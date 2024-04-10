@@ -11,6 +11,10 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
+        path: '',
+        lazy: () => import('./pages/index')
+      },
+      {
         path: 'debug',
         lazy: () => import('./pages/debug')
       },

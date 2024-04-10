@@ -1,17 +1,9 @@
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@renderer/components/ui/resizable"
+import { Outlet } from 'react-router-dom'
 
-function App(): JSX.Element {
+function App() {
   return (
     <>
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel>One</ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel>Two</ResizablePanel>
-      </ResizablePanelGroup>
+      <Outlet />
     </>
   )
 }

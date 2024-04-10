@@ -1,6 +1,6 @@
 import Versions from '../components/Versions'
 
-export function Component(): JSX.Element {
+export function Component() {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 
   return (
