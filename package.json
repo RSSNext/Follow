@@ -1,6 +1,6 @@
 {
   "name": "rere",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
   "author": "example.com",
@@ -23,9 +23,14 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
+    "class-variance-authority": "0.7.0",
+    "clsx": "2.1.0",
     "electron-updater": "^6.1.7",
+    "lucide-react": "0.366.0",
+    "react-resizable-panels": "2.0.16",
     "react-router-dom": "6.22.3",
-    "tailwind-merge": "2.2.2"
+    "tailwind-merge": "2.2.2",
+    "tailwindcss-animate": "1.0.7"
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "1.7.4",
