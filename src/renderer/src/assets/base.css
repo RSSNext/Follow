@@ -1,3 +1,12 @@
 body, #root {
   height: 100vh;
+  user-select: none;
+}
+
+.drag-region {
+  -webkit-app-region: drag;
+}
+
+.no-drag-region {
+  -webkit-app-region: no-drag;
 }
