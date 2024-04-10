@@ -49,6 +49,7 @@ body {
   background: var(--color-background);
   line-height: 1.6;
   font-family:
+    SNPro,
     Inter,
     -apple-system,
     BlinkMacSystemFont,
