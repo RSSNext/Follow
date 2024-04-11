@@ -4,6 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { LazyMotion, MotionConfig } from "framer-motion"
 
 const router = createBrowserRouter([
   {
@@ -22,8 +23,20 @@ const router = createBrowserRouter([
   }
 ])
 
+const loadFeatures = () =>
+  import("./framer-lazy-feature").then((res) => res.default)
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <LazyMotion features={loadFeatures} strict key="framer">
+      <MotionConfig
+        transition={{
+          type: "spring",
+          duration: 0.3,
+        }}
+      >
+        <RouterProvider router={router} />
+      </MotionConfig>
+    </LazyMotion>
   </React.StrictMode>
 )

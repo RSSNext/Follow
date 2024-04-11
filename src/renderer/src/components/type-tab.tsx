@@ -2,59 +2,96 @@ import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
+  TooltipTrigger
+} from '@renderer/components/ui/tooltip'
+import { m, useScroll, useMotionValueEvent } from 'framer-motion'
+import { useRef, useState } from 'react'
+
+function Content({ type }: { type: string }) {
+  return (
+    <div className="w-80">
+      <div>{type}</div>
+    </div>
+  )
+}
 
 export function TypeTab() {
+  const items = [
+    {
+      name: 'Articles',
+      icon: <i className="i-mingcute-news-fill" />,
+      className: 'text-indigo-600'
+    },
+    {
+      name: 'Social Media',
+      icon: <i className="i-mingcute-twitter-fill" />,
+      className: 'text-sky-600'
+    },
+    {
+      name: 'Pictures',
+      icon: <i className="i-mingcute-pic-fill" />,
+      className: 'text-green-600'
+    },
+    {
+      name: 'Videos',
+      icon: <i className="i-mingcute-youtube-fill" />,
+      className: 'text-red-600'
+    },
+    {
+      name: 'Audios',
+      icon: <i className="i-mingcute-headphone-fill" />,
+      className: 'text-purple-600'
+    },
+    {
+      name: 'Notifications',
+      icon: <i className="i-mingcute-notification-fill" />,
+      className: 'text-yellow-600'
+    }
+  ]
+
+  const carouselRef = useRef<HTMLDivElement>(null)
+  const { scrollXProgress } = useScroll({
+    container: carouselRef
+  })
+
+  const [xProgress, setXProgress] = useState(0)
+  useMotionValueEvent(scrollXProgress, "change", (value) => {
+    setXProgress(value);
+  })
+
   return (
     <TooltipProvider delayDuration={300}>
-      <Tabs defaultValue="articles">
-        <TabsList className="w-full justify-around text-xl my-2">
-          <TabsTrigger value="articles" className="data-[state=active]:text-indigo-600">
+      <div className="flex text-zinc-500 w-full justify-around text-xl my-2">
+        {items.map((item, index) => (
+          <m.div
+            key={item.name}
+            className={item.className}
+            style={{
+              filter: `grayscale(${Math.min(Math.abs(xProgress - 1 / (items.length - 1) * index) * (items.length - 1), 1) * 100}%)`,
+            }}
+            onClick={() => {
+              if (carouselRef.current) {
+                carouselRef.current.scrollTo({
+                  left: carouselRef.current.clientWidth * index,
+                  behavior: 'smooth'
+                })
+              }
+            }}
+          >
             <Tooltip>
-              <TooltipTrigger><i className="i-mingcute-news-fill" /></TooltipTrigger>
-              <TooltipContent side="bottom">Articles</TooltipContent>
+              <TooltipTrigger>{item.icon}</TooltipTrigger>
+              <TooltipContent side="bottom">{item.name}</TooltipContent>
             </Tooltip>
-          </TabsTrigger>
-          <TabsTrigger value="social-media" className="data-[state=active]:text-sky-600">
-            <Tooltip>
-              <TooltipTrigger><i className="i-mingcute-twitter-fill" /></TooltipTrigger>
-              <TooltipContent side="bottom">Social Media</TooltipContent>
-            </Tooltip>
-          </TabsTrigger>
-          <TabsTrigger value="pictures" className="data-[state=active]:text-green-600">
-            <Tooltip>
-              <TooltipTrigger><i className="i-mingcute-pic-fill" /></TooltipTrigger>
-              <TooltipContent side="bottom">Pictures</TooltipContent>
-            </Tooltip>
-          </TabsTrigger>
-          <TabsTrigger value="videos" className="data-[state=active]:text-red-600">
-            <Tooltip>
-              <TooltipTrigger><i className="i-mingcute-youtube-fill" /></TooltipTrigger>
-              <TooltipContent side="bottom">Videos</TooltipContent>
-            </Tooltip>
-          </TabsTrigger>
-          <TabsTrigger value="audios" className="data-[state=active]:text-purple-600">
-            <Tooltip>
-              <TooltipTrigger><i className="i-mingcute-headphone-fill" /></TooltipTrigger>
-              <TooltipContent side="bottom">Audios</TooltipContent>
-            </Tooltip>
-          </TabsTrigger>
-          <TabsTrigger value="notifications" className="data-[state=active]:text-yellow-600">
-            <Tooltip>
-              <TooltipTrigger><i className="i-mingcute-notification-fill" /></TooltipTrigger>
-              <TooltipContent side="bottom">Notifications</TooltipContent>
-            </Tooltip>
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="articles">Articles</TabsContent>
-        <TabsContent value="social-media">Social Media</TabsContent>
-        <TabsContent value="pictures">Pictures</TabsContent>
-        <TabsContent value="videos">Videos</TabsContent>
-        <TabsContent value="audios">Audios</TabsContent>
-        <TabsContent value="notifications">Notifications</TabsContent>
-      </Tabs>
+          </m.div>
+        ))}
+      </div>
+      <div className="w-full h-full flex snap-x snap-mandatory overflow-x-auto" ref={carouselRef}>
+          {items.map((item) => (
+            <section key={item.name} className="snap-center shrink-0">
+              <Content type={item.name} />
+            </section>
+          ))}
+      </div>
     </TooltipProvider>
   )
 }
