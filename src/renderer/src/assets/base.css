@@ -1,6 +1,7 @@
 body, #root {
-  height: 100vh;
-  user-select: none;
+  @apply h-screen;
+  @apply text-zinc-800;
+  @apply cursor-default;
 }
 
 .drag-region {

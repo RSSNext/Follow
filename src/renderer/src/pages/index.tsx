@@ -1,17 +1,13 @@
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@renderer/components/ui/resizable"
+import { TypeTab } from '@renderer/components/type-tab'
 
 export function Component() {
   return (
-    <>
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel>One</ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel>Two</ResizablePanel>
-      </ResizablePanelGroup>
-    </>
+    <div className="flex h-full">
+      <div className="w-80 pt-10 px-3 border-r shrink-0">
+        <TypeTab />
+      </div>
+      <div className="w-80 pt-10 px-5 border-r shrink-0">Two</div>
+      <div className="flex-1 pt-10 px-5">Three</div>
+    </div>
   )
 }
