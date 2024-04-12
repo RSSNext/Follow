@@ -52,7 +52,7 @@ export function TypeTab() {
   const [active, setActive] = useState(0)
   const spring = useSpring(0, {
     stiffness: 700,
-    damping: 30,
+    damping: 40,
   })
 
   useEffect(() => {
