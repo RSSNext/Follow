@@ -4,8 +4,10 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@renderer/components/ui/tooltip'
-import { m, useScroll, useMotionValueEvent } from 'framer-motion'
 import { useRef, useState } from 'react'
+import { useWheel } from '@use-gesture/react'
+import { Lethargy } from 'lethargy'
+import { cn, clamp } from '@renderer/lib/utils'
 
 function Content({ type }: { type: string }) {
   return (
@@ -14,6 +16,8 @@ function Content({ type }: { type: string }) {
     </div>
   )
 }
+
+const lethargy = new Lethargy()
 
 export function TypeTab() {
   const items = [
@@ -50,47 +54,54 @@ export function TypeTab() {
   ]
 
   const carouselRef = useRef<HTMLDivElement>(null)
-  const { scrollXProgress } = useScroll({
-    container: carouselRef
-  })
 
-  const [xProgress, setXProgress] = useState(0)
-  useMotionValueEvent(scrollXProgress, "change", (value) => {
-    setXProgress(value);
+  const [active, setActive] = useState(0)
+  useWheel(({ event, last, memo: wait = false, direction: [dx], delta: [dex] }) => {
+    if (!last) {
+      const s = lethargy.check(event)
+      if (s) {
+        if (!wait && Math.abs(dex) > 20) {
+          setActive((i) => clamp(i + dx, 0, items.length - 1))
+          return true
+        } else {
+          return undefined
+        }
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  }, {
+    target: carouselRef,
   })
 
   return (
     <TooltipProvider delayDuration={300}>
       <div className="flex text-zinc-500 w-full justify-around text-xl my-2">
         {items.map((item, index) => (
-          <m.div
+          <div
             key={item.name}
-            className={item.className}
-            style={{
-              filter: `grayscale(${Math.min(Math.abs(xProgress - 1 / (items.length - 1) * index) * (items.length - 1), 1) * 100}%)`,
-            }}
+            className={cn(item.className, active !== index && 'grayscale')}
             onClick={() => {
-              if (carouselRef.current) {
-                carouselRef.current.scrollTo({
-                  left: carouselRef.current.clientWidth * index,
-                  behavior: 'smooth'
-                })
-              }
+              setActive(index)
             }}
           >
             <Tooltip>
               <TooltipTrigger>{item.icon}</TooltipTrigger>
               <TooltipContent side="bottom">{item.name}</TooltipContent>
             </Tooltip>
-          </m.div>
+          </div>
         ))}
       </div>
-      <div className="w-full h-full flex snap-x snap-mandatory overflow-x-auto" ref={carouselRef}>
-          {items.map((item) => (
-            <section key={item.name} className="snap-center shrink-0">
-              <Content type={item.name} />
-            </section>
-          ))}
+      <div className="w-full h-full overflow-x-hidden" ref={carouselRef}>
+        <div className="h-full flex transition-transform" style={{ transform: `translateX(${-active * 320}px)` }}>
+            {items.map((item) => (
+              <section key={item.name} className="snap-center shrink-0">
+                <Content type={item.name} />
+              </section>
+            ))}
+        </div>
       </div>
     </TooltipProvider>
   )
