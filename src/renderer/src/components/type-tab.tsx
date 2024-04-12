@@ -9,51 +9,44 @@ import { useWheel } from '@use-gesture/react'
 import { Lethargy } from 'lethargy'
 import { cn, clamp } from '@renderer/lib/utils'
 import { m, useSpring } from "framer-motion"
-
-function Content({ type }: { type: string }) {
-  return (
-    <div className="w-80">
-      <div>{type}</div>
-    </div>
-  )
-}
+import { FeedList } from './feed-list'
 
 const lethargy = new Lethargy()
 
-export function TypeTab() {
-  const items = [
-    {
-      name: 'Articles',
-      icon: <i className="i-mingcute-news-fill" />,
-      className: 'text-indigo-600'
-    },
-    {
-      name: 'Social Media',
-      icon: <i className="i-mingcute-twitter-fill" />,
-      className: 'text-sky-600'
-    },
-    {
-      name: 'Pictures',
-      icon: <i className="i-mingcute-pic-fill" />,
-      className: 'text-green-600'
-    },
-    {
-      name: 'Videos',
-      icon: <i className="i-mingcute-youtube-fill" />,
-      className: 'text-red-600'
-    },
-    {
-      name: 'Audios',
-      icon: <i className="i-mingcute-headphone-fill" />,
-      className: 'text-purple-600'
-    },
-    {
-      name: 'Notifications',
-      icon: <i className="i-mingcute-notification-fill" />,
-      className: 'text-yellow-600'
-    }
-  ]
+const items = [
+  {
+    name: 'Articles',
+    icon: <i className="i-mingcute-news-fill" />,
+    className: 'text-indigo-600'
+  },
+  {
+    name: 'Social Media',
+    icon: <i className="i-mingcute-twitter-fill" />,
+    className: 'text-sky-600'
+  },
+  {
+    name: 'Pictures',
+    icon: <i className="i-mingcute-pic-fill" />,
+    className: 'text-green-600'
+  },
+  {
+    name: 'Videos',
+    icon: <i className="i-mingcute-youtube-fill" />,
+    className: 'text-red-600'
+  },
+  {
+    name: 'Audios',
+    icon: <i className="i-mingcute-headphone-fill" />,
+    className: 'text-purple-600'
+  },
+  {
+    name: 'Notifications',
+    icon: <i className="i-mingcute-notification-fill" />,
+    className: 'text-yellow-600'
+  }
+]
 
+export function TypeTab() {
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive] = useState(0)
@@ -92,7 +85,7 @@ export function TypeTab() {
         {items.map((item, index) => (
           <div
             key={item.name}
-            className={cn(item.className, active !== index && 'grayscale')}
+            className={cn(active === index && item.className)}
             onClick={() => {
               setActive(index)
             }}
@@ -108,7 +101,7 @@ export function TypeTab() {
         <m.div className="h-full flex" style={{ x: spring }}>
             {items.map((item) => (
               <section key={item.name} className="snap-center shrink-0">
-                <Content type={item.name} />
+                <FeedList type={item.name} />
               </section>
             ))}
         </m.div>

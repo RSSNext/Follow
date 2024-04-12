@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { LazyMotion, MotionConfig } from "framer-motion"
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,8 @@ const router = createBrowserRouter([
 const loadFeatures = () =>
   import("./framer-lazy-feature").then((res) => res.default)
 
+const queryClient = new QueryClient()
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <LazyMotion features={loadFeatures} strict key="framer">
@@ -35,7 +38,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           duration: 0.3,
         }}
       >
-        <RouterProvider router={router} />
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
       </MotionConfig>
     </LazyMotion>
   </React.StrictMode>
