@@ -44,6 +44,11 @@ function FeedCategory({ name, list }: { name: string; list: any[] }) {
       <AnimatePresence>
         {open && (
           <m.div
+            transition={{
+              type: 'tween',
+              duration: 0.2,
+              ease: 'easeInOut',
+            }}
             key={name}
             className="overflow-hidden"
             initial={{
