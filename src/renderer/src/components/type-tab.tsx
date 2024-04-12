@@ -4,10 +4,11 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@renderer/components/ui/tooltip'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useWheel } from '@use-gesture/react'
 import { Lethargy } from 'lethargy'
 import { cn, clamp } from '@renderer/lib/utils'
+import { m, useSpring } from "framer-motion"
 
 function Content({ type }: { type: string }) {
   return (
@@ -56,6 +57,15 @@ export function TypeTab() {
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive] = useState(0)
+  const spring = useSpring(0, {
+    stiffness: 700,
+    damping: 30,
+  })
+
+  useEffect(() => {
+    spring.set(-active * 320)
+  }, [active])
+
   useWheel(({ event, last, memo: wait = false, direction: [dx], delta: [dex] }) => {
     if (!last) {
       const s = lethargy.check(event)
@@ -95,13 +105,13 @@ export function TypeTab() {
         ))}
       </div>
       <div className="w-full h-full overflow-x-hidden" ref={carouselRef}>
-        <div className="h-full flex transition-transform" style={{ transform: `translateX(${-active * 320}px)` }}>
+        <m.div className="h-full flex" style={{ x: spring }}>
             {items.map((item) => (
               <section key={item.name} className="snap-center shrink-0">
                 <Content type={item.name} />
               </section>
             ))}
-        </div>
+        </m.div>
       </div>
     </TooltipProvider>
   )
