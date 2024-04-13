@@ -10,6 +10,7 @@ import { Lethargy } from 'lethargy'
 import { cn, clamp } from '@renderer/lib/utils'
 import { m, useSpring } from "framer-motion"
 import { FeedList } from './feed-list'
+import { ActivedList } from '@renderer/lib/types'
 
 const lethargy = new Lethargy()
 
@@ -46,7 +47,13 @@ const items = [
   }
 ]
 
-export function TypeTab() {
+export function FeedColumn({
+  activedList,
+  setActivedList,
+}: {
+  activedList: ActivedList,
+  setActivedList: (value: ActivedList) => void
+}) {
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive] = useState(0)
@@ -101,7 +108,7 @@ export function TypeTab() {
         <m.div className="h-full flex" style={{ x: spring }}>
             {items.map((item) => (
               <section key={item.name} className="snap-center shrink-0">
-                <FeedList type={item.name} />
+                <FeedList type={item.name} activedList={activedList} setActivedList={setActivedList} />
               </section>
             ))}
         </m.div>
