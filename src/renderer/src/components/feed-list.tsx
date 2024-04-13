@@ -12,14 +12,14 @@ export function FeedList({ type }: { type: string }) {
         <div className="font-bold">{type}</div>
         <div className='text-sm text-zinc-500 ml-2'>{feeds.data?.unread}</div>
       </div>
-      {Object.keys(feeds.data?.list || {}).map((category) => (
-        <FeedCategory key={category} name={category} data={feeds.data?.list[category]} />
+      {feeds.data?.list.map((category) => (
+        <FeedCategory key={category.name} data={category} />
       ))}
     </div>
   )
 }
 
-function FeedCategory({ name, data }: { name: string; data: any }) {
+function FeedCategory({ data }: { data: any }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -30,7 +30,7 @@ function FeedCategory({ name, data }: { name: string; data: any }) {
       <CollapsibleTrigger className="flex items-center justify-between font-medium text-sm leading-loose py-[2px] w-full [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90">
         <div className='flex items-center min-w-0'>
           <i className="i-mingcute-right-fill mr-2 transition-transform" />
-          <span className='truncate'>{name}</span>
+          <span className='truncate'>{data.name}</span>
         </div>
         {!!data.unread && <div className='text-xs text-zinc-500 ml-2'>{data.unread}</div>}
       </CollapsibleTrigger>
@@ -42,7 +42,6 @@ function FeedCategory({ name, data }: { name: string; data: any }) {
               duration: 0.2,
               ease: 'easeInOut',
             }}
-            key={name}
             className="overflow-hidden"
             initial={{
               height: 0,

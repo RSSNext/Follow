@@ -32,6 +32,14 @@ export const useFeeds = () =>
         categories.list[feed.category.title].unread += unread
         categories.unread += unread
       })
-      return categories
+      const list = Object.entries(categories.list).map(([name, list]: any) => ({
+        name,
+        list: list.list.sort((a, b) => b.unread - a.unread),
+        unread: list.unread
+      })).sort((a, b) => b.unread - a.unread)
+      return {
+        list,
+        unread: categories.unread
+      }
     }
   })
