@@ -1,10 +1,6 @@
 import { useFeeds } from '@renderer/lib/feeds'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger
-} from '@renderer/components/ui/collapsible'
-import { m, AnimatePresence, useSpring } from 'framer-motion'
+import { Collapsible, CollapsibleTrigger } from '@renderer/components/ui/collapsible'
+import { m, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 
 export function FeedList({ type }: { type: string }) {
@@ -20,7 +16,7 @@ export function FeedList({ type }: { type: string }) {
   console.log('categories', categories)
 
   return (
-    <div className="w-80 px-4">
+    <div className="w-64 px-5">
       <div className="font-bold my-2">{type}</div>
       {Object.keys(categories).map((category) => (
         <FeedCategory key={category} name={category} list={categories[category]} />
@@ -37,9 +33,9 @@ function FeedCategory({ name, list }: { name: string; list: any[] }) {
       open={open}
       onOpenChange={(o) => setOpen(o)}
     >
-      <CollapsibleTrigger className="flex items-center text-[15px] font-medium leading-loose py-[1px] w-full [&>i]:data-[state=open]:rotate-90">
+      <CollapsibleTrigger className="flex items-center text-sm font-medium leading-loose py-[2px] w-full [&>i]:data-[state=open]:rotate-90">
         <i className="i-mingcute-right-fill mr-2 transition-transform" />
-        <span>{name}</span>
+        <span className='truncate'>{name}</span>
       </CollapsibleTrigger>
       <AnimatePresence>
         {open && (
@@ -73,7 +69,7 @@ function FeedCategory({ name, list }: { name: string; list: any[] }) {
                   src={`https://icons.duckduckgo.com/ip3/${new URL(feed.site_url).host}.ico`}
                   className="w-4 h-4 mr-2 rounded-sm"
                 />
-                <div>{feed.title}</div>
+                <div className='truncate'>{feed.title}</div>
               </div>
             ))}
           </m.div>

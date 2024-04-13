@@ -17,7 +17,7 @@ const items = [
   {
     name: 'Articles',
     icon: <i className="i-mingcute-news-fill" />,
-    className: 'text-indigo-600'
+    className: 'text-amber-700'
   },
   {
     name: 'Social Media',
@@ -56,7 +56,7 @@ export function TypeTab() {
   })
 
   useEffect(() => {
-    spring.set(-active * 320)
+    spring.set(-active * 256)
   }, [active])
 
   useWheel(({ event, last, memo: wait = false, direction: [dx], delta: [dex] }) => {
@@ -81,11 +81,11 @@ export function TypeTab() {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex text-zinc-500 w-full justify-around text-xl my-2">
+      <div className="flex text-zinc-500 w-full justify-between text-xl my-2 px-5">
         {items.map((item, index) => (
           <div
             key={item.name}
-            className={cn(active === index && item.className)}
+            className={cn(active === index && "text-zinc-800")}
             onClick={() => {
               setActive(index)
             }}

@@ -2,6 +2,7 @@ body, #root {
   @apply h-screen;
   @apply text-zinc-700;
   @apply cursor-default;
+  @apply select-none;
 
   font-family: 'SNPro', sans-serif;
 }
