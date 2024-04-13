@@ -1,8 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
 
-export const useFeeds = () =>
+const typeMap = {
+  'Articles': ['Forum', 'News', 'Game', 'Shopping', 'Blog', 'Knowledge'],
+  'Social Media': ['Twitter', 'Weibo'],
+  'Pictures': ['Picture'],
+  'Videos': ['bilibili', 'YouTube', 'Video'],
+  'Audios': [],
+  'Notifications': ['Software'],
+}
+
+export const useFeeds = (type: string) =>
   useQuery({
-    queryKey: ['feeds'],
+    queryKey: ['feeds', type],
     queryFn: async () => {
       const feeds = await (await fetch(`${import.meta.env.VITE_MINIFLUX_ENDPOINT}/v1/feeds`, {
         headers: {
@@ -20,18 +29,20 @@ export const useFeeds = () =>
         unread: 0,
       }
       feeds?.forEach((feed) => {
-        if (!categories.list[feed.category.title]) {
-          categories.list[feed.category.title] = {
-            list: [],
-            unread: 0,
-            id: feed.category.id
+        if (typeMap[type].includes(feed.category.title)) {
+          if (!categories.list[feed.category.title]) {
+            categories.list[feed.category.title] = {
+              list: [],
+              unread: 0,
+              id: feed.category.id
+            }
           }
+          const unread = counters.unreads[feed.id] || 0
+          feed.unread = unread
+          categories.list[feed.category.title].list.push(feed)
+          categories.list[feed.category.title].unread += unread
+          categories.unread += unread
         }
-        const unread = counters.unreads[feed.id] || 0
-        feed.unread = unread
-        categories.list[feed.category.title].list.push(feed)
-        categories.list[feed.category.title].unread += unread
-        categories.unread += unread
       })
       const list = Object.entries(categories.list).map(([name, list]: any) => ({
         name,
