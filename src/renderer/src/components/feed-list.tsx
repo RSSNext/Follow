@@ -67,9 +67,9 @@ function FeedCategory({
         })
       }}
     >
-      <div className={cn("flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded w-full [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90 cursor-pointer", activedList?.level === levels.folder && activedList.id === data.id && 'bg-[#C9C9C7]')}>
+      <div className={cn("flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded w-full cursor-pointer", activedList?.level === levels.folder && activedList.id === data.id && 'bg-[#C9C9C7]')}>
         <div className='flex items-center min-w-0'>
-          <CollapsibleTrigger className='flex items-center h-7'>
+          <CollapsibleTrigger className='flex items-center h-7 [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90'>
             <i className="i-mingcute-right-fill mr-2 transition-transform" />
           </CollapsibleTrigger>
           <span className='truncate'>{data.name}</span>
