@@ -30,6 +30,7 @@
     "@use-gesture/react": "10.3.1",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.0",
+    "dayjs": "1.11.10",
     "electron-updater": "^6.1.7",
     "framer-motion": "11.0.27",
     "lethargy": "1.0.9",
