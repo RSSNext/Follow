@@ -26,6 +26,7 @@ export function FeedList({
           setActivedList({
             level: levels.type,
             id: type,
+            name: levels.type,
           })
         }}
       >
@@ -64,6 +65,7 @@ function FeedCategory({
         setActivedList({
           level: levels.folder,
           id: data.id,
+          name: data.name,
         })
       }}
     >
@@ -107,6 +109,7 @@ function FeedCategory({
                   setActivedList({
                     level: levels.feed,
                     id: feed.id,
+                    name: feed.title,
                   })
                 }}
               >

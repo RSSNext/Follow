@@ -1,4 +1,5 @@
 export type ActivedList = {
-  level: Symbol
+  level: string
   id: string | number
+  name: string
 } | null

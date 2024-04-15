@@ -1,6 +1,6 @@
 export const levels = {
-  type: Symbol('type'),
-  folder: Symbol('folder'),
-  feed: Symbol('feed'),
-  entry: Symbol('entry'),
+  type: 'type',
+  folder: 'folder',
+  feed: 'feed',
+  entry: 'entry',
 }
