@@ -9,7 +9,7 @@ import { useWheel } from '@use-gesture/react'
 import { Lethargy } from 'lethargy'
 import { cn, clamp } from '@renderer/lib/utils'
 import { m, useSpring } from "framer-motion"
-import { FeedList } from './feed-list'
+import { FeedList } from './list'
 import { ActivedList } from '@renderer/lib/types'
 
 const lethargy = new Lethargy()
