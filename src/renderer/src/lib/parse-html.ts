@@ -35,6 +35,8 @@ export const parseHtml = async (content: string) => {
           typeof node.properties.src === "string"
         ) {
           metadata.images.push(node.properties.src)
+        } else if (node.tagName === "a") {
+          node.properties.target = "_blank"
         }
       }
     })
