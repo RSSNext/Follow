@@ -3,6 +3,7 @@ import { ActivedList } from '@renderer/lib/types'
 import { m } from 'framer-motion'
 import { cn } from '@renderer/lib/utils'
 import { ArticleItem } from './article-item'
+import { SocialMediaItem } from './social-media-item'
 
 export function EntryColumn({
   activedList,
@@ -14,9 +15,21 @@ export function EntryColumn({
   setActivedEntry: (value: number | null) => void
 }) {
   const entries = useEntries({
-    type: activedList?.level,
+    level: activedList?.level,
     id: activedList?.id
   })
+
+  let Item;
+  switch (activedList?.type) {
+    case 'Articles':
+      Item = ArticleItem
+      break
+    case 'Social Media':
+      Item = SocialMediaItem
+      break
+    default:
+      Item = ArticleItem
+  }
 
   return (
     <div className='px-2' onClick={() => setActivedEntry(null)}>
@@ -30,20 +43,25 @@ export function EntryColumn({
         {entries.data?.pages?.map((page, index) => (
           <m.div
             key={`${activedList?.level}-${activedList?.id}-${index}`}
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -100, opacity: 0 }}
+            transition={{
+              type: 'tween',
+              duration: 0.1,
+              ease: 'easeInOut',
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
             {page.entries.map((entry) => (
               <div
                 key={entry.id}
-                className={cn("mt-5 flex px-2 py-3 rounded-md cursor-pointer", activedEntry === entry.id && 'bg-[#DEDDDC]')}
+                className={cn("mt-5 rounded-md cursor-pointer", activedEntry === entry.id && 'bg-[#DEDDDC]')}
                 onClick={(e) => {
                   e.stopPropagation()
                   setActivedEntry(entry.id)
                 }}
               >
-                <ArticleItem entry={entry} />
+                <Item entry={entry} />
               </div>
             ))}
           </m.div>

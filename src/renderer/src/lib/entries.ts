@@ -2,19 +2,19 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { parseHtml } from './parse-html'
 
 export const useEntries = ({
-  type,
+  level,
   id,
 }: {
-  type?: string
+  level?: string
   id?: number | string
 }) =>
   useInfiniteQuery({
-    queryKey: ['entries', type, id],
-    enabled: !!type && !!id,
+    queryKey: ['entries', level, id],
+    enabled: !!level && !!id,
     queryFn: async ({ pageParam }) => {
       const entries = await (await fetch(`${import.meta.env.VITE_MINIFLUX_ENDPOINT}/v1/categories/${id}/entries?` + new URLSearchParams({
         direction: 'desc',
-        limit: '20',
+        limit: '10',
         after_entry_id: pageParam,
       }), {
         headers: {

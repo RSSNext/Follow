@@ -6,7 +6,7 @@ export function ArticleItem({
   entry: any,
 }) {
   return (
-    <>
+    <div className='flex px-2 py-3'>
       <img
         src={`https://icons.duckduckgo.com/ip3/${new URL(entry.feed.site_url).host}.ico`}
         className="w-5 h-5 mr-2 rounded-sm shrink-0"
@@ -15,8 +15,7 @@ export function ArticleItem({
         <div className="text-zinc-500 text-[13px]">
           {dayjs
             .duration(dayjs(entry.published_at).diff(dayjs(), 'minute'), 'minute')
-            .humanize()}{' '}
-          ago
+            .humanize()}
         </div>
         <div className="font-medium">{entry.title}</div>
         <div className="text-zinc-500 text-[13px] mt-0.5">{entry.text}</div>
@@ -28,6 +27,6 @@ export function ArticleItem({
           loading="lazy"
         />
       )}
-    </>
+    </div>
   )
 }
