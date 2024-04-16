@@ -1,7 +1,7 @@
 import dayjs from '@renderer/lib/dayjs'
 import { SiteIcon } from '../site-icon'
 
-export function ArticleItem({
+export function NotificationItem({
   entry,
 }: {
   entry: any,
@@ -19,16 +19,8 @@ export function ArticleItem({
               .humanize()}
           </span>
         </div>
-        <div className="font-medium my-0.5">{entry.title}</div>
-        <div className="text-zinc-500 text-[13px]">{entry.text}</div>
+        <div className="my-0.5">{entry.title}</div>
       </div>
-      {entry.images?.[0] && (
-        <img
-          src={entry.images[0]}
-          className="w-20 h-20 shrink-0 ml-2 rounded object-cover"
-          loading="lazy"
-        />
-      )}
     </div>
   )
 }

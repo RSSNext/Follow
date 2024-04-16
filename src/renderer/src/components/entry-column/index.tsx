@@ -6,6 +6,7 @@ import { ArticleItem } from './article-item'
 import { SocialMediaItem } from './social-media-item'
 import { PictureItem } from './picture-item'
 import { VideoItem } from './video-item'
+import { NotificationItem } from './notification-item'
 
 const gridMode = ['Pictures', 'Videos']
 
@@ -36,6 +37,9 @@ export function EntryColumn({
       break
     case 'Videos':
       Item = VideoItem
+      break
+    case 'Notifications':
+      Item = NotificationItem
       break
     default:
       Item = ArticleItem

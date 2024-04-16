@@ -1,4 +1,5 @@
 import dayjs from '@renderer/lib/dayjs'
+import { SiteIcon } from '../site-icon'
 
 export function VideoItem({
   entry,
@@ -21,6 +22,7 @@ export function VideoItem({
         <div className="line-clamp-5 text-sm flex-1 px-2 pb-3 pt-1">
           <div className="font-medium line-clamp-2">{entry.title}</div>
           <div className='space-x-1 text-[13px]'>
+            <SiteIcon className='w-3.5 h-3.5 inline-block mr-0 align-sub' url={entry.feed.site_url} />
             <span>{entry.author}</span>
             <span className="text-zinc-500">·</span>
             <span className="text-zinc-500">
