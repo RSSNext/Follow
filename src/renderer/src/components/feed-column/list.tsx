@@ -27,6 +27,7 @@ export function FeedList({
             level: levels.type,
             id: type,
             name: levels.type,
+            type,
           })
         }}
       >
@@ -39,6 +40,7 @@ export function FeedList({
           data={category}
           activedList={activedList}
           setActivedList={setActivedList}
+          type={type}
         />
       ))}
     </div>
@@ -49,10 +51,12 @@ function FeedCategory({
   data,
   activedList,
   setActivedList,
+  type,
 }: {
   data: any,
   activedList: ActivedList,
   setActivedList: (value: ActivedList) => void
+  type: string,
 }) {
   const [open, setOpen] = useState(false)
 
@@ -66,6 +70,7 @@ function FeedCategory({
           level: levels.folder,
           id: data.id,
           name: data.name,
+          type,
         })
       }}
     >
@@ -110,6 +115,7 @@ function FeedCategory({
                     level: levels.feed,
                     id: feed.id,
                     name: feed.title,
+                    type,
                   })
                 }}
               >
