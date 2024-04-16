@@ -1,4 +1,5 @@
 import dayjs from '@renderer/lib/dayjs'
+import { SiteIcon } from '../site-icon'
 
 export function ArticleItem({
   entry,
@@ -7,10 +8,7 @@ export function ArticleItem({
 }) {
   return (
     <div className='flex my-5 px-2 py-3'>
-      <img
-        src={`https://icons.duckduckgo.com/ip3/${new URL(entry.feed.site_url).host}.ico`}
-        className="w-5 h-5 mr-2 rounded-sm shrink-0"
-      />
+      <SiteIcon url={entry.feed.site_url} />
       <div className="line-clamp-5 text-sm flex-1 -mt-0.5 leading-tight">
         <div className="text-zinc-500 text-[13px]">
           {dayjs

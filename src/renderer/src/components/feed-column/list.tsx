@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { levels } from '@renderer/lib/constants'
 import { ActivedList } from '@renderer/lib/types'
 import { cn } from '@renderer/lib/utils'
+import { SiteIcon } from '../site-icon'
 
 export function FeedList({
   type,
@@ -120,10 +121,7 @@ function FeedCategory({
                 }}
               >
                 <div className='flex items-center min-w-0'>
-                  <img
-                    src={`https://icons.duckduckgo.com/ip3/${new URL(feed.site_url).host}.ico`}
-                    className="w-4 h-4 mr-2 rounded-sm"
-                  />
+                  <SiteIcon url={feed.site_url} className="w-4 h-4" />
                   <div className='truncate'>{feed.title}</div>
                 </div>
                 {!!feed.unread && <div className='text-xs text-zinc-500 ml-2'>{feed.unread}</div>}
