@@ -5,7 +5,12 @@ import { ActivedList } from '@renderer/lib/types'
 import { cn } from '@renderer/lib/utils'
 
 export function Component() {
-  const [activedList, setActivedList] = useState<ActivedList>(null)
+  const [activedList, setActivedList] = useState<ActivedList>({
+    level: 'type',
+    id: 'Articles',
+    name: 'Articles',
+    type: 'Articles',
+  })
   const [activedEntry, setActivedEntry] = useState<number | null>(null)
 
   return (

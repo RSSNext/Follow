@@ -26,7 +26,7 @@ export function FeedList({
           setActivedList({
             level: levels.type,
             id: type,
-            name: levels.type,
+            name: type,
             type,
           })
         }}

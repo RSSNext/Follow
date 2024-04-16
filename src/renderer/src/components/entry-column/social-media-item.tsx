@@ -12,7 +12,7 @@ export function SocialMediaItem({
         className="w-5 h-5 mr-2 rounded-sm shrink-0"
       />
       <div>
-        <div className="line-clamp-5 text-sm flex-1 -mt-0.5 text-[13px]">
+        <div className="line-clamp-5 text-sm flex-1 -mt-0.5">
           <div className='space-x-1'>
             <span className='font-medium'>{entry.author}</span>
             <span className="text-zinc-500">·</span>
@@ -29,7 +29,7 @@ export function SocialMediaItem({
             <img
               key={image}
               src={image}
-              className="w-20 h-20 shrink-0 rounded object-cover"
+              className="w-28 h-28 shrink-0 rounded object-cover"
               loading="lazy"
             />
           ))}
