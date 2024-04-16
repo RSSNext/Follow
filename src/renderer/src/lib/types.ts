@@ -4,3 +4,5 @@ export type ActivedList = {
   name: string
   type: string
 } | null
+
+export type ActivedEntry = Record<string, any> | null

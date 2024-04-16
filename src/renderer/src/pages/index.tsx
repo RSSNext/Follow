@@ -1,8 +1,9 @@
 import { FeedColumn } from '@renderer/components/feed-column'
 import { EntryColumn } from '@renderer/components/entry-column'
 import { useState } from 'react'
-import { ActivedList } from '@renderer/lib/types'
+import { ActivedList, ActivedEntry } from '@renderer/lib/types'
 import { cn } from '@renderer/lib/utils'
+import { EntryContent } from '@renderer/components/entry-content'
 
 const wideMode = ['Social Media', 'Pictures', 'Videos', 'Audios']
 
@@ -13,7 +14,7 @@ export function Component() {
     name: 'Articles',
     type: 'Articles',
   })
-  const [activedEntry, setActivedEntry] = useState<number | null>(null)
+  const [activedEntry, setActivedEntry] = useState<ActivedEntry>(null)
 
   return (
     <div className="flex h-full">
@@ -24,7 +25,9 @@ export function Component() {
         <EntryColumn activedList={activedList} activedEntry={activedEntry} setActivedEntry={setActivedEntry} />
       </div>
       {!wideMode.includes(activedList?.type || '') && (
-        <div className="flex-1 pt-10 px-4">Three</div>
+        <div className="flex-1 pt-10">
+          <EntryContent entry={activedEntry} />
+        </div>
       )}
     </div>
   )

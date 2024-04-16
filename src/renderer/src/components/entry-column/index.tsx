@@ -1,5 +1,5 @@
 import { useEntries } from '@renderer/lib/entries'
-import { ActivedList } from '@renderer/lib/types'
+import { ActivedList, ActivedEntry } from '@renderer/lib/types'
 import { m } from 'framer-motion'
 import { cn } from '@renderer/lib/utils'
 import { ArticleItem } from './article-item'
@@ -16,8 +16,8 @@ export function EntryColumn({
   setActivedEntry,
 }: {
   activedList: ActivedList,
-  activedEntry: number | null,
-  setActivedEntry: (value: number | null) => void
+  activedEntry: ActivedEntry,
+  setActivedEntry: (value: ActivedEntry) => void
 }) {
   const entries = useEntries({
     level: activedList?.level,
@@ -72,10 +72,10 @@ export function EntryColumn({
             {page.entries.map((entry) => (
               <div
                 key={entry.id}
-                className={cn("rounded-md cursor-pointer", activedEntry === entry.id && 'bg-[#DEDDDC]')}
+                className={cn("rounded-md cursor-pointer", activedEntry?.id === entry.id && 'bg-[#DEDDDC]')}
                 onClick={(e) => {
                   e.stopPropagation()
-                  setActivedEntry(entry.id)
+                  setActivedEntry(entry)
                 }}
               >
                 <Item entry={entry} />

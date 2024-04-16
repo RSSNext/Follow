@@ -5,6 +5,8 @@ import rehypeInferDescriptionMeta from 'rehype-infer-description-meta'
 import rehypeStringify from 'rehype-stringify'
 import { VFile } from "vfile"
 import { visit } from "unist-util-visit"
+import { toJsxRuntime } from "hast-util-to-jsx-runtime"
+import { Fragment, jsx, jsxs } from "react/jsx-runtime"
 
 export const parseHtml = async (content: string) => {
   const file = new VFile(content)
@@ -26,7 +28,7 @@ export const parseHtml = async (content: string) => {
     images: [],
   }
   if (hastTree) {
-    visit(hastTree, (node, index, parent) => {
+    visit(hastTree, (node) => {
       if (node.type === "element") {
         if (
           node.tagName === "img" &&
@@ -40,5 +42,12 @@ export const parseHtml = async (content: string) => {
 
   return {
     metadata,
+    content: toJsxRuntime(hastTree, {
+      Fragment,
+      ignoreInvalidStyle: true,
+      jsx,
+      jsxs,
+      passNode: true,
+    }),
   }
 }

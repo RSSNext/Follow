@@ -74,7 +74,8 @@ module.exports = {
     iconsPlugin({
       collections: getIconCollections(["mingcute"]),
     }),
-    require("tailwindcss-animate")
+    require("tailwindcss-animate"),
+    require('@tailwindcss/typography'),
   ],
 }
 
