@@ -20,7 +20,7 @@ export function FeedList({
   return (
     <div className="w-64 px-3">
       <div
-        className={cn('flex items-center justify-between mt-2 mb-3 px-2.5 py-1 rounded cursor-pointer', activedList?.level === levels.type && activedList.id === type && 'bg-[#C9C9C7]')}
+        className={cn('flex items-center justify-between mt-2 mb-3 px-2.5 py-1 rounded cursor-pointer')}
         onClick={(e) => {
           e.stopPropagation()
           setActivedList({

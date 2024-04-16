@@ -1,12 +1,21 @@
 import { useQuery } from '@tanstack/react-query'
 
-const typeMap = {
-  'Articles': ['Forum', 'News', 'Game', 'Shopping', 'Blog', 'Knowledge'],
-  'Social Media': ['Twitter', 'Weibo'],
-  'Pictures': ['Picture'],
-  'Videos': ['bilibili', 'YouTube', 'Video'],
+// const typeMap = {
+//   'Articles': ['Forum', 'News', 'Game', 'Shopping', 'Blog', 'Knowledge'],
+//   'Social Media': ['Twitter', 'Weibo'],
+//   'Pictures': ['Picture'],
+//   'Videos': ['bilibili', 'YouTube', 'Video'],
+//   'Audios': [],
+//   'Notifications': ['Software'],
+// }
+
+export const typeMap = {
+  'Articles': [5, 6, 11, 12, 10, 15],
+  'Social Media': [2, 9],
+  'Pictures': [7],
+  'Videos': [3, 4, 8],
   'Audios': [],
-  'Notifications': ['Software'],
+  'Notifications': [13],
 }
 
 export const useFeeds = (type: string) =>
@@ -29,7 +38,7 @@ export const useFeeds = (type: string) =>
         unread: 0,
       }
       feeds?.forEach((feed) => {
-        if (typeMap[type].includes(feed.category.title)) {
+        if (typeMap[type].includes(feed.category.id)) {
           if (!categories.list[feed.category.title]) {
             categories.list[feed.category.title] = {
               list: [],

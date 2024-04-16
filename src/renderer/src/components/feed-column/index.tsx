@@ -87,14 +87,27 @@ export function FeedColumn({
   })
 
   return (
-    <TooltipProvider delayDuration={300}>
+    <div className='h-full flex flex-col' onClick={() => setActivedList({
+      level: 'type',
+      id: items[active].name,
+      name: items[active].name,
+      type: items[active].name,
+    })}>
       <div className="flex text-zinc-500 w-full justify-between text-xl my-2 px-5">
+        <TooltipProvider delayDuration={300}>
         {items.map((item, index) => (
           <div
             key={item.name}
             className={cn(active === index && "text-zinc-800")}
-            onClick={() => {
+            onClick={(e) => {
               setActive(index)
+              setActivedList({
+                level: 'type',
+                id: items[index].name,
+                name: items[index].name,
+                type: items[index].name,
+              })
+              e.stopPropagation()
             }}
           >
             <Tooltip>
@@ -103,6 +116,7 @@ export function FeedColumn({
             </Tooltip>
           </div>
         ))}
+        </TooltipProvider>
       </div>
       <div className="w-full h-full overflow-x-hidden" ref={carouselRef}>
         <m.div className="h-full flex" style={{ x: spring }}>
@@ -113,6 +127,6 @@ export function FeedColumn({
             ))}
         </m.div>
       </div>
-    </TooltipProvider>
+    </div>
   )
 }

@@ -10,7 +10,7 @@ export function Component() {
 
   return (
     <div className="flex h-full">
-      <div className="w-64 pt-10 border-r shrink-0 flex flex-col bg-[#E1E0DF]" onClick={() => setActivedList(null)}>
+      <div className="w-64 pt-10 border-r shrink-0 bg-[#E1E0DF]">
         <FeedColumn activedList={activedList} setActivedList={setActivedList} />
       </div>
       <div className={cn("pt-10 border-r shrink-0 h-full overflow-y-auto", activedList?.type === "Social Media" ? "flex-1 min-w-96" : "w-[340px]")}>
