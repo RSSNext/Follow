@@ -11,10 +11,10 @@ export function Component() {
       <div className="w-64 pt-10 border-r shrink-0 flex flex-col bg-[#E1E0DF]" onClick={() => setActivedList(null)}>
         <FeedColumn activedList={activedList} setActivedList={setActivedList} />
       </div>
-      <div className="w-80 pt-10 px-5 border-r shrink-0 h-full overflow-y-auto">
+      <div className="w-[340px] pt-10 px-4 border-r shrink-0 h-full overflow-y-auto">
         <EntryColumn activedList={activedList} />
       </div>
-      <div className="flex-1 pt-10 px-5">Three</div>
+      <div className="flex-1 pt-10 px-4">Three</div>
     </div>
   )
 }

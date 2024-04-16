@@ -44,7 +44,7 @@ export function EntryColumn({ activedList }: { activedList: ActivedList }) {
                 {entry.images?.[0] && (
                   <img
                     src={entry.images[0]}
-                    className="w-14 h-14 shrink-0 ml-2 rounded object-cover"
+                    className="w-20 h-20 shrink-0 ml-2 rounded object-cover"
                     loading="lazy"
                   />
                 )}
