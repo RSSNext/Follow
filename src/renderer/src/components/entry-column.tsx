@@ -45,7 +45,6 @@ export function EntryColumn({ activedList }: { activedList: ActivedList }) {
                   <img
                     src={entry.images[0]}
                     className="w-14 h-14 shrink-0 ml-2 rounded object-cover"
-                    referrerPolicy="no-referrer"
                     loading="lazy"
                   />
                 )}
