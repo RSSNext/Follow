@@ -18,7 +18,7 @@ export const useEntries = ({
       if (level === levels.folder) {
         entries = await (await fetch(`${import.meta.env.VITE_MINIFLUX_ENDPOINT}/v1/entries?` + new URLSearchParams({
           direction: 'desc',
-          limit: '10',
+          limit: '20',
           after_entry_id: pageParam,
           category_id: id + '',
         }), {
@@ -29,7 +29,7 @@ export const useEntries = ({
       } else if (level === levels.type) {
         entries = await (await fetch(`${import.meta.env.VITE_MINIFLUX_ENDPOINT}/v1/entries?` + new URLSearchParams({
           direction: 'desc',
-          limit: '10',
+          limit: '20',
           after_entry_id: pageParam,
           category_id: typeMap[id as string][0] + '',
         }), {

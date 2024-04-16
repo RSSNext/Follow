@@ -6,7 +6,7 @@ export function SocialMediaItem({
   entry: any,
 }) {
   return (
-    <div className='flex px-2 py-3'>
+    <div className='flex my-5 px-2 py-3'>
       <img
         src={`https://icons.duckduckgo.com/ip3/${new URL(entry.feed.site_url).host}.ico`}
         className="w-5 h-5 mr-2 rounded-sm shrink-0"

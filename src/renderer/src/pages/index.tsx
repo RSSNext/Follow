@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { ActivedList } from '@renderer/lib/types'
 import { cn } from '@renderer/lib/utils'
 
+const wideMode = ['Social Media', 'Pictures', 'Videos', 'Audios']
+
 export function Component() {
   const [activedList, setActivedList] = useState<ActivedList>({
     level: 'type',
@@ -18,10 +20,12 @@ export function Component() {
       <div className="w-64 pt-10 border-r shrink-0 bg-[#E1E0DF]">
         <FeedColumn activedList={activedList} setActivedList={setActivedList} />
       </div>
-      <div className={cn("pt-10 border-r shrink-0 h-full overflow-y-auto", activedList?.type === "Social Media" ? "flex-1 min-w-96" : "w-[340px]")}>
+      <div className={cn("pt-10 border-r shrink-0 h-full overflow-y-auto", wideMode.includes(activedList?.type || '') ? "flex-1" : "w-[340px]")}>
         <EntryColumn activedList={activedList} activedEntry={activedEntry} setActivedEntry={setActivedEntry} />
       </div>
-      <div className="flex-1 pt-10 px-4">Three</div>
+      {!wideMode.includes(activedList?.type || '') && (
+        <div className="flex-1 pt-10 px-4">Three</div>
+      )}
     </div>
   )
 }
