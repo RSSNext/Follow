@@ -22,6 +22,7 @@ export const useEntries = ({
         }
       })).json()
       entries.entries = await Promise.all(entries.entries.map(async (entry) => {
+        entry.content = entry.content.replaceAll('https://pixiv.diygod.me/', 'https://i.pximg.net/');
         const parsed = await parseHtml(entry.content)
         return {
           ...entry,

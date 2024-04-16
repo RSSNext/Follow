@@ -34,6 +34,25 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  const refererMatchs = [{
+    url: /^https:\/\/\w+\.sinaimg.cn/,
+    referer: 'https://weibo.com'
+  }, {
+    url: /^https:\/\/i\.pximg\.net/,
+    referer: 'https://www.pixiv.net'
+  }]
+  mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
+    (details, callback) => {
+      const refererMatch = refererMatchs.find((item) => item.url.test(details.url))
+      callback({
+        requestHeaders: {
+          ...details.requestHeaders,
+          Referer: refererMatch?.referer || details.url
+        }
+      });
+    },
+  );
 }
 
 // This method will be called when Electron has finished
