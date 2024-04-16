@@ -5,6 +5,9 @@ import { cn } from '@renderer/lib/utils'
 import { ArticleItem } from './article-item'
 import { SocialMediaItem } from './social-media-item'
 import { PictureItem } from './picture-item'
+import { VideoItem } from './video-item'
+
+const gridMode = ['Pictures', 'Videos']
 
 export function EntryColumn({
   activedList,
@@ -31,6 +34,9 @@ export function EntryColumn({
     case 'Pictures':
       Item = PictureItem
       break
+    case 'Videos':
+      Item = VideoItem
+      break
     default:
       Item = ArticleItem
   }
@@ -56,7 +62,7 @@ export function EntryColumn({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className={cn(
-              activedList?.type === 'Pictures' && 'grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2'
+              gridMode.includes(activedList?.type || '') && 'grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2'
             )}
           >
             {page.entries.map((entry) => (

@@ -1,6 +1,6 @@
 import dayjs from '@renderer/lib/dayjs'
 
-export function PictureItem({
+export function VideoItem({
   entry,
 }: {
   entry: any,
@@ -13,7 +13,7 @@ export function PictureItem({
             <img
               key={image}
               src={image}
-              className="w-full aspect-square shrink-0 rounded object-cover"
+              className="w-full aspect-video shrink-0 rounded object-cover"
               loading="lazy"
             />
           ))}
