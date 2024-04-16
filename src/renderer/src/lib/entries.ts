@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { parseHtml } from './parse-html'
 
 export const useEntries = ({
   type,
@@ -20,6 +21,14 @@ export const useEntries = ({
           'X-Auth-Token': import.meta.env.VITE_MINIFLUX_TOKEN
         }
       })).json()
+      entries.entries = await Promise.all(entries.entries.map(async (entry) => {
+        const parsed = await parseHtml(entry.content)
+        return {
+          ...entry,
+          text: parsed.metadata?.desctription,
+          images: parsed.metadata?.images,
+        }
+      }))
 
       return entries;
     },

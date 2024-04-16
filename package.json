@@ -35,8 +35,15 @@
     "framer-motion": "11.0.27",
     "lethargy": "1.0.9",
     "react-router-dom": "6.22.3",
+    "rehype-infer-description-meta": "2.0.0",
+    "rehype-parse": "9.0.0",
+    "rehype-sanitize": "6.0.0",
+    "rehype-stringify": "10.0.0",
     "tailwind-merge": "2.2.2",
-    "tailwindcss-animate": "1.0.7"
+    "tailwindcss-animate": "1.0.7",
+    "unified": "11.0.4",
+    "unist-util-visit": "5.0.0",
+    "vfile": "6.0.1"
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "1.7.4",
