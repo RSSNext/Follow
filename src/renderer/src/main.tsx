@@ -6,6 +6,7 @@ import App from './App'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { LazyMotion, MotionConfig } from "framer-motion"
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { SessionProvider } from "@hono/auth-js/react"
 
 const router = createBrowserRouter([
   {
@@ -38,9 +39,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           duration: 0.3,
         }}
       >
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-        </QueryClientProvider>
+        <SessionProvider>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+          </QueryClientProvider>
+        </SessionProvider>
       </MotionConfig>
     </LazyMotion>
   </React.StrictMode>
