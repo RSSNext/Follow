@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery } from "@tanstack/react-query"
 
 // const typeMap = {
 //   'Articles': ['Forum', 'News', 'Game', 'Shopping', 'Blog', 'Knowledge'],
@@ -10,28 +10,35 @@ import { useQuery } from '@tanstack/react-query'
 // }
 
 export const typeMap = {
-  'Articles': [5, 6, 11, 12, 10, 15],
-  'Social Media': [2, 9],
-  'Pictures': [7],
-  'Videos': [3, 4, 8],
-  'Audios': [],
-  'Notifications': [13],
+  Articles: [5, 6, 11, 12, 10, 15],
+  "Social Media": [2, 9],
+  Pictures: [7],
+  Videos: [3, 4, 8],
+  Audios: [],
+  Notifications: [13],
 }
 
 export const useFeeds = (type: string) =>
   useQuery({
-    queryKey: ['feeds', type],
+    queryKey: ["feeds", type],
     queryFn: async () => {
-      const feeds = await (await fetch(`${import.meta.env.VITE_MINIFLUX_ENDPOINT}/v1/feeds`, {
-        headers: {
-          'X-Auth-Token': import.meta.env.VITE_MINIFLUX_TOKEN
-        }
-      })).json()
-      const counters = await (await fetch(`${import.meta.env.VITE_MINIFLUX_ENDPOINT}/v1/feeds/counters`, {
-        headers: {
-          'X-Auth-Token': import.meta.env.VITE_MINIFLUX_TOKEN
-        }
-      })).json()
+      const feeds = await (
+        await fetch(`${import.meta.env.VITE_MINIFLUX_ENDPOINT}/v1/feeds`, {
+          headers: {
+            "X-Auth-Token": import.meta.env.VITE_MINIFLUX_TOKEN,
+          },
+        })
+      ).json()
+      const counters = await (
+        await fetch(
+          `${import.meta.env.VITE_MINIFLUX_ENDPOINT}/v1/feeds/counters`,
+          {
+            headers: {
+              "X-Auth-Token": import.meta.env.VITE_MINIFLUX_TOKEN,
+            },
+          },
+        )
+      ).json()
 
       const categories = {
         list: {},
@@ -43,7 +50,7 @@ export const useFeeds = (type: string) =>
             categories.list[feed.category.title] = {
               list: [],
               unread: 0,
-              id: feed.category.id
+              id: feed.category.id,
             }
           }
           const unread = counters.unreads[feed.id] || 0
@@ -53,15 +60,17 @@ export const useFeeds = (type: string) =>
           categories.unread += unread
         }
       })
-      const list = Object.entries(categories.list).map(([name, list]: any) => ({
-        name,
-        list: list.list.sort((a, b) => b.unread - a.unread),
-        unread: list.unread,
-        id: list.id
-      })).sort((a, b) => b.unread - a.unread)
+      const list = Object.entries(categories.list)
+        .map(([name, list]: any) => ({
+          name,
+          list: list.list.sort((a, b) => b.unread - a.unread),
+          unread: list.unread,
+          id: list.id,
+        }))
+        .sort((a, b) => b.unread - a.unread)
       return {
         list,
-        unread: categories.unread
+        unread: categories.unread,
       }
-    }
+    },
   })

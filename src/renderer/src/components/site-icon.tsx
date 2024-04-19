@@ -1,11 +1,11 @@
-import { cn } from "@renderer/lib/utils";
+import { cn } from "@renderer/lib/utils"
 
 export function SiteIcon({
   url,
   className,
 }: {
-  url: string,
-  className?: string,
+  url: string
+  className?: string
 }) {
   return (
     <img

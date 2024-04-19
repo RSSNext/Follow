@@ -1,44 +1,44 @@
-import { useEntries } from '@renderer/lib/entries'
-import { ActivedList, ActivedEntry } from '@renderer/lib/types'
-import { m } from 'framer-motion'
-import { cn } from '@renderer/lib/utils'
-import { ArticleItem } from './article-item'
-import { SocialMediaItem } from './social-media-item'
-import { PictureItem } from './picture-item'
-import { VideoItem } from './video-item'
-import { NotificationItem } from './notification-item'
+import { useEntries } from "@renderer/lib/entries"
+import { ActivedList, ActivedEntry } from "@renderer/lib/types"
+import { m } from "framer-motion"
+import { cn } from "@renderer/lib/utils"
+import { ArticleItem } from "./article-item"
+import { SocialMediaItem } from "./social-media-item"
+import { PictureItem } from "./picture-item"
+import { VideoItem } from "./video-item"
+import { NotificationItem } from "./notification-item"
 
-const gridMode = ['Pictures', 'Videos']
+const gridMode = ["Pictures", "Videos"]
 
 export function EntryColumn({
   activedList,
   activedEntry,
   setActivedEntry,
 }: {
-  activedList: ActivedList,
-  activedEntry: ActivedEntry,
+  activedList: ActivedList
+  activedEntry: ActivedEntry
   setActivedEntry: (value: ActivedEntry) => void
 }) {
   const entries = useEntries({
     level: activedList?.level,
-    id: activedList?.id
+    id: activedList?.id,
   })
 
-  let Item;
+  let Item
   switch (activedList?.type) {
-    case 'Articles':
+    case "Articles":
       Item = ArticleItem
       break
-    case 'Social Media':
+    case "Social Media":
       Item = SocialMediaItem
       break
-    case 'Pictures':
+    case "Pictures":
       Item = PictureItem
       break
-    case 'Videos':
+    case "Videos":
       Item = VideoItem
       break
-    case 'Notifications':
+    case "Notifications":
       Item = NotificationItem
       break
     default:
@@ -46,7 +46,7 @@ export function EntryColumn({
   }
 
   return (
-    <div className='px-2' onClick={() => setActivedEntry(null)}>
+    <div className="px-2" onClick={() => setActivedEntry(null)}>
       <div className="ml-9 mb-5">
         <div className="font-bold text-lg">{activedList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
@@ -58,21 +58,25 @@ export function EntryColumn({
           <m.div
             key={`${activedList?.level}-${activedList?.id}-${index}`}
             transition={{
-              type: 'tween',
+              type: "tween",
               duration: 0.1,
-              ease: 'easeInOut',
+              ease: "easeInOut",
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className={cn(
-              gridMode.includes(activedList?.type || '') && 'grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2'
+              gridMode.includes(activedList?.type || "") &&
+                "grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2",
             )}
           >
             {page.entries.map((entry) => (
               <div
                 key={entry.id}
-                className={cn("rounded-md cursor-pointer", activedEntry?.id === entry.id && 'bg-[#DEDDDC]')}
+                className={cn(
+                  "rounded-md cursor-pointer",
+                  activedEntry?.id === entry.id && "bg-[#DEDDDC]",
+                )}
                 onClick={(e) => {
                   e.stopPropagation()
                   setActivedEntry(entry)

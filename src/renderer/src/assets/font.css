@@ -1,83 +1,83 @@
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-Thin.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-Thin.woff2");
   font-weight: 100;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-ThinItalic.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-ThinItalic.woff2");
   font-weight: 100;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-Light.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-Light.woff2");
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-LightItalic.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-LightItalic.woff2");
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-Regular.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-Regular.woff2");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-Italic.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-Italic.woff2");
   font-weight: 400;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-Medium.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-Medium.woff2");
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-MediumItalic.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-MediumItalic.woff2");
   font-weight: 500;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-SemiBold.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-SemiBold.woff2");
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-SemiBoldItalic.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-SemiBoldItalic.woff2");
   font-weight: 600;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-Bold.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-Bold.woff2");
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SNPro';
-  src: url('./font/SNPro-BoldItalic.woff2');
+  font-family: "SNPro";
+  src: url("./font/SNPro-BoldItalic.woff2");
   font-weight: 700;
   font-style: italic;
 }

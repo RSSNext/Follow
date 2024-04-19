@@ -1,28 +1,28 @@
-import './assets/main.css'
+import "./assets/main.css"
 
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import React from "react"
+import ReactDOM from "react-dom/client"
+import App from "./App"
+import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import { LazyMotion, MotionConfig } from "framer-motion"
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
 import { SessionProvider } from "@hono/auth-js/react"
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <App />,
     children: [
       {
-        path: '',
-        lazy: () => import('./pages/index')
+        path: "",
+        lazy: () => import("./pages/index"),
       },
       {
-        path: 'debug',
-        lazy: () => import('./pages/debug')
+        path: "debug",
+        lazy: () => import("./pages/debug"),
       },
-    ]
-  }
+    ],
+  },
 ])
 
 const loadFeatures = () =>
@@ -30,7 +30,7 @@ const loadFeatures = () =>
 
 const queryClient = new QueryClient()
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <LazyMotion features={loadFeatures} strict key="framer">
       <MotionConfig
@@ -46,5 +46,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </SessionProvider>
       </MotionConfig>
     </LazyMotion>
-  </React.StrictMode>
+  </React.StrictMode>,
 )

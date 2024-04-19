@@ -1,27 +1,27 @@
-import fs from 'fs'
-import { resolve } from 'path'
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
-import react from '@vitejs/plugin-react'
+import fs from "fs"
+import { resolve } from "path"
+import { defineConfig, externalizeDepsPlugin } from "electron-vite"
+import react from "@vitejs/plugin-react"
 
-const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'))
+const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"))
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
   },
   preload: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
   },
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
-      }
+        "@renderer": resolve("src/renderer/src"),
+      },
     },
     plugins: [react()],
     define: {
       APP_VERSION: JSON.stringify(pkg.version),
-      APP_NAME: JSON.stringify(pkg.productName)
-    }
-  }
+      APP_NAME: JSON.stringify(pkg.productName),
+    },
+  },
 })

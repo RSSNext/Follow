@@ -1,9 +1,9 @@
-const { iconsPlugin, getIconCollections } = require("@egoist/tailwindcss-icons");
+const { iconsPlugin, getIconCollections } = require("@egoist/tailwindcss-icons")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: ['./src/**/*.tsx'],
+  content: ["./src/**/*.tsx"],
   prefix: "",
   theme: {
     container: {
@@ -75,7 +75,6 @@ module.exports = {
       collections: getIconCollections(["mingcute"]),
     }),
     require("tailwindcss-animate"),
-    require('@tailwindcss/typography'),
+    require("@tailwindcss/typography"),
   ],
 }
-

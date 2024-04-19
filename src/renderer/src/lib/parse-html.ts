@@ -1,8 +1,8 @@
-import { unified } from 'unified'
-import rehypeParse from 'rehype-parse'
-import rehypeSanitize from 'rehype-sanitize'
-import rehypeInferDescriptionMeta from 'rehype-infer-description-meta'
-import rehypeStringify from 'rehype-stringify'
+import { unified } from "unified"
+import rehypeParse from "rehype-parse"
+import rehypeSanitize from "rehype-sanitize"
+import rehypeInferDescriptionMeta from "rehype-infer-description-meta"
+import rehypeStringify from "rehype-stringify"
 import { VFile } from "vfile"
 import { visit } from "unist-util-visit"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
@@ -24,16 +24,13 @@ export const parseHtml = async (content: string) => {
     desctription: string
     images: string[]
   } = {
-    desctription: file.data.meta?.description || '',
+    desctription: file.data.meta?.description || "",
     images: [],
   }
   if (hastTree) {
     visit(hastTree, (node) => {
       if (node.type === "element") {
-        if (
-          node.tagName === "img" &&
-          typeof node.properties.src === "string"
-        ) {
+        if (node.tagName === "img" && typeof node.properties.src === "string") {
           metadata.images.push(node.properties.src)
         } else if (node.tagName === "a") {
           node.properties.target = "_blank"
