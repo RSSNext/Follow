@@ -1,5 +1,5 @@
 {
-  "name": "rere",
+  "name": "readok",
   "version": "0.0.1",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",

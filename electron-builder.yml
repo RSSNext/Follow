@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: rere
+productName: readok
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: rere
+  executableName: readok
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
