@@ -6,7 +6,7 @@ import App from "./App"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import { LazyMotion, MotionConfig } from "framer-motion"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
-import { SessionProvider } from "@hono/auth-js/react"
+import { authConfigManager, SessionProvider } from "@hono/auth-js/react"
 
 const router = createBrowserRouter([
   {
@@ -16,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: "",
         lazy: () => import("./pages/index"),
+      },
+      {
+        path: "login",
+        lazy: () => import("./pages/login"),
       },
       {
         path: "debug",
@@ -29,6 +33,12 @@ const loadFeatures = () =>
   import("./framer-lazy-feature").then((res) => res.default)
 
 const queryClient = new QueryClient()
+
+authConfigManager.setConfig({
+  baseUrl: "http://localhost:3000",
+  basePath: "/auth",
+  credentials: "same-origin",
+})
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

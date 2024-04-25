@@ -139,6 +139,14 @@ export function FeedColumn({
           ))}
         </m.div>
       </div>
+      <a
+        href={`${import.meta.env.VITE_ELECTRON_REMOTE_URL}/login`}
+        target="_blank"
+        className="h-14 flex items-center justify-center gap-1 rounded-xl m-2 bg-zinc-100 font-medium cursor-pointer"
+      >
+        <i className="i-mingcute-emoji-2-line text-xl" />
+        <span className="text-lg">Log in</span>
+      </a>
     </div>
   )
 }
