@@ -35,9 +35,9 @@ const loadFeatures = () =>
 const queryClient = new QueryClient()
 
 authConfigManager.setConfig({
-  baseUrl: "http://localhost:3000",
+  baseUrl: import.meta.env.VITE_ELECTRON_REMOTE_API_URL,
   basePath: "/auth",
-  credentials: "same-origin",
+  credentials: "include",
 })
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
