@@ -1,7 +1,17 @@
-import { app, shell, BrowserWindow, ipcMain } from "electron"
-import { join } from "path"
+import { app, shell, BrowserWindow, ipcMain, dialog } from "electron"
+import path from "path"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 import icon from "../../resources/icon.png?asset"
+
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient("readok", process.execPath, [
+      path.resolve(process.argv[1]),
+    ])
+  }
+} else {
+  app.setAsDefaultProtocolClient("readok")
+}
 
 function createWindow(): void {
   // Create the browser window.
@@ -12,7 +22,7 @@ function createWindow(): void {
     autoHideMenuBar: true,
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, "../preload/index.js"),
+      preload: path.join(__dirname, "../preload/index.js"),
       sandbox: false,
     },
     titleBarStyle: "hiddenInset",
@@ -32,7 +42,7 @@ function createWindow(): void {
   if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
     mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"])
   } else {
-    mainWindow.loadFile(join(__dirname, "../renderer/index.html"))
+    mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"))
   }
 
   const refererMatchs = [
@@ -58,6 +68,24 @@ function createWindow(): void {
       })
     },
   )
+
+  app.on("second-instance", (event, commandLine, workingDirectory) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+    dialog.showErrorBox(
+      "Welcome Back",
+      `You arrived from: ${commandLine.pop()}`,
+    )
+  })
+  app.on("open-url", (event, url) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+    dialog.showErrorBox("Welcome Back", `You arrived from: ${url}`)
+  })
 }
 
 // This method will be called when Electron has finished

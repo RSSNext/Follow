@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: io.readok
 productName: readok
 directories:
   buildResources: build
@@ -41,3 +41,8 @@ npmRebuild: false
 publish:
   provider: generic
   url: https://example.com/auto-updates
+protocols:
+  name: ReadOK
+  schemes:
+    - readok
+    - feed
