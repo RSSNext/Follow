@@ -29,6 +29,7 @@
     "@electron-toolkit/utils": "^3.0.0",
     "@fontsource/sn-pro": "5.0.1",
     "@hono/auth-js": "1.0.4",
+    "@radix-ui/react-avatar": "1.0.4",
     "@radix-ui/react-collapsible": "1.0.3",
     "@radix-ui/react-slot": "1.0.2",
     "@radix-ui/react-tabs": "1.0.4",

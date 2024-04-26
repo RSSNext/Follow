@@ -22,6 +22,10 @@ const router = createBrowserRouter([
         lazy: () => import("./pages/login"),
       },
       {
+        path: "redirect",
+        lazy: () => import("./pages/redirect"),
+      },
+      {
         path: "debug",
         lazy: () => import("./pages/debug"),
       },
