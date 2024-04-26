@@ -5,7 +5,7 @@ body,
   @apply cursor-default;
   @apply select-none;
 
-  font-family: "SNPro", sans-serif;
+  font-family: "SN Pro", sans-serif;
 }
 
 .drag-region {

@@ -14,12 +14,18 @@ importers:
       '@electron-toolkit/utils':
         specifier: ^3.0.0
         version: 3.0.0(electron@29.2.0)
+      '@fontsource/sn-pro':
+        specifier: 5.0.1
+        version: 5.0.1
       '@hono/auth-js':
         specifier: 1.0.3
         version: 1.0.3(@auth/core@0.29.0)(hono@4.2.4)(react@18.2.0)
       '@radix-ui/react-collapsible':
         specifier: 1.0.3
         version: 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-slot':
+        specifier: 1.0.2
+        version: 1.0.2(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-tabs':
         specifier: 1.0.4
         version: 1.0.4(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -673,6 +679,9 @@ packages:
 
   '@floating-ui/utils@0.2.1':
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
+
+  '@fontsource/sn-pro@5.0.1':
+    resolution: {integrity: sha512-Bxx3/qxfadd4Fdjy8xn0kPCaiUf3ma/Kra6+9TmNR/pQhCdAvZtZgSkG8O1Z+3Yt6KE27CuG/OjpAkZ8Bh6VgQ==}
 
   '@hono/auth-js@1.0.3':
     resolution: {integrity: sha512-g4U6oRbsTRnEm7wc5v9VgbCzBr11ef+bFYs7KgWsXt3TfRCGAPuVFaS+q6uFNJsGSBmX56U8nhLPi46gg/zmRQ==}
@@ -4167,6 +4176,8 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
 
   '@floating-ui/utils@0.2.1': {}
+
+  '@fontsource/sn-pro@5.0.1': {}
 
   '@hono/auth-js@1.0.3(@auth/core@0.29.0)(hono@4.2.4)(react@18.2.0)':
     dependencies:
