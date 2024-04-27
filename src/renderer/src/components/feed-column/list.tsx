@@ -1,25 +1,26 @@
-import { useFeeds } from "@renderer/lib/feeds"
+import { useSubscriptions } from "@renderer/lib/subscriptions"
 import {
   Collapsible,
   CollapsibleTrigger,
 } from "@renderer/components/ui/collapsible"
 import { m, AnimatePresence } from "framer-motion"
 import { useState } from "react"
-import { levels } from "@renderer/lib/constants"
+import { levels, views } from "@renderer/lib/constants"
 import { ActivedList } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { SiteIcon } from "../site-icon"
+import { Response as SubscriptionsResponse } from "@renderer/lib/subscriptions"
 
 export function FeedList({
-  type,
+  view,
   activedList,
   setActivedList,
 }: {
-  type: string
+  view: number
   activedList: ActivedList
   setActivedList: (value: ActivedList) => void
 }) {
-  const feeds = useFeeds(type)
+  const subscriptions = useSubscriptions(view)
 
   return (
     <div className="w-64 px-3">
@@ -31,22 +32,24 @@ export function FeedList({
           e.stopPropagation()
           setActivedList({
             level: levels.type,
-            id: type,
-            name: type,
-            type,
+            id: view,
+            name: views[view].name,
+            view,
           })
         }}
       >
-        <div className="font-bold">{type}</div>
-        <div className="text-sm text-zinc-500 ml-2">{feeds.data?.unread}</div>
+        <div className="font-bold">{views[view].name}</div>
+        <div className="text-sm text-zinc-500 ml-2">
+          {subscriptions.data?.unread}
+        </div>
       </div>
-      {feeds.data?.list.map((category) => (
+      {subscriptions.data?.list.map((category) => (
         <FeedCategory
           key={category.name}
           data={category}
           activedList={activedList}
           setActivedList={setActivedList}
-          type={type}
+          view={view}
         />
       ))}
     </div>
@@ -57,12 +60,12 @@ function FeedCategory({
   data,
   activedList,
   setActivedList,
-  type,
+  view,
 }: {
-  data: any
+  data: SubscriptionsResponse["list"][number]
   activedList: ActivedList
   setActivedList: (value: ActivedList) => void
-  type: string
+  view: number
 }) {
   const [open, setOpen] = useState(false)
 
@@ -74,9 +77,9 @@ function FeedCategory({
         e.stopPropagation()
         setActivedList({
           level: levels.folder,
-          id: data.id,
+          id: data.name,
           name: data.name,
-          type,
+          view,
         })
       }}
     >
@@ -84,7 +87,7 @@ function FeedCategory({
         className={cn(
           "flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded w-full cursor-pointer",
           activedList?.level === levels.folder &&
-            activedList.id === data.id &&
+            activedList.id === data.name &&
             "bg-[#C9C9C7]",
         )}
       >
@@ -122,26 +125,26 @@ function FeedCategory({
           >
             {data.list.map((feed) => (
               <div
-                key={feed.id}
+                key={feed.feedId}
                 className={cn(
                   "flex items-center justify-between text-sm font-medium leading-loose w-full pl-6 pr-2.5 py-[2px] rounded cursor-pointer",
                   activedList?.level === levels.feed &&
-                    activedList.id === feed.id &&
+                    activedList.id === feed.feedId &&
                     "bg-[#C9C9C7]",
                 )}
                 onClick={(e) => {
                   e.stopPropagation()
                   setActivedList({
                     level: levels.feed,
-                    id: feed.id,
-                    name: feed.title,
-                    type,
+                    id: feed.feedId,
+                    name: feed.feeds.title,
+                    view,
                   })
                 }}
               >
                 <div className="flex items-center min-w-0">
-                  <SiteIcon url={feed.site_url} className="w-4 h-4" />
-                  <div className="truncate">{feed.title}</div>
+                  <SiteIcon url={feed.feeds.siteUrl} className="w-4 h-4" />
+                  <div className="truncate">{feed.feeds.title}</div>
                 </div>
                 {!!feed.unread && (
                   <div className="text-xs text-zinc-500 ml-2">

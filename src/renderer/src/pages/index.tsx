@@ -5,14 +5,14 @@ import { ActivedList, ActivedEntry } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { EntryContent } from "@renderer/components/entry-content"
 
-const wideMode = ["Social Media", "Pictures", "Videos", "Audios"]
+const wideMode = [1, 2, 3, 4]
 
 export function Component() {
   const [activedList, setActivedList] = useState<ActivedList>({
-    level: "type",
-    id: "Articles",
+    level: "view",
+    id: 0,
     name: "Articles",
-    type: "Articles",
+    view: 0,
   })
   const [activedEntry, setActivedEntry] = useState<ActivedEntry>(null)
 
@@ -24,7 +24,9 @@ export function Component() {
       <div
         className={cn(
           "pt-10 border-r shrink-0 h-full overflow-y-auto",
-          wideMode.includes(activedList?.type || "") ? "flex-1" : "w-[340px]",
+          activedList && wideMode.includes(activedList.view)
+            ? "flex-1"
+            : "w-[340px]",
         )}
       >
         <EntryColumn
@@ -33,7 +35,7 @@ export function Component() {
           setActivedEntry={setActivedEntry}
         />
       </div>
-      {!wideMode.includes(activedList?.type || "") && (
+      {!(activedList && wideMode.includes(activedList.view)) && (
         <div className="flex-1 pt-10">
           <EntryContent entry={activedEntry} />
         </div>

@@ -12,41 +12,9 @@ import { m, useSpring } from "framer-motion"
 import { FeedList } from "./list"
 import { ActivedList } from "@renderer/lib/types"
 import { UserButton } from "@renderer/components/user-button"
+import { views } from "@renderer/lib/constants"
 
 const lethargy = new Lethargy()
-
-const items = [
-  {
-    name: "Articles",
-    icon: <i className="i-mingcute-news-fill" />,
-    className: "text-amber-700",
-  },
-  {
-    name: "Social Media",
-    icon: <i className="i-mingcute-twitter-fill" />,
-    className: "text-sky-600",
-  },
-  {
-    name: "Pictures",
-    icon: <i className="i-mingcute-pic-fill" />,
-    className: "text-green-600",
-  },
-  {
-    name: "Videos",
-    icon: <i className="i-mingcute-youtube-fill" />,
-    className: "text-red-600",
-  },
-  {
-    name: "Audios",
-    icon: <i className="i-mingcute-headphone-fill" />,
-    className: "text-purple-600",
-  },
-  {
-    name: "Notifications",
-    icon: <i className="i-mingcute-notification-fill" />,
-    className: "text-yellow-600",
-  },
-]
 
 export function FeedColumn({
   activedList,
@@ -73,7 +41,7 @@ export function FeedColumn({
         const s = lethargy.check(event)
         if (s) {
           if (!wait && Math.abs(dex) > 20) {
-            setActive((i) => clamp(i + dx, 0, items.length - 1))
+            setActive((i) => clamp(i + dx, 0, views.length - 1))
             return true
           } else {
             return undefined
@@ -95,27 +63,27 @@ export function FeedColumn({
       className="h-full flex flex-col"
       onClick={() =>
         setActivedList({
-          level: "type",
-          id: items[active].name,
-          name: items[active].name,
-          type: items[active].name,
+          level: "view",
+          id: active,
+          name: views[active].name,
+          view: active,
         })
       }
     >
       <UserButton className="h-12 mx-3 mb-2 mt-1" />
       <div className="flex text-zinc-500 w-full justify-between text-xl my-2 px-5">
         <TooltipProvider delayDuration={300}>
-          {items.map((item, index) => (
+          {views.map((item, index) => (
             <div
               key={item.name}
               className={cn(active === index && "text-zinc-800")}
               onClick={(e) => {
                 setActive(index)
                 setActivedList({
-                  level: "type",
-                  id: items[index].name,
-                  name: items[index].name,
-                  type: items[index].name,
+                  level: "view",
+                  id: index,
+                  name: views[index].name,
+                  view: index,
                 })
                 e.stopPropagation()
               }}
@@ -130,10 +98,10 @@ export function FeedColumn({
       </div>
       <div className="w-full h-full overflow-x-hidden" ref={carouselRef}>
         <m.div className="h-full flex" style={{ x: spring }}>
-          {items.map((item) => (
+          {views.map((item, index) => (
             <section key={item.name} className="snap-center shrink-0">
               <FeedList
-                type={item.name}
+                view={index}
                 activedList={activedList}
                 setActivedList={setActivedList}
               />

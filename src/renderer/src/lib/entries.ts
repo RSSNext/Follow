@@ -1,6 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { parseHtml } from "./parse-html"
-import { typeMap } from "./feeds"
 import { levels } from "@renderer/lib/constants"
 
 export const useEntries = ({
@@ -40,7 +39,6 @@ export const useEntries = ({
                 direction: "desc",
                 limit: "20",
                 after_entry_id: pageParam,
-                category_id: typeMap[id as string][0] + "",
               }),
             {
               headers: {
