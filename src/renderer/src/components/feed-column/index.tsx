@@ -102,9 +102,7 @@ export function FeedColumn({
         })
       }
     >
-      <div className="flex justify-center py-2 mx-3 my-2 rounded-xl font-medium cursor-pointer bg-stone-300 text-zinc-600">
-        <UserButton className="h-8" />
-      </div>
+      <UserButton className="h-12 mx-3 mb-2 mt-1" />
       <div className="flex text-zinc-500 w-full justify-between text-xl my-2 px-5">
         <TooltipProvider delayDuration={300}>
           {items.map((item, index) => (

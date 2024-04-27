@@ -24,7 +24,7 @@ export function Component() {
 
   return (
     <div className="h-screen w-full flex items-center justify-center flex-col gap-10">
-      <UserButton />
+      <UserButton className="text-2xl bg-stone-100 px-10 py-4" />
       <h1 className="text-3xl font-bold">
         Successfully connected to ReadOK Account
       </h1>
