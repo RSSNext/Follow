@@ -11,6 +11,7 @@ import { cn, clamp } from "@renderer/lib/utils"
 import { m, useSpring } from "framer-motion"
 import { FeedList } from "./list"
 import { ActivedList } from "@renderer/lib/types"
+import { UserButton } from "@renderer/components/user-button"
 
 const lethargy = new Lethargy()
 
@@ -101,6 +102,9 @@ export function FeedColumn({
         })
       }
     >
+      <div className="flex justify-center py-2 mx-3 my-2 rounded-xl font-medium cursor-pointer bg-stone-300 text-zinc-600">
+        <UserButton className="h-8" />
+      </div>
       <div className="flex text-zinc-500 w-full justify-between text-xl my-2 px-5">
         <TooltipProvider delayDuration={300}>
           {items.map((item, index) => (
@@ -139,14 +143,6 @@ export function FeedColumn({
           ))}
         </m.div>
       </div>
-      <a
-        href={`${import.meta.env.VITE_ELECTRON_REMOTE_URL}/login`}
-        target="_blank"
-        className="h-14 flex items-center justify-center gap-1 rounded-xl m-2 bg-zinc-100 font-medium cursor-pointer"
-      >
-        <i className="i-mingcute-emoji-2-line text-xl" />
-        <span className="text-lg">Log in</span>
-      </a>
     </div>
   )
 }
