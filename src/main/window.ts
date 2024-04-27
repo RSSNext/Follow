@@ -13,6 +13,9 @@ function handleOpen(url: string) {
         url: process.env["VITE_ELECTRON_REMOTE_URL"],
         name: "__Secure-authjs.session-token",
         value: token,
+        secure: true,
+        httpOnly: true,
+        domain: "." + new URL(process.env["VITE_ELECTRON_REMOTE_URL"]).hostname,
       })
       mainWindow.reload()
     }
