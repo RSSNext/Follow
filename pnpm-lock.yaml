@@ -50,6 +50,9 @@ importers:
       dayjs:
         specifier: 1.11.10
         version: 1.11.10
+      dotenv:
+        specifier: 16.4.5
+        version: 16.4.5
       electron-updater:
         specifier: ^6.1.7
         version: 6.1.8
@@ -1906,6 +1909,10 @@ packages:
 
   dotenv-expand@5.1.0:
     resolution: {integrity: sha512-YXQl1DSa4/PQyRfgrv6aoNjhasp/p4qs9FjJ4q4cQk+8m4r6k4ZSiEyytKG8f8W9gi8WsQtIObNmKd+tMzNTmA==}
+
+  dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+    engines: {node: '>=12'}
 
   dotenv@9.0.2:
     resolution: {integrity: sha512-I9OvvrHp4pIARv4+x9iuewrWycX6CcZtoAu1XrzPxc5UygMJXJZYmBsynku8IkrJwgypE5DGNjDPmPRhDCptUg==}
@@ -5898,6 +5905,8 @@ snapshots:
       esutils: 2.0.3
 
   dotenv-expand@5.1.0: {}
+
+  dotenv@16.4.5: {}
 
   dotenv@9.0.2: {}
 

@@ -39,6 +39,7 @@
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
     "dayjs": "1.11.10",
+    "dotenv": "16.4.5",
     "electron-updater": "^6.1.7",
     "framer-motion": "11.1.7",
     "hast-util-to-jsx-runtime": "2.3.0",

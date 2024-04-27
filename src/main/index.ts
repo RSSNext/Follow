@@ -1,7 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from "electron"
+import "dotenv/config"
+import { app, BrowserWindow, ipcMain } from "electron"
 import path from "path"
-import { electronApp, optimizer, is } from "@electron-toolkit/utils"
-import icon from "../../resources/icon.png?asset"
+import { electronApp, optimizer } from "@electron-toolkit/utils"
+import { createWindow } from "./window"
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
@@ -13,87 +14,12 @@ if (process.defaultApp) {
   app.setAsDefaultProtocolClient("readok")
 }
 
-function createWindow(): void {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === "linux" ? { icon } : {}),
-    webPreferences: {
-      preload: path.join(__dirname, "../preload/index.js"),
-      sandbox: false,
-    },
-    titleBarStyle: "hiddenInset",
-  })
-
-  mainWindow.on("ready-to-show", () => {
-    mainWindow.show()
-  })
-
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: "deny" }
-  })
-
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-    mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"])
-  } else {
-    mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"))
-  }
-
-  const refererMatchs = [
-    {
-      url: /^https:\/\/\w+\.sinaimg.cn/,
-      referer: "https://weibo.com",
-    },
-    {
-      url: /^https:\/\/i\.pximg\.net/,
-      referer: "https://www.pixiv.net",
-    },
-  ]
-  mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
-    (details, callback) => {
-      const refererMatch = refererMatchs.find((item) =>
-        item.url.test(details.url),
-      )
-      callback({
-        requestHeaders: {
-          ...details.requestHeaders,
-          Referer: refererMatch?.referer || details.url,
-        },
-      })
-    },
-  )
-
-  app.on("second-instance", (event, commandLine, workingDirectory) => {
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore()
-      mainWindow.focus()
-    }
-    dialog.showErrorBox(
-      "Welcome Back",
-      `You arrived from: ${commandLine.pop()}`,
-    )
-  })
-  app.on("open-url", (event, url) => {
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore()
-      mainWindow.focus()
-    }
-    dialog.showErrorBox("Welcome Back", `You arrived from: ${url}`)
-  })
-}
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId("com.electron")
+  electronApp.setAppUserModelId("io.readok")
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
