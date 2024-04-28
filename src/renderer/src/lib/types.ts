@@ -5,8 +5,6 @@ export type ActivedList = {
   view: number
 } | null
 
-export type ActivedEntry = Record<string, any> | null
-
 type FeedResponse = {
   id: string
   url: string
@@ -60,3 +58,5 @@ export type ListResponse<T> = {
   total?: number
   message?: string
 }
+
+export type ActivedEntry = EntriesResponse[number] | null

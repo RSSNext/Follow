@@ -6,9 +6,11 @@ export function EntryContent({ entry }: { entry: ActivedEntry }) {
   const [content, setContent] = useState<JSX.Element>()
 
   useEffect(() => {
-    parseHtml(entry?.content).then((parsed) => {
-      setContent(parsed.content)
-    })
+    if (entry?.content) {
+      parseHtml(entry?.content).then((parsed) => {
+        setContent(parsed.content)
+      })
+    }
   }, [entry?.content])
 
   return (
@@ -21,10 +23,10 @@ export function EntryContent({ entry }: { entry: ActivedEntry }) {
         >
           <div className="text-3xl font-bold select-text">{entry?.title}</div>
           <div className="mt-2 text-[13px] text-zinc-500 font-medium">
-            {entry?.feed?.title}
+            {entry?.feeds?.title}
           </div>
           <div className="text-[13px] text-zinc-500">
-            {new Date(entry?.published_at).toUTCString()}
+            {entry?.publishedAt && new Date(entry?.publishedAt).toUTCString()}
           </div>
         </a>
         <div className="max-w-[550px] mx-auto mt-10 prose text-[15px] prose-zinc select-text">
