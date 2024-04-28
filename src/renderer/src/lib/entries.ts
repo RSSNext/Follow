@@ -14,33 +14,31 @@ export const useEntries = ({
     enabled: level !== undefined && id !== undefined,
     queryFn: async ({ pageParam }) => {
       let entries: ListResponse<EntriesResponse> | null = null
+      const baseUrl = `${import.meta.env.VITE_ELECTRON_REMOTE_API_URL}/entries?`
+      const params: {
+        category?: string
+        view?: string
+        feedId?: string
+      } = {}
       if (level === levels.folder) {
-        entries = await (
-          await fetch(
-            `${import.meta.env.VITE_ELECTRON_REMOTE_API_URL}/entries?` +
-              new URLSearchParams({
-                offset: pageParam + "",
-                category: id + "",
-              }),
-            {
-              credentials: "include",
-            },
-          )
-        ).json()
+        params.category = id + ""
       } else if (level === levels.view) {
-        entries = await (
-          await fetch(
-            `${import.meta.env.VITE_ELECTRON_REMOTE_API_URL}/entries?` +
-              new URLSearchParams({
-                offset: pageParam + "",
-                view: id + "",
-              }),
-            {
-              credentials: "include",
-            },
-          )
-        ).json()
+        params.view = id + ""
+      } else if (level === levels.feed) {
+        params.feedId = id + ""
       }
+      entries = await (
+        await fetch(
+          baseUrl +
+            new URLSearchParams({
+              offset: pageParam + "",
+              ...params,
+            }),
+          {
+            credentials: "include",
+          },
+        )
+      ).json()
 
       if (!entries) {
         entries = {
