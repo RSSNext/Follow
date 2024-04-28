@@ -1,10 +1,11 @@
 import dayjs from "@renderer/lib/dayjs"
 import { SiteIcon } from "@renderer/components/site-icon"
+import { EntriesResponse } from "@renderer/lib/types"
 
-export function SocialMediaItem({ entry }: { entry: any }) {
+export function SocialMediaItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
     <div className="flex my-5 px-2 py-3">
-      <SiteIcon url={entry.feed.site_url} />
+      <SiteIcon url={entry.feeds.siteUrl} />
       <div>
         <div className="line-clamp-5 text-sm flex-1 -mt-0.5">
           <div className="space-x-1">
@@ -13,13 +14,13 @@ export function SocialMediaItem({ entry }: { entry: any }) {
             <span className="text-zinc-500">
               {dayjs
                 .duration(
-                  dayjs(entry.published_at).diff(dayjs(), "minute"),
+                  dayjs(entry.publishedAt).diff(dayjs(), "minute"),
                   "minute",
                 )
                 .humanize()}
             </span>
           </div>
-          <div className="mt-0.5">{entry.text}</div>
+          <div className="mt-0.5">{entry.description}</div>
         </div>
         <div className="flex gap-2 overflow-x-auto mt-1">
           {entry.images?.map((image) => (

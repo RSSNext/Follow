@@ -1,7 +1,8 @@
 import dayjs from "@renderer/lib/dayjs"
 import { SiteIcon } from "../site-icon"
+import { EntriesResponse } from "@renderer/lib/types"
 
-export function VideoItem({ entry }: { entry: any }) {
+export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
     <div className="flex">
       <div>
@@ -22,14 +23,14 @@ export function VideoItem({ entry }: { entry: any }) {
           <div className="space-x-1 text-[13px]">
             <SiteIcon
               className="w-3.5 h-3.5 inline-block mr-0 align-sub"
-              url={entry.feed.site_url}
+              url={entry.feeds.siteUrl}
             />
             <span>{entry.author}</span>
             <span className="text-zinc-500">·</span>
             <span className="text-zinc-500">
               {dayjs
                 .duration(
-                  dayjs(entry.published_at).diff(dayjs(), "minute"),
+                  dayjs(entry.publishedAt).diff(dayjs(), "minute"),
                   "minute",
                 )
                 .humanize()}
