@@ -1,6 +1,7 @@
 import dayjs from "@renderer/lib/dayjs"
 import { SiteIcon } from "../site-icon"
 import { EntriesResponse } from "@renderer/lib/types"
+import { Image } from "@renderer/components/ui/image"
 
 export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
@@ -23,9 +24,9 @@ export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
         <div className="text-zinc-500 text-[13px]">{entry.description}</div>
       </div>
       {entry.images?.[0] && (
-        <img
+        <Image
           src={entry.images[0]}
-          className="w-20 h-20 shrink-0 ml-2 rounded object-cover"
+          className="w-20 h-20 shrink-0 ml-2"
           loading="lazy"
         />
       )}

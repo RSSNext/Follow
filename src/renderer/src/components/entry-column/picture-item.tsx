@@ -1,16 +1,17 @@
 import dayjs from "@renderer/lib/dayjs"
 import { SiteIcon } from "../site-icon"
 import { EntriesResponse } from "@renderer/lib/types"
+import { Image } from "@renderer/components/ui/image"
 
 export function PictureItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
-    <div className="flex">
+    <div>
       <div>
         <div className="flex gap-2 overflow-x-auto">
           {entry.images
             ?.slice(0, 1)
             .map((image) => (
-              <img
+              <Image
                 key={image}
                 src={image}
                 className="w-full aspect-square shrink-0 rounded object-cover"

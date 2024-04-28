@@ -1,22 +1,21 @@
 import dayjs from "@renderer/lib/dayjs"
 import { SiteIcon } from "../site-icon"
 import { EntriesResponse } from "@renderer/lib/types"
+import { Image } from "@renderer/components/ui/image"
 
 export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
     <div className="flex">
       <div>
         <div className="flex gap-2 overflow-x-auto">
-          {entry.images
-            ?.slice(0, 1)
-            .map((image) => (
-              <img
-                key={image}
-                src={image}
-                className="w-full aspect-video shrink-0 rounded object-cover"
-                loading="lazy"
-              />
-            ))}
+          {
+            <Image
+              key={entry.images?.[0]}
+              src={entry.images?.[0]}
+              className="w-full aspect-video shrink-0 rounded object-cover"
+              loading="lazy"
+            />
+          }
         </div>
         <div className="line-clamp-5 text-sm flex-1 px-2 pb-3 pt-1">
           <div className="font-medium line-clamp-2">{entry.title}</div>

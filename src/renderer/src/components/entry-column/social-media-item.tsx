@@ -1,6 +1,7 @@
 import dayjs from "@renderer/lib/dayjs"
 import { SiteIcon } from "@renderer/components/site-icon"
 import { EntriesResponse } from "@renderer/lib/types"
+import { Image } from "@renderer/components/ui/image"
 
 export function SocialMediaItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
@@ -24,10 +25,10 @@ export function SocialMediaItem({ entry }: { entry: EntriesResponse[number] }) {
         </div>
         <div className="flex gap-2 overflow-x-auto mt-1">
           {entry.images?.map((image) => (
-            <img
+            <Image
               key={image}
               src={image}
-              className="w-28 h-28 shrink-0 rounded object-cover"
+              className="w-28 h-28 shrink-0"
               loading="lazy"
             />
           ))}

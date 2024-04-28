@@ -38,7 +38,7 @@ export function EntryColumn({
     case 3:
       Item = VideoItem
       break
-    case 4:
+    case 5:
       Item = NotificationItem
       break
     default:
