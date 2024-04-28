@@ -7,6 +7,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import { LazyMotion, MotionConfig } from "framer-motion"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
 import { authConfigManager, SessionProvider } from "@hono/auth-js/react"
+import { persistQueryClient } from "@tanstack/react-query-persist-client"
+import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister"
 
 const router = createBrowserRouter([
   {
@@ -36,7 +38,22 @@ const router = createBrowserRouter([
 const loadFeatures = () =>
   import("./framer-lazy-feature").then((res) => res.default)
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: Infinity,
+    },
+  },
+})
+
+const localStoragePersister = createSyncStoragePersister({
+  storage: window.localStorage,
+})
+
+persistQueryClient({
+  queryClient,
+  persister: localStoragePersister,
+})
 
 authConfigManager.setConfig({
   baseUrl: import.meta.env.VITE_ELECTRON_REMOTE_API_URL,
