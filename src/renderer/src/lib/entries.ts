@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
-import { parseHtml } from "./parse-html"
 import { levels } from "@renderer/lib/constants"
+import { EntriesResponse, ListResponse } from "./types"
 
 export const useEntries = ({
   level,
@@ -11,63 +11,46 @@ export const useEntries = ({
 }) =>
   useInfiniteQuery({
     queryKey: ["entries", level, id],
-    enabled: !!level && !!id,
+    enabled: level !== undefined && id !== undefined,
     queryFn: async ({ pageParam }) => {
-      let entries
+      let entries: ListResponse<EntriesResponse> | null = null
       if (level === levels.folder) {
         entries = await (
           await fetch(
-            `${import.meta.env.VITE_MINIFLUX_ENDPOINT}/v1/entries?` +
+            `${import.meta.env.VITE_ELECTRON_REMOTE_API_URL}/entries?` +
               new URLSearchParams({
-                direction: "desc",
-                limit: "20",
-                after_entry_id: pageParam,
-                category_id: id + "",
+                offset: pageParam + "",
+                category: id + "",
               }),
             {
-              headers: {
-                "X-Auth-Token": import.meta.env.VITE_MINIFLUX_TOKEN,
-              },
+              credentials: "include",
             },
           )
         ).json()
-      } else if (level === levels.type) {
+      } else if (level === levels.view) {
         entries = await (
           await fetch(
-            `${import.meta.env.VITE_MINIFLUX_ENDPOINT}/v1/entries?` +
+            `${import.meta.env.VITE_ELECTRON_REMOTE_API_URL}/entries?` +
               new URLSearchParams({
-                direction: "desc",
-                limit: "20",
-                after_entry_id: pageParam,
+                offset: pageParam + "",
+                view: id + "",
               }),
             {
-              headers: {
-                "X-Auth-Token": import.meta.env.VITE_MINIFLUX_TOKEN,
-              },
+              credentials: "include",
             },
           )
         ).json()
       }
-      entries.entries = await Promise.all(
-        entries.entries.map(async (entry) => {
-          entry.content = entry.content.replaceAll(
-            "https://pixiv.diygod.me/",
-            "https://i.pximg.net/",
-          )
-          const parsed = await parseHtml(entry.content)
-          return {
-            ...entry,
-            text: parsed.metadata?.desctription,
-            images: parsed.metadata?.images,
-          }
-        }),
-      )
+
+      if (!entries) {
+        entries = {
+          code: -1,
+        }
+      }
 
       return entries
     },
-    getNextPageParam: (lastPage) =>
-      lastPage?.entries?.length
-        ? lastPage.entries[lastPage.entries.length - 1].id
-        : "",
-    initialPageParam: "",
+    getNextPageParam: (lastPage, _, lastPageParam) =>
+      lastPageParam + (lastPage.data?.length || 0),
+    initialPageParam: 0,
   })

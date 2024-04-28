@@ -1,5 +1,5 @@
 export const levels = {
-  type: "type",
+  view: "view",
   folder: "folder",
   feed: "feed",
   entry: "entry",

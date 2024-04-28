@@ -1,26 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-
-type SubscriptionResponse = {
-  userId: string
-  feedId: string
-  view: number
-  category: string
-  title: string
-  unread?: number
-  feeds: {
-    id: string
-    url: string
-    title: string
-    description: string
-    siteUrl: string
-    image: string
-    checkedAt: string
-    nextCheckAt: string
-    lastModifiedHeader: string
-    etagHeader: string
-    ttl: number
-  }
-}[]
+import { SubscriptionResponse } from "./types"
 
 export type Response = {
   list: {

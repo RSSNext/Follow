@@ -31,7 +31,7 @@ export function FeedList({
         onClick={(e) => {
           e.stopPropagation()
           setActivedList({
-            level: levels.type,
+            level: levels.view,
             id: view,
             name: views[view].name,
             view,

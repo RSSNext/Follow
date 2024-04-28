@@ -8,7 +8,7 @@ import { PictureItem } from "./picture-item"
 import { VideoItem } from "./video-item"
 import { NotificationItem } from "./notification-item"
 
-const gridMode = ["Pictures", "Videos"]
+const gridMode = [2, 3]
 
 export function EntryColumn({
   activedList,
@@ -25,20 +25,20 @@ export function EntryColumn({
   })
 
   let Item
-  switch (activedList?.type) {
-    case "Articles":
+  switch (activedList?.view) {
+    case 0:
       Item = ArticleItem
       break
-    case "Social Media":
+    case 1:
       Item = SocialMediaItem
       break
-    case "Pictures":
+    case 2:
       Item = PictureItem
       break
-    case "Videos":
+    case 3:
       Item = VideoItem
       break
-    case "Notifications":
+    case 4:
       Item = NotificationItem
       break
     default:
@@ -66,11 +66,12 @@ export function EntryColumn({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className={cn(
-              gridMode.includes(activedList?.type || "") &&
+              activedList?.view &&
+                gridMode.includes(activedList.view) &&
                 "grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2",
             )}
           >
-            {page.entries.map((entry) => (
+            {page.data?.map((entry) => (
               <div
                 key={entry.id}
                 className={cn(
