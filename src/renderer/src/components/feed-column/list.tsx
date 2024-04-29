@@ -104,15 +104,10 @@ function FeedCategory({
       <AnimatePresence>
         {open && (
           <m.div
-            transition={{
-              type: "tween",
-              duration: 0.1,
-              ease: "easeInOut",
-            }}
             className="overflow-hidden"
             initial={{
               height: 0,
-              opacity: 0,
+              opacity: 0.01,
             }}
             animate={{
               height: "auto",
@@ -120,7 +115,7 @@ function FeedCategory({
             }}
             exit={{
               height: 0,
-              opacity: 0,
+              opacity: 0.01,
             }}
           >
             {data.list.map((feed) => (

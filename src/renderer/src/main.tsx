@@ -66,8 +66,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <LazyMotion features={loadFeatures} strict key="framer">
       <MotionConfig
         transition={{
-          type: "spring",
-          duration: 0.3,
+          type: "tween",
+          duration: 0.1,
+          ease: "easeInOut",
         }}
       >
         <SessionProvider>

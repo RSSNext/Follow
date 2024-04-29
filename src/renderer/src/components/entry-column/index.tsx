@@ -57,14 +57,9 @@ export function EntryColumn({
         {entries.data?.pages?.map((page, index) => (
           <m.div
             key={`${activedList?.level}-${activedList?.id}-${index}`}
-            transition={{
-              type: "tween",
-              duration: 0.1,
-              ease: "easeInOut",
-            }}
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 0.01 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0.01 }}
             className={cn(
               activedList?.view &&
                 gridMode.includes(activedList.view) &&
