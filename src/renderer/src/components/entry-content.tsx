@@ -1,6 +1,7 @@
 import { parseHtml } from "@renderer/lib/parse-html"
 import { ActivedEntry } from "@renderer/lib/types"
 import { useEffect, useState } from "react"
+import { m } from "framer-motion"
 
 export function EntryContent({ entry }: { entry: ActivedEntry }) {
   const [content, setContent] = useState<JSX.Element>()
@@ -14,7 +15,13 @@ export function EntryContent({ entry }: { entry: ActivedEntry }) {
   }, [entry?.content])
 
   return (
-    <div className="px-4 py-5 overflow-y-auto h-full">
+    <m.div
+      className="px-4 py-5 overflow-y-auto h-full"
+      initial={{ opacity: 0.01, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0.01, y: -50 }}
+      key={entry?.id}
+    >
       <div>
         <a
           href={entry?.url}
@@ -33,6 +40,6 @@ export function EntryContent({ entry }: { entry: ActivedEntry }) {
           {content}
         </div>
       </div>
-    </div>
+    </m.div>
   )
 }
