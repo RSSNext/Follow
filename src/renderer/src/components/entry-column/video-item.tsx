@@ -12,7 +12,7 @@ export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
             <Image
               key={entry.images?.[0]}
               src={entry.images?.[0]}
-              className="w-full aspect-video shrink-0 rounded object-cover"
+              className="w-full aspect-video shrink-0 rounded-md object-cover"
               loading="lazy"
             />
           }

@@ -26,7 +26,7 @@ export function FeedList({
     <div className="w-64 px-3">
       <div
         className={cn(
-          "flex items-center justify-between mt-2 mb-3 px-2.5 py-1 rounded cursor-pointer",
+          "flex items-center justify-between mt-2 mb-3 px-2.5 py-1 cursor-pointer",
         )}
         onClick={(e) => {
           e.stopPropagation()
@@ -85,7 +85,7 @@ function FeedCategory({
     >
       <div
         className={cn(
-          "flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded w-full cursor-pointer",
+          "flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded-md w-full cursor-pointer transition-colors",
           activedList?.level === levels.folder &&
             activedList.id === data.name &&
             "bg-[#C9C9C7]",
@@ -106,7 +106,7 @@ function FeedCategory({
           <m.div
             transition={{
               type: "tween",
-              duration: 0.2,
+              duration: 0.1,
               ease: "easeInOut",
             }}
             className="overflow-hidden"
@@ -127,7 +127,7 @@ function FeedCategory({
               <div
                 key={feed.feedId}
                 className={cn(
-                  "flex items-center justify-between text-sm font-medium leading-loose w-full pl-6 pr-2.5 py-[2px] rounded cursor-pointer",
+                  "flex items-center justify-between text-sm font-medium leading-loose w-full pl-6 pr-2.5 py-[2px] rounded-md cursor-pointer",
                   activedList?.level === levels.feed &&
                     activedList.id === feed.feedId &&
                     "bg-[#C9C9C7]",

@@ -14,7 +14,7 @@ export function PictureItem({ entry }: { entry: EntriesResponse[number] }) {
               <Image
                 key={image}
                 src={image}
-                className="w-full aspect-square shrink-0 rounded object-cover"
+                className="w-full aspect-square shrink-0 rounded-md object-cover"
                 loading="lazy"
               />
             ))}
