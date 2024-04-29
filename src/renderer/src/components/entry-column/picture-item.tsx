@@ -8,16 +8,18 @@ export function PictureItem({ entry }: { entry: EntriesResponse[number] }) {
     <div>
       <div>
         <div className="flex gap-2 overflow-x-auto">
-          {entry.images
-            ?.slice(0, 1)
-            .map((image) => (
-              <Image
-                key={image}
-                src={image}
-                className="w-full aspect-square shrink-0 rounded-md object-cover"
-                loading="lazy"
-              />
-            ))}
+          {entry.images?.slice(0, 1).map((image) => (
+            <Image
+              key={image}
+              src={image}
+              className="w-full aspect-square shrink-0 rounded-md object-cover"
+              loading="lazy"
+              proxy={{
+                width: 600,
+                height: 600,
+              }}
+            />
+          ))}
         </div>
         <div className="line-clamp-5 text-sm flex-1 px-2 pb-3 pt-1">
           <div className="font-medium line-clamp-2">{entry.title}</div>

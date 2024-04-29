@@ -14,6 +14,10 @@ export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
               src={entry.images?.[0]}
               className="w-full aspect-video shrink-0 rounded-md object-cover"
               loading="lazy"
+              proxy={{
+                width: 640,
+                height: 360,
+              }}
             />
           }
         </div>

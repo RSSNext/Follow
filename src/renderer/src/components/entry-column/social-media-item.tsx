@@ -30,6 +30,10 @@ export function SocialMediaItem({ entry }: { entry: EntriesResponse[number] }) {
               src={image}
               className="w-28 h-28 shrink-0"
               loading="lazy"
+              proxy={{
+                width: 224,
+                height: 224,
+              }}
             />
           ))}
         </div>

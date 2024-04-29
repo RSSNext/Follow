@@ -28,6 +28,10 @@ export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
           src={entry.images[0]}
           className="w-20 h-20 shrink-0 ml-2"
           loading="lazy"
+          proxy={{
+            width: 160,
+            height: 160,
+          }}
         />
       )}
     </div>

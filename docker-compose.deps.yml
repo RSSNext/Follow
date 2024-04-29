@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  imgproxy:
+    image: darthsim/imgproxy:latest
+    container_name: rere-imgproxy
+    restart: always
+    ports:
+      - 2873:8080
+    environment:
+      - IMGPROXY_ENABLE_WEBP_DETECTION=true
+      - IMGPROXY_ENABLE_AVIF_DETECTION=true
+      - IMGPROXY_READ_TIMEOUT=30
+      - IMGPROXY_DOWNLOAD_TIMEOUT=30
+      - IMGPROXY_TRUSTED_SIGNATURES=readok
+      - IMGPROXY_IGNORE_SSL_VERIFICATION=true
