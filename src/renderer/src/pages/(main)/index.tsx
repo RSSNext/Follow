@@ -1,21 +1,19 @@
-import { FeedColumn } from "@renderer/components/feed-column"
 import { EntryColumn } from "@renderer/components/entry-column"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { ActivedList, ActivedEntry } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { EntryContent } from "@renderer/components/entry-content"
 import { AnimatePresence } from "framer-motion"
+import { useOutletContext } from "react-router-dom"
 
 const wideMode = [1, 2, 3, 4]
 
 export function Component() {
-  const [activedList, setActivedList] = useState<ActivedList>({
-    level: "view",
-    id: 0,
-    name: "Articles",
-    view: 0,
-  })
-  const [activedEntry, setActivedEntry] = useState<ActivedEntry>(null)
+  const { activedList, activedEntry, setActivedEntry } = useOutletContext<{
+    activedList: ActivedList
+    activedEntry: ActivedEntry
+    setActivedEntry: (value: ActivedEntry) => void
+  }>()
 
   useEffect(() => {
     setActivedEntry(null)
@@ -23,9 +21,6 @@ export function Component() {
 
   return (
     <div className="flex h-full">
-      <div className="w-64 pt-10 border-r shrink-0 bg-[#E1E0DF]">
-        <FeedColumn activedList={activedList} setActivedList={setActivedList} />
-      </div>
       <div
         className={cn(
           "pt-10 border-r shrink-0 h-full overflow-y-auto",
