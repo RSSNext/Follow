@@ -16,7 +16,7 @@ const formSchema = z.object({
   url: z.string().min(1),
 })
 
-export function GeneralForm() {
+export function RSSForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

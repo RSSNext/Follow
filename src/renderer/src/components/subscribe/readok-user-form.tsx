@@ -16,7 +16,7 @@ const formSchema = z.object({
   url: z.string().min(1),
 })
 
-export function GeneralForm() {
+export function ReadOKUserForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,7 +35,7 @@ export function GeneralForm() {
           name="url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>URL or Keyword</FormLabel>
+              <FormLabel>User Email</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>

@@ -11,21 +11,31 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
+import { useEffect } from "react"
 
 const formSchema = z.object({
   url: z.string().min(1),
 })
 
-export function GeneralForm() {
+export function RSSHubForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      url: "",
+      url: "rsshub://",
     },
   })
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
   }
+
+  const url = form.watch("url")
+  useEffect(() => {
+    if (!url.startsWith("rsshub://")) {
+      form.setValue("url", "rsshub://")
+    } else if (url.startsWith("rsshub://rsshub://")) {
+      form.setValue("url", url.slice(9))
+    }
+  }, [url])
 
   return (
     <Form {...form}>
