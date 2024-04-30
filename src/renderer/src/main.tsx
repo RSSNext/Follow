@@ -25,7 +25,13 @@ const router = createBrowserRouter([
           },
           {
             path: "/subscribe",
-            lazy: () => import("./pages/(main)/subscribe"),
+            lazy: () => import("./pages/(main)/subscribe/layout"),
+            children: [
+              {
+                path: "",
+                lazy: () => import("./pages/(main)/subscribe/index"),
+              },
+            ],
           },
         ],
       },
