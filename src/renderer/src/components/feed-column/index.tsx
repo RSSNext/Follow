@@ -13,8 +13,7 @@ import { FeedList } from "./list"
 import { ActivedList } from "@renderer/lib/types"
 import { UserButton } from "@renderer/components/user-button"
 import { views } from "@renderer/lib/constants"
-import { Dialog, DialogTrigger } from "@renderer/components/ui/dialog"
-import { SubscribeDialog } from "./subscribe-dialog"
+import { Link } from "react-router-dom"
 
 const lethargy = new Lethargy()
 
@@ -69,6 +68,7 @@ export function FeedColumn({
           id: active,
           name: views[active].name,
           view: active,
+          preventNavigate: true,
         })
       }
     >
@@ -76,12 +76,9 @@ export function FeedColumn({
         <div className="font-bold text-xl">ReadOK</div>
         <div className="flex items-center gap-2">
           <UserButton className="h-5 p-0" hideName={true} />
-          <Dialog>
-            <DialogTrigger className="flex">
-              <i className="i-mingcute-add-circle-line h-5 w-5 text-zinc-500" />
-            </DialogTrigger>
-            <SubscribeDialog />
-          </Dialog>
+          <Link to={`/subscribe`} className="flex">
+            <i className="i-mingcute-add-circle-line h-5 w-5 text-zinc-500" />
+          </Link>
         </div>
       </div>
       <div className="flex text-zinc-500 w-full justify-between text-xl px-5">

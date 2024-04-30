@@ -3,6 +3,7 @@ export type ActivedList = {
   id: string | number
   name: string
   view: number
+  preventNavigate?: boolean
 } | null
 
 type FeedResponse = {

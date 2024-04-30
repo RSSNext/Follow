@@ -2,8 +2,10 @@ import { FeedColumn } from "@renderer/components/feed-column"
 import { useEffect, useState } from "react"
 import { ActivedList, ActivedEntry } from "@renderer/lib/types"
 import { Outlet } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 export function Component() {
+  const navigate = useNavigate()
   const [activedList, setActivedList] = useState<ActivedList>({
     level: "view",
     id: 0,
@@ -14,6 +16,9 @@ export function Component() {
 
   useEffect(() => {
     setActivedEntry(null)
+    if (!activedList?.preventNavigate) {
+      navigate("/")
+    }
   }, [activedList])
 
   return (

@@ -23,6 +23,10 @@ const router = createBrowserRouter([
             path: "",
             lazy: () => import("./pages/(main)/index"),
           },
+          {
+            path: "/subscribe",
+            lazy: () => import("./pages/(main)/subscribe"),
+          },
         ],
       },
       {
