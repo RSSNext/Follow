@@ -67,7 +67,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       <MotionConfig
         transition={{
           type: "tween",
-          duration: 0.1,
+          duration: 0.15,
           ease: "easeInOut",
         }}
       >

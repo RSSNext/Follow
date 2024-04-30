@@ -17,9 +17,9 @@ export function EntryContent({ entry }: { entry: ActivedEntry }) {
   return (
     <m.div
       className="px-4 py-5 overflow-y-auto h-full"
-      initial={{ opacity: 0.01, y: 50 }}
+      initial={{ opacity: 0.01, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0.01, y: -50 }}
+      exit={{ opacity: 0.01, y: -100 }}
       key={entry?.id}
     >
       <div>

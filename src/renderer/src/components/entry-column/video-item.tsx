@@ -6,7 +6,7 @@ import { Image } from "@renderer/components/ui/image"
 export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
     <div className="flex">
-      <div>
+      <div className="w-full">
         <div className="flex gap-2 overflow-x-auto">
           {
             <Image
