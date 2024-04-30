@@ -6,7 +6,13 @@ import {
 import { useSession } from "@hono/auth-js/react"
 import { cn } from "@renderer/lib/utils"
 
-export function UserButton({ className }: { className?: string }) {
+export function UserButton({
+  className,
+  hideName,
+}: {
+  className?: string
+  hideName?: boolean
+}) {
   const { data: session, status } = useSession()
 
   if (status !== "authenticated") {
@@ -29,7 +35,7 @@ export function UserButton({ className }: { className?: string }) {
         <AvatarImage src={session?.user?.image || undefined} />
         <AvatarFallback>{session?.user?.name?.slice(0, 2)}</AvatarFallback>
       </Avatar>
-      <div>{session?.user?.name}</div>
+      {!hideName && <div>{session?.user?.name}</div>}
     </div>
   )
 }

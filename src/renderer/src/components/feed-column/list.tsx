@@ -26,7 +26,7 @@ export function FeedList({
     <div className="w-64 px-3">
       <div
         className={cn(
-          "flex items-center justify-between mt-2 mb-3 px-2.5 py-1 cursor-pointer",
+          "flex items-center justify-between mb-2 px-2.5 py-1 cursor-pointer",
         )}
         onClick={(e) => {
           e.stopPropagation()

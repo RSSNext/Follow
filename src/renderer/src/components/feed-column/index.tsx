@@ -13,6 +13,8 @@ import { FeedList } from "./list"
 import { ActivedList } from "@renderer/lib/types"
 import { UserButton } from "@renderer/components/user-button"
 import { views } from "@renderer/lib/constants"
+import { Dialog, DialogTrigger } from "@renderer/components/ui/dialog"
+import { SubscribeDialog } from "./subscribe-dialog"
 
 const lethargy = new Lethargy()
 
@@ -60,7 +62,7 @@ export function FeedColumn({
 
   return (
     <div
-      className="h-full flex flex-col"
+      className="h-full flex flex-col gap-3"
       onClick={() =>
         setActivedList({
           level: "view",
@@ -70,8 +72,19 @@ export function FeedColumn({
         })
       }
     >
-      <UserButton className="h-12 mx-3 mb-2 mt-1" />
-      <div className="flex text-zinc-500 w-full justify-between text-xl my-2 px-5">
+      <div className="mx-5 flex items-center justify-between">
+        <div className="font-bold text-xl">ReadOK</div>
+        <div className="flex items-center gap-2">
+          <UserButton className="h-5 p-0" hideName={true} />
+          <Dialog>
+            <DialogTrigger className="flex">
+              <i className="i-mingcute-add-circle-line h-5 w-5 text-zinc-500" />
+            </DialogTrigger>
+            <SubscribeDialog />
+          </Dialog>
+        </div>
+      </div>
+      <div className="flex text-zinc-500 w-full justify-between text-xl px-5">
         <TooltipProvider delayDuration={300}>
           {views.map((item, index) => (
             <div
@@ -89,7 +102,9 @@ export function FeedColumn({
               }}
             >
               <Tooltip>
-                <TooltipTrigger>{item.icon}</TooltipTrigger>
+                <TooltipTrigger className="flex items-center my-2">
+                  {item.icon}
+                </TooltipTrigger>
                 <TooltipContent side="bottom">{item.name}</TooltipContent>
               </Tooltip>
             </div>
