@@ -20,7 +20,7 @@ export function Component() {
   }, [activedList])
 
   return (
-    <div className="flex h-full">
+    <>
       <div
         className={cn(
           "pt-10 border-r shrink-0 h-full overflow-y-auto",
@@ -43,6 +43,6 @@ export function Component() {
             </div>
           )}
       </AnimatePresence>
-    </div>
+    </>
   )
 }
