@@ -75,7 +75,9 @@ export function FeedColumn({
       <div className="mx-5 flex items-center justify-between">
         <div className="font-bold text-xl">ReadOK</div>
         <div className="flex items-center gap-2">
-          <UserButton className="h-5 p-0" hideName={true} />
+          <Link to={`/profile`} className="flex">
+            <UserButton className="h-5 p-0" hideName={true} />
+          </Link>
           <Link to={`/subscribe`} className="flex">
             <i className="i-mingcute-add-circle-line h-5 w-5 text-zinc-500" />
           </Link>

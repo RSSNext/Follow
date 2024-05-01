@@ -33,6 +33,16 @@ const router = createBrowserRouter([
               },
             ],
           },
+          {
+            path: "/profile",
+            lazy: () => import("./pages/(main)/profile/layout"),
+            children: [
+              {
+                path: "",
+                lazy: () => import("./pages/(main)/profile/index"),
+              },
+            ],
+          },
         ],
       },
       {
