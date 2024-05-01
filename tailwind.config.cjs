@@ -68,6 +68,14 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      typography: (theme) => ({
+        zinc: {
+          css: {
+            "--tw-prose-body": theme("colors.zinc.500"),
+            "--tw-prose-quotes": theme("colors.zinc.500"),
+          },
+        },
+      }),
     },
   },
   plugins: [
