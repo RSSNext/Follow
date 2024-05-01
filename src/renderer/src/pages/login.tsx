@@ -6,6 +6,7 @@ export function Component() {
 
   return (
     <div className="h-screen w-full flex items-center justify-center flex-col gap-10">
+      <img src="./icon.svg" alt="logo" className="h-20 w-20" />
       <h1 className="text-3xl font-bold">Log in to ReadOK</h1>
       <div className="flex flex-col gap-3">
         <Button

@@ -24,6 +24,7 @@ export function Component() {
 
   return (
     <div className="h-screen w-full flex items-center justify-center flex-col gap-10">
+      <img src="./icon.svg" alt="logo" className="h-20 w-20" />
       <UserButton className="text-2xl bg-stone-100 px-10 py-4" />
       <h1 className="text-3xl font-bold">
         Successfully connected to ReadOK Account
