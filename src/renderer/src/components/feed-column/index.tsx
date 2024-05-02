@@ -21,8 +21,8 @@ export function FeedColumn({
   activedList,
   setActivedList,
 }: {
-  activedList: ActivedList
-  setActivedList: (value: ActivedList) => void
+  activedList?: ActivedList
+  setActivedList?: (value: ActivedList) => void
 }) {
   const carouselRef = useRef<HTMLDivElement>(null)
 
@@ -63,7 +63,7 @@ export function FeedColumn({
     <div
       className="h-full flex flex-col gap-3"
       onClick={() =>
-        setActivedList({
+        setActivedList?.({
           level: "view",
           id: active,
           name: views[active].name,
@@ -94,7 +94,7 @@ export function FeedColumn({
               className={cn(active === index && "text-zinc-800")}
               onClick={(e) => {
                 setActive(index)
-                setActivedList({
+                setActivedList?.({
                   level: "view",
                   id: index,
                   name: views[index].name,
@@ -118,6 +118,7 @@ export function FeedColumn({
           {views.map((item, index) => (
             <section key={item.name} className="snap-center shrink-0">
               <FeedList
+                className="w-64 px-3"
                 view={index}
                 activedList={activedList}
                 setActivedList={setActivedList}

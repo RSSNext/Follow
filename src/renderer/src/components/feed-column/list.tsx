@@ -12,37 +12,46 @@ import { SiteIcon } from "../site-icon"
 import { Response as SubscriptionsResponse } from "@renderer/lib/subscriptions"
 
 export function FeedList({
+  className,
   view,
   activedList,
   setActivedList,
+  hideTitle,
 }: {
-  view: number
-  activedList: ActivedList
-  setActivedList: (value: ActivedList) => void
+  className?: string
+  view?: number
+  activedList?: ActivedList
+  setActivedList?: (value: ActivedList) => void
+  hideTitle?: boolean
 }) {
   const subscriptions = useSubscriptions(view)
 
   return (
-    <div className="w-64 px-3">
-      <div
-        className={cn(
-          "flex items-center justify-between mb-2 px-2.5 py-1 cursor-pointer",
-        )}
-        onClick={(e) => {
-          e.stopPropagation()
-          setActivedList({
-            level: levels.view,
-            id: view,
-            name: views[view].name,
-            view,
-          })
-        }}
-      >
-        <div className="font-bold">{views[view].name}</div>
-        <div className="text-sm text-zinc-500 ml-2">
-          {subscriptions.data?.unread}
+    <div className={className}>
+      {!hideTitle && (
+        <div
+          className={cn(
+            "flex items-center justify-between mb-2 px-2.5 py-1 cursor-pointer",
+          )}
+          onClick={(e) => {
+            e.stopPropagation()
+            view !== undefined &&
+              setActivedList?.({
+                level: levels.view,
+                id: view,
+                name: views[view].name,
+                view,
+              })
+          }}
+        >
+          <div className="font-bold">
+            {view !== undefined && views[view].name}
+          </div>
+          <div className="text-sm text-zinc-500 ml-2">
+            {subscriptions.data?.unread}
+          </div>
         </div>
-      </div>
+      )}
       {subscriptions.data?.list.map((category) => (
         <FeedCategory
           key={category.name}
@@ -63,9 +72,9 @@ function FeedCategory({
   view,
 }: {
   data: SubscriptionsResponse["list"][number]
-  activedList: ActivedList
-  setActivedList: (value: ActivedList) => void
-  view: number
+  activedList?: ActivedList
+  setActivedList?: (value: ActivedList) => void
+  view?: number
 }) {
   const [open, setOpen] = useState(false)
 
@@ -75,12 +84,13 @@ function FeedCategory({
       onOpenChange={(o) => setOpen(o)}
       onClick={(e) => {
         e.stopPropagation()
-        setActivedList({
-          level: levels.folder,
-          id: data.name,
-          name: data.name,
-          view,
-        })
+        view !== undefined &&
+          setActivedList?.({
+            level: levels.folder,
+            id: data.name,
+            name: data.name,
+            view,
+          })
       }}
     >
       <div
@@ -91,11 +101,17 @@ function FeedCategory({
             "bg-[#C9C9C7]",
         )}
       >
-        <div className="flex items-center min-w-0">
-          <CollapsibleTrigger className="flex items-center h-7 [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90">
+        <div className="flex items-center min-w-0 w-full">
+          <CollapsibleTrigger
+            className={cn(
+              "flex items-center h-7 [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
+              !setActivedList && "flex-1",
+            )}
+          >
             <i className="i-mingcute-right-fill mr-2 transition-transform" />
+            {!setActivedList && <span className="truncate">{data.name}</span>}
           </CollapsibleTrigger>
-          <span className="truncate">{data.name}</span>
+          {setActivedList && <span className="truncate">{data.name}</span>}
         </div>
         {!!data.unread && (
           <div className="text-xs text-zinc-500 ml-2">{data.unread}</div>
@@ -129,12 +145,13 @@ function FeedCategory({
                 )}
                 onClick={(e) => {
                   e.stopPropagation()
-                  setActivedList({
-                    level: levels.feed,
-                    id: feed.feedId,
-                    name: feed.feeds.title,
-                    view,
-                  })
+                  view !== undefined &&
+                    setActivedList?.({
+                      level: levels.feed,
+                      id: feed.feedId,
+                      name: feed.feeds.title,
+                      view,
+                    })
                 }}
               >
                 <div className="flex items-center min-w-0">

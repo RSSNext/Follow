@@ -10,14 +10,15 @@ export type Response = {
   unread: number
 }
 
-export const useSubscriptions = (view: number) =>
+export const useSubscriptions = (view?: number) =>
   useQuery({
     queryKey: ["subscriptions", view],
     queryFn: async () => {
       const subscriptions = (
         await (
           await fetch(
-            `${import.meta.env.VITE_ELECTRON_REMOTE_API_URL}/subscriptions?view=${view}`,
+            `${import.meta.env.VITE_ELECTRON_REMOTE_API_URL}/subscriptions` +
+              (view ? `?view=${view}` : ``),
             {
               credentials: "include",
             },
