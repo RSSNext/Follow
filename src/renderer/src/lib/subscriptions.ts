@@ -18,7 +18,7 @@ export const useSubscriptions = (view?: number) =>
         await (
           await fetch(
             `${import.meta.env.VITE_ELECTRON_REMOTE_API_URL}/subscriptions` +
-              (view ? `?view=${view}` : ``),
+              (view !== undefined ? `?view=${view}` : ``),
             {
               credentials: "include",
             },
