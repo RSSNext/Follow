@@ -45,7 +45,7 @@ export function RSSHubForm() {
           name="url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>URL or Keyword</FormLabel>
+              <FormLabel>RSSHub Route</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>

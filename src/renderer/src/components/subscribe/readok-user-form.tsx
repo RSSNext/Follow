@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
+import { useEffect } from "react"
 
 const formSchema = z.object({
   url: z.string().min(1),
@@ -27,6 +28,15 @@ export function ReadOKUserForm() {
     console.log(values)
   }
 
+  const url = form.watch("url")
+  useEffect(() => {
+    if (!url.startsWith("readok://")) {
+      form.setValue("url", "readok://")
+    } else if (url.startsWith("readok://readok://")) {
+      form.setValue("url", url.slice(9))
+    }
+  }, [url])
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -35,7 +45,7 @@ export function ReadOKUserForm() {
           name="url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>User Email</FormLabel>
+              <FormLabel>User Handle</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
