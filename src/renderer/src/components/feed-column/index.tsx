@@ -91,7 +91,7 @@ export function FeedColumn({
           {views.map((item, index) => (
             <div
               key={item.name}
-              className={cn(active === index && "text-zinc-800")}
+              className={cn(active === index && item.className)}
               onClick={(e) => {
                 setActive(index)
                 setActivedList?.({

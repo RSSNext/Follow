@@ -6,6 +6,7 @@ import {
   AvatarImage,
 } from "@renderer/components/ui/avatar"
 import { views } from "@renderer/lib/constants"
+import { cn } from "@renderer/lib/utils"
 
 export function Component() {
   const { data: session } = useSession()
@@ -25,9 +26,11 @@ export function Component() {
           <div className="overflow-y-auto">
             {views.map((view, index) => (
               <>
-                <div className="font-medium flex items-center gap-2 mb-1">
-                  {view.icon}
-                  {view.name}
+                <div className="font-semibold flex items-center gap-2 mb-1">
+                  <span className={cn("flex", view.className)}>
+                    {view.icon}
+                  </span>
+                  <span>{view.name}</span>
                 </div>
                 <FeedList
                   key={index}
