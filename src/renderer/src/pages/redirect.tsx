@@ -1,8 +1,12 @@
 import { Button } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
 import { getCsrfToken, authConfigManager } from "@hono/auth-js/react"
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
 export function Component() {
+  const navigate = useNavigate()
+
   const getCallbackUrl = async () => {
     const response = await (
       await fetch(
@@ -21,6 +25,14 @@ export function Component() {
     ).json()
     return `follow://auth?token=${response.data.sessionToken}`
   }
+
+  useEffect(() => {
+    if (window.electron) {
+      navigate("/")
+    } else {
+      getCallbackUrl().then((url) => window.open(url))
+    }
+  }, [])
 
   return (
     <div className="h-screen w-full flex items-center justify-center flex-col gap-10">

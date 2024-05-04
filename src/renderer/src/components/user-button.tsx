@@ -16,12 +16,7 @@ export function UserButton({
   const { data: session, status } = useSession()
 
   if (status !== "authenticated") {
-    return (
-      <div className="flex items-center gap-2">
-        <i className="i-mingcute-emoji-2-line text-xl" />
-        <span className="text-lg">Log in</span>
-      </div>
-    )
+    return null
   }
 
   return (

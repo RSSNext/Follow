@@ -3,8 +3,10 @@ import { useEffect, useState } from "react"
 import { ActivedList, ActivedEntry } from "@renderer/lib/types"
 import { Outlet } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import { useSession } from "@hono/auth-js/react"
 
 export function Component() {
+  const { status } = useSession()
   const navigate = useNavigate()
   const [activedList, setActivedList] = useState<ActivedList>({
     level: "view",
@@ -20,6 +22,10 @@ export function Component() {
       navigate("/")
     }
   }, [activedList])
+
+  if (status !== "authenticated") {
+    return navigate("/login")
+  }
 
   return (
     <div className="flex h-full">
