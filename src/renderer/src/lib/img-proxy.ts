@@ -7,5 +7,5 @@ export const getProxyUrl = ({
   width: number
   height: number
 }) => {
-  return `https://img.readok.local/readok/rs:fill:${width}:${height}/plain/${url}`
+  return `https://img.follow.local/follow/rs:fill:${width}:${height}/plain/${url}`
 }

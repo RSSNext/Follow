@@ -7,7 +7,7 @@ import {
 import { Recommendations } from "@renderer/components/subscribe/recommendations"
 import { RSSForm } from "@renderer/components/subscribe/rss-form"
 import { RSSHubForm } from "@renderer/components/subscribe/rsshub-form"
-import { ReadOKUserForm } from "@renderer/components/subscribe/readok-user-form"
+import { FollowUserForm } from "@renderer/components/subscribe/follow-user-form"
 
 export function Component() {
   const tabs = [
@@ -20,8 +20,8 @@ export function Component() {
       content: <RSSHubForm />,
     },
     {
-      name: "ReadOK User",
-      content: <ReadOKUserForm />,
+      name: "Follow User",
+      content: <FollowUserForm />,
     },
     {
       name: "RSS3",

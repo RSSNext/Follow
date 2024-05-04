@@ -75,7 +75,7 @@ export function FeedColumn({
       <div className="mx-5 flex items-center justify-between">
         <div className="font-bold text-xl flex items-center gap-1">
           <img src="./icon.svg" alt="logo" className="h-5 w-5" />
-          ReadOK
+          Follow
         </div>
         <div className="flex items-center gap-2">
           <Link to={`/profile`} className="flex">

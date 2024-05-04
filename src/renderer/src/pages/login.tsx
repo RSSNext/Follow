@@ -2,12 +2,12 @@ import { Button } from "@renderer/components/ui/button"
 import { signIn } from "@hono/auth-js/react"
 
 export function Component() {
-  const callbackUrl = `${import.meta.env.VITE_ELECTRON_REMOTE_URL}/redirect?app=readok`
+  const callbackUrl = `${import.meta.env.VITE_ELECTRON_REMOTE_URL}/redirect?app=follow`
 
   return (
     <div className="h-screen w-full flex items-center justify-center flex-col gap-10">
       <img src="./icon.svg" alt="logo" className="h-20 w-20" />
-      <h1 className="text-3xl font-bold">Log in to ReadOK</h1>
+      <h1 className="text-3xl font-bold">Log in to Follow</h1>
       <div className="flex flex-col gap-3">
         <Button
           className="text-lg"

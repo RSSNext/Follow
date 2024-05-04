@@ -6,12 +6,12 @@ import { createWindow } from "./window"
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient("readok", process.execPath, [
+    app.setAsDefaultProtocolClient("follow", process.execPath, [
       path.resolve(process.argv[1]),
     ])
   }
 } else {
-  app.setAsDefaultProtocolClient("readok")
+  app.setAsDefaultProtocolClient("follow")
 }
 
 app.dock.setIcon(path.join(__dirname, "../../resources/icon.png"))
@@ -21,7 +21,7 @@ app.dock.setIcon(path.join(__dirname, "../../resources/icon.png"))
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId("io.readok")
+  electronApp.setAppUserModelId("re.follow")
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

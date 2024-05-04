@@ -1,5 +1,5 @@
-appId: io.readok
-productName: readok
+appId: io.follow
+productName: follow
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: readok
+  executableName: follow
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -42,7 +42,7 @@ publish:
   provider: generic
   url: https://example.com/auto-updates
 protocols:
-  name: ReadOK
+  name: Follow
   schemes:
-    - readok
+    - follow
     - feed

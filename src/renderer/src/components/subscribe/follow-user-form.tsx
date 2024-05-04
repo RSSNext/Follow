@@ -17,7 +17,7 @@ const formSchema = z.object({
   url: z.string().min(1),
 })
 
-export function ReadOKUserForm() {
+export function FollowUserForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -30,9 +30,9 @@ export function ReadOKUserForm() {
 
   const url = form.watch("url")
   useEffect(() => {
-    if (!url.startsWith("readok://")) {
-      form.setValue("url", "readok://")
-    } else if (url.startsWith("readok://readok://")) {
+    if (!url.startsWith("follow://")) {
+      form.setValue("url", "follow://")
+    } else if (url.startsWith("follow://follow://")) {
       form.setValue("url", url.slice(9))
     }
   }, [url])

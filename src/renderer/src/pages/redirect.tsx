@@ -19,7 +19,7 @@ export function Component() {
         },
       )
     ).json()
-    return `readok://auth?token=${response.data.sessionToken}`
+    return `follow://auth?token=${response.data.sessionToken}`
   }
 
   return (
@@ -27,18 +27,18 @@ export function Component() {
       <img src="./icon.svg" alt="logo" className="h-20 w-20" />
       <UserButton className="text-2xl bg-stone-100 px-10 py-4" />
       <h1 className="text-3xl font-bold">
-        Successfully connected to ReadOK Account
+        Successfully connected to Follow Account
       </h1>
       <h2>
-        You have successfully connected to ReadOK Account. Now is the time to
-        open ReadOK and safely close this page.
+        You have successfully connected to Follow Account. Now is the time to
+        open Follow and safely close this page.
       </h2>
       <Button
         className="text-lg"
         size="xl"
         onClick={async () => window.open(await getCallbackUrl())}
       >
-        Open ReadOK
+        Open Follow
       </Button>
     </div>
   )
