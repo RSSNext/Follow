@@ -5,42 +5,48 @@ import {
   TabsTrigger,
 } from "@renderer/components/ui/tabs"
 import { Recommendations } from "@renderer/components/subscribe/recommendations"
-import { RSSForm } from "@renderer/components/subscribe/rss-form"
-import { RSSHubForm } from "@renderer/components/subscribe/rsshub-form"
-import { FollowUserForm } from "@renderer/components/subscribe/follow-user-form"
+import { SubscribeForm } from "@renderer/components/subscribe/form"
 
 export function Component() {
   const tabs = [
     {
+      name: "General",
+      value: "general",
+    },
+    {
       name: "RSS",
-      content: <RSSForm />,
+      value: "rss",
     },
     {
       name: "RSSHub",
-      content: <RSSHubForm />,
+      value: "rsshub",
     },
     {
       name: "Follow User",
-      content: <FollowUserForm />,
+      value: "user",
     },
     {
       name: "RSS3",
+      value: "rss3",
+      disabled: true,
     },
     {
       name: "Email",
+      value: "email",
+      disabled: true,
     },
   ]
 
   return (
     <div className="flex flex-col gap-8 items-center justify-center w-full">
       <div className="text-2xl font-bold">Subscribe</div>
-      <Tabs defaultValue="RSS">
+      <Tabs defaultValue="General">
         <TabsList>
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.name}
               value={tab.name}
-              disabled={!tab.content}
+              disabled={tab.disabled}
             >
               {tab.name}
             </TabsTrigger>
@@ -48,8 +54,8 @@ export function Component() {
         </TabsList>
         {tabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.name} className="h-96 mt-8">
-            {tab.content || <span className="text-zinc-500">Comming Soon</span>}
-            {tab.content && <Recommendations type={tab.name} />}
+            <SubscribeForm type={tab.value} />
+            <Recommendations type={tab.value} />
           </TabsContent>
         ))}
       </Tabs>

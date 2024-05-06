@@ -14,38 +14,63 @@ import { Input } from "@renderer/components/ui/input"
 import { useEffect } from "react"
 
 const formSchema = z.object({
-  url: z.string().min(1),
+  keyword: z.string().min(1),
 })
 
-export function RSSHubForm() {
+const info: {
+  [key: string]: {
+    label: string
+    prefix?: string
+  }
+} = {
+  general: {
+    label: "Any URL or Keyword",
+  },
+  rss: {
+    label: "RSS URL",
+  },
+  rsshub: {
+    label: "RSSHub Route",
+    prefix: "rsshub://",
+  },
+  user: {
+    label: "User Handle",
+    prefix: "follow://",
+  },
+}
+
+export function SubscribeForm({ type }: { type: string }) {
+  const prefix = info[type].prefix
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      url: "rsshub://",
+      keyword: prefix,
     },
   })
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
   }
 
-  const url = form.watch("url")
+  const keyword = form.watch("keyword")
   useEffect(() => {
-    if (!url.startsWith("rsshub://")) {
-      form.setValue("url", "rsshub://")
-    } else if (url.startsWith("rsshub://rsshub://")) {
-      form.setValue("url", url.slice(9))
+    if (prefix) {
+      if (!keyword.startsWith(prefix)) {
+        form.setValue("keyword", prefix)
+      } else if (keyword.startsWith(`${prefix}${prefix}`)) {
+        form.setValue("keyword", keyword.slice(prefix.length))
+      }
     }
-  }, [url])
+  }, [keyword])
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="url"
+          name="keyword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>RSSHub Route</FormLabel>
+              <FormLabel>{info[type]?.label}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
