@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { SubscriptionResponse } from "./types"
+import { SubscriptionResponse } from "../types"
 
 export type Response = {
   list: {

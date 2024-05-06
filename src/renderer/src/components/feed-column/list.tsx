@@ -1,4 +1,4 @@
-import { useSubscriptions } from "@renderer/lib/subscriptions"
+import { useSubscriptions } from "@renderer/lib/queries/subscriptions"
 import {
   Collapsible,
   CollapsibleTrigger,
@@ -9,7 +9,7 @@ import { levels, views } from "@renderer/lib/constants"
 import { ActivedList } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { SiteIcon } from "../site-icon"
-import { Response as SubscriptionsResponse } from "@renderer/lib/subscriptions"
+import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
 
 export function FeedList({
   className,

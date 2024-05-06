@@ -1,4 +1,4 @@
-import { useEntries } from "@renderer/lib/entries"
+import { useEntries } from "@renderer/lib/queries/entries"
 import { ActivedList, ActivedEntry } from "@renderer/lib/types"
 import { m } from "framer-motion"
 import { cn } from "@renderer/lib/utils"

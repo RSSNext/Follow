@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { levels } from "@renderer/lib/constants"
-import { EntriesResponse, ListResponse } from "./types"
+import { EntriesResponse, ListResponse } from "../types"
 
 export const useEntries = ({
   level,
