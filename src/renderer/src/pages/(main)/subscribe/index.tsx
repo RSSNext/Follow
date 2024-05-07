@@ -38,7 +38,7 @@ export function Component() {
   ]
 
   return (
-    <div className="flex flex-col gap-8 items-center justify-center w-full">
+    <div className="flex flex-col gap-8 items-center justify-center w-full overflow-y-auto">
       <div className="text-2xl font-bold">Subscribe</div>
       <Tabs defaultValue="General">
         <TabsList>

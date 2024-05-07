@@ -6,7 +6,7 @@ export type ActivedList = {
   preventNavigate?: boolean
 } | null
 
-type FeedResponse = {
+export type FeedResponse = {
   id: string
   url: string
   title: string
