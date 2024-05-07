@@ -16,7 +16,7 @@ export function SiteIcon({
     host = new URL(url).host
     const pureDomain = parse(host).domainWithoutSuffix
     fallback = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain?.slice(0, 2).toUpperCase()}`
-    src = `https://icon.horse/icon/${host}`
+    src = `https://unavatar.io/${host}?fallback=${fallback}`
   } catch (error) {
     const pureDomain = parse(url).domainWithoutSuffix
     src = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain?.slice(0, 2).toUpperCase()}`
