@@ -89,7 +89,6 @@ export function SubscribeForm({ type }: { type: string }) {
       }[]
     },
   })
-  console.log(mutation.data)
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutation.mutate(values.keyword)
@@ -131,17 +130,22 @@ export function SubscribeForm({ type }: { type: string }) {
           </Button>
         </form>
       </Form>
-      {mutation.data && (
+      {mutation.isSuccess && (
         <div className="max-w-lg mt-8">
           <div className="text-zinc-500 mb-4">
-            Found {mutation.data.length} feed{mutation.data.length > 1 && "s"}
+            Found {mutation.data?.length || 0} feed
+            {mutation.data?.length > 1 && "s"}
           </div>
           <div className="space-y-6 text-sm">
-            {mutation.data.map((item) => (
-              <Card key={item.feed.url || item.docs}>
+            {mutation.data?.map((item) => (
+              <Card key={item.feed.url || item.docs} className="select-text">
                 <CardHeader>
                   <CardTitle>
-                    <div className="flex items-center">
+                    <a
+                      href={item.feed.siteUrl}
+                      target="_blank"
+                      className="flex items-center"
+                    >
                       {(() => {
                         if (item.feed.image) {
                           return (
@@ -171,7 +175,7 @@ export function SubscribeForm({ type }: { type: string }) {
                       <div className="leading-tight font-medium text-base">
                         {item.feed.title}
                       </div>
-                    </div>
+                    </a>
                   </CardTitle>
                   <CardDescription>
                     <div className="text-zinc-500">
@@ -191,26 +195,28 @@ export function SubscribeForm({ type }: { type: string }) {
                 ) : (
                   <>
                     <CardContent>
-                      {item.entries && (
+                      {item.entries?.length && (
                         <div className="grid grid-cols-4 gap-4">
                           {item.entries.map((entry) => (
-                            <div className="flex items-center gap-1 flex-col min-w-0 flex-1">
+                            <a
+                              href={entry?.url}
+                              target="_blank"
+                              className="flex items-center gap-1 flex-col min-w-0 flex-1"
+                            >
                               {entry?.images?.[0] ? (
-                                <>
-                                  <Image
-                                    src={entry?.images?.[0]}
-                                    className="aspect-square w-full"
-                                  />
-                                  <div className="line-clamp-2 w-full text-xs leading-tight">
-                                    {entry?.title}
-                                  </div>
-                                </>
+                                <Image
+                                  src={entry?.images?.[0]}
+                                  className="aspect-square w-full"
+                                />
                               ) : (
-                                <div className="line-clamp-[9] w-full aspect-square text-xs leading-tight flex items-center">
+                                <div className="bg-stone-100 rounded text-zinc-500 p-2 overflow-hidden w-full aspect-square text-xs leading-tight flex">
                                   {entry?.title}
                                 </div>
                               )}
-                            </div>
+                              <div className="line-clamp-2 w-full text-xs leading-tight">
+                                {entry?.title}
+                              </div>
+                            </a>
                           ))}
                         </div>
                       )}
