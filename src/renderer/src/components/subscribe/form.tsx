@@ -75,6 +75,7 @@ export function SubscribeForm({ type }: { type: string }) {
               body: JSON.stringify({
                 csrfToken: await getCsrfToken(),
                 keyword,
+                type: type === "rss" ? "rss" : "auto",
               }),
             },
           )
