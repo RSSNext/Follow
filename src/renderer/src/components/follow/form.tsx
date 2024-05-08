@@ -52,7 +52,7 @@ const info: {
   },
 }
 
-export function SubscribeForm({ type }: { type: string }) {
+export function FollowForm({ type }: { type: string }) {
   const prefix = info[type].prefix
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

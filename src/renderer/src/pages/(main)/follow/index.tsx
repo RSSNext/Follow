@@ -4,8 +4,8 @@ import {
   TabsList,
   TabsTrigger,
 } from "@renderer/components/ui/tabs"
-import { Recommendations } from "@renderer/components/subscribe/recommendations"
-import { SubscribeForm } from "@renderer/components/subscribe/form"
+import { Recommendations } from "@renderer/components/follow/recommendations"
+import { FollowForm } from "@renderer/components/follow/form"
 
 export function Component() {
   const tabs = [
@@ -39,7 +39,7 @@ export function Component() {
 
   return (
     <div className="flex flex-col gap-8 items-center justify-center w-full overflow-y-auto">
-      <div className="text-2xl font-bold">Subscribe</div>
+      <div className="text-2xl font-bold">Follow</div>
       <Tabs defaultValue="General">
         <TabsList className="w-full">
           {tabs.map((tab) => (
@@ -54,7 +54,7 @@ export function Component() {
         </TabsList>
         {tabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.name} className="h-96 mt-8">
-            <SubscribeForm type={tab.value} />
+            <FollowForm type={tab.value} />
             <Recommendations type={tab.value} />
           </TabsContent>
         ))}

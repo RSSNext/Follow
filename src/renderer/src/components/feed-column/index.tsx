@@ -81,7 +81,7 @@ export function FeedColumn({
           <Link to={`/profile`} className="flex">
             <UserButton className="h-5 p-0" hideName={true} />
           </Link>
-          <Link to={`/subscribe`} className="flex">
+          <Link to={`/follow`} className="flex">
             <i className="i-mingcute-add-circle-line h-5 w-5 text-zinc-500" />
           </Link>
         </div>

@@ -24,12 +24,12 @@ const router = createBrowserRouter([
             lazy: () => import("./pages/(main)/index"),
           },
           {
-            path: "/subscribe",
-            lazy: () => import("./pages/(main)/subscribe/layout"),
+            path: "/follow",
+            lazy: () => import("./pages/(main)/follow/layout"),
             children: [
               {
                 path: "",
-                lazy: () => import("./pages/(main)/subscribe/index"),
+                lazy: () => import("./pages/(main)/follow/index"),
               },
             ],
           },
