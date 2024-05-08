@@ -41,7 +41,7 @@ export function Component() {
     <div className="flex flex-col gap-8 items-center justify-center w-full overflow-y-auto">
       <div className="text-2xl font-bold">Subscribe</div>
       <Tabs defaultValue="General">
-        <TabsList>
+        <TabsList className="w-full">
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.name}

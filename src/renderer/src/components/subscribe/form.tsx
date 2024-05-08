@@ -79,10 +79,13 @@ export function SubscribeForm({ type }: { type: string }) {
             },
           )
         ).json()
-      ).data as (FeedResponse & {
+      ).data as {
+        feed: Partial<FeedResponse>
         docs?: string
-        entries?: EntriesResponse
-      })[]
+        entries?: Partial<EntriesResponse>
+        isSubscribed?: boolean
+        subscriptionCount?: number
+      }[]
     },
   })
   console.log(mutation.data)
@@ -129,18 +132,24 @@ export function SubscribeForm({ type }: { type: string }) {
           </div>
           <div className="space-y-6 text-sm">
             {mutation.data.map((item) => (
-              <Card>
+              <Card key={item.feed.url || item.docs}>
                 <CardHeader>
                   <CardTitle>
                     <div className="flex items-center">
                       {(() => {
-                        if (item.image) {
+                        if (item.feed.image) {
                           return (
-                            <Image src={item.image} className="w-6 h-6 mr-2" />
+                            <Image
+                              src={item.feed.image}
+                              className="w-6 h-6 mr-2"
+                            />
                           )
-                        } else if (item.siteUrl) {
+                        } else if (item.feed.siteUrl) {
                           return (
-                            <SiteIcon url={item.siteUrl} className="w-6 h-6" />
+                            <SiteIcon
+                              url={item.feed.siteUrl}
+                              className="w-6 h-6"
+                            />
                           )
                         } else if (item.docs) {
                           return (
@@ -154,15 +163,17 @@ export function SubscribeForm({ type }: { type: string }) {
                         }
                       })()}
                       <div className="leading-tight font-medium text-base">
-                        {item.title}
+                        {item.feed.title}
                       </div>
                     </div>
                   </CardTitle>
                   <CardDescription>
-                    <div className="text-zinc-500">{item.url || item.docs}</div>
+                    <div className="text-zinc-500">
+                      {item.feed.url || item.docs}
+                    </div>
                     <div className="flex items-center">
                       <div className="line-clamp-2 text-xs">
-                        {item.description}
+                        {item.feed.description}
                       </div>
                     </div>
                   </CardDescription>
@@ -178,22 +189,38 @@ export function SubscribeForm({ type }: { type: string }) {
                         <div className="grid grid-cols-4 gap-4">
                           {item.entries.map((entry) => (
                             <div className="flex items-center gap-1 flex-col min-w-0 flex-1">
-                              <Image
-                                src={entry.images?.[0]}
-                                className="aspect-square"
-                              />
-                              <div className="line-clamp-2 w-full text-xs leading-tight">
-                                {entry.title}
-                              </div>
+                              {entry?.images?.[0] ? (
+                                <>
+                                  <Image
+                                    src={entry?.images?.[0]}
+                                    className="aspect-square w-full"
+                                  />
+                                  <div className="line-clamp-2 w-full text-xs leading-tight">
+                                    {entry?.title}
+                                  </div>
+                                </>
+                              ) : (
+                                <div className="line-clamp-[9] w-full aspect-square text-xs leading-tight flex items-center">
+                                  {entry?.title}
+                                </div>
+                              )}
                             </div>
                           ))}
                         </div>
                       )}
                     </CardContent>
                     <CardFooter>
-                      <Button>Follow</Button>
+                      {item.isSubscribed ? (
+                        <Button variant="outline" disabled>
+                          Followed
+                        </Button>
+                      ) : (
+                        <Button>Follow</Button>
+                      )}
                       <div className="ml-6 text-zinc-500">
-                        <span className="text-zinc-800 font-medium">0</span>{" "}
+                        <span className="text-zinc-800 font-medium">
+                          {item.subscriptionCount}
+                        </span>{" "}
                         Followers
                       </div>
                     </CardFooter>
