@@ -108,7 +108,10 @@ export function SubscribeForm({ type }: { type: string }) {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 w-[512px]"
+        >
           <FormField
             control={form.control}
             name="keyword"
@@ -122,7 +125,9 @@ export function SubscribeForm({ type }: { type: string }) {
               </FormItem>
             )}
           />
-          <Button type="submit">Search</Button>
+          <Button type="submit" isLoading={mutation.isPending}>
+            Search
+          </Button>
         </form>
       </Form>
       {mutation.data && (
