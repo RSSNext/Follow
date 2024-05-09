@@ -25,6 +25,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@renderer/components/ui/card"
+import { FollowButton } from "./button"
 
 const formSchema = z.object({
   keyword: z.string().min(1),
@@ -151,51 +152,52 @@ export function FollowForm({ type }: { type: string }) {
                           return (
                             <Image
                               src={item.feed.image}
-                              className="w-6 h-6 mr-2"
+                              className="w-8 h-8 mr-2"
                             />
                           )
                         } else if (item.feed.siteUrl) {
                           return (
                             <SiteIcon
                               url={item.feed.siteUrl}
-                              className="w-6 h-6"
+                              className="w-8 h-8"
                             />
                           )
                         } else if (item.docs) {
                           return (
                             <SiteIcon
                               url="https://rsshub.app"
-                              className="w-6 h-6"
+                              className="w-8 h-8"
                             />
                           )
                         } else {
                           return null
                         }
                       })()}
-                      <div className="leading-tight font-medium text-base">
+                      <div className="leading-tight font-semibold text-base">
                         {item.feed.title}
+                        <div className="font-normal truncate text-xs text-zinc-500">
+                          {item.feed.description}
+                        </div>
                       </div>
                     </a>
                   </CardTitle>
                   <CardDescription>
-                    <div className="text-zinc-500">
+                    <div className="text-zinc-500 flex items-center gap-1">
+                      <i className="i-mingcute-right-line" />
                       {item.feed.url || item.docs}
-                    </div>
-                    <div className="flex items-center">
-                      <div className="line-clamp-2 text-xs">
-                        {item.feed.description}
-                      </div>
                     </div>
                   </CardDescription>
                 </CardHeader>
                 {item.docs ? (
                   <CardFooter>
-                    <Button>View Docs</Button>
+                    <a href={item.docs} target="_blank">
+                      <Button>View Docs</Button>
+                    </a>
                   </CardFooter>
                 ) : (
                   <>
                     <CardContent>
-                      {item.entries?.length && (
+                      {!!item.entries?.length && (
                         <div className="grid grid-cols-4 gap-4">
                           {item.entries.map((entry) => (
                             <a
@@ -227,7 +229,7 @@ export function FollowForm({ type }: { type: string }) {
                           Followed
                         </Button>
                       ) : (
-                        <Button>Follow</Button>
+                        <FollowButton feed={item.feed} />
                       )}
                       <div className="ml-6 text-zinc-500">
                         <span className="text-zinc-800 font-medium">
