@@ -10,6 +10,13 @@ import { ActivedList } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { SiteIcon } from "../site-icon"
 import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+  ContextMenuSeparator,
+} from "@renderer/components/ui/context-menu"
 
 export function FeedList({
   className,
@@ -135,35 +142,46 @@ function FeedCategory({
             }}
           >
             {data.list.map((feed) => (
-              <div
-                key={feed.feedId}
-                className={cn(
-                  "flex items-center justify-between text-sm font-medium leading-loose w-full pl-6 pr-2.5 py-[2px] rounded-md cursor-pointer",
-                  activedList?.level === levels.feed &&
-                    activedList.id === feed.feedId &&
-                    "bg-[#C9C9C7]",
-                )}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  view !== undefined &&
-                    setActivedList?.({
-                      level: levels.feed,
-                      id: feed.feedId,
-                      name: feed.feeds.title,
-                      view,
-                    })
-                }}
-              >
-                <div className="flex items-center min-w-0">
-                  <SiteIcon url={feed.feeds.siteUrl} className="w-4 h-4" />
-                  <div className="truncate">{feed.feeds.title}</div>
-                </div>
-                {!!feed.unread && (
-                  <div className="text-xs text-zinc-500 ml-2">
-                    {feed.unread}
+              <ContextMenu>
+                <ContextMenuTrigger>
+                  <div
+                    key={feed.feedId}
+                    className={cn(
+                      "flex items-center justify-between text-sm font-medium leading-loose w-full pl-6 pr-2.5 py-[2px] rounded-md cursor-pointer",
+                      activedList?.level === levels.feed &&
+                        activedList.id === feed.feedId &&
+                        "bg-[#C9C9C7]",
+                    )}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      view !== undefined &&
+                        setActivedList?.({
+                          level: levels.feed,
+                          id: feed.feedId,
+                          name: feed.feeds.title,
+                          view,
+                        })
+                    }}
+                  >
+                    <div className="flex items-center min-w-0">
+                      <SiteIcon url={feed.feeds.siteUrl} className="w-4 h-4" />
+                      <div className="truncate">{feed.feeds.title}</div>
+                    </div>
+                    {!!feed.unread && (
+                      <div className="text-xs text-zinc-500 ml-2">
+                        {feed.unread}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </ContextMenuTrigger>
+                <ContextMenuContent onClick={(e) => e.stopPropagation()}>
+                  <ContextMenuItem>Edit</ContextMenuItem>
+                  <ContextMenuItem>Unfollow</ContextMenuItem>
+                  <ContextMenuSeparator />
+                  <ContextMenuItem>Open Feed in Browser</ContextMenuItem>
+                  <ContextMenuItem>Open Site in Browser</ContextMenuItem>
+                </ContextMenuContent>
+              </ContextMenu>
             ))}
           </m.div>
         )}
