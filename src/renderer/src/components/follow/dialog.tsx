@@ -20,8 +20,6 @@ import {
 } from "@renderer/components/ui/dialog"
 import { Button } from "@renderer/components/ui/button"
 import { FeedResponse } from "@renderer/lib/types"
-import { SiteIcon } from "@renderer/components/site-icon"
-import { Image } from "@renderer/components/ui/image"
 import {
   Select,
   SelectContent,
@@ -32,6 +30,7 @@ import {
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { Switch } from "@renderer/components/ui/switch"
+import { FollowSummary } from "../feed-summary"
 
 const formSchema = z.object({
   view: z.enum(["0", "1", "2", "3", "4", "5"]),
@@ -77,29 +76,7 @@ export function FollowDialog({ feed }: { feed: Partial<FeedResponse> }) {
       <DialogHeader>
         <DialogTitle>Follow</DialogTitle>
       </DialogHeader>
-      <div className="text-sm">
-        <div className="flex items-center mb-1">
-          {(() => {
-            if (feed.image) {
-              return <Image src={feed.image} className="w-8 h-8 mr-2" />
-            } else if (feed.siteUrl) {
-              return <SiteIcon url={feed.siteUrl} className="w-8 h-8" />
-            } else {
-              return null
-            }
-          })()}
-          <div className="leading-tight font-semibold text-base">
-            {feed.title}
-            <div className="font-normal truncate text-xs text-zinc-500">
-              {feed.description}
-            </div>
-          </div>
-        </div>
-        <div className="text-zinc-500 flex items-center gap-1">
-          <i className="i-mingcute-right-line" />
-          {feed.url}
-        </div>
-      </div>
+      <FollowSummary feed={feed} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -142,7 +119,7 @@ export function FollowDialog({ feed }: { feed: Partial<FeedResponse> }) {
                 <div>
                   <FormLabel>Category</FormLabel>
                   <FormDescription>
-                    By default, follows will be grouped by website.
+                    By default, your follows will be grouped by website.
                   </FormDescription>
                 </div>
                 <FormControl>

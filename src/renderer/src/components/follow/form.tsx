@@ -14,18 +14,16 @@ import { Input } from "@renderer/components/ui/input"
 import { useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { getCsrfToken } from "@hono/auth-js/react"
-import { SiteIcon } from "@renderer/components/site-icon"
 import { Image } from "@renderer/components/ui/image"
 import { FeedResponse, EntriesResponse } from "@renderer/lib/types"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@renderer/components/ui/card"
 import { FollowButton } from "./button"
+import { FollowSummary } from "../feed-summary"
 
 const formSchema = z.object({
   keyword: z.string().min(1),
@@ -141,52 +139,7 @@ export function FollowForm({ type }: { type: string }) {
             {mutation.data?.map((item) => (
               <Card key={item.feed.url || item.docs} className="select-text">
                 <CardHeader>
-                  <CardTitle>
-                    <a
-                      href={item.feed.siteUrl}
-                      target="_blank"
-                      className="flex items-center"
-                    >
-                      {(() => {
-                        if (item.feed.image) {
-                          return (
-                            <Image
-                              src={item.feed.image}
-                              className="w-8 h-8 mr-2"
-                            />
-                          )
-                        } else if (item.feed.siteUrl) {
-                          return (
-                            <SiteIcon
-                              url={item.feed.siteUrl}
-                              className="w-8 h-8"
-                            />
-                          )
-                        } else if (item.docs) {
-                          return (
-                            <SiteIcon
-                              url="https://rsshub.app"
-                              className="w-8 h-8"
-                            />
-                          )
-                        } else {
-                          return null
-                        }
-                      })()}
-                      <div className="leading-tight font-semibold text-base">
-                        {item.feed.title}
-                        <div className="font-normal truncate text-xs text-zinc-500">
-                          {item.feed.description}
-                        </div>
-                      </div>
-                    </a>
-                  </CardTitle>
-                  <CardDescription>
-                    <div className="text-zinc-500 flex items-center gap-1">
-                      <i className="i-mingcute-right-line" />
-                      {item.feed.url || item.docs}
-                    </div>
-                  </CardDescription>
+                  <FollowSummary feed={item.feed} docs={item.docs} />
                 </CardHeader>
                 {item.docs ? (
                   <CardFooter>
