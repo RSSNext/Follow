@@ -8,14 +8,14 @@ function handleOpen(url: string) {
   const urlObj = new URL(url)
   if (urlObj.hostname === "auth") {
     const token = urlObj.searchParams.get("token")
-    if (token && process.env["VITE_ELECTRON_REMOTE_URL"]) {
+    if (token && process.env["VITE_ELECTRON_REMOTE_API_URL"]) {
       mainWindow.webContents.session.cookies.set({
-        url: process.env["VITE_ELECTRON_REMOTE_URL"],
+        url: process.env["VITE_ELECTRON_REMOTE_API_URL"],
         name: "authjs.session-token",
         value: token,
         secure: true,
         httpOnly: true,
-        domain: "." + new URL(process.env["VITE_ELECTRON_REMOTE_URL"]).hostname,
+        domain: new URL(process.env["VITE_ELECTRON_REMOTE_API_URL"]).hostname,
         sameSite: "no_restriction",
       })
       mainWindow.reload()
