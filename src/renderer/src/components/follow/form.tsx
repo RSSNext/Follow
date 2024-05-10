@@ -63,21 +63,18 @@ export function FollowForm({ type }: { type: string }) {
     mutationFn: async (keyword: string) => {
       return (
         await (
-          await fetch(
-            `${import.meta.env.VITE_ELECTRON_REMOTE_API_URL}/discover`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-              body: JSON.stringify({
-                csrfToken: await getCsrfToken(),
-                keyword,
-                type: type === "rss" ? "rss" : "auto",
-              }),
+          await fetch(`${import.meta.env.VITE_API_URL}/discover`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
             },
-          )
+            credentials: "include",
+            body: JSON.stringify({
+              csrfToken: await getCsrfToken(),
+              keyword,
+              type: type === "rss" ? "rss" : "auto",
+            }),
+          })
         ).json()
       ).data as {
         feed: Partial<FeedResponse>

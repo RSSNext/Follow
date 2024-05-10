@@ -50,7 +50,7 @@ export function FollowDialog({ feed }: { feed: Partial<FeedResponse> }) {
       // return (
       //   await (
       //     await fetch(
-      //       `${import.meta.env.VITE_ELECTRON_REMOTE_API_URL}/discover`,
+      //       `${import.meta.env.VITE_API_URL}/discover`,
       //       {
       //         method: "POST",
       //         headers: {

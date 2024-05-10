@@ -82,7 +82,7 @@ persistQueryClient({
 })
 
 authConfigManager.setConfig({
-  baseUrl: import.meta.env.VITE_ELECTRON_REMOTE_API_URL,
+  baseUrl: import.meta.env.VITE_API_URL,
   basePath: "/auth",
   credentials: "include",
 })

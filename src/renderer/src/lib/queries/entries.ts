@@ -14,7 +14,7 @@ export const useEntries = ({
     enabled: level !== undefined && id !== undefined,
     queryFn: async ({ pageParam }) => {
       let entries: ListResponse<EntriesResponse> | null = null
-      const baseUrl = `${import.meta.env.VITE_ELECTRON_REMOTE_API_URL}/entries?`
+      const baseUrl = `${import.meta.env.VITE_API_URL}/entries?`
       const params: {
         category?: string
         view?: string

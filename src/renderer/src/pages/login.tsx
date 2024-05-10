@@ -8,7 +8,7 @@ export function Component() {
   const navigate = useNavigate()
   const [redirecting, setRedirecting] = useState(false)
 
-  const callbackUrl = `${import.meta.env.VITE_ELECTRON_REMOTE_URL}/redirect?app=follow`
+  const callbackUrl = `${import.meta.env.VITE_WEB_URL}/redirect?app=follow`
 
   const urlParams = new URLSearchParams(window.location.search)
   const provider = urlParams.get("provider")
@@ -39,7 +39,7 @@ export function Component() {
             onClick={() => {
               if (window.electron) {
                 window.open(
-                  `${import.meta.env.VITE_ELECTRON_REMOTE_URL}/login?provider=github`,
+                  `${import.meta.env.VITE_WEB_URL}/login?provider=github`,
                 )
               } else {
                 signIn("github", {
