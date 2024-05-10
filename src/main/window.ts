@@ -11,11 +11,12 @@ function handleOpen(url: string) {
     if (token && process.env["VITE_ELECTRON_REMOTE_URL"]) {
       mainWindow.webContents.session.cookies.set({
         url: process.env["VITE_ELECTRON_REMOTE_URL"],
-        name: "__Secure-authjs.session-token",
+        name: "authjs.session-token",
         value: token,
         secure: true,
         httpOnly: true,
         domain: "." + new URL(process.env["VITE_ELECTRON_REMOTE_URL"]).hostname,
+        sameSite: "no_restriction",
       })
       mainWindow.reload()
     }
@@ -48,8 +49,8 @@ export function createWindow(): void {
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env["VITE_ELECTRON_REMOTE_URL"]) {
-    mainWindow.loadURL(process.env["VITE_ELECTRON_REMOTE_URL"])
+  if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
+    mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"])
   } else {
     mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"))
   }
