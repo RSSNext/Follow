@@ -11,7 +11,7 @@ import {
   FormDescription,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { getCsrfToken } from "@hono/auth-js/react"
 import {
   DialogContent,
@@ -45,30 +45,38 @@ export function FollowDialog({ feed }: { feed: Partial<FeedResponse> }) {
       view: "0",
     },
   })
-  const mutation = useMutation({
+
+  const queryClient = useQueryClient()
+  const followMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      // return (
-      //   await (
-      //     await fetch(
-      //       `${import.meta.env.VITE_API_URL}/discover`,
-      //       {
-      //         method: "POST",
-      //         headers: {
-      //           "Content-Type": "application/json",
-      //         },
-      //         credentials: "include",
-      //         body: JSON.stringify({
-      //           csrfToken: await getCsrfToken(),
-      //         }),
-      //       },
-      //     )
-      //   ).json()
-      // ).data
+      return (
+        await (
+          await fetch(`${import.meta.env.VITE_API_URL}/subscriptions`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              url: feed.url,
+              view: parseInt(values.view),
+              category: values.category,
+              private: values.private,
+              csrfToken: await getCsrfToken(),
+            }),
+          })
+        ).json()
+      ).data
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["subscriptions", variables.view],
+      })
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    mutation.mutate(values)
+    followMutation.mutate(values)
   }
 
   return (
@@ -150,7 +158,7 @@ export function FollowDialog({ feed }: { feed: Partial<FeedResponse> }) {
               </FormItem>
             )}
           />
-          <Button type="submit" isLoading={mutation.isPending}>
+          <Button type="submit" isLoading={followMutation.isPending}>
             Follow
           </Button>
         </form>
