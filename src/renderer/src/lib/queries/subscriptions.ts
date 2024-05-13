@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { SubscriptionResponse } from "../types"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 export type Response = {
   list: {
@@ -14,17 +15,13 @@ export const useSubscriptions = (view?: number) =>
   useQuery({
     queryKey: ["subscriptions", view],
     queryFn: async () => {
-      const subscriptions = (
-        await (
-          await fetch(
-            `${import.meta.env.VITE_API_URL}/subscriptions` +
-              (view !== undefined ? `?view=${view}` : ``),
-            {
-              credentials: "include",
-            },
-          )
-        ).json()
-      ).data as SubscriptionResponse
+      const { data: subscriptions } = await apiFetch<{
+        data: SubscriptionResponse
+      }>("/subscriptions", {
+        query: {
+          view,
+        },
+      })
 
       const categories = {
         list: {},

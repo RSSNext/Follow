@@ -18,10 +18,10 @@ import {
   ContextMenuSeparator,
 } from "@renderer/components/ui/context-menu"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { getCsrfToken } from "@hono/auth-js/react"
 import { useToast } from "@renderer/components/ui/use-toast"
 import { ToastAction } from "@renderer/components/ui/toast"
 import { SubscriptionResponse } from "@renderer/lib/types"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 export function FeedList({
   className,
@@ -93,23 +93,13 @@ function FeedCategory({
 
   const queryClient = useQueryClient()
   const deleteMutation = useMutation({
-    mutationFn: async (feed: SubscriptionResponse[number]) => {
-      return (
-        await (
-          await fetch(`${import.meta.env.VITE_API_URL}/subscriptions`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              feedId: feed.feedId,
-              csrfToken: await getCsrfToken(),
-            }),
-          })
-        ).json()
-      ).data
-    },
+    mutationFn: async (feed: SubscriptionResponse[number]) =>
+      apiFetch("/subscriptions", {
+        method: "DELETE",
+        body: {
+          feedId: feed.feedId,
+        },
+      }),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["subscriptions", view],
@@ -126,19 +116,14 @@ function FeedCategory({
           <ToastAction
             altText="Undo"
             onClick={async () => {
-              await fetch(`${import.meta.env.VITE_API_URL}/subscriptions`, {
+              await apiFetch("/subscriptions", {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
+                body: {
                   url: variables.feeds.url,
                   view,
                   category: variables.category,
                   // private: variables.private,
-                  csrfToken: await getCsrfToken(),
-                }),
+                },
               })
               queryClient.invalidateQueries({
                 queryKey: ["subscriptions", view],

@@ -13,7 +13,6 @@ import {
 import { Input } from "@renderer/components/ui/input"
 import { useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
-import { getCsrfToken } from "@hono/auth-js/react"
 import { Image } from "@renderer/components/ui/image"
 import { FeedResponse, EntriesResponse } from "@renderer/lib/types"
 import {
@@ -24,6 +23,7 @@ import {
 } from "@renderer/components/ui/card"
 import { FollowButton } from "./button"
 import { FollowSummary } from "../feed-summary"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 const formSchema = z.object({
   keyword: z.string().min(1),
@@ -61,28 +61,22 @@ export function FollowForm({ type }: { type: string }) {
   })
   const mutation = useMutation({
     mutationFn: async (keyword: string) => {
-      return (
-        await (
-          await fetch(`${import.meta.env.VITE_API_URL}/discover`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              csrfToken: await getCsrfToken(),
-              keyword,
-              type: type === "rss" ? "rss" : "auto",
-            }),
-          })
-        ).json()
-      ).data as {
-        feed: Partial<FeedResponse>
-        docs?: string
-        entries?: Partial<EntriesResponse>
-        isSubscribed?: boolean
-        subscriptionCount?: number
-      }[]
+      const { data } = await apiFetch<{
+        data: {
+          feed: Partial<FeedResponse>
+          docs?: string
+          entries?: Partial<EntriesResponse>
+          isSubscribed?: boolean
+          subscriptionCount?: number
+        }[]
+      }>("/discover", {
+        method: "POST",
+        body: {
+          keyword,
+          type: type === "rss" ? "rss" : "auto",
+        },
+      })
+      return data
     },
   })
 

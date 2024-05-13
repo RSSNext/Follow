@@ -1,29 +1,21 @@
 import { Button } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
-import { getCsrfToken, authConfigManager } from "@hono/auth-js/react"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 export function Component() {
   const navigate = useNavigate()
 
   const getCallbackUrl = async () => {
-    const response = await (
-      await fetch(
-        `${authConfigManager.getConfig().baseUrl}/auth-app/new-session`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            csrfToken: await getCsrfToken(),
-          }),
-        },
-      )
-    ).json()
-    return `follow://auth?token=${response.data.sessionToken}`
+    const { data } = await apiFetch<{
+      data: {
+        sessionToken: string
+      }
+    }>("/auth-app/new-session", {
+      method: "POST",
+    })
+    return `follow://auth?token=${data.sessionToken}`
   }
 
   useEffect(() => {

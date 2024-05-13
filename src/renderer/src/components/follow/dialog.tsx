@@ -12,7 +12,6 @@ import {
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { getCsrfToken } from "@hono/auth-js/react"
 import {
   DialogContent,
   DialogHeader,
@@ -31,6 +30,7 @@ import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { Switch } from "@renderer/components/ui/switch"
 import { FollowSummary } from "../feed-summary"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 const formSchema = z.object({
   view: z.enum(["0", "1", "2", "3", "4", "5"]),
@@ -54,26 +54,16 @@ export function FollowDialog({
 
   const queryClient = useQueryClient()
   const followMutation = useMutation({
-    mutationFn: async (values: z.infer<typeof formSchema>) => {
-      return (
-        await (
-          await fetch(`${import.meta.env.VITE_API_URL}/subscriptions`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              url: feed.url,
-              view: parseInt(values.view),
-              category: values.category,
-              private: values.private,
-              csrfToken: await getCsrfToken(),
-            }),
-          })
-        ).json()
-      ).data
-    },
+    mutationFn: async (values: z.infer<typeof formSchema>) =>
+      apiFetch("/subscriptions", {
+        method: "POST",
+        body: {
+          url: feed.url,
+          view: parseInt(values.view),
+          category: values.category,
+          private: values.private,
+        },
+      }),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["subscriptions", parseInt(variables.view)],

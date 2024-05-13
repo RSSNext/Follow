@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { levels } from "@renderer/lib/constants"
 import { EntriesResponse, ListResponse } from "../types"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 export const useEntries = ({
   level,
@@ -13,8 +14,6 @@ export const useEntries = ({
     queryKey: ["entries", level, id],
     enabled: level !== undefined && id !== undefined,
     queryFn: async ({ pageParam }) => {
-      let entries: ListResponse<EntriesResponse> | null = null
-      const baseUrl = `${import.meta.env.VITE_API_URL}/entries?`
       const params: {
         category?: string
         view?: string
@@ -27,26 +26,12 @@ export const useEntries = ({
       } else if (level === levels.feed) {
         params.feedId = id + ""
       }
-      entries = await (
-        await fetch(
-          baseUrl +
-            new URLSearchParams({
-              offset: pageParam + "",
-              ...params,
-            }),
-          {
-            credentials: "include",
-          },
-        )
-      ).json()
-
-      if (!entries) {
-        entries = {
-          code: -1,
-        }
-      }
-
-      return entries
+      return await apiFetch<ListResponse<EntriesResponse>>("/entries", {
+        query: {
+          offset: pageParam + "",
+          ...params,
+        },
+      })
     },
     getNextPageParam: (lastPage, _, lastPageParam) =>
       lastPageParam + (lastPage.data?.length || 0),
