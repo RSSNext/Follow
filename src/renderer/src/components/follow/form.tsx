@@ -149,27 +149,30 @@ export function FollowForm({ type }: { type: string }) {
                     <CardContent>
                       {!!item.entries?.length && (
                         <div className="grid grid-cols-4 gap-4">
-                          {item.entries.map((entry) => (
-                            <a
-                              href={entry?.url}
-                              target="_blank"
-                              className="flex items-center gap-1 flex-col min-w-0 flex-1"
-                            >
-                              {entry?.images?.[0] ? (
-                                <Image
-                                  src={entry?.images?.[0]}
-                                  className="aspect-square w-full"
-                                />
-                              ) : (
-                                <div className="bg-stone-100 rounded text-zinc-500 p-2 overflow-hidden w-full aspect-square text-xs leading-tight flex">
-                                  {entry?.title}
+                          {item.entries
+                            .filter((e) => !!e)
+                            .map((entry) => (
+                              <a
+                                key={entry.id}
+                                href={entry.url}
+                                target="_blank"
+                                className="flex items-center gap-1 flex-col min-w-0 flex-1"
+                              >
+                                {entry.images?.[0] ? (
+                                  <Image
+                                    src={entry.images?.[0]}
+                                    className="aspect-square w-full"
+                                  />
+                                ) : (
+                                  <div className="bg-stone-100 rounded text-zinc-500 p-2 overflow-hidden w-full aspect-square text-xs leading-tight flex">
+                                    {entry.title}
+                                  </div>
+                                )}
+                                <div className="line-clamp-2 w-full text-xs leading-tight">
+                                  {entry.title}
                                 </div>
-                              )}
-                              <div className="line-clamp-2 w-full text-xs leading-tight">
-                                {entry?.title}
-                              </div>
-                            </a>
-                          ))}
+                              </a>
+                            ))}
                         </div>
                       )}
                     </CardContent>
