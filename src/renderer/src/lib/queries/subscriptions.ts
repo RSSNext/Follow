@@ -25,16 +25,6 @@ export const useSubscriptions = (view?: number) =>
           )
         ).json()
       ).data as SubscriptionResponse
-      // const counters = await (
-      //   await fetch(
-      //     `${import.meta.env.VITE_MINIFLUX_ENDPOINT}/v1/feeds/counters`,
-      //     {
-      //       headers: {
-      //         "X-Auth-Token": import.meta.env.VITE_MINIFLUX_TOKEN,
-      //       },
-      //     },
-      //   )
-      // ).json()
 
       const categories = {
         list: {},

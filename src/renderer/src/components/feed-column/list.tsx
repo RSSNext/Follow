@@ -17,6 +17,8 @@ import {
   ContextMenuTrigger,
   ContextMenuSeparator,
 } from "@renderer/components/ui/context-menu"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { getCsrfToken } from "@hono/auth-js/react"
 
 export function FeedList({
   className,
@@ -84,6 +86,32 @@ function FeedCategory({
   view?: number
 }) {
   const [open, setOpen] = useState(false)
+
+  const queryClient = useQueryClient()
+  const deleteMutation = useMutation({
+    mutationFn: async (feedId: string) => {
+      return (
+        await (
+          await fetch(`${import.meta.env.VITE_API_URL}/subscriptions`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              feedId,
+              csrfToken: await getCsrfToken(),
+            }),
+          })
+        ).json()
+      ).data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["subscriptions", view],
+      })
+    },
+  })
 
   return (
     <Collapsible
@@ -176,7 +204,11 @@ function FeedCategory({
                 </ContextMenuTrigger>
                 <ContextMenuContent onClick={(e) => e.stopPropagation()}>
                   <ContextMenuItem>Edit</ContextMenuItem>
-                  <ContextMenuItem>Unfollow</ContextMenuItem>
+                  <ContextMenuItem
+                    onClick={() => deleteMutation.mutate(feed.feedId)}
+                  >
+                    Unfollow
+                  </ContextMenuItem>
                   <ContextMenuSeparator />
                   <ContextMenuItem>Open Feed in Browser</ContextMenuItem>
                   <ContextMenuItem>Open Site in Browser</ContextMenuItem>
