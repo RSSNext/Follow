@@ -35,10 +35,16 @@ import { FollowSummary } from "../feed-summary"
 const formSchema = z.object({
   view: z.enum(["0", "1", "2", "3", "4", "5"]),
   category: z.string().optional(),
-  private: z.boolean(),
+  private: z.boolean().optional(),
 })
 
-export function FollowDialog({ feed }: { feed: Partial<FeedResponse> }) {
+export function FollowDialog({
+  feed,
+  onSuccess,
+}: {
+  feed: Partial<FeedResponse>
+  onSuccess?: (values: z.infer<typeof formSchema>) => void
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -70,8 +76,9 @@ export function FollowDialog({ feed }: { feed: Partial<FeedResponse> }) {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["subscriptions", variables.view],
+        queryKey: ["subscriptions", parseInt(variables.view)],
       })
+      onSuccess?.(variables)
     },
   })
 
