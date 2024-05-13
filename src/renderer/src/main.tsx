@@ -9,6 +9,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
 import { authConfigManager, SessionProvider } from "@hono/auth-js/react"
 import { persistQueryClient } from "@tanstack/react-query-persist-client"
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister"
+import { Toaster } from "@renderer/components/ui/toaster"
 
 const router = createBrowserRouter([
   {
@@ -104,5 +105,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </SessionProvider>
       </MotionConfig>
     </LazyMotion>
+    <Toaster />
   </React.StrictMode>,
 )

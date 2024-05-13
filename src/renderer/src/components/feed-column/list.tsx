@@ -19,6 +19,9 @@ import {
 } from "@renderer/components/ui/context-menu"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { getCsrfToken } from "@hono/auth-js/react"
+import { useToast } from "@renderer/components/ui/use-toast"
+import { ToastAction } from "@renderer/components/ui/toast"
+import { SubscriptionResponse } from "@renderer/lib/types"
 
 export function FeedList({
   className,
@@ -86,10 +89,11 @@ function FeedCategory({
   view?: number
 }) {
   const [open, setOpen] = useState(false)
+  const { toast } = useToast()
 
   const queryClient = useQueryClient()
   const deleteMutation = useMutation({
-    mutationFn: async (feedId: string) => {
+    mutationFn: async (feed: SubscriptionResponse[number]) => {
       return (
         await (
           await fetch(`${import.meta.env.VITE_API_URL}/subscriptions`, {
@@ -99,16 +103,51 @@ function FeedCategory({
             },
             credentials: "include",
             body: JSON.stringify({
-              feedId,
+              feedId: feed.feedId,
               csrfToken: await getCsrfToken(),
             }),
           })
         ).json()
       ).data
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["subscriptions", view],
+      })
+      toast({
+        duration: 3000,
+        description: (
+          <>
+            Feed <i className="font-semibold mr-px">{variables.feeds.title}</i>{" "}
+            has been unfollowed.
+          </>
+        ),
+        action: (
+          <ToastAction
+            altText="Undo"
+            onClick={async () => {
+              await fetch(`${import.meta.env.VITE_API_URL}/subscriptions`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                  url: variables.feeds.url,
+                  view,
+                  category: variables.category,
+                  // private: variables.private,
+                  csrfToken: await getCsrfToken(),
+                }),
+              })
+              queryClient.invalidateQueries({
+                queryKey: ["subscriptions", view],
+              })
+            }}
+          >
+            Undo
+          </ToastAction>
+        ),
       })
     },
   })
@@ -170,7 +209,7 @@ function FeedCategory({
             }}
           >
             {data.list.map((feed) => (
-              <ContextMenu>
+              <ContextMenu key={feed.feedId}>
                 <ContextMenuTrigger>
                   <div
                     key={feed.feedId}
@@ -204,9 +243,7 @@ function FeedCategory({
                 </ContextMenuTrigger>
                 <ContextMenuContent onClick={(e) => e.stopPropagation()}>
                   <ContextMenuItem>Edit</ContextMenuItem>
-                  <ContextMenuItem
-                    onClick={() => deleteMutation.mutate(feed.feedId)}
-                  >
+                  <ContextMenuItem onClick={() => deleteMutation.mutate(feed)}>
                     Unfollow
                   </ContextMenuItem>
                   <ContextMenuSeparator />
