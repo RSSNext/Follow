@@ -11,6 +11,12 @@ import { cn } from "@renderer/lib/utils"
 import { SiteIcon } from "../site-icon"
 import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
 import { FeedContextMenu } from "./context-menu"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@renderer/components/ui/tooltip"
 
 export function FeedList({
   className,
@@ -159,6 +165,19 @@ function FeedCategory({
                   <div className="flex items-center min-w-0">
                     <SiteIcon url={feed.feeds.siteUrl} className="w-4 h-4" />
                     <div className="truncate">{feed.feeds.title}</div>
+                    {feed.isPrivate && (
+                      <TooltipProvider delayDuration={300}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <i className="i-mingcute-eye-close-line shrink-0 ml-0.5" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            This feed will not be publicly displayed on your
+                            profile page.
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
                   </div>
                   {!!feed.unread && (
                     <div className="text-xs text-zinc-500 ml-2">
