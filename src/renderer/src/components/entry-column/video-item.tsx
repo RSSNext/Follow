@@ -8,18 +8,16 @@ export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
     <div className="flex">
       <div className="w-full">
         <div className="flex gap-2 overflow-x-auto">
-          {
-            <Image
-              key={entry.images?.[0]}
-              src={entry.images?.[0]}
-              className="w-full aspect-video shrink-0 rounded-md object-cover"
-              loading="lazy"
-              proxy={{
-                width: 640,
-                height: 360,
-              }}
-            />
-          }
+          <Image
+            key={entry.images?.[0]}
+            src={entry.images?.[0]}
+            className="w-full aspect-video shrink-0 rounded-md object-cover"
+            loading="lazy"
+            proxy={{
+              width: 640,
+              height: 360,
+            }}
+          />
         </div>
         <div className="line-clamp-5 text-sm flex-1 px-2 pb-3 pt-1">
           <div className="font-medium line-clamp-2">{entry.title}</div>

@@ -62,7 +62,7 @@ export function FollowDialog({
     defaultValues: {
       view: isSubscribed ? feed.view + "" : "0",
       category: isSubscribed ? feed.category : undefined,
-      isPrivate: isSubscribed ? feed.isPrivate : false,
+      isPrivate: isSubscribed ? feed.isPrivate || false : false,
     },
   })
 
