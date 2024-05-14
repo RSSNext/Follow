@@ -70,15 +70,21 @@ export function FollowDialog({
   const followMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) =>
       apiFetch("/subscriptions", {
-        method: "POST",
+        method: isSubscribed ? "PATCH" : "POST",
         body: {
           url: feed.feeds.url,
           view: parseInt(values.view),
           category: values.category,
           isPrivate: values.isPrivate,
+          ...(isSubscribed && { feedId: feed.feeds.id }),
         },
       }),
     onSuccess: (_, variables) => {
+      if (isSubscribed && variables.view !== feed.view + "") {
+        queryClient.invalidateQueries({
+          queryKey: ["subscriptions", feed.view],
+        })
+      }
       queryClient.invalidateQueries({
         queryKey: ["subscriptions", parseInt(variables.view)],
       })
