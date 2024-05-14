@@ -83,7 +83,7 @@ function FeedCategory({
   setActivedList?: (value: ActivedList) => void
   view?: number
 }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(!data.name)
 
   const setFeedActive = (feed: SubscriptionResponse[number]) => {
     view !== undefined &&
@@ -101,48 +101,52 @@ function FeedCategory({
       onOpenChange={(o) => setOpen(o)}
       onClick={(e) => e.stopPropagation()}
     >
-      <div
-        className={cn(
-          "flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded-md w-full cursor-pointer transition-colors",
-          activedList?.level === levels.folder &&
-            activedList.id === data.name &&
-            "bg-[#C9C9C7]",
-        )}
-        onClick={(e) => {
-          e.stopPropagation()
-          view !== undefined &&
-            setActivedList?.({
-              level: levels.folder,
-              id: data.name,
-              name: data.name,
-              view,
-            })
-        }}
-      >
-        <div className="flex items-center min-w-0 w-full">
-          <CollapsibleTrigger
-            className={cn(
-              "flex items-center h-7 [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
-              !setActivedList && "flex-1",
-            )}
-          >
-            <i className="i-mingcute-right-fill mr-2 transition-transform" />
-            {!setActivedList && <span className="truncate">{data.name}</span>}
-          </CollapsibleTrigger>
-          {setActivedList && <span className="truncate">{data.name}</span>}
+      {!!data.name && (
+        <div
+          className={cn(
+            "flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded-md w-full cursor-pointer transition-colors",
+            activedList?.level === levels.folder &&
+              activedList.id === data.name &&
+              "bg-[#C9C9C7]",
+          )}
+          onClick={(e) => {
+            e.stopPropagation()
+            view !== undefined &&
+              setActivedList?.({
+                level: levels.folder,
+                id: data.name,
+                name: data.name,
+                view,
+              })
+          }}
+        >
+          <div className="flex items-center min-w-0 w-full">
+            <CollapsibleTrigger
+              className={cn(
+                "flex items-center h-7 [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
+                !setActivedList && "flex-1",
+              )}
+            >
+              <i className="i-mingcute-right-fill mr-2 transition-transform" />
+              {!setActivedList && <span className="truncate">{data.name}</span>}
+            </CollapsibleTrigger>
+            {setActivedList && <span className="truncate">{data.name}</span>}
+          </div>
+          {!!data.unread && (
+            <div className="text-xs text-zinc-500 ml-2">{data.unread}</div>
+          )}
         </div>
-        {!!data.unread && (
-          <div className="text-xs text-zinc-500 ml-2">{data.unread}</div>
-        )}
-      </div>
+      )}
       <AnimatePresence>
         {open && (
           <m.div
             className="overflow-hidden"
-            initial={{
-              height: 0,
-              opacity: 0.01,
-            }}
+            initial={
+              !!data.name && {
+                height: 0,
+                opacity: 0.01,
+              }
+            }
             animate={{
               height: "auto",
               opacity: 1,
@@ -160,10 +164,11 @@ function FeedCategory({
               >
                 <div
                   className={cn(
-                    "flex items-center justify-between text-sm font-medium leading-loose w-full pl-6 pr-2.5 py-[2px] rounded-md cursor-pointer",
+                    "flex items-center justify-between text-sm font-medium leading-loose w-full pr-2.5 py-[2px] rounded-md cursor-pointer",
                     activedList?.level === levels.feed &&
                       activedList.id === feed.feedId &&
                       "bg-[#C9C9C7]",
+                    !!data.name ? "pl-6" : "pl-2.5",
                   )}
                   onClick={(e) => {
                     e.stopPropagation()
