@@ -54,7 +54,8 @@ export const useSubscriptions = (view?: number) =>
           if (subscription.feeds.siteUrl) {
             const domain = parse(subscription.feeds.siteUrl).domain
             if (domain && domains[domain] > 1) {
-              subscription.category = domain
+              subscription.category =
+                domain.slice(0, 1).toUpperCase() + domain.slice(1)
             }
           }
           if (!subscription.category) {
