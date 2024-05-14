@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { SubscriptionResponse } from "../types"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import { parse } from "tldts"
 
 export type Response = {
   list: {
@@ -36,7 +37,30 @@ export const useSubscriptions = (view?: number) =>
         >
         unread: number
       }
+      const domains: Record<string, number> = {}
       subscriptions?.forEach((subscription) => {
+        if (!subscription.category && subscription.feeds.siteUrl) {
+          const domain = parse(subscription.feeds.siteUrl).domain
+          if (domain) {
+            if (!domains[domain]) {
+              domains[domain] = 0
+            }
+            domains[domain]++
+          }
+        }
+      })
+      subscriptions?.forEach((subscription) => {
+        if (!subscription.category) {
+          if (subscription.feeds.siteUrl) {
+            const domain = parse(subscription.feeds.siteUrl).domain
+            if (domain && domains[domain] > 1) {
+              subscription.category = domain
+            }
+          }
+          if (!subscription.category) {
+            subscription.category = ""
+          }
+        }
         if (!categories.list[subscription.category]) {
           categories.list[subscription.category] = {
             list: [],
