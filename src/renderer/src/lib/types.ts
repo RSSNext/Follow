@@ -9,14 +9,14 @@ export type ActivedList = {
 export type FeedResponse = {
   id: string
   url: string
-  title: string
-  description: string
-  siteUrl: string
-  image: string
+  title?: string
+  description?: string
+  siteUrl?: string
+  image?: string
   checkedAt: string
   nextCheckAt: string
-  lastModifiedHeader: string
-  etagHeader: string
+  lastModifiedHeader?: string
+  etagHeader?: string
   ttl: number
 }
 
@@ -24,8 +24,8 @@ export type SubscriptionResponse = {
   userId: string
   feedId: string
   view: number
-  category: string
-  title: string
+  category?: string
+  title?: string
   unread?: number
   feeds: FeedResponse
 }[]

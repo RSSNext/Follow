@@ -63,7 +63,7 @@ export function FollowForm({ type }: { type: string }) {
     mutationFn: async (keyword: string) => {
       const { data } = await apiFetch<{
         data: {
-          feed: Partial<FeedResponse>
+          feed: FeedResponse
           docs?: string
           entries?: Partial<EntriesResponse>
           isSubscribed?: boolean

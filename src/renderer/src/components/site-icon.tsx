@@ -5,12 +5,14 @@ export function SiteIcon({
   url,
   className,
 }: {
-  url: string
+  url?: string
   className?: string
 }) {
   let host
   let src
   let fallback
+
+  if (!url) return null
 
   try {
     host = new URL(url).host
