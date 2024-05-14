@@ -6,9 +6,11 @@ import { apiFetch } from "@renderer/lib/queries/api-fetch"
 export const useEntries = ({
   level,
   id,
+  view,
 }: {
   level?: string
   id?: number | string
+  view?: number
 }) =>
   useInfiniteQuery({
     queryKey: ["entries", level, id],
@@ -21,14 +23,13 @@ export const useEntries = ({
       } = {}
       if (level === levels.folder) {
         params.category = id + ""
-      } else if (level === levels.view) {
-        params.view = id + ""
       } else if (level === levels.feed) {
         params.feedId = id + ""
       }
       return await apiFetch<ListResponse<EntriesResponse>>("/entries", {
         query: {
           offset: pageParam + "",
+          view,
           ...params,
         },
       })

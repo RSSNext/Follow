@@ -22,6 +22,7 @@ export function EntryColumn({
   const entries = useEntries({
     level: activedList?.level,
     id: activedList?.id,
+    view: activedList?.view,
   })
 
   let Item
