@@ -113,10 +113,13 @@ export function FeedColumn({
           ))}
         </TooltipProvider>
       </div>
-      <div className="w-full h-full overflow-x-hidden" ref={carouselRef}>
+      <div className="w-full h-full overflow-clip" ref={carouselRef}>
         <m.div className="h-full flex" style={{ x: spring }}>
           {views.map((item, index) => (
-            <section key={item.name} className="snap-center shrink-0">
+            <section
+              key={item.name}
+              className="snap-center shrink-0 overflow-y-auto"
+            >
               <FeedList
                 className="w-64 px-3"
                 view={index}
