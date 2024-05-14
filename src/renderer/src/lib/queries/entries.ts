@@ -18,17 +18,19 @@ export const useEntries = ({
     queryFn: async ({ pageParam }) => {
       const params: {
         category?: string
-        view?: string
+        view?: number
         feedId?: string
+        feedIdList?: string[]
       } = {}
       if (level === levels.folder) {
-        params.category = id + ""
+        params.feedIdList = (id + "").split(",")
       } else if (level === levels.feed) {
         params.feedId = id + ""
       }
       return await apiFetch<ListResponse<EntriesResponse>>("/entries", {
-        query: {
-          offset: pageParam + "",
+        method: "POST",
+        body: {
+          offset: pageParam,
           view,
           ...params,
         },

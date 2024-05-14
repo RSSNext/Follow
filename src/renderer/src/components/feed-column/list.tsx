@@ -114,7 +114,7 @@ function FeedCategory({
             view !== undefined &&
               setActivedList?.({
                 level: levels.folder,
-                id: data.name,
+                id: data.list.map((feed) => feed.feedId).join(","),
                 name: data.name,
                 view,
               })
