@@ -6,7 +6,7 @@ import {
 import { m, AnimatePresence } from "framer-motion"
 import { useState } from "react"
 import { levels, views } from "@renderer/lib/constants"
-import { ActivedList } from "@renderer/lib/types"
+import { ActivedList, SubscriptionResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { SiteIcon } from "../site-icon"
 import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
@@ -85,20 +85,21 @@ function FeedCategory({
 }) {
   const [open, setOpen] = useState(false)
 
+  const setFeedActive = (feed: SubscriptionResponse[number]) => {
+    view !== undefined &&
+      setActivedList?.({
+        level: levels.feed,
+        id: feed.feedId,
+        name: feed.feeds.title || "",
+        view,
+      })
+  }
+
   return (
     <Collapsible
       open={open}
       onOpenChange={(o) => setOpen(o)}
-      onClick={(e) => {
-        e.stopPropagation()
-        view !== undefined &&
-          setActivedList?.({
-            level: levels.folder,
-            id: data.name,
-            name: data.name,
-            view,
-          })
-      }}
+      onClick={(e) => e.stopPropagation()}
     >
       <div
         className={cn(
@@ -107,6 +108,16 @@ function FeedCategory({
             activedList.id === data.name &&
             "bg-[#C9C9C7]",
         )}
+        onClick={(e) => {
+          e.stopPropagation()
+          view !== undefined &&
+            setActivedList?.({
+              level: levels.folder,
+              id: data.name,
+              name: data.name,
+              view,
+            })
+        }}
       >
         <div className="flex items-center min-w-0 w-full">
           <CollapsibleTrigger
@@ -142,9 +153,12 @@ function FeedCategory({
             }}
           >
             {data.list.map((feed) => (
-              <FeedContextMenu feed={feed} key={feed.feedId}>
+              <FeedContextMenu
+                feed={feed}
+                key={feed.feedId}
+                onOpenChange={() => setFeedActive(feed)}
+              >
                 <div
-                  key={feed.feedId}
                   className={cn(
                     "flex items-center justify-between text-sm font-medium leading-loose w-full pl-6 pr-2.5 py-[2px] rounded-md cursor-pointer",
                     activedList?.level === levels.feed &&
@@ -153,13 +167,7 @@ function FeedCategory({
                   )}
                   onClick={(e) => {
                     e.stopPropagation()
-                    view !== undefined &&
-                      setActivedList?.({
-                        level: levels.feed,
-                        id: feed.feedId,
-                        name: feed.feeds.title || "",
-                        view,
-                      })
+                    setFeedActive(feed)
                   }}
                 >
                   <div className="flex items-center min-w-0">

@@ -17,9 +17,11 @@ import { Dialog, DialogTrigger } from "@renderer/components/ui/dialog"
 export function FeedContextMenu({
   feed,
   children,
+  onOpenChange,
 }: {
   feed: SubscriptionResponse[number]
   children: React.ReactNode
+  onOpenChange?: (open: boolean) => void
 }) {
   const [dialogOpen, setDialogOpen] = useState(false)
   const { toast } = useToast()
@@ -72,7 +74,7 @@ export function FeedContextMenu({
 
   return (
     <Dialog key={feed.feedId} open={dialogOpen} onOpenChange={setDialogOpen}>
-      <ContextMenu>
+      <ContextMenu onOpenChange={(open) => onOpenChange?.(open)}>
         <ContextMenuTrigger>{children}</ContextMenuTrigger>
         <ContextMenuContent onClick={(e) => e.stopPropagation()}>
           <DialogTrigger asChild>
@@ -83,7 +85,9 @@ export function FeedContextMenu({
           </ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem>Open Feed in Browser</ContextMenuItem>
-          <ContextMenuItem>Open Site in Browser</ContextMenuItem>
+          <ContextMenuItem onClick={() => window.open(feed.feeds.siteUrl)}>
+            Open Site in Browser
+          </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
       <FollowDialog
