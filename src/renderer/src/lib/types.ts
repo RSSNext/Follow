@@ -26,6 +26,7 @@ export type SubscriptionResponse = {
   view: number
   category?: string
   title?: string
+  isPrivate?: boolean
   unread?: number
   feeds: FeedResponse
 }[]

@@ -55,7 +55,7 @@ export function FeedContextMenu({
                   url: variables.feeds.url,
                   view: feed.view,
                   category: variables.category,
-                  // private: variables.private,
+                  isPrivate: variables.isPrivate,
                 },
               })
               queryClient.invalidateQueries({

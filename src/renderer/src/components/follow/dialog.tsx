@@ -35,7 +35,7 @@ import { SubscriptionResponse } from "@renderer/lib/types"
 const formSchema = z.object({
   view: z.string(),
   category: z.string().optional(),
-  private: z.boolean().optional(),
+  isPrivate: z.boolean().optional(),
 })
 
 export function FollowDialog({
@@ -62,6 +62,7 @@ export function FollowDialog({
     defaultValues: {
       view: isSubscribed ? feed.view + "" : "0",
       category: isSubscribed ? feed.category : undefined,
+      isPrivate: isSubscribed ? feed.isPrivate : false,
     },
   })
 
@@ -74,7 +75,7 @@ export function FollowDialog({
           url: feed.feeds.url,
           view: parseInt(values.view),
           category: values.category,
-          private: values.private,
+          isPrivate: values.isPrivate,
         },
       }),
     onSuccess: (_, variables) => {
@@ -149,7 +150,7 @@ export function FollowDialog({
           />
           <FormField
             control={form.control}
-            name="private"
+            name="isPrivate"
             render={({ field }) => (
               <FormItem>
                 <div>
