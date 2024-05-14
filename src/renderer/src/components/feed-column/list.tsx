@@ -10,18 +10,7 @@ import { ActivedList } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { SiteIcon } from "../site-icon"
 import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-  ContextMenuSeparator,
-} from "@renderer/components/ui/context-menu"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useToast } from "@renderer/components/ui/use-toast"
-import { ToastAction } from "@renderer/components/ui/toast"
-import { SubscriptionResponse } from "@renderer/lib/types"
-import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import { FeedContextMenu } from "./context-menu"
 
 export function FeedList({
   className,
@@ -89,53 +78,6 @@ function FeedCategory({
   view?: number
 }) {
   const [open, setOpen] = useState(false)
-  const { toast } = useToast()
-
-  const queryClient = useQueryClient()
-  const deleteMutation = useMutation({
-    mutationFn: async (feed: SubscriptionResponse[number]) =>
-      apiFetch("/subscriptions", {
-        method: "DELETE",
-        body: {
-          feedId: feed.feedId,
-        },
-      }),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ["subscriptions", view],
-      })
-      toast({
-        duration: 3000,
-        description: (
-          <>
-            Feed <i className="font-semibold mr-px">{variables.feeds.title}</i>{" "}
-            has been unfollowed.
-          </>
-        ),
-        action: (
-          <ToastAction
-            altText="Undo"
-            onClick={async () => {
-              await apiFetch("/subscriptions", {
-                method: "POST",
-                body: {
-                  url: variables.feeds.url,
-                  view,
-                  category: variables.category,
-                  // private: variables.private,
-                },
-              })
-              queryClient.invalidateQueries({
-                queryKey: ["subscriptions", view],
-              })
-            }}
-          >
-            Undo
-          </ToastAction>
-        ),
-      })
-    },
-  })
 
   return (
     <Collapsible
@@ -194,48 +136,37 @@ function FeedCategory({
             }}
           >
             {data.list.map((feed) => (
-              <ContextMenu key={feed.feedId}>
-                <ContextMenuTrigger>
-                  <div
-                    key={feed.feedId}
-                    className={cn(
-                      "flex items-center justify-between text-sm font-medium leading-loose w-full pl-6 pr-2.5 py-[2px] rounded-md cursor-pointer",
-                      activedList?.level === levels.feed &&
-                        activedList.id === feed.feedId &&
-                        "bg-[#C9C9C7]",
-                    )}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      view !== undefined &&
-                        setActivedList?.({
-                          level: levels.feed,
-                          id: feed.feedId,
-                          name: feed.feeds.title,
-                          view,
-                        })
-                    }}
-                  >
-                    <div className="flex items-center min-w-0">
-                      <SiteIcon url={feed.feeds.siteUrl} className="w-4 h-4" />
-                      <div className="truncate">{feed.feeds.title}</div>
-                    </div>
-                    {!!feed.unread && (
-                      <div className="text-xs text-zinc-500 ml-2">
-                        {feed.unread}
-                      </div>
-                    )}
+              <FeedContextMenu feed={feed} key={feed.feedId}>
+                <div
+                  key={feed.feedId}
+                  className={cn(
+                    "flex items-center justify-between text-sm font-medium leading-loose w-full pl-6 pr-2.5 py-[2px] rounded-md cursor-pointer",
+                    activedList?.level === levels.feed &&
+                      activedList.id === feed.feedId &&
+                      "bg-[#C9C9C7]",
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    view !== undefined &&
+                      setActivedList?.({
+                        level: levels.feed,
+                        id: feed.feedId,
+                        name: feed.feeds.title || "",
+                        view,
+                      })
+                  }}
+                >
+                  <div className="flex items-center min-w-0">
+                    <SiteIcon url={feed.feeds.siteUrl} className="w-4 h-4" />
+                    <div className="truncate">{feed.feeds.title}</div>
                   </div>
-                </ContextMenuTrigger>
-                <ContextMenuContent onClick={(e) => e.stopPropagation()}>
-                  <ContextMenuItem>Edit</ContextMenuItem>
-                  <ContextMenuItem onClick={() => deleteMutation.mutate(feed)}>
-                    Unfollow
-                  </ContextMenuItem>
-                  <ContextMenuSeparator />
-                  <ContextMenuItem>Open Feed in Browser</ContextMenuItem>
-                  <ContextMenuItem>Open Site in Browser</ContextMenuItem>
-                </ContextMenuContent>
-              </ContextMenu>
+                  {!!feed.unread && (
+                    <div className="text-xs text-zinc-500 ml-2">
+                      {feed.unread}
+                    </div>
+                  )}
+                </div>
+              </FeedContextMenu>
             ))}
           </m.div>
         )}

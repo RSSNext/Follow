@@ -4,7 +4,7 @@ import { FollowDialog } from "./dialog"
 import { FeedResponse } from "@renderer/lib/types"
 import { useState } from "react"
 
-export function FollowButton({ feed }: { feed: Partial<FeedResponse> }) {
+export function FollowButton({ feed }: { feed: FeedResponse }) {
   const [open, setOpen] = useState(false)
   const [isSuccessful, setIsSuccessful] = useState(false)
 
@@ -20,11 +20,14 @@ export function FollowButton({ feed }: { feed: Partial<FeedResponse> }) {
         )}
       </DialogTrigger>
       <FollowDialog
-        feed={feed}
+        feed={{
+          feeds: feed,
+        }}
         onSuccess={() => {
           setOpen(false)
           setIsSuccessful(true)
         }}
+        isSubscribed={false}
       />
     </Dialog>
   )

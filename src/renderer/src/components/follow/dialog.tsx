@@ -18,7 +18,6 @@ import {
   DialogTitle,
 } from "@renderer/components/ui/dialog"
 import { Button } from "@renderer/components/ui/button"
-import { FeedResponse } from "@renderer/lib/types"
 import {
   Select,
   SelectContent,
@@ -31,9 +30,10 @@ import { cn } from "@renderer/lib/utils"
 import { Switch } from "@renderer/components/ui/switch"
 import { FollowSummary } from "../feed-summary"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import { SubscriptionResponse } from "@renderer/lib/types"
 
 const formSchema = z.object({
-  view: z.enum(["0", "1", "2", "3", "4", "5"]),
+  view: z.string(),
   category: z.string().optional(),
   private: z.boolean().optional(),
 })
@@ -41,14 +41,27 @@ const formSchema = z.object({
 export function FollowDialog({
   feed,
   onSuccess,
-}: {
-  feed: Partial<FeedResponse>
-  onSuccess?: (values: z.infer<typeof formSchema>) => void
-}) {
+  isSubscribed,
+}:
+  | {
+      feed:
+        | SubscriptionResponse[number]
+        | {
+            feeds: SubscriptionResponse[number]["feeds"]
+          }
+      onSuccess?: (values: z.infer<typeof formSchema>) => void
+      isSubscribed?: false
+    }
+  | {
+      feed: SubscriptionResponse[number]
+      onSuccess?: (values: z.infer<typeof formSchema>) => void
+      isSubscribed: true
+    }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      view: "0",
+      view: isSubscribed ? feed.view + "" : "0",
+      category: isSubscribed ? feed.category : undefined,
     },
   })
 
@@ -58,7 +71,7 @@ export function FollowDialog({
       apiFetch("/subscriptions", {
         method: "POST",
         body: {
-          url: feed.url,
+          url: feed.feeds.url,
           view: parseInt(values.view),
           category: values.category,
           private: values.private,
@@ -81,7 +94,7 @@ export function FollowDialog({
       <DialogHeader>
         <DialogTitle>Follow</DialogTitle>
       </DialogHeader>
-      <FollowSummary feed={feed} />
+      <FollowSummary feed={feed.feeds} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -156,7 +169,7 @@ export function FollowDialog({
             )}
           />
           <Button type="submit" isLoading={followMutation.isPending}>
-            Follow
+            {isSubscribed ? "Update" : "Follow"}
           </Button>
         </form>
       </Form>
