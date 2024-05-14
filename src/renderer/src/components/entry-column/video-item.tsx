@@ -1,7 +1,7 @@
 import dayjs from "@renderer/lib/dayjs"
-import { SiteIcon } from "../site-icon"
 import { EntriesResponse } from "@renderer/lib/types"
 import { Image } from "@renderer/components/ui/image"
+import { FeedIcon } from "@renderer/components/feed-icon"
 
 export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
@@ -24,9 +24,9 @@ export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
         <div className="line-clamp-5 text-sm flex-1 px-2 pb-3 pt-1">
           <div className="font-medium line-clamp-2">{entry.title}</div>
           <div className="space-x-1 text-[13px]">
-            <SiteIcon
+            <FeedIcon
               className="w-3.5 h-3.5 inline-block mr-0 align-sub"
-              url={entry.feeds.siteUrl}
+              feed={entry.feeds}
             />
             <span>{entry.author}</span>
             <span className="text-zinc-500">·</span>

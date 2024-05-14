@@ -8,7 +8,6 @@ import { useState } from "react"
 import { levels, views } from "@renderer/lib/constants"
 import { ActivedList, SubscriptionResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
-import { SiteIcon } from "../site-icon"
 import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
 import { FeedContextMenu } from "./context-menu"
 import {
@@ -17,6 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
+import { FeedIcon } from "@renderer/components/feed-icon"
 
 export function FeedList({
   className,
@@ -171,7 +171,7 @@ function FeedCategory({
                   }}
                 >
                   <div className="flex items-center min-w-0">
-                    <SiteIcon url={feed.feeds.siteUrl} className="w-4 h-4" />
+                    <FeedIcon feed={feed.feeds} className="w-4 h-4" />
                     <div className="truncate">{feed.feeds.title}</div>
                     {feed.isPrivate && (
                       <TooltipProvider delayDuration={300}>
