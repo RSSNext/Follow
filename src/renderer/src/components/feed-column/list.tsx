@@ -106,7 +106,7 @@ function FeedCategory({
           className={cn(
             "flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded-md w-full cursor-pointer transition-colors",
             activedList?.level === levels.folder &&
-              activedList.id === data.name &&
+              activedList.name === data.name &&
               "bg-[#C9C9C7]",
           )}
           onClick={(e) => {
