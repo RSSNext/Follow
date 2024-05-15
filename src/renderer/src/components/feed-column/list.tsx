@@ -102,7 +102,9 @@ function FeedCategory({
   }
 
   useEffect(() => {
-    setOpen(expansion)
+    if (data.name) {
+      setOpen(expansion)
+    }
   }, [expansion])
 
   const setCatrgoryActive = () => {
