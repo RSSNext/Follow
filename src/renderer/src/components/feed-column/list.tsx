@@ -17,6 +17,7 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { FeedIcon } from "@renderer/components/feed-icon"
+import dayjs from "@renderer/lib/dayjs"
 
 export function FeedList({
   className,
@@ -175,18 +176,43 @@ function FeedCategory({
                     setFeedActive(feed)
                   }}
                 >
-                  <div className="flex items-center min-w-0">
+                  <div
+                    className={cn(
+                      "flex items-center min-w-0",
+                      feed.feeds.errorAt && "text-red-900",
+                    )}
+                  >
                     <FeedIcon feed={feed.feeds} className="w-4 h-4" />
                     <div className="truncate">{feed.feeds.title}</div>
+                    {feed.feeds.errorAt && (
+                      <TooltipProvider delayDuration={300}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <i className="i-mingcute-wifi-off-line shrink-0 ml-1 text-base" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            Error since{" "}
+                            {dayjs
+                              .duration(
+                                dayjs(feed.feeds.errorAt).diff(
+                                  dayjs(),
+                                  "minute",
+                                ),
+                                "minute",
+                              )
+                              .humanize(true)}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
                     {feed.isPrivate && (
                       <TooltipProvider delayDuration={300}>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <i className="i-mingcute-eye-close-line shrink-0 ml-0.5" />
+                            <i className="i-mingcute-eye-close-line shrink-0 ml-1 text-base" />
                           </TooltipTrigger>
                           <TooltipContent>
-                            This feed will not be publicly displayed on your
-                            profile page.
+                            Not publicly visible on your profile page
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>

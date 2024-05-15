@@ -18,6 +18,8 @@ export type FeedResponse = {
   lastModifiedHeader?: string
   etagHeader?: string
   ttl: number
+  errorAt?: string
+  errorMessage?: string
 }
 
 export type SubscriptionResponse = {

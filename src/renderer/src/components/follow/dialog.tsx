@@ -169,7 +169,7 @@ export function FollowDialog({
                 <div>
                   <FormLabel>Prviate Follow</FormLabel>
                   <FormDescription>
-                    Whether to publicly display your follow on your profile
+                    Whether this follow is publicly visible on your profile
                     page.
                   </FormDescription>
                 </div>
