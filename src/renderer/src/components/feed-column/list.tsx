@@ -4,7 +4,7 @@ import {
   CollapsibleTrigger,
 } from "@renderer/components/ui/collapsible"
 import { m, AnimatePresence } from "framer-motion"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { levels, views } from "@renderer/lib/constants"
 import { ActivedList, SubscriptionResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
@@ -34,30 +34,30 @@ export function FeedList({
   hideTitle?: boolean
 }) {
   const subscriptions = useSubscriptions(view)
+  const [expansion, setExpansion] = useState(false)
 
   return (
     <div className={className}>
       {!hideTitle && (
         <div
-          className={cn(
-            "flex items-center justify-between mb-2 px-2.5 py-1 cursor-pointer",
-          )}
-          onClick={(e) => {
-            e.stopPropagation()
-            view !== undefined &&
-              setActivedList?.({
-                level: levels.view,
-                id: view,
-                name: views[view].name,
-                view,
-              })
-          }}
+          className={cn("flex items-center justify-between mb-2 px-2.5 py-1")}
         >
           <div className="font-bold">
             {view !== undefined && views[view].name}
           </div>
-          <div className="text-sm text-zinc-500 ml-2">
-            {subscriptions.data?.unread}
+          <div className="text-sm text-zinc-500 ml-2 flex items-center gap-3">
+            {expansion ? (
+              <i
+                className="i-mingcute-list-collapse-fill cursor-pointer"
+                onClick={() => setExpansion(false)}
+              />
+            ) : (
+              <i
+                className="i-mingcute-list-expansion-fill cursor-pointer"
+                onClick={() => setExpansion(true)}
+              />
+            )}
+            <span>{subscriptions.data?.unread}</span>
           </div>
         </div>
       )}
@@ -68,6 +68,7 @@ export function FeedList({
           activedList={activedList}
           setActivedList={setActivedList}
           view={view}
+          expansion={expansion}
         />
       ))}
     </div>
@@ -79,11 +80,13 @@ function FeedCategory({
   activedList,
   setActivedList,
   view,
+  expansion,
 }: {
   data: SubscriptionsResponse["list"][number]
   activedList?: ActivedList
   setActivedList?: (value: ActivedList) => void
   view?: number
+  expansion: boolean
 }) {
   const [open, setOpen] = useState(!data.name)
 
@@ -96,6 +99,10 @@ function FeedCategory({
         view,
       })
   }
+
+  useEffect(() => {
+    setOpen(expansion)
+  }, [expansion])
 
   return (
     <Collapsible

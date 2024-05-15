@@ -12,7 +12,7 @@ import { m, useSpring } from "framer-motion"
 import { FeedList } from "./list"
 import { ActivedList } from "@renderer/lib/types"
 import { UserButton } from "@renderer/components/user-button"
-import { views } from "@renderer/lib/constants"
+import { levels, views } from "@renderer/lib/constants"
 import { Link } from "react-router-dom"
 
 const lethargy = new Lethargy()
@@ -64,7 +64,7 @@ export function FeedColumn({
       className="h-full flex flex-col gap-3"
       onClick={() =>
         setActivedList?.({
-          level: "view",
+          level: levels.view,
           id: active,
           name: views[active].name,
           view: active,
