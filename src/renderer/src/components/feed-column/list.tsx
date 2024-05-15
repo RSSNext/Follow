@@ -9,7 +9,8 @@ import { levels, views } from "@renderer/lib/constants"
 import { ActivedList, SubscriptionResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
-import { FeedContextMenu } from "./context-menu"
+import { FeedContextMenu } from "./feed-context-menu"
+import { CategoryContextMenu } from "./category-context-menu"
 import {
   Tooltip,
   TooltipContent,
@@ -104,6 +105,16 @@ function FeedCategory({
     setOpen(expansion)
   }, [expansion])
 
+  const setCatrgoryActive = () => {
+    view !== undefined &&
+      setActivedList?.({
+        level: levels.folder,
+        id: data.list.map((feed) => feed.feedId).join(","),
+        name: data.name,
+        view,
+      })
+  }
+
   return (
     <Collapsible
       open={open}
@@ -120,27 +131,29 @@ function FeedCategory({
           )}
           onClick={(e) => {
             e.stopPropagation()
-            view !== undefined &&
-              setActivedList?.({
-                level: levels.folder,
-                id: data.list.map((feed) => feed.feedId).join(","),
-                name: data.name,
-                view,
-              })
+            setCatrgoryActive()
           }}
         >
-          <div className="flex items-center min-w-0 w-full">
-            <CollapsibleTrigger
-              className={cn(
-                "flex items-center h-7 [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
-                !setActivedList && "flex-1",
-              )}
-            >
-              <i className="i-mingcute-right-fill mr-2 transition-transform" />
-              {!setActivedList && <span className="truncate">{data.name}</span>}
-            </CollapsibleTrigger>
-            {setActivedList && <span className="truncate">{data.name}</span>}
-          </div>
+          <CategoryContextMenu
+            name={data.name}
+            view={view}
+            onOpenChange={() => setCatrgoryActive()}
+          >
+            <div className="flex items-center min-w-0 w-full">
+              <CollapsibleTrigger
+                className={cn(
+                  "flex items-center h-7 [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
+                  !setActivedList && "flex-1",
+                )}
+              >
+                <i className="i-mingcute-right-fill mr-2 transition-transform" />
+                {!setActivedList && (
+                  <span className="truncate">{data.name}</span>
+                )}
+              </CollapsibleTrigger>
+              {setActivedList && <span className="truncate">{data.name}</span>}
+            </div>
+          </CategoryContextMenu>
           {!!data.unread && (
             <div className="text-xs text-zinc-500 ml-2">{data.unread}</div>
           )}
