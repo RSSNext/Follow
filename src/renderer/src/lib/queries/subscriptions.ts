@@ -88,3 +88,20 @@ export const useSubscriptions = (view?: number) =>
       } as Response
     },
   })
+
+export const useSubscriptionCategories = (view?: number) =>
+  useQuery({
+    queryKey: ["subscription-categories", view],
+    queryFn: async () => {
+      const { data: categories } = await apiFetch<{
+        code: number
+        data: string[]
+      }>("/subscriptions/categories", {
+        query: {
+          view,
+        },
+      })
+
+      return categories || []
+    },
+  })

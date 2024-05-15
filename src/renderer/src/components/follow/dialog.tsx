@@ -10,7 +10,6 @@ import {
   FormMessage,
   FormDescription,
 } from "@renderer/components/ui/form"
-import { Input } from "@renderer/components/ui/input"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import {
   DialogContent,
@@ -31,6 +30,8 @@ import { Switch } from "@renderer/components/ui/switch"
 import { FollowSummary } from "../feed-summary"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
 import { SubscriptionResponse } from "@renderer/lib/types"
+import { AutoComplete } from "@renderer/components/ui/autocomplete"
+import { useSubscriptionCategories } from "@renderer/lib/queries/subscriptions"
 
 const formSchema = z.object({
   view: z.string(),
@@ -96,6 +97,8 @@ export function FollowDialog({
     followMutation.mutate(values)
   }
 
+  const categories = useSubscriptionCategories(parseInt(form.watch("view")))
+
   return (
     <DialogContent>
       <DialogHeader>
@@ -148,7 +151,11 @@ export function FollowDialog({
                   </FormDescription>
                 </div>
                 <FormControl>
-                  <Input {...field} />
+                  <AutoComplete
+                    options={categories.data}
+                    emptyMessage="No resulsts."
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
