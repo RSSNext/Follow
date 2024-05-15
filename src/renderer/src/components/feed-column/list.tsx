@@ -15,6 +15,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  TooltipPortal,
 } from "@renderer/components/ui/tooltip"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import dayjs from "@renderer/lib/dayjs"
@@ -190,18 +191,20 @@ function FeedCategory({
                           <TooltipTrigger asChild>
                             <i className="i-mingcute-wifi-off-line shrink-0 ml-1 text-base" />
                           </TooltipTrigger>
-                          <TooltipContent>
-                            Error since{" "}
-                            {dayjs
-                              .duration(
-                                dayjs(feed.feeds.errorAt).diff(
-                                  dayjs(),
+                          <TooltipPortal>
+                            <TooltipContent>
+                              Error since{" "}
+                              {dayjs
+                                .duration(
+                                  dayjs(feed.feeds.errorAt).diff(
+                                    dayjs(),
+                                    "minute",
+                                  ),
                                   "minute",
-                                ),
-                                "minute",
-                              )
-                              .humanize(true)}
-                          </TooltipContent>
+                                )
+                                .humanize(true)}
+                            </TooltipContent>
+                          </TooltipPortal>
                         </Tooltip>
                       </TooltipProvider>
                     )}
@@ -211,9 +214,11 @@ function FeedCategory({
                           <TooltipTrigger asChild>
                             <i className="i-mingcute-eye-close-line shrink-0 ml-1 text-base" />
                           </TooltipTrigger>
-                          <TooltipContent>
-                            Not publicly visible on your profile page
-                          </TooltipContent>
+                          <TooltipPortal>
+                            <TooltipContent>
+                              Not publicly visible on your profile page
+                            </TooltipContent>
+                          </TooltipPortal>
                         </Tooltip>
                       </TooltipProvider>
                     )}
