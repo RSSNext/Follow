@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { app, BrowserWindow, ipcMain } from "electron"
+import { app, BrowserWindow, ipcMain, ShareMenu } from "electron"
 import path from "path"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { createWindow } from "./window"
@@ -32,6 +32,12 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on("ping", () => console.log("pong"))
+
+  ipcMain.on("share-url", (_, url: string) => {
+    new ShareMenu({
+      urls: [url],
+    }).popup()
+  })
 
   createWindow()
 
