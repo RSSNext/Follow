@@ -6,12 +6,13 @@ import {
   ContextMenuTrigger,
   ContextMenuSeparator,
 } from "@renderer/components/ui/context-menu"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useToast } from "@renderer/components/ui/use-toast"
-import { ToastAction } from "@renderer/components/ui/toast"
-import { apiFetch } from "@renderer/lib/queries/api-fetch"
 import { Dialog, DialogTrigger } from "@renderer/components/ui/dialog"
 import { CategoryRenameDialog } from "./category-rename-dialog"
+import { CategoryRemoveDialog } from "./category-remove-dialog"
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+} from "@renderer/components/ui/alert-dialog"
 
 export function CategoryContextMenu({
   name,
@@ -27,29 +28,36 @@ export function CategoryContextMenu({
   feedIdList: string[]
 }) {
   const [dialogOpen, setDialogOpen] = useState(false)
-  const { toast } = useToast()
-
-  const queryClient = useQueryClient()
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <ContextMenu onOpenChange={(open) => onOpenChange?.(open)}>
-        <ContextMenuTrigger className="w-full">{children}</ContextMenuTrigger>
-        <ContextMenuContent onClick={(e) => e.stopPropagation()}>
-          <DialogTrigger asChild>
-            <ContextMenuItem>Rename Category</ContextMenuItem>
-          </DialogTrigger>
-          <ContextMenuItem>Remove Category</ContextMenuItem>
-          <ContextMenuSeparator />
-          <ContextMenuItem>Unfollow All</ContextMenuItem>
-        </ContextMenuContent>
-      </ContextMenu>
-      <CategoryRenameDialog
-        feedIdList={feedIdList}
-        view={view}
-        category={name}
-        onSuccess={() => setDialogOpen(false)}
-      />
+      <AlertDialog>
+        <ContextMenu onOpenChange={(open) => onOpenChange?.(open)}>
+          <ContextMenuTrigger className="w-full">{children}</ContextMenuTrigger>
+          <ContextMenuContent onClick={(e) => e.stopPropagation()}>
+            <DialogTrigger asChild>
+              <ContextMenuItem>Rename Category</ContextMenuItem>
+            </DialogTrigger>
+            <AlertDialogTrigger>
+              <ContextMenuItem>Remove Category</ContextMenuItem>
+            </AlertDialogTrigger>
+            <ContextMenuSeparator />
+            <ContextMenuItem>Unfollow All</ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+        <CategoryRenameDialog
+          feedIdList={feedIdList}
+          view={view}
+          category={name}
+          onSuccess={() => setDialogOpen(false)}
+        />
+        <CategoryRemoveDialog
+          feedIdList={feedIdList}
+          view={view}
+          category={name}
+          onSuccess={() => setDialogOpen(false)}
+        />
+      </AlertDialog>
     </Dialog>
   )
 }
