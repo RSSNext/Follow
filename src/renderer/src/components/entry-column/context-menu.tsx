@@ -7,31 +7,6 @@ import {
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
 import { EntriesResponse } from "@renderer/lib/types"
 
-export const items = [
-  [
-    {
-      name: "Copy Link",
-      className: "i-mingcute-link-line",
-      action: "copyLink",
-    },
-    {
-      name: "Open in Browser",
-      className: "i-mingcute-world-2-line",
-      action: "openInBrowser",
-    },
-    {
-      name: "Save Images to Eagle",
-      icon: "/eagle.svg",
-      action: "save-to-eagle",
-    },
-    {
-      name: "Share",
-      className: "i-mingcute-share-2-line",
-      action: "share",
-    },
-  ],
-]
-
 export function EntryContextMenu({
   entry,
   view,
@@ -43,7 +18,7 @@ export function EntryContextMenu({
 }) {
   if (!entry?.url) return children
 
-  const { execAction } = useEntryActions({
+  const { execAction, items } = useEntryActions({
     url: entry.url,
     images: entry.images,
   })

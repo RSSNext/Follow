@@ -1,5 +1,20 @@
 import { useToast } from "@renderer/components/ui/use-toast"
 import { useCallback } from "react"
+import { ofetch } from "ofetch"
+import { useQuery } from "@tanstack/react-query"
+
+export const useCheckEagle = () =>
+  useQuery({
+    queryKey: ["check-eagle"],
+    queryFn: async () => {
+      try {
+        await ofetch("http://localhost:41595")
+        return true
+      } catch (error: any) {
+        return error.data?.code === 401
+      }
+    },
+  })
 
 export const useEntryActions = ({
   url,
@@ -8,6 +23,34 @@ export const useEntryActions = ({
   url: string
   images?: string[]
 }) => {
+  const checkEagle = useCheckEagle()
+
+  const items = [
+    [
+      {
+        name: "Copy Link",
+        className: "i-mingcute-link-line",
+        action: "copyLink",
+      },
+      {
+        name: "Open in Browser",
+        className: "i-mingcute-world-2-line",
+        action: "openInBrowser",
+      },
+      {
+        name: "Save Images to Eagle",
+        icon: "/eagle.svg",
+        action: "save-to-eagle",
+        disabled: checkEagle.isLoading ? true : !checkEagle.data,
+      },
+      {
+        name: "Share",
+        className: "i-mingcute-share-2-line",
+        action: "share",
+      },
+    ],
+  ]
+
   const { toast } = useToast()
 
   const execAction = useCallback(
@@ -53,5 +96,8 @@ export const useEntryActions = ({
     [toast],
   )
 
-  return { execAction }
+  return {
+    execAction,
+    items,
+  }
 }
