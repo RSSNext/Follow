@@ -11,17 +11,20 @@ import { useToast } from "@renderer/components/ui/use-toast"
 import { ToastAction } from "@renderer/components/ui/toast"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
 import { Dialog, DialogTrigger } from "@renderer/components/ui/dialog"
+import { CategoryRenameDialog } from "./category-rename-dialog"
 
 export function CategoryContextMenu({
   name,
   view,
   children,
   onOpenChange,
+  feedIdList,
 }: {
   name: string
   view?: number
   children: React.ReactNode
   onOpenChange?: (open: boolean) => void
+  feedIdList: string[]
 }) {
   const [dialogOpen, setDialogOpen] = useState(false)
   const { toast } = useToast()
@@ -41,6 +44,12 @@ export function CategoryContextMenu({
           <ContextMenuItem>Unfollow All</ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
+      <CategoryRenameDialog
+        feedIdList={feedIdList}
+        view={view}
+        category={name}
+        onSuccess={() => setDialogOpen(false)}
+      />
     </Dialog>
   )
 }

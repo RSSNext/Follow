@@ -140,6 +140,7 @@ function FeedCategory({
             name={data.name}
             view={view}
             onOpenChange={() => setCatrgoryActive()}
+            feedIdList={data.list.map((feed) => feed.feedId)}
           >
             <div className="flex items-center min-w-0 w-full">
               <CollapsibleTrigger
