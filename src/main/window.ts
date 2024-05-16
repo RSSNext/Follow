@@ -67,13 +67,27 @@ export function createWindow(): void {
   ]
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
     (details, callback) => {
-      const refererMatch = refererMatchs.find((item) =>
-        item.url.test(details.url),
-      )
+      let trueUrl
+      if (
+        process.env["VITE_IMGPROXY_URL"] &&
+        details.url.startsWith(process.env["VITE_IMGPROXY_URL"])
+      ) {
+        trueUrl = decodeURIComponent(
+          details.url.replace(
+            new RegExp(
+              `^${process.env["VITE_IMGPROXY_URL"]}/unsafe/\\d+x\\d+\/`,
+            ),
+            "",
+          ),
+        )
+      } else {
+        trueUrl = details.url
+      }
+      const refererMatch = refererMatchs.find((item) => item.url.test(trueUrl))
       callback({
         requestHeaders: {
           ...details.requestHeaders,
-          Referer: refererMatch?.referer || details.url,
+          Referer: refererMatch?.referer || trueUrl,
         },
       })
     },
