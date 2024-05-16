@@ -1,4 +1,3 @@
-import { useState } from "react"
 import {
   ContextMenu,
   ContextMenuContent,
@@ -30,11 +29,29 @@ export const items = [
 export function EntryContextMenu({
   view,
   url,
+  children,
 }: {
-  view?: number
-  url: string
+  view: number
+  url?: string
+  children: React.ReactNode
 }) {
+  if (!url) return children
+
   const { execAction } = useEntryActions(url)
 
-  return <>{url}</>
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger className="w-full">{children}</ContextMenuTrigger>
+      <ContextMenuContent onClick={(e) => e.stopPropagation()}>
+        {items[view].map((item) => (
+          <ContextMenuItem
+            key={item.name}
+            onClick={() => execAction(item.action)}
+          >
+            {item.name}
+          </ContextMenuItem>
+        ))}
+      </ContextMenuContent>
+    </ContextMenu>
+  )
 }
