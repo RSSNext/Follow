@@ -41,8 +41,6 @@ export function CategoryContextMenu({
             <AlertDialogTrigger>
               <ContextMenuItem>Remove Category</ContextMenuItem>
             </AlertDialogTrigger>
-            <ContextMenuSeparator />
-            <ContextMenuItem>Unfollow All</ContextMenuItem>
           </ContextMenuContent>
         </ContextMenu>
         <CategoryRenameDialog
