@@ -5,6 +5,7 @@ import {
   ContextMenuTrigger,
 } from "@renderer/components/ui/context-menu"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
+import { EntriesResponse } from "@renderer/lib/types"
 
 export const items = [
   [
@@ -19,6 +20,11 @@ export const items = [
       action: "openInBrowser",
     },
     {
+      name: "Save Images to Eagle",
+      icon: "/eagle.svg",
+      action: "save-to-eagle",
+    },
+    {
       name: "Share",
       className: "i-mingcute-share-2-line",
       action: "share",
@@ -27,17 +33,20 @@ export const items = [
 ]
 
 export function EntryContextMenu({
+  entry,
   view,
-  url,
   children,
 }: {
+  entry: EntriesResponse[number]
   view: number
-  url?: string
   children: React.ReactNode
 }) {
-  if (!url) return children
+  if (!entry?.url) return children
 
-  const { execAction } = useEntryActions(url)
+  const { execAction } = useEntryActions({
+    url: entry.url,
+    images: entry.images,
+  })
 
   return (
     <ContextMenu>

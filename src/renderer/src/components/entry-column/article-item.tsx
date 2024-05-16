@@ -6,7 +6,7 @@ import { EntryContextMenu } from "./context-menu"
 
 export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
-    <EntryContextMenu url={entry.url} view={0}>
+    <EntryContextMenu entry={entry} view={0}>
       <div className="flex my-5 px-2 py-3">
         <FeedIcon feed={entry.feeds} />
         <div className="line-clamp-5 text-sm flex-1 -mt-0.5 leading-tight">

@@ -39,6 +39,39 @@ app.whenReady().then(() => {
     }).popup()
   })
 
+  ipcMain.on(
+    "save-to-eagle",
+    async (
+      event,
+      data: {
+        url: string
+        images: string[]
+      },
+    ) => {
+      try {
+        const res = await fetch("http://localhost:41595/api/item/addFromURLs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            items: data.images?.map((image) => ({
+              url: image,
+              website: data.url,
+              headers: {
+                referer: data.url,
+              },
+            })),
+          }),
+        })
+        const result = await res.json()
+        event.reply("save-to-eagle-reply", result)
+      } catch (error) {
+        event.reply("save-to-eagle-reply", null)
+      }
+    },
+  )
+
   createWindow()
 
   app.on("activate", function () {
