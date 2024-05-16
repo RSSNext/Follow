@@ -17,7 +17,7 @@ export function EntryContent({ entry }: { entry: ActivedEntry }) {
 
   return (
     <>
-      <EntryShare url={entry?.url} />
+      <EntryShare url={entry?.url} view={0} />
       <m.div
         className="px-5 py-5 overflow-y-auto h-full"
         initial={{ opacity: 0.01, y: 100 }}

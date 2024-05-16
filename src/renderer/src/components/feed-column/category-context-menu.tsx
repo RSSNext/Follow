@@ -4,7 +4,6 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-  ContextMenuSeparator,
 } from "@renderer/components/ui/context-menu"
 import { Dialog, DialogTrigger } from "@renderer/components/ui/dialog"
 import { CategoryRenameDialog } from "./category-rename-dialog"
