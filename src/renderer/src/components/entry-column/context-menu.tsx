@@ -27,14 +27,16 @@ export function EntryContextMenu({
     <ContextMenu>
       <ContextMenuTrigger className="w-full">{children}</ContextMenuTrigger>
       <ContextMenuContent onClick={(e) => e.stopPropagation()}>
-        {items[view].map((item) => (
-          <ContextMenuItem
-            key={item.name}
-            onClick={() => execAction(item.action)}
-          >
-            {item.name}
-          </ContextMenuItem>
-        ))}
+        {items[view]
+          .filter((item) => !item.disabled)
+          .map((item) => (
+            <ContextMenuItem
+              key={item.name}
+              onClick={() => execAction(item.action)}
+            >
+              {item.name}
+            </ContextMenuItem>
+          ))}
       </ContextMenuContent>
     </ContextMenu>
   )

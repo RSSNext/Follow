@@ -41,7 +41,8 @@ export const useEntryActions = ({
         name: "Save Images to Eagle",
         icon: "/eagle.svg",
         action: "save-to-eagle",
-        disabled: checkEagle.isLoading ? true : !checkEagle.data,
+        disabled:
+          (checkEagle.isLoading ? true : !checkEagle.data) || !images?.length,
       },
       {
         name: "Share",
