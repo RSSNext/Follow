@@ -96,7 +96,7 @@ export const useSubscriptionCategories = (view?: number) =>
       const { data: categories } = await apiFetch<{
         code: number
         data: string[]
-      }>("/subscriptions/categories", {
+      }>("/categories", {
         query: {
           view,
         },
