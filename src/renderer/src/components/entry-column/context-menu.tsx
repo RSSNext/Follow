@@ -13,21 +13,22 @@ export function EntryContextMenu({
   children,
 }: {
   entry: EntriesResponse[number]
-  view: number
+  view?: number
   children: React.ReactNode
 }) {
-  if (!entry?.url) return children
+  if (!entry?.url || view === undefined) return children
 
   const { execAction, items } = useEntryActions({
     url: entry.url,
     images: entry.images,
+    view,
   })
 
   return (
     <ContextMenu>
       <ContextMenuTrigger className="w-full">{children}</ContextMenuTrigger>
       <ContextMenuContent onClick={(e) => e.stopPropagation()}>
-        {items[view]
+        {items
           .filter((item) => !item.disabled)
           .map((item) => (
             <ContextMenuItem

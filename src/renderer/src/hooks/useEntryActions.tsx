@@ -19,9 +19,11 @@ export const useCheckEagle = () =>
 export const useEntryActions = ({
   url,
   images,
+  view,
 }: {
   url: string
   images?: string[]
+  view: number
 }) => {
   const checkEagle = useCheckEagle()
 
@@ -99,6 +101,6 @@ export const useEntryActions = ({
 
   return {
     execAction,
-    items,
+    items: items[view] || items[0],
   }
 }

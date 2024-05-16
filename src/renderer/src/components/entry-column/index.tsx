@@ -7,6 +7,7 @@ import { SocialMediaItem } from "./social-media-item"
 import { PictureItem } from "./picture-item"
 import { VideoItem } from "./video-item"
 import { NotificationItem } from "./notification-item"
+import { EntryContextMenu } from "./context-menu"
 
 const gridMode = [2, 3]
 
@@ -79,7 +80,9 @@ export function EntryColumn({
                   setActivedEntry(entry)
                 }}
               >
-                <Item entry={entry} />
+                <EntryContextMenu entry={entry} view={activedList?.view}>
+                  <Item entry={entry} />
+                </EntryContextMenu>
               </div>
             ))}
           </m.div>

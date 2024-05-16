@@ -20,12 +20,13 @@ export function EntryShare({
   const { execAction, items } = useEntryActions({
     url: entry.url,
     images: entry.images,
+    view,
   })
 
   return (
     <div className="px-5 h-14 flex items-center text-lg justify-end text-zinc-500 gap-5">
       <TooltipProvider delayDuration={300}>
-        {items[view]
+        {items
           .filter((item) => !item.disabled)
           .map((item) => (
             <Tooltip key={item.name}>
