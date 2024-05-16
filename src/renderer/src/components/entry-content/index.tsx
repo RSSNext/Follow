@@ -12,6 +12,8 @@ export function EntryContent({ entry }: { entry: ActivedEntry }) {
       parseHtml(entry?.content).then((parsed) => {
         setContent(parsed.content)
       })
+    } else {
+      setContent(undefined)
     }
   }, [entry?.content])
 
