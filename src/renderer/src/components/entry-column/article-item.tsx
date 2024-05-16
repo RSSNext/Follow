@@ -20,7 +20,7 @@ export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
               .humanize()}
           </span>
         </div>
-        <div className="font-medium my-0.5">{entry.title}</div>
+        <div className="font-medium my-0.5 break-words">{entry.title}</div>
         <div className="text-zinc-500 text-[13px]">{entry.description}</div>
       </div>
       {entry.images?.[0] && (

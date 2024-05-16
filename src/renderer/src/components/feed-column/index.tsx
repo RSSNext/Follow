@@ -121,7 +121,7 @@ export function FeedColumn({
               className="snap-center shrink-0 overflow-y-auto"
             >
               <FeedList
-                className="w-64 px-3"
+                className="w-64 px-3 mb-6"
                 view={index}
                 activedList={activedList}
                 setActivedList={setActivedList}

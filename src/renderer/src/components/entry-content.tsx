@@ -28,7 +28,9 @@ export function EntryContent({ entry }: { entry: ActivedEntry }) {
           target="_blank"
           className="block hover:bg-zinc-100 max-w-[598px] mx-auto p-6 rounded-md transition-colors cursor-pointer"
         >
-          <div className="text-3xl font-bold select-text">{entry?.title}</div>
+          <div className="text-3xl font-bold select-text break-words">
+            {entry?.title}
+          </div>
           <div className="mt-2 text-[13px] text-zinc-500 font-medium">
             {entry?.feeds?.title}
           </div>
