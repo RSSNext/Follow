@@ -14,6 +14,7 @@ import { ActivedList } from "@renderer/lib/types"
 import { UserButton } from "@renderer/components/user-button"
 import { levels, views } from "@renderer/lib/constants"
 import { Link } from "react-router-dom"
+import { Button } from "@renderer/components/ui/button"
 
 const lethargy = new Lethargy()
 
@@ -72,44 +73,52 @@ export function FeedColumn({
         })
       }
     >
-      <div className="mx-5 flex items-center justify-between">
+      <div className="ml-5 mr-3 flex items-center justify-between">
         <div className="font-bold text-xl flex items-center gap-1">
           <img src="./icon.svg" alt="logo" className="h-5 w-5" />
           Follow
         </div>
-        <div className="flex items-center gap-2">
-          <Link to={`/profile`} className="flex">
-            <UserButton className="h-5 p-0" hideName={true} />
-          </Link>
-          <Link to={`/follow`} className="flex">
-            <i className="i-mingcute-add-circle-line h-5 w-5 text-zinc-500" />
-          </Link>
+        <div className="flex items-center">
+          <Button variant="ghost" size="sm">
+            <Link to={`/profile`} className="flex">
+              <UserButton className="h-5 p-0" hideName={true} />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm">
+            <Link to={`/follow`} className="flex">
+              <i className="i-mingcute-add-circle-line h-5 w-5 text-zinc-500" />
+            </Link>
+          </Button>
         </div>
       </div>
-      <div className="flex text-zinc-500 w-full justify-between text-xl px-5">
-        <TooltipProvider delayDuration={300}>
+      <div className="flex text-zinc-500 w-full justify-between text-xl px-3">
+        <TooltipProvider>
           {views.map((item, index) => (
-            <div
-              key={item.name}
-              className={cn(active === index && item.className)}
-              onClick={(e) => {
-                setActive(index)
-                setActivedList?.({
-                  level: "view",
-                  id: index,
-                  name: views[index].name,
-                  view: index,
-                })
-                e.stopPropagation()
-              }}
-            >
-              <Tooltip>
-                <TooltipTrigger className="flex items-center my-2">
+            <Tooltip key={item.name}>
+              <TooltipTrigger asChild>
+                <Button
+                  className={cn(
+                    active === index && item.className,
+                    "flex items-center text-xl",
+                  )}
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    setActive(index)
+                    setActivedList?.({
+                      level: "view",
+                      id: index,
+                      name: views[index].name,
+                      view: index,
+                    })
+                    e.stopPropagation()
+                  }}
+                >
                   {item.icon}
-                </TooltipTrigger>
-                <TooltipContent side="bottom">{item.name}</TooltipContent>
-              </Tooltip>
-            </div>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">{item.name}</TooltipContent>
+            </Tooltip>
           ))}
         </TooltipProvider>
       </div>

@@ -4,9 +4,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
-import { cn } from "@renderer/lib/utils"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
 import { ActivedEntry } from "@renderer/lib/types"
+import { Button } from "@renderer/components/ui/button"
 
 export function EntryShare({
   view,
@@ -24,25 +24,25 @@ export function EntryShare({
   })
 
   return (
-    <div className="px-5 h-14 flex items-center text-lg justify-end text-zinc-500 gap-5">
-      <TooltipProvider delayDuration={300}>
+    <div className="px-5 h-14 flex items-center text-lg justify-end text-zinc-500 gap-3">
+      <TooltipProvider>
         {items
           .filter((item) => !item.disabled)
           .map((item) => (
             <Tooltip key={item.name}>
-              <TooltipTrigger className="flex items-center my-2">
-                {item.icon ? (
-                  <img
-                    className="w-4 h-4 grayscale no-drag-region"
-                    src={item.icon}
-                    onClick={() => execAction(item.action)}
-                  />
-                ) : (
-                  <i
-                    className={cn(item.className, "no-drag-region")}
-                    onClick={() => execAction(item.action)}
-                  />
-                )}
+              <TooltipTrigger asChild>
+                <Button
+                  className="flex items-center text-xl no-drag-region"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => execAction(item.action)}
+                >
+                  {item.icon ? (
+                    <img className="w-4 h-4 grayscale" src={item.icon} />
+                  ) : (
+                    <i className={item.className} />
+                  )}
+                </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">{item.name}</TooltipContent>
             </Tooltip>
