@@ -22,7 +22,7 @@ export function UserButton({
   return (
     <div
       className={cn(
-        "h-20 flex items-center gap-2 justify-center py-2 px-5 rounded-xl font-medium cursor-pointer bg-stone-300 text-zinc-600",
+        "h-20 flex items-center gap-2 justify-center py-2 px-5 rounded-xl font-medium bg-stone-300 text-zinc-600",
         className,
       )}
     >

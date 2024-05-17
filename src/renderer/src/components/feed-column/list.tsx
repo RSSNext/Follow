@@ -49,12 +49,12 @@ export function FeedList({
           <div className="text-sm text-zinc-500 ml-2 flex items-center gap-3">
             {expansion ? (
               <i
-                className="i-mingcute-list-collapse-fill cursor-pointer"
+                className="i-mingcute-list-collapse-fill"
                 onClick={() => setExpansion(false)}
               />
             ) : (
               <i
-                className="i-mingcute-list-expansion-fill cursor-pointer"
+                className="i-mingcute-list-expansion-fill"
                 onClick={() => setExpansion(true)}
               />
             )}
@@ -126,7 +126,7 @@ function FeedCategory({
       {!!data.name && (
         <div
           className={cn(
-            "flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded-md w-full cursor-pointer transition-colors",
+            "flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded-md w-full transition-colors",
             activedList?.level === levels.folder &&
               activedList.name === data.name &&
               "bg-[#C9C9C7]",
@@ -189,7 +189,7 @@ function FeedCategory({
               >
                 <div
                   className={cn(
-                    "flex items-center justify-between text-sm font-medium leading-loose w-full pr-2.5 py-[2px] rounded-md cursor-pointer",
+                    "flex items-center justify-between text-sm font-medium leading-loose w-full pr-2.5 py-[2px] rounded-md",
                     activedList?.level === levels.feed &&
                       activedList.id === feed.feedId &&
                       "bg-[#C9C9C7]",

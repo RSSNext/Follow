@@ -15,3 +15,12 @@ body,
 .no-drag-region {
   -webkit-app-region: no-drag;
 }
+
+button,
+a {
+  @apply cursor-default;
+}
+
+.prose a {
+  @apply cursor-pointer;
+}

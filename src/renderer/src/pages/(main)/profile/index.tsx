@@ -25,7 +25,7 @@ export function Component() {
           <div className="font-bold text-2xl">Subscriptions</div>
           <div className="overflow-y-auto">
             {views.map((view, index) => (
-              <>
+              <div key={view.name}>
                 <div className="font-semibold flex items-center gap-2 mb-1">
                   <span className={cn("flex", view.className)}>
                     {view.icon}
@@ -38,7 +38,7 @@ export function Component() {
                   view={index}
                   hideTitle={true}
                 />
-              </>
+              </div>
             ))}
           </div>
         </div>

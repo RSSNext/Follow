@@ -31,7 +31,7 @@ export function EntryContent({ entry }: { entry: ActivedEntry }) {
           <a
             href={entry?.url}
             target="_blank"
-            className="block hover:bg-zinc-100 max-w-[598px] mx-auto p-6 rounded-md transition-colors cursor-pointer"
+            className="block hover:bg-zinc-100 max-w-[598px] mx-auto p-6 rounded-md transition-colors"
           >
             <div className="text-3xl font-bold select-text break-words">
               {entry?.title}

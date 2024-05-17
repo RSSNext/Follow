@@ -33,16 +33,13 @@ export function EntryShare({
               <TooltipTrigger className="flex items-center my-2">
                 {item.icon ? (
                   <img
-                    className="w-4 h-4 grayscale cursor-pointer no-drag-region"
+                    className="w-4 h-4 grayscale no-drag-region"
                     src={item.icon}
                     onClick={() => execAction(item.action)}
                   />
                 ) : (
                   <i
-                    className={cn(
-                      item.className,
-                      "cursor-pointer no-drag-region",
-                    )}
+                    className={cn(item.className, "no-drag-region")}
                     onClick={() => execAction(item.action)}
                   />
                 )}

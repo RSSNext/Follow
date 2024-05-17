@@ -72,7 +72,7 @@ export function EntryColumn({
               <div
                 key={entry.id}
                 className={cn(
-                  "rounded-md cursor-pointer transition-colors",
+                  "rounded-md transition-colors",
                   activedEntry?.id === entry.id && "bg-[#DEDDDC]",
                 )}
                 onClick={(e) => {
