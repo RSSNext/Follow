@@ -86,7 +86,7 @@ export function FeedColumn({
           </Button>
           <Button variant="ghost" size="sm">
             <Link to={`/follow`} className="flex">
-              <i className="i-mingcute-add-circle-line h-5 w-5 text-zinc-500" />
+              <i className="i-mingcute-add-line h-5 w-5 text-zinc-500" />
             </Link>
           </Button>
         </div>

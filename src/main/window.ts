@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow } from "electron"
+import { app, shell, BrowserWindow, Menu } from "electron"
 import path from "path"
 import { is } from "@electron-toolkit/utils"
 import icon from "../../resources/icon.png?asset"
@@ -91,6 +91,30 @@ export function createWindow(): void {
         },
       })
     },
+  )
+
+  Menu.setApplicationMenu(
+    Menu.buildFromTemplate([
+      {
+        role: "appMenu",
+        submenu: [
+          { role: "about" },
+          { type: "separator" },
+          {
+            label: "Settings...",
+            accelerator: "CmdOrCtrl+,",
+            click: () => {
+              console.log("Oh, hi there!")
+            },
+          },
+          { type: "separator" },
+          { role: "hide" },
+          { role: "quit" },
+        ],
+      },
+      { role: "viewMenu" },
+      { role: "windowMenu" },
+    ]),
   )
 
   app.on("second-instance", (_, commandLine) => {
