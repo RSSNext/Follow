@@ -5,11 +5,10 @@ import ReactDOM from "react-dom/client"
 import App from "./App"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import { LazyMotion, MotionConfig } from "framer-motion"
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
+import { QueryClientProvider } from "@tanstack/react-query"
 import { authConfigManager, SessionProvider } from "@hono/auth-js/react"
-import { persistQueryClient } from "@tanstack/react-query-persist-client"
-import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister"
 import { Toaster } from "@renderer/components/ui/toaster"
+import { queryClient } from "@renderer/lib/query-client"
 
 const router = createBrowserRouter([
   {
@@ -64,23 +63,6 @@ const router = createBrowserRouter([
 
 const loadFeatures = () =>
   import("./framer-lazy-feature").then((res) => res.default)
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      gcTime: Infinity,
-    },
-  },
-})
-
-const localStoragePersister = createSyncStoragePersister({
-  storage: window.localStorage,
-})
-
-persistQueryClient({
-  queryClient,
-  persister: localStoragePersister,
-})
 
 authConfigManager.setConfig({
   baseUrl: import.meta.env.VITE_API_URL,
