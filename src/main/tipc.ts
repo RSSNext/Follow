@@ -1,19 +1,15 @@
 import { tipc } from "@egoist/tipc/main"
-import { Menu } from "electron"
+import { Menu, MessageBoxOptions, dialog } from "electron"
 
 const t = tipc.create()
 
 export const router = {
-  sum: t.procedure
-    .input<{ a: number; b: number }>()
-    .action(async ({ input }) => {
-      return input.a + input.b
-    }),
   inspectElement: t.procedure
     .input<{ x: number; y: number }>()
     .action(async ({ input, context }) => {
       context.sender.inspectElement(input.x, input.y)
     }),
+
   showContextMenu: t.procedure
     .input<{
       items: Array<{ type: "text"; label: string } | { type: "separator" }>
@@ -40,6 +36,22 @@ export const router = {
           context.sender.send("menu-closed")
         },
       })
+    }),
+
+  showConfirmDialog: t.procedure
+    .input<{
+      title: string
+      message: string
+      options?: Partial<MessageBoxOptions>
+    }>()
+    .action(async ({ input }) => {
+      const result = await dialog.showMessageBox({
+        message: input.title,
+        detail: input.message,
+        buttons: ["Confirm", "Cancel"],
+        ...input.options,
+      })
+      return result.response === 0
     }),
 }
 

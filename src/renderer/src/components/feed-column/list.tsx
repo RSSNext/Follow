@@ -19,6 +19,9 @@ import {
 import { FeedIcon } from "@renderer/components/feed-icon"
 import dayjs from "@renderer/lib/dayjs"
 import { showNativeMenu } from "@renderer/lib/native-menu"
+import { client } from "@renderer/lib/client"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 export function FeedList({
   className,
@@ -90,6 +93,23 @@ function FeedCategory({
 }) {
   const [open, setOpen] = useState(!data.name)
 
+  const queryClient = useQueryClient()
+  const deleteMutation = useMutation({
+    mutationFn: async () =>
+      apiFetch("/categories", {
+        method: "DELETE",
+        body: {
+          feedIdList: data.list.map((feed) => feed.feedId),
+          deleteSubscriptions: false,
+        },
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["subscriptions", view],
+      })
+    },
+  })
+
   const setFeedActive = (feed: SubscriptionResponse[number]) => {
     view !== undefined &&
       setActivedList?.({
@@ -145,7 +165,19 @@ function FeedCategory({
                 {
                   type: "text",
                   label: "Delete Category",
-                  click: async () => {},
+                  click: async () => {
+                    if (
+                      await client.showConfirmDialog({
+                        title: `Delete Category ${data.name}?`,
+                        message: `This operation will delete your category, but the feeds it contains will be retained and grouped by website.`,
+                        options: {
+                          buttons: ["Delete", "Cancel"],
+                        },
+                      })
+                    ) {
+                      deleteMutation.mutate()
+                    }
+                  },
                 },
               ],
               e,
