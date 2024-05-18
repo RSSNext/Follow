@@ -25,6 +25,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@egoist/tipc": "0.3.1",
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "@fontsource/sn-pro": "5.0.1",

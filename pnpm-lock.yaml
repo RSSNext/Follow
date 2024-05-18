@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@egoist/tipc':
+        specifier: 0.3.1
+        version: 0.3.1(electron@30.0.3)(react@18.3.1)
       '@electron-toolkit/preload':
         specifier: ^3.0.0
         version: 3.0.1(electron@30.0.3)
@@ -374,6 +377,11 @@ packages:
     resolution: {integrity: sha512-75LfllKL2lq0sGH+wcpsn/sLtJ0kMkDWmcZTLAB76QLDTmfsFu4QHwZVbtCD2woGyKl9c8KvtOUW9JSjRqOVtA==}
     peerDependencies:
       tailwindcss: '*'
+
+  '@egoist/tipc@0.3.1':
+    resolution: {integrity: sha512-jnolALBsPffkUUoBMYNX3/ONX019D94KR/cQwPDF7Ns7eHwbHhormAFr445BjFbtxEifAlt/KWwehrE+0HS5Zg==}
+    peerDependencies:
+      electron: '>=26.0.0'
 
   '@electron-toolkit/eslint-config-prettier@2.0.0':
     resolution: {integrity: sha512-L+uG1FvJcAZkPZpSi6B1pmdpyJFyOxWDTjr1Vs47vSryxv/EX1Ch6o4HVsachlDq3fMEkDgojuP2F3ZvVZMoLw==}
@@ -4574,6 +4582,14 @@ snapshots:
       tailwindcss: 3.4.3
     transitivePeerDependencies:
       - supports-color
+
+  '@egoist/tipc@0.3.1(electron@30.0.3)(react@18.3.1)':
+    dependencies:
+      electron: 30.0.3
+    optionalDependencies:
+      '@tanstack/react-query': 5.36.0(react@18.3.1)
+    transitivePeerDependencies:
+      - react
 
   '@electron-toolkit/eslint-config-prettier@2.0.0(eslint@9.2.0)(prettier@3.2.5)':
     dependencies:

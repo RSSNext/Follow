@@ -3,6 +3,10 @@ import { app, BrowserWindow, ipcMain, ShareMenu } from "electron"
 import path from "path"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { createWindow } from "./window"
+import { registerIpcMain } from "@egoist/tipc/main"
+import { router } from "./tipc"
+
+registerIpcMain(router)
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {

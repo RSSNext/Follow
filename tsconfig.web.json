@@ -4,7 +4,8 @@
     "src/renderer/src/env.d.ts",
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.tsx",
-    "src/preload/*.d.ts"
+    "src/preload/*.d.ts",
+    "src/main/*.ts",
   ],
   "compilerOptions": {
     "composite": true,
@@ -13,7 +14,10 @@
     "paths": {
       "@renderer/*": [
         "src/renderer/src/*"
-      ]
+      ],
+      "@main/*": [
+        "src/main/*"
+      ],
     }
   }
 }
