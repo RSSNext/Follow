@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { app, BrowserWindow, ipcMain } from "electron"
+import { app, BrowserWindow, Menu } from "electron"
 import path from "path"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { createWindow } from "./window"
@@ -54,3 +54,32 @@ app.on("window-all-closed", () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+Menu.setApplicationMenu(
+  Menu.buildFromTemplate([
+    {
+      role: "appMenu",
+      submenu: [
+        { role: "about" },
+        { type: "separator" },
+        {
+          label: "Settings...",
+          accelerator: "CmdOrCtrl+,",
+          click: () => {
+            console.log("Oh, hi there!")
+            createWindow({
+              extraPath: "/settings",
+              width: 800,
+              height: 600,
+            })
+          },
+        },
+        { type: "separator" },
+        { role: "hide" },
+        { role: "quit" },
+      ],
+    },
+    { role: "viewMenu" },
+    { role: "windowMenu" },
+  ]),
+)

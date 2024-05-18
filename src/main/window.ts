@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, Menu } from "electron"
+import { app, shell, BrowserWindow } from "electron"
 import path from "path"
 import { is } from "@electron-toolkit/utils"
 import icon from "../../resources/icon.png?asset"
@@ -23,11 +23,15 @@ function handleOpen(url: string) {
   }
 }
 
-export function createWindow(): void {
+export function createWindow(options?: {
+  extraPath?: string
+  width?: number
+  height?: number
+}): void {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: options?.width || 1200,
+    height: options?.height || 900,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === "linux" ? { icon } : {}),
@@ -50,7 +54,9 @@ export function createWindow(): void {
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-    mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"])
+    mainWindow.loadURL(
+      process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""),
+    )
   } else {
     mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"))
   }
@@ -91,30 +97,6 @@ export function createWindow(): void {
         },
       })
     },
-  )
-
-  Menu.setApplicationMenu(
-    Menu.buildFromTemplate([
-      {
-        role: "appMenu",
-        submenu: [
-          { role: "about" },
-          { type: "separator" },
-          {
-            label: "Settings...",
-            accelerator: "CmdOrCtrl+,",
-            click: () => {
-              console.log("Oh, hi there!")
-            },
-          },
-          { type: "separator" },
-          { role: "hide" },
-          { role: "quit" },
-        ],
-      },
-      { role: "viewMenu" },
-      { role: "windowMenu" },
-    ]),
   )
 
   app.on("second-instance", (_, commandLine) => {

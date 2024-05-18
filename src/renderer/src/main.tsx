@@ -54,6 +54,10 @@ const router = createBrowserRouter([
         lazy: () => import("./pages/redirect"),
       },
       {
+        path: "settings",
+        lazy: () => import("./pages/settings"),
+      },
+      {
         path: "debug",
         lazy: () => import("./pages/debug"),
       },
