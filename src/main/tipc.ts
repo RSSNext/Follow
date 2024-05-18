@@ -1,5 +1,5 @@
 import { tipc } from "@egoist/tipc/main"
-import { Menu, MessageBoxOptions, dialog } from "electron"
+import { Menu, MessageBoxOptions, ShareMenu, dialog } from "electron"
 
 const t = tipc.create()
 
@@ -52,6 +52,45 @@ export const router = {
         ...input.options,
       })
       return result.response === 0
+    }),
+
+  showShareMenu: t.procedure
+    .input<string>()
+    .action(async ({ input, context }) => {
+      const menu = new ShareMenu({
+        urls: [input],
+      })
+
+      menu.popup({
+        callback: () => {
+          context.sender.send("menu-closed")
+        },
+      })
+    }),
+
+  saveToEagle: t.procedure
+    .input<{ url: string; images: string[] }>()
+    .action(async ({ input }) => {
+      try {
+        const res = await fetch("http://localhost:41595/api/item/addFromURLs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            items: input.images?.map((image) => ({
+              url: image,
+              website: input.url,
+              headers: {
+                referer: input.url,
+              },
+            })),
+          }),
+        })
+        return await res.json()
+      } catch (error) {
+        return null
+      }
     }),
 }
 

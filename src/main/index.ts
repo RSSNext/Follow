@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { app, BrowserWindow, ipcMain, ShareMenu } from "electron"
+import { app, BrowserWindow, ipcMain } from "electron"
 import path from "path"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { createWindow } from "./window"
@@ -33,48 +33,6 @@ app.whenReady().then(() => {
   app.on("browser-window-created", (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
-  // IPC test
-  ipcMain.on("ping", () => console.log("pong"))
-
-  ipcMain.on("share-url", (_, url: string) => {
-    new ShareMenu({
-      urls: [url],
-    }).popup()
-  })
-
-  ipcMain.on(
-    "save-to-eagle",
-    async (
-      event,
-      data: {
-        url: string
-        images: string[]
-      },
-    ) => {
-      try {
-        const res = await fetch("http://localhost:41595/api/item/addFromURLs", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            items: data.images?.map((image) => ({
-              url: image,
-              website: data.url,
-              headers: {
-                referer: data.url,
-              },
-            })),
-          }),
-        })
-        const result = await res.json()
-        event.reply("save-to-eagle-reply", result)
-      } catch (error) {
-        event.reply("save-to-eagle-reply", null)
-      }
-    },
-  )
 
   createWindow()
 
