@@ -9,8 +9,6 @@ import { levels, views } from "@renderer/lib/constants"
 import { ActivedList, SubscriptionResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
-import { FeedContextMenu } from "./feed-context-menu"
-import { CategoryContextMenu } from "./category-context-menu"
 import {
   Tooltip,
   TooltipContent,
@@ -20,6 +18,7 @@ import {
 } from "@renderer/components/ui/tooltip"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import dayjs from "@renderer/lib/dayjs"
+import { showNativeMenu } from "@renderer/lib/native-menu"
 
 export function FeedList({
   className,
@@ -135,28 +134,36 @@ function FeedCategory({
             e.stopPropagation()
             setCatrgoryActive()
           }}
+          onContextMenu={(e) => {
+            showNativeMenu(
+              [
+                {
+                  type: "text",
+                  label: "Rename Category",
+                  click: async () => {},
+                },
+                {
+                  type: "text",
+                  label: "Delete Category",
+                  click: async () => {},
+                },
+              ],
+              e,
+            )
+          }}
         >
-          <CategoryContextMenu
-            name={data.name}
-            view={view}
-            onOpenChange={() => setCatrgoryActive()}
-            feedIdList={data.list.map((feed) => feed.feedId)}
-          >
-            <div className="flex items-center min-w-0 w-full">
-              <CollapsibleTrigger
-                className={cn(
-                  "flex items-center h-7 [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
-                  !setActivedList && "flex-1",
-                )}
-              >
-                <i className="i-mingcute-right-fill mr-2 transition-transform" />
-                {!setActivedList && (
-                  <span className="truncate">{data.name}</span>
-                )}
-              </CollapsibleTrigger>
-              {setActivedList && <span className="truncate">{data.name}</span>}
-            </div>
-          </CategoryContextMenu>
+          <div className="flex items-center min-w-0 w-full">
+            <CollapsibleTrigger
+              className={cn(
+                "flex items-center h-7 [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
+                !setActivedList && "flex-1",
+              )}
+            >
+              <i className="i-mingcute-right-fill mr-2 transition-transform" />
+              {!setActivedList && <span className="truncate">{data.name}</span>}
+            </CollapsibleTrigger>
+            {setActivedList && <span className="truncate">{data.name}</span>}
+          </div>
           {!!data.unread && (
             <div className="text-xs text-zinc-500 ml-2">{data.unread}</div>
           )}
@@ -182,77 +189,101 @@ function FeedCategory({
             }}
           >
             {data.list.map((feed) => (
-              <FeedContextMenu
-                feed={feed}
-                key={feed.feedId}
-                onOpenChange={() => setFeedActive(feed)}
+              <div
+                className={cn(
+                  "flex items-center justify-between text-sm font-medium leading-loose w-full pr-2.5 py-[2px] rounded-md",
+                  activedList?.level === levels.feed &&
+                    activedList.id === feed.feedId &&
+                    "bg-[#C9C9C7]",
+                  !!data.name ? "pl-6" : "pl-2.5",
+                )}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setFeedActive(feed)
+                }}
+                onContextMenu={(e) => {
+                  showNativeMenu(
+                    [
+                      {
+                        type: "text",
+                        label: "Edit",
+                        click: async () => {},
+                      },
+                      {
+                        type: "text",
+                        label: "Unfollow",
+                        click: async () => {},
+                      },
+                      {
+                        type: "separator",
+                      },
+                      {
+                        type: "text",
+                        label: "Open Feed in Browser",
+                        click: async () => {},
+                      },
+                      {
+                        type: "text",
+                        label: "Open Site in Browser",
+                        click: () => window.open(feed.feeds.siteUrl),
+                      },
+                    ],
+                    e,
+                  )
+                }}
               >
                 <div
                   className={cn(
-                    "flex items-center justify-between text-sm font-medium leading-loose w-full pr-2.5 py-[2px] rounded-md",
-                    activedList?.level === levels.feed &&
-                      activedList.id === feed.feedId &&
-                      "bg-[#C9C9C7]",
-                    !!data.name ? "pl-6" : "pl-2.5",
+                    "flex items-center min-w-0",
+                    feed.feeds.errorAt && "text-red-900",
                   )}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setFeedActive(feed)
-                  }}
                 >
-                  <div
-                    className={cn(
-                      "flex items-center min-w-0",
-                      feed.feeds.errorAt && "text-red-900",
-                    )}
-                  >
-                    <FeedIcon feed={feed.feeds} className="w-4 h-4" />
-                    <div className="truncate">{feed.feeds.title}</div>
-                    {feed.feeds.errorAt && (
-                      <TooltipProvider delayDuration={300}>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <i className="i-mingcute-wifi-off-line shrink-0 ml-1 text-base" />
-                          </TooltipTrigger>
-                          <TooltipPortal>
-                            <TooltipContent>
-                              Error since{" "}
-                              {dayjs
-                                .duration(
-                                  dayjs(feed.feeds.errorAt).diff(
-                                    dayjs(),
-                                    "minute",
-                                  ),
+                  <FeedIcon feed={feed.feeds} className="w-4 h-4" />
+                  <div className="truncate">{feed.feeds.title}</div>
+                  {feed.feeds.errorAt && (
+                    <TooltipProvider delayDuration={300}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <i className="i-mingcute-wifi-off-line shrink-0 ml-1 text-base" />
+                        </TooltipTrigger>
+                        <TooltipPortal>
+                          <TooltipContent>
+                            Error since{" "}
+                            {dayjs
+                              .duration(
+                                dayjs(feed.feeds.errorAt).diff(
+                                  dayjs(),
                                   "minute",
-                                )
-                                .humanize(true)}
-                            </TooltipContent>
-                          </TooltipPortal>
-                        </Tooltip>
-                      </TooltipProvider>
-                    )}
-                    {feed.isPrivate && (
-                      <TooltipProvider delayDuration={300}>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <i className="i-mingcute-eye-close-line shrink-0 ml-1 text-base" />
-                          </TooltipTrigger>
-                          <TooltipPortal>
-                            <TooltipContent>
-                              Not publicly visible on your profile page
-                            </TooltipContent>
-                          </TooltipPortal>
-                        </Tooltip>
-                      </TooltipProvider>
-                    )}
-                  </div>
-                  {!!feed.unread && (
-                    <div className="text-xs text-zinc-500 ml-2">
-                      {feed.unread}
-                    </div>
+                                ),
+                                "minute",
+                              )
+                              .humanize(true)}
+                          </TooltipContent>
+                        </TooltipPortal>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )}
+                  {feed.isPrivate && (
+                    <TooltipProvider delayDuration={300}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <i className="i-mingcute-eye-close-line shrink-0 ml-1 text-base" />
+                        </TooltipTrigger>
+                        <TooltipPortal>
+                          <TooltipContent>
+                            Not publicly visible on your profile page
+                          </TooltipContent>
+                        </TooltipPortal>
+                      </Tooltip>
+                    </TooltipProvider>
                   )}
                 </div>
-              </FeedContextMenu>
+                {!!feed.unread && (
+                  <div className="text-xs text-zinc-500 ml-2">
+                    {feed.unread}
+                  </div>
+                )}
+              </div>
             ))}
           </m.div>
         )}
