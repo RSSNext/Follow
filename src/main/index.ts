@@ -34,12 +34,52 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  createWindow()
+  let mainWindow: BrowserWindow
+  mainWindow = createWindow()
 
   app.on("activate", function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0) {
+      mainWindow = createWindow()
+    }
+  })
+
+  const handleOpen = (url: string) => {
+    const urlObj = new URL(url)
+    if (urlObj.hostname === "auth") {
+      const token = urlObj.searchParams.get("token")
+      if (token && process.env["VITE_API_URL"]) {
+        mainWindow.webContents.session.cookies.set({
+          url: process.env["VITE_API_URL"],
+          name: "authjs.session-token",
+          value: token,
+          secure: true,
+          httpOnly: true,
+          domain: new URL(process.env["VITE_API_URL"]).hostname,
+          sameSite: "no_restriction",
+        })
+        mainWindow.reload()
+      }
+    }
+  }
+
+  app.on("second-instance", (_, commandLine) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+    const url = commandLine.pop()
+    if (url) {
+      handleOpen(url)
+    }
+  })
+  app.on("open-url", (_, url) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+    handleOpen(url)
   })
 })
 
