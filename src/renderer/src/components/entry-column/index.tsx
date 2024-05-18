@@ -7,7 +7,8 @@ import { SocialMediaItem } from "./social-media-item"
 import { PictureItem } from "./picture-item"
 import { VideoItem } from "./video-item"
 import { NotificationItem } from "./notification-item"
-import { EntryContextMenu } from "./context-menu"
+import { showNativeMenu } from "@renderer/lib/native-menu"
+import { EntryItemWrapper } from "./item-wrapper"
 
 const gridMode = [2, 3]
 
@@ -69,21 +70,15 @@ export function EntryColumn({
             )}
           >
             {page.data?.map((entry) => (
-              <div
+              <EntryItemWrapper
                 key={entry.id}
-                className={cn(
-                  "rounded-md transition-colors",
-                  activedEntry?.id === entry.id && "bg-[#DEDDDC]",
-                )}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setActivedEntry(entry)
-                }}
+                entry={entry}
+                activedEntry={activedEntry}
+                setActivedEntry={setActivedEntry}
+                view={activedList?.view}
               >
-                <EntryContextMenu entry={entry} view={activedList?.view}>
-                  <Item entry={entry} />
-                </EntryContextMenu>
-              </div>
+                <Item entry={entry} />
+              </EntryItemWrapper>
             ))}
           </m.div>
         ))}
