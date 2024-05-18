@@ -74,7 +74,18 @@ export function FeedColumn({
       }
     >
       <div className="ml-5 mr-3 flex items-center justify-between">
-        <div className="font-bold text-xl flex items-center gap-1">
+        <div
+          className="font-bold text-xl flex items-center gap-1"
+          onClick={(e) => {
+            e.stopPropagation()
+            setActivedList?.({
+              level: levels.view,
+              id: active,
+              name: views[active].name,
+              view: active,
+            })
+          }}
+        >
           <img src="./icon.svg" alt="logo" className="h-5 w-5" />
           Follow
         </div>

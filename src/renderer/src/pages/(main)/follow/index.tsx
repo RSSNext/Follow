@@ -24,6 +24,7 @@ export function Component() {
     {
       name: "Follow User",
       value: "user",
+      disabled: true,
     },
     {
       name: "RSS3",

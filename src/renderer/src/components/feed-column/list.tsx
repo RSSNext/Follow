@@ -1,6 +1,6 @@
 import { useSubscriptions } from "@renderer/lib/queries/subscriptions"
 import { useState } from "react"
-import { views } from "@renderer/lib/constants"
+import { levels, views } from "@renderer/lib/constants"
 import { ActivedList } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { FeedCategory } from "./category"
@@ -27,7 +27,19 @@ export function FeedList({
         <div
           className={cn("flex items-center justify-between mb-2 px-2.5 py-1")}
         >
-          <div className="font-bold">
+          <div
+            className="font-bold"
+            onClick={(e) => {
+              e.stopPropagation()
+              view !== undefined &&
+                setActivedList?.({
+                  level: levels.view,
+                  id: view,
+                  name: views[view].name,
+                  view,
+                })
+            }}
+          >
             {view !== undefined && views[view].name}
           </div>
           <div className="text-sm text-zinc-500 ml-2 flex items-center gap-3">
