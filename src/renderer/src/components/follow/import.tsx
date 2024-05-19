@@ -11,10 +11,11 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Card, CardContent, CardHeader } from "@renderer/components/ui/card"
 import { FollowSummary } from "../feed-summary"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import { cn } from "@renderer/lib/utils"
 
 type FeedResponseList = {
   id: string
@@ -32,14 +33,17 @@ const list = [
   {
     key: "parsedErrorItems",
     title: "Parsed Error Items",
+    className: "text-red-500",
   },
   {
     key: "successfulItems",
     title: "Successful Items",
+    className: "text-green-500",
   },
   {
     key: "conflictItems",
     title: "Conflict Items",
+    className: "text-yellow-500",
   },
 ]
 
@@ -47,6 +51,8 @@ export function FollowImport() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
+
+  const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: async (file: File) => {
       const formData = new FormData()
@@ -62,6 +68,11 @@ export function FollowImport() {
         body: formData,
       })
       return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["subscriptions"],
+      })
     },
   })
 
@@ -122,7 +133,11 @@ export function FollowImport() {
             <CardContent className="space-y-6">
               {list.map((item) => (
                 <div key={item.key}>
-                  <div className="font-medium text-xl mb-4">{item.title}</div>
+                  <div
+                    className={cn("font-medium text-lg mb-4", item.className)}
+                  >
+                    {item.title}
+                  </div>
                   <div className="space-y-4">
                     {!mutation.data?.[item.key].length && (
                       <div className="text-zinc-500">No items</div>
