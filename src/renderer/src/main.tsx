@@ -62,6 +62,10 @@ const router = createBrowserRouter([
             lazy: () => import("./pages/settings/index"),
           },
           {
+            path: "rsshub",
+            lazy: () => import("./pages/settings/rsshub"),
+          },
+          {
             path: "profile",
             lazy: () => import("./pages/settings/profile"),
           },

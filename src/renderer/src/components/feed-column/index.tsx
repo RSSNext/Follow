@@ -86,7 +86,7 @@ export function FeedColumn({
             })
           }}
         >
-          <img src="./icon.svg" alt="logo" className="h-5 w-5" />
+          <img src="./icon.svg" alt="logo" className="size-6" />
           Follow
         </div>
         <div className="flex items-center">
