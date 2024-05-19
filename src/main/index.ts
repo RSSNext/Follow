@@ -119,6 +119,7 @@ Menu.setApplicationMenu(
         { role: "quit" },
       ],
     },
+    { role: "editMenu" },
     { role: "viewMenu" },
     { role: "windowMenu" },
   ]),
