@@ -2,6 +2,7 @@
   "name": "follow",
   "version": "0.0.1",
   "description": "An Electron application with React and TypeScript",
+  "packageManager": "pnpm@9.1.1",
   "main": "./out/main/index.js",
   "author": "example.com",
   "homepage": "https://electron-vite.org",
