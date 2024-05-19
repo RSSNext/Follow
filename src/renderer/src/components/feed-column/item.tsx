@@ -99,7 +99,7 @@ export function FeedItem({
           "flex items-center justify-between text-sm font-medium leading-loose w-full pr-2.5 py-[2px] rounded-md",
           activedList?.level === levels.feed &&
             activedList.id === feed.feedId &&
-            "bg-[#C9C9C7]",
+            "bg-native-active",
           className,
         )}
         onClick={(e) => {

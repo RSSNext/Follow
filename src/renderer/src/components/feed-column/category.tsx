@@ -79,7 +79,7 @@ export function FeedCategory({
               "flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded-md w-full transition-colors",
               activedList?.level === levels.folder &&
                 activedList.name === data.name &&
-                "bg-[#C9C9C7]",
+                "bg-native-active",
             )}
             onClick={(e) => {
               e.stopPropagation()

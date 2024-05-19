@@ -29,7 +29,7 @@ export function Component() {
 
   return (
     <div className="flex h-full">
-      <div className="w-64 pt-10 border-r shrink-0 bg-[#E1E0DF]">
+      <div className="w-64 pt-10 border-r shrink-0 bg-native">
         <FeedColumn activedList={activedList} setActivedList={setActivedList} />
       </div>
       <Outlet
