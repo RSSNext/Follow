@@ -55,7 +55,17 @@ const router = createBrowserRouter([
       },
       {
         path: "settings",
-        lazy: () => import("./pages/settings"),
+        lazy: () => import("./pages/settings/layout"),
+        children: [
+          {
+            path: "",
+            lazy: () => import("./pages/settings/index"),
+          },
+          {
+            path: "profile",
+            lazy: () => import("./pages/settings/profile"),
+          },
+        ],
       },
       {
         path: "debug",
