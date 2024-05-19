@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow } from "electron"
+import { shell, BrowserWindow, Menu } from "electron"
 import path from "path"
 import { is } from "@electron-toolkit/utils"
 import icon from "../../resources/icon.png?asset"
@@ -25,6 +25,27 @@ export function createWindow(options?: {
   window.on("ready-to-show", () => {
     window?.show()
   })
+
+  const template: Electron.MenuItemConstructorOptions[] = [
+    {
+      label: "Edit",
+      submenu: [
+        { label: "Undo", accelerator: "CmdOrCtrl+Z", role: "undo" },
+        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", role: "redo" },
+        { type: "separator" },
+        { label: "Cut", accelerator: "CmdOrCtrl+X", role: "cut" },
+        { label: "Copy", accelerator: "CmdOrCtrl+C", role: "copy" },
+        { label: "Paste", accelerator: "CmdOrCtrl+V", role: "paste" },
+        {
+          label: "Select All",
+          accelerator: "CmdOrCtrl+A",
+          role: "selectAll",
+        },
+      ],
+    },
+  ]
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
   window.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
