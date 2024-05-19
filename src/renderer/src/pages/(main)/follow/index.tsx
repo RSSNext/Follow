@@ -6,6 +6,7 @@ import {
 } from "@renderer/components/ui/tabs"
 import { Recommendations } from "@renderer/components/follow/recommendations"
 import { FollowForm } from "@renderer/components/follow/form"
+import { FollowImport } from "@renderer/components/follow/import"
 
 export function Component() {
   const tabs = [
@@ -36,6 +37,10 @@ export function Component() {
       value: "email",
       disabled: true,
     },
+    {
+      name: "Import",
+      value: "import",
+    },
   ]
 
   return (
@@ -55,7 +60,11 @@ export function Component() {
         </TabsList>
         {tabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.name} className="h-96 mt-8">
-            <FollowForm type={tab.value} />
+            {tab.value === "import" ? (
+              <FollowImport />
+            ) : (
+              <FollowForm type={tab.value} />
+            )}
             <Recommendations type={tab.value} />
           </TabsContent>
         ))}
