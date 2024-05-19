@@ -56,7 +56,7 @@ export function FollowForm({ type }: { type: string }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      keyword: prefix,
+      keyword: prefix || "",
     },
   })
   const mutation = useMutation({
