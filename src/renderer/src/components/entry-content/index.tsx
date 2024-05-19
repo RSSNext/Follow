@@ -21,7 +21,7 @@ export function EntryContent({ entry }: { entry: ActivedEntry }) {
     <>
       <EntryShare entry={entry} view={0} />
       <m.div
-        className="px-5 py-5 overflow-y-auto h-full"
+        className="px-5 py-5 overflow-y-auto h-[calc(100%-56px)]"
         initial={{ opacity: 0.01, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0.01, y: -100 }}
