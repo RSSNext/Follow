@@ -17,7 +17,7 @@ export function EntryShare({
 }) {
   if (!entry?.url) return null
 
-  const { execAction, items } = useEntryActions({
+  const { items } = useEntryActions({
     view,
     entry,
   })
@@ -34,7 +34,7 @@ export function EntryShare({
                   className="flex items-center text-xl no-drag-region"
                   variant="ghost"
                   size="sm"
-                  onClick={() => execAction(item.action)}
+                  onClick={item.onClick}
                 >
                   {item.icon ? (
                     <img className="w-4 h-4 grayscale" src={item.icon} />

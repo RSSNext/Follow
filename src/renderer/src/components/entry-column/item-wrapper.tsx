@@ -18,7 +18,7 @@ export function EntryItemWrapper({
 }) {
   if (!entry?.url || view === undefined) return children
 
-  const { execAction, items } = useEntryActions({
+  const { items } = useEntryActions({
     view,
     entry,
   })
@@ -42,7 +42,7 @@ export function EntryItemWrapper({
             .map((item) => ({
               type: "text",
               label: item.name,
-              click: () => execAction(item.action),
+              click: item.onClick,
             })),
           e,
         )
