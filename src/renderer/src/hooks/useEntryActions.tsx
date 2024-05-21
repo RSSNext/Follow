@@ -3,6 +3,7 @@ import { useCallback } from "react"
 import { ofetch } from "ofetch"
 import { useQuery } from "@tanstack/react-query"
 import { client } from "@renderer/lib/client"
+import { EntriesResponse } from "@renderer/lib/types"
 
 export const useCheckEagle = () =>
   useQuery({
@@ -18,13 +19,11 @@ export const useCheckEagle = () =>
   })
 
 export const useEntryActions = ({
-  url,
-  images,
   view,
+  entry,
 }: {
-  url: string
-  images?: string[]
   view: number
+  entry: EntriesResponse[number]
 }) => {
   const checkEagle = useCheckEagle()
 
@@ -45,7 +44,8 @@ export const useEntryActions = ({
         icon: "/eagle.svg",
         action: "save-to-eagle",
         disabled:
-          (checkEagle.isLoading ? true : !checkEagle.data) || !images?.length,
+          (checkEagle.isLoading ? true : !checkEagle.data) ||
+          !entry.images?.length,
       },
       {
         name: "Share",
@@ -61,21 +61,27 @@ export const useEntryActions = ({
     async (action: string) => {
       switch (action) {
         case "copyLink":
-          navigator.clipboard.writeText(url)
+          if (!entry.url) return
+          navigator.clipboard.writeText(entry.url)
           toast({
             duration: 1000,
             description: "Link copied to clipboard.",
           })
           break
         case "openInBrowser":
-          window.open(url, "_blank")
+          if (!entry.url) return
+          window.open(entry.url, "_blank")
           break
         case "share":
-          client.showShareMenu(url)
+          if (!entry.url) return
+          client.showShareMenu(entry.url)
           break
         case "save-to-eagle":
-          if (!images?.length) return
-          const response = await client.saveToEagle({ url, images })
+          if (!entry.url || !entry.images?.length) return
+          const response = await client.saveToEagle({
+            url: entry.url,
+            images: entry.images,
+          })
           if (response?.status === "success") {
             toast({
               duration: 3000,

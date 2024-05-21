@@ -19,9 +19,8 @@ export function EntryItemWrapper({
   if (!entry?.url || view === undefined) return children
 
   const { execAction, items } = useEntryActions({
-    url: entry.url,
-    images: entry.images,
     view,
+    entry,
   })
 
   return (

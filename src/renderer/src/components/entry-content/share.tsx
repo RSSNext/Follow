@@ -18,9 +18,8 @@ export function EntryShare({
   if (!entry?.url) return null
 
   const { execAction, items } = useEntryActions({
-    url: entry.url,
-    images: entry.images,
     view,
+    entry,
   })
 
   return (
