@@ -4,7 +4,6 @@ import { ofetch } from "ofetch"
 import { useQuery } from "@tanstack/react-query"
 import { client } from "@renderer/lib/client"
 import { EntriesResponse } from "@renderer/lib/types"
-import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 export const useCheckEagle = () =>
   useQuery({
@@ -19,22 +18,6 @@ export const useCheckEagle = () =>
     },
   })
 
-export const useIsCollected = (entryId: string) =>
-  useQuery({
-    queryKey: ["is-collected", entryId],
-    queryFn: async () => {
-      const { data: collected } = await apiFetch<{
-        data: boolean
-      }>("/collections", {
-        query: {
-          entryId,
-        },
-      })
-
-      return collected
-    },
-  })
-
 export const useEntryActions = ({
   view,
   entry,
@@ -43,7 +26,6 @@ export const useEntryActions = ({
   entry: EntriesResponse[number]
 }) => {
   const checkEagle = useCheckEagle()
-  const isCollected = useIsCollected(entry.id)
 
   const items = [
     [
@@ -51,13 +33,13 @@ export const useEntryActions = ({
         name: "Collect",
         className: "i-mingcute-star-line",
         action: "collect",
-        disabled: isCollected.data,
+        disabled: !!entry.collections,
       },
       {
         name: "Uncollect",
         className: "i-mingcute-star-fill",
         action: "uncollect",
-        disabled: !isCollected.data,
+        disabled: !entry.collections,
       },
       {
         name: "Copy Link",

@@ -46,7 +46,6 @@ export type EntriesResponse = {
     title?: string
   }
   feedId: string
-  feeds: FeedResponse
   guid: string
   id: string
   images?: string[]
@@ -54,6 +53,11 @@ export type EntriesResponse = {
   readingTime?: number
   title?: string
   url?: string
+
+  feeds: FeedResponse
+  collections: {
+    createdAt: string
+  } | null
 }[]
 
 export type ListResponse<T> = {
