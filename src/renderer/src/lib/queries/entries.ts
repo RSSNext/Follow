@@ -1,6 +1,6 @@
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { levels } from "@renderer/lib/constants"
-import { EntriesResponse, ListResponse } from "../types"
+import { EntriesResponse, ListResponse, DataResponse } from "../types"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 export const useEntries = ({
@@ -39,4 +39,21 @@ export const useEntries = ({
     getNextPageParam: (lastPage, _, lastPageParam) =>
       lastPageParam + (lastPage.data?.length || 0),
     initialPageParam: 0,
+  })
+
+export const useEntry = ({ id }: { id?: string | null }) =>
+  useQuery({
+    queryKey: ["entry", id],
+    enabled: !!id,
+    queryFn: async () => {
+      const data = await apiFetch<DataResponse<EntriesResponse[number]>>(
+        "/entries",
+        {
+          query: {
+            id,
+          },
+        },
+      )
+      return data.data
+    },
   })

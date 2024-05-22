@@ -1,9 +1,9 @@
 import { useToast } from "@renderer/components/ui/use-toast"
-import { useCallback } from "react"
 import { ofetch } from "ofetch"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { client } from "@renderer/lib/client"
 import { EntriesResponse } from "@renderer/lib/types"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 export const useEntryActions = ({
   view,
@@ -24,6 +24,45 @@ export const useEntryActions = ({
     },
   })
 
+  const queryClient = useQueryClient()
+
+  const collect = useMutation({
+    mutationFn: async () =>
+      apiFetch("/collections", {
+        method: "POST",
+        body: {
+          entryId: entry.id,
+        },
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["entries"],
+      })
+      toast({
+        duration: 1000,
+        description: "Collected.",
+      })
+    },
+  })
+  const uncollect = useMutation({
+    mutationFn: async () =>
+      apiFetch("/collections", {
+        method: "DELETE",
+        body: {
+          entryId: entry.id,
+        },
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["entries"],
+      })
+      toast({
+        duration: 1000,
+        description: "Uncollected.",
+      })
+    },
+  })
+
   const { toast } = useToast()
 
   const items = [
@@ -33,14 +72,18 @@ export const useEntryActions = ({
         className: "i-mingcute-star-line",
         action: "collect",
         disabled: !!entry.collections,
-        onClick: () => {},
+        onClick: () => {
+          collect.mutate()
+        },
       },
       {
         name: "Uncollect",
         className: "i-mingcute-star-fill",
         action: "uncollect",
         disabled: !entry.collections,
-        onClick: () => {},
+        onClick: () => {
+          uncollect.mutate()
+        },
       },
       {
         name: "Copy Link",

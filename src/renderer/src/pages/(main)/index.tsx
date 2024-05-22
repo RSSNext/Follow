@@ -39,7 +39,7 @@ export function Component() {
         {!(activedList && wideMode.includes(activedList.view)) &&
           activedEntry && (
             <div className="flex-1">
-              <EntryContent entry={activedEntry} />
+              <EntryContent entryId={activedEntry} />
             </div>
           )}
       </AnimatePresence>

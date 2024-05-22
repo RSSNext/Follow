@@ -7,7 +7,6 @@ import { SocialMediaItem } from "./social-media-item"
 import { PictureItem } from "./picture-item"
 import { VideoItem } from "./video-item"
 import { NotificationItem } from "./notification-item"
-import { showNativeMenu } from "@renderer/lib/native-menu"
 import { EntryItemWrapper } from "./item-wrapper"
 
 const gridMode = [2, 3]

@@ -67,4 +67,9 @@ export type ListResponse<T> = {
   message?: string
 }
 
-export type ActivedEntry = EntriesResponse[number] | null
+export type DataResponse<T> = {
+  code: number
+  data?: T
+}
+
+export type ActivedEntry = string | null

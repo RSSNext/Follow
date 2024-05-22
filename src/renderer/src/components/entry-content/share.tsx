@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
-import { ActivedEntry } from "@renderer/lib/types"
+import { EntriesResponse } from "@renderer/lib/types"
 import { Button } from "@renderer/components/ui/button"
 
 export function EntryShare({
@@ -13,7 +13,7 @@ export function EntryShare({
   entry,
 }: {
   view: number
-  entry: ActivedEntry
+  entry?: EntriesResponse[number]
 }) {
   if (!entry?.url) return null
 

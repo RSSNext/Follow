@@ -28,11 +28,11 @@ export function EntryItemWrapper({
       key={entry.id}
       className={cn(
         "rounded-md transition-colors",
-        activedEntry?.id === entry.id && "bg-[#DEDDDC]",
+        activedEntry === entry.id && "bg-[#DEDDDC]",
       )}
       onClick={(e) => {
         e.stopPropagation()
-        setActivedEntry(entry)
+        setActivedEntry(entry.id)
       }}
       onContextMenu={(e) => {
         e.preventDefault()
