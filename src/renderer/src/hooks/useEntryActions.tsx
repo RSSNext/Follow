@@ -35,9 +35,14 @@ export const useEntryActions = ({
         },
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["entries"],
-      })
+      queryClient.setQueryData(
+        ["entry", entry.id],
+        Object.assign({}, entry, {
+          collections: {
+            createdAt: new Date().toISOString(),
+          },
+        }),
+      )
       toast({
         duration: 1000,
         description: "Collected.",
@@ -53,9 +58,12 @@ export const useEntryActions = ({
         },
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["entries"],
-      })
+      queryClient.setQueryData(
+        ["entry", entry.id],
+        Object.assign({}, entry, {
+          collections: null,
+        }),
+      )
       toast({
         duration: 1000,
         description: "Uncollected.",
