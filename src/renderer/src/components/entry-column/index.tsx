@@ -8,18 +8,15 @@ import { PictureItem } from "./picture-item"
 import { VideoItem } from "./video-item"
 import { NotificationItem } from "./notification-item"
 import { EntryItemWrapper } from "./item-wrapper"
+import { useOutletContext } from "react-router-dom"
 
 const gridMode = [2, 3]
 
-export function EntryColumn({
-  activedList,
-  activedEntry,
-  setActivedEntry,
-}: {
-  activedList: ActivedList
-  activedEntry: ActivedEntry
-  setActivedEntry: (value: ActivedEntry) => void
-}) {
+export function EntryColumn() {
+  const { activedList, setActivedEntry } = useOutletContext<{
+    activedList: ActivedList
+    setActivedEntry: (value: ActivedEntry) => void
+  }>()
   const entries = useEntries({
     level: activedList?.level,
     id: activedList?.id,
@@ -72,8 +69,6 @@ export function EntryColumn({
               <EntryItemWrapper
                 key={entry.id}
                 entry={entry}
-                activedEntry={activedEntry}
-                setActivedEntry={setActivedEntry}
                 view={activedList?.view}
               >
                 <Item entry={entry} />

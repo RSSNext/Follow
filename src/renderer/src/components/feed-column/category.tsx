@@ -5,7 +5,7 @@ import {
 import { m, AnimatePresence } from "framer-motion"
 import { useEffect, useState } from "react"
 import { levels } from "@renderer/lib/constants"
-import { ActivedList } from "@renderer/lib/types"
+import { ActivedEntry, ActivedList } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -15,20 +15,21 @@ import { apiFetch } from "@renderer/lib/queries/api-fetch"
 import { CategoryRenameDialog } from "./category-rename-dialog"
 import { Dialog } from "@renderer/components/ui/dialog"
 import { FeedItem } from "./item"
+import { useOutletContext } from "react-router-dom"
 
 export function FeedCategory({
   data,
-  activedList,
-  setActivedList,
   view,
   expansion,
 }: {
   data: SubscriptionsResponse["list"][number]
-  activedList?: ActivedList
-  setActivedList?: (value: ActivedList) => void
   view?: number
   expansion: boolean
 }) {
+  const { activedList, setActivedList } = useOutletContext<{
+    activedList: ActivedList
+    setActivedList: (value: ActivedList) => void
+  }>()
   const [open, setOpen] = useState(!data.name)
   const [dialogOpen, setDialogOpen] = useState(false)
 
@@ -164,8 +165,6 @@ export function FeedCategory({
               <FeedItem
                 key={feed.feedId}
                 feed={feed}
-                activedList={activedList}
-                setActivedList={setActivedList}
                 view={view}
                 className={!!data.name ? "pl-6" : "pl-2.5"}
               />

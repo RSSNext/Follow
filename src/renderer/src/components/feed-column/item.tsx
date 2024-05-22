@@ -18,21 +18,22 @@ import { Dialog } from "@renderer/components/ui/dialog"
 import { FollowDialog } from "@renderer/components/follow/dialog"
 import { useToast } from "@renderer/components/ui/use-toast"
 import { ToastAction } from "@renderer/components/ui/toast"
+import { useOutletContext } from "react-router-dom"
 
 export function FeedItem({
   feed,
-  activedList,
-  setActivedList,
   view,
   className,
 }: {
   feed: SubscriptionResponse[number]
-  activedList?: ActivedList
-  setActivedList?: (value: ActivedList) => void
   view?: number
   className?: string
 }) {
   const [dialogOpen, setDialogOpen] = useState(false)
+  const { activedList, setActivedList } = useOutletContext<{
+    activedList: ActivedList
+    setActivedList: (value: ActivedList) => void
+  }>()
 
   const setFeedActive = (feed: SubscriptionResponse[number]) => {
     view !== undefined &&

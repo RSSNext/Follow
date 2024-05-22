@@ -13,18 +13,15 @@ import { FeedList } from "./list"
 import { ActivedList } from "@renderer/lib/types"
 import { UserButton } from "@renderer/components/user-button"
 import { levels, views } from "@renderer/lib/constants"
-import { Link } from "react-router-dom"
+import { Link, useOutletContext } from "react-router-dom"
 import { Button } from "@renderer/components/ui/button"
 
 const lethargy = new Lethargy()
 
-export function FeedColumn({
-  activedList,
-  setActivedList,
-}: {
-  activedList?: ActivedList
-  setActivedList?: (value: ActivedList) => void
-}) {
+export function FeedColumn() {
+  const { setActivedList } = useOutletContext<{
+    setActivedList: (value: ActivedList) => void
+  }>()
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive] = useState(0)
@@ -140,12 +137,7 @@ export function FeedColumn({
               key={item.name}
               className="snap-center shrink-0 overflow-y-auto"
             >
-              <FeedList
-                className="w-64 px-3 mb-6"
-                view={index}
-                activedList={activedList}
-                setActivedList={setActivedList}
-              />
+              <FeedList className="w-64 px-3 mb-6" view={index} />
             </section>
           ))}
         </m.div>

@@ -2,17 +2,14 @@ import { ActivedEntry, EntriesResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
+import { useOutletContext } from "react-router-dom"
 
 export function EntryItemWrapper({
   entry,
-  activedEntry,
-  setActivedEntry,
   children,
   view,
 }: {
   entry: EntriesResponse[number]
-  activedEntry: ActivedEntry
-  setActivedEntry: (value: ActivedEntry) => void
   children: React.ReactNode
   view?: number
 }) {
@@ -22,6 +19,10 @@ export function EntryItemWrapper({
     view,
     entry,
   })
+  const { activedEntry, setActivedEntry } = useOutletContext<{
+    activedEntry: ActivedEntry
+    setActivedEntry: (value: ActivedEntry) => void
+  }>()
 
   return (
     <div

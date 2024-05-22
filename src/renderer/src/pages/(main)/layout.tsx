@@ -1,4 +1,3 @@
-import { FeedColumn } from "@renderer/components/feed-column"
 import { useEffect, useState } from "react"
 import { ActivedList, ActivedEntry } from "@renderer/lib/types"
 import { Outlet } from "react-router-dom"
@@ -28,17 +27,13 @@ export function Component() {
   }
 
   return (
-    <div className="flex h-full">
-      <div className="w-64 pt-10 border-r shrink-0 bg-native">
-        <FeedColumn activedList={activedList} setActivedList={setActivedList} />
-      </div>
-      <Outlet
-        context={{
-          activedList,
-          activedEntry,
-          setActivedEntry,
-        }}
-      />
-    </div>
+    <Outlet
+      context={{
+        activedList,
+        activedEntry,
+        setActivedEntry,
+        setActivedList,
+      }}
+    />
   )
 }

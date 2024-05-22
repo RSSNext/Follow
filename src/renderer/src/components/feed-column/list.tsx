@@ -4,22 +4,23 @@ import { levels, views } from "@renderer/lib/constants"
 import { ActivedList } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { FeedCategory } from "./category"
+import { useOutletContext } from "react-router-dom"
 
 export function FeedList({
   className,
   view,
-  activedList,
-  setActivedList,
   hideTitle,
 }: {
   className?: string
   view?: number
-  activedList?: ActivedList
-  setActivedList?: (value: ActivedList) => void
   hideTitle?: boolean
 }) {
   const subscriptions = useSubscriptions(view)
   const [expansion, setExpansion] = useState(false)
+  const { setActivedList } = useOutletContext<{
+    activedList: ActivedList
+    setActivedList: (value: ActivedList) => void
+  }>()
 
   return (
     <div className={className}>
@@ -32,7 +33,7 @@ export function FeedList({
             onClick={(e) => {
               e.stopPropagation()
               view !== undefined &&
-                setActivedList?.({
+                setActivedList({
                   level: levels.view,
                   id: view,
                   name: views[view].name,
@@ -62,8 +63,6 @@ export function FeedList({
         <FeedCategory
           key={category.name}
           data={category}
-          activedList={activedList}
-          setActivedList={setActivedList}
           view={view}
           expansion={expansion}
         />

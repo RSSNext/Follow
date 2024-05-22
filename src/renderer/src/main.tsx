@@ -21,25 +21,32 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            lazy: () => import("./pages/(main)/index"),
-          },
-          {
-            path: "/follow",
-            lazy: () => import("./pages/(main)/follow/layout"),
+            lazy: () => import("./pages/(main)/(context)/layout"),
             children: [
               {
                 path: "",
-                lazy: () => import("./pages/(main)/follow/index"),
+                lazy: () => import("./pages/(main)/(context)/index"),
               },
-            ],
-          },
-          {
-            path: "/profile",
-            lazy: () => import("./pages/(main)/profile/layout"),
-            children: [
               {
-                path: "",
-                lazy: () => import("./pages/(main)/profile/index"),
+                path: "/follow",
+                lazy: () => import("./pages/(main)/(context)/follow/layout"),
+                children: [
+                  {
+                    path: "",
+                    lazy: () => import("./pages/(main)/(context)/follow/index"),
+                  },
+                ],
+              },
+              {
+                path: "/profile",
+                lazy: () => import("./pages/(main)/(context)/profile/layout"),
+                children: [
+                  {
+                    path: "",
+                    lazy: () =>
+                      import("./pages/(main)/(context)/profile/index"),
+                  },
+                ],
               },
             ],
           },

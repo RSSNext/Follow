@@ -29,11 +29,7 @@ export function Component() {
             : "w-[340px]",
         )}
       >
-        <EntryColumn
-          activedList={activedList}
-          activedEntry={activedEntry}
-          setActivedEntry={setActivedEntry}
-        />
+        <EntryColumn />
       </div>
       <AnimatePresence>
         {!(activedList && wideMode.includes(activedList.view)) &&
