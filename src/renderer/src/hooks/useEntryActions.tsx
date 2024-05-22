@@ -1,8 +1,13 @@
 import { useToast } from "@renderer/components/ui/use-toast"
 import { ofetch } from "ofetch"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+  QueryKey,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query"
 import { client } from "@renderer/lib/client"
-import { EntriesResponse } from "@renderer/lib/types"
+import { EntriesResponse, ListResponse } from "@renderer/lib/types"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 export const useEntryActions = ({
@@ -26,6 +31,36 @@ export const useEntryActions = ({
 
   const queryClient = useQueryClient()
 
+  const updateCollection = (
+    target: {
+      createdAt: string
+    } | null,
+  ) => {
+    const key = ["entry", entry.id]
+    const data = queryClient.getQueryData(key)
+    if (data) {
+      queryClient.setQueryData(
+        key,
+        Object.assign({}, data, {
+          collections: target,
+        }),
+      )
+    }
+
+    const entriesData = queryClient.getQueriesData({
+      queryKey: ["entries"],
+    })
+    entriesData.forEach(([key, data]: [QueryKey, any]) => {
+      const list = (data?.pages?.[0] as ListResponse<EntriesResponse>).data
+      list?.forEach((item) => {
+        if (item.id === entry.id) {
+          item.collections = target
+          queryClient.setQueryData(key, data)
+        }
+      })
+    })
+  }
+
   const collect = useMutation({
     mutationFn: async () =>
       apiFetch("/collections", {
@@ -35,14 +70,10 @@ export const useEntryActions = ({
         },
       }),
     onSuccess: () => {
-      queryClient.setQueryData(
-        ["entry", entry.id],
-        Object.assign({}, entry, {
-          collections: {
-            createdAt: new Date().toISOString(),
-          },
-        }),
-      )
+      updateCollection({
+        createdAt: new Date().toISOString(),
+      })
+
       toast({
         duration: 1000,
         description: "Collected.",
@@ -58,12 +89,8 @@ export const useEntryActions = ({
         },
       }),
     onSuccess: () => {
-      queryClient.setQueryData(
-        ["entry", entry.id],
-        Object.assign({}, entry, {
-          collections: null,
-        }),
-      )
+      updateCollection(null)
+
       toast({
         duration: 1000,
         description: "Uncollected.",
