@@ -26,7 +26,7 @@ export function EntryContent({ entryId }: { entryId: ActivedEntry }) {
     <>
       <EntryShare entry={entry.data} view={0} />
       <m.div
-        className="px-5 py-5 overflow-y-auto h-full"
+        className="px-5 py-5 overflow-y-auto h-[calc(100%-3.5rem)]"
         initial={{ opacity: 0.01, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0.01, y: -100 }}
