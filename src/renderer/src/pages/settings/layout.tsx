@@ -50,7 +50,7 @@ export function Component() {
             </Link>
           ))}
         </div>
-        <div className="p-2">
+        <div className="p-8">
           <Outlet />
         </div>
       </div>
