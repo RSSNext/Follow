@@ -57,7 +57,7 @@ export function FeedCategory({
     }
   }, [expansion])
 
-  const setCatrgoryActive = () => {
+  const setCategoryActive = () => {
     view !== undefined &&
       setActivedList?.({
         level: levels.folder,
@@ -84,7 +84,7 @@ export function FeedCategory({
             )}
             onClick={(e) => {
               e.stopPropagation()
-              setCatrgoryActive()
+              setCategoryActive()
             }}
             onContextMenu={(e) => {
               showNativeMenu(
