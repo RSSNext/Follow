@@ -103,6 +103,12 @@ export function FeedItem({
           e.stopPropagation()
           setFeedActive(feed)
         }}
+        onDoubleClick={() =>
+          window.open(
+            `${import.meta.env.VITE_WEB_URL}/feed/${feed.feedId}`,
+            "_blank",
+          )
+        }
         onContextMenu={(e) => {
           showNativeMenu(
             [
@@ -125,12 +131,13 @@ export function FeedItem({
                 click: () =>
                   window.open(
                     `${import.meta.env.VITE_WEB_URL}/feed/${feed.feedId}`,
+                    "_blank",
                   ),
               },
               {
                 type: "text",
                 label: "Open Site in Browser",
-                click: () => window.open(feed.feeds.siteUrl),
+                click: () => window.open(feed.feeds.siteUrl, "_blank"),
               },
             ],
             e,

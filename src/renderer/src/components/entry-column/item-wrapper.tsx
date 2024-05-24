@@ -33,6 +33,7 @@ export function EntryItemWrapper({
         e.stopPropagation()
         setActiveEntry(entry.id)
       }}
+      onDoubleClick={() => window.open(entry.url, "_blank")}
       onContextMenu={(e) => {
         e.preventDefault()
         showNativeMenu(
