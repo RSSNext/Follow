@@ -126,9 +126,10 @@ export function FeedItem({
               {
                 type: "text",
                 label: "Open Feed in Browser",
-                click: () => {
-                  // TODO
-                },
+                click: () =>
+                  window.open(
+                    `${import.meta.env.VITE_WEB_URL}/feed/${feed.feedId}`,
+                  ),
               },
               {
                 type: "text",

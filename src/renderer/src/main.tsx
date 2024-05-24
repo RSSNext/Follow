@@ -82,6 +82,16 @@ const router = createBrowserRouter([
         path: "debug",
         lazy: () => import("./pages/debug"),
       },
+      {
+        path: "/feed/:id",
+        lazy: () => import("./pages/feed/layout"),
+        children: [
+          {
+            path: "",
+            lazy: () => import("./pages/feed/index"),
+          },
+        ],
+      },
     ],
   },
 ])
