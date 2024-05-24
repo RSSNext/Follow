@@ -5,7 +5,7 @@ import {
 import { m, AnimatePresence } from "framer-motion"
 import { useEffect, useState } from "react"
 import { levels } from "@renderer/lib/constants"
-import { ActivedEntry, ActivedList } from "@renderer/lib/types"
+import { ActivedList } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -28,7 +28,7 @@ export function FeedCategory({
 }) {
   const { activedList, setActivedList } = useOutletContext<{
     activedList: ActivedList
-    setActivedList: (value: ActivedList) => void
+    setActivedList: ((value: ActivedList) => void) | null
   }>()
   const [open, setOpen] = useState(!data.name)
   const [dialogOpen, setDialogOpen] = useState(false)
