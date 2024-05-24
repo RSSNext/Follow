@@ -33,14 +33,14 @@ export function Component() {
       </div> */}
       <div className="flex flex-1">
         <div className="border-r w-44 p-3 bg-native pt-10">
-          <div className="font-bold text-xl flex items-center gap-1 mx-2 mb-3">
+          <div className="font-bold text-xl flex items-center gap-1 mx-2 mb-5">
             <img src="./icon.svg" alt="logo" className="size-6" />
             Settings
           </div>
           {tabs.map((t) => (
             <Link
               key={t.path}
-              className={`flex items-center text-[15px] rounded transition-colors px-2 py-1 text-zinc-600 h-8 ${
+              className={`flex items-center font-medium text-[15px] leading-loose rounded-md transition-colors px-2.5 py-[3px] my-1 text-zinc-600 ${
                 tab === t.path ? "bg-native-active text-zinc-900" : ""
               }`}
               to={`/settings/${t.path}`}
