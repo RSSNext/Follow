@@ -151,7 +151,7 @@ export const useEntryActions = ({
           !entry.images?.length,
         onClick: async () => {
           if (!entry.url || !entry.images?.length) return
-          const response = await client.saveToEagle({
+          const response = await client?.saveToEagle({
             url: entry.url,
             images: entry.images,
           })
@@ -174,7 +174,7 @@ export const useEntryActions = ({
         action: "share",
         onClick: () => {
           if (!entry.url) return
-          client.showShareMenu(entry.url)
+          client?.showShareMenu(entry.url)
         },
       },
     ],

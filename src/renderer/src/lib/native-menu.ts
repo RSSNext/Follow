@@ -17,7 +17,7 @@ export const showNativeMenu = async (
             type: "text" as const,
             label: "Inspect Element",
             click: () => {
-              client.inspectElement({
+              client?.inspectElement({
                 x: e.pageX,
                 y: e.pageY,
               })
@@ -33,21 +33,21 @@ export const showNativeMenu = async (
     el.setAttribute("data-context-menu-open", "true")
   }
 
-  const unlisten = window.electron.ipcRenderer.on("menu-click", (_, index) => {
+  const unlisten = window.electron?.ipcRenderer.on("menu-click", (_, index) => {
     const item = items[index]
     if (item && item.type === "text") {
       item.click()
     }
   })
 
-  window.electron.ipcRenderer.once("menu-closed", () => {
-    unlisten()
+  window.electron?.ipcRenderer.once("menu-closed", () => {
+    unlisten?.()
     if (el instanceof HTMLElement) {
       el.removeAttribute("data-context-menu-open")
     }
   })
 
-  await client.showContextMenu({
+  await client?.showContextMenu({
     items: items.map((item) => {
       if (item.type === "text") {
         return {
