@@ -1,27 +1,25 @@
+import { Button } from "@renderer/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
-import { useEffect, useRef, useState } from "react"
-import { useWheel } from "@use-gesture/react"
-import { Lethargy } from "lethargy"
-import { cn, clamp } from "@renderer/lib/utils"
-import { m, useSpring } from "framer-motion"
-import { FeedList } from "./list"
-import { ActivedList } from "@renderer/lib/types"
 import { UserButton } from "@renderer/components/user-button"
+import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 import { levels, views } from "@renderer/lib/constants"
-import { Link, useOutletContext } from "react-router-dom"
-import { Button } from "@renderer/components/ui/button"
+import { clamp, cn } from "@renderer/lib/utils"
+import { useWheel } from "@use-gesture/react"
+import { m, useSpring } from "framer-motion"
+import { Lethargy } from "lethargy"
+import { useEffect, useRef, useState } from "react"
+import { Link } from "react-router-dom"
+import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
 
 export function FeedColumn() {
-  const { setActivedList } = useOutletContext<{
-    setActivedList: (value: ActivedList) => void
-  }>()
+  const { setActiveList } = useMainLayoutContext()
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive] = useState(0)
@@ -61,7 +59,7 @@ export function FeedColumn() {
     <div
       className="h-full flex flex-col gap-3"
       onClick={() =>
-        setActivedList?.({
+        setActiveList?.({
           level: levels.view,
           id: active,
           name: views[active].name,
@@ -75,7 +73,7 @@ export function FeedColumn() {
           className="font-bold text-xl flex items-center gap-1"
           onClick={(e) => {
             e.stopPropagation()
-            setActivedList?.({
+            setActiveList?.({
               level: levels.view,
               id: active,
               name: views[active].name,
@@ -113,7 +111,7 @@ export function FeedColumn() {
                   size="sm"
                   onClick={(e) => {
                     setActive(index)
-                    setActivedList?.({
+                    setActiveList?.({
                       level: "view",
                       id: index,
                       name: views[index].name,

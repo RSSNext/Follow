@@ -1,4 +1,4 @@
-export type ActivedList = {
+export type ActiveList = {
   level: string
   id: string | number
   name: string

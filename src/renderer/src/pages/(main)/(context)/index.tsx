@@ -1,30 +1,28 @@
 import { EntryColumn } from "@renderer/components/entry-column"
-import { useEffect } from "react"
-import { ActivedList, ActivedEntry } from "@renderer/lib/types"
-import { cn } from "@renderer/lib/utils"
 import { EntryContent } from "@renderer/components/entry-content"
+import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
+import { cn } from "@renderer/lib/utils"
 import { AnimatePresence } from "framer-motion"
-import { useOutletContext } from "react-router-dom"
+import { useEffect } from "react"
 
 const wideMode = [1, 2, 3, 4]
 
 export function Component() {
-  const { activedList, activedEntry, setActivedEntry } = useOutletContext<{
-    activedList: ActivedList
-    activedEntry: ActivedEntry
-    setActivedEntry: (value: ActivedEntry) => void
-  }>()
-
+  const {
+    activeList,
+    activeEntry,
+    setActiveEntry: setActivedEntry,
+  } = useMainLayoutContext()
   useEffect(() => {
     setActivedEntry(null)
-  }, [activedList])
+  }, [activeList])
 
   return (
     <>
       <div
         className={cn(
           "pt-10 border-r shrink-0 h-full overflow-y-auto",
-          activedList && wideMode.includes(activedList.view)
+          activeList && wideMode.includes(activeList.view)
             ? "flex-1"
             : "w-[340px]",
         )}
@@ -32,12 +30,11 @@ export function Component() {
         <EntryColumn />
       </div>
       <AnimatePresence>
-        {!(activedList && wideMode.includes(activedList.view)) &&
-          activedEntry && (
-            <div className="flex-1">
-              <EntryContent entryId={activedEntry} />
-            </div>
-          )}
+        {!(activeList && wideMode.includes(activeList.view)) && activeEntry && (
+          <div className="flex-1">
+            <EntryContent entryId={activeEntry} />
+          </div>
+        )}
       </AnimatePresence>
     </>
   )

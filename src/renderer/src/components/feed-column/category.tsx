@@ -2,20 +2,19 @@ import {
   Collapsible,
   CollapsibleTrigger,
 } from "@renderer/components/ui/collapsible"
-import { m, AnimatePresence } from "framer-motion"
-import { useEffect, useState } from "react"
-import { levels } from "@renderer/lib/constants"
-import { ActivedList } from "@renderer/lib/types"
-import { cn } from "@renderer/lib/utils"
-import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
-import { showNativeMenu } from "@renderer/lib/native-menu"
-import { client } from "@renderer/lib/client"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { apiFetch } from "@renderer/lib/queries/api-fetch"
-import { CategoryRenameDialog } from "./category-rename-dialog"
 import { Dialog } from "@renderer/components/ui/dialog"
+import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
+import { client } from "@renderer/lib/client"
+import { levels } from "@renderer/lib/constants"
+import { showNativeMenu } from "@renderer/lib/native-menu"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
+import { cn } from "@renderer/lib/utils"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { AnimatePresence, m } from "framer-motion"
+import { useEffect, useState } from "react"
+import { CategoryRenameDialog } from "./category-rename-dialog"
 import { FeedItem } from "./item"
-import { useOutletContext } from "react-router-dom"
 
 export function FeedCategory({
   data,
@@ -26,10 +25,13 @@ export function FeedCategory({
   view?: number
   expansion: boolean
 }) {
-  const { activedList, setActivedList } = useOutletContext<{
-    activedList: ActivedList
-    setActivedList: ((value: ActivedList) => void) | null
-  }>()
+  const {
+    activeList,
+    setActiveEntry: setActivedEntry,
+    setActiveList,
+    activeEntry,
+  } = useMainLayoutContext()
+
   const [open, setOpen] = useState(!data.name)
   const [dialogOpen, setDialogOpen] = useState(false)
 
@@ -59,7 +61,7 @@ export function FeedCategory({
 
   const setCatrgoryActive = () => {
     view !== undefined &&
-      setActivedList?.({
+      setActiveList?.({
         level: levels.folder,
         id: data.list.map((feed) => feed.feedId).join(","),
         name: data.name,
@@ -78,8 +80,8 @@ export function FeedCategory({
           <div
             className={cn(
               "flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded-md w-full transition-colors",
-              activedList?.level === levels.folder &&
-                activedList.name === data.name &&
+              activeList?.level === levels.folder &&
+                activeList.name === data.name &&
                 "bg-native-active",
             )}
             onClick={(e) => {
@@ -120,15 +122,15 @@ export function FeedCategory({
               <CollapsibleTrigger
                 className={cn(
                   "flex items-center h-7 [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
-                  !setActivedList && "flex-1",
+                  !setActiveList && "flex-1",
                 )}
               >
                 <i className="i-mingcute-right-fill mr-2 transition-transform" />
-                {!setActivedList && (
+                {!setActiveList && (
                   <span className="truncate">{data.name}</span>
                 )}
               </CollapsibleTrigger>
-              {setActivedList && <span className="truncate">{data.name}</span>}
+              {setActiveList && <span className="truncate">{data.name}</span>}
             </div>
             {!!data.unread && (
               <div className="text-xs text-zinc-500 ml-2">{data.unread}</div>

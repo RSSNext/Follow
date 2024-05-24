@@ -1,25 +1,24 @@
-import { useState } from "react"
-import { levels } from "@renderer/lib/constants"
-import { ActivedList, SubscriptionResponse } from "@renderer/lib/types"
-import { cn } from "@renderer/lib/utils"
+import { FeedIcon } from "@renderer/components/feed-icon"
+import { FollowDialog } from "@renderer/components/follow/dialog"
+import { Dialog } from "@renderer/components/ui/dialog"
+import { ToastAction } from "@renderer/components/ui/toast"
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
-  TooltipPortal,
 } from "@renderer/components/ui/tooltip"
-import { FeedIcon } from "@renderer/components/feed-icon"
+import { useToast } from "@renderer/components/ui/use-toast"
+import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
+import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
 import { showNativeMenu } from "@renderer/lib/native-menu"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
-import { Dialog } from "@renderer/components/ui/dialog"
-import { FollowDialog } from "@renderer/components/follow/dialog"
-import { useToast } from "@renderer/components/ui/use-toast"
-import { ToastAction } from "@renderer/components/ui/toast"
-import { useOutletContext } from "react-router-dom"
-
+import { SubscriptionResponse } from "@renderer/lib/types"
+import { cn } from "@renderer/lib/utils"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useState } from "react"
 export function FeedItem({
   feed,
   view,
@@ -30,14 +29,11 @@ export function FeedItem({
   className?: string
 }) {
   const [dialogOpen, setDialogOpen] = useState(false)
-  const { activedList, setActivedList } = useOutletContext<{
-    activedList: ActivedList
-    setActivedList: (value: ActivedList) => void
-  }>()
+  const { activeList, setActiveList } = useMainLayoutContext()
 
   const setFeedActive = (feed: SubscriptionResponse[number]) => {
     view !== undefined &&
-      setActivedList?.({
+      setActiveList?.({
         level: levels.feed,
         id: feed.feedId,
         name: feed.feeds.title || "",
@@ -98,8 +94,8 @@ export function FeedItem({
       <div
         className={cn(
           "flex items-center justify-between text-sm font-medium leading-loose w-full pr-2.5 py-[2px] rounded-md",
-          activedList?.level === levels.feed &&
-            activedList.id === feed.feedId &&
+          activeList?.level === levels.feed &&
+            activeList.id === feed.feedId &&
             "bg-native-active",
           className,
         )}
