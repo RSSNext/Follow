@@ -4,10 +4,10 @@ export function Component() {
   return (
     <Outlet
       context={{
-        activedList: null,
-        activedEntry: null,
-        setActivedEntry: () => {},
-        setActivedList: null,
+        activeList: null,
+        activeEntry: null,
+        setActiveEntry: () => {},
+        setActiveList: null,
       }}
     />
   )

@@ -5,12 +5,8 @@ import {
 } from "@renderer/contexts/outlet/main-layout"
 
 export function Component() {
-  const {
-    activeEntry,
-    activeList,
-    setActiveList,
-    setActiveEntry: setActivedEntry,
-  } = useMainLayoutContext()
+  const { activeEntry, activeList, setActiveList, setActiveEntry } =
+    useMainLayoutContext()
   return (
     <div className="flex h-full">
       <div className="w-64 pt-10 border-r shrink-0 bg-native">
@@ -21,7 +17,7 @@ export function Component() {
           activeList,
           activeEntry,
           setActiveList,
-          setActiveEntry: setActivedEntry,
+          setActiveEntry,
         }}
       />
     </div>

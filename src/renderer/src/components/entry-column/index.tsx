@@ -1,5 +1,4 @@
 import { useEntries } from "@renderer/lib/queries/entries"
-import { ActiveList, ActivedEntry } from "@renderer/lib/types"
 import { m } from "framer-motion"
 import { cn } from "@renderer/lib/utils"
 import { ArticleItem } from "./article-item"
@@ -14,7 +13,7 @@ import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 const gridMode = [2, 3]
 
 export function EntryColumn() {
-  const { activeList, setActiveEntry: setActivedEntry } = useMainLayoutContext()
+  const { activeList, setActiveEntry } = useMainLayoutContext()
   const entries = useEntries({
     level: activeList?.level,
     id: activeList?.id,
@@ -43,7 +42,7 @@ export function EntryColumn() {
   }
 
   return (
-    <div className="px-2" onClick={() => setActivedEntry(null)}>
+    <div className="px-2" onClick={() => setActiveEntry(null)}>
       <div className="ml-9 mb-5">
         <div className="font-bold text-lg">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">

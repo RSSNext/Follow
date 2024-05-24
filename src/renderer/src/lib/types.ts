@@ -72,4 +72,4 @@ export type DataResponse<T> = {
   data?: T
 }
 
-export type ActivedEntry = string | null
+export type ActiveEntry = string | null

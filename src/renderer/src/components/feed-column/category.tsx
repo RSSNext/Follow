@@ -25,12 +25,7 @@ export function FeedCategory({
   view?: number
   expansion: boolean
 }) {
-  const {
-    activeList,
-    setActiveEntry: setActivedEntry,
-    setActiveList,
-    activeEntry,
-  } = useMainLayoutContext()
+  const { activeList, setActiveList } = useMainLayoutContext()
 
   const [open, setOpen] = useState(!data.name)
   const [dialogOpen, setDialogOpen] = useState(false)

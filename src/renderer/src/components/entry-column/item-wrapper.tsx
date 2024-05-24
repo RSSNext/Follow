@@ -20,8 +20,7 @@ export function EntryItemWrapper({
     entry,
   })
 
-  const { activeEntry, setActiveEntry: setActivedEntry } =
-    useMainLayoutContext()
+  const { activeEntry, setActiveEntry } = useMainLayoutContext()
 
   return (
     <div
@@ -32,7 +31,7 @@ export function EntryItemWrapper({
       )}
       onClick={(e) => {
         e.stopPropagation()
-        setActivedEntry(entry.id)
+        setActiveEntry(entry.id)
       }}
       onContextMenu={(e) => {
         e.preventDefault()

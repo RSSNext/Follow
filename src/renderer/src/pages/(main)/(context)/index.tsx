@@ -8,13 +8,9 @@ import { useEffect } from "react"
 const wideMode = [1, 2, 3, 4]
 
 export function Component() {
-  const {
-    activeList,
-    activeEntry,
-    setActiveEntry: setActivedEntry,
-  } = useMainLayoutContext()
+  const { activeList, activeEntry, setActiveEntry } = useMainLayoutContext()
   useEffect(() => {
-    setActivedEntry(null)
+    setActiveEntry(null)
   }, [activeList])
 
   return (

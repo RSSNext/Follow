@@ -1,12 +1,12 @@
-import type { ActiveList, ActivedEntry } from "@renderer/lib/types"
+import type { ActiveList, ActiveEntry } from "@renderer/lib/types"
 import { Outlet, useOutletContext } from "react-router-dom"
 
 export interface MainLayoutContextType {
   activeList: ActiveList
-  setActiveEntry: (value: ActivedEntry) => void
+  setActiveEntry: (value: ActiveEntry) => void
 
-  activeEntry: ActivedEntry
-  setActiveList: (value: ActiveList) => void
+  activeEntry: ActiveEntry
+  setActiveList: ((value: ActiveList) => void) | undefined
 }
 
 export const useMainLayoutContext = () =>

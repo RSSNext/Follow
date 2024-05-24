@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-import { ActiveList, ActivedEntry } from "@renderer/lib/types"
-import { Outlet } from "react-router-dom"
+import { ActiveList, ActiveEntry } from "@renderer/lib/types"
 import { useNavigate } from "react-router-dom"
 import { useSession } from "@hono/auth-js/react"
 import { MainLayoutOutlet } from "@renderer/contexts/outlet/main-layout"
@@ -14,7 +13,7 @@ export function Component() {
     name: "Articles",
     view: 0,
   })
-  const [activeEntry, setActiveEntry] = useState<ActivedEntry>(null)
+  const [activeEntry, setActiveEntry] = useState<ActiveEntry>(null)
 
   useEffect(() => {
     setActiveEntry(null)
