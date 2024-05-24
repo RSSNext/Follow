@@ -1,5 +1,5 @@
 import { useEntries } from "@renderer/lib/queries/entries"
-import { ActivedList, ActivedEntry } from "@renderer/lib/types"
+import { ActiveList, ActivedEntry } from "@renderer/lib/types"
 import { m } from "framer-motion"
 import { cn } from "@renderer/lib/utils"
 import { ArticleItem } from "./article-item"
@@ -8,23 +8,21 @@ import { PictureItem } from "./picture-item"
 import { VideoItem } from "./video-item"
 import { NotificationItem } from "./notification-item"
 import { EntryItemWrapper } from "./item-wrapper"
-import { useOutletContext } from "react-router-dom"
+
+import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 
 const gridMode = [2, 3]
 
 export function EntryColumn() {
-  const { activedList, setActivedEntry } = useOutletContext<{
-    activedList: ActivedList
-    setActivedEntry: (value: ActivedEntry) => void
-  }>()
+  const { activeList, setActiveEntry: setActivedEntry } = useMainLayoutContext()
   const entries = useEntries({
-    level: activedList?.level,
-    id: activedList?.id,
-    view: activedList?.view,
+    level: activeList?.level,
+    id: activeList?.id,
+    view: activeList?.view,
   })
 
   let Item
-  switch (activedList?.view) {
+  switch (activeList?.view) {
     case 0:
       Item = ArticleItem
       break
@@ -47,7 +45,7 @@ export function EntryColumn() {
   return (
     <div className="px-2" onClick={() => setActivedEntry(null)}>
       <div className="ml-9 mb-5">
-        <div className="font-bold text-lg">{activedList?.name}</div>
+        <div className="font-bold text-lg">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
           {entries.data?.pages?.[0].total} Items
         </div>
@@ -55,13 +53,13 @@ export function EntryColumn() {
       <div>
         {entries.data?.pages?.map((page, index) => (
           <m.div
-            key={`${activedList?.level}-${activedList?.id}-${index}`}
+            key={`${activeList?.level}-${activeList?.id}-${index}`}
             initial={{ opacity: 0.01, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0.01, y: -100 }}
             className={cn(
-              activedList?.view &&
-                gridMode.includes(activedList.view) &&
+              activeList?.view &&
+                gridMode.includes(activeList.view) &&
                 "grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2",
             )}
           >
@@ -69,7 +67,7 @@ export function EntryColumn() {
               <EntryItemWrapper
                 key={entry.id}
                 entry={entry}
-                view={activedList?.view}
+                view={activeList?.view}
               >
                 <Item entry={entry} />
               </EntryItemWrapper>

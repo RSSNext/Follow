@@ -1,8 +1,8 @@
-import { ActivedEntry, EntriesResponse } from "@renderer/lib/types"
-import { cn } from "@renderer/lib/utils"
-import { showNativeMenu } from "@renderer/lib/native-menu"
+import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
-import { useOutletContext } from "react-router-dom"
+import { showNativeMenu } from "@renderer/lib/native-menu"
+import { EntriesResponse } from "@renderer/lib/types"
+import { cn } from "@renderer/lib/utils"
 
 export function EntryItemWrapper({
   entry,
@@ -19,17 +19,16 @@ export function EntryItemWrapper({
     view,
     entry,
   })
-  const { activedEntry, setActivedEntry } = useOutletContext<{
-    activedEntry: ActivedEntry
-    setActivedEntry: (value: ActivedEntry) => void
-  }>()
+
+  const { activeEntry, setActiveEntry: setActivedEntry } =
+    useMainLayoutContext()
 
   return (
     <div
       key={entry.id}
       className={cn(
         "rounded-md transition-colors",
-        activedEntry === entry.id && "bg-[#DEDDDC]",
+        activeEntry === entry.id && "bg-[#DEDDDC]",
       )}
       onClick={(e) => {
         e.stopPropagation()

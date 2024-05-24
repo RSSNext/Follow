@@ -1,38 +1,39 @@
 import { useEffect, useState } from "react"
-import { ActivedList, ActivedEntry } from "@renderer/lib/types"
+import { ActiveList, ActivedEntry } from "@renderer/lib/types"
 import { Outlet } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { useSession } from "@hono/auth-js/react"
+import { MainLayoutOutlet } from "@renderer/contexts/outlet/main-layout"
 
 export function Component() {
   const { status } = useSession()
   const navigate = useNavigate()
-  const [activedList, setActivedList] = useState<ActivedList>({
+  const [activeList, setActiveList] = useState<ActiveList>({
     level: "view",
     id: 0,
     name: "Articles",
     view: 0,
   })
-  const [activedEntry, setActivedEntry] = useState<ActivedEntry>(null)
+  const [activeEntry, setActiveEntry] = useState<ActivedEntry>(null)
 
   useEffect(() => {
-    setActivedEntry(null)
-    if (!activedList?.preventNavigate) {
+    setActiveEntry(null)
+    if (!activeList?.preventNavigate) {
       navigate("/")
     }
-  }, [activedList])
+  }, [activeList])
 
   if (status !== "authenticated") {
     return navigate("/login")
   }
 
   return (
-    <Outlet
-      context={{
-        activedList,
-        activedEntry,
-        setActivedEntry,
-        setActivedList,
+    <MainLayoutOutlet
+      {...{
+        activeList,
+        activeEntry,
+        setActiveEntry: setActiveEntry,
+        setActiveList,
       }}
     />
   )
