@@ -41,7 +41,7 @@ export function FeedColumn() {
             setActive((i) => clamp(i + dx, 0, views.length - 1))
             return true
           } else {
-            return undefined
+            return
           }
         } else {
           return false
@@ -65,8 +65,7 @@ export function FeedColumn() {
           name: views[active].name,
           view: active,
           preventNavigate: true,
-        })
-      }
+        })}
     >
       <div className="ml-5 mr-3 flex items-center justify-between">
         <div
@@ -86,12 +85,12 @@ export function FeedColumn() {
         </div>
         <div className="flex items-center">
           <Button variant="ghost" size="sm">
-            <Link to={`/profile`} className="flex">
+            <Link to="/profile" className="flex">
               <UserButton className="h-5 p-0" hideName={true} />
             </Link>
           </Button>
           <Button variant="ghost" size="sm">
-            <Link to={`/follow`} className="flex">
+            <Link to="/follow" className="flex">
               <i className="i-mingcute-add-line size-5 text-zinc-500" />
             </Link>
           </Button>

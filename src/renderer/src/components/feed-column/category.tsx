@@ -56,12 +56,12 @@ export function FeedCategory({
 
   const setCategoryActive = () => {
     view !== undefined &&
-      setActiveList?.({
-        level: levels.folder,
-        id: data.list.map((feed) => feed.feedId).join(","),
-        name: data.name,
-        view,
-      })
+    setActiveList?.({
+      level: levels.folder,
+      id: data.list.map((feed) => feed.feedId).join(","),
+      name: data.name,
+      view,
+    })
   }
 
   return (
@@ -76,8 +76,8 @@ export function FeedCategory({
             className={cn(
               "flex w-full items-center justify-between rounded-md px-2.5 py-[2px] text-sm font-medium leading-loose transition-colors",
               activeList?.level === levels.folder &&
-                activeList.name === data.name &&
-                "bg-native-active",
+              activeList.name === data.name &&
+              "bg-native-active",
             )}
             onClick={(e) => {
               e.stopPropagation()
@@ -143,12 +143,10 @@ export function FeedCategory({
         {open && (
           <m.div
             className="overflow-hidden"
-            initial={
-              !!data.name && {
-                height: 0,
-                opacity: 0.01,
-              }
-            }
+            initial={!!data.name && {
+              height: 0,
+              opacity: 0.01,
+            }}
             animate={{
               height: "auto",
               opacity: 1,

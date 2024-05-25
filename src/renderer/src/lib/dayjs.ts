@@ -6,4 +6,4 @@ import relativeTime from "dayjs/plugin/relativeTime"
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
 
-export default dayjs
+export { default } from "dayjs"

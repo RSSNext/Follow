@@ -31,7 +31,7 @@ export function Component() {
       {...{
         activeList,
         activeEntry,
-        setActiveEntry: setActiveEntry,
+        setActiveEntry,
         setActiveList,
       }}
     />

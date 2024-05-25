@@ -1,35 +1,26 @@
 {
   "name": "follow",
   "version": "0.0.1",
-  "description": "An Electron application with React and TypeScript",
   "packageManager": "pnpm@9.1.1",
-  "main": "./out/main/index.js",
+  "description": "An Electron application with React and TypeScript",
   "author": "example.com",
   "homepage": "https://electron-vite.org",
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown",
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --cache --fix"
-    ]
-  },
+  "main": "./out/main/index.js",
   "scripts": {
-    "format": "prettier --write .",
-    "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
-    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
-    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
-    "typecheck": "npm run typecheck:node && npm run typecheck:web",
-    "start": "electron-vite preview",
-    "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
-    "postinstall": "electron-builder install-app-deps",
+    "build:linux": "electron-vite build && electron-builder --linux",
+    "build:mac": "electron-vite build && electron-builder --mac",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
-    "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux",
-    "prepare": "pnpm exec simple-git-hooks && test -f .env || cp .env.example .env"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm exec lint-staged"
+    "dev": "electron-vite dev",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "postinstall": "electron-builder install-app-deps",
+    "prepare": "pnpm exec simple-git-hooks && test -f .env || cp .env.example .env",
+    "start": "electron-vite preview",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false"
   },
   "dependencies": {
     "@egoist/tipc": "0.3.1",
@@ -82,8 +73,6 @@
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "1.8.0",
-    "@electron-toolkit/eslint-config-prettier": "^2.0.0",
-    "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@iconify-json/mingcute": "1.1.17",
     "@tailwindcss/typography": "0.5.13",
@@ -94,19 +83,20 @@
     "electron": "^30.0.6",
     "electron-builder": "^24.9.1",
     "electron-vite": "^2.2.0",
-    "eslint": "^8",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "4.6.2",
-    "eslint-plugin-tailwindcss": "3.15.1",
-    "eslint-plugin-unused-imports": "4.0.0",
-    "husky": "9.0.11",
+    "eslint": "^9.3.0",
+    "eslint-config-hyoban": "^2.9.3",
     "lint-staged": "15.2.2",
-    "prettier": "^3.2.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "simple-git-hooks": "2.11.1",
     "tailwindcss": "3.4.3",
     "typescript": "^5.4.5",
     "vite": "^5.2.11"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }

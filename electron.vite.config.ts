@@ -1,9 +1,9 @@
-import fs from "fs"
-import { resolve } from "path"
+import fs from "node:fs"
+import { resolve } from "node:path"
 import { defineConfig, externalizeDepsPlugin } from "electron-vite"
 import react from "@vitejs/plugin-react"
 
-const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"))
+const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"))
 
 export default defineConfig({
   main: {

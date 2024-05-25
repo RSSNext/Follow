@@ -1,17 +1,43 @@
 {
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "[javascript][javascriptreact][typescript][typescriptreact][json][jsonc]": {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
   },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+
+  // You may don't need this in the future
+  "eslint.experimental.useFlatConfig": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "json",
+    "jsonc"
+  ],
+
+  // If you do not want to autofix some rules on save
+  // You can put this in your user settings or workspace settings
   "eslint.codeActionsOnSave.rules": [
     "!prefer-const",
     "!unused-imports/no-unused-imports",
+    "!@stylistic/jsx-self-closing-comp",
     "!tailwindcss/classnames-order",
     "*"
+  ],
+
+  // If you want to silent stylistic rules
+  // You can put this in your user settings or workspace settings
+  "eslint.rules.customizations": [
+    { "rule": "@stylistic/*", "severity": "off" },
+    { "rule": "@stylistic/no-tabs", "severity": "default" },
+    { "rule": "@stylistic/max-statements-per-line", "severity": "default" },
+    { "rule": "tailwindcss/classnames-order", "severity": "off" },
+    { "rule": "antfu/consistent-list-newline", "severity": "off" },
+    { "rule": "hyoban/jsx-attribute-spacing", "severity": "off" },
+    { "rule": "simple-import-sort/*", "severity": "off" },
+    { "rule": "prefer-const", "severity": "off" },
+    { "rule": "unused-imports/no-unused-imports", "severity": "off" }
   ]
 }

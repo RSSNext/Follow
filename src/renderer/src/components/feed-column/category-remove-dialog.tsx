@@ -43,7 +43,10 @@ export function CategoryRemoveDialog({
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>
-          Remove category <span className="font-bold">{category}</span>?
+          Remove category
+          {" "}
+          <span className="font-bold">{category}</span>
+          ?
         </AlertDialogTitle>
         <AlertDialogDescription>
           This operation will delete your category, but the feeds it contains

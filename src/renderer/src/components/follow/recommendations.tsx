@@ -1,4 +1,4 @@
-export function Recommendations({ type }: { type: string }) {
+export function Recommendations({ type: _type }: { type: string }) {
   return (
     <div className="mt-8">
       <div className="text-lg font-medium">Suggested</div>

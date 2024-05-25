@@ -25,7 +25,7 @@ type FeedResponseList = {
 }[]
 
 const formSchema = z.object({
-  file: z.instanceof(File).refine((file) => file.size < 500000, {
+  file: z.instanceof(File).refine((file) => file.size < 500_000, {
     message: "Your OPML file must be less than 500KB.",
   }),
 })
@@ -101,8 +101,7 @@ export function FollowImport() {
                     type="file"
                     accept=".opml"
                     onChange={(event) =>
-                      onChange(event.target.files && event.target.files[0])
-                    }
+                      onChange(event.target.files && event.target.files[0])}
                   />
                 </FormControl>
                 <FormMessage />
@@ -120,15 +119,20 @@ export function FollowImport() {
             <CardHeader className="block text-zinc-500">
               <span className="font-bold text-zinc-800">
                 {mutation.data?.successfulItems.length || 0}
-              </span>{" "}
-              feeds were successfully imported,{" "}
+              </span>
+              {" "}
+              feeds were successfully imported,
+              {" "}
               <span className="font-bold text-zinc-800">
                 {mutation.data?.conflictItems.length || 0}
-              </span>{" "}
-              were already subscribed to, and{" "}
+              </span>
+              {" "}
+              were already subscribed to, and
+              {" "}
               <span className="font-bold text-zinc-800">
                 {mutation.data?.parsedErrorItems.length || 0}
-              </span>{" "}
+              </span>
+              {" "}
               failed to import.
             </CardHeader>
             <CardContent className="space-y-6">

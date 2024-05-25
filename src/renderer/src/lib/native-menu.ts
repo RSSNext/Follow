@@ -2,14 +2,14 @@ import { client } from "./client"
 
 export const showNativeMenu = async (
   _items: Array<
-    { type: "text"; label: string; click: () => void } | { type: "separator" }
+    { type: "text", label: string, click: () => void } | { type: "separator" }
   >,
   e?: MouseEvent | React.MouseEvent,
 ) => {
   const items = [
     ..._items,
-    ...(import.meta.env.DEV && e
-      ? [
+    ...(import.meta.env.DEV && e ?
+        [
           {
             type: "separator" as const,
           },
@@ -23,14 +23,14 @@ export const showNativeMenu = async (
               })
             },
           },
-        ]
-      : []),
+        ] :
+        []),
   ]
 
   const el = e && e.currentTarget
 
   if (el instanceof HTMLElement) {
-    el.setAttribute("data-context-menu-open", "true")
+    el.dataset.contextMenuOpen = "true"
   }
 
   const unlisten = window.electron?.ipcRenderer.on("menu-click", (_, index) => {
@@ -43,7 +43,7 @@ export const showNativeMenu = async (
   window.electron?.ipcRenderer.once("menu-closed", () => {
     unlisten?.()
     if (el instanceof HTMLElement) {
-      el.removeAttribute("data-context-menu-open")
+      delete el.dataset.contextMenuOpen
     }
   })
 

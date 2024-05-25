@@ -1,12 +1,14 @@
 import { useToast } from "@renderer/components/ui/use-toast"
-import { ofetch, type FetchError } from "ofetch"
+import { ofetch } from "ofetch"
+import type { FetchError } from "ofetch"
 import {
   QueryKey,
   useMutation,
   useQuery,
   useQueryClient,
-  type InfiniteData,
+
 } from "@tanstack/react-query"
+import type { InfiniteData } from "@tanstack/react-query"
 import { client } from "@renderer/lib/client"
 import { EntriesResponse, ListResponse } from "@renderer/lib/types"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
@@ -57,12 +59,14 @@ export const useEntryActions = ({
         InfiniteData<ListResponse<EntriesResponse>>,
       ]) => {
         const list = data?.pages?.[0]?.data
-        list?.forEach((item) => {
-          if (item.id === entry.id) {
-            item.collections = target
-            queryClient.setQueryData(key, data)
+        if (list) {
+          for (const item of list) {
+            if (item.id === entry.id) {
+              item.collections = target
+              queryClient.setQueryData(key, data)
+            }
           }
-        })
+        }
       },
     )
   }

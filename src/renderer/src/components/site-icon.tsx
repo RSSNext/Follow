@@ -19,7 +19,7 @@ export function SiteIcon({
     const pureDomain = parse(host).domainWithoutSuffix
     fallback = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain?.slice(0, 2).toUpperCase()}`
     src = `https://unavatar.io/${host}?fallback=${fallback}`
-  } catch (error) {
+  } catch {
     const pureDomain = parse(url).domainWithoutSuffix
     src = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain?.slice(0, 2).toUpperCase()}`
   }

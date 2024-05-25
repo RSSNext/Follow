@@ -10,7 +10,7 @@ import { EntryItemWrapper } from "./item-wrapper"
 
 import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 
-const gridMode = [2, 3]
+const gridMode = new Set([2, 3])
 
 export function EntryColumn() {
   const { activeList, setActiveEntry } = useMainLayoutContext()
@@ -22,23 +22,29 @@ export function EntryColumn() {
 
   let Item
   switch (activeList?.view) {
-    case 0:
+    case 0: {
       Item = ArticleItem
       break
-    case 1:
+    }
+    case 1: {
       Item = SocialMediaItem
       break
-    case 2:
+    }
+    case 2: {
       Item = PictureItem
       break
-    case 3:
+    }
+    case 3: {
       Item = VideoItem
       break
-    case 5:
+    }
+    case 5: {
       Item = NotificationItem
       break
-    default:
+    }
+    default: {
       Item = ArticleItem
+    }
   }
 
   return (
@@ -46,7 +52,9 @@ export function EntryColumn() {
       <div className="mb-5 ml-9">
         <div className="text-lg font-bold">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
-          {entries.data?.pages?.[0].total} Items
+          {entries.data?.pages?.[0].total}
+          {" "}
+          Items
         </div>
       </div>
       <div>
@@ -58,8 +66,8 @@ export function EntryColumn() {
             exit={{ opacity: 0.01, y: -100 }}
             className={cn(
               activeList?.view &&
-                gridMode.includes(activeList.view) &&
-                "grid grid-cols-2 gap-2 px-2 md:grid-cols-3 lg:grid-cols-4",
+              gridMode.has(activeList.view) &&
+              "grid grid-cols-2 gap-2 px-2 md:grid-cols-3 lg:grid-cols-4",
             )}
           >
             {page.data?.map((entry) => (

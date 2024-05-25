@@ -60,11 +60,13 @@ export function Component() {
         </TabsList>
         {tabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.name} className="mt-8 h-96">
-            {tab.value === "import" ? (
-              <FollowImport />
-            ) : (
-              <FollowForm type={tab.value} />
-            )}
+            {tab.value === "import" ?
+                (
+                  <FollowImport />
+                ) :
+                (
+                  <FollowForm type={tab.value} />
+                )}
             <Recommendations type={tab.value} />
           </TabsContent>
         ))}

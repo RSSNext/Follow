@@ -38,43 +38,47 @@ export const useSubscriptions = (view?: number) =>
         unread: number
       }
       const domains: Record<string, number> = {}
-      subscriptions?.forEach((subscription) => {
-        if (!subscription.category && subscription.feeds.siteUrl) {
-          const domain = parse(subscription.feeds.siteUrl).domain
-          if (domain) {
-            if (!domains[domain]) {
-              domains[domain] = 0
+      if (subscriptions) {
+        for (const subscription of subscriptions) {
+          if (!subscription.category && subscription.feeds.siteUrl) {
+            const { domain } = parse(subscription.feeds.siteUrl)
+            if (domain) {
+              if (!domains[domain]) {
+                domains[domain] = 0
+              }
+              domains[domain]++
             }
-            domains[domain]++
           }
         }
-      })
-      subscriptions?.forEach((subscription) => {
-        if (!subscription.category) {
-          if (subscription.feeds.siteUrl) {
-            const domain = parse(subscription.feeds.siteUrl).domain
-            if (domain && domains[domain] > 1) {
-              subscription.category =
-                domain.slice(0, 1).toUpperCase() + domain.slice(1)
-            }
-          }
+      }
+      if (subscriptions) {
+        for (const subscription of subscriptions) {
           if (!subscription.category) {
-            subscription.category = ""
+            if (subscription.feeds.siteUrl) {
+              const { domain } = parse(subscription.feeds.siteUrl)
+              if (domain && domains[domain] > 1) {
+                subscription.category =
+                domain.slice(0, 1).toUpperCase() + domain.slice(1)
+              }
+            }
+            if (!subscription.category) {
+              subscription.category = ""
+            }
           }
-        }
-        if (!categories.list[subscription.category]) {
-          categories.list[subscription.category] = {
-            list: [],
-            unread: 0,
+          if (!categories.list[subscription.category]) {
+            categories.list[subscription.category] = {
+              list: [],
+              unread: 0,
+            }
           }
+          // const unread = counters.unreads[feed.id] || 0
+          const unread = 0
+          subscription.unread = unread
+          categories.list[subscription.category].list.push(subscription)
+          categories.list[subscription.category].unread += unread
+          categories.unread += unread
         }
-        // const unread = counters.unreads[feed.id] || 0
-        const unread = 0
-        subscription.unread = unread
-        categories.list[subscription.category].list.push(subscription)
-        categories.list[subscription.category].unread += unread
-        categories.unread += unread
-      })
+      }
       const list = Object.entries(categories.list)
         .map(([name, list]) => ({
           name,
