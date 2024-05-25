@@ -1,6 +1,6 @@
 import { parseHtml } from "@renderer/lib/parse-html"
-import { useEntry } from "@renderer/queries/entries"
 import type { ActiveEntry } from "@renderer/lib/types"
+import { useEntry } from "@renderer/queries/entries"
 import { m } from "framer-motion"
 import { useEffect, useState } from "react"
 
