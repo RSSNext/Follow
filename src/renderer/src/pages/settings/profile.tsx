@@ -57,7 +57,7 @@ export function Component() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
+      <h1 className="mb-4 flex items-center gap-2 text-2xl font-bold">
         <i className="i-mingcute-user-setting-line text-xl" />
         Profile
       </h1>
