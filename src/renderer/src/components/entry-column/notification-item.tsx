@@ -1,6 +1,6 @@
-import dayjs from "@renderer/lib/dayjs"
-import { EntriesResponse } from "@renderer/lib/types"
 import { FeedIcon } from "@renderer/components/feed-icon"
+import dayjs from "@renderer/lib/dayjs"
+import type { EntriesResponse } from "@renderer/lib/types"
 
 export function NotificationItem({
   entry,

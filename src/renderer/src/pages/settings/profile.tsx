@@ -1,6 +1,5 @@
+import { useSession } from "@hono/auth-js/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { Button } from "@renderer/components/ui/button"
 import {
   Form,
@@ -12,10 +11,11 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
-import { useSession } from "@hono/auth-js/react"
-import { useMutation } from "@tanstack/react-query"
-import { apiFetch } from "@renderer/lib/queries/api-fetch"
 import { useToast } from "@renderer/components/ui/use-toast"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import { useMutation } from "@tanstack/react-query"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
 const formSchema = z.object({
   handle: z.string().max(50),

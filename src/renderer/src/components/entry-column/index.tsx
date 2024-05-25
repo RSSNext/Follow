@@ -1,14 +1,14 @@
-import { useEntries } from "@renderer/lib/queries/entries"
-import { m } from "framer-motion"
-import { cn } from "@renderer/lib/utils"
-import { ArticleItem } from "./article-item"
-import { SocialMediaItem } from "./social-media-item"
-import { PictureItem } from "./picture-item"
-import { VideoItem } from "./video-item"
-import { NotificationItem } from "./notification-item"
-import { EntryItemWrapper } from "./item-wrapper"
-
 import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
+import { useEntries } from "@renderer/lib/queries/entries"
+import { cn } from "@renderer/lib/utils"
+import { m } from "framer-motion"
+
+import { ArticleItem } from "./article-item"
+import { EntryItemWrapper } from "./item-wrapper"
+import { NotificationItem } from "./notification-item"
+import { PictureItem } from "./picture-item"
+import { SocialMediaItem } from "./social-media-item"
+import { VideoItem } from "./video-item"
 
 const gridMode = new Set([2, 3])
 

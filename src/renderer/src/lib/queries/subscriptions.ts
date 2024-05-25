@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query"
-import { SubscriptionResponse } from "../types"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import { useQuery } from "@tanstack/react-query"
 import { parse } from "tldts"
+
+import type { SubscriptionResponse } from "../types"
 
 export type Response = {
   list: {

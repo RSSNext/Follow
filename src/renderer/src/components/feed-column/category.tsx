@@ -8,11 +8,12 @@ import { client } from "@renderer/lib/client"
 import { levels } from "@renderer/lib/constants"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
-import { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
+import type { Response as SubscriptionsResponse } from "@renderer/lib/queries/subscriptions"
 import { cn } from "@renderer/lib/utils"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useState } from "react"
+
 import { CategoryRenameDialog } from "./category-rename-dialog"
 import { FeedItem } from "./item"
 

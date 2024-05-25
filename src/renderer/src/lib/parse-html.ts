@@ -1,12 +1,12 @@
-import { unified } from "unified"
-import rehypeParse from "rehype-parse"
-import rehypeSanitize from "rehype-sanitize"
-import rehypeInferDescriptionMeta from "rehype-infer-description-meta"
-import rehypeStringify from "rehype-stringify"
-import { VFile } from "vfile"
-import { visit } from "unist-util-visit"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
+import rehypeInferDescriptionMeta from "rehype-infer-description-meta"
+import rehypeParse from "rehype-parse"
+import rehypeSanitize from "rehype-sanitize"
+import rehypeStringify from "rehype-stringify"
+import { unified } from "unified"
+import { visit } from "unist-util-visit"
+import { VFile } from "vfile"
 
 export const parseHtml = async (content: string) => {
   const file = new VFile(content)

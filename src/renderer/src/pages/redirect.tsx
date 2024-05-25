@@ -1,8 +1,8 @@
 import { Button } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { apiFetch } from "@renderer/lib/queries/api-fetch"
 
 export function Component() {
   const navigate = useNavigate()

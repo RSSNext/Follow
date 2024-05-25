@@ -1,7 +1,6 @@
-import * as React from "react"
 import * as TooltipPrimitive from "@radix-ui/react-tooltip"
-
 import { cn } from "@renderer/lib/utils"
+import * as React from "react"
 
 const TooltipProvider = TooltipPrimitive.Provider
 
@@ -29,8 +28,8 @@ const TooltipPortal = TooltipPrimitive.Portal
 
 export {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
-  TooltipProvider,
   TooltipPortal,
+  TooltipProvider,
+  TooltipTrigger,
 }

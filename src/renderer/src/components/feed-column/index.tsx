@@ -14,6 +14,7 @@ import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
+
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()

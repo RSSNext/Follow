@@ -1,6 +1,7 @@
-import { ImgHTMLAttributes, useState } from "react"
-import { cn } from "@renderer/lib/utils"
 import { getProxyUrl } from "@renderer/lib/img-proxy"
+import { cn } from "@renderer/lib/utils"
+import type { ImgHTMLAttributes } from "react"
+import { useState } from "react"
 
 const failedList = new Set<string | undefined>()
 export const Image = ({

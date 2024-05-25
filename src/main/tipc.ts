@@ -1,5 +1,6 @@
 import { tipc } from "@egoist/tipc/main"
-import { Menu, MessageBoxOptions, ShareMenu, dialog } from "electron"
+import type { MessageBoxOptions } from "electron"
+import { dialog, Menu, ShareMenu } from "electron"
 
 const t = tipc.create()
 

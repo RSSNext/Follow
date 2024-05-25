@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react"
-import { ActiveList, ActiveEntry } from "@renderer/lib/types"
-import { useNavigate } from "react-router-dom"
 import { useSession } from "@hono/auth-js/react"
 import { MainLayoutOutlet } from "@renderer/contexts/outlet/main-layout"
+import type { ActiveEntry, ActiveList } from "@renderer/lib/types"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export function Component() {
   const { status } = useSession()

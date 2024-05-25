@@ -1,7 +1,11 @@
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
 import { Button } from "@renderer/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@renderer/components/ui/card"
 import {
   Form,
   FormControl,
@@ -10,20 +14,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@renderer/components/ui/form"
-import { Input } from "@renderer/components/ui/input"
-import { useEffect } from "react"
-import { useMutation } from "@tanstack/react-query"
 import { Image } from "@renderer/components/ui/image"
-import { FeedResponse, EntriesResponse } from "@renderer/lib/types"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@renderer/components/ui/card"
-import { FollowButton } from "./button"
-import { FollowSummary } from "../feed-summary"
+import { Input } from "@renderer/components/ui/input"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import type { EntriesResponse, FeedResponse } from "@renderer/lib/types"
+import { useMutation } from "@tanstack/react-query"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { FollowSummary } from "../feed-summary"
+import { FollowButton } from "./button"
 
 const formSchema = z.object({
   keyword: z.string().min(1),

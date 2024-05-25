@@ -1,4 +1,4 @@
-import type { ActiveList, ActiveEntry } from "@renderer/lib/types"
+import type { ActiveEntry, ActiveList } from "@renderer/lib/types"
 import { Outlet, useOutletContext } from "react-router-dom"
 
 export interface MainLayoutContextType {
