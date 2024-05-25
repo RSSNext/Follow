@@ -7,7 +7,10 @@
   "author": "example.com",
   "homepage": "https://electron-vite.org",
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*": "prettier --write --ignore-unknown",
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --cache --fix"
+    ]
   },
   "scripts": {
     "format": "prettier --write .",
@@ -23,7 +26,10 @@
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:linux": "electron-vite build && electron-builder --linux",
-    "prepare": "husky"
+    "prepare": "pnpm exec simple-git-hooks && test -f .env || cp .env.example .env"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged"
   },
   "dependencies": {
     "@egoist/tipc": "0.3.1",
@@ -88,13 +94,17 @@
     "electron": "^30.0.6",
     "electron-builder": "^24.9.1",
     "electron-vite": "^2.2.0",
-    "eslint": "^9.3.0",
+    "eslint": "^8",
     "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "4.6.2",
+    "eslint-plugin-tailwindcss": "3.15.1",
+    "eslint-plugin-unused-imports": "4.0.0",
     "husky": "9.0.11",
     "lint-staged": "15.2.2",
     "prettier": "^3.2.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "simple-git-hooks": "2.11.1",
     "tailwindcss": "3.4.3",
     "typescript": "^5.4.5",
     "vite": "^5.2.11"

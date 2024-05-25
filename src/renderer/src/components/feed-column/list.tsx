@@ -22,7 +22,7 @@ export function FeedList({
     <div className={className}>
       {!hideTitle && (
         <div
-          className={cn("flex items-center justify-between mb-2 px-2.5 py-1")}
+          className={cn("mb-2 flex items-center justify-between px-2.5 py-1")}
         >
           <div
             className="font-bold"
@@ -39,7 +39,7 @@ export function FeedList({
           >
             {view !== undefined && views[view].name}
           </div>
-          <div className="text-sm text-zinc-500 ml-2 flex items-center gap-3">
+          <div className="ml-2 flex items-center gap-3 text-sm text-zinc-500">
             {expansion ? (
               <i
                 className="i-mingcute-list-collapse-fill"

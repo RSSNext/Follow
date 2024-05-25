@@ -12,21 +12,21 @@ export function Component() {
   const { data: session } = useSession()
 
   return (
-    <div className="flex gap-10 w-full px-10 py-16">
-      <div className="flex flex-col gap-8 flex-1 pt-20 min-w-40">
-        <Avatar className="w-32 h-32 aspect-square">
+    <div className="flex w-full gap-10 px-10 py-16">
+      <div className="flex min-w-40 flex-1 flex-col gap-8 pt-20">
+        <Avatar className="aspect-square size-32">
           <AvatarImage src={session?.user?.image || undefined} />
           <AvatarFallback>{session?.user?.name?.slice(0, 2)}</AvatarFallback>
         </Avatar>
-        <div className="font-bold text-4xl">{session?.user?.name}</div>
+        <div className="text-4xl font-bold">{session?.user?.name}</div>
       </div>
-      <div className="flex-[2] flex flex-col gap-8">
-        <div className="h-full flex flex-col gap-4">
-          <div className="font-bold text-2xl">Subscriptions</div>
+      <div className="flex flex-[2] flex-col gap-8">
+        <div className="flex h-full flex-col gap-4">
+          <div className="text-2xl font-bold">Subscriptions</div>
           <div className="overflow-y-auto">
             {views.map((view, index) => (
               <div key={view.name}>
-                <div className="font-semibold flex items-center gap-2 mb-1">
+                <div className="mb-1 flex items-center gap-2 font-semibold">
                   <span className={cn("flex", view.className)}>
                     {view.icon}
                   </span>

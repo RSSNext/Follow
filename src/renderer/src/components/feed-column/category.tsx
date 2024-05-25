@@ -74,7 +74,7 @@ export function FeedCategory({
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <div
             className={cn(
-              "flex items-center justify-between font-medium text-sm leading-loose px-2.5 py-[2px] rounded-md w-full transition-colors",
+              "flex w-full items-center justify-between rounded-md px-2.5 py-[2px] text-sm font-medium leading-loose transition-colors",
               activeList?.level === levels.folder &&
                 activeList.name === data.name &&
                 "bg-native-active",
@@ -113,10 +113,10 @@ export function FeedCategory({
               )
             }}
           >
-            <div className="flex items-center min-w-0 w-full">
+            <div className="flex w-full min-w-0 items-center">
               <CollapsibleTrigger
                 className={cn(
-                  "flex items-center h-7 [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
+                  "flex h-7 items-center [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
                   !setActiveList && "flex-1",
                 )}
               >
@@ -128,7 +128,7 @@ export function FeedCategory({
               {setActiveList && <span className="truncate">{data.name}</span>}
             </div>
             {!!data.unread && (
-              <div className="text-xs text-zinc-500 ml-2">{data.unread}</div>
+              <div className="ml-2 text-xs text-zinc-500">{data.unread}</div>
             )}
             <CategoryRenameDialog
               feedIdList={feedIdList}
@@ -163,7 +163,7 @@ export function FeedCategory({
                 key={feed.feedId}
                 feed={feed}
                 view={view}
-                className={!!data.name ? "pl-6" : "pl-2.5"}
+                className={data.name ? "pl-6" : "pl-2.5"}
               />
             ))}
           </m.div>

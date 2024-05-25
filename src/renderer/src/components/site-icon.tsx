@@ -27,7 +27,7 @@ export function SiteIcon({
   return (
     <img
       src={src}
-      className={cn("w-5 h-5 mr-2 rounded-sm shrink-0", className)}
+      className={cn("mr-2 size-5 shrink-0 rounded-sm", className)}
       loading="lazy"
       onError={(e) => {
         if (fallback) {

@@ -13,14 +13,13 @@ export function EntryItemWrapper({
   children: React.ReactNode
   view?: number
 }) {
-  if (!entry?.url || view === undefined) return children
-
   const { items } = useEntryActions({
     view,
     entry,
   })
 
   const { activeEntry, setActiveEntry } = useMainLayoutContext()
+  if (!entry?.url || view === undefined) return children
 
   return (
     <div

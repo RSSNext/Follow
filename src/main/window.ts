@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow } from "electron"
+import { shell, BrowserWindow } from "electron"
 import path from "path"
 import { is } from "@electron-toolkit/utils"
 import icon from "../../resources/icon.png?asset"
@@ -61,7 +61,7 @@ export function createWindow(options?: {
         trueUrl = decodeURIComponent(
           details.url.replace(
             new RegExp(
-              `^${process.env["VITE_IMGPROXY_URL"]}/unsafe/\\d+x\\d+\/`,
+              `^${process.env["VITE_IMGPROXY_URL"]}/unsafe/\\d+x\\d+/`,
             ),
             "",
           ),

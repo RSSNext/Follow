@@ -41,7 +41,7 @@ export const AutoComplete = React.forwardRef<HTMLInputElement, InputProps>(
     )
 
     return (
-      <Command className="rounded-lg border overflow-visible relative [&_[cmdk-input-wrapper]]:border-0 [&_.lucide-search]:hidden">
+      <Command className="relative overflow-visible rounded-lg border [&_.lucide-search]:hidden [&_[cmdk-input-wrapper]]:border-0">
         <CommandInput
           {...props}
           onBlur={(e) => {
@@ -62,7 +62,7 @@ export const AutoComplete = React.forwardRef<HTMLInputElement, InputProps>(
         <CommandList>
           <CommandGroup
             className={cn(
-              "absolute top-full bg-white w-full z-10 border rounded-lg mt-1 hidden [&[hidden]]:!hidden",
+              "absolute top-full z-10 mt-1 hidden w-full rounded-lg border bg-white [&[hidden]]:!hidden",
               open && "block",
             )}
           >
@@ -86,3 +86,4 @@ export const AutoComplete = React.forwardRef<HTMLInputElement, InputProps>(
     )
   },
 )
+AutoComplete.displayName = "AutoComplete"

@@ -13,7 +13,7 @@ export const apiFetch = ofetch.create({
       if (options.body instanceof FormData) {
         options.body.append("csrfToken", csrfToken)
       } else {
-        ;(options.body as Record<string, any>).csrfToken = csrfToken
+        ;(options.body as Record<string, unknown>).csrfToken = csrfToken
       }
     }
   },

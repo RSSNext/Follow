@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader } from "@renderer/components/ui/card"
 import { FollowSummary } from "../feed-summary"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
 import { cn } from "@renderer/lib/utils"
+import type { FeedResponse } from "@renderer/lib/types"
 
 type FeedResponseList = {
   id: string
@@ -85,7 +86,7 @@ export function FollowImport() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-[512px]"
+          className="w-[512px] space-y-8"
         >
           <FormField
             control={form.control}
@@ -114,9 +115,9 @@ export function FollowImport() {
         </form>
       </Form>
       {mutation.isSuccess && (
-        <div className="max-w-lg mt-8">
+        <div className="mt-8 max-w-lg">
           <Card>
-            <CardHeader className="text-zinc-500 block">
+            <CardHeader className="block text-zinc-500">
               <span className="font-bold text-zinc-800">
                 {mutation.data?.successfulItems.length || 0}
               </span>{" "}
@@ -134,7 +135,7 @@ export function FollowImport() {
               {list.map((item) => (
                 <div key={item.key}>
                   <div
-                    className={cn("font-medium text-lg mb-4", item.className)}
+                    className={cn("mb-4 text-lg font-medium", item.className)}
                   >
                     {item.title}
                   </div>
@@ -142,8 +143,8 @@ export function FollowImport() {
                     {!mutation.data?.[item.key].length && (
                       <div className="text-zinc-500">No items</div>
                     )}
-                    {mutation.data?.[item.key].map((feed) => (
-                      <FollowSummary feed={feed} />
+                    {mutation.data?.[item.key].map((feed: FeedResponse) => (
+                      <FollowSummary key={feed.id} feed={feed} />
                     ))}
                   </div>
                 </div>

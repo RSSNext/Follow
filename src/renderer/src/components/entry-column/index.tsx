@@ -43,8 +43,8 @@ export function EntryColumn() {
 
   return (
     <div className="px-2" onClick={() => setActiveEntry(null)}>
-      <div className="ml-9 mb-5">
-        <div className="font-bold text-lg">{activeList?.name}</div>
+      <div className="mb-5 ml-9">
+        <div className="text-lg font-bold">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
           {entries.data?.pages?.[0].total} Items
         </div>
@@ -59,7 +59,7 @@ export function EntryColumn() {
             className={cn(
               activeList?.view &&
                 gridMode.includes(activeList.view) &&
-                "grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2",
+                "grid grid-cols-2 gap-2 px-2 md:grid-cols-3 lg:grid-cols-4",
             )}
           >
             {page.data?.map((entry) => (

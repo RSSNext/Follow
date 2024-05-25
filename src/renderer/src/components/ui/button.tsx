@@ -57,7 +57,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading && (
-          <i className="animate-spin i-mingcute-loading-3-line mr-2" />
+          <i className="i-mingcute-loading-3-line mr-2 animate-spin" />
         )}
         {props.children}
       </Comp>
