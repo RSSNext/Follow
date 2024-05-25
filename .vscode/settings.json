@@ -30,9 +30,10 @@
   // If you want to silent stylistic rules
   // You can put this in your user settings or workspace settings
   "eslint.rules.customizations": [
-    // { "rule": "@stylistic/*", "severity": "off" },
+    { "rule": "@stylistic/*", "severity": "off" },
     { "rule": "@stylistic/no-tabs", "severity": "default" },
     { "rule": "@stylistic/max-statements-per-line", "severity": "default" },
+    { "rule": "tailwindcss/classnames-order", "severity": "off" },
     { "rule": "antfu/consistent-list-newline", "severity": "off" },
     { "rule": "hyoban/jsx-attribute-spacing", "severity": "off" },
     { "rule": "simple-import-sort/*", "severity": "off" },
