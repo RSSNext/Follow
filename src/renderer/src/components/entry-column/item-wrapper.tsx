@@ -1,8 +1,8 @@
-import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { EntriesResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
+import { feedActions, useFeedStore } from "@renderer/store"
 
 export function EntryItemWrapper({
   entry,
@@ -18,7 +18,9 @@ export function EntryItemWrapper({
     entry,
   })
 
-  const { activeEntry, setActiveEntry } = useMainLayoutContext()
+  const activeEntry = useFeedStore(
+    (state) => state.activeEntry,
+  )
   if (!entry?.url || view === undefined) return children
 
   return (
@@ -30,7 +32,7 @@ export function EntryItemWrapper({
       )}
       onClick={(e) => {
         e.stopPropagation()
-        setActiveEntry(entry.id)
+        feedActions.setActiveEntry(entry.id)
       }}
       onDoubleClick={() => window.open(entry.url, "_blank")}
       onContextMenu={(e) => {

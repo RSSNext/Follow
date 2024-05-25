@@ -1,7 +1,7 @@
-import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 import { levels, views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { useSubscriptions } from "@renderer/queries/subscriptions"
+import { feedActions } from "@renderer/store"
 import { useState } from "react"
 
 import { FeedCategory } from "./category"
@@ -17,7 +17,7 @@ export function FeedList({
 }) {
   const subscriptions = useSubscriptions(view)
   const [expansion, setExpansion] = useState(false)
-  const { setActiveList } = useMainLayoutContext()
+  const { setActiveList } = feedActions
 
   return (
     <div className={className}>
