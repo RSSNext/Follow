@@ -187,8 +187,8 @@ importers:
         specifier: ^9.3.0
         version: 9.3.0
       eslint-config-hyoban:
-        specifier: ^2.9.2
-        version: 2.9.2(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(tailwindcss@3.4.3)(typescript@5.4.5)
+        specifier: ^2.9.3
+        version: 2.9.3(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(tailwindcss@3.4.3)(typescript@5.4.5)
       lint-staged:
         specifier: 15.2.2
         version: 15.2.2
@@ -2634,8 +2634,8 @@ packages:
   eslint-config-flat-gitignore@0.1.5:
     resolution: {integrity: sha512-hEZLwuZjDBGDERA49c2q7vxc8sCGv8EdBp6PQYzGOMcHIgrfG9YOM6s/4jx24zhD+wnK9AI8mgN5RxSss5nClQ==}
 
-  eslint-config-hyoban@2.9.2:
-    resolution: {integrity: sha512-F0lXrB5rn4rSfY0DdfFjbskFNLMLP+Boa1gvhL1ApUS4o/vi/0lKBl1WIzWD/GruMTH1wDIKi9u7X/B6GQw1Ow==}
+  eslint-config-hyoban@2.9.3:
+    resolution: {integrity: sha512-kgDjR4JvpquE0XxWTB+qwD39XHPXcvLcSe/m5mrfnDEBI4q4htCiTbrfzXDWHrw8fWhGeoYpydD6BzUV8uUz7A==}
     peerDependencies:
       eslint: ^8.56.0 || ^9.0.0
       typescript: '>=4.7.4'
@@ -7639,7 +7639,7 @@ snapshots:
       find-up: 7.0.0
       parse-gitignore: 2.0.0
 
-  eslint-config-hyoban@2.9.2(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(tailwindcss@3.4.3)(typescript@5.4.5):
+  eslint-config-hyoban@2.9.3(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(tailwindcss@3.4.3)(typescript@5.4.5):
     dependencies:
       '@cspell/eslint-plugin': 8.8.3(eslint@9.3.0)
       '@eslint-react/eslint-plugin': 1.5.12(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)
