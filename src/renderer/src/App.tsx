@@ -4,7 +4,7 @@ function App() {
   return (
     <>
       <div
-        className="h-10 drag-region shrink-0 absolute top-0 inset-x-0"
+        className="drag-region absolute inset-x-0 top-0 h-10 shrink-0"
         aria-hidden
       ></div>
       <Outlet />

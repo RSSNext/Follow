@@ -15,15 +15,14 @@ export function EntryShare({
   view: number
   entry?: EntriesResponse[number]
 }) {
-  if (!entry?.url) return null
-
   const { items } = useEntryActions({
     view,
     entry,
   })
+  if (!entry?.url) return null
 
   return (
-    <div className="px-5 h-14 flex items-center text-lg justify-end text-zinc-500 gap-3">
+    <div className="flex h-14 items-center justify-end gap-3 px-5 text-lg text-zinc-500">
       <TooltipProvider>
         {items
           .filter((item) => !item.disabled)
@@ -31,13 +30,13 @@ export function EntryShare({
             <Tooltip key={item.name}>
               <TooltipTrigger asChild>
                 <Button
-                  className="flex items-center text-xl no-drag-region"
+                  className="no-drag-region flex items-center text-xl"
                   variant="ghost"
                   size="sm"
                   onClick={item.onClick}
                 >
                   {item.icon ? (
-                    <img className="w-4 h-4 grayscale" src={item.icon} />
+                    <img className="size-4 grayscale" src={item.icon} />
                   ) : (
                     <i className={item.className} />
                   )}

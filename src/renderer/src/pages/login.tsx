@@ -26,8 +26,8 @@ export function Component() {
   }
 
   return (
-    <div className="h-screen w-full flex items-center justify-center flex-col gap-10">
-      <img src="./icon.svg" alt="logo" className="h-20 w-20" />
+    <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
+      <img src="./icon.svg" alt="logo" className="size-20" />
       <h1 className="text-3xl font-bold">Log in to Follow</h1>
       {redirecting ? (
         <div>Redirecting</div>
@@ -52,7 +52,7 @@ export function Component() {
             GitHub
           </Button>
           <Button
-            className="text-lg bg-blue-500 hover:bg-blue-500/90"
+            className="bg-blue-500 text-lg hover:bg-blue-500/90"
             size="xl"
             onClick={() =>
               signIn("google", {

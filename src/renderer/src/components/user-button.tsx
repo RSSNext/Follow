@@ -22,11 +22,11 @@ export function UserButton({
   return (
     <div
       className={cn(
-        "h-20 flex items-center gap-2 justify-center py-2 px-5 rounded-xl font-medium bg-stone-300 text-zinc-600",
+        "flex h-20 items-center justify-center gap-2 rounded-xl bg-stone-300 px-5 py-2 font-medium text-zinc-600",
         className,
       )}
     >
-      <Avatar className="w-auto h-full aspect-square">
+      <Avatar className="aspect-square h-full w-auto">
         <AvatarImage src={session?.user?.image || undefined} />
         <AvatarFallback>{session?.user?.name?.slice(0, 2)}</AvatarFallback>
       </Avatar>

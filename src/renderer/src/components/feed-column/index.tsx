@@ -57,7 +57,7 @@ export function FeedColumn() {
 
   return (
     <div
-      className="h-full flex flex-col gap-3"
+      className="flex h-full flex-col gap-3"
       onClick={() =>
         setActiveList?.({
           level: levels.view,
@@ -70,7 +70,7 @@ export function FeedColumn() {
     >
       <div className="ml-5 mr-3 flex items-center justify-between">
         <div
-          className="font-bold text-xl flex items-center gap-1"
+          className="flex items-center gap-1 text-xl font-bold"
           onClick={(e) => {
             e.stopPropagation()
             setActiveList?.({
@@ -92,12 +92,12 @@ export function FeedColumn() {
           </Button>
           <Button variant="ghost" size="sm">
             <Link to={`/follow`} className="flex">
-              <i className="i-mingcute-add-line h-5 w-5 text-zinc-500" />
+              <i className="i-mingcute-add-line size-5 text-zinc-500" />
             </Link>
           </Button>
         </div>
       </div>
-      <div className="flex text-zinc-500 w-full justify-between text-xl px-3">
+      <div className="flex w-full justify-between px-3 text-xl text-zinc-500">
         <TooltipProvider>
           {views.map((item, index) => (
             <Tooltip key={item.name}>
@@ -128,14 +128,14 @@ export function FeedColumn() {
           ))}
         </TooltipProvider>
       </div>
-      <div className="w-full h-full overflow-clip" ref={carouselRef}>
-        <m.div className="h-full flex" style={{ x: spring }}>
+      <div className="size-full overflow-hidden" ref={carouselRef}>
+        <m.div className="flex h-full" style={{ x: spring }}>
           {views.map((item, index) => (
             <section
               key={item.name}
-              className="snap-center shrink-0 overflow-y-auto"
+              className="shrink-0 snap-center overflow-y-auto"
             >
-              <FeedList className="w-64 px-3 mb-6" view={index} />
+              <FeedList className="mb-6 w-64 px-3" view={index} />
             </section>
           ))}
         </m.div>

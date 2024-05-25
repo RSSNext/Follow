@@ -35,11 +35,11 @@ export const Image = ({
   }
 
   return (
-    <div className={cn("bg-stone-100 rounded overflow-hidden", className)}>
+    <div className={cn("overflow-hidden rounded bg-stone-100", className)}>
       <img
         {...props}
         onError={errorHandle}
-        className={cn(hidden && "hidden", "object-cover size-full")}
+        className={cn(hidden && "hidden", "size-full object-cover")}
         src={imgSrc}
       />
     </div>

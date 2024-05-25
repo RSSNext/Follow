@@ -17,7 +17,7 @@ export function Component() {
     <>
       <div
         className={cn(
-          "pt-10 border-r shrink-0 h-full overflow-y-auto",
+          "h-full shrink-0 overflow-y-auto border-r pt-10",
           activeList && wideMode.includes(activeList.view)
             ? "flex-1"
             : "w-[340px]",

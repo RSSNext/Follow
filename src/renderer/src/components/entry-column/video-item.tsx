@@ -11,7 +11,7 @@ export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
           <Image
             key={entry.images?.[0]}
             src={entry.images?.[0]}
-            className="w-full aspect-video shrink-0 rounded-md object-cover"
+            className="aspect-video w-full shrink-0 rounded-md object-cover"
             loading="lazy"
             proxy={{
               width: 640,
@@ -19,11 +19,11 @@ export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
             }}
           />
         </div>
-        <div className="line-clamp-5 text-sm flex-1 px-2 pb-3 pt-1">
-          <div className="font-medium line-clamp-2">{entry.title}</div>
+        <div className="line-clamp-5 flex-1 px-2 pb-3 pt-1 text-sm">
+          <div className="line-clamp-2 font-medium">{entry.title}</div>
           <div className="space-x-1 text-[13px]">
             <FeedIcon
-              className="w-3.5 h-3.5 inline-block mr-0 align-sub"
+              className="mr-0 inline-block size-3.5 align-sub"
               feed={entry.feeds}
             />
             <span>{entry.author}</span>

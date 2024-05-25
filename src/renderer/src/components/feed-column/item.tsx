@@ -60,7 +60,7 @@ export function FeedItem({
         duration: 3000,
         description: (
           <>
-            Feed <i className="font-semibold mr-px">{variables.feeds.title}</i>{" "}
+            Feed <i className="mr-px font-semibold">{variables.feeds.title}</i>{" "}
             has been unfollowed.
           </>
         ),
@@ -93,7 +93,7 @@ export function FeedItem({
     <Dialog key={feed.feedId} open={dialogOpen} onOpenChange={setDialogOpen}>
       <div
         className={cn(
-          "flex items-center justify-between text-sm font-medium leading-loose w-full pr-2.5 py-[2px] rounded-md",
+          "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
           activeList?.level === levels.feed &&
             activeList.id === feed.feedId &&
             "bg-native-active",
@@ -139,17 +139,17 @@ export function FeedItem({
       >
         <div
           className={cn(
-            "flex items-center min-w-0",
+            "flex min-w-0 items-center",
             feed.feeds.errorAt && "text-red-900",
           )}
         >
-          <FeedIcon feed={feed.feeds} className="w-4 h-4" />
+          <FeedIcon feed={feed.feeds} className="size-4" />
           <div className="truncate">{feed.feeds.title}</div>
           {feed.feeds.errorAt && (
             <TooltipProvider delayDuration={300}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <i className="i-mingcute-wifi-off-line shrink-0 ml-1 text-base" />
+                  <i className="i-mingcute-wifi-off-line ml-1 shrink-0 text-base" />
                 </TooltipTrigger>
                 <TooltipPortal>
                   <TooltipContent>
@@ -169,7 +169,7 @@ export function FeedItem({
             <TooltipProvider delayDuration={300}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <i className="i-mingcute-eye-close-line shrink-0 ml-1 text-base" />
+                  <i className="i-mingcute-eye-close-line ml-1 shrink-0 text-base" />
                 </TooltipTrigger>
                 <TooltipPortal>
                   <TooltipContent>
@@ -181,7 +181,7 @@ export function FeedItem({
           )}
         </div>
         {!!feed.unread && (
-          <div className="text-xs text-zinc-500 ml-2">{feed.unread}</div>
+          <div className="ml-2 text-xs text-zinc-500">{feed.unread}</div>
         )}
         <FollowDialog
           feed={feed}

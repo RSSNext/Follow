@@ -26,7 +26,7 @@ export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
     <>
       <EntryShare entry={entry.data} view={0} />
       <m.div
-        className="px-5 py-5 overflow-y-auto h-[calc(100%-3.5rem)]"
+        className="h-[calc(100%-3.5rem)] overflow-y-auto p-5"
         initial={{ opacity: 0.01, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0.01, y: -100 }}
@@ -36,12 +36,13 @@ export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
           <a
             href={entry.data?.url}
             target="_blank"
-            className="block hover:bg-zinc-100 max-w-[598px] mx-auto p-6 rounded-md transition-colors"
+            className="mx-auto block max-w-[598px] rounded-md p-6 transition-colors hover:bg-zinc-100"
+            rel="noreferrer"
           >
-            <div className="text-3xl font-bold select-text break-words">
+            <div className="select-text break-words text-3xl font-bold">
               {entry.data?.title}
             </div>
-            <div className="mt-2 text-[13px] text-zinc-500 font-medium">
+            <div className="mt-2 text-[13px] font-medium text-zinc-500">
               {entry.data?.feeds?.title}
             </div>
             <div className="text-[13px] text-zinc-500">
@@ -49,7 +50,7 @@ export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
                 new Date(entry.data?.publishedAt).toUTCString()}
             </div>
           </a>
-          <div className="max-w-[550px] mx-auto mt-10 mb-32 prose text-[15px] prose-zinc select-text cursor-auto">
+          <div className="prose prose-zinc mx-auto mb-32 mt-10 max-w-[550px] cursor-auto select-text text-[15px]">
             {content}
           </div>
         </div>
