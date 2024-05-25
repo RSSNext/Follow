@@ -1,12 +1,11 @@
 import { useToast } from "@renderer/components/ui/use-toast"
+import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { client } from "@renderer/lib/client"
-import type { EntriesResponse, ListResponse } from "@renderer/lib/types"
+import type { EntriesResponse } from "@renderer/lib/types"
 import { apiFetch } from "@renderer/queries/api-fetch"
-import type { InfiniteData, QueryKey } from "@tanstack/react-query"
 import {
   useMutation,
   useQuery,
-  useQueryClient,
 } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
@@ -31,42 +30,9 @@ export const useEntryActions = ({
     },
   })
 
-  const queryClient = useQueryClient()
-
-  const updateCollection = (
-    target: boolean,
-  ) => {
-    const key = ["entry", entry?.id]
-    const data = queryClient.getQueryData(key)
-    if (data) {
-      queryClient.setQueryData(
-        key,
-        Object.assign({}, data, {
-          collected: target,
-        }),
-      )
-    }
-
-    const entriesData = queryClient.getQueriesData({
-      queryKey: ["entries"],
-    })
-    entriesData.forEach(
-      ([key, data]: [
-        QueryKey,
-        unknown,
-      ]) => {
-        const list = (data as InfiniteData<ListResponse<EntriesResponse>>)?.pages?.[0]?.data
-        if (list) {
-          for (const item of list) {
-            if (item.id === entry?.id) {
-              item.collected = target
-              queryClient.setQueryData(key, data)
-            }
-          }
-        }
-      },
-    )
-  }
+  const updateEntry = useUpdateEntry({
+    entryId: entry?.id,
+  })
 
   const collect = useMutation({
     mutationFn: async () =>
@@ -77,7 +43,9 @@ export const useEntryActions = ({
         },
       }),
     onSuccess: () => {
-      updateCollection(true)
+      updateEntry({
+        collected: true,
+      })
 
       toast({
         duration: 1000,
@@ -94,11 +62,41 @@ export const useEntryActions = ({
         },
       }),
     onSuccess: () => {
-      updateCollection(false)
+      updateEntry({
+        collected: false,
+      })
 
       toast({
         duration: 1000,
         description: "Uncollected.",
+      })
+    },
+  })
+  const read = useMutation({
+    mutationFn: async () =>
+      apiFetch("/reads", {
+        method: "POST",
+        body: {
+          entryId: entry?.id,
+        },
+      }),
+    onSuccess: () => {
+      updateEntry({
+        read: true,
+      })
+    },
+  })
+  const unread = useMutation({
+    mutationFn: async () =>
+      apiFetch("/reads", {
+        method: "DELETE",
+        body: {
+          entryId: entry?.id,
+        },
+      }),
+    onSuccess: () => {
+      updateEntry({
+        read: false,
       })
     },
   })
@@ -112,7 +110,6 @@ export const useEntryActions = ({
       {
         name: "Collect",
         className: "i-mingcute-star-line",
-        action: "collect",
         disabled: !!entry.collected,
         onClick: () => {
           collect.mutate()
@@ -121,7 +118,6 @@ export const useEntryActions = ({
       {
         name: "Uncollect",
         className: "i-mingcute-star-fill",
-        action: "uncollect",
         disabled: !entry.collected,
         onClick: () => {
           uncollect.mutate()
@@ -130,7 +126,6 @@ export const useEntryActions = ({
       {
         name: "Copy Link",
         className: "i-mingcute-link-line",
-        action: "copyLink",
         onClick: () => {
           if (!entry.url) return
           navigator.clipboard.writeText(entry.url)
@@ -143,7 +138,6 @@ export const useEntryActions = ({
       {
         name: "Open in Browser",
         className: "i-mingcute-world-2-line",
-        action: "openInBrowser",
         onClick: () => {
           if (!entry.url) return
           window.open(entry.url, "_blank")
@@ -152,7 +146,6 @@ export const useEntryActions = ({
       {
         name: "Save Images to Eagle",
         icon: "/eagle.svg",
-        action: "save-to-eagle",
         disabled:
           (checkEagle.isLoading ? true : !checkEagle.data) ||
           !entry.images?.length,
@@ -178,10 +171,25 @@ export const useEntryActions = ({
       {
         name: "Share",
         className: "i-mingcute-share-2-line",
-        action: "share",
         onClick: () => {
           if (!entry.url) return
           client?.showShareMenu(entry.url)
+        },
+      },
+      {
+        name: "Mark as Read",
+        className: "i-mingcute-round-fill",
+        disabled: !!entry.read,
+        onClick: () => {
+          read.mutate()
+        },
+      },
+      {
+        name: "Mark as Unread",
+        className: "i-mingcute-round-line",
+        disabled: !entry.read,
+        onClick: () => {
+          unread.mutate()
         },
       },
     ],
