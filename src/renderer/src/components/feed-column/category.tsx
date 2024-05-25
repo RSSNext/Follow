@@ -3,19 +3,21 @@ import {
   CollapsibleTrigger,
 } from "@renderer/components/ui/collapsible"
 import { Dialog } from "@renderer/components/ui/dialog"
-import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 import { client } from "@renderer/lib/client"
 import { levels } from "@renderer/lib/constants"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import type { Response as SubscriptionsResponse } from "@renderer/queries/subscriptions"
+import { feedActions, useFeedActiveList } from "@renderer/store"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useState } from "react"
 
 import { CategoryRenameDialog } from "./category-rename-dialog"
 import { FeedItem } from "./item"
+
+const { setActiveList } = feedActions
 
 export function FeedCategory({
   data,
@@ -26,7 +28,7 @@ export function FeedCategory({
   view?: number
   expansion: boolean
 }) {
-  const { activeList, setActiveList } = useMainLayoutContext()
+  const activeList = useFeedActiveList()
 
   const [open, setOpen] = useState(!data.name)
   const [dialogOpen, setDialogOpen] = useState(false)

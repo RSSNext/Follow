@@ -10,13 +10,13 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useToast } from "@renderer/components/ui/use-toast"
-import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { SubscriptionResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { apiFetch } from "@renderer/queries/api-fetch"
+import { feedActions, useFeedActiveList } from "@renderer/store"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 
@@ -30,7 +30,8 @@ export function FeedItem({
   className?: string
 }) {
   const [dialogOpen, setDialogOpen] = useState(false)
-  const { activeList, setActiveList } = useMainLayoutContext()
+  const activeList = useFeedActiveList()
+  const { setActiveList } = feedActions
 
   const setFeedActive = (feed: SubscriptionResponse[number]) => {
     view !== undefined &&
@@ -107,10 +108,12 @@ export function FeedItem({
           e.stopPropagation()
           setFeedActive(feed)
         }}
-        onDoubleClick={() => window.open(
+        onDoubleClick={() => {
+          window.open(
             `${import.meta.env.VITE_WEB_URL}/feed/${feed.feedId}`,
             "_blank",
-        )}
+          )
+        }}
         onContextMenu={(e) => {
           showNativeMenu(
             [

@@ -6,9 +6,9 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { UserButton } from "@renderer/components/user-button"
-import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 import { levels, views } from "@renderer/lib/constants"
 import { clamp, cn } from "@renderer/lib/utils"
+import { feedActions } from "@renderer/store"
 import { useWheel } from "@use-gesture/react"
 import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
@@ -20,7 +20,7 @@ import { FeedList } from "./list"
 const lethargy = new Lethargy()
 
 export function FeedColumn() {
-  const { setActiveList } = useMainLayoutContext()
+  const { setActiveList } = feedActions
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive] = useState(0)

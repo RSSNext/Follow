@@ -1,6 +1,6 @@
-import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
-import { useEntries } from "@renderer/queries/entries"
 import { cn } from "@renderer/lib/utils"
+import { useEntries } from "@renderer/queries/entries"
+import { feedActions, useFeedStore } from "@renderer/store"
 import { m } from "framer-motion"
 
 import { ArticleItem } from "./article-item"
@@ -13,7 +13,7 @@ import { VideoItem } from "./video-item"
 const gridMode = new Set([2, 3])
 
 export function EntryColumn() {
-  const { activeList, setActiveEntry } = useMainLayoutContext()
+  const activeList = useFeedStore((state) => state.activeList)
   const entries = useEntries({
     level: activeList?.level,
     id: activeList?.id,
@@ -46,7 +46,7 @@ export function EntryColumn() {
       Item = ArticleItem
     }
   }
-
+  const { setActiveEntry } = feedActions
   return (
     <div className="px-2" onClick={() => setActiveEntry(null)}>
       <div className="mb-5 ml-9">
