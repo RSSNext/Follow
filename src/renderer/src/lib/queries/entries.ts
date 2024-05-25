@@ -23,9 +23,9 @@ export const useEntries = ({
         feedIdList?: string[]
       } = {}
       if (level === levels.folder) {
-        params.feedIdList = (id + "").split(",")
+        params.feedIdList = (`${id}`).split(",")
       } else if (level === levels.feed) {
-        params.feedId = id + ""
+        params.feedId = `${id}`
       }
       return await apiFetch<ListResponse<EntriesResponse>>("/entries", {
         method: "POST",

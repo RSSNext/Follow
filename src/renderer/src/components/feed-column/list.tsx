@@ -29,28 +29,30 @@ export function FeedList({
             onClick={(e) => {
               e.stopPropagation()
               view !== undefined &&
-                setActiveList?.({
-                  level: levels.view,
-                  id: view,
-                  name: views[view].name,
-                  view,
-                })
+              setActiveList?.({
+                level: levels.view,
+                id: view,
+                name: views[view].name,
+                view,
+              })
             }}
           >
             {view !== undefined && views[view].name}
           </div>
           <div className="ml-2 flex items-center gap-3 text-sm text-zinc-500">
-            {expansion ? (
-              <i
-                className="i-mingcute-list-collapse-fill"
-                onClick={() => setExpansion(false)}
-              />
-            ) : (
-              <i
-                className="i-mingcute-list-expansion-fill"
-                onClick={() => setExpansion(true)}
-              />
-            )}
+            {expansion ?
+                (
+                  <i
+                    className="i-mingcute-list-collapse-fill"
+                    onClick={() => setExpansion(false)}
+                  />
+                ) :
+                (
+                  <i
+                    className="i-mingcute-list-expansion-fill"
+                    onClick={() => setExpansion(true)}
+                  />
+                )}
             <span>{subscriptions.data?.unread}</span>
           </div>
         </div>

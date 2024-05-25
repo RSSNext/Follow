@@ -5,14 +5,14 @@ const t = tipc.create()
 
 export const router = {
   inspectElement: t.procedure
-    .input<{ x: number; y: number }>()
+    .input<{ x: number, y: number }>()
     .action(async ({ input, context }) => {
       context.sender.inspectElement(input.x, input.y)
     }),
 
   showContextMenu: t.procedure
     .input<{
-      items: Array<{ type: "text"; label: string } | { type: "separator" }>
+      items: Array<{ type: "text", label: string } | { type: "separator" }>
     }>()
     .action(async ({ input, context }) => {
       const menu = Menu.buildFromTemplate(
@@ -69,7 +69,7 @@ export const router = {
     }),
 
   saveToEagle: t.procedure
-    .input<{ url: string; images: string[] }>()
+    .input<{ url: string, images: string[] }>()
     .action(async ({ input }) => {
       try {
         const res = await fetch("http://localhost:41595/api/item/addFromURLs", {
@@ -88,7 +88,7 @@ export const router = {
           }),
         })
         return await res.json()
-      } catch (error) {
+      } catch {
         return null
       }
     }),

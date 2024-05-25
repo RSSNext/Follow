@@ -7,12 +7,20 @@ export function Component() {
     <>
       <div className="creator">Powered by electron-vite</div>
       <div className="text">
-        <span className="i-mingcute-rss-fill"></span>
-        Build an Electron app with <span className="react">React</span>
-        &nbsp;and <span className="ts">TypeScript</span>
+        <span className="i-mingcute-rss-fill" />
+        Build an Electron app with
+        {" "}
+        <span className="react">React</span>
+        &nbsp;and
+        {" "}
+        <span className="ts">TypeScript</span>
       </div>
       <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
+        Please try pressing
+        {" "}
+        <code>F12</code>
+        {" "}
+        to open the devTool
       </p>
       <div className="actions">
         <div className="action">
@@ -26,7 +34,7 @@ export function Component() {
           </a>
         </div>
       </div>
-      <Versions></Versions>
+      <Versions />
     </>
   )
 }

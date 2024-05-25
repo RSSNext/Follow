@@ -19,6 +19,7 @@ import { SubscriptionResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
+
 export function FeedItem({
   feed,
   view,
@@ -33,12 +34,12 @@ export function FeedItem({
 
   const setFeedActive = (feed: SubscriptionResponse[number]) => {
     view !== undefined &&
-      setActiveList?.({
-        level: levels.feed,
-        id: feed.feedId,
-        name: feed.feeds.title || "",
-        view,
-      })
+    setActiveList?.({
+      level: levels.feed,
+      id: feed.feedId,
+      name: feed.feeds.title || "",
+      view,
+    })
   }
 
   const { toast } = useToast()
@@ -60,7 +61,10 @@ export function FeedItem({
         duration: 3000,
         description: (
           <>
-            Feed <i className="mr-px font-semibold">{variables.feeds.title}</i>{" "}
+            Feed
+            {" "}
+            <i className="mr-px font-semibold">{variables.feeds.title}</i>
+            {" "}
             has been unfollowed.
           </>
         ),
@@ -95,20 +99,18 @@ export function FeedItem({
         className={cn(
           "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
           activeList?.level === levels.feed &&
-            activeList.id === feed.feedId &&
-            "bg-native-active",
+          activeList.id === feed.feedId &&
+          "bg-native-active",
           className,
         )}
         onClick={(e) => {
           e.stopPropagation()
           setFeedActive(feed)
         }}
-        onDoubleClick={() =>
-          window.open(
+        onDoubleClick={() => window.open(
             `${import.meta.env.VITE_WEB_URL}/feed/${feed.feedId}`,
             "_blank",
-          )
-        }
+        )}
         onContextMenu={(e) => {
           showNativeMenu(
             [
@@ -160,7 +162,8 @@ export function FeedItem({
                 </TooltipTrigger>
                 <TooltipPortal>
                   <TooltipContent>
-                    Error since{" "}
+                    Error since
+                    {" "}
                     {dayjs
                       .duration(
                         dayjs(feed.feeds.errorAt).diff(dayjs(), "minute"),

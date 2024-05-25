@@ -15,13 +15,13 @@ export const Image = ({
 }) => {
   const [hidden, setHidden] = useState(!props.src)
   const [imgSrc, setImgSrc] = useState(
-    proxy && props.src && !failedList.has(props.src)
-      ? getProxyUrl({
-          url: props.src,
-          width: proxy.width,
-          height: proxy.height,
-        })
-      : props.src,
+    proxy && props.src && !failedList.has(props.src) ?
+      getProxyUrl({
+        url: props.src,
+        width: proxy.width,
+        height: proxy.height,
+      }) :
+      props.src,
   )
 
   const errorHandle = (e) => {

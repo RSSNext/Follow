@@ -11,13 +11,15 @@ export function FollowButton({ feed }: { feed: FeedResponse }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        {isSuccessful ? (
-          <Button variant="outline" disabled>
-            Followed
-          </Button>
-        ) : (
-          <Button>Follow</Button>
-        )}
+        {isSuccessful ?
+            (
+              <Button variant="outline" disabled>
+                Followed
+              </Button>
+            ) :
+            (
+              <Button>Follow</Button>
+            )}
       </DialogTrigger>
       <FollowDialog
         feed={{

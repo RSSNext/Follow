@@ -1,6 +1,6 @@
 import "./assets/main.css"
 
-import React from "react"
+import * as React from "react"
 import ReactDOM from "react-dom/client"
 import App from "./App"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
@@ -105,7 +105,7 @@ authConfigManager.setConfig({
   credentials: "include",
 })
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+ReactDOM.createRoot(document.querySelector("#root") as HTMLElement).render(
   <React.StrictMode>
     <LazyMotion features={loadFeatures} strict key="framer">
       <MotionConfig

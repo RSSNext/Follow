@@ -35,11 +35,13 @@ export function EntryShare({
                   size="sm"
                   onClick={item.onClick}
                 >
-                  {item.icon ? (
-                    <img className="size-4 grayscale" src={item.icon} />
-                  ) : (
-                    <i className={item.className} />
-                  )}
+                  {item.icon ?
+                      (
+                        <img className="size-4 grayscale" src={item.icon} />
+                      ) :
+                      (
+                        <i className={item.className} />
+                      )}
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">{item.name}</TooltipContent>

@@ -5,7 +5,7 @@ import { cn } from "@renderer/lib/utils"
 import { AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
 
-const wideMode = [1, 2, 3, 4]
+const wideMode = new Set([1, 2, 3, 4])
 
 export function Component() {
   const { activeList, activeEntry, setActiveEntry } = useMainLayoutContext()
@@ -18,15 +18,15 @@ export function Component() {
       <div
         className={cn(
           "h-full shrink-0 overflow-y-auto border-r pt-10",
-          activeList && wideMode.includes(activeList.view)
-            ? "flex-1"
-            : "w-[340px]",
+          activeList && wideMode.has(activeList.view) ?
+            "flex-1" :
+            "w-[340px]",
         )}
       >
         <EntryColumn />
       </div>
       <AnimatePresence>
-        {!(activeList && wideMode.includes(activeList.view)) && activeEntry && (
+        {!(activeList && wideMode.has(activeList.view)) && activeEntry && (
           <div className="flex-1">
             <EntryContent entryId={activeEntry} />
           </div>

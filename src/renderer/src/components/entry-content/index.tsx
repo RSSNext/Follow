@@ -47,7 +47,7 @@ export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
             </div>
             <div className="text-[13px] text-zinc-500">
               {entry.data?.publishedAt &&
-                new Date(entry.data?.publishedAt).toUTCString()}
+              new Date(entry.data?.publishedAt).toUTCString()}
             </div>
           </a>
           <div className="prose prose-zinc mx-auto mb-32 mt-10 max-w-[550px] cursor-auto select-text text-[15px]">

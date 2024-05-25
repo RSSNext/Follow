@@ -45,23 +45,23 @@ export function FollowDialog({
   isSubscribed,
 }:
   | {
-      feed:
-        | SubscriptionResponse[number]
-        | {
-            feeds: SubscriptionResponse[number]["feeds"]
-          }
-      onSuccess?: (values: z.infer<typeof formSchema>) => void
-      isSubscribed?: false
-    }
+    feed:
+      | SubscriptionResponse[number]
+      | {
+        feeds: SubscriptionResponse[number]["feeds"]
+      }
+    onSuccess?: (values: z.infer<typeof formSchema>) => void
+    isSubscribed?: false
+  }
   | {
-      feed: SubscriptionResponse[number]
-      onSuccess?: (values: z.infer<typeof formSchema>) => void
-      isSubscribed: true
-    }) {
+    feed: SubscriptionResponse[number]
+    onSuccess?: (values: z.infer<typeof formSchema>) => void
+    isSubscribed: true
+  }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      view: isSubscribed ? feed.view + "" : "0",
+      view: isSubscribed ? `${feed.view}` : "0",
       category: isSubscribed ? feed.category : undefined,
       isPrivate: isSubscribed ? feed.isPrivate || false : false,
     },
@@ -74,20 +74,20 @@ export function FollowDialog({
         method: isSubscribed ? "PATCH" : "POST",
         body: {
           url: feed.feeds.url,
-          view: parseInt(values.view),
+          view: Number.parseInt(values.view),
           category: values.category,
           isPrivate: values.isPrivate,
           ...(isSubscribed && { feedId: feed.feeds.id }),
         },
       }),
     onSuccess: (_, variables) => {
-      if (isSubscribed && variables.view !== feed.view + "") {
+      if (isSubscribed && variables.view !== `${feed.view}`) {
         queryClient.invalidateQueries({
           queryKey: ["subscriptions", feed.view],
         })
       }
       queryClient.invalidateQueries({
-        queryKey: ["subscriptions", parseInt(variables.view)],
+        queryKey: ["subscriptions", Number.parseInt(variables.view)],
       })
       onSuccess?.(variables)
     },
@@ -97,7 +97,7 @@ export function FollowDialog({
     followMutation.mutate(values)
   }
 
-  const categories = useSubscriptionCategories(parseInt(form.watch("view")))
+  const categories = useSubscriptionCategories(Number.parseInt(form.watch("view")))
 
   return (
     <DialogContent>
@@ -124,7 +124,7 @@ export function FollowDialog({
                   </FormControl>
                   <SelectContent>
                     {views.map((view, index) => (
-                      <SelectItem key={view.name} value={index + ""}>
+                      <SelectItem key={view.name} value={`${index}`}>
                         <div className="flex items-center gap-2">
                           <span className={cn(view.className, "flex")}>
                             {view.icon}

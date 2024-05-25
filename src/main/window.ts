@@ -1,5 +1,5 @@
 import { shell, BrowserWindow } from "electron"
-import path from "path"
+import path from "node:path"
 import { is } from "@electron-toolkit/utils"
 import icon from "../../resources/icon.png?asset"
 
@@ -53,22 +53,17 @@ export function createWindow(options?: {
   ]
   window.webContents.session.webRequest.onBeforeSendHeaders(
     (details, callback) => {
-      let trueUrl
-      if (
-        process.env["VITE_IMGPROXY_URL"] &&
-        details.url.startsWith(process.env["VITE_IMGPROXY_URL"])
-      ) {
-        trueUrl = decodeURIComponent(
+      const trueUrl = process.env["VITE_IMGPROXY_URL"] &&
+        details.url.startsWith(process.env["VITE_IMGPROXY_URL"]) ?
+        decodeURIComponent(
           details.url.replace(
             new RegExp(
               `^${process.env["VITE_IMGPROXY_URL"]}/unsafe/\\d+x\\d+/`,
             ),
             "",
           ),
-        )
-      } else {
-        trueUrl = details.url
-      }
+        ) :
+        details.url
       const refererMatch = refererMatchs.find((item) => item.url.test(trueUrl))
       callback({
         requestHeaders: {

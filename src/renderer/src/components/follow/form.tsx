@@ -29,12 +29,10 @@ const formSchema = z.object({
   keyword: z.string().min(1),
 })
 
-const info: {
-  [key: string]: {
-    label: string
-    prefix?: string
-  }
-} = {
+const info: Record<string, {
+  label: string
+  prefix?: string
+}> = {
   general: {
     label: "Any URL or Keyword",
   },
@@ -52,7 +50,7 @@ const info: {
 }
 
 export function FollowForm({ type }: { type: string }) {
-  const prefix = info[type].prefix
+  const { prefix } = info[type]
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -123,7 +121,11 @@ export function FollowForm({ type }: { type: string }) {
       {mutation.isSuccess && (
         <div className="mt-8 max-w-lg">
           <div className="mb-4 text-zinc-500">
-            Found {mutation.data?.length || 0} feed
+            Found
+            {" "}
+            {mutation.data?.length || 0}
+            {" "}
+            feed
             {mutation.data?.length > 1 && "s"}
           </div>
           <div className="space-y-6 text-sm">
@@ -132,62 +134,69 @@ export function FollowForm({ type }: { type: string }) {
                 <CardHeader>
                   <FollowSummary feed={item.feed} docs={item.docs} />
                 </CardHeader>
-                {item.docs ? (
-                  <CardFooter>
-                    <a href={item.docs} target="_blank" rel="noreferrer">
-                      <Button>View Docs</Button>
-                    </a>
-                  </CardFooter>
-                ) : (
-                  <>
-                    <CardContent>
-                      {!!item.entries?.length && (
-                        <div className="grid grid-cols-4 gap-4">
-                          {item.entries
-                            .filter((e) => !!e)
-                            .map((entry) => (
-                              <a
-                                key={entry.id}
-                                href={entry.url}
-                                target="_blank"
-                                className="flex min-w-0 flex-1 flex-col items-center gap-1"
-                                rel="noreferrer"
-                              >
-                                {entry.images?.[0] ? (
-                                  <Image
-                                    src={entry.images?.[0]}
-                                    className="aspect-square w-full"
-                                  />
-                                ) : (
-                                  <div className="flex aspect-square w-full overflow-hidden rounded bg-stone-100 p-2 text-xs leading-tight text-zinc-500">
-                                    {entry.title}
-                                  </div>
-                                )}
-                                <div className="line-clamp-2 w-full text-xs leading-tight">
-                                  {entry.title}
-                                </div>
-                              </a>
-                            ))}
-                        </div>
-                      )}
-                    </CardContent>
-                    <CardFooter>
-                      {item.isSubscribed ? (
-                        <Button variant="outline" disabled>
-                          Followed
-                        </Button>
-                      ) : (
-                        <FollowButton feed={item.feed} />
-                      )}
-                      <div className="ml-6 text-zinc-500">
-                        <span className="font-medium text-zinc-800">
-                          {item.subscriptionCount}
-                        </span>{" "}
-                        Followers
-                      </div>
-                    </CardFooter>
-                  </>
-                )}
+                {item.docs ?
+                    (
+                      <CardFooter>
+                        <a href={item.docs} target="_blank" rel="noreferrer">
+                          <Button>View Docs</Button>
+                        </a>
+                      </CardFooter>
+                    ) :
+                    (
+                      <>
+                        <CardContent>
+                          {!!item.entries?.length && (
+                            <div className="grid grid-cols-4 gap-4">
+                              {item.entries
+                                .filter((e) => !!e)
+                                .map((entry) => (
+                                  <a
+                                    key={entry.id}
+                                    href={entry.url}
+                                    target="_blank"
+                                    className="flex min-w-0 flex-1 flex-col items-center gap-1"
+                                    rel="noreferrer"
+                                  >
+                                    {entry.images?.[0] ?
+                                        (
+                                          <Image
+                                            src={entry.images?.[0]}
+                                            className="aspect-square w-full"
+                                          />
+                                        ) :
+                                        (
+                                          <div className="flex aspect-square w-full overflow-hidden rounded bg-stone-100 p-2 text-xs leading-tight text-zinc-500">
+                                            {entry.title}
+                                          </div>
+                                        )}
+                                    <div className="line-clamp-2 w-full text-xs leading-tight">
+                                      {entry.title}
+                                    </div>
+                                  </a>
+                                ))}
+                            </div>
+                          )}
+                        </CardContent>
+                        <CardFooter>
+                          {item.isSubscribed ?
+                              (
+                                <Button variant="outline" disabled>
+                                  Followed
+                                </Button>
+                              ) :
+                              (
+                                <FollowButton feed={item.feed} />
+                              )}
+                          <div className="ml-6 text-zinc-500">
+                            <span className="font-medium text-zinc-800">
+                              {item.subscriptionCount}
+                            </span>
+                            {" "}
+                            Followers
+                          </div>
+                        </CardFooter>
+                      </>
+                    )}
               </Card>
             ))}
           </div>

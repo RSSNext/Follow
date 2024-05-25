@@ -45,7 +45,7 @@ export function Component() {
               }`}
               to={`/settings/${t.path}`}
             >
-              <i className={cn("mr-2", t.className)}></i>
+              <i className={cn("mr-2", t.className)} />
               <span>{t.name}</span>
             </Link>
           ))}

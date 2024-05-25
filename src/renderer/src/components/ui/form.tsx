@@ -30,14 +30,12 @@ const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
-  ...props
-}: ControllerProps<TFieldValues, TName>) => {
-  return (
+    ...props
+  }: ControllerProps<TFieldValues, TName>) => (
     <FormFieldContext.Provider value={{ name: props.name }}>
       <Controller {...props} />
     </FormFieldContext.Provider>
   )
-}
 
 const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext)
@@ -112,9 +110,9 @@ const FormControl = React.forwardRef<
       ref={ref}
       id={formItemId}
       aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
+        !error ?
+          `${formDescriptionId}` :
+          `${formDescriptionId} ${formMessageId}`
       }
       aria-invalid={!!error}
       {...props}
