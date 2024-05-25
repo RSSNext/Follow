@@ -18,10 +18,9 @@ export const useEntryActions = ({
   view?: number
   entry?: EntriesResponse[number]
 }) => {
-  if (!entry?.url || view === undefined) return { items: [] }
-
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
+    enabled: !!entry?.url && !!view,
     queryFn: async () => {
       try {
         await ofetch("http://localhost:41595")
@@ -37,7 +36,7 @@ export const useEntryActions = ({
   const updateCollection = (
     target: boolean,
   ) => {
-    const key = ["entry", entry.id]
+    const key = ["entry", entry?.id]
     const data = queryClient.getQueryData(key)
     if (data) {
       queryClient.setQueryData(
@@ -59,7 +58,7 @@ export const useEntryActions = ({
         const list = (data as InfiniteData<ListResponse<EntriesResponse>>)?.pages?.[0]?.data
         if (list) {
           for (const item of list) {
-            if (item.id === entry.id) {
+            if (item.id === entry?.id) {
               item.collected = target
               queryClient.setQueryData(key, data)
             }
@@ -74,7 +73,7 @@ export const useEntryActions = ({
       apiFetch("/collections", {
         method: "POST",
         body: {
-          entryId: entry.id,
+          entryId: entry?.id,
         },
       }),
     onSuccess: () => {
@@ -91,7 +90,7 @@ export const useEntryActions = ({
       apiFetch("/collections", {
         method: "DELETE",
         body: {
-          entryId: entry.id,
+          entryId: entry?.id,
         },
       }),
     onSuccess: () => {
@@ -105,6 +104,8 @@ export const useEntryActions = ({
   })
 
   const { toast } = useToast()
+
+  if (!entry?.url || view === undefined) return { items: [] }
 
   const items = [
     [
