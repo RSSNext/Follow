@@ -1,9 +1,10 @@
 import { parseHtml } from "@renderer/lib/parse-html"
-import { ActiveEntry } from "@renderer/lib/types"
-import { useEffect, useState } from "react"
-import { m } from "framer-motion"
-import { EntryShare } from "./share"
 import { useEntry } from "@renderer/lib/queries/entries"
+import type { ActiveEntry } from "@renderer/lib/types"
+import { m } from "framer-motion"
+import { useEffect, useState } from "react"
+
+import { EntryShare } from "./share"
 
 export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
   const entry = useEntry({

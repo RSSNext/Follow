@@ -1,22 +1,20 @@
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  FormDescription,
-} from "@renderer/components/ui/form"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { AutoComplete } from "@renderer/components/ui/autocomplete"
+import { Button } from "@renderer/components/ui/button"
 import {
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@renderer/components/ui/dialog"
-import { Button } from "@renderer/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@renderer/components/ui/form"
 import {
   Select,
   SelectContent,
@@ -24,14 +22,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
-import { views } from "@renderer/lib/constants"
-import { cn } from "@renderer/lib/utils"
 import { Switch } from "@renderer/components/ui/switch"
-import { FollowSummary } from "../feed-summary"
+import { views } from "@renderer/lib/constants"
 import { apiFetch } from "@renderer/lib/queries/api-fetch"
-import { SubscriptionResponse } from "@renderer/lib/types"
-import { AutoComplete } from "@renderer/components/ui/autocomplete"
 import { useSubscriptionCategories } from "@renderer/lib/queries/subscriptions"
+import type { SubscriptionResponse } from "@renderer/lib/types"
+import { cn } from "@renderer/lib/utils"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { FollowSummary } from "../feed-summary"
 
 const formSchema = z.object({
   view: z.string(),

@@ -1,13 +1,12 @@
 import {
   Command,
   CommandGroup,
+  CommandInput,
   CommandItem,
   CommandList,
-  CommandInput,
 } from "@renderer/components/ui/command"
-import { useState, useCallback } from "react"
-
 import { cn } from "@renderer/lib/utils"
+import { useCallback, useState } from "react"
 import * as React from "react"
 
 export interface InputProps

@@ -1,9 +1,9 @@
+import { useSession } from "@hono/auth-js/react"
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
-import { useSession } from "@hono/auth-js/react"
 import { cn } from "@renderer/lib/utils"
 
 export function UserButton({

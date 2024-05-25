@@ -1,17 +1,15 @@
 import { useToast } from "@renderer/components/ui/use-toast"
-import { ofetch } from "ofetch"
-import type { FetchError } from "ofetch"
+import { client } from "@renderer/lib/client"
+import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import type { EntriesResponse, ListResponse } from "@renderer/lib/types"
+import type { InfiniteData, QueryKey } from "@tanstack/react-query"
 import {
-  QueryKey,
   useMutation,
   useQuery,
   useQueryClient,
-
 } from "@tanstack/react-query"
-import type { InfiniteData } from "@tanstack/react-query"
-import { client } from "@renderer/lib/client"
-import { EntriesResponse, ListResponse } from "@renderer/lib/types"
-import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import type { FetchError } from "ofetch"
+import { ofetch } from "ofetch"
 
 export const useEntryActions = ({
   view,

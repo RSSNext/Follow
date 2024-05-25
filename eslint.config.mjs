@@ -26,11 +26,6 @@ export default defineConfig(
       // change to more like prettier
       "@stylistic/operator-linebreak": ["error", "after"],
       "@stylistic/max-statements-per-line": "off",
-
-      // run auto fix later
-      "simple-import-sort/exports": "off",
-      "simple-import-sort/imports": "off",
-      "@typescript-eslint/consistent-type-imports": "off",
     },
   },
   // fix later or just always ignore

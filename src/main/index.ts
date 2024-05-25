@@ -1,10 +1,13 @@
 import "dotenv/config"
-import { app, BrowserWindow, Menu } from "electron"
+
 import path from "node:path"
-import { electronApp, optimizer } from "@electron-toolkit/utils"
-import { createWindow } from "./window"
+
 import { registerIpcMain } from "@egoist/tipc/main"
+import { electronApp, optimizer } from "@electron-toolkit/utils"
+import { app, BrowserWindow, Menu } from "electron"
+
 import { router } from "./tipc"
+import { createWindow } from "./window"
 
 registerIpcMain(router)
 

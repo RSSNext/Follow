@@ -3,6 +3,7 @@ import { levels, views } from "@renderer/lib/constants"
 import { useSubscriptions } from "@renderer/lib/queries/subscriptions"
 import { cn } from "@renderer/lib/utils"
 import { useState } from "react"
+
 import { FeedCategory } from "./category"
 
 export function FeedList({

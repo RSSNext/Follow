@@ -1,7 +1,7 @@
-import dayjs from "@renderer/lib/dayjs"
-import { EntriesResponse } from "@renderer/lib/types"
-import { Image } from "@renderer/components/ui/image"
 import { FeedIcon } from "@renderer/components/feed-icon"
+import { Image } from "@renderer/components/ui/image"
+import dayjs from "@renderer/lib/dayjs"
+import type { EntriesResponse } from "@renderer/lib/types"
 
 export function SocialMediaItem({ entry }: { entry: EntriesResponse[number] }) {
   return (

@@ -1,6 +1,8 @@
-import { shell, BrowserWindow } from "electron"
 import path from "node:path"
+
 import { is } from "@electron-toolkit/utils"
+import { BrowserWindow, shell } from "electron"
+
 import icon from "../../resources/icon.png?asset"
 
 export function createWindow(options?: {

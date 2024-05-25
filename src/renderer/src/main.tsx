@@ -1,14 +1,15 @@
 import "./assets/main.css"
 
-import * as React from "react"
-import ReactDOM from "react-dom/client"
-import App from "./App"
-import { RouterProvider, createBrowserRouter } from "react-router-dom"
-import { LazyMotion, MotionConfig } from "framer-motion"
-import { QueryClientProvider } from "@tanstack/react-query"
 import { authConfigManager, SessionProvider } from "@hono/auth-js/react"
 import { Toaster } from "@renderer/components/ui/toaster"
 import { queryClient } from "@renderer/lib/query-client"
+import { QueryClientProvider } from "@tanstack/react-query"
+import { LazyMotion, MotionConfig } from "framer-motion"
+import * as React from "react"
+import ReactDOM from "react-dom/client"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+
+import App from "./App"
 
 const router = createBrowserRouter([
   {

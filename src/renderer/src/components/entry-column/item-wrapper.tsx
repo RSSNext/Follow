@@ -1,7 +1,7 @@
 import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
 import { showNativeMenu } from "@renderer/lib/native-menu"
-import { EntriesResponse } from "@renderer/lib/types"
+import type { EntriesResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 
 export function EntryItemWrapper({

@@ -1,8 +1,9 @@
 import { Button } from "@renderer/components/ui/button"
 import { Dialog, DialogTrigger } from "@renderer/components/ui/dialog"
-import { FollowDialog } from "./dialog"
-import { FeedResponse } from "@renderer/lib/types"
+import type { FeedResponse } from "@renderer/lib/types"
 import { useState } from "react"
+
+import { FollowDialog } from "./dialog"
 
 export function FollowButton({ feed }: { feed: FeedResponse }) {
   const [open, setOpen] = useState(false)

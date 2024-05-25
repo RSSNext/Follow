@@ -1,5 +1,5 @@
-import { ofetch } from "ofetch"
 import { getCsrfToken } from "@hono/auth-js/react"
+import { ofetch } from "ofetch"
 
 export const apiFetch = ofetch.create({
   baseURL: import.meta.env.VITE_API_URL,

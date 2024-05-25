@@ -1,5 +1,5 @@
-import { FeedResponse } from "@renderer/lib/types"
 import { FeedIcon } from "@renderer/components/feed-icon"
+import type { FeedResponse } from "@renderer/lib/types"
 
 export function FollowSummary({
   feed,

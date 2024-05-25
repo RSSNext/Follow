@@ -1,12 +1,12 @@
+import { FollowForm } from "@renderer/components/follow/form"
+import { FollowImport } from "@renderer/components/follow/import"
+import { Recommendations } from "@renderer/components/follow/recommendations"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@renderer/components/ui/tabs"
-import { Recommendations } from "@renderer/components/follow/recommendations"
-import { FollowForm } from "@renderer/components/follow/form"
-import { FollowImport } from "@renderer/components/follow/import"
 
 export function Component() {
   const tabs = [

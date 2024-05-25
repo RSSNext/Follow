@@ -1,3 +1,4 @@
+import { Button } from "@renderer/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
@@ -5,8 +6,7 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
-import { EntriesResponse } from "@renderer/lib/types"
-import { Button } from "@renderer/components/ui/button"
+import type { EntriesResponse } from "@renderer/lib/types"
 
 export function EntryShare({
   view,
