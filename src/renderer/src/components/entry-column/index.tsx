@@ -1,5 +1,5 @@
 import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
-import { useEntries } from "@renderer/lib/queries/entries"
+import { useEntries } from "@renderer/queries/entries"
 import { cn } from "@renderer/lib/utils"
 import { m } from "framer-motion"
 

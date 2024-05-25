@@ -16,7 +16,7 @@ import {
 } from "@renderer/components/ui/form"
 import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
-import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import { apiFetch } from "@renderer/queries/api-fetch"
 import type { EntriesResponse, FeedResponse } from "@renderer/lib/types"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"

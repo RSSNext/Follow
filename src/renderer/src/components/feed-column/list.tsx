@@ -1,7 +1,7 @@
 import { useMainLayoutContext } from "@renderer/contexts/outlet/main-layout"
 import { levels, views } from "@renderer/lib/constants"
-import { useSubscriptions } from "@renderer/lib/queries/subscriptions"
 import { cn } from "@renderer/lib/utils"
+import { useSubscriptions } from "@renderer/queries/subscriptions"
 import { useState } from "react"
 
 import { FeedCategory } from "./category"

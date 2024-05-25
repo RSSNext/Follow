@@ -1,7 +1,7 @@
 import { useToast } from "@renderer/components/ui/use-toast"
 import { client } from "@renderer/lib/client"
-import { apiFetch } from "@renderer/lib/queries/api-fetch"
 import type { EntriesResponse, ListResponse } from "@renderer/lib/types"
+import { apiFetch } from "@renderer/queries/api-fetch"
 import type { InfiniteData, QueryKey } from "@tanstack/react-query"
 import {
   useMutation,

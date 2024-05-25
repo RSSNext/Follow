@@ -7,7 +7,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@renderer/components/ui/alert-dialog"
-import { apiFetch } from "@renderer/lib/queries/api-fetch"
+import { apiFetch } from "@renderer/queries/api-fetch"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export function CategoryRemoveDialog({
