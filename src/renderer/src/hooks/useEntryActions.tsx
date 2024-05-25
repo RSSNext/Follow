@@ -1,10 +1,11 @@
 import { useToast } from "@renderer/components/ui/use-toast"
-import { ofetch } from "ofetch"
+import { ofetch, type FetchError } from "ofetch"
 import {
   QueryKey,
   useMutation,
   useQuery,
   useQueryClient,
+  type InfiniteData,
 } from "@tanstack/react-query"
 import { client } from "@renderer/lib/client"
 import { EntriesResponse, ListResponse } from "@renderer/lib/types"
@@ -23,8 +24,8 @@ export const useEntryActions = ({
       try {
         await ofetch("http://localhost:41595")
         return true
-      } catch (error: any) {
-        return error.data?.code === 401
+      } catch (error: unknown) {
+        return (error as FetchError).data?.code === 401
       }
     },
   })
@@ -50,15 +51,20 @@ export const useEntryActions = ({
     const entriesData = queryClient.getQueriesData({
       queryKey: ["entries"],
     })
-    entriesData.forEach(([key, data]: [QueryKey, any]) => {
-      const list = (data?.pages?.[0] as ListResponse<EntriesResponse>).data
-      list?.forEach((item) => {
-        if (item.id === entry.id) {
-          item.collections = target
-          queryClient.setQueryData(key, data)
-        }
-      })
-    })
+    entriesData.forEach(
+      ([key, data]: [
+        QueryKey,
+        InfiniteData<ListResponse<EntriesResponse>>,
+      ]) => {
+        const list = data?.pages?.[0]?.data
+        list?.forEach((item) => {
+          if (item.id === entry.id) {
+            item.collections = target
+            queryClient.setQueryData(key, data)
+          }
+        })
+      },
+    )
   }
 
   const collect = useMutation({

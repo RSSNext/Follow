@@ -100,7 +100,7 @@ export function FollowForm({ type }: { type: string }) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-[512px]"
+          className="w-[512px] space-y-8"
         >
           <FormField
             control={form.control}
@@ -121,8 +121,8 @@ export function FollowForm({ type }: { type: string }) {
         </form>
       </Form>
       {mutation.isSuccess && (
-        <div className="max-w-lg mt-8">
-          <div className="text-zinc-500 mb-4">
+        <div className="mt-8 max-w-lg">
+          <div className="mb-4 text-zinc-500">
             Found {mutation.data?.length || 0} feed
             {mutation.data?.length > 1 && "s"}
           </div>
@@ -134,7 +134,7 @@ export function FollowForm({ type }: { type: string }) {
                 </CardHeader>
                 {item.docs ? (
                   <CardFooter>
-                    <a href={item.docs} target="_blank">
+                    <a href={item.docs} target="_blank" rel="noreferrer">
                       <Button>View Docs</Button>
                     </a>
                   </CardFooter>
@@ -150,7 +150,8 @@ export function FollowForm({ type }: { type: string }) {
                                 key={entry.id}
                                 href={entry.url}
                                 target="_blank"
-                                className="flex items-center gap-1 flex-col min-w-0 flex-1"
+                                className="flex min-w-0 flex-1 flex-col items-center gap-1"
+                                rel="noreferrer"
                               >
                                 {entry.images?.[0] ? (
                                   <Image
@@ -158,7 +159,7 @@ export function FollowForm({ type }: { type: string }) {
                                     className="aspect-square w-full"
                                   />
                                 ) : (
-                                  <div className="bg-stone-100 rounded text-zinc-500 p-2 overflow-hidden w-full aspect-square text-xs leading-tight flex">
+                                  <div className="flex aspect-square w-full overflow-hidden rounded bg-stone-100 p-2 text-xs leading-tight text-zinc-500">
                                     {entry.title}
                                   </div>
                                 )}
@@ -179,7 +180,7 @@ export function FollowForm({ type }: { type: string }) {
                         <FollowButton feed={item.feed} />
                       )}
                       <div className="ml-6 text-zinc-500">
-                        <span className="text-zinc-800 font-medium">
+                        <span className="font-medium text-zinc-800">
                           {item.subscriptionCount}
                         </span>{" "}
                         Followers

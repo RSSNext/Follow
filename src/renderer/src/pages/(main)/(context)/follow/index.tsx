@@ -44,7 +44,7 @@ export function Component() {
   ]
 
   return (
-    <div className="flex flex-col gap-8 items-center justify-center w-full overflow-y-auto">
+    <div className="flex w-full flex-col items-center justify-center gap-8 overflow-y-auto">
       <div className="text-2xl font-bold">Follow</div>
       <Tabs defaultValue="General">
         <TabsList className="w-full">
@@ -59,7 +59,7 @@ export function Component() {
           ))}
         </TabsList>
         {tabs.map((tab) => (
-          <TabsContent key={tab.name} value={tab.name} className="h-96 mt-8">
+          <TabsContent key={tab.name} value={tab.name} className="mt-8 h-96">
             {tab.value === "import" ? (
               <FollowImport />
             ) : (

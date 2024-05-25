@@ -9,7 +9,7 @@ export function Component() {
     useMainLayoutContext()
   return (
     <div className="flex h-full">
-      <div className="w-64 pt-10 border-r shrink-0 bg-native">
+      <div className="w-64 shrink-0 border-r bg-native pt-10">
         <FeedColumn />
       </div>
       <MainLayoutOutlet
