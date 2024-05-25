@@ -72,6 +72,34 @@ export const useEntryActions = ({
       })
     },
   })
+  const read = useMutation({
+    mutationFn: async () =>
+      apiFetch("/reads", {
+        method: "POST",
+        body: {
+          entryId: entry?.id,
+        },
+      }),
+    onSuccess: () => {
+      updateEntry({
+        read: true,
+      })
+    },
+  })
+  const unread = useMutation({
+    mutationFn: async () =>
+      apiFetch("/reads", {
+        method: "DELETE",
+        body: {
+          entryId: entry?.id,
+        },
+      }),
+    onSuccess: () => {
+      updateEntry({
+        read: false,
+      })
+    },
+  })
 
   const { toast } = useToast()
 
@@ -82,7 +110,6 @@ export const useEntryActions = ({
       {
         name: "Collect",
         className: "i-mingcute-star-line",
-        action: "collect",
         disabled: !!entry.collected,
         onClick: () => {
           collect.mutate()
@@ -91,7 +118,6 @@ export const useEntryActions = ({
       {
         name: "Uncollect",
         className: "i-mingcute-star-fill",
-        action: "uncollect",
         disabled: !entry.collected,
         onClick: () => {
           uncollect.mutate()
@@ -100,7 +126,6 @@ export const useEntryActions = ({
       {
         name: "Copy Link",
         className: "i-mingcute-link-line",
-        action: "copyLink",
         onClick: () => {
           if (!entry.url) return
           navigator.clipboard.writeText(entry.url)
@@ -113,7 +138,6 @@ export const useEntryActions = ({
       {
         name: "Open in Browser",
         className: "i-mingcute-world-2-line",
-        action: "openInBrowser",
         onClick: () => {
           if (!entry.url) return
           window.open(entry.url, "_blank")
@@ -122,7 +146,6 @@ export const useEntryActions = ({
       {
         name: "Save Images to Eagle",
         icon: "/eagle.svg",
-        action: "save-to-eagle",
         disabled:
           (checkEagle.isLoading ? true : !checkEagle.data) ||
           !entry.images?.length,
@@ -148,10 +171,25 @@ export const useEntryActions = ({
       {
         name: "Share",
         className: "i-mingcute-share-2-line",
-        action: "share",
         onClick: () => {
           if (!entry.url) return
           client?.showShareMenu(entry.url)
+        },
+      },
+      {
+        name: "Mark as Read",
+        className: "i-mingcute-round-fill",
+        disabled: !!entry.read,
+        onClick: () => {
+          read.mutate()
+        },
+      },
+      {
+        name: "Mark as Unread",
+        className: "i-mingcute-round-line",
+        disabled: !entry.read,
+        onClick: () => {
+          unread.mutate()
         },
       },
     ],
