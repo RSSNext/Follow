@@ -55,9 +55,8 @@ export type EntriesResponse = {
   url?: string
 
   feeds: FeedResponse
-  collections: {
-    createdAt: string
-  } | null
+  collected: boolean
+  read: boolean
 }[]
 
 export type ListResponse<T> = {

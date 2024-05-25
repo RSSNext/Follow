@@ -15,9 +15,11 @@ export const useEntryActions = ({
   view,
   entry,
 }: {
-  view: number
-  entry: EntriesResponse[number]
+  view?: number
+  entry?: EntriesResponse[number]
 }) => {
+  if (!entry?.url || view === undefined) return { items: [] }
+
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
     queryFn: async () => {
@@ -33,9 +35,7 @@ export const useEntryActions = ({
   const queryClient = useQueryClient()
 
   const updateCollection = (
-    target: {
-      createdAt: string
-    } | null,
+    target: boolean,
   ) => {
     const key = ["entry", entry.id]
     const data = queryClient.getQueryData(key)
@@ -43,7 +43,7 @@ export const useEntryActions = ({
       queryClient.setQueryData(
         key,
         Object.assign({}, data, {
-          collections: target,
+          collected: target,
         }),
       )
     }
@@ -54,13 +54,13 @@ export const useEntryActions = ({
     entriesData.forEach(
       ([key, data]: [
         QueryKey,
-        InfiniteData<ListResponse<EntriesResponse>>,
+        unknown,
       ]) => {
-        const list = data?.pages?.[0]?.data
+        const list = (data as InfiniteData<ListResponse<EntriesResponse>>)?.pages?.[0]?.data
         if (list) {
           for (const item of list) {
             if (item.id === entry.id) {
-              item.collections = target
+              item.collected = target
               queryClient.setQueryData(key, data)
             }
           }
@@ -78,9 +78,7 @@ export const useEntryActions = ({
         },
       }),
     onSuccess: () => {
-      updateCollection({
-        createdAt: new Date().toISOString(),
-      })
+      updateCollection(true)
 
       toast({
         duration: 1000,
@@ -97,7 +95,7 @@ export const useEntryActions = ({
         },
       }),
     onSuccess: () => {
-      updateCollection(null)
+      updateCollection(false)
 
       toast({
         duration: 1000,
@@ -114,7 +112,7 @@ export const useEntryActions = ({
         name: "Collect",
         className: "i-mingcute-star-line",
         action: "collect",
-        disabled: !!entry.collections,
+        disabled: !!entry.collected,
         onClick: () => {
           collect.mutate()
         },
@@ -123,7 +121,7 @@ export const useEntryActions = ({
         name: "Uncollect",
         className: "i-mingcute-star-fill",
         action: "uncollect",
-        disabled: !entry.collections,
+        disabled: !entry.collected,
         onClick: () => {
           uncollect.mutate()
         },
