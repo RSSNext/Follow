@@ -1,12 +1,11 @@
 import { useToast } from "@renderer/components/ui/use-toast"
+import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { client } from "@renderer/lib/client"
-import type { EntriesResponse, ListResponse } from "@renderer/lib/types"
+import type { EntriesResponse } from "@renderer/lib/types"
 import { apiFetch } from "@renderer/queries/api-fetch"
-import type { InfiniteData, QueryKey } from "@tanstack/react-query"
 import {
   useMutation,
   useQuery,
-  useQueryClient,
 } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
@@ -31,42 +30,9 @@ export const useEntryActions = ({
     },
   })
 
-  const queryClient = useQueryClient()
-
-  const updateCollection = (
-    target: boolean,
-  ) => {
-    const key = ["entry", entry?.id]
-    const data = queryClient.getQueryData(key)
-    if (data) {
-      queryClient.setQueryData(
-        key,
-        Object.assign({}, data, {
-          collected: target,
-        }),
-      )
-    }
-
-    const entriesData = queryClient.getQueriesData({
-      queryKey: ["entries"],
-    })
-    entriesData.forEach(
-      ([key, data]: [
-        QueryKey,
-        unknown,
-      ]) => {
-        const list = (data as InfiniteData<ListResponse<EntriesResponse>>)?.pages?.[0]?.data
-        if (list) {
-          for (const item of list) {
-            if (item.id === entry?.id) {
-              item.collected = target
-              queryClient.setQueryData(key, data)
-            }
-          }
-        }
-      },
-    )
-  }
+  const updateEntry = useUpdateEntry({
+    entryId: entry?.id,
+  })
 
   const collect = useMutation({
     mutationFn: async () =>
@@ -77,7 +43,9 @@ export const useEntryActions = ({
         },
       }),
     onSuccess: () => {
-      updateCollection(true)
+      updateEntry({
+        collected: true,
+      })
 
       toast({
         duration: 1000,
@@ -94,7 +62,9 @@ export const useEntryActions = ({
         },
       }),
     onSuccess: () => {
-      updateCollection(false)
+      updateEntry({
+        collected: false,
+      })
 
       toast({
         duration: 1000,
