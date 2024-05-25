@@ -1,7 +1,6 @@
 body,
 #root {
   @apply h-screen;
-  @apply text-zinc-700;
   @apply cursor-default;
   @apply select-none;
 
@@ -23,4 +22,8 @@ a {
 
 .prose a {
   @apply cursor-pointer;
+}
+
+.dark {
+  color-scheme: dark;
 }

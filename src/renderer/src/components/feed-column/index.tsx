@@ -15,6 +15,7 @@ import { Lethargy } from "lethargy"
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 
+import { AppearanceSwitch } from "../appearance-switch"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -85,6 +86,7 @@ export function FeedColumn() {
           Follow
         </div>
         <div className="flex items-center">
+          <AppearanceSwitch />
           <Button variant="ghost" size="sm">
             <Link to="/profile" className="flex">
               <UserButton className="h-5 p-0" hideName={true} />

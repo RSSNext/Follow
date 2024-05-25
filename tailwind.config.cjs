@@ -3,7 +3,7 @@ const { iconsPlugin, getIconCollections } = require("@egoist/tailwindcss-icons")
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: ["./src/**/*.tsx"],
+  content: ["./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
     container: {
@@ -49,8 +49,8 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         native: {
-          DEFAULT: "#E1E0DF",
-          active: "#C9C9C7",
+          DEFAULT: "hsl(var(--native))",
+          active: "hsl(var(--native-active))",
         },
       },
       borderRadius: {

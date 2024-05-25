@@ -28,7 +28,7 @@ export function EntryItemWrapper({
       key={entry.id}
       className={cn(
         "rounded-md transition-colors",
-        activeEntry === entry.id && "bg-[#DEDDDC]",
+        activeEntry === entry.id && "bg-native-active",
       )}
       onClick={(e) => {
         e.stopPropagation()

@@ -1,6 +1,6 @@
 import { parseHtml } from "@renderer/lib/parse-html"
-import { useEntry } from "@renderer/queries/entries"
 import type { ActiveEntry } from "@renderer/lib/types"
+import { useEntry } from "@renderer/queries/entries"
 import { m } from "framer-motion"
 import { useEffect, useState } from "react"
 
@@ -51,7 +51,7 @@ export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
               new Date(entry.data?.publishedAt).toUTCString()}
             </div>
           </a>
-          <div className="prose prose-zinc mx-auto mb-32 mt-10 max-w-[550px] cursor-auto select-text text-[15px]">
+          <div className="prose prose-zinc mx-auto mb-32 mt-10 max-w-[550px] cursor-auto select-text text-[15px] dark:prose-invert">
             {content}
           </div>
         </div>
