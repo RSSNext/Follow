@@ -2,7 +2,6 @@ import { Button } from "@renderer/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { UserButton } from "@renderer/components/user-button"
@@ -87,7 +86,7 @@ export function FeedColumn() {
         <div className="flex items-center">
           <Button variant="ghost" size="sm">
             <Link to="/profile" className="flex">
-              <UserButton className="h-5 p-0" hideName={true} />
+              <UserButton className="h-5 p-0" hideName />
             </Link>
           </Button>
           <Button variant="ghost" size="sm">
@@ -98,35 +97,33 @@ export function FeedColumn() {
         </div>
       </div>
       <div className="flex w-full justify-between px-3 text-xl text-zinc-500">
-        <TooltipProvider>
-          {views.map((item, index) => (
-            <Tooltip key={item.name}>
-              <TooltipTrigger asChild>
-                <Button
-                  className={cn(
-                    active === index && item.className,
-                    "flex items-center text-xl",
-                  )}
-                  variant="ghost"
-                  size="sm"
-                  onClick={(e) => {
-                    setActive(index)
-                    setActiveList?.({
-                      level: "view",
-                      id: index,
-                      name: views[index].name,
-                      view: index,
-                    })
-                    e.stopPropagation()
-                  }}
-                >
-                  {item.icon}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">{item.name}</TooltipContent>
-            </Tooltip>
-          ))}
-        </TooltipProvider>
+        {views.map((item, index) => (
+          <Tooltip key={item.name}>
+            <TooltipTrigger asChild>
+              <Button
+                className={cn(
+                  active === index && item.className,
+                  "flex items-center text-xl",
+                )}
+                variant="ghost"
+                size="sm"
+                onClick={(e) => {
+                  setActive(index)
+                  setActiveList?.({
+                    level: "view",
+                    id: index,
+                    name: views[index].name,
+                    view: index,
+                  })
+                  e.stopPropagation()
+                }}
+              >
+                {item.icon}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">{item.name}</TooltipContent>
+          </Tooltip>
+        ))}
       </div>
       <div className="size-full overflow-hidden" ref={carouselRef}>
         <m.div className="flex h-full" style={{ x: spring }}>

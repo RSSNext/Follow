@@ -76,6 +76,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground/75;
+    @apply text-foreground/75;
   }
 }
