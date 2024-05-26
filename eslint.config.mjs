@@ -12,6 +12,7 @@ export default defineConfig(
       arrowParens: true,
       braceStyle: "1tbs",
     },
+    ignores: ["src/renderer/src/hono.ts"],
   },
   {
     rules: {

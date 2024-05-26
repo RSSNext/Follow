@@ -1,3 +1,6 @@
+import type { apiClient } from "@renderer/queries/api-fetch"
+import type { InferResponseType } from "hono/client"
+
 export type ActiveList = {
   level: string
   id: string | number
@@ -22,16 +25,15 @@ export type FeedResponse = {
   errorMessage?: string
 }
 
-export type SubscriptionResponse = {
-  userId: string
-  feedId: string
-  view: number
-  category?: string
-  title?: string
-  isPrivate?: boolean
-  unread?: number
-  feeds: FeedResponse
-}[]
+export type SubscriptionResponse = Array<
+  Exclude<
+    Extract<
+      InferResponseType<typeof apiClient.subscriptions.$get>,
+      { code: 0 }
+    >["data"],
+    undefined
+  >[number] & { unread?: number }
+>
 
 export type EntriesResponse = {
   author?: string
