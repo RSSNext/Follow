@@ -1,3 +1,5 @@
+import { AppearanceSwitch } from "@renderer/components/appearance-switch"
+
 export function Component() {
   return (
     <>
@@ -5,6 +7,7 @@ export function Component() {
         <i className="i-mingcute-settings-7-line text-xl" />
         General
       </h1>
+      <AppearanceSwitch />
     </>
   )
 }

@@ -32,7 +32,7 @@ export function Component() {
         Follow Settings
       </div> */}
       <div className="flex flex-1">
-        <div className="w-44 border-r bg-native p-3 pt-10">
+        <div className="w-44 border-r bg-native/80 p-3 pt-10 backdrop-blur">
           <div className="mx-2 mb-5 flex items-center gap-1 text-xl font-bold">
             <img src="./icon.svg" alt="logo" className="size-6" />
             Settings
@@ -40,8 +40,8 @@ export function Component() {
           {tabs.map((t) => (
             <Link
               key={t.path}
-              className={`my-1 flex items-center rounded-md px-2.5 py-[3px] text-[15px] font-medium leading-loose text-zinc-600 transition-colors ${
-                tab === t.path ? "bg-native-active text-zinc-900" : ""
+              className={`my-1 flex items-center rounded-md px-2.5 py-[3px] text-[15px] font-medium leading-loose text-foreground/70 transition-colors ${
+                tab === t.path ? "bg-native-active text-foreground/90" : ""
               }`}
               to={`/settings/${t.path}`}
             >
@@ -50,7 +50,7 @@ export function Component() {
             </Link>
           ))}
         </div>
-        <div className="p-8">
+        <div className="flex-1 bg-background p-8">
           <Outlet />
         </div>
       </div>
