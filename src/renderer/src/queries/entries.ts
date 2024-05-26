@@ -1,8 +1,7 @@
 import { levels } from "@renderer/lib/constants"
+import type { DataResponse, EntriesResponse, ListResponse } from "@renderer/lib/types"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-
-import type { DataResponse, EntriesResponse, ListResponse } from "@renderer/lib/types"
 
 export const useEntries = ({
   level,
