@@ -62,8 +62,8 @@ export function EntryItemWrapper({
       key={entry.id}
       className={cn(
         "rounded-md transition-colors",
-        activeEntry === entry.id && "bg-[#DEDDDC]",
-        entry.read && "text-gray-500 opacity-90",
+        activeEntry === entry.id && "bg-native-active",
+        entry.read && "text-foreground/50",
       )}
       ref={itemRef}
       onClick={(e) => {

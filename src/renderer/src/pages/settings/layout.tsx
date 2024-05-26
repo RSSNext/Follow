@@ -40,8 +40,8 @@ export function Component() {
           {tabs.map((t) => (
             <Link
               key={t.path}
-              className={`my-1 flex items-center rounded-md px-2.5 py-[3px] text-[15px] font-medium leading-loose text-zinc-600 transition-colors ${
-                tab === t.path ? "bg-native-active text-zinc-900" : ""
+              className={`my-1 flex items-center rounded-md px-2.5 py-[3px] text-[15px] font-medium leading-loose text-foreground/70 transition-colors ${
+                tab === t.path ? "bg-native-active text-foreground/90" : ""
               }`}
               to={`/settings/${t.path}`}
             >
