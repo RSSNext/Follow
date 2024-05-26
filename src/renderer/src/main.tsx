@@ -1,15 +1,12 @@
 import "./assets/main.css"
 
-import { authConfigManager, SessionProvider } from "@hono/auth-js/react"
-import { Toaster } from "@renderer/components/ui/toaster"
-import { queryClient } from "@renderer/lib/query-client"
-import { QueryClientProvider } from "@tanstack/react-query"
-import { LazyMotion, MotionConfig } from "framer-motion"
+import { authConfigManager } from "@hono/auth-js/react"
 import * as React from "react"
 import ReactDOM from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
 import App from "./App"
+import { RootProviders } from "./providers/root-providers"
 
 const router = createBrowserRouter([
   {
@@ -97,9 +94,6 @@ const router = createBrowserRouter([
   },
 ])
 
-const loadFeatures = () =>
-  import("./framer-lazy-feature").then((res) => res.default)
-
 authConfigManager.setConfig({
   baseUrl: import.meta.env.VITE_API_URL,
   basePath: "/auth",
@@ -108,21 +102,8 @@ authConfigManager.setConfig({
 
 ReactDOM.createRoot(document.querySelector("#root") as HTMLElement).render(
   <React.StrictMode>
-    <LazyMotion features={loadFeatures} strict key="framer">
-      <MotionConfig
-        transition={{
-          type: "tween",
-          duration: 0.15,
-          ease: "easeInOut",
-        }}
-      >
-        <SessionProvider>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-          </QueryClientProvider>
-        </SessionProvider>
-      </MotionConfig>
-    </LazyMotion>
-    <Toaster />
+    <RootProviders>
+      <RouterProvider router={router} />
+    </RootProviders>
   </React.StrictMode>,
 )
