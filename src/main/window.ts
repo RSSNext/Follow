@@ -22,6 +22,8 @@ export function createWindow(options?: {
       sandbox: false,
     },
     titleBarStyle: "hiddenInset",
+    vibrancy: "window",
+    visualEffectState: "active",
   })
 
   window.on("ready-to-show", () => {
@@ -55,17 +57,18 @@ export function createWindow(options?: {
   ]
   window.webContents.session.webRequest.onBeforeSendHeaders(
     (details, callback) => {
-      const trueUrl = process.env["VITE_IMGPROXY_URL"] &&
+      const trueUrl =
+        process.env["VITE_IMGPROXY_URL"] &&
         details.url.startsWith(process.env["VITE_IMGPROXY_URL"]) ?
-        decodeURIComponent(
-          details.url.replace(
-            new RegExp(
-              `^${process.env["VITE_IMGPROXY_URL"]}/unsafe/\\d+x\\d+/`,
+          decodeURIComponent(
+            details.url.replace(
+              new RegExp(
+                  `^${process.env["VITE_IMGPROXY_URL"]}/unsafe/\\d+x\\d+/`,
+              ),
+              "",
             ),
-            "",
-          ),
-        ) :
-        details.url
+          ) :
+          details.url
       const refererMatch = refererMatchs.find((item) => item.url.test(trueUrl))
       callback({
         requestHeaders: {
