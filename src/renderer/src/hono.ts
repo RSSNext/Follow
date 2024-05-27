@@ -307,8 +307,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         author: string | null;
                         changedAt: string;
                         publishedAt: string;
-                        images: string | null;
-                        categories: string | null;
+                        images: string[] | null;
+                        categories: string[] | null;
                     }[] | undefined;
                     docs?: string | undefined;
                     isSubscribed?: boolean | undefined;
@@ -458,8 +458,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     author: string | null;
                     changedAt: string;
                     publishedAt: string;
-                    images: string | null;
-                    categories: string | null;
+                    images: string[] | null;
+                    categories: string[] | null;
                     collected: boolean;
                     read: boolean;
                 }[] | undefined;
@@ -519,7 +519,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     changedAt: string;
                     publishedAt: string;
                     images: string[] | null;
-                    categories: string | null;
+                    categories: string[] | null;
                     collected: boolean;
                     read: boolean;
                 } | undefined;
