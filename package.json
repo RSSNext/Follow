@@ -91,6 +91,8 @@
     "eslint": "^9.3.0",
     "eslint-config-hyoban": "^2.9.3",
     "lint-staged": "15.2.4",
+    "postcss": "8.4.38",
+    "postcss-js": "4.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "simple-git-hooks": "2.11.1",

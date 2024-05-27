@@ -1,5 +1,7 @@
 const { iconsPlugin, getIconCollections } = require("@egoist/tailwindcss-icons")
 
+require("./cssAsPlugin")
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -88,5 +90,6 @@ module.exports = {
     }),
     require("tailwindcss-animate"),
     require("@tailwindcss/typography"),
+    require("./src/renderer/src/assets/tailwind-extend.css"),
   ],
 }
