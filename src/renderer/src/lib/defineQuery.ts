@@ -16,18 +16,16 @@ type ValidRecipeReturnType<State> =
   | undefined
   | (State extends undefined ? typeof nothing : never)
 
-export type DefinedQuery<
-  TQueryKey extends QueryKey,
-  TData,
-  TTransformedData = TData,
-> = Readonly<{
+export type DefinedQuery<TQueryKey extends QueryKey, TData> = Readonly<{
   key: TQueryKey
   fn: QueryFunction<TData>
-  transform?: (data: TData) => TTransformedData
+  rootKey?: QueryKey
 
   cancel: (key?: (key: TQueryKey) => QueryKey) => Promise<void>
   remove: (key?: (key: TQueryKey) => QueryKey) => Promise<void>
+
   invalidate: (key?: (key: TQueryKey) => QueryKey) => Promise<void>
+  invalidateRoot: () => void
 
   refetch: () => Promise<TData | undefined>
   prefetch: () => Promise<void>
@@ -63,6 +61,7 @@ export type DefinedQuery<
 
 export type DefinedQueryOptions<TData> = {
   // shouldPersist?: boolean;
+  rootKey?: QueryKey
 
   onCancel?: () => void | Promise<void>
   onInvalidate?: () => void | Promise<void>
@@ -91,29 +90,39 @@ export function defineQuery<
   const queryDefine: DefinedQuery<TQueryKey, TData> = {
     key,
     fn,
+    rootKey: options?.rootKey,
 
+    invalidateRoot: () => {
+      if (options?.rootKey) {
+        queryClient.invalidateQueries({
+          queryKey: options.rootKey,
+          refetchType: "all",
+        })
+        options?.onInvalidateRoot?.()
+      }
+    },
     prefetch: async () => {
       await queryClient.prefetchQuery({
         queryKey: key,
         queryFn: fn,
       })
     },
-    cancel: async (keyGenerator) => {
+    cancel: async (keyExtactor) => {
       const queryKey =
-        typeof keyGenerator === "function" ? keyGenerator(key) : key
+        typeof keyExtactor === "function" ? keyExtactor(key) : key
       await queryClient.cancelQueries({
         queryKey,
       })
       options?.onCancel?.()
     },
-    remove: async (keyGenerator) => {
+    remove: async (keyExtactor) => {
       const queryKey =
-        typeof keyGenerator === "function" ? keyGenerator(key) : key
+        typeof keyExtactor === "function" ? keyExtactor(key) : key
       queryClient.removeQueries({ queryKey })
     },
-    invalidate: async (keyGenerator) => {
+    invalidate: async (keyExtactor) => {
       const queryKey =
-        typeof keyGenerator === "function" ? keyGenerator(key) : key
+        typeof keyExtactor === "function" ? keyExtactor(key) : key
 
       await queryClient.invalidateQueries({
         queryKey,
@@ -173,7 +182,6 @@ export function defineQuery<
     optimisticInfiniteUpdate(updater) {
       return queryDefine.optimisticUpdate<InfiniteData<TData>>(updater)
     },
-
   }
 
   return Object.freeze(queryDefine)

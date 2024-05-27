@@ -158,7 +158,7 @@ export function FollowForm({ type }: { type: string }) {
                                   return (
                                     <a
                                       key={assertEntry.id}
-                                      href={assertEntry.url}
+                                      href={assertEntry.url || void 0}
                                       target="_blank"
                                       className="flex min-w-0 flex-1 flex-col items-center gap-1"
                                       rel="noreferrer"

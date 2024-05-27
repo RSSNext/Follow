@@ -1,8 +1,7 @@
 import { UnAuthorizedError } from "@renderer/biz/error"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import type { SubscriptionResponse } from "@renderer/lib/types"
-import { apiClient, apiFetch } from "@renderer/queries/api-fetch"
-import { useQuery } from "@tanstack/react-query"
+import { apiClient } from "@renderer/queries/api-fetch"
 import { parse } from "tldts"
 
 export type Response = {
@@ -90,6 +89,8 @@ export const subscription = {
         list,
         unread: categories.unread,
       } as Response
+    }, {
+      rootKey: ["subscriptions"],
     }),
   categories: (view?: number) =>
     defineQuery(["subscription-categories", view], async () => {
@@ -104,20 +105,3 @@ export const subscription = {
       return res.data
     }),
 }
-
-export const useSubscriptionCategories = (view?: number) =>
-  useQuery({
-    queryKey: ["subscription-categories", view],
-    queryFn: async () => {
-      const { data: categories } = await apiFetch<{
-        code: number
-        data: string[]
-      }>("/categories", {
-        query: {
-          view,
-        },
-      })
-
-      return categories || []
-    },
-  })

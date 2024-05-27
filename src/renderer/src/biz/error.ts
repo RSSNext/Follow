@@ -8,3 +8,11 @@ export class UnAuthorizedError extends RequestError {
     super(message)
   }
 }
+
+export class UnprocessableEntityError extends RequestError {
+  name = "UnprocessableEntityError"
+
+  constructor(message?: string) {
+    super(message)
+  }
+}

@@ -20,31 +20,40 @@ export type SubscriptionResponse = Array<
   >[number] & { unread?: number }
 >
 
-export type EntriesResponse = {
-  author?: string
-  category?: string[]
-  changedAt: string
-  content?: string
-  description?: string
-  enclosure?: {
-    url: string
-    type?: string
-    length?: number
-    title?: string
-  }
-  feedId: string
-  guid: string
-  id: string
-  images?: string[]
-  publishedAt: string
-  readingTime?: number
-  title?: string
-  url?: string
+// export type EntriesResponse = {
+//   author?: string
+//   category?: string[]
+//   changedAt: string
+//   content?: string
+//   description?: string
+//   enclosure?: {
+//     url: string
+//     type?: string
+//     length?: number
+//     title?: string
+//   }
+//   feedId: string
+//   guid: string
+//   id: string
+//   images?: string[]
+//   publishedAt: string
+//   readingTime?: number
+//   title?: string
+//   url?: string
 
-  feeds: FeedResponse
-  collected: boolean
-  read: boolean
-}[]
+//   feeds: FeedResponse
+//   collected: boolean
+//   read: boolean
+// }[]
+export type EntriesResponse = Array<
+  Exclude<
+    Extract<
+      InferResponseType<typeof apiClient.entries.$get>,
+      { code: 0 }
+    >["data"],
+    undefined
+  >
+>
 
 export type ListResponse<T> = {
   code: number

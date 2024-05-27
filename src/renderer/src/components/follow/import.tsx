@@ -12,8 +12,9 @@ import {
 import { Input } from "@renderer/components/ui/input"
 import type { FeedResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
+import { Queries } from "@renderer/queries"
 import { apiFetch } from "@renderer/queries/api-fetch"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -54,7 +55,6 @@ export function FollowImport() {
     resolver: zodResolver(formSchema),
   })
 
-  const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: async (file: File) => {
       const formData = new FormData()
@@ -72,9 +72,7 @@ export function FollowImport() {
       return data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["subscriptions"],
-      })
+      Queries.subscription.byView().invalidateRoot()
     },
   })
 

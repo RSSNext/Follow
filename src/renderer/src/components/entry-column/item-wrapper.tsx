@@ -70,7 +70,7 @@ export function EntryItemWrapper({
         e.stopPropagation()
         feedActions.setActiveEntry(entry.id)
       }}
-      onDoubleClick={() => window.open(entry.url, "_blank")}
+      onDoubleClick={() => entry.url && window.open(entry.url, "_blank")}
       onContextMenu={(e) => {
         e.preventDefault()
         showNativeMenu(

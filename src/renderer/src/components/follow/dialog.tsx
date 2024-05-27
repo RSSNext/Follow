@@ -29,7 +29,7 @@ import type { SubscriptionResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { apiFetch } from "@renderer/queries/api-fetch"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -69,7 +69,6 @@ export function FollowDialog({
     },
   })
 
-  const queryClient = useQueryClient()
   const followMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) =>
       apiFetch("/subscriptions", {
@@ -84,13 +83,10 @@ export function FollowDialog({
       }),
     onSuccess: (_, variables) => {
       if (isSubscribed && variables.view !== `${feed.view}`) {
-        queryClient.invalidateQueries({
-          queryKey: ["subscriptions", feed.view],
-        })
+        Queries.subscription.byView(feed.view).invalidate()
       }
-      queryClient.invalidateQueries({
-        queryKey: ["subscriptions", Number.parseInt(variables.view)],
-      })
+      Queries.subscription.byView(Number.parseInt(variables.view)).invalidate()
+
       onSuccess?.(variables)
     },
   })
