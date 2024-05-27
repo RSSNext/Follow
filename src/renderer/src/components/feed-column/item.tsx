@@ -140,7 +140,9 @@ export function FeedItem({
               {
                 type: "text",
                 label: "Open Site in Browser",
-                click: () => feed.feeds.siteUrl && window.open(feed.feeds.siteUrl, "_blank"),
+                click: () =>
+                  feed.feeds.siteUrl &&
+                  window.open(feed.feeds.siteUrl, "_blank"),
               },
             ],
             e,
