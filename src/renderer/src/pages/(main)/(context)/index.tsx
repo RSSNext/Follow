@@ -21,7 +21,7 @@ export function Component() {
   const { setActiveEntry } = feedActions
   useEffect(() => {
     setActiveEntry(null)
-  }, [activeList])
+  }, [activeList?.id])
 
   return (
     <>

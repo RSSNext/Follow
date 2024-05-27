@@ -1,6 +1,6 @@
 import { cn } from "@renderer/lib/utils"
 import { useEntries } from "@renderer/queries/entries"
-import { feedActions, useFeedStore } from "@renderer/store"
+import { useFeedStore } from "@renderer/store"
 import { m } from "framer-motion"
 
 import { ArticleItem } from "./article-item"
@@ -46,9 +46,9 @@ export function EntryColumn() {
       Item = ArticleItem
     }
   }
-  const { setActiveEntry } = feedActions
+
   return (
-    <div className="px-2" onClick={() => setActiveEntry(null)}>
+    <div className="px-2">
       <div className="mb-5 ml-9">
         <div className="text-lg font-bold">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
