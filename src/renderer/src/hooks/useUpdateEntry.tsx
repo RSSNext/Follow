@@ -18,15 +18,15 @@ export const useUpdateEntry = ({ entryId }: { entryId?: string }) => {
       queryKey: ["entries"],
     })
     entriesData.forEach(([key, data]: [QueryKey, unknown]) => {
-      const list = (data as InfiniteData<ListResponse<EntriesResponse>>)
-        ?.pages?.[0]?.data
+      const assertData = data as InfiniteData<ListResponse<EntriesResponse>>
+      const list = assertData?.pages?.[0]?.data
       if (list) {
         for (const item of list) {
           if (item.id === entryId) {
             for (const [key, value] of Object.entries(changed)) {
               item[key] = value
             }
-            queryClient.setQueryData(key, data)
+            queryClient.setQueryData<typeof assertData>(key, assertData)
           }
         }
       }
