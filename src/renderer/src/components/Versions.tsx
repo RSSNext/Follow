@@ -1,8 +1,10 @@
+import type { ReactNode } from "react"
 import { useState } from "react"
 
-function Versions(): JSX.Element {
-  const [versions] = useState(window.electron.process.versions)
+function Versions(): ReactNode {
+  const [versions] = useState(window.electron?.process.versions)
 
+  if (!versions) return null
   return (
     <ul className="versions">
       <li className="electron-version">

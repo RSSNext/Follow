@@ -10,10 +10,11 @@ import { useCallback, useState } from "react"
 import * as React from "react"
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "value"> {
+  // TODO isLoading
   options: string[]
   emptyMessage: string
-  value?: string
+  value?: string | null
 }
 
 export const AutoComplete = React.forwardRef<HTMLInputElement, InputProps>(
@@ -51,7 +52,7 @@ export const AutoComplete = React.forwardRef<HTMLInputElement, InputProps>(
             setOpen(true)
             props.onFocus?.(e)
           }}
-          value={value}
+          value={value || void 0}
           onValueChange={(value) => {
             setOpen(true)
             onValueChange(value)

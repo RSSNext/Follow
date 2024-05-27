@@ -30,10 +30,13 @@ const formSchema = z.object({
   keyword: z.string().min(1),
 })
 
-const info: Record<string, {
-  label: string
-  prefix?: string
-}> = {
+const info: Record<
+  string,
+  {
+    label: string
+    prefix?: string
+  }
+> = {
   general: {
     label: "Any URL or Keyword",
   },
@@ -150,31 +153,34 @@ export function FollowForm({ type }: { type: string }) {
                             <div className="grid grid-cols-4 gap-4">
                               {item.entries
                                 .filter((e) => !!e)
-                                .map((entry) => (
-                                  <a
-                                    key={entry.id}
-                                    href={entry.url}
-                                    target="_blank"
-                                    className="flex min-w-0 flex-1 flex-col items-center gap-1"
-                                    rel="noreferrer"
-                                  >
-                                    {entry.images?.[0] ?
-                                        (
-                                          <Image
-                                            src={entry.images?.[0]}
-                                            className="aspect-square w-full"
-                                          />
-                                        ) :
-                                        (
-                                          <div className="flex aspect-square w-full overflow-hidden rounded bg-stone-100 p-2 text-xs leading-tight text-zinc-500">
-                                            {entry.title}
-                                          </div>
-                                        )}
-                                    <div className="line-clamp-2 w-full text-xs leading-tight">
-                                      {entry.title}
-                                    </div>
-                                  </a>
-                                ))}
+                                .map((entry) => {
+                                  const assertEntry = entry as EntriesResponse[number]
+                                  return (
+                                    <a
+                                      key={assertEntry.id}
+                                      href={assertEntry.url}
+                                      target="_blank"
+                                      className="flex min-w-0 flex-1 flex-col items-center gap-1"
+                                      rel="noreferrer"
+                                    >
+                                      {assertEntry.images?.[0] ?
+                                          (
+                                            <Image
+                                              src={assertEntry.images?.[0]}
+                                              className="aspect-square w-full"
+                                            />
+                                          ) :
+                                          (
+                                            <div className="flex aspect-square w-full overflow-hidden rounded bg-stone-100 p-2 text-xs leading-tight text-zinc-500">
+                                              {assertEntry.title}
+                                            </div>
+                                          )}
+                                      <div className="line-clamp-2 w-full text-xs leading-tight">
+                                        {assertEntry.title}
+                                      </div>
+                                    </a>
+                                  )
+                                })}
                             </div>
                           )}
                         </CardContent>

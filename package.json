@@ -54,6 +54,7 @@
     "electron-updater": "^6.1.7",
     "framer-motion": "11.2.6",
     "hast-util-to-jsx-runtime": "2.3.0",
+    "immer": "10.1.1",
     "jotai": "2.8.1",
     "jotai-dark": "^0.3.0",
     "jotai-effect": "^1.0.0",

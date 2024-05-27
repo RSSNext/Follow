@@ -44,8 +44,10 @@ export const parseHtml = async (content: string) => {
     content: toJsxRuntime(hastTree, {
       Fragment,
       ignoreInvalidStyle: true,
-      jsx,
-      jsxs,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      jsx: (type, props, key) => jsx(type as any, props, key),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      jsxs: (type, props, key) => jsxs(type as any, props, key),
       passNode: true,
     }),
   }

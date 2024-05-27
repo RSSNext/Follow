@@ -11,7 +11,7 @@ export function FollowSummary({
   return (
     <div className="max-w-[462px] select-text space-y-1 text-sm">
       <a
-        href={feed.siteUrl}
+        href={feed.siteUrl || void 0}
         target="_blank"
         className="flex items-center"
         rel="noreferrer"

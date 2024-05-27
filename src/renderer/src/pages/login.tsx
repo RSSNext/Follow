@@ -22,7 +22,8 @@ export function Component() {
   }, [])
 
   if (status === "authenticated") {
-    return navigate("/redirect?app=follow")
+    navigate("/redirect?app=follow")
+    return null
   }
 
   return (

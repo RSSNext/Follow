@@ -1,6 +1,7 @@
+import { useBizQuery } from "@renderer/hooks/useBizQuery"
 import { levels, views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
-import { useSubscriptions } from "@renderer/queries/subscriptions"
+import { Queries } from "@renderer/queries"
 import { feedActions } from "@renderer/store"
 import { useState } from "react"
 
@@ -15,7 +16,7 @@ export function FeedList({
   view?: number
   hideTitle?: boolean
 }) {
-  const subscriptions = useSubscriptions(view)
+  const subscriptions = useBizQuery(Queries.subscription.byView(view))
   const [expansion, setExpansion] = useState(false)
   const { setActiveList } = feedActions
 

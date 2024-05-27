@@ -9,22 +9,7 @@ export type ActiveList = {
   preventNavigate?: boolean
 } | null
 
-export type FeedResponse = {
-  id: string
-  url: string
-  title?: string
-  description?: string
-  siteUrl?: string
-  image?: string
-  checkedAt: string
-  nextCheckAt: string
-  lastModifiedHeader?: string
-  etagHeader?: string
-  ttl: number
-  errorAt?: string
-  errorMessage?: string
-}
-
+export type FeedResponse = SubscriptionResponse[number]["feeds"]
 export type SubscriptionResponse = Array<
   Exclude<
     Extract<

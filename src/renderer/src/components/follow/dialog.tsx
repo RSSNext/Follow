@@ -23,11 +23,12 @@ import {
   SelectValue,
 } from "@renderer/components/ui/select"
 import { Switch } from "@renderer/components/ui/switch"
+import { useBizQuery } from "@renderer/hooks/useBizQuery"
 import { views } from "@renderer/lib/constants"
 import type { SubscriptionResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
+import { Queries } from "@renderer/queries"
 import { apiFetch } from "@renderer/queries/api-fetch"
-import { useSubscriptionCategories } from "@renderer/queries/subscriptions"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -36,7 +37,7 @@ import { FollowSummary } from "../feed-summary"
 
 const formSchema = z.object({
   view: z.string(),
-  category: z.string().optional(),
+  category: z.string().nullable().optional(),
   isPrivate: z.boolean().optional(),
 })
 
@@ -98,7 +99,9 @@ export function FollowDialog({
     followMutation.mutate(values)
   }
 
-  const categories = useSubscriptionCategories(Number.parseInt(form.watch("view")))
+  const categories = useBizQuery(
+    Queries.subscription.categories(Number.parseInt(form.watch("view"))),
+  )
 
   return (
     <DialogContent>
@@ -153,8 +156,8 @@ export function FollowDialog({
                 </div>
                 <FormControl>
                   <AutoComplete
-                    options={categories.data}
-                    emptyMessage="No resulsts."
+                    options={categories.data || []}
+                    emptyMessage="No results."
                     {...field}
                   />
                 </FormControl>
