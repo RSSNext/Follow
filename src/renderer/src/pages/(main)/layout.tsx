@@ -18,7 +18,8 @@ export function Component() {
   }, [navigate, preventNavigate])
 
   if (status !== "authenticated") {
-    return navigate("/login")
+    navigate("/login")
+    return null
   }
 
   return <Outlet />

@@ -15,9 +15,10 @@ import dayjs from "@renderer/lib/dayjs"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { SubscriptionResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
+import { Queries } from "@renderer/queries"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { feedActions, useFeedActiveList } from "@renderer/store"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
 
 export function FeedItem({
@@ -45,7 +46,6 @@ export function FeedItem({
 
   const { toast } = useToast()
 
-  const queryClient = useQueryClient()
   const deleteMutation = useMutation({
     mutationFn: async (feed: SubscriptionResponse[number]) =>
       apiFetch("/subscriptions", {
@@ -55,9 +55,8 @@ export function FeedItem({
         },
       }),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ["subscriptions", feed.view],
-      })
+      Queries.subscription.byView(variables.view).invalidate()
+
       toast({
         duration: 3000,
         description: (
@@ -82,9 +81,8 @@ export function FeedItem({
                   isPrivate: variables.isPrivate,
                 },
               })
-              queryClient.invalidateQueries({
-                queryKey: ["subscriptions", feed.view],
-              })
+
+              Queries.subscription.byView(feed.view).invalidate()
             }}
           >
             Undo
@@ -142,7 +140,7 @@ export function FeedItem({
               {
                 type: "text",
                 label: "Open Site in Browser",
-                click: () => window.open(feed.feeds.siteUrl, "_blank"),
+                click: () => feed.feeds.siteUrl && window.open(feed.feeds.siteUrl, "_blank"),
               },
             ],
             e,

@@ -7,8 +7,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@renderer/components/ui/alert-dialog"
+import { Queries } from "@renderer/queries"
 import { apiFetch } from "@renderer/queries/api-fetch"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 
 export function CategoryRemoveDialog({
   feedIdList,
@@ -21,7 +22,6 @@ export function CategoryRemoveDialog({
   category: string
   view?: number
 }) {
-  const queryClient = useQueryClient()
   const renameMutation = useMutation({
     mutationFn: async () =>
       apiFetch("/categories", {
@@ -32,9 +32,8 @@ export function CategoryRemoveDialog({
         },
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["subscriptions", view],
-      })
+      Queries.subscription.byView(view).invalidate()
+
       onSuccess?.()
     },
   })

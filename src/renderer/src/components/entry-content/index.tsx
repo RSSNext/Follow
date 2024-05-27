@@ -1,15 +1,14 @@
+import { useBizQuery } from "@renderer/hooks/useBizQuery"
 import { parseHtml } from "@renderer/lib/parse-html"
 import type { ActiveEntry } from "@renderer/lib/types"
-import { useEntry } from "@renderer/queries/entries"
+import { Queries } from "@renderer/queries"
 import { m } from "framer-motion"
 import { useEffect, useState } from "react"
 
 import { EntryShare } from "./share"
 
 export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
-  const entry = useEntry({
-    id: entryId,
-  })
+  const entry = useBizQuery(Queries.entries.byId(entryId))
 
   const [content, setContent] = useState<JSX.Element>()
 
@@ -23,6 +22,8 @@ export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
     }
   }, [entry.data?.content])
 
+  if (!entry.data) return null
+
   return (
     <>
       <EntryShare entry={entry.data} view={0} />
@@ -35,7 +36,7 @@ export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
       >
         <div>
           <a
-            href={entry.data?.url}
+            href={entry.data?.url || void 0}
             target="_blank"
             className="mx-auto block max-w-[598px] rounded-md p-6 transition-colors hover:bg-zinc-100"
             rel="noreferrer"

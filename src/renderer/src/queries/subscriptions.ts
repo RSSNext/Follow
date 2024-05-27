@@ -1,6 +1,7 @@
+import { UnAuthorizedError } from "@renderer/biz/error"
+import { defineQuery } from "@renderer/lib/defineQuery"
 import type { SubscriptionResponse } from "@renderer/lib/types"
-import { apiClient, apiFetch } from "@renderer/queries/api-fetch"
-import { useQuery } from "@tanstack/react-query"
+import { apiClient } from "@renderer/queries/api-fetch"
 import { parse } from "tldts"
 
 export type Response = {
@@ -12,16 +13,16 @@ export type Response = {
   unread: number
 }
 
-export const useSubscriptions = (view?: number) =>
-  useQuery({
-    queryKey: ["subscriptions", view],
-    queryFn: async () => {
-      const res = await (await apiClient.subscriptions.$get({ query: { view: String(view) } })).json()
+export const subscription = {
+  byView: (view?: number) =>
+    defineQuery(["subscriptions", view], async () => {
+      const res = await (
+        await apiClient.subscriptions.$get({ query: { view: String(view) } })
+      ).json()
       if (res.code === 1) {
-        throw new Error(res.error)
+        throw new UnAuthorizedError()
       }
       const subscriptions = res.data as SubscriptionResponse
-
       const categories = {
         list: {},
         unread: 0,
@@ -56,7 +57,7 @@ export const useSubscriptions = (view?: number) =>
               const { domain } = parse(subscription.feeds.siteUrl)
               if (domain && domains[domain] > 1) {
                 subscription.category =
-                domain.slice(0, 1).toUpperCase() + domain.slice(1)
+                  domain.slice(0, 1).toUpperCase() + domain.slice(1)
               }
             }
             if (!subscription.category) {
@@ -88,22 +89,19 @@ export const useSubscriptions = (view?: number) =>
         list,
         unread: categories.unread,
       } as Response
-    },
-  })
-
-export const useSubscriptionCategories = (view?: number) =>
-  useQuery({
-    queryKey: ["subscription-categories", view],
-    queryFn: async () => {
-      const { data: categories } = await apiFetch<{
-        code: number
-        data: string[]
-      }>("/categories", {
-        query: {
-          view,
-        },
-      })
-
-      return categories || []
-    },
-  })
+    }, {
+      rootKey: ["subscriptions"],
+    }),
+  categories: (view?: number) =>
+    defineQuery(["subscription-categories", view], async () => {
+      const res = await (
+        await apiClient.categories.$get({
+          query: { view: String(view) },
+        })
+      ).json()
+      if (res.code === 1) {
+        throw new UnAuthorizedError()
+      }
+      return res.data
+    }),
+}

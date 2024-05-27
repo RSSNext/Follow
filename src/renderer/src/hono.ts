@@ -518,7 +518,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     author: string | null;
                     changedAt: string;
                     publishedAt: string;
-                    images: string | null;
+                    images: string[] | null;
                     categories: string | null;
                     collected: boolean;
                     read: boolean;

@@ -13,8 +13,9 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
+import { Queries } from "@renderer/queries"
 import { apiFetch } from "@renderer/queries/api-fetch"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -40,7 +41,6 @@ export function CategoryRenameDialog({
     },
   })
 
-  const queryClient = useQueryClient()
   const renameMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) =>
       apiFetch("/categories", {
@@ -51,9 +51,8 @@ export function CategoryRenameDialog({
         },
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["subscriptions", view],
-      })
+      Queries.subscription.byView(view).invalidate()
+
       onSuccess?.()
     },
   })

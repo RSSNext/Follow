@@ -7,10 +7,11 @@ import { client } from "@renderer/lib/client"
 import { levels } from "@renderer/lib/constants"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
+import { Queries } from "@renderer/queries"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import type { Response as SubscriptionsResponse } from "@renderer/queries/subscriptions"
 import { feedActions, useFeedActiveList } from "@renderer/store"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useState } from "react"
 
@@ -33,7 +34,6 @@ export function FeedCategory({
   const [open, setOpen] = useState(!data.name)
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  const queryClient = useQueryClient()
   const feedIdList = data.list.map((feed) => feed.feedId)
   const deleteMutation = useMutation({
     mutationFn: async () =>
@@ -45,9 +45,7 @@ export function FeedCategory({
         },
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["subscriptions", view],
-      })
+      Queries.subscription.byView(view).invalidate()
     },
   })
 

@@ -9,22 +9,7 @@ export type ActiveList = {
   preventNavigate?: boolean
 } | null
 
-export type FeedResponse = {
-  id: string
-  url: string
-  title?: string
-  description?: string
-  siteUrl?: string
-  image?: string
-  checkedAt: string
-  nextCheckAt: string
-  lastModifiedHeader?: string
-  etagHeader?: string
-  ttl: number
-  errorAt?: string
-  errorMessage?: string
-}
-
+export type FeedResponse = SubscriptionResponse[number]["feeds"]
 export type SubscriptionResponse = Array<
   Exclude<
     Extract<
@@ -35,31 +20,40 @@ export type SubscriptionResponse = Array<
   >[number] & { unread?: number }
 >
 
-export type EntriesResponse = {
-  author?: string
-  category?: string[]
-  changedAt: string
-  content?: string
-  description?: string
-  enclosure?: {
-    url: string
-    type?: string
-    length?: number
-    title?: string
-  }
-  feedId: string
-  guid: string
-  id: string
-  images?: string[]
-  publishedAt: string
-  readingTime?: number
-  title?: string
-  url?: string
+// export type EntriesResponse = {
+//   author?: string
+//   category?: string[]
+//   changedAt: string
+//   content?: string
+//   description?: string
+//   enclosure?: {
+//     url: string
+//     type?: string
+//     length?: number
+//     title?: string
+//   }
+//   feedId: string
+//   guid: string
+//   id: string
+//   images?: string[]
+//   publishedAt: string
+//   readingTime?: number
+//   title?: string
+//   url?: string
 
-  feeds: FeedResponse
-  collected: boolean
-  read: boolean
-}[]
+//   feeds: FeedResponse
+//   collected: boolean
+//   read: boolean
+// }[]
+export type EntriesResponse = Array<
+  Exclude<
+    Extract<
+      InferResponseType<typeof apiClient.entries.$get>,
+      { code: 0 }
+    >["data"],
+    undefined
+  >
+>
 
 export type ListResponse<T> = {
   code: number
