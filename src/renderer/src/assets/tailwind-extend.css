@@ -1,0 +1,13 @@
+/* This CSS File do not import anywhere, just write atom class for tailwindcss. The tailwindcss intellisense will be work. */
+
+@tailwind components;
+
+@layer components {
+  .drag-region {
+    -webkit-app-region: drag;
+  }
+
+  .no-drag-region {
+    -webkit-app-region: no-drag;
+  }
+}

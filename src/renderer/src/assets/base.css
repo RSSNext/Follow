@@ -7,14 +7,6 @@ body,
   font-family: "SN Pro", sans-serif;
 }
 
-.drag-region {
-  -webkit-app-region: drag;
-}
-
-.no-drag-region {
-  -webkit-app-region: no-drag;
-}
-
 button,
 a {
   @apply cursor-default;

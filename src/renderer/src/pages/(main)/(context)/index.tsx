@@ -27,7 +27,8 @@ export function Component() {
     <>
       <div
         className={cn(
-          "h-full shrink-0 overflow-y-auto border-r pt-10",
+          "h-full shrink-0 overflow-y-auto border-r",
+          window.electron ? "pt-10" : "pt-4",
           activeList && wideMode.has(activeList.view) ? "flex-1" : "w-[340px]",
         )}
       >

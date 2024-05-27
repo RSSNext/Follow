@@ -207,6 +207,12 @@ importers:
       lint-staged:
         specifier: 15.2.4
         version: 15.2.4
+      postcss:
+        specifier: 8.4.38
+        version: 8.4.38
+      postcss-js:
+        specifier: 4.0.1
+        version: 4.0.1(postcss@8.4.38)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -5287,7 +5293,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.22.20
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.0.0
+      picocolors: 1.0.1
 
   '@babel/highlight@7.24.6':
     dependencies:
@@ -9751,7 +9757,7 @@ snapshots:
   postcss@8.4.38:
     dependencies:
       nanoid: 3.3.7
-      picocolors: 1.0.0
+      picocolors: 1.0.1
       source-map-js: 1.2.0
 
   preact-render-to-string@5.2.3(preact@10.11.3):
@@ -10455,7 +10461,7 @@ snapshots:
     dependencies:
       browserslist: 4.23.0
       escalade: 3.1.2
-      picocolors: 1.0.0
+      picocolors: 1.0.1
 
   uri-js@4.4.1:
     dependencies:
