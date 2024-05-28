@@ -1,7 +1,7 @@
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
 import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { showNativeMenu } from "@renderer/lib/native-menu"
-import type { EntryResponse, EntriesResponse } from "@renderer/lib/types"
+import type { EntriesResponse, EntryResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { feedActions, useFeedStore } from "@renderer/store"
@@ -23,9 +23,7 @@ export function EntryItemWrapper({
     entry,
   })
 
-  const activeEntry = useFeedStore(
-    (state) => state.activeEntry,
-  )
+  const activeEntry = useFeedStore((state) => state.activeEntry)
 
   const updateEntry = useUpdateEntry({
     entryId: entry?.entries.id,
@@ -47,13 +45,16 @@ export function EntryItemWrapper({
   })
 
   const itemRef = useRef<HTMLDivElement>(null)
-  useHover((state) => {
-    if (state.active && !entry.read) {
-      read.mutate()
-    }
-  }, {
-    target: itemRef,
-  })
+  useHover(
+    (state) => {
+      if (state.active && !entry.read) {
+        read.mutate()
+      }
+    },
+    {
+      target: itemRef,
+    },
+  )
 
   if (!entry?.entries.url || view === undefined) return children
 
@@ -70,7 +71,8 @@ export function EntryItemWrapper({
         e.stopPropagation()
         feedActions.setActiveEntry(entry.entries.id)
       }}
-      onDoubleClick={() => entry.entries.url && window.open(entry.entries.url, "_blank")}
+      onDoubleClick={() =>
+        entry.entries.url && window.open(entry.entries.url, "_blank")}
       onContextMenu={(e) => {
         e.preventDefault()
         showNativeMenu(
