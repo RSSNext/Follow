@@ -24,8 +24,8 @@ export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
 
         <div
           className={cn(
-            "my-0.5 break-words font-medium text-foreground/60",
-            !entry.read && "text-black dark:text-white/90",
+            "my-0.5 break-words font-medium",
+            entry.read ? "text-zinc-500" : "text-black dark:text-white/90",
           )}
         >
           {entry.title}

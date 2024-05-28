@@ -2,6 +2,7 @@ import type { EntriesResponse, ListResponse } from "@renderer/lib/types"
 import { Queries } from "@renderer/queries"
 import type { InfiniteData, QueryKey } from "@tanstack/react-query"
 import { useQueryClient } from "@tanstack/react-query"
+import { produce } from "immer"
 
 export const useUpdateEntry = ({ entryId }: { entryId?: string }) => {
   const queryClient = useQueryClient()
@@ -19,17 +20,19 @@ export const useUpdateEntry = ({ entryId }: { entryId?: string }) => {
     })
     entriesData.forEach(([key, data]: [QueryKey, unknown]) => {
       const assertData = data as InfiniteData<ListResponse<EntriesResponse>>
-      const list = assertData?.pages?.[0]?.data
-      if (list) {
-        for (const item of list) {
-          if (item.id === entryId) {
-            for (const [key, value] of Object.entries(changed)) {
-              item[key] = value
+      const finaldata = produce(assertData, (assertData) => {
+        const list = assertData?.pages?.[0]?.data
+        if (list) {
+          for (const item of list) {
+            if (item.id === entryId) {
+              for (const [key, value] of Object.entries(changed)) {
+                item[key] = value
+              }
             }
-            queryClient.setQueryData<typeof assertData>(key, assertData)
           }
         }
-      }
+      })
+      queryClient.setQueryData<typeof assertData>(key, finaldata)
     })
   }
 
