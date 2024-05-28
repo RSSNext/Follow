@@ -1,9 +1,9 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
-import type { TimelineResponse } from "@renderer/lib/types"
+import type { EntriesResponse } from "@renderer/lib/types"
 
-export function SocialMediaItem({ entry }: { entry: TimelineResponse[number] }) {
+export function SocialMediaItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
     <div className="my-5 flex px-2 py-3">
       <FeedIcon feed={entry.feeds} />

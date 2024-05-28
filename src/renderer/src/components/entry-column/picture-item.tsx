@@ -1,9 +1,9 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
-import type { TimelineResponse } from "@renderer/lib/types"
+import type { EntriesResponse } from "@renderer/lib/types"
 
-export function PictureItem({ entry }: { entry: TimelineResponse[number] }) {
+export function PictureItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
     <div>
       <div>

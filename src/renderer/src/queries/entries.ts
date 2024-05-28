@@ -28,7 +28,7 @@ export const entries = {
         } else if (level === levels.feed) {
           params.feedId = `${id}`
         }
-        const res = await apiClient.timeline.$post({
+        const res = await apiClient.entries.$post({
           json: {
             offset: pageParam as number | undefined,
             view,

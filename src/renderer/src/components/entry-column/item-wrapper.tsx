@@ -1,7 +1,7 @@
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
 import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { showNativeMenu } from "@renderer/lib/native-menu"
-import type { EntryResponse, TimelineResponse } from "@renderer/lib/types"
+import type { EntryResponse, EntriesResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { feedActions, useFeedStore } from "@renderer/store"
@@ -14,7 +14,7 @@ export function EntryItemWrapper({
   children,
   view,
 }: {
-  entry: TimelineResponse[number] | EntryResponse
+  entry: EntriesResponse[number] | EntryResponse
   children: React.ReactNode
   view?: number
 }) {

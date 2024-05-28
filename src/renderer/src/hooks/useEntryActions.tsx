@@ -1,7 +1,7 @@
 import { useToast } from "@renderer/components/ui/use-toast"
 import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { client } from "@renderer/lib/client"
-import type { TimelineResponse } from "@renderer/lib/types"
+import type { EntriesResponse } from "@renderer/lib/types"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import {
   useMutation,
@@ -15,7 +15,7 @@ export const useEntryActions = ({
   entry,
 }: {
   view?: number
-  entry?: TimelineResponse[number]
+  entry?: EntriesResponse[number]
 }) => {
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],

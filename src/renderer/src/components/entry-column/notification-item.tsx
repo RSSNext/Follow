@@ -1,11 +1,11 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import dayjs from "@renderer/lib/dayjs"
-import type { TimelineResponse } from "@renderer/lib/types"
+import type { EntriesResponse } from "@renderer/lib/types"
 
 export function NotificationItem({
   entry,
 }: {
-  entry: TimelineResponse[number]
+  entry: EntriesResponse[number]
 }) {
   return (
     <div className="my-5 flex px-2 py-3">

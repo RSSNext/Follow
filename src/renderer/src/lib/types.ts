@@ -28,10 +28,10 @@ export type EntryResponse = Exclude<
   undefined
 >
 
-export type TimelineResponse = Array<
+export type EntriesResponse = Array<
   Exclude<
     Extract<
-      InferResponseType<typeof apiClient.timeline.$post>,
+      InferResponseType<typeof apiClient.entries.$post>,
       { code: 0 }
     >["data"],
     undefined

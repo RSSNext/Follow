@@ -1,9 +1,9 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
-import type { TimelineResponse } from "@renderer/lib/types"
+import type { EntriesResponse } from "@renderer/lib/types"
 
-export function VideoItem({ entry }: { entry: TimelineResponse[number] }) {
+export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
     <div className="flex">
       <div className="w-full">
