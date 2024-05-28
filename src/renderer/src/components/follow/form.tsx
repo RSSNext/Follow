@@ -16,7 +16,7 @@ import {
 } from "@renderer/components/ui/form"
 import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
-import type { FeedResponse } from "@renderer/lib/types"
+import type { DiscoverResponse } from "@renderer/lib/types"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
@@ -64,13 +64,7 @@ export function FollowForm({ type }: { type: string }) {
   const mutation = useMutation({
     mutationFn: async (keyword: string) => {
       const { data } = await apiFetch<{
-        data: {
-          feed: FeedResponse
-          docs?: string
-          entries?: Partial<unknown>
-          isSubscribed?: boolean
-          subscriptionCount?: number
-        }[]
+        data: DiscoverResponse
       }>("/discover", {
         method: "POST",
         body: {
@@ -154,7 +148,7 @@ export function FollowForm({ type }: { type: string }) {
                               {item.entries
                                 .filter((e) => !!e)
                                 .map((entry) => {
-                                  const assertEntry = entry as EntriesResponse[number]
+                                  const assertEntry = entry
                                   return (
                                     <a
                                       key={assertEntry.id}
