@@ -42,19 +42,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    entryId: string;
-                    csrfToken: string;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
     };
 } & {
@@ -71,18 +58,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                query: {
-                    entryId: string;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
         $post: {
             input: {
@@ -96,19 +71,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    entryId: string;
-                    csrfToken: string;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
         $delete: {
             input: {
@@ -122,19 +84,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    entryId: string;
-                    csrfToken: string;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
     };
 } & {
@@ -146,23 +95,10 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 };
             };
             output: {
-                code: 0;
                 data?: string[] | undefined;
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                query: {
-                    view?: string | undefined;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
         $delete: {
             input: {
@@ -176,19 +112,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    feedIdList: string[];
-                    deleteSubscriptions: boolean;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
         $patch: {
             input: {
@@ -202,32 +125,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    category: string;
-                    feedIdList: string[];
-                };
-            };
-            output: {
-                code: 2;
-                error: string;
-            };
-            outputFormat: "json";
-            status: 400;
-        } | {
-            input: {
-                json: {
-                    category: string;
-                    feedIdList: string[];
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
     };
 } & {
@@ -243,30 +140,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                query: {
-                    id: string;
-                };
-            };
-            output: {
-                code: 2;
-                error: "Feed not found";
-            };
-            outputFormat: "json";
-            status: 400;
-        } | {
-            input: {
-                query: {
-                    id: string;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized" | "Only admins can refresh feeds";
-            };
-            outputFormat: "json";
-            status: 401;
         };
     };
 } & {
@@ -279,7 +152,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 };
             };
             output: {
-                code: 0;
                 data: {
                     feed: {
                         description: string | null;
@@ -317,19 +189,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    keyword: string;
-                    type?: "auto" | "rss" | undefined;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
     };
 } & {
@@ -350,30 +209,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    csrfToken: string;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
-        } | {
-            input: {
-                json: {
-                    csrfToken: string;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Failed to create session";
-            };
-            outputFormat: "json";
-            status: 500;
         };
     };
     "/auth-app/update-account": {
@@ -391,21 +226,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    csrfToken: string;
-                    name?: string | null | undefined;
-                    image?: string | null | undefined;
-                    handle?: string | null | undefined;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
     };
 } & {
@@ -466,23 +286,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    feedId?: string | undefined;
-                    view?: number | undefined;
-                    category?: string | undefined;
-                    limit?: number | undefined;
-                    offset?: number | undefined;
-                    feedIdList?: string[] | undefined;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
         $get: {
             input: {
@@ -526,18 +329,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                query: {
-                    id: string;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
     };
 } & {
@@ -576,18 +367,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                query: {
-                    view?: string | undefined;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
         $post: {
             input: {
@@ -604,38 +383,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    url: string;
-                    view: number;
-                    csrfToken: string;
-                    category?: string | null | undefined;
-                    isPrivate?: boolean | null | undefined;
-                };
-            };
-            output: {
-                code: 2;
-                error: string;
-            };
-            outputFormat: "json";
-            status: 400;
-        } | {
-            input: {
-                json: {
-                    url: string;
-                    view: number;
-                    csrfToken: string;
-                    category?: string | null | undefined;
-                    isPrivate?: boolean | null | undefined;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
         $delete: {
             input: {
@@ -650,34 +397,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    csrfToken: string;
-                    url?: string | undefined;
-                    feedId?: string | undefined;
-                };
-            };
-            output: {
-                code: 2;
-                error: string;
-            };
-            outputFormat: "json";
-            status: 400;
-        } | {
-            input: {
-                json: {
-                    csrfToken: string;
-                    url?: string | undefined;
-                    feedId?: string | undefined;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
         $patch: {
             input: {
@@ -694,38 +413,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    feedId: string;
-                    view: number;
-                    csrfToken: string;
-                    category?: string | null | undefined;
-                    isPrivate?: boolean | null | undefined;
-                };
-            };
-            output: {
-                code: 2;
-                error: string;
-            };
-            outputFormat: "json";
-            status: 400;
-        } | {
-            input: {
-                json: {
-                    feedId: string;
-                    view: number;
-                    csrfToken: string;
-                    category?: string | null | undefined;
-                    isPrivate?: boolean | null | undefined;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
     };
 }, "/">;

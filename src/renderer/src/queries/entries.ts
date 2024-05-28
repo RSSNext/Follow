@@ -1,5 +1,4 @@
 import {
-  UnAuthorizedError,
   UnprocessableEntityError,
 } from "@renderer/biz/error"
 import { useBizInfiniteQuery } from "@renderer/hooks/useBizQuery"
@@ -54,9 +53,7 @@ export const entries = {
         }
         const res = await apiClient.entries.$get({ query: { id } })
         const json = await res.json()
-        if (json.code === 1) {
-          throw new UnAuthorizedError()
-        }
+
         return json.data
       },
       {
