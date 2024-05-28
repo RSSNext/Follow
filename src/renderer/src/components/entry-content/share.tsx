@@ -6,20 +6,20 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
-import type { EntriesResponse } from "@renderer/lib/types"
+import type { EntryResponse } from "@renderer/lib/types"
 
 export function EntryShare({
   view,
   entry,
 }: {
   view: number
-  entry?: EntriesResponse[number]
+  entry?: EntryResponse
 }) {
   const { items } = useEntryActions({
     view,
     entry,
   })
-  if (!entry?.url) return null
+  if (!entry?.entries.url) return null
 
   return (
     <div className="flex h-14 items-center justify-end gap-3 px-5 text-lg text-zinc-500">

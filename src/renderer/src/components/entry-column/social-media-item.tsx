@@ -1,30 +1,30 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
-import type { EntriesResponse } from "@renderer/lib/types"
+import type { TimelineResponse } from "@renderer/lib/types"
 
-export function SocialMediaItem({ entry }: { entry: EntriesResponse[number] }) {
+export function SocialMediaItem({ entry }: { entry: TimelineResponse[number] }) {
   return (
     <div className="my-5 flex px-2 py-3">
       <FeedIcon feed={entry.feeds} />
       <div>
         <div className="-mt-0.5 line-clamp-5 flex-1 text-sm">
           <div className="space-x-1">
-            <span className="font-medium">{entry.author}</span>
+            <span className="font-medium">{entry.entries.author}</span>
             <span className="text-zinc-500">·</span>
             <span className="text-zinc-500">
               {dayjs
                 .duration(
-                  dayjs(entry.publishedAt).diff(dayjs(), "minute"),
+                  dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"),
                   "minute",
                 )
                 .humanize()}
             </span>
           </div>
-          <div className="mt-0.5">{entry.description}</div>
+          <div className="mt-0.5">{entry.entries.description}</div>
         </div>
         <div className="mt-1 flex gap-2 overflow-x-auto">
-          {entry.images?.map((image) => (
+          {entry.entries.images?.map((image) => (
             <Image
               key={image}
               src={image}

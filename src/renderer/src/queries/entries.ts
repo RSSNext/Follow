@@ -4,8 +4,7 @@ import {
 import { useBizInfiniteQuery } from "@renderer/hooks/useBizQuery"
 import { levels } from "@renderer/lib/constants"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import type { EntriesResponse, ListResponse } from "@renderer/lib/types"
-import { apiClient, apiFetch } from "@renderer/queries/api-fetch"
+import { apiClient } from "@renderer/queries/api-fetch"
 
 export const entries = {
   entries: ({
@@ -18,11 +17,9 @@ export const entries = {
     view?: number
   }) =>
     defineQuery(
-      ["entries", level, id],
+      ["entries", level, id, view],
       async ({ pageParam }) => {
         const params: {
-          category?: string
-          view?: number
           feedId?: string
           feedIdList?: string[]
         } = {}
@@ -31,14 +28,14 @@ export const entries = {
         } else if (level === levels.feed) {
           params.feedId = `${id}`
         }
-        return await apiFetch<ListResponse<EntriesResponse>>("/entries", {
-          method: "POST",
-          body: {
-            offset: pageParam,
+        const res = await apiClient.timeline.$post({
+          json: {
+            offset: pageParam as number | undefined,
             view,
             ...params,
           },
         })
+        return await res.json()
       },
       {
         rootKey: ["entries"],
@@ -51,7 +48,11 @@ export const entries = {
         if (!id) {
           throw new UnprocessableEntityError("id is required")
         }
-        const res = await apiClient.entries.$get({ query: { id } })
+        const res = await apiClient.entries.$get({
+          query: {
+            id,
+          },
+        })
         const json = await res.json()
 
         return json.data

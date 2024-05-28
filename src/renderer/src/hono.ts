@@ -3,6 +3,60 @@ import * as hono_utils_http_status from 'hono/utils/http-status';
 import * as hono from 'hono';
 
 declare const routes: hono_hono_base.HonoBase<hono.Env, {
+    "/timeline": {
+        $post: {
+            input: {
+                json: {
+                    feedId?: string | undefined;
+                    view?: number | undefined;
+                    read?: boolean | undefined;
+                    limit?: number | undefined;
+                    offset?: number | undefined;
+                    feedIdList?: string[] | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                total: number;
+                data?: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        url: string | null;
+                        guid: string;
+                        author: string | null;
+                        changedAt: string;
+                        publishedAt: string;
+                        images: string[] | null;
+                        categories: string[] | null;
+                    };
+                    collections: {
+                        createdAt: string;
+                    };
+                    feeds: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        image: string | null;
+                        url: string;
+                        siteUrl: string | null;
+                        checkedAt: string;
+                        nextCheckAt: string;
+                        lastModifiedHeader: string | null;
+                        etagHeader: string | null;
+                        ttl: number | null;
+                        errorMessage: string | null;
+                        errorAt: string | null;
+                    };
+                    read: boolean | null;
+                }[] | undefined;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
     "/reads": {
         $post: {
             input: {
@@ -280,8 +334,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     publishedAt: string;
                     images: string[] | null;
                     categories: string[] | null;
-                    collected: boolean;
                     read: boolean;
+                    collected: boolean;
                 }[] | undefined;
             };
             outputFormat: "json";
@@ -296,10 +350,22 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             output: {
                 code: 0;
                 data?: {
-                    description: string | null;
-                    title: string | null;
-                    content: string | null;
-                    id: string;
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        content: string | null;
+                        id: string;
+                        url: string | null;
+                        guid: string;
+                        author: string | null;
+                        changedAt: string;
+                        publishedAt: string;
+                        images: string[] | null;
+                        categories: string[] | null;
+                    };
+                    collections: {
+                        createdAt: string;
+                    };
                     feeds: {
                         description: string | null;
                         title: string | null;
@@ -315,16 +381,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         errorMessage: string | null;
                         errorAt: string | null;
                     };
-                    url: string | null;
-                    feedId: string;
-                    guid: string;
-                    author: string | null;
-                    changedAt: string;
-                    publishedAt: string;
-                    images: string[] | null;
-                    categories: string[] | null;
-                    collected: boolean;
-                    read: boolean;
+                    read: boolean | null;
                 } | undefined;
             };
             outputFormat: "json";

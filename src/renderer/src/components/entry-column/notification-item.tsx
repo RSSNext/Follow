@@ -1,11 +1,11 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import dayjs from "@renderer/lib/dayjs"
-import type { EntriesResponse } from "@renderer/lib/types"
+import type { TimelineResponse } from "@renderer/lib/types"
 
 export function NotificationItem({
   entry,
 }: {
-  entry: EntriesResponse[number]
+  entry: TimelineResponse[number]
 }) {
   return (
     <div className="my-5 flex px-2 py-3">
@@ -17,13 +17,13 @@ export function NotificationItem({
           <span>
             {dayjs
               .duration(
-                dayjs(entry.publishedAt).diff(dayjs(), "minute"),
+                dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"),
                 "minute",
               )
               .humanize()}
           </span>
         </div>
-        <div className="my-0.5">{entry.title}</div>
+        <div className="my-0.5">{entry.entries.title}</div>
       </div>
     </div>
   )

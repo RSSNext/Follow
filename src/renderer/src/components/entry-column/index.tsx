@@ -72,7 +72,7 @@ export function EntryColumn() {
           >
             {page.data?.map((entry) => (
               <EntryItemWrapper
-                key={entry.id}
+                key={entry.entries.id}
                 entry={entry}
                 view={activeList?.view}
               >

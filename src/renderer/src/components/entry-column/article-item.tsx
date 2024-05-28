@@ -1,10 +1,10 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
-import type { EntriesResponse } from "@renderer/lib/types"
+import type { TimelineResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 
-export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
+export function ArticleItem({ entry }: { entry: TimelineResponse[number] }) {
   return (
     <div className="my-5 flex px-2 py-3">
       <FeedIcon feed={entry.feeds} />
@@ -15,7 +15,7 @@ export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
           <span>
             {dayjs
               .duration(
-                dayjs(entry.publishedAt).diff(dayjs(), "minute"),
+                dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"),
                 "minute",
               )
               .humanize()}
@@ -28,13 +28,13 @@ export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
             entry.read ? "text-zinc-500" : "text-black dark:text-white/90",
           )}
         >
-          {entry.title}
+          {entry.entries.title}
         </div>
-        <div className="text-[13px] text-zinc-500">{entry.description}</div>
+        <div className="text-[13px] text-zinc-500">{entry.entries.description}</div>
       </div>
-      {entry.images?.[0] && (
+      {entry.entries.images?.[0] && (
         <Image
-          src={entry.images[0]}
+          src={entry.entries.images[0]}
           className="ml-2 size-20 shrink-0"
           loading="lazy"
           proxy={{

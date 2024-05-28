@@ -1,7 +1,7 @@
 import { useToast } from "@renderer/components/ui/use-toast"
 import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { client } from "@renderer/lib/client"
-import type { EntriesResponse } from "@renderer/lib/types"
+import type { TimelineResponse } from "@renderer/lib/types"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import {
   useMutation,
@@ -15,11 +15,11 @@ export const useEntryActions = ({
   entry,
 }: {
   view?: number
-  entry?: EntriesResponse[number]
+  entry?: TimelineResponse[number]
 }) => {
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
-    enabled: !!entry?.url && !!view,
+    enabled: !!entry?.entries.url && !!view,
     queryFn: async () => {
       try {
         await ofetch("http://localhost:41595")
@@ -31,7 +31,7 @@ export const useEntryActions = ({
   })
 
   const updateEntry = useUpdateEntry({
-    entryId: entry?.id,
+    entryId: entry?.entries.id,
   })
 
   const collect = useMutation({
@@ -39,12 +39,14 @@ export const useEntryActions = ({
       apiFetch("/collections", {
         method: "POST",
         body: {
-          entryId: entry?.id,
+          entryId: entry?.entries.id,
         },
       }),
     onSuccess: () => {
       updateEntry({
-        collected: true,
+        collections: {
+          createdAt: new Date().toISOString(),
+        },
       })
 
       toast({
@@ -58,12 +60,12 @@ export const useEntryActions = ({
       apiFetch("/collections", {
         method: "DELETE",
         body: {
-          entryId: entry?.id,
+          entryId: entry?.entries.id,
         },
       }),
     onSuccess: () => {
       updateEntry({
-        collected: false,
+        collections: undefined,
       })
 
       toast({
@@ -77,7 +79,7 @@ export const useEntryActions = ({
       apiFetch("/reads", {
         method: "POST",
         body: {
-          entryId: entry?.id,
+          entryId: entry?.entries.id,
         },
       }),
     onSuccess: () => {
@@ -91,7 +93,7 @@ export const useEntryActions = ({
       apiFetch("/reads", {
         method: "DELETE",
         body: {
-          entryId: entry?.id,
+          entryId: entry?.entries.id,
         },
       }),
     onSuccess: () => {
@@ -103,14 +105,14 @@ export const useEntryActions = ({
 
   const { toast } = useToast()
 
-  if (!entry?.url || view === undefined) return { items: [] }
+  if (!entry?.entries.url || view === undefined) return { items: [] }
 
   const items = [
     [
       {
         name: "Collect",
         className: "i-mingcute-star-line",
-        disabled: !!entry.collected,
+        disabled: !!entry.collections,
         onClick: () => {
           collect.mutate()
         },
@@ -118,7 +120,7 @@ export const useEntryActions = ({
       {
         name: "Uncollect",
         className: "i-mingcute-star-fill",
-        disabled: !entry.collected,
+        disabled: !entry.collections,
         onClick: () => {
           uncollect.mutate()
         },
@@ -127,8 +129,8 @@ export const useEntryActions = ({
         name: "Copy Link",
         className: "i-mingcute-link-line",
         onClick: () => {
-          if (!entry.url) return
-          navigator.clipboard.writeText(entry.url)
+          if (!entry.entries.url) return
+          navigator.clipboard.writeText(entry.entries.url)
           toast({
             duration: 1000,
             description: "Link copied to clipboard.",
@@ -139,8 +141,8 @@ export const useEntryActions = ({
         name: "Open in Browser",
         className: "i-mingcute-world-2-line",
         onClick: () => {
-          if (!entry.url) return
-          window.open(entry.url, "_blank")
+          if (!entry.entries.url) return
+          window.open(entry.entries.url, "_blank")
         },
       },
       {
@@ -148,12 +150,12 @@ export const useEntryActions = ({
         icon: "/eagle.svg",
         disabled:
           (checkEagle.isLoading ? true : !checkEagle.data) ||
-          !entry.images?.length,
+          !entry.entries.images?.length,
         onClick: async () => {
-          if (!entry.url || !entry.images?.length) return
+          if (!entry.entries.url || !entry.entries.images?.length) return
           const response = await client?.saveToEagle({
-            url: entry.url,
-            images: entry.images,
+            url: entry.entries.url,
+            images: entry.entries.images,
           })
           if (response?.status === "success") {
             toast({
@@ -172,8 +174,8 @@ export const useEntryActions = ({
         name: "Share",
         className: "i-mingcute-share-2-line",
         onClick: () => {
-          if (!entry.url) return
-          client?.showShareMenu(entry.url)
+          if (!entry.entries.url) return
+          client?.showShareMenu(entry.entries.url)
         },
       },
       {

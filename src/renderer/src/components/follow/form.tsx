@@ -16,7 +16,7 @@ import {
 } from "@renderer/components/ui/form"
 import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
-import type { EntriesResponse, FeedResponse } from "@renderer/lib/types"
+import type { FeedResponse } from "@renderer/lib/types"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
@@ -67,7 +67,7 @@ export function FollowForm({ type }: { type: string }) {
         data: {
           feed: FeedResponse
           docs?: string
-          entries?: Partial<EntriesResponse>
+          entries?: Partial<unknown>
           isSubscribed?: boolean
           subscriptionCount?: number
         }[]

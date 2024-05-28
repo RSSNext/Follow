@@ -1,7 +1,7 @@
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
 import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { showNativeMenu } from "@renderer/lib/native-menu"
-import type { EntriesResponse } from "@renderer/lib/types"
+import type { EntryResponse, TimelineResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { feedActions, useFeedStore } from "@renderer/store"
@@ -14,7 +14,7 @@ export function EntryItemWrapper({
   children,
   view,
 }: {
-  entry: EntriesResponse[number]
+  entry: TimelineResponse[number] | EntryResponse
   children: React.ReactNode
   view?: number
 }) {
@@ -28,7 +28,7 @@ export function EntryItemWrapper({
   )
 
   const updateEntry = useUpdateEntry({
-    entryId: entry?.id,
+    entryId: entry?.entries.id,
   })
 
   const read = useMutation({
@@ -36,7 +36,7 @@ export function EntryItemWrapper({
       apiFetch("/reads", {
         method: "POST",
         body: {
-          entryId: entry?.id,
+          entryId: entry?.entries.id,
         },
       }),
     onSuccess: () => {
@@ -55,22 +55,22 @@ export function EntryItemWrapper({
     target: itemRef,
   })
 
-  if (!entry?.url || view === undefined) return children
+  if (!entry?.entries.url || view === undefined) return children
 
   return (
     <div
-      key={entry.id}
+      key={entry.entries.id}
       className={cn(
         "rounded-md transition-colors",
-        activeEntry === entry.id && "bg-native-active/50",
+        activeEntry === entry.entries.id && "bg-native-active/50",
         entry.read && "text-foreground/80",
       )}
       ref={itemRef}
       onClick={(e) => {
         e.stopPropagation()
-        feedActions.setActiveEntry(entry.id)
+        feedActions.setActiveEntry(entry.entries.id)
       }}
-      onDoubleClick={() => entry.url && window.open(entry.url, "_blank")}
+      onDoubleClick={() => entry.entries.url && window.open(entry.entries.url, "_blank")}
       onContextMenu={(e) => {
         e.preventDefault()
         showNativeMenu(
