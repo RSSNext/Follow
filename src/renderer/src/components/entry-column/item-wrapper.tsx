@@ -7,7 +7,7 @@ import { cn } from "@renderer/lib/utils"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { feedActions, useFeedStore } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 
 export function EntryItemWrapper({
