@@ -1,10 +1,17 @@
 import type { EntriesResponse, ListResponse } from "@renderer/lib/types"
 import { Queries } from "@renderer/queries"
+import type { Response as SubscriptionsResponse } from "@renderer/queries/subscriptions"
 import type { InfiniteData, QueryKey } from "@tanstack/react-query"
 import { useQueryClient } from "@tanstack/react-query"
 import { produce } from "immer"
 
-export const useUpdateEntry = ({ entryId }: { entryId?: string }) => {
+export const useUpdateEntry = ({
+  entryId,
+  feedId,
+}: {
+  entryId?: string
+  feedId?: string
+}) => {
   const queryClient = useQueryClient()
 
   const updateEntry = (changed: Partial<EntriesResponse[number]>) => {
@@ -34,6 +41,28 @@ export const useUpdateEntry = ({ entryId }: { entryId?: string }) => {
       })
       queryClient.setQueryData<typeof assertData>(key, finaldata)
     })
+
+    if (changed.read !== undefined) {
+      const entriesData = queryClient.getQueriesData({
+        queryKey: ["subscriptions"],
+      })
+      entriesData.forEach(([key, data]: [QueryKey, unknown]) => {
+        const chage = changed.read ? -1 : 1
+        const assertData = data as SubscriptionsResponse
+        const finaldata = produce(assertData, (assertData) => {
+          for (const list of assertData.list) {
+            for (const item of list.list) {
+              if (item.feeds.id === feedId) {
+                assertData.unread += chage
+                list.unread += chage
+                item.unread = (item.unread || 0) + chage
+              }
+            }
+          }
+        })
+        queryClient.setQueryData<typeof assertData>(key, finaldata)
+      })
+    }
   }
 
   return updateEntry

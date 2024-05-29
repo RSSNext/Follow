@@ -32,6 +32,7 @@ export const useEntryActions = ({
 
   const updateEntry = useUpdateEntry({
     entryId: entry?.entries.id,
+    feedId: entry?.feeds.id,
   })
 
   const collect = useMutation({
