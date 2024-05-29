@@ -11,13 +11,15 @@ export const entries = {
     level,
     id,
     view,
+    read,
   }: {
     level?: string
     id?: number | string
     view?: number
+    read?: boolean
   }) =>
     defineQuery(
-      ["entries", level, id, view],
+      ["entries", level, id, view, read],
       async ({ pageParam }) => {
         const params: {
           feedId?: string
@@ -32,6 +34,7 @@ export const entries = {
           json: {
             offset: pageParam as number | undefined,
             view,
+            read,
             ...params,
           },
         })
@@ -67,12 +70,14 @@ export const useEntries = ({
   level,
   id,
   view,
+  read,
 }: {
   level?: string
   id?: number | string
   view?: number
+  read?: boolean
 }) =>
-  useBizInfiniteQuery(entries.entries({ level, id, view }), {
+  useBizInfiniteQuery(entries.entries({ level, id, view, read }), {
     enabled: level !== undefined && id !== undefined,
     getNextPageParam: (lastPage, _, lastPageParam) =>
       (lastPageParam as number) + (lastPage.data?.length || 0),

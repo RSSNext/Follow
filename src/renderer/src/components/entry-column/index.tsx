@@ -1,7 +1,9 @@
+import { Tabs, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
 import { cn } from "@renderer/lib/utils"
 import { useEntries } from "@renderer/queries/entries"
 import { useFeedStore } from "@renderer/store"
 import { m } from "framer-motion"
+import { useState } from "react"
 
 import { ArticleItem } from "./article-item"
 import { EntryItemWrapper } from "./item-wrapper"
@@ -13,11 +15,14 @@ import { VideoItem } from "./video-item"
 const gridMode = new Set([2, 3])
 
 export function EntryColumn() {
+  const [filterTab, setFilterTab] = useState("unread")
+
   const activeList = useFeedStore((state) => state.activeList)
   const entries = useEntries({
     level: activeList?.level,
     id: activeList?.id,
     view: activeList?.view,
+    ...(filterTab === "unread" && { read: false }),
   })
 
   let Item
@@ -49,18 +54,26 @@ export function EntryColumn() {
 
   return (
     <div className="px-2">
-      <div className="mb-5 ml-9">
-        <div className="text-lg font-bold">{activeList?.name}</div>
-        <div className="text-xs font-medium text-zinc-400">
-          {entries.data?.pages?.[0].total}
-          {" "}
-          Items
+      <div className="mb-5 px-9 flex justify-between items-center w-full">
+        <div>
+          <div className="text-lg font-bold">{activeList?.name}</div>
+          <div className="text-xs font-medium text-zinc-400">
+            {entries.data?.pages?.[0].total}
+            {" "}
+            Items
+          </div>
         </div>
+        <Tabs value={filterTab} onValueChange={setFilterTab}>
+          <TabsList variant="rounded">
+            <TabsTrigger variant="rounded" value="unread">Unread</TabsTrigger>
+            <TabsTrigger variant="rounded" value="all">All</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
       <div>
-        {entries.data?.pages?.map((page, index) => (
+        {entries.data?.pages?.map((page) => (
           <m.div
-            key={`${activeList?.level}-${activeList?.id}-${index}`}
+            key={`${activeList?.level}-${activeList?.id}`}
             initial={{ opacity: 0.01, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0.01, y: -100 }}
