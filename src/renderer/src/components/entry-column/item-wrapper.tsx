@@ -1,4 +1,5 @@
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
+import { usePrevious } from "@renderer/hooks/usePrevious"
 import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { EntriesResponse, EntryResponse } from "@renderer/lib/types"
@@ -6,19 +7,17 @@ import { cn } from "@renderer/lib/utils"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { feedActions, useFeedStore } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
-import { useHover } from "@use-gesture/react"
-import { useEffect, useRef, useState } from "react"
+import { useInView } from "framer-motion"
+import { useEffect, useRef } from "react"
 
 export function EntryItemWrapper({
   entry,
   children,
   view,
-  hoverToRead,
 }: {
   entry: EntriesResponse[number] | EntryResponse
   children: React.ReactNode
   view?: number
-  hoverToRead: boolean
 }) {
   const { items } = useEntryActions({
     view,
@@ -48,24 +47,13 @@ export function EntryItemWrapper({
   })
 
   const itemRef = useRef<HTMLDivElement>(null)
-  const [hovered, setHovered] = useState(false)
-  useHover(
-    (state) => {
-      if (hoverToRead && state.active) {
-        read.mutate()
-      }
-      setHovered(state.active)
-    },
-    {
-      target: itemRef,
-      enabled: !entry.read,
-    },
-  )
+  const isInView = useInView(itemRef)
+  const prevIsInView = usePrevious(isInView)
   useEffect(() => {
-    if (hoverToRead && hovered) {
+    if (prevIsInView && !isInView && !entry.read) {
       read.mutate()
     }
-  }, [hoverToRead, hovered, read])
+  }, [entry.read, isInView, read, prevIsInView])
 
   if (!entry?.entries.url || view === undefined) return children
 
@@ -81,6 +69,9 @@ export function EntryItemWrapper({
       onClick={(e) => {
         e.stopPropagation()
         feedActions.setActiveEntry(entry.entries.id)
+        if (!entry.read) {
+          read.mutate()
+        }
       }}
       onDoubleClick={() =>
         entry.entries.url && window.open(entry.entries.url, "_blank")}
