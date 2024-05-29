@@ -2,8 +2,9 @@ import { Tabs, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
 import { cn } from "@renderer/lib/utils"
 import { useEntries } from "@renderer/queries/entries"
 import { useFeedStore } from "@renderer/store"
+import { useHover } from "@use-gesture/react"
 import { m } from "framer-motion"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 import { ArticleItem } from "./article-item"
 import { EntryItemWrapper } from "./item-wrapper"
@@ -16,6 +17,7 @@ const gridMode = new Set([2, 3])
 
 export function EntryColumn() {
   const [filterTab, setFilterTab] = useState("unread")
+  const [focused, setFocused] = useState(false)
 
   const activeList = useFeedStore((state) => state.activeList)
   const entries = useEntries({
@@ -24,6 +26,26 @@ export function EntryColumn() {
     view: activeList?.view,
     ...(filterTab === "unread" && { read: false }),
   })
+
+  const listRef = useRef<HTMLDivElement>(null)
+  let focuseTimer: NodeJS.Timeout | null = null
+  useHover(
+    (state) => {
+      if (state.active) {
+        focuseTimer = setTimeout(() => {
+          setFocused(true)
+        }, 1000)
+      } else {
+        if (focuseTimer) {
+          clearTimeout(focuseTimer)
+        }
+        setFocused(false)
+      }
+    },
+    {
+      target: listRef,
+    },
+  )
 
   let Item
   switch (activeList?.view) {
@@ -70,7 +92,7 @@ export function EntryColumn() {
           </TabsList>
         </Tabs>
       </div>
-      <div>
+      <div ref={listRef}>
         {entries.data?.pages?.map((page) => (
           <m.div
             key={`${activeList?.level}-${activeList?.id}`}
@@ -88,6 +110,7 @@ export function EntryColumn() {
                 key={entry.entries.id}
                 entry={entry}
                 view={activeList?.view}
+                hoverToRead={focused}
               >
                 <Item entry={entry} />
               </EntryItemWrapper>

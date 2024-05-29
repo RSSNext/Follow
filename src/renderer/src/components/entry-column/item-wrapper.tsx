@@ -7,16 +7,18 @@ import { apiFetch } from "@renderer/queries/api-fetch"
 import { feedActions, useFeedStore } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
 import { useHover } from "@use-gesture/react"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export function EntryItemWrapper({
   entry,
   children,
   view,
+  hoverToRead,
 }: {
   entry: EntriesResponse[number] | EntryResponse
   children: React.ReactNode
   view?: number
+  hoverToRead: boolean
 }) {
   const { items } = useEntryActions({
     view,
@@ -46,16 +48,24 @@ export function EntryItemWrapper({
   })
 
   const itemRef = useRef<HTMLDivElement>(null)
+  const [hovered, setHovered] = useState(false)
   useHover(
     (state) => {
-      if (state.active && !entry.read) {
+      if (hoverToRead && state.active) {
         read.mutate()
       }
+      setHovered(state.active)
     },
     {
       target: itemRef,
+      enabled: !entry.read,
     },
   )
+  useEffect(() => {
+    if (hoverToRead && hovered) {
+      read.mutate()
+    }
+  }, [hoverToRead, hovered, read])
 
   if (!entry?.entries.url || view === undefined) return children
 
