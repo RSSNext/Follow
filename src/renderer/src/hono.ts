@@ -43,6 +43,22 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             outputFormat: "json";
             status: 200;
         };
+        $get: {
+            input: {
+                query: {
+                    view: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    feedId: string;
+                    unread: number;
+                }[];
+            };
+            outputFormat: "json";
+            status: 200;
+        };
     };
 } & {
     "/collections": {

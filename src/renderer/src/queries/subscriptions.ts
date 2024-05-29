@@ -21,6 +21,10 @@ export const subscription = {
           await apiClient.subscriptions.$get({ query: { view: String(view) } })
         ).json()
 
+        const unreads = await (
+          await apiClient.reads.$get({ query: { view: String(view) } })
+        ).json()
+
         const subscriptions = res.data as SubscriptionResponse
         const categories = {
           list: {},
@@ -69,8 +73,7 @@ export const subscription = {
                 unread: 0,
               }
             }
-            // const unread = counters.unreads[feed.id] || 0
-            const unread = 0
+            const unread = unreads.data.find((x) => x.feedId === subscription.feedId)?.unread || 0
             subscription.unread = unread
             categories.list[subscription.category].list.push(subscription)
             categories.list[subscription.category].unread += unread
