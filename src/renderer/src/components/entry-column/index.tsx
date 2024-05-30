@@ -122,7 +122,7 @@ export function EntryColumn() {
               entryId={entry.entries.id}
               view={activeList?.view}
             >
-              <Item entry={entry} entryId={entry.entries.id} />
+              <Item entryId={entry.entries.id} />
             </EntryItemWrapper>
           )
         }}
