@@ -6,9 +6,9 @@ import type { UniversalItemProps } from "./types"
 
 export function SocialMediaItem({ entry }: UniversalItemProps) {
   return (
-    <div className="mb-5 flex px-2 py-3">
+    <div className="mb-5 flex px-2 py-3 w-full">
       <FeedIcon feed={entry.feeds} />
-      <div>
+      <div className="flex-1 min-w-0">
         <div className="-mt-0.5 line-clamp-5 flex-1 text-sm">
           <div className="space-x-1">
             <span className="font-medium">{entry.entries.author}</span>
