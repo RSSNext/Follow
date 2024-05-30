@@ -5,6 +5,9 @@ import {
   AvatarImage,
 } from "@renderer/components/ui/avatar"
 import { cn } from "@renderer/lib/utils"
+import { Link } from "react-router-dom"
+
+import { Button } from "./ui/button"
 
 export function UserButton({
   className,
@@ -16,7 +19,11 @@ export function UserButton({
   const { data: session, status } = useSession()
 
   if (status !== "authenticated") {
-    return null
+    return (
+      <Link to="/login">
+        <Button>Login</Button>
+      </Link>
+    )
   }
 
   return (
