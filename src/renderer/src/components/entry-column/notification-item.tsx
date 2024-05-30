@@ -1,12 +1,9 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import dayjs from "@renderer/lib/dayjs"
-import type { EntriesResponse } from "@renderer/lib/types"
 
-export function NotificationItem({
-  entry,
-}: {
-  entry: EntriesResponse[number]
-}) {
+import type { UniversalItemProps } from "./types"
+
+export function NotificationItem({ entry }: UniversalItemProps) {
   return (
     <div className="mb-5 flex px-2 py-3">
       <FeedIcon feed={entry.feeds} />

@@ -1,9 +1,10 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
-import type { EntriesResponse } from "@renderer/lib/types"
 
-export function VideoItem({ entry }: { entry: EntriesResponse[number] }) {
+import type { UniversalItemProps } from "./types"
+
+export function VideoItem({ entry }: UniversalItemProps) {
   return (
     <div className="flex">
       <div className="w-full">

@@ -1,15 +1,16 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
-import type { EntriesResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 
-export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
+import type { UniversalItemProps } from "./types"
+
+export function ArticleItem({ entry }: UniversalItemProps) {
   return (
     <div className="mb-5 flex px-2 py-3">
       <FeedIcon feed={entry.feeds} />
       <div className="-mt-0.5 line-clamp-5 flex-1 text-sm leading-tight">
-        <div className="text-[10px] font-bold text-zinc-500 flex gap-1">
+        <div className="flex gap-1 text-[10px] font-bold text-zinc-500">
           <span className="truncate">{entry.feeds.title}</span>
           <span>·</span>
           <span className="shrink-0">
@@ -30,7 +31,9 @@ export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
         >
           {entry.entries.title}
         </div>
-        <div className="text-[13px] text-zinc-500">{entry.entries.description}</div>
+        <div className="text-[13px] text-zinc-500">
+          {entry.entries.description}
+        </div>
       </div>
       {entry.entries.images?.[0] && (
         <Image
