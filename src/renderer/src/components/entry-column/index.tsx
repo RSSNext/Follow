@@ -5,6 +5,7 @@ import { cn } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
 import { useFeedStore } from "@renderer/store"
+import { entryActions } from "@renderer/store/entry"
 import { m } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
@@ -93,8 +94,9 @@ export function EntryColumn() {
         if (batchLikeIds.length > 0) {
           await apiClient.reads.$post({ json: { entryIds: batchLikeIds } })
 
-          // TODO optimistic update
-          entries.refetch()
+          for (const id of batchLikeIds) {
+            entryActions.optimisticUpdate(id, { read: true })
+          }
         }
       },
       1000,
