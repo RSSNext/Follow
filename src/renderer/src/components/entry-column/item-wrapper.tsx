@@ -1,5 +1,4 @@
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
-import { usePrevious } from "@renderer/hooks/usePrevious"
 import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { EntriesResponse, EntryResponse } from "@renderer/lib/types"
@@ -7,8 +6,6 @@ import { cn } from "@renderer/lib/utils"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { feedActions, useFeedStore } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
-import { useEffect } from "react"
-import { useInView } from "react-intersection-observer"
 
 export function EntryItemWrapper({
   entry,
@@ -46,18 +43,18 @@ export function EntryItemWrapper({
     },
   })
 
-  const { ref, inView } = useInView({
-    threshold: 1,
-    delay: 1000,
-  })
-  const prevInView = usePrevious(inView)
-  useEffect(() => {
-    if (prevInView && !inView && !entry.read) {
-      read.mutate()
-    }
-  }, [entry.read, inView, read, prevInView])
+  // const { ref, inView } = useInView({
+  //   threshold: 1,
+  //   delay: 1000,
+  // })
+  // const prevInView = usePrevious(inView)
+  // useEffect(() => {
+  //   if (prevInView && !inView && !entry.read) {
+  //     read.mutate()
+  //   }
+  // }, [entry.read, inView, read, prevInView])
 
-  if (!entry?.entries.url || view === undefined) return children
+  // if (!entry?.entries.url || view === undefined) return children
 
   return (
     <div
@@ -67,7 +64,7 @@ export function EntryItemWrapper({
         activeEntry === entry.entries.id && "bg-native-active/50",
         entry.read && "text-foreground/80",
       )}
-      ref={ref}
+      // ref={ref}
       onClick={(e) => {
         e.stopPropagation()
         feedActions.setActiveEntry(entry.entries.id)

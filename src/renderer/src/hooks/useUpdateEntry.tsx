@@ -47,15 +47,15 @@ export const useUpdateEntry = ({
         queryKey: ["subscriptions"],
       })
       entriesData.forEach(([key, data]: [QueryKey, unknown]) => {
-        const chage = changed.read ? -1 : 1
+        const change = changed.read ? -1 : 1
         const assertData = data as SubscriptionsResponse
         const finaldata = produce(assertData, (assertData) => {
           for (const list of assertData.list) {
             for (const item of list.list) {
               if (item.feeds.id === feedId) {
-                assertData.unread += chage
-                list.unread += chage
-                item.unread = (item.unread || 0) + chage
+                assertData.unread += change
+                list.unread += change
+                item.unread = (item.unread || 0) + change
               }
             }
           }

@@ -1,33 +1,53 @@
 import { Tabs, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
+import { buildStorageNS } from "@renderer/lib/ns"
+import type { EntryModel } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
+import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
 import { useFeedStore } from "@renderer/store"
 import { m } from "framer-motion"
-import type { LegacyRef } from "react"
-import { forwardRef, useMemo, useState } from "react"
+import { useAtom, useAtomValue } from "jotai"
+import { atomWithStorage } from "jotai/utils"
+import { debounce } from "lodash-es"
+import type { FC } from "react"
+import { forwardRef } from "react"
+import type { ListRange } from "react-virtuoso"
 import { Virtuoso } from "react-virtuoso"
+import { useEventCallback } from "usehooks-ts"
+import { useShallow } from "zustand/react/shallow"
 
 import { ArticleItem } from "./article-item"
 import { EntryItemWrapper } from "./item-wrapper"
 import { NotificationItem } from "./notification-item"
 import { PictureItem } from "./picture-item"
 import { SocialMediaItem } from "./social-media-item"
+import type { FilterTab, UniversalItemProps } from "./types"
 import { VideoItem } from "./video-item"
 
 const gridMode = new Set([2, 3])
 
+const filterTabAtom = atomWithStorage<FilterTab>(
+  buildStorageNS("entry-tab"),
+  "unread",
+)
 export function EntryColumn() {
-  const [filterTab, setFilterTab] = useState("unread")
-
   const activeList = useFeedStore((state) => state.activeList)
-  const entries = useEntries({
-    level: activeList?.level,
-    id: activeList?.id,
-    view: activeList?.view,
-    ...(filterTab === "unread" && { read: false }),
-  })
+  const entries = useEntriesByTab()
 
-  let Item
+  const entriesIds = (entries.data?.pages?.flatMap((page) =>
+    page.data?.map((entry) => entry.entries.id),
+  ) || []) as string[]
+
+  const entriesId2Map =
+    entries.data?.pages?.reduce((acc, page) => {
+      if (!page.data) return acc
+      for (const entry of page.data) {
+        acc[entry.entries.id] = entry
+      }
+      return acc
+    }, {} as Record<string, EntryModel>) ?? {}
+
+  let Item: FC<UniversalItemProps>
   switch (activeList?.view) {
     case 0: {
       Item = ArticleItem
@@ -54,7 +74,116 @@ export function EntryColumn() {
     }
   }
 
-  const List = useMemo(() => forwardRef((props, ref: LegacyRef<HTMLDivElement>) => (
+  const handleRangeChange = useEventCallback(
+    debounce(
+      async ({ startIndex }: ListRange) => {
+        const idSlice = entriesIds?.slice(0, startIndex)
+        if (!idSlice) return
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const requestTasks = [] as Promise<any>[]
+        for (const id of idSlice) {
+          const entry = entriesId2Map[id]
+          if (!entry) continue
+          const isRead = entry.read
+          if (!isRead) {
+            // TODO csrfToken should omit and batch request
+            requestTasks.push(
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              apiClient.reads.$post({ json: { entryId: id } as any }),
+            )
+          }
+        }
+
+        await Promise.all(requestTasks)
+
+        // TODO optimistic update
+
+        if (requestTasks.length > 0) entries.refetch()
+      },
+      1000,
+      { leading: false },
+    ),
+  )
+
+  return (
+    <div className="relative flex h-full flex-1 flex-col">
+      <ListHeader />
+      <Virtuoso
+        className="h-0 grow"
+        components={{
+          List: ListContent,
+        }}
+        rangeChanged={handleRangeChange}
+        totalCount={entriesIds?.length}
+        endReached={() => entries.hasNextPage && entries.fetchNextPage()}
+        data={entries.data?.pages.flatMap((page) => page.data)}
+        itemContent={(_, entry) => {
+          if (!entry) return null
+          return (
+            <EntryItemWrapper
+              key={entry.entries.id}
+              entry={entry}
+              view={activeList?.view}
+            >
+              <Item entry={entry} />
+            </EntryItemWrapper>
+          )
+        }}
+      />
+    </div>
+  )
+}
+
+const useEntriesByTab = () => {
+  const activeList = useFeedStore(useShallow((state) => state.activeList))
+  const filterTab = useAtomValue(filterTabAtom)
+
+  return useEntries({
+    level: activeList?.level,
+    id: activeList?.id,
+    view: activeList?.view,
+    ...(filterTab === "unread" && { read: false }),
+  })
+}
+
+const ListHeader: FC = () => {
+  const activeList = useFeedStore(useShallow((state) => state.activeList))
+  const [filterTab, setFilterTab] = useAtom(filterTabAtom)
+  const entries = useEntriesByTab()
+  const total = entries.data?.pages?.reduce(
+    (acc, page) => acc + (page.data?.length || 0),
+    0,
+  )
+  return (
+    <div className="mb-5 flex w-full items-center justify-between px-9">
+      <div>
+        <div className="text-lg font-bold">{activeList?.name}</div>
+        <div className="text-xs font-medium text-zinc-400">
+          {total}
+          {" "}
+          Items
+        </div>
+      </div>
+      {/* @ts-expect-error */}
+      <Tabs value={filterTab} onValueChange={setFilterTab}>
+        <TabsList variant="rounded">
+          <TabsTrigger variant="rounded" value="unread">
+            Unread
+          </TabsTrigger>
+          <TabsTrigger variant="rounded" value="all">
+            All
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+    </div>
+  )
+}
+
+const ListContent = forwardRef<HTMLDivElement>((props, ref) => {
+  const activeList = useFeedStore(useShallow((state) => state.activeList))
+
+  return (
     <m.div
       key={`${activeList?.level}-${activeList?.id}`}
       initial={{ opacity: 0.01, y: 100 }}
@@ -69,45 +198,5 @@ export function EntryColumn() {
       {...props}
       ref={ref}
     />
-  )), [filterTab, activeList])
-
-  const Header = useMemo(() => () => (
-    <div className="mb-5 px-9 flex justify-between items-center w-full">
-      <div>
-        <div className="text-lg font-bold">{activeList?.name}</div>
-        <div className="text-xs font-medium text-zinc-400">
-          {entries.data?.pages?.[0].total}
-          {" "}
-          Items
-        </div>
-      </div>
-      <Tabs value={filterTab} onValueChange={setFilterTab}>
-        <TabsList variant="rounded">
-          <TabsTrigger variant="rounded" value="unread">Unread</TabsTrigger>
-          <TabsTrigger variant="rounded" value="all">All</TabsTrigger>
-        </TabsList>
-      </Tabs>
-    </div>
-  ), [activeList, entries.data?.pages?.[0].total])
-
-  return (
-    <Virtuoso
-      components={{
-        Header,
-        List,
-      }}
-      endReached={() =>
-        entries.hasNextPage && entries.fetchNextPage()}
-      data={entries.data?.pages}
-      itemContent={(_, page) => page?.data?.map((entry) => (
-        <EntryItemWrapper
-          key={entry.entries.id}
-          entry={entry}
-          view={activeList?.view}
-        >
-          <Item entry={entry} />
-        </EntryItemWrapper>
-      ))}
-    />
   )
-}
+})

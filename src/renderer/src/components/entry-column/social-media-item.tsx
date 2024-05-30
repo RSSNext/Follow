@@ -1,9 +1,10 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
-import type { EntriesResponse } from "@renderer/lib/types"
 
-export function SocialMediaItem({ entry }: { entry: EntriesResponse[number] }) {
+import type { UniversalItemProps } from "./types"
+
+export function SocialMediaItem({ entry }: UniversalItemProps) {
   return (
     <div className="mb-5 flex px-2 py-3">
       <FeedIcon feed={entry.feeds} />

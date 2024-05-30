@@ -38,6 +38,7 @@ export type EntriesResponse = Array<
   >[number]
 >
 
+export type EntryModel = EntriesResponse[number]
 export type DiscoverResponse = Array<
   Exclude<
     InferResponseType<typeof apiClient.discover.$post>["data"],
