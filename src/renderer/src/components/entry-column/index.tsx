@@ -1,6 +1,6 @@
 import { Tabs, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
 import { buildStorageNS } from "@renderer/lib/ns"
-import type { EntriesModel } from "@renderer/lib/types"
+import type { EntryModel } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
@@ -45,7 +45,7 @@ export function EntryColumn() {
         acc[entry.entries.id] = entry
       }
       return acc
-    }, {} as Record<string, EntriesModel>) ?? {}
+    }, {} as Record<string, EntryModel>) ?? {}
 
   let Item: FC<UniversalItemProps>
   switch (activeList?.view) {
