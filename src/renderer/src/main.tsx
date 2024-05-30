@@ -51,12 +51,32 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "login",
-        lazy: () => import("./pages/login"),
-      },
-      {
-        path: "redirect",
-        lazy: () => import("./pages/redirect"),
+        path: "",
+        lazy: () => import("./pages/(external)/layout"),
+        children: [
+          {
+            path: "login",
+            lazy: () => import("./pages/(external)/login"),
+          },
+          {
+            path: "redirect",
+            lazy: () => import("./pages/(external)/redirect"),
+          },
+          {
+            path: "debug",
+            lazy: () => import("./pages/(external)/debug"),
+          },
+          {
+            path: "/feed/:id",
+            lazy: () => import("./pages/(external)/feed/layout"),
+            children: [
+              {
+                path: "",
+                lazy: () => import("./pages/(external)/feed/index"),
+              },
+            ],
+          },
+        ],
       },
       {
         path: "settings",
@@ -73,20 +93,6 @@ const router = createBrowserRouter([
           {
             path: "profile",
             lazy: () => import("./pages/settings/profile"),
-          },
-        ],
-      },
-      {
-        path: "debug",
-        lazy: () => import("./pages/debug"),
-      },
-      {
-        path: "/feed/:id",
-        lazy: () => import("./pages/feed/layout"),
-        children: [
-          {
-            path: "",
-            lazy: () => import("./pages/feed/index"),
           },
         ],
       },
