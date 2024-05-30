@@ -53,20 +53,20 @@ export function Component() {
   return (
     <>
       {feed.data?.feed && (
-        <div className="flex flex-col items-center max-w-5xl mx-auto">
-          <div className="flex items-center text-2xl font-bold mt-10 mb-2">
+        <div className="mx-auto flex max-w-5xl flex-col items-center">
+          <div className="mb-2 mt-10 flex items-center text-2xl font-bold">
             <FeedIcon
               feed={feed.data.feed}
               className="size-8 shrink-0"
             />
             <h1>{feed.data.feed.title}</h1>
           </div>
-          <div className="text-sm text-zinc-500 mb-10">{feed.data.feed.description}</div>
+          <div className="mb-10 text-sm text-zinc-500">{feed.data.feed.description}</div>
           <div className="w-full">
             {entries.data?.pages.map((page) =>
               page.data?.map((entry) => (
                 <a href={entry.entries.url || void 0} target="_blank" key={entry.entries.id}>
-                  <Item entry={entry} />
+                  <Item entryId={entry.entries.id} />
                 </a>
               )),
             )}
