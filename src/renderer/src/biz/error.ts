@@ -16,3 +16,11 @@ export class UnprocessableEntityError extends RequestError {
     super(message)
   }
 }
+
+export class UnprocessableFeedError extends RequestError {
+  name = "UnprocessableEntityError"
+
+  constructor(message?: string) {
+    super(message)
+  }
+}

@@ -127,6 +127,39 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         };
     };
 } & {
+    "/feeds": {
+        $get: {
+            input: {
+                query: {
+                    id: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    feed: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        image: string | null;
+                        url: string;
+                        siteUrl: string | null;
+                        checkedAt: string;
+                        nextCheckAt: string;
+                        lastModifiedHeader: string | null;
+                        etagHeader: string | null;
+                        ttl: number | null;
+                        errorMessage: string | null;
+                        errorAt: string | null;
+                    };
+                    subscriptionCount: number;
+                    readCount: number;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
     "/feeds/refresh": {
         $get: {
             input: {

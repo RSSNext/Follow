@@ -1,4 +1,4 @@
-import Versions from "../components/Versions"
+import Versions from "../../components/Versions"
 
 export function Component() {
   const ipcHandle = (): void => window.electron?.ipcRenderer.send("ping")
