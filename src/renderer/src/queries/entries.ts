@@ -32,7 +32,7 @@ export const entries = {
         }
         const res = await apiClient.entries.$post({
           json: {
-            offset: pageParam as number | undefined,
+            publishedAfter: pageParam as string,
             view,
             read,
             ...params,
@@ -79,7 +79,11 @@ export const useEntries = ({
 }) =>
   useBizInfiniteQuery(entries.entries({ level, id, view, read }), {
     enabled: level !== undefined && id !== undefined,
-    getNextPageParam: (lastPage, _, lastPageParam) =>
-      (lastPageParam as number) + (lastPage.data?.length || 0),
-    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.data?.length) {
+        return null
+      }
+      return lastPage.data.at(-1)!.entries.publishedAt
+    },
+    initialPageParam: undefined,
   })

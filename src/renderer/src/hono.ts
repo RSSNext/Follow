@@ -262,8 +262,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     view?: number | undefined;
                     read?: boolean | undefined;
                     limit?: number | undefined;
-                    offset?: number | undefined;
                     feedIdList?: string[] | undefined;
+                    publishedAfter?: string | undefined;
                 };
             };
             output: {
