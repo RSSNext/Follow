@@ -1,6 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
 import { buildStorageNS } from "@renderer/lib/ns"
-import type { EntryModel } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
@@ -39,15 +38,6 @@ export function EntryColumn() {
     page.data?.map((entry) => entry.entries.id),
   ) || []) as string[]
 
-  const entriesId2Map =
-    entries.data?.pages?.reduce((acc, page) => {
-      if (!page.data) return acc
-      for (const entry of page.data) {
-        acc[entry.entries.id] = entry
-      }
-      return acc
-    }, {} as Record<string, EntryModel>) ?? {}
-
   let Item: FC<UniversalItemProps>
   switch (activeList?.view) {
     case 0: {
@@ -79,11 +69,14 @@ export function EntryColumn() {
     debounce(
       async ({ startIndex }: ListRange) => {
         const idSlice = entriesIds?.slice(0, startIndex)
+
         if (!idSlice) return
 
         const batchLikeIds = [] as string[]
+        const entriesId2Map = entryActions.getFlattenMapEntries()
         for (const id of idSlice) {
           const entry = entriesId2Map[id]
+
           if (!entry) continue
           const isRead = entry.read
           if (!isRead) {
@@ -112,6 +105,8 @@ export function EntryColumn() {
         components={{
           List: ListContent,
         }}
+        defaultItemHeight={320}
+        overscan={window.innerHeight}
         rangeChanged={handleRangeChange}
         totalCount={entriesIds?.length}
         endReached={() => entries.hasNextPage && entries.fetchNextPage()}

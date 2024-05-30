@@ -24,6 +24,7 @@ interface EntryActions {
   }) => Promise<InferResponseType<typeof apiClient.entries.$post>>
   upsert: (feedId: string, entry: EntryModel) => void
   optimisticUpdate: (entryId: string, changed: Partial<EntryModel>) => void
+  getFlattenMapEntries: () => Record<string, EntryModel>
 }
 
 export const useEntryStore = create<EntryState & { actions: EntryActions }>(
@@ -75,6 +76,9 @@ export const useEntryStore = create<EntryState & { actions: EntryActions }>(
         return data
       },
 
+      getFlattenMapEntries() {
+        return get().flatMapEntries
+      },
       optimisticUpdate(entryId: string, changed: Partial<EntryModel>) {
         set((state) =>
           produce(state, (draft) => {
