@@ -9,10 +9,10 @@ export function ArticleItem({ entry }: { entry: EntriesResponse[number] }) {
     <div className="my-5 flex px-2 py-3">
       <FeedIcon feed={entry.feeds} />
       <div className="-mt-0.5 line-clamp-5 flex-1 text-sm leading-tight">
-        <div className="space-x-1 text-[10px] font-bold text-zinc-500">
-          <span>{entry.feeds.title}</span>
+        <div className="text-[10px] font-bold text-zinc-500 flex gap-1">
+          <span className="truncate">{entry.feeds.title}</span>
           <span>·</span>
-          <span>
+          <span className="shrink-0">
             {dayjs
               .duration(
                 dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"),
