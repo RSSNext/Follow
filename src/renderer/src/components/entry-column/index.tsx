@@ -80,26 +80,22 @@ export function EntryColumn() {
         const idSlice = entriesIds?.slice(0, startIndex)
         if (!idSlice) return
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const requestTasks = [] as Promise<any>[]
+        const batchLikeIds = [] as string[]
         for (const id of idSlice) {
           const entry = entriesId2Map[id]
           if (!entry) continue
           const isRead = entry.read
           if (!isRead) {
-            // TODO csrfToken should omit and batch request
-            requestTasks.push(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              apiClient.reads.$post({ json: { entryId: id } as any }),
-            )
+            batchLikeIds.push(id)
           }
         }
 
-        await Promise.all(requestTasks)
+        if (batchLikeIds.length > 0) {
+          await apiClient.reads.$post({ json: { entryIds: batchLikeIds } })
 
-        // TODO optimistic update
-
-        if (requestTasks.length > 0) entries.refetch()
+          // TODO optimistic update
+          entries.refetch()
+        }
       },
       1000,
       { leading: false },

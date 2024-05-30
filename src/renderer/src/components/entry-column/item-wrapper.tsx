@@ -3,7 +3,7 @@ import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { EntriesResponse, EntryResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
-import { apiFetch } from "@renderer/queries/api-fetch"
+import { apiClient } from "@renderer/queries/api-fetch"
 import { feedActions, useFeedStore } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
 
@@ -30,10 +30,9 @@ export function EntryItemWrapper({
 
   const read = useMutation({
     mutationFn: async () =>
-      apiFetch("/reads", {
-        method: "POST",
-        body: {
-          entryId: entry?.entries.id,
+      apiClient.reads.$post({
+        json: {
+          entryIds: [entry.entries.id],
         },
       }),
     onSuccess: () => {

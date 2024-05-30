@@ -2,7 +2,7 @@ import { useToast } from "@renderer/components/ui/use-toast"
 import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { client } from "@renderer/lib/client"
 import type { EntriesResponse } from "@renderer/lib/types"
-import { apiFetch } from "@renderer/queries/api-fetch"
+import { apiClient, apiFetch } from "@renderer/queries/api-fetch"
 import {
   useMutation,
   useQuery,
@@ -77,10 +77,10 @@ export const useEntryActions = ({
   })
   const read = useMutation({
     mutationFn: async () =>
-      apiFetch("/reads", {
-        method: "POST",
-        body: {
-          entryId: entry?.entries.id,
+
+      entry && apiClient.reads.$post({
+        json: {
+          entryIds: [entry.entries.id],
         },
       }),
     onSuccess: () => {

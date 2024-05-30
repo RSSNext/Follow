@@ -1,10 +1,8 @@
-import {
-  UnprocessableEntityError,
-} from "@renderer/biz/error"
+import { UnprocessableEntityError } from "@renderer/biz/error"
 import { useBizInfiniteQuery } from "@renderer/hooks/useBizQuery"
-import { levels } from "@renderer/lib/constants"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { apiClient } from "@renderer/queries/api-fetch"
+import { entryActions } from "@renderer/store/entry"
 
 export const entries = {
   entries: ({
@@ -20,26 +18,33 @@ export const entries = {
   }) =>
     defineQuery(
       ["entries", level, id, view, read],
-      async ({ pageParam }) => {
-        const params: {
-          feedId?: string
-          feedIdList?: string[]
-        } = {}
-        if (level === levels.folder) {
-          params.feedIdList = `${id}`.split(",")
-        } else if (level === levels.feed) {
-          params.feedId = `${id}`
-        }
-        const res = await apiClient.entries.$post({
-          json: {
-            publishedAfter: pageParam as string,
-            view,
-            read,
-            ...params,
-          },
-        })
-        return await res.json()
-      },
+      async ({ pageParam }) =>
+      // const params: {
+      //   feedId?: string
+      //   feedIdList?: string[]
+      // } = {}
+      // if (level === levels.folder) {
+      //   params.feedIdList = `${id}`.split(",")
+      // } else if (level === levels.feed) {
+      //   params.feedId = `${id}`
+      // }
+      // const res = await apiClient.entries.$post({
+      //   json: {
+      //     publishedAfter: pageParam as string,
+      //     view,
+      //     read,
+      //     ...params,
+      //   },
+      // })
+      // return await res.json()
+
+        entryActions.fetchEntries({
+          level,
+          id,
+          view,
+          read,
+          pageParam: pageParam as string,
+        }),
       {
         rootKey: ["entries"],
       },
