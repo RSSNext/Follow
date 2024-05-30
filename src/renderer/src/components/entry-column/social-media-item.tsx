@@ -5,7 +5,7 @@ import type { EntriesResponse } from "@renderer/lib/types"
 
 export function SocialMediaItem({ entry }: { entry: EntriesResponse[number] }) {
   return (
-    <div className="my-5 flex px-2 py-3">
+    <div className="mb-5 flex px-2 py-3">
       <FeedIcon feed={entry.feeds} />
       <div>
         <div className="-mt-0.5 line-clamp-5 flex-1 text-sm">
