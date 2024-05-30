@@ -7,8 +7,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $post: {
             input: {
                 json: {
-                    entryId: string;
-                    csrfToken: string;
+                    entryIds: string[];
                 };
             };
             output: {
@@ -16,25 +15,11 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    entryId: string;
-                    csrfToken: string;
-                };
-            };
-            output: {
-                code: 1;
-                error: "Unauthorized";
-            };
-            outputFormat: "json";
-            status: 401;
         };
         $delete: {
             input: {
                 json: {
                     entryId: string;
-                    csrfToken: string;
                 };
             };
             output: {
@@ -79,7 +64,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             input: {
                 json: {
                     entryId: string;
-                    csrfToken: string;
                 };
             };
             output: {
@@ -92,7 +76,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             input: {
                 json: {
                     entryId: string;
-                    csrfToken: string;
                 };
             };
             output: {
@@ -243,11 +226,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
 } & {
     "/auth-app/new-session": {
         $post: {
-            input: {
-                json: {
-                    csrfToken: string;
-                };
-            };
+            input: {};
             output: {
                 code: 0;
                 data: {
@@ -264,7 +243,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $patch: {
             input: {
                 json: {
-                    csrfToken: string;
                     name?: string | null | undefined;
                     image?: string | null | undefined;
                     handle?: string | null | undefined;
@@ -428,7 +406,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 json: {
                     url: string;
                     view: number;
-                    csrfToken: string;
                     category?: string | null | undefined;
                     isPrivate?: boolean | null | undefined;
                 };
@@ -442,7 +419,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $delete: {
             input: {
                 json: {
-                    csrfToken: string;
                     url?: string | undefined;
                     feedId?: string | undefined;
                 };
@@ -458,7 +434,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 json: {
                     feedId: string;
                     view: number;
-                    csrfToken: string;
                     category?: string | null | undefined;
                     isPrivate?: boolean | null | undefined;
                 };

@@ -6,15 +6,17 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
-import type { EntryResponse } from "@renderer/lib/types"
+import { useEntry } from "@renderer/store/entry"
 
 export function EntryShare({
   view,
-  entry,
+  entryId,
 }: {
   view: number
-  entry?: EntryResponse
+  entryId: string
 }) {
+  const entry = useEntry(entryId)
+
   const { items } = useEntryActions({
     view,
     entry,

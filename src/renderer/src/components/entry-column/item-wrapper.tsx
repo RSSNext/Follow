@@ -1,21 +1,23 @@
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
-import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { showNativeMenu } from "@renderer/lib/native-menu"
-import type { EntriesResponse, EntryResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
-import { apiFetch } from "@renderer/queries/api-fetch"
+import { apiClient } from "@renderer/queries/api-fetch"
 import { feedActions, useFeedStore } from "@renderer/store"
+import { entryActions, useEntry } from "@renderer/store/entry"
 import { useMutation } from "@tanstack/react-query"
 
+import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
+
 export function EntryItemWrapper({
-  entry,
   children,
+  entryId,
   view,
 }: {
-  entry: EntriesResponse[number] | EntryResponse
+  entryId: string
   children: React.ReactNode
   view?: number
 }) {
+  const entry = useEntry(entryId)
   const { items } = useEntryActions({
     view,
     entry,
@@ -23,38 +25,23 @@ export function EntryItemWrapper({
 
   const activeEntry = useFeedStore((state) => state.activeEntry)
 
-  const updateEntry = useUpdateEntry({
-    entryId: entry?.entries.id,
-    feedId: entry?.feeds.id,
-  })
-
   const read = useMutation({
     mutationFn: async () =>
-      apiFetch("/reads", {
-        method: "POST",
-        body: {
-          entryId: entry?.entries.id,
+      apiClient.reads.$post({
+        json: {
+          entryIds: [entry.entries.id],
         },
       }),
-    onSuccess: () => {
-      updateEntry({
+    onMutate: () => {
+      entryActions.optimisticUpdate(entry.entries.id, {
         read: true,
       })
     },
+    // TODO  出错回退
   })
 
-  // const { ref, inView } = useInView({
-  //   threshold: 1,
-  //   delay: 1000,
-  // })
-  // const prevInView = usePrevious(inView)
-  // useEffect(() => {
-  //   if (prevInView && !inView && !entry.read) {
-  //     read.mutate()
-  //   }
-  // }, [entry.read, inView, read, prevInView])
-
-  // if (!entry?.entries.url || view === undefined) return children
+  // NOTE: prevent 0 height element, react virtuoso will not stop render any more
+  if (!entry) return <ReactVirtuosoItemPlaceholder />
 
   return (
     <div

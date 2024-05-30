@@ -1,10 +1,16 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
+import { useEntry } from "@renderer/store/entry"
 
+import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function SocialMediaItem({ entry }: UniversalItemProps) {
+export function SocialMediaItem({ entryId }: UniversalItemProps) {
+  const entry = useEntry(entryId)
+
+  // NOTE: prevent 0 height element, react virtuoso will not stop render any more
+  if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <div className="mb-5 flex px-2 py-3 w-full">
       <FeedIcon feed={entry.feeds} />

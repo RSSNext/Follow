@@ -1,9 +1,13 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import dayjs from "@renderer/lib/dayjs"
+import { useEntry } from "@renderer/store/entry"
 
+import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function NotificationItem({ entry }: UniversalItemProps) {
+export function NotificationItem({ entryId }: UniversalItemProps) {
+  const entry = useEntry(entryId)
+  if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <div className="mb-5 flex px-2 py-3">
       <FeedIcon feed={entry.feeds} />

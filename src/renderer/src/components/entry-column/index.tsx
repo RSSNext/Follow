@@ -1,10 +1,10 @@
 import { Tabs, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
 import { buildStorageNS } from "@renderer/lib/ns"
-import type { EntryModel } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
 import { useFeedStore } from "@renderer/store"
+import { entryActions } from "@renderer/store/entry"
 import { m } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
@@ -38,15 +38,6 @@ export function EntryColumn() {
     page.data?.map((entry) => entry.entries.id),
   ) || []) as string[]
 
-  const entriesId2Map =
-    entries.data?.pages?.reduce((acc, page) => {
-      if (!page.data) return acc
-      for (const entry of page.data) {
-        acc[entry.entries.id] = entry
-      }
-      return acc
-    }, {} as Record<string, EntryModel>) ?? {}
-
   let Item: FC<UniversalItemProps>
   switch (activeList?.view) {
     case 0: {
@@ -78,28 +69,28 @@ export function EntryColumn() {
     debounce(
       async ({ startIndex }: ListRange) => {
         const idSlice = entriesIds?.slice(0, startIndex)
+
         if (!idSlice) return
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const requestTasks = [] as Promise<any>[]
+        const batchLikeIds = [] as string[]
+        const entriesId2Map = entryActions.getFlattenMapEntries()
         for (const id of idSlice) {
           const entry = entriesId2Map[id]
+
           if (!entry) continue
           const isRead = entry.read
           if (!isRead) {
-            // TODO csrfToken should omit and batch request
-            requestTasks.push(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              apiClient.reads.$post({ json: { entryId: id } as any }),
-            )
+            batchLikeIds.push(id)
           }
         }
 
-        await Promise.all(requestTasks)
+        if (batchLikeIds.length > 0) {
+          await apiClient.reads.$post({ json: { entryIds: batchLikeIds } })
 
-        // TODO optimistic update
-
-        if (requestTasks.length > 0) entries.refetch()
+          for (const id of batchLikeIds) {
+            entryActions.optimisticUpdate(id, { read: true })
+          }
+        }
       },
       1000,
       { leading: false },
@@ -114,6 +105,8 @@ export function EntryColumn() {
         components={{
           List: ListContent,
         }}
+        defaultItemHeight={320}
+        overscan={window.innerHeight}
         rangeChanged={handleRangeChange}
         totalCount={entriesIds?.length}
         endReached={() => entries.hasNextPage && entries.fetchNextPage()}
@@ -123,10 +116,10 @@ export function EntryColumn() {
           return (
             <EntryItemWrapper
               key={entry.entries.id}
-              entry={entry}
+              entryId={entry.entries.id}
               view={activeList?.view}
             >
-              <Item entry={entry} />
+              <Item entryId={entry.entries.id} />
             </EntryItemWrapper>
           )
         }}

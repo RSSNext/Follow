@@ -26,7 +26,7 @@ export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
 
   return (
     <>
-      <EntryShare entry={entry.data} view={0} />
+      <EntryShare entryId={entry.data.entries.id} view={0} />
       <m.div
         className="h-[calc(100%-3.5rem)] overflow-y-auto p-5"
         initial={{ opacity: 0.01, y: 100 }}

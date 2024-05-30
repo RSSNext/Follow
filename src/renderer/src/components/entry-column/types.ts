@@ -1,5 +1,5 @@
-import type { EntriesResponse } from "@renderer/lib/types"
-
-export interface UniversalItemProps { entry: EntriesResponse[number] }
+export interface UniversalItemProps {
+  entryId: string
+}
 
 export type FilterTab = "all" | "unread"

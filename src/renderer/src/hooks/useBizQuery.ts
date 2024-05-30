@@ -17,6 +17,7 @@ export type SafeReturnType<T> = T extends (...args: any[]) => infer R
   ? R
   : never
 
+export type CombinedObject<T, U> = T & U
 export function useBizQuery<
   TQuery extends DefinedQuery<QueryKey, any>,
   TError = FetchError | RequestError,
@@ -28,13 +29,23 @@ export function useBizQuery<
     UseQueryOptions<TQueryFnData, TError>,
     "queryKey" | "queryFn"
   > = {},
-): UseQueryResult<TData, FetchError> {
+): CombinedObject<
+  UseQueryResult<TData, TError>,
+  { key: TQuery["key"], fn: TQuery["fn"] }
+> {
   // @ts-expect-error
-  return useQuery({
-    queryKey: query.key,
-    queryFn: query.fn,
-    ...options,
-  })
+  return Object.assign(
+    {},
+    useQuery({
+      queryKey: query.key,
+      queryFn: query.fn,
+      ...options,
+    }),
+    {
+      key: query.key,
+      fn: query.fn,
+    },
+  )
 }
 
 export function useBizInfiniteQuery<
@@ -45,12 +56,22 @@ export function useBizInfiniteQuery<
 >(
   query: T,
   options: Omit<UseInfiniteQueryOptions<FNR, E>, "queryKey" | "queryFn">,
-): UseInfiniteQueryResult<InfiniteData<R>, FetchError | RequestError> {
+): CombinedObject<
+  UseInfiniteQueryResult<InfiniteData<R>, FetchError | RequestError>,
+  { key: T["key"], fn: T["fn"] }
+> {
   // @ts-expect-error
-  return useInfiniteQuery<T, E>({
-    // @ts-expect-error
-    queryFn: query.fn,
-    queryKey: query.key,
-    ...options,
-  })
+  return Object.assign(
+    {},
+    useInfiniteQuery<T, E>({
+      // @ts-expect-error
+      queryFn: query.fn,
+      queryKey: query.key,
+      ...options,
+    }),
+    {
+      key: query.key,
+      fn: query.fn,
+    },
+  )
 }
