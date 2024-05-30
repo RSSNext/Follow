@@ -1,10 +1,14 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
+import { useEntry } from "@renderer/store/entry"
 
+import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function VideoItem({ entry }: UniversalItemProps) {
+export function VideoItem({ entryId }: UniversalItemProps) {
+  const entry = useEntry(entryId)
+  if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <div className="flex">
       <div className="w-full">

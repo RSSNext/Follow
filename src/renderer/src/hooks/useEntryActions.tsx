@@ -1,12 +1,9 @@
 import { useToast } from "@renderer/components/ui/use-toast"
-import { useUpdateEntry } from "@renderer/hooks/useUpdateEntry"
 import { client } from "@renderer/lib/client"
 import type { EntriesResponse } from "@renderer/lib/types"
 import { apiClient, apiFetch } from "@renderer/queries/api-fetch"
-import {
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query"
+import { entryActions } from "@renderer/store/entry"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
 
@@ -30,11 +27,6 @@ export const useEntryActions = ({
     },
   })
 
-  const updateEntry = useUpdateEntry({
-    entryId: entry?.entries.id,
-    feedId: entry?.feeds.id,
-  })
-
   const collect = useMutation({
     mutationFn: async () =>
       apiFetch("/collections", {
@@ -43,13 +35,15 @@ export const useEntryActions = ({
           entryId: entry?.entries.id,
         },
       }),
-    onSuccess: () => {
-      updateEntry({
+    onMutate() {
+      if (!entry) return
+      entryActions.optimisticUpdate(entry.entries.id, {
         collections: {
           createdAt: new Date().toISOString(),
         },
       })
-
+    },
+    onSuccess: () => {
       toast({
         duration: 1000,
         description: "Collected.",
@@ -64,11 +58,13 @@ export const useEntryActions = ({
           entryId: entry?.entries.id,
         },
       }),
-    onSuccess: () => {
-      updateEntry({
+    onMutate() {
+      if (!entry) return
+      entryActions.optimisticUpdate(entry.entries.id, {
         collections: undefined,
       })
-
+    },
+    onSuccess: () => {
       toast({
         duration: 1000,
         description: "Uncollected.",
@@ -77,14 +73,16 @@ export const useEntryActions = ({
   })
   const read = useMutation({
     mutationFn: async () =>
-
-      entry && apiClient.reads.$post({
+      entry &&
+      apiClient.reads.$post({
         json: {
           entryIds: [entry.entries.id],
         },
       }),
-    onSuccess: () => {
-      updateEntry({
+
+    onMutate: () => {
+      if (!entry) return
+      entryActions.optimisticUpdate(entry.entries.id, {
         read: true,
       })
     },
@@ -97,8 +95,9 @@ export const useEntryActions = ({
           entryId: entry?.entries.id,
         },
       }),
-    onSuccess: () => {
-      updateEntry({
+    onMutate: () => {
+      if (!entry) return
+      entryActions.optimisticUpdate(entry.entries.id, {
         read: false,
       })
     },

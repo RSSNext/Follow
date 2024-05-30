@@ -9,6 +9,8 @@ type EntriesIdTable = Record<string, Record<string, EntryModel>>
 
 interface EntryState {
   entries: EntriesIdTable
+
+  flatMapEntries: Record<string, EntryModel>
 }
 
 interface EntryActions {
@@ -20,24 +22,15 @@ interface EntryActions {
 
     pageParam?: string
   }) => Promise<InferResponseType<typeof apiClient.entries.$post>>
-  addOrPatch: (feedId: string, entry: EntryModel) => void
+  upsert: (feedId: string, entry: EntryModel) => void
+  optimisticUpdate: (entryId: string, changed: Partial<EntryModel>) => void
 }
 
 export const useEntryStore = create<EntryState & { actions: EntryActions }>(
   (set, get) => ({
-    entries: {} as EntriesIdTable,
+    entries: {},
+    flatMapEntries: {},
 
-    get flatMapEntries() {
-      const { entries } = get()
-      return Object.keys(get().entries).reduce((acc, feedId) => {
-        const feedEntries = entries[feedId]
-        if (!feedEntries) return acc
-        for (const entry of Object.values(feedEntries)) {
-          acc[entry.entries.id] = entry
-        }
-        return acc
-      }, {} as Record<string, EntryModel>)
-    },
     actions: {
       fetchEntries: async ({
         level,
@@ -76,19 +69,31 @@ export const useEntryStore = create<EntryState & { actions: EntryActions }>(
 
         if (data.data) {
           data.data.forEach((entry: EntryModel) => {
-            get().actions.addOrPatch(entry.feeds.id, entry)
+            get().actions.upsert(entry.feeds.id, entry)
           })
         }
         return data
       },
 
-      addOrPatch(feedId: string, entry: EntryModel) {
+      optimisticUpdate(entryId: string, changed: Partial<EntryModel>) {
+        set((state) =>
+          produce(state, (draft) => {
+            const entry = draft.flatMapEntries[entryId]
+            if (!entry) return
+            Object.assign(entry, changed)
+            return draft
+          }),
+        )
+      },
+
+      upsert(feedId: string, entry: EntryModel) {
         set((state) =>
           produce(state, (draft) => {
             if (!draft.entries[feedId]) {
               draft.entries[feedId] = {}
             }
             draft.entries[feedId][entry.entries.id] = entry
+            draft.flatMapEntries[entry.entries.id] = entry
             return draft
           }),
         )
@@ -99,4 +104,13 @@ export const useEntryStore = create<EntryState & { actions: EntryActions }>(
 
 export const entryActions = useEntryStore.getState().actions
 
-// window.a = () => useEntryStore.getState()
+export const useEntriesByFeedId = (feedId: string) =>
+  useEntryStore((state) => state.entries[feedId])
+export const useEntry = (entryId: string) =>
+  useEntryStore((state) => state.flatMapEntries[entryId])
+
+Object.assign(window, {
+  get __entry() {
+    return useEntryStore.getState()
+  },
+})

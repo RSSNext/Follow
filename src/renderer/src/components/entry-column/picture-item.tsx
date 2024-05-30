@@ -1,10 +1,14 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
+import { useEntry } from "@renderer/store/entry"
 
+import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function PictureItem({ entry }: UniversalItemProps) {
+export function PictureItem({ entryId }: UniversalItemProps) {
+  const entry = useEntry(entryId)
+  if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <div>
       <div>

@@ -119,10 +119,10 @@ export function EntryColumn() {
           return (
             <EntryItemWrapper
               key={entry.entries.id}
-              entry={entry}
+              entryId={entry.entries.id}
               view={activeList?.view}
             >
-              <Item entry={entry} />
+              <Item entry={entry} entryId={entry.entries.id} />
             </EntryItemWrapper>
           )
         }}

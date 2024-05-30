@@ -5,6 +5,10 @@ import type { InfiniteData, QueryKey } from "@tanstack/react-query"
 import { useQueryClient } from "@tanstack/react-query"
 import { produce } from "immer"
 
+/**
+ *
+ * @deprecated
+ */
 export const useUpdateEntry = ({
   entryId,
   feedId,
