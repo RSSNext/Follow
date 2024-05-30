@@ -37,3 +37,5 @@ export const views = [
     className: "text-yellow-600",
   },
 ]
+
+export const gridMode = new Set([2, 3])

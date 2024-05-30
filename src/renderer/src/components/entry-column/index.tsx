@@ -23,8 +23,7 @@ import { PictureItem } from "./picture-item"
 import { SocialMediaItem } from "./social-media-item"
 import type { FilterTab, UniversalItemProps } from "./types"
 import { VideoItem } from "./video-item"
-
-const gridMode = new Set([2, 3])
+import { gridMode } from "@renderer/lib/constants"
 
 const filterTabAtom = atomWithStorage<FilterTab>(
   buildStorageNS("entry-tab"),

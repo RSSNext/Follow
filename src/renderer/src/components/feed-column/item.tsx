@@ -133,7 +133,7 @@ export function FeedItem({
                 label: "Open Feed in Browser",
                 click: () =>
                   window.open(
-                    `${import.meta.env.VITE_WEB_URL}/feed/${feed.feedId}`,
+                    `${import.meta.env.VITE_WEB_URL}/feed/${feed.feedId}?view=${view}`,
                     "_blank",
                   ),
               },
