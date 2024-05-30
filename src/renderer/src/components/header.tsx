@@ -4,25 +4,26 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from "@renderer/components/ui/navigation-menu";
-import { Link } from "react-router-dom";
-import { UserButton } from "./user-button";
+} from "@renderer/components/ui/navigation-menu"
+import { Link } from "react-router-dom"
+
+import { UserButton } from "./user-button"
 
 const items = [{
-  name: 'Home',
-  link: '/'
+  name: "Home",
+  link: "/",
 }, {
-  name: 'Download',
-  link: '/download'
+  name: "Download",
+  link: "/download",
 }, {
-  name: 'Blog',
-  link: '/blog'
+  name: "Blog",
+  link: "/blog",
 }]
 
 export function Header() {
   return (
     <header className="w-full border-b px-10 py-3">
-      <div className="flex items-center justify-between w-full max-w-[1400px] mx-auto">
+      <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2 text-xl font-bold">
             <img src="../icon.svg" alt="logo" className="size-8" />
@@ -45,5 +46,5 @@ export function Header() {
         <UserButton className="h-10 bg-transparent px-10 py-0" />
       </div>
     </header>
-  );
+  )
 }
