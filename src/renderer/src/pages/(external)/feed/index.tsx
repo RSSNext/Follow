@@ -23,6 +23,13 @@ export function Component() {
             className="mr-2 size-8 shrink-0"
           />
           <h1>{feed.data.feed.title}</h1>
+          {entries.data?.pages.map((page) =>
+            page.data?.map((entry) => (
+              <div key={entry.entries.id}>
+                <h2>{entry.entries.title}</h2>
+              </div>
+            )),
+          )}
         </div>
       )}
     </>
