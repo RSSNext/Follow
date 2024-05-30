@@ -1,5 +1,5 @@
 import { UnprocessableEntityError } from "@renderer/biz/error"
-import { useBizInfiniteQuery } from "@renderer/hooks/useBizQuery"
+import { useBizInfiniteQuery, useBizQuery } from "@renderer/hooks/useBizQuery"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { entryActions } from "@renderer/store/entry"
@@ -19,7 +19,6 @@ export const entries = {
     defineQuery(
       ["entries", level, id, view, read],
       async ({ pageParam }) =>
-
         entryActions.fetchEntries({
           level,
           id,
@@ -51,6 +50,23 @@ export const entries = {
         rootKey: ["entries"],
       },
     ),
+  preview: (id: string) =>
+    defineQuery(
+      ["entries-preview", id],
+      async () => {
+        const res = await apiClient.entries.preview.$get({
+          query: {
+            id,
+          },
+        })
+        const json = await res.json()
+
+        return json.data
+      },
+      {
+        rootKey: ["entries-preview"],
+      },
+    ),
 }
 
 export const useEntries = ({
@@ -73,4 +89,13 @@ export const useEntries = ({
       return lastPage.data.at(-1)!.entries.publishedAt
     },
     initialPageParam: undefined,
+  })
+
+export const useEntriesPreview = ({
+  id,
+}: {
+  id?: string
+}) =>
+  useBizQuery(entries.preview(id!), {
+    enabled: !!id,
   })

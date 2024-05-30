@@ -293,9 +293,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         images: string[] | null;
                         categories: string[] | null;
                     };
-                    collections: {
-                        createdAt: string;
-                    };
                     feeds: {
                         description: string | null;
                         title: string | null;
@@ -312,6 +309,9 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         errorAt: string | null;
                     };
                     read: boolean | null;
+                    collections?: {
+                        createdAt: string;
+                    } | undefined;
                 }[] | undefined;
             };
             outputFormat: "json";
@@ -359,6 +359,34 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     };
                     read: boolean | null;
                 } | undefined;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+    "/entries/preview": {
+        $get: {
+            input: {
+                query: {
+                    id: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    description: string | null;
+                    title: string | null;
+                    content: string | null;
+                    id: string;
+                    url: string | null;
+                    feedId: string;
+                    guid: string;
+                    author: string | null;
+                    changedAt: string;
+                    publishedAt: string;
+                    images: string[] | null;
+                    categories: string[] | null;
+                }[];
             };
             outputFormat: "json";
             status: 200;

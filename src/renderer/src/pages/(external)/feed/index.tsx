@@ -5,8 +5,7 @@ import { SocialMediaItem } from "@renderer/components/entry-column/social-media-
 import type { UniversalItemProps } from "@renderer/components/entry-column/types"
 import { VideoItem } from "@renderer/components/entry-column/video-item"
 import { FeedIcon } from "@renderer/components/feed-icon"
-import { levels } from "@renderer/lib/constants"
-import { useEntries } from "@renderer/queries/entries"
+import { useEntriesPreview } from "@renderer/queries/entries"
 import { useFeed } from "@renderer/queries/feed"
 import type { FC } from "react"
 import { useParams } from "react-router-dom"
@@ -18,9 +17,8 @@ export function Component() {
   const feed = useFeed({
     id,
   })
-  const entries = useEntries({
+  const entries = useEntriesPreview({
     id,
-    level: levels.feed,
   })
 
   let Item: FC<UniversalItemProps>
@@ -61,14 +59,29 @@ export function Component() {
             />
             <h1>{feed.data.feed.title}</h1>
           </div>
-          <div className="mb-10 text-sm text-zinc-500">{feed.data.feed.description}</div>
+          <div className="mb-2 text-sm text-zinc-500">{feed.data.feed.description}</div>
+          <div className="mb-10 text-sm">
+            <strong>{feed.data.readCount}</strong>
+            {" "}
+            reads and
+            {" "}
+            <strong>{feed.data.subscriptionCount}</strong>
+            {" "}
+            subscriptions on Follow
+          </div>
           <div className="w-full">
-            {entries.data?.pages.map((page) =>
-              page.data?.map((entry) => (
-                <a href={entry.entries.url || void 0} target="_blank" key={entry.entries.id}>
-                  <Item entryId={entry.entries.id} />
-                </a>
-              )),
+            {entries.data?.map((entry) => (
+              <a href={entry.url || void 0} target="_blank" key={entry.id}>
+                <Item
+                  entryId=""
+                  entryPreview={{
+                    entries: entry,
+                    feeds: feed.data.feed,
+                    read: false,
+                  }}
+                />
+              </a>
+            ),
             )}
           </div>
         </div>

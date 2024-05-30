@@ -7,8 +7,8 @@ import { useEntry } from "@renderer/store/entry"
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function ArticleItem({ entryId }: UniversalItemProps) {
-  const entry = useEntry(entryId)
+export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
+  const entry = useEntry(entryId) || entryPreview
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry) return <ReactVirtuosoItemPlaceholder />

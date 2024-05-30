@@ -5,8 +5,8 @@ import { useEntry } from "@renderer/store/entry"
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function NotificationItem({ entryId }: UniversalItemProps) {
-  const entry = useEntry(entryId)
+export function NotificationItem({ entryId, entryPreview }: UniversalItemProps) {
+  const entry = useEntry(entryId) || entryPreview
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <div className="mb-5 flex px-2 py-3">

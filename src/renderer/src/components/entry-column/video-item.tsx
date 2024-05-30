@@ -6,8 +6,8 @@ import { useEntry } from "@renderer/store/entry"
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function VideoItem({ entryId }: UniversalItemProps) {
-  const entry = useEntry(entryId)
+export function VideoItem({ entryId, entryPreview }: UniversalItemProps) {
+  const entry = useEntry(entryId) || entryPreview
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <div className="flex">
