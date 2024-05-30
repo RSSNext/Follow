@@ -1,4 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
+import { gridMode } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
 import { cn } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
@@ -23,7 +24,6 @@ import { PictureItem } from "./picture-item"
 import { SocialMediaItem } from "./social-media-item"
 import type { FilterTab, UniversalItemProps } from "./types"
 import { VideoItem } from "./video-item"
-import { gridMode } from "@renderer/lib/constants"
 
 const filterTabAtom = atomWithStorage<FilterTab>(
   buildStorageNS("entry-tab"),

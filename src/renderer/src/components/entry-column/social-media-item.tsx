@@ -12,9 +12,9 @@ export function SocialMediaItem({ entryId, entryPreview }: UniversalItemProps) {
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
-    <div className="mb-5 flex px-2 py-3 w-full">
+    <div className="mb-5 flex w-full px-2 py-3">
       <FeedIcon feed={entry.feeds} />
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         <div className="-mt-0.5 line-clamp-5 flex-1 text-sm">
           <div className="space-x-1">
             <span className="font-medium">{entry.entries.author}</span>
