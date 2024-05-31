@@ -24,7 +24,6 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { FollowSummary } from "../feed-summary"
-import { DiscoverButton } from "./button"
 
 const formSchema = z.object({
   keyword: z.string().min(1),
@@ -186,7 +185,7 @@ export function DiscoverForm({ type }: { type: string }) {
                                 </Button>
                               ) :
                               (
-                                <DiscoverButton feed={item.feed} />
+                                <Button onClick={() => window.open(`follow://add${item.feed.id ? `?id=${item.feed.id}` : `?url=${item.feed.url}`}`)}>Follow</Button>
                               )}
                           <div className="ml-6 text-zinc-500">
                             <span className="font-medium text-zinc-800">

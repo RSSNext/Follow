@@ -64,6 +64,12 @@ app.whenReady().then(() => {
         })
         mainWindow.reload()
       }
+    } else {
+      createWindow({
+        extraPath: url.replace("follow:/", ""),
+        width: 800,
+        height: 600,
+      })
     }
   }
 
@@ -137,7 +143,7 @@ Menu.setApplicationMenu(
           label: "follow https://rsshub.app/twitter/user/DIYgod",
           click: () => {
             createWindow({
-              extraPath: `/follow?url=${encodeURIComponent("https://rsshub.app/twitter/user/DIYgod")}`,
+              extraPath: `/add?url=${encodeURIComponent("https://rsshub.app/twitter/user/DIYgod")}`,
               width: 800,
               height: 600,
             })
@@ -147,7 +153,7 @@ Menu.setApplicationMenu(
           label: "follow https://diygod.me/feed",
           click: () => {
             createWindow({
-              extraPath: `/follow?url=${encodeURIComponent("https://diygod.me/feed")}`,
+              extraPath: `/add?url=${encodeURIComponent("https://diygod.me/feed")}`,
               width: 800,
               height: 600,
             })

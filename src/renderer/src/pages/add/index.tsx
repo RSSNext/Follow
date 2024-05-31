@@ -99,7 +99,7 @@ export function Component() {
     <div className="p-10 flex flex-col h-full">
       <div className="font-bold text-[22px] mt-2 mb-4 flex items-center gap-2">
         <img src="../icon.svg" alt="logo" className="size-8" />
-        New follow
+        Add follow
       </div>
       {feed.isLoading ? (
         <div className="flex-1 flex items-center justify-center">
