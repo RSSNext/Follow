@@ -1,6 +1,8 @@
-import { tipc } from "@egoist/tipc/main"
+import { tipc, getRendererHandlers } from "@egoist/tipc/main"
 import type { MessageBoxOptions } from "electron"
 import { dialog, Menu, ShareMenu } from "electron"
+import { RendererHandlers } from "./renderer-handlers"
+import { getMainWindow } from "."
 
 const t = tipc.create()
 
@@ -92,6 +94,14 @@ export const router = {
       } catch {
         return null
       }
+    }),
+
+  invalidateQuery: t.procedure
+    .input<(string | number | undefined)[]>()
+    .action(async ({ input }) => {
+      const mainWindow = getMainWindow()
+      const handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
+      handlers.invalidateQuery.send(input)
     }),
 }
 

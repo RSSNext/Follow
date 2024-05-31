@@ -30,6 +30,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Card, CardHeader } from "@renderer/components/ui/card";
+import { client } from "@renderer/lib/client";
 
 const formSchema = z.object({
   view: z.string(),
@@ -82,8 +83,14 @@ export function Component() {
         variables.view !== `${feed.data?.subscription?.view}`
       ) {
         Queries.subscription.byView(feed.data?.subscription?.view).invalidate();
+        client?.invalidateQuery(
+          Queries.subscription.byView(feed.data?.subscription?.view).key
+        );
       }
       Queries.subscription.byView(Number.parseInt(variables.view)).invalidate();
+      client?.invalidateQuery(Queries.subscription.byView(Number.parseInt(variables.view)).key);
+      Queries.feed.byId({ id: feed.data?.feed.id }).invalidate();
+      client?.invalidateQuery(Queries.feed.byId({ id: feed.data?.feed.id }).key);
     },
   });
 
