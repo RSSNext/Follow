@@ -1,5 +1,5 @@
 // @ts-check
-import defineConfig, { DEFAULT_GLOB_TS_SRC } from "eslint-config-hyoban"
+import defineConfig, { GLOB_TS_SRC } from "eslint-config-hyoban"
 
 export default defineConfig(
   {
@@ -11,23 +11,10 @@ export default defineConfig(
       quotes: "double",
       arrowParens: true,
       braceStyle: "1tbs",
+      lineBreak: "after",
     },
+    lessOpinionated: true,
     ignores: ["src/renderer/src/hono.ts"],
-  },
-  {
-    rules: {
-      // change for less opinionated
-      "curly": ["error", "multi-line", "consistent"],
-      "antfu/if-newline": "off",
-      "antfu/top-level-function": "off",
-      "hyoban/prefer-early-return": "off",
-      "@typescript-eslint/array-type": "off",
-      "@typescript-eslint/consistent-type-definitions": "off",
-
-      // change to more like prettier
-      "@stylistic/operator-linebreak": ["error", "after"],
-      "@stylistic/max-statements-per-line": "off",
-    },
   },
   // fix later or just always ignore
   {
@@ -38,7 +25,7 @@ export default defineConfig(
     },
   },
   {
-    files: DEFAULT_GLOB_TS_SRC,
+    files: GLOB_TS_SRC,
     rules: {
       "@eslint-react/no-unstable-context-value": "warn",
       "react-compiler/react-compiler": "warn",
