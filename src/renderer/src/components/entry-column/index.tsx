@@ -107,7 +107,7 @@ export function EntryColumn() {
         defaultItemHeight={320}
         overscan={window.innerHeight}
         rangeChanged={handleRangeChange}
-        totalCount={entriesIds?.length}
+        totalCount={entries.data?.pages?.[0].total}
         endReached={() => entries.hasNextPage && entries.fetchNextPage()}
         data={entries.data?.pages.flatMap((page) => page.data)}
         itemContent={(_, entry) => {
@@ -143,16 +143,13 @@ const ListHeader: FC = () => {
   const activeList = useFeedStore(useShallow((state) => state.activeList))
   const [filterTab, setFilterTab] = useAtom(filterTabAtom)
   const entries = useEntriesByTab()
-  const total = entries.data?.pages?.reduce(
-    (acc, page) => acc + (page.data?.length || 0),
-    0,
-  )
+
   return (
     <div className="mb-5 flex w-full items-center justify-between px-9">
       <div>
         <div className="text-lg font-bold">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
-          {total}
+          {entries.data?.pages?.[0].total}
           {" "}
           Items
         </div>
@@ -182,7 +179,7 @@ const ListContent = forwardRef<HTMLDivElement>((props, ref) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0.01, y: -100 }}
       className={cn(
-        "h-full px-2",
+        "px-2",
         activeList?.view &&
         gridMode.has(activeList.view) &&
         "grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4",
