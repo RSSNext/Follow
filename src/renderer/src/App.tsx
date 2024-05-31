@@ -1,11 +1,9 @@
+import { queryClient } from "@renderer/lib/query-client"
+import { useEffect } from "react"
 import { Outlet } from "react-router-dom"
 
 import { useDark } from "./hooks/useDark"
 import { handlers } from "./tipc"
-import { useEffect } from "react"
-
-import { queryClient } from "@renderer/lib/query-client"
-
 
 function App() {
   useDark()

@@ -1,8 +1,9 @@
-import { tipc, getRendererHandlers } from "@egoist/tipc/main"
+import { getRendererHandlers, tipc } from "@egoist/tipc/main"
 import type { MessageBoxOptions } from "electron"
 import { dialog, Menu, ShareMenu } from "electron"
-import { RendererHandlers } from "./renderer-handlers"
+
 import { getMainWindow } from "."
+import type { RendererHandlers } from "./renderer-handlers"
 
 const t = tipc.create()
 

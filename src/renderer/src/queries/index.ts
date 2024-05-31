@@ -1,6 +1,6 @@
 import { entries } from "./entries"
-import { subscription } from "./subscriptions"
 import { feed } from "./feed"
+import { subscription } from "./subscriptions"
 
 export const Queries = {
   subscription,
