@@ -1,6 +1,6 @@
 import { SiteIcon } from "@renderer/components/site-icon"
 import { Image } from "@renderer/components/ui/image"
-import type { FeedResponse } from "@renderer/lib/types"
+import type { FeedModel } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
 
 export function FeedIcon({
@@ -8,7 +8,7 @@ export function FeedIcon({
   fallbackUrl,
   className,
 }: {
-  feed: FeedResponse
+  feed: FeedModel
   fallbackUrl?: string
   className?: string
 }) {

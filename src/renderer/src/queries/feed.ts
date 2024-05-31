@@ -6,16 +6,23 @@ import { defineQuery } from "@renderer/lib/defineQuery"
 import { apiClient } from "@renderer/queries/api-fetch"
 
 export const feed = {
-  byId: (id?: string | null) =>
+  byId: ({
+    id,
+    url,
+  }: {
+    id?: string
+    url?: string
+  }) =>
     defineQuery(
-      ["feed", id],
+      ["feed", id, url],
       async () => {
-        if (!id) {
-          throw new UnprocessableFeedError("id is required")
+        if (!id && !url) {
+          throw new UnprocessableFeedError("id or url is required")
         }
         const res = await apiClient.feeds.$get({
           query: {
             id,
+            url,
           },
         })
         const json = await res.json()
@@ -30,9 +37,14 @@ export const feed = {
 
 export const useFeed = ({
   id,
+  url,
 }: {
-  id?: string | null
+  id?: string
+  url?: string
 }) =>
-  useBizQuery(feed.byId(id), {
-    enabled: !!id,
+  useBizQuery(feed.byId({
+    id,
+    url,
+  }), {
+    enabled: !!id || !!url,
   })

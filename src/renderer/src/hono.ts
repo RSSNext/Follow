@@ -131,29 +131,38 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $get: {
             input: {
                 query: {
-                    id: string;
+                    id?: string | undefined;
+                    url?: string | undefined;
                 };
             };
             output: {
                 code: 0;
                 data: {
                     feed: {
-                        description: string | null;
-                        title: string | null;
-                        id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
                         checkedAt: string;
                         nextCheckAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        id?: string | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        lastModifiedHeader?: string | null | undefined;
+                        etagHeader?: string | null | undefined;
+                        ttl?: number | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
                     };
                     subscriptionCount: number;
                     readCount: number;
+                    subscription?: {
+                        title: string | null;
+                        userId: string;
+                        feedId: string;
+                        view: number;
+                        category: string | null;
+                        isPrivate: boolean | null;
+                    } | undefined;
                 };
             };
             outputFormat: "json";

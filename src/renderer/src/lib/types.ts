@@ -10,6 +10,12 @@ export type ActiveList = {
 } | null
 
 export type FeedResponse = SubscriptionResponse[number]["feeds"]
+
+export type FeedModel = Extract<
+  InferResponseType<typeof apiClient.feeds.$get>,
+  { code: 0 }
+>["data"]["feed"]
+
 export type SubscriptionResponse = Array<
   Exclude<
     Extract<
