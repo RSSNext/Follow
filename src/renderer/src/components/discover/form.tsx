@@ -24,7 +24,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { FollowSummary } from "../feed-summary"
-import { FollowButton } from "./button"
+import { DiscoverButton } from "./button"
 
 const formSchema = z.object({
   keyword: z.string().min(1),
@@ -53,7 +53,7 @@ const info: Record<
   },
 }
 
-export function FollowForm({ type }: { type: string }) {
+export function DiscoverForm({ type }: { type: string }) {
   const { prefix } = info[type]
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -186,7 +186,7 @@ export function FollowForm({ type }: { type: string }) {
                                 </Button>
                               ) :
                               (
-                                <FollowButton feed={item.feed} />
+                                <DiscoverButton feed={item.feed} />
                               )}
                           <div className="ml-6 text-zinc-500">
                             <span className="font-medium text-zinc-800">

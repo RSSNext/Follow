@@ -66,7 +66,7 @@ export function Component() {
           <div className="mb-4 text-sm">
             <strong>{feed.data.subscriptionCount}</strong>
             {" "}
-            subscriptions with
+            follows with
             {" "}
             <strong>{feed.data.readCount}</strong>
             {" "}
@@ -75,7 +75,7 @@ export function Component() {
             on Follow
           </div>
           <a className="mb-8" href={`follow://subscribe?id=${id}`}>
-            <Button>Subscribe on Follow</Button>
+            <Button>Follow on Follow</Button>
           </a>
           <div className={cn(
             "w-full",

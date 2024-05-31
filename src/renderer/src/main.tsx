@@ -26,12 +26,12 @@ const router = createBrowserRouter([
                 lazy: () => import("./pages/(main)/(context)/index"),
               },
               {
-                path: "/follow",
-                lazy: () => import("./pages/(main)/(context)/follow/layout"),
+                path: "/discover",
+                lazy: () => import("./pages/(main)/(context)/discover/layout"),
                 children: [
                   {
                     path: "",
-                    lazy: () => import("./pages/(main)/(context)/follow/index"),
+                    lazy: () => import("./pages/(main)/(context)/discover/index"),
                   },
                 ],
               },

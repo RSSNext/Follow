@@ -50,7 +50,7 @@ const list = [
   },
 ]
 
-export function FollowImport() {
+export function DiscoverImport() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })

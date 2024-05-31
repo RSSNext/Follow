@@ -1,5 +1,5 @@
+import { FollowDialog } from "@renderer/components/discover/dialog"
 import { FeedIcon } from "@renderer/components/feed-icon"
-import { FollowDialog } from "@renderer/components/follow/dialog"
 import { Dialog } from "@renderer/components/ui/dialog"
 import { ToastAction } from "@renderer/components/ui/toast"
 import {

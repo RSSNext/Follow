@@ -5,7 +5,7 @@ import { useState } from "react"
 
 import { FollowDialog } from "./dialog"
 
-export function FollowButton({ feed }: { feed: FeedResponse }) {
+export function DiscoverButton({ feed }: { feed: FeedResponse }) {
   const [open, setOpen] = useState(false)
   const [isSuccessful, setIsSuccessful] = useState(false)
 

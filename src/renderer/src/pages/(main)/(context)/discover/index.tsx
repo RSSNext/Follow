@@ -1,6 +1,6 @@
-import { FollowForm } from "@renderer/components/follow/form"
-import { FollowImport } from "@renderer/components/follow/import"
-import { Recommendations } from "@renderer/components/follow/recommendations"
+import { DiscoverForm } from "@renderer/components/discover/form"
+import { DiscoverImport } from "@renderer/components/discover/import"
+import { Recommendations } from "@renderer/components/discover/recommendations"
 import {
   Tabs,
   TabsContent,
@@ -62,10 +62,10 @@ export function Component() {
           <TabsContent key={tab.name} value={tab.name} className="mt-8 h-96">
             {tab.value === "import" ?
                 (
-                  <FollowImport />
+                  <DiscoverImport />
                 ) :
                 (
-                  <FollowForm type={tab.value} />
+                  <DiscoverForm type={tab.value} />
                 )}
             <Recommendations type={tab.value} />
           </TabsContent>
