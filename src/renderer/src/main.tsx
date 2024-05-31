@@ -96,6 +96,15 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "follow",
+        children: [
+          {
+            path: "",
+            lazy: () => import("./pages/follow/index"),
+          },
+        ],
+      },
     ],
   },
 ])

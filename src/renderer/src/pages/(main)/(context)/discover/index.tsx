@@ -45,7 +45,7 @@ export function Component() {
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-8 overflow-y-auto">
-      <div className="text-2xl font-bold">Follow</div>
+      <div className="text-2xl font-bold">Discover</div>
       <Tabs defaultValue="General">
         <TabsList className="w-full">
           {tabs.map((tab) => (
