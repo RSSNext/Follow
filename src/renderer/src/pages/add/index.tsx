@@ -31,6 +31,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useToast } from "@renderer/components/ui/use-toast"
 
 const formSchema = z.object({
   view: z.string(),
@@ -65,6 +66,7 @@ export function Component() {
     }
   }, [feed.data?.subscription])
 
+  const { toast } = useToast()
   const followMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) =>
       apiFetch("/subscriptions", {
@@ -95,6 +97,10 @@ export function Component() {
       client?.invalidateQuery(
         Queries.feed.byId({ id: feed.data?.feed.id }).key,
       )
+      toast({
+        duration: 1000,
+        description: isSubscribed ? "🎉 Updated." : "🎉 Followed.",
+      })
     },
   })
 
