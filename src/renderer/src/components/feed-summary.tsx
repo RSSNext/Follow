@@ -1,15 +1,18 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
-import type { FeedResponse } from "@renderer/lib/types"
+import type { FeedModel } from "@renderer/lib/types"
+import { cn } from "@renderer/lib/utils"
 
 export function FollowSummary({
   feed,
   docs,
+  className,
 }: {
-  feed: FeedResponse
+  feed: FeedModel
   docs?: string
+  className?: string
 }) {
   return (
-    <div className="max-w-[462px] select-text space-y-1 text-sm">
+    <div className={cn("select-text space-y-1 text-sm", className)}>
       <a
         href={feed.siteUrl || void 0}
         target="_blank"

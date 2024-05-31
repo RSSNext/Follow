@@ -44,6 +44,7 @@ export const AutoComplete = React.forwardRef<HTMLInputElement, InputProps>(
       <Command className="relative overflow-visible rounded-lg border [&_.lucide-search]:hidden [&_[cmdk-input-wrapper]]:border-0">
         <CommandInput
           {...props}
+          className="h-10"
           onBlur={(e) => {
             setOpen(false)
             props.onBlur?.(e)

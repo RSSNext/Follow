@@ -147,7 +147,7 @@ export function DiscoverImport() {
                       <div className="text-zinc-500">No items</div>
                     )}
                     {mutation.data?.[item.key].map((feed: FeedResponse) => (
-                      <FollowSummary key={feed.id} feed={feed} />
+                      <FollowSummary className="max-w-[462px]" key={feed.id} feed={feed} />
                     ))}
                   </div>
                 </div>

@@ -109,7 +109,6 @@ Menu.setApplicationMenu(
           label: "Settings...",
           accelerator: "CmdOrCtrl+,",
           click: () => {
-            console.log("Oh, hi there!")
             createWindow({
               extraPath: "/settings",
               width: 800,
@@ -131,5 +130,30 @@ Menu.setApplicationMenu(
     { role: "viewMenu" },
     { role: "windowMenu" },
     { role: "help" },
+    {
+      label: "Dev",
+      submenu: [
+        {
+          label: "follow https://rsshub.app/twitter/user/DIYgod",
+          click: () => {
+            createWindow({
+              extraPath: `/follow?url=${encodeURIComponent("https://rsshub.app/twitter/user/DIYgod")}`,
+              width: 800,
+              height: 600,
+            })
+          },
+        },
+        {
+          label: "follow https://diygod.me/feed",
+          click: () => {
+            createWindow({
+              extraPath: `/follow?url=${encodeURIComponent("https://diygod.me/feed")}`,
+              width: 800,
+              height: 600,
+            })
+          },
+        },
+      ],
+    },
   ]),
 )

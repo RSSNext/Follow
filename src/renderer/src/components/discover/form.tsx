@@ -130,7 +130,7 @@ export function DiscoverForm({ type }: { type: string }) {
             {mutation.data?.map((item) => (
               <Card key={item.feed.url || item.docs} className="select-text">
                 <CardHeader>
-                  <FollowSummary feed={item.feed} docs={item.docs} />
+                  <FollowSummary className="max-w-[462px]" feed={item.feed} docs={item.docs} />
                 </CardHeader>
                 {item.docs ?
                     (
