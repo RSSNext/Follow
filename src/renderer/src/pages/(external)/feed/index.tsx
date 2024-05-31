@@ -74,7 +74,7 @@ export function Component() {
             {" "}
             on Follow
           </div>
-          <a className="mb-8" href={`follow://subscribe?id=${id}`}>
+          <a className="mb-8" href={`follow://add?id=${id}`}>
             <Button>Follow on Follow</Button>
           </a>
           <div className={cn(

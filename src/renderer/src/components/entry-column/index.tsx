@@ -99,6 +99,7 @@ export function EntryColumn() {
   return (
     <div className="relative flex h-full flex-1 flex-col">
       <ListHeader />
+      {/* TODO VirtuosoGrid */}
       <Virtuoso
         className="h-0 grow"
         components={{
