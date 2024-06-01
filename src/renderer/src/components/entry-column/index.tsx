@@ -1,7 +1,6 @@
 import { Tabs, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
 import { gridMode } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
-import { cn } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
 import { useFeedStore } from "@renderer/store"
@@ -13,7 +12,7 @@ import { debounce } from "lodash-es"
 import type { FC } from "react"
 import { forwardRef } from "react"
 import type { ListRange } from "react-virtuoso"
-import { Virtuoso } from "react-virtuoso"
+import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
 import { useShallow } from "zustand/react/shallow"
 
@@ -96,34 +95,45 @@ export function EntryColumn() {
     ),
   )
 
+  const virtusoOptions = {
+    components: {
+      List: ListContent,
+    },
+    overscan: window.innerHeight,
+    rangeChanged: handleRangeChange,
+    totalCount: entries.data?.pages?.[0]?.total,
+    endReached: () => entries.hasNextPage && entries.fetchNextPage(),
+    data: entries.data?.pages.flatMap((page) => page.data) || [],
+    itemContent: (_, entry) => {
+      if (!entry) return null
+      return (
+        <EntryItemWrapper
+          key={entry.entries.id}
+          entryId={entry.entries.id}
+          view={activeList?.view}
+        >
+          <Item entryId={entry.entries.id} />
+        </EntryItemWrapper>
+      )
+    },
+  }
+
   return (
     <div className="relative flex h-full flex-1 flex-col">
       <ListHeader />
-      {/* TODO VirtuosoGrid */}
-      <Virtuoso
-        className="h-0 grow"
-        components={{
-          List: ListContent,
-        }}
-        defaultItemHeight={320}
-        overscan={window.innerHeight}
-        rangeChanged={handleRangeChange}
-        totalCount={entries.data?.pages?.[0].total}
-        endReached={() => entries.hasNextPage && entries.fetchNextPage()}
-        data={entries.data?.pages.flatMap((page) => page.data)}
-        itemContent={(_, entry) => {
-          if (!entry) return null
-          return (
-            <EntryItemWrapper
-              key={entry.entries.id}
-              entryId={entry.entries.id}
-              view={activeList?.view}
-            >
-              <Item entryId={entry.entries.id} />
-            </EntryItemWrapper>
-          )
-        }}
-      />
+      {activeList?.view && gridMode.has(activeList.view) ?
+          (
+            <VirtuosoGrid
+              listClassName="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 px-4"
+              {...virtusoOptions}
+            />
+          ) :
+          (
+            <Virtuoso
+              defaultItemHeight={320}
+              {...virtusoOptions}
+            />
+          )}
     </div>
   )
 }
@@ -179,12 +189,7 @@ const ListContent = forwardRef<HTMLDivElement>((props, ref) => {
       initial={{ opacity: 0.01, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0.01, y: -100 }}
-      className={cn(
-        "px-2",
-        activeList?.view &&
-        gridMode.has(activeList.view) &&
-        "grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4",
-      )}
+      className="px-2"
       {...props}
       ref={ref}
     />
