@@ -12,7 +12,7 @@ export function PictureItem({ entryId, entryPreview }: UniversalItemProps) {
   return (
     <div>
       <div>
-        <div className="flex gap-2 overflow-x-auto">
+        <div className="flex gap-2 overflow-x-auto relative after:rounded-md after:absolute after:transition-colors after:inset-0 hover:after:bg-black/25">
           {entry.entries.images?.slice(0, 1).map((image) => (
             <Image
               key={image}

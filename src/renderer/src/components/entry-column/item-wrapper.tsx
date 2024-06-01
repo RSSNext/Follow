@@ -1,4 +1,5 @@
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
+import { views } from "@renderer/lib/constants"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
@@ -48,7 +49,8 @@ export function EntryItemWrapper({
       key={entry.entries.id}
       className={cn(
         "rounded-md transition-colors",
-        activeEntry === entry.entries.id && "bg-native-active/40",
+        !views[view || 0].wideMode && activeEntry === entry.entries.id && "bg-native-active/40",
+        views[view || 0].wideMode && !views[view || 0].gridMode && "hover:bg-native-active/30",
         entry.read ? "text-zinc-600 opacity-85" : "text-zinc-900 dark:text-white/90",
       )}
       // ref={ref}

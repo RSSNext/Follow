@@ -12,7 +12,7 @@ export function VideoItem({ entryId, entryPreview }: UniversalItemProps) {
   return (
     <div className="flex">
       <div className="w-full">
-        <div className="flex gap-2 overflow-x-auto">
+        <div className="flex gap-2 overflow-x-auto relative after:rounded-md after:absolute after:transition-colors after:inset-0 hover:after:bg-black/25">
           <Image
             key={entry.entries.images?.[0]}
             src={entry.entries.images?.[0]}
