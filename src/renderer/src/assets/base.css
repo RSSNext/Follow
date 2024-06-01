@@ -20,3 +20,15 @@ a {
 .dark {
   color-scheme: dark;
 }
+
+.swiper {
+  @apply bg-zinc-50;
+}
+
+.swiper-button {
+  @apply absolute top-1/2 -translate-y-1/2 bg-white rounded-full z-[1] w-6 h-6 flex items-center justify-center opacity-80;
+}
+
+.swiper-wrapper {
+  @apply flex items-center;
+}

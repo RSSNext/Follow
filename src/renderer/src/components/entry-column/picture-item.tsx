@@ -1,9 +1,10 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
+import { SwipeImages } from "@renderer/components/swipe-images"
 import { Image } from "@renderer/components/ui/image"
+import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholder"
 import dayjs from "@renderer/lib/dayjs"
 import { useEntry } from "@renderer/store/entry"
 
-import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
 export function PictureItem({ entryId, entryPreview }: UniversalItemProps) {
@@ -12,19 +13,13 @@ export function PictureItem({ entryId, entryPreview }: UniversalItemProps) {
   return (
     <div>
       <div>
-        <div className="flex gap-2 overflow-x-auto relative after:rounded-md after:absolute after:transition-colors after:inset-0 hover:after:bg-black/25">
-          {entry.entries.images?.slice(0, 1).map((image) => (
-            <Image
-              key={image}
-              src={image}
-              className="aspect-square w-full shrink-0 rounded-md object-cover"
-              loading="lazy"
-              proxy={{
-                width: 600,
-                height: 600,
-              }}
-            />
-          ))}
+        <div className="flex gap-2 overflow-x-auto relative">
+          <SwipeImages
+            images={entry.entries.images}
+            className="aspect-square w-full shrink-0 rounded-md"
+            imgClassName="object-cover"
+            uniqueKey={entryId}
+          />
         </div>
         <div className="line-clamp-5 flex-1 px-2 pb-3 pt-1 text-sm">
           <div className="line-clamp-2 font-medium">{entry.entries.title}</div>

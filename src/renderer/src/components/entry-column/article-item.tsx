@@ -17,7 +17,7 @@ export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
     <div className="mb-5 flex px-2 py-3">
       <FeedIcon feed={entry.feeds} />
       <div className="-mt-0.5 line-clamp-5 flex-1 text-sm leading-tight">
-        <div className="flex gap-1 text-[10px] font-bold text-zinc-500">
+        <div className={cn("flex gap-1 text-[10px] font-bold", entry.read ? "text-zinc-500/80" : "text-zinc-500")}>
           <span className="truncate">{entry.feeds.title}</span>
           <span>·</span>
           <span className="shrink-0">
@@ -32,7 +32,7 @@ export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
         <div className="my-0.5 break-words font-medium">
           {entry.entries.title}
         </div>
-        <div className="text-[13px] text-zinc-500">
+        <div className={cn("text-[13px]", entry.read ? "text-zinc-500/80" : "text-zinc-500")}>
           {entry.entries.description}
         </div>
       </div>
