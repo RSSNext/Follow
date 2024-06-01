@@ -3,7 +3,7 @@ export function Component() {
   const url = urlSearchParams.get("url")
 
   return url && (
-    <div className="w-screen h-screen">
+    <div className="h-screen w-screen">
       <img src={url} />
     </div>
   )

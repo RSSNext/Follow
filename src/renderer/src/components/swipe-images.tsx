@@ -21,7 +21,7 @@ export function SwipeImages({
   return (
     <div
       className={cn(
-        "overflow-hidden flex items-center relative w-full",
+        "relative flex w-full items-center overflow-hidden",
         className,
       )}
     >
@@ -79,19 +79,17 @@ export function SwipeImages({
         images?.length === 1 ?
             (
               <Image
-                className="object-cover size-full sm:group-hover:scale-105 sm:transition-transform sm:duration-300 sm:ease-in-out"
+                className="size-full object-cover sm:transition-transform sm:duration-300 sm:ease-in-out sm:group-hover:scale-105"
                 alt="cover"
                 src={images[0]}
                 width={624}
                 height={351}
-              >
-              </Image>
+              />
             ) :
             (
-              <div className="rounded-t-2xl overflow-hidden flex items-center relative w-full aspect-video border-b">
-                <div className="sm:group-hover:scale-105 sm:transition-transform sm:duration-500 sm:ease-in-out p-3 size-full text-center flex items-center justify-center">
-                  <div className="text-zinc-600 text-xl font-extrabold">
-                  </div>
+              <div className="relative flex aspect-video w-full items-center overflow-hidden rounded-t-2xl border-b">
+                <div className="flex size-full items-center justify-center p-3 text-center sm:transition-transform sm:duration-500 sm:ease-in-out sm:group-hover:scale-105">
+                  <div className="text-xl font-extrabold text-zinc-600" />
                 </div>
               </div>
             )}

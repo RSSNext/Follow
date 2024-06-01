@@ -1,5 +1,6 @@
 import { EntryColumn } from "@renderer/components/entry-column"
 import { EntryContent } from "@renderer/components/entry-content"
+import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import {
   feedActions,
@@ -8,7 +9,6 @@ import {
 import { AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
 import { useShallow } from "zustand/react/shallow"
-import { views } from "@renderer/lib/constants"
 
 export function Component() {
   const { activeEntry, activeList } = useFeedStore(

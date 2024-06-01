@@ -1,6 +1,5 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { SwipeImages } from "@renderer/components/swipe-images"
-import { Image } from "@renderer/components/ui/image"
 import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholder"
 import dayjs from "@renderer/lib/dayjs"
 import { useEntry } from "@renderer/store/entry"
@@ -13,7 +12,7 @@ export function PictureItem({ entryId, entryPreview }: UniversalItemProps) {
   return (
     <div>
       <div>
-        <div className="flex gap-2 overflow-x-auto relative">
+        <div className="relative flex gap-2 overflow-x-auto">
           <SwipeImages
             images={entry.entries.images}
             className="aspect-square w-full shrink-0 rounded-md"
