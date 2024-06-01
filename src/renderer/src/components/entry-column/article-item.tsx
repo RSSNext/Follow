@@ -29,13 +29,7 @@ export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
               .humanize()}
           </span>
         </div>
-
-        <div
-          className={cn(
-            "my-0.5 break-words font-medium",
-            entry.read ? "text-zinc-500" : "text-black dark:text-white/90",
-          )}
-        >
+        <div className="my-0.5 break-words font-medium">
           {entry.entries.title}
         </div>
         <div className="text-[13px] text-zinc-500">

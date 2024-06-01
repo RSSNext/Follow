@@ -49,7 +49,7 @@ export function EntryItemWrapper({
       className={cn(
         "rounded-md transition-colors",
         activeEntry === entry.entries.id && "bg-native-active/50",
-        entry.read && "text-foreground/80",
+        entry.read ? "text-zinc-600 opacity-85" : "text-zinc-900 dark:text-white/90",
       )}
       // ref={ref}
       onClick={(e) => {
