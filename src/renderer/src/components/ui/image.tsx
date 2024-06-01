@@ -1,3 +1,4 @@
+import { client } from "@renderer/lib/client"
 import { getProxyUrl } from "@renderer/lib/img-proxy"
 import { cn } from "@renderer/lib/utils"
 import type { ImgHTMLAttributes } from "react"
@@ -42,6 +43,17 @@ export const Image = ({
         onError={errorHandle}
         className={cn(hidden && "hidden", "size-full object-cover")}
         src={imgSrc}
+        onClick={async (e) => {
+          props.onClick?.(e)
+          if (props.src && imgSrc && client) {
+            client.previewImage({
+              realUrl: props.src,
+              url: imgSrc,
+              width: (e.target as HTMLImageElement).naturalWidth,
+              height: (e.target as HTMLImageElement).naturalHeight,
+            })
+          }
+        }}
       />
     </div>
   )

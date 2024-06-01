@@ -105,6 +105,15 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "preview",
+        children: [
+          {
+            path: "",
+            lazy: () => import("./pages/preview"),
+          },
+        ],
+      },
     ],
   },
 ])

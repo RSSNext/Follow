@@ -4,6 +4,7 @@ import { dialog, Menu, ShareMenu } from "electron"
 
 import { getMainWindow } from "."
 import type { RendererHandlers } from "./renderer-handlers"
+import { createWindow } from "./window"
 
 const t = tipc.create()
 
@@ -103,6 +104,26 @@ export const router = {
       const mainWindow = getMainWindow()
       const handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
       handlers.invalidateQuery.send(input)
+    }),
+
+  previewImage: t.procedure
+    .input<{
+      realUrl: string
+      url: string
+      width: number
+      height: number
+    }>()
+    .action(async ({ input }) => {
+      if (process.env["VITE_IMGPROXY_URL"] && input.url.startsWith(process.env["VITE_IMGPROXY_URL"])) {
+        const meta = await fetch(`${process.env["VITE_IMGPROXY_URL"]}/unsafe/meta/${encodeURIComponent(input.realUrl)}`).then((res) => res.json())
+        input.width = meta.thumbor.source.width
+        input.height = meta.thumbor.source.height
+      }
+      createWindow({
+        extraPath: `/preview?url=${encodeURIComponent(input.realUrl)}`,
+        width: input.width,
+        height: input.height,
+      })
     }),
 }
 
