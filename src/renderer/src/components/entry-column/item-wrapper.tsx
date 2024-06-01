@@ -48,7 +48,7 @@ export function EntryItemWrapper({
       key={entry.entries.id}
       className={cn(
         "rounded-md transition-colors",
-        activeEntry === entry.entries.id && "bg-native-active/50",
+        activeEntry === entry.entries.id && "bg-native-active/40",
         entry.read ? "text-zinc-600 opacity-85" : "text-zinc-900 dark:text-white/90",
       )}
       // ref={ref}

@@ -1,9 +1,9 @@
 import { Tabs, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
-import { gridMode } from "@renderer/lib/constants"
+import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
-import { useFeedStore } from "@renderer/store"
+import { feedActions, useFeedStore } from "@renderer/store"
 import { entryActions } from "@renderer/store/entry"
 import { m } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
@@ -28,6 +28,9 @@ const filterTabAtom = atomWithStorage<FilterTab>(
   buildStorageNS("entry-tab"),
   "unread",
 )
+
+const { setActiveEntry } = feedActions
+
 export function EntryColumn() {
   const activeList = useFeedStore((state) => state.activeList)
   const entries = useEntriesByTab()
@@ -119,9 +122,9 @@ export function EntryColumn() {
   }
 
   return (
-    <div className="relative flex h-full flex-1 flex-col">
+    <div className="relative flex h-full flex-1 flex-col" onClick={() => setActiveEntry?.(null)}>
       <ListHeader />
-      {activeList?.view && gridMode.has(activeList.view) ?
+      {activeList?.view && views[activeList.view].gridMode ?
           (
             <VirtuosoGrid
               listClassName="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 px-4"

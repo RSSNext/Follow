@@ -8,8 +8,7 @@ import {
 import { AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
 import { useShallow } from "zustand/react/shallow"
-
-const wideMode = new Set([1, 2, 3, 4])
+import { views } from "@renderer/lib/constants"
 
 export function Component() {
   const { activeEntry, activeList } = useFeedStore(
@@ -29,13 +28,13 @@ export function Component() {
         className={cn(
           "h-full shrink-0 overflow-y-auto border-r",
           window.electron ? "pt-10" : "pt-4",
-          activeList && wideMode.has(activeList.view) ? "flex-1" : "w-[340px]",
+          activeList && views[activeList.view].wideMode ? "flex-1" : "w-[340px]",
         )}
       >
         <EntryColumn />
       </div>
       <AnimatePresence>
-        {!(activeList && wideMode.has(activeList.view)) && activeEntry && (
+        {!(activeList && views[activeList.view].wideMode) && activeEntry && (
           <div className="flex-1">
             <EntryContent entryId={activeEntry} />
           </div>
