@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@renderer/components/ui/select"
 import { Switch } from "@renderer/components/ui/switch"
+import { useToast } from "@renderer/components/ui/use-toast"
 import { useBizQuery } from "@renderer/hooks/useBizQuery"
 import { client } from "@renderer/lib/client"
 import { views } from "@renderer/lib/constants"
@@ -31,7 +32,6 @@ import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useToast } from "@renderer/components/ui/use-toast"
 
 const formSchema = z.object({
   view: z.string(),
