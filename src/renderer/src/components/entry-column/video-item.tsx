@@ -22,6 +22,7 @@ export function VideoItem({ entryId, entryPreview }: UniversalItemProps) {
               width: 640,
               height: 360,
             }}
+            disableContextMenu
           />
         </div>
         <div className="line-clamp-5 flex-1 px-2 pb-3 pt-1 text-sm">

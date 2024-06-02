@@ -56,6 +56,7 @@ export function SwipeImages({
                         width: 600,
                         height: 600,
                       }}
+                      disableContextMenu
                     />
                   </SwiperSlide>
                 ))}
@@ -82,8 +83,12 @@ export function SwipeImages({
                 className="size-full object-cover sm:transition-transform sm:duration-300 sm:ease-in-out sm:group-hover:scale-105"
                 alt="cover"
                 src={images[0]}
-                width={624}
-                height={351}
+                loading="lazy"
+                proxy={{
+                  width: 600,
+                  height: 600,
+                }}
+                disableContextMenu
               />
             ) :
             (
