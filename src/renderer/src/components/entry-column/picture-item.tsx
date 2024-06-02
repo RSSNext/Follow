@@ -20,11 +20,11 @@ export function PictureItem({ entryId, entryPreview }: UniversalItemProps) {
             uniqueKey={entryId}
           />
         </div>
-        <div className="line-clamp-5 flex-1 px-2 pb-3 pt-1 text-sm">
-          <div className="line-clamp-2 font-medium">{entry.entries.title}</div>
-          <div className="space-x-1 text-[13px]">
+        <div className="flex-1 px-2 pb-3 pt-1 text-sm">
+          <div className="mb-0.5 mt-1 truncate font-medium">{entry.entries.title}</div>
+          <div className="flex items-center gap-1 truncate text-[13px]">
             <FeedIcon
-              className="mr-0 inline-block size-3.5 align-sub"
+              className="mr-0.5 inline-block size-[18px]"
               feed={entry.feeds}
             />
             <span>{entry.feeds.title}</span>
