@@ -38,7 +38,7 @@ export function EntryItemWrapper({
         read: true,
       })
     },
-    // TODO  出错回退
+    // TODO  fallback
   })
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more

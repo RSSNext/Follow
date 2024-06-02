@@ -98,7 +98,7 @@ export function FeedCategory({
                     click: async () => {
                       if (
                         await client?.showConfirmDialog({
-                          title: `Delete Category ${data.name}?`,
+                          title: `Delete category ${data.name}?`,
                           message: `This operation will delete your category, but the feeds it contains will be retained and grouped by website.`,
                           options: {
                             buttons: ["Delete", "Cancel"],

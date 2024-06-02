@@ -1,5 +1,11 @@
 import { Button } from "@renderer/components/ui/button"
 import {
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from "@renderer/components/ui/popover"
+import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -182,6 +188,28 @@ const ListHeader: FC = () => {
           </TooltipTrigger>
           <TooltipContent side="bottom">{unreadOnly ? "Unread Only" : "All"}</TooltipContent>
         </Tooltip>
+        <Popover>
+          <PopoverTrigger>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button className="size-8 rounded-full p-0 text-lg" variant="ghost">
+                  <i className="i-mingcute-check-circle-line" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Mark All as Read</TooltipContent>
+            </Tooltip>
+          </PopoverTrigger>
+          <PopoverContent className="flex flex-col gap-3 items-center justify-center w-fit text-[15px] font-medium">
+            <div>Mark all as read?</div>
+            <div className="space-x-4">
+              <PopoverClose>
+                <Button size="sm" variant="outline">Cancel</Button>
+              </PopoverClose>
+              {/* TODO */}
+              <Button size="sm">Confirm</Button>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   )
