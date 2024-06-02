@@ -12,6 +12,7 @@ import {
 } from "@renderer/components/ui/tooltip"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
+import { cn } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
 import { feedActions, useFeedStore } from "@renderer/store"
@@ -180,6 +181,14 @@ const ListHeader: FC = () => {
         </div>
       </div>
       <div className="flex items-center gap-1">
+        <Tooltip>
+          <TooltipTrigger>
+            <Button className="size-8 rounded-full p-0 text-lg" variant="ghost" onClick={() => entries.refetch()}>
+              <i className={cn("i-mingcute-refresh-2-line", entries.isRefetching && "animate-spin")} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">Refresh</TooltipContent>
+        </Tooltip>
         <Tooltip>
           <TooltipTrigger>
             <Button className="size-8 rounded-full p-0 text-lg" variant="ghost" onClick={() => setUnreadOnly(!unreadOnly)}>
