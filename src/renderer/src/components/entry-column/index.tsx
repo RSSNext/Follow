@@ -199,7 +199,7 @@ const ListHeader: FC = () => {
               <TooltipContent side="bottom">Mark All as Read</TooltipContent>
             </Tooltip>
           </PopoverTrigger>
-          <PopoverContent className="flex flex-col gap-3 items-center justify-center w-fit text-[15px] font-medium">
+          <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[15px] font-medium">
             <div>Mark all as read?</div>
             <div className="space-x-4">
               <PopoverClose>
