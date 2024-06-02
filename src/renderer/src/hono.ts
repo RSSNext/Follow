@@ -45,6 +45,22 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             status: 200;
         };
     };
+    "/reads/all": {
+        $post: {
+            input: {
+                json: {
+                    feedId?: string | undefined;
+                    view?: number | undefined;
+                    feedIdList?: string[] | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
 } & {
     "/collections": {
         $get: {

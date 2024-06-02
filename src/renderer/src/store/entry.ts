@@ -1,5 +1,5 @@
-import { levels } from "@renderer/lib/constants"
 import type { EntryModel } from "@renderer/lib/types"
+import { getEntriesParams } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
 import type { InferResponseType } from "hono/client"
 import { produce } from "immer"
@@ -24,6 +24,7 @@ interface EntryActions {
   }) => Promise<InferResponseType<typeof apiClient.entries.$post>>
   upsert: (feedId: string, entry: EntryModel) => void
   optimisticUpdate: (entryId: string, changed: Partial<EntryModel>) => void
+  optimisticUpdateAll: (changed: Partial<EntryModel>) => void
   getFlattenMapEntries: () => Record<string, EntryModel>
 }
 
@@ -48,21 +49,15 @@ export const useEntryStore = create<EntryState & { actions: EntryActions }>(
 
         pageParam?: string
       }) => {
-        const params: {
-          feedId?: string
-          feedIdList?: string[]
-        } = {}
-        if (level === levels.folder) {
-          params.feedIdList = `${id}`.split(",")
-        } else if (level === levels.feed) {
-          params.feedId = `${id}`
-        }
         const res = await apiClient.entries.$post({
           json: {
             publishedAfter: pageParam as string,
-            view,
             read,
-            ...params,
+            ...getEntriesParams({
+              level,
+              id,
+              view,
+            }),
           },
         })
 
@@ -85,6 +80,16 @@ export const useEntryStore = create<EntryState & { actions: EntryActions }>(
             const entry = draft.flatMapEntries[entryId]
             if (!entry) return
             Object.assign(entry, changed)
+            return draft
+          }),
+        )
+      },
+      optimisticUpdateAll(changed: Partial<EntryModel>) {
+        set((state) =>
+          produce(state, (draft) => {
+            for (const entry of Object.values(draft.flatMapEntries)) {
+              Object.assign(entry, changed)
+            }
             return draft
           }),
         )

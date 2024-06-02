@@ -12,7 +12,7 @@ import {
 } from "@renderer/components/ui/tooltip"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
-import { cn } from "@renderer/lib/utils"
+import { cn, getEntriesParams } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
 import { feedActions, useFeedStore } from "@renderer/store"
@@ -22,7 +22,7 @@ import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { debounce } from "lodash-es"
 import type { FC } from "react"
-import { forwardRef } from "react"
+import { forwardRef, useCallback, useState } from "react"
 import type { ListRange } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
@@ -169,6 +169,22 @@ const ListHeader: FC = () => {
   const [unreadOnly, setUnreadOnly] = useAtom(unreadOnlyAtom)
   const entries = useEntriesByTab()
 
+  const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
+  const handleMarkAllAsRead = useCallback(async () => {
+    if (!activeList) return
+    await apiClient.reads.all.$post({
+      json: {
+        ...getEntriesParams({
+          level: activeList?.level,
+          id: activeList?.id,
+          view: activeList?.view,
+        }),
+      },
+    })
+    entryActions.optimisticUpdateAll({ read: true })
+    setMarkPopoverOpen(false)
+  }, [activeList])
+
   return (
     <div className="mb-5 flex w-full items-center justify-between pl-9 pr-2">
       <div>
@@ -196,7 +212,7 @@ const ListHeader: FC = () => {
           </TooltipTrigger>
           <TooltipContent side="bottom">{unreadOnly ? "Unread Only" : "All"}</TooltipContent>
         </Tooltip>
-        <Popover>
+        <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
           <PopoverTrigger>
             <Tooltip>
               <TooltipTrigger>
@@ -214,7 +230,7 @@ const ListHeader: FC = () => {
                 <Button size="sm" variant="outline">Cancel</Button>
               </PopoverClose>
               {/* TODO */}
-              <Button size="sm">Confirm</Button>
+              <Button size="sm" onClick={handleMarkAllAsRead}>Confirm</Button>
             </div>
           </PopoverContent>
         </Popover>
