@@ -6,5 +6,3 @@ export type UniversalItemProps = {
     feeds: FeedModel
   }
 }
-
-export type FilterTab = "all" | "unread"

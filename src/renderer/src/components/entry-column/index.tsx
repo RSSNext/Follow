@@ -1,4 +1,9 @@
-import { Tabs, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
+import { Toggle } from "@renderer/components/ui/toggle"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@renderer/components/ui/tooltip"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
 import { apiClient } from "@renderer/queries/api-fetch"
@@ -21,12 +26,12 @@ import { EntryItemWrapper } from "./item-wrapper"
 import { NotificationItem } from "./notification-item"
 import { PictureItem } from "./picture-item"
 import { SocialMediaItem } from "./social-media-item"
-import type { FilterTab, UniversalItemProps } from "./types"
+import type { UniversalItemProps } from "./types"
 import { VideoItem } from "./video-item"
 
-const filterTabAtom = atomWithStorage<FilterTab>(
-  buildStorageNS("entry-tab"),
-  "unread",
+const unreadOnlyAtom = atomWithStorage<boolean>(
+  buildStorageNS("entry-unreadonly"),
+  true,
 )
 
 const { setActiveEntry } = feedActions
@@ -143,23 +148,23 @@ export function EntryColumn() {
 
 const useEntriesByTab = () => {
   const activeList = useFeedStore(useShallow((state) => state.activeList))
-  const filterTab = useAtomValue(filterTabAtom)
+  const unreadOnly = useAtomValue(unreadOnlyAtom)
 
   return useEntries({
     level: activeList?.level,
     id: activeList?.id,
     view: activeList?.view,
-    ...(filterTab === "unread" && { read: false }),
+    ...(unreadOnly === true && { read: false }),
   })
 }
 
 const ListHeader: FC = () => {
   const activeList = useFeedStore(useShallow((state) => state.activeList))
-  const [filterTab, setFilterTab] = useAtom(filterTabAtom)
+  const [unreadOnly, setUnreadOnly] = useAtom(unreadOnlyAtom)
   const entries = useEntriesByTab()
 
   return (
-    <div className="mb-5 flex w-full items-center justify-between px-9">
+    <div className="mb-5 flex w-full items-center justify-between pl-9 pr-2">
       <div>
         <div className="text-lg font-bold">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
@@ -168,17 +173,14 @@ const ListHeader: FC = () => {
           Items
         </div>
       </div>
-      {/* @ts-expect-error */}
-      <Tabs value={filterTab} onValueChange={setFilterTab}>
-        <TabsList variant="rounded">
-          <TabsTrigger variant="rounded" value="unread">
-            Unread
-          </TabsTrigger>
-          <TabsTrigger variant="rounded" value="all">
-            All
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <Tooltip>
+        <TooltipTrigger>
+          <Toggle pressed={unreadOnly} onPressedChange={setUnreadOnly} className="size-8 rounded-full p-0">
+            <i className="i-mingcute-round-line" />
+          </Toggle>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">{unreadOnly ? "Unread Only" : "All"}</TooltipContent>
+      </Tooltip>
     </div>
   )
 }
