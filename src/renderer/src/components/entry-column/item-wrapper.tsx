@@ -45,38 +45,39 @@ export function EntryItemWrapper({
   if (!entry) return <ReactVirtuosoItemPlaceholder />
 
   return (
-    <div
-      className={cn(
-        "rounded-md bg-white transition-colors",
-        !views[view || 0].wideMode && activeEntry === entry.entries.id && "bg-native-active/40",
-        views[view || 0].wideMode && !views[view || 0].gridMode && "hover:bg-native-active/30",
-        entry.read ? "text-zinc-500/90" : "text-zinc-900 dark:text-white/90",
-      )}
-      // ref={ref}
-      onClick={(e) => {
-        e.stopPropagation()
-        feedActions.setActiveEntry(entry.entries.id)
-        if (!entry.read) {
-          read.mutate()
-        }
-      }}
-      onDoubleClick={() =>
-        entry.entries.url && window.open(entry.entries.url, "_blank")}
-      onContextMenu={(e) => {
-        e.preventDefault()
-        showNativeMenu(
-          items
-            .filter((item) => !item.disabled)
-            .map((item) => ({
-              type: "text",
-              label: item.name,
-              click: item.onClick,
-            })),
-          e,
-        )
-      }}
-    >
-      {children}
+    <div className={cn(!views[view || 0].wideMode && "pb-3")}>
+      <div
+        className={cn(
+          "rounded-md bg-white transition-colors",
+          !views[view || 0].wideMode && activeEntry === entry.entries.id && "bg-native-active/40",
+          entry.read ? "text-zinc-500/90" : "text-zinc-900 dark:text-white/90",
+        )}
+        // ref={ref}
+        onClick={(e) => {
+          e.stopPropagation()
+          feedActions.setActiveEntry(entry.entries.id)
+          if (!entry.read) {
+            read.mutate()
+          }
+        }}
+        onDoubleClick={() =>
+          entry.entries.url && window.open(entry.entries.url, "_blank")}
+        onContextMenu={(e) => {
+          e.preventDefault()
+          showNativeMenu(
+            items
+              .filter((item) => !item.disabled)
+              .map((item) => ({
+                type: "text",
+                label: item.name,
+                click: item.onClick,
+              })),
+            e,
+          )
+        }}
+      >
+        {children}
+      </div>
     </div>
   )
 }
