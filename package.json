@@ -1,7 +1,7 @@
 {
   "name": "follow",
   "version": "0.0.1",
-  "packageManager": "pnpm@9.1.1",
+  "packageManager": "pnpm@9.1.4",
   "description": "An Electron application with React and TypeScript",
   "author": "example.com",
   "homepage": "https://electron-vite.org",
@@ -42,7 +42,6 @@
     "@radix-ui/react-switch": "1.0.3",
     "@radix-ui/react-tabs": "1.0.4",
     "@radix-ui/react-toast": "1.1.5",
-    "@radix-ui/react-toggle": "1.0.3",
     "@radix-ui/react-tooltip": "1.0.7",
     "@tanstack/query-sync-storage-persister": "5.40.0",
     "@tanstack/react-query": "5.40.0",

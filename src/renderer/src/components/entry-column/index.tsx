@@ -1,4 +1,4 @@
-import { Toggle } from "@renderer/components/ui/toggle"
+import { Button } from "@renderer/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
@@ -173,14 +173,16 @@ const ListHeader: FC = () => {
           Items
         </div>
       </div>
-      <Tooltip>
-        <TooltipTrigger>
-          <Toggle pressed={unreadOnly} onPressedChange={setUnreadOnly} className="size-8 rounded-full p-0">
-            <i className="i-mingcute-round-line" />
-          </Toggle>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">{unreadOnly ? "Unread Only" : "All"}</TooltipContent>
-      </Tooltip>
+      <div className="flex items-center gap-1">
+        <Tooltip>
+          <TooltipTrigger>
+            <Button className="size-8 rounded-full p-0 text-lg" variant="ghost" onClick={() => setUnreadOnly(!unreadOnly)}>
+              {unreadOnly ? <i className="i-mingcute-round-fill" /> : <i className="i-mingcute-round-line" />}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">{unreadOnly ? "Unread Only" : "All"}</TooltipContent>
+        </Tooltip>
+      </div>
     </div>
   )
 }
