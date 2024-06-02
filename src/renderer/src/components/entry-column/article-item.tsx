@@ -14,7 +14,7 @@ export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
   if (!entry) return <ReactVirtuosoItemPlaceholder />
 
   return (
-    <div className="mb-5 flex px-2 py-3">
+    <div className="pb-8 flex px-2 pt-3">
       <FeedIcon feed={entry.feeds} />
       <div className="-mt-0.5 line-clamp-5 flex-1 text-sm leading-tight">
         <div className={cn("flex gap-1 text-[10px] font-bold", entry.read ? "text-zinc-400" : "text-zinc-500")}>

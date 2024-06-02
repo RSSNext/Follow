@@ -17,7 +17,7 @@ import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
 import { feedActions, useFeedStore } from "@renderer/store"
 import { entryActions } from "@renderer/store/entry"
-import { AnimatePresence, m } from "framer-motion"
+import { m } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { debounce } from "lodash-es"
@@ -145,7 +145,6 @@ export function EntryColumn() {
           ) :
           (
             <Virtuoso
-              defaultItemHeight={320}
               {...virtusoOptions}
             />
           )}
@@ -234,13 +233,8 @@ const ListContent = forwardRef<HTMLDivElement>((props, ref) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0.01, y: -100 }}
       className="px-2"
-    >
-      <AnimatePresence>
-        <div
-          {...props}
-          ref={ref}
-        />
-      </AnimatePresence>
-    </m.div>
+      {...props}
+      ref={ref}
+    />
   )
 })

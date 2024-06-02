@@ -6,7 +6,6 @@ import { apiClient } from "@renderer/queries/api-fetch"
 import { feedActions, useFeedStore } from "@renderer/store"
 import { entryActions, useEntry } from "@renderer/store/entry"
 import { useMutation } from "@tanstack/react-query"
-import { m } from "framer-motion"
 
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 
@@ -46,8 +45,7 @@ export function EntryItemWrapper({
   if (!entry) return <ReactVirtuosoItemPlaceholder />
 
   return (
-    <m.div
-      layoutId={entry.entries.id}
+    <div
       className={cn(
         "rounded-md bg-white transition-colors",
         !views[view || 0].wideMode && activeEntry === entry.entries.id && "bg-native-active/40",
@@ -79,6 +77,6 @@ export function EntryItemWrapper({
       }}
     >
       {children}
-    </m.div>
+    </div>
   )
 }
