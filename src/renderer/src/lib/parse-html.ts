@@ -1,3 +1,4 @@
+import { Image } from "@renderer/components/ui/image"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
 import rehypeInferDescriptionMeta from "rehype-infer-description-meta"
@@ -49,6 +50,9 @@ export const parseHtml = async (content: string) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       jsxs: (type, props, key) => jsxs(type as any, props, key),
       passNode: true,
+      components: {
+        img: Image,
+      },
     }),
   }
 }
