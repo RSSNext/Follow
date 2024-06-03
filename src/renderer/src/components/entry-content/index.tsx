@@ -62,11 +62,11 @@ export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
       ) :
       (
         <m.div
-          className="flex flex-col items-center justify-center size-full font-medium text-zinc-400 gap-1 text-lg"
+          className="flex size-full flex-col items-center justify-center gap-1 text-lg font-medium text-zinc-400"
           initial={{ opacity: 0.01, y: 300 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <img src="./icon.svg" alt="logo" className="size-16 grayscale opacity-40" />
+          <img src="./icon.svg" alt="logo" className="size-16 opacity-40 grayscale" />
           {activeList?.name}
         </m.div>
       )

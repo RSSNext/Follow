@@ -47,7 +47,7 @@ export const Image = ({
       <img
         {...props}
         onError={errorHandle}
-        className={cn(hidden && "hidden", "size-full object-cover bg-stone-100")}
+        className={cn(hidden && "hidden", "size-full bg-stone-100 object-cover")}
         src={imgSrc}
         {...(!disableContextMenu ?
             {
