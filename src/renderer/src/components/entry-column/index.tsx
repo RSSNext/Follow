@@ -7,9 +7,7 @@ import {
 } from "@renderer/components/ui/popover"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
-import type {
-  EntryModel,
-} from "@renderer/lib/types"
+import type { EntryModel } from "@renderer/lib/types"
 import { cn, getEntriesParams } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
@@ -21,10 +19,7 @@ import { atomWithStorage } from "jotai/utils"
 import { debounce } from "lodash-es"
 import type { FC } from "react"
 import { forwardRef, useCallback, useState } from "react"
-import type {
-  ListRange,
-  VirtuosoProps,
-} from "react-virtuoso"
+import type { ListRange } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
 import { useShallow } from "zustand/react/shallow"
@@ -120,7 +115,7 @@ export function EntryColumn() {
     totalCount: entries.data?.pages?.[0]?.total,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entries.data?.pages.flatMap((page) => page.data) || [],
-    itemContent: useCallback((_, entry) => {
+    itemContent: useCallback((_, entry: EntryModel | undefined) => {
       if (!entry) return null
       return (
         <EntryItemWrapper
@@ -132,7 +127,7 @@ export function EntryColumn() {
         </EntryItemWrapper>
       )
     }, []),
-  } satisfies VirtuosoProps<EntryModel, any>
+  }
 
   return (
     <div
