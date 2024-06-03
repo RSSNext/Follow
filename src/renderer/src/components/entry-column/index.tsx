@@ -111,6 +111,7 @@ export function EntryColumn() {
   const virtuosoOptions = {
     components: {
       List: ListContent,
+      EmptyPlaceholder: EmptyList,
     },
     overscan: window.innerHeight,
     rangeChanged: handleRangeChange,
@@ -260,3 +261,25 @@ const ListContent = forwardRef<HTMLDivElement>((props, ref) => (
     ref={ref}
   />
 ))
+
+const EmptyList = (props, ref) => {
+  const unreadOnly = useAtomValue(unreadOnlyAtom)
+
+  return (
+    <m.div
+      initial={{ opacity: 0.01, y: 100 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0.01, y: -100 }}
+      className="-mt-10 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
+      {...props}
+      ref={ref}
+    >
+      {unreadOnly && (
+        <>
+          <i className="i-mingcute-celebrate-line text-4xl" />
+          Zero Unread
+        </>
+      )}
+    </m.div>
+  )
+}

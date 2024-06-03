@@ -4,6 +4,7 @@ import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { feedActions } from "@renderer/store"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 
 import { FeedCategory } from "./category"
 
@@ -19,7 +20,6 @@ export function FeedList({
   const subscriptions = useBizQuery(Queries.subscription.byView(view))
   const [expansion, setExpansion] = useState(false)
   const { setActiveList } = feedActions
-  console.log(subscriptions.data)
 
   return (
     <div className={className}>
@@ -60,14 +60,23 @@ export function FeedList({
           </div>
         </div>
       )}
-      {subscriptions.data?.list.map((category) => (
-        <FeedCategory
-          key={category.name}
-          data={category}
-          view={view}
-          expansion={expansion}
-        />
-      ))}
+      {subscriptions.data?.list?.length ?
+        subscriptions.data?.list.map((category) => (
+          <FeedCategory
+            key={category.name}
+            data={category}
+            view={view}
+            expansion={expansion}
+          />
+        )) :
+          (
+            <div className="flex  h-full flex-1 items-center text-zinc-500">
+              <Link to="/discover" className="-mt-36 flex h-full flex-1 flex-col items-center justify-center gap-2">
+                <i className="i-mingcute-add-line text-3xl " />
+                Add some feeds
+              </Link>
+            </div>
+          )}
     </div>
   )
 }
