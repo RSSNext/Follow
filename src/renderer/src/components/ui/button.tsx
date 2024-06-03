@@ -106,9 +106,7 @@ export const HeaderActionButton = React.forwardRef<
           {children}
         </Button>
       </TooltipTrigger>
-      <TooltipContent side={tooltipSide ?? "bottom"}>
-        {tooltip}
-      </TooltipContent>
+      <TooltipContent side={tooltipSide ?? "bottom"}>{tooltip}</TooltipContent>
     </Tooltip>
   ),
 )

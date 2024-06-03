@@ -1,13 +1,6 @@
-import { useAtom } from "jotai"
-import { atomDark } from "jotai-dark"
+import { useTheme } from "next-themes"
 
-const isDarkAtom = atomDark()
-
-export function useDark() {
-  const [isDark, setIsDark] = useAtom(isDarkAtom)
-  return {
-    isDark,
-    toggleDark: setIsDark as () => void,
-    theme: (isDark ? "dark" : "light") as "dark" | "light",
-  }
+export function useIsDark() {
+  const { systemTheme, theme } = useTheme()
+  return systemTheme === "dark" || theme === "dark"
 }

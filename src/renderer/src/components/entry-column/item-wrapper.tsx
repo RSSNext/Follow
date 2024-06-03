@@ -48,8 +48,8 @@ export function EntryItemWrapper({
     <div className={cn(!views[view || 0].wideMode && "pb-3")}>
       <div
         className={cn(
-          "rounded-md bg-white transition-colors",
-          !views[view || 0].wideMode && activeEntry === entry.entries.id && "bg-native-active/40",
+          "rounded-md bg-background transition-colors",
+          !views[view || 0].wideMode && activeEntry === entry.entries.id && "bg-theme-item-active",
           entry.read ? "text-zinc-500/90" : "text-zinc-900 dark:text-white/90",
         )}
         // ref={ref}

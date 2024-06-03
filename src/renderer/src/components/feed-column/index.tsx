@@ -89,14 +89,14 @@ export function FeedColumn() {
               <UserButton className="h-5 p-0" hideName />
             </Link>
           </Button>
-          <Button variant="ghost" size="sm">
+          <Button className="hover:bg-theme-vibrancyBg" variant="ghost" size="sm">
             <Link to="/discover" className="flex">
-              <i className="i-mingcute-add-line size-5 text-zinc-500" />
+              <i className="i-mingcute-add-line size-5 text-theme-vibrancyFg" />
             </Link>
           </Button>
         </div>
       </div>
-      <div className="flex w-full justify-between px-3 text-xl text-zinc-500">
+      <div className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg">
         {views.map((item, index) => (
           <Tooltip key={item.name}>
             <TooltipTrigger asChild>
@@ -104,6 +104,7 @@ export function FeedColumn() {
                 className={cn(
                   active === index && item.className,
                   "flex items-center text-xl",
+                  "hover:!bg-theme-vibrancyBg",
                 )}
                 variant="ghost"
                 size="sm"

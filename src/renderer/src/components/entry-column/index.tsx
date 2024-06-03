@@ -197,7 +197,7 @@ const ListHeader: FC = () => {
           Items
         </div>
       </div>
-      <div className="relative z-[1] flex h-14 items-center gap-1">
+      <div className="relative z-[1] flex h-14 items-center gap-1 text-zinc-500">
         <HeaderActionButton onClick={entries.refetch} tooltip="Refresh">
           <i
             className={cn(
