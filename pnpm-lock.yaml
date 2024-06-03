@@ -252,9 +252,6 @@ importers:
       vite:
         specifier: ^5.2.12
         version: 5.2.12(@types/node@20.12.13)
-      vite-plugin-react-click-to-component:
-        specifier: 3.0.0
-        version: 3.0.0(react@18.3.1)(vite@5.2.12(@types/node@20.12.13))
 
 packages:
 
@@ -5041,12 +5038,6 @@ packages:
 
   vfile@6.0.1:
     resolution: {integrity: sha512-1bYqc7pt6NIADBJ98UiG0Bn/CHIVOoZ/IyEkqIruLg0mE1BKzkOXY2D6CSqQIcKqgadppE5lrxgWXJmXd7zZJw==}
-
-  vite-plugin-react-click-to-component@3.0.0:
-    resolution: {integrity: sha512-ErVBJDIpq2WfjIrBKwIvGVN7QlsXb2MEqO+IBy15akoVpL4J0b7hBNQzPS74ZrJAmtNkvmE0lHyaQk7Whj1YGQ==}
-    peerDependencies:
-      react: '>=16'
-      vite: ^4 || ^5
 
   vite@5.2.12:
     resolution: {integrity: sha512-/gC8GxzxMK5ntBwb48pR32GGhENnjtY30G4A0jemunsBkiEZFw60s8InGpN8gkhHEkjnRK1aSAxeQgwvFhUHAA==}
@@ -10812,11 +10803,6 @@ snapshots:
       '@types/unist': 3.0.2
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
-
-  vite-plugin-react-click-to-component@3.0.0(react@18.3.1)(vite@5.2.12(@types/node@20.12.13)):
-    dependencies:
-      react: 18.3.1
-      vite: 5.2.12(@types/node@20.12.13)
 
   vite@5.2.12(@types/node@20.12.13):
     dependencies:
