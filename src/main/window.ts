@@ -22,8 +22,11 @@ export function createWindow(options?: {
       sandbox: false,
     },
     titleBarStyle: "hiddenInset",
-    vibrancy: "window",
-    visualEffectState: "active",
+
+    transparent: true,
+    backgroundColor: "#00000000", // transparent hexadecimal or anything with transparency,
+    vibrancy: "sidebar",
+    visualEffectState: "followWindow",
   })
 
   window.on("ready-to-show", () => {

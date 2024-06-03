@@ -32,7 +32,7 @@ export function Component() {
         Follow Settings
       </div> */}
       <div className="flex flex-1">
-        <div className="w-44 border-r bg-native/80 p-3 pt-10 backdrop-blur">
+        <div className="w-44 border-r p-3 pt-10 backdrop-blur">
           <div className="mx-2 mb-5 flex items-center gap-1 text-xl font-bold">
             <img src="./icon.svg" alt="logo" className="size-6" />
             Settings
