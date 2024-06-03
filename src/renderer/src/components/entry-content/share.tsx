@@ -1,9 +1,6 @@
-import { Button } from "@renderer/components/ui/button"
+import { HeaderActionButton } from "@renderer/components/ui/button"
 import {
-  Tooltip,
-  TooltipContent,
   TooltipProvider,
-  TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
 import { useEntry } from "@renderer/store/entry"
@@ -29,25 +26,20 @@ export function EntryShare({
         {items
           .filter((item) => !item.disabled)
           .map((item) => (
-            <Tooltip key={item.name}>
-              <TooltipTrigger asChild>
-                <Button
-                  className="no-drag-region flex items-center text-xl"
-                  variant="ghost"
-                  size="sm"
-                  onClick={item.onClick}
-                >
-                  {item.icon ?
-                      (
-                        <img className="size-4 grayscale" src={item.icon} />
-                      ) :
-                      (
-                        <i className={item.className} />
-                      )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">{item.name}</TooltipContent>
-            </Tooltip>
+            <HeaderActionButton
+              icon={
+                item.icon ?
+                    (
+                      <img className="size-4 grayscale" src={item.icon} />
+                    ) :
+                    (
+                      <i className={item.className} />
+                    )
+              }
+              onClick={item.onClick}
+              tooltip={item.name}
+              key={item.name}
+            />
           ))}
       </TooltipProvider>
     </div>
