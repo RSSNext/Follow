@@ -20,24 +20,36 @@ export const router = createBrowserRouter([
                 lazy: () => import("./pages/(main)/(context)/index"),
               },
               {
-                path: "/discover",
-                lazy: () => import("./pages/(main)/(context)/discover/layout"),
+                path: "",
+                lazy: () => import("./pages/(main)/layout"),
                 children: [
                   {
                     path: "",
-                    lazy: () =>
-                      import("./pages/(main)/(context)/discover/index"),
-                  },
-                ],
-              },
-              {
-                path: "/profile",
-                lazy: () => import("./pages/(main)/(context)/profile/layout"),
-                children: [
-                  {
-                    path: "",
-                    lazy: () =>
-                      import("./pages/(main)/(context)/profile/index"),
+                    lazy: () => import("./pages/(main)/(context)/(nonhome)/layout"),
+                    children: [
+                      {
+                        path: "/discover",
+                        lazy: () => import("./pages/(main)/(context)/(nonhome)/discover/layout"),
+                        children: [
+                          {
+                            path: "",
+                            lazy: () =>
+                              import("./pages/(main)/(context)/(nonhome)/discover/index"),
+                          },
+                        ],
+                      },
+                      {
+                        path: "/profile",
+                        lazy: () => import("./pages/(main)/(context)/(nonhome)/profile/layout"),
+                        children: [
+                          {
+                            path: "",
+                            lazy: () =>
+                              import("./pages/(main)/(context)/(nonhome)/profile/index"),
+                          },
+                        ],
+                      },
+                    ],
                   },
                 ],
               },
