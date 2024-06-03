@@ -6,6 +6,7 @@ import {
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
 import { views } from "@renderer/lib/constants"
+import { FeedViewType } from "@renderer/lib/enum"
 import { buildStorageNS } from "@renderer/lib/ns"
 import type { EntryModel } from "@renderer/lib/types"
 import { cn, getEntriesParams } from "@renderer/lib/utils"
@@ -48,24 +49,25 @@ export function EntryColumn() {
   ) || []) as string[]
 
   let Item: FC<UniversalItemProps>
+
   switch (activeList?.view) {
-    case 0: {
+    case FeedViewType.Articles: {
       Item = ArticleItem
       break
     }
-    case 1: {
+    case FeedViewType.SocialMedia: {
       Item = SocialMediaItem
       break
     }
-    case 2: {
+    case FeedViewType.Pictures: {
       Item = PictureItem
       break
     }
-    case 3: {
+    case FeedViewType.Videos: {
       Item = VideoItem
       break
     }
-    case 5: {
+    case FeedViewType.Notifications: {
       Item = NotificationItem
       break
     }
@@ -115,18 +117,22 @@ export function EntryColumn() {
     totalCount: entries.data?.pages?.[0]?.total,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entries.data?.pages.flatMap((page) => page.data) || [],
-    itemContent: useCallback((_, entry: EntryModel | undefined) => {
-      if (!entry) return null
-      return (
-        <EntryItemWrapper
-          key={entry.entries.id}
-          entryId={entry.entries.id}
-          view={activeList?.view}
-        >
-          <Item entryId={entry.entries.id} />
-        </EntryItemWrapper>
-      )
-    }, []),
+    itemContent: useCallback(
+      (_, entry: EntryModel | undefined) => {
+        if (!entry) return null
+
+        return (
+          <EntryItemWrapper
+            key={entry.entries.id}
+            entryId={entry.entries.id}
+            view={activeList?.view}
+          >
+            <Item entryId={entry.entries.id} />
+          </EntryItemWrapper>
+        )
+      },
+      [Item, activeList?.view],
+    ),
   }
 
   return (

@@ -27,9 +27,9 @@ export function VideoItem({ entryId, entryPreview }: UniversalItemProps) {
         </div>
         <div className="flex-1 px-2 pb-3 pt-1 text-sm">
           <div className="mb-0.5 mt-1 truncate font-medium">{entry.entries.title}</div>
-          <div className="flex items-center gap-1 truncate text-[13px]">
+          <div className="flex items-center gap-1 truncate text-xs">
             <FeedIcon
-              className="mr-0.5 inline-block size-[18px]"
+              className="mr-0.5 inline-block size-3"
               feed={entry.feeds}
             />
             <span>{entry.entries.author}</span>

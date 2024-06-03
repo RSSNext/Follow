@@ -101,6 +101,10 @@ export function Component() {
         duration: 1000,
         description: isSubscribed ? "🎉 Updated." : "🎉 Followed.",
       })
+
+      if (!isSubscribed) {
+        window.close()
+      }
     },
   })
 
@@ -113,7 +117,7 @@ export function Component() {
   )
 
   return (
-    <div className="flex h-full flex-col p-10 bg-background/90">
+    <div className="flex h-full flex-col bg-background/90 p-10">
       <div className="mb-4 mt-2 flex items-center gap-2 text-[22px] font-bold">
         <img src="../icon.svg" alt="logo" className="size-8" />
         Add follow
@@ -215,7 +219,7 @@ export function Component() {
                           </FormItem>
                         )}
                       />
-                      <div className="justify-end flex">
+                      <div className="flex justify-end">
                         <Button
                           size="sm"
                           type="submit"
