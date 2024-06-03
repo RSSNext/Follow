@@ -3,7 +3,7 @@ export const levels = {
   folder: "folder",
   feed: "feed",
   entry: "entry",
-}
+};
 
 export const views = [
   {
@@ -41,4 +41,4 @@ export const views = [
     icon: <i className="i-mingcute-notification-fill" />,
     className: "text-yellow-600",
   },
-]
+];

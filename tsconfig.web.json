@@ -5,6 +5,7 @@
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.tsx",
     "src/preload/*.d.ts",
+    "src/shared/src/**/*",
     "src/main/*.ts",
     "types/**/*.d.ts"
   ],
@@ -18,7 +19,10 @@
       ],
       "@main/*": [
         "src/main/*"
-      ]
+      ],
+      "@shared/*": [
+        "src/shared/src/*"
+      ],
     }
   }
 }
