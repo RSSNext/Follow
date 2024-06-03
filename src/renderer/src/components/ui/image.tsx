@@ -43,11 +43,11 @@ export const Image = ({
   const { toast } = useToast()
 
   return (
-    <div className={cn("overflow-hidden rounded bg-stone-100", className)}>
+    <div className={cn("overflow-hidden rounded", className)}>
       <img
         {...props}
         onError={errorHandle}
-        className={cn(hidden && "hidden", "size-full object-cover")}
+        className={cn(hidden && "hidden", "size-full object-cover bg-stone-100")}
         src={imgSrc}
         {...(!disableContextMenu ?
             {

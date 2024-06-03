@@ -34,7 +34,7 @@ export function Component() {
         <EntryColumn />
       </div>
       <AnimatePresence>
-        {!(activeList && views[activeList.view].wideMode) && activeEntry && (
+        {!(activeList && views[activeList.view].wideMode) && (
           <div className="flex-1">
             <EntryContent entryId={activeEntry} />
           </div>
