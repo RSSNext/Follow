@@ -194,16 +194,18 @@ export function DiscoverForm({ type }: { type: string }) {
                                 <Button
                                   onClick={() =>
                                     openElectronWindow(
-                              `${DEEPLINK_SCHEME}add${
-                                item.feed.id ?
-                                  `?id=${item.feed.id}` :
-                                  `?url=${item.feed.url}`
-                              }`,
-                              {
-                                resizeable: false,
-                                height: 550,
-                              },
-                                    )}
+                                      `${DEEPLINK_SCHEME}add${
+                                        item.feed.id ?
+                                          `?id=${item.feed.id}` :
+                                          `?url=${item.feed.url}`
+                                      }`,
+                                      {
+                                        resizeable: false,
+                                        height: 550,
+                                      },
+                                    )
+                                    // eslint-disable-next-line @stylistic/jsx-curly-newline
+                                  }
                                 >
                                   Follow
                                 </Button>
