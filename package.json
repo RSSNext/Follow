@@ -58,7 +58,7 @@
     "hast-util-to-jsx-runtime": "2.3.0",
     "immer": "10.1.1",
     "jotai": "2.8.2",
-    "jotai-dark": "0.3.0",
+    "jotai-dark": "0.3.1",
     "jotai-effect": "1.0.0",
     "lethargy": "1.0.9",
     "lodash-es": "4.17.21",

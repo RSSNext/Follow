@@ -3,19 +3,9 @@ import { atomDark } from "jotai-dark"
 
 const isDarkAtom = atomDark({
   storageKey: "theme",
+  disableTransition: true,
   applyDarkMode(isDark) {
-    const $css = document.createElement("style")
-    $css.innerHTML = `* {
-      transition: none !important;
-    }`
-    document.head.append($css)
-
-    void document.body.offsetHeight
-
     document.documentElement.dataset.theme = isDark ? "dark" : "light"
-
-    void document.body.offsetHeight
-    $css.remove()
   },
 })
 

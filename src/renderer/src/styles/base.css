@@ -17,7 +17,7 @@ a {
   @apply cursor-pointer;
 }
 
-.dark {
+[data-theme="dark"] {
   color-scheme: dark;
 }
 
