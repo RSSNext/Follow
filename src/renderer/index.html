@@ -18,35 +18,10 @@
           (document.documentElement.dataset.theme = "dark");
       })();
     </script>
-    <style>
-      .skeleton {
-        height: 100vh;
-        width: 100%;
-        display: flex;
-      }
-      .skeleton-sidebar {
-        width: 16rem;
-        height: 100%;
-        flex-shrink: 0;
-      }
-      .skeleton-content {
-        --background: 0 0% 100%;
-        flex-grow: 1;
-        height: 100%;
-        background-color: hsl(var(--background));
-      }
-      [data-theme="dark"] .skeleton-content {
-        --background: 0, 0%, 11.8%;
-      }
-    </style>
   </head>
   <body>
     <div id="root">
       <!-- Skeleton -->
-      <!-- <div class="skeleton">
-        <div class="skeleton-sidebar"></div>
-        <div class="skeleton-content"></div>
-      </div> -->
       <div class="h-full w-full flex">
         <div class="w-64 h-full"></div>
         <div class="grow w-full h-full bg-background"></div>
