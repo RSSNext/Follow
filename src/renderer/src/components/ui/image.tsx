@@ -1,3 +1,4 @@
+import { useToast } from "@renderer/components/ui/use-toast"
 import { client } from "@renderer/lib/client"
 import { getProxyUrl } from "@renderer/lib/img-proxy"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -39,6 +40,8 @@ export const Image = ({
     }
   }
 
+  const { toast } = useToast()
+
   return (
     <div className={cn("overflow-hidden rounded bg-stone-100", className)}>
       <img
@@ -49,6 +52,7 @@ export const Image = ({
         {...(!disableContextMenu ?
             {
               onContextMenu: (e) => {
+                e.stopPropagation()
                 props.onContextMenu?.(e)
                 showNativeMenu(
                   [
@@ -72,6 +76,10 @@ export const Image = ({
                       click: () => {
                         if (props.src) {
                           navigator.clipboard.writeText(props.src)
+                          toast({
+                            duration: 1000,
+                            description: "Address copied to clipboard.",
+                          })
                         }
                       },
                     },
