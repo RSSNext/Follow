@@ -6,7 +6,6 @@ import { queryClient } from "@renderer/lib/query-client"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { LazyMotion, MotionConfig } from "framer-motion"
 import { Provider } from "jotai"
-import { ThemeProvider } from "next-themes"
 import type { FC, PropsWithChildren } from "react"
 
 const loadFeatures = () =>
@@ -23,9 +22,7 @@ export const RootProviders: FC<PropsWithChildren> = (props) => (
       <SessionProvider>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
-            <ThemeProvider disableTransitionOnChange>
-              <Provider store={jotaiStore}>{props.children}</Provider>
-            </ThemeProvider>
+            <Provider store={jotaiStore}>{props.children}</Provider>
           </TooltipProvider>
         </QueryClientProvider>
       </SessionProvider>

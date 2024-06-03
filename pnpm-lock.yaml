@@ -113,6 +113,12 @@ importers:
       jotai:
         specifier: 2.8.2
         version: 2.8.2(@types/react@18.3.3)(react@18.3.1)
+      jotai-dark:
+        specifier: 0.3.0
+        version: 0.3.0(jotai-effect@1.0.0(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1)))(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)
+      jotai-effect:
+        specifier: 1.0.0
+        version: 1.0.0(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1))
       lethargy:
         specifier: 1.0.9
         version: 1.0.9
@@ -122,9 +128,6 @@ importers:
       lucide-react:
         specifier: 0.381.0
         version: 0.381.0(react@18.3.1)
-      next-themes:
-        specifier: 0.3.0
-        version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       ofetch:
         specifier: 1.3.4
         version: 1.3.4
@@ -3562,6 +3565,28 @@ packages:
   jose@5.3.0:
     resolution: {integrity: sha512-IChe9AtAE79ru084ow8jzkN2lNrG3Ntfiv65Cvj9uOCE2m5LNsdHG+9EbxWxAoWRF9TgDOqLN5jm08++owDVRg==}
 
+  jotai-dark@0.3.0:
+    resolution: {integrity: sha512-Vuhymer1VLaAjSW+hLowZBZa0FSKMamo3xajXubCr0Jdnp5P80vrh/5s29EQ2cp3eSa9weuUy+kdoMKEDdp/sA==}
+    peerDependencies:
+      foxact: ^0.2.33
+      jotai: '>=2.5.0'
+      jotai-effect: '*'
+      react: ^18.2.0
+    peerDependenciesMeta:
+      foxact:
+        optional: true
+      jotai:
+        optional: true
+      jotai-effect:
+        optional: true
+      react:
+        optional: true
+
+  jotai-effect@1.0.0:
+    resolution: {integrity: sha512-eCgKKG4BACDzuJGYTu0xZRk1C1MEOvbAhC3L8w7YufQ2lSLORwNX/WFnCuZxLFX0sDLkTUeoUzOYaw8wnXY+UQ==}
+    peerDependencies:
+      jotai: '>=2.5.0'
+
   jotai@2.8.2:
     resolution: {integrity: sha512-AU+EU82YqP94izfbGYQQL3oa/06gmn+Ijf/CKx0QybAURtbqh2e4N6zA2fxeIh0JEUgASF6z5IhagJ8NicR95A==}
     engines: {node: '>=12.20.0'}
@@ -4001,12 +4026,6 @@ packages:
   negotiator@0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
-
-  next-themes@0.3.0:
-    resolution: {integrity: sha512-/QHIrsYpd6Kfk7xakK4svpDI5mmXP0gfvCoJdGpZQ2TOrQZmsW0QxjaiLn8wbIKjtm4BTSqLoix4lxYYOnLJ/w==}
-    peerDependencies:
-      react: ^16.8 || ^17 || ^18
-      react-dom: ^16.8 || ^17 || ^18
 
   node-abi@3.63.0:
     resolution: {integrity: sha512-vAszCsOUrUxjGAmdnM/pq7gUgie0IRteCQMX6d4A534fQCR93EJU5qgzBvU6EkFfK27s0T3HEV3BOyJIr7OMYw==}
@@ -9171,6 +9190,16 @@ snapshots:
 
   jose@5.3.0: {}
 
+  jotai-dark@0.3.0(jotai-effect@1.0.0(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1)))(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1))(react@18.3.1):
+    optionalDependencies:
+      jotai: 2.8.2(@types/react@18.3.3)(react@18.3.1)
+      jotai-effect: 1.0.0(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1))
+      react: 18.3.1
+
+  jotai-effect@1.0.0(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1)):
+    dependencies:
+      jotai: 2.8.2(@types/react@18.3.3)(react@18.3.1)
+
   jotai@2.8.2(@types/react@18.3.3)(react@18.3.1):
     optionalDependencies:
       '@types/react': 18.3.3
@@ -9717,11 +9746,6 @@ snapshots:
   natural-compare@1.4.0: {}
 
   negotiator@0.6.3: {}
-
-  next-themes@0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
 
   node-abi@3.63.0:
     dependencies:
