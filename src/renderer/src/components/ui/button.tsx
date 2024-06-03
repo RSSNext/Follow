@@ -4,7 +4,9 @@ import type { VariantProps } from "class-variance-authority"
 import { cva } from "class-variance-authority"
 import * as React from "react"
 
-const buttonVariants = cva(
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
+
+export const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
@@ -41,7 +43,7 @@ export interface ButtonProps
   isLoading?: boolean
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     { className, variant, size, asChild = false, isLoading = false, ...props },
     ref,
@@ -66,4 +68,45 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = "Button"
 
-export { Button, buttonVariants }
+// BIZ buttons
+
+interface HeaderActionButtonProps {
+  onClick: () => void
+  icon?: React.ReactNode | React.FC<ComponentType>
+  tooltip: string
+  tooltipSide?: "top" | "bottom"
+  active?: boolean
+}
+export const HeaderActionButton = React.forwardRef<
+  HTMLButtonElement,
+  ComponentType<HeaderActionButtonProps>
+>(
+  (
+    { icon, onClick, tooltip, className, tooltipSide, children, active },
+    ref,
+  ) => (
+    <Tooltip key={tooltip}>
+      <TooltipTrigger asChild ref={ref}>
+        <Button
+          className={cn(
+            "no-drag-region flex items-center text-xl",
+            active && "bg-zinc-500/15 hover:bg-zinc-500/20",
+            className,
+          )}
+          variant="ghost"
+          size="sm"
+          onClick={onClick}
+        >
+          {typeof icon === "function" ?
+            React.createElement(icon, {
+              className: "size-4 grayscale text-current",
+            }) :
+            icon}
+
+          {children}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent side={tooltipSide ?? "bottom"}>{tooltip}</TooltipContent>
+    </Tooltip>
+  ),
+)

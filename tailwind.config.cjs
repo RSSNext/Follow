@@ -1,10 +1,13 @@
-const { iconsPlugin, getIconCollections } = require("@egoist/tailwindcss-icons")
+const {
+  iconsPlugin,
+  getIconCollections,
+} = require("@egoist/tailwindcss-icons")
 
 require("./cssAsPlugin")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
+  darkMode: ["class", "[data-theme=\"dark\"]"],
   content: ["./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
@@ -54,6 +57,21 @@ module.exports = {
           DEFAULT: "hsl(var(--native))",
           active: "hsl(var(--native-active))",
         },
+
+        theme: {
+          vibrancyFg: "var(--fo-vibrancy-foreground)",
+          vibrancyBg: "var(--fo-vibrancy-background)",
+
+          item: {
+            active: "var(--fo-item-active)",
+            hover: "var(--fo-item-hover)",
+          },
+
+          tooltip: {
+            background: "var(--fo-tooltip-background)",
+            foreground: "var(--fo-tooltip-foreground)",
+          },
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -90,6 +108,6 @@ module.exports = {
     }),
     require("tailwindcss-animate"),
     require("@tailwindcss/typography"),
-    require("./src/renderer/src/assets/tailwind-extend.css"),
+    require("./src/renderer/src/styles/tailwind-extend.css"),
   ],
 }
