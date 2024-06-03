@@ -192,6 +192,8 @@ const ListHeader: FC = () => {
         <div className="text-xs font-medium text-zinc-400">
           {entries.data?.pages?.[0].total}
           {" "}
+          {unreadOnly ? "Unread" : ""}
+          {" "}
           Items
         </div>
       </div>
@@ -239,18 +241,13 @@ const ListHeader: FC = () => {
   )
 }
 
-const ListContent = forwardRef<HTMLDivElement>((props, ref) => {
-  const activeList = useFeedStore(useShallow((state) => state.activeList))
-
-  return (
-    <m.div
-      key={`${activeList?.level}-${activeList?.id}`}
-      initial={{ opacity: 0.01, y: 100 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0.01, y: -100 }}
-      className="px-2"
-      {...props}
-      ref={ref}
-    />
-  )
-})
+const ListContent = forwardRef<HTMLDivElement>((props, ref) => (
+  <m.div
+    initial={{ opacity: 0.01, y: 100 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0.01, y: -100 }}
+    className="px-2"
+    {...props}
+    ref={ref}
+  />
+))
