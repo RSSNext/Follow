@@ -137,88 +137,83 @@ export function DiscoverForm({ type }: { type: string }) {
                     docs={item.docs}
                   />
                 </CardHeader>
-                {item.docs ?
-                    (
-                      <CardFooter>
-                        <a href={item.docs} target="_blank" rel="noreferrer">
-                          <Button>View Docs</Button>
-                        </a>
-                      </CardFooter>
-                    ) :
-                    (
-                      <>
-                        <CardContent>
-                          {!!item.entries?.length && (
-                            <div className="grid grid-cols-4 gap-4">
-                              {item.entries
-                                .filter((e) => !!e)
-                                .map((entry) => {
-                                  const assertEntry = entry
-                                  return (
-                                    <a
-                                      key={assertEntry.id}
-                                      href={assertEntry.url || void 0}
-                                      target="_blank"
-                                      className="flex min-w-0 flex-1 flex-col items-center gap-1"
-                                      rel="noreferrer"
-                                    >
-                                      {assertEntry.images?.[0] ?
-                                          (
-                                            <Image
-                                              src={assertEntry.images?.[0]}
-                                              className="aspect-square w-full"
-                                            />
-                                          ) :
-                                          (
-                                            <div className="flex aspect-square w-full overflow-hidden rounded bg-stone-100 p-2 text-xs leading-tight text-zinc-500">
-                                              {assertEntry.title}
-                                            </div>
-                                          )}
-                                      <div className="line-clamp-2 w-full text-xs leading-tight">
-                                        {assertEntry.title}
-                                      </div>
-                                    </a>
-                                  )
-                                })}
-                            </div>
-                          )}
-                        </CardContent>
-                        <CardFooter>
-                          {item.isSubscribed ?
-                              (
-                                <Button variant="outline" disabled>
-                                  Followed
-                                </Button>
-                              ) :
-                              (
-                                <Button
-                                  onClick={
-                                    () => openElectronWindow(
-                                      `${DEEPLINK_SCHEME}add${
-                                        item.feed.id ?
-                                          `?id=${item.feed.id}` :
-                                          `?url=${item.feed.url}`
-                                      }`,
-                                      {
-                                        resizeable: false,
-                                        height: 550,
-                                      },
-                                    )
-                                  }
+                {item.docs ? (
+                  <CardFooter>
+                    <a href={item.docs} target="_blank" rel="noreferrer">
+                      <Button>View Docs</Button>
+                    </a>
+                  </CardFooter>
+                ) : (
+                  <>
+                    <CardContent>
+                      {!!item.entries?.length && (
+                        <div className="grid grid-cols-4 gap-4">
+                          {item.entries
+                            .filter((e) => !!e)
+                            .map((entry) => {
+                              const assertEntry = entry
+                              return (
+                                <a
+                                  key={assertEntry.id}
+                                  href={assertEntry.url || void 0}
+                                  target="_blank"
+                                  className="flex min-w-0 flex-1 flex-col items-center gap-1"
+                                  rel="noreferrer"
                                 >
-                                  Follow
-                                </Button>
-                              )}
-                          <div className="ml-6 text-zinc-500">
-                            <span className="font-medium text-zinc-800">
-                              {item.subscriptionCount}
-                            </span>
-                            {" "}
-                            Followers
-                          </div>
-                        </CardFooter>
-                      </>
-                    )}
+                                  {assertEntry.images?.[0] ? (
+                                    <Image
+                                      src={assertEntry.images?.[0]}
+                                      className="aspect-square w-full"
+                                    />
+                                  ) : (
+                                    <div className="flex aspect-square w-full overflow-hidden rounded bg-stone-100 p-2 text-xs leading-tight text-zinc-500">
+                                      {assertEntry.title}
+                                    </div>
+                                  )}
+                                  <div className="line-clamp-2 w-full text-xs leading-tight">
+                                    {assertEntry.title}
+                                  </div>
+                                </a>
+                              )
+                            })}
+                        </div>
+                      )}
+                    </CardContent>
+                    <CardFooter>
+                      {item.isSubscribed ? (
+                        <Button variant="outline" disabled>
+                          Followed
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={
+                            () =>
+                              openElectronWindow(
+                                `${DEEPLINK_SCHEME}add${
+                                  item.feed.id ?
+                                    `?id=${item.feed.id}` :
+                                    `?url=${item.feed.url}`
+                                }`,
+                                {
+                                  resizeable: false,
+                                  height: 550,
+                                },
+                              )
+                          }
+                        >
+                          Follow
+                        </Button>
+                      )}
+                      <div className="ml-6 text-zinc-500">
+                        <span className="font-medium text-zinc-800">
+                          {item.subscriptionCount}
+                        </span>
+                        {" "}
+                        Followers
+                      </div>
+                    </CardFooter>
+                  </>
+                )}
               </Card>
             ))}
           </div>
