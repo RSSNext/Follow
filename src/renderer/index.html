@@ -1,9 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
     <meta name="referrer" content="no-referrer" />
     <title>Follow</title>
+
+    <script>
+      (function () {
+        var e =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches,
+          t = localStorage.getItem("theme") || '"system"';
+        ('"dark"' === t || (e && '"light"' !== t)) &&
+          (document.documentElement.dataset.theme = "light");
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

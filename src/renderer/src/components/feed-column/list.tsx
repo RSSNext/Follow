@@ -41,7 +41,7 @@ export function FeedList({
           >
             {view !== undefined && views[view].name}
           </div>
-          <div className="ml-2 flex items-center gap-3 text-sm text-zinc-500">
+          <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
             {expansion ?
                 (
                   <i

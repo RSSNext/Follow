@@ -39,7 +39,7 @@ export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
               <a
                 href={entry.data?.entries.url || void 0}
                 target="_blank"
-                className="mx-auto block max-w-[598px] rounded-md p-6 transition-colors hover:bg-zinc-100 dark:hover:bg-neutral-800"
+                className="mx-auto block max-w-[598px] rounded-md p-6 transition-colors hover:bg-theme-item-hover"
                 rel="noreferrer"
               >
                 <div className="select-text break-words text-3xl font-bold">

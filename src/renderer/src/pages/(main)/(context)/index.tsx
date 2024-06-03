@@ -2,10 +2,7 @@ import { EntryColumn } from "@renderer/components/entry-column"
 import { EntryContent } from "@renderer/components/entry-content"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
-import {
-  feedActions,
-  useFeedStore,
-} from "@renderer/store"
+import { feedActions, useFeedStore } from "@renderer/store"
 import { AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
 import { useShallow } from "zustand/react/shallow"
@@ -27,7 +24,6 @@ export function Component() {
       <div
         className={cn(
           "h-full shrink-0 overflow-y-auto border-r",
-          window.electron ? "pt-10" : "pt-4",
           activeList && views[activeList.view].wideMode ? "flex-1" : "w-[340px]",
         )}
       >

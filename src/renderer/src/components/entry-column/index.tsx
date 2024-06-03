@@ -1,17 +1,13 @@
-import { Button } from "@renderer/components/ui/button"
+import { Button, HeaderActionButton } from "@renderer/components/ui/button"
 import {
   Popover,
   PopoverClose,
   PopoverContent,
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
+import type { EntryModel } from "@renderer/lib/types"
 import { cn, getEntriesParams } from "@renderer/lib/utils"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
@@ -110,7 +106,7 @@ export function EntryColumn() {
     ),
   )
 
-  const virtusoOptions = {
+  const virtuosoOptions = {
     components: {
       List: ListContent,
     },
@@ -119,7 +115,7 @@ export function EntryColumn() {
     totalCount: entries.data?.pages?.[0]?.total,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entries.data?.pages.flatMap((page) => page.data) || [],
-    itemContent: (_, entry) => {
+    itemContent: useCallback((_, entry: EntryModel | undefined) => {
       if (!entry) return null
       return (
         <EntryItemWrapper
@@ -130,23 +126,24 @@ export function EntryColumn() {
           <Item entryId={entry.entries.id} />
         </EntryItemWrapper>
       )
-    },
+    }, []),
   }
 
   return (
-    <div className="relative flex h-full flex-1 flex-col" onClick={() => setActiveEntry?.(null)}>
+    <div
+      className="relative flex h-full flex-1 flex-col"
+      onClick={() => setActiveEntry?.(null)}
+    >
       <ListHeader />
       {activeList?.view && views[activeList.view].gridMode ?
           (
             <VirtuosoGrid
               listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
-              {...virtusoOptions}
+              {...virtuosoOptions}
             />
           ) :
           (
-            <Virtuoso
-              {...virtusoOptions}
-            />
+            <Virtuoso {...virtuosoOptions} />
           )}
     </div>
   )
@@ -187,7 +184,7 @@ const ListHeader: FC = () => {
 
   return (
     <div className="mb-5 flex w-full items-center justify-between pl-9 pr-2">
-      <div>
+      <div className="mt-4">
         <div className="text-lg font-bold">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
           {entries.data?.pages?.[0].total}
@@ -197,42 +194,48 @@ const ListHeader: FC = () => {
           Items
         </div>
       </div>
-      <div className="flex items-center gap-1">
-        <Tooltip>
-          <TooltipTrigger>
-            <Button className="size-8 rounded-full p-0 text-lg" variant="ghost" onClick={() => entries.refetch()}>
-              <i className={cn("i-mingcute-refresh-2-line", entries.isRefetching && "animate-spin")} />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">Refresh</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger>
-            <Button className="size-8 rounded-full p-0 text-lg" variant="ghost" onClick={() => setUnreadOnly(!unreadOnly)}>
-              {unreadOnly ? <i className="i-mingcute-round-fill" /> : <i className="i-mingcute-round-line" />}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">{unreadOnly ? "Unread Only" : "All"}</TooltipContent>
-        </Tooltip>
+      <div className="relative z-[1] flex h-14 items-center gap-1 text-zinc-500">
+        <HeaderActionButton onClick={entries.refetch} tooltip="Refresh">
+          <i
+            className={cn(
+              "i-mingcute-refresh-2-line",
+              entries.isRefetching && "animate-spin",
+            )}
+          />
+        </HeaderActionButton>
+
+        <HeaderActionButton
+          tooltip={unreadOnly ? "Unread Only" : "All"}
+          onClick={() => setUnreadOnly(!unreadOnly)}
+          active={unreadOnly}
+        >
+          {unreadOnly ?
+              (
+                <i className="i-mingcute-round-fill" />
+              ) :
+              (
+                <i className="i-mingcute-round-line" />
+              )}
+        </HeaderActionButton>
         <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
           <PopoverTrigger>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button className="size-8 rounded-full p-0 text-lg" variant="ghost">
-                  <i className="i-mingcute-check-circle-line" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">Mark All as Read</TooltipContent>
-            </Tooltip>
+            <HeaderActionButton onClick={() => {}} tooltip="Mark All as Read">
+              <i className="i-mingcute-check-circle-line" />
+            </HeaderActionButton>
           </PopoverTrigger>
+
           <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[15px] font-medium">
             <div>Mark all as read?</div>
             <div className="space-x-4">
               <PopoverClose>
-                <Button size="sm" variant="outline">Cancel</Button>
+                <Button size="sm" variant="outline">
+                  Cancel
+                </Button>
               </PopoverClose>
               {/* TODO */}
-              <Button size="sm" onClick={handleMarkAllAsRead}>Confirm</Button>
+              <Button size="sm" onClick={handleMarkAllAsRead}>
+                Confirm
+              </Button>
             </div>
           </PopoverContent>
         </Popover>
