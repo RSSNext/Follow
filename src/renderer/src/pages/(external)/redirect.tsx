@@ -1,6 +1,7 @@
 import { Button } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
 import { apiFetch } from "@renderer/queries/api-fetch"
+import { DEEPLINK_SCHEME } from "@shared/constants"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -15,7 +16,7 @@ export function Component() {
     }>("/auth-app/new-session", {
       method: "POST",
     })
-    return `follow://auth?token=${data.sessionToken}`
+    return `${DEEPLINK_SCHEME}auth?token=${data.sessionToken}`
   }
 
   useEffect(() => {

@@ -9,6 +9,11 @@ const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"))
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()],
+    resolve: {
+      alias: {
+        "@shared": resolve("src/shared/src"),
+      },
+    },
   },
   preload: {
     plugins: [externalizeDepsPlugin()],
@@ -17,6 +22,7 @@ export default defineConfig({
     resolve: {
       alias: {
         "@renderer": resolve("src/renderer/src"),
+        "@shared": resolve("src/shared/src"),
       },
     },
     plugins: [react()],

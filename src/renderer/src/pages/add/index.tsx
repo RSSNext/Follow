@@ -101,6 +101,10 @@ export function Component() {
         duration: 1000,
         description: isSubscribed ? "🎉 Updated." : "🎉 Followed.",
       })
+
+      if (!isSubscribed) {
+        window.close()
+      }
     },
   })
 
@@ -113,7 +117,7 @@ export function Component() {
   )
 
   return (
-    <div className="flex h-full flex-col p-10">
+    <div className="flex h-full flex-col bg-background/90 p-10">
       <div className="mb-4 mt-2 flex items-center gap-2 text-[22px] font-bold">
         <img src="../icon.svg" alt="logo" className="size-8" />
         Add follow
@@ -196,29 +200,34 @@ export function Component() {
                         name="isPrivate"
                         render={({ field }) => (
                           <FormItem>
-                            <div>
-                              <FormLabel>Prviate Follow</FormLabel>
-                              <FormDescription>
-                                Whether this follow is publicly visible on your profile
-                                page.
-                              </FormDescription>
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <FormLabel>Private Follow</FormLabel>
+                                <FormDescription>
+                                  Whether this follow is publicly visible on your
+                                  profile page.
+                                </FormDescription>
+                              </div>
+                              <FormControl>
+                                <Switch
+                                  className="shrink-0"
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
                             </div>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
                           </FormItem>
                         )}
                       />
-                      <Button
-                        size="sm"
-                        type="submit"
-                        isLoading={followMutation.isPending}
-                      >
-                        {isSubscribed ? "Update" : "Follow"}
-                      </Button>
+                      <div className="flex justify-end">
+                        <Button
+                          size="sm"
+                          type="submit"
+                          isLoading={followMutation.isPending}
+                        >
+                          {isSubscribed ? "Update" : "Follow"}
+                        </Button>
+                      </div>
                     </form>
                   </Form>
                 </div>

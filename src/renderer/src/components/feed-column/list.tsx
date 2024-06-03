@@ -19,6 +19,7 @@ export function FeedList({
   const subscriptions = useBizQuery(Queries.subscription.byView(view))
   const [expansion, setExpansion] = useState(false)
   const { setActiveList } = feedActions
+  console.log(subscriptions.data)
 
   return (
     <div className={className}>

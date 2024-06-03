@@ -59,6 +59,8 @@ module.exports = {
         },
 
         theme: {
+          accent: "#FF5C00",
+
           vibrancyFg: "var(--fo-vibrancy-foreground)",
           vibrancyBg: "var(--fo-vibrancy-background)",
 

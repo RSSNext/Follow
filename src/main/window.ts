@@ -9,21 +9,27 @@ export function createWindow(options?: {
   extraPath?: string
   width?: number
   height?: number
+  resizeable?: boolean
 }) {
   // Create the browser window.
   const window = new BrowserWindow({
     width: options?.width || 1200,
     height: options?.height || 900,
     show: false,
+    resizable: options?.resizeable ?? true,
     autoHideMenuBar: true,
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.js"),
       sandbox: false,
     },
+
     titleBarStyle: "hiddenInset",
-    vibrancy: "window",
-    visualEffectState: "active",
+
+    transparent: true,
+    backgroundColor: "#00000000", // transparent hexadecimal or anything with transparency,
+    vibrancy: "sidebar",
+    visualEffectState: "followWindow",
   })
 
   window.on("ready-to-show", () => {

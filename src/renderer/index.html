@@ -4,20 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="referrer" content="no-referrer" />
     <title>Follow</title>
-
+    <link rel="stylesheet" href="./styles/main.css" />
     <script>
       (function () {
         var e =
             window.matchMedia &&
             window.matchMedia("(prefers-color-scheme: dark)").matches,
           t = localStorage.getItem("theme") || '"system"';
-        ('"dark"' === t || (e && '"light"' !== t)) &&
-          (document.documentElement.dataset.theme = "light");
+        t && t !== '"system"' && (document.documentElement.dataset.theme = t);
+        t &&
+          t === '"system"' &&
+          e &&
+          (document.documentElement.dataset.theme = "dark");
       })();
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Skeleton -->
+      <div class="h-full w-full flex">
+        <div class="w-64 h-full"></div>
+        <div class="grow w-full h-full bg-background"></div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

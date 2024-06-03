@@ -18,6 +18,8 @@ import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
 import type { DiscoverResponse } from "@renderer/lib/types"
 import { apiFetch } from "@renderer/queries/api-fetch"
+import { DEEPLINK_SCHEME } from "@shared/constants"
+import { openElectronWindow } from "@shared/electron"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
@@ -48,7 +50,7 @@ const info: Record<
   },
   user: {
     label: "User Handle",
-    prefix: "follow://",
+    prefix: DEEPLINK_SCHEME,
   },
 }
 
@@ -129,7 +131,11 @@ export function DiscoverForm({ type }: { type: string }) {
             {mutation.data?.map((item) => (
               <Card key={item.feed.url || item.docs} className="select-text">
                 <CardHeader>
-                  <FollowSummary className="max-w-[462px]" feed={item.feed} docs={item.docs} />
+                  <FollowSummary
+                    className="max-w-[462px]"
+                    feed={item.feed}
+                    docs={item.docs}
+                  />
                 </CardHeader>
                 {item.docs ?
                     (
@@ -185,7 +191,22 @@ export function DiscoverForm({ type }: { type: string }) {
                                 </Button>
                               ) :
                               (
-                                <Button onClick={() => window.open(`follow://add${item.feed.id ? `?id=${item.feed.id}` : `?url=${item.feed.url}`}`)}>Follow</Button>
+                                <Button
+                                  onClick={() =>
+                                    openElectronWindow(
+                              `${DEEPLINK_SCHEME}add${
+                                item.feed.id ?
+                                  `?id=${item.feed.id}` :
+                                  `?url=${item.feed.url}`
+                              }`,
+                              {
+                                resizeable: false,
+                                height: 550,
+                              },
+                                    )}
+                                >
+                                  Follow
+                                </Button>
                               )}
                           <div className="ml-6 text-zinc-500">
                             <span className="font-medium text-zinc-800">

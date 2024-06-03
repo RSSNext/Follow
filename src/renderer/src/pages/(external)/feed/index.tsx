@@ -10,12 +10,15 @@ import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { useEntriesPreview } from "@renderer/queries/entries"
 import { useFeed } from "@renderer/queries/feed"
+import { DEEPLINK_SCHEME } from "@shared/constants"
 import type { FC } from "react"
 import { useParams } from "react-router-dom"
 
 export function Component() {
   const { id } = useParams()
-  const view = Number.parseInt(new URLSearchParams(location.search).get("view") || "0")
+  const view = Number.parseInt(
+    new URLSearchParams(location.search).get("view") || "0",
+  )
 
   const feed = useFeed({
     id,
@@ -56,13 +59,12 @@ export function Component() {
       {feed.data?.feed && (
         <div className="mx-auto flex max-w-5xl flex-col items-center">
           <div className="mb-2 mt-10 flex items-center text-2xl font-bold">
-            <FeedIcon
-              feed={feed.data.feed}
-              className="size-8 shrink-0"
-            />
+            <FeedIcon feed={feed.data.feed} className="size-8 shrink-0" />
             <h1>{feed.data.feed.title}</h1>
           </div>
-          <div className="mb-8 text-sm text-zinc-500">{feed.data.feed.description}</div>
+          <div className="mb-8 text-sm text-zinc-500">
+            {feed.data.feed.description}
+          </div>
           <div className="mb-4 text-sm">
             <strong>{feed.data.subscriptionCount}</strong>
             {" "}
@@ -70,17 +72,17 @@ export function Component() {
             {" "}
             <strong>{feed.data.readCount}</strong>
             {" "}
-            reads
-            {" "}
-            on Follow
+            reads on Follow
           </div>
-          <a className="mb-8" href={`follow://add?id=${id}`}>
+          <a className="mb-8" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
             <Button>Follow on Follow</Button>
           </a>
-          <div className={cn(
-            "w-full",
-            views[view].gridMode && "grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4",
-          )}
+          <div
+            className={cn(
+              "w-full",
+              views[view].gridMode &&
+              "grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4",
+            )}
           >
             {entries.data?.map((entry) => (
               <a href={entry.url || void 0} target="_blank" key={entry.id}>
@@ -93,8 +95,7 @@ export function Component() {
                   }}
                 />
               </a>
-            ),
-            )}
+            ))}
           </div>
         </div>
       )}

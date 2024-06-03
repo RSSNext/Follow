@@ -4,6 +4,7 @@ import path from "node:path"
 
 import { registerIpcMain } from "@egoist/tipc/main"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
+import { extractElectronWindowOptions } from "@shared/electron"
 import { app, BrowserWindow, Menu } from "electron"
 
 import { router } from "./tipc"
@@ -68,10 +69,15 @@ app.whenReady().then(() => {
         mainWindow.reload()
       }
     } else {
+      console.log("open-url", url)
+      const options = extractElectronWindowOptions(url)
+
+      const { height, resizeable, width } = options || {}
       createWindow({
         extraPath: url.replace("follow:/", ""),
-        width: 800,
-        height: 600,
+        width: width ?? 800,
+        height: height ?? 600,
+        resizeable,
       })
     }
   }
@@ -146,7 +152,9 @@ Menu.setApplicationMenu(
           label: "follow https://rsshub.app/twitter/user/DIYgod",
           click: () => {
             createWindow({
-              extraPath: `/add?url=${encodeURIComponent("https://rsshub.app/twitter/user/DIYgod")}`,
+              extraPath: `/add?url=${encodeURIComponent(
+                "https://rsshub.app/twitter/user/DIYgod",
+              )}`,
               width: 800,
               height: 600,
             })
@@ -156,7 +164,9 @@ Menu.setApplicationMenu(
           label: "follow https://diygod.me/feed",
           click: () => {
             createWindow({
-              extraPath: `/add?url=${encodeURIComponent("https://diygod.me/feed")}`,
+              extraPath: `/add?url=${encodeURIComponent(
+                "https://diygod.me/feed",
+              )}`,
               width: 800,
               height: 600,
             })
