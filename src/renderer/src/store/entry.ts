@@ -119,7 +119,7 @@ export const useEntry = (entryId: string) =>
   useEntryStore((state) => state.flatMapEntries[entryId])
 
 Object.assign(window, {
-  get __entry() {
+  __entry() {
     return useEntryStore.getState()
   },
 })
