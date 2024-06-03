@@ -1,8 +1,7 @@
 import { Button } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
-import { DEEPLINK_SCHEME } from "@shared/constants";
-
 import { apiFetch } from "@renderer/queries/api-fetch"
+import { DEEPLINK_SCHEME } from "@shared/constants"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 

@@ -1,1 +1,1 @@
-export const DEEPLINK_SCHEME = "follow://";
+export const DEEPLINK_SCHEME = "follow://"

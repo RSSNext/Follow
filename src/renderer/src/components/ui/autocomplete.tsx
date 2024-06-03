@@ -41,7 +41,7 @@ export const AutoComplete = React.forwardRef<HTMLInputElement, InputProps>(
     )
 
     return (
-      <Command className="relative overflow-visible rounded-lg border [&_.lucide-search]:hidden [&_[cmdk-input-wrapper]]:border-0 bg-background">
+      <Command className="relative overflow-visible rounded-lg border bg-background [&_.lucide-search]:hidden [&_[cmdk-input-wrapper]]:border-0">
         <CommandInput
           {...props}
           className="h-10"

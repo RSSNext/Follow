@@ -1,57 +1,56 @@
-import { ArticleItem } from "@renderer/components/entry-column/article-item";
-import { NotificationItem } from "@renderer/components/entry-column/notification-item";
-import { PictureItem } from "@renderer/components/entry-column/picture-item";
-import { SocialMediaItem } from "@renderer/components/entry-column/social-media-item";
-import type { UniversalItemProps } from "@renderer/components/entry-column/types";
-import { VideoItem } from "@renderer/components/entry-column/video-item";
-import { FeedIcon } from "@renderer/components/feed-icon";
-import { Button } from "@renderer/components/ui/button";
-import { views } from "@renderer/lib/constants";
-import { DEEPLINK_SCHEME } from "@shared/constants";
-
-import { cn } from "@renderer/lib/utils";
-import { useEntriesPreview } from "@renderer/queries/entries";
-import { useFeed } from "@renderer/queries/feed";
-import type { FC } from "react";
-import { useParams } from "react-router-dom";
+import { ArticleItem } from "@renderer/components/entry-column/article-item"
+import { NotificationItem } from "@renderer/components/entry-column/notification-item"
+import { PictureItem } from "@renderer/components/entry-column/picture-item"
+import { SocialMediaItem } from "@renderer/components/entry-column/social-media-item"
+import type { UniversalItemProps } from "@renderer/components/entry-column/types"
+import { VideoItem } from "@renderer/components/entry-column/video-item"
+import { FeedIcon } from "@renderer/components/feed-icon"
+import { Button } from "@renderer/components/ui/button"
+import { views } from "@renderer/lib/constants"
+import { cn } from "@renderer/lib/utils"
+import { useEntriesPreview } from "@renderer/queries/entries"
+import { useFeed } from "@renderer/queries/feed"
+import { DEEPLINK_SCHEME } from "@shared/constants"
+import type { FC } from "react"
+import { useParams } from "react-router-dom"
 
 export function Component() {
-  const { id } = useParams();
+  const { id } = useParams()
   const view = Number.parseInt(
-    new URLSearchParams(location.search).get("view") || "0"
-  );
+    new URLSearchParams(location.search).get("view") || "0",
+  )
 
   const feed = useFeed({
     id,
-  });
+  })
   const entries = useEntriesPreview({
     id,
-  });
+  })
 
-  let Item: FC<UniversalItemProps>;
+  let Item: FC<UniversalItemProps>
   switch (view) {
     case 0: {
-      Item = ArticleItem;
-      break;
+      Item = ArticleItem
+      break
     }
     case 1: {
-      Item = SocialMediaItem;
-      break;
+      Item = SocialMediaItem
+      break
     }
     case 2: {
-      Item = PictureItem;
-      break;
+      Item = PictureItem
+      break
     }
     case 3: {
-      Item = VideoItem;
-      break;
+      Item = VideoItem
+      break
     }
     case 5: {
-      Item = NotificationItem;
-      break;
+      Item = NotificationItem
+      break
     }
     default: {
-      Item = ArticleItem;
+      Item = ArticleItem
     }
   }
 
@@ -67,8 +66,13 @@ export function Component() {
             {feed.data.feed.description}
           </div>
           <div className="mb-4 text-sm">
-            <strong>{feed.data.subscriptionCount}</strong> follows with{" "}
-            <strong>{feed.data.readCount}</strong> reads on Follow
+            <strong>{feed.data.subscriptionCount}</strong>
+            {" "}
+            follows with
+            {" "}
+            <strong>{feed.data.readCount}</strong>
+            {" "}
+            reads on Follow
           </div>
           <a className="mb-8" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
             <Button>Follow on Follow</Button>
@@ -77,7 +81,7 @@ export function Component() {
             className={cn(
               "w-full",
               views[view].gridMode &&
-                "grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4"
+              "grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4",
             )}
           >
             {entries.data?.map((entry) => (
@@ -96,5 +100,5 @@ export function Component() {
         </div>
       )}
     </>
-  );
+  )
 }
