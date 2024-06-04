@@ -71,7 +71,7 @@ export function FeedCategory({
   }
 
   const unread = useUnreadStore((state) =>
-    data.list.reduce((acc, cur) => state.data[cur.feedId] + acc, 0),
+    data.list.reduce((acc, cur) => (state.data[cur.feedId] || 0) + acc, 0),
   )
 
   const sortByUnreadFeedList = useUnreadStore((state) => data.list.sort((a, b) => (state.data[b.feedId] || 0) - (state.data[a.feedId] || 0)))
