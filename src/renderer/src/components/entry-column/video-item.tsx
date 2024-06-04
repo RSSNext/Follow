@@ -1,6 +1,7 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
+import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry"
 
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
@@ -26,7 +27,12 @@ export function VideoItem({ entryId, entryPreview }: UniversalItemProps) {
           />
         </div>
         <div className="flex-1 px-2 pb-3 pt-1 text-sm">
-          <div className="mb-0.5 mt-1 truncate font-medium">{entry.entries.title}</div>
+          <div className={cn("relative mb-0.5 mt-1 truncate font-medium", !!entry.collections && "pr-4")}>
+            {entry.entries.title}
+            {!!entry.collections && (
+              <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
+            )}
+          </div>
           <div className="flex items-center gap-1 truncate text-xs">
             <FeedIcon
               className="mr-0.5 inline-block size-3"

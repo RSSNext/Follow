@@ -1,6 +1,7 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
+import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry"
 
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
@@ -28,7 +29,12 @@ export function SocialMediaItem({ entryId, entryPreview }: UniversalItemProps) {
                 .humanize()}
             </span>
           </div>
-          <div className="mt-0.5">{entry.entries.description}</div>
+          <div className={cn("relative mt-0.5", !!entry.collections && "pr-4")}>
+            {entry.entries.description}
+            {!!entry.collections && (
+              <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
+            )}
+          </div>
         </div>
         <div className="mt-1 flex gap-2 overflow-x-auto">
           {entry.entries.images?.map((image) => (

@@ -16,7 +16,7 @@ export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
   return (
     <div className="flex px-2 py-3">
       <FeedIcon feed={entry.feeds} />
-      <div className="-mt-0.5 line-clamp-5 flex-1 text-sm leading-tight">
+      <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
         <div className={cn("flex gap-1 text-[10px] font-bold", entry.read ? "text-zinc-400" : "text-zinc-500")}>
           <span className="truncate">{entry.feeds.title}</span>
           <span>·</span>
@@ -29,8 +29,11 @@ export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
               .humanize()}
           </span>
         </div>
-        <div className="my-0.5 break-words font-medium">
+        <div className={cn("relative my-0.5 break-words font-medium", !!entry.collections && "pr-4")}>
           {entry.entries.title}
+          {!!entry.collections && (
+            <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
+          )}
         </div>
         <div className={cn("text-[13px]", entry.read ? "text-zinc-400" : "text-zinc-500")}>
           {entry.entries.description}

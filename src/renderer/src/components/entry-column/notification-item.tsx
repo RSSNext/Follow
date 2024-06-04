@@ -1,5 +1,6 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import dayjs from "@renderer/lib/dayjs"
+import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry"
 
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
@@ -24,7 +25,12 @@ export function NotificationItem({ entryId, entryPreview }: UniversalItemProps) 
               .humanize()}
           </span>
         </div>
-        <div className="my-0.5">{entry.entries.title}</div>
+        <div className={cn("relative my-0.5", !!entry.collections && "pr-4")}>
+          {entry.entries.title}
+          {!!entry.collections && (
+            <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
+          )}
+        </div>
       </div>
     </div>
   )
