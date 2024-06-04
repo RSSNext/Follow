@@ -1,8 +1,8 @@
-import type { ActiveEntry, ActiveList } from "@renderer/lib/types"
+import type { ActiveEntry, ActiveList } from "@renderer/models"
 import { create } from "zustand"
 
 interface FeedStoreActions {
-  setActiveList: ((value: ActiveList) => void) | undefined
+  setActiveList: (value: ActiveList) => void
   setActiveEntry: (value: ActiveEntry) => void
 }
 interface FeedStoreState {
@@ -31,4 +31,5 @@ export const useFeedStore = create<FeedStore>((set) => ({
 export const feedActions = useFeedStore.getState().actions
 
 /** Hooks */
-export const useFeedActiveList = () => useFeedStore((state) => state.activeList)
+export const useFeedActiveList = () =>
+  useFeedStore((state) => state.activeList)

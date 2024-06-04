@@ -60,29 +60,31 @@ export const AutoComplete = React.forwardRef<HTMLInputElement, InputProps>(
           }}
           ref={ref}
         />
-        <CommandList>
-          <CommandGroup
-            className={cn(
-              "absolute top-full z-10 mt-1 hidden w-full rounded-lg border bg-background [&[hidden]]:!hidden",
-              open && "block",
-            )}
-          >
-            {options.map((option) => (
-              <CommandItem
-                key={option}
-                value={option}
-                onSelect={() => handleSelectOption(option)}
-                className="text-zinc-800"
-                onMouseDown={(event) => {
-                  event.preventDefault()
-                  event.stopPropagation()
-                }}
-              >
-                {option}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
+        {options.length > 0 && (
+          <CommandList>
+            <CommandGroup
+              className={cn(
+                "absolute top-full z-10 mt-1 hidden w-full rounded-lg border bg-background [&[hidden]]:!hidden",
+                open && "block",
+              )}
+            >
+              {options.map((option) => (
+                <CommandItem
+                  key={option}
+                  value={option}
+                  onSelect={() => handleSelectOption(option)}
+                  className="text-zinc-800"
+                  onMouseDown={(event) => {
+                    event.preventDefault()
+                    event.stopPropagation()
+                  }}
+                >
+                  {option}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        )}
       </Command>
     )
   },

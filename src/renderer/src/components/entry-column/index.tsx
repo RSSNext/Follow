@@ -8,8 +8,8 @@ import {
 import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { buildStorageNS } from "@renderer/lib/ns"
-import type { EntryModel } from "@renderer/lib/types"
 import { cn, getEntriesParams } from "@renderer/lib/utils"
+import type { EntryModel } from "@renderer/models"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
 import { feedActions, useFeedStore } from "@renderer/store"
@@ -88,7 +88,7 @@ export function EntryColumn() {
 
         if (!idSlice) return
 
-        const batchLikeIds = [] as string[]
+        const batchLikeIds = [] as [string, string][]
         const entriesId2Map = entryActions.getFlattenMapEntries()
         for (const id of idSlice) {
           const entry = entriesId2Map[id]
@@ -96,15 +96,16 @@ export function EntryColumn() {
           if (!entry) continue
           const isRead = entry.read
           if (!isRead) {
-            batchLikeIds.push(id)
+            batchLikeIds.push([entry.feeds.id, id])
           }
         }
 
         if (batchLikeIds.length > 0) {
-          await apiClient.reads.$post({ json: { entryIds: batchLikeIds } })
+          const entryIds = batchLikeIds.map(([, id]) => id)
+          await apiClient.reads.$post({ json: { entryIds } })
 
-          for (const id of batchLikeIds) {
-            entryActions.optimisticUpdate(id, { read: true })
+          for (const [feedId, id] of batchLikeIds) {
+            entryActions.markRead(feedId, id, true)
           }
         }
       },
@@ -147,16 +148,14 @@ export function EntryColumn() {
       onClick={() => setActiveEntry?.(null)}
     >
       <ListHeader />
-      {activeList?.view && views[activeList.view].gridMode ?
-          (
-            <VirtuosoGrid
-              listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
-              {...virtuosoOptions}
-            />
-          ) :
-          (
-            <Virtuoso {...virtuosoOptions} />
-          )}
+      {activeList?.view && views[activeList.view].gridMode ? (
+        <VirtuosoGrid
+          listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
+          {...virtuosoOptions}
+        />
+      ) : (
+        <Virtuoso {...virtuosoOptions} />
+      )}
     </div>
   )
 }
@@ -197,9 +196,9 @@ const ListHeader: FC = () => {
   return (
     <div className="mb-5 flex w-full items-center justify-between pl-9 pr-2">
       <div className="mt-4">
-        <div className="text-lg font-bold">{activeList?.name}</div>
+        <div className="text-lg font-bold leading-none">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
-          {entries.data?.pages?.[0].total}
+          {entries.data?.pages?.[0].total || 0}
           {" "}
           {unreadOnly ? "Unread" : ""}
           {" "}
@@ -221,13 +220,11 @@ const ListHeader: FC = () => {
           onClick={() => setUnreadOnly(!unreadOnly)}
           active={unreadOnly}
         >
-          {unreadOnly ?
-              (
-                <i className="i-mingcute-round-fill" />
-              ) :
-              (
-                <i className="i-mingcute-round-line" />
-              )}
+          {unreadOnly ? (
+            <i className="i-mingcute-round-fill" />
+          ) : (
+            <i className="i-mingcute-round-line" />
+          )}
         </HeaderActionButton>
         <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
           <PopoverTrigger>

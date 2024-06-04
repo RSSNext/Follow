@@ -56,6 +56,7 @@
     "electron-updater": "^6.1.7",
     "framer-motion": "11.2.9",
     "hast-util-to-jsx-runtime": "2.3.0",
+    "idb-keyval": "6.2.1",
     "immer": "10.1.1",
     "jotai": "2.8.2",
     "jotai-dark": "0.3.1",

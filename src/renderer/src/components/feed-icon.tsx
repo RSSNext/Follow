@@ -1,7 +1,7 @@
 import { SiteIcon } from "@renderer/components/site-icon"
 import { Image } from "@renderer/components/ui/image"
-import type { FeedModel } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
+import type { FeedModel } from "@renderer/models"
 
 export function FeedIcon({
   feed,

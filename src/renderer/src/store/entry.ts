@@ -1,9 +1,14 @@
-import type { EntryModel } from "@renderer/lib/types"
 import { getEntriesParams } from "@renderer/lib/utils"
+import type { EntryModel } from "@renderer/models"
 import { apiClient } from "@renderer/queries/api-fetch"
 import type { InferResponseType } from "hono/client"
 import { produce } from "immer"
+import { omit } from "lodash-es"
 import { create } from "zustand"
+import { persist } from "zustand/middleware"
+
+import { unreadActions } from "./unread"
+import { zustandStorage } from "./utils/helper"
 
 type EntriesIdTable = Record<string, Record<string, EntryModel>>
 
@@ -26,14 +31,15 @@ interface EntryActions {
   optimisticUpdate: (entryId: string, changed: Partial<EntryModel>) => void
   optimisticUpdateAll: (changed: Partial<EntryModel>) => void
   getFlattenMapEntries: () => Record<string, EntryModel>
+  markRead: (feedId: string, entryId: string, read: boolean) => void
 }
 
-export const useEntryStore = create<EntryState & { actions: EntryActions }>(
-  (set, get) => ({
-    entries: {},
-    flatMapEntries: {},
+export const useEntryStore = create(
+  persist<EntryState & EntryActions>(
+    (set, get) => ({
+      entries: {},
+      flatMapEntries: {},
 
-    actions: {
       fetchEntries: async ({
         level,
         id,
@@ -65,7 +71,7 @@ export const useEntryStore = create<EntryState & { actions: EntryActions }>(
 
         if (data.data) {
           data.data.forEach((entry: EntryModel) => {
-            get().actions.upsert(entry.feeds.id, entry)
+            get().upsert(entry.feeds.id, entry)
           })
         }
         return data
@@ -107,11 +113,27 @@ export const useEntryStore = create<EntryState & { actions: EntryActions }>(
           }),
         )
       },
+
+      markRead: (feedId: string, entryId: string, read: boolean) => {
+        unreadActions.incrementByFeedId(feedId, read ? -1 : 1)
+        entryActions.optimisticUpdate(entryId, {
+          read,
+        })
+      },
+    }),
+    {
+      name: "entry",
+      storage: zustandStorage,
     },
-  }),
+  ),
 )
 
-export const entryActions = useEntryStore.getState().actions
+export const entryActions = {
+  ...(omit(useEntryStore.getState(), [
+    "entries",
+    "flatMapEntries",
+  ]) as EntryActions),
+}
 
 export const useEntriesByFeedId = (feedId: string) =>
   useEntryStore((state) => state.entries[feedId])

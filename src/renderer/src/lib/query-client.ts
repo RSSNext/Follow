@@ -7,6 +7,7 @@ const queryClient = new QueryClient({
     queries: {
       gcTime: Infinity,
       refetchInterval: 1000 * 60 * 10,
+      throwOnError: import.meta.env.DEV,
     },
   },
 })

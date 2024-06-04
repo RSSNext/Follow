@@ -1,6 +1,6 @@
 import { useToast } from "@renderer/components/ui/use-toast"
 import { client } from "@renderer/lib/client"
-import type { EntriesResponse } from "@renderer/lib/types"
+import type { EntriesResponse } from "@renderer/models"
 import { apiClient, apiFetch } from "@renderer/queries/api-fetch"
 import { entryActions } from "@renderer/store/entry"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -82,9 +82,8 @@ export const useEntryActions = ({
 
     onMutate: () => {
       if (!entry) return
-      entryActions.optimisticUpdate(entry.entries.id, {
-        read: true,
-      })
+
+      entryActions.markRead(entry.feeds.id, entry.entries.id, true)
     },
   })
   const unread = useMutation({
@@ -97,9 +96,8 @@ export const useEntryActions = ({
       }),
     onMutate: () => {
       if (!entry) return
-      entryActions.optimisticUpdate(entry.entries.id, {
-        read: false,
-      })
+
+      entryActions.markRead(entry.feeds.id, entry.entries.id, false)
     },
   })
 

@@ -34,9 +34,7 @@ export function EntryItemWrapper({
         },
       }),
     onMutate: () => {
-      entryActions.optimisticUpdate(entry.entries.id, {
-        read: true,
-      })
+      entryActions.markRead(entry.feeds.id, entry.entries.id, true)
     },
     // TODO  fallback
   })

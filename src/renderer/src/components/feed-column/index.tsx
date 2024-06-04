@@ -59,7 +59,7 @@ export function FeedColumn() {
     <div
       className="flex h-full flex-col gap-3"
       onClick={() =>
-        setActiveList?.({
+        setActiveList({
           level: levels.view,
           id: active,
           name: views[active].name,
@@ -72,7 +72,7 @@ export function FeedColumn() {
           className="flex items-center gap-1 text-xl font-bold"
           onClick={(e) => {
             e.stopPropagation()
-            setActiveList?.({
+            setActiveList({
               level: levels.view,
               id: active,
               name: views[active].name,
