@@ -192,9 +192,9 @@ const ListHeader: FC = () => {
   return (
     <div className="mb-5 flex w-full items-center justify-between pl-9 pr-2">
       <div className="mt-4">
-        <div className="text-lg font-bold">{activeList?.name}</div>
+        <div className="text-lg font-bold leading-none">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
-          {entries.data?.pages?.[0].total}
+          {entries.data?.pages?.[0].total || 0}
           {" "}
           {unreadOnly ? "Unread" : ""}
           {" "}
