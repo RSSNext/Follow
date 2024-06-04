@@ -20,6 +20,7 @@ export default defineConfig(
       "no-console": "warn",
       "unicorn/consistent-function-scoping": "warn",
       "unicorn/prefer-module": "off",
+      "@typescript-eslint/no-floating-promises": "off",
     },
   },
   {

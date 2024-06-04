@@ -1,6 +1,6 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
-import type { FeedModel } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
+import type { FeedModel } from "@renderer/models"
 
 export function FollowSummary({
   feed,

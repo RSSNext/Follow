@@ -7,10 +7,14 @@ import { client } from "@renderer/lib/client"
 import { levels } from "@renderer/lib/constants"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
+import type { FeedListModel } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import { apiFetch } from "@renderer/queries/api-fetch"
-import type { Response as SubscriptionsResponse } from "@renderer/queries/subscriptions"
-import { feedActions, useFeedActiveList } from "@renderer/store"
+import {
+  feedActions,
+  useFeedActiveList,
+  useUnreadStore,
+} from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useState } from "react"
@@ -25,7 +29,7 @@ export function FeedCategory({
   view,
   expansion,
 }: {
-  data: SubscriptionsResponse["list"][number]
+  data: FeedListModel["list"][number]
   view?: number
   expansion: boolean
 }) {
@@ -56,15 +60,21 @@ export function FeedCategory({
   }, [expansion])
 
   const setCategoryActive = () => {
-    view !== undefined &&
-    setActiveList?.({
-      level: levels.folder,
-      id: data.list.map((feed) => feed.feedId).join(","),
-      name: data.name,
-      view,
-    })
+    if (view !== undefined) {
+      setActiveList({
+        level: levels.folder,
+        id: data.list.map((feed) => feed.feedId).join(","),
+        name: data.name,
+        view,
+      })
+    }
   }
 
+  const unread = useUnreadStore((state) =>
+    data.list.reduce((acc, cur) => state.data[cur.feedId] + acc, 0),
+  )
+
+  const sortByUnreadFeedList = useUnreadStore((state) => data.list.sort((a, b) => (state.data[b.feedId] || 0) - (state.data[a.feedId] || 0)))
   return (
     <Collapsible
       open={open}
@@ -95,16 +105,16 @@ export function FeedCategory({
                   {
                     type: "text",
                     label: "Delete Category",
+
                     click: async () => {
-                      if (
-                        await client?.showConfirmDialog({
-                          title: `Delete category ${data.name}?`,
-                          message: `This operation will delete your category, but the feeds it contains will be retained and grouped by website.`,
-                          options: {
-                            buttons: ["Delete", "Cancel"],
-                          },
-                        })
-                      ) {
+                      const result = await client?.showConfirmDialog({
+                        title: `Delete category ${data.name}?`,
+                        message: `This operation will delete your category, but the feeds it contains will be retained and grouped by website.`,
+                        options: {
+                          buttons: ["Delete", "Cancel"],
+                        },
+                      })
+                      if (result) {
                         deleteMutation.mutate()
                       }
                     },
@@ -126,10 +136,10 @@ export function FeedCategory({
                   <span className="truncate">{data.name}</span>
                 )}
               </CollapsibleTrigger>
-              {setActiveList && <span className="truncate">{data.name}</span>}
+              {!!setActiveList && <span className="truncate">{data.name}</span>}
             </div>
-            {!!data.unread && (
-              <div className="ml-2 text-xs text-zinc-500">{data.unread}</div>
+            {!!unread && (
+              <div className="ml-2 text-xs text-zinc-500">{unread}</div>
             )}
             <CategoryRenameDialog
               feedIdList={feedIdList}
@@ -157,7 +167,7 @@ export function FeedCategory({
               opacity: 0.01,
             }}
           >
-            {data.list.map((feed) => (
+            {sortByUnreadFeedList.map((feed) => (
               <FeedItem
                 key={feed.feedId}
                 feed={feed}

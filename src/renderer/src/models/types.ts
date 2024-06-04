@@ -65,3 +65,12 @@ export type DataResponse<T> = {
 }
 
 export type ActiveEntry = string | null
+
+export type SubscriptionModel = SubscriptionResponse[number]
+
+export type FeedListModel = {
+  list: {
+    list: SubscriptionResponse
+    name: string
+  }[]
+}

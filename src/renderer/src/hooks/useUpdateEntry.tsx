@@ -1,4 +1,4 @@
-import type { EntriesResponse, ListResponse } from "@renderer/lib/types"
+import type { EntriesResponse, ListResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import type { Response as SubscriptionsResponse } from "@renderer/queries/subscriptions"
 import type { InfiniteData, QueryKey } from "@tanstack/react-query"

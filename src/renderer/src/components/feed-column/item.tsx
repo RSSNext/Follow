@@ -11,11 +11,15 @@ import { useToast } from "@renderer/components/ui/use-toast"
 import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
 import { showNativeMenu } from "@renderer/lib/native-menu"
-import type { SubscriptionResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
+import type { SubscriptionResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import { apiFetch } from "@renderer/queries/api-fetch"
-import { feedActions, useFeedActiveList } from "@renderer/store"
+import {
+  feedActions,
+  useFeedActiveList,
+  useUnreadStore,
+} from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
 
 export function FeedItem({
@@ -31,8 +35,9 @@ export function FeedItem({
   const { setActiveList } = feedActions
 
   const setFeedActive = (feed: SubscriptionResponse[number]) => {
-    view !== undefined &&
-    setActiveList?.({
+    if (view === undefined) return
+
+    setActiveList({
       level: levels.feed,
       id: feed.feedId,
       name: feed.feeds.title || "",
@@ -88,6 +93,7 @@ export function FeedItem({
     },
   })
 
+  const feedUnread = useUnreadStore((state) => state.data[feed.feedId] || 0)
   return (
     <div
       className={cn(
@@ -128,7 +134,9 @@ export function FeedItem({
               label: "Open Feed in Browser",
               click: () =>
                 window.open(
-                  `${import.meta.env.VITE_WEB_URL}/feed/${feed.feedId}?view=${view}`,
+                  `${import.meta.env.VITE_WEB_URL}/feed/${
+                    feed.feedId
+                  }?view=${view}`,
                   "_blank",
                 ),
             },
@@ -136,8 +144,7 @@ export function FeedItem({
               type: "text",
               label: "Open Site in Browser",
               click: () =>
-                feed.feeds.siteUrl &&
-                window.open(feed.feeds.siteUrl, "_blank"),
+                feed.feeds.siteUrl && window.open(feed.feeds.siteUrl, "_blank"),
             },
           ],
           e,
@@ -188,8 +195,8 @@ export function FeedItem({
           </TooltipProvider>
         )}
       </div>
-      {!!feed.unread && (
-        <div className="ml-2 text-xs text-zinc-500">{feed.unread}</div>
+      {!!feedUnread && (
+        <div className="ml-2 text-xs text-zinc-500">{feedUnread}</div>
       )}
     </div>
   )

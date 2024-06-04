@@ -16,7 +16,7 @@ import {
 } from "@renderer/components/ui/form"
 import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
-import type { DiscoverResponse } from "@renderer/lib/types"
+import type { DiscoverResponse } from "@renderer/models"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import { openElectronWindow } from "@shared/electron"

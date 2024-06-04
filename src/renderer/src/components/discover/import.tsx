@@ -10,8 +10,8 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
-import type { FeedResponse } from "@renderer/lib/types"
 import { cn } from "@renderer/lib/utils"
+import type { FeedResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { useMutation } from "@tanstack/react-query"

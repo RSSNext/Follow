@@ -1,5 +1,5 @@
-import type { EntryModel } from "@renderer/lib/types"
 import { getEntriesParams } from "@renderer/lib/utils"
+import type { EntryModel } from "@renderer/models"
 import { apiClient } from "@renderer/queries/api-fetch"
 import type { InferResponseType } from "hono/client"
 import { produce } from "immer"
@@ -7,7 +7,7 @@ import { omit } from "lodash-es"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-import { createZustandStorage } from "./utils/helper"
+import { zustandStorage } from "./utils/helper"
 
 type EntriesIdTable = Record<string, Record<string, EntryModel>>
 
@@ -114,7 +114,7 @@ export const useEntryStore = create(
     }),
     {
       name: "entry",
-      storage: createZustandStorage(),
+      storage: zustandStorage,
     },
   ),
 )

@@ -36,10 +36,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             output: {
                 code: 0;
-                data: {
-                    feedId: string;
-                    unread: number;
-                }[];
+                data: Record<string, number>;
             };
             outputFormat: "json";
             status: 200;
@@ -427,7 +424,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             };
             output: {
                 code: 0;
-                data?: {
+                data: {
                     title: string | null;
                     userId: string;
                     feeds: {
@@ -449,7 +446,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     view: number;
                     category: string | null;
                     isPrivate: boolean | null;
-                }[] | undefined;
+                }[];
             };
             outputFormat: "json";
             status: 200;

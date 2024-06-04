@@ -1,6 +1,6 @@
 import { useBizQuery } from "@renderer/hooks/useBizQuery"
 import { parseHtml } from "@renderer/lib/parse-html"
-import type { ActiveEntry } from "@renderer/lib/types"
+import type { ActiveEntry } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import { useFeedStore } from "@renderer/store"
 import { m } from "framer-motion"
@@ -9,7 +9,9 @@ import { useEffect, useState } from "react"
 import { EntryShare } from "./share"
 
 export function EntryContent({ entryId }: { entryId: ActiveEntry }) {
-  const entry = useBizQuery(Queries.entries.byId(entryId))
+  const entry = useBizQuery(Queries.entries.byId(entryId), {
+    enabled: !!entryId,
+  })
   const activeList = useFeedStore((state) => state.activeList)
 
   const [content, setContent] = useState<JSX.Element>()

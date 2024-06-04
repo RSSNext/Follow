@@ -1,6 +1,6 @@
 import { useToast } from "@renderer/components/ui/use-toast"
 import { client } from "@renderer/lib/client"
-import type { EntriesResponse } from "@renderer/lib/types"
+import type { EntriesResponse } from "@renderer/models"
 import { apiClient, apiFetch } from "@renderer/queries/api-fetch"
 import { entryActions } from "@renderer/store/entry"
 import { useMutation, useQuery } from "@tanstack/react-query"

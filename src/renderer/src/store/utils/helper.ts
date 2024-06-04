@@ -3,7 +3,8 @@ import type { StateStorage } from "zustand/middleware"
 import { createJSONStorage } from "zustand/middleware"
 
 export const dbStorage: StateStorage = {
-  getItem: async (name: string): Promise<string | null> => (await get(name)) || null,
+  getItem: async (name: string): Promise<string | null> =>
+    (await get(name)) || null,
   setItem: async (name: string, value: string): Promise<void> => {
     await set(name, value)
   },
@@ -12,5 +13,4 @@ export const dbStorage: StateStorage = {
   },
 }
 
-export const createZustandStorage = () =>
-  createJSONStorage(() => dbStorage) as any
+export const zustandStorage = createJSONStorage(() => dbStorage) as any
