@@ -6,6 +6,8 @@ import { omit } from "lodash-es"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
+import { entryActions } from "./entry"
+import { unreadActions } from "./unread"
 import { zustandStorage } from "./utils/helper"
 
 type FeedId = string
@@ -15,10 +17,11 @@ interface SubscriptionState {
 interface SubscriptionActions {
   upsert: (feedId: FeedId, subscription: SubscriptionModel) => void
   fetchByView: (view?: FeedViewType) => Promise<SubscriptionModel[]>
+  markReadByView: (view?: FeedViewType) => void
 }
 export const useSubscriptionStore = create(
   persist<SubscriptionState & SubscriptionActions>(
-    (set) => ({
+    (set, get) => ({
       data: {},
 
       async fetchByView(view) {
@@ -45,6 +48,15 @@ export const useSubscriptionStore = create(
           }),
         )
       },
+      markReadByView(view) {
+        const state = get()
+        for (const feedId in state.data) {
+          if (state.data[feedId].view === view) {
+            unreadActions.updateByFeedId(feedId, 0)
+            entryActions.optimisticUpdateManyByFeedId(feedId, { read: true })
+          }
+        }
+      },
     }),
     {
       name: "subscription",
@@ -56,3 +68,9 @@ export const useSubscriptionStore = create(
 export const subscriptionActions = {
   ...omit(useSubscriptionStore.getState(), ["data"]),
 }
+
+Object.assign(window, {
+  __subscription() {
+    return useSubscriptionStore.getState()
+  },
+})
