@@ -3,10 +3,8 @@ import defineConfig, { GLOB_TS_SRC } from "eslint-config-hyoban"
 
 export default defineConfig(
   {
-    typeChecked: false,
     react: "vite",
     tailwindCSS: true,
-    fileCase: false,
     stylistic: {
       quotes: "double",
       arrowParens: true,
