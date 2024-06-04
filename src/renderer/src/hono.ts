@@ -238,6 +238,12 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         publishedAt: string;
                         images: string[] | null;
                         categories: string[] | null;
+                        enclosures?: {
+                            url: string;
+                            length?: number | undefined;
+                            type?: string | undefined;
+                            title?: string | undefined;
+                        }[] | undefined;
                     }[] | undefined;
                     docs?: string | undefined;
                     isSubscribed?: boolean | undefined;
@@ -317,6 +323,12 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         publishedAt: string;
                         images: string[] | null;
                         categories: string[] | null;
+                        enclosures?: {
+                            url: string;
+                            length?: number | undefined;
+                            type?: string | undefined;
+                            title?: string | undefined;
+                        }[] | undefined;
                     };
                     feeds: {
                         description: string | null;
@@ -363,6 +375,12 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         publishedAt: string;
                         images: string[] | null;
                         categories: string[] | null;
+                        enclosures?: {
+                            url: string;
+                            length?: number | undefined;
+                            type?: string | undefined;
+                            title?: string | undefined;
+                        }[] | undefined;
                     };
                     collections: {
                         createdAt: string;
@@ -411,6 +429,12 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     publishedAt: string;
                     images: string[] | null;
                     categories: string[] | null;
+                    enclosures?: {
+                        url: string;
+                        length?: number | undefined;
+                        type?: string | undefined;
+                        title?: string | undefined;
+                    }[] | undefined;
                 }[];
             };
             outputFormat: "json";

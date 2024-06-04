@@ -26,6 +26,7 @@ import { useEventCallback } from "usehooks-ts"
 import { useShallow } from "zustand/react/shallow"
 
 import { ArticleItem } from "./article-item"
+import { AudioItem } from "./audio-item"
 import { EntryItemWrapper } from "./item-wrapper"
 import { NotificationItem } from "./notification-item"
 import { PictureItem } from "./picture-item"
@@ -65,6 +66,10 @@ export function EntryColumn() {
     }
     case FeedViewType.Videos: {
       Item = VideoItem
+      break
+    }
+    case FeedViewType.Audios: {
+      Item = AudioItem
       break
     }
     case FeedViewType.Notifications: {

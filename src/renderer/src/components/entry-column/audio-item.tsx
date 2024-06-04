@@ -6,7 +6,7 @@ import { useEntry } from "@renderer/store/entry"
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function NotificationItem({ entryId, entryPreview }: UniversalItemProps) {
+export function AudioItem({ entryId, entryPreview }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
@@ -31,6 +31,9 @@ export function NotificationItem({ entryId, entryPreview }: UniversalItemProps) 
             <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
           )}
         </div>
+        {entry.entries?.enclosures?.[0].url && (
+          <audio className="mt-2 h-10 w-full" controls src={entry.entries?.enclosures?.[0].url} />
+        )}
       </div>
     </div>
   )
