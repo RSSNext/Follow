@@ -82,9 +82,8 @@ export const useEntryActions = ({
 
     onMutate: () => {
       if (!entry) return
-      entryActions.optimisticUpdate(entry.entries.id, {
-        read: true,
-      })
+
+      entryActions.markRead(entry.feeds.id, entry.entries.id, true)
     },
   })
   const unread = useMutation({
@@ -97,9 +96,8 @@ export const useEntryActions = ({
       }),
     onMutate: () => {
       if (!entry) return
-      entryActions.optimisticUpdate(entry.entries.id, {
-        read: false,
-      })
+
+      entryActions.markRead(entry.feeds.id, entry.entries.id, false)
     },
   })
 

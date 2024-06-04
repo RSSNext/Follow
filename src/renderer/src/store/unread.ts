@@ -13,6 +13,7 @@ interface UnreadState {
 interface UnreadActions {
   updateByFeedId: (feedId: string, unread: number) => void
   fetchUnreadByView: (view?: FeedViewType) => Promise<Record<string, number>>
+  incrementByFeedId: (feedId: string, inc: number) => void
 }
 export const useUnreadStore = create(
   persist<UnreadState & UnreadActions>(
@@ -34,6 +35,16 @@ export const useUnreadStore = create(
           )
         }
         return data
+      },
+      incrementByFeedId: (feedId, inc: number) => {
+        set((state) =>
+          produce(state, (state) => {
+            const cur = state.data[feedId]
+            if (cur === undefined) return state
+            state.data[feedId] = (cur || 0) + inc
+            return state
+          }),
+        )
       },
       updateByFeedId: (feedId, unread) => {
         set((state) =>

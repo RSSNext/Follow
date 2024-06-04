@@ -7,6 +7,7 @@ import { omit } from "lodash-es"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
+import { unreadActions } from "./unread"
 import { zustandStorage } from "./utils/helper"
 
 type EntriesIdTable = Record<string, Record<string, EntryModel>>
@@ -30,6 +31,7 @@ interface EntryActions {
   optimisticUpdate: (entryId: string, changed: Partial<EntryModel>) => void
   optimisticUpdateAll: (changed: Partial<EntryModel>) => void
   getFlattenMapEntries: () => Record<string, EntryModel>
+  markRead: (feedId: string, entryId: string, read: boolean) => void
 }
 
 export const useEntryStore = create(
@@ -110,6 +112,13 @@ export const useEntryStore = create(
             return draft
           }),
         )
+      },
+
+      markRead: (feedId: string, entryId: string, read: boolean) => {
+        unreadActions.incrementByFeedId(feedId, read ? -1 : 1)
+        entryActions.optimisticUpdate(entryId, {
+          read,
+        })
       },
     }),
     {
