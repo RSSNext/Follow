@@ -117,7 +117,7 @@ export function Component() {
   )
 
   return (
-    <div className="flex h-full flex-col bg-background/90 p-10">
+    <div className="flex h-full flex-col bg-background/90 px-[18px] pb-[18px] pt-12">
       <div className="mb-4 mt-2 flex items-center gap-2 text-[22px] font-bold">
         <img src="../icon.svg" alt="logo" className="size-8" />
         Add follow

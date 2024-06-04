@@ -8,7 +8,7 @@ import {
 import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { buildStorageNS } from "@renderer/lib/ns"
-import { cn, getEntriesParams } from "@renderer/lib/utils"
+import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
@@ -194,8 +194,43 @@ const ListHeader: FC = () => {
   }, [activeList])
 
   return (
-    <div className="mb-5 flex w-full items-center justify-between pl-9 pr-2">
-      <div className="mt-4">
+    <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
+      <div className="flex w-full justify-end">
+        <div className="relative z-[1] flex items-center gap-1 text-zinc-500">
+          <HeaderActionButton
+            tooltip={unreadOnly ? "Unread Only" : "All"}
+            onClick={() => setUnreadOnly(!unreadOnly)}
+          >
+            {unreadOnly ? (
+              <i className="i-mingcute-round-fill" />
+            ) : (
+              <i className="i-mingcute-round-line" />
+            )}
+          </HeaderActionButton>
+          <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
+            <PopoverTrigger>
+              <HeaderActionButton onClick={() => {}} tooltip="Mark All as Read">
+                <i className="i-mingcute-check-circle-line" />
+              </HeaderActionButton>
+            </PopoverTrigger>
+            <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[15px] font-medium">
+              <div>Mark all as read?</div>
+              <div className="space-x-4">
+                <PopoverClose>
+                  <Button size="sm" variant="outline">
+                    Cancel
+                  </Button>
+                </PopoverClose>
+                {/* TODO */}
+                <Button size="sm" onClick={handleMarkAllAsRead}>
+                  Confirm
+                </Button>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+      <div className="mt-[18px]">
         <div className="text-lg font-bold leading-none">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
           {entries.data?.pages?.[0].total || 0}
@@ -204,50 +239,6 @@ const ListHeader: FC = () => {
           {" "}
           Items
         </div>
-      </div>
-      <div className="relative z-[1] flex h-14 items-center gap-1 text-zinc-500">
-        <HeaderActionButton onClick={entries.refetch} tooltip="Refresh">
-          <i
-            className={cn(
-              "i-mingcute-refresh-2-line",
-              entries.isRefetching && "animate-spin",
-            )}
-          />
-        </HeaderActionButton>
-
-        <HeaderActionButton
-          tooltip={unreadOnly ? "Unread Only" : "All"}
-          onClick={() => setUnreadOnly(!unreadOnly)}
-          active={unreadOnly}
-        >
-          {unreadOnly ? (
-            <i className="i-mingcute-round-fill" />
-          ) : (
-            <i className="i-mingcute-round-line" />
-          )}
-        </HeaderActionButton>
-        <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
-          <PopoverTrigger>
-            <HeaderActionButton onClick={() => {}} tooltip="Mark All as Read">
-              <i className="i-mingcute-check-circle-line" />
-            </HeaderActionButton>
-          </PopoverTrigger>
-
-          <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[15px] font-medium">
-            <div>Mark all as read?</div>
-            <div className="space-x-4">
-              <PopoverClose>
-                <Button size="sm" variant="outline">
-                  Cancel
-                </Button>
-              </PopoverClose>
-              {/* TODO */}
-              <Button size="sm" onClick={handleMarkAllAsRead}>
-                Confirm
-              </Button>
-            </div>
-          </PopoverContent>
-        </Popover>
       </div>
     </div>
   )

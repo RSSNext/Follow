@@ -71,7 +71,7 @@ Button.displayName = "Button"
 // BIZ buttons
 
 interface HeaderActionButtonProps {
-  onClick: () => void
+  onClick?: () => void
   icon?: React.ReactNode | React.FC<ComponentType>
   tooltip: string
   tooltipSide?: "top" | "bottom"

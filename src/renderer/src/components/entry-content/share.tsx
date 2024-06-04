@@ -21,7 +21,7 @@ export function EntryShare({
   if (!entry?.entries.url) return null
 
   return (
-    <div className="flex h-14 items-center justify-end gap-3 px-5 text-lg text-zinc-500">
+    <div className="flex items-center justify-end gap-3 px-5 pt-2.5 text-lg text-zinc-500">
       <TooltipProvider>
         {items
           .filter((item) => !item.disabled)

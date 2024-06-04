@@ -1,4 +1,4 @@
-import { Button } from "@renderer/components/ui/button"
+import { Button, HeaderActionButton } from "@renderer/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
@@ -67,33 +67,18 @@ export function FeedColumn() {
           preventNavigate: true,
         })}
     >
-      <div className="ml-5 mr-3 flex items-center justify-between">
-        <div
-          className="flex items-center gap-1 text-xl font-bold"
-          onClick={(e) => {
-            e.stopPropagation()
-            setActiveList({
-              level: levels.view,
-              id: active,
-              name: views[active].name,
-              view: active,
-            })
-          }}
-        >
-          <img src="./icon.svg" alt="logo" className="size-6" />
-          Follow
-        </div>
-        <div className="flex items-center">
-          <Button variant="ghost" size="sm">
-            <Link to="/profile" className="flex">
+      <div className="ml-5 mr-3 flex items-center justify-end">
+        <div className="flex items-center gap-2">
+          <Link to="/profile">
+            <HeaderActionButton tooltip="Profile">
               <UserButton className="h-5 p-0" hideName />
-            </Link>
-          </Button>
-          <Button className="hover:bg-theme-vibrancyBg" variant="ghost" size="sm">
-            <Link to="/discover" className="flex">
+            </HeaderActionButton>
+          </Link>
+          <Link to="/discover">
+            <HeaderActionButton tooltip="Add">
               <i className="i-mingcute-add-line size-5 text-theme-vibrancyFg" />
-            </Link>
-          </Button>
+            </HeaderActionButton>
+          </Link>
         </div>
       </div>
       <div className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg">

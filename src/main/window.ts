@@ -25,6 +25,10 @@ export function createWindow(options?: {
     },
 
     titleBarStyle: "hiddenInset",
+    trafficLightPosition: {
+      x: 18,
+      y: 18,
+    },
 
     transparent: true,
     backgroundColor: "#00000000", // transparent hexadecimal or anything with transparency,
