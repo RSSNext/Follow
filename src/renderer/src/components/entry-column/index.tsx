@@ -12,7 +12,11 @@ import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
 import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
-import { feedActions, useFeedStore } from "@renderer/store"
+import {
+  feedActions,
+  subscriptionActions,
+  useFeedStore,
+} from "@renderer/store"
 import { entryActions } from "@renderer/store/entry"
 import { m } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
@@ -189,7 +193,14 @@ const ListHeader: FC = () => {
         }),
       },
     })
-    entryActions.optimisticUpdateAll({ read: true })
+
+    if (typeof activeList.id === "number") {
+      subscriptionActions.markReadByView(activeList.view)
+    } else {
+      activeList.id.split(",").forEach((feedId) => {
+        entryActions.markReadByFeedId(feedId)
+      })
+    }
     setMarkPopoverOpen(false)
   }, [activeList])
 
