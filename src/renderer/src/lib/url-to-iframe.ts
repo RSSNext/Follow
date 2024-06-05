@@ -8,11 +8,11 @@ export const urlToIframe = (url?: string | null) => {
       highQuality: "true",
       bvid: url.match(/\/\/www.bilibili.com\/video\/(BV\w+)/)?.[1] || "",
     }).toString()}`
-  } else if (url?.match(/\/\/www.youtube.com\/watch\?v=\w+/)) {
-    return `https://www.youtube-nocookie.com/embed/${url.match(/\/\/www.youtube.com\/watch\?v=(\w+)/)?.[1]}?${new URLSearchParams({
+  } else if (url?.match(/\/\/www.youtube.com\/watch\?v=[-\w]+/)) {
+    return `https://www.youtube-nocookie.com/embed/${url.match(/\/\/www.youtube.com\/watch\?v=([-\w]+)/)?.[1]}?${new URLSearchParams({
       controls: "0",
       autoplay: "1",
-      muted: "1",
+      mute: "1",
     }).toString()}`
   } else {
     return null
