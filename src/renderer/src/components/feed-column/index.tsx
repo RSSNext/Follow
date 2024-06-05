@@ -57,7 +57,7 @@ export function FeedColumn() {
 
   return (
     <div
-      className="flex h-full flex-col gap-3"
+      className={cn("flex h-full flex-col gap-3 pt-2.5", !window.electron && "bg-native")}
       onClick={() =>
         setActiveList({
           level: levels.view,

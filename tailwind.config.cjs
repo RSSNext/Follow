@@ -109,6 +109,7 @@ module.exports = {
       collections: getIconCollections(["mingcute"]),
     }),
     require("tailwindcss-animate"),
+    require("@tailwindcss/container-queries"),
     require("@tailwindcss/typography"),
     require("./src/renderer/src/styles/tailwind-extend.css"),
   ],

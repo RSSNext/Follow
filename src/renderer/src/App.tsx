@@ -19,10 +19,12 @@ function App() {
 
   return (
     <>
-      <div
-        className="drag-region absolute inset-x-0 top-0 h-12 shrink-0"
-        aria-hidden
-      />
+      {window.electron && (
+        <div
+          className="drag-region absolute inset-x-0 top-0 h-12 shrink-0"
+          aria-hidden
+        />
+      )}
 
       <Outlet />
     </>

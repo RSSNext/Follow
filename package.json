@@ -88,6 +88,7 @@
     "@egoist/tailwindcss-icons": "1.8.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@iconify-json/mingcute": "1.1.17",
+    "@tailwindcss/container-queries": "0.1.1",
     "@tailwindcss/typography": "0.5.13",
     "@types/lodash-es": "4.17.12",
     "@types/node": "^20.12.13",
