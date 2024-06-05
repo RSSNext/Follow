@@ -36,7 +36,7 @@ export function Component() {
                   key={index}
                   className="mb-4"
                   view={index}
-                  hideTitle={true}
+                  hideTitle
                 />
               </div>
             ))}

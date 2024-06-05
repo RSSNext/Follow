@@ -158,15 +158,17 @@ export function FeedList({
           />
         ))
       ) : (
-        <div className="flex h-full flex-1 items-center text-zinc-500">
-          <Link
-            to="/discover"
-            className="-mt-36 flex h-full flex-1 flex-col items-center justify-center gap-2"
-          >
-            <i className="i-mingcute-add-line text-3xl " />
-            Add some feeds
-          </Link>
-        </div>
+        !hideTitle && (
+          <div className="flex h-full flex-1 items-center text-zinc-500">
+            <Link
+              to="/discover"
+              className="-mt-36 flex h-full flex-1 flex-col items-center justify-center gap-2"
+            >
+              <i className="i-mingcute-add-line text-3xl " />
+              Add some feeds
+            </Link>
+          </div>
+        )
       )}
     </div>
   )
