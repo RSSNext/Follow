@@ -10,4 +10,12 @@
   .no-drag-region {
     -webkit-app-region: no-drag;
   }
+  .mask-squircle {
+    mask-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMjAwJyBoZWlnaHQ9JzIwMCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48cGF0aCBkPSdNMTAwIDBDMjAgMCAwIDIwIDAgMTAwczIwIDEwMCAxMDAgMTAwIDEwMC0yMCAxMDAtMTAwUzE4MCAwIDEwMCAwWicvPjwvc3ZnPg==);
+  }
+  .mask {
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+  }
 }

@@ -5,6 +5,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@renderer/components/ui/navigation-menu"
+import { APP_NAME } from "@renderer/lib/constants"
 import { Link } from "react-router-dom"
 
 import { UserButton } from "./user-button"
@@ -21,15 +22,16 @@ const items = [{
 }]
 
 export function Header() {
+  // TODO optimize ui in mobile view
   return (
-    <header className="w-full border-b px-10 py-3">
+    <header className="w-full border-b px-4 py-3 lg:px-10">
       <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2 text-xl font-bold">
             <img src="../icon.svg" alt="logo" className="size-8" />
-            Follow
+            {APP_NAME}
           </div>
-          <NavigationMenu>
+          <NavigationMenu className="hidden lg:block">
             <NavigationMenuList>
               {items.map((item) => (
                 <NavigationMenuItem key={item.link}>
@@ -43,7 +45,7 @@ export function Header() {
             </NavigationMenuList>
           </NavigationMenu>
         </div>
-        <UserButton className="h-10 bg-transparent px-10 py-0" />
+        <UserButton className="h-10 bg-transparent p-0 lg:px-10" />
       </div>
     </header>
   )

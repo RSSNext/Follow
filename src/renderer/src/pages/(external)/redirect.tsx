@@ -1,5 +1,6 @@
 import { Button } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
+import { APP_NAME } from "@renderer/lib/constants"
 import { apiFetch } from "@renderer/queries/api-fetch"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import { useEffect } from "react"
@@ -32,18 +33,32 @@ export function Component() {
       <img src="./icon.svg" alt="logo" className="size-20" />
       <UserButton className="bg-stone-100 px-10 py-4 text-2xl" />
       <h1 className="text-3xl font-bold">
-        Successfully connected to Follow Account
+        Successfully connected to
+        {" "}
+        {APP_NAME}
+        {" "}
+        Account
       </h1>
       <h2>
-        You have successfully connected to Follow Account. Now is the time to
-        open Follow and safely close this page.
+        You have successfully connected to
+        {" "}
+        {APP_NAME}
+        {" "}
+        Account. Now is the time to
+        open
+        {" "}
+        {APP_NAME}
+        {" "}
+        and safely close this page.
       </h2>
       <Button
         className="text-lg"
         size="xl"
         onClick={async () => window.open(await getCallbackUrl())}
       >
-        Open Follow
+        Open
+        {" "}
+        {APP_NAME}
       </Button>
     </div>
   )

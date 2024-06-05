@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { UserButton } from "@renderer/components/user-button"
-import { levels, views } from "@renderer/lib/constants"
+import { APP_NAME, levels, views } from "@renderer/lib/constants"
 import { clamp, cn } from "@renderer/lib/utils"
 import { feedActions } from "@renderer/store"
 import { useWheel } from "@use-gesture/react"
@@ -93,7 +93,7 @@ export function FeedColumn() {
             }}
           >
             <img src="./icon.svg" alt="logo" className="size-6" />
-            Follow
+            {APP_NAME}
           </div>
         )}
         <div className="flex items-center gap-2">

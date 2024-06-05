@@ -1,40 +1,12 @@
 import { Slot } from "@radix-ui/react-slot"
 import { cn } from "@renderer/lib/utils"
 import type { VariantProps } from "class-variance-authority"
-import { cva } from "class-variance-authority"
+import type { HTMLMotionProps } from "framer-motion"
+import { m } from "framer-motion"
 import * as React from "react"
 
-import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
-
-export const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-8 rounded-md px-4",
-        lg: "h-11 rounded-md px-8",
-        xl: "h-14 rounded-lg px-10",
-        icon: "size-10",
-      },
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-zinc-500/10 px-1.5",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  },
-)
+import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
+import { buttonVariants, styledButtonVariant } from "./variants"
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -110,3 +82,40 @@ export const HeaderActionButton = React.forwardRef<
     </Tooltip>
   ),
 )
+
+export const MotionButtonBase = React.forwardRef<
+  HTMLButtonElement,
+  HTMLMotionProps<"button">
+>(({ children, ...rest }, ref) => (
+  <m.button
+    initial
+    whileFocus={{ scale: 1.02 }}
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.95 }}
+    {...rest}
+    ref={ref}
+  >
+    {children}
+  </m.button>
+))
+
+MotionButtonBase.displayName = "MotionButtonBase"
+
+export const StyledButton = React.forwardRef<
+  HTMLButtonElement,
+  HTMLMotionProps<"button">
+>(({ className, ...props }, ref) => (
+  <MotionButtonBase
+    ref={ref}
+    className={cn(
+      styledButtonVariant({
+        variant: "primary",
+        className,
+      }),
+
+    )}
+    {...props}
+  >
+    {props.children}
+  </MotionButtonBase>
+))
