@@ -5,13 +5,17 @@ import { SocialMediaItem } from "@renderer/components/entry-column/social-media-
 import type { UniversalItemProps } from "@renderer/components/entry-column/types"
 import { VideoItem } from "@renderer/components/entry-column/video-item"
 import { FeedIcon } from "@renderer/components/feed-icon"
-import { Button } from "@renderer/components/ui/button"
-import { views } from "@renderer/lib/constants"
+import { FollowIcon } from "@renderer/components/icons/follow"
+import { StyledButton } from "@renderer/components/ui/button"
+import { ListItemHoverOverlay } from "@renderer/components/ui/list-item-hover-overlay"
+import { APP_NAME, views } from "@renderer/lib/constants"
+import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import { useEntriesPreview } from "@renderer/queries/entries"
 import { useFeed } from "@renderer/queries/feed"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import type { FC } from "react"
+import { Helmet } from "react-helmet-async"
 import { useParams } from "react-router-dom"
 
 export function Component() {
@@ -29,23 +33,23 @@ export function Component() {
 
   let Item: FC<UniversalItemProps>
   switch (view) {
-    case 0: {
+    case FeedViewType.Articles: {
       Item = ArticleItem
       break
     }
-    case 1: {
+    case FeedViewType.SocialMedia: {
       Item = SocialMediaItem
       break
     }
-    case 2: {
+    case FeedViewType.Pictures: {
       Item = PictureItem
       break
     }
-    case 3: {
+    case FeedViewType.Videos: {
       Item = VideoItem
       break
     }
-    case 5: {
+    case FeedViewType.Notifications: {
       Item = NotificationItem
       break
     }
@@ -57,13 +61,27 @@ export function Component() {
   return (
     <>
       {feed.data?.feed && (
-        <div className="mx-auto flex max-w-5xl flex-col items-center">
-          <div className="mb-2 mt-10 flex items-center text-2xl font-bold">
-            <FeedIcon feed={feed.data.feed} className="size-8 shrink-0" />
-            <h1>{feed.data.feed.title}</h1>
-          </div>
-          <div className="mb-8 text-sm text-zinc-500">
-            {feed.data.feed.description}
+        <div className="mx-auto mt-12 flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
+          <Helmet>
+            <title>
+              {feed.data.feed.title}
+              {" "}
+              |
+              {" "}
+              {APP_NAME}
+            </title>
+          </Helmet>
+          <FeedIcon
+            feed={feed.data.feed}
+            className="mask-squircle mask size-16 shrink-0"
+          />
+          <div className="flex flex-col items-center">
+            <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
+              <h1>{feed.data.feed.title}</h1>
+            </div>
+            <div className="mb-8 text-sm text-zinc-500">
+              {feed.data.feed.description}
+            </div>
           </div>
           <div className="mb-4 text-sm">
             <strong>{feed.data.subscriptionCount}</strong>
@@ -72,20 +90,34 @@ export function Component() {
             {" "}
             <strong>{feed.data.readCount}</strong>
             {" "}
-            reads on Follow
+            reads on
+            {" "}
+            {APP_NAME}
           </div>
           <a className="mb-8" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
-            <Button>Follow on Follow</Button>
+            <StyledButton>
+              <FollowIcon className="size-3" />
+              follow on
+              {" "}
+              {APP_NAME}
+            </StyledButton>
           </a>
           <div
             className={cn(
-              "w-full",
-              views[view].gridMode &&
-              "grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4",
+              "w-full pb-12",
+              views[view].gridMode ?
+                "grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4" :
+                "flex max-w-3xl flex-col gap-6",
             )}
           >
             {entries.data?.map((entry) => (
-              <a href={entry.url || void 0} target="_blank" key={entry.id}>
+              <a
+                className="relative cursor-pointer"
+                href={entry.url || void 0}
+                target="_blank"
+                key={entry.id}
+              >
+                <ListItemHoverOverlay />
                 <Item
                   entryId=""
                   entryPreview={{

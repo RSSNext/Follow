@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { UserButton } from "@renderer/components/user-button"
-import { levels, views } from "@renderer/lib/constants"
+import { APP_NAME, levels, views } from "@renderer/lib/constants"
 import { clamp, cn } from "@renderer/lib/utils"
 import { feedActions } from "@renderer/store"
 import { useWheel } from "@use-gesture/react"
@@ -55,9 +55,14 @@ export function FeedColumn() {
     },
   )
 
+  const normalStyle = !window.electron || (window.electron.process.platform !== "darwin")
+
   return (
     <div
-      className="flex h-full flex-col gap-3"
+      className={cn(
+        "flex h-full flex-col gap-3 pt-2.5",
+        normalStyle && "bg-native",
+      )}
       onClick={() =>
         setActiveList({
           level: levels.view,
@@ -67,7 +72,30 @@ export function FeedColumn() {
           preventNavigate: true,
         })}
     >
-      <div className="ml-5 mr-3 flex items-center justify-end">
+      <div
+        className={cn(
+          "ml-5 mr-3 flex items-center",
+
+          normalStyle ? "ml-4 justify-between" : "justify-end",
+        )}
+      >
+        {normalStyle && (
+          <div
+            className="flex items-center gap-1 text-xl font-bold"
+            onClick={(e) => {
+              e.stopPropagation()
+              setActiveList({
+                level: levels.view,
+                id: active,
+                name: views[active].name,
+                view: active,
+              })
+            }}
+          >
+            <img src="./icon.svg" alt="logo" className="size-6" />
+            {APP_NAME}
+          </div>
+        )}
         <div className="flex items-center gap-2">
           <Link to="/profile">
             <HeaderActionButton tooltip="Profile">
@@ -118,7 +146,10 @@ export function FeedColumn() {
               key={item.name}
               className="shrink-0 snap-center overflow-y-auto"
             >
-              <FeedList className="flex min-h-full w-64 flex-col px-3 pb-6" view={index} />
+              <FeedList
+                className="flex min-h-full w-64 flex-col px-3 pb-6"
+                view={index}
+              />
             </section>
           ))}
         </m.div>

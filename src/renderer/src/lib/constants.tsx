@@ -42,3 +42,5 @@ export const views = [
     className: "text-yellow-600",
   },
 ]
+
+export const APP_NAME = "Follow"

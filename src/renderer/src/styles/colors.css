@@ -1,6 +1,6 @@
 :root {
   --fo-vibrancy-foreground: theme(colors.zinc.500);
-  --fo-vibrancy-background: theme(colors.native.active/10);
+  --fo-vibrancy-background: theme(colors.native.active);
 
   --fo-item-active: theme(colors.native.active/0.4);
   --fo-item-hover: theme(colors.native.active/0.2);
@@ -12,7 +12,7 @@
 [data-theme="dark"] {
   --fo-vibrancy-foreground: theme(colors.zinc.400);
   /* --fo-vibrancy-background: theme(colors.zinc.600/10); */
-  --fo-vibrancy-background: theme(colors.native.active/10);
+  --fo-vibrancy-background: theme(colors.native.active);
 
   --fo-item-active: theme(colors.neutral.700/0.4);
   --fo-item-hover: theme(colors.native.active/0.2);

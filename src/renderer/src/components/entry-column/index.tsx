@@ -241,7 +241,7 @@ const ListHeader: FC = () => {
           </Popover>
         </div>
       </div>
-      <div className="mt-[18px]">
+      <div>
         <div className="text-lg font-bold leading-none">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
           {entries.data?.pages?.[0].total || 0}

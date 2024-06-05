@@ -29,7 +29,7 @@ export function Component() {
         className="h-10 border-b flex items-center pl-20 text-sm font-medium"
         aria-hidden
       >
-        Follow Settings
+        {APP_NAME} Settings
       </div> */}
       <div className="flex flex-1">
         <div className="w-44 border-r p-3 pt-12 backdrop-blur">

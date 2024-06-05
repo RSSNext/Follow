@@ -1,5 +1,6 @@
 import { signIn, useSession } from "@hono/auth-js/react"
 import { Button } from "@renderer/components/ui/button"
+import { APP_NAME } from "@renderer/lib/constants"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -29,7 +30,12 @@ export function Component() {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
       <img src="./icon.svg" alt="logo" className="size-20" />
-      <h1 className="text-3xl font-bold">Log in to Follow</h1>
+      <h1 className="text-3xl font-bold">
+        Log in to
+        {" "}
+
+        {APP_NAME}
+      </h1>
       {redirecting ?
           (
             <div>Redirecting</div>

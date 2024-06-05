@@ -33,7 +33,7 @@ export function createWindow(options?: {
     transparent: true,
     backgroundColor: "#00000000", // transparent hexadecimal or anything with transparency,
     vibrancy: "sidebar",
-    visualEffectState: "followWindow",
+    visualEffectState: "active",
   })
 
   window.on("ready-to-show", () => {
