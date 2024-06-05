@@ -92,6 +92,8 @@ export function Component() {
             <strong>{feed.data.readCount}</strong>
             {" "}
             reads on
+            {" "}
+            {" "}
             {APP_NAME}
           </div>
           <a className="mb-8" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
