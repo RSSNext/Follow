@@ -53,7 +53,7 @@ export function Component() {
             className="text-lg text-white"
             size="xl"
             onClick={() => {
-              loginHandler("google")
+              loginHandler("github")
             }}
           >
             <i className="i-mingcute-github-fill mr-2 text-xl" />
