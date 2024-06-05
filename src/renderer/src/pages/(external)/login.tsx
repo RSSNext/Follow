@@ -32,6 +32,7 @@ export function Component() {
       <img src="./icon.svg" alt="logo" className="size-20" />
       <h1 className="text-3xl font-bold">
         Log in to
+        {" "}
         {APP_NAME}
       </h1>
       {redirecting ? (
@@ -39,7 +40,7 @@ export function Component() {
       ) : (
         <div className="flex flex-col gap-3">
           <Button
-            className="text-lg"
+            className="text-lg text-white"
             size="xl"
             onClick={() => {
               if (window.electron) {
@@ -59,7 +60,7 @@ export function Component() {
             GitHub
           </Button>
           <Button
-            className="bg-blue-500 text-lg hover:bg-blue-500/90"
+            className="bg-blue-500 text-lg text-white hover:bg-blue-500/90"
             size="xl"
             onClick={() => {
               if (window.electron) {
