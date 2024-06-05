@@ -70,7 +70,6 @@ export function Component() {
               {" "}
               {APP_NAME}
             </title>
-            <link rel="canonical" href="https://www.tacobell.com/" />
           </Helmet>
           <FeedIcon
             feed={feed.data.feed}
