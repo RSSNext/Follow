@@ -32,6 +32,8 @@ export function Component() {
       <img src="./icon.svg" alt="logo" className="size-20" />
       <h1 className="text-3xl font-bold">
         Log in to
+        {" "}
+
         {APP_NAME}
       </h1>
       {redirecting ?

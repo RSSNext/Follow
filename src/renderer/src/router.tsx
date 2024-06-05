@@ -25,27 +25,38 @@ export const router = createBrowserRouter([
                 children: [
                   {
                     path: "",
-                    lazy: () => import("./pages/(main)/(context)/(nonhome)/layout"),
+                    lazy: () =>
+                      import("./pages/(main)/(context)/(nonhome)/layout"),
                     children: [
                       {
                         path: "/discover",
-                        lazy: () => import("./pages/(main)/(context)/(nonhome)/discover/layout"),
+                        lazy: () =>
+                          import(
+                            "./pages/(main)/(context)/(nonhome)/discover/layout"
+                          ),
                         children: [
                           {
                             path: "",
                             lazy: () =>
-                              import("./pages/(main)/(context)/(nonhome)/discover/index"),
+                              import(
+                                "./pages/(main)/(context)/(nonhome)/discover/index"
+                              ),
                           },
                         ],
                       },
                       {
                         path: "/profile",
-                        lazy: () => import("./pages/(main)/(context)/(nonhome)/profile/layout"),
+                        lazy: () =>
+                          import(
+                            "./pages/(main)/(context)/(nonhome)/profile/layout"
+                          ),
                         children: [
                           {
                             path: "",
                             lazy: () =>
-                              import("./pages/(main)/(context)/(nonhome)/profile/index"),
+                              import(
+                                "./pages/(main)/(context)/(nonhome)/profile/index"
+                              ),
                           },
                         ],
                       },
@@ -74,12 +85,20 @@ export const router = createBrowserRouter([
             lazy: () => import("./pages/(external)/debug"),
           },
           {
-            path: "/feed/:id",
-            lazy: () => import("./pages/(external)/feed/layout"),
+            path: "",
+            lazy: () => import("./pages/(external)/(with-layout)/layout"),
             children: [
               {
-                path: "",
-                lazy: () => import("./pages/(external)/feed/index"),
+                path: "/feed/:id",
+                lazy: () =>
+                  import("./pages/(external)/(with-layout)/feed/layout"),
+                children: [
+                  {
+                    path: "",
+                    lazy: () =>
+                      import("./pages/(external)/(with-layout)/feed/index"),
+                  },
+                ],
               },
             ],
           },
