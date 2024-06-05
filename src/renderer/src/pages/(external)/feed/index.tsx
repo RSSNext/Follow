@@ -93,7 +93,6 @@ export function Component() {
             {" "}
             reads on
             {" "}
-            {" "}
             {APP_NAME}
           </div>
           <a className="mb-8" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
