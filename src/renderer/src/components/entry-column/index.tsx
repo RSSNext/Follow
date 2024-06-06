@@ -153,7 +153,7 @@ export function EntryColumn() {
       onClick={() => setActiveEntry(null)}
     >
       <ListHeader />
-      {virtuosoOptions.totalCount !== 0 ? (
+      {virtuosoOptions.totalCount === 0 ? (
         <EmptyList />
       ) : activeList?.view && views[activeList.view].gridMode ?
           (

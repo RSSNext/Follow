@@ -50,7 +50,7 @@ export function Component() {
       ) : (
         <div className="flex flex-col gap-3">
           <Button
-            className="bg-black text-lg text-white"
+            className="!bg-black text-lg text-white"
             size="xl"
             onClick={() => {
               loginHandler("github")
