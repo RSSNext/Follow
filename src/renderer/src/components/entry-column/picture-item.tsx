@@ -32,6 +32,7 @@ export function PictureItem({ entryId, entryPreview }: UniversalItemProps) {
             <FeedIcon
               className="mr-0.5 inline-block size-[18px]"
               feed={entry.feeds}
+              entry={entry.entries}
             />
             <span>{entry.feeds.title}</span>
             <span className="text-zinc-500">·</span>

@@ -11,7 +11,7 @@ export function AudioItem({ entryId, entryPreview }: UniversalItemProps) {
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <div className="flex px-2 py-4">
-      <FeedIcon feed={entry.feeds} />
+      <FeedIcon feed={entry.feeds} entry={entry.entries} />
       <div className="-mt-0.5 line-clamp-5 flex-1 text-sm leading-tight">
         <div className="space-x-1 text-[10px] text-zinc-500">
           <span>{entry.feeds.title}</span>
