@@ -27,7 +27,8 @@ interface EntryActions {
 
     pageParam?: string
   }) => Promise<InferResponseType<typeof apiClient.entries.$post>>
-  upsert: (feedId: string, entry: EntryModel) => void
+  upsertMany: (entries: EntryModel[]) => void
+
   optimisticUpdate: (entryId: string, changed: Partial<EntryModel>) => void
   optimisticUpdateManyByFeedId: (
     feedId: string,
@@ -68,9 +69,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
     const data = await res.json()
 
     if (data.data) {
-      data.data.forEach((entry: EntryModel) => {
-        get().upsert(entry.feeds.id, entry)
-      })
+      get().upsertMany(data.data)
     }
     return data
   },
@@ -112,14 +111,17 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
       }),
     )
   },
-  upsert(feedId: string, entry: EntryModel) {
+
+  upsertMany(entries) {
     set((state) =>
       produce(state, (draft) => {
-        if (!draft.entries[feedId]) {
-          draft.entries[feedId] = []
+        for (const entry of entries) {
+          if (!draft.entries[entry.feeds.id]) {
+            draft.entries[entry.feeds.id] = []
+          }
+          draft.entries[entry.feeds.id].push(entry.entries.id)
+          draft.flatMapEntries[entry.entries.id] = entry
         }
-        draft.entries[feedId].push(entry.entries.id)
-        draft.flatMapEntries[entry.entries.id] = entry
         return draft
       }),
     )
