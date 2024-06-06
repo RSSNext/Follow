@@ -59,7 +59,7 @@ export function DiscoverImport() {
     mutationFn: async (file: File) => {
       const formData = new FormData()
       formData.append("file", file)
-      // FIXME: if post data is form data, hono bc not support this.
+      // FIXME: if post data is form data, hono hc not support this.
 
       const { data } = await apiFetch<{
         data: {

@@ -9,6 +9,10 @@ export const apiFetch = ofetch.create({
   onRequest: async ({ options }) => {
     if (options.method && options.method.toLowerCase() !== "get") {
       const csrfToken = await getCsrfToken()
+
+      if (typeof options.body === "string") {
+        options.body = JSON.parse(options.body)
+      }
       if (!options.body) {
         options.body = {}
       }
@@ -21,26 +25,6 @@ export const apiFetch = ofetch.create({
   },
 })
 
-export const apiClient = hc<AppType>(import.meta.env.VITE_API_URL, {
-  fetch: async (input, options = {}) => {
-    options.credentials = "include"
-    if (options.method && options.method.toLowerCase() !== "get") {
-      const csrfToken = await getCsrfToken()
-      if (!options.body) {
-        options.body = JSON.stringify({})
-      }
-      if (options.body instanceof FormData) {
-        options.body.append("csrfToken", csrfToken)
-      } else {
-        if (typeof options.body === "string") {
-          options.body = JSON.stringify({
-            csrfToken,
-            ...JSON.parse(options.body),
-          })
-        }
-      }
-    }
-
-    return ofetch(input.toString(), options)
-  },
+export const apiClient = hc<AppType>("", {
+  fetch: async (input, options = {}) => apiFetch(input.toString(), options),
 })
