@@ -227,8 +227,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         title: string | null;
                         content: string | null;
                         id: string;
-                        feedId: string;
                         url: string | null;
+                        feedId: string;
                         guid: string;
                         author: string | null;
                         authorUrl: string | null;
@@ -385,9 +385,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                             title?: string | undefined;
                         }[] | null | undefined;
                     };
-                    collections: {
-                        createdAt: string;
-                    };
                     feeds: {
                         description: string | null;
                         title: string | null;
@@ -402,6 +399,9 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         ttl: number | null;
                         errorMessage: string | null;
                         errorAt: string | null;
+                    };
+                    collections: {
+                        createdAt: string;
                     };
                     read: boolean | null;
                 } | undefined;
@@ -424,8 +424,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     title: string | null;
                     content: string | null;
                     id: string;
-                    feedId: string;
                     url: string | null;
+                    feedId: string;
                     guid: string;
                     author: string | null;
                     authorUrl: string | null;
@@ -459,7 +459,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 data: {
                     title: string | null;
                     userId: string;
-                    feedId: string;
                     feeds: {
                         description: string | null;
                         title: string | null;
@@ -475,6 +474,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         errorMessage: string | null;
                         errorAt: string | null;
                     };
+                    feedId: string;
                     view: number;
                     category: string | null;
                     isPrivate: boolean | null;
@@ -501,8 +501,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $delete: {
             input: {
                 json: {
-                    feedId?: string | undefined;
                     url?: string | undefined;
+                    feedId?: string | undefined;
                 };
             };
             output: {

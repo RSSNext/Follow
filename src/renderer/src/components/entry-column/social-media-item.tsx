@@ -14,7 +14,7 @@ export function SocialMediaItem({ entryId, entryPreview }: UniversalItemProps) {
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <div className="flex w-full px-2 py-3">
-      <FeedIcon feed={entry.feeds} />
+      <FeedIcon feed={entry.feeds} entry={entry.entries} />
       <div className="min-w-0 flex-1">
         <div className="-mt-0.5 line-clamp-5 flex-1 text-sm">
           <div className="space-x-1">
