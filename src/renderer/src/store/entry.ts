@@ -69,9 +69,6 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
     const data = await res.json()
 
     if (data.data) {
-      // data.data.forEach((entry: EntryModel) => {
-      //   get().upsert(entry.feeds.id, entry);
-      // });
       get().upsertMany(data.data)
     }
     return data
