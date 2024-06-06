@@ -183,7 +183,7 @@ export function DiscoverForm({ type }: { type: string }) {
                         </Button>
                       ) : (
                         <Button
-                          onClick={() =>
+                          onClick={() => {
                             openElectronWindow(
                               `${DEEPLINK_SCHEME}add${
                                 item.feed.id ?
@@ -194,7 +194,8 @@ export function DiscoverForm({ type }: { type: string }) {
                                 resizeable: false,
                                 height: 550,
                               },
-                            )}
+                            )
+                          }}
                         >
                           Follow
                         </Button>
