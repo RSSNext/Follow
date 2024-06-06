@@ -29,6 +29,7 @@ import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
 import { useShallow } from "zustand/react/shallow"
 
+import { EmptyIcon } from "../icons/empty"
 import { ArticleItem } from "./article-item"
 import { AudioItem } from "./audio-item"
 import { EntryItemWrapper } from "./item-wrapper"
@@ -149,17 +150,21 @@ export function EntryColumn() {
   return (
     <div
       className="relative flex h-full flex-1 flex-col"
-      onClick={() => setActiveEntry?.(null)}
+      onClick={() => setActiveEntry(null)}
     >
       <ListHeader />
-      {activeList?.view && views[activeList.view].gridMode ? (
-        <VirtuosoGrid
-          listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
-          {...virtuosoOptions}
-        />
-      ) : (
-        <Virtuoso {...virtuosoOptions} />
-      )}
+      {virtuosoOptions.totalCount === 0 ? (
+        <EmptyList />
+      ) : activeList?.view && views[activeList.view].gridMode ?
+          (
+            <VirtuosoGrid
+              listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
+              {...virtuosoOptions}
+            />
+          ) :
+          (
+            <Virtuoso {...virtuosoOptions} />
+          )}
     </div>
   )
 }
@@ -278,10 +283,15 @@ const EmptyList = (props, ref) => {
       {...props}
       ref={ref}
     >
-      {unreadOnly && (
+      {unreadOnly ? (
         <>
           <i className="i-mingcute-celebrate-line text-4xl" />
           Zero Unread
+        </>
+      ) : (
+        <>
+          <EmptyIcon className="size-9" />
+          Zero Items
         </>
       )}
     </m.div>
