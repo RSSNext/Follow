@@ -279,17 +279,17 @@ const EmptyList = (props, ref) => {
       initial={{ opacity: 0.01, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0.01, y: -100 }}
-      className="-mt-10 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
+      className="-mt-20 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
       {...props}
       ref={ref}
     >
       {unreadOnly ? (
         <>
-          <i className="i-mingcute-celebrate-line text-4xl" />
+          <i className="i-mingcute-celebrate-line -mt-11 text-4xl" />
           Zero Unread
         </>
       ) : (
-        <div className="flex -translate-y-5 flex-col items-center justify-center gap-2">
+        <div className="flex -translate-y-6 flex-col items-center justify-center gap-2">
           <EmptyIcon className="size-9" />
           Zero Items
         </div>
