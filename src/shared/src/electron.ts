@@ -2,7 +2,7 @@ import { DEEPLINK_SCHEME } from "@shared/constants"
 
 const ELECTRON_QUERY_KEY = "__electron"
 export interface OpenElectronWindowOptions {
-  resizeable?: boolean
+  resizable?: boolean
   height?: number
   width?: number
 }

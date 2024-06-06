@@ -1,22 +1,26 @@
 import path from "node:path"
 
 import { is } from "@electron-toolkit/utils"
+import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, shell } from "electron"
 
 import icon from "../../resources/icon.png?asset"
+import { store } from "./store"
 
-export function createWindow(options?: {
-  extraPath?: string
-  width?: number
-  height?: number
-  resizeable?: boolean
-}) {
+export function createWindow(
+  options: {
+    extraPath?: string
+    height: number
+    width: number
+  } & BrowserWindowConstructorOptions,
+) {
+  const { extraPath, height, width, ...configs } = options
   // Create the browser window.
   const window = new BrowserWindow({
-    width: options?.width || 1200,
-    height: options?.height || 900,
+    width,
+    height,
     show: false,
-    resizable: options?.resizeable ?? true,
+    resizable: configs?.resizable ?? true,
     autoHideMenuBar: true,
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
@@ -34,6 +38,7 @@ export function createWindow(options?: {
     backgroundColor: "#00000000", // transparent hexadecimal or anything with transparency,
     vibrancy: "sidebar",
     visualEffectState: "active",
+    ...configs,
   })
 
   window.on("ready-to-show", () => {
@@ -88,6 +93,38 @@ export function createWindow(options?: {
       })
     },
   )
+
+  return window
+}
+
+export const createMainWindow = () => {
+  const storeKey = "windowState"
+  const windowState = store.get(storeKey) as {
+    height: number
+    width: number
+    x: number
+    y: number
+  } | null
+
+  const window = createWindow({
+    width: windowState?.width || 1200,
+    height: windowState?.height || 900,
+    x: windowState?.x,
+    y: windowState?.y,
+    minWidth: 1024,
+    minHeight: 500,
+  })
+
+  // 在窗口关闭时保存窗口的大小和位置
+  window.on("close", () => {
+    const bounds = window.getBounds()
+    store.set(storeKey, {
+      width: bounds.width,
+      height: bounds.height,
+      x: bounds.x,
+      y: bounds.y,
+    })
+  })
 
   return window
 }
