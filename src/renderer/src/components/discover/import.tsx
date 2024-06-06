@@ -59,7 +59,8 @@ export function DiscoverImport() {
     mutationFn: async (file: File) => {
       const formData = new FormData()
       formData.append("file", file)
-      // TODO use api client
+      // FIXME: if post data is form data, hono bc not support this.
+
       const { data } = await apiFetch<{
         data: {
           successfulItems: FeedResponseList
