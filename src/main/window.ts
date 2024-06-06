@@ -115,7 +115,6 @@ export const createMainWindow = () => {
     minHeight: 500,
   })
 
-  // 在窗口关闭时保存窗口的大小和位置
   window.on("close", () => {
     const bounds = window.getBounds()
     store.set(storeKey, {
