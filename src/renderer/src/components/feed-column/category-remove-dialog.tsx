@@ -7,7 +7,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@renderer/components/ui/alert-dialog"
-import { apiClient, apiFetch } from "@renderer/lib/api-fetch"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
 

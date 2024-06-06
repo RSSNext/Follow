@@ -12,7 +12,7 @@ import {
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
 import { useToast } from "@renderer/components/ui/use-toast"
-import { apiClient, apiFetch } from "@renderer/lib/api-fetch"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"

@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
-import { apiClient, apiFetch } from "@renderer/lib/api-fetch"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"

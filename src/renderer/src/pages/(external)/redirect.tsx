@@ -1,6 +1,6 @@
 import { Button } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
-import { apiClient, apiFetch } from "@renderer/lib/api-fetch"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { APP_NAME } from "@renderer/lib/constants"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import { useEffect } from "react"

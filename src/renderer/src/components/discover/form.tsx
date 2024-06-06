@@ -17,7 +17,6 @@ import {
 import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
 import { apiClient } from "@renderer/lib/api-fetch"
-import type { DiscoverResponse } from "@renderer/models"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import { openElectronWindow } from "@shared/electron"
 import { useMutation } from "@tanstack/react-query"

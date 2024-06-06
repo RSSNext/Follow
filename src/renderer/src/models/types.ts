@@ -1,5 +1,4 @@
 import type { apiClient } from "@renderer/lib/api-fetch"
-import type { InferResponseType } from "hono/client"
 
 export type ExtractBizResponse<T extends (...args: any[]) => any> = Exclude<
   Awaited<ReturnType<T>>,

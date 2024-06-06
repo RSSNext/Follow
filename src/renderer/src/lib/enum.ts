@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-restricted-syntax
 export enum FeedViewType {
   Articles = 0,
   SocialMedia = 1,

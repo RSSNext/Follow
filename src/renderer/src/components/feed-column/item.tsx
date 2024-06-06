@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useToast } from "@renderer/components/ui/use-toast"
-import { apiClient, apiFetch } from "@renderer/lib/api-fetch"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
 import { showNativeMenu } from "@renderer/lib/native-menu"

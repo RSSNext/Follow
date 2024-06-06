@@ -1,7 +1,6 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
-import type { InferResponseType } from "hono/client"
 import { produce } from "immer"
 import { omit } from "lodash-es"
 

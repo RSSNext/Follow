@@ -3,7 +3,7 @@ import {
   CollapsibleTrigger,
 } from "@renderer/components/ui/collapsible"
 import { Dialog } from "@renderer/components/ui/dialog"
-import { apiClient, apiFetch } from "@renderer/lib/api-fetch"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
 import { levels } from "@renderer/lib/constants"
 import { showNativeMenu } from "@renderer/lib/native-menu"
