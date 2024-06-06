@@ -231,6 +231,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         url: string | null;
                         guid: string;
                         author: string | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
                         changedAt: string;
                         publishedAt: string;
                         images: string[] | null;
@@ -316,6 +318,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         url: string | null;
                         guid: string;
                         author: string | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
                         changedAt: string;
                         publishedAt: string;
                         images: string[] | null;
@@ -368,6 +372,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         url: string | null;
                         guid: string;
                         author: string | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
                         changedAt: string;
                         publishedAt: string;
                         images: string[] | null;
@@ -422,6 +428,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     url: string | null;
                     guid: string;
                     author: string | null;
+                    authorUrl: string | null;
+                    authorAvatar: string | null;
                     changedAt: string;
                     publishedAt: string;
                     images: string[] | null;
