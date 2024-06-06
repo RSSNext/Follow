@@ -153,7 +153,7 @@ export function EntryColumn() {
       onClick={() => setActiveEntry(null)}
     >
       <ListHeader />
-      {virtuosoOptions.totalCount === 0 ? (
+      {virtuosoOptions.totalCount !== 0 ? (
         <EmptyList />
       ) : activeList?.view && views[activeList.view].gridMode ?
           (
@@ -289,10 +289,10 @@ const EmptyList = (props, ref) => {
           Zero Unread
         </>
       ) : (
-        <>
+        <div className="flex -translate-y-5 flex-col items-center justify-center gap-2">
           <EmptyIcon className="size-9" />
           Zero Items
-        </>
+        </div>
       )}
     </m.div>
   )
