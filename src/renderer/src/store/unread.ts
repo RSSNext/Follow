@@ -1,5 +1,5 @@
+import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedViewType } from "@renderer/lib/enum"
-import { apiClient } from "@renderer/queries/api-fetch"
 import { produce } from "immer"
 import { omit } from "lodash-es"
 
@@ -19,9 +19,9 @@ export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
   data: {},
 
   async fetchUnreadByView(view) {
-    const unread = await (
+    const unread = (
       await apiClient.reads.$get({ query: { view: String(view) } })
-    ).json()
+    )
 
     const { data } = unread
     for (const feedId in data) {

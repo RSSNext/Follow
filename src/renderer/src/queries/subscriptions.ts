@@ -1,6 +1,6 @@
+import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import type { FeedViewType } from "@renderer/lib/enum"
-import { apiClient } from "@renderer/queries/api-fetch"
 import { subscriptionActions, unreadActions } from "@renderer/store"
 
 export const subscription = {
@@ -23,11 +23,9 @@ export const subscription = {
     ),
   categories: (view?: number) =>
     defineQuery(["subscription-categories", view], async () => {
-      const res = await (
-        await apiClient.categories.$get({
-          query: { view: String(view) },
-        })
-      ).json()
+      const res = await apiClient.categories.$get({
+        query: { view: String(view) },
+      })
 
       return res.data
     }),

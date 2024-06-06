@@ -22,11 +22,11 @@ import {
 import { Switch } from "@renderer/components/ui/switch"
 import { useToast } from "@renderer/components/ui/use-toast"
 import { useBizQuery } from "@renderer/hooks/useBizQuery"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
-import { apiFetch } from "@renderer/queries/api-fetch"
 import { useFeed } from "@renderer/queries/feed"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
@@ -68,17 +68,20 @@ export function Component() {
 
   const { toast } = useToast()
   const followMutation = useMutation({
-    mutationFn: async (values: z.infer<typeof formSchema>) =>
-      apiFetch("/subscriptions", {
-        method: isSubscribed ? "PATCH" : "POST",
-        body: {
-          url: feed.data?.feed.url,
-          view: Number.parseInt(values.view),
-          category: values.category,
-          isPrivate: values.isPrivate,
-          ...(isSubscribed && { feedId: feed.data?.feed.id }),
-        },
-      }),
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      const body = {
+        url: feed.data?.feed.url,
+        view: Number.parseInt(values.view),
+        category: values.category,
+        isPrivate: values.isPrivate,
+        ...(isSubscribed && { feedId: feed.data?.feed.id }),
+      }
+      const $method = isSubscribed ? apiClient.subscriptions.$patch : apiClient.subscriptions.$post
+      $method({
+        // @ts-expect-error
+        json: body,
+      })
+    },
     onSuccess: (_, variables) => {
       if (
         isSubscribed &&
@@ -122,116 +125,114 @@ export function Component() {
         <img src="../icon.svg" alt="logo" className="size-8" />
         Add follow
       </div>
-      {feed.isLoading ?
+      {feed.isLoading ? (
+        <div className="flex flex-1 items-center justify-center">
+          Loading...
+        </div>
+      ) : !feed.data?.feed ?
           (
-            <div className="flex flex-1 items-center justify-center">
-              Loading...
+            <div className="flex flex-1 flex-col items-center justify-center gap-2">
+              <p>Feed not found.</p>
+              <p>{url}</p>
             </div>
           ) :
-          !feed.data?.feed ?
-              (
-                <div className="flex flex-1 flex-col items-center justify-center gap-2">
-                  <p>Feed not found.</p>
-                  <p>{url}</p>
-                </div>
-              ) :
-              (
-                <div className="space-y-4">
-                  <Card>
-                    <CardHeader>
-                      <FollowSummary feed={feed.data?.feed} />
-                    </CardHeader>
-                  </Card>
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                      <FormField
-                        control={form.control}
-                        name="view"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>View</FormLabel>
-                            <Select onValueChange={field.onChange} value={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {views.map((view, index) => (
-                                  <SelectItem key={view.name} value={`${index}`}>
-                                    <div className="flex items-center gap-2">
-                                      <span className={cn(view.className, "flex")}>
-                                        {view.icon}
-                                      </span>
-                                      <span>{view.name}</span>
-                                    </div>
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                          <FormItem>
-                            <div>
-                              <FormLabel>Category</FormLabel>
-                              <FormDescription>
-                                By default, your follows will be grouped by website.
-                              </FormDescription>
-                            </div>
-                            <FormControl>
-                              <AutoComplete
-                                options={categories.data || []}
-                                emptyMessage="No results."
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="isPrivate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <FormLabel>Private Follow</FormLabel>
-                                <FormDescription>
-                                  Whether this follow is publicly visible on your
-                                  profile page.
-                                </FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch
-                                  className="shrink-0"
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                            </div>
-                          </FormItem>
-                        )}
-                      />
-                      <div className="flex justify-end">
-                        <Button
-                          size="sm"
-                          type="submit"
-                          isLoading={followMutation.isPending}
-                        >
-                          {isSubscribed ? "Update" : "Follow"}
-                        </Button>
-                      </div>
-                    </form>
-                  </Form>
-                </div>
-              )}
+          (
+            <div className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <FollowSummary feed={feed.data?.feed} />
+                </CardHeader>
+              </Card>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="view"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>View</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {views.map((view, index) => (
+                              <SelectItem key={view.name} value={`${index}`}>
+                                <div className="flex items-center gap-2">
+                                  <span className={cn(view.className, "flex")}>
+                                    {view.icon}
+                                  </span>
+                                  <span>{view.name}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="category"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div>
+                          <FormLabel>Category</FormLabel>
+                          <FormDescription>
+                            By default, your follows will be grouped by website.
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <AutoComplete
+                            options={categories.data || []}
+                            emptyMessage="No results."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="isPrivate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <FormLabel>Private Follow</FormLabel>
+                            <FormDescription>
+                              Whether this follow is publicly visible on your
+                              profile page.
+                            </FormDescription>
+                          </div>
+                          <FormControl>
+                            <Switch
+                              className="shrink-0"
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex justify-end">
+                    <Button
+                      size="sm"
+                      type="submit"
+                      isLoading={followMutation.isPending}
+                    >
+                      {isSubscribed ? "Update" : "Follow"}
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </div>
+          )}
     </div>
   )
 }

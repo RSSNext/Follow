@@ -1,5 +1,9 @@
-import type { apiClient } from "@renderer/queries/api-fetch"
-import type { InferResponseType } from "hono/client"
+import type { apiClient } from "@renderer/lib/api-fetch"
+
+export type ExtractBizResponse<T extends (...args: any[]) => any> = Exclude<
+  Awaited<ReturnType<T>>,
+  undefined
+>
 
 export type ActiveList = {
   level: string
@@ -11,24 +15,19 @@ export type ActiveList = {
 
 export type FeedResponse = SubscriptionResponse[number]["feeds"]
 
-export type FeedModel = Extract<
-  InferResponseType<typeof apiClient.feeds.$get>,
-  { code: 0 }
+export type FeedModel = ExtractBizResponse<
+  typeof apiClient.feeds.$get
 >["data"]["feed"]
 
 export type SubscriptionResponse = Array<
-  Exclude<
-    Extract<
-      InferResponseType<typeof apiClient.subscriptions.$get>,
-      { code: 0 }
-    >["data"],
-    undefined
-  >[number] & { unread?: number }
+  ExtractBizResponse<typeof apiClient.subscriptions.$get>["data"][number] & {
+    unread?: number
+  }
 >
 
 export type EntryResponse = Exclude<
   Extract<
-    InferResponseType<typeof apiClient.entries.$get>,
+    ExtractBizResponse<typeof apiClient.entries.$get>,
     { code: 0 }
   >["data"],
   undefined
@@ -36,18 +35,15 @@ export type EntryResponse = Exclude<
 
 export type EntriesResponse = Array<
   Exclude<
-    Extract<
-      InferResponseType<typeof apiClient.entries.$post>,
-      { code: 0 }
-    >["data"],
+    Awaited<ReturnType<typeof apiClient.entries.$post>>["data"],
     undefined
-  >[number]
->
+  >
+>[number]
 
 export type EntryModel = EntriesResponse[number]
 export type DiscoverResponse = Array<
   Exclude<
-    InferResponseType<typeof apiClient.discover.$post>["data"],
+    ExtractBizResponse<typeof apiClient.discover.$post>["data"],
     undefined
   >[number]
 >

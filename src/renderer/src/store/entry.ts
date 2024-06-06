@@ -1,7 +1,6 @@
+import { apiClient } from "@renderer/lib/api-fetch"
 import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
-import { apiClient } from "@renderer/queries/api-fetch"
-import type { InferResponseType } from "hono/client"
 import { produce } from "immer"
 import { omit } from "lodash-es"
 
@@ -26,7 +25,7 @@ interface EntryActions {
     read?: boolean
 
     pageParam?: string
-  }) => Promise<InferResponseType<typeof apiClient.entries.$post>>
+  }) => Promise<Awaited<ReturnType<typeof apiClient.entries.$post>>>
   upsertMany: (entries: EntryModel[]) => void
 
   optimisticUpdate: (entryId: string, changed: Partial<EntryModel>) => void
@@ -54,7 +53,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
 
     pageParam,
   }) => {
-    const res = await apiClient.entries.$post({
+    const data = await apiClient.entries.$post({
       json: {
         publishedAfter: pageParam as string,
         read,
@@ -65,8 +64,6 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
         }),
       },
     })
-
-    const data = await res.json()
 
     if (data.data) {
       get().upsertMany(data.data)

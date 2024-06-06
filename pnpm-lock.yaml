@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  hono@4.4.2:
+    hash: ofhxnfpal3nvwlen5lybasjjdm
+    path: patches/hono@4.4.2.patch
+
 importers:
 
   .:
@@ -22,7 +27,7 @@ importers:
         version: 5.0.1
       '@hono/auth-js':
         specifier: 1.0.8
-        version: 1.0.8(@auth/core@0.31.0)(hono@4.4.2)(react@18.3.1)
+        version: 1.0.8(@auth/core@0.31.0)(hono@4.4.2(patch_hash=ofhxnfpal3nvwlen5lybasjjdm))(react@18.3.1)
       '@hookform/resolvers':
         specifier: 3.4.2
         version: 3.4.2(react-hook-form@7.51.5(react@18.3.1))
@@ -6298,10 +6303,10 @@ snapshots:
 
   '@gar/promisify@1.1.3': {}
 
-  '@hono/auth-js@1.0.8(@auth/core@0.31.0)(hono@4.4.2)(react@18.3.1)':
+  '@hono/auth-js@1.0.8(@auth/core@0.31.0)(hono@4.4.2(patch_hash=ofhxnfpal3nvwlen5lybasjjdm))(react@18.3.1)':
     dependencies:
       '@auth/core': 0.31.0
-      hono: 4.4.2
+      hono: 4.4.2(patch_hash=ofhxnfpal3nvwlen5lybasjjdm)
       react: 18.3.1
 
   '@hookform/resolvers@3.4.2(react-hook-form@7.51.5(react@18.3.1))':
@@ -9150,7 +9155,7 @@ snapshots:
     dependencies:
       hermes-estree: 0.20.1
 
-  hono@4.4.2: {}
+  hono@4.4.2(patch_hash=ofhxnfpal3nvwlen5lybasjjdm): {}
 
   hosted-git-info@2.8.9: {}
 

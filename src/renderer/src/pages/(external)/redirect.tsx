@@ -1,7 +1,7 @@
 import { Button } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { APP_NAME } from "@renderer/lib/constants"
-import { apiFetch } from "@renderer/queries/api-fetch"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
@@ -10,13 +10,7 @@ export function Component() {
   const navigate = useNavigate()
 
   const getCallbackUrl = async () => {
-    const { data } = await apiFetch<{
-      data: {
-        sessionToken: string
-      }
-    }>("/auth-app/new-session", {
-      method: "POST",
-    })
+    const { data } = await apiClient["auth-app"]["new-session"].$post({})
     return `${DEEPLINK_SCHEME}auth?token=${data.sessionToken}`
   }
 
@@ -44,8 +38,8 @@ export function Component() {
         {" "}
         {APP_NAME}
         {" "}
-        Account. Now is the time to
-        open
+        Account. Now is the time
+        to open
         {" "}
         {APP_NAME}
         {" "}
