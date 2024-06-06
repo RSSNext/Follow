@@ -12,7 +12,7 @@ import {
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
 import { useToast } from "@renderer/components/ui/use-toast"
-import { apiFetch } from "@renderer/queries/api-fetch"
+import { apiClient, apiFetch } from "@renderer/lib/api-fetch"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -39,9 +39,8 @@ export function Component() {
 
   const updateMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) =>
-      apiFetch("/auth-app/update-account", {
-        method: "PATCH",
-        body: values,
+      apiClient["auth-app"]["update-account"].$patch({
+        json: values,
       }),
     onSuccess: () => {
       toast({

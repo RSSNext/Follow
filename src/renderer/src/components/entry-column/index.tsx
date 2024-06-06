@@ -5,12 +5,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { buildStorageNS } from "@renderer/lib/ns"
 import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
-import { apiClient } from "@renderer/queries/api-fetch"
 import { useEntries } from "@renderer/queries/entries"
 import {
   feedActions,

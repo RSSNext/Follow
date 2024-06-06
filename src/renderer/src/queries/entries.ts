@@ -1,7 +1,7 @@
 import { UnprocessableEntityError } from "@renderer/biz/error"
 import { useBizInfiniteQuery, useBizQuery } from "@renderer/hooks/useBizQuery"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import { apiClient } from "@renderer/queries/api-fetch"
 import { entryActions } from "@renderer/store/entry"
 
 export const entries = {
@@ -42,9 +42,8 @@ export const entries = {
             id,
           },
         })
-        const json = await res.json()
 
-        return json.data
+        return res.data
       },
       {
         rootKey: ["entries"],
@@ -59,9 +58,8 @@ export const entries = {
             id,
           },
         })
-        const json = await res.json()
 
-        return json.data
+        return res.data
       },
       {
         rootKey: ["entries-preview"],

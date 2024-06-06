@@ -2,8 +2,8 @@ import {
   UnprocessableFeedError,
 } from "@renderer/biz/error"
 import { useBizQuery } from "@renderer/hooks/useBizQuery"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import { apiClient } from "@renderer/queries/api-fetch"
 
 export const feed = {
   byId: ({
@@ -25,9 +25,8 @@ export const feed = {
             url,
           },
         })
-        const json = await res.json()
 
-        return json.data
+        return res.data
       },
       {
         rootKey: ["feed"],

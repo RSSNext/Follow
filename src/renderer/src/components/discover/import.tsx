@@ -10,10 +10,10 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
+import { apiClient, apiFetch } from "@renderer/lib/api-fetch"
 import { cn } from "@renderer/lib/utils"
 import type { FeedResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
-import { apiFetch } from "@renderer/queries/api-fetch"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -59,6 +59,7 @@ export function DiscoverImport() {
     mutationFn: async (file: File) => {
       const formData = new FormData()
       formData.append("file", file)
+      // TODO use api client
       const { data } = await apiFetch<{
         data: {
           successfulItems: FeedResponseList
@@ -69,6 +70,7 @@ export function DiscoverImport() {
         method: "POST",
         body: formData,
       })
+
       return data
     },
     onSuccess: () => {

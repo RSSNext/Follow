@@ -8,13 +8,13 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useToast } from "@renderer/components/ui/use-toast"
+import { apiClient, apiFetch } from "@renderer/lib/api-fetch"
 import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { SubscriptionResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
-import { apiFetch } from "@renderer/queries/api-fetch"
 import {
   feedActions,
   useFeedActiveList,
@@ -49,12 +49,12 @@ export function FeedItem({
 
   const deleteMutation = useMutation({
     mutationFn: async (feed: SubscriptionResponse[number]) =>
-      apiFetch("/subscriptions", {
-        method: "DELETE",
-        body: {
+      apiClient.subscriptions.$delete({
+        json: {
           feedId: feed.feedId,
         },
       }),
+
     onSuccess: (_, variables) => {
       Queries.subscription.byView(variables.view).invalidate()
 
@@ -73,11 +73,10 @@ export function FeedItem({
           <ToastAction
             altText="Undo"
             onClick={async () => {
-              await apiFetch("/subscriptions", {
-                method: "POST",
-                body: {
+              await apiClient.subscriptions.$post({
+                json: {
                   url: variables.feeds.url,
-                  view: feed.view,
+                  view: variables.view,
                   category: variables.category,
                   isPrivate: variables.isPrivate,
                 },

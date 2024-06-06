@@ -16,8 +16,8 @@ import {
 } from "@renderer/components/ui/form"
 import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
+import { apiClient } from "@renderer/lib/api-fetch"
 import type { DiscoverResponse } from "@renderer/models"
-import { apiFetch } from "@renderer/queries/api-fetch"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import { openElectronWindow } from "@shared/electron"
 import { useMutation } from "@tanstack/react-query"
@@ -64,15 +64,13 @@ export function DiscoverForm({ type }: { type: string }) {
   })
   const mutation = useMutation({
     mutationFn: async (keyword: string) => {
-      const { data } = await apiFetch<{
-        data: DiscoverResponse
-      }>("/discover", {
-        method: "POST",
-        body: {
+      const { data } = await apiClient.discover.$post({
+        json: {
           keyword,
           type: type === "rss" ? "rss" : "auto",
         },
       })
+
       return data
     },
   })
@@ -186,20 +184,18 @@ export function DiscoverForm({ type }: { type: string }) {
                         </Button>
                       ) : (
                         <Button
-                          onClick={
-                            () =>
-                              openElectronWindow(
-                                `${DEEPLINK_SCHEME}add${
-                                  item.feed.id ?
-                                    `?id=${item.feed.id}` :
-                                    `?url=${item.feed.url}`
-                                }`,
-                                {
-                                  resizeable: false,
-                                  height: 550,
-                                },
-                              )
-                          }
+                          onClick={() =>
+                            openElectronWindow(
+                              `${DEEPLINK_SCHEME}add${
+                                item.feed.id ?
+                                  `?id=${item.feed.id}` :
+                                  `?url=${item.feed.url}`
+                              }`,
+                              {
+                                resizeable: false,
+                                height: 550,
+                              },
+                            )}
                         >
                           Follow
                         </Button>

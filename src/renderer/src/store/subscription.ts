@@ -1,6 +1,6 @@
+import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedViewType } from "@renderer/lib/enum"
 import type { SubscriptionModel } from "@renderer/models"
-import { apiClient } from "@renderer/queries/api-fetch"
 import { produce } from "immer"
 import { omit } from "lodash-es"
 
@@ -23,11 +23,11 @@ export const useSubscriptionStore = createZustandStore<
   data: {},
 
   async fetchByView(view) {
-    const res = await (
-      await apiClient.subscriptions.$get({ query: { view: String(view) } })
-    ).json()
+    const res = await apiClient.subscriptions.$get({
+      query: { view: String(view) },
+    })
 
-    res.data.forEach((subscription: SubscriptionModel) => {
+    res.data.forEach((subscription) => {
       set((state) =>
         produce(state, (state) => {
           state.data[subscription.feeds.id] = subscription

@@ -116,5 +116,10 @@
   },
   "lint-staged": {
     "*": "eslint --fix"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "hono@4.4.2": "patches/hono@4.4.2.patch"
+    }
   }
 }

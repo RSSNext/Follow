@@ -1,7 +1,7 @@
 import { useToast } from "@renderer/components/ui/use-toast"
+import { apiClient, apiFetch } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
-import type { EntriesResponse } from "@renderer/models"
-import { apiClient, apiFetch } from "@renderer/queries/api-fetch"
+import type { EntriesResponse, EntryModel } from "@renderer/models"
 import { entryActions } from "@renderer/store/entry"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
@@ -12,7 +12,7 @@ export const useEntryActions = ({
   entry,
 }: {
   view?: number
-  entry?: EntriesResponse[number]
+  entry?: EntryModel
 }) => {
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
@@ -29,12 +29,12 @@ export const useEntryActions = ({
 
   const collect = useMutation({
     mutationFn: async () =>
-      apiFetch("/collections", {
-        method: "POST",
-        body: {
+      entry && apiClient.collections.$post({
+        json: {
           entryId: entry?.entries.id,
         },
       }),
+
     onMutate() {
       if (!entry) return
       entryActions.optimisticUpdate(entry.entries.id, {
@@ -52,12 +52,12 @@ export const useEntryActions = ({
   })
   const uncollect = useMutation({
     mutationFn: async () =>
-      apiFetch("/collections", {
-        method: "DELETE",
-        body: {
+      entry && apiClient.collections.$delete({
+        json: {
           entryId: entry?.entries.id,
         },
       }),
+
     onMutate() {
       if (!entry) return
       entryActions.optimisticUpdate(entry.entries.id, {
@@ -87,13 +87,12 @@ export const useEntryActions = ({
     },
   })
   const unread = useMutation({
-    mutationFn: async () =>
-      apiFetch("/reads", {
-        method: "DELETE",
-        body: {
-          entryId: entry?.entries.id,
-        },
-      }),
+    mutationFn: async () => entry && apiClient.reads.$delete({
+      json: {
+        entryId: entry.entries.id,
+      },
+    }),
+
     onMutate: () => {
       if (!entry) return
 
