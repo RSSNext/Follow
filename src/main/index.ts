@@ -5,11 +5,14 @@ import path from "node:path"
 import { registerIpcMain } from "@egoist/tipc/main"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { extractElectronWindowOptions } from "@shared/electron"
-import { app, BrowserWindow, Menu } from "electron"
+import { app, BrowserWindow } from "electron"
 
+import { registerAppMenu } from "./menu"
 import { router } from "./tipc"
-import { createWindow } from "./window"
+import { createMainWindow, createWindow } from "./window"
 
+let mainWindow: BrowserWindow
+export const getMainWindow = () => mainWindow
 registerIpcMain(router)
 
 if (process.defaultApp) {
@@ -23,10 +26,6 @@ if (process.defaultApp) {
 }
 
 app.dock.setIcon(path.join(__dirname, "../../resources/icon.png"))
-
-let mainWindow: BrowserWindow
-
-export const getMainWindow = () => mainWindow
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -42,13 +41,13 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  mainWindow = createWindow()
+  mainWindow = createMainWindow()
 
   app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) {
-      mainWindow = createWindow()
+      mainWindow = createMainWindow()
     }
   })
 
@@ -69,15 +68,14 @@ app.whenReady().then(() => {
         mainWindow.reload()
       }
     } else {
-      console.log("open-url", url)
       const options = extractElectronWindowOptions(url)
 
-      const { height, resizeable, width } = options || {}
+      const { height, resizable, width } = options || {}
       createWindow({
         extraPath: url.replace("follow:/", ""),
         width: width ?? 800,
         height: height ?? 600,
-        resizeable,
+        resizable,
       })
     }
   }
@@ -112,67 +110,4 @@ app.on("window-all-closed", () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
-
-Menu.setApplicationMenu(
-  Menu.buildFromTemplate([
-    {
-      role: "appMenu",
-      submenu: [
-        { role: "about" },
-        { type: "separator" },
-        {
-          label: "Settings...",
-          accelerator: "CmdOrCtrl+,",
-          click: () => {
-            createWindow({
-              extraPath: "/settings",
-              width: 800,
-              height: 600,
-            })
-          },
-        },
-        { type: "separator" },
-        { role: "services" },
-        { type: "separator" },
-        { role: "hide" },
-        { role: "hideOthers" },
-        { type: "separator" },
-        { role: "quit" },
-      ],
-    },
-    { role: "fileMenu" },
-    { role: "editMenu" },
-    { role: "viewMenu" },
-    { role: "windowMenu" },
-    { role: "help" },
-    {
-      label: "Dev",
-      submenu: [
-        {
-          label: "follow https://rsshub.app/twitter/user/DIYgod",
-          click: () => {
-            createWindow({
-              extraPath: `/add?url=${encodeURIComponent(
-                "https://rsshub.app/twitter/user/DIYgod",
-              )}`,
-              width: 800,
-              height: 600,
-            })
-          },
-        },
-        {
-          label: "follow https://diygod.me/feed",
-          click: () => {
-            createWindow({
-              extraPath: `/add?url=${encodeURIComponent(
-                "https://diygod.me/feed",
-              )}`,
-              width: 800,
-              height: 600,
-            })
-          },
-        },
-      ],
-    },
-  ]),
-)
+registerAppMenu()

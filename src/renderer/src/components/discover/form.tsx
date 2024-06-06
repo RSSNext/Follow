@@ -195,7 +195,7 @@ export function DiscoverForm({ type }: { type: string }) {
                                     `?url=${item.feed.url}`
                                 }`,
                                 {
-                                  resizeable: false,
+                                  resizable: false,
                                   height: 550,
                                 },
                               )

@@ -53,6 +53,7 @@
     "cmdk": "1.0.0",
     "dayjs": "1.11.11",
     "dotenv": "16.4.5",
+    "electron-store": "8.2.0",
     "electron-updater": "^6.1.7",
     "framer-motion": "11.2.9",
     "hast-util-to-jsx-runtime": "2.3.0",
