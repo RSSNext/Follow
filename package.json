@@ -101,7 +101,7 @@
     "electron-builder": "^24.9.1",
     "electron-vite": "^2.2.0",
     "eslint": "^9.3.0",
-    "eslint-config-hyoban": "3.0.0-beta.10",
+    "eslint-config-hyoban": "3.0.0-beta.16",
     "lint-staged": "15.2.5",
     "postcss": "8.4.38",
     "postcss-js": "4.0.1",
@@ -111,6 +111,11 @@
     "tailwindcss": "3.4.3",
     "typescript": "^5.4.5",
     "vite": "^5.2.12"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "hono@4.4.2": "patches/hono@4.4.2.patch"
+    }
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged"

@@ -13,8 +13,8 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
-import { apiFetch } from "@renderer/queries/api-fetch"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -43,9 +43,9 @@ export function CategoryRenameDialog({
 
   const renameMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) =>
-      apiFetch("/categories", {
-        method: "PATCH",
-        body: {
+
+      apiClient.categories.$patch({
+        json: {
           feedIdList,
           category: values.category,
         },
@@ -58,7 +58,6 @@ export function CategoryRenameDialog({
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("onSubmit", values)
     renameMutation.mutate(values)
   }
 

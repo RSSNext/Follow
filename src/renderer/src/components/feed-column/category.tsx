@@ -3,13 +3,13 @@ import {
   CollapsibleTrigger,
 } from "@renderer/components/ui/collapsible"
 import { Dialog } from "@renderer/components/ui/dialog"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
 import { levels } from "@renderer/lib/constants"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { FeedListModel } from "@renderer/models"
 import { Queries } from "@renderer/queries"
-import { apiFetch } from "@renderer/queries/api-fetch"
 import {
   feedActions,
   useFeedActiveList,
@@ -41,13 +41,13 @@ export function FeedCategory({
   const feedIdList = data.list.map((feed) => feed.feedId)
   const deleteMutation = useMutation({
     mutationFn: async () =>
-      apiFetch("/categories", {
-        method: "DELETE",
-        body: {
+      apiClient.categories.$delete({
+        json: {
           feedIdList,
           deleteSubscriptions: false,
         },
       }),
+
     onSuccess: () => {
       Queries.subscription.byView(view).invalidate()
     },

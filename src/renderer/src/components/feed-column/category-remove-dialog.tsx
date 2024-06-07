@@ -7,8 +7,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@renderer/components/ui/alert-dialog"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
-import { apiFetch } from "@renderer/queries/api-fetch"
 import { useMutation } from "@tanstack/react-query"
 
 export function CategoryRemoveDialog({
@@ -24,9 +24,9 @@ export function CategoryRemoveDialog({
 }) {
   const renameMutation = useMutation({
     mutationFn: async () =>
-      apiFetch("/categories", {
-        method: "DELETE",
-        body: {
+
+      apiClient.categories.$delete({
+        json: {
           feedIdList,
           deleteSubscriptions: false,
         },
