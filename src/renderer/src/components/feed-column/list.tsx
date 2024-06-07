@@ -168,7 +168,7 @@ export function FeedList({
         }}
       >
         <i className="i-mingcute-star-fill mr-2 text-orange-500" />
-        Collections
+        Starred
       </div>
       {data?.list?.length ? (
         sortedByUnread?.map((category) => (
