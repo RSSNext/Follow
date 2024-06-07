@@ -19,6 +19,7 @@ export const router = createBrowserRouter([
                 path: "",
                 lazy: () => import("./pages/(main)/(context)/index"),
               },
+
               {
                 path: "",
                 Component: Outlet,
@@ -60,15 +61,7 @@ export const router = createBrowserRouter([
                           },
                         ],
                       },
-                      {
-                        path: "add",
-                        children: [
-                          {
-                            path: "",
-                            lazy: () => import("./pages/(main)/add/index"),
-                          },
-                        ],
-                      },
+
                     ],
                   },
                 ],
@@ -138,6 +131,15 @@ export const router = createBrowserRouter([
           {
             path: "",
             lazy: () => import("./pages/preview"),
+          },
+        ],
+      },
+      {
+        path: "add",
+        children: [
+          {
+            path: "",
+            lazy: () => import("./pages/add/index"),
           },
         ],
       },
