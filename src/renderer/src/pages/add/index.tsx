@@ -79,7 +79,8 @@ export function Component() {
         ...(isSubscribed && { feedId: feed.data?.feed.id }),
       }
       const $method = isSubscribed ? apiClient.subscriptions.$patch : apiClient.subscriptions.$post
-      $method({
+
+      return $method({
         // @ts-expect-error
         json: body,
       })
