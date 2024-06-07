@@ -44,3 +44,26 @@ export const views = [
 ]
 
 export const APP_NAME = "Follow"
+
+export const settingTabs = [
+  {
+    name: "General",
+    path: "",
+    className: "i-mingcute-settings-7-line",
+  },
+  {
+    name: "Actions",
+    path: "actions",
+    className: "i-mingcute-bling-line",
+  },
+  {
+    name: "RSSHub",
+    path: "rsshub",
+    className: "i-mingcute-palette-line",
+  },
+  {
+    name: "Profile",
+    path: "profile",
+    className: "i-mingcute-user-setting-line",
+  },
+]

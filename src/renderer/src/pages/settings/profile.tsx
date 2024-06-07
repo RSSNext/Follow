@@ -1,5 +1,6 @@
 import { useSession } from "@hono/auth-js/react"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { SettingsTitle } from "@renderer/components/settings/title"
 import { Button } from "@renderer/components/ui/button"
 import {
   Form,
@@ -56,10 +57,7 @@ export function Component() {
 
   return (
     <>
-      <h1 className="mb-4 flex items-center gap-2 text-2xl font-bold">
-        <i className="i-mingcute-user-setting-line text-xl" />
-        Profile
-      </h1>
+      <SettingsTitle path="profile" className="mb-4" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

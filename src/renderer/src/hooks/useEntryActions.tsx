@@ -107,7 +107,7 @@ export const useEntryActions = ({
   const items = [
     [
       {
-        name: "Collect",
+        name: "Star",
         className: "i-mingcute-star-line",
         disabled: !!entry.collections,
         onClick: () => {
@@ -115,7 +115,7 @@ export const useEntryActions = ({
         },
       },
       {
-        name: "Uncollect",
+        name: "Unstar",
         className: "i-mingcute-star-fill text-orange-500",
         disabled: !entry.collections,
         onClick: () => {

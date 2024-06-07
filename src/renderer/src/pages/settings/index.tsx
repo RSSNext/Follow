@@ -1,12 +1,10 @@
 import { AppearanceSwitch } from "@renderer/components/appearance-switch"
+import { SettingsTitle } from "@renderer/components/settings/title"
 
 export function Component() {
   return (
     <>
-      <h1 className="mb-4 flex items-center gap-2 text-2xl font-bold">
-        <i className="i-mingcute-settings-7-line text-xl" />
-        General
-      </h1>
+      <SettingsTitle path="" className="mb-4" />
       <AppearanceSwitch />
     </>
   )
