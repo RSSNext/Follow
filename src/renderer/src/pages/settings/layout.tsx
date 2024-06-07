@@ -1,23 +1,6 @@
-import { cn } from "@renderer/lib/utils"
+import { SettingsTitle } from "@renderer/components/settings/title"
+import { settingTabs } from "@renderer/lib/constants"
 import { Link, Outlet, useLocation } from "react-router-dom"
-
-const tabs = [
-  {
-    name: "General",
-    path: "",
-    className: "i-mingcute-settings-7-line",
-  },
-  {
-    name: "RSSHub",
-    path: "rsshub",
-    className: "i-mingcute-palette-line",
-  },
-  {
-    name: "Profile",
-    path: "profile",
-    className: "i-mingcute-user-setting-line",
-  },
-]
 
 export function Component() {
   const location = useLocation()
@@ -25,28 +8,20 @@ export function Component() {
 
   return (
     <div className="flex h-screen flex-col">
-      {/* <div
-        className="h-10 border-b flex items-center pl-20 text-sm font-medium"
-        aria-hidden
-      >
-        {APP_NAME} Settings
-      </div> */}
       <div className="flex flex-1">
-        <div className="w-44 border-r p-3 pt-12 backdrop-blur">
-          <div className="mx-2 mb-3 flex items-center gap-1 text-xl font-bold">
+        <div className="w-44 border-r px-2.5 py-3 pt-3.5 backdrop-blur">
+          <div className="mb-3 flex justify-end">
             <img src="./icon.svg" alt="logo" className="size-6" />
-            Settings
           </div>
-          {tabs.map((t) => (
+          {settingTabs.map((t) => (
             <Link
               key={t.path}
-              className={`my-1 flex items-center rounded-md px-2.5 py-[3px] text-[15px] font-medium leading-loose text-foreground/70 transition-colors ${
+              className={`my-1 flex items-center rounded-md px-2.5 py-0.5 leading-loose text-foreground/70 transition-colors ${
                 tab === t.path ? "bg-native-active text-foreground/90" : ""
               }`}
               to={`/settings/${t.path}`}
             >
-              <i className={cn("mr-2", t.className)} />
-              <span>{t.name}</span>
+              <SettingsTitle path={t.path} className="text-[15px] font-medium" />
             </Link>
           ))}
         </div>
