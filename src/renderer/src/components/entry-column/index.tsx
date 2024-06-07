@@ -1,4 +1,4 @@
-import { Button, HeaderActionButton } from "@renderer/components/ui/button"
+import { ActionButton, Button } from "@renderer/components/ui/button"
 import {
   Popover,
   PopoverClose,
@@ -29,6 +29,7 @@ import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
 import { useShallow } from "zustand/react/shallow"
 
+import { EmptyIcon } from "../icons/empty"
 import { ArticleItem } from "./article-item"
 import { AudioItem } from "./audio-item"
 import { EntryItemWrapper } from "./item-wrapper"
@@ -149,17 +150,21 @@ export function EntryColumn() {
   return (
     <div
       className="relative flex h-full flex-1 flex-col"
-      onClick={() => setActiveEntry?.(null)}
+      onClick={() => setActiveEntry(null)}
     >
       <ListHeader />
-      {activeList?.view && views[activeList.view].gridMode ? (
-        <VirtuosoGrid
-          listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
-          {...virtuosoOptions}
-        />
-      ) : (
-        <Virtuoso {...virtuosoOptions} />
-      )}
+      {virtuosoOptions.totalCount === 0 ? (
+        <EmptyList />
+      ) : activeList?.view && views[activeList.view].gridMode ?
+          (
+            <VirtuosoGrid
+              listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
+              {...virtuosoOptions}
+            />
+          ) :
+          (
+            <Virtuoso {...virtuosoOptions} />
+          )}
     </div>
   )
 }
@@ -208,7 +213,7 @@ const ListHeader: FC = () => {
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
       <div className="flex w-full justify-end">
         <div className="relative z-[1] flex items-center gap-1 text-zinc-500">
-          <HeaderActionButton
+          <ActionButton
             tooltip={unreadOnly ? "Unread Only" : "All"}
             onClick={() => setUnreadOnly(!unreadOnly)}
           >
@@ -217,12 +222,12 @@ const ListHeader: FC = () => {
             ) : (
               <i className="i-mingcute-round-line" />
             )}
-          </HeaderActionButton>
+          </ActionButton>
           <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
             <PopoverTrigger>
-              <HeaderActionButton onClick={() => {}} tooltip="Mark All as Read">
+              <ActionButton onClick={() => {}} tooltip="Mark All as Read">
                 <i className="i-mingcute-check-circle-line" />
-              </HeaderActionButton>
+              </ActionButton>
             </PopoverTrigger>
             <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[15px] font-medium">
               <div>Mark all as read?</div>
@@ -274,15 +279,20 @@ const EmptyList = (props, ref) => {
       initial={{ opacity: 0.01, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0.01, y: -100 }}
-      className="-mt-10 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
+      className="-mt-20 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
       {...props}
       ref={ref}
     >
-      {unreadOnly && (
+      {unreadOnly ? (
         <>
-          <i className="i-mingcute-celebrate-line text-4xl" />
+          <i className="i-mingcute-celebrate-line -mt-11 text-3xl" />
           Zero Unread
         </>
+      ) : (
+        <div className="flex -translate-y-6 flex-col items-center justify-center gap-2">
+          <EmptyIcon className="size-[30px]" />
+          Zero Items
+        </div>
       )}
     </m.div>
   )

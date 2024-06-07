@@ -25,6 +25,7 @@ import { useBizQuery } from "@renderer/hooks/useBizQuery"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
 import { views } from "@renderer/lib/constants"
+import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useFeed } from "@renderer/queries/feed"
@@ -44,6 +45,7 @@ export function Component() {
   const paramUrl = urlSearchParams.get("url")
   const url = paramUrl ? decodeURIComponent(paramUrl) : undefined
   const id = urlSearchParams.get("id") || undefined
+  const defaultView = urlSearchParams.get("view") || FeedViewType.Articles
 
   const feed = useFeed({
     url,
@@ -54,7 +56,7 @@ export function Component() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      view: "0",
+      view: defaultView.toString(),
     },
   })
 
@@ -77,7 +79,8 @@ export function Component() {
         ...(isSubscribed && { feedId: feed.data?.feed.id }),
       }
       const $method = isSubscribed ? apiClient.subscriptions.$patch : apiClient.subscriptions.$post
-      $method({
+
+      return $method({
         // @ts-expect-error
         json: body,
       })

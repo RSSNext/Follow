@@ -1,4 +1,5 @@
 import { SettingsTitle } from "@renderer/components/settings/title"
+import { Vibrancy } from "@renderer/components/ui/background"
 import { settingTabs } from "@renderer/lib/constants"
 import { Link, Outlet, useLocation } from "react-router-dom"
 
@@ -9,7 +10,7 @@ export function Component() {
   return (
     <div className="flex h-screen flex-col">
       <div className="flex flex-1">
-        <div className="w-44 border-r px-2.5 py-3 pt-3.5 backdrop-blur">
+        <Vibrancy className="w-44 border-r px-2.5 py-3 pt-3.5">
           <div className="mb-3 flex justify-end">
             <img src="./icon.svg" alt="logo" className="size-6" />
           </div>
@@ -24,7 +25,7 @@ export function Component() {
               <SettingsTitle path={t.path} className="text-[15px] font-medium" />
             </Link>
           ))}
-        </div>
+        </Vibrancy>
         <div className="flex-1 bg-background p-8">
           <Outlet />
         </div>

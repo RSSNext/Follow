@@ -1,9 +1,4 @@
-import { Button, HeaderActionButton } from "@renderer/components/ui/button"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
+import { ActionButton } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
 import { APP_NAME, levels, views } from "@renderer/lib/constants"
 import { clamp, cn } from "@renderer/lib/utils"
@@ -14,6 +9,7 @@ import { Lethargy } from "lethargy"
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 
+import { Vibrancy } from "../ui/background"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -55,21 +51,18 @@ export function FeedColumn() {
     },
   )
 
-  const normalStyle = !window.electron || (window.electron.process.platform !== "darwin")
+  const normalStyle =
+    !window.electron || window.electron.process.platform !== "darwin"
 
   return (
-    <div
-      className={cn(
-        "flex h-full flex-col gap-3 pt-2.5",
-        normalStyle && "bg-native",
-      )}
+    <Vibrancy
+      className="flex h-full flex-col gap-3 pt-2.5"
       onClick={() =>
         setActiveList({
           level: levels.view,
           id: active,
           name: views[active].name,
           view: active,
-          preventNavigate: true,
         })}
     >
       <div
@@ -98,45 +91,40 @@ export function FeedColumn() {
         )}
         <div className="flex items-center gap-2">
           <Link to="/profile">
-            <HeaderActionButton tooltip="Profile">
+            <ActionButton tooltip="Profile">
               <UserButton className="h-5 p-0" hideName />
-            </HeaderActionButton>
+            </ActionButton>
           </Link>
           <Link to="/discover">
-            <HeaderActionButton tooltip="Add">
+            <ActionButton tooltip="Add">
               <i className="i-mingcute-add-line size-5 text-theme-vibrancyFg" />
-            </HeaderActionButton>
+            </ActionButton>
           </Link>
         </div>
       </div>
       <div className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg">
         {views.map((item, index) => (
-          <Tooltip key={item.name}>
-            <TooltipTrigger asChild>
-              <Button
-                className={cn(
-                  active === index && item.className,
-                  "flex items-center text-xl",
-                  "hover:!bg-theme-vibrancyBg",
-                )}
-                variant="ghost"
-                size="sm"
-                onClick={(e) => {
-                  setActive(index)
-                  setActiveList?.({
-                    level: "view",
-                    id: index,
-                    name: views[index].name,
-                    view: index,
-                  })
-                  e.stopPropagation()
-                }}
-              >
-                {item.icon}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">{item.name}</TooltipContent>
-          </Tooltip>
+          <ActionButton
+            key={item.name}
+            tooltip={item.name}
+            className={cn(
+              active === index && item.className,
+              "flex items-center text-xl",
+              "hover:!bg-theme-vibrancyBg",
+            )}
+            onClick={(e) => {
+              setActive(index)
+              setActiveList?.({
+                level: "view",
+                id: index,
+                name: views[index].name,
+                view: index,
+              })
+              e.stopPropagation()
+            }}
+          >
+            {item.icon}
+          </ActionButton>
         ))}
       </div>
       <div className="size-full overflow-hidden" ref={carouselRef}>
@@ -154,6 +142,6 @@ export function FeedColumn() {
           ))}
         </m.div>
       </div>
-    </div>
+    </Vibrancy>
   )
 }

@@ -16,17 +16,21 @@ interface SubscriptionActions {
   upsert: (feedId: FeedId, subscription: SubscriptionModel) => void
   fetchByView: (view?: FeedViewType) => Promise<SubscriptionModel[]>
   markReadByView: (view?: FeedViewType) => void
+  internal_reset: () => void
 }
 export const useSubscriptionStore = createZustandStore<
   SubscriptionState & SubscriptionActions
 >("subscription")((set, get) => ({
   data: {},
-
+  internal_reset() {
+    set({ data: {} })
+  },
   async fetchByView(view) {
     const res = await apiClient.subscriptions.$get({
       query: { view: String(view) },
     })
 
+    get().internal_reset()
     res.data.forEach((subscription) => {
       set((state) =>
         produce(state, (state) => {

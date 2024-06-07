@@ -17,6 +17,8 @@ import {
 import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
 import { apiClient } from "@renderer/lib/api-fetch"
+import { FeedViewType } from "@renderer/lib/enum"
+import { useFeedStore } from "@renderer/store"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import { openElectronWindow } from "@shared/electron"
 import { useMutation } from "@tanstack/react-query"
@@ -183,20 +185,28 @@ export function DiscoverForm({ type }: { type: string }) {
                         </Button>
                       ) : (
                         <Button
-                          onClick={
-                            () =>
-                              openElectronWindow(
-                                `${DEEPLINK_SCHEME}add${
-                                  item.feed.id ?
-                                    `?id=${item.feed.id}` :
-                                    `?url=${item.feed.url}`
-                                }`,
-                                {
-                                  resizable: false,
-                                  height: 550,
-                                },
-                              )
-                          }
+                          onClick={() => {
+                            const searchParams = new URLSearchParams()
+                            if (item.feed.id) {
+                              searchParams.set("id", item.feed.id)
+                            } else {
+                              searchParams.set("url", item.feed.url)
+                            }
+                            searchParams.set(
+                              "view",
+                              String(`${useFeedStore.getState().activeList?.view ||
+                              FeedViewType.Articles}`),
+                            )
+                            openElectronWindow(
+                              `${DEEPLINK_SCHEME}add?${
+                                 searchParams.toString()
+                              }`,
+                              {
+                                resizable: false,
+                                height: 550,
+                              },
+                            )
+                          }}
                         >
                           Follow
                         </Button>

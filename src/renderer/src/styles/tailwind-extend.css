@@ -18,4 +18,8 @@
     mask-repeat: no-repeat;
     mask-position: center;
   }
+
+  .center {
+    @apply flex items-center justify-center;
+  }
 }
