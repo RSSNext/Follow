@@ -22,6 +22,14 @@ export default defineConfig(
       "unicorn/prefer-module": "off",
       "@typescript-eslint/no-floating-promises": "off",
     },
+    settings: {
+      tailwindcss: {
+        callees: ["cn"],
+        whitelist: [
+          "center",
+        ],
+      },
+    },
   },
   {
     files: GLOB_TS_SRC,

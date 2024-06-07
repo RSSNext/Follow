@@ -1,3 +1,4 @@
+import { Vibrancy } from "@renderer/components/ui/background"
 import { cn } from "@renderer/lib/utils"
 import { Link, Outlet, useLocation } from "react-router-dom"
 
@@ -32,7 +33,7 @@ export function Component() {
         {APP_NAME} Settings
       </div> */}
       <div className="flex flex-1">
-        <div className="w-44 border-r p-3 pt-12 backdrop-blur">
+        <Vibrancy className="w-44 border-r p-3 pt-12">
           <div className="mx-2 mb-3 flex items-center gap-1 text-xl font-bold">
             <img src="./icon.svg" alt="logo" className="size-6" />
             Settings
@@ -49,7 +50,7 @@ export function Component() {
               <span>{t.name}</span>
             </Link>
           ))}
-        </div>
+        </Vibrancy>
         <div className="flex-1 bg-background p-8">
           <Outlet />
         </div>

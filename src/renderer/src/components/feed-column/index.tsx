@@ -14,6 +14,7 @@ import { Lethargy } from "lethargy"
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 
+import { Vibrancy } from "../ui/background"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -55,14 +56,12 @@ export function FeedColumn() {
     },
   )
 
-  const normalStyle = !window.electron || (window.electron.process.platform !== "darwin")
+  const normalStyle =
+    !window.electron || window.electron.process.platform !== "darwin"
 
   return (
-    <div
-      className={cn(
-        "flex h-full flex-col gap-3 pt-2.5",
-        normalStyle && "bg-native",
-      )}
+    <Vibrancy
+      className="flex h-full flex-col gap-3 pt-2.5"
       onClick={() =>
         setActiveList({
           level: levels.view,
@@ -154,6 +153,6 @@ export function FeedColumn() {
           ))}
         </m.div>
       </div>
-    </div>
+    </Vibrancy>
   )
 }

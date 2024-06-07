@@ -6,7 +6,6 @@ import * as React from "react"
 import ReactDOM from "react-dom/client"
 import { RouterProvider } from "react-router-dom"
 
-import { RootProviders } from "./providers/root-providers"
 import { router } from "./router"
 
 authConfigManager.setConfig({
@@ -17,9 +16,7 @@ authConfigManager.setConfig({
 
 ReactDOM.createRoot(document.querySelector("#root") as HTMLElement).render(
   <React.StrictMode>
-    <RootProviders>
-      <RouterProvider router={router} />
-      <ClickToComponent />
-    </RootProviders>
+    <RouterProvider router={router} />
+    <ClickToComponent />
   </React.StrictMode>,
 )

@@ -285,12 +285,12 @@ const EmptyList = (props, ref) => {
     >
       {unreadOnly ? (
         <>
-          <i className="i-mingcute-celebrate-line -mt-11 text-4xl" />
+          <i className="i-mingcute-celebrate-line -mt-11 text-3xl" />
           Zero Unread
         </>
       ) : (
         <div className="flex -translate-y-6 flex-col items-center justify-center gap-2">
-          <EmptyIcon className="size-9" />
+          <EmptyIcon className="size-[30px]" />
           Zero Items
         </div>
       )}
