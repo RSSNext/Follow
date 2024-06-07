@@ -147,7 +147,7 @@ export function FeedColumn() {
               className="shrink-0 snap-center overflow-y-auto"
             >
               <FeedList
-                className="flex min-h-full w-64 flex-col px-3 pb-6"
+                className="flex min-h-full w-64 flex-col px-3 pb-6 text-sm"
                 view={index}
               />
             </section>

@@ -117,7 +117,7 @@ export const useEntryActions = ({
       },
       {
         name: "Uncollect",
-        className: "i-mingcute-star-fill",
+        className: "i-mingcute-star-fill text-orange-500",
         disabled: !entry.collections,
         onClick: () => {
           uncollect.mutate()

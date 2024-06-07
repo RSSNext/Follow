@@ -1,5 +1,6 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
+import { useAsRead } from "@renderer/hooks/useAsRead"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry"
@@ -10,6 +11,8 @@ import type { UniversalItemProps } from "./types"
 export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
+  const asRead = useAsRead(entry)
+
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry) return <ReactVirtuosoItemPlaceholder />
 
@@ -17,7 +20,7 @@ export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
     <div className="flex px-2 py-3">
       <FeedIcon feed={entry.feeds} entry={entry.entries} />
       <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
-        <div className={cn("flex gap-1 text-[10px] font-bold", entry.read ? "text-zinc-400" : "text-zinc-500")}>
+        <div className={cn("flex gap-1 text-[10px] font-bold", asRead ? "text-zinc-400" : "text-zinc-500")}>
           <span className="truncate">{entry.feeds.title}</span>
           <span>·</span>
           <span className="shrink-0">
@@ -35,7 +38,7 @@ export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
             <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
           )}
         </div>
-        <div className={cn("text-[13px]", entry.read ? "text-zinc-400" : "text-zinc-500")}>
+        <div className={cn("text-[13px]", asRead ? "text-zinc-400" : "text-zinc-500")}>
           {entry.entries.description}
         </div>
       </div>

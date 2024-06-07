@@ -24,9 +24,14 @@ export function getEntriesParams({
   const params: {
     feedId?: string
     feedIdList?: string[]
+    collected?: boolean
   } = {}
   if (level === levels.folder) {
-    params.feedIdList = `${id}`.split(",")
+    if (id === "collections") {
+      params.collected = true
+    } else {
+      params.feedIdList = `${id}`.split(",")
+    }
   } else if (level === levels.feed) {
     params.feedId = `${id}`
   }

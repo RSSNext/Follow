@@ -4,7 +4,7 @@ import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import type { FeedListModel, SubscriptionResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
-import { feedActions, useUnreadStore } from "@renderer/store"
+import { feedActions, useFeedActiveList, useUnreadStore } from "@renderer/store"
 import { useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import { parse } from "tldts"
@@ -89,6 +89,7 @@ export function FeedList({
 }) {
   const [expansion, setExpansion] = useState(false)
   const data = useData(view)
+  const activeList = useFeedActiveList()
 
   const totalUnread = useUnreadStore((state) => {
     let unread = 0
@@ -111,7 +112,7 @@ export function FeedList({
   )
 
   return (
-    <div className={className}>
+    <div className={cn(className, "font-medium")}>
       {!hideTitle && (
         <div
           className={cn("mb-2 flex items-center justify-between px-2.5 py-1")}
@@ -148,6 +149,27 @@ export function FeedList({
           </div>
         </div>
       )}
+      <div
+        className={cn(
+          "flex h-8 w-full items-center rounded-md px-2.5 transition-colors",
+          activeList?.id === "collections" &&
+          "bg-native-active",
+        )}
+        onClick={(e) => {
+          e.stopPropagation()
+          if (view !== undefined) {
+            setActiveList({
+              level: levels.folder,
+              id: "collections",
+              name: "Collections",
+              view,
+            })
+          }
+        }}
+      >
+        <i className="i-mingcute-star-fill mr-2 text-orange-500" />
+        Collections
+      </div>
       {data?.list?.length ? (
         sortedByUnread?.map((category) => (
           <FeedCategory

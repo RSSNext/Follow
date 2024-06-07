@@ -1,3 +1,4 @@
+import { useAsRead } from "@renderer/hooks/useAsRead"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
 import { views } from "@renderer/lib/constants"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -26,6 +27,8 @@ export function EntryItemWrapper({
 
   const activeEntry = useFeedStore((state) => state.activeEntry)
 
+  const asRead = useAsRead(entry)
+
   const read = useMutation({
     mutationFn: async () =>
       apiClient.reads.$post({
@@ -50,7 +53,7 @@ export function EntryItemWrapper({
         className={cn(
           "rounded-md bg-background transition-colors",
           !views[view || 0].wideMode && activeEntry === entry.entries.id && "bg-theme-item-active",
-          entry.read ? "text-zinc-500/90" : "text-zinc-900 dark:text-white/90",
+          asRead ? "text-zinc-500/90" : "text-zinc-900 dark:text-white/90",
         )}
         // ref={ref}
         onClick={(e) => {

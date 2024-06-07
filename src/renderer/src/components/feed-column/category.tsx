@@ -85,7 +85,7 @@ export function FeedCategory({
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <div
             className={cn(
-              "flex w-full items-center justify-between rounded-md px-2.5 py-[2px] text-sm font-medium leading-loose transition-colors",
+              "flex w-full items-center justify-between rounded-md px-2.5 transition-colors",
               activeList?.level === levels.folder &&
               activeList.name === data.name &&
               "bg-native-active",
@@ -127,7 +127,7 @@ export function FeedCategory({
             <div className="flex w-full min-w-0 items-center">
               <CollapsibleTrigger
                 className={cn(
-                  "flex h-7 items-center [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
+                  "flex h-8 items-center [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
                   !setActiveList && "flex-1",
                 )}
               >
