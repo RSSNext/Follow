@@ -19,6 +19,7 @@ const Wrapper: Component<{
   return (
     <div className="center relative size-full p-12" onClick={dismiss}>
       <m.div
+        className="size-full"
         initial={{ scale: 0.94, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.94, opacity: 0 }}
