@@ -10,7 +10,7 @@ export function Component() {
   return (
     <div className="flex h-screen flex-col">
       <div className="flex flex-1">
-        <Vibrancy className="w-44 border-r px-2.5 py-3 pt-3.5 backdrop-blur">
+        <Vibrancy className="w-44 border-r px-2.5 py-3 pt-3.5">
           <div className="mb-3 flex justify-end">
             <img src="./icon.svg" alt="logo" className="size-6" />
           </div>
@@ -22,10 +22,7 @@ export function Component() {
               }`}
               to={`/settings/${t.path}`}
             >
-              <SettingsTitle
-                path={t.path}
-                className="text-[15px] font-medium"
-              />
+              <SettingsTitle path={t.path} className="text-[15px] font-medium" />
             </Link>
           ))}
         </Vibrancy>
