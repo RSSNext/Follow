@@ -36,7 +36,7 @@ export function createWindow(
 
     transparent: true,
     backgroundColor: "#00000000", // transparent hexadecimal or anything with transparency,
-    vibrancy: "appearance-based",
+    vibrancy: "sidebar",
     visualEffectState: "active",
     ...configs,
   })

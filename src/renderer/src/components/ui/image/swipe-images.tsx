@@ -22,10 +22,13 @@ export function SwipeImages({
   uniqueKey?: string
   className?: string
   imgClassName?: string
-  onPreview?: (src: string) => void
+  onPreview?: (images: string[], index?: number) => void
 }) {
   const uniqImages = uniq(images)
+
   const { ref, inView } = useInView()
+
+  if (!images) return null
   return (
     <div
       ref={ref}
@@ -53,7 +56,7 @@ export function SwipeImages({
             modules={[Navigation, Scrollbar, Mousewheel]}
             className="size-full"
           >
-            {uniqImages?.slice(0, 5).map((image) => (
+            {uniqImages?.slice(0, 5).map((image, i) => (
               <SwiperSlide key={image}>
                 <Image
                   className={cn(imgClassName)}
@@ -65,7 +68,9 @@ export function SwipeImages({
                     height: 600,
                   }}
                   disableContextMenu
-                  onClick={() => onPreview?.(image)}
+                  onClick={() => {
+                    onPreview?.(images, i)
+                  }}
                 />
               </SwiperSlide>
             ))}
@@ -88,6 +93,7 @@ export function SwipeImages({
       ) : uniqImages?.length === 1 ?
           (
             <Image
+              onClick={() => onPreview?.(uniqImages)}
               className="size-full object-cover sm:transition-transform sm:duration-300 sm:ease-in-out sm:group-hover:scale-105"
               alt="cover"
               src={uniqImages[0]}

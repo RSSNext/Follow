@@ -5,10 +5,12 @@ import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry"
 
+import { usePreviewImages } from "../ui/image/hooks"
 import type { UniversalItemProps } from "./types"
 
 export function PictureItem({ entryId, entryPreview }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
+  const previewImage = usePreviewImages()
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <div>
@@ -18,8 +20,8 @@ export function PictureItem({ entryId, entryPreview }: UniversalItemProps) {
           className="aspect-square w-full shrink-0 rounded-md"
           imgClassName="object-cover"
           uniqueKey={entryId}
-          onPreview={(src) => {
-            window.open(src)
+          onPreview={(images, i) => {
+            previewImage(images, i)
           }}
         />
       </div>
