@@ -1,9 +1,4 @@
-import { ActionButton, Button } from "@renderer/components/ui/button"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
+import { ActionButton } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
 import { APP_NAME, levels, views } from "@renderer/lib/constants"
 import { clamp, cn } from "@renderer/lib/utils"
@@ -110,32 +105,27 @@ export function FeedColumn() {
       </div>
       <div className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg">
         {views.map((item, index) => (
-          <Tooltip key={item.name}>
-            <TooltipTrigger asChild>
-              <Button
-                className={cn(
-                  active === index && item.className,
-                  "flex items-center text-xl",
-                  "hover:!bg-theme-vibrancyBg",
-                )}
-                variant="ghost"
-                size="sm"
-                onClick={(e) => {
-                  setActive(index)
-                  setActiveList?.({
-                    level: "view",
-                    id: index,
-                    name: views[index].name,
-                    view: index,
-                  })
-                  e.stopPropagation()
-                }}
-              >
-                {item.icon}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">{item.name}</TooltipContent>
-          </Tooltip>
+          <ActionButton
+            key={item.name}
+            tooltip={item.name}
+            className={cn(
+              active === index && item.className,
+              "flex items-center text-xl",
+              "hover:!bg-theme-vibrancyBg",
+            )}
+            onClick={(e) => {
+              setActive(index)
+              setActiveList?.({
+                level: "view",
+                id: index,
+                name: views[index].name,
+                view: index,
+              })
+              e.stopPropagation()
+            }}
+          >
+            {item.icon}
+          </ActionButton>
         ))}
       </div>
       <div className="size-full overflow-hidden" ref={carouselRef}>

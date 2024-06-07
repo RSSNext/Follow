@@ -44,7 +44,7 @@ Button.displayName = "Button"
 // BIZ buttons
 
 interface ActionButtonProps {
-  onClick?: () => void
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
   icon?: React.ReactNode | React.FC<ComponentType>
   tooltip: string
   tooltipSide?: "top" | "bottom"
