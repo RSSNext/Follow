@@ -1,4 +1,4 @@
-import { Button, HeaderActionButton } from "@renderer/components/ui/button"
+import { ActionButton, Button } from "@renderer/components/ui/button"
 import {
   Popover,
   PopoverClose,
@@ -213,7 +213,7 @@ const ListHeader: FC = () => {
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
       <div className="flex w-full justify-end">
         <div className="relative z-[1] flex items-center gap-1 text-zinc-500">
-          <HeaderActionButton
+          <ActionButton
             tooltip={unreadOnly ? "Unread Only" : "All"}
             onClick={() => setUnreadOnly(!unreadOnly)}
           >
@@ -222,12 +222,12 @@ const ListHeader: FC = () => {
             ) : (
               <i className="i-mingcute-round-line" />
             )}
-          </HeaderActionButton>
+          </ActionButton>
           <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
             <PopoverTrigger>
-              <HeaderActionButton onClick={() => {}} tooltip="Mark All as Read">
+              <ActionButton onClick={() => {}} tooltip="Mark All as Read">
                 <i className="i-mingcute-check-circle-line" />
-              </HeaderActionButton>
+              </ActionButton>
             </PopoverTrigger>
             <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[15px] font-medium">
               <div>Mark all as read?</div>

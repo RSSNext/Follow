@@ -106,6 +106,9 @@ export const router = {
       handlers.invalidateQuery.send(input)
     }),
 
+  /**
+   * @deprecated
+   */
   previewImage: t.procedure
     .input<{
       realUrl: string

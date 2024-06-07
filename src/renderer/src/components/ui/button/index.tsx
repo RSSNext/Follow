@@ -1,4 +1,5 @@
 import { Slot } from "@radix-ui/react-slot"
+import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import type { VariantProps } from "class-variance-authority"
 import type { HTMLMotionProps } from "framer-motion"
@@ -42,24 +43,26 @@ Button.displayName = "Button"
 
 // BIZ buttons
 
-interface HeaderActionButtonProps {
+interface ActionButtonProps {
   onClick?: () => void
   icon?: React.ReactNode | React.FC<ComponentType>
   tooltip: string
   tooltipSide?: "top" | "bottom"
   active?: boolean
 }
-export const HeaderActionButton = React.forwardRef<
+export const ActionButton = React.forwardRef<
   HTMLButtonElement,
-  ComponentType<HeaderActionButtonProps>
+  ComponentType<ActionButtonProps>
 >(
   (
     { icon, onClick, tooltip, className, tooltipSide, children, active },
     ref,
   ) => (
-    <Tooltip key={tooltip}>
+    <Tooltip key={tooltip} disableHoverableContent>
       <TooltipTrigger asChild ref={ref}>
         <Button
+          // @see https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904
+          onFocusCapture={stopPropagation}
           className={cn(
             "no-drag-region flex items-center text-xl",
             active && "bg-zinc-500/15 hover:bg-zinc-500/20",
@@ -112,7 +115,6 @@ export const StyledButton = React.forwardRef<
         variant: "primary",
         className,
       }),
-
     )}
     {...props}
   >

@@ -1,4 +1,4 @@
-import { HeaderActionButton } from "@renderer/components/ui/button"
+import { ActionButton } from "@renderer/components/ui/button"
 import {
   TooltipProvider,
 } from "@renderer/components/ui/tooltip"
@@ -26,7 +26,7 @@ export function EntryShare({
         {items
           .filter((item) => !item.disabled)
           .map((item) => (
-            <HeaderActionButton
+            <ActionButton
               icon={
                 item.icon ?
                     (

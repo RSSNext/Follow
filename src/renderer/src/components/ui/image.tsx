@@ -61,12 +61,7 @@ export const Image = ({
                       label: "Open Image in New Window",
                       click: () => {
                         if (props.src && imgSrc && client) {
-                          client.previewImage({
-                            realUrl: props.src,
-                            url: imgSrc,
-                            width: (e.target as HTMLImageElement).naturalWidth,
-                            height: (e.target as HTMLImageElement).naturalHeight,
-                          })
+                          window.open(props.src, "_blank")
                         }
                       },
                     },

@@ -1,4 +1,4 @@
-import { Button, HeaderActionButton } from "@renderer/components/ui/button"
+import { ActionButton, Button } from "@renderer/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
@@ -97,14 +97,14 @@ export function FeedColumn() {
         )}
         <div className="flex items-center gap-2">
           <Link to="/profile">
-            <HeaderActionButton tooltip="Profile">
+            <ActionButton tooltip="Profile">
               <UserButton className="h-5 p-0" hideName />
-            </HeaderActionButton>
+            </ActionButton>
           </Link>
           <Link to="/discover">
-            <HeaderActionButton tooltip="Add">
+            <ActionButton tooltip="Add">
               <i className="i-mingcute-add-line size-5 text-theme-vibrancyFg" />
-            </HeaderActionButton>
+            </ActionButton>
           </Link>
         </div>
       </div>
