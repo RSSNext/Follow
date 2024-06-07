@@ -1,10 +1,14 @@
 import { stopPropagation } from "@renderer/lib/dom"
+import { m } from "framer-motion"
 import type { FC } from "react"
 import { useState } from "react"
 import { Mousewheel, Scrollbar, Virtual } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 
 import { ActionButton } from "../button"
+import {
+  microReboundPreset,
+} from "../constants/spring"
 import { useCurrentModal } from "../modal"
 
 const Wrapper: Component<{
@@ -14,8 +18,21 @@ const Wrapper: Component<{
 
   return (
     <div className="center relative size-full p-12" onClick={dismiss}>
-      {children}
-      <div className="absolute bottom-4 right-4" onClick={stopPropagation}>
+      <m.div
+        initial={{ scale: 0.94, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.94, opacity: 0 }}
+        transition={microReboundPreset}
+      >
+        {children}
+      </m.div>
+      <m.div
+        initial={{ opacity: 0.8 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="absolute bottom-4 right-4"
+        onClick={stopPropagation}
+      >
         <ActionButton
           tooltip="Open in browser"
           onClick={() => {
@@ -24,7 +41,7 @@ const Wrapper: Component<{
         >
           <i className="i-mingcute-external-link-line" />
         </ActionButton>
-      </div>
+      </m.div>
     </div>
   )
 }

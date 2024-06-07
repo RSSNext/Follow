@@ -39,6 +39,7 @@ export function SocialMediaItem({ entryId, entryPreview }: UniversalItemProps) {
         <div className="mt-1 flex gap-2 overflow-x-auto">
           {entry.entries.images?.map((image) => (
             <Image
+              popper
               key={image}
               src={image}
               className="size-28 shrink-0"

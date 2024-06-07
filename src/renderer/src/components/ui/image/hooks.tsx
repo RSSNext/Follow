@@ -1,4 +1,3 @@
-import { m } from "framer-motion"
 import { useCallback } from "react"
 
 import { useModalStack } from "../modal/stacked/hooks"
@@ -10,14 +9,9 @@ export const usePreviewImages = () => {
     (images: string[], initialIndex = 0) => {
       present({
         content: () => (
-          <m.div
-            className="relative size-full"
-            initial={{ opacity: 0.8 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
+          <div className="relative size-full">
             <PreviewImageContent initialIndex={initialIndex} images={images} />
-          </m.div>
+          </div>
         ),
         title: "Image",
 
