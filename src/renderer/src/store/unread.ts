@@ -12,26 +12,34 @@ interface UnreadActions {
   updateByFeedId: (feedId: string, unread: number) => void
   fetchUnreadByView: (view?: FeedViewType) => Promise<Record<string, number>>
   incrementByFeedId: (feedId: string, inc: number) => void
+
+  internal_reset: () => void
 }
 export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
   "unread",
-)((set) => ({
+)((set, get) => ({
   data: {},
 
+  internal_reset() {
+    set({ data: {} })
+  },
+
   async fetchUnreadByView(view) {
-    const unread = (
-      await apiClient.reads.$get({ query: { view: String(view) } })
-    )
+    const unread = await apiClient.reads.$get({
+      query: { view: String(view) },
+    })
 
     const { data } = unread
-    for (const feedId in data) {
-      set((state) =>
-        produce(state, (state) => {
+    get().internal_reset()
+    set((state) =>
+      produce(state, (state) => {
+        for (const feedId in data) {
           state.data[feedId] = data[feedId]
           return state
-        }),
-      )
-    }
+        }
+        return state
+      }),
+    )
     return data
   },
   incrementByFeedId: (feedId, inc: number) => {
