@@ -1,12 +1,17 @@
-import { Link, Outlet } from "react-router-dom"
+import { MotionButtonBase } from "@renderer/components/ui/button"
+import { Outlet, useNavigate } from "react-router-dom"
 
 export function Component() {
+  const navigate = useNavigate()
   return (
     <div className="relative flex size-full">
-      <Link to="/" className="absolute left-10 top-11 flex items-center gap-1">
-        <i className="i-mingcute-back-line" />
+      <MotionButtonBase
+        onClick={() => navigate("/")}
+        className="absolute left-10 top-11 flex items-center gap-1"
+      >
+        <i className="i-mingcute-arrow-left-circle-line" />
         Back
-      </Link>
+      </MotionButtonBase>
       <Outlet />
     </div>
   )

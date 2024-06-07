@@ -4,7 +4,7 @@ import { useMediaQuery } from "usehooks-ts"
 
 export const Vibrancy: Component<
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-> = ({ className, children }) => {
+> = ({ className, children, ...rest }) => {
   const canVibrancy =
     window.electron && window.electron.process.platform === "darwin"
 
@@ -17,6 +17,7 @@ export const Vibrancy: Component<
         systemDark !== isDark && "bg-native",
         className,
       )}
+      {...rest}
     >
       {children}
     </div>

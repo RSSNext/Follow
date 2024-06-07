@@ -10,7 +10,6 @@ export type ActiveList = {
   id: string | number
   name: string
   view: number
-  preventNavigate?: boolean
 } | null
 
 export type FeedResponse = SubscriptionResponse[number]["feeds"]

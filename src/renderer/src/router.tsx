@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom"
+import { createBrowserRouter, Outlet } from "react-router-dom"
 
 import App from "./App"
 
@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
               },
               {
                 path: "",
-                lazy: () => import("./pages/(main)/layout"),
+                Component: Outlet,
                 children: [
                   {
                     path: "",
@@ -57,6 +57,15 @@ export const router = createBrowserRouter([
                               import(
                                 "./pages/(main)/(context)/(nonhome)/profile/index"
                               ),
+                          },
+                        ],
+                      },
+                      {
+                        path: "add",
+                        children: [
+                          {
+                            path: "",
+                            lazy: () => import("./pages/(main)/add/index"),
                           },
                         ],
                       },
@@ -122,15 +131,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
-      {
-        path: "add",
-        children: [
-          {
-            path: "",
-            lazy: () => import("./pages/add/index"),
-          },
-        ],
-      },
+
       {
         path: "preview",
         children: [

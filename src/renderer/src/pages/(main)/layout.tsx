@@ -3,19 +3,20 @@ import { feedActions, useFeedStore } from "@renderer/store"
 import { useEffect } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 
-export function Component() {
+function MainLayout() {
   const { status } = useSession()
   const navigate = useNavigate()
-  const preventNavigate = useFeedStore(
-    (state) => state.activeList?.preventNavigate,
+
+  const changed = useFeedStore(
+    (state) => `${state.activeList?.view}-${state.activeList?.id}`,
   )
 
   useEffect(() => {
     feedActions.setActiveEntry(null)
-    if (!preventNavigate) {
+    if (changed) {
       navigate("/")
     }
-  }, [navigate, preventNavigate])
+  }, [changed])
 
   if (status !== "authenticated") {
     navigate("/login")
@@ -24,3 +25,5 @@ export function Component() {
 
   return <Outlet />
 }
+
+export { MainLayout as Component }

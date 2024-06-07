@@ -63,7 +63,6 @@ export function FeedColumn() {
           id: active,
           name: views[active].name,
           view: active,
-          preventNavigate: true,
         })}
     >
       <div
