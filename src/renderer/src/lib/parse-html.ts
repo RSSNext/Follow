@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Image } from "@renderer/components/ui/image"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
+import { createElement } from "react"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
 import rehypeInferDescriptionMeta from "rehype-infer-description-meta"
 import rehypeParse from "rehype-parse"
@@ -50,7 +51,7 @@ export const parseHtml = async (content: string) => {
       jsxs: (type, props, key) => jsxs(type as any, props, key),
       passNode: true,
       components: {
-        img: Image as any,
+        img: (props) => createElement(Image, { ...props, popper: true }),
       },
     }),
   }
