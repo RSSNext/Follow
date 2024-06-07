@@ -105,19 +105,20 @@ export const ModalInternal: Component<{
   }, [animateController])
 
   useEffect(() => {
-    if (!isTop) {
-      animateController.start({
-        scale: 0.96,
-        y: 10,
-      })
-      return () => {
-        try {
-          animateController.stop()
-          animateController.start({
-            scale: 1,
-            y: 0,
-          })
-        } catch { /* empty */ }
+    if (isTop) return
+    animateController.start({
+      scale: 0.96,
+      y: 10,
+    })
+    return () => {
+      try {
+        animateController.stop()
+        animateController.start({
+          scale: 1,
+          y: 0,
+        })
+      } catch {
+        /* empty */
       }
     }
   }, [isTop])
