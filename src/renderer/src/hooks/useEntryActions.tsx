@@ -1,4 +1,3 @@
-import { useToast } from "@renderer/components/ui/use-toast"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
 import type { EntryModel } from "@renderer/models"
@@ -6,6 +5,7 @@ import { entryActions } from "@renderer/store/entry"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
+import { toast } from "sonner"
 
 export const useEntryActions = ({
   view,
@@ -44,9 +44,8 @@ export const useEntryActions = ({
       })
     },
     onSuccess: () => {
-      toast({
+      toast("Collected.", {
         duration: 1000,
-        description: "Collected.",
       })
     },
   })
@@ -65,9 +64,8 @@ export const useEntryActions = ({
       })
     },
     onSuccess: () => {
-      toast({
+      toast("Uncollected.", {
         duration: 1000,
-        description: "Uncollected.",
       })
     },
   })
@@ -100,8 +98,6 @@ export const useEntryActions = ({
     },
   })
 
-  const { toast } = useToast()
-
   if (!entry?.entries.url || view === undefined) return { items: [] }
 
   const items = [
@@ -128,9 +124,8 @@ export const useEntryActions = ({
         onClick: () => {
           if (!entry.entries.url) return
           navigator.clipboard.writeText(entry.entries.url)
-          toast({
+          toast("Link copied to clipboard.", {
             duration: 1000,
-            description: "Link copied to clipboard.",
           })
         },
       },
@@ -155,14 +150,12 @@ export const useEntryActions = ({
             images: entry.entries.images,
           })
           if (response?.status === "success") {
-            toast({
+            toast("Saved to Eagle.", {
               duration: 3000,
-              description: "Saved to Eagle.",
             })
           } else {
-            toast({
+            toast("Failed to save to Eagle.", {
               duration: 3000,
-              description: "Failed to save to Eagle.",
             })
           }
         },

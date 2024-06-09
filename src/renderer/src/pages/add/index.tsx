@@ -20,7 +20,6 @@ import {
   SelectValue,
 } from "@renderer/components/ui/select"
 import { Switch } from "@renderer/components/ui/switch"
-import { useToast } from "@renderer/components/ui/use-toast"
 import { useBizQuery } from "@renderer/hooks/useBizQuery"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
@@ -32,6 +31,7 @@ import { useFeed } from "@renderer/queries/feed"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
 const formSchema = z.object({
@@ -68,7 +68,6 @@ export function Component() {
     }
   }, [feed.data?.subscription])
 
-  const { toast } = useToast()
   const followMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const body = {
@@ -103,10 +102,12 @@ export function Component() {
       client?.invalidateQuery(
         Queries.feed.byId({ id: feed.data?.feed.id }).key,
       )
-      toast({
-        duration: 1000,
-        description: isSubscribed ? "🎉 Updated." : "🎉 Followed.",
-      })
+      toast(
+        isSubscribed ? "🎉 Updated." : "🎉 Followed.",
+        {
+          duration: 1000,
+        },
+      )
 
       if (!isSubscribed) {
         window.close()

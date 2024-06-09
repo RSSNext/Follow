@@ -1,10 +1,10 @@
-import { useToast } from "@renderer/components/ui/use-toast"
 import { client } from "@renderer/lib/client"
 import { getProxyUrl } from "@renderer/lib/img-proxy"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { FC, ImgHTMLAttributes } from "react"
 import { memo, useState } from "react"
+import { toast } from "sonner"
 import { useEventCallback } from "usehooks-ts"
 
 import { usePreviewImages } from "./image/hooks"
@@ -57,7 +57,6 @@ const ImageImpl: FC<ImageProps> = ({
       props.onClick?.(e)
     },
   )
-  const { toast } = useToast()
 
   return (
     <div className={cn("overflow-hidden rounded", className)}>
@@ -92,9 +91,8 @@ const ImageImpl: FC<ImageProps> = ({
                       click: () => {
                         if (props.src) {
                           navigator.clipboard.writeText(props.src)
-                          toast({
+                          toast("Address copied to clipboard.", {
                             duration: 1000,
-                            description: "Address copied to clipboard.",
                           })
                         }
                       },
