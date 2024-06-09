@@ -125,8 +125,8 @@ importers:
         specifier: 2.8.2
         version: 2.8.2(@types/react@18.3.3)(react@18.3.1)
       jotai-dark:
-        specifier: 0.3.1
-        version: 0.3.1(jotai-effect@1.0.0(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1)))(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)
+        specifier: 0.3.2
+        version: 0.3.2(jotai-effect@1.0.0(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1)))(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)
       jotai-effect:
         specifier: 1.0.0
         version: 1.0.0(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1))
@@ -169,6 +169,9 @@ importers:
       rehype-stringify:
         specifier: 10.0.0
         version: 10.0.0
+      sonner:
+        specifier: ^1.5.0
+        version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       swiper:
         specifier: 11.1.4
         version: 11.1.4
@@ -3482,16 +3485,13 @@ packages:
   jose@5.3.0:
     resolution: {integrity: sha512-IChe9AtAE79ru084ow8jzkN2lNrG3Ntfiv65Cvj9uOCE2m5LNsdHG+9EbxWxAoWRF9TgDOqLN5jm08++owDVRg==}
 
-  jotai-dark@0.3.1:
-    resolution: {integrity: sha512-6yW4qk+xG9kv/YkDr4aCWHMPQZHd+q/p1orFzg5NFJwlBCfK/UBlUJfPTRLMdbMf1+U5u4pBQWPGa7ZHOqSFBQ==}
+  jotai-dark@0.3.2:
+    resolution: {integrity: sha512-bcxbfze/lQPC6Q7NmceMKmHBkW0ei1wbhEj5Fg0VebQMBeTYkqlzIPeLz8MEsRup/AiKN8mrwNbHLBh5456Yww==}
     peerDependencies:
-      foxact: ^0.2.33
       jotai: '>=2.5.0'
       jotai-effect: '*'
-      react: ^18.2.0
+      react: '>=18.2.0'
     peerDependenciesMeta:
-      foxact:
-        optional: true
       jotai:
         optional: true
       jotai-effect:
@@ -4611,6 +4611,12 @@ packages:
   socks@2.8.3:
     resolution: {integrity: sha512-l5x7VUUWbjVFbafGLxPWkYsHIhEvmF85tbIeFZWc8ZPtoMyybuEhL7Jye/ooC4/d48FgOjSJXgsF/AJPYCW8Zw==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
+
+  sonner@1.5.0:
+    resolution: {integrity: sha512-FBjhG/gnnbN6FY0jaNnqZOMmB73R+5IiyYAw8yBj7L54ER7HB3fOSE5OFiQiE2iXWxeXKvg6fIP4LtVppHEdJA==}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
 
   sort-object-keys@1.1.3:
     resolution: {integrity: sha512-855pvK+VkU7PaKYPc+Jjnmt4EzejQHyhhF33q31qG8x7maDzkeFhAAThdCYay11CISO+qAMwjOBP+fPZe0IPyg==}
@@ -8959,7 +8965,7 @@ snapshots:
 
   jose@5.3.0: {}
 
-  jotai-dark@0.3.1(jotai-effect@1.0.0(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1)))(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1))(react@18.3.1):
+  jotai-dark@0.3.2(jotai-effect@1.0.0(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1)))(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1))(react@18.3.1):
     optionalDependencies:
       jotai: 2.8.2(@types/react@18.3.3)(react@18.3.1)
       jotai-effect: 1.0.0(jotai@2.8.2(@types/react@18.3.3)(react@18.3.1))
@@ -10202,6 +10208,11 @@ snapshots:
     dependencies:
       ip-address: 9.0.5
       smart-buffer: 4.2.0
+
+  sonner@1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   sort-object-keys@1.1.3: {}
 

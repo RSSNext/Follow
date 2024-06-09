@@ -1,5 +1,4 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
-import { ToastAction } from "@renderer/components/ui/toast"
 import {
   Tooltip,
   TooltipContent,
@@ -7,7 +6,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
-import { useToast } from "@renderer/components/ui/use-toast"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
@@ -21,6 +19,7 @@ import {
   useUnreadStore,
 } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 export function FeedItem({
   feed,
@@ -45,8 +44,6 @@ export function FeedItem({
     })
   }
 
-  const { toast } = useToast()
-
   const deleteMutation = useMutation({
     mutationFn: async (feed: SubscriptionResponse[number]) =>
       apiClient.subscriptions.$delete({
@@ -58,21 +55,19 @@ export function FeedItem({
     onSuccess: (_, variables) => {
       Queries.subscription.byView(variables.view).invalidate()
 
-      toast({
-        duration: 3000,
-        description: (
-          <>
-            Feed
-            {" "}
-            <i className="mr-px font-semibold">{variables.feeds.title}</i>
-            {" "}
-            has been unfollowed.
-          </>
-        ),
-        action: (
-          <ToastAction
-            altText="Undo"
-            onClick={async () => {
+      toast(
+        <>
+          Feed
+          {" "}
+          <i className="mr-px font-semibold">{variables.feeds.title}</i>
+          {" "}
+          has been unfollowed.
+        </>,
+        {
+          duration: 3000,
+          action: {
+            label: "Undo",
+            onClick: async () => {
               await apiClient.subscriptions.$post({
                 json: {
                   url: variables.feeds.url,
@@ -83,12 +78,10 @@ export function FeedItem({
               })
 
               Queries.subscription.byView(feed.view).invalidate()
-            }}
-          >
-            Undo
-          </ToastAction>
-        ),
-      })
+            },
+          },
+        },
+      )
     },
   })
 

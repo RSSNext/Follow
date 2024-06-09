@@ -1,6 +1,6 @@
 import { SessionProvider } from "@hono/auth-js/react"
 import { ModalStackProvider } from "@renderer/components/ui/modal"
-import { Toaster } from "@renderer/components/ui/toaster"
+import { Toaster } from "@renderer/components/ui/sonner"
 import { TooltipProvider } from "@renderer/components/ui/tooltip"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { queryClient } from "@renderer/lib/query-client"

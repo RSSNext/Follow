@@ -12,10 +12,10 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
-import { useToast } from "@renderer/components/ui/use-toast"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
 const formSchema = z.object({
@@ -36,17 +36,14 @@ export function Component() {
     },
   })
 
-  const { toast } = useToast()
-
   const updateMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) =>
       apiClient["auth-app"]["update-account"].$patch({
         json: values,
       }),
     onSuccess: () => {
-      toast({
+      toast("Profile updated.", {
         duration: 3000,
-        description: "Profile updated.",
       })
     },
   })
