@@ -32,8 +32,8 @@ export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
               .humanize()}
           </span>
         </div>
-        <div className={cn("relative my-0.5 break-words font-medium", !!entry.collections && "pr-4")}>
-          {entry.entries.title}
+        <div className={cn("relative my-0.5 break-words", !!entry.collections && "pr-4", entry.entries.title ? "font-medium" : "text-[13px]")}>
+          {entry.entries.title || entry.entries.description}
           {!!entry.collections && (
             <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
           )}
