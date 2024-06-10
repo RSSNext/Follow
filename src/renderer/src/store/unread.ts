@@ -1,9 +1,8 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { produce } from "immer"
-import { omit } from "lodash-es"
 
-import { createZustandStore } from "./utils/helper"
+import { createZustandStore, getStoreActions } from "./utils/helper"
 
 interface UnreadState {
   data: Record<string, number>
@@ -17,6 +16,9 @@ interface UnreadActions {
 }
 export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
   "unread",
+  {
+    version: 0,
+  },
 )((set, get) => ({
   data: {},
 
@@ -62,6 +64,4 @@ export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
   },
 }))
 
-export const unreadActions = {
-  ...omit(useUnreadStore.getState(), ["data"]),
-}
+export const unreadActions = getStoreActions(useUnreadStore)

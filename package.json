@@ -69,6 +69,7 @@
     "react-helmet-async": "2.0.5",
     "react-hook-form": "7.51.5",
     "react-intersection-observer": "9.10.2",
+    "react-resizable-layout": "0.7.2",
     "react-router-dom": "6.23.1",
     "react-virtuoso": "4.7.11",
     "rehype-infer-description-meta": "2.0.0",
