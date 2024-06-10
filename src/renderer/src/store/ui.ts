@@ -12,7 +12,7 @@ export const useUIStore = createZustandStore<UIState & UIActions>(
     version: 0,
   },
 )((set) => ({
-  entryColWidth: 450,
+  entryColWidth: 340,
   setEntryColWidth(width) {
     set({ entryColWidth: width })
   },
