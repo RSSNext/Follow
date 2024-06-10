@@ -2,10 +2,9 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
 import { produce } from "immer"
-import { omit } from "lodash-es"
 
 import { unreadActions } from "./unread"
-import { createZustandStore } from "./utils/helper"
+import { createZustandStore, getStoreActions } from "./utils/helper"
 
 type FeedId = string
 type EntryId = string
@@ -41,6 +40,9 @@ interface EntryActions {
 
 export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   "entry",
+  {
+    version: 0,
+  },
 )((set, get) => ({
   entries: {},
   flatMapEntries: {},
@@ -140,12 +142,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   },
 }))
 
-export const entryActions = {
-  ...(omit(useEntryStore.getState(), [
-    "entries",
-    "flatMapEntries",
-  ]) as EntryActions),
-}
+export const entryActions = getStoreActions(useEntryStore)
 
 export const useEntriesByFeedId = (feedId: string) =>
   useEntryStore((state) => {
