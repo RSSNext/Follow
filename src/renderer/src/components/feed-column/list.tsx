@@ -1,5 +1,6 @@
 import { useBizQuery } from "@renderer/hooks/useBizQuery"
 import { levels, views } from "@renderer/lib/constants"
+import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import type { FeedListModel, SubscriptionResponse } from "@renderer/models"
@@ -115,6 +116,7 @@ export function FeedList({
     <div className={cn(className, "font-medium")}>
       {!hideTitle && (
         <div
+          onClick={stopPropagation}
           className={cn("mb-2 flex items-center justify-between px-2.5 py-1")}
         >
           <div

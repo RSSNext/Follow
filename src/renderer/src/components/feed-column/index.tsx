@@ -1,6 +1,7 @@
 import { ActionButton } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
 import { APP_NAME, levels, views } from "@renderer/lib/constants"
+import { stopPropagation } from "@renderer/lib/dom"
 import { clamp, cn } from "@renderer/lib/utils"
 import { feedActions } from "@renderer/store"
 import { useWheel } from "@use-gesture/react"
@@ -89,7 +90,7 @@ export function FeedColumn() {
             {APP_NAME}
           </div>
         )}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2" onClick={stopPropagation}>
           <Link to="/profile">
             <ActionButton tooltip="Profile">
               <UserButton className="h-5 p-0" hideName />
@@ -102,7 +103,10 @@ export function FeedColumn() {
           </Link>
         </div>
       </div>
-      <div className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg">
+      <div
+        className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg"
+        onClick={stopPropagation}
+      >
         {views.map((item, index) => (
           <ActionButton
             key={item.name}
