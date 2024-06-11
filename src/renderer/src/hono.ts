@@ -3,6 +3,73 @@ import * as hono_utils_http_status from 'hono/utils/http-status';
 import * as hono from 'hono';
 
 declare const routes: hono_hono_base.HonoBase<hono.Env, {
+    "/actions": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data?: {
+                    userId: string;
+                    rules?: {
+                        name: string;
+                        condition: {
+                            value: string | number;
+                            field: "title" | "view" | "category" | "site_url" | "feed_url";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[];
+                        result: {
+                            translation?: string | undefined;
+                            summary?: boolean | undefined;
+                            rewriteRules?: {
+                                from: string;
+                                to: string;
+                            }[] | undefined;
+                            blockRules?: {
+                                value: string | number;
+                                field: "title" | "content" | "link" | "all" | "author" | "order";
+                                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                            }[] | undefined;
+                        };
+                    }[] | null | undefined;
+                } | undefined;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+        $put: {
+            input: {
+                json: {
+                    rules?: {
+                        name: string;
+                        condition: {
+                            value: string | number;
+                            field: "title" | "view" | "category" | "site_url" | "feed_url";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[];
+                        result: {
+                            translation?: string | undefined;
+                            summary?: boolean | undefined;
+                            rewriteRules?: {
+                                from: string;
+                                to: string;
+                            }[] | undefined;
+                            blockRules?: {
+                                value: string | number;
+                                field: "title" | "content" | "link" | "all" | "author" | "order";
+                                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                            }[] | undefined;
+                        };
+                    }[] | null | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
     "/reads": {
         $post: {
             input: {
@@ -35,8 +102,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 };
             };
             output: {
-                data: Record<string, number>;
                 code: 0;
+                data: Record<string, number>;
             };
             outputFormat: "json";
             status: 200;
@@ -46,8 +113,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $post: {
             input: {
                 json: {
-                    feedId?: string | undefined;
                     view?: number | undefined;
+                    feedId?: string | undefined;
                     feedIdList?: string[] | undefined;
                 };
             };
@@ -67,8 +134,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 };
             };
             output: {
-                data: boolean;
                 code: 0;
+                data: boolean;
             };
             outputFormat: "json";
             status: 200;
@@ -149,15 +216,16 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 };
             };
             output: {
+                code: 0;
                 data: {
                     feed: {
                         url: string;
                         checkedAt: string;
                         nextCheckAt: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
                         id?: string | undefined;
                         image?: string | null | undefined;
-                        title?: string | null | undefined;
-                        description?: string | null | undefined;
                         siteUrl?: string | null | undefined;
                         lastModifiedHeader?: string | null | undefined;
                         etagHeader?: string | null | undefined;
@@ -168,15 +236,14 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     subscriptionCount: number;
                     readCount: number;
                     subscription?: {
-                        userId: string;
-                        feedId: string;
                         title: string | null;
                         view: number;
                         category: string | null;
+                        userId: string;
+                        feedId: string;
                         isPrivate: boolean | null;
                     } | undefined;
                 };
-                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -208,11 +275,11 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             output: {
                 data: {
                     feed: {
+                        description: string | null;
+                        title: string | null;
                         id: string;
                         image: string | null;
                         url: string;
-                        title: string | null;
-                        description: string | null;
                         siteUrl: string | null;
                         checkedAt: string;
                         nextCheckAt: string;
@@ -223,14 +290,14 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         errorAt: string | null;
                     };
                     entries?: {
-                        id: string;
-                        feedId: string;
-                        url: string | null;
-                        title: string | null;
                         description: string | null;
+                        title: string | null;
                         content: string | null;
-                        guid: string;
                         author: string | null;
+                        id: string;
+                        url: string | null;
+                        feedId: string;
+                        guid: string;
                         authorUrl: string | null;
                         authorAvatar: string | null;
                         changedAt: string;
@@ -239,9 +306,9 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         categories: string[] | null;
                         enclosures?: {
                             url: string;
-                            title?: string | undefined;
-                            type?: string | undefined;
                             length?: number | undefined;
+                            type?: string | undefined;
+                            title?: string | undefined;
                         }[] | null | undefined;
                     }[] | undefined;
                     docs?: string | undefined;
@@ -258,12 +325,12 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $post: {
             input: {};
             output: {
+                code: 0;
                 data: {
                     userId: string;
                     sessionToken: string;
                     expires: string;
                 };
-                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -299,8 +366,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $post: {
             input: {
                 json: {
-                    feedId?: string | undefined;
                     view?: number | undefined;
+                    feedId?: string | undefined;
                     read?: boolean | undefined;
                     limit?: number | undefined;
                     feedIdList?: string[] | undefined;
@@ -312,28 +379,13 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 code: 0;
                 total: number;
                 data?: {
-                    feeds: {
-                        id: string;
-                        image: string | null;
-                        url: string;
-                        title: string | null;
-                        description: string | null;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        nextCheckAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                    };
                     entries: {
+                        description: string | null;
+                        title: string | null;
+                        author: string | null;
                         id: string;
                         url: string | null;
-                        title: string | null;
-                        description: string | null;
                         guid: string;
-                        author: string | null;
                         authorUrl: string | null;
                         authorAvatar: string | null;
                         changedAt: string;
@@ -342,10 +394,25 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         categories: string[] | null;
                         enclosures?: {
                             url: string;
-                            title?: string | undefined;
-                            type?: string | undefined;
                             length?: number | undefined;
+                            type?: string | undefined;
+                            title?: string | undefined;
                         }[] | null | undefined;
+                    };
+                    feeds: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        image: string | null;
+                        url: string;
+                        siteUrl: string | null;
+                        checkedAt: string;
+                        nextCheckAt: string;
+                        lastModifiedHeader: string | null;
+                        etagHeader: string | null;
+                        ttl: number | null;
+                        errorMessage: string | null;
+                        errorAt: string | null;
                     };
                     read: boolean | null;
                     collections?: {
@@ -365,15 +432,33 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
             output: {
                 code: 0;
                 data?: {
-                    collections: {
-                        createdAt: string;
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        content: string | null;
+                        author: string | null;
+                        id: string;
+                        url: string | null;
+                        guid: string;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        changedAt: string;
+                        publishedAt: string;
+                        images: string[] | null;
+                        categories: string[] | null;
+                        enclosures?: {
+                            url: string;
+                            length?: number | undefined;
+                            type?: string | undefined;
+                            title?: string | undefined;
+                        }[] | null | undefined;
                     };
                     feeds: {
+                        description: string | null;
+                        title: string | null;
                         id: string;
                         image: string | null;
                         url: string;
-                        title: string | null;
-                        description: string | null;
                         siteUrl: string | null;
                         checkedAt: string;
                         nextCheckAt: string;
@@ -383,26 +468,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         errorMessage: string | null;
                         errorAt: string | null;
                     };
-                    entries: {
-                        id: string;
-                        url: string | null;
-                        title: string | null;
-                        description: string | null;
-                        content: string | null;
-                        guid: string;
-                        author: string | null;
-                        authorUrl: string | null;
-                        authorAvatar: string | null;
-                        changedAt: string;
-                        publishedAt: string;
-                        images: string[] | null;
-                        categories: string[] | null;
-                        enclosures?: {
-                            url: string;
-                            title?: string | undefined;
-                            type?: string | undefined;
-                            length?: number | undefined;
-                        }[] | null | undefined;
+                    collections: {
+                        createdAt: string;
                     };
                     read: boolean | null;
                 } | undefined;
@@ -419,15 +486,16 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 };
             };
             output: {
+                code: 0;
                 data: {
-                    id: string;
-                    feedId: string;
-                    url: string | null;
-                    title: string | null;
                     description: string | null;
+                    title: string | null;
                     content: string | null;
-                    guid: string;
                     author: string | null;
+                    id: string;
+                    url: string | null;
+                    feedId: string;
+                    guid: string;
                     authorUrl: string | null;
                     authorAvatar: string | null;
                     changedAt: string;
@@ -436,12 +504,11 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     categories: string[] | null;
                     enclosures?: {
                         url: string;
-                        title?: string | undefined;
-                        type?: string | undefined;
                         length?: number | undefined;
+                        type?: string | undefined;
+                        title?: string | undefined;
                     }[] | null | undefined;
                 }[];
-                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -456,15 +523,18 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 };
             };
             output: {
+                code: 0;
                 data: {
+                    title: string | null;
+                    view: number;
+                    category: string | null;
                     userId: string;
-                    feedId: string;
                     feeds: {
+                        description: string | null;
+                        title: string | null;
                         id: string;
                         image: string | null;
                         url: string;
-                        title: string | null;
-                        description: string | null;
                         siteUrl: string | null;
                         checkedAt: string;
                         nextCheckAt: string;
@@ -474,12 +544,9 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         errorMessage: string | null;
                         errorAt: string | null;
                     };
-                    title: string | null;
-                    view: number;
-                    category: string | null;
+                    feedId: string;
                     isPrivate: boolean | null;
                 }[];
-                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -487,8 +554,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $post: {
             input: {
                 json: {
-                    url: string;
                     view: number;
+                    url: string;
                     category?: string | null | undefined;
                     isPrivate?: boolean | null | undefined;
                 };
@@ -502,8 +569,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $delete: {
             input: {
                 json: {
-                    feedId?: string | undefined;
                     url?: string | undefined;
+                    feedId?: string | undefined;
                 };
             };
             output: {
@@ -515,8 +582,8 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $patch: {
             input: {
                 json: {
-                    feedId: string;
                     view: number;
+                    feedId: string;
                     category?: string | null | undefined;
                     isPrivate?: boolean | null | undefined;
                 };
