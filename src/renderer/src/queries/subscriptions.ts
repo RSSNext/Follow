@@ -7,16 +7,7 @@ export const subscription = {
   byView: (view?: FeedViewType) =>
     defineQuery(
       ["subscriptions", view],
-      async () => {
-        const [subscriptions, unreads] = await Promise.all([
-          subscriptionActions.fetchByView(view),
-          unreadActions.fetchUnreadByView(view),
-        ])
-        return {
-          subscriptions,
-          unreads,
-        }
-      },
+      async () => subscriptionActions.fetchByView(view),
       {
         rootKey: ["subscriptions"],
       },
@@ -29,4 +20,7 @@ export const subscription = {
 
       return res.data
     }),
+
+  unreadAll: () =>
+    defineQuery(["unread-all"], async () => unreadActions.fetchUnreadAll()),
 }

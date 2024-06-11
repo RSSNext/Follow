@@ -1,12 +1,10 @@
 import { useAsRead } from "@renderer/hooks/useAsRead"
-import { useEntryActions } from "@renderer/hooks/useEntryActions"
-import { apiClient } from "@renderer/lib/api-fetch"
+import { useEntryActions, useRead } from "@renderer/hooks/useEntryActions"
 import { views } from "@renderer/lib/constants"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { feedActions, useFeedStore } from "@renderer/store"
-import { entryActions, useEntry } from "@renderer/store/entry"
-import { useMutation } from "@tanstack/react-query"
+import { useEntry } from "@renderer/store/entry"
 
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 
@@ -29,20 +27,7 @@ export function EntryItemWrapper({
 
   const asRead = useAsRead(entry)
 
-  const read = useMutation({
-    mutationFn: async () =>
-      apiClient.reads.$post({
-        json: {
-          entryIds: [entry.entries.id],
-        },
-      }),
-    onMutate: () => {
-      entryActions.optimisticUpdate(entry.entries.id, {
-        read: true,
-      })
-    },
-    // TODO  fallback
-  })
+  const markReadMutation = useRead(entry)
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry) return <ReactVirtuosoItemPlaceholder />
@@ -52,15 +37,17 @@ export function EntryItemWrapper({
       <div
         className={cn(
           "rounded-md bg-background transition-colors",
-          !views[view || 0].wideMode && activeEntry === entry.entries.id && "bg-theme-item-active",
+          !views[view || 0].wideMode &&
+          activeEntry === entry.entries.id &&
+          "bg-theme-item-active",
           asRead ? "text-zinc-500/90" : "text-zinc-900 dark:text-white/90",
         )}
         // ref={ref}
         onClick={(e) => {
           e.stopPropagation()
           feedActions.setActiveEntry(entry.entries.id)
-          if (!entry.read) {
-            read.mutate()
+          if (!asRead) {
+            markReadMutation.mutate()
           }
         }}
         onDoubleClick={() =>

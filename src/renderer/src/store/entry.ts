@@ -127,6 +127,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   },
 
   markRead: (feedId: string, entryId: string, read: boolean) => {
+    console.log(feedId, "feedId")
     unreadActions.incrementByFeedId(feedId, read ? -1 : 1)
     entryActions.optimisticUpdate(entryId, {
       read,
