@@ -35,3 +35,4 @@ jobs:
 
         run: |
           pnpm run typecheck && npm run lint
+          pnpm run test
