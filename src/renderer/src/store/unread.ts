@@ -10,6 +10,7 @@ interface UnreadState {
 interface UnreadActions {
   updateByFeedId: (feedId: string, unread: number) => void
   fetchUnreadByView: (view?: FeedViewType) => Promise<Record<string, number>>
+  fetchUnreadAll: () => Promise<Record<string, number>>
   incrementByFeedId: (feedId: string, inc: number) => void
 
   internal_reset: () => void
@@ -33,6 +34,22 @@ export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
 
     const { data } = unread
 
+    set((state) =>
+      produce(state, (state) => {
+        for (const [key, value] of Object.entries(data)) {
+          state.data[key] = value
+        }
+      }),
+    )
+    return data
+  },
+  async fetchUnreadAll() {
+    const unread = await apiClient.reads.$get({
+      query: {},
+    })
+
+    const { data } = unread
+    this.internal_reset()
     set((state) =>
       produce(state, (state) => {
         for (const [key, value] of Object.entries(data)) {
