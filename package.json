@@ -18,6 +18,7 @@
     "postinstall": "electron-builder install-app-deps",
     "prepare": "pnpm exec simple-git-hooks && test -f .env || cp .env.example .env",
     "start": "electron-vite preview",
+    "test": "vitest",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false"
@@ -112,7 +113,8 @@
     "simple-git-hooks": "2.11.1",
     "tailwindcss": "3.4.3",
     "typescript": "^5.4.5",
-    "vite": "^5.2.12"
+    "vite": "^5.2.12",
+    "vitest": "1.6.0"
   },
   "pnpm": {
     "patchedDependencies": {

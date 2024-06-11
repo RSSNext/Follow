@@ -23,7 +23,7 @@ function nestPaths(paths: string[]): NestedStructure {
   return result
 }
 const pathGetterSet = new Set<string>()
-export function convertGlobToRoutes(
+export function buildGlobRoutes(
   glob: Record<string, () => Promise<any>>,
 ): RouteObject[] {
   const keys = Object.keys(glob)
@@ -35,6 +35,8 @@ export function convertGlobToRoutes(
     parentKey: string,
     children: RouteObject[],
     paths: NestedStructure,
+
+    parentPath = "",
   ) {
     const pathKeys = Object.keys(paths)
     // sort `layout` to the start, and `index` to the end
@@ -93,11 +95,15 @@ export function convertGlobToRoutes(
         }
 
         const childrenChildren: RouteObject[] = []
-        dtsRoutes(`${segmentPathKey}/`, childrenChildren, paths[key])
+        dtsRoutes(`${segmentPathKey}/`, childrenChildren, paths[key], parentPath)
         children.push({
           path: "",
           lazy: globGetter,
           children: childrenChildren,
+          handle: {
+            fs: segmentPathKey,
+            fullPath: parentPath,
+          },
         })
       } else if (key === "layout") {
         // if parent key is grouped routes, the layout is handled, so skip this logic
@@ -107,13 +113,23 @@ export function convertGlobToRoutes(
         // if `key` is `layout`, then it's a grouped route
         const accessPath = `${segmentPathKey}.tsx`
         const globGetter = get(glob, accessPath)
-        // console.log(segmentPathKey, key, globGetter, "layout")
+
         const childrenChildren: RouteObject[] = []
-        dtsRoutes(parentKey, childrenChildren, omit(paths, "layout"))
+        // should omit layout, because layout is already handled
+        dtsRoutes(
+          parentKey,
+          childrenChildren,
+          omit(paths, "layout"),
+          parentPath,
+        )
         children.push({
           path: "",
           lazy: globGetter,
           children: childrenChildren,
+          handle: {
+            fs: segmentPathKey,
+            fullPath: parentPath,
+          },
         })
         break
       } else {
@@ -136,13 +152,27 @@ export function convertGlobToRoutes(
           children.push({
             path: normalizeKey,
             lazy: globGetter,
+            handle: {
+              fs: `${segmentPathKey}/${normalizeKey}`,
+              fullPath: `${parentPath}/${normalizeKey}`,
+            },
           })
         } else {
           const childrenChildren: RouteObject[] = []
-          dtsRoutes(`${segmentPathKey}/`, childrenChildren, paths[key])
+          const fullPath = `${parentPath}/${normalizeKey}`
+          dtsRoutes(
+            `${segmentPathKey}/`,
+            childrenChildren,
+            paths[key],
+            fullPath,
+          )
           children.push({
             path: normalizeKey,
             children: childrenChildren,
+            handle: {
+              fs: `${segmentPathKey}/${normalizeKey}`,
+              fullPath,
+            },
           })
         }
       }
