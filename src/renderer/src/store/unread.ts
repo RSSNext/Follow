@@ -32,9 +32,9 @@ export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
     })
 
     const { data } = unread
-    get().internal_reset()
     set((state) =>
       produce(state, (state) => {
+        get().internal_reset()
         for (const feedId in data) {
           state.data[feedId] = data[feedId]
           return state
@@ -48,7 +48,10 @@ export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
     set((state) =>
       produce(state, (state) => {
         const cur = state.data[feedId]
-        if (cur === undefined) return state
+        if (cur === undefined) {
+          state.data[feedId] = inc
+          return state
+        }
         state.data[feedId] = (cur || 0) + inc
         return state
       }),
