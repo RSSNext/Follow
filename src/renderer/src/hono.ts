@@ -31,7 +31,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
         $get: {
             input: {
                 query: {
-                    view: string;
+                    view?: string | undefined;
                 };
             };
             output: {

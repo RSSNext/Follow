@@ -5,7 +5,11 @@ import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import type { FeedListModel, SubscriptionResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
-import { feedActions, useFeedActiveList, useUnreadStore } from "@renderer/store"
+import {
+  feedActions,
+  useFeedActiveList,
+  useUnreadStore,
+} from "@renderer/store"
 import { useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import { parse } from "tldts"
@@ -13,11 +17,11 @@ import { parse } from "tldts"
 import { FeedCategory } from "./category"
 
 const useData = (view?: FeedViewType) => {
-  const subscriptions = useBizQuery(Queries.subscription.byView(view))
+  const query = useBizQuery(Queries.subscription.byView(view))
 
   // TODO Refactor this into category store
   return useMemo(() => {
-    if (!subscriptions.data) return null
+    if (!query.data) return null
     const categories = {
       list: {},
     } as {
@@ -29,10 +33,10 @@ const useData = (view?: FeedViewType) => {
       >
     }
     const domains: Record<string, number> = {}
-    const data = structuredClone(subscriptions.data)
+    const subscriptions = structuredClone(query.data)
 
-    if (subscriptions) {
-      for (const subscription of data.subscriptions) {
+    if (query) {
+      for (const subscription of subscriptions) {
         if (!subscription.category && subscription.feeds.siteUrl) {
           const { domain } = parse(subscription.feeds.siteUrl)
           if (domain) {
@@ -44,8 +48,8 @@ const useData = (view?: FeedViewType) => {
         }
       }
     }
-    if (subscriptions) {
-      for (const subscription of data.subscriptions) {
+    if (query) {
+      for (const subscription of subscriptions) {
         if (!subscription.category) {
           if (subscription.feeds.siteUrl) {
             const { domain } = parse(subscription.feeds.siteUrl)
@@ -64,8 +68,6 @@ const useData = (view?: FeedViewType) => {
           }
         }
 
-        const unread = data.unreads[subscription.feedId] || 0
-        subscription.unread = unread
         categories.list[subscription.category].list.push(subscription)
       }
     }
@@ -77,7 +79,7 @@ const useData = (view?: FeedViewType) => {
     return {
       list,
     } as FeedListModel
-  }, [subscriptions])
+  }, [query])
 }
 export function FeedList({
   className,
@@ -91,6 +93,8 @@ export function FeedList({
   const [expansion, setExpansion] = useState(false)
   const data = useData(view)
   const activeList = useFeedActiveList()
+
+  useBizQuery(Queries.subscription.unreadAll())
 
   const totalUnread = useUnreadStore((state) => {
     let unread = 0
@@ -154,8 +158,7 @@ export function FeedList({
       <div
         className={cn(
           "flex h-8 w-full items-center rounded-md px-2.5 transition-colors",
-          activeList?.id === "collections" &&
-          "bg-native-active",
+          activeList?.id === "collections" && "bg-native-active",
         )}
         onClick={(e) => {
           e.stopPropagation()
@@ -172,7 +175,7 @@ export function FeedList({
         <i className="i-mingcute-star-fill mr-2 text-orange-500" />
         Starred
       </div>
-      {data?.list?.length ? (
+      {data?.list?.length ?
         sortedByUnread?.map((category) => (
           <FeedCategory
             key={category.name}
@@ -180,20 +183,18 @@ export function FeedList({
             view={view}
             expansion={expansion}
           />
-        ))
-      ) : (
-        !hideTitle && (
-          <div className="flex h-full flex-1 items-center text-zinc-500">
-            <Link
-              to="/discover"
-              className="-mt-36 flex h-full flex-1 flex-col items-center justify-center gap-2"
-            >
-              <i className="i-mingcute-add-line text-3xl " />
-              Add some feeds
-            </Link>
-          </div>
-        )
-      )}
+        )) :
+          !hideTitle && (
+            <div className="flex h-full flex-1 items-center text-zinc-500">
+              <Link
+                to="/discover"
+                className="-mt-36 flex h-full flex-1 flex-col items-center justify-center gap-2"
+              >
+                <i className="i-mingcute-add-line text-3xl " />
+                Add some feeds
+              </Link>
+            </div>
+          )}
     </div>
   )
 }

@@ -7,6 +7,87 @@ import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
 import { toast } from "sonner"
 
+export const useCollect = (entry: EntryModel | undefined) =>
+  useMutation({
+    mutationFn: async () =>
+      entry &&
+      apiClient.collections.$post({
+        json: {
+          entryId: entry?.entries.id,
+        },
+      }),
+
+    onMutate() {
+      if (!entry) return
+      entryActions.optimisticUpdate(entry.entries.id, {
+        collections: {
+          createdAt: new Date().toISOString(),
+        },
+      })
+    },
+    onSuccess: () => {
+      toast("Collected.", {
+        duration: 1000,
+      })
+    },
+  })
+
+export const useUnCollect = (entry: EntryModel | undefined) =>
+  useMutation({
+    mutationFn: async () =>
+      entry &&
+      apiClient.collections.$delete({
+        json: {
+          entryId: entry?.entries.id,
+        },
+      }),
+
+    onMutate() {
+      if (!entry) return
+      entryActions.optimisticUpdate(entry.entries.id, {
+        collections: undefined,
+      })
+    },
+    onSuccess: () => {
+      toast("Uncollected.", {
+        duration: 1000,
+      })
+    },
+  })
+
+export const useRead = (entry: EntryModel | undefined) =>
+  useMutation({
+    mutationFn: async () =>
+      entry &&
+      apiClient.reads.$post({
+        json: {
+          entryIds: [entry.entries.id],
+        },
+      }),
+
+    onMutate: () => {
+      if (!entry) return
+
+      entryActions.markRead(entry.feeds.id, entry.entries.id, true)
+    },
+  })
+export const useUnread = (entry: EntryModel | undefined) =>
+  useMutation({
+    mutationFn: async () =>
+      entry &&
+      apiClient.reads.$delete({
+        json: {
+          entryId: entry.entries.id,
+        },
+      }),
+
+    onMutate: () => {
+      if (!entry) return
+
+      entryActions.markRead(entry.feeds.id, entry.entries.id, false)
+    },
+  })
+
 export const useEntryActions = ({
   view,
   entry,
@@ -27,76 +108,10 @@ export const useEntryActions = ({
     },
   })
 
-  const collect = useMutation({
-    mutationFn: async () =>
-      entry && apiClient.collections.$post({
-        json: {
-          entryId: entry?.entries.id,
-        },
-      }),
-
-    onMutate() {
-      if (!entry) return
-      entryActions.optimisticUpdate(entry.entries.id, {
-        collections: {
-          createdAt: new Date().toISOString(),
-        },
-      })
-    },
-    onSuccess: () => {
-      toast("Collected.", {
-        duration: 1000,
-      })
-    },
-  })
-  const uncollect = useMutation({
-    mutationFn: async () =>
-      entry && apiClient.collections.$delete({
-        json: {
-          entryId: entry?.entries.id,
-        },
-      }),
-
-    onMutate() {
-      if (!entry) return
-      entryActions.optimisticUpdate(entry.entries.id, {
-        collections: undefined,
-      })
-    },
-    onSuccess: () => {
-      toast("Uncollected.", {
-        duration: 1000,
-      })
-    },
-  })
-  const read = useMutation({
-    mutationFn: async () =>
-      entry &&
-      apiClient.reads.$post({
-        json: {
-          entryIds: [entry.entries.id],
-        },
-      }),
-
-    onMutate: () => {
-      if (!entry) return
-
-      entryActions.markRead(entry.feeds.id, entry.entries.id, true)
-    },
-  })
-  const unread = useMutation({
-    mutationFn: async () => entry && apiClient.reads.$delete({
-      json: {
-        entryId: entry.entries.id,
-      },
-    }),
-
-    onMutate: () => {
-      if (!entry) return
-
-      entryActions.markRead(entry.feeds.id, entry.entries.id, false)
-    },
-  })
+  const collect = useCollect(entry)
+  const uncollect = useUnCollect(entry)
+  const read = useRead(entry)
+  const unread = useUnread(entry)
 
   if (!entry?.entries.url || view === undefined) return { items: [] }
 
