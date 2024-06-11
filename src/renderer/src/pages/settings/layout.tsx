@@ -26,7 +26,7 @@ export function Component() {
             </Link>
           ))}
         </Vibrancy>
-        <div className="flex-1 bg-background p-8">
+        <div className="h-screen flex-1 overflow-y-auto bg-background p-8">
           <Outlet />
         </div>
       </div>
