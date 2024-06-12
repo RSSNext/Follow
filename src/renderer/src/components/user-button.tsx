@@ -74,6 +74,7 @@ export const LoginButton: FC<LoginProps> = (props) => {
   const modalStack = useModalStack()
   const Content = (
     <ActionButton
+      className="relative z-[1]"
       onClick={
         method === "modal" ?
             () => {
@@ -96,7 +97,7 @@ export const LoginButton: FC<LoginProps> = (props) => {
         Content
       ) :
       (
-        <Link to="/login" className="relative z-[1]">
+        <Link to="/login">
           {Content}
         </Link>
       )
