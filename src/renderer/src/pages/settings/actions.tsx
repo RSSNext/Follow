@@ -3,6 +3,7 @@ import { SettingsTitle } from "@renderer/components/settings/title"
 import { Button } from "@renderer/components/ui/button"
 import { useBizQuery } from "@renderer/hooks/useBizQuery"
 import { apiClient } from "@renderer/lib/api-fetch"
+import type { ActionsResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
@@ -17,7 +18,7 @@ type ActionsInput = {
   condition: {
     field?: FeedField
     operator?: Operation
-    value?: string | number
+    value?: string
   }[]
   result: {
     translation?: string
@@ -46,9 +47,14 @@ export function Component() {
 
   const mutation = useMutation({
     mutationFn: async () => {
+      actionsData.forEach((action) => {
+        action.condition = action.condition.filter((c) => c.field && c.operator && c.value)
+        action.result.rewriteRules = action.result.rewriteRules?.filter((r) => r.from && r.to)
+        action.result.blockRules = action.result.blockRules?.filter((r) => r.field && r.operator && r.value)
+      })
       await apiClient.actions.$put({
         json: {
-          rules: actionsData,
+          rules: actionsData as ActionsResponse,
         },
       })
     },

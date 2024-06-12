@@ -47,6 +47,10 @@ export type DiscoverResponse = Array<
   >[number]
 >
 
+export type ActionsResponse = Exclude<ExtractBizResponse<
+  typeof apiClient.actions.$get
+>["data"], undefined>["rules"]
+
 export type ListResponse<T> = {
   code: number
   data?: T
