@@ -418,6 +418,14 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     collections?: {
                         createdAt: string;
                     } | undefined;
+                    settings?: {
+                        translation?: string | undefined;
+                        summary?: boolean | undefined;
+                        rewriteRules?: {
+                            from: string;
+                            to: string;
+                        }[] | undefined;
+                    } | undefined;
                 }[] | undefined;
             };
             outputFormat: "json";
@@ -472,6 +480,14 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         createdAt: string;
                     };
                     read: boolean | null;
+                    settings?: {
+                        translation?: string | undefined;
+                        summary?: boolean | undefined;
+                        rewriteRules?: {
+                            from: string;
+                            to: string;
+                        }[] | undefined;
+                    } | undefined;
                 } | undefined;
             };
             outputFormat: "json";
