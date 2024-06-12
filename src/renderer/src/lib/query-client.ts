@@ -2,6 +2,8 @@ import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persist
 import { QueryClient } from "@tanstack/react-query"
 import { FetchError } from "ofetch"
 
+import { QUERY_PERSIST_KEY } from "./constants"
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -21,13 +23,13 @@ const queryClient = new QueryClient({
 })
 const localStoragePersister = createSyncStoragePersister({
   storage: window.localStorage,
+  key: QUERY_PERSIST_KEY,
 })
 export const persistConfig = {
   persister: localStoragePersister,
   dehydrateOptions: {
     shouldDehydrateQuery: (query) => {
-      const queryIsReadyForPersistance =
-        query.state.status === "success"
+      const queryIsReadyForPersistance = query.state.status === "success"
       if (queryIsReadyForPersistance) {
         return !((query.state?.data as any)?.pages?.length > 1)
       } else {

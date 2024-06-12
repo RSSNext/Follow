@@ -36,6 +36,8 @@ interface EntryActions {
   getFlattenMapEntries: () => Record<string, EntryModel>
   markRead: (feedId: string, entryId: string, read: boolean) => void
   markReadByFeedId: (feedId: string) => void
+
+  clear: () => void
 }
 
 export const useEntryStore = createZustandStore<EntryState & EntryActions>(
@@ -46,6 +48,13 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
 )((set, get) => ({
   entries: {},
   flatMapEntries: {},
+
+  clear: () => {
+    set({
+      entries: {},
+      flatMapEntries: {},
+    })
+  },
 
   fetchEntries: async ({
     level,

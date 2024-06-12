@@ -14,6 +14,8 @@ interface UnreadActions {
   incrementByFeedId: (feedId: string, inc: number) => void
 
   internal_reset: () => void
+
+  clear: () => void
 }
 export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
   "unread",
@@ -25,6 +27,10 @@ export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
 
   internal_reset() {
     set({ data: {} })
+  },
+
+  clear() {
+    this.internal_reset()
   },
 
   async fetchUnreadByView(view) {

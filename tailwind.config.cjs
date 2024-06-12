@@ -18,7 +18,11 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+
     extend: {
+      fontFamily: {
+        theme: "var(--fo-font-family)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

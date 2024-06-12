@@ -91,7 +91,7 @@ export function FeedColumn() {
           </div>
         )}
         <div className="flex items-center gap-2" onClick={stopPropagation}>
-          <ProfileButton />
+          <ProfileButton method="modal" />
           <Link to="/discover">
             <ActionButton tooltip="Add">
               <i className="i-mingcute-add-line size-5 text-theme-vibrancyFg" />
@@ -99,6 +99,7 @@ export function FeedColumn() {
           </Link>
         </div>
       </div>
+
       <div
         className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg"
         onClick={stopPropagation}

@@ -18,6 +18,7 @@ interface SubscriptionActions {
   fetchByView: (view?: FeedViewType) => Promise<SubscriptionModel[]>
   markReadByView: (view?: FeedViewType) => void
   internal_reset: () => void
+  clear: () => void
 }
 
 const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
@@ -42,6 +43,9 @@ export const useSubscriptionStore = createZustandStore<
       data: {},
       dataIdByView: { ...emptyDataIdByView },
     })
+  },
+  clear() {
+    get().internal_reset()
   },
   async fetchByView(view) {
     const res = await apiClient.subscriptions.$get({
