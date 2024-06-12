@@ -1,7 +1,12 @@
 import { ActionCard } from "@renderer/components/settings/action-card"
 import { SettingsTitle } from "@renderer/components/settings/title"
 import { Button } from "@renderer/components/ui/button"
-import { useState } from "react"
+import { useBizQuery } from "@renderer/hooks/useBizQuery"
+import { apiClient } from "@renderer/lib/api-fetch"
+import { Queries } from "@renderer/queries"
+import { useMutation } from "@tanstack/react-query"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 type Operation = "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex"
 type EntryField = "all" | "title" | "content" | "author" | "link" | "order"
@@ -30,46 +35,43 @@ type ActionsInput = {
 }[]
 
 export function Component() {
-  const [testActions, setTestActions] = useState<ActionsInput>([{
-    name: "Twitter.com to x.com",
-    condition: [{
-      field: "view" as const,
-      operator: "eq" as const,
-      value: 1,
-    }, {
-      field: "title" as const,
-      operator: "contains" as const,
-      value: "Twitter",
-    }],
-    result: {
-      translation: "zh-CN",
-      summary: true,
-      rewriteRules: [{
-        from: "twitter.com",
-        to: "x.com",
-      }],
-      blockRules: [{
-        field: "content" as const,
-        operator: "contains" as const,
-        value: "next.js",
-      }, {
-        field: "author" as const,
-        operator: "eq" as const,
-        value: "elonmusk",
-      }],
+  const actions = useBizQuery(Queries.action.getAll())
+  const [actionsData, setActionsData] = useState<ActionsInput>([])
+
+  useEffect(() => {
+    if (actions.data?.rules) {
+      setActionsData(actions.data.rules)
+    }
+  }, [actions.data?.rules])
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      await apiClient.actions.$put({
+        json: {
+          rules: actionsData,
+        },
+      })
     },
-  }])
+    onSuccess: () => {
+      Queries.action.getAll().invalidate()
+      toast("🎉 Actions saved.")
+    },
+  })
 
   return (
     <>
       <SettingsTitle path="actions" className="mb-4" />
       <div className="space-y-4">
-        {testActions.map((action, actionIdx) => (
+        {actionsData.map((action, actionIdx) => (
           <ActionCard
-            key={actionIdx}
+            key={action.name}
             data={action}
             onChange={(newAction) => {
-              setTestActions(testActions.map((a, idx) => idx === actionIdx ? newAction : a))
+              if (!newAction) {
+                setActionsData(actionsData.filter((_, idx) => idx !== actionIdx))
+              } else {
+                setActionsData(actionsData.map((a, idx) => idx === actionIdx ? newAction : a))
+              }
             }}
           />
         ))}
@@ -78,8 +80,8 @@ export function Component() {
           size="sm"
           className="w-full gap-1"
           onClick={() => {
-            setTestActions([...testActions, {
-              name: `Action ${testActions.length + 1}`,
+            setActionsData([...actionsData, {
+              name: `Action ${actionsData.length + 1}`,
               condition: [],
               result: {},
             }])
@@ -88,6 +90,12 @@ export function Component() {
           <i className="i-mingcute-add-line" />
           {" "}
           New Rule
+        </Button>
+        <Button
+          isLoading={mutation.isPending}
+          onClick={() => mutation.mutate()}
+        >
+          Save
         </Button>
       </div>
     </>
