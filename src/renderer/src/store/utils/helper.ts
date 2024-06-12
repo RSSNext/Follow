@@ -2,13 +2,16 @@ import { del, get, set } from "idb-keyval"
 import { enableMapSet } from "immer"
 import superjson from "superjson" //  can use anything: serialize-javascript, devalue, etc.
 import type { StateCreator } from "zustand"
-import type { PersistOptions, StateStorage } from "zustand/middleware"
+import type {
+  PersistOptions,
+  PersistStorage,
+} from "zustand/middleware"
 import { persist } from "zustand/middleware"
 import { shallow } from "zustand/shallow"
 import { createWithEqualityFn } from "zustand/traditional"
 
-export const dbStorage: StateStorage = {
-  getItem: async (name: string): Promise<string | null> => {
+export const dbStorage: PersistStorage<any> = {
+  getItem: async (name: string) => {
     const data = (await get(name)) || null
 
     if (data === null) {
@@ -17,7 +20,7 @@ export const dbStorage: StateStorage = {
 
     return superjson.parse(data)
   },
-  setItem: async (name: string, value: string): Promise<void> => {
+  setItem: async (name, value) => {
     await set(name, superjson.stringify(value))
   },
   removeItem: async (name: string): Promise<void> => {

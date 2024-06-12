@@ -183,18 +183,46 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
 
 export const entryActions = getStoreActions(useEntryStore)
 
-export const useEntryIdsByFeedId = (feedId: string) =>
-  useEntryStore((state) => state.entries[feedId] || [])
+interface EntryFilter {
+  unread?: boolean
+}
 export const useEntry = (entryId: string) =>
   useEntryStore((state) => state.flatMapEntries[entryId])
+export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
+  useEntryStore((state) => {
+    const data = state.entries[feedId] || []
+    if (filter?.unread) {
+      const result = [] as string[]
+      for (const entryId of data) {
+        const entry = state.flatMapEntries[entryId]
+        if (!entry?.read) {
+          result.push(entryId)
+        }
+      }
+      return result
+    }
+    return data
+  })
 
-export const useEntryIdsByView = (view: FeedViewType) => {
+export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {
   const feedIds = useFeedIdByView(view)
   return useEntryStore((state) => {
     const data = [] as string[]
     for (const feedId of feedIds) {
       const entries = state.entries[feedId] || []
+
       data.push(...entries)
+    }
+
+    if (filter?.unread) {
+      const result = [] as string[]
+      for (const entryId of data) {
+        const entry = state.flatMapEntries[entryId]
+        if (!entry?.read) {
+          result.push(entryId)
+        }
+      }
+      return result
     }
     return data
   })
@@ -202,9 +230,10 @@ export const useEntryIdsByView = (view: FeedViewType) => {
 
 export const useEntryIdsByFeedIdOrView = (
   feedIdOrView: string | FeedViewType,
+  filter: EntryFilter = {},
 ) => {
-  const byView = useEntryIdsByView(feedIdOrView as FeedViewType)
-  const byId = useEntryIdsByFeedId(feedIdOrView as string)
+  const byView = useEntryIdsByView(feedIdOrView as FeedViewType, filter)
+  const byId = useEntryIdsByFeedId(feedIdOrView as string, filter)
 
   if (typeof feedIdOrView === "string") {
     return byId
