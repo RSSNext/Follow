@@ -11,7 +11,7 @@ import { toast } from "sonner"
 
 type Operation = "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex"
 type EntryField = "all" | "title" | "content" | "author" | "link" | "order"
-type FeedField = "view" | "title" | "category" | "site_url" | "feed_url"
+type FeedField = "view" | "title" | "site_url" | "feed_url"
 
 type ActionsInput = {
   name: string

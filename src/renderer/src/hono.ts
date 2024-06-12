@@ -14,7 +14,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         name: string;
                         condition: {
                             value: string;
-                            field: "title" | "view" | "category" | "site_url" | "feed_url";
+                            field: "title" | "view" | "site_url" | "feed_url";
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
                         result: {
@@ -43,7 +43,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         name: string;
                         condition: {
                             value: string;
-                            field: "title" | "view" | "category" | "site_url" | "feed_url";
+                            field: "title" | "view" | "site_url" | "feed_url";
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
                         result: {
@@ -238,9 +238,9 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     subscription?: {
                         title: string | null;
                         view: number;
-                        category: string | null;
                         userId: string;
                         feedId: string;
+                        category: string | null;
                         isPrivate: boolean | null;
                     } | undefined;
                 };
@@ -527,7 +527,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                 data: {
                     title: string | null;
                     view: number;
-                    category: string | null;
                     userId: string;
                     feeds: {
                         description: string | null;
@@ -545,6 +544,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         errorAt: string | null;
                     };
                     feedId: string;
+                    category: string | null;
                     isPrivate: boolean | null;
                 }[];
             };
