@@ -10,14 +10,16 @@ import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { buildStorageNS } from "@renderer/lib/ns"
 import { getEntriesParams } from "@renderer/lib/utils"
-import type { EntryModel } from "@renderer/models"
 import { useEntries } from "@renderer/queries/entries"
 import {
   feedActions,
   subscriptionActions,
   useFeedStore,
 } from "@renderer/store"
-import { entryActions } from "@renderer/store/entry"
+import {
+  entryActions,
+  useEntryIdsByFeedIdOrView,
+} from "@renderer/store/entry"
 import { m } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
@@ -48,11 +50,12 @@ const { setActiveEntry } = feedActions
 
 export function EntryColumn() {
   const activeList = useFeedStore((state) => state.activeList)
-  const entries = useEntriesByTab()
+  const entries = useEntriesByView()
+  const { entriesIds } = entries
 
-  const entriesIds = (entries.data?.pages?.flatMap((page) =>
-    page.data?.map((entry) => entry.entries.id),
-  ) || []) as string[]
+  // const entriesIds = (entries.data?.pages?.flatMap((page) =>
+  //   page.data?.map((entry) => entry.entries.id),
+  // ) || []) as string[]
 
   let Item: FC<UniversalItemProps>
 
@@ -128,18 +131,18 @@ export function EntryColumn() {
     rangeChanged: handleRangeChange,
     totalCount: entries.data?.pages?.[0]?.total,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
-    data: entries.data?.pages.flatMap((page) => page.data) || [],
+    data: entriesIds,
     itemContent: useCallback(
-      (_, entry: EntryModel | undefined) => {
-        if (!entry) return null
+      (_, entryId: string) => {
+        if (!entryId) return null
 
         return (
           <EntryItemWrapper
-            key={entry.entries.id}
-            entryId={entry.entries.id}
+            key={entryId}
+            entryId={entryId}
             view={activeList?.view}
           >
-            <Item entryId={entry.entries.id} />
+            <Item entryId={entryId} />
           </EntryItemWrapper>
         )
       },
@@ -169,22 +172,34 @@ export function EntryColumn() {
   )
 }
 
-const useEntriesByTab = () => {
+const useEntriesByView = () => {
   const activeList = useFeedStore(useShallow((state) => state.activeList))
   const unreadOnly = useAtomValue(unreadOnlyAtom)
 
-  return useEntries({
+  const query = useEntries({
     level: activeList?.level,
     id: activeList?.id,
     view: activeList?.view,
     ...(unreadOnly === true && { read: false }),
   })
+  const entries = useEntryIdsByFeedIdOrView(activeList.id)
+
+  // console.log(useEntryIdsByFeedIdOrView(activeList?.id), e)
+  // return entries;
+
+  return {
+    ...query,
+    entriesIds: entries,
+  }
+  // return e
+  // useEntriesByFeedId(activeList?.id);
+  // useEntriesByTab()
 }
 
 const ListHeader: FC = () => {
   const activeList = useFeedStore(useShallow((state) => state.activeList))
   const [unreadOnly, setUnreadOnly] = useAtom(unreadOnlyAtom)
-  const entries = useEntriesByTab()
+  const entries = useEntriesByView()
 
   const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
   const handleMarkAllAsRead = useCallback(async () => {

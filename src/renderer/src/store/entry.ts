@@ -1,8 +1,10 @@
 import { apiClient } from "@renderer/lib/api-fetch"
+import type { FeedViewType } from "@renderer/lib/enum"
 import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
 import { produce } from "immer"
 
+import { useFeedIdByView } from "./subscription"
 import { unreadActions } from "./unread"
 import { createZustandStore, getStoreActions } from "./utils/helper"
 
@@ -11,9 +13,20 @@ type EntryId = string
 type EntriesIdTable = Record<FeedId, EntryId[]>
 
 interface EntryState {
+  /**
+   * A map of feedId to entryIds
+   */
   entries: EntriesIdTable
+  /**
+   * A map of entryId to entry
+   */
+  flatMapEntries: Record<FeedId, EntryModel>
+  /**
+   * A map of feedId to entryId set, to quickly check if an entryId is in the feed
+   * The array is used to keep the order of the entries, and this set is used to quickly check if an entryId is in the feed
+   */
 
-  flatMapEntries: Record<string, EntryModel>
+  internal_feedId2entryIdSet: Record<FeedId, Set<EntryId>>
 }
 
 interface EntryActions {
@@ -48,11 +61,13 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
 )((set, get) => ({
   entries: {},
   flatMapEntries: {},
+  internal_feedId2entryIdSet: {},
 
   clear: () => {
     set({
       entries: {},
       flatMapEntries: {},
+      internal_feedId2entryIdSet: {},
     })
   },
 
@@ -127,7 +142,22 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
           if (!draft.entries[entry.feeds.id]) {
             draft.entries[entry.feeds.id] = []
           }
-          draft.entries[entry.feeds.id].push(entry.entries.id)
+
+          if (!draft.internal_feedId2entryIdSet[entry.feeds.id]) {
+            draft.internal_feedId2entryIdSet[entry.feeds.id] = new Set()
+          }
+
+          if (
+            !draft.internal_feedId2entryIdSet[entry.feeds.id].has(
+              entry.entries.id,
+            )
+          ) {
+            draft.entries[entry.feeds.id].push(entry.entries.id)
+            draft.internal_feedId2entryIdSet[entry.feeds.id].add(
+              entry.entries.id,
+            )
+          }
+
           draft.flatMapEntries[entry.entries.id] = entry
         }
         return draft
@@ -136,7 +166,6 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   },
 
   markRead: (feedId: string, entryId: string, read: boolean) => {
-    console.log(feedId, "feedId")
     unreadActions.incrementByFeedId(feedId, read ? -1 : 1)
     entryActions.optimisticUpdate(entryId, {
       read,
@@ -154,10 +183,31 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
 
 export const entryActions = getStoreActions(useEntryStore)
 
-export const useEntriesByFeedId = (feedId: string) =>
-  useEntryStore((state) => {
-    const entryIds = state.entries[feedId] || []
-    return entryIds.map((id) => state.flatMapEntries[id])
-  })
+export const useEntryIdsByFeedId = (feedId: string) =>
+  useEntryStore((state) => state.entries[feedId] || [])
 export const useEntry = (entryId: string) =>
   useEntryStore((state) => state.flatMapEntries[entryId])
+
+export const useEntryIdsByView = (view: FeedViewType) => {
+  const feedIds = useFeedIdByView(view)
+  return useEntryStore((state) => {
+    const data = [] as string[]
+    for (const feedId of feedIds) {
+      const entries = state.entries[feedId] || []
+      data.push(...entries)
+    }
+    return data
+  })
+}
+
+export const useEntryIdsByFeedIdOrView = (
+  feedIdOrView: string | FeedViewType,
+) => {
+  const byView = useEntryIdsByView(feedIdOrView as FeedViewType)
+  const byId = useEntryIdsByFeedId(feedIdOrView as string)
+
+  if (typeof feedIdOrView === "string") {
+    return byId
+  }
+  return byView
+}

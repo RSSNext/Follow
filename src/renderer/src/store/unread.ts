@@ -1,3 +1,6 @@
+/**
+ * Store for `feed` unread count
+ */
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { produce } from "immer"

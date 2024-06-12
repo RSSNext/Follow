@@ -97,6 +97,8 @@ export const useSubscriptionStore = createZustandStore<
 
 export const subscriptionActions = getStoreActions(useSubscriptionStore)
 
+export const useFeedIdByView = (view: FeedViewType) =>
+  useSubscriptionStore((state) => state.dataIdByView[view] || [])
 export const useSubscriptionByView = (view: FeedViewType) =>
   useSubscriptionStore((state) =>
     state.dataIdByView[view].map((id) => state.data[id]),
