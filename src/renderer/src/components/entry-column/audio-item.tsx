@@ -6,7 +6,7 @@ import { useEntry } from "@renderer/store/entry"
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function AudioItem({ entryId, entryPreview }: UniversalItemProps) {
+export function AudioItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
@@ -26,7 +26,7 @@ export function AudioItem({ entryId, entryPreview }: UniversalItemProps) {
           </span>
         </div>
         <div className={cn("relative my-0.5", !!entry.collections && "pr-4")}>
-          {entry.entries.title}
+          {translation?.title || entry.entries.title}
           {!!entry.collections && (
             <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
           )}

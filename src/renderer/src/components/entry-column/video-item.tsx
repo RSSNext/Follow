@@ -10,7 +10,7 @@ import { useMemo, useRef, useState } from "react"
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function VideoItem({ entryId, entryPreview }: UniversalItemProps) {
+export function VideoItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
   const iframeSrc = useMemo(() => urlToIframe(entry.entries.url), [entry.entries.url])
@@ -52,7 +52,7 @@ export function VideoItem({ entryId, entryPreview }: UniversalItemProps) {
         </div>
         <div className="flex-1 px-2 pb-3 pt-1 text-sm">
           <div className={cn("relative mb-0.5 mt-1 truncate font-medium", !!entry.collections && "pr-4")}>
-            {entry.entries.title}
+            {translation?.title || entry.entries.title}
             {!!entry.collections && (
               <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
             )}

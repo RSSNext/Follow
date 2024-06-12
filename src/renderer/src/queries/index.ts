@@ -1,4 +1,5 @@
 import { action } from "./actions"
+import { ai } from "./ai"
 import { auth } from "./auth"
 import { entries } from "./entries"
 import { feed } from "./feed"
@@ -10,4 +11,5 @@ export const Queries = {
   feed,
   action,
   auth,
+  ai,
 }

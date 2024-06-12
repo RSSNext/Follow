@@ -7,7 +7,7 @@ import { useEntry } from "@renderer/store/entry"
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function SocialMediaItem({ entryId, entryPreview }: UniversalItemProps) {
+export function SocialMediaItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
@@ -30,7 +30,7 @@ export function SocialMediaItem({ entryId, entryPreview }: UniversalItemProps) {
             </span>
           </div>
           <div className={cn("relative mt-0.5", !!entry.collections && "pr-4")}>
-            {entry.entries.description}
+            {translation?.description || entry.entries.description}
             {!!entry.collections && (
               <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
             )}

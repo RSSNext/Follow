@@ -5,4 +5,8 @@ export type UniversalItemProps = {
   entryPreview?: EntryModel | {
     feeds: FeedModel
   }
+  translation?: {
+    title?: string
+    description?: string
+  } | null
 }

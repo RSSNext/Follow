@@ -12,12 +12,14 @@ export const views = [
     name: "Articles",
     icon: <i className="i-mingcute-news-fill" />,
     className: "text-amber-700",
+    translation: "title,description",
   },
   {
     name: "Social Media",
     icon: <i className="i-mingcute-twitter-fill" />,
     className: "text-sky-600",
     wideMode: true,
+    translation: "description",
   },
   {
     name: "Pictures",
@@ -25,6 +27,7 @@ export const views = [
     className: "text-green-600",
     gridMode: true,
     wideMode: true,
+    translation: "title",
   },
   {
     name: "Videos",
@@ -32,16 +35,19 @@ export const views = [
     className: "text-red-600",
     gridMode: true,
     wideMode: true,
+    translation: "title",
   },
   {
     name: "Audios",
     icon: <i className="i-mingcute-headphone-fill" />,
     className: "text-purple-600",
+    translation: "title",
   },
   {
     name: "Notifications",
     icon: <i className="i-mingcute-notification-fill" />,
     className: "text-yellow-600",
+    translation: "title",
   },
 ]
 

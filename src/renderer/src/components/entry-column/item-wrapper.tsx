@@ -1,26 +1,43 @@
 import { useAsRead } from "@renderer/hooks/useAsRead"
+import { useBizQuery } from "@renderer/hooks/useBizQuery"
 import { useEntryActions, useRead } from "@renderer/hooks/useEntryActions"
 import { views } from "@renderer/lib/constants"
+import { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
+import { Queries } from "@renderer/queries"
 import { feedActions, useFeedStore } from "@renderer/store"
 import { useEntry } from "@renderer/store/entry"
+import type { FC } from "react"
 
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
+import { ArticleItem } from "./article-item"
+import { AudioItem } from "./audio-item"
+import { NotificationItem } from "./notification-item"
+import { PictureItem } from "./picture-item"
+import { SocialMediaItem } from "./social-media-item"
+import type { UniversalItemProps } from "./types"
+import { VideoItem } from "./video-item"
 
 export function EntryItemWrapper({
-  children,
   entryId,
   view,
 }: {
   entryId: string
-  children: React.ReactNode
   view?: number
 }) {
   const entry = useEntry(entryId)
   const { items } = useEntryActions({
     view,
     entry,
+  })
+
+  const translation = useBizQuery(Queries.ai.translation({
+    id: entry.entries.id,
+    language: entry.settings?.translation,
+    fields: view ? views[view].translation : "",
+  }), {
+    enabled: !!entry.settings?.translation,
   })
 
   const activeEntry = useFeedStore((state) => state.activeEntry)
@@ -31,6 +48,38 @@ export function EntryItemWrapper({
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry) return <ReactVirtuosoItemPlaceholder />
+
+  let Item: FC<UniversalItemProps>
+
+  switch (view) {
+    case FeedViewType.Articles: {
+      Item = ArticleItem
+      break
+    }
+    case FeedViewType.SocialMedia: {
+      Item = SocialMediaItem
+      break
+    }
+    case FeedViewType.Pictures: {
+      Item = PictureItem
+      break
+    }
+    case FeedViewType.Videos: {
+      Item = VideoItem
+      break
+    }
+    case FeedViewType.Audios: {
+      Item = AudioItem
+      break
+    }
+    case FeedViewType.Notifications: {
+      Item = NotificationItem
+      break
+    }
+    default: {
+      Item = ArticleItem
+    }
+  }
 
   return (
     <div className={cn(!views[view || 0].wideMode && "pb-3")}>
@@ -66,7 +115,7 @@ export function EntryItemWrapper({
           )
         }}
       >
-        {children}
+        <Item entryId={entryId} translation={translation.data} />
       </div>
     </div>
   )

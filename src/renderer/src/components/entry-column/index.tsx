@@ -7,7 +7,6 @@ import {
 } from "@renderer/components/ui/popover"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { views } from "@renderer/lib/constants"
-import { FeedViewType } from "@renderer/lib/enum"
 import { buildStorageNS } from "@renderer/lib/ns"
 import { getEntriesParams } from "@renderer/lib/utils"
 import { useEntries } from "@renderer/queries/entries"
@@ -29,14 +28,7 @@ import { useEventCallback } from "usehooks-ts"
 import { useShallow } from "zustand/react/shallow"
 
 import { EmptyIcon } from "../icons/empty"
-import { ArticleItem } from "./article-item"
-import { AudioItem } from "./audio-item"
 import { EntryItemWrapper } from "./item-wrapper"
-import { NotificationItem } from "./notification-item"
-import { PictureItem } from "./picture-item"
-import { SocialMediaItem } from "./social-media-item"
-import type { UniversalItemProps } from "./types"
-import { VideoItem } from "./video-item"
 
 const unreadOnlyAtom = atomWithStorage<boolean>(
   buildStorageNS("entry-unreadonly"),
@@ -49,38 +41,6 @@ export function EntryColumn() {
   const activeList = useFeedStore((state) => state.activeList)
   const entries = useEntriesByView()
   const { entriesIds } = entries
-
-  let Item: FC<UniversalItemProps>
-
-  switch (activeList?.view) {
-    case FeedViewType.Articles: {
-      Item = ArticleItem
-      break
-    }
-    case FeedViewType.SocialMedia: {
-      Item = SocialMediaItem
-      break
-    }
-    case FeedViewType.Pictures: {
-      Item = PictureItem
-      break
-    }
-    case FeedViewType.Videos: {
-      Item = VideoItem
-      break
-    }
-    case FeedViewType.Audios: {
-      Item = AudioItem
-      break
-    }
-    case FeedViewType.Notifications: {
-      Item = NotificationItem
-      break
-    }
-    default: {
-      Item = ArticleItem
-    }
-  }
 
   const handleRangeChange = useEventCallback(
     debounce(
@@ -134,12 +94,10 @@ export function EntryColumn() {
             key={entryId}
             entryId={entryId}
             view={activeList?.view}
-          >
-            <Item entryId={entryId} />
-          </EntryItemWrapper>
+          />
         )
       },
-      [Item, activeList?.view],
+      [activeList?.view],
     ),
   }
 

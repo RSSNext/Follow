@@ -8,7 +8,7 @@ import { useEntry } from "@renderer/store/entry"
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
+export function ArticleItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
   const asRead = useAsRead(entry)
@@ -33,13 +33,13 @@ export function ArticleItem({ entryId, entryPreview }: UniversalItemProps) {
           </span>
         </div>
         <div className={cn("relative my-0.5 break-words", !!entry.collections && "pr-4", entry.entries.title ? "font-medium" : "text-[13px]")}>
-          {entry.entries.title || entry.entries.description}
+          {translation?.title || translation?.description || entry.entries.title || entry.entries.description}
           {!!entry.collections && (
             <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
           )}
         </div>
         <div className={cn("text-[13px]", asRead ? "text-zinc-400" : "text-zinc-500")}>
-          {entry.entries.description}
+          {translation?.description || entry.entries.description}
         </div>
       </div>
       {entry.entries.images?.[0] && (
