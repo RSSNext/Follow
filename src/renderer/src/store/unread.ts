@@ -23,7 +23,7 @@ interface UnreadActions {
 export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
   "unread",
   {
-    version: 0,
+    version: 1,
   },
 )((set) => ({
   data: {},
@@ -73,10 +73,10 @@ export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
       produce(state, (state) => {
         const cur = state.data[feedId]
         if (cur === undefined) {
-          state.data[feedId] = inc
+          state.data[feedId] = Math.max(0, inc)
           return state
         }
-        state.data[feedId] = (cur || 0) + inc
+        state.data[feedId] = Math.max(0, (cur || 0) + inc)
         return state
       }),
     )

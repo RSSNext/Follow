@@ -10,6 +10,7 @@ import { persist } from "zustand/middleware"
 import { shallow } from "zustand/shallow"
 import { createWithEqualityFn } from "zustand/traditional"
 
+declare const window: any
 export const dbStorage: PersistStorage<any> = {
   getItem: async (name: string) => {
     const data = (await get(name)) || null
@@ -52,8 +53,9 @@ export const createZustandStore =
         shallow,
       )
 
-      Object.assign(window, {
-        [`__${name}`]() {
+      window.store = window.store || {}
+      Object.assign(window.store, {
+        [name]() {
           return newStore.getState()
         },
       })

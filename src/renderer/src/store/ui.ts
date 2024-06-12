@@ -13,7 +13,7 @@ interface UIActions {
   clear: () => void
 }
 export const useUIStore = createZustandStore<UIState & UIActions>("ui", {
-  version: 0,
+  version: 1,
 })((set) => ({
   ...createDefaultUIState(),
 

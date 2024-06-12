@@ -65,7 +65,7 @@ export function Component() {
       <AnimatePresence>
         {!inWideMode && (
           <div className="flex-1">
-            <EntryContent entryId={activeEntry} />
+            <EntryContent entry={activeEntry} />
           </div>
         )}
       </AnimatePresence>

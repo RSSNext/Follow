@@ -50,10 +50,6 @@ export function EntryColumn() {
   const entries = useEntriesByView()
   const { entriesIds } = entries
 
-  // const entriesIds = (entries.data?.pages?.flatMap((page) =>
-  //   page.data?.map((entry) => entry.entries.id),
-  // ) || []) as string[]
-
   let Item: FC<UniversalItemProps>
 
   switch (activeList?.view) {

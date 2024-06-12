@@ -3,6 +3,7 @@ import type { FeedViewType } from "@renderer/lib/enum"
 import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
 import { produce } from "immer"
+import { merge, omit } from "lodash-es"
 
 import { useFeedIdByView } from "./subscription"
 import { unreadActions } from "./unread"
@@ -38,6 +39,7 @@ interface EntryActions {
 
     pageParam?: string
   }) => Promise<Awaited<ReturnType<typeof apiClient.entries.$post>>>
+  fetchEntryById: (entryId: string) => Promise<EntryModel | undefined>
   upsertMany: (entries: EntryModel[]) => void
 
   optimisticUpdate: (entryId: string, changed: Partial<EntryModel>) => void
@@ -56,7 +58,7 @@ interface EntryActions {
 export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   "entry",
   {
-    version: 0,
+    version: 1,
   },
 )((set, get) => ({
   entries: {},
@@ -71,6 +73,20 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
     })
   },
 
+  fetchEntryById: async (entryId: string) => {
+    const { data } = await apiClient.entries.$get({
+      query: {
+        id: entryId,
+      },
+    })
+    if (data) {
+      get().upsertMany([
+        // patch data, should omit `read` because the network race condition or server cache
+        omit(data, "read") as any,
+      ])
+    }
+    return data
+  },
   fetchEntries: async ({
     level,
     id,
@@ -83,6 +99,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
       json: {
         publishedAfter: pageParam as string,
         read,
+        // withContent: true,
         ...getEntriesParams({
           level,
           id,
@@ -158,7 +175,10 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
             )
           }
 
-          draft.flatMapEntries[entry.entries.id] = entry
+          draft.flatMapEntries[entry.entries.id] = merge(
+            draft.flatMapEntries[entry.entries.id] || {},
+            entry,
+          )
         }
         return draft
       }),
