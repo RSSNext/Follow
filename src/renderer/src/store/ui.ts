@@ -3,16 +3,24 @@ import { createZustandStore, getStoreActions } from "./utils/helper"
 interface UIState {
   entryColWidth: number
 }
+
+const createDefaultUIState = (): UIState => ({
+  entryColWidth: 340,
+})
 interface UIActions {
   setEntryColWidth: (width: number) => void
+
+  clear: () => void
 }
-export const useUIStore = createZustandStore<UIState & UIActions>(
-  "ui",
-  {
-    version: 0,
+export const useUIStore = createZustandStore<UIState & UIActions>("ui", {
+  version: 1,
+})((set) => ({
+  ...createDefaultUIState(),
+
+  clear() {
+    set(createDefaultUIState())
   },
-)((set) => ({
-  entryColWidth: 340,
+
   setEntryColWidth(width) {
     set({ entryColWidth: width })
   },

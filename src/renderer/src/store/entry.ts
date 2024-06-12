@@ -1,8 +1,11 @@
 import { apiClient } from "@renderer/lib/api-fetch"
+import type { FeedViewType } from "@renderer/lib/enum"
 import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
 import { produce } from "immer"
+import { merge, omit } from "lodash-es"
 
+import { useFeedIdByView } from "./subscription"
 import { unreadActions } from "./unread"
 import { createZustandStore, getStoreActions } from "./utils/helper"
 
@@ -11,9 +14,20 @@ type EntryId = string
 type EntriesIdTable = Record<FeedId, EntryId[]>
 
 interface EntryState {
+  /**
+   * A map of feedId to entryIds
+   */
   entries: EntriesIdTable
+  /**
+   * A map of entryId to entry
+   */
+  flatMapEntries: Record<FeedId, EntryModel>
+  /**
+   * A map of feedId to entryId set, to quickly check if an entryId is in the feed
+   * The array is used to keep the order of the entries, and this set is used to quickly check if an entryId is in the feed
+   */
 
-  flatMapEntries: Record<string, EntryModel>
+  internal_feedId2entryIdSet: Record<FeedId, Set<EntryId>>
 }
 
 interface EntryActions {
@@ -25,6 +39,7 @@ interface EntryActions {
 
     pageParam?: string
   }) => Promise<Awaited<ReturnType<typeof apiClient.entries.$post>>>
+  fetchEntryById: (entryId: string) => Promise<EntryModel | undefined>
   upsertMany: (entries: EntryModel[]) => void
 
   optimisticUpdate: (entryId: string, changed: Partial<EntryModel>) => void
@@ -36,17 +51,42 @@ interface EntryActions {
   getFlattenMapEntries: () => Record<string, EntryModel>
   markRead: (feedId: string, entryId: string, read: boolean) => void
   markReadByFeedId: (feedId: string) => void
+
+  clear: () => void
 }
 
 export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   "entry",
   {
-    version: 0,
+    version: 1,
   },
 )((set, get) => ({
   entries: {},
   flatMapEntries: {},
+  internal_feedId2entryIdSet: {},
 
+  clear: () => {
+    set({
+      entries: {},
+      flatMapEntries: {},
+      internal_feedId2entryIdSet: {},
+    })
+  },
+
+  fetchEntryById: async (entryId: string) => {
+    const { data } = await apiClient.entries.$get({
+      query: {
+        id: entryId,
+      },
+    })
+    if (data) {
+      get().upsertMany([
+        // patch data, should omit `read` because the network race condition or server cache
+        omit(data, "read") as any,
+      ])
+    }
+    return data
+  },
   fetchEntries: async ({
     level,
     id,
@@ -59,6 +99,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
       json: {
         publishedAfter: pageParam as string,
         read,
+        // withContent: true,
         ...getEntriesParams({
           level,
           id,
@@ -118,8 +159,26 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
           if (!draft.entries[entry.feeds.id]) {
             draft.entries[entry.feeds.id] = []
           }
-          draft.entries[entry.feeds.id].push(entry.entries.id)
-          draft.flatMapEntries[entry.entries.id] = entry
+
+          if (!draft.internal_feedId2entryIdSet[entry.feeds.id]) {
+            draft.internal_feedId2entryIdSet[entry.feeds.id] = new Set()
+          }
+
+          if (
+            !draft.internal_feedId2entryIdSet[entry.feeds.id].has(
+              entry.entries.id,
+            )
+          ) {
+            draft.entries[entry.feeds.id].push(entry.entries.id)
+            draft.internal_feedId2entryIdSet[entry.feeds.id].add(
+              entry.entries.id,
+            )
+          }
+
+          draft.flatMapEntries[entry.entries.id] = merge(
+            draft.flatMapEntries[entry.entries.id] || {},
+            entry,
+          )
         }
         return draft
       }),
@@ -127,7 +186,6 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   },
 
   markRead: (feedId: string, entryId: string, read: boolean) => {
-    console.log(feedId, "feedId")
     unreadActions.incrementByFeedId(feedId, read ? -1 : 1)
     entryActions.optimisticUpdate(entryId, {
       read,
@@ -145,10 +203,60 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
 
 export const entryActions = getStoreActions(useEntryStore)
 
-export const useEntriesByFeedId = (feedId: string) =>
-  useEntryStore((state) => {
-    const entryIds = state.entries[feedId] || []
-    return entryIds.map((id) => state.flatMapEntries[id])
-  })
+interface EntryFilter {
+  unread?: boolean
+}
 export const useEntry = (entryId: string) =>
   useEntryStore((state) => state.flatMapEntries[entryId])
+export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
+  useEntryStore((state) => {
+    const data = state.entries[feedId] || []
+    if (filter?.unread) {
+      const result = [] as string[]
+      for (const entryId of data) {
+        const entry = state.flatMapEntries[entryId]
+        if (!entry?.read) {
+          result.push(entryId)
+        }
+      }
+      return result
+    }
+    return data
+  })
+
+export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {
+  const feedIds = useFeedIdByView(view)
+  return useEntryStore((state) => {
+    const data = [] as string[]
+    for (const feedId of feedIds) {
+      const entries = state.entries[feedId] || []
+
+      data.push(...entries)
+    }
+
+    if (filter?.unread) {
+      const result = [] as string[]
+      for (const entryId of data) {
+        const entry = state.flatMapEntries[entryId]
+        if (!entry?.read) {
+          result.push(entryId)
+        }
+      }
+      return result
+    }
+    return data
+  })
+}
+
+export const useEntryIdsByFeedIdOrView = (
+  feedIdOrView: string | FeedViewType,
+  filter: EntryFilter = {},
+) => {
+  const byView = useEntryIdsByView(feedIdOrView as FeedViewType, filter)
+  const byId = useEntryIdsByFeedId(feedIdOrView as string, filter)
+
+  if (typeof feedIdOrView === "string") {
+    return byId
+  }
+  return byView
+}

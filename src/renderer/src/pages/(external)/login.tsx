@@ -1,21 +1,10 @@
 import { signIn, useSession } from "@hono/auth-js/react"
 import { Button } from "@renderer/components/ui/button"
+import { LOGIN_CALLBACK_URL, loginHandler } from "@renderer/lib/auth"
 import { APP_NAME } from "@renderer/lib/constants"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-const LOGIN_CALLBACK_URL = `${import.meta.env.VITE_WEB_URL}/redirect?app=follow`
-const loginHandler = (provider: string) => {
-  if (window.electron) {
-    window.open(
-      `${import.meta.env.VITE_WEB_URL}/login?provider=${provider}`,
-    )
-  } else {
-    signIn(provider, {
-      callbackUrl: LOGIN_CALLBACK_URL,
-    })
-  }
-}
 export function Component() {
   const { status } = useSession()
   const navigate = useNavigate()

@@ -1,5 +1,5 @@
 import { ActionButton } from "@renderer/components/ui/button"
-import { UserButton } from "@renderer/components/user-button"
+import { ProfileButton } from "@renderer/components/user-button"
 import { APP_NAME, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { clamp, cn } from "@renderer/lib/utils"
@@ -91,11 +91,7 @@ export function FeedColumn() {
           </div>
         )}
         <div className="flex items-center gap-2" onClick={stopPropagation}>
-          <Link to="/profile">
-            <ActionButton tooltip="Profile">
-              <UserButton className="h-5 p-0" hideName />
-            </ActionButton>
-          </Link>
+          <ProfileButton method="modal" />
           <Link to="/discover">
             <ActionButton tooltip="Add">
               <i className="i-mingcute-add-line size-5 text-theme-vibrancyFg" />
@@ -103,6 +99,7 @@ export function FeedColumn() {
           </Link>
         </div>
       </div>
+
       <div
         className="flex w-full justify-between px-3 text-xl text-theme-vibrancyFg"
         onClick={stopPropagation}

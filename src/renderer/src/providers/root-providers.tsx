@@ -1,10 +1,9 @@
-import { SessionProvider } from "@hono/auth-js/react"
 import { ModalStackProvider } from "@renderer/components/ui/modal"
 import { Toaster } from "@renderer/components/ui/sonner"
 import { TooltipProvider } from "@renderer/components/ui/tooltip"
 import { jotaiStore } from "@renderer/lib/jotai"
-import { queryClient } from "@renderer/lib/query-client"
-import { QueryClientProvider } from "@tanstack/react-query"
+import { persistConfig, queryClient } from "@renderer/lib/query-client"
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { LazyMotion, MotionConfig } from "framer-motion"
 import { Provider } from "jotai"
 import type { FC, PropsWithChildren } from "react"
@@ -21,16 +20,17 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
         ease: "easeInOut",
       }}
     >
-      <SessionProvider>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <Provider store={jotaiStore}>
-              <ModalStackProvider />
-              <HelmetProvider>{children}</HelmetProvider>
-            </Provider>
-          </TooltipProvider>
-        </QueryClientProvider>
-      </SessionProvider>
+      <PersistQueryClientProvider
+        persistOptions={persistConfig}
+        client={queryClient}
+      >
+        <TooltipProvider>
+          <Provider store={jotaiStore}>
+            <ModalStackProvider />
+            <HelmetProvider>{children}</HelmetProvider>
+          </Provider>
+        </TooltipProvider>
+      </PersistQueryClientProvider>
     </MotionConfig>
     <Toaster />
   </LazyMotion>

@@ -1,3 +1,5 @@
+import { buildStorageNS } from "./ns"
+
 export const levels = {
   view: "view",
   folder: "folder",
@@ -43,8 +45,6 @@ export const views = [
   },
 ]
 
-export const APP_NAME = "Follow"
-
 export const settingTabs = [
   {
     name: "General",
@@ -67,3 +67,8 @@ export const settingTabs = [
     className: "i-mingcute-user-setting-line",
   },
 ]
+
+////
+export const APP_NAME = "Follow"
+/// Local storage keys
+export const QUERY_PERSIST_KEY = buildStorageNS("REACT_QUERY_OFFLINE_CACHE")

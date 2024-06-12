@@ -1,3 +1,6 @@
+/**
+ * Store for `feed` unread count
+ */
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { produce } from "immer"
@@ -14,17 +17,23 @@ interface UnreadActions {
   incrementByFeedId: (feedId: string, inc: number) => void
 
   internal_reset: () => void
+
+  clear: () => void
 }
 export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
   "unread",
   {
-    version: 0,
+    version: 1,
   },
 )((set) => ({
   data: {},
 
   internal_reset() {
     set({ data: {} })
+  },
+
+  clear() {
+    this.internal_reset()
   },
 
   async fetchUnreadByView(view) {
@@ -64,10 +73,10 @@ export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
       produce(state, (state) => {
         const cur = state.data[feedId]
         if (cur === undefined) {
-          state.data[feedId] = inc
+          state.data[feedId] = Math.max(0, inc)
           return state
         }
-        state.data[feedId] = (cur || 0) + inc
+        state.data[feedId] = Math.max(0, (cur || 0) + inc)
         return state
       }),
     )

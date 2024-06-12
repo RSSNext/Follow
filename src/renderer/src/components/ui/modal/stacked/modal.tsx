@@ -1,7 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
-import type { Target, Transition } from "framer-motion"
 import { m, useAnimationControls } from "framer-motion"
 import { useSetAtom } from "jotai"
 import type { SyntheticEvent } from "react"
@@ -16,27 +15,15 @@ import {
 } from "react"
 import { useEventCallback } from "usehooks-ts"
 
-import { microReboundPreset } from "../../constants/spring"
 import { DialogOverlay } from "../../dialog"
 import { Divider } from "../../divider"
+import { modalMontionConfig } from "./constants"
 import type {
   CurrentModalContentProps,
   ModalContentPropsInternal,
 } from "./context"
 import { CurrentModalContext, modalStackAtom } from "./context"
 import type { ModalProps } from "./types"
-
-const enterStyle: Target = {
-  scale: 1,
-  opacity: 1,
-}
-const initialStyle: Target = {
-  scale: 0.96,
-  opacity: 0,
-}
-const modalTransition: Transition = {
-  ...microReboundPreset,
-}
 
 export const ModalInternal: Component<{
   item: ModalProps & { id: string }
@@ -87,7 +74,7 @@ export const ModalInternal: Component<{
 
   const animateController = useAnimationControls()
   useEffect(() => {
-    animateController.start(enterStyle)
+    animateController.start(modalMontionConfig.animate)
   }, [animateController])
   const noticeModal = useCallback(() => {
     animateController
@@ -183,14 +170,11 @@ export const ModalInternal: Component<{
             >
               <m.div
                 style={modalStyle}
-                exit={initialStyle}
-                initial={initialStyle}
-                animate={animateController}
-                transition={modalTransition}
+                {...modalMontionConfig}
                 className={cn(
                   "relative flex flex-col overflow-hidden rounded-lg",
                   "bg-zinc-50/80 dark:bg-neutral-900/80",
-                  "p-2 shadow-2xl shadow-stone-300 backdrop-blur-sm dark:shadow-stone-800",
+                  "shadow-modal p-2 backdrop-blur-sm",
                   max ?
                     "h-[90vh] w-[90vw]" :
                     "max-h-[70vh] min-w-[300px] max-w-[90vw] lg:max-h-[calc(100vh-20rem)] lg:max-w-[70vw]",

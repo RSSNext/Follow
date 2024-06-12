@@ -10,7 +10,7 @@ export type ActiveList = {
   id: string | number
   name: string
   view: number
-} | null
+}
 
 export type FeedResponse = SubscriptionResponse[number]["feeds"]
 

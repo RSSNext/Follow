@@ -1,4 +1,3 @@
-import { useSession } from "@hono/auth-js/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { SettingsTitle } from "@renderer/components/settings/title"
 import { Button } from "@renderer/components/ui/button"
@@ -13,6 +12,7 @@ import {
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
 import { apiClient } from "@renderer/lib/api-fetch"
+import { useSession } from "@renderer/queries/auth"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -25,7 +25,7 @@ const formSchema = z.object({
 })
 
 export function Component() {
-  const { data: session } = useSession()
+  const { session } = useSession()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -10,20 +10,19 @@ import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { buildStorageNS } from "@renderer/lib/ns"
 import { getEntriesParams } from "@renderer/lib/utils"
-import type { EntryModel } from "@renderer/models"
 import { useEntries } from "@renderer/queries/entries"
 import {
   feedActions,
   subscriptionActions,
   useFeedStore,
 } from "@renderer/store"
-import { entryActions } from "@renderer/store/entry"
+import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
 import { m } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { debounce } from "lodash-es"
 import type { FC } from "react"
-import { forwardRef, useCallback, useState } from "react"
+import { forwardRef, useCallback, useMemo, useRef, useState } from "react"
 import type { ListRange } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
@@ -48,11 +47,8 @@ const { setActiveEntry } = feedActions
 
 export function EntryColumn() {
   const activeList = useFeedStore((state) => state.activeList)
-  const entries = useEntriesByTab()
-
-  const entriesIds = (entries.data?.pages?.flatMap((page) =>
-    page.data?.map((entry) => entry.entries.id),
-  ) || []) as string[]
+  const entries = useEntriesByView()
+  const { entriesIds } = entries
 
   let Item: FC<UniversalItemProps>
 
@@ -128,18 +124,18 @@ export function EntryColumn() {
     rangeChanged: handleRangeChange,
     totalCount: entries.data?.pages?.[0]?.total,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
-    data: entries.data?.pages.flatMap((page) => page.data) || [],
+    data: entriesIds,
     itemContent: useCallback(
-      (_, entry: EntryModel | undefined) => {
-        if (!entry) return null
+      (_, entryId: string) => {
+        if (!entryId) return null
 
         return (
           <EntryItemWrapper
-            key={entry.entries.id}
-            entryId={entry.entries.id}
+            key={entryId}
+            entryId={entryId}
             view={activeList?.view}
           >
-            <Item entryId={entry.entries.id} />
+            <Item entryId={entryId} />
           </EntryItemWrapper>
         )
       },
@@ -169,22 +165,52 @@ export function EntryColumn() {
   )
 }
 
-const useEntriesByTab = () => {
+const useEntriesByView = () => {
   const activeList = useFeedStore(useShallow((state) => state.activeList))
   const unreadOnly = useAtomValue(unreadOnlyAtom)
 
-  return useEntries({
+  const query = useEntries({
     level: activeList?.level,
     id: activeList?.id,
     view: activeList?.view,
     ...(unreadOnly === true && { read: false }),
   })
+  const entries = useEntryIdsByFeedIdOrView(activeList.id, {
+    unread: unreadOnly,
+  })
+
+  // in unread only entries only can grow the data, but not shrink
+  // so we memo this previous data to avoid the flicker
+  const prevEntries = useRef(entries)
+  const nextEntries = useMemo(() => {
+    if (!unreadOnly) {
+      prevEntries.current = []
+      return entries
+    }
+    if (!prevEntries.current) {
+      prevEntries.current = entries
+      return entries
+    }
+    if (entries.length > prevEntries.current.length) {
+      prevEntries.current = entries
+      return entries
+    }
+    // merge the new entries with the old entries, and unqiue them
+    const nextIds = [...new Set([...prevEntries.current, ...entries])]
+    prevEntries.current = nextIds
+    return nextIds
+  }, [entries, prevEntries, unreadOnly])
+
+  return {
+    ...query,
+    entriesIds: nextEntries,
+  }
 }
 
 const ListHeader: FC = () => {
   const activeList = useFeedStore(useShallow((state) => state.activeList))
   const [unreadOnly, setUnreadOnly] = useAtom(unreadOnlyAtom)
-  const entries = useEntriesByTab()
+  const entries = useEntriesByView()
 
   const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
   const handleMarkAllAsRead = useCallback(async () => {

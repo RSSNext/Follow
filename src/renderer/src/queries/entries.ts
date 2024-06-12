@@ -1,4 +1,3 @@
-import { UnprocessableEntityError } from "@renderer/biz/error"
 import { useBizInfiniteQuery, useBizQuery } from "@renderer/hooks/useBizQuery"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
@@ -24,31 +23,17 @@ export const entries = {
           id,
           view,
           read,
+
           pageParam: pageParam as string,
         }),
       {
         rootKey: ["entries"],
       },
     ),
-  byId: (id?: string | null) =>
-    defineQuery(
-      ["entry", id],
-      async () => {
-        if (!id) {
-          throw new UnprocessableEntityError("id is required")
-        }
-        const res = await apiClient.entries.$get({
-          query: {
-            id,
-          },
-        })
-
-        return res.data
-      },
-      {
-        rootKey: ["entries"],
-      },
-    ),
+  byId: (id: string) =>
+    defineQuery(["entry", id], async () => entryActions.fetchEntryById(id), {
+      rootKey: ["entries"],
+    }),
   preview: (id: string) =>
     defineQuery(
       ["entries-preview", id],
@@ -89,11 +74,7 @@ export const useEntries = ({
     initialPageParam: undefined,
   })
 
-export const useEntriesPreview = ({
-  id,
-}: {
-  id?: string
-}) =>
+export const useEntriesPreview = ({ id }: { id?: string }) =>
   useBizQuery(entries.preview(id!), {
     enabled: !!id,
   })

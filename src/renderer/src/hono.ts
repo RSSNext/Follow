@@ -373,6 +373,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     feedIdList?: string[] | undefined;
                     publishedAfter?: string | undefined;
                     collected?: boolean | undefined;
+                    withContent?: boolean | undefined;
                 };
             };
             output: {
@@ -392,6 +393,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         publishedAt: string;
                         images: string[] | null;
                         categories: string[] | null;
+                        content?: string | null | undefined;
                         enclosures?: {
                             url: string;
                             length?: number | undefined;

@@ -5,7 +5,8 @@ body,
   @apply select-none;
   /* @apply bg-white; */
 
-  font-family: "SN Pro", sans-serif;
+  --fo-font-family: "SN Pro", system-ui, sans-serif;
+  @apply font-theme;
 }
 
 button,

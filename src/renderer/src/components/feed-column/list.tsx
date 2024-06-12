@@ -8,6 +8,7 @@ import { Queries } from "@renderer/queries"
 import {
   feedActions,
   useFeedActiveList,
+  useSubscriptionByView,
   useUnreadStore,
 } from "@renderer/store"
 import { useMemo, useState } from "react"
@@ -16,12 +17,12 @@ import { parse } from "tldts"
 
 import { FeedCategory } from "./category"
 
-const useData = (view?: FeedViewType) => {
-  const query = useBizQuery(Queries.subscription.byView(view))
+const useData = (view: FeedViewType) => {
+  useBizQuery(Queries.subscription.byView(view))
+  const data = useSubscriptionByView(view)
 
   // TODO Refactor this into category store
   return useMemo(() => {
-    if (!query.data) return null
     const categories = {
       list: {},
     } as {
@@ -33,44 +34,42 @@ const useData = (view?: FeedViewType) => {
       >
     }
     const domains: Record<string, number> = {}
-    const subscriptions = structuredClone(query.data)
+    const subscriptions = structuredClone(data)
 
-    if (query) {
-      for (const subscription of subscriptions) {
-        if (!subscription.category && subscription.feeds.siteUrl) {
+    for (const subscription of subscriptions) {
+      if (!subscription.category && subscription.feeds.siteUrl) {
+        const { domain } = parse(subscription.feeds.siteUrl)
+        if (domain) {
+          if (!domains[domain]) {
+            domains[domain] = 0
+          }
+          domains[domain]++
+        }
+      }
+    }
+
+    for (const subscription of subscriptions) {
+      if (!subscription.category) {
+        if (subscription.feeds.siteUrl) {
           const { domain } = parse(subscription.feeds.siteUrl)
-          if (domain) {
-            if (!domains[domain]) {
-              domains[domain] = 0
-            }
-            domains[domain]++
+          if (domain && domains[domain] > 1) {
+            subscription.category =
+              domain.slice(0, 1).toUpperCase() + domain.slice(1)
           }
         }
-      }
-    }
-    if (query) {
-      for (const subscription of subscriptions) {
         if (!subscription.category) {
-          if (subscription.feeds.siteUrl) {
-            const { domain } = parse(subscription.feeds.siteUrl)
-            if (domain && domains[domain] > 1) {
-              subscription.category =
-                domain.slice(0, 1).toUpperCase() + domain.slice(1)
-            }
-          }
-          if (!subscription.category) {
-            subscription.category = ""
-          }
+          subscription.category = ""
         }
-        if (!categories.list[subscription.category]) {
-          categories.list[subscription.category] = {
-            list: [],
-          }
-        }
-
-        categories.list[subscription.category].list.push(subscription)
       }
+      if (!categories.list[subscription.category]) {
+        categories.list[subscription.category] = {
+          list: [],
+        }
+      }
+
+      categories.list[subscription.category].list.push(subscription)
     }
+
     const list = Object.entries(categories.list).map(([name, list]) => ({
       name,
       list: list.list,
@@ -79,7 +78,7 @@ const useData = (view?: FeedViewType) => {
     return {
       list,
     } as FeedListModel
-  }, [query])
+  }, [data])
 }
 export function FeedList({
   className,
@@ -87,7 +86,7 @@ export function FeedList({
   hideTitle,
 }: {
   className?: string
-  view?: number
+  view: number
   hideTitle?: boolean
 }) {
   const [expansion, setExpansion] = useState(false)
