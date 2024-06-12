@@ -14,18 +14,15 @@ import {
 } from "@renderer/components/ui/form"
 import {
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
 import { Switch } from "@renderer/components/ui/switch"
+import { ViewSelectContent } from "@renderer/components/view-select-content"
 import { useBizQuery } from "@renderer/hooks/useBizQuery"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
-import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
-import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useFeed } from "@renderer/queries/feed"
 import { useMutation } from "@tanstack/react-query"
@@ -161,18 +158,7 @@ export function Component() {
                               <SelectValue />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
-                            {views.map((view, index) => (
-                              <SelectItem key={view.name} value={`${index}`}>
-                                <div className="flex items-center gap-2">
-                                  <span className={cn(view.className, "flex")}>
-                                    {view.icon}
-                                  </span>
-                                  <span>{view.name}</span>
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
+                          <ViewSelectContent />
                         </Select>
                         <FormMessage />
                       </FormItem>

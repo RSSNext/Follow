@@ -29,6 +29,8 @@ import {
   TableHeader,
   TableRow,
 } from "@renderer/components/ui/table"
+import { ViewSelectContent } from "@renderer/components/view-select-content"
+import { cn } from "@renderer/lib/utils"
 
 type Operation =
   | "contains"
@@ -39,37 +41,14 @@ type Operation =
   | "lt"
   | "regex"
 type EntryField = "all" | "title" | "content" | "author" | "link" | "order"
-type FeedField = "view" | "title" | "category" | "site_url" | "feed_url"
-
-// eslint-disable-next-line unused-imports/no-unused-vars
-type Actions = {
-  name: string
-  condition: {
-    field: FeedField
-    operator: Operation
-    value: string | number
-  }[]
-  result: {
-    translation?: string
-    summary?: boolean
-    rewriteRules?: {
-      from: string
-      to: string
-    }[]
-    blockRules?: {
-      field: EntryField
-      operator: Operation
-      value: string | number
-    }[]
-  }
-}[]
+type FeedField = "view" | "title" | "site_url" | "feed_url"
 
 type ActionsInput = {
   name: string
   condition: {
     field?: FeedField
     operator?: Operation
-    value?: string | number
+    value?: string
   }[]
   result: {
     translation?: string
@@ -90,30 +69,37 @@ const OperationOptions = [
   {
     name: "contains",
     value: "contains",
+    types: ["text"],
   },
   {
     name: "does not contain",
     value: "not_contains",
+    types: ["text"],
   },
   {
     name: "is equal to",
     value: "eq",
+    types: ["number", "text", "view"],
   },
   {
     name: "is not equal to",
     value: "not_eq",
+    types: ["number", "text", "view"],
   },
   {
     name: "is greater than",
     value: "gt",
+    types: ["number"],
   },
   {
     name: "is less than",
     value: "lt",
+    types: ["number"],
   },
   {
     name: "matches regex",
     value: "regex",
+    types: ["text"],
   },
 ]
 
@@ -141,6 +127,7 @@ const EntryOptions = [
   {
     name: "Order",
     value: "order",
+    type: "number",
   },
 ]
 
@@ -148,6 +135,7 @@ const FeedOptions = [
   {
     name: "View",
     value: "view",
+    type: "view",
   },
   {
     name: "Title",
@@ -231,27 +219,32 @@ const AddTableRow = ({ onClick }: { onClick?: () => void }) => (
 )
 
 const OperationTableCell = ({
+  type,
   value,
   onValueChange,
 }: {
+  type: string
   value?: Operation
   onValueChange?: (value: Operation) => void
-}) => (
-  <TableCell size="sm">
-    <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className="h-8">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {OperationOptions.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  </TableCell>
-)
+}) => {
+  const options = OperationOptions.filter((option) => option.types.includes(type))
+  return (
+    <TableCell size="sm">
+      <Select value={value} onValueChange={onValueChange}>
+        <SelectTrigger className="h-8">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </TableCell>
+  )
+}
 
 const SettingCollapsible = ({
   title,
@@ -273,6 +266,16 @@ const SettingCollapsible = ({
     </div>
     <CollapsibleContent className="mt-2">{children}</CollapsibleContent>
   </Collapsible>
+)
+
+const CommonSelectTrigger = ({
+  className,
+}: {
+  className?: string
+}) => (
+  <SelectTrigger className={cn("h-8", className)}>
+    <SelectValue />
+  </SelectTrigger>
 )
 
 export function ActionCard({
@@ -350,6 +353,9 @@ export function ActionCard({
                           data.condition[conditionIdx][key] = value
                           onChange(data)
                         }
+                        const type = FeedOptions.find(
+                          (option) => option.value === condition.field,
+                        )?.type || "text"
                         return (
                           <TableRow key={conditionIdx}>
                             <DeleteTableCell
@@ -364,9 +370,7 @@ export function ActionCard({
                                 onValueChange={(value: FeedField) =>
                                   change("field", value)}
                               >
-                                <SelectTrigger className="h-8">
-                                  <SelectValue />
-                                </SelectTrigger>
+                                <CommonSelectTrigger />
                                 <SelectContent>
                                   {FeedOptions.map((option) => (
                                     <SelectItem
@@ -380,17 +384,29 @@ export function ActionCard({
                               </Select>
                             </TableCell>
                             <OperationTableCell
+                              type={type}
                               value={condition.operator}
                               onValueChange={(value) =>
                                 change("operator", value)}
                             />
                             <TableCell size="sm">
-                              <Input
-                                value={condition.value}
-                                className="h-8"
-                                onChange={(e) =>
-                                  change("value", e.target.value)}
-                              />
+                              {type === "view" ? (
+                                <Select
+                                  onValueChange={(value) => change("value", value)}
+                                  value={condition.value}
+                                >
+                                  <CommonSelectTrigger />
+                                  <ViewSelectContent />
+                                </Select>
+                              ) : (
+                                <Input
+                                  type={type}
+                                  value={condition.value}
+                                  className="h-8"
+                                  onChange={(e) =>
+                                    change("value", e.target.value)}
+                                />
+                              )}
                             </TableCell>
                           </TableRow>
                         )
@@ -430,9 +446,7 @@ export function ActionCard({
                       onChange(data)
                     }}
                   >
-                    <SelectTrigger className="h-8 max-w-44">
-                      <SelectValue />
-                    </SelectTrigger>
+                    <CommonSelectTrigger className="max-w-44" />
                     <SelectContent>
                       {TransitionOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
@@ -569,6 +583,9 @@ export function ActionCard({
                               data.result.blockRules![index][key] = value
                               onChange(data)
                             }
+                            const type = EntryOptions.find(
+                              (option) => option.value === rule.field,
+                            )?.type || "text"
                             return (
                               <TableRow key={index}>
                                 <DeleteTableCell
@@ -587,9 +604,7 @@ export function ActionCard({
                                     onValueChange={(value) =>
                                       change("field", value)}
                                   >
-                                    <SelectTrigger className="h-8">
-                                      <SelectValue />
-                                    </SelectTrigger>
+                                    <CommonSelectTrigger />
                                     <SelectContent>
                                       {EntryOptions.map((option) => (
                                         <SelectItem
@@ -603,11 +618,13 @@ export function ActionCard({
                                   </Select>
                                 </TableCell>
                                 <OperationTableCell
+                                  type={type}
                                   value={rule.operator}
                                   onValueChange={(value) => change("operator", value)}
                                 />
                                 <TableCell size="sm">
                                   <Input
+                                    type={type}
                                     value={rule.value}
                                     className="h-8"
                                     onChange={(e) => change("value", e.target.value)}
