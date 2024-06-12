@@ -13,7 +13,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     rules?: {
                         name: string;
                         condition: {
-                            value: string | number;
+                            value: string;
                             field: "title" | "view" | "category" | "site_url" | "feed_url";
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
@@ -42,7 +42,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     rules?: {
                         name: string;
                         condition: {
-                            value: string | number;
+                            value: string;
                             field: "title" | "view" | "category" | "site_url" | "feed_url";
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
