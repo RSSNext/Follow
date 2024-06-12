@@ -280,14 +280,24 @@ export function ActionCard({
   onChange,
 }: {
   data: ActionsInput[number]
-  onChange: (data: ActionsInput[number]) => void
+  onChange: (data: ActionsInput[number] | null) => void
 }) {
   return (
     <Card>
-      <CardHeader className="space-y-4">
+      <CardHeader className="space-y-4 px-6 py-4">
         <Collapsible className="[&_.name-placeholder]:data-[state=open]:hidden [&_input.name-input]:data-[state=open]:block">
           <div className="flex w-full items-center gap-2">
-            <p className="shrink-0 font-medium text-zinc-500">Rule name</p>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="-ml-2"
+              onClick={() => {
+                onChange(null)
+              }}
+            >
+              <i className="i-mingcute-delete-2-line text-zinc-600" />
+            </Button>
+            <p className="shrink-0 font-medium text-zinc-500">Name</p>
             <Input
               value={data.name}
               className="name-input hidden h-8"
