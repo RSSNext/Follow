@@ -119,7 +119,8 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "hono@4.4.2": "patches/hono@4.4.2.patch"
+      "hono@4.4.2": "patches/hono@4.4.2.patch",
+      "sonner@1.5.0": "patches/sonner@1.5.0.patch"
     }
   },
   "simple-git-hooks": {

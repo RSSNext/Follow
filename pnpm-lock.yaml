@@ -8,6 +8,9 @@ patchedDependencies:
   hono@4.4.2:
     hash: ofhxnfpal3nvwlen5lybasjjdm
     path: patches/hono@4.4.2.patch
+  sonner@1.5.0:
+    hash: 6s3tquyt5wnkqaogymn3mkivuq
+    path: patches/sonner@1.5.0.patch
 
 importers:
 
@@ -177,7 +180,7 @@ importers:
         version: 10.0.0
       sonner:
         specifier: ^1.5.0
-        version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.5.0(patch_hash=6s3tquyt5wnkqaogymn3mkivuq)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       swiper:
         specifier: 11.1.4
         version: 11.1.4
@@ -10479,7 +10482,7 @@ snapshots:
       ip-address: 9.0.5
       smart-buffer: 4.2.0
 
-  sonner@1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  sonner@1.5.0(patch_hash=6s3tquyt5wnkqaogymn3mkivuq)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
