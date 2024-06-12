@@ -70,7 +70,7 @@ export function Component() {
       <div className="space-y-4">
         {actionsData.map((action, actionIdx) => (
           <ActionCard
-            key={action.name}
+            key={actionIdx}
             data={action}
             onChange={(newAction) => {
               if (!newAction) {
