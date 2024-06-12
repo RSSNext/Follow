@@ -6,6 +6,7 @@ import { ofetch } from "ofetch"
 export const apiFetch = ofetch.create({
   baseURL: import.meta.env.VITE_API_URL,
   credentials: "include",
+  retry: false,
   onRequest: async ({ options }) => {
     if (options.method && options.method.toLowerCase() !== "get") {
       const csrfToken = await getCsrfToken()

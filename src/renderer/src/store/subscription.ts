@@ -1,5 +1,5 @@
 import { apiClient } from "@renderer/lib/api-fetch"
-import type { FeedViewType } from "@renderer/lib/enum"
+import { FeedViewType } from "@renderer/lib/enum"
 import type { SubscriptionModel } from "@renderer/models"
 import { produce } from "immer"
 
@@ -10,56 +10,90 @@ import { createZustandStore, getStoreActions } from "./utils/helper"
 type FeedId = string
 interface SubscriptionState {
   data: Record<FeedId, SubscriptionModel>
+  dataIdByView: Record<FeedViewType, FeedId[]>
 }
+
 interface SubscriptionActions {
   upsert: (feedId: FeedId, subscription: SubscriptionModel) => void
   fetchByView: (view?: FeedViewType) => Promise<SubscriptionModel[]>
   markReadByView: (view?: FeedViewType) => void
   internal_reset: () => void
 }
+
+const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
+  [FeedViewType.Articles]: [],
+  [FeedViewType.Audios]: [],
+  [FeedViewType.Notifications]: [],
+  [FeedViewType.Pictures]: [],
+  [FeedViewType.SocialMedia]: [],
+  [FeedViewType.Videos]: [],
+}
+
 export const useSubscriptionStore = createZustandStore<
   SubscriptionState & SubscriptionActions
-  >("subscription", {
-    version: 0,
-  })((set, get) => ({
-    data: {},
-    internal_reset() {
-      set({ data: {} })
-    },
-    async fetchByView(view) {
-      const res = await apiClient.subscriptions.$get({
-        query: { view: String(view) },
-      })
+>("subscription", {
+  version: 0,
+})((set, get) => ({
+  data: {},
+  dataIdByView: { ...emptyDataIdByView },
 
-      get().internal_reset()
-      res.data.forEach((subscription) => {
-        set((state) =>
-          produce(state, (state) => {
-            state.data[subscription.feeds.id] = subscription
-            return state
-          }),
-        )
-      })
+  internal_reset() {
+    set({
+      data: {},
+      dataIdByView: { ...emptyDataIdByView },
+    })
+  },
+  async fetchByView(view) {
+    const res = await apiClient.subscriptions.$get({
+      query: { view: String(view) },
+    })
 
-      return res.data
-    },
-    upsert: (feedId, subscription) => {
+    // reset dataIdByView
+    if (view !== undefined) {
+      set((state) => ({
+        ...state,
+        dataIdByView: { ...state.dataIdByView, [view]: [] },
+      }))
+    } else {
+      set((state) => ({
+        ...state,
+        dataIdByView: { ...emptyDataIdByView },
+      }))
+    }
+    res.data.forEach((subscription) => {
       set((state) =>
         produce(state, (state) => {
-          state.data[feedId] = subscription
+          state.data[subscription.feeds.id] = subscription
+          state.dataIdByView[subscription.view].push(subscription.feeds.id)
           return state
         }),
       )
-    },
-    markReadByView(view) {
-      const state = get()
-      for (const feedId in state.data) {
-        if (state.data[feedId].view === view) {
-          unreadActions.updateByFeedId(feedId, 0)
-          entryActions.optimisticUpdateManyByFeedId(feedId, { read: true })
-        }
+    })
+
+    return res.data
+  },
+  upsert: (feedId, subscription) => {
+    set((state) =>
+      produce(state, (state) => {
+        state.data[feedId] = subscription
+        return state
+      }),
+    )
+  },
+  markReadByView(view) {
+    const state = get()
+    for (const feedId in state.data) {
+      if (state.data[feedId].view === view) {
+        unreadActions.updateByFeedId(feedId, 0)
+        entryActions.optimisticUpdateManyByFeedId(feedId, { read: true })
       }
-    },
-  }))
+    }
+  },
+}))
 
 export const subscriptionActions = getStoreActions(useSubscriptionStore)
+
+export const useSubscriptionByView = (view: FeedViewType) =>
+  useSubscriptionStore((state) =>
+    state.dataIdByView[view].map((id) => state.data[id]),
+  )

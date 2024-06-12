@@ -1,4 +1,3 @@
-import { useSession } from "@hono/auth-js/react"
 import { FeedList } from "@renderer/components/feed-column/list"
 import {
   Avatar,
@@ -9,9 +8,10 @@ import { Button } from "@renderer/components/ui/button"
 import { useSignOut } from "@renderer/hooks/useAuth"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
+import { useSession } from "@renderer/queries/auth"
 
 export function Component() {
-  const { data: session } = useSession()
+  const { session } = useSession()
   const signOut = useSignOut()
   return (
     <div className="flex w-full gap-10 px-10 py-16">

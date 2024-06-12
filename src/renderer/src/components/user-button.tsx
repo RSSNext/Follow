@@ -1,13 +1,35 @@
-import { useSession } from "@hono/auth-js/react"
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
 import { cn } from "@renderer/lib/utils"
+import { useSession } from "@renderer/queries/auth"
 import { Link } from "react-router-dom"
 
-import { Button } from "./ui/button"
+import { UserArrowLeftIcon } from "./icons/user"
+import { ActionButton } from "./ui/button"
+
+export const ProfileButton = () => {
+  const { status } = useSession()
+
+  if (status !== "authenticated") {
+    return (
+      <Link to="/login" className="relative z-[1]">
+        <ActionButton tooltip="Login">
+          <UserArrowLeftIcon className="size-4" />
+        </ActionButton>
+      </Link>
+    )
+  }
+  return (
+    <Link to="/profile">
+      <ActionButton tooltip="Profile">
+        <UserButton className="h-5 p-0" hideName />
+      </ActionButton>
+    </Link>
+  )
+}
 
 export function UserButton({
   className,
@@ -16,12 +38,14 @@ export function UserButton({
   className?: string
   hideName?: boolean
 }) {
-  const { data: session, status } = useSession()
+  const { session, status } = useSession()
 
   if (status !== "authenticated") {
     return (
-      <Link to="/login">
-        <Button>Login</Button>
+      <Link to="/login" className="relative z-[1]">
+        <ActionButton tooltip="Login">
+          <UserArrowLeftIcon className="size-4" />
+        </ActionButton>
       </Link>
     )
   }
