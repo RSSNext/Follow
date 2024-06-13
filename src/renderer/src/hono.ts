@@ -39,7 +39,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
                         result: {
-                            translation?: string | undefined;
+                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                             summary?: boolean | undefined;
                             rewriteRules?: {
                                 from: string;
@@ -68,7 +68,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
                         result: {
-                            translation?: string | undefined;
+                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                             summary?: boolean | undefined;
                             rewriteRules?: {
                                 from: string;
@@ -440,7 +440,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         createdAt: string;
                     } | undefined;
                     settings?: {
-                        translation?: string | undefined;
+                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                         summary?: boolean | undefined;
                         rewriteRules?: {
                             from: string;
@@ -502,7 +502,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     };
                     read: boolean | null;
                     settings?: {
-                        translation?: string | undefined;
+                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                         summary?: boolean | undefined;
                         rewriteRules?: {
                             from: string;

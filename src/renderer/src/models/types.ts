@@ -73,3 +73,5 @@ export type FeedListModel = {
     name: string
   }[]
 }
+
+export type SupportedLanguages = Parameters<typeof apiClient.ai.translation.$get>[0]["query"]["language"]

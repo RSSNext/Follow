@@ -1,5 +1,6 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
+import type { SupportedLanguages } from "@renderer/models"
 
 export const ai = {
   translation: ({
@@ -8,7 +9,7 @@ export const ai = {
     fields,
   }: {
     id: string
-    language?: string
+    language?: SupportedLanguages
     fields: string
   }) =>
     defineQuery(["translation", id, language], async () => {
@@ -18,7 +19,7 @@ export const ai = {
       const res = await apiClient.ai.translation.$get({
         query: {
           id,
-          language: language as "en" | "ja" | "zh-CN" | "zh-TW",
+          language: language as SupportedLanguages,
           fields,
         },
       })

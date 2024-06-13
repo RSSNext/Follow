@@ -58,6 +58,7 @@
     "electron-store": "8.2.0",
     "electron-updater": "^6.1.7",
     "framer-motion": "11.2.9",
+    "franc-min": "6.2.0",
     "hast-util-to-jsx-runtime": "2.3.0",
     "idb-keyval": "6.2.1",
     "immer": "10.1.1",

@@ -31,6 +31,7 @@ import {
 } from "@renderer/components/ui/table"
 import { ViewSelectContent } from "@renderer/components/view-select-content"
 import { cn } from "@renderer/lib/utils"
+import type { SupportedLanguages } from "@renderer/models"
 
 type Operation =
   | "contains"
@@ -155,7 +156,10 @@ const FeedOptions = [
   },
 ]
 
-const TransitionOptions = [
+const TransitionOptions: {
+  name: string
+  value: SupportedLanguages
+}[] = [
   {
     name: "English",
     value: "en",
