@@ -6,6 +6,7 @@ import { useEntry, useFeedStore } from "@renderer/store"
 import { m } from "framer-motion"
 import { useEffect, useState } from "react"
 
+import { LoadingCircle } from "../ui/loading"
 import { EntryShare } from "./share"
 
 export const EntryContent = ({ entry }: { entry: ActiveEntry }) => {
@@ -32,7 +33,7 @@ export const EntryContent = ({ entry }: { entry: ActiveEntry }) => {
 }
 
 function EntryContentRender({ entryId }: { entryId: string }) {
-  useBizQuery(Queries.entries.byId(entryId), {
+  const { error } = useBizQuery(Queries.entries.byId(entryId), {
     staleTime: 300_000,
   })
 
@@ -79,6 +80,19 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 new Date(entry.entries.publishedAt).toUTCString()}
               </div>
             </a>
+
+            {!content && (
+              <div className="center mt-16">
+                {!error ? (
+                  <LoadingCircle size="large" />
+                ) : (
+                  <div className="center flex flex-col gap-2">
+                    <i className="i-mingcute-close-line text-3xl text-red-500" />
+                    <span className="font-sans text-sm">Network Error</span>
+                  </div>
+                )}
+              </div>
+            )}
             <div className="prose prose-zinc mx-auto mb-32 mt-10 max-w-full cursor-auto select-text break-all text-[15px] dark:prose-invert">
               {content}
             </div>

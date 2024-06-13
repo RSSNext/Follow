@@ -83,7 +83,7 @@ function EntryItemWrapperImpl({
   }
 
   return (
-    <div className={cn(!views[view || 0].wideMode && "pb-3")}>
+    <div className={cn(!views[view || 0].wideMode && "pb-3")} data-entry-id={entryId}>
       <div
         className={cn(
           "rounded-md bg-background transition-colors",
