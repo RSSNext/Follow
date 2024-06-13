@@ -187,7 +187,7 @@ const useEntriesByView = () => {
         null,
     [query.data],
   )
-  console.log("remoteEntryIds", remoteEntryIds)
+
   return {
     ...query,
 
