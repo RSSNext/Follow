@@ -12,6 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@renderer/components/ui/form"
+import { LoadingCircle } from "@renderer/components/ui/loading"
 import {
   Select,
   SelectTrigger,
@@ -128,7 +129,7 @@ export function Component() {
       </div>
       {feed.isLoading ? (
         <div className="flex flex-1 items-center justify-center">
-          Loading...
+          <LoadingCircle size="large" />
         </div>
       ) : !feed.data?.feed ?
           (

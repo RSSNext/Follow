@@ -1,5 +1,6 @@
 import { FEED_COLLECTION_LIST } from "@renderer/lib/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
+import type { EntryModel } from "@renderer/models"
 import { useShallow } from "zustand/react/shallow"
 
 import { useFeedIdByView } from "../subscription"
@@ -9,7 +10,7 @@ interface EntryFilter {
   unread?: boolean
 }
 
-export const useEntry = (entryId: string) =>
+export const useEntry = (entryId: string): EntryModel | null =>
   useEntryStore(useShallow((state) => state.flatMapEntries[entryId]))
 // feedId: single feedId, multiple feedId joint by `,`, and `collections`
 export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>

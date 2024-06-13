@@ -5,7 +5,7 @@ import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import type { SupportedLanguages } from "@renderer/models"
+import type { EntryModel, SupportedLanguages } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import { feedActions, useFeedStore } from "@renderer/store"
 import { useEntry } from "@renderer/store/entry/hooks"
@@ -39,14 +39,11 @@ const LanguageMap: Record<SupportedLanguages, {
   },
 }
 
-function EntryItemImpl({
-  entryId,
-  view,
-}: {
+interface EntryItemProps {
   entryId: string
   view?: number
-}) {
-  const entry = useEntry(entryId)
+}
+function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
   const { items } = useEntryActions({
     view,
     entry,
@@ -82,9 +79,6 @@ function EntryItemImpl({
 
   const markReadMutation = useRead(entry)
 
-  // NOTE: prevent 0 height element, react virtuoso will not stop render any more
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
-
   let Item: FC<UniversalItemProps>
 
   switch (view) {
@@ -118,7 +112,10 @@ function EntryItemImpl({
   }
 
   return (
-    <div className={cn(!views[view || 0].wideMode && "pb-3")} data-entry-id={entryId}>
+    <div
+      className={cn(!views[view || 0].wideMode && "pb-3")}
+      data-entry-id={entry.entries.id}
+    >
       <div
         className={cn(
           "rounded-md bg-background transition-colors",
@@ -151,10 +148,14 @@ function EntryItemImpl({
           )
         }}
       >
-        <Item entryId={entryId} translation={translation.data} />
+        <Item entryId={entry.entries.id} translation={translation.data} />
       </div>
     </div>
   )
 }
 
-export const EntryItem = memo(EntryItemImpl)
+export const EntryItem: FC<EntryItemProps> = memo(({ entryId, view }) => {
+  const entry = useEntry(entryId)
+  if (!entry) return <ReactVirtuosoItemPlaceholder />
+  return <EntryItemImpl entry={entry} view={view} />
+})

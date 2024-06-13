@@ -51,6 +51,8 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     }
   }, [entry?.entries.content])
 
+  if (!entry) return null
+
   return (
     <>
       <EntryShare entryId={entry.entries.id} view={0} />

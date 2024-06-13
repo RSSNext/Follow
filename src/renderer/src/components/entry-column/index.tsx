@@ -36,6 +36,7 @@ import { useEventCallback } from "usehooks-ts"
 import { useShallow } from "zustand/react/shallow"
 
 import { EmptyIcon } from "../icons/empty"
+import { LoadingCircle } from "../ui/loading"
 import { EntryItem } from "./item"
 
 const unreadOnlyAtom = atomWithStorage<boolean>(
@@ -52,7 +53,7 @@ const { setActiveEntry } = feedActions
 export function EntryColumn() {
   const activeList = useFeedStore((state) => state.activeList)
   const entries = useEntriesByView()
-  const { entriesIds } = entries
+  const { entriesIds, isFetchingNextPage } = entries
 
   const handleRangeChange = useEventCallback(
     debounce(
@@ -91,6 +92,14 @@ export function EntryColumn() {
     components: {
       List: ListContent,
       EmptyPlaceholder: EmptyList,
+      Footer: useCallback(() => {
+        if (!isFetchingNextPage) return null
+        return (
+          <div className="center mt-2">
+            <LoadingCircle size="medium" />
+          </div>
+        )
+      }, [isFetchingNextPage]),
     },
     overscan: window.innerHeight,
     rangeChanged: handleRangeChange,
@@ -102,11 +111,7 @@ export function EntryColumn() {
         if (!entryId) return null
 
         return (
-          <EntryItem
-            key={entryId}
-            entryId={entryId}
-            view={activeList?.view}
-          />
+          <EntryItem key={entryId} entryId={entryId} view={activeList?.view} />
         )
       },
       [activeList?.view],
