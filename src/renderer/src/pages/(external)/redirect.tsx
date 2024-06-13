@@ -3,7 +3,7 @@ import { UserButton } from "@renderer/components/user-button"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { APP_NAME } from "@renderer/lib/constants"
 import { DEEPLINK_SCHEME } from "@shared/constants"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 
 export function Component() {
@@ -14,7 +14,10 @@ export function Component() {
     return `${DEEPLINK_SCHEME}auth?token=${data.sessionToken}`
   }
 
+  const onceRef = useRef(false)
   useEffect(() => {
+    if (onceRef.current) return
+    onceRef.current = true
     if (window.electron) {
       navigate("/")
     } else {
