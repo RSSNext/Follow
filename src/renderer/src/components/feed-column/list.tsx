@@ -1,5 +1,5 @@
 import { useBizQuery } from "@renderer/hooks/useBizQuery"
-import { levels, views } from "@renderer/lib/constants"
+import { FEED_COLLECTION_LIST, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
@@ -157,14 +157,14 @@ export function FeedList({
       <div
         className={cn(
           "flex h-8 w-full items-center rounded-md px-2.5 transition-colors",
-          activeList?.id === "collections" && "bg-native-active",
+          activeList?.id === FEED_COLLECTION_LIST && "bg-native-active",
         )}
         onClick={(e) => {
           e.stopPropagation()
           if (view !== undefined) {
             setActiveList({
               level: levels.folder,
-              id: "collections",
+              id: FEED_COLLECTION_LIST,
               name: "Collections",
               view,
             })

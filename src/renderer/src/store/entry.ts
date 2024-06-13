@@ -1,4 +1,5 @@
 import { apiClient } from "@renderer/lib/api-fetch"
+import { FEED_COLLECTION_LIST } from "@renderer/lib/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
@@ -208,20 +209,39 @@ interface EntryFilter {
 }
 export const useEntry = (entryId: string) =>
   useEntryStore((state) => state.flatMapEntries[entryId])
+// feedId: single feedId, multiple feedId joint by `,`, and `collections`
 export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
   useEntryStore((state) => {
-    const data = state.entries[feedId] || []
-    if (filter?.unread) {
+    const isMultiple = typeof feedId === "string" && feedId.includes(",")
+
+    if (isMultiple) {
+      const feedIds = feedId.split(",")
       const result = [] as string[]
-      for (const entryId of data) {
-        const entry = state.flatMapEntries[entryId]
-        if (!entry?.read) {
-          result.push(entryId)
-        }
+      for (const id of feedIds) {
+        result.push(...getSingle(id))
       }
       return result
+    } else if (feedId === FEED_COLLECTION_LIST) {
+      // TODO we can't filter collections in local mode by view
+      return []
+    } else {
+      return getSingle(feedId)
     }
-    return data
+
+    function getSingle(feedId: string) {
+      const data = state.entries[feedId] || []
+      if (filter?.unread) {
+        const result = [] as string[]
+        for (const entryId of data) {
+          const entry = state.flatMapEntries[entryId]
+          if (!entry?.read) {
+            result.push(entryId)
+          }
+        }
+        return result
+      }
+      return data
+    }
   })
 
 export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {

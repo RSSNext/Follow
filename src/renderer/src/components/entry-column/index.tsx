@@ -33,6 +33,10 @@ import { EntryItemWrapper } from "./item-wrapper"
 const unreadOnlyAtom = atomWithStorage<boolean>(
   buildStorageNS("entry-unreadonly"),
   true,
+  undefined,
+  {
+    getOnInit: true,
+  },
 )
 
 const { setActiveEntry } = feedActions
@@ -129,7 +133,7 @@ const useEntriesByView = () => {
 
   const query = useEntries({
     level: activeList?.level,
-    id: activeList?.id,
+    id: activeList.id,
     view: activeList?.view,
     ...(unreadOnly === true && { read: false }),
   })
@@ -153,15 +157,27 @@ const useEntriesByView = () => {
       prevEntries.current = entries
       return entries
     }
-    // merge the new entries with the old entries, and unqiue them
+    // merge the new entries with the old entries, and unique them
     const nextIds = [...new Set([...prevEntries.current, ...entries])]
     prevEntries.current = nextIds
     return nextIds
   }, [entries, prevEntries, unreadOnly])
 
+  const remoteEntryIds = useMemo(() => query.data ?
+    query.data.pages.reduce((acc, page) => {
+      if (!page.data) return acc
+      acc.push(...page.data.map((entry) => entry.entries.id))
+      return acc
+    }, [] as string[]) :
+    null, [query.data])
   return {
     ...query,
-    entriesIds: nextEntries,
+
+    entriesIds:
+    // FIXME we can't filter collections in local mode, so we need to use the remote data
+    // activeList.id === FEED_COLLECTION_LIST ? remoteEntryIds : nextEntries,
+    // NOTE: if we use the remote data, priority will be given to the remote data, local data maybe had sort issue
+     remoteEntryIds ?? nextEntries,
   }
 }
 
