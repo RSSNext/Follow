@@ -5,6 +5,7 @@ import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
+import { EntryTranslation } from "./translation"
 import type { UniversalItemProps } from "./types"
 
 export function SocialMediaItem({ entryId, entryPreview, translation }: UniversalItemProps) {
@@ -30,7 +31,7 @@ export function SocialMediaItem({ entryId, entryPreview, translation }: Universa
             </span>
           </div>
           <div className={cn("relative mt-0.5", !!entry.collections && "pr-4")}>
-            {translation?.description || entry.entries.description}
+            <EntryTranslation source={entry.entries.description} target={translation?.description} />
             {!!entry.collections && (
               <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
             )}

@@ -1,3 +1,4 @@
+import { EntryTranslation } from "@renderer/components/entry-column/translation"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { SwipeImages } from "@renderer/components/ui/image/swipe-images"
 import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholder"
@@ -37,7 +38,7 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
               !!entry.collections && "pr-4",
             )}
           >
-            {translation?.title || entry.entries.title}
+            <EntryTranslation source={entry.entries.title} target={translation?.title} />
             {!!entry.collections && (
               <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
             )}

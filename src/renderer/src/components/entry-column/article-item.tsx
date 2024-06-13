@@ -1,3 +1,4 @@
+import { EntryTranslation } from "@renderer/components/entry-column/translation"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import { useAsRead } from "@renderer/hooks/useAsRead"
@@ -33,13 +34,17 @@ export function ArticleItem({ entryId, entryPreview, translation }: UniversalIte
           </span>
         </div>
         <div className={cn("relative my-0.5 break-words", !!entry.collections && "pr-4", entry.entries.title ? "font-medium" : "text-[13px]")}>
-          {translation?.title || translation?.description || entry.entries.title || entry.entries.description}
+          {entry.entries.title ? (
+            <EntryTranslation source={entry.entries.title} target={translation?.title} />
+          ) : (
+            <EntryTranslation source={entry.entries.description} target={translation?.description} />
+          )}
           {!!entry.collections && (
             <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
           )}
         </div>
         <div className={cn("text-[13px]", asRead ? "text-zinc-400" : "text-zinc-500")}>
-          {translation?.description || entry.entries.description}
+          <EntryTranslation source={entry.entries.description} target={translation?.description} />
         </div>
       </div>
       {entry.entries.images?.[0] && (
