@@ -306,7 +306,7 @@ const EmptyList = (props, ref) => {
   const unreadOnly = useAtomValue(unreadOnlyAtom)
 
   return (
-    <div
+    <m.div
       className="-mt-20 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
       {...props}
       ref={ref}
@@ -322,6 +322,6 @@ const EmptyList = (props, ref) => {
           Zero Items
         </div>
       )}
-    </div>
+    </m.div>
   )
 }
