@@ -125,18 +125,26 @@ export function EntryColumn() {
       data-total-count={virtuosoOptions.totalCount}
     >
       <ListHeader totalCount={virtuosoOptions.totalCount} />
-      {virtuosoOptions.totalCount === 0 ? (
-        <EmptyList />
-      ) : activeList?.view && views[activeList.view].gridMode ?
-          (
-            <VirtuosoGrid
-              listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
-              {...virtuosoOptions}
-            />
-          ) :
-          (
-            <Virtuoso {...virtuosoOptions} />
-          )}
+      <m.div
+        key={JSON.stringify(activeList)}
+        className="h-full"
+        initial={{ opacity: 0.01, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0.01, y: -100 }}
+      >
+        {virtuosoOptions.totalCount === 0 ? (
+          <EmptyList />
+        ) : activeList?.view && views[activeList.view].gridMode ?
+            (
+              <VirtuosoGrid
+                listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
+                {...virtuosoOptions}
+              />
+            ) :
+            (
+              <Virtuoso {...virtuosoOptions} />
+            )}
+      </m.div>
     </div>
   )
 }
@@ -287,10 +295,7 @@ const ListHeader: FC<{
 }
 
 const ListContent = forwardRef<HTMLDivElement>((props, ref) => (
-  <m.div
-    initial={{ opacity: 0.01, y: 100 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0.01, y: -100 }}
+  <div
     className="px-2"
     {...props}
     ref={ref}
@@ -301,10 +306,7 @@ const EmptyList = (props, ref) => {
   const unreadOnly = useAtomValue(unreadOnlyAtom)
 
   return (
-    <m.div
-      initial={{ opacity: 0.01, y: 100 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0.01, y: -100 }}
+    <div
       className="-mt-20 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
       {...props}
       ref={ref}
@@ -320,6 +322,6 @@ const EmptyList = (props, ref) => {
           Zero Items
         </div>
       )}
-    </m.div>
+    </div>
   )
 }
