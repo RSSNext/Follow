@@ -20,6 +20,7 @@ export interface EntryState {
    */
 
   internal_feedId2entryIdSet: Record<FeedId, Set<EntryId>>
+  // internal_updateSortIds: Record<FeedId, EntryId[]>
 }
 
 export interface EntryActions {
