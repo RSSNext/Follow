@@ -3,6 +3,27 @@ import * as hono_utils_http_status from 'hono/utils/http-status';
 import * as hono from 'hono';
 
 declare const routes: hono_hono_base.HonoBase<hono.Env, {
+    "/ai/translation": {
+        $get: {
+            input: {
+                query: {
+                    id: string;
+                    language: "en" | "ja" | "zh-CN" | "zh-TW";
+                    fields: string;
+                };
+            };
+            output: {
+                code: 0;
+                data?: {
+                    description?: string | undefined;
+                    title?: string | undefined;
+                } | undefined;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
     "/actions": {
         $get: {
             input: {};
@@ -18,7 +39,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
                         result: {
-                            translation?: string | undefined;
+                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                             summary?: boolean | undefined;
                             rewriteRules?: {
                                 from: string;
@@ -47,7 +68,7 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
                         result: {
-                            translation?: string | undefined;
+                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                             summary?: boolean | undefined;
                             rewriteRules?: {
                                 from: string;
@@ -373,7 +394,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     feedIdList?: string[] | undefined;
                     publishedAfter?: string | undefined;
                     collected?: boolean | undefined;
-                    withContent?: boolean | undefined;
                 };
             };
             output: {
@@ -393,7 +413,6 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         publishedAt: string;
                         images: string[] | null;
                         categories: string[] | null;
-                        content?: string | null | undefined;
                         enclosures?: {
                             url: string;
                             length?: number | undefined;
@@ -419,6 +438,14 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                     read: boolean | null;
                     collections?: {
                         createdAt: string;
+                    } | undefined;
+                    settings?: {
+                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                        summary?: boolean | undefined;
+                        rewriteRules?: {
+                            from: string;
+                            to: string;
+                        }[] | undefined;
                     } | undefined;
                 }[] | undefined;
             };
@@ -474,6 +501,14 @@ declare const routes: hono_hono_base.HonoBase<hono.Env, {
                         createdAt: string;
                     };
                     read: boolean | null;
+                    settings?: {
+                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                        summary?: boolean | undefined;
+                        rewriteRules?: {
+                            from: string;
+                            to: string;
+                        }[] | undefined;
+                    } | undefined;
                 } | undefined;
             };
             outputFormat: "json";
