@@ -18,8 +18,8 @@ import { parse } from "tldts"
 import { FeedCategory } from "./category"
 
 const useData = (view: FeedViewType) => {
-  useBizQuery(Queries.subscription.byView(view))
-  const data = useSubscriptionByView(view)
+  const { data: remoteData } = useBizQuery(Queries.subscription.byView(view))
+  const data = useSubscriptionByView(view) || remoteData
 
   // TODO Refactor this into category store
   return useMemo(() => {
