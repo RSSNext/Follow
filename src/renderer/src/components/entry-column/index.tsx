@@ -36,7 +36,7 @@ import { useEventCallback } from "usehooks-ts"
 import { useShallow } from "zustand/react/shallow"
 
 import { EmptyIcon } from "../icons/empty"
-import { EntryItemWrapper } from "./item-wrapper"
+import { EntryItem } from "./item"
 
 const unreadOnlyAtom = atomWithStorage<boolean>(
   buildStorageNS("entry-unreadonly"),
@@ -102,7 +102,7 @@ export function EntryColumn() {
         if (!entryId) return null
 
         return (
-          <EntryItemWrapper
+          <EntryItem
             key={entryId}
             entryId={entryId}
             view={activeList?.view}

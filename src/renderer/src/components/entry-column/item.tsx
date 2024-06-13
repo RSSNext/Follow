@@ -20,7 +20,7 @@ import { SocialMediaItem } from "./social-media-item"
 import type { UniversalItemProps } from "./types"
 import { VideoItem } from "./video-item"
 
-function EntryItemWrapperImpl({
+function EntryItemImpl({
   entryId,
   view,
 }: {
@@ -122,4 +122,4 @@ function EntryItemWrapperImpl({
   )
 }
 
-export const EntryItemWrapper = memo(EntryItemWrapperImpl)
+export const EntryItem = memo(EntryItemImpl)
