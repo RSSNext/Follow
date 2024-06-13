@@ -12,6 +12,7 @@ export const useSignOut = () =>
 
     // Clear query cache
     localStorage.removeItem(QUERY_PERSIST_KEY)
+
     // Clear local storage
     // TODO
   }, [])
