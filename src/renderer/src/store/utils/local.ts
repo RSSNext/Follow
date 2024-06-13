@@ -1,4 +1,4 @@
-import { entryActions } from "../entry"
+import { entryActions } from "../entry/entry"
 import { subscriptionActions } from "../subscription"
 import { uiActions } from "../ui"
 import { unreadActions } from "../unread"

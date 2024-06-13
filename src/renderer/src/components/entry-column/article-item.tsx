@@ -3,7 +3,7 @@ import { Image } from "@renderer/components/ui/image"
 import { useAsRead } from "@renderer/hooks/useAsRead"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
-import { useEntry } from "@renderer/store/entry"
+import { useEntry } from "@renderer/store/entry/hooks"
 
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import type { UniversalItemProps } from "./types"

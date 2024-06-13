@@ -3,7 +3,7 @@ import { FeedViewType } from "@renderer/lib/enum"
 import type { SubscriptionModel } from "@renderer/models"
 import { produce } from "immer"
 
-import { entryActions } from "./entry"
+import { entryActions } from "./entry/entry"
 import { unreadActions } from "./unread"
 import { createZustandStore, getStoreActions } from "./utils/helper"
 

@@ -3,7 +3,7 @@ import { Image } from "@renderer/components/ui/image"
 import dayjs from "@renderer/lib/dayjs"
 import { urlToIframe } from "@renderer/lib/url-to-iframe"
 import { cn } from "@renderer/lib/utils"
-import { useEntry } from "@renderer/store/entry"
+import { useEntry } from "@renderer/store/entry/hooks"
 import { useHover } from "@use-gesture/react"
 import { useMemo, useRef, useState } from "react"
 

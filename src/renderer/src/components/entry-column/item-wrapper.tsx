@@ -7,7 +7,7 @@ import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { feedActions, useFeedStore } from "@renderer/store"
-import { useEntry } from "@renderer/store/entry"
+import { useEntry } from "@renderer/store/entry/hooks"
 import type { FC } from "react"
 import { memo } from "react"
 

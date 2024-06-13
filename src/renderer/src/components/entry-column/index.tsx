@@ -15,7 +15,8 @@ import {
   subscriptionActions,
   useFeedStore,
 } from "@renderer/store"
-import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
+import { entryActions } from "@renderer/store/entry/entry"
+import { useEntryIdsByFeedIdOrView } from "@renderer/store/entry/hooks"
 import { m } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
@@ -111,7 +112,7 @@ export function EntryColumn() {
       onClick={() => setActiveEntry(null)}
       data-total-count={virtuosoOptions.totalCount}
     >
-      <ListHeader />
+      <ListHeader totalCount={virtuosoOptions.totalCount} />
       {virtuosoOptions.totalCount === 0 ? (
         <EmptyList />
       ) : activeList?.view && views[activeList.view].gridMode ?
@@ -188,10 +189,11 @@ const useEntriesByView = () => {
   }
 }
 
-const ListHeader: FC = () => {
+const ListHeader: FC<{
+  totalCount: number
+}> = ({ totalCount }) => {
   const activeList = useFeedStore(useShallow((state) => state.activeList))
   const [unreadOnly, setUnreadOnly] = useAtom(unreadOnlyAtom)
-  const entries = useEntriesByView()
 
   const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
   const handleMarkAllAsRead = useCallback(async () => {
@@ -256,7 +258,7 @@ const ListHeader: FC = () => {
       <div>
         <div className="text-lg font-bold leading-none">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
-          {entries.data?.pages?.[0].total || 0}
+          {totalCount || 0}
           {" "}
           {unreadOnly ? "Unread" : ""}
           {" "}

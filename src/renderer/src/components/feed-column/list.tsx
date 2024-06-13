@@ -19,6 +19,7 @@ import { FeedCategory } from "./category"
 
 const useData = (view: FeedViewType) => {
   const { data: remoteData } = useBizQuery(Queries.subscription.byView(view))
+
   const data = useSubscriptionByView(view) || remoteData
 
   // TODO Refactor this into category store
