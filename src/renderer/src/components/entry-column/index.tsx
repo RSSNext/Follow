@@ -86,7 +86,7 @@ export function EntryColumn() {
     },
     overscan: window.innerHeight,
     rangeChanged: handleRangeChange,
-    totalCount: entries.data?.pages?.[0]?.total,
+    totalCount: entries.totalCount,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entriesIds,
     itemContent: useCallback(
@@ -109,6 +109,7 @@ export function EntryColumn() {
     <div
       className="relative flex h-full flex-1 flex-col"
       onClick={() => setActiveEntry(null)}
+      data-total-count={virtuosoOptions.totalCount}
     >
       <ListHeader />
       {virtuosoOptions.totalCount === 0 ? (
@@ -163,21 +164,27 @@ const useEntriesByView = () => {
     return nextIds
   }, [entries, prevEntries, unreadOnly])
 
-  const remoteEntryIds = useMemo(() => query.data ?
-    query.data.pages.reduce((acc, page) => {
-      if (!page.data) return acc
-      acc.push(...page.data.map((entry) => entry.entries.id))
-      return acc
-    }, [] as string[]) :
-    null, [query.data])
+  const remoteEntryIds = useMemo(
+    () =>
+      query.data ?
+        query.data.pages.reduce((acc, page) => {
+          if (!page.data) return acc
+          acc.push(...page.data.map((entry) => entry.entries.id))
+          return acc
+        }, [] as string[]) :
+        null,
+    [query.data],
+  )
   return {
     ...query,
 
+    // If remote data is not available, we use the local data, get the local data length
+    totalCount: query.data?.pages?.[0]?.total ?? nextEntries.length,
     entriesIds:
-    // FIXME we can't filter collections in local mode, so we need to use the remote data
-    // activeList.id === FEED_COLLECTION_LIST ? remoteEntryIds : nextEntries,
-    // NOTE: if we use the remote data, priority will be given to the remote data, local data maybe had sort issue
-     remoteEntryIds ?? nextEntries,
+      // FIXME we can't filter collections in local mode, so we need to use the remote data
+      // activeList.id === FEED_COLLECTION_LIST ? remoteEntryIds : nextEntries,
+      // NOTE: if we use the remote data, priority will be given to the remote data, local data maybe had sort issue
+      remoteEntryIds ?? nextEntries,
   }
 }
 
