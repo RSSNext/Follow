@@ -1,7 +1,7 @@
 import { useBizInfiniteQuery, useBizQuery } from "@renderer/hooks/useBizQuery"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import { entryActions } from "@renderer/store/entry"
+import { entryActions } from "@renderer/store/entry/entry"
 
 export const entries = {
   entries: ({

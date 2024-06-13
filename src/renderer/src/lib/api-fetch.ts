@@ -1,5 +1,6 @@
 import { getCsrfToken } from "@hono/auth-js/react"
 import type { AppType } from "@renderer/hono"
+import { router } from "@renderer/router"
 import { hc } from "hono/client"
 import { ofetch } from "ofetch"
 
@@ -22,6 +23,11 @@ export const apiFetch = ofetch.create({
       } else {
         (options.body as Record<string, unknown>).csrfToken = csrfToken
       }
+    }
+  },
+  onResponseError(context) {
+    if (context.response.status === 401) {
+      router.navigate("/login")
     }
   },
 })

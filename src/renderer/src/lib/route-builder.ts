@@ -22,12 +22,13 @@ function nestPaths(paths: string[]): NestedStructure {
 
   return result
 }
-const pathGetterSet = new Set<string>()
+
 export function buildGlobRoutes(
   glob: Record<string, () => Promise<any>>,
 ): RouteObject[] {
   const keys = Object.keys(glob)
   const paths = nestPaths(keys)
+  const pathGetterSet = new Set<string>()
 
   const routeObject: RouteObject[] = []
 

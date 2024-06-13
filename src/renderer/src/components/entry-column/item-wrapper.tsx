@@ -7,8 +7,9 @@ import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { feedActions, useFeedStore } from "@renderer/store"
-import { useEntry } from "@renderer/store/entry"
+import { useEntry } from "@renderer/store/entry/hooks"
 import type { FC } from "react"
+import { memo } from "react"
 
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import { ArticleItem } from "./article-item"
@@ -19,7 +20,7 @@ import { SocialMediaItem } from "./social-media-item"
 import type { UniversalItemProps } from "./types"
 import { VideoItem } from "./video-item"
 
-export function EntryItemWrapper({
+function EntryItemWrapperImpl({
   entryId,
   view,
 }: {
@@ -120,3 +121,5 @@ export function EntryItemWrapper({
     </div>
   )
 }
+
+export const EntryItemWrapper = memo(EntryItemWrapperImpl)

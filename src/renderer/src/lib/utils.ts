@@ -2,7 +2,7 @@ import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-import { levels } from "./constants"
+import { FEED_COLLECTION_LIST, levels } from "./constants"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -27,7 +27,7 @@ export function getEntriesParams({
     collected?: boolean
   } = {}
   if (level === levels.folder) {
-    if (id === "collections") {
+    if (id === FEED_COLLECTION_LIST) {
       params.collected = true
     } else {
       params.feedIdList = `${id}`.split(",")

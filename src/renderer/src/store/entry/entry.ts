@@ -1,59 +1,12 @@
 import { apiClient } from "@renderer/lib/api-fetch"
-import type { FeedViewType } from "@renderer/lib/enum"
 import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
 import { produce } from "immer"
 import { merge, omit } from "lodash-es"
 
-import { useFeedIdByView } from "./subscription"
-import { unreadActions } from "./unread"
-import { createZustandStore, getStoreActions } from "./utils/helper"
-
-type FeedId = string
-type EntryId = string
-type EntriesIdTable = Record<FeedId, EntryId[]>
-
-interface EntryState {
-  /**
-   * A map of feedId to entryIds
-   */
-  entries: EntriesIdTable
-  /**
-   * A map of entryId to entry
-   */
-  flatMapEntries: Record<FeedId, EntryModel>
-  /**
-   * A map of feedId to entryId set, to quickly check if an entryId is in the feed
-   * The array is used to keep the order of the entries, and this set is used to quickly check if an entryId is in the feed
-   */
-
-  internal_feedId2entryIdSet: Record<FeedId, Set<EntryId>>
-}
-
-interface EntryActions {
-  fetchEntries: (params: {
-    level?: string
-    id?: number | string
-    view?: number
-    read?: boolean
-
-    pageParam?: string
-  }) => Promise<Awaited<ReturnType<typeof apiClient.entries.$post>>>
-  fetchEntryById: (entryId: string) => Promise<EntryModel | undefined>
-  upsertMany: (entries: EntryModel[]) => void
-
-  optimisticUpdate: (entryId: string, changed: Partial<EntryModel>) => void
-  optimisticUpdateManyByFeedId: (
-    feedId: string,
-    changed: Partial<EntryModel>
-  ) => void
-  optimisticUpdateAll: (changed: Partial<EntryModel>) => void
-  getFlattenMapEntries: () => Record<string, EntryModel>
-  markRead: (feedId: string, entryId: string, read: boolean) => void
-  markReadByFeedId: (feedId: string) => void
-
-  clear: () => void
-}
+import { unreadActions } from "../unread"
+import { createZustandStore, getStoreActions } from "../utils/helper"
+import type { EntryActions, EntryState } from "./types"
 
 export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   "entry",
@@ -202,61 +155,3 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
 }))
 
 export const entryActions = getStoreActions(useEntryStore)
-
-interface EntryFilter {
-  unread?: boolean
-}
-export const useEntry = (entryId: string) =>
-  useEntryStore((state) => state.flatMapEntries[entryId])
-export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
-  useEntryStore((state) => {
-    const data = state.entries[feedId] || []
-    if (filter?.unread) {
-      const result = [] as string[]
-      for (const entryId of data) {
-        const entry = state.flatMapEntries[entryId]
-        if (!entry?.read) {
-          result.push(entryId)
-        }
-      }
-      return result
-    }
-    return data
-  })
-
-export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {
-  const feedIds = useFeedIdByView(view)
-  return useEntryStore((state) => {
-    const data = [] as string[]
-    for (const feedId of feedIds) {
-      const entries = state.entries[feedId] || []
-
-      data.push(...entries)
-    }
-
-    if (filter?.unread) {
-      const result = [] as string[]
-      for (const entryId of data) {
-        const entry = state.flatMapEntries[entryId]
-        if (!entry?.read) {
-          result.push(entryId)
-        }
-      }
-      return result
-    }
-    return data
-  })
-}
-
-export const useEntryIdsByFeedIdOrView = (
-  feedIdOrView: string | FeedViewType,
-  filter: EntryFilter = {},
-) => {
-  const byView = useEntryIdsByView(feedIdOrView as FeedViewType, filter)
-  const byId = useEntryIdsByFeedId(feedIdOrView as string, filter)
-
-  if (typeof feedIdOrView === "string") {
-    return byId
-  }
-  return byView
-}

@@ -15,13 +15,21 @@ import {
   subscriptionActions,
   useFeedStore,
 } from "@renderer/store"
-import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
+import { entryActions } from "@renderer/store/entry/entry"
+import { useEntryIdsByFeedIdOrView } from "@renderer/store/entry/hooks"
 import { m } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { debounce } from "lodash-es"
 import type { FC } from "react"
-import { forwardRef, useCallback, useMemo, useRef, useState } from "react"
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import type { ListRange } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
@@ -33,6 +41,10 @@ import { EntryItemWrapper } from "./item-wrapper"
 const unreadOnlyAtom = atomWithStorage<boolean>(
   buildStorageNS("entry-unreadonly"),
   true,
+  undefined,
+  {
+    getOnInit: true,
+  },
 )
 
 const { setActiveEntry } = feedActions
@@ -82,7 +94,7 @@ export function EntryColumn() {
     },
     overscan: window.innerHeight,
     rangeChanged: handleRangeChange,
-    totalCount: entries.data?.pages?.[0]?.total,
+    totalCount: entries.totalCount,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entriesIds,
     itemContent: useCallback(
@@ -105,8 +117,9 @@ export function EntryColumn() {
     <div
       className="relative flex h-full flex-1 flex-col"
       onClick={() => setActiveEntry(null)}
+      data-total-count={virtuosoOptions.totalCount}
     >
-      <ListHeader />
+      <ListHeader totalCount={virtuosoOptions.totalCount} />
       {virtuosoOptions.totalCount === 0 ? (
         <EmptyList />
       ) : activeList?.view && views[activeList.view].gridMode ?
@@ -129,7 +142,7 @@ const useEntriesByView = () => {
 
   const query = useEntries({
     level: activeList?.level,
-    id: activeList?.id,
+    id: activeList.id,
     view: activeList?.view,
     ...(unreadOnly === true && { read: false }),
   })
@@ -140,7 +153,11 @@ const useEntriesByView = () => {
   // in unread only entries only can grow the data, but not shrink
   // so we memo this previous data to avoid the flicker
   const prevEntries = useRef(entries)
-  const nextEntries = useMemo(() => {
+
+  useEffect(() => {
+    prevEntries.current = []
+  }, [activeList.id])
+  const localEntries = useMemo(() => {
     if (!unreadOnly) {
       prevEntries.current = []
       return entries
@@ -153,22 +170,42 @@ const useEntriesByView = () => {
       prevEntries.current = entries
       return entries
     }
-    // merge the new entries with the old entries, and unqiue them
+    // merge the new entries with the old entries, and unique them
     const nextIds = [...new Set([...prevEntries.current, ...entries])]
     prevEntries.current = nextIds
     return nextIds
   }, [entries, prevEntries, unreadOnly])
 
+  const remoteEntryIds = useMemo(
+    () =>
+      query.data ?
+        query.data.pages.reduce((acc, page) => {
+          if (!page.data) return acc
+          acc.push(...page.data.map((entry) => entry.entries.id))
+          return acc
+        }, [] as string[]) :
+        null,
+    [query.data],
+  )
+  console.log("remoteEntryIds", remoteEntryIds)
   return {
     ...query,
-    entriesIds: nextEntries,
+
+    // If remote data is not available, we use the local data, get the local data length
+    totalCount: query.data?.pages?.[0]?.total ?? localEntries.length,
+    entriesIds:
+      // FIXME we can't filter collections in local mode, so we need to use the remote data
+      // activeList.id === FEED_COLLECTION_LIST ? remoteEntryIds : nextEntries,
+      // NOTE: if we use the remote data, priority will be given to the remote data, local data maybe had sort issue
+      remoteEntryIds ?? localEntries,
   }
 }
 
-const ListHeader: FC = () => {
+const ListHeader: FC<{
+  totalCount: number
+}> = ({ totalCount }) => {
   const activeList = useFeedStore(useShallow((state) => state.activeList))
   const [unreadOnly, setUnreadOnly] = useAtom(unreadOnlyAtom)
-  const entries = useEntriesByView()
 
   const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
   const handleMarkAllAsRead = useCallback(async () => {
@@ -233,7 +270,7 @@ const ListHeader: FC = () => {
       <div>
         <div className="text-lg font-bold leading-none">{activeList?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
-          {entries.data?.pages?.[0].total || 0}
+          {totalCount || 0}
           {" "}
           {unreadOnly ? "Unread" : ""}
           {" "}

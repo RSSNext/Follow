@@ -3,7 +3,7 @@ import {
   TooltipProvider,
 } from "@renderer/components/ui/tooltip"
 import { useEntryActions } from "@renderer/hooks/useEntryActions"
-import { useEntry } from "@renderer/store/entry"
+import { useEntry } from "@renderer/store/entry/hooks"
 
 export function EntryShare({
   view,
