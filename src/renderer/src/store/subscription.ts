@@ -64,15 +64,14 @@ export const useSubscriptionStore = createZustandStore<
         dataIdByView: { ...emptyDataIdByView },
       }))
     }
-    res.data.forEach((subscription) => {
-      set((state) =>
-        produce(state, (state) => {
-          state.data[subscription.feeds.id] = subscription
-          state.dataIdByView[subscription.view].push(subscription.feeds.id)
-          return state
-        }),
-      )
-    })
+
+    set((state) => produce(state, (state) => {
+      res.data.forEach((subscription) => {
+        state.data[subscription.feeds.id] = subscription
+        state.dataIdByView[subscription.view].push(subscription.feeds.id)
+        return state
+      })
+    }))
 
     return res.data
   },
