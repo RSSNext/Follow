@@ -22,7 +22,14 @@ import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { debounce } from "lodash-es"
 import type { FC } from "react"
-import { forwardRef, useCallback, useMemo, useRef, useState } from "react"
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import type { ListRange } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
@@ -146,7 +153,11 @@ const useEntriesByView = () => {
   // in unread only entries only can grow the data, but not shrink
   // so we memo this previous data to avoid the flicker
   const prevEntries = useRef(entries)
-  const nextEntries = useMemo(() => {
+
+  useEffect(() => {
+    prevEntries.current = []
+  }, [activeList.id])
+  const localEntries = useMemo(() => {
     if (!unreadOnly) {
       prevEntries.current = []
       return entries
@@ -176,16 +187,17 @@ const useEntriesByView = () => {
         null,
     [query.data],
   )
+  console.log("remoteEntryIds", remoteEntryIds)
   return {
     ...query,
 
     // If remote data is not available, we use the local data, get the local data length
-    totalCount: query.data?.pages?.[0]?.total ?? nextEntries.length,
+    totalCount: query.data?.pages?.[0]?.total ?? localEntries.length,
     entriesIds:
       // FIXME we can't filter collections in local mode, so we need to use the remote data
       // activeList.id === FEED_COLLECTION_LIST ? remoteEntryIds : nextEntries,
       // NOTE: if we use the remote data, priority will be given to the remote data, local data maybe had sort issue
-      remoteEntryIds ?? nextEntries,
+      remoteEntryIds ?? localEntries,
   }
 }
 
