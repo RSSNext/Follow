@@ -1,4 +1,4 @@
-import { useDark } from "@renderer/hooks/useDark"
+import { useDark } from "@renderer/hooks"
 
 import { Switch } from "./ui/switch"
 

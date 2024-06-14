@@ -1,6 +1,6 @@
-import { useBizQuery } from "@renderer/hooks/useBizQuery"
+import { useBizQuery } from "@renderer/hooks"
 import { parseHtml } from "@renderer/lib/parse-html"
-import type { ActiveEntry } from "@renderer/models"
+import type { ActiveEntryId } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import { useEntry, useFeedStore } from "@renderer/store"
 import { m } from "framer-motion"
@@ -9,7 +9,7 @@ import { useEffect, useState } from "react"
 import { LoadingCircle } from "../ui/loading"
 import { EntryShare } from "./share"
 
-export const EntryContent = ({ entry }: { entry: ActiveEntry }) => {
+export const EntryContent = ({ entry }: { entry: ActiveEntryId }) => {
   const activeList = useFeedStore((state) => state.activeList)
 
   if (!entry) {

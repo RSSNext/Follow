@@ -17,7 +17,7 @@ export function Component() {
   const { activeEntry, activeList } = useFeedStore(
     useShallow((state) => ({
       activeList: state.activeList,
-      activeEntry: state.activeEntry,
+      activeEntry: state.activeEntryId,
     })),
   )
   const { setActiveEntry } = feedActions

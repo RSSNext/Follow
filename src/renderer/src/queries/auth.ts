@@ -1,7 +1,7 @@
 import type { Session } from "@auth/core/types"
 import type { GetSessionParams } from "@hono/auth-js/react"
 import { authConfigManager } from "@hono/auth-js/react"
-import { useBizQuery } from "@renderer/hooks/useBizQuery"
+import { useBizQuery } from "@renderer/hooks"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"

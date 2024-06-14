@@ -5,7 +5,7 @@ import {
   AvatarImage,
 } from "@renderer/components/ui/avatar"
 import { Button } from "@renderer/components/ui/button"
-import { useSignOut } from "@renderer/hooks/useAuth"
+import { useSignOut } from "@renderer/hooks"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { useSession } from "@renderer/queries/auth"

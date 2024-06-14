@@ -4,6 +4,10 @@ import { router } from "@renderer/router"
 import { hc } from "hono/client"
 import { ofetch } from "ofetch"
 
+export abstract class RequestError extends Error {
+  name = "RequestError"
+}
+
 export const apiFetch = ofetch.create({
   baseURL: import.meta.env.VITE_API_URL,
   credentials: "include",
@@ -27,6 +31,7 @@ export const apiFetch = ofetch.create({
   },
   onResponseError(context) {
     if (context.response.status === 401) {
+      // Or we can present LoginModal here.
       router.navigate("/login")
     }
   },

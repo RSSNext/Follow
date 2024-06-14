@@ -20,7 +20,7 @@ import {
 } from "@renderer/components/ui/select"
 import { Switch } from "@renderer/components/ui/switch"
 import { ViewSelectContent } from "@renderer/components/view-select-content"
-import { useBizQuery } from "@renderer/hooks/useBizQuery"
+import { useBizQuery } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
 import { FeedViewType } from "@renderer/lib/enum"
@@ -75,7 +75,9 @@ export function Component() {
         isPrivate: values.isPrivate,
         ...(isSubscribed && { feedId: feed.data?.feed.id }),
       }
-      const $method = isSubscribed ? apiClient.subscriptions.$patch : apiClient.subscriptions.$post
+      const $method = isSubscribed ?
+        apiClient.subscriptions.$patch :
+        apiClient.subscriptions.$post
 
       return $method({
         // @ts-expect-error
@@ -96,16 +98,15 @@ export function Component() {
       client?.invalidateQuery(
         Queries.subscription.byView(Number.parseInt(variables.view)).key,
       )
-      Queries.feed.byId({ id: feed.data?.feed.id }).invalidate()
-      client?.invalidateQuery(
-        Queries.feed.byId({ id: feed.data?.feed.id }).key,
-      )
-      toast(
-        isSubscribed ? "🎉 Updated." : "🎉 Followed.",
-        {
-          duration: 1000,
-        },
-      )
+
+      const feedId = feed.data?.feed.id
+      if (feedId) {
+        Queries.feed.byId({ id: feedId }).invalidate()
+        client?.invalidateQuery(Queries.feed.byId({ id: feedId }).key)
+      }
+      toast(isSubscribed ? "🎉 Updated." : "🎉 Followed.", {
+        duration: 1000,
+      })
 
       if (!isSubscribed) {
         window.close()
