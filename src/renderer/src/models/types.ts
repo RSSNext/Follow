@@ -67,7 +67,7 @@ export type DataResponse<T> = {
   data?: T
 }
 
-export type ActiveEntry = string | null
+export type ActiveEntryId = string | null
 
 export type SubscriptionModel = SubscriptionResponse[number]
 

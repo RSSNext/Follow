@@ -1,6 +1,4 @@
-import { useAsRead } from "@renderer/hooks/useAsRead"
-import { useBizQuery } from "@renderer/hooks/useBizQuery"
-import { useEntryActions, useRead } from "@renderer/hooks/useEntryActions"
+import { useAsRead, useBizQuery, useEntryActions, useRead } from "@renderer/hooks"
 import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -11,7 +9,7 @@ import { feedActions, useFeedStore } from "@renderer/store"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { franc } from "franc-min"
 import type { FC } from "react"
-import { memo } from "react"
+import { memo, useCallback } from "react"
 
 import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
 import { ArticleItem } from "./article-item"
@@ -22,9 +20,12 @@ import { SocialMediaItem } from "./social-media-item"
 import type { UniversalItemProps } from "./types"
 import { VideoItem } from "./video-item"
 
-const LanguageMap: Record<SupportedLanguages, {
-  code: string
-}> = {
+const LanguageMap: Record<
+  SupportedLanguages,
+  {
+    code: string
+  }
+> = {
   "en": {
     code: "eng",
   },
@@ -49,7 +50,10 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
     entry,
   })
 
-  let fields = (entry.settings?.translation && view !== undefined) ? (views[view!].translation).split(",") : []
+  let fields =
+    entry.settings?.translation && view !== undefined ?
+      views[view!].translation.split(",") :
+        []
 
   fields = fields.filter((field) => {
     if (entry.settings?.translation && entry.entries[field]) {
@@ -65,15 +69,18 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
     }
   })
 
-  const translation = useBizQuery(Queries.ai.translation({
-    id: entry.entries.id,
-    language: entry.settings?.translation,
-    fields: fields?.join(",") || "title",
-  }), {
-    enabled: !!entry.settings?.translation && !!fields?.length,
-  })
+  const translation = useBizQuery(
+    Queries.ai.translation({
+      id: entry.entries.id,
+      language: entry.settings?.translation,
+      fields: fields?.join(",") || "title",
+    }),
+    {
+      enabled: !!entry.settings?.translation && !!fields?.length,
+    },
+  )
 
-  const activeEntry = useFeedStore((state) => state.activeEntry)
+  const activeEntry = useFeedStore((state) => state.activeEntryId)
 
   const asRead = useAsRead(entry)
 
@@ -110,6 +117,40 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
       Item = ArticleItem
     }
   }
+  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> =
+    useCallback(() => {}, [])
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      e.stopPropagation()
+      feedActions.setActiveEntry(entry.entries.id)
+      if (!asRead) {
+        markReadMutation.mutate()
+      }
+    },
+    [asRead, entry.entries.id, markReadMutation],
+  )
+  const handleDoubleClick: React.MouseEventHandler<HTMLDivElement> =
+    useCallback(
+      () => entry.entries.url && window.open(entry.entries.url, "_blank"),
+      [entry.entries.url],
+    )
+  const handleContextMenu: React.MouseEventHandler<HTMLDivElement> =
+    useCallback(
+      (e) => {
+        e.preventDefault()
+        showNativeMenu(
+          items
+            .filter((item) => !item.disabled)
+            .map((item) => ({
+              type: "text",
+              label: item.name,
+              click: item.onClick,
+            })),
+          e,
+        )
+      },
+      [items],
+    )
 
   return (
     <div
@@ -124,29 +165,10 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
           "bg-theme-item-active",
           asRead ? "text-zinc-500/90" : "text-zinc-900 dark:text-white/90",
         )}
-        // ref={ref}
-        onClick={(e) => {
-          e.stopPropagation()
-          feedActions.setActiveEntry(entry.entries.id)
-          if (!asRead) {
-            markReadMutation.mutate()
-          }
-        }}
-        onDoubleClick={() =>
-          entry.entries.url && window.open(entry.entries.url, "_blank")}
-        onContextMenu={(e) => {
-          e.preventDefault()
-          showNativeMenu(
-            items
-              .filter((item) => !item.disabled)
-              .map((item) => ({
-                type: "text",
-                label: item.name,
-                click: item.onClick,
-              })),
-            e,
-          )
-        }}
+        onKeyDown={handleKeyDown}
+        onClick={handleClick}
+        onDoubleClick={handleDoubleClick}
+        onContextMenu={handleContextMenu}
       >
         <Item entryId={entry.entries.id} translation={translation.data} />
       </div>

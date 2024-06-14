@@ -1,4 +1,4 @@
-import { useBizQuery } from "@renderer/hooks/useBizQuery"
+import { useBizQuery } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 

@@ -5,6 +5,7 @@ import { entryActions } from "@renderer/store/entry/entry"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
+import { useMemo } from "react"
 import { toast } from "sonner"
 
 export const useCollect = (entry: EntryModel | undefined) =>
@@ -112,97 +113,110 @@ export const useEntryActions = ({
   const uncollect = useUnCollect(entry)
   const read = useRead(entry)
   const unread = useUnread(entry)
-
-  if (!entry?.entries.url || view === undefined) return { items: [] }
-
-  const items = [
-    [
-      {
-        name: "Star",
-        className: "i-mingcute-star-line",
-        disabled: !!entry.collections,
-        onClick: () => {
-          collect.mutate()
+  const items = useMemo(() => {
+    if (!entry || view === undefined) return []
+    const items = [
+      [
+        {
+          name: "Star",
+          className: "i-mingcute-star-line",
+          disabled: !!entry.collections,
+          onClick: () => {
+            collect.mutate()
+          },
         },
-      },
-      {
-        name: "Unstar",
-        className: "i-mingcute-star-fill text-orange-500",
-        disabled: !entry.collections,
-        onClick: () => {
-          uncollect.mutate()
+        {
+          name: "Unstar",
+          className: "i-mingcute-star-fill text-orange-500",
+          disabled: !entry.collections,
+          onClick: () => {
+            uncollect.mutate()
+          },
         },
-      },
-      {
-        name: "Copy Link",
-        className: "i-mingcute-link-line",
-        onClick: () => {
-          if (!entry.entries.url) return
-          navigator.clipboard.writeText(entry.entries.url)
-          toast("Link copied to clipboard.", {
-            duration: 1000,
-          })
-        },
-      },
-      {
-        name: "Open in Browser",
-        className: "i-mingcute-world-2-line",
-        onClick: () => {
-          if (!entry.entries.url) return
-          window.open(entry.entries.url, "_blank")
-        },
-      },
-      {
-        name: "Save Images to Eagle",
-        icon: "/eagle.svg",
-        disabled:
-          (checkEagle.isLoading ? true : !checkEagle.data) ||
-          !entry.entries.images?.length,
-        onClick: async () => {
-          if (!entry.entries.url || !entry.entries.images?.length) return
-          const response = await client?.saveToEagle({
-            url: entry.entries.url,
-            images: entry.entries.images,
-          })
-          if (response?.status === "success") {
-            toast("Saved to Eagle.", {
-              duration: 3000,
+        {
+          name: "Copy Link",
+          className: "i-mingcute-link-line",
+          disabled: !entry.entries.url,
+          onClick: () => {
+            if (!entry.entries.url) return
+            navigator.clipboard.writeText(entry.entries.url)
+            toast("Link copied to clipboard.", {
+              duration: 1000,
             })
-          } else {
-            toast("Failed to save to Eagle.", {
-              duration: 3000,
+          },
+        },
+        {
+          name: "Open in Browser",
+          className: "i-mingcute-world-2-line",
+          disabled: !entry.entries.url,
+          onClick: () => {
+            if (!entry.entries.url) return
+            window.open(entry.entries.url, "_blank")
+          },
+        },
+        {
+          name: "Save Images to Eagle",
+          icon: "/eagle.svg",
+          disabled:
+            (checkEagle.isLoading ? true : !checkEagle.data) ||
+            !entry.entries.images?.length,
+          onClick: async () => {
+            if (!entry.entries.url || !entry.entries.images?.length) return
+            const response = await client?.saveToEagle({
+              url: entry.entries.url,
+              images: entry.entries.images,
             })
-          }
+            if (response?.status === "success") {
+              toast("Saved to Eagle.", {
+                duration: 3000,
+              })
+            } else {
+              toast("Failed to save to Eagle.", {
+                duration: 3000,
+              })
+            }
+          },
         },
-      },
-      {
-        name: "Share",
-        className: "i-mingcute-share-2-line",
-        onClick: () => {
-          if (!entry.entries.url) return
-          client?.showShareMenu(entry.entries.url)
+        {
+          name: "Share",
+          className: "i-mingcute-share-2-line",
+          onClick: () => {
+            if (!entry.entries.url) return
+            client?.showShareMenu(entry.entries.url)
+          },
         },
-      },
-      {
-        name: "Mark as Read",
-        className: "i-mingcute-round-fill",
-        disabled: !!entry.read,
-        onClick: () => {
-          read.mutate()
+        {
+          name: "Mark as Read",
+          className: "i-mingcute-round-fill",
+          disabled: !!entry.read,
+          onClick: () => {
+            read.mutate()
+          },
         },
-      },
-      {
-        name: "Mark as Unread",
-        className: "i-mingcute-round-line",
-        disabled: !entry.read,
-        onClick: () => {
-          unread.mutate()
+        {
+          name: "Mark as Unread",
+          className: "i-mingcute-round-line",
+          disabled: !entry.read,
+          onClick: () => {
+            unread.mutate()
+          },
         },
-      },
-    ],
-  ]
+      ],
+    ]
+
+    return items[view] || items[0]
+  }, [
+    checkEagle.data,
+    checkEagle.isLoading,
+    collect,
+    entry,
+    read,
+    uncollect,
+    unread,
+    view,
+  ])
 
   return {
-    items: items[view] || items[0],
+    items,
   }
 }

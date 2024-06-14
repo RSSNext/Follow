@@ -1,7 +1,7 @@
 import { ActionCard } from "@renderer/components/settings/action-card"
 import { SettingsTitle } from "@renderer/components/settings/title"
 import { Button } from "@renderer/components/ui/button"
-import { useBizQuery } from "@renderer/hooks/useBizQuery"
+import { useBizQuery } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { ActionsResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"

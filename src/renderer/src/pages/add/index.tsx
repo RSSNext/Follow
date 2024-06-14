@@ -20,7 +20,7 @@ import {
 } from "@renderer/components/ui/select"
 import { Switch } from "@renderer/components/ui/switch"
 import { ViewSelectContent } from "@renderer/components/view-select-content"
-import { useBizQuery } from "@renderer/hooks/useBizQuery"
+import { useBizQuery } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
 import { FeedViewType } from "@renderer/lib/enum"

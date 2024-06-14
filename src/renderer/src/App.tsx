@@ -2,7 +2,7 @@ import { queryClient } from "@renderer/lib/query-client"
 import { useEffect } from "react"
 import { Outlet } from "react-router-dom"
 
-import { useDark } from "./hooks/useDark"
+import { useDark } from "./hooks/common/useDark"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"
 

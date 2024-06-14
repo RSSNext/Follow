@@ -8,9 +8,9 @@ export function Component() {
       <div className="w-64 shrink-0 border-r">
         <FeedColumn />
       </div>
-      <div ref={setMainContainerElement} className="flex flex-1 bg-background" tabIndex={-1}>
+      <main ref={setMainContainerElement} className="flex flex-1 bg-background !outline-none" tabIndex={-1}>
         <Outlet />
-      </div>
+      </main>
     </div>
   )
 }

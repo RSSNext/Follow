@@ -17,7 +17,7 @@ export default defineConfig(
   // fix later or just always ignore
   {
     rules: {
-      "no-console": ["warn", { allow: ["warn", "error", "info"] }],
+      "no-console": ["error", { allow: ["warn", "error", "info"] }],
       "unicorn/consistent-function-scoping": "warn",
       "unicorn/prefer-module": "off",
       "@typescript-eslint/no-floating-promises": "off",
