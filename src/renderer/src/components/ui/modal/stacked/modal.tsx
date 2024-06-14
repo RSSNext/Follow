@@ -189,6 +189,7 @@ export const ModalInternal: Component<{
               <m.div
                 style={modalStyle}
                 {...modalMontionConfig}
+                animate={animateController}
                 className={cn(
                   "relative flex flex-col overflow-hidden rounded-lg",
                   "bg-zinc-50/80 dark:bg-neutral-900/80",
