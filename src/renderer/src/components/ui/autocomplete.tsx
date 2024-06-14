@@ -18,7 +18,9 @@ export interface InputProps
   value?: string | null
   maxHeight?: number
 }
-
+/**
+ * @deprecated please use `ui/auto-completion` instead
+ */
 export const AutoComplete = React.forwardRef<HTMLInputElement, InputProps>(
   ({ options, emptyMessage, className, value, maxHeight, ...props }, ref) => {
     const [open, setOpen] = useState(false)

@@ -25,6 +25,7 @@ import { useBizQuery } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
 import { FeedViewType } from "@renderer/lib/enum"
+import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useFeed } from "@renderer/queries/feed"
 import { useMutation } from "@tanstack/react-query"
@@ -43,7 +44,9 @@ export const FeedForm: Component<{
   url?: string
   id?: string
   defaultView?: FeedViewType
-}> = ({ id, defaultView = FeedViewType.Articles, url }) => {
+
+  asWidget?: boolean
+}> = ({ id, defaultView = FeedViewType.Articles, url, asWidget }) => {
   const feed = useFeed({
     url,
     id,
@@ -122,16 +125,15 @@ export const FeedForm: Component<{
   )
 
   return (
-    <div className="flex h-full flex-col px-[18px] pb-[18px] pt-12">
-      <div className="mb-4 mt-2 flex items-center gap-2 text-[22px] font-bold">
-        <Logo className="size-8" />
-        {
-          isSubscribed ? "Update" : "Add"
-
-        }
-        {" "}
-        follow
-      </div>
+    <div className={cn("flex h-full flex-col", !asWidget && "px-[18px] pb-[18px] pt-12")}>
+      {!asWidget && (
+        <div className="mb-4 mt-2 flex items-center gap-2 text-[22px] font-bold">
+          <Logo className="size-8" />
+          {isSubscribed ? "Update" : "Add"}
+          {" "}
+          follow
+        </div>
+      )}
       {feed.isLoading ? (
         <div className="flex flex-1 items-center justify-center">
           <LoadingCircle size="large" />
