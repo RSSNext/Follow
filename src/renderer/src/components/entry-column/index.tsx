@@ -340,7 +340,7 @@ const EntryList: FC<VirtuosoProps<string, unknown>> = ({
     if (!$mainContainer) return
     const virtuoso = virtuosoRef.current
     const scope = "entry-list"
-    const registerKeys = "up,down,left,right,h,j,k,l"
+    const registerKeys = "up,down,j,k"
     const focusHandler = () => {
       const target = document.activeElement
 
