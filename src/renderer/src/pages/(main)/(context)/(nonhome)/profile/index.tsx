@@ -1,4 +1,3 @@
-import { FeedList } from "@renderer/components/feed-column/list"
 import {
   Avatar,
   AvatarFallback,
@@ -8,6 +7,7 @@ import { Button } from "@renderer/components/ui/button"
 import { useSignOut } from "@renderer/hooks"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
+import { FeedList } from "@renderer/modules/feed-column/list"
 import { useSession } from "@renderer/queries/auth"
 
 export function Component() {

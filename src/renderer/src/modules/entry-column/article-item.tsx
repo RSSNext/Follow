@@ -1,12 +1,12 @@
-import { EntryTranslation } from "@renderer/components/entry-column/translation"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import { useAsRead } from "@renderer/hooks"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
+import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
 
-import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
+import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
 export function ArticleItem({ entryId, entryPreview, translation }: UniversalItemProps) {

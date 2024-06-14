@@ -1,6 +1,7 @@
-import { SettingsTitle } from "@renderer/components/settings/title"
+import { Logo } from "@renderer/components/icons/logo"
 import { Vibrancy } from "@renderer/components/ui/background"
 import { settingTabs } from "@renderer/lib/constants"
+import { SettingsTitle } from "@renderer/modules/settings/title"
 import { Link, Outlet, useLocation } from "react-router-dom"
 
 export function Component() {
@@ -12,7 +13,8 @@ export function Component() {
       <div className="flex flex-1">
         <Vibrancy className="w-44 border-r px-2.5 py-3 pt-3.5">
           <div className="mb-3 flex justify-end">
-            <img src="./icon.svg" alt="logo" className="size-6" />
+
+            <Logo className="size-6" />
           </div>
           {settingTabs.map((t) => (
             <Link

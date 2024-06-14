@@ -63,7 +63,21 @@ module.exports = {
         },
 
         theme: {
-          accent: "#FF5C00",
+          // https://uicolors.app/create
+          accent: {
+            DEFAULT: "#ff5c00",
+            50: "#fff7ec",
+            100: "#ffeed3",
+            200: "#ffd9a5",
+            300: "#ffbd6d",
+            400: "#ff9532",
+            500: "#ff760a",
+            600: "#ff5c00",
+            700: "#cc4102",
+            800: "#a1330b",
+            900: "#822c0c",
+            950: "#461304",
+          },
 
           vibrancyFg: "var(--fo-vibrancy-foreground)",
           vibrancyBg: "var(--fo-vibrancy-background)",

@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { SettingsTitle } from "@renderer/components/settings/title"
 import { Button } from "@renderer/components/ui/button"
 import {
   Form,
@@ -12,6 +11,7 @@ import {
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
 import { apiClient } from "@renderer/lib/api-fetch"
+import { SettingsTitle } from "@renderer/modules/settings/title"
 import { useSession } from "@renderer/queries/auth"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"

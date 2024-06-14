@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@renderer/components/ui/button"
+import { Button, StyledButton } from "@renderer/components/ui/button"
 import {
   Card,
   CardContent,
@@ -16,17 +16,17 @@ import {
 } from "@renderer/components/ui/form"
 import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
+import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { FeedViewType } from "@renderer/lib/enum"
-import { useFeedStore } from "@renderer/store"
 import { DEEPLINK_SCHEME } from "@shared/constants"
-import { openElectronWindow } from "@shared/electron"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { FollowSummary } from "../feed-summary"
+import { FollowSummary } from "../../components/feed-summary"
+import { FeedForm } from "./feed-form"
 
 const formSchema = z.object({
   keyword: z.string().min(1),
@@ -91,6 +91,8 @@ export function DiscoverForm({ type }: { type: string }) {
     }
   }, [keyword])
 
+  const { present } = useModalStack()
+
   return (
     <>
       <Form {...form}>
@@ -111,9 +113,11 @@ export function DiscoverForm({ type }: { type: string }) {
               </FormItem>
             )}
           />
-          <Button type="submit" isLoading={mutation.isPending}>
-            Search
-          </Button>
+          <div className="center flex">
+            <StyledButton type="submit" isLoading={mutation.isPending}>
+              Search
+            </StyledButton>
+          </div>
         </form>
       </Form>
       {mutation.isSuccess && (
@@ -186,26 +190,17 @@ export function DiscoverForm({ type }: { type: string }) {
                       ) : (
                         <Button
                           onClick={() => {
-                            const searchParams = new URLSearchParams()
-                            if (item.feed.id) {
-                              searchParams.set("id", item.feed.id)
-                            } else {
-                              searchParams.set("url", item.feed.url)
-                            }
-                            searchParams.set(
-                              "view",
-                              String(`${useFeedStore.getState().activeList?.view ||
-                              FeedViewType.Articles}`),
-                            )
-                            openElectronWindow(
-                              `${DEEPLINK_SCHEME}add?${
-                                 searchParams.toString()
-                              }`,
-                              {
-                                resizable: false,
-                                height: 550,
-                              },
-                            )
+                            present({
+                              title: "Add follow",
+                              content: () => (
+                                <FeedForm
+                                  asWidget
+                                  url={item.feed.url}
+                                  id={item.feed.id}
+                                  defaultView={FeedViewType.Articles}
+                                />
+                              ),
+                            })
                           }}
                         >
                           Follow

@@ -1,3 +1,4 @@
+import { Logo } from "@renderer/components/icons/logo"
 import { useBizQuery } from "@renderer/hooks"
 import { parseHtml } from "@renderer/lib/parse-html"
 import type { ActiveEntryId } from "@renderer/models"
@@ -6,8 +7,8 @@ import { useEntry, useFeedStore } from "@renderer/store"
 import { m } from "framer-motion"
 import { useEffect, useState } from "react"
 
+import { LoadingCircle } from "../../components/ui/loading"
 import { EntryTranslation } from "../entry-column/translation"
-import { LoadingCircle } from "../ui/loading"
 import { EntryShare } from "./share"
 
 export const EntryContent = ({ entry }: { entry: ActiveEntryId }) => {
@@ -20,11 +21,7 @@ export const EntryContent = ({ entry }: { entry: ActiveEntryId }) => {
         initial={{ opacity: 0.01, y: 300 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <img
-          src="./icon.svg"
-          alt="logo"
-          className="size-16 opacity-40 grayscale"
-        />
+        <Logo className="size-16 opacity-40 grayscale" />
         {activeList?.name}
       </m.div>
     )
@@ -84,7 +81,10 @@ function EntryContentRender({ entryId }: { entryId: string }) {
               rel="noreferrer"
             >
               <div className="select-text break-words text-3xl font-bold">
-                <EntryTranslation source={entry.entries.title} target={translation.data?.title} />
+                <EntryTranslation
+                  source={entry.entries.title}
+                  target={translation.data?.title}
+                />
               </div>
               <div className="mt-2 text-[13px] font-medium text-zinc-500">
                 {entry.feeds?.title}

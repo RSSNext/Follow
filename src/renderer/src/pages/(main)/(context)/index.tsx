@@ -1,7 +1,7 @@
-import { EntryColumn } from "@renderer/components/entry-column"
-import { EntryContent } from "@renderer/components/entry-content"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
+import { EntryColumn } from "@renderer/modules/entry-column"
+import { EntryContent } from "@renderer/modules/entry-content"
 import {
   feedActions,
   uiActions,

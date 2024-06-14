@@ -40,8 +40,8 @@ import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
 import { useShallow } from "zustand/react/shallow"
 
-import { EmptyIcon } from "../icons/empty"
-import { LoadingCircle } from "../ui/loading"
+import { EmptyIcon } from "../../components/icons/empty"
+import { LoadingCircle } from "../../components/ui/loading"
 import { EntryItem } from "./item"
 
 const unreadOnlyAtom = atomWithStorage<boolean>(

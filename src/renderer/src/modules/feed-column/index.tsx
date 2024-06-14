@@ -1,3 +1,4 @@
+import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
 import { ProfileButton } from "@renderer/components/user-button"
 import { APP_NAME, levels, views } from "@renderer/lib/constants"
@@ -10,7 +11,7 @@ import { Lethargy } from "lethargy"
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 
-import { Vibrancy } from "../ui/background"
+import { Vibrancy } from "../../components/ui/background"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -86,7 +87,7 @@ export function FeedColumn() {
               })
             }}
           >
-            <img src="./icon.svg" alt="logo" className="size-6" />
+            <Logo className="size-6" />
             {APP_NAME}
           </div>
         )}

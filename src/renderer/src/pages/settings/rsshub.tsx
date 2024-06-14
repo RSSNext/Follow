@@ -1,4 +1,4 @@
-import { SettingsTitle } from "@renderer/components/settings/title"
+import { SettingsTitle } from "@renderer/modules/settings/title"
 
 export function Component() {
   return (

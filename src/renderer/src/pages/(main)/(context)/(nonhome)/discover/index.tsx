@@ -1,12 +1,12 @@
-import { DiscoverForm } from "@renderer/components/discover/form"
-import { DiscoverImport } from "@renderer/components/discover/import"
-import { Recommendations } from "@renderer/components/discover/recommendations"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@renderer/components/ui/tabs"
+import { DiscoverForm } from "@renderer/modules/discover/form"
+import { DiscoverImport } from "@renderer/modules/discover/import"
+import { Recommendations } from "@renderer/modules/discover/recommendations"
 
 export function Component() {
   const tabs = [

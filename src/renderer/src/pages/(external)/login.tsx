@@ -1,4 +1,5 @@
 import { signIn, useSession } from "@hono/auth-js/react"
+import { Logo } from "@renderer/components/icons/logo"
 import { Button } from "@renderer/components/ui/button"
 import { useSignOut } from "@renderer/hooks"
 import { LOGIN_CALLBACK_URL, loginHandler } from "@renderer/lib/auth"
@@ -32,7 +33,7 @@ export function Component() {
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
-      <img src="./icon.svg" alt="logo" className="size-20" />
+      <Logo className="size-20" />
       <h1 className="text-3xl font-bold">
         Log in to
         {" "}

@@ -59,6 +59,7 @@
     "electron-updater": "^6.1.7",
     "framer-motion": "11.2.9",
     "franc-min": "6.2.0",
+    "fuse.js": "7.0.0",
     "hast-util-to-jsx-runtime": "2.3.0",
     "hotkeys-js": "3.13.7",
     "idb-keyval": "6.2.1",
