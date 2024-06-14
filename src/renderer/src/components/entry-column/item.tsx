@@ -3,11 +3,10 @@ import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import type { EntryModel, SupportedLanguages } from "@renderer/models"
+import type { EntryModel } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import { feedActions, useFeedStore } from "@renderer/store"
 import { useEntry } from "@renderer/store/entry/hooks"
-import { franc } from "franc-min"
 import type { FC } from "react"
 import { memo, useCallback } from "react"
 
@@ -20,26 +19,6 @@ import { SocialMediaItem } from "./social-media-item"
 import type { UniversalItemProps } from "./types"
 import { VideoItem } from "./video-item"
 
-const LanguageMap: Record<
-  SupportedLanguages,
-  {
-    code: string
-  }
-> = {
-  "en": {
-    code: "eng",
-  },
-  "ja": {
-    code: "jpn",
-  },
-  "zh-CN": {
-    code: "cmn",
-  },
-  "zh-TW": {
-    code: "cmn",
-  },
-}
-
 interface EntryItemProps {
   entryId: string
   view?: number
@@ -50,33 +29,14 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
     entry,
   })
 
-  let fields =
-    entry.settings?.translation && view !== undefined ?
-      views[view!].translation.split(",") :
-        []
-
-  fields = fields.filter((field) => {
-    if (entry.settings?.translation && entry.entries[field]) {
-      const sourceLanguage = franc(entry.entries[field])
-
-      if (sourceLanguage === LanguageMap[entry.settings?.translation].code) {
-        return false
-      } else {
-        return true
-      }
-    } else {
-      return false
-    }
-  })
-
   const translation = useBizQuery(
     Queries.ai.translation({
-      id: entry.entries.id,
+      entry,
+      view,
       language: entry.settings?.translation,
-      fields: fields?.join(",") || "title",
     }),
     {
-      enabled: !!entry.settings?.translation && !!fields?.length,
+      enabled: !!entry.settings?.translation,
     },
   )
 

@@ -6,6 +6,7 @@ import { useEntry, useFeedStore } from "@renderer/store"
 import { m } from "framer-motion"
 import { useEffect, useState } from "react"
 
+import { EntryTranslation } from "../entry-column/translation"
 import { LoadingCircle } from "../ui/loading"
 import { EntryShare } from "./share"
 
@@ -51,6 +52,17 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     }
   }, [entry?.entries.content])
 
+  const translation = useBizQuery(
+    Queries.ai.translation({
+      entry: entry!,
+      language: entry?.settings?.translation,
+      extraFields: ["title"],
+    }),
+    {
+      enabled: !!entry?.settings?.translation,
+    },
+  )
+
   if (!entry) return null
 
   return (
@@ -72,7 +84,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
               rel="noreferrer"
             >
               <div className="select-text break-words text-3xl font-bold">
-                {entry.entries.title}
+                <EntryTranslation source={entry.entries.title} target={translation.data?.title} />
               </div>
               <div className="mt-2 text-[13px] font-medium text-zinc-500">
                 {entry.feeds?.title}
