@@ -91,7 +91,7 @@ export function EntryColumn() {
   const virtuosoOptions = {
     components: {
       List: ListContent,
-      EmptyPlaceholder: EmptyList,
+
       Footer: useCallback(() => {
         if (!isFetchingNextPage) return null
         return (
