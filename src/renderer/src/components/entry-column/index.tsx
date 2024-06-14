@@ -295,14 +295,13 @@ const ListHeader: FC<{
 }
 
 const ListContent = forwardRef<HTMLDivElement>((props, ref) => (
-  <div
-    className="px-2"
-    {...props}
-    ref={ref}
-  />
+  <div className="px-2" {...props} ref={ref} />
 ))
 
-const EmptyList = (props, ref) => {
+const EmptyList = forwardRef<
+  HTMLDivElement,
+  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+>((props, ref) => {
   const unreadOnly = useAtomValue(unreadOnlyAtom)
 
   return (
@@ -324,4 +323,4 @@ const EmptyList = (props, ref) => {
       )}
     </div>
   )
-}
+})
