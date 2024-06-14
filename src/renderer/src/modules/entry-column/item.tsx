@@ -10,7 +10,7 @@ import { useEntry } from "@renderer/store/entry/hooks"
 import type { FC } from "react"
 import { memo, useCallback } from "react"
 
-import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
+import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import { ArticleItem } from "./article-item"
 import { AudioItem } from "./audio-item"
 import { NotificationItem } from "./notification-item"

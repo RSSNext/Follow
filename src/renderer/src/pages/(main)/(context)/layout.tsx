@@ -1,5 +1,5 @@
 import { setMainContainerElement } from "@renderer/atoms"
-import { FeedColumn } from "@renderer/components/feed-column"
+import { FeedColumn } from "@renderer/modules/feed-column"
 import { Outlet } from "react-router-dom"
 
 export function Component() {

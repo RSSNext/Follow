@@ -18,7 +18,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { FollowSummary } from "../feed-summary"
+import { FollowSummary } from "../../components/feed-summary"
 
 type FeedResponseList = {
   id: string

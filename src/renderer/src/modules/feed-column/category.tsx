@@ -14,7 +14,7 @@ import {
 import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useState } from "react"
 
-import { useModalStack } from "../ui/modal/stacked/hooks"
+import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import {
   CategoryRenameContent,

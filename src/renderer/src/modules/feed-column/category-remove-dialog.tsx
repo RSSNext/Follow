@@ -3,8 +3,8 @@ import { Queries } from "@renderer/queries"
 import { subscriptionActions } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
 
-import { StyledButton } from "../ui/button"
-import { useCurrentModal } from "../ui/modal"
+import { StyledButton } from "../../components/ui/button"
+import { useCurrentModal } from "../../components/ui/modal"
 
 export function CategoryRemoveDialogContent({
   feedIdList,

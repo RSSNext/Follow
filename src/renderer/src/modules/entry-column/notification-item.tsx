@@ -1,13 +1,13 @@
-import { EntryTranslation } from "@renderer/components/entry-column/translation"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
+import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
 
-import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
+import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-export function AudioItem({ entryId, entryPreview, translation }: UniversalItemProps) {
+export function NotificationItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
@@ -32,9 +32,6 @@ export function AudioItem({ entryId, entryPreview, translation }: UniversalItemP
             <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
           )}
         </div>
-        {entry.entries?.enclosures?.[0].url && (
-          <audio className="mt-2 h-10 w-full" controls src={entry.entries?.enclosures?.[0].url} />
-        )}
       </div>
     </div>
   )

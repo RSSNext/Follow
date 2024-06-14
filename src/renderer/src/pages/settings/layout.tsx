@@ -1,6 +1,6 @@
-import { SettingsTitle } from "@renderer/components/settings/title"
 import { Vibrancy } from "@renderer/components/ui/background"
 import { settingTabs } from "@renderer/lib/constants"
+import { SettingsTitle } from "@renderer/modules/settings/title"
 import { Link, Outlet, useLocation } from "react-router-dom"
 
 export function Component() {

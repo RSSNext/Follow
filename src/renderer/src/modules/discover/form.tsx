@@ -26,7 +26,7 @@ import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { FollowSummary } from "../feed-summary"
+import { FollowSummary } from "../../components/feed-summary"
 
 const formSchema = z.object({
   keyword: z.string().min(1),

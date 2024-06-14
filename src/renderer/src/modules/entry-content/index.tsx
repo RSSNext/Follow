@@ -6,8 +6,8 @@ import { useEntry, useFeedStore } from "@renderer/store"
 import { m } from "framer-motion"
 import { useEffect, useState } from "react"
 
+import { LoadingCircle } from "../../components/ui/loading"
 import { EntryTranslation } from "../entry-column/translation"
-import { LoadingCircle } from "../ui/loading"
 import { EntryShare } from "./share"
 
 export const EntryContent = ({ entry }: { entry: ActiveEntryId }) => {

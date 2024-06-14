@@ -7,7 +7,7 @@ import { useEntry } from "@renderer/store/entry/hooks"
 import { useHover } from "@use-gesture/react"
 import { useMemo, useRef, useState } from "react"
 
-import { ReactVirtuosoItemPlaceholder } from "../ui/placeholder"
+import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
 export function VideoItem({ entryId, entryPreview, translation }: UniversalItemProps) {
