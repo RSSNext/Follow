@@ -105,6 +105,7 @@
     "@vitejs/plugin-react": "^4.3.0",
     "electron": "^30.0.9",
     "electron-builder": "^24.9.1",
+    "electron-devtools-installer": "3.2.0",
     "electron-vite": "^2.2.0",
     "eslint": "^9.3.0",
     "eslint-config-hyoban": "3.0.0-beta.16",
