@@ -1,8 +1,15 @@
-import type { MenuItem, MenuItemConstructorOptions } from "electron"
+import type {
+  BrowserWindow,
+  MenuItem,
+  MenuItemConstructorOptions,
+} from "electron"
 import { Menu } from "electron"
 
 import { createWindow } from "./window"
 
+const windows = {
+  settingWindow: null as BrowserWindow | null,
+}
 export const registerAppMenu = () => {
   const menus: Array<MenuItemConstructorOptions | MenuItem> = [
     {
@@ -14,10 +21,20 @@ export const registerAppMenu = () => {
           label: "Settings...",
           accelerator: "CmdOrCtrl+,",
           click: () => {
-            createWindow({
+            if (windows.settingWindow) {
+              windows.settingWindow.show()
+              return
+            }
+            const window = createWindow({
               extraPath: "/settings",
               width: 800,
               height: 600,
+              resizable: false,
+            })
+
+            windows.settingWindow = window
+            window.on("closed", () => {
+              windows.settingWindow = null
             })
           },
         },
