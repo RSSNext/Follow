@@ -1,3 +1,4 @@
+import { Logo } from "@renderer/components/icons/logo"
 import { Button } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
 import { apiClient } from "@renderer/lib/api-fetch"
@@ -27,7 +28,7 @@ export function Component() {
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
-      <img src="./icon.svg" alt="logo" className="size-20" />
+      <Logo className="size-20" />
       <UserButton className="bg-stone-100 px-10 py-4 text-2xl" />
       <h1 className="text-3xl font-bold">
         Successfully connected to

@@ -51,11 +51,11 @@ export const styledButtonVariant = cva(
       },
       variant: {
         primary: cn(
-          "bg-theme-accent text-zinc-100",
+          "bg-theme-accent",
           "hover:contrast-[1.10] active:contrast-125",
           "font-semibold",
           "disabled:bg-theme-accent/40 disabled:opacity-80 disabled:dark:text-zinc-50",
-          "dark:text-neutral-800",
+          "text-zinc-100 dark:text-zinc-200/90",
         ),
 
         plain: cn(

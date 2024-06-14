@@ -1,3 +1,4 @@
+import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
 import { ProfileButton } from "@renderer/components/user-button"
 import { APP_NAME, levels, views } from "@renderer/lib/constants"
@@ -86,7 +87,7 @@ export function FeedColumn() {
               })
             }}
           >
-            <img src="./icon.svg" alt="logo" className="size-6" />
+            <Logo className="size-6" />
             {APP_NAME}
           </div>
         )}

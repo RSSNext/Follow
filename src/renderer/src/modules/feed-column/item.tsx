@@ -19,6 +19,7 @@ import {
   useFeedActiveList,
   useUnreadStore,
 } from "@renderer/store"
+import { openElectronWindow } from "@shared/electron"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
@@ -118,7 +119,12 @@ export function FeedItem({
             {
               type: "text",
               label: "Edit",
-              click: () => window.open(`follow://add?id=${feed.feedId}`),
+
+              click: () =>
+                openElectronWindow(`follow://add?id=${feed.feedId}`, {
+                  resizable: false,
+                  height: 550,
+                }),
             },
             {
               type: "text",
