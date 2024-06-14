@@ -104,18 +104,6 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 new Date(entry.entries.publishedAt).toUTCString()}
               </div>
             </a>
-            {!content && (
-              <div className="center mt-16">
-                {!error ? (
-                  <LoadingCircle size="large" />
-                ) : (
-                  <div className="center flex flex-col gap-2">
-                    <i className="i-mingcute-close-line text-3xl text-red-500" />
-                    <span className="font-sans text-sm">Network Error</span>
-                  </div>
-                )}
-              </div>
-            )}
             <div className="prose prose-zinc mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[15px] dark:prose-invert">
               {(summary.isLoading || summary.data) && (
                 <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
@@ -130,6 +118,18 @@ function EntryContentRender({ entryId }: { entryId: string }) {
               )}
               {content}
             </div>
+            {!content && (
+              <div className="center mt-16">
+                {!error ? (
+                  <LoadingCircle size="large" />
+                ) : (
+                  <div className="center flex flex-col gap-2">
+                    <i className="i-mingcute-close-line text-3xl text-red-500" />
+                    <span className="font-sans text-sm">Network Error</span>
+                  </div>
+                )}
+              </div>
+            )}
           </article>
         </m.div>
       </div>
