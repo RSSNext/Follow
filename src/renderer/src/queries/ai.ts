@@ -66,7 +66,7 @@ export const ai = {
         const res = await apiClient.ai.translation.$get({
           query: {
             id: entry.entries.id,
-            language: language as SupportedLanguages,
+            language,
             fields: fields?.join(",") || "title",
           },
         })
@@ -74,5 +74,21 @@ export const ai = {
       } else {
         return null
       }
+    }),
+  summary: ({
+    entryId,
+    language,
+  }: {
+    entryId: string
+    language?: SupportedLanguages
+  }) =>
+    defineQuery(["summary", entryId, language], async () => {
+      const res = await apiClient.ai.summary.$get({
+        query: {
+          id: entryId,
+          language,
+        },
+      })
+      return res.data
     }),
 }

@@ -60,6 +60,16 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     },
   )
 
+  const summary = useBizQuery(
+    Queries.ai.summary({
+      entryId,
+      language: entry?.settings?.translation,
+    }),
+    {
+      enabled: !!entry?.settings?.summary,
+    },
+  )
+
   if (!entry) return null
 
   return (
@@ -77,7 +87,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
             <a
               href={entry.entries.url || void 0}
               target="_blank"
-              className="-mx-6 block rounded-md p-6 transition-colors hover:bg-theme-item-hover"
+              className="-mx-6 block rounded-lg p-6 transition-colors hover:bg-theme-item-hover"
               rel="noreferrer"
             >
               <div className="select-text break-words text-3xl font-bold">
@@ -94,7 +104,6 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 new Date(entry.entries.publishedAt).toUTCString()}
               </div>
             </a>
-
             {!content && (
               <div className="center mt-16">
                 {!error ? (
@@ -107,7 +116,18 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 )}
               </div>
             )}
-            <div className="prose prose-zinc mx-auto mb-32 mt-10 max-w-full cursor-auto select-text break-all text-[15px] dark:prose-invert">
+            <div className="prose prose-zinc mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[15px] dark:prose-invert">
+              {(summary.isLoading || summary.data) && (
+                <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
+                  <div className="flex items-center gap-2 font-medium text-zinc-800">
+                    <i className="i-mingcute-bling-line align-middle" />
+                    <span>AI summary</span>
+                  </div>
+                  <div className="text-sm leading-relaxed">
+                    {summary.isLoading ? "Loading..." : summary.data}
+                  </div>
+                </div>
+              )}
               {content}
             </div>
           </article>
