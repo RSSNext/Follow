@@ -1,5 +1,6 @@
 import { signIn, useSession } from "@hono/auth-js/react"
 import { Button } from "@renderer/components/ui/button"
+import { useSignOut } from "@renderer/hooks"
 import { LOGIN_CALLBACK_URL, loginHandler } from "@renderer/lib/auth"
 import { APP_NAME } from "@renderer/lib/constants"
 import { useEffect, useState } from "react"
@@ -9,22 +10,25 @@ export function Component() {
   const { status } = useSession()
   const navigate = useNavigate()
   const [redirecting, setRedirecting] = useState(false)
+  const signOut = useSignOut()
 
   const urlParams = new URLSearchParams(window.location.search)
   const provider = urlParams.get("provider")
   useEffect(() => {
     if (!window.electron && provider) {
-      signIn(provider, {
-        callbackUrl: LOGIN_CALLBACK_URL,
-      })
+      if (status === "authenticated") {
+        signOut()
+      }
+      if (status === "unauthenticated") {
+        signIn(provider, {
+          callbackUrl: LOGIN_CALLBACK_URL,
+        })
+      }
       setRedirecting(true)
+    } else if (status === "authenticated") {
+      navigate("/redirect?app=follow")
     }
-  }, [])
-
-  if (status === "authenticated") {
-    navigate("/redirect?app=follow")
-    return null
-  }
+  }, [status])
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
