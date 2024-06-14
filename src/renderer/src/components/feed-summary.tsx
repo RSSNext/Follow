@@ -12,7 +12,7 @@ export function FollowSummary({
   className?: string
 }) {
   return (
-    <div className={cn("select-text space-y-1 text-sm", className)}>
+    <div className={cn("flex select-text flex-col gap-2 text-sm", className)}>
       <a
         href={feed.siteUrl || void 0}
         target="_blank"
@@ -22,7 +22,7 @@ export function FollowSummary({
         <FeedIcon
           feed={feed}
           fallbackUrl={docs}
-          className="mr-2 size-8 shrink-0"
+          className="mask-squircle mask mr-2 size-8 shrink-0 rounded-none"
         />
         <div className="truncate text-base font-semibold leading-tight">
           {feed.title}
@@ -33,7 +33,9 @@ export function FollowSummary({
       </a>
       <div className="flex items-center gap-1 truncate text-zinc-500">
         <i className="i-mingcute-right-line shrink-0" />
-        {feed.url || docs}
+        <a href={feed.url || docs} target="_blank" rel="noreferrer">
+          {feed.url || docs}
+        </a>
       </div>
     </div>
   )

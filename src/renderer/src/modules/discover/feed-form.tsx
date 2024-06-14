@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FollowSummary } from "@renderer/components/feed-summary"
 import { Logo } from "@renderer/components/icons/logo"
-import { AutoComplete } from "@renderer/components/ui/autocomplete"
+import { Autocomplete } from "@renderer/components/ui/auto-completion"
 import { StyledButton } from "@renderer/components/ui/button"
 import { Card, CardHeader } from "@renderer/components/ui/card"
 import {
@@ -125,7 +125,12 @@ export const FeedForm: Component<{
     <div className="flex h-full flex-col px-[18px] pb-[18px] pt-12">
       <div className="mb-4 mt-2 flex items-center gap-2 text-[22px] font-bold">
         <Logo className="size-8" />
-        Add follow
+        {
+          isSubscribed ? "Update" : "Add"
+
+        }
+        {" "}
+        follow
       </div>
       {feed.isLoading ? (
         <div className="flex flex-1 items-center justify-center">
@@ -181,10 +186,17 @@ export const FeedForm: Component<{
                         </div>
                         <FormControl>
                           <div>
-                            <AutoComplete
-                              options={categories.data || []}
-                              emptyMessage="No results."
-                              {...field}
+                            <Autocomplete
+                              maxHeight={window.innerHeight < 600 ? 120 : 240}
+                              portal
+                              suggestions={categories.data?.map((i) => ({
+                                name: i,
+                                value: i,
+                              })) || []}
+                              {...(field as any)}
+                              onSuggestionSelected={(suggestion) => {
+                                field.onChange(suggestion.value)
+                              }}
                             />
                           </div>
                         </FormControl>
