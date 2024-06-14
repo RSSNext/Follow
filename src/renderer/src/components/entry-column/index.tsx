@@ -1,3 +1,4 @@
+import { useMainContainerElement } from "@renderer/atoms"
 import { ActionButton, Button } from "@renderer/components/ui/button"
 import {
   Popover,
@@ -5,6 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
+import { useRefValue } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
@@ -12,12 +14,14 @@ import { getEntriesParams } from "@renderer/lib/utils"
 import { useEntries } from "@renderer/queries/entries"
 import {
   feedActions,
+  getCurrentEntryId,
   subscriptionActions,
   useFeedStore,
 } from "@renderer/store"
 import { entryActions } from "@renderer/store/entry/entry"
 import { useEntryIdsByFeedIdOrView } from "@renderer/store/entry/hooks"
 import { m } from "framer-motion"
+import hotkeys from "hotkeys-js"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { debounce } from "lodash-es"
@@ -30,7 +34,7 @@ import {
   useRef,
   useState,
 } from "react"
-import type { ListRange } from "react-virtuoso"
+import type { ListRange, VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
 import { useShallow } from "zustand/react/shallow"
@@ -47,8 +51,6 @@ const unreadOnlyAtom = atomWithStorage<boolean>(
     getOnInit: true,
   },
 )
-
-const { setActiveEntry } = feedActions
 
 export function EntryColumn() {
   const activeList = useFeedStore((state) => state.activeList)
@@ -91,7 +93,7 @@ export function EntryColumn() {
   const virtuosoOptions = {
     components: {
       List: ListContent,
-      EmptyPlaceholder: EmptyList,
+
       Footer: useCallback(() => {
         if (!isFetchingNextPage) return null
         return (
@@ -107,7 +109,7 @@ export function EntryColumn() {
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entriesIds,
     itemContent: useCallback(
-      (_, entryId: string) => {
+      (index: number, entryId: string) => {
         if (!entryId) return null
 
         return (
@@ -121,12 +123,12 @@ export function EntryColumn() {
   return (
     <div
       className="relative flex h-full flex-1 flex-col"
-      onClick={() => setActiveEntry(null)}
+      onClick={() => feedActions.setActiveEntry(null)}
       data-total-count={virtuosoOptions.totalCount}
     >
       <ListHeader totalCount={virtuosoOptions.totalCount} />
       <m.div
-        key={JSON.stringify(activeList)}
+        key={`${activeList?.id}-${activeList?.view}`}
         className="h-full"
         initial={{ opacity: 0.01, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
@@ -142,7 +144,7 @@ export function EntryColumn() {
               />
             ) :
             (
-              <Virtuoso {...virtuosoOptions} />
+              <EntryList {...virtuosoOptions} />
             )}
       </m.div>
     </div>
@@ -324,3 +326,97 @@ const EmptyList = forwardRef<
     </div>
   )
 })
+
+const EntryList: FC<VirtuosoProps<string, unknown>> = ({
+  ...virtuosoOptions
+}) => {
+  const $mainContainer = useMainContainerElement()
+  const virtuosoRef = useRef<VirtuosoHandle>(null)
+
+  const dataRef = useRefValue(virtuosoOptions.data!)
+
+  useEffect(() => {
+    if (!virtuosoRef.current) return
+    if (!$mainContainer) return
+    const virtuoso = virtuosoRef.current
+    const scope = "entry-list"
+    const registerKeys = "up,down,j,k"
+    const focusHandler = () => {
+      const target = document.activeElement
+
+      const isFocusIn =
+        $mainContainer.contains(target) || $mainContainer === target
+
+      if (isFocusIn) {
+        const currentScope = hotkeys.getScope()
+
+        if (currentScope === scope) {
+          return
+        }
+        hotkeys(registerKeys, scope, (handler) => {
+          const data = dataRef.current
+          const currentActiveEntryIndex = data.indexOf(
+            getCurrentEntryId() || "",
+          )
+
+          switch (handler.key) {
+            case "ArrowDown":
+            case "ArrowUp": {
+              const nextIndex =
+                // NOTE: if the current active entry is not in the list, we should set the active entry to the last one
+                handler.key === "ArrowUp" && currentActiveEntryIndex === -1 ?
+                  data.length - 1 :
+                  Math.min(
+                    Math.max(
+                      0,
+                      currentActiveEntryIndex +
+                      (handler.key === "ArrowDown" ? 1 : -1),
+                    ),
+                    data.length - 1,
+                  )
+
+              virtuoso.scrollIntoView({
+                index: nextIndex,
+              })
+              const nextId = data![nextIndex]
+              feedActions.setActiveEntry(nextId)
+            }
+          }
+        })
+        hotkeys.setScope(scope)
+      } else {
+        hotkeys.unbind(registerKeys, scope)
+        hotkeys.deleteScope(scope)
+        hotkeys.setScope("all")
+      }
+    }
+    // NOTE: focusin event will bubble to the document
+    document.addEventListener("focusin", focusHandler)
+
+    focusHandler()
+
+    return () => {
+      hotkeys.unbind(registerKeys, scope)
+      hotkeys.deleteScope(scope)
+
+      document.removeEventListener("focusin", focusHandler)
+    }
+  }, [$mainContainer])
+
+  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault()
+      }
+    },
+    [],
+  )
+
+  return (
+    <Virtuoso
+      onKeyDown={handleKeyDown}
+      {...virtuosoOptions}
+      ref={virtuosoRef}
+    />
+  )
+}

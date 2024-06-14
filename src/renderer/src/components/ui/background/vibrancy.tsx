@@ -1,4 +1,4 @@
-import { useDark } from "@renderer/hooks/useDark"
+import { useDark } from "@renderer/hooks"
 import { cn } from "@renderer/lib/utils"
 import { useMediaQuery } from "usehooks-ts"
 

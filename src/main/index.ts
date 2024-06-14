@@ -5,7 +5,7 @@ import path from "node:path"
 import { registerIpcMain } from "@egoist/tipc/main"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { extractElectronWindowOptions } from "@shared/electron"
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow, session } from "electron"
 
 import { registerAppMenu } from "./menu"
 import { router } from "./tipc"
@@ -97,6 +97,24 @@ app.whenReady().then(() => {
     }
     handleOpen(url)
   })
+
+  // for dev debug
+
+  if (process.env.NODE_ENV === "development") {
+    import("electron-devtools-installer").then(
+      ({ default: installExtension, REACT_DEVELOPER_TOOLS }) => {
+        installExtension(REACT_DEVELOPER_TOOLS, {
+          loadExtensionOptions: { allowFileAccess: true },
+        })
+          .then((name) => console.info(`Added Extension:  ${name}`))
+          .catch((err) => console.info("An error occurred:", err))
+
+        session.defaultSession.getAllExtensions().forEach((e) => {
+          session.defaultSession.loadExtension(e.path)
+        })
+      },
+    )
+  }
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

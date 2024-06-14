@@ -1,4 +1,4 @@
-import { useBizQuery } from "@renderer/hooks/useBizQuery"
+import { useBizQuery } from "@renderer/hooks"
 import { FEED_COLLECTION_LIST, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"

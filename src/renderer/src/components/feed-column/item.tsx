@@ -1,3 +1,4 @@
+import { getMainContainerElement } from "@renderer/atoms"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import {
   Tooltip,
@@ -41,6 +42,12 @@ export function FeedItem({
       id: feed.feedId,
       name: feed.feeds.title || "",
       view,
+    })
+    // focus to main container in order to let keyboard can navigate entry items by arrow keys
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        getMainContainerElement()?.focus()
+      })
     })
   }
 

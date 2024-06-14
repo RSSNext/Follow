@@ -2,7 +2,7 @@ import { ActionButton } from "@renderer/components/ui/button"
 import {
   TooltipProvider,
 } from "@renderer/components/ui/tooltip"
-import { useEntryActions } from "@renderer/hooks/useEntryActions"
+import { useEntryActions } from "@renderer/hooks"
 import { useEntry } from "@renderer/store/entry/hooks"
 
 export function EntryShare({
