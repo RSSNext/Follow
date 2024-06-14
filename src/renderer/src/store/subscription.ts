@@ -97,7 +97,7 @@ export const useSubscriptionStore = createZustandStore<
   },
   deleteCategory(ids) {
     const idSet = new Set(ids)
-    console.log("deleteCategory", ids)
+
     set((state) =>
       produce(state, (state) => {
         Object.keys(state.data).forEach((id) => {
