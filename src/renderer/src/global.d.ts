@@ -8,6 +8,7 @@ declare global {
     className?: string
   } & PropsWithChildren &
   P
+  export type Nullable<T> = T | null | undefined
 
 }
 

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { RequestError } from "@renderer/biz/error"
 import type { DefinedQuery } from "@renderer/lib/defineQuery"
 import type {
   InfiniteData,
@@ -20,7 +19,7 @@ export type SafeReturnType<T> = T extends (...args: any[]) => infer R
 export type CombinedObject<T, U> = T & U
 export function useBizQuery<
   TQuery extends DefinedQuery<QueryKey, any>,
-  TError = FetchError | RequestError,
+  TError = FetchError,
   TQueryFnData = Awaited<ReturnType<TQuery["fn"]>>,
   TData = TQueryFnData,
 >(
@@ -50,14 +49,14 @@ export function useBizQuery<
 
 export function useBizInfiniteQuery<
   T extends DefinedQuery<any, any>,
-  E = FetchError | RequestError,
+  E = FetchError,
   FNR = Awaited<ReturnType<T["fn"]>>,
   R = FNR,
 >(
   query: T,
   options: Omit<UseInfiniteQueryOptions<FNR, E>, "queryKey" | "queryFn">,
 ): CombinedObject<
-  UseInfiniteQueryResult<InfiniteData<R>, FetchError | RequestError>,
+  UseInfiniteQueryResult<InfiniteData<R>, FetchError>,
   { key: T["key"], fn: T["fn"] }
 > {
   // @ts-expect-error

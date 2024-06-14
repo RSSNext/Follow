@@ -13,7 +13,7 @@ import type { UniversalItemProps } from "./types"
 export function VideoItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
-  const iframeSrc = useMemo(() => urlToIframe(entry.entries.url), [entry.entries.url])
+  const iframeSrc = useMemo(() => urlToIframe(entry?.entries.url), [entry?.entries.url])
 
   const ref = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState(false)

@@ -11,6 +11,7 @@ import { ListItemHoverOverlay } from "@renderer/components/ui/list-item-hover-ov
 import { APP_NAME, views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
+import type { FeedModel } from "@renderer/models"
 import { useEntriesPreview } from "@renderer/queries/entries"
 import { useFeed } from "@renderer/queries/feed"
 import { DEEPLINK_SCHEME } from "@shared/constants"
@@ -67,7 +68,6 @@ export function Component() {
               {feed.data.feed.title}
               {" "}
               |
-              {" "}
               {APP_NAME}
             </title>
           </Helmet>
@@ -91,7 +91,6 @@ export function Component() {
             <strong>{feed.data.readCount}</strong>
             {" "}
             reads on
-            {" "}
             {APP_NAME}
           </div>
           <a className="mb-8" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
@@ -122,7 +121,8 @@ export function Component() {
                   entryId=""
                   entryPreview={{
                     entries: entry,
-                    feeds: feed.data.feed,
+                    // @ts-expect-error
+                    feeds: feed.data.feed as FeedModel,
                     read: false,
                   }}
                 />

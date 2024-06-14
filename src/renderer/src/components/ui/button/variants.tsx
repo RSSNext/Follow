@@ -31,19 +31,42 @@ export const buttonVariants = cva(
   },
 )
 export const styledButtonVariant = cva(
-  "inline-flex select-none cursor-default items-center gap-2 justify-center rounded-lg py-2 px-3 text-sm outline-offset-2 transition active:transition-none",
+  "inline-flex select-none disabled:cursor-not-allowed cursor-default items-center gap-2 justify-center rounded-lg py-2 px-3 text-sm outline-offset-2 transition active:transition-none",
   {
+    compoundVariants: [
+      {
+        variant: "primary",
+        status: "disabled",
+        className: "text-zinc-50 bg-theme-accent/30",
+      },
+      {
+        variant: "plain",
+        status: "disabled",
+        className: "text-primary-foreground/50",
+      },
+    ],
     variants: {
+      status: {
+        disabled: "cursor-not-allowed",
+      },
       variant: {
         primary: cn(
           "bg-theme-accent text-zinc-100",
           "hover:contrast-[1.10] active:contrast-125",
           "font-semibold",
-          "disabled:cursor-not-allowed disabled:bg-theme-accent/40 disabled:opacity-80 disabled:dark:text-zinc-50",
+          "disabled:bg-theme-accent/40 disabled:opacity-80 disabled:dark:text-zinc-50",
           "dark:text-neutral-800",
         ),
 
+        plain: cn(
+          "bg-background font-semibold transition-colors duration-200",
+          "border border-border hover:bg-zinc-50/20 dark:bg-neutral-900/30",
+        ),
       },
+    },
+
+    defaultVariants: {
+      variant: "primary",
     },
   },
 )

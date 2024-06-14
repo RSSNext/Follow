@@ -15,7 +15,6 @@ import {
 } from "react"
 import { useEventCallback } from "usehooks-ts"
 
-import { DialogOverlay } from "../../dialog"
 import { Divider } from "../../divider"
 import { modalMontionConfig } from "./constants"
 import type {
@@ -24,6 +23,25 @@ import type {
 } from "./context"
 import { CurrentModalContext, modalStackAtom } from "./context"
 import type { ModalProps } from "./types"
+
+const DialogOverlay = ({
+  onClick,
+  zIndex,
+}: {
+  onClick?: () => void
+  zIndex?: number
+}) => (
+  <Dialog.Overlay asChild>
+    <m.div
+      onClick={onClick}
+      className="fixed inset-0 z-[11] bg-zinc-50/80 dark:bg-neutral-900/80"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{ zIndex }}
+    />
+  </Dialog.Overlay>
+)
 
 export const ModalInternal: Component<{
   item: ModalProps & { id: string }
@@ -171,6 +189,7 @@ export const ModalInternal: Component<{
               <m.div
                 style={modalStyle}
                 {...modalMontionConfig}
+                animate={animateController}
                 className={cn(
                   "relative flex flex-col overflow-hidden rounded-lg",
                   "bg-zinc-50/80 dark:bg-neutral-900/80",
@@ -185,10 +204,10 @@ export const ModalInternal: Component<{
                 onClick={stopPropagation}
               >
                 <div className="relative flex items-center">
-                  <Dialog.Title className="shrink-0 grow items-center px-4 py-1 text-lg font-medium">
+                  <Dialog.Title className="shrink-0 grow items-center px-4 py-1 text-lg font-semibold">
                     {title}
                   </Dialog.Title>
-                  <Dialog.DialogClose className="p-2" onClick={close}>
+                  <Dialog.DialogClose className="center p-2" onClick={close}>
                     <i className="i-mingcute-close-line" />
                   </Dialog.DialogClose>
                 </div>

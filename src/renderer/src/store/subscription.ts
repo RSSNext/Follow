@@ -19,6 +19,7 @@ interface SubscriptionActions {
   markReadByView: (view?: FeedViewType) => void
   internal_reset: () => void
   clear: () => void
+  deleteCategory: (ids: string[]) => void
 }
 
 const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
@@ -65,13 +66,15 @@ export const useSubscriptionStore = createZustandStore<
       }))
     }
 
-    set((state) => produce(state, (state) => {
-      res.data.forEach((subscription) => {
-        state.data[subscription.feeds.id] = subscription
-        state.dataIdByView[subscription.view].push(subscription.feeds.id)
-        return state
-      })
-    }))
+    set((state) =>
+      produce(state, (state) => {
+        res.data.forEach((subscription) => {
+          state.data[subscription.feeds.id] = subscription
+          state.dataIdByView[subscription.view].push(subscription.feeds.id)
+          return state
+        })
+      }),
+    )
 
     return res.data
   },
@@ -91,6 +94,19 @@ export const useSubscriptionStore = createZustandStore<
         entryActions.optimisticUpdateManyByFeedId(feedId, { read: true })
       }
     }
+  },
+  deleteCategory(ids) {
+    const idSet = new Set(ids)
+
+    set((state) =>
+      produce(state, (state) => {
+        Object.keys(state.data).forEach((id) => {
+          if (idSet.has(id)) {
+            state.data[id].category = null
+          }
+        })
+      }),
+    )
   },
 }))
 
