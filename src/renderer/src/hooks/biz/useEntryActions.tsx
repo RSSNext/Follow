@@ -8,7 +8,7 @@ import { ofetch } from "ofetch"
 import { useMemo } from "react"
 import { toast } from "sonner"
 
-export const useCollect = (entry: EntryModel | undefined) =>
+export const useCollect = (entry: Nullable<EntryModel>) =>
   useMutation({
     mutationFn: async () =>
       entry &&
@@ -33,7 +33,7 @@ export const useCollect = (entry: EntryModel | undefined) =>
     },
   })
 
-export const useUnCollect = (entry: EntryModel | undefined) =>
+export const useUnCollect = (entry: Nullable<EntryModel>) =>
   useMutation({
     mutationFn: async () =>
       entry &&
@@ -56,7 +56,7 @@ export const useUnCollect = (entry: EntryModel | undefined) =>
     },
   })
 
-export const useRead = (entry: EntryModel | undefined) =>
+export const useRead = (entry: Nullable<EntryModel>) =>
   useMutation({
     mutationFn: async () =>
       entry &&
@@ -72,7 +72,7 @@ export const useRead = (entry: EntryModel | undefined) =>
       entryActions.markRead(entry.feeds.id, entry.entries.id, true)
     },
   })
-export const useUnread = (entry: EntryModel | undefined) =>
+export const useUnread = (entry: Nullable<EntryModel>) =>
   useMutation({
     mutationFn: async () =>
       entry &&
@@ -94,7 +94,7 @@ export const useEntryActions = ({
   entry,
 }: {
   view?: number
-  entry?: EntryModel
+  entry?: EntryModel | null
 }) => {
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],

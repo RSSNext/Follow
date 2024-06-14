@@ -20,6 +20,7 @@ import {
 } from "@renderer/store"
 import { entryActions } from "@renderer/store/entry/entry"
 import { useEntryIdsByFeedIdOrView } from "@renderer/store/entry/hooks"
+import type { HTMLMotionProps } from "framer-motion"
 import { m } from "framer-motion"
 import hotkeys from "hotkeys-js"
 import { useAtom, useAtomValue } from "jotai"
@@ -109,7 +110,7 @@ export function EntryColumn() {
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entriesIds,
     itemContent: useCallback(
-      (index: number, entryId: string) => {
+      (_, entryId: string) => {
         if (!entryId) return null
 
         return (
@@ -300,32 +301,31 @@ const ListContent = forwardRef<HTMLDivElement>((props, ref) => (
   <div className="px-2" {...props} ref={ref} />
 ))
 
-const EmptyList = forwardRef<
-  HTMLDivElement,
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
->((props, ref) => {
-  const unreadOnly = useAtomValue(unreadOnlyAtom)
+const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
+  (props, ref) => {
+    const unreadOnly = useAtomValue(unreadOnlyAtom)
 
-  return (
-    <m.div
-      className="-mt-20 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
-      {...props}
-      ref={ref}
-    >
-      {unreadOnly ? (
-        <>
-          <i className="i-mingcute-celebrate-line -mt-11 text-3xl" />
-          Zero Unread
-        </>
-      ) : (
-        <div className="flex -translate-y-6 flex-col items-center justify-center gap-2">
-          <EmptyIcon className="size-[30px]" />
-          Zero Items
-        </div>
-      )}
-    </m.div>
-  )
-})
+    return (
+      <m.div
+        className="-mt-20 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
+        {...props}
+        ref={ref}
+      >
+        {unreadOnly ? (
+          <>
+            <i className="i-mingcute-celebrate-line -mt-11 text-3xl" />
+            Zero Unread
+          </>
+        ) : (
+          <div className="flex -translate-y-6 flex-col items-center justify-center gap-2">
+            <EmptyIcon className="size-[30px]" />
+            Zero Items
+          </div>
+        )}
+      </m.div>
+    )
+  },
+)
 
 const EntryList: FC<VirtuosoProps<string, unknown>> = ({
   ...virtuosoOptions
