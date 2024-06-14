@@ -52,6 +52,8 @@ const useData = (view: FeedViewType) => {
     for (const subscription of subscriptions) {
       if (!subscription.category) {
         if (subscription.feeds.siteUrl) {
+          // FIXME @DIYgod
+          // The logic here makes it impossible to remove the auto-generated category based on domain
           const { domain } = parse(subscription.feeds.siteUrl)
           if (domain && domains[domain] > 1) {
             subscription.category =

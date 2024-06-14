@@ -1,63 +1,56 @@
-import {
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@renderer/components/ui/alert-dialog"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
+import { subscriptionActions } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
 
-export function CategoryRemoveDialog({
+import { StyledButton } from "../ui/button"
+import { useCurrentModal } from "../ui/modal"
+
+export function CategoryRemoveDialogContent({
   feedIdList,
-  onSuccess,
-  category,
+
   view,
 }: {
   feedIdList: string[]
   onSuccess?: () => void
-  category: string
+
   view?: number
 }) {
-  const renameMutation = useMutation({
+  const deleteMutation = useMutation({
     mutationFn: async () =>
-
       apiClient.categories.$delete({
         json: {
           feedIdList,
           deleteSubscriptions: false,
         },
       }),
+
     onSuccess: () => {
       Queries.subscription.byView(view).invalidate()
-
-      onSuccess?.()
+      subscriptionActions.deleteCategory(feedIdList)
     },
   })
 
+  const { dismiss } = useCurrentModal()
+
   return (
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        <AlertDialogTitle>
-          Remove category
-          {" "}
-          <span className="font-bold">{category}</span>
-          ?
-        </AlertDialogTitle>
-        <AlertDialogDescription>
-          This operation will delete your category, but the feeds it contains
-          will be retained and grouped by website.
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction onClick={() => renameMutation.mutate()}>
+    <div className="flex w-[65ch] max-w-full flex-col gap-4">
+      <p>
+        This operation will delete your category, but the feeds it contains will
+        be retained and grouped by website.
+      </p>
+
+      <div className="flex items-center justify-end gap-3">
+        <StyledButton variant="plain" onClick={dismiss}>
+          Cancel
+        </StyledButton>
+        <StyledButton
+          isLoading={deleteMutation.isPending}
+          onClick={() => deleteMutation.mutateAsync().then(() => dismiss())}
+        >
           Continue
-        </AlertDialogAction>
-      </AlertDialogFooter>
-    </AlertDialogContent>
+        </StyledButton>
+      </div>
+    </div>
   )
 }

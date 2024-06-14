@@ -6,6 +6,10 @@
     }
   },
 
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ],
   // You may don't need this in the future
   "eslint.experimental.useFlatConfig": true,
   "eslint.validate": [

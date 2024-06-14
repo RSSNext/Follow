@@ -1,10 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@renderer/components/ui/button"
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@renderer/components/ui/dialog"
+import { StyledButton } from "@renderer/components/ui/button"
 import {
   Form,
   FormControl,
@@ -23,7 +18,7 @@ const formSchema = z.object({
   category: z.string(),
 })
 
-export function CategoryRenameDialog({
+export function CategoryRenameContent({
   feedIdList,
   onSuccess,
   category,
@@ -43,7 +38,6 @@ export function CategoryRenameDialog({
 
   const renameMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) =>
-
       apiClient.categories.$patch({
         json: {
           feedIdList,
@@ -62,29 +56,26 @@ export function CategoryRenameDialog({
   }
 
   return (
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Rename Category</DialogTitle>
-      </DialogHeader>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="category"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" isLoading={renameMutation.isPending}>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex justify-end">
+          <StyledButton type="submit" isLoading={renameMutation.isPending}>
             Rename
-          </Button>
-        </form>
-      </Form>
-    </DialogContent>
+          </StyledButton>
+        </div>
+      </form>
+    </Form>
   )
 }
