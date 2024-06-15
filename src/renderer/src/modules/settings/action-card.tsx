@@ -41,7 +41,7 @@ type Operation =
   | "gt"
   | "lt"
   | "regex"
-type EntryField = "all" | "title" | "content" | "author" | "link" | "order"
+type EntryField = "all" | "title" | "content" | "author" | "url" | "order"
 type FeedField = "view" | "title" | "site_url" | "feed_url"
 
 type ActionsInput = {
@@ -122,8 +122,8 @@ const EntryOptions = [
     value: "author",
   },
   {
-    name: "Link",
-    value: "link",
+    name: "Url",
+    value: "url",
   },
   {
     name: "Order",
