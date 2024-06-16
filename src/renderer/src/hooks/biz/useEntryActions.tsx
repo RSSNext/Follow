@@ -58,20 +58,23 @@ export const useUnCollect = (entry: Nullable<EntryModel>) =>
 
 export const useRead = () =>
   useMutation({
-    mutationFn: async (entry: EntryModel) =>
+    mutationFn: async (entry: Nullable<EntryModel>) =>
+      entry &&
       apiClient.reads.$post({
         json: {
           entryIds: [entry.entries.id],
         },
       }),
 
-    onMutate: (entry: EntryModel) => {
+    onMutate: (entry: Nullable<EntryModel>) => {
+      if (!entry) return
+
       entryActions.markRead(entry.feeds.id, entry.entries.id, true)
     },
   })
-export const useUnread = (entry: Nullable<EntryModel>) =>
+export const useUnread = () =>
   useMutation({
-    mutationFn: async () =>
+    mutationFn: async (entry: Nullable<EntryModel>) =>
       entry &&
       apiClient.reads.$delete({
         json: {
@@ -79,7 +82,7 @@ export const useUnread = (entry: Nullable<EntryModel>) =>
         },
       }),
 
-    onMutate: () => {
+    onMutate: (entry: Nullable<EntryModel>) => {
       if (!entry) return
 
       entryActions.markRead(entry.feeds.id, entry.entries.id, false)
@@ -108,8 +111,8 @@ export const useEntryActions = ({
 
   const collect = useCollect(entry)
   const uncollect = useUnCollect(entry)
-  const read = useRead(entry)
-  const unread = useUnread(entry)
+  const read = useRead()
+  const unread = useUnread()
   const items = useMemo(() => {
     if (!entry || view === undefined) return []
     const items = [
@@ -187,7 +190,7 @@ export const useEntryActions = ({
           className: "i-mingcute-round-fill",
           disabled: !!entry.read,
           onClick: () => {
-            read.mutate()
+            read.mutate(entry)
           },
         },
         {
@@ -195,7 +198,7 @@ export const useEntryActions = ({
           className: "i-mingcute-round-line",
           disabled: !entry.read,
           onClick: () => {
-            unread.mutate()
+            unread.mutate(entry)
           },
         },
       ],
