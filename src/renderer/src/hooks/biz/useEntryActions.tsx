@@ -56,19 +56,16 @@ export const useUnCollect = (entry: Nullable<EntryModel>) =>
     },
   })
 
-export const useRead = (entry: Nullable<EntryModel>) =>
+export const useRead = () =>
   useMutation({
-    mutationFn: async () =>
-      entry &&
+    mutationFn: async (entry: EntryModel) =>
       apiClient.reads.$post({
         json: {
           entryIds: [entry.entries.id],
         },
       }),
 
-    onMutate: () => {
-      if (!entry) return
-
+    onMutate: (entry: EntryModel) => {
       entryActions.markRead(entry.feeds.id, entry.entries.id, true)
     },
   })

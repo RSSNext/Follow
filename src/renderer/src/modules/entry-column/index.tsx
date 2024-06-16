@@ -6,7 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
-import { useRefValue } from "@renderer/hooks"
+import { useRead, useRefValue } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
@@ -19,7 +19,7 @@ import {
   useFeedStore,
 } from "@renderer/store"
 import { entryActions } from "@renderer/store/entry/entry"
-import { useEntryIdsByFeedIdOrView } from "@renderer/store/entry/hooks"
+import { useEntry, useEntryIdsByFeedIdOrView } from "@renderer/store/entry/hooks"
 import type { HTMLMotionProps } from "framer-motion"
 import { m } from "framer-motion"
 import hotkeys from "hotkeys-js"
@@ -54,9 +54,21 @@ const unreadOnlyAtom = atomWithStorage<boolean>(
 )
 
 export function EntryColumn() {
-  const activeList = useFeedStore((state) => state.activeList)
+  const { activeList, activeEntryId } = useFeedStore((state) => ({
+    activeList: state.activeList,
+    activeEntryId: state.activeEntryId,
+  }))
   const entries = useEntriesByView()
   const { entriesIds, isFetchingNextPage } = entries
+
+  const activeEntry = useEntry(activeEntryId)
+  const markReadMutation = useRead()
+  useEffect(() => {
+    if (!activeEntry || activeEntry.read) {
+      return
+    }
+    markReadMutation.mutate(activeEntry)
+  }, [activeEntry])
 
   const handleRangeChange = useEventCallback(
     debounce(

@@ -10,8 +10,8 @@ interface EntryFilter {
   unread?: boolean
 }
 
-export const useEntry = (entryId: string): EntryModel | null =>
-  useEntryStore(useShallow((state) => state.flatMapEntries[entryId]))
+export const useEntry = (entryId: string | null): EntryModel | null =>
+  useEntryStore(useShallow((state) => entryId ? state.flatMapEntries[entryId] : null))
 // feedId: single feedId, multiple feedId joint by `,`, and `collections`
 export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
   useEntryStore(

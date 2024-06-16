@@ -26,42 +26,36 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
           }}
         />
       </div>
-      <a
-        href={entry.entries.url!}
-        className={entry.entries.url ? "cursor-pointer" : void 0}
-        target="_blank"
-      >
-        <div className="flex-1 px-2 pb-3 pt-1 text-sm">
-          <div
-            className={cn(
-              "relative mb-0.5 mt-1 truncate font-medium",
-              !!entry.collections && "pr-4",
-            )}
-          >
-            <EntryTranslation source={entry.entries.title} target={translation?.title} />
-            {!!entry.collections && (
-              <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
-            )}
-          </div>
-          <div className="flex items-center gap-1 truncate text-[13px]">
-            <FeedIcon
-              className="mr-0.5 inline-block size-[18px]"
-              feed={entry.feeds}
-              entry={entry.entries}
-            />
-            <span>{entry.feeds.title}</span>
-            <span className="text-zinc-500">·</span>
-            <span className="text-zinc-500">
-              {dayjs
-                .duration(
-                  dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"),
-                  "minute",
-                )
-                .humanize()}
-            </span>
-          </div>
+      <div className="flex-1 px-2 pb-3 pt-1 text-sm">
+        <div
+          className={cn(
+            "relative mb-0.5 mt-1 truncate font-medium",
+            !!entry.collections && "pr-4",
+          )}
+        >
+          <EntryTranslation source={entry.entries.title} target={translation?.title} />
+          {!!entry.collections && (
+            <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
+          )}
         </div>
-      </a>
+        <div className="flex items-center gap-1 truncate text-[13px]">
+          <FeedIcon
+            className="mr-0.5 inline-block size-[18px]"
+            feed={entry.feeds}
+            entry={entry.entries}
+          />
+          <span>{entry.feeds.title}</span>
+          <span className="text-zinc-500">·</span>
+          <span className="text-zinc-500">
+            {dayjs
+              .duration(
+                dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"),
+                "minute",
+              )
+              .humanize()}
+          </span>
+        </div>
+      </div>
     </div>
   )
 }

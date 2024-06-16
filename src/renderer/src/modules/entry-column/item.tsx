@@ -1,4 +1,4 @@
-import { useAsRead, useBizQuery, useEntryActions, useRead } from "@renderer/hooks"
+import { useAsRead, useBizQuery, useEntryActions } from "@renderer/hooks"
 import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -44,8 +44,6 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
 
   const asRead = useAsRead(entry)
 
-  const markReadMutation = useRead(entry)
-
   let Item: FC<UniversalItemProps>
 
   switch (view) {
@@ -83,11 +81,8 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
     (e) => {
       e.stopPropagation()
       feedActions.setActiveEntry(entry.entries.id)
-      if (!asRead) {
-        markReadMutation.mutate()
-      }
     },
-    [asRead, entry.entries.id, markReadMutation],
+    [entry.entries.id],
   )
   const handleDoubleClick: React.MouseEventHandler<HTMLDivElement> =
     useCallback(
