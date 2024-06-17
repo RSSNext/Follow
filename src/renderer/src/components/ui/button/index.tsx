@@ -94,6 +94,7 @@ export const MotionButtonBase = React.forwardRef<
   HTMLMotionProps<"button">
 >(({ children, ...rest }, ref) => (
   <m.button
+    layout="size"
     initial
     whileFocus={{ scale: 1.02 }}
     whileHover={{ scale: 1.02 }}
@@ -138,7 +139,7 @@ export const StyledButton = React.forwardRef<
       {...props}
       onClick={handleClick}
     >
-      <m.span layout="size" className="center">
+      <m.span className="center">
         {isLoading && (
           <m.span>
             <LoadingCircle size="small" className="mr-2" />

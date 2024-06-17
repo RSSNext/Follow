@@ -37,12 +37,12 @@ export const styledButtonVariant = cva(
       {
         variant: "primary",
         status: "disabled",
-        className: "text-zinc-50 bg-theme-accent/30",
+        className: "text-zinc-50 bg-theme-disabled",
       },
       {
         variant: "plain",
         status: "disabled",
-        className: "text-primary-foreground/50",
+        className: "text-theme-disabled border-theme-inactive dark:border-zinc-800",
       },
     ],
     variants: {
@@ -54,7 +54,7 @@ export const styledButtonVariant = cva(
           "bg-theme-accent",
           "hover:contrast-[1.10] active:contrast-125",
           "font-semibold",
-          "disabled:bg-theme-accent/40 disabled:opacity-80 disabled:dark:text-zinc-50",
+          "disabled:bg-theme-disabled disabled:dark:text-zinc-50",
           "text-zinc-100 dark:text-zinc-200/90",
         ),
 

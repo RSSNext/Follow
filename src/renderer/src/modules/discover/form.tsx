@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, StyledButton } from "@renderer/components/ui/button"
+import { StyledButton } from "@renderer/components/ui/button"
 import {
   Card,
   CardContent,
@@ -143,7 +143,7 @@ export function DiscoverForm({ type }: { type: string }) {
                 {item.docs ? (
                   <CardFooter>
                     <a href={item.docs} target="_blank" rel="noreferrer">
-                      <Button>View Docs</Button>
+                      <StyledButton>View Docs</StyledButton>
                     </a>
                   </CardFooter>
                 ) : (
@@ -184,27 +184,28 @@ export function DiscoverForm({ type }: { type: string }) {
                     </CardContent>
                     <CardFooter>
                       {item.isSubscribed ? (
-                        <Button variant="outline" disabled>
+                        <StyledButton variant="plain" disabled>
                           Followed
-                        </Button>
+                        </StyledButton>
                       ) : (
-                        <Button
+                        <StyledButton
                           onClick={() => {
                             present({
                               title: "Add follow",
-                              content: () => (
+                              content: ({ dismiss }) => (
                                 <FeedForm
                                   asWidget
                                   url={item.feed.url}
                                   id={item.feed.id}
                                   defaultView={FeedViewType.Articles}
+                                  onSuccess={dismiss}
                                 />
                               ),
                             })
                           }}
                         >
                           Follow
-                        </Button>
+                        </StyledButton>
                       )}
                       <div className="ml-6 text-zinc-500">
                         <span className="font-medium text-zinc-800">

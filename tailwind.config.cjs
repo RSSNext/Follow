@@ -91,6 +91,12 @@ module.exports = {
             background: "var(--fo-tooltip-background)",
             foreground: "var(--fo-tooltip-foreground)",
           },
+
+          inactive: "var(--fo-inactive)",
+          disabled: "var(--fo-disabled)",
+
+          foreground: "var(--fo-text-foreground)",
+          background: "var(--fo-background)",
         },
       },
       borderRadius: {
