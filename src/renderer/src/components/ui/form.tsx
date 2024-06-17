@@ -3,16 +3,8 @@ import { Slot } from "@radix-ui/react-slot"
 import { Label } from "@renderer/components/ui/label"
 import { cn } from "@renderer/lib/utils"
 import * as React from "react"
-import type {
-  ControllerProps,
-  FieldPath,
-  FieldValues,
-} from "react-hook-form"
-import {
-  Controller,
-  FormProvider,
-  useFormContext,
-} from "react-hook-form"
+import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
+import { Controller, FormProvider, useFormContext } from "react-hook-form"
 
 const Form = FormProvider
 
@@ -92,7 +84,7 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
-      className={cn(error && "text-destructive", className)}
+      className={cn(error && "text-destructive", "font-semibold", className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -104,7 +96,8 @@ const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
   React.ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
+  const { error, formItemId, formDescriptionId, formMessageId } =
+    useFormField()
 
   return (
     <Slot
@@ -132,7 +125,7 @@ const FormDescription = React.forwardRef<
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn("text-xs text-muted-foreground", className)}
       {...props}
     />
   )

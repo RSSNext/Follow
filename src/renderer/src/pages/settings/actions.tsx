@@ -1,4 +1,4 @@
-import { Button } from "@renderer/components/ui/button"
+import { StyledButton } from "@renderer/components/ui/button"
 import { useBizQuery } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { ActionsResponse } from "@renderer/models"
@@ -9,7 +9,14 @@ import { useMutation } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
-type Operation = "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex"
+type Operation =
+  | "contains"
+  | "not_contains"
+  | "eq"
+  | "not_eq"
+  | "gt"
+  | "lt"
+  | "regex"
 type EntryField = "all" | "title" | "content" | "author" | "url" | "order"
 type FeedField = "view" | "title" | "site_url" | "feed_url"
 
@@ -48,9 +55,15 @@ export function Component() {
   const mutation = useMutation({
     mutationFn: async () => {
       actionsData.forEach((action) => {
-        action.condition = action.condition.filter((c) => c.field && c.operator && c.value)
-        action.result.rewriteRules = action.result.rewriteRules?.filter((r) => r.from && r.to)
-        action.result.blockRules = action.result.blockRules?.filter((r) => r.field && r.operator && r.value)
+        action.condition = action.condition.filter(
+          (c) => c.field && c.operator && c.value,
+        )
+        action.result.rewriteRules = action.result.rewriteRules?.filter(
+          (r) => r.from && r.to,
+        )
+        action.result.blockRules = action.result.blockRules?.filter(
+          (r) => r.field && r.operator && r.value,
+        )
       })
       await apiClient.actions.$put({
         json: {
@@ -74,35 +87,45 @@ export function Component() {
             data={action}
             onChange={(newAction) => {
               if (!newAction) {
-                setActionsData(actionsData.filter((_, idx) => idx !== actionIdx))
+                setActionsData(
+                  actionsData.filter((_, idx) => idx !== actionIdx),
+                )
               } else {
-                setActionsData(actionsData.map((a, idx) => idx === actionIdx ? newAction : a))
+                setActionsData(
+                  actionsData.map((a, idx) =>
+                    idx === actionIdx ? newAction : a,
+                  ),
+                )
               }
             }}
           />
         ))}
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full gap-1"
+        <StyledButton
+          variant="plain"
+          className="center w-full gap-1"
           onClick={() => {
-            setActionsData([...actionsData, {
-              name: `Action ${actionsData.length + 1}`,
-              condition: [],
-              result: {},
-            }])
+            setActionsData([
+              ...actionsData,
+              {
+                name: `Action ${actionsData.length + 1}`,
+                condition: [],
+                result: {},
+              },
+            ])
           }}
         >
           <i className="i-mingcute-add-line" />
-          {" "}
-          New Rule
-        </Button>
-        <Button
-          isLoading={mutation.isPending}
-          onClick={() => mutation.mutate()}
-        >
-          Save
-        </Button>
+          <span> New Rule</span>
+        </StyledButton>
+        <div className="text-right">
+          <StyledButton
+            variant="primary"
+            isLoading={mutation.isPending}
+            onClick={() => mutation.mutate()}
+          >
+            Save
+          </StyledButton>
+        </div>
       </div>
     </>
   )

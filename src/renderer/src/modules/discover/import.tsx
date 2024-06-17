@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@renderer/components/ui/button"
+import { StyledButton } from "@renderer/components/ui/button"
 import { Card, CardContent, CardHeader } from "@renderer/components/ui/card"
 import {
   Form,
@@ -110,9 +110,9 @@ export function DiscoverImport() {
               </FormItem>
             )}
           />
-          <Button type="submit" isLoading={mutation.isPending}>
+          <StyledButton type="submit" isLoading={mutation.isPending}>
             Import
-          </Button>
+          </StyledButton>
         </form>
       </Form>
       {mutation.isSuccess && (

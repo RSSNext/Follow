@@ -1,5 +1,5 @@
 import { Logo } from "@renderer/components/icons/logo"
-import { Button } from "@renderer/components/ui/button"
+import { StyledButton } from "@renderer/components/ui/button"
 import { UserButton } from "@renderer/components/user-button"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { APP_NAME } from "@renderer/lib/constants"
@@ -49,15 +49,14 @@ export function Component() {
         {" "}
         and safely close this page.
       </h2>
-      <Button
-        className="text-lg"
-        size="xl"
+      <StyledButton
+        className="h-14 rounded-lg px-10 text-lg"
         onClick={async () => window.open(await getCallbackUrl())}
       >
         Open
         {" "}
         {APP_NAME}
-      </Button>
+      </StyledButton>
     </div>
   )
 }

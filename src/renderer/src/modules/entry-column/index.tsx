@@ -1,5 +1,8 @@
 import { useMainContainerElement } from "@renderer/atoms"
-import { ActionButton, Button } from "@renderer/components/ui/button"
+import {
+  ActionButton,
+  StyledButton,
+} from "@renderer/components/ui/button"
 import {
   Popover,
   PopoverClose,
@@ -19,7 +22,10 @@ import {
   useFeedStore,
 } from "@renderer/store"
 import { entryActions } from "@renderer/store/entry/entry"
-import { useEntry, useEntryIdsByFeedIdOrView } from "@renderer/store/entry/hooks"
+import {
+  useEntry,
+  useEntryIdsByFeedIdOrView,
+} from "@renderer/store/entry/hooks"
 import type { HTMLMotionProps } from "framer-motion"
 import { m } from "framer-motion"
 import hotkeys from "hotkeys-js"
@@ -274,7 +280,7 @@ const ListHeader: FC<{
           </ActionButton>
           <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
             <PopoverTrigger>
-              <ActionButton onClick={() => {}} tooltip="Mark All as Read">
+              <ActionButton tooltip="Mark All as Read">
                 <i className="i-mingcute-check-circle-line" />
               </ActionButton>
             </PopoverTrigger>
@@ -282,14 +288,12 @@ const ListHeader: FC<{
               <div>Mark all as read?</div>
               <div className="space-x-4">
                 <PopoverClose>
-                  <Button size="sm" variant="outline">
-                    Cancel
-                  </Button>
+                  <StyledButton variant="plain">Cancel</StyledButton>
                 </PopoverClose>
                 {/* TODO */}
-                <Button size="sm" onClick={handleMarkAllAsRead}>
+                <StyledButton onClick={handleMarkAllAsRead}>
                   Confirm
-                </Button>
+                </StyledButton>
               </div>
             </PopoverContent>
           </Popover>
