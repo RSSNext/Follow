@@ -97,7 +97,6 @@ export const MotionButtonBase = React.forwardRef<
     layout="size"
     initial
     whileFocus={{ scale: 1.02 }}
-    whileHover={{ scale: 1.02 }}
     whileTap={{ scale: 0.95 }}
     {...rest}
     ref={ref}
@@ -145,7 +144,7 @@ export const StyledButton = React.forwardRef<
             <LoadingCircle size="small" className="mr-2" />
           </m.span>
         )}
-        <m.span>{props.children}</m.span>
+        <m.span className={cn("center", className)}>{props.children}</m.span>
       </m.span>
     </MotionButtonBase>
   )

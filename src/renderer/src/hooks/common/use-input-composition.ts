@@ -42,6 +42,12 @@ export const useInputComposition = (
         e.stopPropagation()
         return
       }
+
+      if (e.key === "Escape") {
+        e.currentTarget.blur()
+        e.preventDefault()
+        e.stopPropagation()
+      }
     },
     [onKeyDown],
   )

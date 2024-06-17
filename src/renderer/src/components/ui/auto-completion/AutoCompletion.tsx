@@ -205,7 +205,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
           exit={{ opacity: 0, y: 10 }}
           className={clsx(
             "pointer-events-auto max-h-48 grow",
-            "overflow-auto rounded-md border border-zinc-200 bg-zinc-50/90 backdrop-blur dark:border-neutral-800 dark:bg-neutral-900/90",
+            "overflow-auto rounded-md border border-zinc-200 bg-popover text-popover-foreground",
           )}
           //  FIXME: https://github.com/radix-ui/primitives/issues/2125
           onWheel={stopPropagation}
@@ -220,7 +220,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             }
             return (
               <li
-                className="cursor-default px-4 py-2 text-sm hover:bg-zinc-200 dark:hover:bg-neutral-800"
+                className="cursor-default px-4 py-1.5 text-sm hover:bg-theme-item-hover dark:hover:bg-neutral-800"
                 key={suggestion.value}
                 onMouseDown={handleClick}
                 onClick={handleClick}
