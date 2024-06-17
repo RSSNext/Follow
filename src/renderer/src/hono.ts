@@ -95,6 +95,22 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             status: 200;
         };
     };
+    "/ai/summary": {
+        $get: {
+            input: {
+                query: {
+                    id: string;
+                    language?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data?: string | undefined;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
 } & {
     "/actions": {
         $get: {
@@ -119,7 +135,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                             }[] | undefined;
                             blockRules?: {
                                 value: string | number;
-                                field: "title" | "content" | "link" | "author" | "all" | "order";
+                                field: "title" | "content" | "url" | "author" | "all" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
                         };
@@ -148,7 +164,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                             }[] | undefined;
                             blockRules?: {
                                 value: string | number;
-                                field: "title" | "content" | "link" | "author" | "all" | "order";
+                                field: "title" | "content" | "url" | "author" | "all" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
                         };
