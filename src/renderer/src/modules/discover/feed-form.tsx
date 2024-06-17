@@ -46,7 +46,15 @@ export const FeedForm: Component<{
   defaultView?: FeedViewType
 
   asWidget?: boolean
-}> = ({ id, defaultView = FeedViewType.Articles, url, asWidget }) => {
+
+  onSuccess?: () => void
+}> = ({
+  id,
+  defaultView = FeedViewType.Articles,
+  url,
+  asWidget,
+  onSuccess,
+}) => {
   const feed = useFeed({
     url,
     id,
@@ -110,9 +118,11 @@ export const FeedForm: Component<{
         duration: 1000,
       })
 
-      if (!isSubscribed) {
+      if (!asWidget && !isSubscribed) {
         window.close()
       }
+
+      onSuccess?.()
     },
   })
 
@@ -125,7 +135,12 @@ export const FeedForm: Component<{
   )
 
   return (
-    <div className={cn("flex h-full flex-col", !asWidget && "px-[18px] pb-[18px] pt-12")}>
+    <div
+      className={cn(
+        "flex h-full flex-col",
+        asWidget ? "min-h-[420px] w-[550px] max-w-full" : "px-[18px] pb-[18px] pt-12",
+      )}
+    >
       {!asWidget && (
         <div className="mb-4 mt-2 flex items-center gap-2 text-[22px] font-bold">
           <Logo className="size-8" />

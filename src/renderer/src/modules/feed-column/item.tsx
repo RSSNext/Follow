@@ -1,5 +1,6 @@
 import { getMainContainerElement } from "@renderer/atoms"
 import { FeedIcon } from "@renderer/components/feed-icon"
+import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import {
   Tooltip,
   TooltipContent,
@@ -19,9 +20,10 @@ import {
   useFeedActiveList,
   useUnreadStore,
 } from "@renderer/store"
-import { openElectronWindow } from "@shared/electron"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
+
+import { FeedForm } from "../discover/feed-form"
 
 export function FeedItem({
   feed,
@@ -94,6 +96,7 @@ export function FeedItem({
   })
 
   const feedUnread = useUnreadStore((state) => state.data[feed.feedId] || 0)
+  const { present } = useModalStack()
   return (
     <div
       className={cn(
@@ -120,11 +123,12 @@ export function FeedItem({
               type: "text",
               label: "Edit",
 
-              click: () =>
-                openElectronWindow(`follow://add?id=${feed.feedId}`, {
-                  resizable: false,
-                  height: 550,
-                }),
+              click: () => {
+                present({
+                  title: "Edit Feed",
+                  content: ({ dismiss }) => <FeedForm asWidget id={feed.feedId} onSuccess={dismiss} />,
+                })
+              },
             },
             {
               type: "text",

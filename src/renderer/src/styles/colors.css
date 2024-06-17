@@ -7,6 +7,9 @@
 
   --fo-tooltip-background: theme(colors.zinc.50/0.8);
   --fo-tooltip-foreground: theme(colors.neutral.950);
+
+  --fo-inactive: theme(colors.zinc.200);
+  --fo-disabled: theme(colors.zinc.300);
 }
 
 [data-theme="dark"] {
@@ -19,4 +22,7 @@
 
   --fo-tooltip-background: theme(colors.zinc.800/0.8);
   --fo-tooltip-foreground: theme(colors.zinc.100);
+
+  --fo-inactive: theme(colors.zinc.500);
+  --fo-disabled: theme(colors.zinc.600);
 }

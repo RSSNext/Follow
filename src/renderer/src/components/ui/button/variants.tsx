@@ -47,14 +47,14 @@ export const styledButtonVariant = cva(
     ],
     variants: {
       status: {
-        disabled: "cursor-not-allowed",
+        disabled: "cursor-not-allowed bg-theme-disabled",
       },
       variant: {
         primary: cn(
           "bg-theme-accent",
           "hover:contrast-[1.10] active:contrast-125",
           "font-semibold",
-          "disabled:bg-theme-accent/40 disabled:opacity-80 disabled:dark:text-zinc-50",
+          "disabled:bg-theme-disabled disabled:dark:text-zinc-50",
           "text-zinc-100 dark:text-zinc-200/90",
         ),
 

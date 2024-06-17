@@ -192,12 +192,13 @@ export function DiscoverForm({ type }: { type: string }) {
                           onClick={() => {
                             present({
                               title: "Add follow",
-                              content: () => (
+                              content: ({ dismiss }) => (
                                 <FeedForm
                                   asWidget
                                   url={item.feed.url}
                                   id={item.feed.id}
                                   defaultView={FeedViewType.Articles}
+                                  onSuccess={dismiss}
                                 />
                               ),
                             })
