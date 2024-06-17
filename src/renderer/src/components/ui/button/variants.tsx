@@ -31,7 +31,7 @@ export const buttonVariants = cva(
   },
 )
 export const styledButtonVariant = cva(
-  "inline-flex select-none disabled:cursor-not-allowed cursor-default items-center gap-2 justify-center rounded-lg py-2 px-3 text-sm outline-offset-2 transition active:transition-none",
+  "inline-flex select-none disabled:cursor-not-allowed cursor-default items-center gap-2 justify-center rounded-lg py-1.5 px-3 text-sm outline-offset-2 transition active:transition-none",
   {
     compoundVariants: [
       {
