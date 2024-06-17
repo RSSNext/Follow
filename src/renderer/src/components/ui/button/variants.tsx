@@ -37,17 +37,17 @@ export const styledButtonVariant = cva(
       {
         variant: "primary",
         status: "disabled",
-        className: "text-zinc-50 bg-theme-accent/30",
+        className: "text-zinc-50 bg-theme-disabled",
       },
       {
         variant: "plain",
         status: "disabled",
-        className: "text-primary-foreground/50",
+        className: "text-theme-disabled border-theme-inactive dark:border-zinc-800",
       },
     ],
     variants: {
       status: {
-        disabled: "cursor-not-allowed bg-theme-disabled",
+        disabled: "cursor-not-allowed",
       },
       variant: {
         primary: cn(

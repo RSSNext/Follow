@@ -94,6 +94,9 @@ module.exports = {
 
           inactive: "var(--fo-inactive)",
           disabled: "var(--fo-disabled)",
+
+          foreground: "var(--fo-text-foreground)",
+          background: "var(--fo-background)",
         },
       },
       borderRadius: {
