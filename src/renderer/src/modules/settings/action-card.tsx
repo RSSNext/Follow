@@ -9,10 +9,8 @@ import {
 import { Divider } from "@renderer/components/ui/divider"
 import { Input } from "@renderer/components/ui/input"
 import { Label } from "@renderer/components/ui/label"
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@renderer/components/ui/radio-group"
+import { Radio } from "@renderer/components/ui/radio-group"
+import { RadioGroup } from "@renderer/components/ui/radio-group/RadioGroup"
 import {
   Select,
   SelectContent,
@@ -231,7 +229,9 @@ const OperationTableCell = ({
   value?: Operation
   onValueChange?: (value: Operation) => void
 }) => {
-  const options = OperationOptions.filter((option) => option.types.includes(type))
+  const options = OperationOptions.filter((option) =>
+    option.types.includes(type),
+  )
   return (
     <TableCell size="sm">
       <Select value={value} onValueChange={onValueChange}>
@@ -272,11 +272,7 @@ const SettingCollapsible = ({
   </Collapsible>
 )
 
-const CommonSelectTrigger = ({
-  className,
-}: {
-  className?: string
-}) => (
+const CommonSelectTrigger = ({ className }: { className?: string }) => (
   <SelectTrigger className={cn("h-8", className)}>
     <SelectValue />
   </SelectTrigger>
@@ -321,26 +317,23 @@ export function ActionCard({
           <CollapsibleContent className="mt-4 space-y-4">
             <div className="space-y-3">
               <p className="font-medium text-zinc-500">When feeds match…</p>
-              <RadioGroup
-                value={data.condition.length > 0 ? "filter" : "all"}
-                onValueChange={(value) => {
-                  if (value === "all") {
-                    data.condition = []
-                  } else {
-                    data.condition = [{}]
-                  }
-                  onChange(data)
-                }}
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="all" id="all" />
-                  <Label htmlFor="all">All followed feeds</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="filter" id="filter" />
-                  <Label htmlFor="filter">Custom filter</Label>
-                </div>
-              </RadioGroup>
+              <div className="flex flex-col gap-2">
+                <RadioGroup
+                  value={data.condition.length > 0 ? "filter" : "all"}
+                  onValueChange={(value) => {
+                    if (value === "all") {
+                      data.condition = []
+                    } else {
+                      data.condition = [{}]
+                    }
+                    onChange(data)
+                  }}
+                >
+                  <Radio label="all" value="all" />
+                  <Radio label="Custom filter" value="filter" />
+                </RadioGroup>
+              </div>
+
               {data.condition.length > 0 && (
                 <div>
                   <Table>
@@ -357,9 +350,10 @@ export function ActionCard({
                           data.condition[conditionIdx][key] = value
                           onChange(data)
                         }
-                        const type = FeedOptions.find(
-                          (option) => option.value === condition.field,
-                        )?.type || "text"
+                        const type =
+                          FeedOptions.find(
+                            (option) => option.value === condition.field,
+                          )?.type || "text"
                         return (
                           <TableRow key={conditionIdx}>
                             <DeleteTableCell
@@ -396,7 +390,8 @@ export function ActionCard({
                             <TableCell size="sm">
                               {type === "view" ? (
                                 <Select
-                                  onValueChange={(value) => change("value", value)}
+                                  onValueChange={(value) =>
+                                    change("value", value)}
                                   value={condition.value}
                                 >
                                   <CommonSelectTrigger />
@@ -487,17 +482,20 @@ export function ActionCard({
                   open={!!data.result.rewriteRules}
                   onOpenChange={(open) => {
                     if (open) {
-                      data.result.rewriteRules = [{
-                        from: "",
-                        to: "",
-                      }]
+                      data.result.rewriteRules = [
+                        {
+                          from: "",
+                          to: "",
+                        },
+                      ]
                     } else {
                       delete data.result.rewriteRules
                     }
                     onChange(data)
                   }}
                 >
-                  {data.result.rewriteRules && data.result.rewriteRules.length > 0 && (
+                  {data.result.rewriteRules &&
+                  data.result.rewriteRules.length > 0 && (
                     <>
                       <Table>
                         <TableHeader>
@@ -508,45 +506,50 @@ export function ActionCard({
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {data.result.rewriteRules.map((rule, rewriteIdx) => {
-                            const change = (key: string, value: string) => {
-                              data.result.rewriteRules![rewriteIdx][key] = value
-                              onChange(data)
-                            }
-                            return (
-                              <TableRow key={rewriteIdx}>
-                                <DeleteTableCell
-                                  onClick={() => {
-                                    if (
-                                      data.result.rewriteRules?.length === 1
-                                    ) {
-                                      delete data.result.rewriteRules
-                                    } else {
-                                      data.result.rewriteRules?.splice(
-                                        rewriteIdx,
-                                        1,
-                                      )
-                                    }
-                                    onChange(data)
-                                  }}
-                                />
-                                <TableCell size="sm">
-                                  <Input
-                                    value={rule.from}
-                                    className="h-8"
-                                    onChange={(e) => change("from", e.target.value)}
+                          {data.result.rewriteRules.map(
+                            (rule, rewriteIdx) => {
+                              const change = (key: string, value: string) => {
+                                data.result.rewriteRules![rewriteIdx][key] =
+                                    value
+                                onChange(data)
+                              }
+                              return (
+                                <TableRow key={rewriteIdx}>
+                                  <DeleteTableCell
+                                    onClick={() => {
+                                      if (
+                                        data.result.rewriteRules?.length === 1
+                                      ) {
+                                        delete data.result.rewriteRules
+                                      } else {
+                                        data.result.rewriteRules?.splice(
+                                          rewriteIdx,
+                                          1,
+                                        )
+                                      }
+                                      onChange(data)
+                                    }}
                                   />
-                                </TableCell>
-                                <TableCell size="sm">
-                                  <Input
-                                    value={rule.to}
-                                    className="h-8"
-                                    onChange={(e) => change("to", e.target.value)}
-                                  />
-                                </TableCell>
-                              </TableRow>
-                            )
-                          })}
+                                  <TableCell size="sm">
+                                    <Input
+                                      value={rule.from}
+                                      className="h-8"
+                                      onChange={(e) =>
+                                        change("from", e.target.value)}
+                                    />
+                                  </TableCell>
+                                  <TableCell size="sm">
+                                    <Input
+                                      value={rule.to}
+                                      className="h-8"
+                                      onChange={(e) =>
+                                        change("to", e.target.value)}
+                                    />
+                                  </TableCell>
+                                </TableRow>
+                              )
+                            },
+                          )}
                         </TableBody>
                       </Table>
                       <AddTableRow
@@ -574,7 +577,8 @@ export function ActionCard({
                     onChange(data)
                   }}
                 >
-                  {data.result.blockRules && data.result.blockRules.length > 0 && (
+                  {data.result.blockRules &&
+                  data.result.blockRules.length > 0 && (
                     <>
                       <Table>
                         <FieldTableHeader />
@@ -587,17 +591,23 @@ export function ActionCard({
                               data.result.blockRules![index][key] = value
                               onChange(data)
                             }
-                            const type = EntryOptions.find(
-                              (option) => option.value === rule.field,
-                            )?.type || "text"
+                            const type =
+                                EntryOptions.find(
+                                  (option) => option.value === rule.field,
+                                )?.type || "text"
                             return (
                               <TableRow key={index}>
                                 <DeleteTableCell
                                   onClick={() => {
-                                    if (data.result.blockRules?.length === 1) {
+                                    if (
+                                      data.result.blockRules?.length === 1
+                                    ) {
                                       delete data.result.blockRules
                                     } else {
-                                      data.result.blockRules?.splice(index, 1)
+                                      data.result.blockRules?.splice(
+                                        index,
+                                        1,
+                                      )
                                     }
                                     onChange(data)
                                   }}
@@ -624,14 +634,16 @@ export function ActionCard({
                                 <OperationTableCell
                                   type={type}
                                   value={rule.operator}
-                                  onValueChange={(value) => change("operator", value)}
+                                  onValueChange={(value) =>
+                                    change("operator", value)}
                                 />
                                 <TableCell size="sm">
                                   <Input
                                     type={type}
                                     value={rule.value}
                                     className="h-8"
-                                    onChange={(e) => change("value", e.target.value)}
+                                    onChange={(e) =>
+                                      change("value", e.target.value)}
                                   />
                                 </TableCell>
                               </TableRow>

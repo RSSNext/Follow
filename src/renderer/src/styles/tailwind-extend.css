@@ -53,12 +53,14 @@
   .shadow-modal {
     @apply shadow-2xl shadow-stone-300 dark:shadow-stone-800;
   }
+}
 
+/* Radio styling */
+@layer components {
   .radio {
     flex-shrink: 0;
-    --chkbg: var(--bc);
-    height: 1.5rem;
-    width: 1.5rem;
+    height: 1rem;
+    width: 1rem;
     cursor: pointer;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -66,12 +68,30 @@
     border-radius: 9999px;
     border-width: 1px;
     border-color: var(--fallback-bc, theme(colors.theme.accent.DEFAULT));
-    --tw-border-opacity: 0.2;
+
+    --bc: theme(colors.accent.foreground);
+    --fallback-bc: var(--bc);
+    --chkbg: var(--bc);
+    --fallback-b1: theme(colors.background);
+  }
+
+  .radio-current {
+    --chkbg: currentColor;
+    --fallback-bc: currentColor;
   }
 
   .radio-primary {
     --chkbg: theme(colors.theme.accent.DEFAULT);
     --fallback-bc: theme(colors.theme.accent.DEFAULT);
+    --fallback-b1: theme(colors.background);
+  }
+
+  .radio-sm {
+    @apply size-[0.9rem];
+  }
+
+  .radio-md {
+    @apply size-[1.2rem];
   }
 
   .radio:checked,
