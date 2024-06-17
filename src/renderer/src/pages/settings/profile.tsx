@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@renderer/components/ui/button"
+import { StyledButton } from "@renderer/components/ui/button"
 import {
   Form,
   FormControl,
@@ -98,7 +98,9 @@ export function Component() {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <div className="text-right">
+            <StyledButton type="submit">Submit</StyledButton>
+          </div>
         </form>
       </Form>
     </>

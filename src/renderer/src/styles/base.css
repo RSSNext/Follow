@@ -21,3 +21,7 @@ a {
 [data-theme="dark"] {
   color-scheme: dark;
 }
+
+::selection {
+  @apply bg-theme-accent/20;
+}
