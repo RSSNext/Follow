@@ -323,7 +323,7 @@ const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
 
     return (
       <m.div
-        className="-mt-20 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
+        className="-mt-6 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
         {...props}
         ref={ref}
       >
