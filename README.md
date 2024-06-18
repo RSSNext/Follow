@@ -6,3 +6,9 @@
 > [WIP] Next generation information browser
 
 Roadmap: https://github.com/orgs/RSSNext/projects/1/views/1
+
+## License
+
+2024, Follow Team. The project is licenses under MIT.
+
+Additionally, all contents in the `icons/mgc` directory of this project are copyrighted by https://mgc.mingcute.com/.
