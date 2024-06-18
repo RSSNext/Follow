@@ -118,6 +118,9 @@ importers:
       electron-updater:
         specifier: ^6.1.7
         version: 6.1.8
+      foxact:
+        specifier: 0.2.35
+        version: 0.2.35(react@18.3.1)
       framer-motion:
         specifier: 11.2.9
         version: 11.2.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2404,6 +2407,9 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
 
+  client-only@0.0.1:
+    resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+
   cliui@8.0.1:
     resolution: {integrity: sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==}
     engines: {node: '>=12'}
@@ -3178,6 +3184,14 @@ packages:
   form-data@4.0.0:
     resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
     engines: {node: '>= 6'}
+
+  foxact@0.2.35:
+    resolution: {integrity: sha512-5e2p34TcBETZTTMhmf4WuljS07lgtv3laimqJer9OGOqYgOpYHgKfR0Cie8Q2IxH1FFhVkm1l0+2W/XL8nBL7Q==}
+    peerDependencies:
+      react: '*'
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   framer-motion@11.2.9:
     resolution: {integrity: sha512-gfxNSkp4dC3vpy2hGNQK3K9bNOKwfasqOhrqvmZzYxCPSJ9Tpv/9JlCkeCMgFdKefgPr8+JiouGjVmaDzu750w==}
@@ -4797,6 +4811,9 @@ packages:
   serialize-error@7.0.1:
     resolution: {integrity: sha512-8I8TjW5KMOKsZQTvoxjuSIa7foAwPWGOts+6o7sgjz41/qMD9VQHEDxi6PBvK2l0MXUmqZyNpUK+T2tQaaElvw==}
     engines: {node: '>=10'}
+
+  server-only@0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
 
   set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
@@ -7881,6 +7898,8 @@ snapshots:
       - '@types/react'
       - react-dom
 
+  client-only@0.0.1: {}
+
   cliui@8.0.1:
     dependencies:
       string-width: 4.2.3
@@ -8930,6 +8949,13 @@ snapshots:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
+
+  foxact@0.2.35(react@18.3.1):
+    dependencies:
+      client-only: 0.0.1
+      server-only: 0.0.1
+    optionalDependencies:
+      react: 18.3.1
 
   framer-motion@11.2.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -10749,6 +10775,8 @@ snapshots:
     dependencies:
       type-fest: 0.13.1
     optional: true
+
+  server-only@0.0.1: {}
 
   set-blocking@2.0.0: {}
 

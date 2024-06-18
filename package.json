@@ -58,6 +58,7 @@
     "dotenv": "16.4.5",
     "electron-store": "8.2.0",
     "electron-updater": "^6.1.7",
+    "foxact": "0.2.35",
     "framer-motion": "11.2.9",
     "franc-min": "6.2.0",
     "fuse.js": "7.0.0",

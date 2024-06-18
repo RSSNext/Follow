@@ -8,7 +8,8 @@ export function Component() {
       <div className="w-64 shrink-0 border-r">
         <FeedColumn />
       </div>
-      <main ref={setMainContainerElement} className="flex flex-1 bg-theme-background !outline-none" tabIndex={-1}>
+      {/* NOTE: tabIndex for main element can get by `document.activeElement` */}
+      <main ref={setMainContainerElement} className="flex min-w-0 flex-1 bg-theme-background !outline-none" tabIndex={-1}>
         <Outlet />
       </main>
     </div>
