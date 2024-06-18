@@ -1,4 +1,5 @@
 import { Logo } from "@renderer/components/icons/logo"
+import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { useBizQuery } from "@renderer/hooks"
 import { parseHtml } from "@renderer/lib/parse-html"
 import type { ActiveEntryId } from "@renderer/models"
@@ -101,7 +102,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
               </div>
               <div className="text-[13px] text-zinc-500">
                 {entry.entries.publishedAt &&
-                new Date(entry.entries.publishedAt).toUTCString()}
+                new Date(entry.entries.publishedAt).toLocaleString()}
               </div>
             </a>
             <div className="prose prose-zinc mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[15px] dark:prose-invert">
@@ -111,9 +112,9 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                     <i className="i-mingcute-bling-line align-middle" />
                     <span>AI summary</span>
                   </div>
-                  <div className="text-sm leading-relaxed">
-                    {summary.isLoading ? "Loading..." : summary.data}
-                  </div>
+                  <AutoResizeHeight spring className="text-sm leading-relaxed">
+                    {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
+                  </AutoResizeHeight>
                 </div>
               )}
               {content}
@@ -136,3 +137,11 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     </>
   )
 }
+
+const SummaryLoadingSkeleton = (
+  <div className="space-y-2">
+    <span className="block h-3 w-full animate-pulse rounded-xl bg-zinc-200 dark:bg-neutral-800" />
+    <span className="block h-3 w-full animate-pulse rounded-xl bg-zinc-200 dark:bg-neutral-800" />
+    <span className="block h-3 w-full animate-pulse rounded-xl bg-zinc-200 dark:bg-neutral-800" />
+  </div>
+)
