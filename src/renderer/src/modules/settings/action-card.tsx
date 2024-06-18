@@ -214,7 +214,7 @@ const AddTableRow = ({ onClick }: { onClick?: () => void }) => (
     className="mt-1 w-full gap-1"
     onClick={onClick}
   >
-    <i className="i-mingcute-add-line" />
+    <i className="i-mgc-add-cute-re" />
     {" "}
     Add
   </Button>

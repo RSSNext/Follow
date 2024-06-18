@@ -95,7 +95,7 @@ export function FeedColumn() {
           <ProfileButton method="modal" />
           <Link to="/discover">
             <ActionButton tooltip="Add">
-              <i className="i-mingcute-add-line size-5 text-theme-vibrancyFg" />
+              <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
             </ActionButton>
           </Link>
         </div>

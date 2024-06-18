@@ -44,6 +44,7 @@ export function Component() {
   const inWideMode = activeList && views[activeList.view].wideMode
   return (
     <div ref={containerRef} className="flex grow">
+
       <div
         className={cn(
           "h-full shrink-0 overflow-y-auto",
