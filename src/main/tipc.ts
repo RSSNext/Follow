@@ -1,6 +1,6 @@
 import { getRendererHandlers, tipc } from "@egoist/tipc/main"
 import type { MessageBoxOptions } from "electron"
-import { dialog, Menu, ShareMenu } from "electron"
+import { app, dialog, Menu, ShareMenu } from "electron"
 
 import { getMainWindow } from "."
 import type { RendererHandlers } from "./renderer-handlers"
@@ -126,6 +126,18 @@ export const router = {
         extraPath: `/preview?url=${encodeURIComponent(input.realUrl)}`,
         width: input.width,
         height: input.height,
+      })
+    }),
+
+  getLoginItemSettings: t.procedure
+    .input<void>()
+    .action(async () => await app.getLoginItemSettings()),
+
+  setLoginItemSettings: t.procedure
+    .input<boolean>()
+    .action(async ({ input }) => {
+      app.setLoginItemSettings({
+        openAtLogin: input,
       })
     }),
 }
