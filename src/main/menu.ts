@@ -27,7 +27,7 @@ export const registerAppMenu = () => {
             }
             const window = createWindow({
               extraPath: "/settings",
-              width: 800,
+              width: 700,
               height: 600,
               resizable: false,
             })
