@@ -68,7 +68,7 @@ export const AutoComplete = React.forwardRef<HTMLInputElement, InputProps>(
     React.useImperativeHandle(ref, () => inputRef.current!)
 
     return (
-      <Command className="relative overflow-visible rounded-lg border bg-background [&_.lucide-search]:hidden [&_[cmdk-input-wrapper]]:border-0">
+      <Command className="relative overflow-visible rounded-lg border bg-theme-background [&_.lucide-search]:hidden [&_[cmdk-input-wrapper]]:border-0">
         <Popover.Root open={open && options.length > 0}>
           <Popover.Trigger>
             <CommandInput
@@ -108,7 +108,7 @@ export const AutoComplete = React.forwardRef<HTMLInputElement, InputProps>(
                 >
                   <CommandGroup
                     className={cn(
-                      "absolute top-full z-10 mt-1 hidden w-full rounded-lg border bg-background [&[hidden]]:!hidden",
+                      "absolute top-full z-10 mt-1 hidden w-full rounded-lg border bg-theme-background [&[hidden]]:!hidden",
 
                       open && "block",
                     )}

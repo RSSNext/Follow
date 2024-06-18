@@ -16,7 +16,7 @@ export function Component() {
     }
   }, [])
   return (
-    <div className="h-full overflow-hidden bg-background">
+    <div className="h-full overflow-hidden bg-theme-background">
       <FeedForm url={url} id={id} defaultView={defaultView as FeedViewType} />
     </div>
   )

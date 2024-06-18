@@ -17,7 +17,7 @@ export const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-input bg-theme-background hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-zinc-500/10 px-1.5",
@@ -59,7 +59,7 @@ export const styledButtonVariant = cva(
         ),
 
         plain: cn(
-          "bg-background font-semibold transition-colors duration-200",
+          "bg-theme-background font-semibold transition-colors duration-200",
           "border border-border hover:bg-zinc-50/20 dark:bg-neutral-900/30",
         ),
       },

@@ -1,35 +1,34 @@
 :root {
-  --fo-vibrancy-foreground: theme(colors.zinc.500);
   --fo-vibrancy-background: theme(colors.native.active);
+  --fo-vibrancy-foreground: 0, 0%, 50%;
+  --fo-text-primary: 0, 0%, 10%;
+
+  /* TODO replace with own color */
+  --fo-background: theme(colors.background);
+
+  --fo-tooltip-background: 0, 0%, 95%;
+  --fo-tooltip-foreground: 0, 0%, 10%;
+
+  --fo-inactive: 0, 0%, 80%;
+  --fo-disabled: 0, 0%, 70%;
 
   --fo-item-active: theme(colors.native.active/0.4);
   --fo-item-hover: theme(colors.native.active/0.2);
-
-  --fo-tooltip-background: theme(colors.zinc.50);
-  --fo-tooltip-foreground: theme(colors.neutral.950);
-
-  --fo-inactive: theme(colors.zinc.200);
-  --fo-disabled: theme(colors.zinc.300);
-
-  --fo-text-primary: theme(colors.neutral.950);
-  /* TODO replace with own color */
-  --fo-background: theme(colors.background);
 }
 
 [data-theme="dark"] {
-  --fo-vibrancy-foreground: theme(colors.zinc.400);
-  /* --fo-vibrancy-background: theme(colors.zinc.600/10); */
+  --fo-vibrancy-foreground: 0, 0%, 63%;
+
   --fo-vibrancy-background: theme(colors.native.active);
 
   --fo-item-active: theme(colors.neutral.700/0.4);
   --fo-item-hover: theme(colors.native.active/0.2);
+  --fo-tooltip-background: 0, 0%, 15%;
+  --fo-tooltip-foreground: 0, 0%, 96%;
 
-  --fo-tooltip-background: theme(colors.zinc.800);
-  --fo-tooltip-foreground: theme(colors.zinc.100);
+  --fo-inactive: 0, 0%, 50%;
+  --fo-disabled: 0, 0%, 35%;
 
-  --fo-inactive: theme(colors.zinc.500);
-  --fo-disabled: theme(colors.zinc.600);
-
-  --fo-text-primary: theme(colors.zinc.200);
+  --fo-text-primary: 0, 0%, 80%;
   --fo-background: theme(colors.background);
 }

@@ -19,8 +19,8 @@ export function Component() {
           {settingTabs.map((t) => (
             <Link
               key={t.path}
-              className={`my-1 flex items-center rounded-md px-2.5 py-0.5 leading-loose text-foreground/70 transition-colors ${
-                tab === t.path ? "bg-native-active text-foreground/90" : ""
+              className={`my-1 flex items-center rounded-md px-2.5 py-0.5 leading-loose text-theme-foreground/70 transition-colors ${
+                tab === t.path ? "bg-native-active text-theme-foreground/90" : ""
               }`}
               to={`/settings/${t.path}`}
             >
@@ -28,7 +28,7 @@ export function Component() {
             </Link>
           ))}
         </Vibrancy>
-        <div className="h-screen flex-1 overflow-y-auto bg-background p-8">
+        <div className="h-screen flex-1 overflow-y-auto bg-theme-background p-8">
           <Outlet />
         </div>
       </div>
