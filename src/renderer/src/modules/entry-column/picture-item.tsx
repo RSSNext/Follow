@@ -35,7 +35,7 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
         >
           <EntryTranslation source={entry.entries.title} target={translation?.title} />
           {!!entry.collections && (
-            <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
+            <i className="i-mgc-star-cute-fi absolute right-0 top-0.5 text-orange-400" />
           )}
         </div>
         <div className="flex items-center gap-1 truncate text-[13px]">

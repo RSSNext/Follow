@@ -172,7 +172,7 @@ export function FeedItem({
           <TooltipProvider delayDuration={300}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <i className="i-mingcute-wifi-off-line ml-1 shrink-0 text-base" />
+                <i className="i-mgc-wifi-off-cute-re ml-1 shrink-0 text-base" />
               </TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>
@@ -193,7 +193,7 @@ export function FeedItem({
           <TooltipProvider delayDuration={300}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <i className="i-mingcute-eye-close-line ml-1 shrink-0 text-base" />
+                <i className="i-mgc-eye-close-cute-re ml-1 shrink-0 text-base" />
               </TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>

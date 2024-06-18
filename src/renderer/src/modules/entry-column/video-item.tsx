@@ -54,7 +54,7 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
           <div className={cn("relative mb-0.5 mt-1 truncate font-medium", !!entry.collections && "pr-4")}>
             {translation?.title || entry.entries.title}
             {!!entry.collections && (
-              <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
+              <i className="i-mgc-star-cute-fi absolute right-0 top-0.5 text-orange-400" />
             )}
           </div>
           <div className="flex items-center gap-1 truncate text-xs">

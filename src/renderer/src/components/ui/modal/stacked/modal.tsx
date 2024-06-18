@@ -208,7 +208,7 @@ export const ModalInternal: Component<{
                     {title}
                   </Dialog.Title>
                   <Dialog.DialogClose className="center p-2" onClick={close}>
-                    <i className="i-mingcute-close-line" />
+                    <i className="i-mgc-close-cute-re" />
                   </Dialog.DialogClose>
                 </div>
                 <Divider className="my-2 shrink-0 border-slate-200 opacity-80 dark:border-neutral-800" />

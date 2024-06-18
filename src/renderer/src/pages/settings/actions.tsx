@@ -114,7 +114,7 @@ export function Component() {
             ])
           }}
         >
-          <i className="i-mingcute-add-line" />
+          <i className="i-mgc-add-cute-re" />
           <span> New Rule</span>
         </StyledButton>
         <div className="text-right">

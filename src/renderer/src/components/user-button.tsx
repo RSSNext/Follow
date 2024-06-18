@@ -43,7 +43,7 @@ const LoginModalContent = () => {
               loginHandler("github")
             }}
           >
-            <i className="i-mingcute-github-fill mr-2 text-xl" />
+            <i className="i-mgc-github-cute-fi mr-2 text-xl" />
             {" "}
             Continue with
             GitHub
@@ -55,7 +55,7 @@ const LoginModalContent = () => {
               loginHandler("google")
             }}
           >
-            <i className="i-mingcute-google-fill mr-2 text-xl" />
+            <i className="i-mgc-google-cute-fi mr-2 text-xl" />
             {" "}
             Continue with
             Google

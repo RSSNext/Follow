@@ -29,7 +29,7 @@ export function NotificationItem({ entryId, entryPreview, translation }: Univers
         <div className={cn("relative my-0.5", !!entry.collections && "pr-4")}>
           <EntryTranslation source={entry.entries.title} target={translation?.title} />
           {!!entry.collections && (
-            <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
+            <i className="i-mgc-star-cute-fi absolute right-0 top-0.5 text-orange-400" />
           )}
         </div>
       </div>

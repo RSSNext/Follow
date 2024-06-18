@@ -7,7 +7,7 @@ export function Component() {
     <>
       <div className="creator">Powered by electron-vite</div>
       <div className="text">
-        <span className="i-mingcute-rss-fill" />
+        <span className="i-mgc-rss-cute-fi" />
         Build an Electron app with
         {" "}
         <span className="react">React</span>

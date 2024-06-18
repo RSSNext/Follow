@@ -9,7 +9,7 @@ export function Component() {
         onClick={() => navigate("/")}
         className="absolute left-10 top-11 flex items-center gap-1"
       >
-        <i className="i-mingcute-arrow-left-circle-line" />
+        <i className="i-mgc-arrow-left-circle-cute-re" />
         Back
       </MotionButtonBase>
       <Outlet />

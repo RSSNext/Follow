@@ -116,7 +116,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 {(summary.isLoading || summary.data) && (
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
                     <div className="flex items-center gap-2 font-medium text-zinc-800">
-                      <i className="i-mingcute-bling-line align-middle" />
+                      <i className="i-mgc-bling-cute-re align-middle" />
                       <span>AI summary</span>
                     </div>
                     <AutoResizeHeight
@@ -138,7 +138,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                   <LoadingCircle size="large" />
                 ) : (
                   <div className="center flex flex-col gap-2">
-                    <i className="i-mingcute-close-line text-3xl text-red-500" />
+                    <i className="i-mgc-close-cute-re text-3xl text-red-500" />
                     <span className="font-sans text-sm">Network Error</span>
                   </div>
                 )}

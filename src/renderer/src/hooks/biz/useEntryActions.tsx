@@ -119,7 +119,7 @@ export const useEntryActions = ({
       [
         {
           name: "Star",
-          className: "i-mingcute-star-line",
+          className: "i-mgc-star-cute-re",
           disabled: !!entry.collections,
           onClick: () => {
             collect.mutate()
@@ -127,7 +127,7 @@ export const useEntryActions = ({
         },
         {
           name: "Unstar",
-          className: "i-mingcute-star-fill text-orange-500",
+          className: "i-mgc-star-cute-fi text-orange-500",
           disabled: !entry.collections,
           onClick: () => {
             uncollect.mutate()
@@ -135,7 +135,7 @@ export const useEntryActions = ({
         },
         {
           name: "Copy Link",
-          className: "i-mingcute-link-line",
+          className: "i-mgc-link-cute-re",
           disabled: !entry.entries.url,
           onClick: () => {
             if (!entry.entries.url) return
@@ -147,7 +147,7 @@ export const useEntryActions = ({
         },
         {
           name: "Open in Browser",
-          className: "i-mingcute-world-2-line",
+          className: "i-mgc-world-2-cute-re",
           disabled: !entry.entries.url,
           onClick: () => {
             if (!entry.entries.url) return
@@ -179,7 +179,7 @@ export const useEntryActions = ({
         },
         {
           name: "Share",
-          className: "i-mingcute-share-2-line",
+          className: "i-mgc-share-forward-cute-re",
           onClick: () => {
             if (!entry.entries.url) return
             client?.showShareMenu(entry.entries.url)
@@ -187,7 +187,7 @@ export const useEntryActions = ({
         },
         {
           name: "Mark as Read",
-          className: "i-mingcute-round-fill",
+          className: "i-mgc-round-cute-fi",
           disabled: !!entry.read,
           onClick: () => {
             read.mutate(entry)
@@ -195,7 +195,7 @@ export const useEntryActions = ({
         },
         {
           name: "Mark as Unread",
-          className: "i-mingcute-round-line",
+          className: "i-mgc-round-cute-re",
           disabled: !entry.read,
           onClick: () => {
             unread.mutate(entry)

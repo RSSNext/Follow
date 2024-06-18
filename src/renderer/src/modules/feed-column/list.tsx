@@ -144,12 +144,12 @@ export function FeedList({
           <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
             {expansion ? (
               <i
-                className="i-mingcute-list-collapse-fill"
+                className="i-mgc-list-collapse-cute-fi"
                 onClick={() => setExpansion(false)}
               />
             ) : (
               <i
-                className="i-mingcute-list-expansion-fill"
+                className="i-mgc-list-expansion-cute-fi"
                 onClick={() => setExpansion(true)}
               />
             )}
@@ -174,7 +174,7 @@ export function FeedList({
           }
         }}
       >
-        <i className="i-mingcute-star-fill mr-2 text-orange-500" />
+        <i className="i-mgc-star-cute-fi mr-2 text-orange-500" />
         Starred
       </div>
       {data?.list?.length ?
@@ -192,7 +192,7 @@ export function FeedList({
                 to="/discover"
                 className="-mt-36 flex h-full flex-1 flex-col items-center justify-center gap-2"
               >
-                <i className="i-mingcute-add-line text-3xl " />
+                <i className="i-mgc-add-cute-re text-3xl " />
                 Add some feeds
               </Link>
             </div>

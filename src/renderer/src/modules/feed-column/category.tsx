@@ -124,11 +124,11 @@ export function FeedCategory({
           <div className="flex w-full min-w-0 items-center">
             <CollapsibleTrigger
               className={cn(
-                "flex h-8 items-center [&_.i-mingcute-right-fill]:data-[state=open]:rotate-90",
+                "flex h-8 items-center [&_.i-mgc-right-cute-fi]:data-[state=open]:rotate-90",
                 !setActiveList && "flex-1",
               )}
             >
-              <i className="i-mingcute-right-fill mr-2 transition-transform" />
+              <i className="i-mgc-right-cute-fi mr-2 transition-transform" />
               {!setActiveList && <span className="truncate">{data.name}</span>}
             </CollapsibleTrigger>
             {!!setActiveList && <span className="truncate">{data.name}</span>}

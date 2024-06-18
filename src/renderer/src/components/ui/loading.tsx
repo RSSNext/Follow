@@ -14,6 +14,6 @@ export const LoadingCircle: Component<LoadingCircleProps> = ({
   size,
 }) => (
   <div className={cn(sizeMap[size], className)}>
-    <i className="i-mingcute-loading-3-line animate-spin" />
+    <i className="i-mgc-loading-3-cute-re animate-spin" />
   </div>
 )

@@ -40,7 +40,7 @@ const Wrapper: Component<{
             window.open(src)
           }}
         >
-          <i className="i-mingcute-external-link-line" />
+          <i className="i-mgc-external-link-cute-re" />
         </ActionButton>
       </m.div>
     </div>

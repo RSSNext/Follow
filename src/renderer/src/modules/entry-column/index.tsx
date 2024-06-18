@@ -273,15 +273,15 @@ const ListHeader: FC<{
             onClick={() => setUnreadOnly(!unreadOnly)}
           >
             {unreadOnly ? (
-              <i className="i-mingcute-round-fill" />
+              <i className="i-mgc-round-cute-fi" />
             ) : (
-              <i className="i-mingcute-round-line" />
+              <i className="i-mgc-round-cute-re" />
             )}
           </ActionButton>
           <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
             <PopoverTrigger>
               <ActionButton tooltip="Mark All as Read">
-                <i className="i-mingcute-check-circle-line" />
+                <i className="i-mgc-check-circle-cute-re" />
               </ActionButton>
             </PopoverTrigger>
             <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[15px] font-medium">
@@ -329,7 +329,7 @@ const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
       >
         {unreadOnly ? (
           <>
-            <i className="i-mingcute-celebrate-line -mt-11 text-3xl" />
+            <i className="i-mgc-celebrate-cute-re -mt-11 text-3xl" />
             Zero Unread
           </>
         ) : (

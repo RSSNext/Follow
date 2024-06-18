@@ -40,7 +40,7 @@ export function ArticleItem({ entryId, entryPreview, translation }: UniversalIte
             <EntryTranslation source={entry.entries.description} target={translation?.description} />
           )}
           {!!entry.collections && (
-            <i className="i-mingcute-star-fill absolute right-0 top-0.5 text-orange-400" />
+            <i className="i-mgc-star-cute-fi absolute right-0 top-0.5 text-orange-400" />
           )}
         </div>
         <div className={cn("text-[13px]", asRead ? "text-zinc-400" : "text-zinc-500")}>

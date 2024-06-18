@@ -35,7 +35,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={props.disabled || isLoading}
       >
         {isLoading && (
-          <i className="i-mingcute-loading-3-line mr-2 animate-spin" />
+          <i className="i-mgc-loading-3-cute-re mr-2 animate-spin" />
         )}
         {props.children}
       </Comp>

@@ -80,14 +80,14 @@ export function SwipeImages({
             className="swiper-button left-2"
             onDoubleClick={(e) => e.stopPropagation()}
           >
-            <i className="i-mingcute-left-fill" />
+            <i className="i-mgc-left-cute-fi" />
           </div>
           <div
             id={`swiper-button-next-${uniqueKey}`}
             className="swiper-button right-2"
             onDoubleClick={(e) => e.stopPropagation()}
           >
-            <i className="i-mingcute-right-fill" />
+            <i className="i-mgc-right-cute-fi" />
           </div>
         </>
       ) : uniqImages?.length === 1 ?

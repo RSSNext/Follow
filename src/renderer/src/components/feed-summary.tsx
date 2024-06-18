@@ -32,7 +32,7 @@ export function FollowSummary({
         </div>
       </a>
       <div className="flex items-center gap-1 truncate text-zinc-500">
-        <i className="i-mingcute-right-line shrink-0" />
+        <i className="i-mgc-right-cute-re shrink-0" />
         <a href={feed.url || docs} target="_blank" rel="noreferrer">
           {feed.url || docs}
         </a>

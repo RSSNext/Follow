@@ -29,7 +29,7 @@ export const EntryTranslation = ({
     >
       {target && !hovered ? (
         <>
-          <i className="i-mingcute-bling-line mr-1 align-middle" />
+          <i className="i-mgc-bling-cute-re mr-1 align-middle" />
           <span className="align-middle">{target}</span>
         </>
       ) : (

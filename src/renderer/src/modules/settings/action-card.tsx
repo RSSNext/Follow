@@ -202,7 +202,7 @@ const DeleteTableCell = ({
       disabled={disabled}
       onClick={onClick}
     >
-      <i className="i-mingcute-delete-2-line text-zinc-600" />
+      <i className="i-mgc-delete-2-cute-re text-zinc-600" />
     </Button>
   </TableCell>
 )
@@ -265,7 +265,7 @@ const SettingCollapsible = ({
     <div className="flex items-center">
       <Label className="flex-1">{title}</Label>
       <CollapsibleTrigger className="-m-3 flex items-center [&_i]:data-[state=open]:rotate-45">
-        <i className="i-mingcute-add-line m-3 transition-transform" />
+        <i className="i-mgc-add-cute-re m-3 transition-transform" />
       </CollapsibleTrigger>
     </div>
     <CollapsibleContent className="mt-2">{children}</CollapsibleContent>
@@ -298,7 +298,7 @@ export function ActionCard({
                 onChange(null)
               }}
             >
-              <i className="i-mingcute-delete-2-line text-zinc-600" />
+              <i className="i-mgc-delete-2-cute-re text-zinc-600" />
             </Button>
             <p className="shrink-0 font-medium text-zinc-500">Name</p>
             <Input
@@ -311,7 +311,7 @@ export function ActionCard({
             />
             <CollapsibleTrigger className="flex w-14 flex-1 shrink-0 items-center pl-3 text-left [&_i]:data-[state=open]:rotate-90">
               <div className="name-placeholder flex-1 text-sm">{data.name}</div>
-              <i className="i-mingcute-right-line h-8 shrink-0 text-xl transition-transform" />
+              <i className="i-mgc-right-cute-re h-8 shrink-0 text-xl transition-transform" />
             </CollapsibleTrigger>
           </div>
           <CollapsibleContent className="mt-4 space-y-4">
