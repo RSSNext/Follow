@@ -89,29 +89,29 @@ function EntryContentRender({ entryId }: { entryId: string }) {
           exit={{ opacity: 0.01, y: -100 }}
           key={entry.entries.id}
         >
-          <WrappedElementProvider boundingDetection>
-            <TitleMetaHandler entryId={entry.entries.id} />
-            <article className="relative m-auto min-w-0 max-w-[550px] @4xl:max-w-[70ch]">
-              <a
-                href={entry.entries.url || void 0}
-                target="_blank"
-                className="-mx-6 block rounded-lg p-6 transition-colors hover:bg-theme-item-hover"
-                rel="noreferrer"
-              >
-                <div className="select-text break-words text-3xl font-bold">
-                  <EntryTranslation
-                    source={entry.entries.title}
-                    target={translation.data?.title}
-                  />
-                </div>
-                <div className="mt-2 text-[13px] font-medium text-zinc-500">
-                  {entry.feeds?.title}
-                </div>
-                <div className="text-[13px] text-zinc-500">
-                  {entry.entries.publishedAt &&
-                  new Date(entry.entries.publishedAt).toLocaleString()}
-                </div>
-              </a>
+          <article className="relative m-auto min-w-0 max-w-[550px] @4xl:max-w-[70ch]">
+            <a
+              href={entry.entries.url || void 0}
+              target="_blank"
+              className="-mx-6 block rounded-lg p-6 transition-colors hover:bg-theme-item-hover"
+              rel="noreferrer"
+            >
+              <div className="select-text break-words text-3xl font-bold">
+                <EntryTranslation
+                  source={entry.entries.title}
+                  target={translation.data?.title}
+                />
+              </div>
+              <div className="mt-2 text-[13px] font-medium text-zinc-500">
+                {entry.feeds?.title}
+              </div>
+              <div className="text-[13px] text-zinc-500">
+                {entry.entries.publishedAt &&
+                new Date(entry.entries.publishedAt).toLocaleString()}
+              </div>
+            </a>
+            <WrappedElementProvider boundingDetection>
+              <TitleMetaHandler entryId={entry.entries.id} />
               <div className="prose prose-zinc mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[15px] dark:prose-invert">
                 {(summary.isLoading || summary.data) && (
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
@@ -131,20 +131,20 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 )}
                 {content}
               </div>
-              {!content && (
-                <div className="center mt-16">
-                  {!error ? (
-                    <LoadingCircle size="large" />
-                  ) : (
-                    <div className="center flex flex-col gap-2">
-                      <i className="i-mingcute-close-line text-3xl text-red-500" />
-                      <span className="font-sans text-sm">Network Error</span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </article>
-          </WrappedElementProvider>
+            </WrappedElementProvider>
+            {!content && (
+              <div className="center mt-16">
+                {!error ? (
+                  <LoadingCircle size="large" />
+                ) : (
+                  <div className="center flex flex-col gap-2">
+                    <i className="i-mingcute-close-line text-3xl text-red-500" />
+                    <span className="font-sans text-sm">Network Error</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </article>
         </m.div>
       </div>
     </>
@@ -169,7 +169,7 @@ const TitleMetaHandler: Component<{
   } = useEntry(entryId)!
 
   useEffect(() => {
-    if (!isAtTop && entryTitle && feedTitle) setEntryTitleMeta({ title: entryTitle, description: feedTitle })
+    if (!isAtTop && entryTitle && feedTitle) { setEntryTitleMeta({ title: entryTitle, description: feedTitle }) }
     return () => {
       setEntryTitleMeta(null)
     }
