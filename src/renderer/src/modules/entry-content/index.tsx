@@ -116,7 +116,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 {(summary.isLoading || summary.data) && (
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
                     <div className="flex items-center gap-2 font-medium text-zinc-800">
-                      <i className="i-mgc-bling-cute-re align-middle" />
+                      <i className="i-mgc-magic-2-cute-re align-middle" />
                       <span>AI summary</span>
                     </div>
                     <AutoResizeHeight

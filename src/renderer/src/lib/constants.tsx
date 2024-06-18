@@ -10,7 +10,7 @@ export const levels = {
 export const views = [
   {
     name: "Articles",
-    icon: <i className="i-mgc-news-cute-fi" />,
+    icon: <i className="i-mgc-paper-cute-fi" />,
     className: "text-amber-700",
     translation: "title,description",
   },
@@ -31,7 +31,7 @@ export const views = [
   },
   {
     name: "Videos",
-    icon: <i className="i-mgc-youtube-cute-fi" />,
+    icon: <i className="i-mgc-video-cute-fi" />,
     className: "text-red-600",
     gridMode: true,
     wideMode: true,
@@ -39,13 +39,13 @@ export const views = [
   },
   {
     name: "Audios",
-    icon: <i className="i-mgc-headphone-cute-fi" />,
+    icon: <i className="i-mgc-mic-cute-fi" />,
     className: "text-purple-600",
     translation: "title",
   },
   {
     name: "Notifications",
-    icon: <i className="i-mgc-notification-cute-fi" />,
+    icon: <i className="i-mgc-announcement-cute-fi" />,
     className: "text-yellow-600",
     translation: "title",
   },
@@ -60,7 +60,7 @@ export const settingTabs = [
   {
     name: "Actions",
     path: "actions",
-    className: "i-mgc-bling-cute-re",
+    className: "i-mgc-magic-2-cute-re",
   },
   {
     name: "Profile",
