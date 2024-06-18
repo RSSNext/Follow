@@ -24,7 +24,7 @@ const LoginModalContent = () => {
   return (
     <div className="center flex h-full" onClick={modal.dismiss}>
       <m.div
-        className="shadow-modal rounded-lg border border-border bg-background p-4 px-8 pb-8"
+        className="shadow-modal rounded-lg border border-border bg-theme-background p-4 px-8 pb-8"
         onClick={stopPropagation}
         {...modalMontionConfig}
       >

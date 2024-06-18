@@ -1,7 +1,7 @@
 .swipe-wrapper {
   :global {
     .swiper {
-      @apply bg-background;
+      @apply bg-theme-background;
     }
 
     .swiper-button {

@@ -32,13 +32,13 @@
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
 
-    --native: 30 3.2% 87.8%;
-    --native-active: 60 1.8% 78.4%;
+    --native: 240 1.6% 87.6%;
+    --native-active: 240 0.9% 78.2%;
     --radius: 0.5rem;
   }
 
   [data-theme="dark"] {
-    --background: 0, 0%, 11.8%;
+    --background: 0 0% 11.8%;
     --foreground: 0 0% 98%;
 
     --card: 240 10% 3.9%;
@@ -76,6 +76,6 @@
     @apply border-border;
   }
   body {
-    @apply text-foreground/75;
+    @apply text-theme-foreground;
   }
 }

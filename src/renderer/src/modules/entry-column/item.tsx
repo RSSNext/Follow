@@ -114,7 +114,7 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
     >
       <div
         className={cn(
-          "rounded-md bg-background transition-colors",
+          "rounded-md bg-theme-background transition-colors",
           !views[view || 0].wideMode &&
           activeEntry === entry.entries.id &&
           "bg-theme-item-active",

@@ -18,7 +18,7 @@ export const Input = forwardRef<
       ref={ref}
       className={cn(
         "min-w-0 flex-auto appearance-none rounded-lg text-sm",
-        "bg-background px-3 py-[calc(theme(spacing.2)-1px)] placeholder:text-zinc-400 dark:bg-zinc-700/[0.15]",
+        "bg-theme-background px-3 py-[calc(theme(spacing.2)-1px)] placeholder:text-zinc-400 dark:bg-zinc-700/[0.15]",
         "ring-theme-accent/20 duration-200 focus:border-theme-accent/80 focus:outline-none focus:ring-2",
         "border border-border",
         "dark:text-zinc-200 dark:placeholder:text-zinc-500",
