@@ -8,7 +8,6 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       gcTime: Infinity,
-      refetchInterval: 1000 * 60 * 10,
       retryDelay: 1000,
       retry(failureCount, error) {
         console.error(error)

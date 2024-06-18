@@ -72,6 +72,7 @@ export const useEntries = ({
       return lastPage.data.at(-1)!.entries.publishedAt
     },
     initialPageParam: undefined,
+    refetchInterval: 1000 * 60 * 10,
   })
 
 export const useEntriesPreview = ({ id }: { id?: string }) =>
