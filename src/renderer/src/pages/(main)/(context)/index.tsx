@@ -43,8 +43,7 @@ export function Component() {
 
   const inWideMode = activeList && views[activeList.view].wideMode
   return (
-    <div ref={containerRef} className="flex grow">
-
+    <div ref={containerRef} className="flex min-w-0 grow">
       <div
         className={cn(
           "h-full shrink-0 overflow-y-auto",
@@ -65,7 +64,7 @@ export function Component() {
       )}
       <AnimatePresence>
         {!inWideMode && (
-          <div className="flex-1">
+          <div className="min-w-0 flex-1">
             <EntryContent entry={activeEntry} />
           </div>
         )}
