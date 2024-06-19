@@ -27,7 +27,7 @@ export const useCollect = (entry: Nullable<EntryModel>) =>
       })
     },
     onSuccess: () => {
-      toast("Collected.", {
+      toast.success("Starred.", {
         duration: 1000,
       })
     },
@@ -50,7 +50,7 @@ export const useUnCollect = (entry: Nullable<EntryModel>) =>
       })
     },
     onSuccess: () => {
-      toast("Uncollected.", {
+      toast.success("Unstarred.", {
         duration: 1000,
       })
     },
@@ -118,6 +118,7 @@ export const useEntryActions = ({
     const items = [
       [
         {
+          key: "star",
           name: "Star",
           className: "i-mgc-star-cute-re",
           disabled: !!entry.collections,
@@ -126,6 +127,7 @@ export const useEntryActions = ({
           },
         },
         {
+          key: "unstar",
           name: "Unstar",
           className: "i-mgc-star-cute-fi text-orange-500",
           disabled: !entry.collections,
@@ -146,6 +148,7 @@ export const useEntryActions = ({
           },
         },
         {
+          key: "openInBrowser",
           name: "Open in Browser",
           className: "i-mgc-world-2-cute-re",
           disabled: !entry.entries.url,
@@ -186,6 +189,7 @@ export const useEntryActions = ({
           },
         },
         {
+          key: "read",
           name: "Mark as Read",
           className: "i-mgc-round-cute-fi",
           disabled: !!entry.read,
@@ -194,6 +198,7 @@ export const useEntryActions = ({
           },
         },
         {
+          key: "unread",
           name: "Mark as Unread",
           className: "i-mgc-round-cute-re",
           disabled: !entry.read,

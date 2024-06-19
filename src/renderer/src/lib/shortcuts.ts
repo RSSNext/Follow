@@ -54,7 +54,7 @@ export const shortcuts = {
     },
     openInBrower: {
       name: "Open in Browser",
-      key: "B, ↩︎",
+      key: "B, Enter",
     },
   },
 }

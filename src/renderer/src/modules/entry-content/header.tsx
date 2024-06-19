@@ -1,8 +1,10 @@
 import { ActionButton } from "@renderer/components/ui/button"
 import { useEntryActions } from "@renderer/hooks"
+import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { AnimatePresence, m } from "framer-motion"
+import { useHotkeys } from "react-hotkeys-hook"
 
 import { useEntryTitleMeta } from "./atoms"
 
@@ -19,6 +21,21 @@ export function EntryHeader({
     view,
     entry,
   })
+
+  useHotkeys(shortcuts.entry.toggleRead.key, () => {
+    const key = entry?.read ? "unread" : "read"
+    items.find((item) => item.key === key)?.onClick()
+  }, { scopes: ["home"] })
+
+  useHotkeys(shortcuts.entry.toggleStarred.key, () => {
+    const key = entry?.collections ? "unstar" : "star"
+    items.find((item) => item.key === key)?.onClick()
+  }, { scopes: ["home"] })
+
+  useHotkeys(shortcuts.entry.openInBrower.key, () => {
+    items.find((item) => item.key === "openInBrowser")?.onClick()
+  }, { scopes: ["home"] })
+
   const entryTitleMeta = useEntryTitleMeta()
   if (!entry?.entries.url) return null
 
