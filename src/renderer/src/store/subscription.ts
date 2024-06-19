@@ -2,20 +2,23 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { FeedViewType } from "@renderer/lib/enum"
 import type { SubscriptionModel } from "@renderer/models"
 import { produce } from "immer"
+import { omit } from "lodash-es"
 
-import { entryActions } from "./entry/entry"
+import { entryActions } from "./entry/store"
+import { feedActions } from "./feed"
 import { unreadActions } from "./unread"
 import { createZustandStore, getStoreActions } from "./utils/helper"
 
 type FeedId = string
+export type SubscriptionPlainModel = Omit<SubscriptionModel, "feeds">
 interface SubscriptionState {
-  data: Record<FeedId, SubscriptionModel>
+  data: Record<FeedId, SubscriptionPlainModel>
   dataIdByView: Record<FeedViewType, FeedId[]>
 }
 
 interface SubscriptionActions {
-  upsert: (feedId: FeedId, subscription: SubscriptionModel) => void
-  fetchByView: (view?: FeedViewType) => Promise<SubscriptionModel[]>
+  upsertMany: (subscription: SubscriptionPlainModel[]) => void
+  fetchByView: (view?: FeedViewType) => Promise<SubscriptionPlainModel[]>
   markReadByView: (view?: FeedViewType) => void
   internal_reset: () => void
   clear: () => void
@@ -66,23 +69,20 @@ export const useSubscriptionStore = createZustandStore<
       }))
     }
 
-    set((state) =>
-      produce(state, (state) => {
-        res.data.forEach((subscription) => {
-          state.data[subscription.feeds.id] = subscription
-          state.dataIdByView[subscription.view].push(subscription.feeds.id)
-          return state
-        })
-      }),
-    )
+    get().upsertMany(res.data)
+    feedActions.upsertMany(res.data.map((s) => s.feeds))
 
     return res.data
   },
-  upsert: (feedId, subscription) => {
+  upsertMany: (subscriptions) => {
     set((state) =>
       produce(state, (state) => {
-        state.data[feedId] = subscription
-        return state
+        subscriptions.forEach((subscription) => {
+          state.data[subscription.feedId] = omit(subscription, "feeds")
+          state.dataIdByView[subscription.view].push(subscription.feedId)
+
+          return state
+        })
       }),
     )
   },

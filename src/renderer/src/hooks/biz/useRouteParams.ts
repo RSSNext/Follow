@@ -43,5 +43,6 @@ export const useRouteParms = () => {
     entryId: params.entryId || undefined,
     feedId: params.feedId || undefined,
     level: search.get("level") || undefined,
+    category: search.get("category") || undefined,
   }
 }

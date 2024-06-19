@@ -5,10 +5,13 @@ import { FEED_COLLECTION_LIST, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
-import type { FeedListModel, SubscriptionResponse } from "@renderer/models"
+import type {
+  FeedListModel,
+} from "@renderer/models"
 import { Queries } from "@renderer/queries"
+import type { SubscriptionPlainModel } from "@renderer/store"
 import {
-  feedActions,
+  getFeedById,
   useSubscriptionByView,
   useUnreadStore,
 } from "@renderer/store"
@@ -31,7 +34,7 @@ const useData = (view: FeedViewType) => {
       list: Record<
         string,
         {
-          list: SubscriptionResponse
+          list: SubscriptionPlainModel[]
         }
       >
     }
@@ -39,8 +42,9 @@ const useData = (view: FeedViewType) => {
     const subscriptions = structuredClone(data)
 
     for (const subscription of subscriptions) {
-      if (!subscription.category && subscription.feeds.siteUrl) {
-        const { domain } = parse(subscription.feeds.siteUrl)
+      const feed = getFeedById(subscription.feedId)
+      if (!subscription.category && feed.siteUrl) {
+        const { domain } = parse(feed.siteUrl)
         if (domain) {
           if (!domains[domain]) {
             domains[domain] = 0
@@ -51,11 +55,12 @@ const useData = (view: FeedViewType) => {
     }
 
     for (const subscription of subscriptions) {
+      const feed = getFeedById(subscription.feedId)
       if (!subscription.category) {
-        if (subscription.feeds.siteUrl) {
+        if (feed.siteUrl) {
           // FIXME @DIYgod
           // The logic here makes it impossible to remove the auto-generated category based on domain
-          const { domain } = parse(subscription.feeds.siteUrl)
+          const { domain } = parse(feed.siteUrl)
           if (domain && domains[domain] > 1) {
             subscription.category =
               domain.slice(0, 1).toUpperCase() + domain.slice(1)
@@ -131,10 +136,10 @@ export function FeedList({
             onClick={(e) => {
               e.stopPropagation()
               if (view !== undefined) {
-                feedActions.setActiveList({
+                navigate({
+                  entryId: null,
+                  feedId: null,
                   level: levels.view,
-                  id: view,
-                  name: views[view].name,
                   view,
                 })
               }

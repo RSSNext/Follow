@@ -2,24 +2,20 @@ import {
   Collapsible,
   CollapsibleTrigger,
 } from "@renderer/components/ui/collapsible"
+import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { levels } from "@renderer/lib/constants"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { FeedListModel } from "@renderer/models"
-import {
-  feedActions,
-  useUnreadStore,
-} from "@renderer/store"
+import { useUnreadStore } from "@renderer/store"
 import { AnimatePresence, m } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { CategoryRenameContent } from "./category-rename-dialog"
 import { FeedItem } from "./item"
-
-const { setActiveList } = feedActions
 
 export function FeedCategory({
   data,
@@ -42,13 +38,17 @@ export function FeedCategory({
     }
   }, [expansion])
 
+  const navigate = useNavigateEntry()
+
   const setCategoryActive = () => {
     if (view !== undefined) {
-      setActiveList({
+      navigate({
+        entryId: null,
+        // TODO joint feedId is too long, need to be optimized
+        feedId: data.list.map((feed) => feed.feedId).join(","),
         level: levels.folder,
-        id: data.list.map((feed) => feed.feedId).join(","),
-        name: data.name,
         view,
+        category: data.name,
       })
     }
   }
@@ -62,6 +62,13 @@ export function FeedCategory({
       (a, b) => (state.data[b.feedId] || 0) - (state.data[a.feedId] || 0),
     ),
   )
+
+  const isActive = useMemo(
+    () =>
+      routerParams?.level === levels.folder &&
+      routerParams.feedId === data.list.map((feed) => feed.feedId).join(","),
+    [data.list, routerParams.feedId, routerParams?.level],
+  )
   const { present } = useModalStack()
   return (
     <Collapsible
@@ -73,9 +80,7 @@ export function FeedCategory({
         <div
           className={cn(
             "flex w-full items-center justify-between rounded-md px-2.5 transition-colors",
-            routerParams?.level === levels.folder &&
-            routerParams.name === data.name &&
-            "bg-native-active",
+            isActive && "bg-native-active",
           )}
           onClick={(e) => {
             e.stopPropagation()
@@ -154,7 +159,7 @@ export function FeedCategory({
             {sortByUnreadFeedList.map((feed) => (
               <FeedItem
                 key={feed.feedId}
-                feed={feed}
+                subscription={feed}
                 view={view}
                 className={data.name ? "pl-6" : "pl-2.5"}
               />

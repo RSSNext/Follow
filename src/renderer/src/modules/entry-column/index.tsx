@@ -7,7 +7,9 @@ import {
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
 import { useRead, useRefValue } from "@renderer/hooks"
+import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import {
+  useRouteEntryId,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
 import { apiClient } from "@renderer/lib/api-fetch"
@@ -16,11 +18,10 @@ import { buildStorageNS } from "@renderer/lib/ns"
 import { getEntriesParams } from "@renderer/lib/utils"
 import { useEntries } from "@renderer/queries/entries"
 import {
-  feedActions,
-  getCurrentEntryId,
+  entryActions,
   subscriptionActions,
+  useFeedHeaderTitle,
 } from "@renderer/store"
-import { entryActions } from "@renderer/store/entry/entry"
 import {
   useEntry,
   useEntryIdsByFeedIdOrView,
@@ -131,10 +132,14 @@ export function EntryColumn() {
     ),
   }
 
+  const navigate = useNavigateEntry()
   return (
     <div
       className="relative flex h-full flex-1 flex-col"
-      onClick={() => feedActions.setActiveEntry(null)}
+      onClick={() =>
+        navigate({
+          entryId: null,
+        })}
       data-total-count={virtuosoOptions.totalCount}
     >
       <ListHeader totalCount={virtuosoOptions.totalCount} />
@@ -256,6 +261,7 @@ const ListHeader: FC<{
     setMarkPopoverOpen(false)
   }, [routerParams])
 
+  const headerTitle = useFeedHeaderTitle()
   return (
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
       <div className="flex w-full justify-end">
@@ -292,7 +298,7 @@ const ListHeader: FC<{
         </div>
       </div>
       <div>
-        <div className="text-lg font-bold leading-none">{routerParams?.name}</div>
+        <div className="text-lg font-bold leading-none">{headerTitle}</div>
         <div className="text-xs font-medium text-zinc-400">
           {totalCount || 0}
           {" "}
@@ -343,6 +349,9 @@ const EntryList: FC<VirtuosoProps<string, unknown>> = ({
 
   const dataRef = useRefValue(virtuosoOptions.data!)
 
+  const currentEntryIdRef = useRefValue(useRouteEntryId())
+
+  const navigate = useNavigateEntry()
   useEffect(() => {
     if (!virtuosoRef.current) return
     if (!$mainContainer) return
@@ -364,7 +373,7 @@ const EntryList: FC<VirtuosoProps<string, unknown>> = ({
         hotkeys(registerKeys, scope, (handler) => {
           const data = dataRef.current
           const currentActiveEntryIndex = data.indexOf(
-            getCurrentEntryId() || "",
+            currentEntryIdRef.current || "",
           )
 
           switch (handler.key) {
@@ -387,7 +396,10 @@ const EntryList: FC<VirtuosoProps<string, unknown>> = ({
                 index: nextIndex,
               })
               const nextId = data![nextIndex]
-              feedActions.setActiveEntry(nextId)
+
+              navigate({
+                entryId: nextId,
+              })
             }
           }
         })
@@ -409,7 +421,7 @@ const EntryList: FC<VirtuosoProps<string, unknown>> = ({
 
       document.removeEventListener("focusin", focusHandler)
     }
-  }, [$mainContainer])
+  }, [$mainContainer, currentEntryIdRef, dataRef, navigate])
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = useCallback(
     (e) => {

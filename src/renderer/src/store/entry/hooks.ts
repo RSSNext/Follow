@@ -4,7 +4,7 @@ import type { EntryModel } from "@renderer/models"
 import { useShallow } from "zustand/react/shallow"
 
 import { useFeedIdByView } from "../subscription"
-import { useEntryStore } from "./entry"
+import { useEntryStore } from "./store"
 
 interface EntryFilter {
   unread?: boolean

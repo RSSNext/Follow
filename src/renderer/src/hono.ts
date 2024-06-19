@@ -21,20 +21,6 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             };
             outputFormat: "json";
             status: 200;
-        } | {
-            input: {
-                json: {
-                    userId: string;
-                    amount: string;
-                    entryId?: string | undefined;
-                };
-            };
-            output: {
-                code: 1;
-                message: string;
-            };
-            outputFormat: "json";
-            status: 400;
         };
     };
     "/wallets": {
@@ -49,9 +35,9 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 code: 0;
                 data: {
                     userId: string;
-                    createdAt: string;
                     addressIndex: number;
                     address: string | null;
+                    createdAt: string;
                     powerToken: bigint;
                 }[];
             };
@@ -64,9 +50,9 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 code: 0;
                 data: {
                     userId: string;
-                    createdAt: string;
                     addressIndex: number;
                     address: string | null;
+                    createdAt: string;
                     powerToken: bigint;
                 };
             };
