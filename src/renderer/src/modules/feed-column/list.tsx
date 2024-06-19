@@ -1,13 +1,17 @@
 import { useBizQuery } from "@renderer/hooks"
+import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
+import { useRouteFeedId } from "@renderer/hooks/biz/useRouteParams"
 import { FEED_COLLECTION_LIST, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
-import type { FeedListModel, SubscriptionResponse } from "@renderer/models"
+import type {
+  FeedListModel,
+} from "@renderer/models"
 import { Queries } from "@renderer/queries"
+import type { SubscriptionPlainModel } from "@renderer/store"
 import {
-  feedActions,
-  useFeedActiveList,
+  getFeedById,
   useSubscriptionByView,
   useUnreadStore,
 } from "@renderer/store"
@@ -30,7 +34,7 @@ const useData = (view: FeedViewType) => {
       list: Record<
         string,
         {
-          list: SubscriptionResponse
+          list: SubscriptionPlainModel[]
         }
       >
     }
@@ -38,8 +42,9 @@ const useData = (view: FeedViewType) => {
     const subscriptions = structuredClone(data)
 
     for (const subscription of subscriptions) {
-      if (!subscription.category && subscription.feeds.siteUrl) {
-        const { domain } = parse(subscription.feeds.siteUrl)
+      const feed = getFeedById(subscription.feedId)
+      if (!subscription.category && feed && feed.siteUrl) {
+        const { domain } = parse(feed.siteUrl)
         if (domain) {
           if (!domains[domain]) {
             domains[domain] = 0
@@ -50,11 +55,13 @@ const useData = (view: FeedViewType) => {
     }
 
     for (const subscription of subscriptions) {
+      const feed = getFeedById(subscription.feedId)
+      if (!feed) continue
       if (!subscription.category) {
-        if (subscription.feeds.siteUrl) {
+        if (feed.siteUrl) {
           // FIXME @DIYgod
           // The logic here makes it impossible to remove the auto-generated category based on domain
-          const { domain } = parse(subscription.feeds.siteUrl)
+          const { domain } = parse(feed.siteUrl)
           if (domain && domains[domain] > 1) {
             subscription.category =
               domain.slice(0, 1).toUpperCase() + domain.slice(1)
@@ -94,7 +101,6 @@ export function FeedList({
 }) {
   const [expansion, setExpansion] = useState(false)
   const data = useData(view)
-  const activeList = useFeedActiveList()
 
   useBizQuery(Queries.subscription.unreadAll())
 
@@ -108,8 +114,6 @@ export function FeedList({
     return unread
   })
 
-  const { setActiveList } = feedActions
-
   const sortedByUnread = useUnreadStore((state) =>
     data?.list?.sort(
       (a, b) =>
@@ -117,6 +121,9 @@ export function FeedList({
         a.list.reduce((acc, cur) => (state.data[cur.feedId] || 0) + acc, 0),
     ),
   )
+
+  const feedId = useRouteFeedId()
+  const navigate = useNavigateEntry()
 
   return (
     <div className={cn(className, "font-medium")}>
@@ -130,10 +137,10 @@ export function FeedList({
             onClick={(e) => {
               e.stopPropagation()
               if (view !== undefined) {
-                setActiveList({
+                navigate({
+                  entryId: null,
+                  feedId: null,
                   level: levels.view,
-                  id: view,
-                  name: views[view].name,
                   view,
                 })
               }
@@ -160,15 +167,15 @@ export function FeedList({
       <div
         className={cn(
           "flex h-8 w-full items-center rounded-md px-2.5 transition-colors",
-          activeList?.id === FEED_COLLECTION_LIST && "bg-native-active",
+          feedId === FEED_COLLECTION_LIST && "bg-native-active",
         )}
         onClick={(e) => {
           e.stopPropagation()
           if (view !== undefined) {
-            setActiveList({
-              level: levels.folder,
-              id: FEED_COLLECTION_LIST,
-              name: "Collections",
+            navigate({
+              entryId: null,
+              feedId: FEED_COLLECTION_LIST,
+              level: levels.feed,
               view,
             })
           }

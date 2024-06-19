@@ -8,7 +8,7 @@ import {
   WrappedElementProvider,
 } from "@renderer/providers/wrapped-element-provider"
 import { Queries } from "@renderer/queries"
-import { useEntry, useFeedStore } from "@renderer/store"
+import { useEntry, useFeedHeaderTitle } from "@renderer/store"
 import { m } from "framer-motion"
 import { useEffect, useState } from "react"
 
@@ -17,10 +17,9 @@ import { EntryTranslation } from "../entry-column/translation"
 import { setEntryTitleMeta } from "./atoms"
 import { EntryHeader } from "./header"
 
-export const EntryContent = ({ entry }: { entry: ActiveEntryId }) => {
-  const activeList = useFeedStore((state) => state.activeList)
-
-  if (!entry) {
+export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
+  const title = useFeedHeaderTitle()
+  if (!entryId) {
     return (
       <m.div
         className="-mt-2 flex size-full min-w-0 flex-col items-center justify-center gap-1 text-lg font-medium text-zinc-400"
@@ -28,12 +27,12 @@ export const EntryContent = ({ entry }: { entry: ActiveEntryId }) => {
         animate={{ opacity: 1, y: 0 }}
       >
         <Logo className="size-16 opacity-40 grayscale" />
-        {activeList?.name}
+        {title}
       </m.div>
     )
   }
 
-  return <EntryContentRender entryId={entry} />
+  return <EntryContentRender entryId={entryId} />
 }
 
 function EntryContentRender({ entryId }: { entryId: string }) {
@@ -169,7 +168,9 @@ const TitleMetaHandler: Component<{
   } = useEntry(entryId)!
 
   useEffect(() => {
-    if (!isAtTop && entryTitle && feedTitle) { setEntryTitleMeta({ title: entryTitle, description: feedTitle }) }
+    if (!isAtTop && entryTitle && feedTitle) {
+      setEntryTitleMeta({ title: entryTitle, description: feedTitle })
+    }
     return () => {
       setEntryTitleMeta(null)
     }

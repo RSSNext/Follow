@@ -1,22 +1,17 @@
-import { feedActions, useFeedStore } from "@renderer/store"
-import { useEffect } from "react"
-import { Outlet, useNavigate } from "react-router-dom"
+import { setMainContainerElement } from "@renderer/atoms"
+import { FeedColumn } from "@renderer/modules/feed-column"
+import { Outlet } from "react-router-dom"
 
-function MainLayout() {
-  const navigate = useNavigate()
-
-  const changed = useFeedStore(
-    (state) => `${state.activeList?.view}-${state.activeList?.id}`,
+export function Component() {
+  return (
+    <div className="flex h-full">
+      <div className="w-64 shrink-0 border-r">
+        <FeedColumn />
+      </div>
+      {/* NOTE: tabIndex for main element can get by `document.activeElement` */}
+      <main ref={setMainContainerElement} className="flex min-w-0 flex-1 bg-theme-background !outline-none" tabIndex={-1}>
+        <Outlet />
+      </main>
+    </div>
   )
-
-  useEffect(() => {
-    feedActions.setActiveEntry(null)
-    if (changed) {
-      navigate("/")
-    }
-  }, [changed])
-
-  return <Outlet />
 }
-
-export { MainLayout as Component }

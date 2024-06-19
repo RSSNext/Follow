@@ -4,6 +4,7 @@ import type { EntryModel } from "@renderer/models"
 import { produce } from "immer"
 import { merge, omit } from "lodash-es"
 
+import { feedActions } from "../feed"
 import { unreadActions } from "../unread"
 import { createZustandStore, getStoreActions } from "../utils/helper"
 import type { EntryActions, EntryState } from "./types"
@@ -132,6 +133,10 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
             draft.flatMapEntries[entry.entries.id] || {},
             entry,
           )
+
+          const feeds = entries.map((entry) => entry.feeds)
+          // Insert to feed store
+          feedActions.upsertMany(feeds)
         }
         return draft
       }),

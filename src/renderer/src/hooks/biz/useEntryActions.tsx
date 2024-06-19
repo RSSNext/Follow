@@ -1,7 +1,7 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
 import type { EntryModel } from "@renderer/models"
-import { entryActions } from "@renderer/store/entry/entry"
+import { entryActions } from "@renderer/store"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"

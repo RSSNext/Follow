@@ -7,6 +7,7 @@ import { ofetch } from "ofetch"
 export abstract class RequestError extends Error {
   name = "RequestError"
 }
+const csrfToken = await getCsrfToken()
 
 export const apiFetch = ofetch.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -14,8 +15,6 @@ export const apiFetch = ofetch.create({
   retry: false,
   onRequest: async ({ options }) => {
     if (options.method && options.method.toLowerCase() !== "get") {
-      const csrfToken = await getCsrfToken()
-
       if (typeof options.body === "string") {
         options.body = JSON.parse(options.body)
       }

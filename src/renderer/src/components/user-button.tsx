@@ -10,6 +10,7 @@ import { cn } from "@renderer/lib/utils"
 import { useSession } from "@renderer/queries/auth"
 import { m } from "framer-motion"
 import type { FC } from "react"
+import { memo } from "react"
 import { Link } from "react-router-dom"
 
 import { FollowIcon } from "./icons/follow"
@@ -102,7 +103,7 @@ export const LoginButton: FC<LoginProps> = (props) => {
         </Link>
       )
 }
-export const ProfileButton: FC<LoginProps> = (props) => {
+export const ProfileButton: FC<LoginProps> = memo((props) => {
   const { status } = useSession()
 
   if (status !== "authenticated") {
@@ -115,7 +116,8 @@ export const ProfileButton: FC<LoginProps> = (props) => {
       </ActionButton>
     </Link>
   )
-}
+})
+ProfileButton.displayName = "ProfileButton"
 
 export function UserButton({
   className,

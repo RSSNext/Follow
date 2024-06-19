@@ -8,54 +8,56 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
+import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
+import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import type { SubscriptionResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
-import {
-  feedActions,
-  useFeedActiveList,
-  useUnreadStore,
-} from "@renderer/store"
+import type { SubscriptionPlainModel } from "@renderer/store"
+import { getFeedById, useFeedById, useUnreadStore } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
+import { memo, useCallback } from "react"
 import { toast } from "sonner"
 
 import { FeedForm } from "../discover/feed-form"
 
-export function FeedItem({
-  feed,
+type FeedItemData = SubscriptionPlainModel
+const FeedItemImpl = ({
+  subscription,
   view,
   className,
 }: {
-  feed: SubscriptionResponse[number]
+  subscription: FeedItemData
   view?: number
   className?: string
-}) {
-  const activeList = useFeedActiveList()
-  const { setActiveList } = feedActions
-
-  const setFeedActive = (feed: SubscriptionResponse[number]) => {
-    if (view === undefined) return
-
-    setActiveList({
-      level: levels.feed,
-      id: feed.feedId,
-      name: feed.feeds.title || "",
-      view,
-    })
-    // focus to main container in order to let keyboard can navigate entry items by arrow keys
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        getMainContainerElement()?.focus()
+}) => {
+  const navigate = useNavigateEntry()
+  const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      e.stopPropagation()
+      if (view === undefined) return
+      navigate({
+        feedId: subscription.feedId,
+        entryId: null,
+        view,
+        level: levels.feed,
+        category: null,
       })
-    })
-  }
+      // focus to main container in order to let keyboard can navigate entry items by arrow keys
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          getMainContainerElement()?.focus()
+        })
+      })
+    },
+    [subscription.feedId, navigate, view],
+  )
 
   const deleteMutation = useMutation({
-    mutationFn: async (feed: SubscriptionResponse[number]) =>
+    mutationFn: async (feed: SubscriptionPlainModel) =>
       apiClient.subscriptions.$delete({
         json: {
           feedId: feed.feedId,
@@ -65,13 +67,17 @@ export function FeedItem({
     onSuccess: (_, variables) => {
       Queries.subscription.byView(variables.view).invalidate()
 
+      const feed = getFeedById(variables.feedId)
+
+      if (!feed) return
       toast(
         <>
           Feed
           {" "}
-          <i className="mr-px font-semibold">{variables.feeds.title}</i>
+          <i className="mr-px font-semibold">{feed.title}</i>
           {" "}
-          has been unfollowed.
+          has been
+          unfollowed.
         </>,
         {
           duration: 3000,
@@ -80,14 +86,14 @@ export function FeedItem({
             onClick: async () => {
               await apiClient.subscriptions.$post({
                 json: {
-                  url: variables.feeds.url,
+                  url: feed.url,
                   view: variables.view,
                   category: variables.category,
                   isPrivate: variables.isPrivate,
                 },
               })
 
-              Queries.subscription.byView(feed.view).invalidate()
+              Queries.subscription.byView(variables.view).invalidate()
             },
           },
         },
@@ -95,24 +101,33 @@ export function FeedItem({
     },
   })
 
-  const feedUnread = useUnreadStore((state) => state.data[feed.feedId] || 0)
+  const feedUnread = useUnreadStore(
+    (state) => state.data[subscription.feedId] || 0,
+  )
   const { present } = useModalStack()
+
+  const isActive = useRouteParamsSelector(
+    (routerParams) =>
+      routerParams?.level === levels.feed &&
+      routerParams.feedId === subscription.feedId,
+  )
+
+  const feed = useFeedById(subscription.feedId)
+
+  if (!feed) return null
   return (
     <div
       className={cn(
         "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
-        activeList?.level === levels.feed &&
-        activeList.id === feed.feedId &&
-        "bg-native-active",
+        isActive && "bg-native-active",
         className,
       )}
-      onClick={(e) => {
-        e.stopPropagation()
-        setFeedActive(feed)
-      }}
+      onClick={handleNavigate}
       onDoubleClick={() => {
         window.open(
-          `${import.meta.env.VITE_WEB_URL}/feed/${feed.feedId}?view=${view}`,
+          `${import.meta.env.VITE_WEB_URL}/feed/${
+            subscription.feedId
+          }?view=${view}`,
           "_blank",
         )
       }}
@@ -126,14 +141,20 @@ export function FeedItem({
               click: () => {
                 present({
                   title: "Edit Feed",
-                  content: ({ dismiss }) => <FeedForm asWidget id={feed.feedId} onSuccess={dismiss} />,
+                  content: ({ dismiss }) => (
+                    <FeedForm
+                      asWidget
+                      id={subscription.feedId}
+                      onSuccess={dismiss}
+                    />
+                  ),
                 })
               },
             },
             {
               type: "text",
               label: "Unfollow",
-              click: () => deleteMutation.mutate(feed),
+              click: () => deleteMutation.mutate(subscription),
             },
             {
               type: "separator",
@@ -144,7 +165,7 @@ export function FeedItem({
               click: () =>
                 window.open(
                   `${import.meta.env.VITE_WEB_URL}/feed/${
-                    feed.feedId
+                    subscription.feedId
                   }?view=${view}`,
                   "_blank",
                 ),
@@ -152,8 +173,12 @@ export function FeedItem({
             {
               type: "text",
               label: "Open Site in Browser",
-              click: () =>
-                feed.feeds.siteUrl && window.open(feed.feeds.siteUrl, "_blank"),
+              click: () => {
+                const feed = getFeedById(subscription.feedId)
+                if (feed) {
+                  feed.siteUrl && window.open(feed.siteUrl, "_blank")
+                }
+              },
             },
           ],
           e,
@@ -163,12 +188,12 @@ export function FeedItem({
       <div
         className={cn(
           "flex min-w-0 items-center",
-          feed.feeds.errorAt && "text-red-900",
+          feed.errorAt && "text-red-900",
         )}
       >
-        <FeedIcon feed={feed.feeds} className="size-4" />
-        <div className="truncate">{feed.feeds.title}</div>
-        {feed.feeds.errorAt && (
+        <FeedIcon feed={feed} className="size-4" />
+        <div className="truncate">{feed.title}</div>
+        {feed.errorAt && (
           <TooltipProvider delayDuration={300}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -180,7 +205,7 @@ export function FeedItem({
                   {" "}
                   {dayjs
                     .duration(
-                      dayjs(feed.feeds.errorAt).diff(dayjs(), "minute"),
+                      dayjs(feed.errorAt).diff(dayjs(), "minute"),
                       "minute",
                     )
                     .humanize(true)}
@@ -189,7 +214,7 @@ export function FeedItem({
             </Tooltip>
           </TooltipProvider>
         )}
-        {feed.isPrivate && (
+        {subscription.isPrivate && (
           <TooltipProvider delayDuration={300}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -210,3 +235,5 @@ export function FeedItem({
     </div>
   )
 }
+
+export const FeedItem = memo(FeedItemImpl)
