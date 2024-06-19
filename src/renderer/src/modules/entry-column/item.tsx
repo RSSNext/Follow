@@ -1,6 +1,6 @@
 import { useAsRead, useBizQuery, useEntryActions } from "@renderer/hooks"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { useRouteEntryId } from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -41,7 +41,7 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
     },
   )
 
-  const currentEntryId = useRouteEntryId()
+  const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry.entries.id)
 
   const asRead = useAsRead(entry)
 
@@ -120,7 +120,7 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
         className={cn(
           "rounded-md bg-theme-background transition-colors",
           !views[view || 0].wideMode &&
-          currentEntryId === entry.entries.id &&
+          isActive &&
           "bg-theme-item-active",
           asRead ? "text-zinc-500/90" : "text-zinc-900 dark:text-white/90",
         )}

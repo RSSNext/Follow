@@ -118,7 +118,7 @@ describe("test route builder", () => {
                           "children": [
                             {
                               "handle": {
-                                "fs": "./pages/(external)/(with-layout)/feed/[:id]/index/",
+                                "fs": "./pages/(external)/(with-layout)/feed/[id]/index/",
                                 "fullPath": "/feed/:id/",
                               },
                               "lazy": [Function],
@@ -126,7 +126,7 @@ describe("test route builder", () => {
                             },
                           ],
                           "handle": {
-                            "fs": "./pages/(external)/(with-layout)/feed/[:id]/layout",
+                            "fs": "./pages/(external)/(with-layout)/feed/[id]/layout",
                             "fullPath": "/feed/:id",
                           },
                           "lazy": [Function],
@@ -134,7 +134,7 @@ describe("test route builder", () => {
                         },
                       ],
                       "handle": {
-                        "fs": "./pages/(external)/(with-layout)/feed/[:id]/:id",
+                        "fs": "./pages/(external)/(with-layout)/feed/[id]/:id",
                         "fullPath": "/feed/:id",
                       },
                       "path": ":id",
