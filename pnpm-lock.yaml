@@ -133,9 +133,6 @@ importers:
       hast-util-to-jsx-runtime:
         specifier: 2.3.0
         version: 2.3.0
-      hotkeys-js:
-        specifier: 3.13.7
-        version: 3.13.7
       idb-keyval:
         specifier: 6.2.1
         version: 6.2.1
@@ -169,6 +166,9 @@ importers:
       react-hook-form:
         specifier: 7.51.5
         version: 7.51.5(react@18.3.1)
+      react-hotkeys-hook:
+        specifier: 4.5.0
+        version: 4.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-intersection-observer:
         specifier: 9.10.2
         version: 9.10.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3463,9 +3463,6 @@ packages:
     resolution: {integrity: sha512-kyCuEOWjJqZuDbRHzL8V93NzQhwIB71oFWSyzVo+KPZI+pnQPPxucdkrOZvkLRnrf5URsQM+IJ09Dw29cRALIA==}
     engines: {node: '>=10'}
 
-  hotkeys-js@3.13.7:
-    resolution: {integrity: sha512-ygFIdTqqwG4fFP7kkiYlvayZppeIQX2aPpirsngkv1xM1lP0piDY5QEh68nQnIKvz64hfocxhBaD/uK3sSK1yQ==}
-
   htm@3.1.1:
     resolution: {integrity: sha512-983Vyg8NwUE7JkZ6NmOqpCZ+sh1bKv2iYTlUkzlWmA5JD2acKoxd4KVxbMmxX/85mtfdnDmTFoNKcg5DGAvxNQ==}
 
@@ -4553,6 +4550,12 @@ packages:
     engines: {node: '>=12.22.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
+
+  react-hotkeys-hook@4.5.0:
+    resolution: {integrity: sha512-Samb85GSgAWFQNvVt3PS90LPPGSf9mkH/r4au81ZP1yOIFayLC3QAvqTgGtJ8YEDMXtPmaVBs6NgipHO6h4Mug==}
+    peerDependencies:
+      react: '>=16.8.1'
+      react-dom: '>=16.8.1'
 
   react-intersection-observer@9.10.2:
     resolution: {integrity: sha512-j2hGADK2hCbAlfaq6L3tVLb4iqngoN7B1fT16MwJ4J16YW/vWLcmAIinLsw0lgpZeMi4UDUWtHC9QDde0/P1yQ==}
@@ -9345,8 +9348,6 @@ snapshots:
     dependencies:
       lru-cache: 6.0.0
 
-  hotkeys-js@3.13.7: {}
-
   htm@3.1.1: {}
 
   html-void-elements@3.0.0: {}
@@ -10483,6 +10484,11 @@ snapshots:
   react-hook-form@7.51.5(react@18.3.1):
     dependencies:
       react: 18.3.1
+
+  react-hotkeys-hook@4.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   react-intersection-observer@9.10.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:

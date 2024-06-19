@@ -2,49 +2,55 @@ export const shortcuts = {
   subscriptions: {
     previous: {
       name: "Previous Subscription",
-      key: "p",
+      key: "P",
     },
     next: {
       name: "Next Subscription",
-      key: "n",
+      key: "N",
     },
     toggleFolder: {
       name: "Toggle Folder",
-      key: "x",
+      key: "X",
     },
     add: {
       name: "Add Subscription",
-      key: "ctrl+t, ⌘+t",
+      key: "Ctrl+T, ⌘+T",
     },
   },
   entries: {
     refetch: {
       name: "Refetch",
-      key: "r",
+      key: "R",
     },
     previous: {
       name: "Previous Entry",
-      key: "k, up",
+      key: "K, Up",
     },
     next: {
       name: "Next Entry",
-      key: "j, down",
-    },
-    toggleRead: {
-      name: "Toggle Read",
-      key: "m",
-    },
-    toggleStarred: {
-      name: "Toggle Starred",
-      key: "s",
-    },
-    openInBrower: {
-      name: "Open in Browser",
-      key: "b, ↩︎",
+      key: "J, Down",
     },
     markAllAsRead: {
       name: "Mark All as Read",
-      key: "a",
+      key: "A",
+    },
+    toggleUnreadOnly: {
+      name: "Toggle Unread Only",
+      key: "U",
+    },
+  },
+  entry: {
+    toggleRead: {
+      name: "Toggle Read",
+      key: "M",
+    },
+    toggleStarred: {
+      name: "Toggle Starred",
+      key: "S",
+    },
+    openInBrower: {
+      name: "Open in Browser",
+      key: "B, ↩︎",
     },
   },
 }

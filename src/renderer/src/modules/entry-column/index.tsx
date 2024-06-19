@@ -1,4 +1,3 @@
-import { useMainContainerElement } from "@renderer/atoms"
 import {
   ActionButton,
   StyledButton,
@@ -13,6 +12,7 @@ import { useRead, useRefValue } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
+import { shortcuts } from "@renderer/lib/shortcuts"
 import { getEntriesParams } from "@renderer/lib/utils"
 import { useEntries } from "@renderer/queries/entries"
 import {
@@ -28,7 +28,6 @@ import {
 } from "@renderer/store/entry/hooks"
 import type { HTMLMotionProps } from "framer-motion"
 import { m } from "framer-motion"
-import hotkeys from "hotkeys-js"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { debounce } from "lodash-es"
@@ -41,6 +40,7 @@ import {
   useRef,
   useState,
 } from "react"
+import { useHotkeys } from "react-hotkeys-hook"
 import type { ListRange, VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
@@ -184,6 +184,10 @@ const useEntriesByView = () => {
     unread: unreadOnly,
   })
 
+  useHotkeys(shortcuts.entries.refetch.key, () => {
+    query.refetch()
+  }, { scopes: ["home"] })
+
   // in unread only entries only can grow the data, but not shrink
   // so we memo this previous data to avoid the flicker
   const prevEntries = useRef(entries)
@@ -264,12 +268,20 @@ const ListHeader: FC<{
     setMarkPopoverOpen(false)
   }, [activeList])
 
+  useHotkeys(shortcuts.entries.markAllAsRead.key, () => {
+    setMarkPopoverOpen(true)
+  }, { scopes: ["home"] })
+
+  useHotkeys(shortcuts.entries.toggleUnreadOnly.key, () => {
+    setUnreadOnly((prev) => !prev)
+  }, { scopes: ["home"] })
+
   return (
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
       <div className="flex w-full justify-end">
         <div className="relative z-[1] flex items-center gap-1 text-zinc-500">
           <ActionButton
-            tooltip={unreadOnly ? "Unread Only" : "All"}
+            tooltip={`${unreadOnly ? "Unread Only" : "All"} (${shortcuts.entries.toggleUnreadOnly.key})`}
             onClick={() => setUnreadOnly(!unreadOnly)}
           >
             {unreadOnly ? (
@@ -280,7 +292,7 @@ const ListHeader: FC<{
           </ActionButton>
           <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
             <PopoverTrigger>
-              <ActionButton tooltip="Mark All as Read">
+              <ActionButton tooltip={`Mark All as Read (${shortcuts.entries.markAllAsRead.key})`}>
                 <i className="i-mgc-check-circle-cute-re" />
               </ActionButton>
             </PopoverTrigger>
@@ -346,91 +358,42 @@ const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
 const EntryList: FC<VirtuosoProps<string, unknown>> = ({
   ...virtuosoOptions
 }) => {
-  const $mainContainer = useMainContainerElement()
   const virtuosoRef = useRef<VirtuosoHandle>(null)
 
   const dataRef = useRefValue(virtuosoOptions.data!)
 
-  useEffect(() => {
-    if (!virtuosoRef.current) return
-    if (!$mainContainer) return
-    const virtuoso = virtuosoRef.current
-    const scope = "entry-list"
-    const registerKeys = "up,down,j,k"
-    const focusHandler = () => {
-      const target = document.activeElement
+  useHotkeys(shortcuts.entries.next.key, () => {
+    const data = dataRef.current
+    const currentActiveEntryIndex = data.indexOf(
+      getCurrentEntryId() || "",
+    )
 
-      const isFocusIn =
-        $mainContainer.contains(target) || $mainContainer === target
+    const nextIndex = Math.min(currentActiveEntryIndex + 1, data.length - 1)
 
-      if (isFocusIn) {
-        const currentScope = hotkeys.getScope()
+    virtuosoRef.current?.scrollIntoView({
+      index: nextIndex,
+    })
+    const nextId = data![nextIndex]
+    feedActions.setActiveEntry(nextId)
+  }, { scopes: ["home"] })
 
-        if (currentScope === scope) {
-          return
-        }
-        hotkeys(registerKeys, scope, (handler) => {
-          const data = dataRef.current
-          const currentActiveEntryIndex = data.indexOf(
-            getCurrentEntryId() || "",
-          )
+  useHotkeys(shortcuts.entries.previous.key, () => {
+    const data = dataRef.current
+    const currentActiveEntryIndex = data.indexOf(
+      getCurrentEntryId() || "",
+    )
 
-          switch (handler.key) {
-            case "ArrowDown":
-            case "ArrowUp": {
-              const nextIndex =
-                // NOTE: if the current active entry is not in the list, we should set the active entry to the last one
-                handler.key === "ArrowUp" && currentActiveEntryIndex === -1 ?
-                  data.length - 1 :
-                  Math.min(
-                    Math.max(
-                      0,
-                      currentActiveEntryIndex +
-                      (handler.key === "ArrowDown" ? 1 : -1),
-                    ),
-                    data.length - 1,
-                  )
+    const nextIndex = currentActiveEntryIndex === -1 ? data.length - 1 : Math.max(0, currentActiveEntryIndex - 1)
 
-              virtuoso.scrollIntoView({
-                index: nextIndex,
-              })
-              const nextId = data![nextIndex]
-              feedActions.setActiveEntry(nextId)
-            }
-          }
-        })
-        hotkeys.setScope(scope)
-      } else {
-        hotkeys.unbind(registerKeys, scope)
-        hotkeys.deleteScope(scope)
-        hotkeys.setScope("all")
-      }
-    }
-    // NOTE: focusin event will bubble to the document
-    document.addEventListener("focusin", focusHandler)
-
-    focusHandler()
-
-    return () => {
-      hotkeys.unbind(registerKeys, scope)
-      hotkeys.deleteScope(scope)
-
-      document.removeEventListener("focusin", focusHandler)
-    }
-  }, [$mainContainer])
-
-  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = useCallback(
-    (e) => {
-      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-        e.preventDefault()
-      }
-    },
-    [],
-  )
+    virtuosoRef.current?.scrollIntoView({
+      index: nextIndex,
+    })
+    const nextId = data![nextIndex]
+    feedActions.setActiveEntry(nextId)
+  }, { scopes: ["home"] })
 
   return (
     <Virtuoso
-      onKeyDown={handleKeyDown}
       {...virtuosoOptions}
       ref={virtuosoRef}
     />

@@ -14,7 +14,7 @@ export function Component() {
               {Object.keys(shortcuts[type]).map((action, index) => (
                 <div key={`${type}-${action}`} className={cn("flex items-center justify-between px-3 py-1.5", index % 2 && "bg-native/40")}>
                   <div>{shortcuts[type][action].name}</div>
-                  <div className="uppercase">{shortcuts[type][action].key}</div>
+                  <div>{shortcuts[type][action].key}</div>
                 </div>
               ))}
             </div>
