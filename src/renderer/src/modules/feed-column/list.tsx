@@ -1,4 +1,6 @@
 import { useBizQuery } from "@renderer/hooks"
+import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
+import { useRouteFeedId } from "@renderer/hooks/biz/useRouteParams"
 import { FEED_COLLECTION_LIST, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
@@ -7,7 +9,6 @@ import type { FeedListModel, SubscriptionResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import {
   feedActions,
-  useFeedActiveList,
   useSubscriptionByView,
   useUnreadStore,
 } from "@renderer/store"
@@ -94,7 +95,6 @@ export function FeedList({
 }) {
   const [expansion, setExpansion] = useState(false)
   const data = useData(view)
-  const activeList = useFeedActiveList()
 
   useBizQuery(Queries.subscription.unreadAll())
 
@@ -108,8 +108,6 @@ export function FeedList({
     return unread
   })
 
-  const { setActiveList } = feedActions
-
   const sortedByUnread = useUnreadStore((state) =>
     data?.list?.sort(
       (a, b) =>
@@ -117,6 +115,9 @@ export function FeedList({
         a.list.reduce((acc, cur) => (state.data[cur.feedId] || 0) + acc, 0),
     ),
   )
+
+  const feedId = useRouteFeedId()
+  const navigate = useNavigateEntry()
 
   return (
     <div className={cn(className, "font-medium")}>
@@ -130,7 +131,7 @@ export function FeedList({
             onClick={(e) => {
               e.stopPropagation()
               if (view !== undefined) {
-                setActiveList({
+                feedActions.setActiveList({
                   level: levels.view,
                   id: view,
                   name: views[view].name,
@@ -160,15 +161,15 @@ export function FeedList({
       <div
         className={cn(
           "flex h-8 w-full items-center rounded-md px-2.5 transition-colors",
-          activeList?.id === FEED_COLLECTION_LIST && "bg-native-active",
+          feedId === FEED_COLLECTION_LIST && "bg-native-active",
         )}
         onClick={(e) => {
           e.stopPropagation()
           if (view !== undefined) {
-            setActiveList({
-              level: levels.folder,
-              id: FEED_COLLECTION_LIST,
-              name: "Collections",
+            navigate({
+              entryId: null,
+              feedId: FEED_COLLECTION_LIST,
+              level: levels.feed,
               view,
             })
           }

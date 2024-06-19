@@ -1,8 +1,5 @@
 import { useMainContainerElement } from "@renderer/atoms"
-import {
-  ActionButton,
-  StyledButton,
-} from "@renderer/components/ui/button"
+import { ActionButton, StyledButton } from "@renderer/components/ui/button"
 import {
   Popover,
   PopoverClose,
@@ -10,6 +7,9 @@ import {
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
 import { useRead, useRefValue } from "@renderer/hooks"
+import {
+  useRouteParms,
+} from "@renderer/hooks/biz/useRouteParams"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
@@ -19,7 +19,6 @@ import {
   feedActions,
   getCurrentEntryId,
   subscriptionActions,
-  useFeedStore,
 } from "@renderer/store"
 import { entryActions } from "@renderer/store/entry/entry"
 import {
@@ -44,7 +43,6 @@ import {
 import type { ListRange, VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
-import { useShallow } from "zustand/react/shallow"
 
 import { EmptyIcon } from "../../components/icons/empty"
 import { LoadingCircle } from "../../components/ui/loading"
@@ -60,13 +58,9 @@ const unreadOnlyAtom = atomWithStorage<boolean>(
 )
 
 export function EntryColumn() {
-  const { activeList, activeEntryId } = useFeedStore((state) => ({
-    activeList: state.activeList,
-    activeEntryId: state.activeEntryId,
-  }))
   const entries = useEntriesByView()
   const { entriesIds, isFetchingNextPage } = entries
-
+  const { entryId: activeEntryId, view, feedId } = useRouteParms()
   const activeEntry = useEntry(activeEntryId)
   const markReadMutation = useRead()
   useEffect(() => {
@@ -131,11 +125,9 @@ export function EntryColumn() {
       (_, entryId: string) => {
         if (!entryId) return null
 
-        return (
-          <EntryItem key={entryId} entryId={entryId} view={activeList?.view} />
-        )
+        return <EntryItem key={entryId} entryId={entryId} view={view} />
       },
-      [activeList?.view],
+      [view],
     ),
   }
 
@@ -147,7 +139,7 @@ export function EntryColumn() {
     >
       <ListHeader totalCount={virtuosoOptions.totalCount} />
       <m.div
-        key={`${activeList?.id}-${activeList?.view}`}
+        key={`${feedId}-${view}`}
         className="h-full"
         initial={{ opacity: 0.01, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
@@ -155,7 +147,7 @@ export function EntryColumn() {
       >
         {virtuosoOptions.totalCount === 0 ? (
           <EmptyList />
-        ) : activeList?.view && views[activeList.view].gridMode ?
+        ) : view && views[view].gridMode ?
             (
               <VirtuosoGrid
                 listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
@@ -171,16 +163,16 @@ export function EntryColumn() {
 }
 
 const useEntriesByView = () => {
-  const activeList = useFeedStore(useShallow((state) => state.activeList))
+  const activeList = useRouteParms()
   const unreadOnly = useAtomValue(unreadOnlyAtom)
 
   const query = useEntries({
     level: activeList?.level,
-    id: activeList.id,
+    id: activeList.feedId,
     view: activeList?.view,
     ...(unreadOnly === true && { read: false }),
   })
-  const entries = useEntryIdsByFeedIdOrView(activeList.id, {
+  const entries = useEntryIdsByFeedIdOrView(activeList.feedId!, {
     unread: unreadOnly,
   })
 
@@ -190,7 +182,7 @@ const useEntriesByView = () => {
 
   useEffect(() => {
     prevEntries.current = []
-  }, [activeList.id])
+  }, [activeList.feedId])
   const localEntries = useMemo(() => {
     if (!unreadOnly) {
       prevEntries.current = []
@@ -238,31 +230,31 @@ const useEntriesByView = () => {
 const ListHeader: FC<{
   totalCount: number
 }> = ({ totalCount }) => {
-  const activeList = useFeedStore(useShallow((state) => state.activeList))
+  const routerParams = useRouteParms()
   const [unreadOnly, setUnreadOnly] = useAtom(unreadOnlyAtom)
 
   const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
   const handleMarkAllAsRead = useCallback(async () => {
-    if (!activeList) return
+    if (!routerParams) return
     await apiClient.reads.all.$post({
       json: {
         ...getEntriesParams({
-          level: activeList?.level,
-          id: activeList?.id,
-          view: activeList?.view,
+          level: routerParams?.level,
+          id: routerParams?.feedId,
+          view: routerParams?.view,
         }),
       },
     })
 
-    if (typeof activeList.id === "number") {
-      subscriptionActions.markReadByView(activeList.view)
+    if (typeof routerParams.feedId === "number") {
+      subscriptionActions.markReadByView(routerParams.view)
     } else {
-      activeList.id.split(",").forEach((feedId) => {
+      routerParams.feedId?.split(",").forEach((feedId) => {
         entryActions.markReadByFeedId(feedId)
       })
     }
     setMarkPopoverOpen(false)
-  }, [activeList])
+  }, [routerParams])
 
   return (
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
@@ -300,7 +292,7 @@ const ListHeader: FC<{
         </div>
       </div>
       <div>
-        <div className="text-lg font-bold leading-none">{activeList?.name}</div>
+        <div className="text-lg font-bold leading-none">{routerParams?.name}</div>
         <div className="text-xs font-medium text-zinc-400">
           {totalCount || 0}
           {" "}

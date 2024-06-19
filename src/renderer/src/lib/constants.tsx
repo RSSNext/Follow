@@ -69,9 +69,12 @@ export const settingTabs = [
   },
 ]
 
-////
+/// App
 export const APP_NAME = "Follow"
 /// Feed
 export const FEED_COLLECTION_LIST = "collections"
 /// Local storage keys
 export const QUERY_PERSIST_KEY = buildStorageNS("REACT_QUERY_OFFLINE_CACHE")
+
+/// Route Keys
+export const ROUTE_FEED_PENDING = "pending"

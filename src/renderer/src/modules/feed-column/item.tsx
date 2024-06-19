@@ -8,6 +8,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
+import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
+import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
@@ -16,12 +18,10 @@ import { cn } from "@renderer/lib/utils"
 import type { SubscriptionResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import {
-  feedActions,
-  useFeedActiveList,
   useUnreadStore,
 } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
-import { useNavigate } from "react-router-dom"
+import { useCallback } from "react"
 import { toast } from "sonner"
 
 import { FeedForm } from "../discover/feed-form"
@@ -35,25 +35,26 @@ export function FeedItem({
   view?: number
   className?: string
 }) {
-  const activeList = useFeedActiveList()
-  const { setActiveList } = feedActions
-
-  const setFeedActive = (feed: SubscriptionResponse[number]) => {
-    if (view === undefined) return
-
-    setActiveList({
-      level: levels.feed,
-      id: feed.feedId,
-      name: feed.feeds.title || "",
-      view,
-    })
-    // focus to main container in order to let keyboard can navigate entry items by arrow keys
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        getMainContainerElement()?.focus()
+  const navigate = useNavigateEntry()
+  const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      e.stopPropagation()
+      if (view === undefined) return
+      navigate({
+        feedId: feed.feedId,
+        entryId: null,
+        view,
+        level: levels.feed,
       })
-    })
-  }
+      // focus to main container in order to let keyboard can navigate entry items by arrow keys
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          getMainContainerElement()?.focus()
+        })
+      })
+    },
+    [feed.feedId, navigate, view],
+  )
 
   const deleteMutation = useMutation({
     mutationFn: async (feed: SubscriptionResponse[number]) =>
@@ -98,21 +99,19 @@ export function FeedItem({
 
   const feedUnread = useUnreadStore((state) => state.data[feed.feedId] || 0)
   const { present } = useModalStack()
-  const navigate = useNavigate()
+
+  const routerParmas = useRouteParms()
+
   return (
     <div
       className={cn(
         "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
-        activeList?.level === levels.feed &&
-        activeList.id === feed.feedId &&
+        routerParmas?.level === levels.feed &&
+        routerParmas.feedId === feed.feedId &&
         "bg-native-active",
         className,
       )}
-      onClick={(e) => {
-        e.stopPropagation()
-        setFeedActive(feed)
-        navigate(`/feeds/${feed.feedId}`)
-      }}
+      onClick={handleNavigate}
       onDoubleClick={() => {
         window.open(
           `${import.meta.env.VITE_WEB_URL}/feed/${feed.feedId}?view=${view}`,
@@ -129,7 +128,9 @@ export function FeedItem({
               click: () => {
                 present({
                   title: "Edit Feed",
-                  content: ({ dismiss }) => <FeedForm asWidget id={feed.feedId} onSuccess={dismiss} />,
+                  content: ({ dismiss }) => (
+                    <FeedForm asWidget id={feed.feedId} onSuccess={dismiss} />
+                  ),
                 })
               },
             },

@@ -51,9 +51,10 @@ export type DiscoverResponse = Array<
   >[number]
 >
 
-export type ActionsResponse = Exclude<ExtractBizResponse<
-  typeof apiClient.actions.$get
->["data"], undefined>["rules"]
+export type ActionsResponse = Exclude<
+  ExtractBizResponse<typeof apiClient.actions.$get>["data"],
+  undefined
+>["rules"]
 
 export type ListResponse<T> = {
   code: number
@@ -67,7 +68,7 @@ export type DataResponse<T> = {
   data?: T
 }
 
-export type ActiveEntryId = string | null
+export type ActiveEntryId = Nullable<string>
 
 export type SubscriptionModel = SubscriptionResponse[number]
 
@@ -78,4 +79,6 @@ export type FeedListModel = {
   }[]
 }
 
-export type SupportedLanguages = Parameters<typeof apiClient.ai.translation.$get>[0]["query"]["language"]
+export type SupportedLanguages = Parameters<
+  typeof apiClient.ai.translation.$get
+>[0]["query"]["language"]

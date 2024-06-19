@@ -1,31 +1,20 @@
+import { useRouteView } from "@renderer/hooks/biz/useRouteParams"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { EntryColumn } from "@renderer/modules/entry-column"
-import { EntryContent } from "@renderer/modules/entry-content"
-import {
-  uiActions,
-  useFeedStore,
-  useUIStore,
-} from "@renderer/store"
-import { AnimatePresence } from "framer-motion"
+import { uiActions, useUIStore } from "@renderer/store"
 import { useMemo, useRef } from "react"
 import { useResizable } from "react-resizable-layout"
-import { useShallow } from "zustand/react/shallow"
+import { Outlet } from "react-router-dom"
 
 export function Component() {
-  const { activeEntry, activeList } = useFeedStore(
-    useShallow((state) => ({
-      activeList: state.activeList,
-      activeEntry: state.activeEntryId,
-    })),
-  )
-
   const containerRef = useRef<HTMLDivElement>(null)
 
   // Memo this initial value to avoid re-render
   // eslint-disable-next-line react-compiler/react-compiler
   const entryColWidth = useMemo(() => useUIStore.getState().entryColWidth, [])
-
+  const view = useRouteView()
+  const inWideMode = view ? views[view].wideMode : false
   const { position, separatorProps } = useResizable({
     axis: "x",
     min: 300,
@@ -37,7 +26,6 @@ export function Component() {
     },
   })
 
-  const inWideMode = activeList && views[activeList.view].wideMode
   return (
     <div ref={containerRef} className="flex min-w-0 grow">
       <div
@@ -58,13 +46,7 @@ export function Component() {
           className="h-full w-px shrink-0 cursor-ew-resize hover:bg-border"
         />
       )}
-      <AnimatePresence>
-        {!inWideMode && (
-          <div className="min-w-0 flex-1">
-            <EntryContent entry={activeEntry} />
-          </div>
-        )}
-      </AnimatePresence>
+      <Outlet />
     </div>
   )
 }

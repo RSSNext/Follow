@@ -1,0 +1,47 @@
+import { FeedViewType } from "@renderer/lib/enum"
+import { useParams, useSearchParams } from "react-router-dom"
+// '0', '1', '2', '3', '4', '5',
+const FeedViewTypeValues = (() => {
+  const values = Object.values(FeedViewType)
+  return values.slice(values.length / 2).map((v) => v.toString())
+})()
+export const useRouteView = () => {
+  const [search] = useSearchParams()
+  const view = search.get("view")
+
+  return (
+    (view && FeedViewTypeValues.includes(view) ?
+        +view :
+      FeedViewType.Articles) || FeedViewType.Articles
+  )
+}
+
+export const useRouteEntryId = () => {
+  const { entryId } = useParams()
+  return entryId
+}
+
+export const useRouteFeedId = () => {
+  const { feedId } = useParams()
+  return feedId
+}
+
+export const useRouteParms = () => {
+  const params = useParams()
+  const [search] = useSearchParams()
+  const view = useRouteView()
+
+  let feedId: string | number = params.feedId!
+
+  // If feedId is a number, it's a FeedViewType
+  if (feedId && FeedViewTypeValues.includes(feedId as string)) {
+    feedId = Number.parseInt(feedId as string)
+  }
+
+  return {
+    view,
+    entryId: params.entryId || undefined,
+    feedId: params.feedId || undefined,
+    level: search.get("level") || undefined,
+  }
+}

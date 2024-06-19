@@ -1,11 +1,12 @@
 import { useAsRead, useBizQuery, useEntryActions } from "@renderer/hooks"
+import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
+import { useRouteEntryId } from "@renderer/hooks/biz/useRouteParams"
 import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { EntryModel } from "@renderer/models"
 import { Queries } from "@renderer/queries"
-import { feedActions, useFeedStore } from "@renderer/store"
 import { useEntry } from "@renderer/store/entry/hooks"
 import type { FC } from "react"
 import { memo, useCallback } from "react"
@@ -40,7 +41,7 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
     },
   )
 
-  const activeEntry = useFeedStore((state) => state.activeEntryId)
+  const currentEntryId = useRouteEntryId()
 
   const asRead = useAsRead(entry)
 
@@ -75,14 +76,17 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
       Item = ArticleItem
     }
   }
-  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> =
-    useCallback(() => {}, [])
+
+  const navigate = useNavigateEntry()
   const handleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       e.stopPropagation()
-      feedActions.setActiveEntry(entry.entries.id)
+
+      navigate({
+        entryId: entry.entries.id,
+      })
     },
-    [entry.entries.id],
+    [entry.entries.id, navigate],
   )
   const handleDoubleClick: React.MouseEventHandler<HTMLDivElement> =
     useCallback(
@@ -116,11 +120,10 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
         className={cn(
           "rounded-md bg-theme-background transition-colors",
           !views[view || 0].wideMode &&
-          activeEntry === entry.entries.id &&
+          currentEntryId === entry.entries.id &&
           "bg-theme-item-active",
           asRead ? "text-zinc-500/90" : "text-zinc-900 dark:text-white/90",
         )}
-        onKeyDown={handleKeyDown}
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}
         onContextMenu={handleContextMenu}

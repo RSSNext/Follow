@@ -1,10 +1,10 @@
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
 import { ProfileButton } from "@renderer/components/user-button"
+import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { APP_NAME, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { clamp, cn } from "@renderer/lib/utils"
-import { feedActions } from "@renderer/store"
 import { useWheel } from "@use-gesture/react"
 import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
@@ -17,7 +17,6 @@ import { FeedList } from "./list"
 const lethargy = new Lethargy()
 
 export function FeedColumn() {
-  const { setActiveList } = feedActions
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive] = useState(0)
@@ -56,16 +55,20 @@ export function FeedColumn() {
   const normalStyle =
     !window.electron || window.electron.process.platform !== "darwin"
 
+  const navigate = useNavigateEntry()
+
+  const navigateBackHome = () => {
+    navigate({
+      feedId: null,
+      entryId: null,
+      view: active,
+      level: levels.view,
+    })
+  }
   return (
     <Vibrancy
       className="flex h-full flex-col gap-3 pt-2.5"
-      onClick={() =>
-        setActiveList({
-          level: levels.view,
-          id: active,
-          name: views[active].name,
-          view: active,
-        })}
+      onClick={navigateBackHome}
     >
       <div
         className={cn(
@@ -79,12 +82,8 @@ export function FeedColumn() {
             className="flex items-center gap-1 text-xl font-bold"
             onClick={(e) => {
               e.stopPropagation()
-              setActiveList({
-                level: levels.view,
-                id: active,
-                name: views[active].name,
-                view: active,
-              })
+
+              navigateBackHome()
             }}
           >
             <Logo className="size-6" />
@@ -116,11 +115,12 @@ export function FeedColumn() {
             )}
             onClick={(e) => {
               setActive(index)
-              setActiveList?.({
-                level: "view",
-                id: index,
-                name: views[index].name,
+
+              navigate({
+                feedId: null,
+                entryId: null,
                 view: index,
+                level: levels.view,
               })
               e.stopPropagation()
             }}

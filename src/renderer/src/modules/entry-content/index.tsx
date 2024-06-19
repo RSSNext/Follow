@@ -17,10 +17,10 @@ import { EntryTranslation } from "../entry-column/translation"
 import { setEntryTitleMeta } from "./atoms"
 import { EntryHeader } from "./header"
 
-export const EntryContent = ({ entry }: { entry: ActiveEntryId }) => {
+export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   const activeList = useFeedStore((state) => state.activeList)
 
-  if (!entry) {
+  if (!entryId) {
     return (
       <m.div
         className="-mt-2 flex size-full min-w-0 flex-col items-center justify-center gap-1 text-lg font-medium text-zinc-400"
@@ -33,7 +33,7 @@ export const EntryContent = ({ entry }: { entry: ActiveEntryId }) => {
     )
   }
 
-  return <EntryContentRender entryId={entry} />
+  return <EntryContentRender entryId={entryId} />
 }
 
 function EntryContentRender({ entryId }: { entryId: string }) {
