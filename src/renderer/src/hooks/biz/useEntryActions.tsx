@@ -1,5 +1,6 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { client } from "@renderer/lib/client"
+import { shortcuts } from "@renderer/lib/shortcuts"
 import type { EntryModel } from "@renderer/models"
 import { entryActions } from "@renderer/store"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -119,7 +120,7 @@ export const useEntryActions = ({
       [
         {
           key: "star",
-          name: "Star",
+          name: `Star (${shortcuts.entry.toggleStarred.key})`,
           className: "i-mgc-star-cute-re",
           disabled: !!entry.collections,
           onClick: () => {
@@ -128,7 +129,7 @@ export const useEntryActions = ({
         },
         {
           key: "unstar",
-          name: "Unstar",
+          name: `Unstar (${shortcuts.entry.toggleStarred.key})`,
           className: "i-mgc-star-cute-fi text-orange-500",
           disabled: !entry.collections,
           onClick: () => {
@@ -149,7 +150,7 @@ export const useEntryActions = ({
         },
         {
           key: "openInBrowser",
-          name: "Open in Browser",
+          name: `Open in Browser (${shortcuts.entry.openInBrower.key})`,
           className: "i-mgc-world-2-cute-re",
           disabled: !entry.entries.url,
           onClick: () => {
@@ -190,7 +191,7 @@ export const useEntryActions = ({
         },
         {
           key: "read",
-          name: "Mark as Read",
+          name: `Mark as Read (${shortcuts.entry.toggleRead.key})`,
           className: "i-mgc-round-cute-fi",
           disabled: !!entry.read,
           onClick: () => {
@@ -199,7 +200,7 @@ export const useEntryActions = ({
         },
         {
           key: "unread",
-          name: "Mark as Unread",
+          name: `Mark as Unread (${shortcuts.entry.toggleRead.key})`,
           className: "i-mgc-round-cute-re",
           disabled: !entry.read,
           onClick: () => {

@@ -134,7 +134,7 @@ export function FeedColumn() {
         {views.map((item, index) => (
           <ActionButton
             key={item.name}
-            tooltip={item.name}
+            tooltip={`${item.name} (${index + 1})`}
             className={cn(
               active === index && item.className,
               "flex items-center text-xl",
