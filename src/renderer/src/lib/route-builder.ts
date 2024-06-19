@@ -189,7 +189,7 @@ const normalizePathKey = (key: string) => {
     return ""
   }
 
-  if (key.startsWith("[:") && key.endsWith("]")) {
+  if (key.startsWith("[") && key.endsWith("]")) {
     return `:${key.slice(2, -1)}`
   }
   return key

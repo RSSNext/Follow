@@ -21,6 +21,7 @@ import {
   useUnreadStore,
 } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
+import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 import { FeedForm } from "../discover/feed-form"
@@ -97,6 +98,7 @@ export function FeedItem({
 
   const feedUnread = useUnreadStore((state) => state.data[feed.feedId] || 0)
   const { present } = useModalStack()
+  const navigate = useNavigate()
   return (
     <div
       className={cn(
@@ -109,6 +111,7 @@ export function FeedItem({
       onClick={(e) => {
         e.stopPropagation()
         setFeedActive(feed)
+        navigate(`/feeds/${feed.feedId}`)
       }}
       onDoubleClick={() => {
         window.open(

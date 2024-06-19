@@ -3,13 +3,12 @@ import { cn } from "@renderer/lib/utils"
 import { EntryColumn } from "@renderer/modules/entry-column"
 import { EntryContent } from "@renderer/modules/entry-content"
 import {
-  feedActions,
   uiActions,
   useFeedStore,
   useUIStore,
 } from "@renderer/store"
 import { AnimatePresence } from "framer-motion"
-import { useEffect, useMemo, useRef } from "react"
+import { useMemo, useRef } from "react"
 import { useResizable } from "react-resizable-layout"
 import { useShallow } from "zustand/react/shallow"
 
@@ -20,10 +19,7 @@ export function Component() {
       activeEntry: state.activeEntryId,
     })),
   )
-  const { setActiveEntry } = feedActions
-  useEffect(() => {
-    setActiveEntry(null)
-  }, [activeList?.id])
+
   const containerRef = useRef<HTMLDivElement>(null)
 
   // Memo this initial value to avoid re-render

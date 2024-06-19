@@ -10,8 +10,8 @@ describe("test route builder", () => {
         "./pages/(external)/layout.tsx": fakePromise,
         "./pages/(external)/(with-layout)/index.tsx": fakePromise,
         "./pages/(external)/(with-layout)/layout.tsx": fakePromise,
-        "./pages/(external)/(with-layout)/feed/[:id]/index.tsx": fakePromise,
-        "./pages/(external)/(with-layout)/feed/[:id]/layout.tsx": fakePromise,
+        "./pages/(external)/(with-layout)/feed/[id]/index.tsx": fakePromise,
+        "./pages/(external)/(with-layout)/feed/[id]/layout.tsx": fakePromise,
 
         "./pages/(main)/layout.tsx": fakePromise,
         "./pages/(main)/(context)/layout.tsx": fakePromise,
