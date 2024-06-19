@@ -63,6 +63,11 @@ export const settingTabs = [
     className: "i-mgc-magic-2-cute-re",
   },
   {
+    name: "Shortcuts",
+    path: "shortcuts",
+    className: "i-mgc-hotkey-cute-re",
+  },
+  {
     name: "Profile",
     path: "profile",
     className: "i-mgc-user-setting-cute-re",
