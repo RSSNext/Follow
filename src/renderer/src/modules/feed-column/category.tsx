@@ -5,6 +5,7 @@ import {
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { levels } from "@renderer/lib/constants"
+import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { FeedListModel } from "@renderer/models"
@@ -126,6 +127,7 @@ export function FeedCategory({
         >
           <div className="flex w-full min-w-0 items-center">
             <CollapsibleTrigger
+              onClick={stopPropagation}
               className={cn(
                 "flex h-8 items-center [&_.i-mgc-right-cute-fi]:data-[state=open]:rotate-90",
               )}

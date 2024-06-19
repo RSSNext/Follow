@@ -43,7 +43,7 @@ const useData = (view: FeedViewType) => {
 
     for (const subscription of subscriptions) {
       const feed = getFeedById(subscription.feedId)
-      if (!subscription.category && feed.siteUrl) {
+      if (!subscription.category && feed && feed.siteUrl) {
         const { domain } = parse(feed.siteUrl)
         if (domain) {
           if (!domains[domain]) {
@@ -56,6 +56,7 @@ const useData = (view: FeedViewType) => {
 
     for (const subscription of subscriptions) {
       const feed = getFeedById(subscription.feedId)
+      if (!feed) continue
       if (!subscription.category) {
         if (feed.siteUrl) {
           // FIXME @DIYgod

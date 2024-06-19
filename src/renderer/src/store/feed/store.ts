@@ -1,3 +1,4 @@
+import type { FeedModel } from "@renderer/models"
 import { produce } from "immer"
 
 import { createZustandStore, getStoreActions } from "../utils/helper"
@@ -36,4 +37,4 @@ export const useFeedStore = createZustandStore<FeedState & FeedActions>(
 }))
 export const feedActions = getStoreActions(useFeedStore)
 
-export const getFeedById = (feedId: string) => useFeedStore.getState().feeds[feedId]
+export const getFeedById = (feedId: string): Nullable<FeedModel> => useFeedStore.getState().feeds[feedId]

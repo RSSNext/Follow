@@ -8,7 +8,7 @@ import { clamp, cn } from "@renderer/lib/utils"
 import { useWheel } from "@use-gesture/react"
 import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 
 import { Vibrancy } from "../../components/ui/background"
@@ -57,14 +57,14 @@ export function FeedColumn() {
 
   const navigate = useNavigateEntry()
 
-  const navigateBackHome = () => {
+  const navigateBackHome = useCallback(() => {
     navigate({
       feedId: null,
       entryId: null,
       view: active,
       level: levels.view,
     })
-  }
+  }, [active, navigate])
   return (
     <Vibrancy
       className="flex h-full flex-col gap-3 pt-2.5"
