@@ -1,20 +1,24 @@
 export const shortcuts = {
-  subscriptions: {
-    previous: {
-      name: "Previous Subscription",
-      key: "P",
-    },
-    next: {
-      name: "Next Subscription",
-      key: "N",
-    },
-    toggleFolder: {
-      name: "Toggle Folder",
-      key: "X",
-    },
+  feeds: {
+    // previous: {
+    //   name: "Previous Subscription",
+    //   key: "P",
+    // },
+    // next: {
+    //   name: "Next Subscription",
+    //   key: "N",
+    // },
+    // toggleFolder: {
+    //   name: "Toggle Folder",
+    //   key: "X",
+    // },
     add: {
       name: "Add Subscription",
-      key: "Ctrl+T, ⌘+T",
+      key: "Meta+T",
+    },
+    switchToView: {
+      name: "Switch View",
+      key: "1, 2, 3, 4, 5, 6, Left, Right, Tab, Shift+Tab",
     },
   },
   entries: {

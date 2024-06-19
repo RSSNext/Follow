@@ -4,12 +4,14 @@ import { ProfileButton } from "@renderer/components/user-button"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { APP_NAME, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
+import { shortcuts } from "@renderer/lib/shortcuts"
 import { clamp, cn } from "@renderer/lib/utils"
 import { useWheel } from "@use-gesture/react"
 import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { Link } from "react-router-dom"
+import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
+import { Link, useNavigate } from "react-router-dom"
 
 import { Vibrancy } from "../../components/ui/background"
 import { FeedList } from "./list"
@@ -25,9 +27,29 @@ export function FeedColumn() {
     damping: 40,
   })
 
-  useEffect(() => {
-    spring.set(-active * 256)
-  }, [active])
+  useHotkeys(shortcuts.feeds.switchToView.key, (event) => {
+    if (Number.parseInt(event.key) > 0) {
+      setActive(Number.parseInt(event.key) - 1)
+    } else if (isHotkeyPressed("Left") || isHotkeyPressed("Shift")) {
+      setActive((i) => {
+        if (i === 0) {
+          return views.length - 1
+        } else {
+          return i - 1
+        }
+      })
+    } else {
+      setActive((i) => (i + 1) % views.length)
+    }
+    if (isHotkeyPressed("Tab")) {
+      event.preventDefault()
+    }
+  }, { scopes: ["home"] })
+
+  const routerNavigate = useNavigate()
+  useHotkeys(shortcuts.feeds.add.key, () => {
+    routerNavigate("/discover")
+  }, { scopes: ["home"] })
 
   useWheel(
     ({ event, last, memo: wait = false, direction: [dx], delta: [dex] }) => {
@@ -56,6 +78,11 @@ export function FeedColumn() {
     !window.electron || window.electron.process.platform !== "darwin"
 
   const navigate = useNavigateEntry()
+
+  useEffect(() => {
+    spring.set(-active * 256)
+    navigateBackHome()
+  }, [active])
 
   const navigateBackHome = useCallback(() => {
     navigate({
@@ -115,13 +142,6 @@ export function FeedColumn() {
             )}
             onClick={(e) => {
               setActive(index)
-
-              navigate({
-                feedId: null,
-                entryId: null,
-                view: index,
-                level: levels.view,
-              })
               e.stopPropagation()
             }}
           >
