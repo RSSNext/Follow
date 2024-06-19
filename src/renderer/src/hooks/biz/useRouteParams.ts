@@ -47,7 +47,7 @@ export const useRouteParms = () => {
     category: search.get("category") || undefined,
   }
 }
-
+const noop = [] as any[]
 export const useRouteParamsSelector = <T>(
   selector: (params: {
     entryId: string | undefined
@@ -56,28 +56,30 @@ export const useRouteParamsSelector = <T>(
     category: string | undefined
     view: FeedViewType
   }) => T,
-): T => useReadonlyRouteSelector((route) => {
-    const { searchParams, params } = route
+  deps = noop,
+): T =>
+    useReadonlyRouteSelector((route) => {
+      const { searchParams, params } = route
 
-    let feedId: string | number = params.feedId!
+      let feedId: string | number = params.feedId!
 
-    // If feedId is a number, it's a FeedViewType
-    if (feedId && FeedViewTypeValues.includes(feedId as string)) {
-      feedId = Number.parseInt(feedId as string)
-    }
+      // If feedId is a number, it's a FeedViewType
+      if (feedId && FeedViewTypeValues.includes(feedId as string)) {
+        feedId = Number.parseInt(feedId as string)
+      }
 
-    const view = searchParams.get("view")
+      const view = searchParams.get("view")
 
-    const finalView =
+      const finalView =
       (view && FeedViewTypeValues.includes(view) ?
           +view :
         FeedViewType.Articles) || FeedViewType.Articles
 
-    return selector({
-      entryId: params.entryId || undefined,
-      feedId: params.feedId || undefined,
-      level: searchParams.get("level") || undefined,
-      category: searchParams.get("category") || undefined,
-      view: finalView,
-    })
-  })
+      return selector({
+        entryId: params.entryId || undefined,
+        feedId: params.feedId || undefined,
+        level: searchParams.get("level") || undefined,
+        category: searchParams.get("category") || undefined,
+        view: finalView,
+      })
+    }, deps)

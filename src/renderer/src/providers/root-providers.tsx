@@ -9,7 +9,7 @@ import { Provider } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import { HelmetProvider } from "react-helmet-async"
 
-import { RouterParamsProvider } from "./router-prams-provider"
+import { BizRouterProvider } from "./biz-router-provider"
 
 const loadFeatures = () =>
   import("../framer-lazy-feature").then((res) => res.default)
@@ -30,7 +30,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
           <Provider store={jotaiStore}>
             <ModalStackProvider />
             <HelmetProvider>{children}</HelmetProvider>
-            <RouterParamsProvider />
+            <BizRouterProvider />
           </Provider>
         </TooltipProvider>
       </PersistQueryClientProvider>

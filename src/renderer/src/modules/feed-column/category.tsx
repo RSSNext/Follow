@@ -11,14 +11,14 @@ import { cn } from "@renderer/lib/utils"
 import type { FeedListModel } from "@renderer/models"
 import { useUnreadStore } from "@renderer/store"
 import { AnimatePresence, m } from "framer-motion"
-import { useEffect, useState } from "react"
+import { memo, useEffect, useState } from "react"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { CategoryRenameContent } from "./category-rename-dialog"
 import { FeedItem } from "./item"
 
-export function FeedCategory({
+function FeedCategoryImpl({
   data,
   view,
   expansion,
@@ -166,3 +166,5 @@ export function FeedCategory({
     </Collapsible>
   )
 }
+
+export const FeedCategory = memo(FeedCategoryImpl)

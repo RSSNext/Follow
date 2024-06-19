@@ -9,9 +9,7 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import {
-  useRouteParamsSelector,
-} from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
@@ -21,13 +19,13 @@ import { Queries } from "@renderer/queries"
 import type { SubscriptionPlainModel } from "@renderer/store"
 import { getFeedById, useFeedById, useUnreadStore } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
-import { useCallback } from "react"
+import { memo, useCallback } from "react"
 import { toast } from "sonner"
 
 import { FeedForm } from "../discover/feed-form"
 
 type FeedItemData = SubscriptionPlainModel
-export function FeedItem({
+const FeedItemImpl = ({
   subscription,
   view,
   className,
@@ -35,7 +33,7 @@ export function FeedItem({
   subscription: FeedItemData
   view?: number
   className?: string
-}) {
+}) => {
   const navigate = useNavigateEntry()
   const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
@@ -121,8 +119,7 @@ export function FeedItem({
     <div
       className={cn(
         "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
-        isActive &&
-        "bg-native-active",
+        isActive && "bg-native-active",
         className,
       )}
       onClick={handleNavigate}
@@ -238,3 +235,5 @@ export function FeedItem({
     </div>
   )
 }
+
+export const FeedItem = memo(FeedItemImpl)
