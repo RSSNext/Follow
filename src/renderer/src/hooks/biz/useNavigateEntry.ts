@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
+import { getReadonlyRoute } from "@renderer/atoms"
 import { ROUTE_FEED_PENDING } from "@renderer/lib/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { isUndefined } from "lodash-es"
 import { useCallback } from "react"
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
-
-import { useRefValue } from "../common"
+import { useNavigate } from "react-router-dom"
 
 type NavigateEntryOptions = Partial<{
   feedId: string | null
@@ -19,22 +18,18 @@ type NavigateEntryOptions = Partial<{
  * @description a hook to navigate to `feedId`, `entryId`, add search for `view`, `level`
  */
 export const useNavigateEntry = () => {
-  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const params = useParams()
-
-  const paramsRef = useRefValue(params)
-  const searchRef = useRefValue(searchParams)
   return useCallback(
     (options: NavigateEntryOptions) => {
       const { entryId, feedId, level, view, category } = options || {}
-      let finalFeedId = feedId || paramsRef.current.feedId || ROUTE_FEED_PENDING
+      const { params, searchParams } = getReadonlyRoute()
+      let finalFeedId = feedId || params.feedId || ROUTE_FEED_PENDING
 
       if ("feedId" in options && feedId === null) {
         finalFeedId = ROUTE_FEED_PENDING
       }
 
-      const nextSearchParams = new URLSearchParams(searchRef.current)
+      const nextSearchParams = new URLSearchParams(searchParams)
 
       !isUndefined(view) && nextSearchParams.set("view", view.toString())
       level && nextSearchParams.set("level", level.toString())
@@ -53,6 +48,6 @@ export const useNavigateEntry = () => {
         }?${nextSearchParams.toString()}`,
       )
     },
-    [navigate, paramsRef, searchRef],
+    [navigate],
   )
 }

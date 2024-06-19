@@ -3,7 +3,7 @@ import {
   CollapsibleTrigger,
 } from "@renderer/components/ui/collapsible"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { levels } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -11,7 +11,7 @@ import { cn } from "@renderer/lib/utils"
 import type { FeedListModel } from "@renderer/models"
 import { useUnreadStore } from "@renderer/store"
 import { AnimatePresence, m } from "framer-motion"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
@@ -27,8 +27,6 @@ export function FeedCategory({
   view?: number
   expansion: boolean
 }) {
-  const routerParams = useRouteParms()
-
   const [open, setOpen] = useState(!data.name)
 
   const feedIdList = data.list.map((feed) => feed.feedId)
@@ -64,12 +62,8 @@ export function FeedCategory({
     ),
   )
 
-  const isActive = useMemo(
-    () =>
-      routerParams?.level === levels.folder &&
-      routerParams.feedId === data.list.map((feed) => feed.feedId).join(","),
-    [data.list, routerParams.feedId, routerParams?.level],
-  )
+  const isActive = useRouteParamsSelector((routerParams) => routerParams?.level === levels.folder &&
+    routerParams.feedId === data.list.map((feed) => feed.feedId).join(","))
   const { present } = useModalStack()
   return (
     <Collapsible

@@ -9,7 +9,9 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
+import {
+  useRouteParamsSelector,
+} from "@renderer/hooks/biz/useRouteParams"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
@@ -68,6 +70,8 @@ export function FeedItem({
       Queries.subscription.byView(variables.view).invalidate()
 
       const feed = getFeedById(variables.feedId)
+
+      if (!feed) return
       toast(
         <>
           Feed
@@ -104,7 +108,11 @@ export function FeedItem({
   )
   const { present } = useModalStack()
 
-  const routerParmas = useRouteParms()
+  const isActive = useRouteParamsSelector(
+    (routerParams) =>
+      routerParams?.level === levels.feed &&
+      routerParams.feedId === subscription.feedId,
+  )
 
   const feed = useFeedById(subscription.feedId)
 
@@ -113,8 +121,7 @@ export function FeedItem({
     <div
       className={cn(
         "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
-        routerParmas?.level === levels.feed &&
-        routerParmas.feedId === subscription.feedId &&
+        isActive &&
         "bg-native-active",
         className,
       )}
