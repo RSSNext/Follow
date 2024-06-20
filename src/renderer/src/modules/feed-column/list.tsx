@@ -175,7 +175,7 @@ export function FeedList({
             navigate({
               entryId: null,
               feedId: FEED_COLLECTION_LIST,
-              level: levels.feed,
+              level: levels.folder,
               view,
             })
           }

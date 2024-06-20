@@ -1,5 +1,5 @@
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
-import { ROUTE_FEED_PENDING, views } from "@renderer/lib/constants"
+import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING, views } from "@renderer/lib/constants"
 import type { FeedModel } from "@renderer/models"
 import { useShallow } from "zustand/react/shallow"
 
@@ -17,7 +17,16 @@ export const useFeedHeaderTitle = () => {
   const { feedId: currentFeedId, category, view } = useRouteParms()
 
   const feedTitle = useFeedByIdSelector(currentFeedId, (feed) => feed.title)
-  return currentFeedId === ROUTE_FEED_PENDING ?
-    views[view].name :
-    category || feedTitle
+
+  switch (currentFeedId) {
+    case ROUTE_FEED_PENDING: {
+      return views[view].name
+    }
+    case FEED_COLLECTION_LIST: {
+      return "Starred"
+    }
+    default: {
+      return category || feedTitle
+    }
+  }
 }
