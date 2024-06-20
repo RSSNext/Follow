@@ -23,7 +23,7 @@ export const feed = {
       },
     ),
   claimMessage: ({ feedId }: { feedId: string }) =>
-    defineQuery(["feed", "claimMessage"], async () =>
+    defineQuery(["feed", "claimMessage", feedId], async () =>
       apiClient.feeds.claim.message.$get({ query: { feedId } })),
 }
 
