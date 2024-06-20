@@ -110,7 +110,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
     return <LoginButton {...props} />
   }
   return (
-    <Link to="/profile">
+    <Link to="/profile" tabIndex={-1}>
       <ActionButton tooltip="Profile">
         <UserButton className="h-5 p-0" hideName />
       </ActionButton>

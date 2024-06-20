@@ -109,7 +109,7 @@ export function FeedColumn() {
         )}
         <div className="flex items-center gap-2" onClick={stopPropagation}>
           <ProfileButton method="modal" />
-          <Link to="/discover">
+          <Link to="/discover" tabIndex={-1}>
             <ActionButton shortcut="Meta+T" tooltip="Add">
               <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
             </ActionButton>

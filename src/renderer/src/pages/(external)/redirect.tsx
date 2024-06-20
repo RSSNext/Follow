@@ -49,14 +49,24 @@ export function Component() {
         {" "}
         and safely close this page.
       </h2>
-      <StyledButton
-        className="h-14 rounded-lg px-10 text-lg"
-        onClick={async () => window.open(await getCallbackUrl())}
-      >
-        Open
-        {" "}
-        {APP_NAME}
-      </StyledButton>
+      <div className="center flex gap-4">
+        <StyledButton
+          variant="plain"
+          className="h-14 border-transparent px-10 text-base"
+          onClick={() => navigate("/")}
+        >
+          Continue in Browser
+        </StyledButton>
+
+        <StyledButton
+          className="h-14 !rounded-full px-10 text-lg"
+          onClick={async () => window.open(await getCallbackUrl())}
+        >
+          Open
+          {" "}
+          {APP_NAME}
+        </StyledButton>
+      </div>
     </div>
   )
 }
