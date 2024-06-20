@@ -11,7 +11,7 @@ import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 import { Vibrancy } from "../../components/ui/background"
 import { FeedList } from "./list"
@@ -27,10 +27,8 @@ export function FeedColumn() {
     damping: 40,
   })
 
-  useHotkeys(shortcuts.feeds.switchToView.key, (event) => {
-    if (Number.parseInt(event.key) > 0) {
-      setActive(Number.parseInt(event.key) - 1)
-    } else if (isHotkeyPressed("Left") || isHotkeyPressed("Shift")) {
+  useHotkeys(shortcuts.feeds.switchBetweenViews.key, () => {
+    if (isHotkeyPressed("Left")) {
       setActive((i) => {
         if (i === 0) {
           return views.length - 1
@@ -41,14 +39,6 @@ export function FeedColumn() {
     } else {
       setActive((i) => (i + 1) % views.length)
     }
-    if (isHotkeyPressed("Tab")) {
-      event.preventDefault()
-    }
-  }, { scopes: ["home"] })
-
-  const routerNavigate = useNavigate()
-  useHotkeys(shortcuts.feeds.add.key, () => {
-    routerNavigate("/discover")
   }, { scopes: ["home"] })
 
   useWheel(
@@ -120,7 +110,7 @@ export function FeedColumn() {
         <div className="flex items-center gap-2" onClick={stopPropagation}>
           <ProfileButton method="modal" />
           <Link to="/discover">
-            <ActionButton tooltip="Add">
+            <ActionButton shortcut="Meta+T" tooltip="Add">
               <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
             </ActionButton>
           </Link>
@@ -134,7 +124,8 @@ export function FeedColumn() {
         {views.map((item, index) => (
           <ActionButton
             key={item.name}
-            tooltip={`${item.name} (${index + 1})`}
+            tooltip={`${item.name}`}
+            shortcut={`${index + 1}`}
             className={cn(
               active === index && item.className,
               "flex items-center text-xl",

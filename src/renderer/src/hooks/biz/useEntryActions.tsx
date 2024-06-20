@@ -120,7 +120,8 @@ export const useEntryActions = ({
       [
         {
           key: "star",
-          name: `Star (${shortcuts.entry.toggleStarred.key})`,
+          shortcut: shortcuts.entry.toggleStarred.key,
+          name: `Star`,
           className: "i-mgc-star-cute-re",
           disabled: !!entry.collections,
           onClick: () => {
@@ -129,7 +130,8 @@ export const useEntryActions = ({
         },
         {
           key: "unstar",
-          name: `Unstar (${shortcuts.entry.toggleStarred.key})`,
+          name: `Unstar`,
+          shortcut: shortcuts.entry.toggleStarred.key,
           className: "i-mgc-star-cute-fi text-orange-500",
           disabled: !entry.collections,
           onClick: () => {
@@ -140,6 +142,7 @@ export const useEntryActions = ({
           name: "Copy Link",
           className: "i-mgc-link-cute-re",
           disabled: !entry.entries.url,
+          shortcut: shortcuts.entry.copyLink.key,
           onClick: () => {
             if (!entry.entries.url) return
             navigator.clipboard.writeText(entry.entries.url)
@@ -150,7 +153,8 @@ export const useEntryActions = ({
         },
         {
           key: "openInBrowser",
-          name: `Open in Browser (${shortcuts.entry.openInBrower.key})`,
+          name: `Open in Browser`,
+          shortcut: shortcuts.entry.openInBrowser.key,
           className: "i-mgc-world-2-cute-re",
           disabled: !entry.entries.url,
           onClick: () => {
@@ -191,7 +195,8 @@ export const useEntryActions = ({
         },
         {
           key: "read",
-          name: `Mark as Read (${shortcuts.entry.toggleRead.key})`,
+          name: `Mark as Read`,
+          shortcut: shortcuts.entry.toggleRead.key,
           className: "i-mgc-round-cute-fi",
           disabled: !!entry.read,
           onClick: () => {
@@ -200,7 +205,8 @@ export const useEntryActions = ({
         },
         {
           key: "unread",
-          name: `Mark as Unread (${shortcuts.entry.toggleRead.key})`,
+          name: `Mark as Unread`,
+          shortcut: shortcuts.entry.toggleRead.key,
           className: "i-mgc-round-cute-re",
           disabled: !entry.read,
           onClick: () => {

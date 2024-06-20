@@ -107,7 +107,7 @@ export function DiscoverForm({ type }: { type: string }) {
               <FormItem>
                 <FormLabel>{info[type]?.label}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input autoFocus {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

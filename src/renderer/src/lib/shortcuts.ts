@@ -18,7 +18,11 @@ export const shortcuts = {
     },
     switchToView: {
       name: "Switch View",
-      key: "1, 2, 3, 4, 5, 6, Left, Right, Tab, Shift+Tab",
+      key: "1, 2, 3, 4, 5, 6",
+    },
+    switchBetweenViews: {
+      name: "Switch Between Views",
+      key: "Left, Right",
     },
   },
   entries: {
@@ -52,9 +56,14 @@ export const shortcuts = {
       name: "Toggle Starred",
       key: "S",
     },
-    openInBrower: {
+    openInBrowser: {
       name: "Open in Browser",
-      key: "B, Enter",
+      key: "B",
+    },
+    copyLink: {
+      name: "Copy Link",
+      key: "Meta+Shift+C",
+
     },
   },
-}
+} as const

@@ -1,3 +1,4 @@
+import { useMainContainerElement } from "@renderer/atoms"
 import { ActionButton, StyledButton } from "@renderer/components/ui/button"
 import {
   Popover,
@@ -36,6 +37,7 @@ import {
   forwardRef,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -181,9 +183,13 @@ const useEntriesByView = () => {
     unread: unreadOnly,
   })
 
-  useHotkeys(shortcuts.entries.refetch.key, () => {
-    query.refetch()
-  }, { scopes: ["home"] })
+  useHotkeys(
+    shortcuts.entries.refetch.key,
+    () => {
+      query.refetch()
+    },
+    { scopes: ["home"] },
+  )
 
   // in unread only entries only can grow the data, but not shrink
   // so we memo this previous data to avoid the flicker
@@ -265,21 +271,14 @@ const ListHeader: FC<{
     setMarkPopoverOpen(false)
   }, [routerParams])
 
-  useHotkeys(shortcuts.entries.markAllAsRead.key, () => {
-    setMarkPopoverOpen(true)
-  }, { scopes: ["home"] })
-
-  useHotkeys(shortcuts.entries.toggleUnreadOnly.key, () => {
-    setUnreadOnly((prev) => !prev)
-  }, { scopes: ["home"] })
-
   const headerTitle = useFeedHeaderTitle()
   return (
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
       <div className="flex w-full justify-end">
         <div className="relative z-[1] flex items-center gap-1 text-zinc-500">
           <ActionButton
-            tooltip={`${unreadOnly ? "Unread Only" : "All"} (${shortcuts.entries.toggleUnreadOnly.key})`}
+            tooltip={`${unreadOnly ? "Unread Only" : "All"}`}
+            shortcut={shortcuts.entries.toggleUnreadOnly.key}
             onClick={() => setUnreadOnly(!unreadOnly)}
           >
             {unreadOnly ? (
@@ -290,7 +289,10 @@ const ListHeader: FC<{
           </ActionButton>
           <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
             <PopoverTrigger>
-              <ActionButton tooltip={`Mark All as Read (${shortcuts.entries.markAllAsRead.key})`}>
+              <ActionButton
+                shortcut={shortcuts.entries.markAllAsRead.key}
+                tooltip="Mark All as Read"
+              >
                 <i className="i-mgc-check-circle-cute-re" />
               </ActionButton>
             </PopoverTrigger>
@@ -359,49 +361,90 @@ const EntryList: FC<VirtuosoProps<string, unknown>> = ({
   const virtuosoRef = useRef<VirtuosoHandle>(null)
 
   const dataRef = useRefValue(virtuosoOptions.data!)
-
   const currentEntryIdRef = useRefValue(useRouteEntryId())
 
   const navigate = useNavigateEntry()
 
-  useHotkeys(shortcuts.entries.next.key, () => {
-    const data = dataRef.current
-    const currentActiveEntryIndex = data.indexOf(
-      currentEntryIdRef.current || "",
-    )
+  const $mainContainer = useMainContainerElement()
+  const [enabledArrowKey, setEnabledArrowKey] = useState(false)
 
-    const nextIndex = Math.min(currentActiveEntryIndex + 1, data.length - 1)
+  // Enable arrow key navigation shortcuts only when focus is on entryContent or entryList,
+  // entryList shortcuts should not be triggered in the feed col
+  useLayoutEffect(() => {
+    if (!$mainContainer) return
+    const handler = () => {
+      const target = document.activeElement
+      const isFocusIn =
+        $mainContainer.contains(target) || $mainContainer === target
 
-    virtuosoRef.current?.scrollIntoView({
-      index: nextIndex,
-    })
-    const nextId = data![nextIndex]
+      setEnabledArrowKey(isFocusIn)
+    }
 
-    navigate({
-      entryId: nextId,
-    })
-  }, { scopes: ["home"] })
+    handler()
+    // NOTE: focusin event will bubble to the document
+    document.addEventListener("focusin", handler)
+    return () => {
+      document.removeEventListener("focusin", handler)
+    }
+  }, [$mainContainer])
 
-  useHotkeys(shortcuts.entries.previous.key, () => {
-    const data = dataRef.current
-    const currentActiveEntryIndex = data.indexOf(
-      currentEntryIdRef.current || "",
-    )
+  useHotkeys(
+    shortcuts.entries.next.key,
+    () => {
+      const data = dataRef.current
+      const currentActiveEntryIndex = data.indexOf(
+        currentEntryIdRef.current || "",
+      )
 
-    const nextIndex = currentActiveEntryIndex === -1 ? data.length - 1 : Math.max(0, currentActiveEntryIndex - 1)
+      const nextIndex = Math.min(currentActiveEntryIndex + 1, data.length - 1)
 
-    virtuosoRef.current?.scrollIntoView({
-      index: nextIndex,
-    })
-    const nextId = data![nextIndex]
+      virtuosoRef.current?.scrollIntoView({
+        index: nextIndex,
+      })
+      const nextId = data![nextIndex]
 
-    navigate({
-      entryId: nextId,
-    })
-  }, { scopes: ["home"] })
+      navigate({
+        entryId: nextId,
+      })
+    },
+    { scopes: ["home"], enabled: enabledArrowKey },
+  )
+  useHotkeys(
+    shortcuts.entries.previous.key,
+    () => {
+      const data = dataRef.current
+      const currentActiveEntryIndex = data.indexOf(
+        currentEntryIdRef.current || "",
+      )
 
+      const nextIndex =
+        currentActiveEntryIndex === -1 ?
+          data.length - 1 :
+          Math.max(0, currentActiveEntryIndex - 1)
+
+      virtuosoRef.current?.scrollIntoView({
+        index: nextIndex,
+      })
+      const nextId = data![nextIndex]
+
+      navigate({
+        entryId: nextId,
+      })
+    },
+    { scopes: ["home"], enabled: enabledArrowKey },
+  )
+  // Prevent scroll list move when press up/down key, the up/down key should be taken over by the shortcut key we defined.
+  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault()
+      }
+    },
+    [],
+  )
   return (
     <Virtuoso
+      onKeyDown={handleKeyDown}
       {...virtuosoOptions}
       ref={virtuosoRef}
     />

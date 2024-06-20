@@ -5,7 +5,10 @@ import type { VariantProps } from "class-variance-authority"
 import type { HTMLMotionProps } from "framer-motion"
 import { m } from "framer-motion"
 import * as React from "react"
+import { useHotkeys } from "react-hotkeys-hook"
+import type { OptionsOrDependencyArray } from "react-hotkeys-hook/dist/types"
 
+import { Kbd } from "../kbd/Kbd"
 import { LoadingCircle } from "../loading"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
 import { buttonVariants, styledButtonVariant } from "./variants"
@@ -52,43 +55,82 @@ interface ActionButtonProps {
   tooltip: string
   tooltipSide?: "top" | "bottom"
   active?: boolean
+  shortcut?: string
 }
+
 export const ActionButton = React.forwardRef<
   HTMLButtonElement,
   ComponentType<ActionButtonProps>
 >(
   (
-    { icon, onClick, tooltip, className, tooltipSide, children, active },
+    {
+      icon,
+      onClick,
+      tooltip,
+      className,
+      tooltipSide,
+      children,
+      active,
+      shortcut,
+    },
     ref,
-  ) => (
-    <Tooltip key={tooltip} disableHoverableContent>
-      <TooltipTrigger asChild ref={ref}>
-        <Button
-          // @see https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904
-          onFocusCapture={stopPropagation}
-          className={cn(
-            "no-drag-region flex size-8 items-center text-xl",
-            active && "bg-zinc-500/15 hover:bg-zinc-500/20",
-            className,
-          )}
-          variant="ghost"
-          size="sm"
-          onClick={onClick}
-        >
-          {typeof icon === "function" ?
-            React.createElement(icon, {
-              className: "size-4 grayscale text-current",
-            }) :
-            icon}
+  ) => {
+    const buttonRef = React.useRef<HTMLButtonElement>(null)
 
-          {children}
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent side={tooltipSide ?? "bottom"}>{tooltip}</TooltipContent>
-    </Tooltip>
-  ),
+    return (
+      <>
+        {shortcut && (
+          <HotKeyTrigger
+            shortcut={shortcut}
+            fn={() => buttonRef.current?.click()}
+          />
+        )}
+        <Tooltip key={tooltip} disableHoverableContent>
+          <TooltipTrigger asChild ref={ref}>
+            <Button
+              ref={buttonRef}
+              // @see https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904
+              onFocusCapture={stopPropagation}
+              className={cn(
+                "no-drag-region flex size-8 items-center text-xl",
+                active && "bg-zinc-500/15 hover:bg-zinc-500/20",
+                className,
+              )}
+              variant="ghost"
+              size="sm"
+              onClick={onClick}
+            >
+              {typeof icon === "function" ?
+                React.createElement(icon, {
+                  className: "size-4 grayscale text-current",
+                }) :
+                icon}
+
+              {children}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side={tooltipSide ?? "bottom"}>
+            {tooltip}
+            {shortcut && shortcut.split("+").map((key) => (<Kbd key={key}>{key}</Kbd>))}
+          </TooltipContent>
+        </Tooltip>
+      </>
+    )
+  },
 )
 
+const HotKeyTrigger = ({
+  shortcut,
+  fn,
+  options,
+}: {
+  shortcut: string
+  fn: () => void
+  options?: OptionsOrDependencyArray
+}) => {
+  useHotkeys(shortcut, fn, options)
+  return null
+}
 export const MotionButtonBase = React.forwardRef<
   HTMLButtonElement,
   HTMLMotionProps<"button">
