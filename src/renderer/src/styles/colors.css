@@ -6,7 +6,7 @@
   /* TODO replace with own color */
   --fo-background: theme(colors.background);
 
-  --fo-tooltip-background: 0, 0%, 95%;
+  --fo-tooltip-background: 0, 0%, 98%;
   --fo-tooltip-foreground: 0, 0%, 10%;
 
   --fo-inactive: 0, 0%, 80%;

@@ -22,17 +22,17 @@ export function EntryHeader({
     entry,
   })
 
-  useHotkeys(shortcuts.entry.toggleRead.key, () => {
-    const key = entry?.read ? "unread" : "read"
-    items.find((item) => item.key === key)?.onClick()
-  }, { scopes: ["home"] })
+  // useHotkeys(shortcuts.entry.toggleRead.key, () => {
+  //   const key = entry?.read ? "unread" : "read"
+  //   items.find((item) => item.key === key)?.onClick()
+  // }, { scopes: ["home"] })
 
   useHotkeys(shortcuts.entry.toggleStarred.key, () => {
     const key = entry?.collections ? "unstar" : "star"
     items.find((item) => item.key === key)?.onClick()
   }, { scopes: ["home"] })
 
-  useHotkeys(shortcuts.entry.openInBrower.key, () => {
+  useHotkeys(shortcuts.entry.openInBrowser.key, () => {
     items.find((item) => item.key === "openInBrowser")?.onClick()
   }, { scopes: ["home"] })
 
@@ -76,6 +76,7 @@ export function EntryHeader({
                   <i className={item.className} />
                 )
               }
+              shortcut={item.shortcut}
               onClick={item.onClick}
               tooltip={item.name}
               key={item.name}
