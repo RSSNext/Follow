@@ -1,6 +1,7 @@
 import { useBizQuery } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
+import { useMutation } from "@tanstack/react-query"
 
 export const feed = {
   byId: ({ id, url }: { id?: string, url?: string }) =>
@@ -35,3 +36,12 @@ export const useFeed = ({ id, url }: { id?: string, url?: string }) =>
       enabled: !!id || !!url,
     },
   )
+
+export const useClaimFeedMutation = (feedId: string) => useMutation({
+  mutationKey: ["claimFeed", feedId],
+  mutationFn: () => apiClient.feeds.claim.challenge.$post({
+    json: {
+      feedId,
+    },
+  }),
+})

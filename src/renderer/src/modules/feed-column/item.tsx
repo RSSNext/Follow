@@ -163,7 +163,7 @@ const FeedItemImpl = ({
             {
               type: "separator",
             },
-            !feed.ownerUserId && {
+            !feed.ownerUserId && !!feed.id && {
               type: "text",
               label: "Claim",
               click: () => {
