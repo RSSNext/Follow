@@ -2,11 +2,8 @@ import { getCsrfToken } from "@hono/auth-js/react"
 import type { AppType } from "@renderer/hono"
 import { router } from "@renderer/router"
 import { hc } from "hono/client"
-import { ofetch } from "ofetch"
+import { FetchError, ofetch } from "ofetch"
 
-export abstract class RequestError extends Error {
-  name = "RequestError"
-}
 const csrfToken = await getCsrfToken()
 
 export const apiFetch = ofetch.create({
@@ -39,3 +36,18 @@ export const apiFetch = ofetch.create({
 export const apiClient = hc<AppType>("", {
   fetch: async (input, options = {}) => apiFetch(input.toString(), options),
 })
+
+export const getFetchErrorMessage = (error: Error) => {
+  if (error instanceof FetchError) {
+    try {
+      const json = JSON.parse(error.response?._data)
+      // TODO get the biz code to show the error message, and for i18n
+      // const bizCode = json.code
+      return json.message || error.message
+    } catch {
+      return error.message
+    }
+  }
+
+  return error.message
+}

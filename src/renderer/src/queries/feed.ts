@@ -1,7 +1,8 @@
 import { useBizQuery } from "@renderer/hooks"
-import { apiClient } from "@renderer/lib/api-fetch"
+import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 export const feed = {
   byId: ({ id, url }: { id?: string, url?: string }) =>
@@ -44,4 +45,7 @@ export const useClaimFeedMutation = (feedId: string) => useMutation({
       feedId,
     },
   }),
+  async onError(err) {
+    toast.error(await getFetchErrorMessage(err))
+  },
 })
