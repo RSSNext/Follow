@@ -3,13 +3,7 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 
 export const feed = {
-  byId: ({
-    id,
-    url,
-  }: {
-    id?: string
-    url?: string
-  }) =>
+  byId: ({ id, url }: { id?: string, url?: string }) =>
     defineQuery(
       ["feed", id, url],
       async () => {
@@ -26,18 +20,18 @@ export const feed = {
         rootKey: ["feed"],
       },
     ),
+  claimMessage: ({ feedId }: { feedId: string }) =>
+    defineQuery(["feed", "claimMessage"], async () =>
+      apiClient.feeds.claim.message.$get({ query: { feedId } })),
 }
 
-export const useFeed = ({
-  id,
-  url,
-}: {
-  id?: string
-  url?: string
-}) =>
-  useBizQuery(feed.byId({
-    id,
-    url,
-  }), {
-    enabled: !!id || !!url,
-  })
+export const useFeed = ({ id, url }: { id?: string, url?: string }) =>
+  useBizQuery(
+    feed.byId({
+      id,
+      url,
+    }),
+    {
+      enabled: !!id || !!url,
+    },
+  )

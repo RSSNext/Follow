@@ -22,6 +22,7 @@ import { useMutation } from "@tanstack/react-query"
 import { memo, useCallback } from "react"
 import { toast } from "sonner"
 
+import { useFeedClaimModal } from "../claim/hooks"
 import { FeedForm } from "../discover/feed-form"
 
 type FeedItemData = SubscriptionPlainModel
@@ -114,6 +115,9 @@ const FeedItemImpl = ({
 
   const feed = useFeedById(subscription.feedId)
 
+  const claimFeed = useFeedClaimModal({
+    feedId: subscription.feedId,
+  })
   if (!feed) return null
   return (
     <div
@@ -159,6 +163,17 @@ const FeedItemImpl = ({
             {
               type: "separator",
             },
+            !feed.ownerUserId && {
+              type: "text",
+              label: "Claim",
+              click: () => {
+                claimFeed()
+              },
+            },
+            {
+              type: "separator",
+            },
+
             {
               type: "text",
               label: "Open Feed in Browser",
