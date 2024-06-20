@@ -288,7 +288,7 @@ const ListHeader: FC<{
             )}
           </ActionButton>
           <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
-            <PopoverTrigger>
+            <PopoverTrigger asChild>
               <ActionButton
                 shortcut={shortcuts.entries.markAllAsRead.key}
                 tooltip="Mark All as Read"

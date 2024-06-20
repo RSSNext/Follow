@@ -9,6 +9,10 @@ body,
   @apply font-theme;
 }
 
+:focus-visible {
+  outline: theme(colors.theme.accent.DEFAULT) auto 1px;
+}
+
 button,
 a {
   @apply cursor-default;
