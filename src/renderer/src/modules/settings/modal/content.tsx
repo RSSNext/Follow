@@ -5,6 +5,7 @@ import { settingTabs } from "@renderer/lib/constants"
 import { preventDefault } from "@renderer/lib/dom"
 import { SettingsTitle } from "@renderer/modules/settings/title"
 import { createContextState } from "foxact/context-state"
+import { m } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
 import { createElement, useEffect, useState } from "react"
 
@@ -28,7 +29,11 @@ function Layout(props: PropsWithChildren) {
   const setTab = useSetSettingTab()
   const tab = useSettingTab()
   return (
-    <div
+    <m.div
+      exit={{
+        opacity: 0,
+        scale: 0.96,
+      }}
       className="flex h-[500px] max-h-[80vh] w-[660px] max-w-full flex-col overflow-hidden rounded-xl border border-border"
       onContextMenu={preventDefault}
     >
@@ -56,7 +61,7 @@ function Layout(props: PropsWithChildren) {
           {children}
         </div>
       </div>
-    </div>
+    </m.div>
   )
 }
 
