@@ -163,7 +163,7 @@ export const ModalInternal: Component<{
                 )}
                 onClick={clickOutsideToDismiss ? dismiss : undefined}
               >
-                <div className="contents" onClick={stopPropagation}>
+                <div className={cn("contents", modalClassName)} onClick={stopPropagation}>
                   <CustomModalComponent>{finalChildren}</CustomModalComponent>
                 </div>
               </div>

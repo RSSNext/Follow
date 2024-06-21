@@ -1,7 +1,7 @@
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import { Label } from "@renderer/components/ui/label"
 import { useDark } from "@renderer/hooks"
-import { client } from "@renderer/lib/client"
+import { tipcClient } from "@renderer/lib/client"
 import { SettingsTitle } from "@renderer/modules/settings/title"
 import { useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
@@ -11,13 +11,13 @@ export function Component() {
 
   const [loginSetting, setLoginSetting] = useState(false)
   useEffect(() => {
-    client?.getLoginItemSettings().then((settings) => {
+    tipcClient?.getLoginItemSettings().then((settings) => {
       setLoginSetting(settings.openAtLogin)
     })
   }, [])
 
   const saveLoginSetting = useCallback((checked: boolean) => {
-    client?.setLoginItemSettings(checked)
+    tipcClient?.setLoginItemSettings(checked)
     setLoginSetting(checked)
     toast.success("Settings saved.")
   }, [])
@@ -29,7 +29,7 @@ export function Component() {
 
   return (
     <>
-      <SettingsTitle path="" className="mb-4" />
+      <SettingsTitle path="" sticky className="mb-4" />
       <div className="mt-6 space-y-6">
         <div className="flex items-center gap-4">
           <Checkbox

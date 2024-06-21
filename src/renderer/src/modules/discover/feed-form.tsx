@@ -23,7 +23,7 @@ import { Switch } from "@renderer/components/ui/switch"
 import { ViewSelectContent } from "@renderer/components/view-select-content"
 import { useBizQuery } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
-import { client } from "@renderer/lib/client"
+import { tipcClient } from "@renderer/lib/client"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
@@ -100,19 +100,19 @@ export const FeedForm: Component<{
         variables.view !== `${feed.data?.subscription?.view}`
       ) {
         Queries.subscription.byView(feed.data?.subscription?.view).invalidate()
-        client?.invalidateQuery(
+        tipcClient?.invalidateQuery(
           Queries.subscription.byView(feed.data?.subscription?.view).key,
         )
       }
       Queries.subscription.byView(Number.parseInt(variables.view)).invalidate()
-      client?.invalidateQuery(
+      tipcClient?.invalidateQuery(
         Queries.subscription.byView(Number.parseInt(variables.view)).key,
       )
 
       const feedId = feed.data?.feed.id
       if (feedId) {
         Queries.feed.byId({ id: feedId }).invalidate()
-        client?.invalidateQuery(Queries.feed.byId({ id: feedId }).key)
+        tipcClient?.invalidateQuery(Queries.feed.byId({ id: feedId }).key)
       }
       toast(isSubscribed ? "🎉 Updated." : "🎉 Followed.", {
         duration: 1000,

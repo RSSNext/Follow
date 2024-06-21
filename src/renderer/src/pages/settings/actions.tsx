@@ -79,7 +79,7 @@ export function Component() {
 
   return (
     <>
-      <SettingsTitle path="actions" className="mb-4" />
+      <SettingsTitle path="actions" sticky className="mb-4" />
       <div className="space-y-4">
         {actionsData.map((action, actionIdx) => (
           <ActionCard

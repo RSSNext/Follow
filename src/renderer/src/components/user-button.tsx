@@ -3,10 +3,13 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
+import { useSignOut } from "@renderer/hooks"
 import { loginHandler } from "@renderer/lib/auth"
+import { tipcClient } from "@renderer/lib/client"
 import { APP_NAME } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
+import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useSession } from "@renderer/queries/auth"
 import { m } from "framer-motion"
 import type { FC } from "react"
@@ -104,8 +107,10 @@ export const LoginButton: FC<LoginProps> = (props) => {
   return method === "modal" ? Content : <Link to="/login">{Content}</Link>
 }
 export const ProfileButton: FC<LoginProps> = memo((props) => {
-  const { status } = useSession()
-
+  const { status, session } = useSession()
+  const { user } = session || {}
+  const signOut = useSignOut()
+  const settingModalPresent = useSettingModal()
   if (status !== "authenticated") {
     return <LoginButton {...props} />
   }
@@ -116,13 +121,49 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
           <UserAvatar className="h-5 p-0" hideName />
         </ActionButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      <DropdownMenuContent className="min-w-[180px]" side="bottom" align="end">
+        <DropdownMenuLabel className="text-xs text-theme-foreground/60">
+          Account
+        </DropdownMenuLabel>
+        <DropdownMenuLabel>
+          <div className="-mt-2 flex items-center justify-between">
+            <span className="">{user?.name}</span>
+            <UserAvatar className="h-5 shrink-0 p-0" hideName />
+          </div>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Team</DropdownMenuItem>
-        <DropdownMenuItem>Subscription</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            if (window.electron) {
+              tipcClient?.openSettingWindow()
+            } else {
+              // Here we need to delay one frame, so it's two raf,
+              //  in order to have `point-event: none` recorded by RadixOverlay after modal is invoked in a certain scenario,
+              // and the page freezes after modal is turned off.
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  settingModalPresent()
+                })
+              })
+            }
+          }}
+        >
+          Preferences
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        {!window.electron && (
+          <>
+            <DropdownMenuItem
+              onClick={() => {
+                // TODO
+              }}
+            >
+              Download Desktop app
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
+        <DropdownMenuItem onClick={signOut}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
