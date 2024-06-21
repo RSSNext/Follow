@@ -1,5 +1,5 @@
 import { apiClient } from "@renderer/lib/api-fetch"
-import { client } from "@renderer/lib/client"
+import { tipcClient } from "@renderer/lib/client"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import type { EntryModel } from "@renderer/models"
 import { entryActions } from "@renderer/store"
@@ -170,7 +170,7 @@ export const useEntryActions = ({
             !entry.entries.images?.length,
           onClick: async () => {
             if (!entry.entries.url || !entry.entries.images?.length) return
-            const response = await client?.saveToEagle({
+            const response = await tipcClient?.saveToEagle({
               url: entry.entries.url,
               images: entry.entries.images,
             })
@@ -190,7 +190,7 @@ export const useEntryActions = ({
           className: "i-mgc-share-forward-cute-re",
           onClick: () => {
             if (!entry.entries.url) return
-            client?.showShareMenu(entry.entries.url)
+            tipcClient?.showShareMenu(entry.entries.url)
           },
         },
         {

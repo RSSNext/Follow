@@ -5,7 +5,7 @@ import { SettingsTitle } from "@renderer/modules/settings/title"
 export function Component() {
   return (
     <>
-      <SettingsTitle path="shortcuts" className="mb-4" />
+      <SettingsTitle path="shortcuts" sticky className="mb-4" />
       <div className="space-y-6">
         {Object.keys(shortcuts).map((type) => (
           <section key={type}>

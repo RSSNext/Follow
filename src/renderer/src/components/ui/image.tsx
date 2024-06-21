@@ -1,4 +1,4 @@
-import { client } from "@renderer/lib/client"
+import { tipcClient } from "@renderer/lib/client"
 import { getProxyUrl } from "@renderer/lib/img-proxy"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
@@ -80,7 +80,7 @@ const ImageImpl: FC<ImageProps> = ({
                       type: "text",
                       label: "Open Image in New Window",
                       click: () => {
-                        if (props.src && imgSrc && client) {
+                        if (props.src && imgSrc && tipcClient) {
                           window.open(props.src, "_blank")
                         }
                       },

@@ -1,4 +1,4 @@
-import { client } from "./client"
+import { tipcClient } from "./client"
 
 export type NativeMenuItem =
   | {
@@ -23,7 +23,7 @@ export const showNativeMenu = async (
             type: "text" as const,
             label: "Inspect Element",
             click: () => {
-              client?.inspectElement({
+              tipcClient?.inspectElement({
                 x: e.pageX,
                 y: e.pageY,
               })
@@ -66,7 +66,7 @@ export const showNativeMenu = async (
     }
   })
 
-  await client?.showContextMenu({
+  await tipcClient?.showContextMenu({
     items: nextItems.map((item) => {
       if (item.type === "text") {
         return {

@@ -4,7 +4,7 @@ import { app, dialog, Menu, ShareMenu } from "electron"
 
 import { getMainWindow } from "."
 import type { RendererHandlers } from "./renderer-handlers"
-import { createWindow } from "./window"
+import { createSettingWindow, createWindow } from "./window"
 
 const t = tipc.create()
 
@@ -153,6 +153,8 @@ export const router = {
         openAtLogin: input,
       })
     }),
+
+  openSettingWindow: t.procedure.action(async () => createSettingWindow()),
 }
 
 export type Router = typeof router
