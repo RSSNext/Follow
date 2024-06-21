@@ -1,6 +1,7 @@
 "use client"
 
 import { useInputComposition } from "@renderer/hooks/common/use-input-composition"
+import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import clsx from "clsx"
 import { useMotionValue } from "framer-motion"
@@ -97,6 +98,7 @@ export const TextArea = forwardRef<
                 setIsFocus(false)
                 rest.onBlur?.(e)
               }}
+              onContextMenu={stopPropagation}
               {...inputProps}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {

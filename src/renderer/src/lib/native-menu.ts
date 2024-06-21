@@ -1,13 +1,21 @@
 import { client } from "./client"
 
+export type NativeMenuItem =
+  | {
+    type: "text"
+    label: string
+    click?: () => void
+    enabled?: boolean
+  }
+  | { type: "separator" }
 export const showNativeMenu = async (
-  _items: Array<
+  items: Array<
     { type: "text", label: string, click: () => void } | { type: "separator" }
   >,
   e?: MouseEvent | React.MouseEvent,
 ) => {
-  const items = [
-    ..._items,
+  const nextItems = [
+    ...items,
     ...(import.meta.env.DEV && e ?
         [
           {
@@ -25,12 +33,25 @@ export const showNativeMenu = async (
           },
         ] :
         []),
-  ]
+  ].filter(Boolean) as NativeMenuItem[]
 
   const el = e && e.currentTarget
 
   if (el instanceof HTMLElement) {
     el.dataset.contextMenuOpen = "true"
+  }
+
+  if (!window.electron) {
+    document.dispatchEvent(
+      new CustomEvent(CONTEXT_MENU_SHOW_EVENT_KEY, {
+        detail: {
+          items: nextItems,
+          x: e?.clientX,
+          y: e?.clientY,
+        },
+      }),
+    )
+    return
   }
 
   const unlisten = window.electron?.ipcRenderer.on("menu-click", (_, index) => {
@@ -60,3 +81,5 @@ export const showNativeMenu = async (
     }),
   })
 }
+
+export const CONTEXT_MENU_SHOW_EVENT_KEY = "contextmenu-show"

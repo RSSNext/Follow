@@ -103,7 +103,7 @@ export function FeedColumn() {
               navigateBackHome()
             }}
           >
-            <Logo className="size-6" />
+            <Logo className="mr-1 size-6" />
             {APP_NAME}
           </div>
         )}
