@@ -5,8 +5,6 @@ import { cva } from "class-variance-authority"
 import { m } from "framer-motion"
 import * as React from "react"
 
-import { AutoResizeHeight } from "./auto-resize-height"
-
 const Tabs = TabsPrimitive.Root
 
 const tabsListVariants = cva("", {
@@ -111,27 +109,17 @@ TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
 
 const TabsContent = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content> & {
-    transition?: boolean
-  }
->(({ className, transition, ...props }, ref) => {
-  const content = (
-    <TabsPrimitive.Content
-      ref={ref}
-      className={cn(
-        "ring-offset-background focus-visible:outline-none",
-        className,
-        transition ? "pt-2" : "mt-2",
-      )}
-      {...props}
-    />
-  )
-
-  if (transition) {
-    return <AutoResizeHeight duration={0.15}>{content}</AutoResizeHeight>
-  }
-  return content
-})
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.Content
+    ref={ref}
+    className={cn(
+      "mt-2 ring-offset-background focus-visible:outline-none",
+      className,
+    )}
+    {...props}
+  />
+))
 TabsContent.displayName = TabsPrimitive.Content.displayName
 
 export { Tabs, TabsContent, TabsList, TabsTrigger }

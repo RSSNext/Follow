@@ -1,12 +1,15 @@
 import { client } from "./client"
 
-type NativeMenuItem = { type: "text", label: string, click: () => void } | { type: "separator" }
+type NativeMenuItem =
+  | {
+    type: "text"
+    label: string
+    click?: () => void
+    enabled?: boolean
+  }
+  | { type: "separator" }
 export const showNativeMenu = async (
-  items: Array<
-    Nullable<
-     NativeMenuItem | false
-    >
-  >,
+  items: Array<Nullable<NativeMenuItem | false>>,
   e?: MouseEvent | React.MouseEvent,
 ) => {
   const nextItems = [
@@ -39,7 +42,7 @@ export const showNativeMenu = async (
   const unlisten = window.electron?.ipcRenderer.on("menu-click", (_, index) => {
     const item = nextItems[index]
     if (item && item.type === "text") {
-      item.click()
+      item.click?.()
     }
   })
 
@@ -55,6 +58,7 @@ export const showNativeMenu = async (
       if (item.type === "text") {
         return {
           ...item,
+          enabled: item.enabled ?? item.click !== undefined,
           click: undefined,
         }
       }

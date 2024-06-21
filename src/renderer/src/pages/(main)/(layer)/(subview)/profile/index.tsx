@@ -1,3 +1,4 @@
+import { useUser } from "@renderer/atoms/user"
 import {
   Avatar,
   AvatarFallback,
@@ -8,19 +9,18 @@ import { useSignOut } from "@renderer/hooks"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { FeedList } from "@renderer/modules/feed-column/list"
-import { useSession } from "@renderer/queries/auth"
 
 export function Component() {
-  const { session } = useSession()
+  const user = useUser()
   const signOut = useSignOut()
   return (
     <div className="flex w-full gap-10 px-10 py-16">
       <div className="flex min-w-40 flex-1 flex-col items-center gap-8 pt-20">
         <Avatar className="aspect-square size-32">
-          <AvatarImage src={session?.user?.image || undefined} />
-          <AvatarFallback>{session?.user?.name?.slice(0, 2)}</AvatarFallback>
+          <AvatarImage src={user?.image || undefined} />
+          <AvatarFallback>{user?.name?.slice(0, 2)}</AvatarFallback>
         </Avatar>
-        <div className="text-4xl font-bold">{session?.user?.name}</div>
+        <div className="text-4xl font-bold">{user?.name}</div>
 
         <div>
           <StyledButton

@@ -17,7 +17,10 @@ export const router = {
 
   showContextMenu: t.procedure
     .input<{
-      items: Array<{ type: "text", label: string } | { type: "separator" }>
+      items: Array<
+        | { type: "text", label: string, enabled?: boolean }
+        | { type: "separator" }
+      >
     }>()
     .action(async ({ input, context }) => {
       const menu = Menu.buildFromTemplate(
@@ -29,6 +32,7 @@ export const router = {
           }
           return {
             label: item.label,
+            enabled: item.enabled ?? true,
             click() {
               context.sender.send("menu-click", index)
             },
@@ -102,7 +106,9 @@ export const router = {
     .input<(string | number | undefined)[]>()
     .action(async ({ input }) => {
       const mainWindow = getMainWindow()
-      const handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
+      const handlers = getRendererHandlers<RendererHandlers>(
+        mainWindow.webContents,
+      )
       handlers.invalidateQuery.send(input)
     }),
 
@@ -117,8 +123,15 @@ export const router = {
       height: number
     }>()
     .action(async ({ input }) => {
-      if (process.env["VITE_IMGPROXY_URL"] && input.url.startsWith(process.env["VITE_IMGPROXY_URL"])) {
-        const meta = await fetch(`${process.env["VITE_IMGPROXY_URL"]}/unsafe/meta/${encodeURIComponent(input.realUrl)}`).then((res) => res.json())
+      if (
+        process.env["VITE_IMGPROXY_URL"] &&
+        input.url.startsWith(process.env["VITE_IMGPROXY_URL"])
+      ) {
+        const meta = await fetch(
+          `${process.env["VITE_IMGPROXY_URL"]}/unsafe/meta/${encodeURIComponent(
+            input.realUrl,
+          )}`,
+        ).then((res) => res.json())
         input.width = meta.thumbor.source.width
         input.height = meta.thumbor.source.height
       }

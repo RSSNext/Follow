@@ -18,7 +18,9 @@ export const useFeedStore = createZustandStore<FeedState & FeedActions>(
     set((state) =>
       produce(state, (state) => {
         for (const feed of feeds) {
-          if (feed.id) { state.feeds[feed.id] = feed }
+          if (feed.id) {
+            state.feeds[feed.id] = feed
+          }
         }
       }),
     )
@@ -34,7 +36,19 @@ export const useFeedStore = createZustandStore<FeedState & FeedActions>(
       }),
     )
   },
+
+  patch(feedId, patch) {
+    set((state) =>
+      produce(state, (state) => {
+        const feed = state.feeds[feedId]
+        if (!feed) return
+
+        Object.assign(feed, patch)
+      }),
+    )
+  },
 }))
 export const feedActions = getStoreActions(useFeedStore)
 
-export const getFeedById = (feedId: string): Nullable<FeedModel> => useFeedStore.getState().feeds[feedId]
+export const getFeedById = (feedId: string): Nullable<FeedModel> =>
+  useFeedStore.getState().feeds[feedId]

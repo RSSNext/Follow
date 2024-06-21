@@ -41,7 +41,7 @@ export const useSession = () => {
 /**
  * Fetch session data, copy and patch code from @hono/auth-js/react
  */
-export async function fetchData<T = any>(
+async function fetchData<T = any>(
   path: string,
 
   req: any = {},

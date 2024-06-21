@@ -10,4 +10,5 @@ export interface FeedActions {
   upsertMany: (feeds: FeedModel[]) => void
   optimisticUpdate: (feedId: FeedId, changed: Partial<FeedModel>) => void
   clear: () => void
+  patch: (feedId: FeedId, patch: Partial<FeedModel>) => void
 }

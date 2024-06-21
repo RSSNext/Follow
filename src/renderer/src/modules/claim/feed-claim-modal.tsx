@@ -1,3 +1,4 @@
+import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { StyledButton } from "@renderer/components/ui/button"
 import { CopyButton } from "@renderer/components/ui/code-highlighter"
 import { LoadingCircle } from "@renderer/components/ui/loading"
@@ -26,7 +27,11 @@ export const FeedClaimModalContent: FC<{
     enabled: !!feed,
   })
 
-  const { mutateAsync: claim, isPending } = useClaimFeedMutation(feedId)
+  const {
+    mutateAsync: claim,
+    isPending,
+    isSuccess,
+  } = useClaimFeedMutation(feedId)
 
   if (!feed) return null
 
@@ -55,44 +60,55 @@ export const FeedClaimModalContent: FC<{
           <TabsTrigger value="description">Description</TabsTrigger>
           <TabsTrigger value="rss">RSS Tag</TabsTrigger>
         </TabsList>
+        <AutoResizeHeight duration={0.1}>
+          <TabsContent className="mt-0 pt-3" value="content">
+            <p>Copy the content below and post it to your latest RSS feed.</p>
 
-        <TabsContent className="pt-3" transition value="content">
-          <p>Copy the content below and post it to your latest RSS feed.</p>
-
-          <BaseCodeBlock>{claimMessage?.data.content || ""}</BaseCodeBlock>
-        </TabsContent>
-        <TabsContent className="pt-3" transition value="description">
-          <p>
-            Copy the following content and paste it into the
-            {" "}
-            <code className="text-sm">{`<description />`}</code>
-            {" "}
-            field of your
-            RSS feed.
-          </p>
-          <BaseCodeBlock>{claimMessage?.data.description || ""}</BaseCodeBlock>
-        </TabsContent>
-        <TabsContent className="pt-3" transition value="rss">
-          <div className="space-y-3">
-            <p>Copy the code below and paste it into your RSS generator.</p>
+            <BaseCodeBlock>{claimMessage?.data.content || ""}</BaseCodeBlock>
+          </TabsContent>
+          <TabsContent className="pt-3" value="description">
             <p>
-              RSS generators generally have two formats to choose from. Please
-              copy the XML and JSON formats below as needed.
+              Copy the following content and paste it into the
+              {" "}
+              <code className="text-sm">{`<description />`}</code>
+              {" "}
+              field of your
+              RSS feed.
             </p>
-            <p>
-              <b>XML Format</b>
-            </p>
-            <BaseCodeBlock>{claimMessage?.data.xml || ""}</BaseCodeBlock>
-            <p>
-              <b>JSON Format</b>
-            </p>
-            <BaseCodeBlock>{claimMessage?.data.json || ""}</BaseCodeBlock>
-          </div>
-        </TabsContent>
+            <BaseCodeBlock>
+              {claimMessage?.data.description || ""}
+            </BaseCodeBlock>
+          </TabsContent>
+          <TabsContent className="mt-0 pt-3" value="rss">
+            <div className="space-y-3">
+              <p>Copy the code below and paste it into your RSS generator.</p>
+              <p>
+                RSS generators generally have two formats to choose from. Please
+                copy the XML and JSON formats below as needed.
+              </p>
+              <p>
+                <b>XML Format</b>
+              </p>
+              <BaseCodeBlock>{claimMessage?.data.xml || ""}</BaseCodeBlock>
+              <p>
+                <b>JSON Format</b>
+              </p>
+              <BaseCodeBlock>{claimMessage?.data.json || ""}</BaseCodeBlock>
+            </div>
+          </TabsContent>
+        </AutoResizeHeight>
       </Tabs>
 
       <div className="mt-3 flex justify-end">
-        <StyledButton isLoading={isPending} onClick={() => claim()}>Claim</StyledButton>
+        <StyledButton
+          disabled={isSuccess}
+          isLoading={isPending}
+          onClick={() => claim()}
+          variant={isSuccess ? "plain" : "primary"}
+        >
+          {isSuccess && <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />}
+          Claim
+        </StyledButton>
       </div>
     </div>
   )
