@@ -251,8 +251,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         />
         <AnimatePresence>
           {isOpen &&
-          filterableSuggestions.length > 0 &&
-          (portal ? <RootPortal>{ListElement}</RootPortal> : ListElement)}
+            filterableSuggestions.length > 0 &&
+            (portal ? <RootPortal>{ListElement}</RootPortal> : ListElement)}
         </AnimatePresence>
       </div>
     )
