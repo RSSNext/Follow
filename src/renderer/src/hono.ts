@@ -14,10 +14,10 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
+                code: 0;
                 data: {
                     transactionHash: string;
                 };
-                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -32,14 +32,14 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
+                code: 0;
                 data: {
                     userId: string;
-                    addressIndex: number;
-                    address: string | null;
                     createdAt: string;
                     powerToken: bigint;
+                    addressIndex: number;
+                    address: string | null;
                 }[];
-                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -47,14 +47,14 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         $post: {
             input: {};
             output: {
+                code: 0;
                 data: {
                     userId: string;
-                    addressIndex: number;
-                    address: string | null;
                     createdAt: string;
                     powerToken: bigint;
+                    addressIndex: number;
+                    address: string | null;
                 };
-                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -73,8 +73,8 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             output: {
                 code: 0;
                 data?: {
-                    title?: string | undefined;
                     description?: string | undefined;
+                    title?: string | undefined;
                 } | undefined;
             };
             outputFormat: "json";
@@ -109,7 +109,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         name: string;
                         condition: {
                             value: string;
-                            field: "view" | "title" | "site_url" | "feed_url";
+                            field: "title" | "view" | "site_url" | "feed_url";
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
                         result: {
@@ -121,7 +121,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                             }[] | undefined;
                             blockRules?: {
                                 value: string | number;
-                                field: "title" | "all" | "content" | "author" | "url" | "order";
+                                field: "title" | "content" | "all" | "author" | "url" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
                         };
@@ -138,7 +138,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         name: string;
                         condition: {
                             value: string;
-                            field: "view" | "title" | "site_url" | "feed_url";
+                            field: "title" | "view" | "site_url" | "feed_url";
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
                         result: {
@@ -150,7 +150,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                             }[] | undefined;
                             blockRules?: {
                                 value: string | number;
-                                field: "title" | "all" | "content" | "author" | "url" | "order";
+                                field: "title" | "content" | "all" | "author" | "url" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
                         };
@@ -197,8 +197,8 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                data: Record<string, number>;
                 code: 0;
+                data: Record<string, number>;
             };
             outputFormat: "json";
             status: 200;
@@ -229,8 +229,8 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                data: boolean;
                 code: 0;
+                data: boolean;
             };
             outputFormat: "json";
             status: 200;
@@ -302,6 +302,40 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         };
     };
 } & {
+    "/feeds/claim/message": {
+        $get: {
+            input: {
+                query: {
+                    feedId: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    xml: string;
+                    description: string;
+                    content: string;
+                    json: string;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+    "/feeds/claim/challenge": {
+        $post: {
+            input: {
+                json: {
+                    feedId: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
     "/feeds": {
         $get: {
             input: {
@@ -311,34 +345,35 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
+                code: 0;
                 data: {
                     feed: {
                         url: string;
                         checkedAt: string;
                         nextCheckAt: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
                         id?: string | undefined;
                         image?: string | null | undefined;
-                        title?: string | null | undefined;
-                        description?: string | null | undefined;
                         siteUrl?: string | null | undefined;
                         lastModifiedHeader?: string | null | undefined;
                         etagHeader?: string | null | undefined;
                         ttl?: number | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
                     };
                     subscriptionCount: number;
                     readCount: number;
                     subscription?: {
+                        title: string | null;
                         userId: string;
                         view: number;
-                        title: string | null;
                         feedId: string;
                         category: string | null;
                         isPrivate: boolean | null;
                     } | undefined;
                 };
-                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -370,11 +405,11 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             output: {
                 data: {
                     feed: {
+                        description: string | null;
+                        title: string | null;
                         id: string;
                         image: string | null;
-                        title: string | null;
                         url: string;
-                        description: string | null;
                         siteUrl: string | null;
                         checkedAt: string;
                         nextCheckAt: string;
@@ -383,14 +418,15 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         ttl: number | null;
                         errorMessage: string | null;
                         errorAt: string | null;
+                        ownerUserId: string | null;
                     };
                     entries?: {
-                        id: string;
+                        description: string | null;
                         title: string | null;
                         content: string | null;
+                        id: string;
                         author: string | null;
                         url: string | null;
-                        description: string | null;
                         feedId: string;
                         guid: string;
                         authorUrl: string | null;
@@ -401,9 +437,9 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         categories: string[] | null;
                         enclosures?: {
                             url: string;
-                            title?: string | undefined;
-                            type?: string | undefined;
                             length?: number | undefined;
+                            type?: string | undefined;
+                            title?: string | undefined;
                         }[] | null | undefined;
                     }[] | undefined;
                     docs?: string | undefined;
@@ -420,12 +456,12 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         $post: {
             input: {};
             output: {
+                code: 0;
                 data: {
                     userId: string;
                     sessionToken: string;
                     expires: string;
                 };
-                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -475,11 +511,11 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 total: number;
                 data?: {
                     entries: {
-                        id: string;
+                        description: string | null;
                         title: string | null;
+                        id: string;
                         author: string | null;
                         url: string | null;
-                        description: string | null;
                         guid: string;
                         authorUrl: string | null;
                         authorAvatar: string | null;
@@ -489,17 +525,17 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         categories: string[] | null;
                         enclosures?: {
                             url: string;
-                            title?: string | undefined;
-                            type?: string | undefined;
                             length?: number | undefined;
+                            type?: string | undefined;
+                            title?: string | undefined;
                         }[] | null | undefined;
                     };
                     feeds: {
+                        description: string | null;
+                        title: string | null;
                         id: string;
                         image: string | null;
-                        title: string | null;
                         url: string;
-                        description: string | null;
                         siteUrl: string | null;
                         checkedAt: string;
                         nextCheckAt: string;
@@ -508,6 +544,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         ttl: number | null;
                         errorMessage: string | null;
                         errorAt: string | null;
+                        ownerUserId: string | null;
                     };
                     read: boolean | null;
                     collections?: {
@@ -536,12 +573,12 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 code: 0;
                 data?: {
                     entries: {
-                        id: string;
+                        description: string | null;
                         title: string | null;
                         content: string | null;
+                        id: string;
                         author: string | null;
                         url: string | null;
-                        description: string | null;
                         guid: string;
                         authorUrl: string | null;
                         authorAvatar: string | null;
@@ -551,17 +588,20 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         categories: string[] | null;
                         enclosures?: {
                             url: string;
-                            title?: string | undefined;
-                            type?: string | undefined;
                             length?: number | undefined;
+                            type?: string | undefined;
+                            title?: string | undefined;
                         }[] | null | undefined;
                     };
+                    collections: {
+                        createdAt: string;
+                    };
                     feeds: {
+                        description: string | null;
+                        title: string | null;
                         id: string;
                         image: string | null;
-                        title: string | null;
                         url: string;
-                        description: string | null;
                         siteUrl: string | null;
                         checkedAt: string;
                         nextCheckAt: string;
@@ -570,9 +610,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         ttl: number | null;
                         errorMessage: string | null;
                         errorAt: string | null;
-                    };
-                    collections: {
-                        createdAt: string;
+                        ownerUserId: string | null;
                     };
                     read: boolean | null;
                     settings?: {
@@ -597,13 +635,14 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
+                code: 0;
                 data: {
-                    id: string;
+                    description: string | null;
                     title: string | null;
                     content: string | null;
+                    id: string;
                     author: string | null;
                     url: string | null;
-                    description: string | null;
                     feedId: string;
                     guid: string;
                     authorUrl: string | null;
@@ -614,12 +653,11 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     categories: string[] | null;
                     enclosures?: {
                         url: string;
-                        title?: string | undefined;
-                        type?: string | undefined;
                         length?: number | undefined;
+                        type?: string | undefined;
+                        title?: string | undefined;
                     }[] | null | undefined;
                 }[];
-                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -634,16 +672,18 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
+                code: 0;
                 data: {
+                    title: string | null;
                     userId: string;
                     view: number;
-                    title: string | null;
+                    feedId: string;
                     feeds: {
+                        description: string | null;
+                        title: string | null;
                         id: string;
                         image: string | null;
-                        title: string | null;
                         url: string;
-                        description: string | null;
                         siteUrl: string | null;
                         checkedAt: string;
                         nextCheckAt: string;
@@ -652,12 +692,11 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         ttl: number | null;
                         errorMessage: string | null;
                         errorAt: string | null;
+                        ownerUserId: string | null;
                     };
-                    feedId: string;
                     category: string | null;
                     isPrivate: boolean | null;
                 }[];
-                code: 0;
             };
             outputFormat: "json";
             status: 200;

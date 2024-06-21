@@ -9,9 +9,7 @@ export type NativeMenuItem =
   }
   | { type: "separator" }
 export const showNativeMenu = async (
-  items: Array<
-    { type: "text", label: string, click: () => void } | { type: "separator" }
-  >,
+  items: Array<Nullable<NativeMenuItem | false>>,
   e?: MouseEvent | React.MouseEvent,
 ) => {
   const nextItems = [
@@ -55,9 +53,9 @@ export const showNativeMenu = async (
   }
 
   const unlisten = window.electron?.ipcRenderer.on("menu-click", (_, index) => {
-    const item = items[index]
+    const item = nextItems[index]
     if (item && item.type === "text") {
-      item.click()
+      item.click?.()
     }
   })
 
@@ -69,10 +67,11 @@ export const showNativeMenu = async (
   })
 
   await tipcClient?.showContextMenu({
-    items: items.map((item) => {
+    items: nextItems.map((item) => {
       if (item.type === "text") {
         return {
           ...item,
+          enabled: item.enabled ?? item.click !== undefined,
           click: undefined,
         }
       }

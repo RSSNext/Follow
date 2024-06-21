@@ -21,6 +21,7 @@ export default defineConfig(
       "unicorn/consistent-function-scoping": "warn",
       "unicorn/prefer-module": "off",
       "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/no-unused-expressions": 0,
     },
     settings: {
       tailwindcss: {

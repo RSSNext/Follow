@@ -42,7 +42,7 @@ export const styledButtonVariant = cva(
       {
         variant: "plain",
         status: "disabled",
-        className: "text-theme-disabled border-theme-inactive dark:border-zinc-800",
+        className: "text-theme-disabled border-theme-inactive dark:border-zinc-800 hover:!bg-theme-background",
       },
     ],
     variants: {

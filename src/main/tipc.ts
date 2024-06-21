@@ -17,7 +17,10 @@ export const router = {
 
   showContextMenu: t.procedure
     .input<{
-      items: Array<{ type: "text", label: string } | { type: "separator" }>
+      items: Array<
+        | { type: "text", label: string, enabled?: boolean }
+        | { type: "separator" }
+      >
     }>()
     .action(async ({ input, context }) => {
       const menu = Menu.buildFromTemplate(
@@ -29,6 +32,7 @@ export const router = {
           }
           return {
             label: item.label,
+            enabled: item.enabled ?? true,
             click() {
               context.sender.send("menu-click", index)
             },

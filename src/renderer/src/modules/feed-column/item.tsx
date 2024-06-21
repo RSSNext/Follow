@@ -1,4 +1,5 @@
 import { getMainContainerElement } from "@renderer/atoms"
+import { getUser } from "@renderer/atoms/user"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import {
@@ -22,6 +23,7 @@ import { useMutation } from "@tanstack/react-query"
 import { memo, useCallback } from "react"
 import { toast } from "sonner"
 
+import { useFeedClaimModal } from "../claim/hooks"
 import { FeedForm } from "../discover/feed-form"
 
 type FeedItemData = SubscriptionPlainModel
@@ -114,6 +116,10 @@ const FeedItemImpl = ({
 
   const feed = useFeedById(subscription.feedId)
 
+  const claimFeed = useFeedClaimModal({
+    feedId: subscription.feedId,
+  })
+
   if (!feed) return null
   return (
     <div
@@ -159,6 +165,22 @@ const FeedItemImpl = ({
             {
               type: "separator",
             },
+            !feed.ownerUserId &&
+            !!feed.id && {
+              type: "text",
+              label: "Claim",
+              click: () => {
+                claimFeed()
+              },
+            },
+            feed.ownerUserId === getUser()?.id && {
+              type: "text",
+              label: "This feed is owned by you",
+            },
+            {
+              type: "separator",
+            },
+
             {
               type: "text",
               label: "Open Feed in Browser",
