@@ -495,7 +495,7 @@ export function ActionCard({
                   }}
                 >
                   {data.result.rewriteRules &&
-                  data.result.rewriteRules.length > 0 && (
+                    data.result.rewriteRules.length > 0 && (
                     <>
                       <Table>
                         <TableHeader>
@@ -578,7 +578,7 @@ export function ActionCard({
                   }}
                 >
                   {data.result.blockRules &&
-                  data.result.blockRules.length > 0 && (
+                    data.result.blockRules.length > 0 && (
                     <>
                       <Table>
                         <FieldTableHeader />

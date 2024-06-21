@@ -1,5 +1,5 @@
 // @ts-check
-import defineConfig, { GLOB_TS_SRC } from "eslint-config-hyoban"
+import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
 
 export default defineConfig(
   {
@@ -21,7 +21,6 @@ export default defineConfig(
       "unicorn/consistent-function-scoping": "warn",
       "unicorn/prefer-module": "off",
       "@typescript-eslint/no-floating-promises": "off",
-
     },
     settings: {
       tailwindcss: {

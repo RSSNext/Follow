@@ -113,7 +113,7 @@
     "electron-devtools-installer": "3.2.0",
     "electron-vite": "^2.2.0",
     "eslint": "^9.3.0",
-    "eslint-config-hyoban": "3.0.0-beta.16",
+    "eslint-config-hyoban": "3.0.0-beta.19",
     "lint-staged": "15.2.5",
     "postcss": "8.4.38",
     "postcss-js": "4.0.1",
