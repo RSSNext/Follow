@@ -10,6 +10,7 @@ import type { FC, PropsWithChildren } from "react"
 import { HelmetProvider } from "react-helmet-async"
 
 import { BizRouterProvider } from "./biz-router-provider"
+import { ContextMenuProvider } from "./context-menu-provider"
 import { UserProvider } from "./user-provider"
 
 const loadFeatures = () =>
@@ -31,6 +32,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
           <Provider store={jotaiStore}>
             <UserProvider />
             <ModalStackProvider />
+            <ContextMenuProvider />
             <HelmetProvider>{children}</HelmetProvider>
             <BizRouterProvider />
           </Provider>

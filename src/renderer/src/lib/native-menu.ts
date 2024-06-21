@@ -1,6 +1,6 @@
 import { client } from "./client"
 
-type NativeMenuItem =
+export type NativeMenuItem =
   | {
     type: "text"
     label: string
@@ -39,6 +39,19 @@ export const showNativeMenu = async (
     el.dataset.contextMenuOpen = "true"
   }
 
+  if (!window.electron) {
+    document.dispatchEvent(
+      new CustomEvent(CONTEXT_MENU_SHOW_EVENT_KEY, {
+        detail: {
+          items: nextItems,
+          x: e?.clientX,
+          y: e?.clientY,
+        },
+      }),
+    )
+    return
+  }
+
   const unlisten = window.electron?.ipcRenderer.on("menu-click", (_, index) => {
     const item = nextItems[index]
     if (item && item.type === "text") {
@@ -67,3 +80,5 @@ export const showNativeMenu = async (
     }),
   })
 }
+
+export const CONTEXT_MENU_SHOW_EVENT_KEY = "contextmenu-show"

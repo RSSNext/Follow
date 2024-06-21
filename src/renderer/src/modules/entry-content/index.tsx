@@ -1,6 +1,7 @@
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { useBizQuery } from "@renderer/hooks"
+import { stopPropagation } from "@renderer/lib/dom"
 import { parseHtml } from "@renderer/lib/parse-html"
 import type { ActiveEntryId } from "@renderer/models"
 import {
@@ -88,7 +89,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
           exit={{ opacity: 0.01, y: -100 }}
           key={entry.entries.id}
         >
-          <article className="relative m-auto min-w-0 max-w-[550px] @4xl:max-w-[70ch]">
+          <article onContextMenu={stopPropagation} className="relative m-auto min-w-0 max-w-[550px] @4xl:max-w-[70ch]">
             <a
               href={entry.entries.url || void 0}
               target="_blank"

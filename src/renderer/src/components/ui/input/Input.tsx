@@ -1,4 +1,5 @@
 import { useInputComposition } from "@renderer/hooks/common/use-input-composition"
+import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import type { DetailedHTMLProps, InputHTMLAttributes } from "react"
 import { forwardRef } from "react"
@@ -15,6 +16,7 @@ export const Input = forwardRef<
   const inputProps = useInputComposition(props)
   return (
     <input
+      onContextMenu={stopPropagation}
       ref={ref}
       className={cn(
         "min-w-0 flex-auto appearance-none rounded-lg text-sm",

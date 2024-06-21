@@ -1,6 +1,7 @@
 import { Logo } from "@renderer/components/icons/logo"
 import { Vibrancy } from "@renderer/components/ui/background"
 import { APP_NAME, settingTabs } from "@renderer/lib/constants"
+import { preventDefault } from "@renderer/lib/dom"
 import { SettingsTitle } from "@renderer/modules/settings/title"
 import { Link, Outlet, useLocation } from "react-router-dom"
 
@@ -10,7 +11,7 @@ export function Component() {
   const tab = location.pathname.replace(/^\/settings\/?/, "")
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-screen flex-col" onContextMenu={preventDefault}>
       <div className="flex flex-1">
         <Vibrancy className="flex h-full w-44 flex-col border-r px-2.5 py-3 pt-3.5">
           <div className="grow pt-8">
