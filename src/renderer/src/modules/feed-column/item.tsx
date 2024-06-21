@@ -1,4 +1,5 @@
 import { getMainContainerElement } from "@renderer/atoms"
+import { getUser } from "@renderer/atoms/user"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import {
@@ -118,6 +119,7 @@ const FeedItemImpl = ({
   const claimFeed = useFeedClaimModal({
     feedId: subscription.feedId,
   })
+
   if (!feed) return null
   return (
     <div
@@ -171,7 +173,7 @@ const FeedItemImpl = ({
                 claimFeed()
               },
             },
-            {
+            feed.ownerUserId === getUser()?.id && {
               type: "text",
               label: "This feed is owned by you",
             },
