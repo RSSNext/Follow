@@ -6,6 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
+import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
 import { useRead, useRefValue } from "@renderer/hooks"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import {
@@ -16,7 +17,7 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
 import { shortcuts } from "@renderer/lib/shortcuts"
-import { getEntriesParams } from "@renderer/lib/utils"
+import { cn, getEntriesParams, getOS } from "@renderer/lib/utils"
 import { useEntries } from "@renderer/queries/entries"
 import {
   entryActions,
@@ -272,10 +273,37 @@ const ListHeader: FC<{
   }, [routerParams])
 
   const headerTitle = useFeedHeaderTitle()
+  const os = useMemo(getOS, [])
+
+  const titleAtBottom = window.electron && os === "macOS"
+  const titleInfo = (
+    <div
+      className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}
+    >
+      <div className="min-w-0 break-all text-lg font-bold leading-none">
+        <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
+          {headerTitle}
+        </EllipsisHorizontalTextWithTooltip>
+      </div>
+      <div className="text-xs font-medium text-zinc-400">
+        {totalCount || 0}
+        {" "}
+        {unreadOnly ? "Unread" : ""}
+        {" "}
+        Items
+      </div>
+    </div>
+  )
   return (
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
-      <div className="flex w-full justify-end">
-        <div className="relative z-[1] flex items-center gap-1 text-zinc-500">
+      <div
+        className={cn(
+          "flex w-full",
+          titleAtBottom ? "justify-end" : "justify-between",
+        )}
+      >
+        {!titleAtBottom && titleInfo}
+        <div className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500">
           <ActionButton
             tooltip={`${unreadOnly ? "Unread Only" : "All"}`}
             shortcut={shortcuts.entries.toggleUnreadOnly.key}
@@ -311,16 +339,7 @@ const ListHeader: FC<{
           </Popover>
         </div>
       </div>
-      <div>
-        <div className="text-lg font-bold leading-none">{headerTitle}</div>
-        <div className="text-xs font-medium text-zinc-400">
-          {totalCount || 0}
-          {" "}
-          {unreadOnly ? "Unread" : ""}
-          {" "}
-          Items
-        </div>
-      </div>
+      {titleAtBottom && titleInfo}
     </div>
   )
 }

@@ -41,7 +41,8 @@ export function getEntriesParams({
   }
 }
 
-export function getOS() {
+export type OS = "macOS" | "iOS" | "Windows" | "Android" | "Linux" | ""
+export function getOS(): OS {
   const { userAgent } = window.navigator,
     { platform } = window.navigator,
     macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"],
