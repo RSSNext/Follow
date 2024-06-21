@@ -4,7 +4,7 @@ import { app, dialog, Menu, ShareMenu } from "electron"
 
 import { getMainWindow } from "."
 import type { RendererHandlers } from "./renderer-handlers"
-import { createWindow } from "./window"
+import { createSettingWindow, createWindow } from "./window"
 
 const t = tipc.create()
 
@@ -102,7 +102,9 @@ export const router = {
     .input<(string | number | undefined)[]>()
     .action(async ({ input }) => {
       const mainWindow = getMainWindow()
-      const handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
+      const handlers = getRendererHandlers<RendererHandlers>(
+        mainWindow.webContents,
+      )
       handlers.invalidateQuery.send(input)
     }),
 
@@ -117,8 +119,15 @@ export const router = {
       height: number
     }>()
     .action(async ({ input }) => {
-      if (process.env["VITE_IMGPROXY_URL"] && input.url.startsWith(process.env["VITE_IMGPROXY_URL"])) {
-        const meta = await fetch(`${process.env["VITE_IMGPROXY_URL"]}/unsafe/meta/${encodeURIComponent(input.realUrl)}`).then((res) => res.json())
+      if (
+        process.env["VITE_IMGPROXY_URL"] &&
+        input.url.startsWith(process.env["VITE_IMGPROXY_URL"])
+      ) {
+        const meta = await fetch(
+          `${process.env["VITE_IMGPROXY_URL"]}/unsafe/meta/${encodeURIComponent(
+            input.realUrl,
+          )}`,
+        ).then((res) => res.json())
         input.width = meta.thumbor.source.width
         input.height = meta.thumbor.source.height
       }
@@ -140,6 +149,8 @@ export const router = {
         openAtLogin: input,
       })
     }),
+
+  openSettingWindow: t.procedure.action(async () => createSettingWindow()),
 }
 
 export type Router = typeof router

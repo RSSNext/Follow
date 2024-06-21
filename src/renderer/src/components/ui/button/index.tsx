@@ -21,14 +21,24 @@ export interface ButtonProps
   VariantProps<typeof buttonVariants>,
   BaseButtonProps {
   asChild?: boolean
+
+  as?: keyof React.JSX.IntrinsicElements
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant, size, asChild = false, isLoading = false, ...props },
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      isLoading = false,
+      as = "button",
+      ...props
+    },
     ref,
   ) => {
-    const Comp = asChild ? Slot : "button"
+    const Comp = asChild ? Slot : as as any
 
     return (
       <Comp
@@ -56,6 +66,7 @@ interface ActionButtonProps {
   tooltipSide?: "top" | "bottom"
   active?: boolean
   shortcut?: string
+  as?: keyof React.JSX.IntrinsicElements
 }
 
 export const ActionButton = React.forwardRef<
@@ -72,10 +83,12 @@ export const ActionButton = React.forwardRef<
       children,
       active,
       shortcut,
+      as,
     },
     ref,
   ) => {
     const buttonRef = React.useRef<HTMLButtonElement>(null)
+    React.useImperativeHandle(ref, () => buttonRef.current!)
 
     return (
       <>
@@ -86,8 +99,9 @@ export const ActionButton = React.forwardRef<
           />
         )}
         <Tooltip key={tooltip} disableHoverableContent>
-          <TooltipTrigger asChild ref={ref}>
+          <TooltipTrigger asChild>
             <Button
+              as={as}
               ref={buttonRef}
               // @see https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904
               onFocusCapture={stopPropagation}
@@ -111,7 +125,8 @@ export const ActionButton = React.forwardRef<
           </TooltipTrigger>
           <TooltipContent side={tooltipSide ?? "bottom"}>
             {tooltip}
-            {shortcut && shortcut.split("+").map((key) => (<Kbd key={key}>{key}</Kbd>))}
+            {shortcut &&
+            shortcut.split("+").map((key) => <Kbd key={key}>{key}</Kbd>)}
           </TooltipContent>
         </Tooltip>
       </>

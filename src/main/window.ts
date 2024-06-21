@@ -127,3 +127,23 @@ export const createMainWindow = () => {
 
   return window
 }
+const windows = {
+  settingWindow: null as BrowserWindow | null,
+}
+export const createSettingWindow = () => {
+  if (windows.settingWindow) {
+    windows.settingWindow.show()
+    return
+  }
+  const window = createWindow({
+    extraPath: "/settings",
+    width: 700,
+    height: 600,
+    resizable: false,
+  })
+
+  windows.settingWindow = window
+  window.on("closed", () => {
+    windows.settingWindow = null
+  })
+}

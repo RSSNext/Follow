@@ -9,7 +9,7 @@ import { APP_NAME } from "@renderer/lib/constants"
 import { Link } from "react-router-dom"
 
 import { Logo } from "./icons/logo"
-import { UserButton } from "./user-button"
+import { UserAvatar } from "./user-button"
 
 const items = [
   {
@@ -52,7 +52,7 @@ export function Header() {
             </NavigationMenuList>
           </NavigationMenu>
         </div>
-        <UserButton className="h-10 bg-transparent p-0 lg:px-10" />
+        <UserAvatar className="h-10 bg-transparent p-0 lg:px-10" />
       </div>
     </header>
   )

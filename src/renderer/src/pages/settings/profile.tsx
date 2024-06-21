@@ -54,7 +54,7 @@ export function Component() {
 
   return (
     <>
-      <SettingsTitle path="profile" className="mb-4" />
+      <SettingsTitle path="profile" sticky className="mb-4" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
