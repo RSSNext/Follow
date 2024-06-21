@@ -1,6 +1,6 @@
 import { Logo } from "@renderer/components/icons/logo"
 import { StyledButton } from "@renderer/components/ui/button"
-import { UserButton } from "@renderer/components/user-button"
+import { UserAvatar } from "@renderer/components/user-button"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { APP_NAME } from "@renderer/lib/constants"
 import { DEEPLINK_SCHEME } from "@shared/constants"
@@ -29,7 +29,7 @@ export function Component() {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
       <Logo className="size-20" />
-      <UserButton className="bg-stone-100 px-10 py-4 text-2xl" />
+      <UserAvatar className="bg-stone-100 px-10 py-4 text-2xl" />
       <h1 className="text-3xl font-bold">
         Successfully connected to
         {" "}

@@ -16,6 +16,14 @@ import { Link } from "react-router-dom"
 import { FollowIcon } from "./icons/follow"
 import { UserArrowLeftIcon } from "./icons/user"
 import { ActionButton, Button } from "./ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu/dropdown-menu"
 import { useCurrentModal } from "./ui/modal"
 import { modalMontionConfig } from "./ui/modal/stacked/constants"
 import { useModalStack } from "./ui/modal/stacked/hooks"
@@ -93,15 +101,7 @@ export const LoginButton: FC<LoginProps> = (props) => {
       <UserArrowLeftIcon className="size-4" />
     </ActionButton>
   )
-  return method === "modal" ?
-      (
-        Content
-      ) :
-      (
-        <Link to="/login">
-          {Content}
-        </Link>
-      )
+  return method === "modal" ? Content : <Link to="/login">{Content}</Link>
 }
 export const ProfileButton: FC<LoginProps> = memo((props) => {
   const { status } = useSession()
@@ -110,16 +110,26 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
     return <LoginButton {...props} />
   }
   return (
-    <Link to="/profile" tabIndex={-1}>
-      <ActionButton tooltip="Profile">
-        <UserButton className="h-5 p-0" hideName />
-      </ActionButton>
-    </Link>
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <ActionButton as="div" tooltip="Profile">
+          <UserAvatar className="h-5 p-0" hideName />
+        </ActionButton>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem>Billing</DropdownMenuItem>
+        <DropdownMenuItem>Team</DropdownMenuItem>
+        <DropdownMenuItem>Subscription</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 })
 ProfileButton.displayName = "ProfileButton"
 
-export function UserButton({
+export function UserAvatar({
   className,
   hideName,
   ...props
