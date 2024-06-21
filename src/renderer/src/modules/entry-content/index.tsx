@@ -107,7 +107,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
               </div>
               <div className="text-[13px] text-zinc-500">
                 {entry.entries.publishedAt &&
-                new Date(entry.entries.publishedAt).toLocaleString()}
+                  new Date(entry.entries.publishedAt).toLocaleString()}
               </div>
             </a>
             <WrappedElementProvider boundingDetection>

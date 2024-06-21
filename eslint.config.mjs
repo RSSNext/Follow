@@ -1,5 +1,5 @@
 // @ts-check
-import defineConfig, { GLOB_TS_SRC } from "eslint-config-hyoban"
+import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
 
 export default defineConfig(
   {
