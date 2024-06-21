@@ -62,5 +62,5 @@ export function getOS(): OS {
     os = "Linux"
   }
 
-  return os
+  return os as OS
 }
