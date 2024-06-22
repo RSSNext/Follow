@@ -11,6 +11,7 @@ export default defineConfig(
     },
     lessOpinionated: true,
     ignores: ["src/renderer/src/hono.ts"],
+    preferESM: false,
   },
   {
     settings: {
@@ -20,6 +21,9 @@ export default defineConfig(
           "center",
         ],
       },
+    },
+    rules: {
+      "unicorn/prefer-module": "off",
     },
   },
 )
