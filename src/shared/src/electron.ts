@@ -26,6 +26,7 @@ export const openElectronWindow = async (
 
     window.open(urlObject.toString())
   } else {
+    // eslint-disable-next-line no-restricted-globals
     window.open(url.replace(DEEPLINK_SCHEME, `${location.origin}/`))
   }
 }
