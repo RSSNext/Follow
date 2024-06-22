@@ -22,7 +22,9 @@ export function Component() {
     if (window.electron) {
       navigate("/")
     } else {
-      getCallbackUrl().then((url) => window.open(url))
+      getCallbackUrl().then((url) => {
+        window.open(url)
+      })
     }
   }, [])
 

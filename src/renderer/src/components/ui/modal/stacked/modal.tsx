@@ -92,7 +92,9 @@ export const ModalInternal: Component<{
 
   const animateController = useAnimationControls()
   useEffect(() => {
-    requestAnimationFrame(() => animateController.start(modalMontionConfig.animate))
+    requestAnimationFrame(() => {
+      animateController.start(modalMontionConfig.animate)
+    })
   }, [animateController])
   const noticeModal = useCallback(() => {
     animateController

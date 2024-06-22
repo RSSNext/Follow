@@ -5,15 +5,15 @@ import { useSignOut } from "@renderer/hooks"
 import { LOGIN_CALLBACK_URL, loginHandler } from "@renderer/lib/auth"
 import { APP_NAME } from "@renderer/lib/constants"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 export function Component() {
   const { status } = useSession()
   const navigate = useNavigate()
   const [redirecting, setRedirecting] = useState(false)
   const signOut = useSignOut()
-
-  const urlParams = new URLSearchParams(window.location.search)
+  const location = useLocation()
+  const urlParams = new URLSearchParams(location.search)
   const provider = urlParams.get("provider")
   useEffect(() => {
     if (!window.electron && provider) {
@@ -36,7 +36,6 @@ export function Component() {
       <Logo className="size-20" />
       <h1 className="text-3xl font-bold">
         Log in to
-        {" "}
         {APP_NAME}
       </h1>
       {redirecting ? (
