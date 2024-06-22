@@ -22,5 +22,8 @@ export default defineConfig(
         ],
       },
     },
+    rules: {
+      "unicorn/prefer-module": "off",
+    },
   },
 )

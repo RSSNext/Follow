@@ -3,12 +3,27 @@ productName: follow
 directories:
   buildResources: build
 files:
-  - "!**/.vscode/*"
-  - "!src/*"
-  - "!electron.vite.config.{js,ts,mjs,cjs}"
-  - "!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}"
-  - "!{.env,.env.*,.npmrc,pnpm-lock.yaml}"
-  - "!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}"
+  # - "**/*"
+  # - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}"
+  # - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
+  # - "!**/node_modules/*.d.ts"
+  # - "!**/node_modules/.bin"
+  # - "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}"
+  # - "!.editorconfig"
+  # - "!**/._*"
+  # - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}"
+  # - "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}"
+  # - "!**/{appveyor.yml,.travis.yml,circle.yml}"
+  # - "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+  # - "!**/.vscode/*"
+  # - "!src/*"
+  # - "!electron.vite.config.{js,ts,mjs,cjs}"
+  # - "!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}"
+  # - "!{.env,.env.*,.npmrc,pnpm-lock.yaml}"
+  # - "!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}"
+  - "out"
+  - "resources"
+  # - "!node_modules"
 asarUnpack:
   - resources/**
 win:

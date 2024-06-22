@@ -1,8 +1,17 @@
-import Store from "electron-store"
+import { resolve } from "node:path"
 
-interface StoreType {
-  set: (key: string, value: any) => void
-  get: (key: string) => any
+import { app } from "electron"
+import { JSONFileSyncPreset } from "lowdb/node"
+
+export const db = JSONFileSyncPreset(
+  resolve(app.getPath("userData"), "db.json"),
+  {},
+)
+
+export const store = {
+  get: (key: string) => db.data[key],
+  set: (key: string, value: any) => {
+    db.data[key] = value
+    db.write()
+  },
 }
-// https://github.com/sindresorhus/electron-store/issues/276
-export const store = new Store() as unknown as StoreType
