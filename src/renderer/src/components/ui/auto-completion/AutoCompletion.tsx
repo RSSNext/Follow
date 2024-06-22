@@ -1,7 +1,8 @@
+import { useRefValue } from "@renderer/hooks"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import clsx from "clsx"
-import { AnimatePresence, m } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 import Fuse from "fuse.js"
 import { merge, throttle } from "lodash-es"
 import {
@@ -79,6 +80,16 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       doFilter()
     }, [inputValue, suggestions])
 
+    useEffect(() => {
+      const $input = inputRef.current
+      if (!$input) return
+      if (document.activeElement !== $input) { return }
+
+      setIsOpen(
+        filterableSuggestions.length > 0,
+      )
+    }, [filterableSuggestions])
+
     const [isOpen, setIsOpen] = useState(false)
 
     const [listRef, setListRef] = useState<HTMLElement | null>(null)
@@ -102,29 +113,56 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     const inputRef = useRef<HTMLInputElement>(null)
     useImperativeHandle(forwardedRef, () => inputRef.current!)
 
-    const [inputRect, setInputRect] = useState<DOMRect | null>(null)
+    const [currentActiveIndex, setCurrentActiveIndex] = useState(0)
+    const currentActiveIndexRef = useRefValue(currentActiveIndex)
+    const filterableSuggestionsRef = useRefValue(filterableSuggestions)
+    // Bind hotkey
+    useEffect(() => {
+      const $input = inputRef.current
+      if (!$input) return
+      const handleKeyDown = (e: KeyboardEvent) => {
+        const currentActiveIndex = currentActiveIndexRef.current
+        const filterableSuggestionsLength =
+          filterableSuggestionsRef.current.length
+        const filterableSuggestions = filterableSuggestionsRef.current
 
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          e.preventDefault()
+          const nextIndex =
+            currentActiveIndex +
+            (e.key === "ArrowDown" ? 1 : e.key === "ArrowUp" ? -1 : 0)
+          setCurrentActiveIndex(
+            Math.max(0, Math.min(nextIndex, filterableSuggestionsLength - 1)),
+          )
+        } else if (
+          (e.key === "Enter" || e.key === "Tab") &&
+          currentActiveIndex >= 0 &&
+          currentActiveIndex < filterableSuggestionsLength
+        ) {
+          e.stopPropagation()
+          e.preventDefault()
+
+          onSuggestionSelected(filterableSuggestions[currentActiveIndex])
+          setInputValue(filterableSuggestions[currentActiveIndex].name)
+
+          requestAnimationFrame((() => {
+            requestAnimationFrame(() => {
+              setIsOpen(false)
+            })
+          }))
+        }
+      }
+
+      $input.addEventListener("keydown", handleKeyDown)
+      return () => {
+        $input.removeEventListener("keydown", handleKeyDown)
+      }
+    }, [currentActiveIndexRef, filterableSuggestionsRef, onSuggestionSelected])
+
+    const [inputRect, setInputRect] = useState<DOMRect | null>(null)
+    const [dropdownPos, setDropdownPos] = useState("down")
     const [dropdownHeight, setDropdownHeight] = useState(maxHeight || 200)
 
-    const [dropdownPos, setDropdownPos] = useState("down")
-
-    // useLayoutEffect(() => {
-    //   const $list = listRef
-    //   if (!$list) return
-    //   const handler = () => {
-    //     const rect = $list.getBoundingClientRect()
-
-    //     setDropdownHeight(rect.height)
-    //   }
-    //   const ob = new ResizeObserver(handler)
-    //   handler()
-
-    //   // setInterval(handler, 1000)
-    //   ob.observe($list)
-    //   return () => {
-    //     ob.disconnect()
-    //   }
-    // }, [listRef])
     useLayoutEffect(() => {
       const $input = inputRef.current
       if (!$input) return
@@ -199,19 +237,18 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
               {},
         )}
       >
-        <m.ul
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 10 }}
+        <ul
+          data-state={isOpen ? "open" : "closed"}
           className={clsx(
             "pointer-events-auto max-h-48 grow",
-            "overflow-auto rounded-md border border-zinc-200 bg-popover text-popover-foreground",
+            "overflow-auto rounded-md border border-border bg-popover text-popover-foreground",
+            "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
           )}
           //  FIXME: https://github.com/radix-ui/primitives/issues/2125
           onWheel={stopPropagation}
           onScroll={handleScroll}
         >
-          {filterableSuggestions.map((suggestion) => {
+          {filterableSuggestions.map((suggestion, index) => {
             const handleClick = () => {
               onSuggestionSelected(suggestion)
               setIsOpen(false)
@@ -220,16 +257,21 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             }
             return (
               <li
-                className="cursor-default px-4 py-1.5 text-sm hover:bg-theme-item-hover dark:hover:bg-neutral-800"
+                className={cn(
+                  "cursor-default px-4 py-1.5 text-sm",
+
+                  currentActiveIndex === index &&
+                  "bg-theme-item-hover dark:bg-neutral-800",
+                )}
                 key={suggestion.value}
                 onMouseDown={handleClick}
-                onClick={handleClick}
+                onMouseEnter={() => setCurrentActiveIndex(index)}
               >
                 {renderSuggestion(suggestion)}
               </li>
             )
           })}
-        </m.ul>
+        </ul>
       </div>
     )
     const handleFocus: React.FocusEventHandler<HTMLInputElement> =
