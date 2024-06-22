@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { getReadonlyRoute, getStableRouterNavigate } from "@renderer/atoms"
 import { ROUTE_FEED_PENDING } from "@renderer/lib/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
