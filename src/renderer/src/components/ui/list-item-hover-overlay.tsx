@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prefer-add-event-listener */
 "use client"
 
 import clsx from "clsx"

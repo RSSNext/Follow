@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 import "./cssAsPlugin"
 
 import { getIconCollections, iconsPlugin } from "@egoist/tailwindcss-icons"

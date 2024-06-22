@@ -1,10 +1,8 @@
 // @ts-check
-import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
+import { defineConfig } from "eslint-config-hyoban"
 
 export default defineConfig(
   {
-    react: "vite",
-    tailwindCSS: true,
     stylistic: {
       quotes: "double",
       arrowParens: true,
@@ -14,15 +12,7 @@ export default defineConfig(
     lessOpinionated: true,
     ignores: ["src/renderer/src/hono.ts"],
   },
-  // fix later or just always ignore
   {
-    rules: {
-      "no-console": ["error", { allow: ["warn", "error", "info"] }],
-      "unicorn/consistent-function-scoping": "warn",
-      "unicorn/prefer-module": "off",
-      "@typescript-eslint/no-floating-promises": "off",
-      "@typescript-eslint/no-unused-expressions": 0,
-    },
     settings: {
       tailwindcss: {
         callees: ["cn"],
@@ -30,13 +20,6 @@ export default defineConfig(
           "center",
         ],
       },
-    },
-  },
-  {
-    files: GLOB_TS_SRC,
-    rules: {
-      "@eslint-react/no-unstable-context-value": "warn",
-      "react-compiler/react-compiler": "warn",
     },
   },
 )

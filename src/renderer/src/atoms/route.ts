@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/no-unreadable-array-destructuring */
 import { createAtomHooks } from "@renderer/lib/jotai"
 import { atom, useAtomValue } from "jotai"
 import { selectAtom } from "jotai/utils"
