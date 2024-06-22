@@ -5,6 +5,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@renderer/components/ui/context-menu"
+import { nextFrame } from "@renderer/lib/dom"
 import type { NativeMenuItem } from "@renderer/lib/native-menu"
 import { CONTEXT_MENU_SHOW_EVENT_KEY } from "@renderer/lib/native-menu"
 import type { ReactNode } from "react"
@@ -59,10 +60,8 @@ const Handler = () => {
                     // Here we need to delay one frame,
                     // so it's two raf's, in order to have `point-event: none` recorded by RadixOverlay after modal is invoked in a certain scenario,
                     // and the page freezes after modal is turned off.
-                    requestAnimationFrame(() => {
-                      requestAnimationFrame(() => {
-                        item.click?.()
-                      })
+                    nextFrame(() => {
+                      item.click?.()
                     })
                   }}
                 >

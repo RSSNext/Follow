@@ -14,6 +14,7 @@ import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
+import { nextFrame } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
@@ -49,10 +50,8 @@ const FeedItemImpl = ({
         category: null,
       })
       // focus to main container in order to let keyboard can navigate entry items by arrow keys
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          getMainContainerElement()?.focus()
-        })
+      nextFrame(() => {
+        getMainContainerElement()?.focus()
       })
     },
     [subscription.feedId, navigate, view],

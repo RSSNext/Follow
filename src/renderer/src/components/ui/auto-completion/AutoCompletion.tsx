@@ -1,5 +1,5 @@
 import { useRefValue } from "@renderer/hooks"
-import { stopPropagation } from "@renderer/lib/dom"
+import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import clsx from "clsx"
 import { AnimatePresence } from "framer-motion"
@@ -83,11 +83,11 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     useEffect(() => {
       const $input = inputRef.current
       if (!$input) return
-      if (document.activeElement !== $input) { return }
+      if (document.activeElement !== $input) {
+        return
+      }
 
-      setIsOpen(
-        filterableSuggestions.length > 0,
-      )
+      setIsOpen(filterableSuggestions.length > 0)
     }, [filterableSuggestions])
 
     const [isOpen, setIsOpen] = useState(false)
@@ -145,11 +145,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
           onSuggestionSelected(filterableSuggestions[currentActiveIndex])
           setInputValue(filterableSuggestions[currentActiveIndex].name)
 
-          requestAnimationFrame((() => {
-            requestAnimationFrame(() => {
-              setIsOpen(false)
-            })
-          }))
+          nextFrame(() => {
+            setIsOpen(false)
+          })
         }
       }
 
