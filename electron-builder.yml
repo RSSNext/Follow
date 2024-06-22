@@ -23,7 +23,7 @@ files:
   # - "!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}"
   - "out"
   - "resources"
-  # - "!node_modules"
+  - "!node_modules"
 asarUnpack:
   - resources/**
 win:
