@@ -5,7 +5,20 @@ import { cva } from "class-variance-authority"
 import { m } from "framer-motion"
 import * as React from "react"
 
-const Tabs = TabsPrimitive.Root
+const TabsIdContext = React.createContext<string | null>(null)
+
+const Tabs: typeof TabsPrimitive.Root = React.forwardRef((props, ref) => {
+  const { children, ...rest } = props
+  const id = React.useId()
+
+  return (
+    <TabsIdContext.Provider value={id}>
+      <TabsPrimitive.Root {...rest} ref={ref}>
+        {children}
+      </TabsPrimitive.Root>
+    </TabsIdContext.Provider>
+  )
+})
 
 const tabsListVariants = cva("", {
   variants: {
@@ -63,6 +76,8 @@ const TabsTrigger = React.forwardRef<
   React.useImperativeHandle(ref, () => triggerRef.current!, [ref])
 
   const [isSelect, setIsSelect] = React.useState(false)
+  const id = React.useContext(TabsIdContext)
+  const layoutId = `tab-selected-underline-${id}`
   React.useLayoutEffect(() => {
     if (!triggerRef.current) return
 
@@ -98,7 +113,7 @@ const TabsTrigger = React.forwardRef<
       {children}
       {isSelect && (
         <m.span
-          layoutId="tab-selected-underline"
+          layoutId={layoutId}
           className="absolute -bottom-1 h-0.5 w-[calc(100%-16px)] rounded bg-theme-accent"
         />
       )}
