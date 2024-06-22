@@ -17,12 +17,13 @@ import { useFeed } from "@renderer/queries/feed"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import type { FC } from "react"
 import { Helmet } from "react-helmet-async"
-import { useParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 
 export function Component() {
   const { id } = useParams()
+  const [search] = useSearchParams()
   const view = Number.parseInt(
-    new URLSearchParams(location.search).get("view") || "0",
+    search.get("view") || "0",
   )
 
   const feed = useFeed({

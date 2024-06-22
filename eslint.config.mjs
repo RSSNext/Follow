@@ -24,6 +24,13 @@ export default defineConfig(
     },
     rules: {
       "unicorn/prefer-module": "off",
+      "no-restricted-globals": [
+        "error",
+        {
+          name: "location",
+          message: "Since you don't use the same router instance in electron and browser, you can't use the global location to get the route info. \n\n" + "You can use `useLocaltion` or `getReadonlyRoute` to get the route info.",
+        },
+      ],
     },
   },
 )

@@ -1,4 +1,7 @@
+import { useLocation } from "react-router-dom"
+
 export function Component() {
+  const location = useLocation()
   const urlSearchParams = new URLSearchParams(location.search)
   const url = urlSearchParams.get("url")
 
