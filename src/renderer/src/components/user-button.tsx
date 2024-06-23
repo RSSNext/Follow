@@ -5,7 +5,6 @@ import {
 } from "@renderer/components/ui/avatar"
 import { useSignOut } from "@renderer/hooks"
 import { loginHandler } from "@renderer/lib/auth"
-import { tipcClient } from "@renderer/lib/client"
 import { APP_NAME } from "@renderer/lib/constants"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
@@ -134,14 +133,10 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
-            if (window.electron) {
-              tipcClient?.openSettingWindow()
-            } else {
-              // Here we need to delay one frame, so it's two raf,
-              //  in order to have `point-event: none` recorded by RadixOverlay after modal is invoked in a certain scenario,
-              // and the page freezes after modal is turned off.
-              nextFrame(settingModalPresent)
-            }
+            // Here we need to delay one frame, so it's two raf,
+            //  in order to have `point-event: none` recorded by RadixOverlay after modal is invoked in a certain scenario,
+            // and the page freezes after modal is turned off.
+            nextFrame(settingModalPresent)
           }}
         >
           Preferences

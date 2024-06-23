@@ -1,11 +1,17 @@
 import path from "node:path"
 
 import { is } from "@electron-toolkit/utils"
+import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, shell } from "electron"
 
 import icon from "../../resources/icon.png?asset"
 import { store } from "./store"
+
+const windows = {
+  settingWindow: null as BrowserWindow | null,
+  mainWindow: null as BrowserWindow | null,
+}
 
 export function createWindow(
   options: {
@@ -123,14 +129,21 @@ export const createMainWindow = () => {
       x: bounds.x,
       y: bounds.y,
     })
+    windows.mainWindow = null
   })
 
+  windows.mainWindow = window
   return window
 }
-const windows = {
-  settingWindow: null as BrowserWindow | null,
-}
+
 export const createSettingWindow = () => {
+  // We need to open the setting modal in the main window when the main window exists,
+  // if we open a new window then the state between the two windows will be out of sync.
+  if (windows.mainWindow) {
+    windows.mainWindow.show()
+    callGlobalContextMethod(windows.mainWindow, "showSetting")
+    return
+  }
   if (windows.settingWindow) {
     windows.settingWindow.show()
     return

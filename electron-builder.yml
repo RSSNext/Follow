@@ -24,6 +24,7 @@ files:
   - "out"
   - "resources"
   - "!node_modules"
+  - "node_modules/font-list/**/*"
 asarUnpack:
   - resources/**
 win:

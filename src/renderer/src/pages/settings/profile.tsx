@@ -13,6 +13,7 @@ import {
 import { Input } from "@renderer/components/ui/input"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { SettingsTitle } from "@renderer/modules/settings/title"
+import { defineSettingPage } from "@renderer/modules/settings/utils"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -22,6 +23,15 @@ const formSchema = z.object({
   handle: z.string().max(50),
   name: z.string().min(3).max(50),
   avatar: z.string().url(),
+})
+
+const iconName = "i-mgc-user-setting-cute-re"
+const name = "Profile"
+const priority = 1030
+export const loader = defineSettingPage({
+  iconName,
+  name,
+  priority,
 })
 
 export function Component() {
@@ -54,7 +64,7 @@ export function Component() {
 
   return (
     <>
-      <SettingsTitle path="profile" sticky className="mb-4" />
+      <SettingsTitle />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

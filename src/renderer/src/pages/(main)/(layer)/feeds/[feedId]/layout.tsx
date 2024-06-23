@@ -23,7 +23,7 @@ export function Component() {
     initial: entryColWidth,
     containerRef,
     onResizeEnd({ position }) {
-      uiActions.setEntryColWidth(position)
+      uiActions.set("entryColWidth", position)
     },
   })
 

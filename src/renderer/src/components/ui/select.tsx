@@ -1,6 +1,5 @@
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { cn } from "@renderer/lib/utils"
-import { Check, ChevronDown, ChevronUp } from "lucide-react"
 import * as React from "react"
 
 const Select = SelectPrimitive.Root
@@ -25,7 +24,7 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="size-4 opacity-50" />
+      <i className="i-mingcute-down-line size-4 opacity-50" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ))
@@ -43,7 +42,7 @@ const SelectScrollUpButton = React.forwardRef<
     )}
     {...props}
   >
-    <ChevronUp />
+    <i className="i-mingcute-up-line" />
   </SelectPrimitive.ScrollUpButton>
 ))
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName
@@ -60,7 +59,7 @@ const SelectScrollDownButton = React.forwardRef<
     )}
     {...props}
   >
-    <ChevronDown />
+    <i className="i-mingcute-down-line" />
   </SelectPrimitive.ScrollDownButton>
 ))
 SelectScrollDownButton.displayName =
@@ -124,7 +123,7 @@ const SelectItem = React.forwardRef<
   >
     <span className="absolute right-2 flex size-3.5 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
-        <Check className="size-4" />
+        <i className="i-mingcute-check-line size-3" />
       </SelectPrimitive.ItemIndicator>
     </span>
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

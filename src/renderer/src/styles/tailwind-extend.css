@@ -159,7 +159,7 @@
     appearance: none;
     border-radius: 5px;
     border-width: 1px;
-    border-color: theme(colors.zinc.500);
+    border-color: theme(colors.theme.inactive);
     --tw-border-opacity: 0.2;
   }
 
