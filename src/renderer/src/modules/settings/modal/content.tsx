@@ -1,13 +1,17 @@
 import { MotionButtonBase } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useCurrentModal } from "@renderer/components/ui/modal"
-import { settingTabs } from "@renderer/lib/constants"
 import { preventDefault } from "@renderer/lib/dom"
-import { SettingsTitle } from "@renderer/modules/settings/title"
+import {
+  SettingsSidebarTitle,
+  SettingsTitle,
+} from "@renderer/modules/settings/title"
 import { createContextState } from "foxact/context-state"
 import { m } from "framer-motion"
-import type { FC, PropsWithChildren } from "react"
+import type { FC, PropsWithChildren, ReactNode } from "react"
 import { createElement, useEffect, useState } from "react"
+
+import { settings } from "../constants"
 
 const [SettingTabProvider, useSettingTab, useSetSettingTab] =
   createContextState("")
@@ -28,6 +32,10 @@ function Layout(props: PropsWithChildren) {
   const { children } = props
   const setTab = useSetSettingTab()
   const tab = useSettingTab()
+
+  useEffect(() => {
+    if (!tab) setTab(settings[0].path)
+  }, [])
   return (
     <m.div
       exit={{
@@ -39,7 +47,7 @@ function Layout(props: PropsWithChildren) {
     >
       <div className="flex h-0 flex-1 bg-theme-tooltip-background">
         <div className="w-44 border-r px-2 py-6">
-          {settingTabs.map((t) => (
+          {settings.map((t) => (
             <button
               key={t.path}
               className={`my-1 flex w-full items-center rounded-lg px-2.5 py-0.5 leading-loose text-theme-foreground/70 transition-colors ${
@@ -50,7 +58,7 @@ function Layout(props: PropsWithChildren) {
               type="button"
               onClick={() => setTab(t.path)}
             >
-              <SettingsTitle
+              <SettingsSidebarTitle
                 path={t.path}
                 className="text-[15px] font-medium"
               />
@@ -87,7 +95,7 @@ const Close = () => {
 }
 
 const Content = () => {
-  const key = useSettingTab() || "index"
+  const key = useSettingTab()
   const Component = pages[key]
 
   if (!Component) return null
@@ -100,7 +108,7 @@ const LoadRemixAsyncComponent: FC<{
 }> = ({ loader }) => {
   const [loading, setLoading] = useState(true)
 
-  const [Component, setComponent] = useState({
+  const [Component, setComponent] = useState<{ c: () => ReactNode }>({
     c: () => null,
   })
 
@@ -111,8 +119,15 @@ const LoadRemixAsyncComponent: FC<{
         if (!module.Component) {
           return
         }
+
+        const { loader } = module
         setComponent({
-          c: module.Component,
+          c: () => (
+            <>
+              <SettingsTitle loader={loader} />
+              <module.Component />
+            </>
+          ),
         })
       })
       .finally(() => {
