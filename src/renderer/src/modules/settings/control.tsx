@@ -29,7 +29,7 @@ export const SettingSwitch: Component<{
 }> = ({ checked, label, onCheckedChange }) => {
   const id = useId()
   return (
-    <div className="mb-2 flex items-center justify-between gap-4">
+    <div className="mb-3 flex items-center justify-between gap-4">
       <Label htmlFor={id}>{label}</Label>
       <Switch
         checked={checked}

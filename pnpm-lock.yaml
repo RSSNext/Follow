@@ -121,6 +121,9 @@ importers:
       electron-updater:
         specifier: ^6.2.1
         version: 6.2.1
+      font-list:
+        specifier: 1.5.1
+        version: 1.5.1
       foxact:
         specifier: 0.2.35
         version: 0.2.35(react@18.3.1)
@@ -3479,6 +3482,9 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+
+  font-list@1.5.1:
+    resolution: {integrity: sha512-Hr5V0dsSv91wH3FgirXd7qh1PydqA/vMQyWjFFWn+lUPJtC+3i2tzgVqbLRcvQh87TGdbTGbAR3mEo4VlwC1jw==}
 
   foreground-child@3.1.1:
     resolution: {integrity: sha512-TMKDUnIte6bfb5nWv7V/caI169OHgvwjb7V4WkeUvbQQdjr5rWKqHFiKWb/fcOwB+CzBT+qbWjvj+DVwRskpIg==}
@@ -9514,6 +9520,8 @@ snapshots:
   flatted@3.3.1: {}
 
   follow-redirects@1.15.6: {}
+
+  font-list@1.5.1: {}
 
   foreground-child@3.1.1:
     dependencies:

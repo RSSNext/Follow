@@ -19,8 +19,8 @@ export function Component() {
       <div className="space-y-6">
         {Object.keys(shortcuts).map((type) => (
           <section key={type}>
-            <div className="mb-2 text-sm capitalize">{type}</div>
-            <div className="rounded-md border text-[13px] text-zinc-600">
+            <div className="mb-2 text-sm font-medium capitalize">{type}</div>
+            <div className="rounded-md border text-[13px] text-zinc-600 dark:text-zinc-300">
               {Object.keys(shortcuts[type]).map((action, index) => (
                 <div
                   key={`${type}-${action}`}

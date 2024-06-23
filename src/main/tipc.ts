@@ -155,6 +155,14 @@ export const router = {
     }),
 
   openSettingWindow: t.procedure.action(async () => createSettingWindow()),
+
+  getSystemFonts: t.procedure.action(async (): Promise<string[]> => new Promise((resolve) => {
+    // NOTE: should external font-list deps
+    // use `require` to avoid bundling, vite behavior
+    require("font-list").getFonts().then((fonts) => {
+      resolve(fonts.map((font) => font.replaceAll("\"", "")))
+    })
+  })),
 }
 
 export type Router = typeof router

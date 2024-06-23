@@ -9,7 +9,7 @@ import {
   WrappedElementProvider,
 } from "@renderer/providers/wrapped-element-provider"
 import { Queries } from "@renderer/queries"
-import { useEntry, useFeedHeaderTitle } from "@renderer/store"
+import { useEntry, useFeedHeaderTitle, useUIStore } from "@renderer/store"
 import { m } from "framer-motion"
 import { useEffect, useState } from "react"
 
@@ -76,6 +76,8 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     },
   )
 
+  const readerFontFamily = useUIStore((state) => state.readerFontFamily)
+
   if (!entry) return null
 
   return (
@@ -83,13 +85,19 @@ function EntryContentRender({ entryId }: { entryId: string }) {
       <EntryHeader entryId={entry.entries.id} view={0} />
       <div className="h-[calc(100%-3.5rem)] min-w-0 overflow-y-auto @container">
         <m.div
+          style={{
+            fontFamily: readerFontFamily,
+          }}
           className="p-5"
           initial={{ opacity: 0.01, y: 100 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0.01, y: -100 }}
           key={entry.entries.id}
         >
-          <article onContextMenu={stopPropagation} className="relative m-auto min-w-0 max-w-[550px] @4xl:max-w-[70ch]">
+          <article
+            onContextMenu={stopPropagation}
+            className="relative m-auto min-w-0 max-w-[550px] @4xl:max-w-[70ch]"
+          >
             <a
               href={entry.entries.url || void 0}
               target="_blank"
@@ -112,10 +120,10 @@ function EntryContentRender({ entryId }: { entryId: string }) {
             </a>
             <WrappedElementProvider boundingDetection>
               <TitleMetaHandler entryId={entry.entries.id} />
-              <div className="prose prose-zinc mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[15px] dark:prose-invert">
+              <div className="prose prose-zinc mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
                 {(summary.isLoading || summary.data) && (
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
-                    <div className="flex items-center gap-2 font-medium text-zinc-800">
+                    <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
                       <i className="i-mgc-magic-2-cute-re align-middle" />
                       <span>AI summary</span>
                     </div>

@@ -1,5 +1,5 @@
 import { tipcClient } from "@renderer/lib/client"
-import { SettingCheckbox } from "@renderer/modules/settings/control"
+import { SettingSwitch } from "@renderer/modules/settings/control"
 import {
   SettingsTitle,
 } from "@renderer/modules/settings/title"
@@ -34,7 +34,7 @@ export function Component() {
       <SettingsTitle />
       <div className="mt-6 space-y-6">
         {window.electron && (
-          <SettingCheckbox
+          <SettingSwitch
             label="Launch Follow at Login"
             checked={loginSetting}
             onCheckedChange={saveLoginSetting}

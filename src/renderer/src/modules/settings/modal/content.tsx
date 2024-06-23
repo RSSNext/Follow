@@ -60,12 +60,12 @@ function Layout(props: PropsWithChildren) {
             >
               <SettingsSidebarTitle
                 path={t.path}
-                className="text-[15px] font-medium"
+                className="text-[0.94rem] font-medium"
               />
             </button>
           ))}
         </div>
-        <div className="relative h-full flex-1 bg-theme-background p-8">
+        <div className="relative h-full flex-1 bg-theme-background p-8 pt-0">
           {children}
         </div>
       </div>

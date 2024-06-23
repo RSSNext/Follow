@@ -60,6 +60,7 @@
     "dayjs": "1.11.11",
     "dotenv": "16.4.5",
     "electron-updater": "^6.2.1",
+    "font-list": "1.5.1",
     "foxact": "0.2.35",
     "framer-motion": "11.2.11",
     "franc-min": "6.2.0",

@@ -20,7 +20,7 @@ export const SettingsSidebarTitle = ({
   return (
     <div
       className={cn(
-        "flex items-center gap-2 text-[15px] font-medium",
+        "flex items-center gap-2 text-[0.94rem] font-medium",
         className,
       )}
     >
@@ -47,7 +47,7 @@ export const SettingsTitle = ({
   return (
     <div
       className={cn(
-        "flex items-center gap-2 text-xl font-bold",
+        "flex items-center gap-2 pb-2 pt-6 text-xl font-bold",
         "sticky top-0 mb-4 bg-background",
         className,
       )}
