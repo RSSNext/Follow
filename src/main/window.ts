@@ -136,7 +136,7 @@ export const createSettingWindow = () => {
     return
   }
   const window = createWindow({
-    extraPath: "/settings",
+    extraPath: "/#settings",
     width: 700,
     height: 600,
     resizable: false,
