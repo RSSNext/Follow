@@ -2,10 +2,11 @@ import { createZustandStore, getStoreActions } from "./utils/helper"
 
 interface UIState {
   entryColWidth: number
-
   opaqueSidebar: boolean
   readerFontFamily: string
   uiTextSize: number
+  /** macOS only */
+  showDockBadge: boolean
 }
 
 const createDefaultUIState = (): UIState => ({
@@ -13,6 +14,8 @@ const createDefaultUIState = (): UIState => ({
   opaqueSidebar: false,
   readerFontFamily: "SN Pro",
   uiTextSize: 16,
+
+  showDockBadge: true,
 })
 interface UIActions {
   clear: () => void

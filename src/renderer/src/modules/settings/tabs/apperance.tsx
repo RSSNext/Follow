@@ -23,6 +23,7 @@ export const SettingAppearance = () => {
   }, [])
 
   const state = useUIStore()
+  const onlyMacos = window.electron && getOS() === "macOS"
 
   return (
     <div>
@@ -33,19 +34,30 @@ export const SettingAppearance = () => {
         checked={isDark}
         onCheckedChange={saveDarkSetting}
       />
-      {window.electron && getOS() === "macOS" && (
-        <SettingSwitch
-          label="Opaque Sidebars"
-          checked={state.opaqueSidebar}
-          onCheckedChange={(checked) => {
-            uiActions.set("opaqueSidebar", checked)
-          }}
-        />
-      )}
+      {onlyMacos &&
+        (
+          <SettingSwitch
+            label="Opaque Sidebars"
+            checked={state.opaqueSidebar}
+            onCheckedChange={(checked) => {
+              uiActions.set("opaqueSidebar", checked)
+            }}
+          />
+        )}
 
       <SettingSectionTitle title="Text" />
       {window.electron && <Fonts />}
       <TextSize />
+      <SettingSectionTitle title="Display counts" />
+      {onlyMacos && (
+        <SettingSwitch
+          label="Dock Badge"
+          checked={state.showDockBadge}
+          onCheckedChange={(c) => {
+            uiActions.set("showDockBadge", c)
+          }}
+        />
+      )}
     </div>
   )
 }
