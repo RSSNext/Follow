@@ -18,15 +18,19 @@ import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { CategoryRenameContent } from "./category-rename-dialog"
 import { FeedItem } from "./item"
 
+interface FeedCategoryProps {
+  data: FeedListModel["list"][number]
+  view?: number
+  expansion: boolean
+  showUnreadCount?: boolean
+}
+
 function FeedCategoryImpl({
   data,
   view,
   expansion,
-}: {
-  data: FeedListModel["list"][number]
-  view?: number
-  expansion: boolean
-}) {
+  showUnreadCount = true,
+}: FeedCategoryProps) {
   const [open, setOpen] = useState(!data.name)
 
   const feedIdList = data.list.map((feed) => feed.feedId)
@@ -62,9 +66,13 @@ function FeedCategoryImpl({
     ),
   )
 
-  const isActive = useRouteParamsSelector((routerParams) => routerParams?.level === levels.folder &&
-    routerParams.feedId === data.list.map((feed) => feed.feedId).join(","))
+  const isActive = useRouteParamsSelector(
+    (routerParams) =>
+      routerParams?.level === levels.folder &&
+      routerParams.feedId === data.list.map((feed) => feed.feedId).join(","),
+  )
   const { present } = useModalStack()
+
   return (
     <Collapsible
       open={open}
@@ -128,9 +136,11 @@ function FeedCategoryImpl({
             >
               <i className="i-mgc-right-cute-fi mr-2 transition-transform" />
             </CollapsibleTrigger>
-            <span className="truncate">{data.name}</span>
+            <span className={cn("truncate", !showUnreadCount && (unread ? "font-bold" : "font-medium opacity-70"))}>
+              {data.name}
+            </span>
           </div>
-          {!!unread && (
+          {!!unread && showUnreadCount && (
             <div className="ml-2 text-xs text-zinc-500">{unread}</div>
           )}
         </div>
@@ -154,6 +164,7 @@ function FeedCategoryImpl({
           >
             {sortByUnreadFeedList.map((feed) => (
               <FeedItem
+                showUnreadCount={showUnreadCount}
                 key={feed.feedId}
                 subscription={feed}
                 view={view}

@@ -28,15 +28,18 @@ import { useFeedClaimModal } from "../claim/hooks"
 import { FeedForm } from "../discover/feed-form"
 
 type FeedItemData = SubscriptionPlainModel
+interface FeedItemProps {
+  subscription: FeedItemData
+  view?: number
+  className?: string
+  showUnreadCount?: boolean
+}
 const FeedItemImpl = ({
   subscription,
   view,
   className,
-}: {
-  subscription: FeedItemData
-  view?: number
-  className?: string
-}) => {
+  showUnreadCount = true,
+}: FeedItemProps) => {
   const navigate = useNavigateEntry()
   const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
@@ -213,7 +216,14 @@ const FeedItemImpl = ({
         )}
       >
         <FeedIcon feed={feed} className="size-4" />
-        <div className="truncate">{feed.title}</div>
+        <div
+          className={cn(
+            "truncate",
+            !showUnreadCount && (feedUnread ? "font-bold" : "font-medium opacity-70"),
+          )}
+        >
+          {feed.title}
+        </div>
         {feed.errorAt && (
           <TooltipProvider delayDuration={300}>
             <Tooltip>
@@ -250,7 +260,7 @@ const FeedItemImpl = ({
           </TooltipProvider>
         )}
       </div>
-      {!!feedUnread && (
+      {showUnreadCount && !!feedUnread && (
         <div className="ml-2 text-xs text-zinc-500">{feedUnread}</div>
       )}
     </div>

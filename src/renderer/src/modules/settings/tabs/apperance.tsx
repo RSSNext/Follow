@@ -23,6 +23,7 @@ export const SettingAppearance = () => {
   }, [])
 
   const state = useUIStore()
+  const onlyMacos = window.electron && getOS() === "macOS"
 
   return (
     <div>
@@ -33,7 +34,7 @@ export const SettingAppearance = () => {
         checked={isDark}
         onCheckedChange={saveDarkSetting}
       />
-      {window.electron && getOS() === "macOS" && (
+      {onlyMacos && (
         <SettingSwitch
           label="Opaque Sidebars"
           checked={state.opaqueSidebar}
@@ -46,6 +47,23 @@ export const SettingAppearance = () => {
       <SettingSectionTitle title="Text" />
       {window.electron && <Fonts />}
       <TextSize />
+      <SettingSectionTitle title="Display counts" />
+      {onlyMacos && (
+        <SettingSwitch
+          label="Dock Badge"
+          checked={state.showDockBadge}
+          onCheckedChange={(c) => {
+            uiActions.set("showDockBadge", c)
+          }}
+        />
+      )}
+      <SettingSwitch
+        label="Show sidebar unread count"
+        checked={state.sidebarShowUnreadCount}
+        onCheckedChange={(c) => {
+          uiActions.set("sidebarShowUnreadCount", c)
+        }}
+      />
     </div>
   )
 }
@@ -108,12 +126,16 @@ const TextSize = () => {
           )
         }}
       >
-        <SelectTrigger className="h-8 w-24">
+        <SelectTrigger className="h-8 w-24 capitalize">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
           {Object.entries(textSizeMap).map(([size, value]) => (
-            <SelectItem key={size} value={value.toString()}>
+            <SelectItem
+              className="capitalize"
+              key={size}
+              value={value.toString()}
+            >
               {size}
             </SelectItem>
           ))}

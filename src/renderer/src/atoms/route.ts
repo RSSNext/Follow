@@ -2,17 +2,25 @@ import { createAtomHooks } from "@renderer/lib/jotai"
 import { atom, useAtomValue } from "jotai"
 import { selectAtom } from "jotai/utils"
 import { useMemo } from "react"
-import type { NavigateFunction, Params } from "react-router-dom"
+import type { Location, NavigateFunction, Params } from "react-router-dom"
 
 interface RouteAtom {
   params: Readonly<Params<string>>
   searchParams: URLSearchParams
+  location: Location<any>
 }
 
 export const [routeAtom, , , , getReadonlyRoute, setRoute] = createAtomHooks(
   atom<RouteAtom>({
     params: {},
     searchParams: new URLSearchParams(),
+    location: {
+      pathname: "",
+      search: "",
+      hash: "",
+      state: null,
+      key: "",
+    },
   }),
 )
 
@@ -25,7 +33,7 @@ export const useReadonlyRouteSelector = <T>(
       useMemo(() => selectAtom(routeAtom, (route) => selector(route)), deps),
     )
 
-// VITE HMR will create new router instance, but RouterProvider always stable
+// Vite HMR will create new router instance, but RouterProvider always stable
 
 const [, , , , navigate, setNavigate] = createAtomHooks(
   atom<{ fn: NavigateFunction | null }>({ fn() {} }),

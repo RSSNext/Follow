@@ -28,6 +28,23 @@ export const dbStorage: PersistStorage<any> = {
     await del(name)
   },
 }
+export const localStorage: PersistStorage<any> = {
+  getItem: (name: string) => {
+    const data = window.localStorage.getItem(name)
+
+    if (data === null) {
+      return null
+    }
+
+    return JSON.parse(data)
+  },
+  setItem: (name, value) => {
+    window.localStorage.setItem(name, JSON.stringify(value))
+  },
+  removeItem: (name: string) => {
+    window.localStorage.removeItem(name)
+  },
+}
 enableMapSet()
 export const zustandStorage = dbStorage
 

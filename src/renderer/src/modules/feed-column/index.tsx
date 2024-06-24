@@ -1,15 +1,17 @@
+import { getReadonlyRoute } from "@renderer/atoms"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
 import { ProfileButton } from "@renderer/components/user-button"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { APP_NAME, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
+import { Routes } from "@renderer/lib/enum"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { clamp, cn } from "@renderer/lib/utils"
 import { useWheel } from "@use-gesture/react"
 import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { Link } from "react-router-dom"
 
@@ -18,28 +20,57 @@ import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
 
+const useBackHome = (active: number) => {
+  const navigate = useNavigateEntry()
+
+  return useCallback((overvideActive?: number) => {
+    navigate({
+      feedId: null,
+      entryId: null,
+      view: overvideActive ?? active,
+      level: levels.view,
+    })
+  }, [active, navigate])
+}
 export function FeedColumn() {
   const carouselRef = useRef<HTMLDivElement>(null)
 
-  const [active, setActive] = useState(0)
+  const [active, setActive_] = useState(0)
   const spring = useSpring(0, {
     stiffness: 700,
     damping: 40,
   })
+  const navigateBackHome = useBackHome(active)
+  const setActive: typeof setActive_ = useCallback(
+    (args) => {
+      const nextActive = typeof args === "function" ? args(active) : args
+      setActive_(args)
 
-  useHotkeys(shortcuts.feeds.switchBetweenViews.key, () => {
-    if (isHotkeyPressed("Left")) {
-      setActive((i) => {
-        if (i === 0) {
-          return views.length - 1
-        } else {
-          return i - 1
-        }
-      })
-    } else {
-      setActive((i) => (i + 1) % views.length)
-    }
-  }, { scopes: ["home"] })
+      if (getReadonlyRoute().location.pathname.startsWith(Routes.Feeds)) {
+        navigateBackHome(nextActive)
+      }
+      spring.set(-nextActive * 256)
+    },
+    [active, navigateBackHome, spring],
+  )
+
+  useHotkeys(
+    shortcuts.feeds.switchBetweenViews.key,
+    () => {
+      if (isHotkeyPressed("Left")) {
+        setActive((i) => {
+          if (i === 0) {
+            return views.length - 1
+          } else {
+            return i - 1
+          }
+        })
+      } else {
+        setActive((i) => (i + 1) % views.length)
+      }
+    },
+    { scopes: ["home"] },
+  )
 
   useWheel(
     ({ event, last, memo: wait = false, direction: [dx], delta: [dex] }) => {
@@ -67,25 +98,10 @@ export function FeedColumn() {
   const normalStyle =
     !window.electron || window.electron.process.platform !== "darwin"
 
-  const navigate = useNavigateEntry()
-
-  useEffect(() => {
-    spring.set(-active * 256)
-    navigateBackHome()
-  }, [active])
-
-  const navigateBackHome = useCallback(() => {
-    navigate({
-      feedId: null,
-      entryId: null,
-      view: active,
-      level: levels.view,
-    })
-  }, [active, navigate])
   return (
     <Vibrancy
       className="flex h-full flex-col gap-3 pt-2.5"
-      onClick={navigateBackHome}
+      onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
       <div
         className={cn(

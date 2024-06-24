@@ -9,7 +9,7 @@ import { Provider } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import { HelmetProvider } from "react-helmet-async"
 
-import { BizRouterProvider } from "./biz-router-provider"
+import { StableRouterProvider } from "./biz-router-provider"
 import { ContextMenuProvider } from "./context-menu-provider"
 import { UISettingInitialize } from "./ui-setting-Initialize"
 import { UserProvider } from "./user-provider"
@@ -36,7 +36,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
             <ModalStackProvider />
             <ContextMenuProvider />
             <HelmetProvider>{children}</HelmetProvider>
-            <BizRouterProvider />
+            <StableRouterProvider />
           </Provider>
         </TooltipProvider>
       </PersistQueryClientProvider>

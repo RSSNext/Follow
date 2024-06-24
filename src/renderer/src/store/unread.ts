@@ -16,6 +16,8 @@ interface UnreadActions {
   fetchUnreadAll: () => Promise<Record<string, number>>
   incrementByFeedId: (feedId: string, inc: number) => void
 
+  subscribeUnreadCount: (fn: (count: number) => void, immediately?: boolean) => () => void
+
   internal_reset: () => void
 
   clear: () => void
@@ -25,7 +27,7 @@ export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
   {
     version: 1,
   },
-)((set) => ({
+)((set, get) => ({
   data: {},
 
   internal_reset() {
@@ -88,6 +90,21 @@ export const useUnreadStore = createZustandStore<UnreadState & UnreadActions>(
         return state
       }),
     )
+  },
+
+  subscribeUnreadCount(fn, immediately) {
+    const handler = (state: UnreadState & UnreadActions): void => {
+      let unread = 0
+      for (const key in state.data) {
+        unread += state.data[key]
+      }
+
+      fn(unread)
+    }
+    if (immediately) {
+      handler(get())
+    }
+    return useUnreadStore.subscribe(handler)
   },
 }))
 
