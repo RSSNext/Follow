@@ -25,7 +25,9 @@ if (process.defaultApp) {
   app.setAsDefaultProtocolClient("follow")
 }
 
-app.dock.setIcon(path.join(__dirname, "../../resources/icon.png"))
+if (app.dock) {
+  app.dock.setIcon(path.join(__dirname, "../../resources/icon.png"))
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
