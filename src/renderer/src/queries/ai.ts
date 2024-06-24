@@ -36,7 +36,7 @@ export const ai = {
     language?: SupportedLanguages
     extraFields?: string[]
   }) =>
-    defineQuery(["translation", entry.entries.id, language], async () => {
+    defineQuery(["translation", entry?.entries?.id, language], async () => {
       if (!language) {
         return null
       }
