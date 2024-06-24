@@ -82,3 +82,5 @@ export type FeedListModel = {
 export type SupportedLanguages = Parameters<
   typeof apiClient.ai.translation.$get
 >[0]["query"]["language"]
+
+export type RecommendationItem = ExtractBizResponse<typeof apiClient.discover.rsshub.$get>["data"][string]

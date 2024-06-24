@@ -6,13 +6,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@renderer/components/ui/card"
+import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import { useBizQuery } from "@renderer/hooks"
 import { Queries } from "@renderer/queries"
+
+import { RecommendationContent } from "./recommendation-content"
 
 export function Recommendations() {
   const rsshubPopular = useBizQuery(Queries.discover.rsshubCategory({
     category: "popular",
   }))
+  const { present } = useModalStack()
 
   return (
     <div className="mt-8">
@@ -33,7 +37,26 @@ export function Recommendations() {
                 <CardDescription>
                   <ul className="space-y-1">
                     {Object.keys(rsshubPopular.data[key].routes).map((route) => (
-                      <li key={route} className="transition-colors hover:font-medium hover:text-zinc-800">{rsshubPopular.data[key].routes[route].name}</li>
+                      <li
+                        key={route}
+                        className="transition-colors hover:font-medium hover:text-zinc-800"
+                        onClick={() => {
+                          present({
+                            content: () => <RecommendationContent route={rsshubPopular.data[key].routes[route]} />,
+                            title: (
+                              <div className="flex items-center">
+                                <SiteIcon
+                                  url={`https://${rsshubPopular.data[key].url}`}
+                                />
+                                {`${rsshubPopular.data[key].name} - ${rsshubPopular.data[key].routes[route].name}`}
+                              </div>
+                            ),
+                            clickOutsideToDismiss: true,
+                          })
+                        }}
+                      >
+                        {rsshubPopular.data[key].routes[route].name}
+                      </li>
                     ))}
                   </ul>
                 </CardDescription>
