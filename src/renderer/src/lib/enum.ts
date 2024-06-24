@@ -6,3 +6,9 @@ export enum FeedViewType {
   Audios = 4,
   Notifications = 5,
 }
+
+export enum Routes {
+  Feeds = "/feeds",
+  Discover = "/discover",
+
+}
