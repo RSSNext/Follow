@@ -157,6 +157,9 @@ export const ModalInternal: Component<{
         <Dialog.Root open onOpenChange={onClose}>
           <Dialog.Portal>
             <DialogOverlay zIndex={20} />
+            <Dialog.DialogTitle className="sr-only">
+              {title}
+            </Dialog.DialogTitle>
             <Dialog.Content asChild>
               <div
                 className={cn(
