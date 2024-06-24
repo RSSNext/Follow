@@ -66,6 +66,7 @@ const ImageImpl: FC<ImageProps> = ({
         className={cn(
           hidden && "hidden",
           "size-full bg-stone-100 object-cover",
+          popper && "cursor-zoom-in",
         )}
         src={imgSrc}
         onClick={handleClick}
