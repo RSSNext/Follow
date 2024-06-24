@@ -39,7 +39,7 @@ const info: Record<
     prefix?: string
   }
 > = {
-  general: {
+  search: {
     label: "Any URL or Keyword",
   },
   rss: {

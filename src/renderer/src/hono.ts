@@ -451,6 +451,34 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             status: 200;
         };
     };
+    "/discover/rsshub": {
+        $get: {
+            input: {
+                query: {
+                    category: string;
+                };
+            };
+            output: {
+                data: Record<string, {
+                    description: string;
+                    name: string;
+                    url: string;
+                    routes: Record<string, {
+                        path: string;
+                        example: string;
+                        description: string;
+                        name: string;
+                        categories: string[];
+                        parameters: Record<string, string>;
+                        maintainers: string[];
+                        location: string;
+                    }>;
+                }>;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
 } & {
     "/auth-app/new-session": {
         $post: {

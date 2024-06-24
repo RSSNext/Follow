@@ -11,8 +11,8 @@ import { Recommendations } from "@renderer/modules/discover/recommendations"
 export function Component() {
   const tabs = [
     {
-      name: "General",
-      value: "general",
+      name: "Search",
+      value: "search",
     },
     {
       name: "RSS",
@@ -44,9 +44,9 @@ export function Component() {
   ]
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-8 overflow-y-auto">
+    <div className="flex w-full flex-col items-center gap-8 overflow-y-auto pb-10 pt-40">
       <div className="text-2xl font-bold">Discover</div>
-      <Tabs defaultValue="General">
+      <Tabs defaultValue="Search">
         <TabsList className="w-full">
           {tabs.map((tab) => (
             <TabsTrigger
@@ -59,7 +59,7 @@ export function Component() {
           ))}
         </TabsList>
         {tabs.map((tab) => (
-          <TabsContent key={tab.name} value={tab.name} className="mt-8 h-96">
+          <TabsContent key={tab.name} value={tab.name} className="mt-8">
             {tab.value === "import" ?
                 (
                   <DiscoverImport />
@@ -67,10 +67,10 @@ export function Component() {
                 (
                   <DiscoverForm type={tab.value} />
                 )}
-            <Recommendations type={tab.value} />
           </TabsContent>
         ))}
       </Tabs>
+      <Recommendations />
     </div>
   )
 }
