@@ -8,6 +8,7 @@ export const useSettingModal = () => {
 
   return useCallback(() => present({
     title: "Setting",
+    id: "setting",
     content: SettingModalContent,
     CustomModalComponent: (props) => createElement("div", {
       className: "center h-full center",

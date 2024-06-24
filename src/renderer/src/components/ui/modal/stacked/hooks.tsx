@@ -12,23 +12,36 @@ export const useModalStack = (options?: ModalStackOptions) => {
   return {
     present: useCallback(
       (props: ModalProps & { id?: string }) => {
-        const modalId = `${id}-${++currentCount.current}`
-        jotaiStore.set(modalStackAtom, (p) => {
-          const modalProps = {
-            ...props,
-            id: props.id ?? modalId,
-            wrapper,
-          }
-          modalIdToPropsMap[modalProps.id] = modalProps
-          return p.concat(modalProps)
-        })
+        const fallbackModelId = `${id}-${++currentCount.current}`
+        const modalId = props.id ?? fallbackModelId
+
+        const currentStack = jotaiStore.get(modalStackAtom)
+
+        const existingModal = currentStack.find((item) => item.id === modalId)
+        if (existingModal) {
+          // Move to top
+          jotaiStore.set(modalStackAtom, (p) => {
+            const index = p.indexOf(existingModal)
+            return [...p.slice(0, index), ...p.slice(index + 1), existingModal]
+          })
+        } else {
+          jotaiStore.set(modalStackAtom, (p) => {
+            const modalProps = {
+              ...props,
+              id: modalId,
+              wrapper,
+            }
+            modalIdToPropsMap[modalProps.id] = modalProps
+            return p.concat(modalProps)
+          })
+        }
 
         return () => {
           jotaiStore.set(modalStackAtom, (p) =>
             p.filter((item) => item.id !== modalId))
         }
       },
-      [id],
+      [id, wrapper],
     ),
 
     ...actions,

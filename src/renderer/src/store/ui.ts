@@ -1,6 +1,10 @@
 import { buildStorageNS } from "@renderer/lib/ns"
 
-import { createZustandStore, getStoreActions, localStorage } from "./utils/helper"
+import {
+  createZustandStore,
+  getStoreActions,
+  localStorage,
+} from "./utils/helper"
 
 interface UIState {
   entryColWidth: number
@@ -27,7 +31,8 @@ interface UIActions {
   clear: () => void
   set: <T extends keyof UIState>(key: T, value: UIState[T]) => void
 }
-export const useUIStore = createZustandStore<UIState & UIActions>(buildStorageNS("ui"), {
+const storageKey = buildStorageNS("ui")
+export const useUIStore = createZustandStore<UIState & UIActions>(storageKey, {
   version: 1,
   storage: localStorage,
 })((set) => ({
