@@ -34,16 +34,15 @@ export const SettingAppearance = () => {
         checked={isDark}
         onCheckedChange={saveDarkSetting}
       />
-      {onlyMacos &&
-        (
-          <SettingSwitch
-            label="Opaque Sidebars"
-            checked={state.opaqueSidebar}
-            onCheckedChange={(checked) => {
-              uiActions.set("opaqueSidebar", checked)
-            }}
-          />
-        )}
+      {onlyMacos && (
+        <SettingSwitch
+          label="Opaque Sidebars"
+          checked={state.opaqueSidebar}
+          onCheckedChange={(checked) => {
+            uiActions.set("opaqueSidebar", checked)
+          }}
+        />
+      )}
 
       <SettingSectionTitle title="Text" />
       {window.electron && <Fonts />}
@@ -58,6 +57,13 @@ export const SettingAppearance = () => {
           }}
         />
       )}
+      <SettingSwitch
+        label="Show sidebar unread count"
+        checked={state.sidebarShowUnreadCount}
+        onCheckedChange={(c) => {
+          uiActions.set("sidebarShowUnreadCount", c)
+        }}
+      />
     </div>
   )
 }
@@ -120,12 +126,16 @@ const TextSize = () => {
           )
         }}
       >
-        <SelectTrigger className="h-8 w-24">
+        <SelectTrigger className="h-8 w-24 capitalize">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
           {Object.entries(textSizeMap).map(([size, value]) => (
-            <SelectItem key={size} value={value.toString()}>
+            <SelectItem
+              className="capitalize"
+              key={size}
+              value={value.toString()}
+            >
               {size}
             </SelectItem>
           ))}

@@ -5,14 +5,13 @@ import { FEED_COLLECTION_LIST, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
-import type {
-  FeedListModel,
-} from "@renderer/models"
+import type { FeedListModel } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import type { SubscriptionPlainModel } from "@renderer/store"
 import {
   getFeedById,
   useSubscriptionByView,
+  useUIStore,
   useUnreadStore,
 } from "@renderer/store"
 import { useMemo, useState } from "react"
@@ -124,6 +123,7 @@ export function FeedList({
 
   const feedId = useRouteFeedId()
   const navigate = useNavigateEntry()
+  const showUnreadCount = useUIStore((state) => state.sidebarShowUnreadCount)
 
   return (
     <div className={cn(className, "font-medium")}>
@@ -187,6 +187,7 @@ export function FeedList({
       {data?.list?.length ?
         sortedByUnread?.map((category) => (
           <FeedCategory
+            showUnreadCount={showUnreadCount}
             key={category.name}
             data={category}
             view={view}
