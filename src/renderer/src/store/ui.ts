@@ -16,6 +16,11 @@ interface UIState {
   /** macOS only */
   showDockBadge: boolean
   sidebarShowUnreadCount: boolean
+
+  // modal
+  modalOverlay: boolean
+  modalDraggable: boolean
+  modalOpaque: boolean
 }
 
 const createDefaultUIState = (): UIState => ({
@@ -26,6 +31,10 @@ const createDefaultUIState = (): UIState => ({
 
   showDockBadge: true,
   sidebarShowUnreadCount: true,
+
+  modalOverlay: true,
+  modalDraggable: true,
+  modalOpaque: false,
 })
 interface UIActions {
   clear: () => void

@@ -15,6 +15,9 @@ export interface ModalProps {
   max?: boolean
 
   wrapper?: FC
+
+  overlay?: boolean
+  draggable?: boolean
 }
 export interface ModalStackOptions {
   wrapper?: FC

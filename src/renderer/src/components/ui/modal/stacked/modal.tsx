@@ -1,6 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
+import { useUIStore } from "@renderer/store"
 import { m, useAnimationControls } from "framer-motion"
 import { useSetAtom } from "jotai"
 import type { SyntheticEvent } from "react"
@@ -14,6 +15,7 @@ import {
   useRef,
 } from "react"
 import { useEventCallback } from "usehooks-ts"
+import { useShallow } from "zustand/react/shallow"
 
 import { Divider } from "../../divider"
 import { modalMontionConfig } from "./constants"
@@ -71,6 +73,13 @@ export const ModalInternal: Component<{
     [close],
   )
 
+  const { opaque, overlay: defaultOverlay } = useUIStore(
+    useShallow((state) => ({
+      overlay: state.modalOverlay,
+      opaque: state.modalOpaque,
+    })),
+  )
+
   const {
     CustomModalComponent,
     modalClassName,
@@ -81,7 +90,8 @@ export const ModalInternal: Component<{
     wrapper: Wrapper = Fragment,
     max,
     icon,
-
+    overlay = defaultOverlay,
+    draggable = false,
   } = item
   const modalStyle = useMemo(() => ({ zIndex: 99 + index }), [index])
   const dismiss = useCallback(
@@ -153,12 +163,15 @@ export const ModalInternal: Component<{
     </CurrentModalContext.Provider>
   )
 
+  const edgeElementRef = useRef<HTMLDivElement>(null)
+
   if (CustomModalComponent) {
     return (
       <Wrapper>
         <Dialog.Root open onOpenChange={onClose}>
           <Dialog.Portal>
-            <DialogOverlay zIndex={20} />
+            {overlay && <DialogOverlay zIndex={19} />}
+
             <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
             <Dialog.Content asChild>
               <div
@@ -185,9 +198,11 @@ export const ModalInternal: Component<{
     <Wrapper>
       <Dialog.Root open onOpenChange={onClose}>
         <Dialog.Portal>
-          <DialogOverlay zIndex={20} />
+          {overlay && <DialogOverlay zIndex={19} />}
+
           <Dialog.Content asChild>
             <div
+              ref={edgeElementRef}
               className={cn(
                 "center fixed inset-0 z-20 flex",
                 modalContainerClassName,
@@ -200,8 +215,10 @@ export const ModalInternal: Component<{
                 animate={animateController}
                 className={cn(
                   "relative flex flex-col overflow-hidden rounded-lg",
-                  "bg-zinc-50/80 dark:bg-neutral-900/80",
-                  "shadow-modal p-2 backdrop-blur-sm",
+                  opaque ?
+                    "bg-zinc-50 dark:bg-neutral-900" :
+                    "bg-zinc-50/80 backdrop-blur-sm dark:bg-neutral-900/80",
+                  "shadow-modal p-2",
                   max ?
                     "h-[90vh] w-[90vw]" :
                     "max-h-[70vh] min-w-[300px] max-w-[90vw] lg:max-h-[calc(100vh-20rem)] lg:max-w-[70vw]",
@@ -210,14 +227,16 @@ export const ModalInternal: Component<{
                   modalClassName,
                 )}
                 onClick={stopPropagation}
+                drag={draggable}
+                dragElastic={0}
+                dragMomentum={false}
+                dragConstraints={edgeElementRef}
               >
                 <div className="relative flex items-center">
                   <Dialog.Title className="flex shrink-0 grow items-center gap-2 px-4 py-1 text-lg font-semibold">
                     {icon && <span className="size-4">{icon}</span>}
 
-                    <span>
-                      {title}
-                    </span>
+                    <span>{title}</span>
                   </Dialog.Title>
                   <Dialog.DialogClose className="center p-2" onClick={close}>
                     <i className="i-mgc-close-cute-re" />
@@ -225,7 +244,10 @@ export const ModalInternal: Component<{
                 </div>
                 <Divider className="my-2 shrink-0 border-slate-200 opacity-80 dark:border-neutral-800" />
 
-                <div className="min-h-0 shrink grow overflow-auto px-4 py-2">
+                <div
+                  className="min-h-0 shrink grow overflow-auto px-4 py-2"
+                  onPointerDownCapture={stopPropagation}
+                >
                   {finalChildren}
                 </div>
               </m.div>

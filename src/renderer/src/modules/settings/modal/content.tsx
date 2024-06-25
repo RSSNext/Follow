@@ -1,9 +1,8 @@
 import { LoadRemixAsyncComponent } from "@renderer/components/common/LoadRemixAsyncComponent"
 import { MotionButtonBase } from "@renderer/components/ui/button"
 import { useCurrentModal } from "@renderer/components/ui/modal"
-import {
-  SettingsTitle,
-} from "@renderer/modules/settings/title"
+import { ScrollArea } from "@renderer/components/ui/scroll-area"
+import { SettingsTitle } from "@renderer/modules/settings/title"
 
 import { SettingTabProvider, useSettingTab } from "./context"
 import { SettingModalLayout } from "./layout"
@@ -22,10 +21,13 @@ const pages = (() => {
 export const SettingModalContent = () => (
   <SettingTabProvider>
     <SettingModalLayout>
-      <div className="h-full flex-1 shrink-0 overflow-auto">
+      <ScrollArea.ScrollArea
+        scrollbarClassName="mt-12 mb-2"
+        rootClassName="h-full flex-1 shrink-0 overflow-auto px-8"
+      >
         <Content />
         <Close />
-      </div>
+      </ScrollArea.ScrollArea>
     </SettingModalLayout>
   </SettingTabProvider>
 )
@@ -34,7 +36,7 @@ const Close = () => {
   const { dismiss } = useCurrentModal()
 
   return (
-    <MotionButtonBase className="absolute right-8 top-8" onClick={dismiss}>
+    <MotionButtonBase className="absolute right-8 top-7" onClick={dismiss}>
       <i className="i-mgc-close-cute-re" />
     </MotionButtonBase>
   )
