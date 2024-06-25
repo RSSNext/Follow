@@ -1,12 +1,16 @@
-import type { RecommendationItem } from "@renderer/models"
+import type { RSSHubRoute } from "./types"
 
 export const RecommendationContent = ({
   route,
 }: {
-  route: RecommendationItem["routes"][string]
-}) => (
-  <>
-    rsshub:/
-    {route.path}
-  </>
-)
+  route: RSSHubRoute
+}) => {
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const keys = []
+  return (
+    <>
+      rsshub:/
+      {route.path}
+    </>
+  )
+}
