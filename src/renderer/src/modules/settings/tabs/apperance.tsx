@@ -109,7 +109,7 @@ const Fonts = () => {
           uiActions.set("readerFontFamily", value)
         }}
       >
-        <SelectTrigger className="h-8 w-48">
+        <SelectTrigger size="sm" className="w-48">
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="h-64">
@@ -149,7 +149,7 @@ const TextSize = () => {
           )
         }}
       >
-        <SelectTrigger className="h-8 w-24 capitalize">
+        <SelectTrigger size="sm" className="w-24 capitalize">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

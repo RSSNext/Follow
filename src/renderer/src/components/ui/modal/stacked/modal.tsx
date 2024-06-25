@@ -2,9 +2,9 @@ import * as Dialog from "@radix-ui/react-dialog"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useUIStore } from "@renderer/store"
-import { m, useAnimationControls } from "framer-motion"
+import { m, useAnimationControls, useDragControls } from "framer-motion"
 import { useSetAtom } from "jotai"
-import type { SyntheticEvent } from "react"
+import type { PointerEventHandler, SyntheticEvent } from "react"
 import {
   createElement,
   Fragment,
@@ -123,6 +123,16 @@ export const ModalInternal: Component<{
       })
   }, [animateController])
 
+  const dragController = useDragControls()
+  const handleDrag: PointerEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (draggable) {
+        dragController.start(e)
+      }
+    },
+    [dragController, draggable],
+  )
+
   useEffect(() => {
     if (isTop) return
     animateController.start({
@@ -227,12 +237,20 @@ export const ModalInternal: Component<{
                   modalClassName,
                 )}
                 onClick={stopPropagation}
-                drag={draggable}
+                drag
+                dragControls={dragController}
                 dragElastic={0}
+                dragListener={false}
                 dragMomentum={false}
                 dragConstraints={edgeElementRef}
+                whileDrag={{
+                  cursor: "grabbing",
+                }}
               >
-                <div className="relative flex items-center">
+                <div
+                  className="relative flex items-center"
+                  onPointerDownCapture={handleDrag}
+                >
                   <Dialog.Title className="flex shrink-0 grow items-center gap-2 px-4 py-1 text-lg font-semibold">
                     {icon && <span className="size-4">{icon}</span>}
 
@@ -244,10 +262,7 @@ export const ModalInternal: Component<{
                 </div>
                 <Divider className="my-2 shrink-0 border-slate-200 opacity-80 dark:border-neutral-800" />
 
-                <div
-                  className="min-h-0 shrink grow overflow-auto px-4 py-2"
-                  onPointerDownCapture={stopPropagation}
-                >
+                <div className="min-h-0 shrink grow overflow-auto px-4 py-2">
                   {finalChildren}
                 </div>
               </m.div>

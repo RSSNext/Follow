@@ -1,11 +1,11 @@
 import { Logo } from "@renderer/components/icons/logo"
 import { APP_NAME } from "@renderer/lib/constants"
-import { preventDefault, stopPropagation } from "@renderer/lib/dom"
+import { preventDefault } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useUIStore } from "@renderer/store"
-import { m } from "framer-motion"
-import type { PropsWithChildren } from "react"
-import { useEffect } from "react"
+import { m, useDragControls } from "framer-motion"
+import type { PointerEventHandler, PropsWithChildren } from "react"
+import { useCallback, useEffect } from "react"
 import { useShallow } from "zustand/react/shallow"
 
 import { settings } from "../constants"
@@ -27,6 +27,16 @@ export function SettingModalLayout(props: PropsWithChildren) {
       overlay: state.modalOverlay,
     })),
   )
+  const dragController = useDragControls()
+  const handleDrag: PointerEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (draggable) {
+        dragController.start(e)
+      }
+    },
+    [dragController, draggable],
+  )
+
   return (
     <m.div
       exit={{
@@ -34,14 +44,20 @@ export function SettingModalLayout(props: PropsWithChildren) {
         scale: 0.96,
       }}
       className={cn(
-        "flex h-[500px] max-h-[80vh] w-[660px] max-w-full flex-col overflow-hidden rounded-xl border border-border",
+        "relative flex h-[500px] max-h-[80vh] w-[660px] max-w-full flex-col overflow-hidden rounded-xl border border-border",
         !overlay && "shadow-perfect",
       )}
       onContextMenu={preventDefault}
       drag={draggable}
+      dragControls={dragController}
+      dragListener={false}
       dragMomentum={false}
       dragElastic={false}
+      whileDrag={{
+        cursor: "grabbing",
+      }}
     >
+      {draggable && <div className="absolute inset-x-0 top-0 z-[1] h-8" onPointerDown={handleDrag} />}
       <div className="flex h-0 flex-1 bg-theme-tooltip-background">
         <div className="w-44 border-r px-2 py-5">
           <div className="mb-4 flex h-8 items-center gap-2 px-4 font-bold">
@@ -66,10 +82,7 @@ export function SettingModalLayout(props: PropsWithChildren) {
             </button>
           ))}
         </div>
-        <div
-          className="relative h-full flex-1 bg-theme-background pt-0"
-          onPointerDownCapture={stopPropagation}
-        >
+        <div className="relative h-full flex-1 bg-theme-background pt-0">
           {children}
         </div>
       </div>

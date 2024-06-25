@@ -23,7 +23,8 @@ export const SettingModalContent = () => (
     <SettingModalLayout>
       <ScrollArea.ScrollArea
         scrollbarClassName="mt-12 mb-2"
-        rootClassName="h-full flex-1 shrink-0 overflow-auto px-8"
+        rootClassName="h-full flex-1 shrink-0 overflow-auto pl-8 pr-7"
+        viewportClassName="pr-1"
       >
         <Content />
         <Close />
