@@ -20,6 +20,7 @@ interface UIState {
   // modal
   modalOverlay: boolean
   modalDraggable: boolean
+  modalOpaque: boolean
 }
 
 const createDefaultUIState = (): UIState => ({
@@ -33,6 +34,7 @@ const createDefaultUIState = (): UIState => ({
 
   modalOverlay: true,
   modalDraggable: true,
+  modalOpaque: false,
 })
 interface UIActions {
   clear: () => void

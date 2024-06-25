@@ -2,7 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useUIStore } from "@renderer/store"
-import { AnimatePresence, m, useAnimationControls } from "framer-motion"
+import { m, useAnimationControls } from "framer-motion"
 import { useSetAtom } from "jotai"
 import type { SyntheticEvent } from "react"
 import {
@@ -15,6 +15,7 @@ import {
   useRef,
 } from "react"
 import { useEventCallback } from "usehooks-ts"
+import { useShallow } from "zustand/react/shallow"
 
 import { Divider } from "../../divider"
 import { modalMontionConfig } from "./constants"
@@ -72,7 +73,12 @@ export const ModalInternal: Component<{
     [close],
   )
 
-  const defaultOverlay = useUIStore((state) => state.modalOverlay)
+  const { opaque, overlay: defaultOverlay } = useUIStore(
+    useShallow((state) => ({
+      overlay: state.modalOverlay,
+      opaque: state.modalOpaque,
+    })),
+  )
 
   const {
     CustomModalComponent,
@@ -164,9 +170,8 @@ export const ModalInternal: Component<{
       <Wrapper>
         <Dialog.Root open onOpenChange={onClose}>
           <Dialog.Portal>
-            <AnimatePresence>
-              {overlay && <DialogOverlay zIndex={19} />}
-            </AnimatePresence>
+            {overlay && <DialogOverlay zIndex={19} />}
+
             <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
             <Dialog.Content asChild>
               <div
@@ -193,9 +198,8 @@ export const ModalInternal: Component<{
     <Wrapper>
       <Dialog.Root open onOpenChange={onClose}>
         <Dialog.Portal>
-          <AnimatePresence>
-            {overlay && <DialogOverlay zIndex={19} />}
-          </AnimatePresence>
+          {overlay && <DialogOverlay zIndex={19} />}
+
           <Dialog.Content asChild>
             <div
               ref={edgeElementRef}
@@ -211,8 +215,10 @@ export const ModalInternal: Component<{
                 animate={animateController}
                 className={cn(
                   "relative flex flex-col overflow-hidden rounded-lg",
-                  "bg-zinc-50/80 dark:bg-neutral-900/80",
-                  "shadow-modal p-2 backdrop-blur-sm",
+                  opaque ?
+                    "bg-zinc-50 dark:bg-neutral-900" :
+                    "bg-zinc-50/80 backdrop-blur-sm dark:bg-neutral-900/80",
+                  "shadow-modal p-2",
                   max ?
                     "h-[90vh] w-[90vw]" :
                     "max-h-[70vh] min-w-[300px] max-w-[90vw] lg:max-h-[calc(100vh-20rem)] lg:max-w-[70vw]",
