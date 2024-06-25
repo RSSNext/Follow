@@ -120,7 +120,6 @@ export function EntryColumn() {
         )
       }, [isFetchingNextPage]),
     },
-    overscan: window.innerHeight,
     rangeChanged: handleRangeChange,
     totalCount: entries.totalCount,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),

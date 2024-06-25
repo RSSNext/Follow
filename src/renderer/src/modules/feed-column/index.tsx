@@ -161,12 +161,14 @@ export function FeedColumn() {
           {views.map((item, index) => (
             <section
               key={item.name}
-              className="shrink-0 snap-center overflow-y-auto"
+              className="min-h-full w-64 shrink-0 snap-center overflow-y-auto"
             >
-              <FeedList
-                className="flex min-h-full w-64 flex-col px-3 pb-6 text-sm"
-                view={index}
-              />
+              {active === index && (
+                <FeedList
+                  className="flex w-full flex-col px-3 pb-6 text-sm"
+                  view={index}
+                />
+              )}
             </section>
           ))}
         </m.div>

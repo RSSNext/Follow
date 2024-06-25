@@ -59,7 +59,7 @@ export function SettingModalLayout(props: PropsWithChildren) {
     >
       {draggable && <div className="absolute inset-x-0 top-0 z-[1] h-8" onPointerDown={handleDrag} />}
       <div className="flex h-0 flex-1 bg-theme-tooltip-background">
-        <div className="w-44 border-r px-2 py-5">
+        <div className="w-44 border-r px-2 py-6">
           <div className="mb-4 flex h-8 items-center gap-2 px-4 font-bold">
             <Logo className="size-6" />
             {APP_NAME}
