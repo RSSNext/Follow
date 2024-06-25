@@ -74,7 +74,7 @@ export const SettingAppearance = () => {
         }}
       />
       <SettingSwitch
-        label="Let modal can draggable"
+        label="Modal draggable"
         checked={state.modalDraggable}
         onCheckedChange={(c) => {
           uiActions.set("modalDraggable", c)
