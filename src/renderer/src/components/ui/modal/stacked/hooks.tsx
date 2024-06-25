@@ -1,4 +1,5 @@
 import { jotaiStore } from "@renderer/lib/jotai"
+import { useUIStore } from "@renderer/store"
 import { useCallback, useEffect, useId, useRef } from "react"
 import { useLocation } from "react-router-dom"
 
@@ -9,6 +10,7 @@ export const useModalStack = (options?: ModalStackOptions) => {
   const id = useId()
   const currentCount = useRef(0)
   const { wrapper } = options || {}
+
   return {
     present: useCallback(
       (props: ModalProps & { id?: string }) => {
@@ -25,14 +27,24 @@ export const useModalStack = (options?: ModalStackOptions) => {
             return [...p.slice(0, index), ...p.slice(index + 1), existingModal]
           })
         } else {
+          // NOTE: The props of the Command Modal are immutable, so we'll just take the store value and inject it.
+          // There is no need to inject `overlay` props, this is rendered responsively based on ui changes.
+          const uiState = useUIStore.getState()
+          const modalConfig: Partial<ModalProps> = {
+            draggable: uiState.modalDraggable,
+          }
           jotaiStore.set(modalStackAtom, (p) => {
-            const modalProps = {
+            const modalProps: ModalProps = {
+              ...modalConfig,
               ...props,
-              id: modalId,
+
               wrapper,
             }
-            modalIdToPropsMap[modalProps.id] = modalProps
-            return p.concat(modalProps)
+            modalIdToPropsMap[modalId] = modalProps
+            return p.concat({
+              id: modalId,
+              ...modalProps,
+            })
           })
         }
 

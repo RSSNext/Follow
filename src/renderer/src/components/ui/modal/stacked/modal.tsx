@@ -1,7 +1,8 @@
 import * as Dialog from "@radix-ui/react-dialog"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
-import { m, useAnimationControls } from "framer-motion"
+import { useUIStore } from "@renderer/store"
+import { AnimatePresence, m, useAnimationControls } from "framer-motion"
 import { useSetAtom } from "jotai"
 import type { SyntheticEvent } from "react"
 import {
@@ -71,6 +72,8 @@ export const ModalInternal: Component<{
     [close],
   )
 
+  const defaultOverlay = useUIStore((state) => state.modalOverlay)
+
   const {
     CustomModalComponent,
     modalClassName,
@@ -81,7 +84,8 @@ export const ModalInternal: Component<{
     wrapper: Wrapper = Fragment,
     max,
     icon,
-
+    overlay = defaultOverlay,
+    draggable = false,
   } = item
   const modalStyle = useMemo(() => ({ zIndex: 99 + index }), [index])
   const dismiss = useCallback(
@@ -160,7 +164,9 @@ export const ModalInternal: Component<{
       <Wrapper>
         <Dialog.Root open onOpenChange={onClose}>
           <Dialog.Portal>
-            <DialogOverlay zIndex={20} />
+            <AnimatePresence>
+              {overlay && <DialogOverlay zIndex={19} />}
+            </AnimatePresence>
             <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
             <Dialog.Content asChild>
               <div
@@ -187,7 +193,9 @@ export const ModalInternal: Component<{
     <Wrapper>
       <Dialog.Root open onOpenChange={onClose}>
         <Dialog.Portal>
-          <DialogOverlay zIndex={20} />
+          <AnimatePresence>
+            {overlay && <DialogOverlay zIndex={19} />}
+          </AnimatePresence>
           <Dialog.Content asChild>
             <div
               ref={edgeElementRef}
@@ -213,19 +221,16 @@ export const ModalInternal: Component<{
                   modalClassName,
                 )}
                 onClick={stopPropagation}
-                drag
+                drag={draggable}
                 dragElastic={0}
                 dragMomentum={false}
                 dragConstraints={edgeElementRef}
-
               >
                 <div className="relative flex items-center">
                   <Dialog.Title className="flex shrink-0 grow items-center gap-2 px-4 py-1 text-lg font-semibold">
                     {icon && <span className="size-4">{icon}</span>}
 
-                    <span>
-                      {title}
-                    </span>
+                    <span>{title}</span>
                   </Dialog.Title>
                   <Dialog.DialogClose className="center p-2" onClick={close}>
                     <i className="i-mgc-close-cute-re" />
@@ -233,7 +238,10 @@ export const ModalInternal: Component<{
                 </div>
                 <Divider className="my-2 shrink-0 border-slate-200 opacity-80 dark:border-neutral-800" />
 
-                <div className="min-h-0 shrink grow overflow-auto px-4 py-2" onPointerDownCapture={stopPropagation}>
+                <div
+                  className="min-h-0 shrink grow overflow-auto px-4 py-2"
+                  onPointerDownCapture={stopPropagation}
+                >
                   {finalChildren}
                 </div>
               </m.div>
