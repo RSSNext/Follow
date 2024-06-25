@@ -80,6 +80,8 @@ export const ModalInternal: Component<{
     modalContainerClassName,
     wrapper: Wrapper = Fragment,
     max,
+    icon,
+
   } = item
   const modalStyle = useMemo(() => ({ zIndex: 99 + index }), [index])
   const dismiss = useCallback(
@@ -157,9 +159,7 @@ export const ModalInternal: Component<{
         <Dialog.Root open onOpenChange={onClose}>
           <Dialog.Portal>
             <DialogOverlay zIndex={20} />
-            <Dialog.DialogTitle className="sr-only">
-              {title}
-            </Dialog.DialogTitle>
+            <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
             <Dialog.Content asChild>
               <div
                 className={cn(
@@ -168,7 +168,10 @@ export const ModalInternal: Component<{
                 )}
                 onClick={clickOutsideToDismiss ? dismiss : undefined}
               >
-                <div className={cn("contents", modalClassName)} onClick={stopPropagation}>
+                <div
+                  className={cn("contents", modalClassName)}
+                  onClick={stopPropagation}
+                >
                   <CustomModalComponent>{finalChildren}</CustomModalComponent>
                 </div>
               </div>
@@ -209,8 +212,12 @@ export const ModalInternal: Component<{
                 onClick={stopPropagation}
               >
                 <div className="relative flex items-center">
-                  <Dialog.Title className="shrink-0 grow items-center px-4 py-1 text-lg font-semibold">
-                    {title}
+                  <Dialog.Title className="flex shrink-0 grow items-center gap-2 px-4 py-1 text-lg font-semibold">
+                    {icon && <span className="size-4">{icon}</span>}
+
+                    <span>
+                      {title}
+                    </span>
                   </Dialog.Title>
                   <Dialog.DialogClose className="center p-2" onClick={close}>
                     <i className="i-mgc-close-cute-re" />

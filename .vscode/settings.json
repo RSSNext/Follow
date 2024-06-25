@@ -31,5 +31,8 @@
     { "rule": "simple-import-sort/*", "severity": "off" },
     { "rule": "prefer-const", "severity": "off" },
     { "rule": "unused-imports/no-unused-imports", "severity": "off" }
+  ],
+  "cSpell.words": [
+    "rsshub"
   ]
 }

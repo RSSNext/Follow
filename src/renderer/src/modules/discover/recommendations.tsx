@@ -43,14 +43,13 @@ export function Recommendations() {
                         onClick={() => {
                           present({
                             content: () => <RecommendationContent route={rsshubPopular.data[key].routes[route]} />,
-                            title: (
-                              <div className="flex items-center">
-                                <SiteIcon
-                                  url={`https://${rsshubPopular.data[key].url}`}
-                                />
-                                {`${rsshubPopular.data[key].name} - ${rsshubPopular.data[key].routes[route].name}`}
-                              </div>
+                            icon: (
+                              <SiteIcon
+                                className="size-4"
+                                url={`https://${rsshubPopular.data[key].url}`}
+                              />
                             ),
+                            title: `${rsshubPopular.data[key].name} - ${rsshubPopular.data[key].routes[route].name}`,
                             clickOutsideToDismiss: true,
                           })
                         }}
