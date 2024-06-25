@@ -47,7 +47,7 @@ export const LoadRemixAsyncComponent: FC<{
 
   if (loading) {
     return (
-      <div className="center h-full">
+      <div className="center absolute inset-0 h-full">
         <LoadingCircle size="large" />
       </div>
     )

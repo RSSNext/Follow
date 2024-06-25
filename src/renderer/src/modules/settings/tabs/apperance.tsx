@@ -64,6 +64,22 @@ export const SettingAppearance = () => {
           uiActions.set("sidebarShowUnreadCount", c)
         }}
       />
+
+      <SettingSectionTitle title="Modal" />
+      <SettingSwitch
+        label="Show modal overlay"
+        checked={state.modalOverlay}
+        onCheckedChange={(c) => {
+          uiActions.set("modalOverlay", c)
+        }}
+      />
+      <SettingSwitch
+        label="Let Modal can draggable"
+        checked={state.modalDraggable}
+        onCheckedChange={(c) => {
+          uiActions.set("modalDraggable", c)
+        }}
+      />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { Logo } from "@renderer/components/icons/logo"
 import { APP_NAME } from "@renderer/lib/constants"
-import { preventDefault } from "@renderer/lib/dom"
+import { preventDefault, stopPropagation } from "@renderer/lib/dom"
 import { m } from "framer-motion"
 import type { PropsWithChildren } from "react"
 import { useEffect } from "react"
@@ -25,6 +25,9 @@ export function SettingModalLayout(props: PropsWithChildren) {
       }}
       className="flex h-[500px] max-h-[80vh] w-[660px] max-w-full flex-col overflow-hidden rounded-xl border border-border"
       onContextMenu={preventDefault}
+      drag
+      dragMomentum={false}
+      dragElastic={false}
     >
       <div className="flex h-0 flex-1 bg-theme-tooltip-background">
         <div className="w-44 border-r px-2 py-5">
@@ -50,7 +53,7 @@ export function SettingModalLayout(props: PropsWithChildren) {
             </button>
           ))}
         </div>
-        <div className="relative h-full flex-1 bg-theme-background p-8 pt-0">
+        <div className="relative h-full flex-1 bg-theme-background pt-0" onPointerDownCapture={stopPropagation}>
           {children}
         </div>
       </div>

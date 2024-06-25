@@ -153,6 +153,8 @@ export const ModalInternal: Component<{
     </CurrentModalContext.Provider>
   )
 
+  const edgeElementRef = useRef<HTMLDivElement>(null)
+
   if (CustomModalComponent) {
     return (
       <Wrapper>
@@ -188,6 +190,7 @@ export const ModalInternal: Component<{
           <DialogOverlay zIndex={20} />
           <Dialog.Content asChild>
             <div
+              ref={edgeElementRef}
               className={cn(
                 "center fixed inset-0 z-20 flex",
                 modalContainerClassName,
@@ -210,6 +213,11 @@ export const ModalInternal: Component<{
                   modalClassName,
                 )}
                 onClick={stopPropagation}
+                drag
+                dragElastic={0}
+                dragMomentum={false}
+                dragConstraints={edgeElementRef}
+
               >
                 <div className="relative flex items-center">
                   <Dialog.Title className="flex shrink-0 grow items-center gap-2 px-4 py-1 text-lg font-semibold">
@@ -225,7 +233,7 @@ export const ModalInternal: Component<{
                 </div>
                 <Divider className="my-2 shrink-0 border-slate-200 opacity-80 dark:border-neutral-800" />
 
-                <div className="min-h-0 shrink grow overflow-auto px-4 py-2">
+                <div className="min-h-0 shrink grow overflow-auto px-4 py-2" onPointerDownCapture={stopPropagation}>
                   {finalChildren}
                 </div>
               </m.div>
