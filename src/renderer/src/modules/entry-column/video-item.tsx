@@ -1,9 +1,6 @@
-import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
-import { useAsRead } from "@renderer/hooks"
-import dayjs from "@renderer/lib/dayjs"
 import { urlToIframe } from "@renderer/lib/url-to-iframe"
-import { cn } from "@renderer/lib/utils"
+import { GridItem } from "@renderer/modules/entry-column/grid-item-template"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useHover } from "@use-gesture/react"
 import { useMemo, useRef, useState } from "react"
@@ -13,8 +10,6 @@ import type { UniversalItemProps } from "./types"
 
 export function VideoItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
-
-  const asRead = useAsRead(entry)
 
   const iframeSrc = useMemo(() => urlToIframe(entry?.entries.url), [entry?.entries.url])
 
@@ -31,10 +26,11 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
 
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
-    <div className="flex">
+    <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div className="w-full">
         <div className="overflow-x-auto" ref={ref}>
           {iframeSrc && hovered ? (
+            // eslint-disable-next-line @eslint-react/dom/no-missing-iframe-sandbox
             <iframe
               src={iframeSrc}
               className="pointer-events-none aspect-video w-full shrink-0 rounded-md bg-black object-cover"
@@ -53,31 +49,7 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
             />
           )}
         </div>
-        <div className={cn("relative flex-1 px-2 pb-3 pt-1 text-sm", !asRead && "before:absolute before:-left-1 before:top-[14px] before:block before:size-2 before:rounded-full before:bg-blue-500")}>
-          <div className={cn("relative mb-0.5 mt-1 truncate font-medium", !!entry.collections && "pr-4")}>
-            {translation?.title || entry.entries.title}
-            {!!entry.collections && (
-              <i className="i-mgc-star-cute-fi absolute right-0 top-0.5 text-orange-400" />
-            )}
-          </div>
-          <div className="flex items-center gap-1 truncate text-xs">
-            <FeedIcon
-              className="mr-0.5 inline-block size-3"
-              feed={entry.feeds}
-            />
-            <span>{entry.entries.author}</span>
-            <span className="text-zinc-500">·</span>
-            <span className="text-zinc-500">
-              {dayjs
-                .duration(
-                  dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"),
-                  "minute",
-                )
-                .humanize()}
-            </span>
-          </div>
-        </div>
       </div>
-    </div>
+    </GridItem>
   )
 }

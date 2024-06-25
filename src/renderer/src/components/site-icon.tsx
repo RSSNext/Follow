@@ -4,9 +4,11 @@ import { parse } from "tldts"
 export function SiteIcon({
   url,
   className,
+  style,
 }: {
   url?: string
   className?: string
+  style?: React.CSSProperties
 }) {
   let host
   let src
@@ -34,6 +36,7 @@ export function SiteIcon({
           e.currentTarget.src = fallback
         }
       }}
+      style={style}
     />
   )
 }

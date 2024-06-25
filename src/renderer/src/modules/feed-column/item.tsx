@@ -215,7 +215,7 @@ const FeedItemImpl = ({
           feed.errorAt && "text-red-900",
         )}
       >
-        <FeedIcon feed={feed} className="size-4" />
+        <FeedIcon feed={feed} size={16} />
         <div
           className={cn(
             "truncate",

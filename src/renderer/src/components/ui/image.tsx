@@ -25,7 +25,7 @@ const ImageImpl: FC<ImageProps> = ({
   popper = false,
   ...props
 }) => {
-  const { src, ...rest } = props
+  const { src, style, ...rest } = props
   const [hidden, setHidden] = useState(!src)
   const [imgSrc, setImgSrc] = useState(
     proxy && src && !failedList.has(src) ?
@@ -59,7 +59,7 @@ const ImageImpl: FC<ImageProps> = ({
   )
 
   return (
-    <div className={cn("overflow-hidden rounded", className)}>
+    <div className={cn("overflow-hidden rounded", className)} style={style}>
       <img
         {...rest}
         onError={errorHandle}

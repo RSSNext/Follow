@@ -8,28 +8,52 @@ export function FeedIcon({
   entry,
   fallbackUrl,
   className,
+  size = 20,
 }: {
   feed: FeedModel
   entry?: EntryModel["entries"]
   fallbackUrl?: string
   className?: string
+  size?: number
 }) {
   const image = entry?.authorAvatar || feed.image
   if (image) {
     return (
       <Image
         src={image}
-        className={cn("mr-2 size-5 shrink-0 rounded-sm", className)}
+        className={cn("mr-2 shrink-0 rounded-sm", className)}
+        style={{
+          width: size,
+          height: size,
+        }}
         proxy={{
-          width: 40,
-          height: 40,
+          width: size * 2,
+          height: size * 2,
         }}
       />
     )
   } else if (feed.siteUrl) {
-    return <SiteIcon url={feed.siteUrl} className={className} />
+    return (
+      <SiteIcon
+        url={feed.siteUrl}
+        className={className}
+        style={{
+          width: size,
+          height: size,
+        }}
+      />
+    )
   } else if (fallbackUrl) {
-    return <SiteIcon url={fallbackUrl} className={className} />
+    return (
+      <SiteIcon
+        url={fallbackUrl}
+        className={className}
+        style={{
+          width: size,
+          height: size,
+        }}
+      />
+    )
   } else {
     return null
   }

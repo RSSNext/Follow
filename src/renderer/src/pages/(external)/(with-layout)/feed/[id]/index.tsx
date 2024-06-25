@@ -74,7 +74,8 @@ export function Component() {
           </Helmet>
           <FeedIcon
             feed={feed.data.feed}
-            className="mask-squircle mask size-16 shrink-0"
+            className="mask-squircle mask shrink-0"
+            size={64}
           />
           <div className="flex flex-col items-center">
             <div className="mb-2 mt-4 flex items-center text-2xl font-bold">

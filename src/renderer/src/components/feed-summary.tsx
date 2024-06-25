@@ -22,7 +22,8 @@ export function FollowSummary({
         <FeedIcon
           feed={feed}
           fallbackUrl={docs}
-          className="mask-squircle mask mr-2 size-8 shrink-0 rounded-none"
+          className="mask-squircle mask mr-2 shrink-0 rounded-none"
+          size={32}
         />
         <div className="truncate text-base font-semibold leading-tight">
           {feed.title}

@@ -17,8 +17,8 @@ export function SocialMediaItem({ entryId, entryPreview, translation }: Universa
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
-    <div className={cn("relative flex w-full px-2 py-3", !asRead && "before:absolute before:-left-1 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-blue-500")}>
-      <FeedIcon feed={entry.feeds} entry={entry.entries} />
+    <div className={cn("relative flex w-full py-3 pl-3 pr-2", !asRead && "before:absolute before:-left-0.5 before:top-[22px] before:block before:size-2 before:rounded-full before:bg-blue-500")}>
+      <FeedIcon feed={entry.feeds} entry={entry.entries} size={28} />
       <div className="min-w-0 flex-1">
         <div className="-mt-0.5 line-clamp-5 flex-1 text-sm">
           <div className="space-x-1">
@@ -36,7 +36,7 @@ export function SocialMediaItem({ entryId, entryPreview, translation }: Universa
           <div className={cn("relative mt-0.5", !!entry.collections && "pr-4")}>
             <EntryTranslation source={entry.entries.description} target={translation?.description} />
             {!!entry.collections && (
-              <i className="i-mgc-star-cute-fi absolute right-0 top-0.5 text-orange-400" />
+              <i className="i-mgc-star-cute-fi absolute right-0 top-1 text-orange-400" />
             )}
           </div>
         </div>
