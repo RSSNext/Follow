@@ -1,5 +1,7 @@
 import { Image } from "@renderer/components/ui/image"
+import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { urlToIframe } from "@renderer/lib/url-to-iframe"
+import { cn } from "@renderer/lib/utils"
 import { GridItem } from "@renderer/modules/entry-column/grid-item-template"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useHover } from "@use-gesture/react"
@@ -10,6 +12,8 @@ import type { UniversalItemProps } from "./types"
 
 export function VideoItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
+
+  const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
   const iframeSrc = useMemo(() => urlToIframe(entry?.entries.url), [entry?.entries.url])
 
@@ -33,13 +37,13 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
             // eslint-disable-next-line @eslint-react/dom/no-missing-iframe-sandbox
             <iframe
               src={iframeSrc}
-              className="pointer-events-none aspect-video w-full shrink-0 rounded-md bg-black object-cover"
+              className={cn("pointer-events-none aspect-video w-full shrink-0 rounded-md bg-black object-cover", isActive && "rounded-b-none")}
             />
           ) : (
             <Image
               key={entry.entries.images?.[0]}
               src={entry.entries.images?.[0]}
-              className="aspect-video w-full shrink-0 rounded-md object-cover"
+              className={cn("aspect-video w-full shrink-0 rounded-md object-cover", isActive && "rounded-b-none")}
               loading="lazy"
               proxy={{
                 width: 640,

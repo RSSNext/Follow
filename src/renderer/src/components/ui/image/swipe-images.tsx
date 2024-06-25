@@ -59,7 +59,7 @@ export function SwipeImages({
             {uniqImages?.slice(0, 5).map((image, i) => (
               <SwiperSlide key={image}>
                 <Image
-                  className={cn(imgClassName)}
+                  className={cn(imgClassName, "rounded-none")}
                   alt="cover"
                   src={image}
                   loading="lazy"
@@ -94,7 +94,7 @@ export function SwipeImages({
           (
             <Image
               onClick={() => onPreview?.(uniqImages)}
-              className="size-full object-cover sm:transition-transform sm:duration-300 sm:ease-in-out sm:group-hover:scale-105"
+              className="size-full rounded-none object-cover sm:transition-transform sm:duration-300 sm:ease-in-out sm:group-hover:scale-105"
               alt="cover"
               src={uniqImages[0]}
               loading="lazy"

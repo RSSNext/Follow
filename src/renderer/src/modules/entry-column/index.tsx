@@ -72,7 +72,7 @@ export function EntryColumn() {
       return
     }
     markReadMutation.mutate(activeEntry)
-  }, [activeEntry?.entries?.id])
+  }, [activeEntry?.entries?.id, activeEntry?.read])
 
   const handleRangeChange = useEventCallback(
     debounce(
