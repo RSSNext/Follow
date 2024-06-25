@@ -11,7 +11,7 @@ export const views = [
   {
     name: "Articles",
     icon: <i className="i-mgc-paper-cute-fi" />,
-    className: "text-amber-700",
+    className: "text-orange-600",
     translation: "title,description",
   },
   {

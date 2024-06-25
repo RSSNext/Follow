@@ -18,7 +18,7 @@ export function ArticleItem({ entryId, entryPreview, translation }: UniversalIte
   if (!entry) return <ReactVirtuosoItemPlaceholder />
 
   return (
-    <div className="flex px-2 py-3">
+    <div className={cn("relative flex px-2 py-3", !asRead && "before:absolute before:-left-1 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-blue-500")}>
       <FeedIcon feed={entry.feeds} entry={entry.entries} />
       <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
         <div className={cn("flex gap-1 text-[10px] font-bold", asRead ? "text-zinc-400" : "text-zinc-500")}>

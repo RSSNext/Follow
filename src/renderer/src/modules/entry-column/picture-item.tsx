@@ -1,6 +1,7 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { SwipeImages } from "@renderer/components/ui/image/swipe-images"
 import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholder"
+import { useAsRead } from "@renderer/hooks"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
@@ -11,6 +12,9 @@ import type { UniversalItemProps } from "./types"
 
 export function PictureItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
+
+  const asRead = useAsRead(entry)
+
   const previewImage = usePreviewImages()
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
@@ -26,7 +30,7 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
           }}
         />
       </div>
-      <div className="flex-1 px-2 pb-3 pt-1 text-sm">
+      <div className={cn("relative flex-1 px-2 pb-3 pt-1 text-sm", !asRead && "before:absolute before:-left-1 before:top-[15px] before:block before:size-2 before:rounded-full before:bg-blue-500")}>
         <div
           className={cn(
             "relative mb-0.5 mt-1 truncate font-medium",

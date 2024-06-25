@@ -1,6 +1,6 @@
 :root {
   --fo-vibrancy-background: theme(colors.native.active);
-  --fo-vibrancy-foreground: 0, 0%, 50%;
+  --fo-vibrancy-foreground: 0, 0%, 45%;
   --fo-text-primary: 0, 0%, 10%;
 
   /* TODO replace with own color */
@@ -17,7 +17,7 @@
 }
 
 [data-theme="dark"] {
-  --fo-vibrancy-foreground: 0, 0%, 63%;
+  --fo-vibrancy-foreground: 0, 0%, 83%;
 
   --fo-vibrancy-background: theme(colors.native.active);
 

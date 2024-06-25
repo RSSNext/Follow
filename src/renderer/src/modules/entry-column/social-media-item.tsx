@@ -1,5 +1,6 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
+import { useAsRead } from "@renderer/hooks"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
@@ -11,10 +12,12 @@ import type { UniversalItemProps } from "./types"
 export function SocialMediaItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
+  const asRead = useAsRead(entry)
+
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
-    <div className="flex w-full px-2 py-3">
+    <div className={cn("relative flex w-full px-2 py-3", !asRead && "before:absolute before:-left-1 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-blue-500")}>
       <FeedIcon feed={entry.feeds} entry={entry.entries} />
       <div className="min-w-0 flex-1">
         <div className="-mt-0.5 line-clamp-5 flex-1 text-sm">
