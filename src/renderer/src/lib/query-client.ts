@@ -27,6 +27,16 @@ const localStoragePersister = createSyncStoragePersister({
 })
 export const persistConfig = {
   persister: localStoragePersister,
+  dehydrateOptions: {
+    shouldDehydrateQuery: (query) => {
+      const queryIsReadyForPersistance = query.state.status === "success"
+      if (queryIsReadyForPersistance) {
+        return !((query.state?.data as any)?.pages?.length > 1) && query.queryKey?.[0] !== "check-eagle"
+      } else {
+        return false
+      }
+    },
+  },
 }
 
 export { queryClient }

@@ -38,6 +38,8 @@ function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
     }),
     {
       enabled: !!entry.settings?.translation,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
     },
   )
 

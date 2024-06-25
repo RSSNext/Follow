@@ -108,6 +108,8 @@ export const useEntryActions = ({
         return (error as FetchError).data?.code === 401
       }
     },
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   })
 
   const collect = useCollect(entry)

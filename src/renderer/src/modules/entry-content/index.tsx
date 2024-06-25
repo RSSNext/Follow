@@ -64,6 +64,8 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     }),
     {
       enabled: !!entry?.settings?.translation,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
     },
   )
 
@@ -74,6 +76,8 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     }),
     {
       enabled: !!entry?.settings?.summary,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
     },
   )
 
