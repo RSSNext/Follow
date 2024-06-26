@@ -166,7 +166,7 @@ export function FeedList({
       )}
       <div
         className={cn(
-          "flex h-8 w-full items-center rounded-md px-2.5 transition-colors",
+          "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 transition-colors",
           feedId === FEED_COLLECTION_LIST && "bg-native-active",
         )}
         onClick={(e) => {
