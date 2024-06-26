@@ -103,6 +103,11 @@ export default resolveConfig({
 
           foreground: "hsl(var(--fo-text-primary), <alpha-value>)",
           background: "var(--fo-background)",
+
+          modal: {
+            "background": "var(--fo-modal-background)",
+            "background-opaque": "var(--fo-modal-background-opaque)",
+          },
         },
       },
       borderRadius: {

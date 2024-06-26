@@ -170,6 +170,7 @@ export const ModalInternal: Component<{
                   modalContainerClassName,
                 )}
                 onClick={clickOutsideToDismiss ? dismiss : undefined}
+                style={zIndexStyle}
               >
                 <div
                   className={cn("contents", modalClassName)}
@@ -206,8 +207,8 @@ export const ModalInternal: Component<{
                 className={cn(
                   "relative flex flex-col overflow-hidden rounded-lg",
                   opaque ?
-                    "bg-zinc-50 dark:bg-neutral-900" :
-                    "bg-zinc-50/80 backdrop-blur-sm dark:bg-neutral-900/80",
+                    "bg-theme-modal-background-opaque" :
+                    "bg-theme-modal-background backdrop-blur-sm",
                   "shadow-modal p-2",
                   max ?
                     "h-[90vh] w-[90vw]" :
