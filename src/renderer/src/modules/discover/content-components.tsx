@@ -108,7 +108,7 @@ export const DiscoverFeedForm = ({
     mode: "all",
   }) as UseFormReturn<any>
 
-  const { present } = useModalStack()
+  const { present, dismissAll } = useModalStack()
   const onSubmit = useCallback(
     (data) => {
       try {
@@ -124,12 +124,12 @@ export const DiscoverFeedForm = ({
         const url = `rsshub://${routePrefix}${fillRegexpPath}`
         present({
           title: "Add follow",
-          content: ({ dismiss }) => (
+          content: () => (
             <FeedForm
               asWidget
               url={url}
               defaultView={FeedViewType.Articles}
-              onSuccess={dismiss}
+              onSuccess={dismissAll}
             />
           ),
         })
@@ -142,7 +142,7 @@ export const DiscoverFeedForm = ({
         }
       }
     },
-    [form, keys.array, present, route.path, routePrefix],
+    [dismissAll, form, keys.array, present, route.path, routePrefix],
   )
 
   return (
