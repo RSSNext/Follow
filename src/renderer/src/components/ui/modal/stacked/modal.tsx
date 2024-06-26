@@ -15,35 +15,16 @@ import {
   useRef,
 } from "react"
 import { useEventCallback } from "usehooks-ts"
-import { useShallow } from "zustand/react/shallow"
 
 import { Divider } from "../../divider"
-import { modalMontionConfig } from "./constants"
+import { modalStackAtom } from "./atom"
+import { MODAL_STACK_Z_INDEX, modalMontionConfig } from "./constants"
 import type {
   CurrentModalContentProps,
   ModalContentPropsInternal,
 } from "./context"
-import { CurrentModalContext, modalStackAtom } from "./context"
+import { CurrentModalContext } from "./context"
 import type { ModalProps } from "./types"
-
-const DialogOverlay = ({
-  onClick,
-  zIndex,
-}: {
-  onClick?: () => void
-  zIndex?: number
-}) => (
-  <Dialog.Overlay asChild>
-    <m.div
-      onClick={onClick}
-      className="fixed inset-0 z-[11] bg-zinc-50/80 dark:bg-neutral-900/80"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      style={{ zIndex }}
-    />
-  </Dialog.Overlay>
-)
 
 export const ModalInternal: Component<{
   item: ModalProps & { id: string }
@@ -73,12 +54,13 @@ export const ModalInternal: Component<{
     [close],
   )
 
-  const { opaque, overlay: defaultOverlay } = useUIStore(
-    useShallow((state) => ({
-      overlay: state.modalOverlay,
-      opaque: state.modalOpaque,
-    })),
-  )
+  // const { opaque, overlay: defaultOverlay } = useUIStore(
+  //   useShallow((state) => ({
+  //     overlay: state.modalOverlay,
+  //     opaque: state.modalOpaque,
+  //   })),
+  // )
+  const opaque = useUIStore((state) => state.modalOpaque)
 
   const {
     CustomModalComponent,
@@ -90,10 +72,10 @@ export const ModalInternal: Component<{
     wrapper: Wrapper = Fragment,
     max,
     icon,
-    overlay = defaultOverlay,
+
     draggable = false,
   } = item
-  const modalStyle = useMemo(() => ({ zIndex: 99 + index }), [index])
+  const zIndexStyle = useMemo(() => ({ zIndex: MODAL_STACK_Z_INDEX + index }), [index])
   const dismiss = useCallback(
     (e: SyntheticEvent) => {
       e.stopPropagation()
@@ -180,8 +162,6 @@ export const ModalInternal: Component<{
       <Wrapper>
         <Dialog.Root open onOpenChange={onClose}>
           <Dialog.Portal>
-            {overlay && <DialogOverlay zIndex={19} />}
-
             <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
             <Dialog.Content asChild>
               <div
@@ -190,6 +170,7 @@ export const ModalInternal: Component<{
                   modalContainerClassName,
                 )}
                 onClick={clickOutsideToDismiss ? dismiss : undefined}
+                style={zIndexStyle}
               >
                 <div
                   className={cn("contents", modalClassName)}
@@ -204,15 +185,15 @@ export const ModalInternal: Component<{
       </Wrapper>
     )
   }
+
   return (
     <Wrapper>
       <Dialog.Root open onOpenChange={onClose}>
         <Dialog.Portal>
-          {overlay && <DialogOverlay zIndex={19} />}
-
           <Dialog.Content asChild>
             <div
               ref={edgeElementRef}
+              style={zIndexStyle}
               className={cn(
                 "center fixed inset-0 z-20 flex",
                 modalContainerClassName,
@@ -220,14 +201,14 @@ export const ModalInternal: Component<{
               onClick={clickOutsideToDismiss ? dismiss : noticeModal}
             >
               <m.div
-                style={modalStyle}
+                style={zIndexStyle}
                 {...modalMontionConfig}
                 animate={animateController}
                 className={cn(
                   "relative flex flex-col overflow-hidden rounded-lg",
                   opaque ?
-                    "bg-zinc-50 dark:bg-neutral-900" :
-                    "bg-zinc-50/80 backdrop-blur-sm dark:bg-neutral-900/80",
+                    "bg-theme-modal-background-opaque" :
+                    "bg-theme-modal-background backdrop-blur-sm",
                   "shadow-modal p-2",
                   max ?
                     "h-[90vh] w-[90vw]" :
@@ -256,7 +237,7 @@ export const ModalInternal: Component<{
 
                     <span>{title}</span>
                   </Dialog.Title>
-                  <Dialog.DialogClose className="center p-2" onClick={close}>
+                  <Dialog.DialogClose className="center p-2" tabIndex={1} onClick={close}>
                     <i className="i-mgc-close-cute-re" />
                   </Dialog.DialogClose>
                 </div>
@@ -265,6 +246,7 @@ export const ModalInternal: Component<{
                 <div className="min-h-0 shrink grow overflow-auto px-4 py-2">
                   {finalChildren}
                 </div>
+
               </m.div>
             </div>
           </Dialog.Content>

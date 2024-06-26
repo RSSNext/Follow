@@ -1,5 +1,6 @@
-import { useReadonlyRouteSelector } from "@renderer/atoms"
+import { getReadonlyRoute, useReadonlyRouteSelector } from "@renderer/atoms"
 import { FeedViewType } from "@renderer/lib/enum"
+import type { Params } from "react-router-dom"
 import { useParams, useSearchParams } from "react-router-dom"
 // '0', '1', '2', '3', '4', '5',
 const FeedViewTypeValues = (() => {
@@ -27,10 +28,17 @@ export const useRouteFeedId = () => {
   return feedId
 }
 
-export const useRouteParms = () => {
-  const params = useParams()
-  const [search] = useSearchParams()
-  const view = useRouteView()
+const parseRouteParams = (
+  params: Params<any>,
+  search: URLSearchParams,
+) => {
+  const _view = search.get("view")
+
+  const view = (
+    (_view && FeedViewTypeValues.includes(_view) ?
+        +_view :
+      FeedViewType.Articles) || FeedViewType.Articles
+  )
 
   let feedId: string | number = params.feedId!
 
@@ -47,6 +55,13 @@ export const useRouteParms = () => {
     category: search.get("category") || undefined,
   }
 }
+
+export const useRouteParms = () => {
+  const params = useParams()
+  const [search] = useSearchParams()
+
+  return parseRouteParams(params, search)
+}
 const noop = [] as any[]
 export const useRouteParamsSelector = <T>(
   selector: (params: {
@@ -61,25 +76,11 @@ export const useRouteParamsSelector = <T>(
     useReadonlyRouteSelector((route) => {
       const { searchParams, params } = route
 
-      let feedId: string | number = params.feedId!
-
-      // If feedId is a number, it's a FeedViewType
-      if (feedId && FeedViewTypeValues.includes(feedId as string)) {
-        feedId = Number.parseInt(feedId as string)
-      }
-
-      const view = searchParams.get("view")
-
-      const finalView =
-      (view && FeedViewTypeValues.includes(view) ?
-          +view :
-        FeedViewType.Articles) || FeedViewType.Articles
-
-      return selector({
-        entryId: params.entryId || undefined,
-        feedId: params.feedId || undefined,
-        level: searchParams.get("level") || undefined,
-        category: searchParams.get("category") || undefined,
-        view: finalView,
-      })
+      return selector(parseRouteParams(params, searchParams))
     }, deps)
+
+export const getRouteParams = () => {
+  const route = getReadonlyRoute()
+  const { searchParams, params } = route
+  return parseRouteParams(params, searchParams)
+}

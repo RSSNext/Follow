@@ -36,4 +36,5 @@ jobs:
         run: |
           pnpm run typecheck
           npm run lint
-          pnpm run test
+      - name: Run test
+        run: pnpm test

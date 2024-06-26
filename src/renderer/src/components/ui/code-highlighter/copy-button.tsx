@@ -36,6 +36,7 @@ export const CopyButton: Component<{
   }, [value])
   return (
     <MotionButtonBase
+      type="button"
       onClick={handleCopy}
       className={cn(
         "center flex text-xs",

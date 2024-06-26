@@ -17,3 +17,5 @@ export const modalMontionConfig = {
   exit: initialStyle,
   transition: microReboundPreset,
 }
+
+export const MODAL_STACK_Z_INDEX = 100

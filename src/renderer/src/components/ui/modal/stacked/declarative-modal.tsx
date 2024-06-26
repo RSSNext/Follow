@@ -4,8 +4,10 @@ import { AnimatePresence } from "framer-motion"
 import type { FC, ReactNode } from "react"
 import { useId, useMemo } from "react"
 
-import { modalStackAtom } from "./context"
+import { modalStackAtom } from "./atom"
+import { MODAL_STACK_Z_INDEX } from "./constants"
 import { ModalInternal } from "./modal"
+import { ModalOverlay } from "./overlay"
 import type { ModalProps } from "./types"
 
 export interface DeclarativeModalProps extends Omit<ModalProps, "content"> {
@@ -37,18 +39,19 @@ const DeclarativeModalImpl: FC<DeclarativeModalProps> = ({
   return (
     <AnimatePresence>
       {open && (
-        <ModalInternal isTop onClose={onOpenChange} index={index} item={item}>
-          {children}
-        </ModalInternal>
+        <>
+          <ModalInternal isTop onClose={onOpenChange} index={index} item={item}>
+            {children}
+          </ModalInternal>
+          <ModalOverlay zIndex={MODAL_STACK_Z_INDEX - 1 + index} />
+        </>
       )}
     </AnimatePresence>
   )
 }
 
 const FooterAction: Component = ({ children, className }) => (
-  <div
-    className={cn("mt-4 flex items-center justify-end gap-2", className)}
-  >
+  <div className={cn("mt-4 flex items-center justify-end gap-2", className)}>
     {children}
   </div>
 )

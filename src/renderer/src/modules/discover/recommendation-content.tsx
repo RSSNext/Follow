@@ -1,12 +1,16 @@
-import type { RecommendationItem } from "@renderer/models"
+import { DiscoverFeedForm, FeedDescription } from "./content-components"
+import type { RSSHubRoute } from "./types"
 
 export const RecommendationContent = ({
   route,
+  routePrefix,
 }: {
-  route: RecommendationItem["routes"][string]
+  route: RSSHubRoute
+  routePrefix: string
 }) => (
-  <>
-    rsshub:/
-    {route.path}
-  </>
+  <div className="w-full min-w-[550px] max-w-[700px]">
+    <FeedDescription description={route.description} />
+
+    <DiscoverFeedForm route={route} routePrefix={routePrefix} />
+  </div>
 )
