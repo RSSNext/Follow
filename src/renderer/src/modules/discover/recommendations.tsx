@@ -27,7 +27,7 @@ export function Recommendations() {
 
       <div className="mt-4 grid grid-cols-3 gap-4">
         {Object.keys(data).map((key) => (
-          <RecommendationCard key={key} data={data[key]} />
+          <RecommendationCard key={key} data={data[key]} routePrefix={key} />
         ))}
       </div>
     </div>

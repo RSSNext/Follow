@@ -15,8 +15,9 @@ import type { RSSHubRouteDeclaration } from "./types"
 
 interface RecommendationCardProps {
   data: RSSHubRouteDeclaration
+  routePrefix: string
 }
-export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data }) => {
+export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, routePrefix }) => {
   const { present } = useModalStack()
   return (
     <Card>
@@ -36,7 +37,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data }) =
                 onClick={() => {
                   present({
                     content: () => (
-                      <RecommendationContent route={data.routes[route]} />
+                      <RecommendationContent routePrefix={routePrefix} route={data.routes[route]} />
                     ),
                     icon: (
                       <SiteIcon
