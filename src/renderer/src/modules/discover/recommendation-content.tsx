@@ -1,4 +1,4 @@
-import { DiscoverFeedForm, FeedDescription } from "./content-components"
+import { DiscoverFeedForm } from "./content-components"
 import type { RSSHubRoute } from "./types"
 
 export const RecommendationContent = ({
@@ -9,8 +9,6 @@ export const RecommendationContent = ({
   routePrefix: string
 }) => (
   <div className="w-full min-w-[550px] max-w-[700px]">
-    <FeedDescription description={route.description} />
-
     <DiscoverFeedForm route={route} routePrefix={routePrefix} />
   </div>
 )

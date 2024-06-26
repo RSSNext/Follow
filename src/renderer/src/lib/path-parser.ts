@@ -44,6 +44,11 @@ export const regexpPathToPath = (
   },
   options?: Omit<CompileOptions, "validate">,
 ): string => {
+  for (const param in params) {
+    if (params[param] === "") {
+      delete params[param]
+    }
+  }
   const transformedPath = transformUriPath(regexpPath)
 
   const paramsKeys = pathToRegexp(transformedPath).keys

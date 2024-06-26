@@ -38,12 +38,9 @@ const FeedMaintainers = ({ maintainers }: { maintainers?: string[] }) => {
   }
 
   return (
-    <div className="mb-2 text-sm">
-      <p>
-        The maintainers of this feed are as follows. If you have any questions
-        or suggestions, you can contact them.
-      </p>
-      <ul className="flex flex-wrap items-center gap-4">
+    <div className="mb-2 text-sm text-theme-foreground/80">
+      This feed is provided by RSSHub, with credit to
+      <span className="ml-1 inline-flex flex-wrap items-center gap-2">
         {maintainers.map((maintainer) => (
           <a
             href={`https://github.com/${maintainer}`}
@@ -57,14 +54,14 @@ const FeedMaintainers = ({ maintainers }: { maintainers?: string[] }) => {
             <i className="i-mgc-external-link-cute-re ml-0.5" />
           </a>
         ))}
-      </ul>
+      </span>
     </div>
   )
 }
 
-export const FeedDescription = ({ description }: { description?: string }) => {
+const FeedDescription = ({ description }: { description?: string }) => {
   if (!description) {
-    return <p className="mb-4">This feed does not have a description.</p>
+    return null
   }
 
   return (
@@ -109,19 +106,8 @@ export const DiscoverFeedForm = ({
     [keys],
   )
 
-  const defaultValue = useMemo(() => {
-    const ret = {}
-    if (!route.parameters) return ret
-    for (const key in route.parameters) {
-      const params = normalizeRSSHubParameters(route.parameters[key])
-      if (!params) continue
-      ret[key] = params.default
-    }
-    return ret
-  }, [route.parameters])
   const form = useForm<z.infer<typeof dynamicFormSchema>>({
     resolver: zodResolver(dynamicFormSchema),
-    defaultValues: defaultValue,
     mode: "all",
   }) as UseFormReturn<any>
 
@@ -174,6 +160,11 @@ export const DiscoverFeedForm = ({
   }, [formElRef])
   return (
     <Form {...form}>
+      <PreviewUrl
+        watch={form.watch}
+        path={route.path}
+        routePrefix={`rsshub://${routePrefix}`}
+      />
       <form
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(onSubmit)}
@@ -198,15 +189,15 @@ export const DiscoverFeedForm = ({
                   onValueChange={(value) => {
                     form.setValue(keyItem.name, value)
                   }}
-                  defaultValue={parameters?.default || void 0}
                 >
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
                     {parameters.options.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
+                      <SelectItem key={option.value} value={option.value || ""}>
                         {option.label}
+                        {parameters.default === option.value && " (default)"}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -215,7 +206,6 @@ export const DiscoverFeedForm = ({
                 <Input
                   {...form.register(keyItem.name)}
                   placeholder={parameters?.default ?? formPlaceholder[keyItem.name]}
-                  defaultValue={parameters?.default || void 0}
                 />
               )}
               {!!parameters && (
@@ -227,11 +217,7 @@ export const DiscoverFeedForm = ({
           )
         })}
 
-        <PreviewUrl
-          watch={form.watch}
-          path={route.path}
-          routePrefix={`rsshub://${routePrefix}`}
-        />
+        <FeedDescription description={route.description} />
 
         <FeedMaintainers maintainers={route.maintainers} />
 
@@ -263,7 +249,7 @@ const PreviewUrl: FC<{
 
   const renderedPath = `${routePrefix}${fullPath}`
   return (
-    <div className="group relative min-w-0 py-2">
+    <div className="group relative min-w-0 pb-4">
       <pre className="w-full whitespace-pre-line break-words text-xs text-theme-foreground/40">
         {renderedPath}
       </pre>
