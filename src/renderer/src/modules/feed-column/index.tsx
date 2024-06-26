@@ -165,7 +165,7 @@ export function FeedColumn() {
             >
               {active === index && (
                 <FeedList
-                  className="flex w-full flex-col px-3 pb-6 text-sm"
+                  className="flex size-full flex-col px-3 pb-6 text-sm"
                   view={index}
                 />
               )}

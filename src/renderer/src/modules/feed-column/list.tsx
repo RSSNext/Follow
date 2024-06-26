@@ -200,7 +200,7 @@ export function FeedList({
                 to="/discover"
                 className="-mt-36 flex h-full flex-1 flex-col items-center justify-center gap-2"
               >
-                <i className="i-mgc-add-cute-re text-3xl " />
+                <i className="i-mgc-add-cute-re text-3xl" />
                 Add some feeds
               </Link>
             </div>
