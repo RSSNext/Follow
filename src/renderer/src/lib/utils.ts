@@ -64,3 +64,6 @@ export function getOS(): OS {
 
   return os as OS
 }
+
+// eslint-disable-next-line no-control-regex
+export const isASCII = (str) => /^[\u0000-\u007F]*$/.test(str)
