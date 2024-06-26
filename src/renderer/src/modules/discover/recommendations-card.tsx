@@ -20,7 +20,7 @@ interface RecommendationCardProps {
 export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, routePrefix }) => {
   const { present } = useModalStack()
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader className="p-5 pb-3">
         <CardTitle className="flex items-center text-base">
           <SiteIcon url={`https://${data.url}`} />

@@ -25,7 +25,7 @@ export function Recommendations() {
     <div className="mt-8">
       <div className="text-center text-lg font-bold">Popular</div>
 
-      <div className="mt-4 grid grid-cols-3 gap-4">
+      <div className="mt-4 grid grid-cols-3 gap-4 px-3">
         {Object.keys(data).map((key) => (
           <RecommendationCard key={key} data={data[key]} routePrefix={key} />
         ))}
