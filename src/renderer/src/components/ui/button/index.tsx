@@ -196,8 +196,8 @@ export const StyledButton = React.forwardRef<
     >
       <m.span className="center">
         {isLoading && (
-          <m.span>
-            <LoadingCircle size="small" className="mr-2" />
+          <m.span className="center">
+            <LoadingCircle size="small" className="center mr-2" />
           </m.span>
         )}
         <m.span className={cn("center", className)}>{props.children}</m.span>
