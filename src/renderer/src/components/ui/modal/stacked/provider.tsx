@@ -2,9 +2,11 @@ import { AnimatePresence } from "framer-motion"
 import { useAtomValue } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 
-import { modalStackAtom } from "./context"
+import { modalStackAtom } from "./atom"
+import { MODAL_STACK_Z_INDEX } from "./constants"
 import { useDismissAllWhenRouterChange } from "./hooks"
 import { ModalInternal } from "./modal"
+import { ModalOverlay } from "./overlay"
 
 export const ModalStackProvider: FC<PropsWithChildren> = ({ children }) => (
   <>
@@ -28,6 +30,7 @@ const ModalStack = () => {
           isTop={index === stack.length - 1}
         />
       ))}
+      {stack.length > 0 && <ModalOverlay zIndex={MODAL_STACK_Z_INDEX + stack.length - 1} />}
     </AnimatePresence>
   )
 }

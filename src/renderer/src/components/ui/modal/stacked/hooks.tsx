@@ -1,11 +1,13 @@
 import { jotaiStore } from "@renderer/lib/jotai"
 import { useUIStore } from "@renderer/store"
-import { useCallback, useEffect, useId, useRef } from "react"
+import { useCallback, useContext, useEffect, useId, useRef } from "react"
 import { useLocation } from "react-router-dom"
 
-import { modalIdToPropsMap, modalStackAtom } from "./context"
+import { modalStackAtom } from "./atom"
+import { CurrentModalContext } from "./context"
 import type { ModalProps, ModalStackOptions } from "./types"
 
+export const modalIdToPropsMap = {} as Record<string, ModalProps>
 export const useModalStack = (options?: ModalStackOptions) => {
   const id = useId()
   const currentCount = useRef(0)
@@ -77,3 +79,5 @@ export const useDismissAllWhenRouterChange = () => {
     actions.dismissAll()
   }, [pathname])
 }
+
+export const useCurrentModal = () => useContext(CurrentModalContext)
