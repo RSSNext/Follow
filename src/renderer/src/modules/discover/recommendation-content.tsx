@@ -29,17 +29,33 @@ export const RecommendationContent = ({
   route: RSSHubRoute
   routePrefix: string
 }) => (
-  <div className="max-w-[700px]">
-    <p>
-      The description of this feed is as follows, and you can fill out the
-      parameter form with the relevant information.
-    </p>
-    <Markdown className="my-4 w-full max-w-full cursor-text select-text">
-      {route.description}
-    </Markdown>
+  <div className="w-full min-w-[550px] max-w-[700px]">
+    <FeedDescription description={route.description} />
     <DiscoverFeedForm route={route} routePrefix={routePrefix} />
   </div>
 )
+
+const FeedDescription = ({ description }: { description?: string }) => {
+  if (!description) {
+    return (
+      <p className="mb-4">
+        This feed does not have a description.
+      </p>
+    )
+  }
+
+  return (
+    <>
+      <p>
+        The description of this feed is as follows, and you can fill out the
+        parameter form with the relevant information.
+      </p>
+      <Markdown className="my-4 w-full max-w-full cursor-text select-text">
+        {description}
+      </Markdown>
+    </>
+  )
+}
 
 const DiscoverFeedForm = ({
   route,
@@ -130,9 +146,11 @@ const DiscoverFeedForm = ({
               {...form.register(keyItem.name)}
               placeholder={formPlaceholder[keyItem.name]}
             />
-            <p className="text-xs text-theme-foreground/50">
-              {route.parameters[keyItem.name]}
-            </p>
+            {!!route.parameters?.[keyItem.name] && (
+              <p className="text-xs text-theme-foreground/50">
+                {route.parameters[keyItem.name]}
+              </p>
+            )}
           </FormItem>
         ))}
 
@@ -142,10 +160,7 @@ const DiscoverFeedForm = ({
           routePrefix={`rsshub://${routePrefix}`}
         />
         <div className="mt-4 flex justify-end">
-          <StyledButton
-            disabled={!form.formState.isValid}
-            type="submit"
-          >
+          <StyledButton disabled={!form.formState.isValid} type="submit">
             Preview
           </StyledButton>
         </div>
