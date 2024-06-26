@@ -95,11 +95,13 @@ export const parseRegexpPathParams = (regexpPath: string) => {
   const array: PathParams[] = []
 
   for (const item of pathToRegexp(transformedPath).keys) {
-    array.push({
-      name: item.name,
-      optional: item.modifier === "?" || item.modifier === "*",
-      isCatchAll: item.name === CATCH_ALL_GROUP_KEY || item.modifier === "*",
-    })
+    if (item.name !== "routeParams") {
+      array.push({
+        name: item.name,
+        optional: item.modifier === "?" || item.modifier === "*",
+        isCatchAll: item.name === CATCH_ALL_GROUP_KEY || item.modifier === "*",
+      })
+    }
   }
 
   const map = array.reduce((acc, { name, optional, isCatchAll }) => {
