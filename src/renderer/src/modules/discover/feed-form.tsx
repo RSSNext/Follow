@@ -24,12 +24,13 @@ import { ViewSelectContent } from "@renderer/components/view-select-content"
 import { useBizQuery } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { tipcClient } from "@renderer/lib/client"
+import { nextFrame } from "@renderer/lib/dom"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useFeed } from "@renderer/queries/feed"
 import { useMutation } from "@tanstack/react-query"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -133,6 +134,11 @@ export const FeedForm: Component<{
   const categories = useBizQuery(
     Queries.subscription.categories(Number.parseInt(form.watch("view"))),
   )
+
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    if (feed.isSuccess) nextFrame(() => buttonRef.current?.focus())
+  }, [feed.isSuccess])
 
   return (
     <div
@@ -248,6 +254,7 @@ export const FeedForm: Component<{
 
                   <div className="flex flex-1 items-end justify-end">
                     <StyledButton
+                      ref={buttonRef}
                       type="submit"
                       isLoading={followMutation.isPending}
                     >

@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { getSidebarActiveView } from "@renderer/atoms/sidebar"
 import { StyledButton } from "@renderer/components/ui/button"
 import { CopyButton } from "@renderer/components/ui/code-highlighter"
 import { Form, FormItem, FormLabel } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
 import { Markdown } from "@renderer/components/ui/markdown"
 import { useModalStack } from "@renderer/components/ui/modal"
-import { FeedViewType } from "@renderer/lib/enum"
+import type { FeedViewType } from "@renderer/lib/enum"
 import {
   MissingOptionalParamError,
   parseFullPathParams,
@@ -13,7 +14,7 @@ import {
   regexpPathToPath,
 } from "@renderer/lib/path-parser"
 import type { FC } from "react"
-import { useCallback, useMemo } from "react"
+import { useCallback, useLayoutEffect, useMemo, useRef } from "react"
 import type { UseFormReturn } from "react-hook-form"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -109,6 +110,7 @@ export const DiscoverFeedForm = ({
   }) as UseFormReturn<any>
 
   const { present, dismissAll } = useModalStack()
+
   const onSubmit = useCallback(
     (data) => {
       try {
@@ -122,13 +124,15 @@ export const DiscoverFeedForm = ({
 
         const fillRegexpPath = regexpPathToPath(route.path, nextData)
         const url = `rsshub://${routePrefix}${fillRegexpPath}`
+        const defaultView = getSidebarActiveView() as FeedViewType
+
         present({
           title: "Add follow",
           content: () => (
             <FeedForm
               asWidget
               url={url}
-              defaultView={FeedViewType.Articles}
+              defaultView={defaultView}
               onSuccess={dismissAll}
             />
           ),
@@ -145,11 +149,19 @@ export const DiscoverFeedForm = ({
     [dismissAll, form, keys.array, present, route.path, routePrefix],
   )
 
+  const formElRef = useRef<HTMLFormElement>(null)
+
+  useLayoutEffect(() => {
+    const $form = formElRef.current
+    if (!$form) return
+    $form.querySelectorAll("input")[0]?.focus()
+  }, [formElRef])
   return (
     <Form {...form}>
       <form
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(onSubmit)}
+        ref={formElRef}
       >
         {keys.array.map((keyItem) => (
           <FormItem key={keyItem.name} className="flex flex-col space-y-2">

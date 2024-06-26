@@ -1,4 +1,5 @@
 import { getReadonlyRoute } from "@renderer/atoms"
+import { useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
 import { ProfileButton } from "@renderer/components/user-button"
@@ -11,7 +12,7 @@ import { clamp, cn } from "@renderer/lib/utils"
 import { useWheel } from "@use-gesture/react"
 import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useRef } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { Link } from "react-router-dom"
 
@@ -35,7 +36,7 @@ const useBackHome = (active: number) => {
 export function FeedColumn() {
   const carouselRef = useRef<HTMLDivElement>(null)
 
-  const [active, setActive_] = useState(0)
+  const [active, setActive_] = useSidebarActiveView()
   const spring = useSpring(0, {
     stiffness: 700,
     damping: 40,

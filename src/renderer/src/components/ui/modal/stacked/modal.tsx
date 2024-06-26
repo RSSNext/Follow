@@ -237,7 +237,7 @@ export const ModalInternal: Component<{
 
                     <span>{title}</span>
                   </Dialog.Title>
-                  <Dialog.DialogClose className="center p-2" onClick={close}>
+                  <Dialog.DialogClose className="center p-2" tabIndex={1} onClick={close}>
                     <i className="i-mgc-close-cute-re" />
                   </Dialog.DialogClose>
                 </div>
@@ -246,6 +246,7 @@ export const ModalInternal: Component<{
                 <div className="min-h-0 shrink grow overflow-auto px-4 py-2">
                   {finalChildren}
                 </div>
+
               </m.div>
             </div>
           </Dialog.Content>
