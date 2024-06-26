@@ -26,8 +26,8 @@ export function transformUriPath(uri: string): string {
 }
 
 export class MissingOptionalParamError extends Error {
-  constructor(param: string) {
-    super(`Missing optional param after optional param ${param}`)
+  constructor(public param: string) {
+    super(`You used the optional parameter ${param}, but there are other optional parameters before the optional parameter ${param} that you did not fill in.`)
   }
 }
 
@@ -49,6 +49,7 @@ export const regexpPathToPath = (
   const paramsKeys = pathToRegexp(transformedPath).keys
   const inputtedKeys = new Set(Object.keys(params))
   let prevKeyIsOptional = false
+  let prevKeyIsInputted = false
   for (const key of paramsKeys) {
     if (key.name === CATCH_ALL_GROUP_KEY) {
       params[CATCH_ALL_GROUP_KEY] = params.catchAll
@@ -64,11 +65,12 @@ export const regexpPathToPath = (
       throw new Error("Required param after optional param")
     }
 
-    if (prevKeyIsOptional && userInputted) {
+    if (prevKeyIsOptional && !prevKeyIsInputted && userInputted) {
       throw new MissingOptionalParamError(key.name)
     }
 
     prevKeyIsOptional = isOptional
+    prevKeyIsInputted = userInputted
   }
   return compile(transformedPath, {
     validate: false,
@@ -104,4 +106,17 @@ export const parseRegexpPathParams = (regexpPath: string) => {
     map,
     length: array.length,
   }
+}
+export const parseFullPathParams = (path: string, regexpPath: string) => {
+  // path: /user/123344
+  // regexpPath: /user/:id
+  // return {id: '123344'}
+  const transformedPath = transformUriPath(regexpPath)
+  const { keys } = pathToRegexp(transformedPath)
+  const result = pathToRegexp(transformedPath).exec(path)
+  if (!result) return {}
+  return keys.reduce((acc, key, index) => {
+    acc[key.name] = result[index + 1]
+    return acc
+  }, {} as Record<string, string>)
 }

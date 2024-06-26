@@ -204,6 +204,7 @@ export const ModalInternal: Component<{
       </Wrapper>
     )
   }
+
   return (
     <Wrapper>
       <Dialog.Root open onOpenChange={onClose}>

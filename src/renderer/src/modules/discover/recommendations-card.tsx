@@ -46,7 +46,6 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
                       />
                     ),
                     title: `${data.name} - ${data.routes[route].name}`,
-                    clickOutsideToDismiss: true,
                   })
                 }}
               >

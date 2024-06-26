@@ -1,7 +1,7 @@
 import { compile, pathToRegexp } from "path-to-regexp"
 import { describe, expect, test } from "vitest"
 
-import { MissingOptionalParamError, MissingRequiredParamError, parseRegexpPathParams, regexpPathToPath, transformUriPath } from "./path-parser"
+import { MissingOptionalParamError, MissingRequiredParamError, parseFullPathParams, parseRegexpPathParams, regexpPathToPath, transformUriPath } from "./path-parser"
 
 describe("test `transformUriPath()`", () => {
   test("normal path", () => {
@@ -168,7 +168,14 @@ describe("test `regexpPathToPath()`", () => {
         repo: "follow",
         labels: "rss",
       }),
-    ).throws(MissingOptionalParamError)
+    ).toThrowError(MissingOptionalParamError)
+  })
+  test("path with many optional params, but when using the optional parameter(s) after the optional parameter(s), the previous optional parameter(s) is/are not filled in.", () => {
+    expect(
+      () => regexpPathToPath("/ranking/:rid?/:day?/:arc_type?/:disableEmbed?", {
+        day: "1",
+      }),
+    ).toThrowError(MissingOptionalParamError)
   })
 
   test("missing required param", () => {
@@ -179,6 +186,15 @@ describe("test `regexpPathToPath()`", () => {
     expect(regexpPathToPath("*", {
       catchAll: "a/b/c",
     })).toMatchInlineSnapshot(`"/a%2Fb%2Fc"`)
+  })
+
+  test("path with many optional params and all inputted", () => {
+    expect(regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
+      user: "rssnext",
+      repo: "follow",
+      state: "open",
+      labels: "rss",
+    })).toMatchInlineSnapshot(`"/issue/rssnext/follow/open/rss"`)
   })
 })
 
@@ -307,6 +323,24 @@ describe("test `parseRegexpPathParams()`", () => {
             "optional": false,
           },
         },
+      }
+    `)
+  })
+})
+
+describe("test `parseFullPathParams()`", () => {
+  test("case 1", () => {
+    expect(parseFullPathParams("/user/123344", "/user/:id")).toMatchInlineSnapshot(`
+      {
+        "id": "123344",
+      }
+    `)
+  })
+  test("case 2", () => {
+    expect(parseFullPathParams("/build/wangqiru/ttrss", "/build/:user/:name")).toMatchInlineSnapshot(`
+      {
+        "name": "ttrss",
+        "user": "wangqiru",
       }
     `)
   })

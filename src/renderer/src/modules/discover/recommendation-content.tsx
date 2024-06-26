@@ -6,6 +6,8 @@ import { Markdown } from "@renderer/components/ui/markdown"
 import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import { FeedViewType } from "@renderer/lib/enum"
 import {
+  MissingOptionalParamError,
+  parseFullPathParams,
   parseRegexpPathParams,
   regexpPathToPath,
 } from "@renderer/lib/path-parser"
@@ -13,6 +15,7 @@ import type { FC } from "react"
 import { useCallback, useMemo } from "react"
 import type { UseFormReturn } from "react-hook-form"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
 import { FeedForm } from "./feed-form"
@@ -47,6 +50,13 @@ const DiscoverFeedForm = ({
 }) => {
   const keys = parseRegexpPathParams(route.path)
 
+  const formPlaceholder = useMemo<Record<string, string>>(() => {
+    if (!route.example) return {}
+    return parseFullPathParams(
+      route.example.replace(`/${routePrefix}`, ""),
+      route.path,
+    )
+  }, [route.example, route.path, routePrefix])
   const dynamicFormSchema = useMemo(
     () =>
       z.object({
@@ -62,25 +72,45 @@ const DiscoverFeedForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(dynamicFormSchema),
     defaultValues: {},
+    mode: "all",
   }) as UseFormReturn<any>
 
   const { present } = useModalStack()
-  const onSubmit = useCallback((data) => {
-    present({
-      title: "Add follow",
-      content: ({ dismiss }) => {
-        const url = `rsshub://${routePrefix}${regexpPathToPath(route.path, data)}`
-        return (
-          <FeedForm
-            asWidget
-            url={url}
-            defaultView={FeedViewType.Articles}
-            onSuccess={dismiss}
-          />
-        )
-      },
-    })
-  }, [present, route.path, routePrefix])
+  const onSubmit = useCallback(
+    (data) => {
+      try {
+        //   Delete empty string values
+        const nextData = { ...data }
+        for (const key in nextData) {
+          if (nextData[key] === "") {
+            delete nextData[key]
+          }
+        }
+
+        const fillRegexpPath = regexpPathToPath(route.path, nextData)
+        const url = `rsshub://${routePrefix}${fillRegexpPath}`
+        present({
+          title: "Add follow",
+          content: ({ dismiss }) => (
+            <FeedForm
+              asWidget
+              url={url}
+              defaultView={FeedViewType.Articles}
+              onSuccess={dismiss}
+            />
+          ),
+        })
+      } catch (err: unknown) {
+        if (err instanceof MissingOptionalParamError) {
+          toast.error(err.message)
+          const idx = keys.array.findIndex((item) => item.name === err.param)
+
+          form.setFocus(keys.array[idx === 0 ? 0 : idx - 1].name)
+        }
+      }
+    },
+    [form, keys.array, present, route.path, routePrefix],
+  )
 
   return (
     <Form {...form}>
@@ -96,7 +126,10 @@ const DiscoverFeedForm = ({
                 <sup className="ml-1 align-sub text-red-500">*</sup>
               )}
             </FormLabel>
-            <Input {...form.register(keyItem.name)} />
+            <Input
+              {...form.register(keyItem.name)}
+              placeholder={formPlaceholder[keyItem.name]}
+            />
             <p className="text-xs text-theme-foreground/50">
               {route.parameters[keyItem.name]}
             </p>
@@ -105,10 +138,16 @@ const DiscoverFeedForm = ({
 
         <PreviewUrl
           watch={form.watch}
-          path={`rsshub://${routePrefix}${route.path}`}
+          path={route.path}
+          routePrefix={`rsshub://${routePrefix}`}
         />
         <div className="mt-4 flex justify-end">
-          <StyledButton type="submit">Preview</StyledButton>
+          <StyledButton
+            disabled={!form.formState.isValid}
+            type="submit"
+          >
+            Preview
+          </StyledButton>
         </div>
       </form>
     </Form>
@@ -118,19 +157,23 @@ const DiscoverFeedForm = ({
 const PreviewUrl: FC<{
   watch: UseFormReturn<any>["watch"]
   path: string
-}> = ({ watch, path }) => {
+  routePrefix: string
+}> = ({ watch, path, routePrefix }) => {
   const data = watch()
 
   const fullPath = useMemo(() => {
     try {
-      const url = new URL(path)
-      const { protocol, pathname } = url
-
-      return `${protocol}/${regexpPathToPath(pathname, data)}`
-    } catch {
+      return regexpPathToPath(path, data)
+    } catch (err: unknown) {
+      console.info((err as Error).message)
       return path
     }
   }, [path, data])
 
-  return <pre className="text-xs text-theme-foreground/30">{fullPath}</pre>
+  return (
+    <pre className="text-xs text-theme-foreground/30">
+      {routePrefix}
+      {fullPath}
+    </pre>
+  )
 }
