@@ -6,6 +6,13 @@ import { Form, FormItem, FormLabel } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
 import { Markdown } from "@renderer/components/ui/markdown"
 import { useModalStack } from "@renderer/components/ui/modal"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@renderer/components/ui/select"
 import type { FeedViewType } from "@renderer/lib/enum"
 import {
   MissingOptionalParamError,
@@ -13,6 +20,7 @@ import {
   parseRegexpPathParams,
   regexpPathToPath,
 } from "@renderer/lib/path-parser"
+import { isNil } from "lodash-es"
 import type { FC } from "react"
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react"
 import type { UseFormReturn } from "react-hook-form"
@@ -77,9 +85,9 @@ export const DiscoverFeedForm = ({
   routePrefix,
 }: {
   route: RSSHubRoute
-  routePrefix
+  routePrefix: string
 }) => {
-  const keys = parseRegexpPathParams(route.path)
+  const keys = useMemo(() => parseRegexpPathParams(route.path), [route.path])
 
   const formPlaceholder = useMemo<Record<string, string>>(() => {
     if (!route.example) return {}
@@ -100,21 +108,32 @@ export const DiscoverFeedForm = ({
       }),
     [keys],
   )
+
+  const defaultValue = useMemo(() => {
+    const ret = {}
+    if (!route.parameters) return ret
+    for (const key in route.parameters) {
+      const params = normalizeRSSHubParameters(route.parameters[key])
+      if (!params) continue
+      ret[key] = params.default
+    }
+    return ret
+  }, [route.parameters])
   const form = useForm<z.infer<typeof dynamicFormSchema>>({
     resolver: zodResolver(dynamicFormSchema),
-    defaultValues: {},
+    defaultValues: defaultValue,
     mode: "all",
   }) as UseFormReturn<any>
 
   const { present, dismissAll } = useModalStack()
 
   const onSubmit = useCallback(
-    (data) => {
+    (data: Record<string, string>) => {
       try {
         //   Delete empty string values
         const nextData = { ...data }
         for (const key in nextData) {
-          if (nextData[key] === "") {
+          if (nextData[key] === "" || isNil(nextData[key])) {
             delete nextData[key]
           }
         }
@@ -139,7 +158,7 @@ export const DiscoverFeedForm = ({
           toast.error(err.message)
           const idx = keys.array.findIndex((item) => item.name === err.param)
 
-          form.setFocus(keys.array[idx === 0 ? 0 : idx - 1].name)
+          form.setFocus(keys.array[idx === 0 ? 0 : idx - 1].name, { shouldSelect: true })
         }
       }
     },
@@ -173,11 +192,32 @@ export const DiscoverFeedForm = ({
                   <sup className="ml-1 align-sub text-red-500">*</sup>
                 )}
               </FormLabel>
-              <Input
-                {...form.register(keyItem.name)}
-                placeholder={parameters?.default ?? formPlaceholder[keyItem.name]}
-                defaultValue={parameters?.default || void 0}
-              />
+              {parameters?.options ? (
+                <Select
+                  {...form.register(keyItem.name)}
+                  onValueChange={(value) => {
+                    form.setValue(keyItem.name, value)
+                  }}
+                  defaultValue={parameters?.default || void 0}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {parameters.options.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Input
+                  {...form.register(keyItem.name)}
+                  placeholder={parameters?.default ?? formPlaceholder[keyItem.name]}
+                  defaultValue={parameters?.default || void 0}
+                />
+              )}
               {!!parameters && (
                 <p className="text-xs text-theme-foreground/50">
                   {parameters.description}
