@@ -3,6 +3,7 @@ import { MotionButtonBase } from "@renderer/components/ui/button"
 import { useCurrentModal } from "@renderer/components/ui/modal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { SettingsTitle } from "@renderer/modules/settings/title"
+import type { FC } from "react"
 
 import { SettingTabProvider, useSettingTab } from "./context"
 import { SettingModalLayout } from "./layout"
@@ -18,9 +19,13 @@ const pages = (() => {
   }
   return pages
 })()
-export const SettingModalContent = () => (
+export const SettingModalContent: FC<{
+  initialTab?: string
+}> = ({ initialTab }) => (
   <SettingTabProvider>
-    <SettingModalLayout>
+    <SettingModalLayout
+      initialTab={initialTab ? initialTab in pages ? initialTab : undefined : undefined}
+    >
       <ScrollArea.ScrollArea
         scrollbarClassName="mt-12 mb-2"
         rootClassName="h-full flex-1 shrink-0 overflow-auto pl-8 pr-7"
