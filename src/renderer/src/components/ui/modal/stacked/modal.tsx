@@ -208,7 +208,7 @@ export const ModalInternal: Component<{
     <Wrapper>
       <Dialog.Root open onOpenChange={onClose}>
         <Dialog.Portal>
-          {overlay && <DialogOverlay zIndex={19} />}
+          {overlay && <DialogOverlay zIndex={19 + index} />}
 
           <Dialog.Content asChild>
             <div
