@@ -43,7 +43,7 @@ export const registerAppMenu = () => {
           label: "follow https://rsshub.app/twitter/user/DIYgod",
           click: () => {
             createWindow({
-              extraPath: `/add?url=${encodeURIComponent(
+              extraPath: `#add?url=${encodeURIComponent(
                 "https://rsshub.app/twitter/user/DIYgod",
               )}`,
               width: 800,
@@ -55,7 +55,7 @@ export const registerAppMenu = () => {
           label: "follow https://diygod.me/feed",
           click: () => {
             createWindow({
-              extraPath: `/add?url=${encodeURIComponent(
+              extraPath: `#add?url=${encodeURIComponent(
                 "https://diygod.me/feed",
               )}`,
               width: 800,

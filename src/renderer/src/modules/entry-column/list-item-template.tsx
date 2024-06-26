@@ -27,7 +27,7 @@ export function ListItem({
   if (!entry) return <ReactVirtuosoItemPlaceholder />
 
   return (
-    <div className={cn("relative flex py-3 pl-3 pr-2", !asRead && "before:absolute before:-left-0.5 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-blue-500")}>
+    <div className={cn("relative flex py-3 pl-3 pr-2", !asRead && "before:absolute before:-left-0.5 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-theme-accent")}>
       <FeedIcon feed={entry.feeds} entry={entry.entries} />
       <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
         <div className={cn("flex gap-1 text-[10px] font-bold", asRead ? "text-zinc-400" : "text-zinc-500")}>
