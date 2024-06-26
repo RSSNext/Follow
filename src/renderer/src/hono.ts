@@ -36,6 +36,19 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             status: 200;
         };
     };
+    "/wallets/transactions/claim_daily_ttl": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    ttl: number;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
     "/wallets": {
         $get: {
             input: {

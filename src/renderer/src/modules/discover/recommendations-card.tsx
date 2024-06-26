@@ -33,7 +33,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
             {Object.keys(data.routes).map((route) => (
               <li
                 key={route}
-                className="transition-colors hover:font-medium hover:text-zinc-800"
+                className="duration-200 hover:font-medium hover:text-theme-foreground-hover"
                 onClick={() => {
                   present({
                     content: () => (

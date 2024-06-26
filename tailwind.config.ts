@@ -70,7 +70,7 @@ export default resolveConfig({
 
         theme: {
           // https://uicolors.app/create
-          accent: {
+          "accent": {
             DEFAULT: "#ff5c00",
             50: "#fff7ec",
             100: "#ffeed3",
@@ -85,26 +85,28 @@ export default resolveConfig({
             950: "#461304",
           },
 
-          vibrancyFg: "hsl(var(--fo-vibrancy-foreground), <alpha-value>)",
-          vibrancyBg: "var(--fo-vibrancy-background)",
+          "vibrancyFg": "hsl(var(--fo-vibrancy-foreground), <alpha-value>)",
+          "vibrancyBg": "var(--fo-vibrancy-background)",
 
-          item: {
+          "item": {
             active: "var(--fo-item-active)",
             hover: "var(--fo-item-hover)",
           },
 
-          tooltip: {
+          "tooltip": {
             background: "hsl(var(--fo-tooltip-background), <alpha-value>)",
             foreground: "hsl(var(--fo-tooltip-foreground), <alpha-value>)",
           },
 
-          inactive: "hsl(var(--fo-inactive), <alpha-value>)",
-          disabled: "hsl(var(--fo-disabled), <alpha-value>)",
+          "inactive": "hsl(var(--fo-inactive), <alpha-value>)",
+          "disabled": "hsl(var(--fo-disabled), <alpha-value>)",
 
-          foreground: "hsl(var(--fo-text-primary), <alpha-value>)",
-          background: "var(--fo-background)",
+          "foreground": "hsl(var(--fo-text-primary), <alpha-value>)",
+          "background": "var(--fo-background)",
 
-          modal: {
+          "foreground-hover": "hsl(var(--fo-text-primary-hover), <alpha-value>)",
+
+          "modal": {
             "background": "var(--fo-modal-background)",
             "background-opaque": "var(--fo-modal-background-opaque)",
           },

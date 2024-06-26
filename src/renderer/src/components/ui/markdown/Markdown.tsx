@@ -17,7 +17,7 @@ export const Markdown: Component<{
   children: string
 }> = (props) => (
   <div
-    className={cn(styles.markdown, props.className, "prose")}
+    className={cn(styles.markdown, props.className, "prose dark:prose-invert prose-th:text-left")}
     dangerouslySetInnerHTML={useMemo(
       () => ({
         __html: md.render(props.children as string),

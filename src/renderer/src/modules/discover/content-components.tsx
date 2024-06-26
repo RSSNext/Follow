@@ -22,12 +22,9 @@ import { z } from "zod"
 
 import { FeedForm } from "./feed-form"
 import type { RSSHubRoute } from "./types"
+import { normalizeRSSHubParameters } from "./utils"
 
-const FeedMaintainers = ({
-  maintainers,
-}: {
-  maintainers?: string[]
-}) => {
+const FeedMaintainers = ({ maintainers }: { maintainers?: string[] }) => {
   if (!maintainers || maintainers.length === 0) {
     return null
   }
@@ -163,25 +160,32 @@ export const DiscoverFeedForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
         ref={formElRef}
       >
-        {keys.array.map((keyItem) => (
-          <FormItem key={keyItem.name} className="flex flex-col space-y-2">
-            <FormLabel>
-              {keyItem.name}
-              {!keyItem.optional && (
-                <sup className="ml-1 align-sub text-red-500">*</sup>
+        {keys.array.map((keyItem) => {
+          const parameters = normalizeRSSHubParameters(
+            route.parameters[keyItem.name],
+          )
+
+          return (
+            <FormItem key={keyItem.name} className="flex flex-col space-y-2">
+              <FormLabel>
+                {keyItem.name}
+                {!keyItem.optional && (
+                  <sup className="ml-1 align-sub text-red-500">*</sup>
+                )}
+              </FormLabel>
+              <Input
+                {...form.register(keyItem.name)}
+                placeholder={parameters?.default ?? formPlaceholder[keyItem.name]}
+                defaultValue={parameters?.default || void 0}
+              />
+              {!!parameters && (
+                <p className="text-xs text-theme-foreground/50">
+                  {parameters.description}
+                </p>
               )}
-            </FormLabel>
-            <Input
-              {...form.register(keyItem.name)}
-              placeholder={formPlaceholder[keyItem.name]}
-            />
-            {!!route.parameters?.[keyItem.name] && (
-              <p className="text-xs text-theme-foreground/50">
-                {route.parameters[keyItem.name]}
-              </p>
-            )}
-          </FormItem>
-        ))}
+            </FormItem>
+          )
+        })}
 
         <PreviewUrl
           watch={form.watch}
@@ -223,7 +227,10 @@ const PreviewUrl: FC<{
       <pre className="w-full whitespace-pre-line break-words text-xs text-theme-foreground/40">
         {renderedPath}
       </pre>
-      <CopyButton value={renderedPath} className="absolute right-0 top-0 opacity-0 duration-200 group-hover:opacity-100" />
+      <CopyButton
+        value={renderedPath}
+        className="absolute right-0 top-0 opacity-0 duration-200 group-hover:opacity-100"
+      />
     </div>
   )
 }

@@ -17,6 +17,8 @@
 
   --fo-modal-background: theme(colors.zinc.50/0.8);
   --fo-modal-background-opaque: theme(colors.zinc.50);
+
+  --fo-text-primary-hover: 0, 0%, 14.9%;
 }
 
 [data-theme="dark"] {
@@ -37,4 +39,6 @@
 
   --fo-modal-background: theme(colors.neutral.900/0.8);
   --fo-modal-background-opaque: theme(colors.neutral.900);
+
+  --fo-text-primary-hover: 240, 4.9%, 83.9%;
 }
