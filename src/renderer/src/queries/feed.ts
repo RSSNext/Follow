@@ -58,3 +58,12 @@ export const useClaimFeedMutation = (feedId: string) => useMutation({
     })
   },
 })
+
+export const useRefreshFeedMutation = (feedId?: string) => useMutation({
+  mutationKey: ["refreshFeed", feedId],
+  mutationFn: () => apiClient.feeds.refresh.$get({ query: { id: feedId! } }),
+
+  async onError(err) {
+    toast.error(await getFetchErrorMessage(err))
+  },
+})
