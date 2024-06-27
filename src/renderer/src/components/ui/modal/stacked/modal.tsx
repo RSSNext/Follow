@@ -75,7 +75,7 @@ export const ModalInternal: Component<{
 
     draggable = false,
   } = item
-  const zIndexStyle = useMemo(() => ({ zIndex: MODAL_STACK_Z_INDEX + index }), [index])
+  const zIndexStyle = useMemo(() => ({ zIndex: MODAL_STACK_Z_INDEX + index + 1 }), [index])
   const dismiss = useCallback(
     (e: SyntheticEvent) => {
       e.stopPropagation()
