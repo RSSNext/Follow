@@ -67,3 +67,22 @@ export function getOS(): OS {
 
 // eslint-disable-next-line no-control-regex
 export const isASCII = (str) => /^[\u0000-\u007F]*$/.test(str)
+
+export const isBizId = (id) => {
+  if (!id) return false
+
+  // id is uuid or snowflake
+
+  // 0. check is uuid
+  if (id.length === 36 && id[8] === "-" && id[13] === "-" && id[18] === "-" && id[23] === "-") {
+    return true
+  }
+
+  // 1. check is snowflake
+  // snowflake ep 1712546615000
+  if (id.length > 16 && id.length < 20 && !Number.isNaN(id)) {
+    return true
+  }
+
+  return false
+}

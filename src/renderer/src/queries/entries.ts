@@ -16,7 +16,7 @@ export const entries = {
     read?: boolean
   }) =>
     defineQuery(
-      ["entries", level, id, view, read],
+      ["entries", id, level, view, read],
       async ({ pageParam }) =>
         entryActions.fetchEntries({
           level,
@@ -27,7 +27,7 @@ export const entries = {
           pageParam: pageParam as string,
         }),
       {
-        rootKey: ["entries"],
+        rootKey: ["entries", id],
       },
     ),
   byId: (id: string) =>

@@ -1,4 +1,5 @@
 import { useMainContainerElement } from "@renderer/atoms"
+import { useUser } from "@renderer/atoms/user"
 import { ActionButton, StyledButton } from "@renderer/components/ui/button"
 import {
   Popover,
@@ -17,12 +18,13 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
 import { shortcuts } from "@renderer/lib/shortcuts"
-import { cn, getEntriesParams, getOS } from "@renderer/lib/utils"
+import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
 import { useEntries } from "@renderer/queries/entries"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import {
   entryActions,
   subscriptionActions,
+  useFeedById,
   useFeedHeaderTitle,
 } from "@renderer/store"
 import {
@@ -295,6 +297,10 @@ const ListHeader: FC<{
   const { mutateAsync: refreshFeed, isPending } = useRefreshFeedMutation(
     routerParams.feedId,
   )
+
+  const user = useUser()
+
+  const feed = useFeedById(routerParams.feedId)
   return (
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
       <div
@@ -305,7 +311,8 @@ const ListHeader: FC<{
       >
         {!titleAtBottom && titleInfo}
         <div className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500">
-          {routerParams.feedId && (
+          {feed?.ownerUserId === user?.id &&
+            isBizId(routerParams.feedId) && (
             <ActionButton
               tooltip="Refresh"
               // shortcut={shortcuts.entries.toggleUnreadOnly.key}
