@@ -11,18 +11,15 @@ import {
 } from "@renderer/components/ui/tooltip"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
-import { apiClient } from "@renderer/lib/api-fetch"
+import { useDeleteSubscription } from "@renderer/hooks/biz/useSubscriptionActions"
 import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
 import { nextFrame } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import { Queries } from "@renderer/queries"
 import type { SubscriptionPlainModel } from "@renderer/store"
 import { getFeedById, useFeedById, useUnreadStore } from "@renderer/store"
-import { useMutation } from "@tanstack/react-query"
 import { memo, useCallback } from "react"
-import { toast } from "sonner"
 
 import { useFeedClaimModal } from "../claim/hooks"
 import { FeedForm } from "../discover/feed-form"
@@ -60,50 +57,7 @@ const FeedItemImpl = ({
     [subscription.feedId, navigate, view],
   )
 
-  const deleteMutation = useMutation({
-    mutationFn: async (feed: SubscriptionPlainModel) =>
-      apiClient.subscriptions.$delete({
-        json: {
-          feedId: feed.feedId,
-        },
-      }),
-
-    onSuccess: (_, variables) => {
-      Queries.subscription.byView(variables.view).invalidate()
-
-      const feed = getFeedById(variables.feedId)
-
-      if (!feed) return
-      toast(
-        <>
-          Feed
-          {" "}
-          <i className="mr-px font-semibold">{feed.title}</i>
-          {" "}
-          has been
-          unfollowed.
-        </>,
-        {
-          duration: 3000,
-          action: {
-            label: "Undo",
-            onClick: async () => {
-              await apiClient.subscriptions.$post({
-                json: {
-                  url: feed.url,
-                  view: variables.view,
-                  category: variables.category,
-                  isPrivate: variables.isPrivate,
-                },
-              })
-
-              Queries.subscription.byView(variables.view).invalidate()
-            },
-          },
-        },
-      )
-    },
-  })
+  const deleteSubscription = useDeleteSubscription({})
 
   const feedUnread = useUnreadStore(
     (state) => state.data[subscription.feedId] || 0,
@@ -162,7 +116,7 @@ const FeedItemImpl = ({
             {
               type: "text",
               label: "Unfollow",
-              click: () => deleteMutation.mutate(subscription),
+              click: () => deleteSubscription.mutate(subscription),
             },
             {
               type: "separator",
