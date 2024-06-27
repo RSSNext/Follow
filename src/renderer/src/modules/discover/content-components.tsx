@@ -20,7 +20,6 @@ import {
   parseRegexpPathParams,
   regexpPathToPath,
 } from "@renderer/lib/path-parser"
-import { isNil } from "lodash-es"
 import type { FC } from "react"
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react"
 import type { UseFormReturn } from "react-hook-form"
@@ -38,9 +37,11 @@ const FeedMaintainers = ({ maintainers }: { maintainers?: string[] }) => {
   }
 
   return (
-    <div className="mb-2 text-sm text-theme-foreground/80">
-      This feed is provided by RSSHub, with credit to
-      <span className="ml-1 inline-flex flex-wrap items-center gap-2">
+    <div className="mb-2 flex flex-col gap-x-1 text-sm text-theme-foreground/80">
+      <span>
+        This feed is provided by RSSHub, with credit to
+      </span>
+      <span className="inline-flex flex-wrap items-center gap-2">
         {maintainers.map((maintainer) => (
           <a
             href={`https://github.com/${maintainer}`}
@@ -84,7 +85,9 @@ export const DiscoverFeedForm = ({
   route: RSSHubRoute
   routePrefix: string
 }) => {
-  const keys = useMemo(() => parseRegexpPathParams(route.path), [route.path])
+  const keys = useMemo(() => parseRegexpPathParams(route.path, {
+    excludeNames: ["routeParams"],
+  }), [route.path])
 
   const formPlaceholder = useMemo<Record<string, string>>(() => {
     if (!route.example) return {}
@@ -116,15 +119,7 @@ export const DiscoverFeedForm = ({
   const onSubmit = useCallback(
     (data: Record<string, string>) => {
       try {
-        //   Delete empty string values
-        const nextData = { ...data }
-        for (const key in nextData) {
-          if (nextData[key] === "" || isNil(nextData[key])) {
-            delete nextData[key]
-          }
-        }
-
-        const fillRegexpPath = regexpPathToPath(route.path, nextData)
+        const fillRegexpPath = regexpPathToPath(route.path, data)
         const url = `rsshub://${routePrefix}${fillRegexpPath}`
         const defaultView = getSidebarActiveView() as FeedViewType
 
