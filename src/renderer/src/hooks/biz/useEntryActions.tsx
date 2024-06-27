@@ -118,7 +118,7 @@ export const useEntryActions = ({
   // comment out L119-122 to work ⬇️
   const openTipModal = useTipModal({
     userId: entry?.feeds.ownerUserId ?? undefined,
-    entryId: entry?.entries.id ?? undefined,
+    feedId: entry?.feeds.id ?? undefined,
   })
 
   const collect = useCollect(entry)

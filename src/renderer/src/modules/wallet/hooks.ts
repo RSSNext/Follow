@@ -4,7 +4,7 @@ import { toast } from "sonner"
 
 import { TipModalContent } from "./tip-modal"
 
-export const useTipModal = ({ userId, entryId }: { userId?: string, entryId?: string }) => {
+export const useTipModal = ({ userId, feedId }: { userId?: string, feedId?: string }) => {
   const { present } = useModalStack()
 
   return useCallback(() => {
@@ -16,7 +16,7 @@ export const useTipModal = ({ userId, entryId }: { userId?: string, entryId?: st
 
     present({
       title: "Tip",
-      content: () => createElement(TipModalContent, { userId, entryId }),
+      content: () => createElement(TipModalContent, { userId, feedId }),
     })
-  }, [present, userId, entryId])
+  }, [present, userId, feedId])
 }

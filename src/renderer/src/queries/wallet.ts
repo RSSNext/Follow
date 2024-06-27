@@ -85,7 +85,7 @@ export const useClaimWalletDailyRewardMutation = () => useMutation({
 
 export const useWalletTipMutation = () => useMutation({
   mutationKey: ["walletTip"],
-  mutationFn: (data: { userId: string, entryId?: string, amount: string }) =>
+  mutationFn: (data: Parameters<typeof apiClient.wallets.transactions.tip.$post>[0]["json"]) =>
     apiClient.wallets.transactions.tip.$post({ json: data }),
   async onError(err) {
     toast.error(await getFetchErrorMessage(err))

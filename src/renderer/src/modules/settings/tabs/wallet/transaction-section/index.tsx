@@ -32,7 +32,7 @@ export const TransactionsSection = () => {
               <TableHead size="sm" className="uppercase">Amount</TableHead>
               <TableHead size="sm" className="uppercase">From</TableHead>
               <TableHead size="sm" className="uppercase">To</TableHead>
-              <TableHead size="sm" className="uppercase">Entry</TableHead>
+              <TableHead size="sm" className="uppercase">Feed</TableHead>
               <TableHead size="sm" className="uppercase">Date</TableHead>
             </TableRow>
           </TableHeader>
@@ -45,7 +45,7 @@ export const TransactionsSection = () => {
                   <TableCell align="center" size="sm"><Balance>{row.powerToken}</Balance></TableCell>
                   <TableCell align="center" size="sm"><UserRenderer user={row.fromUser} /></TableCell>
                   <TableCell align="center" size="sm"><UserRenderer user={row.toUser} /></TableCell>
-                  <TableCell align="center" size="sm"><EntryRenderer entry={row.toEntry} /></TableCell>
+                  <TableCell align="center" size="sm"><FeedRenderer feed={row.toFeed} /></TableCell>
                   <TableCell align="center" size="sm">{dayjs(row.createdAt).fromNow()}</TableCell>
                 </TableRow>
               ),
@@ -87,8 +87,8 @@ const UserRenderer = ({ user }: { user?: NonNullable<ReturnType<typeof useWallet
   )
 }
 
-const EntryRenderer = ({ entry }: { entry: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["toEntry"] }) => (
+const FeedRenderer = ({ feed }: { feed: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["toFeed"] }) => (
   <div className="center line-clamp-1 truncate">
-    {entry?.title ?? "-"}
+    {feed?.title ?? "-"}
   </div>
 )

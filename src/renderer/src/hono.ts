@@ -8,9 +8,9 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         $post: {
             input: {
                 json: {
-                    userId: string;
                     amount: string;
-                    entryId?: string | undefined;
+                    userId?: string | undefined;
+                    feedId?: string | undefined;
                 };
             };
             output: {
@@ -31,7 +31,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     hash?: string | undefined;
                     fromUserId?: string | undefined;
                     toUserId?: string | undefined;
-                    toEntryId?: string | undefined;
+                    toFeedId?: string | undefined;
                     fromOrToUserId?: string | undefined;
                     createdAfter?: string | undefined;
                 };
@@ -45,46 +45,40 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     hash: string;
                     fromUserId: string | null;
                     toUserId: string | null;
-                    toEntryId: string | null;
+                    toFeedId: string | null;
                     comment: string | null;
-                    fromUser?: {
+                    fromUser: {
                         name: string | null;
                         id: string;
                         email: string;
-                        emailVerified: Date | null;
+                        emailVerified: string | null;
                         image: string | null;
                         handle: string | null;
-                    } | undefined;
-                    toUser?: {
+                    } | null;
+                    toUser: {
                         name: string | null;
                         id: string;
                         email: string;
-                        emailVerified: Date | null;
+                        emailVerified: string | null;
                         image: string | null;
                         handle: string | null;
-                    } | undefined;
-                    toEntry?: {
+                    } | null;
+                    toFeed: {
                         description: string | null;
                         title: string | null;
-                        content: string | null;
                         id: string;
-                        author: string | null;
-                        url: string | null;
-                        feedId: string;
-                        guid: string;
-                        authorUrl: string | null;
-                        authorAvatar: string | null;
-                        changedAt: string;
-                        publishedAt: string;
-                        images: string[] | null;
-                        categories: string[] | null;
-                        enclosures?: {
-                            url: string;
-                            length?: number | undefined;
-                            type?: string | undefined;
-                            title?: string | undefined;
-                        }[] | null | undefined;
-                    } | undefined;
+                        image: string | null;
+                        url: string;
+                        siteUrl: string | null;
+                        checkedAt: string;
+                        nextCheckAt: string;
+                        lastModifiedHeader: string | null;
+                        etagHeader: string | null;
+                        ttl: number | null;
+                        errorMessage: string | null;
+                        errorAt: string | null;
+                        ownerUserId: string | null;
+                    } | null;
                 }[];
             };
             outputFormat: "json";

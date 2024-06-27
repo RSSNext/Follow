@@ -5,9 +5,9 @@ import type { FC } from "react"
 
 export const TipModalContent: FC<{
   userId: string
-  entryId?: string
-}> = ({ userId, entryId }) => {
-  const transationsQuery = useWalletTransactions({ toUserId: userId, toEntryId: entryId })
+  feedId?: string
+}> = ({ userId, feedId }) => {
+  const transationsQuery = useWalletTransactions({ toUserId: userId, toFeedId: feedId })
 
   const tipMutation = useWalletTipMutation()
 
@@ -30,7 +30,7 @@ export const TipModalContent: FC<{
         <StyledButton
           disabled={tipMutation.isSuccess || tipMutation.isPending}
           isLoading={tipMutation.isPending}
-          onClick={() => tipMutation.mutate({ userId, entryId, amount: "0" })}
+          onClick={() => tipMutation.mutate({ userId, feedId, amount: "0" })}
           variant={tipMutation.isSuccess ? "plain" : "primary"}
         >
           {tipMutation.isSuccess && (
