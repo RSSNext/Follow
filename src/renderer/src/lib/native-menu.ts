@@ -12,26 +12,7 @@ export const showNativeMenu = async (
   items: Array<Nullable<NativeMenuItem | false>>,
   e?: MouseEvent | React.MouseEvent,
 ) => {
-  const nextItems = [
-    ...items,
-    ...(import.meta.env.DEV && e ?
-        [
-          {
-            type: "separator" as const,
-          },
-          {
-            type: "text" as const,
-            label: "Inspect Element",
-            click: () => {
-              tipcClient?.inspectElement({
-                x: e.pageX,
-                y: e.pageY,
-              })
-            },
-          },
-        ] :
-        []),
-  ].filter(Boolean) as NativeMenuItem[]
+  const nextItems = items.filter(Boolean) as NativeMenuItem[]
 
   const el = e && e.currentTarget
 
@@ -50,6 +31,24 @@ export const showNativeMenu = async (
       }),
     )
     return
+  } else {
+    if (import.meta.env.DEV && e) {
+      nextItems.push(
+        {
+          type: "separator" as const,
+        },
+        {
+          type: "text" as const,
+          label: "Inspect Element",
+          click: () => {
+            tipcClient?.inspectElement({
+              x: e.pageX,
+              y: e.pageY,
+            })
+          },
+        },
+      )
+    }
   }
 
   const unlisten = window.electron?.ipcRenderer.on("menu-click", (_, index) => {
