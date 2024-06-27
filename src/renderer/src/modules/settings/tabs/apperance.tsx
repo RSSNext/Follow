@@ -65,28 +65,20 @@ export const SettingAppearance = () => {
         }}
       />
 
-      <SettingSectionTitle title="Modal" />
-      <SettingSwitch
-        label="Show modal overlay"
-        checked={state.modalOverlay}
-        onCheckedChange={(c) => {
-          uiActions.set("modalOverlay", c)
-        }}
-      />
-      <SettingSwitch
+      {/* <SettingSwitch
         label="Modal draggable"
         checked={state.modalDraggable}
         onCheckedChange={(c) => {
           uiActions.set("modalDraggable", c)
         }}
-      />
-      <SettingSwitch
+      /> */}
+      {/* <SettingSwitch
         label="Modal opaque"
         checked={state.modalOpaque}
         onCheckedChange={(c) => {
           uiActions.set("modalOpaque", c)
         }}
-      />
+      /> */}
 
       <SettingSectionTitle title="Content" />
       {window.electron && <Fonts />}
@@ -95,6 +87,14 @@ export const SettingAppearance = () => {
         checked={state.readerRenderInlineStyle}
         onCheckedChange={(c) => {
           uiActions.set("readerRenderInlineStyle", c)
+        }}
+      />
+      <SettingSectionTitle title="Misc" />
+      <SettingSwitch
+        label="Show modal overlay"
+        checked={state.modalOverlay}
+        onCheckedChange={(c) => {
+          uiActions.set("modalOverlay", c)
         }}
       />
     </div>

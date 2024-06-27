@@ -38,7 +38,7 @@ const createDefaultUIState = (): UIState => ({
 
   modalOverlay: true,
   modalDraggable: true,
-  modalOpaque: false,
+  modalOpaque: true,
   readerRenderInlineStyle: false,
 })
 interface UIActions {
