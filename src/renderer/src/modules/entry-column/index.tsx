@@ -1,4 +1,5 @@
 import { useMainContainerElement } from "@renderer/atoms"
+import { useUser } from "@renderer/atoms/user"
 import { ActionButton, StyledButton } from "@renderer/components/ui/button"
 import {
   Popover,
@@ -17,11 +18,13 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
 import { shortcuts } from "@renderer/lib/shortcuts"
-import { cn, getEntriesParams, getOS } from "@renderer/lib/utils"
+import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
 import { useEntries } from "@renderer/queries/entries"
+import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import {
   entryActions,
   subscriptionActions,
+  useFeedById,
   useFeedHeaderTitle,
 } from "@renderer/store"
 import {
@@ -276,9 +279,7 @@ const ListHeader: FC<{
 
   const titleAtBottom = window.electron && os === "macOS"
   const titleInfo = (
-    <div
-      className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}
-    >
+    <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
       <div className="min-w-0 break-all text-lg font-bold leading-none">
         <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
           {headerTitle}
@@ -293,6 +294,13 @@ const ListHeader: FC<{
       </div>
     </div>
   )
+  const { mutateAsync: refreshFeed, isPending } = useRefreshFeedMutation(
+    routerParams.feedId,
+  )
+
+  const user = useUser()
+
+  const feed = useFeedById(routerParams.feedId)
   return (
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
       <div
@@ -303,6 +311,23 @@ const ListHeader: FC<{
       >
         {!titleAtBottom && titleInfo}
         <div className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500">
+          {feed?.ownerUserId === user?.id &&
+            isBizId(routerParams.feedId) && (
+            <ActionButton
+              tooltip="Refresh"
+              // shortcut={shortcuts.entries.toggleUnreadOnly.key}
+              onClick={() => {
+                refreshFeed()
+              }}
+            >
+              <i
+                className={cn(
+                  "i-mgc-refresh-2-cute-re",
+                  isPending && "animate-spin",
+                )}
+              />
+            </ActionButton>
+          )}
           <ActionButton
             tooltip={`${unreadOnly ? "Unread Only" : "All"}`}
             shortcut={shortcuts.entries.toggleUnreadOnly.key}

@@ -6,6 +6,8 @@ import { feedActions } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
+import { Queries } from "."
+
 export const feed = {
   byId: ({ id, url }: { id?: string, url?: string }) =>
     defineQuery(
@@ -56,5 +58,20 @@ export const useClaimFeedMutation = (feedId: string) => useMutation({
     feedActions.patch(feedId, {
       ownerUserId: getUser()?.id,
     })
+  },
+})
+
+export const useRefreshFeedMutation = (feedId?: string) => useMutation({
+  mutationKey: ["refreshFeed", feedId],
+  mutationFn: () => apiClient.feeds.refresh.$get({ query: { id: feedId! } }),
+
+  onSuccess() {
+    if (!feedId) return
+    Queries.entries.entries({
+      id: feedId!,
+    }).invalidateRoot()
+  },
+  async onError(err) {
+    toast.error(await getFetchErrorMessage(err))
   },
 })
