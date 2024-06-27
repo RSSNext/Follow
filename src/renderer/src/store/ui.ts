@@ -9,7 +9,7 @@ import {
 interface UIState {
   entryColWidth: number
   opaqueSidebar: boolean
-  readerFontFamily: string
+  // UI
   uiTextSize: number
 
   // Display counts
@@ -21,6 +21,10 @@ interface UIState {
   modalOverlay: boolean
   modalDraggable: boolean
   modalOpaque: boolean
+
+  // content
+  readerFontFamily: string
+  readerRenderInlineStyle: boolean
 }
 
 const createDefaultUIState = (): UIState => ({
@@ -35,6 +39,7 @@ const createDefaultUIState = (): UIState => ({
   modalOverlay: true,
   modalDraggable: true,
   modalOpaque: false,
+  readerRenderInlineStyle: false,
 })
 interface UIActions {
   clear: () => void

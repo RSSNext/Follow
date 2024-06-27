@@ -28,7 +28,7 @@ export const SettingModalContent: FC<{
     >
       <ScrollArea.ScrollArea
         scrollbarClassName="mt-12 mb-2"
-        rootClassName="h-full flex-1 shrink-0 overflow-auto pl-8 pr-7"
+        rootClassName="h-full flex-1 shrink-0 overflow-auto pl-8 pr-7 pb-8"
         viewportClassName="pr-1"
       >
         <Content />

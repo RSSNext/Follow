@@ -5,22 +5,33 @@ import { createElement } from "react"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
 import rehypeInferDescriptionMeta from "rehype-infer-description-meta"
 import rehypeParse from "rehype-parse"
-import rehypeSanitize from "rehype-sanitize"
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 import rehypeStringify from "rehype-stringify"
 import { unified } from "unified"
 import { visit } from "unist-util-visit"
 import { VFile } from "vfile"
 
-export const parseHtml = async (content: string) => {
+export const parseHtml = async (content: string, options?: {
+  renderInlineStyle: boolean
+}) => {
   const file = new VFile(content)
+  const { renderInlineStyle = false } = options || {}
 
   const pipeline = await unified()
-    .use(rehypeParse)
-    .use(rehypeSanitize)
+    .use(rehypeParse, { fragment: true })
+    .use(rehypeSanitize, {
+      ...defaultSchema,
+      attributes: {
+        ...defaultSchema.attributes,
+
+        "*": renderInlineStyle ? [...defaultSchema.attributes!["*"], "style"] : defaultSchema.attributes!["*"],
+      },
+    })
     .use(rehypeInferDescriptionMeta)
     .use(rehypeStringify)
 
   const tree = pipeline.parse(content)
+
   const hastTree = pipeline.runSync(tree, file)
 
   const metadata: {

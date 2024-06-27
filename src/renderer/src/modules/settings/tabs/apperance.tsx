@@ -44,8 +44,8 @@ export const SettingAppearance = () => {
         />
       )}
 
-      <SettingSectionTitle title="Text" />
-      {window.electron && <Fonts />}
+      <SettingSectionTitle title="UI" />
+
       <TextSize />
       <SettingSectionTitle title="Display counts" />
       {onlyMacos && (
@@ -87,6 +87,16 @@ export const SettingAppearance = () => {
           uiActions.set("modalOpaque", c)
         }}
       />
+
+      <SettingSectionTitle title="Content" />
+      {window.electron && <Fonts />}
+      <SettingSwitch
+        label="Render inline style"
+        checked={state.readerRenderInlineStyle}
+        onCheckedChange={(c) => {
+          uiActions.set("readerRenderInlineStyle", c)
+        }}
+      />
     </div>
   )
 }
@@ -100,7 +110,7 @@ const Fonts = () => {
     (state) => state.readerFontFamily || "SN Pro",
   )
   return (
-    <div className="-mt-1 flex items-center justify-between">
+    <div className="-mt-1 mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">Font Family</span>
       <Select
         defaultValue="SN Pro"
@@ -138,7 +148,7 @@ const TextSize = () => {
 
   return (
     <div className="mt-1 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">Text Size</span>
+      <span className="shrink-0 text-sm font-medium">UI Text Size</span>
       <Select
         defaultValue={textSizeMap.default.toString()}
         value={uiTextSize.toString() || textSizeMap.default.toString()}
