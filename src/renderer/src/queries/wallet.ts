@@ -4,8 +4,6 @@ import { defineQuery } from "@renderer/lib/defineQuery"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import { Queries } from "."
-
 export const wallet = {
   get: ({ userId }: { userId?: string } = {}) =>
     defineQuery(
@@ -61,7 +59,7 @@ export const useCreateWalletMutation = () =>
       toast.error(await getFetchErrorMessage(err))
     },
     onSuccess() {
-      Queries.wallet.get().invalidate()
+      wallet.get().invalidate()
       toast("🎉 Wallet created.")
     },
   })
@@ -79,8 +77,8 @@ export const useClaimWalletDailyRewardMutation = () => useMutation({
     toast.error(await getFetchErrorMessage(err))
   },
   onSuccess() {
-    Queries.wallet.get().invalidate()
-    Queries.wallet.claimDailyRewardTtl().invalidate()
+    wallet.get().invalidate()
+    wallet.claimDailyRewardTtl().invalidate()
     toast("🎉 Daily reward claimed.")
   },
 })
@@ -93,8 +91,8 @@ export const useWalletTipMutation = () => useMutation({
     toast.error(await getFetchErrorMessage(err))
   },
   onSuccess() {
-    Queries.wallet.get().invalidate()
-    Queries.wallet.transactions.get().invalidate()
+    wallet.get().invalidate()
+    wallet.transactions.get().invalidate()
     toast("🎉 Tipped.")
   },
 })
