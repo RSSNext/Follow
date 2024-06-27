@@ -136,6 +136,14 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             // Here we need to delay one frame, so it's two raf,
             //  in order to have `point-event: none` recorded by RadixOverlay after modal is invoked in a certain scenario,
             // and the page freezes after modal is turned off.
+            nextFrame(() => settingModalPresent("wallet"))
+          }}
+        >
+          Wallet
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() => {
             nextFrame(settingModalPresent)
           }}
         >

@@ -1,7 +1,9 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { tipcClient } from "@renderer/lib/client"
+import { nextFrame } from "@renderer/lib/dom"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import type { EntryModel } from "@renderer/models"
+import { useTipModal } from "@renderer/modules/wallet/hooks"
 import { entryActions } from "@renderer/store"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
@@ -112,14 +114,32 @@ export const useEntryActions = ({
     refetchOnWindowFocus: false,
   })
 
+  // const canTip = Boolean(entry?.feeds.ownerUserId)
+  // comment out L119-122 to work ⬇️
+  const openTipModal = useTipModal({
+    userId: entry?.feeds.ownerUserId ?? undefined,
+    entryId: entry?.entries.id ?? undefined,
+  })
+
   const collect = useCollect(entry)
   const uncollect = useUnCollect(entry)
   const read = useRead()
   const unread = useUnread()
+
   const items = useMemo(() => {
     if (!entry || view === undefined) return []
     const items = [
       [
+        {
+          key: "tip",
+          shortcut: shortcuts.entry.tip.key,
+          name: `Tip`,
+          className: "i-mgc-power-mono",
+          // disabled: !canTip,
+          onClick: () => {
+            nextFrame(openTipModal)
+          },
+        },
         {
           key: "star",
           shortcut: shortcuts.entry.toggleStarred.key,

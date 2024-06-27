@@ -1,4 +1,3 @@
-/* eslint-disable tailwindcss/no-custom-classname */
 import { Button } from "@renderer/components/ui/button"
 import { Card, CardHeader } from "@renderer/components/ui/card"
 import {
