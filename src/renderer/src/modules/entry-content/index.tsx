@@ -43,18 +43,22 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
   const entry = useEntry(entryId)
   const [content, setContent] = useState<JSX.Element>()
-
+  const readerRenderInlineStyle = useUIStore(
+    (state) => state.readerRenderInlineStyle,
+  )
   useEffect(() => {
     // Fallback data, if local data is broken should fallback to cached query data.
     const processContent = entry?.entries.content ?? data?.entries.content
     if (processContent) {
-      parseHtml(processContent).then((parsed) => {
+      parseHtml(processContent, {
+        renderInlineStyle: readerRenderInlineStyle,
+      }).then((parsed) => {
         setContent(parsed.content)
       })
     } else {
       setContent(undefined)
     }
-  }, [data?.entries.content, entry?.entries.content])
+  }, [data?.entries.content, entry?.entries.content, readerRenderInlineStyle])
 
   const translation = useBizQuery(
     Queries.ai.translation({
