@@ -13,6 +13,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   "entry",
   {
     version: 1,
+    disablePersist: true,
   },
 )((set, get) => ({
   entries: {},
