@@ -20,6 +20,7 @@ import {
   parseRegexpPathParams,
   regexpPathToPath,
 } from "@renderer/lib/path-parser"
+import { omit } from "lodash-es"
 import type { FC } from "react"
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react"
 import type { UseFormReturn } from "react-hook-form"
@@ -170,6 +171,8 @@ export const DiscoverFeedForm = ({
             route.parameters[keyItem.name],
           )
 
+          const formRegister = form.register(keyItem.name)
+
           return (
             <FormItem key={keyItem.name} className="flex flex-col space-y-2">
               <FormLabel>
@@ -180,12 +183,13 @@ export const DiscoverFeedForm = ({
               </FormLabel>
               {parameters?.options ? (
                 <Select
-                  {...form.register(keyItem.name)}
+                  {...omit(formRegister, "ref")}
                   onValueChange={(value) => {
                     form.setValue(keyItem.name, value)
                   }}
                 >
-                  <SelectTrigger>
+                  {/* Select focused ref on `SelectTrigger` or `Select` */}
+                  <SelectTrigger ref={formRegister.ref}>
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
@@ -199,7 +203,7 @@ export const DiscoverFeedForm = ({
                 </Select>
               ) : (
                 <Input
-                  {...form.register(keyItem.name)}
+                  {...formRegister}
                   placeholder={parameters?.default ?? formPlaceholder[keyItem.name]}
                 />
               )}
