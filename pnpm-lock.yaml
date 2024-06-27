@@ -118,6 +118,9 @@ importers:
       dayjs:
         specifier: 1.11.11
         version: 1.11.11
+      dnum:
+        specifier: ^2.13.1
+        version: 2.13.1
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -3090,6 +3093,9 @@ packages:
     os: [darwin]
     hasBin: true
 
+  dnum@2.13.1:
+    resolution: {integrity: sha512-4oZ+BtlvNtKFJji1Fc5073LyJFvgioBQ0PNu/C+r1A8P09Yvka/aXYYD5bsUHMTUPEu01iv4bk+5nPQmt5AA8A==}
+
   doctrine@3.0.0:
     resolution: {integrity: sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==}
     engines: {node: '>=6.0.0'}
@@ -3568,6 +3574,9 @@ packages:
 
   franc-min@6.2.0:
     resolution: {integrity: sha512-1uDIEUSlUZgvJa2AKYR/dmJC66v/PvGQ9mWfI9nOr/kPpMFyvswK0gPXOwpYJYiYD008PpHLkGfG58SPjQJFxw==}
+
+  from-exponential@1.1.1:
+    resolution: {integrity: sha512-VBE7f5OVnYwdgB3LHa+Qo29h8qVpxhVO9Trlc+AWm+/XNAgks1tAwMFHb33mjeiof77GglsJzeYF7OqXrROP/A==}
 
   fs-constants@1.0.0:
     resolution: {integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==}
@@ -8958,6 +8967,10 @@ snapshots:
       verror: 1.10.1
     optional: true
 
+  dnum@2.13.1:
+    dependencies:
+      from-exponential: 1.1.1
+
   doctrine@3.0.0:
     dependencies:
       esutils: 2.0.3
@@ -9661,6 +9674,8 @@ snapshots:
   franc-min@6.2.0:
     dependencies:
       trigram-utils: 2.0.1
+
+  from-exponential@1.1.1: {}
 
   fs-constants@1.0.0: {}
 

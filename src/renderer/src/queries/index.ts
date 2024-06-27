@@ -5,6 +5,7 @@ import { discover } from "./discover"
 import { entries } from "./entries"
 import { feed } from "./feed"
 import { subscription } from "./subscriptions"
+import { wallet } from "./wallet"
 
 export const Queries = {
   subscription,
@@ -14,4 +15,5 @@ export const Queries = {
   auth,
   ai,
   discover,
+  wallet,
 }

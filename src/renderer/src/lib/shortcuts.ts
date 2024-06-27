@@ -63,7 +63,10 @@ export const shortcuts = {
     copyLink: {
       name: "Copy Link",
       key: "Meta+Shift+C",
-
+    },
+    tip: {
+      name: "Tip",
+      key: "Meta+Shift+T",
     },
   },
 } as const
