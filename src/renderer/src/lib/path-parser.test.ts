@@ -196,6 +196,46 @@ describe("test `regexpPathToPath()`", () => {
       labels: "rss",
     })).toMatchInlineSnapshot(`"/issue/rssnext/follow/open/rss"`)
   })
+
+  test("omit empty string and nil value", () => {
+    expect(regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
+      user: "rssnext",
+      repo: "follow",
+      state: "open",
+      labels: "",
+    }, {
+      omitNilAndEmptyString: true,
+    })).toMatchInlineSnapshot(`"/issue/rssnext/follow/open"`)
+  })
+
+  test("omit empty string and nil value will throw", () => {
+    expect(() => regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
+      user: "rssnext",
+      repo: "follow",
+      state: "",
+      labels: "l",
+    }, {
+      omitNilAndEmptyString: true,
+    })).toThrow(MissingOptionalParamError)
+  })
+
+  test("omit empty string and nil value will throw (default behavior)", () => {
+    expect(() => regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
+      user: "rssnext",
+      repo: "follow",
+      state: "",
+      labels: "l",
+    })).toThrow(MissingOptionalParamError)
+  })
+
+  test("empty string will pass", () => {
+    expect(regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
+      user: "rssnext",
+      repo: "follow",
+      state: "",
+      labels: "l",
+    }, { omitNilAndEmptyString: false })).toMatchInlineSnapshot(`"/issue/rssnext/follow//l"`)
+  })
 })
 
 describe("test `parseRegexpPathParams()`", () => {
@@ -320,6 +360,50 @@ describe("test `parseRegexpPathParams()`", () => {
           "__catchAll__": {
             "isCatchAll": true,
             "name": "__catchAll__",
+            "optional": false,
+          },
+        },
+      }
+    `)
+  })
+
+  test("with excludeNames", () => {
+    expect(parseRegexpPathParams("/issue/:user/:repo/:state?/:labels?/:routeParams?", {
+      excludeNames: ["state", "routeParams"],
+    })).toMatchInlineSnapshot(`
+      {
+        "array": [
+          {
+            "isCatchAll": false,
+            "name": "user",
+            "optional": false,
+          },
+          {
+            "isCatchAll": false,
+            "name": "repo",
+            "optional": false,
+          },
+          {
+            "isCatchAll": false,
+            "name": "labels",
+            "optional": true,
+          },
+        ],
+        "length": 3,
+        "map": {
+          "labels": {
+            "isCatchAll": false,
+            "name": "labels",
+            "optional": true,
+          },
+          "repo": {
+            "isCatchAll": false,
+            "name": "repo",
+            "optional": false,
+          },
+          "user": {
+            "isCatchAll": false,
+            "name": "user",
             "optional": false,
           },
         },

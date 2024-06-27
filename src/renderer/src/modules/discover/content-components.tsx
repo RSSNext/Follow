@@ -20,7 +20,7 @@ import {
   parseRegexpPathParams,
   regexpPathToPath,
 } from "@renderer/lib/path-parser"
-import { isNil } from "lodash-es"
+import { omit } from "lodash-es"
 import type { FC } from "react"
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react"
 import type { UseFormReturn } from "react-hook-form"
@@ -38,9 +38,9 @@ const FeedMaintainers = ({ maintainers }: { maintainers?: string[] }) => {
   }
 
   return (
-    <div className="mb-2 text-sm text-theme-foreground/80">
-      This feed is provided by RSSHub, with credit to
-      <span className="ml-1 inline-flex flex-wrap items-center gap-2">
+    <div className="mb-2 flex flex-col gap-x-1 text-sm text-theme-foreground/80">
+      <span>This feed is provided by RSSHub, with credit to</span>
+      <span className="inline-flex flex-wrap items-center gap-2">
         {maintainers.map((maintainer) => (
           <a
             href={`https://github.com/${maintainer}`}
@@ -84,7 +84,13 @@ export const DiscoverFeedForm = ({
   route: RSSHubRoute
   routePrefix: string
 }) => {
-  const keys = useMemo(() => parseRegexpPathParams(route.path), [route.path])
+  const keys = useMemo(
+    () =>
+      parseRegexpPathParams(route.path, {
+        excludeNames: ["routeParams"],
+      }),
+    [route.path],
+  )
 
   const formPlaceholder = useMemo<Record<string, string>>(() => {
     if (!route.example) return {}
@@ -106,8 +112,19 @@ export const DiscoverFeedForm = ({
     [keys],
   )
 
+  const defaultValue = useMemo(() => {
+    const ret = {}
+    if (!route.parameters) return ret
+    for (const key in route.parameters) {
+      const params = normalizeRSSHubParameters(route.parameters[key])
+      if (!params) continue
+      ret[key] = params.default
+    }
+    return ret
+  }, [route.parameters])
   const form = useForm<z.infer<typeof dynamicFormSchema>>({
     resolver: zodResolver(dynamicFormSchema),
+    defaultValues: defaultValue,
     mode: "all",
   }) as UseFormReturn<any>
 
@@ -116,15 +133,7 @@ export const DiscoverFeedForm = ({
   const onSubmit = useCallback(
     (data: Record<string, string>) => {
       try {
-        //   Delete empty string values
-        const nextData = { ...data }
-        for (const key in nextData) {
-          if (nextData[key] === "" || isNil(nextData[key])) {
-            delete nextData[key]
-          }
-        }
-
-        const fillRegexpPath = regexpPathToPath(route.path, nextData)
+        const fillRegexpPath = regexpPathToPath(route.path, data)
         const url = `rsshub://${routePrefix}${fillRegexpPath}`
         const defaultView = getSidebarActiveView() as FeedViewType
 
@@ -144,7 +153,9 @@ export const DiscoverFeedForm = ({
           toast.error(err.message)
           const idx = keys.array.findIndex((item) => item.name === err.param)
 
-          form.setFocus(keys.array[idx === 0 ? 0 : idx - 1].name, { shouldSelect: true })
+          form.setFocus(keys.array[idx === 0 ? 0 : idx - 1].name, {
+            shouldSelect: true,
+          })
         }
       }
     },
@@ -175,6 +186,8 @@ export const DiscoverFeedForm = ({
             route.parameters[keyItem.name],
           )
 
+          const formRegister = form.register(keyItem.name)
+
           return (
             <FormItem key={keyItem.name} className="flex flex-col space-y-2">
               <FormLabel>
@@ -185,12 +198,14 @@ export const DiscoverFeedForm = ({
               </FormLabel>
               {parameters?.options ? (
                 <Select
-                  {...form.register(keyItem.name)}
+                  {...omit(formRegister, "ref")}
                   onValueChange={(value) => {
                     form.setValue(keyItem.name, value)
                   }}
+                  defaultValue={parameters.default || void 0}
                 >
-                  <SelectTrigger>
+                  {/* Select focused ref on `SelectTrigger` or `Select` */}
+                  <SelectTrigger ref={formRegister.ref}>
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
@@ -204,8 +219,8 @@ export const DiscoverFeedForm = ({
                 </Select>
               ) : (
                 <Input
-                  {...form.register(keyItem.name)}
-                  placeholder={parameters?.default ?? formPlaceholder[keyItem.name]}
+                  {...formRegister}
+                  placeholder={parameters?.default ?? formPlaceholder[keyItem.name] ? `e.g. ${formPlaceholder[keyItem.name]}` : void 0}
                 />
               )}
               {!!parameters && (

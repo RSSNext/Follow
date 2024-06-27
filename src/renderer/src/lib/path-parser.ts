@@ -1,3 +1,4 @@
+import { isNil } from "lodash-es"
 import type { CompileOptions } from "path-to-regexp"
 import { compile, pathToRegexp } from "path-to-regexp"
 
@@ -42,22 +43,32 @@ export const regexpPathToPath = (
     catchAll?: string
     [key: string]: string | string[] | undefined
   },
-  options?: Omit<CompileOptions, "validate">,
+  options?: Omit<CompileOptions, "validate"> & {
+    /** @default true */
+    omitNilAndEmptyString?: boolean
+  },
 ): string => {
-  for (const param in params) {
-    if (params[param] === "") {
-      delete params[param]
+  const nextParams = { ...params }
+
+  const { omitNilAndEmptyString = true, ...compileConfigs } = options || {}
+  if (omitNilAndEmptyString) {
+    //  Delete empty string values and nil value
+    for (const key in nextParams) {
+      if (nextParams[key] === "" || isNil(nextParams[key])) {
+        delete nextParams[key]
+      }
     }
   }
+
   const transformedPath = transformUriPath(regexpPath)
 
   const paramsKeys = pathToRegexp(transformedPath).keys
-  const inputtedKeys = new Set(Object.keys(params))
+  const inputtedKeys = new Set(Object.keys(nextParams))
   let prevKeyIsOptional = false
   let prevKeyIsInputted = false
   for (const key of paramsKeys) {
     if (key.name === CATCH_ALL_GROUP_KEY) {
-      params[CATCH_ALL_GROUP_KEY] = params.catchAll
+      nextParams[CATCH_ALL_GROUP_KEY] = nextParams.catchAll
       break
     }
     const isOptional = key.modifier === "?"
@@ -80,8 +91,8 @@ export const regexpPathToPath = (
   return compile(transformedPath, {
     validate: false,
 
-    ...options,
-  })(params)
+    ...compileConfigs,
+  })(nextParams)
 }
 
 export type PathParams = {
@@ -90,18 +101,23 @@ export type PathParams = {
   isCatchAll: boolean
 
 }
-export const parseRegexpPathParams = (regexpPath: string) => {
+
+export type ParseRegexpPathParamsOptions = {
+  excludeNames?: string[]
+}
+export const parseRegexpPathParams = (regexpPath: string, options?: ParseRegexpPathParamsOptions) => {
+  const { excludeNames = [] } = options || {}
   const transformedPath = transformUriPath(regexpPath)
   const array: PathParams[] = []
 
   for (const item of pathToRegexp(transformedPath).keys) {
-    if (item.name !== "routeParams") {
-      array.push({
-        name: item.name,
-        optional: item.modifier === "?" || item.modifier === "*",
-        isCatchAll: item.name === CATCH_ALL_GROUP_KEY || item.modifier === "*",
-      })
-    }
+    if (excludeNames.includes(item.name)) continue
+
+    array.push({
+      name: item.name,
+      optional: item.modifier === "?" || item.modifier === "*",
+      isCatchAll: item.name === CATCH_ALL_GROUP_KEY || item.modifier === "*",
+    })
   }
 
   const map = array.reduce((acc, { name, optional, isCatchAll }) => {
