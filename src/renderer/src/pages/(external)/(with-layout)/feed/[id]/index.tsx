@@ -97,7 +97,7 @@ export function Component() {
           </div>
           <a className="mb-8" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
             <StyledButton>
-              <FollowIcon className="size-3" />
+              <FollowIcon className="mr-1 size-3" />
               follow on
               {" "}
               {APP_NAME}

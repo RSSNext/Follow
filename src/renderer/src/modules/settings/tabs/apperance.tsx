@@ -11,6 +11,7 @@ import { getOS } from "@renderer/lib/utils"
 import { uiActions, useUIStore } from "@renderer/store"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback } from "react"
+import { bundledThemes } from "shiki/themes"
 
 import { SettingSwitch } from "../control"
 import { SettingSectionTitle } from "../section"
@@ -82,6 +83,7 @@ export const SettingAppearance = () => {
 
       <SettingSectionTitle title="Content" />
       {window.electron && <Fonts />}
+      <ShikiTheme />
       <SettingSwitch
         label="Render inline style"
         checked={state.readerRenderInlineStyle}
@@ -97,6 +99,33 @@ export const SettingAppearance = () => {
           uiActions.set("modalOverlay", c)
         }}
       />
+    </div>
+  )
+}
+const ShikiTheme = () => {
+  const codeHighlightTheme = useUIStore((state) => state.codeHighlightTheme)
+  return (
+    <div className="mb-3 flex items-center justify-between">
+      <span className="shrink-0 text-sm font-medium">Code Highlight Theme</span>
+      <Select
+        defaultValue="github-dark"
+        value={codeHighlightTheme}
+        onValueChange={(value) => {
+          uiActions.set("codeHighlightTheme", value)
+        }}
+      >
+        <SelectTrigger size="sm" className="w-48">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent className="h-64">
+          {Object.keys(bundledThemes)
+            ?.map((theme) => (
+              <SelectItem key={theme} value={theme}>
+                {theme}
+              </SelectItem>
+            ))}
+        </SelectContent>
+      </Select>
     </div>
   )
 }
