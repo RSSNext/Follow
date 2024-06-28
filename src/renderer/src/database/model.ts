@@ -15,7 +15,7 @@ export class BaseModel<
 > {
   protected readonly db: BrowserDB
   // used to data validation, but use now
-  // @ts-expect-error
+
   private readonly schema: ZodObject<any>
   private readonly _tableName: keyof BrowserDBSchema
 
