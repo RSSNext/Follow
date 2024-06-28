@@ -1,11 +1,10 @@
-import { FEED_COLLECTION_LIST, levels } from "@renderer/lib/constants"
-import type { EntryModel } from "@renderer/models"
+import type { CombinedEntryModel } from "@renderer/models"
 
 import { useRouteParamsSelector } from "./useRouteParams"
 
-export function useAsRead(entry?: EntryModel) {
-  return useRouteParamsSelector(({ feedId, level }) => {
+export function useAsRead(entry?: CombinedEntryModel) {
+  return useRouteParamsSelector(() => {
     if (!entry) return false
-    return entry.read && !(level === levels.folder && feedId === FEED_COLLECTION_LIST)
+    return entry.read
   }, [entry?.read])
 }

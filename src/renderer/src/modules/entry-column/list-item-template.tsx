@@ -27,10 +27,23 @@ export function ListItem({
   if (!entry) return <ReactVirtuosoItemPlaceholder />
 
   return (
-    <div className={cn("relative flex py-3 pl-3 pr-2", !asRead && "before:absolute before:-left-0.5 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-theme-accent")}>
+    <div
+      className={cn(
+        "relative flex py-3 pl-3 pr-2",
+        !asRead &&
+        "before:absolute before:-left-0.5 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
+
+      )}
+    >
       <FeedIcon feed={entry.feeds} entry={entry.entries} />
       <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
-        <div className={cn("flex gap-1 text-[10px] font-bold", asRead ? "text-zinc-400" : "text-zinc-500")}>
+        <div
+          className={cn(
+            "flex gap-1 text-[10px] font-bold",
+            asRead ? "text-zinc-400" : "text-zinc-500",
+            entry.collections && "text-zinc-600 dark:text-zinc-400",
+          )}
+        >
           <span className="truncate">{entry.feeds.title}</span>
           <span>·</span>
           <span className="shrink-0">
@@ -42,23 +55,50 @@ export function ListItem({
               .humanize()}
           </span>
         </div>
-        <div className={cn("relative my-0.5 break-words", !!entry.collections && "pr-4", entry.entries.title ? (withDetails && "font-medium") : "text-[13px]")}>
+        <div
+          className={cn(
+            "relative my-0.5 break-words",
+            !!entry.collections && "pr-4",
+            entry.entries.title ? withDetails && "font-medium" : "text-[13px]",
+            asRead ? "text-zinc-400 dark:text-neutral-500" : "text-zinc-500",
+            entry.collections && "text-neutral-700 dark:text-zinc-300",
+          )}
+        >
           {entry.entries.title ? (
-            <EntryTranslation source={entry.entries.title} target={translation?.title} />
+            <EntryTranslation
+              source={entry.entries.title}
+              target={translation?.title}
+            />
           ) : (
-            <EntryTranslation source={entry.entries.description} target={translation?.description} />
+            <EntryTranslation
+              source={entry.entries.description}
+              target={translation?.description}
+            />
           )}
           {!!entry.collections && (
             <i className="i-mgc-star-cute-fi absolute right-0 top-[3px] text-orange-400" />
           )}
         </div>
         {withDetails && (
-          <div className={cn("text-[13px]", asRead ? "text-zinc-400" : "text-zinc-500")}>
-            <EntryTranslation source={entry.entries.description} target={translation?.description} />
+          <div
+            className={cn(
+              "text-[13px]",
+              asRead ? "text-zinc-400 dark:text-neutral-500" : "text-zinc-500",
+              entry.collections && "text-neutral-700 dark:text-zinc-300",
+            )}
+          >
+            <EntryTranslation
+              source={entry.entries.description}
+              target={translation?.description}
+            />
           </div>
         )}
         {withAudio && entry.entries?.enclosures?.[0].url && (
-          <audio className="mt-2 h-10 w-full" controls src={entry.entries?.enclosures?.[0].url} />
+          <audio
+            className="mt-2 h-10 w-full"
+            controls
+            src={entry.entries?.enclosures?.[0].url}
+          />
         )}
       </div>
       {withDetails && entry.entries.images?.[0] && (

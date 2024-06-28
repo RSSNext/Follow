@@ -1,6 +1,4 @@
-import { del, get, set } from "idb-keyval"
 import { enableMapSet } from "immer"
-import superjson from "superjson" //  can use anything: serialize-javascript, devalue, etc.
 import type { StateCreator, StoreApi } from "zustand"
 import type {
   PersistOptions,
@@ -12,23 +10,6 @@ import type { UseBoundStoreWithEqualityFn } from "zustand/traditional"
 import { createWithEqualityFn } from "zustand/traditional"
 
 declare const window: any
-export const dbStorage: PersistStorage<any> = {
-  getItem: async (name: string) => {
-    const data = (await get(name)) || null
-
-    if (data === null) {
-      return null
-    }
-
-    return superjson.parse(data)
-  },
-  setItem: async (name, value) => {
-    await set(name, superjson.stringify(value))
-  },
-  removeItem: async (name: string): Promise<void> => {
-    await del(name)
-  },
-}
 export const localStorage: PersistStorage<any> = {
   getItem: (name: string) => {
     const data = window.localStorage.getItem(name)
@@ -47,7 +28,6 @@ export const localStorage: PersistStorage<any> = {
   },
 }
 enableMapSet()
-export const zustandStorage = dbStorage
 
 export const createZustandStore =
   <
@@ -60,15 +40,15 @@ export const createZustandStore =
   >(
     name: string,
     options?: Partial<PersistOptions<S> & {
-      disablePersist?: boolean
+      persist?: boolean
     }>,
   ) =>
     (store: T) => {
-      const newStore = !options?.disablePersist ?
+      const newStore = options?.persist ?
         createWithEqualityFn(
           persist<S>(store, {
             name,
-            storage: zustandStorage,
+            storage: localStorage,
             ...options,
           }),
           shallow,

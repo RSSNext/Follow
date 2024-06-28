@@ -1,7 +1,9 @@
 import type { FeedModel } from "@renderer/models"
+import { FeedService } from "@renderer/services"
 import { produce } from "immer"
 
 import { createZustandStore, getStoreActions } from "../utils/helper"
+import { isHydrated } from "../utils/hydrate"
 import type { FeedActions, FeedState } from "./types"
 
 export const useFeedStore = createZustandStore<FeedState & FeedActions>(
@@ -15,6 +17,9 @@ export const useFeedStore = createZustandStore<FeedState & FeedActions>(
     set({ feeds: {} })
   },
   upsertMany(feeds) {
+    if (isHydrated()) {
+      FeedService.upsertMany(feeds)
+    }
     set((state) =>
       produce(state, (state) => {
         for (const feed of feeds) {
@@ -22,17 +27,6 @@ export const useFeedStore = createZustandStore<FeedState & FeedActions>(
             state.feeds[feed.id] = feed
           }
         }
-      }),
-    )
-  },
-
-  optimisticUpdate(feedId, changed) {
-    set((state) =>
-      produce(state, (state) => {
-        const feed = state.feeds[feedId]
-        if (!feed) return
-
-        Object.assign(feed, changed)
       }),
     )
   },

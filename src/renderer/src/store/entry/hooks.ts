@@ -1,16 +1,18 @@
 import { FEED_COLLECTION_LIST } from "@renderer/lib/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
-import type { EntryModel } from "@renderer/models"
+import type { CombinedEntryModel } from "@renderer/models"
 import { useShallow } from "zustand/react/shallow"
 
 import { useFeedIdByView } from "../subscription"
+import { getEntryIsInView } from "../utils/biz"
 import { useEntryStore } from "./store"
 
 interface EntryFilter {
   unread?: boolean
+  view?: FeedViewType
 }
 
-export const useEntry = (entryId: Nullable<string >): EntryModel | null =>
+export const useEntry = (entryId: Nullable<string >): CombinedEntryModel | null =>
   useEntryStore(useShallow((state) => entryId ? state.flatMapEntries[entryId] : null))
 // feedId: single feedId, multiple feedId joint by `,`, and `collections`
 export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
@@ -26,8 +28,14 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
         }
         return result
       } else if (feedId === FEED_COLLECTION_LIST) {
-        // TODO we can't filter collections in local mode by view
-        return []
+        const result = [] as string[]
+        state.starIds.forEach((entryId) => {
+          if (getEntryIsInView(entryId)?.toString() === filter?.view?.toString()) {
+            result.push(entryId)
+          }
+        })
+
+        return result
       } else {
         return getSingle(feedId)
       }
@@ -51,6 +59,7 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
 
 export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {
   const feedIds = useFeedIdByView(view)
+
   return useEntryStore(
     useShallow((state) => {
       const data = [] as string[]

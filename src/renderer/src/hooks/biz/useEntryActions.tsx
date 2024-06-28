@@ -2,7 +2,7 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
 import { shortcuts } from "@renderer/lib/shortcuts"
-import type { EntryModel } from "@renderer/models"
+import type { CombinedEntryModel } from "@renderer/models"
 import { useTipModal } from "@renderer/modules/wallet/hooks"
 import { entryActions } from "@renderer/store"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -11,7 +11,7 @@ import { ofetch } from "ofetch"
 import { useMemo } from "react"
 import { toast } from "sonner"
 
-export const useCollect = (entry: Nullable<EntryModel>) =>
+export const useCollect = (entry: Nullable<CombinedEntryModel>) =>
   useMutation({
     mutationFn: async () =>
       entry &&
@@ -23,11 +23,7 @@ export const useCollect = (entry: Nullable<EntryModel>) =>
 
     onMutate() {
       if (!entry) return
-      entryActions.optimisticUpdate(entry.entries.id, {
-        collections: {
-          createdAt: new Date().toISOString(),
-        },
-      })
+      entryActions.markStar(entry.entries.id, true)
     },
     onSuccess: () => {
       toast.success("Starred.", {
@@ -36,7 +32,7 @@ export const useCollect = (entry: Nullable<EntryModel>) =>
     },
   })
 
-export const useUnCollect = (entry: Nullable<EntryModel>) =>
+export const useUnCollect = (entry: Nullable<CombinedEntryModel>) =>
   useMutation({
     mutationFn: async () =>
       entry &&
@@ -48,9 +44,7 @@ export const useUnCollect = (entry: Nullable<EntryModel>) =>
 
     onMutate() {
       if (!entry) return
-      entryActions.optimisticUpdate(entry.entries.id, {
-        collections: undefined,
-      })
+      entryActions.markStar(entry.entries.id, false)
     },
     onSuccess: () => {
       toast.success("Unstarred.", {
@@ -61,7 +55,7 @@ export const useUnCollect = (entry: Nullable<EntryModel>) =>
 
 export const useRead = () =>
   useMutation({
-    mutationFn: async (entry: Nullable<EntryModel>) =>
+    mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
       entry &&
       apiClient.reads.$post({
         json: {
@@ -69,7 +63,7 @@ export const useRead = () =>
         },
       }),
 
-    onMutate: (entry: Nullable<EntryModel>) => {
+    onMutate: (entry: Nullable<CombinedEntryModel>) => {
       if (!entry) return
 
       entryActions.markRead(entry.feeds.id, entry.entries.id, true)
@@ -77,7 +71,7 @@ export const useRead = () =>
   })
 export const useUnread = () =>
   useMutation({
-    mutationFn: async (entry: Nullable<EntryModel>) =>
+    mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
       entry &&
       apiClient.reads.$delete({
         json: {
@@ -85,7 +79,7 @@ export const useUnread = () =>
         },
       }),
 
-    onMutate: (entry: Nullable<EntryModel>) => {
+    onMutate: (entry: Nullable<CombinedEntryModel>) => {
       if (!entry) return
 
       entryActions.markRead(entry.feeds.id, entry.entries.id, false)
@@ -97,7 +91,7 @@ export const useEntryActions = ({
   entry,
 }: {
   view?: number
-  entry?: EntryModel | null
+  entry?: CombinedEntryModel | null
 }) => {
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
