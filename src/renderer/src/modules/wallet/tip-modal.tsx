@@ -17,11 +17,11 @@ import { useSettingModal } from "../settings/modal/hooks"
 const DEFAULT_RECOMMENDED_TIP = 0.1
 
 export const TipModalContent: FC<{
-  userId: string
+  userId?: string
   feedId?: string
 }> = ({ userId, feedId }) => {
   const user = useUser()
-  const myWallet = useWallet({ userId: user.id })
+  const myWallet = useWallet({ userId: user?.id })
   const myWalletData = myWallet.data?.[0]
 
   const balanceBigInt = BigInt(myWalletData?.powerToken ?? 0)
