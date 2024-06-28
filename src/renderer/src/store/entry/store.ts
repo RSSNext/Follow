@@ -1,6 +1,10 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { getEntriesParams } from "@renderer/lib/utils"
-import type { EntryModel, FeedModel } from "@renderer/models"
+import type {
+  EntryModel,
+  FeedModel,
+} from "@renderer/models"
+import { EntryService, FeedEntryService } from "@renderer/services"
 import { produce } from "immer"
 import { merge, omit } from "lodash-es"
 
@@ -13,7 +17,6 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   "entry",
   {
     version: 1,
-    disablePersist: true,
   },
 )((set, get) => ({
   entries: {},
@@ -72,7 +75,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   getFlattenMapEntries() {
     return get().flatMapEntries
   },
-  optimisticUpdate(entryId: string, changed: Partial<EntryModel>) {
+  patch(entryId, changed) {
     set((state) =>
       produce(state, (draft) => {
         const entry = draft.flatMapEntries[entryId]
@@ -82,7 +85,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
       }),
     )
   },
-  optimisticUpdateManyByFeedId(feedId, changed) {
+  patchManyByFeedId(feedId, changed) {
     set((state) =>
       produce(state, (draft) => {
         const ids = draft.entries[feedId]
@@ -96,7 +99,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
       }),
     )
   },
-  optimisticUpdateAll(changed) {
+  patchAll(changed) {
     set((state) =>
       produce(state, (draft) => {
         for (const entry of Object.values(draft.flatMapEntries)) {
@@ -107,50 +110,61 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
     )
   },
 
-  upsertMany(entries) {
+  upsertMany(data) {
+    const feeds = [] as FeedModel[]
+    const entries = [] as EntryModel[]
+    const entry2Read = {} as Record<string, boolean>
     set((state) =>
       produce(state, (draft) => {
-        const feeds = [] as FeedModel[]
-        for (const entry of entries) {
-          if (!draft.entries[entry.feeds.id]) {
-            draft.entries[entry.feeds.id] = []
+        for (const item of data) {
+          if (!draft.entries[item.feeds.id]) {
+            draft.entries[item.feeds.id] = []
           }
 
-          if (!draft.internal_feedId2entryIdSet[entry.feeds.id]) {
-            draft.internal_feedId2entryIdSet[entry.feeds.id] = new Set()
+          if (!draft.internal_feedId2entryIdSet[item.feeds.id]) {
+            draft.internal_feedId2entryIdSet[item.feeds.id] = new Set()
           }
 
           if (
-            !draft.internal_feedId2entryIdSet[entry.feeds.id].has(
-              entry.entries.id,
+            !draft.internal_feedId2entryIdSet[item.feeds.id].has(
+              item.entries.id,
             )
           ) {
-            draft.entries[entry.feeds.id].push(entry.entries.id)
-            draft.internal_feedId2entryIdSet[entry.feeds.id].add(
-              entry.entries.id,
+            draft.entries[item.feeds.id].push(item.entries.id)
+            draft.internal_feedId2entryIdSet[item.feeds.id].add(
+              item.entries.id,
             )
           }
 
-          draft.flatMapEntries[entry.entries.id] = merge(
-            draft.flatMapEntries[entry.entries.id] || {},
-            entry,
+          draft.flatMapEntries[item.entries.id] = merge(
+            draft.flatMapEntries[item.entries.id] || {},
+            item,
           )
 
           // Push feed
-          feeds.push(entry.feeds)
+          feeds.push(item.feeds)
+          // Push entry
+          entries.push(item.entries)
+          // Push entry2Read
+          entry2Read[item.entries.id] = item.read || false
         }
-
-        // Insert to feed store
-        feedActions.upsertMany(feeds)
 
         return draft
       }),
     )
+    // Insert to feed store
+    feedActions.upsertMany(feeds)
+    EntryService.upsertMany(entries)
+    EntryService.bulkUpdateReadStatus(entry2Read)
+    const newEntries = get().entries
+    for (const feedId in newEntries) {
+      FeedEntryService.updateFeed(feedId, newEntries[feedId])
+    }
   },
 
   markRead: (feedId: string, entryId: string, read: boolean) => {
     unreadActions.incrementByFeedId(feedId, read ? -1 : 1)
-    entryActions.optimisticUpdate(entryId, {
+    entryActions.patch(entryId, {
       read,
     })
   },

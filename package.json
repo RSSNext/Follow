@@ -60,6 +60,7 @@
     "clsx": "2.1.1",
     "cmdk": "1.0.0",
     "dayjs": "1.11.11",
+    "dexie": "4.0.7",
     "dnum": "^2.13.1",
     "dotenv": "16.4.5",
     "electron-updater": "^6.2.1",

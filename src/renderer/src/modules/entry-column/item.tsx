@@ -5,7 +5,7 @@ import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import type { EntryModel } from "@renderer/models"
+import type { CombinedEntryModel } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry/hooks"
 import type { FC } from "react"
@@ -24,7 +24,7 @@ interface EntryItemProps {
   entryId: string
   view?: number
 }
-function EntryItemImpl({ entry, view }: { entry: EntryModel, view?: number }) {
+function EntryItemImpl({ entry, view }: { entry: CombinedEntryModel, view?: number }) {
   const { items } = useEntryActions({
     view,
     entry,

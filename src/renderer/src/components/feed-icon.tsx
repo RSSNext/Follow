@@ -1,7 +1,7 @@
 import { SiteIcon } from "@renderer/components/site-icon"
 import { Image } from "@renderer/components/ui/image"
 import { cn } from "@renderer/lib/utils"
-import type { EntryModel, FeedModel } from "@renderer/models"
+import type { CombinedEntryModel, FeedModel } from "@renderer/models"
 
 export function FeedIcon({
   feed,
@@ -11,7 +11,7 @@ export function FeedIcon({
   size = 20,
 }: {
   feed: FeedModel
-  entry?: EntryModel["entries"]
+  entry?: CombinedEntryModel["entries"]
   fallbackUrl?: string
   className?: string
   size?: number

@@ -1,6 +1,7 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { FeedViewType } from "@renderer/lib/enum"
 import type { SubscriptionModel } from "@renderer/models"
+import { SubscriptionService } from "@renderer/services"
 import { produce } from "immer"
 import { omit } from "lodash-es"
 
@@ -75,6 +76,7 @@ export const useSubscriptionStore = createZustandStore<
     return res.data
   },
   upsertMany: (subscriptions) => {
+    SubscriptionService.upsertMany(subscriptions)
     set((state) =>
       produce(state, (state) => {
         subscriptions.forEach((subscription) => {
@@ -91,7 +93,7 @@ export const useSubscriptionStore = createZustandStore<
     for (const feedId in state.data) {
       if (state.data[feedId].view === view) {
         unreadActions.updateByFeedId(feedId, 0)
-        entryActions.optimisticUpdateManyByFeedId(feedId, { read: true })
+        entryActions.patchManyByFeedId(feedId, { read: true })
       }
     }
   },

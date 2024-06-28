@@ -1,4 +1,5 @@
 import type { FeedModel } from "@renderer/models"
+import { FeedService } from "@renderer/services"
 import { produce } from "immer"
 
 import { createZustandStore, getStoreActions } from "../utils/helper"
@@ -15,6 +16,7 @@ export const useFeedStore = createZustandStore<FeedState & FeedActions>(
     set({ feeds: {} })
   },
   upsertMany(feeds) {
+    FeedService.upsertMany(feeds)
     set((state) =>
       produce(state, (state) => {
         for (const feed of feeds) {

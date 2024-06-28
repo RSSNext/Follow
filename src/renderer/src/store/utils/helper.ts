@@ -60,11 +60,11 @@ export const createZustandStore =
   >(
     name: string,
     options?: Partial<PersistOptions<S> & {
-      disablePersist?: boolean
+      persist?: boolean
     }>,
   ) =>
     (store: T) => {
-      const newStore = !options?.disablePersist ?
+      const newStore = options?.persist ?
         createWithEqualityFn(
           persist<S>(store, {
             name,
