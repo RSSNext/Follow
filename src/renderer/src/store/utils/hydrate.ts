@@ -10,36 +10,25 @@ import {
 import { entryActions } from "../entry/store"
 import { feedActions, useFeedStore } from "../feed"
 import { subscriptionActions } from "../subscription"
-import { uiActions } from "../ui"
-import { unreadActions } from "../unread"
 
+// This flag controls write data in indexedDB, if it's false, pass data insert to db
+// When app not ready, it's false, after hydrate data, it's true
+// Or set is false when disable indexedDB in setting
 let _isHydrated = false
 
-export const setHydrated = () => {
-  _isHydrated = true
+export const setHydrated = (v: boolean) => {
+  console.info("setHydrated", v)
+  _isHydrated = v
 }
 
 export const isHydrated = () => _isHydrated
-
-export const clearLocalPersistStoreData = () => {
-  // All clear and reset method will aggregate here
-  [
-    entryActions,
-    subscriptionActions,
-    unreadActions,
-    uiActions,
-    feedActions,
-  ].forEach((actions) => {
-    actions.clear()
-  })
-}
 
 export const hydrateDatabaseToStore = async () => {
   const now = Date.now()
   const [feeds] = await Promise.all([hydrateFeed(), hydrateSubscription()])
 
   await hydrateEntry(feeds)
-  setHydrated()
+  _isHydrated = true
   console.info("hydrate data done, cast:", Date.now() - now)
 }
 

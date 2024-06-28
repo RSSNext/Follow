@@ -1,8 +1,8 @@
+import { useShouldUseIndexedDB } from "@renderer/database"
 import { tipcClient } from "@renderer/lib/client"
-import { SettingSwitch } from "@renderer/modules/settings/control"
-import {
-  SettingsTitle,
-} from "@renderer/modules/settings/title"
+import { SettingDescription, SettingSwitch } from "@renderer/modules/settings/control"
+import { SettingSectionTitle } from "@renderer/modules/settings/section"
+import { SettingsTitle } from "@renderer/modules/settings/title"
 import { defineSettingPage } from "@renderer/modules/settings/utils"
 import { useCallback, useEffect, useState } from "react"
 
@@ -29,6 +29,7 @@ export function Component() {
     setLoginSetting(checked)
   }, [])
 
+  const [shouldUseIndexedDB, setShouldUseIndexedDB] = useShouldUseIndexedDB()
   return (
     <>
       <SettingsTitle />
@@ -40,6 +41,15 @@ export function Component() {
             onCheckedChange={saveLoginSetting}
           />
         )}
+        <SettingSectionTitle title="Data control" />
+        <SettingSwitch
+          checked={shouldUseIndexedDB}
+          onCheckedChange={setShouldUseIndexedDB}
+          label="Persist data to offline usage"
+        />
+        <SettingDescription>
+          Data will be stored locally on your device for offline usage and speed up the data loading of the first screen. If you disable this, all local data will be removed.
+        </SettingDescription>
       </div>
     </>
   )

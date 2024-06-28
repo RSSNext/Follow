@@ -1,14 +1,14 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { getEntriesParams } from "@renderer/lib/utils"
 import type { EntryModel, FeedModel } from "@renderer/models"
-import { EntryService, FeedEntryService } from "@renderer/services"
+import { EntryService } from "@renderer/services"
 import { produce } from "immer"
 import { merge, omit } from "lodash-es"
 
 import { feedActions } from "../feed"
 import { unreadActions } from "../unread"
 import { createZustandStore, getStoreActions } from "../utils/helper"
-import { isHydrated } from "../utils/local"
+import { isHydrated } from "../utils/hydrate"
 import type { EntryActions, EntryState } from "./types"
 
 export const useEntryStore = createZustandStore<EntryState & EntryActions>(
@@ -160,10 +160,10 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
       EntryService.upsertMany(entries)
       EntryService.bulkUpdateReadStatus(entry2Read)
       EntryService.bulkRecordFeedId(entryFeedMap)
-      const newEntries = get().entries
-      for (const feedId in newEntries) {
-        FeedEntryService.updateFeed(feedId, newEntries[feedId])
-      }
+      // const newEntries = get().entries
+      // for (const feedId in newEntries) {
+      //   FeedEntryService.updateFeed(feedId, newEntries[feedId])
+      // }
     }
   },
 

@@ -14,5 +14,7 @@ class ServiceStatic {
     return feedEntriesModel.table.toArray()
   }
 }
-
+/**
+ * Not used yet
+ */
 export const FeedEntryService = new ServiceStatic()

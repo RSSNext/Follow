@@ -9,7 +9,7 @@ import { entryActions } from "./entry/store"
 import { feedActions } from "./feed"
 import { unreadActions } from "./unread"
 import { createZustandStore, getStoreActions } from "./utils/helper"
-import { isHydrated } from "./utils/local"
+import { isHydrated } from "./utils/hydrate"
 
 type FeedId = string
 export type SubscriptionPlainModel = Omit<SubscriptionModel, "feeds">
