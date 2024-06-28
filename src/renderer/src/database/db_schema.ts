@@ -2,6 +2,6 @@ export const dbSchemaV1 = {
   entries: "&id",
   feeds: "&id",
   subscriptions: "&id",
-  entryReads: "&id",
+  entryRelated: "&id",
   feedEntries: "&feedId",
 }

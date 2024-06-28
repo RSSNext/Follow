@@ -15,7 +15,7 @@ import {
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
 import { apiClient } from "@renderer/lib/api-fetch"
-import { views } from "@renderer/lib/constants"
+import { ROUTE_FEED_PENDING, views } from "@renderer/lib/constants"
 import { buildStorageNS } from "@renderer/lib/ns"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
@@ -182,9 +182,14 @@ const useEntriesByView = () => {
     view: activeList?.view,
     ...(unreadOnly === true && { read: false }),
   })
-  const entries = useEntryIdsByFeedIdOrView(activeList.feedId!, {
-    unread: unreadOnly,
-  })
+  const entries = useEntryIdsByFeedIdOrView(
+    activeList.feedId === ROUTE_FEED_PENDING ?
+      activeList.view :
+      activeList.feedId!,
+    {
+      unread: unreadOnly,
+    },
+  )
 
   useHotkeys(
     shortcuts.entries.refetch.key,
@@ -311,8 +316,7 @@ const ListHeader: FC<{
       >
         {!titleAtBottom && titleInfo}
         <div className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500">
-          {feed?.ownerUserId === user?.id &&
-            isBizId(routerParams.feedId) && (
+          {feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) && (
             <ActionButton
               tooltip="Refresh"
               // shortcut={shortcuts.entries.toggleUnreadOnly.key}

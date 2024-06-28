@@ -1,10 +1,10 @@
 import { BaseModel } from "../model"
 import { DB_EntrySchema } from "../schemas"
 
-class ModelStatic extends BaseModel<"entryReads"> {
+class ModelStatic extends BaseModel<"entryRelated"> {
   constructor() {
-    super("entryReads", DB_EntrySchema)
+    super("entryRelated", DB_EntrySchema)
   }
 }
 
-export const entryReadsModel = new ModelStatic()
+export const entryRelatedModel = new ModelStatic()

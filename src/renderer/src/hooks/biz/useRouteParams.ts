@@ -40,13 +40,6 @@ const parseRouteParams = (
       FeedViewType.Articles) || FeedViewType.Articles
   )
 
-  let feedId: string | number = params.feedId!
-
-  // If feedId is a number, it's a FeedViewType
-  if (feedId && FeedViewTypeValues.includes(feedId as string)) {
-    feedId = Number.parseInt(feedId as string)
-  }
-
   return {
     view,
     entryId: params.entryId || undefined,

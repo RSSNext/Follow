@@ -6,7 +6,7 @@ import type {
 } from "@renderer/models/types"
 
 import { BaseService } from "./base"
-import { EntryReadService } from "./entry-read"
+import { EntryRelatedKey, EntryRelatedService } from "./entry-related"
 import { FeedService } from "./feed"
 
 class EntryServiceStatic extends BaseService<EntryModel> {
@@ -30,18 +30,35 @@ class EntryServiceStatic extends BaseService<EntryModel> {
   }
 
   updateReadStatus(entryId: string, read: boolean) {
-    return EntryReadService.upsert({
-      id: entryId,
-      read,
-    })
+    return EntryRelatedService.upsert(
+      EntryRelatedKey.READ,
+      {
+        [entryId]: read,
+      },
+    )
   }
 
   bulkUpdateReadStatus(record: Record<string, boolean>) {
-    const items = [] as { id: string, read: boolean }[]
-    for (const [entryId, read] of Object.entries(record)) {
-      items.push({ id: entryId, read })
-    }
-    return EntryReadService.upsertMany(items)
+    return EntryRelatedService.upsert(
+      EntryRelatedKey.READ,
+      record,
+    )
+  }
+
+  recordFeedId(entryId: string, feedId: string) {
+    return EntryRelatedService.upsert(
+      EntryRelatedKey.FEED_ID,
+      {
+        [entryId]: feedId,
+      },
+    )
+  }
+
+  bulkRecordFeedId(record: Record<string, string>) {
+    return EntryRelatedService.upsert(
+      EntryRelatedKey.FEED_ID,
+      record,
+    )
   }
 }
 

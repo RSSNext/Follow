@@ -51,6 +51,7 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
 
 export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {
   const feedIds = useFeedIdByView(view)
+
   return useEntryStore(
     useShallow((state) => {
       const data = [] as string[]

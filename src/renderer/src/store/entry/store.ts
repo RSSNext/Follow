@@ -1,9 +1,6 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { getEntriesParams } from "@renderer/lib/utils"
-import type {
-  EntryModel,
-  FeedModel,
-} from "@renderer/models"
+import type { EntryModel, FeedModel } from "@renderer/models"
 import { EntryService, FeedEntryService } from "@renderer/services"
 import { produce } from "immer"
 import { merge, omit } from "lodash-es"
@@ -11,6 +8,7 @@ import { merge, omit } from "lodash-es"
 import { feedActions } from "../feed"
 import { unreadActions } from "../unread"
 import { createZustandStore, getStoreActions } from "../utils/helper"
+import { isHydrated } from "../utils/local"
 import type { EntryActions, EntryState } from "./types"
 
 export const useEntryStore = createZustandStore<EntryState & EntryActions>(
@@ -114,6 +112,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
     const feeds = [] as FeedModel[]
     const entries = [] as EntryModel[]
     const entry2Read = {} as Record<string, boolean>
+    const entryFeedMap = {} as Record<string, string>
     set((state) =>
       produce(state, (draft) => {
         for (const item of data) {
@@ -147,6 +146,8 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
           entries.push(item.entries)
           // Push entry2Read
           entry2Read[item.entries.id] = item.read || false
+          // Push entryFeedMap
+          entryFeedMap[item.entries.id] = item.feeds.id
         }
 
         return draft
@@ -154,11 +155,15 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
     )
     // Insert to feed store
     feedActions.upsertMany(feeds)
-    EntryService.upsertMany(entries)
-    EntryService.bulkUpdateReadStatus(entry2Read)
-    const newEntries = get().entries
-    for (const feedId in newEntries) {
-      FeedEntryService.updateFeed(feedId, newEntries[feedId])
+    // Update database
+    if (isHydrated()) {
+      EntryService.upsertMany(entries)
+      EntryService.bulkUpdateReadStatus(entry2Read)
+      EntryService.bulkRecordFeedId(entryFeedMap)
+      const newEntries = get().entries
+      for (const feedId in newEntries) {
+        FeedEntryService.updateFeed(feedId, newEntries[feedId])
+      }
     }
   },
 

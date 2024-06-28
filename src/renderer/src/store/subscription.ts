@@ -9,6 +9,7 @@ import { entryActions } from "./entry/store"
 import { feedActions } from "./feed"
 import { unreadActions } from "./unread"
 import { createZustandStore, getStoreActions } from "./utils/helper"
+import { isHydrated } from "./utils/local"
 
 type FeedId = string
 export type SubscriptionPlainModel = Omit<SubscriptionModel, "feeds">
@@ -76,7 +77,9 @@ export const useSubscriptionStore = createZustandStore<
     return res.data
   },
   upsertMany: (subscriptions) => {
-    SubscriptionService.upsertMany(subscriptions)
+    if (isHydrated()) {
+      SubscriptionService.upsertMany(subscriptions)
+    }
     set((state) =>
       produce(state, (state) => {
         subscriptions.forEach((subscription) => {

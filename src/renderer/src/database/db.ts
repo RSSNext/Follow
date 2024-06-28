@@ -13,7 +13,7 @@ export interface LobeDBSchemaMap {
   // TODO - Add more schemas here
   feeds: DB_Entry
   subscriptions: DB_Entry
-  entryReads: DB_Entry
+  entryRelated: DB_Entry
   feedEntries: DB_Entry
 }
 
@@ -22,7 +22,7 @@ export class BrowserDB extends Dexie {
   public entries: BrowserDBTable<"entries">
   public feeds: BrowserDBTable<"feeds">
   public subscriptions: BrowserDBTable<"subscriptions">
-  public entryReads: BrowserDBTable<"entryReads">
+  public entryRelated: BrowserDBTable<"entryRelated">
   public feedEntries: BrowserDBTable<"feedEntries">
 
   constructor() {
@@ -32,7 +32,7 @@ export class BrowserDB extends Dexie {
     this.entries = this.table("entries")
     this.feeds = this.table("feeds")
     this.subscriptions = this.table("subscriptions")
-    this.entryReads = this.table("entryReads")
+    this.entryRelated = this.table("entryRelated")
     this.feedEntries = this.table("feedEntries")
   }
 }

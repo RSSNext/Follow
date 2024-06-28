@@ -7,16 +7,20 @@ import ReactDOM from "react-dom/client"
 import { RouterProvider } from "react-router-dom"
 
 import { router } from "./router"
+import { hydrateDatabaseToStore } from "./store/utils/local"
+
+hydrateDatabaseToStore()
+  .then(() => {
+    ReactDOM.createRoot(document.querySelector("#root") as HTMLElement).render(
+      <React.StrictMode>
+        <RouterProvider router={router} />
+        <ClickToComponent />
+      </React.StrictMode>,
+    )
+  })
 
 authConfigManager.setConfig({
   baseUrl: import.meta.env.VITE_API_URL,
   basePath: "/auth",
   credentials: "include",
 })
-
-ReactDOM.createRoot(document.querySelector("#root") as HTMLElement).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-    <ClickToComponent />
-  </React.StrictMode>,
-)

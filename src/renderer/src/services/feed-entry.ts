@@ -9,6 +9,10 @@ class ServiceStatic {
       entryIds,
     })
   }
+
+  getAll() {
+    return feedEntriesModel.table.toArray()
+  }
 }
 
 export const FeedEntryService = new ServiceStatic()

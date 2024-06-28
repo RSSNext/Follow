@@ -10,8 +10,10 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
     super(subscriptionModel.table)
   }
 
-  override upsertMany(data: SubscriptionPlainModel[]): Promise<string> {
-    return this.table.bulkPut(data.map((d) => ({ ...d, id: this.uniqueId(d.userId, d.feedId) })))
+  override async upsertMany(data: SubscriptionPlainModel[]) {
+    this.table.bulkPut(
+      data.map((d) => ({ ...d, id: this.uniqueId(d.userId, d.feedId) })),
+    )
   }
 
   override upsert(data: SubscriptionModelWithId) {
