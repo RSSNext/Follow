@@ -9,9 +9,9 @@ class ServiceStatic extends BaseService<FeedModelWithId> {
     super(feedModel.table)
   }
 
-  override upsertMany(data: FeedModel[]): Promise<string> {
+  override async upsertMany(data: FeedModel[]) {
     const filterData = data.filter((d) => d.id)
-    return this.table.bulkPut(filterData as FeedModelWithId[])
+    this.table.bulkPut(filterData as FeedModelWithId[])
   }
 
   override upsert(data: FeedModel) {

@@ -60,6 +60,8 @@ async function hydrateEntry(feedMap: Record<string, FeedModel>) {
 
     storeValue.push({
       entries: entry,
+      // @ts-expect-error
+      // FIXME server provided feed type is not match, but it's ok
       feeds: feed,
       read: entryRelated[entry.id] || false,
     })

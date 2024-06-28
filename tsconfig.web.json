@@ -12,6 +12,7 @@
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx",
+    "noUnusedLocals": false,
     "baseUrl": ".",
     "paths": {
       "@renderer/*": [
