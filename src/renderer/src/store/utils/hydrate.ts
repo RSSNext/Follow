@@ -17,7 +17,6 @@ import { subscriptionActions } from "../subscription"
 let _isHydrated = false
 
 export const setHydrated = (v: boolean) => {
-  console.info("setHydrated", v)
   _isHydrated = v
 }
 

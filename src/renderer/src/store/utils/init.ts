@@ -3,7 +3,6 @@ import { browserDB, getShouldUseIndexedDB, subscribeShouldUseIndexedDB } from "@
 import { hydrateDatabaseToStore, setHydrated } from "./hydrate"
 
 const cleanup = subscribeShouldUseIndexedDB((value) => {
-  console.info("shouldUseIndexedDB", value)
   if (!value) {
     browserDB.delete()
     setHydrated(false)
