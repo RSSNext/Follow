@@ -28,7 +28,6 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
         }
         return result
       } else if (feedId === FEED_COLLECTION_LIST) {
-        // TODO we can't filter collections in local mode by view
         const result = [] as string[]
         state.starIds.forEach((entryId) => {
           if (getEntryIsInView(entryId)?.toString() === filter?.view?.toString()) {
