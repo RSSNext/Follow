@@ -8,9 +8,9 @@ export const useTipModal = ({ userId, feedId }: { userId?: string, feedId?: stri
   const { present } = useModalStack()
 
   return useCallback(() => {
-    if (!userId) {
+    if (!userId && !feedId) {
       // this should not happen unless there is a bug in the code
-      toast.error("You must have a user to tip.")
+      toast.error("Invalid user id or feed id")
       return
     }
 

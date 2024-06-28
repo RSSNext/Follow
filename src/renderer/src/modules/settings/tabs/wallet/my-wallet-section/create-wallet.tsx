@@ -17,7 +17,7 @@ export const CreateWallet = () => {
       <p className="my-2 text-theme-inactive">
         Create a free wallet to receive
         {" "}
-        <strong>PowerTokens</strong>
+        <strong>$POWER</strong>
         , which can
         be used to reward creators and also get rewarded for your content
         contributions.

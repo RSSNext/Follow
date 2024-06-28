@@ -108,8 +108,6 @@ export const useEntryActions = ({
     refetchOnWindowFocus: false,
   })
 
-  // const canTip = Boolean(entry?.feeds.ownerUserId)
-  // comment out L119-122 to work ⬇️
   const openTipModal = useTipModal({
     userId: entry?.feeds.ownerUserId ?? undefined,
     feedId: entry?.feeds.id ?? undefined,
@@ -129,7 +127,6 @@ export const useEntryActions = ({
           shortcut: shortcuts.entry.tip.key,
           name: `Tip`,
           className: "i-mgc-power-outline",
-          // disabled: !canTip,
           onClick: () => {
             nextFrame(openTipModal)
           },
@@ -239,6 +236,7 @@ export const useEntryActions = ({
     collect,
     entry,
     read,
+    openTipModal,
     uncollect,
     unread,
     view,

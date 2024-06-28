@@ -51,7 +51,7 @@
   }
 
   .shadow-modal {
-    @apply shadow-2xl shadow-stone-300 dark:shadow-stone-800;
+    @apply shadow-2xl shadow-stone-300 dark:shadow-stone-900;
   }
   /* Utils */
   .no-animation {

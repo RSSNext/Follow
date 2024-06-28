@@ -41,7 +41,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 data: {
                     type: "tip" | "mint" | "burn" | "withdraw";
                     createdAt: string;
-                    powerToken: bigint;
+                    powerToken: string;
                     hash: string;
                     fromUserId: string | null;
                     toUserId: string | null;
@@ -124,7 +124,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 data: {
                     userId: string;
                     createdAt: string;
-                    powerToken: bigint;
+                    powerToken: string;
                     addressIndex: number;
                     address: string | null;
                 }[];
@@ -139,7 +139,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 data: {
                     userId: string;
                     createdAt: string;
-                    powerToken: bigint;
+                    powerToken: string;
                     addressIndex: number;
                     address: string | null;
                 };

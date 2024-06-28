@@ -56,7 +56,7 @@ export const ClaimDailyReward = () => {
       </TooltipTrigger>
       <TooltipContent>
         {canClaim ?
-          "Claim your daily reward (2.00 PowerTokens) now!" :
+          "Claim your daily reward (2.00 POWER) now!" :
           `You can claim your daily reward in ${hour}:${minute}:${second}.`}
       </TooltipContent>
     </Tooltip>
