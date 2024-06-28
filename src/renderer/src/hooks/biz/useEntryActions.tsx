@@ -23,11 +23,7 @@ export const useCollect = (entry: Nullable<CombinedEntryModel>) =>
 
     onMutate() {
       if (!entry) return
-      entryActions.patch(entry.entries.id, {
-        collections: {
-          createdAt: new Date().toISOString(),
-        },
-      })
+      entryActions.markStar(entry.entries.id, true)
     },
     onSuccess: () => {
       toast.success("Starred.", {
@@ -48,9 +44,7 @@ export const useUnCollect = (entry: Nullable<CombinedEntryModel>) =>
 
     onMutate() {
       if (!entry) return
-      entryActions.patch(entry.entries.id, {
-        collections: undefined,
-      })
+      entryActions.markStar(entry.entries.id, false)
     },
     onSuccess: () => {
       toast.success("Unstarred.", {

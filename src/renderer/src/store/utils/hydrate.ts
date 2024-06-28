@@ -7,7 +7,7 @@ import {
   SubscriptionService,
 } from "@renderer/services"
 
-import { entryActions } from "../entry/store"
+import { entryActions, useEntryStore } from "../entry/store"
 import { feedActions, useFeedStore } from "../feed"
 import { subscriptionActions } from "../subscription"
 
@@ -37,11 +37,12 @@ async function hydrateFeed() {
   return useFeedStore.getState().feeds
 }
 async function hydrateEntry(feedMap: Record<string, FeedModel>) {
-  const [entries, entryRelated, feedEntries] = await Promise.all([
+  const [entries, entryRelated, feedEntries, collections] = await Promise.all([
     EntryService.findAll(),
 
     EntryRelatedService.findAll(EntryRelatedKey.READ),
     EntryRelatedService.findAll(EntryRelatedKey.FEED_ID),
+    EntryRelatedService.findAll(EntryRelatedKey.COLLECTION),
   ])
 
   const storeValue = [] as CombinedEntryModel[]
@@ -64,9 +65,13 @@ async function hydrateEntry(feedMap: Record<string, FeedModel>) {
       // FIXME server provided feed type is not match, but it's ok
       feeds: feed,
       read: entryRelated[entry.id] || false,
+      collections: collections[entry.id],
     })
   }
   entryActions.upsertMany(storeValue)
+  useEntryStore.setState({
+    starIds: new Set(Object.keys(collections)),
+  })
 }
 
 async function hydrateSubscription() {

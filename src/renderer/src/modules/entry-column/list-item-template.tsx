@@ -32,6 +32,7 @@ export function ListItem({
         "relative flex py-3 pl-3 pr-2",
         !asRead &&
         "before:absolute before:-left-0.5 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
+
       )}
     >
       <FeedIcon feed={entry.feeds} entry={entry.entries} />
@@ -40,6 +41,7 @@ export function ListItem({
           className={cn(
             "flex gap-1 text-[10px] font-bold",
             asRead ? "text-zinc-400" : "text-zinc-500",
+            entry.collections && "text-zinc-600 dark:text-zinc-400",
           )}
         >
           <span className="truncate">{entry.feeds.title}</span>
@@ -59,6 +61,7 @@ export function ListItem({
             !!entry.collections && "pr-4",
             entry.entries.title ? withDetails && "font-medium" : "text-[13px]",
             asRead ? "text-zinc-400 dark:text-neutral-500" : "text-zinc-500",
+            entry.collections && "text-neutral-700 dark:text-zinc-300",
           )}
         >
           {entry.entries.title ? (
@@ -81,6 +84,7 @@ export function ListItem({
             className={cn(
               "text-[13px]",
               asRead ? "text-zinc-400 dark:text-neutral-500" : "text-zinc-500",
+              entry.collections && "text-neutral-700 dark:text-zinc-300",
             )}
           >
             <EntryTranslation

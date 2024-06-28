@@ -4,10 +4,12 @@ import type { CombinedEntryModel } from "@renderer/models"
 import { useShallow } from "zustand/react/shallow"
 
 import { useFeedIdByView } from "../subscription"
+import { getEntryIsInView } from "../utils/biz"
 import { useEntryStore } from "./store"
 
 interface EntryFilter {
   unread?: boolean
+  view?: FeedViewType
 }
 
 export const useEntry = (entryId: Nullable<string >): CombinedEntryModel | null =>
@@ -27,7 +29,14 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
         return result
       } else if (feedId === FEED_COLLECTION_LIST) {
         // TODO we can't filter collections in local mode by view
-        return []
+        const result = [] as string[]
+        state.starIds.forEach((entryId) => {
+          if (getEntryIsInView(entryId)?.toString() === filter?.view?.toString()) {
+            result.push(entryId)
+          }
+        })
+
+        return result
       } else {
         return getSingle(feedId)
       }

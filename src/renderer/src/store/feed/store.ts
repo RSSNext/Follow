@@ -31,17 +31,6 @@ export const useFeedStore = createZustandStore<FeedState & FeedActions>(
     )
   },
 
-  optimisticUpdate(feedId, changed) {
-    set((state) =>
-      produce(state, (state) => {
-        const feed = state.feeds[feedId]
-        if (!feed) return
-
-        Object.assign(feed, changed)
-      }),
-    )
-  },
-
   patch(feedId, patch) {
     set((state) =>
       produce(state, (state) => {

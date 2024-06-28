@@ -188,6 +188,7 @@ const useEntriesByView = () => {
       activeList.feedId!,
     {
       unread: unreadOnly,
+      view: activeList.view,
     },
   )
 

@@ -9,6 +9,9 @@ import { BaseService } from "./base"
 import { EntryRelatedKey, EntryRelatedService } from "./entry-related"
 import { FeedService } from "./feed"
 
+type EntryCollection = {
+  createdAt: string
+}
 class EntryServiceStatic extends BaseService<EntryModel> {
   constructor() {
     super(entryModel.table)
@@ -29,36 +32,20 @@ class EntryServiceStatic extends BaseService<EntryModel> {
     ])
   }
 
-  updateReadStatus(entryId: string, read: boolean) {
-    return EntryRelatedService.upsert(
-      EntryRelatedKey.READ,
-      {
-        [entryId]: read,
-      },
-    )
+  bulkStoreReadStatus(record: Record<string, boolean>) {
+    return EntryRelatedService.upsert(EntryRelatedKey.READ, record)
   }
 
-  bulkUpdateReadStatus(record: Record<string, boolean>) {
-    return EntryRelatedService.upsert(
-      EntryRelatedKey.READ,
-      record,
-    )
+  bulkStoreFeedId(record: Record<string, string>) {
+    return EntryRelatedService.upsert(EntryRelatedKey.FEED_ID, record)
   }
 
-  recordFeedId(entryId: string, feedId: string) {
-    return EntryRelatedService.upsert(
-      EntryRelatedKey.FEED_ID,
-      {
-        [entryId]: feedId,
-      },
-    )
+  async bulkStoreCollection(record: Record<string, EntryCollection>) {
+    return EntryRelatedService.upsert(EntryRelatedKey.COLLECTION, record)
   }
 
-  bulkRecordFeedId(record: Record<string, string>) {
-    return EntryRelatedService.upsert(
-      EntryRelatedKey.FEED_ID,
-      record,
-    )
+  async deleteCollection(entryId: string) {
+    return EntryRelatedService.deleteItem(EntryRelatedKey.COLLECTION, entryId)
   }
 }
 

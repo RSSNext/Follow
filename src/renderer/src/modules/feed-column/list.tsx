@@ -177,6 +177,7 @@ export function FeedList({
               feedId: FEED_COLLECTION_LIST,
               level: levels.folder,
               view,
+              category: "",
             })
           }
         }}

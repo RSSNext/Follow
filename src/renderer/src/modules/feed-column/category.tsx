@@ -69,7 +69,7 @@ function FeedCategoryImpl({
   const isActive = useRouteParamsSelector(
     (routerParams) =>
       routerParams?.level === levels.folder &&
-      routerParams.feedId === data.list.map((feed) => feed.feedId).join(","),
+      (routerParams.feedId === data.list.map((feed) => feed.feedId).join(",") || data.name === routerParams?.category),
   )
   const { present } = useModalStack()
 

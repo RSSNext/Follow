@@ -20,6 +20,8 @@ export interface EntryState {
    */
 
   internal_feedId2entryIdSet: Record<FeedId, Set<EntryId>>
+  // viewToStarIds: Record<FeedViewType, Set<EntryId>>
+  starIds: Set<EntryId>
   // internal_updateSortIds: Record<FeedId, EntryId[]>
 }
 
@@ -44,6 +46,7 @@ export interface EntryActions {
   getFlattenMapEntries: () => Record<string, CombinedEntryModel>
   markRead: (feedId: string, entryId: string, read: boolean) => void
   markReadByFeedId: (feedId: string) => void
+  markStar: (entryId: string, starred: boolean) => void
 
   clear: () => void
 }

@@ -11,22 +11,31 @@ import { createZustandStore, getStoreActions } from "../utils/helper"
 import { isHydrated } from "../utils/hydrate"
 import type { EntryActions, EntryState } from "./types"
 
+const createState = (): EntryState => ({
+  entries: {},
+  flatMapEntries: {},
+  internal_feedId2entryIdSet: {},
+  starIds: new Set(),
+  // viewToStarIds: {
+  //   [FeedViewType.Articles]: new Set(),
+  //   [FeedViewType.Audios]: new Set(),
+  //   [FeedViewType.Videos]: new Set(),
+  //   [FeedViewType.Notifications]: new Set(),
+  //   [FeedViewType.SocialMedia]: new Set(),
+  //   [FeedViewType.Pictures]: new Set(),
+  // },
+})
+
 export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   "entry",
   {
     version: 1,
   },
 )((set, get) => ({
-  entries: {},
-  flatMapEntries: {},
-  internal_feedId2entryIdSet: {},
+  ...createState(),
 
   clear: () => {
-    set({
-      entries: {},
-      flatMapEntries: {},
-      internal_feedId2entryIdSet: {},
-    })
+    set(createState)
   },
 
   fetchEntryById: async (entryId: string) => {
@@ -113,6 +122,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
     const entries = [] as EntryModel[]
     const entry2Read = {} as Record<string, boolean>
     const entryFeedMap = {} as Record<string, string>
+    const entryCollection = {} as Record<string, any>
     set((state) =>
       produce(state, (draft) => {
         for (const item of data) {
@@ -148,6 +158,10 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
           entry2Read[item.entries.id] = item.read || false
           // Push entryFeedMap
           entryFeedMap[item.entries.id] = item.feeds.id
+          // Push entryCollection
+          if (item.collections) {
+            entryCollection[item.entries.id] = item.collections
+          }
         }
 
         return draft
@@ -155,15 +169,20 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
     )
     // Insert to feed store
     feedActions.upsertMany(feeds)
+    const newStarIds = new Set(get().starIds)
+    for (const entryId in entryCollection) {
+      newStarIds.add(entryId)
+    }
+    set((state) => ({
+      ...state,
+      starIds: newStarIds,
+    }))
     // Update database
     if (isHydrated()) {
       EntryService.upsertMany(entries)
-      EntryService.bulkUpdateReadStatus(entry2Read)
-      EntryService.bulkRecordFeedId(entryFeedMap)
-      // const newEntries = get().entries
-      // for (const feedId in newEntries) {
-      //   FeedEntryService.updateFeed(feedId, newEntries[feedId])
-      // }
+      EntryService.bulkStoreReadStatus(entry2Read)
+      EntryService.bulkStoreFeedId(entryFeedMap)
+      EntryService.bulkStoreCollection(entryCollection)
     }
   },
 
@@ -180,6 +199,33 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
       entryActions.markRead(feedId, entryId, true)
     })
     unreadActions.updateByFeedId(feedId, 0)
+  },
+
+  markStar: (entryId, star) => {
+    entryActions.patch(entryId, {
+      collections: star ?
+          {
+            createdAt: new Date().toISOString(),
+          } :
+        undefined,
+    })
+
+    set((state) =>
+      produce(state, (state) => {
+        star ? state.starIds.add(entryId) : state.starIds.delete(entryId)
+      }),
+    )
+
+    if (!isHydrated()) return
+    if (star) {
+      EntryService.bulkStoreCollection({
+        [entryId]: {
+          createdAt: new Date().toISOString(),
+        },
+      })
+    } else {
+      EntryService.deleteCollection(entryId)
+    }
   },
 }))
 
