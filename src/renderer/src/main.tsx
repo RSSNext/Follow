@@ -9,7 +9,7 @@ import { RouterProvider } from "react-router-dom"
 import { router } from "./router"
 import { initializeDbAndStore } from "./store/utils/init"
 
-initializeDbAndStore().then(render)
+initializeDbAndStore().finally(render)
 
 authConfigManager.setConfig({
   baseUrl: import.meta.env.VITE_API_URL,

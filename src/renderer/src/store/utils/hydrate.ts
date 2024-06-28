@@ -61,8 +61,6 @@ async function hydrateEntry(feedMap: Record<string, FeedModel>) {
 
     storeValue.push({
       entries: entry,
-      // @ts-expect-error
-      // FIXME , data is not unique
       feeds: feed,
       read: entryRelated[entry.id] || false,
     })
