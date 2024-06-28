@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
 import { Image } from "@renderer/components/ui/image"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
+import { renderToString } from "react-dom/server"
 import rehypeInferDescriptionMeta from "rehype-infer-description-meta"
 import rehypeParse from "rehype-parse"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
@@ -11,9 +13,12 @@ import { unified } from "unified"
 import { visit } from "unist-util-visit"
 import { VFile } from "vfile"
 
-export const parseHtml = async (content: string, options?: {
-  renderInlineStyle: boolean
-}) => {
+export const parseHtml = async (
+  content: string,
+  options?: {
+    renderInlineStyle: boolean
+  },
+) => {
   const file = new VFile(content)
   const { renderInlineStyle = false } = options || {}
 
@@ -24,7 +29,9 @@ export const parseHtml = async (content: string, options?: {
       attributes: {
         ...defaultSchema.attributes,
 
-        "*": renderInlineStyle ? [...defaultSchema.attributes!["*"], "style"] : defaultSchema.attributes!["*"],
+        "*": renderInlineStyle ?
+            [...defaultSchema.attributes!["*"], "style"] :
+          defaultSchema.attributes!["*"],
       },
     })
     .use(rehypeInferDescriptionMeta)
@@ -62,7 +69,45 @@ export const parseHtml = async (content: string, options?: {
       jsxs: (type, props, key) => jsxs(type as any, props, key),
       passNode: true,
       components: {
-        img: (props) => createElement(Image, { ...props, popper: true }),
+        img: ({ node, ...props }) => createElement(Image, { ...props, popper: true }),
+        pre: ({ node, ...props }) => {
+          if (!props.children) return null
+
+          let language = "plaintext"
+          let codeString = null as string | null
+          if (props.className?.includes("language-")) {
+            language = props.className.replace("language-", "")
+          }
+
+          if (typeof props.children !== "object") {
+            language = "plaintext"
+            codeString = props.children.toString()
+          } else {
+            if (
+              "type" in props.children &&
+              props.children.type === "code" &&
+              props.children.props.className?.includes("language-")
+            ) {
+              language = props.children.props.className.replace(
+                "language-",
+                "",
+              )
+            }
+            const code =
+              "props" in props.children && props.children.props.children
+            if (!code) return null
+            const $text = document.createElement("div")
+            $text.innerHTML = renderToString(code)
+            codeString = $text.textContent
+          }
+
+          if (!codeString) return null
+          // return createElement("pre", { ...props, className: "shiki" })
+          return createElement(ShikiHighLighter, {
+            code: codeString,
+            language: language.toLowerCase(),
+          })
+        },
       },
     }),
   }

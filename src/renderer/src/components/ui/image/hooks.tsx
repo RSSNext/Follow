@@ -14,7 +14,7 @@ export const usePreviewImages = () => {
           </div>
         ),
         title: "Image",
-
+        overlay: true,
         CustomModalComponent: ({ children }) => children,
         clickOutsideToDismiss: true,
       })

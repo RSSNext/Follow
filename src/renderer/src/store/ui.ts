@@ -25,6 +25,7 @@ interface UIState {
   // content
   readerFontFamily: string
   readerRenderInlineStyle: boolean
+  codeHighlightTheme: string
 }
 
 const createDefaultUIState = (): UIState => ({
@@ -40,6 +41,7 @@ const createDefaultUIState = (): UIState => ({
   modalDraggable: true,
   modalOpaque: true,
   readerRenderInlineStyle: false,
+  codeHighlightTheme: "github-dark",
 })
 interface UIActions {
   clear: () => void
