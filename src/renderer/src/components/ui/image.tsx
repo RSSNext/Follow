@@ -65,7 +65,8 @@ const ImageImpl: FC<ImageProps> = ({
         onError={errorHandle}
         className={cn(
           hidden && "hidden",
-          "size-full bg-stone-100 object-cover",
+          !(props.width || props.height) && "size-full",
+          "bg-stone-100 object-cover",
           popper && "cursor-zoom-in",
         )}
         src={imgSrc}
