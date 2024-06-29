@@ -54,9 +54,9 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             input: {
                 query: {
                     type?: "tip" | "mint" | "burn" | "withdraw" | undefined;
-                    hash?: string | undefined;
                     fromUserId?: string | undefined;
                     toUserId?: string | undefined;
+                    hash?: string | undefined;
                     toFeedId?: string | undefined;
                     fromOrToUserId?: string | undefined;
                     createdAfter?: string | undefined;
@@ -68,9 +68,9 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     type: "tip" | "mint" | "burn" | "withdraw";
                     createdAt: string;
                     powerToken: string;
-                    hash: string;
                     fromUserId: string | null;
                     toUserId: string | null;
+                    hash: string;
                     toFeedId: string | null;
                     comment: string | null;
                     fromUser: {
@@ -131,6 +131,42 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 code: 0;
                 data: {
                     ttl: number;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+    "/wallets/transactions/withdrawable": {
+        $get: {
+            input: {
+                query: {
+                    feedId?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    title: string | null;
+                    id: string;
+                    powerToken: string;
+                }[];
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+    "/wallets/transactions/withdraw": {
+        $post: {
+            input: {
+                json: {
+                    feedId: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    transactionHash: string;
                 };
             };
             outputFormat: "json";
