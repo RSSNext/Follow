@@ -30,6 +30,14 @@ export const apiFetch = ofetch.create({
       // Or we can present LoginModal here.
       router.navigate("/login")
     }
+    try {
+      const json = JSON.parse(context.response._data)
+      if (context.response.status === 400 && json.code === 1003) {
+        router.navigate("/invitation")
+      }
+    } catch {
+      // ignore
+    }
   },
 })
 

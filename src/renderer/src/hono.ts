@@ -15,6 +15,20 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             status: 200;
         };
     };
+    "/invitations/use": {
+        $post: {
+            input: {
+                json: {
+                    code: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
 } & {
     "/wallets/transactions/tip": {
         $post: {
@@ -298,7 +312,9 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             };
             output: {
                 code: 0;
-                data: Record<string, number>;
+                data: {
+                    [x: string]: number;
+                };
             };
             outputFormat: "json";
             status: 200;
@@ -559,21 +575,27 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                data: Record<string, {
-                    description: string;
-                    name: string;
-                    url: string;
-                    routes: Record<string, {
-                        path: string;
-                        example: string;
+                data: {
+                    [x: string]: {
                         description: string;
                         name: string;
-                        categories: string[];
-                        parameters: Record<string, string>;
-                        maintainers: string[];
-                        location: string;
-                    }>;
-                }>;
+                        url: string;
+                        routes: {
+                            [x: string]: {
+                                path: string;
+                                example: string;
+                                description: string;
+                                name: string;
+                                categories: string[];
+                                parameters: {
+                                    [x: string]: string;
+                                };
+                                maintainers: string[];
+                                location: string;
+                            };
+                        };
+                    };
+                };
             };
             outputFormat: "json";
             status: 200;
