@@ -215,7 +215,7 @@ const FeedItemImpl = ({
         )}
       </div>
       {showUnreadCount && !!feedUnread && (
-        <div className="ml-2 text-xs text-zinc-500">{feedUnread}</div>
+        <div className="ml-2 text-xs text-zinc-500 dark:text-neutral-400">{feedUnread}</div>
       )}
     </div>
   )

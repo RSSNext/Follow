@@ -24,7 +24,7 @@ export function GridItem({
   return (
     <div>
       {children}
-      <div className={cn("relative flex-1 px-2 pb-3 pt-1 text-sm", !asRead && "before:absolute before:-left-1 before:top-[13.5px] before:block before:size-2 before:rounded-full before:bg-blue-500")}>
+      <div className={cn("relative flex-1 px-2 pb-3 pt-1 text-sm", !asRead && "before:absolute before:-left-1 before:top-[13.5px] before:block before:size-2 before:rounded-full before:bg-theme-accent")}>
         <div
           className={cn(
             "relative mb-1 mt-1.5 truncate font-medium leading-none",

@@ -123,7 +123,7 @@ function EntryItemImpl({ entry, view }: { entry: CombinedEntryModel, view?: numb
           "rounded-md bg-theme-background transition-colors",
           isActive &&
           "bg-theme-item-active",
-          asRead ? "text-zinc-700" : "text-zinc-900 dark:text-white/90",
+          asRead ? "text-zinc-700 dark:text-neutral-400" : "text-zinc-900 dark:text-neutral-300",
         )}
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}
