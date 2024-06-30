@@ -139,7 +139,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             nextFrame(() => settingModalPresent("wallet"))
           }}
         >
-          Wallet
+          Power
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem

@@ -15,7 +15,7 @@ export const useTipModal = ({ userId, feedId }: { userId?: string, feedId?: stri
     }
 
     present({
-      title: "Tip",
+      title: "Tip Power",
       content: () => createElement(TipModalContent, { userId, feedId }),
     })
   }, [present, userId, feedId])

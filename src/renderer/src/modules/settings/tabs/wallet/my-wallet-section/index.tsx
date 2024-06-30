@@ -3,7 +3,6 @@ import { LoadingCircle } from "@renderer/components/ui/loading"
 import { Balance } from "@renderer/components/ui/wallet/balance"
 import { useWallet } from "@renderer/queries/wallet"
 
-import { SettingSectionTitle } from "../../../section"
 import { ClaimDailyReward } from "./claim-daily-reward"
 import { CreateWallet } from "./create-wallet"
 
@@ -14,8 +13,6 @@ export const MyWalletSection = () => {
 
   return (
     <div>
-      <SettingSectionTitle title="My Wallet" />
-
       {wallet.isPending ? (
         <LoadingCircle size="large" />
       ) : !myWallet ?

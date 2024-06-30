@@ -14,10 +14,10 @@ export const CreateWallet = () => {
         Create Wallet
       </StyledButton>
 
-      <p className="my-2 text-theme-inactive">
+      <p className="my-2 text-sm text-gray-400 dark:text-neutral-500">
         Create a free wallet to receive
         {" "}
-        <strong>$POWER</strong>
+        <strong className="font-medium">$POWER</strong>
         , which can
         be used to reward creators and also get rewarded for your content
         contributions.
