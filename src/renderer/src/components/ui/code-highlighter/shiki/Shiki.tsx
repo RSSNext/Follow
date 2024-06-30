@@ -1,4 +1,5 @@
 /* eslint-disable @eslint-react/dom/no-dangerously-set-innerhtml */
+import { cn } from "@renderer/lib/utils"
 import { useUIStore } from "@renderer/store"
 import type { FC } from "react"
 import { useLayoutEffect, useMemo, useRef, useState } from "react"
@@ -28,6 +29,7 @@ export interface ShikiProps {
   code: string
 
   attrs?: string
+  className?: string
 
 }
 
@@ -39,7 +41,7 @@ let themeModule: Record<BundledTheme, DynamicImportThemeRegistration> | null =
   null
 
 export const ShikiHighLighter: FC<ShikiProps> = (props) => {
-  const { code, language } = props
+  const { code, language, className } = props
   const loadThemesRef = useRef([] as string[])
   const loadLanguagesRef = useRef([] as string[])
 
@@ -118,7 +120,7 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
 
   if (!loaded) {
     return (
-      <pre>
+      <pre className={className}>
         <code>{code}</code>
       </pre>
     )
@@ -129,7 +131,7 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
 const ShikiCode: FC<ShikiProps & {
   codeTheme: string
 
-}> = ({ code, language, codeTheme }) => {
+}> = ({ code, language, codeTheme, className }) => {
   const rendered = useMemo(() => {
     try {
       return shiki.codeToHtml(code, {
@@ -148,13 +150,13 @@ const ShikiCode: FC<ShikiProps & {
 
   if (!rendered) {
     return (
-      <pre>
+      <pre className={className}>
         <code>{code}</code>
       </pre>
     )
   }
   return (
-    <div className="group relative">
+    <div className={cn("group relative", className)}>
       <div dangerouslySetInnerHTML={{ __html: rendered }} />
       <CopyButton value={code} className="absolute right-2 top-2 opacity-0 duration-200 group-hover:opacity-100" />
     </div>

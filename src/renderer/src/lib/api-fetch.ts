@@ -1,6 +1,5 @@
 import { getCsrfToken } from "@hono/auth-js/react"
 import type { AppType } from "@renderer/hono"
-import { router } from "@renderer/router"
 import { hc } from "hono/client"
 import { FetchError, ofetch } from "ofetch"
 
@@ -26,6 +25,7 @@ export const apiFetch = ofetch.create({
     }
   },
   onResponseError(context) {
+    const { router } = window
     if (context.response.status === 401) {
       // Or we can present LoginModal here.
       router.navigate("/login")
