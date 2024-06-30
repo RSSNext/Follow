@@ -28,7 +28,12 @@ export const feed = {
     ),
   claimMessage: ({ feedId }: { feedId: string }) =>
     defineQuery(["feed", "claimMessage", feedId], async () =>
-      apiClient.feeds.claim.message.$get({ query: { feedId } })),
+      apiClient.feeds.claim.message.$get({ query: { feedId } }).then((res) => {
+        res.data.json = JSON.stringify(JSON.parse(res.data.json), null, 2)
+        const $document = new DOMParser().parseFromString(res.data.xml, "text/xml")
+        res.data.xml = new XMLSerializer().serializeToString($document)
+        return res
+      })),
 }
 
 export const useFeed = ({ id, url }: { id?: string, url?: string }) =>
@@ -42,36 +47,40 @@ export const useFeed = ({ id, url }: { id?: string, url?: string }) =>
     },
   )
 
-export const useClaimFeedMutation = (feedId: string) => useMutation({
-  mutationKey: ["claimFeed", feedId],
-  mutationFn: () =>
-    apiClient.feeds.claim.challenge.$post({
-      json: {
-        feedId,
-      },
-    }),
+export const useClaimFeedMutation = (feedId: string) =>
+  useMutation({
+    mutationKey: ["claimFeed", feedId],
+    mutationFn: () =>
+      apiClient.feeds.claim.challenge.$post({
+        json: {
+          feedId,
+        },
+      }),
 
-  async onError(err) {
-    toast.error(await getFetchErrorMessage(err))
-  },
-  onSuccess() {
-    feedActions.patch(feedId, {
-      ownerUserId: getUser()?.id,
-    })
-  },
-})
+    async onError(err) {
+      toast.error(await getFetchErrorMessage(err))
+    },
+    onSuccess() {
+      feedActions.patch(feedId, {
+        ownerUserId: getUser()?.id,
+      })
+    },
+  })
 
-export const useRefreshFeedMutation = (feedId?: string) => useMutation({
-  mutationKey: ["refreshFeed", feedId],
-  mutationFn: () => apiClient.feeds.refresh.$get({ query: { id: feedId! } }),
+export const useRefreshFeedMutation = (feedId?: string) =>
+  useMutation({
+    mutationKey: ["refreshFeed", feedId],
+    mutationFn: () => apiClient.feeds.refresh.$get({ query: { id: feedId! } }),
 
-  onSuccess() {
-    if (!feedId) return
-    Queries.entries.entries({
-      id: feedId!,
-    }).invalidateRoot()
-  },
-  async onError(err) {
-    toast.error(await getFetchErrorMessage(err))
-  },
-})
+    onSuccess() {
+      if (!feedId) return
+      Queries.entries
+        .entries({
+          id: feedId!,
+        })
+        .invalidateRoot()
+    },
+    async onError(err) {
+      toast.error(await getFetchErrorMessage(err))
+    },
+  })

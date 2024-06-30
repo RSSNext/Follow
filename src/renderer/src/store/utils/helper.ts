@@ -1,4 +1,3 @@
-import { enableMapSet } from "immer"
 import type { StateCreator, StoreApi } from "zustand"
 import type {
   PersistOptions,
@@ -27,7 +26,6 @@ export const localStorage: PersistStorage<any> = {
     window.localStorage.removeItem(name)
   },
 }
-enableMapSet()
 
 export const createZustandStore =
   <

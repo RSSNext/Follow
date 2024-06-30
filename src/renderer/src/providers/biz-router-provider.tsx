@@ -1,6 +1,22 @@
 import { setNavigate, setRoute } from "@renderer/atoms"
 import { useLayoutEffect } from "react"
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
+import type { NavigateFunction } from "react-router-dom"
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom"
+
+declare global {
+  export const router: {
+    navigate: NavigateFunction
+  }
+  interface Window {
+    router: typeof router
+  }
+}
+
 /**
  * Why this.
  * Remix router always update immutable object when the router has any changes, lead to the component which uses router hooks re-render.
@@ -13,6 +29,11 @@ export const StableRouterProvider = () => {
   const params = useParams()
   const nav = useNavigate()
   const location = useLocation()
+
+  // NOTE: This is a hack to expose the navigate function to the window object, avoid to import `router` circular issue.
+  window.router = {
+    navigate: nav,
+  }
   useLayoutEffect(() => {
     setRoute({
       params,

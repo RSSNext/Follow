@@ -1,6 +1,9 @@
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { StyledButton } from "@renderer/components/ui/button"
-import { CopyButton } from "@renderer/components/ui/code-highlighter"
+import {
+  CopyButton,
+  ShikiHighLighter,
+} from "@renderer/components/ui/code-highlighter"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import {
   Tabs,
@@ -18,7 +21,6 @@ export const FeedClaimModalContent: FC<{
   feedId: string
 }> = ({ feedId }) => {
   const feed = useFeedById(feedId)
-
   const {
     data: claimMessage,
     isLoading,
@@ -66,7 +68,7 @@ export const FeedClaimModalContent: FC<{
 
             <BaseCodeBlock>{claimMessage?.data.content || ""}</BaseCodeBlock>
           </TabsContent>
-          <TabsContent className="pt-3" value="description">
+          <TabsContent className="mt-0 pt-3" value="description">
             <p>
               Copy the following content and paste it into the
               {" "}
@@ -89,11 +91,23 @@ export const FeedClaimModalContent: FC<{
               <p>
                 <b>XML Format</b>
               </p>
-              <BaseCodeBlock>{claimMessage?.data.xml || ""}</BaseCodeBlock>
+              <ShikiHighLighter
+                className="group relative mt-3 cursor-auto select-text whitespace-pre break-words rounded-lg border border-border bg-zinc-100 p-2 text-sm dark:bg-neutral-800 [&_pre]:whitespace-pre [&_pre]:break-words"
+                code={claimMessage?.data.xml || ""}
+                language="xml"
+              />
               <p>
                 <b>JSON Format</b>
               </p>
-              <BaseCodeBlock>{claimMessage?.data.json || ""}</BaseCodeBlock>
+              <ShikiHighLighter
+                className="group relative mt-3 cursor-auto select-text whitespace-pre break-words rounded-lg border border-border bg-zinc-100 p-2 text-sm dark:bg-neutral-800 [&_pre]:whitespace-pre [&_pre]:break-words"
+                code={JSON.stringify(
+                  JSON.parse(claimMessage?.data.json || "{}"),
+                  null,
+                  2,
+                )}
+                language="json"
+              />
             </div>
           </TabsContent>
         </AutoResizeHeight>
@@ -106,7 +120,9 @@ export const FeedClaimModalContent: FC<{
           onClick={() => claim()}
           variant={isSuccess ? "plain" : "primary"}
         >
-          {isSuccess && <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />}
+          {isSuccess && (
+            <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />
+          )}
           Claim
         </StyledButton>
       </div>
