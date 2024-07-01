@@ -1,8 +1,8 @@
+import { getUISettings, setUISetting } from "@renderer/atoms"
 import { useRouteView } from "@renderer/hooks/biz/useRouteParams"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { EntryColumn } from "@renderer/modules/entry-column"
-import { uiActions, useUIStore } from "@renderer/store"
 import { useMemo, useRef } from "react"
 import { HotkeysProvider } from "react-hotkeys-hook"
 import { useResizable } from "react-resizable-layout"
@@ -12,8 +12,8 @@ export function Component() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   // Memo this initial value to avoid re-render
-  // eslint-disable-next-line react-compiler/react-compiler
-  const entryColWidth = useMemo(() => useUIStore.getState().entryColWidth, [])
+
+  const entryColWidth = useMemo(() => getUISettings().entryColWidth, [])
   const view = useRouteView()
   const inWideMode = view ? views[view].wideMode : false
   const { position, separatorProps } = useResizable({
@@ -23,7 +23,7 @@ export function Component() {
     initial: entryColWidth,
     containerRef,
     onResizeEnd({ position }) {
-      uiActions.set("entryColWidth", position)
+      setUISetting("entryColWidth", position)
     },
   })
 

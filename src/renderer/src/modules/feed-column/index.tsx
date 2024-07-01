@@ -158,7 +158,7 @@ export function FeedColumn() {
         ))}
       </div>
       <div className="size-full overflow-hidden" ref={carouselRef}>
-        <m.div className="flex h-full" style={{ x: spring }}>
+        <m.div className="flex h-full" style={{ x: -active * 256 }}>
           {views.map((item, index) => (
             <section
               key={item.name}

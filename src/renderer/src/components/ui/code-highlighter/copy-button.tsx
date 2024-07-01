@@ -1,6 +1,7 @@
+import { m } from "@renderer/components/common/Motion"
 import { cn } from "@renderer/lib/utils"
 import type { Variants } from "framer-motion"
-import { AnimatePresence, m } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 import { useCallback, useRef, useState } from "react"
 
 import { MotionButtonBase } from "../button"

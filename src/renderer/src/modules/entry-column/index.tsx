@@ -1,5 +1,6 @@
 import { useMainContainerElement } from "@renderer/atoms"
 import { useUser } from "@renderer/atoms/user"
+import { m } from "@renderer/components/common/Motion"
 import { ActionButton, StyledButton } from "@renderer/components/ui/button"
 import {
   Popover,
@@ -16,7 +17,7 @@ import {
 } from "@renderer/hooks/biz/useRouteParams"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { ROUTE_FEED_PENDING, views } from "@renderer/lib/constants"
-import { buildStorageNS } from "@renderer/lib/ns"
+import { getStorageNS } from "@renderer/lib/ns"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
 import { useEntries } from "@renderer/queries/entries"
@@ -32,7 +33,6 @@ import {
   useEntryIdsByFeedIdOrView,
 } from "@renderer/store/entry/hooks"
 import type { HTMLMotionProps } from "framer-motion"
-import { m } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { debounce } from "lodash-es"
@@ -56,7 +56,7 @@ import { LoadingCircle } from "../../components/ui/loading"
 import { EntryItem } from "./item"
 
 const unreadOnlyAtom = atomWithStorage<boolean>(
-  buildStorageNS("entry-unreadonly"),
+  getStorageNS("entry-unreadonly"),
   true,
   undefined,
   {

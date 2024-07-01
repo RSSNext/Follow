@@ -1,4 +1,10 @@
 import {
+  setUISetting,
+  useUISettingKey,
+  useUISettingSelector,
+  useUISettingValue,
+} from "@renderer/atoms"
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -8,7 +14,6 @@ import {
 import { useDark } from "@renderer/hooks"
 import { tipcClient } from "@renderer/lib/client"
 import { getOS } from "@renderer/lib/utils"
-import { uiActions, useUIStore } from "@renderer/store"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback } from "react"
 import { bundledThemes } from "shiki/themes"
@@ -23,7 +28,7 @@ export const SettingAppearance = () => {
     toggleDark()
   }, [])
 
-  const state = useUIStore()
+  const state = useUISettingValue()
   const onlyMacos = window.electron && getOS() === "macOS"
 
   return (
@@ -40,7 +45,7 @@ export const SettingAppearance = () => {
           label="Opaque Sidebars"
           checked={state.opaqueSidebar}
           onCheckedChange={(checked) => {
-            uiActions.set("opaqueSidebar", checked)
+            setUISetting("opaqueSidebar", checked)
           }}
         />
       )}
@@ -54,7 +59,7 @@ export const SettingAppearance = () => {
           label="Dock Badge"
           checked={state.showDockBadge}
           onCheckedChange={(c) => {
-            uiActions.set("showDockBadge", c)
+            setUISetting("showDockBadge", c)
           }}
         />
       )}
@@ -62,7 +67,7 @@ export const SettingAppearance = () => {
         label="Show sidebar unread count"
         checked={state.sidebarShowUnreadCount}
         onCheckedChange={(c) => {
-          uiActions.set("sidebarShowUnreadCount", c)
+          setUISetting("sidebarShowUnreadCount", c)
         }}
       />
 
@@ -70,14 +75,14 @@ export const SettingAppearance = () => {
         label="Modal draggable"
         checked={state.modalDraggable}
         onCheckedChange={(c) => {
-          uiActions.set("modalDraggable", c)
+          setUISetting("modalDraggable", c)
         }}
       /> */}
       {/* <SettingSwitch
         label="Modal opaque"
         checked={state.modalOpaque}
         onCheckedChange={(c) => {
-          uiActions.set("modalOpaque", c)
+          setUISetting("modalOpaque", c)
         }}
       /> */}
 
@@ -88,7 +93,7 @@ export const SettingAppearance = () => {
         label="Render inline style"
         checked={state.readerRenderInlineStyle}
         onCheckedChange={(c) => {
-          uiActions.set("readerRenderInlineStyle", c)
+          setUISetting("readerRenderInlineStyle", c)
         }}
       />
       <SettingSectionTitle title="Misc" />
@@ -96,14 +101,14 @@ export const SettingAppearance = () => {
         label="Show modal overlay"
         checked={state.modalOverlay}
         onCheckedChange={(c) => {
-          uiActions.set("modalOverlay", c)
+          setUISetting("modalOverlay", c)
         }}
       />
     </div>
   )
 }
 const ShikiTheme = () => {
-  const codeHighlightTheme = useUIStore((state) => state.codeHighlightTheme)
+  const codeHighlightTheme = useUISettingKey("codeHighlightTheme")
   return (
     <div className="mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">Code Highlight Theme</span>
@@ -111,19 +116,18 @@ const ShikiTheme = () => {
         defaultValue="github-dark"
         value={codeHighlightTheme}
         onValueChange={(value) => {
-          uiActions.set("codeHighlightTheme", value)
+          setUISetting("codeHighlightTheme", value)
         }}
       >
         <SelectTrigger size="sm" className="w-48">
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="h-64">
-          {Object.keys(bundledThemes)
-            ?.map((theme) => (
-              <SelectItem key={theme} value={theme}>
-                {theme}
-              </SelectItem>
-            ))}
+          {Object.keys(bundledThemes)?.map((theme) => (
+            <SelectItem key={theme} value={theme}>
+              {theme}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>
@@ -135,7 +139,7 @@ const Fonts = () => {
     queryFn: () => tipcClient?.getSystemFonts(),
     queryKey: ["systemFonts"],
   })
-  const readerFontFamily = useUIStore(
+  const readerFontFamily = useUISettingSelector(
     (state) => state.readerFontFamily || "SN Pro",
   )
   return (
@@ -145,7 +149,7 @@ const Fonts = () => {
         defaultValue="SN Pro"
         value={readerFontFamily}
         onValueChange={(value) => {
-          uiActions.set("readerFontFamily", value)
+          setUISetting("readerFontFamily", value)
         }}
       >
         <SelectTrigger size="sm" className="w-48">
@@ -173,7 +177,7 @@ const textSizeMap = {
 }
 
 const TextSize = () => {
-  const uiTextSize = useUIStore((state) => state.uiTextSize)
+  const uiTextSize = useUISettingSelector((state) => state.uiTextSize)
 
   return (
     <div className="mt-1 flex items-center justify-between">
@@ -182,7 +186,7 @@ const TextSize = () => {
         defaultValue={textSizeMap.default.toString()}
         value={uiTextSize.toString() || textSizeMap.default.toString()}
         onValueChange={(value) => {
-          uiActions.set(
+          setUISetting(
             "uiTextSize",
             Number.parseInt(value) || textSizeMap.default,
           )

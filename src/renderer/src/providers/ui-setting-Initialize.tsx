@@ -1,9 +1,10 @@
+import { useUISettingValue } from "@renderer/atoms"
 import { tipcClient } from "@renderer/lib/client"
-import { unreadActions, useUIStore } from "@renderer/store"
+import { unreadActions } from "@renderer/store"
 import { useEffect, useInsertionEffect } from "react"
 
 export const UISettingInitialize = () => {
-  const state = useUIStore()
+  const state = useUISettingValue()
 
   useInsertionEffect(() => {
     const root = document.documentElement

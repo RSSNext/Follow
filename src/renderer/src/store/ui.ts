@@ -1,4 +1,4 @@
-import { buildStorageNS } from "@renderer/lib/ns"
+import { getStorageNS } from "@renderer/lib/ns"
 
 import {
   createZustandStore,
@@ -47,7 +47,7 @@ interface UIActions {
   clear: () => void
   set: <T extends keyof UIState>(key: T, value: UIState[T]) => void
 }
-const storageKey = buildStorageNS("ui")
+const storageKey = getStorageNS("ui")
 export const useUIStore = createZustandStore<UIState & UIActions>(storageKey, {
   version: 1,
   storage: localStorage,

@@ -1,12 +1,12 @@
+import { useUISettingKey } from "@renderer/atoms"
 import { useDark } from "@renderer/hooks"
 import { cn } from "@renderer/lib/utils"
-import { useUIStore } from "@renderer/store"
 import { useMediaQuery } from "usehooks-ts"
 
 export const Vibrancy: Component<
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 > = ({ className, children, ...rest }) => {
-  const opaqueSidebar = useUIStore((s) => s.opaqueSidebar)
+  const opaqueSidebar = useUISettingKey("opaqueSidebar")
   const canVibrancy =
     window.electron &&
     window.electron.process.platform === "darwin" &&

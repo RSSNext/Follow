@@ -1,8 +1,9 @@
 import * as Dialog from "@radix-ui/react-dialog"
+import { useUISettingKey } from "@renderer/atoms"
+import { m } from "@renderer/components/common/Motion"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
-import { useUIStore } from "@renderer/store"
-import { m, useAnimationControls, useDragControls } from "framer-motion"
+import { useAnimationControls, useDragControls } from "framer-motion"
 import { useSetAtom } from "jotai"
 import type { PointerEventHandler, SyntheticEvent } from "react"
 import {
@@ -60,7 +61,8 @@ export const ModalInternal: Component<{
   //     opaque: state.modalOpaque,
   //   })),
   // )
-  const opaque = useUIStore((state) => state.modalOpaque)
+  // const opaque = useUIStore((state) => state.modalOpaque)
+  const opaque = useUISettingKey("modalOpaque")
 
   const {
     CustomModalComponent,

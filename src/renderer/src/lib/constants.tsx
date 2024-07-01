@@ -1,4 +1,4 @@
-import { buildStorageNS } from "./ns"
+import { getStorageNS } from "./ns"
 
 export const levels = {
   view: "view",
@@ -79,7 +79,7 @@ export const APP_NAME = "Follow"
 /// Feed
 export const FEED_COLLECTION_LIST = "collections"
 /// Local storage keys
-export const QUERY_PERSIST_KEY = buildStorageNS("REACT_QUERY_OFFLINE_CACHE")
+export const QUERY_PERSIST_KEY = getStorageNS("REACT_QUERY_OFFLINE_CACHE")
 
 /// Route Keys
 export const ROUTE_FEED_PENDING = "pending"
