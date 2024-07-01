@@ -43,7 +43,7 @@ const Close = () => {
   const { dismiss } = useCurrentModal()
 
   return (
-    <MotionButtonBase className="absolute right-8 top-7" onClick={dismiss}>
+    <MotionButtonBase className="absolute right-8 top-7 z-[99]" onClick={dismiss}>
       <i className="i-mgc-close-cute-re" />
     </MotionButtonBase>
   )

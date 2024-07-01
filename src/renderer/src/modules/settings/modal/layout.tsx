@@ -1,12 +1,12 @@
+import { useUISettingSelector } from "@renderer/atoms"
+import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { APP_NAME } from "@renderer/lib/constants"
 import { preventDefault } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
-import { useUIStore } from "@renderer/store"
-import { m, useDragControls } from "framer-motion"
+import { useDragControls } from "framer-motion"
 import type { PointerEventHandler, PropsWithChildren } from "react"
 import { useCallback, useEffect } from "react"
-import { useShallow } from "zustand/react/shallow"
 
 import { settings } from "../constants"
 import { SettingsSidebarTitle } from "../title"
@@ -31,8 +31,8 @@ export function SettingModalLayout(
     }
   }, [])
 
-  const { draggable, overlay } = useUIStore(
-    useShallow((state) => ({
+  const { draggable, overlay } = useUISettingSelector(
+    ((state) => ({
       draggable: state.modalDraggable,
       overlay: state.modalOverlay,
     })),

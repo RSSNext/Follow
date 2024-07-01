@@ -1,5 +1,5 @@
+import { getUISettings } from "@renderer/atoms"
 import { jotaiStore } from "@renderer/lib/jotai"
-import { useUIStore } from "@renderer/store"
 import { useCallback, useContext, useEffect, useId, useRef } from "react"
 import { useLocation } from "react-router-dom"
 
@@ -31,9 +31,9 @@ export const useModalStack = (options?: ModalStackOptions) => {
         } else {
           // NOTE: The props of the Command Modal are immutable, so we'll just take the store value and inject it.
           // There is no need to inject `overlay` props, this is rendered responsively based on ui changes.
-          const uiState = useUIStore.getState()
+          const uiSettings = getUISettings()
           const modalConfig: Partial<ModalProps> = {
-            draggable: uiState.modalDraggable,
+            draggable: uiSettings.modalDraggable,
           }
           jotaiStore.set(modalStackAtom, (p) => {
             const modalProps: ModalProps = {

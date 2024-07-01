@@ -1,10 +1,11 @@
-import { useUIStore } from "@renderer/store"
+import { useUISettingKey } from "@renderer/atoms"
 import { AnimatePresence } from "framer-motion"
 import { useAtomValue } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX } from "./constants"
+import { useDismissAllWhenRouterChange } from "./hooks"
 // import { useDismissAllWhenRouterChange } from "./hooks"
 import { ModalInternal } from "./modal"
 import { ModalOverlay } from "./overlay"
@@ -20,9 +21,8 @@ const ModalStack = () => {
   const stack = useAtomValue(modalStackAtom)
 
   // Vite HMR issue
-  // useDismissAllWhenRouterChange()
-
-  const modalSettingOverlay = useUIStore((state) => state.modalOverlay)
+  useDismissAllWhenRouterChange()
+  const modalSettingOverlay = useUISettingKey("modalOverlay")
 
   const forceOverlay = stack.some((item) => item.overlay)
 

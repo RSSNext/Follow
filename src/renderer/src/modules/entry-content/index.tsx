@@ -1,3 +1,5 @@
+import { useUISettingKey } from "@renderer/atoms"
+import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { useBizQuery } from "@renderer/hooks"
@@ -9,8 +11,7 @@ import {
   WrappedElementProvider,
 } from "@renderer/providers/wrapped-element-provider"
 import { Queries } from "@renderer/queries"
-import { useEntry, useFeedHeaderTitle, useUIStore } from "@renderer/store"
-import { m } from "framer-motion"
+import { useEntry, useFeedHeaderTitle } from "@renderer/store"
 import { useEffect, useState } from "react"
 
 import { LoadingCircle } from "../../components/ui/loading"
@@ -43,9 +44,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
   const entry = useEntry(entryId)
   const [content, setContent] = useState<JSX.Element>()
-  const readerRenderInlineStyle = useUIStore(
-    (state) => state.readerRenderInlineStyle,
-  )
+  const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
   useEffect(() => {
     // Fallback data, if local data is broken should fallback to cached query data.
     const processContent = entry?.entries.content ?? data?.entries.content
@@ -85,7 +84,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     },
   )
 
-  const readerFontFamily = useUIStore((state) => state.readerFontFamily)
+  const readerFontFamily = useUISettingKey("readerFontFamily")
 
   if (!entry) return null
 

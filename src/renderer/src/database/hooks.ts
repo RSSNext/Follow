@@ -1,8 +1,8 @@
 import { createAtomHooks, jotaiStore } from "@renderer/lib/jotai"
-import { buildStorageNS } from "@renderer/lib/ns"
+import { getStorageNS } from "@renderer/lib/ns"
 import { atomWithStorage } from "jotai/utils"
 
-const SHOULD_USE_INDEXED_DB_KEY = buildStorageNS("shouldUseIndexedDB")
+const SHOULD_USE_INDEXED_DB_KEY = getStorageNS("shouldUseIndexedDB")
 
 export const [
   __shouldUseIndexedDBAtom,

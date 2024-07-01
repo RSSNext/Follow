@@ -1,6 +1,6 @@
 /* eslint-disable @eslint-react/dom/no-dangerously-set-innerhtml */
+import { useUISettingSelector } from "@renderer/atoms"
 import { cn } from "@renderer/lib/utils"
-import { useUIStore } from "@renderer/store"
 import type { FC } from "react"
 import { useLayoutEffect, useMemo, useRef, useState } from "react"
 import type {
@@ -51,7 +51,7 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
 
   const [loaded, setLoaded] = useState(false)
 
-  const codeTheme = useUIStore((s) => overrideTheme || s.codeHighlightTheme)
+  const codeTheme = useUISettingSelector((s) => overrideTheme || s.codeHighlightTheme)
   useLayoutEffect(() => {
     let isMounted = true
     setLoaded(false)

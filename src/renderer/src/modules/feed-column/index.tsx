@@ -4,6 +4,7 @@ import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
 import { ProfileButton } from "@renderer/components/user-button"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
+import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { APP_NAME, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { Routes } from "@renderer/lib/enum"
@@ -99,6 +100,7 @@ export function FeedColumn() {
   const normalStyle =
     !window.electron || window.electron.process.platform !== "darwin"
 
+  const reduceMotion = useReduceMotion()
   return (
     <Vibrancy
       className="flex h-full flex-col gap-3 pt-2.5"
@@ -158,7 +160,7 @@ export function FeedColumn() {
         ))}
       </div>
       <div className="size-full overflow-hidden" ref={carouselRef}>
-        <m.div className="flex h-full" style={{ x: spring }}>
+        <m.div className="flex h-full" style={{ x: reduceMotion ? -active * 256 : spring }}>
           {views.map((item, index) => (
             <section
               key={item.name}

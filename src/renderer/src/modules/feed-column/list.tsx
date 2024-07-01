@@ -1,3 +1,4 @@
+import { useUISettingKey } from "@renderer/atoms"
 import { useBizQuery } from "@renderer/hooks"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteFeedId } from "@renderer/hooks/biz/useRouteParams"
@@ -11,7 +12,6 @@ import type { SubscriptionPlainModel } from "@renderer/store"
 import {
   getFeedById,
   useSubscriptionByView,
-  useUIStore,
   useUnreadStore,
 } from "@renderer/store"
 import { useMemo, useState } from "react"
@@ -123,7 +123,7 @@ export function FeedList({
 
   const feedId = useRouteFeedId()
   const navigate = useNavigateEntry()
-  const showUnreadCount = useUIStore((state) => state.sidebarShowUnreadCount)
+  const showUnreadCount = useUISettingKey("sidebarShowUnreadCount")
 
   return (
     <div className={cn(className, "font-medium")}>

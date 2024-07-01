@@ -1,4 +1,4 @@
-import { m } from "framer-motion"
+import { m } from "@renderer/components/common/Motion"
 
 import { RootPortal } from "../../portal"
 
