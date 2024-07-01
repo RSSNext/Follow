@@ -17,7 +17,7 @@ export const useFeedClaimModal = ({ feedId }: {
     present({
       title: "Feed Claim",
       content: () => createElement(FeedClaimModalContent, { feedId }),
-      modalClassName: "!h-auto",
+      modalClassName: "!h-auto !max-h-screen",
     })
   }, [feedId, present])
 }

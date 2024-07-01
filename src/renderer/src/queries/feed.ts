@@ -2,6 +2,7 @@ import { getUser } from "@renderer/atoms/user"
 import { useBizQuery } from "@renderer/hooks"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
+import { formatXml } from "@renderer/lib/utils"
 import { feedActions } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
@@ -30,8 +31,13 @@ export const feed = {
     defineQuery(["feed", "claimMessage", feedId], async () =>
       apiClient.feeds.claim.message.$get({ query: { feedId } }).then((res) => {
         res.data.json = JSON.stringify(JSON.parse(res.data.json), null, 2)
-        const $document = new DOMParser().parseFromString(res.data.xml, "text/xml")
-        res.data.xml = new XMLSerializer().serializeToString($document)
+        const $document = new DOMParser().parseFromString(
+          res.data.xml,
+          "text/xml",
+        )
+        res.data.xml = formatXml(
+          new XMLSerializer().serializeToString($document),
+        )
         return res
       })),
 }

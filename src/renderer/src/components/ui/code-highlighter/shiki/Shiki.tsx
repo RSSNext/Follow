@@ -14,6 +14,7 @@ import { default as getWasm } from "shiki/wasm"
 
 import { CopyButton } from "../copy-button"
 import { shikiTransformers } from "./shared"
+import styles from "./shiki.module.css"
 
 const shiki = await createHighlighterCore({
   themes: [
@@ -31,6 +32,9 @@ export interface ShikiProps {
   attrs?: string
   className?: string
 
+  transparent?: boolean
+
+  theme?: string
 }
 
 let langModule: Record<
@@ -41,13 +45,13 @@ let themeModule: Record<BundledTheme, DynamicImportThemeRegistration> | null =
   null
 
 export const ShikiHighLighter: FC<ShikiProps> = (props) => {
-  const { code, language, className } = props
+  const { code, language, className, theme: overrideTheme } = props
   const loadThemesRef = useRef([] as string[])
   const loadLanguagesRef = useRef([] as string[])
 
   const [loaded, setLoaded] = useState(false)
 
-  const codeTheme = useUIStore((s) => s.codeHighlightTheme)
+  const codeTheme = useUIStore((s) => overrideTheme || s.codeHighlightTheme)
   useLayoutEffect(() => {
     let isMounted = true
     setLoaded(false)
@@ -131,7 +135,7 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
 const ShikiCode: FC<ShikiProps & {
   codeTheme: string
 
-}> = ({ code, language, codeTheme, className }) => {
+}> = ({ code, language, codeTheme, className, transparent }) => {
   const rendered = useMemo(() => {
     try {
       return shiki.codeToHtml(code, {
@@ -156,9 +160,9 @@ const ShikiCode: FC<ShikiProps & {
     )
   }
   return (
-    <div className={cn("group relative", className)}>
+    <div className={cn("group relative", styles["shiki-wrapper"], transparent ? styles["transparent"] : null, className)}>
       <div dangerouslySetInnerHTML={{ __html: rendered }} />
-      <CopyButton value={code} className="absolute right-2 top-2 opacity-0 duration-200 group-hover:opacity-100" />
+      <CopyButton value={code} className="absolute right-1 top-1 opacity-0 duration-200 group-hover:opacity-100" />
     </div>
   )
 }

@@ -4,6 +4,7 @@ import {
   CopyButton,
   ShikiHighLighter,
 } from "@renderer/components/ui/code-highlighter"
+import { useShikiDefaultTheme } from "@renderer/components/ui/code-highlighter/shiki/hooks"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import {
   Tabs,
@@ -34,6 +35,8 @@ export const FeedClaimModalContent: FC<{
     isPending,
     isSuccess,
   } = useClaimFeedMutation(feedId)
+
+  const shikiTheme = useShikiDefaultTheme()
 
   if (!feed) return null
 
@@ -92,6 +95,8 @@ export const FeedClaimModalContent: FC<{
                 <b>XML Format</b>
               </p>
               <ShikiHighLighter
+                transparent
+                theme={shikiTheme}
                 className="group relative mt-3 cursor-auto select-text whitespace-pre break-words rounded-lg border border-border bg-zinc-100 p-2 text-sm dark:bg-neutral-800 [&_pre]:whitespace-pre [&_pre]:break-words"
                 code={claimMessage?.data.xml || ""}
                 language="xml"
@@ -100,6 +105,8 @@ export const FeedClaimModalContent: FC<{
                 <b>JSON Format</b>
               </p>
               <ShikiHighLighter
+                transparent
+                theme={shikiTheme}
                 className="group relative mt-3 cursor-auto select-text whitespace-pre break-words rounded-lg border border-border bg-zinc-100 p-2 text-sm dark:bg-neutral-800 [&_pre]:whitespace-pre [&_pre]:break-words"
                 code={JSON.stringify(
                   JSON.parse(claimMessage?.data.json || "{}"),
