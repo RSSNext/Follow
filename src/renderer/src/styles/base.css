@@ -10,7 +10,8 @@ body,
 }
 
 :focus-visible {
-  outline: theme(colors.theme.accent.DEFAULT) auto 1px;
+  /* outline: theme(colors.theme.accent.DEFAULT) auto 1px; */
+  outline: none;
 }
 
 button,

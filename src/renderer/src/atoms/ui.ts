@@ -26,7 +26,14 @@ const createDefaultSettings = () => ({
   readerRenderInlineStyle: false,
   codeHighlightTheme: "github-dark",
 })
-const atom = atomWithStorage(getStorageNS("ui"), createDefaultSettings())
+const atom = atomWithStorage(
+  getStorageNS("ui"),
+  createDefaultSettings(),
+  undefined,
+  {
+    getOnInit: true,
+  },
+)
 const [, , useUISettingValue, , getUISettings, setUISettings] =
   createAtomHooks(atom)
 
