@@ -1,4 +1,6 @@
 .shiki-wrapper {
+  @apply rounded-md overflow-hidden;
+
   &.transparent {
     :global {
       .shiki,
@@ -10,7 +12,7 @@
 
   :global {
     pre {
-      @apply !m-0 !p-0 overflow-auto;
+      @apply !m-0 overflow-auto p-2;
 
       font-size: min(1em, 16px);
     }

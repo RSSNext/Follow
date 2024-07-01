@@ -97,7 +97,7 @@ export const FeedClaimModalContent: FC<{
               <ShikiHighLighter
                 transparent
                 theme={shikiTheme}
-                className="group relative mt-3 cursor-auto select-text whitespace-pre break-words rounded-lg border border-border bg-zinc-100 p-2 text-sm dark:bg-neutral-800 [&_pre]:whitespace-pre [&_pre]:break-words"
+                className="group relative mt-3 cursor-auto select-text whitespace-pre break-words rounded-lg border border-border bg-zinc-100 p-2 text-sm dark:bg-neutral-800 [&_pre]:whitespace-pre [&_pre]:break-words [&_pre]:!p-0"
                 code={claimMessage?.data.xml || ""}
                 language="xml"
               />
@@ -107,7 +107,7 @@ export const FeedClaimModalContent: FC<{
               <ShikiHighLighter
                 transparent
                 theme={shikiTheme}
-                className="group relative mt-3 cursor-auto select-text whitespace-pre break-words rounded-lg border border-border bg-zinc-100 p-2 text-sm dark:bg-neutral-800 [&_pre]:whitespace-pre [&_pre]:break-words"
+                className="group relative mt-3 cursor-auto select-text whitespace-pre break-words rounded-lg border border-border bg-zinc-100 p-2 text-sm dark:bg-neutral-800 [&_pre]:whitespace-pre [&_pre]:break-words [&_pre]:!p-0"
                 code={JSON.stringify(
                   JSON.parse(claimMessage?.data.json || "{}"),
                   null,
