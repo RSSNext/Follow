@@ -1,5 +1,5 @@
+import { m } from "@renderer/components/common/Motion"
 import { stopPropagation } from "@renderer/lib/dom"
-import { m } from "framer-motion"
 import type { FC } from "react"
 import { useState } from "react"
 import { Mousewheel, Scrollbar, Virtual } from "swiper/modules"
