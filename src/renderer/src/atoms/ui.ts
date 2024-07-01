@@ -30,6 +30,14 @@ const atom = atomWithStorage(getStorageNS("ui"), createDefaultSettings())
 const [, , useUISettingValue, , getUISettings, setUISettings] =
   createAtomHooks(atom)
 
+export const initializeDefaultUISettings = () => {
+  const currentSettings = getUISettings()
+  const defaultSettings = createDefaultSettings()
+  if (typeof currentSettings !== "object") setUISettings(defaultSettings)
+  const newSettings = { ...defaultSettings, ...currentSettings }
+  setUISettings(newSettings)
+}
+
 export { getUISettings, useUISettingValue }
 export const useUISettingKey = <
   T extends keyof ReturnType<typeof getUISettings>,
