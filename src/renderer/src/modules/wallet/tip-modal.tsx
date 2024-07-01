@@ -4,6 +4,8 @@ import { Divider } from "@renderer/components/ui/divider"
 import { Input } from "@renderer/components/ui/input"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useCurrentModal } from "@renderer/components/ui/modal"
+import { RadioGroup, useRadioContext } from "@renderer/components/ui/radio-group"
+import { RadioCard } from "@renderer/components/ui/radio-group/RadioCard"
 import { Balance } from "@renderer/components/ui/wallet/balance"
 import { nextFrame } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
@@ -14,7 +16,7 @@ import { useState } from "react"
 
 import { useSettingModal } from "../settings/modal/hooks-hack"
 
-const DEFAULT_RECOMMENDED_TIP = 0.1
+const DEFAULT_RECOMMENDED_TIP = 1
 
 export const TipModalContent: FC<{
   userId?: string
@@ -32,6 +34,7 @@ export const TipModalContent: FC<{
   const tipMutation = useWalletTipMutation()
 
   const [amount, setAmount] = useState(DEFAULT_RECOMMENDED_TIP > balanceNumber ? balanceNumber : DEFAULT_RECOMMENDED_TIP)
+  const [amountCard, setAmountCard] = useState("1")
 
   const amountBigInt = from(amount, 18)[0]
   const remainingBalance = subtract(balanceBigInt, amountBigInt)[0]
@@ -43,6 +46,29 @@ export const TipModalContent: FC<{
   const { dismiss } = useCurrentModal()
 
   const settingModalPresent = useSettingModal()
+
+  const CustomBalanceInput = () => {
+    const { onChange: ctxOnChange } = useRadioContext()
+
+    return (
+      <Input
+        className="focus:border-0"
+        type="number"
+        min={0}
+        max={balanceNumber}
+        step={0.01}
+        placeholder="Enter amount"
+        value={amount}
+        onClick={() => {
+          setAmountCard("custom")
+          ctxOnChange?.("custom")
+        }}
+        onChange={(e) => {
+          setAmount(Number(e.target.value))
+        }}
+      />
+    )
+  }
 
   if (transactionsQuery.isPending || myWallet.isPending) {
     return (
@@ -101,20 +127,32 @@ export const TipModalContent: FC<{
   return (
     <div className="flex w-[80vw] max-w-[350px] flex-col gap-5">
       <p className="text-sm text-theme-foreground/80">
-        ⭐ Tip to show your support! Your tip will be added to the author's wallet.
+        ⭐ Tip to show your support! Your tip will be added to the author's
+        wallet.
       </p>
 
       <div className="flex flex-col justify-center gap-y-2">
         <div className="font-bold">Amount</div>
-        <Input
-          type="number"
-          min={0}
-          max={balanceNumber}
-          step={0.01}
-          placeholder="Enter amount"
-          value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
-        />
+
+        <RadioGroup
+          value={amountCard}
+          onValueChange={(value) => {
+            setAmountCard(value)
+            if (value === "custom") return
+            setAmount(Number(value))
+          }}
+        >
+          <div className="grid grid-cols-3 gap-2">
+            <RadioCard className="justify-center" label="1.00" value="1" />
+            <RadioCard className="justify-center" label="2.00" value="2" />
+
+            <RadioCard
+              className="justify-center p-0"
+              label={(<CustomBalanceInput />)}
+              value="custom"
+            />
+          </div>
+        </RadioGroup>
 
         <Divider className="my-2" />
 
@@ -123,11 +161,19 @@ export const TipModalContent: FC<{
             <div className="font-bold">Balance</div>
             <Balance withSuffix>{balanceBigInt}</Balance>
           </div>
-          <div className={cn("flex flex-row gap-x-2", { "text-red-500": wrongNumberRange })}>
+          <div
+            className={cn("flex flex-row gap-x-2", {
+              "text-red-500": wrongNumberRange,
+            })}
+          >
             <div className="font-bold">Tipping</div>
             <Balance withSuffix>{amountBigInt}</Balance>
           </div>
-          <div className={cn("flex flex-row gap-x-2", { "text-red-500": wrongNumberRange })}>
+          <div
+            className={cn("flex flex-row gap-x-2", {
+              "text-red-500": wrongNumberRange,
+            })}
+          >
             <div className="font-bold">Remaining</div>
             <Balance withSuffix>{remainingBalance}</Balance>
           </div>
@@ -144,7 +190,11 @@ export const TipModalContent: FC<{
               setShowConfirm(true)
               return
             }
-            tipMutation.mutate({ userId, feedId, amount: amountBigInt.toString() })
+            tipMutation.mutate({
+              userId,
+              feedId,
+              amount: amountBigInt.toString(),
+            })
             setShowConfirm(false)
           }}
           variant={tipMutation.isSuccess ? "plain" : "primary"}
@@ -155,9 +205,13 @@ export const TipModalContent: FC<{
           {showConfirm ? (
             <div className="flex flex-row justify-center gap-x-1">
               Confirm Tip
-              <Balance withTooltip={false} withSuffix>{amountBigInt}</Balance>
+              <Balance withTooltip={false} withSuffix>
+                {amountBigInt}
+              </Balance>
             </div>
-          ) : "Tip Now"}
+          ) : (
+            "Tip Now"
+          )}
         </StyledButton>
       </div>
     </div>

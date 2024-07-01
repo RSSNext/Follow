@@ -24,32 +24,53 @@ export const TransactionsSection = () => {
     <div>
       <SettingSectionTitle title="Transactions" />
 
-      <div className="overflow-x-scroll">
+      <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead size="sm" className="uppercase">Type</TableHead>
-              <TableHead size="sm" className="uppercase">Amount</TableHead>
-              <TableHead size="sm" className="uppercase">From</TableHead>
-              <TableHead size="sm" className="uppercase">To</TableHead>
-              <TableHead size="sm" className="uppercase">Feed</TableHead>
-              <TableHead size="sm" className="uppercase">Date</TableHead>
+              <TableHead size="sm" className="uppercase">
+                Type
+              </TableHead>
+              <TableHead size="sm" className="uppercase">
+                Amount
+              </TableHead>
+              <TableHead size="sm" className="uppercase">
+                From
+              </TableHead>
+              <TableHead size="sm" className="uppercase">
+                To
+              </TableHead>
+              {/* <TableHead size="sm" className="uppercase">Feed</TableHead> */}
+              <TableHead size="sm" className="uppercase">
+                Date
+              </TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
-            {transactions.data?.map(
-              (row) => (
-                <TableRow key={row.hash}>
-                  <TableCell align="center" size="sm"><TypeRenderer>{row.type}</TypeRenderer></TableCell>
-                  <TableCell align="center" size="sm"><Balance>{row.powerToken}</Balance></TableCell>
-                  <TableCell align="center" size="sm"><UserRenderer user={row.fromUser} /></TableCell>
-                  <TableCell align="center" size="sm"><UserRenderer user={row.toUser} /></TableCell>
-                  <TableCell align="center" size="sm"><FeedRenderer feed={row.toFeed} /></TableCell>
-                  <TableCell align="center" size="sm">{dayjs(row.createdAt).fromNow()}</TableCell>
-                </TableRow>
-              ),
-            )}
+            {transactions.data?.map((row) => (
+              <TableRow key={row.hash}>
+                <TableCell align="center" size="sm">
+                  <TypeRenderer type={row.type} />
+                </TableCell>
+                <TableCell align="center" size="sm">
+                  <BalanceRenderer
+                    sign={row.fromUserId === user?.id ? "-" : "+"}
+                    amount={row.powerToken}
+                  />
+                </TableCell>
+                <TableCell align="center" size="sm">
+                  <UserRenderer user={row.fromUser} />
+                </TableCell>
+                <TableCell align="center" size="sm">
+                  <UserRenderer user={row.toUser} />
+                </TableCell>
+                {/* <TableCell align="center" size="sm"><FeedRenderer feed={row.toFeed} /></TableCell> */}
+                <TableCell align="center" size="sm">
+                  {dayjs(row.createdAt).fromNow()}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>
@@ -57,15 +78,34 @@ export const TransactionsSection = () => {
   )
 }
 
-const TypeRenderer = ({ children }: { children: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["type"] }) => (
+const TypeRenderer = ({ type }: { type: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["type"] }) => (
   <div className={cn("center rounded-full p-px text-xs uppercase", {
-    "bg-theme-primary text-white": children === "tip",
-    "bg-green-700 text-white": children === "mint",
-    "bg-red-700 text-white": children === "burn",
-    "bg-yellow-700 text-white": children === "withdraw",
+    "bg-theme-accent-700 text-white": type === "tip",
+    "bg-green-700 text-white": type === "mint",
+    "bg-red-700 text-white": type === "burn",
+    "bg-yellow-700 text-white": type === "withdraw",
   })}
   >
-    {children}
+    {type}
+  </div>
+)
+
+const BalanceRenderer = ({
+  sign,
+  amount,
+}: {
+  sign: "+" | "-"
+  amount: NonNullable<
+    ReturnType<typeof useWalletTransactions>["data"]
+  >[number]["powerToken"]
+}) => (
+  <div className={cn("flex items-center justify-center", {
+    "text-green-500": sign === "+",
+    "text-red-500": sign === "-",
+  })}
+  >
+    {sign}
+    <Balance>{amount}</Balance>
   </div>
 )
 
@@ -87,8 +127,8 @@ const UserRenderer = ({ user }: { user?: NonNullable<ReturnType<typeof useWallet
   )
 }
 
-const FeedRenderer = ({ feed }: { feed: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["toFeed"] }) => (
-  <div className="center line-clamp-1 truncate">
-    {feed?.title ?? "-"}
-  </div>
-)
+// const FeedRenderer = ({ feed }: { feed: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["toFeed"] }) => (
+//   <div className="center line-clamp-1 truncate">
+//     {feed?.title ?? "-"}
+//   </div>
+// )
