@@ -12,7 +12,7 @@ import { from, subtract, toNumber } from "dnum"
 import type { FC } from "react"
 import { useState } from "react"
 
-import { useSettingModal } from "../settings/modal/hooks"
+import { useSettingModal } from "../settings/modal/hooks-hack"
 
 const DEFAULT_RECOMMENDED_TIP = 0.1
 

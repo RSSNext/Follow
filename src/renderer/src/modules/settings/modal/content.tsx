@@ -1,21 +1,22 @@
-import { LoadRemixAsyncComponent } from "@renderer/components/common/LoadRemixAsyncComponent"
 import { MotionButtonBase } from "@renderer/components/ui/button"
 import { useCurrentModal } from "@renderer/components/ui/modal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { SettingsTitle } from "@renderer/modules/settings/title"
 import type { FC } from "react"
 
+import { settings } from "../constants"
 import { SettingTabProvider, useSettingTab } from "./context"
 import { SettingModalLayout } from "./layout"
 
 const pages = (() => {
-  const map = import.meta.glob("@renderer/pages/settings/*.tsx")
   const pages = {}
-  for (const key in map) {
-    const filename = key.split("/").pop()
-    if (!filename) continue
-    const settingKey = filename.split(".").slice(0, -1).join(".")
-    pages[settingKey] = map[key]
+  for (const setting of settings) {
+    const filename = setting.path
+
+    pages[filename] = {
+      Component: setting.Component,
+      loader: setting.loader,
+    }
   }
   return pages
 })()
@@ -49,10 +50,16 @@ const Close = () => {
 }
 
 const Content = () => {
-  const key = useSettingTab()
-  const Component = pages[key]
+  const key = useSettingTab() || "general"
+  const { Component, loader } = pages[key]
 
   if (!Component) return null
 
-  return <LoadRemixAsyncComponent Header={SettingsTitle} loader={Component} />
+  return (
+    <>
+      <SettingsTitle loader={loader} />
+      <Component />
+
+    </>
+  )
 }

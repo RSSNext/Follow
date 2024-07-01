@@ -1,7 +1,8 @@
 import type { SettingPageConfig } from "./utils"
 
 function getSettings() {
-  const map = import.meta.glob("../../pages/settings/*.tsx", { eager: true })
+  // eslint-disable-next-line unicorn/prefer-string-raw
+  const map = import.meta.glob("../../pages/settings/\\(settings\\)/*", { eager: true })
 
   const settings = [] as {
     name: string
@@ -9,9 +10,10 @@ function getSettings() {
     path: string
     Component: () => JSX.Element
     priority: number
+    loader: () => SettingPageConfig
   }[]
   for (const path in map) {
-    const p = path.split("/").pop()?.replace(".tsx", "")!
+    const p = path.split("/").pop()?.replace(".tsx", "").replace("(settings)", "")!
 
     if (p === "index" || p === "layout") continue
 
@@ -24,6 +26,7 @@ function getSettings() {
     settings.push({
       ...Module.loader(),
       Component: Module.Component,
+      loader: Module.loader,
       path: p,
     })
   }
