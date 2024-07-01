@@ -18,7 +18,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useCallback } from "react"
 import { bundledThemes } from "shiki/themes"
 
-import { SettingSwitch } from "../control"
+import { SettingDescription, SettingSwitch } from "../control"
 import { SettingSectionTitle } from "../section"
 import { SettingsTitle } from "../title"
 
@@ -96,6 +96,7 @@ export const SettingAppearance = () => {
           setUISetting("readerRenderInlineStyle", c)
         }}
       />
+
       <SettingSectionTitle title="Misc" />
       <SettingSwitch
         label="Show modal overlay"
@@ -104,6 +105,18 @@ export const SettingAppearance = () => {
           setUISetting("modalOverlay", c)
         }}
       />
+      <SettingSwitch
+        label="Reduce motion"
+        checked={state.reduceMotion}
+        onCheckedChange={(c) => {
+          setUISetting("reduceMotion", c)
+        }}
+      />
+      <SettingDescription>
+        Enabling this option will reduce the motion of the element to improve
+        performance and device life, and if it is disabled, it will adapt to the
+        system settings.
+      </SettingDescription>
     </div>
   )
 }

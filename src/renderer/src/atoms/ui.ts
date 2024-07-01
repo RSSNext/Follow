@@ -1,25 +1,32 @@
+import { useRefValue } from "@renderer/hooks"
 import { createAtomHooks } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
 import { useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
-import { useEventCallback } from "usehooks-ts"
 
-const atom = atomWithStorage(getStorageNS("ui"), {
+const createDefaultSettings = () => ({
+  // Sidebar
   entryColWidth: 340,
   opaqueSidebar: false,
-  readerFontFamily: "SN Pro",
-  uiTextSize: 16,
-
-  showDockBadge: true,
   sidebarShowUnreadCount: true,
 
+  // Global UI
+  uiTextSize: 16,
+  // System
+  showDockBadge: true,
+  // Misc
   modalOverlay: true,
   modalDraggable: true,
   modalOpaque: true,
+  reduceMotion: false,
+
+  // Content
+  readerFontFamily: "SN Pro",
   readerRenderInlineStyle: false,
   codeHighlightTheme: "github-dark",
 })
+const atom = atomWithStorage(getStorageNS("ui"), createDefaultSettings())
 const [, , useUISettingValue, , getUISettings, setUISettings] =
   createAtomHooks(atom)
 
@@ -37,11 +44,11 @@ export const useUISettingSelector = <
 >(
     selector: (s: S) => R,
   ): R => {
-  const stableSelector = useEventCallback(selector)
+  const stableSelector = useRefValue(selector)
 
   return useAtomValue(
     // @ts-expect-error
-    useMemo(() => selectAtom(atom, stableSelector), [stableSelector]),
+    useMemo(() => selectAtom(atom, stableSelector.current), [stableSelector]),
   )
 }
 
@@ -53,4 +60,8 @@ export const setUISetting = <K extends keyof ReturnType<typeof getUISettings>>(
     ...getUISettings(),
     [key]: value,
   })
+}
+
+export const clearUISettings = () => {
+  setUISettings(createDefaultSettings())
 }

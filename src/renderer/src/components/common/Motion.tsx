@@ -1,3 +1,4 @@
+import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import type { MotionProps } from "framer-motion"
 import { m as M } from "framer-motion"
 import { createElement, forwardRef } from "react"
@@ -11,14 +12,16 @@ export const m: typeof M = new Proxy(M, {
       return cacheMap.get(p)
     }
     const MotionComponent = forwardRef((props: MotionProps, ref) => {
+      const shouldReduceMotion = useReduceMotion()
       const nextProps = { ...props }
+      if (shouldReduceMotion) {
+        if (props.exit) {
+          delete nextProps.exit
+        }
 
-      if (props.exit) {
-        delete nextProps.exit
-      }
-
-      if (props.initial) {
-        nextProps.initial = true
+        if (props.initial) {
+          nextProps.initial = true
+        }
       }
 
       return createElement(Component, { ...nextProps, ref })
