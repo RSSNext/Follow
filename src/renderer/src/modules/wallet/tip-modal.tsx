@@ -35,6 +35,7 @@ export const TipModalContent: FC<{
 
   const [amount, setAmount] = useState(DEFAULT_RECOMMENDED_TIP > balanceNumber ? balanceNumber : DEFAULT_RECOMMENDED_TIP)
   const [amountCard, setAmountCard] = useState("1")
+  const [customAmount, setCustomAmount] = useState(5)
 
   const amountBigInt = from(amount, 18)[0]
   const remainingBalance = subtract(balanceBigInt, amountBigInt)[0]
@@ -109,7 +110,10 @@ export const TipModalContent: FC<{
       </p>
 
       <div className="flex flex-col justify-center gap-y-2">
-        <div className="font-bold">Amount</div>
+        <div className="flex flex-row items-center gap-x-2 font-bold">
+          <i className="i-mgc-power" />
+          <span>Amount</span>
+        </div>
 
         <RadioGroup
           value={amountCard}
@@ -120,22 +124,24 @@ export const TipModalContent: FC<{
           }}
         >
           <div className="grid grid-cols-3 gap-2">
-            <RadioCard className="justify-center" label="1.00" value="1" />
-            <RadioCard className="justify-center" label="2.00" value="2" />
+            <RadioCard wrapperClassName="justify-center" label="1" value="1" />
+            <RadioCard wrapperClassName="justify-center" label="2" value="2" />
 
             <RadioCard
               wrapperClassName="justify-center p-0"
               label={(
                 <CustomBalanceInput
                   max={balanceNumber}
-                  value={amount}
+                  value={customAmount}
                   onChange={(e) => {
                     setAmountCard("custom")
                     setAmount(Number(e.target.value))
+                    setCustomAmount(Number(e.target.value))
                   }}
                   onClick={(e) => {
                     setAmountCard("custom")
                     setAmount(Number(e.currentTarget.value))
+                    setCustomAmount(Number(e.currentTarget.value))
                   }}
                 />
               )}
@@ -224,7 +230,7 @@ const CustomBalanceInput = ({
   return (
     <Input
       key="custom"
-      className="focus:border-0"
+      className="text-center focus:border-0"
       type="number"
       min={0}
       max={max}
