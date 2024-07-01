@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { getSidebarActiveView } from "@renderer/atoms/sidebar"
 import { StyledButton } from "@renderer/components/ui/button"
 import {
   Card,
@@ -18,7 +19,6 @@ import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
 import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
-import { FeedViewType } from "@renderer/lib/enum"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
@@ -197,7 +197,7 @@ export function DiscoverForm({ type }: { type: string }) {
                                   asWidget
                                   url={item.feed.url}
                                   id={item.feed.id}
-                                  defaultView={FeedViewType.Articles}
+                                  defaultView={getSidebarActiveView()}
                                   onSuccess={dismiss}
                                 />
                               ),
