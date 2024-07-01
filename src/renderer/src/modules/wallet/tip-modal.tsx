@@ -47,29 +47,6 @@ export const TipModalContent: FC<{
 
   const settingModalPresent = useSettingModal()
 
-  const CustomBalanceInput = () => {
-    const { onChange: ctxOnChange } = useRadioContext()
-
-    return (
-      <Input
-        className="focus:border-0"
-        type="number"
-        min={0}
-        max={balanceNumber}
-        step={0.01}
-        placeholder="Enter amount"
-        value={amount}
-        onClick={() => {
-          setAmountCard("custom")
-          ctxOnChange?.("custom")
-        }}
-        onChange={(e) => {
-          setAmount(Number(e.target.value))
-        }}
-      />
-    )
-  }
-
   if (transactionsQuery.isPending || myWallet.isPending) {
     return (
       <div className="center h-32 w-[650px]">
@@ -147,8 +124,21 @@ export const TipModalContent: FC<{
             <RadioCard className="justify-center" label="2.00" value="2" />
 
             <RadioCard
-              className="justify-center p-0"
-              label={(<CustomBalanceInput />)}
+              wrapperClassName="justify-center p-0"
+              label={(
+                <CustomBalanceInput
+                  max={balanceNumber}
+                  value={amount}
+                  onChange={(e) => {
+                    setAmountCard("custom")
+                    setAmount(Number(e.target.value))
+                  }}
+                  onClick={(e) => {
+                    setAmountCard("custom")
+                    setAmount(Number(e.target.value))
+                  }}
+                />
+              )}
               value="custom"
             />
           </div>
@@ -215,5 +205,39 @@ export const TipModalContent: FC<{
         </StyledButton>
       </div>
     </div>
+  )
+}
+
+const CustomBalanceInput = ({
+  max,
+  value,
+  onClick,
+  onChange,
+}: {
+  max?: number
+  value: number
+  onClick?: (e: React.MouseEvent<HTMLInputElement>) => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+}) => {
+  const { onChange: ctxOnChange } = useRadioContext()
+
+  return (
+    <Input
+      key="custom"
+      className="focus:border-0"
+      type="number"
+      min={0}
+      max={max}
+      step={0.01}
+      placeholder="Enter amount"
+      value={value}
+      onClick={(e) => {
+        ctxOnChange?.("custom")
+        onClick?.(e)
+      }}
+      onChange={(e) => {
+        onChange?.(e)
+      }}
+    />
   )
 }
