@@ -135,7 +135,7 @@ export const TipModalContent: FC<{
                   }}
                   onClick={(e) => {
                     setAmountCard("custom")
-                    setAmount(Number(e.target.value))
+                    setAmount(Number(e.currentTarget.value))
                   }}
                 />
               )}
@@ -216,7 +216,7 @@ const CustomBalanceInput = ({
 }: {
   max?: number
   value: number
-  onClick?: (e: React.MouseEvent<HTMLInputElement>) => void
+  onClick?: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }) => {
   const { onChange: ctxOnChange } = useRadioContext()
