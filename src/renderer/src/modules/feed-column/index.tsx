@@ -149,6 +149,7 @@ export function FeedColumn() {
               active === index && item.className,
               "flex items-center text-xl",
               "hover:!bg-theme-vibrancyBg",
+              "focus-visible:!outline-none",
             )}
             onClick={(e) => {
               setActive(index)

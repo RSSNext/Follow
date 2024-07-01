@@ -133,6 +133,7 @@ function FeedCategoryImpl({
               className={cn(
                 "flex h-8 items-center [&_.i-mgc-right-cute-fi]:data-[state=open]:rotate-90",
               )}
+              tabIndex={-1}
             >
               <i className="i-mgc-right-cute-fi mr-2 transition-transform" />
             </CollapsibleTrigger>
