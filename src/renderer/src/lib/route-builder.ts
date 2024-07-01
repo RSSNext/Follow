@@ -1,4 +1,5 @@
 import { get, omit } from "lodash-es"
+import { Fragment } from "react/jsx-runtime"
 import type { RouteObject } from "react-router-dom"
 
 type NestedStructure = { [key: string]: NestedStructure }
@@ -83,7 +84,7 @@ export function buildGlobRoutes(
 
       if (isGroupedRoute) {
         const accessPath = `${segmentPathKey}/layout.tsx`
-        const globGetter = get(glob, accessPath)
+        const globGetter = get(glob, accessPath) || (() => Fragment)
         if (pathGetterSet.has(accessPath)) {
           // throw new Error(`duplicate path: ` + accessPath)
 
@@ -91,9 +92,9 @@ export function buildGlobRoutes(
         }
         pathGetterSet.add(accessPath)
 
-        if (!globGetter) {
-          throw new Error("grouped route must have a layout file")
-        }
+        // if (!globGetter) {
+        //   throw new Error("grouped route must have a layout file")
+        // }
 
         const childrenChildren: RouteObject[] = []
         dtsRoutes(`${segmentPathKey}/`, childrenChildren, paths[key], parentPath)

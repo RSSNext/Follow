@@ -7,7 +7,7 @@ import { feedActions } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import { Queries } from "."
+import { entries } from "./entries"
 
 export const feed = {
   byId: ({ id, url }: { id?: string, url?: string }) =>
@@ -80,7 +80,7 @@ export const useRefreshFeedMutation = (feedId?: string) =>
 
     onSuccess() {
       if (!feedId) return
-      Queries.entries
+      entries
         .entries({
           id: feedId!,
         })
