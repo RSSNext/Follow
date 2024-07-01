@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/RSSNext/Follow/main/src/renderer/public/icon.svg" alt="Follow" width="100">
+<img src="https://github.com/RSSNext/follow/assets/41265413/c6c02ad5-cddc-46f5-8420-a47afe1c82fe" alt="Follow" width="100">
 </p>
 <h1 align="center">Follow</h1>
 
