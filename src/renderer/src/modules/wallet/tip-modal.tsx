@@ -7,7 +7,6 @@ import { RadioGroup } from "@renderer/components/ui/radio-group"
 import { RadioCard } from "@renderer/components/ui/radio-group/RadioCard"
 import { Balance } from "@renderer/components/ui/wallet/balance"
 import { nextFrame } from "@renderer/lib/dom"
-import { cn } from "@renderer/lib/utils"
 import { useWallet, useWalletTipMutation, useWalletTransactions } from "@renderer/queries/wallet"
 import { from, toNumber } from "dnum"
 import type { FC } from "react"
@@ -38,10 +37,6 @@ export const TipModalContent: FC<{
 
   const amountBigInt = from(amount, 18)[0]
   const shouldDeductFromCPower = amountBigInt > dPowerBigInt
-  const remainingDPowerBigInt = shouldDeductFromCPower ? BigInt(0) : dPowerBigInt - amountBigInt
-  const toDeductFromCPowerBigInt = shouldDeductFromCPower ? amountBigInt - dPowerBigInt : BigInt(0)
-  const remainingCPowerBigInt = cPowerBigInt - toDeductFromCPowerBigInt
-  const remainingBalance = remainingDPowerBigInt + remainingCPowerBigInt
 
   const wrongNumberRange = amountBigInt > balanceBigInt || amountBigInt <= BigInt(0)
 
@@ -129,56 +124,6 @@ export const TipModalContent: FC<{
         </RadioGroup>
 
         <Divider className="my-2" />
-
-        {/* tipping calculator */}
-        <div className="text-sm text-theme-foreground/80">
-          <div className="flex flex-row justify-between">
-            <div className="font-bold">Balance</div>
-            <Balance withSuffix>{balanceBigInt}</Balance>
-          </div>
-          <div className="ml-1 text-xs text-theme-foreground/60">
-            <div className="flex flex-row justify-between">
-              <div className="font-bold">Daily $POWER</div>
-              <Balance withSuffix>{dPowerBigInt}</Balance>
-            </div>
-            <div className="flex flex-row justify-between">
-              <div className="font-bold">Cashable $POWER</div>
-              <Balance withSuffix>{cPowerBigInt}</Balance>
-            </div>
-          </div>
-
-          <div
-            className={cn("flex flex-row justify-between", {
-              "text-red-500": wrongNumberRange,
-            })}
-          >
-            <div className="font-bold">Tipping</div>
-            <Balance withSuffix>{amountBigInt}</Balance>
-          </div>
-
-          <div
-            className={cn("flex flex-row justify-between", {
-              "text-red-500": wrongNumberRange,
-            })}
-          >
-            <div className="font-bold">Remaining</div>
-            <Balance withSuffix>{remainingBalance}</Balance>
-          </div>
-          <div
-            className={cn("ml-1 text-xs text-theme-foreground/60", {
-              "text-red-500/80": wrongNumberRange,
-            })}
-          >
-            <div className="flex flex-row justify-between">
-              <div className="font-bold">Daily $POWER</div>
-              <Balance withSuffix>{remainingDPowerBigInt}</Balance>
-            </div>
-            <div className="flex flex-row justify-between">
-              <div className="font-bold">Cashable $POWER</div>
-              <Balance withSuffix>{remainingCPowerBigInt}</Balance>
-            </div>
-          </div>
-        </div>
 
         {/* low balance notice */}
         {wrongNumberRange && (
