@@ -186,9 +186,10 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 data: {
                     userId: string;
                     createdAt: string;
-                    powerToken: string;
                     addressIndex: number;
                     address: string | null;
+                    dailyPowerToken: string;
+                    cashablePowerToken: string;
                 }[];
             };
             outputFormat: "json";
@@ -201,9 +202,10 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 data: {
                     userId: string;
                     createdAt: string;
-                    powerToken: string;
                     addressIndex: number;
                     address: string | null;
+                    dailyPowerToken: string;
+                    cashablePowerToken: string;
                 };
             };
             outputFormat: "json";

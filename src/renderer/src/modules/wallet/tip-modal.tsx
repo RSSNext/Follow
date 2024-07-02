@@ -1,16 +1,15 @@
 import { useUser } from "@renderer/atoms/user"
 import { StyledButton } from "@renderer/components/ui/button"
 import { Divider } from "@renderer/components/ui/divider"
-import { Input } from "@renderer/components/ui/input"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useCurrentModal } from "@renderer/components/ui/modal"
-import { RadioGroup, useRadioContext } from "@renderer/components/ui/radio-group"
+import { RadioGroup } from "@renderer/components/ui/radio-group"
 import { RadioCard } from "@renderer/components/ui/radio-group/RadioCard"
 import { Balance } from "@renderer/components/ui/wallet/balance"
 import { nextFrame } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useWallet, useWalletTipMutation, useWalletTransactions } from "@renderer/queries/wallet"
-import { from, subtract, toNumber } from "dnum"
+import { from, toNumber } from "dnum"
 import type { FC } from "react"
 import { useState } from "react"
 
@@ -26,7 +25,9 @@ export const TipModalContent: FC<{
   const myWallet = useWallet({ userId: user?.id })
   const myWalletData = myWallet.data?.[0]
 
-  const balanceBigInt = BigInt(myWalletData?.powerToken ?? 0)
+  const dPowerBigInt = BigInt(myWalletData?.dailyPowerToken ?? 0)
+  const cPowerBigInt = BigInt(myWalletData?.cashablePowerToken ?? 0)
+  const balanceBigInt = cPowerBigInt + dPowerBigInt
   const balanceNumber = toNumber(from(balanceBigInt, 18), { digits: 2, trailingZeros: true })
 
   const transactionsQuery = useWalletTransactions({ toUserId: userId, toFeedId: feedId })
@@ -34,11 +35,13 @@ export const TipModalContent: FC<{
   const tipMutation = useWalletTipMutation()
 
   const [amount, setAmount] = useState(DEFAULT_RECOMMENDED_TIP > balanceNumber ? balanceNumber : DEFAULT_RECOMMENDED_TIP)
-  const [amountCard, setAmountCard] = useState("1")
-  const [customAmount, setCustomAmount] = useState(5)
 
   const amountBigInt = from(amount, 18)[0]
-  const remainingBalance = subtract(balanceBigInt, amountBigInt)[0]
+  const shouldDeductFromCPower = amountBigInt > dPowerBigInt
+  const remainingDPowerBigInt = shouldDeductFromCPower ? BigInt(0) : dPowerBigInt - amountBigInt
+  const toDeductFromCPowerBigInt = shouldDeductFromCPower ? amountBigInt - dPowerBigInt : BigInt(0)
+  const remainingCPowerBigInt = cPowerBigInt - toDeductFromCPowerBigInt
+  const remainingBalance = remainingDPowerBigInt + remainingCPowerBigInt
 
   const wrongNumberRange = amountBigInt > balanceBigInt || amountBigInt <= BigInt(0)
 
@@ -116,64 +119,87 @@ export const TipModalContent: FC<{
         </div>
 
         <RadioGroup
-          value={amountCard}
-          onValueChange={(value) => {
-            setAmountCard(value)
-            if (value === "custom") return
-            setAmount(Number(value))
-          }}
+          value={amount.toString()}
+          onValueChange={(value) => setAmount(Number(value))}
         >
           <div className="grid grid-cols-3 gap-2">
             <RadioCard wrapperClassName="justify-center" label="1" value="1" />
             <RadioCard wrapperClassName="justify-center" label="2" value="2" />
-
-            <RadioCard
-              wrapperClassName="justify-center p-0"
-              label={(
-                <CustomBalanceInput
-                  max={balanceNumber}
-                  value={customAmount}
-                  onChange={(e) => {
-                    setAmountCard("custom")
-                    setAmount(Number(e.target.value))
-                    setCustomAmount(Number(e.target.value))
-                  }}
-                  onClick={(e) => {
-                    setAmountCard("custom")
-                    setAmount(Number(e.currentTarget.value))
-                    setCustomAmount(Number(e.currentTarget.value))
-                  }}
-                />
-              )}
-              value="custom"
-            />
+            <RadioCard wrapperClassName="justify-center" label="5" value="5" />
           </div>
         </RadioGroup>
 
         <Divider className="my-2" />
 
+        {/* tipping calculator */}
         <div className="text-sm text-theme-foreground/80">
-          <div className="flex flex-row gap-x-2">
+          <div className="flex flex-row justify-between">
             <div className="font-bold">Balance</div>
             <Balance withSuffix>{balanceBigInt}</Balance>
           </div>
+          <div className="ml-1 text-xs text-theme-foreground/60">
+            <div className="flex flex-row justify-between">
+              <div className="font-bold">Daily $POWER</div>
+              <Balance withSuffix>{dPowerBigInt}</Balance>
+            </div>
+            <div className="flex flex-row justify-between">
+              <div className="font-bold">Cashable $POWER</div>
+              <Balance withSuffix>{cPowerBigInt}</Balance>
+            </div>
+          </div>
+
           <div
-            className={cn("flex flex-row gap-x-2", {
+            className={cn("flex flex-row justify-between", {
               "text-red-500": wrongNumberRange,
             })}
           >
             <div className="font-bold">Tipping</div>
             <Balance withSuffix>{amountBigInt}</Balance>
           </div>
+
           <div
-            className={cn("flex flex-row gap-x-2", {
+            className={cn("flex flex-row justify-between", {
               "text-red-500": wrongNumberRange,
             })}
           >
             <div className="font-bold">Remaining</div>
             <Balance withSuffix>{remainingBalance}</Balance>
           </div>
+          <div
+            className={cn("ml-1 text-xs text-theme-foreground/60", {
+              "text-red-500/80": wrongNumberRange,
+            })}
+          >
+            <div className="flex flex-row justify-between">
+              <div className="font-bold">Daily $POWER</div>
+              <Balance withSuffix>{remainingDPowerBigInt}</Balance>
+            </div>
+            <div className="flex flex-row justify-between">
+              <div className="font-bold">Cashable $POWER</div>
+              <Balance withSuffix>{remainingCPowerBigInt}</Balance>
+            </div>
+          </div>
         </div>
+
+        {/* low balance notice */}
+        {wrongNumberRange && (
+          <div className="text-xs text-red-500">
+            <span>
+              Your balance is not enough to cover this tip. Please adjust the
+              amount.
+            </span>
+          </div>
+        )}
+
+        {/* cPower spent notice */}
+        {!wrongNumberRange && shouldDeductFromCPower && (
+          <div className="text-xs text-red-500">
+            <span>
+              Your daily $POWER is not enough to cover this tip. The remaining
+              amount will be deducted from your cashable $POWER.
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="flex justify-end">
@@ -211,39 +237,5 @@ export const TipModalContent: FC<{
         </StyledButton>
       </div>
     </div>
-  )
-}
-
-const CustomBalanceInput = ({
-  max,
-  value,
-  onClick,
-  onChange,
-}: {
-  max?: number
-  value: number
-  onClick?: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-}) => {
-  const { onChange: ctxOnChange } = useRadioContext()
-
-  return (
-    <Input
-      key="custom"
-      className="text-center focus:border-0"
-      type="number"
-      min={0}
-      max={max}
-      step={0.01}
-      placeholder="Enter amount"
-      value={value}
-      onClick={(e) => {
-        ctxOnChange?.("custom")
-        onClick?.(e)
-      }}
-      onChange={(e) => {
-        onChange?.(e)
-      }}
-    />
   )
 }
