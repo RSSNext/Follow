@@ -82,4 +82,4 @@ export const FEED_COLLECTION_LIST = "collections"
 export const QUERY_PERSIST_KEY = getStorageNS("REACT_QUERY_OFFLINE_CACHE")
 
 /// Route Keys
-export const ROUTE_FEED_PENDING = "pending"
+export const ROUTE_FEED_PENDING = "all"
