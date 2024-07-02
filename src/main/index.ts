@@ -58,14 +58,15 @@ app.whenReady().then(() => {
     const urlObj = new URL(url)
     if (urlObj.hostname === "auth") {
       const token = urlObj.searchParams.get("token")
-      if (token && process.env["VITE_API_URL"]) {
+      const apiURL = process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
+      if (token && apiURL) {
         mainWindow.webContents.session.cookies.set({
-          url: process.env["VITE_API_URL"],
+          url: apiURL,
           name: "authjs.session-token",
           value: token,
           secure: true,
           httpOnly: true,
-          domain: new URL(process.env["VITE_API_URL"]).hostname,
+          domain: new URL(apiURL).hostname,
           sameSite: "no_restriction",
         })
         mainWindow.reload()
