@@ -19,6 +19,7 @@ import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { SubscriptionPlainModel } from "@renderer/store"
 import { getFeedById, useFeedById, useUnreadStore } from "@renderer/store"
+import { WEB_URL } from "@shared/constants"
 import { memo, useCallback } from "react"
 
 import { useFeedClaimModal } from "../claim/hooks"
@@ -87,7 +88,7 @@ const FeedItemImpl = ({
       onClick={handleNavigate}
       onDoubleClick={() => {
         window.open(
-          `${import.meta.env.VITE_WEB_URL}/feed/${
+          `${WEB_URL}/feed/${
             subscription.feedId
           }?view=${view}`,
           "_blank",
@@ -142,7 +143,7 @@ const FeedItemImpl = ({
               label: "Open Feed in Browser",
               click: () =>
                 window.open(
-                  `${import.meta.env.VITE_WEB_URL}/feed/${
+                  `${WEB_URL}/feed/${
                     subscription.feedId
                   }?view=${view}`,
                   "_blank",
