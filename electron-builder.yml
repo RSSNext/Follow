@@ -1,5 +1,5 @@
 appId: io.follow
-productName: follow
+productName: Follow
 directories:
   buildResources: build
 files:
