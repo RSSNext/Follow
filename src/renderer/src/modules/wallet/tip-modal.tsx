@@ -39,8 +39,6 @@ export const TipModalContent: FC<{
 
   const wrongNumberRange = amountBigInt > balanceBigInt || amountBigInt <= BigInt(0)
 
-  const [showConfirm, setShowConfirm] = useState(false)
-
   const { dismiss } = useCurrentModal()
 
   const settingModalPresent = useSettingModal()
@@ -141,32 +139,18 @@ export const TipModalContent: FC<{
           isLoading={tipMutation.isPending}
           onClick={() => {
             if (tipMutation.isPending) return
-            if (!showConfirm) {
-              setShowConfirm(true)
-              return
-            }
             tipMutation.mutate({
               userId,
               feedId,
               amount: amountBigInt.toString(),
             })
-            setShowConfirm(false)
           }}
           variant={tipMutation.isSuccess ? "outline" : "primary"}
         >
           {tipMutation.isSuccess && (
             <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />
           )}
-          {showConfirm ? (
-            <div className="flex flex-row justify-center gap-x-1">
-              Confirm Tip
-              <Balance withTooltip={false} withSuffix>
-                {amountBigInt}
-              </Balance>
-            </div>
-          ) : (
-            "Tip Now"
-          )}
+          Tip Now
         </StyledButton>
       </div>
     </div>
