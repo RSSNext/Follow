@@ -32,9 +32,11 @@ export const RadioCard: FC<
       id={groupId || id}
       className={cn(
         "flex cursor-pointer items-center rounded-md p-2",
-        "border bg-background hover:border-theme-accent-400 hover:bg-theme-item-hover",
-        "ring-theme-accent/20 duration-200 focus:outline-none focus:ring-2",
-        selected && "border-theme-accent-500 bg-theme-item-active",
+        "border bg-background hover:border-theme-accent-400",
+
+        "ring-0 ring-theme-accent/20 duration-200",
+
+        selected && "border-theme-accent-500 border-theme-accent/80 outline-none ring-2",
         wrapperClassName,
       )}
     >
