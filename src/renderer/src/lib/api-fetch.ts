@@ -51,7 +51,8 @@ export const getFetchErrorMessage = (error: Error) => {
       const json = JSON.parse(error.response?._data)
       // TODO get the biz code to show the error message, and for i18n
       // const bizCode = json.code
-      return json.message || error.message
+      const { reason } = json
+      return `${json.message || error.message}${reason ? `: ${reason}` : ""}`
     } catch {
       return error.message
     }
