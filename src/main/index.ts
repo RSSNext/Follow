@@ -4,6 +4,7 @@ import path from "node:path"
 
 import { registerIpcMain } from "@egoist/tipc/main"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
+import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@shared/constants"
 import { extractElectronWindowOptions } from "@shared/electron"
 import { app, BrowserWindow, session } from "electron"
 
@@ -17,12 +18,12 @@ registerIpcMain(router)
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient("follow", process.execPath, [
+    app.setAsDefaultProtocolClient(APP_PROTOCOL, process.execPath, [
       path.resolve(process.argv[1]),
     ])
   }
 } else {
-  app.setAsDefaultProtocolClient("follow")
+  app.setAsDefaultProtocolClient(APP_PROTOCOL)
 }
 
 if (app.dock) {
@@ -74,7 +75,7 @@ app.whenReady().then(() => {
 
       const { height, resizable, width } = options || {}
       createWindow({
-        extraPath: url.replace("follow:/", ""),
+        extraPath: url.replace(DEEPLINK_SCHEME, "/"),
         width: width ?? 800,
         height: height ?? 600,
         resizable,
