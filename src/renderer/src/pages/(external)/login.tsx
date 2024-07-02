@@ -36,7 +36,7 @@ export function Component() {
       <Logo className="size-20" />
       <h1 className="text-3xl font-bold">
         Log in to
-        {APP_NAME}
+        {` ${APP_NAME}`}
       </h1>
       {redirecting ? (
         <div>Redirecting</div>

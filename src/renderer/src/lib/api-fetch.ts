@@ -1,4 +1,5 @@
 import { getCsrfToken } from "@hono/auth-js/react"
+import { setAuthFail } from "@renderer/atoms"
 import type { AppType } from "@renderer/hono"
 import { hc } from "hono/client"
 import { FetchError, ofetch } from "ofetch"
@@ -28,7 +29,9 @@ export const apiFetch = ofetch.create({
     const { router } = window
     if (context.response.status === 401) {
       // Or we can present LoginModal here.
-      router.navigate("/login")
+      // router.navigate("/login")
+      // If any response status is 401, we can set auth fail. Maybe some bug, but if navigate to login page, had same issues
+      setAuthFail(true)
     }
     try {
       const json = JSON.parse(context.response._data)

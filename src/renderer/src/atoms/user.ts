@@ -5,3 +5,6 @@ import { atom } from "jotai"
 export const [, , useUser, useSetUser, getUser, setUser] = createAtomHooks(
   atom<Nullable<User>>(null),
 )
+
+export const [, , useAuthFail, useSetAuthFail, getAuthFail, setAuthFail] =
+  createAtomHooks(atom<boolean>(false))

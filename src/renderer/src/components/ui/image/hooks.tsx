@@ -1,6 +1,7 @@
 import { useCallback } from "react"
 
 import { useModalStack } from "../modal/stacked/hooks"
+import { NoopChildren } from "../modal/stacked/utils"
 import { PreviewImageContent } from "./preview-image"
 
 export const usePreviewImages = () => {
@@ -15,7 +16,7 @@ export const usePreviewImages = () => {
         ),
         title: "Image",
         overlay: true,
-        CustomModalComponent: ({ children }) => children,
+        CustomModalComponent: NoopChildren,
         clickOutsideToDismiss: true,
       })
     },
