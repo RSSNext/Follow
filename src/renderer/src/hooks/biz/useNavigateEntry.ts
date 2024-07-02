@@ -1,5 +1,5 @@
 import { getReadonlyRoute, getStableRouterNavigate } from "@renderer/atoms"
-import { ROUTE_FEED_PENDING } from "@renderer/lib/constants"
+import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "@renderer/lib/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { isUndefined } from "lodash-es"
 import { useCallback } from "react"
@@ -39,7 +39,7 @@ export const useNavigateEntry = () => useCallback((options: NavigateEntryOptions
 
   return getStableRouterNavigate()?.(
       `/feeds/${finalFeedId}/${
-        entryId || ROUTE_FEED_PENDING
+        entryId || ROUTE_ENTRY_PENDING
       }?${nextSearchParams.toString()}`,
   )
 }, [])

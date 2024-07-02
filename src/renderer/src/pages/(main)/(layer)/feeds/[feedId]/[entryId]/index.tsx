@@ -1,5 +1,5 @@
 import { useRouteView } from "@renderer/hooks/biz/useRouteParams"
-import { ROUTE_FEED_PENDING, views } from "@renderer/lib/constants"
+import { ROUTE_ENTRY_PENDING, views } from "@renderer/lib/constants"
 import { EntryContent } from "@renderer/modules/entry-content"
 import { AnimatePresence } from "framer-motion"
 import { useParams } from "react-router-dom"
@@ -12,7 +12,7 @@ export const Component = () => {
     <AnimatePresence>
       {!inWideMode && (
         <div className="min-w-0 flex-1">
-          <EntryContent entryId={entryId === ROUTE_FEED_PENDING ? "" : entryId} />
+          <EntryContent entryId={entryId === ROUTE_ENTRY_PENDING ? "" : entryId} />
         </div>
       )}
     </AnimatePresence>

@@ -83,3 +83,4 @@ export const QUERY_PERSIST_KEY = getStorageNS("REACT_QUERY_OFFLINE_CACHE")
 
 /// Route Keys
 export const ROUTE_FEED_PENDING = "all"
+export const ROUTE_ENTRY_PENDING = "pending"
