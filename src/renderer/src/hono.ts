@@ -4,6 +4,29 @@ import * as hono from 'hono';
 import * as hono_types from 'hono/types';
 
 declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
+    "/profiles": {
+        $get: {
+            input: {
+                query: {
+                    id: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    name: string | null;
+                    id: string;
+                    email: string;
+                    emailVerified: string | null;
+                    image: string | null;
+                    handle: string | null;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
     "/invitations/new": {
         $post: {
             input: {};

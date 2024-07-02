@@ -187,11 +187,10 @@ export const StyledButton = React.forwardRef<
   return (
     <MotionButtonBase
       ref={ref}
-      className={styledButtonVariant({
+      className={cn(styledButtonVariant({
         variant,
-        className,
         status: isLoading || props.disabled ? "disabled" : undefined,
-      })}
+      }), className)}
       {...props}
       onClick={handleClick}
     >

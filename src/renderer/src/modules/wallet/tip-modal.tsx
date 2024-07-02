@@ -6,6 +6,7 @@ import { useCurrentModal } from "@renderer/components/ui/modal"
 import { RadioGroup } from "@renderer/components/ui/radio-group"
 import { RadioCard } from "@renderer/components/ui/radio-group/RadioCard"
 import { Balance } from "@renderer/components/ui/wallet/balance"
+import { UserAvatar } from "@renderer/components/user-button"
 import { nextFrame } from "@renderer/lib/dom"
 import { useWallet, useWalletTipMutation, useWalletTransactions } from "@renderer/queries/wallet"
 import { from, toNumber } from "dnum"
@@ -98,10 +99,23 @@ export const TipModalContent: FC<{
   }
 
   return (
-    <div className="flex w-[80vw] max-w-[350px] flex-col gap-5">
+    <div className="flex w-[80vw] max-w-[350px] flex-col gap-3">
+      {userId ? (
+        <>
+          <p className="text-sm font-medium">Feed Owner</p>
+          <UserAvatar className="h-8 justify-start bg-transparent p-0" userId={userId} />
+        </>
+      ) : (
+        <>
+          <p className="leading-none">
+            <span className="text-xs text-theme-foreground/80">No one has claimed this feed yet. The received Power will be securely held in the blockchain contract until it is claimed.</span>
+          </p>
+          <StyledButton variant="text" className="w-fit p-0">Claim this feed</StyledButton>
+        </>
+      )}
+      <Divider className="my-2" />
       <p className="text-sm text-theme-foreground/80">
-        ⭐ Tip to show your support! Your tip will be added to the author's
-        wallet.
+        ⭐ Tip to show your support!
       </p>
 
       <div className="flex flex-col justify-center gap-y-2">

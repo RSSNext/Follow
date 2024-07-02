@@ -10,7 +10,9 @@ export const auth = {
   getSession: () => defineQuery(["auth", "session"], () => getSession()),
 }
 
-export const useSession = () => {
+export const useSession = (options?: {
+  enabled?: boolean
+}) => {
   const { data, isLoading, ...rest } = useAuthQuery(auth.getSession(), {
     retry(failureCount, error) {
       const fetchError = error as FetchError
@@ -21,6 +23,7 @@ export const useSession = () => {
 
       return !!(3 - failureCount)
     },
+    enabled: options?.enabled ?? true,
   })
   const { error } = rest
   const fetchError = error as FetchError

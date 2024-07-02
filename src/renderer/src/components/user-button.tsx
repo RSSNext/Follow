@@ -3,7 +3,9 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
-import { useSignOut } from "@renderer/hooks"
+import { useAuthQuery, useSignOut } from "@renderer/hooks"
+import { apiClient } from "@renderer/lib/api-fetch"
+import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { LoginModalContent } from "@renderer/modules/auth/LoginModalContent"
@@ -126,14 +128,27 @@ ProfileButton.displayName = "ProfileButton"
 export function UserAvatar({
   className,
   hideName,
+  userId,
   ...props
 }: {
   className?: string
   hideName?: boolean
+  userId?: string
 } & LoginProps) {
-  const { session, status } = useSession()
+  const { session, status } = useSession({
+    enabled: !userId,
+  })
 
-  if (status !== "authenticated") {
+  const profile = useAuthQuery(defineQuery(["profiles", userId], async () => {
+    const res = await apiClient.profiles.$get({
+      query: { id: userId! },
+    })
+    return res.data
+  }), {
+    enabled: !!userId,
+  })
+
+  if (!userId && status !== "authenticated") {
     return <LoginButton {...props} />
   }
 
@@ -145,10 +160,10 @@ export function UserAvatar({
       )}
     >
       <Avatar className="aspect-square h-full w-auto">
-        <AvatarImage src={session?.user?.image || undefined} />
-        <AvatarFallback>{session?.user?.name?.slice(0, 2)}</AvatarFallback>
+        <AvatarImage src={(profile.data || session?.user)?.image || undefined} />
+        <AvatarFallback>{(profile.data || session?.user)?.name?.slice(0, 2)}</AvatarFallback>
       </Avatar>
-      {!hideName && <div>{session?.user?.name}</div>}
+      {!hideName && <div>{(profile.data || session?.user)?.name}</div>}
     </div>
   )
 }
