@@ -13,6 +13,7 @@ import { from, toNumber } from "dnum"
 import type { FC } from "react"
 import { useState } from "react"
 
+import { useFeedClaimModal } from "../claim"
 import { useSettingModal } from "../settings/modal/hooks-hack"
 
 const DEFAULT_RECOMMENDED_TIP = 1
@@ -43,6 +44,10 @@ export const TipModalContent: FC<{
   const { dismiss } = useCurrentModal()
 
   const settingModalPresent = useSettingModal()
+
+  const claimFeed = useFeedClaimModal({
+    feedId,
+  })
 
   if (transactionsQuery.isPending || myWallet.isPending) {
     return (
@@ -110,7 +115,7 @@ export const TipModalContent: FC<{
           <p className="leading-none">
             <span className="text-xs text-theme-foreground/80">No one has claimed this feed yet. The received Power will be securely held in the blockchain contract until it is claimed.</span>
           </p>
-          <StyledButton variant="text" className="w-fit p-0">Claim this feed</StyledButton>
+          <StyledButton variant="text" className="w-fit p-0" onClick={() => claimFeed()}>Claim this feed</StyledButton>
         </>
       )}
       <Divider className="my-2" />
