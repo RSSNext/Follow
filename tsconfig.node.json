@@ -3,7 +3,8 @@
   "include": [
     "electron.vite.config.*",
     "src/main/**/*",
-    "src/preload/**/*"
+    "src/preload/**/*",
+    "types/**/*.d.ts"
   ],
   "compilerOptions": {
     "composite": true,
