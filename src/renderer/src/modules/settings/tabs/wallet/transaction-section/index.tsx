@@ -18,7 +18,7 @@ export const TransactionsSection = () => {
 
   if (transactions.isLoading) return <div className="text-theme-disabled">Loading...</div>
 
-  if (transactions.data?.length === 0) return <div className="text-theme-disabled">No transactions</div>
+  // if (transactions.data?.length === 0) return <div className="text-theme-disabled">No transactions</div>
 
   return (
     <div>
@@ -28,25 +28,23 @@ export const TransactionsSection = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead size="sm" className="uppercase">
+              <TableHead size="sm">
                 Type
               </TableHead>
-              <TableHead size="sm" className="uppercase">
+              <TableHead size="sm">
                 Amount
               </TableHead>
-              <TableHead size="sm" className="uppercase">
+              <TableHead size="sm">
                 From
               </TableHead>
-              <TableHead size="sm" className="uppercase">
+              <TableHead size="sm">
                 To
               </TableHead>
-              {/* <TableHead size="sm" className="uppercase">Feed</TableHead> */}
-              <TableHead size="sm" className="uppercase">
+              <TableHead size="sm">
                 Date
               </TableHead>
             </TableRow>
           </TableHeader>
-
           <TableBody>
             {transactions.data?.map((row) => (
               <TableRow key={row.hash}>
@@ -73,6 +71,9 @@ export const TransactionsSection = () => {
             ))}
           </TableBody>
         </Table>
+        {!transactions.data?.length && (
+          <div className="my-2 w-full text-center text-sm text-zinc-400">No transactions</div>
+        )}
       </div>
     </div>
   )

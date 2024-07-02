@@ -1,7 +1,9 @@
 import { useUser } from "@renderer/atoms/user"
+import { Divider } from "@renderer/components/ui/divider"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
 import { Balance } from "@renderer/components/ui/wallet/balance"
+import { SettingSectionTitle } from "@renderer/modules/settings/section"
 import { useWallet } from "@renderer/queries/wallet"
 
 import { ClaimDailyReward } from "./claim-daily-reward"
@@ -21,40 +23,40 @@ export const MyWalletSection = () => {
             <CreateWallet />
           ) :
           (
-            <div>
-              <div className="my-2 flex flex-row items-center gap-x-5">
+            <div className="space-y-8">
+              <div>
+                <SettingSectionTitle title="Balance" />
+                <div className="flex items-center justify-between">
+                  <Balance className="text-xl font-bold text-theme-accent">{myWallet.dailyPowerToken}</Balance>
+                  <ClaimDailyReward />
+                </div>
+                <Divider className="my-4" />
                 <Tooltip>
-                  <TooltipTrigger>
-                    <div className="flex flex-row items-center gap-x-2 font-bold">
-                      Daily $POWER
+                  <TooltipTrigger className="block">
+                    <div className="flex flex-row items-center gap-x-2 text-xs text-zinc-600 dark:text-neutral-400">
+                      <span className="">Daily Power</span>
+                      <Balance>{myWallet.dailyPowerToken}</Balance>
                       <i className="i-mingcute-question-line" />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
-                    Daily $POWER is the amount of $POWER you can claim daily. It can
-                    only be used to tip other users.
+                    <p>1. Daily Power can only be used for tips.</p>
+                    <p>2. It comes from the Power you claim for free every day..</p>
                   </TooltipContent>
                 </Tooltip>
-                <Balance>{myWallet.dailyPowerToken}</Balance>
-                <ClaimDailyReward />
-              </div>
-
-              <div className="my-2 flex flex-row items-center gap-x-5">
                 <Tooltip>
-                  <TooltipTrigger>
-                    <div className="flex flex-row items-center gap-x-2 font-bold">
-                      Cashable $POWER
+                  <TooltipTrigger className="block">
+                    <div className="flex flex-row items-center gap-x-2 text-xs text-zinc-600 dark:text-neutral-400">
+                      Cashable Power
+                      <Balance>{myWallet.cashablePowerToken}</Balance>
                       <i className="i-mingcute-question-line" />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
-                    Cashable $POWER is the amount of $POWER you can withdraw to your
-                    wallet. It can be used to tip other users or convert to other
-                    cryptocurrencies. When you are tipped with $POWER, it will be
-                    added to your cashable $POWER.
+                    <p>1. You can transfer Cashable Power to your wallet and trade freely.</p>
+                    <p>2. It comes from the Power you recharge and the tips you receive.</p>
                   </TooltipContent>
                 </Tooltip>
-                <Balance>{myWallet.cashablePowerToken}</Balance>
               </div>
             </div>
           )}

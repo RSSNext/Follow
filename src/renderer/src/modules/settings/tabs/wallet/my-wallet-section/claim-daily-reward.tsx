@@ -20,7 +20,6 @@ export const ClaimDailyReward = () => {
   const minute = Math.floor((ttlState % 3600) / 60)
     .toString()
     .padStart(2, "0")
-  const second = (ttlState % 60).toString().padStart(2, "0")
 
   const canClaim = ttlState <= 0
 
@@ -50,14 +49,14 @@ export const ClaimDailyReward = () => {
           disabled={!canClaim}
         >
           {canClaim ?
-            "Claim Daily Reward" :
-            `Reward in ${hour}:${minute}:${second}`}
+            "Claim Daily Power" :
+            `Claim in ${hour}:${minute}`}
         </StyledButton>
       </TooltipTrigger>
       <TooltipContent>
         {canClaim ?
-          "Claim your daily reward (2.00 POWER) now!" :
-          `You can claim your daily reward in ${hour}:${minute}:${second}.`}
+          "Claim your 2 Daily Power now!" :
+          `You can claim your Daily Power in ${hour}:${minute}.`}
       </TooltipContent>
     </Tooltip>
   )

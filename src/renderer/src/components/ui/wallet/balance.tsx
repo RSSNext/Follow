@@ -6,9 +6,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
 export const Balance = ({
   children,
   className,
-  precision = 2,
+  precision = 0,
   withSuffix = false,
-  withTooltip = true,
+  withTooltip = false,
 }: {
   /** The token balance in wei. */
   children: bigint | string

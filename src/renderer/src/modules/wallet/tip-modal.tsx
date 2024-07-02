@@ -36,7 +36,6 @@ export const TipModalContent: FC<{
   const [amount, setAmount] = useState(DEFAULT_RECOMMENDED_TIP > balanceNumber ? balanceNumber : DEFAULT_RECOMMENDED_TIP)
 
   const amountBigInt = from(amount, 18)[0]
-  const shouldDeductFromCPower = amountBigInt > dPowerBigInt
 
   const wrongNumberRange = amountBigInt > balanceBigInt || amountBigInt <= BigInt(0)
 
@@ -118,8 +117,8 @@ export const TipModalContent: FC<{
           onValueChange={(value) => setAmount(Number(value))}
         >
           <div className="grid grid-cols-2 gap-2">
-            <RadioCard wrapperClassName="justify-center" label="1" value="1" />
-            <RadioCard wrapperClassName="justify-center" label="2" value="2" />
+            <RadioCard wrapperClassName="justify-center" label="1 Power" value="1" />
+            <RadioCard wrapperClassName="justify-center" label="2 Power" value="2" />
           </div>
         </RadioGroup>
 
@@ -131,16 +130,6 @@ export const TipModalContent: FC<{
             <span>
               Your balance is not enough to cover this tip. Please adjust the
               amount.
-            </span>
-          </div>
-        )}
-
-        {/* cPower spent notice */}
-        {!wrongNumberRange && shouldDeductFromCPower && (
-          <div className="text-xs text-red-500">
-            <span>
-              Your daily $POWER is not enough to cover this tip. The remaining
-              amount will be deducted from your cashable $POWER.
             </span>
           </div>
         )}
