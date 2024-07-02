@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useLoginModalShow } from "@renderer/atoms"
 import type { DefinedQuery } from "@renderer/lib/defineQuery"
 import type {
   InfiniteData,
@@ -17,7 +18,7 @@ export type SafeReturnType<T> = T extends (...args: any[]) => infer R
   : never
 
 export type CombinedObject<T, U> = T & U
-export function useBizQuery<
+export function useAuthQuery<
   TQuery extends DefinedQuery<QueryKey, any>,
   TError = FetchError,
   TQueryFnData = Awaited<ReturnType<TQuery["fn"]>>,
@@ -31,13 +32,15 @@ export function useBizQuery<
 ): CombinedObject<
   UseQueryResult<TData, TError>,
   { key: TQuery["key"], fn: TQuery["fn"] }
-> {
+  > {
+  const authFail = useLoginModalShow()
   // @ts-expect-error
   return Object.assign(
     {},
     useQuery({
       queryKey: query.key,
       queryFn: query.fn,
+      enabled: !authFail && options.enabled !== false,
       ...options,
     }),
     {
@@ -47,7 +50,7 @@ export function useBizQuery<
   )
 }
 
-export function useBizInfiniteQuery<
+export function useAuthInfiniteQuery<
   T extends DefinedQuery<any, any>,
   E = FetchError,
   FNR = Awaited<ReturnType<T["fn"]>>,
@@ -58,14 +61,16 @@ export function useBizInfiniteQuery<
 ): CombinedObject<
   UseInfiniteQueryResult<InfiniteData<R>, FetchError>,
   { key: T["key"], fn: T["fn"] }
-> {
+  > {
+  const authFail = useLoginModalShow()
   // @ts-expect-error
   return Object.assign(
     {},
+    // @ts-expect-error
     useInfiniteQuery<T, E>({
-      // @ts-expect-error
       queryFn: query.fn,
       queryKey: query.key,
+      enabled: !authFail && options.enabled !== false,
       ...options,
     }),
     {
@@ -74,3 +79,8 @@ export function useBizInfiniteQuery<
     },
   )
 }
+
+/**
+ * @deprecated use `useAuthQuery` instead
+ */
+export const useBizQuery = useAuthQuery

@@ -21,7 +21,7 @@ import {
 } from "@renderer/components/ui/select"
 import { Switch } from "@renderer/components/ui/switch"
 import { ViewSelectContent } from "@renderer/components/view-select-content"
-import { useBizQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks"
 import { useDeleteSubscription } from "@renderer/hooks/biz/useSubscriptionActions"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { tipcClient } from "@renderer/lib/client"
@@ -145,7 +145,7 @@ export const FeedForm: Component<{
     followMutation.mutate(values)
   }
 
-  const categories = useBizQuery(
+  const categories = useAuthQuery(
     Queries.subscription.categories(Number.parseInt(form.watch("view"))),
   )
 
@@ -270,8 +270,9 @@ export const FeedForm: Component<{
                     {isSubscribed && (
                       <StyledButton
                         ref={buttonRef}
+                        variant="text"
                         isLoading={deleteSubscription.isPending}
-                        className="bg-red-500"
+                        className="text-red-500"
                         onClick={(e) => {
                           e.preventDefault()
                           if (feed.data?.subscription) {

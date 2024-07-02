@@ -1,5 +1,5 @@
 import { LoadingCircle } from "@renderer/components/ui/loading"
-import { useBizQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks"
 import { isASCII } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useMemo } from "react"
@@ -7,7 +7,7 @@ import { useMemo } from "react"
 import { RecommendationCard } from "./recommendations-card"
 
 export function Recommendations() {
-  const rsshubPopular = useBizQuery(
+  const rsshubPopular = useAuthQuery(
     Queries.discover.rsshubCategory({
       category: "popular",
     }),

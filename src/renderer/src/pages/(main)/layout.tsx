@@ -1,6 +1,6 @@
 import {
   setMainContainerElement,
-  useAuthFail,
+  useLoginModalShow,
   useUser,
 } from "@renderer/atoms"
 import { DeclarativeModal } from "@renderer/components/ui/modal/stacked/declarative-modal"
@@ -12,7 +12,7 @@ import { FeedColumn } from "@renderer/modules/feed-column"
 import { Outlet } from "react-router-dom"
 
 export function Component() {
-  const isAuthFail = useAuthFail()
+  const isAuthFail = useLoginModalShow()
   const user = useUser()
 
   return (

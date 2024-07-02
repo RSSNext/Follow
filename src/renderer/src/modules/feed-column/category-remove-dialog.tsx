@@ -41,7 +41,7 @@ export function CategoryRemoveDialogContent({
       </p>
 
       <div className="flex items-center justify-end gap-3">
-        <StyledButton variant="plain" onClick={dismiss}>
+        <StyledButton variant="outline" onClick={dismiss}>
           Cancel
         </StyledButton>
         <StyledButton

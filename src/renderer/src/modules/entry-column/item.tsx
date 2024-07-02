@@ -1,4 +1,4 @@
-import { useAsRead, useBizQuery, useEntryActions } from "@renderer/hooks"
+import { useAsRead, useAuthQuery, useEntryActions } from "@renderer/hooks"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { views } from "@renderer/lib/constants"
@@ -30,7 +30,7 @@ function EntryItemImpl({ entry, view }: { entry: CombinedEntryModel, view?: numb
     entry,
   })
 
-  const translation = useBizQuery(
+  const translation = useAuthQuery(
     Queries.ai.translation({
       entry,
       view,

@@ -357,7 +357,7 @@ const ListHeader: FC<{
               <div>Mark all as read?</div>
               <div className="space-x-4">
                 <PopoverClose>
-                  <StyledButton variant="plain">Cancel</StyledButton>
+                  <StyledButton variant="outline">Cancel</StyledButton>
                 </PopoverClose>
                 {/* TODO */}
                 <StyledButton onClick={handleMarkAllAsRead}>

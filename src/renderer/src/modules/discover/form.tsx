@@ -184,7 +184,7 @@ export function DiscoverForm({ type }: { type: string }) {
                     </CardContent>
                     <CardFooter>
                       {item.isSubscribed ? (
-                        <StyledButton variant="plain" disabled>
+                        <StyledButton variant="outline" disabled>
                           Followed
                         </StyledButton>
                       ) : (

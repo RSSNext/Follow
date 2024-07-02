@@ -1,5 +1,5 @@
 import { StyledButton } from "@renderer/components/ui/button"
-import { useBizQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { ActionsResponse } from "@renderer/models"
 import { ActionCard } from "@renderer/modules/settings/action-card"
@@ -54,7 +54,7 @@ type ActionsInput = {
 }[]
 
 export function Component() {
-  const actions = useBizQuery(Queries.action.getAll())
+  const actions = useAuthQuery(Queries.action.getAll())
   const [actionsData, setActionsData] = useState<ActionsInput>([])
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export function Component() {
           />
         ))}
         <StyledButton
-          variant="plain"
+          variant="outline"
           className="center w-full gap-1"
           onClick={() => {
             setActionsData([

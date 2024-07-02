@@ -1,5 +1,5 @@
 import { useUISettingKey } from "@renderer/atoms"
-import { useBizQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteFeedId } from "@renderer/hooks/biz/useRouteParams"
 import { FEED_COLLECTION_LIST, levels, views } from "@renderer/lib/constants"
@@ -21,7 +21,7 @@ import { parse } from "tldts"
 import { FeedCategory } from "./category"
 
 const useData = (view: FeedViewType) => {
-  const { data: remoteData } = useBizQuery(Queries.subscription.byView(view))
+  const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
 
   const data = useSubscriptionByView(view) || remoteData
 
@@ -101,7 +101,7 @@ export function FeedList({
   const [expansion, setExpansion] = useState(false)
   const data = useData(view)
 
-  useBizQuery(Queries.subscription.unreadAll())
+  useAuthQuery(Queries.subscription.unreadAll())
 
   const totalUnread = useUnreadStore((state) => {
     let unread = 0

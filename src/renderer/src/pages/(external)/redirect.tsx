@@ -53,8 +53,8 @@ export function Component() {
       </h2>
       <div className="center flex gap-4">
         <StyledButton
-          variant="plain"
-          className="h-14 border-transparent px-10 text-base"
+          variant="text"
+          className="h-14 px-10 text-base"
           onClick={() => navigate("/")}
         >
           Continue in Browser
