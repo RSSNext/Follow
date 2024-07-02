@@ -41,7 +41,11 @@ export const LoginButton: FC<LoginProps> = (props) => {
               modalStack.present({
                 CustomModalComponent: NoopChildren,
                 title: "Login",
-                content: () => <LoginModalContent runtime={window.electron ? "app" : "browser"} />,
+                content: () => (
+                  <LoginModalContent
+                    runtime={window.electron ? "app" : "browser"}
+                  />
+                ),
                 clickOutsideToDismiss: true,
               })
             } :
@@ -80,6 +84,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+
         <DropdownMenuItem
           onClick={() => {
             // Here we need to delay one frame, so it's two raf,

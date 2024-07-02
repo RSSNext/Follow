@@ -1,6 +1,5 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { cn } from "@renderer/lib/utils"
-import { ChevronRightIcon } from "lucide-react"
 import * as React from "react"
 
 const DropdownMenu = DropdownMenuPrimitive.Root
@@ -31,7 +30,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
     {...props}
   >
     {children}
-    <ChevronRightIcon className="ml-auto size-4" />
+    <i className="i-mingcute-down-line ml-auto size-4" />
   </DropdownMenuPrimitive.SubTrigger>
 ))
 DropdownMenuSubTrigger.displayName =
