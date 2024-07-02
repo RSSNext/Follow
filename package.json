@@ -12,6 +12,7 @@
     "build:linux": "electron-vite build && electron-builder --linux",
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:unpack": "npm run build && electron-builder --dir",
+    "build:web": "vite build",
     "build:win": "npm run build && electron-builder --win",
     "dev": "electron-vite dev",
     "lint": "eslint",
