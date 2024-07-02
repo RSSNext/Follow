@@ -24,7 +24,7 @@ export function Component() {
 
         <div>
           <StyledButton
-            variant="plain"
+            variant="outline"
             onClick={() => {
               signOut()
             }}

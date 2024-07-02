@@ -1,4 +1,4 @@
-import { useBizQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { useMutation } from "@tanstack/react-query"
@@ -41,13 +41,13 @@ export const wallet = {
 }
 
 export const useWallet = ({ userId }: { userId?: string } = {}) =>
-  useBizQuery(
+  useAuthQuery(
     wallet.get({ userId }),
     { enabled: !!userId },
   )
 
 export const useWalletTransactions = (query: Parameters<typeof wallet.transactions.get>[0] = {}) =>
-  useBizQuery(
+  useAuthQuery(
     wallet.transactions.get(query),
   )
 
@@ -65,7 +65,7 @@ export const useCreateWalletMutation = () =>
   })
 
 export const useClaimWalletDailyRewardTtl = () =>
-  useBizQuery(
+  useAuthQuery(
     wallet.claimDailyRewardTtl(),
     { refetchInterval: 5000 },
   )

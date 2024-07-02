@@ -1,7 +1,7 @@
 import type { Session } from "@auth/core/types"
 import type { GetSessionParams } from "@hono/auth-js/react"
 import { authConfigManager } from "@hono/auth-js/react"
-import { useBizQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
@@ -11,7 +11,7 @@ export const auth = {
 }
 
 export const useSession = () => {
-  const { data, isLoading, ...rest } = useBizQuery(auth.getSession(), {
+  const { data, isLoading, ...rest } = useAuthQuery(auth.getSession(), {
     retry(failureCount, error) {
       const fetchError = error as FetchError
 

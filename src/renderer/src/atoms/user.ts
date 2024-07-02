@@ -6,5 +6,5 @@ export const [, , useUser, useSetUser, getUser, setUser] = createAtomHooks(
   atom<Nullable<User>>(null),
 )
 
-export const [, , useAuthFail, useSetAuthFail, getAuthFail, setAuthFail] =
+export const [, , useLoginModalShow, useSetLoginModalShow, getLoginModalShow, setLoginModalShow] =
   createAtomHooks(atom<boolean>(false))

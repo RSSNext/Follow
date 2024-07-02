@@ -12,7 +12,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@renderer/components/ui/tabs"
-import { useBizQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks"
 import { Queries } from "@renderer/queries"
 import { useClaimFeedMutation } from "@renderer/queries/feed"
 import { useFeedById } from "@renderer/store"
@@ -26,7 +26,7 @@ export const FeedClaimModalContent: FC<{
     data: claimMessage,
     isLoading,
     error,
-  } = useBizQuery(Queries.feed.claimMessage({ feedId }), {
+  } = useAuthQuery(Queries.feed.claimMessage({ feedId }), {
     enabled: !!feed,
   })
 
@@ -125,7 +125,7 @@ export const FeedClaimModalContent: FC<{
           disabled={isSuccess}
           isLoading={isPending}
           onClick={() => claim()}
-          variant={isSuccess ? "plain" : "primary"}
+          variant={isSuccess ? "outline" : "primary"}
         >
           {isSuccess && (
             <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />

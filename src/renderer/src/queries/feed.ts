@@ -1,5 +1,5 @@
 import { getUser } from "@renderer/atoms/user"
-import { useBizQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { formatXml } from "@renderer/lib/utils"
@@ -43,7 +43,7 @@ export const feed = {
 }
 
 export const useFeed = ({ id, url }: { id?: string, url?: string }) =>
-  useBizQuery(
+  useAuthQuery(
     feed.byId({
       id,
       url,

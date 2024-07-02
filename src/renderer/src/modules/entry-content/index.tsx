@@ -2,7 +2,7 @@ import { useUISettingKey } from "@renderer/atoms"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { useBizQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks"
 import { stopPropagation } from "@renderer/lib/dom"
 import { parseHtml } from "@renderer/lib/parse-html"
 import type { ActiveEntryId } from "@renderer/models"
@@ -38,7 +38,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 }
 
 function EntryContentRender({ entryId }: { entryId: string }) {
-  const { error, data } = useBizQuery(Queries.entries.byId(entryId), {
+  const { error, data } = useAuthQuery(Queries.entries.byId(entryId), {
     staleTime: 300_000,
   })
 
@@ -59,7 +59,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     }
   }, [data?.entries.content, entry?.entries.content, readerRenderInlineStyle])
 
-  const translation = useBizQuery(
+  const translation = useAuthQuery(
     Queries.ai.translation({
       entry: entry!,
       language: entry?.settings?.translation,
@@ -72,7 +72,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     },
   )
 
-  const summary = useBizQuery(
+  const summary = useAuthQuery(
     Queries.ai.summary({
       entryId,
       language: entry?.settings?.translation,

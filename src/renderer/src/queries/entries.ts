@@ -1,4 +1,4 @@
-import { useBizInfiniteQuery, useBizQuery } from "@renderer/hooks"
+import { useAuthInfiniteQuery, useAuthQuery } from "@renderer/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { entryActions } from "@renderer/store"
@@ -63,7 +63,7 @@ export const useEntries = ({
   view?: number
   read?: boolean
 }) =>
-  useBizInfiniteQuery(entries.entries({ level, id, view, read }), {
+  useAuthInfiniteQuery(entries.entries({ level, id, view, read }), {
     enabled: level !== undefined && id !== undefined,
     getNextPageParam: (lastPage) => {
       if (!lastPage.data?.length) {
@@ -76,6 +76,6 @@ export const useEntries = ({
   })
 
 export const useEntriesPreview = ({ id }: { id?: string }) =>
-  useBizQuery(entries.preview(id!), {
+  useAuthQuery(entries.preview(id!), {
     enabled: !!id,
   })
