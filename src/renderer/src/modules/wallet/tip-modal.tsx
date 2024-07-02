@@ -122,10 +122,9 @@ export const TipModalContent: FC<{
           value={amount.toString()}
           onValueChange={(value) => setAmount(Number(value))}
         >
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             <RadioCard wrapperClassName="justify-center" label="1" value="1" />
             <RadioCard wrapperClassName="justify-center" label="2" value="2" />
-            <RadioCard wrapperClassName="justify-center" label="5" value="5" />
           </div>
         </RadioGroup>
 
