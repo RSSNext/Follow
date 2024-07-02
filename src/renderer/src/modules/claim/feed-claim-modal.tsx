@@ -125,7 +125,7 @@ export const FeedClaimModalContent: FC<{
           disabled={isSuccess}
           isLoading={isPending}
           onClick={() => claim()}
-          variant={isSuccess ? "plain" : "primary"}
+          variant={isSuccess ? "outline" : "primary"}
         >
           {isSuccess && (
             <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />

@@ -163,7 +163,7 @@ export const TipModalContent: FC<{
             })
             setShowConfirm(false)
           }}
-          variant={tipMutation.isSuccess ? "plain" : "primary"}
+          variant={tipMutation.isSuccess ? "outline" : "primary"}
         >
           {tipMutation.isSuccess && (
             <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />
