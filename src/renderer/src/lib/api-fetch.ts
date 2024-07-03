@@ -4,13 +4,18 @@ import type { AppType } from "@renderer/hono"
 import { hc } from "hono/client"
 import { FetchError, ofetch } from "ofetch"
 
-const csrfToken = await getCsrfToken()
+let csrfTokenPromise: Promise<string> | null = null
 
 export const apiFetch = ofetch.create({
   baseURL: import.meta.env.VITE_API_URL,
   credentials: "include",
   retry: false,
   onRequest: async ({ options }) => {
+    if (!csrfTokenPromise) {
+      csrfTokenPromise = getCsrfToken()
+    }
+
+    const csrfToken = await csrfTokenPromise
     if (options.method && options.method.toLowerCase() !== "get") {
       if (typeof options.body === "string") {
         options.body = JSON.parse(options.body)

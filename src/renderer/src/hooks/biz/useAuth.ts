@@ -1,22 +1,23 @@
 import { signOut } from "@hono/auth-js/react"
-import { setLoginModalShow, setUser } from "@renderer/atoms"
+import { setUser } from "@renderer/atoms"
 import { QUERY_PERSIST_KEY } from "@renderer/lib/constants"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useCallback } from "react"
 
 export const useSignOut = () =>
-  useCallback(() => {
-    signOut()
-
+  useCallback(async () => {
     // clear local store data
     clearLocalPersistStoreData()
 
     // Clear query cache
     localStorage.removeItem(QUERY_PERSIST_KEY)
 
-    setLoginModalShow(true)
+    // setLoginModalShow(true)
     setUser(null)
 
     // Clear local storage
     // TODO
+
+    // Sign out
+    await signOut()
   }, [])
