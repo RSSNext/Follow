@@ -1,3 +1,4 @@
+import { appLog } from "@renderer/lib/log"
 import type { CombinedEntryModel, FeedModel } from "@renderer/models"
 import {
   EntryRelatedKey,
@@ -25,12 +26,13 @@ export const setHydrated = (v: boolean) => {
 export const isHydrated = () => _isHydrated
 
 export const hydrateDatabaseToStore = async () => {
+  appLog("Hydrate database data to store task start...")
   const now = Date.now()
   const [feeds] = await Promise.all([hydrateFeed(), hydrateSubscription(), hydrateFeedUnread()])
 
   await hydrateEntry(feeds)
   _isHydrated = true
-  console.info("hydrate data done, cast:", Date.now() - now)
+  appLog("Hydrate data done,", `${Date.now() - now}ms`)
 }
 
 async function hydrateFeed() {

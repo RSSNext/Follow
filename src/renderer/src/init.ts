@@ -6,6 +6,8 @@ import {
 } from "@renderer/database"
 import { enableMapSet } from "immer"
 
+import { APP_NAME } from "./lib/constants"
+import { appLog } from "./lib/log"
 import { hydrateDatabaseToStore, setHydrated } from "./store/utils/hydrate"
 
 const cleanup = subscribeShouldUseIndexedDB((value) => {
@@ -17,6 +19,9 @@ const cleanup = subscribeShouldUseIndexedDB((value) => {
   setHydrated(true)
 })
 export const initializeApp = async () => {
+  const now = Date.now()
+  appLog(`${APP_NAME}: Next generation information browser`, `https://github.com/RSSNext/follow`)
+  appLog(`Initialize ${APP_NAME}...`)
   enableMapSet()
   // Initialize the database
   if (getShouldUseIndexedDB()) {
@@ -29,6 +34,7 @@ export const initializeApp = async () => {
     basePath: "/auth",
     credentials: "include",
   })
+  appLog(`Initialize ${APP_NAME} done,`, `${Date.now() - now}ms`)
 }
 
 import.meta.hot?.dispose(cleanup)

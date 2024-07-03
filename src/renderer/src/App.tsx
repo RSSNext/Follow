@@ -3,6 +3,7 @@ import { registerGlobalContext } from "@shared/bridge"
 import { useEffect } from "react"
 import { Outlet } from "react-router-dom"
 
+import { useAppIsReady, useUISettingKey } from "./atoms"
 import { useDark } from "./hooks/common/useDark"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"
@@ -31,11 +32,29 @@ function App() {
           aria-hidden
         />
       )}
-      <RootProviders>
-        <Outlet />
-      </RootProviders>
+      <RootProviders><AppLayer /></RootProviders>
     </>
   )
 }
 
+const AppLayer = () => {
+  const appIsReady = useAppIsReady()
+
+  return appIsReady ? <Outlet /> : <AppSkeleton />
+}
+
+const AppSkeleton = () => {
+  const entryColWidth = useUISettingKey("entryColWidth")
+  return (
+    <div className="flex size-full">
+      <div className="h-full w-64 shrink-0" />
+      <div className="relative size-full grow bg-theme-background">
+        <div
+          className="absolute inset-y-0 w-px bg-border"
+          style={{ left: entryColWidth }}
+        />
+      </div>
+    </div>
+  )
+}
 export default App
