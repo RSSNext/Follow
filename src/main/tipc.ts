@@ -2,9 +2,8 @@ import { getRendererHandlers, tipc } from "@egoist/tipc/main"
 import type { MessageBoxOptions } from "electron"
 import { app, dialog, Menu, ShareMenu } from "electron"
 
-import { getMainWindow } from "."
 import type { RendererHandlers } from "./renderer-handlers"
-import { createSettingWindow, createWindow } from "./window"
+import { createSettingWindow, createWindow, getMainWindow } from "./window"
 
 const t = tipc.create()
 
@@ -106,6 +105,7 @@ export const router = {
     .input<(string | number | undefined)[]>()
     .action(async ({ input }) => {
       const mainWindow = getMainWindow()
+      if (!mainWindow) return
       const handlers = getRendererHandlers<RendererHandlers>(
         mainWindow.webContents,
       )

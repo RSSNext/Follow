@@ -23,6 +23,7 @@ export const initializeApp = async () => {
   appLog(`${APP_NAME}: Next generation information browser`, `https://github.com/RSSNext/follow`)
   appLog(`Initialize ${APP_NAME}...`)
   enableMapSet()
+
   // Initialize the database
   if (getShouldUseIndexedDB()) {
     await hydrateDatabaseToStore()

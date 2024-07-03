@@ -160,3 +160,5 @@ export const createSettingWindow = () => {
     windows.settingWindow = null
   })
 }
+
+export const getMainWindow = () => windows.mainWindow

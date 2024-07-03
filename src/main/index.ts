@@ -2,19 +2,16 @@ import "dotenv/config"
 
 import path from "node:path"
 
-import { registerIpcMain } from "@egoist/tipc/main"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@shared/constants"
 import { extractElectronWindowOptions } from "@shared/electron"
 import { app, BrowserWindow, session } from "electron"
 
-import { registerAppMenu } from "./menu"
-import { router } from "./tipc"
+import { initializationApp } from "./init"
 import { createMainWindow, createWindow } from "./window"
 
+initializationApp()
 let mainWindow: BrowserWindow
-export const getMainWindow = () => mainWindow
-registerIpcMain(router)
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
@@ -26,22 +23,12 @@ if (process.defaultApp) {
   app.setAsDefaultProtocolClient(APP_PROTOCOL)
 }
 
-const iconMap = {
-  prod: path.join(__dirname, "../../resources/icon.png"),
-  dev: path.join(__dirname, "../../resources/icon-dev.png"),
-}
-if (app.dock) {
-  app.dock.setIcon(
-    process.env.NODE_ENV === "development" ? iconMap.dev : iconMap.prod,
-  )
-}
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId("re.follow")
+  electronApp.setAppUserModelId(`re.${APP_PROTOCOL}`)
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -64,7 +51,8 @@ app.whenReady().then(() => {
     const urlObj = new URL(url)
     if (urlObj.hostname === "auth") {
       const token = urlObj.searchParams.get("token")
-      const apiURL = process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
+      const apiURL =
+        process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
       if (token && apiURL) {
         mainWindow.webContents.session.cookies.set({
           url: apiURL,
@@ -135,7 +123,3 @@ app.on("window-all-closed", () => {
     app.quit()
   }
 })
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.
-registerAppMenu()
