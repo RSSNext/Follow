@@ -1,4 +1,6 @@
 import { Image } from "@renderer/components/ui/image"
+import { useModalStack } from "@renderer/components/ui/modal"
+import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { urlToIframe } from "@renderer/lib/url-to-iframe"
 import { cn } from "@renderer/lib/utils"
@@ -15,7 +17,8 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
 
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
-  const iframeSrc = useMemo(() => urlToIframe(entry?.entries.url), [entry?.entries.url])
+  const [miniIframeSrc, iframeSrc] = useMemo(() => [urlToIframe(entry?.entries.url, true), urlToIframe(entry?.entries.url)], [entry?.entries.url])
+  const modalStack = useModalStack()
 
   const ref = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState(false)
@@ -31,13 +34,29 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
-      <div className="w-full">
-        <div className="overflow-x-auto" ref={ref}>
-          {iframeSrc && hovered ? (
+      <div
+        className="w-full"
+        onClick={() => iframeSrc && modalStack.present({
+          title: "",
+          content: ({ dismiss }) => (
             // eslint-disable-next-line @eslint-react/dom/no-missing-iframe-sandbox
             <iframe
               src={iframeSrc}
-              className={cn("aspect-video w-full shrink-0 rounded-md bg-black object-cover", isActive && "rounded-b-none")}
+              className="size-full p-12"
+              onClick={() => dismiss()}
+            />
+          ),
+          clickOutsideToDismiss: true,
+          CustomModalComponent: NoopChildren,
+          overlay: true,
+        })}
+      >
+        <div className="overflow-x-auto" ref={ref}>
+          {miniIframeSrc && hovered ? (
+            // eslint-disable-next-line @eslint-react/dom/no-missing-iframe-sandbox
+            <iframe
+              src={miniIframeSrc}
+              className={cn("pointer-events-none aspect-video w-full shrink-0 rounded-md bg-black object-cover", isActive && "rounded-b-none")}
             />
           ) : (
             <Image

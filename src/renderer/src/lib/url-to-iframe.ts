@@ -1,18 +1,18 @@
-export const urlToIframe = (url?: string | null) => {
+export const urlToIframe = (url?: string | null, mini?: boolean) => {
   if (url?.match(/\/\/www.bilibili.com\/video\/BV\w+/)) {
     return `https://www.bilibili.com/blackboard/newplayer.html?${new URLSearchParams({
       isOutside: "true",
       autoplay: "true",
       danmaku: "true",
-      muted: "true",
+      muted: mini ? "true" : "false",
       highQuality: "true",
       bvid: url.match(/\/\/www.bilibili.com\/video\/(BV\w+)/)?.[1] || "",
     }).toString()}`
   } else if (url?.match(/\/\/www.youtube.com\/watch\?v=[-\w]+/)) {
     return `https://www.youtube-nocookie.com/embed/${url.match(/\/\/www.youtube.com\/watch\?v=([-\w]+)/)?.[1]}?${new URLSearchParams({
-      controls: "0",
+      controls: mini ? "0" : "1",
       autoplay: "1",
-      mute: "1",
+      mute: mini ? "1" : "0",
     }).toString()}`
   } else {
     return null
