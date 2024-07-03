@@ -1,9 +1,9 @@
 import { BaseModel } from "../model"
-import { DB_EntrySchema } from "../schemas"
+import { DB_BaseSchema } from "../schemas"
 
 class ModelStatic extends BaseModel<"feedEntries"> {
   constructor() {
-    super("feedEntries", DB_EntrySchema)
+    super("feedEntries", DB_BaseSchema)
   }
 }
 

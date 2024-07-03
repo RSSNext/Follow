@@ -7,7 +7,7 @@ import { omit } from "lodash-es"
 
 import { entryActions } from "./entry/store"
 import { feedActions } from "./feed"
-import { unreadActions } from "./unread"
+import { feedUnreadActions } from "./unread"
 import { createZustandStore, getStoreActions } from "./utils/helper"
 import { isHydrated } from "./utils/hydrate"
 
@@ -95,7 +95,7 @@ export const useSubscriptionStore = createZustandStore<
     const state = get()
     for (const feedId in state.data) {
       if (state.data[feedId].view === view) {
-        unreadActions.updateByFeedId(feedId, 0)
+        feedUnreadActions.updateByFeedId(feedId, 0)
         entryActions.patchManyByFeedId(feedId, { read: true })
       }
     }

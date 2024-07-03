@@ -9,7 +9,7 @@ import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { FeedListModel } from "@renderer/models"
-import { useUnreadStore } from "@renderer/store"
+import { useFeedUnreadStore } from "@renderer/store"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useEffect, useState } from "react"
 
@@ -56,11 +56,11 @@ function FeedCategoryImpl({
     }
   }
 
-  const unread = useUnreadStore((state) =>
+  const unread = useFeedUnreadStore((state) =>
     data.list.reduce((acc, cur) => (state.data[cur.feedId] || 0) + acc, 0),
   )
 
-  const sortByUnreadFeedList = useUnreadStore((state) =>
+  const sortByUnreadFeedList = useFeedUnreadStore((state) =>
     data.list.sort(
       (a, b) => (state.data[b.feedId] || 0) - (state.data[a.feedId] || 0),
     ),

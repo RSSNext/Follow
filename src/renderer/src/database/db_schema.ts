@@ -4,4 +4,10 @@ export const dbSchemaV1 = {
   subscriptions: "&id",
   entryRelated: "&id",
   feedEntries: "&feedId",
+  feedUnreads: "&id",
+}
+
+export const dbSchemaV2 = {
+  ...dbSchemaV1,
+  subscriptions: "&id, userId, feedId",
 }
