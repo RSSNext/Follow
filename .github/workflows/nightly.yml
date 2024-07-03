@@ -33,10 +33,9 @@ jobs:
       - name: Build for Mac
         run: pnpm build:mac
       - name: Upload file
-        uses: xresloader/upload-to-github-release@v1
+        uses: actions/upload-artifact@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "dist/*.dmg"
-          tags: false
-          draft: false
+          path: "dist/*.dmg"
+          retention-days: 90
