@@ -6,6 +6,7 @@ import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
 
+import { StarIcon } from "./star-icon"
 import type { UniversalItemProps } from "./types"
 
 export function GridItem({
@@ -28,12 +29,12 @@ export function GridItem({
         <div
           className={cn(
             "relative mb-1 mt-1.5 truncate font-medium leading-none",
-            !!entry.collections && "pr-4",
+            !!entry.collections && "pr-5",
           )}
         >
           <EntryTranslation source={entry.entries.title} target={translation?.title} />
           {!!entry.collections && (
-            <i className="i-mgc-star-cute-fi absolute right-0 top-0 text-orange-400" />
+            <StarIcon />
           )}
         </div>
         <div className="flex items-center gap-1 truncate text-[13px]">

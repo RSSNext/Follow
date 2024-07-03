@@ -7,6 +7,7 @@ import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
+import { StarIcon } from "./star-icon"
 import type { UniversalItemProps } from "./types"
 
 export function ListItem({
@@ -57,7 +58,7 @@ export function ListItem({
         <div
           className={cn(
             "relative my-0.5 break-words",
-            !!entry.collections && "pr-4",
+            !!entry.collections && "pr-5",
             entry.entries.title ? withDetails && "font-medium" : "text-[13px]",
           )}
         >
@@ -73,7 +74,7 @@ export function ListItem({
             />
           )}
           {!!entry.collections && (
-            <i className="i-mgc-star-cute-fi absolute right-0 top-[3px] text-orange-400" />
+            <StarIcon />
           )}
         </div>
         {withDetails && (
