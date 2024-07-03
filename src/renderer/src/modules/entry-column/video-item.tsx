@@ -37,7 +37,7 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
             // eslint-disable-next-line @eslint-react/dom/no-missing-iframe-sandbox
             <iframe
               src={iframeSrc}
-              className={cn("pointer-events-none aspect-video w-full shrink-0 rounded-md bg-black object-cover", isActive && "rounded-b-none")}
+              className={cn("aspect-video w-full shrink-0 rounded-md bg-black object-cover", isActive && "rounded-b-none")}
             />
           ) : (
             <Image

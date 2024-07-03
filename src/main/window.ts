@@ -100,6 +100,19 @@ export function createWindow(
     },
   )
 
+  window.webContents.session.webRequest.onBeforeRequest(async (details, callback) => {
+    const { url } = details
+
+    if (url.startsWith("https://s1.hdslb.com/bfs/seed/jinkela/short/player/player-util.js")) {
+      callback({
+        cancel: false,
+        redirectURL: `https://assets.follow.is/player-util.js`,
+      })
+    } else {
+      callback({ cancel: false })
+    }
+  })
+
   return window
 }
 
