@@ -1,5 +1,5 @@
 import { getUISettings, setUISetting } from "@renderer/atoms"
-import { useRouteView } from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { EntryColumn } from "@renderer/modules/entry-column"
@@ -14,7 +14,7 @@ export function Component() {
   // Memo this initial value to avoid re-render
 
   const entryColWidth = useMemo(() => getUISettings().entryColWidth, [])
-  const view = useRouteView()
+  const { feedId, view } = useRouteParms()
   const inWideMode = view ? views[view].wideMode : false
   const { position, separatorProps } = useResizable({
     axis: "x",
@@ -40,7 +40,9 @@ export function Component() {
             width: position,
           }}
         >
-          <EntryColumn />
+          <EntryColumn
+            key={`${feedId}-${view}`}
+          />
         </div>
         {!inWideMode && (
           <div

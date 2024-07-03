@@ -20,6 +20,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     emailVerified: string | null;
                     image: string | null;
                     handle: string | null;
+                    createdAt: string;
                 };
             };
             outputFormat: "json";
@@ -103,6 +104,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         emailVerified: string | null;
                         image: string | null;
                         handle: string | null;
+                        createdAt: string;
                     } | null;
                     toUser: {
                         name: string | null;
@@ -111,6 +113,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         emailVerified: string | null;
                         image: string | null;
                         handle: string | null;
+                        createdAt: string;
                     } | null;
                     toFeed: {
                         description: string | null;
@@ -207,8 +210,8 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             output: {
                 code: 0;
                 data: {
-                    userId: string;
                     createdAt: string;
+                    userId: string;
                     addressIndex: number;
                     address: string | null;
                     dailyPowerToken: string;
@@ -223,8 +226,8 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             output: {
                 code: 0;
                 data: {
-                    userId: string;
                     createdAt: string;
+                    userId: string;
                     addressIndex: number;
                     address: string | null;
                     dailyPowerToken: string;

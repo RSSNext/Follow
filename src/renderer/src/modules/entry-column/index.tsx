@@ -206,7 +206,7 @@ const useEntriesByView = () => {
 
   useEffect(() => {
     prevEntries.current = []
-  }, [activeList.feedId])
+  }, [activeList.feedId, activeList.view])
   const localEntries = useMemo(() => {
     if (!unreadOnly) {
       prevEntries.current = []
@@ -244,8 +244,6 @@ const useEntriesByView = () => {
     // If remote data is not available, we use the local data, get the local data length
     totalCount: query.data?.pages?.[0]?.total ?? localEntries.length,
     entriesIds:
-      // FIXME we can't filter collections in local mode, so we need to use the remote data
-      // activeList.id === FEED_COLLECTION_LIST ? remoteEntryIds : nextEntries,
       // NOTE: if we use the remote data, priority will be given to the remote data, local data maybe had sort issue
       remoteEntryIds ?? localEntries,
   }
