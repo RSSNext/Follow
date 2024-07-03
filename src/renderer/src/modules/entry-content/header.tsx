@@ -11,9 +11,11 @@ import { useEntryTitleMeta } from "./atoms"
 export function EntryHeader({
   view,
   entryId,
+  className,
 }: {
   view: number
   entryId: string
+  className?: string
 }) {
   const entry = useEntry(entryId)
 
@@ -42,8 +44,9 @@ export function EntryHeader({
   return (
     <div
       className={cn(
-        "flex h-[55px] min-w-0 items-center justify-between gap-3 overflow-hidden px-5 text-lg text-zinc-500",
+        "flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500",
         entryTitleMeta && "border-b border-border",
+        className,
       )}
     >
       <div className="flex min-w-0 shrink">

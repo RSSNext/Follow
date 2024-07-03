@@ -125,7 +125,7 @@ export const useEntryActions = ({
         {
           key: "tip",
           shortcut: shortcuts.entry.tip.key,
-          name: `Tip Power`,
+          name: `Tip`,
           className: "i-mgc-power-outline",
           onClick: () => {
             nextFrame(openTipModal)

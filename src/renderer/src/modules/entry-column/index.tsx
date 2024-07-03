@@ -1,7 +1,10 @@
 import { useMainContainerElement } from "@renderer/atoms"
 import { useUser } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
+import { EmptyIcon } from "@renderer/components/icons/empty"
 import { ActionButton, StyledButton } from "@renderer/components/ui/button"
+import { DividerVertical } from "@renderer/components/ui/divider"
+import { LoadingCircle } from "@renderer/components/ui/loading"
 import {
   Popover,
   PopoverClose,
@@ -16,10 +19,11 @@ import {
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
 import { apiClient } from "@renderer/lib/api-fetch"
-import { ROUTE_FEED_PENDING, views } from "@renderer/lib/constants"
+import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING, views } from "@renderer/lib/constants"
 import { getStorageNS } from "@renderer/lib/ns"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
+import { EntryHeader } from "@renderer/modules/entry-content/header"
 import { useEntries } from "@renderer/queries/entries"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import {
@@ -51,8 +55,6 @@ import type { ListRange, VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
 
-import { EmptyIcon } from "../../components/icons/empty"
-import { LoadingCircle } from "../../components/ui/loading"
 import { EntryItem } from "./item"
 
 const unreadOnlyAtom = atomWithStorage<boolean>(
@@ -305,6 +307,9 @@ const ListHeader: FC<{
   const user = useUser()
 
   const feed = useFeedById(routerParams.feedId)
+
+  const { entryId, view } = useRouteParms()
+
   return (
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
       <div
@@ -314,7 +319,13 @@ const ListHeader: FC<{
         )}
       >
         {!titleAtBottom && titleInfo}
-        <div className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500">
+        <div className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500" onClick={(e) => e.stopPropagation()}>
+          {views[view].wideMode && entryId && entryId !== ROUTE_ENTRY_PENDING && (
+            <>
+              <EntryHeader view={view} entryId={entryId} />
+              <DividerVertical className="w-px" />
+            </>
+          )}
           {feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) && (
             <ActionButton
               tooltip="Refresh"

@@ -90,7 +90,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
   return (
     <>
-      <EntryHeader entryId={entry.entries.id} view={0} />
+      <EntryHeader entryId={entry.entries.id} view={0} className="h-[55px] px-5" />
       <div className="h-[calc(100%-3.5rem)] min-w-0 overflow-y-auto @container">
         <m.div
           style={{
