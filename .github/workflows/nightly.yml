@@ -1,4 +1,4 @@
-name: release
+name: nightly
 
 on:
   push:
@@ -37,6 +37,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "build/follow*.dmg"
-          tags: true
+          file: "build/*.dmg"
+          tags: false
           draft: false
