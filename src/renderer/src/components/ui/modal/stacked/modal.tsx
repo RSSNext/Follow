@@ -55,13 +55,6 @@ export const ModalInternal: Component<{
     [close],
   )
 
-  // const { opaque, overlay: defaultOverlay } = useUIStore(
-  //   useShallow((state) => ({
-  //     overlay: state.modalOverlay,
-  //     opaque: state.modalOpaque,
-  //   })),
-  // )
-  // const opaque = useUIStore((state) => state.modalOpaque)
   const opaque = useUISettingKey("modalOpaque")
 
   const {

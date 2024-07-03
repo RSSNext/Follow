@@ -334,7 +334,7 @@ const ListHeader: FC<{
             </ActionButton>
           )}
           <ActionButton
-            tooltip={`${unreadOnly ? "Unread Only" : "All"}`}
+            tooltip={unreadOnly ? "Unread Only" : "All"}
             shortcut={shortcuts.entries.toggleUnreadOnly.key}
             onClick={() => setUnreadOnly(!unreadOnly)}
           >

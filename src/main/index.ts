@@ -26,8 +26,14 @@ if (process.defaultApp) {
   app.setAsDefaultProtocolClient(APP_PROTOCOL)
 }
 
+const iconMap = {
+  prod: path.join(__dirname, "../../resources/icon.png"),
+  dev: path.join(__dirname, "../../resources/icon-dev.png"),
+}
 if (app.dock) {
-  app.dock.setIcon(path.join(__dirname, "../../resources/icon.png"))
+  app.dock.setIcon(
+    process.env.NODE_ENV === "development" ? iconMap.dev : iconMap.prod,
+  )
 }
 
 // This method will be called when Electron has finished
