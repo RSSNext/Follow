@@ -1,1 +1,2 @@
-export * from "./entry"
+export * from "./base"
+export * from "./feed"

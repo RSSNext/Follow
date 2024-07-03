@@ -1,6 +1,6 @@
 import { initializeDefaultUISettings, useUISettingValue } from "@renderer/atoms"
 import { tipcClient } from "@renderer/lib/client"
-import { unreadActions } from "@renderer/store"
+import { feedUnreadActions } from "@renderer/store"
 import { useEffect, useInsertionEffect } from "react"
 
 initializeDefaultUISettings()
@@ -14,7 +14,7 @@ export const UISettingInitialize = () => {
 
   useEffect(() => {
     if (state.showDockBadge) {
-      return unreadActions.subscribeUnreadCount((count) => tipcClient?.setMacOSBadge(count), true)
+      return feedUnreadActions.subscribeUnreadCount((count) => tipcClient?.setMacOSBadge(count), true)
     } else {
       tipcClient?.setMacOSBadge(0)
     }

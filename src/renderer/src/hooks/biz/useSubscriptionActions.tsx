@@ -1,7 +1,7 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
 import type { SubscriptionPlainModel } from "@renderer/store"
-import { getFeedById, unreadActions } from "@renderer/store"
+import { feedUnreadActions, getFeedById } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
@@ -19,7 +19,7 @@ export const useDeleteSubscription = ({
 
   onSuccess: (_, variables) => {
     Queries.subscription.byView(variables.view).invalidate()
-    unreadActions.updateByFeedId(variables.feedId, 0)
+    feedUnreadActions.updateByFeedId(variables.feedId, 0)
 
     const feed = getFeedById(variables.feedId)
 
@@ -48,7 +48,7 @@ export const useDeleteSubscription = ({
             })
 
             Queries.subscription.byView(variables.view).invalidate()
-            unreadActions.fetchUnreadByView(variables.view)
+            feedUnreadActions.fetchUnreadByView(variables.view)
           },
         },
       },

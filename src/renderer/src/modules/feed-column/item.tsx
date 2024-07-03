@@ -18,7 +18,7 @@ import { nextFrame } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { SubscriptionPlainModel } from "@renderer/store"
-import { getFeedById, useFeedById, useUnreadStore } from "@renderer/store"
+import { getFeedById, useFeedById, useFeedUnreadStore } from "@renderer/store"
 import { WEB_URL } from "@shared/constants"
 import { memo, useCallback } from "react"
 
@@ -60,7 +60,7 @@ const FeedItemImpl = ({
 
   const deleteSubscription = useDeleteSubscription({})
 
-  const feedUnread = useUnreadStore(
+  const feedUnread = useFeedUnreadStore(
     (state) => state.data[subscription.feedId] || 0,
   )
   const { present } = useModalStack()

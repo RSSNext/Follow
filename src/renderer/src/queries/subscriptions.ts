@@ -1,7 +1,7 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import type { FeedViewType } from "@renderer/lib/enum"
-import { subscriptionActions, unreadActions } from "@renderer/store"
+import { feedUnreadActions, subscriptionActions } from "@renderer/store"
 
 export const subscription = {
   byView: (view?: FeedViewType) =>
@@ -22,5 +22,5 @@ export const subscription = {
     }),
 
   unreadAll: () =>
-    defineQuery(["unread-all"], async () => unreadActions.fetchUnreadAll()),
+    defineQuery(["unread-all"], async () => feedUnreadActions.fetchUnreadAll()),
 }

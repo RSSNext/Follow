@@ -11,8 +11,8 @@ import { Queries } from "@renderer/queries"
 import type { SubscriptionPlainModel } from "@renderer/store"
 import {
   getFeedById,
+  useFeedUnreadStore,
   useSubscriptionByView,
-  useUnreadStore,
 } from "@renderer/store"
 import { useMemo, useState } from "react"
 import { Link } from "react-router-dom"
@@ -103,7 +103,7 @@ export function FeedList({
 
   useAuthQuery(Queries.subscription.unreadAll())
 
-  const totalUnread = useUnreadStore((state) => {
+  const totalUnread = useFeedUnreadStore((state) => {
     let unread = 0
     data?.list.forEach((a) => {
       a.list.forEach((b) => {
@@ -113,7 +113,7 @@ export function FeedList({
     return unread
   })
 
-  const sortedByUnread = useUnreadStore((state) =>
+  const sortedByUnread = useFeedUnreadStore((state) =>
     data?.list?.sort(
       (a, b) =>
         b.list.reduce((acc, cur) => (state.data[cur.feedId] || 0) + acc, 0) -

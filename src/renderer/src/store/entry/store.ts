@@ -6,7 +6,7 @@ import { produce } from "immer"
 import { merge, omit } from "lodash-es"
 
 import { feedActions } from "../feed"
-import { unreadActions } from "../unread"
+import { feedUnreadActions } from "../unread"
 import { createZustandStore, getStoreActions } from "../utils/helper"
 import { isHydrated } from "../utils/hydrate"
 import type { EntryActions, EntryState } from "./types"
@@ -187,7 +187,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   },
 
   markRead: (feedId: string, entryId: string, read: boolean) => {
-    unreadActions.incrementByFeedId(feedId, read ? -1 : 1)
+    feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
     entryActions.patch(entryId, {
       read,
     })
@@ -198,7 +198,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
     entries.forEach((entryId) => {
       entryActions.markRead(feedId, entryId, true)
     })
-    unreadActions.updateByFeedId(feedId, 0)
+    feedUnreadActions.updateByFeedId(feedId, 0)
   },
 
   markStar: (entryId, star) => {

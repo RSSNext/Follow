@@ -4,14 +4,14 @@ import { browserDB } from "@renderer/database"
 import { entryActions } from "../entry"
 import { feedActions } from "../feed"
 import { subscriptionActions } from "../subscription"
-import { unreadActions } from "../unread"
+import { feedUnreadActions } from "../unread"
 
 export const clearLocalPersistStoreData = () => {
   // All clear and reset method will aggregate here
   [
     entryActions,
     subscriptionActions,
-    unreadActions,
+    feedUnreadActions,
     feedActions,
   ].forEach((actions) => {
     actions.clear()

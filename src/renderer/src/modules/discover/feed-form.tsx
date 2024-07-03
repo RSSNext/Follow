@@ -30,7 +30,7 @@ import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useFeed } from "@renderer/queries/feed"
-import { unreadActions } from "@renderer/store"
+import { feedUnreadActions } from "@renderer/store"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
@@ -106,13 +106,13 @@ export const FeedForm: Component<{
         tipcClient?.invalidateQuery(
           Queries.subscription.byView(feed.data?.subscription?.view).key,
         )
-        unreadActions.fetchUnreadByView(feed.data?.subscription?.view)
+        feedUnreadActions.fetchUnreadByView(feed.data?.subscription?.view)
       }
       Queries.subscription.byView(Number.parseInt(variables.view)).invalidate()
       tipcClient?.invalidateQuery(
         Queries.subscription.byView(Number.parseInt(variables.view)).key,
       )
-      unreadActions.fetchUnreadByView(Number.parseInt(variables.view))
+      feedUnreadActions.fetchUnreadByView(Number.parseInt(variables.view))
 
       const feedId = feed.data?.feed.id
       if (feedId) {

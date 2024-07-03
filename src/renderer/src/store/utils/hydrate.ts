@@ -4,12 +4,14 @@ import {
   EntryRelatedService,
   EntryService,
   FeedService,
+  FeedUnreadService,
   SubscriptionService,
 } from "@renderer/services"
 
 import { entryActions, useEntryStore } from "../entry/store"
 import { feedActions, useFeedStore } from "../feed"
 import { subscriptionActions } from "../subscription"
+import { feedUnreadActions } from "../unread"
 
 // This flag controls write data in indexedDB, if it's false, pass data insert to db
 // When app not ready, it's false, after hydrate data, it's true
@@ -24,7 +26,7 @@ export const isHydrated = () => _isHydrated
 
 export const hydrateDatabaseToStore = async () => {
   const now = Date.now()
-  const [feeds] = await Promise.all([hydrateFeed(), hydrateSubscription()])
+  const [feeds] = await Promise.all([hydrateFeed(), hydrateSubscription(), hydrateFeedUnread()])
 
   await hydrateEntry(feeds)
   _isHydrated = true
@@ -35,6 +37,12 @@ async function hydrateFeed() {
   const feeds = await FeedService.findAll()
   feedActions.upsertMany(feeds)
   return useFeedStore.getState().feeds
+}
+
+async function hydrateFeedUnread() {
+  const unread = await FeedUnreadService.getAll()
+
+  return feedUnreadActions.hydrate(unread)
 }
 async function hydrateEntry(feedMap: Record<string, FeedModel>) {
   const [entries, entryRelated, feedEntries, collections] = await Promise.all([
