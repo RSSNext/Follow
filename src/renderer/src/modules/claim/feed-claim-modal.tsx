@@ -1,5 +1,7 @@
+import { FollowSummary } from "@renderer/components/feed-summary"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { StyledButton } from "@renderer/components/ui/button"
+import { Card, CardHeader } from "@renderer/components/ui/card"
 import {
   CopyButton,
   ShikiHighLighter,
@@ -54,6 +56,11 @@ export const FeedClaimModalContent: FC<{
 
   return (
     <div className="w-[650px] max-w-full">
+      <Card className="mb-2">
+        <CardHeader>
+          <FollowSummary feed={feed} />
+        </CardHeader>
+      </Card>
       <p>To claim this feed as your own, you need to verify ownership.</p>
       <p>
         There are three ways to choose from, you can choose one of them to
@@ -72,6 +79,10 @@ export const FeedClaimModalContent: FC<{
             <BaseCodeBlock>{claimMessage?.data.content || ""}</BaseCodeBlock>
           </TabsContent>
           <TabsContent className="mt-0 pt-3" value="description">
+            <p className="mb-2 leading-none">
+              Current description:
+              <span className="ml-2 text-xs text-zinc-500">{feed.description}</span>
+            </p>
             <p>
               Copy the following content and paste it into the
               {" "}
