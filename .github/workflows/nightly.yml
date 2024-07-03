@@ -1,4 +1,4 @@
-name: nightly
+name: Build Nightly
 
 on:
   push:
@@ -11,7 +11,7 @@ env:
 jobs:
   build:
     runs-on: macos-latest
-    name: Build assets
+    name: Build
     steps:
       - uses: actions/checkout@v4
       - name: Cache pnpm modules
@@ -37,6 +37,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "build/*.dmg"
+          file: "dist/*.dmg"
           tags: false
           draft: false
