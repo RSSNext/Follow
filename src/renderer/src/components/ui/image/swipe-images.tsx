@@ -4,8 +4,9 @@ import "swiper/css/scrollbar"
 
 import { Image } from "@renderer/components/ui/image"
 import { cn } from "@renderer/lib/utils"
+import { useHover } from "@use-gesture/react"
 import { uniq } from "lodash-es"
-import { useInView } from "react-intersection-observer"
+import { useRef, useState } from "react"
 import { Mousewheel, Navigation, Scrollbar } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 
@@ -26,23 +27,33 @@ export function SwipeImages({
 }) {
   const uniqImages = uniq(images)
 
-  const { ref, inView } = useInView()
+  const hoverRef = useRef<HTMLDivElement>(null)
+  const [enableSwipe, setEnableSwipe] = useState(false)
+  useHover(
+    (event) => {
+      if (event.active) {
+        setEnableSwipe(event.active)
+      }
+    },
+    {
+      target: hoverRef,
+    },
+  )
 
   if (!images) return null
   return (
     <div
-      ref={ref}
+      ref={hoverRef}
       className={cn(
         "relative flex w-full items-center overflow-hidden",
         styles["swipe-wrapper"],
         className,
       )}
     >
-      {(uniqImages?.length || 0) > 1 ? (
+      {enableSwipe && (uniqImages?.length || 0) > 1 ? (
         <>
           <Swiper
             loop
-            autoplay={inView ? true : false}
             navigation={{
               prevEl: `#swiper-button-prev-${uniqueKey}`,
               nextEl: `#swiper-button-next-${uniqueKey}`,
@@ -90,7 +101,7 @@ export function SwipeImages({
             <i className="i-mgc-right-cute-fi" />
           </div>
         </>
-      ) : uniqImages?.length === 1 ?
+      ) : uniqImages?.length >= 1 ?
           (
             <Image
               onClick={() => onPreview?.(uniqImages)}
