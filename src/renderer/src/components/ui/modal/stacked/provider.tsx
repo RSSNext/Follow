@@ -1,4 +1,4 @@
-import { useUISettingKey } from "@renderer/atoms/ui"
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { AnimatePresence } from "framer-motion"
 import { useAtomValue } from "jotai"
 import type { FC, PropsWithChildren } from "react"

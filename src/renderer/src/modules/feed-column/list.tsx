@@ -1,4 +1,4 @@
-import { useUISettingKey } from "@renderer/atoms/ui"
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteFeedId } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"

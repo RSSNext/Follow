@@ -1,4 +1,5 @@
 import { appLog } from "@renderer/lib/log"
+import { sleep } from "@renderer/lib/utils"
 import type { CombinedEntryModel, FeedModel } from "@renderer/models"
 import {
   EntryRelatedKey,
@@ -27,12 +28,26 @@ export const isHydrated = () => _isHydrated
 
 export const hydrateDatabaseToStore = async () => {
   appLog("Hydrate database data to store task start...")
-  const now = Date.now()
-  const [feeds] = await Promise.all([hydrateFeed(), hydrateSubscription(), hydrateFeedUnread()])
 
-  await hydrateEntry(feeds)
-  _isHydrated = true
-  appLog("Hydrate data done,", `${Date.now() - now}ms`)
+  async function hydrate() {
+    const now = Date.now()
+    const [feeds] = await Promise.all([
+      hydrateFeed(),
+      hydrateSubscription(),
+      hydrateFeedUnread(),
+    ])
+
+    await hydrateEntry(feeds)
+    _isHydrated = true
+    appLog("Hydrate data done,", `${Date.now() - now}ms`)
+  }
+  await Promise.race([hydrate(), sleep(1500).then(() => "timeout")]).then(
+    (result) => {
+      if (result === "timeout") {
+        appLog("Hydrate data timeout")
+      }
+    },
+  )
 }
 
 async function hydrateFeed() {

@@ -1,24 +1,26 @@
-import { initializeDefaultUISettings, useUISettingValue } from "@renderer/atoms/ui"
+import { useUISettingValue } from "@renderer/atoms/settings/ui"
 import { tipcClient } from "@renderer/lib/client"
 import { feedUnreadActions } from "@renderer/store/unread"
 import { useEffect, useInsertionEffect } from "react"
 
-initializeDefaultUISettings()
-export const UISettingInitialize = () => {
-  const state = useUISettingValue()
+const useUISettingSync = () => {
+  const setting = useUISettingValue()
 
   useInsertionEffect(() => {
     const root = document.documentElement
-    root.style.fontSize = `${state.uiTextSize}px`
-  }, [state.uiTextSize])
+    root.style.fontSize = `${setting.uiTextSize}px`
+  }, [setting.uiTextSize])
 
   useEffect(() => {
-    if (state.showDockBadge) {
+    if (setting.showDockBadge) {
       return feedUnreadActions.subscribeUnreadCount((count) => tipcClient?.setMacOSBadge(count), true)
     } else {
       tipcClient?.setMacOSBadge(0)
     }
     return
-  }, [state.showDockBadge])
+  }, [setting.showDockBadge])
+}
+export const SettingSync = () => {
+  useUISettingSync()
   return null
 }

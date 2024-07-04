@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom"
 import { toast } from "sonner"
 
 import { useAppIsReady } from "./atoms/app"
-import { useUISettingKey } from "./atoms/ui"
+import { useUISettingKey } from "./atoms/settings/ui"
 import { useDark } from "./hooks/common/useDark"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"

@@ -1,4 +1,4 @@
-import { clearUISettings } from "@renderer/atoms/ui"
+import { clearUISettings } from "@renderer/atoms/settings/ui"
 import { browserDB } from "@renderer/database"
 
 import { entryActions } from "../entry"

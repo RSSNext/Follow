@@ -1,6 +1,12 @@
-import { useShouldUseIndexedDB } from "@renderer/database"
+import {
+  setGeneralSetting,
+  useGeneralSettingValue,
+} from "@renderer/atoms/settings/general"
 import { tipcClient } from "@renderer/lib/client"
-import { SettingDescription, SettingSwitch } from "@renderer/modules/settings/control"
+import {
+  SettingDescription,
+  SettingSwitch,
+} from "@renderer/modules/settings/control"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
 import { SettingsTitle } from "@renderer/modules/settings/title"
 import { defineSettingPage } from "@renderer/modules/settings/utils"
@@ -29,7 +35,8 @@ export function Component() {
     setLoginSetting(checked)
   }, [])
 
-  const [shouldUseIndexedDB, setShouldUseIndexedDB] = useShouldUseIndexedDB()
+  const settings = useGeneralSettingValue()
+
   return (
     <>
       <SettingsTitle />
@@ -43,12 +50,15 @@ export function Component() {
         )}
         <SettingSectionTitle title="Data control" />
         <SettingSwitch
-          checked={shouldUseIndexedDB}
-          onCheckedChange={setShouldUseIndexedDB}
+          checked={settings.dataPersist}
+          onCheckedChange={(checked) =>
+            setGeneralSetting("dataPersist", checked)}
           label="Persist data to offline usage"
         />
         <SettingDescription>
-          Data will be stored locally on your device for offline usage and speed up the data loading of the first screen. If you disable this, all local data will be removed.
+          Data will be stored locally on your device for offline usage and speed
+          up the data loading of the first screen. If you disable this, all
+          local data will be removed.
         </SettingDescription>
       </div>
     </>

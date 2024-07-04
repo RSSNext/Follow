@@ -11,6 +11,7 @@ export const createAtomAccessor = <T>(atom: PrimitiveAtom<T>) =>
     (value: T) => jotaiStore.set(atom, value),
   ] as const
 
+const options = { store: jotaiStore }
 /**
  * @param atom - jotai
  * @returns - [atom, useAtom, useAtomValue, useSetAtom, jotaiStore.get, jotaiStore.set]
@@ -18,9 +19,9 @@ export const createAtomAccessor = <T>(atom: PrimitiveAtom<T>) =>
 export const createAtomHooks = <T>(atom: PrimitiveAtom<T>) =>
   [
     atom,
-    () => useAtom(atom),
-    () => useAtomValue(atom),
-    () => useSetAtom(atom),
+    () => useAtom(atom, options),
+    () => useAtomValue(atom, options),
+    () => useSetAtom(atom, options),
     ...createAtomAccessor(atom),
   ] as const
 

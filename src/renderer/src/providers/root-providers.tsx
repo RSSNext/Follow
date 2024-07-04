@@ -11,7 +11,7 @@ import { HelmetProvider } from "react-helmet-async"
 
 import { StableRouterProvider } from "./biz-router-provider"
 import { ContextMenuProvider } from "./context-menu-provider"
-import { UISettingInitialize } from "./ui-setting-Initialize"
+import { SettingSync } from "./ui-setting-Initialize"
 import { UserProvider } from "./user-provider"
 
 const loadFeatures = () =>
@@ -32,7 +32,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
         <TooltipProvider>
           <Provider store={jotaiStore}>
             <UserProvider />
-            <UISettingInitialize />
+            <SettingSync />
             <ModalStackProvider />
             <ContextMenuProvider />
             <HelmetProvider>{children}</HelmetProvider>
