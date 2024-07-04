@@ -31,9 +31,19 @@ const Wrapper: Component<{
         initial={{ opacity: 0.8 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute bottom-4 right-4"
+        className="absolute bottom-4 right-4 flex gap-3"
         onClick={stopPropagation}
       >
+        {!!window.electron && (
+          <ActionButton
+            tooltip="Download"
+            onClick={() => {
+              tipcClient?.saveImage(src)
+            }}
+          >
+            <i className="i-mgc-download-2-cute-re" />
+          </ActionButton>
+        )}
         <ActionButton
           tooltip="Open in browser"
           onClick={() => {
@@ -76,7 +86,6 @@ export const PreviewImageContent: FC<{
             label: "Save image as...",
             type: "text",
             click: () => {
-              // window.electron.ipcRenderer.invoke("save-image", image);
               tipcClient?.saveImage(image)
             },
           },
