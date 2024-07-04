@@ -1,4 +1,5 @@
 import { useMainContainerElement } from "@renderer/atoms/dom"
+import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { useUser } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { EmptyIcon } from "@renderer/components/icons/empty"
@@ -81,7 +82,7 @@ export function EntryColumn() {
     markReadMutation.mutate(activeEntry)
   }, [activeEntry?.entries?.id, activeEntry?.read])
 
-  const handleRangeChange = useEventCallback(
+  const handleMarkreadInRange = useEventCallback(
     debounce(
       async ({ startIndex }: ListRange) => {
         const idSlice = entriesIds?.slice(0, startIndex)
@@ -113,7 +114,7 @@ export function EntryColumn() {
       { leading: false },
     ),
   )
-
+  const scrollMarkUnread = useGeneralSettingKey("scrollMarkUnread")
   const virtuosoOptions = {
     components: {
       List: ListContent,
@@ -127,7 +128,7 @@ export function EntryColumn() {
         )
       }, [isFetchingNextPage]),
     },
-    rangeChanged: handleRangeChange,
+    rangeChanged: scrollMarkUnread ? handleMarkreadInRange : undefined,
     totalCount: entries.totalCount,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entriesIds,

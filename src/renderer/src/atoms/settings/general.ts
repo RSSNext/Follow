@@ -4,6 +4,10 @@ import { createSettingAtom } from "./helper"
 
 const createDefaultSettings = () => ({
   dataPersist: true,
+
+  // mark unread
+  scrollMarkUnread: true,
+
 })
 export const {
   useSettingKey: useGeneralSettingKey,
