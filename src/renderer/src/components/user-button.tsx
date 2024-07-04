@@ -44,6 +44,7 @@ export const LoginButton: FC<LoginProps> = (props) => {
               modalStack.present({
                 CustomModalComponent: NoopChildren,
                 title: "Login",
+                id: "login",
                 content: () => (
                   <LoginModalContent
                     runtime={window.electron ? "app" : "browser"}

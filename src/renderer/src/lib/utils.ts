@@ -111,3 +111,5 @@ export function formatXml(xml: string, indent = 4) {
 
   return formatted.trim()
 }
+
+export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))

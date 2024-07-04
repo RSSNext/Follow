@@ -1,4 +1,4 @@
-import { useUISettingSelector } from "@renderer/atoms/ui"
+import { useUISettingSelector } from "@renderer/atoms/settings/ui"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { APP_NAME } from "@renderer/lib/constants"

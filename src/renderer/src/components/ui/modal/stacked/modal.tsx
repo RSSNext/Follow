@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog"
-import { useUISettingKey } from "@renderer/atoms/ui"
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { m } from "@renderer/components/common/Motion"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"

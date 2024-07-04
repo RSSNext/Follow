@@ -1,4 +1,4 @@
-import { useUISettingKey } from "@renderer/atoms/ui"
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useDark } from "@renderer/hooks/common"
 import { cn } from "@renderer/lib/utils"
 import { useMediaQuery } from "usehooks-ts"

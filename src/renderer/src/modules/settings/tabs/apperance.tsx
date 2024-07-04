@@ -3,7 +3,7 @@ import {
   useUISettingKey,
   useUISettingSelector,
   useUISettingValue,
-} from "@renderer/atoms/ui"
+} from "@renderer/atoms/settings/ui"
 import {
   Select,
   SelectContent,
