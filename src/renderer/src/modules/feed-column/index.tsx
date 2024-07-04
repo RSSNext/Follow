@@ -112,7 +112,7 @@ export function FeedColumn() {
   const reduceMotion = useReduceMotion()
   return (
     <Vibrancy
-      className="flex h-full flex-col gap-3 pt-2.5"
+      className="relative flex h-full flex-col gap-3 pt-2.5"
       onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
       <div
@@ -189,6 +189,9 @@ export function FeedColumn() {
           ))}
         </m.div>
       </div>
+      {APP_VERSION?.[0] === "0" && (
+        <div className="pointer-events-none absolute bottom-3 w-full text-center text-xs opacity-20">Early Access</div>
+      )}
     </Vibrancy>
   )
 }
