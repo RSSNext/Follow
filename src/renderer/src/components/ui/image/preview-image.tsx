@@ -1,14 +1,14 @@
 import { m } from "@renderer/components/common/Motion"
+import { tipcClient } from "@renderer/lib/client"
 import { stopPropagation } from "@renderer/lib/dom"
+import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { FC } from "react"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { Mousewheel, Scrollbar, Virtual } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 
 import { ActionButton } from "../button"
-import {
-  microReboundPreset,
-} from "../constants/spring"
+import { microReboundPreset } from "../constants/spring"
 import { useCurrentModal } from "../modal"
 
 const Wrapper: Component<{
@@ -52,12 +52,51 @@ export const PreviewImageContent: FC<{
 }> = ({ images, initialIndex = 0 }) => {
   const [currentSrc, setCurrentSrc] = useState(images[initialIndex])
 
+  const handleContextMenu = useCallback(
+    (image: string, e: React.MouseEvent<HTMLImageElement>) => {
+      if (!window.electron) return
+
+      showNativeMenu(
+        [
+          {
+            label: "Open in browser",
+            type: "text",
+            click: () => {
+              window.open(image)
+            },
+          },
+          {
+            label: "Copy image address",
+            type: "text",
+            click: () => {
+              navigator.clipboard.writeText(image)
+            },
+          },
+          {
+            label: "Save image as...",
+            type: "text",
+            click: () => {
+              // window.electron.ipcRenderer.invoke("save-image", image);
+              tipcClient?.saveImage(image)
+            },
+          },
+        ],
+        e,
+      )
+    },
+    [],
+  )
   if (images.length === 0) return null
   if (images.length === 1) {
     const src = images[0]
     return (
       <Wrapper src={src}>
-        <img className="size-full object-contain" alt="cover" src={src} />
+        <img
+          className="size-full object-contain"
+          alt="cover"
+          src={src}
+          onContextMenu={(e) => handleContextMenu(src, e)}
+        />
       </Wrapper>
     )
   }
@@ -81,6 +120,7 @@ export const PreviewImageContent: FC<{
         {images.map((image, index) => (
           <SwiperSlide key={image} virtualIndex={index}>
             <img
+              onContextMenu={(e) => handleContextMenu(image, e)}
               className="size-full object-contain"
               alt="cover"
               src={image}

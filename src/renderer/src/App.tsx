@@ -2,6 +2,7 @@ import { queryClient } from "@renderer/lib/query-client"
 import { registerGlobalContext } from "@shared/bridge"
 import { useEffect } from "react"
 import { Outlet } from "react-router-dom"
+import { toast } from "sonner"
 
 import { useAppIsReady, useUISettingKey } from "./atoms"
 import { useDark } from "./hooks/common/useDark"
@@ -20,6 +21,7 @@ function App() {
 
     registerGlobalContext({
       showSetting: window.router.showSettings,
+      toast,
     })
     return cleanup
   }, [])

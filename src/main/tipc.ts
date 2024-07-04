@@ -1,7 +1,9 @@
 import { getRendererHandlers, tipc } from "@egoist/tipc/main"
+import { callGlobalContextMethod } from "@shared/bridge"
 import type { MessageBoxOptions } from "electron"
 import { app, dialog, Menu, ShareMenu } from "electron"
 
+import { downloadFile } from "./lib/download"
 import type { RendererHandlers } from "./renderer-handlers"
 import { createSettingWindow, createWindow, getMainWindow } from "./window"
 
@@ -170,6 +172,26 @@ export const router = {
   ),
   setMacOSBadge: t.procedure.input<number>().action(async ({ input }) => {
     app.setBadgeCount(input)
+  }),
+
+  saveImage: t.procedure.input<string>().action(async ({ input }) => {
+    const result = await dialog.showSaveDialog({
+      defaultPath: input.split("/").pop(),
+    })
+    if (result.canceled) return
+
+    // return result.filePath;
+    await downloadFile(input, result.filePath)
+      .catch((err) => {
+        const mainWindow = getMainWindow()
+        if (!mainWindow) return
+        callGlobalContextMethod(mainWindow, "toast.error", ["Download failed!"])
+        throw err
+      })
+
+    const mainWindow = getMainWindow()
+    if (!mainWindow) return
+    callGlobalContextMethod(mainWindow, "toast.success", ["Download success!"])
   }),
 }
 
