@@ -3,7 +3,7 @@ import {
   useUISettingKey,
   useUISettingSelector,
   useUISettingValue,
-} from "@renderer/atoms"
+} from "@renderer/atoms/ui"
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
-import { useDark } from "@renderer/hooks"
+import { useDark } from "@renderer/hooks/common"
 import { tipcClient } from "@renderer/lib/client"
 import { getOS } from "@renderer/lib/utils"
 import { useQuery } from "@tanstack/react-query"

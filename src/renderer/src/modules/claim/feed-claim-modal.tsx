@@ -14,10 +14,10 @@ import {
   TabsList,
   TabsTrigger,
 } from "@renderer/components/ui/tabs"
-import { useAuthQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks/common"
 import { Queries } from "@renderer/queries"
 import { useClaimFeedMutation } from "@renderer/queries/feed"
-import { useFeedById } from "@renderer/store"
+import { useFeedById } from "@renderer/store/feed"
 import type { FC } from "react"
 
 export const FeedClaimModalContent: FC<{

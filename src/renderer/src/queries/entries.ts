@@ -1,7 +1,7 @@
-import { useAuthInfiniteQuery, useAuthQuery } from "@renderer/hooks"
+import { useAuthInfiniteQuery, useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import { entryActions } from "@renderer/store"
+import { entryActions } from "@renderer/store/entry"
 
 export const entries = {
   entries: ({

@@ -5,7 +5,7 @@ import {
   AvatarImage,
 } from "@renderer/components/ui/avatar"
 import { StyledButton } from "@renderer/components/ui/button"
-import { useSignOut } from "@renderer/hooks"
+import { useSignOut } from "@renderer/hooks/biz/useSignOut"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { FeedList } from "@renderer/modules/feed-column/list"

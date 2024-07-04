@@ -1,5 +1,5 @@
 import { subscriptionModel } from "@renderer/database"
-import type { SubscriptionPlainModel } from "@renderer/store"
+import type { SubscriptionPlainModel } from "@renderer/store/subscription"
 
 import { BaseService } from "./base"
 

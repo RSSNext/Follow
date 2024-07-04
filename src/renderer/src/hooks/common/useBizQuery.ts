@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useLoginModalShow } from "@renderer/atoms"
+import { useLoginModalShow } from "@renderer/atoms/user"
 import type { DefinedQuery } from "@renderer/lib/defineQuery"
 import type {
   InfiniteData,

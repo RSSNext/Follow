@@ -1,6 +1,6 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholder"
-import { useAsRead } from "@renderer/hooks"
+import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"

@@ -1,6 +1,6 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
-import { useAsRead } from "@renderer/hooks"
+import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"

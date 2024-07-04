@@ -2,6 +2,8 @@ import { FeedIcon } from "@renderer/components/feed-icon"
 import { cn } from "@renderer/lib/utils"
 import type { FeedModel } from "@renderer/models"
 
+import { EllipsisHorizontalTextWithTooltip } from "./ui/typography"
+
 export function FollowSummary({
   feed,
   docs,
@@ -22,14 +24,14 @@ export function FollowSummary({
         <FeedIcon
           feed={feed}
           fallbackUrl={docs}
-          className="mask-squircle mask mr-2 shrink-0 rounded-none"
+          className="mask-squircle mask mr-3 shrink-0 rounded-none"
           size={32}
         />
         <div className="truncate text-base font-semibold leading-tight">
           {feed.title}
-          <div className="truncate text-xs font-normal text-zinc-500">
+          <EllipsisHorizontalTextWithTooltip className="truncate text-xs font-normal text-zinc-500">
             {feed.description}
-          </div>
+          </EllipsisHorizontalTextWithTooltip>
         </div>
       </a>
       <div className="flex items-center gap-1 truncate text-zinc-500">

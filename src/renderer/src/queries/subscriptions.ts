@@ -1,7 +1,8 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import type { FeedViewType } from "@renderer/lib/enum"
-import { feedUnreadActions, subscriptionActions } from "@renderer/store"
+import { subscriptionActions } from "@renderer/store/subscription"
+import { feedUnreadActions } from "@renderer/store/unread"
 
 export const subscription = {
   byView: (view?: FeedViewType) =>

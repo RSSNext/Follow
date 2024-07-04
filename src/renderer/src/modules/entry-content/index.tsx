@@ -1,8 +1,8 @@
-import { useUISettingKey } from "@renderer/atoms"
+import { useUISettingKey } from "@renderer/atoms/ui"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { useAuthQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { parseHtml } from "@renderer/lib/parse-html"
 import type { ActiveEntryId } from "@renderer/models"
@@ -11,7 +11,8 @@ import {
   WrappedElementProvider,
 } from "@renderer/providers/wrapped-element-provider"
 import { Queries } from "@renderer/queries"
-import { useEntry, useFeedHeaderTitle } from "@renderer/store"
+import { useEntry } from "@renderer/store/entry"
+import { useFeedHeaderTitle } from "@renderer/store/feed"
 import { useEffect, useState } from "react"
 
 import { LoadingCircle } from "../../components/ui/loading"

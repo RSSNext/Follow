@@ -3,7 +3,8 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
-import { useAuthQuery, useSignOut } from "@renderer/hooks"
+import { useSignOut } from "@renderer/hooks/biz/useSignOut"
+import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame } from "@renderer/lib/dom"

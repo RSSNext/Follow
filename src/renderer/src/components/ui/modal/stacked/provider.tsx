@@ -1,4 +1,4 @@
-import { useUISettingKey } from "@renderer/atoms"
+import { useUISettingKey } from "@renderer/atoms/ui"
 import { AnimatePresence } from "framer-motion"
 import { useAtomValue } from "jotai"
 import type { FC, PropsWithChildren } from "react"
@@ -6,7 +6,6 @@ import type { FC, PropsWithChildren } from "react"
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX } from "./constants"
 import { useDismissAllWhenRouterChange } from "./hooks"
-// import { useDismissAllWhenRouterChange } from "./hooks"
 import { ModalInternal } from "./modal"
 import { ModalOverlay } from "./overlay"
 

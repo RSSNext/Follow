@@ -1,5 +1,5 @@
 import { StyledButton } from "@renderer/components/ui/button"
-import { useAuthQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { ActionsResponse } from "@renderer/models"
 import { ActionCard } from "@renderer/modules/settings/action-card"

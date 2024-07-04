@@ -1,5 +1,5 @@
 import { LoadingCircle } from "@renderer/components/ui/loading"
-import { useAuthQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks/common"
 import { isASCII } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useMemo } from "react"

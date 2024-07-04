@@ -1,4 +1,4 @@
-import { useRefValue } from "@renderer/hooks"
+import { useRefValue } from "@renderer/hooks/common"
 import { createAtomHooks } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
 import { useAtomValue } from "jotai"

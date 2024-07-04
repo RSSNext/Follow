@@ -1,9 +1,9 @@
 import { getUser } from "@renderer/atoms/user"
-import { useAuthQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { formatXml } from "@renderer/lib/utils"
-import { feedActions } from "@renderer/store"
+import { feedActions } from "@renderer/store/feed"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 

@@ -1,5 +1,5 @@
 import { getCsrfToken } from "@hono/auth-js/react"
-import { setLoginModalShow } from "@renderer/atoms"
+import { setLoginModalShow } from "@renderer/atoms/user"
 import type { AppType } from "@renderer/hono"
 import { hc } from "hono/client"
 import { FetchError, ofetch } from "ofetch"

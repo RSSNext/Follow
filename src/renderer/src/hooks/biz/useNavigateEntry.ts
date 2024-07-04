@@ -1,4 +1,4 @@
-import { getReadonlyRoute, getStableRouterNavigate } from "@renderer/atoms"
+import { getReadonlyRoute, getStableRouterNavigate } from "@renderer/atoms/route"
 import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "@renderer/lib/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { isUndefined } from "lodash-es"
