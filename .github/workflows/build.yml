@@ -41,7 +41,7 @@ jobs:
           cache: "pnpm"
 
       - name: Build/release Electron app
-        uses: songkeys/action-electron-builder@v1
+        uses: songkeys/action-electron-builder@master
         with:
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
