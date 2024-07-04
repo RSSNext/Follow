@@ -20,19 +20,13 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      - name: Cache pnpm modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
 
-      - name: Use Node.js 22.x
-        uses: actions/setup-node@v4.0.2
+      - name: Set node
+        uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: "pnpm"
 
       - name: Build/release Electron app
         uses: phil-chp/action-electron-builder@v1
