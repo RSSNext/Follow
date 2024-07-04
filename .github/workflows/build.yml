@@ -55,3 +55,14 @@ jobs:
 
           mac_certs: ${{ secrets.mac_certs }}
           mac_certs_password: ${{ secrets.mac_certs_password }}
+
+      - name: Upload file
+        uses: actions/upload-artifact@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: |
+            "dist/*.dmg"
+            "dist/*.exe"
+            "dist/*.AppImage"
+          retention-days: 90
