@@ -56,6 +56,9 @@ jobs:
           mac_certs: ${{ secrets.mac_certs }}
           mac_certs_password: ${{ secrets.mac_certs_password }}
 
+      - name: List files
+        run: ls -l dist
+
       - name: Upload file
         uses: actions/upload-artifact@v4
         env:
