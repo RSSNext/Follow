@@ -13,6 +13,8 @@ import { useMemo, useRef, useState } from "react"
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
+const ViewTag = window.electron ? "webview" : "iframe"
+
 export function VideoItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
@@ -43,12 +45,12 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
             modalStack.present({
               title: "",
               content: ({ dismiss }) => (
-                <m.iframe
-                  exit={{ scale: 0.94, opacity: 0 }}
-                  src={iframeSrc}
-                  className="size-full p-12"
-                  onClick={() => dismiss()}
-                />
+                <m.div exit={{ scale: 0.94, opacity: 0 }} className="size-full p-12" onClick={() => dismiss()}>
+                  <ViewTag
+                    src={iframeSrc}
+                    className="size-full"
+                  />
+                </m.div>
               ),
               clickOutsideToDismiss: true,
               CustomModalComponent: NoopChildren,
@@ -59,8 +61,7 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
       >
         <div className="overflow-x-auto" ref={ref}>
           {miniIframeSrc && hovered ? (
-            // eslint-disable-next-line @eslint-react/dom/no-missing-iframe-sandbox
-            <iframe
+            <ViewTag
               src={miniIframeSrc}
               className={cn("pointer-events-none aspect-video w-full shrink-0 rounded-md bg-black object-cover", isActive && "rounded-b-none")}
             />
