@@ -29,6 +29,7 @@ asarUnpack:
   - resources/**
 win:
   executableName: follow
+  icon: resources/icon.png
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
