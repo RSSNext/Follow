@@ -79,8 +79,9 @@ export function SwipeImages({
                     height: 600,
                   }}
                   disableContextMenu
-                  onClick={() => {
+                  onClick={(e) => {
                     onPreview?.(images, i)
+                    e.stopPropagation()
                   }}
                 />
               </SwiperSlide>
@@ -104,7 +105,10 @@ export function SwipeImages({
       ) : uniqImages?.length >= 1 ?
           (
             <Image
-              onClick={() => onPreview?.(uniqImages)}
+              onClick={(e) => {
+                onPreview?.(uniqImages)
+                e.stopPropagation()
+              }}
               className="size-full rounded-none object-cover sm:transition-transform sm:duration-300 sm:ease-in-out sm:group-hover:scale-105"
               alt="cover"
               src={uniqImages[0]}
