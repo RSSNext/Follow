@@ -40,7 +40,7 @@ export const shortcuts = {
     },
     markAllAsRead: {
       name: "Mark All as Read",
-      key: "A",
+      key: "Shift+Meta+A",
     },
     toggleUnreadOnly: {
       name: "Toggle Unread Only",
@@ -62,11 +62,11 @@ export const shortcuts = {
     },
     copyLink: {
       name: "Copy Link",
-      key: "Meta+Shift+C",
+      key: "Shift+Meta+C",
     },
     tip: {
       name: "Tip Power",
-      key: "Meta+Shift+T",
+      key: "Shift+Meta+T",
     },
   },
 } as const

@@ -19,7 +19,11 @@ import {
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
 import { apiClient } from "@renderer/lib/api-fetch"
-import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING, views } from "@renderer/lib/constants"
+import {
+  ROUTE_ENTRY_PENDING,
+  ROUTE_FEED_PENDING,
+  views,
+} from "@renderer/lib/constants"
 import { getStorageNS } from "@renderer/lib/ns"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
@@ -270,7 +274,10 @@ const ListHeader: FC<{
       },
     })
 
-    if (typeof routerParams.feedId === "number") {
+    if (
+      typeof routerParams.feedId === "number" ||
+      routerParams.feedId === ROUTE_FEED_PENDING
+    ) {
       subscriptionActions.markReadByView(routerParams.view)
     } else {
       routerParams.feedId?.split(",").forEach((feedId) => {
@@ -319,8 +326,13 @@ const ListHeader: FC<{
         )}
       >
         {!titleAtBottom && titleInfo}
-        <div className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500" onClick={(e) => e.stopPropagation()}>
-          {views[view].wideMode && entryId && entryId !== ROUTE_ENTRY_PENDING && (
+        <div
+          className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {views[view].wideMode &&
+            entryId &&
+            entryId !== ROUTE_ENTRY_PENDING && (
             <>
               <EntryHeader view={view} entryId={entryId} />
               <DividerVertical className="w-px" />
