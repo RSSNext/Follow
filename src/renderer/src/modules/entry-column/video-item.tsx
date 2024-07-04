@@ -1,3 +1,4 @@
+import { m } from "@renderer/components/common/Motion"
 import { Image } from "@renderer/components/ui/image"
 import { useModalStack } from "@renderer/components/ui/modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
@@ -36,20 +37,25 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div
         className="w-full"
-        onClick={() => iframeSrc && modalStack.present({
-          title: "",
-          content: ({ dismiss }) => (
-            // eslint-disable-next-line @eslint-react/dom/no-missing-iframe-sandbox
-            <iframe
-              src={iframeSrc}
-              className="size-full p-12"
-              onClick={() => dismiss()}
-            />
-          ),
-          clickOutsideToDismiss: true,
-          CustomModalComponent: NoopChildren,
-          overlay: true,
-        })}
+        onClick={(e) => {
+          if (iframeSrc) {
+            e.stopPropagation()
+            modalStack.present({
+              title: "",
+              content: ({ dismiss }) => (
+                <m.iframe
+                  exit={{ scale: 0.94, opacity: 0 }}
+                  src={iframeSrc}
+                  className="size-full p-12"
+                  onClick={() => dismiss()}
+                />
+              ),
+              clickOutsideToDismiss: true,
+              CustomModalComponent: NoopChildren,
+              overlay: true,
+            })
+          }
+        }}
       >
         <div className="overflow-x-auto" ref={ref}>
           {miniIframeSrc && hovered ? (

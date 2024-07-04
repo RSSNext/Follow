@@ -198,6 +198,7 @@ export function FeedList({
               <Link
                 to="/discover"
                 className="-mt-36 flex h-full flex-1 flex-col items-center justify-center gap-2"
+                onClick={stopPropagation}
               >
                 <i className="i-mgc-add-cute-re text-3xl" />
                 Add some feeds
