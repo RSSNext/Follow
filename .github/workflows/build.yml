@@ -64,5 +64,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          path: "dist/*.dmg"
+          path: |
+            dist/*.dmg
+            dist/*.exe
+            dist/*.AppImage
           retention-days: 90
