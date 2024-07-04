@@ -28,12 +28,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3.0.0
-        with:
-          version: latest
-          run_install: true
-
       - name: Use Node.js 22.x
         uses: actions/setup-node@v4.0.2
         with:
@@ -46,8 +40,6 @@ jobs:
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
           github_token: ${{ secrets.GITHUB_TOKEN }}
-
-          skip_install: true
 
           # If the commit is tagged with a version (e.g. "v1.0.0"),
           # release the app after building
