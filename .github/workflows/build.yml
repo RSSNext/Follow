@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+
+env:
+  VITE_WEB_URL: ${{ vars.VITE_WEB_URL }}
+  VITE_API_URL: ${{ vars.VITE_API_URL }}
+  VITE_IMGPROXY_URL: ${{ vars.VITE_IMGPROXY_URL }}
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3.0.0
+        with:
+          version: latest
+          run_install: true
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: 22.x
+          cache: "pnpm"
+
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
