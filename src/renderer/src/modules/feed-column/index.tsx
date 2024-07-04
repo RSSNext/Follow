@@ -5,6 +5,7 @@ import { ActionButton } from "@renderer/components/ui/button"
 import { ProfileButton } from "@renderer/components/user-button"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
+import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
 import { APP_NAME, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { Routes } from "@renderer/lib/enum"
@@ -13,7 +14,7 @@ import { clamp, cn } from "@renderer/lib/utils"
 import { useWheel } from "@use-gesture/react"
 import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
-import { useCallback, useRef } from "react"
+import { useCallback, useLayoutEffect, useRef } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { Link } from "react-router-dom"
 
@@ -25,14 +26,17 @@ const lethargy = new Lethargy()
 const useBackHome = (active: number) => {
   const navigate = useNavigateEntry()
 
-  return useCallback((overvideActive?: number) => {
-    navigate({
-      feedId: null,
-      entryId: null,
-      view: overvideActive ?? active,
-      level: levels.view,
-    })
-  }, [active, navigate])
+  return useCallback(
+    (overvideActive?: number) => {
+      navigate({
+        feedId: null,
+        entryId: null,
+        view: overvideActive ?? active,
+        level: levels.view,
+      })
+    },
+    [active, navigate],
+  )
 }
 export function FeedColumn() {
   const carouselRef = useRef<HTMLDivElement>(null)
@@ -55,7 +59,12 @@ export function FeedColumn() {
     },
     [active, navigateBackHome, spring],
   )
-
+  useLayoutEffect(() => {
+    const { view } = getRouteParams()
+    if (view !== undefined) {
+      setActive(view)
+    }
+  }, [])
   useHotkeys(
     shortcuts.feeds.switchBetweenViews.key,
     () => {
@@ -161,7 +170,10 @@ export function FeedColumn() {
         ))}
       </div>
       <div className="size-full overflow-hidden" ref={carouselRef}>
-        <m.div className="flex h-full" style={{ x: reduceMotion ? -active * 256 : spring }}>
+        <m.div
+          className="flex h-full"
+          style={{ x: reduceMotion ? -active * 256 : spring }}
+        >
           {views.map((item, index) => (
             <section
               key={item.name}
