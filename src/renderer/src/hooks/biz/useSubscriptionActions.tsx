@@ -1,7 +1,8 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
-import type { SubscriptionPlainModel } from "@renderer/store"
-import { feedUnreadActions, getFeedById } from "@renderer/store"
+import { getFeedById } from "@renderer/store/feed"
+import type { SubscriptionPlainModel } from "@renderer/store/subscription"
+import { feedUnreadActions } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 

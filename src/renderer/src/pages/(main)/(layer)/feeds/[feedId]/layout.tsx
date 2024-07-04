@@ -1,4 +1,4 @@
-import { getUISettings, setUISetting } from "@renderer/atoms"
+import { getUISettings, setUISetting } from "@renderer/atoms/ui"
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"

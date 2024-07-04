@@ -1,4 +1,4 @@
-import { useMainContainerElement } from "@renderer/atoms"
+import { useMainContainerElement } from "@renderer/atoms/dom"
 import { useUser } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { EmptyIcon } from "@renderer/components/icons/empty"
@@ -12,12 +12,13 @@ import {
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
 import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
-import { useRead, useRefValue } from "@renderer/hooks"
+import { useRead } from "@renderer/hooks/biz/useEntryActions"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import {
   useRouteEntryId,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
+import { useRefValue } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
   ROUTE_ENTRY_PENDING,
@@ -30,16 +31,13 @@ import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
 import { EntryHeader } from "@renderer/modules/entry-content/header"
 import { useEntries } from "@renderer/queries/entries"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
-import {
-  entryActions,
-  subscriptionActions,
-  useFeedById,
-  useFeedHeaderTitle,
-} from "@renderer/store"
+import { entryActions } from "@renderer/store/entry"
 import {
   useEntry,
   useEntryIdsByFeedIdOrView,
 } from "@renderer/store/entry/hooks"
+import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
+import { subscriptionActions } from "@renderer/store/subscription"
 import type { HTMLMotionProps } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"

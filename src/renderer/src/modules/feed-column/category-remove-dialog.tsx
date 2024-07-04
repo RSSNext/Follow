@@ -1,6 +1,6 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
-import { subscriptionActions } from "@renderer/store"
+import { subscriptionActions } from "@renderer/store/subscription"
 import { useMutation } from "@tanstack/react-query"
 
 import { StyledButton } from "../../components/ui/button"

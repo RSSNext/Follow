@@ -5,7 +5,7 @@ import * as React from "react"
 import ReactDOM from "react-dom/client"
 import { RouterProvider } from "react-router-dom"
 
-import { setAppIsReady } from "./atoms"
+import { setAppIsReady } from "./atoms/app"
 import { initializeApp } from "./init"
 import { router } from "./router"
 

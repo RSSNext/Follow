@@ -1,4 +1,4 @@
-import { getUISettings } from "@renderer/atoms"
+import { getUISettings } from "@renderer/atoms/ui"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { useCallback, useContext, useEffect, useId, useRef } from "react"
 import { useLocation } from "react-router-dom"

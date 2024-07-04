@@ -1,8 +1,5 @@
-import {
-  setMainContainerElement,
-  useLoginModalShow,
-  useUser,
-} from "@renderer/atoms"
+import { setMainContainerElement } from "@renderer/atoms/dom"
+import { useLoginModalShow, useUser } from "@renderer/atoms/user"
 import { DeclarativeModal } from "@renderer/components/ui/modal/stacked/declarative-modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { RootPortal } from "@renderer/components/ui/portal"

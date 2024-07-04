@@ -1,4 +1,4 @@
-import { useAuthQuery } from "@renderer/hooks"
+import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { useMutation } from "@tanstack/react-query"

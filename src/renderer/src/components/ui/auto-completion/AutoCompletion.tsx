@@ -1,4 +1,4 @@
-import { useRefValue } from "@renderer/hooks"
+import { useRefValue } from "@renderer/hooks/common"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import clsx from "clsx"

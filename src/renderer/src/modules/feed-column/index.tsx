@@ -1,4 +1,4 @@
-import { getReadonlyRoute } from "@renderer/atoms"
+import { getReadonlyRoute } from "@renderer/atoms/route"
 import { useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"

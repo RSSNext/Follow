@@ -1,6 +1,6 @@
-import { initializeDefaultUISettings, useUISettingValue } from "@renderer/atoms"
+import { initializeDefaultUISettings, useUISettingValue } from "@renderer/atoms/ui"
 import { tipcClient } from "@renderer/lib/client"
-import { feedUnreadActions } from "@renderer/store"
+import { feedUnreadActions } from "@renderer/store/unread"
 import { useEffect, useInsertionEffect } from "react"
 
 initializeDefaultUISettings()

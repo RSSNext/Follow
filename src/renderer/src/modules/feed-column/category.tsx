@@ -9,7 +9,7 @@ import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { FeedListModel } from "@renderer/models"
-import { useFeedUnreadStore } from "@renderer/store"
+import { useFeedUnreadStore } from "@renderer/store/unread"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useEffect, useState } from "react"
 

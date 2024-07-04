@@ -1,4 +1,4 @@
-import { getReadonlyRoute, useReadonlyRouteSelector } from "@renderer/atoms"
+import { getReadonlyRoute, useReadonlyRouteSelector } from "@renderer/atoms/route"
 import { FeedViewType } from "@renderer/lib/enum"
 import type { Params } from "react-router-dom"
 import { useParams, useSearchParams } from "react-router-dom"
