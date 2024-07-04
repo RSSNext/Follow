@@ -28,6 +28,7 @@ export function Component() {
       {isAuthFail && !user && (
         <RootPortal>
           <DeclarativeModal
+            id="login"
             CustomModalComponent={NoopChildren}
             open
             title="Login"
