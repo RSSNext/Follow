@@ -36,6 +36,16 @@ export const SettingGeneral = () => {
           />
         )}
 
+        <SettingSectionTitle title="view" />
+        <SettingSwitch
+          checked={settings.unreadOnly}
+          onCheckedChange={(checked) =>
+            setGeneralSetting("unreadOnly", checked)}
+          label="Show unread content initially"
+        />
+        <SettingDescription>
+          Only show unread content initially when you open the app
+        </SettingDescription>
         <SettingSectionTitle title="Mark read" />
 
         <SettingSwitch
@@ -45,7 +55,7 @@ export const SettingGeneral = () => {
           label="Mark as read when scrolling"
         />
         <SettingDescription>
-          Automatic marking of feed entry as read when the item is scrolled up
+          Automatic marking of feed entries as read when the item is scrolled up
           out of the viewport.
         </SettingDescription>
 
@@ -57,7 +67,19 @@ export const SettingGeneral = () => {
           label="Mark as read when hovering"
         />
         <SettingDescription>
-          Automatic marking of feed entry as read when the item is hovered.
+          Automatic marking of feed entries as read when the item is hovered.
+        </SettingDescription>
+
+        <SettingSwitch
+          className="mt-6"
+          checked={settings.renderMarkUnread}
+          onCheckedChange={(checked) =>
+            setGeneralSetting("renderMarkUnread", checked)}
+          label="Mark as read when in the viewport"
+        />
+        <SettingDescription>
+          Automatically mark feed entries with only one level of content(e.g. Social Media, Picture, Video views) as read when
+          the item is in the viewport.
         </SettingDescription>
 
         <SettingSectionTitle title="Data control" />

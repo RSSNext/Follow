@@ -34,5 +34,6 @@
   ],
   "cSpell.words": [
     "rsshub"
-  ]
+  ],
+  "editor.foldingImportsByDefault": true
 }

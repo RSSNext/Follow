@@ -7,13 +7,14 @@ type FeedId = string
 const unread = create({
   fetcher: async (ids: [FeedId, EntryId][]) => {
     await apiClient.reads.$post({ json: { entryIds: ids.map((i) => i[1]) } })
-    for (const [feedId, entryId] of ids) {
-      entryActions.markRead(feedId, entryId, true)
-    }
+
     return []
   },
   resolver: keyResolver("id"),
   scheduler: windowScheduler(1000),
 })
 
-export const batchMarkUnread = unread.fetch
+export const batchMarkUnread: typeof unread.fetch = (...args) => {
+  entryActions.markRead(args[0][0], args[0][1], true)
+  return unread.fetch.apply(null, args)
+}
