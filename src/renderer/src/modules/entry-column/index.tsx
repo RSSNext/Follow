@@ -22,7 +22,10 @@ import {
 import { useRefValue } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
+  FEED_COLLECTION_LIST,
+  levels,
   ROUTE_ENTRY_PENDING,
+  ROUTE_FEED_IN_FOLDER,
   ROUTE_FEED_PENDING,
   views,
 } from "@renderer/lib/constants"
@@ -38,7 +41,10 @@ import {
   useEntryIdsByFeedIdOrView,
 } from "@renderer/store/entry/hooks"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
-import { subscriptionActions } from "@renderer/store/subscription"
+import {
+  subscriptionActions,
+  useFolderFeedsByFeedId,
+} from "@renderer/store/subscription"
 import type { HTMLMotionProps } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
@@ -178,22 +184,24 @@ export function EntryColumn() {
 }
 
 const useEntriesByView = () => {
-  const activeList = useRouteParms()
+  const routeParams = useRouteParms()
   const unreadOnly = useAtomValue(unreadOnlyAtom)
 
+  const { level, feedId, view } = routeParams
+
+  const folderIds = useFolderFeedsByFeedId(feedId)
+
   const query = useEntries({
-    level: activeList?.level,
-    id: activeList.feedId,
-    view: activeList?.view,
+    level,
+    id: level === levels.folder ? folderIds?.join(",") : feedId,
+    view,
     ...(unreadOnly === true && { read: false }),
   })
   const entries = useEntryIdsByFeedIdOrView(
-    activeList.feedId === ROUTE_FEED_PENDING ?
-      activeList.view :
-      activeList.feedId!,
+    feedId === ROUTE_FEED_PENDING ? view : feedId!,
     {
       unread: unreadOnly,
-      view: activeList.view,
+      view,
     },
   )
 
@@ -211,7 +219,7 @@ const useEntriesByView = () => {
 
   useEffect(() => {
     prevEntries.current = []
-  }, [activeList.feedId, activeList.view])
+  }, [routeParams.feedId, routeParams.view])
   const localEntries = useMemo(() => {
     if (!unreadOnly) {
       prevEntries.current = []
@@ -260,6 +268,9 @@ const ListHeader: FC<{
   const routerParams = useRouteParms()
   const [unreadOnly, setUnreadOnly] = useAtom(unreadOnlyAtom)
 
+  const { feedId, entryId, view } = routerParams
+  const folderIds = useFolderFeedsByFeedId(feedId)
+
   const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
   const handleMarkAllAsRead = useCallback(async () => {
     if (!routerParams) return
@@ -267,7 +278,10 @@ const ListHeader: FC<{
       json: {
         ...getEntriesParams({
           level: routerParams?.level,
-          id: routerParams?.feedId,
+          id:
+            routerParams.level === levels.folder ?
+              folderIds?.join(",") :
+              feedId,
           view: routerParams?.view,
         }),
       },
@@ -278,13 +292,20 @@ const ListHeader: FC<{
       routerParams.feedId === ROUTE_FEED_PENDING
     ) {
       subscriptionActions.markReadByView(routerParams.view)
+    } else if (
+      routerParams.level === levels.folder &&
+      routerParams.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)
+    ) {
+      subscriptionActions.markReadByFolder(
+        routerParams.feedId.replace(ROUTE_FEED_IN_FOLDER, ""),
+      )
     } else {
       routerParams.feedId?.split(",").forEach((feedId) => {
         entryActions.markReadByFeedId(feedId)
       })
     }
     setMarkPopoverOpen(false)
-  }, [routerParams])
+  }, [feedId, folderIds, routerParams])
 
   const headerTitle = useFeedHeaderTitle()
   const os = useMemo(getOS, [])
@@ -314,7 +335,7 @@ const ListHeader: FC<{
 
   const feed = useFeedById(routerParams.feedId)
 
-  const { entryId, view } = useRouteParms()
+  const isInCollectionList = feedId === FEED_COLLECTION_LIST
 
   return (
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
@@ -325,68 +346,70 @@ const ListHeader: FC<{
         )}
       >
         {!titleAtBottom && titleInfo}
-        <div
-          className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {views[view].wideMode &&
-            entryId &&
-            entryId !== ROUTE_ENTRY_PENDING && (
-            <>
-              <EntryHeader view={view} entryId={entryId} />
-              <DividerVertical className="w-px" />
-            </>
-          )}
-          {feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) && (
-            <ActionButton
-              tooltip="Refresh"
-              // shortcut={shortcuts.entries.toggleUnreadOnly.key}
-              onClick={() => {
-                refreshFeed()
-              }}
-            >
-              <i
-                className={cn(
-                  "i-mgc-refresh-2-cute-re",
-                  isPending && "animate-spin",
-                )}
-              />
-            </ActionButton>
-          )}
-          <ActionButton
-            tooltip={unreadOnly ? "Unread Only" : "All"}
-            shortcut={shortcuts.entries.toggleUnreadOnly.key}
-            onClick={() => setUnreadOnly(!unreadOnly)}
+        {!isInCollectionList && (
+          <div
+            className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500"
+            onClick={(e) => e.stopPropagation()}
           >
-            {unreadOnly ? (
-              <i className="i-mgc-round-cute-fi" />
-            ) : (
-              <i className="i-mgc-round-cute-re" />
+            {views[view].wideMode &&
+              entryId &&
+              entryId !== ROUTE_ENTRY_PENDING && (
+              <>
+                <EntryHeader view={view} entryId={entryId} />
+                <DividerVertical className="w-px" />
+              </>
             )}
-          </ActionButton>
-          <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
-            <PopoverTrigger asChild>
+            {feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) && (
               <ActionButton
-                shortcut={shortcuts.entries.markAllAsRead.key}
-                tooltip="Mark All as Read"
+                tooltip="Refresh"
+                // shortcut={shortcuts.entries.toggleUnreadOnly.key}
+                onClick={() => {
+                  refreshFeed()
+                }}
               >
-                <i className="i-mgc-check-circle-cute-re" />
+                <i
+                  className={cn(
+                    "i-mgc-refresh-2-cute-re",
+                    isPending && "animate-spin",
+                  )}
+                />
               </ActionButton>
-            </PopoverTrigger>
-            <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
-              <div>Mark all as read?</div>
-              <div className="space-x-4">
-                <PopoverClose>
-                  <StyledButton variant="outline">Cancel</StyledButton>
-                </PopoverClose>
-                {/* TODO */}
-                <StyledButton onClick={handleMarkAllAsRead}>
-                  Confirm
-                </StyledButton>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
+            )}
+            <ActionButton
+              tooltip={unreadOnly ? "Unread Only" : "All"}
+              shortcut={shortcuts.entries.toggleUnreadOnly.key}
+              onClick={() => setUnreadOnly(!unreadOnly)}
+            >
+              {unreadOnly ? (
+                <i className="i-mgc-round-cute-fi" />
+              ) : (
+                <i className="i-mgc-round-cute-re" />
+              )}
+            </ActionButton>
+            <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
+              <PopoverTrigger asChild>
+                <ActionButton
+                  shortcut={shortcuts.entries.markAllAsRead.key}
+                  tooltip="Mark All as Read"
+                >
+                  <i className="i-mgc-check-circle-cute-re" />
+                </ActionButton>
+              </PopoverTrigger>
+              <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
+                <div>Mark all as read?</div>
+                <div className="space-x-4">
+                  <PopoverClose>
+                    <StyledButton variant="outline">Cancel</StyledButton>
+                  </PopoverClose>
+                  {/* TODO */}
+                  <StyledButton onClick={handleMarkAllAsRead}>
+                    Confirm
+                  </StyledButton>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
       </div>
       {titleAtBottom && titleInfo}
     </div>

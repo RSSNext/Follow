@@ -10,13 +10,12 @@ type NavigateEntryOptions = Partial<{
   view: FeedViewType
   level: string | null
 
-  category: string | null
 }>
 /**
  * @description a hook to navigate to `feedId`, `entryId`, add search for `view`, `level`
  */
 export const useNavigateEntry = () => useCallback((options: NavigateEntryOptions) => {
-  const { entryId, feedId, level, view, category } = options || {}
+  const { entryId, feedId, level, view } = options || {}
   const { params, searchParams } = getReadonlyRoute()
   let finalFeedId = feedId || params.feedId || ROUTE_FEED_PENDING
 
@@ -28,14 +27,6 @@ export const useNavigateEntry = () => useCallback((options: NavigateEntryOptions
 
   !isUndefined(view) && nextSearchParams.set("view", view.toString())
   level && nextSearchParams.set("level", level.toString())
-
-  if ("category" in options) {
-    if (!category) {
-      nextSearchParams.delete("category")
-    } else {
-      nextSearchParams.set("category", category.toString())
-    }
-  }
 
   return getStableRouterNavigate()?.(
       `/feeds/${finalFeedId}/${

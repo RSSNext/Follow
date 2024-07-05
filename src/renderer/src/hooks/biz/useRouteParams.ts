@@ -45,7 +45,6 @@ const parseRouteParams = (
     entryId: params.entryId || undefined,
     feedId: params.feedId || undefined,
     level: search.get("level") || undefined,
-    category: search.get("category") || undefined,
   }
 }
 
@@ -61,7 +60,6 @@ export const useRouteParamsSelector = <T>(
     entryId: string | undefined
     feedId: string | undefined
     level: string | undefined
-    category: string | undefined
     view: FeedViewType
   }) => T,
   deps = noop,

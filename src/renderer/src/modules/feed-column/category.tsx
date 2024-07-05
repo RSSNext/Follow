@@ -4,11 +4,13 @@ import {
 } from "@renderer/components/ui/collapsible"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
-import { levels } from "@renderer/lib/constants"
+import { levels, ROUTE_FEED_IN_FOLDER } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import type { FeedListModel } from "@renderer/models"
+import {
+  useSubscriptionByFeedId,
+} from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useEffect, useState } from "react"
@@ -18,58 +20,57 @@ import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { CategoryRenameContent } from "./category-rename-dialog"
 import { FeedItem } from "./item"
 
+type FeedId = string
 interface FeedCategoryProps {
-  data: FeedListModel["list"][number]
+  data: FeedId[]
   view?: number
   expansion: boolean
   showUnreadCount?: boolean
 }
 
 function FeedCategoryImpl({
-  data,
+  data: ids,
   view,
   expansion,
   showUnreadCount = true,
 }: FeedCategoryProps) {
-  const [open, setOpen] = useState(!data.name)
+  const sortByUnreadFeedList = useFeedUnreadStore((state) =>
+    ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0)),
+  )
 
-  const feedIdList = data.list.map((feed) => feed.feedId)
+  const showCollapse = sortByUnreadFeedList.length > 1
+  const [open, setOpen] = useState(!showCollapse)
 
   useEffect(() => {
-    if (data.name) {
+    if (showCollapse) {
       setOpen(expansion)
     }
   }, [expansion])
 
   const navigate = useNavigateEntry()
 
+  const subscription = useSubscriptionByFeedId(ids[0])
+  const folderName = subscription?.category
   const setCategoryActive = () => {
     if (view !== undefined) {
       navigate({
         entryId: null,
         // TODO joint feedId is too long, need to be optimized
-        feedId: data.list.map((feed) => feed.feedId).join(","),
+        feedId: `${ROUTE_FEED_IN_FOLDER}${folderName}`,
         level: levels.folder,
         view,
-        category: data.name,
       })
     }
   }
 
   const unread = useFeedUnreadStore((state) =>
-    data.list.reduce((acc, cur) => (state.data[cur.feedId] || 0) + acc, 0),
-  )
-
-  const sortByUnreadFeedList = useFeedUnreadStore((state) =>
-    data.list.sort(
-      (a, b) => (state.data[b.feedId] || 0) - (state.data[a.feedId] || 0),
-    ),
+    ids.reduce((acc, feedId) => (state.data[feedId] || 0) + acc, 0),
   )
 
   const isActive = useRouteParamsSelector(
     (routerParams) =>
       routerParams?.level === levels.folder &&
-      (routerParams.feedId === data.list.map((feed) => feed.feedId).join(",") || data.name === routerParams?.category),
+      routerParams.feedId === `${ROUTE_FEED_IN_FOLDER}${folderName}`,
   )
   const { present } = useModalStack()
 
@@ -79,7 +80,7 @@ function FeedCategoryImpl({
       onOpenChange={(o) => setOpen(o)}
       onClick={(e) => e.stopPropagation()}
     >
-      {!!data.name && (
+      {!!showCollapse && (
         <div
           className={cn(
             "flex w-full items-center justify-between rounded-md px-2.5 transition-colors",
@@ -100,8 +101,8 @@ function FeedCategoryImpl({
                       title: "Rename Category",
                       content: ({ dismiss }) => (
                         <CategoryRenameContent
-                          feedIdList={feedIdList}
-                          category={data.name}
+                          feedIdList={ids}
+                          category={folderName || ""}
                           view={view}
                           onSuccess={dismiss}
                         />
@@ -115,9 +116,9 @@ function FeedCategoryImpl({
 
                   click: async () => {
                     present({
-                      title: `Delete category ${data.name}?`,
+                      title: `Delete category ${folderName}?`,
                       content: () => (
-                        <CategoryRemoveDialogContent feedIdList={feedIdList} />
+                        <CategoryRemoveDialogContent feedIdList={ids} />
                       ),
                     })
                   },
@@ -137,12 +138,20 @@ function FeedCategoryImpl({
             >
               <i className="i-mgc-right-cute-fi mr-2 transition-transform" />
             </CollapsibleTrigger>
-            <span className={cn("truncate", !showUnreadCount && (unread ? "font-bold" : "font-medium opacity-70"))}>
-              {data.name}
+            <span
+              className={cn(
+                "truncate",
+                !showUnreadCount &&
+                (unread ? "font-bold" : "font-medium opacity-70"),
+              )}
+            >
+              {folderName}
             </span>
           </div>
           {!!unread && showUnreadCount && (
-            <div className="ml-2 text-xs text-zinc-500 dark:text-neutral-400">{unread}</div>
+            <div className="ml-2 text-xs text-zinc-500 dark:text-neutral-400">
+              {unread}
+            </div>
           )}
         </div>
       )}
@@ -150,7 +159,7 @@ function FeedCategoryImpl({
         {open && (
           <m.div
             className="overflow-hidden"
-            initial={!!data.name && {
+            initial={!!showCollapse && {
               height: 0,
               opacity: 0.01,
             }}
@@ -163,13 +172,13 @@ function FeedCategoryImpl({
               opacity: 0.01,
             }}
           >
-            {sortByUnreadFeedList.map((feed) => (
+            {sortByUnreadFeedList.map((feedId) => (
               <FeedItem
                 showUnreadCount={showUnreadCount}
-                key={feed.feedId}
-                subscription={feed}
+                key={feedId}
+                feedId={feedId}
                 view={view}
-                className={data.name ? "pl-6" : "pl-2.5"}
+                className={showCollapse ? "pl-6" : "pl-2.5"}
               />
             ))}
           </m.div>

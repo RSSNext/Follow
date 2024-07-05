@@ -18,7 +18,7 @@ import { nextFrame } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { getFeedById, useFeedById } from "@renderer/store/feed"
-import type { SubscriptionPlainModel } from "@renderer/store/subscription"
+import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { WEB_URL } from "@shared/constants"
 import { memo, useCallback } from "react"
@@ -26,56 +26,52 @@ import { memo, useCallback } from "react"
 import { useFeedClaimModal } from "../claim/hooks"
 import { FeedForm } from "../discover/feed-form"
 
-type FeedItemData = SubscriptionPlainModel
 interface FeedItemProps {
-  subscription: FeedItemData
+  feedId: string
   view?: number
   className?: string
   showUnreadCount?: boolean
 }
 const FeedItemImpl = ({
-  subscription,
   view,
+  feedId,
   className,
   showUnreadCount = true,
 }: FeedItemProps) => {
+  const subscription = useSubscriptionByFeedId(feedId)
   const navigate = useNavigateEntry()
   const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       e.stopPropagation()
       if (view === undefined) return
       navigate({
-        feedId: subscription.feedId,
+        feedId,
         entryId: null,
         view,
         level: levels.feed,
-        category: null,
       })
       // focus to main container in order to let keyboard can navigate entry items by arrow keys
       nextFrame(() => {
         getMainContainerElement()?.focus()
       })
     },
-    [subscription.feedId, navigate, view],
+    [feedId, navigate, view],
   )
 
   const deleteSubscription = useDeleteSubscription({})
 
-  const feedUnread = useFeedUnreadStore(
-    (state) => state.data[subscription.feedId] || 0,
-  )
+  const feedUnread = useFeedUnreadStore((state) => state.data[feedId] || 0)
   const { present } = useModalStack()
 
   const isActive = useRouteParamsSelector(
     (routerParams) =>
-      routerParams?.level === levels.feed &&
-      routerParams.feedId === subscription.feedId,
+      routerParams?.level === levels.feed && routerParams.feedId === feedId,
   )
 
-  const feed = useFeedById(subscription.feedId)
+  const feed = useFeedById(feedId)
 
   const claimFeed = useFeedClaimModal({
-    feedId: subscription.feedId,
+    feedId,
   })
 
   if (!feed) return null
@@ -88,12 +84,7 @@ const FeedItemImpl = ({
       )}
       onClick={handleNavigate}
       onDoubleClick={() => {
-        window.open(
-          `${WEB_URL}/feed/${
-            subscription.feedId
-          }?view=${view}`,
-          "_blank",
-        )
+        window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank")
       }}
       onContextMenu={(e) => {
         showNativeMenu(
@@ -106,11 +97,7 @@ const FeedItemImpl = ({
                 present({
                   title: "Edit Feed",
                   content: ({ dismiss }) => (
-                    <FeedForm
-                      asWidget
-                      id={subscription.feedId}
-                      onSuccess={dismiss}
-                    />
+                    <FeedForm asWidget id={feedId} onSuccess={dismiss} />
                   ),
                 })
               },
@@ -143,18 +130,13 @@ const FeedItemImpl = ({
               type: "text",
               label: "Open Feed in Browser",
               click: () =>
-                window.open(
-                  `${WEB_URL}/feed/${
-                    subscription.feedId
-                  }?view=${view}`,
-                  "_blank",
-                ),
+                window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank"),
             },
             {
               type: "text",
               label: "Open Site in Browser",
               click: () => {
-                const feed = getFeedById(subscription.feedId)
+                const feed = getFeedById(feedId)
                 if (feed) {
                   feed.siteUrl && window.open(feed.siteUrl, "_blank")
                 }
@@ -175,7 +157,8 @@ const FeedItemImpl = ({
         <div
           className={cn(
             "truncate",
-            !showUnreadCount && (feedUnread ? "font-bold" : "font-medium opacity-70"),
+            !showUnreadCount &&
+            (feedUnread ? "font-bold" : "font-medium opacity-70"),
           )}
         >
           {feed.title}
@@ -217,7 +200,9 @@ const FeedItemImpl = ({
         )}
       </div>
       {showUnreadCount && !!feedUnread && (
-        <div className="ml-2 text-xs text-zinc-500 dark:text-neutral-400">{feedUnread}</div>
+        <div className="ml-2 text-xs text-zinc-500 dark:text-neutral-400">
+          {feedUnread}
+        </div>
       )}
     </div>
   )

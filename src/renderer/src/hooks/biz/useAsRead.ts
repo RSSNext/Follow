@@ -6,7 +6,7 @@ import { useRouteParamsSelector } from "./useRouteParams"
 export function useAsRead(entry?: CombinedEntryModel) {
   return useRouteParamsSelector((params) => {
     if (params.feedId === FEED_COLLECTION_LIST) {
-      return false
+      return true
     }
     if (!entry) return false
     return entry.read
