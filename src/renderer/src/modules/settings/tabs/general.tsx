@@ -1,4 +1,7 @@
-import { setGeneralSetting, useGeneralSettingValue } from "@renderer/atoms/settings/general"
+import {
+  setGeneralSetting,
+  useGeneralSettingValue,
+} from "@renderer/atoms/settings/general"
 import { tipcClient } from "@renderer/lib/client"
 import { useCallback, useEffect, useState } from "react"
 
@@ -34,6 +37,7 @@ export const SettingGeneral = () => {
         )}
 
         <SettingSectionTitle title="Mark read" />
+
         <SettingSwitch
           checked={settings.scrollMarkUnread}
           onCheckedChange={(checked) =>
@@ -41,8 +45,19 @@ export const SettingGeneral = () => {
           label="Mark as read when scrolling"
         />
         <SettingDescription>
-          Automatic marking of articles as read when the item is scrolled up out
-          of the viewport.
+          Automatic marking of feed entry as read when the item is scrolled up
+          out of the viewport.
+        </SettingDescription>
+
+        <SettingSwitch
+          className="mt-6"
+          checked={settings.hoverMarkUnread}
+          onCheckedChange={(checked) =>
+            setGeneralSetting("hoverMarkUnread", checked)}
+          label="Mark as read when hovering"
+        />
+        <SettingDescription>
+          Automatic marking of feed entry as read when the item is hovered.
         </SettingDescription>
 
         <SettingSectionTitle title="Data control" />

@@ -1,6 +1,7 @@
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import { Label } from "@renderer/components/ui/label"
 import { Switch } from "@renderer/components/ui/switch"
+import { cn } from "@renderer/lib/utils"
 import { useId } from "react"
 
 export const SettingCheckbox: Component<{
@@ -26,10 +27,12 @@ export const SettingSwitch: Component<{
   label: string
   checked: boolean
   onCheckedChange: (checked: boolean) => void
-}> = ({ checked, label, onCheckedChange }) => {
+}> = ({ checked, label, onCheckedChange, className }) => {
   const id = useId()
   return (
-    <div className="mb-3 flex items-center justify-between gap-4">
+    <div
+      className={cn("mb-3 flex items-center justify-between gap-4", className)}
+    >
       <Label htmlFor={id}>{label}</Label>
       <Switch
         checked={checked}
@@ -42,4 +45,8 @@ export const SettingSwitch: Component<{
 
 export const SettingDescription: Component<{ children: string }> = ({
   children,
-}) => <small className="!mt-2 block w-4/5 text-balance text-[13px] leading-tight text-gray-400 dark:text-neutral-500">{children}</small>
+}) => (
+  <small className="!mt-0 block w-4/5 text-balance text-[13px] leading-tight text-gray-400 dark:text-neutral-500">
+    {children}
+  </small>
+)
