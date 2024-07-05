@@ -9,7 +9,7 @@ const createDefaultSettings = () => ({
   unreadOnly: false,
   // mark unread
   scrollMarkUnread: true,
-  hoverMarkUnread: true,
+  hoverMarkUnread: false,
   renderMarkUnread: true,
 })
 export const {
