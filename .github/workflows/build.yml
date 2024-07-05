@@ -38,6 +38,9 @@ jobs:
           node-version: 22
           cache: "pnpm"
 
+      - name: Install appdmg
+        run: pnpm add -g appdmg
+
       - name: Install the Apple certificate and provisioning profile
         if: runner.os == 'macos-latest'
         env:

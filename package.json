@@ -8,7 +8,7 @@
   "homepage": "https://electron-vite.org",
   "main": "./dist/main/index.js",
   "scripts": {
-    "build": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make && electron-forge package",
+    "build": "npm run typecheck && electron-vite build --outDir=dist && electron-forge package && electron-forge make",
     "build:web": "vite build",
     "dev": "electron-vite dev",
     "lint": "eslint",
