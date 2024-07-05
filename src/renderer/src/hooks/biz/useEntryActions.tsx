@@ -211,7 +211,7 @@ export const useEntryActions = ({
           name: `Mark as Read`,
           shortcut: shortcuts.entry.toggleRead.key,
           className: "i-mgc-round-cute-fi",
-          disabled: !!entry.read,
+          disabled: !!entry.read || entry.collections,
           onClick: () => {
             read.mutate(entry)
           },
@@ -221,7 +221,7 @@ export const useEntryActions = ({
           name: `Mark as Unread`,
           shortcut: shortcuts.entry.toggleRead.key,
           className: "i-mgc-round-cute-re",
-          disabled: !entry.read,
+          disabled: !entry.read || entry.collections,
           onClick: () => {
             unread.mutate(entry)
           },
