@@ -28,6 +28,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-
 
+      - name: Setup Python
+        run: pip install setuptools
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -40,6 +43,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install the Apple certificate and provisioning profile
+        if: runner.os == 'macos-latest'
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
