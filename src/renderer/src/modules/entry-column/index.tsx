@@ -58,6 +58,7 @@ import type { ListRange, VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 import { useEventCallback } from "usehooks-ts"
 
+import { batchMarkUnread } from "./helper"
 import { EntryItem } from "./item"
 
 const unreadOnlyAtom = atomWithStorage<boolean>(
@@ -102,11 +103,8 @@ export function EntryColumn() {
         }
 
         if (batchLikeIds.length > 0) {
-          const entryIds = batchLikeIds.map(([, id]) => id)
-          await apiClient.reads.$post({ json: { entryIds } })
-
           for (const [feedId, id] of batchLikeIds) {
-            entryActions.markRead(feedId, id, true)
+            batchMarkUnread([feedId, id])
           }
         }
       },
@@ -115,6 +113,7 @@ export function EntryColumn() {
     ),
   )
   const scrollMarkUnread = useGeneralSettingKey("scrollMarkUnread")
+
   const virtuosoOptions = {
     components: {
       List: ListContent,

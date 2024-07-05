@@ -192,6 +192,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
       read,
     })
   },
+
   markReadByFeedId: (feedId: string) => {
     const state = get()
     const entries = state.entries[feedId] || []
