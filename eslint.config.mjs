@@ -23,7 +23,6 @@ export default defineConfig(
       },
     },
     rules: {
-      "unicorn/prefer-module": "off",
       "no-restricted-globals": [
         "error",
         {
