@@ -13,6 +13,7 @@ import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry/hooks"
 import type { FC } from "react"
 import { memo, useCallback } from "react"
+import { useDebounceCallback } from "usehooks-ts"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import { ArticleItem } from "./article-item"
@@ -60,12 +61,18 @@ function EntryItemImpl({
   const asRead = useAsRead(entry)
   const hoverMarkUnread = useGeneralSettingKey("hoverMarkUnread")
 
-  const handleMouseEnter = useCallback(() => {
-    if (!hoverMarkUnread) return
-    if (asRead) return
+  const handleMouseEnter = useDebounceCallback(
+    () => {
+      if (!hoverMarkUnread) return
+      if (asRead) return
 
-    batchMarkUnread([entry.feeds.id, entry.entries.id])
-  }, [asRead, entry.entries.id, entry.feeds.id, hoverMarkUnread])
+      batchMarkUnread([entry.feeds.id, entry.entries.id])
+    },
+    233,
+    {
+      leading: false,
+    },
+  )
   let Item: FC<UniversalItemProps>
 
   switch (view) {

@@ -1,5 +1,8 @@
 import { useMainContainerElement } from "@renderer/atoms/dom"
-import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
+import {
+  setGeneralSetting,
+  useGeneralSettingKey,
+} from "@renderer/atoms/settings/general"
 import { useUser } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { EmptyIcon } from "@renderer/components/icons/empty"
@@ -13,7 +16,6 @@ import {
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
 import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
-import { useRead } from "@renderer/hooks/biz/useEntryActions"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import {
   useRouteEntryId,
@@ -29,26 +31,17 @@ import {
   ROUTE_FEED_PENDING,
   views,
 } from "@renderer/lib/constants"
-import { getStorageNS } from "@renderer/lib/ns"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
 import { EntryHeader } from "@renderer/modules/entry-content/header"
-import { useEntries } from "@renderer/queries/entries"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
-import { entryActions } from "@renderer/store/entry"
-import {
-  useEntry,
-  useEntryIdsByFeedIdOrView,
-} from "@renderer/store/entry/hooks"
+import { entryActions, useEntry } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import {
   subscriptionActions,
   useFolderFeedsByFeedId,
 } from "@renderer/store/subscription"
 import type { HTMLMotionProps } from "framer-motion"
-import { useAtom, useAtomValue } from "jotai"
-import { atomWithStorage } from "jotai/utils"
-import { debounce } from "lodash-es"
 import type { FC } from "react"
 import {
   forwardRef,
@@ -60,65 +53,27 @@ import {
   useState,
 } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
-import type { ListRange, VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
+import type { VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
-import { useEventCallback } from "usehooks-ts"
 
 import { batchMarkUnread } from "./helper"
+import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import { EntryItem } from "./item"
-
-const unreadOnlyAtom = atomWithStorage<boolean>(
-  getStorageNS("entry-unreadonly"),
-  true,
-  undefined,
-  {
-    getOnInit: true,
-  },
-)
 
 export function EntryColumn() {
   const entries = useEntriesByView()
   const { entriesIds, isFetchingNextPage } = entries
+
   const { entryId: activeEntryId, view, feedId } = useRouteParms()
   const activeEntry = useEntry(activeEntryId)
-  const markReadMutation = useRead()
+
   useEffect(() => {
-    if (!activeEntry || activeEntry.read) {
-      return
-    }
-    markReadMutation.mutate(activeEntry)
-  }, [activeEntry?.entries?.id, activeEntry?.read])
+    if (!feedId || !activeEntryId) return
 
-  const handleMarkreadInRange = useEventCallback(
-    debounce(
-      async ({ startIndex }: ListRange) => {
-        const idSlice = entriesIds?.slice(0, startIndex)
+    batchMarkUnread([feedId, activeEntryId])
+  }, [activeEntry, activeEntryId, feedId])
 
-        if (!idSlice) return
-
-        const batchLikeIds = [] as [string, string][]
-        const entriesId2Map = entryActions.getFlattenMapEntries()
-        for (const id of idSlice) {
-          const entry = entriesId2Map[id]
-
-          if (!entry) continue
-          const isRead = entry.read
-          if (!isRead) {
-            batchLikeIds.push([entry.feeds.id, id])
-          }
-        }
-
-        if (batchLikeIds.length > 0) {
-          for (const [feedId, id] of batchLikeIds) {
-            batchMarkUnread([feedId, id])
-          }
-        }
-      },
-      1000,
-      { leading: false },
-    ),
-  )
-  const scrollMarkUnread = useGeneralSettingKey("scrollMarkUnread")
+  const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
 
   const virtuosoOptions = {
     components: {
@@ -133,7 +88,7 @@ export function EntryColumn() {
         )
       }, [isFetchingNextPage]),
     },
-    rangeChanged: scrollMarkUnread ? handleMarkreadInRange : undefined,
+    rangeChanged: handleMarkReadInRange,
     totalCount: entries.totalCount,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entriesIds,
@@ -182,90 +137,12 @@ export function EntryColumn() {
   )
 }
 
-const useEntriesByView = () => {
-  const routeParams = useRouteParms()
-  const unreadOnly = useAtomValue(unreadOnlyAtom)
-
-  const { level, feedId, view } = routeParams
-
-  const folderIds = useFolderFeedsByFeedId(feedId)
-
-  const query = useEntries({
-    level,
-    id: level === levels.folder ? folderIds?.join(",") : feedId,
-    view,
-    ...(unreadOnly === true && { read: false }),
-  })
-  const entries = useEntryIdsByFeedIdOrView(
-    feedId === ROUTE_FEED_PENDING ? view : feedId!,
-    {
-      unread: unreadOnly,
-      view,
-    },
-  )
-
-  useHotkeys(
-    shortcuts.entries.refetch.key,
-    () => {
-      query.refetch()
-    },
-    { scopes: ["home"] },
-  )
-
-  // in unread only entries only can grow the data, but not shrink
-  // so we memo this previous data to avoid the flicker
-  const prevEntries = useRef(entries)
-
-  useEffect(() => {
-    prevEntries.current = []
-  }, [routeParams.feedId, routeParams.view])
-  const localEntries = useMemo(() => {
-    if (!unreadOnly) {
-      prevEntries.current = []
-      return entries
-    }
-    if (!prevEntries.current) {
-      prevEntries.current = entries
-      return entries
-    }
-    if (entries.length > prevEntries.current.length) {
-      prevEntries.current = entries
-      return entries
-    }
-    // merge the new entries with the old entries, and unique them
-    const nextIds = [...new Set([...prevEntries.current, ...entries])]
-    prevEntries.current = nextIds
-    return nextIds
-  }, [entries, prevEntries, unreadOnly])
-
-  const remoteEntryIds = useMemo(
-    () =>
-      query.data ?
-        query.data.pages.reduce((acc, page) => {
-          if (!page.data) return acc
-          acc.push(...page.data.map((entry) => entry.entries.id))
-          return acc
-        }, [] as string[]) :
-        null,
-    [query.data],
-  )
-
-  return {
-    ...query,
-
-    // If remote data is not available, we use the local data, get the local data length
-    totalCount: query.data?.pages?.[0]?.total ?? localEntries.length,
-    entriesIds:
-      // NOTE: if we use the remote data, priority will be given to the remote data, local data maybe had sort issue
-      remoteEntryIds ?? localEntries,
-  }
-}
-
 const ListHeader: FC<{
   totalCount: number
 }> = ({ totalCount }) => {
   const routerParams = useRouteParms()
-  const [unreadOnly, setUnreadOnly] = useAtom(unreadOnlyAtom)
+
+  const unreadOnly = useGeneralSettingKey("unreadOnly")
 
   const { feedId, entryId, view } = routerParams
   const folderIds = useFolderFeedsByFeedId(feedId)
@@ -377,7 +254,7 @@ const ListHeader: FC<{
             <ActionButton
               tooltip={unreadOnly ? "Unread Only" : "All"}
               shortcut={shortcuts.entries.toggleUnreadOnly.key}
-              onClick={() => setUnreadOnly(!unreadOnly)}
+              onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
             >
               {unreadOnly ? (
                 <i className="i-mgc-round-cute-fi" />
@@ -421,8 +298,7 @@ const ListContent = forwardRef<HTMLDivElement>((props, ref) => (
 
 const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
   (props, ref) => {
-    const unreadOnly = useAtomValue(unreadOnlyAtom)
-
+    const unreadOnly = useGeneralSettingKey("unreadOnly")
     return (
       <m.div
         className="-mt-6 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
