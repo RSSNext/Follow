@@ -25,7 +25,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
 
       - name: Install the Apple certificate and provisioning profile
         if: runner.os == 'macos-latest'
