@@ -1,4 +1,5 @@
 import type { apiClient } from "@renderer/lib/api-fetch"
+import type { FeedViewType } from "@renderer/lib/enum"
 import type { CombinedEntryModel } from "@renderer/models"
 
 type FeedId = string
@@ -49,4 +50,9 @@ export interface EntryActions {
   markStar: (entryId: string, starred: boolean) => void
 
   clear: () => void
+}
+
+export interface EntryFilter {
+  unread?: boolean
+  view?: FeedViewType
 }

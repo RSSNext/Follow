@@ -6,85 +6,34 @@ import { FEED_COLLECTION_LIST, levels, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
-import type { FeedListModel } from "@renderer/models"
 import { Queries } from "@renderer/queries"
-import { getFeedById } from "@renderer/store/feed"
-import type { SubscriptionPlainModel } from "@renderer/store/subscription"
 import { useSubscriptionByView } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { useMemo, useState } from "react"
 import { Link } from "react-router-dom"
-import { parse } from "tldts"
 
 import { FeedCategory } from "./category"
 
-const useData = (view: FeedViewType) => {
+const useGroupedData = (view: FeedViewType) => {
   const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
 
   const data = useSubscriptionByView(view) || remoteData
 
-  // TODO Refactor this into category store
   return useMemo(() => {
-    const categories = {
-      list: {},
-    } as {
-      list: Record<
-        string,
-        {
-          list: SubscriptionPlainModel[]
-        }
-      >
-    }
-    const domains: Record<string, number> = {}
-    const subscriptions = structuredClone(data)
+    if (!data || data.length === 0) return {}
 
-    for (const subscription of subscriptions) {
-      const feed = getFeedById(subscription.feedId)
-      if (!subscription.category && feed && feed.siteUrl) {
-        const { domain } = parse(feed.siteUrl)
-        if (domain) {
-          if (!domains[domain]) {
-            domains[domain] = 0
-          }
-          domains[domain]++
+    const groupFolder = {} as Record<string, string[]>
+
+    for (const subscription of data) {
+      if (subscription.category) {
+        if (!groupFolder[subscription.category]) {
+          groupFolder[subscription.category] = []
         }
+        groupFolder[subscription.category].push(subscription.feedId)
       }
     }
 
-    for (const subscription of subscriptions) {
-      const feed = getFeedById(subscription.feedId)
-      if (!feed) continue
-      if (!subscription.category) {
-        if (feed.siteUrl) {
-          // FIXME @DIYgod
-          // The logic here makes it impossible to remove the auto-generated category based on domain
-          const { domain } = parse(feed.siteUrl)
-          if (domain && domains[domain] > 1) {
-            subscription.category =
-              domain.slice(0, 1).toUpperCase() + domain.slice(1)
-          }
-        }
-        if (!subscription.category) {
-          subscription.category = ""
-        }
-      }
-      if (!categories.list[subscription.category]) {
-        categories.list[subscription.category] = {
-          list: [],
-        }
-      }
-
-      categories.list[subscription.category].list.push(subscription)
-    }
-
-    const list = Object.entries(categories.list).map(([name, list]) => ({
-      name,
-      list: list.list,
-    }))
-
-    return {
-      list,
-    } as FeedListModel
+    return groupFolder
   }, [data])
 }
 export function FeedList({
@@ -97,27 +46,43 @@ export function FeedList({
   hideTitle?: boolean
 }) {
   const [expansion, setExpansion] = useState(false)
-  const data = useData(view)
+  const data = useGroupedData(view)
 
   useAuthQuery(Queries.subscription.unreadAll())
 
   const totalUnread = useFeedUnreadStore((state) => {
     let unread = 0
-    data?.list.forEach((a) => {
-      a.list.forEach((b) => {
-        unread += state.data[b.feedId] || 0
-      })
-    })
+
+    for (const category in data) {
+      for (const feedId of data[category]) {
+        unread += state.data[feedId] || 0
+      }
+    }
     return unread
   })
 
-  const sortedByUnread = useFeedUnreadStore((state) =>
-    data?.list?.sort(
-      (a, b) =>
-        b.list.reduce((acc, cur) => (state.data[cur.feedId] || 0) + acc, 0) -
-        a.list.reduce((acc, cur) => (state.data[cur.feedId] || 0) + acc, 0),
-    ),
-  )
+  const sortedByUnread = useFeedUnreadStore((state) => {
+    const sortedList = [] as [string, string[]][]
+    const folderUnread = {} as Record<string, number>
+    // Calc total unread count for each folder
+    for (const category in data) {
+      folderUnread[category] = data[category].reduce(
+        (acc, cur) => (state.data[cur] || 0) + acc,
+        0,
+      )
+    }
+
+    // Sort by unread count
+    Object.keys(folderUnread)
+      .sort((a, b) => folderUnread[b] - folderUnread[a])
+      .forEach((key) => {
+        sortedList.push([key, data[key]])
+      })
+
+    return sortedList
+  })
+
+  const hasData = Object.keys(data).length > 0
 
   const feedId = useRouteFeedId()
   const navigate = useNavigateEntry()
@@ -128,7 +93,7 @@ export function FeedList({
       {!hideTitle && (
         <div
           onClick={stopPropagation}
-          className={cn("mb-2 flex items-center justify-between px-2.5 py-1")}
+          className="mb-2 flex items-center justify-between px-2.5 py-1"
         >
           <div
             className="font-bold"
@@ -175,7 +140,6 @@ export function FeedList({
               feedId: FEED_COLLECTION_LIST,
               level: levels.folder,
               view,
-              category: "",
             })
           }
         }}
@@ -183,12 +147,12 @@ export function FeedList({
         <i className="i-mgc-star-cute-fi mr-2 text-orange-500" />
         Starred
       </div>
-      {data?.list?.length ?
-        sortedByUnread?.map((category) => (
+      {hasData ?
+        sortedByUnread?.map(([category, ids]) => (
           <FeedCategory
             showUnreadCount={showUnreadCount}
-            key={category.name}
-            data={category}
+            key={category}
+            data={ids}
             view={view}
             expansion={expansion}
           />

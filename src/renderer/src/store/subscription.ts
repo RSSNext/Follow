@@ -1,9 +1,11 @@
 import { apiClient } from "@renderer/lib/api-fetch"
+import { ROUTE_FEED_IN_FOLDER } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import type { SubscriptionModel } from "@renderer/models"
 import { SubscriptionService } from "@renderer/services"
 import { produce } from "immer"
 import { omit } from "lodash-es"
+import { parse } from "tldts"
 
 import { entryActions } from "./entry/store"
 import { feedActions } from "./feed"
@@ -17,7 +19,6 @@ interface SubscriptionState {
   data: Record<FeedId, SubscriptionPlainModel>
   dataIdByView: Record<FeedViewType, FeedId[]>
 }
-
 interface SubscriptionActions {
   upsertMany: (subscription: SubscriptionPlainModel[]) => void
   fetchByView: (view?: FeedViewType) => Promise<SubscriptionPlainModel[]>
@@ -25,6 +26,17 @@ interface SubscriptionActions {
   internal_reset: () => void
   clear: () => void
   deleteCategory: (ids: string[]) => void
+}
+
+function morphResponseData(data: SubscriptionModel[]) {
+  for (const subscription of data) {
+    if (!subscription.category && subscription.feeds) {
+      const { siteUrl } = subscription.feeds
+      if (!siteUrl) continue
+      const parsed = parse(siteUrl)
+      parsed.domain && (subscription.category = parsed.domain)
+    }
+  }
 }
 
 const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
@@ -71,6 +83,7 @@ export const useSubscriptionStore = createZustandStore<
       }))
     }
 
+    morphResponseData(res.data)
     get().upsertMany(res.data)
     feedActions.upsertMany(res.data.map((s) => s.feeds))
 
@@ -123,3 +136,23 @@ export const useSubscriptionByView = (view: FeedViewType) =>
   useSubscriptionStore((state) =>
     state.dataIdByView[view].map((id) => state.data[id]),
   )
+
+export const useSubscriptionByFeedId = (feedId: FeedId) =>
+  useSubscriptionStore((state) => state.data[feedId])
+
+export const useFolderFeedsByFeedId = (feedId?: string) =>
+  useSubscriptionStore((state) => {
+    if (!feedId) return
+    if (!feedId.startsWith(ROUTE_FEED_IN_FOLDER)) {
+      return
+    }
+    const folderName = feedId.replace(ROUTE_FEED_IN_FOLDER, "")
+    const feedIds: string[] = []
+    for (const feedId in state.data) {
+      const subscription = state.data[feedId]
+      if (subscription.category === folderName) {
+        feedIds.push(feedId)
+      }
+    }
+    return feedIds
+  })

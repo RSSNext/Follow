@@ -22,6 +22,7 @@ import {
 import { useRefValue } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
+  levels,
   ROUTE_ENTRY_PENDING,
   ROUTE_FEED_PENDING,
   views,
@@ -37,8 +38,14 @@ import {
   useEntry,
   useEntryIdsByFeedIdOrView,
 } from "@renderer/store/entry/hooks"
-import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
-import { subscriptionActions } from "@renderer/store/subscription"
+import {
+  useFeedById,
+  useFeedHeaderTitle,
+} from "@renderer/store/feed"
+import {
+  subscriptionActions,
+  useFolderFeedsByFeedId,
+} from "@renderer/store/subscription"
 import type { HTMLMotionProps } from "framer-motion"
 import { useAtom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
@@ -178,22 +185,24 @@ export function EntryColumn() {
 }
 
 const useEntriesByView = () => {
-  const activeList = useRouteParms()
+  const routeParams = useRouteParms()
   const unreadOnly = useAtomValue(unreadOnlyAtom)
 
+  const { level, feedId, view } = routeParams
+
+  const folderIds = useFolderFeedsByFeedId(feedId)
+
   const query = useEntries({
-    level: activeList?.level,
-    id: activeList.feedId,
-    view: activeList?.view,
+    level,
+    id: level === levels.folder ? folderIds?.join(",") : feedId,
+    view,
     ...(unreadOnly === true && { read: false }),
   })
   const entries = useEntryIdsByFeedIdOrView(
-    activeList.feedId === ROUTE_FEED_PENDING ?
-      activeList.view :
-      activeList.feedId!,
+    feedId === ROUTE_FEED_PENDING ? view : feedId!,
     {
       unread: unreadOnly,
-      view: activeList.view,
+      view,
     },
   )
 
@@ -211,7 +220,7 @@ const useEntriesByView = () => {
 
   useEffect(() => {
     prevEntries.current = []
-  }, [activeList.feedId, activeList.view])
+  }, [routeParams.feedId, routeParams.view])
   const localEntries = useMemo(() => {
     if (!unreadOnly) {
       prevEntries.current = []

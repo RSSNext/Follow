@@ -1,5 +1,5 @@
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
-import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING, views } from "@renderer/lib/constants"
+import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING, views } from "@renderer/lib/constants"
 import type { FeedModel } from "@renderer/models"
 import { useShallow } from "zustand/react/shallow"
 
@@ -14,7 +14,7 @@ export const useFeedByIdSelector = <T>(
 ) => useFeedStore(useShallow((state) => (feedId && state.feeds[feedId] ? selector(state.feeds[feedId]) : null)))
 
 export const useFeedHeaderTitle = () => {
-  const { feedId: currentFeedId, category, view } = useRouteParms()
+  const { feedId: currentFeedId, view } = useRouteParms()
 
   const feedTitle = useFeedByIdSelector(currentFeedId, (feed) => feed.title)
 
@@ -26,7 +26,10 @@ export const useFeedHeaderTitle = () => {
       return "Starred"
     }
     default: {
-      return category || feedTitle
+      if (currentFeedId?.startsWith(ROUTE_FEED_IN_FOLDER)) {
+        return currentFeedId.replace(ROUTE_FEED_IN_FOLDER, "")
+      }
+      return feedTitle
     }
   }
 }
