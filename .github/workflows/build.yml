@@ -20,24 +20,10 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      - name: Cache pnpm modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: true
-
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
 
       - name: Install the Apple certificate and provisioning profile
         env:
@@ -69,8 +55,11 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Build
-        run: pnpm build
+        run: npm run build
 
       - name: Upload file
         uses: actions/upload-artifact@v4
