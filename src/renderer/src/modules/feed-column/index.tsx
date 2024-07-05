@@ -55,16 +55,20 @@ export function FeedColumn() {
       if (getReadonlyRoute().location.pathname.startsWith(Routes.Feeds)) {
         navigateBackHome(nextActive)
       }
-      spring.set(-nextActive * 256)
     },
     [active, navigateBackHome, spring],
   )
   useLayoutEffect(() => {
     const { view } = getRouteParams()
     if (view !== undefined) {
-      setActive(view)
+      setActive_(view)
     }
-  }, [])
+  }, [setActive_])
+
+  useLayoutEffect(() => {
+    spring.set(-active * 256)
+  }, [active, spring])
+
   useHotkeys(
     shortcuts.feeds.switchBetweenViews.key,
     () => {
