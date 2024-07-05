@@ -8,7 +8,7 @@ import { omit } from "lodash-es"
 import { parse } from "tldts"
 
 import { entryActions } from "./entry/store"
-import { feedActions } from "./feed"
+import { feedActions, getFeedById } from "./feed"
 import { feedUnreadActions } from "./unread"
 import { createZustandStore, getStoreActions } from "./utils/helper"
 import { isHydrated } from "./utils/hydrate"
@@ -130,7 +130,13 @@ export const useSubscriptionStore = createZustandStore<
       produce(state, (state) => {
         Object.keys(state.data).forEach((id) => {
           if (idSet.has(id)) {
-            state.data[id].category = null
+            const subscription = state.data[id]
+            const feed = getFeedById(subscription.feedId)
+            if (!feed) return
+            const { siteUrl } = feed
+            if (!siteUrl) return
+            const parsed = parse(siteUrl)
+            parsed.domain && (subscription.category = parsed.domain)
           }
         })
       }),
