@@ -35,7 +35,7 @@ import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
 import { EntryHeader } from "@renderer/modules/entry-content/header"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
-import { entryActions } from "@renderer/store/entry"
+import { entryActions, useEntry } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import {
   subscriptionActions,
@@ -46,6 +46,7 @@ import type { FC } from "react"
 import {
   forwardRef,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -55,13 +56,22 @@ import { useHotkeys } from "react-hotkeys-hook"
 import type { VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 
+import { batchMarkUnread } from "./helper"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import { EntryItem } from "./item"
 
 export function EntryColumn() {
   const entries = useEntriesByView()
   const { entriesIds, isFetchingNextPage } = entries
-  const { view, feedId } = useRouteParms()
+
+  const { entryId: activeEntryId, view, feedId } = useRouteParms()
+  const activeEntry = useEntry(activeEntryId)
+
+  useEffect(() => {
+    if (!feedId || !activeEntryId) return
+
+    batchMarkUnread([feedId, activeEntryId])
+  }, [activeEntry, activeEntryId, feedId])
 
   const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
 

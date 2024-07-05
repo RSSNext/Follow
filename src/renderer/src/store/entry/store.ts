@@ -231,3 +231,5 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
 }))
 
 export const entryActions = getStoreActions(useEntryStore)
+
+export const getEntry = (entryId: string) => useEntryStore.getState().flatMapEntries[entryId]

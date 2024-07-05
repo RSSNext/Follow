@@ -1,5 +1,5 @@
 import { apiClient } from "@renderer/lib/api-fetch"
-import { entryActions } from "@renderer/store/entry"
+import { entryActions, getEntry } from "@renderer/store/entry"
 import { create, keyResolver, windowScheduler } from "@yornaath/batshit"
 
 type EntryId = string
@@ -14,7 +14,10 @@ const unread = create({
   scheduler: windowScheduler(1000),
 })
 
-export const batchMarkUnread: typeof unread.fetch = (...args) => {
+export const batchMarkUnread = (...args: Parameters<typeof unread.fetch>) => {
+  const [, entryId] = args[0]
+  const currentIsRead = getEntry(entryId)?.read
+  if (currentIsRead) return
   entryActions.markRead(args[0][0], args[0][1], true)
   return unread.fetch.apply(null, args)
 }

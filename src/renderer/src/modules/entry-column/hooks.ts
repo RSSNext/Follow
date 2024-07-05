@@ -8,11 +8,10 @@ import { shortcuts } from "@renderer/lib/shortcuts"
 import { useEntries } from "@renderer/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
 import { useFolderFeedsByFeedId } from "@renderer/store/subscription"
-import { debounce } from "lodash-es"
 import { useCallback, useEffect, useMemo, useRef } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import type { ListRange } from "react-virtuoso"
-import { useEventCallback } from "usehooks-ts"
+import { useDebounceCallback } from "usehooks-ts"
 
 import { batchMarkUnread } from "./helper"
 
@@ -21,17 +20,15 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
   const scrollMarkUnread = useGeneralSettingKey("scrollMarkUnread")
   const feedView = useRouteParamsSelector((params) => params.view)
 
-  const handleMarkReadInRange = useEventCallback(
-    debounce(
-      async ({ startIndex }: ListRange) => {
-        const idSlice = entriesIds?.slice(0, startIndex)
+  const handleMarkReadInRange = useDebounceCallback(
+    async ({ startIndex }: ListRange) => {
+      const idSlice = entriesIds?.slice(0, startIndex)
 
-        if (!idSlice) return
-        batchMarkRead(idSlice)
-      },
-      1000,
-      { leading: false },
-    ),
+      if (!idSlice) return
+      batchMarkRead(idSlice)
+    },
+    1000,
+    { leading: false },
   )
 
   const handleRenderAsRead = useCallback(
@@ -140,9 +137,7 @@ export const useEntriesByView = () => {
   }
 }
 
-function batchMarkRead(
-  ids: string[],
-) {
+function batchMarkRead(ids: string[]) {
   const batchLikeIds = [] as [string, string][]
   const entriesId2Map = entryActions.getFlattenMapEntries()
   for (const id of ids) {
