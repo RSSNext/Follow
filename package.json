@@ -111,7 +111,6 @@
     "@electron-forge/maker-dmg": "7.4.0",
     "@electron-forge/maker-rpm": "7.4.0",
     "@electron-forge/maker-squirrel": "7.4.0",
-    "@electron-forge/maker-zip": "7.4.0",
     "@electron-forge/plugin-fuses": "7.4.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@iconify-json/mingcute": "1.1.18",

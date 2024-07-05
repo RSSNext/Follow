@@ -86,7 +86,6 @@ jobs:
         with:
           name: ${{ runner.os }}
           path: |
-            out/**/*.app
             out/**/*.dmg
             out/**/*.exe
             out/**/*.deb
