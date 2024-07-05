@@ -13,6 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
@@ -29,35 +30,54 @@ jobs:
             ${{ runner.os }}-
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v3.0.0
-        with:
-          version: latest
-          run_install: true
+        uses: pnpm/action-setup@v4
 
-      - name: Use Node.js 22.x
-        uses: actions/setup-node@v4.0.2
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22
           cache: "pnpm"
 
-      - name: Build/release Electron app
-        uses: songkeys/action-electron-builder@master
-        with:
-          # GitHub token, automatically provided to the action
-          # (No need to define this secret in the repo settings)
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install appdmg
+        if: runner.os == 'macOS'
+        run: pnpm add -g appdmg
 
-          skip_install: true
+      - name: Install the Apple certificate and provisioning profile
+        if: runner.os == 'macOS'
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.provisionprofile
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
-          # If the commit is tagged with a version (e.g. "v1.0.0"),
-          # release the app after building
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          # import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
 
-          mac_certs: ${{ secrets.mac_certs }}
-          mac_certs_password: ${{ secrets.mac_certs_password }}
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
 
-      - name: List files
-        run: ls -l dist
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build
+        run: pnpm build
 
       - name: Upload file
         uses: actions/upload-artifact@v4
@@ -66,7 +86,8 @@ jobs:
         with:
           name: ${{ runner.os }}
           path: |
-            dist/*.dmg
-            dist/*.exe
-            dist/*.AppImage
+            out/**/*.dmg
+            out/**/*.exe
+            out/**/*.deb
+            out/**/*.rpm
           retention-days: 90
