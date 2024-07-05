@@ -1,12 +1,15 @@
 import { apiClient } from "@renderer/lib/api-fetch"
+import { ROUTE_FEED_IN_FOLDER } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
+import { capitalizeFirstLetter } from "@renderer/lib/utils"
 import type { SubscriptionModel } from "@renderer/models"
 import { SubscriptionService } from "@renderer/services"
 import { produce } from "immer"
 import { omit } from "lodash-es"
+import { parse } from "tldts"
 
 import { entryActions } from "./entry/store"
-import { feedActions } from "./feed"
+import { feedActions, getFeedById } from "./feed"
 import { feedUnreadActions } from "./unread"
 import { createZustandStore, getStoreActions } from "./utils/helper"
 import { isHydrated } from "./utils/hydrate"
@@ -17,14 +20,25 @@ interface SubscriptionState {
   data: Record<FeedId, SubscriptionPlainModel>
   dataIdByView: Record<FeedViewType, FeedId[]>
 }
-
 interface SubscriptionActions {
   upsertMany: (subscription: SubscriptionPlainModel[]) => void
   fetchByView: (view?: FeedViewType) => Promise<SubscriptionPlainModel[]>
   markReadByView: (view?: FeedViewType) => void
+  markReadByFolder: (folder: string) => void
   internal_reset: () => void
   clear: () => void
   deleteCategory: (ids: string[]) => void
+}
+
+function morphResponseData(data: SubscriptionModel[]) {
+  for (const subscription of data) {
+    if (!subscription.category && subscription.feeds) {
+      const { siteUrl } = subscription.feeds
+      if (!siteUrl) continue
+      const parsed = parse(siteUrl)
+      parsed.domain && (subscription.category = capitalizeFirstLetter(parsed.domain))
+    }
+  }
 }
 
 const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
@@ -71,6 +85,7 @@ export const useSubscriptionStore = createZustandStore<
       }))
     }
 
+    morphResponseData(res.data)
     get().upsertMany(res.data)
     feedActions.upsertMany(res.data.map((s) => s.feeds))
 
@@ -100,6 +115,15 @@ export const useSubscriptionStore = createZustandStore<
       }
     }
   },
+  markReadByFolder(folder) {
+    const state = get()
+    for (const feedId in state.data) {
+      if (state.data[feedId].category === folder) {
+        feedUnreadActions.updateByFeedId(feedId, 0)
+        entryActions.patchManyByFeedId(feedId, { read: true })
+      }
+    }
+  },
   deleteCategory(ids) {
     const idSet = new Set(ids)
 
@@ -107,7 +131,13 @@ export const useSubscriptionStore = createZustandStore<
       produce(state, (state) => {
         Object.keys(state.data).forEach((id) => {
           if (idSet.has(id)) {
-            state.data[id].category = null
+            const subscription = state.data[id]
+            const feed = getFeedById(subscription.feedId)
+            if (!feed) return
+            const { siteUrl } = feed
+            if (!siteUrl) return
+            const parsed = parse(siteUrl)
+            parsed.domain && (subscription.category = capitalizeFirstLetter(parsed.domain))
           }
         })
       }),
@@ -123,3 +153,24 @@ export const useSubscriptionByView = (view: FeedViewType) =>
   useSubscriptionStore((state) =>
     state.dataIdByView[view].map((id) => state.data[id]),
   )
+
+export const useSubscriptionByFeedId = (feedId: FeedId) =>
+  useSubscriptionStore((state) => state.data[feedId])
+
+export const useFolderFeedsByFeedId = (feedId?: string) =>
+  useSubscriptionStore((state) => {
+    if (typeof feedId !== "string") return
+
+    if (!feedId.startsWith(ROUTE_FEED_IN_FOLDER)) {
+      return
+    }
+    const folderName = feedId.replace(ROUTE_FEED_IN_FOLDER, "")
+    const feedIds: string[] = []
+    for (const feedId in state.data) {
+      const subscription = state.data[feedId]
+      if (subscription.category === folderName) {
+        feedIds.push(feedId)
+      }
+    }
+    return feedIds
+  })

@@ -1,5 +1,8 @@
 import { useMainContainerElement } from "@renderer/atoms/dom"
-import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
+import {
+  setGeneralSetting,
+  useGeneralSettingKey,
+} from "@renderer/atoms/settings/general"
 import { useUser } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { EmptyIcon } from "@renderer/components/icons/empty"
@@ -13,7 +16,6 @@ import {
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
 import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
-import { useRead } from "@renderer/hooks/biz/useEntryActions"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import {
   useRouteEntryId,
@@ -22,27 +24,24 @@ import {
 import { useRefValue } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
+  FEED_COLLECTION_LIST,
+  levels,
   ROUTE_ENTRY_PENDING,
+  ROUTE_FEED_IN_FOLDER,
   ROUTE_FEED_PENDING,
   views,
 } from "@renderer/lib/constants"
-import { getStorageNS } from "@renderer/lib/ns"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
 import { EntryHeader } from "@renderer/modules/entry-content/header"
-import { useEntries } from "@renderer/queries/entries"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
-import { entryActions } from "@renderer/store/entry"
-import {
-  useEntry,
-  useEntryIdsByFeedIdOrView,
-} from "@renderer/store/entry/hooks"
+import { entryActions, useEntry } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
-import { subscriptionActions } from "@renderer/store/subscription"
+import {
+  subscriptionActions,
+  useFolderFeedsByFeedId,
+} from "@renderer/store/subscription"
 import type { HTMLMotionProps } from "framer-motion"
-import { useAtom, useAtomValue } from "jotai"
-import { atomWithStorage } from "jotai/utils"
-import { debounce } from "lodash-es"
 import type { FC } from "react"
 import {
   forwardRef,
@@ -54,67 +53,28 @@ import {
   useState,
 } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
-import type { ListRange, VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
+import type { VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
-import { useEventCallback } from "usehooks-ts"
 
+import { batchMarkUnread } from "./helper"
+import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import { EntryItem } from "./item"
-
-const unreadOnlyAtom = atomWithStorage<boolean>(
-  getStorageNS("entry-unreadonly"),
-  true,
-  undefined,
-  {
-    getOnInit: true,
-  },
-)
 
 export function EntryColumn() {
   const entries = useEntriesByView()
   const { entriesIds, isFetchingNextPage } = entries
+
   const { entryId: activeEntryId, view, feedId } = useRouteParms()
   const activeEntry = useEntry(activeEntryId)
-  const markReadMutation = useRead()
+
   useEffect(() => {
-    if (!activeEntry || activeEntry.read) {
-      return
-    }
-    markReadMutation.mutate(activeEntry)
-  }, [activeEntry?.entries?.id, activeEntry?.read])
+    if (!feedId || !activeEntryId) return
 
-  const handleMarkreadInRange = useEventCallback(
-    debounce(
-      async ({ startIndex }: ListRange) => {
-        const idSlice = entriesIds?.slice(0, startIndex)
+    batchMarkUnread([feedId, activeEntryId])
+  }, [activeEntry, activeEntryId, feedId])
 
-        if (!idSlice) return
+  const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
 
-        const batchLikeIds = [] as [string, string][]
-        const entriesId2Map = entryActions.getFlattenMapEntries()
-        for (const id of idSlice) {
-          const entry = entriesId2Map[id]
-
-          if (!entry) continue
-          const isRead = entry.read
-          if (!isRead) {
-            batchLikeIds.push([entry.feeds.id, id])
-          }
-        }
-
-        if (batchLikeIds.length > 0) {
-          const entryIds = batchLikeIds.map(([, id]) => id)
-          await apiClient.reads.$post({ json: { entryIds } })
-
-          for (const [feedId, id] of batchLikeIds) {
-            entryActions.markRead(feedId, id, true)
-          }
-        }
-      },
-      1000,
-      { leading: false },
-    ),
-  )
-  const scrollMarkUnread = useGeneralSettingKey("scrollMarkUnread")
   const virtuosoOptions = {
     components: {
       List: ListContent,
@@ -128,7 +88,7 @@ export function EntryColumn() {
         )
       }, [isFetchingNextPage]),
     },
-    rangeChanged: scrollMarkUnread ? handleMarkreadInRange : undefined,
+    rangeChanged: handleMarkReadInRange,
     totalCount: entries.totalCount,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entriesIds,
@@ -177,88 +137,15 @@ export function EntryColumn() {
   )
 }
 
-const useEntriesByView = () => {
-  const activeList = useRouteParms()
-  const unreadOnly = useAtomValue(unreadOnlyAtom)
-
-  const query = useEntries({
-    level: activeList?.level,
-    id: activeList.feedId,
-    view: activeList?.view,
-    ...(unreadOnly === true && { read: false }),
-  })
-  const entries = useEntryIdsByFeedIdOrView(
-    activeList.feedId === ROUTE_FEED_PENDING ?
-      activeList.view :
-      activeList.feedId!,
-    {
-      unread: unreadOnly,
-      view: activeList.view,
-    },
-  )
-
-  useHotkeys(
-    shortcuts.entries.refetch.key,
-    () => {
-      query.refetch()
-    },
-    { scopes: ["home"] },
-  )
-
-  // in unread only entries only can grow the data, but not shrink
-  // so we memo this previous data to avoid the flicker
-  const prevEntries = useRef(entries)
-
-  useEffect(() => {
-    prevEntries.current = []
-  }, [activeList.feedId, activeList.view])
-  const localEntries = useMemo(() => {
-    if (!unreadOnly) {
-      prevEntries.current = []
-      return entries
-    }
-    if (!prevEntries.current) {
-      prevEntries.current = entries
-      return entries
-    }
-    if (entries.length > prevEntries.current.length) {
-      prevEntries.current = entries
-      return entries
-    }
-    // merge the new entries with the old entries, and unique them
-    const nextIds = [...new Set([...prevEntries.current, ...entries])]
-    prevEntries.current = nextIds
-    return nextIds
-  }, [entries, prevEntries, unreadOnly])
-
-  const remoteEntryIds = useMemo(
-    () =>
-      query.data ?
-        query.data.pages.reduce((acc, page) => {
-          if (!page.data) return acc
-          acc.push(...page.data.map((entry) => entry.entries.id))
-          return acc
-        }, [] as string[]) :
-        null,
-    [query.data],
-  )
-
-  return {
-    ...query,
-
-    // If remote data is not available, we use the local data, get the local data length
-    totalCount: query.data?.pages?.[0]?.total ?? localEntries.length,
-    entriesIds:
-      // NOTE: if we use the remote data, priority will be given to the remote data, local data maybe had sort issue
-      remoteEntryIds ?? localEntries,
-  }
-}
-
 const ListHeader: FC<{
   totalCount: number
 }> = ({ totalCount }) => {
   const routerParams = useRouteParms()
-  const [unreadOnly, setUnreadOnly] = useAtom(unreadOnlyAtom)
+
+  const unreadOnly = useGeneralSettingKey("unreadOnly")
+
+  const { feedId, entryId, view } = routerParams
+  const folderIds = useFolderFeedsByFeedId(feedId)
 
   const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
   const handleMarkAllAsRead = useCallback(async () => {
@@ -267,7 +154,10 @@ const ListHeader: FC<{
       json: {
         ...getEntriesParams({
           level: routerParams?.level,
-          id: routerParams?.feedId,
+          id:
+            routerParams.level === levels.folder ?
+              folderIds?.join(",") :
+              feedId,
           view: routerParams?.view,
         }),
       },
@@ -278,13 +168,20 @@ const ListHeader: FC<{
       routerParams.feedId === ROUTE_FEED_PENDING
     ) {
       subscriptionActions.markReadByView(routerParams.view)
+    } else if (
+      routerParams.level === levels.folder &&
+      routerParams.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)
+    ) {
+      subscriptionActions.markReadByFolder(
+        routerParams.feedId.replace(ROUTE_FEED_IN_FOLDER, ""),
+      )
     } else {
       routerParams.feedId?.split(",").forEach((feedId) => {
         entryActions.markReadByFeedId(feedId)
       })
     }
     setMarkPopoverOpen(false)
-  }, [routerParams])
+  }, [feedId, folderIds, routerParams])
 
   const headerTitle = useFeedHeaderTitle()
   const os = useMemo(getOS, [])
@@ -314,7 +211,7 @@ const ListHeader: FC<{
 
   const feed = useFeedById(routerParams.feedId)
 
-  const { entryId, view } = useRouteParms()
+  const isInCollectionList = feedId === FEED_COLLECTION_LIST
 
   return (
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
@@ -325,68 +222,70 @@ const ListHeader: FC<{
         )}
       >
         {!titleAtBottom && titleInfo}
-        <div
-          className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {views[view].wideMode &&
-            entryId &&
-            entryId !== ROUTE_ENTRY_PENDING && (
-            <>
-              <EntryHeader view={view} entryId={entryId} />
-              <DividerVertical className="w-px" />
-            </>
-          )}
-          {feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) && (
-            <ActionButton
-              tooltip="Refresh"
-              // shortcut={shortcuts.entries.toggleUnreadOnly.key}
-              onClick={() => {
-                refreshFeed()
-              }}
-            >
-              <i
-                className={cn(
-                  "i-mgc-refresh-2-cute-re",
-                  isPending && "animate-spin",
-                )}
-              />
-            </ActionButton>
-          )}
-          <ActionButton
-            tooltip={unreadOnly ? "Unread Only" : "All"}
-            shortcut={shortcuts.entries.toggleUnreadOnly.key}
-            onClick={() => setUnreadOnly(!unreadOnly)}
+        {!isInCollectionList && (
+          <div
+            className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500"
+            onClick={(e) => e.stopPropagation()}
           >
-            {unreadOnly ? (
-              <i className="i-mgc-round-cute-fi" />
-            ) : (
-              <i className="i-mgc-round-cute-re" />
+            {views[view].wideMode &&
+              entryId &&
+              entryId !== ROUTE_ENTRY_PENDING && (
+              <>
+                <EntryHeader view={view} entryId={entryId} />
+                <DividerVertical className="w-px" />
+              </>
             )}
-          </ActionButton>
-          <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
-            <PopoverTrigger asChild>
+            {feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) && (
               <ActionButton
-                shortcut={shortcuts.entries.markAllAsRead.key}
-                tooltip="Mark All as Read"
+                tooltip="Refresh"
+                // shortcut={shortcuts.entries.toggleUnreadOnly.key}
+                onClick={() => {
+                  refreshFeed()
+                }}
               >
-                <i className="i-mgc-check-circle-cute-re" />
+                <i
+                  className={cn(
+                    "i-mgc-refresh-2-cute-re",
+                    isPending && "animate-spin",
+                  )}
+                />
               </ActionButton>
-            </PopoverTrigger>
-            <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
-              <div>Mark all as read?</div>
-              <div className="space-x-4">
-                <PopoverClose>
-                  <StyledButton variant="outline">Cancel</StyledButton>
-                </PopoverClose>
-                {/* TODO */}
-                <StyledButton onClick={handleMarkAllAsRead}>
-                  Confirm
-                </StyledButton>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
+            )}
+            <ActionButton
+              tooltip={unreadOnly ? "Unread Only" : "All"}
+              shortcut={shortcuts.entries.toggleUnreadOnly.key}
+              onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
+            >
+              {unreadOnly ? (
+                <i className="i-mgc-round-cute-fi" />
+              ) : (
+                <i className="i-mgc-round-cute-re" />
+              )}
+            </ActionButton>
+            <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
+              <PopoverTrigger asChild>
+                <ActionButton
+                  shortcut={shortcuts.entries.markAllAsRead.key}
+                  tooltip="Mark All as Read"
+                >
+                  <i className="i-mgc-check-circle-cute-re" />
+                </ActionButton>
+              </PopoverTrigger>
+              <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
+                <div>Mark all as read?</div>
+                <div className="space-x-4">
+                  <PopoverClose>
+                    <StyledButton variant="outline">Cancel</StyledButton>
+                  </PopoverClose>
+                  {/* TODO */}
+                  <StyledButton onClick={handleMarkAllAsRead}>
+                    Confirm
+                  </StyledButton>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
       </div>
       {titleAtBottom && titleInfo}
     </div>
@@ -399,8 +298,7 @@ const ListContent = forwardRef<HTMLDivElement>((props, ref) => (
 
 const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
   (props, ref) => {
-    const unreadOnly = useAtomValue(unreadOnlyAtom)
-
+    const unreadOnly = useGeneralSettingKey("unreadOnly")
     return (
       <m.div
         className="-mt-6 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"

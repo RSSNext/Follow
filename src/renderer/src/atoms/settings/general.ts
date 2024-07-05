@@ -5,9 +5,12 @@ import { createSettingAtom } from "./helper"
 const createDefaultSettings = () => ({
   dataPersist: true,
 
+  // view
+  unreadOnly: false,
   // mark unread
   scrollMarkUnread: true,
-
+  hoverMarkUnread: true,
+  renderMarkUnread: true,
 })
 export const {
   useSettingKey: useGeneralSettingKey,

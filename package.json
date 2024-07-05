@@ -52,6 +52,7 @@
     "@tanstack/react-query": "5.49.0",
     "@tanstack/react-query-persist-client": "5.49.0",
     "@use-gesture/react": "10.3.1",
+    "@yornaath/batshit": "0.10.1",
     "class-variance-authority": "0.7.0",
     "click-to-react-component": "1.1.0",
     "clsx": "2.1.1",

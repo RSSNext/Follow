@@ -192,6 +192,7 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
       read,
     })
   },
+
   markReadByFeedId: (feedId: string) => {
     const state = get()
     const entries = state.entries[feedId] || []
@@ -230,3 +231,5 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
 }))
 
 export const entryActions = getStoreActions(useEntryStore)
+
+export const getEntry = (entryId: string) => useEntryStore.getState().flatMapEntries[entryId]

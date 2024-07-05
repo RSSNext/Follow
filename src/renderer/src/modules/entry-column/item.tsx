@@ -1,3 +1,4 @@
+import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
@@ -12,10 +13,12 @@ import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry/hooks"
 import type { FC } from "react"
 import { memo, useCallback } from "react"
+import { useDebounceCallback } from "usehooks-ts"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import { ArticleItem } from "./article-item"
 import { AudioItem } from "./audio-item"
+import { batchMarkUnread } from "./helper"
 import { NotificationItem } from "./notification-item"
 import { PictureItem } from "./picture-item"
 import { SocialMediaItem } from "./social-media-item"
@@ -26,7 +29,13 @@ interface EntryItemProps {
   entryId: string
   view?: number
 }
-function EntryItemImpl({ entry, view }: { entry: CombinedEntryModel, view?: number }) {
+function EntryItemImpl({
+  entry,
+  view,
+}: {
+  entry: CombinedEntryModel
+  view?: number
+}) {
   const { items } = useEntryActions({
     view,
     entry,
@@ -45,10 +54,25 @@ function EntryItemImpl({ entry, view }: { entry: CombinedEntryModel, view?: numb
     },
   )
 
-  const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry.entries.id)
+  const isActive = useRouteParamsSelector(
+    ({ entryId }) => entryId === entry.entries.id,
+  )
 
   const asRead = useAsRead(entry)
+  const hoverMarkUnread = useGeneralSettingKey("hoverMarkUnread")
 
+  const handleMouseEnter = useDebounceCallback(
+    () => {
+      if (!hoverMarkUnread) return
+      if (asRead) return
+
+      batchMarkUnread([entry.feeds.id, entry.entries.id])
+    },
+    233,
+    {
+      leading: false,
+    },
+  )
   let Item: FC<UniversalItemProps>
 
   switch (view) {
@@ -123,11 +147,13 @@ function EntryItemImpl({ entry, view }: { entry: CombinedEntryModel, view?: numb
       <div
         className={cn(
           "rounded-md bg-theme-background transition-colors",
-          isActive &&
-          "bg-theme-item-active",
-          asRead ? "text-zinc-700 dark:text-neutral-400" : "text-zinc-900 dark:text-neutral-300",
+          isActive && "bg-theme-item-active",
+          asRead ?
+            "text-zinc-700 dark:text-neutral-400" :
+            "text-zinc-900 dark:text-neutral-300",
         )}
         onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
         onDoubleClick={handleDoubleClick}
         onContextMenu={handleContextMenu}
       >
