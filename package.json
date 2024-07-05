@@ -5,6 +5,7 @@
   "packageManager": "pnpm@9.1.4",
   "description": "An Electron application with React and TypeScript",
   "author": "example.com",
+  "license": "UNLICENSED",
   "homepage": "https://electron-vite.org",
   "main": "./dist/main/index.js",
   "scripts": {
