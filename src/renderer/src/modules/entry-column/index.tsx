@@ -24,6 +24,7 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import {
   levels,
   ROUTE_ENTRY_PENDING,
+  ROUTE_FEED_IN_FOLDER,
   ROUTE_FEED_PENDING,
   views,
 } from "@renderer/lib/constants"
@@ -38,10 +39,7 @@ import {
   useEntry,
   useEntryIdsByFeedIdOrView,
 } from "@renderer/store/entry/hooks"
-import {
-  useFeedById,
-  useFeedHeaderTitle,
-} from "@renderer/store/feed"
+import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import {
   subscriptionActions,
   useFolderFeedsByFeedId,
@@ -269,6 +267,9 @@ const ListHeader: FC<{
   const routerParams = useRouteParms()
   const [unreadOnly, setUnreadOnly] = useAtom(unreadOnlyAtom)
 
+  const { feedId } = routerParams
+  const folderIds = useFolderFeedsByFeedId(feedId)
+
   const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
   const handleMarkAllAsRead = useCallback(async () => {
     if (!routerParams) return
@@ -276,7 +277,10 @@ const ListHeader: FC<{
       json: {
         ...getEntriesParams({
           level: routerParams?.level,
-          id: routerParams?.feedId,
+          id:
+            routerParams.level === levels.folder ?
+              folderIds?.join(",") :
+              feedId,
           view: routerParams?.view,
         }),
       },
@@ -287,13 +291,20 @@ const ListHeader: FC<{
       routerParams.feedId === ROUTE_FEED_PENDING
     ) {
       subscriptionActions.markReadByView(routerParams.view)
+    } else if (
+      routerParams.level === levels.folder &&
+      routerParams.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)
+    ) {
+      subscriptionActions.markReadByFolder(
+        routerParams.feedId.replace(ROUTE_FEED_IN_FOLDER, ""),
+      )
     } else {
       routerParams.feedId?.split(",").forEach((feedId) => {
         entryActions.markReadByFeedId(feedId)
       })
     }
     setMarkPopoverOpen(false)
-  }, [routerParams])
+  }, [feedId, folderIds, routerParams])
 
   const headerTitle = useFeedHeaderTitle()
   const os = useMemo(getOS, [])

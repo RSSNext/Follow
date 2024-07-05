@@ -23,6 +23,7 @@ interface SubscriptionActions {
   upsertMany: (subscription: SubscriptionPlainModel[]) => void
   fetchByView: (view?: FeedViewType) => Promise<SubscriptionPlainModel[]>
   markReadByView: (view?: FeedViewType) => void
+  markReadByFolder: (folder: string) => void
   internal_reset: () => void
   clear: () => void
   deleteCategory: (ids: string[]) => void
@@ -108,6 +109,15 @@ export const useSubscriptionStore = createZustandStore<
     const state = get()
     for (const feedId in state.data) {
       if (state.data[feedId].view === view) {
+        feedUnreadActions.updateByFeedId(feedId, 0)
+        entryActions.patchManyByFeedId(feedId, { read: true })
+      }
+    }
+  },
+  markReadByFolder(folder) {
+    const state = get()
+    for (const feedId in state.data) {
+      if (state.data[feedId].category === folder) {
         feedUnreadActions.updateByFeedId(feedId, 0)
         entryActions.patchManyByFeedId(feedId, { read: true })
       }
