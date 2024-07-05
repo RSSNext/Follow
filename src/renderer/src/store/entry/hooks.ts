@@ -26,11 +26,8 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
       const isMultiple = feedId.includes(",")
 
       const isInFolder =
-        feedId.startsWith(ROUTE_FEED_IN_FOLDER) ||
-        feedId === FEED_COLLECTION_LIST
-      if (isInFolder) {
-        return []
-      }
+        feedId.startsWith(ROUTE_FEED_IN_FOLDER)
+
       if (isMultiple) {
         const feedIds = feedId.split(",")
         const result = [] as string[]
@@ -49,6 +46,9 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
         })
 
         return result
+      } else if (isInFolder) {
+        // please use `useEntryIdsByFolderName` instead
+        return []
       } else {
         return getSingle(feedId)
       }
