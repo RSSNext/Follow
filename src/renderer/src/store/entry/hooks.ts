@@ -22,7 +22,8 @@ export const useEntry = (
 export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
   useEntryStore(
     useShallow((state) => {
-      const isMultiple = typeof feedId === "string" && feedId.includes(",")
+      if (typeof feedId !== "string") return []
+      const isMultiple = feedId.includes(",")
 
       const isInFolder =
         feedId.startsWith(ROUTE_FEED_IN_FOLDER) ||

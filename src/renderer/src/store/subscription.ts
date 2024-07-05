@@ -142,7 +142,8 @@ export const useSubscriptionByFeedId = (feedId: FeedId) =>
 
 export const useFolderFeedsByFeedId = (feedId?: string) =>
   useSubscriptionStore((state) => {
-    if (!feedId) return
+    if (typeof feedId !== "string") return
+
     if (!feedId.startsWith(ROUTE_FEED_IN_FOLDER)) {
       return
     }
