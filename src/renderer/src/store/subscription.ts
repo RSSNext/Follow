@@ -1,6 +1,7 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { ROUTE_FEED_IN_FOLDER } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
+import { capitalizeFirstLetter } from "@renderer/lib/utils"
 import type { SubscriptionModel } from "@renderer/models"
 import { SubscriptionService } from "@renderer/services"
 import { produce } from "immer"
@@ -35,7 +36,7 @@ function morphResponseData(data: SubscriptionModel[]) {
       const { siteUrl } = subscription.feeds
       if (!siteUrl) continue
       const parsed = parse(siteUrl)
-      parsed.domain && (subscription.category = parsed.domain)
+      parsed.domain && (subscription.category = capitalizeFirstLetter(parsed.domain))
     }
   }
 }
@@ -136,7 +137,7 @@ export const useSubscriptionStore = createZustandStore<
             const { siteUrl } = feed
             if (!siteUrl) return
             const parsed = parse(siteUrl)
-            parsed.domain && (subscription.category = parsed.domain)
+            parsed.domain && (subscription.category = capitalizeFirstLetter(parsed.domain))
           }
         })
       }),
