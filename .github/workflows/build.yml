@@ -89,4 +89,5 @@ jobs:
             out/**/*.dmg
             out/**/*.exe
             out/**/*.deb
+            out/**/*.rpm
           retention-days: 90
