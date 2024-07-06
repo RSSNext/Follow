@@ -100,12 +100,14 @@ app.whenReady().then(() => {
 
   if (process.env.NODE_ENV === "development") {
     import("electron-devtools-installer").then(
-      ({ default: installExtension, REACT_DEVELOPER_TOOLS }) => {
-        installExtension(REACT_DEVELOPER_TOOLS, {
-          loadExtensionOptions: { allowFileAccess: true },
+      ({ default: installExtension, REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS }) => {
+        [REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS].forEach((extension) => {
+          installExtension(extension, {
+            loadExtensionOptions: { allowFileAccess: true },
+          })
+            .then((name) => console.info(`Added Extension:  ${name}`))
+            .catch((err) => console.info("An error occurred:", err))
         })
-          .then((name) => console.info(`Added Extension:  ${name}`))
-          .catch((err) => console.info("An error occurred:", err))
 
         session.defaultSession.getAllExtensions().forEach((e) => {
           session.defaultSession.loadExtension(e.path)

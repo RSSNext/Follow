@@ -3,7 +3,12 @@ import {
   useRouteParamsSelector,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
-import { levels, ROUTE_FEED_PENDING, views } from "@renderer/lib/constants"
+import {
+  FEED_COLLECTION_LIST,
+  levels,
+  ROUTE_FEED_PENDING,
+  views,
+} from "@renderer/lib/constants"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { useEntries } from "@renderer/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
@@ -113,27 +118,21 @@ export const useEntriesByView = () => {
     prevEntries.current = nextIds
     return nextIds
   }, [entries, prevEntries, unreadOnly])
-
-  const remoteEntryIds = useMemo(
+  const sortedLocalEntries = useMemo(
     () =>
-      query.data ?
-        query.data.pages.reduce((acc, page) => {
-          if (!page.data) return acc
-          acc.push(...page.data.map((entry) => entry.entries.id))
-          return acc
-        }, [] as string[]) :
-        null,
-    [query.data],
+      feedId === FEED_COLLECTION_LIST ?
+        sortEntriesIdByStarAt(localEntries) :
+        sortEntriesIdByEntryPublishedAt(localEntries),
+    [feedId, localEntries],
   )
 
   return {
     ...query,
 
     // If remote data is not available, we use the local data, get the local data length
-    totalCount: query.data?.pages?.[0]?.total ?? localEntries.length,
-    entriesIds:
-      // NOTE: if we use the remote data, priority will be given to the remote data, local data maybe had sort issue
-      remoteEntryIds ?? localEntries,
+    totalCount: query.data?.pages?.[0]?.total ? Math.max(query.data?.pages?.[0]?.total, localEntries.length) : localEntries.length,
+    entriesIds: sortedLocalEntries,
+    // entriesIds: remoteEntryIds,
   }
 }
 
@@ -155,4 +154,25 @@ function batchMarkRead(ids: string[]) {
       batchMarkUnread([feedId, id])
     }
   }
+}
+
+function sortEntriesIdByEntryPublishedAt(entries: string[]) {
+  const entriesId2Map = entryActions.getFlattenMapEntries()
+  return entries
+    .slice()
+    .sort((a, b) =>
+      entriesId2Map[b]?.entries.publishedAt.localeCompare(
+        entriesId2Map[a]?.entries.publishedAt,
+      ),
+    )
+}
+
+function sortEntriesIdByStarAt(entries: string[]) {
+  const entriesId2Map = entryActions.getFlattenMapEntries()
+  return entries.slice().sort((a, b) => {
+    const aStar = entriesId2Map[a].collections?.createdAt
+    const bStar = entriesId2Map[b].collections?.createdAt
+    if (!aStar || !bStar) return 0
+    return bStar.localeCompare(aStar)
+  })
 }

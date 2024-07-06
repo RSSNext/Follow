@@ -16,24 +16,28 @@ const createState = (): EntryState => ({
   flatMapEntries: {},
   internal_feedId2entryIdSet: {},
   starIds: new Set(),
-  // viewToStarIds: {
-  //   [FeedViewType.Articles]: new Set(),
-  //   [FeedViewType.Audios]: new Set(),
-  //   [FeedViewType.Videos]: new Set(),
-  //   [FeedViewType.Notifications]: new Set(),
-  //   [FeedViewType.SocialMedia]: new Set(),
-  //   [FeedViewType.Pictures]: new Set(),
-  // },
 })
 
 export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   "entry",
-
 )((set, get) => ({
   ...createState(),
 
   clear: () => {
     set(createState)
+  },
+  clearByFeedId(feedId) {
+    set((state) =>
+      produce(state, (draft) => {
+        const entryIds = draft.entries[feedId]
+        if (!entryIds) return
+        entryIds.forEach((entryId) => {
+          delete draft.flatMapEntries[entryId]
+        })
+        delete draft.entries[feedId]
+        delete draft.internal_feedId2entryIdSet[feedId]
+      }),
+    )
   },
 
   fetchEntryById: async (entryId: string) => {
@@ -230,4 +234,5 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
 
 export const entryActions = getStoreActions(useEntryStore)
 
-export const getEntry = (entryId: string) => useEntryStore.getState().flatMapEntries[entryId]
+export const getEntry = (entryId: string) =>
+  useEntryStore.getState().flatMapEntries[entryId]

@@ -1,6 +1,10 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
+import {
+  useRouteParamsSelector,
+} from "@renderer/hooks/biz/useRouteParams"
+import { FEED_COLLECTION_LIST } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
@@ -24,6 +28,9 @@ export function ListItem({
 
   const asRead = useAsRead(entry)
 
+  const inInCollection = useRouteParamsSelector(
+    (s) => s.feedId === FEED_COLLECTION_LIST,
+  )
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry) return <ReactVirtuosoItemPlaceholder />
 
@@ -49,7 +56,11 @@ export function ListItem({
           <span className="shrink-0">
             {dayjs
               .duration(
-                dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"),
+                dayjs(
+                  inInCollection ?
+                    entry.collections?.createdAt :
+                    entry.entries.publishedAt,
+                ).diff(dayjs(), "minute"),
                 "minute",
               )
               .humanize()}
@@ -73,15 +84,15 @@ export function ListItem({
               target={translation?.description}
             />
           )}
-          {!!entry.collections && (
-            <StarIcon />
-          )}
+          {!!entry.collections && <StarIcon />}
         </div>
         {withDetails && (
           <div
             className={cn(
               "text-[13px]",
-              asRead ? "text-zinc-400 dark:text-neutral-500" : "text-zinc-500 dark:text-neutral-400",
+              asRead ?
+                "text-zinc-400 dark:text-neutral-500" :
+                "text-zinc-500 dark:text-neutral-400",
             )}
           >
             <EntryTranslation

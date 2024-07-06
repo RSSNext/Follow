@@ -1,59 +1,69 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
-import { getFeedById } from "@renderer/store/feed"
 import type { SubscriptionPlainModel } from "@renderer/store/subscription"
+import { subscriptionActions } from "@renderer/store/subscription"
 import { feedUnreadActions } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
+
+import { navigateEntry } from "./useNavigateEntry"
+import { getRouteParams } from "./useRouteParams"
 
 export const useDeleteSubscription = ({
   onSuccess,
 }: {
   onSuccess?: () => void
-}) => useMutation({
-  mutationFn: async (feed: SubscriptionPlainModel) =>
-    apiClient.subscriptions.$delete({
-      json: {
-        feedId: feed.feedId,
-      },
-    }),
+}) =>
+  useMutation({
+    mutationFn: async (subscription: SubscriptionPlainModel) =>
+      subscriptionActions.unfollow(subscription.feedId).then((feed) => {
+        Queries.subscription.byView(subscription.view).invalidate()
+        feedUnreadActions.updateByFeedId(subscription.feedId, 0)
 
-  onSuccess: (_, variables) => {
-    Queries.subscription.byView(variables.view).invalidate()
-    feedUnreadActions.updateByFeedId(variables.feedId, 0)
+        if (!subscription) return
+        if (!feed) return
+        toast(
+          <>
+            Feed
+            {" "}
+            <i className="mr-px font-semibold">{feed.title}</i>
+            {" "}
+            has been
+            unfollowed.
+          </>,
+          {
+            duration: 3000,
+            action: {
+              label: "Undo",
+              onClick: async () => {
+                // TODO store action
+                await apiClient.subscriptions.$post({
+                  json: {
+                    url: feed.url,
+                    view: subscription.view,
+                    category: subscription.category,
+                    isPrivate: subscription.isPrivate,
+                  },
+                })
 
-    const feed = getFeedById(variables.feedId)
-
-    if (!feed) return
-    toast(
-      <>
-        Feed
-        {" "}
-        <i className="mr-px font-semibold">{feed.title}</i>
-        {" "}
-        has been
-        unfollowed.
-      </>,
-      {
-        duration: 3000,
-        action: {
-          label: "Undo",
-          onClick: async () => {
-            await apiClient.subscriptions.$post({
-              json: {
-                url: feed.url,
-                view: variables.view,
-                category: variables.category,
-                isPrivate: variables.isPrivate,
+                Queries.subscription.byView(subscription.view).invalidate()
+                feedUnreadActions.fetchUnreadByView(subscription.view)
               },
-            })
-
-            Queries.subscription.byView(variables.view).invalidate()
-            feedUnreadActions.fetchUnreadByView(variables.view)
+            },
           },
-        },
-      },
-    )
-    onSuccess?.()
-  },
-})
+        )
+      }),
+
+    onSuccess: (_) => {
+      onSuccess?.()
+    },
+    onMutate(variables) {
+      if (getRouteParams().feedId === variables.feedId) {
+        navigateEntry({
+          feedId: null,
+          entryId: null,
+          view: getRouteParams().view,
+        })
+      }
+    },
+  })

@@ -50,6 +50,7 @@ export interface EntryActions {
   markStar: (entryId: string, starred: boolean) => void
 
   clear: () => void
+  clearByFeedId: (feedId: string) => void
 }
 
 export interface EntryFilter {
