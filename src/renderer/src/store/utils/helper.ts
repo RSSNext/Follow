@@ -1,5 +1,6 @@
 import type { StateCreator } from "zustand"
 import type { PersistStorage } from "zustand/middleware"
+import { devtools } from "zustand/middleware"
 import { shallow } from "zustand/shallow"
 import type { UseBoundStoreWithEqualityFn } from "zustand/traditional"
 import { createWithEqualityFn } from "zustand/traditional"
@@ -30,7 +31,13 @@ export const createZustandStore =
     name: string,
   ) =>
     (store: T) => {
-      const newStore = createWithEqualityFn(store, shallow)
+      const newStore = createWithEqualityFn(
+        devtools(store, {
+          enabled: process.env.NODE_ENV === "development",
+          name,
+        }),
+        shallow,
+      )
 
       storeMap[name] = newStore
       window.store =

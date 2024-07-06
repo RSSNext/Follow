@@ -13,6 +13,7 @@
     "composite": true,
     "jsx": "react-jsx",
     "noUnusedLocals": false,
+    "strict": true,
     "baseUrl": ".",
     "paths": {
       "@renderer/*": [

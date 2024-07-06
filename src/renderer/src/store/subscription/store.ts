@@ -1,5 +1,4 @@
 import { apiClient } from "@renderer/lib/api-fetch"
-import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { capitalizeFirstLetter } from "@renderer/lib/utils"
 import type { SubscriptionModel } from "@renderer/models"
@@ -8,26 +7,24 @@ import { produce } from "immer"
 import { omit } from "lodash-es"
 import { parse } from "tldts"
 
-import { entryActions } from "./entry/store"
-import { feedActions, getFeedById } from "./feed"
-import { feedUnreadActions } from "./unread"
-import { createZustandStore, getStoreActions } from "./utils/helper"
-import { isHydrated } from "./utils/hydrate"
+import { entryActions } from "../entry"
+import { feedActions, getFeedById } from "../feed"
+import { feedUnreadActions } from "../unread"
+import { createZustandStore } from "../utils/helper"
+import { isHydrated } from "../utils/hydrate"
 
-type FeedId = string
 export type SubscriptionPlainModel = Omit<SubscriptionModel, "feeds">
 interface SubscriptionState {
+  /**
+   * Key: feedId
+   * Value: SubscriptionPlainModel
+   */
   data: Record<FeedId, SubscriptionPlainModel>
+  /**
+   * Key: FeedViewType
+   * Value: FeedId[]
+   */
   dataIdByView: Record<FeedViewType, FeedId[]>
-}
-interface SubscriptionActions {
-  upsertMany: (subscription: SubscriptionPlainModel[]) => void
-  fetchByView: (view?: FeedViewType) => Promise<SubscriptionPlainModel[]>
-  markReadByView: (view?: FeedViewType) => void
-  markReadByFolder: (folder: string) => void
-  internal_reset: () => void
-  clear: () => void
-  deleteCategory: (ids: string[]) => void
 }
 
 function morphResponseData(data: SubscriptionModel[]) {
@@ -36,7 +33,8 @@ function morphResponseData(data: SubscriptionModel[]) {
       const { siteUrl } = subscription.feeds
       if (!siteUrl) continue
       const parsed = parse(siteUrl)
-      parsed.domain && (subscription.category = capitalizeFirstLetter(parsed.domain))
+      parsed.domain &&
+      (subscription.category = capitalizeFirstLetter(parsed.domain))
     }
   }
 }
@@ -50,22 +48,20 @@ const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
   [FeedViewType.Videos]: [],
 }
 
-export const useSubscriptionStore = createZustandStore<
-  SubscriptionState & SubscriptionActions
->("subscription")((set, get) => ({
+export const useSubscriptionStore = createZustandStore<SubscriptionState>(
+  "subscription",
+)(() => ({
   data: {},
   dataIdByView: { ...emptyDataIdByView },
+}))
 
-  internal_reset() {
-    set({
-      data: {},
-      dataIdByView: { ...emptyDataIdByView },
-    })
-  },
-  clear() {
-    get().internal_reset()
-  },
-  async fetchByView(view) {
+const set = useSubscriptionStore.setState
+const get = useSubscriptionStore.getState
+
+class SubscriptionActions {
+  static shared = new SubscriptionActions()
+
+  async fetchByView(view?: FeedViewType) {
     const res = await apiClient.subscriptions.$get({
       query: { view: String(view) },
     })
@@ -84,12 +80,13 @@ export const useSubscriptionStore = createZustandStore<
     }
 
     morphResponseData(res.data)
-    get().upsertMany(res.data)
+    SubscriptionActions.shared.upsertMany(res.data)
     feedActions.upsertMany(res.data.map((s) => s.feeds))
 
     return res.data
-  },
-  upsertMany: (subscriptions) => {
+  }
+
+  upsertMany(subscriptions: SubscriptionPlainModel[]) {
     if (isHydrated()) {
       SubscriptionService.upsertMany(subscriptions)
     }
@@ -103,8 +100,9 @@ export const useSubscriptionStore = createZustandStore<
         })
       }),
     )
-  },
-  markReadByView(view) {
+  }
+
+  markReadByView(view?: FeedViewType) {
     const state = get()
     for (const feedId in state.data) {
       if (state.data[feedId].view === view) {
@@ -112,8 +110,9 @@ export const useSubscriptionStore = createZustandStore<
         entryActions.patchManyByFeedId(feedId, { read: true })
       }
     }
-  },
-  markReadByFolder(folder) {
+  }
+
+  markReadByFolder(folder: string) {
     const state = get()
     for (const feedId in state.data) {
       if (state.data[feedId].category === folder) {
@@ -121,8 +120,16 @@ export const useSubscriptionStore = createZustandStore<
         entryActions.patchManyByFeedId(feedId, { read: true })
       }
     }
-  },
-  deleteCategory(ids) {
+  }
+
+  clear() {
+    set({
+      data: {},
+      dataIdByView: { ...emptyDataIdByView },
+    })
+  }
+
+  deleteCategory(ids: string[]) {
     const idSet = new Set(ids)
 
     set((state) =>
@@ -135,42 +142,40 @@ export const useSubscriptionStore = createZustandStore<
             const { siteUrl } = feed
             if (!siteUrl) return
             const parsed = parse(siteUrl)
-            parsed.domain && (subscription.category = capitalizeFirstLetter(parsed.domain))
+            parsed.domain &&
+            (subscription.category = capitalizeFirstLetter(parsed.domain))
           }
         })
       }),
     )
-  },
-}))
+  }
 
-export const subscriptionActions = getStoreActions(useSubscriptionStore)
+  async unfollow(feedId: string) {
+    const feed = getFeedById(feedId)
+    // Remove feed and subscription
+    set((state) =>
+      produce(state, (draft) => {
+        delete draft.data[feedId]
+        for (const view in draft.dataIdByView) {
+          const currentViewFeedIds = draft.dataIdByView[view] as string[]
+          currentViewFeedIds.splice(currentViewFeedIds.indexOf(feedId), 1)
+        }
+      }),
+    )
 
-export const useFeedIdByView = (view: FeedViewType) =>
-  useSubscriptionStore((state) => state.dataIdByView[view] || [])
-export const useSubscriptionByView = (view: FeedViewType) =>
-  useSubscriptionStore((state) =>
-    state.dataIdByView[view].map((id) => state.data[id]),
-  )
+    // Remove feed's entries
+    entryActions.clearByFeedId(feedId)
+    // Clear feed's unread count
+    feedUnreadActions.updateByFeedId(feedId, 0)
 
-export const useSubscriptionByFeedId = (feedId: FeedId) =>
-  useSubscriptionStore((state) => state.data[feedId])
+    return apiClient.subscriptions
+      .$delete({
+        json: {
+          feedId,
+        },
+      })
+      .then(() => feed)
+  }
+}
 
-export const useFolderFeedsByFeedId = (feedId?: string) =>
-  useSubscriptionStore((state): string[] => {
-    if (typeof feedId !== "string") return []
-    if (feedId === FEED_COLLECTION_LIST) { return [feedId] }
-
-    if (!feedId.startsWith(ROUTE_FEED_IN_FOLDER)) {
-      return []
-    }
-
-    const folderName = feedId.replace(ROUTE_FEED_IN_FOLDER, "")
-    const feedIds: string[] = []
-    for (const feedId in state.data) {
-      const subscription = state.data[feedId]
-      if (subscription.category === folderName) {
-        feedIds.push(feedId)
-      }
-    }
-    return feedIds
-  })
+export const subscriptionActions = SubscriptionActions.shared
