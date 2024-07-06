@@ -21,11 +21,13 @@ const config: ForgeConfig = {
       }),
       keychain: process.env.KEYCHAIN_PATH,
     },
-    osxNotarize: {
-      appleId: process.env.APPLE_ID!,
-      appleIdPassword: process.env.APPLE_PASSWORD!,
-      teamId: process.env.APPLE_TEAM_ID!,
-    },
+    ...(process.env.APPLE_ID && process.env.APPLE_PASSWORD && process.env.APPLE_TEAM_ID && {
+      osxNotarize: {
+        appleId: process.env.APPLE_ID!,
+        appleIdPassword: process.env.APPLE_PASSWORD!,
+        teamId: process.env.APPLE_TEAM_ID!,
+      },
+    }),
   },
   rebuildConfig: {},
   makers: [
@@ -36,7 +38,33 @@ const config: ForgeConfig = {
         icon: "resources/icon.png",
       },
     }),
-    new MakerDMG({}),
+    new MakerDMG({
+      background: "resources/dmg-background.png",
+      icon: "resources/dmg-icon.icns",
+      iconSize: 160,
+      additionalDMGOptions: {
+        window: {
+          size: {
+            width: 660,
+            height: 400,
+          },
+        },
+      },
+      contents: (opts) => ([
+        {
+          x: 180,
+          y: 170,
+          type: "file",
+          path: (opts as any).appPath,
+        },
+        {
+          x: 480,
+          y: 170,
+          type: "link",
+          path: "/Applications",
+        },
+      ]),
+    }),
   ],
   plugins: [
     // Fuses are used to enable/disable various Electron functionality
