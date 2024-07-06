@@ -35,9 +35,7 @@ interface FeedUnreadActions {
  */
 export const useFeedUnreadStore = createZustandStore<
   UnreadState & FeedUnreadActions
->("unread", {
-  version: 1,
-})((set, get) => ({
+>("unread")((set, get) => ({
   data: {},
 
   internal_reset() {

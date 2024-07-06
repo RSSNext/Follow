@@ -1,7 +1,4 @@
-import type {
-  MenuItem,
-  MenuItemConstructorOptions,
-} from "electron"
+import type { MenuItem, MenuItemConstructorOptions } from "electron"
 import { Menu } from "electron"
 
 import { createSettingWindow, createWindow } from "./window"
@@ -16,8 +13,7 @@ export const registerAppMenu = () => {
         {
           label: "Settings...",
           accelerator: "CmdOrCtrl+,",
-          click: createSettingWindow
-          ,
+          click: () => createSettingWindow(),
         },
         { type: "separator" },
         { role: "services" },

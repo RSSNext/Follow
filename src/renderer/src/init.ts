@@ -15,7 +15,9 @@ import { hydrateDatabaseToStore, setHydrated } from "./store/utils/hydrate"
 
 const cleanup = subscribeShouldUseIndexedDB((value) => {
   if (!value) {
-    browserDB.delete()
+    browserDB.tables.forEach((table) => {
+      table.clear()
+    })
     setHydrated(false)
     return
   }
@@ -31,7 +33,7 @@ export const initializeApp = async () => {
   const now = Date.now()
 
   registerGlobalContext({
-    showSetting: window.router.showSettings,
+    showSetting: () => window.router.showSettings(),
     toast,
   })
 

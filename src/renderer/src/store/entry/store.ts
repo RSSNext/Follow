@@ -28,9 +28,7 @@ const createState = (): EntryState => ({
 
 export const useEntryStore = createZustandStore<EntryState & EntryActions>(
   "entry",
-  {
-    version: 1,
-  },
+
 )((set, get) => ({
   ...createState(),
 

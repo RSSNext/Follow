@@ -52,9 +52,7 @@ const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
 
 export const useSubscriptionStore = createZustandStore<
   SubscriptionState & SubscriptionActions
->("subscription", {
-  version: 1,
-})((set, get) => ({
+>("subscription")((set, get) => ({
   data: {},
   dataIdByView: { ...emptyDataIdByView },
 

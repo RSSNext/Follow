@@ -1,9 +1,5 @@
-import type { StateCreator, StoreApi } from "zustand"
-import type {
-  PersistOptions,
-  PersistStorage,
-} from "zustand/middleware"
-import { persist } from "zustand/middleware"
+import type { StateCreator } from "zustand"
+import type { PersistStorage } from "zustand/middleware"
 import { shallow } from "zustand/shallow"
 import type { UseBoundStoreWithEqualityFn } from "zustand/traditional"
 import { createWithEqualityFn } from "zustand/traditional"
@@ -27,41 +23,31 @@ export const localStorage: PersistStorage<any> = {
   },
 }
 
+const storeMap = {} as Record<string, UseBoundStoreWithEqualityFn<any>>
+
 export const createZustandStore =
-  <
-    S,
-    T extends StateCreator<
-      S,
-      [["zustand/persist", unknown]],
-      []
-    > = StateCreator<S, [["zustand/persist", unknown]], []>,
-  >(
+  <S, T extends StateCreator<S, [], []> = StateCreator<S, [], []>>(
     name: string,
-    options?: Partial<PersistOptions<S> & {
-      persist?: boolean
-    }>,
   ) =>
     (store: T) => {
-      const newStore = options?.persist ?
-        createWithEqualityFn(
-          persist<S>(store, {
-            name,
-            storage: localStorage,
-            ...options,
-          }),
-          shallow,
-        ) :
-        createWithEqualityFn(store as any, shallow)
+      const newStore = createWithEqualityFn(store, shallow)
 
-      window.store = window.store || {}
-      Object.assign(window.store, {
-        [name]() {
-          return newStore.getState()
+      storeMap[name] = newStore
+      window.store =
+      window.store ||
+      new Proxy(
+        {},
+        {
+          get(_, prop) {
+            if (prop in storeMap) {
+              return storeMap[prop as string].getState()
+            }
+            return
+          },
         },
-      })
-      return newStore as unknown as UseBoundStoreWithEqualityFn<StoreApi<
-        S
-      >>
+      )
+
+      return newStore
     }
 type FunctionKeys<T> = {
   [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
