@@ -21,11 +21,11 @@ const config: ForgeConfig = {
       }),
       keychain: process.env.KEYCHAIN_PATH,
     },
-    // osxNotarize: {
-    //   appleId: process.env.APPLE_ID!,
-    //   appleIdPassword: process.env.APPLE_PASSWORD!,
-    //   teamId: process.env.APPLE_TEAM_ID!,
-    // },
+    osxNotarize: {
+      appleId: process.env.APPLE_ID!,
+      appleIdPassword: process.env.APPLE_PASSWORD!,
+      teamId: process.env.APPLE_TEAM_ID!,
+    },
   },
   rebuildConfig: {},
   makers: [
