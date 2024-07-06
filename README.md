@@ -9,6 +9,6 @@ Roadmap: https://github.com/orgs/RSSNext/projects/1/views/1
 
 ## License
 
-2024, Follow Team. The project is licenses under MIT.
+Follow Desktop is licensed under the GNU General Public License version 3 with the addition of the following special exception:
 
-Additionally, all contents in the `icons/mgc` directory of this project are copyrighted by https://mgc.mingcute.com/.
+All content in the `icons/mgc` directory is copyrighted by https://mgc.mingcute.com/ and cannot be redistributed.
