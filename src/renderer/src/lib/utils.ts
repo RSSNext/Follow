@@ -1,5 +1,6 @@
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
+import { memoize } from "lodash-es"
 import { twMerge } from "tailwind-merge"
 
 import { FEED_COLLECTION_LIST, levels } from "./constants"
@@ -42,7 +43,7 @@ export function getEntriesParams({
 }
 
 export type OS = "macOS" | "iOS" | "Windows" | "Android" | "Linux" | ""
-export function getOS(): OS {
+export const getOS = memoize((): OS => {
   const { userAgent } = window.navigator,
     { platform } = window.navigator,
     macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"],
@@ -63,7 +64,7 @@ export function getOS(): OS {
   }
 
   return os as OS
-}
+})
 
 // eslint-disable-next-line no-control-regex
 export const isASCII = (str) => /^[\u0000-\u007F]*$/.test(str)
@@ -74,7 +75,13 @@ export const isBizId = (id) => {
   // id is uuid or snowflake
 
   // 0. check is uuid
-  if (id.length === 36 && id[8] === "-" && id[13] === "-" && id[18] === "-" && id[23] === "-") {
+  if (
+    id.length === 36 &&
+    id[8] === "-" &&
+    id[13] === "-" &&
+    id[18] === "-" &&
+    id[23] === "-"
+  ) {
     return true
   }
 
@@ -112,7 +119,8 @@ export function formatXml(xml: string, indent = 4) {
   return formatted.trim()
 }
 
-export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms))
 
 export const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)

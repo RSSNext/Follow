@@ -1,5 +1,5 @@
 import { apiClient } from "@renderer/lib/api-fetch"
-import { ROUTE_FEED_IN_FOLDER } from "@renderer/lib/constants"
+import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { capitalizeFirstLetter } from "@renderer/lib/utils"
 import type { SubscriptionModel } from "@renderer/models"
@@ -156,12 +156,14 @@ export const useSubscriptionByFeedId = (feedId: FeedId) =>
   useSubscriptionStore((state) => state.data[feedId])
 
 export const useFolderFeedsByFeedId = (feedId?: string) =>
-  useSubscriptionStore((state) => {
-    if (typeof feedId !== "string") return
+  useSubscriptionStore((state): string[] => {
+    if (typeof feedId !== "string") return []
+    if (feedId === FEED_COLLECTION_LIST) { return [feedId] }
 
     if (!feedId.startsWith(ROUTE_FEED_IN_FOLDER)) {
-      return
+      return []
     }
+
     const folderName = feedId.replace(ROUTE_FEED_IN_FOLDER, "")
     const feedIds: string[] = []
     for (const feedId in state.data) {

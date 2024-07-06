@@ -1,5 +1,4 @@
 import { getOS } from "@renderer/lib/utils"
-import { memoize } from "lodash-es"
 import type { FC } from "react"
 
 const SpecialKeys = {
@@ -23,11 +22,10 @@ const SpecialKeys = {
   },
 }
 
-const os = memoize(getOS)
 export const Kbd: FC<{
   children: string
 }> = ({ children }) => {
-  const specialKeys = SpecialKeys[os()]
+  const specialKeys = SpecialKeys[getOS()]
   let key = children
   if (children.toLowerCase() in specialKeys) {
     key = specialKeys[children.toLowerCase()]

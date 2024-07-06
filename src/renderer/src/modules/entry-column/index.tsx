@@ -48,7 +48,6 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from "react"
@@ -184,7 +183,7 @@ const ListHeader: FC<{
   }, [feedId, folderIds, routerParams])
 
   const headerTitle = useFeedHeaderTitle()
-  const os = useMemo(getOS, [])
+  const os = getOS()
 
   const titleAtBottom = window.electron && os === "macOS"
   const titleInfo = (
@@ -222,70 +221,71 @@ const ListHeader: FC<{
         )}
       >
         {!titleAtBottom && titleInfo}
-        {!isInCollectionList && (
-          <div
-            className="relative z-[1] flex items-center gap-1 self-baseline text-zinc-500"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {views[view].wideMode &&
-              entryId &&
-              entryId !== ROUTE_ENTRY_PENDING && (
-              <>
-                <EntryHeader view={view} entryId={entryId} />
-                <DividerVertical className="w-px" />
-              </>
-            )}
-            {feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) && (
-              <ActionButton
-                tooltip="Refresh"
-                // shortcut={shortcuts.entries.toggleUnreadOnly.key}
-                onClick={() => {
-                  refreshFeed()
-                }}
-              >
-                <i
-                  className={cn(
-                    "i-mgc-refresh-2-cute-re",
-                    isPending && "animate-spin",
-                  )}
-                />
-              </ActionButton>
-            )}
+
+        <div
+          className={cn("relative z-[1] flex items-center gap-1 self-baseline text-zinc-500", isInCollectionList && "pointer-events-none opacity-0",
+
+          )}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {views[view].wideMode &&
+            entryId &&
+            entryId !== ROUTE_ENTRY_PENDING && (
+            <>
+              <EntryHeader view={view} entryId={entryId} />
+              <DividerVertical className="w-px" />
+            </>
+          )}
+          {feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) && (
             <ActionButton
-              tooltip={unreadOnly ? "Unread Only" : "All"}
-              shortcut={shortcuts.entries.toggleUnreadOnly.key}
-              onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
+              tooltip="Refresh"
+              // shortcut={shortcuts.entries.toggleUnreadOnly.key}
+              onClick={() => {
+                refreshFeed()
+              }}
             >
-              {unreadOnly ? (
-                <i className="i-mgc-round-cute-fi" />
-              ) : (
-                <i className="i-mgc-round-cute-re" />
-              )}
+              <i
+                className={cn(
+                  "i-mgc-refresh-2-cute-re",
+                  isPending && "animate-spin",
+                )}
+              />
             </ActionButton>
-            <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
-              <PopoverTrigger asChild>
-                <ActionButton
-                  shortcut={shortcuts.entries.markAllAsRead.key}
-                  tooltip="Mark All as Read"
-                >
-                  <i className="i-mgc-check-circle-cute-re" />
-                </ActionButton>
-              </PopoverTrigger>
-              <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
-                <div>Mark all as read?</div>
-                <div className="space-x-4">
-                  <PopoverClose>
-                    <StyledButton variant="outline">Cancel</StyledButton>
-                  </PopoverClose>
-                  {/* TODO */}
-                  <StyledButton onClick={handleMarkAllAsRead}>
-                    Confirm
-                  </StyledButton>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
-        )}
+          )}
+          <ActionButton
+            tooltip={unreadOnly ? "Unread Only" : "All"}
+            shortcut={shortcuts.entries.toggleUnreadOnly.key}
+            onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
+          >
+            {unreadOnly ? (
+              <i className="i-mgc-round-cute-fi" />
+            ) : (
+              <i className="i-mgc-round-cute-re" />
+            )}
+          </ActionButton>
+          <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
+            <PopoverTrigger asChild>
+              <ActionButton
+                shortcut={shortcuts.entries.markAllAsRead.key}
+                tooltip="Mark All as Read"
+              >
+                <i className="i-mgc-check-circle-cute-re" />
+              </ActionButton>
+            </PopoverTrigger>
+            <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
+              <div>Mark all as read?</div>
+              <div className="space-x-4">
+                <PopoverClose>
+                  <StyledButton variant="outline">Cancel</StyledButton>
+                </PopoverClose>
+                {/* TODO */}
+                <StyledButton onClick={handleMarkAllAsRead}>
+                  Confirm
+                </StyledButton>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
       {titleAtBottom && titleInfo}
     </div>
