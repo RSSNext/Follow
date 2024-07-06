@@ -68,6 +68,7 @@ export function EntryColumn() {
 
   useEffect(() => {
     if (!feedId || !activeEntryId) return
+    if (activeEntryId === ROUTE_ENTRY_PENDING || feedId === FEED_COLLECTION_LIST || feedId === ROUTE_FEED_PENDING) return
 
     batchMarkUnread([feedId, activeEntryId])
   }, [activeEntry, activeEntryId, feedId])
