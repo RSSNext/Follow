@@ -1,5 +1,7 @@
 import "./cssAsPlugin"
 
+import path from "node:path"
+
 import { getIconCollections, iconsPlugin } from "@egoist/tailwindcss-icons"
 import {
   cleanupSVG,
@@ -145,7 +147,7 @@ export default resolveConfig({
     iconsPlugin({
       collections: {
         ...getIconCollections(["mingcute"]),
-        mgc: getCollections("./icons/mgc"),
+        mgc: getCollections(path.resolve(__dirname, "./icons/mgc")),
       },
     }),
     require("tailwindcss-animate"),
