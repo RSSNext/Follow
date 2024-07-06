@@ -19,7 +19,7 @@ const config: ForgeConfig = {
       optionsForFile: () => ({
         entitlements: "build/entitlements.mac.plist",
       }),
-      keychain: "app-signing.keychain",
+      keychain: process.env.KEYCHAIN_PATH,
     },
     // osxNotarize: {
     //   appleId: process.env.APPLE_ID!,
