@@ -48,31 +48,31 @@ function App() {
         />
       )}
       {windowsElectron && (
-        <div className="drag-region fixed top-0 z-[99999] flex h-[24px] w-full items-center justify-end bg-background">
+        <div className="drag-region fixed top-0 z-[99999] flex h-[24px] w-full items-center justify-end rounded-t-[12px] bg-background">
 
           <button
-            className="no-drag-region p-2"
+            className="no-drag-region flex h-[24px] w-[32px] items-center justify-center rounded duration-200 hover:bg-theme-item-active"
             onClick={() => {
               tipcClient?.windowAction({ action: "minimize" })
             }}
           >
-            x
+            <i className="i-mingcute-minimize-line" />
           </button>
           <button
-            className="no-drag-region p-2"
+            className="no-drag-region flex h-[24px] w-[32px] items-center justify-center rounded duration-200 hover:bg-theme-item-active"
             onClick={() => {
               tipcClient?.windowAction({ action: "maximum" })
             }}
           >
-            x
+            <i className="i-mingcute-restore-line" />
           </button>
           <button
-            className="no-drag-region p-2"
+            className="no-drag-region flex h-[24px] w-[32px] items-center justify-center rounded duration-200 hover:bg-red-500"
             onClick={() => {
               tipcClient?.windowAction({ action: "close" })
             }}
           >
-            x
+            <i className="i-mingcute-close-line" />
           </button>
         </div>
       )}
