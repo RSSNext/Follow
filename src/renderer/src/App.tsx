@@ -5,6 +5,8 @@ import { Outlet } from "react-router-dom"
 import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"
 import { useDark } from "./hooks/common/useDark"
+import { tipcClient } from "./lib/client"
+import { getOS } from "./lib/utils"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"
 
@@ -36,13 +38,43 @@ function App() {
       document.removeEventListener("keydown", handleOpenSettings)
     }
   }, [])
+  const windowsElectron = window.electron && getOS() === "Windows"
   return (
     <>
-      {window.electron && (
+      {window.electron && !windowsElectron && (
         <div
           className="drag-region absolute inset-x-0 top-0 h-12 shrink-0"
           aria-hidden
         />
+      )}
+      {windowsElectron && (
+        <div className="drag-region fixed top-0 z-[99999] flex h-[24px] w-full items-center justify-end bg-background">
+
+          <button
+            className="no-drag-region p-2"
+            onClick={() => {
+              tipcClient?.windowAction({ action: "minimize" })
+            }}
+          >
+            x
+          </button>
+          <button
+            className="no-drag-region p-2"
+            onClick={() => {
+              tipcClient?.windowAction({ action: "maximum" })
+            }}
+          >
+            x
+          </button>
+          <button
+            className="no-drag-region p-2"
+            onClick={() => {
+              tipcClient?.windowAction({ action: "close" })
+            }}
+          >
+            x
+          </button>
+        </div>
       )}
       <RootProviders>
         <AppLayer />

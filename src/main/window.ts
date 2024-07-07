@@ -13,6 +13,8 @@ const windows = {
   mainWindow: null as BrowserWindow | null,
 }
 
+const { platform } = process
+
 export function createWindow(
   options: {
     extraPath?: string
@@ -28,14 +30,13 @@ export function createWindow(
     show: false,
     resizable: configs?.resizable ?? true,
     autoHideMenuBar: true,
-    ...(process.platform === "linux" ? { icon } : {}),
+    ...(platform === "linux" ? { icon } : {}),
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.mjs"),
       sandbox: false,
       webviewTag: true,
     },
-
-    titleBarStyle: "hiddenInset",
+    titleBarStyle: platform === "win32" ? "hidden" : "hiddenInset",
     trafficLightPosition: {
       x: 18,
       y: 18,

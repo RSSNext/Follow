@@ -7,13 +7,21 @@ import { RouterProvider } from "react-router-dom"
 
 import { setAppIsReady } from "./atoms/app"
 import { initializeApp } from "./init"
+import { getOS } from "./lib/utils"
 import { router } from "./router"
 
 await initializeApp().finally(() => {
   setAppIsReady(true)
 })
 
-ReactDOM.createRoot(document.querySelector("#root") as HTMLElement).render(
+const $container = document.querySelector("#root") as HTMLElement
+
+if (window.electron && getOS() === "Windows") {
+  $container.style.borderRadius = "12px"
+  $container.style.overflow = "hidden"
+  $container.style.paddingTop = "24px"
+}
+ReactDOM.createRoot($container).render(
   <React.StrictMode>
     <RouterProvider router={router} />
     <ClickToComponent />

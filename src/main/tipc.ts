@@ -1,6 +1,6 @@
 import { getRendererHandlers, tipc } from "@egoist/tipc/main"
 import { callGlobalContextMethod } from "@shared/bridge"
-import type { MessageBoxOptions } from "electron"
+import type { BrowserWindow, MessageBoxOptions } from "electron"
 import { app, dialog, Menu, ShareMenu } from "electron"
 
 import { downloadFile } from "./lib/download"
@@ -193,6 +193,32 @@ export const router = {
     if (!mainWindow) return
     callGlobalContextMethod(mainWindow, "toast.success", ["Download success!"])
   }),
+
+  windowAction: t.procedure.input<{ action: "close" | "minimize" | "maximum" }>().action(async ({ input, context }) => {
+    if (context.sender.getType() === "window") {
+      const window: BrowserWindow | null = (context.sender as Sender).getOwnerBrowserWindow()
+
+      if (!window) return
+      switch (input.action) {
+        case "close": { window.close(); break
+        }
+        case "minimize": { window.minimize(); break
+        }
+        case "maximum": {
+          if (window.isMaximized()) {
+            window.unmaximize()
+          } else {
+            window.maximize()
+          }
+          break
+        }
+      }
+    }
+  }),
+}
+
+interface Sender extends Electron.WebContents {
+  getOwnerBrowserWindow: () => Electron.BrowserWindow | null
 }
 
 export type Router = typeof router
