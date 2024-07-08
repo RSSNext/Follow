@@ -59,8 +59,6 @@ const set = useSubscriptionStore.setState
 const get = useSubscriptionStore.getState
 
 class SubscriptionActions {
-  static shared = new SubscriptionActions()
-
   async fetchByView(view?: FeedViewType) {
     const res = await apiClient.subscriptions.$get({
       query: { view: String(view) },
@@ -80,7 +78,7 @@ class SubscriptionActions {
     }
 
     morphResponseData(res.data)
-    SubscriptionActions.shared.upsertMany(res.data)
+    this.upsertMany(res.data)
     feedActions.upsertMany(res.data.map((s) => s.feeds))
 
     return res.data
@@ -178,4 +176,4 @@ class SubscriptionActions {
   }
 }
 
-export const subscriptionActions = SubscriptionActions.shared
+export const subscriptionActions = new SubscriptionActions()

@@ -2,51 +2,33 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { FeedUnreadService } from "@renderer/services"
 
-import { createZustandStore, getStoreActions } from "./utils/helper"
+import { createZustandStore } from "./utils/helper"
 
 interface UnreadState {
   data: Record<string, number>
 }
-interface FeedUnreadActions {
-  updateByFeedId: (feedId: string, unread: number) => void
-  fetchUnreadByView: (view?: FeedViewType) => Promise<Record<string, number>>
-  fetchUnreadAll: () => Promise<Record<string, number>>
-  incrementByFeedId: (feedId: string, inc: number) => void
-
-  subscribeUnreadCount: (
-    fn: (count: number) => void,
-    immediately?: boolean
-  ) => () => void
-
-  internal_reset: () => void
-  internal_setValue: (data: [string, number][]) => void
-
-  clear: () => void
-
-  hydrate: (
-    data: {
-      id: string
-      count: number
-    }[],
-  ) => void
-}
 /**
  * Store for `feed` unread count
  */
-export const useFeedUnreadStore = createZustandStore<
-  UnreadState & FeedUnreadActions
->("unread")((set, get) => ({
-  data: {},
+export const useFeedUnreadStore = createZustandStore<UnreadState>("unread")(
+  () => ({
+    data: {},
+  }),
+)
 
-  internal_reset() {
+const set = useFeedUnreadStore.setState
+const get = useFeedUnreadStore.getState
+class FeedUnreadActions {
+  private internal_reset() {
     set({ data: {} })
     FeedUnreadService.clear()
-  },
+  }
 
   clear() {
     this.internal_reset()
-  },
-  internal_setValue(data) {
+  }
+
+  private internal_setValue(data: [string, number][]) {
     set((state) => {
       state.data = { ...state.data }
       for (const [key, value] of data) {
@@ -55,19 +37,20 @@ export const useFeedUnreadStore = createZustandStore<
       FeedUnreadService.updateFeedUnread(data)
       return { ...state }
     })
-  },
+  }
 
-  async fetchUnreadByView(view) {
+  async fetchUnreadByView(view: FeedViewType | undefined) {
     const unread = await apiClient.reads.$get({
       query: { view: String(view) },
     })
 
     const { data } = unread
 
-    get().internal_setValue(Object.entries(data))
+    this.internal_setValue(Object.entries(data))
 
     return data
-  },
+  }
+
   async fetchUnreadAll() {
     const unread = await apiClient.reads.$get({
       query: {},
@@ -76,21 +59,23 @@ export const useFeedUnreadStore = createZustandStore<
     const { data } = unread
     this.internal_reset()
 
-    get().internal_setValue(Object.entries(data))
+    this.internal_setValue(Object.entries(data))
     return data
-  },
-  incrementByFeedId: (feedId, inc: number) => {
+  }
+
+  incrementByFeedId(feedId: string, inc: number) {
     const state = get()
     const cur = state.data[feedId]
 
-    state.internal_setValue([[feedId, Math.max(0, (cur || 0) + inc)]])
-  },
-  updateByFeedId: (feedId, unread) => {
-    get().internal_setValue([[feedId, unread]])
-  },
+    this.internal_setValue([[feedId, Math.max(0, (cur || 0) + inc)]])
+  }
 
-  subscribeUnreadCount(fn, immediately) {
-    const handler = (state: UnreadState & FeedUnreadActions): void => {
+  updateByFeedId(feedId: string, unread: number) {
+    this.internal_setValue([[feedId, unread]])
+  }
+
+  subscribeUnreadCount(fn: (count: number) => void, immediately?: boolean) {
+    const handler = (state: UnreadState): void => {
       let unread = 0
       for (const key in state.data) {
         unread += state.data[key]
@@ -102,9 +87,14 @@ export const useFeedUnreadStore = createZustandStore<
       handler(get())
     }
     return useFeedUnreadStore.subscribe(handler)
-  },
+  }
 
-  hydrate(data) {
+  hydrate(
+    data: {
+      id: string
+      count: number
+    }[],
+  ) {
     set((state) => {
       state.data = { ...state.data }
 
@@ -114,7 +104,7 @@ export const useFeedUnreadStore = createZustandStore<
 
       return { ...state }
     })
-  },
-}))
+  }
+}
 
-export const feedUnreadActions = getStoreActions(useFeedUnreadStore)
+export const feedUnreadActions = new FeedUnreadActions()

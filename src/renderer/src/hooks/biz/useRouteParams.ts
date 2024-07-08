@@ -1,4 +1,12 @@
-import { getReadonlyRoute, useReadonlyRouteSelector } from "@renderer/atoms/route"
+import {
+  getReadonlyRoute,
+  useReadonlyRouteSelector,
+} from "@renderer/atoms/route"
+import {
+  FEED_COLLECTION_LIST,
+  ROUTE_ENTRY_PENDING,
+  ROUTE_FEED_PENDING,
+} from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import type { Params } from "react-router-dom"
 import { useParams, useSearchParams } from "react-router-dom"
@@ -28,23 +36,34 @@ export const useRouteFeedId = () => {
   return feedId
 }
 
-const parseRouteParams = (
-  params: Params<any>,
-  search: URLSearchParams,
-) => {
+export interface BizRouteParams {
+  view: FeedViewType
+  entryId?: string
+  feedId?: string
+  level?: string
+  isCollection: boolean
+  isAllFeeds: boolean
+  isPendingEntry: boolean
+
+}
+
+const parseRouteParams = (params: Params<any>, search: URLSearchParams): BizRouteParams => {
   const _view = search.get("view")
 
-  const view = (
+  const view =
     (_view && FeedViewTypeValues.includes(_view) ?
         +_view :
       FeedViewType.Articles) || FeedViewType.Articles
-  )
 
   return {
     view,
     entryId: params.entryId || undefined,
     feedId: params.feedId || undefined,
     level: search.get("level") || undefined,
+    // alias
+    isCollection: params.feedId === FEED_COLLECTION_LIST,
+    isAllFeeds: params.feedId === ROUTE_FEED_PENDING,
+    isPendingEntry: params.entryId === ROUTE_ENTRY_PENDING,
   }
 }
 
@@ -56,12 +75,7 @@ export const useRouteParms = () => {
 }
 const noop = [] as any[]
 export const useRouteParamsSelector = <T>(
-  selector: (params: {
-    entryId: string | undefined
-    feedId: string | undefined
-    level: string | undefined
-    view: FeedViewType
-  }) => T,
+  selector: (params: BizRouteParams) => T,
   deps = noop,
 ): T =>
     useReadonlyRouteSelector((route) => {

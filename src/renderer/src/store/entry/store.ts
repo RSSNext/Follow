@@ -1,15 +1,19 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { getEntriesParams } from "@renderer/lib/utils"
-import type { EntryModel, FeedModel } from "@renderer/models"
+import type {
+  CombinedEntryModel,
+  EntryModel,
+  FeedModel,
+} from "@renderer/models"
 import { EntryService } from "@renderer/services"
 import { produce } from "immer"
 import { merge, omit } from "lodash-es"
 
 import { feedActions } from "../feed"
 import { feedUnreadActions } from "../unread"
-import { createZustandStore, getStoreActions } from "../utils/helper"
+import { createZustandStore } from "../utils/helper"
 import { isHydrated } from "../utils/hydrate"
-import type { EntryActions, EntryState } from "./types"
+import type { EntryState } from "./types"
 
 const createState = (): EntryState => ({
   entries: {},
@@ -18,15 +22,18 @@ const createState = (): EntryState => ({
   starIds: new Set(),
 })
 
-export const useEntryStore = createZustandStore<EntryState & EntryActions>(
-  "entry",
-)((set, get) => ({
+export const useEntryStore = createZustandStore<EntryState>("entry")(() => ({
   ...createState(),
+}))
 
-  clear: () => {
+const get = useEntryStore.getState
+const set = useEntryStore.setState
+class EntryActions {
+  clear() {
     set(createState)
-  },
-  clearByFeedId(feedId) {
+  }
+
+  clearByFeedId(feedId: string) {
     set((state) =>
       produce(state, (draft) => {
         const entryIds = draft.entries[feedId]
@@ -38,30 +45,31 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
         delete draft.internal_feedId2entryIdSet[feedId]
       }),
     )
-  },
+  }
 
-  fetchEntryById: async (entryId: string) => {
+  async fetchEntryById(entryId: string) {
     const { data } = await apiClient.entries.$get({
       query: {
         id: entryId,
       },
     })
     if (data) {
-      get().upsertMany([
+      this.upsertMany([
         // patch data, should omit `read` because the network race condition or server cache
         omit(data, "read") as any,
       ])
     }
     return data
-  },
-  fetchEntries: async ({
+  }
+
+  async fetchEntries({
     level,
     id,
     view,
     read,
 
     pageParam,
-  }) => {
+  }) {
     const data = await apiClient.entries.$post({
       json: {
         publishedAfter: pageParam as string,
@@ -76,15 +84,16 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
     })
 
     if (data.data) {
-      get().upsertMany(data.data)
+      this.upsertMany(data.data)
     }
     return data
-  },
+  }
 
   getFlattenMapEntries() {
     return get().flatMapEntries
-  },
-  patch(entryId, changed) {
+  }
+
+  patch(entryId: string, changed: Partial<CombinedEntryModel>) {
     set((state) =>
       produce(state, (draft) => {
         const entry = draft.flatMapEntries[entryId]
@@ -93,8 +102,9 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
         return draft
       }),
     )
-  },
-  patchManyByFeedId(feedId, changed) {
+  }
+
+  patchManyByFeedId(feedId: string, changed: Partial<CombinedEntryModel>) {
     set((state) =>
       produce(state, (draft) => {
         const ids = draft.entries[feedId]
@@ -107,8 +117,9 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
         return draft
       }),
     )
-  },
-  patchAll(changed) {
+  }
+
+  patchAll(changed: Partial<CombinedEntryModel>) {
     set((state) =>
       produce(state, (draft) => {
         for (const entry of Object.values(draft.flatMapEntries)) {
@@ -117,9 +128,9 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
         return draft
       }),
     )
-  },
+  }
 
-  upsertMany(data) {
+  upsertMany(data: CombinedEntryModel[]) {
     const feeds = [] as FeedModel[]
     const entries = [] as EntryModel[]
     const entry2Read = {} as Record<string, boolean>
@@ -186,26 +197,26 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
       EntryService.bulkStoreFeedId(entryFeedMap)
       EntryService.bulkStoreCollection(entryCollection)
     }
-  },
+  }
 
-  markRead: (feedId: string, entryId: string, read: boolean) => {
+  markRead(feedId: string, entryId: string, read: boolean) {
     feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
-    entryActions.patch(entryId, {
+    this.patch(entryId, {
       read,
     })
-  },
+  }
 
-  markReadByFeedId: (feedId: string) => {
+  markReadByFeedId(feedId: string) {
     const state = get()
     const entries = state.entries[feedId] || []
     entries.forEach((entryId) => {
-      entryActions.markRead(feedId, entryId, true)
+      this.markRead(feedId, entryId, true)
     })
     feedUnreadActions.updateByFeedId(feedId, 0)
-  },
+  }
 
-  markStar: (entryId, star) => {
-    entryActions.patch(entryId, {
+  markStar(entryId: string, star: boolean) {
+    this.patch(entryId, {
       collections: star ?
           {
             createdAt: new Date().toISOString(),
@@ -229,10 +240,10 @@ export const useEntryStore = createZustandStore<EntryState & EntryActions>(
     } else {
       EntryService.deleteCollection(entryId)
     }
-  },
-}))
+  }
+}
 
-export const entryActions = getStoreActions(useEntryStore)
+export const entryActions = new EntryActions()
 
 export const getEntry = (entryId: string) =>
   useEntryStore.getState().flatMapEntries[entryId]
