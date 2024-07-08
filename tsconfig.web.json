@@ -24,7 +24,8 @@
       ],
       "@shared/*": [
         "src/shared/src/*"
-      ]
+      ],
+      "@pkg": ["./package.json"]
     }
   }
 }

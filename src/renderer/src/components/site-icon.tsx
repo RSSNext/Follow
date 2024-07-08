@@ -32,8 +32,11 @@ export function SiteIcon({
       className={cn("mr-2 size-5 shrink-0 rounded-sm", className)}
       loading="lazy"
       onError={(e) => {
-        if (fallback) {
+        if (fallback && e.currentTarget.src !== fallback) {
           e.currentTarget.src = fallback
+        } else {
+          // Empty svg
+          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3C/svg%3E"
         }
       }}
       style={style}

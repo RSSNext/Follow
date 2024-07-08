@@ -1,11 +1,11 @@
 import { getCsrfToken } from "@hono/auth-js/react"
+import PKG from "@pkg"
 import { setLoginModalShow } from "@renderer/atoms/user"
 import type { AppType } from "@renderer/hono"
 import { hc } from "hono/client"
 import { FetchError, ofetch } from "ofetch"
 
 let csrfTokenPromise: Promise<string> | null = null
-
 export const apiFetch = ofetch.create({
   baseURL: import.meta.env.VITE_API_URL,
   credentials: "include",
@@ -28,6 +28,15 @@ export const apiFetch = ofetch.create({
       } else {
         (options.body as Record<string, unknown>).csrfToken = csrfToken
       }
+
+      const header = new Headers(options.headers)
+
+      header.set("x-app-version", PKG.version)
+      header.set(
+        "X-App-Dev",
+        process.env.NODE_ENV === "development" ? "1" : "0",
+      )
+      options.headers = header
     }
   },
   onResponseError(context) {
@@ -51,6 +60,12 @@ export const apiFetch = ofetch.create({
 
 export const apiClient = hc<AppType>("", {
   fetch: async (input, options = {}) => apiFetch(input.toString(), options),
+  headers() {
+    return {
+      "X-App-Version": PKG.version,
+      "X-App-Dev": process.env.NODE_ENV === "development" ? "1" : "0",
+    }
+  },
 })
 
 export const getFetchErrorMessage = (error: Error) => {
