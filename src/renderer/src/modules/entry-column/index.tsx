@@ -75,7 +75,7 @@ export function EntryColumn() {
     const feedId = activeEntry?.feeds.id
     if (!feedId) return
     batchMarkUnread([feedId, activeEntryId])
-  }, [activeEntry, activeEntryId, isCollection, isPendingEntry, routeFeedId])
+  }, [activeEntry?.feeds.id, activeEntryId, isCollection, isPendingEntry])
 
   const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
 
