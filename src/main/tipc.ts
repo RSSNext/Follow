@@ -171,7 +171,11 @@ export const router = {
       }),
   ),
   setMacOSBadge: t.procedure.input<number>().action(async ({ input }) => {
-    app.setBadgeCount(input)
+    if (app.dock) {
+      app.dock.setBadge(input.toString())
+    } else {
+      app.setBadgeCount(input)
+    }
   }),
 
   saveImage: t.procedure.input<string>().action(async ({ input }) => {
