@@ -12,6 +12,7 @@ import { cn } from "@renderer/lib/utils"
 import { LoginModalContent } from "@renderer/modules/auth/LoginModalContent"
 import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useSession } from "@renderer/queries/auth"
+import { WEB_URL } from "@shared/constants"
 import type { FC } from "react"
 import { memo } from "react"
 import { Link } from "react-router-dom"
@@ -82,13 +83,24 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
           Account
         </DropdownMenuLabel>
         <DropdownMenuLabel>
-          <div className="-mt-2 flex items-center justify-between">
-            <span className="">{user?.name}</span>
-            <UserAvatar className="h-5 shrink-0 p-0" hideName />
+          <div className="-mt-1 flex items-center gap-2">
+            <UserAvatar className="h-7 shrink-0 p-0" hideName />
+            <div className="max-w-40 leading-none">
+              <div className="truncate">{user?.name}</div>
+              <div className="truncate text-xs font-medium text-zinc-500">{user?.handle}</div>
+            </div>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-
+        <DropdownMenuItem
+          onClick={() => {
+            window.open(`${WEB_URL}/profile/${user?.handle}`, "_blank")
+          }}
+        >
+          <i className="i-mgc-user-3-cute-re mr-1.5" />
+          Profile
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
             // Here we need to delay one frame, so it's two raf,
@@ -97,14 +109,15 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             nextFrame(() => settingModalPresent("wallet"))
           }}
         >
+          <i className="i-mgc-power-outline mr-1.5" />
           Power
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
             nextFrame(settingModalPresent)
           }}
         >
+          <i className="i-mgc-settings-7-cute-re mr-1.5" />
           Preferences
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -112,15 +125,19 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
           <>
             <DropdownMenuItem
               onClick={() => {
-                // TODO
+              // TODO
               }}
             >
+              <i className="i-mgc-gift-cute-re mr-1.5" />
               Download Desktop app
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>
         )}
-        <DropdownMenuItem onClick={signOut}>Log out</DropdownMenuItem>
+        <DropdownMenuItem onClick={signOut}>
+          <i className="i-mgc-exit-cute-re mr-1.5" />
+          Log out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
