@@ -63,15 +63,20 @@ export function EntryColumn() {
   const entries = useEntriesByView()
   const { entriesIds, isFetchingNextPage } = entries
 
-  const { entryId: activeEntryId, view, feedId } = useRouteParms()
+  const { entryId: activeEntryId, view, feedId: routeFeedId } = useRouteParms()
   const activeEntry = useEntry(activeEntryId)
 
   useEffect(() => {
-    if (!feedId || !activeEntryId) return
-    if (activeEntryId === ROUTE_ENTRY_PENDING || feedId === FEED_COLLECTION_LIST || feedId === ROUTE_FEED_PENDING) return
+    if (!activeEntryId) return
+    if (
+      activeEntryId === ROUTE_ENTRY_PENDING ||
+      routeFeedId === FEED_COLLECTION_LIST
+    ) { return }
 
+    const feedId = activeEntry?.feeds.id
+    if (!feedId) return
     batchMarkUnread([feedId, activeEntryId])
-  }, [activeEntry, activeEntryId, feedId])
+  }, [activeEntry, activeEntryId, routeFeedId])
 
   const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
 
@@ -114,7 +119,7 @@ export function EntryColumn() {
     >
       <ListHeader totalCount={virtuosoOptions.totalCount} />
       <m.div
-        key={`${feedId}-${view}`}
+        key={`${routeFeedId}-${view}`}
         className="h-full"
         initial={{ opacity: 0.01, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
@@ -224,8 +229,9 @@ const ListHeader: FC<{
         {!titleAtBottom && titleInfo}
 
         <div
-          className={cn("relative z-[1] flex items-center gap-1 self-baseline text-zinc-500", isInCollectionList && "pointer-events-none opacity-0",
-
+          className={cn(
+            "relative z-[1] flex items-center gap-1 self-baseline text-zinc-500",
+            isInCollectionList && "pointer-events-none opacity-0",
           )}
           onClick={(e) => e.stopPropagation()}
         >
