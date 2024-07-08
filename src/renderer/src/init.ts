@@ -4,6 +4,7 @@ import { registerGlobalContext } from "@shared/bridge"
 import { enableMapSet } from "immer"
 import { toast } from "sonner"
 
+import { subscribeNetworkStatus } from "./atoms/network"
 import { initializeSettings } from "./atoms/settings"
 import {
   getGeneralSettings,
@@ -31,6 +32,7 @@ export const initializeApp = async () => {
   appLog(`Initialize ${APP_NAME}...`)
 
   const now = Date.now()
+  subscribeNetworkStatus()
 
   registerGlobalContext({
     showSetting: () => window.router.showSettings(),

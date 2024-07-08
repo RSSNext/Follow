@@ -1,5 +1,6 @@
 import { getCsrfToken } from "@hono/auth-js/react"
 import PKG from "@pkg"
+import { NetworkStatus, setApiStatus } from "@renderer/atoms/network"
 import { setLoginModalShow } from "@renderer/atoms/user"
 import type { AppType } from "@renderer/hono"
 import { hc } from "hono/client"
@@ -39,8 +40,19 @@ export const apiFetch = ofetch.create({
       options.headers = header
     }
   },
+  onResponse() {
+    setApiStatus(NetworkStatus.ONLINE)
+  },
   onResponseError(context) {
     const { router } = window
+
+    // If api is down
+    if ((!context.response || context.response.status === 0) && navigator.onLine) {
+      setApiStatus(NetworkStatus.OFFLINE)
+    } else {
+      setApiStatus(NetworkStatus.ONLINE)
+    }
+
     if (context.response.status === 401) {
       // Or we can present LoginModal here.
       // router.navigate("/login")
@@ -59,7 +71,14 @@ export const apiFetch = ofetch.create({
 })
 
 export const apiClient = hc<AppType>("", {
-  fetch: async (input, options = {}) => apiFetch(input.toString(), options),
+  fetch: async (input, options = {}) => apiFetch(input.toString(), options).catch(
+    (err) => {
+      if (err instanceof FetchError && !err.response) {
+        setApiStatus(NetworkStatus.OFFLINE)
+      }
+      throw err
+    },
+  ),
   headers() {
     return {
       "X-App-Version": PKG.version,

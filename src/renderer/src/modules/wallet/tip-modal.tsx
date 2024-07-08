@@ -115,7 +115,9 @@ export const TipModalContent: FC<{
           <p className="leading-none">
             <span className="text-xs text-theme-foreground/80">No one has claimed this feed yet. The received Power will be securely held in the blockchain contract until it is claimed.</span>
           </p>
-          <StyledButton variant="text" className="w-fit p-0" onClick={() => claimFeed()}>Claim this feed</StyledButton>
+          <div className="text-center">
+            <StyledButton variant="text" className="w-fit p-0" onClick={() => claimFeed()}>Claim this feed</StyledButton>
+          </div>
         </>
       )}
       <Divider className="my-2" />
@@ -139,16 +141,18 @@ export const TipModalContent: FC<{
           </div>
         </RadioGroup>
 
-        <Divider className="my-2" />
-
         {/* low balance notice */}
         {wrongNumberRange && (
-          <div className="text-xs text-red-500">
-            <span>
-              Your balance is not enough to cover this tip. Please adjust the
-              amount.
-            </span>
-          </div>
+          <>
+            <Divider className="my-2" />
+            <div className="text-xs text-red-500">
+              <span>
+                Your balance is not enough to cover this tip. Please adjust the
+                amount.
+              </span>
+            </div>
+          </>
+
         )}
       </div>
 

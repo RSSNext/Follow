@@ -1,4 +1,4 @@
-import { useInputComposition } from "@renderer/hooks/common/use-input-composition"
+import { useInputComposition } from "@renderer/hooks/common/useInputComposition"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import type { DetailedHTMLProps, InputHTMLAttributes } from "react"

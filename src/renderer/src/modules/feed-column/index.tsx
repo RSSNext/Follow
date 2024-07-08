@@ -19,6 +19,7 @@ import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { Link } from "react-router-dom"
 
 import { Vibrancy } from "../../components/ui/background"
+import { NetworkStatusIndicator } from "../app/NetworkStatusIndicator"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -139,7 +140,10 @@ export function FeedColumn() {
             {APP_NAME}
           </div>
         )}
-        <div className="flex items-center gap-2" onClick={stopPropagation}>
+        <div
+          className="relative flex items-center gap-2"
+          onClick={stopPropagation}
+        >
           <Link to="/discover" tabIndex={-1}>
             <ActionButton shortcut="Meta+T" tooltip="Add">
               <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
@@ -181,11 +185,11 @@ export function FeedColumn() {
           {views.map((item, index) => (
             <section
               key={item.name}
-              className="min-h-full w-64 shrink-0 snap-center overflow-y-auto"
+              className="min-h-full w-64 shrink-0 snap-center overflow-y-auto pb-8"
             >
               {active === index && (
                 <FeedList
-                  className="flex size-full flex-col px-3 pb-6 text-sm"
+                  className="flex min-h-full w-full flex-col px-3 text-sm"
                   view={index}
                 />
               )}
@@ -194,8 +198,12 @@ export function FeedColumn() {
         </m.div>
       </div>
       {APP_VERSION?.[0] === "0" && (
-        <div className="pointer-events-none absolute bottom-3 w-full text-center text-xs opacity-20">Early Access</div>
+        <div className="pointer-events-none absolute bottom-3 w-full text-center text-xs opacity-20">
+          Early Access
+        </div>
       )}
+
+      <NetworkStatusIndicator />
     </Vibrancy>
   )
 }
