@@ -28,7 +28,6 @@ import {
   levels,
   ROUTE_ENTRY_PENDING,
   ROUTE_FEED_IN_FOLDER,
-  ROUTE_FEED_PENDING,
   views,
 } from "@renderer/lib/constants"
 import { shortcuts } from "@renderer/lib/shortcuts"
@@ -63,20 +62,20 @@ export function EntryColumn() {
   const entries = useEntriesByView()
   const { entriesIds, isFetchingNextPage } = entries
 
-  const { entryId: activeEntryId, view, feedId: routeFeedId } = useRouteParms()
+  const { entryId: activeEntryId, view, feedId: routeFeedId, isPendingEntry, isCollection } = useRouteParms()
   const activeEntry = useEntry(activeEntryId)
 
   useEffect(() => {
     if (!activeEntryId) return
+
     if (
-      activeEntryId === ROUTE_ENTRY_PENDING ||
-      routeFeedId === FEED_COLLECTION_LIST
-    ) { return }
+      isCollection || isPendingEntry
+    ) return
 
     const feedId = activeEntry?.feeds.id
     if (!feedId) return
     batchMarkUnread([feedId, activeEntryId])
-  }, [activeEntry, activeEntryId, routeFeedId])
+  }, [activeEntry, activeEntryId, isCollection, isPendingEntry, routeFeedId])
 
   const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
 
@@ -170,7 +169,7 @@ const ListHeader: FC<{
 
     if (
       typeof routerParams.feedId === "number" ||
-      routerParams.feedId === ROUTE_FEED_PENDING
+      routerParams.isAllFeeds
     ) {
       subscriptionActions.markReadByView(routerParams.view)
     } else if (

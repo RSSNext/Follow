@@ -4,9 +4,7 @@ import {
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
 import {
-  FEED_COLLECTION_LIST,
   levels,
-  ROUTE_FEED_PENDING,
   views,
 } from "@renderer/lib/constants"
 import { shortcuts } from "@renderer/lib/shortcuts"
@@ -67,7 +65,7 @@ export const useEntriesByView = () => {
   const routeParams = useRouteParms()
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
-  const { level, feedId, view } = routeParams
+  const { level, feedId, view, isAllFeeds, isCollection } = routeParams
 
   const folderIds = useFolderFeedsByFeedId(feedId)
 
@@ -78,7 +76,7 @@ export const useEntriesByView = () => {
     ...(unreadOnly === true && { read: false }),
   })
   const entries = useEntryIdsByFeedIdOrView(
-    feedId === ROUTE_FEED_PENDING ? view : feedId!,
+    isAllFeeds ? view : feedId!,
     {
       unread: unreadOnly,
       view,
@@ -120,10 +118,10 @@ export const useEntriesByView = () => {
   }, [entries, prevEntries, unreadOnly])
   const sortedLocalEntries = useMemo(
     () =>
-      feedId === FEED_COLLECTION_LIST ?
+      isCollection ?
         sortEntriesIdByStarAt(localEntries) :
         sortEntriesIdByEntryPublishedAt(localEntries),
-    [feedId, localEntries],
+    [isCollection, localEntries],
   )
 
   return {

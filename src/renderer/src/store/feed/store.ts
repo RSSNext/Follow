@@ -2,19 +2,25 @@ import type { FeedModel } from "@renderer/models"
 import { FeedService } from "@renderer/services"
 import { produce } from "immer"
 
-import { createZustandStore, getStoreActions } from "../utils/helper"
+import { createZustandStore } from "../utils/helper"
 import { isHydrated } from "../utils/hydrate"
-import type { FeedActions, FeedState } from "./types"
+import type { FeedState } from "./types"
 
-export const useFeedStore = createZustandStore<FeedState & FeedActions>(
+export const useFeedStore = createZustandStore<FeedState >(
   "feed",
 
-)((set) => ({
+)(() => ({
   feeds: {},
+}))
+
+const set = useFeedStore.setState
+// const get = useFeedStore.getState
+class FeedActions {
   clear() {
     set({ feeds: {} })
-  },
-  upsertMany(feeds) {
+  }
+
+  upsertMany(feeds: FeedModel[]) {
     if (isHydrated()) {
       FeedService.upsertMany(feeds)
     }
@@ -27,9 +33,9 @@ export const useFeedStore = createZustandStore<FeedState & FeedActions>(
         }
       }),
     )
-  },
+  }
 
-  patch(feedId, patch) {
+  patch(feedId: string, patch: Partial<FeedModel>) {
     set((state) =>
       produce(state, (state) => {
         const feed = state.feeds[feedId]
@@ -38,9 +44,9 @@ export const useFeedStore = createZustandStore<FeedState & FeedActions>(
         Object.assign(feed, patch)
       }),
     )
-  },
-}))
-export const feedActions = getStoreActions(useFeedStore)
+  }
+}
+export const feedActions = new FeedActions()
 
 export const getFeedById = (feedId: string): Nullable<FeedModel> =>
   useFeedStore.getState().feeds[feedId]
