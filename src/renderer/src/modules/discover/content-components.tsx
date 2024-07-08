@@ -237,7 +237,7 @@ export const DiscoverFeedForm = ({
         <FeedMaintainers maintainers={route.maintainers} />
 
         <div className="sticky bottom-0 -mt-4 flex w-full translate-y-3 justify-end bg-theme-modal-background-opaque py-3">
-          <StyledButton disabled={!form.formState.isValid} type="submit">
+          <StyledButton type="submit">
             Preview
           </StyledButton>
         </div>
