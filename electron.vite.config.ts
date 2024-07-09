@@ -29,6 +29,7 @@ export default defineConfig({
       sentryVitePlugin({
         org: "follow-rg",
         project: "follow",
+        disable: process.env.NODE_ENV === "development",
         bundleSizeOptimizations: {
           excludeDebugStatements: true,
           // Only relevant if you added `browserTracingIntegration`
