@@ -94,7 +94,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
-            window.open(`${WEB_URL}/profile/${user?.handle}`, "_blank")
+            window.open(`${WEB_URL}/profile/${user?.handle || user?.id}`, "_blank")
           }}
         >
           <i className="i-mgc-user-3-cute-re mr-1.5" />
