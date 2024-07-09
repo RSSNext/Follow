@@ -21,6 +21,7 @@ export function FeedIcon({
     return (
       <Image
         src={image}
+        loading="lazy"
         className={cn("mr-2 shrink-0 rounded-sm", className)}
         style={{
           width: size,

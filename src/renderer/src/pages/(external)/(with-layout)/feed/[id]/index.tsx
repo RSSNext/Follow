@@ -69,6 +69,7 @@ export function Component() {
               {feed.data.feed.title}
               {" "}
               |
+              {" "}
               {APP_NAME}
             </title>
           </Helmet>
@@ -98,8 +99,6 @@ export function Component() {
           <a className="mb-8" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
             <StyledButton>
               <FollowIcon className="mr-1 size-3" />
-              follow on
-              {" "}
               {APP_NAME}
             </StyledButton>
           </a>

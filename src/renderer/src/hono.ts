@@ -551,7 +551,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         view: number;
                         feedId: string;
                         category: string | null;
-                        isPrivate: boolean | null;
+                        isPrivate: boolean;
                     } | undefined;
                 };
             };
@@ -882,6 +882,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         $get: {
             input: {
                 query: {
+                    userId?: string | undefined;
                     view?: string | undefined;
                 };
             };
@@ -909,7 +910,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         ownerUserId: string | null;
                     };
                     category: string | null;
-                    isPrivate: boolean | null;
+                    isPrivate: boolean;
                 }[];
             };
             outputFormat: "json";
@@ -921,7 +922,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     view: number;
                     url: string;
                     category?: string | null | undefined;
-                    isPrivate?: boolean | null | undefined;
+                    isPrivate?: boolean | undefined;
                 };
             };
             output: {
@@ -949,7 +950,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     view: number;
                     feedId: string;
                     category?: string | null | undefined;
-                    isPrivate?: boolean | null | undefined;
+                    isPrivate?: boolean | undefined;
                 };
             };
             output: {
