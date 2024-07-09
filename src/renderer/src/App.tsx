@@ -40,6 +40,7 @@ function App() {
       document.removeEventListener("keydown", handleOpenSettings)
     }
   }, [])
+
   const windowsElectron = window.electron && getOS() === "Windows"
   return (
     <>
@@ -53,9 +54,7 @@ function App() {
         <div className="drag-region fixed top-0 z-[99999] flex h-[24px] w-full items-center justify-end rounded-t-[12px] bg-background">
           <div className="absolute left-5 top-0 flex h-[24px] items-center gap-2">
             <Logo className="size-4" />
-            <span className="text-sm font-bold">
-              {APP_NAME}
-            </span>
+            <span className="text-sm font-bold">{APP_NAME}</span>
           </div>
           <button
             className="no-drag-region flex h-[24px] w-[32px] items-center justify-center rounded duration-200 hover:bg-theme-item-active"

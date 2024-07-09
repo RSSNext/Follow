@@ -1,11 +1,12 @@
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
 import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, shell } from "electron"
 
-import icon from "../../resources/icon.png?asset"
+import { getIconPath } from "./helper"
 import { store } from "./store"
 
 const windows = {
@@ -14,7 +15,7 @@ const windows = {
 }
 
 const { platform } = process
-
+const __dirname = fileURLToPath(new URL(".", import.meta.url))
 export function createWindow(
   options: {
     extraPath?: string
@@ -30,7 +31,7 @@ export function createWindow(
     show: false,
     resizable: configs?.resizable ?? true,
     autoHideMenuBar: true,
-    ...(platform === "linux" ? { icon } : {}),
+    ...(platform === "linux" ? { icon: getIconPath() } : {}),
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.mjs"),
       sandbox: false,

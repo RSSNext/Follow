@@ -62,15 +62,19 @@ export function EntryColumn() {
   const entries = useEntriesByView()
   const { entriesIds, isFetchingNextPage } = entries
 
-  const { entryId: activeEntryId, view, feedId: routeFeedId, isPendingEntry, isCollection } = useRouteParms()
+  const {
+    entryId: activeEntryId,
+    view,
+    feedId: routeFeedId,
+    isPendingEntry,
+    isCollection,
+  } = useRouteParms()
   const activeEntry = useEntry(activeEntryId)
 
   useEffect(() => {
     if (!activeEntryId) return
 
-    if (
-      isCollection || isPendingEntry
-    ) return
+    if (isCollection || isPendingEntry) return
 
     const feedId = activeEntry?.feeds.id
     if (!feedId) return
@@ -167,10 +171,7 @@ const ListHeader: FC<{
       },
     })
 
-    if (
-      typeof routerParams.feedId === "number" ||
-      routerParams.isAllFeeds
-    ) {
+    if (typeof routerParams.feedId === "number" || routerParams.isAllFeeds) {
       subscriptionActions.markReadByView(routerParams.view)
     } else if (
       routerParams.level === levels.folder &&

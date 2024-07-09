@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
+import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
@@ -11,6 +12,7 @@ export default defineConfig({
   build: {
     outDir: resolve(__dirname, "out/web"),
     target: "ES2022",
+    sourcemap: true,
   },
   root: "./src/renderer",
   resolve: {
@@ -21,9 +23,22 @@ export default defineConfig({
     },
   },
   base: "/",
-  plugins: [react()],
+  plugins: [
+    react(),
+    sentryVitePlugin({
+      org: "follow-rg",
+      project: "follow",
+
+      moduleMetadata: {
+        appVersion:
+          process.env.NODE_ENV === "development" ? "dev" : pkg.version,
+        electron: false,
+      },
+    }),
+  ],
   define: {
     APP_VERSION: JSON.stringify(pkg.version),
     APP_NAME: JSON.stringify(pkg.productName),
+    APP_DEV_CWD: JSON.stringify(process.cwd()),
   },
 })
