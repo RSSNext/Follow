@@ -1,6 +1,6 @@
 import { authConfigManager } from "@hono/auth-js/react"
 import { browserDB } from "@renderer/database"
-import * as Sentry from "@sentry/react"
+import { init as reactInit } from "@sentry/react"
 import { registerGlobalContext } from "@shared/bridge"
 import { enableMapSet } from "immer"
 import { toast } from "sonner"
@@ -26,21 +26,43 @@ const cleanup = subscribeShouldUseIndexedDB((value) => {
   setHydrated(true)
 })
 
-const initSentry = () => {
-  Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    integrations: [
-      Sentry.browserTracingIntegration(),
-      Sentry.replayIntegration(),
-    ],
-    // Performance Monitoring
-    tracesSampleRate: 1, //  Capture 100% of the transactions
-    // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-    tracePropagationTargets: ["localhost", /^https:\/\/yourserver\.io\/api/],
-    // Session Replay
-    replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-    replaysOnErrorSampleRate: 1, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
-  })
+const initSentry = async () => {
+  if (window.electron) {
+    const Sentry = await import("@sentry/electron/renderer")
+
+    Sentry.init({
+      integrations: [
+        Sentry.browserTracingIntegration(),
+        Sentry.replayIntegration(),
+      ],
+
+      // Set tracesSampleRate to 1.0 to capture 100%
+      // of transactions for performance monitoring.
+      // We recommend adjusting this value in production
+      tracesSampleRate: 1,
+
+      // Capture Replay for 10% of all sessions,
+      // plus for 100% of sessions with an error
+      replaysSessionSampleRate: 0.1,
+      replaysOnErrorSampleRate: 1,
+    }, reactInit)
+  } else {
+    const Sentry = await import("@sentry/react")
+    Sentry.init({
+      dsn: import.meta.env.VITE_SENTRY_DSN,
+      integrations: [
+        Sentry.browserTracingIntegration(),
+        Sentry.replayIntegration(),
+      ],
+      // Performance Monitoring
+      tracesSampleRate: 1, //  Capture 100% of the transactions
+      // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
+      tracePropagationTargets: ["localhost", /^https:\/\/yourserver\.io\/api/],
+      // Session Replay
+      replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+      replaysOnErrorSampleRate: 1, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+    })
+  }
 }
 
 export const initializeApp = async () => {

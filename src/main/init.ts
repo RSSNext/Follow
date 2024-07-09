@@ -1,6 +1,7 @@
 import path from "node:path"
 
 import { registerIpcMain } from "@egoist/tipc/main"
+import * as Sentry from "@sentry/electron/main"
 import { app } from "electron"
 
 import { registerAppMenu } from "./menu"
@@ -14,6 +15,11 @@ const appFolder = {
   prod: "Follow",
   dev: "Follow (dev)",
 }
+
+Sentry.init({
+  dsn: process.env.VITE_SENTRY_DSN,
+})
+
 const isDev = process.env.NODE_ENV === "development"
 export const initializationApp = () => {
   registerIpcMain(router)
