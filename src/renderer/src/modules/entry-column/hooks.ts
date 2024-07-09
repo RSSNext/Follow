@@ -117,7 +117,7 @@ export const useEntriesByView = () => {
       sortEntriesIdByEntryPublishedAt(localEntries)
   const remoteEntryIds = query.data?.pages
     ?.map((page) => page.data?.map((entry) => entry.entries.id))
-    .flat()
+    .flat() as string[]
 
   return {
     ...query,
