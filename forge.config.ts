@@ -1,3 +1,6 @@
+import { readdir } from "node:fs/promises"
+import path from "node:path"
+
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
 import { MakerDeb } from "@electron-forge/maker-deb"
 import { MakerDMG } from "@electron-forge/maker-dmg"
@@ -5,23 +8,59 @@ import { MakerRpm } from "@electron-forge/maker-rpm"
 import { MakerSquirrel } from "@electron-forge/maker-squirrel"
 import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
+import { rimraf } from "rimraf"
 
+// remove folders & files not to be included in the app
+async function cleanSources(
+  buildPath,
+  electronVersion,
+  platform,
+  arch,
+  callback,
+) {
+  // folders & files to be included in the app
+  const appItems = new Set([
+    "dist",
+    "node_modules",
+    "package.json",
+    "resources",
+  ])
+
+  // Keep only node_modules to be included in the app
+  const modules = new Set(["font-list"])
+  await Promise.all([
+    ...(await readdir(buildPath).then((items) =>
+      items
+        .filter((item) => !appItems.has(item))
+        .map((item) => rimraf(path.join(buildPath, item))),
+    )),
+    ...(await readdir(path.join(buildPath, "node_modules")).then((items) =>
+      items
+        .filter((item) => !modules.has(item))
+        .map((item) => rimraf(path.join(buildPath, "node_modules", item))),
+    )),
+  ])
+
+  callback()
+}
 const config: ForgeConfig = {
   packagerConfig: {
     appBundleId: "is.follow",
     icon: "resources/icon",
-    ignore: [
-      /^\/src/,
-      /(.eslintrc.json)|(.gitignore)|(electron.vite.config.ts)|(forge.config.ts)|(tsconfig.*)/,
-    ],
+
+    afterCopy: [cleanSources],
     asar: true,
-    osxSign: {
-      optionsForFile: () => ({
-        entitlements: "build/entitlements.mac.plist",
-      }),
-      keychain: process.env.KEYCHAIN_PATH,
-    },
-    ...(process.env.APPLE_ID && process.env.APPLE_PASSWORD && process.env.APPLE_TEAM_ID && {
+    ignore: [/^\/node_modules\/(?!font-list)/],
+    prune: true,
+    ...(process.env.APPLE_ID &&
+      process.env.APPLE_PASSWORD &&
+      process.env.APPLE_TEAM_ID && {
+      osxSign: {
+        optionsForFile: () => ({
+          entitlements: "build/entitlements.mac.plist",
+        }),
+        keychain: process.env.KEYCHAIN_PATH,
+      },
       osxNotarize: {
         appleId: process.env.APPLE_ID!,
         appleIdPassword: process.env.APPLE_PASSWORD!,
@@ -50,7 +89,7 @@ const config: ForgeConfig = {
           },
         },
       },
-      contents: (opts) => ([
+      contents: (opts) => [
         {
           x: 180,
           y: 170,
@@ -63,7 +102,7 @@ const config: ForgeConfig = {
           type: "link",
           path: "/Applications",
         },
-      ]),
+      ],
     }),
   ],
   plugins: [
