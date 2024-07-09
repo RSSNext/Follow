@@ -8,6 +8,10 @@
   "author": "example.com",
   "license": "UNLICENSED",
   "homepage": "https://electron-vite.org",
+  "repository": {
+    "url": "https://github.com/RSSNext/follow",
+    "type": "git"
+  },
   "main": "./dist/main/index.js",
   "scripts": {
     "build": "npm run typecheck && electron-vite build --outDir=dist && electron-forge package && electron-forge make",

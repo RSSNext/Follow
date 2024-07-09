@@ -15,6 +15,7 @@ declare global {
   export type EntryId = Id
 
   export const SENTRY_RELEASE: { id: string }
+  export const APP_DEV_CWD: string
   export interface Window {
     SENTRY_RELEASE: typeof SENTRY_RELEASE
   }
