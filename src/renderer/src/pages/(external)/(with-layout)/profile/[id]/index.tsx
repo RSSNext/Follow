@@ -96,7 +96,7 @@ export function Component() {
                           <div className="mt-1 line-clamp-1 text-xs text-zinc-500">{subscription.feeds?.description}</div>
                         </div>
                       </a>
-                      <a className="absolute left-full top-5 opacity-0 transition-opacity group-hover:opacity-100" href={`${DEEPLINK_SCHEME}add?id=${subscription.feeds?.id}`}>
+                      <a className="absolute left-full top-5 opacity-0 transition-opacity group-hover:opacity-100" href={`${DEEPLINK_SCHEME}#add?id=${subscription.feeds?.id}`}>
                         <StyledButton>
                           <FollowIcon className="mr-1 size-3" />
                           {APP_NAME}
