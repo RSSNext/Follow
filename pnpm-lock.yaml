@@ -91,6 +91,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: 1.1.2
         version: 1.1.2(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@sentry/react':
+        specifier: 8.15.0
+        version: 8.15.0(react@18.3.1)
       '@shikijs/transformers':
         specifier: 1.10.0
         version: 1.10.0
@@ -1972,6 +1975,44 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@sentry-internal/browser-utils@8.15.0':
+    resolution: {integrity: sha512-DquySUQRnmMyRbfHH9t/JDwPMsVaCOCzV/6XmMb7s4FDYTWSCSpumJEYfiyJCuI9NeebPHZWF7LZCHH4glSAJQ==}
+    engines: {node: '>=14.18'}
+
+  '@sentry-internal/feedback@8.15.0':
+    resolution: {integrity: sha512-W6XiLpw7fL1A0KaHxIH45nbC2M8uagrMoBnMZ1NcqE4AoSe7VtoDqPsLvQ7MgMXwsBYiPu2AItRnKoGFS/dUBA==}
+    engines: {node: '>=14.18'}
+
+  '@sentry-internal/replay-canvas@8.15.0':
+    resolution: {integrity: sha512-gfezIuvf94wY748l5wSy4pRm+45GjiBm0Q/KLnXROLZKmbI7MTJrdQXA2Oxut848iISTQo4/LimecFnBDiaGtw==}
+    engines: {node: '>=14.18'}
+
+  '@sentry-internal/replay@8.15.0':
+    resolution: {integrity: sha512-d4cA8pjr0CGHkTe8ulqMROYCX3bMHBAi/7DJBr11i4MdNCUl+/pndA9C5TiFv0sFzk/hDZQZS3J+MfGp56ZQHw==}
+    engines: {node: '>=14.18'}
+
+  '@sentry/browser@8.15.0':
+    resolution: {integrity: sha512-Tx4eFgAqa8tedg30+Cgr7qFocWHise8p3jb/RSNs+TCEBXLVtQidHHVZMO71FWUAC86D7woo5hMKTt+UmB8pgg==}
+    engines: {node: '>=14.18'}
+
+  '@sentry/core@8.15.0':
+    resolution: {integrity: sha512-RjuEq/34VjNmxlfzq+485jG63/Vst90svQapLwVgBZWgM8jxrLyCRXHU0wfBc7/1IhV/T9GYAplrJQAkG4J9Ow==}
+    engines: {node: '>=14.18'}
+
+  '@sentry/react@8.15.0':
+    resolution: {integrity: sha512-mRkWZ3gVkgT5VrRVHfOlritsxNM0XOOkOqKP2WXiHCRCGKns7hwGcEt5Y9AKFITIKL9ADtmE22tjv69V5fYwqQ==}
+    engines: {node: '>=14.18'}
+    peerDependencies:
+      react: ^16.14.0 || 17.x || 18.x || 19.x
+
+  '@sentry/types@8.15.0':
+    resolution: {integrity: sha512-AZc9nSHKuNH8P/7ihmq5fbZBiQ7Gr35kJq9Tad9eVuOgL8D+2b6Vqu/61ljVVlMFI0tBGFsSkWJ/00PfBcVKWg==}
+    engines: {node: '>=14.18'}
+
+  '@sentry/utils@8.15.0':
+    resolution: {integrity: sha512-1ISmyYFuRHJbGun0gUYscyz1aP6RfILUldNAUwQwF0Ycu8YOi4n8uwJRN0aov6cCi41tnZWOMBagSeLxbJiJgQ==}
+    engines: {node: '>=14.18'}
+
   '@shikijs/core@1.10.0':
     resolution: {integrity: sha512-BZcr6FCmPfP6TXaekvujZcnkFmJHZ/Yglu97r/9VjzVndQA56/F4WjUKtJRQUnK59Wi7p/UTAOekMfCJv7jnYg==}
 
@@ -3723,6 +3764,9 @@ packages:
   hermes-parser@0.20.1:
     resolution: {integrity: sha512-BL5P83cwCogI8D7rrDCgsFY0tdYUtmFP9XaXtl2IQjC+2Xo+4okjfXintlTxcIwl4qeGddEl28Z11kbVIw0aNA==}
 
+  hoist-non-react-statics@3.3.2:
+    resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
+
   homedir-polyfill@1.0.3:
     resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}
     engines: {node: '>=0.10.0'}
@@ -4972,6 +5016,9 @@ packages:
     peerDependenciesMeta:
       react-dom:
         optional: true
+
+  react-is@16.13.1:
+    resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
@@ -7863,6 +7910,62 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.18.0':
     optional: true
 
+  '@sentry-internal/browser-utils@8.15.0':
+    dependencies:
+      '@sentry/core': 8.15.0
+      '@sentry/types': 8.15.0
+      '@sentry/utils': 8.15.0
+
+  '@sentry-internal/feedback@8.15.0':
+    dependencies:
+      '@sentry/core': 8.15.0
+      '@sentry/types': 8.15.0
+      '@sentry/utils': 8.15.0
+
+  '@sentry-internal/replay-canvas@8.15.0':
+    dependencies:
+      '@sentry-internal/replay': 8.15.0
+      '@sentry/core': 8.15.0
+      '@sentry/types': 8.15.0
+      '@sentry/utils': 8.15.0
+
+  '@sentry-internal/replay@8.15.0':
+    dependencies:
+      '@sentry-internal/browser-utils': 8.15.0
+      '@sentry/core': 8.15.0
+      '@sentry/types': 8.15.0
+      '@sentry/utils': 8.15.0
+
+  '@sentry/browser@8.15.0':
+    dependencies:
+      '@sentry-internal/browser-utils': 8.15.0
+      '@sentry-internal/feedback': 8.15.0
+      '@sentry-internal/replay': 8.15.0
+      '@sentry-internal/replay-canvas': 8.15.0
+      '@sentry/core': 8.15.0
+      '@sentry/types': 8.15.0
+      '@sentry/utils': 8.15.0
+
+  '@sentry/core@8.15.0':
+    dependencies:
+      '@sentry/types': 8.15.0
+      '@sentry/utils': 8.15.0
+
+  '@sentry/react@8.15.0(react@18.3.1)':
+    dependencies:
+      '@sentry/browser': 8.15.0
+      '@sentry/core': 8.15.0
+      '@sentry/types': 8.15.0
+      '@sentry/utils': 8.15.0
+      hoist-non-react-statics: 3.3.2
+      react: 18.3.1
+
+  '@sentry/types@8.15.0': {}
+
+  '@sentry/utils@8.15.0':
+    dependencies:
+      '@sentry/types': 8.15.0
+
   '@shikijs/core@1.10.0': {}
 
   '@shikijs/transformers@1.10.0':
@@ -10102,6 +10205,10 @@ snapshots:
     dependencies:
       hermes-estree: 0.20.1
 
+  hoist-non-react-statics@3.3.2:
+    dependencies:
+      react-is: 16.13.1
+
   homedir-polyfill@1.0.3:
     dependencies:
       parse-passwd: 1.0.0
@@ -11418,6 +11525,8 @@ snapshots:
       react: 18.3.1
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
+
+  react-is@16.13.1: {}
 
   react-is@18.3.1: {}
 

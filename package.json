@@ -48,6 +48,7 @@
     "@radix-ui/react-tabs": "1.1.0",
     "@radix-ui/react-toast": "1.2.1",
     "@radix-ui/react-tooltip": "1.1.2",
+    "@sentry/react": "8.15.0",
     "@shikijs/transformers": "1.10.0",
     "@tanstack/query-sync-storage-persister": "5.49.0",
     "@tanstack/react-query": "5.49.0",
