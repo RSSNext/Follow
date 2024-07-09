@@ -14,25 +14,6 @@ export default defineConfig({
         "@shared": resolve("src/shared/src"),
       },
     },
-    plugins: [
-      sentryVitePlugin({
-        org: "follow-rg",
-        project: "follow",
-        bundleSizeOptimizations: {
-          excludeDebugStatements: true,
-          // Only relevant if you added `browserTracingIntegration`
-          excludePerformanceMonitoring: true,
-          // Only relevant if you added `replayIntegration`
-          excludeReplayIframe: true,
-          excludeReplayShadowDom: true,
-          excludeReplayWorker: true,
-        },
-        moduleMetadata: {
-          appVersion:
-            process.env.NODE_ENV === "development" ? "dev" : pkg.version,
-        },
-      }),
-    ],
   },
   preload: {},
   renderer: {

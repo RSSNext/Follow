@@ -1,8 +1,15 @@
 import { authConfigManager } from "@hono/auth-js/react"
+import { version } from "@pkg"
 import { browserDB } from "@renderer/database"
-import { init as reactInit } from "@sentry/react"
 import { registerGlobalContext } from "@shared/bridge"
 import { enableMapSet } from "immer"
+import { useEffect } from "react"
+import {
+  createRoutesFromChildren,
+  matchRoutes,
+  useLocation,
+  useNavigationType,
+} from "react-router-dom"
 import { toast } from "sonner"
 
 import { subscribeNetworkStatus } from "./atoms/network"
@@ -28,32 +35,29 @@ const cleanup = subscribeShouldUseIndexedDB((value) => {
 })
 
 const initSentry = async () => {
-  if (window.electron) {
-    const Sentry = await import("@sentry/electron/renderer")
+  if (!window.SENTRY_RELEASE) return
+  const Sentry = await import("@sentry/react")
+  Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+    environment: import.meta.env.VITE_BUILD_TYPE ?? "development",
+    integrations: [
+      Sentry.browserTracingIntegration(),
+      Sentry.replayIntegration(),
+      Sentry.moduleMetadataIntegration(),
+      Sentry.reactRouterV6BrowserTracingIntegration({
+        useEffect,
+        useLocation,
+        useNavigationType,
+        createRoutesFromChildren,
+        matchRoutes,
+      }),
+    ],
+    ...SentryConfig,
+  })
 
-    Sentry.init(
-      {
-        integrations: [
-          Sentry.browserTracingIntegration(),
-          Sentry.replayIntegration(),
-          Sentry.moduleMetadataIntegration(),
-        ],
-        ...SentryConfig,
-      },
-      reactInit,
-    )
-  } else {
-    const Sentry = await import("@sentry/react")
-    Sentry.init({
-      dsn: import.meta.env.VITE_SENTRY_DSN,
-      integrations: [
-        Sentry.browserTracingIntegration(),
-        Sentry.replayIntegration(),
-        Sentry.moduleMetadataIntegration(),
-      ],
-      ...SentryConfig,
-    })
-  }
+  Sentry.setTags({
+    appVersion: version,
+  })
 }
 
 export const initializeApp = async () => {
