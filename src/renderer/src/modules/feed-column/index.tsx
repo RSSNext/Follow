@@ -132,7 +132,6 @@ export function FeedColumn() {
             className="flex items-center gap-1 text-xl font-bold"
             onClick={(e) => {
               e.stopPropagation()
-
               navigateBackHome()
             }}
           >

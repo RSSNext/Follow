@@ -27,7 +27,13 @@ export default defineConfig({
     react(),
     sentryVitePlugin({
       org: "follow-rg",
-      project: "javascript-react",
+      project: "follow",
+
+      moduleMetadata: {
+        appVersion:
+          process.env.NODE_ENV === "development" ? "dev" : pkg.version,
+        electron: false,
+      },
     }),
   ],
   define: {

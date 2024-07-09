@@ -11,6 +11,7 @@ import {
   getGeneralSettings,
   subscribeShouldUseIndexedDB,
 } from "./atoms/settings/general"
+import { SentryConfig } from "./configs"
 import { APP_NAME } from "./lib/constants"
 import { appLog } from "./lib/log"
 import { hydrateDatabaseToStore, setHydrated } from "./store/utils/hydrate"
@@ -30,22 +31,17 @@ const initSentry = async () => {
   if (window.electron) {
     const Sentry = await import("@sentry/electron/renderer")
 
-    Sentry.init({
-      integrations: [
-        Sentry.browserTracingIntegration(),
-        Sentry.replayIntegration(),
-      ],
-
-      // Set tracesSampleRate to 1.0 to capture 100%
-      // of transactions for performance monitoring.
-      // We recommend adjusting this value in production
-      tracesSampleRate: 1,
-
-      // Capture Replay for 10% of all sessions,
-      // plus for 100% of sessions with an error
-      replaysSessionSampleRate: 0.1,
-      replaysOnErrorSampleRate: 1,
-    }, reactInit)
+    Sentry.init(
+      {
+        integrations: [
+          Sentry.browserTracingIntegration(),
+          Sentry.replayIntegration(),
+          Sentry.moduleMetadataIntegration(),
+        ],
+        ...SentryConfig,
+      },
+      reactInit,
+    )
   } else {
     const Sentry = await import("@sentry/react")
     Sentry.init({
@@ -53,14 +49,9 @@ const initSentry = async () => {
       integrations: [
         Sentry.browserTracingIntegration(),
         Sentry.replayIntegration(),
+        Sentry.moduleMetadataIntegration(),
       ],
-      // Performance Monitoring
-      tracesSampleRate: 1, //  Capture 100% of the transactions
-      // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-      tracePropagationTargets: ["localhost", /^https:\/\/yourserver\.io\/api/],
-      // Session Replay
-      replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-      replaysOnErrorSampleRate: 1, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+      ...SentryConfig,
     })
   }
 }
