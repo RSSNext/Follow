@@ -11,7 +11,7 @@ const tree = buildGlobRoutes(globTree)
 
 let routerCreator = window.electron ? createHashRouter : createBrowserRouter
 if (window.SENTRY_RELEASE) {
-  routerCreator = wrapCreateBrowserRouter(createHashRouter)
+  routerCreator = wrapCreateBrowserRouter(routerCreator)
 }
 
 export const router = routerCreator([
