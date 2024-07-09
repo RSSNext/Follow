@@ -3,10 +3,7 @@ import {
   useRouteParamsSelector,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
-import {
-  levels,
-  views,
-} from "@renderer/lib/constants"
+import { levels, views } from "@renderer/lib/constants"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { useEntries } from "@renderer/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
@@ -75,13 +72,10 @@ export const useEntriesByView = () => {
     view,
     ...(unreadOnly === true && { read: false }),
   })
-  const entries = useEntryIdsByFeedIdOrView(
-    isAllFeeds ? view : feedId!,
-    {
-      unread: unreadOnly,
-      view,
-    },
-  )
+  const entries = useEntryIdsByFeedIdOrView(isAllFeeds ? view : feedId!, {
+    unread: unreadOnly,
+    view,
+  })
 
   useHotkeys(
     shortcuts.entries.refetch.key,
@@ -116,21 +110,26 @@ export const useEntriesByView = () => {
     prevEntries.current = nextIds
     return nextIds
   }, [entries, prevEntries, unreadOnly])
-  const sortedLocalEntries = useMemo(
-    () =>
-      isCollection ?
-        sortEntriesIdByStarAt(localEntries) :
-        sortEntriesIdByEntryPublishedAt(localEntries),
-    [isCollection, localEntries],
-  )
+
+  const sortLocalEntries = () =>
+    isCollection ?
+      sortEntriesIdByStarAt(localEntries) :
+      sortEntriesIdByEntryPublishedAt(localEntries)
+  const remoteEntryIds = query.data?.pages
+    ?.map((page) => page.data?.map((entry) => entry.entries.id))
+    .flat()
 
   return {
     ...query,
 
     // If remote data is not available, we use the local data, get the local data length
-    totalCount: query.data?.pages?.[0]?.total ? Math.max(query.data?.pages?.[0]?.total, localEntries.length) : localEntries.length,
-    entriesIds: sortedLocalEntries,
-    // entriesIds: remoteEntryIds,
+    // FIXME: remote first, then local store data
+    // NOTE: We still can't use the store's data handling directly.
+    // Imagine that the local data may be persistent, and then if there are incremental updates to the data on the server side,
+    // then we have no way to incrementally update the data.
+    // We need to add an interface to incrementally update the data based on the version hash.
+    entriesIds: remoteEntryIds ?? sortLocalEntries(),
+    totalCount: query.data?.pages?.[0]?.total ?? localEntries.length,
   }
 }
 
