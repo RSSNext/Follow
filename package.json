@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "private": true,
   "packageManager": "pnpm@9.1.4",
   "description": "An Electron application with React and TypeScript",
