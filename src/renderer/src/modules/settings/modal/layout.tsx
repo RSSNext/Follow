@@ -1,7 +1,6 @@
 import { useUISettingSelector } from "@renderer/atoms/settings/ui"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
-import { APP_NAME } from "@renderer/lib/constants"
 import { preventDefault } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useDragControls } from "framer-motion"
@@ -97,7 +96,7 @@ export function SettingModalLayout(
             </button>
           ))}
         </div>
-        <div className="relative h-full flex-1 bg-theme-background pt-0">
+        <div className="relative flex h-full flex-1 flex-col bg-theme-background pt-1">
           {children}
         </div>
       </div>
