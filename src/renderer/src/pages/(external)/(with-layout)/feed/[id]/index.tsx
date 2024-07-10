@@ -118,7 +118,7 @@ export function Component() {
                     entries: entry,
                     // @ts-expect-error
                     feeds: feed.data.feed as FeedModel,
-                    read: false,
+                    read: true,
                   }}
                 />
               </a>
