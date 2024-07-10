@@ -74,8 +74,6 @@ export const settingTabs = [
   },
 ]
 
-/// App
-export const APP_NAME = "Follow"
 /// Feed
 export const FEED_COLLECTION_LIST = "collections"
 /// Local storage keys

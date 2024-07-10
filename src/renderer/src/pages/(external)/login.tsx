@@ -3,7 +3,6 @@ import { Logo } from "@renderer/components/icons/logo"
 import { Button } from "@renderer/components/ui/button"
 import { useSignOut } from "@renderer/hooks/biz/useSignOut"
 import { LOGIN_CALLBACK_URL, loginHandler } from "@renderer/lib/auth"
-import { APP_NAME } from "@renderer/lib/constants"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 

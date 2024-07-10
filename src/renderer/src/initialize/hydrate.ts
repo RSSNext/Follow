@@ -1,3 +1,5 @@
+import { initializeDefaultGeneralSettings } from "@renderer/atoms/settings/general"
+import { initializeDefaultUISettings } from "@renderer/atoms/settings/ui"
 import { appLog } from "@renderer/lib/log"
 import { sleep } from "@renderer/lib/utils"
 import type { CombinedEntryModel, FeedModel } from "@renderer/models"
@@ -10,10 +12,10 @@ import {
   SubscriptionService,
 } from "@renderer/services"
 
-import { entryActions, useEntryStore } from "../entry/store"
-import { feedActions, useFeedStore } from "../feed"
-import { subscriptionActions } from "../subscription"
-import { feedUnreadActions } from "../unread"
+import { entryActions, useEntryStore } from "../store/entry/store"
+import { feedActions, useFeedStore } from "../store/feed"
+import { subscriptionActions } from "../store/subscription"
+import { feedUnreadActions } from "../store/unread"
 
 // This flag controls write data in indexedDB, if it's false, pass data insert to db
 // When app not ready, it's false, after hydrate data, it's true
@@ -39,13 +41,17 @@ export const hydrateDatabaseToStore = async () => {
 
     await hydrateEntry(feeds)
     _isHydrated = true
-    appLog("Hydrate data done,", `${Date.now() - now}ms`)
+    const costTime = Date.now() - now
+    appLog("Hydrate data done,", `${costTime}ms`)
+
+    return costTime
   }
-  await Promise.race([hydrate(), sleep(1000).then(() => "timeout")]).then(
+  return Promise.race([hydrate(), sleep(1000).then(() => 10e10)]).then(
     (result) => {
-      if (result === "timeout") {
+      if (result === 10e10) {
         appLog("Hydrate data timeout")
       }
+      return result
     },
   )
 }
@@ -110,4 +116,9 @@ const logHydrateError = (message: string) => {
   console.debug(
     `Hydrate error: ${message}, maybe local database data is dirty.`,
   )
+}
+
+export const hydrateSettings = () => {
+  initializeDefaultUISettings()
+  initializeDefaultGeneralSettings()
 }

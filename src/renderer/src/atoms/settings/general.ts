@@ -3,7 +3,9 @@ import { jotaiStore } from "@renderer/lib/jotai"
 import { createSettingAtom } from "./helper"
 
 const createDefaultSettings = () => ({
+  // Data control
   dataPersist: true,
+  sendAnonymousData: true,
 
   // view
   unreadOnly: false,

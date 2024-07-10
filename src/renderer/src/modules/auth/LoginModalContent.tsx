@@ -4,7 +4,6 @@ import { useCurrentModal } from "@renderer/components/ui/modal"
 import { modalMontionConfig } from "@renderer/components/ui/modal/stacked/constants"
 import type { LoginRuntime } from "@renderer/lib/auth"
 import { loginHandler } from "@renderer/lib/auth"
-import { APP_NAME } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { m } from "framer-motion"
 

@@ -74,11 +74,12 @@ export const useClaimWalletDailyRewardMutation = () => useMutation({
   mutationKey: ["claimWalletDailyReward"],
   mutationFn: () => apiClient.wallets.transactions.claim_daily.$post(),
   async onError(err) {
-    toast.error(await getFetchErrorMessage(err))
+    toast.error(getFetchErrorMessage(err))
   },
   onSuccess() {
     wallet.get().invalidate()
     wallet.claimDailyRewardTtl().invalidate()
+    window.posthog?.capture("daily_reward_claimed")
     toast("🎉 Daily reward claimed.")
   },
 })
@@ -88,11 +89,12 @@ export const useWalletTipMutation = () => useMutation({
   mutationFn: (data: Parameters<typeof apiClient.wallets.transactions.tip.$post>[0]["json"]) =>
     apiClient.wallets.transactions.tip.$post({ json: data }),
   async onError(err) {
-    toast.error(await getFetchErrorMessage(err))
+    toast.error(getFetchErrorMessage(err))
   },
-  onSuccess() {
+  onSuccess(_, variables) {
     wallet.get().invalidate()
     wallet.transactions.get().invalidate()
+    window.posthog?.capture("tip_sent", { amount: variables.amount, feedId: variables.feedId })
     toast("🎉 Tipped.")
   },
 })

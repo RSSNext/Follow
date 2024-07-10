@@ -1,5 +1,3 @@
-import { APP_NAME } from "./constants"
-
 /* eslint-disable no-console */
 export const appLog = (...args: any[]) => {
   console.log(

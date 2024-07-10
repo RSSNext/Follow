@@ -59,7 +59,7 @@ const ImageImpl: FC<ImageProps> = ({
   )
 
   return (
-    <div className={cn("overflow-hidden rounded", className)} style={style}>
+    <p className={cn("overflow-hidden rounded", className)} style={style}>
       <img
         {...rest}
         onError={errorHandle}
@@ -106,7 +106,7 @@ const ImageImpl: FC<ImageProps> = ({
             } :
             {})}
       />
-    </div>
+    </p>
   )
 }
 

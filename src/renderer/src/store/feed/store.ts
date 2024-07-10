@@ -2,8 +2,8 @@ import type { FeedModel } from "@renderer/models"
 import { FeedService } from "@renderer/services"
 import { produce } from "immer"
 
+import { isHydrated } from "../../initialize/hydrate"
 import { createZustandStore } from "../utils/helper"
-import { isHydrated } from "../utils/hydrate"
 import type { FeedState } from "./types"
 
 export const useFeedStore = createZustandStore<FeedState >(

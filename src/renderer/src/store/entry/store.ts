@@ -9,10 +9,10 @@ import { EntryService } from "@renderer/services"
 import { produce } from "immer"
 import { merge, omit } from "lodash-es"
 
+import { isHydrated } from "../../initialize/hydrate"
 import { feedActions } from "../feed"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore } from "../utils/helper"
-import { isHydrated } from "../utils/hydrate"
 import type { EntryState } from "./types"
 
 const createState = (): EntryState => ({

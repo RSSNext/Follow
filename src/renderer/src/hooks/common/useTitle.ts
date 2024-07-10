@@ -1,4 +1,3 @@
-import { APP_NAME } from "@renderer/lib/constants"
 import { useEffect, useRef } from "react"
 
 const titleTemplate = `%s | ${APP_NAME}`

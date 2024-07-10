@@ -1,6 +1,5 @@
 import { Logo } from "@renderer/components/icons/logo"
 import { Vibrancy } from "@renderer/components/ui/background"
-import { APP_NAME } from "@renderer/lib/constants"
 import { preventDefault } from "@renderer/lib/dom"
 import { settings } from "@renderer/modules/settings/constants"
 import {

@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   VITE_IMGPROXY_URL: string
   VITE_SENTRY_DSN: string
   VITE_BUILD_TYPE: string
+  VITE_POSTHOG_KEY: string
 }
 
 interface ImportMeta {

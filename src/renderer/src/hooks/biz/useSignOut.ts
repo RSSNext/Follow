@@ -1,6 +1,7 @@
 import { signOut } from "@hono/auth-js/react"
 import { setUser } from "@renderer/atoms/user"
 import { QUERY_PERSIST_KEY } from "@renderer/lib/constants"
+import { clearStorage } from "@renderer/lib/ns"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useCallback } from "react"
 
@@ -16,7 +17,8 @@ export const useSignOut = () =>
     setUser(null)
 
     // Clear local storage
-    // TODO
+    clearStorage()
+    window.posthog?.reset()
 
     // Sign out
     await signOut()

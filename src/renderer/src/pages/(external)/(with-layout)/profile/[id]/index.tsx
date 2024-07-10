@@ -8,7 +8,6 @@ import {
 import { StyledButton } from "@renderer/components/ui/button"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
-import { APP_NAME } from "@renderer/lib/constants"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { capitalizeFirstLetter } from "@renderer/lib/utils"
 import { DEEPLINK_SCHEME } from "@shared/constants"

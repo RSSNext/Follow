@@ -5,7 +5,6 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@renderer/components/ui/navigation-menu"
-import { APP_NAME } from "@renderer/lib/constants"
 import { Link } from "react-router-dom"
 
 import { Logo } from "./icons/logo"
