@@ -82,6 +82,7 @@ jobs:
         run: pnpm i
 
       - name: Build
+        if: github.event_name != 'release'
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
@@ -92,6 +93,10 @@ jobs:
       - name: Publish
         if: github.event_name == 'release'
         env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm run publish
 
