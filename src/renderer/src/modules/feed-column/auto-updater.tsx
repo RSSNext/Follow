@@ -1,5 +1,6 @@
 import { setUpdaterStatus, useUpdaterStatus } from "@renderer/atoms/updater"
-import { handlers, tipcClient } from "@renderer/lib/client"
+import { tipcClient } from "@renderer/lib/client"
+import { handlers } from "@renderer/tipc"
 import { useCallback, useEffect } from "react"
 
 export const AutoUpdater = () => {
