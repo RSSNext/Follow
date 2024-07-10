@@ -156,32 +156,35 @@ const config: ForgeConfig = {
         version: makeResults[0].packageJSON.version,
         files: [],
       }
-      makeResults.map((result) => result.artifacts.map((artifact) => {
-        if (artifactRegex.test(artifact)) {
-          const newArtifact = `${__dirname}/out/${result.packageJSON.name}-${result.packageJSON.version}-${platformNamesMap[result.platform]}-${result.arch}${path.extname(artifact)}`
-          fs.renameSync(artifact, newArtifact)
+      makeResults = makeResults.map((result) => {
+        result.artifacts = result.artifacts.map((artifact) => {
+          if (artifactRegex.test(artifact)) {
+            const newArtifact = `${__dirname}/out/${result.packageJSON.name}-${result.packageJSON.version}-${platformNamesMap[result.platform]}-${result.arch}${path.extname(artifact)}`
+            fs.renameSync(artifact, newArtifact)
 
-          try {
-            const fileData = fs.readFileSync(newArtifact)
-            const hash = crypto
-              .createHash("sha512")
-              .update(fileData)
-              .digest("base64")
-            const { size } = fs.statSync(newArtifact)
+            try {
+              const fileData = fs.readFileSync(newArtifact)
+              const hash = crypto
+                .createHash("sha512")
+                .update(fileData)
+                .digest("base64")
+              const { size } = fs.statSync(newArtifact)
 
-            yml.files.push({
-              url: path.basename(newArtifact),
-              sha512: hash,
-              size,
-            })
-          } catch {
-            console.error(`Failed to hash ${newArtifact}`)
+              yml.files.push({
+                url: path.basename(newArtifact),
+                sha512: hash,
+                size,
+              })
+            } catch {
+              console.error(`Failed to hash ${newArtifact}`)
+            }
+            return newArtifact
+          } else {
+            return artifact
           }
-          return newArtifact
-        } else {
-          return artifact
-        }
-      }))
+        })
+        return result
+      })
       yml.releaseDate = new Date().toISOString()
       const ymlStr =
         `version: ${yml.version}\n` +
@@ -195,7 +198,15 @@ const config: ForgeConfig = {
           .join("")
         }releaseDate: ${yml.releaseDate}\n`
 
-      fs.writeFileSync(`${__dirname}/out/${ymlMapsMap[makeResults[0].platform]}`, ymlStr)
+      const ymlPath = `${__dirname}/out/${ymlMapsMap[makeResults[0].platform]}`
+      fs.writeFileSync(ymlPath, ymlStr)
+
+      makeResults.push({
+        artifacts: [ymlPath],
+        platform: makeResults[0].platform,
+        arch: makeResults[0].arch,
+        packageJSON: makeResults[0].packageJSON,
+      })
 
       return makeResults
     },
