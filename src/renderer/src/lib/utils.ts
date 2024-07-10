@@ -124,3 +124,25 @@ export const sleep = (ms: number) =>
 
 export const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)
+
+export const pluralize = (
+  noun: string,
+  count: number,
+  postfix: string | ((noun: string, rule: Intl.LDMLPluralRule) => string) = "s",
+) => {
+  let rule: Intl.LDMLPluralRule
+  // Check Support
+  if (typeof Intl === "undefined" || !Intl.PluralRules) {
+    if (count === 1) {
+      rule = "one"
+    } else {
+      rule = "other"
+    }
+  }
+  rule = new Intl.PluralRules("en", { type: "ordinal" }).select(count)
+
+  if (typeof postfix === "string") {
+    return `${noun}${count === 1 ? "" : postfix}`
+  }
+  return postfix(noun, rule)
+}

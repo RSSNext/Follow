@@ -1,4 +1,4 @@
-import { signIn, useSession } from "@hono/auth-js/react"
+import { SessionProvider, signIn, useSession } from "@hono/auth-js/react"
 import { Logo } from "@renderer/components/icons/logo"
 import { Button } from "@renderer/components/ui/button"
 import { useSignOut } from "@renderer/hooks/biz/useSignOut"
@@ -7,6 +7,13 @@ import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
 export function Component() {
+  return (
+    <SessionProvider>
+      <Login />
+    </SessionProvider>
+  )
+}
+function Login() {
   const { status } = useSession()
   const navigate = useNavigate()
   const [redirecting, setRedirecting] = useState(false)

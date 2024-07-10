@@ -5,7 +5,7 @@ import { ListItemHoverOverlay } from "@renderer/components/ui/list-item-hover-ov
 import { useTitle } from "@renderer/hooks/common"
 import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
-import { cn } from "@renderer/lib/utils"
+import { cn, pluralize } from "@renderer/lib/utils"
 import type { FeedModel } from "@renderer/models"
 import { ArticleItem } from "@renderer/modules/entry-column/article-item"
 import { NotificationItem } from "@renderer/modules/entry-column/notification-item"
@@ -62,7 +62,6 @@ export function Component() {
     <>
       {feed.data?.feed && (
         <div className="mx-auto mt-12 flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
-
           <FeedIcon
             feed={feed.data.feed}
             className="mask-squircle mask shrink-0"
@@ -79,11 +78,16 @@ export function Component() {
           <div className="mb-4 text-sm">
             <strong>{feed.data.subscriptionCount}</strong>
             {" "}
-            follows with
+            {pluralize("follow", feed.data.subscriptionCount)}
+            {" "}
+            with
             {" "}
             <strong>{feed.data.readCount}</strong>
             {" "}
-            reads on
+            {pluralize("read", feed.data.readCount)}
+            {" "}
+            on
+            {" "}
             {APP_NAME}
           </div>
           <a className="mb-8" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
