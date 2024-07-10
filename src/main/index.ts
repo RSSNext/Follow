@@ -2,13 +2,15 @@ import "dotenv/config"
 
 import path from "node:path"
 
+import { getRendererHandlers } from "@egoist/tipc/main"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@shared/constants"
 import { extractElectronWindowOptions } from "@shared/electron"
-import { app, BrowserWindow, session } from "electron"
+import { app, autoUpdater, BrowserWindow, session } from "electron"
 
 import { initializationApp } from "./init"
-import { createMainWindow, createWindow } from "./window"
+import type { RendererHandlers } from "./renderer-handlers"
+import { createMainWindow, createWindow, getMainWindow } from "./window"
 
 initializationApp()
 let mainWindow: BrowserWindow
@@ -119,6 +121,23 @@ app.whenReady().then(() => {
       },
     )
   }
+
+  // Auto update
+  autoUpdater.setFeedURL({
+    url: `https://update.follow.is/update/${process.platform}/${app.getVersion()}`,
+  })
+  setInterval(() => {
+    autoUpdater.checkForUpdates()
+  }, 15 * 60 * 1000)
+
+  autoUpdater.on("update-downloaded", () => {
+    const mainWindow = getMainWindow()
+    if (!mainWindow) return
+    const handlers = getRendererHandlers<RendererHandlers>(
+      mainWindow.webContents,
+    )
+    handlers.updateDownloaded.send()
+  })
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

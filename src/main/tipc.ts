@@ -1,7 +1,7 @@
 import { getRendererHandlers, tipc } from "@egoist/tipc/main"
 import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindow, MessageBoxOptions } from "electron"
-import { app, dialog, Menu, ShareMenu } from "electron"
+import { app, autoUpdater, dialog, Menu, ShareMenu } from "electron"
 
 import { downloadFile } from "./lib/download"
 import type { RendererHandlers } from "./renderer-handlers"
@@ -218,6 +218,10 @@ export const router = {
         }
       }
     }
+  }),
+
+  quitAndInstall: t.procedure.action(async () => {
+    autoUpdater.quitAndInstall()
   }),
 }
 

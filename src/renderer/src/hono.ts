@@ -527,6 +527,7 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             output: {
                 code: 0;
                 data: {
+                    readCount: number;
                     feed: {
                         url: string;
                         checkedAt: string;
@@ -544,7 +545,6 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         ownerUserId?: string | null | undefined;
                     };
                     subscriptionCount: number;
-                    readCount: number;
                     subscription?: {
                         title: string | null;
                         userId: string;
@@ -800,6 +800,16 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         publishedAt: string;
                         images: string[] | null;
                         categories: string[] | null;
+                        entryReadHistories: {
+                            users: {
+                                name: string | null;
+                                id: string;
+                                image: string | null;
+                                handle: string | null;
+                            }[];
+                            userIds: string[];
+                            readCount: number;
+                        };
                         enclosures?: {
                             url: string;
                             length?: number | undefined;

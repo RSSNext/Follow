@@ -2,6 +2,8 @@ name: Build
 
 on:
   push:
+  release:
+    types: [published]
 
 env:
   VITE_WEB_URL: ${{ vars.VITE_WEB_URL }}
@@ -86,6 +88,12 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
         run: pnpm build
+
+      - name: Publish
+        if: github.event_name == 'release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm publish
 
       - name: Upload file
         uses: actions/upload-artifact@v4
