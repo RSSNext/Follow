@@ -118,6 +118,9 @@ importers:
       '@yornaath/batshit':
         specifier: 0.10.1
         version: 0.10.1
+      builder-util-runtime:
+        specifier: 9.2.5-alpha.3
+        version: 9.2.5-alpha.3
       class-variance-authority:
         specifier: 0.7.0
         version: 0.7.0
@@ -142,6 +145,9 @@ importers:
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
+      electron-log:
+        specifier: 5.1.5
+        version: 5.1.5
       electron-updater:
         specifier: ^6.2.1
         version: 6.2.1
@@ -235,6 +241,9 @@ importers:
       rehype-stringify:
         specifier: 10.0.0
         version: 10.0.0
+      semver:
+        specifier: 7.6.2
+        version: 7.6.2
       shiki:
         specifier: 1.10.0
         version: 1.10.0
@@ -2937,6 +2946,10 @@ packages:
     resolution: {integrity: sha512-upp+biKpN/XZMLim7aguUyW8s0FUpDvOtK6sbanMFDAMBzpHDqdhgVYm6zc9HJ6nWo7u2Lxk60i2M6Jd3aiNrA==}
     engines: {node: '>=12.0.0'}
 
+  builder-util-runtime@9.2.5-alpha.3:
+    resolution: {integrity: sha512-ugXSJSbYBpaYeXpk2Rxa2QZdT67oRz3FFu3Lud4XK0Ijqe+OXwyAyCM4pGXJEO3VSdUn43AOJ5bUZ3gsCdQAIw==}
+    engines: {node: '>=12.0.0'}
+
   builtin-modules@3.3.0:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
@@ -3439,6 +3452,10 @@ packages:
     engines: {node: '>= 10.0.0'}
     os: [darwin, linux]
     hasBin: true
+
+  electron-log@5.1.5:
+    resolution: {integrity: sha512-vuq10faUAxRbILgQx7yHoMObKZDEfj7hMSZrJPsVrDNeCpV/HN11dU7QuY4UDUe055pzBxhSCB3m0+6D3Aktjw==}
+    engines: {node: '>= 14'}
 
   electron-to-chromium@1.4.808:
     resolution: {integrity: sha512-0ItWyhPYnww2VOuCGF4s1LTfbrdAV2ajy/TN+ZTuhR23AHI6rWHCrBXJ/uxoXOvRRqw8qjYVrG81HFI7x/2wdQ==}
@@ -7600,7 +7617,7 @@ snapshots:
       '@antfu/install-pkg': 0.1.1
       '@antfu/utils': 0.7.8
       '@iconify/types': 2.0.0
-      debug: 4.3.4
+      debug: 4.3.5
       kolorist: 1.8.0
       local-pkg: 0.5.0
       mlly: 1.7.0
@@ -9540,7 +9557,7 @@ snapshots:
 
   aria-hidden@1.2.4:
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.6.3
 
   array-timsort@1.0.3: {}
 
@@ -9643,7 +9660,14 @@ snapshots:
 
   builder-util-runtime@9.2.4:
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.5
+      sax: 1.4.1
+    transitivePeerDependencies:
+      - supports-color
+
+  builder-util-runtime@9.2.5-alpha.3:
+    dependencies:
+      debug: 4.3.5
       sax: 1.4.1
     transitivePeerDependencies:
       - supports-color
@@ -10216,6 +10240,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
     optional: true
+
+  electron-log@5.1.5: {}
 
   electron-to-chromium@1.4.808: {}
 
@@ -13546,7 +13572,7 @@ snapshots:
   vite-node@1.6.0(@types/node@20.14.9):
     dependencies:
       cac: 6.7.14
-      debug: 4.3.4
+      debug: 4.3.5
       pathe: 1.1.2
       picocolors: 1.0.1
       vite: 5.3.2(@types/node@20.14.9)

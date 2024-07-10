@@ -1,6 +1,7 @@
 import type { MenuItem, MenuItemConstructorOptions } from "electron"
 import { Menu } from "electron"
 
+import { revealLogFile } from "./logger"
 import { createSettingWindow, createWindow } from "./window"
 
 export const registerAppMenu = () => {
@@ -35,6 +36,12 @@ export const registerAppMenu = () => {
     menus.push({
       label: "Dev",
       submenu: [
+        {
+          label: "Open log file",
+          click: async () => {
+            await revealLogFile()
+          },
+        },
         {
           label: "follow https://rsshub.app/twitter/user/DIYgod",
           click: () => {

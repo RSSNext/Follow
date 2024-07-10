@@ -11,7 +11,7 @@ env:
   VITE_IMGPROXY_URL: ${{ vars.VITE_IMGPROXY_URL }}
   VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
   VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}
-  VITE_BUILD_TYPE: production
+  VITE_BUILD_TYPE: internal
 
 jobs:
   release:
