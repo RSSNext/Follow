@@ -1,6 +1,8 @@
 import { setUpdaterStatus, useUpdaterStatus } from "@renderer/atoms/updater"
+import { softBouncePreset } from "@renderer/components/ui/constants/spring"
 import { tipcClient } from "@renderer/lib/client"
 import { handlers } from "@renderer/tipc"
+import { m } from "framer-motion"
 import { useCallback, useEffect } from "react"
 
 export const AutoUpdater = () => {
@@ -21,12 +23,19 @@ export const AutoUpdater = () => {
   if (!updaterStatus) return null
 
   return (
-    <div
-      className="absolute inset-x-3 bottom-3 rounded-xl bg-white/80 py-3 text-center text-sm shadow"
+    <m.div
+      className="absolute inset-x-3 bottom-3 rounded-lg bg-theme-modal-background py-3 text-center text-sm shadow backdrop-blur"
       onClick={handleClick}
+      initial={{ y: 50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={softBouncePreset}
     >
-      <div className="font-medium">Follow is ready to update!</div>
+      <div className="font-medium">
+        {APP_NAME}
+        {" "}
+        is ready to update!
+      </div>
       <div className="text-xs text-zinc-500">Click to restart</div>
-    </div>
+    </m.div>
   )
 }
