@@ -89,7 +89,7 @@ jobs:
         run: pnpm build
 
       - name: Publish
-        if: github.event_name == 'release' && github.event.action == 'published'
+        if: github.event_name == 'release'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm publish
