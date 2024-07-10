@@ -118,8 +118,5 @@ jobs:
         with:
           name: ${{ runner.os }}
           path: |
-            out/*.dmg
-            out/*.exe
-            out/*.AppImage
-            out/latest*.yml
+            out/make/*
           retention-days: 90

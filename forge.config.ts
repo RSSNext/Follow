@@ -159,7 +159,7 @@ const config: ForgeConfig = {
       makeResults = makeResults.map((result) => {
         result.artifacts = result.artifacts.map((artifact) => {
           if (artifactRegex.test(artifact)) {
-            const newArtifact = `${__dirname}/out/${result.packageJSON.name}-${result.packageJSON.version}-${platformNamesMap[result.platform]}-${result.arch}${path.extname(artifact)}`
+            const newArtifact = `${path.dirname(artifact)}/${result.packageJSON.name}-${result.packageJSON.version}-${platformNamesMap[result.platform]}-${result.arch}${path.extname(artifact)}`
             fs.renameSync(artifact, newArtifact)
 
             try {
@@ -198,7 +198,7 @@ const config: ForgeConfig = {
           .join("")
         }releaseDate: ${yml.releaseDate}\n`
 
-      const ymlPath = `${__dirname}/out/${ymlMapsMap[makeResults[0].platform]}`
+      const ymlPath = `${path.dirname(makeResults[0].artifacts[0])}/${ymlMapsMap[makeResults[0].platform]}`
       fs.writeFileSync(ymlPath, ymlStr)
 
       makeResults.push({
