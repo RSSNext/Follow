@@ -202,9 +202,6 @@ importers:
       react-error-boundary:
         specifier: 4.0.13
         version: 4.0.13(react@18.3.1)
-      react-helmet-async:
-        specifier: 2.0.5
-        version: 2.0.5(react@18.3.1)
       react-hook-form:
         specifier: 7.52.0
         version: 7.52.0(react@18.3.1)
@@ -5400,14 +5397,6 @@ packages:
     peerDependencies:
       react: '>=16.13.1'
 
-  react-fast-compare@3.2.2:
-    resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
-
-  react-helmet-async@2.0.5:
-    resolution: {integrity: sha512-rYUYHeus+i27MvFE+Jaa4WsyBKGkL6qVgbJvSBoX8mbsWoABJXdEO0bZyi0F6i+4f0NuIb8AvqPMj3iXFHkMwg==}
-    peerDependencies:
-      react: ^16.6.0 || ^17.0.0 || ^18.0.0
-
   react-hook-form@7.52.0:
     resolution: {integrity: sha512-mJX506Xc6mirzLsmXUJyqlAI3Kj9Ph2RhplYhUVffeOQSnubK2uVqBFOBJmvKikvbFV91pxVXmDiR+QMF19x6A==}
     engines: {node: '>=12.22.0'}
@@ -5724,9 +5713,6 @@ packages:
 
   setimmediate@1.0.5:
     resolution: {integrity: sha512-MATJdZp8sLqDl/68LfQmbP8zKPLQNV6BIZoIgrscFDQ+RsvK/BxeDQOgyxKKoh0y/8h3BqVFnCqQ/gd+reiIXA==}
-
-  shallowequal@1.1.0:
-    resolution: {integrity: sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==}
 
   shebang-command@1.2.0:
     resolution: {integrity: sha512-EV3L1+UQWGor21OmnvojK36mhg+TyIKDh3iFBKBohr5xeXIhNBcx8oWdgkTEEQ+BEFFYdLRuqMfd5L84N1V5Vg==}
@@ -12492,15 +12478,6 @@ snapshots:
       '@babel/runtime': 7.24.4
       react: 18.3.1
 
-  react-fast-compare@3.2.2: {}
-
-  react-helmet-async@2.0.5(react@18.3.1):
-    dependencies:
-      invariant: 2.2.4
-      react: 18.3.1
-      react-fast-compare: 3.2.2
-      shallowequal: 1.1.0
-
   react-hook-form@7.52.0(react@18.3.1):
     dependencies:
       react: 18.3.1
@@ -12850,8 +12827,6 @@ snapshots:
   set-blocking@2.0.0: {}
 
   setimmediate@1.0.5: {}
-
-  shallowequal@1.1.0: {}
 
   shebang-command@1.2.0:
     dependencies:

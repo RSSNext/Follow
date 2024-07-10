@@ -7,7 +7,6 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { LazyMotion, MotionConfig } from "framer-motion"
 import { Provider } from "jotai"
 import type { FC, PropsWithChildren } from "react"
-import { HelmetProvider } from "react-helmet-async"
 
 import { StableRouterProvider } from "./biz-router-provider"
 import { ContextMenuProvider } from "./context-menu-provider"
@@ -35,8 +34,8 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
             <SettingSync />
             <ModalStackProvider />
             <ContextMenuProvider />
-            <HelmetProvider>{children}</HelmetProvider>
             <StableRouterProvider />
+            {children}
           </Provider>
         </TooltipProvider>
       </PersistQueryClientProvider>

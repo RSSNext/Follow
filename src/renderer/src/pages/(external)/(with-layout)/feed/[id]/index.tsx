@@ -2,6 +2,7 @@ import { FeedIcon } from "@renderer/components/feed-icon"
 import { FollowIcon } from "@renderer/components/icons/follow"
 import { StyledButton } from "@renderer/components/ui/button"
 import { ListItemHoverOverlay } from "@renderer/components/ui/list-item-hover-overlay"
+import { useTitle } from "@renderer/hooks/common"
 import { APP_NAME, views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
@@ -16,15 +17,12 @@ import { useEntriesPreview } from "@renderer/queries/entries"
 import { useFeed } from "@renderer/queries/feed"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import type { FC } from "react"
-import { Helmet } from "react-helmet-async"
 import { useParams, useSearchParams } from "react-router-dom"
 
 export function Component() {
   const { id } = useParams()
   const [search] = useSearchParams()
-  const view = Number.parseInt(
-    search.get("view") || "0",
-  )
+  const view = Number.parseInt(search.get("view") || "0")
 
   const feed = useFeed({
     id,
@@ -59,20 +57,12 @@ export function Component() {
       Item = ArticleItem
     }
   }
-
+  useTitle(feed.data?.feed.title)
   return (
     <>
       {feed.data?.feed && (
         <div className="mx-auto mt-12 flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
-          <Helmet>
-            <title>
-              {feed.data.feed.title}
-              {" "}
-              |
-              {" "}
-              {APP_NAME}
-            </title>
-          </Helmet>
+
           <FeedIcon
             feed={feed.data.feed}
             className="mask-squircle mask shrink-0"

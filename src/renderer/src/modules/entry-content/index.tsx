@@ -2,7 +2,7 @@ import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { useAuthQuery } from "@renderer/hooks/common"
+import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { parseHtml } from "@renderer/lib/parse-html"
 import type { ActiveEntryId } from "@renderer/models"
@@ -22,6 +22,8 @@ import { EntryHeader } from "./header"
 
 export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   const title = useFeedHeaderTitle()
+
+  useTitle(title)
   if (!entryId) {
     return (
       <m.div
@@ -45,6 +47,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
   })
 
   const entry = useEntry(entryId)
+  useTitle(entry?.entries.title)
   const [content, setContent] = useState<JSX.Element>()
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
   useEffect(() => {

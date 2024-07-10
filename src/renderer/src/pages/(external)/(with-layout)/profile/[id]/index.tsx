@@ -6,13 +6,12 @@ import {
   AvatarImage,
 } from "@renderer/components/ui/avatar"
 import { StyledButton } from "@renderer/components/ui/button"
-import { useAuthQuery } from "@renderer/hooks/common"
+import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { APP_NAME } from "@renderer/lib/constants"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { capitalizeFirstLetter } from "@renderer/lib/utils"
 import { DEEPLINK_SCHEME } from "@shared/constants"
-import { Helmet } from "react-helmet-async"
 import { useParams } from "react-router-dom"
 import { parse } from "tldts"
 
@@ -54,20 +53,12 @@ export function Component() {
   }), {
     enabled: !!user.data?.id,
   })
-
+  useTitle(user.data?.name)
   return (
     <>
       {user.data && (
         <div className="mx-auto mt-12 flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
-          <Helmet>
-            <title>
-              {user.data.name}
-              {" "}
-              |
-              {" "}
-              {APP_NAME}
-            </title>
-          </Helmet>
+
           <Avatar className="aspect-square size-16">
             <AvatarImage src={user.data.image || undefined} />
             <AvatarFallback>{user.data.name?.slice(0, 2)}</AvatarFallback>
