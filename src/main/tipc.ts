@@ -172,7 +172,11 @@ export const router = {
   ),
   setMacOSBadge: t.procedure.input<number>().action(async ({ input }) => {
     if (app.dock) {
-      app.dock.setBadge(input.toString())
+      if (input === 0) {
+        app.dock.setBadge("")
+      } else {
+        app.dock.setBadge(input.toString())
+      }
     } else {
       app.setBadgeCount(input)
     }
@@ -185,41 +189,47 @@ export const router = {
     if (result.canceled) return
 
     // return result.filePath;
-    await downloadFile(input, result.filePath)
-      .catch((err) => {
-        const mainWindow = getMainWindow()
-        if (!mainWindow) return
-        callGlobalContextMethod(mainWindow, "toast.error", ["Download failed!"])
-        throw err
-      })
+    await downloadFile(input, result.filePath).catch((err) => {
+      const mainWindow = getMainWindow()
+      if (!mainWindow) return
+      callGlobalContextMethod(mainWindow, "toast.error", ["Download failed!"])
+      throw err
+    })
 
     const mainWindow = getMainWindow()
     if (!mainWindow) return
     callGlobalContextMethod(mainWindow, "toast.success", ["Download success!"])
   }),
 
-  windowAction: t.procedure.input<{ action: "close" | "minimize" | "maximum" }>().action(async ({ input, context }) => {
-    if (context.sender.getType() === "window") {
-      const window: BrowserWindow | null = (context.sender as Sender).getOwnerBrowserWindow()
+  windowAction: t.procedure
+    .input<{ action: "close" | "minimize" | "maximum" }>()
+    .action(async ({ input, context }) => {
+      if (context.sender.getType() === "window") {
+        const window: BrowserWindow | null = (
+          context.sender as Sender
+        ).getOwnerBrowserWindow()
 
-      if (!window) return
-      switch (input.action) {
-        case "close": { window.close(); break
-        }
-        case "minimize": { window.minimize(); break
-        }
-        case "maximum": {
-          if (window.isMaximized()) {
-            window.unmaximize()
-          } else {
-            window.maximize()
+        if (!window) return
+        switch (input.action) {
+          case "close": {
+            window.close()
+            break
           }
-          break
+          case "minimize": {
+            window.minimize()
+            break
+          }
+          case "maximum": {
+            if (window.isMaximized()) {
+              window.unmaximize()
+            } else {
+              window.maximize()
+            }
+            break
+          }
         }
       }
-    }
-  }),
-
+    }),
   quitAndInstall: t.procedure.action(async () => {
     autoUpdater.quitAndInstall()
   }),

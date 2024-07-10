@@ -18,9 +18,11 @@ import { useQuery } from "@tanstack/react-query"
 import { useCallback } from "react"
 import { bundledThemes } from "shiki/themes"
 
-import { SettingDescription, SettingSwitch } from "../control"
-import { SettingItemGroup, SettingSectionTitle } from "../section"
+import { SettingSwitch } from "../control"
+import { createSettingBuilder } from "../setting-builder"
 import { SettingsTitle } from "../title"
+
+const SettingBuilder = createSettingBuilder(useUISettingValue)
 
 export const SettingAppearance = () => {
   const { isDark, toggleDark } = useDark()
@@ -28,98 +30,81 @@ export const SettingAppearance = () => {
     toggleDark()
   }, [])
 
-  const state = useUISettingValue()
-  const onlyMacos = window.electron && getOS() === "macOS"
-
   return (
-    <div>
+    <>
       <SettingsTitle />
-      <SettingSectionTitle title="General" />
-      <SettingSwitch
-        label="Dark Mode"
-        checked={isDark}
-        onCheckedChange={saveDarkSetting}
-      />
-      {onlyMacos && (
-        <SettingSwitch
-          label="Opaque Sidebars"
-          checked={state.opaqueSidebar}
-          onCheckedChange={(checked) => {
-            setUISetting("opaqueSidebar", checked)
-          }}
+      <div className="mt-4">
+        <SettingBuilder
+          settings={[
+            {
+              type: "title",
+              value: "General",
+            },
+            <SettingSwitch
+              key="darkMode"
+              label="Dark Mode"
+              checked={isDark}
+              onCheckedChange={saveDarkSetting}
+            />,
+            {
+              label: "Opaque Sidebars",
+              key: "opaqueSidebar",
+              onChange: (value) => setUISetting("opaqueSidebar", value),
+            },
+            {
+              type: "title",
+              value: "UI",
+            },
+            TextSize,
+            {
+              type: "title",
+              value: "Display counts",
+            },
+            {
+              disabled:
+                window.electron && !["macOS", "Linux"].includes(getOS()),
+              label: "Dock Badge",
+              key: "showDockBadge",
+              onChange: (value) => setUISetting("showDockBadge", value),
+            },
+            {
+              label: "Show sidebar unread count",
+              key: "sidebarShowUnreadCount",
+              onChange: (value) =>
+                setUISetting("sidebarShowUnreadCount", value),
+            },
+            {
+              type: "title",
+              value: "Content",
+            },
+            !!window.electron && Fonts,
+
+            ShikiTheme,
+            {
+              label: "Render inline style",
+              key: "readerRenderInlineStyle",
+              onChange: (value) =>
+                setUISetting("readerRenderInlineStyle", value),
+            },
+            {
+              type: "title",
+              value: "Misc",
+            },
+            {
+              label: "Show modal overlay",
+              key: "modalOverlay",
+              onChange: (value) => setUISetting("modalOverlay", value),
+            },
+            {
+              label: "Reduce motion",
+              key: "reduceMotion",
+              onChange: (value) => setUISetting("reduceMotion", value),
+              description: `Enabling this option will reduce the motion of the element to improve performance and device life, and if it is disabled, it will adapt to the system settings.`,
+            },
+          ]}
         />
-      )}
-
-      <SettingSectionTitle title="UI" />
-
-      <TextSize />
-      <SettingSectionTitle title="Display counts" />
-      {onlyMacos && (
-        <SettingSwitch
-          label="Dock Badge"
-          checked={state.showDockBadge}
-          onCheckedChange={(c) => {
-            setUISetting("showDockBadge", c)
-          }}
-        />
-      )}
-      <SettingSwitch
-        label="Show sidebar unread count"
-        checked={state.sidebarShowUnreadCount}
-        onCheckedChange={(c) => {
-          setUISetting("sidebarShowUnreadCount", c)
-        }}
-      />
-
-      {/* <SettingSwitch
-        label="Modal draggable"
-        checked={state.modalDraggable}
-        onCheckedChange={(c) => {
-          setUISetting("modalDraggable", c)
-        }}
-      /> */}
-      {/* <SettingSwitch
-        label="Modal opaque"
-        checked={state.modalOpaque}
-        onCheckedChange={(c) => {
-          setUISetting("modalOpaque", c)
-        }}
-      /> */}
-
-      <SettingSectionTitle title="Content" />
-      {window.electron && <Fonts />}
-      <ShikiTheme />
-      <SettingSwitch
-        label="Render inline style"
-        checked={state.readerRenderInlineStyle}
-        onCheckedChange={(c) => {
-          setUISetting("readerRenderInlineStyle", c)
-        }}
-      />
-
-      <SettingSectionTitle title="Misc" />
-      <SettingSwitch
-        label="Show modal overlay"
-        checked={state.modalOverlay}
-        onCheckedChange={(c) => {
-          setUISetting("modalOverlay", c)
-        }}
-      />
-      <SettingItemGroup>
-        <SettingSwitch
-          label="Reduce motion"
-          checked={state.reduceMotion}
-          onCheckedChange={(c) => {
-            setUISetting("reduceMotion", c)
-          }}
-        />
-        <SettingDescription>
-          Enabling this option will reduce the motion of the element to improve
-          performance and device life, and if it is disabled, it will adapt to the
-          system settings.
-        </SettingDescription>
-      </SettingItemGroup>
-    </div>
+      </div>
+    </>
   )
 }
 const ShikiTheme = () => {

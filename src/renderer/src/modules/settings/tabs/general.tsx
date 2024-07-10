@@ -4,32 +4,106 @@ import {
 } from "@renderer/atoms/settings/general"
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 
-import { SettingDescription, SettingSwitch } from "../control"
-import { SettingItemGroup, SettingSectionTitle } from "../section"
+import { createSettingBuilder } from "../setting-builder"
 import { SettingsTitle } from "../title"
 
+const SettingBuilder = createSettingBuilder(useGeneralSettingValue)
 export const SettingGeneral = () => {
-  const [loginSetting, setLoginSetting] = useState(false)
   useEffect(() => {
     tipcClient?.getLoginItemSettings().then((settings) => {
-      setLoginSetting(settings.openAtLogin)
+      setGeneralSetting("appLaunchOnStartup", settings.openAtLogin)
     })
   }, [])
 
   const saveLoginSetting = useCallback((checked: boolean) => {
     tipcClient?.setLoginItemSettings(checked)
-    setLoginSetting(checked)
-  }, [])
 
-  const settings = useGeneralSettingValue()
+    setGeneralSetting("appLaunchOnStartup", checked)
+  }, [])
 
   return (
     <>
       <SettingsTitle />
-      <div className="mt-6">
-        {window.electron && (
+      <div className="mt-4">
+        <SettingBuilder
+          settings={[
+            {
+              type: "title",
+              value: "App",
+              disabled: !window.electron,
+            },
+            {
+              disabled: !window.electron,
+              label: "Launch Follow at Login",
+              key: "appLaunchOnStartup",
+              onChange(value) {
+                saveLoginSetting(value)
+              },
+            },
+            {
+              type: "title",
+              value: "view",
+            },
+            {
+              key: "unreadOnly",
+              label: "Show unread content initially",
+              description:
+                "Only show unread content initially when you open the app",
+              onChange: (value) => setGeneralSetting("unreadOnly", value),
+            },
+            {
+              key: "scrollMarkUnread",
+              label: "Mark as read when scrolling",
+              description:
+                "Automatic marking of feed entries as read when the item is scrolled up out of the viewport.",
+              onChange: (value) => setGeneralSetting("scrollMarkUnread", value),
+            },
+            {
+              key: "hoverMarkUnread",
+              label: "Mark as read when hovering",
+              description:
+                "Automatic marking of feed entries as read when the item is hovered.",
+              onChange: (value) => setGeneralSetting("hoverMarkUnread", value),
+            },
+            {
+              key: "renderMarkUnread",
+              label: "Mark as read when in the viewport",
+              description:
+                "Automatically mark feed entries with only one level of content(e.g. Social Media, Picture, Video views) as read when the item is in the viewport.",
+              onChange: (value) => setGeneralSetting("renderMarkUnread", value),
+            },
+            {
+              type: "title",
+              value: "Data control",
+            },
+            {
+              key: "dataPersist",
+              label: "Persist data to offline usage",
+              description:
+                "Data will be stored locally on your device for offline usage and speed up the data loading of the first screen. If you disable this, all local data will be removed.",
+              onChange: (value) => setGeneralSetting("dataPersist", value),
+            },
+            {
+              key: "sendAnonymousData",
+              label: "Send anonymous data",
+              description:
+                "By selecting to send telemetry data, you can help us improve the overall user experience of Follow",
+              onChange: (value) => {
+                setGeneralSetting("sendAnonymousData", value)
+                if (value) {
+                  initPostHog()
+                } else {
+                  window.posthog?.reset()
+                  delete window.posthog
+                }
+              },
+            },
+          ]}
+        />
+
+        {/* {window.electron && (
           <SettingSwitch
             label="Launch Follow at Login"
             checked={loginSetting}
@@ -127,7 +201,7 @@ export const SettingGeneral = () => {
             {" "}
             {APP_NAME}
           </SettingDescription>
-        </SettingItemGroup>
+        </SettingItemGroup> */}
       </div>
     </>
   )

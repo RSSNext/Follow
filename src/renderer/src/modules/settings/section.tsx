@@ -10,7 +10,7 @@ import { SettingDescription, SettingSwitch } from "./control"
 export const SettingSectionTitle: FC<{
   title: string
 }> = ({ title }) => (
-  <div className="mb-4 mt-6 text-sm font-medium capitalize text-gray-400 dark:text-neutral-500">
+  <div className="mb-4 mt-8 text-sm font-medium capitalize text-gray-400 first:mt-0 dark:text-neutral-500">
     {title}
   </div>
 )
