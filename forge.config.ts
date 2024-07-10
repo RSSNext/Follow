@@ -1,3 +1,4 @@
+import fs from "node:fs"
 import { readdir } from "node:fs/promises"
 import path from "node:path"
 
@@ -8,6 +9,13 @@ import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 import { rimraf } from "rimraf"
+
+const artifactRegex = /.*\.(?:exe|dmg|AppImage)$/
+const platformNamesMap = {
+  darwin: "macos",
+  linux: "linux",
+  win32: "windows",
+}
 
 // remove folders & files not to be included in the app
 async function cleanSources(
@@ -128,6 +136,20 @@ const config: ForgeConfig = {
       },
     },
   ],
+  hooks: {
+    postMake: async (config, makeResults) => {
+      makeResults.map((result) => result.artifacts.map((artifact) => {
+        if (artifactRegex.test(artifact)) {
+          const newArtifact = `${__dirname}/out/${result.packageJSON.name}-${result.packageJSON.version}-${platformNamesMap[result.platform]}-${result.arch}${path.extname(artifact)}`
+          fs.renameSync(artifact, newArtifact)
+          return newArtifact
+        } else {
+          return artifact
+        }
+      }))
+      return makeResults
+    },
+  },
 }
 
 export default config
