@@ -7,6 +7,8 @@ env:
   VITE_WEB_URL: ${{ vars.VITE_WEB_URL }}
   VITE_API_URL: ${{ vars.VITE_API_URL }}
   VITE_IMGPROXY_URL: ${{ vars.VITE_IMGPROXY_URL }}
+  VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+  VITE_BUILD_TYPE: production
 
 jobs:
   release:
