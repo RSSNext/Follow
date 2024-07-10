@@ -2,12 +2,11 @@ import { readdir } from "node:fs/promises"
 import path from "node:path"
 
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
-import { MakerDeb } from "@electron-forge/maker-deb"
 import { MakerDMG } from "@electron-forge/maker-dmg"
-import { MakerRpm } from "@electron-forge/maker-rpm"
 import { MakerSquirrel } from "@electron-forge/maker-squirrel"
 import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
+import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 import { rimraf } from "rimraf"
 
 // remove folders & files not to be included in the app
@@ -71,12 +70,6 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({}),
-    new MakerRpm({}),
-    new MakerDeb({
-      options: {
-        icon: "resources/icon.png",
-      },
-    }),
     new MakerDMG({
       background: "resources/dmg-background.png",
       icon: "resources/dmg-icon.icns",
@@ -103,6 +96,11 @@ const config: ForgeConfig = {
           path: "/Applications",
         },
       ],
+    }),
+    new MakerAppImage({
+      options: {
+        icon: "resources/icon.png",
+      },
     }),
   ],
   plugins: [

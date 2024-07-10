@@ -109,6 +109,5 @@ jobs:
           path: |
             out/**/*.dmg
             out/**/*.exe
-            out/**/*.deb
-            out/**/*.rpm
+            out/**/*.AppImage
           retention-days: 90
