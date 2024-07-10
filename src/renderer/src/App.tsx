@@ -7,7 +7,7 @@ import { useUISettingKey } from "./atoms/settings/ui"
 import { Logo } from "./components/icons/logo"
 import { useDark } from "./hooks/common/useDark"
 import { tipcClient } from "./lib/client"
-import { APP_NAME } from "./lib/constants"
+import { appLog } from "./lib/log"
 import { getOS } from "./lib/utils"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"
@@ -86,6 +86,14 @@ function App() {
 
 const AppLayer = () => {
   const appIsReady = useAppIsReady()
+
+  useEffect(() => {
+    const doneTime = Math.trunc(performance.now())
+    window.posthog?.capture("ui_render_init", {
+      time: doneTime,
+    })
+    appLog("App is ready", `${doneTime}ms`)
+  }, [appIsReady])
 
   return appIsReady ? <Outlet /> : <AppSkeleton />
 }

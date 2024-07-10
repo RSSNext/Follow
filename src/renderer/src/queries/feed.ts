@@ -64,9 +64,12 @@ export const useClaimFeedMutation = (feedId: string) =>
       }),
 
     async onError(err) {
-      toast.error(await getFetchErrorMessage(err))
+      toast.error(getFetchErrorMessage(err))
     },
     onSuccess() {
+      window.posthog?.capture("feed_claimed", {
+        feedId,
+      })
       feedActions.patch(feedId, {
         ownerUserId: getUser()?.id,
       })
@@ -87,6 +90,6 @@ export const useRefreshFeedMutation = (feedId?: string) =>
         .invalidateRoot()
     },
     async onError(err) {
-      toast.error(await getFetchErrorMessage(err))
+      toast.error(getFetchErrorMessage(err))
     },
   })

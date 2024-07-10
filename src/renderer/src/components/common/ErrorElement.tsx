@@ -1,13 +1,11 @@
 import { repository } from "@pkg"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { isRouteErrorResponse, useRouteError } from "react-router-dom"
 
 import { StyledButton } from "../ui/button"
 
-export const ErrorElement = DefaultErrorComponent
-
-function DefaultErrorComponent() {
+export function ErrorElement() {
   const error = useRouteError()
   const message = isRouteErrorResponse(error) ?
     `${error.status} ${error.statusText}` :
@@ -25,6 +23,18 @@ function DefaultErrorComponent() {
       captureException(error)
     })
   }, [error])
+
+  const reloadRef = useRef(false)
+  if (
+    message.startsWith("Failed to fetch dynamically imported module") &&
+    window.sessionStorage.getItem("reload") !== "1"
+  ) {
+    if (reloadRef.current) return null
+    window.sessionStorage.setItem("reload", "1")
+    window.location.reload()
+    reloadRef.current = true
+    return null
+  }
 
   return (
     <div className="select-text p-8">

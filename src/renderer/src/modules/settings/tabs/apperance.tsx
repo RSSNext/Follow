@@ -19,7 +19,7 @@ import { useCallback } from "react"
 import { bundledThemes } from "shiki/themes"
 
 import { SettingDescription, SettingSwitch } from "../control"
-import { SettingSectionTitle } from "../section"
+import { SettingItemGroup, SettingSectionTitle } from "../section"
 import { SettingsTitle } from "../title"
 
 export const SettingAppearance = () => {
@@ -105,18 +105,20 @@ export const SettingAppearance = () => {
           setUISetting("modalOverlay", c)
         }}
       />
-      <SettingSwitch
-        label="Reduce motion"
-        checked={state.reduceMotion}
-        onCheckedChange={(c) => {
-          setUISetting("reduceMotion", c)
-        }}
-      />
-      <SettingDescription>
-        Enabling this option will reduce the motion of the element to improve
-        performance and device life, and if it is disabled, it will adapt to the
-        system settings.
-      </SettingDescription>
+      <SettingItemGroup>
+        <SettingSwitch
+          label="Reduce motion"
+          checked={state.reduceMotion}
+          onCheckedChange={(c) => {
+            setUISetting("reduceMotion", c)
+          }}
+        />
+        <SettingDescription>
+          Enabling this option will reduce the motion of the element to improve
+          performance and device life, and if it is disabled, it will adapt to the
+          system settings.
+        </SettingDescription>
+      </SettingItemGroup>
     </div>
   )
 }

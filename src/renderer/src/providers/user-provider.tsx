@@ -8,6 +8,11 @@ export const UserProvider = () => {
   useEffect(() => {
     if (!session?.user) return
     setUser(session.user)
+
+    window.posthog?.identify(session.user.id, {
+      name: session.user.name,
+      handle: session.user.handle,
+    })
   }, [session?.user, setUser])
 
   return null

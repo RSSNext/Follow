@@ -43,10 +43,13 @@ export const SettingSwitch: Component<{
   )
 }
 
-export const SettingDescription: Component<{ children: string }> = ({
-  children,
-}) => (
-  <small className="!mt-0 block w-4/5 text-balance text-[13px] leading-tight text-gray-400 dark:text-neutral-500">
+export const SettingDescription: Component = ({ children, className }) => (
+  <small
+    className={cn(
+      "!mt-0 block w-4/5 text-balance text-[13px] leading-tight text-gray-400 dark:text-neutral-500",
+      className,
+    )}
+  >
     {children}
   </small>
 )

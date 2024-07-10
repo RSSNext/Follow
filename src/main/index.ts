@@ -100,7 +100,11 @@ app.whenReady().then(() => {
 
   if (process.env.NODE_ENV === "development") {
     import("electron-devtools-installer").then(
-      ({ default: installExtension, REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS }) => {
+      ({
+        default: installExtension,
+        REDUX_DEVTOOLS,
+        REACT_DEVELOPER_TOOLS,
+      }) => {
         [REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS].forEach((extension) => {
           installExtension(extension, {
             loadExtensionOptions: { allowFileAccess: true },

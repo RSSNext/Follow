@@ -7,7 +7,7 @@ import { RouterProvider } from "react-router-dom"
 
 import { setAppIsReady } from "./atoms/app"
 import { AppErrorBoundary } from "./components/common/AppErrorBoundary"
-import { initializeApp } from "./init"
+import { initializeApp } from "./initialize"
 import { getOS } from "./lib/utils"
 import { router } from "./router"
 

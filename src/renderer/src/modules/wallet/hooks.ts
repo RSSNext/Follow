@@ -4,7 +4,13 @@ import { toast } from "sonner"
 
 import { TipModalContent } from "./tip-modal"
 
-export const useTipModal = ({ userId, feedId }: { userId?: string, feedId?: string }) => {
+export const useTipModal = ({
+  userId,
+  feedId,
+}: {
+  userId?: string
+  feedId?: string
+}) => {
   const { present } = useModalStack()
 
   return useCallback(() => {
@@ -13,7 +19,7 @@ export const useTipModal = ({ userId, feedId }: { userId?: string, feedId?: stri
       toast.error("Invalid user id or feed id")
       return
     }
-
+    window.posthog?.capture("tip_modal_opened", { feedId })
     present({
       title: "Tip Power",
       content: () => createElement(TipModalContent, { userId, feedId }),
