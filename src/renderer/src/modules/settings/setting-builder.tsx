@@ -26,7 +26,7 @@ type CustomSettingItem = ReactNode | FC
 export const createSettingBuilder =
   <T extends object>(useSetting: () => T) =>
     <K extends keyof T>(props: {
-      settings: (SettingItem<T, K> | SpecificSettingItem | CustomSettingItem | false)[]
+      settings: (SettingItem<T, K> | SpecificSettingItem | CustomSettingItem | boolean)[]
     }) => {
       const { settings } = props
       const settingObject = useSetting()
