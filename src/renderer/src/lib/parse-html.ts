@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
 import { Image } from "@renderer/components/ui/image"
+import { LinkWithTooltip } from "@renderer/components/ui/link"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
@@ -69,6 +70,7 @@ export const parseHtml = async (
       jsxs: (type, props, key) => jsxs(type as any, props, key),
       passNode: true,
       components: {
+        a: ({ node, ...props }) => createElement(LinkWithTooltip, { ...props } as any),
         img: ({ node, ...props }) => createElement(Image, { ...props, popper: true }),
         pre: ({ node, ...props }) => {
           if (!props.children) return null
@@ -102,7 +104,6 @@ export const parseHtml = async (
           }
 
           if (!codeString) return null
-          // return createElement("pre", { ...props, className: "shiki" })
           return createElement(ShikiHighLighter, {
             code: codeString,
             language: language.toLowerCase(),
