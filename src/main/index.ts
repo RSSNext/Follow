@@ -2,7 +2,6 @@ import "dotenv/config"
 
 import path from "node:path"
 
-import type { RendererHandlersCaller } from "@egoist/tipc/main"
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@shared/constants"
@@ -10,12 +9,11 @@ import { extractElectronWindowOptions } from "@shared/electron"
 import { app, autoUpdater, BrowserWindow, session } from "electron"
 
 import { initializationApp } from "./init"
-import type { RendererHandlers } from "./tipc"
-import { createMainWindow, createWindow } from "./window"
+import type { RendererHandlers } from "./renderer-handlers"
+import { createMainWindow, createWindow, getMainWindow } from "./window"
 
 initializationApp()
 let mainWindow: BrowserWindow
-let handlers: RendererHandlersCaller<RendererHandlers>
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
@@ -42,14 +40,12 @@ app.whenReady().then(() => {
   })
 
   mainWindow = createMainWindow()
-  handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
 
   app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) {
       mainWindow = createMainWindow()
-      handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
     }
   })
 
@@ -131,6 +127,11 @@ app.whenReady().then(() => {
   }, 15 * 60 * 1000)
 
   autoUpdater.on("update-downloaded", () => {
+    const mainWindow = getMainWindow()
+    if (!mainWindow) return
+    const handlers = getRendererHandlers<RendererHandlers>(
+      mainWindow.webContents,
+    )
     handlers.updateDownloaded.send()
   })
 })

@@ -4,6 +4,7 @@ import type { BrowserWindow, MessageBoxOptions } from "electron"
 import { app, autoUpdater, dialog, Menu, ShareMenu } from "electron"
 
 import { downloadFile } from "./lib/download"
+import type { RendererHandlers } from "./renderer-handlers"
 import { createSettingWindow, createWindow, getMainWindow } from "./window"
 
 const t = tipc.create()
@@ -229,7 +230,3 @@ interface Sender extends Electron.WebContents {
 }
 
 export type Router = typeof router
-
-export type RendererHandlers = {
-  updateDownloaded: () => void
-}
