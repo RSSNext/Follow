@@ -41,7 +41,7 @@ export const hydrateDatabaseToStore = async () => {
     _isHydrated = true
     appLog("Hydrate data done,", `${Date.now() - now}ms`)
   }
-  await Promise.race([hydrate(), sleep(1500).then(() => "timeout")]).then(
+  await Promise.race([hydrate(), sleep(1000).then(() => "timeout")]).then(
     (result) => {
       if (result === "timeout") {
         appLog("Hydrate data timeout")
