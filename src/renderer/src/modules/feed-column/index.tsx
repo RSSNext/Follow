@@ -20,6 +20,7 @@ import { Link } from "react-router-dom"
 
 import { Vibrancy } from "../../components/ui/background"
 import { NetworkStatusIndicator } from "../app/NetworkStatusIndicator"
+import { AutoUpdater } from "./auto-updater"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -201,6 +202,7 @@ export function FeedColumn() {
           Early Access
         </div>
       )}
+      <AutoUpdater />
 
       <NetworkStatusIndicator />
     </Vibrancy>

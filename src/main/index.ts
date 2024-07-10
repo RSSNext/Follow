@@ -2,16 +2,20 @@ import "dotenv/config"
 
 import path from "node:path"
 
+import type { RendererHandlersCaller } from "@egoist/tipc/main"
+import { getRendererHandlers } from "@egoist/tipc/main"
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@shared/constants"
 import { extractElectronWindowOptions } from "@shared/electron"
-import { app, BrowserWindow, session } from "electron"
+import { app, autoUpdater, BrowserWindow, session } from "electron"
 
 import { initializationApp } from "./init"
+import type { RendererHandlers } from "./tipc"
 import { createMainWindow, createWindow } from "./window"
 
 initializationApp()
 let mainWindow: BrowserWindow
+let handlers: RendererHandlersCaller<RendererHandlers>
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
@@ -38,12 +42,14 @@ app.whenReady().then(() => {
   })
 
   mainWindow = createMainWindow()
+  handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
 
   app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) {
       mainWindow = createMainWindow()
+      handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
     }
   })
 
@@ -115,6 +121,18 @@ app.whenReady().then(() => {
       },
     )
   }
+
+  // Auto update
+  autoUpdater.setFeedURL({
+    url: `https://update.follow.is/update/${process.platform}/${app.getVersion()}`,
+  })
+  setInterval(() => {
+    autoUpdater.checkForUpdates()
+  }, 15 * 60 * 1000)
+
+  autoUpdater.on("update-downloaded", () => {
+    handlers.updateDownloaded.send()
+  })
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
