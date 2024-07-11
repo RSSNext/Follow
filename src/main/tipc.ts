@@ -177,7 +177,14 @@ export const router = {
   setAppearance: t.procedure
     .input<"light" | "dark" | "system">()
     .action(async ({ input }) => {
-      nativeTheme.themeSource = input
+      // NOTE: Temporarily changing to system to get the color mode that system is in at the moment may cause a bit of a problem.
+      // On macos, there is a bug,  traffic lights flicker
+      nativeTheme.themeSource = "system"
+      const systemColorMode = nativeTheme.shouldUseDarkColors ?
+        "dark" :
+        "light"
+
+      nativeTheme.themeSource = systemColorMode === input ? "system" : input
     }),
   setMacOSBadge: t.procedure.input<number>().action(async ({ input }) => {
     if (app.dock) {
