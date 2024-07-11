@@ -39,9 +39,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ matrix.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-
+            ${{ matrix.os }}-
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -103,28 +103,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ${{ runner.os }}
+          name: ${{ matrix.os }}
           path: |
-            out/**/*.dmg
-            out/**/*.exe
-            out/**/*.AppImage
-            out/**/*.yml
+            out/make/**/*.dmg
+            out/make/**/*.exe
+            out/make/**/*.AppImage
+            out/make/**/*.yml
           retention-days: 90
 
-      - name: Get Package Version
-        id: get-package-version
-        uses: stevenbenitez/get-package-version-action@v1
+      - name: Setup Version
+        id: version
+        uses: ./.github/actions/setup-version
 
       - name: Create Release Draft
         if: github.event_name == 'workflow_dispatch'
         uses: softprops/action-gh-release@v2
         with:
-          name: v${{ steps.get-package-version.outputs.version }}
+          name: v${{ steps.version.outputs.APP_VERSION }}
           draft: true
           prerelease: false
-          tag_name: v${{ steps.get-package-version.outputs.version }}
+          tag_name: v${{ steps.version.outputs.APP_VERSION }}
           files: |
-            out/**/*.dmg
-            out/**/*.exe
-            out/**/*.AppImage
-            out/**/*.yml
+            out/make/**/*.dmg
+            out/make/**/*.exe
+            out/make/**/*.AppImage
+            out/make/**/*.yml
