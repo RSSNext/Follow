@@ -1,7 +1,9 @@
+import { createRequire } from "node:module"
+
 import { getRendererHandlers, tipc } from "@egoist/tipc/main"
 import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindow, MessageBoxOptions } from "electron"
-import { app, dialog, Menu, ShareMenu } from "electron"
+import { app, dialog, Menu, nativeTheme, ShareMenu } from "electron"
 
 import { downloadFile } from "./lib/download"
 import type { RendererHandlers } from "./renderer-handlers"
@@ -10,6 +12,7 @@ import { createSettingWindow, createWindow, getMainWindow } from "./window"
 
 const t = tipc.create()
 
+const require = createRequire(import.meta.url)
 export const router = {
   inspectElement: t.procedure
     .input<{ x: number, y: number }>()
@@ -171,6 +174,11 @@ export const router = {
           })
       }),
   ),
+  setAppearance: t.procedure
+    .input<"light" | "dark" | "system">()
+    .action(async ({ input }) => {
+      nativeTheme.themeSource = input
+    }),
   setMacOSBadge: t.procedure.input<number>().action(async ({ input }) => {
     if (app.dock) {
       if (input === 0) {
