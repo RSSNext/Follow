@@ -4,6 +4,7 @@ import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
+import { useFeedById } from "@renderer/store/feed"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import { StarIcon } from "./star-icon"
@@ -14,12 +15,13 @@ export function SocialMediaItem({ entryId, entryPreview, translation }: Universa
   const entry = useEntry(entryId) || entryPreview
 
   const asRead = useAsRead(entry)
+  const feed = useFeedById(entry?.feedId)
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
+  if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
   return (
     <div className={cn("relative flex w-full py-3 pl-3 pr-2", !asRead && "before:absolute before:-left-0.5 before:top-[22px] before:block before:size-2 before:rounded-full before:bg-theme-accent")}>
-      <FeedIcon feed={entry.feeds} entry={entry.entries} size={28} />
+      <FeedIcon feed={feed} entry={entry.entries} size={28} />
       <div className="min-w-0 flex-1">
         <div className={cn("-mt-0.5 flex-1 text-sm", entry.entries.description && "line-clamp-5")}>
           <div className="space-x-1">

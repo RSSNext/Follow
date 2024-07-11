@@ -6,6 +6,8 @@ import type {
   FeedModel,
 } from "@renderer/models"
 import { EntryService } from "@renderer/services"
+import type { IFuseOptions } from "fuse.js"
+import Fuse from "fuse.js"
 import { produce } from "immer"
 import { merge, omit } from "lodash-es"
 
@@ -13,7 +15,7 @@ import { isHydrated } from "../../initialize/hydrate"
 import { feedActions } from "../feed"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore } from "../utils/helper"
-import type { EntryState } from "./types"
+import type { EntryState, FlatEntryModel } from "./types"
 
 const createState = (): EntryState => ({
   entries: {},
@@ -136,6 +138,7 @@ class EntryActions {
     const entry2Read = {} as Record<string, boolean>
     const entryFeedMap = {} as Record<string, string>
     const entryCollection = {} as Record<string, any>
+
     set((state) =>
       produce(state, (draft) => {
         for (const item of data) {
@@ -160,7 +163,10 @@ class EntryActions {
 
           draft.flatMapEntries[item.entries.id] = merge(
             draft.flatMapEntries[item.entries.id] || {},
-            item,
+            {
+              feedId: item.feeds.id,
+            },
+            omit(item, "feeds"),
           )
 
           // Push feed
@@ -197,6 +203,52 @@ class EntryActions {
       EntryService.bulkStoreFeedId(entryFeedMap)
       EntryService.bulkStoreCollection(entryCollection)
     }
+  }
+
+  hydrate(data: FlatEntryModel[]) {
+    const entryCollection = {} as Record<string, any>
+
+    set((state) =>
+      produce(state, (draft) => {
+        for (const item of data) {
+          if (!draft.entries[item.feedId]) {
+            draft.entries[item.feedId] = []
+          }
+
+          if (!draft.internal_feedId2entryIdSet[item.feedId]) {
+            draft.internal_feedId2entryIdSet[item.feedId] = new Set()
+          }
+
+          if (
+            !draft.internal_feedId2entryIdSet[item.feedId].has(item.entries.id)
+          ) {
+            draft.entries[item.feedId].push(item.entries.id)
+            draft.internal_feedId2entryIdSet[item.feedId].add(item.entries.id)
+          }
+
+          draft.flatMapEntries[item.entries.id] = merge(
+            draft.flatMapEntries[item.entries.id] || {},
+            item,
+          )
+
+          // Push entryCollection
+          if (item.collections) {
+            entryCollection[item.entries.id] = item.collections
+          }
+        }
+
+        return draft
+      }),
+    )
+
+    const newStarIds = new Set(get().starIds)
+    for (const entryId in entryCollection) {
+      newStarIds.add(entryId)
+    }
+    set((state) => ({
+      ...state,
+      starIds: newStarIds,
+    }))
   }
 
   markRead(feedId: string, entryId: string, read: boolean) {
@@ -240,6 +292,18 @@ class EntryActions {
     } else {
       EntryService.deleteCollection(entryId)
     }
+  }
+
+  async createLocalSearch() {
+    const data = Object.values(get().flatMapEntries)
+
+    const options: IFuseOptions<FlatEntryModel> = {
+      keys: ["entries.title", "entries.content", "entries.description"],
+    }
+    const index = Fuse.createIndex(options.keys!, data)
+    const fuse = new Fuse(data, options, index)
+
+    return fuse
   }
 }
 

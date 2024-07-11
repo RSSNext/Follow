@@ -4,7 +4,9 @@ import { nextFrame } from "@renderer/lib/dom"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import type { CombinedEntryModel } from "@renderer/models"
 import { useTipModal } from "@renderer/modules/wallet/hooks"
+import type { FlatEntryModel } from "@renderer/store/entry"
 import { entryActions } from "@renderer/store/entry"
+import { useFeedById } from "@renderer/store/feed"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
@@ -91,7 +93,7 @@ export const useEntryActions = ({
   entry,
 }: {
   view?: number
-  entry?: CombinedEntryModel | null
+  entry?: FlatEntryModel | null
 }) => {
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
@@ -108,18 +110,29 @@ export const useEntryActions = ({
     refetchOnWindowFocus: false,
   })
 
+  const feed = useFeedById(entry?.feedId)
+
+  const populatedEntry = useMemo(() => {
+    if (!entry) return null
+    if (!feed) return null
+    return {
+      ...entry,
+      feeds: feed!,
+    } as CombinedEntryModel
+  }, [entry, feed])
+
   const openTipModal = useTipModal({
-    userId: entry?.feeds.ownerUserId ?? undefined,
-    feedId: entry?.feeds.id ?? undefined,
+    userId: populatedEntry?.feeds.ownerUserId ?? undefined,
+    feedId: populatedEntry?.feeds.id ?? undefined,
   })
 
-  const collect = useCollect(entry)
-  const uncollect = useUnCollect(entry)
+  const collect = useCollect(populatedEntry)
+  const uncollect = useUnCollect(populatedEntry)
   const read = useRead()
   const unread = useUnread()
 
   const items = useMemo(() => {
-    if (!entry || view === undefined) return []
+    if (!populatedEntry || view === undefined) return []
     const items = [
       [
         {
@@ -136,7 +149,7 @@ export const useEntryActions = ({
           shortcut: shortcuts.entry.toggleStarred.key,
           name: `Star`,
           className: "i-mgc-star-cute-re",
-          disabled: !!entry.collections,
+          disabled: !!populatedEntry.collections,
           onClick: () => {
             collect.mutate()
           },
@@ -146,7 +159,7 @@ export const useEntryActions = ({
           name: `Unstar`,
           shortcut: shortcuts.entry.toggleStarred.key,
           className: "i-mgc-star-cute-fi text-orange-500",
-          disabled: !entry.collections,
+          disabled: !populatedEntry.collections,
           onClick: () => {
             uncollect.mutate()
           },
@@ -154,11 +167,11 @@ export const useEntryActions = ({
         {
           name: "Copy Link",
           className: "i-mgc-link-cute-re",
-          disabled: !entry.entries.url,
+          disabled: !populatedEntry.entries.url,
           shortcut: shortcuts.entry.copyLink.key,
           onClick: () => {
-            if (!entry.entries.url) return
-            navigator.clipboard.writeText(entry.entries.url)
+            if (!populatedEntry.entries.url) return
+            navigator.clipboard.writeText(populatedEntry.entries.url)
             toast("Link copied to clipboard.", {
               duration: 1000,
             })
@@ -169,10 +182,10 @@ export const useEntryActions = ({
           name: `Open in Browser`,
           shortcut: shortcuts.entry.openInBrowser.key,
           className: "i-mgc-world-2-cute-re",
-          disabled: !entry.entries.url,
+          disabled: !populatedEntry.entries.url,
           onClick: () => {
-            if (!entry.entries.url) return
-            window.open(entry.entries.url, "_blank")
+            if (!populatedEntry.entries.url) return
+            window.open(populatedEntry.entries.url, "_blank")
           },
         },
         {
@@ -180,12 +193,15 @@ export const useEntryActions = ({
           icon: "/eagle.svg",
           disabled:
             (checkEagle.isLoading ? true : !checkEagle.data) ||
-            !entry.entries.images?.length,
+            !populatedEntry.entries.images?.length,
           onClick: async () => {
-            if (!entry.entries.url || !entry.entries.images?.length) return
+            if (
+              !populatedEntry.entries.url ||
+              !populatedEntry.entries.images?.length
+            ) { return }
             const response = await tipcClient?.saveToEagle({
-              url: entry.entries.url,
-              images: entry.entries.images,
+              url: populatedEntry.entries.url,
+              images: populatedEntry.entries.images,
             })
             if (response?.status === "success") {
               toast("Saved to Eagle.", {
@@ -202,8 +218,8 @@ export const useEntryActions = ({
           name: "Share",
           className: "i-mgc-share-forward-cute-re",
           onClick: () => {
-            if (!entry.entries.url) return
-            tipcClient?.showShareMenu(entry.entries.url)
+            if (!populatedEntry.entries.url) return
+            tipcClient?.showShareMenu(populatedEntry.entries.url)
           },
         },
         {
@@ -211,9 +227,9 @@ export const useEntryActions = ({
           name: `Mark as Read`,
           shortcut: shortcuts.entry.toggleRead.key,
           className: "i-mgc-round-cute-fi",
-          disabled: !!entry.read || entry.collections,
+          disabled: !!populatedEntry.read || populatedEntry.collections,
           onClick: () => {
-            read.mutate(entry)
+            read.mutate(populatedEntry)
           },
         },
         {
@@ -221,9 +237,9 @@ export const useEntryActions = ({
           name: `Mark as Unread`,
           shortcut: shortcuts.entry.toggleRead.key,
           className: "i-mgc-round-cute-re",
-          disabled: !entry.read || entry.collections,
+          disabled: !populatedEntry.read || populatedEntry.collections,
           onClick: () => {
-            unread.mutate(entry)
+            unread.mutate(populatedEntry)
           },
         },
       ],
@@ -234,7 +250,7 @@ export const useEntryActions = ({
     checkEagle.data,
     checkEagle.isLoading,
     collect,
-    entry,
+    populatedEntry,
     read,
     openTipModal,
     uncollect,

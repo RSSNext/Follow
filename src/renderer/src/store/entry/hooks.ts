@@ -3,18 +3,15 @@ import {
   ROUTE_FEED_IN_FOLDER,
 } from "@renderer/lib/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
-import type { CombinedEntryModel } from "@renderer/models"
 import { useShallow } from "zustand/react/shallow"
 
 import { useFeedIdByView, useFolderFeedsByFeedId } from "../subscription"
 import { getEntryIsInView } from "../utils/biz"
 import { getFilteredFeedIds } from "./helper"
 import { useEntryStore } from "./store"
-import type { EntryFilter } from "./types"
+import type { EntryFilter, FlatEntryModel } from "./types"
 
-export const useEntry = (
-  entryId: Nullable<string>,
-): CombinedEntryModel | null =>
+export const useEntry = (entryId: Nullable<string>): FlatEntryModel | null =>
   useEntryStore(
     useShallow((state) => (entryId ? state.flatMapEntries[entryId] : null)),
   )
@@ -25,8 +22,7 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
       if (typeof feedId !== "string") return []
       const isMultiple = feedId.includes(",")
 
-      const isInFolder =
-        feedId.startsWith(ROUTE_FEED_IN_FOLDER)
+      const isInFolder = feedId.startsWith(ROUTE_FEED_IN_FOLDER)
 
       if (isMultiple) {
         const feedIds = feedId.split(",")
@@ -73,9 +69,7 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
 export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {
   const feedIds = useFeedIdByView(view)
 
-  return useEntryStore(
-    useShallow(() => getFilteredFeedIds(feedIds, filter)),
-  )
+  return useEntryStore(useShallow(() => getFilteredFeedIds(feedIds, filter)))
 }
 
 export const useEntryIdsByFolderName = (

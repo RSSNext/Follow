@@ -9,6 +9,7 @@ import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
+import { useFeedById } from "@renderer/store/feed"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import { StarIcon } from "./star-icon"
@@ -31,8 +32,11 @@ export function ListItem({
   const inInCollection = useRouteParamsSelector(
     (s) => s.feedId === FEED_COLLECTION_LIST,
   )
+
+  const feed = useFeedById(entry?.feedId)
+
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
-  if (!entry) return <ReactVirtuosoItemPlaceholder />
+  if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
   return (
     <div
@@ -42,7 +46,7 @@ export function ListItem({
         "before:absolute before:-left-0.5 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
       )}
     >
-      <FeedIcon feed={entry.feeds} entry={entry.entries} />
+      <FeedIcon feed={feed} entry={entry.entries} />
       <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
         <div
           className={cn(
@@ -51,7 +55,7 @@ export function ListItem({
             entry.collections && "text-zinc-600 dark:text-zinc-500",
           )}
         >
-          <span className="truncate">{entry.feeds.title}</span>
+          <span className="truncate">{feed.title}</span>
           <span>·</span>
           <span className="shrink-0">
             {dayjs
