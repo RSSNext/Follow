@@ -11,6 +11,7 @@
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx",
+    "target": "ES2022",
     "noUnusedLocals": false,
     "strict": true,
     "baseUrl": ".",
