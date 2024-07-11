@@ -82,8 +82,6 @@
     "idb-keyval": "6.2.1",
     "immer": "10.1.1",
     "jotai": "2.8.4",
-    "jotai-dark": "0.4.0",
-    "jotai-effect": "1.0.0",
     "lethargy": "1.0.9",
     "lodash-es": "4.17.21",
     "lowdb": "7.0.1",

@@ -10,7 +10,7 @@ import type { FC, PropsWithChildren } from "react"
 
 import { StableRouterProvider } from "./biz-router-provider"
 import { ContextMenuProvider } from "./context-menu-provider"
-import { SettingSync } from "./ui-setting-Initialize"
+import { SettingSync } from "./ui-setting-sync"
 import { UserProvider } from "./user-provider"
 
 const loadFeatures = () =>
