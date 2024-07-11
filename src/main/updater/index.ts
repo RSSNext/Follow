@@ -1,8 +1,7 @@
 import { getRendererHandlers } from "@egoist/tipc/main"
-import { env } from "@env"
 import { autoUpdater } from "electron-updater"
 
-import { isDev } from "../env"
+import { channel, isDev } from "../env"
 import { logger } from "../logger"
 import type { RendererHandlers } from "../renderer-handlers"
 import { getMainWindow } from "../window"
@@ -63,19 +62,18 @@ export const registerUpdater = async () => {
 
   const allowAutoUpdate = true
 
-  const buildType = env.VITE_BUILD_TYPE
   autoUpdater.autoDownload = false
-  autoUpdater.allowPrerelease = buildType !== "stable"
+  autoUpdater.allowPrerelease = channel !== "stable"
   autoUpdater.autoInstallOnAppQuit = true
   autoUpdater.autoRunAppAfterInstall = true
 
   const feedUrl: Exclude<Parameters<typeof autoUpdater.setFeedURL>[0], string> = {
-    channel: buildType,
+    channel,
     // hack for custom provider
     provider: "custom" as "github",
     repo: "follow",
     owner: "RSSNext",
-    releaseType: buildType === "stable" ? "release" : "prerelease",
+    releaseType: channel === "stable" ? "release" : "prerelease",
     // @ts-expect-error hack for custom provider
     updateProvider: CustomGitHubProvider,
   }

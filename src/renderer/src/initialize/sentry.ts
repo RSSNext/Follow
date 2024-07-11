@@ -1,5 +1,6 @@
 import { env } from "@env"
 import { version } from "@pkg"
+import { channel } from "@renderer/lib/constants"
 import { useEffect } from "react"
 import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from "react-router-dom"
 
@@ -13,7 +14,7 @@ export const initSentry = async () => {
   ])
   Sentry.init({
     dsn: env.VITE_SENTRY_DSN,
-    environment: env.VITE_BUILD_TYPE ?? "internal",
+    environment: channel,
     integrations: [
       Sentry.moduleMetadataIntegration(),
       Sentry.reactRouterV6BrowserTracingIntegration({

@@ -8,13 +8,10 @@ export const env = createEnv({
     VITE_API_URL: z.string().url(),
     VITE_IMGPROXY_URL: z.string().url(),
     VITE_SENTRY_DSN: z.string().optional(),
-    VITE_BUILD_TYPE: z
-      .enum(["stable", "beta", "internal", "development"])
-      .default("internal"),
     VITE_POSTHOG_KEY: z.string().optional(),
   },
   server: {
-    VERCEL_URL: z.string().url(),
+    VERCEL_URL: z.string().url().optional(),
   },
   emptyStringAsUndefined: true,
   runtimeEnv: "process" in globalThis ? process.env : import.meta.env,
