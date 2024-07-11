@@ -2,8 +2,17 @@ name: Build
 
 on:
   push:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      build-type:
+        description: 'Build Type'
+        type: choice
+        required: true
+        default: canary
+        options:
+          - internal
+          - beta
+          - stable
 
 env:
   VITE_WEB_URL: ${{ vars.VITE_WEB_URL }}
@@ -11,7 +20,7 @@ env:
   VITE_IMGPROXY_URL: ${{ vars.VITE_IMGPROXY_URL }}
   VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
   VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}
-  VITE_BUILD_TYPE: production
+  VITE_BUILD_TYPE: ${{ github.event.inputs.build-type || 'internal' }}
 
 jobs:
   release:
@@ -82,23 +91,12 @@ jobs:
         run: pnpm i
 
       - name: Build
-        if: github.event_name != 'release'
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
         run: pnpm build
-
-      - name: Publish
-        if: github.event_name == 'release'
-        env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run publish
 
       - name: Upload file
         uses: actions/upload-artifact@v4
@@ -107,8 +105,20 @@ jobs:
         with:
           name: ${{ runner.os }}
           path: |
-            out/**/*.dmg
-            out/**/*.exe
-            out/**/*.deb
-            out/**/*.rpm
+            out/make/*
           retention-days: 90
+
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+
+      - name: Create Release Draft
+        if: github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: v${{ steps.package-version.outputs.current-version}}
+          body: ''
+          draft: true
+          prerelease: false
+          files: |
+            out/make/*

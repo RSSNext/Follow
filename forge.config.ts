@@ -1,14 +1,27 @@
+import crypto from "node:crypto"
+import fs from "node:fs"
 import { readdir } from "node:fs/promises"
 import path from "node:path"
 
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
-import { MakerDeb } from "@electron-forge/maker-deb"
 import { MakerDMG } from "@electron-forge/maker-dmg"
-import { MakerRpm } from "@electron-forge/maker-rpm"
 import { MakerSquirrel } from "@electron-forge/maker-squirrel"
 import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
+import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 import { rimraf } from "rimraf"
+
+const artifactRegex = /.*\.(?:exe|dmg|AppImage)$/
+const platformNamesMap = {
+  darwin: "macos",
+  linux: "linux",
+  win32: "windows",
+}
+const ymlMapsMap = {
+  darwin: "latest-mac.yml",
+  linux: "latest-linux.yml",
+  win32: "latest.yml",
+}
 
 // remove folders & files not to be included in the app
 async function cleanSources(
@@ -71,12 +84,6 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({}),
-    new MakerRpm({}),
-    new MakerDeb({
-      options: {
-        icon: "resources/icon.png",
-      },
-    }),
     new MakerDMG({
       background: "resources/dmg-background.png",
       icon: "resources/dmg-icon.icns",
@@ -104,6 +111,11 @@ const config: ForgeConfig = {
         },
       ],
     }),
+    new MakerAppImage({
+      options: {
+        icon: "resources/icon.png",
+      },
+    }),
   ],
   plugins: [
     // Fuses are used to enable/disable various Electron functionality
@@ -130,6 +142,75 @@ const config: ForgeConfig = {
       },
     },
   ],
+  hooks: {
+    postMake: async (config, makeResults) => {
+      const yml: {
+        version?: string
+        files: {
+          url: string
+          sha512: string
+          size: number
+        }[]
+        releaseDate?: string
+      } = {
+        version: makeResults[0].packageJSON.version,
+        files: [],
+      }
+      makeResults = makeResults.map((result) => {
+        result.artifacts = result.artifacts.map((artifact) => {
+          if (artifactRegex.test(artifact)) {
+            const newArtifact = `${path.dirname(artifact)}/${result.packageJSON.name}-${result.packageJSON.version}-${platformNamesMap[result.platform]}-${result.arch}${path.extname(artifact)}`
+            fs.renameSync(artifact, newArtifact)
+
+            try {
+              const fileData = fs.readFileSync(newArtifact)
+              const hash = crypto
+                .createHash("sha512")
+                .update(fileData)
+                .digest("base64")
+              const { size } = fs.statSync(newArtifact)
+
+              yml.files.push({
+                url: path.basename(newArtifact),
+                sha512: hash,
+                size,
+              })
+            } catch {
+              console.error(`Failed to hash ${newArtifact}`)
+            }
+            return newArtifact
+          } else {
+            return artifact
+          }
+        })
+        return result
+      })
+      yml.releaseDate = new Date().toISOString()
+      const ymlStr =
+        `version: ${yml.version}\n` +
+        `files:\n${
+        yml.files
+          .map((file) => (
+              `  - url: ${file.url}\n` +
+              `    sha512: ${file.sha512}\n` +
+              `    size: ${file.size}\n`
+            ))
+          .join("")
+        }releaseDate: ${yml.releaseDate}\n`
+
+      const ymlPath = `${path.dirname(makeResults[0].artifacts[0])}/${ymlMapsMap[makeResults[0].platform]}`
+      fs.writeFileSync(ymlPath, ymlStr)
+
+      makeResults.push({
+        artifacts: [ymlPath],
+        platform: makeResults[0].platform,
+        arch: makeResults[0].arch,
+        packageJSON: makeResults[0].packageJSON,
+      })
+
+      return makeResults
+    },
+  },
 }
 
 export default config
