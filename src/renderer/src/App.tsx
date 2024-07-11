@@ -18,7 +18,6 @@ if (import.meta.env.DEV) {
 }
 function App() {
   useDark()
-
   useEffect(() => {
     const cleanup = handlers?.invalidateQuery.listen((queryKey) => {
       queryClient.invalidateQueries({

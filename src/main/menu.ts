@@ -29,12 +29,8 @@ export const registerAppMenu = () => {
     { role: "editMenu" },
     { role: "viewMenu" },
     { role: "windowMenu" },
-    { role: "help" },
-  ]
-
-  if (import.meta.env.DEV) {
-    menus.push({
-      label: "Dev",
+    {
+      role: "help",
       submenu: [
         {
           label: "Open log file",
@@ -42,24 +38,20 @@ export const registerAppMenu = () => {
             await revealLogFile()
           },
         },
+      ],
+    },
+  ]
+
+  if (import.meta.env.DEV) {
+    menus.push({
+      label: "Debug",
+      submenu: [
         {
-          label: "follow https://rsshub.app/twitter/user/DIYgod",
+          label: "follow https://github.com/RSSNext/follow/releases.atom",
           click: () => {
             createWindow({
               extraPath: `#add?url=${encodeURIComponent(
-                "https://rsshub.app/twitter/user/DIYgod",
-              )}`,
-              width: 800,
-              height: 600,
-            })
-          },
-        },
-        {
-          label: "follow https://diygod.me/feed",
-          click: () => {
-            createWindow({
-              extraPath: `#add?url=${encodeURIComponent(
-                "https://diygod.me/feed",
+                "https://github.com/RSSNext/follow/releases.atom",
               )}`,
               width: 800,
               height: 600,

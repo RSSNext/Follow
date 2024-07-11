@@ -1,8 +1,10 @@
-import { repository } from "@pkg"
+import pkg, { repository } from "@pkg"
+import { attachOpenInEditor } from "@renderer/lib/dev"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useEffect, useRef } from "react"
 import { isRouteErrorResponse, useRouteError } from "react-router-dom"
 
+import { Logo } from "../icons/logo"
 import { StyledButton } from "../ui/button"
 
 export function ErrorElement() {
@@ -37,13 +39,17 @@ export function ErrorElement() {
   }
 
   return (
-    <div className="select-text p-8">
+    <div className="m-auto flex min-h-full max-w-prose select-text flex-col p-8 pt-12">
       <div className="drag-region fixed inset-x-0 top-0 h-12" />
-
-      <h2 className="mt-12 text-2xl">Unexpected Application Error!</h2>
+      <div className="center flex flex-col">
+        <i className="i-mgc-bug-cute-re size-12 text-red-400" />
+        <h2 className="mt-12 text-2xl">
+          Sorry, the app has encountered an error
+        </h2>
+      </div>
       <h3 className="text-xl">{message}</h3>
       {import.meta.env.DEV && stack ? (
-        <div className="mt-4 cursor-text overflow-auto whitespace-pre rounded-md bg-red-50 p-4 font-mono text-sm text-red-600">
+        <div className="mt-4 cursor-text overflow-auto whitespace-pre rounded-md bg-red-50 p-4 text-left font-mono text-sm text-red-600">
           {attachOpenInEditor(stack)}
         </div>
       ) : null}
@@ -71,79 +77,33 @@ export function ErrorElement() {
       <p className="mt-8">
         Still having this issue? Please give feedback in Github, thanks!
         <a
-          className="ml-2 cursor-pointer text-theme-accent-400/80 duration-200 hover:text-theme-accent"
+          className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-theme-accent"
           href={`${repository.url}/issues/new?title=${encodeURIComponent(
             `Error: ${message}`,
           )}&body=${encodeURIComponent(
             `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
-          )}`}
+          )}&label=bug`}
           target="_blank"
           rel="noreferrer"
         >
           Submit Issue
         </a>
       </p>
+      <div className="grow" />
+      <footer className="center mt-12 flex gap-2">
+        Powered by
+        {" "}
+        <Logo className="size-5" />
+        {" "}
+        <a
+          href={pkg.homepage}
+          className="cursor-pointer font-bold text-theme-accent"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {APP_NAME}
+        </a>
+      </footer>
     </div>
   )
-}
-const attachOpenInEditor = (stack: string) => {
-  const lines = stack.split("\n")
-  return lines.map((line) => {
-    // A line like this: at App (http://localhost:5173/src/App.tsx?t=1720527056591:41:9)
-    // Find the `localhost` part and open the file in the editor
-    if (!line.includes("at ")) {
-      return line
-    }
-    const match = line.match(/(http:\/\/localhost:\d+\/[^:]+):(\d+):(\d+)/)
-
-    if (match) {
-      const [o] = match
-
-      // Find `@fs/`
-      // Like: `http://localhost:5173/@fs/Users/innei/git/work/rss3/follow/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=757920f2:11548:26`
-      const realFsPath = o.split("@fs")[1]
-
-      if (realFsPath) {
-        return (
-          // Delete `v=` hash, like `v=757920f2`
-          <div
-            className="cursor-pointer"
-            key={line}
-            onClick={openInEditor.bind(
-              null,
-              realFsPath.replace(/\?v=[a-f0-9]+/, ""),
-            )}
-          >
-            {line}
-          </div>
-        )
-      } else {
-        // at App (http://localhost:5173/src/App.tsx?t=1720527056591:41:9)
-        const srcFsPath = o.split("/src")[1]
-
-        if (srcFsPath) {
-          const fs = srcFsPath.replace(/\?t=[a-f0-9]+/, "")
-
-          return (
-            <div
-              className="cursor-pointer"
-              key={line}
-              onClick={openInEditor.bind(
-                null,
-                `${APP_DEV_CWD}/src/renderer/src${fs}`,
-              )}
-            >
-              {line}
-            </div>
-          )
-        }
-      }
-    }
-
-    return line
-  })
-}
-// http://localhost:5173/src/App.tsx?t=1720527056591:41:9
-const openInEditor = (file: string) => {
-  fetch(`/__open-in-editor?file=${encodeURIComponent(`${file}`)}`)
 }

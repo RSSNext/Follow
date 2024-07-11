@@ -1,3 +1,4 @@
+/* eslint-disable @eslint-react/no-array-index-key */
 import type { FC, ReactNode } from "react"
 import { isValidElement } from "react"
 import * as React from "react"
@@ -26,7 +27,12 @@ type CustomSettingItem = ReactNode | FC
 export const createSettingBuilder =
   <T extends object>(useSetting: () => T) =>
     <K extends keyof T>(props: {
-      settings: (SettingItem<T, K> | SpecificSettingItem | CustomSettingItem | boolean)[]
+      settings: (
+        | SettingItem<T, K>
+        | SpecificSettingItem
+        | CustomSettingItem
+        | boolean
+      )[]
     }) => {
       const { settings } = props
       const settingObject = useSetting()
@@ -35,7 +41,7 @@ export const createSettingBuilder =
         .filter((i) => typeof i !== "boolean")
         .map((setting, index) => {
           if (isValidElement(setting)) return setting
-          if (typeof setting === "function") return React.createElement(setting)
+          if (typeof setting === "function") { return React.createElement(setting, { key: index }) }
           const assertSetting = setting as SettingItem<T> | SpecificSettingItem
 
           if (assertSetting.disabled) return null
@@ -45,7 +51,9 @@ export const createSettingBuilder =
             assertSetting.type === "title" &&
             assertSetting.value
           ) {
-            return <SettingSectionTitle key={index} title={assertSetting.value} />
+            return (
+              <SettingSectionTitle key={index} title={assertSetting.value} />
+            )
           }
           if ("type" in assertSetting) {
             return null
@@ -76,7 +84,9 @@ export const createSettingBuilder =
             <SettingItemGroup key={index}>
               {ControlElement}
               {!!assertSetting.description && (
-                <SettingDescription>{assertSetting.description}</SettingDescription>
+                <SettingDescription>
+                  {assertSetting.description}
+                </SettingDescription>
               )}
             </SettingItemGroup>
           )

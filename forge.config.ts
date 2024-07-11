@@ -6,12 +6,13 @@ import path from "node:path"
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
 import { MakerDMG } from "@electron-forge/maker-dmg"
 import { MakerSquirrel } from "@electron-forge/maker-squirrel"
+import { MakerZIP } from "@electron-forge/maker-zip"
 import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 import { rimraf } from "rimraf"
 
-const artifactRegex = /.*\.(?:exe|dmg|AppImage)$/
+const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
 const platformNamesMap = {
   darwin: "macos",
   linux: "linux",
@@ -60,6 +61,7 @@ const config: ForgeConfig = {
   packagerConfig: {
     appBundleId: "is.follow",
     icon: "resources/icon",
+    extraResource: ["./resources/app-update.yml"],
 
     afterCopy: [cleanSources],
     asar: true,
@@ -83,7 +85,7 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
+    new MakerZIP({}, ["darwin"]),
     new MakerDMG({
       background: "resources/dmg-background.png",
       icon: "resources/dmg-icon.icns",
@@ -111,6 +113,7 @@ const config: ForgeConfig = {
         },
       ],
     }),
+    new MakerSquirrel({}),
     new MakerAppImage({
       options: {
         icon: "resources/icon.png",

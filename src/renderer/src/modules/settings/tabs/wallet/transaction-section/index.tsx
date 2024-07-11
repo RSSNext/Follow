@@ -21,7 +21,7 @@ export const TransactionsSection = () => {
   // if (transactions.data?.length === 0) return <div className="text-theme-disabled">No transactions</div>
 
   return (
-    <div>
+    <div className="mt-8">
       <SettingSectionTitle title="Transactions" />
 
       <div className="overflow-x-auto">
@@ -114,22 +114,18 @@ const UserRenderer = ({ user }: { user?: NonNullable<ReturnType<typeof useWallet
   const me = useUser()
   const isMe = user?.id === me?.id
 
+  const name = isMe ? "You" : user?.name || "SYSTEM"
+
   return (
     <div className="center">
       <Avatar className="aspect-square size-4">
         <AvatarImage src={user?.image || undefined} />
-        <AvatarFallback>{user?.name?.slice(0, 2)}</AvatarFallback>
+        <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
       </Avatar>
 
       <div className="ml-1">
-        {isMe ? <span className="font-bold">You</span> : user?.name || "NULL"}
+        {isMe ? <span className="font-bold">You</span> : name}
       </div>
     </div>
   )
 }
-
-// const FeedRenderer = ({ feed }: { feed: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["toFeed"] }) => (
-//   <div className="center line-clamp-1 truncate">
-//     {feed?.title ?? "-"}
-//   </div>
-// )

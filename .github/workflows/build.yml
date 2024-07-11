@@ -96,6 +96,7 @@ jobs:
           name: ${{ matrix.os }}
           path: |
             out/make/**/*.dmg
+            out/make/**/*.zip
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
@@ -115,6 +116,7 @@ jobs:
           tag_name: v${{ steps.version.outputs.APP_VERSION }}
           files: |
             out/make/**/*.dmg
+            out/make/**/*.zip
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
