@@ -49,7 +49,7 @@ export function ErrorElement() {
       </div>
       <h3 className="text-xl">{message}</h3>
       {import.meta.env.DEV && stack ? (
-        <div className="mt-4 cursor-text overflow-auto whitespace-pre rounded-md bg-red-50 p-4 font-mono text-sm text-red-600">
+        <div className="mt-4 cursor-text overflow-auto whitespace-pre rounded-md bg-red-50 p-4 text-left font-mono text-sm text-red-600">
           {attachOpenInEditor(stack)}
         </div>
       ) : null}
