@@ -14,7 +14,6 @@ import { handlers } from "./tipc"
 
 function App() {
   useDark()
-
   useEffect(() => {
     const cleanup = handlers?.invalidateQuery.listen((queryKey) => {
       queryClient.invalidateQueries({

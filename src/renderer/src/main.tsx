@@ -6,7 +6,6 @@ import ReactDOM from "react-dom/client"
 import { RouterProvider } from "react-router-dom"
 
 import { setAppIsReady } from "./atoms/app"
-import { AppErrorBoundary } from "./components/common/AppErrorBoundary"
 import { initializeApp } from "./initialize"
 import { getOS } from "./lib/utils"
 import { router } from "./router"
@@ -24,9 +23,7 @@ if (window.electron && getOS() === "Windows") {
 }
 ReactDOM.createRoot($container).render(
   <React.StrictMode>
-    <AppErrorBoundary>
-      <RouterProvider router={router} />
-    </AppErrorBoundary>
+    <RouterProvider router={router} />
     <ClickToComponent />
   </React.StrictMode>,
 )

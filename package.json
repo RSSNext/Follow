@@ -7,7 +7,7 @@
   "description": "An Electron application with React and TypeScript",
   "author": "example.com",
   "license": "UNLICENSED",
-  "homepage": "https://electron-vite.org",
+  "homepage": "https://dev.follow.is",
   "repository": {
     "url": "https://github.com/RSSNext/follow",
     "type": "git"
