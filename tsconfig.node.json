@@ -5,17 +5,22 @@
     "src/main/**/*",
     "src/preload/**/*",
     "types/**/*.d.ts",
-    "src/shared/src/**/*"
+    "src/shared/src/**/*",
+    "src/env.ts"
   ],
   "compilerOptions": {
     "composite": true,
     "types": [
       "electron-vite/node"
     ],
+    "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {
       "@shared/*": [
         "src/shared/src/*"
+      ],
+      "@env": [
+        "./src/env.ts"
       ]
     }
   }

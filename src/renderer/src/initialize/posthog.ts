@@ -1,3 +1,4 @@
+import { env } from "@env"
 import { getUser } from "@renderer/atoms/user"
 
 declare global {
@@ -9,7 +10,9 @@ declare global {
 export const initPostHog = async () => {
   if (import.meta.env.DEV) return
   const { default: posthog } = await import("posthog-js")
-  posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
+
+  if (env.VITE_POSTHOG_KEY === undefined) return
+  posthog.init(env.VITE_POSTHOG_KEY, {
     person_profiles: "identified_only",
   })
 

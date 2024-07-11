@@ -1,3 +1,4 @@
+import { env } from "@env"
 import { version } from "@pkg"
 import { useEffect } from "react"
 import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from "react-router-dom"
@@ -11,8 +12,8 @@ export const initSentry = async () => {
     import("posthog-js").then((module) => module.default),
   ])
   Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    environment: import.meta.env.VITE_BUILD_TYPE ?? "internal",
+    dsn: env.VITE_SENTRY_DSN,
+    environment: env.VITE_BUILD_TYPE ?? "internal",
     integrations: [
       Sentry.moduleMetadataIntegration(),
       Sentry.reactRouterV6BrowserTracingIntegration({

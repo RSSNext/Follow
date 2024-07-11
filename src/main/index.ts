@@ -7,10 +7,13 @@ import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@shared/constants"
 import { extractElectronWindowOptions } from "@shared/electron"
 import { app, BrowserWindow, session } from "electron"
 
+import { env } from "../env"
+import { isDev } from "./env"
 import { initializationApp } from "./init"
 import { registerUpdater } from "./updater"
 import { createMainWindow, createWindow } from "./window"
 
+if (isDev) console.info("[main] env loaded:", env)
 initializationApp()
 let mainWindow: BrowserWindow
 

@@ -1,7 +1,8 @@
 import { getRendererHandlers } from "@egoist/tipc/main"
+import { env } from "@env"
 import { autoUpdater } from "electron-updater"
 
-import { buildType, isDev } from "../config"
+import { isDev } from "../env"
 import { logger } from "../logger"
 import type { RendererHandlers } from "../renderer-handlers"
 import { getMainWindow } from "../window"
@@ -62,6 +63,7 @@ export const registerUpdater = async () => {
 
   const allowAutoUpdate = true
 
+  const buildType = env.VITE_BUILD_TYPE
   autoUpdater.autoDownload = false
   autoUpdater.allowPrerelease = buildType !== "stable"
   autoUpdater.autoInstallOnAppQuit = true

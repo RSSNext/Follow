@@ -6,11 +6,13 @@
     "src/renderer/src/**/*.tsx",
     "src/preload/*.d.ts",
     "src/shared/src/**/*",
-    "types/**/*.d.ts"
+    "types/**/*.d.ts",
+    "src/env.ts"
   ],
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx",
+    "moduleResolution": "Bundler",
     "noUnusedLocals": false,
     "strict": true,
     "baseUrl": ".",
@@ -24,7 +26,8 @@
       "@shared/*": [
         "src/shared/src/*"
       ],
-      "@pkg": ["./package.json"]
+      "@pkg": ["./package.json"],
+      "@env": ["./src/env.ts"]
     }
   }
 }
