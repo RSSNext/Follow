@@ -232,7 +232,7 @@ const ListHeader: FC<{
         <div
           className={cn(
             "relative z-[1] flex items-center gap-1 self-baseline text-zinc-500",
-            isInCollectionList && "pointer-events-none opacity-0",
+            (isInCollectionList || !headerTitle) && "pointer-events-none opacity-0",
           )}
           onClick={(e) => e.stopPropagation()}
         >
