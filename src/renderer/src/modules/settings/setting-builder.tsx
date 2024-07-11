@@ -26,56 +26,59 @@ type CustomSettingItem = ReactNode | FC
 export const createSettingBuilder =
   <T extends object>(useSetting: () => T) =>
     <K extends keyof T>(props: {
-      settings: (SettingItem<T, K> | SpecificSettingItem | CustomSettingItem)[]
+      settings: (SettingItem<T, K> | SpecificSettingItem | CustomSettingItem | boolean)[]
     }) => {
       const { settings } = props
       const settingObject = useSetting()
 
-      return settings.map((setting, index) => {
-        if (isValidElement(setting)) return setting
-        if (typeof setting === "function") return React.createElement(setting)
-        const assertSetting = setting as SettingItem<T> | SpecificSettingItem
+      return settings
+        .filter((i) => typeof i !== "boolean")
+        .map((setting, index) => {
+          if (isValidElement(setting)) return setting
+          if (typeof setting === "function") return React.createElement(setting)
+          const assertSetting = setting as SettingItem<T> | SpecificSettingItem
 
-        if (
-          "type" in assertSetting &&
-          assertSetting.type === "title" &&
-          assertSetting.value
-        ) {
-          return <SettingSectionTitle key={index} title={assertSetting.value} />
-        }
-        if ("type" in assertSetting) {
-          return null
-        }
+          if (assertSetting.disabled) return null
 
-        if (assertSetting.disabled) return null
-        let ControlElement: React.ReactNode
-        switch (typeof settingObject[assertSetting.key]) {
-          case "boolean": {
-            ControlElement = (
-              <SettingSwitch
-                className="mt-4"
-                checked={settingObject[assertSetting.key] as boolean}
-                onCheckedChange={(checked) =>
-                  assertSetting.onChange(checked as T[keyof T])}
-                label={assertSetting.label}
-              />
-            )
-            break
+          if (
+            "type" in assertSetting &&
+            assertSetting.type === "title" &&
+            assertSetting.value
+          ) {
+            return <SettingSectionTitle key={index} title={assertSetting.value} />
           }
-          case "string": {
+          if ("type" in assertSetting) {
             return null
           }
-          default: {
-            return null
+
+          let ControlElement: React.ReactNode
+          switch (typeof settingObject[assertSetting.key]) {
+            case "boolean": {
+              ControlElement = (
+                <SettingSwitch
+                  className="mt-4"
+                  checked={settingObject[assertSetting.key] as boolean}
+                  onCheckedChange={(checked) =>
+                    assertSetting.onChange(checked as T[keyof T])}
+                  label={assertSetting.label}
+                />
+              )
+              break
+            }
+            case "string": {
+              return null
+            }
+            default: {
+              return null
+            }
           }
-        }
-        return (
-          <SettingItemGroup key={index}>
-            {ControlElement}
-            {!!assertSetting.description && (
-              <SettingDescription>{assertSetting.description}</SettingDescription>
-            )}
-          </SettingItemGroup>
-        )
-      })
+          return (
+            <SettingItemGroup key={index}>
+              {ControlElement}
+              {!!assertSetting.description && (
+                <SettingDescription>{assertSetting.description}</SettingDescription>
+              )}
+            </SettingItemGroup>
+          )
+        })
     }
