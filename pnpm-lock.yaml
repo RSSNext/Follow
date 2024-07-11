@@ -293,6 +293,9 @@ importers:
       '@electron-forge/maker-squirrel':
         specifier: 7.4.0
         version: 7.4.0
+      '@electron-forge/maker-zip':
+        specifier: 7.4.0
+        version: 7.4.0
       '@electron-forge/plugin-fuses':
         specifier: 7.4.0
         version: 7.4.0(@electron/fuses@1.8.0)
@@ -808,6 +811,10 @@ packages:
 
   '@electron-forge/maker-squirrel@7.4.0':
     resolution: {integrity: sha512-mCQyufnSNfjffiKho59ZqVg4W601zGOl6h01OyfDwjOU/G4iQtpnnDEOXGe26q7OVT5ORb1WDnfyGgBeJ6Ge7g==}
+    engines: {node: '>= 16.4.0'}
+
+  '@electron-forge/maker-zip@7.4.0':
+    resolution: {integrity: sha512-UGbMdpuK/P29x1FFRWNOs3bNz+7QNFWVWyTM5hcWqib66cNuUmoaPifQyuwW2POIrIohrxlzLK87/i9Zc8g4dA==}
     engines: {node: '>= 16.4.0'}
 
   '@electron-forge/plugin-base@7.4.0':
@@ -3296,6 +3303,10 @@ packages:
   cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
     engines: {node: '>= 8'}
+
+  cross-zip@4.0.1:
+    resolution: {integrity: sha512-n63i0lZ0rvQ6FXiGQ+/JFCKAUyPFhLQYJIqKaa+tSJtfKeULF/IDNDAbdnSIxgS4NTuw2b0+lj8LzfITuq+ZxQ==}
+    engines: {node: '>=12.10'}
 
   cspell-config-lib@8.9.1:
     resolution: {integrity: sha512-gSXAazmeX+CCpFCsNQQqHRO/nn01kMnCoB0v+7AM0Bip2iDXRl+LmUEJGNcnFaiJG3liaZ8+S5/qCDbza010VQ==}
@@ -7245,6 +7256,17 @@ snapshots:
       - bluebird
       - supports-color
 
+  '@electron-forge/maker-zip@7.4.0':
+    dependencies:
+      '@electron-forge/maker-base': 7.4.0
+      '@electron-forge/shared-types': 7.4.0
+      cross-zip: 4.0.1
+      fs-extra: 10.1.0
+      got: 11.8.6
+    transitivePeerDependencies:
+      - bluebird
+      - supports-color
+
   '@electron-forge/plugin-base@7.4.0':
     dependencies:
       '@electron-forge/shared-types': 7.4.0
@@ -10289,6 +10311,8 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  cross-zip@4.0.1: {}
 
   cspell-config-lib@8.9.1:
     dependencies:
