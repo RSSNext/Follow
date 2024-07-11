@@ -178,12 +178,6 @@ importers:
       jotai:
         specifier: 2.8.4
         version: 2.8.4(@types/react@18.3.3)(react@18.3.1)
-      jotai-dark:
-        specifier: 0.4.0
-        version: 0.4.0(jotai-effect@1.0.0(jotai@2.8.4(@types/react@18.3.3)(react@18.3.1)))(jotai@2.8.4(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)
-      jotai-effect:
-        specifier: 1.0.0
-        version: 1.0.0(jotai@2.8.4(@types/react@18.3.3)(react@18.3.1))
       lethargy:
         specifier: 1.0.9
         version: 1.0.9
@@ -4601,25 +4595,6 @@ packages:
 
   jose@5.6.2:
     resolution: {integrity: sha512-F1t1/WZJ4JdmCE/XoMYw1dPOW5g8JF0xGm6Ox2fwaCAPlCzt+4Bh0EWP59iQuZNHHauDkCdjx+kCZSh5z/PGow==}
-
-  jotai-dark@0.4.0:
-    resolution: {integrity: sha512-1RUmCRqzZFcFrVJwuG4BZ3kDPNjElFXA1FH8X77rPqhFDkSy79rpTrzfMBAx2pZauQvXBRQWN3fJ1p+CF2JO4g==}
-    peerDependencies:
-      jotai: '>=2.5.0'
-      jotai-effect: '*'
-      react: '>=18.2.0'
-    peerDependenciesMeta:
-      jotai:
-        optional: true
-      jotai-effect:
-        optional: true
-      react:
-        optional: true
-
-  jotai-effect@1.0.0:
-    resolution: {integrity: sha512-eCgKKG4BACDzuJGYTu0xZRk1C1MEOvbAhC3L8w7YufQ2lSLORwNX/WFnCuZxLFX0sDLkTUeoUzOYaw8wnXY+UQ==}
-    peerDependencies:
-      jotai: '>=2.5.0'
 
   jotai@2.8.4:
     resolution: {integrity: sha512-f6jwjhBJcDtpeauT2xH01gnqadKEySwwt1qNBLvAXcnojkmb76EdqRt05Ym8IamfHGAQz2qMKAwftnyjeSoHAA==}
@@ -11967,16 +11942,6 @@ snapshots:
   jiti@1.21.6: {}
 
   jose@5.6.2: {}
-
-  jotai-dark@0.4.0(jotai-effect@1.0.0(jotai@2.8.4(@types/react@18.3.3)(react@18.3.1)))(jotai@2.8.4(@types/react@18.3.3)(react@18.3.1))(react@18.3.1):
-    optionalDependencies:
-      jotai: 2.8.4(@types/react@18.3.3)(react@18.3.1)
-      jotai-effect: 1.0.0(jotai@2.8.4(@types/react@18.3.3)(react@18.3.1))
-      react: 18.3.1
-
-  jotai-effect@1.0.0(jotai@2.8.4(@types/react@18.3.3)(react@18.3.1)):
-    dependencies:
-      jotai: 2.8.4(@types/react@18.3.3)(react@18.3.1)
 
   jotai@2.8.4(@types/react@18.3.3)(react@18.3.1):
     optionalDependencies:

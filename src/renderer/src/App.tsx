@@ -5,7 +5,6 @@ import { Outlet } from "react-router-dom"
 import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"
 import { Logo } from "./components/icons/logo"
-import { useDark } from "./hooks/common/useDark"
 import { tipcClient } from "./lib/client"
 import { appLog } from "./lib/log"
 import { getOS } from "./lib/utils"
@@ -13,7 +12,6 @@ import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"
 
 function App() {
-  useDark()
   useEffect(() => {
     const cleanup = handlers?.invalidateQuery.listen((queryKey) => {
       queryClient.invalidateQueries({

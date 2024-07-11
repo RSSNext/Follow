@@ -15,7 +15,6 @@ import { useDark } from "@renderer/hooks/common"
 import { tipcClient } from "@renderer/lib/client"
 import { getOS } from "@renderer/lib/utils"
 import { useQuery } from "@tanstack/react-query"
-import { useCallback } from "react"
 import { bundledThemes } from "shiki/themes"
 
 import { SettingSwitch } from "../control"
@@ -25,10 +24,7 @@ import { SettingsTitle } from "../title"
 const SettingBuilder = createSettingBuilder(useUISettingValue)
 
 export const SettingAppearance = () => {
-  const { isDark, toggleDark } = useDark()
-  const saveDarkSetting = useCallback(() => {
-    toggleDark()
-  }, [])
+  const isDark = useDark()
 
   return (
     <>
@@ -44,7 +40,9 @@ export const SettingAppearance = () => {
               key="darkMode"
               label="Dark Mode"
               checked={isDark}
-              onCheckedChange={saveDarkSetting}
+              onCheckedChange={(e) => {
+                tipcClient?.setAppearance(e ? "dark" : "light")
+              }}
             />,
             {
               label: "Opaque Sidebars",
