@@ -12,7 +12,7 @@ export const initSentry = async () => {
   ])
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
-    environment: import.meta.env.VITE_BUILD_TYPE ?? "development",
+    environment: import.meta.env.VITE_BUILD_TYPE ?? "internal",
     integrations: [
       Sentry.moduleMetadataIntegration(),
       Sentry.reactRouterV6BrowserTracingIntegration({
