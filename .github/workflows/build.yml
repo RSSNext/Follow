@@ -105,7 +105,10 @@ jobs:
         with:
           name: ${{ runner.os }}
           path: |
-            out/make/*
+            out/**/*.dmg
+            out/**/*.exe
+            out/**/*.AppImage
+            out/**/*.yml
           retention-days: 90
 
       - name: Get Package Version
@@ -117,8 +120,11 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: v${{ steps.get-package-version.outputs.version }}
-          body: ''
           draft: true
           prerelease: false
+          tag_name: v${{ steps.get-package-version.outputs.version }}
           files: |
-            out/make/*
+            out/**/*.dmg
+            out/**/*.exe
+            out/**/*.AppImage
+            out/**/*.yml
