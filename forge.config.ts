@@ -61,6 +61,7 @@ const config: ForgeConfig = {
   packagerConfig: {
     appBundleId: "is.follow",
     icon: "resources/icon",
+    extraResource: ["./resources/app-update.yml"],
 
     afterCopy: [cleanSources],
     asar: true,
