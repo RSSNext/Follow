@@ -1,24 +1,68 @@
 import { jotaiStore } from "@renderer/lib/jotai"
+import { getStorageNS } from "@renderer/lib/ns"
 import { atom, useAtomValue } from "jotai"
-import { useLayoutEffect } from "react"
+import { atomWithStorage } from "jotai/utils"
+import { useCallback, useLayoutEffect } from "react"
 import { useMediaQuery } from "usehooks-ts"
 
-const darkAtom = atom(false)
-export function useDark() {
-  return useAtomValue(darkAtom)
+const useDarkQuery = () => useMediaQuery("(prefers-color-scheme: dark)")
+type ColorMode = "light" | "dark" | "system"
+const darkAtom = !window.electron ?
+  atomWithStorage(
+    getStorageNS("color-mode"),
+    "system" as ColorMode,
+    undefined,
+    {
+      getOnInit: true,
+    },
+  ) :
+  atom("system" as ColorMode)
+function useDarkElectron() {
+  return useAtomValue(darkAtom) === "dark"
 }
+function useDarkWebApp() {
+  const systemIsDark = useDarkQuery()
+  const mode = useAtomValue(darkAtom)
+  return mode === "dark" || (mode === "system" && systemIsDark)
+}
+export const useDark = window.electron ? useDarkElectron : useDarkWebApp
 
-export const useSyncDark = () => {
-  const isDark = useMediaQuery("(prefers-color-scheme: dark)")
+const useSyncDarkElectron = () => {
+  const appIsDark = useDarkQuery()
 
   useLayoutEffect(() => {
-    jotaiStore.set(darkAtom, isDark)
+    document.documentElement.dataset.theme = appIsDark ? "dark" : "light"
+    disableTransition(["[role=switch]>*"])
 
-    document.documentElement.dataset.theme = isDark ? "dark" : "light"
-    disableTransition([
-      "[role=switch]>*",
-    ])
-  }, [isDark])
+    jotaiStore.set(darkAtom, appIsDark ? "dark" : "light")
+  }, [appIsDark])
+}
+
+const useSyncDarkWebApp = () => {
+  const colorMode = useAtomValue(darkAtom)
+  const systemIsDark = useDarkQuery()
+  useLayoutEffect(() => {
+    const realColorMode: Exclude<ColorMode, "system"> =
+      colorMode === "system" ? (systemIsDark ? "dark" : "light") : colorMode
+    document.documentElement.dataset.theme = realColorMode
+    disableTransition(["[role=switch]>*"])
+  }, [colorMode, systemIsDark])
+}
+
+export const useSyncDark = window.electron ?
+  useSyncDarkElectron :
+  useSyncDarkWebApp
+
+export const useSetDarkInWebApp = () => {
+  const systemColorMode = useDarkQuery() ? "dark" : "light"
+  return useCallback(
+    (colorMode: Exclude<ColorMode, "system">) =>
+      jotaiStore.set(
+        darkAtom,
+        colorMode === systemColorMode ? "system" : colorMode,
+      ),
+    [systemColorMode],
+  )
 }
 
 function disableTransition(disableTransitionExclude: string[] = []) {
