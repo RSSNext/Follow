@@ -3,16 +3,6 @@ name: Build
 on:
   push:
   workflow_dispatch:
-    inputs:
-      build-type:
-        description: 'Build Type'
-        type: choice
-        required: true
-        default: canary
-        options:
-          - internal
-          - beta
-          - stable
 
 env:
   VITE_WEB_URL: ${{ vars.VITE_WEB_URL }}
@@ -20,7 +10,7 @@ env:
   VITE_IMGPROXY_URL: ${{ vars.VITE_IMGPROXY_URL }}
   VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
   VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}
-  VITE_BUILD_TYPE: ${{ github.event.inputs.build-type || 'internal' }}
+  VITE_BUILD_TYPE: internal
 
 jobs:
   release:
@@ -116,7 +106,7 @@ jobs:
         uses: ./.github/actions/setup-version
 
       - name: Create Release Draft
-        if: github.event_name == 'workflow_dispatch'
+        if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@v2
         with:
           name: v${{ steps.version.outputs.APP_VERSION }}

@@ -7,8 +7,14 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: 'Get Version'
+    - name: 'Write Version'
       id: version
       shell: bash
       run: |
-        APP_VERSION=$(node -p "require('./package.json').version")
+        if [ "${{ github.ref_type }}" == "tag" ]; then
+          APP_VERSION=$(echo "${{ github.ref_name }}" | sed 's/^v//')
+        else
+          APP_VERSION=$(node -p "require('./package.json').version")
+        fi
+        echo $APP_VERSION
+        echo "APP_VERSION=$APP_VERSION" >> "$GITHUB_OUTPUT"
