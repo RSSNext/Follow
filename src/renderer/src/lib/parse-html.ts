@@ -70,8 +70,27 @@ export const parseHtml = async (
       jsxs: (type, props, key) => jsxs(type as any, props, key),
       passNode: true,
       components: {
-        a: ({ node, ...props }) => createElement(LinkWithTooltip, { ...props } as any),
-        img: ({ node, ...props }) => createElement(Image, { ...props, popper: true }),
+        a: ({ node, ...props }) =>
+          createElement(LinkWithTooltip, { ...props } as any),
+        img: ({ node, ...props }) => {
+          if (node?.properties.inline) {
+            return createElement("img", {
+              src: props.src,
+              style: { maxWidth: "100%", display: "inline" },
+            })
+          }
+          return createElement(Image, { ...props, popper: true })
+        },
+        p: ({ node, ...props }) => {
+          if (node?.children) {
+            for (const item of node.children) {
+              item.type === "element" &&
+              item.tagName === "img" &&
+              ((item.properties as any).inline = true)
+            }
+          }
+          return createElement(Fragment, undefined, props.children)
+        },
         pre: ({ node, ...props }) => {
           if (!props.children) return null
 
