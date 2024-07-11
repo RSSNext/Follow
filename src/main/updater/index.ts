@@ -8,7 +8,7 @@ import { getMainWindow } from "../window"
 import { CustomGitHubProvider } from "./custom-github-provider"
 
 // skip auto update in dev mode
-const disabled = false
+const disabled = isDev
 
 export const quitAndInstall = async () => {
   autoUpdater.quitAndInstall()
