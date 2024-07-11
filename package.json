@@ -122,6 +122,7 @@
     "@electron-forge/cli": "7.4.0",
     "@electron-forge/maker-dmg": "7.4.0",
     "@electron-forge/maker-squirrel": "7.4.0",
+    "@electron-forge/maker-zip": "7.4.0",
     "@electron-forge/plugin-fuses": "7.4.0",
     "@electron-forge/publisher-github": "7.4.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
