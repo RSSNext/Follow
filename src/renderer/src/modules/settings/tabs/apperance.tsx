@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
-import { useDark } from "@renderer/hooks/common"
+import { useDark, useSetDarkInWebApp } from "@renderer/hooks/common"
 import { tipcClient } from "@renderer/lib/client"
 import { getOS } from "@renderer/lib/utils"
 import { useQuery } from "@tanstack/react-query"
@@ -25,6 +25,8 @@ const SettingBuilder = createSettingBuilder(useUISettingValue)
 
 export const SettingAppearance = () => {
   const isDark = useDark()
+
+  const setDarkInWebApp = useSetDarkInWebApp()
 
   return (
     <>
@@ -41,7 +43,11 @@ export const SettingAppearance = () => {
               label="Dark Mode"
               checked={isDark}
               onCheckedChange={(e) => {
-                tipcClient?.setAppearance(e ? "dark" : "light")
+                if (window.electron) {
+                  tipcClient?.setAppearance(e ? "dark" : "light")
+                } else {
+                  setDarkInWebApp(e ? "dark" : "light")
+                }
               }}
             />,
             {
