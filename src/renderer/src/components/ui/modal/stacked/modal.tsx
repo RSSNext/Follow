@@ -1,6 +1,8 @@
 import * as Dialog from "@radix-ui/react-dialog"
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
+import { AppErrorBoundary } from "@renderer/components/common/AppErrorBoundary"
 import { m } from "@renderer/components/common/Motion"
+import { ErrorComponentType } from "@renderer/components/errors"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useAnimationControls, useDragControls } from "framer-motion"
@@ -148,7 +150,9 @@ export const ModalInternal: Component<{
     )
     const finalChildren = (
       <CurrentModalContext.Provider value={ModalContextProps}>
-        {children ?? createElement(content, ModalProps)}
+        <AppErrorBoundary errorType={ErrorComponentType.Modal}>
+          {children ?? createElement(content, ModalProps)}
+        </AppErrorBoundary>
       </CurrentModalContext.Provider>
     )
 

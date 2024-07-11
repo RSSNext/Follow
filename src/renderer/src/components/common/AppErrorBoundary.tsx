@@ -1,18 +1,24 @@
 import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC, PropsWithChildren } from "react"
-import { useCallback } from "react"
+import { createElement, useCallback } from "react"
+
+import type { ErrorComponentType } from "../errors"
+import { getErrorFallback } from "../errors"
 
 export interface AppErrorBoundaryProps extends PropsWithChildren {
   height?: number | string
+  errorType: ErrorComponentType
 }
 
-export const AppErrorBoundary: FC<AppErrorBoundaryProps> = (props) => {
+export const AppErrorBoundary: FC<AppErrorBoundaryProps> = ({
+  errorType,
+  children,
+}) => {
   const fallbackRender: FallbackRender = useCallback(
-    (fallbackProps) => (
-      <ErrorFallback {...fallbackProps} height={props.height} />
-    ),
-    [props.height],
+    (fallbackProps) =>
+      createElement(getErrorFallback(errorType), fallbackProps),
+    [errorType],
   )
 
   const onError = useCallback((error: unknown, componentStack?: string) => {
@@ -21,13 +27,7 @@ export const AppErrorBoundary: FC<AppErrorBoundaryProps> = (props) => {
 
   return (
     <ErrorBoundary fallback={fallbackRender} onError={onError}>
-      {props.children}
+      {children}
     </ErrorBoundary>
   )
 }
-
-export type AppErrorFallbackProps = Parameters<FallbackRender>[0] & {
-  height?: number | string
-}
-
-const ErrorFallback = (_props: AppErrorFallbackProps) => <div>App has crashed</div>
