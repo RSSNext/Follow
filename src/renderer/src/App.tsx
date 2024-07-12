@@ -2,6 +2,7 @@ import { queryClient } from "@renderer/lib/query-client"
 import { useEffect, useLayoutEffect } from "react"
 import { Outlet } from "react-router-dom"
 
+import { env } from "../../env.js"
 import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"
 import { Logo } from "./components/icons/logo"
@@ -11,6 +12,9 @@ import { getOS } from "./lib/utils"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"
 
+if (import.meta.env.DEV) {
+  console.info("[renderer] env loaded:", env)
+}
 function App() {
   useEffect(() => {
     const cleanup = handlers?.invalidateQuery.listen((queryKey) => {

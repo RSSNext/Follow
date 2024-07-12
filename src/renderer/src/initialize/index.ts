@@ -1,3 +1,4 @@
+import { env } from "@env"
 import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
 import { browserDB } from "@renderer/database"
@@ -65,7 +66,7 @@ export const initializeApp = async () => {
 
   // Initialize the auth config
   authConfigManager.setConfig({
-    baseUrl: import.meta.env.VITE_API_URL,
+    baseUrl: env.VITE_API_URL,
     basePath: "/auth",
     credentials: "include",
   })

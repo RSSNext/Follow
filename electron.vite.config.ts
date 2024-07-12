@@ -12,16 +12,24 @@ export default defineConfig({
     resolve: {
       alias: {
         "@shared": resolve("src/shared/src"),
+        "@env": resolve("./src/env.ts"),
       },
     },
   },
-  preload: {},
+  preload: {
+    resolve: {
+      alias: {
+        "@env": resolve("./src/env.ts"),
+      },
+    },
+  },
   renderer: {
     resolve: {
       alias: {
         "@renderer": resolve("src/renderer/src"),
         "@shared": resolve("src/shared/src"),
         "@pkg": resolve("./package.json"),
+        "@env": resolve("./src/env.ts"),
       },
     },
     plugins: [
