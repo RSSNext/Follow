@@ -12,6 +12,7 @@ import { Routes } from "@renderer/lib/enum"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { clamp, cn } from "@renderer/lib/utils"
 import { useWheel } from "@use-gesture/react"
+import type { MotionValue } from "framer-motion"
 import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
 import { useCallback, useLayoutEffect, useRef } from "react"
@@ -60,6 +61,7 @@ export function FeedColumn() {
     },
     [active, navigateBackHome, spring],
   )
+
   useLayoutEffect(() => {
     const { view } = getRouteParams()
     if (view !== undefined) {
@@ -115,7 +117,6 @@ export function FeedColumn() {
   const normalStyle =
     !window.electron || window.electron.process.platform !== "darwin"
 
-  const reduceMotion = useReduceMotion()
   return (
     <Vibrancy
       className="relative flex h-full flex-col gap-3 pt-2.5"
@@ -178,10 +179,7 @@ export function FeedColumn() {
         ))}
       </div>
       <div className="size-full overflow-hidden" ref={carouselRef}>
-        <m.div
-          className="flex h-full"
-          style={{ x: reduceMotion ? -active * 256 : spring }}
-        >
+        <SwipeWrapper active={active} spring={spring}>
           {views.map((item, index) => (
             <section
               key={item.name}
@@ -195,7 +193,7 @@ export function FeedColumn() {
               )}
             </section>
           ))}
-        </m.div>
+        </SwipeWrapper>
       </div>
       {APP_VERSION?.[0] === "0" && (
         <div className="pointer-events-none absolute bottom-3 w-full text-center text-xs opacity-20">
@@ -206,5 +204,35 @@ export function FeedColumn() {
 
       <NetworkStatusIndicator />
     </Vibrancy>
+  )
+}
+
+const SwipeWrapper: Component<{
+  active: number
+  spring: MotionValue<number>
+}> = ({ children, active, spring }) => {
+  const reduceMotion = useReduceMotion()
+
+  if (reduceMotion) {
+    return (
+      <div
+        className="flex h-full"
+        style={{
+          transform: `translateX(${-active * 256}px)`,
+        }}
+      >
+        {children}
+      </div>
+    )
+  }
+  return (
+    <m.div
+      className="flex h-full"
+      style={{
+        x: spring,
+      }}
+    >
+      {children}
+    </m.div>
   )
 }
