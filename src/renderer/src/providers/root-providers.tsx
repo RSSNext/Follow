@@ -8,8 +8,8 @@ import { LazyMotion, MotionConfig } from "framer-motion"
 import { Provider } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 
-import { StableRouterProvider } from "./biz-router-provider"
 import { ContextMenuProvider } from "./context-menu-provider"
+import { StableRouterProvider } from "./stable-router-provider"
 import { SettingSync } from "./ui-setting-sync"
 import { UserProvider } from "./user-provider"
 
