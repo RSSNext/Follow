@@ -1,4 +1,3 @@
-/* eslint-disable @eslint-react/dom/no-dangerously-set-innerhtml */
 import { useUISettingSelector } from "@renderer/atoms/settings/ui"
 import { cn } from "@renderer/lib/utils"
 import type { FC } from "react"
