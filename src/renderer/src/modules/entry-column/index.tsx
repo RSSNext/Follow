@@ -81,6 +81,8 @@ export function EntryColumn() {
     batchMarkUnread([feedId, activeEntryId])
   }, [activeEntry?.feeds.id, activeEntryId, isCollection, isPendingEntry])
 
+  const isInteracted = useRef(false)
+
   const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
 
   const virtuosoOptions = {
@@ -96,10 +98,18 @@ export function EntryColumn() {
         )
       }, [isFetchingNextPage]),
     },
-    rangeChanged: handleMarkReadInRange,
+    rangeChanged: (...args: any[]) => {
+      // @ts-expect-error
+      handleMarkReadInRange && handleMarkReadInRange(...args, isInteracted.current)
+    },
     totalCount: entries.totalCount,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entriesIds,
+    onScroll: () => {
+      if (!isInteracted.current) {
+        isInteracted.current = true
+      }
+    },
     itemContent: useCallback(
       (_, entryId: string) => {
         if (!entryId) return null
@@ -232,7 +242,8 @@ const ListHeader: FC<{
         <div
           className={cn(
             "relative z-[1] flex items-center gap-1 self-baseline text-zinc-500",
-            (isInCollectionList || !headerTitle) && "pointer-events-none opacity-0",
+            (isInCollectionList || !headerTitle) &&
+            "pointer-events-none opacity-0",
           )}
           onClick={(e) => e.stopPropagation()}
         >

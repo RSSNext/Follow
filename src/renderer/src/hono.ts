@@ -3,7 +3,7 @@ import * as hono_utils_http_status from 'hono/utils/http-status';
 import * as hono from 'hono';
 import * as hono_types from 'hono/types';
 
-declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
+declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
     "/profiles": {
         $get: {
             input: {
@@ -971,6 +971,6 @@ declare const routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         };
     };
 }, "/">;
-type AppType = typeof routes;
+type AppType = typeof _routes;
 
 export type { AppType };

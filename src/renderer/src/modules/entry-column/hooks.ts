@@ -32,7 +32,8 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
   )
 
   const handleRenderAsRead = useCallback(
-    async ({ startIndex, endIndex }: ListRange) => {
+    async ({ startIndex, endIndex }: ListRange, enabled?: boolean) => {
+      if (!enabled) return
       const idSlice = entriesIds?.slice(startIndex, endIndex)
 
       if (!idSlice) return

@@ -14,7 +14,7 @@ const createDefaultSettings = () => ({
   // mark unread
   scrollMarkUnread: true,
   hoverMarkUnread: true,
-  renderMarkUnread: true,
+  renderMarkUnread: false,
 })
 export const {
   useSettingKey: useGeneralSettingKey,
