@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/no-tabs */
 import { cn } from "@renderer/lib/utils"
 
 export const EmptyIcon: Component = ({ className }) => (

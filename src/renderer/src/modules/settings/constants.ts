@@ -1,7 +1,6 @@
 import type { SettingPageConfig } from "./utils"
 
 function getSettings() {
-  // eslint-disable-next-line unicorn/prefer-string-raw
   const map = import.meta.glob("../../pages/settings/\\(settings\\)/*", { eager: true })
 
   const settings = [] as {

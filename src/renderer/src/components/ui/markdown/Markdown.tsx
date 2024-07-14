@@ -1,4 +1,3 @@
-/* eslint-disable @eslint-react/dom/no-dangerously-set-innerhtml */
 import { cn } from "@renderer/lib/utils"
 import markdownit from "markdown-it"
 import { useMemo } from "react"

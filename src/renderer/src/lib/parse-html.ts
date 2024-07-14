@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
 import { Image } from "@renderer/components/ui/image"
 import { LinkWithTooltip } from "@renderer/components/ui/link"

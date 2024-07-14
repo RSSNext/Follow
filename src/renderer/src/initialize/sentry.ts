@@ -26,7 +26,6 @@ export const initSentry = async () => {
       }),
       posthog.sentryIntegration({
         organization: "follow-rg",
-        // eslint-disable-next-line unicorn/numeric-separators-style
         projectId: 4507570439979008,
         severityAllowList: ["error", "info"], // optional: here is set to handle captureMessage (info) and captureException (error)
       },
