@@ -288,10 +288,14 @@ const SearchResultCount: FC<{
     hasKeyword && (
       <Tooltip>
         <TooltipTrigger asChild>
-          <small className="shrink-0 opacity-80">
+          <small className="center shrink-0 gap-1 opacity-80">
             {count}
             {" "}
             {pluralize("result", count)}
+            {" "}
+            (Local mode)
+
+            <i className="i-mingcute-question-line" />
           </small>
         </TooltipTrigger>
         <TooltipContent>
