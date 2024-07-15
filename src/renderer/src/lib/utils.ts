@@ -146,3 +146,13 @@ export const pluralize = (
   }
   return postfix(noun, rule)
 }
+
+export const omitObjectUndefinedValue = (obj: Record<string, any>) => {
+  const newObj = {}
+  for (const key in obj) {
+    if (obj[key] !== undefined) {
+      newObj[key] = obj[key]
+    }
+  }
+  return newObj
+}
