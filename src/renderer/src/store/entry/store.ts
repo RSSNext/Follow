@@ -1,5 +1,8 @@
 import { apiClient } from "@renderer/lib/api-fetch"
-import { getEntriesParams } from "@renderer/lib/utils"
+import {
+  getEntriesParams,
+  omitObjectUndefinedValue,
+} from "@renderer/lib/utils"
 import type {
   CombinedEntryModel,
   EntryModel,
@@ -7,7 +10,7 @@ import type {
 } from "@renderer/models"
 import { EntryService } from "@renderer/services"
 import { produce } from "immer"
-import { merge, omit } from "lodash-es"
+import { isNil, merge, omit } from "lodash-es"
 
 import { isHydrated } from "../../initialize/hydrate"
 import { feedActions } from "../feed"
@@ -98,7 +101,8 @@ class EntryActions {
       produce(state, (draft) => {
         const entry = draft.flatMapEntries[entryId]
         if (!entry) return
-        Object.assign(entry, changed)
+        Object.assign(entry, omitObjectUndefinedValue(changed))
+
         return draft
       }),
     )
@@ -204,6 +208,12 @@ class EntryActions {
     this.patch(entryId, {
       read,
     })
+    if (!isHydrated()) return
+    if (!isNil(read)) {
+      EntryService.bulkStoreReadStatus({
+        [entryId]: read,
+      })
+    }
   }
 
   markReadByFeedId(feedId: string) {

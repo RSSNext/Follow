@@ -26,6 +26,11 @@ export const setHydrated = (v: boolean) => {
   _isHydrated = v
 }
 
+/**
+ * @description Check if database data is hydrated to store, or current database is ready.
+ * If users disabled data persist, it's always false, that means you can't do operation with database.
+ *
+ */
 export const isHydrated = () => _isHydrated
 
 export const hydrateDatabaseToStore = async () => {

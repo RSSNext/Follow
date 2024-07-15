@@ -73,10 +73,26 @@ export const useEntriesByView = () => {
     view,
     ...(unreadOnly === true && { read: false }),
   })
-  const entries = useEntryIdsByFeedIdOrView(isAllFeeds ? view : feedId!, {
-    unread: unreadOnly,
-    view,
-  })
+  const remoteEntryIds = query.data?.pages
+    ?.map((page) => page.data?.map((entry) => entry.entries.id))
+    .flat() as string[]
+
+  const currentEntries = useEntryIdsByFeedIdOrView(
+    isAllFeeds ? view : feedId!,
+    {
+      unread: unreadOnly,
+      view,
+    },
+  )
+
+  // If remote data is not available, we use the local data, get the local data length
+  // FIXME: remote first, then local store data
+  // NOTE: We still can't use the store's data handling directly.
+  // Imagine that the local data may be persistent, and then if there are incremental updates to the data on the server side,
+  // then we have no way to incrementally update the data.
+  // We need to add an interface to incrementally update the data based on the version hash.
+
+  const entries = remoteEntryIds || currentEntries
 
   useHotkeys(
     shortcuts.entries.refetch.key,
@@ -93,16 +109,12 @@ export const useEntriesByView = () => {
   useEffect(() => {
     prevEntries.current = []
   }, [routeParams.feedId, routeParams.view])
-  const localEntries = useMemo(() => {
+  const mergedEntries = useMemo(() => {
     if (!unreadOnly) {
       prevEntries.current = []
       return entries
     }
     if (!prevEntries.current) {
-      prevEntries.current = entries
-      return entries
-    }
-    if (entries.length > prevEntries.current.length) {
       prevEntries.current = entries
       return entries
     }
@@ -112,25 +124,16 @@ export const useEntriesByView = () => {
     return nextIds
   }, [entries, prevEntries, unreadOnly])
 
-  const sortLocalEntries = () =>
+  const sortEntries = () =>
     isCollection ?
-      sortEntriesIdByStarAt(localEntries) :
-      sortEntriesIdByEntryPublishedAt(localEntries)
-  const remoteEntryIds = query.data?.pages
-    ?.map((page) => page.data?.map((entry) => entry.entries.id))
-    .flat() as string[]
+      sortEntriesIdByStarAt(mergedEntries) :
+      sortEntriesIdByEntryPublishedAt(mergedEntries)
 
   return {
     ...query,
 
-    // If remote data is not available, we use the local data, get the local data length
-    // FIXME: remote first, then local store data
-    // NOTE: We still can't use the store's data handling directly.
-    // Imagine that the local data may be persistent, and then if there are incremental updates to the data on the server side,
-    // then we have no way to incrementally update the data.
-    // We need to add an interface to incrementally update the data based on the version hash.
-    entriesIds: remoteEntryIds ?? sortLocalEntries(),
-    totalCount: query.data?.pages?.[0]?.total ?? localEntries.length,
+    entriesIds: sortEntries(),
+    totalCount: query.data?.pages?.[0]?.total ?? mergedEntries.length,
   }
 }
 
