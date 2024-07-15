@@ -17,7 +17,7 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { ROUTE_ENTRY_PENDING } from "@renderer/lib/constants"
+import { levels, ROUTE_ENTRY_PENDING } from "@renderer/lib/constants"
 import { cn, pluralize } from "@renderer/lib/utils"
 import { getFeedById } from "@renderer/store/feed"
 import { searchActions, useSearchStore } from "@renderer/store/search"
@@ -252,6 +252,8 @@ const SearchItem = memo(function Item({
         navigateEntry({
           feedId: item.feedId!,
           entryId: item.entryId,
+
+          level: levels.feed,
         })
       }}
     >
@@ -295,7 +297,6 @@ const SearchResultCount: FC<{
             {pluralize("result", count)}
             {" "}
             (Local mode)
-
             <i className="i-mingcute-question-line" />
           </small>
         </TooltipTrigger>

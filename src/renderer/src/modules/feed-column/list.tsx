@@ -103,7 +103,6 @@ export function FeedList({
                 navigate({
                   entryId: null,
                   feedId: null,
-                  level: levels.view,
                   view,
                 })
               }

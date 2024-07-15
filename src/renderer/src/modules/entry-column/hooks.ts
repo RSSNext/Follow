@@ -73,6 +73,7 @@ export const useEntriesByView = () => {
     view,
     ...(unreadOnly === true && { read: false }),
   })
+
   const entries = useEntryIdsByFeedIdOrView(isAllFeeds ? view : feedId!, {
     unread: unreadOnly,
     view,

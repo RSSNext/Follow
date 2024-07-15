@@ -8,7 +8,7 @@ import { ProfileButton } from "@renderer/components/user-button"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
-import { levels, views } from "@renderer/lib/constants"
+import { views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { Routes } from "@renderer/lib/enum"
 import { shortcuts } from "@renderer/lib/shortcuts"
@@ -36,7 +36,6 @@ const useBackHome = (active: number) => {
         feedId: null,
         entryId: null,
         view: overvideActive ?? active,
-        level: levels.view,
       })
     },
     [active, navigate],

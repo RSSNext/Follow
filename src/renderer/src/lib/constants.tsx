@@ -3,10 +3,8 @@ import * as semver from "semver"
 import { getStorageNS } from "./ns"
 
 export const levels = {
-  view: "view",
   folder: "folder",
   feed: "feed",
-  entry: "entry",
 }
 
 export const views = [
@@ -86,4 +84,6 @@ export const ROUTE_FEED_PENDING = "all"
 export const ROUTE_ENTRY_PENDING = "pending"
 export const ROUTE_FEED_IN_FOLDER = "folder-"
 
-export const channel = import.meta.env.DEV ? "development" : ((semver.prerelease(APP_VERSION)?.[0] as string) || "stable")
+export const channel = import.meta.env.DEV ?
+  "development" :
+    (semver.prerelease(APP_VERSION)?.[0] as string) || "stable"
