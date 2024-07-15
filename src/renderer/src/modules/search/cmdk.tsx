@@ -24,6 +24,7 @@ import { getFeedById } from "@renderer/store/feed"
 import { searchActions, useSearchStore } from "@renderer/store/search"
 import { SearchType } from "@renderer/store/search/constants"
 import type { SearchInstance } from "@renderer/store/search/types"
+import { getSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import clsx from "clsx"
 import { Command } from "cmdk"
@@ -169,6 +170,7 @@ export const SearchCmdK: React.FC = () => {
                   return (
                     <SearchItem
                       key={entry.item.id}
+                      view={feed?.id ? getSubscriptionByFeedId(feed.id)?.view : undefined}
                       title={entry.item.title!}
                       feedId={entry.feedId}
                       entryId={entry.item.id}
@@ -193,6 +195,7 @@ export const SearchCmdK: React.FC = () => {
                 {renderedFeeds.map((feed) => (
                   <SearchItem
                     key={feed.item.id}
+                    view={getSubscriptionByFeedId(feed.item.id!)?.view}
                     title={feed.item.title!}
                     feedId={feed.item.id!}
                     entryId={ROUTE_ENTRY_PENDING}

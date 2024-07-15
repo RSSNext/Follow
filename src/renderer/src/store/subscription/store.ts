@@ -177,3 +177,8 @@ class SubscriptionActions {
 }
 
 export const subscriptionActions = new SubscriptionActions()
+
+export const getSubscriptionByFeedId = (feedId: FeedId) => {
+  const state = get()
+  return state.data[feedId]
+}
