@@ -82,7 +82,7 @@ export const SettingGeneral = () => {
               key: "dataPersist",
               label: "Persist data to offline usage",
               description:
-                "Data will be stored locally on your device for offline usage and speed up the data loading of the first screen. If you disable this, all local data will be removed.",
+                "Collects data to local data for offline access and provides local search feature.",
               onChange: (value) => setGeneralSetting("dataPersist", value),
             },
             {
