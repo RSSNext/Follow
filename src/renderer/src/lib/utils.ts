@@ -31,7 +31,7 @@ export function getEntriesParams({
     if (id === FEED_COLLECTION_LIST) {
       params.collected = true
     } else {
-      params.feedIdList = `${id}`.split(",")
+      params.feedIdList = id ? `${id}`.split(",") : undefined
     }
   } else if (level === levels.feed) {
     params.feedId = `${id}`
