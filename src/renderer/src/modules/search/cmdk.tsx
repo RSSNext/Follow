@@ -1,4 +1,5 @@
 import { setAppSearchOpen, useAppSearchOpen } from "@renderer/atoms/app"
+import { LoadMoreIndicator } from "@renderer/components/common/LoadMoreIndicator"
 import { EmptyIcon } from "@renderer/components/icons/empty"
 import { Logo } from "@renderer/components/icons/logo"
 import { SiteIcon } from "@renderer/components/site-icon"
@@ -32,7 +33,15 @@ const SearchCmdKContext = React.createContext<Promise<SearchInstance> | null>(
 export const SearchCmdK: React.FC = () => {
   const open = useAppSearchOpen()
 
-  const searchInstance = useMemo(() => searchActions.createLocalDbSearch(), [])
+  const [searchInstance, setSearchInstance] = React.useState(() =>
+    searchActions.createLocalDbSearch(),
+  )
+  React.useEffect(() => {
+    if (!open) return
+    // Refresh data
+    setPage(0)
+    setSearchInstance(() => searchActions.createLocalDbSearch())
+  }, [open])
 
   const entries = useSearchStore((s) => s.entries)
   const feeds = useSearchStore((s) => s.feeds)
@@ -65,6 +74,7 @@ export const SearchCmdK: React.FC = () => {
   const handleSearch = React.useCallback(
     async (value: string) => {
       const { search } = await searchInstance
+      setPage(0)
       startTransition(() => {
         search(value)
         const $scrollView = scrollViewRef.current
@@ -75,6 +85,34 @@ export const SearchCmdK: React.FC = () => {
     },
     [searchInstance],
   )
+  // Performance optimization
+  const [page, setPage] = React.useState(0)
+  const pageSize = 16
+  const renderedEntries = useMemo(
+    () => entries.slice(0, (page + 1) * pageSize),
+    [entries, page],
+  )
+
+  const renderedFeeds = useMemo(() => {
+    const delta = entries.length - renderedEntries.length
+    if (delta > pageSize) return []
+
+    const entriesTotalPage = Math.ceil(entries.length / pageSize)
+    const right =
+      entriesTotalPage === page + 1 ? delta : pageSize * page - entries.length
+    return feeds.slice(0, right)
+  }, [entries.length, feeds, page, renderedEntries.length])
+  const totalCount = entries.length + feeds.length
+  const renderedTotalCount = renderedEntries.length + renderedFeeds.length
+  const loadMore = React.useCallback(() => {
+    const totalPage = Math.ceil((entries.length + feeds.length) / pageSize)
+    setPage((p) => {
+      if (p + 1 < totalPage) return p + 1
+      return p
+    })
+  }, [entries.length, feeds.length])
+
+  const canLoadMore = totalCount > renderedTotalCount
   return (
     <SearchCmdKContext.Provider value={searchInstance}>
       <Command.Dialog
@@ -108,7 +146,7 @@ export const SearchCmdK: React.FC = () => {
           <Command.List className="flex w-full min-w-0 flex-col">
             <SearchPlaceholder />
 
-            {entries.length > 0 && (
+            {renderedEntries.length > 0 && (
               <Command.Group
                 heading={(
                   <SearchGroupHeading
@@ -118,7 +156,7 @@ export const SearchCmdK: React.FC = () => {
                 )}
                 className="flex w-full min-w-0 flex-col py-2"
               >
-                {entries.map((entry, index) => {
+                {renderedEntries.map((entry, index) => {
                   const feed = getFeedById(entry.feedId)
                   return (
                     <SearchItem
@@ -135,7 +173,7 @@ export const SearchCmdK: React.FC = () => {
                 })}
               </Command.Group>
             )}
-            {feeds.length > 0 && (
+            {renderedFeeds.length > 0 && (
               <Command.Group
                 heading={(
                   <SearchGroupHeading
@@ -145,7 +183,7 @@ export const SearchCmdK: React.FC = () => {
                 )}
                 className="py-2"
               >
-                {feeds.map((feed, index) => (
+                {renderedFeeds.map((feed, index) => (
                   <SearchItem
                     key={feed.item.id}
                     title={feed.item.title!}
@@ -161,7 +199,10 @@ export const SearchCmdK: React.FC = () => {
                 ))}
               </Command.Group>
             )}
+            {canLoadMore &&
+              <LoadMoreIndicator className="center w-full" onLoading={loadMore} />}
           </Command.List>
+
         </ScrollArea.ScrollArea>
         <SearchOptions />
       </Command.Dialog>
@@ -193,6 +234,7 @@ const SearchItem = memo(function Item({
         "before:z-0 hover:before:bg-zinc-200/60 dark:hover:before:bg-zinc-800/80",
         "data-[selected=true]:before:bg-zinc-200/60 data-[selected=true]:dark:before:bg-zinc-800/80",
         "min-w-0 max-w-full",
+        styles["content-visually"],
       )}
       key={item.id}
       onSelect={() => {
@@ -209,7 +251,7 @@ const SearchItem = memo(function Item({
         <span className="block min-w-0 flex-1 shrink-0 truncate">
           {item.title}
         </span>
-        <span className="block min-w-0 shrink-0 grow-0 text-xs font-medium text-zinc-800 opacity-80 dark:text-slate-200/80">
+        <span className="block min-w-0 shrink-0 grow-0 text-xs font-medium text-zinc-800 opacity-60 dark:text-slate-200/80">
           {item.subtitle}
         </span>
       </div>
@@ -227,7 +269,7 @@ const SearchGroupHeading: FC<{ icon: string, title: string }> = ({
   </div>
 )
 
-const SearchOptions = () => {
+const SearchOptions = memo(() => {
   const searchType = useSearchStore((s) => s.searchType)
 
   const searchInstance = React.useContext(SearchCmdKContext)
@@ -282,7 +324,7 @@ const SearchOptions = () => {
       )}
     </div>
   )
-}
+})
 
 const SearchPlaceholder = () => {
   const hasKeyword = useSearchStore((s) => !!s.keyword)

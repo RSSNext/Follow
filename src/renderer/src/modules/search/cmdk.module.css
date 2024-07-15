@@ -10,3 +10,8 @@
     animation: move 2s steps(60) infinite;
   }
 }
+
+.content-visually {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 38px;
+}
