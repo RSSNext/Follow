@@ -73,10 +73,15 @@ export const useEntriesByView = () => {
     view,
     ...(unreadOnly === true && { read: false }),
   })
-  const entries = useEntryIdsByFeedIdOrView(isAllFeeds ? view : feedId!, {
+  const remoteEntryIds = query.data?.pages
+    ?.map((page) => page.data?.map((entry) => entry.entries.id))
+    .flat() as string[]
+
+  const currentEntries = useEntryIdsByFeedIdOrView(isAllFeeds ? view : feedId!, {
     unread: unreadOnly,
     view,
   })
+  const entries = remoteEntryIds || currentEntries
 
   useHotkeys(
     shortcuts.entries.refetch.key,
@@ -102,10 +107,6 @@ export const useEntriesByView = () => {
       prevEntries.current = entries
       return entries
     }
-    if (entries.length > prevEntries.current.length) {
-      prevEntries.current = entries
-      return entries
-    }
     // merge the new entries with the old entries, and unique them
     const nextIds = [...new Set([...prevEntries.current, ...entries])]
     prevEntries.current = nextIds
@@ -116,9 +117,6 @@ export const useEntriesByView = () => {
     isCollection ?
       sortEntriesIdByStarAt(localEntries) :
       sortEntriesIdByEntryPublishedAt(localEntries)
-  const remoteEntryIds = query.data?.pages
-    ?.map((page) => page.data?.map((entry) => entry.entries.id))
-    .flat() as string[]
 
   return {
     ...query,
@@ -129,7 +127,7 @@ export const useEntriesByView = () => {
     // Imagine that the local data may be persistent, and then if there are incremental updates to the data on the server side,
     // then we have no way to incrementally update the data.
     // We need to add an interface to incrementally update the data based on the version hash.
-    entriesIds: remoteEntryIds ?? sortLocalEntries(),
+    entriesIds: sortLocalEntries(),
     totalCount: query.data?.pages?.[0]?.total ?? localEntries.length,
   }
 }

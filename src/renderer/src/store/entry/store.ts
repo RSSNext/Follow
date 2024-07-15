@@ -99,6 +99,11 @@ class EntryActions {
         const entry = draft.flatMapEntries[entryId]
         if (!entry) return
         Object.assign(entry, changed)
+        if (changed.read !== undefined && changed.read !== null) {
+          EntryService.bulkStoreReadStatus({
+            [entryId]: changed.read,
+          })
+        }
         return draft
       }),
     )
