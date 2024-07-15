@@ -60,7 +60,7 @@ export function Component() {
           />
           <div className="center flex">
             <StyledButton type="submit" isLoading={invitationMutation.isPending}>
-              Active
+              Activate
             </StyledButton>
           </div>
         </form>
