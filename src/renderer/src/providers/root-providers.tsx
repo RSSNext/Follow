@@ -3,6 +3,7 @@ import { Toaster } from "@renderer/components/ui/sonner"
 import { TooltipProvider } from "@renderer/components/ui/tooltip"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { persistConfig, queryClient } from "@renderer/lib/query-client"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { LazyMotion, MotionConfig } from "framer-motion"
 import { Provider } from "jotai"
@@ -35,6 +36,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
             <ModalStackProvider />
             <ContextMenuProvider />
             <StableRouterProvider />
+            {import.meta.env.DEV && <Devtools />}
             {children}
           </Provider>
         </TooltipProvider>
@@ -42,4 +44,10 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
     </MotionConfig>
     <Toaster />
   </LazyMotion>
+)
+
+const Devtools = () => (
+  <>
+    {!window.electron && <ReactQueryDevtools buttonPosition="bottom-left" client={queryClient} />}
+  </>
 )

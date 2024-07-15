@@ -51,6 +51,9 @@ function EntryItemImpl({
       enabled: !!entry.settings?.translation,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
+      meta: {
+        persist: true,
+      },
     },
   )
 

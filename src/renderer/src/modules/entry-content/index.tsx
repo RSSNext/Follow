@@ -44,6 +44,9 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 function EntryContentRender({ entryId }: { entryId: string }) {
   const { error, data } = useAuthQuery(Queries.entries.byId(entryId), {
     staleTime: 300_000,
+    meta: {
+      persist: true,
+    },
   })
 
   const entry = useEntry(entryId)
@@ -74,6 +77,9 @@ function EntryContentRender({ entryId }: { entryId: string }) {
       enabled: !!entry?.settings?.translation,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
+      meta: {
+        persist: true,
+      },
     },
   )
 
@@ -86,6 +92,9 @@ function EntryContentRender({ entryId }: { entryId: string }) {
       enabled: !!entry?.settings?.summary,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
+      meta: {
+        persist: true,
+      },
     },
   )
 
@@ -95,7 +104,11 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
   return (
     <>
-      <EntryHeader entryId={entry.entries.id} view={0} className="h-[55px] px-5" />
+      <EntryHeader
+        entryId={entry.entries.id}
+        view={0}
+        className="h-[55px] px-5"
+      />
       <div className="h-[calc(100%-3.5rem)] min-w-0 overflow-y-auto @container">
         <m.div
           style={{
