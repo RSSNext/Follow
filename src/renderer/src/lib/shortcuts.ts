@@ -22,7 +22,7 @@ export const shortcuts = {
     },
     switchBetweenViews: {
       name: "Switch Between Views",
-      key: "Left, Right",
+      key: "Tab, Left, Right",
     },
   },
   entries: {

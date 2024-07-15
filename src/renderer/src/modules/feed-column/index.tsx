@@ -94,7 +94,8 @@ export function FeedColumn() {
 
   useHotkeys(
     shortcuts.feeds.switchBetweenViews.key,
-    () => {
+    (e) => {
+      e.preventDefault()
       if (isHotkeyPressed("Left")) {
         setActive((i) => {
           if (i === 0) {
@@ -188,7 +189,6 @@ export function FeedColumn() {
               active === index && item.className,
               "flex h-11 flex-col items-center gap-1 text-xl",
               "hover:!bg-theme-vibrancyBg",
-              "focus-visible:!outline-none",
             )}
             onClick={(e) => {
               setActive(index)
