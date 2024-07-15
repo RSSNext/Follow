@@ -11,9 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@renderer/components/ui/tooltip"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { ROUTE_ENTRY_PENDING } from "@renderer/lib/constants"
-import { cn } from "@renderer/lib/utils"
+import { cn, pluralize } from "@renderer/lib/utils"
 import { getFeedById } from "@renderer/store/feed"
 import { searchActions, useSearchStore } from "@renderer/store/search"
 import { SearchType } from "@renderer/store/search/constants"
@@ -199,12 +204,17 @@ export const SearchCmdK: React.FC = () => {
                 ))}
               </Command.Group>
             )}
-            {canLoadMore &&
-              <LoadMoreIndicator className="center w-full" onLoading={loadMore} />}
+            {canLoadMore && (
+              <LoadMoreIndicator
+                className="center w-full"
+                onLoading={loadMore}
+              />
+            )}
           </Command.List>
-
         </ScrollArea.ScrollArea>
-        <SearchOptions />
+        <SearchOptions>
+          <SearchResultCount count={totalCount} />
+        </SearchOptions>
       </Command.Dialog>
     </SearchCmdKContext.Provider>
   )
@@ -269,11 +279,33 @@ const SearchGroupHeading: FC<{ icon: string, title: string }> = ({
   </div>
 )
 
-const SearchOptions = memo(() => {
+const SearchResultCount: FC<{
+  count?: number
+}> = ({ count }) => {
+  const hasKeyword = useSearchStore((s) => !!s.keyword)
+  if (!count) return null
+  return (
+    hasKeyword && (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <small className="shrink-0 opacity-80">
+            {count}
+            {" "}
+            {pluralize("result", count)}
+          </small>
+        </TooltipTrigger>
+        <TooltipContent>
+          This search run on local database, the result may not be up-to-date.
+        </TooltipContent>
+      </Tooltip>
+    )
+  )
+}
+const SearchOptions: Component = memo(({ children }) => {
   const searchType = useSearchStore((s) => s.searchType)
 
   const searchInstance = React.useContext(SearchCmdKContext)
-  const hasKeyword = useSearchStore((s) => !!s.keyword)
+
   return (
     <div className="absolute bottom-2 left-4 flex items-center gap-2 text-sm text-theme-foreground/80">
       <span className="shrink-0">Search Type</span>
@@ -317,11 +349,7 @@ const SearchOptions = memo(() => {
         </SelectContent>
       </Select>
 
-      {hasKeyword && (
-        <small className="shrink-0 opacity-80">
-          This search run on local database, the result may not be up-to-date.
-        </small>
-      )}
+      {children}
     </div>
   )
 })
