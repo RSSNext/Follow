@@ -18,6 +18,7 @@ import {
 } from "@renderer/components/ui/tooltip"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { levels, ROUTE_ENTRY_PENDING } from "@renderer/lib/constants"
+import type { FeedViewType } from "@renderer/lib/enum"
 import { cn, pluralize } from "@renderer/lib/utils"
 import { getFeedById } from "@renderer/store/feed"
 import { searchActions, useSearchStore } from "@renderer/store/search"
@@ -163,7 +164,7 @@ export const SearchCmdK: React.FC = () => {
                 )}
                 className="flex w-full min-w-0 flex-col py-2"
               >
-                {renderedEntries.map((entry, index) => {
+                {renderedEntries.map((entry) => {
                   const feed = getFeedById(entry.feedId)
                   return (
                     <SearchItem
@@ -172,7 +173,6 @@ export const SearchCmdK: React.FC = () => {
                       feedId={entry.feedId}
                       entryId={entry.item.id}
                       id={entry.item.id}
-                      index={index}
                       icon={feed?.siteUrl}
                       subtitle={feed?.title}
                     />
@@ -190,14 +190,13 @@ export const SearchCmdK: React.FC = () => {
                 )}
                 className="py-2"
               >
-                {renderedFeeds.map((feed, index) => (
+                {renderedFeeds.map((feed) => (
                   <SearchItem
                     key={feed.item.id}
                     title={feed.item.title!}
                     feedId={feed.item.id!}
                     entryId={ROUTE_ENTRY_PENDING}
                     id={feed.item.id!}
-                    index={entries.length + index}
                     icon={feed.item.siteUrl}
                     subtitle={useFeedUnreadStore
                       .getState()
@@ -228,15 +227,20 @@ type SearchListType = {
   entryId?: string
   icon?: Nullable<string>
   id: string
+  view?: FeedViewType
 }
 
 const SearchItem = memo(function Item({
-  index,
-  ...item
-}: {
-  index: number
-} & SearchListType) {
+  id,
+  title,
+  entryId,
+  feedId,
+  icon,
+  subtitle,
+  view,
+}: {} & SearchListType) {
   const navigateEntry = useNavigateEntry()
+
   return (
     <Command.Item
       className={clsx(
@@ -247,25 +251,26 @@ const SearchItem = memo(function Item({
         "min-w-0 max-w-full",
         styles["content-visually"],
       )}
-      key={item.id}
+      key={id}
       onSelect={() => {
         navigateEntry({
-          feedId: item.feedId!,
-          entryId: item.entryId,
+          feedId: feedId!,
+          entryId,
+          view,
 
           level: levels.feed,
         })
       }}
     >
       <div className="relative z-10 flex w-full items-center justify-between px-1 py-2">
-        {item.icon && (
-          <SiteIcon className="mr-2 size-5 shrink-0" url={item.icon} />
+        {icon && (
+          <SiteIcon className="mr-2 size-5 shrink-0" url={icon} />
         )}
         <span className="block min-w-0 flex-1 shrink-0 truncate">
-          {item.title}
+          {title}
         </span>
         <span className="block min-w-0 shrink-0 grow-0 text-xs font-medium text-zinc-800 opacity-60 dark:text-slate-200/80">
-          {item.subtitle}
+          {subtitle}
         </span>
       </div>
     </Command.Item>
