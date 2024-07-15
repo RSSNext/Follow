@@ -43,6 +43,8 @@ export const SearchCmdK: React.FC = () => {
   )
   React.useEffect(() => {
     if (!open) return
+
+    window.posthog?.capture("search_open")
     // Refresh data
     setPage(0)
     setSearchInstance(() => searchActions.createLocalDbSearch())
@@ -212,9 +214,8 @@ export const SearchCmdK: React.FC = () => {
             )}
           </Command.List>
         </ScrollArea.ScrollArea>
-        <SearchOptions>
-          <SearchResultCount count={totalCount} />
-        </SearchOptions>
+        <SearchOptions />
+        <SearchResultCount count={totalCount} />
       </Command.Dialog>
     </SearchCmdKContext.Provider>
   )
@@ -288,7 +289,7 @@ const SearchResultCount: FC<{
     hasKeyword && (
       <Tooltip>
         <TooltipTrigger asChild>
-          <small className="center shrink-0 gap-1 opacity-80">
+          <small className="center absolute bottom-3 right-3 shrink-0 gap-1 opacity-80">
             {count}
             {" "}
             {pluralize("result", count)}
