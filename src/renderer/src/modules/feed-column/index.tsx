@@ -1,4 +1,6 @@
+import { setAppSearchOpen } from "@renderer/atoms/app"
 import { getReadonlyRoute } from "@renderer/atoms/route"
+import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
@@ -141,9 +143,11 @@ export function FeedColumn({ children }: PropsWithChildren) {
           </div>
         )}
         <div
-          className="relative flex items-center gap-2"
+          className="relative flex items-center gap-1"
           onClick={stopPropagation}
         >
+          <SearchActionButton />
+
           <Link to="/discover" tabIndex={-1}>
             <ActionButton shortcut="Meta+T" tooltip="Add">
               <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
@@ -196,7 +200,6 @@ export function FeedColumn({ children }: PropsWithChildren) {
       </div>
 
       {children}
-
     </Vibrancy>
   )
 }
@@ -228,5 +231,19 @@ const SwipeWrapper: Component<{
     >
       {children}
     </m.div>
+  )
+}
+
+const SearchActionButton = () => {
+  const canSearch = useGeneralSettingKey("dataPersist")
+  if (!canSearch) return null
+  return (
+    <ActionButton
+      shortcut="Meta+K"
+      tooltip="Search"
+      onClick={() => setAppSearchOpen(true)}
+    >
+      <i className="i-mgc-search-2-cute-re size-5 text-theme-vibrancyFg" />
+    </ActionButton>
   )
 }

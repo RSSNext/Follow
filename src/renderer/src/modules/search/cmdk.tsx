@@ -1,3 +1,4 @@
+import { setAppSearchOpen, useAppSearchOpen } from "@renderer/atoms/app"
 import { EmptyIcon } from "@renderer/components/icons/empty"
 import { Logo } from "@renderer/components/icons/logo"
 import { SiteIcon } from "@renderer/components/site-icon"
@@ -22,16 +23,15 @@ import { Command } from "cmdk"
 import type { FC } from "react"
 import * as React from "react"
 import { memo, useMemo } from "react"
-import { useHotkeys } from "react-hotkeys-hook"
+
+import styles from "./cmdk.module.css"
 
 const SearchCmdKContext = React.createContext<Promise<SearchInstance> | null>(
   null,
 )
 export const SearchCmdK: React.FC = () => {
-  const [open, setOpen] = React.useState(false)
-  useHotkeys("meta+k,ctrl+k", () => {
-    setOpen((o) => !o)
-  })
+  const open = useAppSearchOpen()
+
   const searchInstance = useMemo(() => searchActions.createLocalDbSearch(), [])
 
   const entries = useSearchStore((s) => s.entries)
@@ -51,7 +51,7 @@ export const SearchCmdK: React.FC = () => {
     React.useCallback((e) => {
       const $input = inputRef.current
       if (e.key === "Escape") {
-        setOpen(false)
+        setAppSearchOpen(false)
         return
       }
 
@@ -61,6 +61,20 @@ export const SearchCmdK: React.FC = () => {
         $input?.focus()
       }
     }, [])
+  const [isPending, startTransition] = React.useTransition()
+  const handleSearch = React.useCallback(
+    async (value: string) => {
+      const { search } = await searchInstance
+      startTransition(() => {
+        search(value)
+        const $scrollView = scrollViewRef.current
+        if ($scrollView) {
+          $scrollView.scrollTop = 0
+        }
+      })
+    },
+    [searchInstance],
+  )
   return (
     <SearchCmdKContext.Provider value={searchInstance}>
       <Command.Dialog
@@ -68,7 +82,7 @@ export const SearchCmdK: React.FC = () => {
         shouldFilter={false}
         open={open}
         onKeyDown={handleKeyDownToFocusInput}
-        onOpenChange={setOpen}
+        onOpenChange={setAppSearchOpen}
         className={cn(
           "h-[600px] max-h-[80vh] w-[800px] max-w-[100vw] rounded-none md:h-screen md:max-h-[60vh] md:max-w-[80vw]",
           "flex min-h-[50vh] flex-col bg-zinc-50/85 shadow-2xl backdrop-blur-md dark:bg-neutral-900/80 md:rounded-xl",
@@ -79,15 +93,11 @@ export const SearchCmdK: React.FC = () => {
         <Command.Input
           className="w-full shrink-0 border-b border-zinc-200 bg-transparent p-4 px-5 text-lg leading-4 dark:border-neutral-700"
           ref={inputRef}
-          placeholder={searchActions.getCurrentKeyword()}
-          onValueChange={async (value) => {
-            const { search } = await searchInstance
-            search(value)
-            const $scrollView = scrollViewRef.current
-            if ($scrollView) {
-              $scrollView.scrollTop = 0
-            }
-          }}
+          placeholder={searchActions.getCurrentKeyword() || "Search..."}
+          onValueChange={handleSearch}
+        />
+        <div
+          className={cn(styles["status-bar"], isPending && styles["loading"])}
         />
 
         <ScrollArea.ScrollArea
@@ -144,7 +154,9 @@ export const SearchCmdK: React.FC = () => {
                     id={feed.item.id!}
                     index={entries.length + index}
                     icon={feed.item.siteUrl}
-                    subtitle={useFeedUnreadStore.getState().data[feed.item.id!]?.toString()}
+                    subtitle={useFeedUnreadStore
+                      .getState()
+                      .data[feed.item.id!]?.toString()}
                   />
                 ))}
               </Command.Group>
@@ -221,7 +233,7 @@ const SearchOptions = () => {
   const searchInstance = React.useContext(SearchCmdKContext)
   const hasKeyword = useSearchStore((s) => !!s.keyword)
   return (
-    <div className="absolute bottom-2 left-4 flex items-center gap-2 text-sm">
+    <div className="absolute bottom-2 left-4 flex items-center gap-2 text-sm text-theme-foreground/80">
       <span className="shrink-0">Search Type</span>
 
       <Select
