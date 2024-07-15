@@ -11,6 +11,8 @@ import { stopPropagation } from "@renderer/lib/dom"
 import { Routes } from "@renderer/lib/enum"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { clamp, cn } from "@renderer/lib/utils"
+import { useSubscriptionStore } from "@renderer/store/subscription"
+import { useFeedUnreadStore } from "@renderer/store/unread"
 import { useWheel } from "@use-gesture/react"
 import type { MotionValue } from "framer-motion"
 import { m, useSpring } from "framer-motion"
@@ -41,6 +43,23 @@ const useBackHome = (active: number) => {
     [active, navigate],
   )
 }
+
+const useUnreadByView = () => {
+  const idByView = useSubscriptionStore((state) =>
+    state.dataIdByView,
+  )
+  const totalUnread = useFeedUnreadStore((state) => {
+    const unread = {} as Record<number, number>
+
+    for (const view in idByView) {
+      unread[view] = idByView[view].reduce((acc, feedId) => acc + (state.data[feedId] || 0), 0)
+    }
+    return unread
+  })
+
+  return totalUnread
+}
+
 export function FeedColumn() {
   const carouselRef = useRef<HTMLDivElement>(null)
 
@@ -117,6 +136,8 @@ export function FeedColumn() {
   const normalStyle =
     !window.electron || window.electron.process.platform !== "darwin"
 
+  const unreadByView = useUnreadByView()
+
   return (
     <Vibrancy
       className="relative flex h-full flex-col gap-3 pt-2.5"
@@ -165,7 +186,7 @@ export function FeedColumn() {
             shortcut={`${index + 1}`}
             className={cn(
               active === index && item.className,
-              "flex items-center text-xl",
+              "flex h-11 flex-col items-center gap-1 text-xl",
               "hover:!bg-theme-vibrancyBg",
               "focus-visible:!outline-none",
             )}
@@ -175,6 +196,7 @@ export function FeedColumn() {
             }}
           >
             {item.icon}
+            <div className="text-[10px] font-medium leading-none">{unreadByView[index] > 99 ? <span className="-mr-0.5">99+</span> : unreadByView[index]}</div>
           </ActionButton>
         ))}
       </div>
