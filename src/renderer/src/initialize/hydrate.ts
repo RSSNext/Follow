@@ -88,7 +88,9 @@ async function hydrateEntry() {
       entries: entry,
       feedId: entryRelatedFeedId,
       read: entryRelated[entry.id] || false,
-      collections: collections[entry.id],
+      collections: collections[entry.id] as {
+        createdAt: string
+      },
     })
   }
   entryActions.hydrate(storeValue)
