@@ -76,10 +76,10 @@ export function EntryColumn() {
 
     if (isCollection || isPendingEntry) return
 
-    const feedId = activeEntry?.feeds.id
+    const feedId = activeEntry?.feedId
     if (!feedId) return
     batchMarkUnread([feedId, activeEntryId])
-  }, [activeEntry?.feeds.id, activeEntryId, isCollection, isPendingEntry])
+  }, [activeEntry?.feedId, activeEntryId, isCollection, isPendingEntry])
 
   const isInteracted = useRef(false)
 

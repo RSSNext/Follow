@@ -2,7 +2,6 @@ import { initializeDefaultGeneralSettings } from "@renderer/atoms/settings/gener
 import { initializeDefaultUISettings } from "@renderer/atoms/settings/ui"
 import { appLog } from "@renderer/lib/log"
 import { sleep } from "@renderer/lib/utils"
-import type { CombinedEntryModel, FeedModel } from "@renderer/models"
 import {
   EntryRelatedKey,
   EntryRelatedService,
@@ -11,6 +10,7 @@ import {
   FeedUnreadService,
   SubscriptionService,
 } from "@renderer/services"
+import type { FlatEntryModel } from "@renderer/store/entry"
 
 import { entryActions, useEntryStore } from "../store/entry/store"
 import { feedActions, useFeedStore } from "../store/feed"
@@ -38,13 +38,13 @@ export const hydrateDatabaseToStore = async () => {
 
   async function hydrate() {
     const now = Date.now()
-    const [feeds] = await Promise.all([
+    await Promise.all([
       hydrateFeed(),
       hydrateSubscription(),
       hydrateFeedUnread(),
+      hydrateEntry(),
     ])
 
-    await hydrateEntry(feeds)
     _isHydrated = true
     const costTime = Date.now() - now
     appLog("Hydrate data done,", `${costTime}ms`)
@@ -72,7 +72,7 @@ async function hydrateFeedUnread() {
 
   return feedUnreadActions.hydrate(unread)
 }
-async function hydrateEntry(feedMap: Record<string, FeedModel>) {
+async function hydrateEntry() {
   const [entries, entryRelated, feedEntries, collections] = await Promise.all([
     EntryService.findAll(),
 
@@ -81,30 +81,24 @@ async function hydrateEntry(feedMap: Record<string, FeedModel>) {
     EntryRelatedService.findAll(EntryRelatedKey.COLLECTION),
   ])
 
-  const storeValue = [] as CombinedEntryModel[]
+  const storeValue = [] as FlatEntryModel[]
   for (const entry of entries) {
     const entryRelatedFeedId = feedEntries[entry.id]
     if (!entryRelatedFeedId) {
       logHydrateError(`Entry ${entry.id} has no related feed id`)
       continue
     }
-    const feed = feedMap[entryRelatedFeedId]
-
-    if (!feed) {
-      logHydrateError(`Entry related feed ${entryRelatedFeedId} is missing`)
-      continue
-    }
 
     storeValue.push({
       entries: entry,
-      // @ts-expect-error
-      // FIXME server provided feed type is not match, but it's ok
-      feeds: feed,
+      feedId: entryRelatedFeedId,
       read: entryRelated[entry.id] || false,
-      collections: collections[entry.id],
+      collections: collections[entry.id] as {
+        createdAt: string
+      },
     })
   }
-  entryActions.upsertMany(storeValue)
+  entryActions.hydrate(storeValue)
   useEntryStore.setState({
     starIds: new Set(Object.keys(collections)),
   })

@@ -4,8 +4,11 @@ import { DeclarativeModal } from "@renderer/components/ui/modal/stacked/declarat
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { preventDefault } from "@renderer/lib/dom"
+import { NetworkStatusIndicator } from "@renderer/modules/app/NetworkStatusIndicator"
 import { LoginModalContent } from "@renderer/modules/auth/LoginModalContent"
 import { FeedColumn } from "@renderer/modules/feed-column"
+import { AutoUpdater } from "@renderer/modules/feed-column/auto-updater"
+import { SearchCmdK } from "@renderer/modules/search/cmdk"
 import { Outlet } from "react-router-dom"
 
 export function Component() {
@@ -15,7 +18,16 @@ export function Component() {
   return (
     <div className="flex h-full" onContextMenu={preventDefault}>
       <div className="w-64 shrink-0 border-r">
-        <FeedColumn />
+        <FeedColumn>
+          {APP_VERSION?.[0] === "0" && (
+            <div className="pointer-events-none absolute bottom-3 w-full text-center text-xs opacity-20">
+              Early Access
+            </div>
+          )}
+          <AutoUpdater />
+
+          <NetworkStatusIndicator />
+        </FeedColumn>
       </div>
       {/* NOTE: tabIndex for main element can get by `document.activeElement` */}
       <main
@@ -25,6 +37,8 @@ export function Component() {
       >
         <Outlet />
       </main>
+
+      <SearchCmdK />
       {isAuthFail && !user && (
         <RootPortal>
           <DeclarativeModal

@@ -6,7 +6,6 @@ import { useTitle } from "@renderer/hooks/common"
 import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn, pluralize } from "@renderer/lib/utils"
-import type { FeedModel } from "@renderer/models"
 import { ArticleItem } from "@renderer/modules/entry-column/article-item"
 import { NotificationItem } from "@renderer/modules/entry-column/notification-item"
 import { PictureItem } from "@renderer/modules/entry-column/picture-item"
@@ -113,13 +112,14 @@ export function Component() {
               >
                 <ListItemHoverOverlay />
                 <Item
-                  entryId=""
-                  entryPreview={{
-                    entries: entry,
-                    // @ts-expect-error
-                    feeds: feed.data.feed as FeedModel,
-                    read: true,
-                  }}
+                  // entryId=""
+                  // entryPreview={{
+                  //   entries: entry,
+                  //   // @ts-expect-error
+                  //   feeds: feed.data.feed as FeedModel,
+                  //   read: true,
+                  // }}
+                  entryId={entry.id}
                 />
               </a>
             ))}

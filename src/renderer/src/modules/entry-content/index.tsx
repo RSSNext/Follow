@@ -15,7 +15,7 @@ import {
 } from "@renderer/providers/wrapped-element-provider"
 import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry"
-import { useFeedHeaderTitle } from "@renderer/store/feed"
+import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import { useEffect, useState } from "react"
 
 import { LoadingCircle } from "../../components/ui/loading"
@@ -55,6 +55,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
   })
 
   const entry = useEntry(entryId)
+  const feed = useFeedById(entry?.feedId)
   useTitle(entry?.entries.title)
   const [content, setContent] = useState<JSX.Element>()
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
@@ -142,7 +143,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 />
               </div>
               <div className="mt-2 text-[13px] font-medium text-zinc-500">
-                {entry.feeds?.title}
+                {feed?.title}
               </div>
               <div className="text-[13px] text-zinc-500">
                 {entry.entries.publishedAt &&
@@ -265,8 +266,10 @@ const TitleMetaHandler: Component<{
   const isAtTop = useIsSoFWrappedElement()
   const {
     entries: { title: entryTitle },
-    feeds: { title: feedTitle },
+    feedId,
   } = useEntry(entryId)!
+
+  const { title: feedTitle } = useFeedById(feedId)!
 
   useEffect(() => {
     if (!isAtTop && entryTitle && feedTitle) {

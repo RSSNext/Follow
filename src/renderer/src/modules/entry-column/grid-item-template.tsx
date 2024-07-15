@@ -5,6 +5,7 @@ import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
+import { useFeedById } from "@renderer/store/feed"
 
 import { StarIcon } from "./star-icon"
 import type { UniversalItemProps } from "./types"
@@ -18,6 +19,7 @@ export function GridItem({
   children?: React.ReactNode
 }) {
   const entry = useEntry(entryId) || entryPreview
+  const feeds = useFeedById(entry?.feedId)
 
   const asRead = useAsRead(entry)
 
@@ -40,11 +42,11 @@ export function GridItem({
         <div className="flex items-center gap-1 truncate text-[13px]">
           <FeedIcon
             className="mr-0.5 inline-block"
-            feed={entry.feeds}
+            feed={feeds!}
             entry={entry.entries}
             size={18}
           />
-          <span>{entry.feeds.title}</span>
+          <span>{feeds?.title}</span>
           <span className="text-zinc-500">·</span>
           <span className="text-zinc-500">
             {dayjs

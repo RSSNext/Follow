@@ -1,4 +1,6 @@
+import { setAppSearchOpen } from "@renderer/atoms/app"
 import { getReadonlyRoute } from "@renderer/atoms/route"
+import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
@@ -6,7 +8,7 @@ import { ProfileButton } from "@renderer/components/user-button"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
-import { levels, views } from "@renderer/lib/constants"
+import { views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { Routes } from "@renderer/lib/enum"
 import { shortcuts } from "@renderer/lib/shortcuts"
@@ -17,13 +19,12 @@ import { useWheel } from "@use-gesture/react"
 import type { MotionValue } from "framer-motion"
 import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
+import type { PropsWithChildren } from "react"
 import { useCallback, useLayoutEffect, useRef } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { Link } from "react-router-dom"
 
 import { Vibrancy } from "../../components/ui/background"
-import { NetworkStatusIndicator } from "../app/NetworkStatusIndicator"
-import { AutoUpdater } from "./auto-updater"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -37,7 +38,6 @@ const useBackHome = (active: number) => {
         feedId: null,
         entryId: null,
         view: overvideActive ?? active,
-        level: levels.view,
       })
     },
     [active, navigate],
@@ -60,7 +60,7 @@ const useUnreadByView = () => {
   return totalUnread
 }
 
-export function FeedColumn() {
+export function FeedColumn({ children }: PropsWithChildren) {
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive_] = useSidebarActiveView()
@@ -164,9 +164,11 @@ export function FeedColumn() {
           </div>
         )}
         <div
-          className="relative flex items-center gap-2"
+          className="relative flex items-center gap-1"
           onClick={stopPropagation}
         >
+          <SearchActionButton />
+
           <Link to="/discover" tabIndex={-1}>
             <ActionButton shortcut="Meta+T" tooltip="Add">
               <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
@@ -217,14 +219,8 @@ export function FeedColumn() {
           ))}
         </SwipeWrapper>
       </div>
-      {APP_VERSION?.[0] === "0" && (
-        <div className="pointer-events-none absolute bottom-3 w-full text-center text-xs opacity-20">
-          Early Access
-        </div>
-      )}
-      <AutoUpdater />
 
-      <NetworkStatusIndicator />
+      {children}
     </Vibrancy>
   )
 }
@@ -256,5 +252,19 @@ const SwipeWrapper: Component<{
     >
       {children}
     </m.div>
+  )
+}
+
+const SearchActionButton = () => {
+  const canSearch = useGeneralSettingKey("dataPersist")
+  if (!canSearch) return null
+  return (
+    <ActionButton
+      shortcut="Meta+K"
+      tooltip="Search"
+      onClick={() => setAppSearchOpen(true)}
+    >
+      <i className="i-mgc-search-2-cute-re size-5 text-theme-vibrancyFg" />
+    </ActionButton>
   )
 }

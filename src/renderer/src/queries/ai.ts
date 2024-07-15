@@ -1,7 +1,8 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { views } from "@renderer/lib/constants"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import type { CombinedEntryModel, SupportedLanguages } from "@renderer/models"
+import type { SupportedLanguages } from "@renderer/models"
+import type { FlatEntryModel } from "@renderer/store/entry"
 import { franc } from "franc-min"
 
 const LanguageMap: Record<
@@ -31,7 +32,7 @@ export const ai = {
     language,
     extraFields,
   }: {
-    entry: CombinedEntryModel
+    entry: FlatEntryModel
     view?: number
     language?: SupportedLanguages
     extraFields?: string[]

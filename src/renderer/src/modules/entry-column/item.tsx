@@ -8,8 +8,8 @@ import { views } from "@renderer/lib/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import type { CombinedEntryModel } from "@renderer/models"
 import { Queries } from "@renderer/queries"
+import type { FlatEntryModel } from "@renderer/store/entry"
 import { useEntry } from "@renderer/store/entry/hooks"
 import type { FC } from "react"
 import { memo, useCallback } from "react"
@@ -33,7 +33,7 @@ function EntryItemImpl({
   entry,
   view,
 }: {
-  entry: CombinedEntryModel
+  entry: FlatEntryModel
   view?: number
 }) {
   const { items } = useEntryActions({
@@ -69,7 +69,7 @@ function EntryItemImpl({
       if (!hoverMarkUnread) return
       if (asRead) return
 
-      batchMarkUnread([entry.feeds.id, entry.entries.id])
+      batchMarkUnread([entry.feedId, entry.entries.id])
     },
     233,
     {

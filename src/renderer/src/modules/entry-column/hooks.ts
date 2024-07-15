@@ -146,7 +146,7 @@ function batchMarkRead(ids: string[]) {
     if (!entry) continue
     const isRead = entry.read
     if (!isRead) {
-      batchLikeIds.push([entry.feeds.id, id])
+      batchLikeIds.push([entry.feedId, id])
     }
   }
 

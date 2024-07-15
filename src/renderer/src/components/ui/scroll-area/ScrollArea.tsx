@@ -96,19 +96,18 @@ export const Root = React.forwardRef<
 ))
 
 Root.displayName = "ScrollArea.Root"
-export const ScrollArea: React.FC<
+export const ScrollArea = React.forwardRef<
+  HTMLDivElement,
   React.PropsWithChildren & {
     rootClassName?: string
     viewportClassName?: string
     scrollbarClassName?: string
   }
-> = ({ children, rootClassName, viewportClassName, scrollbarClassName }) => (
+>(({ children, rootClassName, viewportClassName, scrollbarClassName }, ref) => (
   <Root className={rootClassName}>
-    <Viewport onWheel={stopPropagation} className={viewportClassName}>
+    <Viewport ref={ref} onWheel={stopPropagation} className={viewportClassName}>
       {children}
     </Viewport>
-    <Scrollbar
-      className={scrollbarClassName}
-    />
+    <Scrollbar className={scrollbarClassName} />
   </Root>
-)
+))
