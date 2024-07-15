@@ -2,7 +2,7 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { FeedUnreadService } from "@renderer/services"
 
-import { createZustandStore } from "./utils/helper"
+import { createZustandStore } from "../utils/helper"
 
 interface UnreadState {
   data: Record<string, number>

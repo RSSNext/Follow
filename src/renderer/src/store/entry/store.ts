@@ -6,8 +6,6 @@ import type {
   FeedModel,
 } from "@renderer/models"
 import { EntryService } from "@renderer/services"
-import type { IFuseOptions } from "fuse.js"
-import Fuse from "fuse.js"
 import { produce } from "immer"
 import { merge, omit } from "lodash-es"
 
@@ -292,18 +290,6 @@ class EntryActions {
     } else {
       EntryService.deleteCollection(entryId)
     }
-  }
-
-  async createLocalSearch() {
-    const data = Object.values(get().flatMapEntries)
-
-    const options: IFuseOptions<FlatEntryModel> = {
-      keys: ["entries.title", "entries.content", "entries.description"],
-    }
-    const index = Fuse.createIndex(options.keys!, data)
-    const fuse = new Fuse(data, options, index)
-
-    return fuse
   }
 }
 

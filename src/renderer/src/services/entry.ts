@@ -1,13 +1,10 @@
 import { entryModel } from "@renderer/database/models"
 import type {
-  CombinedEntryModel,
   EntryModel,
-  FeedModel,
 } from "@renderer/models/types"
 
 import { BaseService } from "./base"
 import { EntryRelatedKey, EntryRelatedService } from "./entry-related"
-import { FeedService } from "./feed"
 
 type EntryCollection = {
   createdAt: string
@@ -15,21 +12,6 @@ type EntryCollection = {
 class EntryServiceStatic extends BaseService<EntryModel> {
   constructor() {
     super(entryModel.table)
-  }
-
-  pour(data: CombinedEntryModel[]) {
-    const entries = [] as EntryModel[]
-    const feeds = [] as FeedModel[]
-    for (const entry of data) {
-      entries.push(entry.entries)
-
-      feeds.push(entry.feeds)
-    }
-
-    return Promise.all([
-      this.upsertMany(entries),
-      FeedService.upsertMany(feeds),
-    ])
   }
 
   bulkStoreReadStatus(record: Record<string, boolean>) {

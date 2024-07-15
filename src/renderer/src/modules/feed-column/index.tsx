@@ -15,13 +15,12 @@ import { useWheel } from "@use-gesture/react"
 import type { MotionValue } from "framer-motion"
 import { m, useSpring } from "framer-motion"
 import { Lethargy } from "lethargy"
+import type { PropsWithChildren } from "react"
 import { useCallback, useLayoutEffect, useRef } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { Link } from "react-router-dom"
 
 import { Vibrancy } from "../../components/ui/background"
-import { NetworkStatusIndicator } from "../app/NetworkStatusIndicator"
-import { AutoUpdater } from "./auto-updater"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -41,7 +40,7 @@ const useBackHome = (active: number) => {
     [active, navigate],
   )
 }
-export function FeedColumn() {
+export function FeedColumn({ children }: PropsWithChildren) {
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive_] = useSidebarActiveView()
@@ -195,14 +194,9 @@ export function FeedColumn() {
           ))}
         </SwipeWrapper>
       </div>
-      {APP_VERSION?.[0] === "0" && (
-        <div className="pointer-events-none absolute bottom-3 w-full text-center text-xs opacity-20">
-          Early Access
-        </div>
-      )}
-      <AutoUpdater />
 
-      <NetworkStatusIndicator />
+      {children}
+
     </Vibrancy>
   )
 }
