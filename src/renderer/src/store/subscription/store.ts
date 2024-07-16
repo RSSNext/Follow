@@ -13,13 +13,15 @@ import { feedActions, getFeedById } from "../feed"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 
-export type SubscriptionPlainModel = Omit<SubscriptionModel, "feeds">
+export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
+  defaultCategory?: string
+}
 interface SubscriptionState {
   /**
    * Key: feedId
    * Value: SubscriptionPlainModel
    */
-  data: Record<FeedId, SubscriptionPlainModel>
+  data: Record<FeedId, SubscriptionFlatModel>
   /**
    * Key: FeedViewType
    * Value: FeedId[]
@@ -27,16 +29,22 @@ interface SubscriptionState {
   dataIdByView: Record<FeedViewType, FeedId[]>
 }
 
-function morphResponseData(data: SubscriptionModel[]) {
+function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
+  const result: SubscriptionFlatModel[] = []
   for (const subscription of data) {
+    const cloned: SubscriptionFlatModel = { ...subscription }
     if (!subscription.category && subscription.feeds) {
       const { siteUrl } = subscription.feeds
       if (!siteUrl) continue
       const parsed = parse(siteUrl)
-      parsed.domain &&
-      (subscription.category = capitalizeFirstLetter(parsed.domain))
+
+      if (parsed.domain) {
+        cloned.defaultCategory = capitalizeFirstLetter(parsed.domain)
+      }
     }
+    result.push(cloned)
   }
+  return result
 }
 
 const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
@@ -79,14 +87,14 @@ class SubscriptionActions {
       }))
     }
 
-    morphResponseData(res.data)
-    this.upsertMany(res.data)
+    const transformedData = morphResponseData(res.data)
+    this.upsertMany(transformedData)
     feedActions.upsertMany(res.data.map((s) => s.feeds))
 
     return res.data
   }
 
-  upsertMany(subscriptions: SubscriptionPlainModel[]) {
+  upsertMany(subscriptions: SubscriptionFlatModel[]) {
     runTransactionInScope(() => {
       SubscriptionService.upsertMany(subscriptions)
     })
@@ -151,17 +159,20 @@ class SubscriptionActions {
                 const { siteUrl } = feed
                 if (!siteUrl) return
                 const parsed = parse(siteUrl)
+                subscription.category = null
                 // The logic for removing Category here is to use domain as the default category name.
                 parsed.domain &&
-                (subscription.category = capitalizeFirstLetter(
-                  parsed.domain,
+                (subscription.defaultCategory = (
+                  capitalizeFirstLetter(parsed.domain)
                 ))
               }
             })
           }),
         )
         const { data } = get()
-        return ids.map((id) => data[id] && SubscriptionService.upsert(data[id]))
+        return ids.map(
+          (id) => data[id] && SubscriptionService.upsert(data[id]),
+        )
       },
       {
         doTranscationWhenMutationFail: false,
