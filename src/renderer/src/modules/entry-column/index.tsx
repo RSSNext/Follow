@@ -100,8 +100,8 @@ export function EntryColumn() {
       }, [isFetchingNextPage]),
     },
     rangeChanged: (...args: any[]) => {
-      // @ts-expect-error
       handleMarkReadInRange &&
+      // @ts-expect-error
       handleMarkReadInRange(...args, isInteracted.current)
     },
     totalCount: entries.totalCount,
