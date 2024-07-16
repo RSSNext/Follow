@@ -134,6 +134,7 @@ export function EntryColumn() {
     >
       <ListHeader
         refetch={entries.refetch}
+        isRefreshing={entries.isFetching && !entries.isFetchingNextPage}
         totalCount={virtuosoOptions.totalCount}
       />
       <m.div
@@ -163,7 +164,8 @@ export function EntryColumn() {
 const ListHeader: FC<{
   totalCount: number
   refetch: () => void
-}> = ({ totalCount, refetch }) => {
+  isRefreshing: boolean
+}> = ({ totalCount, refetch, isRefreshing }) => {
   const routerParams = useRouteParms()
 
   const unreadOnly = useGeneralSettingKey("unreadOnly")
@@ -289,7 +291,7 @@ const ListHeader: FC<{
                     <i
                       className={cn(
                         "i-mgc-refresh-2-cute-re",
-                        isPending && "animate-spin",
+                        isRefreshing && "animate-spin",
                       )}
                     />
                   </ActionButton>
