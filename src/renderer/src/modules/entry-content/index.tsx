@@ -1,10 +1,18 @@
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { useUser } from "@renderer/atoms/user"
+import { useMe } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@renderer/components/ui/avatar"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@renderer/components/ui/tooltip"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { parseHtml } from "@renderer/lib/parse-html"
@@ -14,9 +22,10 @@ import {
   WrappedElementProvider,
 } from "@renderer/providers/wrapped-element-provider"
 import { Queries } from "@renderer/queries"
-import { useEntry } from "@renderer/store/entry"
+import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
-import { useEffect, useState } from "react"
+import { useUserById } from "@renderer/store/user"
+import { Fragment, useEffect, useState } from "react"
 
 import { LoadingCircle } from "../../components/ui/loading"
 import { EntryTranslation } from "../entry-column/translation"
@@ -45,7 +54,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 }
 
 function EntryContentRender({ entryId }: { entryId: string }) {
-  const user = useUser()
+  const user = useMe()
 
   const { error, data } = useAuthQuery(Queries.entries.byId(entryId), {
     staleTime: 300_000,
@@ -55,8 +64,12 @@ function EntryContentRender({ entryId }: { entryId: string }) {
   })
 
   const entry = useEntry(entryId)
-  const feed = useFeedById(entry?.feedId)
   useTitle(entry?.entries.title)
+
+  const feed = useFeedById(entry?.feedId)
+
+  const entryHistory = useEntryReadHistory(entryId)
+
   const [content, setContent] = useState<JSX.Element>()
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
   useEffect(() => {
@@ -154,61 +167,15 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                   <i className="i-mgc-eye-2-cute-re" />
                   <span>
                     {(
-                      (data?.entries.entryReadHistories.readCount ?? 0) +
-                      (data?.entries.entryReadHistories.users.every((u) => u.id !== user?.id) ? 1 : 0) // if no me, +1
-                    ).toLocaleString()}
+                      (entryHistory?.readCount ?? 0) +
+                      (entryHistory?.userIds?.every((id) => id !== user?.id) ?
+                        1 :
+                        0)
+                    ) // if no me, +1
+                      .toLocaleString()}
                   </span>
                 </div>
-                <div className="flex items-center">
-                  {[
-                    {
-                      id: user?.id,
-                      name: user?.name ?? null,
-                      image: user?.image ?? null,
-                      handle: user?.handle ?? null,
-                    },
-                  ] // myself first
-                    .concat(
-                      data?.entries.entryReadHistories.users.filter(
-                        (u) => u.id !== user?.id,
-                      ) ?? [],
-                    ) // then others
-                    .slice(0, 10) // only show 10
-                    .concat(
-                      data?.entries.entryReadHistories.readCount &&
-                      data.entries.entryReadHistories.readCount > 10 ?
-                          [
-                            {
-                              id: "more",
-                              name: `+${
-                                data?.entries.entryReadHistories.readCount - 10
-                              }`,
-                              image: null,
-                              handle: null,
-                            },
-                          ] :
-                          [],
-                    ) // show more count
-                    .map((user, i) => (
-                      <Tooltip key={user.id}>
-                        <TooltipTrigger>
-                          <div
-                            style={{
-                              transform: `translateX(-${i * 5}px)`,
-                            }}
-                          >
-                            <Avatar className="aspect-square size-6 border border-black dark:border-white">
-                              <AvatarImage src={user?.image || undefined} />
-                              <AvatarFallback>
-                                {user.name?.slice(0, 2)}
-                              </AvatarFallback>
-                            </Avatar>
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">{user.name}</TooltipContent>
-                      </Tooltip>
-                    ))}
-                </div>
+                <EntryReadHistory entryId={entryId} />
               </div>
             </a>
             <WrappedElementProvider boundingDetection>
@@ -280,4 +247,65 @@ const TitleMetaHandler: Component<{
     }
   }, [entryId, entryTitle, feedTitle, isAtTop])
   return null
+}
+
+export const EntryReadHistory: Component<{ entryId: string }> = ({
+  entryId,
+}) => {
+  const me = useMe()
+  const entryHistory = useEntryReadHistory(entryId)
+
+  if (!entryHistory) return null
+
+  if (!me) return null
+
+  return (
+    <div className="flex items-center">
+      {[me.id]
+        .concat(entryHistory.userIds?.filter((id) => id !== me?.id) ?? []) // then others
+        .slice(0, 10)
+
+        .map((userId, i) => (
+          <Fragment key={userId}>
+            <EntryUser userId={userId} i={i} />
+          </Fragment>
+        ))}
+
+      {entryHistory.readCount && entryHistory.readCount > 10 && (
+        <Tooltip>
+          <TooltipTrigger>
+            <div className="flex size-6 items-center justify-center rounded-full border border-black bg-zinc-200 dark:border-white dark:bg-neutral-800">
+              <span className="text-xs font-medium text-zinc-500 dark:text-neutral-400">
+                +
+                {entryHistory.readCount - 10}
+              </span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top">More</TooltipContent>
+        </Tooltip>
+      )}
+    </div>
+  )
+}
+
+const EntryUser: Component<{ userId: string, i: number }> = ({ userId, i }) => {
+  const user = useUserById(userId)
+  if (!user) return null
+  return (
+    <Tooltip>
+      <TooltipTrigger>
+        <div
+          style={{
+            transform: `translateX(-${i * 5}px)`,
+          }}
+        >
+          <Avatar className="aspect-square size-6 border border-black dark:border-white">
+            <AvatarImage src={user?.image || undefined} />
+            <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
+          </Avatar>
+        </div>
+      </TooltipTrigger>
+      <TooltipContent side="top">{user.name}</TooltipContent>
+    </Tooltip>
+  )
 }

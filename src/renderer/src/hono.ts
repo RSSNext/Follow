@@ -2,6 +2,2392 @@ import * as hono_hono_base from 'hono/hono-base';
 import * as hono_utils_http_status from 'hono/utils/http-status';
 import * as hono from 'hono';
 import * as hono_types from 'hono/types';
+import * as drizzle_orm from 'drizzle-orm';
+import { InferInsertModel } from 'drizzle-orm';
+import * as drizzle_orm_pg_core from 'drizzle-orm/pg-core';
+import * as zod from 'zod';
+import { z } from 'zod';
+
+declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "actions";
+    schema: undefined;
+    columns: {
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "actions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        rules: drizzle_orm_pg_core.PgColumn<{
+            name: "rules";
+            tableName: "actions";
+            dataType: "array";
+            columnType: "PgArray";
+            data: unknown[];
+            driverParam: string | unknown[];
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: drizzle_orm.Column<{
+                name: "rules";
+                tableName: "actions";
+                dataType: "json";
+                columnType: "PgJsonb";
+                data: unknown;
+                driverParam: unknown;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                generated: undefined;
+            }, object, object>;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const languageSchema: z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>;
+declare const actionsItemOpenAPISchema: z.ZodObject<{
+    name: z.ZodString;
+    condition: z.ZodArray<z.ZodObject<{
+        field: z.ZodEnum<["view", "title", "site_url", "feed_url"]>;
+        operator: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
+        value: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }, {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }>, "many">;
+    result: z.ZodObject<{
+        translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
+        summary: z.ZodOptional<z.ZodBoolean>;
+        rewriteRules: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            from: z.ZodString;
+            to: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            from: string;
+            to: string;
+        }, {
+            from: string;
+            to: string;
+        }>, "many">>;
+        blockRules: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            field: z.ZodEnum<["all", "title", "content", "author", "url", "order"]>;
+            operator: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
+            value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
+        }, "strip", z.ZodTypeAny, {
+            value: string | number;
+            field: "title" | "content" | "all" | "author" | "url" | "order";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }, {
+            value: string | number;
+            field: "title" | "content" | "all" | "author" | "url" | "order";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }>, "many">>;
+    }, "strip", z.ZodTypeAny, {
+        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        summary?: boolean | undefined;
+        rewriteRules?: {
+            from: string;
+            to: string;
+        }[] | undefined;
+        blockRules?: {
+            value: string | number;
+            field: "title" | "content" | "all" | "author" | "url" | "order";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[] | undefined;
+    }, {
+        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        summary?: boolean | undefined;
+        rewriteRules?: {
+            from: string;
+            to: string;
+        }[] | undefined;
+        blockRules?: {
+            value: string | number;
+            field: "title" | "content" | "all" | "author" | "url" | "order";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[] | undefined;
+    }>;
+}, "strip", z.ZodTypeAny, {
+    name: string;
+    condition: {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }[];
+    result: {
+        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        summary?: boolean | undefined;
+        rewriteRules?: {
+            from: string;
+            to: string;
+        }[] | undefined;
+        blockRules?: {
+            value: string | number;
+            field: "title" | "content" | "all" | "author" | "url" | "order";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[] | undefined;
+    };
+}, {
+    name: string;
+    condition: {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }[];
+    result: {
+        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+        summary?: boolean | undefined;
+        rewriteRules?: {
+            from: string;
+            to: string;
+        }[] | undefined;
+        blockRules?: {
+            value: string | number;
+            field: "title" | "content" | "all" | "author" | "url" | "order";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[] | undefined;
+    };
+}>;
+declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
+    userId: z.ZodString;
+    rules: z.ZodNullable<z.ZodArray<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>, "many">>;
+}, "rules">, {
+    rules: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+        name: z.ZodString;
+        condition: z.ZodArray<z.ZodObject<{
+            field: z.ZodEnum<["view", "title", "site_url", "feed_url"]>;
+            operator: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
+            value: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }, {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }>, "many">;
+        result: z.ZodObject<{
+            translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
+            summary: z.ZodOptional<z.ZodBoolean>;
+            rewriteRules: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                from: z.ZodString;
+                to: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                from: string;
+                to: string;
+            }, {
+                from: string;
+                to: string;
+            }>, "many">>;
+            blockRules: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                field: z.ZodEnum<["all", "title", "content", "author", "url", "order"]>;
+                operator: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
+                value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
+            }, "strip", z.ZodTypeAny, {
+                value: string | number;
+                field: "title" | "content" | "all" | "author" | "url" | "order";
+                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+            }, {
+                value: string | number;
+                field: "title" | "content" | "all" | "author" | "url" | "order";
+                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+            }>, "many">>;
+        }, "strip", z.ZodTypeAny, {
+            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
+            rewriteRules?: {
+                from: string;
+                to: string;
+            }[] | undefined;
+            blockRules?: {
+                value: string | number;
+                field: "title" | "content" | "all" | "author" | "url" | "order";
+                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+            }[] | undefined;
+        }, {
+            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
+            rewriteRules?: {
+                from: string;
+                to: string;
+            }[] | undefined;
+            blockRules?: {
+                value: string | number;
+                field: "title" | "content" | "all" | "author" | "url" | "order";
+                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+            }[] | undefined;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        name: string;
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[];
+        result: {
+            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
+            rewriteRules?: {
+                from: string;
+                to: string;
+            }[] | undefined;
+            blockRules?: {
+                value: string | number;
+                field: "title" | "content" | "all" | "author" | "url" | "order";
+                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+            }[] | undefined;
+        };
+    }, {
+        name: string;
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[];
+        result: {
+            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
+            rewriteRules?: {
+                from: string;
+                to: string;
+            }[] | undefined;
+            blockRules?: {
+                value: string | number;
+                field: "title" | "content" | "all" | "author" | "url" | "order";
+                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+            }[] | undefined;
+        };
+    }>, "many">>>;
+}>, "strip", z.ZodTypeAny, {
+    userId: string;
+    rules?: {
+        name: string;
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[];
+        result: {
+            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
+            rewriteRules?: {
+                from: string;
+                to: string;
+            }[] | undefined;
+            blockRules?: {
+                value: string | number;
+                field: "title" | "content" | "all" | "author" | "url" | "order";
+                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+            }[] | undefined;
+        };
+    }[] | null | undefined;
+}, {
+    userId: string;
+    rules?: {
+        name: string;
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[];
+        result: {
+            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+            summary?: boolean | undefined;
+            rewriteRules?: {
+                from: string;
+                to: string;
+            }[] | undefined;
+            blockRules?: {
+                value: string | number;
+                field: "title" | "content" | "all" | "author" | "url" | "order";
+                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+            }[] | undefined;
+        };
+    }[] | null | undefined;
+}>;
+declare const actionsRelations: drizzle_orm.Relations<"actions", {
+    users: drizzle_orm.One<"user", true>;
+}>;
+type ActionsModel = z.infer<typeof actionsOpenAPISchema>;
+type SettingsModel = Exclude<z.infer<typeof actionsItemOpenAPISchema>["result"], undefined>;
+
+declare const collections: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "collections";
+    schema: undefined;
+    columns: {
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "collections";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        feedId: drizzle_orm_pg_core.PgColumn<{
+            name: "feedId";
+            tableName: "collections";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        entryId: drizzle_orm_pg_core.PgColumn<{
+            name: "entry_id";
+            tableName: "collections";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "created_at";
+            tableName: "collections";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        view: drizzle_orm_pg_core.PgColumn<{
+            name: "view";
+            tableName: "collections";
+            dataType: "number";
+            columnType: "PgSmallInt";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const collectionsOpenAPISchema: zod.ZodObject<{
+    userId: zod.ZodString;
+    feedId: zod.ZodString;
+    entryId: zod.ZodString;
+    createdAt: zod.ZodString;
+    view: zod.ZodNumber;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    createdAt: string;
+    userId: string;
+    view: number;
+    feedId: string;
+    entryId: string;
+}, {
+    createdAt: string;
+    userId: string;
+    view: number;
+    feedId: string;
+    entryId: string;
+}>;
+declare const collectionsRelations: drizzle_orm.Relations<"collections", {
+    users: drizzle_orm.One<"user", true>;
+    entries: drizzle_orm.One<"entries", true>;
+    feeds: drizzle_orm.One<"feeds", true>;
+}>;
+
+declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "entries";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        feedId: drizzle_orm_pg_core.PgColumn<{
+            name: "feed_id";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        title: drizzle_orm_pg_core.PgColumn<{
+            name: "title";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        url: drizzle_orm_pg_core.PgColumn<{
+            name: "url";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        content: drizzle_orm_pg_core.PgColumn<{
+            name: "content";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        description: drizzle_orm_pg_core.PgColumn<{
+            name: "description";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        guid: drizzle_orm_pg_core.PgColumn<{
+            name: "guid";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        author: drizzle_orm_pg_core.PgColumn<{
+            name: "author";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        authorUrl: drizzle_orm_pg_core.PgColumn<{
+            name: "author_url";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        authorAvatar: drizzle_orm_pg_core.PgColumn<{
+            name: "author_avatar";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        changedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "changed_at";
+            tableName: "entries";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        publishedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "published_at";
+            tableName: "entries";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        images: drizzle_orm_pg_core.PgColumn<{
+            name: "images";
+            tableName: "entries";
+            dataType: "array";
+            columnType: "PgArray";
+            data: string[];
+            driverParam: string | string[];
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: drizzle_orm.Column<{
+                name: "images";
+                tableName: "entries";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                driverParam: string;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                generated: undefined;
+            }, object, object>;
+            generated: undefined;
+        }, {}, {}>;
+        categories: drizzle_orm_pg_core.PgColumn<{
+            name: "categories";
+            tableName: "entries";
+            dataType: "array";
+            columnType: "PgArray";
+            data: string[];
+            driverParam: string | string[];
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: drizzle_orm.Column<{
+                name: "categories";
+                tableName: "entries";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                driverParam: string;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                generated: undefined;
+            }, object, object>;
+            generated: undefined;
+        }, {}, {}>;
+        enclosures: drizzle_orm_pg_core.PgColumn<{
+            name: "enclosures";
+            tableName: "entries";
+            dataType: "array";
+            columnType: "PgArray";
+            data: unknown[];
+            driverParam: string | unknown[];
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: drizzle_orm.Column<{
+                name: "enclosures";
+                tableName: "entries";
+                dataType: "json";
+                columnType: "PgJsonb";
+                data: unknown;
+                driverParam: unknown;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                generated: undefined;
+            }, object, object>;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
+    id: z.ZodString;
+    feedId: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
+    url: z.ZodNullable<z.ZodString>;
+    content: z.ZodNullable<z.ZodString>;
+    description: z.ZodNullable<z.ZodString>;
+    guid: z.ZodString;
+    author: z.ZodNullable<z.ZodString>;
+    authorUrl: z.ZodNullable<z.ZodString>;
+    authorAvatar: z.ZodNullable<z.ZodString>;
+    changedAt: z.ZodString;
+    publishedAt: z.ZodString;
+    images: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
+    categories: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
+    enclosures: z.ZodNullable<z.ZodArray<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>, "many">>;
+}, "enclosures">, {
+    enclosures: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+        url: z.ZodString;
+        length: z.ZodOptional<z.ZodNumber>;
+        type: z.ZodOptional<z.ZodString>;
+        title: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        url: string;
+        length?: number | undefined;
+        type?: string | undefined;
+        title?: string | undefined;
+    }, {
+        url: string;
+        length?: number | undefined;
+        type?: string | undefined;
+        title?: string | undefined;
+    }>, "many">>>;
+}>, "strip", z.ZodTypeAny, {
+    description: string | null;
+    title: string | null;
+    content: string | null;
+    id: string;
+    author: string | null;
+    url: string | null;
+    feedId: string;
+    guid: string;
+    authorUrl: string | null;
+    authorAvatar: string | null;
+    changedAt: string;
+    publishedAt: string;
+    images: string[] | null;
+    categories: string[] | null;
+    enclosures?: {
+        url: string;
+        length?: number | undefined;
+        type?: string | undefined;
+        title?: string | undefined;
+    }[] | null | undefined;
+}, {
+    description: string | null;
+    title: string | null;
+    content: string | null;
+    id: string;
+    author: string | null;
+    url: string | null;
+    feedId: string;
+    guid: string;
+    authorUrl: string | null;
+    authorAvatar: string | null;
+    changedAt: string;
+    publishedAt: string;
+    images: string[] | null;
+    categories: string[] | null;
+    enclosures?: {
+        url: string;
+        length?: number | undefined;
+        type?: string | undefined;
+        title?: string | undefined;
+    }[] | null | undefined;
+}>;
+declare const entriesRelations: drizzle_orm.Relations<"entries", {
+    feeds: drizzle_orm.One<"feeds", true>;
+    collections: drizzle_orm.Many<"collections">;
+    feedPowerTokens: drizzle_orm.One<"feedPowerTokens", true>;
+    entryReadHistories: drizzle_orm.One<"entryReadHistories", true>;
+}>;
+type EntriesModel = InferInsertModel<typeof entries> & {
+    enclosures?: {
+        url: string;
+        length?: number;
+        type?: string;
+        title?: string;
+    }[] | null;
+};
+declare const entryReadHistories: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "entryReadHistories";
+    schema: undefined;
+    columns: {
+        entryId: drizzle_orm_pg_core.PgColumn<{
+            name: "entry_id";
+            tableName: "entryReadHistories";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        userIds: drizzle_orm_pg_core.PgColumn<{
+            name: "user_ids";
+            tableName: "entryReadHistories";
+            dataType: "array";
+            columnType: "PgArray";
+            data: string[];
+            driverParam: string | string[];
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: drizzle_orm.Column<{
+                name: "user_ids";
+                tableName: "entryReadHistories";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                driverParam: string;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                generated: undefined;
+            }, object, object>;
+            generated: undefined;
+        }, {}, {}>;
+        readCount: drizzle_orm_pg_core.PgColumn<{
+            name: "read_count";
+            tableName: "entryReadHistories";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const entryReadHistoriesRelations: drizzle_orm.Relations<"entryReadHistories", {
+    entry: drizzle_orm.One<"entries", true>;
+}>;
+type EntryReadHistoriesModel = InferInsertModel<typeof entryReadHistories>;
+declare const entryReadHistoriesOpenAPISchema: z.ZodObject<{
+    entryId: z.ZodString;
+    userIds: z.ZodArray<z.ZodString, "many">;
+    readCount: z.ZodNumber;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    entryId: string;
+    userIds: string[];
+    readCount: number;
+}, {
+    entryId: string;
+    userIds: string[];
+    readCount: number;
+}>;
+
+declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "feeds";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        url: drizzle_orm_pg_core.PgColumn<{
+            name: "url";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        title: drizzle_orm_pg_core.PgColumn<{
+            name: "title";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        description: drizzle_orm_pg_core.PgColumn<{
+            name: "description";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        siteUrl: drizzle_orm_pg_core.PgColumn<{
+            name: "site_url";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        image: drizzle_orm_pg_core.PgColumn<{
+            name: "image";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        checkedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "checked_at";
+            tableName: "feeds";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        nextCheckAt: drizzle_orm_pg_core.PgColumn<{
+            name: "next_check_at";
+            tableName: "feeds";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        lastModifiedHeader: drizzle_orm_pg_core.PgColumn<{
+            name: "last_modified_header";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        etagHeader: drizzle_orm_pg_core.PgColumn<{
+            name: "etag_header";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        ttl: drizzle_orm_pg_core.PgColumn<{
+            name: "ttl";
+            tableName: "feeds";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        errorMessage: drizzle_orm_pg_core.PgColumn<{
+            name: "error_message";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        errorAt: drizzle_orm_pg_core.PgColumn<{
+            name: "error_at";
+            tableName: "feeds";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        ownerUserId: drizzle_orm_pg_core.PgColumn<{
+            name: "owner_user_id";
+            tableName: "feeds";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const feedsOpenAPISchema: zod.ZodObject<{
+    id: zod.ZodString;
+    url: zod.ZodString;
+    title: zod.ZodNullable<zod.ZodString>;
+    description: zod.ZodNullable<zod.ZodString>;
+    siteUrl: zod.ZodNullable<zod.ZodString>;
+    image: zod.ZodNullable<zod.ZodString>;
+    checkedAt: zod.ZodString;
+    nextCheckAt: zod.ZodString;
+    lastModifiedHeader: zod.ZodNullable<zod.ZodString>;
+    etagHeader: zod.ZodNullable<zod.ZodString>;
+    ttl: zod.ZodNullable<zod.ZodNumber>;
+    errorMessage: zod.ZodNullable<zod.ZodString>;
+    errorAt: zod.ZodNullable<zod.ZodString>;
+    ownerUserId: zod.ZodNullable<zod.ZodString>;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    description: string | null;
+    title: string | null;
+    id: string;
+    image: string | null;
+    url: string;
+    siteUrl: string | null;
+    checkedAt: string;
+    nextCheckAt: string;
+    lastModifiedHeader: string | null;
+    etagHeader: string | null;
+    ttl: number | null;
+    errorMessage: string | null;
+    errorAt: string | null;
+    ownerUserId: string | null;
+}, {
+    description: string | null;
+    title: string | null;
+    id: string;
+    image: string | null;
+    url: string;
+    siteUrl: string | null;
+    checkedAt: string;
+    nextCheckAt: string;
+    lastModifiedHeader: string | null;
+    etagHeader: string | null;
+    ttl: number | null;
+    errorMessage: string | null;
+    errorAt: string | null;
+    ownerUserId: string | null;
+}>;
+declare const feedsInputSchema: zod.ZodObject<{
+    description: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    title: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    id: zod.ZodOptional<zod.ZodString>;
+    image: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    url: zod.ZodString;
+    siteUrl: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    checkedAt: zod.ZodString;
+    nextCheckAt: zod.ZodString;
+    lastModifiedHeader: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    etagHeader: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    ttl: zod.ZodOptional<zod.ZodNullable<zod.ZodNumber>>;
+    errorMessage: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    errorAt: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    ownerUserId: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    url: string;
+    checkedAt: string;
+    nextCheckAt: string;
+    description?: string | null | undefined;
+    title?: string | null | undefined;
+    id?: string | undefined;
+    image?: string | null | undefined;
+    siteUrl?: string | null | undefined;
+    lastModifiedHeader?: string | null | undefined;
+    etagHeader?: string | null | undefined;
+    ttl?: number | null | undefined;
+    errorMessage?: string | null | undefined;
+    errorAt?: string | null | undefined;
+    ownerUserId?: string | null | undefined;
+}, {
+    url: string;
+    checkedAt: string;
+    nextCheckAt: string;
+    description?: string | null | undefined;
+    title?: string | null | undefined;
+    id?: string | undefined;
+    image?: string | null | undefined;
+    siteUrl?: string | null | undefined;
+    lastModifiedHeader?: string | null | undefined;
+    etagHeader?: string | null | undefined;
+    ttl?: number | null | undefined;
+    errorMessage?: string | null | undefined;
+    errorAt?: string | null | undefined;
+    ownerUserId?: string | null | undefined;
+}>;
+declare const feedsRelations: drizzle_orm.Relations<"feeds", {
+    subscriptions: drizzle_orm.Many<"subscriptions">;
+    entries: drizzle_orm.Many<"entries">;
+    owner: drizzle_orm.One<"user", false>;
+}>;
+type FeedModel = InferInsertModel<typeof feeds>;
+
+declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "invitations";
+    schema: undefined;
+    columns: {
+        code: drizzle_orm_pg_core.PgColumn<{
+            name: "code";
+            tableName: "invitations";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "created_at";
+            tableName: "invitations";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        fromUserId: drizzle_orm_pg_core.PgColumn<{
+            name: "from_user_id";
+            tableName: "invitations";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        toUserId: drizzle_orm_pg_core.PgColumn<{
+            name: "to_user_id";
+            tableName: "invitations";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+
+declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "subscriptions";
+    schema: undefined;
+    columns: {
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "subscriptions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        feedId: drizzle_orm_pg_core.PgColumn<{
+            name: "feed_id";
+            tableName: "subscriptions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        view: drizzle_orm_pg_core.PgColumn<{
+            name: "view";
+            tableName: "subscriptions";
+            dataType: "number";
+            columnType: "PgSmallInt";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        category: drizzle_orm_pg_core.PgColumn<{
+            name: "category";
+            tableName: "subscriptions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        title: drizzle_orm_pg_core.PgColumn<{
+            name: "title";
+            tableName: "subscriptions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        isPrivate: drizzle_orm_pg_core.PgColumn<{
+            name: "is_private";
+            tableName: "subscriptions";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const subscriptionsOpenAPISchema: zod.ZodObject<{
+    userId: zod.ZodString;
+    feedId: zod.ZodString;
+    view: zod.ZodNumber;
+    category: zod.ZodNullable<zod.ZodString>;
+    title: zod.ZodNullable<zod.ZodString>;
+    isPrivate: zod.ZodBoolean;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    title: string | null;
+    userId: string;
+    view: number;
+    feedId: string;
+    category: string | null;
+    isPrivate: boolean;
+}, {
+    title: string | null;
+    userId: string;
+    view: number;
+    feedId: string;
+    category: string | null;
+    isPrivate: boolean;
+}>;
+declare const subscriptionsRelations: drizzle_orm.Relations<"subscriptions", {
+    users: drizzle_orm.One<"user", true>;
+    feeds: drizzle_orm.One<"feeds", true>;
+}>;
+
+declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "timeline";
+    schema: undefined;
+    columns: {
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "timeline";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        feedId: drizzle_orm_pg_core.PgColumn<{
+            name: "feedId";
+            tableName: "timeline";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        entryId: drizzle_orm_pg_core.PgColumn<{
+            name: "entry_id";
+            tableName: "timeline";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        publishedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "published_at";
+            tableName: "timeline";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        view: drizzle_orm_pg_core.PgColumn<{
+            name: "view";
+            tableName: "timeline";
+            dataType: "number";
+            columnType: "PgSmallInt";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        read: drizzle_orm_pg_core.PgColumn<{
+            name: "read";
+            tableName: "timeline";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const timelineOpenAPISchema: zod.ZodObject<{
+    userId: zod.ZodString;
+    feedId: zod.ZodString;
+    entryId: zod.ZodString;
+    publishedAt: zod.ZodString;
+    view: zod.ZodNumber;
+    read: zod.ZodNullable<zod.ZodBoolean>;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    userId: string;
+    view: number;
+    feedId: string;
+    publishedAt: string;
+    entryId: string;
+    read: boolean | null;
+}, {
+    userId: string;
+    view: number;
+    feedId: string;
+    publishedAt: string;
+    entryId: string;
+    read: boolean | null;
+}>;
+declare const timelineRelations: drizzle_orm.Relations<"timeline", {
+    entries: drizzle_orm.One<"entries", true>;
+    feeds: drizzle_orm.One<"feeds", true>;
+    collections: drizzle_orm.One<"collections", true>;
+}>;
+
+declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "user";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "user";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        name: drizzle_orm_pg_core.PgColumn<{
+            name: "name";
+            tableName: "user";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        email: drizzle_orm_pg_core.PgColumn<{
+            name: "email";
+            tableName: "user";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        emailVerified: drizzle_orm_pg_core.PgColumn<{
+            name: "emailVerified";
+            tableName: "user";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        image: drizzle_orm_pg_core.PgColumn<{
+            name: "image";
+            tableName: "user";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        handle: drizzle_orm_pg_core.PgColumn<{
+            name: "handle";
+            tableName: "user";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "created_at";
+            tableName: "user";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const usersOpenApiSchema: z.ZodObject<{
+    id: z.ZodString;
+    name: z.ZodNullable<z.ZodString>;
+    email: z.ZodString;
+    emailVerified: z.ZodNullable<z.ZodString>;
+    image: z.ZodNullable<z.ZodString>;
+    handle: z.ZodNullable<z.ZodString>;
+    createdAt: z.ZodDate;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    name: string | null;
+    id: string;
+    email: string;
+    emailVerified: string | null;
+    image: string | null;
+    handle: string | null;
+    createdAt: Date;
+}, {
+    name: string | null;
+    id: string;
+    email: string;
+    emailVerified: string | null;
+    image: string | null;
+    handle: string | null;
+    createdAt: Date;
+}>;
+declare const accounts: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "account";
+    schema: undefined;
+    columns: {
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "userId";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        type: drizzle_orm_pg_core.PgColumn<{
+            name: "type";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        provider: drizzle_orm_pg_core.PgColumn<{
+            name: "provider";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        providerAccountId: drizzle_orm_pg_core.PgColumn<{
+            name: "providerAccountId";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        refresh_token: drizzle_orm_pg_core.PgColumn<{
+            name: "refresh_token";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        access_token: drizzle_orm_pg_core.PgColumn<{
+            name: "access_token";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        expires_at: drizzle_orm_pg_core.PgColumn<{
+            name: "expires_at";
+            tableName: "account";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        token_type: drizzle_orm_pg_core.PgColumn<{
+            name: "token_type";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        scope: drizzle_orm_pg_core.PgColumn<{
+            name: "scope";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        id_token: drizzle_orm_pg_core.PgColumn<{
+            name: "id_token";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        session_state: drizzle_orm_pg_core.PgColumn<{
+            name: "session_state";
+            tableName: "account";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const sessions: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "session";
+    schema: undefined;
+    columns: {
+        sessionToken: drizzle_orm_pg_core.PgColumn<{
+            name: "sessionToken";
+            tableName: "session";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "userId";
+            tableName: "session";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        expires: drizzle_orm_pg_core.PgColumn<{
+            name: "expires";
+            tableName: "session";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const verificationTokens: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "verificationToken";
+    schema: undefined;
+    columns: {
+        identifier: drizzle_orm_pg_core.PgColumn<{
+            name: "identifier";
+            tableName: "verificationToken";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        token: drizzle_orm_pg_core.PgColumn<{
+            name: "token";
+            tableName: "verificationToken";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        expires: drizzle_orm_pg_core.PgColumn<{
+            name: "expires";
+            tableName: "verificationToken";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const usersRelations: drizzle_orm.Relations<"user", {
+    subscriptions: drizzle_orm.Many<"subscriptions">;
+    collections: drizzle_orm.Many<"collections">;
+    actions: drizzle_orm.One<"actions", true>;
+    wallets: drizzle_orm.One<"wallets", true>;
+    feeds: drizzle_orm.Many<"feeds">;
+}>;
+
+declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "wallets";
+    schema: undefined;
+    columns: {
+        addressIndex: drizzle_orm_pg_core.PgColumn<{
+            name: "address_index";
+            tableName: "wallets";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: drizzle_orm.GeneratedColumnConfig<number> & {
+                as: any;
+                type: "always";
+            };
+        }, {}, {}>;
+        address: drizzle_orm_pg_core.PgColumn<{
+            name: "address";
+            tableName: "wallets";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "userId";
+            tableName: "wallets";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "created_at";
+            tableName: "wallets";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        dailyPowerToken: drizzle_orm_pg_core.PgColumn<{
+            name: "daily_power_token";
+            tableName: "wallets";
+            dataType: "string";
+            columnType: "PgNumeric";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        cashablePowerToken: drizzle_orm_pg_core.PgColumn<{
+            name: "cashable_power_token";
+            tableName: "wallets";
+            dataType: "string";
+            columnType: "PgNumeric";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const walletsOpenAPISchema: zod.ZodObject<{
+    addressIndex: zod.ZodNumber;
+    address: zod.ZodNullable<zod.ZodString>;
+    userId: zod.ZodString;
+    createdAt: zod.ZodString;
+    dailyPowerToken: zod.ZodString;
+    cashablePowerToken: zod.ZodString;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    createdAt: string;
+    userId: string;
+    addressIndex: number;
+    address: string | null;
+    dailyPowerToken: string;
+    cashablePowerToken: string;
+}, {
+    createdAt: string;
+    userId: string;
+    addressIndex: number;
+    address: string | null;
+    dailyPowerToken: string;
+    cashablePowerToken: string;
+}>;
+declare const walletsRelations: drizzle_orm.Relations<"wallets", {
+    user: drizzle_orm.One<"user", true>;
+    transactionsFrom: drizzle_orm.Many<"transactions">;
+    transactionTo: drizzle_orm.Many<"transactions">;
+}>;
+declare const transactionType: drizzle_orm_pg_core.PgEnum<["tip", "mint", "burn", "withdraw"]>;
+declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "transactions";
+    schema: undefined;
+    columns: {
+        hash: drizzle_orm_pg_core.PgColumn<{
+            name: "hash";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        type: drizzle_orm_pg_core.PgColumn<{
+            name: "type";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgEnumColumn";
+            data: "tip" | "mint" | "burn" | "withdraw";
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: ["tip", "mint", "burn", "withdraw"];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        fromUserId: drizzle_orm_pg_core.PgColumn<{
+            name: "from_user_id";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        toUserId: drizzle_orm_pg_core.PgColumn<{
+            name: "to_user_id";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        toFeedId: drizzle_orm_pg_core.PgColumn<{
+            name: "to_feed_id";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        powerToken: drizzle_orm_pg_core.PgColumn<{
+            name: "power_token";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgNumeric";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "created_at";
+            tableName: "transactions";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        comment: drizzle_orm_pg_core.PgColumn<{
+            name: "comment";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const transactionsOpenAPISchema: zod.ZodObject<{
+    hash: zod.ZodString;
+    type: zod.ZodEnum<["tip", "mint", "burn", "withdraw"]>;
+    fromUserId: zod.ZodNullable<zod.ZodString>;
+    toUserId: zod.ZodNullable<zod.ZodString>;
+    toFeedId: zod.ZodNullable<zod.ZodString>;
+    powerToken: zod.ZodString;
+    createdAt: zod.ZodString;
+    comment: zod.ZodNullable<zod.ZodString>;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    type: "tip" | "mint" | "burn" | "withdraw";
+    createdAt: string;
+    powerToken: string;
+    fromUserId: string | null;
+    toUserId: string | null;
+    hash: string;
+    toFeedId: string | null;
+    comment: string | null;
+}, {
+    type: "tip" | "mint" | "burn" | "withdraw";
+    createdAt: string;
+    powerToken: string;
+    fromUserId: string | null;
+    toUserId: string | null;
+    hash: string;
+    toFeedId: string | null;
+    comment: string | null;
+}>;
+declare const transactionsRelations: drizzle_orm.Relations<"transactions", {
+    fromUser: drizzle_orm.One<"user", false>;
+    toUser: drizzle_orm.One<"user", false>;
+    toFeed: drizzle_orm.One<"feeds", false>;
+    fromWallet: drizzle_orm.One<"wallets", false>;
+    toWallet: drizzle_orm.One<"wallets", false>;
+}>;
+declare const feedPowerTokens: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "feedPowerTokens";
+    schema: undefined;
+    columns: {
+        feedId: drizzle_orm_pg_core.PgColumn<{
+            name: "feed_id";
+            tableName: "feedPowerTokens";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        powerToken: drizzle_orm_pg_core.PgColumn<{
+            name: "power_token";
+            tableName: "feedPowerTokens";
+            dataType: "string";
+            columnType: "PgNumeric";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const feedPowerTokensOpenAPISchema: zod.ZodObject<{
+    feedId: zod.ZodString;
+    powerToken: zod.ZodString;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    feedId: string;
+    powerToken: string;
+}, {
+    feedId: string;
+    powerToken: string;
+}>;
+declare const feedPowerTokensRelations: drizzle_orm.Relations<"feedPowerTokens", {
+    feed: drizzle_orm.One<"feeds", true>;
+}>;
 
 declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
     "/profiles": {
@@ -800,22 +3186,20 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         publishedAt: string;
                         images: string[] | null;
                         categories: string[] | null;
-                        entryReadHistories: {
-                            users: {
-                                name: string | null;
-                                id: string;
-                                image: string | null;
-                                handle: string | null;
-                            }[];
-                            userIds: string[];
-                            readCount: number;
-                        };
                         enclosures?: {
                             url: string;
                             length?: number | undefined;
                             type?: string | undefined;
                             title?: string | undefined;
                         }[] | null | undefined;
+                    };
+                    users: {
+                        [x: string]: {
+                            name: string | null;
+                            id: string;
+                            image: string | null;
+                            handle: string | null;
+                        };
                     };
                     collections: {
                         createdAt: string;
@@ -836,6 +3220,10 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         errorAt: string | null;
                         ownerUserId: string | null;
                     };
+                    entryReadHistories: {
+                        userIds: string[];
+                        readCount: number;
+                    } | null;
                     read: boolean | null;
                     settings?: {
                         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -973,4 +3361,4 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
 }, "/">;
 type AppType = typeof _routes;
 
-export type { AppType };
+export { type ActionsModel, type AppType, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type SettingsModel, accounts, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsInputSchema, feedsOpenAPISchema, feedsRelations, invitations, languageSchema, sessions, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

@@ -1,4 +1,4 @@
-import { getUser } from "@renderer/atoms/user"
+import { getMe } from "@renderer/atoms/user"
 import { runTransactionInScope } from "@renderer/database"
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedModel } from "@renderer/models"
@@ -61,7 +61,7 @@ class FeedActions {
         }),
 
       async () => {
-        const currentUser = getUser()
+        const currentUser = getMe()
         if (!currentUser) return
         this.updateFeedOwnership(feedId, currentUser.id)
         const feed = get().feeds[feedId]

@@ -1,4 +1,6 @@
 import { runTransactionInScope } from "@renderer/database"
+import type { UserModel } from "@renderer/database/models/user"
+import type { EntryReadHistoriesModel } from "@renderer/hono"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
   getEntriesParams,
@@ -15,6 +17,7 @@ import { merge, omit } from "lodash-es"
 
 import { feedActions } from "../feed"
 import { feedUnreadActions } from "../unread"
+import { userActions } from "../user"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import { batchMarkUnread } from "./helper"
 import type { EntryState, FlatEntryModel } from "./types"
@@ -24,6 +27,7 @@ const createState = (): EntryState => ({
   flatMapEntries: {},
   internal_feedId2entryIdSet: {},
   starIds: new Set(),
+  readHistory: {},
 })
 
 export const useEntryStore = createZustandStore<EntryState>("entry")(() => ({
@@ -62,7 +66,12 @@ class EntryActions {
         // patch data, should omit `read` because the network race condition or server cache
         omit(data, "read") as any,
       ])
+      userActions.upsert(data.users as Record<string, UserModel>)
+      if (data.entryReadHistories) {
+        this.updateReadHistory(entryId, data.entryReadHistories)
+      }
     }
+
     return data
   }
 
@@ -297,7 +306,7 @@ class EntryActions {
           {
             createdAt: new Date().toISOString(),
           } :
-        null as unknown as undefined,
+          (null as unknown as undefined),
     })
 
     set((state) =>
@@ -335,6 +344,19 @@ class EntryActions {
         }
       },
     )
+  }
+
+  updateReadHistory(
+    entryId: string,
+    readHistory: Omit<EntryReadHistoriesModel, "entryId">,
+  ) {
+    set((state) => ({
+      ...state,
+      readHistory: {
+        ...state.readHistory,
+        [entryId]: readHistory,
+      },
+    }))
   }
 }
 

@@ -3,7 +3,7 @@ import {
   setGeneralSetting,
   useGeneralSettingKey,
 } from "@renderer/atoms/settings/general"
-import { useUser } from "@renderer/atoms/user"
+import { useMe } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { EmptyIcon } from "@renderer/components/icons/empty"
 import { ActionButton, StyledButton } from "@renderer/components/ui/button"
@@ -226,7 +226,7 @@ const ListHeader: FC<{
     routerParams.feedId,
   )
 
-  const user = useUser()
+  const user = useMe()
   const isOnline = useIsOnline()
 
   const feed = useFeedById(routerParams.feedId)

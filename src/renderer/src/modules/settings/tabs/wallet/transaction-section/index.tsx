@@ -1,4 +1,4 @@
-import { useUser } from "@renderer/atoms/user"
+import { useMe } from "@renderer/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@renderer/components/ui/table"
 import { Balance } from "@renderer/components/ui/wallet/balance"
@@ -8,7 +8,7 @@ import { SettingSectionTitle } from "@renderer/modules/settings/section"
 import { useWallet, useWalletTransactions } from "@renderer/queries/wallet"
 
 export const TransactionsSection = () => {
-  const user = useUser()
+  const user = useMe()
   const wallet = useWallet({ userId: user?.id })
   const myWallet = wallet.data?.[0]
 
@@ -111,7 +111,7 @@ const BalanceRenderer = ({
 )
 
 const UserRenderer = ({ user }: { user?: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["fromUser" | "toUser"] }) => {
-  const me = useUser()
+  const me = useMe()
   const isMe = user?.id === me?.id
 
   const name = isMe ? "You" : user?.name || "SYSTEM"

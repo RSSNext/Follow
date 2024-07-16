@@ -1,3 +1,4 @@
+import type { EntryReadHistoriesModel } from "@renderer/hono"
 import type { FeedViewType } from "@renderer/lib/enum"
 import type { CombinedEntryModel } from "@renderer/models"
 
@@ -5,7 +6,9 @@ type FeedId = string
 type EntryId = string
 type EntriesIdTable = Record<FeedId, EntryId[]>
 
-export type FlatEntryModel = Omit<CombinedEntryModel, "feeds"> & { feedId: FeedId }
+export type FlatEntryModel = Omit<CombinedEntryModel, "feeds"> & {
+  feedId: FeedId
+}
 export interface EntryState {
   /**
    * A map of feedId to entryIds
@@ -21,9 +24,9 @@ export interface EntryState {
    */
 
   internal_feedId2entryIdSet: Record<FeedId, Set<EntryId>>
-  // viewToStarIds: Record<FeedViewType, Set<EntryId>>
   starIds: Set<EntryId>
-  // internal_updateSortIds: Record<FeedId, EntryId[]>
+
+  readHistory: Record<EntryId, Omit<EntryReadHistoriesModel, "entryId">>
 }
 
 export interface EntryFilter {

@@ -1,5 +1,5 @@
 import { signOut } from "@hono/auth-js/react"
-import { setUser } from "@renderer/atoms/user"
+import { setMe } from "@renderer/atoms/user"
 import { QUERY_PERSIST_KEY } from "@renderer/lib/constants"
 import { clearStorage } from "@renderer/lib/ns"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
@@ -14,7 +14,7 @@ export const useSignOut = () =>
     localStorage.removeItem(QUERY_PERSIST_KEY)
 
     // setLoginModalShow(true)
-    setUser(null)
+    setMe(null)
 
     // Clear local storage
     clearStorage()
