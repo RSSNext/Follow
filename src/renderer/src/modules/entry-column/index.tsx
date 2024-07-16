@@ -204,6 +204,7 @@ const ListHeader: FC<{
   const os = getOS()
 
   const titleAtBottom = window.electron && os === "macOS"
+  const isInCollectionList = feedId === FEED_COLLECTION_LIST
 
   const titleInfo = !!headerTitle && (
     <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
@@ -215,7 +216,7 @@ const ListHeader: FC<{
       <div className="text-xs font-medium text-zinc-400">
         {totalCount || 0}
         {" "}
-        {unreadOnly ? "Unread" : ""}
+        {unreadOnly && !isInCollectionList ? "Unread" : ""}
         {" "}
         Items
       </div>
@@ -229,8 +230,6 @@ const ListHeader: FC<{
   const isOnline = useIsOnline()
 
   const feed = useFeedById(routerParams.feedId)
-
-  const isInCollectionList = feedId === FEED_COLLECTION_LIST
 
   return (
     <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
