@@ -257,6 +257,7 @@ class EntryActions {
     const currentIsRead = get().flatMapEntries[entryId]?.read
 
     if (currentIsRead) return
+
     this.patch(entryId, {
       read,
     })

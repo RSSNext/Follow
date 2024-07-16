@@ -8,7 +8,7 @@ import { shortcuts } from "@renderer/lib/shortcuts"
 import { useEntries } from "@renderer/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
 import { useFolderFeedsByFeedId } from "@renderer/store/subscription"
-import { useCallback, useEffect, useMemo, useRef } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import type { ListRange } from "react-virtuoso"
 import { useDebounceCallback } from "usehooks-ts"
@@ -106,20 +106,24 @@ export const useEntriesByView = () => {
   useEffect(() => {
     prevEntries.current = []
   }, [routeParams.feedId, routeParams.view])
-  const mergedEntries = useMemo(() => {
+  const [mergedEntries, setMergedEntries] = useState<string[]>([])
+
+  useEffect(() => {
     if (!unreadOnly) {
       prevEntries.current = []
-      return entries
+      setMergedEntries(entries)
+      return
     }
     if (!prevEntries.current) {
       prevEntries.current = entries
-      return entries
+      setMergedEntries(entries)
+      return
     }
     // merge the new entries with the old entries, and unique them
     const nextIds = [...new Set([...prevEntries.current, ...entries])]
     prevEntries.current = nextIds
-    return nextIds
-  }, [entries, prevEntries, unreadOnly])
+    setMergedEntries(nextIds)
+  }, [entries, unreadOnly])
 
   const sortEntries = () =>
     isCollection ?

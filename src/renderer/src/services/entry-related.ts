@@ -45,14 +45,16 @@ class ServiceStatic {
     data: IdToAnyObjectRecord
   ): Promise<void>
   async upsert(type: any, data: Record<string, any>) {
-    const oldData = await this.findAll(type)
     const getPreviousTask = taskQueue.get(type) || Promise.resolve()
-    const task = getPreviousTask.finally(() =>
+
+    const task = getPreviousTask.finally(async () => {
+      const oldData = await this.findAll(type)
+
       entryRelatedModel.table.put({
         data: { ...oldData, ...data },
         id: type,
-      }),
-    )
+      })
+    })
     taskQueue.set(type, task)
 
     return task

@@ -35,7 +35,7 @@ export const createZustandStore =
     (store: T) => {
       const newStore = createWithEqualityFn(
         devtools(store, {
-          enabled: process.env.NODE_ENV === "development",
+          enabled: import.meta.env.DEV,
           name,
         }),
         shallow,
