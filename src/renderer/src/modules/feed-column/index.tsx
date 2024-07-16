@@ -8,11 +8,13 @@ import { ProfileButton } from "@renderer/components/user-button"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
+import { useAuthQuery } from "@renderer/hooks/common"
 import { views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { Routes } from "@renderer/lib/enum"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { clamp, cn } from "@renderer/lib/utils"
+import { Queries } from "@renderer/queries"
 import { useSubscriptionStore } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { useWheel } from "@use-gesture/react"
@@ -45,6 +47,7 @@ const useBackHome = (active: number) => {
 }
 
 const useUnreadByView = () => {
+  useAuthQuery(Queries.subscription.byView())
   const idByView = useSubscriptionStore((state) =>
     state.dataIdByView,
   )

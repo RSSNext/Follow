@@ -61,7 +61,9 @@ const get = useSubscriptionStore.getState
 class SubscriptionActions {
   async fetchByView(view?: FeedViewType) {
     const res = await apiClient.subscriptions.$get({
-      query: { view: String(view) },
+      query: {
+        view: view !== undefined ? String(view) : undefined,
+      },
     })
 
     // reset dataIdByView
