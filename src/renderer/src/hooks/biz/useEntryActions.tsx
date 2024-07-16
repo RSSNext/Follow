@@ -58,34 +58,12 @@ export const useUnCollect = (entry: Nullable<CombinedEntryModel>) =>
 export const useRead = () =>
   useMutation({
     mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry &&
-      apiClient.reads.$post({
-        json: {
-          entryIds: [entry.entries.id],
-        },
-      }),
-
-    onMutate: (entry: Nullable<CombinedEntryModel>) => {
-      if (!entry) return
-
-      entryActions.markRead(entry.feeds.id, entry.entries.id, true)
-    },
+      entry && entryActions.markRead(entry.feeds.id, entry.entries.id, true),
   })
 export const useUnread = () =>
   useMutation({
     mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry &&
-      apiClient.reads.$delete({
-        json: {
-          entryId: entry.entries.id,
-        },
-      }),
-
-    onMutate: (entry: Nullable<CombinedEntryModel>) => {
-      if (!entry) return
-
-      entryActions.markRead(entry.feeds.id, entry.entries.id, false)
-    },
+      entry && entryActions.markRead(entry.feeds.id, entry.entries.id, false),
   })
 
 export const useEntryActions = ({
@@ -198,7 +176,9 @@ export const useEntryActions = ({
             if (
               !populatedEntry.entries.url ||
               !populatedEntry.entries.images?.length
-            ) { return }
+            ) {
+              return
+            }
             const response = await tipcClient?.saveToEagle({
               url: populatedEntry.entries.url,
               images: populatedEntry.entries.images,

@@ -1,3 +1,4 @@
+import { runTransactionInScope } from "@renderer/database"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { FeedViewType } from "@renderer/lib/enum"
 import { capitalizeFirstLetter } from "@renderer/lib/utils"
@@ -7,7 +8,6 @@ import { produce } from "immer"
 import { omit } from "lodash-es"
 import { parse } from "tldts"
 
-import { isHydrated } from "../../initialize/hydrate"
 import { entryActions } from "../entry"
 import { feedActions, getFeedById } from "../feed"
 import { feedUnreadActions } from "../unread"
@@ -87,9 +87,9 @@ class SubscriptionActions {
   }
 
   upsertMany(subscriptions: SubscriptionPlainModel[]) {
-    if (isHydrated()) {
+    runTransactionInScope(() => {
       SubscriptionService.upsertMany(subscriptions)
-    }
+    })
     set((state) =>
       produce(state, (state) => {
         subscriptions.forEach((subscription) => {

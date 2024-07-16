@@ -1,3 +1,4 @@
+import { runTransactionInScope } from "@renderer/database"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
   getEntriesParams,
@@ -12,10 +13,10 @@ import { EntryService } from "@renderer/services"
 import { produce } from "immer"
 import { isNil, merge, omit } from "lodash-es"
 
-import { isHydrated } from "../../initialize/hydrate"
 import { feedActions } from "../feed"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore } from "../utils/helper"
+import { batchMarkUnread } from "./helper"
 import type { EntryState, FlatEntryModel } from "./types"
 
 const createState = (): EntryState => ({
@@ -94,7 +95,7 @@ class EntryActions {
     return get().flatMapEntries
   }
 
-  patch(entryId: string, changed: Partial<CombinedEntryModel>) {
+  private patch(entryId: string, changed: Partial<CombinedEntryModel>) {
     set((state) =>
       produce(state, (draft) => {
         const entry = draft.flatMapEntries[entryId]
@@ -121,7 +122,7 @@ class EntryActions {
     )
   }
 
-  patchAll(changed: Partial<CombinedEntryModel>) {
+  private patchAll(changed: Partial<CombinedEntryModel>) {
     set((state) =>
       produce(state, (draft) => {
         for (const entry of Object.values(draft.flatMapEntries)) {
@@ -197,12 +198,12 @@ class EntryActions {
       starIds: newStarIds,
     }))
     // Update database
-    if (isHydrated()) {
+    runTransactionInScope(() => {
       EntryService.upsertMany(entries)
       EntryService.bulkStoreReadStatus(entry2Read)
       EntryService.bulkStoreFeedId(entryFeedMap)
       EntryService.bulkStoreCollection(entryCollection)
-    }
+    })
   }
 
   hydrate(data: FlatEntryModel[]) {
@@ -256,12 +257,24 @@ class EntryActions {
     this.patch(entryId, {
       read,
     })
-    if (!isHydrated()) return
-    if (!isNil(read)) {
-      EntryService.bulkStoreReadStatus({
-        [entryId]: read,
+
+    if (read) {
+      batchMarkUnread([feedId, entryId])
+    } else {
+      apiClient.reads.$delete({
+        json: {
+          entryId,
+        },
       })
     }
+
+    runTransactionInScope(() => {
+      if (!isNil(read)) {
+        EntryService.bulkStoreReadStatus({
+          [entryId]: read,
+        })
+      }
+    })
   }
 
   markReadByFeedId(feedId: string) {
@@ -273,7 +286,7 @@ class EntryActions {
     feedUnreadActions.updateByFeedId(feedId, 0)
   }
 
-  markStar(entryId: string, star: boolean) {
+  async markStar(entryId: string, star: boolean) {
     this.patch(entryId, {
       collections: star ?
           {
@@ -282,22 +295,29 @@ class EntryActions {
         undefined,
     })
 
+    apiClient.collections.$delete({
+      json: {
+        entryId,
+      },
+    })
+
     set((state) =>
       produce(state, (state) => {
         star ? state.starIds.add(entryId) : state.starIds.delete(entryId)
       }),
     )
 
-    if (!isHydrated()) return
-    if (star) {
-      EntryService.bulkStoreCollection({
-        [entryId]: {
-          createdAt: new Date().toISOString(),
-        },
-      })
-    } else {
-      EntryService.deleteCollection(entryId)
-    }
+    runTransactionInScope(() => {
+      if (star) {
+        EntryService.bulkStoreCollection({
+          [entryId]: {
+            createdAt: new Date().toISOString(),
+          },
+        })
+      } else {
+        EntryService.deleteCollection(entryId)
+      }
+    })
   }
 }
 

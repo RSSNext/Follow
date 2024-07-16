@@ -1,8 +1,8 @@
+import { runTransactionInScope } from "@renderer/database"
 import type { FeedModel } from "@renderer/models"
 import { FeedService } from "@renderer/services"
 import { produce } from "immer"
 
-import { isHydrated } from "../../initialize/hydrate"
 import { createZustandStore } from "../utils/helper"
 import type { FeedState } from "./types"
 
@@ -21,9 +21,9 @@ class FeedActions {
   }
 
   upsertMany(feeds: FeedModel[]) {
-    if (isHydrated()) {
+    runTransactionInScope(() => {
       FeedService.upsertMany(feeds)
-    }
+    })
     set((state) =>
       produce(state, (state) => {
         for (const feed of feeds) {
