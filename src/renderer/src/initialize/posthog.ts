@@ -1,5 +1,5 @@
 import { env } from "@env"
-import { getUser } from "@renderer/atoms/user"
+import { getMe } from "@renderer/atoms/user"
 
 declare global {
   interface Window {
@@ -18,7 +18,7 @@ export const initPostHog = async () => {
 
   window.posthog = posthog
 
-  const user = getUser()
+  const user = getMe()
   if (user) {
     posthog.identify(user.id, { name: user.name, handle: user.handle })
   }

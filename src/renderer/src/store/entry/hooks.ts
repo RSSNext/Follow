@@ -1,3 +1,4 @@
+import type { EntryReadHistoriesModel } from "@renderer/hono"
 import {
   FEED_COLLECTION_LIST,
   ROUTE_FEED_IN_FOLDER,
@@ -96,3 +97,5 @@ export const useEntryIdsByFeedIdOrView = (
   }
   return byView
 }
+
+export const useEntryReadHistory = (entryId: string): Omit<EntryReadHistoriesModel, "entryId"> | null => useEntryStore(useShallow((state) => state.readHistory[entryId]))

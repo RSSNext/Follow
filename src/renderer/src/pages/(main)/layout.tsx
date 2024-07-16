@@ -1,5 +1,5 @@
 import { setMainContainerElement } from "@renderer/atoms/dom"
-import { useLoginModalShow, useUser } from "@renderer/atoms/user"
+import { useLoginModalShow, useMe } from "@renderer/atoms/user"
 import { DeclarativeModal } from "@renderer/components/ui/modal/stacked/declarative-modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { RootPortal } from "@renderer/components/ui/portal"
@@ -13,7 +13,7 @@ import { Outlet } from "react-router-dom"
 
 export function Component() {
   const isAuthFail = useLoginModalShow()
-  const user = useUser()
+  const user = useMe()
 
   return (
     <div className="flex h-full" onContextMenu={preventDefault}>

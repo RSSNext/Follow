@@ -1,10 +1,8 @@
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { useUser } from "@renderer/atoms/user"
+import { useMe } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { parseHtml } from "@renderer/lib/parse-html"
@@ -14,7 +12,7 @@ import {
   WrappedElementProvider,
 } from "@renderer/providers/wrapped-element-provider"
 import { Queries } from "@renderer/queries"
-import { useEntry } from "@renderer/store/entry"
+import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import { useEffect, useState } from "react"
 
@@ -45,7 +43,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 }
 
 function EntryContentRender({ entryId }: { entryId: string }) {
-  const user = useUser()
+  const user = useMe()
 
   const { error, data } = useAuthQuery(Queries.entries.byId(entryId), {
     staleTime: 300_000,
@@ -55,8 +53,12 @@ function EntryContentRender({ entryId }: { entryId: string }) {
   })
 
   const entry = useEntry(entryId)
-  const feed = useFeedById(entry?.feedId)
   useTitle(entry?.entries.title)
+
+  const feed = useFeedById(entry?.feedId)
+
+  const entryHistory = useEntryReadHistory(entryId)
+
   const [content, setContent] = useState<JSX.Element>()
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
   useEffect(() => {
@@ -115,6 +117,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
         view={0}
         className="h-[55px] px-5"
       />
+
       <div className="h-[calc(100%-3.5rem)] min-w-0 overflow-y-auto @container">
         <m.div
           style={{
@@ -145,69 +148,21 @@ function EntryContentRender({ entryId }: { entryId: string }) {
               <div className="mt-2 text-[13px] font-medium text-zinc-500">
                 {feed?.title}
               </div>
-              <div className="text-[13px] text-zinc-500">
+              <div className="flex items-center gap-2 text-[13px] text-zinc-500">
                 {entry.entries.publishedAt &&
                   new Date(entry.entries.publishedAt).toLocaleString()}
-              </div>
-              <div className="mt-2 flex items-center gap-2 text-[13px] text-zinc-500">
-                <div className="flex items-center gap-1 font-medium">
+
+                <div className="flex items-center gap-1">
                   <i className="i-mgc-eye-2-cute-re" />
                   <span>
                     {(
-                      (data?.entries.entryReadHistories.readCount ?? 0) +
-                      (data?.entries.entryReadHistories.users.every((u) => u.id !== user?.id) ? 1 : 0) // if no me, +1
-                    ).toLocaleString()}
+                      (entryHistory?.readCount ?? 0) +
+                      (entryHistory?.userIds?.every((id) => id !== user?.id) ?
+                        1 :
+                        0)
+                    ) // if no me, +1
+                      .toLocaleString()}
                   </span>
-                </div>
-                <div className="flex items-center">
-                  {[
-                    {
-                      id: user?.id,
-                      name: user?.name ?? null,
-                      image: user?.image ?? null,
-                      handle: user?.handle ?? null,
-                    },
-                  ] // myself first
-                    .concat(
-                      data?.entries.entryReadHistories.users.filter(
-                        (u) => u.id !== user?.id,
-                      ) ?? [],
-                    ) // then others
-                    .slice(0, 10) // only show 10
-                    .concat(
-                      data?.entries.entryReadHistories.readCount &&
-                      data.entries.entryReadHistories.readCount > 10 ?
-                          [
-                            {
-                              id: "more",
-                              name: `+${
-                                data?.entries.entryReadHistories.readCount - 10
-                              }`,
-                              image: null,
-                              handle: null,
-                            },
-                          ] :
-                          [],
-                    ) // show more count
-                    .map((user, i) => (
-                      <Tooltip key={user.id}>
-                        <TooltipTrigger>
-                          <div
-                            style={{
-                              transform: `translateX(-${i * 5}px)`,
-                            }}
-                          >
-                            <Avatar className="aspect-square size-6 border border-black dark:border-white">
-                              <AvatarImage src={user?.image || undefined} />
-                              <AvatarFallback>
-                                {user.name?.slice(0, 2)}
-                              </AvatarFallback>
-                            </Avatar>
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">{user.name}</TooltipContent>
-                      </Tooltip>
-                    ))}
                 </div>
               </div>
             </a>
