@@ -2,6 +2,8 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { entryActions, getEntry } from "@renderer/store/entry"
 import { create, keyResolver, windowScheduler } from "@yornaath/batshit"
 
+import { useFeedStore } from "../feed"
+import { useSubscriptionStore } from "../subscription"
 import { useEntryStore } from "./store"
 import type { EntryFilter } from "./types"
 
@@ -49,4 +51,16 @@ export const batchMarkUnread = (...args: Parameters<typeof unread.fetch>) => {
   if (currentIsRead) return
   entryActions.markRead(args[0][0], args[0][1], true)
   return unread.fetch.apply(null, args)
+}
+
+export const getEntryIsInView = (entryId: string) => {
+  const state = useEntryStore.getState()
+  const entry = state.flatMapEntries[entryId]
+  if (!entry) return
+  const { feedId } = entry
+  const feed = useFeedStore.getState().feeds[feedId]
+  if (!feed?.id) return
+  const subscription = useSubscriptionStore.getState().data[feed.id]
+  if (!subscription) return
+  return subscription.view
 }

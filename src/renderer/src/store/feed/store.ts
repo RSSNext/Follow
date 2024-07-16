@@ -1,20 +1,19 @@
+import { getUser } from "@renderer/atoms/user"
 import { runTransactionInScope } from "@renderer/database"
+import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedModel } from "@renderer/models"
 import { FeedService } from "@renderer/services"
 import { produce } from "immer"
 
-import { createZustandStore } from "../utils/helper"
+import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import type { FeedState } from "./types"
 
-export const useFeedStore = createZustandStore<FeedState >(
-  "feed",
-
-)(() => ({
+export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
   feeds: {},
 }))
 
 const set = useFeedStore.setState
-// const get = useFeedStore.getState
+const get = useFeedStore.getState
 class FeedActions {
   clear() {
     set({ feeds: {} })
@@ -35,7 +34,7 @@ class FeedActions {
     )
   }
 
-  patch(feedId: string, patch: Partial<FeedModel>) {
+  private patch(feedId: string, patch: Partial<FeedModel>) {
     set((state) =>
       produce(state, (state) => {
         const feed = state.feeds[feedId]
@@ -43,6 +42,33 @@ class FeedActions {
 
         Object.assign(feed, patch)
       }),
+    )
+  }
+
+  updateFeedOwnership(feedId: string, ownerUserId: string | null) {
+    this.patch(feedId, {
+      ownerUserId,
+    })
+  }
+
+  async claimFeed(feedId: string) {
+    await doMutationAndTransaction(
+      () =>
+        apiClient.feeds.claim.challenge.$post({
+          json: {
+            feedId,
+          },
+        }),
+
+      async () => {
+        const currentUser = getUser()
+        if (!currentUser) return
+        this.updateFeedOwnership(feedId, currentUser.id)
+        const feed = get().feeds[feedId]
+        if (!feed) return
+        await FeedService.upsert(feed)
+      },
+      { doTranscationWhenMutationFail: false, waitMutation: true },
     )
   }
 }

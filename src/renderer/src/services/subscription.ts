@@ -16,8 +16,8 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
     )
   }
 
-  override upsert(data: SubscriptionModelWithId) {
-    this.table.put({
+  override upsert(data: SubscriptionPlainModel) {
+    return this.table.put({
       ...data,
       id: this.uniqueId(data.userId, data.feedId),
     })

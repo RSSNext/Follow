@@ -1,4 +1,3 @@
-import { apiClient } from "@renderer/lib/api-fetch"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
 import { shortcuts } from "@renderer/lib/shortcuts"
@@ -16,17 +15,8 @@ import { toast } from "sonner"
 export const useCollect = (entry: Nullable<CombinedEntryModel>) =>
   useMutation({
     mutationFn: async () =>
-      entry &&
-      apiClient.collections.$post({
-        json: {
-          entryId: entry?.entries.id,
-        },
-      }),
+      entry && entryActions.markStar(entry.entries.id, true),
 
-    onMutate() {
-      if (!entry) return
-      entryActions.markStar(entry.entries.id, true)
-    },
     onSuccess: () => {
       toast.success("Starred.", {
         duration: 1000,
@@ -38,16 +28,8 @@ export const useUnCollect = (entry: Nullable<CombinedEntryModel>) =>
   useMutation({
     mutationFn: async () =>
       entry &&
-      apiClient.collections.$delete({
-        json: {
-          entryId: entry?.entries.id,
-        },
-      }),
+      entryActions.markStar(entry.entries.id, false),
 
-    onMutate() {
-      if (!entry) return
-      entryActions.markStar(entry.entries.id, false)
-    },
     onSuccess: () => {
       toast.success("Unstarred.", {
         duration: 1000,

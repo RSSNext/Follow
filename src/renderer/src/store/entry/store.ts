@@ -15,7 +15,7 @@ import { isNil, merge, omit } from "lodash-es"
 
 import { feedActions } from "../feed"
 import { feedUnreadActions } from "../unread"
-import { createZustandStore } from "../utils/helper"
+import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import { batchMarkUnread } from "./helper"
 import type { EntryState, FlatEntryModel } from "./types"
 
@@ -252,37 +252,42 @@ class EntryActions {
     }))
   }
 
-  markRead(feedId: string, entryId: string, read: boolean) {
+  async markRead(feedId: string, entryId: string, read: boolean) {
     feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
     this.patch(entryId, {
       read,
     })
 
-    if (read) {
-      batchMarkUnread([feedId, entryId])
-    } else {
-      apiClient.reads.$delete({
-        json: {
-          entryId,
-        },
-      })
-    }
-
-    runTransactionInScope(() => {
-      if (!isNil(read)) {
-        EntryService.bulkStoreReadStatus({
+    await doMutationAndTransaction(
+      // Send api request
+      async () => {
+        if (read) {
+          await batchMarkUnread([feedId, entryId])
+        } else {
+          await apiClient.reads.$delete({
+            json: {
+              entryId,
+            },
+          })
+        }
+      },
+      async () => {
+        if (isNil(read)) {
+          return
+        }
+        return EntryService.bulkStoreReadStatus({
           [entryId]: read,
         })
-      }
-    })
+      },
+    )
   }
 
-  markReadByFeedId(feedId: string) {
+  async markReadByFeedId(feedId: string) {
     const state = get()
     const entries = state.entries[feedId] || []
-    entries.forEach((entryId) => {
-      this.markRead(feedId, entryId, true)
-    })
+    await Promise.all(
+      entries.map((entryId) => this.markRead(feedId, entryId, true)),
+    )
     feedUnreadActions.updateByFeedId(feedId, 0)
   }
 
@@ -295,29 +300,41 @@ class EntryActions {
         undefined,
     })
 
-    apiClient.collections.$delete({
-      json: {
-        entryId,
-      },
-    })
-
     set((state) =>
       produce(state, (state) => {
         star ? state.starIds.add(entryId) : state.starIds.delete(entryId)
       }),
     )
 
-    runTransactionInScope(() => {
-      if (star) {
-        EntryService.bulkStoreCollection({
-          [entryId]: {
-            createdAt: new Date().toISOString(),
-          },
-        })
-      } else {
-        EntryService.deleteCollection(entryId)
-      }
-    })
+    await doMutationAndTransaction(
+      // Send api request
+      async () => {
+        if (star) {
+          apiClient.collections.$post({
+            json: {
+              entryId,
+            },
+          })
+        } else {
+          await apiClient.collections.$delete({
+            json: {
+              entryId,
+            },
+          })
+        }
+      },
+      async () => {
+        if (star) {
+          return EntryService.bulkStoreCollection({
+            [entryId]: {
+              createdAt: new Date().toISOString(),
+            },
+          })
+        } else {
+          return EntryService.deleteCollection(entryId)
+        }
+      },
+    )
   }
 }
 

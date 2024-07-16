@@ -3,10 +3,10 @@ declare global {
   // When app not ready, it's false, after hydrate data, it's true
   // Or set is false when disable indexedDB in setting
 
-  export let dbIsReady: boolean
+  export let __dbIsReady: boolean
 
   interface Window {
-    dbIsReady: boolean
+    __dbIsReady: boolean
   }
 }
 

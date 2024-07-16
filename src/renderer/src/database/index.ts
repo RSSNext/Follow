@@ -4,13 +4,18 @@ export * from "./db"
 export * from "./models"
 export * from "./schemas"
 
-export const runTransactionInScope = (
-  fn: (db: typeof browserDB) => any,
+export const DB_NOT_READY_OR_DISABLED = "Database is not ready or disabled"
+/**
+ * @description Check if database is ready
+ * If users disabled data persist, it's always false, that means you can't do operation with database.
+ *
+ */
 
-) => {
-  if (!dbIsReady) {
+export const runTransactionInScope = <T>(fn: (db: typeof browserDB) => T): T | typeof DB_NOT_READY_OR_DISABLED => {
+  if (!window.__dbIsReady) {
     // Or, push to waiting queue
-    return
+    return DB_NOT_READY_OR_DISABLED
   }
-  fn(browserDB)
+
+  return fn(browserDB)
 }

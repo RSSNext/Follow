@@ -1,3 +1,5 @@
+import { runTransactionInScope } from "@renderer/database"
+import { unstable_batchedUpdates } from "react-dom"
 import type { StateCreator } from "zustand"
 import type { PersistStorage } from "zustand/middleware"
 import { devtools } from "zustand/middleware"
@@ -73,4 +75,47 @@ export const getStoreActions = <T extends { getState: () => any }>(
   }
 
   return actions as any
+}
+
+export type MutationAndTranscationOptions = {
+  /**
+   * If true, will wait for the mutation to finish before running the transaction
+   */
+  waitMutation?: boolean
+  /**
+   * If true, will run the transaction even if the mutation fails, useful in network offline
+   */
+  doTranscationWhenMutationFail?: boolean
+}
+export const doMutationAndTransaction = async (
+  mutationFn: () => Promise<any>,
+  transaction: () => Promise<any>,
+  options?: MutationAndTranscationOptions,
+) => {
+  const {
+    waitMutation = false,
+    doTranscationWhenMutationFail = !navigator.onLine,
+  } = options || {}
+  const wrappedTransaction = () => runTransactionInScope(() => unstable_batchedUpdates(() => transaction()))
+
+  if (waitMutation) {
+    let runOnce = false
+    await mutationFn()
+      .then(() => {
+        runOnce = true
+        return wrappedTransaction()
+      })
+      .finally(() => {
+        if (runOnce) return
+        if (doTranscationWhenMutationFail) {
+          return wrappedTransaction()
+        }
+        return
+      })
+  } else {
+    await Promise.all([
+      mutationFn(),
+      wrappedTransaction(),
+    ])
+  }
 }

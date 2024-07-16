@@ -18,15 +18,8 @@ import { subscriptionActions } from "../store/subscription"
 import { feedUnreadActions } from "../store/unread"
 
 export const setHydrated = (v: boolean) => {
-  dbIsReady = v
+  window.__dbIsReady = v
 }
-
-/**
- * @description Check if database data is hydrated to store, or current database is ready.
- * If users disabled data persist, it's always false, that means you can't do operation with database.
- *
- */
-export const isHydrated = () => dbIsReady
 
 export const hydrateDatabaseToStore = async () => {
   appLog("Hydrate database data to store task start...")
@@ -40,7 +33,7 @@ export const hydrateDatabaseToStore = async () => {
       hydrateEntry(),
     ])
 
-    dbIsReady = true
+    window.__dbIsReady = true
     const costTime = Date.now() - now
     appLog("Hydrate data done,", `${costTime}ms`)
 

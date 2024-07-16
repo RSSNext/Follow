@@ -1,4 +1,3 @@
-import { getUser } from "@renderer/atoms/user"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
@@ -56,12 +55,7 @@ export const useFeed = ({ id, url }: { id?: string, url?: string }) =>
 export const useClaimFeedMutation = (feedId: string) =>
   useMutation({
     mutationKey: ["claimFeed", feedId],
-    mutationFn: () =>
-      apiClient.feeds.claim.challenge.$post({
-        json: {
-          feedId,
-        },
-      }),
+    mutationFn: () => feedActions.claimFeed(feedId),
 
     async onError(err) {
       toast.error(getFetchErrorMessage(err))
@@ -69,9 +63,6 @@ export const useClaimFeedMutation = (feedId: string) =>
     onSuccess() {
       window.posthog?.capture("feed_claimed", {
         feedId,
-      })
-      feedActions.patch(feedId, {
-        ownerUserId: getUser()?.id,
       })
     },
   })

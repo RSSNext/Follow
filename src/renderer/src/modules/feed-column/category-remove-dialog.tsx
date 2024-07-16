@@ -1,5 +1,3 @@
-import { apiClient } from "@renderer/lib/api-fetch"
-import { Queries } from "@renderer/queries"
 import { subscriptionActions } from "@renderer/store/subscription"
 import { useMutation } from "@tanstack/react-query"
 
@@ -8,27 +6,11 @@ import { useCurrentModal } from "../../components/ui/modal"
 
 export function CategoryRemoveDialogContent({
   feedIdList,
-
-  view,
 }: {
   feedIdList: string[]
-  onSuccess?: () => void
-
-  view?: number
 }) {
   const deleteMutation = useMutation({
-    mutationFn: async () =>
-      apiClient.categories.$delete({
-        json: {
-          feedIdList,
-          deleteSubscriptions: false,
-        },
-      }),
-
-    onSuccess: () => {
-      Queries.subscription.byView(view).invalidate()
-      subscriptionActions.deleteCategory(feedIdList)
-    },
+    mutationFn: () => subscriptionActions.deleteCategory(feedIdList),
   })
 
   const { dismiss } = useCurrentModal()
