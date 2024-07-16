@@ -13,8 +13,6 @@ import { useHotkeys } from "react-hotkeys-hook"
 import type { ListRange } from "react-virtuoso"
 import { useDebounceCallback } from "usehooks-ts"
 
-import { batchMarkUnread } from "./helper"
-
 export const useEntryMarkReadHandler = (entriesIds: string[]) => {
   const renderAsRead = useGeneralSettingKey("renderMarkUnread")
   const scrollMarkUnread = useGeneralSettingKey("scrollMarkUnread")
@@ -71,7 +69,6 @@ export const useEntriesByView = () => {
     id: folderIds?.join(",") || feedId,
     view,
     ...(unreadOnly === true && { read: false }),
-
   })
   const remoteEntryIds = query.data?.pages
     ?.map((page) => page.data?.map((entry) => entry.entries.id))
@@ -152,7 +149,7 @@ function batchMarkRead(ids: string[]) {
 
   if (batchLikeIds.length > 0) {
     for (const [feedId, id] of batchLikeIds) {
-      batchMarkUnread([feedId, id])
+      entryActions.markRead(feedId, id, true)
     }
   }
 }

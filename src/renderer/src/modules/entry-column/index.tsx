@@ -54,7 +54,6 @@ import { useHotkeys } from "react-hotkeys-hook"
 import type { VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 
-import { batchMarkUnread } from "./helper"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import { EntryItem } from "./item"
 
@@ -78,7 +77,8 @@ export function EntryColumn() {
 
     const feedId = activeEntry?.feedId
     if (!feedId) return
-    batchMarkUnread([feedId, activeEntryId])
+
+    entryActions.markRead(feedId, activeEntryId, true)
   }, [activeEntry?.feedId, activeEntryId, isCollection, isPendingEntry])
 
   const isInteracted = useRef(false)

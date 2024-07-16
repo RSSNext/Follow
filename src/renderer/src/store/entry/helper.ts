@@ -1,5 +1,4 @@
 import { apiClient } from "@renderer/lib/api-fetch"
-import { entryActions, getEntry } from "@renderer/store/entry"
 import { create, keyResolver, windowScheduler } from "@yornaath/batshit"
 
 import { useFeedStore } from "../feed"
@@ -10,10 +9,7 @@ import type { EntryFilter } from "./types"
 type EntryId = string
 type FeedId = string
 
-export const getFilteredFeedIds = (
-  feedIds: string[],
-  filter?: EntryFilter,
-) => {
+export const getFilteredFeedIds = (feedIds: string[], filter?: EntryFilter) => {
   const state = useEntryStore.getState()
   const ids = [] as string[]
   for (const feedId of feedIds) {
@@ -44,14 +40,11 @@ const unread = create({
   resolver: keyResolver("id"),
   scheduler: windowScheduler(1000),
 })
-
-export const batchMarkUnread = (...args: Parameters<typeof unread.fetch>) => {
-  const [, entryId] = args[0]
-  const currentIsRead = getEntry(entryId)?.read
-  if (currentIsRead) return
-  entryActions.markRead(args[0][0], args[0][1], true)
-  return unread.fetch.apply(null, args)
-}
+/**
+ * Only call in store action
+ * @internal
+ */
+export const batchMarkUnread = (...args: Parameters<typeof unread.fetch>) => unread.fetch.apply(null, args)
 
 export const getEntryIsInView = (entryId: string) => {
   const state = useEntryStore.getState()

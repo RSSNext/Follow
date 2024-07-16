@@ -11,7 +11,7 @@ import type {
 } from "@renderer/models"
 import { EntryService } from "@renderer/services"
 import { produce } from "immer"
-import { isNil, merge, omit } from "lodash-es"
+import { merge, omit } from "lodash-es"
 
 import { feedActions } from "../feed"
 import { feedUnreadActions } from "../unread"
@@ -254,6 +254,9 @@ class EntryActions {
 
   async markRead(feedId: string, entryId: string, read: boolean) {
     feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
+    const currentIsRead = get().flatMapEntries[entryId]?.read
+
+    if (currentIsRead) return
     this.patch(entryId, {
       read,
     })
@@ -271,14 +274,9 @@ class EntryActions {
           })
         }
       },
-      async () => {
-        if (isNil(read)) {
-          return
-        }
-        return EntryService.bulkStoreReadStatus({
-          [entryId]: read,
-        })
-      },
+      async () => EntryService.bulkStoreReadStatus({
+        [entryId]: read,
+      }),
     )
   }
 
