@@ -6,11 +6,13 @@ export enum EntryRelatedKey {
   COLLECTION = "COLLECTION",
 }
 
-// eslint-disable-next-line unused-imports/no-unused-vars
-type Model = {
-  id: EntryRelatedKey
-  data: Record<string, any>
-}
+const taskQueue = new Map<EntryRelatedKey, Promise<any>>(
+  [
+    EntryRelatedKey.READ,
+    EntryRelatedKey.FEED_ID,
+    EntryRelatedKey.COLLECTION,
+  ].map((key) => [key, Promise.resolve()]),
+)
 
 type IdToIdRecord = Record<string, string>
 type IdToBooleanRecord = Record<string, boolean>
@@ -43,12 +45,19 @@ class ServiceStatic {
     data: IdToAnyObjectRecord
   ): Promise<void>
   async upsert(type: any, data: Record<string, any>) {
-    const oldData = await this.findAll(type)
+    const getPreviousTask = taskQueue.get(type) || Promise.resolve()
 
-    return entryRelatedModel.table.put({
-      data: { ...oldData, ...data },
-      id: type,
+    const task = getPreviousTask.finally(async () => {
+      const oldData = await this.findAll(type)
+
+      entryRelatedModel.table.put({
+        data: { ...oldData, ...data },
+        id: type,
+      })
     })
+    taskQueue.set(type, task)
+
+    return task
   }
 
   async deleteItem(type: EntryRelatedKey, key: string) {

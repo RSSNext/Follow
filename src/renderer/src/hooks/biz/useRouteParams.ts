@@ -10,6 +10,7 @@ import {
 import { FeedViewType } from "@renderer/lib/enum"
 import type { Params } from "react-router-dom"
 import { useParams, useSearchParams } from "react-router-dom"
+
 // '0', '1', '2', '3', '4', '5',
 const FeedViewTypeValues = (() => {
   const values = Object.values(FeedViewType)

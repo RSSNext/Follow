@@ -12,9 +12,8 @@ export abstract class BaseService<T extends { id: string }> {
     return this.table.bulkAdd(data)
   }
 
-  // @ts-expect-error
-  async upsert(data: T): Promise<void> | void {
-    this.table.put(data)
+  async upsert(data: T): Promise<unknown> {
+    return this.table.put(data)
   }
 
   async upsertMany(data: T[]) {

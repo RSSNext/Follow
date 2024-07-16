@@ -14,9 +14,9 @@ class ServiceStatic extends BaseService<FeedModelWithId> {
     this.table.bulkPut(filterData as FeedModelWithId[])
   }
 
-  override upsert(data: FeedModel) {
-    if (!data.id) return
-    this.table.put(data as FeedModelWithId)
+  override async upsert(data: FeedModel): Promise<string | null> {
+    if (!data.id) return null
+    return this.table.put(data as FeedModelWithId)
   }
 }
 

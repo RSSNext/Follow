@@ -10,6 +10,7 @@ import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import type { FlatEntryModel } from "@renderer/store/entry"
+import { entryActions } from "@renderer/store/entry"
 import { useEntry } from "@renderer/store/entry/hooks"
 import type { FC } from "react"
 import { memo, useCallback } from "react"
@@ -18,7 +19,6 @@ import { useDebounceCallback } from "usehooks-ts"
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import { ArticleItem } from "./article-item"
 import { AudioItem } from "./audio-item"
-import { batchMarkUnread } from "./helper"
 import { NotificationItem } from "./notification-item"
 import { PictureItem } from "./picture-item"
 import { SocialMediaItem } from "./social-media-item"
@@ -69,7 +69,7 @@ function EntryItemImpl({
       if (!hoverMarkUnread) return
       if (asRead) return
 
-      batchMarkUnread([entry.feedId, entry.entries.id])
+      entryActions.markRead(entry.feedId, entry.entries.id, true)
     },
     233,
     {

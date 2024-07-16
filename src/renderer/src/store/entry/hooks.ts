@@ -6,8 +6,7 @@ import type { FeedViewType } from "@renderer/lib/enum"
 import { useShallow } from "zustand/react/shallow"
 
 import { useFeedIdByView, useFolderFeedsByFeedId } from "../subscription"
-import { getEntryIsInView } from "../utils/biz"
-import { getFilteredFeedIds } from "./helper"
+import { getEntryIsInView, getFilteredFeedIds } from "./helper"
 import { useEntryStore } from "./store"
 import type { EntryFilter, FlatEntryModel } from "./types"
 

@@ -8,12 +8,10 @@ import { shortcuts } from "@renderer/lib/shortcuts"
 import { useEntries } from "@renderer/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
 import { useFolderFeedsByFeedId } from "@renderer/store/subscription"
-import { useCallback, useEffect, useMemo, useRef } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import type { ListRange } from "react-virtuoso"
 import { useDebounceCallback } from "usehooks-ts"
-
-import { batchMarkUnread } from "./helper"
 
 export const useEntryMarkReadHandler = (entriesIds: string[]) => {
   const renderAsRead = useGeneralSettingKey("renderMarkUnread")
@@ -71,7 +69,6 @@ export const useEntriesByView = () => {
     id: folderIds?.join(",") || feedId,
     view,
     ...(unreadOnly === true && { read: false }),
-
   })
   const remoteEntryIds = query.data?.pages
     ?.map((page) => page.data?.map((entry) => entry.entries.id))
@@ -92,7 +89,7 @@ export const useEntriesByView = () => {
   // then we have no way to incrementally update the data.
   // We need to add an interface to incrementally update the data based on the version hash.
 
-  const entries = remoteEntryIds || currentEntries
+  const entryIds = remoteEntryIds || currentEntries
 
   useHotkeys(
     shortcuts.entries.refetch.key,
@@ -104,25 +101,29 @@ export const useEntriesByView = () => {
 
   // in unread only entries only can grow the data, but not shrink
   // so we memo this previous data to avoid the flicker
-  const prevEntries = useRef(entries)
+  const prevEntryIdsRef = useRef(entryIds)
 
   useEffect(() => {
-    prevEntries.current = []
+    prevEntryIdsRef.current = []
   }, [routeParams.feedId, routeParams.view])
-  const mergedEntries = useMemo(() => {
+  const [mergedEntries, setMergedEntries] = useState<string[]>([])
+
+  useEffect(() => {
     if (!unreadOnly) {
-      prevEntries.current = []
-      return entries
+      prevEntryIdsRef.current = []
+      setMergedEntries(entryIds)
+      return
     }
-    if (!prevEntries.current) {
-      prevEntries.current = entries
-      return entries
+    if (!prevEntryIdsRef.current) {
+      prevEntryIdsRef.current = entryIds
+      setMergedEntries(entryIds)
+      return
     }
     // merge the new entries with the old entries, and unique them
-    const nextIds = [...new Set([...prevEntries.current, ...entries])]
-    prevEntries.current = nextIds
-    return nextIds
-  }, [entries, prevEntries, unreadOnly])
+    const nextIds = [...new Set([...prevEntryIdsRef.current, ...entryIds])]
+    prevEntryIdsRef.current = nextIds
+    setMergedEntries(nextIds)
+  }, [unreadOnly, entryIds.toString()])
 
   const sortEntries = () =>
     isCollection ?
@@ -152,7 +153,7 @@ function batchMarkRead(ids: string[]) {
 
   if (batchLikeIds.length > 0) {
     for (const [feedId, id] of batchLikeIds) {
-      batchMarkUnread([feedId, id])
+      entryActions.markRead(feedId, id, true)
     }
   }
 }

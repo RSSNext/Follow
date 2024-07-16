@@ -17,21 +17,9 @@ import { feedActions, useFeedStore } from "../store/feed"
 import { subscriptionActions } from "../store/subscription"
 import { feedUnreadActions } from "../store/unread"
 
-// This flag controls write data in indexedDB, if it's false, pass data insert to db
-// When app not ready, it's false, after hydrate data, it's true
-// Or set is false when disable indexedDB in setting
-let _isHydrated = false
-
 export const setHydrated = (v: boolean) => {
-  _isHydrated = v
+  window.__dbIsReady = v
 }
-
-/**
- * @description Check if database data is hydrated to store, or current database is ready.
- * If users disabled data persist, it's always false, that means you can't do operation with database.
- *
- */
-export const isHydrated = () => _isHydrated
 
 export const hydrateDatabaseToStore = async () => {
   appLog("Hydrate database data to store task start...")
@@ -45,7 +33,7 @@ export const hydrateDatabaseToStore = async () => {
       hydrateEntry(),
     ])
 
-    _isHydrated = true
+    window.__dbIsReady = true
     const costTime = Date.now() - now
     appLog("Hydrate data done,", `${costTime}ms`)
 

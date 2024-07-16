@@ -1,3 +1,4 @@
+import { runTransactionInScope } from "@renderer/database"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { FeedViewType } from "@renderer/lib/enum"
 import { capitalizeFirstLetter } from "@renderer/lib/utils"
@@ -7,11 +8,10 @@ import { produce } from "immer"
 import { omit } from "lodash-es"
 import { parse } from "tldts"
 
-import { isHydrated } from "../../initialize/hydrate"
 import { entryActions } from "../entry"
 import { feedActions, getFeedById } from "../feed"
 import { feedUnreadActions } from "../unread"
-import { createZustandStore } from "../utils/helper"
+import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 
 export type SubscriptionPlainModel = Omit<SubscriptionModel, "feeds">
 interface SubscriptionState {
@@ -87,9 +87,9 @@ class SubscriptionActions {
   }
 
   upsertMany(subscriptions: SubscriptionPlainModel[]) {
-    if (isHydrated()) {
+    runTransactionInScope(() => {
       SubscriptionService.upsertMany(subscriptions)
-    }
+    })
     set((state) =>
       produce(state, (state) => {
         subscriptions.forEach((subscription) => {
@@ -132,21 +132,41 @@ class SubscriptionActions {
   deleteCategory(ids: string[]) {
     const idSet = new Set(ids)
 
-    set((state) =>
-      produce(state, (state) => {
-        Object.keys(state.data).forEach((id) => {
-          if (idSet.has(id)) {
-            const subscription = state.data[id]
-            const feed = getFeedById(subscription.feedId)
-            if (!feed) return
-            const { siteUrl } = feed
-            if (!siteUrl) return
-            const parsed = parse(siteUrl)
-            parsed.domain &&
-            (subscription.category = capitalizeFirstLetter(parsed.domain))
-          }
-        })
-      }),
+    return doMutationAndTransaction(
+      () =>
+        apiClient.categories.$delete({
+          json: {
+            feedIdList: ids,
+            deleteSubscriptions: false,
+          },
+        }),
+      async () => {
+        set((state) =>
+          produce(state, (state) => {
+            Object.keys(state.data).forEach((id) => {
+              if (idSet.has(id)) {
+                const subscription = state.data[id]
+                const feed = getFeedById(subscription.feedId)
+                if (!feed) return
+                const { siteUrl } = feed
+                if (!siteUrl) return
+                const parsed = parse(siteUrl)
+                // The logic for removing Category here is to use domain as the default category name.
+                parsed.domain &&
+                (subscription.category = capitalizeFirstLetter(
+                  parsed.domain,
+                ))
+              }
+            })
+          }),
+        )
+        const { data } = get()
+        return ids.map((id) => data[id] && SubscriptionService.upsert(data[id]))
+      },
+      {
+        doTranscationWhenMutationFail: false,
+        waitMutation: true,
+      },
     )
   }
 

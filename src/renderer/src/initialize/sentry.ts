@@ -8,6 +8,7 @@ import { SentryConfig } from "../configs"
 
 export const initSentry = async () => {
   if (!window.SENTRY_RELEASE) return
+  if (import.meta.env.DEV) return
   const [Sentry, posthog] = await Promise.all([
     import("@sentry/react"),
     import("posthog-js").then((module) => module.default),
@@ -26,6 +27,7 @@ export const initSentry = async () => {
       }),
       posthog.sentryIntegration({
         organization: "follow-rg",
+
         projectId: 4507570439979008,
         severityAllowList: ["error", "info"], // optional: here is set to handle captureMessage (info) and captureException (error)
       },

@@ -1,4 +1,3 @@
-import { apiClient } from "@renderer/lib/api-fetch"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
 import { shortcuts } from "@renderer/lib/shortcuts"
@@ -16,17 +15,8 @@ import { toast } from "sonner"
 export const useCollect = (entry: Nullable<CombinedEntryModel>) =>
   useMutation({
     mutationFn: async () =>
-      entry &&
-      apiClient.collections.$post({
-        json: {
-          entryId: entry?.entries.id,
-        },
-      }),
+      entry && entryActions.markStar(entry.entries.id, true),
 
-    onMutate() {
-      if (!entry) return
-      entryActions.markStar(entry.entries.id, true)
-    },
     onSuccess: () => {
       toast.success("Starred.", {
         duration: 1000,
@@ -38,16 +28,8 @@ export const useUnCollect = (entry: Nullable<CombinedEntryModel>) =>
   useMutation({
     mutationFn: async () =>
       entry &&
-      apiClient.collections.$delete({
-        json: {
-          entryId: entry?.entries.id,
-        },
-      }),
+      entryActions.markStar(entry.entries.id, false),
 
-    onMutate() {
-      if (!entry) return
-      entryActions.markStar(entry.entries.id, false)
-    },
     onSuccess: () => {
       toast.success("Unstarred.", {
         duration: 1000,
@@ -58,34 +40,12 @@ export const useUnCollect = (entry: Nullable<CombinedEntryModel>) =>
 export const useRead = () =>
   useMutation({
     mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry &&
-      apiClient.reads.$post({
-        json: {
-          entryIds: [entry.entries.id],
-        },
-      }),
-
-    onMutate: (entry: Nullable<CombinedEntryModel>) => {
-      if (!entry) return
-
-      entryActions.markRead(entry.feeds.id, entry.entries.id, true)
-    },
+      entry && entryActions.markRead(entry.feeds.id, entry.entries.id, true),
   })
 export const useUnread = () =>
   useMutation({
     mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry &&
-      apiClient.reads.$delete({
-        json: {
-          entryId: entry.entries.id,
-        },
-      }),
-
-    onMutate: (entry: Nullable<CombinedEntryModel>) => {
-      if (!entry) return
-
-      entryActions.markRead(entry.feeds.id, entry.entries.id, false)
-    },
+      entry && entryActions.markRead(entry.feeds.id, entry.entries.id, false),
   })
 
 export const useEntryActions = ({
@@ -198,7 +158,9 @@ export const useEntryActions = ({
             if (
               !populatedEntry.entries.url ||
               !populatedEntry.entries.images?.length
-            ) { return }
+            ) {
+              return
+            }
             const response = await tipcClient?.saveToEagle({
               url: populatedEntry.entries.url,
               images: populatedEntry.entries.images,

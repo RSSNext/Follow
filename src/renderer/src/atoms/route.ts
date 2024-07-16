@@ -14,6 +14,7 @@ export const [routeAtom, , , , getReadonlyRoute, setRoute] = createAtomHooks(
   atom<RouteAtom>({
     params: {},
     searchParams: new URLSearchParams(),
+
     location: {
       pathname: "",
       search: "",

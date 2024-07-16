@@ -1,3 +1,4 @@
+import { runTransactionInScope } from "@renderer/database"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
   getEntriesParams,
@@ -10,12 +11,12 @@ import type {
 } from "@renderer/models"
 import { EntryService } from "@renderer/services"
 import { produce } from "immer"
-import { isNil, merge, omit } from "lodash-es"
+import { merge, omit } from "lodash-es"
 
-import { isHydrated } from "../../initialize/hydrate"
 import { feedActions } from "../feed"
 import { feedUnreadActions } from "../unread"
-import { createZustandStore } from "../utils/helper"
+import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import { batchMarkUnread } from "./helper"
 import type { EntryState, FlatEntryModel } from "./types"
 
 const createState = (): EntryState => ({
@@ -94,7 +95,7 @@ class EntryActions {
     return get().flatMapEntries
   }
 
-  patch(entryId: string, changed: Partial<CombinedEntryModel>) {
+  private patch(entryId: string, changed: Partial<CombinedEntryModel>) {
     set((state) =>
       produce(state, (draft) => {
         const entry = draft.flatMapEntries[entryId]
@@ -121,7 +122,7 @@ class EntryActions {
     )
   }
 
-  patchAll(changed: Partial<CombinedEntryModel>) {
+  private patchAll(changed: Partial<CombinedEntryModel>) {
     set((state) =>
       produce(state, (draft) => {
         for (const entry of Object.values(draft.flatMapEntries)) {
@@ -197,12 +198,12 @@ class EntryActions {
       starIds: newStarIds,
     }))
     // Update database
-    if (isHydrated()) {
+    runTransactionInScope(() => {
       EntryService.upsertMany(entries)
       EntryService.bulkStoreReadStatus(entry2Read)
       EntryService.bulkStoreFeedId(entryFeedMap)
       EntryService.bulkStoreCollection(entryCollection)
-    }
+    })
   }
 
   hydrate(data: FlatEntryModel[]) {
@@ -251,35 +252,52 @@ class EntryActions {
     }))
   }
 
-  markRead(feedId: string, entryId: string, read: boolean) {
+  async markRead(feedId: string, entryId: string, read: boolean) {
     feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
+    const currentIsRead = get().flatMapEntries[entryId]?.read
+
+    if (currentIsRead) return
+
     this.patch(entryId, {
       read,
     })
-    if (!isHydrated()) return
-    if (!isNil(read)) {
-      EntryService.bulkStoreReadStatus({
-        [entryId]: read,
-      })
-    }
+
+    await doMutationAndTransaction(
+      // Send api request
+      async () => {
+        if (read) {
+          await batchMarkUnread([feedId, entryId])
+        } else {
+          await apiClient.reads.$delete({
+            json: {
+              entryId,
+            },
+          })
+        }
+      },
+      async () =>
+        EntryService.bulkStoreReadStatus({
+          [entryId]: read,
+        }),
+    )
   }
 
-  markReadByFeedId(feedId: string) {
+  async markReadByFeedId(feedId: string) {
     const state = get()
     const entries = state.entries[feedId] || []
-    entries.forEach((entryId) => {
-      this.markRead(feedId, entryId, true)
-    })
+    await Promise.all(
+      entries.map((entryId) => this.markRead(feedId, entryId, true)),
+    )
     feedUnreadActions.updateByFeedId(feedId, 0)
   }
 
-  markStar(entryId: string, star: boolean) {
+  async markStar(entryId: string, star: boolean) {
     this.patch(entryId, {
       collections: star ?
           {
             createdAt: new Date().toISOString(),
           } :
-        undefined,
+        null as unknown as undefined,
     })
 
     set((state) =>
@@ -288,16 +306,35 @@ class EntryActions {
       }),
     )
 
-    if (!isHydrated()) return
-    if (star) {
-      EntryService.bulkStoreCollection({
-        [entryId]: {
-          createdAt: new Date().toISOString(),
-        },
-      })
-    } else {
-      EntryService.deleteCollection(entryId)
-    }
+    await doMutationAndTransaction(
+      // Send api request
+      async () => {
+        if (star) {
+          apiClient.collections.$post({
+            json: {
+              entryId,
+            },
+          })
+        } else {
+          await apiClient.collections.$delete({
+            json: {
+              entryId,
+            },
+          })
+        }
+      },
+      async () => {
+        if (star) {
+          return EntryService.bulkStoreCollection({
+            [entryId]: {
+              createdAt: new Date().toISOString(),
+            },
+          })
+        } else {
+          return EntryService.deleteCollection(entryId)
+        }
+      },
+    )
   }
 }
 
