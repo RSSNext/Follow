@@ -40,7 +40,6 @@ export interface BizRouteParams {
   view: FeedViewType
   entryId?: string
   feedId?: string
-  level?: string
   isCollection: boolean
   isAllFeeds: boolean
   isPendingEntry: boolean
@@ -59,7 +58,6 @@ const parseRouteParams = (params: Params<any>, search: URLSearchParams): BizRout
     view,
     entryId: params.entryId || undefined,
     feedId: params.feedId || undefined,
-    level: search.get("level") || undefined,
     // alias
     isCollection: params.feedId === FEED_COLLECTION_LIST,
     isAllFeeds: params.feedId === ROUTE_FEED_PENDING,

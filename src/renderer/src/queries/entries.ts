@@ -5,21 +5,18 @@ import { entryActions } from "@renderer/store/entry"
 
 export const entries = {
   entries: ({
-    level,
     id,
     view,
     read,
   }: {
-    level?: string
     id?: number | string
     view?: number
     read?: boolean
   }) =>
     defineQuery(
-      ["entries", id, level, view, read],
+      ["entries", id, view, read],
       async ({ pageParam }) =>
         entryActions.fetchEntries({
-          level,
           id,
           view,
           read,
@@ -53,18 +50,16 @@ export const entries = {
 }
 
 export const useEntries = ({
-  level,
   id,
   view,
   read,
 }: {
-  level?: string
   id?: number | string
   view?: number
   read?: boolean
 }) =>
-  useAuthInfiniteQuery(entries.entries({ level, id, view, read }), {
-    enabled: level !== undefined && id !== undefined,
+  useAuthInfiniteQuery(entries.entries({ id, view, read }), {
+    enabled: id !== undefined,
     getNextPageParam: (lastPage) => {
       if (!lastPage.data?.length) {
         return null

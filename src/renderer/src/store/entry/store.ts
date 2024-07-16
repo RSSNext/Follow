@@ -66,7 +66,6 @@ class EntryActions {
   }
 
   async fetchEntries({
-    level,
     id,
     view,
     read,
@@ -79,7 +78,6 @@ class EntryActions {
         read,
         // withContent: true,
         ...getEntriesParams({
-          level,
           id,
           view,
         }),

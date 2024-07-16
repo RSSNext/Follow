@@ -4,7 +4,7 @@ import {
 } from "@renderer/components/ui/collapsible"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
-import { levels, ROUTE_FEED_IN_FOLDER } from "@renderer/lib/constants"
+import { ROUTE_FEED_IN_FOLDER } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
@@ -57,7 +57,6 @@ function FeedCategoryImpl({
         entryId: null,
         // TODO joint feedId is too long, need to be optimized
         feedId: `${ROUTE_FEED_IN_FOLDER}${folderName}`,
-        level: levels.folder,
         view,
       })
     }
@@ -68,9 +67,7 @@ function FeedCategoryImpl({
   )
 
   const isActive = useRouteParamsSelector(
-    (routerParams) =>
-      routerParams?.level === levels.folder &&
-      routerParams.feedId === `${ROUTE_FEED_IN_FOLDER}${folderName}`,
+    (routerParams) => routerParams.feedId === `${ROUTE_FEED_IN_FOLDER}${folderName}`,
   )
   const { present } = useModalStack()
 

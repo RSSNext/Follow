@@ -3,7 +3,7 @@ import { clsx } from "clsx"
 import { memoize } from "lodash-es"
 import { twMerge } from "tailwind-merge"
 
-import { FEED_COLLECTION_LIST, levels } from "./constants"
+import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "./constants"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -14,11 +14,9 @@ export function clamp(value, min, max) {
 }
 
 export function getEntriesParams({
-  level,
   id,
   view,
 }: {
-  level?: string
   id?: number | string
   view?: number
 }) {
@@ -27,14 +25,10 @@ export function getEntriesParams({
     feedIdList?: string[]
     collected?: boolean
   } = {}
-  if (level === levels.folder) {
-    if (id === FEED_COLLECTION_LIST) {
-      params.collected = true
-    } else {
-      params.feedIdList = id ? `${id}`.split(",") : undefined
-    }
-  } else if (level === levels.feed) {
-    params.feedId = `${id}`
+  if (id === FEED_COLLECTION_LIST) {
+    params.collected = true
+  } else if (id && id !== ROUTE_FEED_PENDING) {
+    params.feedIdList = `${id}`.split(",")
   }
   return {
     view,

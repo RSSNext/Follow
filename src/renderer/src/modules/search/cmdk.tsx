@@ -17,7 +17,7 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { levels, ROUTE_ENTRY_PENDING } from "@renderer/lib/constants"
+import { ROUTE_ENTRY_PENDING } from "@renderer/lib/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn, pluralize } from "@renderer/lib/utils"
 import { getFeedById } from "@renderer/store/feed"
@@ -261,8 +261,6 @@ const SearchItem = memo(function Item({
           feedId: feedId!,
           entryId,
           view,
-
-          level: levels.feed,
         })
       }}
     >

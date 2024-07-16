@@ -15,12 +15,12 @@ export const useSubscriptionByFeedId = (feedId: FeedId) =>
   useSubscriptionStore((state) => state.data[feedId])
 
 export const useFolderFeedsByFeedId = (feedId?: string) =>
-  useSubscriptionStore((state): string[] => {
-    if (typeof feedId !== "string") return []
+  useSubscriptionStore((state): string[] | null => {
+    if (typeof feedId !== "string") return null
     if (feedId === FEED_COLLECTION_LIST) { return [feedId] }
 
     if (!feedId.startsWith(ROUTE_FEED_IN_FOLDER)) {
-      return []
+      return null
     }
 
     const folderName = feedId.replace(ROUTE_FEED_IN_FOLDER, "")

@@ -26,7 +26,6 @@ import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
   FEED_COLLECTION_LIST,
-  levels,
   ROUTE_ENTRY_PENDING,
   ROUTE_FEED_IN_FOLDER,
   views,
@@ -179,11 +178,7 @@ const ListHeader: FC<{
     await apiClient.reads.all.$post({
       json: {
         ...getEntriesParams({
-          level: routerParams?.level,
-          id:
-            routerParams.level === levels.folder ?
-              folderIds?.join(",") :
-              feedId,
+          id: folderIds?.join(",") || feedId,
           view: routerParams?.view,
         }),
       },
@@ -192,7 +187,6 @@ const ListHeader: FC<{
     if (typeof routerParams.feedId === "number" || routerParams.isAllFeeds) {
       subscriptionActions.markReadByView(routerParams.view)
     } else if (
-      routerParams.level === levels.folder &&
       routerParams.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)
     ) {
       subscriptionActions.markReadByFolder(

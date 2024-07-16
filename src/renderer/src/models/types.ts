@@ -6,7 +6,6 @@ export type ExtractBizResponse<T extends (...args: any[]) => any> = Exclude<
 >
 
 export type ActiveList = {
-  level: string
   id: string | number
   name: string
   view: number

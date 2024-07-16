@@ -79,7 +79,7 @@ export const useEntryIdsByFolderName = (
   const feedIds = useFolderFeedsByFeedId(folderName)
   return useEntryStore(
     useShallow(() => {
-      if (!feedIds) return []
+      if (!feedIds) return null
 
       return getFilteredFeedIds(feedIds, filter)
     }),

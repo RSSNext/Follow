@@ -3,7 +3,7 @@ import {
   useRouteParamsSelector,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
-import { levels, views } from "@renderer/lib/constants"
+import { views } from "@renderer/lib/constants"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { useEntries } from "@renderer/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
@@ -63,13 +63,12 @@ export const useEntriesByView = () => {
   const routeParams = useRouteParms()
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
-  const { level, feedId, view, isAllFeeds, isCollection } = routeParams
+  const { feedId, view, isAllFeeds, isCollection } = routeParams
 
   const folderIds = useFolderFeedsByFeedId(feedId)
 
   const query = useEntries({
-    level,
-    id: level === levels.folder ? folderIds?.join(",") : feedId,
+    id: folderIds?.join(",") || feedId,
     view,
     ...(unreadOnly === true && { read: false }),
 

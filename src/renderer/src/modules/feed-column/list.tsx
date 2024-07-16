@@ -2,7 +2,7 @@ import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteFeedId } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { FEED_COLLECTION_LIST, levels, views } from "@renderer/lib/constants"
+import { FEED_COLLECTION_LIST, views } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
@@ -137,7 +137,6 @@ export function FeedList({
             navigate({
               entryId: null,
               feedId: FEED_COLLECTION_LIST,
-              level: levels.folder,
               view,
             })
           }

@@ -2,11 +2,6 @@ import * as semver from "semver"
 
 import { getStorageNS } from "./ns"
 
-export const levels = {
-  folder: "folder",
-  feed: "feed",
-}
-
 export const views = [
   {
     name: "Articles",

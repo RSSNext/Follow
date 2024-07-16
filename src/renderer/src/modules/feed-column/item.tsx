@@ -12,7 +12,6 @@ import {
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { useDeleteSubscription } from "@renderer/hooks/biz/useSubscriptionActions"
-import { levels } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
 import { nextFrame } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -48,7 +47,6 @@ const FeedItemImpl = ({
         feedId,
         entryId: null,
         view,
-        level: levels.feed,
       })
       // focus to main container in order to let keyboard can navigate entry items by arrow keys
       nextFrame(() => {
@@ -64,8 +62,7 @@ const FeedItemImpl = ({
   const { present } = useModalStack()
 
   const isActive = useRouteParamsSelector(
-    (routerParams) =>
-      routerParams?.level === levels.feed && routerParams.feedId === feedId,
+    (routerParams) => routerParams.feedId === feedId,
   )
 
   const feed = useFeedById(feedId)
