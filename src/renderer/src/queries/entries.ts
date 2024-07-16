@@ -73,6 +73,8 @@ export const useEntries = ({
     },
     initialPageParam: undefined,
     refetchInterval: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   })
 
 export const useEntriesPreview = ({ id }: { id?: string }) =>

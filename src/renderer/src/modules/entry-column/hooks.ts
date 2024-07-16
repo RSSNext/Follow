@@ -72,6 +72,7 @@ export const useEntriesByView = () => {
     id: level === levels.folder ? folderIds?.join(",") : feedId,
     view,
     ...(unreadOnly === true && { read: false }),
+
   })
   const remoteEntryIds = query.data?.pages
     ?.map((page) => page.data?.map((entry) => entry.entries.id))
