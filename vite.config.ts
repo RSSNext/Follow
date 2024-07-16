@@ -15,6 +15,7 @@ export default defineConfig({
     sourcemap: true,
   },
   root: "./src/renderer",
+  envDir: resolve(__dirname, "."),
   resolve: {
     alias: {
       "@renderer": resolve("src/renderer/src"),

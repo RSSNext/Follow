@@ -17,6 +17,7 @@
     "build": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make",
     "build:web": "vite build",
     "dev": "electron-vite dev --outDir=dist",
+    "dev:web": "vite",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "prepare": "pnpm exec simple-git-hooks && test -f .env || cp .env.example .env",

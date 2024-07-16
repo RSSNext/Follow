@@ -3,7 +3,7 @@ import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import * as React from "react"
 
-import { useMaskScrollArea } from "./useMaskScrollArea"
+import styles from "./index.module.css"
 
 const Corner = React.forwardRef<
   React.ElementRef<typeof ScrollAreaBase.Corner>,
@@ -66,16 +66,13 @@ export const Viewport = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Viewport>
 >(({ className, ...rest }, forwardedRef) => {
   const ref = React.useRef<HTMLDivElement>(null)
-  const [, maskClassName] = useMaskScrollArea({
-    ref,
-    size: "lg",
-  })
+
   React.useImperativeHandle(forwardedRef, () => ref.current as HTMLDivElement)
   return (
     <ScrollAreaBase.Viewport
       {...rest}
       ref={ref}
-      className={cn("block size-full", maskClassName, className)}
+      className={cn("block size-full", styles["scroller"], className)}
     />
   )
 })

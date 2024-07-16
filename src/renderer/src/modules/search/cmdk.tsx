@@ -149,8 +149,9 @@ export const SearchCmdK: React.FC = () => {
 
         <ScrollArea.ScrollArea
           ref={scrollViewRef}
-          viewportClassName="max-h-[50vh] px-5 [&>div]:!flex"
-          rootClassName="h-full"
+          viewportClassName="max-h-[50vh] [&>div]:!flex"
+          rootClassName="h-full px-5"
+          scrollbarClassName="mb-6"
         >
           <Command.List className="flex w-full min-w-0 flex-col">
             <SearchPlaceholder />
