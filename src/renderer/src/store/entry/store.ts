@@ -275,9 +275,10 @@ class EntryActions {
           })
         }
       },
-      async () => EntryService.bulkStoreReadStatus({
-        [entryId]: read,
-      }),
+      async () =>
+        EntryService.bulkStoreReadStatus({
+          [entryId]: read,
+        }),
     )
   }
 
@@ -296,7 +297,7 @@ class EntryActions {
           {
             createdAt: new Date().toISOString(),
           } :
-        undefined,
+        null as unknown as undefined,
     })
 
     set((state) =>
