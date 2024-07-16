@@ -9,7 +9,7 @@ import {
 import type { IFuseOptions } from "fuse.js"
 import Fuse from "fuse.js"
 
-import type { SubscriptionPlainModel } from "../subscription"
+import type { SubscriptionFlatModel } from "../subscription"
 import { createZustandStore } from "../utils/helper"
 import { SearchType } from "./constants"
 import { defineSearchInstance } from "./helper"
@@ -83,7 +83,7 @@ class SearchActions {
         }
 
         const processedSubscriptions = [] as SearchResult<
-          SubscriptionPlainModel,
+          SubscriptionFlatModel,
           { feedId: string }
         >[]
         for (const subscription of subscriptions) {

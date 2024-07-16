@@ -25,11 +25,12 @@ const useGroupedData = (view: FeedViewType) => {
     const groupFolder = {} as Record<string, string[]>
 
     for (const subscription of data) {
-      if (subscription.category) {
-        if (!groupFolder[subscription.category]) {
-          groupFolder[subscription.category] = []
+      const category = subscription.category || subscription.defaultCategory
+      if (category) {
+        if (!groupFolder[category]) {
+          groupFolder[category] = []
         }
-        groupFolder[subscription.category].push(subscription.feedId)
+        groupFolder[category].push(subscription.feedId)
       }
     }
 

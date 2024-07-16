@@ -8,9 +8,7 @@ import { ROUTE_FEED_IN_FOLDER } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import {
-  useSubscriptionByFeedId,
-} from "@renderer/store/subscription"
+import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useEffect, useState } from "react"
@@ -38,19 +36,19 @@ function FeedCategoryImpl({
     ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0)),
   )
 
-  const showCollapse = sortByUnreadFeedList.length > 1
-  const [open, setOpen] = useState(!showCollapse)
+  const navigate = useNavigateEntry()
 
+  const subscription = useSubscriptionByFeedId(ids[0])
+  const folderName = subscription?.category || subscription.defaultCategory
+
+  const showCollapse = sortByUnreadFeedList.length > 1 || subscription?.category
+  const [open, setOpen] = useState(!showCollapse)
   useEffect(() => {
     if (showCollapse) {
       setOpen(expansion)
     }
   }, [expansion])
 
-  const navigate = useNavigateEntry()
-
-  const subscription = useSubscriptionByFeedId(ids[0])
-  const folderName = subscription?.category
   const setCategoryActive = () => {
     if (view !== undefined) {
       navigate({
@@ -67,7 +65,8 @@ function FeedCategoryImpl({
   )
 
   const isActive = useRouteParamsSelector(
-    (routerParams) => routerParams.feedId === `${ROUTE_FEED_IN_FOLDER}${folderName}`,
+    (routerParams) =>
+      routerParams.feedId === `${ROUTE_FEED_IN_FOLDER}${folderName}`,
   )
   const { present } = useModalStack()
 

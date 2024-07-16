@@ -1,6 +1,6 @@
 import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
-import type { SubscriptionPlainModel } from "@renderer/store/subscription"
+import type { SubscriptionFlatModel } from "@renderer/store/subscription"
 import { subscriptionActions } from "@renderer/store/subscription"
 import { feedUnreadActions } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
@@ -15,7 +15,7 @@ export const useDeleteSubscription = ({
   onSuccess?: () => void
 }) =>
   useMutation({
-    mutationFn: async (subscription: SubscriptionPlainModel) =>
+    mutationFn: async (subscription: SubscriptionFlatModel) =>
       subscriptionActions.unfollow(subscription.feedId).then((feed) => {
         Queries.subscription.byView(subscription.view).invalidate()
         feedUnreadActions.updateByFeedId(subscription.feedId, 0)
