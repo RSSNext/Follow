@@ -22,6 +22,7 @@ import {
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
 import { useRefValue } from "@renderer/hooks/common"
+import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
   FEED_COLLECTION_LIST,
@@ -100,7 +101,8 @@ export function EntryColumn() {
     },
     rangeChanged: (...args: any[]) => {
       // @ts-expect-error
-      handleMarkReadInRange && handleMarkReadInRange(...args, isInteracted.current)
+      handleMarkReadInRange &&
+      handleMarkReadInRange(...args, isInteracted.current)
     },
     totalCount: entries.totalCount,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
@@ -130,7 +132,10 @@ export function EntryColumn() {
         })}
       data-total-count={virtuosoOptions.totalCount}
     >
-      <ListHeader totalCount={virtuosoOptions.totalCount} />
+      <ListHeader
+        refetch={entries.refetch}
+        totalCount={virtuosoOptions.totalCount}
+      />
       <m.div
         key={`${routeFeedId}-${view}`}
         className="h-full"
@@ -157,7 +162,8 @@ export function EntryColumn() {
 
 const ListHeader: FC<{
   totalCount: number
-}> = ({ totalCount }) => {
+  refetch: () => void
+}> = ({ totalCount, refetch }) => {
   const routerParams = useRouteParms()
 
   const unreadOnly = useGeneralSettingKey("unreadOnly")
@@ -224,6 +230,7 @@ const ListHeader: FC<{
   )
 
   const user = useUser()
+  const isOnline = useIsOnline()
 
   const feed = useFeedById(routerParams.feedId)
 
@@ -255,22 +262,39 @@ const ListHeader: FC<{
               <DividerVertical className="w-px" />
             </>
           )}
-          {feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) && (
-            <ActionButton
-              tooltip="Refresh"
-              // shortcut={shortcuts.entries.toggleUnreadOnly.key}
-              onClick={() => {
-                refreshFeed()
-              }}
-            >
-              <i
-                className={cn(
-                  "i-mgc-refresh-2-cute-re",
-                  isPending && "animate-spin",
-                )}
-              />
-            </ActionButton>
-          )}
+          {isOnline ? (
+            feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) ?
+                (
+                  <ActionButton
+                    tooltip="Refresh"
+                    onClick={() => {
+                      refreshFeed()
+                    }}
+                  >
+                    <i
+                      className={cn(
+                        "i-mgc-refresh-2-cute-re",
+                        isPending && "animate-spin",
+                      )}
+                    />
+                  </ActionButton>
+                ) :
+                (
+                  <ActionButton
+                    tooltip="Refetch"
+                    onClick={() => {
+                      refetch()
+                    }}
+                  >
+                    <i
+                      className={cn(
+                        "i-mgc-refresh-2-cute-re",
+                        isPending && "animate-spin",
+                      )}
+                    />
+                  </ActionButton>
+                )
+          ) : null}
           <ActionButton
             tooltip={unreadOnly ? "Unread Only" : "All"}
             shortcut={shortcuts.entries.toggleUnreadOnly.key}
