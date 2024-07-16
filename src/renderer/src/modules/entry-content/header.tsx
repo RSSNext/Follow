@@ -7,6 +7,7 @@ import { AnimatePresence, m } from "framer-motion"
 import { useHotkeys } from "react-hotkeys-hook"
 
 import { useEntryTitleMeta } from "./atoms"
+import { EntryReadHistory } from "./read-history"
 
 export function EntryHeader({
   view,
@@ -29,14 +30,22 @@ export function EntryHeader({
   //   items.find((item) => item.key === key)?.onClick()
   // }, { scopes: ["home"] })
 
-  useHotkeys(shortcuts.entry.toggleStarred.key, () => {
-    const key = entry?.collections ? "unstar" : "star"
-    items.find((item) => item.key === key)?.onClick()
-  }, { scopes: ["home"] })
+  useHotkeys(
+    shortcuts.entry.toggleStarred.key,
+    () => {
+      const key = entry?.collections ? "unstar" : "star"
+      items.find((item) => item.key === key)?.onClick()
+    },
+    { scopes: ["home"] },
+  )
 
-  useHotkeys(shortcuts.entry.openInBrowser.key, () => {
-    items.find((item) => item.key === "openInBrowser")?.onClick()
-  }, { scopes: ["home"] })
+  useHotkeys(
+    shortcuts.entry.openInBrowser.key,
+    () => {
+      items.find((item) => item.key === "openInBrowser")?.onClick()
+    },
+    { scopes: ["home"] },
+  )
 
   const entryTitleMeta = useEntryTitleMeta()
   if (!entry?.entries.url) return null
@@ -58,7 +67,9 @@ export function EntryHeader({
               exit={{ opacity: 0.01, y: 30 }}
               className="flex min-w-0 shrink items-end gap-2 truncate text-sm leading-tight text-theme-foreground"
             >
-              <span className="min-w-0 shrink truncate font-bold">{entryTitleMeta.title}</span>
+              <span className="min-w-0 shrink truncate font-bold">
+                {entryTitleMeta.title}
+              </span>
               <i className="i-mgc-line-cute-re size-[10px] shrink-0 translate-y-[-3px] rotate-[-25deg]" />
               <span className="shrink-0 truncate text-xs opacity-80">
                 {entryTitleMeta.description}
@@ -67,24 +78,30 @@ export function EntryHeader({
           )}
         </AnimatePresence>
       </div>
-      <div className="flex items-center gap-3">
-        {items
-          .filter((item) => !item.disabled)
-          .map((item) => (
-            <ActionButton
-              icon={
-                item.icon ? (
-                  <img className="size-4 grayscale" src={item.icon} />
-                ) : (
-                  <i className={item.className} />
-                )
-              }
-              shortcut={item.shortcut}
-              onClick={item.onClick}
-              tooltip={item.name}
-              key={item.name}
-            />
-          ))}
+      <div className="flex w-full items-center justify-between">
+        <div className="flex items-center gap-2 text-[13px] text-zinc-500">
+          <EntryReadHistory entryId={entryId} />
+        </div>
+
+        <div className="flex shrink-0 items-center gap-3">
+          {items
+            .filter((item) => !item.disabled)
+            .map((item) => (
+              <ActionButton
+                icon={
+                  item.icon ? (
+                    <img className="size-4 grayscale" src={item.icon} />
+                  ) : (
+                    <i className={item.className} />
+                  )
+                }
+                shortcut={item.shortcut}
+                onClick={item.onClick}
+                tooltip={item.name}
+                key={item.name}
+              />
+            ))}
+        </div>
       </div>
     </div>
   )

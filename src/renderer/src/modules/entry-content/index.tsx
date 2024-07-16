@@ -3,16 +3,6 @@ import { useMe } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@renderer/components/ui/avatar"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { parseHtml } from "@renderer/lib/parse-html"
@@ -24,8 +14,7 @@ import {
 import { Queries } from "@renderer/queries"
 import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
-import { useUserById } from "@renderer/store/user"
-import { Fragment, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import { LoadingCircle } from "../../components/ui/loading"
 import { EntryTranslation } from "../entry-column/translation"
@@ -128,6 +117,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
         view={0}
         className="h-[55px] px-5"
       />
+
       <div className="h-[calc(100%-3.5rem)] min-w-0 overflow-y-auto @container">
         <m.div
           style={{
@@ -158,12 +148,11 @@ function EntryContentRender({ entryId }: { entryId: string }) {
               <div className="mt-2 text-[13px] font-medium text-zinc-500">
                 {feed?.title}
               </div>
-              <div className="text-[13px] text-zinc-500">
+              <div className="flex items-center gap-2 text-[13px] text-zinc-500">
                 {entry.entries.publishedAt &&
                   new Date(entry.entries.publishedAt).toLocaleString()}
-              </div>
-              <div className="mt-2 flex items-center gap-2 text-[13px] text-zinc-500">
-                <div className="flex items-center gap-1 font-medium">
+
+                <div className="flex items-center gap-1">
                   <i className="i-mgc-eye-2-cute-re" />
                   <span>
                     {(
@@ -175,7 +164,6 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                       .toLocaleString()}
                   </span>
                 </div>
-                <EntryReadHistory entryId={entryId} />
               </div>
             </a>
             <WrappedElementProvider boundingDetection>
@@ -247,65 +235,4 @@ const TitleMetaHandler: Component<{
     }
   }, [entryId, entryTitle, feedTitle, isAtTop])
   return null
-}
-
-export const EntryReadHistory: Component<{ entryId: string }> = ({
-  entryId,
-}) => {
-  const me = useMe()
-  const entryHistory = useEntryReadHistory(entryId)
-
-  if (!entryHistory) return null
-
-  if (!me) return null
-
-  return (
-    <div className="flex items-center">
-      {[me.id]
-        .concat(entryHistory.userIds?.filter((id) => id !== me?.id) ?? []) // then others
-        .slice(0, 10)
-
-        .map((userId, i) => (
-          <Fragment key={userId}>
-            <EntryUser userId={userId} i={i} />
-          </Fragment>
-        ))}
-
-      {entryHistory.readCount && entryHistory.readCount > 10 && (
-        <Tooltip>
-          <TooltipTrigger>
-            <div className="flex size-6 items-center justify-center rounded-full border border-black bg-zinc-200 dark:border-white dark:bg-neutral-800">
-              <span className="text-xs font-medium text-zinc-500 dark:text-neutral-400">
-                +
-                {entryHistory.readCount - 10}
-              </span>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent side="top">More</TooltipContent>
-        </Tooltip>
-      )}
-    </div>
-  )
-}
-
-const EntryUser: Component<{ userId: string, i: number }> = ({ userId, i }) => {
-  const user = useUserById(userId)
-  if (!user) return null
-  return (
-    <Tooltip>
-      <TooltipTrigger>
-        <div
-          style={{
-            transform: `translateX(-${i * 5}px)`,
-          }}
-        >
-          <Avatar className="aspect-square size-6 border border-black dark:border-white">
-            <AvatarImage src={user?.image || undefined} />
-            <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
-          </Avatar>
-        </div>
-      </TooltipTrigger>
-      <TooltipContent side="top">{user.name}</TooltipContent>
-    </Tooltip>
-  )
 }
