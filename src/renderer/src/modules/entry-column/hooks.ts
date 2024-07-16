@@ -89,7 +89,7 @@ export const useEntriesByView = () => {
   // then we have no way to incrementally update the data.
   // We need to add an interface to incrementally update the data based on the version hash.
 
-  const entries = remoteEntryIds || currentEntries
+  const entryIds = remoteEntryIds || currentEntries
 
   useHotkeys(
     shortcuts.entries.refetch.key,
@@ -101,29 +101,29 @@ export const useEntriesByView = () => {
 
   // in unread only entries only can grow the data, but not shrink
   // so we memo this previous data to avoid the flicker
-  const prevEntries = useRef(entries)
+  const prevEntryIdsRef = useRef(entryIds)
 
   useEffect(() => {
-    prevEntries.current = []
+    prevEntryIdsRef.current = []
   }, [routeParams.feedId, routeParams.view])
   const [mergedEntries, setMergedEntries] = useState<string[]>([])
 
   useEffect(() => {
     if (!unreadOnly) {
-      prevEntries.current = []
-      setMergedEntries(entries)
+      prevEntryIdsRef.current = []
+      setMergedEntries(entryIds)
       return
     }
-    if (!prevEntries.current) {
-      prevEntries.current = entries
-      setMergedEntries(entries)
+    if (!prevEntryIdsRef.current) {
+      prevEntryIdsRef.current = entryIds
+      setMergedEntries(entryIds)
       return
     }
     // merge the new entries with the old entries, and unique them
-    const nextIds = [...new Set([...prevEntries.current, ...entries])]
-    prevEntries.current = nextIds
+    const nextIds = [...new Set([...prevEntryIdsRef.current, ...entryIds])]
+    prevEntryIdsRef.current = nextIds
     setMergedEntries(nextIds)
-  }, [entries, unreadOnly])
+  }, [unreadOnly, entryIds.toString()])
 
   const sortEntries = () =>
     isCollection ?

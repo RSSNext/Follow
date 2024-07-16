@@ -92,15 +92,16 @@ export const doMutationAndTransaction = async (
   transaction: () => Promise<any>,
   options?: MutationAndTranscationOptions,
 ) => {
-  const {
-    waitMutation = false,
-    doTranscationWhenMutationFail = !navigator.onLine,
-  } = options || {}
-  const wrappedTransaction = () => runTransactionInScope(() => unstable_batchedUpdates(() => transaction()))
+  const isOnline = navigator.onLine
+  const { waitMutation = false, doTranscationWhenMutationFail = !isOnline } =
+    options || {}
+  const wrappedTransaction = () =>
+    runTransactionInScope(() => unstable_batchedUpdates(() => transaction()))
+  const wrappedMutation = () => (isOnline ? mutationFn() : Promise.resolve())
 
   if (waitMutation) {
     let runOnce = false
-    await mutationFn()
+    await wrappedMutation()
       .then(() => {
         runOnce = true
         return wrappedTransaction()
@@ -113,9 +114,6 @@ export const doMutationAndTransaction = async (
         return
       })
   } else {
-    await Promise.all([
-      mutationFn(),
-      wrappedTransaction(),
-    ])
+    await Promise.all([wrappedMutation(), wrappedTransaction()])
   }
 }
