@@ -1,4 +1,16 @@
 .scroller {
+  animation: mask-up;
+  animation-timeline: scroll(self);
+  animation-range: 0 1rem;
+  mask-composite: exclude;
+}
+@​keyframes mask-up {
+  to {
+    mask-size: 100% 120px, 100% 100%;
+  }
+}
+
+.scroller {
   --mask-size: 48px;
   padding: 0;
   background: transparent;

@@ -66,13 +66,19 @@ export const Viewport = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Viewport>
 >(({ className, ...rest }, forwardedRef) => {
   const ref = React.useRef<HTMLDivElement>(null)
-
+  const [canScroll, setCanScroll] = React.useState(false)
+  React.useLayoutEffect(() => {
+    const $el = ref.current
+    if (!$el) return
+    const canScroll = $el.scrollHeight > $el.clientHeight
+    setCanScroll(canScroll)
+  }, [rest.children])
   React.useImperativeHandle(forwardedRef, () => ref.current as HTMLDivElement)
   return (
     <ScrollAreaBase.Viewport
       {...rest}
       ref={ref}
-      className={cn("block size-full", styles["scroller"], className)}
+      className={cn("block size-full", canScroll && styles["scroller"], className)}
     />
   )
 })

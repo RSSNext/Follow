@@ -66,7 +66,7 @@ export const SettingAppearance = () => {
             },
             {
               disabled:
-                window.electron && !["macOS", "Linux"].includes(getOS()),
+                !window.electron || !["macOS", "Linux"].includes(getOS()),
               label: "Dock Badge",
               key: "showDockBadge",
               onChange: (value) => setUISetting("showDockBadge", value),
