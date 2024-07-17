@@ -35,13 +35,22 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({
           </Fragment>
         ))}
 
-      {entryHistory.readCount && entryHistory.readCount > 10 && (
+      {entryHistory.readCount &&
+        entryHistory.readCount > 10 &&
+        entryHistory.userIds &&
+        entryHistory.userIds.length >= 10 && (
         <Tooltip>
-          <TooltipTrigger>
-            <div className="relative z-[11] flex size-8 items-center justify-center rounded-full border border-border bg-zinc-200 dark:bg-neutral-800">
-              <span className="text-xs font-medium text-zinc-500 dark:text-neutral-400">
+          <TooltipTrigger asChild>
+            <div
+              style={{
+                right: "80px",
+                zIndex: 11,
+              }}
+              className="relative z-[11] flex size-8 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
+            >
+              <span className="text-[10px] font-medium text-muted-foreground">
                 +
-                {entryHistory.readCount - 10}
+                {Math.min(entryHistory.readCount - 10, 99)}
               </span>
             </div>
           </TooltipTrigger>
@@ -52,29 +61,28 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({
   )
 }
 
-const EntryUser: Component<{ userId: string, i: number }> = ({ userId, i }) => {
+const EntryUser: Component<{
+  userId: string
+  i: number
+}> = ({ userId, i }) => {
   const user = useUserById(userId)
   if (!user) return null
   return (
     <Tooltip>
-      <TooltipTrigger>
-        <div
-          className="relative"
-          style={{
-            transform: `translateX(-${i * 8}px)`,
-            zIndex: i,
-          }}
-        >
-          <Avatar className="aspect-square size-8 border border-border">
-            <AvatarImage src={user?.image || undefined} />
-            <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
-          </Avatar>
-        </div>
+      <TooltipTrigger
+        className="relative"
+        style={{
+          right: `${i * 8}px`,
+          zIndex: i,
+        }}
+      >
+        <Avatar className="aspect-square size-8 border border-border ring-1 ring-background">
+          <AvatarImage src={user?.image || undefined} />
+          <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
+        </Avatar>
       </TooltipTrigger>
       <TooltipContent side="top">
         Recent reader:
-        {" "}
-
         {user.name}
       </TooltipContent>
     </Tooltip>
