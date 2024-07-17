@@ -1,4 +1,5 @@
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
+import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteFeedId } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
@@ -94,7 +95,7 @@ export function FeedList({
       {!hideTitle && (
         <div
           onClick={stopPropagation}
-          className="mb-2 flex items-center justify-between px-2.5 py-1"
+          className="mx-3 mb-2 flex items-center justify-between px-2.5 py-1"
         >
           <div
             className="font-bold"
@@ -127,47 +128,49 @@ export function FeedList({
           </div>
         </div>
       )}
-      <div
-        className={cn(
-          "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 transition-colors",
-          feedId === FEED_COLLECTION_LIST && "bg-native-active",
-        )}
-        onClick={(e) => {
-          e.stopPropagation()
-          if (view !== undefined) {
-            navigate({
-              entryId: null,
-              feedId: FEED_COLLECTION_LIST,
-              view,
-            })
-          }
-        }}
-      >
-        <i className="i-mgc-star-cute-fi mr-2 text-orange-500" />
-        Starred
-      </div>
-      {hasData ?
-        sortedByUnread?.map(([category, ids]) => (
-          <FeedCategory
-            showUnreadCount={showUnreadCount}
-            key={category}
-            data={ids}
-            view={view}
-            expansion={expansion}
-          />
-        )) :
-          !hideTitle && (
-            <div className="flex h-full flex-1 items-center text-zinc-500">
-              <Link
-                to="/discover"
-                className="-mt-36 flex h-full flex-1 flex-col items-center justify-center gap-2"
-                onClick={stopPropagation}
-              >
-                <i className="i-mgc-add-cute-re text-3xl" />
-                Add some feeds
-              </Link>
-            </div>
+      <ScrollArea.ScrollArea flex viewportClassName="!px-3">
+        <div
+          className={cn(
+            "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 transition-colors",
+            feedId === FEED_COLLECTION_LIST && "bg-native-active",
           )}
+          onClick={(e) => {
+            e.stopPropagation()
+            if (view !== undefined) {
+              navigate({
+                entryId: null,
+                feedId: FEED_COLLECTION_LIST,
+                view,
+              })
+            }
+          }}
+        >
+          <i className="i-mgc-star-cute-fi mr-2 text-orange-500" />
+          Starred
+        </div>
+        {hasData ?
+          sortedByUnread?.map(([category, ids]) => (
+            <FeedCategory
+              showUnreadCount={showUnreadCount}
+              key={category}
+              data={ids}
+              view={view}
+              expansion={expansion}
+            />
+          )) :
+            !hideTitle && (
+              <div className="flex h-full flex-1 items-center text-zinc-500">
+                <Link
+                  to="/discover"
+                  className="-mt-36 flex h-full flex-1 flex-col items-center justify-center gap-2"
+                  onClick={stopPropagation}
+                >
+                  <i className="i-mgc-add-cute-re text-3xl" />
+                  Add some feeds
+                </Link>
+              </div>
+            )}
+      </ScrollArea.ScrollArea>
     </div>
   )
 }

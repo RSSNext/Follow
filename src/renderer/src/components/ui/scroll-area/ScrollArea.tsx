@@ -70,15 +70,27 @@ export const Viewport = React.forwardRef<
   React.useLayoutEffect(() => {
     const $el = ref.current
     if (!$el) return
-    const canScroll = $el.scrollHeight > $el.clientHeight
-    setCanScroll(canScroll)
-  }, [rest.children])
+    const handler = () => {
+      const canScroll = $el.scrollHeight > $el.clientHeight
+      setCanScroll(canScroll)
+    }
+    const observer = new ResizeObserver(handler)
+    handler()
+    observer.observe($el)
+
+    return () => observer.disconnect()
+  }, [])
+
   React.useImperativeHandle(forwardedRef, () => ref.current as HTMLDivElement)
   return (
     <ScrollAreaBase.Viewport
       {...rest}
       ref={ref}
-      className={cn("block size-full", canScroll && styles["scroller"], className)}
+      className={cn(
+        "block size-full",
+        canScroll && styles["scroller"],
+        className,
+      )}
     />
   )
 })
@@ -105,12 +117,25 @@ export const ScrollArea = React.forwardRef<
     rootClassName?: string
     viewportClassName?: string
     scrollbarClassName?: string
+    flex?: boolean
   }
->(({ children, rootClassName, viewportClassName, scrollbarClassName }, ref) => (
-  <Root className={rootClassName}>
-    <Viewport ref={ref} onWheel={stopPropagation} className={viewportClassName}>
-      {children}
-    </Viewport>
-    <Scrollbar className={scrollbarClassName} />
-  </Root>
-))
+>(
+  (
+    { flex, children, rootClassName, viewportClassName, scrollbarClassName },
+    ref,
+  ) => (
+    <Root className={rootClassName}>
+      <Viewport
+        ref={ref}
+        onWheel={stopPropagation}
+        className={cn(
+          flex ? "[&>div]:!flex [&>div]:!flex-col" : "",
+          viewportClassName,
+        )}
+      >
+        {children}
+      </Viewport>
+      <Scrollbar className={scrollbarClassName} />
+    </Root>
+  ),
+)

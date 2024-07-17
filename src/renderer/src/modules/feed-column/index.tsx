@@ -210,11 +210,11 @@ export function FeedColumn({ children }: PropsWithChildren) {
           {views.map((item, index) => (
             <section
               key={item.name}
-              className="min-h-full w-64 shrink-0 snap-center overflow-y-auto pb-8"
+              className="h-full w-64 shrink-0 snap-center pb-8"
             >
               {active === index && (
                 <FeedList
-                  className="flex min-h-full w-full flex-col px-3 text-sm"
+                  className="flex size-full flex-col text-sm"
                   view={index}
                 />
               )}
