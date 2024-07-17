@@ -3,6 +3,7 @@ import { attachOpenInEditor } from "@renderer/lib/dev"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useEffect, useRef } from "react"
 import { isRouteErrorResponse, useRouteError } from "react-router-dom"
+import { toast } from "sonner"
 
 import { Logo } from "../icons/logo"
 import { StyledButton } from "../ui/button"
@@ -32,6 +33,7 @@ export function ErrorElement() {
     window.sessionStorage.getItem("reload") !== "1"
   ) {
     if (reloadRef.current) return null
+    toast.info("Web app has been updated so it needs to be reloaded.")
     window.sessionStorage.setItem("reload", "1")
     window.location.reload()
     reloadRef.current = true
