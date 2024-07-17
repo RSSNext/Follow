@@ -1,5 +1,4 @@
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { AnimatePresence } from "framer-motion"
 import { useAtomValue } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 
@@ -26,7 +25,7 @@ const ModalStack = () => {
   const forceOverlay = stack.some((item) => item.overlay)
 
   return (
-    <AnimatePresence mode="popLayout">
+    <>
       {stack.map((item, index) => (
         <ModalInternal
           key={item.id}
@@ -36,6 +35,6 @@ const ModalStack = () => {
         />
       ))}
       {stack.length > 0 && (modalSettingOverlay || forceOverlay) && <ModalOverlay zIndex={MODAL_STACK_Z_INDEX + stack.length - 1} />}
-    </AnimatePresence>
+    </>
   )
 }

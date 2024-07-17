@@ -1040,22 +1040,6 @@ declare const feeds: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
-        nextCheckAt: drizzle_orm_pg_core.PgColumn<{
-            name: "next_check_at";
-            tableName: "feeds";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
         lastModifiedHeader: drizzle_orm_pg_core.PgColumn<{
             name: "last_modified_header";
             tableName: "feeds";
@@ -1163,7 +1147,6 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     siteUrl: zod.ZodNullable<zod.ZodString>;
     image: zod.ZodNullable<zod.ZodString>;
     checkedAt: zod.ZodString;
-    nextCheckAt: zod.ZodString;
     lastModifiedHeader: zod.ZodNullable<zod.ZodString>;
     etagHeader: zod.ZodNullable<zod.ZodString>;
     ttl: zod.ZodNullable<zod.ZodNumber>;
@@ -1178,7 +1161,6 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     url: string;
     siteUrl: string | null;
     checkedAt: string;
-    nextCheckAt: string;
     lastModifiedHeader: string | null;
     etagHeader: string | null;
     ttl: number | null;
@@ -1193,7 +1175,6 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     url: string;
     siteUrl: string | null;
     checkedAt: string;
-    nextCheckAt: string;
     lastModifiedHeader: string | null;
     etagHeader: string | null;
     ttl: number | null;
@@ -1209,7 +1190,6 @@ declare const feedsInputSchema: zod.ZodObject<{
     url: zod.ZodString;
     siteUrl: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
     checkedAt: zod.ZodString;
-    nextCheckAt: zod.ZodString;
     lastModifiedHeader: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
     etagHeader: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
     ttl: zod.ZodOptional<zod.ZodNullable<zod.ZodNumber>>;
@@ -1219,7 +1199,6 @@ declare const feedsInputSchema: zod.ZodObject<{
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     url: string;
     checkedAt: string;
-    nextCheckAt: string;
     description?: string | null | undefined;
     title?: string | null | undefined;
     id?: string | undefined;
@@ -1234,7 +1213,6 @@ declare const feedsInputSchema: zod.ZodObject<{
 }, {
     url: string;
     checkedAt: string;
-    nextCheckAt: string;
     description?: string | null | undefined;
     title?: string | null | undefined;
     id?: string | undefined;
@@ -2390,6 +2368,30 @@ declare const feedPowerTokensRelations: drizzle_orm.Relations<"feedPowerTokens",
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
+    "/metrics": {
+        $get: {
+            input: {
+                query: {
+                    type?: "completed" | "failed" | undefined;
+                };
+            };
+            output: {
+                data: {
+                    data: number[];
+                    meta: {
+                        count: number;
+                        prevTS: number;
+                        prevCount: number;
+                    };
+                    count: number;
+                };
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
     "/profiles": {
         $get: {
             input: {
@@ -2508,7 +2510,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         url: string;
                         siteUrl: string | null;
                         checkedAt: string;
-                        nextCheckAt: string;
                         lastModifiedHeader: string | null;
                         etagHeader: string | null;
                         ttl: number | null;
@@ -2916,7 +2917,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     feed: {
                         url: string;
                         checkedAt: string;
-                        nextCheckAt: string;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
                         id?: string | undefined;
@@ -2978,7 +2978,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         url: string;
                         siteUrl: string | null;
                         checkedAt: string;
-                        nextCheckAt: string;
                         lastModifiedHeader: string | null;
                         etagHeader: string | null;
                         ttl: number | null;
@@ -3147,7 +3146,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         url: string;
                         siteUrl: string | null;
                         checkedAt: string;
-                        nextCheckAt: string;
                         lastModifiedHeader: string | null;
                         etagHeader: string | null;
                         ttl: number | null;
@@ -3221,7 +3219,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         url: string;
                         siteUrl: string | null;
                         checkedAt: string;
-                        nextCheckAt: string;
                         lastModifiedHeader: string | null;
                         etagHeader: string | null;
                         ttl: number | null;
@@ -3307,7 +3304,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         url: string;
                         siteUrl: string | null;
                         checkedAt: string;
-                        nextCheckAt: string;
                         lastModifiedHeader: string | null;
                         etagHeader: string | null;
                         ttl: number | null;
