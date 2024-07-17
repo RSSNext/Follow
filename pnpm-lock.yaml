@@ -206,8 +206,8 @@ importers:
         specifier: 1.3.4
         version: 1.3.4
       path-to-regexp:
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.0.0
+        version: 7.0.0
       posthog-js:
         specifier: 1.148.0
         version: 1.148.0
@@ -5488,8 +5488,8 @@ packages:
     resolution: {integrity: sha512-ypGJsmGtdXUOeM5u93TyeIEfEhM6s+ljAhrk5vAvSx8uyY/02OvrZnA0YNGUrPXfpJMgI1ODd3nwz8Npx4O4cg==}
     engines: {node: 20 || >=22}
 
-  path-to-regexp@7.1.0:
-    resolution: {integrity: sha512-ZToe+MbUF4lBqk6dV8GKot4DKfzrxXsplOddH8zN3YK+qw9/McvP7+4ICjZvOne0jQhN4eJwHsX6tT0Ns19fvw==}
+  path-to-regexp@7.0.0:
+    resolution: {integrity: sha512-58Y94bQqF3zBIASFNiufRPH1NfgZth1qwZ35radL87sg8pgbVqr6uikAhqZtFD+w65MGH6SWnY/ly3GbrM4fbg==}
     engines: {node: '>=16'}
 
   path-type@2.0.0:
@@ -12966,7 +12966,7 @@ snapshots:
       lru-cache: 11.0.0
       minipass: 7.1.2
 
-  path-to-regexp@7.1.0: {}
+  path-to-regexp@7.0.0: {}
 
   path-type@2.0.0:
     dependencies:
