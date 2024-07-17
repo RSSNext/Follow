@@ -168,14 +168,23 @@ const FeedItemImpl = ({
               </TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>
-                  Error since
-                  {" "}
-                  {dayjs
-                    .duration(
-                      dayjs(feed.errorAt).diff(dayjs(), "minute"),
-                      "minute",
-                    )
-                    .humanize(true)}
+                  <div className="flex items-center gap-1">
+                    <i className="i-mgc-time-cute-re" />
+                    Error since
+                    {" "}
+                    {dayjs
+                      .duration(
+                        dayjs(feed.errorAt).diff(dayjs(), "minute"),
+                        "minute",
+                      )
+                      .humanize(true)}
+                  </div>
+                  {!!feed.errorMessage && (
+                    <div className="flex items-center gap-1">
+                      <i className="i-mgc-bug-cute-re" />
+                      {feed.errorMessage}
+                    </div>
+                  )}
                 </TooltipContent>
               </TooltipPortal>
             </Tooltip>
