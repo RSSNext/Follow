@@ -161,7 +161,8 @@
   "pnpm": {
     "patchedDependencies": {
       "sonner@1.5.0": "patches/sonner@1.5.0.patch",
-      "hono@4.4.7": "patches/hono@4.4.7.patch"
+      "hono@4.4.7": "patches/hono@4.4.7.patch",
+      "@egoist/tipc@0.3.1": "patches/@egoist__tipc@0.3.1.patch"
     }
   },
   "simple-git-hooks": {
