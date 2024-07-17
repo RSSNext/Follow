@@ -2398,7 +2398,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: {
                     name: string | null;
                     id: string;
@@ -2408,6 +2407,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     handle: string | null;
                     createdAt: string;
                 };
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2418,8 +2418,8 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         $post: {
             input: {};
             output: {
-                code: 0;
                 data: string;
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2450,10 +2450,10 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: {
                     transactionHash: string;
                 };
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2473,7 +2473,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: {
                     type: "tip" | "mint" | "burn" | "withdraw";
                     createdAt: string;
@@ -2518,6 +2517,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         ownerUserId: string | null;
                     } | null;
                 }[];
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2527,10 +2527,10 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         $post: {
             input: {};
             output: {
-                code: 0;
                 data: {
                     transactionHash: string;
                 };
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2540,10 +2540,10 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         $get: {
             input: {};
             output: {
-                code: 0;
                 data: {
                     ttl: number;
                 };
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2557,12 +2557,12 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: {
                     title: string | null;
                     id: string;
                     powerToken: string;
                 }[];
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2576,10 +2576,10 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: {
                     transactionHash: string;
                 };
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2594,7 +2594,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: {
                     createdAt: string;
                     userId: string;
@@ -2603,6 +2602,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     dailyPowerToken: string;
                     cashablePowerToken: string;
                 }[];
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2610,7 +2610,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         $post: {
             input: {};
             output: {
-                code: 0;
                 data: {
                     createdAt: string;
                     userId: string;
@@ -2619,6 +2618,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     dailyPowerToken: string;
                     cashablePowerToken: string;
                 };
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2761,10 +2761,10 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: {
                     [x: string]: number;
                 };
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2795,8 +2795,8 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: boolean;
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2876,13 +2876,13 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: {
+                    json: string;
                     xml: string;
                     description: string;
                     content: string;
-                    json: string;
                 };
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -2911,7 +2911,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: {
                     readCount: number;
                     feed: {
@@ -2940,6 +2939,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         isPrivate: boolean;
                     } | undefined;
                 };
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -3056,12 +3056,12 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         $post: {
             input: {};
             output: {
-                code: 0;
                 data: {
                     userId: string;
                     sessionToken: string;
                     expires: string;
                 };
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -3085,6 +3085,15 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
     };
 } & {
     [x: `/import/${string}`]: {
+        [x: `$${Lowercase<string>}`]: {
+            input: Partial<hono.ValidationTargets>;
+            output: any;
+            outputFormat: string;
+            status: hono_utils_http_status.StatusCode;
+        };
+    };
+} & {
+    [x: `/entries/read-histories/${string}`]: {
         [x: `$${Lowercase<string>}`]: {
             input: Partial<hono.ValidationTargets>;
             output: any;
@@ -3247,7 +3256,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: {
                     description: string | null;
                     title: string | null;
@@ -3270,6 +3278,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         title?: string | undefined;
                     }[] | null | undefined;
                 }[];
+                code: 0;
             };
             outputFormat: "json";
             status: 200;
@@ -3285,7 +3294,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                 };
             };
             output: {
-                code: 0;
                 data: {
                     title: string | null;
                     userId: string;
@@ -3310,6 +3318,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     category: string | null;
                     isPrivate: boolean;
                 }[];
+                code: 0;
             };
             outputFormat: "json";
             status: 200;

@@ -52,14 +52,20 @@ class SearchActions {
       "title",
       "content",
       "description",
+      "id",
     ])
-    const feedsFuse = this.createFuse(feeds, ["title", "description"])
+    const feedsFuse = this.createFuse(feeds, ["title", "description", "id"])
     const subscriptionsFuse = this.createFuse(subscriptions, [
       "title",
       "category",
     ])
 
     return defineSearchInstance({
+      counts: {
+        entries: entries.length,
+        feeds: feeds.length,
+        subscriptions: subscriptions.length,
+      },
       search(keyword: string) {
         const type = get().searchType
         const entries =

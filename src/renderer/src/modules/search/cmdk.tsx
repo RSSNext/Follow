@@ -1,4 +1,5 @@
 import { setAppSearchOpen, useAppSearchOpen } from "@renderer/atoms/app"
+import { ExPromise } from "@renderer/components/common/ExPromise"
 import { LoadMoreIndicator } from "@renderer/components/common/LoadMoreIndicator"
 import { EmptyIcon } from "@renderer/components/icons/empty"
 import { Logo } from "@renderer/components/icons/logo"
@@ -171,7 +172,11 @@ export const SearchCmdK: React.FC = () => {
                   return (
                     <SearchItem
                       key={entry.item.id}
-                      view={feed?.id ? getSubscriptionByFeedId(feed.id)?.view : undefined}
+                      view={
+                        feed?.id ?
+                          getSubscriptionByFeedId(feed.id)?.view :
+                          undefined
+                      }
                       title={entry.item.title!}
                       feedId={entry.feedId}
                       entryId={entry.item.id}
@@ -265,12 +270,8 @@ const SearchItem = memo(function Item({
       }}
     >
       <div className="relative z-10 flex w-full items-center justify-between px-1 py-2">
-        {icon && (
-          <SiteIcon className="mr-2 size-5 shrink-0" url={icon} />
-        )}
-        <span className="block min-w-0 flex-1 shrink-0 truncate">
-          {title}
-        </span>
+        {icon && <SiteIcon className="mr-2 size-5 shrink-0" url={icon} />}
+        <span className="block min-w-0 flex-1 shrink-0 truncate">{title}</span>
         <span className="block min-w-0 shrink-0 grow-0 text-xs font-medium text-zinc-800 opacity-60 dark:text-slate-200/80">
           {subtitle}
         </span>
@@ -292,26 +293,57 @@ const SearchGroupHeading: FC<{ icon: string, title: string }> = ({
 const SearchResultCount: FC<{
   count?: number
 }> = ({ count }) => {
+  const searchInstance = React.useContext(SearchCmdKContext)
   const hasKeyword = useSearchStore((s) => !!s.keyword)
-  if (!count) return null
+  const searchType = useSearchStore((s) => s.searchType)
+  const recordCountPromise = useMemo(async () => {
+    let count = 0
+    const counts = await searchInstance?.then((s) => s.counts)
+    if (!counts) return 0
+    if (searchType & SearchType.Entry) {
+      count += counts.entries || 0
+    }
+    if (searchType & SearchType.Feed) {
+      count += counts.feeds || 0
+    }
+    if (searchType & SearchType.Subscription) {
+      count += counts.subscriptions || 0
+    }
+    return count
+  }, [searchInstance, searchType])
+
   return (
-    hasKeyword && (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <small className="center absolute bottom-3 right-3 shrink-0 gap-1 opacity-80">
-            {count}
-            {" "}
-            {pluralize("result", count)}
-            {" "}
-            (Local mode)
-            <i className="i-mingcute-question-line" />
-          </small>
-        </TooltipTrigger>
-        <TooltipContent>
-          This search run on local database, the result may not be up-to-date.
-        </TooltipContent>
-      </Tooltip>
-    )
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <small className="center absolute bottom-3 right-3 shrink-0 gap-1 opacity-80">
+          {hasKeyword ? (
+            <span>
+              {count}
+              {" "}
+              {pluralize("result", count || 0)}
+            </span>
+          ) : (
+            <ExPromise promise={recordCountPromise}>
+              {(count) => (
+                <>
+                  {count}
+                  {" "}
+                  local
+                  {" "}
+                  {pluralize("record", count)}
+                </>
+              )}
+            </ExPromise>
+          )}
+          {" "}
+          (Local mode)
+          <i className="i-mingcute-question-line" />
+        </small>
+      </TooltipTrigger>
+      <TooltipContent>
+        This search run on local database, the result may not be up-to-date.
+      </TooltipContent>
+    </Tooltip>
   )
 }
 const SearchOptions: Component = memo(({ children }) => {

@@ -19,4 +19,10 @@ export interface SearchState {
 }
 export interface SearchInstance {
   search: (keyword: string) => SearchState
+
+  counts: {
+    feeds: number
+    entries: number
+    subscriptions: number
+  }
 }
