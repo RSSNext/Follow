@@ -105,24 +105,26 @@ export const SearchCmdK: React.FC = () => {
 
   const renderedFeeds = useMemo(() => {
     const delta = entries.length - renderedEntries.length
+
     if (delta > pageSize) return []
 
     const entriesTotalPage = Math.ceil(entries.length / pageSize)
     const right =
-      entriesTotalPage === page + 1 ? delta : pageSize * page - entries.length
+      entriesTotalPage === page + 1 ?
+        delta :
+        pageSize * page + 1 - entries.length
+
     return feeds.slice(0, right)
   }, [entries.length, feeds, page, renderedEntries.length])
   const totalCount = entries.length + feeds.length
   const renderedTotalCount = renderedEntries.length + renderedFeeds.length
   const loadMore = React.useCallback(() => {
     const totalPage = Math.ceil((entries.length + feeds.length) / pageSize)
-    setPage((p) => {
-      if (p + 1 < totalPage) return p + 1
-      return p
-    })
+    setPage((p) => Math.min(p + 1, totalPage))
   }, [entries.length, feeds.length])
 
-  const canLoadMore = totalCount > renderedTotalCount
+  const canLoadMore = totalCount > renderedTotalCount && renderedTotalCount > 0
+
   return (
     <SearchCmdKContext.Provider value={searchInstance}>
       <Command.Dialog
@@ -329,7 +331,6 @@ const SearchResultCount: FC<{
                   {count}
                   {" "}
                   local
-                  {" "}
                   {pluralize("record", count)}
                 </>
               )}
