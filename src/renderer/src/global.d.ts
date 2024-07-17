@@ -16,6 +16,7 @@ declare global {
 
   export const SENTRY_RELEASE: { id: string }
   export const APP_DEV_CWD: string
+  export const GIT_COMMIT_SHA: string
   export interface Window {
     SENTRY_RELEASE: typeof SENTRY_RELEASE
   }

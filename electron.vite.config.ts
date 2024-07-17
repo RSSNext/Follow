@@ -5,6 +5,8 @@ import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "electron-vite"
 
+import { getGitHash } from "./scripts/lib"
+
 const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"))
 
 export default defineConfig({
@@ -57,6 +59,7 @@ export default defineConfig({
       APP_VERSION: JSON.stringify(pkg.version),
       APP_NAME: JSON.stringify(pkg.name),
       APP_DEV_CWD: JSON.stringify(process.cwd()),
+      GIT_COMMIT_SHA: JSON.stringify(getGitHash()),
     },
   },
 })

@@ -6,6 +6,8 @@ import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
+import { getGitHash } from "./scripts/lib"
+
 const pkg = JSON.parse(readFileSync("package.json", "utf8"))
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
 export default defineConfig({
@@ -30,7 +32,7 @@ export default defineConfig({
     sentryVitePlugin({
       org: "follow-rg",
       project: "follow",
-
+      disable: process.env.NODE_ENV === "development",
       moduleMetadata: {
         appVersion:
           process.env.NODE_ENV === "development" ? "dev" : pkg.version,
@@ -42,5 +44,7 @@ export default defineConfig({
     APP_VERSION: JSON.stringify(pkg.version),
     APP_NAME: JSON.stringify(pkg.name),
     APP_DEV_CWD: JSON.stringify(process.cwd()),
+
+    GIT_COMMIT_SHA: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA || getGitHash()),
   },
 })
