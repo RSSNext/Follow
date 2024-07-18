@@ -206,6 +206,7 @@ class EntryActions {
       ...state,
       starIds: newStarIds,
     }))
+
     // Update database
     runTransactionInScope(() => {
       EntryService.upsertMany(entries)

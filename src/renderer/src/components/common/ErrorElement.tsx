@@ -45,7 +45,7 @@ export function ErrorElement() {
       <div className="drag-region fixed inset-x-0 top-0 h-12" />
       <div className="center flex flex-col">
         <i className="i-mgc-bug-cute-re size-12 text-red-400" />
-        <h2 className="mt-12 text-2xl">
+        <h2 className="mb-4 mt-12 text-2xl">
           Sorry, the app has encountered an error
         </h2>
       </div>

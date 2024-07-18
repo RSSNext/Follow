@@ -48,14 +48,15 @@ const useBackHome = (active: number) => {
 
 const useUnreadByView = () => {
   useAuthQuery(Queries.subscription.byView())
-  const idByView = useSubscriptionStore((state) =>
-    state.dataIdByView,
-  )
+  const idByView = useSubscriptionStore((state) => state.dataIdByView)
   const totalUnread = useFeedUnreadStore((state) => {
     const unread = {} as Record<number, number>
 
     for (const view in idByView) {
-      unread[view] = idByView[view].reduce((acc, feedId) => acc + (state.data[feedId] || 0), 0)
+      unread[view] = idByView[view].reduce(
+        (acc, feedId) => acc + (state.data[feedId] || 0),
+        0,
+      )
     }
     return unread
   })
@@ -156,7 +157,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
       >
         {normalStyle && (
           <div
-            className="flex items-center gap-1 text-xl font-bold"
+            className="relative flex items-center gap-1 text-xl font-bold"
             onClick={(e) => {
               e.stopPropagation()
               navigateBackHome()
@@ -201,7 +202,13 @@ export function FeedColumn({ children }: PropsWithChildren) {
             }}
           >
             {item.icon}
-            <div className="text-[10px] font-medium leading-none">{unreadByView[index] > 99 ? <span className="-mr-0.5">99+</span> : unreadByView[index]}</div>
+            <div className="text-[10px] font-medium leading-none">
+              {unreadByView[index] > 99 ? (
+                <span className="-mr-0.5">99+</span>
+              ) : (
+                unreadByView[index]
+              )}
+            </div>
           </ActionButton>
         ))}
       </div>

@@ -33,13 +33,15 @@ export const createZustandStore =
     name: string,
   ) =>
     (store: T) => {
-      const newStore = createWithEqualityFn(
-        devtools(store, {
-          enabled: import.meta.env.DEV,
-          name,
-        }),
-        shallow,
-      )
+      const newStore = import.meta.env.DEV ?
+        createWithEqualityFn(
+          devtools(store, {
+            enabled: DEBUG,
+            name,
+          }),
+          shallow,
+        ) :
+        createWithEqualityFn(store, shallow)
 
       storeMap[name] = newStore
       window.store =

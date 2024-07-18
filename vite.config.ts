@@ -45,6 +45,10 @@ export default defineConfig({
     APP_NAME: JSON.stringify(pkg.name),
     APP_DEV_CWD: JSON.stringify(process.cwd()),
 
-    GIT_COMMIT_SHA: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA || getGitHash()),
+    GIT_COMMIT_SHA: JSON.stringify(
+      process.env.VERCEL_GIT_COMMIT_SHA || getGitHash(),
+    ),
+
+    DEBUG: process.env.DEBUG === "true",
   },
 })
