@@ -19,7 +19,6 @@ export const ModalStackProvider: FC<PropsWithChildren> = ({ children }) => (
 const ModalStack = () => {
   const stack = useAtomValue(modalStackAtom)
 
-  // Vite HMR issue
   useDismissAllWhenRouterChange()
   const modalSettingOverlay = useUISettingKey("modalOverlay")
 
@@ -35,7 +34,9 @@ const ModalStack = () => {
           isTop={index === stack.length - 1}
         />
       ))}
-      {stack.length > 0 && (modalSettingOverlay || forceOverlay) && <ModalOverlay zIndex={MODAL_STACK_Z_INDEX + stack.length - 1} />}
+      {stack.length > 0 && (modalSettingOverlay || forceOverlay) && (
+        <ModalOverlay zIndex={MODAL_STACK_Z_INDEX + stack.length - 1} />
+      )}
     </AnimatePresence>
   )
 }

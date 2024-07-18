@@ -3,11 +3,10 @@ import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { AppErrorBoundary } from "@renderer/components/common/AppErrorBoundary"
 import { m } from "@renderer/components/common/Motion"
 import { ErrorComponentType } from "@renderer/components/errors"
-import { stopPropagation } from "@renderer/lib/dom"
+import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useAnimationControls, useDragControls } from "framer-motion"
-import { useAtomValue, useSetAtom } from "jotai"
-import { selectAtom } from "jotai/utils"
+import { useSetAtom } from "jotai"
 import type { PointerEventHandler, SyntheticEvent } from "react"
 import {
   createElement,
@@ -18,6 +17,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from "react"
 import { useEventCallback } from "usehooks-ts"
 
@@ -43,19 +43,16 @@ export const ModalInternal: Component<{
     ref: any,
   ) {
     const setStack = useSetAtom(modalStackAtom)
+
+    const [currentIsClosing, setCurrentIsClosing] = useState(false)
+
     const close = useEventCallback(() => {
-      setStack((p) => p.filter((modal) => modal.id !== item.id))
+      setCurrentIsClosing(true)
+      nextFrame(() => {
+        setStack((p) => p.filter((modal) => modal.id !== item.id))
+      })
       onPropsClose?.(false)
     })
-
-    const currentIsClosing = useAtomValue(
-      useMemo(
-        () =>
-          selectAtom(modalStackAtom, (atomValue) =>
-            atomValue.every((modal) => modal.id !== item.id)),
-        [item.id],
-      ),
-    )
 
     const onClose = useCallback(
       (open: boolean): void => {
@@ -159,13 +156,13 @@ export const ModalInternal: Component<{
       }),
       [ModalProps],
     )
-    const finalChildren = (
+    const finalChildren = useMemo(() => (
       <CurrentModalContext.Provider value={ModalContextProps}>
         <AppErrorBoundary errorType={ErrorComponentType.Modal}>
           {children ?? createElement(content, ModalProps)}
         </AppErrorBoundary>
       </CurrentModalContext.Provider>
-    )
+    ), [ModalContextProps, ModalProps, children, content])
 
     useEffect(() => {
       if (currentIsClosing) {
@@ -188,7 +185,7 @@ export const ModalInternal: Component<{
                 <div
                   className={cn(
                     "fixed inset-0 z-20 overflow-auto",
-                    currentIsClosing && "pointer-events-none",
+                    currentIsClosing && "!pointer-events-none",
                     modalContainerClassName,
                   )}
                   onClick={clickOutsideToDismiss ? dismiss : undefined}
