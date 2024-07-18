@@ -88,7 +88,7 @@ export const parseHtml = async (
               ((item.properties as any).inline = true)
             }
           }
-          return createElement(Fragment, undefined, props.children)
+          return createElement("p", undefined, props.children)
         },
         pre: ({ node, ...props }) => {
           if (!props.children) return null
