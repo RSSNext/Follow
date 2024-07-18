@@ -57,7 +57,11 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
     scrollMarkUnread,
   ])
 }
-export const useEntriesByView = () => {
+export const useEntriesByView = ({
+  onReset,
+}: {
+  onReset?: () => void
+}) => {
   const routeParams = useRouteParms()
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
@@ -116,6 +120,7 @@ export const useEntriesByView = () => {
 
   useEffect(() => {
     prevEntryIdsRef.current = []
+    onReset?.()
   }, [feedId, view, unreadOnly])
 
   const [mergedEntries, setMergedEntries] = useState<string[]>([])
@@ -142,10 +147,11 @@ export const useEntriesByView = () => {
     ...query,
 
     refetch: useCallback(() => {
+      onReset?.()
       prevEntryIdsRef.current = []
       setMergedEntries(entryIds)
       query.refetch()
-    }, [entryIds, query]),
+    }, [entryIds, query, onReset]),
     entriesIds: sortEntries(),
     totalCount: query.data?.pages?.[0]?.total ?? mergedEntries.length,
   }
