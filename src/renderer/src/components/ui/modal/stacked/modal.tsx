@@ -6,7 +6,8 @@ import { ErrorComponentType } from "@renderer/components/errors"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useAnimationControls, useDragControls } from "framer-motion"
-import { useSetAtom } from "jotai"
+import { useAtomValue, useSetAtom } from "jotai"
+import { selectAtom } from "jotai/utils"
 import type { PointerEventHandler, SyntheticEvent } from "react"
 import {
   createElement,
@@ -47,6 +48,15 @@ export const ModalInternal: Component<{
       onPropsClose?.(false)
     })
 
+    const currentIsClosing = useAtomValue(
+      useMemo(
+        () =>
+          selectAtom(modalStackAtom, (atomValue) =>
+            atomValue.every((modal) => modal.id !== item.id)),
+        [item.id],
+      ),
+    )
+
     const onClose = useCallback(
       (open: boolean): void => {
         if (!open) {
@@ -78,6 +88,7 @@ export const ModalInternal: Component<{
     const dismiss = useCallback(
       (e: SyntheticEvent) => {
         e.stopPropagation()
+
         close()
       },
       [close],
@@ -156,6 +167,13 @@ export const ModalInternal: Component<{
       </CurrentModalContext.Provider>
     )
 
+    useEffect(() => {
+      if (currentIsClosing) {
+        // Radix dialog will block pointer events
+        document.body.style.pointerEvents = "auto"
+      }
+    }, [currentIsClosing])
+
     const edgeElementRef = useRef<HTMLDivElement>(null)
 
     if (CustomModalComponent) {
@@ -170,6 +188,7 @@ export const ModalInternal: Component<{
                 <div
                   className={cn(
                     "fixed inset-0 z-20 overflow-auto",
+                    currentIsClosing && "pointer-events-none",
                     modalContainerClassName,
                   )}
                   onClick={clickOutsideToDismiss ? dismiss : undefined}
@@ -200,6 +219,7 @@ export const ModalInternal: Component<{
                 style={zIndexStyle}
                 className={cn(
                   "center fixed inset-0 z-20 flex",
+                  currentIsClosing && "!pointer-events-none",
                   modalContainerClassName,
                 )}
                 onClick={clickOutsideToDismiss ? dismiss : noticeModal}
