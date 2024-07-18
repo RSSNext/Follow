@@ -1,3 +1,4 @@
+import { nextFrame } from "@renderer/lib/dom"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
 import { atom, useAtomValue } from "jotai"
@@ -32,7 +33,7 @@ const useSyncDarkElectron = () => {
 
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = appIsDark ? "dark" : "light"
-    disableTransition(["[role=switch]>*"])
+    disableTransition(["[role=switch]>*"])()
 
     jotaiStore.set(darkAtom, appIsDark ? "dark" : "light")
   }, [appIsDark])
@@ -45,7 +46,7 @@ const useSyncDarkWebApp = () => {
     const realColorMode: Exclude<ColorMode, "system"> =
       colorMode === "system" ? (systemIsDark ? "dark" : "light") : colorMode
     document.documentElement.dataset.theme = realColorMode
-    disableTransition(["[role=switch]>*"])
+    disableTransition(["[role=switch]>*"])()
   }, [colorMode, systemIsDark])
 }
 
@@ -87,8 +88,8 @@ function disableTransition(disableTransitionExclude: string[] = []) {
     (() => window.getComputedStyle(document.body))()
 
     // Wait for next tick before removing
-    setTimeout(() => {
+    nextFrame(() => {
       css.remove()
-    }, 1)
+    })
   }
 }
