@@ -70,9 +70,13 @@ export const useEntriesByView = () => {
     view,
     ...(unreadOnly === true && { read: false }),
   })
-  const remoteEntryIds = query.data?.pages
-    ?.map((page) => page.data?.map((entry) => entry.entries.id))
-    .flat() as string[]
+  const remoteEntryIds = useMemo(
+    () =>
+      query.data?.pages
+        ?.map((page) => page.data?.map((entry) => entry.entries.id))
+        .flat() as string[],
+    [query.data?.pages],
+  )
 
   const currentEntries = useEntryIdsByFeedIdOrView(
     isAllFeeds ? view : feedId!,
@@ -116,6 +120,7 @@ export const useEntriesByView = () => {
 
   const [mergedEntries, setMergedEntries] = useState<string[]>([])
 
+  const entryIdsAsDeps = entryIds.toString()
   useEffect(() => {
     if (!prevEntryIdsRef.current) {
       prevEntryIdsRef.current = entryIds
@@ -126,7 +131,7 @@ export const useEntriesByView = () => {
     const nextIds = [...new Set([...prevEntryIdsRef.current, ...entryIds])]
     prevEntryIdsRef.current = nextIds
     setMergedEntries(nextIds)
-  }, [entryIds.toString()])
+  }, [entryIdsAsDeps.toString()])
 
   const sortEntries = () =>
     isCollection ?
@@ -136,11 +141,11 @@ export const useEntriesByView = () => {
   return {
     ...query,
 
-    refetch: () => {
+    refetch: useCallback(() => {
       prevEntryIdsRef.current = []
       setMergedEntries(entryIds)
       query.refetch()
-    },
+    }, [entryIds, query]),
     entriesIds: sortEntries(),
     totalCount: query.data?.pages?.[0]?.total ?? mergedEntries.length,
   }
