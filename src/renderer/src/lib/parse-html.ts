@@ -1,3 +1,4 @@
+import { Checkbox } from "@renderer/components/ui/checkbox"
 import { ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
 import { Image } from "@renderer/components/ui/image"
 import { LinkWithTooltip } from "@renderer/components/ui/link"
@@ -89,6 +90,20 @@ export const parseHtml = async (
             }
           }
           return createElement("p", undefined, props.children)
+        },
+        hr: ({ node, ...props }) => createElement("hr", {
+          ...props,
+          className: tw`scale-x-50`,
+        }),
+        input: ({ node, ...props }) => {
+          if (props.type === "checkbox") {
+            return createElement(Checkbox, {
+              ...props,
+              disabled: false,
+              className: tw`pointer-events-none mr-2`,
+            })
+          }
+          return createElement("input", props)
         },
         pre: ({ node, ...props }) => {
           if (!props.children) return null
