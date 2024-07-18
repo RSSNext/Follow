@@ -57,7 +57,11 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
     scrollMarkUnread,
   ])
 }
-export const useEntriesByView = () => {
+export const useEntriesByView = ({
+  onReset,
+}: {
+  onReset?: () => void
+}) => {
   const routeParams = useRouteParms()
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
@@ -70,9 +74,13 @@ export const useEntriesByView = () => {
     view,
     ...(unreadOnly === true && { read: false }),
   })
-  const remoteEntryIds = query.data?.pages
-    ?.map((page) => page.data?.map((entry) => entry.entries.id))
-    .flat() as string[]
+  const remoteEntryIds = useMemo(
+    () =>
+      query.data?.pages
+        ?.map((page) => page.data?.map((entry) => entry.entries.id))
+        .flat() as string[],
+    [query.data?.pages],
+  )
 
   const currentEntries = useEntryIdsByFeedIdOrView(
     isAllFeeds ? view : feedId!,
@@ -104,16 +112,17 @@ export const useEntriesByView = () => {
   const prevEntryIdsRef = useRef(entryIds)
 
   useEffect(() => {
-    prevEntryIdsRef.current = []
-  }, [routeParams.feedId, routeParams.view])
+    if (!query.isFetching) {
+      prevEntryIdsRef.current = entryIds
+      setMergedEntries(entryIds)
+      onReset?.()
+    }
+  }, [query.isFetching])
+
   const [mergedEntries, setMergedEntries] = useState<string[]>([])
 
+  const entryIdsAsDeps = entryIds.toString()
   useEffect(() => {
-    if (!unreadOnly) {
-      prevEntryIdsRef.current = []
-      setMergedEntries(entryIds)
-      return
-    }
     if (!prevEntryIdsRef.current) {
       prevEntryIdsRef.current = entryIds
       setMergedEntries(entryIds)
@@ -123,7 +132,7 @@ export const useEntriesByView = () => {
     const nextIds = [...new Set([...prevEntryIdsRef.current, ...entryIds])]
     prevEntryIdsRef.current = nextIds
     setMergedEntries(nextIds)
-  }, [unreadOnly, entryIds.toString()])
+  }, [entryIdsAsDeps])
 
   const sortEntries = () =>
     isCollection ?
@@ -133,6 +142,9 @@ export const useEntriesByView = () => {
   return {
     ...query,
 
+    refetch: useCallback(() => {
+      query.refetch()
+    }, [query]),
     entriesIds: sortEntries(),
     totalCount: query.data?.pages?.[0]?.total ?? mergedEntries.length,
   }
