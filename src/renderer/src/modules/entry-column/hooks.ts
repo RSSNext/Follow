@@ -131,7 +131,7 @@ export const useEntriesByView = () => {
     const nextIds = [...new Set([...prevEntryIdsRef.current, ...entryIds])]
     prevEntryIdsRef.current = nextIds
     setMergedEntries(nextIds)
-  }, [entryIdsAsDeps.toString()])
+  }, [entryIdsAsDeps])
 
   const sortEntries = () =>
     isCollection ?
