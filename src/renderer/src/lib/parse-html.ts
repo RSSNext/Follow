@@ -137,8 +137,9 @@ export const parseHtml = async (
           }
 
           if (!codeString) return null
+
           return createElement(ShikiHighLighter, {
-            code: codeString,
+            code: codeString.trimEnd(),
             language: language.toLowerCase(),
           })
         },
