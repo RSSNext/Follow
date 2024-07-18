@@ -20,13 +20,13 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({
   const entryHistory = useEntryReadHistory(entryId)
 
   if (!entryHistory) return null
-
   if (!me) return null
+  if (!entryHistory.userIds) return null
 
   return (
     <div className="flex items-center">
-      {[me.id]
-        .concat(entryHistory.userIds?.filter((id) => id !== me?.id) ?? []) // then others
+      {entryHistory.userIds
+        .filter((id) => id !== me?.id)
         .slice(0, 10)
 
         .map((userId, i) => (
