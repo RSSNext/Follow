@@ -1,3 +1,4 @@
+/* eslint-disable @eslint-react/no-clone-element */
 /* eslint-disable @eslint-react/no-children-to-array */
 /* eslint-disable @eslint-react/no-children-map */
 
@@ -5,7 +6,11 @@ import type { FC, PropsWithChildren, ReactNode } from "react"
 import { cloneElement } from "react"
 import * as React from "react"
 
-import { SettingDescription, SettingSwitch } from "./control"
+import {
+  SettingActionItem,
+  SettingDescription,
+  SettingSwitch,
+} from "./control"
 
 export const SettingSectionTitle: FC<{
   title: string
@@ -30,9 +35,13 @@ export const SettingItemGroup: FC<PropsWithChildren> = ({ children }) => {
 
       switch (prevType) {
         case SettingSwitch: {
-          // eslint-disable-next-line @eslint-react/no-clone-element
           return cloneElement(child as React.ReactElement, {
             className: "!-mt-2",
+          })
+        }
+        case SettingActionItem: {
+          return cloneElement(child as React.ReactElement, {
+            className: "!-mt-3",
           })
         }
         default: {

@@ -4,6 +4,7 @@ import {
 } from "@renderer/atoms/settings/general"
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
+import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useCallback, useEffect } from "react"
 
 import { createSettingBuilder } from "../setting-builder"
@@ -99,6 +100,16 @@ export const SettingGeneral = () => {
                   delete window.posthog
                 }
               },
+            },
+            {
+              label: "Rebuild Database",
+              action: () => {
+                clearLocalPersistStoreData()
+                window.location.reload()
+              },
+              description:
+                "If you are experiencing data rendering anomalies, try rebuilding the database, this action will reload the page.",
+              buttonText: "Rebuild",
             },
           ]}
         />

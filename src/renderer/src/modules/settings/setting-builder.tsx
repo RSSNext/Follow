@@ -3,7 +3,11 @@ import type { FC, ReactNode } from "react"
 import { isValidElement } from "react"
 import * as React from "react"
 
-import { SettingDescription, SettingSwitch } from "./control"
+import {
+  SettingActionItem,
+  SettingDescription,
+  SettingSwitch,
+} from "./control"
 import { SettingItemGroup, SettingSectionTitle } from "./section"
 
 type SharedSettingItem = {
@@ -17,11 +21,17 @@ type SettingItem<T, K extends keyof T = keyof T> = {
   onChange: (value: T[K]) => void
 } & SharedSettingItem
 
-type SpecificSettingItem = {
+type SectionSettingItem = {
   type: "title"
   value?: string
 } & SharedSettingItem
 
+type ActionSettingItem = {
+  label: string
+  action: () => void
+  description?: string
+  buttonText: string
+} & SharedSettingItem
 type CustomSettingItem = ReactNode | FC
 
 export const createSettingBuilder =
@@ -29,8 +39,9 @@ export const createSettingBuilder =
     <K extends keyof T>(props: {
       settings: (
         | SettingItem<T, K>
-        | SpecificSettingItem
+        | SectionSettingItem
         | CustomSettingItem
+        | ActionSettingItem
         | boolean
       )[]
     }) => {
@@ -41,8 +52,13 @@ export const createSettingBuilder =
         .filter((i) => typeof i !== "boolean")
         .map((setting, index) => {
           if (isValidElement(setting)) return setting
-          if (typeof setting === "function") { return React.createElement(setting, { key: index }) }
-          const assertSetting = setting as SettingItem<T> | SpecificSettingItem
+          if (typeof setting === "function") {
+            return React.createElement(setting, { key: index })
+          }
+          const assertSetting = setting as
+            | SettingItem<T>
+            | SectionSettingItem
+            | ActionSettingItem
 
           if (assertSetting.disabled) return null
 
@@ -60,25 +76,30 @@ export const createSettingBuilder =
           }
 
           let ControlElement: React.ReactNode
-          switch (typeof settingObject[assertSetting.key]) {
-            case "boolean": {
-              ControlElement = (
-                <SettingSwitch
-                  className="mt-4"
-                  checked={settingObject[assertSetting.key] as boolean}
-                  onCheckedChange={(checked) =>
-                    assertSetting.onChange(checked as T[keyof T])}
-                  label={assertSetting.label}
-                />
-              )
-              break
+
+          if ("key" in assertSetting) {
+            switch (typeof settingObject[assertSetting.key]) {
+              case "boolean": {
+                ControlElement = (
+                  <SettingSwitch
+                    className="mt-4"
+                    checked={settingObject[assertSetting.key] as boolean}
+                    onCheckedChange={(checked) =>
+                      assertSetting.onChange(checked as T[keyof T])}
+                    label={assertSetting.label}
+                  />
+                )
+                break
+              }
+              case "string": {
+                return null
+              }
+              default: {
+                return null
+              }
             }
-            case "string": {
-              return null
-            }
-            default: {
-              return null
-            }
+          } else if ("action" in assertSetting) {
+            ControlElement = <SettingActionItem {...assertSetting} key={index} />
           }
           return (
             <SettingItemGroup key={index}>
