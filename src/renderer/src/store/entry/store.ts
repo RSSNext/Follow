@@ -262,10 +262,13 @@ class EntryActions {
   }
 
   async markRead(feedId: string, entryId: string, read: boolean) {
-    feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
     const currentIsRead = get().flatMapEntries[entryId]?.read
 
-    if (currentIsRead) return
+    if (read && currentIsRead) {
+      return
+    }
+
+    feedUnreadActions.incrementByFeedId(feedId, read ? -1 : 1)
 
     this.patch(entryId, {
       read,
