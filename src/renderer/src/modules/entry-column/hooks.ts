@@ -112,16 +112,12 @@ export const useEntriesByView = ({
   const prevEntryIdsRef = useRef(entryIds)
 
   useEffect(() => {
-    if (!query.isFetching && query.isSuccess) {
+    if (!query.isFetching) {
       prevEntryIdsRef.current = entryIds
       setMergedEntries(entryIds)
+      onReset?.()
     }
   }, [query.isFetching])
-
-  useEffect(() => {
-    prevEntryIdsRef.current = []
-    onReset?.()
-  }, [feedId, view, unreadOnly])
 
   const [mergedEntries, setMergedEntries] = useState<string[]>([])
 
@@ -147,11 +143,8 @@ export const useEntriesByView = ({
     ...query,
 
     refetch: useCallback(() => {
-      onReset?.()
-      prevEntryIdsRef.current = []
-      setMergedEntries(entryIds)
       query.refetch()
-    }, [entryIds, query, onReset]),
+    }, [query]),
     entriesIds: sortEntries(),
     totalCount: query.data?.pages?.[0]?.total ?? mergedEntries.length,
   }
