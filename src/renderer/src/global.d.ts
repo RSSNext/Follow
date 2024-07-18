@@ -21,6 +21,8 @@ declare global {
   export interface Window {
     SENTRY_RELEASE: typeof SENTRY_RELEASE
   }
+
+  export function tw(strings: TemplateStringsArray, ...values: any[]): string
 }
 
 export {}
