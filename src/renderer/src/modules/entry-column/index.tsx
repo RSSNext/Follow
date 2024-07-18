@@ -144,7 +144,7 @@ export function EntryColumn() {
         exit={{ opacity: 0.01, y: -100 }}
       >
         {virtuosoOptions.totalCount === 0 ? (
-          <EmptyList />
+          entries.isLoading ? <LoadingCircle className="center h-full" size="large" /> : <EmptyList />
         ) : view && views[view].gridMode ?
             (
               <VirtuosoGrid
