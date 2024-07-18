@@ -104,16 +104,19 @@ export const useEntriesByView = () => {
   const prevEntryIdsRef = useRef(entryIds)
 
   useEffect(() => {
+    if (!query.isFetching && query.isSuccess) {
+      prevEntryIdsRef.current = entryIds
+      setMergedEntries(entryIds)
+    }
+  }, [query.isFetching])
+
+  useEffect(() => {
     prevEntryIdsRef.current = []
-  }, [routeParams.feedId, routeParams.view])
+  }, [feedId, view, unreadOnly])
+
   const [mergedEntries, setMergedEntries] = useState<string[]>([])
 
   useEffect(() => {
-    if (!unreadOnly) {
-      prevEntryIdsRef.current = []
-      setMergedEntries(entryIds)
-      return
-    }
     if (!prevEntryIdsRef.current) {
       prevEntryIdsRef.current = entryIds
       setMergedEntries(entryIds)
@@ -123,7 +126,7 @@ export const useEntriesByView = () => {
     const nextIds = [...new Set([...prevEntryIdsRef.current, ...entryIds])]
     prevEntryIdsRef.current = nextIds
     setMergedEntries(nextIds)
-  }, [unreadOnly, entryIds.toString()])
+  }, [entryIds.toString()])
 
   const sortEntries = () =>
     isCollection ?
@@ -133,6 +136,11 @@ export const useEntriesByView = () => {
   return {
     ...query,
 
+    refetch: () => {
+      prevEntryIdsRef.current = []
+      setMergedEntries(entryIds)
+      query.refetch()
+    },
     entriesIds: sortEntries(),
     totalCount: query.data?.pages?.[0]?.total ?? mergedEntries.length,
   }
