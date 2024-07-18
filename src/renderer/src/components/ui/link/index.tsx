@@ -9,7 +9,7 @@ interface LinkProps {
 
 export const LinkWithTooltip = (props: LinkProps) => (
   <Tooltip delayDuration={0}>
-    <TooltipTrigger>
+    <TooltipTrigger asChild>
       <a href={props.href} title={props.title} target={props.target}>{props.children}</a>
     </TooltipTrigger>
     <TooltipContent align="start" side="bottom">
