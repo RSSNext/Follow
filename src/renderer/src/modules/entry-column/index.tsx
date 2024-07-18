@@ -61,7 +61,7 @@ export function EntryColumn() {
   const virtuosoRef = useRef<VirtuosoHandle>(null)
   const entries = useEntriesByView({
     onReset: useCallback(() => {
-      virtuosoRef.current?.scrollIntoView({
+      virtuosoRef.current?.scrollIntoView?.({
         index: 0,
       })
     }, []),
@@ -411,7 +411,7 @@ const EntryList: FC<VirtuosoProps<string, unknown> & {
 
       const nextIndex = Math.min(currentActiveEntryIndex + 1, data.length - 1)
 
-      virtuosoOptions.virtuosoRef.current?.scrollIntoView({
+      virtuosoOptions.virtuosoRef.current?.scrollIntoView?.({
         index: nextIndex,
       })
       const nextId = data![nextIndex]
@@ -435,7 +435,7 @@ const EntryList: FC<VirtuosoProps<string, unknown> & {
           data.length - 1 :
           Math.max(0, currentActiveEntryIndex - 1)
 
-      virtuosoOptions.virtuosoRef.current?.scrollIntoView({
+      virtuosoOptions.virtuosoRef.current?.scrollIntoView?.({
         index: nextIndex,
       })
       const nextId = data![nextIndex]
