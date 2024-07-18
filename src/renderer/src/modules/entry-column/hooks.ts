@@ -111,13 +111,15 @@ export const useEntriesByView = ({
   // so we memo this previous data to avoid the flicker
   const prevEntryIdsRef = useRef(entryIds)
 
+  const isFetchingFirstPage = query.isFetching && !query.isFetchingNextPage
+
   useEffect(() => {
-    if (!query.isFetching) {
+    if (!isFetchingFirstPage) {
       prevEntryIdsRef.current = entryIds
       setMergedEntries(entryIds)
       onReset?.()
     }
-  }, [query.isFetching])
+  }, [isFetchingFirstPage])
 
   const [mergedEntries, setMergedEntries] = useState<string[]>([])
 
