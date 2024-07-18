@@ -46,7 +46,11 @@ export function ErrorElement() {
       <div className="center flex flex-col">
         <i className="i-mgc-bug-cute-re size-12 text-red-400" />
         <h2 className="mb-4 mt-12 text-2xl">
-          Sorry, the app has encountered an error
+          Sorry,
+          {" "}
+          {APP_NAME}
+          {" "}
+          has encountered an error
         </h2>
       </div>
       <h3 className="text-xl">{message}</h3>
@@ -57,7 +61,9 @@ export function ErrorElement() {
       ) : null}
 
       <p className="my-8">
-        The App has a temporary problem, click the button below to try reloading
+        {APP_NAME}
+        {" "}
+        has a temporary problem, click the button below to try reloading
         the app or another solution?
       </p>
 
