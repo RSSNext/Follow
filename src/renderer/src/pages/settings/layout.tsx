@@ -2,12 +2,9 @@ import { Logo } from "@renderer/components/icons/logo"
 import { Vibrancy } from "@renderer/components/ui/background"
 import { preventDefault } from "@renderer/lib/dom"
 import { settings } from "@renderer/modules/settings/constants"
-import {
-  SettingsSidebarTitle,
-} from "@renderer/modules/settings/title"
+import { SettingsSidebarTitle } from "@renderer/modules/settings/title"
 import { Link, Outlet, useLocation } from "react-router-dom"
 
-// TODO Web UI
 export function Component() {
   const location = useLocation()
   const tab = location.pathname.replace(/^\/settings\/?/, "")
@@ -20,7 +17,7 @@ export function Component() {
             {settings.map((t) => (
               <Link
                 key={t.path}
-                className={`my-1 flex items-center rounded-md px-2.5 py-0.5 leading-loose text-theme-foreground/70 transition-colors dark:text-theme-foreground/90 ${
+                className={`my-1 flex cursor-default items-center rounded-md px-2.5 py-0.5 leading-loose text-theme-foreground/70 transition-colors dark:text-theme-foreground/90 ${
                   tab === t.path ?
                     "bg-native-active text-theme-foreground/90" :
                     ""

@@ -1,3 +1,4 @@
+import { repository } from "@pkg"
 import { MotionButtonBase } from "@renderer/components/ui/button"
 import { useCurrentModal } from "@renderer/components/ui/modal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
@@ -62,6 +63,17 @@ const Content = () => {
         viewportClassName="pr-1"
       >
         <Component />
+        <p className="mt-12 flex items-center justify-center gap-1 text-xs opacity-80">
+          <i className="i-mgc-heart-cute-fi" />
+          {" "}
+          {/* 喜欢我们的产品？在 GitHub 给添加星标 并 分享您宝贵的建议 ! */}
+          Love our product?
+          {" "}
+          <a href={`${repository.url}`} className="text-theme-accent" target="_blank">
+            Give us a star on GitHub
+          </a>
+          !
+        </p>
       </ScrollArea.ScrollArea>
     </>
   )

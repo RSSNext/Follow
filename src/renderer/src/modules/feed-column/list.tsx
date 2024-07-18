@@ -162,7 +162,7 @@ export function FeedList({
               <div className="flex h-full flex-1 items-center text-zinc-500">
                 <Link
                   to="/discover"
-                  className="-mt-36 flex h-full flex-1 flex-col items-center justify-center gap-2"
+                  className="-mt-36 flex h-full flex-1 cursor-default flex-col items-center justify-center gap-2"
                   onClick={stopPropagation}
                 >
                   <i className="i-mgc-add-cute-re text-3xl" />

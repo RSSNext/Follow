@@ -89,7 +89,7 @@ export function Component() {
             {" "}
             {APP_NAME}
           </div>
-          <a className="mb-8" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
+          <a className="mb-8 cursor-default" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
             <StyledButton>
               <FollowIcon className="mr-1 size-3" />
               {APP_NAME}

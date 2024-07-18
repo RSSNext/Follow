@@ -30,12 +30,10 @@ export function SettingModalLayout(
     }
   }, [])
 
-  const { draggable, overlay } = useUISettingSelector(
-    ((state) => ({
-      draggable: state.modalDraggable,
-      overlay: state.modalOverlay,
-    })),
-  )
+  const { draggable, overlay } = useUISettingSelector((state) => ({
+    draggable: state.modalDraggable,
+    overlay: state.modalOverlay,
+  }))
   const dragController = useDragControls()
   const handleDrag: PointerEventHandler<HTMLDivElement> = useCallback(
     (e) => {

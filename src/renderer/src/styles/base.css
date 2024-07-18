@@ -16,8 +16,7 @@ body,
   outline: none;
 }
 
-button,
-a {
+button {
   @apply cursor-default;
 }
 
