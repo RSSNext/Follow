@@ -77,28 +77,28 @@ export const useEntriesByView = ({
   }
   const query = useEntries(entriesOptions)
 
-  const [firstId, setFirstId] = useState<string>()
+  const [firstPublishedAt, setFirstPublishedAt] = useState<string>()
   const [hasUpdate, setHasUpdate] = useState(false)
   const firstEntry = useAuthQuery(entries.entries({
     ...entriesOptions,
     limit: 1,
   }), {
-    refetchInterval: 1000 * 60,
-    enabled: !hasUpdate && !!firstId,
+    refetchInterval: 1000 * 6,
+    enabled: !hasUpdate && !!firstPublishedAt,
   })
 
   useEffect(() => {
-    if (query.data?.pages?.[0]?.data?.[0]?.entries.id) {
-      setFirstId(query.data.pages[0].data[0].entries.id)
+    if (query.data?.pages?.[0]?.data?.[0]) {
+      setFirstPublishedAt(query.data.pages[0].data[0].entries.publishedAt)
       setHasUpdate(false)
     }
-  }, [query.data?.pages?.[0]?.data?.[0]?.entries.id])
+  }, [query.data?.pages?.[0]?.data?.[0]])
 
   useEffect(() => {
-    if (!hasUpdate && firstId && firstEntry.data?.data?.[0]?.entries.id && firstId !== firstEntry.data.data[0].entries.id) {
+    if (!hasUpdate && firstPublishedAt && firstEntry.data?.data?.[0] && new Date(firstPublishedAt) < new Date(firstEntry.data.data[0].entries.publishedAt)) {
       setHasUpdate(true)
     }
-  }, [firstEntry.data?.data?.[0]?.entries.id])
+  }, [firstEntry.data?.data?.[0]])
 
   const remoteEntryIds = useMemo(
     () =>
