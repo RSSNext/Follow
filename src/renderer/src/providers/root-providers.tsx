@@ -48,6 +48,6 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
 
 const Devtools = () => (
   <>
-    {!window.electron && <ReactQueryDevtools buttonPosition="bottom-left" client={queryClient} />}
+    {!ELECTRON && <ReactQueryDevtools buttonPosition="bottom-left" client={queryClient} />}
   </>
 )

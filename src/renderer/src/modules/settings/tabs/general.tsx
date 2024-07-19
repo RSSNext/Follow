@@ -114,7 +114,7 @@ export const SettingGeneral = () => {
           ]}
         />
 
-        {/* {window.electron && (
+        {/* {ELECTRON&& (
           <SettingSwitch
             label="Launch Follow at Login"
             checked={loginSetting}

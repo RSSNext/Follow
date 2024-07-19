@@ -51,7 +51,7 @@ export function Component() {
             open
             title="Login"
           >
-            <LoginModalContent runtime={window.electron ? "app" : "browser"} />
+            <LoginModalContent runtime={ELECTRON ? "app" : "browser"} />
           </DeclarativeModal>
         </RootPortal>
       )}

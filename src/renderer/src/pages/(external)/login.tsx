@@ -22,7 +22,7 @@ function Login() {
   const urlParams = new URLSearchParams(location.search)
   const provider = urlParams.get("provider")
   useEffect(() => {
-    if (!window.electron && provider) {
+    if (!ELECTRON && provider) {
       if (status === "authenticated") {
         signOut()
       }

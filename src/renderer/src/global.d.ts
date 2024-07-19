@@ -18,6 +18,7 @@ declare global {
   export const APP_DEV_CWD: string
   export const GIT_COMMIT_SHA: string
   export const DEBUG: boolean
+  export const ELECTRON: boolean
   export interface Window {
     SENTRY_RELEASE: typeof SENTRY_RELEASE
   }

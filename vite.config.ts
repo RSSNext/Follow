@@ -50,5 +50,6 @@ export default defineConfig({
     ),
 
     DEBUG: process.env.DEBUG === "true",
+    ELECTRON: "false",
   },
 })

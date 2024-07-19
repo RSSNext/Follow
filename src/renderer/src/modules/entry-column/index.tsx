@@ -212,7 +212,7 @@ const ListHeader: FC<{
   const headerTitle = useFeedHeaderTitle()
   const os = getOS()
 
-  const titleAtBottom = window.electron && os === "macOS"
+  const titleAtBottom = ELECTRON && os === "macOS"
   const isInCollectionList = feedId === FEED_COLLECTION_LIST
 
   const titleInfo = !!headerTitle && (
