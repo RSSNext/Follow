@@ -34,7 +34,7 @@ const Wrapper: Component<{
         className="absolute bottom-4 right-4 flex gap-3"
         onClick={stopPropagation}
       >
-        {!!window.electron && (
+        {ELECTRON && (
           <ActionButton
             tooltip="Download"
             onClick={() => {
@@ -64,7 +64,7 @@ export const PreviewImageContent: FC<{
 
   const handleContextMenu = useCallback(
     (image: string, e: React.MouseEvent<HTMLImageElement>) => {
-      if (!window.electron) return
+      if (!ELECTRON) return
 
       showNativeMenu(
         [

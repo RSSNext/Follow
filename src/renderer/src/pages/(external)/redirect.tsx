@@ -18,7 +18,7 @@ export function Component() {
   useEffect(() => {
     if (onceRef.current) return
     onceRef.current = true
-    if (window.electron) {
+    if (ELECTRON) {
       navigate("/")
     } else {
       getCallbackUrl().then((url) => {

@@ -62,6 +62,7 @@ export default defineConfig({
       GIT_COMMIT_SHA: JSON.stringify(getGitHash()),
 
       DEBUG: process.env.DEBUG === "true",
+      ELECTRON: "true",
     },
   },
 })
