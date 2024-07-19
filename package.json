@@ -2,7 +2,6 @@
   "name": "Follow",
   "type": "module",
   "version": "0.0.1-internal.1",
-  "productName": "Follow",
   "private": true,
   "packageManager": "pnpm@9.5.0",
   "description": "Next generation information browser",
@@ -172,5 +171,6 @@
   },
   "lint-staged": {
     "*": "eslint --fix"
-  }
+  },
+  "productName": "Follow"
 }
