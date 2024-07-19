@@ -70,7 +70,7 @@ export function SwipeImages({
             {uniqImages?.slice(0, 5).map((image, i) => (
               <SwiperSlide key={image}>
                 <Image
-                  className={cn(imgClassName, "rounded-none")}
+                  className={cn(imgClassName, "size-full rounded-none")}
                   alt="cover"
                   src={image}
                   loading="lazy"
