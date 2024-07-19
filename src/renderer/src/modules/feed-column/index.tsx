@@ -139,7 +139,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
   )
 
   const normalStyle =
-    !ELECTRON || window.electron!.process.platform !== "darwin"
+    !ELECTRON || window.electron?.process.platform !== "darwin"
 
   const unreadByView = useUnreadByView()
 
