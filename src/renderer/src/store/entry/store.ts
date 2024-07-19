@@ -79,13 +79,20 @@ class EntryActions {
     id,
     view,
     read,
-
+    limit,
     pageParam,
+  }: {
+    id?: number | string
+    view?: number
+    read?: boolean
+    limit?: number
+    pageParam?: string
   }) {
     const data = await apiClient.entries.$post({
       json: {
-        publishedAfter: pageParam as string,
+        publishedAfter: pageParam,
         read,
+        limit,
         // withContent: true,
         ...getEntriesParams({
           id,

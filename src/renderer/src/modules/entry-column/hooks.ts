@@ -3,9 +3,10 @@ import {
   useRouteParamsSelector,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
+import { useAuthQuery } from "@renderer/hooks/common"
 import { views } from "@renderer/lib/constants"
 import { shortcuts } from "@renderer/lib/shortcuts"
-import { useEntries } from "@renderer/queries/entries"
+import { entries, useEntries } from "@renderer/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
 import { useFolderFeedsByFeedId } from "@renderer/store/subscription"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
@@ -69,11 +70,36 @@ export const useEntriesByView = ({
 
   const folderIds = useFolderFeedsByFeedId(feedId)
 
-  const query = useEntries({
+  const entriesOptions = {
     id: folderIds?.join(",") || feedId,
     view,
     ...(unreadOnly === true && { read: false }),
+  }
+  const query = useEntries(entriesOptions)
+
+  const [firstId, setFirstId] = useState<string>()
+  const [hasUpdate, setHasUpdate] = useState(false)
+  const firstEntry = useAuthQuery(entries.entries({
+    ...entriesOptions,
+    limit: 1,
+  }), {
+    refetchInterval: 1000 * 10,
+    enabled: !hasUpdate,
   })
+
+  useEffect(() => {
+    if (query.data?.pages?.[0]?.data?.[0].entries.id) {
+      setFirstId(query.data.pages[0].data[0].entries.id)
+      setHasUpdate(false)
+    }
+  }, [query.data?.pages?.[0]?.data?.[0].entries.id])
+
+  useEffect(() => {
+    if (!hasUpdate && firstId && firstEntry.data?.data?.[0].entries.id && firstId !== firstEntry.data.data[0].entries.id) {
+      setHasUpdate(true)
+    }
+  }, [firstEntry.data?.data?.[0].entries.id])
+
   const remoteEntryIds = useMemo(
     () =>
       query.data?.pages
@@ -144,6 +170,7 @@ export const useEntriesByView = ({
   return {
     ...query,
 
+    hasUpdate,
     refetch: useCallback(() => {
       query.refetch()
     }, [query]),

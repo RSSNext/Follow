@@ -8,19 +8,21 @@ export const entries = {
     id,
     view,
     read,
+    limit,
   }: {
     id?: number | string
     view?: number
     read?: boolean
+    limit?: number
   }) =>
     defineQuery(
-      ["entries", id, view, read],
+      ["entries", id, view, read, limit],
       async ({ pageParam }) =>
         entryActions.fetchEntries({
           id,
           view,
           read,
-
+          limit,
           pageParam: pageParam as string,
         }),
       {
@@ -67,7 +69,6 @@ export const useEntries = ({
       return lastPage.data.at(-1)!.entries.publishedAt
     },
     initialPageParam: undefined,
-    refetchInterval: 1000 * 60 * 10,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   })

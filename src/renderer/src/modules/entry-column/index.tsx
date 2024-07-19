@@ -143,6 +143,7 @@ export function EntryColumn() {
         refetch={entries.refetch}
         isRefreshing={entries.isFetching && !entries.isFetchingNextPage}
         totalCount={virtuosoOptions.totalCount}
+        hasUpdate={entries.hasUpdate}
       />
       <m.div
         key={`${routeFeedId}-${view}`}
@@ -173,7 +174,8 @@ const ListHeader: FC<{
   totalCount: number
   refetch: () => void
   isRefreshing: boolean
-}> = ({ totalCount, refetch, isRefreshing }) => {
+  hasUpdate: boolean
+}> = ({ totalCount, refetch, isRefreshing, hasUpdate }) => {
   const routerParams = useRouteParms()
 
   const unreadOnly = useGeneralSettingKey("unreadOnly")
@@ -285,7 +287,7 @@ const ListHeader: FC<{
                 ) :
                 (
                   <ActionButton
-                    tooltip="Refetch"
+                    tooltip={hasUpdate ? "New entries available" : "Refetch"}
                     onClick={() => {
                       refetch()
                     }}
@@ -294,6 +296,7 @@ const ListHeader: FC<{
                       className={cn(
                         "i-mgc-refresh-2-cute-re",
                         isRefreshing && "animate-spin",
+                        hasUpdate && "text-theme-accent",
                       )}
                     />
                   </ActionButton>
