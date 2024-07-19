@@ -83,22 +83,22 @@ export const useEntriesByView = ({
     ...entriesOptions,
     limit: 1,
   }), {
-    refetchInterval: 1000 * 10,
-    enabled: !hasUpdate,
+    refetchInterval: 1000 * 60,
+    enabled: !hasUpdate && !!firstId,
   })
 
   useEffect(() => {
-    if (query.data?.pages?.[0]?.data?.[0].entries.id) {
+    if (query.data?.pages?.[0]?.data?.[0]?.entries.id) {
       setFirstId(query.data.pages[0].data[0].entries.id)
       setHasUpdate(false)
     }
-  }, [query.data?.pages?.[0]?.data?.[0].entries.id])
+  }, [query.data?.pages?.[0]?.data?.[0]?.entries.id])
 
   useEffect(() => {
-    if (!hasUpdate && firstId && firstEntry.data?.data?.[0].entries.id && firstId !== firstEntry.data.data[0].entries.id) {
+    if (!hasUpdate && firstId && firstEntry.data?.data?.[0]?.entries.id && firstId !== firstEntry.data.data[0].entries.id) {
       setHasUpdate(true)
     }
-  }, [firstEntry.data?.data?.[0].entries.id])
+  }, [firstEntry.data?.data?.[0]?.entries.id])
 
   const remoteEntryIds = useMemo(
     () =>
