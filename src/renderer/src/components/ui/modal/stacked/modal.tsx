@@ -6,6 +6,7 @@ import { ErrorComponentType } from "@renderer/components/errors"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useAnimationControls, useDragControls } from "framer-motion"
+import { produce } from "immer"
 import { useSetAtom } from "jotai"
 import type { PointerEventHandler, SyntheticEvent } from "react"
 import {
@@ -24,10 +25,7 @@ import { useEventCallback } from "usehooks-ts"
 import { Divider } from "../../divider"
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX, modalMontionConfig } from "./constants"
-import type {
-  CurrentModalContentProps,
-  ModalContentPropsInternal,
-} from "./context"
+import type { CurrentModalContentProps, ModalActionsInternal } from "./context"
 import { CurrentModalContext } from "./context"
 import type { ModalProps } from "./types"
 
@@ -42,11 +40,27 @@ export const ModalInternal: Component<{
     { item, index, onClose: onPropsClose, children, isTop },
     ref: any,
   ) {
+    const {
+      CustomModalComponent,
+      modalClassName,
+      content,
+      title,
+      clickOutsideToDismiss,
+      modalContainerClassName,
+      wrapper: Wrapper = Fragment,
+      max,
+      icon,
+      canClose = true,
+
+      draggable = false,
+    } = item
+
     const setStack = useSetAtom(modalStackAtom)
 
     const [currentIsClosing, setCurrentIsClosing] = useState(false)
 
-    const close = useEventCallback(() => {
+    const close = useEventCallback((forceClose = false) => {
+      if (!canClose && !forceClose) return
       setCurrentIsClosing(true)
       nextFrame(() => {
         setStack((p) => p.filter((modal) => modal.id !== item.id))
@@ -65,19 +79,6 @@ export const ModalInternal: Component<{
 
     const opaque = useUISettingKey("modalOpaque")
 
-    const {
-      CustomModalComponent,
-      modalClassName,
-      content,
-      title,
-      clickOutsideToDismiss,
-      modalContainerClassName,
-      wrapper: Wrapper = Fragment,
-      max,
-      icon,
-
-      draggable = false,
-    } = item
     const zIndexStyle = useMemo(
       () => ({ zIndex: MODAL_STACK_Z_INDEX + index + 1 }),
       [index],
@@ -86,7 +87,7 @@ export const ModalInternal: Component<{
       (e: SyntheticEvent) => {
         e.stopPropagation()
 
-        close()
+        close(true)
       },
       [close],
     )
@@ -142,11 +143,19 @@ export const ModalInternal: Component<{
     }, [isTop])
 
     const modalContentRef = useRef<HTMLDivElement>(null)
-    const ModalProps: ModalContentPropsInternal = useMemo(
+    const ModalProps: ModalActionsInternal = useMemo(
       () => ({
         dismiss: close,
+        setClickOutSideToDismiss: (v) => {
+          setStack((state) => produce(state, (draft) => {
+            const model = draft.find((modal) => modal.id === item.id)
+            if (!model) return
+            if (model.clickOutsideToDismiss === v) return
+            model.clickOutsideToDismiss = v
+          }))
+        },
       }),
-      [close],
+      [close, item.id, setStack],
     )
 
     const ModalContextProps = useMemo<CurrentModalContentProps>(
@@ -156,13 +165,16 @@ export const ModalInternal: Component<{
       }),
       [ModalProps],
     )
-    const finalChildren = useMemo(() => (
-      <CurrentModalContext.Provider value={ModalContextProps}>
-        <AppErrorBoundary errorType={ErrorComponentType.Modal}>
-          {children ?? createElement(content, ModalProps)}
-        </AppErrorBoundary>
-      </CurrentModalContext.Provider>
-    ), [ModalContextProps, ModalProps, children, content])
+    const finalChildren = useMemo(
+      () => (
+        <CurrentModalContext.Provider value={ModalContextProps}>
+          <AppErrorBoundary errorType={ErrorComponentType.Modal}>
+            {children ?? createElement(content, ModalProps)}
+          </AppErrorBoundary>
+        </CurrentModalContext.Provider>
+      ),
+      [ModalContextProps, ModalProps, children, content],
+    )
 
     useEffect(() => {
       if (currentIsClosing) {
@@ -188,7 +200,9 @@ export const ModalInternal: Component<{
                     currentIsClosing && "!pointer-events-none",
                     modalContainerClassName,
                   )}
-                  onClick={clickOutsideToDismiss ? dismiss : undefined}
+                  onClick={
+                    clickOutsideToDismiss && canClose ? dismiss : undefined
+                  }
                   style={zIndexStyle}
                 >
                   <div
@@ -219,7 +233,9 @@ export const ModalInternal: Component<{
                   currentIsClosing && "!pointer-events-none",
                   modalContainerClassName,
                 )}
-                onClick={clickOutsideToDismiss ? dismiss : noticeModal}
+                onClick={
+                  clickOutsideToDismiss && canClose ? dismiss : noticeModal
+                }
               >
                 <m.div
                   ref={ref}
@@ -259,13 +275,15 @@ export const ModalInternal: Component<{
 
                       <span>{title}</span>
                     </Dialog.Title>
-                    <Dialog.DialogClose
-                      className="center p-2"
-                      tabIndex={1}
-                      onClick={close}
-                    >
-                      <i className="i-mgc-close-cute-re" />
-                    </Dialog.DialogClose>
+                    {canClose && (
+                      <Dialog.DialogClose
+                        className="center p-2"
+                        tabIndex={1}
+                        onClick={close}
+                      >
+                        <i className="i-mgc-close-cute-re" />
+                      </Dialog.DialogClose>
+                    )}
                   </div>
                   <Divider className="my-2 shrink-0 border-slate-200 opacity-80 dark:border-neutral-800" />
 

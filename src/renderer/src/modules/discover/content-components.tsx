@@ -5,7 +5,7 @@ import { CopyButton } from "@renderer/components/ui/code-highlighter"
 import { Form, FormItem, FormLabel } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
 import { Markdown } from "@renderer/components/ui/markdown"
-import { useModalStack } from "@renderer/components/ui/modal"
+import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
 import {
   Select,
   SelectContent,
@@ -22,7 +22,13 @@ import {
 } from "@renderer/lib/path-parser"
 import { omit } from "lodash-es"
 import type { FC } from "react"
-import { useCallback, useLayoutEffect, useMemo, useRef } from "react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "react"
 import type { UseFormReturn } from "react-hook-form"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -169,6 +175,12 @@ export const DiscoverFeedForm = ({
     if (!$form) return
     $form.querySelectorAll("input")[0]?.focus()
   }, [formElRef])
+
+  const { setClickOutSideToDismiss } = useCurrentModal()
+
+  useEffect(() => {
+    setClickOutSideToDismiss(!form.formState.isDirty)
+  }, [form.formState.isDirty, setClickOutSideToDismiss])
   return (
     <Form {...form}>
       <PreviewUrl
@@ -220,7 +232,11 @@ export const DiscoverFeedForm = ({
               ) : (
                 <Input
                   {...formRegister}
-                  placeholder={parameters?.default ?? formPlaceholder[keyItem.name] ? `e.g. ${formPlaceholder[keyItem.name]}` : void 0}
+                  placeholder={
+                    parameters?.default ?? formPlaceholder[keyItem.name] ?
+                      `e.g. ${formPlaceholder[keyItem.name]}` :
+                      void 0
+                  }
                 />
               )}
               {!!parameters && (
@@ -237,9 +253,7 @@ export const DiscoverFeedForm = ({
         <FeedMaintainers maintainers={route.maintainers} />
 
         <div className="sticky bottom-0 -mt-4 flex w-full translate-y-3 justify-end bg-theme-modal-background-opaque py-3">
-          <StyledButton type="submit">
-            Preview
-          </StyledButton>
+          <StyledButton type="submit">Preview</StyledButton>
         </div>
       </form>
     </Form>

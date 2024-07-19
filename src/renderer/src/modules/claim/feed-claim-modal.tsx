@@ -8,6 +8,7 @@ import {
 } from "@renderer/components/ui/code-highlighter"
 import { useShikiDefaultTheme } from "@renderer/components/ui/code-highlighter/shiki/hooks"
 import { LoadingCircle } from "@renderer/components/ui/loading"
+import { useCurrentModal } from "@renderer/components/ui/modal"
 import {
   Tabs,
   TabsContent,
@@ -19,6 +20,7 @@ import { Queries } from "@renderer/queries"
 import { useClaimFeedMutation } from "@renderer/queries/feed"
 import { useFeedById } from "@renderer/store/feed"
 import type { FC } from "react"
+import { useEffect } from "react"
 
 export const FeedClaimModalContent: FC<{
   feedId: string
@@ -31,12 +33,17 @@ export const FeedClaimModalContent: FC<{
   } = useAuthQuery(Queries.feed.claimMessage({ feedId }), {
     enabled: !!feed,
   })
+  const { setClickOutSideToDismiss } = useCurrentModal()
 
   const {
     mutateAsync: claim,
     isPending,
     isSuccess,
   } = useClaimFeedMutation(feedId)
+
+  useEffect(() => {
+    setClickOutSideToDismiss(isPending)
+  }, [isPending, setClickOutSideToDismiss])
 
   const shikiTheme = useShikiDefaultTheme()
 
@@ -81,7 +88,9 @@ export const FeedClaimModalContent: FC<{
           <TabsContent className="mt-0 pt-3" value="description">
             <p className="mb-2 leading-none">
               Current description:
-              <span className="ml-2 text-xs text-zinc-500">{feed.description}</span>
+              <span className="ml-2 text-xs text-zinc-500">
+                {feed.description}
+              </span>
             </p>
             <p>
               Copy the following content and paste it into the

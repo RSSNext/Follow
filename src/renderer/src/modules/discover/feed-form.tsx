@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { LoadingCircle } from "@renderer/components/ui/loading"
+import { useCurrentModal } from "@renderer/components/ui/modal"
 import {
   Select,
   SelectTrigger,
@@ -70,6 +71,14 @@ export const FeedForm: Component<{
       view: defaultView.toString(),
     },
   })
+
+  const { setClickOutSideToDismiss } = useCurrentModal()
+
+  useEffect(() => {
+    if (form.formState.isDirty) {
+      setClickOutSideToDismiss(false)
+    }
+  }, [form.formState.isDirty])
 
   useEffect(() => {
     if (feed.data?.subscription) {

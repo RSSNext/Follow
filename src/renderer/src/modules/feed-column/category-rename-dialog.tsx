@@ -8,9 +8,11 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
+import { useCurrentModal } from "@renderer/components/ui/modal"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -55,6 +57,13 @@ export function CategoryRenameContent({
     renameMutation.mutate(values)
   }
 
+  const { setClickOutSideToDismiss } = useCurrentModal()
+
+  useEffect(() => {
+    if (form.formState.isDirty) {
+      setClickOutSideToDismiss(false)
+    }
+  }, [form.formState.isDirty])
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
