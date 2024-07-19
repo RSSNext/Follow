@@ -8,7 +8,7 @@ import { useMediaQuery } from "usehooks-ts"
 
 const useDarkQuery = () => useMediaQuery("(prefers-color-scheme: dark)")
 type ColorMode = "light" | "dark" | "system"
-const darkAtom = !ELECTRON ?
+const darkAtom = !window.electron ?
   atomWithStorage(
     getStorageNS("color-mode"),
     "system" as ColorMode,
@@ -26,7 +26,7 @@ function useDarkWebApp() {
   const mode = useAtomValue(darkAtom)
   return mode === "dark" || (mode === "system" && systemIsDark)
 }
-export const useDark = ELECTRON ? useDarkElectron : useDarkWebApp
+export const useDark = window.electron ? useDarkElectron : useDarkWebApp
 
 const useSyncDarkElectron = () => {
   const appIsDark = useDarkQuery()
@@ -50,7 +50,7 @@ const useSyncDarkWebApp = () => {
   }, [colorMode, systemIsDark])
 }
 
-export const useSyncDark = ELECTRON ?
+export const useSyncDark = window.electron ?
   useSyncDarkElectron :
   useSyncDarkWebApp
 

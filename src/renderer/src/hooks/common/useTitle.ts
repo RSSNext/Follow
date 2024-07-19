@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react"
 
-const titleTemplate = ELECTRON ? `%s` : `%s | ${APP_NAME}`
+const titleTemplate = window.electron ? `%s` : `%s | ${APP_NAME}`
 
 export const useTitle = (title?: Nullable<string >) => {
   const currentTitleRef = useRef(document.title)

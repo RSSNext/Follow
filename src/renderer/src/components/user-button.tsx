@@ -47,7 +47,9 @@ export const LoginButton: FC<LoginProps> = (props) => {
                 title: "Login",
                 id: "login",
                 content: () => (
-                  <LoginModalContent runtime={ELECTRON ? "app" : "browser"} />
+                  <LoginModalContent
+                    runtime={window.electron ? "app" : "browser"}
+                  />
                 ),
                 clickOutsideToDismiss: true,
               })
@@ -124,7 +126,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
           Preferences
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        {!ELECTRON && (
+        {!window.electron && (
           <>
             <DropdownMenuItem
               onClick={() => {

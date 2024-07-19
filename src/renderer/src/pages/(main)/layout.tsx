@@ -55,10 +55,7 @@ export function Component() {
             canClose={false}
             clickOutsideToDismiss={false}
           >
-            <LoginModalContent
-              canClose={false}
-              runtime={ELECTRON ? "app" : "browser"}
-            />
+            <LoginModalContent canClose={false} runtime={window.electron ? "app" : "browser"} />
           </DeclarativeModal>
         </RootPortal>
       )}

@@ -16,7 +16,7 @@ await initializeApp().finally(() => {
 
 const $container = document.querySelector("#root") as HTMLElement
 
-if (ELECTRON && getOS() === "Windows") {
+if (window.electron && getOS() === "Windows") {
   $container.style.borderRadius = "12px"
   $container.style.overflow = "hidden"
   $container.style.paddingTop = "24px"

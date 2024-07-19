@@ -6,8 +6,8 @@ export const Vibrancy: Component<
 > = ({ className, children, ...rest }) => {
   const opaqueSidebar = useUISettingKey("opaqueSidebar")
   const canVibrancy =
-    ELECTRON &&
-    window.electron?.process.platform === "darwin" &&
+    window.electron &&
+    window.electron.process.platform === "darwin" &&
     !opaqueSidebar
 
   return (

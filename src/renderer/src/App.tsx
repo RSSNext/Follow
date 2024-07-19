@@ -27,7 +27,7 @@ function App() {
 
   useLayoutEffect(() => {
     // Electron app register in app scope, but web app should register in window scope
-    if (ELECTRON) return
+    if (window.electron) return
     const handleOpenSettings = (e) => {
       if (e.key === "," && (e.metaKey || e.ctrlKey)) {
         window.router.showSettings()
@@ -41,10 +41,10 @@ function App() {
     }
   }, [])
 
-  const windowsElectron = ELECTRON && getOS() === "Windows"
+  const windowsElectron = window.electron && getOS() === "Windows"
   return (
     <>
-      {ELECTRON && !windowsElectron && (
+      {window.electron && !windowsElectron && (
         <div
           className="drag-region absolute inset-x-0 top-0 h-12 shrink-0"
           aria-hidden

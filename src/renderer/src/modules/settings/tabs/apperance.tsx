@@ -43,7 +43,7 @@ export const SettingAppearance = () => {
               label="Dark Mode"
               checked={isDark}
               onCheckedChange={(e) => {
-                if (ELECTRON) {
+                if (window.electron) {
                   tipcClient?.setAppearance(e ? "dark" : "light")
                 } else {
                   setDarkInWebApp(e ? "dark" : "light")
@@ -66,7 +66,7 @@ export const SettingAppearance = () => {
             },
             {
               disabled:
-                !ELECTRON || !["macOS", "Linux"].includes(getOS()),
+                !window.electron || !["macOS", "Linux"].includes(getOS()),
               label: "Dock Badge",
               key: "showDockBadge",
               onChange: (value) => setUISetting("showDockBadge", value),
@@ -81,7 +81,7 @@ export const SettingAppearance = () => {
               type: "title",
               value: "Content",
             },
-            !!ELECTRON && Fonts,
+            !!window.electron && Fonts,
 
             ShikiTheme,
             {

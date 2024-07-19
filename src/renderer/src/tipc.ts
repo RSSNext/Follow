@@ -1,8 +1,7 @@
 import { createEventHandlers } from "@egoist/tipc/renderer"
 import type { RendererHandlers } from "@main/renderer-handlers"
 
-export const handlers = ELECTRON ?
-  window.electron &&
+export const handlers = window.electron ?
   createEventHandlers<RendererHandlers>({
     on: (channel, callback) => {
       if (!window.electron) return () => {}

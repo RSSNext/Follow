@@ -13,7 +13,7 @@ import { useMemo, useRef, useState } from "react"
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import type { UniversalItemProps } from "./types"
 
-const ViewTag = ELECTRON ? "webview" : "iframe"
+const ViewTag = window.electron ? "webview" : "iframe"
 
 export function VideoItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview

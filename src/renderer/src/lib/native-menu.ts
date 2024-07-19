@@ -20,7 +20,7 @@ export const showNativeMenu = async (
     el.dataset.contextMenuOpen = "true"
   }
 
-  if (!ELECTRON) {
+  if (!window.electron) {
     document.dispatchEvent(
       new CustomEvent(CONTEXT_MENU_SHOW_EVENT_KEY, {
         detail: {
