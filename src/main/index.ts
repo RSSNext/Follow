@@ -1,62 +1,113 @@
-import "dotenv/config"
+import "dotenv/config";
 
-import path from "node:path"
 
-import { electronApp, optimizer } from "@electron-toolkit/utils"
-import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@shared/constants"
-import { extractElectronWindowOptions } from "@shared/electron"
-import { app, BrowserWindow, session } from "electron"
+import { electronApp, optimizer } from "@electron-toolkit/utils";
+import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@shared/constants";
+import { extractElectronWindowOptions } from "@shared/electron";
+import { BrowserWindow, app, session } from "electron";
 
-import { env } from "../env"
-import { isDev } from "./env"
-import { initializationApp } from "./init"
-import { registerUpdater } from "./updater"
-import { createMainWindow, createWindow } from "./window"
+import { env } from "../env";
+import { isDev } from "./env";
+import { initializationApp } from "./init";
+import { registerUpdater } from "./updater";
+import { createMainWindow, createWindow } from "./window";
 
-if (isDev) console.info("[main] env loaded:", env)
-initializationApp()
-let mainWindow: BrowserWindow
+if (isDev) console.info("[main] env loaded:", env);
 
-if (process.defaultApp) {
-  if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient(APP_PROTOCOL, process.execPath, [
-      path.resolve(process.argv[1]),
-    ])
+function bootsharp() {
+  const gotTheLock = app.requestSingleInstanceLock();
+
+  if (!gotTheLock) {
+    app.quit();
+
+    return;
   }
-} else {
-  app.setAsDefaultProtocolClient(APP_PROTOCOL)
-}
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  // Set app user model id for windows
-  electronApp.setAppUserModelId(`re.${APP_PROTOCOL}`)
+  let mainWindow: BrowserWindow;
 
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-  app.on("browser-window-created", (_, window) => {
-    optimizer.watchWindowShortcuts(window)
-  })
+  initializationApp();
 
-  mainWindow = createMainWindow()
-
-  app.on("activate", () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) {
-      mainWindow = createMainWindow()
+  app.on("second-instance", (_, commandLine) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
     }
-  })
+
+    const url = commandLine.pop();
+    if (url) {
+      handleOpen(url);
+    }
+  });
+
+  // This method will be called when Electron has finished
+  // initialization and is ready to create browser windows.
+  // Some APIs can only be used after this event occurs.
+  app.whenReady().then(() => {
+    // Set app user model id for windows
+    electronApp.setAppUserModelId(`re.${APP_PROTOCOL}`);
+
+    mainWindow = createMainWindow();
+
+    registerUpdater();
+
+    app.on("activate", () => {
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (BrowserWindow.getAllWindows().length === 0) {
+        mainWindow = createMainWindow();
+      }
+    });
+
+    app.on("open-url", (_, url) => {
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus();
+      } else {
+        mainWindow = createMainWindow();
+      }
+      handleOpen(url);
+    });
+
+    // Default open or close DevTools by F12 in development
+    // and ignore CommandOrControl + R in production.
+    // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
+    app.on("browser-window-created", (_, window) => {
+      optimizer.watchWindowShortcuts(window);
+    });
+
+    // for dev debug
+
+    if (process.env.NODE_ENV === "development") {
+      import("electron-devtools-installer").then(
+        ({
+          default: installExtension,
+          REDUX_DEVTOOLS,
+          REACT_DEVELOPER_TOOLS,
+        }) => {
+          [REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS].forEach((extension) => {
+            installExtension(extension, {
+              loadExtensionOptions: { allowFileAccess: true },
+            })
+              .then((name) => console.info(`Added Extension:  ${name}`))
+              .catch((err) => console.info("An error occurred:", err));
+          });
+
+          session.defaultSession.getAllExtensions().forEach((e) => {
+            session.defaultSession.loadExtension(e.path);
+          });
+        }
+      );
+    }
+  });
 
   const handleOpen = (url: string) => {
-    const urlObj = new URL(url)
-    if (urlObj.hostname === "auth") {
-      const token = urlObj.searchParams.get("token")
+    const urlObj = new URL(url);
+
+    if (urlObj.hostname === "auth" || urlObj.pathname === "//auth") {
+      const token = urlObj.searchParams.get("token");
+
       const apiURL =
-        process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
+        process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL;
       if (token && apiURL) {
         mainWindow.webContents.session.cookies.set({
           url: apiURL,
@@ -66,72 +117,30 @@ app.whenReady().then(() => {
           httpOnly: true,
           domain: new URL(apiURL).hostname,
           sameSite: "no_restriction",
-        })
-        mainWindow.reload()
+        });
+        mainWindow.reload();
       }
     } else {
-      const options = extractElectronWindowOptions(url)
+      const options = extractElectronWindowOptions(url);
 
-      const { height, resizable, width } = options || {}
+      const { height, resizable, width } = options || {};
       createWindow({
         extraPath: url.replace(DEEPLINK_SCHEME, "/"),
         width: width ?? 800,
         height: height ?? 600,
         resizable,
-      })
+      });
     }
-  }
 
-  app.on("second-instance", (_, commandLine) => {
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore()
-      mainWindow.focus()
-    }
-    const url = commandLine.pop()
-    if (url) {
-      handleOpen(url)
-    }
-  })
-  app.on("open-url", (_, url) => {
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore()
-      mainWindow.focus()
-    }
-    handleOpen(url)
-  })
+    // Quit when all windows are closed, except on  macOS. There, it's common
+    // for applications and their menu bar to stay active until the user quits
+    // explicitly with Cmd + Q.
+    app.on("window-all-closed", () => {
+      if (process.platform !== "darwin") {
+        app.quit();
+      }
+    });
+  };
+}
 
-  registerUpdater()
-
-  // for dev debug
-
-  if (process.env.NODE_ENV === "development") {
-    import("electron-devtools-installer").then(
-      ({
-        default: installExtension,
-        REDUX_DEVTOOLS,
-        REACT_DEVELOPER_TOOLS,
-      }) => {
-        [REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS].forEach((extension) => {
-          installExtension(extension, {
-            loadExtensionOptions: { allowFileAccess: true },
-          })
-            .then((name) => console.info(`Added Extension:  ${name}`))
-            .catch((err) => console.info("An error occurred:", err))
-        })
-
-        session.defaultSession.getAllExtensions().forEach((e) => {
-          session.defaultSession.loadExtension(e.path)
-        })
-      },
-    )
-  }
-})
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit()
-  }
-})
+bootsharp();
