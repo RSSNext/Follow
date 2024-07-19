@@ -67,7 +67,7 @@ export function EntryHeader({
         <EntryReadHistory entryId={entryId} />
       </div>
       <div className="relative z-10 flex w-full items-center justify-between gap-3 bg-background">
-        <div className="flex min-w-0 shrink">
+        <div className="flex min-w-0 shrink grow">
           <AnimatePresence>
             {entryTitleMeta && (
               <m.div
@@ -88,7 +88,7 @@ export function EntryHeader({
           </AnimatePresence>
         </div>
 
-        <div className="relative flex w-full items-center justify-end gap-3">
+        <div className="relative flex shrink-0 items-center justify-end gap-3">
           {items
             .filter((item) => !item.disabled)
             .map((item) => (
