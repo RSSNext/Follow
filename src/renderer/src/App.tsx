@@ -5,10 +5,9 @@ import { Outlet } from "react-router-dom"
 import { env } from "../../env.js"
 import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"
-import { Logo } from "./components/icons/logo"
-import { tipcClient } from "./lib/client"
 import { appLog } from "./lib/log"
 import { getOS } from "./lib/utils"
+import { Titlebar } from "./modules/app/Titlebar.js"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"
 
@@ -51,33 +50,7 @@ function App() {
           aria-hidden
         />
       )}
-      {windowsElectron && (
-        <div className="drag-region fixed top-0 z-[99999] flex h-[24px] w-full items-center justify-end rounded-t-[12px] bg-background">
-          <div className="absolute left-5 top-0 flex h-[24px] items-center gap-2">
-            <Logo className="size-4" />
-            <span className="text-sm font-bold">{APP_NAME}</span>
-          </div>
-          <button
-            className="no-drag-region flex h-[24px] w-[32px] items-center justify-center rounded duration-200 hover:bg-theme-item-active"
-            type="button"
-            onClick={() => {
-              tipcClient?.windowAction({ action: "minimize" })
-            }}
-          >
-            <i className="i-mingcute-minimize-line" />
-          </button>
-
-          <button
-            type="button"
-            className="no-drag-region flex h-[24px] w-[32px] items-center justify-center rounded duration-200 hover:bg-red-500 hover:!text-white"
-            onClick={() => {
-              tipcClient?.windowAction({ action: "close" })
-            }}
-          >
-            <i className="i-mingcute-close-line" />
-          </button>
-        </div>
-      )}
+      {windowsElectron && <Titlebar />}
       <RootProviders>
         <AppLayer />
       </RootProviders>

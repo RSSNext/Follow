@@ -141,7 +141,7 @@
     "@vercel/ncc": "0.38.1",
     "@vitejs/plugin-react": "^4.3.1",
     "drizzle-orm": "0.32.0",
-    "electron": "^30.1.2",
+    "electron": "^31.0.2",
     "electron-devtools-installer": "3.2.0",
     "electron-vite": "^2.3.0",
     "eslint": "^9.7.0",
@@ -171,5 +171,6 @@
   },
   "lint-staged": {
     "*": "eslint --fix"
-  }
+  },
+  "productName": "Follow"
 }

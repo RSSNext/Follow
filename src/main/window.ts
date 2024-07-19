@@ -31,7 +31,7 @@ export function createWindow(
     show: false,
     resizable: configs?.resizable ?? true,
     autoHideMenuBar: true,
-    ...(platform === "linux" ? { icon: getIconPath() } : {}),
+    ...(platform !== "darwin" ? { icon: getIconPath() } : {}),
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.mjs"),
       sandbox: false,
@@ -66,7 +66,7 @@ export function createWindow(
       process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""),
     )
   } else {
-    window.loadFile(path.join(__dirname, "../renderer/index.html"))
+    window.loadFile(path.resolve(__dirname, "../renderer/index.html"))
   }
 
   const refererMatchs = [

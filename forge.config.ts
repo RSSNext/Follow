@@ -62,7 +62,12 @@ const config: ForgeConfig = {
     appBundleId: "is.follow",
     icon: "resources/icon",
     extraResource: ["./resources/app-update.yml"],
-
+    protocols: [
+      {
+        name: "Follow",
+        schemes: ["follow"],
+      },
+    ],
     afterCopy: [cleanSources],
     asar: true,
     ignore: [/^\/node_modules\/(?!font-list)/],
@@ -117,6 +122,7 @@ const config: ForgeConfig = {
     new MakerAppImage({
       options: {
         icon: "resources/icon.png",
+        mimeType: ["x-scheme-handler/follow"],
       },
     }),
   ],

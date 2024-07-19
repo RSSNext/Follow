@@ -2,6 +2,7 @@ import path from "node:path"
 
 import { registerIpcMain } from "@egoist/tipc/main"
 import * as Sentry from "@sentry/electron/main"
+import { APP_PROTOCOL } from "@shared/constants"
 import { app } from "electron"
 
 import { getIconPath } from "./helper"
@@ -15,6 +16,15 @@ const appFolder = {
 
 const isDev = process.env.NODE_ENV === "development"
 export const initializationApp = () => {
+  if (process.defaultApp) {
+    if (process.argv.length >= 2) {
+      app.setAsDefaultProtocolClient(APP_PROTOCOL, process.execPath, [
+        path.resolve(process.argv[1]),
+      ])
+    }
+  } else {
+    app.setAsDefaultProtocolClient(APP_PROTOCOL)
+  }
   Sentry.init({
     dsn: process.env.VITE_SENTRY_DSN,
   })
