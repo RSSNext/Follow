@@ -47,9 +47,7 @@ export const LoginButton: FC<LoginProps> = (props) => {
                 title: "Login",
                 id: "login",
                 content: () => (
-                  <LoginModalContent
-                    runtime={ELECTRON ? "app" : "browser"}
-                  />
+                  <LoginModalContent runtime={ELECTRON ? "app" : "browser"} />
                 ),
                 clickOutsideToDismiss: true,
               })
@@ -87,14 +85,19 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             <UserAvatar className="h-7 shrink-0 p-0" hideName />
             <div className="max-w-40 leading-none">
               <div className="truncate">{user?.name}</div>
-              <div className="truncate text-xs font-medium text-zinc-500">{user?.handle}</div>
+              <div className="truncate text-xs font-medium text-zinc-500">
+                {user?.handle}
+              </div>
             </div>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
-            window.open(`${WEB_URL}/profile/${user?.handle || user?.id}`, "_blank")
+            window.open(
+              `${WEB_URL}/profile/${user?.handle || user?.id}`,
+              "_blank",
+            )
           }}
         >
           <i className="i-mgc-user-3-cute-re mr-1.5" />
@@ -125,7 +128,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
           <>
             <DropdownMenuItem
               onClick={() => {
-              // TODO
+                // TODO
               }}
             >
               <i className="i-mgc-gift-cute-re mr-1.5" />
@@ -158,14 +161,17 @@ export function UserAvatar({
     enabled: !userId,
   })
 
-  const profile = useAuthQuery(defineQuery(["profiles", userId], async () => {
-    const res = await apiClient.profiles.$get({
-      query: { id: userId! },
-    })
-    return res.data
-  }), {
-    enabled: !!userId,
-  })
+  const profile = useAuthQuery(
+    defineQuery(["profiles", userId], async () => {
+      const res = await apiClient.profiles.$get({
+        query: { id: userId! },
+      })
+      return res.data
+    }),
+    {
+      enabled: !!userId,
+    },
+  )
 
   if (!userId && status !== "authenticated") {
     return <LoginButton {...props} />
@@ -179,8 +185,12 @@ export function UserAvatar({
       )}
     >
       <Avatar className="aspect-square h-full w-auto">
-        <AvatarImage src={(profile.data || session?.user)?.image || undefined} />
-        <AvatarFallback>{(profile.data || session?.user)?.name?.slice(0, 2)}</AvatarFallback>
+        <AvatarImage
+          src={(profile.data || session?.user)?.image || undefined}
+        />
+        <AvatarFallback>
+          {(profile.data || session?.user)?.name?.slice(0, 2)}
+        </AvatarFallback>
       </Avatar>
       {!hideName && <div>{(profile.data || session?.user)?.name}</div>}
     </div>

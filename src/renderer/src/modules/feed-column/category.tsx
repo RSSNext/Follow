@@ -41,7 +41,8 @@ function FeedCategoryImpl({
   const subscription = useSubscriptionByFeedId(ids[0])
   const folderName = subscription?.category || subscription.defaultCategory
 
-  const showCollapse = sortByUnreadFeedList.length > 1 || subscription?.category
+  const showCollapse =
+    sortByUnreadFeedList.length > 1 || subscription?.category
   const [open, setOpen] = useState(!showCollapse)
   useEffect(() => {
     if (showCollapse) {
@@ -95,6 +96,7 @@ function FeedCategoryImpl({
                   click: () => {
                     present({
                       title: "Rename Category",
+                      clickOutsideToDismiss: true,
                       content: ({ dismiss }) => (
                         <CategoryRenameContent
                           feedIdList={ids}

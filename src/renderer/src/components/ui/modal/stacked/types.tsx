@@ -1,13 +1,13 @@
 import type { FC, PropsWithChildren, ReactNode } from "react"
 
-import type { ModalContentPropsInternal } from "./context"
+import type { ModalActionsInternal } from "./context"
 
 export interface ModalProps {
   title: ReactNode
   icon?: ReactNode
 
   CustomModalComponent?: FC<PropsWithChildren>
-  content: FC<ModalContentPropsInternal>
+  content: FC<ModalActionsInternal>
   clickOutsideToDismiss?: boolean
   modalClassName?: string
   modalContainerClassName?: string
@@ -18,6 +18,7 @@ export interface ModalProps {
 
   overlay?: boolean
   draggable?: boolean
+  canClose?: boolean
 }
 export interface ModalStackOptions {
   wrapper?: FC

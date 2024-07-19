@@ -9,11 +9,18 @@ import { m } from "framer-motion"
 
 interface LoginModalContentProps {
   runtime?: LoginRuntime
+  canClose?: boolean
 }
 export const LoginModalContent = (props: LoginModalContentProps) => {
   const modal = useCurrentModal()
+
+  const { canClose = true, runtime } = props
+
   return (
-    <div className="center flex h-full" onClick={modal.dismiss}>
+    <div
+      className="center flex h-full"
+      onClick={canClose ? modal.dismiss : undefined}
+    >
       <m.div
         className="shadow-modal rounded-lg border border-border bg-theme-background p-4 px-8 pb-8"
         onClick={stopPropagation}
@@ -31,7 +38,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             className="h-[48px] w-[320px] rounded-[8px] !bg-black font-sans text-base text-white hover:!bg-black/80"
             size="lg"
             onClick={() => {
-              loginHandler("github", props.runtime)
+              loginHandler("github", runtime)
             }}
           >
             <i className="i-mgc-github-cute-fi mr-2 text-xl" />
@@ -43,7 +50,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             className="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90"
             size="xl"
             onClick={() => {
-              loginHandler("google", props.runtime)
+              loginHandler("google", runtime)
             }}
           >
             <i className="i-mgc-google-cute-fi mr-2 text-xl" />

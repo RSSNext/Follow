@@ -24,7 +24,9 @@ export function Component() {
             <div className="pointer-events-none absolute bottom-3 w-full text-center text-xs opacity-20">
               Early Access
               {" "}
-              {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
+              {GIT_COMMIT_SHA ?
+                `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` :
+                ""}
             </div>
           )}
           <AutoUpdater />
@@ -50,8 +52,13 @@ export function Component() {
             CustomModalComponent={NoopChildren}
             open
             title="Login"
+            canClose={false}
+            clickOutsideToDismiss={false}
           >
-            <LoginModalContent runtime={ELECTRON ? "app" : "browser"} />
+            <LoginModalContent
+              canClose={false}
+              runtime={ELECTRON ? "app" : "browser"}
+            />
           </DeclarativeModal>
         </RootPortal>
       )}
