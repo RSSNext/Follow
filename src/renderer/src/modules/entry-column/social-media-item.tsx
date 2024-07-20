@@ -1,5 +1,6 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
+import { usePreviewImages } from "@renderer/components/ui/image/hooks"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
@@ -14,6 +15,7 @@ import type { UniversalItemProps } from "./types"
 export function SocialMediaItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
+  const previewImage = usePreviewImages()
   const asRead = useAsRead(entry)
   const feed = useFeedById(entry?.feedId)
 
@@ -44,9 +46,8 @@ export function SocialMediaItem({ entryId, entryPreview, translation }: Universa
           </div>
         </div>
         <div className="mt-1 flex gap-2 overflow-x-auto">
-          {entry.entries.images?.map((image) => (
+          {entry.entries.images?.map((image, i, images) => (
             <Image
-              popper
               key={image}
               src={image}
               className="size-28 shrink-0"
@@ -54,6 +55,10 @@ export function SocialMediaItem({ entryId, entryPreview, translation }: Universa
               proxy={{
                 width: 224,
                 height: 224,
+              }}
+              onClick={(e) => {
+                previewImage(images, i)
+                e.stopPropagation()
               }}
             />
           ))}
