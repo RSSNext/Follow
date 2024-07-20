@@ -20,6 +20,7 @@ import {
   useRef,
   useState,
 } from "react"
+import { useHotkeysContext } from "react-hotkeys-hook"
 import { useEventCallback } from "usehooks-ts"
 
 import { Divider } from "../../divider"
@@ -184,6 +185,17 @@ export const ModalInternal: Component<{
     }, [currentIsClosing])
 
     const edgeElementRef = useRef<HTMLDivElement>(null)
+
+    const { enableScope, disableScope } = useHotkeysContext()
+
+    useEffect(() => {
+      enableScope("modal")
+      disableScope("home")
+      return () => {
+        enableScope("home")
+        disableScope("modal")
+      }
+    }, [])
 
     if (CustomModalComponent) {
       return (

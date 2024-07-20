@@ -4,7 +4,7 @@ import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { FC } from "react"
 import { useCallback, useState } from "react"
-import { Mousewheel, Scrollbar, Virtual } from "swiper/modules"
+import { Keyboard, Mousewheel, Scrollbar, Virtual } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 
 import { ActionButton } from "../button"
@@ -119,11 +119,14 @@ export const PreviewImageContent: FC<{
         mousewheel={{
           forceToAxis: true,
         }}
+        keyboard={{
+          enabled: true,
+        }}
         virtual
         onSlideChange={({ realIndex }) => {
           setCurrentSrc(images[realIndex])
         }}
-        modules={[Scrollbar, Mousewheel, Virtual]}
+        modules={[Scrollbar, Mousewheel, Virtual, Keyboard]}
         className="size-full"
       >
         {images.map((image, index) => (

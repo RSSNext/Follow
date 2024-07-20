@@ -8,6 +8,7 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { LazyMotion, MotionConfig } from "framer-motion"
 import { Provider } from "jotai"
 import type { FC, PropsWithChildren } from "react"
+import { HotkeysProvider } from "react-hotkeys-hook"
 
 import { ContextMenuProvider } from "./context-menu-provider"
 import { StableRouterProvider } from "./stable-router-provider"
@@ -30,15 +31,17 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
         client={queryClient}
       >
         <TooltipProvider>
-          <Provider store={jotaiStore}>
-            <UserProvider />
-            <SettingSync />
-            <ModalStackProvider />
-            <ContextMenuProvider />
-            <StableRouterProvider />
-            {import.meta.env.DEV && <Devtools />}
-            {children}
-          </Provider>
+          <HotkeysProvider initiallyActiveScopes={["home"]}>
+            <Provider store={jotaiStore}>
+              <UserProvider />
+              <SettingSync />
+              <ModalStackProvider />
+              <ContextMenuProvider />
+              <StableRouterProvider />
+              {import.meta.env.DEV && <Devtools />}
+              {children}
+            </Provider>
+          </HotkeysProvider>
         </TooltipProvider>
       </PersistQueryClientProvider>
     </MotionConfig>

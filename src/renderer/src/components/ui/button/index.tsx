@@ -143,7 +143,10 @@ const HotKeyTrigger = ({
   fn: () => void
   options?: OptionsOrDependencyArray
 }) => {
-  useHotkeys(shortcut, fn, options)
+  useHotkeys(shortcut, fn, {
+    scopes: ["home"],
+    ...options,
+  })
   return null
 }
 export const MotionButtonBase = React.forwardRef<
