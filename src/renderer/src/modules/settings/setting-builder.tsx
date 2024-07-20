@@ -1,7 +1,7 @@
 /* eslint-disable @eslint-react/no-array-index-key */
 import type { FC, ReactNode } from "react"
-import { isValidElement } from "react"
 import * as React from "react"
+import { isValidElement } from "react"
 
 import {
   SettingActionItem,
@@ -113,3 +113,15 @@ export const createSettingBuilder =
           )
         })
     }
+
+export function createSettingItemTypeHelper<Setting extends () => object>(
+  _t: Setting,
+) {
+  return function <const Key extends keyof ReturnType<Setting>>(schema: {
+    key: Key
+    onChange: (v: ReturnType<Setting>[Key]) => void
+    label: string
+  }): any {
+    return schema
+  }
+}

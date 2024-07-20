@@ -53,6 +53,8 @@ export const SettingAppearance = () => {
             {
               label: "Opaque Sidebars",
               key: "opaqueSidebar",
+              disabled:
+                !window.electron || !["macOS", "Linux"].includes(getOS()),
               onChange: (value) => setUISetting("opaqueSidebar", value),
             },
             {
