@@ -112,6 +112,7 @@ export const PreviewImageContent: FC<{
   return (
     <Wrapper src={currentSrc}>
       <Swiper
+        loop
         initialSlide={initialIndex}
         scrollbar={{
           hide: true,

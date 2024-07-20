@@ -26,7 +26,7 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
       if (!idSlice) return
       batchMarkRead(idSlice)
     },
-    1000,
+    500,
     { leading: false },
   )
 
