@@ -27,8 +27,7 @@ export const useCollect = (entry: Nullable<CombinedEntryModel>) =>
 export const useUnCollect = (entry: Nullable<CombinedEntryModel>) =>
   useMutation({
     mutationFn: async () =>
-      entry &&
-      entryActions.markStar(entry.entries.id, false),
+      entry && entryActions.markStar(entry.entries.id, false),
 
     onSuccess: () => {
       toast.success("Unstarred.", {
@@ -179,9 +178,18 @@ export const useEntryActions = ({
         {
           name: "Share",
           className: "i-mgc-share-forward-cute-re",
+          disabled:
+            !window.electron || !navigator.share,
           onClick: () => {
             if (!populatedEntry.entries.url) return
-            tipcClient?.showShareMenu(populatedEntry.entries.url)
+
+            if (window.electron) {
+              return tipcClient?.showShareMenu(populatedEntry.entries.url)
+            } else {
+              navigator.share({
+                url: populatedEntry.entries.url,
+              })
+            }
           },
         },
         {
