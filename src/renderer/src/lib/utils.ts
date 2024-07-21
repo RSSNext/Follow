@@ -3,7 +3,7 @@ import { clsx } from "clsx"
 import { memoize } from "lodash-es"
 import { twMerge } from "tailwind-merge"
 
-import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "./constants"
+import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "../constants/app"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

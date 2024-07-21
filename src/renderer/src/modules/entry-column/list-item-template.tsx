@@ -1,10 +1,10 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { Image } from "@renderer/components/ui/image"
+import { FEED_COLLECTION_LIST } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import {
   useRouteParamsSelector,
 } from "@renderer/hooks/biz/useRouteParams"
-import { FEED_COLLECTION_LIST } from "@renderer/lib/constants"
 import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"

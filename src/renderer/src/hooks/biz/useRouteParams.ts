@@ -6,7 +6,7 @@ import {
   FEED_COLLECTION_LIST,
   ROUTE_ENTRY_PENDING,
   ROUTE_FEED_PENDING,
-} from "@renderer/lib/constants"
+} from "@renderer/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import type { Params } from "react-router-dom"
 import { useParams, useSearchParams } from "react-router-dom"

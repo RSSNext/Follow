@@ -2,9 +2,9 @@ import {
   Collapsible,
   CollapsibleTrigger,
 } from "@renderer/components/ui/collapsible"
+import { ROUTE_FEED_IN_FOLDER } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
-import { ROUTE_FEED_IN_FOLDER } from "@renderer/lib/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"

@@ -1,5 +1,5 @@
+import { views } from "@renderer/constants"
 import { apiClient } from "@renderer/lib/api-fetch"
-import { views } from "@renderer/lib/constants"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import type { SupportedLanguages } from "@renderer/models"
 import type { FlatEntryModel } from "@renderer/store/entry"

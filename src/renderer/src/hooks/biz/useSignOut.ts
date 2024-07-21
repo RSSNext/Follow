@@ -1,6 +1,6 @@
 import { signOut } from "@hono/auth-js/react"
 import { setMe } from "@renderer/atoms/user"
-import { QUERY_PERSIST_KEY } from "@renderer/lib/constants"
+import { QUERY_PERSIST_KEY } from "@renderer/constants"
 import { clearStorage } from "@renderer/lib/ns"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useCallback } from "react"

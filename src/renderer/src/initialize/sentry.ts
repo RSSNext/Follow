@@ -1,6 +1,6 @@
 import { env } from "@env"
 import { version } from "@pkg"
-import { channel } from "@renderer/lib/constants"
+import { channel } from "@renderer/constants"
 import { useEffect } from "react"
 import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from "react-router-dom"
 

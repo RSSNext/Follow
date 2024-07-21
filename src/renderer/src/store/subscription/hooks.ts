@@ -1,7 +1,7 @@
 import {
   FEED_COLLECTION_LIST,
   ROUTE_FEED_IN_FOLDER,
-} from "@renderer/lib/constants"
+} from "@renderer/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
 
 import { useSubscriptionStore } from "../subscription"

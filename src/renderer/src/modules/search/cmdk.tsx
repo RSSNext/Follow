@@ -17,8 +17,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
+import { ROUTE_ENTRY_PENDING } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { ROUTE_ENTRY_PENDING } from "@renderer/lib/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn, pluralize } from "@renderer/lib/utils"
 import { getFeedById } from "@renderer/store/feed"

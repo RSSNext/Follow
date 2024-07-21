@@ -1,6 +1,6 @@
 import { getReadonlyRoute, getStableRouterNavigate } from "@renderer/atoms/route"
 import { setSidebarActiveView } from "@renderer/atoms/sidebar"
-import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "@renderer/lib/constants"
+import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "@renderer/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { isUndefined } from "lodash-es"
 

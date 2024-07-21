@@ -1,3 +1,5 @@
+import { COPY_MAP } from "@renderer/constants"
+
 export const shortcuts = {
   feeds: {
     // previous: {
@@ -57,7 +59,7 @@ export const shortcuts = {
       key: "S",
     },
     openInBrowser: {
-      name: "Open in Browser",
+      name: COPY_MAP.OpenInBrowser(),
       key: "B",
     },
     copyLink: {

@@ -1,4 +1,5 @@
 import { m } from "@renderer/components/common/Motion"
+import { COPY_MAP } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -45,7 +46,7 @@ const Wrapper: Component<{
           </ActionButton>
         )}
         <ActionButton
-          tooltip="Open in browser"
+          tooltip={COPY_MAP.OpenInBrowser()}
           onClick={() => {
             window.open(src)
           }}
@@ -69,7 +70,7 @@ export const PreviewImageContent: FC<{
       showNativeMenu(
         [
           {
-            label: "Open in browser",
+            label: COPY_MAP.OpenInBrowser(),
             type: "text",
             click: () => {
               window.open(image)

@@ -2,7 +2,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@renderer/components/ui/select"
-import { views } from "@renderer/lib/constants"
+import { views } from "@renderer/constants"
 import { cn } from "@renderer/lib/utils"
 
 export const ViewSelectContent = () => (

@@ -1,6 +1,6 @@
 import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
+import { views } from "@renderer/constants"
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
-import { views } from "@renderer/lib/constants"
 import { cn } from "@renderer/lib/utils"
 import { EntryColumn } from "@renderer/modules/entry-column"
 import { useMemo, useRef } from "react"

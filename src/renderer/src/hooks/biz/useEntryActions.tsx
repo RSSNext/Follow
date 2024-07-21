@@ -1,3 +1,4 @@
+import { COPY_MAP } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
 import { shortcuts } from "@renderer/lib/shortcuts"
@@ -138,7 +139,7 @@ export const useEntryActions = ({
         },
         {
           key: "openInBrowser",
-          name: `Open in Browser`,
+          name: COPY_MAP.OpenInBrowser(),
           shortcut: shortcuts.entry.openInBrowser.key,
           className: "i-mgc-world-2-cute-re",
           disabled: !populatedEntry.entries.url,
@@ -190,6 +191,7 @@ export const useEntryActions = ({
                 url: populatedEntry.entries.url,
               })
             }
+            return
           },
         },
         {

@@ -4,7 +4,7 @@ import { QueryClient } from "@tanstack/react-query"
 import type { PersistQueryClientOptions } from "@tanstack/react-query-persist-client"
 import { FetchError } from "ofetch"
 
-import { QUERY_PERSIST_KEY } from "./constants"
+import { QUERY_PERSIST_KEY } from "../constants/app"
 
 const queryClient = new QueryClient({
   defaultOptions: {

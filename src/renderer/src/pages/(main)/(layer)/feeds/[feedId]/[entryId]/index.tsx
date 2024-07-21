@@ -1,5 +1,5 @@
+import { ROUTE_ENTRY_PENDING, views } from "@renderer/constants"
 import { useRouteView } from "@renderer/hooks/biz/useRouteParams"
-import { ROUTE_ENTRY_PENDING, views } from "@renderer/lib/constants"
 import { EntryContent } from "@renderer/modules/entry-content"
 import { AnimatePresence } from "framer-motion"
 import { useParams } from "react-router-dom"

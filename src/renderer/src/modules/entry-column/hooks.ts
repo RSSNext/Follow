@@ -1,10 +1,10 @@
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
+import { views } from "@renderer/constants"
 import {
   useRouteParamsSelector,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { views } from "@renderer/lib/constants"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { entries, useEntries } from "@renderer/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
