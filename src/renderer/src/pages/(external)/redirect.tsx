@@ -22,7 +22,7 @@ export function Component() {
       navigate("/")
     } else {
       getCallbackUrl().then((url) => {
-        window.open(url)
+        window.open(url, "_top")
       })
     }
   }, [])
@@ -61,7 +61,7 @@ export function Component() {
 
         <StyledButton
           className="h-14 !rounded-full px-10 text-lg"
-          onClick={async () => window.open(await getCallbackUrl())}
+          onClick={async () => window.open(await getCallbackUrl(), "_top")}
         >
           Open
           {" "}
