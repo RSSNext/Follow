@@ -331,6 +331,7 @@ const SearchResultCount: FC<{
                   {count}
                   {" "}
                   local
+                  {" "}
                   {pluralize("record", count)}
                 </>
               )}
