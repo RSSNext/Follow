@@ -29,7 +29,7 @@ export function Component() {
                 ""}
             </div>
           )}
-          <AutoUpdater />
+          {ELECTRON && <AutoUpdater />}
 
           <NetworkStatusIndicator />
           {!import.meta.env.PROD && <EnvironmentIndicator />}

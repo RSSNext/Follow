@@ -12,6 +12,7 @@ import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { Routes } from "@renderer/lib/enum"
+import { jotaiStore } from "@renderer/lib/jotai"
 import { shortcuts } from "@renderer/lib/shortcuts"
 import { clamp, cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
@@ -20,6 +21,7 @@ import { useFeedUnreadStore } from "@renderer/store/unread"
 import { useWheel } from "@use-gesture/react"
 import type { MotionValue } from "framer-motion"
 import { m, useSpring } from "framer-motion"
+import { atom, useAtomValue } from "jotai"
 import { Lethargy } from "lethargy"
 import type { PropsWithChildren } from "react"
 import { useCallback, useLayoutEffect, useRef } from "react"
@@ -64,6 +66,7 @@ const useUnreadByView = () => {
   return totalUnread
 }
 
+const carouselWidthAtom = atom(256)
 export function FeedColumn({ children }: PropsWithChildren) {
   const carouselRef = useRef<HTMLDivElement>(null)
 
@@ -93,7 +96,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
   }, [setActive_])
 
   useLayoutEffect(() => {
-    spring.set(-active * 256)
+    spring.set(-active * jotaiStore.get(carouselWidthAtom))
   }, [active, spring])
 
   useHotkeys(
@@ -137,6 +140,21 @@ export function FeedColumn({ children }: PropsWithChildren) {
       target: carouselRef,
     },
   )
+
+  useLayoutEffect(() => {
+    const $carousel = carouselRef.current
+    if (!$carousel) return
+
+    const handler = () => {
+      const width = $carousel.clientWidth
+      jotaiStore.set(carouselWidthAtom, width)
+    }
+    handler()
+    new ResizeObserver(handler).observe($carousel)
+    return () => {
+      new ResizeObserver(handler).disconnect()
+    }
+  }, [])
 
   const normalStyle =
     !window.electron || window.electron.process.platform !== "darwin"
@@ -202,7 +220,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
             }}
           >
             {item.icon}
-            <div className="text-[10px] font-medium leading-none">
+            <div className="text-[0.625rem] font-medium leading-none">
               {unreadByView[index] > 99 ? (
                 <span className="-mr-0.5">99+</span>
               ) : (
@@ -241,12 +259,13 @@ const SwipeWrapper: Component<{
 }> = ({ children, active, spring }) => {
   const reduceMotion = useReduceMotion()
 
+  const carouselWidth = useAtomValue(carouselWidthAtom)
   if (reduceMotion) {
     return (
       <div
         className="flex h-full"
         style={{
-          transform: `translateX(${-active * 256}px)`,
+          transform: `translateX(${-active * carouselWidth}px)`,
         }}
       >
         {children}

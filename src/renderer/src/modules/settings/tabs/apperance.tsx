@@ -175,8 +175,7 @@ const Fonts = () => {
 }
 
 const textSizeMap = {
-  tiny: 12,
-  smaller: 14,
+  smaller: 15,
   default: 16,
   medium: 18,
   large: 20,
