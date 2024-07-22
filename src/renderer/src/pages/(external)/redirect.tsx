@@ -28,17 +28,17 @@ export function Component() {
   }, [])
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
+    <div className="flex h-screen w-full flex-col items-center justify-center gap-10 px-4">
       <Logo className="size-20" />
       <UserAvatar className="bg-stone-100 px-10 py-4 text-2xl" />
-      <h1 className="text-3xl font-bold">
+      <h1 className="text-center text-3xl font-bold">
         Successfully connected to
         {" "}
         {APP_NAME}
         {" "}
         Account
       </h1>
-      <h2>
+      <h2 className="text-center">
         You have successfully connected to
         {" "}
         {APP_NAME}
@@ -50,7 +50,7 @@ export function Component() {
         {" "}
         and safely close this page.
       </h2>
-      <div className="center flex gap-4">
+      <div className="center flex flex-col gap-4 sm:flex-row">
         <StyledButton
           variant="text"
           className="h-14 px-10 text-base"
