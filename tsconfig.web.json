@@ -29,6 +29,9 @@
       ],
       "@pkg": ["./package.json"],
       "@env": ["./src/env.ts"]
-    }
+    },
+    "types": [
+      "vite-plugin-pwa/client"
+    ]
   }
 }
