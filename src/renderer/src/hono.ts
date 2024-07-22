@@ -3020,7 +3020,8 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         $get: {
             input: {
                 query: {
-                    category: string;
+                    category?: string | undefined;
+                    namespace?: string | undefined;
                 };
             };
             output: {

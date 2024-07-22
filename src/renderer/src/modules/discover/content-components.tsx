@@ -20,6 +20,7 @@ import {
   parseRegexpPathParams,
   regexpPathToPath,
 } from "@renderer/lib/path-parser"
+import { cn } from "@renderer/lib/utils"
 import { omit } from "lodash-es"
 import type { FC } from "react"
 import {
@@ -86,9 +87,13 @@ const FeedDescription = ({ description }: { description?: string }) => {
 export const DiscoverFeedForm = ({
   route,
   routePrefix,
+  noDescription,
+  submitButtonClassName,
 }: {
   route: RSSHubRoute
   routePrefix: string
+  noDescription?: boolean
+  submitButtonClassName?: string
 }) => {
   const keys = useMemo(
     () =>
@@ -176,18 +181,20 @@ export const DiscoverFeedForm = ({
     $form.querySelectorAll("input")[0]?.focus()
   }, [formElRef])
 
-  const { setClickOutSideToDismiss } = useCurrentModal()
+  const modal = useCurrentModal()
 
   useEffect(() => {
-    setClickOutSideToDismiss(!form.formState.isDirty)
-  }, [form.formState.isDirty, setClickOutSideToDismiss])
+    modal?.setClickOutSideToDismiss?.(!form.formState.isDirty)
+  }, [form.formState.isDirty, modal?.setClickOutSideToDismiss])
   return (
     <Form {...form}>
-      <PreviewUrl
-        watch={form.watch}
-        path={route.path}
-        routePrefix={`rsshub://${routePrefix}`}
-      />
+      {!noDescription && (
+        <PreviewUrl
+          watch={form.watch}
+          path={route.path}
+          routePrefix={`rsshub://${routePrefix}`}
+        />
+      )}
       <form
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(onSubmit)}
@@ -202,7 +209,7 @@ export const DiscoverFeedForm = ({
 
           return (
             <FormItem key={keyItem.name} className="flex flex-col space-y-2">
-              <FormLabel>
+              <FormLabel className="capitalize">
                 {keyItem.name}
                 {!keyItem.optional && (
                   <sup className="ml-1 align-sub text-red-500">*</sup>
@@ -247,12 +254,13 @@ export const DiscoverFeedForm = ({
             </FormItem>
           )
         })}
-
-        <FeedDescription description={route.description} />
-
-        <FeedMaintainers maintainers={route.maintainers} />
-
-        <div className="sticky bottom-0 -mt-4 flex w-full translate-y-3 justify-end bg-theme-modal-background-opaque py-3">
+        {!noDescription && (
+          <>
+            <FeedDescription description={route.description} />
+            <FeedMaintainers maintainers={route.maintainers} />
+          </>
+        )}
+        <div className={cn("sticky bottom-0 -mt-4 flex w-full translate-y-3 justify-end py-3", submitButtonClassName)}>
           <StyledButton type="submit">Preview</StyledButton>
         </div>
       </form>
