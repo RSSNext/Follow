@@ -67,6 +67,7 @@ function EntryItemImpl({
   const handleMouseEnter = useDebounceCallback(
     () => {
       if (!hoverMarkUnread) return
+      if (!document.hasFocus()) return
       if (asRead) return
 
       entryActions.markRead(entry.feedId, entry.entries.id, true)
