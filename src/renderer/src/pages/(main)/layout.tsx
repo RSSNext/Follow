@@ -1,18 +1,26 @@
+import { setFeedColumnShow, useFeedColumnShow } from "@renderer/atoms/app"
 import { setMainContainerElement } from "@renderer/atoms/dom"
-import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
+import { useViewport } from "@renderer/atoms/hooks/viewport"
+import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
+import {
+  getUISettings,
+  setUISetting,
+} from "@renderer/atoms/settings/ui"
 import { useLoginModalShow, useMe } from "@renderer/atoms/user"
 import { PanelSplitter } from "@renderer/components/ui/divider"
 import { DeclarativeModal } from "@renderer/components/ui/modal/stacked/declarative-modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { preventDefault } from "@renderer/lib/dom"
+import { cn } from "@renderer/lib/utils"
 import { EnvironmentIndicator } from "@renderer/modules/app/EnvironmentIndicator"
 import { NetworkStatusIndicator } from "@renderer/modules/app/NetworkStatusIndicator"
 import { LoginModalContent } from "@renderer/modules/auth/LoginModalContent"
 import { FeedColumn } from "@renderer/modules/feed-column"
 import { AutoUpdater } from "@renderer/modules/feed-column/auto-updater"
 import { SearchCmdK } from "@renderer/modules/search/cmdk"
-import { useRef } from "react"
+import type { PropsWithChildren } from "react"
+import { useEffect, useRef } from "react"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
@@ -21,16 +29,6 @@ export function Component() {
   const user = useMe()
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const { position, separatorProps } = useResizable({
-    axis: "x",
-    min: 256,
-    max: 300,
-    initial: getUISettings().feedColWidth,
-    containerRef,
-    onResizeEnd({ position }) {
-      setUISetting("feedColWidth", position)
-    },
-  })
 
   return (
     <div
@@ -38,14 +36,7 @@ export function Component() {
       ref={containerRef}
       onContextMenu={preventDefault}
     >
-      <div
-        className="shrink-0 border-r"
-        style={{
-          "width": `${position}px`,
-          // @ts-expect-error
-          "--fo-feed-col-w": `${position}px`,
-        }}
-      >
+      <FeedResponsiveResizerContainer containerRef={containerRef}>
         <FeedColumn>
           {APP_VERSION?.[0] === "0" && (
             <div className="pointer-events-none absolute bottom-3 w-full text-center text-xs opacity-20">
@@ -61,13 +52,11 @@ export function Component() {
           <NetworkStatusIndicator />
           {!import.meta.env.PROD && <EnvironmentIndicator />}
         </FeedColumn>
-      </div>
-      {/* NOTE: tabIndex for main element can get by `document.activeElement` */}
-
-      <PanelSplitter {...separatorProps} />
+      </FeedResponsiveResizerContainer>
       <main
         ref={setMainContainerElement}
         className="flex min-w-0 flex-1 bg-theme-background !outline-none"
+        // NOTE: tabIndex for main element can get by `document.activeElement`
         tabIndex={-1}
       >
         <Outlet />
@@ -92,5 +81,61 @@ export function Component() {
         </RootPortal>
       )}
     </div>
+  )
+}
+
+const FeedResponsiveResizerContainer = ({
+  containerRef,
+  children,
+}: {
+  containerRef: React.RefObject<HTMLDivElement>
+} & PropsWithChildren) => {
+  const { position, separatorProps } = useResizable({
+    axis: "x",
+    min: 256,
+    max: 300,
+    initial: getUISettings().feedColWidth,
+    containerRef,
+    onResizeEnd({ position }) {
+      setUISetting("feedColWidth", position)
+    },
+  })
+
+  const feedColumnShow = useFeedColumnShow()
+
+  const xl = useViewport((v) => v.xl)
+  const autoHideFeedColumn = useGeneralSettingKey("autoHideFeedColumn")
+  useEffect(() => {
+    if (!autoHideFeedColumn) return
+
+    setFeedColumnShow(xl)
+  }, [autoHideFeedColumn, xl])
+
+  return (
+    <>
+      <div
+        className={cn(
+          "shrink-0",
+          "absolute inset-y-0 z-10",
+          !feedColumnShow ? "-translate-x-full" : "",
+        )}
+        style={{
+          "width": `${position}px`,
+          // @ts-expect-error
+          "--fo-feed-col-w": `${position}px`,
+        }}
+      >
+        {children}
+      </div>
+
+      <div
+        className="duration-200"
+        style={{
+          width: feedColumnShow ? `${position}px` : 0,
+        }}
+      />
+
+      {feedColumnShow && <PanelSplitter {...separatorProps} />}
+    </>
   )
 }

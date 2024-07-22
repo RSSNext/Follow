@@ -16,6 +16,7 @@ type NavigateEntryOptions = Partial<{
 export const useNavigateEntry = () => navigateEntry
 
 export const navigateEntry = (options: NavigateEntryOptions) => {
+  console.error("call")
   const { entryId, feedId, view } = options || {}
   const { params, searchParams } = getReadonlyRoute()
   let finalFeedId = feedId || params.feedId || ROUTE_FEED_PENDING

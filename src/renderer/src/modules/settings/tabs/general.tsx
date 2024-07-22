@@ -77,6 +77,19 @@ export const SettingGeneral = () => {
             },
             {
               type: "title",
+              value: "User Experience",
+            },
+            {
+              key: "autoHideFeedColumn",
+              label: "Auto hide feed column",
+              description:
+                "Automatically hides the sidebar when the window is smaller than 1280px.",
+              onChange(value) {
+                setGeneralSetting("autoHideFeedColumn", value)
+              },
+            },
+            {
+              type: "title",
               value: "Data control",
             },
             {

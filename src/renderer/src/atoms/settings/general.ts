@@ -15,6 +15,8 @@ const createDefaultSettings = () => ({
   scrollMarkUnread: true,
   hoverMarkUnread: true,
   renderMarkUnread: false,
+  // UX
+  autoHideFeedColumn: true,
 })
 export const {
   useSettingKey: useGeneralSettingKey,

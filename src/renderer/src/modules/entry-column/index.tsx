@@ -1,3 +1,4 @@
+import { setFeedColumnShow, useFeedColumnShow } from "@renderer/atoms/app"
 import { useMainContainerElement } from "@renderer/atoms/dom"
 import {
   setGeneralSetting,
@@ -22,6 +23,7 @@ import {
   ROUTE_FEED_IN_FOLDER,
   views,
 } from "@renderer/constants"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import {
   useRouteEntryId,
@@ -30,7 +32,6 @@ import {
 import { useRefValue } from "@renderer/hooks/common"
 import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
 import { apiClient } from "@renderer/lib/api-fetch"
-import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
 import { EntryHeader } from "@renderer/modules/entry-content/header"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
@@ -132,10 +133,13 @@ export function EntryColumn() {
   return (
     <div
       className="relative flex h-full flex-1 flex-col"
-      onClick={() =>
+      onClick={(e) => {
+        // Prevent toggle sidebar hide/show, dispatch click event on the main container
+        if (!e.isTrusted) return
         navigate({
           entryId: null,
-        })}
+        })
+      }}
       data-total-count={virtuosoOptions.totalCount}
     >
       <ListHeader
@@ -218,13 +222,11 @@ const ListHeader: FC<{
   }, [feedId, folderIds, routerParams])
 
   const headerTitle = useFeedHeaderTitle()
-  const os = getOS()
 
-  const titleAtBottom = window.electron && os === "macOS"
   const isInCollectionList = feedId === FEED_COLLECTION_LIST
 
   const titleInfo = !!headerTitle && (
-    <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
+    <div className="pl-12">
       <div className="min-w-0 break-all text-lg font-bold leading-none">
         <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
           {headerTitle}
@@ -248,19 +250,31 @@ const ListHeader: FC<{
 
   const feed = useFeedById(routerParams.feedId)
 
+  const feedColumnShow = useFeedColumnShow()
+
   return (
-    <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
+    <div className="mb-5 flex w-full flex-col pr-4 pt-2.5">
       <div
         className={cn(
-          "flex w-full",
-          titleAtBottom ? "justify-end" : "justify-between",
+          "flex w-full items-center",
+          "justify-between pl-4 text-zinc-500",
         )}
       >
-        {!titleAtBottom && titleInfo}
+        <ActionButton
+          shortcut={shortcuts.layout.toggleSidebar.key}
+          className={cn(!feedColumnShow ? getOS() === "macOS" && window.electron ? "-translate-x-1 translate-y-full" : "" : "")}
+          icon={
+            feedColumnShow ? <i className="i-mgc-layout-leftbar-close-cute-re" /> : <i className="i-mgc-layout-leftbar-open-cute-re" />
+          }
+          tooltip={
+            feedColumnShow ? "Hide Feed Column" : "Show Feed Column"
+          }
+          onClick={() => setFeedColumnShow(!feedColumnShow)}
+        />
 
         <div
           className={cn(
-            "relative z-[1] flex items-center gap-1 self-baseline text-zinc-500",
+            "relative z-[1] flex items-center gap-1 self-baseline",
             (isInCollectionList || !headerTitle) &&
             "pointer-events-none opacity-0",
           )}
@@ -343,7 +357,8 @@ const ListHeader: FC<{
           </Popover>
         </div>
       </div>
-      {titleAtBottom && titleInfo}
+
+      {titleInfo}
     </div>
   )
 }
