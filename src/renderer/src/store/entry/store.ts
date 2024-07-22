@@ -161,7 +161,7 @@ class EntryActions {
         for (const item of data) {
           const mergedEntry = Object.assign(
             {},
-            draft.flatMapEntries[item.entries.id]?.entries || {},
+            state.flatMapEntries[item.entries.id]?.entries || {},
             item.entries,
           )
 
