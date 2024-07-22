@@ -153,7 +153,16 @@ export function EntryColumn() {
         exit={{ opacity: 0.01, y: -100 }}
       >
         {virtuosoOptions.totalCount === 0 ? (
-          entries.isLoading ? <LoadingCircle className="center h-full" size="large" /> : <EmptyList />
+          entries.isLoading ?
+              (
+                <LoadingCircle
+                  className="center h-full -translate-y-12"
+                  size="large"
+                />
+              ) :
+              (
+                <EmptyList />
+              )
         ) : view && views[view].gridMode ?
             (
               <VirtuosoGrid
@@ -197,9 +206,7 @@ const ListHeader: FC<{
 
     if (typeof routerParams.feedId === "number" || routerParams.isAllFeeds) {
       subscriptionActions.markReadByView(routerParams.view)
-    } else if (
-      routerParams.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)
-    ) {
+    } else if (routerParams.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)) {
       subscriptionActions.markReadByFolder(
         routerParams.feedId.replace(ROUTE_FEED_IN_FOLDER, ""),
       )
@@ -371,11 +378,11 @@ const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
   },
 )
 
-const EntryList: FC<VirtuosoProps<string, unknown> & {
-  virtuosoRef: React.RefObject<VirtuosoHandle>
-}> = ({
-  ...virtuosoOptions
-}) => {
+const EntryList: FC<
+  VirtuosoProps<string, unknown> & {
+    virtuosoRef: React.RefObject<VirtuosoHandle>
+  }
+> = ({ ...virtuosoOptions }) => {
   const dataRef = useRefValue(virtuosoOptions.data!)
   const currentEntryIdRef = useRefValue(useRouteEntryId())
 
