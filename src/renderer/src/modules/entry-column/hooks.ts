@@ -88,12 +88,11 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
     },
   )
   const hasUpdate = useMemo(
-    () => lastPublishedAt && hasNewQuery?.data?.data.has_new,
+    () => !!(lastPublishedAt && hasNewQuery?.data?.data.has_new),
     [hasNewQuery?.data?.data.has_new, lastPublishedAt],
   )
 
   useEffect(() => {
-    if (typeof hasUpdate !== "boolean") return
     setPauseQuery(hasUpdate)
   }, [hasUpdate])
 
