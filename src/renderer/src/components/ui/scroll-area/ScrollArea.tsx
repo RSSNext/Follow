@@ -27,8 +27,8 @@ const Thumb = React.forwardRef<
     ref={forwardedRef}
     className={cn(
       "relative w-full flex-1 rounded-xl transition-colors duration-150",
-      "bg-gray-300 hover:bg-theme-accent/80 dark:bg-neutral-500",
-      "active:bg-theme-accent-50/50",
+      "bg-gray-300 hover:bg-neutral-400/80 dark:bg-neutral-500",
+      "active:bg-neutral-400/50",
       "before:absolute before:-left-1/2 before:-top-1/2 before:h-full before:min-h-[44]",
       "before:w-full before:min-w-[44] before:-translate-x-full before:-translate-y-full before:content-[\"\"]",
       className,
@@ -47,7 +47,7 @@ export const Scrollbar = React.forwardRef<
       {...rest}
       ref={forwardedRef}
       className={cn(
-        "z-[10000] flex w-2.5 touch-none select-none p-0.5",
+        "z-[99] flex w-2.5 touch-none select-none p-0.5",
         orientation === "horizontal" ?
           `h-2.5 w-full flex-col` :
           `w-2.5 flex-row`,

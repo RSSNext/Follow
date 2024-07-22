@@ -147,7 +147,7 @@ const FeedItemImpl = ({
       <div
         className={cn(
           "flex min-w-0 items-center",
-          feed.errorAt && "text-red-900",
+          feed.errorAt && "text-red-900 dark:text-red-500",
         )}
       >
         <FeedIcon feed={feed} size={16} />
