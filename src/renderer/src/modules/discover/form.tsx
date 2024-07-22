@@ -19,6 +19,7 @@ import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
 import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
+import type { FeedViewType } from "@renderer/lib/enum"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
@@ -36,6 +37,7 @@ const info: Record<
   {
     label: string
     prefix?: string
+    showModal?: boolean
   }
 > = {
   search: {
@@ -43,10 +45,13 @@ const info: Record<
   },
   rss: {
     label: "RSS URL",
+    prefix: "https://",
+    showModal: true,
   },
   rsshub: {
     label: "RSSHub Route",
     prefix: "rsshub://",
+    showModal: true,
   },
 }
 
@@ -63,7 +68,6 @@ export function DiscoverForm({ type }: { type: string }) {
       const { data } = await apiClient.discover.$post({
         json: {
           keyword,
-          type: type === "rss" ? "rss" : "auto",
         },
       })
 
@@ -71,8 +75,25 @@ export function DiscoverForm({ type }: { type: string }) {
     },
   })
 
+  const { present, dismissAll } = useModalStack()
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    mutation.mutate(values.keyword)
+    if (info[type].showModal) {
+      const defaultView = getSidebarActiveView() as FeedViewType
+      present({
+        title: "Add follow",
+        content: () => (
+          <FeedForm
+            asWidget
+            url={values.keyword}
+            defaultView={defaultView}
+            onSuccess={dismissAll}
+          />
+        ),
+      })
+    } else {
+      mutation.mutate(values.keyword)
+    }
   }
 
   const keyword = form.watch("keyword")
@@ -85,8 +106,6 @@ export function DiscoverForm({ type }: { type: string }) {
       }
     }
   }, [keyword])
-
-  const { present } = useModalStack()
 
   return (
     <>
@@ -110,7 +129,7 @@ export function DiscoverForm({ type }: { type: string }) {
           />
           <div className="center flex">
             <StyledButton type="submit" isLoading={mutation.isPending}>
-              Search
+              {info[type].showModal ? "Preview" : "Search"}
             </StyledButton>
           </div>
         </form>
