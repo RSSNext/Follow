@@ -235,7 +235,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
           {views.map((item, index) => (
             <section
               key={item.name}
-              className="h-full w-64 shrink-0 snap-center pb-8"
+              className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center pb-8"
             >
               {active === index && (
                 <FeedList

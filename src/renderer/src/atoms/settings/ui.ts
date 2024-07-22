@@ -3,6 +3,8 @@ import { createSettingAtom } from "./helper"
 const createDefaultSettings = () => ({
   // Sidebar
   entryColWidth: 340,
+  feedColWidth: 256,
+
   opaqueSidebar: false,
   sidebarShowUnreadCount: true,
 

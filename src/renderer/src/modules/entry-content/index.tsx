@@ -47,9 +47,6 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
   const { error, data } = useAuthQuery(Queries.entries.byId(entryId), {
     staleTime: 300_000,
-    meta: {
-      persist: true,
-    },
   })
 
   const entry = useEntry(entryId)
