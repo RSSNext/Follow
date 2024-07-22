@@ -93,7 +93,6 @@ export function EntryColumn() {
   const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
 
   const virtuosoOptions = {
-    virtuosoRef,
     components: {
       List: ListContent,
 
@@ -168,11 +167,11 @@ export function EntryColumn() {
               <VirtuosoGrid
                 listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
                 {...virtuosoOptions}
-                ref={virtuosoOptions.virtuosoRef}
+                ref={virtuosoRef}
               />
             ) :
             (
-              <EntryList {...virtuosoOptions} />
+              <EntryList {...virtuosoOptions} virtuosoRef={virtuosoRef} />
             )}
       </m.div>
     </div>

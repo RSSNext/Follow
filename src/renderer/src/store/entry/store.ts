@@ -159,6 +159,12 @@ class EntryActions {
     set((state) =>
       produce(state, (draft) => {
         for (const item of data) {
+          const mergedEntry = Object.assign(
+            {},
+            draft.flatMapEntries[item.entries.id]?.entries || {},
+            item.entries,
+          )
+
           if (!draft.entries[item.feeds.id]) {
             draft.entries[item.feeds.id] = []
           }
@@ -182,6 +188,7 @@ class EntryActions {
             draft.flatMapEntries[item.entries.id] || {},
             {
               feedId: item.feeds.id,
+              entries: mergedEntry,
             },
             omit(item, "feeds"),
           )
@@ -189,7 +196,7 @@ class EntryActions {
           // Push feed
           feeds.push(item.feeds)
           // Push entry
-          entries.push(item.entries)
+          entries.push(mergedEntry)
           // Push entry2Read
           entry2Read[item.entries.id] = item.read || false
           // Push entryFeedMap
@@ -215,12 +222,12 @@ class EntryActions {
     }))
 
     // Update database
-    runTransactionInScope(() => {
-      EntryService.upsertMany(entries)
-      EntryService.bulkStoreReadStatus(entry2Read)
-      EntryService.bulkStoreFeedId(entryFeedMap)
-      EntryService.bulkStoreCollection(entryCollection)
-    })
+    runTransactionInScope(() => Promise.all([
+      EntryService.upsertMany(entries),
+      EntryService.bulkStoreReadStatus(entry2Read),
+      EntryService.bulkStoreFeedId(entryFeedMap),
+      EntryService.bulkStoreCollection(entryCollection),
+    ]))
   }
 
   hydrate(data: FlatEntryModel[]) {

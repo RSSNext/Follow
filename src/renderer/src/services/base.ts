@@ -17,7 +17,7 @@ export abstract class BaseService<T extends { id: string }> {
   }
 
   async upsertMany(data: T[]) {
-    this.table.bulkPut(data)
+    return this.table.bulkPut(data)
   }
 
   async findAll() {
