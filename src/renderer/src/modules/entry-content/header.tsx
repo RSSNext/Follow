@@ -25,11 +25,6 @@ export function EntryHeader({
     entry,
   })
 
-  // useHotkeys(shortcuts.entry.toggleRead.key, () => {
-  //   const key = entry?.read ? "unread" : "read"
-  //   items.find((item) => item.key === key)?.onClick()
-  // }, { scopes: ["home"] })
-
   useHotkeys(
     shortcuts.entry.toggleStarred.key,
     () => {
@@ -106,7 +101,6 @@ export function EntryHeader({
                 key={item.name}
               />
             ))}
-
         </div>
       </div>
     </div>
