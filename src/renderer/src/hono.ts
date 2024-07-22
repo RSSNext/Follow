@@ -3020,7 +3020,8 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         $get: {
             input: {
                 query: {
-                    category: string;
+                    category?: string | undefined;
+                    namespace?: string | undefined;
                 };
             };
             output: {
@@ -3100,7 +3101,14 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             status: hono_utils_http_status.StatusCode;
         };
     };
-} & {
+    [x: `/entries/check-new/${string}`]: {
+        [x: `$${Lowercase<string>}`]: {
+            input: Partial<hono.ValidationTargets>;
+            output: any;
+            outputFormat: string;
+            status: hono_utils_http_status.StatusCode;
+        };
+    };
     "/entries": {
         $post: {
             input: {
@@ -3109,8 +3117,8 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     feedId?: string | undefined;
                     feedIdList?: string[] | undefined;
                     read?: boolean | undefined;
-                    limit?: number | undefined;
                     publishedAfter?: string | undefined;
+                    limit?: number | undefined;
                     collected?: boolean | undefined;
                 };
             };
@@ -3216,13 +3224,6 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         ownerUserId: string | null;
                     };
                     read: boolean | null;
-                    collections: {
-                        createdAt: string;
-                    };
-                    entryReadHistories: {
-                        userIds: string[];
-                        readCount: number;
-                    } | null;
                     users: {
                         [x: string]: {
                             name: string | null;
@@ -3230,6 +3231,13 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                             image: string | null;
                             handle: string | null;
                         };
+                    };
+                    entryReadHistories: {
+                        userIds: string[];
+                        readCount: number;
+                    } | null;
+                    collections: {
+                        createdAt: string;
                     };
                     settings?: {
                         summary?: boolean | undefined;

@@ -1,6 +1,7 @@
 import { useAuthInfiniteQuery, useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
+import { getEntriesParams } from "@renderer/lib/utils"
 import { entryActions } from "@renderer/store/entry"
 
 export const entries = {
@@ -47,6 +48,37 @@ export const entries = {
       },
       {
         rootKey: ["entries-preview"],
+      },
+    ),
+
+  checkNew: ({
+    id,
+    view,
+    read,
+    lastPublishedAt,
+  }: {
+    id?: number | string
+    view?: number
+    read?: boolean
+    lastPublishedAt: string
+  }) =>
+    defineQuery(
+      ["entry-checkNew", id, view, read, lastPublishedAt],
+      async () =>
+        // @ts-expect-error
+        apiClient.entries["check-new"].$get({
+          query: {
+            ...getEntriesParams({
+              id,
+              view,
+            }),
+            read,
+            publishedAfter: lastPublishedAt,
+          },
+        }) as Promise<{ data: { has_new: boolean, lastest_at?: string } }>,
+
+      {
+        rootKey: ["entry-checkNew", id],
       },
     ),
 }
