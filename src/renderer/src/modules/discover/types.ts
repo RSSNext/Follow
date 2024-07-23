@@ -1,3 +1,5 @@
+import type { FeedViewType } from "@renderer/lib/enum"
+
 export type RSSHubRouteType = Record<string, RSSHubRouteDeclaration>
 export interface RSSHubRouteDeclaration {
   routes: Routes
@@ -17,13 +19,14 @@ export type RSSHubParameterObject = {
 export type RSSHubParameter = string | RSSHubParameterObject
 export type RSSHubRoute = {
   path: string
-  categories: string[]
+  categories: RSSHubCategory[]
   example: string
   parameters: Record<string, RSSHubParameter>
   name: string
   maintainers: string[]
   location: string
   description: string
+  view?: FeedViewType
 
   // features: Features
   // radar: RadarItem[]
@@ -41,3 +44,29 @@ export type RSSHubRoute = {
 //   source: string[]
 //   target: string
 // }
+
+export type RSSHubCategory =
+  | "popular"
+  | "social-media"
+  | "new-media"
+  | "traditional-media"
+  | "bbs"
+  | "blog"
+  | "programming"
+  | "design"
+  | "live"
+  | "multimedia"
+  | "picture"
+  | "anime"
+  | "program-update"
+  | "university"
+  | "forecast"
+  | "travel"
+  | "shopping"
+  | "game"
+  | "reading"
+  | "government"
+  | "study"
+  | "journal"
+  | "finance"
+  | "other"

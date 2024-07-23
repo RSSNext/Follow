@@ -20,7 +20,7 @@ import {
   parseRegexpPathParams,
   regexpPathToPath,
 } from "@renderer/lib/path-parser"
-import { cn } from "@renderer/lib/utils"
+import { cn, getViewFromRoute } from "@renderer/lib/utils"
 import { omit } from "lodash-es"
 import type { FC } from "react"
 import {
@@ -146,7 +146,7 @@ export const DiscoverFeedForm = ({
       try {
         const fillRegexpPath = regexpPathToPath(route.path, data)
         const url = `rsshub://${routePrefix}${fillRegexpPath}`
-        const defaultView = getSidebarActiveView() as FeedViewType
+        const defaultView = getViewFromRoute(route) || getSidebarActiveView() as FeedViewType
 
         present({
           title: "Add follow",

@@ -3041,6 +3041,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                                 categories: string[];
                                 maintainers: string[];
                                 location: string;
+                                view?: number | undefined;
                             };
                         };
                     };
