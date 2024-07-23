@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`x > data should be set up correctly 1`] = `
+exports[`test db cleaner > data should be set up correctly 1`] = `
 [
   {
     "id": "feed-id-1",
@@ -20,7 +20,7 @@ exports[`x > data should be set up correctly 1`] = `
 ]
 `;
 
-exports[`x > data should be set up correctly 2`] = `
+exports[`test db cleaner > data should be set up correctly 2`] = `
 [
   {
     "feedId": "feed-id-1",
@@ -49,7 +49,7 @@ exports[`x > data should be set up correctly 2`] = `
 ]
 `;
 
-exports[`x > data should be set up correctly 3`] = `
+exports[`test db cleaner > data should be set up correctly 3`] = `
 [
   {
     "feedId": "feed-id-1",
