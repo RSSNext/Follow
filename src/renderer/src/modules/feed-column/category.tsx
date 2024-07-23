@@ -2,14 +2,20 @@ import {
   Collapsible,
   CollapsibleTrigger,
 } from "@renderer/components/ui/collapsible"
-import { ROUTE_FEED_IN_FOLDER } from "@renderer/constants"
+import { LoadingCircle } from "@renderer/components/ui/loading"
+import { ROUTE_FEED_IN_FOLDER, views } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
-import { stopPropagation } from "@renderer/lib/dom"
+import { nextFrame, stopPropagation } from "@renderer/lib/dom"
+import type { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import { useSubscriptionByFeedId } from "@renderer/store/subscription"
+import {
+  subscriptionActions,
+  useSubscriptionByFeedId,
+} from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
+import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useEffect, useState } from "react"
 
@@ -71,6 +77,20 @@ function FeedCategoryImpl({
   )
   const { present } = useModalStack()
 
+  const { mutateAsync: changeCategoryView, isPending: isChangePending } =
+    useMutation({
+      mutationKey: ["changeCategoryView", folderName, view],
+      mutationFn: async (nextView: FeedViewType) => {
+        if (!folderName) return
+        if (typeof view !== "number") return
+        return subscriptionActions.changeCategoryView(
+          folderName,
+          view,
+          nextView,
+        )
+      },
+    })
+
   return (
     <Collapsible
       open={open}
@@ -92,7 +112,28 @@ function FeedCategoryImpl({
               [
                 {
                   type: "text",
-                  label: "Rename Category",
+                  enabled: !!(folderName && typeof view === "number"),
+                  label: "Change to other view",
+                  click() {
+                    nextFrame(() =>
+                      showNativeMenu(
+                        views
+                          .filter((v) => v.view !== view)
+                          .map((v) => ({
+                            label: v.name,
+                            type: "text",
+                            click() {
+                              return changeCategoryView(v.view)
+                            },
+                          })),
+                        e,
+                      ),
+                    )
+                  },
+                },
+                {
+                  type: "text",
+                  label: "Rename category",
                   click: () => {
                     present({
                       title: "Rename Category",
@@ -110,7 +151,7 @@ function FeedCategoryImpl({
                 },
                 {
                   type: "text",
-                  label: "Delete Category",
+                  label: "Delete category",
 
                   click: async () => {
                     present({
@@ -134,7 +175,11 @@ function FeedCategoryImpl({
               )}
               tabIndex={-1}
             >
-              <i className="i-mgc-right-cute-fi mr-2 transition-transform" />
+              {isChangePending ? (
+                <LoadingCircle size="small" className="mr-2" />
+              ) : (
+                <i className="i-mgc-right-cute-fi mr-2 transition-transform" />
+              )}
             </CollapsibleTrigger>
             <span
               className={cn(

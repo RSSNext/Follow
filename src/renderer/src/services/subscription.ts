@@ -12,7 +12,10 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
 
   override async upsertMany(data: SubscriptionFlatModel[]) {
     return this.table.bulkPut(
-      data.map((d) => ({ ...d, id: this.uniqueId(d.userId, d.feedId) })),
+      data.map(({ feeds, ...d }: any) => ({
+        ...d,
+        id: this.uniqueId(d.userId, d.feedId),
+      })),
     )
   }
 
@@ -25,6 +28,10 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
 
   private uniqueId(userId: string, feedId: string) {
     return `${userId}/${feedId}`
+  }
+
+  async changeView(feedId: string, view: number) {
+    return this.table.where("feedId").equals(feedId).modify({ view })
   }
 }
 

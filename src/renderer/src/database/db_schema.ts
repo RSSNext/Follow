@@ -11,3 +11,8 @@ export const dbSchemaV2 = {
   ...dbSchemaV1,
   subscriptions: "&id, userId, feedId",
 }
+
+export const dbSchemaV3 = {
+  ...dbSchemaV1,
+  subscriptions: "&id, userId, &feedId",
+}
