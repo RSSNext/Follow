@@ -1,7 +1,8 @@
-import { z } from "zod"
+import type { FeedModel } from "@renderer/models"
 
-export const DB_FeedIdSchema = z.object({
-  feedId: z.string(),
-})
+export type DB_FeedUnread = {
+  id: string
+  count: number
+}
 
-export type DB_FeedId = z.infer<typeof DB_FeedIdSchema>
+export type DB_Feed = FeedModel

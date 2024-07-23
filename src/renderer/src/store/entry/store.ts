@@ -1,15 +1,11 @@
 import { runTransactionInScope } from "@renderer/database"
-import type { UserModel } from "@renderer/database/models/user"
 import type { EntryReadHistoriesModel } from "@renderer/hono"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
   getEntriesParams,
   omitObjectUndefinedValue,
 } from "@renderer/lib/utils"
-import type {
-  CombinedEntryModel,
-  EntryModel,
-  FeedModel,
+import type { CombinedEntryModel, EntryModel, FeedModel, UserModel,
 } from "@renderer/models"
 import { EntryService } from "@renderer/services"
 import { produce } from "immer"

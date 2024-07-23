@@ -23,3 +23,8 @@ export const dbSchemaV4 = {
   entries: "&id, feedId",
   subscriptions: "&id, userId, feedId",
 }
+
+export const dbSchemaV5 = {
+  ...dbSchemaV4,
+  cleaner: "++id, refId, updatedAt",
+}

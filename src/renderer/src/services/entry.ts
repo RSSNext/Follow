@@ -1,4 +1,4 @@
-import { entryModel } from "@renderer/database/models"
+import { browserDB } from "@renderer/database"
 import type { EntryModel } from "@renderer/models/types"
 
 import { BaseService } from "./base"
@@ -9,7 +9,7 @@ type EntryCollection = {
 }
 class EntryServiceStatic extends BaseService<EntryModel> {
   constructor() {
-    super(entryModel.table)
+    super(browserDB.entries)
   }
 
   // @ts-expect-error
@@ -56,11 +56,11 @@ class EntryServiceStatic extends BaseService<EntryModel> {
   }
 
   async deleteEntries(entryIds: string[]) {
-    await entryModel.table.bulkDelete(entryIds)
+    await this.table.bulkDelete(entryIds)
   }
 
   async deleteEntriesByFeedId(feedIds: string[]) {
-    await entryModel.table.where("feedId").anyOf(feedIds).delete()
+    await this.table.where("feedId").anyOf(feedIds).delete()
   }
 }
 

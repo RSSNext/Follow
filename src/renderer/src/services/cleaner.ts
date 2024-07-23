@@ -1,8 +1,11 @@
+import { browserDB } from "@renderer/database"
+
 import { EntryService } from "./entry"
 import { FeedService } from "./feed"
 import { FeedUnreadService } from "./feed-unread"
 import { SubscriptionService } from "./subscription"
 
+const cleanerModel = browserDB.cleaner
 class CleanerServiceStatic {
   // Clean other user subscriptions, should call this after login
   async cleanRemainingData(currentUserId: string) {
@@ -31,6 +34,14 @@ class CleanerServiceStatic {
       FeedUnreadService.bulkDelete(toRemoveFeedIds),
       EntryService.deleteEntriesByFeedId(toRemoveFeedIds),
     ])
+  }
+
+  /**
+   * Mark the which data recently used
+   */
+  renew(list: { type: "feed" | "entry", id: string }[]) {
+    void list
+    void cleanerModel
   }
 }
 export const CleanerService = new CleanerServiceStatic()

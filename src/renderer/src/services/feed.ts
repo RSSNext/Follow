@@ -1,4 +1,4 @@
-import { feedModel } from "@renderer/database/models"
+import { browserDB } from "@renderer/database"
 import type { FeedModel } from "@renderer/models/types"
 
 import { BaseService } from "./base"
@@ -6,7 +6,7 @@ import { BaseService } from "./base"
 type FeedModelWithId = FeedModel & { id: string }
 class ServiceStatic extends BaseService<FeedModelWithId> {
   constructor() {
-    super(feedModel.table)
+    super(browserDB.feeds)
   }
 
   override async upsertMany(data: FeedModel[]) {

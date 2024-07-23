@@ -1,14 +1,15 @@
-import { feedUnreadModel } from "@renderer/database/models/unread"
+import { browserDB } from "@renderer/database"
 
+const feedUnreadModel = browserDB.feedUnreads
 class ServiceStatic {
   updateFeedUnread(list: [string, number][]) {
-    return feedUnreadModel.table.bulkPut(
+    return feedUnreadModel.bulkPut(
       list.map(([feedId, count]) => ({ id: feedId, count })),
     )
   }
 
   getAll() {
-    return feedUnreadModel.table.toArray() as Promise<
+    return feedUnreadModel.toArray() as Promise<
       {
         id: string
         count: number
@@ -17,11 +18,11 @@ class ServiceStatic {
   }
 
   clear() {
-    return feedUnreadModel.table.clear()
+    return feedUnreadModel.clear()
   }
 
   async bulkDelete(ids: string[]) {
-    return feedUnreadModel.table.bulkDelete(ids)
+    return feedUnreadModel.bulkDelete(ids)
   }
 }
 

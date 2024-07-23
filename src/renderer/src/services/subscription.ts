@@ -1,4 +1,4 @@
-import { subscriptionModel } from "@renderer/database"
+import { browserDB } from "@renderer/database"
 import type { SubscriptionFlatModel } from "@renderer/store/subscription"
 import { uniq } from "lodash-es"
 
@@ -8,7 +8,7 @@ type SubscriptionModelWithId = SubscriptionFlatModel & { id: string }
 
 class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
   constructor() {
-    super(subscriptionModel.table)
+    super(browserDB.subscriptions)
   }
 
   public getUserSubscriptions(userIds: string[]) {

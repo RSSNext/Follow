@@ -1,4 +1,7 @@
+import type { users } from "@renderer/hono"
 import type { apiClient } from "@renderer/lib/api-fetch"
+
+export type UserModel = Omit<typeof users.$inferSelect, "emailVerified">
 
 export type ExtractBizResponse<T extends (...args: any[]) => any> = Exclude<
   Awaited<ReturnType<T>>,
