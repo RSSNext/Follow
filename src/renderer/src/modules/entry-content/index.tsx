@@ -45,7 +45,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 function EntryContentRender({ entryId }: { entryId: string }) {
   const user = useMe()
 
-  const { error, data } = useAuthQuery(Queries.entries.byId(entryId), {
+  const { error, data, isPending } = useAuthQuery(Queries.entries.byId(entryId), {
     staleTime: 300_000,
   })
 
@@ -187,13 +187,21 @@ function EntryContentRender({ entryId }: { entryId: string }) {
             </WrappedElementProvider>
             {!content && (
               <div className="center mt-16">
-                {!error ? (
+                {isPending ? (
                   <LoadingCircle size="large" />
                 ) : (
-                  <div className="center flex flex-col gap-2">
-                    <i className="i-mgc-close-cute-re text-3xl text-red-500" />
-                    <span className="font-sans text-sm">Network Error</span>
-                  </div>
+                  error ?
+                      (
+                        <div className="center flex flex-col gap-2">
+                          <i className="i-mgc-close-cute-re text-3xl text-red-500" />
+                          <span className="font-sans text-sm">Network Error</span>
+                        </div>
+                      ) :
+                      (
+                        <div className="center">
+                          <span className="text-sm text-zinc-400">No content</span>
+                        </div>
+                      )
                 )}
               </div>
             )}
