@@ -1,4 +1,4 @@
-import type { RSSHubCategory, RSSHubRoute } from "@renderer/modules/discover/types"
+import type { RSSHubRoute } from "@renderer/modules/discover/types"
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
 import { memoize } from "lodash-es"
@@ -153,7 +153,7 @@ export const omitObjectUndefinedValue = (obj: Record<string, any>) => {
   return newObj
 }
 
-const rsshubCategoryMap: Partial<Record<RSSHubCategory, FeedViewType>> = {
+const rsshubCategoryMap: Partial<Record<string, FeedViewType>> = {
   "design": FeedViewType.Pictures,
   "forecast": FeedViewType.Notifications,
   "live": FeedViewType.Notifications,
@@ -171,4 +171,5 @@ export const getViewFromRoute = (route: RSSHubRoute) => {
       return rsshubCategoryMap[categories]
     }
   }
+  return null
 }

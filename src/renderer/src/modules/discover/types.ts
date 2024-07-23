@@ -19,7 +19,7 @@ export type RSSHubParameterObject = {
 export type RSSHubParameter = string | RSSHubParameterObject
 export type RSSHubRoute = {
   path: string
-  categories: RSSHubCategory[]
+  categories: string[]
   example: string
   parameters: Record<string, RSSHubParameter>
   name: string
@@ -44,29 +44,3 @@ export type RSSHubRoute = {
 //   source: string[]
 //   target: string
 // }
-
-export type RSSHubCategory =
-  | "popular"
-  | "social-media"
-  | "new-media"
-  | "traditional-media"
-  | "bbs"
-  | "blog"
-  | "programming"
-  | "design"
-  | "live"
-  | "multimedia"
-  | "picture"
-  | "anime"
-  | "program-update"
-  | "university"
-  | "forecast"
-  | "travel"
-  | "shopping"
-  | "game"
-  | "reading"
-  | "government"
-  | "study"
-  | "journal"
-  | "finance"
-  | "other"
