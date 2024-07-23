@@ -1,7 +1,8 @@
-import { entryRelatedModel } from "@renderer/database"
+import { browserDB } from "@renderer/database"
 
 export enum EntryRelatedKey {
   READ = "READ",
+  /** @deprecated */
   FEED_ID = "FEED_ID",
   COLLECTION = "COLLECTION",
 }
@@ -17,13 +18,14 @@ const taskQueue = new Map<EntryRelatedKey, Promise<any>>(
 type IdToIdRecord = Record<string, string>
 type IdToBooleanRecord = Record<string, boolean>
 type IdToAnyObjectRecord = Record<string, Record<string, any>>
+const entryRelatedModel = browserDB.entryRelated
 class ServiceStatic {
   async findAll(type: EntryRelatedKey.FEED_ID): Promise<IdToIdRecord>
   async findAll(type: EntryRelatedKey.READ): Promise<IdToBooleanRecord>
   async findAll(type: EntryRelatedKey.COLLECTION): Promise<IdToAnyObjectRecord>
 
   async findAll(type: EntryRelatedKey): Promise<Record<string, any>> {
-    const data = await entryRelatedModel.table.get(type)
+    const data = await entryRelatedModel.get(type)
     return data ? data.data : {}
   }
 
@@ -50,7 +52,7 @@ class ServiceStatic {
     const task = getPreviousTask.finally(async () => {
       const oldData = await this.findAll(type)
 
-      entryRelatedModel.table.put({
+      entryRelatedModel.put({
         data: { ...oldData, ...data },
         id: type,
       })
@@ -64,14 +66,14 @@ class ServiceStatic {
     const oldData = await this.findAll(type as any)
     delete oldData[key]
 
-    return entryRelatedModel.table.put({
+    return entryRelatedModel.put({
       data: oldData,
       id: type,
     })
   }
 
   async clear() {
-    return entryRelatedModel.table.clear()
+    return entryRelatedModel.clear()
   }
 }
 

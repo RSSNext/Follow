@@ -2,6 +2,7 @@ import { env } from "@env"
 import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
 import { browserDB } from "@renderer/database"
+import { CleanerService } from "@renderer/services/cleaner"
 import { registerGlobalContext } from "@shared/bridge"
 import { enableMapSet } from "immer"
 import { toast } from "sonner"
@@ -62,6 +63,7 @@ export const initializeApp = async () => {
   // Initialize the database
   if (enabledDataPersist) {
     dataHydratedTime = await hydrateDatabaseToStore()
+    CleanerService.cleanOutdatedData()
   }
 
   // Initialize the auth config
