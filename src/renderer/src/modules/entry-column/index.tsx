@@ -381,7 +381,7 @@ const EntryList: FC<
   VirtuosoProps<string, unknown> & {
     virtuosoRef: React.RefObject<VirtuosoHandle>
   }
-> = ({ ...virtuosoOptions }) => {
+> = ({ virtuosoRef, ...virtuosoOptions }) => {
   const dataRef = useRefValue(virtuosoOptions.data!)
   const currentEntryIdRef = useRefValue(useRouteEntryId())
 
@@ -468,7 +468,7 @@ const EntryList: FC<
     <Virtuoso
       onKeyDown={handleKeyDown}
       {...virtuosoOptions}
-      ref={virtuosoOptions.virtuosoRef}
+      ref={virtuosoRef}
     />
   )
 }
