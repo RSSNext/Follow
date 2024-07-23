@@ -1,9 +1,12 @@
+import { FeedViewType } from "@renderer/lib/enum"
+
 export const views = [
   {
     name: "Articles",
     icon: <i className="i-mgc-paper-cute-fi" />,
     className: "text-orange-600",
     translation: "title,description",
+    view: FeedViewType.Articles,
   },
   {
     name: "Social Media",
@@ -11,6 +14,7 @@ export const views = [
     className: "text-sky-600",
     wideMode: true,
     translation: "description",
+    view: FeedViewType.SocialMedia,
   },
   {
     name: "Pictures",
@@ -19,6 +23,7 @@ export const views = [
     gridMode: true,
     wideMode: true,
     translation: "title",
+    view: FeedViewType.Pictures,
   },
   {
     name: "Videos",
@@ -27,19 +32,23 @@ export const views = [
     gridMode: true,
     wideMode: true,
     translation: "title",
+    view: FeedViewType.Videos,
   },
   {
     name: "Audios",
     icon: <i className="i-mgc-mic-cute-fi" />,
     className: "text-purple-600",
     translation: "title",
+    view: FeedViewType.Audios,
   },
   {
     name: "Notifications",
     icon: <i className="i-mgc-announcement-cute-fi" />,
     className: "text-yellow-600",
     translation: "title",
+    view: FeedViewType.Notifications,
   },
+
 ]
 
 export const settingTabs = [

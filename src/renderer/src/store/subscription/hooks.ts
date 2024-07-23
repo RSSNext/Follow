@@ -8,10 +8,10 @@ import { useSubscriptionStore } from "../subscription"
 
 type FeedId = string
 export const useFeedIdByView = (view: FeedViewType) =>
-  useSubscriptionStore((state) => state.dataIdByView[view] || [])
+  useSubscriptionStore((state) => state.feedIdByView[view] || [])
 export const useSubscriptionByView = (view: FeedViewType) =>
   useSubscriptionStore((state) =>
-    state.dataIdByView[view].map((id) => state.data[id]),
+    state.feedIdByView[view].map((id) => state.data[id]),
   )
 
 export const useSubscriptionByFeedId = (feedId: FeedId) =>

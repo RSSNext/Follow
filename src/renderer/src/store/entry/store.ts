@@ -42,9 +42,9 @@ class EntryActions {
   }
 
   clearByFeedId(feedId: string) {
+    const entryIds = get().entries[feedId]
     set((state) =>
       produce(state, (draft) => {
-        const entryIds = draft.entries[feedId]
         if (!entryIds) return
         entryIds.forEach((entryId) => {
           delete draft.flatMapEntries[entryId]
@@ -53,6 +53,7 @@ class EntryActions {
         delete draft.internal_feedId2entryIdSet[feedId]
       }),
     )
+    runTransactionInScope(() => EntryService.deleteEntries(entryIds))
   }
 
   async fetchEntryById(entryId: string) {
@@ -222,12 +223,14 @@ class EntryActions {
     }))
 
     // Update database
-    runTransactionInScope(() => Promise.all([
-      EntryService.upsertMany(entries),
-      EntryService.bulkStoreReadStatus(entry2Read),
-      EntryService.bulkStoreFeedId(entryFeedMap),
-      EntryService.bulkStoreCollection(entryCollection),
-    ]))
+    runTransactionInScope(() =>
+      Promise.all([
+        EntryService.upsertMany(entries),
+        EntryService.bulkStoreReadStatus(entry2Read),
+        EntryService.bulkStoreFeedId(entryFeedMap),
+        EntryService.bulkStoreCollection(entryCollection),
+      ]),
+    )
   }
 
   hydrate(data: FlatEntryModel[]) {

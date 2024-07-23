@@ -1,7 +1,5 @@
 import { entryModel } from "@renderer/database/models"
-import type {
-  EntryModel,
-} from "@renderer/models/types"
+import type { EntryModel } from "@renderer/models/types"
 
 import { BaseService } from "./base"
 import { EntryRelatedKey, EntryRelatedService } from "./entry-related"
@@ -28,6 +26,10 @@ class EntryServiceStatic extends BaseService<EntryModel> {
 
   async deleteCollection(entryId: string) {
     return EntryRelatedService.deleteItem(EntryRelatedKey.COLLECTION, entryId)
+  }
+
+  async deleteEntries(entryIds: string[]) {
+    await entryModel.table.bulkDelete(entryIds)
   }
 }
 

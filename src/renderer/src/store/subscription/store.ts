@@ -26,7 +26,7 @@ interface SubscriptionState {
    * Key: FeedViewType
    * Value: FeedId[]
    */
-  dataIdByView: Record<FeedViewType, FeedId[]>
+  feedIdByView: Record<FeedViewType, FeedId[]>
 }
 
 function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
@@ -60,7 +60,7 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>(
   "subscription",
 )(() => ({
   data: {},
-  dataIdByView: { ...emptyDataIdByView },
+  feedIdByView: { ...emptyDataIdByView },
 }))
 
 const set = useSubscriptionStore.setState
@@ -78,12 +78,12 @@ class SubscriptionActions {
     if (view !== undefined) {
       set((state) => ({
         ...state,
-        dataIdByView: { ...state.dataIdByView, [view]: [] },
+        feedIdByView: { ...state.feedIdByView, [view]: [] },
       }))
     } else {
       set((state) => ({
         ...state,
-        dataIdByView: { ...emptyDataIdByView },
+        feedIdByView: { ...emptyDataIdByView },
       }))
     }
 
@@ -102,7 +102,7 @@ class SubscriptionActions {
       produce(state, (state) => {
         subscriptions.forEach((subscription) => {
           state.data[subscription.feedId] = omit(subscription, "feeds")
-          state.dataIdByView[subscription.view].push(subscription.feedId)
+          state.feedIdByView[subscription.view].push(subscription.feedId)
 
           return state
         })
@@ -133,7 +133,7 @@ class SubscriptionActions {
   clear() {
     set({
       data: {},
-      dataIdByView: { ...emptyDataIdByView },
+      feedIdByView: { ...emptyDataIdByView },
     })
   }
 
@@ -162,8 +162,8 @@ class SubscriptionActions {
                 subscription.category = null
                 // The logic for removing Category here is to use domain as the default category name.
                 parsed.domain &&
-                (subscription.defaultCategory = (
-                  capitalizeFirstLetter(parsed.domain)
+                (subscription.defaultCategory = capitalizeFirstLetter(
+                  parsed.domain,
                 ))
               }
             })
@@ -187,8 +187,8 @@ class SubscriptionActions {
     set((state) =>
       produce(state, (draft) => {
         delete draft.data[feedId]
-        for (const view in draft.dataIdByView) {
-          const currentViewFeedIds = draft.dataIdByView[view] as string[]
+        for (const view in draft.feedIdByView) {
+          const currentViewFeedIds = draft.feedIdByView[view] as string[]
           currentViewFeedIds.splice(currentViewFeedIds.indexOf(feedId), 1)
         }
       }),
@@ -206,6 +206,54 @@ class SubscriptionActions {
         },
       })
       .then(() => feed)
+  }
+
+  async changeCategoryView(
+    category: string,
+    currentView: FeedViewType,
+    changeToView: FeedViewType,
+  ) {
+    const state = get()
+    const folderFeedIds = [] as string[]
+    for (const feedId of state.feedIdByView[currentView]) {
+      const subscription = state.data[feedId]
+      if (!subscription) continue
+      if (
+        subscription.category === category ||
+        subscription.defaultCategory === category
+      ) {
+        folderFeedIds.push(feedId)
+      }
+    }
+    await Promise.all(
+      folderFeedIds.map((feedId) =>
+        apiClient.subscriptions.$patch({
+          json: {
+            feedId,
+            view: changeToView,
+          },
+        }),
+      ),
+    )
+
+    set((state) =>
+      produce(state, (state) => {
+        for (const feedId of folderFeedIds) {
+          const feed = state.data[feedId]
+          if (feed) feed.view = changeToView
+          const currentViewFeedIds = state.feedIdByView[
+            currentView
+          ] as string[]
+          const changeToViewFeedIds = state.feedIdByView[
+            changeToView
+          ] as string[]
+          currentViewFeedIds.splice(currentViewFeedIds.indexOf(feedId), 1)
+          changeToViewFeedIds.push(feedId)
+        }
+      }),
+    )
+
+    await Promise.all(folderFeedIds.map((feedId) => SubscriptionService.changeView(feedId, changeToView)))
   }
 }
 

@@ -2,7 +2,7 @@ import type { Transaction } from "dexie"
 import Dexie from "dexie"
 
 import { LOCAL_DB_NAME } from "./constants"
-import { dbSchemaV1, dbSchemaV2 } from "./db_schema"
+import { dbSchemaV1, dbSchemaV2, dbSchemaV3 } from "./db_schema"
 import type { DB_Base } from "./schemas/base"
 import type { DB_FeedId } from "./schemas/feed"
 import type { DBModel } from "./types"
@@ -30,6 +30,7 @@ export class BrowserDB extends Dexie {
     this.version(1).stores(dbSchemaV1)
     this.version(2).stores(dbSchemaV2)
       .upgrade(this.upgradeToV2)
+    this.version(3).stores(dbSchemaV3)
 
     this.entries = this.table("entries")
     this.feeds = this.table("feeds")
