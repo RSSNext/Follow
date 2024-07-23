@@ -83,7 +83,7 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
       lastPublishedAt: lastPublishedAt!,
     }),
     {
-      refetchInterval: 1000 * 6,
+      refetchInterval: 1000 * 60,
       enabled: !!lastPublishedAt && !pauseQuery,
     },
   )
