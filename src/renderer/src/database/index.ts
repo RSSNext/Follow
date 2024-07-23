@@ -1,7 +1,6 @@
 import { browserDB } from "./db"
 
 export * from "./db"
-export * from "./models"
 export * from "./schemas"
 
 export const DB_NOT_READY_OR_DISABLED = "Database is not ready or disabled"

@@ -60,16 +60,21 @@ const Content = () => {
       <Close />
       <ScrollArea.ScrollArea
         rootClassName="h-full grow flex-1 shrink-0 overflow-auto pl-8 pr-7 pb-8"
-        viewportClassName="pr-1"
+        viewportClassName="pr-1 min-h-full [&>div]:min-h-full"
       >
         <Component />
-        <p className="mt-12 flex items-center justify-center gap-1 text-xs opacity-80">
+
+        <div className="h-12" />
+        <p className="absolute inset-x-0 bottom-8 flex items-center justify-center gap-1 text-xs opacity-80">
           <i className="i-mgc-heart-cute-fi" />
           {" "}
-          {/* 喜欢我们的产品？在 GitHub 给添加星标 并 分享您宝贵的建议 ! */}
           Love our product?
           {" "}
-          <a href={`${repository.url}`} className="text-theme-accent" target="_blank">
+          <a
+            href={`${repository.url}`}
+            className="text-theme-accent"
+            target="_blank"
+          >
             Give us a star on GitHub
           </a>
           !

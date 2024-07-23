@@ -69,14 +69,17 @@ export const Viewport = React.forwardRef<
   const [canScroll, setCanScroll] = React.useState(false)
   React.useLayoutEffect(() => {
     const $el = ref.current
+    const $child = $el?.firstElementChild
     if (!$el) return
+    if (!$child) return
     const handler = () => {
       const canScroll = $el.scrollHeight > $el.clientHeight
+
       setCanScroll(canScroll)
     }
     const observer = new ResizeObserver(handler)
     handler()
-    observer.observe($el)
+    observer.observe($child)
 
     return () => observer.disconnect()
   }, [])

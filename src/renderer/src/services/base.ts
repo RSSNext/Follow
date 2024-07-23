@@ -4,14 +4,6 @@ import type { UpdateSpec } from "dexie"
 export abstract class BaseService<T extends { id: string }> {
   constructor(public readonly table: Dexie.Table<T, string>) {}
 
-  async create(data: T) {
-    return this.table.add(data)
-  }
-
-  async insertMany(data: T[]) {
-    return this.table.bulkAdd(data)
-  }
-
   async upsert(data: T): Promise<unknown> {
     return this.table.put(data)
   }
