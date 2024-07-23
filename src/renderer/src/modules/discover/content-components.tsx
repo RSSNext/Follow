@@ -98,7 +98,7 @@ export const DiscoverFeedForm = ({
   const keys = useMemo(
     () =>
       parseRegexpPathParams(route.path, {
-        excludeNames: ["routeParams"],
+        excludeNames: ["routeParams", "functionalFlag", "fulltext"],
       }),
     [route.path],
   )
