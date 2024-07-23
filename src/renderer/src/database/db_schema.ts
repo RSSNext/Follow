@@ -26,5 +26,5 @@ export const dbSchemaV4 = {
 
 export const dbSchemaV5 = {
   ...dbSchemaV4,
-  cleaner: "++id, refId, updatedAt",
+  cleaner: "&refId, visitedAt",
 }

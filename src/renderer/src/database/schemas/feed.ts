@@ -5,4 +5,4 @@ export type DB_FeedUnread = {
   count: number
 }
 
-export type DB_Feed = FeedModel
+export type DB_Feed = FeedModel & { id: string }

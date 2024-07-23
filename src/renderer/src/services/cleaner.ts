@@ -1,4 +1,5 @@
 import { browserDB } from "@renderer/database"
+import { appLog } from "@renderer/lib/log"
 
 import { EntryService } from "./entry"
 import { FeedService } from "./feed"
@@ -32,7 +33,7 @@ class CleanerServiceStatic {
       otherUserIds.map((id) => SubscriptionService.removeSubscription(id)),
       FeedService.bulkDelete(toRemoveFeedIds),
       FeedUnreadService.bulkDelete(toRemoveFeedIds),
-      EntryService.deleteEntriesByFeedId(toRemoveFeedIds),
+      EntryService.deleteEntriesByFeedIds(toRemoveFeedIds),
     ])
   }
 
@@ -40,8 +41,50 @@ class CleanerServiceStatic {
    * Mark the which data recently used
    */
   renew(list: { type: "feed" | "entry", id: string }[]) {
-    void list
-    void cleanerModel
+    const now = Date.now()
+    return cleanerModel.bulkPut(
+      list.map((item) => ({
+        refId: item.id,
+        visitedAt: now,
+        type: item.type,
+      })),
+    )
+  }
+
+  /**
+   * Remove the data that not used for a long time
+   */
+  async cleanOutdatedData() {
+    const now = Date.now()
+    const expiredTime = now - 1000 * 60 * 60 * 24 * 30 // 30 days
+    const data = await cleanerModel
+      .where("visitedAt")
+      .below(expiredTime)
+      .toArray()
+
+    if (data.length === 0) { return }
+    const deleteEntries = [] as string[]
+    const deleteFeeds = [] as string[]
+    for (const item of data) {
+      switch (item.type) {
+        case "feed": {
+          deleteFeeds.push(item.refId)
+          break
+        }
+        case "entry": {
+          deleteEntries.push(item.refId)
+          break
+        }
+      }
+    }
+
+    appLog("Clean outdated data...", "feeds:", deleteFeeds.length, "entries:", deleteEntries.length)
+    await Promise.allSettled([
+      FeedService.bulkDelete(deleteFeeds),
+      EntryService.deleteEntries(deleteEntries),
+      EntryService.deleteEntriesByFeedIds(deleteFeeds),
+      cleanerModel.bulkDelete(data.map((d) => d.refId)),
+    ])
   }
 }
 export const CleanerService = new CleanerServiceStatic()

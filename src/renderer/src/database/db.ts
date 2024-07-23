@@ -13,7 +13,6 @@ import type { DB_Cleaner } from "./schemas/cleaner"
 import type { DB_Entry, DB_EntryRelated } from "./schemas/entry"
 import type { DB_Feed, DB_FeedUnread } from "./schemas/feed"
 import type { DB_Subscription } from "./schemas/subscription"
-import type { DBModel } from "./types"
 
 export interface LocalDBSchemaMap {
   entries: DB_Entry
@@ -67,7 +66,7 @@ export const browserDB = new BrowserDB()
 export type BrowserDBSchema = {
   [t in keyof LocalDBSchemaMap]: {
     model: LocalDBSchemaMap[t]
-    table: Dexie.Table<DBModel<LocalDBSchemaMap[t]>, string>
+    table: Dexie.Table<LocalDBSchemaMap[t], string>
   };
 }
 type BrowserDBTable<T extends keyof LocalDBSchemaMap> =

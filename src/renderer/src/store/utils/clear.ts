@@ -8,14 +8,11 @@ import { feedUnreadActions } from "../unread"
 
 export const clearLocalPersistStoreData = () => {
   // All clear and reset method will aggregate here
-  [
-    entryActions,
-    subscriptionActions,
-    feedUnreadActions,
-    feedActions,
-  ].forEach((actions) => {
-    actions.clear()
-  })
+  [entryActions, subscriptionActions, feedUnreadActions, feedActions].forEach(
+    (actions) => {
+      actions.clear()
+    },
+  )
 
   clearUISettings()
 
