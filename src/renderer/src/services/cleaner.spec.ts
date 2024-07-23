@@ -88,7 +88,7 @@ const entryFeedIdMap = {
   "entry-id-5": "feed-id-5",
   "entry-id-6": "feed-id-1",
 }
-describe.only("x", () => {
+describe("test db cleaner", () => {
   beforeAll(async () => {
     await browserDB.delete()
   })
