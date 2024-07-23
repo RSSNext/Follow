@@ -420,7 +420,7 @@ const EntryList: FC<
 
       const nextIndex = Math.min(currentActiveEntryIndex + 1, data.length - 1)
 
-      virtuosoOptions.virtuosoRef.current?.scrollIntoView?.({
+      virtuosoRef.current?.scrollIntoView?.({
         index: nextIndex,
       })
       const nextId = data![nextIndex]
@@ -444,7 +444,7 @@ const EntryList: FC<
           data.length - 1 :
           Math.max(0, currentActiveEntryIndex - 1)
 
-      virtuosoOptions.virtuosoRef.current?.scrollIntoView?.({
+      virtuosoRef.current?.scrollIntoView?.({
         index: nextIndex,
       })
       const nextId = data![nextIndex]
