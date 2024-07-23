@@ -1,6 +1,7 @@
 import { setAppSearchOpen } from "@renderer/atoms/app"
 import { getReadonlyRoute } from "@renderer/atoms/route"
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
@@ -161,6 +162,8 @@ export function FeedColumn({ children }: PropsWithChildren) {
 
   const unreadByView = useUnreadByView()
 
+  const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
+
   return (
     <Vibrancy
       className="relative flex h-full flex-col gap-3 pt-2.5"
@@ -211,8 +214,9 @@ export function FeedColumn({ children }: PropsWithChildren) {
             shortcut={`${index + 1}`}
             className={cn(
               active === index && item.className,
-              "flex h-11 flex-col items-center gap-1 text-xl",
+              "flex flex-col items-center gap-1 text-xl",
               "hover:!bg-theme-vibrancyBg",
+              showSidebarUnreadCount && "h-11",
             )}
             onClick={(e) => {
               setActive(index)
@@ -220,13 +224,15 @@ export function FeedColumn({ children }: PropsWithChildren) {
             }}
           >
             {item.icon}
-            <div className="text-[0.625rem] font-medium leading-none">
-              {unreadByView[index] > 99 ? (
-                <span className="-mr-0.5">99+</span>
-              ) : (
-                unreadByView[index]
-              )}
-            </div>
+            {showSidebarUnreadCount && (
+              <div className="text-[0.625rem] font-medium leading-none">
+                {unreadByView[index] > 99 ? (
+                  <span className="-mr-0.5">99+</span>
+                ) : (
+                  unreadByView[index]
+                )}
+              </div>
+            )}
           </ActionButton>
         ))}
       </div>

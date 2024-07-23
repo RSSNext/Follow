@@ -75,10 +75,6 @@ export const SettingGeneral = () => {
                 "Automatically mark feed entries with only one level of content(e.g. Social Media, Picture, Video views) as read when the item is in the viewport.",
               onChange: (value) => setGeneralSetting("renderMarkUnread", value),
             },
-            {
-              type: "title",
-              value: "User Experience",
-            },
 
             {
               type: "title",
