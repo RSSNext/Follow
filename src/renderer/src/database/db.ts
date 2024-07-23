@@ -2,7 +2,7 @@ import type { Transaction } from "dexie"
 import Dexie from "dexie"
 
 import { LOCAL_DB_NAME } from "./constants"
-import { dbSchemaV1, dbSchemaV2, dbSchemaV3 } from "./db_schema"
+import { dbSchemaV1, dbSchemaV2, dbSchemaV3, dbSchemaV4 } from "./db_schema"
 import type { DB_Base } from "./schemas/base"
 import type { DB_FeedId } from "./schemas/feed"
 import type { DBModel } from "./types"
@@ -22,21 +22,20 @@ export class BrowserDB extends Dexie {
   public feeds: BrowserDBTable<"feeds">
   public subscriptions: BrowserDBTable<"subscriptions">
   public entryRelated: BrowserDBTable<"entryRelated">
-  public feedEntries: BrowserDBTable<"feedEntries">
+
   public feedUnreads: BrowserDBTable<"feedUnreads">
 
   constructor() {
     super(LOCAL_DB_NAME)
     this.version(1).stores(dbSchemaV1)
-    this.version(2).stores(dbSchemaV2)
-      .upgrade(this.upgradeToV2)
+    this.version(2).stores(dbSchemaV2).upgrade(this.upgradeToV2)
     this.version(3).stores(dbSchemaV3)
+    this.version(4).stores(dbSchemaV4)
 
     this.entries = this.table("entries")
     this.feeds = this.table("feeds")
     this.subscriptions = this.table("subscriptions")
     this.entryRelated = this.table("entryRelated")
-    this.feedEntries = this.table("feedEntries")
     this.feedUnreads = this.table("feedUnreads")
   }
 

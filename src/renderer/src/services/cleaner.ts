@@ -5,7 +5,7 @@ import { SubscriptionService } from "./subscription"
 
 class CleanerServiceStatic {
   // Clean other user subscriptions, should call this after login
-  async cleanOtherUserSubscriptions(currentUserId: string) {
+  async cleanRemainingData(currentUserId: string) {
     const dbUserIds = await SubscriptionService.getUserIds()
 
     const otherUserIds = dbUserIds.filter((id) => id !== currentUserId)
@@ -24,6 +24,7 @@ class CleanerServiceStatic {
     )
 
     const toRemoveFeedIds = toRemoveSubscription.map((s) => s.feedId)
+
     await Promise.allSettled([
       otherUserIds.map((id) => SubscriptionService.removeSubscription(id)),
       FeedService.bulkDelete(toRemoveFeedIds),

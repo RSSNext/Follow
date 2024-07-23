@@ -15,7 +15,7 @@ export const UserProvider = () => {
       handle: session.user.handle,
     })
 
-    CleanerService.cleanOtherUserSubscriptions(session.user.id)
+    CleanerService.cleanRemainingData(session.user.id)
   }, [session?.user, setUser])
 
   return null
