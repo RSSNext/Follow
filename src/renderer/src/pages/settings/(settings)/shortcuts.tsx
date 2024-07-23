@@ -1,4 +1,4 @@
-import { shortcuts } from "@renderer/lib/shortcuts"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import { cn } from "@renderer/lib/utils"
 import { SettingsTitle } from "@renderer/modules/settings/title"
 import { defineSettingPage } from "@renderer/modules/settings/utils"

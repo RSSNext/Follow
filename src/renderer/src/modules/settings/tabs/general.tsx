@@ -77,6 +77,11 @@ export const SettingGeneral = () => {
             },
             {
               type: "title",
+              value: "User Experience",
+            },
+
+            {
+              type: "title",
               value: "Data control",
             },
             {

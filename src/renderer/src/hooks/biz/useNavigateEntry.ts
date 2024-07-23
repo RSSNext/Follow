@@ -1,4 +1,7 @@
-import { getReadonlyRoute, getStableRouterNavigate } from "@renderer/atoms/route"
+import {
+  getReadonlyRoute,
+  getStableRouterNavigate,
+} from "@renderer/atoms/route"
 import { setSidebarActiveView } from "@renderer/atoms/sidebar"
 import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "@renderer/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
@@ -32,8 +35,8 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
   }
 
   return getStableRouterNavigate()?.(
-      `/feeds/${finalFeedId}/${
-        entryId || ROUTE_ENTRY_PENDING
-      }?${nextSearchParams.toString()}`,
+    `/feeds/${finalFeedId}/${
+      entryId || ROUTE_ENTRY_PENDING
+    }?${nextSearchParams.toString()}`,
   )
 }

@@ -1,6 +1,6 @@
 import { ActionButton } from "@renderer/components/ui/button"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
-import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { AnimatePresence, m } from "framer-motion"

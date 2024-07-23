@@ -27,6 +27,12 @@ export const shortcuts = {
       key: "Tab, Left, Right",
     },
   },
+  layout: {
+    toggleSidebar: {
+      name: "Toggle Feed Sidebar",
+      key: "Meta+B",
+    },
+  },
   entries: {
     refetch: {
       name: "Refetch",

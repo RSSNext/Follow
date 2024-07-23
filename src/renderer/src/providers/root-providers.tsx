@@ -11,6 +11,7 @@ import type { FC, PropsWithChildren } from "react"
 import { HotkeysProvider } from "react-hotkeys-hook"
 
 import { ContextMenuProvider } from "./context-menu-provider"
+import { EventProvider } from "./event-provider"
 import { StableRouterProvider } from "./stable-router-provider"
 import { SettingSync } from "./ui-setting-sync"
 import { UserProvider } from "./user-provider"
@@ -33,6 +34,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
         <TooltipProvider>
           <HotkeysProvider initiallyActiveScopes={["home"]}>
             <Provider store={jotaiStore}>
+              <EventProvider />
               <UserProvider />
               <SettingSync />
               <ModalStackProvider />
