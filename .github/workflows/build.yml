@@ -94,11 +94,21 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: |
-            out/make/**/*.dmg
             out/make/**/*.zip
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
+          retention-days: 90
+
+      - name: Upload file (dmg)
+        uses: actions/upload-artifact@v4
+        if: matrix.os == 'macos-latest'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: macos-dmg
+          path: |
+            out/make/**/*.dmg
           retention-days: 90
 
       - name: Setup Version
