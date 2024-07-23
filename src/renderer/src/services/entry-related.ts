@@ -2,6 +2,7 @@ import { entryRelatedModel } from "@renderer/database"
 
 export enum EntryRelatedKey {
   READ = "READ",
+  /** @deprecated */
   FEED_ID = "FEED_ID",
   COLLECTION = "COLLECTION",
 }

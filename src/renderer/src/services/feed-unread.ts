@@ -19,6 +19,10 @@ class ServiceStatic {
   clear() {
     return feedUnreadModel.table.clear()
   }
+
+  async bulkDelete(ids: string[]) {
+    return feedUnreadModel.table.bulkDelete(ids)
+  }
 }
 
 export const FeedUnreadService = new ServiceStatic()

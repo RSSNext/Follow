@@ -225,9 +225,8 @@ class EntryActions {
     // Update database
     runTransactionInScope(() =>
       Promise.all([
-        EntryService.upsertMany(entries),
+        EntryService.upsertMany(entries, entryFeedMap),
         EntryService.bulkStoreReadStatus(entry2Read),
-        EntryService.bulkStoreFeedId(entryFeedMap),
         EntryService.bulkStoreCollection(entryCollection),
       ]),
     )

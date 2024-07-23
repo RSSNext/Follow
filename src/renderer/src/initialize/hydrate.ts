@@ -71,7 +71,7 @@ async function hydrateEntry() {
 
   const storeValue = [] as FlatEntryModel[]
   for (const entry of entries) {
-    const entryRelatedFeedId = feedEntries[entry.id]
+    const entryRelatedFeedId = entry.feedId || feedEntries[entry.id]
     if (!entryRelatedFeedId) {
       logHydrateError(`Entry ${entry.id} has no related feed id`)
       continue

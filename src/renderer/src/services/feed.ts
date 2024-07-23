@@ -18,6 +18,10 @@ class ServiceStatic extends BaseService<FeedModelWithId> {
     if (!data.id) return null
     return this.table.put(data as FeedModelWithId)
   }
+
+  async bulkDelete(ids: string[]) {
+    return this.table.bulkDelete(ids)
+  }
 }
 
 export const FeedService = new ServiceStatic()

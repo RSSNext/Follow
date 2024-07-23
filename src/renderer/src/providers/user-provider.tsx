@@ -1,5 +1,6 @@
 import { useSetMe } from "@renderer/atoms/user"
 import { useSession } from "@renderer/queries/auth"
+import { CleanerService } from "@renderer/services/cleaner"
 import { useEffect } from "react"
 
 export const UserProvider = () => {
@@ -13,6 +14,8 @@ export const UserProvider = () => {
       name: session.user.name,
       handle: session.user.handle,
     })
+
+    CleanerService.cleanOtherUserSubscriptions(session.user.id)
   }, [session?.user, setUser])
 
   return null
