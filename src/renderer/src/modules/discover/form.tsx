@@ -15,8 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@renderer/components/ui/form"
-import { Image } from "@renderer/components/ui/image"
 import { Input } from "@renderer/components/ui/input"
+import { Media } from "@renderer/components/ui/media"
 import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedViewType } from "@renderer/lib/enum"
@@ -177,9 +177,9 @@ export function DiscoverForm({ type }: { type: string }) {
                                   className="flex min-w-0 flex-1 flex-col items-center gap-1"
                                   rel="noreferrer"
                                 >
-                                  {assertEntry.images?.[0] ? (
-                                    <Image
-                                      src={assertEntry.images?.[0]}
+                                  {assertEntry.media?.[0] ? (
+                                    <Media
+                                      src={assertEntry.media?.[0].url}
                                       className="aspect-square w-full"
                                     />
                                   ) : (

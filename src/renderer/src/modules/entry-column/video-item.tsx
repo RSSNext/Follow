@@ -1,5 +1,5 @@
 import { m } from "@renderer/components/common/Motion"
-import { Image } from "@renderer/components/ui/image"
+import { Media } from "@renderer/components/ui/media"
 import { useModalStack } from "@renderer/components/ui/modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
@@ -66,9 +66,9 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
               className={cn("pointer-events-none aspect-video w-full shrink-0 rounded-md bg-black object-cover", isActive && "rounded-b-none")}
             />
           ) : (
-            <Image
-              key={entry.entries.images?.[0]}
-              src={entry.entries.images?.[0]}
+            <Media
+              key={entry.entries.media?.[0].url}
+              src={entry.entries.media?.[0].url}
               className={cn("aspect-video w-full shrink-0 rounded-md object-cover", isActive && "rounded-b-none")}
               loading="lazy"
               proxy={{

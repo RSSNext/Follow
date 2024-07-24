@@ -1,7 +1,7 @@
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import { ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
-import { Image } from "@renderer/components/ui/image"
 import { LinkWithTooltip } from "@renderer/components/ui/link"
+import { Media } from "@renderer/components/ui/media"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
@@ -11,7 +11,6 @@ import rehypeParse from "rehype-parse"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 import rehypeStringify from "rehype-stringify"
 import { unified } from "unified"
-import { visit } from "unist-util-visit"
 import { VFile } from "vfile"
 
 export const parseHtml = async (
@@ -42,27 +41,7 @@ export const parseHtml = async (
 
   const hastTree = pipeline.runSync(tree, file)
 
-  const metadata: {
-    desctription: string
-    images: string[]
-  } = {
-    desctription: file.data.meta?.description || "",
-    images: [],
-  }
-  if (hastTree) {
-    visit(hastTree, (node) => {
-      if (node.type === "element") {
-        if (node.tagName === "img" && typeof node.properties.src === "string") {
-          metadata.images.push(node.properties.src)
-        } else if (node.tagName === "a") {
-          node.properties.target = "_blank"
-        }
-      }
-    })
-  }
-
   return {
-    metadata,
     content: toJsxRuntime(hastTree, {
       Fragment,
       ignoreInvalidStyle: true,
@@ -79,7 +58,7 @@ export const parseHtml = async (
               style: { maxWidth: "100%", display: "inline" },
             })
           }
-          return createElement(Image, { ...props, popper: true })
+          return createElement(Media, { ...props, popper: true })
         },
         p: ({ node, ...props }) => {
           if (node?.children) {

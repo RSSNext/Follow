@@ -1,7 +1,7 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { RelativeTime } from "@renderer/components/ui/datetime"
-import { Image } from "@renderer/components/ui/image"
-import { usePreviewImages } from "@renderer/components/ui/image/hooks"
+import { Media } from "@renderer/components/ui/media"
+import { usePreviewMedia } from "@renderer/components/ui/media/hooks"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
@@ -19,7 +19,7 @@ export const SocialMediaItem: EntryListItemFC = ({
 }) => {
   const entry = useEntry(entryId) || entryPreview
 
-  const previewImage = usePreviewImages()
+  const previewMedia = usePreviewMedia()
   const asRead = useAsRead(entry)
   const feed = useFeedById(entry?.feedId)
 
@@ -68,10 +68,11 @@ export const SocialMediaItem: EntryListItemFC = ({
           </div>
         </div>
         <div className="mt-1 flex gap-2 overflow-x-auto">
-          {entry.entries.images?.map((image, i, images) => (
-            <Image
-              key={image}
-              src={image}
+          {entry.entries.media?.map((media, i, mediaList) => (
+            <Media
+              key={media.url}
+              src={media.url}
+              type={media.type}
               className="size-28 shrink-0"
               loading="lazy"
               proxy={{
@@ -79,7 +80,7 @@ export const SocialMediaItem: EntryListItemFC = ({
                 height: 224,
               }}
               onClick={(e) => {
-                previewImage(images, i)
+                previewMedia(mediaList, i)
                 e.stopPropagation()
               }}
             />

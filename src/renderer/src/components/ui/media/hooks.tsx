@@ -1,17 +1,18 @@
+import type { MediaModel } from "@renderer/hono"
 import { useCallback } from "react"
 
 import { useModalStack } from "../modal/stacked/hooks"
 import { NoopChildren } from "../modal/stacked/utils"
-import { PreviewImageContent } from "./preview-image"
+import { PreviewMediaContent } from "./preview-media"
 
-export const usePreviewImages = () => {
+export const usePreviewMedia = () => {
   const { present } = useModalStack()
   return useCallback(
-    (images: string[], initialIndex = 0) => {
+    (media: MediaModel[], initialIndex = 0) => {
       present({
         content: () => (
           <div className="relative size-full">
-            <PreviewImageContent initialIndex={initialIndex} images={images} />
+            <PreviewMediaContent initialIndex={initialIndex} media={media} />
           </div>
         ),
         title: "Image",

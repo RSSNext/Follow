@@ -149,21 +149,21 @@ export const useEntryActions = ({
           },
         },
         {
-          name: "Save Images to Eagle",
+          name: "Save Media to Eagle",
           icon: "/eagle.svg",
           disabled:
             (checkEagle.isLoading ? true : !checkEagle.data) ||
-            !populatedEntry.entries.images?.length,
+            !populatedEntry.entries.media?.length,
           onClick: async () => {
             if (
               !populatedEntry.entries.url ||
-              !populatedEntry.entries.images?.length
+              !populatedEntry.entries.media?.length
             ) {
               return
             }
             const response = await tipcClient?.saveToEagle({
               url: populatedEntry.entries.url,
-              images: populatedEntry.entries.images,
+              mediaUrls: populatedEntry.entries.media.map((m) => m.url),
             })
             if (response?.status === "success") {
               toast("Saved to Eagle.", {

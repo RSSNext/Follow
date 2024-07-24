@@ -1,5 +1,6 @@
 import { m } from "@renderer/components/common/Motion"
 import { COPY_MAP } from "@renderer/constants"
+import type { MediaModel } from "@renderer/hono"
 import { tipcClient } from "@renderer/lib/client"
 import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -57,11 +58,11 @@ const Wrapper: Component<{
     </div>
   )
 }
-export const PreviewImageContent: FC<{
-  images: string[]
+export const PreviewMediaContent: FC<{
+  media: MediaModel[]
   initialIndex?: number
-}> = ({ images, initialIndex = 0 }) => {
-  const [currentSrc, setCurrentSrc] = useState(images[initialIndex])
+}> = ({ media, initialIndex = 0 }) => {
+  const [currentMedia, setCurrentMedia] = useState(media[initialIndex])
 
   const handleContextMenu = useCallback(
     (image: string, e: React.MouseEvent<HTMLImageElement>) => {
@@ -96,9 +97,9 @@ export const PreviewImageContent: FC<{
     },
     [],
   )
-  if (images.length === 0) return null
-  if (images.length === 1) {
-    const src = images[0]
+  if (media.length === 0) return null
+  if (media.length === 1) {
+    const src = media[0].url
     return (
       <Wrapper src={src}>
         <img
@@ -111,7 +112,7 @@ export const PreviewImageContent: FC<{
     )
   }
   return (
-    <Wrapper src={currentSrc}>
+    <Wrapper src={currentMedia.url}>
       <Swiper
         loop
         initialSlide={initialIndex}
@@ -126,18 +127,18 @@ export const PreviewImageContent: FC<{
         }}
         virtual
         onSlideChange={({ realIndex }) => {
-          setCurrentSrc(images[realIndex])
+          setCurrentMedia(media[realIndex])
         }}
         modules={[Scrollbar, Mousewheel, Virtual, Keyboard]}
         className="size-full"
       >
-        {images.map((image, index) => (
-          <SwiperSlide key={image} virtualIndex={index}>
+        {media.map((med, index) => (
+          <SwiperSlide key={med.url} virtualIndex={index}>
             <img
-              onContextMenu={(e) => handleContextMenu(image, e)}
+              onContextMenu={(e) => handleContextMenu(med.url, e)}
               className="size-full object-contain"
               alt="cover"
-              src={image}
+              src={med.url}
               loading="lazy"
             />
           </SwiperSlide>

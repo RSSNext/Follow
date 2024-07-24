@@ -8,7 +8,7 @@ import { app, dialog, Menu, nativeTheme, ShareMenu } from "electron"
 import { downloadFile } from "./lib/download"
 import type { RendererHandlers } from "./renderer-handlers"
 import { quitAndInstall } from "./updater"
-import { createSettingWindow, createWindow, getMainWindow } from "./window"
+import { createSettingWindow, getMainWindow } from "./window"
 
 const t = tipc.create()
 
@@ -91,7 +91,7 @@ export const router = {
     }),
 
   saveToEagle: t.procedure
-    .input<{ url: string, images: string[] }>()
+    .input<{ url: string, mediaUrls: string[] }>()
     .action(async ({ input }) => {
       try {
         const res = await fetch("http://localhost:41595/api/item/addFromURLs", {
@@ -100,8 +100,8 @@ export const router = {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            items: input.images?.map((image) => ({
-              url: image,
+            items: input.mediaUrls?.map((media) => ({
+              url: media,
               website: input.url,
               headers: {
                 referer: input.url,
@@ -124,36 +124,6 @@ export const router = {
         mainWindow.webContents,
       )
       handlers.invalidateQuery.send(input)
-    }),
-
-  /**
-   * @deprecated
-   */
-  previewImage: t.procedure
-    .input<{
-      realUrl: string
-      url: string
-      width: number
-      height: number
-    }>()
-    .action(async ({ input }) => {
-      if (
-        process.env["VITE_IMGPROXY_URL"] &&
-        input.url.startsWith(process.env["VITE_IMGPROXY_URL"])
-      ) {
-        const meta = await fetch(
-          `${process.env["VITE_IMGPROXY_URL"]}/unsafe/meta/${encodeURIComponent(
-            input.realUrl,
-          )}`,
-        ).then((res) => res.json())
-        input.width = meta.thumbor.source.width
-        input.height = meta.thumbor.source.height
-      }
-      createWindow({
-        extraPath: `/preview?url=${encodeURIComponent(input.realUrl)}`,
-        width: input.width,
-        height: input.height,
-      })
     }),
 
   getLoginItemSettings: t.procedure

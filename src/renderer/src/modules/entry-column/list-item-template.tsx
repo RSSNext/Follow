@@ -1,6 +1,6 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { RelativeTime } from "@renderer/components/ui/datetime"
-import { Image } from "@renderer/components/ui/image"
+import { Media } from "@renderer/components/ui/media"
 import { FEED_COLLECTION_LIST } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
@@ -111,9 +111,10 @@ export function ListItem({
           />
         )}
       </div>
-      {withDetails && entry.entries.images?.[0] && (
-        <Image
-          src={entry.entries.images[0]}
+      {withDetails && entry.entries.media?.[0] && (
+        <Media
+          src={entry.entries.media[0].url}
+          type={entry.entries.media[0].type}
           className="ml-2 size-20 shrink-0"
           loading="lazy"
           proxy={{

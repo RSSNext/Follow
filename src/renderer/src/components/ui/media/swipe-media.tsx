@@ -2,30 +2,31 @@ import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/scrollbar"
 
-import { Image } from "@renderer/components/ui/image"
+import { Media } from "@renderer/components/ui/media"
+import type { MediaModel } from "@renderer/hono"
 import { cn } from "@renderer/lib/utils"
 import { useHover } from "@use-gesture/react"
-import { uniq } from "lodash-es"
+import { uniqBy } from "lodash-es"
 import { useRef, useState } from "react"
 import { Mousewheel, Navigation, Scrollbar } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 
 import styles from "./index.module.css"
 
-export function SwipeImages({
-  images,
+export function SwipeMedia({
+  media,
   uniqueKey,
   className,
   imgClassName,
   onPreview,
 }: {
-  images?: string[] | null
+  media?: MediaModel[] | null
   uniqueKey?: string
   className?: string
   imgClassName?: string
-  onPreview?: (images: string[], index?: number) => void
+  onPreview?: (media: MediaModel[], index?: number) => void
 }) {
-  const uniqImages = uniq(images)
+  const uniqMedia = uniqBy(media, "url")
 
   const hoverRef = useRef<HTMLDivElement>(null)
   const [enableSwipe, setEnableSwipe] = useState(false)
@@ -40,7 +41,7 @@ export function SwipeImages({
     },
   )
 
-  if (!images) return null
+  if (!media) return null
   return (
     <div
       ref={hoverRef}
@@ -50,7 +51,7 @@ export function SwipeImages({
         className,
       )}
     >
-      {enableSwipe && (uniqImages?.length || 0) > 1 ? (
+      {enableSwipe && (uniqMedia?.length || 0) > 1 ? (
         <>
           <Swiper
             loop
@@ -67,12 +68,13 @@ export function SwipeImages({
             modules={[Navigation, Scrollbar, Mousewheel]}
             className="size-full"
           >
-            {uniqImages?.slice(0, 5).map((image, i) => (
-              <SwiperSlide key={image}>
-                <Image
+            {uniqMedia?.slice(0, 5).map((med, i) => (
+              <SwiperSlide key={med.url}>
+                <Media
                   className={cn(imgClassName, "size-full rounded-none")}
                   alt="cover"
-                  src={image}
+                  src={med.url}
+                  type={med.type}
                   loading="lazy"
                   proxy={{
                     width: 600,
@@ -80,7 +82,7 @@ export function SwipeImages({
                   }}
                   disableContextMenu
                   onClick={(e) => {
-                    onPreview?.(images, i)
+                    onPreview?.(uniqMedia, i)
                     e.stopPropagation()
                   }}
                 />
@@ -102,16 +104,17 @@ export function SwipeImages({
             <i className="i-mgc-right-cute-fi" />
           </div>
         </>
-      ) : uniqImages?.length >= 1 ?
+      ) : uniqMedia?.length >= 1 ?
           (
-            <Image
+            <Media
               onClick={(e) => {
-                onPreview?.(uniqImages)
+                onPreview?.(uniqMedia)
                 e.stopPropagation()
               }}
               className="size-full rounded-none object-cover sm:transition-transform sm:duration-300 sm:ease-in-out sm:group-hover:scale-105"
               alt="cover"
-              src={uniqImages[0]}
+              src={uniqMedia[0].url}
+              type={uniqMedia[0].type}
               loading="lazy"
               proxy={{
                 width: 600,

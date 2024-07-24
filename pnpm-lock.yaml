@@ -268,9 +268,6 @@ importers:
       unified:
         specifier: 11.0.5
         version: 11.0.5
-      unist-util-visit:
-        specifier: 5.0.0
-        version: 5.0.0
       usehooks-ts:
         specifier: 3.1.0
         version: 3.1.0(react@18.3.1)
