@@ -180,7 +180,7 @@ export const useEntryActions = ({
           name: "Share",
           className: "i-mgc-share-forward-cute-re",
           disabled:
-            !window.electron || !navigator.share,
+            !window.electron && !navigator.share,
           onClick: () => {
             if (!populatedEntry.entries.url) return
 
