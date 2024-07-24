@@ -64,5 +64,6 @@ export const StableRouterProvider = () => {
       })
     }
   }, [location, searchParams])
+
   return null
 }
