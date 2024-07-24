@@ -1,4 +1,4 @@
-import { getOS } from "@renderer/lib/utils"
+import { cn, getOS } from "@renderer/lib/utils"
 import type { FC } from "react"
 
 const SpecialKeys = {
@@ -24,12 +24,13 @@ const SpecialKeys = {
 
 export const Kbd: FC<{
   children: string
-}> = ({ children }) => {
+  className?: string
+}> = ({ children, className }) => {
   const specialKeys = SpecialKeys[getOS()]
   let key = children
   if (children.toLowerCase() in specialKeys) {
     key = specialKeys[children.toLowerCase()]
   }
 
-  return <kbd className="kbd ml-1">{key}</kbd>
+  return <kbd className={cn("kbd ml-1 aspect-square size-4 font-mono text-[0.9em]", className)}>{key}</kbd>
 }

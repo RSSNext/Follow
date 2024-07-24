@@ -135,9 +135,9 @@
 @layer components {
   .kbd {
     background-color: oklch(0.984625 0.001706 247.839);
-    @apply shadow-[0px_2px_0px_0px_rgba(255,255,255,0.5)] dark:shadow-[0px_2px_0px_0px_rgba(0,0,0,0.6)];
-    @apply text-[12px] px-1 rounded-[0.5rem];
-    @apply font-mono border border-border border-b-2;
+    /* @apply shadow-[0px_2px_0px_0px_rgba(255,255,255,0.5)] dark:shadow-[0px_2px_0px_0px_rgba(0,0,0,0.6)]; */
+    @apply text-[0.5em] px-1 rounded-[4px];
+    @apply font-mono border dark:border-neutral-700 border-zinc-300;
     @apply inline-flex items-center justify-center;
   }
 

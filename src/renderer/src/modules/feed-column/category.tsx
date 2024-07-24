@@ -122,6 +122,8 @@ function FeedCategoryImpl({
                           .map((v) => ({
                             label: v.name,
                             type: "text",
+                            shortcut: (v.view + 1).toString(),
+                            icon: v.icon,
                             click() {
                               return changeCategoryView(v.view)
                             },

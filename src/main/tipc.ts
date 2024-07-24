@@ -23,7 +23,14 @@ export const router = {
   showContextMenu: t.procedure
     .input<{
       items: Array<
-        | { type: "text", label: string, enabled?: boolean }
+        | {
+          type: "text"
+          label: string
+          enabled?: boolean
+
+          shortcut?: string
+          icon?: string
+        }
         | { type: "separator" }
       >
     }>()
@@ -38,6 +45,7 @@ export const router = {
           return {
             label: item.label,
             enabled: item.enabled ?? true,
+            accelerator: item.shortcut,
             click() {
               context.sender.send("menu-click", index)
             },
