@@ -60,12 +60,12 @@ const Content = () => {
       <Close />
       <ScrollArea.ScrollArea
         rootClassName="h-full grow flex-1 shrink-0 overflow-auto pl-8 pr-7 pb-8"
-        viewportClassName="pr-1 min-h-full [&>div]:min-h-full"
+        viewportClassName="pr-1 min-h-full [&>div]:min-h-full [&>div]:relative"
       >
         <Component />
 
         <div className="h-12" />
-        <p className="absolute inset-x-0 bottom-8 flex items-center justify-center gap-1 text-xs opacity-80">
+        <p className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 text-xs opacity-80">
           <i className="i-mgc-heart-cute-fi" />
           {" "}
           Love our product?
