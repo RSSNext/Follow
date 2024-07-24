@@ -51,7 +51,7 @@ export function ListItem({
         <div
           className={cn(
             "flex gap-1 text-[10px] font-bold",
-            asRead ? "text-zinc-400" : "text-zinc-500",
+            asRead ? "text-zinc-400 dark:text-neutral-500" : "text-zinc-500 dark:text-zinc-400",
             entry.collections && "text-zinc-600 dark:text-zinc-500",
           )}
         >
