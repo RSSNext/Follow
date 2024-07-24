@@ -115,6 +115,7 @@ export function ListItem({
         <Media
           src={entry.entries.media[0].url}
           type={entry.entries.media[0].type}
+          previewImageUrl={entry.entries.media[0].preview_image_url}
           className="ml-2 size-20 shrink-0"
           loading="lazy"
           proxy={{

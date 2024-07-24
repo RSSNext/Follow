@@ -75,6 +75,7 @@ export function SwipeMedia({
                   alt="cover"
                   src={med.url}
                   type={med.type}
+                  previewImageUrl={med.preview_image_url}
                   loading="lazy"
                   proxy={{
                     width: 600,
@@ -115,6 +116,7 @@ export function SwipeMedia({
               alt="cover"
               src={uniqMedia[0].url}
               type={uniqMedia[0].type}
+              previewImageUrl={uniqMedia[0].preview_image_url}
               loading="lazy"
               proxy={{
                 width: 600,

@@ -66,17 +66,21 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
               className={cn("pointer-events-none aspect-video w-full shrink-0 rounded-md bg-black object-cover", isActive && "rounded-b-none")}
             />
           ) : (
-            <Media
-              key={entry.entries.media?.[0].url}
-              src={entry.entries.media?.[0].url}
-              className={cn("aspect-video w-full shrink-0 rounded-md object-cover", isActive && "rounded-b-none")}
-              loading="lazy"
-              proxy={{
-                width: 640,
-                height: 360,
-              }}
-              disableContextMenu
-            />
+            entry.entries.media && (
+              <Media
+                key={entry.entries.media?.[0].url}
+                src={entry.entries.media?.[0].url}
+                type={entry.entries.media?.[0].type}
+                previewImageUrl={entry.entries.media?.[0].preview_image_url}
+                className={cn("aspect-video w-full shrink-0 rounded-md object-cover", isActive && "rounded-b-none")}
+                loading="lazy"
+                proxy={{
+                  width: 640,
+                  height: 360,
+                }}
+                disableContextMenu
+              />
+            )
           )}
         </div>
       </div>

@@ -180,6 +180,8 @@ export function DiscoverForm({ type }: { type: string }) {
                                   {assertEntry.media?.[0] ? (
                                     <Media
                                       src={assertEntry.media?.[0].url}
+                                      type={assertEntry.media?.[0].type}
+                                      previewImageUrl={assertEntry.media?.[0].preview_image_url}
                                       className="aspect-square w-full"
                                     />
                                   ) : (

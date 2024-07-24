@@ -1,9 +1,8 @@
-import type { MediaModel } from "@renderer/hono"
 import { tipcClient } from "@renderer/lib/client"
 import { getProxyUrl } from "@renderer/lib/img-proxy"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import type { FC, ImgHTMLAttributes } from "react"
+import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { memo, useState } from "react"
 import { toast } from "sonner"
 import { useEventCallback } from "usehooks-ts"
@@ -11,15 +10,25 @@ import { useEventCallback } from "usehooks-ts"
 import { usePreviewMedia } from "./media/hooks"
 
 const failedList = new Set<string | undefined>()
-export type ImageProps = ImgHTMLAttributes<HTMLImageElement> & {
+export type ImageProps = (ImgHTMLAttributes<HTMLImageElement> & {
   proxy?: {
     width: number
     height: number
   }
   disableContextMenu?: boolean
   popper?: boolean
-  type?: MediaModel["type"]
-}
+  type: "photo"
+  previewImageUrl?: string
+}) | (VideoHTMLAttributes<HTMLVideoElement> & {
+  proxy?: {
+    width: number
+    height: number
+  }
+  disableContextMenu?: boolean
+  popper?: boolean
+  type: "video"
+  previewImageUrl?: string
+})
 const MediaImpl: FC<ImageProps> = ({
   className,
   proxy,
@@ -27,7 +36,7 @@ const MediaImpl: FC<ImageProps> = ({
   popper = false,
   ...props
 }) => {
-  const { src, style, type, ...rest } = props
+  const { src, style, type, previewImageUrl, ...rest } = props
   const [hidden, setHidden] = useState(!src)
   const [imgSrc, setImgSrc] = useState(
     proxy && src && !failedList.has(src) ?
@@ -46,28 +55,28 @@ const MediaImpl: FC<ImageProps> = ({
         failedList.add(props.src)
       } else {
         setHidden(true)
-        props.onError?.(e)
+        props.onError?.(e as any)
       }
     })
   const previewMedia = usePreviewMedia()
   const handleClick = useEventCallback(
-    (e: React.MouseEvent<HTMLImageElement>) => {
+    (e: React.MouseEvent) => {
       if (popper && src) {
         e.stopPropagation()
         previewMedia([{
           url: src,
-          type: "photo",
+          type,
         }], 0)
       }
-      props.onClick?.(e)
+      props.onClick?.(e as any)
     },
   )
 
   return (
     <div className={cn("overflow-hidden rounded", className)} style={style}>
-      {(!type || type === "photo") && (
+      {(type === "photo") && (
         <img
-          {...rest}
+          {...rest as ImgHTMLAttributes<HTMLImageElement>}
           onError={errorHandle}
           className={cn(
             hidden && "hidden",
@@ -112,6 +121,32 @@ const MediaImpl: FC<ImageProps> = ({
               } :
               {})}
         />
+      )}
+      {(type === "video") && (
+        <div
+          className={cn(
+            hidden && "hidden",
+            !(props.width || props.height) && "size-full",
+            "relative bg-stone-100 object-cover",
+          )}
+          onClick={handleClick}
+        >
+          {previewImageUrl ? (
+            <img
+              src={previewImageUrl}
+              className="size-full object-cover"
+            />
+          ) : (
+            <video
+              src={src}
+              muted
+              className="relative size-full object-cover"
+            />
+          )}
+          <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-3xl text-white/80">
+            <i className="i-mgc-play-cute-fi" />
+          </div>
+        </div>
       )}
     </div>
   )

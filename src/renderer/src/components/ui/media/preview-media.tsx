@@ -21,7 +21,7 @@ const Wrapper: Component<{
   return (
     <div className="center relative size-full p-12" onClick={dismiss}>
       <m.div
-        className="size-full"
+        className="center size-full"
         initial={{ scale: 0.94, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.94, opacity: 0 }}
@@ -102,12 +102,23 @@ export const PreviewMediaContent: FC<{
     const src = media[0].url
     return (
       <Wrapper src={src}>
-        <img
-          className="size-full object-contain"
-          alt="cover"
-          src={src}
-          onContextMenu={(e) => handleContextMenu(src, e)}
-        />
+        {media[0].type === "video" ? (
+          <video
+            src={src}
+            controls
+            autoPlay
+            muted
+            className="object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        ) : (
+          <img
+            className="size-full object-contain"
+            alt="cover"
+            src={src}
+            onContextMenu={(e) => handleContextMenu(src, e)}
+          />
+        )}
       </Wrapper>
     )
   }
@@ -134,13 +145,21 @@ export const PreviewMediaContent: FC<{
       >
         {media.map((med, index) => (
           <SwiperSlide key={med.url} virtualIndex={index}>
-            <img
-              onContextMenu={(e) => handleContextMenu(med.url, e)}
-              className="size-full object-contain"
-              alt="cover"
-              src={med.url}
-              loading="lazy"
-            />
+            {med.type === "video" ? (
+              <video
+                src={med.url}
+                controls
+                className="object-contain"
+              />
+            ) : (
+              <img
+                onContextMenu={(e) => handleContextMenu(med.url, e)}
+                className="size-full object-contain"
+                alt="cover"
+                src={med.url}
+                loading="lazy"
+              />
+            )}
           </SwiperSlide>
         ))}
       </Swiper>

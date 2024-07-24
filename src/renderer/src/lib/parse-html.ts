@@ -26,12 +26,20 @@ export const parseHtml = async (
     .use(rehypeParse, { fragment: true })
     .use(rehypeSanitize, {
       ...defaultSchema,
+      tagNames: renderInlineStyle ?
+        defaultSchema.tagNames :
+          [
+            ...defaultSchema.tagNames!,
+            "video",
+          ],
       attributes: {
         ...defaultSchema.attributes,
 
         "*": renderInlineStyle ?
             [...defaultSchema.attributes!["*"], "style"] :
           defaultSchema.attributes!["*"],
+
+        "video": ["src", "poster"],
       },
     })
     .use(rehypeInferDescriptionMeta)
@@ -58,8 +66,9 @@ export const parseHtml = async (
               style: { maxWidth: "100%", display: "inline" },
             })
           }
-          return createElement(Media, { ...props, popper: true })
+          return createElement(Media, { ...props, popper: true, type: "photo" })
         },
+        video: ({ node, ...props }) => createElement(Media, { ...props, popper: true, type: "video" }),
         p: ({ node, ...props }) => {
           if (node?.children) {
             for (const item of node.children) {

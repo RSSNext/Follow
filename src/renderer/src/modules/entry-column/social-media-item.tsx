@@ -73,6 +73,7 @@ export const SocialMediaItem: EntryListItemFC = ({
               key={media.url}
               src={media.url}
               type={media.type}
+              previewImageUrl={media.preview_image_url}
               className="size-28 shrink-0"
               loading="lazy"
               proxy={{
