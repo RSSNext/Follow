@@ -44,6 +44,12 @@ export const SettingAbout = () => (
         {" "}
         License.
       </p>
+      <p className="mt-3 text-balance text-sm">
+        The icon library used by Follow is mgc which is copyrighted by
+        <a href="https://mgc.mingcute.com/" target="_blank" rel="noreferrer">https://mgc.mingcute.com/</a>
+        {" "}
+        and cannot be redistributed.
+      </p>
 
       <p className="mt-3 text-sm">
         {APP_NAME}
@@ -74,7 +80,6 @@ export const SettingAbout = () => (
         Social Media
       </h2>
       <div className="mt-2 flex flex-wrap gap-2">
-
         {SocialMediaLinks.map((link) => (
           <Button
             as="a"

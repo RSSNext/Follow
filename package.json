@@ -6,7 +6,7 @@
   "packageManager": "pnpm@9.5.0",
   "description": "Next generation information browser",
   "author": "Follow Team",
-  "license": "AGPL-3.0-only",
+  "license": "GPL-3.0-only",
   "homepage": "https://github.com/RSSNext",
   "repository": {
     "url": "https://github.com/RSSNext/follow",
