@@ -1,11 +1,11 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholder"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
-import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
+import dayjs from "dayjs"
 
 import { StarIcon } from "./star-icon"
 import type { UniversalItemProps } from "./types"

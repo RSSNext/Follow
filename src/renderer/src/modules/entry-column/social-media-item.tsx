@@ -1,8 +1,8 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
+import { RelativeTime } from "@renderer/components/ui/datetime"
 import { Image } from "@renderer/components/ui/image"
 import { usePreviewImages } from "@renderer/components/ui/image/hooks"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
-import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
@@ -10,9 +10,13 @@ import { useFeedById } from "@renderer/store/feed"
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import { StarIcon } from "./star-icon"
 import { EntryTranslation } from "./translation"
-import type { UniversalItemProps } from "./types"
+import type { EntryListItemFC } from "./types"
 
-export function SocialMediaItem({ entryId, entryPreview, translation }: UniversalItemProps) {
+export const SocialMediaItem: EntryListItemFC = ({
+  entryId,
+  entryPreview,
+  translation,
+}) => {
   const entry = useEntry(entryId) || entryPreview
 
   const previewImage = usePreviewImages()
@@ -21,28 +25,47 @@ export function SocialMediaItem({ entryId, entryPreview, translation }: Universa
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
+
   return (
-    <div className={cn("relative flex w-full py-3 pl-3 pr-2", !asRead && "before:absolute before:-left-0.5 before:top-[22px] before:block before:size-2 before:rounded-full before:bg-theme-accent")}>
-      <FeedIcon feed={feed} entry={entry.entries} size={28} />
-      <div className="min-w-0 flex-1">
-        <div className={cn("-mt-0.5 flex-1 text-sm", entry.entries.description && "line-clamp-5")}>
+    <div
+      className={cn(
+        "relative flex py-3 pl-3 pr-2",
+        !asRead &&
+        // "before:absolute before:-left-4 before:top-[22px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
+        "bg-theme-accent/15",
+      )}
+    >
+      <FeedIcon
+        className="mask-squircle mask"
+        feed={feed}
+        entry={entry.entries}
+        size={36}
+      />
+      <div className="ml-2 min-w-0 flex-1">
+        <div
+          className={cn(
+            "-mt-0.5 flex-1 text-sm",
+            entry.entries.description && "line-clamp-5",
+          )}
+        >
           <div className="space-x-1">
-            <span className="font-medium">{entry.entries.author}</span>
+            <span className="font-semibold">{entry.entries.author}</span>
             <span className="text-zinc-500">·</span>
             <span className="text-zinc-500">
-              {dayjs
-                .duration(
-                  dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"),
-                  "minute",
-                )
-                .humanize()}
+              <RelativeTime date={entry.entries.publishedAt} />
             </span>
           </div>
-          <div className={cn("relative mt-0.5", !!entry.collections && "pr-5")}>
-            <EntryTranslation source={entry.entries.description} target={translation?.description} />
-            {!!entry.collections && (
-              <StarIcon />
+          <div
+            className={cn(
+              "relative mt-0.5 whitespace-pre-line text-base",
+              !!entry.collections && "pr-5",
             )}
+          >
+            <EntryTranslation
+              source={entry.entries.description}
+              target={translation?.description}
+            />
+            {!!entry.collections && <StarIcon />}
           </div>
         </div>
         <div className="mt-1 flex gap-2 overflow-x-auto">
@@ -67,3 +90,5 @@ export function SocialMediaItem({ entryId, entryPreview, translation }: Universa
     </div>
   )
 }
+
+SocialMediaItem.wrapperClassName = tw`w-[75ch] m-auto hover:bg-theme-item-hover`

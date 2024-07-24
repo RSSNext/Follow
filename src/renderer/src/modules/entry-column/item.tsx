@@ -22,7 +22,7 @@ import { AudioItem } from "./audio-item"
 import { NotificationItem } from "./notification-item"
 import { PictureItem } from "./picture-item"
 import { SocialMediaItem } from "./social-media-item"
-import type { UniversalItemProps } from "./types"
+import type { EntryListItemFC } from "./types"
 import { VideoItem } from "./video-item"
 
 interface EntryItemProps {
@@ -77,7 +77,7 @@ function EntryItemImpl({
       leading: false,
     },
   )
-  let Item: FC<UniversalItemProps>
+  let Item: EntryListItemFC
 
   switch (view) {
     case FeedViewType.Articles: {
@@ -151,10 +151,11 @@ function EntryItemImpl({
       <div
         className={cn(
           "rounded-md bg-theme-background transition-colors",
-          isActive && "bg-theme-item-active",
+          isActive && "!bg-theme-item-active",
           asRead ?
             "text-zinc-700 dark:text-neutral-400" :
             "text-zinc-900 dark:text-neutral-300",
+          Item.wrapperClassName,
         )}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}

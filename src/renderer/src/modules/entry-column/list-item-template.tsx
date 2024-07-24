@@ -1,11 +1,9 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
+import { RelativeTime } from "@renderer/components/ui/datetime"
 import { Image } from "@renderer/components/ui/image"
 import { FEED_COLLECTION_LIST } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
-import {
-  useRouteParamsSelector,
-} from "@renderer/hooks/biz/useRouteParams"
-import dayjs from "@renderer/lib/dayjs"
+import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
@@ -38,6 +36,9 @@ export function ListItem({
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
+  const displayTime = inInCollection ?
+    entry.collections?.createdAt :
+    entry.entries.publishedAt
   return (
     <div
       className={cn(
@@ -51,23 +52,20 @@ export function ListItem({
         <div
           className={cn(
             "flex gap-1 text-[10px] font-bold",
-            asRead ? "text-zinc-400 dark:text-neutral-500" : "text-zinc-500 dark:text-zinc-400",
+            asRead ?
+              "text-zinc-400 dark:text-neutral-500" :
+              "text-zinc-500 dark:text-zinc-400",
             entry.collections && "text-zinc-600 dark:text-zinc-500",
           )}
         >
           <span className="truncate">{feed.title}</span>
           <span>·</span>
           <span className="shrink-0">
-            {dayjs
-              .duration(
-                dayjs(
-                  inInCollection ?
-                    entry.collections?.createdAt :
-                    entry.entries.publishedAt,
-                ).diff(dayjs(), "minute"),
-                "minute",
-              )
-              .humanize()}
+            {!!displayTime && (
+              <RelativeTime
+                date={displayTime}
+              />
+            )}
           </span>
         </div>
         <div

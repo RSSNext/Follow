@@ -51,7 +51,7 @@ export const TipModalContent: FC<{
 
   if (transactionsQuery.isPending || myWallet.isPending) {
     return (
-      <div className="center h-32 w-[650px]">
+      <div className="center h-32 w-[350px]">
         <LoadingCircle size="large" />
       </div>
     )

@@ -4,6 +4,10 @@ import { repository } from "@pkg"
 import { browserDB } from "@renderer/database"
 import { CleanerService } from "@renderer/services/cleaner"
 import { registerGlobalContext } from "@shared/bridge"
+import dayjs from "dayjs"
+import duration from "dayjs/plugin/duration"
+import localizedFormat from "dayjs/plugin/localizedFormat"
+import relativeTime from "dayjs/plugin/relativeTime"
 import { enableMapSet } from "immer"
 import { toast } from "sonner"
 
@@ -41,6 +45,12 @@ export const initializeApp = async () => {
   appLog(`${APP_NAME}: Next generation information browser`, repository.url)
   appLog(`Initialize ${APP_NAME}...`)
   window.version = APP_VERSION
+
+  // Initialize dayjs
+  dayjs.extend(duration)
+  dayjs.extend(relativeTime)
+  dayjs.extend(localizedFormat)
+
   const now = Date.now()
 
   enableMapSet()
