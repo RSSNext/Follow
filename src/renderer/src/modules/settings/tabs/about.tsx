@@ -1,6 +1,8 @@
 import { license, repository } from "@pkg"
 import { Logo } from "@renderer/components/icons/logo"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button, StyledButton } from "@renderer/components/ui/button"
+import { Divider } from "@renderer/components/ui/divider"
+import { SocialMediaLinks } from "@renderer/constants/social"
 
 export const SettingAbout = () => (
   <div>
@@ -33,7 +35,7 @@ export const SettingAbout = () => (
         </div>
       </div>
 
-      <p className="mt-3 text-balance text-sm">
+      <p className="mt-6 text-balance text-sm">
         {APP_NAME}
         {" "}
         is a free and open-source project. It is licensed under the
@@ -48,12 +50,15 @@ export const SettingAbout = () => (
         {" "}
         (
         {GIT_COMMIT_SHA.slice(0, 7).toUpperCase()}
-        )
+        ) currently early
+        in development. If you have any feedback or suggestions, please feel
+        free to
         {" "}
-        currently early in development. If you have any feedback or
-        suggestions, please feel free to
-        {" "}
-        <a className="inline-flex cursor-pointer items-center gap-1 hover:underline" href={`${repository.url}/issues/new`} target="_blank">
+        <a
+          className="inline-flex cursor-pointer items-center gap-1 hover:underline"
+          href={`${repository.url}/issues/new`}
+          target="_blank"
+        >
           open an issue
           {" "}
           <i className="i-mgc-external-link-cute-re" />
@@ -61,6 +66,31 @@ export const SettingAbout = () => (
         {" "}
         on the GitHub.
       </p>
+
+      <Divider className="scale-x-50" />
+
+      <h2 className="text-base font-semibold">
+        {/* 社区与资讯 */}
+        Social Media
+      </h2>
+      <div className="mt-2 flex flex-wrap gap-2">
+
+        {SocialMediaLinks.map((link) => (
+          <Button
+            as="a"
+            key={link.url}
+            variant="outline"
+            className="flex flex-1 cursor-pointer items-center gap-2"
+            // @ts-expect-error
+            href={link.url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <i className={link.icon} />
+            {link.label}
+          </Button>
+        ))}
+      </div>
     </section>
   </div>
 )

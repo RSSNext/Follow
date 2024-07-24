@@ -194,7 +194,7 @@ export const router = {
 
       nativeTheme.themeSource = systemColorMode === input ? "system" : input
     }),
-  setMacOSBadge: t.procedure.input<number>().action(async ({ input }) => {
+  setDockBadge: t.procedure.input<number>().action(async ({ input }) => {
     if (app.dock) {
       if (input === 0) {
         app.dock.setBadge("")
