@@ -103,11 +103,11 @@ export function ListItem({
             />
           </div>
         )}
-        {withAudio && entry.entries?.enclosures?.[0].url && (
+        {withAudio && entry.entries?.attachments?.[0].url && (
           <audio
             className="mt-2 h-10 w-full"
             controls
-            src={entry.entries?.enclosures?.[0].url}
+            src={entry.entries?.attachments?.[0].url}
           />
         )}
       </div>
