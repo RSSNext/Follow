@@ -31,8 +31,7 @@ export const SocialMediaItem: EntryListItemFC = ({
       className={cn(
         "relative flex py-3 pl-3 pr-2",
         !asRead &&
-        // "before:absolute before:-left-4 before:top-[22px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
-        "bg-theme-accent/15",
+        "before:absolute before:-left-4 before:top-[22px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
       )}
     >
       <FeedIcon
