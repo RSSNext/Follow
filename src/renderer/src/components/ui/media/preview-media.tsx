@@ -6,7 +6,7 @@ import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { FC } from "react"
 import { useCallback, useState } from "react"
-import { Keyboard, Mousewheel, Scrollbar, Virtual } from "swiper/modules"
+import { Keyboard, Mousewheel, Scrollbar } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 
 import { ActionButton } from "../button"
@@ -108,7 +108,7 @@ export const PreviewMediaContent: FC<{
             controls
             autoPlay
             muted
-            className="object-contain"
+            className="max-h-full max-w-full object-contain"
             onClick={(e) => e.stopPropagation()}
           />
         ) : (
@@ -136,20 +136,20 @@ export const PreviewMediaContent: FC<{
         keyboard={{
           enabled: true,
         }}
-        virtual
         onSlideChange={({ realIndex }) => {
           setCurrentMedia(media[realIndex])
         }}
-        modules={[Scrollbar, Mousewheel, Virtual, Keyboard]}
+        modules={[Scrollbar, Mousewheel, Keyboard]}
         className="size-full"
       >
         {media.map((med, index) => (
-          <SwiperSlide key={med.url} virtualIndex={index}>
+          <SwiperSlide key={med.url} virtualIndex={index} className="center !flex">
             {med.type === "video" ? (
               <video
                 src={med.url}
                 controls
-                className="object-contain"
+                className="max-h-full max-w-full object-contain"
+                onClick={(e) => e.stopPropagation()}
               />
             ) : (
               <img
