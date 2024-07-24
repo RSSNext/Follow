@@ -194,7 +194,7 @@ function FeedCategoryImpl({
             </span>
           </div>
           {!!unread && showUnreadCount && (
-            <div className="ml-2 text-xs text-zinc-500 dark:text-neutral-400">
+            <div className="ml-2 text-xs tabular-nums text-zinc-500 dark:text-neutral-400">
               {unread}
             </div>
           )}

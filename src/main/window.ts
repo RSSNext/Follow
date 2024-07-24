@@ -136,6 +136,14 @@ export const createMainWindow = () => {
   })
 
   windows.mainWindow = window
+
+  window.on("close", (event) => {
+    if (process.platform === "darwin") {
+      event.preventDefault()
+      window.hide()
+    }
+  })
+
   return window
 }
 

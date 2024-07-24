@@ -55,6 +55,8 @@ function bootsharp() {
       if (BrowserWindow.getAllWindows().length === 0) {
         mainWindow = createMainWindow()
       }
+
+      if (mainWindow) mainWindow.show()
     })
 
     app.on("open-url", (_, url) => {
@@ -139,6 +141,11 @@ function bootsharp() {
     if (process.platform !== "darwin") {
       app.quit()
     }
+  })
+
+  app.on("before-quit", () => {
+    const windows = BrowserWindow.getAllWindows()
+    windows.forEach((window) => window.destroy())
   })
 }
 
