@@ -2,6 +2,7 @@ import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { views } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
+import { useFeedActions } from "@renderer/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
@@ -39,6 +40,12 @@ function EntryItemImpl({
   const { items } = useEntryActions({
     view,
     entry,
+  })
+
+  const { items: feedItems } = useFeedActions({
+    feedId: entry.feedId,
+    view,
+    type: "entryList",
   })
 
   const translation = useAuthQuery(
@@ -130,18 +137,24 @@ function EntryItemImpl({
       (e) => {
         e.preventDefault()
         showNativeMenu(
-          items
-            .filter((item) => !item.disabled)
-            .map((item) => ({
-              type: "text",
-              label: item.name,
-              click: item.onClick,
-              shortcut: item.shortcut,
-            })),
+          [
+            ...(items
+              .filter((item) => !item.disabled)
+              .map((item) => ({
+                type: "text" as const,
+                label: item.name,
+                click: item.onClick,
+                shortcut: item.shortcut,
+              }))),
+            {
+              type: "separator" as const,
+            },
+            ...(feedItems.filter((item) => !item.disabled)),
+          ],
           e,
         )
       },
-      [items],
+      [items, feedItems],
     )
 
   return (
