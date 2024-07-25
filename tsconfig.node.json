@@ -7,8 +7,7 @@
     "types/**/*.d.ts",
     "src/shared/src/**/*",
     "src/env.ts",
-    "./src/hono.ts",
-    "./src/renderer/src/atoms/settings/*"
+    "./src/hono.ts"
   ],
   "compilerOptions": {
     "composite": true,

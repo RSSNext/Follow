@@ -1,8 +1,9 @@
 import { jotaiStore } from "@renderer/lib/jotai"
+import type { GeneralSettings } from "@shared/interface/settings"
 
 import { createSettingAtom } from "./helper"
 
-const createDefaultSettings = () => ({
+const createDefaultSettings = (): GeneralSettings => ({
   // App
   appLaunchOnStartup: false,
   // Data control
@@ -18,7 +19,7 @@ const createDefaultSettings = () => ({
   // UX
   // autoHideFeedColumn: true,
 })
-export type GeneralSettings = ReturnType<typeof createDefaultSettings>
+
 export const {
   useSettingKey: useGeneralSettingKey,
   useSettingSelector: useGeneralSettingSelector,

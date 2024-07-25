@@ -1,6 +1,8 @@
+import type { UISettings } from "@shared/interface/settings"
+
 import { createSettingAtom } from "./helper"
 
-const createDefaultSettings = () => ({
+const createDefaultSettings = (): UISettings => ({
   // Sidebar
   entryColWidth: 340,
   feedColWidth: 256,
@@ -23,7 +25,7 @@ const createDefaultSettings = () => ({
   readerRenderInlineStyle: false,
   codeHighlightTheme: "github-dark",
 })
-export type UISettings = ReturnType<typeof createDefaultSettings>
+
 export const {
   useSettingKey: useUISettingKey,
   useSettingSelector: useUISettingSelector,
