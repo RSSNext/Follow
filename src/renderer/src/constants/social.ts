@@ -9,7 +9,7 @@ export const SocialMediaLinks = [
   {
     icon: "i-mgc-discord-cute-fi",
     label: "Discord",
-    url: "https://discord.gg/b7hC2qcE",
+    url: "https://discord.gg/xHCVQZ6wmZ",
   },
   {
     icon: "i-mgc-social-x-cute-re",
