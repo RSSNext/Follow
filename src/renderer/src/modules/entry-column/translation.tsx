@@ -1,15 +1,13 @@
 import { useHover } from "@use-gesture/react"
 import { useRef, useState } from "react"
 
-export const EntryTranslation = ({
-  source,
-  target,
-}: {
+export const EntryTranslation: Component<{
   source?: string | null
   target?: string
-}) => {
+}> = ({ source, target, className }) => {
+  let nextTarget = target
   if (source === target) {
-    target = undefined
+    nextTarget = undefined
   }
 
   const ref = useRef<HTMLDivElement>(null)
@@ -24,18 +22,14 @@ export const EntryTranslation = ({
   )
 
   return (
-    <div
-      ref={ref}
-    >
-      {target && !hovered ? (
+    <div ref={ref} className={className}>
+      {nextTarget && !hovered ? (
         <>
           <i className="i-mgc-magic-2-cute-re mr-1 align-middle" />
-          <span className="align-middle">{target}</span>
+          <span className="align-middle">{nextTarget}</span>
         </>
       ) : (
-        <span className="align-middle">
-          {source}
-        </span>
+        <span className="align-middle">{source}</span>
       )}
     </div>
   )
