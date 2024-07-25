@@ -112,13 +112,13 @@ export function Component() {
               >
                 <ListItemHoverOverlay />
                 <Item
-                  // entryId=""
-                  // entryPreview={{
-                  //   entries: entry,
-                  //   // @ts-expect-error
-                  //   feeds: feed.data.feed as FeedModel,
-                  //   read: true,
-                  // }}
+                  entryPreview={{
+                    entries: entry,
+                    // @ts-expect-error
+                    feeds: feed.data.feed as FeedModel,
+                    read: true,
+                    feedId: feed.data.feed.id!,
+                  }}
                   entryId={entry.id}
                 />
               </a>

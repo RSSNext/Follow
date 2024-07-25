@@ -31,7 +31,7 @@ export function ListItem({
     (s) => s.feedId === FEED_COLLECTION_LIST,
   )
 
-  const feed = useFeedById(entry?.feedId)
+  const feed = useFeedById(entry?.feedId) || entryPreview?.feeds
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
