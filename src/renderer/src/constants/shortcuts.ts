@@ -67,6 +67,7 @@ export const shortcuts = {
     openInBrowser: {
       name: COPY_MAP.OpenInBrowser(),
       key: "B",
+      extra: "Double Click",
     },
     copyLink: {
       name: "Copy Link",

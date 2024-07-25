@@ -126,8 +126,8 @@ export const ActionButton = React.forwardRef<
           </TooltipTrigger>
           <TooltipContent className="flex items-center gap-1" side={tooltipSide ?? "bottom"}>
             {tooltip}
-            <div className="-mr-1">
-              {shortcut && shortcut.split("+").map((key) => <Kbd className="text-foreground/80" key={key}>{key}</Kbd>)}
+            <div className="ml-1">
+              {shortcut && <Kbd className="text-foreground/80">{shortcut}</Kbd>}
             </div>
           </TooltipContent>
         </Tooltip>

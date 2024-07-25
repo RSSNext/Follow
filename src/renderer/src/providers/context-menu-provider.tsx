@@ -126,9 +126,7 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
 
           {!!item.shortcut && (
             <div className="ml-auto pl-4">
-              {item.shortcut.split("+").map((key) => (
-                <Kbd key={key}>{key}</Kbd>
-              ))}
+              <Kbd>{item.shortcut}</Kbd>
             </div>
           )}
         </ContextMenuItem>

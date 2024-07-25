@@ -136,6 +136,7 @@ function EntryItemImpl({
               type: "text",
               label: item.name,
               click: item.onClick,
+              shortcut: item.shortcut,
             })),
           e,
         )

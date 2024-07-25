@@ -26,11 +26,17 @@ export const Kbd: FC<{
   children: string
   className?: string
 }> = ({ children, className }) => {
-  const specialKeys = SpecialKeys[getOS()]
+  const specialKeys = SpecialKeys[getOS()] as Record<string, string>
   let key = children
-  if (children.toLowerCase() in specialKeys) {
-    key = specialKeys[children.toLowerCase()]
+  for (const [k, v] of Object.entries(specialKeys)) {
+    key = key.replaceAll(new RegExp(k, "gi"), v)
   }
 
-  return <kbd className={cn("kbd ml-1 aspect-square size-4 font-mono text-[0.9em]", className)}>{key}</kbd>
+  return (
+    <div className="space-x-1">
+      {key.split(",").map((k) => (
+        <kbd key={k} className={cn("kbd h-4 font-mono text-[0.9em]", className)}>{k}</kbd>
+      ))}
+    </div>
+  )
 }
