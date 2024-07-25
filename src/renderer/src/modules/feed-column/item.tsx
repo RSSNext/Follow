@@ -1,7 +1,5 @@
 import { getMainContainerElement } from "@renderer/atoms/dom"
-import { getMe } from "@renderer/atoms/user"
 import { FeedIcon } from "@renderer/components/feed-icon"
-import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import {
   Tooltip,
   TooltipContent,
@@ -9,21 +7,18 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
+import { useFeedActions } from "@renderer/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
-import { useDeleteSubscription } from "@renderer/hooks/biz/useSubscriptionActions"
 import { nextFrame } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import { getFeedById, useFeedById } from "@renderer/store/feed"
+import { useFeedById } from "@renderer/store/feed"
 import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { WEB_URL } from "@shared/constants"
 import dayjs from "dayjs"
 import { memo, useCallback } from "react"
-
-import { useFeedClaimModal } from "../claim/hooks"
-import { FeedForm } from "../discover/feed-form"
 
 interface FeedItemProps {
   feedId: string
@@ -56,10 +51,7 @@ const FeedItemImpl = ({
     [feedId, navigate, view],
   )
 
-  const deleteSubscription = useDeleteSubscription({})
-
   const feedUnread = useFeedUnreadStore((state) => state.data[feedId] || 0)
-  const { present } = useModalStack()
 
   const isActive = useRouteParamsSelector(
     (routerParams) => routerParams.feedId === feedId,
@@ -67,9 +59,7 @@ const FeedItemImpl = ({
 
   const feed = useFeedById(feedId)
 
-  const claimFeed = useFeedClaimModal({
-    feedId,
-  })
+  const { items } = useFeedActions({ feedId, view })
 
   if (!feed) return null
   return (
@@ -84,64 +74,7 @@ const FeedItemImpl = ({
         window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank")
       }}
       onContextMenu={(e) => {
-        showNativeMenu(
-          [
-            {
-              type: "text",
-              label: "Edit",
-
-              click: () => {
-                present({
-                  title: "Edit Feed",
-                  content: ({ dismiss }) => (
-                    <FeedForm asWidget id={feedId} onSuccess={dismiss} />
-                  ),
-                })
-              },
-            },
-            {
-              type: "text",
-              label: "Unfollow",
-              click: () => deleteSubscription.mutate(subscription),
-            },
-            {
-              type: "separator",
-            },
-            !feed.ownerUserId &&
-            !!feed.id && {
-              type: "text",
-              label: "Claim",
-              click: () => {
-                claimFeed()
-              },
-            },
-            feed.ownerUserId === getMe()?.id && {
-              type: "text",
-              label: "This feed is owned by you",
-            },
-            {
-              type: "separator",
-            },
-
-            {
-              type: "text",
-              label: "Open Feed in Browser",
-              click: () =>
-                window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank"),
-            },
-            {
-              type: "text",
-              label: "Open Site in Browser",
-              click: () => {
-                const feed = getFeedById(feedId)
-                if (feed) {
-                  feed.siteUrl && window.open(feed.siteUrl, "_blank")
-                }
-              },
-            },
-          ],
-          e,
-        )
+        showNativeMenu(items, e)
       }}
     >
       <div
