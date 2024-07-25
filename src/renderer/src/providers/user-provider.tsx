@@ -1,4 +1,5 @@
 import { useSetMe } from "@renderer/atoms/user"
+import { tipcClient } from "@renderer/lib/client"
 import { useSession } from "@renderer/queries/auth"
 import { CleanerService } from "@renderer/services/cleaner"
 import { useEffect } from "react"
@@ -15,6 +16,9 @@ export const UserProvider = () => {
       handle: session.user.handle,
     })
 
+    tipcClient?.trackerIdentify({
+      user: session.user,
+    })
     CleanerService.cleanRemainingData(session.user.id)
   }, [session?.user, setUser])
 

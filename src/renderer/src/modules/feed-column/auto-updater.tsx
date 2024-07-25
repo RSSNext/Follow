@@ -17,6 +17,8 @@ export const AutoUpdater = () => {
 
   const handleClick = useCallback(() => {
     setUpdaterStatus(false)
+    window.posthog?.capture("update_restart")
+
     tipcClient?.quitAndInstall()
   }, [])
 
