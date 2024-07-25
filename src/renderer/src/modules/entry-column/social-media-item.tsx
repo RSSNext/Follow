@@ -22,7 +22,6 @@ export const SocialMediaItem: EntryListItemFC = ({
   const previewMedia = usePreviewMedia()
   const asRead = useAsRead(entry)
   const feed = useFeedById(entry?.feedId)
-
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
