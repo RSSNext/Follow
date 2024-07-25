@@ -30,6 +30,7 @@ export const apiFetch = ofetch.create({
 })
 
 export const apiClient = hc<AppType>("", {
+
   fetch: async (input, options = {}) => apiFetch(input.toString(), options),
   headers() {
     const authSessionToken = getAuthSessionToken()
