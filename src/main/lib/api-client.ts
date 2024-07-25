@@ -5,7 +5,7 @@ import { ofetch } from "ofetch"
 
 import type { AppType } from "../../hono"
 import { logger } from "../logger"
-import { getAuthSessionToken } from "./user-auth"
+import { getAuthSessionToken } from "./user"
 
 const abortController = new AbortController()
 export const apiFetch = ofetch.create({

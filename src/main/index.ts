@@ -8,7 +8,7 @@ import { app, BrowserWindow, session } from "electron"
 import { env } from "../env"
 import { isDev } from "./env"
 import { initializationApp } from "./init"
-import { setAuthSessionToken } from "./lib/user-auth"
+import { setAuthSessionToken } from "./lib/user"
 import { registerUpdater } from "./updater"
 import { createMainWindow, createWindow } from "./window"
 

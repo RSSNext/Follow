@@ -1,7 +1,7 @@
 import { getRendererHandlers } from "@egoist/tipc/main"
 import type { BrowserWindow } from "electron"
 
-import { cleanAuthSessionToken } from "../lib/user-auth"
+import { cleanAuthSessionToken, cleanUser } from "../lib/user"
 import type { RendererHandlers } from "../renderer-handlers"
 import { quitAndInstall } from "../updater"
 import { getMainWindow } from "../window"
@@ -79,8 +79,8 @@ export const appRoute = {
 
   cleanAuthSessionToken: t.procedure.action(async () => {
     cleanAuthSessionToken()
+    cleanUser()
   }),
-
 }
 interface Sender extends Electron.WebContents {
   getOwnerBrowserWindow: () => Electron.BrowserWindow | null

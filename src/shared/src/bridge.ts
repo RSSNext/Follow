@@ -15,19 +15,19 @@ export const registerGlobalContext = (context: RenderGlobalContext) => {
   globalThis[PREFIX] = context
 }
 
-export function callGlobalContextMethod(
-  window: BrowserWindow,
-  method: string,
-  args?: any[]
-): void
-
 export function callGlobalContextMethod<T extends keyof RenderGlobalContext>(
   window: BrowserWindow,
   method: T,
 
   // @ts-expect-error
   args: Parameters<RenderGlobalContext[T]> = [] as any
+): Promise<ReturnType<RenderGlobalContext[T]>>
+export function callGlobalContextMethod(
+  window: BrowserWindow,
+  method: string,
+  args?: any[]
 ): void
+
 export function callGlobalContextMethod<T extends keyof RenderGlobalContext>(
   window: BrowserWindow,
   method: T,

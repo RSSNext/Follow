@@ -1,16 +1,19 @@
 import { env } from "@env"
-import Posthog from "posthog-js"
+import { PostHog } from "posthog-node"
+
+import { getUser } from "./user"
 
 export const initPosthog = () => {
   if (env.VITE_POSTHOG_KEY === undefined) return
-  Posthog.init(env.VITE_POSTHOG_KEY, {
-    person_profiles: "identified_only",
-    debug: true,
-  })
-  return Posthog
+
+  return new PostHog(env.VITE_POSTHOG_KEY, {})
 }
 export const posthog = initPosthog()
 
+// posthog?.debug(true)
+
 export const trackEvent = (event: string, properties?: Record<string, any>) => {
-  posthog?.capture(event, properties)
+  const userId = getUser()?.id
+  if (!userId) return
+  posthog?.capture({ event, properties, distinctId: userId })
 }

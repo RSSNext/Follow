@@ -5,6 +5,7 @@ import { is } from "@electron-toolkit/utils"
 import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, shell } from "electron"
+import type { UISettings } from "src/renderer/src/atoms/settings/ui"
 
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
@@ -152,8 +153,15 @@ export const createMainWindow = () => {
     cancelPollingUpdateUnreadCount()
   })
 
-  window.on("hide", () => {
-    pollingUpdateUnreadCount()
+  window.on("hide", async () => {
+    const settings = (await callGlobalContextMethod(
+      window,
+      "getUISettings",
+    )) as UISettings
+
+    if (settings.showDockBadge) {
+      pollingUpdateUnreadCount()
+    }
   })
 
   return window
