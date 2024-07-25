@@ -70,7 +70,7 @@ export function createWindow(
       process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""),
     )
   } else {
-    window.loadFile(path.resolve(__dirname, "../renderer/index.html"))
+    window.loadFile(path.resolve(__dirname, `../renderer/index.html${options?.extraPath || ""}`))
   }
 
   const refererMatchs = [
