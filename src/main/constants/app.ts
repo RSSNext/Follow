@@ -1,0 +1,2 @@
+// 5min
+export const UNREAD_BACKGROUND_POLLING_INTERVAL = 1000

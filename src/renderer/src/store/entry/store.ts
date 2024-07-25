@@ -1,5 +1,4 @@
 import { runTransactionInScope } from "@renderer/database"
-import type { EntryReadHistoriesModel } from "@renderer/hono"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
   getEntriesParams,
@@ -10,6 +9,7 @@ import type { CombinedEntryModel, EntryModel, FeedModel, UserModel,
 import { EntryService } from "@renderer/services"
 import { produce } from "immer"
 import { merge, omit } from "lodash-es"
+import type { EntryReadHistoriesModel } from "src/hono"
 
 import { feedActions } from "../feed"
 import { feedUnreadActions } from "../unread"

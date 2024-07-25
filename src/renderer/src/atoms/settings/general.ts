@@ -18,6 +18,7 @@ const createDefaultSettings = () => ({
   // UX
   // autoHideFeedColumn: true,
 })
+export type GeneralSettings = ReturnType<typeof createDefaultSettings>
 export const {
   useSettingKey: useGeneralSettingKey,
   useSettingSelector: useGeneralSettingSelector,

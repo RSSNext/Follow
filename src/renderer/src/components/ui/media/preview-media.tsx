@@ -1,11 +1,11 @@
 import { m } from "@renderer/components/common/Motion"
 import { COPY_MAP } from "@renderer/constants"
-import type { MediaModel } from "@renderer/hono"
 import { tipcClient } from "@renderer/lib/client"
 import { stopPropagation } from "@renderer/lib/dom"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { FC } from "react"
 import { useCallback, useState } from "react"
+import type { MediaModel } from "src/hono"
 import { Keyboard, Mousewheel, Scrollbar } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 

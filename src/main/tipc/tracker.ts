@@ -1,6 +1,6 @@
 import type { User } from "@auth/core/types"
 
-import { posthog } from "../posthog"
+import { posthog } from "../lib/posthog"
 import { t } from "./_instance"
 
 export const trackerRoute = {

@@ -23,6 +23,7 @@ const createDefaultSettings = () => ({
   readerRenderInlineStyle: false,
   codeHighlightTheme: "github-dark",
 })
+export type UISettings = ReturnType<typeof createDefaultSettings>
 export const {
   useSettingKey: useUISettingKey,
   useSettingSelector: useUISettingSelector,

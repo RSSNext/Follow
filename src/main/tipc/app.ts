@@ -1,13 +1,13 @@
 import { getRendererHandlers } from "@egoist/tipc/main"
 import type { BrowserWindow } from "electron"
 
+import { cleanAuthSessionToken } from "../lib/user-auth"
 import type { RendererHandlers } from "../renderer-handlers"
 import { quitAndInstall } from "../updater"
 import { getMainWindow } from "../window"
 import { t } from "./_instance"
 
 export const appRoute = {
-
   saveToEagle: t.procedure
     .input<{ url: string, mediaUrls: string[] }>()
     .action(async ({ input }) => {
@@ -76,6 +76,11 @@ export const appRoute = {
   quitAndInstall: t.procedure.action(async () => {
     quitAndInstall()
   }),
+
+  cleanAuthSessionToken: t.procedure.action(async () => {
+    cleanAuthSessionToken()
+  }),
+
 }
 interface Sender extends Electron.WebContents {
   getOwnerBrowserWindow: () => Electron.BrowserWindow | null

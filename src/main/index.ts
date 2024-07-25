@@ -8,6 +8,7 @@ import { app, BrowserWindow, session } from "electron"
 import { env } from "../env"
 import { isDev } from "./env"
 import { initializationApp } from "./init"
+import { setAuthSessionToken } from "./lib/user-auth"
 import { registerUpdater } from "./updater"
 import { createMainWindow, createWindow } from "./window"
 
@@ -110,6 +111,7 @@ function bootsharp() {
       const apiURL =
         process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
       if (token && apiURL) {
+        setAuthSessionToken(token)
         mainWindow.webContents.session.cookies.set({
           url: apiURL,
           name: "authjs.session-token",

@@ -2,8 +2,8 @@ import {
   FEED_COLLECTION_LIST,
   ROUTE_FEED_IN_FOLDER,
 } from "@renderer/constants"
-import type { EntryReadHistoriesModel } from "@renderer/hono"
 import type { FeedViewType } from "@renderer/lib/enum"
+import type { EntryReadHistoriesModel } from "src/hono"
 import { useShallow } from "zustand/react/shallow"
 
 import { useFeedIdByView, useFolderFeedsByFeedId } from "../subscription"

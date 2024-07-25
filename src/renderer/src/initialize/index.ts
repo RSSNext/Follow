@@ -1,6 +1,7 @@
 import { env } from "@env"
 import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
+import { getUISettings } from "@renderer/atoms/settings/ui"
 import { browserDB } from "@renderer/database"
 import { CleanerService } from "@renderer/services/cleaner"
 import { registerGlobalContext } from "@shared/bridge"
@@ -58,6 +59,8 @@ export const initializeApp = async () => {
 
   registerGlobalContext({
     showSetting: () => window.router.showSettings(),
+    getGeneralSettings,
+    getUISettings,
     toast,
   })
 

@@ -9,7 +9,7 @@ import { QUERY_PERSIST_KEY } from "../constants/app"
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: Infinity,
+      refetchOnWindowFocus: false,
       retryDelay: 1000,
       retry(failureCount, error) {
         console.error(error)

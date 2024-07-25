@@ -50,10 +50,7 @@ const useBackHome = (active: number) => {
 }
 
 const useUnreadByView = () => {
-  useAuthQuery(Queries.subscription.byView(), {
-    refetchOnWindowFocus: false,
-    refetchInterval: false,
-  })
+  useAuthQuery(Queries.subscription.byView())
   const idByView = useSubscriptionStore((state) => state.feedIdByView)
   const totalUnread = useFeedUnreadStore((state) => {
     const unread = {} as Record<number, number>

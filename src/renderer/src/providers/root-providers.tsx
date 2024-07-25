@@ -12,6 +12,7 @@ import { HotkeysProvider } from "react-hotkeys-hook"
 
 import { ContextMenuProvider } from "./context-menu-provider"
 import { EventProvider } from "./event-provider"
+import { InvalidateQueryProvider } from "./invalidate-query-provider"
 import { StableRouterProvider } from "./stable-router-provider"
 import { SettingSync } from "./ui-setting-sync"
 import { UserProvider } from "./user-provider"
@@ -31,6 +32,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
         persistOptions={persistConfig}
         client={queryClient}
       >
+
         <TooltipProvider>
           <HotkeysProvider initiallyActiveScopes={["home"]}>
             <Provider store={jotaiStore}>
@@ -45,6 +47,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
             </Provider>
           </HotkeysProvider>
         </TooltipProvider>
+        <InvalidateQueryProvider />
       </PersistQueryClientProvider>
     </MotionConfig>
     <Toaster />
