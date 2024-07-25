@@ -1,8 +1,8 @@
 // @ts-nocheck
 import { browserDB } from "@renderer/database"
-import type { FeedModel } from "@renderer/hono"
 import type { EntryModel } from "@renderer/models"
 import type { SubscriptionFlatModel } from "@renderer/store/subscription"
+import type { FeedModel } from "src/hono"
 import { beforeAll, describe, expect, test } from "vitest"
 
 import { CleanerService } from "./cleaner"

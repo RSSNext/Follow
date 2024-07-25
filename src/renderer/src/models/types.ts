@@ -1,5 +1,5 @@
-import type { users } from "@renderer/hono"
 import type { apiClient } from "@renderer/lib/api-fetch"
+import type { users } from "src/hono"
 
 export type UserModel = Omit<typeof users.$inferSelect, "emailVerified">
 

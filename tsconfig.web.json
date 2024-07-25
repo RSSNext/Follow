@@ -7,7 +7,8 @@
     "src/preload/*.d.ts",
     "src/shared/src/**/*",
     "types/**/*.d.ts",
-    "src/env.ts"
+    "src/env.ts",
+    "src/hono.ts"
   ],
   "compilerOptions": {
     "composite": true,
@@ -27,8 +28,12 @@
       "@shared/*": [
         "src/shared/src/*"
       ],
-      "@pkg": ["./package.json"],
-      "@env": ["./src/env.ts"]
+      "@pkg": [
+        "./package.json"
+      ],
+      "@env": [
+        "./src/env.ts"
+      ]
     }
   }
 }

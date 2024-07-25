@@ -1,6 +1,7 @@
 import type { User } from "@auth/core/types"
 
-import { posthog } from "../posthog"
+import { posthog } from "../lib/posthog"
+import { setUser } from "../lib/user"
 import { t } from "./_instance"
 
 export const trackerRoute = {
@@ -11,9 +12,14 @@ export const trackerRoute = {
     .action(async ({ input }) => {
       const { user } = input
 
-      posthog?.identify(user.id, {
-        name: user.name,
-        handle: user.handle,
+      setUser(user)
+      posthog?.capture({
+        event: "login",
+        distinctId: user.id,
+        properties: {
+          name: user.name,
+          handle: user.handle,
+        },
       })
     }),
 }

@@ -7,7 +7,11 @@ import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, shell } from "electron"
 
 import { getIconPath } from "./helper"
-import { store } from "./store"
+import { store } from "./lib/store"
+import {
+  cancelPollingUpdateUnreadCount,
+  pollingUpdateUnreadCount,
+} from "./tipc/dock"
 
 const windows = {
   settingWindow: null as BrowserWindow | null,
@@ -141,6 +145,18 @@ export const createMainWindow = () => {
     if (process.platform === "darwin") {
       event.preventDefault()
       window.hide()
+    }
+  })
+
+  window.on("show", () => {
+    cancelPollingUpdateUnreadCount()
+  })
+
+  window.on("hide", async () => {
+    const settings = await callGlobalContextMethod(window, "getUISettings")
+
+    if (settings.showDockBadge) {
+      pollingUpdateUnreadCount()
     }
   })
 

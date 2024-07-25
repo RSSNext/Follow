@@ -1,5 +1,5 @@
-import type { MediaModel } from "@renderer/hono"
 import { useCallback } from "react"
+import type { MediaModel } from "src/hono"
 
 import { useModalStack } from "../modal/stacked/hooks"
 import { NoopChildren } from "../modal/stacked/utils"

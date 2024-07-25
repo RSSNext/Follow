@@ -38,6 +38,28 @@ const useGroupedData = (view: FeedViewType) => {
     return groupFolder
   }, [data])
 }
+
+const useUpdateUnreadCount = () => {
+  useAuthQuery(Queries.subscription.unreadAll(), {
+    refetchInterval: false,
+  })
+  // const isPageVisible = usePageVisibility()
+
+  // useAccurateInterval(
+  //   () => {
+  //     if (!isPageVisible) {
+  //       refetch()
+  //     }
+  //   },
+  //   {
+  //     enable: !isPageVisible,
+  //     delay:
+  //       // 10s
+  //       10_000,
+  //   },
+  // )
+}
+
 export function FeedList({
   className,
   view,
@@ -48,7 +70,7 @@ export function FeedList({
   const [expansion, setExpansion] = useState(false)
   const data = useGroupedData(view)
 
-  useAuthQuery(Queries.subscription.unreadAll())
+  useUpdateUnreadCount()
 
   const totalUnread = useFeedUnreadStore((state) => {
     let unread = 0

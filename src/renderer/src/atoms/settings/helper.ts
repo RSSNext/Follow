@@ -5,7 +5,7 @@ import { useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
 
-export const createSettingAtom = <T extends Record<string, unknown>>(
+export const createSettingAtom = <T extends object>(
   settingKey: string,
   createDefaultSettings: () => T,
 ) => {
