@@ -1,8 +1,13 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
+import { ActionButton } from "@renderer/components/ui/button"
 import { RelativeTime } from "@renderer/components/ui/datetime"
 import { Media } from "@renderer/components/ui/media"
 import { usePreviewMedia } from "@renderer/components/ui/media/hooks"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
+import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
+import {
+  useRouteParamsSelector,
+} from "@renderer/hooks/biz/useRouteParams"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
@@ -29,6 +34,7 @@ export const SocialMediaItem: EntryListItemFC = ({
     <div
       className={cn(
         "relative flex py-3 pl-3 pr-2",
+        "group",
         !asRead &&
         "before:absolute before:-left-4 before:top-[22px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
       )}
@@ -46,7 +52,7 @@ export const SocialMediaItem: EntryListItemFC = ({
             entry.entries.description && "line-clamp-5",
           )}
         >
-          <div className="space-x-1">
+          <div className="w-[calc(100%-10rem)]  space-x-1">
             <span className="font-semibold">{entry.entries.author}</span>
             <span className="text-zinc-500">·</span>
             <span className="text-zinc-500">
@@ -87,8 +93,46 @@ export const SocialMediaItem: EntryListItemFC = ({
           ))}
         </div>
       </div>
+
+      <div
+        className={cn(
+          "absolute right-0 top-0",
+          "invisible opacity-0 duration-200 group-hover:visible group-hover:opacity-80",
+        )}
+      >
+        <ActionBar entryId={entryId} />
+      </div>
     </div>
   )
 }
 
 SocialMediaItem.wrapperClassName = tw`w-[75ch] m-auto hover:bg-theme-item-hover`
+
+const ActionBar = ({ entryId }: { entryId: string }) => {
+  const entry = useEntry(entryId)
+  const view = useRouteParamsSelector((s) => s.view)
+  const { items } = useEntryActions({
+    entry,
+    view,
+  })
+  return (
+    <div className="flex origin-right scale-90 items-center gap-1">
+      {items
+        .filter((item) => !item.disabled)
+        .map((item) => (
+          <ActionButton
+            icon={
+              item.icon ? (
+                <img className="size-4 grayscale" src={item.icon} />
+              ) : (
+                <i className={item.className} />
+              )
+            }
+            onClick={item.onClick}
+            tooltip={item.name}
+            key={item.name}
+          />
+        ))}
+    </div>
+  )
+}
