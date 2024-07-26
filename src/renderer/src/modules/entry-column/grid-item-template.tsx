@@ -26,7 +26,7 @@ export function GridItem({
 
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
-    <div>
+    <div className="p-1.5">
       {children}
       <div
         className={cn(

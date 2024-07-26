@@ -1,4 +1,5 @@
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
+import { ListItemHoverOverlay } from "@renderer/components/ui/list-item-hover-overlay"
 import { views } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
@@ -159,13 +160,11 @@ function EntryItemImpl({
 
   return (
     <div
-      className={cn(!views[view || 0].wideMode && "pb-3")}
       data-entry-id={entry.entries.id}
     >
       <div
         className={cn(
-          "rounded-md bg-theme-background transition-colors",
-          isActive && "!bg-theme-item-active",
+          "relative rounded-md bg-theme-background transition-colors",
           asRead ?
             "text-zinc-700 dark:text-neutral-400" :
             "text-zinc-900 dark:text-neutral-300",
@@ -176,7 +175,9 @@ function EntryItemImpl({
         onDoubleClick={handleDoubleClick}
         onContextMenu={handleContextMenu}
       >
-        <Item entryId={entry.entries.id} translation={translation.data} />
+        <ListItemHoverOverlay className={cn(views[view || 0].gridMode ? "inset-0" : "inset-y-1")} isActive={isActive}>
+          <Item entryId={entry.entries.id} translation={translation.data} />
+        </ListItemHoverOverlay>
       </div>
     </div>
   )

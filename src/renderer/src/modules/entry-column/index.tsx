@@ -165,7 +165,7 @@ export function EntryColumn() {
         ) : view && views[view].gridMode ?
             (
               <VirtuosoGrid
-                listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
+                listClassName="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-4"
                 {...virtuosoOptions}
                 ref={virtuosoRef}
               />

@@ -110,17 +110,18 @@ export function Component() {
                 target="_blank"
                 key={entry.id}
               >
-                <ListItemHoverOverlay />
-                <Item
-                  entryPreview={{
-                    entries: entry,
-                    // @ts-expect-error
-                    feeds: feed.data.feed as FeedModel,
-                    read: true,
-                    feedId: feed.data.feed.id!,
-                  }}
-                  entryId={entry.id}
-                />
+                <ListItemHoverOverlay>
+                  <Item
+                    entryPreview={{
+                      entries: entry,
+                      // @ts-expect-error
+                      feeds: feed.data.feed as FeedModel,
+                      read: true,
+                      feedId: feed.data.feed.id!,
+                    }}
+                    entryId={entry.id}
+                  />
+                </ListItemHoverOverlay>
               </a>
             ))}
           </div>

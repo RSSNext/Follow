@@ -48,7 +48,7 @@ export function ListItem({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        "relative flex py-3 pl-3 pr-2",
+        "relative flex py-4 pl-3 pr-2",
         !asRead &&
         "before:absolute before:-left-0.5 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
       )}

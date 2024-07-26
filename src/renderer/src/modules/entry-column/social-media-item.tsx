@@ -106,7 +106,7 @@ export const SocialMediaItem: EntryListItemFC = ({
   )
 }
 
-SocialMediaItem.wrapperClassName = tw`w-[75ch] m-auto hover:bg-theme-item-hover`
+SocialMediaItem.wrapperClassName = tw`w-[75ch] m-auto`
 
 const ActionBar = ({ entryId }: { entryId: string }) => {
   const entry = useEntry(entryId)
