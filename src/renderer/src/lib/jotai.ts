@@ -23,10 +23,12 @@ export const createAtomHooks = <T>(atom: PrimitiveAtom<T>) =>
     () => useAtomValue(atom, options),
     () => useSetAtom(atom, options),
     ...createAtomAccessor(atom),
+    createAtomSelector(atom),
   ] as const
 
-export const createAtomSelector = <T>(atom: Atom<T>) => {
-  const useHook = <R>(selector: (a: T) => R, deps: any[] = []) =>
+const noop = []
+const createAtomSelector = <T>(atom: Atom<T>) => {
+  const useHook = <R>(selector: (a: T) => R, deps: any[] = noop) =>
     useAtomValue(
       selectAtom(
         atom,
@@ -34,6 +36,5 @@ export const createAtomSelector = <T>(atom: Atom<T>) => {
       ),
     )
 
-  useHook.__atom = atom
   return useHook
 }

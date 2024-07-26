@@ -29,6 +29,7 @@ export const [
   useSetPlayerAtom,
   getPlayerAtomValue,
   setPlayerAtomValue,
+  usePlayerAtomSelector,
 ] = createAtomHooks<PlayerAtomValue>(
   atomWithStorage(
     getStorageNS("player"),

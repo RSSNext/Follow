@@ -1,9 +1,11 @@
 import * as Slider from "@radix-ui/react-slider"
-import { Player, usePlayerAtomValue } from "@renderer/atoms/player"
-import { FeedIcon } from "@renderer/components/feed-icon"
 import {
-  microReboundPreset,
-} from "@renderer/components/ui/constants/spring"
+  Player,
+  usePlayerAtomSelector,
+  usePlayerAtomValue,
+} from "@renderer/atoms/player"
+import { FeedIcon } from "@renderer/components/feed-icon"
+import { microReboundPreset } from "@renderer/components/ui/constants/spring"
 import {
   Tooltip,
   TooltipContent,
@@ -22,27 +24,13 @@ const handleClickPlay = () => {
 }
 
 export const CornerPlayer = () => {
-  const playerValue = usePlayerAtomValue()
+  const entryId = usePlayerAtomSelector((v) => v.entryId)
+  const show = usePlayerAtomSelector((v) => v.show)
+  const status = usePlayerAtomSelector((v) => v.status)
+  const isMute = usePlayerAtomSelector((v) => v.isMute)
+  const playerValue = { entryId, show, status, isMute }
   const entry = useEntry(playerValue.entryId)
   const feed = useFeedById(entry?.feedId)
-
-  const { currentTime = 0, duration = 0 } = playerValue
-  const [controlledCurrentTime, setControlledCurrentTime] =
-    useState(currentTime)
-  const [isDraggingProgress, setIsDraggingProgress] = useState(false)
-  useEffect(() => {
-    if (isDraggingProgress) return
-    setControlledCurrentTime(currentTime)
-  }, [currentTime, isDraggingProgress])
-
-  const currentTimeIndicator = dayjs()
-    .startOf("y")
-    .second(controlledCurrentTime)
-    .format("mm:ss")
-  const remainingTimeIndicator = dayjs()
-    .startOf("y")
-    .second(duration - controlledCurrentTime)
-    .format("mm:ss")
 
   return (
     <AnimatePresence>
@@ -136,43 +124,69 @@ export const CornerPlayer = () => {
               </div>
 
               {/* progress control */}
-              <div className="relative mt-2">
-                <div className="absolute bottom-1 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-200 ease-in-out group-hover:opacity-100">
-                  <div className="text-xs">{currentTimeIndicator}</div>
-                  <div className="text-xs">
-                    -
-                    {remainingTimeIndicator}
-                  </div>
-                </div>
-
-                {/* slider */}
-                <Slider.Root
-                  className="relative flex h-1 w-full items-center transition-all duration-200 ease-in-out"
-                  min={0}
-                  max={duration}
-                  step={1}
-                  value={[controlledCurrentTime]}
-                  onPointerDown={() => setIsDraggingProgress(true)}
-                  onPointerUp={() => setIsDraggingProgress(false)}
-                  onValueChange={(value) => setControlledCurrentTime(value[0])}
-                  onValueCommit={(value) => Player.seek(value[0])}
-                >
-                  <Slider.Track className="relative h-1 w-full grow bg-muted group-hover:bg-theme-disabled">
-                    <Slider.Range className="absolute h-1 bg-theme-accent" />
-                  </Slider.Track>
-
-                  {/* indicator */}
-                  <Slider.Thumb
-                    className="block h-2 w-[3px] bg-theme-accent"
-                    aria-label="Progress"
-                  />
-                </Slider.Root>
-              </div>
+              <PlayerProgress />
             </div>
           </div>
         </m.div>
       )}
     </AnimatePresence>
+  )
+}
+
+const PlayerProgress = () => {
+  const playerValue = usePlayerAtomValue()
+
+  const { currentTime = 0, duration = 0 } = playerValue
+  const [controlledCurrentTime, setControlledCurrentTime] =
+    useState(currentTime)
+  const [isDraggingProgress, setIsDraggingProgress] = useState(false)
+  useEffect(() => {
+    if (isDraggingProgress) return
+    setControlledCurrentTime(currentTime)
+  }, [currentTime, isDraggingProgress])
+
+  const currentTimeIndicator = dayjs()
+    .startOf("y")
+    .second(controlledCurrentTime)
+    .format("mm:ss")
+  const remainingTimeIndicator = dayjs()
+    .startOf("y")
+    .second(duration - controlledCurrentTime)
+    .format("mm:ss")
+
+  return (
+    <div className="relative mt-2">
+      <div className="absolute bottom-1 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-200 ease-in-out group-hover:opacity-100">
+        <div className="text-xs">{currentTimeIndicator}</div>
+        <div className="text-xs">
+          -
+          {remainingTimeIndicator}
+        </div>
+      </div>
+
+      {/* slider */}
+      <Slider.Root
+        className="relative flex h-1 w-full items-center transition-all duration-200 ease-in-out"
+        min={0}
+        max={duration}
+        step={1}
+        value={[controlledCurrentTime]}
+        onPointerDown={() => setIsDraggingProgress(true)}
+        onPointerUp={() => setIsDraggingProgress(false)}
+        onValueChange={(value) => setControlledCurrentTime(value[0])}
+        onValueCommit={(value) => Player.seek(value[0])}
+      >
+        <Slider.Track className="relative h-1 w-full grow bg-muted group-hover:bg-theme-disabled">
+          <Slider.Range className="absolute h-1 bg-theme-accent" />
+        </Slider.Track>
+
+        {/* indicator */}
+        <Slider.Thumb
+          className="block h-2 w-[3px] bg-theme-accent"
+          aria-label="Progress"
+        />
+      </Slider.Root>
+    </div>
   )
 }
 
@@ -204,7 +218,7 @@ const ActionIcon = ({
 )
 
 const VolumeSlider = () => {
-  const playerValue = usePlayerAtomValue()
+  const volume = usePlayerAtomSelector((v) => v.volume)
 
   return (
     <Slider.Root
@@ -212,7 +226,7 @@ const VolumeSlider = () => {
       max={1}
       step={0.01}
       orientation="vertical"
-      value={[playerValue.volume ?? 0.8]}
+      value={[volume ?? 0.8]}
       onValueChange={(value) => Player.setVolume(value[0])}
     >
       <Slider.Track className="relative w-1 grow bg-zinc-500">
@@ -227,7 +241,7 @@ const VolumeSlider = () => {
 }
 
 const PlaybackRateSelector = () => {
-  const playerValue = usePlayerAtomValue()
+  const playbackRate = usePlayerAtomSelector((v) => v.playbackRate)
 
   return (
     <div className="flex flex-col items-center">
@@ -237,9 +251,9 @@ const PlaybackRateSelector = () => {
           type="button"
           className={cn(
             "center rounded-md font-mono hover:bg-theme-item-hover",
-            playerValue.playbackRate === rate &&
+            playbackRate === rate &&
             "bg-theme-item-hover text-black dark:text-white",
-            playerValue.playbackRate !== rate && "text-zinc-500",
+            playbackRate !== rate && "text-zinc-500",
           )}
           onClick={() => Player.setPlaybackRate(rate)}
         >
@@ -252,9 +266,9 @@ const PlaybackRateSelector = () => {
 }
 
 const PlaybackRateButton = () => {
-  const playerValue = usePlayerAtomValue()
+  const playbackRate = usePlayerAtomSelector((v) => v.playbackRate)
 
-  const char = `${playerValue.playbackRate || 1}`
+  const char = `${playbackRate || 1}`
   return (
     <span
       className={cn(
