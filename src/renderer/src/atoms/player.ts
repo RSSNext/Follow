@@ -31,12 +31,9 @@ export const [
   setPlayerAtomValue,
   usePlayerAtomSelector,
 ] = createAtomHooks<PlayerAtomValue>(
-  atomWithStorage(
-    getStorageNS("player"),
-    playerInitialValue,
-    undefined,
-    { getOnInit: true },
-  ),
+  atomWithStorage(getStorageNS("player"), playerInitialValue, undefined, {
+    getOnInit: true,
+  }),
 )
 
 export const Player = {
@@ -45,7 +42,9 @@ export const Player = {
   get() {
     return getPlayerAtomValue()
   },
-  play(v: Omit<PlayerAtomValue, "show" | "status" | "playedSeconds" | "duration">) {
+  play(
+    v: Omit<PlayerAtomValue, "show" | "status" | "playedSeconds" | "duration">,
+  ) {
     const curV = getPlayerAtomValue()
     if (!v.src || (curV.src === v.src && curV.status === "playing")) {
       return
@@ -81,6 +80,10 @@ export const Player = {
       })
     })
   },
+  teardown() {
+    this.currentTimeTimer && clearInterval(this.currentTimeTimer)
+    this.audio.pause()
+  },
   pause() {
     const curV = getPlayerAtomValue()
     if (curV.status === "paused") {
@@ -92,8 +95,8 @@ export const Player = {
       status: "paused",
       currentTime: this.audio.currentTime,
     })
-
-    return this.audio.pause()
+    this.teardown()
+    return
   },
   togglePlayAndPause() {
     const curV = getPlayerAtomValue()
@@ -112,9 +115,7 @@ export const Player = {
       status: "paused",
     })
 
-    this.currentTimeTimer && clearInterval(this.currentTimeTimer)
-
-    return this.audio.pause()
+    this.teardown()
   },
   seek(time: number) {
     this.audio.currentTime = time
