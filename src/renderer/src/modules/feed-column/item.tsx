@@ -11,6 +11,7 @@ import { useFeedActions } from "@renderer/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { nextFrame } from "@renderer/lib/dom"
+import { getNewIssueUrl } from "@renderer/lib/issues"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { useFeedById } from "@renderer/store/feed"
@@ -74,7 +75,36 @@ const FeedItemImpl = ({
         window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank")
       }}
       onContextMenu={(e) => {
-        showNativeMenu(items, e)
+        const nextItems = items.concat()
+        if (feed.errorAt && feed.errorMessage) {
+          nextItems.push(
+            {
+              type: "separator",
+              disabled: false,
+            },
+            {
+              label: "Feedback",
+              type: "text",
+              click: () => {
+                window.open(
+                  getNewIssueUrl({
+                    body:
+                      `### Error\n\nError Message: ${feed.errorMessage}\n\n### Info\n\n` +
+                      `\`\`\`json\n${
+                      JSON.stringify(feed, null, 2)
+                      }\n\`\`\``,
+                    label: "bug",
+                    title: `Feed Error: ${feed.title}, ${feed.errorMessage}`,
+                  }),
+                )
+              },
+            },
+          )
+        }
+        showNativeMenu(
+          nextItems,
+          e,
+        )
       }}
     >
       <div
