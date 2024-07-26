@@ -11,6 +11,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
+import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
+import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry"
 import { useFeedById } from "@renderer/store/feed"
@@ -53,7 +55,10 @@ const CornerPlayerImpl = () => {
   const entry = useEntry(playerValue.entryId)
   const feed = useFeedById(entry?.feedId)
 
+  const navigateToEntry = useNavigateEntry()
+
   if (!entry || !feed) return null
+
   return (
     <>
       {/* advanced controls */}
@@ -63,6 +68,15 @@ const CornerPlayerImpl = () => {
             className="i-mingcute-close-fill"
             onClick={() => Player.close()}
             label="Close"
+          />
+          <ActionIcon
+            className="i-mingcute-external-link-line"
+            onClick={() => navigateToEntry({
+              entryId: entry.entries.id,
+              feedId: feed.id,
+              view: FeedViewType.Audios,
+            })}
+            label="Open Entry"
           />
         </div>
         <div className="flex items-center">
