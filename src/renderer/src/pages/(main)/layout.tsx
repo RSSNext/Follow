@@ -13,6 +13,7 @@ import { NetworkStatusIndicator } from "@renderer/modules/app/NetworkStatusIndic
 import { LoginModalContent } from "@renderer/modules/auth/LoginModalContent"
 import { FeedColumn } from "@renderer/modules/feed-column"
 import { AutoUpdater } from "@renderer/modules/feed-column/auto-updater"
+import { CornerPlayer } from "@renderer/modules/feed-column/corner-player"
 import { SearchCmdK } from "@renderer/modules/search/cmdk"
 import type { PropsWithChildren } from "react"
 import { useRef } from "react"
@@ -33,6 +34,9 @@ export function Component() {
     >
       <FeedResponsiveResizerContainer containerRef={containerRef}>
         <FeedColumn>
+
+          <CornerPlayer />
+
           {APP_VERSION?.[0] === "0" && (
             <div className="pointer-events-none absolute bottom-3 w-full text-center text-xs opacity-20">
               Early Access
@@ -42,6 +46,7 @@ export function Component() {
                 ""}
             </div>
           )}
+
           {ELECTRON && <AutoUpdater />}
 
           <NetworkStatusIndicator />
