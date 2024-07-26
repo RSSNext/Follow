@@ -40,7 +40,7 @@ export const SettingAppearance = () => {
             },
             <SettingSwitch
               key="darkMode"
-              label="Dark Mode"
+              label="Dark mode"
               checked={isDark}
               onCheckedChange={(e) => {
                 if (window.electron) {
@@ -51,7 +51,7 @@ export const SettingAppearance = () => {
               }}
             />,
             {
-              label: "Opaque Sidebars",
+              label: "Opaque sidebars",
               key: "opaqueSidebar",
               disabled:
                 !window.electron || !["macOS", "Linux"].includes(getOS()),
@@ -69,7 +69,7 @@ export const SettingAppearance = () => {
             {
               disabled:
                 !window.electron || !["macOS", "Linux"].includes(getOS()),
-              label: "Dock Badge",
+              label: "Show Dock badge",
               key: "showDockBadge",
               onChange: (value) => setUISetting("showDockBadge", value),
             },
@@ -117,7 +117,7 @@ const ShikiTheme = () => {
   const codeHighlightTheme = useUISettingKey("codeHighlightTheme")
   return (
     <div className="mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">Code Highlight Theme</span>
+      <span className="shrink-0 text-sm font-medium">Code highlight theme</span>
       <Select
         defaultValue="github-dark"
         value={codeHighlightTheme}
@@ -150,7 +150,7 @@ const Fonts = () => {
   )
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">Font Family</span>
+      <span className="shrink-0 text-sm font-medium">Font family</span>
       <Select
         defaultValue="SN Pro"
         value={readerFontFamily}
@@ -186,7 +186,7 @@ const TextSize = () => {
 
   return (
     <div className="mt-1 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">UI Text Size</span>
+      <span className="shrink-0 text-sm font-medium">Text size</span>
       <Select
         defaultValue={textSizeMap.default.toString()}
         value={uiTextSize.toString() || textSizeMap.default.toString()}
