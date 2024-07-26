@@ -8,7 +8,7 @@ import * as React from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import type { OptionsOrDependencyArray } from "react-hotkeys-hook/dist/types"
 
-import { Kbd } from "../kbd/Kbd"
+import { KbdCombined } from "../kbd/Kbd"
 import { LoadingCircle } from "../loading"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
 import { buttonVariants, styledButtonVariant } from "./variants"
@@ -38,7 +38,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    const Comp = asChild ? Slot : as as any
+    const Comp = asChild ? Slot : (as as any)
 
     return (
       <Comp
@@ -124,11 +124,18 @@ export const ActionButton = React.forwardRef<
               {children}
             </Button>
           </TooltipTrigger>
-          <TooltipContent className="flex items-center gap-1" side={tooltipSide ?? "bottom"}>
+          <TooltipContent
+            className="flex items-center gap-1"
+            side={tooltipSide ?? "bottom"}
+          >
             {tooltip}
-            <div className="ml-1">
-              {shortcut && <Kbd className="text-foreground/80">{shortcut}</Kbd>}
-            </div>
+            {!!shortcut && (
+              <div className="ml-1">
+                <KbdCombined className="text-foreground/80">
+                  {shortcut}
+                </KbdCombined>
+              </div>
+            )}
           </TooltipContent>
         </Tooltip>
       </>
@@ -193,10 +200,13 @@ export const StyledButton = React.forwardRef<
   return (
     <MotionButtonBase
       ref={ref}
-      className={cn(styledButtonVariant({
-        variant,
-        status: isLoading || props.disabled ? "disabled" : undefined,
-      }), className)}
+      className={cn(
+        styledButtonVariant({
+          variant,
+          status: isLoading || props.disabled ? "disabled" : undefined,
+        }),
+        className,
+      )}
       {...props}
       onClick={handleClick}
     >

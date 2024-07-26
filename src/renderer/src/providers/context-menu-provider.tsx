@@ -5,7 +5,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@renderer/components/ui/context-menu"
-import { Kbd } from "@renderer/components/ui/kbd/Kbd"
+import { KbdCombined } from "@renderer/components/ui/kbd/Kbd"
 import { nextFrame } from "@renderer/lib/dom"
 import type { NativeMenuItem } from "@renderer/lib/native-menu"
 import { CONTEXT_MENU_SHOW_EVENT_KEY } from "@renderer/lib/native-menu"
@@ -126,7 +126,7 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
 
           {!!item.shortcut && (
             <div className="ml-auto pl-4">
-              <Kbd>{item.shortcut}</Kbd>
+              <KbdCombined>{item.shortcut}</KbdCombined>
             </div>
           )}
         </ContextMenuItem>

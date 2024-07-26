@@ -1,5 +1,6 @@
 import { cn, getOS } from "@renderer/lib/utils"
 import type { FC } from "react"
+import { Fragment, memo } from "react"
 
 const SpecialKeys = {
   Windows: {
@@ -22,7 +23,7 @@ const SpecialKeys = {
   },
 }
 
-export const Kbd: FC<{
+export const KbdCombined: FC<{
   children: string
   className?: string
 }> = ({ children, className }) => {
@@ -33,10 +34,27 @@ export const Kbd: FC<{
   }
 
   return (
-    <div className="space-x-1">
-      {key.split(",").map((k) => (
-        <kbd key={k} className={cn("kbd h-4 font-mono text-[0.9em]", className)}>{k}</kbd>
+    <div className="flex items-center gap-1">
+      {key.split(",").map((k, i) => (
+        <Fragment key={k}>
+          <div className="flex items-center gap-1">
+            {k.split("+").map((key, index) => (
+              <Kbd key={index} className={className}>
+                {key}
+              </Kbd>
+            ))}
+          </div>
+          {i !== key.split(",").length - 1 && " / "}
+        </Fragment>
       ))}
     </div>
   )
 }
+
+export const Kbd: FC<{ children: string, className?: string }> = memo(
+  ({ children, className }) => (
+    <kbd className={cn("kbd h-4 font-mono text-[0.7rem]", className)}>
+      {children}
+    </kbd>
+  ),
+)
