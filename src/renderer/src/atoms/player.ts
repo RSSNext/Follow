@@ -1,6 +1,7 @@
 import { createAtomHooks } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
-import { atomWithStorage } from "jotai/utils"
+import { atomWithStorage, createJSONStorage } from "jotai/utils"
+import type { SyncStorage } from "jotai/vanilla/utils/atomWithStorage"
 
 type PlayerAtomValue = {
   show: boolean
@@ -22,18 +23,36 @@ const playerInitialValue: PlayerAtomValue = {
   playbackRate: 1,
 }
 
+const jsonStorage = createJSONStorage<PlayerAtomValue>()
+const patchedLocalStorage: SyncStorage<PlayerAtomValue> = {
+  setItem: jsonStorage.setItem,
+  getItem: (key, initialValue) => {
+    const value = jsonStorage.getItem(key, initialValue)
+    if (value) {
+      // patch status to `paused` when hydration
+      value.status = "paused"
+    }
+    return value
+  },
+  removeItem: jsonStorage.removeItem,
+}
 export const [
   ,
-  usePlayerAtom,
+  ,
   usePlayerAtomValue,
   useSetPlayerAtom,
   getPlayerAtomValue,
   setPlayerAtomValue,
   usePlayerAtomSelector,
 ] = createAtomHooks<PlayerAtomValue>(
-  atomWithStorage(getStorageNS("player"), playerInitialValue, undefined, {
-    getOnInit: true,
-  }),
+  atomWithStorage(
+    getStorageNS("player"),
+    playerInitialValue,
+    patchedLocalStorage,
+    {
+      getOnInit: true,
+    },
+  ),
 )
 
 export const Player = {
