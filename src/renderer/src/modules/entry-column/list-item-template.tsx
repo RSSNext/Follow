@@ -1,4 +1,7 @@
-import { Player, usePlayerAtomValue } from "@renderer/atoms/player"
+import {
+  Player,
+  usePlayerAtomSelector,
+} from "@renderer/atoms/player"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { RelativeTime } from "@renderer/components/ui/datetime"
 import { Media } from "@renderer/components/ui/media"
@@ -144,16 +147,16 @@ function AudioCover({
   durationInSeconds?: number
   feedIcon: React.ReactNode
 }) {
-  const playerValue = usePlayerAtomValue()
-
-  const isMeActive = playerValue.src === src && playerValue.show
+  const playStatus = usePlayerAtomSelector((playerValue) =>
+    playerValue.src === src && playerValue.show ? playerValue.status : false,
+  )
 
   const estimatedMins = durationInSeconds ?
     Math.floor(durationInSeconds / 60) :
     undefined
 
   const handleClickPlay = () => {
-    if (!isMeActive) {
+    if (!playStatus) {
       // switch this to play
       Player.play({
         type: "audio",
@@ -174,7 +177,7 @@ function AudioCover({
       <div
         className={cn(
           "center absolute inset-0 w-full transition-all duration-200 ease-in-out group-hover:opacity-100",
-          isMeActive ? "opacity-100" : "opacity-0",
+          playStatus ? "opacity-100" : "opacity-0",
         )}
         onClick={handleClickPlay}
       >
@@ -185,11 +188,11 @@ function AudioCover({
           <i
             className={cn("size-6", {
               "i-mingcute-pause-fill":
-                isMeActive && playerValue.status === "playing",
+                playStatus && playStatus === "playing",
               "i-mingcute-loading-fill animate-spin":
-                isMeActive && playerValue.status === "loading",
+                playStatus && playStatus === "loading",
               "i-mingcute-play-fill":
-                !isMeActive || playerValue.status === "paused",
+                !playStatus || playStatus === "paused",
             })}
           />
         </button>
