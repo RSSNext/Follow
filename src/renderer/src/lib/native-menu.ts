@@ -6,6 +6,9 @@ export type NativeMenuItem =
     label: string
     click?: () => void
     enabled?: boolean
+    /** only work in web app */
+    icon?: React.ReactNode
+    shortcut?: string
   }
   | { type: "separator" }
 export const showNativeMenu = async (
@@ -70,6 +73,7 @@ export const showNativeMenu = async (
       if (item.type === "text") {
         return {
           ...item,
+          icon: "",
           enabled: item.enabled ?? item.click !== undefined,
           click: undefined,
         }

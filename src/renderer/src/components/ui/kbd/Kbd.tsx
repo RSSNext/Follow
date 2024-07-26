@@ -1,4 +1,4 @@
-import { getOS } from "@renderer/lib/utils"
+import { cn, getOS } from "@renderer/lib/utils"
 import type { FC } from "react"
 
 const SpecialKeys = {
@@ -24,12 +24,19 @@ const SpecialKeys = {
 
 export const Kbd: FC<{
   children: string
-}> = ({ children }) => {
-  const specialKeys = SpecialKeys[getOS()]
+  className?: string
+}> = ({ children, className }) => {
+  const specialKeys = SpecialKeys[getOS()] as Record<string, string>
   let key = children
-  if (children.toLowerCase() in specialKeys) {
-    key = specialKeys[children.toLowerCase()]
+  for (const [k, v] of Object.entries(specialKeys)) {
+    key = key.replaceAll(new RegExp(k, "gi"), v)
   }
 
-  return <kbd className="kbd ml-1">{key}</kbd>
+  return (
+    <div className="space-x-1">
+      {key.split(",").map((k) => (
+        <kbd key={k} className={cn("kbd h-4 font-mono text-[0.9em]", className)}>{k}</kbd>
+      ))}
+    </div>
+  )
 }

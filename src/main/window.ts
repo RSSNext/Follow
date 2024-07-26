@@ -7,7 +7,11 @@ import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, shell } from "electron"
 
 import { getIconPath } from "./helper"
-import { store } from "./store"
+import { store } from "./lib/store"
+import {
+  cancelPollingUpdateUnreadCount,
+  pollingUpdateUnreadCount,
+} from "./tipc/dock"
 
 const windows = {
   settingWindow: null as BrowserWindow | null,
@@ -66,7 +70,7 @@ export function createWindow(
       process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""),
     )
   } else {
-    window.loadFile(path.resolve(__dirname, "../renderer/index.html"))
+    window.loadFile(path.resolve(__dirname, `../renderer/index.html${options?.extraPath || ""}`))
   }
 
   const refererMatchs = [
@@ -136,6 +140,26 @@ export const createMainWindow = () => {
   })
 
   windows.mainWindow = window
+
+  window.on("close", (event) => {
+    if (process.platform === "darwin") {
+      event.preventDefault()
+      window.hide()
+    }
+  })
+
+  window.on("show", () => {
+    cancelPollingUpdateUnreadCount()
+  })
+
+  window.on("hide", async () => {
+    const settings = await callGlobalContextMethod(window, "getUISettings")
+
+    if (settings.showDockBadge) {
+      pollingUpdateUnreadCount()
+    }
+  })
+
   return window
 }
 

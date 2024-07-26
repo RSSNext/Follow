@@ -1,3 +1,5 @@
+import type { FeedViewType } from "@renderer/lib/enum"
+
 export type RSSHubRouteType = Record<string, RSSHubRouteDeclaration>
 export interface RSSHubRouteDeclaration {
   routes: Routes
@@ -24,6 +26,7 @@ export type RSSHubRoute = {
   maintainers: string[]
   location: string
   description: string
+  view?: FeedViewType
 
   // features: Features
   // radar: RadarItem[]

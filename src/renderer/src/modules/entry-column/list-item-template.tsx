@@ -1,11 +1,9 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
-import { Image } from "@renderer/components/ui/image"
+import { RelativeTime } from "@renderer/components/ui/datetime"
+import { Media } from "@renderer/components/ui/media"
 import { FEED_COLLECTION_LIST } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
-import {
-  useRouteParamsSelector,
-} from "@renderer/hooks/biz/useRouteParams"
-import dayjs from "@renderer/lib/dayjs"
+import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
@@ -33,11 +31,14 @@ export function ListItem({
     (s) => s.feedId === FEED_COLLECTION_LIST,
   )
 
-  const feed = useFeedById(entry?.feedId)
+  const feed = useFeedById(entry?.feedId) || entryPreview?.feeds
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
+  const displayTime = inInCollection ?
+    entry.collections?.createdAt :
+    entry.entries.publishedAt
   return (
     <div
       className={cn(
@@ -51,23 +52,20 @@ export function ListItem({
         <div
           className={cn(
             "flex gap-1 text-[10px] font-bold",
-            asRead ? "text-zinc-400" : "text-zinc-500",
+            asRead ?
+              "text-zinc-400 dark:text-neutral-500" :
+              "text-zinc-500 dark:text-zinc-400",
             entry.collections && "text-zinc-600 dark:text-zinc-500",
           )}
         >
           <span className="truncate">{feed.title}</span>
           <span>·</span>
           <span className="shrink-0">
-            {dayjs
-              .duration(
-                dayjs(
-                  inInCollection ?
-                    entry.collections?.createdAt :
-                    entry.entries.publishedAt,
-                ).diff(dayjs(), "minute"),
-                "minute",
-              )
-              .humanize()}
+            {!!displayTime && (
+              <RelativeTime
+                date={displayTime}
+              />
+            )}
           </span>
         </div>
         <div
@@ -105,17 +103,19 @@ export function ListItem({
             />
           </div>
         )}
-        {withAudio && entry.entries?.enclosures?.[0].url && (
+        {withAudio && entry.entries?.attachments?.[0].url && (
           <audio
             className="mt-2 h-10 w-full"
             controls
-            src={entry.entries?.enclosures?.[0].url}
+            src={entry.entries?.attachments?.[0].url}
           />
         )}
       </div>
-      {withDetails && entry.entries.images?.[0] && (
-        <Image
-          src={entry.entries.images[0]}
+      {withDetails && entry.entries.media?.[0] && (
+        <Media
+          src={entry.entries.media[0].url}
+          type={entry.entries.media[0].type}
+          previewImageUrl={entry.entries.media[0].preview_image_url}
           className="ml-2 size-20 shrink-0"
           loading="lazy"
           proxy={{

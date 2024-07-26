@@ -1,5 +1,5 @@
 import { SiteIcon } from "@renderer/components/site-icon"
-import { Image } from "@renderer/components/ui/image"
+import { Media } from "@renderer/components/ui/media"
 import { cn } from "@renderer/lib/utils"
 import type { CombinedEntryModel, FeedModel } from "@renderer/models"
 
@@ -19,8 +19,9 @@ export function FeedIcon({
   const image = entry?.authorAvatar || feed.image
   if (image) {
     return (
-      <Image
+      <Media
         src={image}
+        type="photo"
         loading="lazy"
         className={cn("mr-2 shrink-0 rounded-sm", className)}
         style={{

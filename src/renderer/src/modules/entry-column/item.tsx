@@ -2,6 +2,7 @@ import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { views } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
+import { useFeedActions } from "@renderer/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
@@ -22,7 +23,7 @@ import { AudioItem } from "./audio-item"
 import { NotificationItem } from "./notification-item"
 import { PictureItem } from "./picture-item"
 import { SocialMediaItem } from "./social-media-item"
-import type { UniversalItemProps } from "./types"
+import type { EntryListItemFC } from "./types"
 import { VideoItem } from "./video-item"
 
 interface EntryItemProps {
@@ -39,6 +40,12 @@ function EntryItemImpl({
   const { items } = useEntryActions({
     view,
     entry,
+  })
+
+  const { items: feedItems } = useFeedActions({
+    feedId: entry.feedId,
+    view,
+    type: "entryList",
   })
 
   const translation = useAuthQuery(
@@ -67,6 +74,7 @@ function EntryItemImpl({
   const handleMouseEnter = useDebounceCallback(
     () => {
       if (!hoverMarkUnread) return
+      if (!document.hasFocus()) return
       if (asRead) return
 
       entryActions.markRead(entry.feedId, entry.entries.id, true)
@@ -76,7 +84,7 @@ function EntryItemImpl({
       leading: false,
     },
   )
-  let Item: FC<UniversalItemProps>
+  let Item: EntryListItemFC
 
   switch (view) {
     case FeedViewType.Articles: {
@@ -129,17 +137,24 @@ function EntryItemImpl({
       (e) => {
         e.preventDefault()
         showNativeMenu(
-          items
-            .filter((item) => !item.disabled)
-            .map((item) => ({
-              type: "text",
-              label: item.name,
-              click: item.onClick,
-            })),
+          [
+            ...(items
+              .filter((item) => !item.disabled)
+              .map((item) => ({
+                type: "text" as const,
+                label: item.name,
+                click: item.onClick,
+                shortcut: item.shortcut,
+              }))),
+            {
+              type: "separator" as const,
+            },
+            ...(feedItems.filter((item) => !item.disabled)),
+          ],
           e,
         )
       },
-      [items],
+      [items, feedItems],
     )
 
   return (
@@ -150,10 +165,11 @@ function EntryItemImpl({
       <div
         className={cn(
           "rounded-md bg-theme-background transition-colors",
-          isActive && "bg-theme-item-active",
+          isActive && "!bg-theme-item-active",
           asRead ?
             "text-zinc-700 dark:text-neutral-400" :
             "text-zinc-900 dark:text-neutral-300",
+          Item.wrapperClassName,
         )}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}

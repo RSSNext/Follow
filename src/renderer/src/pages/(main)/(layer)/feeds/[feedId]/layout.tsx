@@ -1,4 +1,5 @@
 import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
+import { PanelSplitter } from "@renderer/components/ui/divider"
 import { views } from "@renderer/constants"
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { cn } from "@renderer/lib/utils"
@@ -38,16 +39,9 @@ export function Component() {
           width: position,
         }}
       >
-        <EntryColumn
-          key={`${feedId}-${view}`}
-        />
+        <EntryColumn key={`${feedId}-${view}`} />
       </div>
-      {!inWideMode && (
-        <div
-          {...separatorProps}
-          className="h-full w-px shrink-0 cursor-ew-resize hover:bg-border"
-        />
-      )}
+      {!inWideMode && <PanelSplitter {...separatorProps} />}
       <Outlet />
     </div>
   )

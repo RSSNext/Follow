@@ -45,11 +45,8 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 function EntryContentRender({ entryId }: { entryId: string }) {
   const user = useMe()
 
-  const { error, data } = useAuthQuery(Queries.entries.byId(entryId), {
+  const { error, data, isPending } = useAuthQuery(Queries.entries.byId(entryId), {
     staleTime: 300_000,
-    meta: {
-      persist: true,
-    },
   })
 
   const entry = useEntry(entryId)
@@ -136,7 +133,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
             <a
               href={entry.entries.url || void 0}
               target="_blank"
-              className="-mx-6 block cursor-default rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none"
+              className="-mx-6 block cursor-default rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
               rel="noreferrer"
             >
               <div className="select-text break-words text-3xl font-bold">
@@ -190,13 +187,21 @@ function EntryContentRender({ entryId }: { entryId: string }) {
             </WrappedElementProvider>
             {!content && (
               <div className="center mt-16">
-                {!error ? (
+                {isPending ? (
                   <LoadingCircle size="large" />
                 ) : (
-                  <div className="center flex flex-col gap-2">
-                    <i className="i-mgc-close-cute-re text-3xl text-red-500" />
-                    <span className="font-sans text-sm">Network Error</span>
-                  </div>
+                  error ?
+                      (
+                        <div className="center flex flex-col gap-2">
+                          <i className="i-mgc-close-cute-re text-3xl text-red-500" />
+                          <span className="font-sans text-sm">Network Error</span>
+                        </div>
+                      ) :
+                      (
+                        <div className="center">
+                          <span className="text-sm text-zinc-400">No content</span>
+                        </div>
+                      )
                 )}
               </div>
             )}

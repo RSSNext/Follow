@@ -1,9 +1,11 @@
+import type { RSSHubRoute } from "@renderer/modules/discover/types"
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
 import { memoize } from "lodash-es"
 import { twMerge } from "tailwind-merge"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "../constants/app"
+import { FeedViewType } from "./enum"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -149,4 +151,25 @@ export const omitObjectUndefinedValue = (obj: Record<string, any>) => {
     }
   }
   return newObj
+}
+
+const rsshubCategoryMap: Partial<Record<string, FeedViewType>> = {
+  "design": FeedViewType.Pictures,
+  "forecast": FeedViewType.Notifications,
+  "live": FeedViewType.Notifications,
+  "picture": FeedViewType.Pictures,
+  "program-update": FeedViewType.Notifications,
+  "social-media": FeedViewType.SocialMedia,
+}
+
+export const getViewFromRoute = (route: RSSHubRoute) => {
+  if (route.view) {
+    return route.view
+  }
+  for (const categories of route.categories) {
+    if (rsshubCategoryMap[categories]) {
+      return rsshubCategoryMap[categories]
+    }
+  }
+  return null
 }

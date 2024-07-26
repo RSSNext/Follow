@@ -33,7 +33,7 @@ export const NetworkStatusIndicator = () => {
           <span className="shrink-0 text-xs font-semibold opacity-50">
             {networkStatus === NetworkStatus.OFFLINE ?
               canUseLocalData ?
-                "Local Mode" :
+                "Local Mode (alpha)" :
                 "Offline" :
               apiStatus === NetworkStatus.OFFLINE ?
                 "API Error" :

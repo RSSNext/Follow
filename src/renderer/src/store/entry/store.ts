@@ -1,19 +1,15 @@
 import { runTransactionInScope } from "@renderer/database"
-import type { UserModel } from "@renderer/database/models/user"
-import type { EntryReadHistoriesModel } from "@renderer/hono"
 import { apiClient } from "@renderer/lib/api-fetch"
 import {
   getEntriesParams,
   omitObjectUndefinedValue,
 } from "@renderer/lib/utils"
-import type {
-  CombinedEntryModel,
-  EntryModel,
-  FeedModel,
+import type { CombinedEntryModel, EntryModel, FeedModel, UserModel,
 } from "@renderer/models"
 import { EntryService } from "@renderer/services"
 import { produce } from "immer"
 import { merge, omit } from "lodash-es"
+import type { EntryReadHistoriesModel } from "src/hono"
 
 import { feedActions } from "../feed"
 import { feedUnreadActions } from "../unread"
@@ -42,9 +38,9 @@ class EntryActions {
   }
 
   clearByFeedId(feedId: string) {
+    const entryIds = get().entries[feedId]
     set((state) =>
       produce(state, (draft) => {
-        const entryIds = draft.entries[feedId]
         if (!entryIds) return
         entryIds.forEach((entryId) => {
           delete draft.flatMapEntries[entryId]
@@ -53,6 +49,7 @@ class EntryActions {
         delete draft.internal_feedId2entryIdSet[feedId]
       }),
     )
+    runTransactionInScope(() => EntryService.deleteEntries(entryIds))
   }
 
   async fetchEntryById(entryId: string) {
@@ -159,6 +156,12 @@ class EntryActions {
     set((state) =>
       produce(state, (draft) => {
         for (const item of data) {
+          const mergedEntry = Object.assign(
+            {},
+            state.flatMapEntries[item.entries.id]?.entries || {},
+            item.entries,
+          )
+
           if (!draft.entries[item.feeds.id]) {
             draft.entries[item.feeds.id] = []
           }
@@ -182,6 +185,7 @@ class EntryActions {
             draft.flatMapEntries[item.entries.id] || {},
             {
               feedId: item.feeds.id,
+              entries: mergedEntry,
             },
             omit(item, "feeds"),
           )
@@ -189,7 +193,7 @@ class EntryActions {
           // Push feed
           feeds.push(item.feeds)
           // Push entry
-          entries.push(item.entries)
+          entries.push(mergedEntry)
           // Push entry2Read
           entry2Read[item.entries.id] = item.read || false
           // Push entryFeedMap
@@ -215,12 +219,13 @@ class EntryActions {
     }))
 
     // Update database
-    runTransactionInScope(() => {
-      EntryService.upsertMany(entries)
-      EntryService.bulkStoreReadStatus(entry2Read)
-      EntryService.bulkStoreFeedId(entryFeedMap)
-      EntryService.bulkStoreCollection(entryCollection)
-    })
+    runTransactionInScope(() =>
+      Promise.all([
+        EntryService.upsertMany(entries, entryFeedMap),
+        EntryService.bulkStoreReadStatus(entry2Read),
+        EntryService.bulkStoreCollection(entryCollection),
+      ]),
+    )
   }
 
   hydrate(data: FlatEntryModel[]) {

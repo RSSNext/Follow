@@ -1,5 +1,5 @@
 import { m } from "@renderer/components/common/Motion"
-import { Image } from "@renderer/components/ui/image"
+import { Media } from "@renderer/components/ui/media"
 import { useModalStack } from "@renderer/components/ui/modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
@@ -15,12 +15,24 @@ import type { UniversalItemProps } from "./types"
 
 const ViewTag = window.electron ? "webview" : "iframe"
 
-export function VideoItem({ entryId, entryPreview, translation }: UniversalItemProps) {
+export function VideoItem({
+  entryId,
+  entryPreview,
+  translation,
+}: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
-  const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
+  const isActive = useRouteParamsSelector(
+    ({ entryId }) => entryId === entry?.entries.id,
+  )
 
-  const [miniIframeSrc, iframeSrc] = useMemo(() => [urlToIframe(entry?.entries.url, true), urlToIframe(entry?.entries.url)], [entry?.entries.url])
+  const [miniIframeSrc, iframeSrc] = useMemo(
+    () => [
+      urlToIframe(entry?.entries.url, true),
+      urlToIframe(entry?.entries.url),
+    ],
+    [entry?.entries.url],
+  )
   const modalStack = useModalStack()
 
   const ref = useRef<HTMLDivElement>(null)
@@ -36,7 +48,11 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
 
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
-    <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
+    <GridItem
+      entryId={entryId}
+      entryPreview={entryPreview}
+      translation={translation}
+    >
       <div
         className="w-full"
         onClick={(e) => {
@@ -45,11 +61,12 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
             modalStack.present({
               title: "",
               content: ({ dismiss }) => (
-                <m.div exit={{ scale: 0.94, opacity: 0 }} className="size-full p-12" onClick={() => dismiss()}>
-                  <ViewTag
-                    src={iframeSrc}
-                    className="size-full"
-                  />
+                <m.div
+                  exit={{ scale: 0.94, opacity: 0 }}
+                  className="size-full p-12"
+                  onClick={() => dismiss()}
+                >
+                  <ViewTag src={iframeSrc} className="size-full" />
                 </m.div>
               ),
               clickOutsideToDismiss: true,
@@ -63,21 +80,36 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
           {miniIframeSrc && hovered ? (
             <ViewTag
               src={miniIframeSrc}
-              className={cn("pointer-events-none aspect-video w-full shrink-0 rounded-md bg-black object-cover", isActive && "rounded-b-none")}
+              className={cn(
+                "pointer-events-none aspect-video w-full shrink-0 rounded-md bg-black object-cover",
+                isActive && "rounded-b-none",
+              )}
             />
-          ) : (
-            <Image
-              key={entry.entries.images?.[0]}
-              src={entry.entries.images?.[0]}
-              className={cn("aspect-video w-full shrink-0 rounded-md object-cover", isActive && "rounded-b-none")}
-              loading="lazy"
-              proxy={{
-                width: 640,
-                height: 360,
-              }}
-              disableContextMenu
-            />
-          )}
+          ) : entry.entries.media ?
+              (
+                <Media
+                  key={entry.entries.media?.[0].url}
+                  src={entry.entries.media?.[0].url}
+                  type={entry.entries.media?.[0].type}
+                  previewImageUrl={entry.entries.media?.[0].preview_image_url}
+                  className={cn(
+                    "aspect-video w-full shrink-0 rounded-md object-cover",
+                    isActive && "rounded-b-none",
+                  )}
+                  loading="lazy"
+                  proxy={{
+                    width: 640,
+                    height: 360,
+                  }}
+                  disableContextMenu
+                />
+              ) :
+              (
+                <div className="center aspect-video w-full flex-col gap-1 bg-muted text-xs text-muted-foreground">
+                  <i className="i-mgc-sad-cute-re size-6" />
+                  No video available
+                </div>
+              )}
         </div>
       </div>
     </GridItem>

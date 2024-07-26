@@ -2,10 +2,10 @@ import { useMe } from "@renderer/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@renderer/components/ui/table"
 import { Balance } from "@renderer/components/ui/wallet/balance"
-import dayjs from "@renderer/lib/dayjs"
 import { cn } from "@renderer/lib/utils"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
 import { useWallet, useWalletTransactions } from "@renderer/queries/wallet"
+import dayjs from "dayjs"
 
 export const TransactionsSection = () => {
   const user = useMe()

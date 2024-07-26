@@ -1,18 +1,20 @@
 import { setAppSearchOpen } from "@renderer/atoms/app"
 import { getReadonlyRoute } from "@renderer/atoms/route"
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
 import { ProfileButton } from "@renderer/components/user-button"
 import { views } from "@renderer/constants"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { Routes } from "@renderer/lib/enum"
-import { shortcuts } from "@renderer/lib/shortcuts"
+import { jotaiStore } from "@renderer/lib/jotai"
 import { clamp, cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useSubscriptionStore } from "@renderer/store/subscription"
@@ -20,6 +22,7 @@ import { useFeedUnreadStore } from "@renderer/store/unread"
 import { useWheel } from "@use-gesture/react"
 import type { MotionValue } from "framer-motion"
 import { m, useSpring } from "framer-motion"
+import { atom, useAtomValue } from "jotai"
 import { Lethargy } from "lethargy"
 import type { PropsWithChildren } from "react"
 import { useCallback, useLayoutEffect, useRef } from "react"
@@ -48,13 +51,13 @@ const useBackHome = (active: number) => {
 
 const useUnreadByView = () => {
   useAuthQuery(Queries.subscription.byView())
-  const idByView = useSubscriptionStore((state) => state.dataIdByView)
+  const idByView = useSubscriptionStore((state) => state.feedIdByView)
   const totalUnread = useFeedUnreadStore((state) => {
     const unread = {} as Record<number, number>
 
     for (const view in idByView) {
       unread[view] = idByView[view].reduce(
-        (acc, feedId) => acc + (state.data[feedId] || 0),
+        (acc: number, feedId: string) => acc + (state.data[feedId] || 0),
         0,
       )
     }
@@ -64,6 +67,7 @@ const useUnreadByView = () => {
   return totalUnread
 }
 
+const carouselWidthAtom = atom(256)
 export function FeedColumn({ children }: PropsWithChildren) {
   const carouselRef = useRef<HTMLDivElement>(null)
 
@@ -93,7 +97,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
   }, [setActive_])
 
   useLayoutEffect(() => {
-    spring.set(-active * 256)
+    spring.set(-active * jotaiStore.get(carouselWidthAtom))
   }, [active, spring])
 
   useHotkeys(
@@ -138,10 +142,27 @@ export function FeedColumn({ children }: PropsWithChildren) {
     },
   )
 
+  useLayoutEffect(() => {
+    const $carousel = carouselRef.current
+    if (!$carousel) return
+
+    const handler = () => {
+      const width = $carousel.clientWidth
+      jotaiStore.set(carouselWidthAtom, width)
+    }
+    handler()
+    new ResizeObserver(handler).observe($carousel)
+    return () => {
+      new ResizeObserver(handler).disconnect()
+    }
+  }, [])
+
   const normalStyle =
     !window.electron || window.electron.process.platform !== "darwin"
 
   const unreadByView = useUnreadByView()
+
+  const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
 
   return (
     <Vibrancy
@@ -193,8 +214,9 @@ export function FeedColumn({ children }: PropsWithChildren) {
             shortcut={`${index + 1}`}
             className={cn(
               active === index && item.className,
-              "flex h-11 flex-col items-center gap-1 text-xl",
+              "flex flex-col items-center gap-1 text-xl",
               "hover:!bg-theme-vibrancyBg",
+              showSidebarUnreadCount && "h-11",
             )}
             onClick={(e) => {
               setActive(index)
@@ -202,13 +224,15 @@ export function FeedColumn({ children }: PropsWithChildren) {
             }}
           >
             {item.icon}
-            <div className="text-[10px] font-medium leading-none">
-              {unreadByView[index] > 99 ? (
-                <span className="-mr-0.5">99+</span>
-              ) : (
-                unreadByView[index]
-              )}
-            </div>
+            {showSidebarUnreadCount && (
+              <div className="text-[0.625rem] font-medium leading-none">
+                {unreadByView[index] > 99 ? (
+                  <span className="-mr-0.5">99+</span>
+                ) : (
+                  unreadByView[index]
+                )}
+              </div>
+            )}
           </ActionButton>
         ))}
       </div>
@@ -217,7 +241,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
           {views.map((item, index) => (
             <section
               key={item.name}
-              className="h-full w-64 shrink-0 snap-center pb-8"
+              className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center pb-8"
             >
               {active === index && (
                 <FeedList
@@ -241,12 +265,13 @@ const SwipeWrapper: Component<{
 }> = ({ children, active, spring }) => {
   const reduceMotion = useReduceMotion()
 
+  const carouselWidth = useAtomValue(carouselWidthAtom)
   if (reduceMotion) {
     return (
       <div
         className="flex h-full"
         style={{
-          transform: `translateX(${-active * 256}px)`,
+          transform: `translateX(${-active * carouselWidth}px)`,
         }}
       >
         {children}

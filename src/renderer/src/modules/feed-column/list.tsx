@@ -38,19 +38,39 @@ const useGroupedData = (view: FeedViewType) => {
     return groupFolder
   }, [data])
 }
+
+const useUpdateUnreadCount = () => {
+  useAuthQuery(Queries.subscription.unreadAll(), {
+    refetchInterval: false,
+  })
+  // const isPageVisible = usePageVisibility()
+
+  // useAccurateInterval(
+  //   () => {
+  //     if (!isPageVisible) {
+  //       refetch()
+  //     }
+  //   },
+  //   {
+  //     enable: !isPageVisible,
+  //     delay:
+  //       // 10s
+  //       10_000,
+  //   },
+  // )
+}
+
 export function FeedList({
   className,
   view,
-  hideTitle,
 }: {
   className?: string
   view: number
-  hideTitle?: boolean
 }) {
   const [expansion, setExpansion] = useState(false)
   const data = useGroupedData(view)
 
-  useAuthQuery(Queries.subscription.unreadAll())
+  useUpdateUnreadCount()
 
   const totalUnread = useFeedUnreadStore((state) => {
     let unread = 0
@@ -92,42 +112,40 @@ export function FeedList({
 
   return (
     <div className={cn(className, "font-medium")}>
-      {!hideTitle && (
+      <div
+        onClick={stopPropagation}
+        className="mx-3 mb-2 flex items-center justify-between px-2.5 py-1"
+      >
         <div
-          onClick={stopPropagation}
-          className="mx-3 mb-2 flex items-center justify-between px-2.5 py-1"
+          className="font-bold"
+          onClick={(e) => {
+            e.stopPropagation()
+            if (view !== undefined) {
+              navigate({
+                entryId: null,
+                feedId: null,
+                view,
+              })
+            }
+          }}
         >
-          <div
-            className="font-bold"
-            onClick={(e) => {
-              e.stopPropagation()
-              if (view !== undefined) {
-                navigate({
-                  entryId: null,
-                  feedId: null,
-                  view,
-                })
-              }
-            }}
-          >
-            {view !== undefined && views[view].name}
-          </div>
-          <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
-            {expansion ? (
-              <i
-                className="i-mgc-list-collapse-cute-fi"
-                onClick={() => setExpansion(false)}
-              />
-            ) : (
-              <i
-                className="i-mgc-list-expansion-cute-fi"
-                onClick={() => setExpansion(true)}
-              />
-            )}
-            <span>{totalUnread}</span>
-          </div>
+          {view !== undefined && views[view].name}
         </div>
-      )}
+        <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
+          {expansion ? (
+            <i
+              className="i-mgc-list-collapse-cute-fi"
+              onClick={() => setExpansion(false)}
+            />
+          ) : (
+            <i
+              className="i-mgc-list-expansion-cute-fi"
+              onClick={() => setExpansion(true)}
+            />
+          )}
+          <span>{totalUnread}</span>
+        </div>
+      </div>
       <ScrollArea.ScrollArea flex viewportClassName="!px-3">
         <div
           className={cn(
@@ -148,7 +166,7 @@ export function FeedList({
           <i className="i-mgc-star-cute-fi mr-2 text-orange-500" />
           Starred
         </div>
-        {hasData ?
+        {hasData ? (
           sortedByUnread?.map(([category, ids]) => (
             <FeedCategory
               showUnreadCount={showUnreadCount}
@@ -157,19 +175,19 @@ export function FeedList({
               view={view}
               expansion={expansion}
             />
-          )) :
-            !hideTitle && (
-              <div className="flex h-full flex-1 items-center text-zinc-500">
-                <Link
-                  to="/discover"
-                  className="-mt-36 flex h-full flex-1 cursor-default flex-col items-center justify-center gap-2"
-                  onClick={stopPropagation}
-                >
-                  <i className="i-mgc-add-cute-re text-3xl" />
-                  Add some feeds
-                </Link>
-              </div>
-            )}
+          ))
+        ) : (
+          <div className="flex h-full flex-1 items-center text-zinc-500">
+            <Link
+              to="/discover"
+              className="-mt-36 flex h-full flex-1 cursor-default flex-col items-center justify-center gap-2"
+              onClick={stopPropagation}
+            >
+              <i className="i-mgc-add-cute-re text-3xl" />
+              Add some feeds
+            </Link>
+          </div>
+        )}
       </ScrollArea.ScrollArea>
     </div>
   )

@@ -51,7 +51,7 @@ export function SettingModalLayout(
         scale: 0.96,
       }}
       className={cn(
-        "relative flex h-[500px] max-h-[80vh] w-[660px] max-w-full flex-col overflow-hidden rounded-xl border border-border",
+        "relative flex h-[500px] max-h-[80vh] w-[calc(170px+55ch)] max-w-full flex-col overflow-hidden rounded-xl border border-border",
         !overlay && "shadow-perfect",
       )}
       onContextMenu={preventDefault}

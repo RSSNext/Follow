@@ -1,6 +1,6 @@
 import { ActionButton } from "@renderer/components/ui/button"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
-import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { AnimatePresence, m } from "framer-motion"
@@ -24,11 +24,6 @@ export function EntryHeader({
     view,
     entry,
   })
-
-  // useHotkeys(shortcuts.entry.toggleRead.key, () => {
-  //   const key = entry?.read ? "unread" : "read"
-  //   items.find((item) => item.key === key)?.onClick()
-  // }, { scopes: ["home"] })
 
   useHotkeys(
     shortcuts.entry.toggleStarred.key,
@@ -106,7 +101,6 @@ export function EntryHeader({
                 key={item.name}
               />
             ))}
-
         </div>
       </div>
     </div>

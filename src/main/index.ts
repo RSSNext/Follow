@@ -8,6 +8,7 @@ import { app, BrowserWindow, session } from "electron"
 import { env } from "../env"
 import { isDev } from "./env"
 import { initializationApp } from "./init"
+import { setAuthSessionToken } from "./lib/user"
 import { registerUpdater } from "./updater"
 import { createMainWindow, createWindow } from "./window"
 
@@ -55,6 +56,8 @@ function bootsharp() {
       if (BrowserWindow.getAllWindows().length === 0) {
         mainWindow = createMainWindow()
       }
+
+      if (mainWindow) mainWindow.show()
     })
 
     app.on("open-url", (_, url) => {
@@ -108,6 +111,7 @@ function bootsharp() {
       const apiURL =
         process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
       if (token && apiURL) {
+        setAuthSessionToken(token)
         mainWindow.webContents.session.cookies.set({
           url: apiURL,
           name: "authjs.session-token",
@@ -130,16 +134,21 @@ function bootsharp() {
         resizable,
       })
     }
-
-    // Quit when all windows are closed, except on  macOS. There, it's common
-    // for applications and their menu bar to stay active until the user quits
-    // explicitly with Cmd + Q.
-    app.on("window-all-closed", () => {
-      if (process.platform !== "darwin") {
-        app.quit()
-      }
-    })
   }
+
+  // Quit when all windows are closed, except on  macOS. There, it's common
+  // for applications and their menu bar to stay active until the user quits
+  // explicitly with Cmd + Q.
+  app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") {
+      app.quit()
+    }
+  })
+
+  app.on("before-quit", () => {
+    const windows = BrowserWindow.getAllWindows()
+    windows.forEach((window) => window.destroy())
+  })
 }
 
 bootsharp()

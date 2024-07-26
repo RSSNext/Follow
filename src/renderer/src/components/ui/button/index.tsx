@@ -124,9 +124,11 @@ export const ActionButton = React.forwardRef<
               {children}
             </Button>
           </TooltipTrigger>
-          <TooltipContent side={tooltipSide ?? "bottom"}>
+          <TooltipContent className="flex items-center gap-1" side={tooltipSide ?? "bottom"}>
             {tooltip}
-            {shortcut && shortcut.split("+").map((key) => <Kbd key={key}>{key}</Kbd>)}
+            <div className="ml-1">
+              {shortcut && <Kbd className="text-foreground/80">{shortcut}</Kbd>}
+            </div>
           </TooltipContent>
         </Tooltip>
       </>
@@ -145,6 +147,7 @@ const HotKeyTrigger = ({
 }) => {
   useHotkeys(shortcut, fn, {
     scopes: ["home"],
+    preventDefault: true,
     ...options,
   })
   return null

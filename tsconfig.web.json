@@ -7,7 +7,8 @@
     "src/preload/*.d.ts",
     "src/shared/src/**/*",
     "types/**/*.d.ts",
-    "src/env.ts"
+    "src/env.ts",
+    "src/hono.ts"
   ],
   "compilerOptions": {
     "composite": true,
@@ -17,6 +18,9 @@
     "noUnusedLocals": false,
     "strict": true,
     "baseUrl": ".",
+    "types": [
+      "vite-plugin-pwa/client"
+    ],
     "paths": {
       "@renderer/*": [
         "src/renderer/src/*"
@@ -27,11 +31,12 @@
       "@shared/*": [
         "src/shared/src/*"
       ],
-      "@pkg": ["./package.json"],
-      "@env": ["./src/env.ts"]
-    },
-    "types": [
-      "vite-plugin-pwa/client"
-    ]
+      "@pkg": [
+        "./package.json"
+      ],
+      "@env": [
+        "./src/env.ts"
+      ]
+    }
   }
 }

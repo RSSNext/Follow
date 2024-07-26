@@ -22,6 +22,7 @@ import {
   ROUTE_FEED_IN_FOLDER,
   views,
 } from "@renderer/constants"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import {
   useRouteEntryId,
@@ -30,7 +31,6 @@ import {
 import { useRefValue } from "@renderer/hooks/common"
 import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
 import { apiClient } from "@renderer/lib/api-fetch"
-import { shortcuts } from "@renderer/lib/shortcuts"
 import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
 import { EntryHeader } from "@renderer/modules/entry-content/header"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
@@ -93,7 +93,6 @@ export function EntryColumn() {
   const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
 
   const virtuosoOptions = {
-    virtuosoRef,
     components: {
       List: ListContent,
 
@@ -153,17 +152,26 @@ export function EntryColumn() {
         exit={{ opacity: 0.01, y: -100 }}
       >
         {virtuosoOptions.totalCount === 0 ? (
-          entries.isLoading ? <LoadingCircle className="center h-full" size="large" /> : <EmptyList />
+          entries.isLoading ?
+              (
+                <LoadingCircle
+                  className="center h-full -translate-y-12"
+                  size="large"
+                />
+              ) :
+              (
+                <EmptyList />
+              )
         ) : view && views[view].gridMode ?
             (
               <VirtuosoGrid
                 listClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 px-4"
                 {...virtuosoOptions}
-                ref={virtuosoOptions.virtuosoRef}
+                ref={virtuosoRef}
               />
             ) :
             (
-              <EntryList {...virtuosoOptions} />
+              <EntryList {...virtuosoOptions} virtuosoRef={virtuosoRef} />
             )}
       </m.div>
     </div>
@@ -197,9 +205,7 @@ const ListHeader: FC<{
 
     if (typeof routerParams.feedId === "number" || routerParams.isAllFeeds) {
       subscriptionActions.markReadByView(routerParams.view)
-    } else if (
-      routerParams.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)
-    ) {
+    } else if (routerParams.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)) {
       subscriptionActions.markReadByFolder(
         routerParams.feedId.replace(ROUTE_FEED_IN_FOLDER, ""),
       )
@@ -371,11 +377,11 @@ const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
   },
 )
 
-const EntryList: FC<VirtuosoProps<string, unknown> & {
-  virtuosoRef: React.RefObject<VirtuosoHandle>
-}> = ({
-  ...virtuosoOptions
-}) => {
+const EntryList: FC<
+  VirtuosoProps<string, unknown> & {
+    virtuosoRef: React.RefObject<VirtuosoHandle>
+  }
+> = ({ virtuosoRef, ...virtuosoOptions }) => {
   const dataRef = useRefValue(virtuosoOptions.data!)
   const currentEntryIdRef = useRefValue(useRouteEntryId())
 
@@ -414,7 +420,7 @@ const EntryList: FC<VirtuosoProps<string, unknown> & {
 
       const nextIndex = Math.min(currentActiveEntryIndex + 1, data.length - 1)
 
-      virtuosoOptions.virtuosoRef.current?.scrollIntoView?.({
+      virtuosoRef.current?.scrollIntoView?.({
         index: nextIndex,
       })
       const nextId = data![nextIndex]
@@ -438,7 +444,7 @@ const EntryList: FC<VirtuosoProps<string, unknown> & {
           data.length - 1 :
           Math.max(0, currentActiveEntryIndex - 1)
 
-      virtuosoOptions.virtuosoRef.current?.scrollIntoView?.({
+      virtuosoRef.current?.scrollIntoView?.({
         index: nextIndex,
       })
       const nextId = data![nextIndex]
@@ -462,7 +468,7 @@ const EntryList: FC<VirtuosoProps<string, unknown> & {
     <Virtuoso
       onKeyDown={handleKeyDown}
       {...virtuosoOptions}
-      ref={virtuosoOptions.virtuosoRef}
+      ref={virtuosoRef}
     />
   )
 }

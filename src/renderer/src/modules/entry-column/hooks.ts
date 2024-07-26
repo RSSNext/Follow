@@ -1,11 +1,11 @@
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { views } from "@renderer/constants"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import {
   useRouteParamsSelector,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { shortcuts } from "@renderer/lib/shortcuts"
 import { entries, useEntries } from "@renderer/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
 import { useFolderFeedsByFeedId } from "@renderer/store/subscription"
@@ -58,11 +58,7 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
     scrollMarkUnread,
   ])
 }
-export const useEntriesByView = ({
-  onReset,
-}: {
-  onReset?: () => void
-}) => {
+export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
   const routeParams = useRouteParms()
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
@@ -77,28 +73,28 @@ export const useEntriesByView = ({
   }
   const query = useEntries(entriesOptions)
 
-  const [firstPublishedAt, setFirstPublishedAt] = useState<string>()
-  const [hasUpdate, setHasUpdate] = useState(false)
-  const firstEntry = useAuthQuery(entries.entries({
-    ...entriesOptions,
-    limit: 1,
-  }), {
-    refetchInterval: 1000 * 6,
-    enabled: !hasUpdate && !!firstPublishedAt,
-  })
+  const lastPublishedAt =
+    query.data?.pages?.[0]?.data?.[0]?.entries.publishedAt
+
+  const [pauseQuery, setPauseQuery] = useState(false)
+  const hasNewQuery = useAuthQuery(
+    entries.checkNew({
+      ...entriesOptions,
+      lastPublishedAt: lastPublishedAt!,
+    }),
+    {
+      refetchInterval: 1000 * 60,
+      enabled: !!lastPublishedAt && !pauseQuery,
+    },
+  )
+  const hasUpdate = useMemo(
+    () => !!(lastPublishedAt && hasNewQuery?.data?.data.has_new),
+    [hasNewQuery?.data?.data.has_new, lastPublishedAt],
+  )
 
   useEffect(() => {
-    if (query.data?.pages?.[0]?.data?.[0]) {
-      setFirstPublishedAt(query.data.pages[0].data[0].entries.publishedAt)
-      setHasUpdate(false)
-    }
-  }, [query.data?.pages?.[0]?.data?.[0]])
-
-  useEffect(() => {
-    if (!hasUpdate && firstPublishedAt && firstEntry.data?.data?.[0] && new Date(firstPublishedAt) < new Date(firstEntry.data.data[0].entries.publishedAt)) {
-      setHasUpdate(true)
-    }
-  }, [firstEntry.data?.data?.[0]])
+    setPauseQuery(hasUpdate)
+  }, [hasUpdate])
 
   const remoteEntryIds = useMemo(
     () =>

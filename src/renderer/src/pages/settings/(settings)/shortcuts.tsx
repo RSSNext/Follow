@@ -1,4 +1,5 @@
-import { shortcuts } from "@renderer/lib/shortcuts"
+import { Kbd } from "@renderer/components/ui/kbd/Kbd"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import { cn } from "@renderer/lib/utils"
 import { SettingsTitle } from "@renderer/modules/settings/title"
 import { defineSettingPage } from "@renderer/modules/settings/utils"
@@ -31,11 +32,9 @@ export function Component() {
                 >
                   <div>{shortcuts[type][action].name}</div>
                   <div>
-                    {shortcuts[type][action].key.split(",").map((keys) => (
-                      <kbd key={keys} className="kbd ml-1">
-                        {keys}
-                      </kbd>
-                    ))}
+                    <Kbd>
+                      {`${shortcuts[type][action].key}${shortcuts[type][action].extra ? `, ${shortcuts[type][action].extra}` : ""}`}
+                    </Kbd>
                   </div>
                 </div>
               ))}

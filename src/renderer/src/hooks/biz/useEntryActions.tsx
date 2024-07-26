@@ -1,7 +1,7 @@
 import { COPY_MAP } from "@renderer/constants"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
-import { shortcuts } from "@renderer/lib/shortcuts"
 import type { CombinedEntryModel } from "@renderer/models"
 import { useTipModal } from "@renderer/modules/wallet/hooks"
 import type { FlatEntryModel } from "@renderer/store/entry"
@@ -149,21 +149,21 @@ export const useEntryActions = ({
           },
         },
         {
-          name: "Save Images to Eagle",
+          name: "Save Media to Eagle",
           icon: "/eagle.svg",
           disabled:
             (checkEagle.isLoading ? true : !checkEagle.data) ||
-            !populatedEntry.entries.images?.length,
+            !populatedEntry.entries.media?.length,
           onClick: async () => {
             if (
               !populatedEntry.entries.url ||
-              !populatedEntry.entries.images?.length
+              !populatedEntry.entries.media?.length
             ) {
               return
             }
             const response = await tipcClient?.saveToEagle({
               url: populatedEntry.entries.url,
-              images: populatedEntry.entries.images,
+              mediaUrls: populatedEntry.entries.media.map((m) => m.url),
             })
             if (response?.status === "success") {
               toast("Saved to Eagle.", {
@@ -180,7 +180,7 @@ export const useEntryActions = ({
           name: "Share",
           className: "i-mgc-share-forward-cute-re",
           disabled:
-            !window.electron || !navigator.share,
+            !window.electron && !navigator.share,
           onClick: () => {
             if (!populatedEntry.entries.url) return
 

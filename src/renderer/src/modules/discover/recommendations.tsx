@@ -18,10 +18,15 @@ export function Recommendations() {
   const keys = useMemo(() => {
     if (data) {
       return Object.keys(data).sort((a, b) => {
-        const aname = data[a].name[0]
-        const bname = data[b].name[0]
-        const ia = isASCII(aname)
-        const ib = isASCII(bname)
+        const aname = data[a].name
+        const bname = data[b].name
+
+        const aRouteName = data[a].routes[Object.keys(data[a].routes)[0]].name
+        const bRouteName = data[b].routes[Object.keys(data[b].routes)[0]].name
+
+        const ia = isASCII(aname) && isASCII(aRouteName)
+        const ib = isASCII(bname) && isASCII(bRouteName)
+
         if (ia && ib) {
           return aname.toLowerCase() < bname.toLowerCase() ? -1 : 1
         } else if (ia || ib) {

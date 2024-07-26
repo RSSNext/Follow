@@ -110,9 +110,11 @@ export function DiscoverImport() {
               </FormItem>
             )}
           />
-          <StyledButton type="submit" isLoading={mutation.isPending}>
-            Import
-          </StyledButton>
+          <div className="center flex">
+            <StyledButton type="submit" isLoading={mutation.isPending}>
+              Import
+            </StyledButton>
+          </div>
         </form>
       </Form>
       {mutation.isSuccess && (

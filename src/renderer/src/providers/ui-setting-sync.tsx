@@ -15,11 +15,11 @@ const useUISettingSync = () => {
   useEffect(() => {
     if (setting.showDockBadge) {
       return feedUnreadActions.subscribeUnreadCount(
-        (count) => tipcClient?.setMacOSBadge(count),
+        (count) => tipcClient?.setDockBadge(count),
         true,
       )
     } else {
-      tipcClient?.setMacOSBadge(0)
+      tipcClient?.setDockBadge(0)
     }
     return
   }, [setting.showDockBadge])

@@ -27,8 +27,8 @@ const Thumb = React.forwardRef<
     ref={forwardedRef}
     className={cn(
       "relative w-full flex-1 rounded-xl transition-colors duration-150",
-      "bg-gray-300 hover:bg-theme-accent/80 dark:bg-neutral-500",
-      "active:bg-theme-accent-50/50",
+      "bg-gray-300 hover:bg-neutral-400/80 dark:bg-neutral-500",
+      "active:bg-neutral-400/50",
       "before:absolute before:-left-1/2 before:-top-1/2 before:h-full before:min-h-[44]",
       "before:w-full before:min-w-[44] before:-translate-x-full before:-translate-y-full before:content-[\"\"]",
       className,
@@ -47,7 +47,7 @@ export const Scrollbar = React.forwardRef<
       {...rest}
       ref={forwardedRef}
       className={cn(
-        "z-[10000] flex w-2.5 touch-none select-none p-0.5",
+        "z-[99] flex w-2.5 touch-none select-none p-0.5",
         orientation === "horizontal" ?
           `h-2.5 w-full flex-col` :
           `w-2.5 flex-row`,
@@ -63,23 +63,30 @@ Scrollbar.displayName = "ScrollArea.Scrollbar"
 
 export const Viewport = React.forwardRef<
   React.ElementRef<typeof ScrollAreaBase.Viewport>,
-  React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Viewport>
->(({ className, ...rest }, forwardedRef) => {
+  React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Viewport> & {
+    mask?: boolean
+  }
+>(({ className, mask, ...rest }, forwardedRef) => {
   const ref = React.useRef<HTMLDivElement>(null)
-  const [canScroll, setCanScroll] = React.useState(false)
+  const [shouldAddMask, setShouldAddMask] = React.useState(false)
   React.useLayoutEffect(() => {
+    if (!mask) {
+      setShouldAddMask(false)
+      return
+    }
     const $el = ref.current
+    const $child = $el?.firstElementChild
     if (!$el) return
+    if (!$child) return
     const handler = () => {
-      const canScroll = $el.scrollHeight > $el.clientHeight
-      setCanScroll(canScroll)
+      setShouldAddMask($el.scrollHeight > ($el.clientHeight + 48 * 2))
     }
     const observer = new ResizeObserver(handler)
     handler()
-    observer.observe($el)
+    observer.observe($child)
 
     return () => observer.disconnect()
-  }, [])
+  }, [mask])
 
   React.useImperativeHandle(forwardedRef, () => ref.current as HTMLDivElement)
   return (
@@ -88,7 +95,7 @@ export const Viewport = React.forwardRef<
       ref={ref}
       className={cn(
         "block size-full",
-        canScroll && styles["scroller"],
+        shouldAddMask && styles["scroller"],
         className,
       )}
     />
@@ -118,10 +125,18 @@ export const ScrollArea = React.forwardRef<
     viewportClassName?: string
     scrollbarClassName?: string
     flex?: boolean
+    mask?: boolean
   }
 >(
   (
-    { flex, children, rootClassName, viewportClassName, scrollbarClassName },
+    {
+      flex,
+      children,
+      rootClassName,
+      viewportClassName,
+      scrollbarClassName,
+      mask = true,
+    },
     ref,
   ) => (
     <Root className={rootClassName}>
@@ -132,6 +147,7 @@ export const ScrollArea = React.forwardRef<
           flex ? "[&>div]:!flex [&>div]:!flex-col" : "",
           viewportClassName,
         )}
+        mask={mask}
       >
         {children}
       </Viewport>
