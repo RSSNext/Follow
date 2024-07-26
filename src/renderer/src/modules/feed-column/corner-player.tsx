@@ -1,8 +1,14 @@
 import * as Slider from "@radix-ui/react-slider"
 import { Player, usePlayerAtomValue } from "@renderer/atoms/player"
 import { FeedIcon } from "@renderer/components/feed-icon"
-import { softBouncePreset } from "@renderer/components/ui/constants/spring"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
+import {
+  microReboundPreset,
+} from "@renderer/components/ui/constants/spring"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@renderer/components/ui/tooltip"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry"
 import { useFeedById } from "@renderer/store/feed"
@@ -21,28 +27,35 @@ export const CornerPlayer = () => {
   const feed = useFeedById(entry?.feedId)
 
   const { currentTime = 0, duration = 0 } = playerValue
-  const [controlledCurrentTime, setControlledCurrentTime] = useState(currentTime)
+  const [controlledCurrentTime, setControlledCurrentTime] =
+    useState(currentTime)
   const [isDraggingProgress, setIsDraggingProgress] = useState(false)
   useEffect(() => {
     if (isDraggingProgress) return
     setControlledCurrentTime(currentTime)
   }, [currentTime, isDraggingProgress])
 
-  const currentTimeIndicator = dayjs().startOf("y").second(controlledCurrentTime).format("mm:ss")
-  const remainingTimeIndicator = dayjs().startOf("y").second(duration - controlledCurrentTime).format("mm:ss")
+  const currentTimeIndicator = dayjs()
+    .startOf("y")
+    .second(controlledCurrentTime)
+    .format("mm:ss")
+  const remainingTimeIndicator = dayjs()
+    .startOf("y")
+    .second(duration - controlledCurrentTime)
+    .format("mm:ss")
 
   return (
     <AnimatePresence>
       {playerValue.show && entry && feed && (
         <m.div
-          className="group absolute inset-x-1 bottom-10"
+          className="group absolute inset-x-0 bottom-10"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
-          transition={{ ...softBouncePreset, duration: 0.1 }}
+          transition={microReboundPreset}
         >
           {/* advanced controls */}
-          <div className="flex translate-y-10 justify-between rounded-t-lg bg-theme-modal-background p-1 opacity-0 shadow backdrop-blur transition-all duration-200 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="flex translate-y-10 justify-between bg-theme-modal-background p-1 opacity-0 shadow backdrop-blur transition-all duration-200 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
             <div>
               <ActionIcon
                 className="i-mingcute-close-fill"
@@ -50,12 +63,13 @@ export const CornerPlayer = () => {
                 label="Close"
               />
             </div>
-            <div>
+            <div className="flex items-center">
               <ActionIcon
-                className="i-mingcute-fast-forward-fill"
                 label={<PlaybackRateSelector />}
                 labelDelayDuration={0}
-              />
+              >
+                <PlaybackRateButton />
+              </ActionIcon>
               <ActionIcon
                 className={cn(
                   playerValue.isMute ?
@@ -79,19 +93,19 @@ export const CornerPlayer = () => {
             </div>
           </div>
 
-          <div className="flex rounded-lg bg-theme-modal-background shadow backdrop-blur transition-all duration-200 ease-in-out hover:rounded-b-lg hover:rounded-t-none">
+          <div className="relative flex bg-theme-modal-background shadow backdrop-blur transition-all duration-200 ease-in-out hover:rounded-b-lg hover:rounded-t-none">
             {/* play cover */}
-            <div className="relative">
+            <div className="relative h-full">
               <FeedIcon
                 feed={feed}
                 entry={entry.entries}
-                size={50}
-                className="m-0"
+                size={58}
+                className="m-0 size-[3.625rem] rounded-none"
               />
               <div className="center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100">
                 <button
                   type="button"
-                  className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-theme-accent hover:opacity-100"
+                  className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-theme-accent hover:text-white hover:opacity-100"
                   onClick={handleClickPlay}
                 >
                   <i
@@ -106,7 +120,7 @@ export const CornerPlayer = () => {
               </div>
             </div>
 
-            <div className="relative truncate text-center text-sm">
+            <div className="relative truncate p-1 text-center text-sm">
               <Marquee
                 play={playerValue.status === "playing"}
                 gradient
@@ -116,7 +130,9 @@ export const CornerPlayer = () => {
               >
                 {entry.entries.title}
               </Marquee>
-              <div className="text-xs text-muted-foreground">{feed.title}</div>
+              <div className="mt-0.5 text-xs text-muted-foreground">
+                {feed.title}
+              </div>
 
               {/* progress control */}
               <div className="relative mt-2">
@@ -141,12 +157,12 @@ export const CornerPlayer = () => {
                   onValueCommit={(value) => Player.seek(value[0])}
                 >
                   <Slider.Track className="relative h-1 w-full grow bg-muted group-hover:bg-theme-disabled">
-                    <Slider.Range className="absolute h-1 rounded-md bg-theme-accent" />
+                    <Slider.Range className="absolute h-1 bg-theme-accent" />
                   </Slider.Track>
 
                   {/* indicator */}
                   <Slider.Thumb
-                    className="block h-2 w-1 rounded-sm bg-theme-accent"
+                    className="block h-2 w-[3px] bg-theme-accent"
                     aria-label="Progress"
                   />
                 </Slider.Root>
@@ -164,11 +180,13 @@ const ActionIcon = ({
   onClick,
   label,
   labelDelayDuration = 700,
+  children,
 }: {
   className?: string
   onClick?: () => void
   label: React.ReactNode
   labelDelayDuration?: number
+  children?: React.ReactNode
 }) => (
   <Tooltip delayDuration={labelDelayDuration}>
     <TooltipTrigger>
@@ -177,7 +195,7 @@ const ActionIcon = ({
         className="center size-6 rounded-md text-zinc-500 hover:bg-theme-item-hover"
         onClick={onClick}
       >
-        <i className={className} />
+        {children || <i className={className} />}
       </button>
     </TooltipTrigger>
     <TooltipContent>{label}</TooltipContent>
@@ -218,7 +236,8 @@ const PlaybackRateSelector = () => {
           type="button"
           className={cn(
             "center rounded-md font-mono hover:bg-theme-item-hover",
-            playerValue.playbackRate === rate && "bg-theme-item-hover text-black dark:text-white",
+            playerValue.playbackRate === rate &&
+            "bg-theme-item-hover text-black dark:text-white",
             playerValue.playbackRate !== rate && "text-zinc-500",
           )}
           onClick={() => Player.setPlaybackRate(rate)}
@@ -227,7 +246,23 @@ const PlaybackRateSelector = () => {
           x
         </button>
       ))}
-
     </div>
+  )
+}
+
+const PlaybackRateButton = () => {
+  const playerValue = usePlayerAtomValue()
+
+  const char = `${playerValue.playbackRate || 1}`
+  return (
+    <span
+      className={cn(
+        char.length > 1 ? "text-[9px]" : "text-xs",
+        "block font-mono font-bold",
+      )}
+    >
+      {char}
+      x
+    </span>
   )
 }

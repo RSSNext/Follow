@@ -29,7 +29,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
     return (
       <m.div
         onContextMenu={stopPropagation}
-        className="-mt-2 flex size-full min-w-0 flex-col items-center justify-center gap-1 text-lg font-medium text-zinc-400"
+        className="-mt-2 flex size-full min-w-0 flex-col items-center justify-center gap-1 text-balance px-12 text-center text-lg font-medium text-zinc-400"
         initial={{ opacity: 0.01, y: 300 }}
         animate={{ opacity: 1, y: 0 }}
       >

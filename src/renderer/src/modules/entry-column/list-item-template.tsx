@@ -180,7 +180,7 @@ function AudioCover({
       >
         <button
           type="button"
-          className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-theme-accent hover:opacity-100"
+          className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-theme-accent hover:text-white hover:opacity-100"
         >
           <i
             className={cn("size-6", {
@@ -195,9 +195,13 @@ function AudioCover({
         </button>
       </div>
 
-      <div className="absolute bottom-0 w-full bg-theme-background text-center text-[13px] opacity-50">
-        {estimatedMins ? `${estimatedMins} m` : "- m"}
-      </div>
+      {!!estimatedMins && (
+        <div className="absolute bottom-0 w-full rounded-b-sm bg-white/50 text-center text-[13px] backdrop-blur dark:bg-neutral-900/70">
+          {estimatedMins}
+          {" "}
+          mins
+        </div>
+      )}
     </div>
   )
 }

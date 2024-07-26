@@ -22,7 +22,7 @@ const playerInitialValue: PlayerAtomValue = {
 }
 
 export const [
-  playerAtom,
+  ,
   usePlayerAtom,
   usePlayerAtomValue,
   useSetPlayerAtom,
