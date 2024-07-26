@@ -146,7 +146,7 @@ function AudioCover({
 }) {
   const playerValue = usePlayerAtomValue()
 
-  const isMeActive = playerValue.src === src
+  const isMeActive = playerValue.src === src && playerValue.show
 
   const estimatedMins = durationInSeconds ?
     Math.floor(durationInSeconds / 60) :

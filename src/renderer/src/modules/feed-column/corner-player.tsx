@@ -36,7 +36,7 @@ export const CornerPlayer = () => {
           className="group relative z-10 -mt-10 mb-10 w-full"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 50, opacity: 1 }}
+          exit={{ y: 50, opacity: 0 }}
           transition={{ ...microReboundPreset, duration: 0.2 }}
           onClick={(e) => e.stopPropagation()}
         >

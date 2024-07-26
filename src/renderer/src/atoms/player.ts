@@ -107,8 +107,9 @@ export const Player = {
   },
   close() {
     setPlayerAtomValue({
+      ...getPlayerAtomValue(),
       show: false,
-      currentTime: 0,
+      status: "paused",
     })
 
     this.currentTimeTimer && clearInterval(this.currentTimeTimer)
