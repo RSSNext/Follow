@@ -18,6 +18,7 @@ type PlayerAtomValue = {
 const playerInitialValue: PlayerAtomValue = {
   show: false,
   volume: 0.8,
+  duration: 0,
   playbackRate: 1,
 }
 
@@ -43,7 +44,7 @@ export const Player = {
   get() {
     return getPlayerAtomValue()
   },
-  play(v: Omit<PlayerAtomValue, "show" | "status" | "playedSeconds">) {
+  play(v: Omit<PlayerAtomValue, "show" | "status" | "playedSeconds" | "duration">) {
     const curV = getPlayerAtomValue()
     if (!v.src || (curV.src === v.src && curV.status === "playing")) {
       return
@@ -75,6 +76,7 @@ export const Player = {
       setPlayerAtomValue({
         ...getPlayerAtomValue(),
         status: "playing",
+        duration: this.audio.duration,
       })
     })
   },

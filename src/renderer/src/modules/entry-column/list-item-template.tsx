@@ -168,7 +168,6 @@ function AudioCover({
         type: "audio",
         entryId,
         src,
-        duration: durationInSeconds,
         currentTime: 0,
       })
     } else {

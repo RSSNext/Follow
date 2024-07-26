@@ -53,6 +53,7 @@ export const CornerPlayer = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
           transition={microReboundPreset}
+          onClick={(e) => e.stopPropagation()}
         >
           {/* advanced controls */}
           <div className="flex translate-y-10 justify-between bg-theme-modal-background p-1 opacity-0 shadow backdrop-blur transition-all duration-200 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
@@ -130,7 +131,7 @@ export const CornerPlayer = () => {
               >
                 {entry.entries.title}
               </Marquee>
-              <div className="mt-0.5 text-xs text-muted-foreground">
+              <div className="mt-0.5 overflow-hidden truncate text-xs text-muted-foreground group-hover:mx-8">
                 {feed.title}
               </div>
 
