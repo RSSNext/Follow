@@ -1,8 +1,14 @@
 import type { PropsWithChildren } from "react"
 import { useCallback, useRef, useState } from "react"
+import type { MarqueeProps } from "react-fast-marquee"
 import Marquee from "react-fast-marquee"
 
-export const TitleMarquee = ({ children }: PropsWithChildren) => {
+export const TitleMarquee = ({
+  children,
+  speed = 30,
+  play,
+  ...rest
+}: PropsWithChildren & MarqueeProps) => {
   const [hovered, setHovered] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -42,13 +48,7 @@ export const TitleMarquee = ({ children }: PropsWithChildren) => {
         })
       }, [])}
     >
-      <Marquee
-        play={hovered}
-        ref={ref}
-        // gradient
-        // gradientWidth={24}
-        speed={30}
-      >
+      <Marquee play={hovered} ref={ref} speed={speed} {...rest}>
         {children}
       </Marquee>
     </div>
