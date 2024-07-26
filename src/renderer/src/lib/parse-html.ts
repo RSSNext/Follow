@@ -1,6 +1,7 @@
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import { ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
 import { MarkdownLink } from "@renderer/components/ui/link"
+import { MarkdownBlockImage } from "@renderer/components/ui/markdown/renderers/BlockImage"
 import { Media } from "@renderer/components/ui/media"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
@@ -58,24 +59,21 @@ export const parseHtml = async (
           createElement(MarkdownLink, { ...props } as any),
         img: ({ node, ...props }) => {
           if (node?.properties.inline) {
-            return createElement("img", {
-              src: props.src,
-              style: { maxWidth: "100%", display: "inline" },
+            return createElement(Media, {
+              type: "photo",
+              ...props,
+              mediaContainerClassName: tw`max-w-full inline size-auto`,
+              popper: true,
+              className: tw`inline`,
             })
           }
-          return createElement(Media, {
-            ...props,
-            mediaContainerClassName: "w-full rounded",
-            className: "flex justify-center",
 
-            popper: true,
-            type: "photo",
-          })
+          return createElement(MarkdownBlockImage, props)
         },
         video: ({ node, ...props }) =>
           createElement(Media, { ...props, popper: true, type: "video" }),
         p: ({ node, ...props }) => {
-          if (node?.children) {
+          if (node?.children && node.children.length !== 1) {
             for (const item of node.children) {
               item.type === "element" &&
               item.tagName === "img" &&

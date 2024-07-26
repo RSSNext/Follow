@@ -74,4 +74,8 @@
   table * {
     font-size: 1rem;
   }
+
+  table table {
+    margin: 0;
+  }
 }

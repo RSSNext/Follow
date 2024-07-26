@@ -61,11 +61,7 @@ export function ListItem({
           <span className="truncate">{feed.title}</span>
           <span>·</span>
           <span className="shrink-0">
-            {!!displayTime && (
-              <RelativeTime
-                date={displayTime}
-              />
-            )}
+            {!!displayTime && <RelativeTime date={displayTime} />}
           </span>
         </div>
         <div
