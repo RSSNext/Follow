@@ -43,7 +43,7 @@ export function EntryHeader({
   )
 
   const entryTitleMeta = useEntryTitleMeta()
-  if (!entry?.entries.url) return null
+  if (!entry?.entries) return null
 
   return (
     <div
