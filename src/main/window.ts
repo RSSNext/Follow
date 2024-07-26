@@ -143,7 +143,7 @@ export function createWindow(
     { role: "selectAll", accelerator: "CmdOrCtrl+A" },
   ])
 
-  window.webContents.on("context-menu", (e, props) => {
+  window.webContents.on("context-menu", (_e, props) => {
     const { selectionText, isEditable } = props
     if (isEditable) {
       inputMenu.popup({

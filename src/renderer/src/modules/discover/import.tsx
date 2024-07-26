@@ -67,7 +67,7 @@ export function DiscoverImport() {
           conflictItems: FeedResponseList
           parsedErrorItems: FeedResponseList
         }
-      }>("/import", {
+      }>("/subscriptions/import", {
         method: "POST",
         body: formData,
       })

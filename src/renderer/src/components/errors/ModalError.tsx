@@ -1,5 +1,5 @@
-import { repository } from "@pkg"
 import { attachOpenInEditor } from "@renderer/lib/dev"
+import { getNewIssueUrl } from "@renderer/lib/issues"
 import type { FallbackRender } from "@sentry/react"
 import type { FC } from "react"
 
@@ -53,11 +53,11 @@ export const ModalErrorFallback: FC<Parameters<FallbackRender>[0]> = (
           Still having this issue? Please give feedback in Github, thanks!
           <a
             className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-theme-accent"
-            href={`${repository.url}/issues/new?title=${encodeURIComponent(
-              `Error: ${message}`,
-            )}&body=${encodeURIComponent(
-              `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
-            )}&label=bug`}
+            href={getNewIssueUrl({
+              title: `Error: ${message}`,
+              body: `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
+              label: "bug",
+            })}
             target="_blank"
             rel="noreferrer"
           >

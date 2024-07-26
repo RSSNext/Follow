@@ -1,5 +1,6 @@
-import pkg, { repository } from "@pkg"
+import pkg from "@pkg"
 import { attachOpenInEditor } from "@renderer/lib/dev"
+import { getNewIssueUrl } from "@renderer/lib/issues"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useEffect, useRef } from "react"
 import { isRouteErrorResponse, useRouteError } from "react-router-dom"
@@ -63,8 +64,8 @@ export function ErrorElement() {
       <p className="my-8">
         {APP_NAME}
         {" "}
-        has a temporary problem, click the button below to try reloading
-        the app or another solution?
+        has a temporary problem, click the button below to try
+        reloading the app or another solution?
       </p>
 
       <div className="center gap-4">
@@ -86,11 +87,11 @@ export function ErrorElement() {
         Still having this issue? Please give feedback in Github, thanks!
         <a
           className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-theme-accent"
-          href={`${repository.url}/issues/new?title=${encodeURIComponent(
-            `Error: ${message}`,
-          )}&body=${encodeURIComponent(
-            `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
-          )}&label=bug`}
+          href={getNewIssueUrl({
+            title: `Error: ${message}`,
+            body: `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
+            label: "bug",
+          })}
           target="_blank"
           rel="noreferrer"
         >

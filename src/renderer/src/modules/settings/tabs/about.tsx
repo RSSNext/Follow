@@ -3,6 +3,7 @@ import { Logo } from "@renderer/components/icons/logo"
 import { Button, StyledButton } from "@renderer/components/ui/button"
 import { Divider } from "@renderer/components/ui/divider"
 import { SocialMediaLinks } from "@renderer/constants/social"
+import { getNewIssueUrl } from "@renderer/lib/issues"
 
 export const SettingAbout = () => (
   <div>
@@ -46,7 +47,9 @@ export const SettingAbout = () => (
       </p>
       <p className="mt-3 text-balance text-sm">
         The icon library used by Follow is mgc which is copyrighted by
-        <a href="https://mgc.mingcute.com/" target="_blank" rel="noreferrer">https://mgc.mingcute.com/</a>
+        <a href="https://mgc.mingcute.com/" target="_blank" rel="noreferrer">
+          https://mgc.mingcute.com/
+        </a>
         {" "}
         and cannot be redistributed.
       </p>
@@ -62,7 +65,7 @@ export const SettingAbout = () => (
         {" "}
         <a
           className="inline-flex cursor-pointer items-center gap-1 hover:underline"
-          href={`${repository.url}/issues/new`}
+          href={getNewIssueUrl()}
           target="_blank"
         >
           open an issue
