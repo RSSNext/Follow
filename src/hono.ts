@@ -3352,12 +3352,103 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
         };
     };
 } & {
-    [x: `/subscriptions/${string}`]: {
-        [x: `$${Lowercase<string>}`]: {
-            input: Partial<hono.ValidationTargets>;
-            output: any;
+    "/subscriptions": {
+        $get: {
+            input: {
+                query: {
+                    view?: string | undefined;
+                    userId?: string | undefined;
+                };
+            };
+            output: {
+                data: {
+                    title: string | null;
+                    view: number;
+                    userId: string;
+                    feeds: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        image: string | null;
+                        url: string;
+                        siteUrl: string | null;
+                        checkedAt: string;
+                        lastModifiedHeader: string | null;
+                        etagHeader: string | null;
+                        ttl: number | null;
+                        errorMessage: string | null;
+                        errorAt: string | null;
+                        ownerUserId: string | null;
+                    };
+                    feedId: string;
+                    category: string | null;
+                    isPrivate: boolean;
+                }[];
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+        $post: {
+            input: {
+                json: {
+                    view: number;
+                    url: string;
+                    category?: string | null | undefined;
+                    isPrivate?: boolean | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+        $delete: {
+            input: {
+                json: {
+                    url?: string | undefined;
+                    feedId?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+        $patch: {
+            input: {
+                json: {
+                    view: number;
+                    feedId: string;
+                    category?: string | null | undefined;
+                    isPrivate?: boolean | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+    "/subscriptions/export": {
+        $get: {
+            input: {};
+            output: {};
             outputFormat: string;
-            status: hono_utils_http_status.StatusCode;
+            status: 200;
+        };
+    };
+    "/subscriptions/import": {
+        $post: {
+            input: {};
+            output: {
+                code: 0;
+            };
+            outputFormat: "json";
+            status: 200;
         };
     };
 }, "/">;
