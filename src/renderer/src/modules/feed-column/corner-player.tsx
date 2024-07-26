@@ -24,112 +24,120 @@ const handleClickPlay = () => {
 }
 
 export const CornerPlayer = () => {
-  const entryId = usePlayerAtomSelector((v) => v.entryId)
   const show = usePlayerAtomSelector((v) => v.show)
-  const status = usePlayerAtomSelector((v) => v.status)
-  const isMute = usePlayerAtomSelector((v) => v.isMute)
-  const playerValue = { entryId, show, status, isMute }
-  const entry = useEntry(playerValue.entryId)
-  const feed = useFeedById(entry?.feedId)
 
   return (
     <AnimatePresence>
-      {playerValue.show && entry && feed && (
+      {show && (
         <m.div
+          key="corner-player"
           className="group relative z-10 -mt-10 mb-10 w-full"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 50, opacity: 0 }}
-          transition={microReboundPreset}
+          exit={{ y: 50, opacity: 1 }}
+          transition={{ ...microReboundPreset, duration: 0.2 }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* advanced controls */}
-          <div className="flex translate-y-10 justify-between bg-theme-modal-background p-1 opacity-0 shadow backdrop-blur transition-all duration-200 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
-            <div>
-              <ActionIcon
-                className="i-mingcute-close-fill"
-                onClick={() => Player.close()}
-                label="Close"
-              />
-            </div>
-            <div className="flex items-center">
-              <ActionIcon
-                label={<PlaybackRateSelector />}
-                labelDelayDuration={0}
-              >
-                <PlaybackRateButton />
-              </ActionIcon>
-              <ActionIcon
-                className={cn(
-                  playerValue.isMute ?
-                    "i-mingcute-volume-mute-fill text-red-500" :
-                    "i-mingcute-volume-fill",
-                )}
-                onClick={() => Player.toggleMute()}
-                label={<VolumeSlider />}
-                labelDelayDuration={0}
-              />
-              <ActionIcon
-                className="i-mingcute-back-2-fill"
-                onClick={() => Player.back(10)}
-                label="Back 10s"
-              />
-              <ActionIcon
-                className="i-mingcute-forward-2-fill"
-                onClick={() => Player.forward(10)}
-                label="Forward 10s"
-              />
-            </div>
-          </div>
-
-          <div className="relative flex bg-theme-modal-background shadow backdrop-blur transition-all duration-200 ease-in-out">
-            {/* play cover */}
-            <div className="relative h-full">
-              <FeedIcon
-                feed={feed}
-                entry={entry.entries}
-                size={58}
-                className="m-0 size-[3.625rem] rounded-none"
-              />
-              <div className="center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100">
-                <button
-                  type="button"
-                  className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-theme-accent hover:text-white hover:opacity-100"
-                  onClick={handleClickPlay}
-                >
-                  <i
-                    className={cn("size-6", {
-                      "i-mingcute-pause-fill": playerValue.status === "playing",
-                      "i-mingcute-loading-fill animate-spin":
-                        playerValue.status === "loading",
-                      "i-mingcute-play-fill": playerValue.status === "paused",
-                    })}
-                  />
-                </button>
-              </div>
-            </div>
-
-            <div className="relative truncate p-1 text-center text-sm">
-              <Marquee
-                play={playerValue.status === "playing"}
-                gradient
-                gradientWidth={24}
-                gradientColor="var(--fo-modal-background)"
-                speed={30}
-              >
-                {entry.entries.title}
-              </Marquee>
-              <div className="mt-0.5 overflow-hidden truncate text-xs text-muted-foreground group-hover:mx-8">
-                {feed.title}
-              </div>
-
-              {/* progress control */}
-              <PlayerProgress />
-            </div>
-          </div>
+          <CornerPlayerImpl />
         </m.div>
       )}
     </AnimatePresence>
+  )
+}
+const CornerPlayerImpl = () => {
+  const entryId = usePlayerAtomSelector((v) => v.entryId)
+
+  const status = usePlayerAtomSelector((v) => v.status)
+  const isMute = usePlayerAtomSelector((v) => v.isMute)
+  const playerValue = { entryId, status, isMute }
+  const entry = useEntry(playerValue.entryId)
+  const feed = useFeedById(entry?.feedId)
+
+  if (!entry || !feed) return null
+  return (
+    <>
+      {/* advanced controls */}
+      <div className="flex translate-y-10 justify-between bg-theme-modal-background p-1 opacity-0 shadow backdrop-blur transition-all duration-200 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
+        <div>
+          <ActionIcon
+            className="i-mingcute-close-fill"
+            onClick={() => Player.close()}
+            label="Close"
+          />
+        </div>
+        <div className="flex items-center">
+          <ActionIcon label={<PlaybackRateSelector />} labelDelayDuration={0}>
+            <PlaybackRateButton />
+          </ActionIcon>
+          <ActionIcon
+            className={cn(
+              playerValue.isMute ?
+                "i-mingcute-volume-mute-fill text-red-500" :
+                "i-mingcute-volume-fill",
+            )}
+            onClick={() => Player.toggleMute()}
+            label={<VolumeSlider />}
+            labelDelayDuration={0}
+          />
+          <ActionIcon
+            className="i-mingcute-back-2-fill"
+            onClick={() => Player.back(10)}
+            label="Back 10s"
+          />
+          <ActionIcon
+            className="i-mingcute-forward-2-fill"
+            onClick={() => Player.forward(10)}
+            label="Forward 10s"
+          />
+        </div>
+      </div>
+
+      <div className="relative flex bg-theme-modal-background shadow backdrop-blur transition-all duration-200 ease-in-out">
+        {/* play cover */}
+        <div className="relative h-full">
+          <FeedIcon
+            feed={feed}
+            entry={entry.entries}
+            size={58}
+            className="m-0 size-[3.625rem] rounded-none"
+          />
+          <div className="center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100">
+            <button
+              type="button"
+              className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-theme-accent hover:text-white hover:opacity-100"
+              onClick={handleClickPlay}
+            >
+              <i
+                className={cn("size-6", {
+                  "i-mingcute-pause-fill": playerValue.status === "playing",
+                  "i-mingcute-loading-fill animate-spin":
+                    playerValue.status === "loading",
+                  "i-mingcute-play-fill": playerValue.status === "paused",
+                })}
+              />
+            </button>
+          </div>
+        </div>
+
+        <div className="relative truncate p-1 text-center text-sm">
+          <Marquee
+            play={playerValue.status === "playing"}
+            gradient
+            gradientWidth={24}
+            gradientColor="var(--fo-modal-background)"
+            speed={30}
+          >
+            {entry.entries.title}
+          </Marquee>
+          <div className="mt-0.5 overflow-hidden truncate text-xs text-muted-foreground group-hover:mx-8">
+            {feed.title}
+          </div>
+
+          {/* progress control */}
+          <PlayerProgress />
+        </div>
+      </div>
+    </>
   )
 }
 
