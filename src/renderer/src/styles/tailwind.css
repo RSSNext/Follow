@@ -69,3 +69,9 @@
     @apply text-theme-foreground;
   }
 }
+
+.prose {
+  table * {
+    font-size: 1rem;
+  }
+}
