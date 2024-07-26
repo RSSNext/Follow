@@ -61,8 +61,8 @@ export function EntryColumn() {
   const virtuosoRef = useRef<VirtuosoHandle>(null)
   const entries = useEntriesByView({
     onReset: useCallback(() => {
-      virtuosoRef.current?.scrollIntoView?.({
-        index: 0,
+      virtuosoRef.current?.scrollTo({
+        top: 0,
       })
     }, []),
   })
