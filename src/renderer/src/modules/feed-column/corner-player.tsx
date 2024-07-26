@@ -48,7 +48,7 @@ export const CornerPlayer = () => {
     <AnimatePresence>
       {playerValue.show && entry && feed && (
         <m.div
-          className="group -mt-10 mb-10 w-full"
+          className="group relative z-10 -mt-10 mb-10 w-full"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
@@ -93,7 +93,7 @@ export const CornerPlayer = () => {
             </div>
           </div>
 
-          <div className="relative flex bg-theme-modal-background shadow backdrop-blur transition-all duration-200 ease-in-out hover:rounded-b-lg hover:rounded-t-none">
+          <div className="relative flex bg-theme-modal-background shadow backdrop-blur transition-all duration-200 ease-in-out">
             {/* play cover */}
             <div className="relative h-full">
               <FeedIcon
