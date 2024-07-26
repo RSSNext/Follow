@@ -9,7 +9,6 @@ import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
-import { useState } from "react"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import { StarIcon } from "./star-icon"
@@ -35,8 +34,6 @@ export function ListItem({
 
   const feed = useFeedById(entry?.feedId) || entryPreview?.feeds
 
-  const [isHovered, setIsHovered] = useState(false)
-
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
@@ -45,10 +42,8 @@ export function ListItem({
     entry.entries.publishedAt
   return (
     <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        "relative flex py-4 pl-3 pr-2",
+        "group relative flex py-4 pl-3 pr-2",
         !asRead &&
         "before:absolute before:-left-0.5 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
       )}
@@ -118,7 +113,6 @@ export function ListItem({
             10,
           )}
           feedIcon={<FeedIcon feed={feed} entry={entry.entries} size={80} />}
-          isHovered={isHovered}
         />
       )}
 
@@ -144,18 +138,15 @@ function AudioCover({
   src,
   durationInSeconds,
   feedIcon,
-  isHovered,
 }: {
   entryId: string
   src: string
   durationInSeconds?: number
   feedIcon: React.ReactNode
-  isHovered: boolean
 }) {
   const playerValue = usePlayerAtomValue()
 
   const isMeActive = playerValue.src === src
-  const shouldShowPlayButton = isHovered || isMeActive
 
   const estimatedMins = durationInSeconds ?
     Math.floor(durationInSeconds / 60) :
@@ -182,8 +173,8 @@ function AudioCover({
 
       <div
         className={cn(
-          "center absolute inset-0 w-full transition-all duration-200 ease-in-out",
-          shouldShowPlayButton ? "opacity-100" : "opacity-0",
+          "center absolute inset-0 w-full transition-all duration-200 ease-in-out group-hover:opacity-100",
+          isMeActive ? "opacity-100" : "opacity-0",
         )}
         onClick={handleClickPlay}
       >
