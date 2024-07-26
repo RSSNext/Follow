@@ -34,7 +34,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
         animate={{ opacity: 1, y: 0 }}
       >
         <Logo className="size-16 opacity-40 grayscale" />
-        {title}
+        <span className="max-w-[60ch]">{title}</span>
       </m.div>
     )
   }
@@ -45,9 +45,12 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 function EntryContentRender({ entryId }: { entryId: string }) {
   const user = useMe()
 
-  const { error, data, isPending } = useAuthQuery(Queries.entries.byId(entryId), {
-    staleTime: 300_000,
-  })
+  const { error, data, isPending } = useAuthQuery(
+    Queries.entries.byId(entryId),
+    {
+      staleTime: 300_000,
+    },
+  )
 
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
@@ -189,20 +192,18 @@ function EntryContentRender({ entryId }: { entryId: string }) {
               <div className="center mt-16">
                 {isPending ? (
                   <LoadingCircle size="large" />
-                ) : (
-                  error ?
-                      (
-                        <div className="center flex flex-col gap-2">
-                          <i className="i-mgc-close-cute-re text-3xl text-red-500" />
-                          <span className="font-sans text-sm">Network Error</span>
-                        </div>
-                      ) :
-                      (
-                        <div className="center">
-                          <span className="text-sm text-zinc-400">No content</span>
-                        </div>
-                      )
-                )}
+                ) : error ?
+                    (
+                      <div className="center flex flex-col gap-2">
+                        <i className="i-mgc-close-cute-re text-3xl text-red-500" />
+                        <span className="font-sans text-sm">Network Error</span>
+                      </div>
+                    ) :
+                    (
+                      <div className="center">
+                        <span className="text-sm text-zinc-400">No content</span>
+                      </div>
+                    )}
               </div>
             )}
           </article>
