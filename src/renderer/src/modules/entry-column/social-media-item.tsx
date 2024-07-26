@@ -33,7 +33,7 @@ export const SocialMediaItem: EntryListItemFC = ({
   return (
     <div
       className={cn(
-        "relative flex py-3 pl-3 pr-2",
+        "relative flex py-4 pl-3 pr-2",
         "group",
         !asRead &&
         "before:absolute before:-left-4 before:top-[22px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
@@ -96,7 +96,7 @@ export const SocialMediaItem: EntryListItemFC = ({
 
       <div
         className={cn(
-          "absolute right-0 top-0",
+          "absolute right-1 top-1.5",
           "invisible opacity-0 duration-200 group-hover:visible group-hover:opacity-80",
         )}
       >
