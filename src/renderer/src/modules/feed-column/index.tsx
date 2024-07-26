@@ -97,7 +97,14 @@ export function FeedColumn({ children }: PropsWithChildren) {
   }, [setActive_])
 
   useLayoutEffect(() => {
+    const handler = () => {
+      spring.jump(-active * jotaiStore.get(carouselWidthAtom))
+    }
+    const dispose = jotaiStore.sub(carouselWidthAtom, handler)
     spring.set(-active * jotaiStore.get(carouselWidthAtom))
+    return () => {
+      dispose()
+    }
   }, [active, spring])
 
   useHotkeys(
