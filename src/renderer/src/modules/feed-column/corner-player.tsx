@@ -62,8 +62,8 @@ const CornerPlayerImpl = () => {
   return (
     <>
       {/* advanced controls */}
-      <div className="flex translate-y-10 justify-between bg-theme-modal-background p-1 opacity-0 shadow backdrop-blur transition-all duration-200 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
-        <div>
+      <div className="flex translate-y-10 justify-between border-t bg-theme-modal-background p-1 opacity-0 backdrop-blur transition-all duration-200 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
+        <div className="flex items-center">
           <ActionIcon
             className="i-mingcute-close-fill"
             onClick={() => Player.close()}
@@ -106,7 +106,7 @@ const CornerPlayerImpl = () => {
         </div>
       </div>
 
-      <div className="relative flex bg-theme-modal-background shadow backdrop-blur transition-all duration-200 ease-in-out">
+      <div className="relative flex border-y bg-theme-modal-background backdrop-blur transition-all duration-200 ease-in-out">
         {/* play cover */}
         <div className="relative h-full">
           <FeedIcon
@@ -133,7 +133,7 @@ const CornerPlayerImpl = () => {
           </div>
         </div>
 
-        <div className="relative truncate p-1 text-center text-sm">
+        <div className="relative truncate px-2 py-1 text-center text-sm">
           <Marquee
             play={playerValue.status === "playing"}
             gradient
@@ -198,13 +198,13 @@ const PlayerProgress = () => {
         onValueChange={(value) => setControlledCurrentTime(value[0])}
         onValueCommit={(value) => Player.seek(value[0])}
       >
-        <Slider.Track className="relative h-1 w-full grow bg-muted group-hover:bg-theme-disabled">
-          <Slider.Range className="absolute h-1 bg-theme-accent" />
+        <Slider.Track className="relative h-1 w-full grow rounded bg-muted group-hover:bg-theme-disabled">
+          <Slider.Range className="absolute h-1 rounded bg-theme-accent" />
         </Slider.Track>
 
         {/* indicator */}
         <Slider.Thumb
-          className="block h-2 w-[3px] bg-theme-accent"
+          className="block h-2 w-[3px] rounded-[1px] bg-theme-accent"
           aria-label="Progress"
         />
       </Slider.Root>
@@ -244,18 +244,18 @@ const VolumeSlider = () => {
 
   return (
     <Slider.Root
-      className="relative flex h-10 w-1 flex-col items-center p-1"
+      className="relative flex h-16 w-1 flex-col items-center overflow-hidden rounded p-1"
       max={1}
       step={0.01}
       orientation="vertical"
       value={[volume ?? 0.8]}
       onValueChange={(value) => Player.setVolume(value[0])}
     >
-      <Slider.Track className="relative w-1 grow bg-zinc-500">
-        <Slider.Range className="absolute w-full bg-black dark:bg-white" />
+      <Slider.Track className="relative w-1 grow rounded bg-zinc-500">
+        <Slider.Range className="absolute w-full rounded bg-black dark:bg-white" />
       </Slider.Track>
       <Slider.Thumb
-        className="block bg-black dark:bg-white"
+        className="block rounded bg-black dark:bg-white"
         aria-label="Volume"
       />
     </Slider.Root>
@@ -266,13 +266,13 @@ const PlaybackRateSelector = () => {
   const playbackRate = usePlayerAtomSelector((v) => v.playbackRate)
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-0.5">
       {[0.5, 0.75, 1, 1.25, 1.5, 2].map((rate) => (
         <button
           key={rate}
           type="button"
           className={cn(
-            "center rounded-md font-mono hover:bg-theme-item-hover",
+            "center rounded-md p-1 font-mono hover:bg-theme-item-hover",
             playbackRate === rate &&
             "bg-theme-item-hover text-black dark:text-white",
             playbackRate !== rate && "text-zinc-500",
