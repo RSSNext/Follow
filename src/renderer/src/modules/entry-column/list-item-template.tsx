@@ -74,7 +74,9 @@ export function ListItem({
           className={cn(
             "relative my-0.5 break-words",
             !!entry.collections && "pr-5",
-            entry.entries.title ? withDetails && "font-medium" : "text-[13px]",
+            entry.entries.title ?
+                (withDetails || withAudio) && "font-medium" :
+              "text-[13px]",
           )}
         >
           {entry.entries.title ? (
@@ -111,7 +113,10 @@ export function ListItem({
         <AudioCover
           entryId={entryId}
           src={entry.entries?.attachments?.[0].url}
-          durationInSeconds={Number.parseInt(String(entry.entries?.attachments?.[0].duration_in_seconds ?? 0), 10)}
+          durationInSeconds={Number.parseInt(
+            String(entry.entries?.attachments?.[0].duration_in_seconds ?? 0),
+            10,
+          )}
           feedIcon={<FeedIcon feed={feed} entry={entry.entries} size={80} />}
           isHovered={isHovered}
         />
@@ -152,7 +157,9 @@ function AudioCover({
   const isMeActive = playerValue.src === src
   const shouldShowPlayButton = isHovered || isMeActive
 
-  const estimatedMins = durationInSeconds ? Math.floor(durationInSeconds / 60) : undefined
+  const estimatedMins = durationInSeconds ?
+    Math.floor(durationInSeconds / 60) :
+    undefined
 
   const handleClickPlay = () => {
     if (!isMeActive) {
@@ -175,7 +182,10 @@ function AudioCover({
       {feedIcon}
 
       <div
-        className={cn("center absolute inset-0 w-full transition-all duration-200 ease-in-out", shouldShowPlayButton ? "opacity-100" : "opacity-0")}
+        className={cn(
+          "center absolute inset-0 w-full transition-all duration-200 ease-in-out",
+          shouldShowPlayButton ? "opacity-100" : "opacity-0",
+        )}
         onClick={handleClickPlay}
       >
         <button
