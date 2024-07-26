@@ -48,7 +48,7 @@ export const CornerPlayer = () => {
     <AnimatePresence>
       {playerValue.show && entry && feed && (
         <m.div
-          className="group absolute inset-x-0 bottom-10"
+          className="group -mt-10 mb-10 w-full"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
