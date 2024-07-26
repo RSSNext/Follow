@@ -229,3 +229,35 @@
       rgba(0, 0, 0, 0.067) 0px 2px 5px, rgba(0, 0, 0, 0.067) 0px 1px 1px;
   }
 }
+
+/* Link */
+@layer components {
+  .follow-link--underline {
+    color: currentColor;
+    background-image: linear-gradient(
+      theme(colors.theme.accent.DEFAULT),
+      theme(colors.theme.accent.DEFAULT)
+    );
+    background-size: 0% 1.5px;
+    background-repeat: no-repeat;
+    /* NOTE: this won't work with background images   */
+
+    transition: all 500ms ease;
+
+    @apply border-0 no-underline;
+
+    background-position: left 1em;
+
+    &:hover {
+      background-size: 100% 1.5px;
+      text-shadow: 0.05em 0 theme(colors.background),
+        -0.05em 0 theme(colors.background);
+
+      transition: all 250ms ease;
+    }
+
+    &.no-shadow {
+      text-shadow: none;
+    }
+  }
+}

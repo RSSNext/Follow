@@ -10,32 +10,39 @@ import { useEventCallback } from "usehooks-ts"
 import { usePreviewMedia } from "./media/hooks"
 
 const failedList = new Set<string | undefined>()
-export type ImageProps =
-  | (ImgHTMLAttributes<HTMLImageElement> & {
-    proxy?: {
-      width: number
-      height: number
-    }
-    disableContextMenu?: boolean
-    popper?: boolean
-    type: "photo"
-    previewImageUrl?: string
-  })
-  | (VideoHTMLAttributes<HTMLVideoElement> & {
-    proxy?: {
-      width: number
-      height: number
-    }
-    disableContextMenu?: boolean
-    popper?: boolean
-    type: "video"
-    previewImageUrl?: string
-  })
-const MediaImpl: FC<ImageProps> = ({
+
+type BaseProps = {
+  mediaContainerClassName?: string
+}
+export type MediaProps = BaseProps &
+  (
+    | (ImgHTMLAttributes<HTMLImageElement> & {
+      proxy?: {
+        width: number
+        height: number
+      }
+      disableContextMenu?: boolean
+      popper?: boolean
+      type: "photo"
+      previewImageUrl?: string
+    })
+    | (VideoHTMLAttributes<HTMLVideoElement> & {
+      proxy?: {
+        width: number
+        height: number
+      }
+      disableContextMenu?: boolean
+      popper?: boolean
+      type: "video"
+      previewImageUrl?: string
+    })
+  )
+const MediaImpl: FC<MediaProps> = ({
   className,
   proxy,
   disableContextMenu,
   popper = false,
+  mediaContainerClassName,
   ...props
 }) => {
   const { src, style, type, previewImageUrl, ...rest } = props
@@ -89,6 +96,7 @@ const MediaImpl: FC<ImageProps> = ({
               !(props.width || props.height) && "size-full",
               "bg-stone-100 object-cover",
               popper && "cursor-zoom-in",
+              mediaContainerClassName,
             )}
             src={imgSrc}
             onClick={handleClick}
@@ -136,6 +144,7 @@ const MediaImpl: FC<ImageProps> = ({
               hidden && "hidden",
               !(props.width || props.height) && "size-full",
               "relative bg-stone-100 object-cover",
+              mediaContainerClassName,
             )}
             onClick={handleClick}
           >

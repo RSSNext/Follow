@@ -1,6 +1,6 @@
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import { ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
-import { LinkWithTooltip } from "@renderer/components/ui/link"
+import { MarkdownLink } from "@renderer/components/ui/link"
 import { Media } from "@renderer/components/ui/media"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
@@ -28,10 +28,7 @@ export const parseHtml = async (
       ...defaultSchema,
       tagNames: renderInlineStyle ?
         defaultSchema.tagNames :
-          [
-            ...defaultSchema.tagNames!,
-            "video",
-          ],
+          [...defaultSchema.tagNames!, "video"],
       attributes: {
         ...defaultSchema.attributes,
 
@@ -58,7 +55,7 @@ export const parseHtml = async (
       passNode: true,
       components: {
         a: ({ node, ...props }) =>
-          createElement(LinkWithTooltip, { ...props } as any),
+          createElement(MarkdownLink, { ...props } as any),
         img: ({ node, ...props }) => {
           if (node?.properties.inline) {
             return createElement("img", {
@@ -66,9 +63,17 @@ export const parseHtml = async (
               style: { maxWidth: "100%", display: "inline" },
             })
           }
-          return createElement(Media, { ...props, popper: true, type: "photo" })
+          return createElement(Media, {
+            ...props,
+            mediaContainerClassName: "w-full rounded",
+            className: "flex justify-center",
+
+            popper: true,
+            type: "photo",
+          })
         },
-        video: ({ node, ...props }) => createElement(Media, { ...props, popper: true, type: "video" }),
+        video: ({ node, ...props }) =>
+          createElement(Media, { ...props, popper: true, type: "video" }),
         p: ({ node, ...props }) => {
           if (node?.children) {
             for (const item of node.children) {
@@ -79,10 +84,11 @@ export const parseHtml = async (
           }
           return createElement("p", undefined, props.children)
         },
-        hr: ({ node, ...props }) => createElement("hr", {
-          ...props,
-          className: tw`scale-x-50`,
-        }),
+        hr: ({ node, ...props }) =>
+          createElement("hr", {
+            ...props,
+            className: tw`scale-x-50`,
+          }),
         input: ({ node, ...props }) => {
           if (props.type === "checkbox") {
             return createElement(Checkbox, {
