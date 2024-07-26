@@ -71,11 +71,12 @@ const CornerPlayerImpl = () => {
           />
           <ActionIcon
             className="i-mingcute-external-link-line"
-            onClick={() => navigateToEntry({
-              entryId: entry.entries.id,
-              feedId: feed.id,
-              view: FeedViewType.Audios,
-            })}
+            onClick={() =>
+              navigateToEntry({
+                entryId: entry.entries.id,
+                feedId: feed.id,
+                view: FeedViewType.Audios,
+              })}
             label="Open Entry"
           />
         </div>
