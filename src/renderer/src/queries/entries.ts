@@ -55,15 +55,15 @@ export const entries = {
     id,
     view,
     read,
-    lastPublishedAt,
+    fetchedTime,
   }: {
     id?: number | string
     view?: number
     read?: boolean
-    lastPublishedAt: string
+    fetchedTime: number
   }) =>
     defineQuery(
-      ["entry-checkNew", id, view, read, lastPublishedAt],
+      ["entry-checkNew", id, view, read, fetchedTime],
       async () =>
         // @ts-expect-error
         apiClient.entries["check-new"].$get({
@@ -73,7 +73,7 @@ export const entries = {
               view,
             }),
             read,
-            publishedAfter: lastPublishedAt,
+            insertedAfter: fetchedTime,
           },
         }) as Promise<{ data: { has_new: boolean, lastest_at?: string } }>,
 

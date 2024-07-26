@@ -73,23 +73,27 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
   }
   const query = useEntries(entriesOptions)
 
-  const lastPublishedAt =
-    query.data?.pages?.[0]?.data?.[0]?.entries.publishedAt
+  const [fetchedTime, setFetchedTime] = useState<number>()
+  useEffect(() => {
+    if (!query.isFetching) {
+      setFetchedTime(Date.now())
+    }
+  }, [query.isFetching])
 
   const [pauseQuery, setPauseQuery] = useState(false)
   const hasNewQuery = useAuthQuery(
     entries.checkNew({
       ...entriesOptions,
-      lastPublishedAt: lastPublishedAt!,
+      fetchedTime: fetchedTime!,
     }),
     {
       refetchInterval: 1000 * 60,
-      enabled: !!lastPublishedAt && !pauseQuery,
+      enabled: !!fetchedTime && !pauseQuery,
     },
   )
   const hasUpdate = useMemo(
-    () => !!(lastPublishedAt && hasNewQuery?.data?.data.has_new),
-    [hasNewQuery?.data?.data.has_new, lastPublishedAt],
+    () => !!(fetchedTime && hasNewQuery?.data?.data.has_new),
+    [hasNewQuery?.data?.data.has_new, fetchedTime],
   )
 
   useEffect(() => {

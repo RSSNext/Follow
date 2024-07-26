@@ -626,8 +626,8 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
-        changedAt: drizzle_orm_pg_core.PgColumn<{
-            name: "changed_at";
+        insertedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "inserted_at";
             tableName: "entries";
             dataType: "date";
             columnType: "PgTimestamp";
@@ -765,7 +765,7 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     author: z.ZodNullable<z.ZodString>;
     authorUrl: z.ZodNullable<z.ZodString>;
     authorAvatar: z.ZodNullable<z.ZodString>;
-    changedAt: z.ZodString;
+    insertedAt: z.ZodString;
     publishedAt: z.ZodString;
     media: z.ZodNullable<z.ZodArray<z.ZodType<string | number | boolean | {
         [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
@@ -822,7 +822,7 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     author: string | null;
     authorUrl: string | null;
     authorAvatar: string | null;
-    changedAt: string;
+    insertedAt: string;
     publishedAt: string;
     categories: string[] | null;
     media?: {
@@ -848,7 +848,7 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     author: string | null;
     authorUrl: string | null;
     authorAvatar: string | null;
-    changedAt: string;
+    insertedAt: string;
     publishedAt: string;
     categories: string[] | null;
     media?: {
@@ -1540,6 +1540,22 @@ declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        insertedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "inserted_at";
+            tableName: "timeline";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
         view: drizzle_orm_pg_core.PgColumn<{
             name: "view";
             tableName: "timeline";
@@ -1580,6 +1596,7 @@ declare const timelineOpenAPISchema: zod.ZodObject<{
     feedId: zod.ZodString;
     entryId: zod.ZodString;
     publishedAt: zod.ZodString;
+    insertedAt: zod.ZodString;
     view: zod.ZodNumber;
     read: zod.ZodNullable<zod.ZodBoolean>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
@@ -1587,6 +1604,7 @@ declare const timelineOpenAPISchema: zod.ZodObject<{
     userId: string;
     feedId: string;
     read: boolean | null;
+    insertedAt: string;
     publishedAt: string;
     entryId: string;
 }, {
@@ -1594,6 +1612,7 @@ declare const timelineOpenAPISchema: zod.ZodObject<{
     userId: string;
     feedId: string;
     read: boolean | null;
+    insertedAt: string;
     publishedAt: string;
     entryId: string;
 }>;
@@ -3046,7 +3065,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         author: string | null;
                         authorUrl: string | null;
                         authorAvatar: string | null;
-                        changedAt: string;
+                        insertedAt: string;
                         publishedAt: string;
                         categories: string[] | null;
                         media?: {
@@ -3164,8 +3183,8 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     feedId?: string | undefined;
                     feedIdList?: string[] | undefined;
                     read?: boolean | undefined;
-                    publishedAfter?: string | undefined;
                     limit?: number | undefined;
+                    publishedAfter?: string | undefined;
                     collected?: boolean | undefined;
                 };
             };
@@ -3182,7 +3201,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         author: string | null;
                         authorUrl: string | null;
                         authorAvatar: string | null;
-                        changedAt: string;
+                        insertedAt: string;
                         publishedAt: string;
                         categories: string[] | null;
                         media?: {
@@ -3249,7 +3268,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         author: string | null;
                         authorUrl: string | null;
                         authorAvatar: string | null;
-                        changedAt: string;
+                        insertedAt: string;
                         publishedAt: string;
                         categories: string[] | null;
                         media?: {
@@ -3329,7 +3348,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     author: string | null;
                     authorUrl: string | null;
                     authorAvatar: string | null;
-                    changedAt: string;
+                    insertedAt: string;
                     publishedAt: string;
                     categories: string[] | null;
                     media?: {
