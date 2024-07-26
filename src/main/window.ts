@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url"
 import { is } from "@electron-toolkit/utils"
 import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
-import { BrowserWindow, shell } from "electron"
+import { BrowserWindow, Menu, shell } from "electron"
 
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
@@ -70,7 +70,12 @@ export function createWindow(
       process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""),
     )
   } else {
-    window.loadFile(path.resolve(__dirname, `../renderer/index.html${options?.extraPath || ""}`))
+    window.loadFile(
+      path.resolve(
+        __dirname,
+        `../renderer/index.html${options?.extraPath || ""}`,
+      ),
+    )
   }
 
   const refererMatchs = [
@@ -106,6 +111,48 @@ export function createWindow(
       })
     },
   )
+
+  const selectionMenu = Menu.buildFromTemplate([
+    { role: "copy", accelerator: "CmdOrCtrl+C" },
+    { type: "separator" },
+    { role: "selectAll", accelerator: "CmdOrCtrl+A" },
+  ])
+
+  const inputMenu = Menu.buildFromTemplate([
+    { role: "undo", accelerator: "CmdOrCtrl+Z" },
+    {
+      role: "redo",
+      accelerator: "CmdOrCtrl+Shift+Z",
+    },
+    { type: "separator" },
+    {
+      role: "cut",
+      accelerator: "CmdOrCtrl+X",
+    },
+    {
+      role: "copy",
+      accelerator: "CmdOrCtrl+C",
+    },
+    {
+      role: "paste",
+      accelerator: "CmdOrCtrl+V",
+    },
+    {
+      type: "separator",
+    },
+    { role: "selectAll", accelerator: "CmdOrCtrl+A" },
+  ])
+
+  window.webContents.on("context-menu", (e, props) => {
+    const { selectionText, isEditable } = props
+    if (isEditable) {
+      inputMenu.popup({
+        window,
+      })
+    } else if (selectionText && selectionText.trim() !== "") {
+      selectionMenu.popup({ window })
+    }
+  })
 
   return window
 }
