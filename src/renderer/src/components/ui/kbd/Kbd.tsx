@@ -26,7 +26,8 @@ const SpecialKeys = {
 export const KbdCombined: FC<{
   children: string
   className?: string
-}> = ({ children, className }) => {
+  joint?: boolean
+}> = ({ children, joint, className }) => {
   const specialKeys = SpecialKeys[getOS()] as Record<string, string>
   let key = children
   for (const [k, v] of Object.entries(specialKeys)) {
@@ -37,13 +38,17 @@ export const KbdCombined: FC<{
     <div className="flex items-center gap-1">
       {key.split(",").map((k, i) => (
         <Fragment key={k}>
-          <div className="flex items-center gap-1">
-            {k.split("+").map((key, index) => (
-              <Kbd key={index} className={className}>
-                {key}
-              </Kbd>
-            ))}
-          </div>
+          {joint ? (
+            <Kbd className={className}>{k.replaceAll("+", " ")}</Kbd>
+          ) : (
+            <div className="flex items-center gap-1">
+              {k.split("+").map((key, index) => (
+                <Kbd key={index} className={className}>
+                  {key}
+                </Kbd>
+              ))}
+            </div>
+          )}
           {i !== key.split(",").length - 1 && " / "}
         </Fragment>
       ))}

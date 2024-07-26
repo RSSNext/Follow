@@ -32,7 +32,7 @@ export function Component() {
                 >
                   <div>{shortcuts[type][action].name}</div>
                   <div>
-                    <KbdCombined>
+                    <KbdCombined joint>
                       {`${shortcuts[type][action].key}${shortcuts[type][action].extra ? `, ${shortcuts[type][action].extra}` : ""}`}
                     </KbdCombined>
                   </div>
