@@ -188,4 +188,4 @@ const MediaImpl: FC<MediaProps> = ({
   )
 }
 
-export const Media = memo(MediaImpl)
+export const Media: FC<MediaProps> = memo((props) => <MediaImpl {...props} key={props.src} />)

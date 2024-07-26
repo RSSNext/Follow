@@ -71,11 +71,12 @@ const CornerPlayerImpl = () => {
           />
           <ActionIcon
             className="i-mingcute-external-link-line"
-            onClick={() => navigateToEntry({
-              entryId: entry.entries.id,
-              feedId: feed.id,
-              view: FeedViewType.Audios,
-            })}
+            onClick={() =>
+              navigateToEntry({
+                entryId: entry.entries.id,
+                feedId: feed.id,
+                view: FeedViewType.Audios,
+              })}
             label="Open Entry"
           />
         </div>
@@ -199,7 +200,7 @@ const PlayerProgress = () => {
         onValueChange={(value) => setControlledCurrentTime(value[0])}
         onValueCommit={(value) => Player.seek(value[0])}
       >
-        <Slider.Track className="relative h-1 w-full grow rounded bg-muted group-hover:bg-theme-disabled">
+        <Slider.Track className="relative h-1 w-full grow rounded bg-gray-200 duration-200 group-hover:bg-gray-300 dark:bg-neutral-700 group-hover:dark:bg-neutral-600">
           <Slider.Range className="absolute h-1 rounded bg-theme-accent" />
         </Slider.Track>
 
