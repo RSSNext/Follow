@@ -5,8 +5,11 @@ import { Divider } from "@renderer/components/ui/divider"
 import { SocialMediaLinks } from "@renderer/constants/social"
 import { getNewIssueUrl } from "@renderer/lib/issues"
 
+import { SettingsTitle } from "../title"
+
 export const SettingAbout = () => (
   <div>
+    <SettingsTitle />
     <section className="mt-4">
       <div className="flex gap-3">
         <Logo className="size-[52px]" />

@@ -1,8 +1,8 @@
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import { ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
-import { MarkdownLink } from "@renderer/components/ui/link"
 import {
   MarkdownBlockImage,
+  MarkdownLink,
   MarkdownP,
 } from "@renderer/components/ui/markdown/renderers"
 import { Media } from "@renderer/components/ui/media"
@@ -88,10 +88,14 @@ export const parseHtml = async (
               ((item.properties as any).inline = true)
             }
           }
-          return createElement(MarkdownP, {
-            ...props,
-            parseTimeline: options?.parseParagraphAudioTime,
-          }, props.children)
+          return createElement(
+            MarkdownP,
+            {
+              ...props,
+              parseTimeline: options?.parseParagraphAudioTime,
+            },
+            props.children,
+          )
         },
         hr: ({ node, ...props }) =>
           createElement("hr", {

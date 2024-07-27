@@ -183,7 +183,6 @@ export const createMainWindow = () => {
       x: bounds.x,
       y: bounds.y,
     })
-    windows.mainWindow = null
   })
 
   windows.mainWindow = window
@@ -192,6 +191,8 @@ export const createMainWindow = () => {
     if (process.platform === "darwin") {
       event.preventDefault()
       window.hide()
+    } else {
+      windows.mainWindow = null
     }
   })
 

@@ -246,7 +246,7 @@
 
     @apply border-0 no-underline;
 
-    background-position: left 1em;
+    background-position: left 1.1em;
 
     &:hover {
       background-size: 100% 1.5px;
