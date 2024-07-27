@@ -123,10 +123,32 @@ export const useFeedActions = ({
           }
         },
       },
+      {
+        type: "separator",
+        disabled: isEntryList,
+      },
+      {
+        type: "text" as const,
+        label: "Copy Feed Id",
+        disabled: isEntryList,
+        click: () => {
+          navigator.clipboard.writeText(feedId)
+        },
+      },
     ]
 
     return items
-  }, [feedId])
+  }, [
+    claimFeed,
+    deleteSubscription,
+    feed,
+    feedId,
+    isEntryList,
+    navigateEntry,
+    present,
+    subscription,
+    view,
+  ])
 
   return { items }
 }

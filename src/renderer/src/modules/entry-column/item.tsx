@@ -151,11 +151,22 @@ function EntryItemImpl({
               type: "separator" as const,
             },
             ...(feedItems.filter((item) => !item.disabled)),
+
+            {
+              type: "separator" as const,
+            },
+            {
+              type: "text" as const,
+              label: "Copy Entry Id",
+              click: () => {
+                navigator.clipboard.writeText(entry.entries.id)
+              },
+            },
           ],
           e,
         )
       },
-      [items, feedItems],
+      [items, feedItems, entry.entries.id],
     )
 
   return (
