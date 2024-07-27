@@ -65,6 +65,7 @@ const FeedItemImpl = ({
   if (!feed) return null
   return (
     <div
+      data-feed-id={feedId}
       className={cn(
         "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
         isActive && "bg-native-active",

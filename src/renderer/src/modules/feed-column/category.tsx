@@ -5,7 +5,10 @@ import {
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { ROUTE_FEED_IN_FOLDER, views } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
+import {
+  getRouteParams,
+  useRouteParamsSelector,
+} from "@renderer/hooks/biz/useRouteParams"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
@@ -17,7 +20,7 @@ import {
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useEffect, useState } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
@@ -50,6 +53,28 @@ function FeedCategoryImpl({
   const showCollapse =
     sortByUnreadFeedList.length > 1 || subscription?.category
   const [open, setOpen] = useState(!showCollapse)
+
+  const shouldOpen = useRouteParamsSelector(
+    (s) => typeof s.feedId === "string" && ids.includes(s.feedId),
+  )
+
+  const itemsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (shouldOpen) {
+      setOpen(true)
+
+      const $items = itemsRef.current
+
+      if (!$items) return
+      $items
+        .querySelector(`[data-feed-id="${getRouteParams().feedId}"]`)
+        ?.scrollIntoView({
+          block: "center",
+          behavior: "smooth",
+        })
+    }
+  }, [shouldOpen])
   useEffect(() => {
     if (showCollapse) {
       setOpen(expansion)
@@ -203,6 +228,7 @@ function FeedCategoryImpl({
       <AnimatePresence>
         {open && (
           <m.div
+            ref={itemsRef}
             className="overflow-hidden"
             initial={!!showCollapse && {
               height: 0,

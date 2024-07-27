@@ -73,7 +73,12 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     } else {
       setContent(undefined)
     }
-  }, [data?.entries.content, entry?.entries.content, readerRenderInlineStyle])
+  }, [
+    data?.entries.content,
+    entry?.entries.content,
+    readerRenderInlineStyle,
+    parseHtml,
+  ])
 
   const translation = useAuthQuery(
     Queries.ai.translation({
