@@ -176,5 +176,3 @@ export const Player = {
     })
   },
 }
-
-window.play = Player
