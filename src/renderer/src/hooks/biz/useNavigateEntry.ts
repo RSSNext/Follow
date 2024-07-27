@@ -34,6 +34,14 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
     setSidebarActiveView(view)
   }
 
+  if (window.posthog) {
+    window.posthog.capture("Navigate Entry", {
+      feedId: finalFeedId,
+      entryId,
+      view,
+    })
+  }
+
   return getStableRouterNavigate()?.(
     `/feeds/${finalFeedId}/${
       entryId || ROUTE_ENTRY_PENDING
