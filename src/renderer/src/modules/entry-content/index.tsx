@@ -3,8 +3,10 @@ import { useMe } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
+import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
+import { FeedViewType } from "@renderer/lib/enum"
 import { parseHtml } from "@renderer/lib/parse-html"
 import type { ActiveEntryId } from "@renderer/models"
 import {
@@ -20,6 +22,7 @@ import { LoadingCircle } from "../../components/ui/loading"
 import { EntryTranslation } from "../entry-column/translation"
 import { setEntryTitleMeta } from "./atoms"
 import { EntryHeader } from "./header"
+import { EntryContentProvider } from "./provider"
 
 export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   const title = useFeedHeaderTitle()
@@ -67,6 +70,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     if (processContent) {
       parseHtml(processContent, {
         renderInlineStyle: readerRenderInlineStyle,
+        parseParagraphAudioTime: getRouteParams().view === FeedViewType.Audios,
       }).then((parsed) => {
         setContent(parsed.content)
       })
@@ -116,7 +120,11 @@ function EntryContentRender({ entryId }: { entryId: string }) {
   if (!entry) return null
 
   return (
-    <>
+    <EntryContentProvider
+      entryId={entry.entries.id}
+      feedId={entry.feedId}
+      audioSrc={entry.entries?.attachments?.[0].url}
+    >
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
@@ -214,7 +222,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
           </article>
         </m.div>
       </div>
-    </>
+    </EntryContentProvider>
   )
 }
 

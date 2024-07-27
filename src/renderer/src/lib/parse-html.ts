@@ -1,7 +1,10 @@
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import { ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
 import { MarkdownLink } from "@renderer/components/ui/link"
-import { MarkdownBlockImage } from "@renderer/components/ui/markdown/renderers/BlockImage"
+import {
+  MarkdownBlockImage,
+  MarkdownP,
+} from "@renderer/components/ui/markdown/renderers"
 import { Media } from "@renderer/components/ui/media"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
@@ -18,12 +21,17 @@ export const parseHtml = async (
   content: string,
   options?: {
     renderInlineStyle: boolean
+
+    /**
+     * parse first audio time in paragraph, e,g: 00:00
+     */
+    parseParagraphAudioTime?: boolean
   },
 ) => {
   const file = new VFile(content)
   const { renderInlineStyle = false } = options || {}
 
-  const pipeline = await unified()
+  const pipeline = unified()
     .use(rehypeParse, { fragment: true })
     .use(rehypeSanitize, {
       ...defaultSchema,
@@ -80,7 +88,10 @@ export const parseHtml = async (
               ((item.properties as any).inline = true)
             }
           }
-          return createElement("p", undefined, props.children)
+          return createElement(MarkdownP, {
+            ...props,
+            parseTimeline: options?.parseParagraphAudioTime,
+          }, props.children)
         },
         hr: ({ node, ...props }) =>
           createElement("hr", {
