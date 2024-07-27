@@ -10,7 +10,12 @@ import type { OptionsOrDependencyArray } from "react-hotkeys-hook/dist/types"
 
 import { KbdCombined } from "../kbd/Kbd"
 import { LoadingCircle } from "../loading"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "../tooltip"
 import { buttonVariants, styledButtonVariant } from "./variants"
 
 export interface BaseButtonProps {
@@ -124,19 +129,21 @@ export const ActionButton = React.forwardRef<
               {children}
             </Button>
           </TooltipTrigger>
-          <TooltipContent
-            className="flex items-center gap-1"
-            side={tooltipSide ?? "bottom"}
-          >
-            {tooltip}
-            {!!shortcut && (
-              <div className="ml-1">
-                <KbdCombined className="text-foreground/80">
-                  {shortcut}
-                </KbdCombined>
-              </div>
-            )}
-          </TooltipContent>
+          <TooltipPortal>
+            <TooltipContent
+              className="flex items-center gap-1"
+              side={tooltipSide ?? "bottom"}
+            >
+              {tooltip}
+              {!!shortcut && (
+                <div className="ml-1">
+                  <KbdCombined className="text-foreground/80">
+                    {shortcut}
+                  </KbdCombined>
+                </div>
+              )}
+            </TooltipContent>
+          </TooltipPortal>
         </Tooltip>
       </>
     )
