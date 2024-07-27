@@ -2,6 +2,7 @@ import { COPY_MAP } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
+import { getOS } from "@renderer/lib/utils"
 import type { CombinedEntryModel } from "@renderer/models"
 import { useTipModal } from "@renderer/modules/wallet/hooks"
 import type { FlatEntryModel } from "@renderer/store/entry"
@@ -93,131 +94,141 @@ export const useEntryActions = ({
 
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
-    const items = [
-      [
-        {
-          key: "tip",
-          shortcut: shortcuts.entry.tip.key,
-          name: `Tip`,
-          className: "i-mgc-power-outline",
-          onClick: () => {
-            nextFrame(openTipModal)
-          },
+    const items: {
+      key: string
+      className?: string
+      shortcut?: string
+      name: string
+      icon?: string
+      disabled?: boolean
+      onClick: () => void
+    }[] = [
+      {
+        key: "tip",
+        shortcut: shortcuts.entry.tip.key,
+        name: `Tip`,
+        className: "i-mgc-power-outline",
+        onClick: () => {
+          nextFrame(openTipModal)
         },
-        {
-          key: "star",
-          shortcut: shortcuts.entry.toggleStarred.key,
-          name: `Star`,
-          className: "i-mgc-star-cute-re",
-          disabled: !!populatedEntry.collections,
-          onClick: () => {
-            collect.mutate()
-          },
+      },
+      {
+        key: "star",
+        shortcut: shortcuts.entry.toggleStarred.key,
+        name: `Star`,
+        className: "i-mgc-star-cute-re",
+        disabled: !!populatedEntry.collections,
+        onClick: () => {
+          collect.mutate()
         },
-        {
-          key: "unstar",
-          name: `Unstar`,
-          shortcut: shortcuts.entry.toggleStarred.key,
-          className: "i-mgc-star-cute-fi text-orange-500",
-          disabled: !populatedEntry.collections,
-          onClick: () => {
-            uncollect.mutate()
-          },
+      },
+      {
+        key: "unstar",
+        name: `Unstar`,
+        shortcut: shortcuts.entry.toggleStarred.key,
+        className: "i-mgc-star-cute-fi text-orange-500",
+        disabled: !populatedEntry.collections,
+        onClick: () => {
+          uncollect.mutate()
         },
-        {
-          name: "Copy Link",
-          className: "i-mgc-link-cute-re",
-          disabled: !populatedEntry.entries.url,
-          shortcut: shortcuts.entry.copyLink.key,
-          onClick: () => {
-            if (!populatedEntry.entries.url) return
-            navigator.clipboard.writeText(populatedEntry.entries.url)
-            toast("Link copied to clipboard.", {
-              duration: 1000,
-            })
-          },
+      },
+      {
+        key: "copyLink",
+        name: "Copy Link",
+        className: "i-mgc-link-cute-re",
+        disabled: !populatedEntry.entries.url,
+        shortcut: shortcuts.entry.copyLink.key,
+        onClick: () => {
+          if (!populatedEntry.entries.url) return
+          navigator.clipboard.writeText(populatedEntry.entries.url)
+          toast("Link copied to clipboard.", {
+            duration: 1000,
+          })
         },
-        {
-          key: "openInBrowser",
-          name: COPY_MAP.OpenInBrowser(),
-          shortcut: shortcuts.entry.openInBrowser.key,
-          className: "i-mgc-world-2-cute-re",
-          disabled: !populatedEntry.entries.url,
-          onClick: () => {
-            if (!populatedEntry.entries.url) return
-            window.open(populatedEntry.entries.url, "_blank")
-          },
+      },
+      {
+        key: "openInBrowser",
+        name: COPY_MAP.OpenInBrowser(),
+        shortcut: shortcuts.entry.openInBrowser.key,
+        className: "i-mgc-world-2-cute-re",
+        disabled: !populatedEntry.entries.url,
+        onClick: () => {
+          if (!populatedEntry.entries.url) return
+          window.open(populatedEntry.entries.url, "_blank")
         },
-        {
-          name: "Save Media to Eagle",
-          icon: "/eagle.svg",
-          disabled:
-            (checkEagle.isLoading ? true : !checkEagle.data) ||
-            !populatedEntry.entries.media?.length,
-          onClick: async () => {
-            if (
-              !populatedEntry.entries.url ||
-              !populatedEntry.entries.media?.length
-            ) {
-              return
-            }
-            const response = await tipcClient?.saveToEagle({
-              url: populatedEntry.entries.url,
-              mediaUrls: populatedEntry.entries.media.map((m) => m.url),
-            })
-            if (response?.status === "success") {
-              toast("Saved to Eagle.", {
-                duration: 3000,
-              })
-            } else {
-              toast("Failed to save to Eagle.", {
-                duration: 3000,
-              })
-            }
-          },
-        },
-        {
-          name: "Share",
-          className: "i-mgc-share-forward-cute-re",
-          disabled:
-            !window.electron && !navigator.share,
-          onClick: () => {
-            if (!populatedEntry.entries.url) return
-
-            if (window.electron) {
-              return tipcClient?.showShareMenu(populatedEntry.entries.url)
-            } else {
-              navigator.share({
-                url: populatedEntry.entries.url,
-              })
-            }
+      },
+      {
+        name: "Save Media to Eagle",
+        icon: "/eagle.svg",
+        key: "saveToEagle",
+        disabled:
+          (checkEagle.isLoading ? true : !checkEagle.data) ||
+          !populatedEntry.entries.media?.length,
+        onClick: async () => {
+          if (
+            !populatedEntry.entries.url ||
+            !populatedEntry.entries.media?.length
+          ) {
             return
-          },
+          }
+          const response = await tipcClient?.saveToEagle({
+            url: populatedEntry.entries.url,
+            mediaUrls: populatedEntry.entries.media.map((m) => m.url),
+          })
+          if (response?.status === "success") {
+            toast("Saved to Eagle.", {
+              duration: 3000,
+            })
+          } else {
+            toast("Failed to save to Eagle.", {
+              duration: 3000,
+            })
+          }
         },
-        {
-          key: "read",
-          name: `Mark as Read`,
-          shortcut: shortcuts.entry.toggleRead.key,
-          className: "i-mgc-round-cute-fi",
-          disabled: !!populatedEntry.read || populatedEntry.collections,
-          onClick: () => {
-            read.mutate(populatedEntry)
-          },
+      },
+      {
+        name: "Share",
+        key: "share",
+        className: getOS() === "macOS" ? `i-mgc-share-3-cute-re` : "i-mgc-share-forward-cute-re",
+        shortcut: shortcuts.entry.share.key,
+        disabled: !window.electron && !navigator.share,
+
+        onClick: () => {
+          if (!populatedEntry.entries.url) return
+
+          if (window.electron) {
+            return tipcClient?.showShareMenu(populatedEntry.entries.url)
+          } else {
+            navigator.share({
+              url: populatedEntry.entries.url,
+            })
+          }
+          return
         },
-        {
-          key: "unread",
-          name: `Mark as Unread`,
-          shortcut: shortcuts.entry.toggleRead.key,
-          className: "i-mgc-round-cute-re",
-          disabled: !populatedEntry.read || populatedEntry.collections,
-          onClick: () => {
-            unread.mutate(populatedEntry)
-          },
+      },
+      {
+        key: "read",
+        name: `Mark as Read`,
+        shortcut: shortcuts.entry.toggleRead.key,
+        className: "i-mgc-round-cute-fi",
+        disabled: !!(!!populatedEntry.read || populatedEntry.collections),
+        onClick: () => {
+          read.mutate(populatedEntry)
         },
-      ],
+      },
+      {
+        key: "unread",
+        name: `Mark as Unread`,
+        shortcut: shortcuts.entry.toggleRead.key,
+        className: "i-mgc-round-cute-re",
+        disabled: !!(!populatedEntry.read || populatedEntry.collections),
+        onClick: () => {
+          unread.mutate(populatedEntry)
+        },
+      },
     ]
 
-    return items[view] || items[0]
+    return items
   }, [
     checkEagle.data,
     checkEagle.isLoading,

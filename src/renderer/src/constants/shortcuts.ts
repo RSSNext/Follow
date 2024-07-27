@@ -77,5 +77,9 @@ export const shortcuts = {
       name: "Tip Power",
       key: "Shift+Meta+T",
     },
+    share: {
+      name: "Share",
+      key: "Meta+Alt+S",
+    },
   },
 } as const
