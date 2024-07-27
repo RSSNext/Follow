@@ -3,7 +3,7 @@ import { getMe } from "@renderer/atoms/user"
 
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+
     posthog?: typeof import("posthog-js").default
   }
 }
