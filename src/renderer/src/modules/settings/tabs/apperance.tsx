@@ -14,10 +14,10 @@ import {
 import { useDark, useSetDarkInWebApp } from "@renderer/hooks/common"
 import { tipcClient } from "@renderer/lib/client"
 import { getOS } from "@renderer/lib/utils"
-import { useQuery } from "@tanstack/react-query"
 import { bundledThemes } from "shiki/themes"
 
 import { SettingSwitch } from "../control"
+import { ContentFontSelector, UIFontSelector } from "../modules/fonts"
 import { createSettingBuilder } from "../setting-builder"
 import { SettingsTitle } from "../title"
 
@@ -81,10 +81,14 @@ export const SettingAppearance = () => {
             },
             {
               type: "title",
+              value: "Fonts",
+            },
+            UIFontSelector,
+            ContentFontSelector,
+            {
+              type: "title",
               value: "Content",
             },
-            !!window.electron && Fonts,
-
             ShikiTheme,
             {
               label: "Render inline style",
@@ -132,40 +136,6 @@ const ShikiTheme = () => {
           {Object.keys(bundledThemes)?.map((theme) => (
             <SelectItem key={theme} value={theme}>
               {theme}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-  )
-}
-
-const Fonts = () => {
-  const { data } = useQuery({
-    queryFn: () => tipcClient?.getSystemFonts(),
-    queryKey: ["systemFonts"],
-  })
-  const readerFontFamily = useUISettingSelector(
-    (state) => state.readerFontFamily || "SN Pro",
-  )
-  return (
-    <div className="-mt-1 mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">Font family</span>
-      <Select
-        defaultValue="SN Pro"
-        value={readerFontFamily}
-        onValueChange={(value) => {
-          setUISetting("readerFontFamily", value)
-        }}
-      >
-        <SelectTrigger size="sm" className="w-48">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent className="h-64">
-          <SelectItem value="SN Pro">SN Pro</SelectItem>
-          {data?.map((font) => (
-            <SelectItem key={font} value={font}>
-              {font}
             </SelectItem>
           ))}
         </SelectContent>

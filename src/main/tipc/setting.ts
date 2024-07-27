@@ -1,9 +1,12 @@
+import { createRequire } from "node:module"
+
 import { app, nativeTheme } from "electron"
 
 import { setDockCount } from "../lib/dock"
 import { createSettingWindow } from "../window"
 import { t } from "./_instance"
 
+const require = createRequire(import.meta.url)
 export const settingRoute = {
   getLoginItemSettings: t.procedure
     .input<void>()

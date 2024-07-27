@@ -1,3 +1,7 @@
+html {
+  --fo-font-family: "SN Pro", system-ui, sans-serif;
+}
+
 body,
 #root {
   @apply h-screen;
@@ -5,7 +9,6 @@ body,
   @apply select-none;
   /* @apply bg-white; */
 
-  --fo-font-family: "SN Pro", system-ui, sans-serif;
   @apply font-theme;
 
   overscroll-behavior: none;

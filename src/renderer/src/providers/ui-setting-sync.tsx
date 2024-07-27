@@ -12,6 +12,21 @@ const useUISettingSync = () => {
     root.style.fontSize = `${setting.uiTextSize}px`
   }, [setting.uiTextSize])
 
+  useInsertionEffect(() => {
+    const root = document.documentElement
+
+    const fontCss = `${setting.uiFontFamily},"SN Pro", system-ui, sans-serif`
+    Object.assign(root.style, {
+      fontFamily: fontCss,
+
+    })
+    root.style.cssText += `\n--fo-font-family: ${fontCss}`
+    Object.assign(document.body.style, {
+      fontFamily: fontCss,
+
+    })
+  }, [setting.uiFontFamily])
+
   useEffect(() => {
     if (setting.showDockBadge) {
       return feedUnreadActions.subscribeUnreadCount(

@@ -20,8 +20,10 @@ const createDefaultSettings = (): UISettings => ({
   modalOpaque: true,
   reduceMotion: false,
 
+  // Font
+  uiFontFamily: "SN Pro",
+  readerFontFamily: "inherit",
   // Content
-  readerFontFamily: "SN Pro",
   readerRenderInlineStyle: false,
   codeHighlightTheme: "github-dark",
 })

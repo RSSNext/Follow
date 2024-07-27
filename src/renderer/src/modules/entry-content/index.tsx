@@ -133,9 +133,9 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
       <div className="h-[calc(100%-3.5rem)] min-w-0 overflow-y-auto @container">
         <m.div
-          style={{
+          style={readerFontFamily ? {
             fontFamily: readerFontFamily,
-          }}
+          } : undefined}
           className="p-5"
           initial={{ opacity: 0.01, y: 100 }}
           animate={{ opacity: 1, y: 0 }}
