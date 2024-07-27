@@ -20,6 +20,7 @@ import dayjs from "dayjs"
 import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useState } from "react"
 import Marquee from "react-fast-marquee"
+import { useHotkeys } from "react-hotkeys-hook"
 
 const handleClickPlay = () => {
   Player.togglePlayAndPause()
@@ -54,6 +55,11 @@ const CornerPlayerImpl = () => {
   const playerValue = { entryId, status, isMute }
   const entry = useEntry(playerValue.entryId)
   const feed = useFeedById(entry?.feedId)
+
+  useHotkeys("space", handleClickPlay, {
+    preventDefault: true,
+    scopes: ["home"],
+  })
 
   const navigateToEntry = useNavigateEntry()
 
