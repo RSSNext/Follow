@@ -82,4 +82,11 @@ export const shortcuts = {
       key: "Meta+Alt+S",
     },
   },
+
+  audio: {
+    "play/pause": {
+      name: "Play/Pause",
+      key: "Space",
+    },
+  },
 } as const

@@ -237,13 +237,13 @@ const ActionIcon = ({
     <TooltipTrigger>
       <button
         type="button"
-        className="center size-6 rounded-md text-zinc-500 hover:bg-theme-item-hover"
+        className="center size-6 rounded-md text-zinc-500 hover:bg-theme-button-hover"
         onClick={onClick}
       >
         {children || <i className={className} />}
       </button>
     </TooltipTrigger>
-    <TooltipContent>{label}</TooltipContent>
+    <TooltipContent className="bg-theme-modal-background">{label}</TooltipContent>
   </Tooltip>
 )
 

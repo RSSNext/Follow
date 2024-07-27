@@ -112,6 +112,9 @@ export default resolveConfig({
             "background": "var(--fo-modal-background)",
             "background-opaque": "var(--fo-modal-background-opaque)",
           },
+          "button": {
+            hover: "var(--fo-button-hover)",
+          },
         },
       },
       borderRadius: {
