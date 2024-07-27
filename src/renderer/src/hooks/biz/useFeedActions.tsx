@@ -1,5 +1,6 @@
 import { getMe } from "@renderer/atoms/user"
 import { useModalStack } from "@renderer/components/ui/modal"
+import type { NativeMenuItem } from "@renderer/lib/native-menu"
 import { useFeedClaimModal } from "@renderer/modules/claim"
 import { FeedForm } from "@renderer/modules/discover/feed-form"
 import { getFeedById, useFeedById } from "@renderer/store/feed"
@@ -7,6 +8,8 @@ import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { WEB_URL } from "@shared/constants"
 import { useMemo } from "react"
 
+import { useNavigateEntry } from "./useNavigateEntry"
+import { getRouteParams } from "./useRouteParams"
 import { useDeleteSubscription } from "./useSubscriptionActions"
 
 export const useFeedActions = ({
@@ -27,15 +30,16 @@ export const useFeedActions = ({
     feedId,
   })
 
+  const navigateEntry = useNavigateEntry()
   const isEntryList = type === "entryList"
 
   const items = useMemo(() => {
     if (!feed) return []
-    const items = [
+    const items: NativeMenuItem[] = [
       {
         type: "text" as const,
         label: isEntryList ? "Edit Feed" : "Edit",
-
+        shortcut: "E",
         click: () => {
           present({
             title: "Edit Feed",
@@ -48,20 +52,33 @@ export const useFeedActions = ({
       {
         type: "text" as const,
         label: isEntryList ? "Unfollow Feed" : "Unfollow",
+        shortcut: "Meta+Backspace",
         click: () => deleteSubscription.mutate(subscription),
+      },
+      {
+        type: "text" as const,
+        label: "Navigate to Feed",
+        shortcut: "Meta+G",
+        disabled: !isEntryList || getRouteParams().feedId === feedId,
+        click: () => {
+          navigateEntry({ feedId })
+        },
       },
       {
         type: "separator" as const,
         disabled: isEntryList,
       },
       ...(!feed.ownerUserId && !!feed.id ?
-          [{
-            type: "text" as const,
-            label: isEntryList ? "Claim Feed" : "Claim",
-            click: () => {
-              claimFeed()
+          [
+            {
+              type: "text" as const,
+              label: isEntryList ? "Claim Feed" : "Claim",
+              shortcut: "C",
+              click: () => {
+                claimFeed()
+              },
             },
-          }] :
+          ] :
           []),
       ...(feed.ownerUserId === getMe()?.id ?
           [
@@ -77,14 +94,27 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
+        label: "Copy Feed URL",
+        disabled: isEntryList,
+        shortcut: "Meta+C",
+        click: () => navigator.clipboard.writeText(feed.url),
+      },
+      {
+        type: "separator",
+        disabled: isEntryList,
+      },
+      {
+        type: "text" as const,
         label: "Open Feed in Browser",
         disabled: isEntryList,
+        shortcut: "O",
         click: () =>
           window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank"),
       },
       {
         type: "text" as const,
         label: "Open Site in Browser",
+        shortcut: "Meta+O",
         disabled: isEntryList,
         click: () => {
           const feed = getFeedById(feedId)

@@ -8,18 +8,24 @@ const SpecialKeys = {
     ctrl: "Ctrl",
     alt: "Alt",
     shift: "Shift",
+    backspace: "⌫",
+    space: "␣",
   },
   macOS: {
     meta: "⌘",
     ctrl: "⌃",
     alt: "⌥",
     shift: "⇧",
+    backspace: "⌫",
+    space: "␣",
   },
   Linux: {
     meta: "Super",
     ctrl: "Ctrl",
     alt: "Alt",
     shift: "Shift",
+    backspace: "⌫",
+    space: "␣",
   },
 }
 

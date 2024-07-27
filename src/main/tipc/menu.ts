@@ -32,7 +32,7 @@ export const menuRoute = {
           return {
             label: item.label,
             enabled: item.enabled ?? true,
-            accelerator: item.shortcut,
+            accelerator: item.shortcut?.replace("Meta", "CmdOrCtrl"),
             click() {
               context.sender.send("menu-click", index)
             },

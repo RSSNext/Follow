@@ -9,8 +9,10 @@ export type NativeMenuItem =
     /** only work in web app */
     icon?: React.ReactNode
     shortcut?: string
+    disabled?: boolean
   }
-  | { type: "separator" }
+  | { type: "separator", disabled?: boolean }
+
 export const showNativeMenu = async (
   items: Array<Nullable<NativeMenuItem | false>>,
   e?: MouseEvent | React.MouseEvent,
