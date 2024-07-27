@@ -14,8 +14,11 @@ import {
   SelectValue,
 } from "@renderer/components/ui/select"
 import { tipcClient } from "@renderer/lib/client"
+import { nextFrame } from "@renderer/lib/dom"
+import { getStorageNS } from "@renderer/lib/ns"
 import { useQuery } from "@tanstack/react-query"
-import { useCallback, useMemo, useRef } from "react"
+import { useCallback, useEffect, useMemo, useRef } from "react"
+import * as React from "react"
 
 const FALLBACK_FONT = "Default"
 const DEFAULT_FONT = "SN Pro"
@@ -101,7 +104,7 @@ export const UIFontSelector = () => {
   const setCustom = usePresentCustomFontDialog("uiFontFamily")
   const isCustomFont = useMemo(
     () =>
-
+      uiFont !== DEFAULT_FONT &&
       data.find((d) => d.value === uiFont) === undefined,
     [data, uiFont],
   )
@@ -125,9 +128,7 @@ export const UIFontSelector = () => {
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="h-64">
-          {isCustomFont && (
-            <SelectItem value={uiFont}>{uiFont}</SelectItem>
-          )}
+          {isCustomFont && <SelectItem value={uiFont}>{uiFont}</SelectItem>}
           <SelectItem value={DEFAULT_FONT}>{DEFAULT_FONT}</SelectItem>
           {data.map(({ label, value }) => (
             <SelectItem key={value} value={value}>
@@ -143,34 +144,49 @@ export const UIFontSelector = () => {
 const usePresentCustomFontDialog = (
   setKey: "uiFontFamily" | "readerFontFamily",
 ) => {
+  const HISTORY_KEY = getStorageNS("customFonts")
   const { present } = useModalStack()
 
   return useCallback(() => {
     present({
       title: "Custom Font",
-      content: function Content({ dismiss }) {
+      clickOutsideToDismiss: true,
+      content: function Content({ dismiss, setClickOutSideToDismiss }) {
         const inputRef = useRef<HTMLInputElement>(null)
 
+        useEffect(() => {
+          nextFrame(() => inputRef.current?.focus())
+        }, [inputRef])
+
+        const save: React.FormEventHandler = (e) => {
+          e.preventDefault()
+          const value = inputRef.current?.value
+          if (value) {
+            setUISetting(setKey, value)
+            localStorage.setItem(HISTORY_KEY, value)
+            dismiss()
+          }
+        }
         return (
-          <div className="flex flex-col gap-2">
-            <Input ref={inputRef} />
+
+          <form className="flex flex-col gap-2" onSubmit={save}>
+            <Input
+              defaultValue={localStorage.getItem(HISTORY_KEY) || ""}
+              ref={inputRef}
+              onChange={() => {
+                setClickOutSideToDismiss(false)
+              }}
+            />
 
             <div className="flex justify-end">
-              <StyledButton
-                onClick={() => {
-                  const value = inputRef.current?.value
-                  if (value) {
-                    setUISetting(setKey, value)
-                    dismiss()
-                  }
-                }}
-              >
+              <StyledButton type="submit">
                 Save
               </StyledButton>
             </div>
-          </div>
+          </form>
+
         )
       },
     })
-  }, [present, setKey])
+  }, [HISTORY_KEY, present, setKey])
 }
