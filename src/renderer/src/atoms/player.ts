@@ -61,7 +61,7 @@ export const Player = {
   get() {
     return getPlayerAtomValue()
   },
-  play(
+  mount(
     v: Omit<PlayerAtomValue, "show" | "status" | "playedSeconds" | "duration">,
   ) {
     const curV = getPlayerAtomValue()
@@ -103,6 +103,11 @@ export const Player = {
     this.currentTimeTimer && clearInterval(this.currentTimeTimer)
     this.audio.pause()
   },
+  play() {
+    const curV = getPlayerAtomValue()
+
+    this.mount(curV)
+  },
   pause() {
     const curV = getPlayerAtomValue()
     if (curV.status === "paused") {
@@ -122,7 +127,7 @@ export const Player = {
     if (curV.status === "playing") {
       return this.pause()
     } else if (curV.status === "paused") {
-      return this.play(curV)
+      return this.mount(curV)
     } else {
       return this.pause()
     }
@@ -171,3 +176,5 @@ export const Player = {
     })
   },
 }
+
+window.play = Player

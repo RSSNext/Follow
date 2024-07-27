@@ -94,7 +94,7 @@ const MediaImpl: FC<MediaProps> = ({
             className={cn(
               hidden && "hidden",
               !(props.width || props.height) && "size-full",
-              "bg-stone-100 object-cover",
+              "bg-stone-100 object-cover dark:bg-neutral-800",
               popper && "cursor-zoom-in",
               mediaContainerClassName,
             )}
@@ -173,6 +173,7 @@ const MediaImpl: FC<MediaProps> = ({
     handleClick,
     hidden,
     imgSrc,
+    mediaContainerClassName,
     popper,
     previewImageUrl,
     props,
@@ -188,4 +189,6 @@ const MediaImpl: FC<MediaProps> = ({
   )
 }
 
-export const Media: FC<MediaProps> = memo((props) => <MediaImpl {...props} key={props.src} />)
+export const Media: FC<MediaProps> = memo((props) => (
+  <MediaImpl {...props} key={props.src} />
+))

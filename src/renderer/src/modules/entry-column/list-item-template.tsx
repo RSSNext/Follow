@@ -158,7 +158,7 @@ function AudioCover({
   const handleClickPlay = () => {
     if (!playStatus) {
       // switch this to play
-      Player.play({
+      Player.mount({
         type: "audio",
         entryId,
         src,

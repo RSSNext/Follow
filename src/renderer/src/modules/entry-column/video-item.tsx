@@ -1,5 +1,7 @@
+import { Player } from "@renderer/atoms/player"
 import { m } from "@renderer/components/common/Motion"
 import { Media } from "@renderer/components/ui/media"
+import type { ModalContentComponent } from "@renderer/components/ui/modal"
 import { useModalStack } from "@renderer/components/ui/modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
@@ -8,7 +10,7 @@ import { cn } from "@renderer/lib/utils"
 import { GridItem } from "@renderer/modules/entry-column/grid-item-template"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useHover } from "@use-gesture/react"
-import { useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import type { UniversalItemProps } from "./types"
@@ -60,14 +62,8 @@ export function VideoItem({
             e.stopPropagation()
             modalStack.present({
               title: "",
-              content: ({ dismiss }) => (
-                <m.div
-                  exit={{ scale: 0.94, opacity: 0 }}
-                  className="size-full p-12"
-                  onClick={() => dismiss()}
-                >
-                  <ViewTag src={iframeSrc} className="size-full" />
-                </m.div>
+              content: (props) => (
+                <PreviewVideoModalContent src={iframeSrc} {...props} />
               ),
               clickOutsideToDismiss: true,
               CustomModalComponent: NoopChildren,
@@ -113,5 +109,31 @@ export function VideoItem({
         </div>
       </div>
     </GridItem>
+  )
+}
+
+const PreviewVideoModalContent: ModalContentComponent<{
+  src: string
+}> = ({ dismiss, src }) => {
+  const currentAudioPlayerIsPlay = useRef(Player.get().status === "playing")
+  useEffect(() => {
+    const currentValue = currentAudioPlayerIsPlay.current
+    if (currentValue) {
+      Player.pause()
+    }
+    return () => {
+      if (currentValue) {
+        Player.play()
+      }
+    }
+  }, [])
+  return (
+    <m.div
+      exit={{ scale: 0.94, opacity: 0 }}
+      className="size-full p-12"
+      onClick={() => dismiss()}
+    >
+      <ViewTag src={src} className="size-full" />
+    </m.div>
   )
 }

@@ -60,7 +60,7 @@ const TimeStamp = (props: { time: string }) => {
     <span
       className="cursor-pointer tabular-nums text-theme-accent dark:text-theme-accent-500"
       onClick={() => {
-        Player.play({
+        Player.mount({
           type: "audio",
           entryId,
           src,

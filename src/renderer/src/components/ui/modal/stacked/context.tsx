@@ -9,7 +9,7 @@ export const CurrentModalContext = createContext<CurrentModalContentProps>(
   null as any,
 )
 
-export type ModalContentComponent<T> = FC<ModalActionsInternal & T>
+export type ModalContentComponent<T = object> = FC<ModalActionsInternal & T>
 export type ModalActionsInternal = {
   dismiss: () => void
   setClickOutSideToDismiss: (value: boolean) => void
