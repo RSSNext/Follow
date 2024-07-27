@@ -197,6 +197,8 @@ export const createMainWindow = () => {
 
   window.on("show", () => {
     cancelPollingUpdateUnreadCount()
+
+    callGlobalContextMethod(window, "invalidateQueries")
   })
 
   window.on("hide", async () => {

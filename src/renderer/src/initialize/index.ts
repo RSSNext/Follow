@@ -3,6 +3,7 @@ import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
 import { getUISettings } from "@renderer/atoms/settings/ui"
 import { browserDB } from "@renderer/database"
+import { InvalidateQueryEvent } from "@renderer/providers/invalidate-query-provider"
 import { CleanerService } from "@renderer/services/cleaner"
 import { registerGlobalContext } from "@shared/bridge"
 import dayjs from "dayjs"
@@ -61,6 +62,12 @@ export const initializeApp = async () => {
     showSetting: () => window.router.showSettings(),
     getGeneralSettings,
     getUISettings,
+    /**
+     * Electron app only
+     */
+    invalidateQueries() {
+      document.dispatchEvent(new InvalidateQueryEvent())
+    },
     toast,
   })
 

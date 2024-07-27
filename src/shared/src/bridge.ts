@@ -8,6 +8,8 @@ interface RenderGlobalContext {
   showSetting: () => void
   getGeneralSettings: () => GeneralSettings
   getUISettings: () => UISettings
+
+  invalidateQueries: () => void
   toast: typeof toast
 }
 
