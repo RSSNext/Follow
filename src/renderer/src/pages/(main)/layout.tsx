@@ -28,7 +28,7 @@ export function Component() {
 
   return (
     <div
-      className="flex h-full"
+      className="flex h-screen overflow-hidden"
       ref={containerRef}
       onContextMenu={preventDefault}
     >
