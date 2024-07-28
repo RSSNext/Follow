@@ -15,6 +15,7 @@ import { cn } from "@renderer/lib/utils"
 import type { FeedResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
+import { Fragment } from "react/jsx-runtime"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -97,21 +98,48 @@ export function DiscoverImport() {
               <FormItem>
                 <FormLabel>OPML file</FormLabel>
                 <FormControl>
-                  <Input
-                    {...fieldProps}
-                    placeholder="Picture"
-                    type="file"
-                    accept=".opml"
-                    onChange={(event) =>
-                      onChange(event.target.files && event.target.files[0])}
-                  />
+                  <label
+                    className="center flex h-[100px] w-full rounded-md border border-dashed"
+                    htmlFor="upload-file"
+                  >
+                    {form.formState.dirtyFields.file ? (
+                      <Fragment>
+                        <i className="i-mgc-file-upload-cute-re size-5" />
+
+                        <span className="ml-2 text-sm font-semibold opacity-80">
+                          {value.name}
+                        </span>
+                      </Fragment>
+                    ) : (
+                      <Fragment>
+                        <i className="i-mgc-file-upload-cute-re size-5" />
+
+                        <span className="ml-2 text-sm opacity-80">
+                          Click to upload OPML file
+                        </span>
+                      </Fragment>
+                    )}
+                  </label>
                 </FormControl>
+                <Input
+                  {...fieldProps}
+                  id="upload-file"
+                  type="file"
+                  accept=".opml"
+                  className="hidden"
+                  onChange={(event) =>
+                    onChange(event.target.files && event.target.files[0])}
+                />
                 <FormMessage />
               </FormItem>
             )}
           />
           <div className="center flex">
-            <StyledButton type="submit" isLoading={mutation.isPending}>
+            <StyledButton
+              type="submit"
+              disabled={!form.formState.dirtyFields.file}
+              isLoading={mutation.isPending}
+            >
               Import
             </StyledButton>
           </div>
@@ -152,7 +180,11 @@ export function DiscoverImport() {
                       <div className="text-zinc-500">No items</div>
                     )}
                     {mutation.data?.[item.key].map((feed: FeedResponse) => (
-                      <FollowSummary className="max-w-[462px]" key={feed.id} feed={feed} />
+                      <FollowSummary
+                        className="max-w-[462px]"
+                        key={feed.id}
+                        feed={feed}
+                      />
                     ))}
                   </div>
                 </div>
