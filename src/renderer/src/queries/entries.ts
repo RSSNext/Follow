@@ -64,18 +64,25 @@ export const entries = {
   }) =>
     defineQuery(
       ["entry-checkNew", id, view, read, fetchedTime],
-      async () =>
+      async () => {
+        const query = {
+          ...getEntriesParams({
+            id,
+            view,
+          }),
+          read,
+          insertedAfter: fetchedTime,
+        }
+
+        if (query.feedIdList && query.feedIdList.length === 1) {
+          query.feedId = query.feedIdList[0]
+          delete query.feedIdList
+        }
         // @ts-expect-error
-        apiClient.entries["check-new"].$get({
-          query: {
-            ...getEntriesParams({
-              id,
-              view,
-            }),
-            read,
-            insertedAfter: fetchedTime,
-          },
-        }) as Promise<{ data: { has_new: boolean, lastest_at?: string } }>,
+        return apiClient.entries["check-new"].$get({
+          query,
+        }) as Promise<{ data: { has_new: boolean, lastest_at?: string } }>
+      },
 
       {
         rootKey: ["entry-checkNew", id],

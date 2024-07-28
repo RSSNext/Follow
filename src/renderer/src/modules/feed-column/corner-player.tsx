@@ -1,5 +1,6 @@
 import * as Slider from "@radix-ui/react-slider"
 import {
+  getPlayerAtomValue,
   Player,
   usePlayerAtomSelector,
   usePlayerAtomValue,
@@ -47,12 +48,47 @@ export const CornerPlayer = () => {
     </AnimatePresence>
   )
 }
+
+const usePlayerTracker = () => {
+  const playerOpenAt = useState(Date.now)[0]
+  const show = usePlayerAtomSelector((v) => v.show)
+
+  useEffect(() => {
+    const handler = () => {
+      const playerState = getPlayerAtomValue()
+      window.posthog?.capture(
+        "player_open_duration",
+        {
+          duration: Date.now() - playerOpenAt,
+          status: playerState.status,
+          trigger: "beforeunload",
+        },
+        { transport: "sendBeacon" },
+      )
+    }
+
+    window.addEventListener("beforeunload", handler)
+    return () => window.removeEventListener("beforeunload", handler)
+  }, [])
+
+  useEffect(() => {
+    if (!show) {
+      const playerState = getPlayerAtomValue()
+      window.posthog?.capture("player_open_duration", {
+        duration: Date.now() - playerOpenAt,
+        status: playerState.status,
+        trigger: "manual",
+      })
+    }
+  }, [show])
+}
 const CornerPlayerImpl = () => {
   const entryId = usePlayerAtomSelector((v) => v.entryId)
-
   const status = usePlayerAtomSelector((v) => v.status)
   const isMute = usePlayerAtomSelector((v) => v.isMute)
+
   const playerValue = { entryId, status, isMute }
+
   const entry = useEntry(playerValue.entryId)
   const feed = useFeedById(entry?.feedId)
 
@@ -62,6 +98,7 @@ const CornerPlayerImpl = () => {
   })
 
   const navigateToEntry = useNavigateEntry()
+  usePlayerTracker()
 
   if (!entry || !feed) return null
 
@@ -243,7 +280,9 @@ const ActionIcon = ({
         {children || <i className={className} />}
       </button>
     </TooltipTrigger>
-    <TooltipContent className="bg-theme-modal-background">{label}</TooltipContent>
+    <TooltipContent className="bg-theme-modal-background">
+      {label}
+    </TooltipContent>
   </Tooltip>
 )
 
