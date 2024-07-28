@@ -1,4 +1,4 @@
-import { useId, useMemo, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 
 import { RadioGroupContextProvider, RadioGroupValueProvider } from "./context"
 
@@ -6,7 +6,6 @@ export const RadioGroup: Component<{
   value?: string
   onValueChange?: (value: string) => void
 }> = (props) => {
-  const id = useId()
   const { onValueChange, value } = props
 
   const stableOnValueChange = useRef(onValueChange).current
@@ -16,13 +15,12 @@ export const RadioGroup: Component<{
     <RadioGroupContextProvider
       value={useMemo(
         () => ({
-          groupId: id,
           onChange(value) {
             setCurrentValue(value)
             stableOnValueChange?.(value)
           },
         }),
-        [id, stableOnValueChange],
+        [stableOnValueChange],
       )}
     >
       <RadioGroupValueProvider value={currentValue}>

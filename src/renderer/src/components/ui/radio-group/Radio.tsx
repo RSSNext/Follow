@@ -1,5 +1,6 @@
 import { cn } from "@renderer/lib/utils"
 import type { FC, ReactNode } from "react"
+import { useId } from "react"
 import { useEventCallback } from "usehooks-ts"
 
 import { useRadioContext, useRadioGroupValue } from "./context"
@@ -15,7 +16,8 @@ export const Radio: FC<
 > = (props) => {
   const { id, label, className, wrapperClassName, value, onChange, ...rest } =
     props
-  const { groupId, onChange: ctxOnChange } = useRadioContext() || {}
+  const { onChange: ctxOnChange } = useRadioContext() || {}
+  const fallbackId = useId()
 
   const ctxValue = useRadioGroupValue()
 
@@ -29,7 +31,7 @@ export const Radio: FC<
       <input
         {...rest}
         type="radio"
-        id={groupId || id}
+        id={id ?? fallbackId}
         className={cn(
           "radio radio-primary radio-sm disabled:radio-current disabled:cursor-not-allowed disabled:text-theme-disabled",
           className,
@@ -43,7 +45,7 @@ export const Radio: FC<
         className={cn(
           rest.disabled ? "text-theme-disabled" : "",
         )}
-        htmlFor={groupId || id}
+        htmlFor={id ?? fallbackId}
       >
         {label}
       </label>

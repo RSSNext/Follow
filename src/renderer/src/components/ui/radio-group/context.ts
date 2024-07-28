@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react"
 
 interface RadioContext {
-  groupId: string
   onChange: (value: string) => void
 
 }

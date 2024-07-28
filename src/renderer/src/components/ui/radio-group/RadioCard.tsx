@@ -1,5 +1,6 @@
 import { cn } from "@renderer/lib/utils"
 import type { FC, ReactNode } from "react"
+import { useId } from "react"
 import { useEventCallback } from "usehooks-ts"
 
 import { useRadioContext, useRadioGroupValue } from "./context"
@@ -15,7 +16,8 @@ export const RadioCard: FC<
 > = (props) => {
   const { id, label, className, wrapperClassName, value, onChange, ...rest } =
     props
-  const { groupId, onChange: ctxOnChange } = useRadioContext() || {}
+  const { onChange: ctxOnChange } = useRadioContext() || {}
+  const fallbackId = useId()
 
   const ctxValue = useRadioGroupValue()
 
@@ -29,7 +31,7 @@ export const RadioCard: FC<
 
   return (
     <label
-      id={groupId || id}
+      htmlFor={id ?? fallbackId}
       className={cn(
         "flex cursor-pointer items-center rounded-md p-2",
         "border",
@@ -41,7 +43,7 @@ export const RadioCard: FC<
       )}
     >
       <input
-        id={id}
+        id={id ?? fallbackId}
         type="radio"
         className={cn("hidden size-0", className)}
         value={value}
