@@ -1,4 +1,4 @@
-import { Slot } from "@radix-ui/react-slot"
+import { Slot, Slottable } from "@radix-ui/react-slot"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import type { VariantProps } from "class-variance-authority"
@@ -55,7 +55,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading && (
           <i className="i-mgc-loading-3-cute-re mr-2 animate-spin" />
         )}
-        {props.children}
+        <Slottable>{props.children}</Slottable>
       </Comp>
     )
   },
@@ -72,6 +72,7 @@ interface ActionButtonProps {
   active?: boolean
   shortcut?: string
   as?: keyof React.JSX.IntrinsicElements
+  asChild?: boolean
 }
 
 export const ActionButton = React.forwardRef<
@@ -89,6 +90,7 @@ export const ActionButton = React.forwardRef<
       active,
       shortcut,
       as,
+      asChild,
     },
     ref,
   ) => {
@@ -107,6 +109,7 @@ export const ActionButton = React.forwardRef<
           <TooltipTrigger asChild>
             <Button
               as={as}
+              asChild={asChild}
               ref={buttonRef}
               // @see https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904
               onFocusCapture={stopPropagation}

@@ -94,17 +94,16 @@ export const SettingAbout = () => (
       <div className="mt-2 flex flex-wrap gap-2">
         {SocialMediaLinks.map((link) => (
           <Button
-            as="a"
+            asChild
             key={link.url}
             variant="outline"
             className="flex flex-1 cursor-pointer items-center gap-2"
-            // @ts-expect-error
-            href={link.url}
-            target="_blank"
-            rel="noreferrer"
+
           >
-            <i className={link.icon} />
-            {link.label}
+            <a href={link.url} target="_blank" rel="noreferrer">
+              <i className={link.icon} />
+              {link.label}
+            </a>
           </Button>
         ))}
       </div>
