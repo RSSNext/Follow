@@ -11,6 +11,11 @@ export function Recommendations() {
     Queries.discover.rsshubCategory({
       category: "popular",
     }),
+    {
+      meta: {
+        persist: true,
+      },
+    },
   )
 
   const { data } = rsshubPopular

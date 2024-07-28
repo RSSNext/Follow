@@ -1,14 +1,24 @@
+import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { Queries } from "@renderer/queries"
 
 import { DiscoverFeedForm } from "./content-components"
 
 export function DiscoverRSS3() {
-  const { data } = useAuthQuery(
+  const { data, isLoading } = useAuthQuery(
     Queries.discover.rsshubNamespace({
       namespace: "rss3",
     }),
+    {
+      meta: {
+        persist: true,
+      },
+    },
   )
+
+  if (isLoading) {
+    return <LoadingCircle size="large" className="center flex w-full" />
+  }
 
   return (
     <>
