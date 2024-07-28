@@ -10,9 +10,9 @@ import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { LoginModalContent } from "@renderer/modules/auth/LoginModalContent"
+import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
 import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useSession } from "@renderer/queries/auth"
-import { WEB_URL } from "@shared/constants"
 import type { FC } from "react"
 import { memo } from "react"
 import { Link } from "react-router-dom"
@@ -68,9 +68,11 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   const { user } = session || {}
   const signOut = useSignOut()
   const settingModalPresent = useSettingModal()
+  const presentUserProfile = usePresentUserProfileModal()
   if (status !== "authenticated") {
     return <LoginButton {...props} />
   }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="!outline-none focus-visible:bg-theme-item-hover">
@@ -96,10 +98,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
-            window.open(
-              `${WEB_URL}/profile/${user?.handle || user?.id}`,
-              "_blank",
-            )
+            presentUserProfile(user?.id)
           }}
         >
           <i className="i-mgc-user-3-cute-re mr-1.5" />

@@ -13,6 +13,8 @@ import { useEntryReadHistory } from "@renderer/store/entry"
 import { useUserById } from "@renderer/store/user"
 import { Fragment } from "react"
 
+import { usePresentUserProfileModal } from "../profile/hooks"
+
 export const EntryReadHistory: Component<{ entryId: string }> = ({
   entryId,
 }) => {
@@ -66,6 +68,7 @@ const EntryUser: Component<{
   i: number
 }> = ({ userId, i }) => {
   const user = useUserById(userId)
+  const presentUserProfile = usePresentUserProfileModal()
   if (!user) return null
   return (
     <Tooltip>
@@ -76,14 +79,21 @@ const EntryUser: Component<{
           zIndex: i,
         }}
       >
-        <Avatar className="aspect-square size-8 border border-border ring-1 ring-background">
-          <AvatarImage src={user?.image || undefined} />
-          <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
-        </Avatar>
+        <button
+          className="no-drag-region"
+          type="button"
+          onClick={() => {
+            presentUserProfile(userId)
+          }}
+        >
+          <Avatar className="aspect-square size-8 border border-border ring-1 ring-background">
+            <AvatarImage src={user?.image || undefined} />
+            <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
+          </Avatar>
+        </button>
       </TooltipTrigger>
       <TooltipContent side="top">
         Recent reader:
-        {" "}
         {user.name}
       </TooltipContent>
     </Tooltip>
