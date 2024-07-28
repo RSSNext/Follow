@@ -1,13 +1,13 @@
-import { ActionButton } from '@renderer/components/ui/button'
-import { shortcuts } from '@renderer/constants/shortcuts'
-import { useEntryActions } from '@renderer/hooks/biz/useEntryActions'
-import { cn } from '@renderer/lib/utils'
-import { useEntry } from '@renderer/store/entry/hooks'
-import { AnimatePresence, m } from 'framer-motion'
-import { useHotkeys } from 'react-hotkeys-hook'
+import { ActionButton } from "@renderer/components/ui/button"
+import { shortcuts } from "@renderer/constants/shortcuts"
+import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
+import { cn } from "@renderer/lib/utils"
+import { useEntry } from "@renderer/store/entry/hooks"
+import { AnimatePresence, m } from "framer-motion"
+import { useHotkeys } from "react-hotkeys-hook"
 
-import { useEntryContentScrollToTop, useEntryTitleMeta } from './atoms'
-import { EntryReadHistory } from './read-history'
+import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
+import { EntryReadHistory } from "./read-history"
 
 export function EntryHeader({
   view,
@@ -28,18 +28,18 @@ export function EntryHeader({
   useHotkeys(
     shortcuts.entry.toggleStarred.key,
     () => {
-      const key = entry?.collections ? 'unstar' : 'star'
-      items.find(item => item.key === key)?.onClick()
+      const key = entry?.collections ? "unstar" : "star"
+      items.find((item) => item.key === key)?.onClick()
     },
-    { scopes: ['home'] },
+    { scopes: ["home"] },
   )
 
   useHotkeys(
     shortcuts.entry.openInBrowser.key,
     () => {
-      items.find(item => item.key === 'openInBrowser')?.onClick()
+      items.find((item) => item.key === "openInBrowser")?.onClick()
     },
-    { scopes: ['home'] },
+    { scopes: ["home"] },
   )
 
   const entryTitleMeta = useEntryTitleMeta()
@@ -50,15 +50,15 @@ export function EntryHeader({
   return (
     <div
       className={cn(
-        'relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500',
-        shouldShowMeta && 'border-b border-border',
+        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500",
+        shouldShowMeta && "border-b border-border",
         className,
       )}
     >
       <div
         className={cn(
-          'invisible absolute left-5 top-0 z-0 flex h-full items-center gap-2 text-[13px] text-zinc-500',
-          isAtTop && 'visible z-[11]',
+          "invisible absolute left-5 top-0 z-0 flex h-full items-center gap-2 text-[13px] text-zinc-500",
+          isAtTop && "visible z-[11]",
         )}
       >
         <EntryReadHistory entryId={entryId} />
@@ -87,8 +87,8 @@ export function EntryHeader({
 
         <div className="relative flex shrink-0 items-center justify-end gap-3">
           {items
-            .filter(item => !item.disabled)
-            .map(item => (
+            .filter((item) => !item.disabled)
+            .map((item) => (
               <ActionButton
                 icon={
                   item.icon ? (

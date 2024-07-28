@@ -1,15 +1,15 @@
-import { Kbd } from '@renderer/components/ui/kbd/Kbd'
-import { apiClient } from '@renderer/lib/api-fetch'
-import { Queries } from '@renderer/queries'
-import type { SubscriptionFlatModel } from '@renderer/store/subscription'
-import { subscriptionActions } from '@renderer/store/subscription'
-import { feedUnreadActions } from '@renderer/store/unread'
-import { useMutation } from '@tanstack/react-query'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { toast } from 'sonner'
+import { Kbd } from "@renderer/components/ui/kbd/Kbd"
+import { apiClient } from "@renderer/lib/api-fetch"
+import { Queries } from "@renderer/queries"
+import type { SubscriptionFlatModel } from "@renderer/store/subscription"
+import { subscriptionActions } from "@renderer/store/subscription"
+import { feedUnreadActions } from "@renderer/store/unread"
+import { useMutation } from "@tanstack/react-query"
+import { useHotkeys } from "react-hotkeys-hook"
+import { toast } from "sonner"
 
-import { navigateEntry } from './useNavigateEntry'
-import { getRouteParams } from './useRouteParams'
+import { navigateEntry } from "./useNavigateEntry"
+import { getRouteParams } from "./useRouteParams"
 
 export const useDeleteSubscription = ({
   onSuccess,
@@ -72,16 +72,16 @@ export const useDeleteSubscription = ({
   })
 
 const UnfollowInfo = ({ title, undo }: { title: string, undo: () => any }) => {
-  useHotkeys('ctrl+z,meta+z', undo, {
-    scopes: ['home'],
+  useHotkeys("ctrl+z,meta+z", undo, {
+    scopes: ["home"],
     preventDefault: true,
   })
   return (
     <>
       Feed
-      {' '}
+      {" "}
       <i className="mr-px font-semibold">{title}</i>
-      {' '}
+      {" "}
       has been unfollowed.
     </>
   )

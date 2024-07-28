@@ -1,28 +1,28 @@
-import { useUISettingKey } from '@renderer/atoms/settings/ui'
-import { useMe } from '@renderer/atoms/user'
-import { m } from '@renderer/components/common/Motion'
-import { Logo } from '@renderer/components/icons/logo'
-import { AutoResizeHeight } from '@renderer/components/ui/auto-resize-height'
-import { getRouteParams } from '@renderer/hooks/biz/useRouteParams'
-import { useAuthQuery, useTitle } from '@renderer/hooks/common'
-import { stopPropagation } from '@renderer/lib/dom'
-import { FeedViewType } from '@renderer/lib/enum'
-import { parseHtml } from '@renderer/lib/parse-html'
-import type { ActiveEntryId } from '@renderer/models'
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
+import { useMe } from "@renderer/atoms/user"
+import { m } from "@renderer/components/common/Motion"
+import { Logo } from "@renderer/components/icons/logo"
+import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
+import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
+import { useAuthQuery, useTitle } from "@renderer/hooks/common"
+import { stopPropagation } from "@renderer/lib/dom"
+import { FeedViewType } from "@renderer/lib/enum"
+import { parseHtml } from "@renderer/lib/parse-html"
+import type { ActiveEntryId } from "@renderer/models"
 import {
   useIsSoFWrappedElement,
   WrappedElementProvider,
-} from '@renderer/providers/wrapped-element-provider'
-import { Queries } from '@renderer/queries'
-import { useEntry, useEntryReadHistory } from '@renderer/store/entry'
-import { useFeedById, useFeedHeaderTitle } from '@renderer/store/feed'
-import { useEffect, useLayoutEffect, useState } from 'react'
+} from "@renderer/providers/wrapped-element-provider"
+import { Queries } from "@renderer/queries"
+import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
+import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
+import { useEffect, useLayoutEffect, useState } from "react"
 
-import { LoadingCircle } from '../../components/ui/loading'
-import { EntryTranslation } from '../entry-column/translation'
-import { setEntryContentScrollToTop, setEntryTitleMeta } from './atoms'
-import { EntryHeader } from './header'
-import { EntryContentProvider } from './provider'
+import { LoadingCircle } from "../../components/ui/loading"
+import { EntryTranslation } from "../entry-column/translation"
+import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
+import { EntryHeader } from "./header"
+import { EntryContentProvider } from "./provider"
 
 export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   const title = useFeedHeaderTitle()
@@ -63,7 +63,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
   const entryHistory = useEntryReadHistory(entryId)
 
   const [content, setContent] = useState<JSX.Element>()
-  const readerRenderInlineStyle = useUISettingKey('readerRenderInlineStyle')
+  const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
   useEffect(() => {
     // Fallback data, if local data is broken should fallback to cached query data.
     const processContent = entry?.entries.content ?? data?.entries.content
@@ -74,8 +74,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
       }).then((parsed) => {
         setContent(parsed.content)
       })
-    }
-    else {
+    } else {
       setContent(undefined)
     }
   }, [
@@ -89,7 +88,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     Queries.ai.translation({
       entry: entry!,
       language: entry?.settings?.translation,
-      extraFields: ['title'],
+      extraFields: ["title"],
     }),
     {
       enabled: !!entry?.settings?.translation,
@@ -116,7 +115,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     },
   )
 
-  const readerFontFamily = useUISettingKey('readerFontFamily')
+  const readerFontFamily = useUISettingKey("readerFontFamily")
 
   if (!entry) return null
 
@@ -135,11 +134,11 @@ function EntryContentRender({ entryId }: { entryId: string }) {
       <div className="h-[calc(100%-3.5rem)] min-w-0 overflow-y-auto @container">
         <m.div
           style={
-            readerFontFamily
-              ? {
+            readerFontFamily ?
+                {
                   fontFamily: readerFontFamily,
-                }
-              : undefined
+                } :
+              undefined
           }
           className="p-5"
           initial={{ opacity: 0.01, y: 100 }}
@@ -167,17 +166,17 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 {feed?.title}
               </div>
               <div className="flex items-center gap-2 text-[13px] text-zinc-500">
-                {entry.entries.publishedAt
-                && new Date(entry.entries.publishedAt).toLocaleString()}
+                {entry.entries.publishedAt &&
+                  new Date(entry.entries.publishedAt).toLocaleString()}
 
                 <div className="flex items-center gap-1">
                   <i className="i-mgc-eye-2-cute-re" />
                   <span>
                     {(
-                      (entryHistory?.readCount ?? 0)
-                      + (entryHistory?.userIds?.every(id => id !== user?.id)
-                        ? 1
-                        : 0)
+                      (entryHistory?.readCount ?? 0) +
+                      (entryHistory?.userIds?.every((id) => id !== user?.id) ?
+                        1 :
+                        0)
                     ) // if no me, +1
                       .toLocaleString()}
                   </span>
@@ -197,9 +196,9 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                       spring
                       className="text-sm leading-relaxed"
                     >
-                      {summary.isLoading
-                        ? SummaryLoadingSkeleton
-                        : summary.data}
+                      {summary.isLoading ?
+                        SummaryLoadingSkeleton :
+                        summary.data}
                     </AutoResizeHeight>
                   </div>
                 )}
@@ -210,14 +209,14 @@ function EntryContentRender({ entryId }: { entryId: string }) {
               <div className="center mt-16">
                 {isPending ? (
                   <LoadingCircle size="large" />
-                ) : error
-                  ? (
+                ) : error ?
+                    (
                       <div className="center flex flex-col gap-2">
                         <i className="i-mgc-close-cute-re text-3xl text-red-500" />
                         <span className="font-sans text-sm">Network Error</span>
                       </div>
-                    )
-                  : (
+                    ) :
+                    (
                       <div className="center">
                         <span className="text-sm text-zinc-400">No content</span>
                       </div>
