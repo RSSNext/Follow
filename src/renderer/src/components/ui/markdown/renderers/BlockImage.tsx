@@ -17,7 +17,7 @@ export const MarkdownBlockImage = (
         size.w < Number.parseInt(props.width as string) && "w-full",
       )}
       popper
-      className="flex justify-center"
+      className="inline-flex justify-center"
     />
   )
 }
