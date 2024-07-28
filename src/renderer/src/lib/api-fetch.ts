@@ -1,3 +1,4 @@
+import { env } from "@env"
 import { getCsrfToken } from "@hono/auth-js/react"
 import PKG from "@pkg"
 import { NetworkStatus, setApiStatus } from "@renderer/atoms/network"
@@ -8,7 +9,7 @@ import type { AppType } from "src/hono"
 
 let csrfTokenPromise: Promise<string> | null = null
 export const apiFetch = ofetch.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: env.VITE_API_URL,
   credentials: "include",
   retry: false,
   onRequest: async ({ options }) => {
@@ -70,7 +71,7 @@ export const apiFetch = ofetch.create({
   },
 })
 
-export const apiClient = hc<AppType>("", {
+export const apiClient = hc<AppType>(env.VITE_API_URL, {
   fetch: async (input, options = {}) => apiFetch(input.toString(), options).catch(
     (err) => {
       if (err instanceof FetchError && !err.response) {

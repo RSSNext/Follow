@@ -9,6 +9,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
+import { useAuthQuery } from "@renderer/hooks/common"
+import { Queries } from "@renderer/queries"
 import { useEntryReadHistory } from "@renderer/store/entry"
 import { useUserById } from "@renderer/store/user"
 import { Fragment } from "react"
@@ -20,6 +22,10 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({
 }) => {
   const me = useMe()
   const entryHistory = useEntryReadHistory(entryId)
+
+  useAuthQuery(Queries.entries.entryReadingHistory(entryId), {
+    refetchInterval: 1000 * 60,
+  })
 
   if (!entryHistory) return null
   if (!me) return null
@@ -80,7 +86,7 @@ const EntryUser: Component<{
         }}
       >
         <button
-          className="no-drag-region"
+          className="no-drag-region cursor-pointer"
           type="button"
           onClick={() => {
             presentUserProfile(userId)

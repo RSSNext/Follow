@@ -3,6 +3,7 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { getEntriesParams } from "@renderer/lib/utils"
 import { entryActions } from "@renderer/store/entry"
+import { entryHistoryActions } from "@renderer/store/entry-history/action"
 
 export const entries = {
   entries: ({
@@ -86,6 +87,15 @@ export const entries = {
 
       {
         rootKey: ["entry-checkNew", id],
+      },
+    ),
+
+  entryReadingHistory: (entryId: string) =>
+    defineQuery(
+      ["entry-reading-history", entryId],
+      async () => entryHistoryActions.fetchEntryHistory(entryId),
+      {
+        rootKey: ["entry-reading-history", entryId],
       },
     ),
 }
