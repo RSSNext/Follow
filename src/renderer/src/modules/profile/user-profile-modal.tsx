@@ -18,9 +18,7 @@ import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import type { SubscriptionModel } from "@renderer/models"
 import { useUserSubscriptionsQuery } from "@renderer/modules/profile/hooks"
-import {
-  useSubscriptionStore,
-} from "@renderer/store/subscription"
+import { useSubscriptionStore } from "@renderer/store/subscription"
 import { useAnimationControls } from "framer-motion"
 import type { FC } from "react"
 import { Fragment, useEffect, useState } from "react"
@@ -103,21 +101,28 @@ export const UserProfileModalContent: FC<{
               </div>
             </div>
             <div className="mb-4 h-full w-[70ch] max-w-full space-y-10 overflow-auto px-5">
-              {Object.keys(subscriptions.data || {}).map((category) => (
-                <div key={category}>
-                  <div className="mb-4 flex items-center text-2xl font-bold">
-                    <h3>{category}</h3>
+              {subscriptions.isLoading ? (
+                <LoadingCircle
+                  size="large"
+                  className="center h-48 w-[46.125rem] max-w-full"
+                />
+              ) : (
+                subscriptions.data && Object.keys(subscriptions.data).map((category) => (
+                  <div key={category}>
+                    <div className="mb-4 flex items-center text-2xl font-bold">
+                      <h3>{category}</h3>
+                    </div>
+                    <div>
+                      {subscriptions.data?.[category].map((subscription) => (
+                        <SubscriptionItem
+                          key={subscription.feedId}
+                          subscription={subscription}
+                        />
+                      ))}
+                    </div>
                   </div>
-                  <div>
-                    {subscriptions.data?.[category].map((subscription) => (
-                      <SubscriptionItem
-                        key={subscription.feedId}
-                        subscription={subscription}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </Fragment>
         )}
@@ -164,7 +169,9 @@ const SubscriptionItem: FC<{
               const defaultView = getSidebarActiveView() as FeedViewType
 
               present({
-                title: `${isFollowed ? "Edit " : ""}${APP_NAME} - ${subscription.feeds.title}`,
+                title: `${isFollowed ? "Edit " : ""}${APP_NAME} - ${
+                  subscription.feeds.title
+                }`,
                 content: ({ dismiss }) => (
                   <FeedForm
                     asWidget
