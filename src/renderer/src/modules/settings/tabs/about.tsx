@@ -50,8 +50,15 @@ export const SettingAbout = () => (
       </p>
       <p className="mt-3 text-balance text-sm">
         The icon library used by Follow is mgc which is copyrighted by
-        <a href="https://mgc.mingcute.com/" target="_blank" rel="noreferrer">
+        {" "}
+        <a
+          className="inline-flex cursor-pointer items-center gap-1 hover:underline"
+          href="https://mgc.mingcute.com/"
+          target="_blank"
+          rel="noreferrer"
+        >
           https://mgc.mingcute.com/
+          <i className="i-mgc-external-link-cute-re" />
         </a>
         {" "}
         and cannot be redistributed.
@@ -72,7 +79,6 @@ export const SettingAbout = () => (
           target="_blank"
         >
           open an issue
-          {" "}
           <i className="i-mgc-external-link-cute-re" />
         </a>
         {" "}
