@@ -52,14 +52,14 @@ export const SettingAbout = () => (
         The icon library used by Follow is mgc which is copyrighted by
         {" "}
         <a
-          className="inline-flex cursor-pointer items-center gap-1 hover:underline"
+          className="follow-link--underline inline-flex items-center"
           href="https://mgc.mingcute.com/"
           target="_blank"
           rel="noreferrer"
         >
           https://mgc.mingcute.com/
-          <i className="i-mgc-external-link-cute-re" />
         </a>
+        <i className="i-mgc-external-link-cute-re translate-y-px" />
         {" "}
         and cannot be redistributed.
       </p>

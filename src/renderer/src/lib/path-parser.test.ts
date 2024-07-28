@@ -22,7 +22,7 @@ describe("test `transformUriPath()`", () => {
           "name": "id",
           "pattern": undefined,
           "prefix": "/",
-          "separator": "/",
+          "separator": undefined,
           "suffix": "",
         },
       ]
@@ -45,7 +45,7 @@ describe("test `transformUriPath()`", () => {
           "name": "id",
           "pattern": undefined,
           "prefix": "/",
-          "separator": "/",
+          "separator": undefined,
           "suffix": "",
         },
       ]
@@ -66,19 +66,19 @@ describe("test `transformUriPath()`", () => {
     expect(pathToRegexp(path).keys).toMatchInlineSnapshot(`
       [
         {
-          "modifier": "",
+          "modifier": undefined,
           "name": "user",
           "pattern": undefined,
           "prefix": "/",
-          "separator": "/",
+          "separator": undefined,
           "suffix": "",
         },
         {
-          "modifier": "",
+          "modifier": undefined,
           "name": "repo",
           "pattern": undefined,
           "prefix": "/",
-          "separator": "/",
+          "separator": undefined,
           "suffix": "",
         },
         {
@@ -86,7 +86,7 @@ describe("test `transformUriPath()`", () => {
           "name": "state",
           "pattern": undefined,
           "prefix": "/",
-          "separator": "/",
+          "separator": undefined,
           "suffix": "",
         },
         {
@@ -94,7 +94,7 @@ describe("test `transformUriPath()`", () => {
           "name": "labels",
           "pattern": undefined,
           "prefix": "/",
-          "separator": "/",
+          "separator": undefined,
           "suffix": "",
         },
       ]
