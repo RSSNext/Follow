@@ -31,7 +31,7 @@ export function Component() {
     <div ref={containerRef} className="flex min-w-0 grow">
       <div
         className={cn(
-          "h-full shrink-0 overflow-y-auto",
+          "h-full shrink-0",
           inWideMode ? "flex-1" : "border-r",
           "will-change-[width]",
         )}

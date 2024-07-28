@@ -19,7 +19,7 @@ body {
 
 [data-theme="dark"] {
   *::-webkit-scrollbar-thumb {
-    border: 3px solid theme(colors.neutral.500);
+    border: 6px solid theme(colors.neutral.500);
   }
 
   *::-webkit-scrollbar-thumb:hover {
@@ -29,7 +29,7 @@ body {
 
 *::-webkit-scrollbar-thumb {
   background-color: transparent;
-  border: 4px solid theme(colors.gray.300);
+  border: 6px solid theme(colors.gray.300);
   @apply rounded-xl;
 }
 
