@@ -41,6 +41,8 @@ export const persistConfig: OmitKeyof<
   "queryClient"
 > = {
   persister: localStoragePersister,
+  // 7 day
+  maxAge: 7 * 24 * 60 * 60 * 1000,
   dehydrateOptions: {
     shouldDehydrateQuery: (query) => {
       if (!query.meta?.persist) return false

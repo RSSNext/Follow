@@ -8,6 +8,7 @@ import { DiscoverForm } from "@renderer/modules/discover/form"
 import { DiscoverImport } from "@renderer/modules/discover/import"
 import { Recommendations } from "@renderer/modules/discover/recommendations"
 import { DiscoverRSS3 } from "@renderer/modules/discover/rss3-form"
+import { createElement } from "react"
 
 export function Component() {
   const tabs = [
@@ -55,19 +56,20 @@ export function Component() {
         </TabsList>
         {tabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.name} className="mt-8">
-            {tab.value === "import" ? (
-              <DiscoverImport />
-            ) : tab.value === "rss3" ?
-                (
-                  <DiscoverRSS3 />
-                ) :
-                (
-                  <DiscoverForm type={tab.value} />
-                )}
+            {TabComponent[tab.value] ? (
+              createElement(TabComponent[tab.value])
+            ) : (
+              <DiscoverForm type={tab.value} />
+            )}
           </TabsContent>
         ))}
       </Tabs>
       <Recommendations />
     </div>
   )
+}
+
+const TabComponent = {
+  import: DiscoverImport,
+  rss3: DiscoverRSS3,
 }

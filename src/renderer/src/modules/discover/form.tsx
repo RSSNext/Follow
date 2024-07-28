@@ -128,7 +128,11 @@ export function DiscoverForm({ type }: { type: string }) {
             )}
           />
           <div className="center flex">
-            <StyledButton type="submit" isLoading={mutation.isPending}>
+            <StyledButton
+              disabled={!form.formState.isValid}
+              type="submit"
+              isLoading={mutation.isPending}
+            >
               {info[type].showModal ? "Preview" : "Search"}
             </StyledButton>
           </div>
