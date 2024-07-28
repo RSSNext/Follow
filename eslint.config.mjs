@@ -3,7 +3,7 @@ import { defineConfig } from "eslint-config-hyoban"
 
 export default defineConfig(
   {
-    stylistic: {
+    formatting: {
       quotes: "double",
       arrowParens: true,
       braceStyle: "1tbs",
@@ -16,7 +16,6 @@ export default defineConfig(
   {
     settings: {
       tailwindcss: {
-        callees: ["cn"],
         whitelist: [
           "center",
         ],

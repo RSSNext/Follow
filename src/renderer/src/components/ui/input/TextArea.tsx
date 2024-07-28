@@ -73,7 +73,7 @@ export const TextArea = forwardRef<
             {bordered && (
               <div
                 className={clsx(
-                  "border-border pointer-events-none absolute inset-0 z-0 border",
+                  "pointer-events-none absolute inset-0 z-0 border border-border",
                   roundedMap[rounded],
                 )}
                 aria-hidden="true"
