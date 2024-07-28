@@ -1,9 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { FollowSummary } from "@renderer/components/feed-summary"
-import { Logo } from "@renderer/components/icons/logo"
-import { Autocomplete } from "@renderer/components/ui/auto-completion"
-import { StyledButton } from "@renderer/components/ui/button"
-import { Card, CardHeader } from "@renderer/components/ui/card"
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FollowSummary } from '@renderer/components/feed-summary'
+import { Logo } from '@renderer/components/icons/logo'
+import { Autocomplete } from '@renderer/components/ui/auto-completion'
+import { StyledButton } from '@renderer/components/ui/button'
+import { Card, CardHeader } from '@renderer/components/ui/card'
 import {
   Form,
   FormControl,
@@ -12,31 +12,31 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@renderer/components/ui/form"
-import { LoadingCircle } from "@renderer/components/ui/loading"
-import { useCurrentModal } from "@renderer/components/ui/modal"
+} from '@renderer/components/ui/form'
+import { LoadingCircle } from '@renderer/components/ui/loading'
+import { useCurrentModal } from '@renderer/components/ui/modal'
 import {
   Select,
   SelectTrigger,
   SelectValue,
-} from "@renderer/components/ui/select"
-import { Switch } from "@renderer/components/ui/switch"
-import { ViewSelectContent } from "@renderer/components/view-select-content"
-import { useDeleteSubscription } from "@renderer/hooks/biz/useSubscriptionActions"
-import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { tipcClient } from "@renderer/lib/client"
-import { nextFrame } from "@renderer/lib/dom"
-import { FeedViewType } from "@renderer/lib/enum"
-import { cn } from "@renderer/lib/utils"
-import { Queries } from "@renderer/queries"
-import { useFeed } from "@renderer/queries/feed"
-import { feedUnreadActions } from "@renderer/store/unread"
-import { useMutation } from "@tanstack/react-query"
-import { useEffect, useRef } from "react"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import { z } from "zod"
+} from '@renderer/components/ui/select'
+import { Switch } from '@renderer/components/ui/switch'
+import { ViewSelectContent } from '@renderer/components/view-select-content'
+import { useDeleteSubscription } from '@renderer/hooks/biz/useSubscriptionActions'
+import { useAuthQuery } from '@renderer/hooks/common'
+import { apiClient } from '@renderer/lib/api-fetch'
+import { tipcClient } from '@renderer/lib/client'
+import { nextFrame } from '@renderer/lib/dom'
+import { FeedViewType } from '@renderer/lib/enum'
+import { cn } from '@renderer/lib/utils'
+import { Queries } from '@renderer/queries'
+import { useFeed } from '@renderer/queries/feed'
+import { feedUnreadActions } from '@renderer/store/unread'
+import { useMutation } from '@tanstack/react-query'
+import { useEffect, useRef } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
 
 const formSchema = z.object({
   view: z.string(),
@@ -75,16 +75,14 @@ export const FeedForm: Component<{
   const { setClickOutSideToDismiss } = useCurrentModal() || {}
 
   useEffect(() => {
-    if (form.formState.isDirty) {
-      setClickOutSideToDismiss?.(false)
-    }
+    setClickOutSideToDismiss?.(form.formState.isDirty)
   }, [form.formState.isDirty])
 
   useEffect(() => {
     if (feed.data?.subscription) {
-      form.setValue("view", `${feed.data?.subscription?.view}`)
-      form.setValue("category", feed.data?.subscription?.category)
-      form.setValue("isPrivate", feed.data?.subscription?.isPrivate || false)
+      form.setValue('view', `${feed.data?.subscription?.view}`)
+      form.setValue('category', feed.data?.subscription?.category)
+      form.setValue('isPrivate', feed.data?.subscription?.isPrivate || false)
     }
   }, [feed.data?.subscription])
 
@@ -97,9 +95,9 @@ export const FeedForm: Component<{
         isPrivate: values.isPrivate,
         ...(isSubscribed && { feedId: feed.data?.feed.id }),
       }
-      const $method = isSubscribed ?
-        apiClient.subscriptions.$patch :
-        apiClient.subscriptions.$post
+      const $method = isSubscribed
+        ? apiClient.subscriptions.$patch
+        : apiClient.subscriptions.$post
 
       return $method({
         // @ts-expect-error
@@ -108,8 +106,8 @@ export const FeedForm: Component<{
     },
     onSuccess: (_, variables) => {
       if (
-        isSubscribed &&
-        variables.view !== `${feed.data?.subscription?.view}`
+        isSubscribed
+        && variables.view !== `${feed.data?.subscription?.view}`
       ) {
         Queries.subscription.byView(feed.data?.subscription?.view).invalidate()
         tipcClient?.invalidateQuery(
@@ -128,7 +126,7 @@ export const FeedForm: Component<{
         Queries.feed.byId({ id: feedId }).invalidate()
         tipcClient?.invalidateQuery(Queries.feed.byId({ id: feedId }).key)
       }
-      toast(isSubscribed ? "🎉 Updated." : "🎉 Followed.", {
+      toast(isSubscribed ? '🎉 Updated.' : '🎉 Followed.', {
         duration: 1000,
       })
 
@@ -155,7 +153,7 @@ export const FeedForm: Component<{
   }
 
   const categories = useAuthQuery(
-    Queries.subscription.categories(Number.parseInt(form.watch("view"))),
+    Queries.subscription.categories(Number.parseInt(form.watch('view'))),
   )
 
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -166,15 +164,17 @@ export const FeedForm: Component<{
   return (
     <div
       className={cn(
-        "flex h-full flex-col",
-        asWidget ? "min-h-[420px] w-[550px] max-w-full" : "px-[18px] pb-[18px] pt-12",
+        'flex h-full flex-col',
+        asWidget
+          ? 'min-h-[420px] w-[550px] max-w-full'
+          : 'px-[18px] pb-[18px] pt-12',
       )}
     >
       {!asWidget && (
         <div className="mb-4 mt-2 flex items-center gap-2 text-[22px] font-bold">
           <Logo className="size-8" />
-          {isSubscribed ? "Update" : "Add"}
-          {" "}
+          {isSubscribed ? 'Update' : 'Add'}
+          {' '}
           follow
         </div>
       )}
@@ -182,14 +182,14 @@ export const FeedForm: Component<{
         <div className="flex flex-1 items-center justify-center">
           <LoadingCircle size="large" />
         </div>
-      ) : !feed.data?.feed ?
-          (
+      ) : !feed.data?.feed
+        ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-2">
               <p>Feed not found.</p>
               <p>{url}</p>
             </div>
-          ) :
-          (
+          )
+        : (
             <div className="flex flex-1 flex-col gap-y-4">
               <Card>
                 <CardHeader>
@@ -235,7 +235,7 @@ export const FeedForm: Component<{
                             <Autocomplete
                               maxHeight={window.innerHeight < 600 ? 120 : 240}
                               portal
-                              suggestions={categories.data?.map((i) => ({
+                              suggestions={categories.data?.map(i => ({
                                 name: i,
                                 value: i,
                               })) || []}
@@ -297,7 +297,7 @@ export const FeedForm: Component<{
                       type="submit"
                       isLoading={followMutation.isPending}
                     >
-                      {isSubscribed ? "Update" : "Follow"}
+                      {isSubscribed ? 'Update' : 'Follow'}
                     </StyledButton>
                   </div>
                 </form>

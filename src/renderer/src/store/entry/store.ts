@@ -1,22 +1,22 @@
-import { runTransactionInScope } from "@renderer/database"
-import { apiClient } from "@renderer/lib/api-fetch"
+import { runTransactionInScope } from '@renderer/database'
+import { apiClient } from '@renderer/lib/api-fetch'
 import {
   getEntriesParams,
   omitObjectUndefinedValue,
-} from "@renderer/lib/utils"
+} from '@renderer/lib/utils'
 import type { CombinedEntryModel, EntryModel, FeedModel, UserModel,
-} from "@renderer/models"
-import { EntryService } from "@renderer/services"
-import { produce } from "immer"
-import { merge, omit } from "lodash-es"
-import type { EntryReadHistoriesModel } from "src/hono"
+} from '@renderer/models'
+import { EntryService } from '@renderer/services'
+import { produce } from 'immer'
+import { merge, omit } from 'lodash-es'
+import type { EntryReadHistoriesModel } from 'src/hono'
 
-import { feedActions } from "../feed"
-import { feedUnreadActions } from "../unread"
-import { userActions } from "../user"
-import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
-import { batchMarkUnread } from "./helper"
-import type { EntryState, FlatEntryModel } from "./types"
+import { feedActions } from '../feed'
+import { feedUnreadActions } from '../unread'
+import { userActions } from '../user'
+import { createZustandStore, doMutationAndTransaction } from '../utils/helper'
+import { batchMarkUnread } from './helper'
+import type { EntryState, FlatEntryModel } from './types'
 
 const createState = (): EntryState => ({
   entries: {},
@@ -26,7 +26,7 @@ const createState = (): EntryState => ({
   readHistory: {},
 })
 
-export const useEntryStore = createZustandStore<EntryState>("entry")(() => ({
+export const useEntryStore = createZustandStore<EntryState>('entry')(() => ({
   ...createState(),
 }))
 
@@ -39,9 +39,10 @@ class EntryActions {
 
   clearByFeedId(feedId: string) {
     const entryIds = get().entries[feedId]
-    set((state) =>
+
+    if (!entryIds) return
+    set(state =>
       produce(state, (draft) => {
-        if (!entryIds) return
         entryIds.forEach((entryId) => {
           delete draft.flatMapEntries[entryId]
         })
@@ -61,7 +62,7 @@ class EntryActions {
     if (data) {
       this.upsertMany([
         // patch data, should omit `read` because the network race condition or server cache
-        omit(data, "read") as any,
+        omit(data, 'read') as any,
       ])
       userActions.upsert(data.users as Record<string, UserModel>)
       if (data.entryReadHistories) {
@@ -109,7 +110,7 @@ class EntryActions {
   }
 
   private patch(entryId: string, changed: Partial<CombinedEntryModel>) {
-    set((state) =>
+    set(state =>
       produce(state, (draft) => {
         const entry = draft.flatMapEntries[entryId]
         if (!entry) return
@@ -121,7 +122,7 @@ class EntryActions {
   }
 
   patchManyByFeedId(feedId: string, changed: Partial<CombinedEntryModel>) {
-    set((state) =>
+    set(state =>
       produce(state, (draft) => {
         const ids = draft.entries[feedId]
         if (!ids) return
@@ -136,7 +137,7 @@ class EntryActions {
   }
 
   private patchAll(changed: Partial<CombinedEntryModel>) {
-    set((state) =>
+    set(state =>
       produce(state, (draft) => {
         for (const entry of Object.values(draft.flatMapEntries)) {
           Object.assign(entry, changed)
@@ -153,7 +154,7 @@ class EntryActions {
     const entryFeedMap = {} as Record<string, string>
     const entryCollection = {} as Record<string, any>
 
-    set((state) =>
+    set(state =>
       produce(state, (draft) => {
         for (const item of data) {
           const mergedEntry = Object.assign(
@@ -187,7 +188,7 @@ class EntryActions {
               feedId: item.feeds.id,
               entries: mergedEntry,
             },
-            omit(item, "feeds"),
+            omit(item, 'feeds'),
           )
 
           // Push feed
@@ -213,7 +214,7 @@ class EntryActions {
     for (const entryId in entryCollection) {
       newStarIds.add(entryId)
     }
-    set((state) => ({
+    set(state => ({
       ...state,
       starIds: newStarIds,
     }))
@@ -231,7 +232,7 @@ class EntryActions {
   hydrate(data: FlatEntryModel[]) {
     const entryCollection = {} as Record<string, any>
 
-    set((state) =>
+    set(state =>
       produce(state, (draft) => {
         for (const item of data) {
           if (!draft.entries[item.feedId]) {
@@ -268,7 +269,7 @@ class EntryActions {
     for (const entryId in entryCollection) {
       newStarIds.add(entryId)
     }
-    set((state) => ({
+    set(state => ({
       ...state,
       starIds: newStarIds,
     }))
@@ -292,7 +293,8 @@ class EntryActions {
       async () => {
         if (read) {
           await batchMarkUnread([feedId, entryId])
-        } else {
+        }
+        else {
           await apiClient.reads.$delete({
             json: {
               entryId,
@@ -311,21 +313,21 @@ class EntryActions {
     const state = get()
     const entries = state.entries[feedId] || []
     await Promise.all(
-      entries.map((entryId) => this.markRead(feedId, entryId, true)),
+      entries.map(entryId => this.markRead(feedId, entryId, true)),
     )
     feedUnreadActions.updateByFeedId(feedId, 0)
   }
 
   async markStar(entryId: string, star: boolean) {
     this.patch(entryId, {
-      collections: star ?
-          {
+      collections: star
+        ? {
             createdAt: new Date().toISOString(),
-          } :
-          (null as unknown as undefined),
+          }
+        : (null as unknown as undefined),
     })
 
-    set((state) =>
+    set(state =>
       produce(state, (state) => {
         star ? state.starIds.add(entryId) : state.starIds.delete(entryId)
       }),
@@ -340,7 +342,8 @@ class EntryActions {
               entryId,
             },
           })
-        } else {
+        }
+        else {
           await apiClient.collections.$delete({
             json: {
               entryId,
@@ -355,7 +358,8 @@ class EntryActions {
               createdAt: new Date().toISOString(),
             },
           })
-        } else {
+        }
+        else {
           return EntryService.deleteCollection(entryId)
         }
       },
@@ -364,9 +368,9 @@ class EntryActions {
 
   updateReadHistory(
     entryId: string,
-    readHistory: Omit<EntryReadHistoriesModel, "entryId">,
+    readHistory: Omit<EntryReadHistoriesModel, 'entryId'>,
   ) {
-    set((state) => ({
+    set(state => ({
       ...state,
       readHistory: {
         ...state.readHistory,

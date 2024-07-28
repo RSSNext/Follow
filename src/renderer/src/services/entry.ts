@@ -1,9 +1,9 @@
-import { browserDB } from "@renderer/database"
-import type { EntryModel } from "@renderer/models/types"
+import { browserDB } from '@renderer/database'
+import type { EntryModel } from '@renderer/models/types'
 
-import { BaseService } from "./base"
-import { CleanerService } from "./cleaner"
-import { EntryRelatedKey, EntryRelatedService } from "./entry-related"
+import { BaseService } from './base'
+import { CleanerService } from './cleaner'
+import { EntryRelatedKey, EntryRelatedService } from './entry-related'
 
 type EntryCollection = {
   createdAt: string
@@ -18,16 +18,16 @@ class EntryServiceStatic extends BaseService<EntryModel> {
     data: EntryModel[],
     entryFeedMap: Record<string, string>,
   ) {
-    const renewList = [] as { type: "entry", id: string }[]
+    const renewList = [] as { type: 'entry', id: string }[]
     const nextData = [] as (EntryModel & { feedId: string })[]
 
     for (const item of data) {
       const feedId = entryFeedMap[item.id]
       if (!feedId) {
-        console.error("EntryService.upsertMany: feedId not found", item)
+        console.error('EntryService.upsertMany: feedId not found', item)
         continue
       }
-      renewList.push({ type: "entry", id: item.id })
+      renewList.push({ type: 'entry', id: item.id })
       nextData.push({
         ...item,
         feedId,
@@ -43,7 +43,7 @@ class EntryServiceStatic extends BaseService<EntryModel> {
   override async upsert(feedId: string, data: EntryModel): Promise<unknown> {
     CleanerService.renew([
       {
-        type: "entry",
+        type: 'entry',
         id: data.id,
       },
     ])
@@ -80,7 +80,7 @@ class EntryServiceStatic extends BaseService<EntryModel> {
   }
 
   async deleteEntriesByFeedIds(feedIds: string[]) {
-    await this.table.where("feedId").anyOf(feedIds).delete()
+    await this.table.where('feedId').anyOf(feedIds).delete()
   }
 }
 
