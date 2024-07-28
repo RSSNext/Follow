@@ -16,7 +16,11 @@ import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
+import type { SubscriptionModel } from "@renderer/models"
 import { useUserSubscriptionsQuery } from "@renderer/modules/profile/hooks"
+import {
+  useSubscriptionStore,
+} from "@renderer/store/subscription"
 import { useAnimationControls } from "framer-motion"
 import type { FC } from "react"
 import { Fragment, useEffect, useState } from "react"
@@ -42,7 +46,6 @@ export const UserProfileModalContent: FC<{
     nextFrame(() => controller.start("enter"))
   }, [controller])
 
-  const { present } = useModalStack()
   const winHeight = useState(() => window.innerHeight)[0]
 
   return (
@@ -85,7 +88,7 @@ export const UserProfileModalContent: FC<{
         </button>
         {user.data && (
           <Fragment>
-            <div className="center m-12 flex shrink-0 flex-col">
+            <div className="center m-12 mb-4 flex shrink-0 flex-col">
               <Avatar className="aspect-square size-16">
                 <AvatarImage src={user.data.image || undefined} />
                 <AvatarFallback>{user.data.name?.slice(0, 2)}</AvatarFallback>
@@ -94,7 +97,7 @@ export const UserProfileModalContent: FC<{
                 <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
                   <h1>{user.data.name}</h1>
                 </div>
-                <div className="mb-8 text-sm text-zinc-500">
+                <div className="mb-0 text-sm text-zinc-500">
                   {user.data.handle}
                 </div>
               </div>
@@ -107,60 +110,10 @@ export const UserProfileModalContent: FC<{
                   </div>
                   <div>
                     {subscriptions.data?.[category].map((subscription) => (
-                      <div
+                      <SubscriptionItem
                         key={subscription.feedId}
-                        className="group relative border-b py-5"
-                      >
-                        <a
-                          className="flex flex-1 cursor-default"
-                          href={subscription.feeds.siteUrl!}
-                          target="_blank"
-                        >
-                          <FeedIcon
-                            feed={subscription.feeds}
-                            size={22}
-                            className="mr-3"
-                          />
-                          <div
-                            className={cn(
-                              "w-0 flex-1 grow",
-                              "group-hover:grow-[0.85]",
-                            )}
-                          >
-                            <div className="truncate font-medium leading-none">
-                              {subscription.feeds?.title}
-                            </div>
-                            <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
-                              {subscription.feeds?.description}
-                            </div>
-                          </div>
-                          <div className="absolute right-0 opacity-0 transition-opacity group-hover:opacity-100">
-                            <StyledButton
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                e.preventDefault()
-                                const defaultView =
-                                  getSidebarActiveView() as FeedViewType
-
-                                present({
-                                  title: "Add follow",
-                                  content: ({ dismiss }) => (
-                                    <FeedForm
-                                      asWidget
-                                      url={subscription.feeds.url}
-                                      defaultView={defaultView}
-                                      onSuccess={dismiss}
-                                    />
-                                  ),
-                                })
-                              }}
-                            >
-                              <FollowIcon className="mr-1 size-3" />
-                              {APP_NAME}
-                            </StyledButton>
-                          </div>
-                        </a>
-                      </div>
+                        subscription={subscription}
+                      />
                     ))}
                   </div>
                 </div>
@@ -170,9 +123,64 @@ export const UserProfileModalContent: FC<{
         )}
 
         {!user.data && (
-          <LoadingCircle size="large" className="center h-48 w-[46.125rem] max-w-full" />
+          <LoadingCircle
+            size="large"
+            className="center h-48 w-[46.125rem] max-w-full"
+          />
         )}
       </m.div>
+    </div>
+  )
+}
+
+const SubscriptionItem: FC<{
+  subscription: SubscriptionModel
+}> = ({ subscription }) => {
+  const isFollowed = !!useSubscriptionStore(
+    (state) => state.data[subscription.feedId],
+  )
+  const { present } = useModalStack()
+  return (
+    <div className="group relative border-b py-5">
+      <a
+        className="flex flex-1 cursor-default"
+        href={subscription.feeds.siteUrl!}
+        target="_blank"
+      >
+        <FeedIcon feed={subscription.feeds} size={22} className="mr-3" />
+        <div className={cn("w-0 flex-1 grow", "group-hover:grow-[0.85]")}>
+          <div className="truncate font-medium leading-none">
+            {subscription.feeds?.title}
+          </div>
+          <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
+            {subscription.feeds?.description}
+          </div>
+        </div>
+        <div className="absolute right-0 opacity-0 transition-opacity group-hover:opacity-100">
+          <StyledButton
+            onClick={(e) => {
+              e.stopPropagation()
+              e.preventDefault()
+              const defaultView = getSidebarActiveView() as FeedViewType
+
+              present({
+                title: `${isFollowed ? "Edit " : ""}${APP_NAME} - ${subscription.feeds.title}`,
+                content: ({ dismiss }) => (
+                  <FeedForm
+                    asWidget
+                    url={subscription.feeds.url}
+                    defaultView={defaultView}
+                    onSuccess={dismiss}
+                  />
+                ),
+              })
+            }}
+          >
+            <FollowIcon className="mr-1 size-3" />
+            {isFollowed ? "Edit" : APP_NAME}
+          </StyledButton>
+        </div>
+      </a>
     </div>
   )
 }
