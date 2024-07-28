@@ -216,7 +216,7 @@ export const createMainWindow = () => {
 export const createSettingWindow = () => {
   // We need to open the setting modal in the main window when the main window exists,
   // if we open a new window then the state between the two windows will be out of sync.
-  if (windows.mainWindow) {
+  if (windows.mainWindow && windows.mainWindow.isVisible()) {
     windows.mainWindow.show()
     callGlobalContextMethod(windows.mainWindow, "showSetting")
     return
