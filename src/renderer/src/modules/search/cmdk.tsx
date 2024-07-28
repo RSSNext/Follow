@@ -138,6 +138,7 @@ export const SearchCmdK: React.FC = () => {
           "flex min-h-[50vh] flex-col bg-zinc-50/85 shadow-2xl backdrop-blur-md dark:bg-neutral-900/80 md:rounded-xl",
           "border-0 border-zinc-200 dark:border-zinc-800 md:border",
           "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
+          "z-10",
         )}
       >
         <Command.Input
