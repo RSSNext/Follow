@@ -38,18 +38,19 @@ export function Component() {
   }, [invitationMutation.isSuccess, navigate])
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center gap-10 px-10">
+    <div className="container flex h-screen w-full flex-col items-center justify-center gap-10">
       <Logo className="size-20" />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[512px] space-y-8"
+          className="w-[512px] max-w-full space-y-8"
         >
           <FormField
+
             control={form.control}
             name="code"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col items-center gap-2 md:block">
                 <FormLabel>Invitation Code</FormLabel>
                 <FormControl>
                   <Input autoFocus {...field} />
@@ -59,18 +60,22 @@ export function Component() {
             )}
           />
           <div className="center flex">
-            <StyledButton type="submit" isLoading={invitationMutation.isPending}>
+            <StyledButton
+              type="submit"
+              isLoading={invitationMutation.isPending}
+            >
               Activate
             </StyledButton>
           </div>
         </form>
       </Form>
-      <div className="text-sm text-zinc-500">
+      <div className="text-balance text-center text-sm text-zinc-500 md:text-left">
         😰 Sorry, Follow is currently in
         {" "}
         <strong>early access</strong>
         {" "}
-        and requires an invitation to use.
+        and
+        requires an invitation to use.
       </div>
     </div>
   )
