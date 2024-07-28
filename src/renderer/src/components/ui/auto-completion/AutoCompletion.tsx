@@ -207,7 +207,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     const ListElement = (
       <div
         className={clsx(
-          "pointer-events-auto z-[101] mt-1 overflow-hidden",
+          "pointer-events-auto z-[999] mt-1 overflow-hidden",
           portal ? "absolute flex flex-col" : "absolute w-full",
         )}
         ref={useCallback((el) => {

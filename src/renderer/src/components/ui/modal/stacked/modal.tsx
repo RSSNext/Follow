@@ -24,6 +24,7 @@ import { useHotkeysContext } from "react-hotkeys-hook"
 import { useEventCallback } from "usehooks-ts"
 
 import { Divider } from "../../divider"
+import { RootPortalProvider } from "../../portal/provider"
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX, modalMontionConfig } from "./constants"
 import type { CurrentModalContentProps, ModalActionsInternal } from "./context"
@@ -148,12 +149,14 @@ export const ModalInternal: Component<{
       () => ({
         dismiss: close,
         setClickOutSideToDismiss: (v) => {
-          setStack((state) => produce(state, (draft) => {
-            const model = draft.find((modal) => modal.id === item.id)
-            if (!model) return
-            if (model.clickOutsideToDismiss === v) return
-            model.clickOutsideToDismiss = v
-          }))
+          setStack((state) =>
+            produce(state, (draft) => {
+              const model = draft.find((modal) => modal.id === item.id)
+              if (!model) return
+              if (model.clickOutsideToDismiss === v) return
+              model.clickOutsideToDismiss = v
+            }),
+          )
         },
       }),
       [close, item.id, setStack],
@@ -166,11 +169,16 @@ export const ModalInternal: Component<{
       }),
       [ModalProps],
     )
+
+    const edgeElementRef = useRef<HTMLDivElement>(null)
+
     const finalChildren = useMemo(
       () => (
         <CurrentModalContext.Provider value={ModalContextProps}>
           <AppErrorBoundary errorType={ErrorComponentType.Modal}>
-            {children ?? createElement(content, ModalProps)}
+            <RootPortalProvider value={edgeElementRef.current as HTMLElement}>
+              {children ?? createElement(content, ModalProps)}
+            </RootPortalProvider>
           </AppErrorBoundary>
         </CurrentModalContext.Provider>
       ),
@@ -183,8 +191,6 @@ export const ModalInternal: Component<{
         document.body.style.pointerEvents = "auto"
       }
     }, [currentIsClosing])
-
-    const edgeElementRef = useRef<HTMLDivElement>(null)
 
     const { enableScope, disableScope } = useHotkeysContext()
 
@@ -207,9 +213,10 @@ export const ModalInternal: Component<{
               </Dialog.DialogTitle>
               <Dialog.Content asChild>
                 <div
+                  ref={edgeElementRef}
                   className={cn(
                     "fixed inset-0 z-20 overflow-auto",
-                    currentIsClosing && "!pointer-events-none",
+                    currentIsClosing ? "!pointer-events-none" : "!pointer-events-auto",
                     modalContainerClassName,
                   )}
                   onClick={

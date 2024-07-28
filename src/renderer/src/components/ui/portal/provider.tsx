@@ -3,13 +3,9 @@ import { createContext, useContext } from "react"
 export const useRootPortal = () => {
   const ctx = useContext(RootPortalContext)
 
-  return ctx.to || document.body
+  return ctx || document.body
 }
 
-const RootPortalContext = createContext<{
-  to?: HTMLElement | undefined
-}>({
-  to: undefined,
-})
+const RootPortalContext = createContext<HTMLElement | undefined>(undefined)
 
 export const RootPortalProvider = RootPortalContext.Provider
