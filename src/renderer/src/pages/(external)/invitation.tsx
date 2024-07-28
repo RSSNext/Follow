@@ -62,6 +62,7 @@ export function Component() {
           <div className="center flex">
             <StyledButton
               type="submit"
+              disabled={!form.formState.isValid}
               isLoading={invitationMutation.isPending}
             >
               Activate
