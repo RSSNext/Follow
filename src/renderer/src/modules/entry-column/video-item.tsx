@@ -4,6 +4,7 @@ import { Media } from "@renderer/components/ui/media"
 import type { ModalContentComponent } from "@renderer/components/ui/modal"
 import { useModalStack } from "@renderer/components/ui/modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
+import { Skeleton } from "@renderer/components/ui/skeleton"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { urlToIframe } from "@renderer/lib/url-to-iframe"
 import { cn } from "@renderer/lib/utils"
@@ -157,18 +158,18 @@ export const VideoItemSkeleton = (
       <div className="p-1.5">
         <div className="w-full">
           <div className="overflow-x-auto">
-            <div className="aspect-video w-full shrink-0 overflow-hidden rounded-md bg-gray-200 dark:bg-neutral-800" />
+            <Skeleton className="aspect-video w-full shrink-0 overflow-hidden" />
           </div>
         </div>
         <div className="relative flex-1 px-2 pb-3 pt-1 text-sm">
           <div className="relative mb-1 mt-1.5 truncate font-medium leading-none">
-            <div className="h-4 w-3/4 bg-gray-200 dark:bg-neutral-800" />
+            <Skeleton className="h-4 w-3/4 " />
           </div>
           <div className="mt-1 flex items-center gap-1 truncate text-[13px]">
-            <div className="mr-0.5 size-4 rounded-sm bg-gray-200 dark:bg-neutral-800" />
-            <div className="h-3 w-1/2 bg-gray-200 dark:bg-neutral-800" />
+            <Skeleton className="mr-0.5 size-4" />
+            <Skeleton className="h-3 w-1/2 " />
             <span className="text-zinc-500">·</span>
-            <div className="h-3 w-12 bg-gray-200 dark:bg-neutral-800" />
+            <Skeleton className="h-3 w-12 " />
           </div>
         </div>
       </div>
