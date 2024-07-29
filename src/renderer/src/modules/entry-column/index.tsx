@@ -401,7 +401,7 @@ const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
     const unreadOnly = useGeneralSettingKey("unreadOnly")
     return (
       <m.div
-        className="-mt-6 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
+        className="mt-6 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
         {...props}
         ref={ref}
       >
