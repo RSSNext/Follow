@@ -48,6 +48,19 @@ export function VideoItem({
     },
   )
 
+  const [showPreview, setShowPreview] = useState(false)
+  useEffect(() => {
+    if (hovered) {
+      const timer = setTimeout(() => {
+        setShowPreview(true)
+      }, 500)
+      return () => clearTimeout(timer)
+    } else {
+      setShowPreview(false)
+      return () => {}
+    }
+  }, [hovered])
+
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <GridItem
@@ -73,7 +86,7 @@ export function VideoItem({
         }}
       >
         <div className="overflow-x-auto" ref={ref}>
-          {miniIframeSrc && hovered ? (
+          {miniIframeSrc && showPreview ? (
             <ViewTag
               src={miniIframeSrc}
               className={cn(
