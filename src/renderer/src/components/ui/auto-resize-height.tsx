@@ -13,6 +13,7 @@ interface AnimateChangeInHeightProps {
   duration?: number
 
   spring?: boolean
+  innerClassName?: string
 }
 
 export const AutoResizeHeight: React.FC<AnimateChangeInHeightProps> = ({
@@ -20,6 +21,7 @@ export const AutoResizeHeight: React.FC<AnimateChangeInHeightProps> = ({
   className,
   duration = 0.35,
   spring = false,
+  innerClassName,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [height, setHeight] = useState<number | "auto">("auto")
@@ -46,14 +48,20 @@ export const AutoResizeHeight: React.FC<AnimateChangeInHeightProps> = ({
       className={cn("overflow-hidden", className)}
       initial={false}
       animate={{ height }}
-      transition={spring ? {
-        ...softSpringPreset,
-        duration,
-      } : {
-        duration,
-      }}
+      transition={
+        spring ?
+            {
+              ...softSpringPreset,
+              duration,
+            } :
+            {
+              duration,
+            }
+      }
     >
-      <div ref={containerRef}>{children}</div>
+      <div ref={containerRef} className={innerClassName}>
+        {children}
+      </div>
     </m.div>
   )
 }

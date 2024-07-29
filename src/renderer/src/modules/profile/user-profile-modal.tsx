@@ -11,6 +11,7 @@ import {
 import { ActionButton, StyledButton } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
+import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
@@ -47,6 +48,24 @@ export const UserProfileModalContent: FC<{
 
   const winHeight = useState(() => window.innerHeight)[0]
 
+  const [scrollerRef, setScrollerRef] = useState<HTMLDivElement | null>(null)
+
+  const [isHeaderSimple, setHeaderSimple] = useState(false)
+
+  useEffect(() => {
+    const $ref = scrollerRef
+
+    if (!$ref) return
+    $ref.onscroll = () => {
+      const currentH = $ref.scrollTop
+
+      setHeaderSimple(currentH > 300)
+    }
+    return () => {
+      $ref.onscroll = null
+    }
+  }, [scrollerRef])
+
   return (
     <div className="container center h-full" onClick={modal.dismiss}>
       <m.div
@@ -74,7 +93,8 @@ export const UserProfileModalContent: FC<{
           friction: 1,
         }}
         exit="exit"
-        className="shadow-perfect perfect-sm relative flex max-h-[80vh] flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8"
+        layout="size"
+        className="shadow-perfect perfect-sm relative flex h-[80vh] flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 lg:max-h-[calc(100vh-20rem)]"
       >
         <div className="absolute right-2 top-2 z-10 flex items-center gap-2 text-[20px] opacity-80">
           <ActionButton
@@ -89,27 +109,60 @@ export const UserProfileModalContent: FC<{
             <i className="i-mgc-close-cute-re" />
           </ActionButton>
         </div>
+
         {user.data && (
           <Fragment>
-            <div className="center m-12 mb-4 flex shrink-0 flex-col">
-              <Avatar className="aspect-square size-16">
-                <AvatarImage src={user.data.image || undefined} />
-                <AvatarFallback>{user.data.name?.slice(0, 2)}</AvatarFallback>
+            <div
+              className={cn(
+                "center m-12 mb-4 flex shrink-0 flex-col",
+                isHeaderSimple ? "mt-3 flex-row" : "flex-col",
+              )}
+            >
+              <Avatar
+                asChild
+                className={cn(
+                  "aspect-square",
+                  isHeaderSimple ? "size-12" : "size-16",
+                )}
+              >
+                <m.span layout>
+                  <AvatarImage asChild src={user.data.image || undefined}>
+                    <m.img layout />
+                  </AvatarImage>
+                  <AvatarFallback>{user.data.name?.slice(0, 2)}</AvatarFallback>
+                </m.span>
               </Avatar>
-              <div className="flex flex-col items-center">
-                <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
-                  <h1>{user.data.name}</h1>
-                </div>
-                <div className="mb-0 text-sm text-zinc-500">
-                  {user.data.handle}
-                </div>
-              </div>
+              <m.div
+                layout
+                className={cn(
+                  "flex flex-col items-center",
+                  isHeaderSimple ? "ml-8 items-start" : "",
+                )}
+              >
+                <m.div
+                  className={cn(
+                    "mb-1 flex items-center text-2xl font-bold",
+                    isHeaderSimple ? "" : "mt-4",
+                  )}
+                >
+                  <m.h1 layout>{user.data.name}</m.h1>
+                </m.div>
+                {!!user.data.handle && (
+                  <m.div className="mb-0 text-sm text-zinc-500" layout>
+                    @
+                    {user.data.handle}
+                  </m.div>
+                )}
+              </m.div>
             </div>
-            <div className="mb-4 h-full w-[70ch] max-w-full space-y-10 overflow-auto px-5">
+            <ScrollArea.ScrollArea
+              ref={setScrollerRef}
+              rootClassName="mb-4 h-[400px] grow w-[70ch] max-w-full px-5"
+            >
               {subscriptions.isLoading ? (
                 <LoadingCircle
                   size="large"
-                  className="center h-48 w-[46.125rem] max-w-full"
+                  className="center h-48 w-full max-w-full"
                 />
               ) : (
                 subscriptions.data &&
@@ -129,7 +182,7 @@ export const UserProfileModalContent: FC<{
                   </div>
                 ))
               )}
-            </div>
+            </ScrollArea.ScrollArea>
           </Fragment>
         )}
 
