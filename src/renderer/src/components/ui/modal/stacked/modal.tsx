@@ -215,7 +215,7 @@ export const ModalInternal: Component<{
                 <div
                   ref={edgeElementRef}
                   className={cn(
-                    "fixed inset-0 z-20 overflow-auto",
+                    "no-drag-region fixed inset-0 z-20 overflow-auto",
                     currentIsClosing ? "!pointer-events-none" : "!pointer-events-auto",
                     modalContainerClassName,
                   )}
