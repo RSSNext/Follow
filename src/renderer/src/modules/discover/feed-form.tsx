@@ -15,13 +15,8 @@ import {
 } from "@renderer/components/ui/form"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useCurrentModal } from "@renderer/components/ui/modal"
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-} from "@renderer/components/ui/select"
 import { Switch } from "@renderer/components/ui/switch"
-import { ViewSelectContent } from "@renderer/components/view-select-content"
+import { views } from "@renderer/constants"
 import { useDeleteSubscription } from "@renderer/hooks/biz/useSubscriptionActions"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
@@ -204,17 +199,28 @@ export const FeedForm: Component<{
                   <FormField
                     control={form.control}
                     name="view"
-                    render={({ field }) => (
+                    render={() => (
                       <FormItem>
                         <FormLabel>View</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                          </FormControl>
-                          <ViewSelectContent />
-                        </Select>
+                        <Card>
+                          <CardHeader className="grid grid-cols-6 space-y-0 px-2 py-3">
+                            {views.map((view) => (
+                              <div key={view.name}>
+                                <input
+                                  className="peer hidden"
+                                  type="radio"
+                                  id={view.name}
+                                  value={view.view}
+                                  {...form.register("view")}
+                                />
+                                <label htmlFor={view.name} className={cn(view.peerClassName, "center flex h-10 flex-col text-xs leading-none text-theme-vibrancyFg")}>
+                                  <span className="text-lg">{view.icon}</span>
+                                  {view.name}
+                                </label>
+                              </div>
+                            ))}
+                          </CardHeader>
+                        </Card>
                         <FormMessage />
                       </FormItem>
                     )}
