@@ -4,10 +4,7 @@ import { m } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
 
 const softSpringPreset: Spring = {
-  duration: 0.35,
   type: "spring",
-  stiffness: 120,
-  damping: 20,
 }
 
 interface AnimateChangeInHeightProps {
@@ -21,7 +18,7 @@ interface AnimateChangeInHeightProps {
 export const AutoResizeHeight: React.FC<AnimateChangeInHeightProps> = ({
   children,
   className,
-  duration = 0.6,
+  duration = 0.35,
   spring = false,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -47,10 +44,14 @@ export const AutoResizeHeight: React.FC<AnimateChangeInHeightProps> = ({
   return (
     <m.div
       className={cn("overflow-hidden", className)}
-      style={{ height }}
       initial={false}
       animate={{ height }}
-      transition={spring ? softSpringPreset : { duration }}
+      transition={spring ? {
+        ...softSpringPreset,
+        duration,
+      } : {
+        duration,
+      }}
     >
       <div ref={containerRef}>{children}</div>
     </m.div>

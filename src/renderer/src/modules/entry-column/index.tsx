@@ -164,7 +164,7 @@ export function EntryColumn() {
       />
       <AutoResizeHeight spring>
         {isRefreshing && (
-          <div className="center h-7 gap-2 bg-theme-accent text-xs text-white">
+          <div className="center h-7 gap-2 text-xs">
             <LoadingCircle size="small" />
             Refreshing new entries...
           </div>
