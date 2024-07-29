@@ -31,7 +31,10 @@ export const buttonVariants = cva(
   },
 )
 export const styledButtonVariant = cva(
-  "inline-flex select-none disabled:cursor-not-allowed cursor-default items-center gap-2 justify-center rounded-lg py-1.5 px-3 text-sm outline-offset-2 transition active:transition-none",
+  cn(
+    "inline-flex cursor-default select-none items-center justify-center gap-2 rounded-lg px-3 py-1.5 text-sm outline-offset-2 transition active:transition-none disabled:cursor-not-allowed",
+    "ring-theme-accent/20 duration-200 focus:border-theme-accent/80 focus:outline-none focus:ring-2",
+  ),
   {
     compoundVariants: [
       {
@@ -42,7 +45,8 @@ export const styledButtonVariant = cva(
       {
         variant: "outline",
         status: "disabled",
-        className: "text-theme-disabled border-theme-inactive dark:border-zinc-800 hover:!bg-theme-background",
+        className:
+          "text-theme-disabled border-theme-inactive dark:border-zinc-800 hover:!bg-theme-background",
       },
       {
         variant: "text",

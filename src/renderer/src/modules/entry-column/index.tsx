@@ -253,12 +253,17 @@ const ListHeader: FC<{
     "pl-4",
     "pl-7",
     "pl-7",
-    "pl-5",
+    "px-5",
     "pl-11",
   ]
 
   return (
-    <div className={cn("mb-5 flex w-full flex-col pr-4 pt-2.5", titleStyleBasedView[view])}>
+    <div
+      className={cn(
+        "mb-5 flex w-full flex-col pr-4 pt-2.5",
+        titleStyleBasedView[view],
+      )}
+    >
       <div
         className={cn(
           "flex w-full",
@@ -272,6 +277,8 @@ const ListHeader: FC<{
             "relative z-[1] flex items-center gap-1 self-baseline text-zinc-500",
             (isInCollectionList || !headerTitle) &&
             "pointer-events-none opacity-0",
+
+            "translate-x-[6px]",
           )}
           onClick={(e) => e.stopPropagation()}
         >

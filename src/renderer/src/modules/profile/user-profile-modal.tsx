@@ -1,3 +1,4 @@
+import { env } from "@env"
 import { getSidebarActiveView } from "@renderer/atoms/sidebar"
 import { m } from "@renderer/components/common/Motion"
 import { FeedIcon } from "@renderer/components/feed-icon"
@@ -7,7 +8,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
-import { StyledButton } from "@renderer/components/ui/button"
+import { ActionButton, StyledButton } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
 import { useAuthQuery } from "@renderer/hooks/common"
@@ -68,7 +69,6 @@ export const UserProfileModalContent: FC<{
         }}
         transition={{
           type: "spring",
-
           mass: 0.4,
           tension: 100,
           friction: 1,
@@ -76,14 +76,19 @@ export const UserProfileModalContent: FC<{
         exit="exit"
         className="shadow-perfect perfect-sm relative flex max-h-[80vh] flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8"
       >
-        <button
-          className="absolute right-2 top-2 z-10 p-2"
-          onClick={modal.dismiss}
-          type="button"
-          aria-label="close profile"
-        >
-          <i className="i-mgc-close-cute-re text-[20px] opacity-80 hover:to-theme-button-hover" />
-        </button>
+        <div className="absolute right-2 top-2 z-10 flex items-center gap-2 text-[20px] opacity-80">
+          <ActionButton
+            tooltip="Share"
+            onClick={() => {
+              window.open(`${env.VITE_WEB_URL}/profile/${user.data?.id}`)
+            }}
+          >
+            <i className="i-mgc-share-3-cute-re" />
+          </ActionButton>
+          <ActionButton tooltip="Close" onClick={modal.dismiss}>
+            <i className="i-mgc-close-cute-re" />
+          </ActionButton>
+        </div>
         {user.data && (
           <Fragment>
             <div className="center m-12 mb-4 flex shrink-0 flex-col">
@@ -107,7 +112,8 @@ export const UserProfileModalContent: FC<{
                   className="center h-48 w-[46.125rem] max-w-full"
                 />
               ) : (
-                subscriptions.data && Object.keys(subscriptions.data).map((category) => (
+                subscriptions.data &&
+                Object.keys(subscriptions.data).map((category) => (
                   <div key={category}>
                     <div className="mb-4 flex items-center text-2xl font-bold">
                       <h3>{category}</h3>

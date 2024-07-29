@@ -36,12 +36,12 @@ export const useInputComposition = (
 
   const handleKeyDown: React.KeyboardEventHandler<any> = useCallback(
     (e) => {
-      onKeyDown?.(e)
-
+      // The keydown event stop emit when the composition is being entered
       if (isCompositionRef.current) {
         e.stopPropagation()
         return
       }
+      onKeyDown?.(e)
 
       if (e.key === "Escape") {
         e.currentTarget.blur()
