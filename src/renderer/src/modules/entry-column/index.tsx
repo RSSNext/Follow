@@ -248,8 +248,17 @@ const ListHeader: FC<{
 
   const feed = useFeedById(routerParams.feedId)
 
+  const titleStyleBasedView = [
+    "pl-11",
+    "pl-4",
+    "pl-7",
+    "pl-7",
+    "pl-5",
+    "pl-11",
+  ]
+
   return (
-    <div className="mb-5 flex w-full flex-col pl-11 pr-4 pt-2.5">
+    <div className={cn("mb-5 flex w-full flex-col pr-4 pt-2.5", titleStyleBasedView[view])}>
       <div
         className={cn(
           "flex w-full",

@@ -109,6 +109,7 @@ export function ListItem({
 
       {withAudio && entry.entries?.attachments?.[0].url && (
         <AudioCover
+
           entryId={entryId}
           src={entry.entries?.attachments?.[0].url}
           durationInSeconds={Number.parseInt(
@@ -199,12 +200,31 @@ function AudioCover({
       </div>
 
       {!!estimatedMins && (
-        <div className="absolute bottom-0 w-full rounded-b-sm bg-white/50 text-center text-[13px] backdrop-blur dark:bg-neutral-900/70">
-          {estimatedMins}
-          {" "}
-          mins
+        <div className="absolute bottom-0 w-full rounded-b-sm bg-white/50 text-center text-[13px] opacity-0 backdrop-blur duration-100 group-hover:opacity-100 dark:bg-neutral-900/70">
+          {formatEstimatedMins(estimatedMins)}
         </div>
       )}
     </div>
   )
+}
+const formatEstimatedMins = (estimatedMins: number) => {
+  const minutesInHour = 60
+  const minutesInDay = minutesInHour * 24
+  const minutesInMonth = minutesInDay * 30
+
+  const months = Math.floor(estimatedMins / minutesInMonth)
+  const days = Math.floor((estimatedMins % minutesInMonth) / minutesInDay)
+  const hours = Math.floor((estimatedMins % minutesInDay) / minutesInHour)
+  const minutes = estimatedMins % minutesInHour
+
+  if (months > 0) {
+    return `${months}M ${days}d`
+  }
+  if (days > 0) {
+    return `${days}d ${hours}h`
+  }
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`
+  }
+  return `${estimatedMins} mins`
 }
