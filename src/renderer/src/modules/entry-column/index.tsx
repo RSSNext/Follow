@@ -6,6 +6,7 @@ import {
 import { useMe } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { EmptyIcon } from "@renderer/components/icons/empty"
+import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { ActionButton, StyledButton } from "@renderer/components/ui/button"
 import { DividerVertical } from "@renderer/components/ui/divider"
 import { LoadingCircle } from "@renderer/components/ui/loading"
@@ -137,6 +138,7 @@ export function EntryColumn() {
   } satisfies VirtuosoProps<string, unknown>
 
   const navigate = useNavigateEntry()
+  const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
   return (
     <div
       className="relative flex h-full flex-1 flex-col"
@@ -148,10 +150,18 @@ export function EntryColumn() {
     >
       <ListHeader
         refetch={entries.refetch}
-        isRefreshing={entries.isFetching && !entries.isFetchingNextPage}
+        isRefreshing={isRefreshing}
         totalCount={virtuosoOptions.totalCount}
         hasUpdate={entries.hasUpdate}
       />
+      <AutoResizeHeight spring>
+        {isRefreshing && (
+          <div className="center h-7 gap-2 bg-theme-accent text-xs text-white">
+            <LoadingCircle size="small" />
+            Refreshing new entries...
+          </div>
+        )}
+      </AutoResizeHeight>
       <m.div
         key={`${routeFeedId}-${view}`}
         className="h-full"

@@ -94,7 +94,7 @@ const MediaImpl: FC<MediaProps> = ({
             className={cn(
               hidden && "hidden",
               !(props.width || props.height) && "size-full",
-              "bg-stone-100 object-cover dark:bg-neutral-800",
+              "bg-gray-200 object-cover dark:bg-neutral-800",
               popper && "cursor-zoom-in",
               mediaContainerClassName,
             )}
