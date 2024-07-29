@@ -1,5 +1,6 @@
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { ListItemHoverOverlay } from "@renderer/components/ui/list-item-hover-overlay"
+import { LoadingCircle } from "@renderer/components/ui/loading"
 import { views } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
@@ -14,18 +15,21 @@ import { Queries } from "@renderer/queries"
 import type { FlatEntryModel } from "@renderer/store/entry"
 import { entryActions } from "@renderer/store/entry"
 import { useEntry } from "@renderer/store/entry/hooks"
-import type { FC } from "react"
+import type { FC, ReactNode } from "react"
 import { memo, useCallback } from "react"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
-import { ArticleItem } from "./article-item"
-import { AudioItem } from "./audio-item"
-import { NotificationItem } from "./notification-item"
-import { PictureItem } from "./picture-item"
-import { SocialMediaItem } from "./social-media-item"
+import { ArticleItem, ArticleItemSkeleton } from "./article-item"
+import { AudioItem, AudioItemSkeleton } from "./audio-item"
+import {
+  NotificationItem,
+  NotificationItemSkeleton,
+} from "./notification-item"
+import { PictureItem, PictureItemSkeleton } from "./picture-item"
+import { SocialMediaItem, SocialMediaItemSkeleton } from "./social-media-item"
 import type { EntryListItemFC } from "./types"
-import { VideoItem } from "./video-item"
+import { VideoItem, VideoItemSkeleton } from "./video-item"
 
 interface EntryItemProps {
   entryId: string
@@ -139,25 +143,25 @@ function EntryItemImpl({
         e.preventDefault()
         showNativeMenu(
           [
-            ...(items
+            ...items
               .filter((item) => !item.disabled)
               .map((item) => ({
                 type: "text" as const,
                 label: item.name,
                 click: item.onClick,
                 shortcut: item.shortcut,
-              }))),
+              })),
             {
               type: "separator" as const,
             },
-            ...(feedItems.filter((item) => !item.disabled)),
+            ...feedItems.filter((item) => !item.disabled),
 
             {
               type: "separator" as const,
             },
             {
               type: "text" as const,
-              label: "Copy Entry Id",
+              label: "Copy Entry ID",
               click: () => {
                 navigator.clipboard.writeText(entry.entries.id)
               },
@@ -170,9 +174,7 @@ function EntryItemImpl({
     )
 
   return (
-    <div
-      data-entry-id={entry.entries.id}
-    >
+    <div data-entry-id={entry.entries.id}>
       <div
         className={cn(
           "relative rounded-md bg-theme-background transition-colors",
@@ -186,7 +188,11 @@ function EntryItemImpl({
         onDoubleClick={handleDoubleClick}
         onContextMenu={handleContextMenu}
       >
-        <ListItemHoverOverlay className={cn(views[view || 0].gridMode ? "inset-0" : "inset-y-1")} isActive={isActive}>
+
+        <ListItemHoverOverlay
+          className={cn(views[view || 0].gridMode ? "inset-0" : "inset-y-1")}
+          isActive={isActive}
+        >
           <Item entryId={entry.entries.id} translation={translation.data} />
         </ListItemHoverOverlay>
       </div>
@@ -199,3 +205,38 @@ export const EntryItem: FC<EntryItemProps> = memo(({ entryId, view }) => {
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return <EntryItemImpl entry={entry} view={view} />
 })
+
+const SkeletonItemMap = {
+  [FeedViewType.Articles]: ArticleItemSkeleton,
+  [FeedViewType.SocialMedia]: SocialMediaItemSkeleton,
+  [FeedViewType.Pictures]: PictureItemSkeleton,
+  [FeedViewType.Videos]: VideoItemSkeleton,
+  [FeedViewType.Audios]: AudioItemSkeleton,
+  [FeedViewType.Notifications]: NotificationItemSkeleton,
+}
+
+const LoadingCircleFallback = (
+  <div className="center mt-2">
+    <LoadingCircle size="medium" />
+  </div>
+)
+export const EntryItemSkeleton: FC<{ view: FeedViewType }> = memo(
+  ({ view }) => {
+    const SkeletonItem = SkeletonItemMap[view]
+    return SkeletonItem ?
+        (
+          <div className="flex flex-col">{createSkeletonItems(SkeletonItem)}</div>
+        ) :
+        (
+          LoadingCircleFallback
+        )
+  },
+)
+
+const createSkeletonItems = (element: ReactNode) => {
+  const children = [] as ReactNode[]
+  for (let i = 0; i < 10; i++) {
+    children.push(element)
+  }
+  return children
+}

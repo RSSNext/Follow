@@ -137,3 +137,28 @@ const PreviewVideoModalContent: ModalContentComponent<{
     </m.div>
   )
 }
+
+export const VideoItemSkeleton = (
+  <div className="relative mx-auto w-full max-w-lg rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
+    <div className="relative z-[1]">
+      <div className="p-1.5">
+        <div className="w-full">
+          <div className="overflow-x-auto">
+            <div className="aspect-video w-full shrink-0 animate-pulse overflow-hidden rounded-md bg-gray-200 dark:bg-neutral-800" />
+          </div>
+        </div>
+        <div className="relative flex-1 px-2 pb-3 pt-1 text-sm">
+          <div className="relative mb-1 mt-1.5 truncate font-medium leading-none">
+            <div className="h-4 w-3/4 animate-pulse bg-gray-200 dark:bg-neutral-800" />
+          </div>
+          <div className="mt-1 flex items-center gap-1 truncate text-[13px]">
+            <div className="mr-0.5 size-4 animate-pulse rounded-sm bg-gray-200 dark:bg-neutral-800" />
+            <div className="h-3 w-1/2 animate-pulse bg-gray-200 dark:bg-neutral-800" />
+            <span className="text-zinc-500">·</span>
+            <div className="h-3 w-12 animate-pulse bg-gray-200 dark:bg-neutral-800" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)

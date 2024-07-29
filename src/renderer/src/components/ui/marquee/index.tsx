@@ -16,6 +16,7 @@ export const TitleMarquee = ({
   return (
     <div
       ref={$wrapper}
+      // className="[&_*]:scrollbar-none"
       onMouseEnter={useCallback(() => {
         const $container = ref.current
 
@@ -48,7 +49,7 @@ export const TitleMarquee = ({
         })
       }, [])}
     >
-      <Marquee play={hovered} ref={ref} speed={speed} {...rest}>
+      <Marquee className="overflow-hidden" play={hovered} ref={ref} speed={speed} {...rest}>
         {children}
       </Marquee>
     </div>

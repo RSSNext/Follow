@@ -129,7 +129,7 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: "Copy Feed Id",
+        label: "Copy Feed ID",
         disabled: isEntryList,
         click: () => {
           navigator.clipboard.writeText(feedId)

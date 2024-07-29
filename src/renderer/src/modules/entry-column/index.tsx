@@ -55,7 +55,7 @@ import type { VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
-import { EntryItem } from "./item"
+import { EntryItem, EntryItemSkeleton } from "./item"
 
 export function EntryColumn() {
   const virtuosoRef = useRef<VirtuosoHandle>(null)
@@ -98,12 +98,8 @@ export function EntryColumn() {
 
       Footer: useCallback(() => {
         if (!isFetchingNextPage) return null
-        return (
-          <div className="center mt-2">
-            <LoadingCircle size="medium" />
-          </div>
-        )
-      }, [isFetchingNextPage]),
+        return <EntryItemSkeleton view={view} />
+      }, [isFetchingNextPage, view]),
     },
     rangeChanged: (...args: any[]) => {
       handleMarkReadInRange &&
@@ -126,7 +122,7 @@ export function EntryColumn() {
       },
       [view],
     ),
-  }
+  } satisfies VirtuosoProps<string, unknown>
 
   const navigate = useNavigateEntry()
   return (
