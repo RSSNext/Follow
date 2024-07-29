@@ -109,14 +109,13 @@ export function ListItem({
 
       {withAudio && entry.entries?.attachments?.[0].url && (
         <AudioCover
-
           entryId={entryId}
           src={entry.entries?.attachments?.[0].url}
           durationInSeconds={Number.parseInt(
             String(entry.entries?.attachments?.[0].duration_in_seconds ?? 0),
             10,
           )}
-          feedIcon={<FeedIcon feed={feed} entry={entry.entries} size={80} />}
+          feedIcon={<FeedIcon feed={feed} entry={entry.entries} size={80} className="m-0" />}
         />
       )}
 
@@ -172,7 +171,7 @@ function AudioCover({
   }
 
   return (
-    <div className="relative ml-2 size-20 shrink-0">
+    <div className="relative ml-2 shrink-0">
       {feedIcon}
 
       <div
