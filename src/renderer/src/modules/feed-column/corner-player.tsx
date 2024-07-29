@@ -200,6 +200,7 @@ const CornerPlayerImpl = () => {
   )
 }
 
+const ONE_HOUR_IN_SECONDS = 60 * 60
 const PlayerProgress = () => {
   const playerValue = usePlayerAtomValue()
 
@@ -215,11 +216,11 @@ const PlayerProgress = () => {
   const currentTimeIndicator = dayjs()
     .startOf("y")
     .second(controlledCurrentTime)
-    .format("mm:ss")
+    .format(controlledCurrentTime > ONE_HOUR_IN_SECONDS ? "H:mm:ss" : "m:ss")
   const remainingTimeIndicator = dayjs()
     .startOf("y")
     .second(duration - controlledCurrentTime)
-    .format("mm:ss")
+    .format(duration - controlledCurrentTime > ONE_HOUR_IN_SECONDS ? "H:mm:ss" : "m:ss")
 
   return (
     <div className="relative mt-2">
