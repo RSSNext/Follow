@@ -177,7 +177,13 @@ export function EntryColumn() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0.01, y: -100 }}
       >
-        <ScrollArea.ScrollArea mask={false} ref={scrollRef} flex rootClassName="h-full">
+        <ScrollArea.ScrollArea
+          mask={false}
+          ref={scrollRef}
+          flex
+          rootClassName="h-full"
+          viewportClassName="[&>div]:grow flex"
+        >
           {virtuosoOptions.totalCount === 0 ? (
             entries.isLoading ?
                 (
@@ -401,7 +407,7 @@ const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
     const unreadOnly = useGeneralSettingKey("unreadOnly")
     return (
       <m.div
-        className="-mt-6 flex h-full flex-col items-center justify-center gap-2 text-zinc-400"
+        className="-mt-6 flex h-full grow flex-col items-center justify-center gap-2 text-zinc-400"
         {...props}
         ref={ref}
       >
