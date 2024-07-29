@@ -51,12 +51,20 @@ import {
   useState,
 } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
-import type { VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
+import type {
+  ScrollSeekConfiguration,
+  VirtuosoHandle,
+  VirtuosoProps,
+} from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import { EntryItem, EntryItemSkeleton } from "./item"
 
+const scrollSeekConfiguration: ScrollSeekConfiguration = {
+  enter: (velocity) => Math.abs(velocity) > 500,
+  exit: (velocity) => Math.abs(velocity) < 500,
+}
 export function EntryColumn() {
   const virtuosoRef = useRef<VirtuosoHandle>(null)
   const entries = useEntriesByView({
@@ -95,12 +103,16 @@ export function EntryColumn() {
   const virtuosoOptions = {
     components: {
       List: ListContent,
-
       Footer: useCallback(() => {
         if (!isFetchingNextPage) return null
         return <EntryItemSkeleton view={view} />
       }, [isFetchingNextPage, view]),
+      ScrollSeekPlaceholder: useCallback(
+        () => <EntryItemSkeleton view={view} single />,
+        [view],
+      ),
     },
+    scrollSeekConfiguration,
     rangeChanged: (...args: any[]) => {
       handleMarkReadInRange &&
       // @ts-expect-error

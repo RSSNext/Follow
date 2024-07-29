@@ -139,31 +139,31 @@ export const SocialMediaItemSkeleton = (
   <div className="relative m-auto w-[75ch] rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
     <div className="relative z-[1]">
       <div className="group relative flex py-4 pl-3 pr-2">
-        <div className="mr-2 size-9 animate-pulse rounded-sm bg-gray-200 dark:bg-neutral-800" />
+        <div className="mr-2 size-9 rounded-sm bg-gray-200 dark:bg-neutral-800" />
         <div className="ml-2 min-w-0 flex-1">
           <div className="-mt-0.5 line-clamp-5 flex-1 text-sm">
             <div className="flex w-[calc(100%-10rem)] space-x-1">
-              <div className="h-4 w-16 animate-pulse bg-gray-200 dark:bg-neutral-800" />
+              <div className="h-4 w-16 bg-gray-200 dark:bg-neutral-800" />
               <span className="text-zinc-500">·</span>
-              <div className="h-4 w-12 animate-pulse bg-gray-200 dark:bg-neutral-800" />
+              <div className="h-4 w-12 bg-gray-200 dark:bg-neutral-800" />
             </div>
             <div className="relative mt-0.5 whitespace-pre-line text-base">
-              <div className="h-4 w-full animate-pulse bg-gray-200 dark:bg-neutral-800" />
-              <div className="mt-1.5 h-4 w-full animate-pulse bg-gray-200 dark:bg-neutral-800" />
-              <div className="mt-1.5 h-4 w-3/4 animate-pulse bg-gray-200 dark:bg-neutral-800" />
+              <div className="h-4 w-full bg-gray-200 dark:bg-neutral-800" />
+              <div className="mt-1.5 h-4 w-full bg-gray-200 dark:bg-neutral-800" />
+              <div className="mt-1.5 h-4 w-3/4 bg-gray-200 dark:bg-neutral-800" />
             </div>
           </div>
           <div className="mt-2 flex gap-2 overflow-x-auto">
-            <div className="size-28 animate-pulse overflow-hidden rounded bg-gray-200 dark:bg-neutral-800" />
+            <div className="size-28 overflow-hidden rounded bg-gray-200 dark:bg-neutral-800" />
           </div>
         </div>
         <div className="invisible absolute right-1 top-1.5 opacity-0 duration-200 group-hover:visible group-hover:opacity-80">
           <div className="flex origin-right scale-90 items-center gap-1">
-            <div className="size-8 animate-pulse justify-center rounded-md bg-gray-200 dark:bg-neutral-800" />
-            <div className="size-8 animate-pulse justify-center rounded-md bg-gray-200 dark:bg-neutral-800" />
-            <div className="size-8 animate-pulse justify-center rounded-md bg-gray-200 dark:bg-neutral-800" />
-            <div className="size-8 animate-pulse justify-center rounded-md bg-gray-200 dark:bg-neutral-800" />
-            <div className="size-8 animate-pulse justify-center rounded-md bg-gray-200 dark:bg-neutral-800" />
+            <div className="size-8 justify-center rounded-md bg-gray-200 dark:bg-neutral-800" />
+            <div className="size-8 justify-center rounded-md bg-gray-200 dark:bg-neutral-800" />
+            <div className="size-8 justify-center rounded-md bg-gray-200 dark:bg-neutral-800" />
+            <div className="size-8 justify-center rounded-md bg-gray-200 dark:bg-neutral-800" />
+            <div className="size-8 justify-center rounded-md bg-gray-200 dark:bg-neutral-800" />
           </div>
         </div>
       </div>

@@ -188,7 +188,6 @@ function EntryItemImpl({
         onDoubleClick={handleDoubleClick}
         onContextMenu={handleContextMenu}
       >
-
         <ListItemHoverOverlay
           className={cn(views[view || 0].gridMode ? "inset-0" : "inset-y-1")}
           isActive={isActive}
@@ -220,18 +219,22 @@ const LoadingCircleFallback = (
     <LoadingCircle size="medium" />
   </div>
 )
-export const EntryItemSkeleton: FC<{ view: FeedViewType }> = memo(
-  ({ view }) => {
-    const SkeletonItem = SkeletonItemMap[view]
-    return SkeletonItem ?
-        (
-          <div className="flex flex-col">{createSkeletonItems(SkeletonItem)}</div>
-        ) :
-        (
-          LoadingCircleFallback
-        )
-  },
-)
+export const EntryItemSkeleton: FC<{
+  view: FeedViewType
+  single?: boolean
+}> = memo(({ view, single }) => {
+  const SkeletonItem = SkeletonItemMap[view]
+  if (single) {
+    return SkeletonItem
+  }
+  return SkeletonItem ?
+      (
+        <div className="flex flex-col">{createSkeletonItems(SkeletonItem)}</div>
+      ) :
+      (
+        LoadingCircleFallback
+      )
+})
 
 const createSkeletonItems = (element: ReactNode) => {
   const children = [] as ReactNode[]
