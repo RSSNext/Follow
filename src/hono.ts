@@ -3185,6 +3185,7 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                     read?: boolean | undefined;
                     limit?: number | undefined;
                     publishedAfter?: string | undefined;
+                    publishedBefore?: string | undefined;
                     collected?: boolean | undefined;
                 };
             };
