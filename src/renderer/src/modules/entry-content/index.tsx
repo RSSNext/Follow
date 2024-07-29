@@ -3,6 +3,7 @@ import { useMe } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
+import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
@@ -81,6 +82,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     data?.entries.content,
     entry?.entries.content,
     readerRenderInlineStyle,
+    // Only for dx, hmr
     parseHtml,
   ])
 
@@ -128,10 +130,10 @@ function EntryContentRender({ entryId }: { entryId: string }) {
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
-        className="h-[55px] px-5"
+        className="h-[55px] shrink-0 px-5"
       />
 
-      <div className="h-[calc(100%-3.5rem)] min-w-0 overflow-y-auto @container">
+      <ScrollArea.ScrollArea mask={false} rootClassName="h-0 grow min-w-0 overflow-y-auto @container">
         <m.div
           style={
             readerFontFamily ?
@@ -225,7 +227,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
             )}
           </article>
         </m.div>
-      </div>
+      </ScrollArea.ScrollArea>
     </EntryContentProvider>
   )
 }

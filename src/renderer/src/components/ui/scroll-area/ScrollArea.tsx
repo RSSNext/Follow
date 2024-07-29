@@ -27,8 +27,9 @@ const Thumb = React.forwardRef<
     ref={forwardedRef}
     className={cn(
       "relative w-full flex-1 rounded-xl transition-colors duration-150",
-      "bg-gray-300 hover:bg-neutral-400/80 dark:bg-neutral-500",
-      "active:bg-neutral-400/50",
+      "bg-gray-300 hover:bg-neutral-400/80",
+      "active:bg-neutral-400",
+      "dark:bg-neutral-500 hover:dark:bg-neutral-400/80 active:dark:bg-neutral-400",
       "before:absolute before:-left-1/2 before:-top-1/2 before:h-full before:min-h-[44]",
       "before:w-full before:min-w-[44] before:-translate-x-full before:-translate-y-full before:content-[\"\"]",
       className,

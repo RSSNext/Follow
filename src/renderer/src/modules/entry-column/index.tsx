@@ -16,6 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
+import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
 import {
   FEED_COLLECTION_LIST,
@@ -60,7 +61,11 @@ import type {
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
-import { EntryItem, EntryItemSkeleton } from "./item"
+import {
+  EntryItem,
+  EntryItemSkeleton,
+  EntryItemSkeletonWithDelayShow,
+} from "./item"
 
 const scrollSeekConfiguration: ScrollSeekConfiguration = {
   enter: (velocity) => Math.abs(velocity) > 500,
@@ -101,12 +106,13 @@ export function EntryColumn() {
 
   const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
 
+  const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {
     components: {
       List: ListContent,
       Footer: useCallback(() => {
         if (!isFetchingNextPage) return null
-        return <EntryItemSkeleton view={view} />
+        return <EntryItemSkeletonWithDelayShow delay={500} view={view} />
       }, [isFetchingNextPage, view]),
       ScrollSeekPlaceholder: useCallback(
         () => <EntryItemSkeleton view={view} single />,
@@ -119,6 +125,8 @@ export function EntryColumn() {
       // @ts-expect-error
       handleMarkReadInRange(...args, isInteracted.current)
     },
+    customScrollParent: scrollRef.current!,
+
     totalCount: entries.totalCount,
     endReached: () => entries.hasNextPage && entries.fetchNextPage(),
     data: entriesIds,
@@ -164,33 +172,35 @@ export function EntryColumn() {
       </AutoResizeHeight>
       <m.div
         key={`${routeFeedId}-${view}`}
-        className="h-full"
+        className="relative h-0 grow"
         initial={{ opacity: 0.01, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0.01, y: -100 }}
       >
-        {virtuosoOptions.totalCount === 0 ? (
-          entries.isLoading ?
+        <ScrollArea.ScrollArea mask={false} ref={scrollRef} flex rootClassName="h-full">
+          {virtuosoOptions.totalCount === 0 ? (
+            entries.isLoading ?
+                (
+                  <LoadingCircle
+                    className="center h-full -translate-y-12"
+                    size="large"
+                  />
+                ) :
+                (
+                  <EmptyList />
+                )
+          ) : view && views[view].gridMode ?
               (
-                <LoadingCircle
-                  className="center h-full -translate-y-12"
-                  size="large"
+                <VirtuosoGrid
+                  listClassName="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-4"
+                  {...virtuosoOptions}
+                  ref={virtuosoRef}
                 />
               ) :
               (
-                <EmptyList />
-              )
-        ) : view && views[view].gridMode ?
-            (
-              <VirtuosoGrid
-                listClassName="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-4"
-                {...virtuosoOptions}
-                ref={virtuosoRef}
-              />
-            ) :
-            (
-              <EntryList {...virtuosoOptions} virtuosoRef={virtuosoRef} />
-            )}
+                <EntryList {...virtuosoOptions} virtuosoRef={virtuosoRef} />
+              )}
+        </ScrollArea.ScrollArea>
       </m.div>
     </div>
   )

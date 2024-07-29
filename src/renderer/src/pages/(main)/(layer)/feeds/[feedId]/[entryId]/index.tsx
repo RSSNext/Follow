@@ -11,7 +11,7 @@ export const Component = () => {
   return (
     <AnimatePresence>
       {!inWideMode && (
-        <div className="min-w-0 flex-1">
+        <div className="flex min-w-0 flex-1 flex-col">
           <EntryContent entryId={entryId === ROUTE_ENTRY_PENDING ? "" : entryId} />
         </div>
       )}

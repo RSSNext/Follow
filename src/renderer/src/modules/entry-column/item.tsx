@@ -16,7 +16,7 @@ import type { FlatEntryModel } from "@renderer/store/entry"
 import { entryActions } from "@renderer/store/entry"
 import { useEntry } from "@renderer/store/entry/hooks"
 import type { FC, ReactNode } from "react"
-import { memo, useCallback } from "react"
+import { memo, useCallback, useEffect, useState } from "react"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
@@ -243,3 +243,31 @@ const createSkeletonItems = (element: ReactNode) => {
   }
   return children
 }
+
+export const EntryItemSkeletonWithDelayShow: FC<{
+  view: FeedViewType
+  delay: number
+}> = memo(({ view, delay }) => {
+  const SkeletonItem = SkeletonItemMap[view]
+
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShow(true)
+    }, delay)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [delay])
+  if (!show) return LoadingCircleFallback
+
+  return SkeletonItem ?
+      (
+        <div className="flex flex-col">{createSkeletonItems(SkeletonItem)}</div>
+      ) :
+      (
+        LoadingCircleFallback
+      )
+})
