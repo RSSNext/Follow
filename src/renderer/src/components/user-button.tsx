@@ -27,6 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu/dropdown-menu"
+import { Kbd } from "./ui/kbd/Kbd"
 import { useModalStack } from "./ui/modal/stacked/hooks"
 import { NoopChildren } from "./ui/modal/stacked/utils"
 
@@ -77,7 +78,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
     <DropdownMenu>
       <DropdownMenuTrigger className="!outline-none focus-visible:bg-theme-item-hover">
         <ActionButton as="div" tooltip="Profile">
-          <UserAvatar className="h-5 p-0" hideName />
+          <UserAvatar className="h-5 p-0 [&_*]:border-0" hideName />
         </ActionButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-[180px]" side="bottom" align="end">
@@ -123,6 +124,10 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         >
           <i className="i-mgc-settings-7-cute-re mr-1.5" />
           Preferences
+          <div className="ml-auto flex gap-1">
+            <Kbd>Meta</Kbd>
+            <Kbd>,</Kbd>
+          </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {!window.electron && (
@@ -181,11 +186,11 @@ export function UserAvatar({
   return (
     <div
       className={cn(
-        "flex h-20 items-center justify-center gap-2 rounded-xl bg-stone-300 px-5 py-2 font-medium text-zinc-600",
+        "flex h-20 items-center justify-center gap-2 px-5 py-2 font-medium text-zinc-600",
         className,
       )}
     >
-      <Avatar className="aspect-square h-full w-auto">
+      <Avatar className="aspect-square h-full w-auto overflow-hidden rounded-full border bg-stone-300">
         <AvatarImage
           src={(profile.data || session?.user)?.image || undefined}
         />
