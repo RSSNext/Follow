@@ -36,7 +36,7 @@ export const ListItemHoverOverlay = ({
 
   const mClassName = clsx(
     "absolute rounded-lg",
-    "dark:bg-neutral-850 bg-zinc-200/80",
+    "bg-zinc-200/80 dark:bg-neutral-800",
     "inset-0",
     className,
   )
