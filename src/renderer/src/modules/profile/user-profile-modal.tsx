@@ -156,6 +156,7 @@ export const UserProfileModalContent: FC<{
               </m.div>
             </div>
             <ScrollArea.ScrollArea
+              mask
               ref={setScrollerRef}
               rootClassName="mb-4 h-[400px] grow w-[70ch] max-w-full px-5"
               viewportClassName="[&>div]:space-y-4"

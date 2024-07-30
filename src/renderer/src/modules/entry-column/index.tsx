@@ -171,7 +171,7 @@ export function EntryColumn() {
           ref={scrollRef}
           flex
           rootClassName="h-full"
-          viewportClassName="[&>div]:grow flex pt-3"
+          viewportClassName="[&>div]:grow flex pt-3 @container"
         >
           {virtuosoOptions.totalCount === 0 ? (
             entries.isLoading ?
@@ -182,7 +182,7 @@ export function EntryColumn() {
           ) : view && views[view].gridMode ?
               (
                 <VirtuosoGrid
-                  listClassName="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-4"
+                  listClassName={tw`grid grid-cols-1 @lg:grid-cols-2 @3xl:grid-cols-3 @6xl:grid-cols-4 @7xl:grid-cols-5 px-4 gap-1.5`}
                   {...virtuosoOptions}
                   ref={virtuosoRef}
                 />

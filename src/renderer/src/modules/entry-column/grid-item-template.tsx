@@ -30,7 +30,7 @@ export function GridItem({
       {children}
       <div
         className={cn(
-          "relative flex-1 px-2 pb-3 pt-1 text-sm",
+          "relative flex-1 px-2 py-1 text-sm",
           !asRead &&
           "before:absolute before:-left-1 before:top-[13.5px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
         )}
