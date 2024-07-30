@@ -109,7 +109,7 @@ export const SettingAppearance = () => {
               label: "Reduce motion",
               key: "reduceMotion",
               onChange: (value) => setUISetting("reduceMotion", value),
-              description: `Reduction the motion of elements to improve performance and reduce energy consumption.`,
+              description: `Reducing the motion of elements to improve performance and reduce energy consumption.`,
             },
           ]}
         />
