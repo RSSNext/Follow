@@ -19,7 +19,7 @@ export function Component() {
 
           setSidebarActiveView(prevView)
         }}
-        className="absolute left-10 top-11 flex items-center gap-1"
+        className="absolute left-10 top-11 z-[1] flex items-center gap-1"
       >
         <i className="i-mgc-left-cute-fi" />
         Back

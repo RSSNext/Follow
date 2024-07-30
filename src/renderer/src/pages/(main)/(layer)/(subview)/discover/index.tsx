@@ -1,3 +1,4 @@
+import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
   Tabs,
   TabsContent,
@@ -40,7 +41,12 @@ export function Component() {
   ]
 
   return (
-    <div className="flex w-full flex-col items-center gap-8 overflow-y-auto pb-10 pt-40">
+    <ScrollArea.ScrollArea
+      mask={false}
+      flex
+      rootClassName="w-full"
+      viewportClassName="pb-10 pt-40 [&>div]:items-center [&>div]:gap-8"
+    >
       <div className="text-2xl font-bold">Discover</div>
       <Tabs defaultValue="Search">
         <TabsList className="w-full">
@@ -65,7 +71,7 @@ export function Component() {
         ))}
       </Tabs>
       <Recommendations />
-    </div>
+    </ScrollArea.ScrollArea>
   )
 }
 

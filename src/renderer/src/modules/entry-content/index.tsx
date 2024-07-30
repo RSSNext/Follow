@@ -133,7 +133,11 @@ function EntryContentRender({ entryId }: { entryId: string }) {
         className="h-[55px] shrink-0 px-5"
       />
 
-      <ScrollArea.ScrollArea mask={false} rootClassName="h-0 grow min-w-0 overflow-y-auto @container">
+      <ScrollArea.ScrollArea
+        mask={false}
+        rootClassName="h-0 grow min-w-0 overflow-y-auto @container"
+        viewportClassName="mask-t p-5"
+      >
         <m.div
           style={
             readerFontFamily ?
@@ -142,7 +146,6 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 } :
               undefined
           }
-          className="p-5"
           initial={{ opacity: 0.01, y: 100 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0.01, y: -100 }}
