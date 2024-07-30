@@ -76,7 +76,9 @@ export const Kbd: FC<{ children: string, className?: string }> = memo(
     specialKeys = { ...SharedKeys, ...specialKeys }
 
     return (
-      <kbd className={cn("kbd h-4 space-x-1 font-mono text-[0.7rem]", className)}>
+      <kbd
+        className={cn("kbd h-4 space-x-1 font-mono text-[0.7rem]", className)}
+      >
         {children.split("+").map((key_) => {
           let key: string = key_.toLowerCase()
           for (const [k, v] of Object.entries(specialKeys)) {
@@ -85,9 +87,11 @@ export const Kbd: FC<{ children: string, className?: string }> = memo(
 
           switch (key) {
             case SharedKeys.space: {
-              return (
-                <i className="i-mingcute-space-line" key={key} />
-              )
+              return <i className="i-mingcute-space-line" key={key} />
+            }
+
+            case SharedKeys.backspace: {
+              return <i className="i-mingcute-delete-back-line" key={key} />
             }
 
             default: {
