@@ -92,7 +92,7 @@ const EntryUser: Component<{
             presentUserProfile(userId)
           }}
         >
-          <Avatar className="aspect-square size-8 border border-border ring-1 ring-background">
+          <Avatar className="aspect-square size-7 border border-border ring-1 ring-background">
             <AvatarImage src={user?.image || undefined} />
             <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>

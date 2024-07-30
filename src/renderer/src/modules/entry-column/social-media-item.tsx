@@ -39,6 +39,7 @@ export const SocialMediaItem: EntryListItemFC = ({
       )}
     >
       <FeedIcon
+        fallback
         className="mask-squircle mask"
         feed={feed}
         entry={entry.entries}

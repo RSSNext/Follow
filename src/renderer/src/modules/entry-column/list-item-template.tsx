@@ -51,7 +51,7 @@ export function ListItem({
         "before:absolute before:-left-0.5 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
       )}
     >
-      {!withAudio && <FeedIcon feed={feed} entry={entry.entries} />}
+      {!withAudio && <FeedIcon feed={feed} fallback entry={entry.entries} />}
       <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
         <div
           className={cn(

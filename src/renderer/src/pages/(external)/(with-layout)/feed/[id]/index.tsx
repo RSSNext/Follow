@@ -62,6 +62,7 @@ export function Component() {
       {feed.data?.feed && (
         <div className="mx-auto mt-12 flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
           <FeedIcon
+            fallback
             feed={feed.data.feed}
             className="mask-squircle mask shrink-0"
             size={64}

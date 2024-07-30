@@ -51,6 +51,7 @@ export function GridItem({
         </div>
         <div className="flex items-center gap-1 truncate text-[13px]">
           <FeedIcon
+            fa
             className="mr-0.5 inline-block"
             feed={feeds!}
             entry={entry.entries}
