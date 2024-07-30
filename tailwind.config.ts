@@ -66,8 +66,8 @@ export default resolveConfig({
           foreground: "hsl(var(--card-foreground) / <alpha-value>)",
         },
         native: {
-          DEFAULT: "hsl(var(--native) / <alpha-value>)",
-          active: "hsl(var(--native-active) / <alpha-value>)",
+          DEFAULT: "hsl(var(--fo-native) / <alpha-value>)",
+          active: "hsl(var(--fo-native-active) / <alpha-value>)",
         },
 
         theme: {

@@ -158,6 +158,7 @@ export const UserProfileModalContent: FC<{
             <ScrollArea.ScrollArea
               ref={setScrollerRef}
               rootClassName="mb-4 h-[400px] grow w-[70ch] max-w-full px-5"
+              viewportClassName="[&>div]:space-y-4"
             >
               {subscriptions.isLoading ? (
                 <LoadingCircle
@@ -168,7 +169,7 @@ export const UserProfileModalContent: FC<{
                 subscriptions.data &&
                 Object.keys(subscriptions.data).map((category) => (
                   <div key={category}>
-                    <div className="mb-4 flex items-center text-2xl font-bold">
+                    <div className="mb-2 flex items-center text-2xl font-bold">
                       <h3>{category}</h3>
                     </div>
                     <div>
@@ -189,7 +190,7 @@ export const UserProfileModalContent: FC<{
         {!user.data && (
           <LoadingCircle
             size="large"
-            className="center h-48 w-[46.125rem] max-w-full"
+            className="center h-[80vh] w-[39.125rem] max-w-full"
           />
         )}
       </m.div>

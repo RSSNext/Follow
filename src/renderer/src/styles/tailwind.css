@@ -51,17 +51,6 @@
 }
 
 @layer base {
-  :root {
-    --native: 240 1.6% 87.6%;
-    --native-active: 240 0.9% 78.2%;
-  }
-  [data-theme="dark"] {
-    --native: 30 1.7% 23.5%;
-    --native-active: 20 2.1% 28.4%;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
   }

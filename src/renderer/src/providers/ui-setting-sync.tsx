@@ -18,12 +18,10 @@ const useUISettingSync = () => {
     const fontCss = `${setting.uiFontFamily},"SN Pro", system-ui, sans-serif`
     Object.assign(root.style, {
       fontFamily: fontCss,
-
     })
     root.style.cssText += `\n--fo-font-family: ${fontCss}`
     Object.assign(document.body.style, {
       fontFamily: fontCss,
-
     })
   }, [setting.uiFontFamily])
 

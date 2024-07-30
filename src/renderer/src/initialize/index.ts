@@ -48,14 +48,21 @@ export const initializeApp = async () => {
   appLog(`Initialize ${APP_NAME}...`)
   window.version = APP_VERSION
 
+  const now = Date.now()
+
+  // Set Environment
+  const isElectronBuild = ELECTRON
+
+  document.documentElement.dataset.buildType = isElectronBuild ? "electron" : "web"
+
   // Initialize dayjs
   dayjs.extend(duration)
   dayjs.extend(relativeTime)
   dayjs.extend(localizedFormat)
 
-  const now = Date.now()
-
+  // Enable Map/Set in immer
   enableMapSet()
+
   subscribeNetworkStatus()
 
   registerGlobalContext({
