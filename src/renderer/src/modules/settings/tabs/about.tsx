@@ -42,11 +42,10 @@ export const SettingAbout = () => (
       <p className="mt-6 text-balance text-sm">
         {APP_NAME}
         {" "}
-        is and will always be a free and open-source project. It is licensed under the
+        is and will always be a free and open-source project. It is licensed under
         {" "}
         {license}
-        {" "}
-        license.
+        .
       </p>
       <p className="mt-3 text-balance text-sm">
         The icon library used is copyrighted by
