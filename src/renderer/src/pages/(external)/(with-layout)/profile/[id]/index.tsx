@@ -64,7 +64,7 @@ export function Component() {
                     target="_blank"
                   >
                     <FeedIcon
-                      fa
+                      fallback
                       feed={subscription.feeds}
                       size={22}
                       className="mr-3"
