@@ -2,6 +2,7 @@ import { env } from "@env"
 import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
 import { getUISettings } from "@renderer/atoms/settings/ui"
+import { isElectronBuild } from "@renderer/constants"
 import { browserDB } from "@renderer/database"
 import { InvalidateQueryEvent } from "@renderer/providers/invalidate-query-provider"
 import { CleanerService } from "@renderer/services/cleaner"
@@ -51,9 +52,9 @@ export const initializeApp = async () => {
   const now = Date.now()
 
   // Set Environment
-  const isElectronBuild = ELECTRON
-
-  document.documentElement.dataset.buildType = isElectronBuild ? "electron" : "web"
+  document.documentElement.dataset.buildType = isElectronBuild ?
+    "electron" :
+    "web"
 
   // Initialize dayjs
   dayjs.extend(duration)

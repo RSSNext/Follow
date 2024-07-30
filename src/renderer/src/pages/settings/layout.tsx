@@ -1,11 +1,12 @@
 import { Logo } from "@renderer/components/icons/logo"
 import { Vibrancy } from "@renderer/components/ui/background"
+import { isElectronBuild } from "@renderer/constants"
 import { preventDefault } from "@renderer/lib/dom"
 import { settings } from "@renderer/modules/settings/constants"
 import { SettingsSidebarTitle } from "@renderer/modules/settings/title"
 import { Link, Outlet, useLocation } from "react-router-dom"
 
-export function Component() {
+function Layout() {
   const location = useLocation()
   const tab = location.pathname.replace(/^\/settings\/?/, "")
 
@@ -41,3 +42,5 @@ export function Component() {
     </div>
   )
 }
+// NOTE: we disable directly nav to setting routes on the web app
+export const Component = isElectronBuild ? Layout : () => null
