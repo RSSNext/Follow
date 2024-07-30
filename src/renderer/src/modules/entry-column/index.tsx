@@ -56,8 +56,8 @@ import {
 } from "./item"
 
 const scrollSeekConfiguration: ScrollSeekConfiguration = {
-  enter: (velocity) => Math.abs(velocity) > 500,
-  exit: (velocity) => Math.abs(velocity) < 500,
+  enter: (velocity) => Math.abs(velocity) > 1000,
+  exit: (velocity) => Math.abs(velocity) < 1000,
 }
 export function EntryColumn() {
   const virtuosoRef = useRef<VirtuosoHandle>(null)
@@ -100,7 +100,7 @@ export function EntryColumn() {
       List: ListContent,
       Footer: useCallback(() => {
         if (!isFetchingNextPage) return null
-        return <EntryItemSkeletonWithDelayShow delay={500} view={view} />
+        return <EntryItemSkeletonWithDelayShow view={view} />
       }, [isFetchingNextPage, view]),
       ScrollSeekPlaceholder: useCallback(
         () => <EntryItemSkeleton view={view} single />,
