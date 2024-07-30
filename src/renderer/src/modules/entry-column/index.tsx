@@ -1,4 +1,3 @@
-import { useMainContainerElement } from "@renderer/atoms/dom"
 import {
   setGeneralSetting,
   useGeneralSettingKey,
@@ -27,10 +26,8 @@ import {
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import {
-  useRouteEntryId,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
-import { useRefValue } from "@renderer/hooks/common"
 import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
@@ -48,11 +45,9 @@ import {
   forwardRef,
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react"
-import { useHotkeys } from "react-hotkeys-hook"
 import type {
   ScrollSeekConfiguration,
   VirtuosoHandle,
@@ -60,6 +55,7 @@ import type {
 } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 
+import { EntryColumnShortcutHandler } from "./EntryColumnShortcutHandler"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import {
   EntryItem,
@@ -204,7 +200,11 @@ export function EntryColumn() {
                 />
               ) :
               (
-                <EntryList {...virtuosoOptions} virtuosoRef={virtuosoRef} />
+                <EntryList
+                  {...virtuosoOptions}
+                  virtuosoRef={virtuosoRef}
+                  refetch={entries.refetch}
+                />
               )}
         </ScrollArea.ScrollArea>
       </m.div>
@@ -430,81 +430,10 @@ const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
 const EntryList: FC<
   VirtuosoProps<string, unknown> & {
     virtuosoRef: React.RefObject<VirtuosoHandle>
+
+    refetch: () => void
   }
-> = ({ virtuosoRef, ...virtuosoOptions }) => {
-  const dataRef = useRefValue(virtuosoOptions.data!)
-  const currentEntryIdRef = useRefValue(useRouteEntryId())
-
-  const navigate = useNavigateEntry()
-
-  const $mainContainer = useMainContainerElement()
-  const [enabledArrowKey, setEnabledArrowKey] = useState(false)
-
-  // Enable arrow key navigation shortcuts only when focus is on entryContent or entryList,
-  // entryList shortcuts should not be triggered in the feed col
-  useLayoutEffect(() => {
-    if (!$mainContainer) return
-    const handler = () => {
-      const target = document.activeElement
-      const isFocusIn =
-        $mainContainer.contains(target) || $mainContainer === target
-
-      setEnabledArrowKey(isFocusIn)
-    }
-
-    handler()
-    // NOTE: focusin event will bubble to the document
-    document.addEventListener("focusin", handler)
-    return () => {
-      document.removeEventListener("focusin", handler)
-    }
-  }, [$mainContainer])
-
-  useHotkeys(
-    shortcuts.entries.next.key,
-    () => {
-      const data = dataRef.current
-      const currentActiveEntryIndex = data.indexOf(
-        currentEntryIdRef.current || "",
-      )
-
-      const nextIndex = Math.min(currentActiveEntryIndex + 1, data.length - 1)
-
-      virtuosoRef.current?.scrollIntoView?.({
-        index: nextIndex,
-      })
-      const nextId = data![nextIndex]
-
-      navigate({
-        entryId: nextId,
-      })
-    },
-    { scopes: ["home"], enabled: enabledArrowKey },
-  )
-  useHotkeys(
-    shortcuts.entries.previous.key,
-    () => {
-      const data = dataRef.current
-      const currentActiveEntryIndex = data.indexOf(
-        currentEntryIdRef.current || "",
-      )
-
-      const nextIndex =
-        currentActiveEntryIndex === -1 ?
-          data.length - 1 :
-          Math.max(0, currentActiveEntryIndex - 1)
-
-      virtuosoRef.current?.scrollIntoView?.({
-        index: nextIndex,
-      })
-      const nextId = data![nextIndex]
-
-      navigate({
-        entryId: nextId,
-      })
-    },
-    { scopes: ["home"], enabled: enabledArrowKey },
-  )
+> = ({ virtuosoRef, refetch, ...virtuosoOptions }) => {
   // Prevent scroll list move when press up/down key, the up/down key should be taken over by the shortcut key we defined.
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = useCallback(
     (e) => {
@@ -515,10 +444,17 @@ const EntryList: FC<
     [],
   )
   return (
-    <Virtuoso
-      onKeyDown={handleKeyDown}
-      {...virtuosoOptions}
-      ref={virtuosoRef}
-    />
+    <>
+      <Virtuoso
+        onKeyDown={handleKeyDown}
+        {...virtuosoOptions}
+        ref={virtuosoRef}
+      />
+      <EntryColumnShortcutHandler
+        refetch={refetch}
+        data={virtuosoOptions.data!}
+        virtuosoRef={virtuosoRef}
+      />
+    </>
   )
 }

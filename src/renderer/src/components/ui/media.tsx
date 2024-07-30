@@ -104,6 +104,7 @@ const MediaImpl: FC<MediaProps> = ({
                 {
                   onContextMenu: (e) => {
                     e.stopPropagation()
+                    e.preventDefault()
                     props.onContextMenu?.(e)
                     showNativeMenu(
                       [

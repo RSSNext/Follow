@@ -1,6 +1,5 @@
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { views } from "@renderer/constants"
-import { shortcuts } from "@renderer/constants/shortcuts"
 import {
   useRouteParamsSelector,
   useRouteParms,
@@ -10,7 +9,6 @@ import { entries, useEntries } from "@renderer/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
 import { useFolderFeedsByFeedId } from "@renderer/store/subscription"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { useHotkeys } from "react-hotkeys-hook"
 import type { ListRange } from "react-virtuoso"
 import { useDebounceCallback } from "usehooks-ts"
 
@@ -124,14 +122,6 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
   // We need to add an interface to incrementally update the data based on the version hash.
 
   const entryIds = remoteEntryIds || currentEntries
-
-  useHotkeys(
-    shortcuts.entries.refetch.key,
-    () => {
-      query.refetch()
-    },
-    { scopes: ["home"] },
-  )
 
   // in unread only entries only can grow the data, but not shrink
   // so we memo this previous data to avoid the flicker
