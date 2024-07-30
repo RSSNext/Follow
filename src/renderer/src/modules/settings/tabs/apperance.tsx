@@ -74,7 +74,7 @@ export const SettingAppearance = () => {
               onChange: (value) => setUISetting("showDockBadge", value),
             },
             {
-              label: "Show sidebar unread count",
+              label: "Show unread count in sidebar",
               key: "sidebarShowUnreadCount",
               onChange: (value) =>
                 setUISetting("sidebarShowUnreadCount", value),
@@ -109,7 +109,7 @@ export const SettingAppearance = () => {
               label: "Reduce motion",
               key: "reduceMotion",
               onChange: (value) => setUISetting("reduceMotion", value),
-              description: `Enabling this option will reduce the motion of the element to improve performance and device life, and if it is disabled, it will adapt to the system settings.`,
+              description: `Reduction the motion of elements to improve performance and reduce energy consumption.`,
             },
           ]}
         />

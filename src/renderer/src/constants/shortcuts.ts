@@ -19,7 +19,7 @@ export const shortcuts = {
       key: "Meta+T",
     },
     switchToView: {
-      name: "Switch View",
+      name: "Switch to View",
       key: "1, 2, 3, 4, 5, 6",
     },
     switchBetweenViews: {

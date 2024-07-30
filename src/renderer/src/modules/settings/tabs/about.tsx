@@ -42,14 +42,14 @@ export const SettingAbout = () => (
       <p className="mt-6 text-balance text-sm">
         {APP_NAME}
         {" "}
-        is a free and open-source project. It is licensed under the
+        is and will always be a free and open-source project. It is licensed under the
         {" "}
         {license}
         {" "}
-        License.
+        license.
       </p>
       <p className="mt-3 text-balance text-sm">
-        The icon library used by Follow is mgc which is copyrighted by
+        The icon library used is copyrighted by
         {" "}
         <a
           className="follow-link--underline inline-flex items-center"
@@ -69,8 +69,7 @@ export const SettingAbout = () => (
         {" "}
         (
         {GIT_COMMIT_SHA.slice(0, 7).toUpperCase()}
-        ) currently early
-        in development. If you have any feedback or suggestions, please feel
+        ) is in the early stages of development. If you have any feedback or suggestions, please feel
         free to
         {" "}
         <a
@@ -82,7 +81,7 @@ export const SettingAbout = () => (
           <i className="i-mgc-external-link-cute-re" />
         </a>
         {" "}
-        on the GitHub.
+        on our GitHub.
       </p>
 
       <Divider className="scale-x-50" />
