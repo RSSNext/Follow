@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
       retryDelay: 1000,
       retry(failureCount, error) {
         console.error(error)
-        if (error instanceof FetchError && error.statusCode === undefined) {
+        if (error instanceof FetchError && (error.statusCode === undefined || error.statusCode === 401)) {
           return false
         }
 
