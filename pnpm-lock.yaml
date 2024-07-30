@@ -157,6 +157,9 @@ importers:
       electron-log:
         specifier: 5.1.7
         version: 5.1.7
+      electron-squirrel-startup:
+        specifier: 1.0.1
+        version: 1.0.1
       electron-updater:
         specifier: ^6.2.1
         version: 6.2.1
@@ -3487,6 +3490,9 @@ packages:
 
   electron-publish@24.13.1:
     resolution: {integrity: sha512-2ZgdEqJ8e9D17Hwp5LEq5mLQPjqU3lv/IALvgp+4W8VeNhryfGhYEQC/PgDPMrnWUp+l60Ou5SJLsu+k4mhQ8A==}
+
+  electron-squirrel-startup@1.0.1:
+    resolution: {integrity: sha512-sTfFIHGku+7PsHLJ7v0dRcZNkALrV+YEozINTW8X1nM//e5O3L+rfYuvSW00lmGHnYmUjARZulD8F2V8ISI9RA==}
 
   electron-to-chromium@1.4.808:
     resolution: {integrity: sha512-0ItWyhPYnww2VOuCGF4s1LTfbrdAV2ajy/TN+ZTuhR23AHI6rWHCrBXJ/uxoXOvRRqw8qjYVrG81HFI7x/2wdQ==}
@@ -10351,6 +10357,12 @@ snapshots:
       fs-extra: 10.1.0
       lazy-val: 1.0.5
       mime: 2.6.0
+    transitivePeerDependencies:
+      - supports-color
+
+  electron-squirrel-startup@1.0.1:
+    dependencies:
+      debug: 2.6.9
     transitivePeerDependencies:
       - supports-color
 

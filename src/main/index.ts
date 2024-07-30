@@ -4,6 +4,7 @@ import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@shared/constants"
 import { extractElectronWindowOptions } from "@shared/electron"
 import { app, BrowserWindow, session } from "electron"
+import squirrelStartup from "electron-squirrel-startup"
 
 import { env } from "../env"
 import { isDev } from "./env"
@@ -13,6 +14,10 @@ import { registerUpdater } from "./updater"
 import { createMainWindow, createWindow } from "./window"
 
 if (isDev) console.info("[main] env loaded:", env)
+
+if (squirrelStartup) {
+  app.quit()
+}
 
 function bootsharp() {
   const gotTheLock = app.requestSingleInstanceLock()
