@@ -10,36 +10,38 @@ import { DiscoverImport } from "@renderer/modules/discover/import"
 import { Recommendations } from "@renderer/modules/discover/recommendations"
 import { DiscoverRSS3 } from "@renderer/modules/discover/rss3-form"
 import { createElement } from "react"
+import { useSearchParams } from "react-router-dom"
+
+const tabs = [
+  {
+    name: "Search",
+    value: "search",
+  },
+  {
+    name: "RSS",
+    value: "rss",
+  },
+  {
+    name: "RSSHub",
+    value: "rsshub",
+  },
+  {
+    name: "RSS3",
+    value: "rss3",
+  },
+  {
+    name: "Email",
+    value: "email",
+    disabled: true,
+  },
+  {
+    name: "Import",
+    value: "import",
+  },
+]
 
 export function Component() {
-  const tabs = [
-    {
-      name: "Search",
-      value: "search",
-    },
-    {
-      name: "RSS",
-      value: "rss",
-    },
-    {
-      name: "RSSHub",
-      value: "rsshub",
-    },
-    {
-      name: "RSS3",
-      value: "rss3",
-    },
-    {
-      name: "Email",
-      value: "email",
-      disabled: true,
-    },
-    {
-      name: "Import",
-      value: "import",
-    },
-  ]
-
+  const [search, setSearch] = useSearchParams()
   return (
     <ScrollArea.ScrollArea
       mask={false}
@@ -48,12 +50,20 @@ export function Component() {
       viewportClassName="pb-10 pt-40 [&>div]:items-center [&>div]:gap-8"
     >
       <div className="text-2xl font-bold">Discover</div>
-      <Tabs defaultValue="Search">
+      <Tabs
+        value={search.get("type") || "search"}
+        onValueChange={(val) => {
+          setSearch((search) => {
+            search.set("type", val)
+            return new URLSearchParams(search)
+          })
+        }}
+      >
         <TabsList className="w-full">
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.name}
-              value={tab.name}
+              value={tab.value}
               disabled={tab.disabled}
             >
               {tab.name}
@@ -61,7 +71,7 @@ export function Component() {
           ))}
         </TabsList>
         {tabs.map((tab) => (
-          <TabsContent key={tab.name} value={tab.name} className="mt-8">
+          <TabsContent key={tab.name} value={tab.value} className="mt-8">
             {TabComponent[tab.value] ? (
               createElement(TabComponent[tab.value])
             ) : (
