@@ -116,7 +116,11 @@ export function EntryColumn() {
     customScrollParent: scrollRef.current!,
 
     totalCount: entries.totalCount,
-    endReached: () => entries.hasNextPage && entries.fetchNextPage(),
+    endReached: () => {
+      if (!entries.isFetchingNextPage && entries.hasNextPage) {
+        entries.fetchNextPage()
+      }
+    },
     data: entriesIds,
     onScroll: () => {
       if (!isInteracted.current) {
