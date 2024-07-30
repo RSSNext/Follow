@@ -146,7 +146,7 @@ export function FeedList({
           <span>{totalUnread}</span>
         </div>
       </div>
-      <ScrollArea.ScrollArea flex viewportClassName="!px-3">
+      <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3">
         <div
           className={cn(
             "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 transition-colors",

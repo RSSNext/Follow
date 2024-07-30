@@ -1,3 +1,4 @@
+import { repository } from "@pkg"
 import {
   Avatar,
   AvatarFallback,
@@ -27,7 +28,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu/dropdown-menu"
-import { Kbd } from "./ui/kbd/Kbd"
 import { useModalStack } from "./ui/modal/stacked/hooks"
 import { NoopChildren } from "./ui/modal/stacked/utils"
 
@@ -124,17 +124,17 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         >
           <i className="i-mgc-settings-7-cute-re mr-1.5" />
           Preferences
-          <div className="ml-auto flex gap-1">
+          {/* <div className="ml-auto flex gap-1">
             <Kbd>Meta</Kbd>
             <Kbd>,</Kbd>
-          </div>
+          </div> */}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {!window.electron && (
           <>
             <DropdownMenuItem
               onClick={() => {
-                // TODO
+                window.open(`${repository.url}/releases`)
               }}
             >
               <i className="i-mgc-gift-cute-re mr-1.5" />

@@ -136,7 +136,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
       <ScrollArea.ScrollArea
         mask={false}
         rootClassName="h-0 grow min-w-0 overflow-y-auto @container"
-        viewportClassName="mask-t p-5"
+        viewportClassName="p-5"
       >
         <m.div
           style={

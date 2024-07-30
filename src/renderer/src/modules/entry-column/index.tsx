@@ -25,9 +25,7 @@ import {
 } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import {
-  useRouteParms,
-} from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
@@ -41,13 +39,7 @@ import {
 } from "@renderer/store/subscription"
 import type { HTMLMotionProps } from "framer-motion"
 import type { FC } from "react"
-import {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react"
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react"
 import type {
   ScrollSeekConfiguration,
   VirtuosoHandle,
@@ -179,16 +171,11 @@ export function EntryColumn() {
           ref={scrollRef}
           flex
           rootClassName="h-full"
-          viewportClassName="[&>div]:grow flex mask-t pt-3"
+          viewportClassName="[&>div]:grow flex pt-3"
         >
           {virtuosoOptions.totalCount === 0 ? (
             entries.isLoading ?
-                (
-                  <LoadingCircle
-                    className="center h-full -translate-y-12"
-                    size="large"
-                  />
-                ) :
+              null :
                 (
                   <EmptyList />
                 )

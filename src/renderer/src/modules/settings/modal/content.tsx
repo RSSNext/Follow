@@ -59,6 +59,7 @@ const Content = () => {
       <SettingsTitle loader={loader} className="relative mb-0 px-8" />
       <Close />
       <ScrollArea.ScrollArea
+        mask={false}
         rootClassName="h-full grow flex-1 shrink-0 overflow-auto pl-8 pr-7 pb-8"
         viewportClassName="pr-1 min-h-full [&>div]:min-h-full [&>div]:relative"
       >

@@ -67,7 +67,7 @@ export const Viewport = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Viewport> & {
     mask?: boolean
   }
->(({ className, mask, ...rest }, forwardedRef) => {
+>(({ className, mask = false, ...rest }, forwardedRef) => {
   const ref = React.useRef<HTMLDivElement>(null)
   const [shouldAddMask, setShouldAddMask] = React.useState(false)
   React.useLayoutEffect(() => {
@@ -136,7 +136,7 @@ export const ScrollArea = React.forwardRef<
       rootClassName,
       viewportClassName,
       scrollbarClassName,
-      mask = true,
+      mask = false,
     },
     ref,
   ) => (
