@@ -56,7 +56,7 @@ export const styledButtonVariant = cva(
     ],
     variants: {
       status: {
-        disabled: "cursor-not-allowed",
+        disabled: "cursor-not-allowed !ring-0",
       },
       variant: {
         primary: cn(
