@@ -1,5 +1,6 @@
 import { createRequire } from "node:module"
 
+import type { BrowserWindow } from "electron"
 import { app, nativeTheme } from "electron"
 
 import { setDockCount } from "../lib/dock"
@@ -46,4 +47,16 @@ export const settingRoute = {
   setDockBadge: t.procedure.input<number>().action(async ({ input }) => {
     setDockCount(input)
   }),
+  getWindowIsMaximized: t.procedure
+    .input<void>()
+    .action(async ({ context }) => {
+      const window: BrowserWindow | null = (
+        context.sender as Sender
+      ).getOwnerBrowserWindow()
+      return window?.isMaximized()
+    }),
+}
+
+interface Sender extends Electron.WebContents {
+  getOwnerBrowserWindow: () => Electron.BrowserWindow | null
 }

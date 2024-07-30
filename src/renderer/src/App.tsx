@@ -6,7 +6,7 @@ import { env } from "../../env.js"
 import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"
 import { appLog } from "./lib/log"
-import { getOS } from "./lib/utils"
+import { cn, getOS } from "./lib/utils"
 import { Titlebar } from "./modules/app/Titlebar.js"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"
@@ -44,15 +44,15 @@ function App() {
   const windowsElectron = window.electron && getOS() === "Windows"
   return (
     <>
-      {window.electron && (
-        <div
-          className="drag-region absolute inset-x-0 top-0 h-12 shrink-0"
-          aria-hidden
-        >
-          {windowsElectron && <Titlebar />}
-        </div>
-      )}
       <RootProviders>
+        {window.electron && (
+          <div
+            className={cn("drag-region absolute inset-x-0 top-0 h-12 shrink-0", windowsElectron && "pointer-events-none z-[9999]")}
+            aria-hidden
+          >
+            {windowsElectron && <Titlebar />}
+          </div>
+        )}
         <AppLayer />
       </RootProviders>
     </>
