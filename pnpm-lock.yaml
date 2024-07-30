@@ -8,6 +8,9 @@ patchedDependencies:
   hono@4.4.7:
     hash: ycbk46disqruhfjducp47b5fl4
     path: patches/hono@4.4.7.patch
+  immer@10.1.1:
+    hash: og7mbnoo5vh43tjlw5rbmrdbvu
+    path: patches/immer@10.1.1.patch
   sonner@1.5.0:
     hash: 6s3tquyt5wnkqaogymn3mkivuq
     path: patches/sonner@1.5.0.patch
@@ -186,7 +189,7 @@ importers:
         version: 6.2.1
       immer:
         specifier: 10.1.1
-        version: 10.1.1
+        version: 10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu)
       jotai:
         specifier: 2.9.1
         version: 2.9.1(@types/react@18.3.3)(react@18.3.1)
@@ -288,7 +291,7 @@ importers:
         version: 3.23.8
       zustand:
         specifier: 4.5.4
-        version: 4.5.4(@types/react@18.3.3)(immer@10.1.1)(react@18.3.1)
+        version: 4.5.4(@types/react@18.3.3)(immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu))(react@18.3.1)
     devDependencies:
       '@egoist/tailwindcss-icons':
         specifier: 1.8.1
@@ -11534,7 +11537,7 @@ snapshots:
 
   immediate@3.0.6: {}
 
-  immer@10.1.1: {}
+  immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu): {}
 
   import-fresh@3.3.0:
     dependencies:
@@ -13963,12 +13966,12 @@ snapshots:
 
   zod@3.23.8: {}
 
-  zustand@4.5.4(@types/react@18.3.3)(immer@10.1.1)(react@18.3.1):
+  zustand@4.5.4(@types/react@18.3.3)(immer@10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu))(react@18.3.1):
     dependencies:
       use-sync-external-store: 1.2.0(react@18.3.1)
     optionalDependencies:
       '@types/react': 18.3.3
-      immer: 10.1.1
+      immer: 10.1.1(patch_hash=og7mbnoo5vh43tjlw5rbmrdbvu)
       react: 18.3.1
 
   zwitch@2.0.4: {}

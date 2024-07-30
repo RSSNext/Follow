@@ -3,17 +3,10 @@ import type {
   QueryFunction,
   QueryKey,
 } from "@tanstack/react-query"
-import type { Draft, nothing } from "immer"
+import type { Draft, ValidRecipeReturnType } from "immer"
 import { produce } from "immer"
 
 import { queryClient } from "./query-client"
-
-// From immer, but immer not export this type
-type ValidRecipeReturnType<State> =
-  | State
-  | void
-  | undefined
-  | (State extends undefined ? typeof nothing : never)
 
 export type DefinedQuery<TQueryKey extends QueryKey, TData> = Readonly<{
   key: TQueryKey
