@@ -173,7 +173,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
 
   return (
     <Vibrancy
-      className="relative flex h-full flex-col gap-3 pt-2.5"
+      className="relative flex h-full flex-col gap-3 rounded-l-[12px] pt-2.5"
       onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
       <div

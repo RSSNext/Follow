@@ -109,7 +109,7 @@ const FeedResponsiveResizerContainer = ({
       <div
         className={cn(
           "shrink-0",
-          "absolute inset-y-0 z-10 rounded-l-[12px]",
+          "absolute inset-y-0 z-10",
           !feedColumnShow ? "-translate-x-full" : "",
         )}
         style={{
