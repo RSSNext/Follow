@@ -19,7 +19,7 @@ import { Switch } from "@renderer/components/ui/switch"
 import { views } from "@renderer/constants"
 import { useDeleteSubscription } from "@renderer/hooks/biz/useSubscriptionActions"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient } from "@renderer/lib/api-fetch"
+import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
 import { FeedViewType } from "@renderer/lib/enum"
@@ -131,6 +131,9 @@ export const FeedForm: Component<{
 
       onSuccess?.()
     },
+    async onError(err) {
+      toast.error(getFetchErrorMessage(err))
+    },
   })
 
   const deleteSubscription = useDeleteSubscription({
@@ -213,7 +216,13 @@ export const FeedForm: Component<{
                                   value={view.view}
                                   {...form.register("view")}
                                 />
-                                <label htmlFor={view.name} className={cn(view.peerClassName, "center flex h-10 flex-col text-xs leading-none text-theme-vibrancyFg")}>
+                                <label
+                                  htmlFor={view.name}
+                                  className={cn(
+                                    view.peerClassName,
+                                    "center flex h-10 flex-col text-xs leading-none text-theme-vibrancyFg",
+                                  )}
+                                >
                                   <span className="text-lg">{view.icon}</span>
                                   {view.name}
                                 </label>

@@ -10,13 +10,14 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
-import { apiFetch } from "@renderer/lib/api-fetch"
+import { apiFetch, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { cn } from "@renderer/lib/utils"
 import type { FeedResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
 import { Fragment } from "react/jsx-runtime"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
 import { FollowSummary } from "../../components/feed-summary"
@@ -77,6 +78,9 @@ export function DiscoverImport() {
     },
     onSuccess: () => {
       Queries.subscription.byView().invalidateRoot()
+    },
+    async onError(err) {
+      toast.error(getFetchErrorMessage(err))
     },
   })
 

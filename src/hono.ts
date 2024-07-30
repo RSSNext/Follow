@@ -2949,8 +2949,8 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
             output: {
                 data: {
                     json: string;
-                    description: string;
                     xml: string;
+                    description: string;
                     content: string;
                 };
                 code: 0;
@@ -3106,13 +3106,13 @@ declare const _routes: hono_hono_base.HonoBase<hono_types.BlankEnv, {
                         url: string;
                         routes: {
                             [x: string]: {
-                                description: string;
                                 path: string;
                                 example: string;
+                                description: string;
+                                name: string;
                                 parameters: {
                                     [x: string]: string;
                                 };
-                                name: string;
                                 categories: string[];
                                 maintainers: string[];
                                 location: string;
