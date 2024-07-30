@@ -67,7 +67,7 @@ function bootsharp() {
       } else {
         mainWindow = createMainWindow()
       }
-      handleOpen(url)
+      url && handleOpen(url)
     })
 
     // Default open or close DevTools by F12 in development
