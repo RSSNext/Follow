@@ -174,11 +174,12 @@ export function EntryColumn() {
         exit={{ opacity: 0.01, y: -100 }}
       >
         <ScrollArea.ScrollArea
+          scrollbarClassName="mt-3"
           mask={false}
           ref={scrollRef}
           flex
           rootClassName="h-full"
-          viewportClassName="[&>div]:grow flex"
+          viewportClassName="[&>div]:grow flex mask-t pt-3"
         >
           {virtuosoOptions.totalCount === 0 ? (
             entries.isLoading ?
@@ -294,7 +295,7 @@ const ListHeader: FC<{
   return (
     <div
       className={cn(
-        "mb-5 flex w-full flex-col pr-4 pt-2.5",
+        "mb-2 flex w-full flex-col pr-4 pt-2.5",
         titleStyleBasedView[view],
       )}
     >
