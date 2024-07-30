@@ -58,21 +58,21 @@ export const SettingGeneral = () => {
               key: "scrollMarkUnread",
               label: "Mark as read when scrolling",
               description:
-                "Automatic marking of feed entries as read when scrolled out of the view.",
+                "Automatically mark entries as read when scrolled out of the view.",
               onChange: (value) => setGeneralSetting("scrollMarkUnread", value),
             },
             {
               key: "hoverMarkUnread",
               label: "Mark as read when hovering",
               description:
-                "Automatic marking of feed entries as read when hovered.",
+                "Automatically mark entries as read when hovered.",
               onChange: (value) => setGeneralSetting("hoverMarkUnread", value),
             },
             {
               key: "renderMarkUnread",
               label: "Mark as read when in the view",
               description:
-                "Automatically mark single-level content feed entries (e.g., social media posts, pictures, video views) as read once they enter the view.",
+                "Automatically mark single-level entries (e.g., social media posts, pictures, video views) as read when they enter the view.",
               onChange: (value) => setGeneralSetting("renderMarkUnread", value),
             },
 
@@ -145,7 +145,7 @@ export const SettingGeneral = () => {
             label="Mark as read when scrolling"
           />
           <SettingDescription>
-            Automatic marking of feed entries as read when the item is scrolled
+            Automatically mark entries as read when the item is scrolled
             up out of the viewport.
           </SettingDescription>
         </SettingItemGroup>
@@ -159,7 +159,7 @@ export const SettingGeneral = () => {
             label="Mark as read when hovering"
           />
           <SettingDescription>
-            Automatic marking of feed entries as read when the item is hovered.
+            Automatically mark entries as read when the item is hovered.
           </SettingDescription>
         </SettingItemGroup>
         <SettingItemGroup>
@@ -171,7 +171,7 @@ export const SettingGeneral = () => {
             label="Mark as read when in the viewport"
           />
           <SettingDescription>
-            Automatically mark feed entries with only one level of content(e.g.
+            Automatically mark entries with only one level of content(e.g.
             Social Media, Picture, Video views) as read when the item is in the
             viewport.
           </SettingDescription>
