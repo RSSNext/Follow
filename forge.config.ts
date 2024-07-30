@@ -120,7 +120,7 @@ const config: ForgeConfig = {
     }),
     new MakerSquirrel({
       name: "Follow",
-      setupIcon: "resources/icon.png",
+      setupIcon: "resources/icon.ico",
     }),
     new MakerAppImage({
       options: {
