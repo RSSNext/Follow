@@ -146,7 +146,12 @@ export function FeedList({
           <span>{totalUnread}</span>
         </div>
       </div>
-      <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3">
+      <ScrollArea.ScrollArea
+        mask={false}
+        flex
+        viewportClassName="!px-3"
+        rootClassName="h-full"
+      >
         <div
           className={cn(
             "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 transition-colors",
@@ -180,11 +185,11 @@ export function FeedList({
           <div className="flex h-full flex-1 items-center text-zinc-500">
             <Link
               to="/discover"
-              className="-mt-36 flex h-full flex-1 cursor-default flex-col items-center justify-center gap-2"
+              className="absolute inset-0 -mt-14 flex h-full flex-1 cursor-default flex-col items-center justify-center gap-2"
               onClick={stopPropagation}
             >
               <i className="i-mgc-add-cute-re text-3xl" />
-              Add some feeds
+              <span className="text-base">Add some feeds</span>
             </Link>
           </div>
         )}

@@ -154,7 +154,7 @@ export function EntryColumn() {
         totalCount={virtuosoOptions.totalCount}
         hasUpdate={entries.hasUpdate}
       />
-      <AutoResizeHeight spring>
+      <AutoResizeHeight spring className="mt-3">
         {isRefreshing && (
           <div className="center h-7 gap-2 text-xs">
             <LoadingCircle size="small" />
@@ -173,7 +173,6 @@ export function EntryColumn() {
           scrollbarClassName="mt-3"
           mask={false}
           ref={scrollRef}
-          flex
           rootClassName="h-full"
           viewportClassName="[&>div]:grow flex pt-3 @container"
         >
@@ -399,19 +398,19 @@ const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
     const unreadOnly = useGeneralSettingKey("unreadOnly")
     return (
       <m.div
-        className="-mt-6 flex h-full grow flex-col items-center justify-center gap-2 text-zinc-400"
+        className="absolute -mt-6 flex size-full grow flex-col items-center justify-center gap-2 text-zinc-400"
         {...props}
         ref={ref}
       >
         {unreadOnly ? (
           <>
             <i className="i-mgc-celebrate-cute-re -mt-11 text-3xl" />
-            Zero Unread
+            <span className="text-base">Zero Unread</span>
           </>
         ) : (
           <div className="flex -translate-y-6 flex-col items-center justify-center gap-2">
             <EmptyIcon className="size-[30px]" />
-            Zero Items
+            <span className="text-base">Zero Items</span>
           </div>
         )}
       </m.div>
