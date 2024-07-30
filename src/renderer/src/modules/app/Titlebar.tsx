@@ -10,12 +10,7 @@ export const Titlebar = () => {
     update()
   }, [location])
   return (
-    <div className="drag-region fixed top-0 z-[99999] flex h-[24px] w-full items-center justify-end rounded-t-[12px] bg-background">
-      <div className="absolute inset-x-[90px] top-0 flex h-[24px] items-center gap-2">
-        <div className="flex w-full justify-center">
-          <span className="text-xs font-bold">{document.title}</span>
-        </div>
-      </div>
+    <div className="flex h-10 w-full items-center justify-end rounded-t-[12px] pr-1">
       <button
         className="no-drag-region flex h-[24px] w-[32px] items-center justify-center rounded duration-200 hover:bg-theme-item-active"
         type="button"

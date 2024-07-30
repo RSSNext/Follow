@@ -44,13 +44,14 @@ function App() {
   const windowsElectron = window.electron && getOS() === "Windows"
   return (
     <>
-      {window.electron && !windowsElectron && (
+      {window.electron && (
         <div
           className="drag-region absolute inset-x-0 top-0 h-12 shrink-0"
           aria-hidden
-        />
+        >
+          {windowsElectron && <Titlebar />}
+        </div>
       )}
-      {windowsElectron && <Titlebar />}
       <RootProviders>
         <AppLayer />
       </RootProviders>

@@ -19,7 +19,8 @@ const $container = document.querySelector("#root") as HTMLElement
 if (window.electron && getOS() === "Windows") {
   $container.style.borderRadius = "12px"
   $container.style.overflow = "hidden"
-  $container.style.paddingTop = "24px"
+  $container.style.paddingTop = "30px"
+  $container.style.background = "white"
 }
 ReactDOM.createRoot($container).render(
   <React.StrictMode>
