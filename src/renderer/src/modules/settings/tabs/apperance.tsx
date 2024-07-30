@@ -64,17 +64,17 @@ export const SettingAppearance = () => {
             TextSize,
             {
               type: "title",
-              value: "Display counts",
+              value: "Unread count",
             },
             {
               disabled:
                 !window.electron || !["macOS", "Linux"].includes(getOS()),
-              label: "Show Dock badge",
+              label: "Show as Dock badge",
               key: "showDockBadge",
               onChange: (value) => setUISetting("showDockBadge", value),
             },
             {
-              label: "Show unread count in sidebar",
+              label: "Show in sidebar",
               key: "sidebarShowUnreadCount",
               onChange: (value) =>
                 setUISetting("sidebarShowUnreadCount", value),
