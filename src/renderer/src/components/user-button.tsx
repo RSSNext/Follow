@@ -16,7 +16,7 @@ import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useSession } from "@renderer/queries/auth"
 import type { FC } from "react"
 import { memo } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 import { UserArrowLeftIcon } from "./icons/user"
 import { ActionButton } from "./ui/button"
@@ -70,7 +70,6 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   const signOut = useSignOut()
   const settingModalPresent = useSettingModal()
   const presentUserProfile = usePresentUserProfileModal()
-  const navigate = useNavigate()
   if (status !== "authenticated") {
     return <LoginButton {...props} />
   }
@@ -129,23 +128,6 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             <Kbd>Meta</Kbd>
             <Kbd>,</Kbd>
           </div> */}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {
-          navigate("/discover?type=import")
-        }}
-        >
-          <i className="i-mgc-file-import-cute-re mr-1.5" />
-          Import from OPML
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          onClick={() => {
-            window.open(apiClient.subscriptions.export.$url())
-          }}
-        >
-          <i className="i-mgc-file-export-cute-re mr-1.5" />
-          Export to OPML
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {!window.electron && (
