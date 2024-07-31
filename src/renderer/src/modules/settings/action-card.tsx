@@ -328,8 +328,8 @@ export function ActionCard({
                     onChange(data)
                   }}
                 >
-                  <Radio label="all" value="all" />
-                  <Radio label="Custom filter" value="filter" />
+                  <Radio label="All" value="all" />
+                  <Radio label="Custom filters" value="filter" />
                 </RadioGroup>
               </div>
 
@@ -422,11 +422,11 @@ export function ActionCard({
             </div>
             <div className="space-y-4">
               <p className="font-medium text-zinc-500">
-                Then the settings are…
+                Then do…
               </p>
               <div className="w-full space-y-4">
                 <SettingCollapsible
-                  title="Translate to"
+                  title="Translate into"
                   open={!!data.result.translation}
                   onOpenChange={(open) => {
                     if (open) {
@@ -456,7 +456,7 @@ export function ActionCard({
                 </SettingCollapsible>
                 <Divider />
                 <SettingCollapsible
-                  title="Enable AI summary"
+                  title="Generate summary using AI"
                   open={data.result.summary !== undefined}
                   onOpenChange={(open) => {
                     if (open) {

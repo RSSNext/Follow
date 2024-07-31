@@ -344,7 +344,7 @@ const SearchResultCount: FC<{
         </small>
       </TooltipTrigger>
       <TooltipContent>
-        This search run on local database, the result may not be up-to-date.
+        This search covers locally available data. Try a Refetch to include the latest data.
       </TooltipContent>
     </Tooltip>
   )

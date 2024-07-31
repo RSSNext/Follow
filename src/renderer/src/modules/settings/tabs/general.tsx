@@ -49,49 +49,49 @@ export const SettingGeneral = () => {
             },
             {
               key: "unreadOnly",
-              label: "Show unread content initially",
+              label: "Show unread content on launch",
               description:
-                "Only show unread content initially when you open the app",
+                "Display only unread content when the app is launched.",
               onChange: (value) => setGeneralSetting("unreadOnly", value),
             },
             {
               key: "scrollMarkUnread",
               label: "Mark as read when scrolling",
               description:
-                "Automatic marking of feed entries as read when the item is scrolled up out of the viewport.",
+                "Automatically mark entries as read when scrolled out of the view.",
               onChange: (value) => setGeneralSetting("scrollMarkUnread", value),
             },
             {
               key: "hoverMarkUnread",
               label: "Mark as read when hovering",
               description:
-                "Automatic marking of feed entries as read when the item is hovered.",
+                "Automatically mark entries as read when hovered.",
               onChange: (value) => setGeneralSetting("hoverMarkUnread", value),
             },
             {
               key: "renderMarkUnread",
-              label: "Mark as read when in the viewport",
+              label: "Mark as read when in the view",
               description:
-                "Automatically mark feed entries with only one level of content(e.g. Social Media, Picture, Video views) as read when the item is in the viewport.",
+                "Automatically mark single-level entries (e.g., social media posts, pictures, video views) as read when they enter the view.",
               onChange: (value) => setGeneralSetting("renderMarkUnread", value),
             },
 
             {
               type: "title",
-              value: "Data control",
+              value: "Privacy & Data",
             },
             {
               key: "dataPersist",
-              label: "Persist data to offline usage",
+              label: "Persist data for offline usage",
               description:
-                "Collects data to local data for offline access and provides local search feature.",
+                "Persist data locally to enable offline access and local search.",
               onChange: (value) => setGeneralSetting("dataPersist", value),
             },
             {
               key: "sendAnonymousData",
               label: "Send anonymous data",
               description:
-                "By selecting to send telemetry data, you can help us improve the overall user experience of Follow",
+                "By opting to send anonymized telemetry data, you contribute to improving the overall user experience of Follow.",
               onChange: (value) => {
                 setGeneralSetting("sendAnonymousData", value)
                 if (value) {
@@ -109,7 +109,7 @@ export const SettingGeneral = () => {
                 window.location.reload()
               },
               description:
-                "If you are experiencing data rendering anomalies, try rebuilding the database, this action will reload the page.",
+                "If you are experiencing rendering issues, rebuilding the database may solve them.",
               buttonText: "Rebuild",
             },
           ]}
@@ -145,7 +145,7 @@ export const SettingGeneral = () => {
             label="Mark as read when scrolling"
           />
           <SettingDescription>
-            Automatic marking of feed entries as read when the item is scrolled
+            Automatically mark entries as read when the item is scrolled
             up out of the viewport.
           </SettingDescription>
         </SettingItemGroup>
@@ -159,7 +159,7 @@ export const SettingGeneral = () => {
             label="Mark as read when hovering"
           />
           <SettingDescription>
-            Automatic marking of feed entries as read when the item is hovered.
+            Automatically mark entries as read when the item is hovered.
           </SettingDescription>
         </SettingItemGroup>
         <SettingItemGroup>
@@ -171,7 +171,7 @@ export const SettingGeneral = () => {
             label="Mark as read when in the viewport"
           />
           <SettingDescription>
-            Automatically mark feed entries with only one level of content(e.g.
+            Automatically mark entries with only one level of content(e.g.
             Social Media, Picture, Video views) as read when the item is in the
             viewport.
           </SettingDescription>

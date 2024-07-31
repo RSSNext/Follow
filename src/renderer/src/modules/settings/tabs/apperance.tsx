@@ -64,17 +64,17 @@ export const SettingAppearance = () => {
             TextSize,
             {
               type: "title",
-              value: "Display counts",
+              value: "Unread count",
             },
             {
               disabled:
                 !window.electron || !["macOS", "Linux"].includes(getOS()),
-              label: "Show Dock badge",
+              label: "Show as Dock badge",
               key: "showDockBadge",
               onChange: (value) => setUISetting("showDockBadge", value),
             },
             {
-              label: "Show sidebar unread count",
+              label: "Show in sidebar",
               key: "sidebarShowUnreadCount",
               onChange: (value) =>
                 setUISetting("sidebarShowUnreadCount", value),
@@ -109,7 +109,7 @@ export const SettingAppearance = () => {
               label: "Reduce motion",
               key: "reduceMotion",
               onChange: (value) => setUISetting("reduceMotion", value),
-              description: `Enabling this option will reduce the motion of the element to improve performance and device life, and if it is disabled, it will adapt to the system settings.`,
+              description: `Reducing the motion of elements to improve performance and reduce energy consumption.`,
             },
           ]}
         />
