@@ -52,7 +52,7 @@ export function GridItem({
         <div className="flex items-center gap-1 truncate text-[13px]">
           <FeedIcon
             fallback
-            className="mr-0.5 inline-block"
+            className="mr-0.5 flex"
             feed={feeds!}
             entry={entry.entries}
             size={18}
