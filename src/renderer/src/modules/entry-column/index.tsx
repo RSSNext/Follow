@@ -155,9 +155,9 @@ export function EntryColumn() {
         totalCount={virtuosoOptions.totalCount}
         hasUpdate={entries.hasUpdate}
       />
-      <AutoResizeHeight spring className="mt-3">
+      <AutoResizeHeight spring>
         {isRefreshing && (
-          <div className="center h-7 gap-2 text-xs">
+          <div className="center box-content h-7 gap-2 py-3 text-xs">
             <LoadingCircle size="small" />
             Refreshing new entries...
           </div>
@@ -175,7 +175,7 @@ export function EntryColumn() {
           mask={false}
           ref={scrollRef}
           rootClassName="h-full"
-          viewportClassName="[&>div]:grow flex pt-3"
+          viewportClassName="[&>div]:grow flex"
         >
           {virtuosoOptions.totalCount === 0 ? (
             entries.isLoading ?
