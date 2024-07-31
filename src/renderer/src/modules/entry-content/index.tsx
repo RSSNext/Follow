@@ -4,10 +4,11 @@ import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
+import {
+  useRouteParamsSelector,
+} from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
-import { FeedViewType } from "@renderer/lib/enum"
 import { parseHtml } from "@renderer/lib/parse-html"
 import type { ActiveEntryId } from "@renderer/models"
 import {
@@ -71,7 +72,6 @@ function EntryContentRender({ entryId }: { entryId: string }) {
     if (processContent) {
       parseHtml(processContent, {
         renderInlineStyle: readerRenderInlineStyle,
-        parseParagraphAudioTime: getRouteParams().view === FeedViewType.Audios,
       }).then((parsed) => {
         setContent(parsed.content)
       })
@@ -118,6 +118,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
   )
 
   const readerFontFamily = useUISettingKey("readerFontFamily")
+  const view = useRouteParamsSelector((route) => route.view)
 
   if (!entry) return null
 
@@ -126,6 +127,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
       entryId={entry.entries.id}
       feedId={entry.feedId}
       audioSrc={entry.entries?.attachments?.[0].url}
+      view={view}
     >
       <EntryHeader
         entryId={entry.entries.id}

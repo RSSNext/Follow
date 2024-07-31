@@ -1,14 +1,17 @@
-import { createContext, useContext } from "react"
+import type { FeedViewType } from "@renderer/lib/enum"
+import { createContext } from "react"
 
-interface ContextValue {
+export interface EntryContentContext {
   entryId: string
   feedId: string
 
   audioSrc?: string
-}
-const EntryContentContext = createContext<ContextValue>(null!)
 
-export const EntryContentProvider: Component<ContextValue> = ({
+  view: FeedViewType
+}
+export const EntryContentContext = createContext<EntryContentContext>(null!)
+
+export const EntryContentProvider: Component<EntryContentContext> = ({
   children,
   ...value
 }) => (
@@ -16,13 +19,3 @@ export const EntryContentProvider: Component<ContextValue> = ({
     {children}
   </EntryContentContext.Provider>
 )
-
-export const useEntryContentContext = () => {
-  const ctx = useContext(EntryContentContext)
-  if (!ctx) {
-    throw new Error(
-      "useEntryContentContext must be used within EntryContentProvider",
-    )
-  }
-  return ctx
-}
