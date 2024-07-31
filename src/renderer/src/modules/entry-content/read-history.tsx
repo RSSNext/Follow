@@ -54,7 +54,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({
                 right: "80px",
                 zIndex: 11,
               }}
-              className="relative z-[11] flex size-8 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
+              className="relative z-[11] flex size-7 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
             >
               <span className="text-[10px] font-medium text-muted-foreground">
                 +

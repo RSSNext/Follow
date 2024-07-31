@@ -70,7 +70,7 @@ export function SettingModalLayout(
           onPointerDown={handleDrag}
         />
       )}
-      <div className="flex h-0 flex-1 bg-theme-tooltip-background">
+      <div className="flex h-0 flex-1 bg-theme-modal-background-opaque">
         <div className="w-44 border-r px-2 py-6">
           <div className="mb-4 flex h-8 items-center gap-2 px-2 font-bold">
             <Logo className="mr-1 size-6" />

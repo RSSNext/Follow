@@ -1,3 +1,4 @@
+import { SimpleIconsEagle } from "@renderer/components/ui/platform-icon/icons"
 import { COPY_MAP } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { tipcClient } from "@renderer/lib/client"
@@ -11,6 +12,7 @@ import { useFeedById } from "@renderer/store/feed"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
+import type { ReactNode } from "react"
 import { useMemo } from "react"
 import { toast } from "sonner"
 
@@ -99,7 +101,7 @@ export const useEntryActions = ({
       className?: string
       shortcut?: string
       name: string
-      icon?: string
+      icon?: ReactNode
       disabled?: boolean
       onClick: () => void
     }[] = [
@@ -159,7 +161,7 @@ export const useEntryActions = ({
       },
       {
         name: "Save Media to Eagle",
-        icon: "/eagle.svg",
+        icon: <SimpleIconsEagle />,
         key: "saveToEagle",
         disabled:
           (checkEagle.isLoading ? true : !checkEagle.data) ||
@@ -189,7 +191,10 @@ export const useEntryActions = ({
       {
         name: "Share",
         key: "share",
-        className: getOS() === "macOS" ? `i-mgc-share-3-cute-re` : "i-mgc-share-forward-cute-re",
+        className:
+          getOS() === "macOS" ?
+            `i-mgc-share-3-cute-re` :
+            "i-mgc-share-forward-cute-re",
         shortcut: shortcuts.entry.share.key,
         disabled: !window.electron && !navigator.share,
 

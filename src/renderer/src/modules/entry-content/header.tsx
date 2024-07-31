@@ -1,3 +1,4 @@
+import { Slot } from "@radix-ui/react-slot"
 import { ActionButton } from "@renderer/components/ui/button"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
 import { cn } from "@renderer/lib/utils"
@@ -73,7 +74,9 @@ export function EntryHeader({
               <ActionButton
                 icon={
                   item.icon ? (
-                    <img className="size-4 grayscale" src={item.icon} />
+                    <Slot className="size-4">
+                      {item.icon}
+                    </Slot>
                   ) : (
                     <i className={item.className} />
                   )
