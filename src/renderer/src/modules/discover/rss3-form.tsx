@@ -2,7 +2,7 @@ import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { Queries } from "@renderer/queries"
 
-import { DiscoverFeedForm } from "./content-components"
+import { DiscoverFeedForm } from "./DiscoverFeedForm"
 
 export function DiscoverRSS3() {
   const { data, isLoading } = useAuthQuery(

@@ -77,7 +77,7 @@ const FeedDescription = ({ description }: { description?: string }) => {
         The description of this feed is as follows, and you can fill out the
         parameter form with the relevant information.
       </p>
-      <Markdown className="my-4 w-full max-w-full cursor-text select-text">
+      <Markdown className="my-4 w-full max-w-full cursor-text select-text break-all">
         {description}
       </Markdown>
     </>
@@ -116,7 +116,9 @@ export const DiscoverFeedForm = ({
         ...Object.fromEntries(
           keys.array.map((keyItem) => [
             keyItem.name,
-            keyItem.optional ? z.string().optional() : z.string().min(1),
+            keyItem.optional ?
+              z.string().optional().nullable() :
+              z.string().min(1),
           ]),
         ),
       }),
@@ -133,6 +135,7 @@ export const DiscoverFeedForm = ({
     }
     return ret
   }, [route.parameters])
+
   const form = useForm<z.infer<typeof dynamicFormSchema>>({
     resolver: zodResolver(dynamicFormSchema),
     defaultValues: defaultValue,
@@ -146,7 +149,8 @@ export const DiscoverFeedForm = ({
       try {
         const fillRegexpPath = regexpPathToPath(route.path, data)
         const url = `rsshub://${routePrefix}${fillRegexpPath}`
-        const defaultView = getViewFromRoute(route) || getSidebarActiveView() as FeedViewType
+        const defaultView =
+          getViewFromRoute(route) || (getSidebarActiveView() as FeedViewType)
 
         present({
           title: "Add Feed",
@@ -185,7 +189,7 @@ export const DiscoverFeedForm = ({
 
   useEffect(() => {
     modal?.setClickOutSideToDismiss?.(!form.formState.isDirty)
-  }, [form.formState.isDirty, modal?.setClickOutSideToDismiss])
+  }, [form.formState.isDirty, modal, modal.setClickOutSideToDismiss])
 
   return (
     <Form {...form}>
@@ -261,7 +265,12 @@ export const DiscoverFeedForm = ({
             <FeedMaintainers maintainers={route.maintainers} />
           </>
         )}
-        <div className={cn("sticky bottom-0 -mt-4 mb-1 flex w-full translate-y-3 justify-end py-3", submitButtonClassName)}>
+        <div
+          className={cn(
+            "sticky bottom-0 -mt-4 mb-1 flex w-full translate-y-3 justify-end py-3",
+            submitButtonClassName,
+          )}
+        >
           <StyledButton type="submit">Preview</StyledButton>
         </div>
       </form>
