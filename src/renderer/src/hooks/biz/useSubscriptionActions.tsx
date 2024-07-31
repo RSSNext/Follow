@@ -48,7 +48,7 @@ export const useDeleteSubscription = ({
               label: (
                 <span className="flex items-center gap-1">
                   Undo
-                  <Kbd className="border border-border bg-transparent">Meta+Z</Kbd>
+                  <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">Meta+Z</Kbd>
                 </span>
               ),
               onClick: undo,
