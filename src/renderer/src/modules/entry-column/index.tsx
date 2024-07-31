@@ -54,6 +54,7 @@ import {
   EntryItemSkeleton,
   EntryItemSkeletonWithDelayShow,
 } from "./item"
+import { girdClassNames } from "./styles"
 
 const scrollSeekConfiguration: ScrollSeekConfiguration = {
   enter: (velocity) => Math.abs(velocity) > 1000,
@@ -141,7 +142,7 @@ export function EntryColumn() {
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
   return (
     <div
-      className="relative flex h-full flex-1 flex-col"
+      className="relative flex h-full flex-1 flex-col @container"
       onClick={() =>
         navigate({
           entryId: null,
@@ -174,7 +175,7 @@ export function EntryColumn() {
           mask={false}
           ref={scrollRef}
           rootClassName="h-full"
-          viewportClassName="[&>div]:grow flex pt-3 @container"
+          viewportClassName="[&>div]:grow flex pt-3"
         >
           {virtuosoOptions.totalCount === 0 ? (
             entries.isLoading ?
@@ -185,7 +186,7 @@ export function EntryColumn() {
           ) : view && views[view].gridMode ?
               (
                 <VirtuosoGrid
-                  listClassName={tw`grid grid-cols-1 @lg:grid-cols-2 @3xl:grid-cols-3 @6xl:grid-cols-4 @7xl:grid-cols-5 px-4 gap-1.5`}
+                  listClassName={girdClassNames}
                   {...virtuosoOptions}
                   ref={virtuosoRef}
                 />

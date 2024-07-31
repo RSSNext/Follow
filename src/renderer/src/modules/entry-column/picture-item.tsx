@@ -47,7 +47,7 @@ export function PictureItem({
 }
 
 export const PictureItemSkeleton = (
-  <div className="relative mx-auto w-full max-w-md rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
+  <div className="relative max-w-md rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
     <div className="relative z-[1]">
       <div className="p-1.5">
         <div className="relative flex gap-2 overflow-x-auto">

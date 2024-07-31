@@ -28,6 +28,7 @@ import {
 } from "./notification-item"
 import { PictureItem, PictureItemSkeleton } from "./picture-item"
 import { SocialMediaItem, SocialMediaItemSkeleton } from "./social-media-item"
+import { girdClassNames } from "./styles"
 import type { EntryListItemFC } from "./types"
 import { VideoItem, VideoItemSkeleton } from "./video-item"
 
@@ -219,6 +220,7 @@ const LoadingCircleFallback = (
     <LoadingCircle size="medium" />
   </div>
 )
+
 export const EntryItemSkeleton: FC<{
   view: FeedViewType
   single?: boolean
@@ -227,9 +229,14 @@ export const EntryItemSkeleton: FC<{
   if (single) {
     return SkeletonItem
   }
+
   return SkeletonItem ?
       (
-        <div className="flex flex-col">{createSkeletonItems(SkeletonItem)}</div>
+        <div
+          className={cn(views[view].gridMode ? girdClassNames : "flex flex-col")}
+        >
+          {createSkeletonItems(SkeletonItem)}
+        </div>
       ) :
       (
         LoadingCircleFallback
@@ -251,7 +258,11 @@ export const EntryItemSkeletonWithDelayShow: FC<{
 
   return SkeletonItem ?
       (
-        <div className="flex flex-col">{createSkeletonItems(SkeletonItem)}</div>
+        <div
+          className={cn(views[view].gridMode ? girdClassNames : "flex flex-col")}
+        >
+          {createSkeletonItems(SkeletonItem)}
+        </div>
       ) :
       (
         LoadingCircleFallback
