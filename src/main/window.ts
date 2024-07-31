@@ -8,6 +8,7 @@ import { BrowserWindow, Menu, shell } from "electron"
 
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
+import { logger } from "./logger"
 import {
   cancelPollingUpdateUnreadCount,
   pollingUpdateUnreadCount,
@@ -69,12 +70,20 @@ export function createWindow(
     window.loadURL(
       process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""),
     )
+
+    logger.log(
+      process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""),
+    )
   } else {
+    const openPath = path.resolve(
+      __dirname,
+      `../renderer/index.html${options?.extraPath || ""}`,
+    )
     window.loadFile(
-      path.resolve(
-        __dirname,
-        `../renderer/index.html${options?.extraPath || ""}`,
-      ),
+      openPath,
+    )
+    logger.log(
+      openPath,
     )
   }
 
