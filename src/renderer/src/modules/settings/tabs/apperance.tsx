@@ -57,11 +57,7 @@ export const SettingAppearance = () => {
                 !window.electron || !["macOS", "Linux"].includes(getOS()),
               onChange: (value) => setUISetting("opaqueSidebar", value),
             },
-            {
-              type: "title",
-              value: "UI",
-            },
-            TextSize,
+
             {
               type: "title",
               value: "Unread count",
@@ -83,6 +79,7 @@ export const SettingAppearance = () => {
               type: "title",
               value: "Fonts",
             },
+            TextSize,
             UIFontSelector,
             ContentFontSelector,
             {
@@ -155,7 +152,7 @@ const TextSize = () => {
   const uiTextSize = useUISettingSelector((state) => state.uiTextSize)
 
   return (
-    <div className="mt-1 flex items-center justify-between">
+    <div className="-mt-1 mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">Text size</span>
       <Select
         defaultValue={textSizeMap.default.toString()}

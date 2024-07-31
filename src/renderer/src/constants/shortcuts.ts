@@ -85,7 +85,7 @@ export const shortcuts = {
 
   audio: {
     "play/pause": {
-      name: "Play/Pause",
+      name: "Play/Pause (When the audio player is open)",
       key: "Space",
     },
   },
