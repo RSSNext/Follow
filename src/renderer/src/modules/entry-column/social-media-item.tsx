@@ -1,3 +1,4 @@
+import { Slot } from "@radix-ui/react-slot"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { ActionButton } from "@renderer/components/ui/button"
 import { RelativeTime } from "@renderer/components/ui/datetime"
@@ -123,7 +124,9 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
           <ActionButton
             icon={
               item.icon ? (
-                <img className="size-4 grayscale" src={item.icon} />
+                <Slot className="size-4">
+                  {item.icon}
+                </Slot>
               ) : (
                 <i className={item.className} />
               )
