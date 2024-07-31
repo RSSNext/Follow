@@ -22,6 +22,7 @@ import type { SubscriptionModel } from "@renderer/models"
 import { useUserSubscriptionsQuery } from "@renderer/modules/profile/hooks"
 import { useSubscriptionStore } from "@renderer/store/subscription"
 import { useAnimationControls } from "framer-motion"
+import { throttle } from "lodash-es"
 import type { FC } from "react"
 import { Fragment, useEffect, useState } from "react"
 
@@ -56,11 +57,20 @@ export const UserProfileModalContent: FC<{
     const $ref = scrollerRef
 
     if (!$ref) return
-    $ref.onscroll = () => {
+
+    const initialHeaderHeight = 136
+    $ref.onscroll = throttle(() => {
       const currentH = $ref.scrollTop
 
-      setHeaderSimple(currentH > 300)
-    }
+      setHeaderSimple((current) => {
+        if (!current) {
+          return currentH > initialHeaderHeight
+        } else {
+          if (currentH === 0) return false
+        }
+        return current
+      })
+    }, 16)
     return () => {
       $ref.onscroll = null
     }
@@ -94,7 +104,7 @@ export const UserProfileModalContent: FC<{
         }}
         exit="exit"
         layout="size"
-        className="shadow-perfect perfect-sm relative flex h-[80vh] flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 lg:max-h-[calc(100vh-20rem)]"
+        className="shadow-perfect perfect-sm relative flex h-[80vh] flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 lg:max-h-[calc(100vh-10rem)]"
       >
         <div className="absolute right-2 top-2 z-10 flex items-center gap-2 text-[20px] opacity-80">
           <ActionButton
@@ -168,21 +178,22 @@ export const UserProfileModalContent: FC<{
                 />
               ) : (
                 subscriptions.data &&
-                Object.keys(subscriptions.data).map((category) => (
-                  <div key={category}>
-                    <div className="mb-2 flex items-center text-2xl font-bold">
-                      <h3>{category}</h3>
+                Object.keys(subscriptions.data)
+                  .map((category) => (
+                    <div key={category}>
+                      <div className="mb-2 flex items-center text-2xl font-bold">
+                        <h3>{category}</h3>
+                      </div>
+                      <div>
+                        {subscriptions.data?.[category].map((subscription) => (
+                          <SubscriptionItem
+                            key={subscription.feedId}
+                            subscription={subscription}
+                          />
+                        ))}
+                      </div>
                     </div>
-                    <div>
-                      {subscriptions.data?.[category].map((subscription) => (
-                        <SubscriptionItem
-                          key={subscription.feedId}
-                          subscription={subscription}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))
+                  ))
               )}
             </ScrollArea.ScrollArea>
           </Fragment>
@@ -191,7 +202,7 @@ export const UserProfileModalContent: FC<{
         {!user.data && (
           <LoadingCircle
             size="large"
-            className="center h-[80vh] w-[39.125rem] max-w-full"
+            className="center h-[80vh] w-[70ch] max-w-full"
           />
         )}
       </m.div>
@@ -244,8 +255,14 @@ const SubscriptionItem: FC<{
               })
             }}
           >
-            <FollowIcon className="mr-1 size-3" />
-            {isFollowed ? "Edit" : APP_NAME}
+            {isFollowed ? (
+              "Edit"
+            ) : (
+              <>
+                <FollowIcon className="mr-1 size-3" />
+                {APP_NAME}
+              </>
+            )}
           </StyledButton>
         </div>
       </a>

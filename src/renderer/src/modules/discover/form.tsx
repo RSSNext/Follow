@@ -81,7 +81,7 @@ export function DiscoverForm({ type }: { type: string }) {
     if (info[type].showModal) {
       const defaultView = getSidebarActiveView() as FeedViewType
       present({
-        title: "Add follow",
+        title: "Add Feed",
         content: () => (
           <FeedForm
             asWidget
@@ -211,7 +211,7 @@ export function DiscoverForm({ type }: { type: string }) {
                         <StyledButton
                           onClick={() => {
                             present({
-                              title: "Add follow",
+                              title: "Add Feed",
                               content: ({ dismiss }) => (
                                 <FeedForm
                                   asWidget
