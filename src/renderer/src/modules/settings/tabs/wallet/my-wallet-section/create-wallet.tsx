@@ -6,22 +6,25 @@ export const CreateWallet = () => {
 
   return (
     <div>
-      <StyledButton
-        variant="primary"
-        isLoading={mutation.isPending}
-        onClick={() => mutation.mutate()}
-      >
-        Create Wallet
-      </StyledButton>
-
-      <p className="my-2 text-sm text-gray-400 dark:text-neutral-500">
+      <p className="text-base">
         Create a free wallet to receive
         {" "}
-        <strong className="font-medium">Power</strong>
-        , which can
-        be used to reward creators and also get rewarded for your content
-        contributions.
+        <strong className="inline-flex items-baseline gap-1 font-medium">
+          <i className="i-mgc-power translate-y-[2px]" />
+          Power
+        </strong>
+        , which can be used to
+        reward creators and also get rewarded for your content contributions.
       </p>
+      <div className="mt-4 text-right">
+        <StyledButton
+          variant="primary"
+          isLoading={mutation.isPending}
+          onClick={() => mutation.mutate()}
+        >
+          Create Wallet
+        </StyledButton>
+      </div>
     </div>
   )
 }
