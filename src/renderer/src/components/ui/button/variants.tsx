@@ -32,8 +32,9 @@ export const buttonVariants = cva(
 )
 export const styledButtonVariant = cva(
   cn(
-    "inline-flex cursor-default select-none items-center justify-center gap-2 rounded-lg px-3 py-1.5 text-sm outline-offset-2 transition active:transition-none disabled:cursor-not-allowed",
+    "inline-flex cursor-default select-none items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm outline-offset-2 transition active:transition-none disabled:cursor-not-allowed",
     "ring-theme-accent/20 duration-200 focus:border-theme-accent/80 focus:outline-none focus:ring-2 disabled:ring-0",
+    "leading-none",
   ),
   {
     compoundVariants: [
