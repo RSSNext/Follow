@@ -1,10 +1,8 @@
 import { ActionButton } from "@renderer/components/ui/button"
-import { shortcuts } from "@renderer/constants/shortcuts"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { AnimatePresence, m } from "framer-motion"
-import { useHotkeys } from "react-hotkeys-hook"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./read-history"
@@ -24,23 +22,6 @@ export function EntryHeader({
     view,
     entry,
   })
-
-  useHotkeys(
-    shortcuts.entry.toggleStarred.key,
-    () => {
-      const key = entry?.collections ? "unstar" : "star"
-      items.find((item) => item.key === key)?.onClick()
-    },
-    { scopes: ["home"] },
-  )
-
-  useHotkeys(
-    shortcuts.entry.openInBrowser.key,
-    () => {
-      items.find((item) => item.key === "openInBrowser")?.onClick()
-    },
-    { scopes: ["home"] },
-  )
 
   const entryTitleMeta = useEntryTitleMeta()
   const isAtTop = useEntryContentScrollToTop()

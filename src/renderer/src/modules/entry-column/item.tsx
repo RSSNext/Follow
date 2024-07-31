@@ -142,6 +142,7 @@ function EntryItemImpl({
     useCallback(
       (e) => {
         e.preventDefault()
+
         showNativeMenu(
           [
             ...items
