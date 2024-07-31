@@ -186,6 +186,7 @@ export const DiscoverFeedForm = ({
   useEffect(() => {
     modal?.setClickOutSideToDismiss?.(!form.formState.isDirty)
   }, [form.formState.isDirty, modal?.setClickOutSideToDismiss])
+
   return (
     <Form {...form}>
       {!noDescription && (
@@ -260,7 +261,7 @@ export const DiscoverFeedForm = ({
             <FeedMaintainers maintainers={route.maintainers} />
           </>
         )}
-        <div className={cn("sticky bottom-0 -mt-4 flex w-full translate-y-3 justify-end py-3", submitButtonClassName)}>
+        <div className={cn("sticky bottom-0 -mt-4 mb-1 flex w-full translate-y-3 justify-end py-3", submitButtonClassName)}>
           <StyledButton type="submit">Preview</StyledButton>
         </div>
       </form>
