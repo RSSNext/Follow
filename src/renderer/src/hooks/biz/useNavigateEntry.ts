@@ -27,6 +27,7 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
     finalFeedId = ROUTE_FEED_PENDING
   }
 
+  finalFeedId = encodeURIComponent(finalFeedId)
   const nextSearchParams = new URLSearchParams(searchParams)
 
   if (!isUndefined(view)) {
