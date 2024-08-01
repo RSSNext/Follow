@@ -35,7 +35,7 @@ export const CornerPlayer = () => {
       {show && (
         <m.div
           key="corner-player"
-          className="group relative z-10 -mt-10 mb-10 w-full px-px"
+          className="group relative z-10 -mt-16 mb-10 w-full px-px"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
@@ -105,7 +105,7 @@ const CornerPlayerImpl = () => {
   return (
     <>
       {/* advanced controls */}
-      <div className="flex translate-y-10 justify-between border-t bg-theme-modal-background p-1 opacity-0 backdrop-blur transition-all duration-200 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
+      <div className="z-10 flex translate-y-10 justify-between border-t bg-theme-modal-background p-1 opacity-0 backdrop-blur transition-all duration-200 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
         <div className="flex items-center">
           <ActionIcon
             className="i-mingcute-close-fill"
@@ -220,7 +220,11 @@ const PlayerProgress = () => {
   const remainingTimeIndicator = dayjs()
     .startOf("y")
     .second(duration - controlledCurrentTime)
-    .format(duration - controlledCurrentTime > ONE_HOUR_IN_SECONDS ? "H:mm:ss" : "m:ss")
+    .format(
+      duration - controlledCurrentTime > ONE_HOUR_IN_SECONDS ?
+        "H:mm:ss" :
+        "m:ss",
+    )
 
   return (
     <div className="relative mt-2">

@@ -129,7 +129,7 @@ export function DiscoverImport() {
                   {...fieldProps}
                   id="upload-file"
                   type="file"
-                  accept=".opml"
+                  accept=".opml,.xml"
                   className="hidden"
                   onChange={(event) =>
                     onChange(event.target.files && event.target.files[0])}
