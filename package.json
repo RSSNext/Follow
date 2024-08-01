@@ -38,6 +38,7 @@
     "@hono/auth-js": "1.0.10",
     "@hookform/resolvers": "3.9.0",
     "@iconify/tools": "4.0.4",
+    "@mozilla/readability": "^0.5.0",
     "@radix-ui/react-alert-dialog": "1.1.1",
     "@radix-ui/react-avatar": "1.1.0",
     "@radix-ui/react-checkbox": "1.1.1",
@@ -89,7 +90,9 @@
     "idb-keyval": "6.2.1",
     "immer": "10.1.1",
     "jotai": "2.9.1",
+
     "lethargy": "1.0.9",
+    "linkedom": "^0.18.4",
     "lodash-es": "4.17.21",
     "lowdb": "7.0.1",
     "markdown-it": "14.1.0",
@@ -171,7 +174,8 @@
     "patchedDependencies": {
       "sonner@1.5.0": "patches/sonner@1.5.0.patch",
       "hono@4.4.7": "patches/hono@4.4.7.patch",
-      "immer@10.1.1": "patches/immer@10.1.1.patch"
+      "immer@10.1.1": "patches/immer@10.1.1.patch",
+      "@mozilla/readability@0.5.0": "patches/@mozilla__readability@0.5.0.patch"
     }
   },
   "simple-git-hooks": {
