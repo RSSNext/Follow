@@ -17,11 +17,7 @@ const items = [
   },
   {
     name: "Download",
-    link: "/download",
-  },
-  {
-    name: "Blog",
-    link: "/blog",
+    link: "https://github.com/RSSNext/follow/releases",
   },
 ]
 
@@ -39,7 +35,7 @@ export function Header() {
             <NavigationMenuList>
               {items.map((item) => (
                 <NavigationMenuItem key={item.link}>
-                  <Link to={item.link}>
+                  <Link to={item.link} target="_blank">
                     <NavigationMenuLink
                       className={navigationMenuTriggerStyle()}
                     >
