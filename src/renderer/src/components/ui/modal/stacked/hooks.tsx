@@ -1,7 +1,6 @@
 import { getUISettings } from "@renderer/atoms/settings/ui"
 import { jotaiStore } from "@renderer/lib/jotai"
-import { useCallback, useContext, useEffect, useId, useRef } from "react"
-import { useLocation } from "react-router-dom"
+import { useCallback, useContext, useId, useRef } from "react"
 
 import { modalStackAtom } from "./atom"
 import { CurrentModalContext } from "./context"
@@ -71,13 +70,6 @@ const actions = {
   dismissAll() {
     jotaiStore.set(modalStackAtom, [])
   },
-}
-export const useDismissAllWhenRouterChange = () => {
-  const { pathname } = useLocation()
-
-  useEffect(() => {
-    actions.dismissAll()
-  }, [pathname])
 }
 
 export const useCurrentModal = () => useContext(CurrentModalContext)

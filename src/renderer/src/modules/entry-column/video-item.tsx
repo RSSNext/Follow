@@ -71,9 +71,8 @@ export function VideoItem({
     >
       <div
         className="w-full"
-        onClick={(e) => {
+        onClick={() => {
           if (iframeSrc) {
-            e.stopPropagation()
             modalStack.present({
               title: "",
               content: (props) => (

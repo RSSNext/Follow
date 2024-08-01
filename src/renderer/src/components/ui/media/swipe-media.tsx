@@ -82,10 +82,7 @@ export function SwipeMedia({
                     height: 600,
                   }}
                   disableContextMenu
-                  onClick={(e) => {
-                    onPreview?.(uniqMedia, i)
-                    e.stopPropagation()
-                  }}
+                  onClick={() => onPreview?.(uniqMedia, i)}
                 />
               </SwiperSlide>
             ))}
@@ -108,10 +105,7 @@ export function SwipeMedia({
       ) : uniqMedia?.length >= 1 ?
           (
             <Media
-              onClick={(e) => {
-                onPreview?.(uniqMedia)
-                e.stopPropagation()
-              }}
+              onClick={() => onPreview?.(uniqMedia)}
               className="size-full rounded-none object-cover sm:transition-transform sm:duration-300 sm:ease-in-out sm:group-hover:scale-105"
               alt="cover"
               src={uniqMedia[0].url}
