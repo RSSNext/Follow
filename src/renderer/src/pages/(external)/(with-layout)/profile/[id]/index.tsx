@@ -97,7 +97,7 @@ export function Component() {
 
                         <a
                           className="absolute right-0 opacity-0 transition-opacity group-hover:opacity-100"
-                          href={`${DEEPLINK_SCHEME}#add?id=${subscription.feeds?.id}`}
+                          href={`${DEEPLINK_SCHEME}add?id=${subscription.feeds?.id}`}
                           onClick={stopPropagation}
                         >
                           <StyledButton>
