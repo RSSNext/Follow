@@ -77,13 +77,19 @@ export function createWindow(
   } else {
     const openPath = path.resolve(
       __dirname,
-      `../renderer/index.html${options?.extraPath || ""}`,
+      "../renderer/index.html",
     )
     window.loadFile(
       openPath,
+      {
+        hash: options?.extraPath,
+      },
     )
     logger.log(
       openPath,
+      {
+        hash: options?.extraPath,
+      },
     )
   }
 
@@ -235,7 +241,7 @@ export const createSettingWindow = () => {
     return
   }
   const window = createWindow({
-    extraPath: "/#settings",
+    extraPath: "#settings",
     width: 700,
     height: 600,
     resizable: false,
