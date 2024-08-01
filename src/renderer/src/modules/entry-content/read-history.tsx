@@ -74,7 +74,7 @@ const EntryUser: Component<{
   i: number
 }> = ({ userId, i }) => {
   const user = useUserById(userId)
-  const presentUserProfile = usePresentUserProfileModal()
+  const presentUserProfile = usePresentUserProfileModal("drawer")
   if (!user) return null
   return (
     <Tooltip>

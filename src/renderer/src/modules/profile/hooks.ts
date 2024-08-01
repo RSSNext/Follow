@@ -42,7 +42,9 @@ export const useUserSubscriptionsQuery = (userId: string | undefined) => {
   return subscriptions
 }
 
-export const usePresentUserProfileModal = () => {
+export const usePresentUserProfileModal = (
+  variant: "drawer" | "dialog" = "dialog",
+) => {
   const { present } = useModalStack()
 
   return useCallback(
@@ -53,11 +55,12 @@ export const usePresentUserProfileModal = () => {
         content: () =>
           createElement(UserProfileModalContent, {
             userId,
+            variant,
           }),
         CustomModalComponent: NoopChildren,
         clickOutsideToDismiss: true,
       })
     },
-    [present],
+    [present, variant],
   )
 }

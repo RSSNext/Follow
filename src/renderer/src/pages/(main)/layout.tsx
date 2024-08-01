@@ -108,7 +108,7 @@ const FeedResponsiveResizerContainer = ({
     <>
       <div
         className={cn(
-          "shrink-0",
+          "shrink-0 overflow-hidden",
           "absolute inset-y-0 z-10",
           !feedColumnShow ? "-translate-x-full" : "",
         )}

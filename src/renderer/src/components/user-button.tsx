@@ -69,7 +69,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   const { user } = session || {}
   const signOut = useSignOut()
   const settingModalPresent = useSettingModal()
-  const presentUserProfile = usePresentUserProfileModal()
+  const presentUserProfile = usePresentUserProfileModal("dialog")
   if (status !== "authenticated") {
     return <LoginButton {...props} />
   }
@@ -137,7 +137,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
                 window.open(`${repository.url}/releases`)
               }}
             >
-              <i className="i-mgc-gift-cute-re mr-1.5" />
+              <i className="i-mgc-download-2-cute-re mr-1.5" />
               Download Desktop app
             </DropdownMenuItem>
             <DropdownMenuSeparator />
