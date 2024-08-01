@@ -220,6 +220,9 @@ importers:
       posthog-node:
         specifier: 4.0.1
         version: 4.0.1
+      re-resizable:
+        specifier: 6.9.17
+        version: 6.9.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-error-boundary:
         specifier: 4.0.13
         version: 4.0.13(react@18.3.1)
@@ -5524,6 +5527,12 @@ packages:
 
   random-path@0.1.2:
     resolution: {integrity: sha512-4jY0yoEaQ5v9StCl5kZbNIQlg1QheIDBrdkDn53EynpPb9FgO6//p3X/tgMnrC45XN6QZCzU1Xz/+pSSsJBpRw==}
+
+  re-resizable@6.9.17:
+    resolution: {integrity: sha512-OBqd1BwVXpEJJn/yYROG+CbeqIDBWIp6wathlpB0kzZWWZIY1gPTsgK2yJEui5hOvkCdC2mcexF2V3DZVfLq2g==}
+    peerDependencies:
+      react: ^16.13.1 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
 
   react-dom@18.3.1:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
@@ -12832,6 +12841,11 @@ snapshots:
       base32-encode: 1.2.0
       murmur-32: 0.2.0
     optional: true
+
+  re-resizable@6.9.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   react-dom@18.3.1(react@18.3.1):
     dependencies:

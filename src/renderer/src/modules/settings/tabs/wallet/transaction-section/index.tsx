@@ -46,8 +46,8 @@ export const TransactionsSection = () => {
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="text-center" size="sm">
+            <TableRow className="[&_*]:!font-semibold">
+              <TableHead className="w-16 text-center" size="sm">
                 Type
               </TableHead>
               <TableHead className="text-center" size="sm">
