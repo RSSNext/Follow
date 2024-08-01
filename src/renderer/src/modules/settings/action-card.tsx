@@ -294,7 +294,7 @@ export function ActionCard({
         <Collapse
           className="[&_.name-placeholder]:data-[state=open]:hidden [&_input.name-input]:data-[state=open]:block"
           title={(
-            <div className="flex w-full items-center gap-2">
+            <div className="flex w-full items-center gap-2 pr-2">
               <Button
                 variant="ghost"
                 size="sm"
