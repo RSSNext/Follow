@@ -117,7 +117,7 @@ export function VideoItem({
               (
                 <div className="center aspect-video w-full flex-col gap-1 bg-muted text-xs text-muted-foreground">
                   <i className="i-mgc-sad-cute-re size-6" />
-                  No video available
+                  No media available
                 </div>
               )}
         </div>

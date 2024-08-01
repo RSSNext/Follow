@@ -29,18 +29,26 @@ export function PictureItem({
       translation={translation}
     >
       <div className="relative flex gap-2 overflow-x-auto">
-        <SwipeMedia
-          media={entry.entries.media}
-          className={cn(
-            "aspect-square w-full shrink-0 rounded-md",
-            isActive && "rounded-b-none",
-          )}
-          imgClassName="object-cover"
-          uniqueKey={entryId}
-          onPreview={(media, i) => {
-            previewMedia(media, i)
-          }}
-        />
+        {entry.entries.media ? (
+          <SwipeMedia
+            media={entry.entries.media}
+            className={cn(
+              "aspect-square w-full shrink-0 rounded-md",
+              isActive && "rounded-b-none",
+            )}
+            imgClassName="object-cover"
+            uniqueKey={entryId}
+            onPreview={(media, i) => {
+              previewMedia(media, i)
+            }}
+          />
+        ) : (
+          <div className="center aspect-square w-full flex-col gap-1 bg-muted text-xs text-muted-foreground">
+            <i className="i-mgc-sad-cute-re size-6" />
+            No media available
+          </div>
+        )}
+
       </div>
     </GridItem>
   )
