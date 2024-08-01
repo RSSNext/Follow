@@ -1,5 +1,6 @@
 import { Slot } from "@radix-ui/react-slot"
 import { ActionButton } from "@renderer/components/ui/button"
+import { views } from "@renderer/constants"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
@@ -41,6 +42,7 @@ export function EntryHeader({
         className={cn(
           "invisible absolute left-5 top-0 z-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500",
           isAtTop && "visible z-[11]",
+          views[view].wideMode && "static",
         )}
       >
         <EntryReadHistory entryId={entryId} />
