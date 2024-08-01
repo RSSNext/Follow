@@ -70,7 +70,6 @@ const MediaImpl: FC<MediaProps> = ({
   const previewMedia = usePreviewMedia()
   const handleClick = useEventCallback((e: React.MouseEvent) => {
     if (popper && src) {
-      e.stopPropagation()
       previewMedia(
         [
           {

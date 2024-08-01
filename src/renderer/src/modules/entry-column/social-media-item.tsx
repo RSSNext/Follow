@@ -87,8 +87,8 @@ export const SocialMediaItem: EntryListItemFC = ({
                 height: 224,
               }}
               onClick={(e) => {
-                previewMedia(mediaList, i)
                 e.stopPropagation()
+                previewMedia(mediaList, i)
               }}
             />
           ))}
@@ -119,14 +119,15 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
   return (
     <div className="flex origin-right scale-90 items-center gap-1">
       {items
-        .filter((item) => !item.disabled && (item.key !== "read" && item.key !== "unread"))
+        .filter(
+          (item) =>
+            !item.disabled && item.key !== "read" && item.key !== "unread",
+        )
         .map((item) => (
           <ActionButton
             icon={
               item.icon ? (
-                <Slot className="size-4">
-                  {item.icon}
-                </Slot>
+                <Slot className="size-4">{item.icon}</Slot>
               ) : (
                 <i className={item.className} />
               )
