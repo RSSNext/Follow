@@ -1,12 +1,14 @@
+import {
+  useEntryIsInReadability,
+  useEntryReadabilityContent,
+} from "@renderer/atoms/readability"
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useMe } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import {
-  useRouteParamsSelector,
-} from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { parseHtml } from "@renderer/lib/parse-html"
@@ -18,6 +20,7 @@ import {
 import { Queries } from "@renderer/queries"
 import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
+import type { ReactNode } from "react"
 import { useEffect, useLayoutEffect, useState } from "react"
 
 import { LoadingCircle } from "../../components/ui/loading"
@@ -120,6 +123,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
   const readerFontFamily = useUISettingKey("readerFontFamily")
   const view = useRouteParamsSelector((route) => route.view)
 
+  const isInReadabilityMode = useEntryIsInReadability(entryId)
   if (!entry) return null
 
   return (
@@ -209,7 +213,11 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                     </AutoResizeHeight>
                   </div>
                 )}
-                {content}
+                {!isInReadabilityMode ? (
+                  content
+                ) : (
+                  <ReadabilityContent entryId={entryId} />
+                )}
               </div>
             </WrappedElementProvider>
             {!content && (
@@ -269,4 +277,26 @@ const TitleMetaHandler: Component<{
     }
   }, [entryId, entryTitle, feedTitle])
   return null
+}
+
+const ReadabilityContent = ({ entryId }: { entryId: string }) => {
+  const result = useEntryReadabilityContent(entryId)
+
+  const [renderer, setRenderer] = useState<ReactNode | null>(null)
+  useEffect(() => {
+    if (!result) return
+    const { content: processContent } = result
+
+    if (processContent) {
+      parseHtml(processContent, {
+        renderInlineStyle: true,
+      }).then((parsed) => {
+        setRenderer(parsed.content)
+      })
+    } else {
+      setRenderer(null)
+    }
+  }, [result, parseHtml])
+
+  return renderer
 }

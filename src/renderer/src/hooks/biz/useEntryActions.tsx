@@ -1,5 +1,11 @@
+import {
+  getReadabilityStatus,
+  setReadabilityContent,
+  setReadabilityStatus,
+  useEntryIsInReadability,
+} from "@renderer/atoms/readability"
 import { SimpleIconsEagle } from "@renderer/components/ui/platform-icon/icons"
-import { COPY_MAP } from "@renderer/constants"
+import { COPY_MAP, views } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
@@ -72,6 +78,7 @@ export const useEntryActions = ({
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
+  const entryIsInReadability = useEntryIsInReadability(entry?.entries.id)
 
   const feed = useFeedById(entry?.feedId)
 
@@ -102,7 +109,8 @@ export const useEntryActions = ({
       shortcut?: string
       name: string
       icon?: ReactNode
-      disabled?: boolean
+      hide?: boolean
+      active?: boolean
       onClick: () => void
     }[] = [
       {
@@ -119,7 +127,7 @@ export const useEntryActions = ({
         shortcut: shortcuts.entry.toggleStarred.key,
         name: `Star`,
         className: "i-mgc-star-cute-re",
-        disabled: !!populatedEntry.collections,
+        hide: !!populatedEntry.collections,
         onClick: () => {
           collect.mutate()
         },
@@ -129,7 +137,7 @@ export const useEntryActions = ({
         name: `Unstar`,
         shortcut: shortcuts.entry.toggleStarred.key,
         className: "i-mgc-star-cute-fi text-orange-500",
-        disabled: !populatedEntry.collections,
+        hide: !populatedEntry.collections,
         onClick: () => {
           uncollect.mutate()
         },
@@ -138,7 +146,7 @@ export const useEntryActions = ({
         key: "copyLink",
         name: "Copy Link",
         className: "i-mgc-link-cute-re",
-        disabled: !populatedEntry.entries.url,
+        hide: !populatedEntry.entries.url,
         shortcut: shortcuts.entry.copyLink.key,
         onClick: () => {
           if (!populatedEntry.entries.url) return
@@ -153,17 +161,45 @@ export const useEntryActions = ({
         name: COPY_MAP.OpenInBrowser(),
         shortcut: shortcuts.entry.openInBrowser.key,
         className: "i-mgc-world-2-cute-re",
-        disabled: !populatedEntry.entries.url,
+        hide: !populatedEntry.entries.url,
         onClick: () => {
           if (!populatedEntry.entries.url) return
           window.open(populatedEntry.entries.url, "_blank")
         },
       },
       {
+        name: "Readability",
+        className: entryIsInReadability ? `i-mgc-sparkles-2-filled` : `i-mgc-sparkles-2-cute-re`,
+        key: "readability",
+        hide: views[view].wideMode || !populatedEntry.entries.url || !window.electron,
+        active: entryIsInReadability,
+        async onClick() {
+          const isTurnOn = getReadabilityStatus()[populatedEntry.entries.id]
+          if (!isTurnOn && populatedEntry.entries.url) {
+            const result = await tipcClient?.readability({
+              url: populatedEntry.entries.url,
+            })
+
+            if (result) {
+              setReadabilityStatus({
+                [populatedEntry.entries.id]: true,
+              })
+              setReadabilityContent({
+                [populatedEntry.entries.id]: result,
+              })
+            }
+          } else {
+            setReadabilityStatus({
+              [populatedEntry.entries.id]: false,
+            })
+          }
+        },
+      },
+      {
         name: "Save Media to Eagle",
         icon: <SimpleIconsEagle />,
         key: "saveToEagle",
-        disabled:
+        hide:
           (checkEagle.isLoading ? true : !checkEagle.data) ||
           !populatedEntry.entries.media?.length,
         onClick: async () => {
@@ -196,7 +232,7 @@ export const useEntryActions = ({
             `i-mgc-share-3-cute-re` :
             "i-mgc-share-forward-cute-re",
         shortcut: shortcuts.entry.share.key,
-        disabled: !window.electron && !navigator.share,
+        hide: !window.electron && !navigator.share,
 
         onClick: () => {
           if (!populatedEntry.entries.url) return
@@ -216,7 +252,7 @@ export const useEntryActions = ({
         name: `Mark as Read`,
         shortcut: shortcuts.entry.toggleRead.key,
         className: "i-mgc-round-cute-fi",
-        disabled: !!(!!populatedEntry.read || populatedEntry.collections),
+        hide: !!(!!populatedEntry.read || populatedEntry.collections),
         onClick: () => {
           read.mutate(populatedEntry)
         },
@@ -226,7 +262,7 @@ export const useEntryActions = ({
         name: `Mark as Unread`,
         shortcut: shortcuts.entry.toggleRead.key,
         className: "i-mgc-round-cute-re",
-        disabled: !!(!populatedEntry.read || populatedEntry.collections),
+        hide: !!(!populatedEntry.read || populatedEntry.collections),
         onClick: () => {
           unread.mutate(populatedEntry)
         },
@@ -244,6 +280,7 @@ export const useEntryActions = ({
     uncollect,
     unread,
     view,
+    entryIsInReadability,
   ])
 
   return {

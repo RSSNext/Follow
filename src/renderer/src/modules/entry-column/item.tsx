@@ -146,7 +146,7 @@ function EntryItemImpl({
         showNativeMenu(
           [
             ...items
-              .filter((item) => !item.disabled)
+              .filter((item) => !item.hide)
               .map((item) => ({
                 type: "text" as const,
                 label: item.name,

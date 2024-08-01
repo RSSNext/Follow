@@ -119,7 +119,7 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
   return (
     <div className="flex origin-right scale-90 items-center gap-1">
       {items
-        .filter((item) => !item.disabled && (item.key !== "read" && item.key !== "unread"))
+        .filter((item) => !item.hide && (item.key !== "read" && item.key !== "unread"))
         .map((item) => (
           <ActionButton
             icon={

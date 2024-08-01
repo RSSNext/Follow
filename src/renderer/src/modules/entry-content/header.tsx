@@ -69,7 +69,7 @@ export function EntryHeader({
 
         <div className="relative flex shrink-0 items-center justify-end gap-3">
           {items
-            .filter((item) => !item.disabled)
+            .filter((item) => !item.hide)
             .map((item) => (
               <ActionButton
                 icon={
@@ -81,6 +81,7 @@ export function EntryHeader({
                     <i className={item.className} />
                   )
                 }
+                active={item.active}
                 shortcut={item.shortcut}
                 onClick={item.onClick}
                 tooltip={item.name}
