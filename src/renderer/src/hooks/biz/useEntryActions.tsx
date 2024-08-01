@@ -1,15 +1,17 @@
 import {
   getReadabilityStatus,
+  isInReadability,
+  ReadabilityStatus,
   setReadabilityContent,
   setReadabilityStatus,
-  useEntryIsInReadability,
+  useEntryInReadabilityStatus,
 } from "@renderer/atoms/readability"
 import { SimpleIconsEagle } from "@renderer/components/ui/platform-icon/icons"
 import { COPY_MAP, views } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
-import { getOS } from "@renderer/lib/utils"
+import { cn, getOS } from "@renderer/lib/utils"
 import type { CombinedEntryModel } from "@renderer/models"
 import { useTipModal } from "@renderer/modules/wallet/hooks"
 import type { FlatEntryModel } from "@renderer/store/entry"
@@ -19,9 +21,42 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
 import type { ReactNode } from "react"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import { toast } from "sonner"
 
+export const useEntryReadabilityToggle = ({
+  id,
+  url,
+}: {
+  id: string
+  url: string
+}) =>
+  useCallback(async () => {
+    const status = getReadabilityStatus()[id]
+    const isTurnOn = status !== ReadabilityStatus.INITIAL && !!status
+
+    if (!isTurnOn && url) {
+      setReadabilityStatus({
+        [id]: ReadabilityStatus.WAITING,
+      })
+      const result = await tipcClient?.readability({
+        url,
+      })
+
+      if (result) {
+        setReadabilityStatus({
+          [id]: ReadabilityStatus.SUCCESS,
+        })
+        setReadabilityContent({
+          [id]: result,
+        })
+      }
+    } else {
+      setReadabilityStatus({
+        [id]: ReadabilityStatus.INITIAL,
+      })
+    }
+  }, [id, url])
 export const useCollect = (entry: Nullable<CombinedEntryModel>) =>
   useMutation({
     mutationFn: async () =>
@@ -78,7 +113,7 @@ export const useEntryActions = ({
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
-  const entryIsInReadability = useEntryIsInReadability(entry?.entries.id)
+  const entryReadabilityStatus = useEntryInReadabilityStatus(entry?.entries.id)
 
   const feed = useFeedById(entry?.feedId)
 
@@ -101,6 +136,10 @@ export const useEntryActions = ({
   const read = useRead()
   const unread = useUnread()
 
+  const readabilityToggle = useEntryReadabilityToggle({
+    id: populatedEntry?.entries.id ?? "",
+    url: populatedEntry?.entries.url ?? "",
+  })
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
     const items: {
@@ -169,30 +208,22 @@ export const useEntryActions = ({
       },
       {
         name: "Readability",
-        className: entryIsInReadability ? `i-mgc-sparkles-2-filled` : `i-mgc-sparkles-2-cute-re`,
+        className: cn(
+          isInReadability(entryReadabilityStatus) ?
+            `i-mgc-sparkles-2-filled` :
+            `i-mgc-sparkles-2-cute-re`,
+          entryReadabilityStatus === ReadabilityStatus.WAITING ?
+            `animate-pulse` :
+            "",
+        ),
         key: "readability",
-        hide: views[view].wideMode || !populatedEntry.entries.url || !window.electron,
-        active: entryIsInReadability,
+        hide:
+          views[view].wideMode ||
+          !populatedEntry.entries.url ||
+          !window.electron,
+        active: isInReadability(entryReadabilityStatus),
         async onClick() {
-          const isTurnOn = getReadabilityStatus()[populatedEntry.entries.id]
-          if (!isTurnOn && populatedEntry.entries.url) {
-            const result = await tipcClient?.readability({
-              url: populatedEntry.entries.url,
-            })
-
-            if (result) {
-              setReadabilityStatus({
-                [populatedEntry.entries.id]: true,
-              })
-              setReadabilityContent({
-                [populatedEntry.entries.id]: result,
-              })
-            }
-          } else {
-            setReadabilityStatus({
-              [populatedEntry.entries.id]: false,
-            })
-          }
+          return readabilityToggle()
         },
       },
       {
@@ -270,18 +301,7 @@ export const useEntryActions = ({
     ]
 
     return items
-  }, [
-    checkEagle.data,
-    checkEagle.isLoading,
-    collect,
-    populatedEntry,
-    read,
-    openTipModal,
-    uncollect,
-    unread,
-    view,
-    entryIsInReadability,
-  ])
+  }, [populatedEntry, view, checkEagle.isLoading, checkEagle.data, openTipModal, collect, uncollect, readabilityToggle, read, unread, entryReadabilityStatus])
 
   return {
     items,

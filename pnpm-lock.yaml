@@ -199,9 +199,6 @@ importers:
       jotai:
         specifier: 2.9.1
         version: 2.9.1(@types/react@18.3.3)(react@18.3.1)
-      jsdom:
-        specifier: ^24.1.1
-        version: 24.1.1
       lethargy:
         specifier: 1.0.9
         version: 1.0.9
@@ -9696,6 +9693,7 @@ snapshots:
       debug: 4.3.5
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   agentkeepalive@4.5.0:
     dependencies:
@@ -10314,6 +10312,7 @@ snapshots:
   cssstyle@4.0.1:
     dependencies:
       rrweb-cssom: 0.6.0
+    optional: true
 
   csstype@3.1.3: {}
 
@@ -10321,6 +10320,7 @@ snapshots:
     dependencies:
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.0.0
+    optional: true
 
   dayjs@1.11.12: {}
 
@@ -10336,7 +10336,8 @@ snapshots:
     dependencies:
       ms: 2.1.2
 
-  decimal.js@10.4.3: {}
+  decimal.js@10.4.3:
+    optional: true
 
   decode-named-character-reference@1.0.2:
     dependencies:
@@ -11659,6 +11660,7 @@ snapshots:
   html-encoding-sniffer@4.0.0:
     dependencies:
       whatwg-encoding: 3.1.1
+    optional: true
 
   html-escaper@3.0.3: {}
 
@@ -11694,6 +11696,7 @@ snapshots:
       debug: 4.3.5
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   http2-wrapper@1.0.3:
     dependencies:
@@ -11713,6 +11716,7 @@ snapshots:
       debug: 4.3.5
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   human-signals@2.1.0: {}
 
@@ -11879,7 +11883,8 @@ snapshots:
 
   is-plain-object@5.0.0: {}
 
-  is-potential-custom-element-name@1.0.1: {}
+  is-potential-custom-element-name@1.0.1:
+    optional: true
 
   is-property@1.0.2:
     optional: true
@@ -11971,6 +11976,7 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+    optional: true
 
   jsesc@0.5.0: {}
 
@@ -12707,7 +12713,8 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nwsapi@2.2.12: {}
+  nwsapi@2.2.12:
+    optional: true
 
   oauth4webapi@2.11.1: {}
 
@@ -13060,7 +13067,8 @@ snapshots:
 
   proxy-from-env@1.1.0: {}
 
-  psl@1.9.0: {}
+  psl@1.9.0:
+    optional: true
 
   pump@3.0.0:
     dependencies:
@@ -13071,7 +13079,8 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  querystringify@2.2.0: {}
+  querystringify@2.2.0:
+    optional: true
 
   queue-microtask@1.2.3: {}
 
@@ -13333,7 +13342,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  requires-port@1.0.0: {}
+  requires-port@1.0.0:
+    optional: true
 
   resedit@2.0.2:
     dependencies:
@@ -13435,9 +13445,11 @@ snapshots:
       '@rollup/rollup-win32-x64-msvc': 4.18.0
       fsevents: 2.3.3
 
-  rrweb-cssom@0.6.0: {}
+  rrweb-cssom@0.6.0:
+    optional: true
 
-  rrweb-cssom@0.7.1: {}
+  rrweb-cssom@0.7.1:
+    optional: true
 
   run-parallel@1.2.0:
     dependencies:
@@ -13458,6 +13470,7 @@ snapshots:
   saxes@6.0.0:
     dependencies:
       xmlchars: 2.2.0
+    optional: true
 
   scheduler@0.23.2:
     dependencies:
@@ -13715,7 +13728,8 @@ snapshots:
 
   swiper@11.1.8: {}
 
-  symbol-tree@3.2.4: {}
+  symbol-tree@3.2.4:
+    optional: true
 
   synckit@0.6.2:
     dependencies:
@@ -13834,12 +13848,14 @@ snapshots:
       punycode: 2.3.1
       universalify: 0.2.0
       url-parse: 1.5.10
+    optional: true
 
   tr46@0.0.3: {}
 
   tr46@5.0.0:
     dependencies:
       punycode: 2.3.1
+    optional: true
 
   trigram-utils@2.0.1:
     dependencies:
@@ -13970,7 +13986,8 @@ snapshots:
 
   universalify@0.1.2: {}
 
-  universalify@0.2.0: {}
+  universalify@0.2.0:
+    optional: true
 
   universalify@2.0.1: {}
 
@@ -14004,6 +14021,7 @@ snapshots:
     dependencies:
       querystringify: 2.2.0
       requires-port: 1.0.0
+    optional: true
 
   use-callback-ref@1.3.2(@types/react@18.3.3)(react@18.3.1):
     dependencies:
@@ -14147,6 +14165,7 @@ snapshots:
   w3c-xmlserializer@5.0.0:
     dependencies:
       xml-name-validator: 5.0.0
+    optional: true
 
   wcwidth@1.0.1:
     dependencies:
@@ -14158,7 +14177,8 @@ snapshots:
 
   webidl-conversions@3.0.1: {}
 
-  webidl-conversions@7.0.0: {}
+  webidl-conversions@7.0.0:
+    optional: true
 
   webpack-sources@3.2.3: {}
 
@@ -14167,13 +14187,16 @@ snapshots:
   whatwg-encoding@3.1.1:
     dependencies:
       iconv-lite: 0.6.3
+    optional: true
 
-  whatwg-mimetype@4.0.0: {}
+  whatwg-mimetype@4.0.0:
+    optional: true
 
   whatwg-url@14.0.0:
     dependencies:
       tr46: 5.0.0
       webidl-conversions: 7.0.0
+    optional: true
 
   whatwg-url@5.0.0:
     dependencies:
@@ -14221,13 +14244,16 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  ws@8.18.0: {}
+  ws@8.18.0:
+    optional: true
 
-  xml-name-validator@5.0.0: {}
+  xml-name-validator@5.0.0:
+    optional: true
 
   xmlbuilder@15.1.1: {}
 
-  xmlchars@2.2.0: {}
+  xmlchars@2.2.0:
+    optional: true
 
   xtend@4.0.2: {}
 

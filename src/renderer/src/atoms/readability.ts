@@ -33,6 +33,12 @@ export const setReadabilityContent = mergeObjectSetter(
   getReadabilityContent,
 )
 
+export enum ReadabilityStatus {
+  INITIAL = 1,
+  WAITING = 2,
+  SUCCESS = 3,
+  FAILURE = 4,
+}
 export const [
   ,
   ,
@@ -41,13 +47,29 @@ export const [
   getReadabilityStatus,
   __setReadabilityStatus,
   useReadabilityStatusSelector,
-] = createAtomHooks(atom<Record<string, boolean>>({}))
+] = createAtomHooks(atom<Record<string, ReadabilityStatus>>({}))
 export const setReadabilityStatus = mergeObjectSetter(
   __setReadabilityStatus,
   getReadabilityStatus,
 )
 
 export const useEntryIsInReadability = (entryId?: string) =>
-  useReadabilityStatusSelector((map) => (entryId ? map[entryId] : false))
+  useReadabilityStatusSelector(
+    (map) =>
+      entryId ? (map[entryId] ? isInReadability(map[entryId]) : false) : false,
+    [entryId],
+  )
+
+export const useEntryInReadabilityStatus = (entryId?: string) =>
+  useReadabilityStatusSelector(
+    (map) =>
+      entryId ?
+        map[entryId] || ReadabilityStatus.INITIAL :
+        ReadabilityStatus.INITIAL,
+    [entryId],
+  )
+
+export const isInReadability = (status: ReadabilityStatus) =>
+  status !== ReadabilityStatus.INITIAL && !!status
 export const useEntryReadabilityContent = (entryId: string) =>
-  useReadabilityContentSelector((map) => map[entryId])
+  useReadabilityContentSelector((map) => map[entryId], [entryId])

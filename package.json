@@ -90,7 +90,7 @@
     "idb-keyval": "6.2.1",
     "immer": "10.1.1",
     "jotai": "2.9.1",
-    "jsdom": "^24.1.1",
+
     "lethargy": "1.0.9",
     "linkedom": "^0.18.4",
     "lodash-es": "4.17.21",

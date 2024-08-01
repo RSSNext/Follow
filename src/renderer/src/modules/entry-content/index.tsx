@@ -1,4 +1,6 @@
 import {
+  ReadabilityStatus,
+  useEntryInReadabilityStatus,
   useEntryIsInReadability,
   useEntryReadabilityContent,
 } from "@renderer/atoms/readability"
@@ -7,7 +9,9 @@ import { useMe } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
+import { StyledButton } from "@renderer/components/ui/button"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
+import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
@@ -20,7 +24,7 @@ import {
 import { Queries } from "@renderer/queries"
 import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
-import type { ReactNode } from "react"
+import type { FC, ReactNode } from "react"
 import { useEffect, useLayoutEffect, useState } from "react"
 
 import { LoadingCircle } from "../../components/ui/loading"
@@ -194,6 +198,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 </div>
               </div>
             </a>
+
             <WrappedElementProvider boundingDetection>
               <TitleMetaHandler entryId={entry.entries.id} />
               <div className="prose prose-zinc mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
@@ -232,9 +237,10 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                       </div>
                     ) :
                     (
-                      <div className="center">
-                        <span className="text-sm text-zinc-400">No content</span>
-                      </div>
+                      <NoContent
+                        id={entry.entries.id}
+                        url={entry.entries.url ?? ""}
+                      />
                     )}
               </div>
             )}
@@ -298,5 +304,48 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
     }
   }, [result, parseHtml])
 
-  return renderer
+  return (
+    <div>
+      <p className="rounded-xl border p-3 text-sm opacity-80">
+        <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
+        This content is provided by Readability. If you find typographical
+        anomalies, please go to the source site to view the original content.
+      </p>
+      {renderer}
+    </div>
+  )
+}
+
+const NoContent: FC<{
+  id: string
+  url: string
+}> = ({ id, url }) => {
+  const toggle = useEntryReadabilityToggle({
+    id,
+    url,
+  })
+
+  const status = useEntryInReadabilityStatus(id)
+  if (status === ReadabilityStatus.SUCCESS) {
+    return null
+  }
+  return (
+    <div className="center">
+      <div className="space-y-2 text-balance text-center text-sm text-zinc-400">
+        <span>No content</span>
+        {url && window.electron && (
+          <div className="flex flex-col items-center justify-center gap-4">
+            But you can try to get the source site's content and parse and
+            render it by using the button below.
+            <StyledButton
+              isLoading={status === ReadabilityStatus.WAITING}
+              onClick={toggle}
+            >
+              Readability
+            </StyledButton>
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }

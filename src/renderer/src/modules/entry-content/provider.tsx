@@ -1,4 +1,4 @@
-import type { FeedViewType } from "@renderer/lib/enum"
+import { FeedViewType } from "@renderer/lib/enum"
 import { createContext } from "react"
 
 export interface EntryContentContext {
@@ -9,7 +9,13 @@ export interface EntryContentContext {
 
   view: FeedViewType
 }
-export const EntryContentContext = createContext<EntryContentContext>(null!)
+const defaultContextValue: EntryContentContext = {
+  entryId: "",
+  feedId: "",
+  view: FeedViewType.Articles,
+}
+export const EntryContentContext =
+  createContext<EntryContentContext>(defaultContextValue)
 
 export const EntryContentProvider: Component<EntryContentContext> = ({
   children,

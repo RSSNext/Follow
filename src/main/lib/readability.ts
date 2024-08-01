@@ -17,8 +17,29 @@ export async function readability(url: string) {
   // FIXME: linkedom does not handle relative addresses in strings. Refer to
   // @see https://github.com/WebReflection/linkedom/issues/153
   // JSDOM handles it correctly, but JSDOM introduces canvas binding.
-  const reader = new Readability(parseHTML(documentString).document, {
+
+  const { document } = parseHTML(documentString)
+  const baseUrl = new URL(url).origin
+
+  document.querySelectorAll("a").forEach((a) => {
+    a.href = replaceRelativeAddress(baseUrl, a.href)
+  });
+
+  (["img", "audio", "video"] as const).forEach((tag) => {
+    document.querySelectorAll(tag).forEach((img) => {
+      img.src = img.src && replaceRelativeAddress(baseUrl, img.src)
+    })
+  })
+
+  const reader = new Readability(document, {
     debug: isDev,
   })
   return reader.parse()
+}
+
+const replaceRelativeAddress = (baseUrl: string, url: string) => {
+  if (url.startsWith("http")) {
+    return url
+  }
+  return new URL(url, baseUrl).href
 }
