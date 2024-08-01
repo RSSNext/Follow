@@ -100,6 +100,7 @@ const EntryUser: Component<{
       </TooltipTrigger>
       <TooltipContent side="top">
         Recent reader:
+        {" "}
         {user.name}
       </TooltipContent>
     </Tooltip>

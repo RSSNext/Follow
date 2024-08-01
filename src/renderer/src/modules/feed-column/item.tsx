@@ -1,5 +1,7 @@
 import { getMainContainerElement } from "@renderer/atoms/dom"
+import { useMe } from "@renderer/atoms/user"
 import { FeedIcon } from "@renderer/components/feed-icon"
+import { PhCrown } from "@renderer/components/icons/crown"
 import {
   Tooltip,
   TooltipContent,
@@ -61,71 +63,81 @@ const FeedItemImpl = ({
   const feed = useFeedById(feedId)
 
   const { items } = useFeedActions({ feedId, view })
+  const me = useMe()
+  const isOwned = feed && feed.ownerUserId === me?.id
 
   if (!feed) return null
+
   return (
-    <div
-      data-feed-id={feedId}
-      className={cn(
-        "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
-        isActive && "bg-native-active",
-        className,
-      )}
-      onClick={handleNavigate}
-      onDoubleClick={() => {
-        window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank")
-      }}
-      onContextMenu={(e) => {
-        const nextItems = items.concat()
-        if (feed.errorAt && feed.errorMessage) {
-          nextItems.push(
-            {
-              type: "separator",
-              disabled: false,
-            },
-            {
-              label: "Feedback",
-              type: "text",
-              click: () => {
-                window.open(
-                  getNewIssueUrl({
-                    body:
-                      `### Error\n\nError Message: ${feed.errorMessage}\n\n### Info\n\n` +
-                      `\`\`\`json\n${
-                      JSON.stringify(feed, null, 2)
-                      }\n\`\`\``,
-                    label: "bug",
-                    title: `Feed Error: ${feed.title}, ${feed.errorMessage}`,
-                  }),
-                )
-              },
-            },
-          )
-        }
-        showNativeMenu(
-          nextItems,
-          e,
-        )
-      }}
-    >
+    <TooltipProvider delayDuration={300}>
       <div
+        data-feed-id={feedId}
         className={cn(
-          "flex min-w-0 items-center",
-          feed.errorAt && "text-red-900 dark:text-red-500",
+          "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
+          isActive && "bg-native-active",
+          className,
         )}
+        onClick={handleNavigate}
+        onDoubleClick={() => {
+          window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank")
+        }}
+        onContextMenu={(e) => {
+          const nextItems = items.concat()
+          if (feed.errorAt && feed.errorMessage) {
+            nextItems.push(
+              {
+                type: "separator",
+                disabled: false,
+              },
+              {
+                label: "Feedback",
+                type: "text",
+                click: () => {
+                  window.open(
+                    getNewIssueUrl({
+                      body:
+                      `### Error\n\nError Message: ${feed.errorMessage}\n\n### Info\n\n` +
+                      `\`\`\`json\n${JSON.stringify(feed, null, 2)}\n\`\`\``,
+                      label: "bug",
+                      title: `Feed Error: ${feed.title}, ${feed.errorMessage}`,
+                    }),
+                  )
+                },
+              },
+            )
+          }
+          showNativeMenu(nextItems, e)
+        }}
       >
-        <FeedIcon fallback feed={feed} size={16} />
         <div
           className={cn(
-            "truncate",
-            !showUnreadCount &&
-            (feedUnread ? "font-bold" : "font-medium opacity-70"),
+            "flex min-w-0 items-center",
+            feed.errorAt && "text-red-900 dark:text-red-500",
           )}
         >
-          {feed.title}
-        </div>
-        {feed.errorAt && (
-          <TooltipProvider delayDuration={300}>
+          <FeedIcon fallback feed={feed} size={16} />
+          <div
+            className={cn(
+              "truncate",
+              !showUnreadCount &&
+              (feedUnread ? "font-bold" : "font-medium opacity-70"),
+            )}
+          >
+            {feed.title}
+          </div>
+          {isOwned && (
+            <Tooltip>
+              <TooltipTrigger>
+                <PhCrown className="ml-1 shrink-0 text-base" />
+              </TooltipTrigger>
+
+              <TooltipPortal>
+                <TooltipContent>This feed is owned by you</TooltipContent>
+              </TooltipPortal>
+            </Tooltip>
+          )}
+          {feed.errorAt && (
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <i className="i-mgc-wifi-off-cute-re ml-1 shrink-0 text-base" />
@@ -152,10 +164,10 @@ const FeedItemImpl = ({
                 </TooltipContent>
               </TooltipPortal>
             </Tooltip>
-          </TooltipProvider>
-        )}
-        {subscription.isPrivate && (
-          <TooltipProvider delayDuration={300}>
+
+          )}
+          {subscription.isPrivate && (
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <i className="i-mgc-eye-close-cute-re ml-1 shrink-0 text-base" />
@@ -166,15 +178,17 @@ const FeedItemImpl = ({
                 </TooltipContent>
               </TooltipPortal>
             </Tooltip>
-          </TooltipProvider>
+
+          )}
+        </div>
+
+        {showUnreadCount && !!feedUnread && (
+          <div className="ml-2 text-xs text-zinc-500 dark:text-neutral-400">
+            {feedUnread}
+          </div>
         )}
       </div>
-      {showUnreadCount && !!feedUnread && (
-        <div className="ml-2 text-xs text-zinc-500 dark:text-neutral-400">
-          {feedUnread}
-        </div>
-      )}
-    </div>
+    </TooltipProvider>
   )
 }
 

@@ -38,7 +38,7 @@ export function Component() {
           <CornerPlayer />
 
           {APP_VERSION?.[0] === "0" && (
-            <div className="pointer-events-none absolute bottom-3 w-full text-center text-xs opacity-20">
+            <div className="pointer-events-none !mt-0 w-full py-3 text-center text-xs opacity-20">
               Early Access
               {" "}
               {GIT_COMMIT_SHA ?

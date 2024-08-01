@@ -5,7 +5,6 @@ import type { FC, PropsWithChildren } from "react"
 
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX } from "./constants"
-import { useDismissAllWhenRouterChange } from "./hooks"
 import { ModalInternal } from "./modal"
 import { ModalOverlay } from "./overlay"
 
@@ -19,7 +18,6 @@ export const ModalStackProvider: FC<PropsWithChildren> = ({ children }) => (
 const ModalStack = () => {
   const stack = useAtomValue(modalStackAtom)
 
-  useDismissAllWhenRouterChange()
   const modalSettingOverlay = useUISettingKey("modalOverlay")
 
   const forceOverlay = stack.some((item) => item.overlay)

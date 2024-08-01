@@ -87,8 +87,8 @@ export const SocialMediaItem: EntryListItemFC = ({
                 height: 224,
               }}
               onClick={(e) => {
-                previewMedia(mediaList, i)
                 e.stopPropagation()
+                previewMedia(mediaList, i)
               }}
             />
           ))}
@@ -124,9 +124,7 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
           <ActionButton
             icon={
               item.icon ? (
-                <Slot className="size-4">
-                  {item.icon}
-                </Slot>
+                <Slot className="size-4">{item.icon}</Slot>
               ) : (
                 <i className={item.className} />
               )
