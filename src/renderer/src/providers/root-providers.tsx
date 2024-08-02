@@ -1,6 +1,7 @@
 import { ModalStackProvider } from "@renderer/components/ui/modal"
 import { Toaster } from "@renderer/components/ui/sonner"
 import { TooltipProvider } from "@renderer/components/ui/tooltip"
+import { HotKeyScopeMap } from "@renderer/constants"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { persistConfig, queryClient } from "@renderer/lib/query-client"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
@@ -34,7 +35,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
       >
 
         <TooltipProvider>
-          <HotkeysProvider initiallyActiveScopes={["home"]}>
+          <HotkeysProvider initiallyActiveScopes={HotKeyScopeMap.Home}>
             <Provider store={jotaiStore}>
               <EventProvider />
               <UserProvider />

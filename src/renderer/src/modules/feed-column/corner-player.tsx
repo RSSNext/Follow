@@ -12,6 +12,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
+import { HotKeyScopeMap } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
@@ -94,7 +95,7 @@ const CornerPlayerImpl = () => {
 
   useHotkeys("space", handleClickPlay, {
     preventDefault: true,
-    scopes: ["home"],
+    scopes: HotKeyScopeMap.Home,
   })
 
   const navigateToEntry = useNavigateEntry()

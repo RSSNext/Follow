@@ -3,6 +3,7 @@ import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { AppErrorBoundary } from "@renderer/components/common/AppErrorBoundary"
 import { m } from "@renderer/components/common/Motion"
 import { ErrorComponentType } from "@renderer/components/errors"
+import { useSwitchHotKeyScope } from "@renderer/hooks/common/useSwitchHotkeyScope"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useAnimationControls, useDragControls } from "framer-motion"
@@ -20,7 +21,6 @@ import {
   useRef,
   useState,
 } from "react"
-import { useHotkeysContext } from "react-hotkeys-hook"
 import { useEventCallback } from "usehooks-ts"
 
 import { Divider } from "../../divider"
@@ -192,16 +192,13 @@ export const ModalInternal: Component<{
       }
     }, [currentIsClosing])
 
-    const { enableScope, disableScope } = useHotkeysContext()
-
+    const switchHotkeyScope = useSwitchHotKeyScope()
     useEffect(() => {
-      enableScope("modal")
-      disableScope("home")
+      switchHotkeyScope("Modal")
       return () => {
-        enableScope("home")
-        disableScope("modal")
+        switchHotkeyScope("Home")
       }
-    }, [])
+    }, [switchHotkeyScope])
 
     if (CustomModalComponent) {
       return (
@@ -216,7 +213,9 @@ export const ModalInternal: Component<{
                   ref={edgeElementRef}
                   className={cn(
                     "no-drag-region fixed inset-0 z-20 overflow-auto",
-                    currentIsClosing ? "!pointer-events-none" : "!pointer-events-auto",
+                    currentIsClosing ?
+                      "!pointer-events-none" :
+                      "!pointer-events-auto",
                     modalContainerClassName,
                   )}
                   onClick={

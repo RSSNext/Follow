@@ -14,7 +14,8 @@ import { LoginModalContent } from "@renderer/modules/auth/LoginModalContent"
 import { FeedColumn } from "@renderer/modules/feed-column"
 import { AutoUpdater } from "@renderer/modules/feed-column/auto-updater"
 import { CornerPlayer } from "@renderer/modules/feed-column/corner-player"
-import { SearchCmdK } from "@renderer/modules/search/cmdk"
+import { SearchCmdK } from "@renderer/modules/panel/cmdk"
+import { CmdNTrigger } from "@renderer/modules/panel/cmdn"
 import type { PropsWithChildren } from "react"
 import { useRef } from "react"
 import { useResizable } from "react-resizable-layout"
@@ -34,7 +35,6 @@ export function Component() {
     >
       <FeedResponsiveResizerContainer containerRef={containerRef}>
         <FeedColumn>
-
           <CornerPlayer />
 
           {APP_VERSION?.[0] === "0" && (
@@ -63,6 +63,7 @@ export function Component() {
       </main>
 
       <SearchCmdK />
+      <CmdNTrigger />
       {isAuthFail && !user && (
         <RootPortal>
           <DeclarativeModal

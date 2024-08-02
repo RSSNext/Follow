@@ -1,4 +1,5 @@
 import { Slot, Slottable } from "@radix-ui/react-slot"
+import { HotKeyScopeMap } from "@renderer/constants"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import type { VariantProps } from "class-variance-authority"
@@ -163,7 +164,7 @@ const HotKeyTrigger = ({
   options?: OptionsOrDependencyArray
 }) => {
   useHotkeys(shortcut, fn, {
-    scopes: ["home"],
+    scopes: HotKeyScopeMap.Home,
     preventDefault: true,
     ...options,
   })

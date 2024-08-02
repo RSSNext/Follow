@@ -6,7 +6,7 @@ import { useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
 import { ProfileButton } from "@renderer/components/user-button"
-import { views } from "@renderer/constants"
+import { HotKeyScopeMap, views } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
@@ -123,7 +123,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
         setActive((i) => (i + 1) % views.length)
       }
     },
-    { scopes: ["home"] },
+    { scopes: HotKeyScopeMap.Home },
   )
 
   useWheel(
