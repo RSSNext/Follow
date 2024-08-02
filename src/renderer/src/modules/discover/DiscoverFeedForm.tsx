@@ -188,8 +188,8 @@ export const DiscoverFeedForm = ({
   const modal = useCurrentModal()
 
   useEffect(() => {
-    modal?.setClickOutSideToDismiss?.(!form.formState.isDirty)
-  }, [form.formState.isDirty, modal, modal.setClickOutSideToDismiss])
+    modal.setClickOutSideToDismiss(!form.formState.isDirty)
+  }, [form.formState.isDirty, modal])
 
   return (
     <Form {...form}>

@@ -67,10 +67,10 @@ export const FeedForm: Component<{
     },
   })
 
-  const { setClickOutSideToDismiss } = useCurrentModal() || {}
+  const { setClickOutSideToDismiss } = useCurrentModal()
 
   useEffect(() => {
-    setClickOutSideToDismiss?.(form.formState.isDirty)
+    setClickOutSideToDismiss(form.formState.isDirty)
   }, [form.formState.isDirty])
 
   useEffect(() => {

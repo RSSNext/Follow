@@ -5,9 +5,21 @@ export type CurrentModalContentProps = ModalActionsInternal & {
   ref: RefObject<HTMLElement | null>
 }
 
-export const CurrentModalContext = createContext<CurrentModalContentProps>(
-  null as any,
-)
+const warnNoProvider = () => {
+  if (import.meta.env.DEV) {
+    console.error(
+      "No ModalProvider found, please make sure to wrap your component with ModalProvider",
+    )
+  }
+}
+const defaultCtxValue: CurrentModalContentProps = {
+  dismiss: warnNoProvider,
+  setClickOutSideToDismiss: warnNoProvider,
+  ref: { current: null },
+}
+
+export const CurrentModalContext =
+  createContext<CurrentModalContentProps>(defaultCtxValue)
 
 export type ModalContentComponent<T = object> = FC<ModalActionsInternal & T>
 export type ModalActionsInternal = {
