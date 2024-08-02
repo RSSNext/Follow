@@ -99,6 +99,7 @@ export const CmdNTrigger = () => {
         content: CmdNPanel,
         CustomModalComponent: NoopChildren,
         overlay: false,
+        clickOutsideToDismiss: true,
       })
     },
     { scopes: HotKeyScopeMap.Home },
