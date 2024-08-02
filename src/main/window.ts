@@ -6,6 +6,7 @@ import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, Menu, shell } from "electron"
 
+import { getShouldAppDoHide } from "./flag"
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
 import { logger } from "./logger"
@@ -203,7 +204,7 @@ export const createMainWindow = () => {
   windows.mainWindow = window
 
   window.on("close", (event) => {
-    if (process.platform === "darwin") {
+    if (process.platform === "darwin" && getShouldAppDoHide()) {
       event.preventDefault()
       window.hide()
     } else {

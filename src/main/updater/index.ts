@@ -2,6 +2,7 @@ import { getRendererHandlers } from "@egoist/tipc/main"
 import { autoUpdater } from "electron-updater"
 
 import { channel, isDev } from "../env"
+import { setShouldAppDoHide } from "../flag"
 import { trackEvent } from "../lib/posthog"
 import { logger } from "../logger"
 import type { RendererHandlers } from "../renderer-handlers"
@@ -12,7 +13,16 @@ import { CustomGitHubProvider } from "./custom-github-provider"
 const disabled = isDev
 
 export const quitAndInstall = async () => {
-  autoUpdater.quitAndInstall()
+  setShouldAppDoHide(false)
+  const mainWindow = getMainWindow()
+
+  logger.info("Quit and install update, close main window, ", mainWindow?.id)
+  mainWindow?.close()
+
+  setTimeout(() => {
+    logger.info("Window is closed, quit and install update")
+    autoUpdater.quitAndInstall()
+  }, 1000)
 }
 
 let downloading = false
