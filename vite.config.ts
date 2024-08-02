@@ -29,6 +29,9 @@ export default defineConfig({
     },
   },
   base: "/",
+  server: {
+    port: 2233,
+  },
   plugins: [
     react(),
     sentryVitePlugin({

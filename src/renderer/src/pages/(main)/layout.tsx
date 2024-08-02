@@ -50,7 +50,7 @@ export function Component() {
           {ELECTRON && <AutoUpdater />}
 
           <NetworkStatusIndicator />
-          {!import.meta.env.PROD && <EnvironmentIndicator />}
+          <EnvironmentIndicator />
         </FeedColumn>
       </FeedResponsiveResizerContainer>
       <main
