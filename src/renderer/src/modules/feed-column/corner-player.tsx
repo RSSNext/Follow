@@ -124,6 +124,14 @@ const CornerPlayerImpl = () => {
           />
         </div>
         <div className="flex items-center">
+          <ActionIcon
+            label="Download"
+            onClick={() => {
+              window.open(Player.get().src, "_blank")
+            }}
+          >
+            <i className="i-mgc-download-2-cute-re" />
+          </ActionIcon>
           <ActionIcon label={<PlaybackRateSelector />} labelDelayDuration={0}>
             <PlaybackRateButton />
           </ActionIcon>

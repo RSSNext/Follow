@@ -332,7 +332,7 @@ const NoContent: FC<{
   })
 
   const status = useEntryInReadabilityStatus(id)
-  if (status === ReadabilityStatus.SUCCESS) {
+  if (status !== ReadabilityStatus.INITIAL) {
     return null
   }
   return (
@@ -343,12 +343,7 @@ const NoContent: FC<{
           <div className="flex flex-col items-center justify-center gap-4">
             But you can try to get the source site's content and parse and
             render it by using the button below.
-            <StyledButton
-              isLoading={status === ReadabilityStatus.WAITING}
-              onClick={toggle}
-            >
-              Readability
-            </StyledButton>
+            <StyledButton onClick={toggle}>Readability</StyledButton>
           </div>
         )}
       </div>
