@@ -19,6 +19,7 @@ import { clamp, cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useSubscriptionStore } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
+import { useSubscribeElectronEvent } from "@shared/event"
 import { useWheel } from "@use-gesture/react"
 import type { MotionValue } from "framer-motion"
 import { m, useSpring } from "framer-motion"
@@ -170,6 +171,10 @@ export function FeedColumn({ children }: PropsWithChildren) {
   const unreadByView = useUnreadByView()
 
   const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
+
+  useSubscribeElectronEvent("Discover", () => {
+    window.router.navigate(Routes.Discover)
+  })
 
   return (
     <Vibrancy

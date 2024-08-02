@@ -76,22 +76,13 @@ export function createWindow(
       process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""),
     )
   } else {
-    const openPath = path.resolve(
-      __dirname,
-      "../renderer/index.html",
-    )
-    window.loadFile(
-      openPath,
-      {
-        hash: options?.extraPath,
-      },
-    )
-    logger.log(
-      openPath,
-      {
-        hash: options?.extraPath,
-      },
-    )
+    const openPath = path.resolve(__dirname, "../renderer/index.html")
+    window.loadFile(openPath, {
+      hash: options?.extraPath,
+    })
+    logger.log(openPath, {
+      hash: options?.extraPath,
+    })
   }
 
   const refererMatchs = [
@@ -229,12 +220,12 @@ export const createMainWindow = () => {
   return window
 }
 
-export const createSettingWindow = () => {
+export const createSettingWindow = (path?: string) => {
   // We need to open the setting modal in the main window when the main window exists,
   // if we open a new window then the state between the two windows will be out of sync.
   if (windows.mainWindow && windows.mainWindow.isVisible()) {
     windows.mainWindow.show()
-    callGlobalContextMethod(windows.mainWindow, "showSetting")
+    callGlobalContextMethod(windows.mainWindow, "showSetting", [path])
     return
   }
   if (windows.settingWindow) {
@@ -242,7 +233,7 @@ export const createSettingWindow = () => {
     return
   }
   const window = createWindow({
-    extraPath: "#settings",
+    extraPath: `#settings/${path || ""}`,
     width: 700,
     height: 600,
     resizable: false,

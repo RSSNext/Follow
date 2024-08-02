@@ -1,15 +1,23 @@
+import { name } from "@pkg"
+import { dispatchEventOnWindow } from "@shared/event"
 import type { MenuItem, MenuItemConstructorOptions } from "electron"
 import { Menu } from "electron"
 
 import { revealLogFile } from "./logger"
-import { createSettingWindow, createWindow } from "./window"
+import { createSettingWindow, createWindow, getMainWindow } from "./window"
 
 export const registerAppMenu = () => {
   const menus: Array<MenuItemConstructorOptions | MenuItem> = [
     {
       role: "appMenu",
       submenu: [
-        { role: "about" },
+        {
+          type: "normal",
+          label: `About ${name}`,
+          click: () => {
+            createSettingWindow("about")
+          },
+        },
         { type: "separator" },
         {
           label: "Settings...",
@@ -25,7 +33,37 @@ export const registerAppMenu = () => {
         { role: "quit" },
       ],
     },
-    { role: "fileMenu" },
+    {
+      role: "fileMenu",
+      submenu: [
+        {
+          type: "normal",
+          label: "Quick Add",
+          accelerator: "CmdOrCtrl+N",
+          click: () => {
+            const mainWindow = getMainWindow()
+            if (!mainWindow) return
+            mainWindow.show()
+            dispatchEventOnWindow(mainWindow, "QuickAdd")
+          },
+        },
+
+        {
+          type: "normal",
+          label: "Discover",
+          accelerator: "CmdOrCtrl+T",
+          click: () => {
+            const mainWindow = getMainWindow()
+            if (!mainWindow) return
+            mainWindow.show()
+            dispatchEventOnWindow(mainWindow, "Discover")
+          },
+        },
+
+        { type: "separator" },
+        { role: "close" },
+      ],
+    },
     { role: "editMenu" },
     { role: "viewMenu" },
     { role: "windowMenu" },

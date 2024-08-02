@@ -13,6 +13,7 @@ import { HotKeyScopeMap } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
+import { useSubscribeElectronEvent } from "@shared/event"
 import { useLayoutEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useHotkeys } from "react-hotkeys-hook"
@@ -46,6 +47,9 @@ const CmdNPanel = () => {
     const { url } = form.getValues()
 
     const defaultView = getSidebarActiveView() as FeedViewType
+
+    window.posthog?.capture("quick_add_feed", { url, defaultView })
+
     present({
       title: "Add Feed",
       content: () => (
@@ -102,20 +106,23 @@ const CmdNPanel = () => {
 
 export const CmdNTrigger = () => {
   const { present } = useModalStack()
-  useHotkeys(
-    "meta+n,ctrl+n",
-    (e) => {
-      e.preventDefault()
-      present({
-        title: "Quick Follow",
-        content: CmdNPanel,
-        CustomModalComponent: NoopChildren,
-        overlay: false,
-        clickOutsideToDismiss: true,
-      })
-    },
-    { scopes: HotKeyScopeMap.Home },
-  )
+  const handler = () => {
+    present({
+      title: "Quick Follow",
+      content: CmdNPanel,
+      CustomModalComponent: NoopChildren,
+      overlay: false,
+      id: "quick-add",
+      clickOutsideToDismiss: true,
+    })
+  }
+
+  useSubscribeElectronEvent("QuickAdd", handler)
+
+  useHotkeys("meta+n,ctrl+n", handler, {
+    scopes: HotKeyScopeMap.Home,
+    preventDefault: true,
+  })
 
   return null
 }

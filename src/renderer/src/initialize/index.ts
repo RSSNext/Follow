@@ -67,7 +67,7 @@ export const initializeApp = async () => {
   subscribeNetworkStatus()
 
   registerGlobalContext({
-    showSetting: () => window.router.showSettings(),
+    showSetting: (path) => window.router.showSettings(path),
     getGeneralSettings,
     getUISettings,
     /**
