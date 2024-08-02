@@ -2,7 +2,7 @@ import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
 import { PanelSplitter } from "@renderer/components/ui/divider"
 import { views } from "@renderer/constants"
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
-import { cn } from "@renderer/lib/utils"
+import { cn, isSafari } from "@renderer/lib/utils"
 import { EntryColumn } from "@renderer/modules/entry-column"
 import { useMemo, useRef } from "react"
 import { useResizable } from "react-resizable-layout"
@@ -18,7 +18,8 @@ export function Component() {
   const inWideMode = view ? views[view].wideMode : false
   const { position, separatorProps } = useResizable({
     axis: "x",
-    min: 300,
+    // FIXME: Less than this width causes grid images to overflow on safari
+    min: isSafari() ? 356 : 300,
     max: 450,
     initial: entryColWidth,
     containerRef,
