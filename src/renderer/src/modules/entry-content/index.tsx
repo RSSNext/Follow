@@ -306,11 +306,17 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
 
   return (
     <div>
-      <p className="rounded-xl border p-3 text-sm opacity-80">
-        <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
-        This content is provided by Readability. If you find typographical
-        anomalies, please go to the source site to view the original content.
-      </p>
+      {result ? (
+        <p className="rounded-xl border p-3 text-sm opacity-80">
+          <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
+          This content is provided by Readability. If you find typographical
+          anomalies, please go to the source site to view the original content.
+        </p>
+      ) : (
+        <div className="center mt-12">
+          <LoadingCircle size="large" />
+        </div>
+      )}
       {renderer}
     </div>
   )
