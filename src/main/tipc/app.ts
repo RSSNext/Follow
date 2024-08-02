@@ -1,5 +1,6 @@
 import { getRendererHandlers } from "@egoist/tipc/main"
 import type { BrowserWindow } from "electron"
+import { clipboard } from "electron"
 
 import { cleanAuthSessionToken, cleanUser } from "../lib/user"
 import type { RendererHandlers } from "../renderer-handlers"
@@ -81,6 +82,9 @@ export const appRoute = {
     cleanAuthSessionToken()
     cleanUser()
   }),
+  /// clipboard
+
+  readClipboard: t.procedure.action(async () => clipboard.readText()),
 }
 interface Sender extends Electron.WebContents {
   getOwnerBrowserWindow: () => Electron.BrowserWindow | null

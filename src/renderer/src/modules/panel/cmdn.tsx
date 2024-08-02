@@ -10,8 +10,10 @@ import {
 import { useModalStack } from "@renderer/components/ui/modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { HotKeyScopeMap } from "@renderer/constants"
+import { tipcClient } from "@renderer/lib/client"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
+import { useLayoutEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useHotkeys } from "react-hotkeys-hook"
 import { z } from "zod"
@@ -25,8 +27,18 @@ const CmdNPanel = () => {
         url: z.string().url(),
       }),
     ),
+
     mode: "all",
   })
+
+  useLayoutEffect(() => {
+    tipcClient?.readClipboard().then((clipboardText) => {
+      if (clipboardText) {
+        form.setValue("url", clipboardText)
+        form.control._updateValid()
+      }
+    })
+  }, [])
 
   const { present, dismissAll } = useModalStack()
 
