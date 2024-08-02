@@ -6,6 +6,7 @@ import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
 import { visualizer } from "rollup-plugin-visualizer"
 import { defineConfig } from "vite"
+import mkcert from "vite-plugin-mkcert"
 
 import { getGitHash } from "./scripts/lib"
 
@@ -34,6 +35,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    mkcert(),
     sentryVitePlugin({
       org: "follow-rg",
       project: "follow",
