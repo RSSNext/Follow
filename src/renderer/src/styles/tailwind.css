@@ -50,6 +50,10 @@
   }
 }
 
+:root {
+  --a: theme("colors.theme.accent.DEFAULT");
+}
+
 @layer base {
   * {
     @apply border-border;
