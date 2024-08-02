@@ -1,1 +1,14 @@
-{ "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }] }
+{
+  "routes": [
+    {
+      "src": "/__debug_proxy",
+      "dest": "/__debug_proxy.html",
+      "status": 200
+    },
+    {
+      "src": "/[^.]+",
+      "dest": "/",
+      "status": 200
+    }
+  ]
+}
