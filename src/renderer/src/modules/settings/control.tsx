@@ -36,6 +36,7 @@ export const SettingSwitch: Component<{
     >
       <Label htmlFor={id}>{label}</Label>
       <Switch
+        id={id}
         checked={checked}
         onCheckedChange={onCheckedChange}
         className="cursor-auto"
