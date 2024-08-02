@@ -108,6 +108,7 @@ export const initializeApp = async () => {
     loading_time: loadingTime,
     using_indexed_db: enabledDataPersist,
     data_hydrated_time: dataHydratedTime,
+    version: APP_VERSION,
   })
 }
 
