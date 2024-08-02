@@ -2,6 +2,7 @@ import { FeedIcon } from "@renderer/components/feed-icon"
 import { FollowIcon } from "@renderer/components/icons/follow"
 import { StyledButton } from "@renderer/components/ui/button"
 import { ListItemHoverOverlay } from "@renderer/components/ui/list-item-hover-overlay"
+import { LoadingCircle } from "@renderer/components/ui/loading"
 import { views } from "@renderer/constants"
 import { useTitle } from "@renderer/hooks/common"
 import { FeedViewType } from "@renderer/lib/enum"
@@ -59,7 +60,12 @@ export function Component() {
   useTitle(feed.data?.feed.title)
   return (
     <>
-      {feed.data?.feed && (
+      {feed.isLoading ? (
+        <LoadingCircle
+          size="large"
+          className="center h-48 w-full max-w-full"
+        />
+      ) : feed.data?.feed && (
         <div className="mx-auto mt-12 flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
           <FeedIcon
             fallback

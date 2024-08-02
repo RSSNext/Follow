@@ -1,10 +1,10 @@
+import { Slot } from "@radix-ui/react-slot"
 import { ActionButton } from "@renderer/components/ui/button"
-import { shortcuts } from "@renderer/constants/shortcuts"
+import { views } from "@renderer/constants"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { AnimatePresence, m } from "framer-motion"
-import { useHotkeys } from "react-hotkeys-hook"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./read-history"
@@ -25,23 +25,6 @@ export function EntryHeader({
     entry,
   })
 
-  useHotkeys(
-    shortcuts.entry.toggleStarred.key,
-    () => {
-      const key = entry?.collections ? "unstar" : "star"
-      items.find((item) => item.key === key)?.onClick()
-    },
-    { scopes: ["home"] },
-  )
-
-  useHotkeys(
-    shortcuts.entry.openInBrowser.key,
-    () => {
-      items.find((item) => item.key === "openInBrowser")?.onClick()
-    },
-    { scopes: ["home"] },
-  )
-
   const entryTitleMeta = useEntryTitleMeta()
   const isAtTop = useEntryContentScrollToTop()
   const shouldShowMeta = !isAtTop && entryTitleMeta
@@ -57,8 +40,9 @@ export function EntryHeader({
     >
       <div
         className={cn(
-          "invisible absolute left-5 top-0 z-0 flex h-full items-center gap-2 text-[13px] text-zinc-500",
+          "invisible absolute left-5 top-0 z-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500",
           isAtTop && "visible z-[11]",
+          views[view].wideMode && "static",
         )}
       >
         <EntryReadHistory entryId={entryId} />
@@ -87,16 +71,19 @@ export function EntryHeader({
 
         <div className="relative flex shrink-0 items-center justify-end gap-3">
           {items
-            .filter((item) => !item.disabled)
+            .filter((item) => !item.hide)
             .map((item) => (
               <ActionButton
                 icon={
                   item.icon ? (
-                    <img className="size-4 grayscale" src={item.icon} />
+                    <Slot className="size-4">
+                      {item.icon}
+                    </Slot>
                   ) : (
                     <i className={item.className} />
                   )
                 }
+                active={item.active}
                 shortcut={item.shortcut}
                 onClick={item.onClick}
                 tooltip={item.name}

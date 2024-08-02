@@ -173,7 +173,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
 
   return (
     <Vibrancy
-      className="relative flex h-full flex-col gap-3 rounded-l-[12px] pt-2.5"
+      className="relative flex h-full flex-col space-y-3 rounded-l-[12px] pt-2.5"
       onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
       <div
@@ -248,7 +248,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
           {views.map((item, index) => (
             <section
               key={item.name}
-              className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center pb-8"
+              className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center"
             >
               {active === index && (
                 <FeedList

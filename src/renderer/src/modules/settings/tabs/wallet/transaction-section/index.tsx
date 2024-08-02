@@ -5,6 +5,8 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
+import { RelativeTime } from "@renderer/components/ui/datetime"
+import { LoadingCircle } from "@renderer/components/ui/loading"
 import {
   Table,
   TableBody,
@@ -17,7 +19,6 @@ import { Balance } from "@renderer/components/ui/wallet/balance"
 import { cn } from "@renderer/lib/utils"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
 import { useWallet, useWalletTransactions } from "@renderer/queries/wallet"
-import dayjs from "dayjs"
 
 export const TransactionsSection = () => {
   const user = useMe()
@@ -26,9 +27,15 @@ export const TransactionsSection = () => {
 
   const transactions = useWalletTransactions({ fromOrToUserId: user?.id })
 
-  if (!myWallet) return
+  if (!myWallet) return null
 
-  if (transactions.isLoading) { return <div className="text-theme-disabled">Loading...</div> }
+  if (transactions.isLoading) {
+    return (
+      <div className="center mt-12">
+        <LoadingCircle size="large" />
+      </div>
+    )
+  }
 
   // if (transactions.data?.length === 0) return <div className="text-theme-disabled">No transactions</div>
 
@@ -39,12 +46,22 @@ export const TransactionsSection = () => {
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead size="sm">Type</TableHead>
-              <TableHead size="sm">Amount</TableHead>
-              <TableHead size="sm">From</TableHead>
-              <TableHead size="sm">To</TableHead>
-              <TableHead size="sm">Date</TableHead>
+            <TableRow className="[&_*]:!font-semibold">
+              <TableHead className="w-16 text-center" size="sm">
+                Type
+              </TableHead>
+              <TableHead className="text-center" size="sm">
+                Amount
+              </TableHead>
+              <TableHead className="text-center" size="sm">
+                From
+              </TableHead>
+              <TableHead className="text-center" size="sm">
+                To
+              </TableHead>
+              <TableHead className="text-center" size="sm">
+                Date
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -67,7 +84,7 @@ export const TransactionsSection = () => {
                 </TableCell>
                 {/* <TableCell align="center" size="sm"><FeedRenderer feed={row.toFeed} /></TableCell> */}
                 <TableCell align="center" size="sm">
-                  {dayjs(row.createdAt).fromNow()}
+                  <RelativeTime date={row.createdAt} />
                 </TableCell>
               </TableRow>
             ))}

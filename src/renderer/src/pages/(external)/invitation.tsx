@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
+import { getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { useInvitationMutation } from "@renderer/queries/invitations"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
@@ -25,7 +26,12 @@ export function Component() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
-  const invitationMutation = useInvitationMutation()
+  const invitationMutation = useInvitationMutation({
+    onError(error) {
+      const message = getFetchErrorMessage(error)
+      form.setError("code", { message })
+    },
+  })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     invitationMutation.mutate(values.code)
@@ -46,7 +52,6 @@ export function Component() {
           className="w-[512px] max-w-full space-y-8"
         >
           <FormField
-
             control={form.control}
             name="code"
             render={({ field }) => (
@@ -55,7 +60,9 @@ export function Component() {
                 <FormControl>
                   <Input autoFocus {...field} />
                 </FormControl>
-                <FormMessage />
+                <div className="h-6">
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />

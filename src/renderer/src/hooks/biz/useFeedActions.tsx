@@ -3,6 +3,7 @@ import { useModalStack } from "@renderer/components/ui/modal"
 import type { NativeMenuItem } from "@renderer/lib/native-menu"
 import { useFeedClaimModal } from "@renderer/modules/claim"
 import { FeedForm } from "@renderer/modules/discover/feed-form"
+import { entryActions } from "@renderer/store/entry"
 import { getFeedById, useFeedById } from "@renderer/store/feed"
 import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { WEB_URL } from "@shared/constants"
@@ -67,6 +68,13 @@ export const useFeedActions = ({
       {
         type: "separator" as const,
         disabled: isEntryList,
+      },
+      {
+        type: "text",
+        label: "Mark All as Read",
+        shortcut: "Meta+Shift+A",
+        disabled: isEntryList,
+        click: () => entryActions.markReadByFeedId(feedId),
       },
       ...(!feed.ownerUserId && !!feed.id ?
           [

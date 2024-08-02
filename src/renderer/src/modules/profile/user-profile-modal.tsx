@@ -22,14 +22,18 @@ import type { SubscriptionModel } from "@renderer/models"
 import { useUserSubscriptionsQuery } from "@renderer/modules/profile/hooks"
 import { useSubscriptionStore } from "@renderer/store/subscription"
 import { useAnimationControls } from "framer-motion"
+import { throttle } from "lodash-es"
 import type { FC } from "react"
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useEffect, useMemo, useRef, useState } from "react"
 
 import { FeedForm } from "../discover/feed-form"
 
+type ItemVariant = "loose" | "compact"
 export const UserProfileModalContent: FC<{
   userId: string
-}> = ({ userId }) => {
+
+  variant: "drawer" | "dialog"
+}> = ({ userId, variant }) => {
   const user = useAuthQuery(
     defineQuery(["profiles", userId], async () => {
       const res = await apiClient.profiles.$get({
@@ -49,31 +53,75 @@ export const UserProfileModalContent: FC<{
   const winHeight = useState(() => window.innerHeight)[0]
 
   const [scrollerRef, setScrollerRef] = useState<HTMLDivElement | null>(null)
-
   const [isHeaderSimple, setHeaderSimple] = useState(false)
 
+  const currentVisibleRef = useRef<Set<string>>()
   useEffect(() => {
     const $ref = scrollerRef
 
     if (!$ref) return
-    $ref.onscroll = () => {
+
+    const initialHeaderHeight = 136
+    $ref.onscroll = throttle(() => {
       const currentH = $ref.scrollTop
 
-      setHeaderSimple(currentH > 300)
-    }
+      setHeaderSimple((current) => {
+        if (!current) {
+          return currentH > initialHeaderHeight
+        } else {
+          if (currentH === 0) return false
+        }
+        return current
+      })
+    }, 16)
+
+    const currentVisible = new Set<string>()
+    const ob = new IntersectionObserver((en) => {
+      en.forEach((entry) => {
+        const id = (entry.target as HTMLElement).dataset.feedId as string
+        if (!id) return
+        if (entry.isIntersecting) {
+          currentVisible.add(id)
+        } else {
+          currentVisible.delete(id)
+        }
+      })
+
+      if (currentVisible.size === 0) return
+      currentVisibleRef.current = currentVisible
+    })
+
+    $ref.querySelectorAll("[data-feed-id]").forEach((el) => {
+      ob.observe(el)
+    })
     return () => {
       $ref.onscroll = null
-    }
-  }, [scrollerRef])
 
-  return (
-    <div className="container center h-full" onClick={modal.dismiss}>
-      <m.div
-        onClick={(e) => e.stopPropagation()}
-        tabIndex={-1}
-        initial="initial"
-        animate={controller}
-        variants={{
+      ob.disconnect()
+    }
+  }, [scrollerRef, subscriptions])
+
+  const modalVariant = useMemo(() => {
+    switch (variant) {
+      case "drawer": {
+        return {
+          enter: {
+            x: 0,
+            opacity: 1,
+          },
+          initial: {
+            x: 700,
+            opacity: 0.9,
+          },
+          exit: {
+            x: 750,
+            opacity: 0,
+          },
+        }
+      }
+
+      case "dialog": {
+        return {
           enter: {
             y: 0,
             opacity: 1,
@@ -85,7 +133,27 @@ export const UserProfileModalContent: FC<{
           exit: {
             y: winHeight,
           },
-        }}
+        }
+      }
+    }
+  }, [variant, winHeight])
+
+  const [itemStyle, setItemStyle] = useState("loose" as ItemVariant)
+  return (
+    <div
+      className={
+        variant === "drawer" ?
+          "flex h-full justify-end overflow-hidden" :
+          "container center h-full"
+      }
+      onClick={modal.dismiss}
+    >
+      <m.div
+        onClick={(e) => e.stopPropagation()}
+        tabIndex={-1}
+        initial="initial"
+        animate={controller}
+        variants={modalVariant}
         transition={{
           type: "spring",
           mass: 0.4,
@@ -94,9 +162,40 @@ export const UserProfileModalContent: FC<{
         }}
         exit="exit"
         layout="size"
-        className="shadow-perfect perfect-sm relative flex h-[80vh] flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 lg:max-h-[calc(100vh-20rem)]"
+        className={cn(
+          "shadow-perfect perfect-sm relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8",
+          variant === "drawer" ?
+            "my-auto mr-4 h-[calc(100%-4rem)] w-[60ch] max-w-full" :
+            "h-[80vh] w-[500px] max-w-full lg:max-h-[calc(100vh-10rem)]",
+        )}
       >
         <div className="absolute right-2 top-2 z-10 flex items-center gap-2 text-[20px] opacity-80">
+          <ActionButton
+            tooltip="Toggle Item Style"
+            onClick={() => {
+              const currentVisible = currentVisibleRef.current
+              const topOfCurrent = currentVisible?.values().next().value
+
+              setItemStyle((current) =>
+                current === "loose" ? "compact" : "loose",
+              )
+              if (!topOfCurrent) return
+
+              nextFrame(() => {
+                scrollerRef
+                  ?.querySelector(`[data-feed-id="${topOfCurrent}"]`)
+                  ?.scrollIntoView()
+              })
+            }}
+          >
+            <i
+              className={cn(
+                itemStyle === "loose" ?
+                  "i-mgc-list-check-3-cute-re" :
+                  "i-mgc-list-check-cute-re",
+              )}
+            />
+          </ActionButton>
           <ActionButton
             tooltip="Share"
             onClick={() => {
@@ -156,9 +255,8 @@ export const UserProfileModalContent: FC<{
               </m.div>
             </div>
             <ScrollArea.ScrollArea
-              mask
               ref={setScrollerRef}
-              rootClassName="mb-4 h-[400px] grow w-[70ch] max-w-full px-5"
+              rootClassName="mb-4 h-[400px] grow max-w-full px-5 w-full"
               viewportClassName="[&>div]:space-y-4"
             >
               {subscriptions.isLoading ? (
@@ -176,6 +274,7 @@ export const UserProfileModalContent: FC<{
                     <div>
                       {subscriptions.data?.[category].map((subscription) => (
                         <SubscriptionItem
+                          variant={itemStyle}
                           key={subscription.feedId}
                           subscription={subscription}
                         />
@@ -188,12 +287,7 @@ export const UserProfileModalContent: FC<{
           </Fragment>
         )}
 
-        {!user.data && (
-          <LoadingCircle
-            size="large"
-            className="center h-[80vh] w-[39.125rem] max-w-full"
-          />
-        )}
+        {!user.data && <LoadingCircle size="large" className="center h-full" />}
       </m.div>
     </div>
   )
@@ -201,26 +295,40 @@ export const UserProfileModalContent: FC<{
 
 const SubscriptionItem: FC<{
   subscription: SubscriptionModel
-}> = ({ subscription }) => {
+
+  variant: ItemVariant
+}> = ({ subscription, variant }) => {
   const isFollowed = !!useSubscriptionStore(
     (state) => state.data[subscription.feedId],
   )
   const { present } = useModalStack()
+  const isLoose = variant === "loose"
   return (
-    <div className="group relative border-b py-5">
+    <div
+      className={cn("group relative", isLoose ? "border-b py-5" : "py-2")}
+      data-feed-id={subscription.feedId}
+    >
       <a
         className="flex flex-1 cursor-default"
         href={subscription.feeds.siteUrl!}
         target="_blank"
       >
         <FeedIcon feed={subscription.feeds} size={22} className="mr-3" />
-        <div className={cn("w-0 flex-1 grow", "group-hover:grow-[0.85]")}>
+        <div
+          className={cn(
+            "w-0 flex-1 grow",
+            "group-hover:grow-[0.85]",
+            !isLoose && "flex items-center",
+          )}
+        >
           <div className="truncate font-medium leading-none">
             {subscription.feeds?.title}
           </div>
-          <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
-            {subscription.feeds?.description}
-          </div>
+          {isLoose && (
+            <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
+              {subscription.feeds?.description}
+            </div>
+          )}
         </div>
         <div className="absolute right-0 opacity-0 transition-opacity group-hover:opacity-100">
           <StyledButton
@@ -244,8 +352,14 @@ const SubscriptionItem: FC<{
               })
             }}
           >
-            <FollowIcon className="mr-1 size-3" />
-            {isFollowed ? "Edit" : APP_NAME}
+            {isFollowed ? (
+              "Edit"
+            ) : (
+              <>
+                <FollowIcon className="mr-1 size-3" />
+                {APP_NAME}
+              </>
+            )}
           </StyledButton>
         </div>
       </a>

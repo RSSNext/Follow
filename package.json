@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "private": true,
   "packageManager": "pnpm@9.6.0",
   "description": "Next generation information browser",
@@ -15,6 +15,7 @@
   "main": "./dist/main/index.js",
   "scripts": {
     "build": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make",
+    "build:macos": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make --arch=universal --platform=darwin",
     "build:web": "vite build",
     "dev": "electron-vite dev --outDir=dist",
     "dev:debug": "export DEBUG=true && vite --debug",
@@ -37,6 +38,7 @@
     "@hono/auth-js": "1.0.10",
     "@hookform/resolvers": "3.9.0",
     "@iconify/tools": "4.0.4",
+    "@mozilla/readability": "^0.5.0",
     "@radix-ui/react-alert-dialog": "1.1.1",
     "@radix-ui/react-avatar": "1.1.0",
     "@radix-ui/react-checkbox": "1.1.1",
@@ -88,7 +90,9 @@
     "idb-keyval": "6.2.1",
     "immer": "10.1.1",
     "jotai": "2.9.1",
+
     "lethargy": "1.0.9",
+    "linkedom": "^0.18.4",
     "lodash-es": "4.17.21",
     "lowdb": "7.0.1",
     "markdown-it": "14.1.0",
@@ -97,6 +101,7 @@
     "path-to-regexp": "7.1.0",
     "posthog-js": "1.150.0",
     "posthog-node": "4.0.1",
+    "re-resizable": "6.9.17",
     "react-error-boundary": "4.0.13",
     "react-fast-marquee": "1.6.5",
     "react-hook-form": "7.52.1",
@@ -169,7 +174,8 @@
     "patchedDependencies": {
       "sonner@1.5.0": "patches/sonner@1.5.0.patch",
       "hono@4.4.7": "patches/hono@4.4.7.patch",
-      "immer@10.1.1": "patches/immer@10.1.1.patch"
+      "immer@10.1.1": "patches/immer@10.1.1.patch",
+      "@mozilla/readability@0.5.0": "patches/@mozilla__readability@0.5.0.patch"
     }
   },
   "simple-git-hooks": {

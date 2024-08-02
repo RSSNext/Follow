@@ -12,8 +12,8 @@
   --fo-inactive: 0, 0%, 80%;
   --fo-disabled: 0, 0%, 70%;
 
-  --fo-item-active: theme(colors.native.active/0.4);
-  --fo-item-hover: theme(colors.native.active/0.2);
+  --fo-item-active: theme(colors.zinc.400/0.3);
+  --fo-item-hover: theme(colors.zinc.400/0.2);
 
   --fo-modal-background: theme(colors.zinc.50/0.8);
   --fo-modal-background-opaque: theme(colors.zinc.50);
@@ -28,8 +28,9 @@
 
   --fo-vibrancy-background: theme(colors.native.active);
 
-  --fo-item-active: theme(colors.neutral.700/0.4);
-  --fo-item-hover: theme(colors.native.active/0.2);
+  --fo-item-active: theme(colors.neutral.600/0.4);
+  --fo-item-hover: theme(colors.neutral.700/0.3);
+
   --fo-tooltip-background: 0, 0%, 15%;
   --fo-tooltip-foreground: 0, 0%, 96%;
 

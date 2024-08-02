@@ -1,13 +1,8 @@
 import { Button } from "@renderer/components/ui/button"
 import { Card, CardHeader } from "@renderer/components/ui/card"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@renderer/components/ui/collapsible"
+import { Collapse, CollapseControlled } from "@renderer/components/ui/collapse"
 import { Divider } from "@renderer/components/ui/divider"
 import { Input } from "@renderer/components/ui/input"
-import { Label } from "@renderer/components/ui/label"
 import { Radio } from "@renderer/components/ui/radio-group"
 import { RadioGroup } from "@renderer/components/ui/radio-group/RadioGroup"
 import {
@@ -27,6 +22,7 @@ import {
   TableRow,
 } from "@renderer/components/ui/table"
 import { ViewSelectContent } from "@renderer/components/view-select-content"
+import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import type { SupportedLanguages } from "@renderer/models"
 
@@ -251,25 +247,33 @@ const OperationTableCell = ({
 
 const SettingCollapsible = ({
   title,
-  children,
-  open,
   onOpenChange,
+  open,
+  children,
 }: {
   title: string
   children: React.ReactNode
   open?: boolean
   onOpenChange?: (open: boolean) => void
-}) => (
-  <Collapsible open={open} onOpenChange={onOpenChange}>
-    <div className="flex items-center">
-      <Label className="flex-1">{title}</Label>
-      <CollapsibleTrigger className="-m-3 flex items-center [&_i]:data-[state=open]:rotate-45">
-        <i className="i-mgc-add-cute-re m-3 transition-transform" />
-      </CollapsibleTrigger>
-    </div>
-    <CollapsibleContent className="mt-2">{children}</CollapsibleContent>
-  </Collapsible>
-)
+}) => {
+  if (typeof open === "boolean" && typeof onOpenChange === "function") {
+    return (
+      <CollapseControlled
+        isOpened={open}
+        onOpenChange={onOpenChange}
+        title={title}
+      >
+        <div className="pt-2">{children}</div>
+      </CollapseControlled>
+    )
+  }
+
+  return (
+    <Collapse title={title}>
+      <div className="pt-2">{children}</div>
+    </Collapse>
+  )
+}
 
 const CommonSelectTrigger = ({ className }: { className?: string }) => (
   <SelectTrigger className={cn("h-8", className)}>
@@ -287,33 +291,36 @@ export function ActionCard({
   return (
     <Card>
       <CardHeader className="space-y-4 px-6 py-4">
-        <Collapsible className="[&_.name-placeholder]:data-[state=open]:hidden [&_input.name-input]:data-[state=open]:block">
-          <div className="flex w-full items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="-ml-2"
-              onClick={() => {
-                onChange(null)
-              }}
-            >
-              <i className="i-mgc-delete-2-cute-re text-zinc-600" />
-            </Button>
-            <p className="shrink-0 font-medium text-zinc-500">Name</p>
-            <Input
-              value={data.name}
-              className="name-input hidden h-8"
-              onChange={(e) => {
-                data.name = e.target.value
-                onChange(data)
-              }}
-            />
-            <CollapsibleTrigger className="flex w-14 flex-1 shrink-0 items-center pl-3 text-left [&_i]:data-[state=open]:rotate-90">
+        <Collapse
+          className="[&_.name-placeholder]:data-[state=open]:hidden [&_input.name-input]:data-[state=open]:block"
+          title={(
+            <div className="flex w-full items-center gap-2 pr-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="-ml-2"
+                onClick={() => {
+                  onChange(null)
+                }}
+              >
+                <i className="i-mgc-delete-2-cute-re text-zinc-600" />
+              </Button>
+              <p className="shrink-0 font-medium text-zinc-500">Name</p>
+              <Input
+                value={data.name}
+                className="name-input hidden h-8"
+                onClick={stopPropagation}
+                onChange={(e) => {
+                  data.name = e.target.value
+                  onChange(data)
+                }}
+              />
+
               <div className="name-placeholder flex-1 text-sm">{data.name}</div>
-              <i className="i-mgc-right-cute-re h-8 shrink-0 text-xl transition-transform" />
-            </CollapsibleTrigger>
-          </div>
-          <CollapsibleContent className="mt-4 space-y-4">
+            </div>
+          )}
+        >
+          <div className="mt-4 space-y-4">
             <div className="space-y-3">
               <p className="font-medium text-zinc-500">When feeds match…</p>
               <div className="flex flex-col gap-2">
@@ -328,8 +335,8 @@ export function ActionCard({
                     onChange(data)
                   }}
                 >
-                  <Radio label="all" value="all" />
-                  <Radio label="Custom filter" value="filter" />
+                  <Radio label="All" value="all" />
+                  <Radio label="Custom filters" value="filter" />
                 </RadioGroup>
               </div>
 
@@ -421,22 +428,26 @@ export function ActionCard({
               )}
             </div>
             <div className="space-y-4">
-              <p className="font-medium text-zinc-500">
-                Then the settings are…
-              </p>
+              <p className="font-medium text-zinc-500">Then do…</p>
               <div className="w-full space-y-4">
-                <SettingCollapsible
-                  title="Translate to"
-                  open={!!data.result.translation}
-                  onOpenChange={(open) => {
-                    if (open) {
-                      data.result.translation = TransitionOptions[0].value
-                    } else {
-                      delete data.result.translation
-                    }
-                    onChange(data)
-                  }}
-                >
+                <div className="flex w-full cursor-pointer items-center justify-between">
+                  <span className="w-0 shrink grow truncate">
+                    Generate summary using AI
+                  </span>
+                  <Switch
+                    checked={data.result.summary}
+                    onCheckedChange={(checked) => {
+                      data.result.summary = checked
+                      onChange(data)
+                    }}
+                  />
+                </div>
+                <Divider />
+
+                <div className="flex w-full cursor-pointer items-center justify-between">
+                  <span className="w-0 shrink grow truncate">
+                    Translate into
+                  </span>
                   <Select
                     value={data.result.translation}
                     onValueChange={(value) => {
@@ -453,29 +464,10 @@ export function ActionCard({
                       ))}
                     </SelectContent>
                   </Select>
-                </SettingCollapsible>
+                </div>
+
                 <Divider />
-                <SettingCollapsible
-                  title="Enable AI summary"
-                  open={data.result.summary !== undefined}
-                  onOpenChange={(open) => {
-                    if (open) {
-                      data.result.summary = true
-                    } else {
-                      delete data.result.summary
-                    }
-                    onChange(data)
-                  }}
-                >
-                  <Switch
-                    checked={data.result.summary}
-                    onCheckedChange={(checked) => {
-                      data.result.summary = checked
-                      onChange(data)
-                    }}
-                  />
-                </SettingCollapsible>
-                <Divider />
+
                 <SettingCollapsible
                   title="Rewrite Rules"
                   open={!!data.result.rewriteRules}
@@ -661,8 +653,8 @@ export function ActionCard({
                 </SettingCollapsible>
               </div>
             </div>
-          </CollapsibleContent>
-        </Collapsible>
+          </div>
+        </Collapse>
       </CardHeader>
     </Card>
   )

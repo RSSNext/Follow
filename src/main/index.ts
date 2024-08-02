@@ -133,7 +133,7 @@ function bootsharp() {
 
       const { height, resizable, width } = options || {}
       createWindow({
-        extraPath: url.replace(DEEPLINK_SCHEME, "/"),
+        extraPath: `#${url.replace(DEEPLINK_SCHEME, "/")}`,
         width: width ?? 800,
         height: height ?? 600,
         resizable,

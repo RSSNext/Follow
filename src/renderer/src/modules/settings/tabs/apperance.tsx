@@ -57,24 +57,20 @@ export const SettingAppearance = () => {
                 !window.electron || !["macOS", "Linux"].includes(getOS()),
               onChange: (value) => setUISetting("opaqueSidebar", value),
             },
+
             {
               type: "title",
-              value: "UI",
-            },
-            TextSize,
-            {
-              type: "title",
-              value: "Display counts",
+              value: "Unread count",
             },
             {
               disabled:
                 !window.electron || !["macOS", "Linux"].includes(getOS()),
-              label: "Show Dock badge",
+              label: "Show as Dock badge",
               key: "showDockBadge",
               onChange: (value) => setUISetting("showDockBadge", value),
             },
             {
-              label: "Show sidebar unread count",
+              label: "Show in sidebar",
               key: "sidebarShowUnreadCount",
               onChange: (value) =>
                 setUISetting("sidebarShowUnreadCount", value),
@@ -83,6 +79,7 @@ export const SettingAppearance = () => {
               type: "title",
               value: "Fonts",
             },
+            TextSize,
             UIFontSelector,
             ContentFontSelector,
             {
@@ -109,7 +106,7 @@ export const SettingAppearance = () => {
               label: "Reduce motion",
               key: "reduceMotion",
               onChange: (value) => setUISetting("reduceMotion", value),
-              description: `Enabling this option will reduce the motion of the element to improve performance and device life, and if it is disabled, it will adapt to the system settings.`,
+              description: `Reducing the motion of elements to improve performance and reduce energy consumption.`,
             },
           ]}
         />
@@ -155,7 +152,7 @@ const TextSize = () => {
   const uiTextSize = useUISettingSelector((state) => state.uiTextSize)
 
   return (
-    <div className="mt-1 flex items-center justify-between">
+    <div className="-mt-1 mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">Text size</span>
       <Select
         defaultValue={textSizeMap.default.toString()}

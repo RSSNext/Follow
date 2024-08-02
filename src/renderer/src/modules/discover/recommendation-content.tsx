@@ -1,4 +1,4 @@
-import { DiscoverFeedForm } from "./content-components"
+import { DiscoverFeedForm } from "./DiscoverFeedForm"
 import type { RSSHubRoute } from "./types"
 
 export const RecommendationContent = ({

@@ -1,3 +1,4 @@
+import { Slot } from "@radix-ui/react-slot"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { ActionButton } from "@renderer/components/ui/button"
 import { RelativeTime } from "@renderer/components/ui/datetime"
@@ -86,8 +87,8 @@ export const SocialMediaItem: EntryListItemFC = ({
                 height: 224,
               }}
               onClick={(e) => {
-                previewMedia(mediaList, i)
                 e.stopPropagation()
+                previewMedia(mediaList, i)
               }}
             />
           ))}
@@ -118,12 +119,12 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
   return (
     <div className="flex origin-right scale-90 items-center gap-1">
       {items
-        .filter((item) => !item.disabled)
+        .filter((item) => !item.hide && (item.key !== "read" && item.key !== "unread"))
         .map((item) => (
           <ActionButton
             icon={
               item.icon ? (
-                <img className="size-4 grayscale" src={item.icon} />
+                <Slot className="size-4">{item.icon}</Slot>
               ) : (
                 <i className={item.className} />
               )

@@ -21,11 +21,6 @@ export const parseHtml = async (
   content: string,
   options?: {
     renderInlineStyle: boolean
-
-    /**
-     * parse first audio time in paragraph, e,g: 00:00
-     */
-    parseParagraphAudioTime?: boolean
   },
 ) => {
   const file = new VFile(content)
@@ -88,14 +83,7 @@ export const parseHtml = async (
               ((item.properties as any).inline = true)
             }
           }
-          return createElement(
-            MarkdownP,
-            {
-              ...props,
-              parseTimeline: options?.parseParagraphAudioTime,
-            },
-            props.children,
-          )
+          return createElement(MarkdownP, props, props.children)
         },
         hr: ({ node, ...props }) =>
           createElement("hr", {

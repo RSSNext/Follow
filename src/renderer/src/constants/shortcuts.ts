@@ -19,7 +19,7 @@ export const shortcuts = {
       key: "Meta+T",
     },
     switchToView: {
-      name: "Switch View",
+      name: "Switch to View",
       key: "1, 2, 3, 4, 5, 6",
     },
     switchBetweenViews: {
@@ -85,7 +85,7 @@ export const shortcuts = {
 
   audio: {
     "play/pause": {
-      name: "Play/Pause",
+      name: "Play/Pause (When the audio player is open)",
       key: "Space",
     },
   },

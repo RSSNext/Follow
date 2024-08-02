@@ -4,7 +4,7 @@ import {
 } from "@renderer/atoms/route"
 import { setSidebarActiveView } from "@renderer/atoms/sidebar"
 import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "@renderer/constants"
-import type { FeedViewType } from "@renderer/lib/enum"
+import { FeedViewType } from "@renderer/lib/enum"
 import { isUndefined } from "lodash-es"
 
 type NavigateEntryOptions = Partial<{
@@ -27,6 +27,7 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
     finalFeedId = ROUTE_FEED_PENDING
   }
 
+  finalFeedId = encodeURIComponent(finalFeedId)
   const nextSearchParams = new URLSearchParams(searchParams)
 
   if (!isUndefined(view)) {
@@ -34,11 +35,13 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
     setSidebarActiveView(view)
   }
 
+  const finalView = nextSearchParams.get("view")
+
   if (window.posthog) {
     window.posthog.capture("Navigate Entry", {
       feedId: finalFeedId,
       entryId,
-      view,
+      view: finalView ? Number.parseInt(finalView, 10) : FeedViewType.Articles,
     })
   }
 

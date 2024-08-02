@@ -6,6 +6,7 @@ import { FetchError } from "ofetch"
 
 import { QUERY_PERSIST_KEY } from "../constants/app"
 
+const DO_NOT_RETRY_CODES = new Set([401, 403, 404, 422])
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -13,7 +14,11 @@ const queryClient = new QueryClient({
       retryDelay: 1000,
       retry(failureCount, error) {
         console.error(error)
-        if (error instanceof FetchError && (error.statusCode === undefined || error.statusCode === 401)) {
+        if (
+          error instanceof FetchError &&
+          (error.statusCode === undefined ||
+            DO_NOT_RETRY_CODES.has(error.statusCode))
+        ) {
           return false
         }
 
