@@ -7,13 +7,10 @@
     {
       "source": "/__debug_proxy/:path*",
       "destination": "/__debug_proxy.html"
-    }
-  ],
-  "routes": [
+    },
     {
-      "src": "/[^.]+",
-      "dest": "/",
-      "status": 200
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
