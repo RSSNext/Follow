@@ -90,8 +90,8 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
     },
   )
   const hasUpdate = useMemo(
-    () => !!(fetchedTime && hasNewQuery?.data?.data.has_new),
-    [hasNewQuery?.data?.data.has_new, fetchedTime],
+    () => !!(fetchedTime && hasNewQuery?.data?.data?.has_new),
+    [hasNewQuery?.data?.data?.has_new, fetchedTime],
   )
 
   useEffect(() => {
