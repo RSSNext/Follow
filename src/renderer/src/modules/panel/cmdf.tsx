@@ -103,7 +103,7 @@ const CmdFImpl: FC<{
         e.preventDefault()
         nativeSearch(value)
       }}
-      className="center fixed right-8 top-12 z-[1000] size-9 w-64 gap-2 rounded-2xl border bg-zinc-50/90 pl-3 pr-2 backdrop-blur duration-200 focus-within:border-theme-accent dark:bg-neutral-800/80"
+      className="center shadow-perfect fixed right-8 top-12 z-[1000] size-9 w-64 gap-2 rounded-2xl border bg-zinc-50/90 pl-3 pr-2 backdrop-blur duration-200 focus-within:border-theme-accent dark:bg-neutral-800/80"
     >
       <div className="relative h-full grow">
         <input
