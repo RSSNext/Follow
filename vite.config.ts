@@ -40,10 +40,22 @@ export default defineConfig({
       org: "follow-rg",
       project: "follow",
       disable: !isCI,
+      bundleSizeOptimizations: {
+        excludeDebugStatements: true,
+        // Only relevant if you added `browserTracingIntegration`
+        excludePerformanceMonitoring: true,
+        // Only relevant if you added `replayIntegration`
+        excludeReplayIframe: true,
+        excludeReplayShadowDom: true,
+        excludeReplayWorker: true,
+      },
       moduleMetadata: {
         appVersion:
           process.env.NODE_ENV === "development" ? "dev" : pkg.version,
         electron: false,
+      },
+      sourcemaps: {
+        filesToDeleteAfterUpload: ["out/web/assets/*.js.map"],
       },
     }),
 
