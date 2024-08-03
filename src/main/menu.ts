@@ -80,6 +80,16 @@ export const registerAppMenu = () => {
         { role: "cut" },
         { role: "copy" },
         { role: "paste" },
+        { type: "separator" },
+        {
+          type: "normal",
+          label: "Search",
+          accelerator: "CmdOrCtrl+F",
+          click(_e, window) {
+            if (!window) return
+            dispatchEventOnWindow(window, "OpenSearch")
+          },
+        },
         ...((isMacOS ?
             [
               { role: "pasteAndMatchStyle" },

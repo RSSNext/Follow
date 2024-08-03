@@ -2,30 +2,76 @@
  * @see https://github.com/toeverything/AFFiNE/blob/98e35384a6f71bf64c668b8f13afcaf28c9b8e97/packages/frontend/core/src/modules/find-in-page/view/find-in-page-modal.tsx
  * @copyright AFFiNE, Follow
  */
+import { softSpringPreset } from "@renderer/components/ui/constants/spring"
+import { useInputComposition, useRefValue } from "@renderer/hooks/common"
 import { tipcClient } from "@renderer/lib/client"
+import { nextFrame } from "@renderer/lib/dom"
 import { observeResize } from "@renderer/lib/observe-resize"
-import { useEffect, useRef, useState } from "react"
-import { useDebounceCallback } from "usehooks-ts"
+import { cn } from "@renderer/lib/utils"
+import { useSubscribeElectronEvent } from "@shared/event"
+import { AnimatePresence, m } from "framer-motion"
+import type { FC } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useDebounceCallback, useEventCallback } from "usehooks-ts"
 
-const CmdFImpl = () => {
+const CmdFImpl: FC<{
+  onClose: () => void
+}> = ({ onClose }) => {
   const [value, setValue] = useState("")
+
+  const currentValue = useRefValue(value)
   const inputRef = useRef<HTMLInputElement>(null)
+  useLayoutEffect(() => {
+    tipcClient?.readClipboard().then((text) => {
+      if (!currentValue.current) {
+        setValue(text)
+      }
+    })
+
+    inputRef.current?.focus()
+    // Select all
+
+    nextFrame(() =>
+      inputRef.current?.setSelectionRange(0, currentValue.current.length),
+    )
+  }, [currentValue])
+
   const [isSearching, setIsSearching] = useState(false)
 
   const searchIdRef = useRef<number>(0)
-  const nativeSearch = useDebounceCallback(
+
+  const { isCompositionRef, ...inputProps } = useInputComposition({
+    onKeyDown: useEventCallback((e) => {
+      const $input = inputRef.current
+      if (!$input) return
+
+      if (e.key === "Escape") {
+        nativeSearchImpl("")
+        onClose()
+        e.preventDefault()
+      }
+    }),
+    onCompositionEnd: useEventCallback(() => nativeSearch(value)),
+  })
+
+  const nativeSearchImpl = useEventCallback(
     async (
       text: string,
 
       dir: "forward" | "backward" = "forward",
     ) => {
+      if (isCompositionRef.current) return
       setIsSearching(true)
 
       const searchId = ++searchIdRef.current
 
       let findNext = true
       if (!text) {
-        await tipcClient?.clearSearch()
+        await tipcClient?.clearSearch().finally(() => {
+          if (searchId === searchIdRef.current) {
+            setIsSearching(false)
+          }
+        })
       } else {
         await tipcClient
           ?.search({
@@ -43,21 +89,28 @@ const CmdFImpl = () => {
           })
       }
     },
-    500,
   )
-  useEffect(() => {
+  const nativeSearch = useDebounceCallback(nativeSearchImpl, 500)
+  useLayoutEffect(() => {
     inputRef.current?.focus()
     setTimeout(() => {
       inputRef.current?.focus()
     })
   }, [isSearching])
   return (
-    <form className="center fixed right-8 top-12 z-[1000] size-9 w-64 rounded-2xl border bg-neutral-800/80 px-3 backdrop-blur">
-      <div className="relative size-full">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        nativeSearch(value)
+      }}
+      className="center fixed right-8 top-12 z-[1000] size-9 w-64 gap-2 rounded-2xl border bg-neutral-800/80 pl-3 pr-2 backdrop-blur duration-200 focus-within:border-theme-accent"
+    >
+      <div className="relative h-full grow">
         <input
+          {...inputProps}
           ref={inputRef}
           name="search"
-          className="absolute inset-0 size-full appearance-none bg-transparent font-[system-ui] text-[15px] text-transparent"
+          className="absolute inset-0 size-full appearance-none bg-transparent font-[system-ui] text-[15px]"
           style={{
             visibility: isSearching ? "hidden" : "visible",
           }}
@@ -73,9 +126,43 @@ const CmdFImpl = () => {
         />
 
         <CanvasText
-          className="pointer-events-none absolute inset-0 size-full text-transparent [&::placeholder]:text-foreground"
+          className={cn(
+            "pointer-events-none absolute inset-0 size-full text-transparent [&::placeholder]:text-foreground",
+            isSearching ? "visible" : "invisible",
+          )}
           text={value}
         />
+      </div>
+      <div className="center gap-1 [&>*]:opacity-80">
+        <button
+          type="button"
+          className="center hover:opacity-90"
+          onClick={() => {
+            nativeSearchImpl(value, "backward")
+          }}
+        >
+          <i className="i-mgc-back-2-cute-re" />
+        </button>
+        <button
+          type="button"
+          className="center hover:opacity-90"
+          onClick={() => {
+            nativeSearchImpl(value, "forward")
+          }}
+        >
+          <i className="i-mgc-forward-2-cute-re" />
+        </button>
+        <button
+          type="button"
+          className="center hover:opacity-90"
+          onClick={() => {
+            setValue("")
+            nativeSearchImpl("")
+            onClose()
+          }}
+        >
+          <i className="i-mingcute-close-circle-fill" />
+        </button>
       </div>
     </form>
   )
@@ -91,7 +178,11 @@ const drawText = (canvas: HTMLCanvasElement, text: string) => {
   canvas.width = canvas.getBoundingClientRect().width * dpr
   canvas.height = canvas.getBoundingClientRect().height * dpr
 
-  const textColor = `#fff`
+  const rootStyles = getComputedStyle(document.documentElement)
+
+  const textColor = `hsl(${rootStyles
+    .getPropertyValue("--foreground")
+    .trim()})`
 
   ctx.scale(dpr, dpr)
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -124,4 +215,28 @@ const CanvasText = ({
   return <canvas className={className} ref={ref} />
 }
 
-export const CmdF = CmdFImpl
+export const CmdF = () => {
+  const [show, setShow] = useState(false)
+
+  useSubscribeElectronEvent("OpenSearch", () => {
+    setShow(true)
+  })
+  return (
+    <AnimatePresence>
+      {show && (
+        <m.div
+          initial={{ opacity: 0.8, y: -150 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -150 }}
+          transition={softSpringPreset}
+        >
+          <CmdFImpl
+            onClose={() => {
+              setShow(false)
+            }}
+          />
+        </m.div>
+      )}
+    </AnimatePresence>
+  )
+}
