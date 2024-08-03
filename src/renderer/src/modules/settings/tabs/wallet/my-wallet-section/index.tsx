@@ -54,8 +54,8 @@ export const MyWalletSection = () => {
           </TooltipTrigger>
           <TooltipPortal>
             <TooltipContent align="start" className="z-[999]">
-              <p>1. Daily Power can only be used for tips.</p>
-              <p>2. It comes from the Power you claim for free every day..</p>
+              <p>1. Daily Power can only be used for tipping others.</p>
+              <p>2. You claim Daily Power for free once every 24 hours.</p>
             </TooltipContent>
           </TooltipPortal>
         </Tooltip>
@@ -74,12 +74,11 @@ export const MyWalletSection = () => {
           <TooltipPortal>
             <TooltipContent align="start" className="z-[999]">
               <p>
-                1. You can transfer Cashable Power to your wallet and trade
-                freely.
+                1. Cashable Power can be withdrawn to your wallet for trading.
               </p>
               <p>
-                2. It comes from the Power you recharge and the tips you
-                receive.
+                2. Cashable Power is the Power you have recharged and the tips you
+                have received.
               </p>
             </TooltipContent>
           </TooltipPortal>
