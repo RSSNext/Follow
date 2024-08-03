@@ -14,6 +14,7 @@ import { LoginModalContent } from "@renderer/modules/auth/LoginModalContent"
 import { FeedColumn } from "@renderer/modules/feed-column"
 import { AutoUpdater } from "@renderer/modules/feed-column/auto-updater"
 import { CornerPlayer } from "@renderer/modules/feed-column/corner-player"
+import { CmdF } from "@renderer/modules/panel/cmdf"
 import { SearchCmdK } from "@renderer/modules/panel/cmdk"
 import { CmdNTrigger } from "@renderer/modules/panel/cmdn"
 import type { PropsWithChildren } from "react"
@@ -65,6 +66,7 @@ export function Component() {
 
       <SearchCmdK />
       <CmdNTrigger />
+      {ELECTRON && <CmdF />}
       {isAuthFail && !user && (
         <RootPortal>
           <DeclarativeModal
