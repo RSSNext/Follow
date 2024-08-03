@@ -10,7 +10,7 @@ export const Titlebar = () => {
 
   return (
     <div
-      className="flex w-full items-center justify-end overflow-hidden"
+      className="drag-region flex w-full items-center justify-end overflow-hidden"
       style={{
         height:
           `${ElECTRON_CUSTOM_TITLEBAR_HEIGHT}px`,
@@ -19,7 +19,7 @@ export const Titlebar = () => {
       }}
     >
       <button
-        className="no-drag-region pointer-events-auto flex h-full w-[40px] items-center justify-center duration-200 hover:bg-theme-item-active"
+        className="no-drag-region pointer-events-auto flex h-full w-[50px] items-center justify-center duration-200 hover:bg-theme-item-active"
         type="button"
         onClick={() => {
           tipcClient?.windowAction({ action: "minimize" })
@@ -30,7 +30,7 @@ export const Titlebar = () => {
 
       <button
         type="button"
-        className="no-drag-region pointer-events-auto flex h-full w-[40px] items-center justify-center duration-200 hover:bg-theme-item-active"
+        className="no-drag-region pointer-events-auto flex h-full w-[50px] items-center justify-center duration-200 hover:bg-theme-item-active"
         onClick={async () => {
           await tipcClient?.windowAction({ action: "maximum" })
           refetch()
@@ -41,7 +41,7 @@ export const Titlebar = () => {
 
       <button
         type="button"
-        className="no-drag-region pointer-events-auto flex h-full w-[40px] items-center justify-center duration-200 hover:bg-red-500 hover:!text-white"
+        className="no-drag-region pointer-events-auto flex h-full w-[50px] items-center justify-center duration-200 hover:bg-red-500 hover:!text-white"
         onClick={() => {
           tipcClient?.windowAction({ action: "close" })
         }}

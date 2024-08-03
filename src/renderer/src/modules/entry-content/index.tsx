@@ -140,7 +140,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
-        className="h-[55px] shrink-0 px-5"
+        className="h-[55px] shrink-0 px-3"
       />
 
       <ScrollArea.ScrollArea
