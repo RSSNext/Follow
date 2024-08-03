@@ -25,6 +25,8 @@ import {
 } from "electron-updater/out/providers/Provider"
 import * as semver from "semver"
 
+import { isWindows } from "../env"
+
 interface GithubUpdateInfo extends UpdateInfo {
   tag: string
 }
@@ -258,12 +260,14 @@ export class CustomGitHubProvider extends BaseGitHubProvider<GithubUpdateInfo> {
   resolveFiles(updateInfo: GithubUpdateInfo): Array<ResolvedUpdateFileInfo> {
     const filteredUpdateInfo = structuredClone(updateInfo)
     // for windows, we need to determine its installer type (nsis or squirrel)
-    if (process.platform === "win32" && updateInfo.files.length > 1) {
+    if (isWindows && updateInfo.files.length > 1) {
       const isSquirrel = isSquirrelBuild()
       // @ts-expect-error we should be able to modify the object
-      filteredUpdateInfo.files = updateInfo.files.filter((file) => isSquirrel ?
-          !file.url.includes("nsis.exe") :
-        file.url.includes("nsis.exe"))
+      filteredUpdateInfo.files = updateInfo.files.filter((file) =>
+        isSquirrel ?
+            !file.url.includes("nsis.exe") :
+          file.url.includes("nsis.exe"),
+      )
     }
 
     // still replace space to - due to backward compatibility

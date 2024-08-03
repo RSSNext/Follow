@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 export const EventsMap = {
   QuickAdd: "quick-add",
   Discover: "discover",
+  OpenSearch: "open-search",
 }
 
 export const dispatchEventOnWindow = (
