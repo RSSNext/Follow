@@ -6,7 +6,7 @@ import type { FeedViewType } from "@renderer/lib/enum"
 import type { EntryReadHistoriesModel } from "src/hono"
 import { useShallow } from "zustand/react/shallow"
 
-import { useFeedIdByView, useFolderFeedsByFeedId } from "../subscription"
+import { useFeedIdByView } from "../subscription"
 import { getEntryIsInView, getFilteredFeedIds } from "./helper"
 import { useEntryStore } from "./store"
 import type { EntryFilter, FlatEntryModel } from "./types"
@@ -72,30 +72,31 @@ export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {
   return useEntryStore(useShallow(() => getFilteredFeedIds(feedIds, filter)))
 }
 
-export const useEntryIdsByFolderName = (
-  folderName: string,
+export const useEntryIdsByFeedIds = (
+  feedIds: string[],
   filter: EntryFilter = {},
-) => {
-  const feedIds = useFolderFeedsByFeedId(folderName)
-  return useEntryStore(
-    useShallow(() => {
-      if (!feedIds) return null
+) => useEntryStore(
+  useShallow(() => {
+    if (!feedIds) return null
+    if ((!Array.isArray(feedIds))) return null
 
-      return getFilteredFeedIds(feedIds, filter)
-    }),
-  )
-}
+    return getFilteredFeedIds(feedIds, filter)
+  }),
+)
 export const useEntryIdsByFeedIdOrView = (
-  feedIdOrView: string | FeedViewType,
+  feedIdOrView: string | string[] | FeedViewType,
   filter: EntryFilter = {},
 ) => {
   const byView = useEntryIdsByView(feedIdOrView as FeedViewType, filter)
   const byId = useEntryIdsByFeedId(feedIdOrView as string, filter)
-  const byFolder = useEntryIdsByFolderName(feedIdOrView as string, filter)
-  if (typeof feedIdOrView === "string") {
-    return feedIdOrView.startsWith(ROUTE_FEED_IN_FOLDER) ? byFolder : byId
+  const byFolder = useEntryIdsByFeedIds(feedIdOrView as string[], filter)
+  if (Array.isArray(feedIdOrView)) {
+    return byFolder
+  } else if (typeof feedIdOrView === "string") {
+    return byId
+  } else {
+    return byView
   }
-  return byView
 }
 
 export const useEntryReadHistory = (entryId: string): Omit<EntryReadHistoriesModel, "entryId"> | null => useEntryStore(useShallow((state) => state.readHistory[entryId]))

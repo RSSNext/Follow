@@ -62,7 +62,10 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
 
   const { feedId, view, isAllFeeds, isCollection } = routeParams
 
-  const folderIds = useFolderFeedsByFeedId(feedId)
+  const folderIds = useFolderFeedsByFeedId({
+    feedId,
+    view,
+  })
 
   const entriesOptions = {
     id: folderIds?.join(",") || feedId,
@@ -107,7 +110,7 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
   )
 
   const currentEntries = useEntryIdsByFeedIdOrView(
-    isAllFeeds ? view : feedId!,
+    isAllFeeds ? view : (folderIds || feedId!),
     {
       unread: unreadOnly,
       view,
@@ -152,10 +155,31 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
     setMergedEntries(nextIds)
   }, [entryIdsAsDeps])
 
-  const sortEntries = () =>
-    isCollection ?
-      sortEntriesIdByStarAt(mergedEntries) :
-      sortEntriesIdByEntryPublishedAt(mergedEntries)
+  const sortEntries = isCollection ?
+    sortEntriesIdByStarAt(mergedEntries) :
+    sortEntriesIdByEntryPublishedAt(mergedEntries)
+
+  const entriesWithDate = useMemo(() => {
+    if (views[view].gridMode) {
+      return sortEntries
+    } else {
+      const entriesId2Map = entryActions.getFlattenMapEntries()
+      let lastDate = ""
+      const entriesWithDate = [] as string[]
+      for (const id of sortEntries) {
+        const entry = entriesId2Map[id]
+        if (entry) {
+          const date = new Date(entry.entries.publishedAt).toDateString()
+          if (date !== lastDate) {
+            entriesWithDate.push(date)
+            lastDate = date
+          }
+        }
+        entriesWithDate.push(id)
+      }
+      return entriesWithDate
+    }
+  }, [sortEntries, view])
 
   return {
     ...query,
@@ -164,7 +188,7 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
     refetch: useCallback(() => {
       query.refetch()
     }, [query]),
-    entriesIds: sortEntries(),
+    entriesIds: entriesWithDate,
     totalCount: query.data?.pages?.[0]?.total ?? mergedEntries.length,
   }
 }

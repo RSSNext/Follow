@@ -66,6 +66,11 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>(
 const set = useSubscriptionStore.setState
 const get = useSubscriptionStore.getState
 
+type MarkReadFilter = {
+  startTime: number
+  endTime: number
+}
+
 class SubscriptionActions {
   async fetchByView(view?: FeedViewType) {
     const res = await apiClient.subscriptions.$get({
@@ -110,23 +115,38 @@ class SubscriptionActions {
     )
   }
 
-  markReadByView(view?: FeedViewType) {
+  async markReadByView(view: FeedViewType, filter?: MarkReadFilter) {
+    await apiClient.reads.all.$post({
+      json: {
+        view,
+        ...filter,
+      },
+    })
     const state = get()
     for (const feedId in state.data) {
       if (state.data[feedId].view === view) {
         feedUnreadActions.updateByFeedId(feedId, 0)
-        entryActions.patchManyByFeedId(feedId, { read: true })
+        entryActions.patchManyByFeedId(feedId, { read: true }, filter)
       }
+    }
+    if (filter) {
+      feedUnreadActions.fetchUnreadByView(view)
     }
   }
 
-  markReadByFolder(folder: string) {
-    const state = get()
-    for (const feedId in state.data) {
-      if (state.data[feedId].category === folder) {
-        feedUnreadActions.updateByFeedId(feedId, 0)
-        entryActions.patchManyByFeedId(feedId, { read: true })
-      }
+  async markReadByFeedIds(view: FeedViewType, feedIds: string[], filter?: MarkReadFilter) {
+    await apiClient.reads.all.$post({
+      json: {
+        feedIdList: feedIds,
+        ...filter,
+      },
+    })
+    for (const feedId of feedIds) {
+      feedUnreadActions.updateByFeedId(feedId, 0)
+      entryActions.patchManyByFeedId(feedId, { read: true }, filter)
+    }
+    if (filter) {
+      feedUnreadActions.fetchUnreadByView(view)
     }
   }
 

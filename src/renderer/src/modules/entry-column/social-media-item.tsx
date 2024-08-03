@@ -13,6 +13,7 @@ import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
+import { MarkAllButton } from "./mark-all-button"
 import { StarIcon } from "./star-icon"
 import { EntryTranslation } from "./translation"
 import type { EntryListItemFC } from "./types"
@@ -164,3 +165,28 @@ export const SocialMediaItemSkeleton = (
     </div>
   </div>
 )
+
+export const SocialMediaDateItem = ({
+  date,
+  className,
+}: {
+  date: string
+  className?: string
+}) => {
+  const dateObj = new Date(date)
+  const dateString = dateObj.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })
+  const startOfDay = new Date(dateObj.setHours(0, 0, 0, 0)).getTime()
+  const endOfDay = new Date(dateObj.setHours(23, 59, 59, 999)).getTime()
+
+  return (
+    <div className={cn(className, "m-auto w-[75ch] gap-3 pl-5 text-base")}>
+      <MarkAllButton
+        filter={{
+          startTime: startOfDay,
+          endTime: endOfDay,
+        }}
+      />
+      {dateString}
+    </div>
+  )
+}
