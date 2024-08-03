@@ -103,8 +103,8 @@ export const SettingGeneral = () => {
             },
             {
               label: "Rebuild Database",
-              action: () => {
-                clearLocalPersistStoreData()
+              action: async () => {
+                await clearLocalPersistStoreData()
                 window.location.reload()
               },
               description:

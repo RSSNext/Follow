@@ -6,7 +6,7 @@ import { feedActions } from "../feed"
 import { subscriptionActions } from "../subscription"
 import { feedUnreadActions } from "../unread"
 
-export const clearLocalPersistStoreData = () => {
+export const clearLocalPersistStoreData = async () => {
   // All clear and reset method will aggregate here
   [entryActions, subscriptionActions, feedUnreadActions, feedActions].forEach(
     (actions) => {
@@ -16,5 +16,5 @@ export const clearLocalPersistStoreData = () => {
 
   clearUISettings()
 
-  browserDB.delete()
+  await browserDB.delete().catch(() => null)
 }
