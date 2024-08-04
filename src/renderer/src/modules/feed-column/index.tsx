@@ -204,6 +204,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
           className="relative flex items-center gap-1"
           onClick={stopPropagation}
         >
+
           <SearchActionButton />
 
           <Link to="/discover" tabIndex={-1}>
