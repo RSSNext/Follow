@@ -116,38 +116,52 @@ class SubscriptionActions {
   }
 
   async markReadByView(view: FeedViewType, filter?: MarkReadFilter) {
-    await apiClient.reads.all.$post({
-      json: {
-        view,
-        ...filter,
+    doMutationAndTransaction(
+      () =>
+        apiClient.reads.all.$post({
+          json: {
+            view,
+            ...filter,
+          },
+        }),
+      async () => {
+        const state = get()
+        for (const feedId in state.data) {
+          if (state.data[feedId].view === view) {
+            feedUnreadActions.updateByFeedId(feedId, 0)
+            entryActions.patchManyByFeedId(feedId, { read: true }, filter)
+          }
+        }
+        if (filter) {
+          feedUnreadActions.fetchUnreadByView(view)
+        }
       },
-    })
-    const state = get()
-    for (const feedId in state.data) {
-      if (state.data[feedId].view === view) {
-        feedUnreadActions.updateByFeedId(feedId, 0)
-        entryActions.patchManyByFeedId(feedId, { read: true }, filter)
-      }
-    }
-    if (filter) {
-      feedUnreadActions.fetchUnreadByView(view)
-    }
+    )
   }
 
-  async markReadByFeedIds(view: FeedViewType, feedIds: string[], filter?: MarkReadFilter) {
-    await apiClient.reads.all.$post({
-      json: {
-        feedIdList: feedIds,
-        ...filter,
+  async markReadByFeedIds(
+    view: FeedViewType,
+    feedIds: string[],
+    filter?: MarkReadFilter,
+  ) {
+    doMutationAndTransaction(
+      () =>
+        apiClient.reads.all.$post({
+          json: {
+            feedIdList: feedIds,
+            ...filter,
+          },
+        }),
+      async () => {
+        for (const feedId of feedIds) {
+          feedUnreadActions.updateByFeedId(feedId, 0)
+          entryActions.patchManyByFeedId(feedId, { read: true }, filter)
+        }
+        if (filter) {
+          feedUnreadActions.fetchUnreadByView(view)
+        }
       },
-    })
-    for (const feedId of feedIds) {
-      feedUnreadActions.updateByFeedId(feedId, 0)
-      entryActions.patchManyByFeedId(feedId, { read: true }, filter)
-    }
-    if (filter) {
-      feedUnreadActions.fetchUnreadByView(view)
-    }
+    )
   }
 
   clear() {
@@ -273,7 +287,11 @@ class SubscriptionActions {
       }),
     )
 
-    await Promise.all(folderFeedIds.map((feedId) => SubscriptionService.changeView(feedId, changeToView)))
+    await Promise.all(
+      folderFeedIds.map((feedId) =>
+        SubscriptionService.changeView(feedId, changeToView),
+      ),
+    )
   }
 }
 

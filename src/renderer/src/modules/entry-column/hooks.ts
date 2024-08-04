@@ -110,7 +110,7 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
   )
 
   const currentEntries = useEntryIdsByFeedIdOrView(
-    isAllFeeds ? view : (folderIds || feedId!),
+    isAllFeeds ? view : folderIds || feedId!,
     {
       unread: unreadOnly,
       view,
@@ -162,23 +162,22 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
   const entriesWithDate = useMemo(() => {
     if (views[view].gridMode) {
       return sortEntries
-    } else {
-      const entriesId2Map = entryActions.getFlattenMapEntries()
-      let lastDate = ""
-      const entriesWithDate = [] as string[]
-      for (const id of sortEntries) {
-        const entry = entriesId2Map[id]
-        if (entry) {
-          const date = new Date(entry.entries.publishedAt).toDateString()
-          if (date !== lastDate) {
-            entriesWithDate.push(date)
-            lastDate = date
-          }
-        }
-        entriesWithDate.push(id)
-      }
-      return entriesWithDate
     }
+    const entriesId2Map = entryActions.getFlattenMapEntries()
+    let lastDate = ""
+    const entriesWithDate = [] as string[]
+    for (const id of sortEntries) {
+      const entry = entriesId2Map[id]
+      if (entry) {
+        const date = new Date(entry.entries.publishedAt).toDateString()
+        if (date !== lastDate) {
+          entriesWithDate.push(date)
+          lastDate = date
+        }
+      }
+      entriesWithDate.push(id)
+    }
+    return entriesWithDate
   }, [sortEntries, view])
 
   return {
