@@ -121,19 +121,40 @@ class EntryActions {
     )
   }
 
-  patchManyByFeedId(feedId: string, changed: Partial<CombinedEntryModel>) {
+  patchManyByFeedId(feedId: string, changed: Partial<CombinedEntryModel>, filter?: {
+    startTime: number
+    endTime: number
+  }) {
     set((state) =>
       produce(state, (draft) => {
         const ids = draft.entries[feedId]
         if (!ids) return
 
         ids.forEach((entryId) => {
+          if (filter) {
+            const entry = draft.flatMapEntries[entryId]
+            if (
+              +new Date(entry.entries.publishedAt) < filter.startTime ||
+              +new Date(entry.entries.publishedAt) > filter.endTime
+            ) {
+              return
+            }
+          }
           Object.assign(draft.flatMapEntries[entryId], changed)
         })
 
         return draft
       }),
     )
+  }
+
+  async markReadByFeedId(feedId: string) {
+    const state = get()
+    const entries = state.entries[feedId] || []
+    await Promise.all(
+      entries.map((entryId) => this.markRead(feedId, entryId, true)),
+    )
+    feedUnreadActions.updateByFeedId(feedId, 0)
   }
 
   private patchAll(changed: Partial<CombinedEntryModel>) {
@@ -306,15 +327,6 @@ class EntryActions {
           [entryId]: read,
         }),
     )
-  }
-
-  async markReadByFeedId(feedId: string) {
-    const state = get()
-    const entries = state.entries[feedId] || []
-    await Promise.all(
-      entries.map((entryId) => this.markRead(feedId, entryId, true)),
-    )
-    feedUnreadActions.updateByFeedId(feedId, 0)
   }
 
   async markStar(entryId: string, star: boolean) {

@@ -6,40 +6,28 @@ import { useMe } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { EmptyIcon } from "@renderer/components/icons/empty"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { ActionButton, StyledButton } from "@renderer/components/ui/button"
+import { ActionButton } from "@renderer/components/ui/button"
 import { DividerVertical } from "@renderer/components/ui/divider"
 import { LoadingCircle } from "@renderer/components/ui/loading"
-import {
-  Popover,
-  PopoverClose,
-  PopoverContent,
-  PopoverTrigger,
-} from "@renderer/components/ui/popover"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
 import {
   FEED_COLLECTION_LIST,
   ROUTE_ENTRY_PENDING,
-  ROUTE_FEED_IN_FOLDER,
   views,
 } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
+import { cn, getOS, isBizId } from "@renderer/lib/utils"
 import { EntryHeader } from "@renderer/modules/entry-content/header"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import { entryActions, useEntry } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
-import {
-  subscriptionActions,
-  useFolderFeedsByFeedId,
-} from "@renderer/store/subscription"
 import type { HTMLMotionProps } from "framer-motion"
 import type { FC } from "react"
-import { forwardRef, useCallback, useEffect, useRef, useState } from "react"
+import { forwardRef, useCallback, useEffect, useRef } from "react"
 import type {
   ScrollSeekConfiguration,
   VirtuosoHandle,
@@ -47,6 +35,7 @@ import type {
 } from "react-virtuoso"
 import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
 
+import { DateItem } from "./date-item"
 import { EntryColumnShortcutHandler } from "./EntryColumnShortcutHandler"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import {
@@ -54,6 +43,7 @@ import {
   EntryItemSkeleton,
   EntryItemSkeletonWithDelayShow,
 } from "./item"
+import { MarkAllButton } from "./mark-all-button"
 import { girdClassNames } from "./styles"
 
 const scrollSeekConfiguration: ScrollSeekConfiguration = {
@@ -129,10 +119,14 @@ export function EntryColumn() {
       }
     },
     itemContent: useCallback(
-      (_, entryId: string) => {
+      (index, entryId) => {
         if (!entryId) return null
 
-        return <EntryItem key={entryId} entryId={entryId} view={view} />
+        if (entryId.includes(" ")) {
+          return <DateItem date={entryId} view={view} isFirst={index === 0} />
+        } else {
+          return <EntryItem key={entryId} entryId={entryId} view={view} />
+        }
       },
       [view],
     ),
@@ -215,33 +209,6 @@ const ListHeader: FC<{
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
   const { feedId, entryId, view } = routerParams
-  const folderIds = useFolderFeedsByFeedId(feedId)
-
-  const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
-  const handleMarkAllAsRead = useCallback(async () => {
-    if (!routerParams) return
-    await apiClient.reads.all.$post({
-      json: {
-        ...getEntriesParams({
-          id: folderIds?.join(",") || feedId,
-          view: routerParams?.view,
-        }),
-      },
-    })
-
-    if (typeof routerParams.feedId === "number" || routerParams.isAllFeeds) {
-      subscriptionActions.markReadByView(routerParams.view)
-    } else if (routerParams.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)) {
-      subscriptionActions.markReadByFolder(
-        routerParams.feedId.replace(ROUTE_FEED_IN_FOLDER, ""),
-      )
-    } else {
-      routerParams.feedId?.split(",").forEach((feedId) => {
-        entryActions.markReadByFeedId(feedId)
-      })
-    }
-    setMarkPopoverOpen(false)
-  }, [feedId, folderIds, routerParams])
 
   const headerTitle = useFeedHeaderTitle()
   const os = getOS()
@@ -275,12 +242,12 @@ const ListHeader: FC<{
   const feed = useFeedById(routerParams.feedId)
 
   const titleStyleBasedView = [
-    "pl-11",
-    "pl-4",
+    "pl-12",
+    "pl-7",
     "pl-7",
     "pl-7",
     "px-5",
-    "pl-11",
+    "pl-12",
   ]
 
   return (
@@ -361,28 +328,7 @@ const ListHeader: FC<{
               <i className="i-mgc-round-cute-re" />
             )}
           </ActionButton>
-          <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
-            <PopoverTrigger asChild>
-              <ActionButton
-                shortcut={shortcuts.entries.markAllAsRead.key}
-                tooltip="Mark All as Read"
-              >
-                <i className="i-mgc-check-circle-cute-re" />
-              </ActionButton>
-            </PopoverTrigger>
-            <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
-              <div>Mark all as read?</div>
-              <div className="space-x-4">
-                <PopoverClose>
-                  <StyledButton variant="outline">Cancel</StyledButton>
-                </PopoverClose>
-                {/* TODO */}
-                <StyledButton onClick={handleMarkAllAsRead}>
-                  Confirm
-                </StyledButton>
-              </div>
-            </PopoverContent>
-          </Popover>
+          <MarkAllButton />
         </div>
       </div>
       {titleAtBottom && titleInfo}

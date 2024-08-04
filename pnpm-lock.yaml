@@ -329,6 +329,9 @@ importers:
       '@electron-toolkit/tsconfig':
         specifier: ^1.0.1
         version: 1.0.1(@types/node@20.14.12)
+      '@hono/node-server':
+        specifier: 1.12.0
+        version: 1.12.0
       '@iconify-json/mingcute':
         specifier: 1.1.18
         version: 1.1.18
@@ -1015,6 +1018,10 @@ packages:
       '@auth/core': 0.*
       hono: '>=3.*'
       react: '>=18'
+
+  '@hono/node-server@1.12.0':
+    resolution: {integrity: sha512-e6oHjNiErRxsZRZBmc2KucuvY3btlO/XPncIpP2X75bRdTilF9GLjm3NHvKKunpJbbJJj31/FoPTksTf8djAVw==}
+    engines: {node: '>=18.14.1'}
 
   '@hookform/resolvers@3.9.0':
     resolution: {integrity: sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg==}
@@ -7738,6 +7745,8 @@ snapshots:
       '@auth/core': 0.34.1
       hono: 4.4.7(patch_hash=ycbk46disqruhfjducp47b5fl4)
       react: 18.3.1
+
+  '@hono/node-server@1.12.0': {}
 
   '@hookform/resolvers@3.9.0(react-hook-form@7.52.1(react@18.3.1))':
     dependencies:
