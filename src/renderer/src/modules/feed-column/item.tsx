@@ -23,6 +23,8 @@ import { WEB_URL } from "@shared/constants"
 import dayjs from "dayjs"
 import { memo, useCallback } from "react"
 
+import { UnreadNumber } from "./unread-number"
+
 interface FeedItemProps {
   feedId: string
   view?: number
@@ -181,12 +183,7 @@ const FeedItemImpl = ({
 
           )}
         </div>
-
-        {showUnreadCount && !!feedUnread && (
-          <div className="ml-2 text-xs text-zinc-500 dark:text-neutral-400">
-            {feedUnread}
-          </div>
-        )}
+        <UnreadNumber unread={feedUnread} className="ml-2" />
       </div>
     </TooltipProvider>
   )

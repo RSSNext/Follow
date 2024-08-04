@@ -26,6 +26,7 @@ import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { CategoryRenameContent } from "./category-rename-dialog"
 import { FeedItem } from "./item"
+import { UnreadNumber } from "./unread-number"
 
 type FeedId = string
 interface FeedCategoryProps {
@@ -218,11 +219,7 @@ function FeedCategoryImpl({
               {folderName}
             </span>
           </div>
-          {!!unread && showUnreadCount && (
-            <div className="ml-2 text-xs tabular-nums text-zinc-500 dark:text-neutral-400">
-              {unread}
-            </div>
-          )}
+          <UnreadNumber unread={unread} className="ml-2" />
         </div>
       )}
       <AnimatePresence>
