@@ -60,9 +60,7 @@ export function CategoryRenameContent({
   const { setClickOutSideToDismiss } = useCurrentModal()
 
   useEffect(() => {
-    if (form.formState.isDirty) {
-      setClickOutSideToDismiss(false)
-    }
+    setClickOutSideToDismiss(!form.formState.isDirty)
   }, [form.formState.isDirty])
   return (
     <Form {...form}>

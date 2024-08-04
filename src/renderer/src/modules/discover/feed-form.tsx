@@ -39,21 +39,19 @@ const formSchema = z.object({
   isPrivate: z.boolean().optional(),
 })
 
+const defaultValue = { view: FeedViewType.Articles.toString() } as z.infer<
+  typeof formSchema
+>
 export const FeedForm: Component<{
   url?: string
   id?: string
-  defaultView?: FeedViewType
+
+  defaultValues?: z.infer<typeof formSchema>
 
   asWidget?: boolean
 
   onSuccess?: () => void
-}> = ({
-  id,
-  defaultView = FeedViewType.Articles,
-  url,
-  asWidget,
-  onSuccess,
-}) => {
+}> = ({ id, defaultValues = defaultValue, url, asWidget, onSuccess }) => {
   const feed = useFeed({
     url,
     id,
@@ -62,15 +60,13 @@ export const FeedForm: Component<{
   const isSubscribed = !!feed.data?.subscription
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      view: defaultView.toString(),
-    },
+    defaultValues,
   })
 
   const { setClickOutSideToDismiss } = useCurrentModal()
 
   useEffect(() => {
-    setClickOutSideToDismiss(form.formState.isDirty)
+    setClickOutSideToDismiss(!form.formState.isDirty)
   }, [form.formState.isDirty])
 
   useEffect(() => {

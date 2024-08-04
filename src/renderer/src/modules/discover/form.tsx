@@ -86,7 +86,10 @@ export function DiscoverForm({ type }: { type: string }) {
           <FeedForm
             asWidget
             url={values.keyword}
-            defaultView={defaultView}
+
+            defaultValues={{
+              view: defaultView.toString(),
+            }}
             onSuccess={dismissAll}
           />
         ),
@@ -217,7 +220,9 @@ export function DiscoverForm({ type }: { type: string }) {
                                   asWidget
                                   url={item.feed.url}
                                   id={item.feed.id}
-                                  defaultView={getSidebarActiveView()}
+                                  defaultValues={{
+                                    view: getSidebarActiveView().toString(),
+                                  }}
                                   onSuccess={dismiss}
                                 />
                               ),
