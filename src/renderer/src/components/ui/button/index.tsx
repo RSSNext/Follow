@@ -193,42 +193,50 @@ export const StyledButton = React.forwardRef<
   React.PropsWithChildren<
     Omit<HTMLMotionProps<"button">, "children"> &
     BaseButtonProps &
-    VariantProps<typeof styledButtonVariant>
+    VariantProps<typeof styledButtonVariant> & {
+      buttonClassName?: string
+    }
   >
->(({ className, isLoading, variant, status, ...props }, ref) => {
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> =
-    React.useCallback(
-      (e) => {
-        if (isLoading || props.disabled) {
-          e.preventDefault()
-          return
-        }
+>(
+  (
+    { className, buttonClassName, isLoading, variant, status, ...props },
+    ref,
+  ) => {
+    const handleClick: React.MouseEventHandler<HTMLButtonElement> =
+      React.useCallback(
+        (e) => {
+          if (isLoading || props.disabled) {
+            e.preventDefault()
+            return
+          }
 
-        props.onClick?.(e)
-      },
-      [isLoading, props],
-    )
-  return (
-    <MotionButtonBase
-      ref={ref}
-      className={cn(
-        styledButtonVariant({
-          variant,
-          status: isLoading || props.disabled ? "disabled" : undefined,
-        }),
-        className,
-      )}
-      {...props}
-      onClick={handleClick}
-    >
-      <m.span className="center">
-        {isLoading && (
-          <m.span className="center">
-            <LoadingCircle size="small" className="center mr-2" />
-          </m.span>
+          props.onClick?.(e)
+        },
+        [isLoading, props],
+      )
+    return (
+      <MotionButtonBase
+        ref={ref}
+        className={cn(
+          styledButtonVariant({
+            variant,
+            status: isLoading || props.disabled ? "disabled" : undefined,
+          }),
+          className,
+          buttonClassName,
         )}
-        <m.span className={cn("center", className)}>{props.children}</m.span>
-      </m.span>
-    </MotionButtonBase>
-  )
-})
+        {...props}
+        onClick={handleClick}
+      >
+        <m.span className="center">
+          {isLoading && (
+            <m.span className="center">
+              <LoadingCircle size="small" className="center mr-2" />
+            </m.span>
+          )}
+          <m.span className={cn("center", className)}>{props.children}</m.span>
+        </m.span>
+      </MotionButtonBase>
+    )
+  },
+)

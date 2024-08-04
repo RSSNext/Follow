@@ -41,7 +41,7 @@ export const SettingItemGroup: FC<PropsWithChildren> = ({ children }) => {
         }
         case SettingActionItem: {
           return cloneElement(child as React.ReactElement, {
-            className: "!-mt-3",
+            className: "!-mt-2",
           })
         }
         default: {
