@@ -16,7 +16,7 @@
   "scripts": {
     "build": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make",
     "build:macos": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make --arch=universal --platform=darwin",
-    "build:web": "vite build",
+    "build:web": "rm -rf out/web && vite build",
     "dev": "electron-vite dev --outDir=dist",
     "dev:debug": "export DEBUG=true && vite --debug",
     "dev:web": "vite",
