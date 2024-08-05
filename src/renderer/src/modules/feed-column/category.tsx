@@ -199,9 +199,11 @@ function FeedCategoryImpl({
               tabIndex={-1}
             >
               {isChangePending ? (
-                <LoadingCircle size="small" className="mr-2" />
+                <LoadingCircle size="small" className="mr-2 size-[16px]" />
               ) : (
-                <i className="i-mgc-right-cute-fi mr-2 transition-transform" />
+                <div className="mr-2 size-[16px]">
+                  <i className="i-mgc-right-cute-fi  transition-transform" />
+                </div>
               )}
             </CollapsibleTrigger>
             <span
