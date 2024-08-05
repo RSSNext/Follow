@@ -19,7 +19,7 @@ const windows = {
   settingWindow: null as BrowserWindow | null,
   mainWindow: null as BrowserWindow | null,
 }
-
+globalThis["windows"] = windows
 const { platform } = process
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
 export function createWindow(
@@ -43,6 +43,9 @@ export function createWindow(
       sandbox: false,
       webviewTag: true,
     },
+
+    // @windows
+    backgroundMaterial: "mica",
     titleBarStyle: platform === "win32" ? "hidden" : "hiddenInset",
     trafficLightPosition: {
       x: 18,
@@ -54,6 +57,19 @@ export function createWindow(
     vibrancy: "sidebar",
     visualEffectState: "active",
     ...configs,
+  })
+
+  window.on("enter-html-full-screen", () => {
+    window.setBackgroundColor("")
+    window.webContents.invalidate()
+  })
+  window.on("leave-html-full-screen", () => {
+    window.setBackgroundColor("")
+
+    window.webContents.invalidate()
+    setTimeout(() => {
+      window.setBackgroundColor("#00000000")
+    }, 10_000)
   })
 
   window.on("ready-to-show", () => {

@@ -104,11 +104,11 @@ export const appRoute = {
       requestId = webContents.findInPage(input.text, input.options)
       return promise
     }),
-  clearSearch: t.procedure.action(async ({
-    context: { sender: webContents },
-  }) => {
-    webContents.stopFindInPage("keepSelection")
-  }),
+  clearSearch: t.procedure.action(
+    async ({ context: { sender: webContents } }) => {
+      webContents.stopFindInPage("keepSelection")
+    },
+  ),
 }
 interface Sender extends Electron.WebContents {
   getOwnerBrowserWindow: () => Electron.BrowserWindow | null
