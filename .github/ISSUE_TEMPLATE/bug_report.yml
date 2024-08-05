@@ -14,10 +14,10 @@ body:
       placeholder: Bug description
     validations:
       required: true
-  - type: input
+  - type: textarea
     id: feed-info
     attributes:
-      label: FeedInfo
+      label: Feed Info
       description: Please provide your feed id, feed url, and any other information that can help us reproduce the issue.
       placeholder: Feed ID, Feed URL, etc.
     validations:
