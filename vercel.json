@@ -1,1 +1,16 @@
-{ "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }] }
+{
+  "rewrites": [
+    {
+      "source": "/__debug_proxy",
+      "destination": "/__debug_proxy.html"
+    },
+    {
+      "source": "/__debug_proxy/:path*",
+      "destination": "/__debug_proxy.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -6,7 +6,7 @@ import { useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
 import { ProfileButton } from "@renderer/components/user-button"
-import { views } from "@renderer/constants"
+import { HotKeyScopeMap, views } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
@@ -19,6 +19,7 @@ import { clamp, cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useSubscriptionStore } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
+import { useSubscribeElectronEvent } from "@shared/event"
 import { useWheel } from "@use-gesture/react"
 import type { MotionValue } from "framer-motion"
 import { m, useSpring } from "framer-motion"
@@ -123,7 +124,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
         setActive((i) => (i + 1) % views.length)
       }
     },
-    { scopes: ["home"] },
+    { scopes: HotKeyScopeMap.Home },
   )
 
   useWheel(
@@ -171,6 +172,10 @@ export function FeedColumn({ children }: PropsWithChildren) {
 
   const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
 
+  useSubscribeElectronEvent("Discover", () => {
+    window.router.navigate(Routes.Discover)
+  })
+
   return (
     <Vibrancy
       className="relative flex h-full flex-col space-y-3 rounded-l-[12px] pt-2.5"
@@ -199,6 +204,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
           className="relative flex items-center gap-1"
           onClick={stopPropagation}
         >
+
           <SearchActionButton />
 
           <Link to="/discover" tabIndex={-1}>
@@ -222,7 +228,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
             className={cn(
               active === index && item.className,
               "flex flex-col items-center gap-1 text-xl",
-              "hover:!bg-theme-vibrancyBg",
+              ELECTRON ? "hover:!bg-theme-vibrancyBg" : "",
               showSidebarUnreadCount && "h-11",
             )}
             onClick={(e) => {

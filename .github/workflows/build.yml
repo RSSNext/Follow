@@ -82,6 +82,8 @@ jobs:
       - name: Build
         if: matrix.os != 'macos-latest'
         run: pnpm build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Build (macOS)
         if: matrix.os == 'macos-latest'
@@ -96,6 +98,7 @@ jobs:
         uses: actions/upload-artifact@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
           name: ${{ matrix.os }}
           path: |

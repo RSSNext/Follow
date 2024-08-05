@@ -3,15 +3,26 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "@renderer/components/ui/context-menu"
 import { KbdCombined } from "@renderer/components/ui/kbd/Kbd"
+import { HotKeyScopeMap } from "@renderer/constants"
+import { useSwitchHotKeyScope } from "@renderer/hooks/common/useSwitchHotkeyScope"
 import { nextFrame } from "@renderer/lib/dom"
 import type { NativeMenuItem } from "@renderer/lib/native-menu"
 import { CONTEXT_MENU_SHOW_EVENT_KEY } from "@renderer/lib/native-menu"
 import type { ReactNode } from "react"
-import { memo, useCallback, useEffect, useRef, useState } from "react"
-import { useHotkeys, useHotkeysContext } from "react-hotkeys-hook"
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
+import { useHotkeys } from "react-hotkeys-hook"
 
 export const ContextMenuProvider: Component = ({ children }) => (
   <>
@@ -25,18 +36,18 @@ const Handler = () => {
   const ref = useRef<HTMLSpanElement>(null)
 
   const [node, setNode] = useState([] as ReactNode[] | ReactNode)
-  const { enableScope, disableScope } = useHotkeysContext()
 
   const [open, setOpen] = useState(false)
+
+  const switchHotkeyScope = useSwitchHotKeyScope()
+
   useEffect(() => {
     if (!open) return
-    enableScope("menu")
-    disableScope("home")
+    switchHotkeyScope("Menu")
     return () => {
-      enableScope("home")
-      disableScope("menu")
+      switchHotkeyScope("Home")
     }
-  }, [disableScope, enableScope, open])
+  }, [open, switchHotkeyScope])
 
   useEffect(() => {
     const fakeElement = ref.current
@@ -105,31 +116,43 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
   useHotkeys((item as any).shortcut, () => itemRef.current?.click(), {
     enabled:
       (item as any).enabled !== false && (item as any).shortcut !== undefined,
-    scopes: ["menu"],
+    scopes: HotKeyScopeMap.Menu,
     preventDefault: true,
   })
+
   switch (item.type) {
     case "separator": {
       return <ContextMenuSeparator />
     }
     case "text": {
+      const Wrapper = item.submenu ? ContextMenuSubTrigger : ContextMenuItem
       return (
-        <ContextMenuItem
-          ref={itemRef}
-          disabled={item.enabled === false || item.click === undefined}
-          onClick={onClick}
-          className="flex items-center gap-1"
-        >
-          {/* {!!item.icon && <span className="mr-1">{item.icon}</span>} */}
-          {item.icon}
-          {item.label}
+        <ContextMenuSub>
+          <Wrapper
+            ref={itemRef}
+            disabled={item.enabled === false || (item.click === undefined && !item.submenu)}
+            onClick={onClick}
+            className="flex items-center gap-1"
+          >
+            {/* {!!item.icon && <span className="mr-1">{item.icon}</span>} */}
+            {item.icon}
+            {item.label}
 
-          {!!item.shortcut && (
-            <div className="ml-auto pl-4">
-              <KbdCombined>{item.shortcut}</KbdCombined>
-            </div>
-          )}
-        </ContextMenuItem>
+            {!!item.shortcut && (
+              <div className="ml-auto pl-4">
+                <KbdCombined joint>{item.shortcut}</KbdCombined>
+              </div>
+            )}
+
+            {item.submenu && (
+              <ContextMenuSubContent>
+                {item.submenu.map((subItem, index) => (
+                  <Item key={index} item={subItem} />
+                ))}
+              </ContextMenuSubContent>
+            )}
+          </Wrapper>
+        </ContextMenuSub>
       )
     }
     default: {

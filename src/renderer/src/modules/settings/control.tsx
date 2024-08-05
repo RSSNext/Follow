@@ -36,6 +36,7 @@ export const SettingSwitch: Component<{
     >
       <Label htmlFor={id}>{label}</Label>
       <Switch
+        id={id}
         checked={checked}
         onCheckedChange={onCheckedChange}
         className="cursor-auto"
@@ -47,7 +48,7 @@ export const SettingSwitch: Component<{
 export const SettingDescription: Component = ({ children, className }) => (
   <small
     className={cn(
-      "!mt-0 block w-4/5 text-balance text-[13px] leading-tight text-gray-400 dark:text-neutral-500",
+      "block w-4/5 text-balance text-[13px] leading-tight text-gray-400 dark:text-neutral-500",
       className,
     )}
   >
@@ -64,8 +65,8 @@ export const SettingActionItem = ({
   action: () => void
   buttonText: string
 }) => (
-  <div className={cn("mb-3 mt-4 flex items-center justify-between gap-4")}>
+  <div className={cn("relative mb-3 mt-4 flex items-center justify-between gap-4")}>
     <div className="text-sm font-medium">{label}</div>
-    <StyledButton className="text-xs" onClick={action}>{buttonText}</StyledButton>
+    <StyledButton buttonClassName="text-xs absolute right-0" onClick={action}>{buttonText}</StyledButton>
   </div>
 )

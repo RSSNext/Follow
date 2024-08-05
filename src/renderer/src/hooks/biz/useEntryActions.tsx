@@ -44,6 +44,8 @@ export const useEntryReadabilityToggle = ({
       })
 
       if (result) {
+        const status = getReadabilityStatus()[id]
+        if (status !== ReadabilityStatus.WAITING) return
         setReadabilityStatus({
           [id]: ReadabilityStatus.SUCCESS,
         })
@@ -222,9 +224,7 @@ export const useEntryActions = ({
           !populatedEntry.entries.url ||
           !window.electron,
         active: isInReadability(entryReadabilityStatus),
-        async onClick() {
-          return readabilityToggle()
-        },
+        onClick: readabilityToggle,
       },
       {
         name: "Save Media to Eagle",
@@ -301,7 +301,19 @@ export const useEntryActions = ({
     ]
 
     return items
-  }, [populatedEntry, view, checkEagle.isLoading, checkEagle.data, openTipModal, collect, uncollect, readabilityToggle, read, unread, entryReadabilityStatus])
+  }, [
+    populatedEntry,
+    view,
+    checkEagle.isLoading,
+    checkEagle.data,
+    openTipModal,
+    collect,
+    uncollect,
+    readabilityToggle,
+    read,
+    unread,
+    entryReadabilityStatus,
+  ])
 
   return {
     items,

@@ -9,7 +9,7 @@ import {
   getRouteParams,
   useRouteParamsSelector,
 } from "@renderer/hooks/biz/useRouteParams"
-import { nextFrame, stopPropagation } from "@renderer/lib/dom"
+import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
@@ -26,6 +26,7 @@ import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { CategoryRenameContent } from "./category-rename-dialog"
 import { FeedItem } from "./item"
+import { UnreadNumber } from "./unread-number"
 
 type FeedId = string
 interface FeedCategoryProps {
@@ -139,25 +140,20 @@ function FeedCategoryImpl({
                   type: "text",
                   enabled: !!(folderName && typeof view === "number"),
                   label: "Change to other view",
-                  click() {
-                    nextFrame(() =>
-                      showNativeMenu(
-                        views
-                          .filter((v) => v.view !== view)
-                          .map((v) => ({
-                            label: v.name,
-                            type: "text",
-                            shortcut: (v.view + 1).toString(),
-                            icon: v.icon,
-                            click() {
-                              return changeCategoryView(v.view)
-                            },
-                          })),
-                        e,
-                      ),
-                    )
-                  },
+                  submenu: views
+                    .filter((v) => v.view !== view)
+                    .map((v) => ({
+                      label: v.name,
+                      enabled: true,
+                      type: "text",
+                      shortcut: (v.view + 1).toString(),
+                      icon: v.icon,
+                      click() {
+                        return changeCategoryView(v.view)
+                      },
+                    })),
                 },
+                { type: "separator" },
                 {
                   type: "text",
                   label: "Rename category",
@@ -203,9 +199,11 @@ function FeedCategoryImpl({
               tabIndex={-1}
             >
               {isChangePending ? (
-                <LoadingCircle size="small" className="mr-2" />
+                <LoadingCircle size="small" className="mr-2 size-[16px]" />
               ) : (
-                <i className="i-mgc-right-cute-fi mr-2 transition-transform" />
+                <div className="mr-2 size-[16px]">
+                  <i className="i-mgc-right-cute-fi  transition-transform" />
+                </div>
               )}
             </CollapsibleTrigger>
             <span
@@ -218,11 +216,7 @@ function FeedCategoryImpl({
               {folderName}
             </span>
           </div>
-          {!!unread && showUnreadCount && (
-            <div className="ml-2 text-xs tabular-nums text-zinc-500 dark:text-neutral-400">
-              {unread}
-            </div>
-          )}
+          <UnreadNumber unread={unread} className="ml-2" />
         </div>
       )}
       <AnimatePresence>

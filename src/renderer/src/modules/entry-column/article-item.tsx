@@ -23,7 +23,7 @@ export const ArticleItemSkeleton = (
     <div className="relative z-[1]">
       <div className="group relative flex py-4 pl-3 pr-2">
         <Skeleton className="mr-2 size-5 rounded-sm" />
-        <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
+        <div className="-mt-0.5 flex-1 text-sm leading-tight">
           <div className="flex gap-1 text-[10px] font-bold text-zinc-400 dark:text-neutral-500">
             <Skeleton className="h-3 w-24" />
             <span>·</span>

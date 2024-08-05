@@ -55,8 +55,14 @@ export default defineConfig({
           appVersion:
             process.env.NODE_ENV === "development" ? "dev" : pkg.version,
         },
+        sourcemaps: {
+          filesToDeleteAfterUpload: ["dist/renderer/assets/*.js.map"],
+        },
       }),
     ],
+    build: {
+      sourcemap: true,
+    },
     define: {
       APP_VERSION: JSON.stringify(pkg.version),
       APP_NAME: JSON.stringify(pkg.name),

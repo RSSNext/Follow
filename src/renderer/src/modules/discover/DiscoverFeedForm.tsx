@@ -158,7 +158,11 @@ export const DiscoverFeedForm = ({
             <FeedForm
               asWidget
               url={url}
-              defaultView={defaultView}
+
+              defaultValues={{
+                view: defaultView.toString(),
+
+              }}
               onSuccess={dismissAll}
             />
           ),
@@ -188,8 +192,8 @@ export const DiscoverFeedForm = ({
   const modal = useCurrentModal()
 
   useEffect(() => {
-    modal?.setClickOutSideToDismiss?.(!form.formState.isDirty)
-  }, [form.formState.isDirty, modal, modal.setClickOutSideToDismiss])
+    modal.setClickOutSideToDismiss(!form.formState.isDirty)
+  }, [form.formState.isDirty, modal])
 
   return (
     <Form {...form}>

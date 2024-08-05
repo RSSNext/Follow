@@ -1,6 +1,6 @@
 import { ModalStackProvider } from "@renderer/components/ui/modal"
 import { Toaster } from "@renderer/components/ui/sonner"
-import { TooltipProvider } from "@renderer/components/ui/tooltip"
+import { HotKeyScopeMap } from "@renderer/constants"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { persistConfig, queryClient } from "@renderer/lib/query-client"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
@@ -32,21 +32,19 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
         persistOptions={persistConfig}
         client={queryClient}
       >
+        <HotkeysProvider initiallyActiveScopes={HotKeyScopeMap.Home}>
+          <Provider store={jotaiStore}>
+            <EventProvider />
+            <UserProvider />
+            <SettingSync />
+            <ModalStackProvider />
+            <ContextMenuProvider />
+            <StableRouterProvider />
+            {import.meta.env.DEV && <Devtools />}
+            {children}
+          </Provider>
+        </HotkeysProvider>
 
-        <TooltipProvider>
-          <HotkeysProvider initiallyActiveScopes={["home"]}>
-            <Provider store={jotaiStore}>
-              <EventProvider />
-              <UserProvider />
-              <SettingSync />
-              <ModalStackProvider />
-              <ContextMenuProvider />
-              <StableRouterProvider />
-              {import.meta.env.DEV && <Devtools />}
-              {children}
-            </Provider>
-          </HotkeysProvider>
-        </TooltipProvider>
         <InvalidateQueryProvider />
       </PersistQueryClientProvider>
     </MotionConfig>
@@ -56,6 +54,8 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
 
 const Devtools = () => (
   <>
-    {!window.electron && <ReactQueryDevtools buttonPosition="bottom-left" client={queryClient} />}
+    {!window.electron && (
+      <ReactQueryDevtools buttonPosition="bottom-left" client={queryClient} />
+    )}
   </>
 )

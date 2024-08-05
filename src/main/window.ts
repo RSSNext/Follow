@@ -6,7 +6,7 @@ import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, Menu, shell } from "electron"
 
-import { getShouldAppDoHide } from "./flag"
+import { isMacOS } from "./env"
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
 import { logger } from "./logger"
@@ -19,7 +19,7 @@ const windows = {
   settingWindow: null as BrowserWindow | null,
   mainWindow: null as BrowserWindow | null,
 }
-
+globalThis["windows"] = windows
 const { platform } = process
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
 export function createWindow(
@@ -43,6 +43,9 @@ export function createWindow(
       sandbox: false,
       webviewTag: true,
     },
+
+    // @windows
+    backgroundMaterial: "mica",
     titleBarStyle: platform === "win32" ? "hidden" : "hiddenInset",
     trafficLightPosition: {
       x: 18,
@@ -54,6 +57,24 @@ export function createWindow(
     vibrancy: "sidebar",
     visualEffectState: "active",
     ...configs,
+  })
+
+  function refreshBound(timeout = 0) {
+    setTimeout(() => {
+      const mainWindow = getMainWindow()
+      if (!mainWindow) return
+      // FIXME: workaround for theme bug in full screen mode
+      const size = mainWindow.getSize()
+      mainWindow.setSize(size[0] + 1, size[1] + 1)
+      mainWindow.setSize(size[0], size[1])
+    }, timeout)
+  }
+
+  window.on("leave-html-full-screen", () => {
+    // To solve the vibrancy losing issue when leaving full screen mode
+    // @see https://github.com/toeverything/AFFiNE/blob/280e24934a27557529479a70ab38c4f5fc65cb00/packages/frontend/electron/src/main/windows-manager/main-window.ts:L157
+    refreshBound()
+    refreshBound(1000)
   })
 
   window.on("ready-to-show", () => {
@@ -76,22 +97,13 @@ export function createWindow(
       process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""),
     )
   } else {
-    const openPath = path.resolve(
-      __dirname,
-      "../renderer/index.html",
-    )
-    window.loadFile(
-      openPath,
-      {
-        hash: options?.extraPath,
-      },
-    )
-    logger.log(
-      openPath,
-      {
-        hash: options?.extraPath,
-      },
-    )
+    const openPath = path.resolve(__dirname, "../renderer/index.html")
+    window.loadFile(openPath, {
+      hash: options?.extraPath,
+    })
+    logger.log(openPath, {
+      hash: options?.extraPath,
+    })
   }
 
   const refererMatchs = [
@@ -204,7 +216,7 @@ export const createMainWindow = () => {
   windows.mainWindow = window
 
   window.on("close", (event) => {
-    if (process.platform === "darwin" && getShouldAppDoHide()) {
+    if (isMacOS) {
       event.preventDefault()
       window.hide()
     } else {
@@ -229,12 +241,12 @@ export const createMainWindow = () => {
   return window
 }
 
-export const createSettingWindow = () => {
+export const createSettingWindow = (path?: string) => {
   // We need to open the setting modal in the main window when the main window exists,
   // if we open a new window then the state between the two windows will be out of sync.
   if (windows.mainWindow && windows.mainWindow.isVisible()) {
     windows.mainWindow.show()
-    callGlobalContextMethod(windows.mainWindow, "showSetting")
+    callGlobalContextMethod(windows.mainWindow, "showSetting", [path])
     return
   }
   if (windows.settingWindow) {
@@ -242,7 +254,7 @@ export const createSettingWindow = () => {
     return
   }
   const window = createWindow({
-    extraPath: "#settings",
+    extraPath: `#settings/${path || ""}`,
     width: 700,
     height: 600,
     resizable: false,
@@ -255,3 +267,15 @@ export const createSettingWindow = () => {
 }
 
 export const getMainWindow = () => windows.mainWindow
+
+export const getMainWindowOrCreate = () => {
+  if (!windows.mainWindow) {
+    createMainWindow()
+  }
+  return windows.mainWindow
+}
+
+export const destroyMainWindow = () => {
+  windows.mainWindow?.destroy()
+  windows.mainWindow = null
+}

@@ -8,9 +8,6 @@ import { useCallback } from "react"
 
 export const useSignOut = () =>
   useCallback(async () => {
-    // clear local store data
-    clearLocalPersistStoreData()
-
     // Clear query cache
     localStorage.removeItem(QUERY_PERSIST_KEY)
 
@@ -20,7 +17,11 @@ export const useSignOut = () =>
     // Clear local storage
     clearStorage()
     window.posthog?.reset()
-    tipcClient?.cleanAuthSessionToken()
+    // clear local store data
+    await Promise.allSettled([
+      clearLocalPersistStoreData(),
+      tipcClient?.cleanAuthSessionToken(),
+    ])
     // Sign out
     await signOut()
   }, [])

@@ -12,6 +12,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
+import { HotKeyScopeMap } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
@@ -35,7 +36,7 @@ export const CornerPlayer = () => {
       {show && (
         <m.div
           key="corner-player"
-          className="group relative z-10 !-mt-8 !mb-0 w-full px-px"
+          className="group relative z-10 !-mt-8 !mb-0 w-full pr-px"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
@@ -94,7 +95,7 @@ const CornerPlayerImpl = () => {
 
   useHotkeys("space", handleClickPlay, {
     preventDefault: true,
-    scopes: ["home"],
+    scopes: HotKeyScopeMap.Home,
   })
 
   const navigateToEntry = useNavigateEntry()
@@ -104,52 +105,6 @@ const CornerPlayerImpl = () => {
 
   return (
     <>
-      {/* advanced controls */}
-      <div className="z-10 flex translate-y-10 justify-between border-t bg-theme-modal-background-opaque p-1 opacity-0 transition-all duration-200 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
-        <div className="flex items-center">
-          <ActionIcon
-            className="i-mingcute-close-fill"
-            onClick={() => Player.close()}
-            label="Close"
-          />
-          <ActionIcon
-            className="i-mingcute-external-link-line"
-            onClick={() =>
-              navigateToEntry({
-                entryId: entry.entries.id,
-                feedId: feed.id,
-                view: FeedViewType.Audios,
-              })}
-            label="Open Entry"
-          />
-        </div>
-        <div className="flex items-center">
-          <ActionIcon label={<PlaybackRateSelector />} labelDelayDuration={0}>
-            <PlaybackRateButton />
-          </ActionIcon>
-          <ActionIcon
-            className={cn(
-              playerValue.isMute ?
-                "i-mingcute-volume-mute-fill text-red-500" :
-                "i-mingcute-volume-fill",
-            )}
-            onClick={() => Player.toggleMute()}
-            label={<VolumeSlider />}
-            labelDelayDuration={0}
-          />
-          <ActionIcon
-            className="i-mingcute-back-2-fill"
-            onClick={() => Player.back(10)}
-            label="Back 10s"
-          />
-          <ActionIcon
-            className="i-mingcute-forward-2-fill"
-            onClick={() => Player.forward(10)}
-            label="Forward 10s"
-          />
-        </div>
-      </div>
-
       <div className="relative flex border-y bg-theme-modal-background backdrop-blur transition-all duration-200 ease-in-out">
         {/* play cover */}
         <div className="relative h-full">
@@ -194,6 +149,60 @@ const CornerPlayerImpl = () => {
 
           {/* progress control */}
           <PlayerProgress />
+        </div>
+      </div>
+
+      {/* advanced controls */}
+      <div className="absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque p-1 opacity-0 transition-all duration-200 ease-in-out group-hover:-translate-y-full group-hover:opacity-100">
+        <div className="flex items-center">
+          <ActionIcon
+            className="i-mgc-close-cute-re"
+            onClick={() => Player.close()}
+            label="Close"
+          />
+          <ActionIcon
+            className="i-mgc-external-link-cute-re"
+            onClick={() =>
+              navigateToEntry({
+                entryId: entry.entries.id,
+                feedId: feed.id,
+                view: FeedViewType.Audios,
+              })}
+            label="Open Entry"
+          />
+        </div>
+        <div className="flex items-center">
+          <ActionIcon
+            label="Download"
+            onClick={() => {
+              window.open(Player.get().src, "_blank")
+            }}
+          >
+            <i className="i-mgc-download-2-cute-re" />
+          </ActionIcon>
+          <ActionIcon label={<PlaybackRateSelector />} labelDelayDuration={0}>
+            <PlaybackRateButton />
+          </ActionIcon>
+          <ActionIcon
+            className={cn(
+              playerValue.isMute ?
+                "i-mgc-volume-off-cute-re text-red-500" :
+                "i-mgc-volume-cute-re",
+            )}
+            onClick={() => Player.toggleMute()}
+            label={<VolumeSlider />}
+            labelDelayDuration={0}
+          />
+          <ActionIcon
+            className="i-mgc-back-2-cute-re"
+            onClick={() => Player.back(10)}
+            label="Back 10s"
+          />
+          <ActionIcon
+            className="i-mgc-forward-2-cute-re"
+            onClick={() => Player.forward(10)}
+            label="Forward 10s"
+          />
         </div>
       </div>
     </>
@@ -347,7 +356,7 @@ const PlaybackRateButton = () => {
     <span
       className={cn(
         char.length > 1 ? "text-[9px]" : "text-xs",
-        "block font-mono font-bold",
+        "block font-mono",
       )}
     >
       {char}

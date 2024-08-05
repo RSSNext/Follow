@@ -1,4 +1,5 @@
 import { useMainContainerElement } from "@renderer/atoms/dom"
+import { HotKeyScopeMap } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteEntryId } from "@renderer/hooks/biz/useRouteParams"
@@ -20,7 +21,7 @@ export const EntryColumnShortcutHandler: FC<{
     () => {
       refetch()
     },
-    { scopes: ["home"] },
+    { scopes: HotKeyScopeMap.Home },
   )
   const currentEntryIdRef = useRefValue(useRouteEntryId())
 
@@ -68,7 +69,7 @@ export const EntryColumnShortcutHandler: FC<{
         entryId: nextId,
       })
     },
-    { scopes: ["home"], enabled: enabledArrowKey },
+    { scopes: HotKeyScopeMap.Home, enabled: enabledArrowKey },
   )
   useHotkeys(
     shortcuts.entries.previous.key,
@@ -92,7 +93,7 @@ export const EntryColumnShortcutHandler: FC<{
         entryId: nextId,
       })
     },
-    { scopes: ["home"], enabled: enabledArrowKey },
+    { scopes: HotKeyScopeMap.Home, enabled: enabledArrowKey },
   )
   return null
 })

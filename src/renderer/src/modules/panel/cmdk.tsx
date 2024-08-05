@@ -257,7 +257,7 @@ const SearchItem = memo(function Item({
     <Command.Item
       className={clsx(
         "relative flex w-full justify-between px-1 text-[0.9rem]",
-        "before:content-auto before:absolute before:inset-0 before:rounded-md",
+        `before:absolute before:inset-0 before:rounded-md before:content-[""]`,
         "before:z-0 hover:before:bg-zinc-200/60 dark:hover:before:bg-zinc-800/80",
         "data-[selected=true]:before:bg-zinc-200/60 data-[selected=true]:dark:before:bg-zinc-800/80",
         "min-w-0 max-w-full",

@@ -140,7 +140,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
-        className="h-[55px] shrink-0 px-5"
+        className="h-[55px] shrink-0 px-3"
       />
 
       <ScrollArea.ScrollArea
@@ -201,7 +201,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
             <WrappedElementProvider boundingDetection>
               <TitleMetaHandler entryId={entry.entries.id} />
-              <div className="prose prose-zinc mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
+              <div className="prose mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
                 {(summary.isLoading || summary.data) && (
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
                     <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
@@ -306,11 +306,17 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
 
   return (
     <div>
-      <p className="rounded-xl border p-3 text-sm opacity-80">
-        <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
-        This content is provided by Readability. If you find typographical
-        anomalies, please go to the source site to view the original content.
-      </p>
+      {result ? (
+        <p className="rounded-xl border p-3 text-sm opacity-80">
+          <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
+          This content is provided by Readability. If you find typographical
+          anomalies, please go to the source site to view the original content.
+        </p>
+      ) : (
+        <div className="center mt-12">
+          <LoadingCircle size="large" />
+        </div>
+      )}
       {renderer}
     </div>
   )
@@ -326,7 +332,7 @@ const NoContent: FC<{
   })
 
   const status = useEntryInReadabilityStatus(id)
-  if (status === ReadabilityStatus.SUCCESS) {
+  if (status !== ReadabilityStatus.INITIAL) {
     return null
   }
   return (
@@ -337,12 +343,7 @@ const NoContent: FC<{
           <div className="flex flex-col items-center justify-center gap-4">
             But you can try to get the source site's content and parse and
             render it by using the button below.
-            <StyledButton
-              isLoading={status === ReadabilityStatus.WAITING}
-              onClick={toggle}
-            >
-              Readability
-            </StyledButton>
+            <StyledButton onClick={toggle}>Readability</StyledButton>
           </div>
         )}
       </div>

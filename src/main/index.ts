@@ -7,7 +7,7 @@ import { app, BrowserWindow, session } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
 
 import { env } from "../env"
-import { isDev } from "./env"
+import { isDev, isMacOS } from "./env"
 import { initializationApp } from "./init"
 import { setAuthSessionToken } from "./lib/user"
 import { registerUpdater } from "./updater"
@@ -145,7 +145,7 @@ function bootsharp() {
   // for applications and their menu bar to stay active until the user quits
   // explicitly with Cmd + Q.
   app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") {
+    if (!isMacOS) {
       app.quit()
     }
   })

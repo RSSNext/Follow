@@ -21,6 +21,7 @@ const ModalStack = () => {
   const modalSettingOverlay = useUISettingKey("modalOverlay")
 
   const forceOverlay = stack.some((item) => item.overlay)
+  const allForceHideOverlay = stack.every((item) => item.overlay === false)
 
   return (
     <AnimatePresence mode="popLayout">
@@ -32,7 +33,7 @@ const ModalStack = () => {
           isTop={index === stack.length - 1}
         />
       ))}
-      {stack.length > 0 && (modalSettingOverlay || forceOverlay) && (
+      {stack.length > 0 && (modalSettingOverlay || forceOverlay) && !allForceHideOverlay && (
         <ModalOverlay zIndex={MODAL_STACK_Z_INDEX + stack.length - 1} />
       )}
     </AnimatePresence>

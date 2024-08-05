@@ -51,8 +51,8 @@ export const persistConfig: OmitKeyof<
   dehydrateOptions: {
     shouldDehydrateQuery: (query) => {
       if (!query.meta?.persist) return false
-      const queryIsReadyForPersistance = query.state.status === "success"
-      if (queryIsReadyForPersistance) {
+      const queryIsReadyForPersistence = query.state.status === "success"
+      if (queryIsReadyForPersistence) {
         return (
           !((query.state?.data as any)?.pages?.length > 1) &&
           query.queryKey?.[0] !== "check-eagle"

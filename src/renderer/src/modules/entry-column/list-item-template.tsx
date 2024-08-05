@@ -1,14 +1,11 @@
-import {
-  Player,
-  usePlayerAtomSelector,
-} from "@renderer/atoms/player"
+import { Player, usePlayerAtomSelector } from "@renderer/atoms/player"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { RelativeTime } from "@renderer/components/ui/datetime"
 import { Media } from "@renderer/components/ui/media"
 import { FEED_COLLECTION_LIST } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
-import { cn } from "@renderer/lib/utils"
+import { cn, isSafari } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
@@ -43,16 +40,24 @@ export function ListItem({
   const displayTime = inInCollection ?
     entry.collections?.createdAt :
     entry.entries.publishedAt
+  const envIsSafari = isSafari()
   return (
     <div
       className={cn(
         "group relative flex py-4 pl-3 pr-2",
         !asRead &&
-        "before:absolute before:-left-0.5 before:top-[18px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
+        "before:absolute before:left-0 before:top-[1.4375rem] before:block before:size-1.5 before:rounded-full before:bg-theme-accent",
       )}
     >
       {!withAudio && <FeedIcon feed={feed} fallback entry={entry.entries} />}
-      <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
+      <div
+        className={cn(
+          "-mt-0.5 flex-1 text-sm leading-tight",
+
+          // FIXME: Safari bug, not support line-clamp cross elements
+          !envIsSafari && "line-clamp-4",
+        )}
+      >
         <div
           className={cn(
             "flex gap-1 text-[10px] font-bold",
@@ -79,6 +84,7 @@ export function ListItem({
         >
           {entry.entries.title ? (
             <EntryTranslation
+              className={envIsSafari ? "line-clamp-2 break-all" : undefined}
               source={entry.entries.title}
               target={translation?.title}
             />
@@ -100,6 +106,7 @@ export function ListItem({
             )}
           >
             <EntryTranslation
+              className={envIsSafari ? "line-clamp-2 break-all" : undefined}
               source={entry.entries.description}
               target={translation?.description}
             />
@@ -115,7 +122,14 @@ export function ListItem({
             String(entry.entries?.attachments?.[0].duration_in_seconds ?? 0),
             10,
           )}
-          feedIcon={<FeedIcon feed={feed} entry={entry.entries} size={80} className="m-0" />}
+          feedIcon={(
+            <FeedIcon
+              feed={feed}
+              entry={entry.entries}
+              size={80}
+              className="m-0"
+            />
+          )}
         />
       )}
 
@@ -187,12 +201,10 @@ function AudioCover({
         >
           <i
             className={cn("size-6", {
-              "i-mingcute-pause-fill":
-                playStatus && playStatus === "playing",
+              "i-mingcute-pause-fill": playStatus && playStatus === "playing",
               "i-mingcute-loading-fill animate-spin":
                 playStatus && playStatus === "loading",
-              "i-mingcute-play-fill":
-                !playStatus || playStatus === "paused",
+              "i-mingcute-play-fill": !playStatus || playStatus === "paused",
             })}
           />
         </button>

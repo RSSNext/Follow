@@ -5,7 +5,7 @@ import type { GeneralSettings, UISettings } from "./interface/settings"
 
 const PREFIX = "__follow"
 interface RenderGlobalContext {
-  showSetting: () => void
+  showSetting: (path?: string) => void
   getGeneralSettings: () => GeneralSettings
   getUISettings: () => UISettings
 

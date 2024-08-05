@@ -42,7 +42,7 @@ export const FeedClaimModalContent: FC<{
   } = useClaimFeedMutation(feedId)
 
   useEffect(() => {
-    setClickOutSideToDismiss(isPending)
+    setClickOutSideToDismiss(!isPending)
   }, [isPending, setClickOutSideToDismiss])
 
   const shikiTheme = useShikiDefaultTheme()

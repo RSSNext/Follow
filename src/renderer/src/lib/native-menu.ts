@@ -1,3 +1,5 @@
+import { get } from "lodash-es"
+
 import { tipcClient } from "./client"
 
 export type NativeMenuItem =
@@ -10,6 +12,7 @@ export type NativeMenuItem =
     icon?: React.ReactNode
     shortcut?: string
     disabled?: boolean
+    submenu?: NativeMenuItem[]
   }
   | { type: "separator", disabled?: boolean }
 
@@ -56,12 +59,25 @@ export const showNativeMenu = async (
     }
   }
 
-  const unlisten = window.electron?.ipcRenderer.on("menu-click", (_, index) => {
-    const item = nextItems[index]
-    if (item && item.type === "text") {
-      item.click?.()
-    }
-  })
+  const unlisten = window.electron?.ipcRenderer.on(
+    "menu-click",
+    (_, combinedIndex: string) => {
+      const arr = combinedIndex.split("-")
+      const accessors = [] as string[]
+      for (let i = 0; i < arr.length; i++) {
+        accessors.push(arr[i])
+
+        if (i !== arr.length - 1) {
+          accessors.push("submenu")
+        }
+      }
+      const item = get(nextItems, accessors)
+
+      if (item && item.type === "text") {
+        item.click?.()
+      }
+    },
+  )
 
   window.electron?.ipcRenderer.once("menu-closed", () => {
     unlisten?.()
@@ -71,19 +87,23 @@ export const showNativeMenu = async (
   })
 
   await tipcClient?.showContextMenu({
-    items: nextItems.map((item) => {
+    items: transformMenuItems(nextItems),
+  })
+
+  function transformMenuItems(nextItems: NativeMenuItem[]) {
+    return nextItems.map((item) => {
       if (item.type === "text") {
         return {
           ...item,
-          icon: "",
-          enabled: item.enabled ?? item.click !== undefined,
+          icon: undefined,
+          enabled: item.enabled ?? (item.click !== undefined || !!item.submenu),
           click: undefined,
+          submenu: item.submenu ? transformMenuItems(item.submenu) : undefined,
         }
       }
-
       return item
-    }),
-  })
+    })
+  }
 }
 
 export const CONTEXT_MENU_SHOW_EVENT_KEY = "contextmenu-show"

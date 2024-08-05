@@ -1,5 +1,6 @@
 import { getRendererHandlers } from "@egoist/tipc/main"
 import type { BrowserWindow } from "electron"
+import { clipboard } from "electron"
 
 import { cleanAuthSessionToken, cleanUser } from "../lib/user"
 import type { RendererHandlers } from "../renderer-handlers"
@@ -81,6 +82,33 @@ export const appRoute = {
     cleanAuthSessionToken()
     cleanUser()
   }),
+  /// clipboard
+
+  readClipboard: t.procedure.action(async () => clipboard.readText()),
+  /// search
+  search: t.procedure
+    .input<{
+      text: string
+      options: Electron.FindInPageOptions
+    }>()
+    .action(async ({ input, context }) => {
+      const { sender: webContents } = context
+
+      const { promise, resolve } =
+        Promise.withResolvers<Electron.Result | null>()
+
+      let requestId = -1
+      webContents.once("found-in-page", (_, result) => {
+        resolve(result.requestId === requestId ? result : null)
+      })
+      requestId = webContents.findInPage(input.text, input.options)
+      return promise
+    }),
+  clearSearch: t.procedure.action(
+    async ({ context: { sender: webContents } }) => {
+      webContents.stopFindInPage("keepSelection")
+    },
+  ),
 }
 interface Sender extends Electron.WebContents {
   getOwnerBrowserWindow: () => Electron.BrowserWindow | null

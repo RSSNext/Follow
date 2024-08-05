@@ -67,7 +67,7 @@ export const initializeApp = async () => {
   subscribeNetworkStatus()
 
   registerGlobalContext({
-    showSetting: () => window.router.showSettings(),
+    showSetting: (path) => window.router.showSettings(path),
     getGeneralSettings,
     getUISettings,
     /**
@@ -108,6 +108,7 @@ export const initializeApp = async () => {
     loading_time: loadingTime,
     using_indexed_db: enabledDataPersist,
     data_hydrated_time: dataHydratedTime,
+    version: APP_VERSION,
   })
 }
 

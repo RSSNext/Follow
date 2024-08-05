@@ -56,5 +56,6 @@ export const useInputComposition = (
     onCompositionEnd: handleCompositionEnd,
     onCompositionStart: handleCompositionStart,
     onKeyDown: handleKeyDown,
+    isCompositionRef,
   }
 }

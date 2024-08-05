@@ -19,7 +19,13 @@ export function Component() {
   }, [])
   return (
     <div className="h-full overflow-hidden bg-theme-background">
-      <FeedForm url={url} id={id} defaultView={defaultView as FeedViewType} />
+      <FeedForm
+        url={url}
+        id={id}
+        defaultValues={{
+          view: defaultView.toString(),
+        }}
+      />
     </div>
   )
 }

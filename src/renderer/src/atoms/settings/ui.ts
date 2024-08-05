@@ -4,7 +4,7 @@ import { createSettingAtom } from "./helper"
 
 const createDefaultSettings = (): UISettings => ({
   // Sidebar
-  entryColWidth: 340,
+  entryColWidth: 356,
   feedColWidth: 256,
 
   opaqueSidebar: false,

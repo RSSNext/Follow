@@ -1,4 +1,5 @@
 import { Kbd } from "@renderer/components/ui/kbd/Kbd"
+import { HotKeyScopeMap } from "@renderer/constants"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { Queries } from "@renderer/queries"
 import type { SubscriptionFlatModel } from "@renderer/store/subscription"
@@ -73,7 +74,7 @@ export const useDeleteSubscription = ({
 
 const UnfollowInfo = ({ title, undo }: { title: string, undo: () => any }) => {
   useHotkeys("ctrl+z,meta+z", undo, {
-    scopes: ["home"],
+    scopes: HotKeyScopeMap.Home,
     preventDefault: true,
   })
   return (
