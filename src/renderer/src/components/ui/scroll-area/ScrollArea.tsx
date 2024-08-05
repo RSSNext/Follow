@@ -24,6 +24,10 @@ const Thumb = React.forwardRef<
 >(({ className, ...rest }, forwardedRef) => (
   <ScrollAreaBase.Thumb
     {...rest}
+    onClick={(e) => {
+      e.stopPropagation()
+      rest.onClick?.(e)
+    }}
     ref={forwardedRef}
     className={cn(
       "relative w-full flex-1 rounded-xl transition-colors duration-150",

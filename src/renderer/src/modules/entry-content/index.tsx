@@ -163,7 +163,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
         >
           <article
             onContextMenu={stopPropagation}
-            className="relative m-auto min-w-0 max-w-[550px] @4xl:max-w-[70ch]"
+            className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
           >
             <a
               href={entry.entries.url || void 0}
