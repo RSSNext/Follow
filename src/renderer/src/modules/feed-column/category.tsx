@@ -9,7 +9,7 @@ import {
   getRouteParams,
   useRouteParamsSelector,
 } from "@renderer/hooks/biz/useRouteParams"
-import { nextFrame, stopPropagation } from "@renderer/lib/dom"
+import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
@@ -140,24 +140,18 @@ function FeedCategoryImpl({
                   type: "text",
                   enabled: !!(folderName && typeof view === "number"),
                   label: "Change to other view",
-                  click() {
-                    nextFrame(() =>
-                      showNativeMenu(
-                        views
-                          .filter((v) => v.view !== view)
-                          .map((v) => ({
-                            label: v.name,
-                            type: "text",
-                            shortcut: (v.view + 1).toString(),
-                            icon: v.icon,
-                            click() {
-                              return changeCategoryView(v.view)
-                            },
-                          })),
-                        e,
-                      ),
-                    )
-                  },
+                  submenu: views
+                    .filter((v) => v.view !== view)
+                    .map((v) => ({
+                      label: v.name,
+                      enabled: true,
+                      type: "text",
+                      shortcut: (v.view + 1).toString(),
+                      icon: v.icon,
+                      click() {
+                        return changeCategoryView(v.view)
+                      },
+                    })),
                 },
                 {
                   type: "text",
