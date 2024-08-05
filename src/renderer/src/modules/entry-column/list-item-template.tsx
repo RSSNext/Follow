@@ -42,13 +42,13 @@ export function ListItem({
     entry.entries.publishedAt
   const envIsSafari = isSafari()
   return (
-    <div className="group relative flex px-2 py-4">
-      <div
-        className={cn(
-          "mr-1 size-2 translate-y-1.5 rounded-full bg-theme-accent duration-200",
-          !asRead ? "mr-2 w-2" : "w-0",
-        )}
-      />
+    <div
+      className={cn(
+        "group relative flex py-4 pl-3 pr-2",
+        !asRead &&
+        "before:absolute before:left-0 before:top-[1.4375rem] before:block before:size-1.5 before:rounded-full before:bg-theme-accent",
+      )}
+    >
       {!withAudio && <FeedIcon feed={feed} fallback entry={entry.entries} />}
       <div
         className={cn(
