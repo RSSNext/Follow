@@ -59,17 +59,22 @@ export function createWindow(
     ...configs,
   })
 
-  window.on("enter-html-full-screen", () => {
-    window.setBackgroundColor("")
-    window.webContents.invalidate()
-  })
-  window.on("leave-html-full-screen", () => {
-    window.setBackgroundColor("")
-
-    window.webContents.invalidate()
+  function refreshBound(timeout = 0) {
     setTimeout(() => {
-      window.setBackgroundColor("#00000000")
-    }, 10_000)
+      const mainWindow = getMainWindow()
+      if (!mainWindow) return
+      // FIXME: workaround for theme bug in full screen mode
+      const size = mainWindow.getSize()
+      mainWindow.setSize(size[0] + 1, size[1] + 1)
+      mainWindow.setSize(size[0], size[1])
+    }, timeout)
+  }
+
+  window.on("leave-html-full-screen", () => {
+    // To solve the vibrancy losing issue when leaving full screen mode
+    // @see https://github.com/toeverything/AFFiNE/blob/280e24934a27557529479a70ab38c4f5fc65cb00/packages/frontend/electron/src/main/windows-manager/main-window.ts:L157
+    refreshBound()
+    refreshBound(1000)
   })
 
   window.on("ready-to-show", () => {
