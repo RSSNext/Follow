@@ -32,13 +32,14 @@ export function GridItem({
         className={cn(
           "relative flex-1 px-2 py-1 text-sm",
           !asRead &&
-          "before:absolute before:-left-1 before:top-[13.5px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
+          "before:absolute before:left-0 before:top-[13.5px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
         )}
       >
         <div
           className={cn(
-            "relative mb-1 mt-1.5 truncate font-medium leading-none",
+            "relative mb-1 mt-1.5 truncate font-medium leading-none duration-200",
             !!entry.collections && "pr-5",
+            !asRead && "pl-1",
           )}
         >
           <TitleMarquee>

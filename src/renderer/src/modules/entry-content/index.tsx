@@ -201,7 +201,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
             <WrappedElementProvider boundingDetection>
               <TitleMetaHandler entryId={entry.entries.id} />
-              <div className="prose prose-zinc mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
+              <div className="prose mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
                 {(summary.isLoading || summary.data) && (
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
                     <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">

@@ -37,7 +37,7 @@ export const SocialMediaItem: EntryListItemFC = ({
         "relative flex py-4 pl-3 pr-2",
         "group",
         !asRead &&
-        "before:absolute before:-left-4 before:top-[22px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
+        "before:absolute before:-left-4 before:top-[28px] before:block before:size-2 before:rounded-full before:bg-theme-accent",
       )}
     >
       <FeedIcon
@@ -54,7 +54,7 @@ export const SocialMediaItem: EntryListItemFC = ({
             entry.entries.description && "line-clamp-5",
           )}
         >
-          <div className="w-[calc(100%-10rem)]  space-x-1">
+          <div className="w-[calc(100%-10rem)] space-x-1">
             <span className="font-semibold">{entry.entries.author}</span>
             <span className="text-zinc-500">·</span>
             <span className="text-zinc-500">

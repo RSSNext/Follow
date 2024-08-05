@@ -165,11 +165,12 @@ export function EntryColumn() {
         exit={{ opacity: 0.01, y: -100 }}
       >
         <ScrollArea.ScrollArea
-          scrollbarClassName="mt-3"
+          scrollbarClassName="mt-3 w-2"
           mask={false}
           ref={scrollRef}
           rootClassName="h-full"
           viewportClassName="[&>div]:grow flex"
+
         >
           {virtuosoOptions.totalCount === 0 ? (
             entries.isLoading ?
