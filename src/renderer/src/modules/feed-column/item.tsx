@@ -6,7 +6,6 @@ import {
   Tooltip,
   TooltipContent,
   TooltipPortal,
-  TooltipProvider,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useFeedActions } from "@renderer/hooks/biz/useFeedActions"
@@ -71,7 +70,7 @@ const FeedItemImpl = ({
   if (!feed) return null
 
   return (
-    <TooltipProvider delayDuration={300}>
+    <>
       <div
         data-feed-id={feedId}
         className={cn(
@@ -98,8 +97,8 @@ const FeedItemImpl = ({
                   window.open(
                     getNewIssueUrl({
                       body:
-                      `### Error\n\nError Message: ${feed.errorMessage}\n\n### Info\n\n` +
-                      `\`\`\`json\n${JSON.stringify(feed, null, 2)}\n\`\`\``,
+                        `### Error\n\nError Message: ${feed.errorMessage}\n\n### Info\n\n` +
+                        `\`\`\`json\n${JSON.stringify(feed, null, 2)}\n\`\`\``,
                       label: "bug",
                       title: `Feed Error: ${feed.title}, ${feed.errorMessage}`,
                     }),
@@ -128,7 +127,7 @@ const FeedItemImpl = ({
             {feed.title}
           </div>
           {isOwned && (
-            <Tooltip>
+            <Tooltip delayDuration={300}>
               <TooltipTrigger>
                 <PhCrown className="ml-1 shrink-0 text-base" />
               </TooltipTrigger>
@@ -139,8 +138,7 @@ const FeedItemImpl = ({
             </Tooltip>
           )}
           {feed.errorAt && (
-
-            <Tooltip>
+            <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
                 <i className="i-mgc-wifi-off-cute-re ml-1 shrink-0 text-base" />
               </TooltipTrigger>
@@ -166,11 +164,9 @@ const FeedItemImpl = ({
                 </TooltipContent>
               </TooltipPortal>
             </Tooltip>
-
           )}
           {subscription.isPrivate && (
-
-            <Tooltip>
+            <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
                 <i className="i-mgc-eye-close-cute-re ml-1 shrink-0 text-base" />
               </TooltipTrigger>
@@ -180,12 +176,11 @@ const FeedItemImpl = ({
                 </TooltipContent>
               </TooltipPortal>
             </Tooltip>
-
           )}
         </div>
         <UnreadNumber unread={feedUnread} className="ml-2" />
       </div>
-    </TooltipProvider>
+    </>
   )
 }
 

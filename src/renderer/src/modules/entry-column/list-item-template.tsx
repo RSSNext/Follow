@@ -46,7 +46,7 @@ export function ListItem({
       <div
         className={cn(
           "mr-1 size-2 translate-y-1.5 rounded-full bg-theme-accent duration-200",
-          !asRead ? "w-2" : "w-0",
+          !asRead ? "mr-2 w-2" : "w-0",
         )}
       />
       {!withAudio && <FeedIcon feed={feed} fallback entry={entry.entries} />}

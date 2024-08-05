@@ -4,7 +4,11 @@ import * as React from "react"
 
 const TooltipProvider = TooltipPrimitive.Provider
 
-const Tooltip = TooltipPrimitive.Root
+const Tooltip: typeof TooltipProvider = ({ children, ...props }) => (
+  <TooltipProvider {...props}>
+    <TooltipPrimitive.Tooltip>{children}</TooltipPrimitive.Tooltip>
+  </TooltipProvider>
+)
 
 const TooltipTrigger = TooltipPrimitive.Trigger
 
@@ -29,10 +33,4 @@ TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
 const TooltipPortal = TooltipPrimitive.Portal
 
-export {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipProvider,
-  TooltipTrigger,
-}
+export { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger }

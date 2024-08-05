@@ -153,6 +153,7 @@ function FeedCategoryImpl({
                       },
                     })),
                 },
+                { type: "separator" },
                 {
                   type: "text",
                   label: "Rename category",
