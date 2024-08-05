@@ -7,11 +7,16 @@ import { useInputComposition, useRefValue } from "@renderer/hooks/common"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
 import { observeResize } from "@renderer/lib/observe-resize"
-import { cn } from "@renderer/lib/utils"
 import { useSubscribeElectronEvent } from "@shared/event"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react"
 import { useDebounceCallback, useEventCallback } from "usehooks-ts"
 
 const CmdFImpl: FC<{
@@ -21,6 +26,9 @@ const CmdFImpl: FC<{
 
   const currentValue = useRefValue(value)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const [scrollLeft, setScrollLeft] = useState(0)
+
   useLayoutEffect(() => {
     tipcClient?.readClipboard().then((text) => {
       if (!currentValue.current) {
@@ -61,6 +69,11 @@ const CmdFImpl: FC<{
       dir: "forward" | "backward" = "forward",
     ) => {
       if (isCompositionRef.current) return
+      const $input = inputRef.current
+      if (!$input) return
+      const { scrollLeft } = $input
+      setScrollLeft(scrollLeft)
+
       setIsSearching(true)
 
       const searchId = ++searchIdRef.current
@@ -97,6 +110,14 @@ const CmdFImpl: FC<{
       inputRef.current?.focus()
     })
   }, [isSearching])
+  const handleScroll = useCallback(() => {
+    const $input = inputRef.current
+    if (!$input) return
+    const { scrollLeft } = $input
+
+    setScrollLeft(scrollLeft)
+  }, [])
+
   return (
     <form
       onSubmit={(e) => {
@@ -110,12 +131,13 @@ const CmdFImpl: FC<{
           {...inputProps}
           ref={inputRef}
           name="search"
-          className="absolute inset-0 size-full appearance-none bg-transparent font-[system-ui] text-[15px]"
+          className="absolute inset-0 size-full appearance-none bg-transparent font-[system-ui] text-[15px] text-transparent caret-theme-accent selection:text-transparent"
           style={{
             visibility: isSearching ? "hidden" : "visible",
           }}
           type="text"
           value={value}
+          onScroll={handleScroll}
           onChange={async (e) => {
             e.preventDefault()
             const search = e.target.value
@@ -126,10 +148,8 @@ const CmdFImpl: FC<{
         />
 
         <CanvasText
-          className={cn(
-            "pointer-events-none absolute inset-0 size-full text-transparent [&::placeholder]:text-foreground",
-            isSearching ? "visible" : "invisible",
-          )}
+          scrollLeft={scrollLeft}
+          className="pointer-events-none absolute inset-0 size-full text-transparent [&::placeholder]:text-foreground"
           text={value}
         />
       </div>
@@ -168,7 +188,11 @@ const CmdFImpl: FC<{
   )
 }
 
-const drawText = (canvas: HTMLCanvasElement, text: string) => {
+const drawText = (
+  canvas: HTMLCanvasElement,
+  text: string,
+  scrollLeft: number,
+) => {
   const ctx = canvas.getContext("2d")
   if (!ctx) {
     return
@@ -189,7 +213,10 @@ const drawText = (canvas: HTMLCanvasElement, text: string) => {
   ctx.fillStyle = textColor
   ctx.font = "15px system-ui"
 
-  ctx.fillText(text, 0, 22)
+  const offsetX = -scrollLeft // Offset based on scrollLeft
+
+  ctx.fillText(text, offsetX, 23)
+
   ctx.textAlign = "left"
   ctx.textBaseline = "middle"
 }
@@ -197,9 +224,11 @@ const drawText = (canvas: HTMLCanvasElement, text: string) => {
 const CanvasText = ({
   text,
   className,
+  scrollLeft,
 }: {
   text: string
   className: string
+  scrollLeft: number
 }) => {
   const ref = useRef<HTMLCanvasElement>(null)
 
@@ -208,9 +237,9 @@ const CanvasText = ({
     if (!canvas) {
       return
     }
-    drawText(canvas, text)
-    return observeResize(canvas, () => drawText(canvas, text))
-  }, [text])
+    drawText(canvas, text, scrollLeft)
+    return observeResize(canvas, () => drawText(canvas, text, scrollLeft))
+  }, [scrollLeft, text])
 
   return <canvas className={className} ref={ref} />
 }
