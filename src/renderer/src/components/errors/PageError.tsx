@@ -3,24 +3,14 @@ import type { FallbackRender } from "@sentry/react"
 import type { FC } from "react"
 
 import { FallbackIssue } from "../common/ErrorElement"
-import { m } from "../common/Motion"
 import { StyledButton } from "../ui/button"
-import { useCurrentModal } from "../ui/modal"
 import { parseError } from "./helper"
 
-export const ModalErrorFallback: FC<Parameters<FallbackRender>[0]> = (
-  props,
-) => {
+export const PageErrorFallback: FC<Parameters<FallbackRender>[0]> = (props) => {
   const { message, stack } = parseError(props.error)
-  const modal = useCurrentModal()
+
   return (
-    <m.div
-      className="flex flex-col items-center justify-center rounded-md bg-theme-modal-background-opaque p-2"
-      exit={{
-        opacity: 0,
-        scale: 0.9,
-      }}
-    >
+    <div className="flex w-full flex-col items-center justify-center rounded-md bg-theme-modal-background-opaque p-2">
       <div className="m-auto max-w-prose text-center">
         <div className="mb-4">
           <i className="i-mgc-bug-cute-re text-4xl text-red-500" />
@@ -38,9 +28,10 @@ export const ModalErrorFallback: FC<Parameters<FallbackRender>[0]> = (
         </p>
 
         <div className="center gap-4">
-          <StyledButton onClick={() => modal.dismiss()} variant="outline">
-            Close Modal
+          <StyledButton onClick={() => props.resetError()} variant="primary">
+            Reset
           </StyledButton>
+
           <StyledButton
             onClick={() => window.location.reload()}
             variant="outline"
@@ -51,6 +42,6 @@ export const ModalErrorFallback: FC<Parameters<FallbackRender>[0]> = (
 
         <FallbackIssue message={message!} stack={stack} />
       </div>
-    </m.div>
+    </div>
   )
 }

@@ -3,6 +3,8 @@ import { useFeedColumnShow } from "@renderer/atoms/app"
 import { setMainContainerElement } from "@renderer/atoms/dom"
 import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
 import { useLoginModalShow, useMe } from "@renderer/atoms/user"
+import { AppErrorBoundary } from "@renderer/components/common/AppErrorBoundary"
+import { ErrorComponentType } from "@renderer/components/errors"
 import { PanelSplitter } from "@renderer/components/ui/divider"
 import { DeclarativeModal } from "@renderer/components/ui/modal/stacked/declarative-modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
@@ -80,7 +82,9 @@ export function Component() {
         // NOTE: tabIndex for main element can get by `document.activeElement`
         tabIndex={-1}
       >
-        <Outlet />
+        <AppErrorBoundary errorType={ErrorComponentType.Page}>
+          <Outlet />
+        </AppErrorBoundary>
       </main>
 
       <SearchCmdK />

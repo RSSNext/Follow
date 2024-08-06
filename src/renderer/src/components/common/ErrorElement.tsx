@@ -83,21 +83,7 @@ export function ErrorElement() {
         </StyledButton>
       </div>
 
-      <p className="mt-8">
-        Still having this issue? Please give feedback in Github, thanks!
-        <a
-          className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-theme-accent"
-          href={getNewIssueUrl({
-            title: `Error: ${message}`,
-            body: `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
-            label: "bug",
-          })}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Submit Issue
-        </a>
-      </p>
+      <FallbackIssue message={message} stack={stack} />
       <div className="grow" />
       <footer className="center mt-12 flex gap-2">
         Powered by
@@ -116,3 +102,27 @@ export function ErrorElement() {
     </div>
   )
 }
+
+export const FallbackIssue = ({
+  message,
+  stack,
+}: {
+  message: string
+  stack: string | null | undefined
+}) => (
+  <p className="mt-8">
+    Still having this issue? Please give feedback in Github, thanks!
+    <a
+      className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-theme-accent"
+      href={getNewIssueUrl({
+        title: `Error: ${message}`,
+        body: `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
+        label: "bug",
+      })}
+      target="_blank"
+      rel="noreferrer"
+    >
+      Submit Issue
+    </a>
+  </p>
+)

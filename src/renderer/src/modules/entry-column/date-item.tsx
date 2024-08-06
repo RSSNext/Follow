@@ -1,10 +1,11 @@
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
+import { memo } from "react"
 
 import { MarkAllButton } from "./mark-all-button"
 import { SocialMediaDateItem } from "./social-media-item"
 
-export const DateItem = ({
+export const DateItem = memo(({
   date,
   view,
   isFirst,
@@ -36,4 +37,5 @@ export const DateItem = ({
       {dateString}
     </div>
   )
-}
+},
+)
