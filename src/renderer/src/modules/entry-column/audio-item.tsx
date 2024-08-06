@@ -20,7 +20,7 @@ export function AudioItem({
 
 export const AudioItemSkeleton = (
   <div className="relative mx-auto w-full max-w-lg rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
-    <div className="relative z-[1]">
+    <div className="relative">
       <div className="group relative flex py-4 pl-3 pr-2">
         <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
           <div className="flex gap-1 text-[10px] font-bold text-zinc-400 dark:text-neutral-500">

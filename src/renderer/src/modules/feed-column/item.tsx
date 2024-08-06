@@ -1,5 +1,5 @@
 import { getMainContainerElement } from "@renderer/atoms/dom"
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import {
   Tooltip,
@@ -63,7 +63,7 @@ const FeedItemImpl = ({
   const feed = useFeedById(feedId)
 
   const { items } = useFeedActions({ feedId, view })
-  const me = useMe()
+  const me = useWhoami()
   const isOwned = feed && feed.ownerUserId === me?.id
 
   if (!feed) return null

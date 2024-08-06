@@ -1,4 +1,4 @@
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { Divider } from "@renderer/components/ui/divider"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import {
@@ -15,7 +15,7 @@ import { ClaimDailyReward } from "./claim-daily-reward"
 import { CreateWallet } from "./create-wallet"
 
 export const MyWalletSection = () => {
-  const user = useMe()
+  const user = useWhoami()
   const wallet = useWallet({ userId: user?.id })
   const myWallet = wallet.data?.[0]
 

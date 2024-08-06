@@ -159,26 +159,34 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
     sortEntriesIdByStarAt(mergedEntries) :
     sortEntriesIdByEntryPublishedAt(mergedEntries)
 
-  const entriesWithDate = useMemo(() => {
+  const groupByDate = useGeneralSettingKey("groupByDate")
+  const groupedCounts: number[] | undefined = useMemo(() => {
     if (views[view].gridMode) {
-      return sortEntries
+      return
+    }
+    if (!groupByDate) {
+      return
     }
     const entriesId2Map = entryActions.getFlattenMapEntries()
+    const counts = [] as number[]
     let lastDate = ""
-    const entriesWithDate = [] as string[]
     for (const id of sortEntries) {
       const entry = entriesId2Map[id]
-      if (entry) {
-        const date = new Date(entry.entries.publishedAt).toDateString()
-        if (date !== lastDate) {
-          entriesWithDate.push(date)
-          lastDate = date
-        }
+      if (!entry) {
+        continue
       }
-      entriesWithDate.push(id)
+      const date = new Date(entry.entries.publishedAt).toDateString()
+      if (date !== lastDate) {
+        counts.push(1)
+        lastDate = date
+      } else {
+        const last = counts.pop()
+        if (last) counts.push(last + 1)
+      }
     }
-    return entriesWithDate
-  }, [sortEntries, view])
+
+    return counts
+  }, [groupByDate, sortEntries, view])
 
   return {
     ...query,
@@ -187,7 +195,8 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
     refetch: useCallback(() => {
       query.refetch()
     }, [query]),
-    entriesIds: entriesWithDate,
+    entriesIds: sortEntries,
+    groupedCounts,
     totalCount: query.data?.pages?.[0]?.total ?? mergedEntries.length,
   }
 }

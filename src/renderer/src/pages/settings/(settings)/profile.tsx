@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { StyledButton } from "@renderer/components/ui/button"
 import {
   Form,
@@ -35,7 +35,7 @@ export const loader = defineSettingPage({
 })
 
 export function Component() {
-  const user = useMe()
+  const user = useWhoami()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

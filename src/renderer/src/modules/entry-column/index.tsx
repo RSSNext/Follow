@@ -2,9 +2,8 @@ import {
   setGeneralSetting,
   useGeneralSettingKey,
 } from "@renderer/atoms/settings/general"
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
-import { EmptyIcon } from "@renderer/components/icons/empty"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { ActionButton } from "@renderer/components/ui/button"
 import { DividerVertical } from "@renderer/components/ui/divider"
@@ -18,31 +17,32 @@ import {
 } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
+import {
+  useRouteParms,
+} from "@renderer/hooks/biz/useRouteParams"
 import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
 import { cn, getOS, isBizId } from "@renderer/lib/utils"
 import { EntryHeader } from "@renderer/modules/entry-content/header"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import { entryActions, useEntry } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
-import type { HTMLMotionProps } from "framer-motion"
 import type { FC } from "react"
-import { forwardRef, useCallback, useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import type {
   ScrollSeekConfiguration,
   VirtuosoHandle,
   VirtuosoProps,
 } from "react-virtuoso"
-import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
+import { VirtuosoGrid } from "react-virtuoso"
 
 import { DateItem } from "./date-item"
-import { EntryColumnShortcutHandler } from "./EntryColumnShortcutHandler"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import {
   EntryItem,
   EntryItemSkeleton,
   EntryItemSkeletonWithDelayShow,
 } from "./item"
+import { EntryEmptyList, EntryList, EntryListContent } from "./lists"
 import { MarkAllButton } from "./mark-all-button"
 import { girdClassNames } from "./styles"
 
@@ -59,7 +59,7 @@ export function EntryColumn() {
       })
     }, []),
   })
-  const { entriesIds, isFetchingNextPage } = entries
+  const { entriesIds, isFetchingNextPage, groupedCounts } = entries
 
   const {
     entryId: activeEntryId,
@@ -88,7 +88,7 @@ export function EntryColumn() {
   const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {
     components: {
-      List: ListContent,
+      List: EntryListContent,
       Footer: useCallback(() => {
         if (!isFetchingNextPage) return null
         return <EntryItemSkeletonWithDelayShow view={view} />
@@ -178,7 +178,7 @@ export function EntryColumn() {
             entries.isLoading ?
               null :
                 (
-                  <EmptyList />
+                  <EntryEmptyList />
                 )
           ) : view && views[view].gridMode ?
               (
@@ -193,6 +193,7 @@ export function EntryColumn() {
                   {...virtuosoOptions}
                   virtuosoRef={virtuosoRef}
                   refetch={entries.refetch}
+                  groupCounts={groupedCounts}
                 />
               )}
         </ScrollArea.ScrollArea>
@@ -239,7 +240,7 @@ const ListHeader: FC<{
     routerParams.feedId,
   )
 
-  const user = useMe()
+  const user = useWhoami()
   const isOnline = useIsOnline()
 
   const feed = useFeedById(routerParams.feedId)
@@ -336,66 +337,5 @@ const ListHeader: FC<{
       </div>
       {titleAtBottom && titleInfo}
     </div>
-  )
-}
-
-const ListContent = forwardRef<HTMLDivElement>((props, ref) => (
-  <div className="px-2" {...props} ref={ref} />
-))
-
-const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
-  (props, ref) => {
-    const unreadOnly = useGeneralSettingKey("unreadOnly")
-    return (
-      <m.div
-        className="absolute -mt-6 flex size-full grow flex-col items-center justify-center gap-2 text-zinc-400"
-        {...props}
-        ref={ref}
-      >
-        {unreadOnly ? (
-          <>
-            <i className="i-mgc-celebrate-cute-re -mt-11 text-3xl" />
-            <span className="text-base">Zero Unread</span>
-          </>
-        ) : (
-          <div className="flex -translate-y-6 flex-col items-center justify-center gap-2">
-            <EmptyIcon className="size-[30px]" />
-            <span className="text-base">Zero Items</span>
-          </div>
-        )}
-      </m.div>
-    )
-  },
-)
-
-const EntryList: FC<
-  VirtuosoProps<string, unknown> & {
-    virtuosoRef: React.RefObject<VirtuosoHandle>
-
-    refetch: () => void
-  }
-> = ({ virtuosoRef, refetch, ...virtuosoOptions }) => {
-  // Prevent scroll list move when press up/down key, the up/down key should be taken over by the shortcut key we defined.
-  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = useCallback(
-    (e) => {
-      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-        e.preventDefault()
-      }
-    },
-    [],
-  )
-  return (
-    <>
-      <Virtuoso
-        onKeyDown={handleKeyDown}
-        {...virtuosoOptions}
-        ref={virtuosoRef}
-      />
-      <EntryColumnShortcutHandler
-        refetch={refetch}
-        data={virtuosoOptions.data!}
-        virtuosoRef={virtuosoRef}
-      />
-    </>
   )
 }

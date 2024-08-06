@@ -76,7 +76,7 @@ export const ListItemHoverOverlay = ({
       )}
       <div
         ref={ref}
-        className="relative z-[1]"
+        className="relative"
         onMouseEnter={() => {
           setMouseEnter(true)
         }}

@@ -2,7 +2,7 @@ import { repository } from "@pkg"
 import { useFeedColumnShow } from "@renderer/atoms/app"
 import { setMainContainerElement } from "@renderer/atoms/dom"
 import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
-import { useLoginModalShow, useMe } from "@renderer/atoms/user"
+import { useLoginModalShow, useWhoami } from "@renderer/atoms/user"
 import { AppErrorBoundary } from "@renderer/components/common/AppErrorBoundary"
 import { ErrorComponentType } from "@renderer/components/errors"
 import { PanelSplitter } from "@renderer/components/ui/divider"
@@ -54,7 +54,7 @@ const FooterInfo = () => (
 
 export function Component() {
   const isAuthFail = useLoginModalShow()
-  const user = useMe()
+  const user = useWhoami()
 
   const containerRef = useRef<HTMLDivElement>(null)
 

@@ -5,7 +5,7 @@ import {
   useEntryReadabilityContent,
 } from "@renderer/atoms/readability"
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
@@ -55,7 +55,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 }
 
 function EntryContentRender({ entryId }: { entryId: string }) {
-  const user = useMe()
+  const user = useWhoami()
 
   const { error, data, isPending } = useAuthQuery(
     Queries.entries.byId(entryId),

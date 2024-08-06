@@ -1,6 +1,7 @@
 import { useRefValue } from "@renderer/hooks/common"
 import { createAtomHooks } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
+import { createSettingBuilder } from "@renderer/modules/settings/setting-builder"
 import { useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
@@ -72,5 +73,42 @@ export const createSettingAtom = <T extends object>(
     getSettings,
 
     settingAtom: atom,
+  }
+}
+
+export const createDefineSettingItem =
+  <T>(
+    _getSetting: () => T,
+    setSetting: (key: any, value: Partial<T>) => void,
+  ) =>
+  <K extends keyof T>(
+      key: K,
+      options: {
+        label: string
+        description?: string
+        onChange?: (value: T[K]) => void
+      },
+    ) => {
+    const { label, description, onChange } = options
+    return {
+      key,
+      label,
+      description,
+      onChange: (value: any) => {
+        if (onChange) return onChange(value as any)
+        setSetting(key, value as any)
+      },
+    } as any
+  }
+
+export const createSetting = <T extends object>(
+  useSetting: () => T,
+  setSetting: (key: any, value: Partial<T>) => void,
+) => {
+  const SettingBuilder = createSettingBuilder(useSetting)
+  const defineSettingItem = createDefineSettingItem(useSetting, setSetting)
+  return {
+    SettingBuilder,
+    defineSettingItem,
   }
 }
