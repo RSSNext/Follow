@@ -38,7 +38,7 @@ export const NotFound = () => {
   }, [location])
   const navigate = useNavigate()
   return (
-    <div className="prose center m-auto size-full flex-col">
+    <div className="prose center m-auto size-full flex-col dark:prose-invert">
       <main className="flex grow flex-col items-center justify-center">
         <div className="center mb-8 flex">
           <Logo className="size-20" />

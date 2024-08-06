@@ -1,12 +1,12 @@
 import { attachOpenInEditor } from "@renderer/lib/dev"
-import type { FallbackRender } from "@sentry/react"
 import type { FC } from "react"
 
+import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 import { FallbackIssue } from "../common/ErrorElement"
 import { StyledButton } from "../ui/button"
 import { parseError } from "./helper"
 
-export const PageErrorFallback: FC<Parameters<FallbackRender>[0]> = (props) => {
+export const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {
   const { message, stack } = parseError(props.error)
 
   return (

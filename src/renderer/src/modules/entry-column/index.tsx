@@ -4,6 +4,8 @@ import {
 } from "@renderer/atoms/settings/general"
 import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
+import { FeedFoundCanBeFollowError } from "@renderer/components/errors/FeedFoundCanBeFollowErrorFallback"
+import { FeedNotFound } from "@renderer/components/errors/FeedNotFound"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { ActionButton } from "@renderer/components/ui/button"
 import { DividerVertical } from "@renderer/components/ui/divider"
@@ -17,11 +19,14 @@ import {
 } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
+import {
+  useRouteParamsSelector,
+  useRouteParms,
+} from "@renderer/hooks/biz/useRouteParams"
 import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
 import { cn, getOS, isBizId } from "@renderer/lib/utils"
 import { EntryHeader } from "@renderer/modules/entry-content/header"
-import { useRefreshFeedMutation } from "@renderer/queries/feed"
+import { useFeed, useRefreshFeedMutation } from "@renderer/queries/feed"
 import { entryActions, useEntry } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC } from "react"
@@ -127,6 +132,7 @@ export function EntryColumn() {
 
   const navigate = useNavigateEntry()
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
+
   return (
     <div
       className="relative flex h-full flex-1 flex-col @container"
@@ -136,6 +142,10 @@ export function EntryColumn() {
         })}
       data-total-count={virtuosoOptions.totalCount}
     >
+      {virtuosoOptions.totalCount === 0 &&
+        !entries.isLoading &&
+        !entries.error && <AddFeedHelper />}
+
       <ListHeader
         refetch={entries.refetch}
         isRefreshing={isRefreshing}
@@ -193,6 +203,21 @@ export function EntryColumn() {
       </m.div>
     </div>
   )
+}
+
+const AddFeedHelper = () => {
+  const feedId = useRouteParamsSelector((s) => s.feedId)
+  const feedQuery = useFeed({ id: feedId })
+
+  if (feedQuery.error && feedQuery.error.statusCode === 404) {
+    throw new FeedNotFound()
+  }
+
+  if (!feedQuery.data) {
+    return null
+  }
+
+  throw new FeedFoundCanBeFollowError(feedQuery.data.feed)
 }
 
 const ListHeader: FC<{

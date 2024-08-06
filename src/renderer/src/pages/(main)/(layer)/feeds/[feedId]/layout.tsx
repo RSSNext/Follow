@@ -1,7 +1,9 @@
 import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
 import { PanelSplitter } from "@renderer/components/ui/divider"
 import { views } from "@renderer/constants"
-import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
+import {
+  useRouteParms,
+} from "@renderer/hooks/biz/useRouteParams"
 import { cn, isSafari } from "@renderer/lib/utils"
 import { EntryColumn } from "@renderer/modules/entry-column"
 import { useMemo, useRef } from "react"

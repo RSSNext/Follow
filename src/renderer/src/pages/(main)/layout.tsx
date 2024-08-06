@@ -82,7 +82,13 @@ export function Component() {
         // NOTE: tabIndex for main element can get by `document.activeElement`
         tabIndex={-1}
       >
-        <AppErrorBoundary errorType={ErrorComponentType.Page}>
+        <AppErrorBoundary
+          errorType={[
+            ErrorComponentType.Page,
+            ErrorComponentType.FeedFoundCanBeFollow,
+            ErrorComponentType.FeedNotFound,
+          ]}
+        >
           <Outlet />
         </AppErrorBoundary>
       </main>
