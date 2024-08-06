@@ -39,5 +39,6 @@
     "rsshub"
   ],
   "editor.foldingImportsByDefault": true,
-  "commentTranslate.hover.enabled": false
+  "commentTranslate.hover.enabled": false,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,4 +1,4 @@
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { StyledButton } from "@renderer/components/ui/button"
 import { Divider } from "@renderer/components/ui/divider"
 import { LoadingCircle } from "@renderer/components/ui/loading"
@@ -22,7 +22,7 @@ export const TipModalContent: FC<{
   userId?: string
   feedId?: string
 }> = ({ userId, feedId }) => {
-  const user = useMe()
+  const user = useWhoami()
   const myWallet = useWallet({ userId: user?.id })
   const myWalletData = myWallet.data?.[0]
 

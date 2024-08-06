@@ -14,7 +14,7 @@ type SharedSettingItem = {
   disabled?: boolean
 }
 
-type SettingItem<T, K extends keyof T = keyof T> = {
+export type SettingItem<T, K extends keyof T = keyof T> = {
   key: K
   label: string
   description?: string
@@ -113,15 +113,3 @@ export const createSettingBuilder =
           )
         })
     }
-
-export function createSettingItemTypeHelper<Setting extends () => object>(
-  _t: Setting,
-) {
-  return function <const Key extends keyof ReturnType<Setting>>(schema: {
-    key: Key
-    onChange: (v: ReturnType<Setting>[Key]) => void
-    label: string
-  }): any {
-    return schema
-  }
-}

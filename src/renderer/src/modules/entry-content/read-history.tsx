@@ -1,4 +1,4 @@
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import {
   Avatar,
   AvatarFallback,
@@ -20,7 +20,7 @@ import { usePresentUserProfileModal } from "../profile/hooks"
 export const EntryReadHistory: Component<{ entryId: string }> = ({
   entryId,
 }) => {
-  const me = useMe()
+  const me = useWhoami()
   const entryHistory = useEntryReadHistory(entryId)
 
   useAuthQuery(Queries.entries.entryReadingHistory(entryId), {

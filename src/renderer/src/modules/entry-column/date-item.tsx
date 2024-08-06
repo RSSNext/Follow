@@ -23,7 +23,7 @@ export const DateItem = memo(
 
     const className = cn(
       isFirst ? "pt-2" : "pt-8",
-      "flex items-center gap-1 pl-2 text-sm font-bold text-zinc-800 dark:text-neutral-400",
+      `relative z-10 -mx-2 flex items-center gap-1 bg-background px-4 text-sm font-bold text-zinc-800 dark:text-neutral-400`,
     )
 
     if (view === FeedViewType.SocialMedia) {

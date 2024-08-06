@@ -1,5 +1,5 @@
 import { signOut } from "@hono/auth-js/react"
-import { setMe } from "@renderer/atoms/user"
+import { setWhoami } from "@renderer/atoms/user"
 import { QUERY_PERSIST_KEY } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { clearStorage } from "@renderer/lib/ns"
@@ -12,7 +12,7 @@ export const useSignOut = () =>
     localStorage.removeItem(QUERY_PERSIST_KEY)
 
     // setLoginModalShow(true)
-    setMe(null)
+    setWhoami(null)
 
     // Clear local storage
     clearStorage()

@@ -18,7 +18,7 @@ export function NotificationItem({
 }
 
 export const NotificationItemSkeleton = (
-  <div className="relative z-[1] mx-auto w-full max-w-lg">
+  <div className="relative mx-auto w-full max-w-lg">
     <div className="group relative flex py-4 pl-3 pr-2">
       <Skeleton className="mr-2 size-5 shrink-0 overflow-hidden rounded-sm " />
       <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">

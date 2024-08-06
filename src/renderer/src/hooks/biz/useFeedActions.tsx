@@ -1,4 +1,4 @@
-import { getMe } from "@renderer/atoms/user"
+import { whoami } from "@renderer/atoms/user"
 import { useModalStack } from "@renderer/components/ui/modal"
 import type { NativeMenuItem } from "@renderer/lib/native-menu"
 import { useFeedClaimModal } from "@renderer/modules/claim"
@@ -88,7 +88,7 @@ export const useFeedActions = ({
             },
           ] :
           []),
-      ...(feed.ownerUserId === getMe()?.id ?
+      ...(feed.ownerUserId === whoami()?.id ?
           [
             {
               type: "text" as const,

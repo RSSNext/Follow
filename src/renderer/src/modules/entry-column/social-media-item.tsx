@@ -141,7 +141,7 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
 
 export const SocialMediaItemSkeleton = (
   <div className="relative m-auto w-[75ch] rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
-    <div className="relative z-[1]">
+    <div className="relative">
       <div className="group relative flex py-4 pl-3 pr-2">
         <Skeleton className="mr-2 size-9" />
         <div className="ml-2 min-w-0 flex-1">

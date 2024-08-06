@@ -1,5 +1,5 @@
 import { env } from "@env"
-import { getMe } from "@renderer/atoms/user"
+import { whoami } from "@renderer/atoms/user"
 import type { CaptureOptions, Properties } from "posthog-js"
 
 declare global {
@@ -43,7 +43,7 @@ export const initPostHog = async () => {
     },
   }
 
-  const user = getMe()
+  const user = whoami()
   if (user) {
     posthog.identify(user.id, { name: user.name, handle: user.handle })
   }

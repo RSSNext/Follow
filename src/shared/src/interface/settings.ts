@@ -6,6 +6,7 @@ export interface GeneralSettings {
   scrollMarkUnread: boolean
   hoverMarkUnread: boolean
   renderMarkUnread: boolean
+  groupByDate: boolean
 }
 
 export interface UISettings {
