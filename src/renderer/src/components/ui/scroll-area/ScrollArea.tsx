@@ -36,6 +36,7 @@ const Thumb = React.forwardRef<
       "dark:bg-neutral-500 hover:dark:bg-neutral-400/80 active:dark:bg-neutral-400",
       "before:absolute before:-left-1/2 before:-top-1/2 before:h-full before:min-h-[44]",
       "before:w-full before:min-w-[44] before:-translate-x-full before:-translate-y-full before:content-[\"\"]",
+
       className,
     )}
   />
@@ -56,6 +57,7 @@ export const Scrollbar = React.forwardRef<
         orientation === "horizontal" ?
           `h-2.5 w-full flex-col` :
           `w-2.5 flex-row`,
+        "animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in",
         className,
       )}
     >
@@ -84,7 +86,7 @@ export const Viewport = React.forwardRef<
     if (!$el) return
     if (!$child) return
     const handler = () => {
-      setShouldAddMask($el.scrollHeight > ($el.clientHeight + 48 * 2))
+      setShouldAddMask($el.scrollHeight > $el.clientHeight + 48 * 2)
     }
     const observer = new ResizeObserver(handler)
     handler()
