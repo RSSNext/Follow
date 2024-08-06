@@ -6,7 +6,7 @@ import { FetchError } from "ofetch"
 
 import { QUERY_PERSIST_KEY } from "../constants/app"
 
-const DO_NOT_RETRY_CODES = new Set([401, 403, 404, 422])
+const DO_NOT_RETRY_CODES = new Set([400, 401, 403, 404, 422])
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

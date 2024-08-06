@@ -12,7 +12,7 @@ declare global {
   }
 }
 export const initPostHog = async () => {
-  // if (import.meta.env.DEV) return
+  if (import.meta.env.DEV) return
   const { default: posthog } = await import("posthog-js")
 
   if (env.VITE_POSTHOG_KEY === undefined) return
