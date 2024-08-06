@@ -6,6 +6,7 @@ import {
   setReadabilityStatus,
   useEntryInReadabilityStatus,
 } from "@renderer/atoms/readability"
+import { whoami } from "@renderer/atoms/user"
 import { SimpleIconsEagle } from "@renderer/components/ui/platform-icon/icons"
 import { COPY_MAP, views } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
@@ -159,6 +160,7 @@ export const useEntryActions = ({
         shortcut: shortcuts.entry.tip.key,
         name: `Tip`,
         className: "i-mgc-power-outline",
+        hide: feed?.ownerUserId === whoami()?.id,
         onClick: () => {
           nextFrame(openTipModal)
         },
