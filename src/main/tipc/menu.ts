@@ -1,29 +1,31 @@
 import { callGlobalContextMethod } from "@shared/bridge"
-import type { MessageBoxOptions } from "electron"
+import type { MenuItemConstructorOptions, MessageBoxOptions } from "electron"
 import { dialog, Menu, ShareMenu } from "electron"
 
 import { downloadFile } from "../lib/download"
 import { getMainWindow } from "../window"
 import { t } from "./_instance"
 
+type MenuItem = ActionMenuItem | { type: "separator" }
+interface ActionMenuItem {
+  type: "text"
+  label: string
+  enabled?: boolean
+
+  shortcut?: string
+  icon?: string
+  submenu?: MenuItem[]
+}
 export const menuRoute = {
   showContextMenu: t.procedure
     .input<{
-      items: Array<
-        | {
-          type: "text"
-          label: string
-          enabled?: boolean
-
-          shortcut?: string
-          icon?: string
-        }
-        | { type: "separator" }
-      >
+      items: Array<MenuItem>
     }>()
     .action(async ({ input, context }) => {
-      const menu = Menu.buildFromTemplate(
-        input.items.map((item, index) => {
+      const menu = Menu.buildFromTemplate(transformMenuItems(input.items))
+
+      function transformMenuItems(items: MenuItem[], parentIndex?: number) {
+        return items.map((item, index) => {
           if (item.type === "separator") {
             return {
               type: "separator" as const,
@@ -34,11 +36,19 @@ export const menuRoute = {
             enabled: item.enabled ?? true,
             accelerator: item.shortcut?.replace("Meta", "CmdOrCtrl"),
             click() {
-              context.sender.send("menu-click", index)
+              context.sender.send(
+                "menu-click",
+                parentIndex !== undefined ?
+                  `${parentIndex}-${index}` :
+                  `${index}`,
+              )
             },
-          }
-        }),
-      )
+            submenu: item.submenu ?
+              transformMenuItems(item.submenu, index) :
+              undefined,
+          } as MenuItemConstructorOptions
+        })
+      }
 
       menu.popup({
         callback: () => {

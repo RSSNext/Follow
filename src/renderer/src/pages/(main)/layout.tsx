@@ -1,7 +1,10 @@
+import { repository } from "@pkg"
 import { useFeedColumnShow } from "@renderer/atoms/app"
 import { setMainContainerElement } from "@renderer/atoms/dom"
 import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
-import { useLoginModalShow, useMe } from "@renderer/atoms/user"
+import { useLoginModalShow, useWhoami } from "@renderer/atoms/user"
+import { AppErrorBoundary } from "@renderer/components/common/AppErrorBoundary"
+import { ErrorComponentType } from "@renderer/components/errors"
 import { PanelSplitter } from "@renderer/components/ui/divider"
 import { DeclarativeModal } from "@renderer/components/ui/modal/stacked/declarative-modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
@@ -14,6 +17,7 @@ import { LoginModalContent } from "@renderer/modules/auth/LoginModalContent"
 import { FeedColumn } from "@renderer/modules/feed-column"
 import { AutoUpdater } from "@renderer/modules/feed-column/auto-updater"
 import { CornerPlayer } from "@renderer/modules/feed-column/corner-player"
+import { CmdF } from "@renderer/modules/panel/cmdf"
 import { SearchCmdK } from "@renderer/modules/panel/cmdk"
 import { CmdNTrigger } from "@renderer/modules/panel/cmdn"
 import type { PropsWithChildren } from "react"
@@ -21,9 +25,41 @@ import { useRef } from "react"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
+const FooterInfo = () => (
+  <div className="relative">
+    {APP_VERSION?.[0] === "0" && (
+      <div className="pointer-events-none !mt-0 w-full py-3 text-center text-xs opacity-20">
+        Early Access
+        {" "}
+        {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
+      </div>
+    )}
+
+    {!ELECTRON && (
+      <div className="center absolute inset-y-0 right-2">
+        <button
+          type="button"
+          aria-label="Download Desktop App"
+          onClick={() => {
+            window.open(`${repository.url}/releases`)
+          }}
+          className="center cursor-pointer rounded-full border bg-background p-1.5 shadow-sm"
+        >
+          <i className="i-mgc-download-2-cute-re size-3.5 opacity-80" />
+        </button>
+      </div>
+    )}
+  </div>
+)
+
+const errorTypes = [
+  ErrorComponentType.Page,
+  ErrorComponentType.FeedFoundCanBeFollow,
+  ErrorComponentType.FeedNotFound,
+] as ErrorComponentType[]
 export function Component() {
   const isAuthFail = useLoginModalShow()
-  const user = useMe()
+  const user = useWhoami()
 
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -37,15 +73,7 @@ export function Component() {
         <FeedColumn>
           <CornerPlayer />
 
-          {APP_VERSION?.[0] === "0" && (
-            <div className="pointer-events-none !mt-0 w-full py-3 text-center text-xs opacity-20">
-              Early Access
-              {" "}
-              {GIT_COMMIT_SHA ?
-                `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` :
-                ""}
-            </div>
-          )}
+          <FooterInfo />
 
           {ELECTRON && <AutoUpdater />}
 
@@ -55,15 +83,20 @@ export function Component() {
       </FeedResponsiveResizerContainer>
       <main
         ref={setMainContainerElement}
-        className="flex min-w-0 flex-1 bg-theme-background !outline-none"
+        className="flex min-w-0 flex-1 bg-theme-background pt-[calc(var(--fo-window-padding-top)_-10px)] !outline-none"
         // NOTE: tabIndex for main element can get by `document.activeElement`
         tabIndex={-1}
       >
-        <Outlet />
+        <AppErrorBoundary
+          errorType={errorTypes}
+        >
+          <Outlet />
+        </AppErrorBoundary>
       </main>
 
       <SearchCmdK />
       <CmdNTrigger />
+      {ELECTRON && <CmdF />}
       {isAuthFail && !user && (
         <RootPortal>
           <DeclarativeModal

@@ -2,11 +2,9 @@ import type { User } from "@auth/core/types"
 import { createAtomHooks } from "@renderer/lib/jotai"
 import { atom } from "jotai"
 
-export const [, , useMe, useSetMe, getMe, setMe] = createAtomHooks(
+export const [, , useWhoami, useSetWhoami, whoami, setWhoami] = createAtomHooks(
   atom<Nullable<User>>(null),
 )
-
-export { useMe as useWhoAmI }
 
 export const [
   ,

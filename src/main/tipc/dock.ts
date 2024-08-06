@@ -1,7 +1,7 @@
 import { UNREAD_BACKGROUND_POLLING_INTERVAL } from "../constants/app"
 import { apiClient } from "../lib/api-client"
 import { setDockCount } from "../lib/dock"
-import { sleep } from "../lib/until"
+import { sleep } from "../lib/utils"
 import { t } from "./_instance"
 
 const timerMap = {

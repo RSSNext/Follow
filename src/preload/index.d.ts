@@ -4,5 +4,6 @@ declare global {
   interface Window {
     electron?: ElectronAPI
     api: unknown
+    platform: NodeJS.Platform
   }
 }

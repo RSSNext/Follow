@@ -2,58 +2,51 @@ import {
   setGeneralSetting,
   useGeneralSettingKey,
 } from "@renderer/atoms/settings/general"
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
-import { EmptyIcon } from "@renderer/components/icons/empty"
+import { FeedFoundCanBeFollowError } from "@renderer/components/errors/FeedFoundCanBeFollowErrorFallback"
+import { FeedNotFound } from "@renderer/components/errors/FeedNotFound"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { ActionButton, StyledButton } from "@renderer/components/ui/button"
+import { ActionButton } from "@renderer/components/ui/button"
 import { DividerVertical } from "@renderer/components/ui/divider"
 import { LoadingCircle } from "@renderer/components/ui/loading"
-import {
-  Popover,
-  PopoverClose,
-  PopoverContent,
-  PopoverTrigger,
-} from "@renderer/components/ui/popover"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
 import {
   FEED_COLLECTION_LIST,
   ROUTE_ENTRY_PENDING,
-  ROUTE_FEED_IN_FOLDER,
+  ROUTE_FEED_PENDING,
   views,
 } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
+import {
+  useRouteParamsSelector,
+  useRouteParms,
+} from "@renderer/hooks/biz/useRouteParams"
 import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { cn, getEntriesParams, getOS, isBizId } from "@renderer/lib/utils"
+import { cn, getOS, isBizId } from "@renderer/lib/utils"
 import { EntryHeader } from "@renderer/modules/entry-content/header"
-import { useRefreshFeedMutation } from "@renderer/queries/feed"
+import { useFeed, useRefreshFeedMutation } from "@renderer/queries/feed"
 import { entryActions, useEntry } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
-import {
-  subscriptionActions,
-  useFolderFeedsByFeedId,
-} from "@renderer/store/subscription"
-import type { HTMLMotionProps } from "framer-motion"
 import type { FC } from "react"
-import { forwardRef, useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import type {
   ScrollSeekConfiguration,
   VirtuosoHandle,
   VirtuosoProps,
 } from "react-virtuoso"
-import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
+import { VirtuosoGrid } from "react-virtuoso"
 
-import { EntryColumnShortcutHandler } from "./EntryColumnShortcutHandler"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import {
   EntryItem,
   EntryItemSkeleton,
   EntryItemSkeletonWithDelayShow,
 } from "./item"
+import { EntryEmptyList, EntryList, EntryListContent } from "./lists"
+import { MarkAllButton } from "./mark-all-button"
 import { girdClassNames } from "./styles"
 
 const scrollSeekConfiguration: ScrollSeekConfiguration = {
@@ -69,7 +62,7 @@ export function EntryColumn() {
       })
     }, []),
   })
-  const { entriesIds, isFetchingNextPage } = entries
+  const { entriesIds, isFetchingNextPage, groupedCounts } = entries
 
   const {
     entryId: activeEntryId,
@@ -98,7 +91,7 @@ export function EntryColumn() {
   const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {
     components: {
-      List: ListContent,
+      List: EntryListContent,
       Footer: useCallback(() => {
         if (!isFetchingNextPage) return null
         return <EntryItemSkeletonWithDelayShow view={view} />
@@ -129,7 +122,7 @@ export function EntryColumn() {
       }
     },
     itemContent: useCallback(
-      (_, entryId: string) => {
+      (_, entryId) => {
         if (!entryId) return null
 
         return <EntryItem key={entryId} entryId={entryId} view={view} />
@@ -140,6 +133,7 @@ export function EntryColumn() {
 
   const navigate = useNavigateEntry()
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
+
   return (
     <div
       className="relative flex h-full flex-1 flex-col @container"
@@ -149,6 +143,10 @@ export function EntryColumn() {
         })}
       data-total-count={virtuosoOptions.totalCount}
     >
+      {virtuosoOptions.totalCount === 0 &&
+        !entries.isLoading &&
+        !entries.error && <AddFeedHelper />}
+
       <ListHeader
         refetch={entries.refetch}
         isRefreshing={isRefreshing}
@@ -171,7 +169,10 @@ export function EntryColumn() {
         exit={{ opacity: 0.01, y: -100 }}
       >
         <ScrollArea.ScrollArea
-          scrollbarClassName="mt-3"
+          scrollbarClassName={cn(
+            "mt-3",
+            !views[view].wideMode ? "w-[5px] p-0" : "",
+          )}
           mask={false}
           ref={scrollRef}
           rootClassName="h-full"
@@ -181,7 +182,7 @@ export function EntryColumn() {
             entries.isLoading ?
               null :
                 (
-                  <EmptyList />
+                  <EntryEmptyList />
                 )
           ) : view && views[view].gridMode ?
               (
@@ -196,12 +197,36 @@ export function EntryColumn() {
                   {...virtuosoOptions}
                   virtuosoRef={virtuosoRef}
                   refetch={entries.refetch}
+                  groupCounts={groupedCounts}
                 />
               )}
         </ScrollArea.ScrollArea>
       </m.div>
     </div>
   )
+}
+
+const AddFeedHelper = () => {
+  const feedId = useRouteParamsSelector((s) => s.feedId)
+  const feedQuery = useFeed({ id: feedId })
+
+  if (!feedId) { return }
+  if (feedId === FEED_COLLECTION_LIST || feedId === ROUTE_FEED_PENDING) {
+    return null
+  }
+  if (!isBizId(feedId)) {
+    return null
+  }
+
+  if (feedQuery.error && feedQuery.error.statusCode === 404) {
+    throw new FeedNotFound()
+  }
+
+  if (!feedQuery.data) {
+    return null
+  }
+
+  throw new FeedFoundCanBeFollowError(feedQuery.data.feed)
 }
 
 const ListHeader: FC<{
@@ -215,33 +240,6 @@ const ListHeader: FC<{
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
   const { feedId, entryId, view } = routerParams
-  const folderIds = useFolderFeedsByFeedId(feedId)
-
-  const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
-  const handleMarkAllAsRead = useCallback(async () => {
-    if (!routerParams) return
-    await apiClient.reads.all.$post({
-      json: {
-        ...getEntriesParams({
-          id: folderIds?.join(",") || feedId,
-          view: routerParams?.view,
-        }),
-      },
-    })
-
-    if (typeof routerParams.feedId === "number" || routerParams.isAllFeeds) {
-      subscriptionActions.markReadByView(routerParams.view)
-    } else if (routerParams.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)) {
-      subscriptionActions.markReadByFolder(
-        routerParams.feedId.replace(ROUTE_FEED_IN_FOLDER, ""),
-      )
-    } else {
-      routerParams.feedId?.split(",").forEach((feedId) => {
-        entryActions.markReadByFeedId(feedId)
-      })
-    }
-    setMarkPopoverOpen(false)
-  }, [feedId, folderIds, routerParams])
 
   const headerTitle = useFeedHeaderTitle()
   const os = getOS()
@@ -269,18 +267,18 @@ const ListHeader: FC<{
     routerParams.feedId,
   )
 
-  const user = useMe()
+  const user = useWhoami()
   const isOnline = useIsOnline()
 
   const feed = useFeedById(routerParams.feedId)
 
   const titleStyleBasedView = [
-    "pl-11",
-    "pl-4",
+    "pl-12",
+    "pl-7",
     "pl-7",
     "pl-7",
     "px-5",
-    "pl-11",
+    "pl-12",
   ]
 
   return (
@@ -317,7 +315,7 @@ const ListHeader: FC<{
             </>
           )}
           {isOnline ? (
-            feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) ?
+            feed?.ownerUserId === user?.id && isBizId(routerParams.feedId!) ?
                 (
                   <ActionButton
                     tooltip="Refresh"
@@ -361,92 +359,10 @@ const ListHeader: FC<{
               <i className="i-mgc-round-cute-re" />
             )}
           </ActionButton>
-          <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
-            <PopoverTrigger asChild>
-              <ActionButton
-                shortcut={shortcuts.entries.markAllAsRead.key}
-                tooltip="Mark All as Read"
-              >
-                <i className="i-mgc-check-circle-cute-re" />
-              </ActionButton>
-            </PopoverTrigger>
-            <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
-              <div>Mark all as read?</div>
-              <div className="space-x-4">
-                <PopoverClose>
-                  <StyledButton variant="outline">Cancel</StyledButton>
-                </PopoverClose>
-                {/* TODO */}
-                <StyledButton onClick={handleMarkAllAsRead}>
-                  Confirm
-                </StyledButton>
-              </div>
-            </PopoverContent>
-          </Popover>
+          <MarkAllButton />
         </div>
       </div>
       {titleAtBottom && titleInfo}
     </div>
-  )
-}
-
-const ListContent = forwardRef<HTMLDivElement>((props, ref) => (
-  <div className="px-2" {...props} ref={ref} />
-))
-
-const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
-  (props, ref) => {
-    const unreadOnly = useGeneralSettingKey("unreadOnly")
-    return (
-      <m.div
-        className="absolute -mt-6 flex size-full grow flex-col items-center justify-center gap-2 text-zinc-400"
-        {...props}
-        ref={ref}
-      >
-        {unreadOnly ? (
-          <>
-            <i className="i-mgc-celebrate-cute-re -mt-11 text-3xl" />
-            <span className="text-base">Zero Unread</span>
-          </>
-        ) : (
-          <div className="flex -translate-y-6 flex-col items-center justify-center gap-2">
-            <EmptyIcon className="size-[30px]" />
-            <span className="text-base">Zero Items</span>
-          </div>
-        )}
-      </m.div>
-    )
-  },
-)
-
-const EntryList: FC<
-  VirtuosoProps<string, unknown> & {
-    virtuosoRef: React.RefObject<VirtuosoHandle>
-
-    refetch: () => void
-  }
-> = ({ virtuosoRef, refetch, ...virtuosoOptions }) => {
-  // Prevent scroll list move when press up/down key, the up/down key should be taken over by the shortcut key we defined.
-  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = useCallback(
-    (e) => {
-      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-        e.preventDefault()
-      }
-    },
-    [],
-  )
-  return (
-    <>
-      <Virtuoso
-        onKeyDown={handleKeyDown}
-        {...virtuosoOptions}
-        ref={virtuosoRef}
-      />
-      <EntryColumnShortcutHandler
-        refetch={refetch}
-        data={virtuosoOptions.data!}
-        virtuosoRef={virtuosoRef}
-      />
-    </>
   )
 }

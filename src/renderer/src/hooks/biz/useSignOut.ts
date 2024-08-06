@@ -1,5 +1,5 @@
 import { signOut } from "@hono/auth-js/react"
-import { setMe } from "@renderer/atoms/user"
+import { setWhoami } from "@renderer/atoms/user"
 import { QUERY_PERSIST_KEY } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { clearStorage } from "@renderer/lib/ns"
@@ -8,19 +8,20 @@ import { useCallback } from "react"
 
 export const useSignOut = () =>
   useCallback(async () => {
-    // clear local store data
-    clearLocalPersistStoreData()
-
     // Clear query cache
     localStorage.removeItem(QUERY_PERSIST_KEY)
 
     // setLoginModalShow(true)
-    setMe(null)
+    setWhoami(null)
 
     // Clear local storage
     clearStorage()
     window.posthog?.reset()
-    tipcClient?.cleanAuthSessionToken()
+    // clear local store data
+    await Promise.allSettled([
+      clearLocalPersistStoreData(),
+      tipcClient?.cleanAuthSessionToken(),
+    ])
     // Sign out
     await signOut()
   }, [])

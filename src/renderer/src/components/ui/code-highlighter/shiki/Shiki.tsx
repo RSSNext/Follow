@@ -159,7 +159,7 @@ const ShikiCode: FC<ShikiProps & {
     )
   }
   return (
-    <div className={cn("group relative", styles["shiki-wrapper"], transparent ? styles["transparent"] : null, className)}>
+    <div className={cn("group relative my-4", styles["shiki-wrapper"], transparent ? styles["transparent"] : null, className)}>
       <div dangerouslySetInnerHTML={{ __html: rendered }} />
       <CopyButton value={code} className="absolute right-1 top-1 opacity-0 duration-200 group-hover:opacity-100" />
     </div>

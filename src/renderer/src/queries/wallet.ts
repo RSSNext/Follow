@@ -25,7 +25,11 @@ export const wallet = {
       apiClient.wallets.transactions.claim_daily_ttl.$get()),
 
   transactions: {
-    get: (query: Parameters<typeof apiClient.wallets.transactions.$get>[0]["query"] = {}) =>
+    get: (
+      query: Parameters<
+        typeof apiClient.wallets.transactions.$get
+      >[0]["query"] = {},
+    ) =>
       defineQuery(
         ["wallet", "transactions", query].filter(Boolean),
         async () => {
@@ -41,15 +45,11 @@ export const wallet = {
 }
 
 export const useWallet = ({ userId }: { userId?: string } = {}) =>
-  useAuthQuery(
-    wallet.get({ userId }),
-    { enabled: !!userId },
-  )
+  useAuthQuery(wallet.get({ userId }), { enabled: !!userId })
 
-export const useWalletTransactions = (query: Parameters<typeof wallet.transactions.get>[0] = {}) =>
-  useAuthQuery(
-    wallet.transactions.get(query),
-  )
+export const useWalletTransactions = (
+  query: Parameters<typeof wallet.transactions.get>[0] = {},
+) => useAuthQuery(wallet.transactions.get(query))
 
 export const useCreateWalletMutation = () =>
   useMutation({
@@ -65,36 +65,41 @@ export const useCreateWalletMutation = () =>
   })
 
 export const useClaimWalletDailyRewardTtl = () =>
-  useAuthQuery(
-    wallet.claimDailyRewardTtl(),
-    { refetchInterval: 5000 },
-  )
+  useAuthQuery(wallet.claimDailyRewardTtl(), { refetchInterval: 5000 })
 
-export const useClaimWalletDailyRewardMutation = () => useMutation({
-  mutationKey: ["claimWalletDailyReward"],
-  mutationFn: () => apiClient.wallets.transactions.claim_daily.$post(),
-  async onError(err) {
-    toast.error(getFetchErrorMessage(err))
-  },
-  onSuccess() {
-    wallet.get().invalidate()
-    wallet.claimDailyRewardTtl().invalidate()
-    window.posthog?.capture("daily_reward_claimed")
-    toast("🎉 Daily reward claimed.")
-  },
-})
+export const useClaimWalletDailyRewardMutation = () =>
+  useMutation({
+    mutationKey: ["claimWalletDailyReward"],
+    mutationFn: () => apiClient.wallets.transactions.claim_daily.$post(),
+    async onError(err) {
+      toast.error(getFetchErrorMessage(err))
+    },
+    onSuccess() {
+      wallet.get().invalidate()
+      wallet.claimDailyRewardTtl().invalidate()
+      window.posthog?.capture("daily_reward_claimed")
+      toast("🎉 Daily reward claimed.")
+    },
+  })
 
-export const useWalletTipMutation = () => useMutation({
-  mutationKey: ["walletTip"],
-  mutationFn: (data: Parameters<typeof apiClient.wallets.transactions.tip.$post>[0]["json"]) =>
-    apiClient.wallets.transactions.tip.$post({ json: data }),
-  async onError(err) {
-    toast.error(getFetchErrorMessage(err))
-  },
-  onSuccess(_, variables) {
-    wallet.get().invalidate()
-    wallet.transactions.get().invalidate()
-    window.posthog?.capture("tip_sent", { amount: variables.amount, feedId: variables.feedId })
-    toast("🎉 Tipped.")
-  },
-})
+export const useWalletTipMutation = () =>
+  useMutation({
+    mutationKey: ["walletTip"],
+    mutationFn: (
+      data: Parameters<
+        typeof apiClient.wallets.transactions.tip.$post
+      >[0]["json"],
+    ) => apiClient.wallets.transactions.tip.$post({ json: data }),
+    async onError(err) {
+      toast.error(getFetchErrorMessage(err))
+    },
+    onSuccess(_, variables) {
+      wallet.get().invalidate()
+      wallet.transactions.get().invalidate()
+      window.posthog?.capture("tip_sent", {
+        amount: variables.amount,
+        feedId: variables.feedId,
+      })
+      toast("🎉 Tipped.")
+    },
+  })

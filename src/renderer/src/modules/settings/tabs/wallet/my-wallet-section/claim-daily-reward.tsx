@@ -49,14 +49,14 @@ export const ClaimDailyReward = () => {
           disabled={!canClaim}
         >
           {canClaim ?
-            "Claim Daily Power" :
-            `Claim in ${hour}:${minute}`}
+            "Mint Daily Power" :
+            `Mint in ${hour}:${minute}`}
         </StyledButton>
       </TooltipTrigger>
       <TooltipContent>
         {canClaim ?
-          "Claim your 2 Daily Power now!" :
-          `You can claim your Daily Power in ${hour}:${minute}.`}
+          "Mint your 2 Daily Power now!" :
+          `You can mint your Daily Power in ${hour}:${minute}.`}
       </TooltipContent>
     </Tooltip>
   )

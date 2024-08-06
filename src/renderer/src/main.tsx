@@ -20,7 +20,6 @@ const $container = document.querySelector("#root") as HTMLElement
 if (window.electron && getOS() === "Windows") {
   $container.style.borderRadius = `${ELECTRON_WINDOWS_RADIUS}px`
   $container.style.overflow = "hidden"
-  $container.style.paddingTop = `${ElECTRON_CUSTOM_TITLEBAR_HEIGHT}px`
   $container.style.background = "var(--fo-background)"
 
   document.body.style.cssText += `--fo-window-padding-top: ${ElECTRON_CUSTOM_TITLEBAR_HEIGHT}px; --fo-window-radius: ${ELECTRON_WINDOWS_RADIUS}px;`

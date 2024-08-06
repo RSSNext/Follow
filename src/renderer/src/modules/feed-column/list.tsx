@@ -14,6 +14,7 @@ import { useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 
 import { FeedCategory } from "./category"
+import { UnreadNumber } from "./unread-number"
 
 const useGroupedData = (view: FeedViewType) => {
   const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
@@ -143,7 +144,7 @@ export function FeedList({
               onClick={() => setExpansion(true)}
             />
           )}
-          <span>{totalUnread}</span>
+          <UnreadNumber unread={totalUnread} className="text-xs" />
         </div>
       </div>
       <ScrollArea.ScrollArea

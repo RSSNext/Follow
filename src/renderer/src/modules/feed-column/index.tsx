@@ -204,6 +204,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
           className="relative flex items-center gap-1"
           onClick={stopPropagation}
         >
+
           <SearchActionButton />
 
           <Link to="/discover" tabIndex={-1}>
@@ -227,7 +228,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
             className={cn(
               active === index && item.className,
               "flex flex-col items-center gap-1 text-xl",
-              "hover:!bg-theme-vibrancyBg",
+              ELECTRON ? "hover:!bg-theme-vibrancyBg" : "",
               showSidebarUnreadCount && "h-11",
             )}
             onClick={(e) => {

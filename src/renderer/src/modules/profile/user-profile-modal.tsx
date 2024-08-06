@@ -1,5 +1,4 @@
 import { env } from "@env"
-import { getSidebarActiveView } from "@renderer/atoms/sidebar"
 import { m } from "@renderer/components/common/Motion"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { FollowIcon } from "@renderer/components/icons/follow"
@@ -16,7 +15,6 @@ import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame } from "@renderer/lib/dom"
-import type { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import type { SubscriptionModel } from "@renderer/models"
 import { useUserSubscriptionsQuery } from "@renderer/modules/profile/hooks"
@@ -335,17 +333,21 @@ const SubscriptionItem: FC<{
             onClick={(e) => {
               e.stopPropagation()
               e.preventDefault()
-              const defaultView = getSidebarActiveView() as FeedViewType
+              const defaultView = subscription.view
 
               present({
                 title: `${isFollowed ? "Edit " : ""}${APP_NAME} - ${
                   subscription.feeds.title
-                }`,
+                  }`,
+                clickOutsideToDismiss: true,
                 content: ({ dismiss }) => (
                   <FeedForm
                     asWidget
                     url={subscription.feeds.url}
-                    defaultView={defaultView}
+                    defaultValues={{
+                      view: defaultView.toString(),
+                      category: subscription.category,
+                    }}
                     onSuccess={dismiss}
                   />
                 ),

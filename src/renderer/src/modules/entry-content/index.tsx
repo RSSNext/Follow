@@ -5,7 +5,7 @@ import {
   useEntryReadabilityContent,
 } from "@renderer/atoms/readability"
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
@@ -55,7 +55,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 }
 
 function EntryContentRender({ entryId }: { entryId: string }) {
-  const user = useMe()
+  const user = useWhoami()
 
   const { error, data, isPending } = useAuthQuery(
     Queries.entries.byId(entryId),
@@ -140,7 +140,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
-        className="h-[55px] shrink-0 px-5"
+        className="h-[55px] shrink-0 px-3"
       />
 
       <ScrollArea.ScrollArea
@@ -163,7 +163,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
         >
           <article
             onContextMenu={stopPropagation}
-            className="relative m-auto min-w-0 max-w-[550px] @4xl:max-w-[70ch]"
+            className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
           >
             <a
               href={entry.entries.url || void 0}
@@ -201,7 +201,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
             <WrappedElementProvider boundingDetection>
               <TitleMetaHandler entryId={entry.entries.id} />
-              <div className="prose prose-zinc mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
+              <div className="prose mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
                 {(summary.isLoading || summary.data) && (
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
                     <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">

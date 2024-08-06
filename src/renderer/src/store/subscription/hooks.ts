@@ -17,7 +17,13 @@ export const useSubscriptionByView = (view: FeedViewType) =>
 export const useSubscriptionByFeedId = (feedId: FeedId) =>
   useSubscriptionStore((state) => state.data[feedId])
 
-export const useFolderFeedsByFeedId = (feedId?: string) =>
+export const useFolderFeedsByFeedId = ({
+  feedId,
+  view,
+}: {
+  feedId?: string
+  view: FeedViewType
+}) =>
   useSubscriptionStore((state): string[] | null => {
     if (typeof feedId !== "string") return null
     if (feedId === FEED_COLLECTION_LIST) {
@@ -32,7 +38,7 @@ export const useFolderFeedsByFeedId = (feedId?: string) =>
     const feedIds: string[] = []
     for (const feedId in state.data) {
       const subscription = state.data[feedId]
-      if (subscription.category === folderName || subscription.defaultCategory === folderName) {
+      if (subscription.view === view && (subscription.category === folderName || subscription.defaultCategory === folderName)) {
         feedIds.push(feedId)
       }
     }

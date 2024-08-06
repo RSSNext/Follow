@@ -1,12 +1,10 @@
 import { getMainContainerElement } from "@renderer/atoms/dom"
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { FeedIcon } from "@renderer/components/feed-icon"
-import { PhCrown } from "@renderer/components/icons/crown"
 import {
   Tooltip,
   TooltipContent,
   TooltipPortal,
-  TooltipProvider,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useFeedActions } from "@renderer/hooks/biz/useFeedActions"
@@ -22,6 +20,8 @@ import { useFeedUnreadStore } from "@renderer/store/unread"
 import { WEB_URL } from "@shared/constants"
 import dayjs from "dayjs"
 import { memo, useCallback } from "react"
+
+import { UnreadNumber } from "./unread-number"
 
 interface FeedItemProps {
   feedId: string
@@ -63,13 +63,13 @@ const FeedItemImpl = ({
   const feed = useFeedById(feedId)
 
   const { items } = useFeedActions({ feedId, view })
-  const me = useMe()
+  const me = useWhoami()
   const isOwned = feed && feed.ownerUserId === me?.id
 
   if (!feed) return null
 
   return (
-    <TooltipProvider delayDuration={300}>
+    <>
       <div
         data-feed-id={feedId}
         className={cn(
@@ -96,8 +96,8 @@ const FeedItemImpl = ({
                   window.open(
                     getNewIssueUrl({
                       body:
-                      `### Error\n\nError Message: ${feed.errorMessage}\n\n### Info\n\n` +
-                      `\`\`\`json\n${JSON.stringify(feed, null, 2)}\n\`\`\``,
+                        `### Error\n\nError Message: ${feed.errorMessage}\n\n### Info\n\n` +
+                        `\`\`\`json\n${JSON.stringify(feed, null, 2)}\n\`\`\``,
                       label: "bug",
                       title: `Feed Error: ${feed.title}, ${feed.errorMessage}`,
                     }),
@@ -126,9 +126,9 @@ const FeedItemImpl = ({
             {feed.title}
           </div>
           {isOwned && (
-            <Tooltip>
-              <TooltipTrigger>
-                <PhCrown className="ml-1 shrink-0 text-base" />
+            <Tooltip delayDuration={300}>
+              <TooltipTrigger asChild>
+                <i className="i-mgc-flag-1-cute-fi ml-1 shrink-0 text-base text-theme-accent" />
               </TooltipTrigger>
 
               <TooltipPortal>
@@ -137,8 +137,7 @@ const FeedItemImpl = ({
             </Tooltip>
           )}
           {feed.errorAt && (
-
-            <Tooltip>
+            <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
                 <i className="i-mgc-wifi-off-cute-re ml-1 shrink-0 text-base" />
               </TooltipTrigger>
@@ -164,11 +163,9 @@ const FeedItemImpl = ({
                 </TooltipContent>
               </TooltipPortal>
             </Tooltip>
-
           )}
           {subscription.isPrivate && (
-
-            <Tooltip>
+            <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
                 <i className="i-mgc-eye-close-cute-re ml-1 shrink-0 text-base" />
               </TooltipTrigger>
@@ -178,17 +175,11 @@ const FeedItemImpl = ({
                 </TooltipContent>
               </TooltipPortal>
             </Tooltip>
-
           )}
         </div>
-
-        {showUnreadCount && !!feedUnread && (
-          <div className="ml-2 text-xs text-zinc-500 dark:text-neutral-400">
-            {feedUnread}
-          </div>
-        )}
+        <UnreadNumber unread={feedUnread} className="ml-2" />
       </div>
-    </TooltipProvider>
+    </>
   )
 }
 

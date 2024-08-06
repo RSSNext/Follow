@@ -9,7 +9,7 @@ import { buildGlobRoutes } from "./lib/route-builder"
 const globTree = import.meta.glob("./pages/**/*.tsx")
 const tree = buildGlobRoutes(globTree)
 
-let routerCreator = window.electron ? createHashRouter : createBrowserRouter
+let routerCreator = window.electron || globalThis["__DEBUG_PROXY__"] ? createHashRouter : createBrowserRouter
 if (window.SENTRY_RELEASE) {
   routerCreator = wrapCreateBrowserRouter(routerCreator)
 }

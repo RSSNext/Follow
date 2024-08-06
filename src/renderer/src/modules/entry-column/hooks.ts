@@ -62,7 +62,10 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
 
   const { feedId, view, isAllFeeds, isCollection } = routeParams
 
-  const folderIds = useFolderFeedsByFeedId(feedId)
+  const folderIds = useFolderFeedsByFeedId({
+    feedId,
+    view,
+  })
 
   const entriesOptions = {
     id: folderIds?.join(",") || feedId,
@@ -90,8 +93,8 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
     },
   )
   const hasUpdate = useMemo(
-    () => !!(fetchedTime && hasNewQuery?.data?.data.has_new),
-    [hasNewQuery?.data?.data.has_new, fetchedTime],
+    () => !!(fetchedTime && hasNewQuery?.data?.data?.has_new),
+    [hasNewQuery?.data?.data?.has_new, fetchedTime],
   )
 
   useEffect(() => {
@@ -107,7 +110,7 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
   )
 
   const currentEntries = useEntryIdsByFeedIdOrView(
-    isAllFeeds ? view : feedId!,
+    isAllFeeds ? view : folderIds || feedId!,
     {
       unread: unreadOnly,
       view,
@@ -152,10 +155,38 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
     setMergedEntries(nextIds)
   }, [entryIdsAsDeps])
 
-  const sortEntries = () =>
-    isCollection ?
-      sortEntriesIdByStarAt(mergedEntries) :
-      sortEntriesIdByEntryPublishedAt(mergedEntries)
+  const sortEntries = isCollection ?
+    sortEntriesIdByStarAt(mergedEntries) :
+    sortEntriesIdByEntryPublishedAt(mergedEntries)
+
+  const groupByDate = useGeneralSettingKey("groupByDate")
+  const groupedCounts: number[] | undefined = useMemo(() => {
+    if (views[view].gridMode) {
+      return
+    }
+    if (!groupByDate) {
+      return
+    }
+    const entriesId2Map = entryActions.getFlattenMapEntries()
+    const counts = [] as number[]
+    let lastDate = ""
+    for (const id of sortEntries) {
+      const entry = entriesId2Map[id]
+      if (!entry) {
+        continue
+      }
+      const date = new Date(entry.entries.publishedAt).toDateString()
+      if (date !== lastDate) {
+        counts.push(1)
+        lastDate = date
+      } else {
+        const last = counts.pop()
+        if (last) counts.push(last + 1)
+      }
+    }
+
+    return counts
+  }, [groupByDate, sortEntries, view])
 
   return {
     ...query,
@@ -164,7 +195,8 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
     refetch: useCallback(() => {
       query.refetch()
     }, [query]),
-    entriesIds: sortEntries(),
+    entriesIds: sortEntries,
+    groupedCounts,
     totalCount: query.data?.pages?.[0]?.total ?? mergedEntries.length,
   }
 }

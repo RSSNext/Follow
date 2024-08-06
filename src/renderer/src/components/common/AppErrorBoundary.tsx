@@ -11,12 +11,41 @@ export interface AppErrorBoundaryProps extends PropsWithChildren {
   errorType: ErrorComponentType
 }
 
-export const AppErrorBoundary: FC<AppErrorBoundaryProps> = ({
+export const AppErrorBoundary: FC<
+  Omit<AppErrorBoundaryProps, "errorType"> & {
+    errorType: ErrorComponentType[] | ErrorComponentType
+  }
+> = ({ errorType, children }) => {
+  if (Array.isArray(errorType)) {
+    return (
+      <>
+        {errorType.reduceRight(
+          (acc, type) => (
+            <AppErrorBoundaryItem key={type} errorType={type}>
+              {acc}
+            </AppErrorBoundaryItem>
+          ),
+          children,
+        )}
+      </>
+    )
+  }
+
+  return (
+    <AppErrorBoundaryItem errorType={errorType}>
+      {children}
+    </AppErrorBoundaryItem>
+  )
+}
+
+type ErrorFallbackProps = Parameters<FallbackRender>["0"]
+export type AppErrorFallbackProps = ErrorFallbackProps & {}
+const AppErrorBoundaryItem: FC<AppErrorBoundaryProps> = ({
   errorType,
   children,
 }) => {
-  const fallbackRender: FallbackRender = useCallback(
-    (fallbackProps) =>
+  const fallbackRender = useCallback(
+    (fallbackProps: ErrorFallbackProps) =>
       createElement(getErrorFallback(errorType), fallbackProps),
     [errorType],
   )

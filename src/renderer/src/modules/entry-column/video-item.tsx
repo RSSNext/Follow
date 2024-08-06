@@ -153,7 +153,7 @@ const PreviewVideoModalContent: ModalContentComponent<{
 
 export const VideoItemSkeleton = (
   <div className="relative mx-auto w-full max-w-lg rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
-    <div className="relative z-[1]">
+    <div className="relative">
       <div className="p-1.5">
         <div className="w-full">
           <div className="overflow-x-auto">

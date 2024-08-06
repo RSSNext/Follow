@@ -30,13 +30,16 @@ const handleClickPlay = () => {
 
 export const CornerPlayer = () => {
   const show = usePlayerAtomSelector((v) => v.show)
+  const entryId = usePlayerAtomSelector((v) => v.entryId)
+  const entry = useEntry(entryId)
+  const feed = useFeedById(entry?.feedId)
 
   return (
     <AnimatePresence>
-      {show && (
+      {show && entry && feed && (
         <m.div
           key="corner-player"
-          className="group relative z-10 !-mt-8 !mb-0 w-full px-px"
+          className="group relative z-10 !mb-0 w-full pr-px"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
@@ -105,16 +108,63 @@ const CornerPlayerImpl = () => {
 
   return (
     <>
+      <div className="relative flex border-y bg-white transition-all duration-200 ease-in-out dark:bg-neutral-800">
+        {/* play cover */}
+        <div className="relative h-full">
+          <FeedIcon
+            feed={feed}
+            entry={entry.entries}
+            size={58}
+            className="m-0 size-[3.625rem] rounded-none"
+          />
+          <div className="center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100">
+            <button
+              type="button"
+              className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-theme-accent hover:text-white hover:opacity-100"
+              onClick={handleClickPlay}
+            >
+              <i
+                className={cn("size-6", {
+                  "i-mgc-pause-cute-fi": playerValue.status === "playing",
+                  "i-mgc-loading-3-cute-re animate-spin":
+                    playerValue.status === "loading",
+                  "i-mgc-play-cute-fi": playerValue.status === "paused",
+                })}
+              />
+            </button>
+          </div>
+        </div>
+
+        <div className="relative truncate px-2 py-1 text-center text-sm">
+          <Marquee
+            play={playerValue.status === "playing"}
+            className="font-medium"
+            gradient
+            gradientWidth={24}
+            gradientColor="var(--fo-modal-background)"
+            speed={30}
+          >
+            {entry.entries.title}
+          </Marquee>
+          <div className="mt-0.5 overflow-hidden truncate text-xs text-muted-foreground group-hover:mx-8">
+            {feed.title}
+          </div>
+
+          {/* progress control */}
+          <PlayerProgress />
+        </div>
+      </div>
+
       {/* advanced controls */}
-      <div className="z-10 flex translate-y-10 justify-between border-t bg-theme-modal-background-opaque p-1 opacity-0 transition-all duration-200 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
+      <div className="absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque p-1 opacity-0 transition-all duration-200 ease-in-out group-hover:-translate-y-full group-hover:opacity-100">
         <div className="flex items-center">
           <ActionIcon
-            className="i-mingcute-close-fill"
+            className="i-mgc-close-cute-re"
             onClick={() => Player.close()}
             label="Close"
           />
           <ActionIcon
-            className="i-mingcute-external-link-line"
+            className="i-mgc-external-link-cute-re"
             onClick={() =>
               navigateToEntry({
                 entryId: entry.entries.id,
@@ -139,70 +189,23 @@ const CornerPlayerImpl = () => {
           <ActionIcon
             className={cn(
               playerValue.isMute ?
-                "i-mingcute-volume-mute-fill text-red-500" :
-                "i-mingcute-volume-fill",
+                "i-mgc-volume-off-cute-re text-red-500" :
+                "i-mgc-volume-cute-re",
             )}
             onClick={() => Player.toggleMute()}
             label={<VolumeSlider />}
             labelDelayDuration={0}
           />
           <ActionIcon
-            className="i-mingcute-back-2-fill"
+            className="i-mgc-back-2-cute-re"
             onClick={() => Player.back(10)}
             label="Back 10s"
           />
           <ActionIcon
-            className="i-mingcute-forward-2-fill"
+            className="i-mgc-forward-2-cute-re"
             onClick={() => Player.forward(10)}
             label="Forward 10s"
           />
-        </div>
-      </div>
-
-      <div className="relative flex border-y bg-theme-modal-background backdrop-blur transition-all duration-200 ease-in-out">
-        {/* play cover */}
-        <div className="relative h-full">
-          <FeedIcon
-            feed={feed}
-            entry={entry.entries}
-            size={58}
-            className="m-0 size-[3.625rem] rounded-none"
-          />
-          <div className="center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100">
-            <button
-              type="button"
-              className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-theme-accent hover:text-white hover:opacity-100"
-              onClick={handleClickPlay}
-            >
-              <i
-                className={cn("size-6", {
-                  "i-mingcute-pause-fill": playerValue.status === "playing",
-                  "i-mingcute-loading-fill animate-spin":
-                    playerValue.status === "loading",
-                  "i-mingcute-play-fill": playerValue.status === "paused",
-                })}
-              />
-            </button>
-          </div>
-        </div>
-
-        <div className="relative truncate px-2 py-1 text-center text-sm">
-          <Marquee
-            play={playerValue.status === "playing"}
-            className="font-medium"
-            gradient
-            gradientWidth={24}
-            gradientColor="var(--fo-modal-background)"
-            speed={30}
-          >
-            {entry.entries.title}
-          </Marquee>
-          <div className="mt-0.5 overflow-hidden truncate text-xs text-muted-foreground group-hover:mx-8">
-            {feed.title}
-          </div>
-
-          {/* progress control */}
-          <PlayerProgress />
         </div>
       </div>
     </>
@@ -356,7 +359,7 @@ const PlaybackRateButton = () => {
     <span
       className={cn(
         char.length > 1 ? "text-[9px]" : "text-xs",
-        "block font-mono font-bold",
+        "block font-mono",
       )}
     >
       {char}

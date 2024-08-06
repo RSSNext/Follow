@@ -158,7 +158,11 @@ export const DiscoverFeedForm = ({
             <FeedForm
               asWidget
               url={url}
-              defaultView={defaultView}
+
+              defaultValues={{
+                view: defaultView.toString(),
+
+              }}
               onSuccess={dismissAll}
             />
           ),

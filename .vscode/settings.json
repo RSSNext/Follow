@@ -38,5 +38,7 @@
   "cSpell.words": [
     "rsshub"
   ],
-  "editor.foldingImportsByDefault": true
+  "editor.foldingImportsByDefault": true,
+  "commentTranslate.hover.enabled": false,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

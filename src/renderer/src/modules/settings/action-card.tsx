@@ -298,7 +298,7 @@ export function ActionCard({
               <Button
                 variant="ghost"
                 size="sm"
-                className="-ml-2"
+                className="ml-2"
                 onClick={() => {
                   onChange(null)
                 }}
