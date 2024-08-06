@@ -52,6 +52,11 @@ const FooterInfo = () => (
   </div>
 )
 
+const errorTypes = [
+  ErrorComponentType.Page,
+  ErrorComponentType.FeedFoundCanBeFollow,
+  ErrorComponentType.FeedNotFound,
+] as ErrorComponentType[]
 export function Component() {
   const isAuthFail = useLoginModalShow()
   const user = useWhoami()
@@ -83,11 +88,7 @@ export function Component() {
         tabIndex={-1}
       >
         <AppErrorBoundary
-          errorType={[
-            ErrorComponentType.Page,
-            ErrorComponentType.FeedFoundCanBeFollow,
-            ErrorComponentType.FeedNotFound,
-          ]}
+          errorType={errorTypes}
         >
           <Outlet />
         </AppErrorBoundary>
