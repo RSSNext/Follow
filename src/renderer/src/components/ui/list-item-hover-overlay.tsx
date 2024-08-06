@@ -1,5 +1,7 @@
 "use client"
 
+import { views } from "@renderer/constants"
+import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import clsx from "clsx"
 import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
@@ -34,10 +36,12 @@ export const ListItemHoverOverlay = ({
     }
   }, [])
 
+  const view = useRouteParamsSelector((s) => s.view)
+
   const mClassName = clsx(
-    "absolute rounded-lg",
+    "absolute",
     "bg-zinc-200/80 dark:bg-neutral-800",
-    "inset-0",
+    views[view].wideMode ? "inset-0 rounded-xl" : "-inset-x-2 inset-y-0",
     className,
   )
   const motionConfig = {
