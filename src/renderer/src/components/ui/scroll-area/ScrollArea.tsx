@@ -43,7 +43,7 @@ const Thumb = React.forwardRef<
 ))
 Thumb.displayName = "ScrollArea.Thumb"
 
-export const Scrollbar = React.forwardRef<
+const Scrollbar = React.forwardRef<
   React.ElementRef<typeof ScrollAreaBase.Scrollbar>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Scrollbar>
 >(({ className, children, ...rest }, forwardedRef) => {
@@ -68,7 +68,7 @@ export const Scrollbar = React.forwardRef<
 })
 Scrollbar.displayName = "ScrollArea.Scrollbar"
 
-export const Viewport = React.forwardRef<
+const Viewport = React.forwardRef<
   React.ElementRef<typeof ScrollAreaBase.Viewport>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Viewport> & {
     mask?: boolean
@@ -110,12 +110,13 @@ export const Viewport = React.forwardRef<
 })
 Viewport.displayName = "ScrollArea.Viewport"
 
-export const Root = React.forwardRef<
+const Root = React.forwardRef<
   React.ElementRef<typeof ScrollAreaBase.Root>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Root>
 >(({ className, children, ...rest }, forwardedRef) => (
   <ScrollAreaBase.Root
     {...rest}
+    scrollHideDelay={0}
     ref={forwardedRef}
     className={cn("overflow-hidden", className)}
   >
