@@ -181,7 +181,7 @@ const CmdFImpl: FC<{
             onClose()
           }}
         >
-          <i className="i-mingcute-close-circle-fill" />
+          <i className="i-mgc-close-cute-re" />
         </button>
       </div>
     </form>

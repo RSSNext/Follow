@@ -280,15 +280,30 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
     return (
       <div className={cn("pointer-events-auto relative", wrapperClassName)}>
-        <Input
-          value={inputValue}
-          ref={inputRef}
-          {...inputProps}
-          onBlur={onBlur}
-          onKeyDown={handleInputKeyDown}
-          onChange={handleChange}
-          onFocus={handleFocus}
-        />
+        <div className="relative">
+          <Input
+            value={inputValue}
+            ref={inputRef}
+            className="pr-8"
+            {...inputProps}
+            onBlur={onBlur}
+            onKeyDown={handleInputKeyDown}
+            onChange={handleChange}
+            onFocus={handleFocus}
+          />
+          {!!inputValue && (
+            <button
+              onClick={() => {
+                setInputValue("")
+                onChange?.({ target: { value: "" } } as any)
+              }}
+              type="button"
+              className="center absolute inset-y-0 right-0 flex px-2 opacity-80 duration-200 hover:opacity-100"
+            >
+              <i className="i-mingcute-close-circle-fill" />
+            </button>
+          )}
+        </div>
         <AnimatePresence>
           {isOpen &&
             filterableSuggestions.length > 0 &&
