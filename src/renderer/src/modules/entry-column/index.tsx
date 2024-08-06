@@ -17,9 +17,7 @@ import {
 } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import {
-  useRouteParms,
-} from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
 import { cn, getOS, isBizId } from "@renderer/lib/utils"
 import { EntryHeader } from "@renderer/modules/entry-content/header"
@@ -35,7 +33,6 @@ import type {
 } from "react-virtuoso"
 import { VirtuosoGrid } from "react-virtuoso"
 
-import { DateItem } from "./date-item"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import {
   EntryItem,
@@ -119,14 +116,10 @@ export function EntryColumn() {
       }
     },
     itemContent: useCallback(
-      (index, entryId) => {
+      (_, entryId) => {
         if (!entryId) return null
 
-        if (entryId.includes(" ")) {
-          return <DateItem date={entryId} view={view} isFirst={index === 0} />
-        } else {
-          return <EntryItem key={entryId} entryId={entryId} view={view} />
-        }
+        return <EntryItem key={entryId} entryId={entryId} view={view} />
       },
       [view],
     ),
