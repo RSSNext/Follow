@@ -7,10 +7,7 @@ import { useEntry } from "@renderer/store/entry"
 import type { HTMLMotionProps } from "framer-motion"
 import type { DOMAttributes, FC } from "react"
 import { forwardRef, memo, useCallback } from "react"
-import type {
-  VirtuosoHandle,
-  VirtuosoProps,
-} from "react-virtuoso"
+import type { VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { GroupedVirtuoso, Virtuoso } from "react-virtuoso"
 
 import { DateItem } from "./date-item"
@@ -107,7 +104,8 @@ const EntryGroupedList = forwardRef<
       groupCounts,
       itemContent,
       onKeyDown,
-
+      data,
+      totalCount,
       ...virtuosoOptions
     },
     ref,
@@ -116,23 +114,21 @@ const EntryGroupedList = forwardRef<
       ref={ref}
       groupContent={useCallback(
         (index: number) => {
-          const entryId = getGetGroupDataIndex(
-            groupCounts!,
-            index,
-            virtuosoOptions.data!,
-          )
+          const entryId = getGetGroupDataIndex(groupCounts!, index, data!)
 
           return <EntryHeadDateItem entryId={entryId} />
         },
-        [groupCounts, virtuosoOptions.data],
+        [groupCounts, data],
       )}
       groupCounts={groupCounts}
       onKeyDown={onKeyDown}
       {...virtuosoOptions}
       itemContent={useCallback(
-        (index: number, _: number, entryId: string, c: any) =>
-          itemContent?.(index, entryId, c),
-        [itemContent],
+        (index: number, _: number, __: string, c: any) => {
+          const entryId = data![index]
+          return itemContent?.(index, entryId, c)
+        },
+        [itemContent, JSON.stringify(data)],
       )}
     />
   ),

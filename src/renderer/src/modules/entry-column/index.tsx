@@ -315,7 +315,7 @@ const ListHeader: FC<{
             </>
           )}
           {isOnline ? (
-            feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) ?
+            feed?.ownerUserId === user?.id && isBizId(routerParams.feedId!) ?
                 (
                   <ActionButton
                     tooltip="Refresh"
