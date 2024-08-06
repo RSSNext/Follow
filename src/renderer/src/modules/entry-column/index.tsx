@@ -15,6 +15,7 @@ import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typog
 import {
   FEED_COLLECTION_LIST,
   ROUTE_ENTRY_PENDING,
+  ROUTE_FEED_PENDING,
   views,
 } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
@@ -208,6 +209,14 @@ export function EntryColumn() {
 const AddFeedHelper = () => {
   const feedId = useRouteParamsSelector((s) => s.feedId)
   const feedQuery = useFeed({ id: feedId })
+
+  if (!feedId) { return }
+  if (feedId === FEED_COLLECTION_LIST || feedId === ROUTE_FEED_PENDING) {
+    return null
+  }
+  if (!isBizId(feedId)) {
+    return null
+  }
 
   if (feedQuery.error && feedQuery.error.statusCode === 404) {
     throw new FeedNotFound()

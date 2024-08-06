@@ -85,7 +85,7 @@ export const isSafari = memoize(() => {
 // eslint-disable-next-line no-control-regex
 export const isASCII = (str) => /^[\u0000-\u007F]*$/.test(str)
 
-export const isBizId = (id) => {
+export const isBizId = (id: string) => {
   if (!id) return false
 
   // id is uuid or snowflake
