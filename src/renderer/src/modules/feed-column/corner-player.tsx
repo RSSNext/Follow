@@ -108,7 +108,7 @@ const CornerPlayerImpl = () => {
 
   return (
     <>
-      <div className="relative flex border-y bg-theme-modal-background backdrop-blur transition-all duration-200 ease-in-out">
+      <div className="relative flex border-y bg-white transition-all duration-200 ease-in-out dark:bg-neutral-800">
         {/* play cover */}
         <div className="relative h-full">
           <FeedIcon
@@ -125,10 +125,10 @@ const CornerPlayerImpl = () => {
             >
               <i
                 className={cn("size-6", {
-                  "i-mingcute-pause-fill": playerValue.status === "playing",
-                  "i-mingcute-loading-fill animate-spin":
+                  "i-mgc-pause-cute-fi": playerValue.status === "playing",
+                  "i-mgc-loading-3-cute-re animate-spin":
                     playerValue.status === "loading",
-                  "i-mingcute-play-fill": playerValue.status === "paused",
+                  "i-mgc-play-cute-fi": playerValue.status === "paused",
                 })}
               />
             </button>
