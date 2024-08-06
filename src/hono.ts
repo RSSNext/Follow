@@ -2723,6 +2723,22 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+    "/ai/daily": {
+        $get: {
+            input: {
+                query: {
+                    view: "0" | "1";
+                    startDate: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: string;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
 } & {
     "/actions": {
         $get: {

@@ -11,10 +11,12 @@ import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { StyledButton } from "@renderer/components/ui/button"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
+import { ROUTE_FEED_PENDING } from "@renderer/constants"
 import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
-import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParamsSelector, useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
+import { FeedViewType } from "@renderer/lib/enum"
 import { parseHtml } from "@renderer/lib/parse-html"
 import type { ActiveEntryId } from "@renderer/models"
 import {
@@ -30,23 +32,32 @@ import { useEffect, useLayoutEffect, useState } from "react"
 import { LoadingCircle } from "../../components/ui/loading"
 import { EntryTranslation } from "../entry-column/translation"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
+import { Daily } from "./daily"
 import { EntryHeader } from "./header"
 import { EntryContentProvider } from "./provider"
 
 export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   const title = useFeedHeaderTitle()
+  const { feedId, view } = useRouteParms()
 
   useTitle(title)
   if (!entryId) {
     return (
       <m.div
-        onContextMenu={stopPropagation}
-        className="-mt-2 flex size-full min-w-0 flex-col items-center justify-center gap-1 text-balance px-12 text-center text-lg font-medium text-zinc-400"
+        className="center size-full flex-col"
         initial={{ opacity: 0.01, y: 300 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <Logo className="size-16 opacity-40 grayscale" />
-        <span className="max-w-[60ch]">{title}</span>
+        <div
+          onContextMenu={stopPropagation}
+          className="flex w-full min-w-0 flex-col items-center justify-center gap-1 text-balance px-12 pb-6 text-center text-lg font-medium text-zinc-400"
+        >
+          <Logo className="size-16 opacity-40 grayscale" />
+          <span className="max-w-[60ch]">{title}</span>
+        </div>
+        {feedId === ROUTE_FEED_PENDING && view === FeedViewType.Articles && (
+          <Daily view={view} />
+        )}
       </m.div>
     )
   }
