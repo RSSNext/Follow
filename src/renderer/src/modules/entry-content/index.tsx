@@ -7,13 +7,15 @@ import {
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
-import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { StyledButton } from "@renderer/components/ui/button"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { ROUTE_FEED_PENDING } from "@renderer/constants"
 import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
-import { useRouteParamsSelector, useRouteParms } from "@renderer/hooks/biz/useRouteParams"
+import {
+  useRouteParamsSelector,
+  useRouteParms,
+} from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { FeedViewType } from "@renderer/lib/enum"
@@ -33,6 +35,7 @@ import { LoadingCircle } from "../../components/ui/loading"
 import { EntryTranslation } from "../entry-column/translation"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
 import { Daily } from "./daily"
+import { EntryPlaceholderLogo } from "./entry-placeholder"
 import { EntryHeader } from "./header"
 import { EntryContentProvider } from "./provider"
 
@@ -48,13 +51,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
         initial={{ opacity: 0.01, y: 300 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div
-          onContextMenu={stopPropagation}
-          className="flex w-full min-w-0 flex-col items-center justify-center gap-1 text-balance px-12 pb-6 text-center text-lg font-medium text-zinc-400"
-        >
-          <Logo className="size-16 opacity-40 grayscale" />
-          <span className="max-w-[60ch]">{title}</span>
-        </div>
+        <EntryPlaceholderLogo />
         {feedId === ROUTE_FEED_PENDING && view === FeedViewType.Articles && (
           <Daily view={view} />
         )}

@@ -1,6 +1,4 @@
-import {
-  MarkdownLink,
-} from "@renderer/components/ui/markdown/renderers"
+import { MarkdownLink } from "@renderer/components/ui/markdown/renderers"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
@@ -11,9 +9,7 @@ import remarkRehype from "remark-rehype"
 import { unified } from "unified"
 import { VFile } from "vfile"
 
-export const parseMarkdown = async (
-  content: string,
-) => {
+export const parseMarkdown = (content: string) => {
   const file = new VFile(content)
 
   const pipeline = unified()

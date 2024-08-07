@@ -1,29 +1,38 @@
 import { cn } from "@renderer/lib/utils"
-import { createContextState } from "foxact/context-state"
 import type { Variants } from "framer-motion"
 import { AnimatePresence, m } from "framer-motion"
 import * as React from "react"
+
+import {
+  CollapseGroupItemStateProvider,
+  CollapseStateProvider,
+  useCurrentCollapseId,
+  useSetCollapseGroupItemState,
+  useSetCurrentCollapseId,
+} from "./hooks"
 
 interface CollapseProps {
   title: React.ReactNode
   hideArrow?: boolean
 }
-const [CollapseStateProvider, useCurrentCollapseId, useSetCurrentCollapseId] =
-  createContextState<string | null>(null)
+
 export const CollapseGroup: Component = ({ children }) => (
-  <CollapseStateProvider>{children}</CollapseStateProvider>
+  <CollapseStateProvider>
+    <CollapseGroupItemStateProvider>{children}</CollapseGroupItemStateProvider>
+  </CollapseStateProvider>
 )
 export const Collapse: Component<CollapseProps> = (props) => {
   const [isOpened, setIsOpened] = React.useState(false)
   const id = React.useId()
   const setCurrentId = useSetCurrentCollapseId()
   const currentId = useCurrentCollapseId()
-
+  const setItemStatus = useSetCollapseGroupItemState()
   React.useEffect(() => {
     if (isOpened) {
       setCurrentId(id)
     }
-  }, [id, isOpened, setCurrentId])
+    setItemStatus((prev) => ({ ...prev, [id]: isOpened }))
+  }, [id, isOpened, setCurrentId, setItemStatus])
   React.useEffect(() => {
     setIsOpened(currentId === id)
   }, [currentId, id])

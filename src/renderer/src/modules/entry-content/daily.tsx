@@ -1,5 +1,9 @@
+import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { Card, CardHeader } from "@renderer/components/ui/card"
 import { Collapse, CollapseGroup } from "@renderer/components/ui/collapse"
+import {
+  useCollapseGroupItemState,
+} from "@renderer/components/ui/collapse/hooks"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
@@ -15,7 +19,9 @@ import { parseMarkdown } from "@renderer/lib/parse-markdown"
 import { cn } from "@renderer/lib/utils"
 import { MarkAllButton } from "@renderer/modules/entry-column/mark-all-button"
 import type { FC } from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+
+import { setEntryContentPlaceholderLogoShow } from "./atoms"
 
 type DailyView = Extract<
   FeedViewType,
@@ -153,13 +159,10 @@ const DailyReportContent: FC<{
   const [markAllButtonRef, setMarkAllButtonRef] =
     useState<HTMLButtonElement | null>(null)
 
-  const [eleContent, setEleContent] = useState<JSX.Element>()
-  useEffect(() => {
-    if (content.data) {
-      parseMarkdown(content.data).then(({ content }) => {
-        setEleContent(content)
-      })
-    }
+  const eleContent = useMemo(() => {
+    if (!content.data) return null
+    const { content: _content } = parseMarkdown(content.data)
+    return _content
   }, [content.data])
 
   return (
@@ -170,15 +173,17 @@ const DailyReportContent: FC<{
           flex
           viewportClassName="max-h-[calc(100vh-500px)]"
         >
-          {content.isLoading ? (
-            <LoadingCircle size="large" className="mt-8 text-center" />
-          ) : (
-            eleContent && (
-              <div className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1">
-                {eleContent}
-              </div>
-            )
-          )}
+          <AutoResizeHeight spring>
+            {content.isLoading ? (
+              <LoadingCircle size="large" className="mt-8 text-center" />
+            ) : (
+              eleContent && (
+                <div className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-theme-accent">
+                  {eleContent}
+                </div>
+              )
+            )}
+          </AutoResizeHeight>
         </ScrollArea.ScrollArea>
         {eleContent && (
           <button
@@ -213,9 +218,18 @@ export const Daily = ({
 }) => (
   <div className={cn(className, "mx-auto flex w-[75ch] flex-col gap-6")}>
     <CollapseGroup>
+      <CtxConsumer />
       <DailyItem day={DayOf.Today} view={view} />
-
       <DailyItem day={DayOf.Yesterday} view={view} />
     </CollapseGroup>
   </div>
 )
+
+const CtxConsumer = () => {
+  const status = useCollapseGroupItemState()
+  const isAllCollapsed = Object.values(status).every((v) => !v)
+  useEffect(() => {
+    setEntryContentPlaceholderLogoShow(isAllCollapsed)
+  }, [isAllCollapsed])
+  return null
+}

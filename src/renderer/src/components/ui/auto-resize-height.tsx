@@ -30,9 +30,15 @@ export const AutoResizeHeight: React.FC<AnimateChangeInHeightProps> = ({
     if (!containerRef.current) return
     const resizeObserver = new ResizeObserver((entries) => {
       // We only have one entry, so we can use entries[0].
+      const target = entries[0].target as HTMLElement
       const observedHeight = entries[0].contentRect.height
+      const style = getComputedStyle(target)
+
+      const marginHeight =
+        Number.parseFloat(style.marginTop) +
+        Number.parseFloat(style.marginBottom)
       // add margin top
-      setHeight(observedHeight)
+      setHeight(observedHeight + marginHeight)
     })
 
     resizeObserver.observe(containerRef.current)
@@ -59,7 +65,7 @@ export const AutoResizeHeight: React.FC<AnimateChangeInHeightProps> = ({
             }
       }
     >
-      <div ref={containerRef} className={innerClassName}>
+      <div className={cn("overflow-hidden", innerClassName)} ref={containerRef}>
         {children}
       </div>
     </m.div>

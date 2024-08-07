@@ -19,3 +19,12 @@ export const [
   getEntryContentScrollToTop,
   setEntryContentScrollToTop,
 ] = createAtomHooks(atom(false))
+
+export const [
+  ,
+  ,
+  useEntryContentPlaceholderLogoShow,
+  ,
+  getEntryContentPlaceholderLogoShow,
+  setEntryContentPlaceholderLogoShow,
+] = createAtomHooks(atom(true))
