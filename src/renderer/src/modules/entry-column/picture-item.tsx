@@ -5,6 +5,7 @@ import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { cn } from "@renderer/lib/utils"
 import { GridItem } from "@renderer/modules/entry-column/grid-item-template"
 import { useEntry } from "@renderer/store/entry/hooks"
+import { memo } from "react"
 
 import { usePreviewMedia } from "../../components/ui/media/hooks"
 import type { UniversalItemProps } from "./types"
@@ -33,7 +34,8 @@ export function PictureItem({
           <SwipeMedia
             media={entry.entries.media}
             className={cn(
-              "aspect-square w-full shrink-0 rounded-md",
+              "aspect-square",
+              "w-full shrink-0 rounded-md",
               isActive && "rounded-b-none",
             )}
             imgClassName="object-cover"
@@ -48,11 +50,55 @@ export function PictureItem({
             No media available
           </div>
         )}
-
       </div>
     </GridItem>
   )
 }
+
+const proxySize = {
+  width: 600,
+  height: 0,
+}
+export const PictureWaterFallItem = memo(function PictureWaterFallItem({
+  entryId,
+  entryPreview,
+  translation,
+
+}: UniversalItemProps) {
+  const entry = useEntry(entryId) || entryPreview
+
+  const isActive = useRouteParamsSelector(
+    ({ entryId }) => entryId === entry?.entries.id,
+  )
+
+  const previewMedia = usePreviewMedia()
+  if (!entry) return null
+  return (
+    <GridItem
+      entryId={entryId}
+      entryPreview={entryPreview}
+      translation={translation}
+    >
+      <div className="relative flex gap-2 overflow-x-auto">
+        {entry.entries.media ? (
+          <SwipeMedia
+            media={entry.entries.media}
+            className={cn(
+              "w-full shrink-0 rounded-md",
+              isActive && "rounded-b-none",
+            )}
+            proxySize={proxySize}
+            imgClassName="object-cover"
+            uniqueKey={entryId}
+            onPreview={(media, i) => {
+              previewMedia(media, i)
+            }}
+          />
+        ) : null}
+      </div>
+    </GridItem>
+  )
+})
 
 export const PictureItemSkeleton = (
   <div className="relative max-w-md rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">

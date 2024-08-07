@@ -13,18 +13,27 @@ import { Swiper, SwiperSlide } from "swiper/react"
 
 import styles from "./index.module.css"
 
+const defaultProxySize = {
+  width: 600,
+  height: 600,
+}
 export function SwipeMedia({
   media,
   uniqueKey,
   className,
   imgClassName,
   onPreview,
+  proxySize = defaultProxySize,
 }: {
   media?: MediaModel[] | null
   uniqueKey?: string
   className?: string
   imgClassName?: string
   onPreview?: (media: MediaModel[], index?: number) => void
+  proxySize?: {
+    width: number
+    height: number
+  }
 }) {
   const uniqMedia = uniqBy(media, "url")
 
@@ -77,10 +86,7 @@ export function SwipeMedia({
                   type={med.type}
                   previewImageUrl={med.preview_image_url}
                   loading="lazy"
-                  proxy={{
-                    width: 600,
-                    height: 600,
-                  }}
+                  proxy={proxySize}
                   disableContextMenu
                   onClick={(e) => {
                     e.stopPropagation()
@@ -118,10 +124,7 @@ export function SwipeMedia({
               type={uniqMedia[0].type}
               previewImageUrl={uniqMedia[0].preview_image_url}
               loading="lazy"
-              proxy={{
-                width: 600,
-                height: 600,
-              }}
+              proxy={proxySize}
               disableContextMenu
             />
           ) :

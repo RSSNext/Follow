@@ -22,6 +22,9 @@ importers:
 
   .:
     dependencies:
+      '@egjs/react-infinitegrid':
+        specifier: 4.12.0
+        version: 4.12.0
       '@egoist/tipc':
         specifier: 0.3.2
         version: 0.3.2(electron@30.1.2)(react@18.3.1)
@@ -628,9 +631,36 @@ packages:
     resolution: {integrity: sha512-XEFXSlxiG5td2EJRe8vOmRbaXVgfcBlszKujvVmWIK/UpywWljQCfzAv3RQCGujWQ1RD4YYWEAqDXfuJiy8f5Q==}
     engines: {node: '>=6.9.0'}
 
+  '@cfcs/core@0.0.24':
+    resolution: {integrity: sha512-feB38qu+eDk0Pggh/yR7gjaNmvUYA2uCxHP3Pz2MLE4LZ/9jPdtu8bzCSI47yTEhWyZCF5Pk698hdz8IN2mTjA==}
+
+  '@cfcs/core@0.0.5':
+    resolution: {integrity: sha512-TZ/RXKV7MUrqFpiX+16uaaptv5jgChWNsuE6w8Rn3eJbO1PFd4Wpn25zeJbii7ch46ck8/ZIIYCcW3pHiYtm4Q==}
+
   '@develar/schema-utils@2.6.5':
     resolution: {integrity: sha512-0cp4PsWQ/9avqTVMCtZ+GirikIA36ikvjtHweU4/j8yLtgObI0+JUPhYFScgwlteveGB1rt3Cm8UhN04XayDig==}
     engines: {node: '>= 8.9.0'}
+
+  '@egjs/children-differ@1.0.1':
+    resolution: {integrity: sha512-DRvyqMf+CPCOzAopQKHtW+X8iN6Hy6SFol+/7zCUiE5y4P/OB8JP8FtU4NxtZwtafvSL4faD5KoQYPj3JHzPFQ==}
+
+  '@egjs/component@3.0.5':
+    resolution: {integrity: sha512-cLcGizTrrUNA2EYE3MBmEDt2tQv1joVP1Q3oDisZ5nw0MZDx2kcgEXM+/kZpfa/PAkFvYVhRUZwytIQWoN3V/w==}
+
+  '@egjs/grid@1.16.0':
+    resolution: {integrity: sha512-w344hL2HNwmOHu379EG9I8ULkWF4A0cVf1XDn5nGlLXc+8c/rMvQadMBkGPOcdWMEKvFZpEiOPI7tWlXLOCloQ==}
+
+  '@egjs/imready@1.4.1':
+    resolution: {integrity: sha512-JIOBs4lB7FYdsKi5uvz2j3SObX8eShtZjtqlOH41tm185aJOQZwiKBK8+V4MxzG4X6DqVhpdN8UcuVwBbElfsg==}
+
+  '@egjs/infinitegrid@4.12.0':
+    resolution: {integrity: sha512-zoDz+mag7DAropcgmxW0Bx3JQ5ID19lk+AUN9rf9U7diwmO8IBfddX44jOVc9+ya5yZ+Goj95Fkm5S3GqCOrZQ==}
+
+  '@egjs/list-differ@1.0.1':
+    resolution: {integrity: sha512-OTFTDQcWS+1ZREOdCWuk5hCBgYO4OsD30lXcOCyVOAjXMhgL5rBRDnt/otb6Nz8CzU0L/igdcaQBDLWc4t9gvg==}
+
+  '@egjs/react-infinitegrid@4.12.0':
+    resolution: {integrity: sha512-V661KH1nka13wgy73N0IGBazZGe7LiECml1JDqB5DP6axTERUVCs8KRHadHu6oQihDeXwJIHe1YRhhMN9eAnUw==}
 
   '@egoist/tailwindcss-icons@1.8.1':
     resolution: {integrity: sha512-hqZeASrhT6BOeaBHYDPB0yBH/zgMKqmm7y2Rsq0c4iRnNVv1RWEiXMBMJB38JsDMTHME450FKa/wvdaIhED+Iw==}
@@ -7132,10 +7162,49 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
+  '@cfcs/core@0.0.24':
+    dependencies:
+      '@egjs/component': 3.0.5
+
+  '@cfcs/core@0.0.5':
+    dependencies:
+      '@egjs/component': 3.0.5
+
   '@develar/schema-utils@2.6.5':
     dependencies:
       ajv: 6.12.6
       ajv-keywords: 3.5.2(ajv@6.12.6)
+
+  '@egjs/children-differ@1.0.1':
+    dependencies:
+      '@egjs/list-differ': 1.0.1
+
+  '@egjs/component@3.0.5': {}
+
+  '@egjs/grid@1.16.0':
+    dependencies:
+      '@egjs/children-differ': 1.0.1
+      '@egjs/component': 3.0.5
+      '@egjs/imready': 1.4.1
+
+  '@egjs/imready@1.4.1':
+    dependencies:
+      '@cfcs/core': 0.0.24
+      '@egjs/component': 3.0.5
+
+  '@egjs/infinitegrid@4.12.0':
+    dependencies:
+      '@cfcs/core': 0.0.5
+      '@egjs/children-differ': 1.0.1
+      '@egjs/component': 3.0.5
+      '@egjs/grid': 1.16.0
+      '@egjs/list-differ': 1.0.1
+
+  '@egjs/list-differ@1.0.1': {}
+
+  '@egjs/react-infinitegrid@4.12.0':
+    dependencies:
+      '@egjs/infinitegrid': 4.12.0
 
   '@egoist/tailwindcss-icons@1.8.1(tailwindcss@3.4.7)':
     dependencies:

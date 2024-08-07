@@ -31,6 +31,7 @@
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false"
   },
   "dependencies": {
+    "@egjs/react-infinitegrid": "4.12.0",
     "@egoist/tipc": "0.3.2",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",

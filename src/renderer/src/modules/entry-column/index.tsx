@@ -1,3 +1,4 @@
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { m } from "@renderer/components/common/Motion"
 import { FeedFoundCanBeFollowError } from "@renderer/components/errors/FeedFoundCanBeFollowErrorFallback"
 import { FeedNotFound } from "@renderer/components/errors/FeedNotFound"
@@ -14,12 +15,14 @@ import {
   useRouteParamsSelector,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
+import { FeedViewType } from "@renderer/lib/enum"
 import { cn, isBizId } from "@renderer/lib/utils"
 import { useFeed } from "@renderer/queries/feed"
 import { entryActions, useEntry } from "@renderer/store/entry"
 import { useCallback, useEffect, useRef } from "react"
 import type {
   ScrollSeekConfiguration,
+  VirtuosoGridProps,
   VirtuosoHandle,
   VirtuosoProps,
 } from "react-virtuoso"
@@ -33,6 +36,7 @@ import {
   EntryItemSkeletonWithDelayShow,
 } from "./item"
 import { EntryEmptyList, EntryList, EntryListContent } from "./lists"
+import { PictureMasonry } from "./picture-masonry"
 import { girdClassNames } from "./styles"
 
 const scrollSeekConfiguration: ScrollSeekConfiguration = {
@@ -96,11 +100,11 @@ export function EntryColumn() {
     customScrollParent: scrollRef.current!,
 
     totalCount: entries.totalCount,
-    endReached: () => {
+    endReached: useCallback(async () => {
       if (!entries.isFetchingNextPage && entries.hasNextPage) {
-        entries.fetchNextPage()
+        await entries.fetchNextPage()
       }
-    },
+    }, [entries]),
     data: entriesIds,
     onScroll: () => {
       if (!isInteracted.current) {
@@ -172,10 +176,9 @@ export function EntryColumn() {
                 )
           ) : view && views[view].gridMode ?
               (
-                <VirtuosoGrid
-                  listClassName={girdClassNames}
-                  {...virtuosoOptions}
-                  ref={virtuosoRef}
+                <ListGird
+                  virtuosoOptions={virtuosoOptions}
+                  virtuosoRef={virtuosoRef}
                 />
               ) :
               (
@@ -192,11 +195,46 @@ export function EntryColumn() {
   )
 }
 
+const ListGird = ({
+  virtuosoOptions,
+  virtuosoRef,
+}: {
+  virtuosoOptions: Omit<
+    VirtuosoGridProps<string, unknown>,
+    "data" | "endReached"
+  > & {
+    data: string[]
+    endReached: () => Promise<any>
+  }
+  virtuosoRef: React.RefObject<VirtuosoHandle>
+}) => {
+  const masonry = useUISettingKey("pictureViewMasonry")
+  const view = useRouteParamsSelector((s) => s.view)
+  if (masonry && view === FeedViewType.Pictures) {
+    return (
+      <PictureMasonry
+        hasNextPage={virtuosoOptions.totalCount! > virtuosoOptions.data.length}
+        endReached={virtuosoOptions.endReached}
+        data={virtuosoOptions.data}
+      />
+    )
+  }
+  return (
+    <VirtuosoGrid
+      listClassName={girdClassNames}
+      {...virtuosoOptions}
+      ref={virtuosoRef}
+    />
+  )
+}
+
 const AddFeedHelper = () => {
   const feedId = useRouteParamsSelector((s) => s.feedId)
   const feedQuery = useFeed({ id: feedId })
 
-  if (!feedId) { return }
+  if (!feedId) {
+    return
+  }
   if (feedId === FEED_COLLECTION_LIST || feedId === ROUTE_FEED_PENDING) {
     return null
   }

@@ -3,6 +3,7 @@ import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import * as React from "react"
 
+import { ScrollElementContext } from "./ctx"
 import styles from "./index.module.css"
 
 const Corner = React.forwardRef<
@@ -146,20 +147,29 @@ export const ScrollArea = React.forwardRef<
       mask = false,
     },
     ref,
-  ) => (
-    <Root className={rootClassName}>
-      <Viewport
-        ref={ref}
-        onWheel={stopPropagation}
-        className={cn(
-          flex ? "[&>div]:!flex [&>div]:!flex-col" : "",
-          viewportClassName,
-        )}
-        mask={mask}
-      >
-        {children}
-      </Viewport>
-      <Scrollbar className={scrollbarClassName} />
-    </Root>
-  ),
+  ) => {
+    const [viewportRef, setViewportRef] = React.useState<HTMLDivElement | null>(
+      null,
+    )
+    React.useImperativeHandle(ref, () => viewportRef as HTMLDivElement)
+
+    return (
+      <ScrollElementContext.Provider value={viewportRef}>
+        <Root className={rootClassName}>
+          <Viewport
+            ref={setViewportRef}
+            onWheel={stopPropagation}
+            className={cn(
+              flex ? "[&>div]:!flex [&>div]:!flex-col" : "",
+              viewportClassName,
+            )}
+            mask={mask}
+          >
+            {children}
+          </Viewport>
+          <Scrollbar className={scrollbarClassName} />
+        </Root>
+      </ScrollElementContext.Provider>
+    )
+  },
 )
