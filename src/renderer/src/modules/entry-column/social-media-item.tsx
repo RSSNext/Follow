@@ -5,6 +5,7 @@ import { RelativeTime } from "@renderer/components/ui/datetime"
 import { Media } from "@renderer/components/ui/media"
 import { usePreviewMedia } from "@renderer/components/ui/media/hooks"
 import { Skeleton } from "@renderer/components/ui/skeleton"
+import { views } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
@@ -177,9 +178,10 @@ export const SocialMediaDateItem = ({
   const dateString = dateObj.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })
   const startOfDay = new Date(dateObj.setHours(0, 0, 0, 0)).getTime()
   const endOfDay = new Date(dateObj.setHours(23, 59, 59, 999)).getTime()
+  const view = useRouteParamsSelector((s) => s.view)
 
   return (
-    <div className={cn(className, "m-auto w-[75ch] gap-3 pl-5 text-base")}>
+    <div className={cn(className, "m-auto w-[75ch] gap-3 pl-5 text-base", views[view].wideMode && "flex justify-center")}>
       <MarkAllButton
         filter={{
           startTime: startOfDay,

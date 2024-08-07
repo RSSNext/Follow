@@ -1,15 +1,32 @@
 import { cn } from "@renderer/lib/utils"
+import { createContextState } from "foxact/context-state"
 import type { Variants } from "framer-motion"
 import { AnimatePresence, m } from "framer-motion"
 import * as React from "react"
 
-import { microReboundPreset } from "../constants/spring"
-
 interface CollapseProps {
   title: React.ReactNode
+  hideArrow?: boolean
 }
+const [CollapseStateProvider, useCurrentCollapseId, useSetCurrentCollapseId] =
+  createContextState<string | null>(null)
+export const CollapseGroup: Component = ({ children }) => (
+  <CollapseStateProvider>{children}</CollapseStateProvider>
+)
 export const Collapse: Component<CollapseProps> = (props) => {
   const [isOpened, setIsOpened] = React.useState(false)
+  const id = React.useId()
+  const setCurrentId = useSetCurrentCollapseId()
+  const currentId = useCurrentCollapseId()
+
+  React.useEffect(() => {
+    if (isOpened) {
+      setCurrentId(id)
+    }
+  }, [id, isOpened, setCurrentId])
+  React.useEffect(() => {
+    setIsOpened(currentId === id)
+  }, [currentId, id])
   return (
     <CollapseControlled
       isOpened={isOpened}
@@ -34,14 +51,16 @@ export const CollapseControlled: Component<
       onClick={() => props.onOpenChange(!props.isOpened)}
     >
       <span className="w-0 shrink grow truncate">{props.title}</span>
-      <div className="shrink-0 text-gray-400">
-        <i
-          className={cn(
-            "i-mingcute-down-line duration-200",
-            props.isOpened ? "rotate-180" : "",
-          )}
-        />
-      </div>
+      {!props.hideArrow && (
+        <div className="shrink-0 text-gray-400">
+          <i
+            className={cn(
+              "i-mingcute-down-line duration-200",
+              props.isOpened ? "rotate-180" : "",
+            )}
+          />
+        </div>
+      )}
     </div>
     <CollapseContent isOpened={props.isOpened}>
       {props.children}
@@ -57,7 +76,11 @@ export const CollapseContent: Component<{
       open: {
         opacity: 1,
         height: "auto",
-        transition: microReboundPreset,
+
+        transition: {
+          type: "spring",
+          mass: 0.2,
+        },
       },
       collapsed: {
         opacity: 0,

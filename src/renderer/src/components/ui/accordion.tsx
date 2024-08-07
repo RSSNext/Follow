@@ -2,6 +2,9 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { cn } from "@renderer/lib/utils"
 import * as React from "react"
 
+/**
+ * @deprecated please use `src/renderer/src/components/ui/collapse/Collapse.tsx`
+ */
 const Accordion = AccordionPrimitive.Root
 
 const AccordionItem = React.forwardRef<

@@ -1,36 +1,22 @@
-import {
-  setGeneralSetting,
-  useGeneralSettingKey,
-} from "@renderer/atoms/settings/general"
-import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { FeedFoundCanBeFollowError } from "@renderer/components/errors/FeedFoundCanBeFollowErrorFallback"
 import { FeedNotFound } from "@renderer/components/errors/FeedNotFound"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { ActionButton } from "@renderer/components/ui/button"
-import { DividerVertical } from "@renderer/components/ui/divider"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
 import {
   FEED_COLLECTION_LIST,
-  ROUTE_ENTRY_PENDING,
   ROUTE_FEED_PENDING,
   views,
 } from "@renderer/constants"
-import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import {
   useRouteParamsSelector,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
-import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
-import { cn, getOS, isBizId } from "@renderer/lib/utils"
-import { EntryHeader } from "@renderer/modules/entry-content/header"
-import { useFeed, useRefreshFeedMutation } from "@renderer/queries/feed"
+import { cn, isBizId } from "@renderer/lib/utils"
+import { useFeed } from "@renderer/queries/feed"
 import { entryActions, useEntry } from "@renderer/store/entry"
-import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
-import type { FC } from "react"
 import { useCallback, useEffect, useRef } from "react"
 import type {
   ScrollSeekConfiguration,
@@ -39,6 +25,7 @@ import type {
 } from "react-virtuoso"
 import { VirtuosoGrid } from "react-virtuoso"
 
+import { EntryListHeader } from "./EntryListHeader"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import {
   EntryItem,
@@ -46,7 +33,6 @@ import {
   EntryItemSkeletonWithDelayShow,
 } from "./item"
 import { EntryEmptyList, EntryList, EntryListContent } from "./lists"
-import { MarkAllButton } from "./mark-all-button"
 import { girdClassNames } from "./styles"
 
 const scrollSeekConfiguration: ScrollSeekConfiguration = {
@@ -147,7 +133,7 @@ export function EntryColumn() {
         !entries.isLoading &&
         !entries.error && <AddFeedHelper />}
 
-      <ListHeader
+      <EntryListHeader
         refetch={entries.refetch}
         isRefreshing={isRefreshing}
         totalCount={virtuosoOptions.totalCount}
@@ -227,142 +213,4 @@ const AddFeedHelper = () => {
   }
 
   throw new FeedFoundCanBeFollowError(feedQuery.data.feed)
-}
-
-const ListHeader: FC<{
-  totalCount: number
-  refetch: () => void
-  isRefreshing: boolean
-  hasUpdate: boolean
-}> = ({ totalCount, refetch, isRefreshing, hasUpdate }) => {
-  const routerParams = useRouteParms()
-
-  const unreadOnly = useGeneralSettingKey("unreadOnly")
-
-  const { feedId, entryId, view } = routerParams
-
-  const headerTitle = useFeedHeaderTitle()
-  const os = getOS()
-
-  const titleAtBottom = window.electron && os === "macOS"
-  const isInCollectionList = feedId === FEED_COLLECTION_LIST
-
-  const titleInfo = !!headerTitle && (
-    <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
-      <div className="min-w-0 break-all text-lg font-bold leading-none">
-        <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
-          {headerTitle}
-        </EllipsisHorizontalTextWithTooltip>
-      </div>
-      <div className="text-xs font-medium text-zinc-400">
-        {totalCount || 0}
-        {" "}
-        {unreadOnly && !isInCollectionList ? "Unread" : ""}
-        {" "}
-        Items
-      </div>
-    </div>
-  )
-  const { mutateAsync: refreshFeed, isPending } = useRefreshFeedMutation(
-    routerParams.feedId,
-  )
-
-  const user = useWhoami()
-  const isOnline = useIsOnline()
-
-  const feed = useFeedById(routerParams.feedId)
-
-  const titleStyleBasedView = [
-    "pl-12",
-    "pl-7",
-    "pl-7",
-    "pl-7",
-    "px-5",
-    "pl-12",
-  ]
-
-  return (
-    <div
-      className={cn(
-        "mb-2 flex w-full flex-col pr-4 pt-2.5",
-        titleStyleBasedView[view],
-      )}
-    >
-      <div
-        className={cn(
-          "flex w-full",
-          titleAtBottom ? "justify-end" : "justify-between",
-        )}
-      >
-        {!titleAtBottom && titleInfo}
-
-        <div
-          className={cn(
-            "relative z-[1] flex items-center gap-1 self-baseline text-zinc-500",
-            (isInCollectionList || !headerTitle) &&
-            "pointer-events-none opacity-0",
-
-            "translate-x-[6px]",
-          )}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {views[view].wideMode &&
-            entryId &&
-            entryId !== ROUTE_ENTRY_PENDING && (
-            <>
-              <EntryHeader view={view} entryId={entryId} />
-              <DividerVertical className="w-px" />
-            </>
-          )}
-          {isOnline ? (
-            feed?.ownerUserId === user?.id && isBizId(routerParams.feedId!) ?
-                (
-                  <ActionButton
-                    tooltip="Refresh"
-                    onClick={() => {
-                      refreshFeed()
-                    }}
-                  >
-                    <i
-                      className={cn(
-                        "i-mgc-refresh-2-cute-re",
-                        isPending && "animate-spin",
-                      )}
-                    />
-                  </ActionButton>
-                ) :
-                (
-                  <ActionButton
-                    tooltip={hasUpdate ? "New entries available" : "Refetch"}
-                    onClick={() => {
-                      refetch()
-                    }}
-                  >
-                    <i
-                      className={cn(
-                        "i-mgc-refresh-2-cute-re",
-                        isRefreshing && "animate-spin",
-                        hasUpdate && "text-theme-accent",
-                      )}
-                    />
-                  </ActionButton>
-                )
-          ) : null}
-          <ActionButton
-            tooltip={unreadOnly ? "Unread Only" : "All"}
-            shortcut={shortcuts.entries.toggleUnreadOnly.key}
-            onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
-          >
-            {unreadOnly ? (
-              <i className="i-mgc-round-cute-fi" />
-            ) : (
-              <i className="i-mgc-round-cute-re" />
-            )}
-          </ActionButton>
-          <MarkAllButton />
-        </div>
-      </div>
-      {titleAtBottom && titleInfo}
-    </div>
-  )
 }

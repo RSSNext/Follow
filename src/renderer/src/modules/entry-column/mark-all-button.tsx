@@ -1,3 +1,4 @@
+import { PopoverPortal } from "@radix-ui/react-popover"
 import { ActionButton, StyledButton } from "@renderer/components/ui/button"
 import {
   Popover,
@@ -7,19 +8,22 @@ import {
 } from "@renderer/components/ui/popover"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
-import { subscriptionActions, useFolderFeedsByFeedId } from "@renderer/store/subscription"
-import { useCallback, useState } from "react"
+import {
+  subscriptionActions,
+  useFolderFeedsByFeedId,
+} from "@renderer/store/subscription"
+import { forwardRef, useCallback, useState } from "react"
 
-export const MarkAllButton = ({
-  filter,
-  className,
-}: {
-  filter?: {
-    startTime: number
-    endTime: number
+export const MarkAllButton = forwardRef<
+  HTMLButtonElement,
+  {
+    filter?: {
+      startTime: number
+      endTime: number
+    }
+    className?: string
   }
-  className?: string
-}) => {
+>(({ filter, className }, ref) => {
   const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
 
   const routerParams = useRouteParms()
@@ -35,13 +39,13 @@ export const MarkAllButton = ({
     if (typeof routerParams.feedId === "number" || routerParams.isAllFeeds) {
       subscriptionActions.markReadByView(view, filter)
     } else if (folderIds) {
+      subscriptionActions.markReadByFeedIds(view, folderIds, filter)
+    } else if (routerParams.feedId) {
       subscriptionActions.markReadByFeedIds(
         view,
-        folderIds,
+        routerParams.feedId?.split(","),
         filter,
       )
-    } else if (routerParams.feedId) {
-      subscriptionActions.markReadByFeedIds(view, routerParams.feedId?.split(","), filter)
     }
   }, [feedId, folderIds, filter, routerParams])
 
@@ -52,26 +56,30 @@ export const MarkAllButton = ({
           shortcut={shortcuts.entries.markAllAsRead.key}
           tooltip="Mark All as Read"
           className={className}
+          ref={ref}
         >
           <i className="i-mgc-check-circle-cute-re" />
         </ActionButton>
       </PopoverTrigger>
-      <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
-        <div>Mark all as read?</div>
-        <div className="space-x-4">
-          <PopoverClose>
-            <StyledButton variant="outline">Cancel</StyledButton>
-          </PopoverClose>
-          {/* TODO */}
-          <StyledButton onClick={() => {
-            handleMarkAllAsRead()
-            setMarkPopoverOpen(false)
-          }}
-          >
-            Confirm
-          </StyledButton>
-        </div>
-      </PopoverContent>
+      <PopoverPortal>
+        <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
+          <div>Mark all as read?</div>
+          <div className="space-x-4">
+            <PopoverClose>
+              <StyledButton variant="outline">Cancel</StyledButton>
+            </PopoverClose>
+            {/* TODO */}
+            <StyledButton
+              onClick={() => {
+                handleMarkAllAsRead()
+                setMarkPopoverOpen(false)
+              }}
+            >
+              Confirm
+            </StyledButton>
+          </div>
+        </PopoverContent>
+      </PopoverPortal>
     </Popover>
   )
-}
+})
