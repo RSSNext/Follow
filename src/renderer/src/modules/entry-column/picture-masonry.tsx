@@ -4,13 +4,7 @@ import { useRefValue } from "@renderer/hooks/common"
 import { FeedViewType } from "@renderer/lib/enum"
 import { throttle } from "lodash-es"
 import type { CSSProperties, PropsWithChildren } from "react"
-import {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 
 import { EntryItemSkeleton } from "./item"
 import { PictureWaterFallItem } from "./picture-item"
@@ -61,24 +55,18 @@ export const PictureMasonry = ({
   const [currentItemWidth, setCurrentItemWidth] = useState(0)
   const [currentColumn, setCurrentColumn] = useState(1)
   const $scroll = useScrollViewElement()
-  const scrollContainerHeightRef = useRef(0)
 
   const currentScrollDirectionRef = useRef<"up" | "down">("down")
   const loadDataCallOnceRef = useRef(false)
 
   const stableEndReached = useRefValue(endReached)
+  const escapedHasNextPageRef = useRefValue(hasNextPage)
   useLayoutEffect(() => {
     if (!$scroll) return
 
-    const handler = () => {
-      const { scrollHeight } = $scroll
-      scrollContainerHeightRef.current = scrollHeight
-    }
-    const resizeObserver = new ResizeObserver(handler)
-    handler()
-
     let lastScrollTop = 0
     const scrollHandler = () => {
+      if (!escapedHasNextPageRef.current) return
       const currentScrollTop = $scroll.scrollTop
       const scrollDirection = currentScrollTop > lastScrollTop ? "down" : "up"
       lastScrollTop = currentScrollTop
@@ -86,9 +74,10 @@ export const PictureMasonry = ({
       const threshold = 100
 
       const isAtTop = currentScrollTop <= threshold
+      const { scrollHeight } = $scroll
       const isReachBottom =
-        currentScrollTop + $scroll.clientHeight >=
-        scrollContainerHeightRef.current - threshold
+        currentScrollTop + scrollHeight >= scrollHeight - threshold
+
       if (!isReachBottom || isAtTop) return
 
       if (loadDataCallOnceRef.current) return
@@ -103,12 +92,10 @@ export const PictureMasonry = ({
     }
     $scroll.addEventListener("scroll", scrollHandler)
 
-    resizeObserver.observe($scroll)
     return () => {
-      resizeObserver.disconnect()
       $scroll.removeEventListener("scroll", scrollHandler)
     }
-  }, [$scroll, stableEndReached])
+  }, [$scroll, escapedHasNextPageRef, stableEndReached])
 
   useLayoutEffect(() => {
     const $warpper = containerRef.current
@@ -138,9 +125,18 @@ export const PictureMasonry = ({
     const intersectionObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          const target = entry.target as HTMLElement;
-          (target.childNodes.item(0) as HTMLElement).style.display =
-            entry.isIntersecting ? "" : "none"
+          const target = entry.target as HTMLElement
+
+          const item = target.childNodes.item(0) as HTMLElement
+
+          if (entry.isIntersecting) {
+            target.style.height = ""
+
+            item.style.display = ""
+          } else {
+            target.style.height = `${item.clientHeight}px`
+            item.style.display = "none"
+          }
         }
       },
       {
@@ -153,8 +149,22 @@ export const PictureMasonry = ({
       intersectionObserver.observe(node as HTMLElement)
     }
 
+    const mutationObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === "childList") {
+          for (const node of mutation.addedNodes.values()) {
+            intersectionObserver.observe(node as HTMLElement)
+          }
+        }
+      }
+    })
+    mutationObserver.observe($container, {
+      childList: true,
+    })
+
     return () => {
       intersectionObserver.disconnect()
+      mutationObserver.disconnect()
     }
   }, [$scroll])
 
@@ -163,9 +173,9 @@ export const PictureMasonry = ({
     [currentItemWidth],
   )
 
-  const loadingSkeletonItem =
-  hasNextPage &&
-  <LoadingSkeletonItem itemStyle={itemStyle} />
+  const loadingSkeletonItem = hasNextPage && (
+    <LoadingSkeletonItem itemStyle={itemStyle} />
+  )
   return (
     <div ref={containerRef} className="p-4">
       <MasonryInfiniteGrid
