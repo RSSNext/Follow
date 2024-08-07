@@ -1,7 +1,6 @@
 import { Card, CardHeader } from "@renderer/components/ui/card"
 import { Collapse, CollapseGroup } from "@renderer/components/ui/collapse"
 import { LoadingCircle } from "@renderer/components/ui/loading"
-import { Markdown } from "@renderer/components/ui/markdown"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
   Tooltip,
@@ -12,10 +11,11 @@ import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import type { FeedViewType } from "@renderer/lib/enum"
+import { parseMarkdown } from "@renderer/lib/parse-markdown"
 import { cn } from "@renderer/lib/utils"
 import { MarkAllButton } from "@renderer/modules/entry-column/mark-all-button"
 import type { FC } from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 type DailyView = Extract<
   FeedViewType,
@@ -153,6 +153,15 @@ const DailyReportContent: FC<{
   const [markAllButtonRef, setMarkAllButtonRef] =
     useState<HTMLButtonElement | null>(null)
 
+  const [eleContent, setEleContent] = useState<JSX.Element>()
+  useEffect(() => {
+    if (content.data) {
+      parseMarkdown(content.data).then(({ content }) => {
+        setEleContent(content)
+      })
+    }
+  }, [content.data])
+
   return (
     <Card className="border-none bg-transparent">
       <CardHeader className="space-y-0 p-0">
@@ -164,14 +173,14 @@ const DailyReportContent: FC<{
           {content.isLoading ? (
             <LoadingCircle size="large" className="mt-8 text-center" />
           ) : (
-            content.data && (
-              <Markdown className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1">
-                {content.data}
-              </Markdown>
+            eleContent && (
+              <div className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1">
+                {eleContent}
+              </div>
             )
           )}
         </ScrollArea.ScrollArea>
-        {content.data && (
+        {eleContent && (
           <button
             type="button"
             onClick={() => {
