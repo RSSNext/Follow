@@ -1,7 +1,7 @@
 import { Slot } from "@radix-ui/react-slot"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { ActionButton } from "@renderer/components/ui/button"
-import { RelativeTime } from "@renderer/components/ui/datetime"
+import { RelativeDay, RelativeTime } from "@renderer/components/ui/datetime"
 import { Media } from "@renderer/components/ui/media"
 import { usePreviewMedia } from "@renderer/components/ui/media/hooks"
 import { Skeleton } from "@renderer/components/ui/skeleton"
@@ -121,7 +121,9 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
   return (
     <div className="flex origin-right scale-90 items-center gap-1">
       {items
-        .filter((item) => !item.hide && (item.key !== "read" && item.key !== "unread"))
+        .filter(
+          (item) => !item.hide && item.key !== "read" && item.key !== "unread",
+        )
         .map((item) => (
           <ActionButton
             icon={
@@ -175,20 +177,26 @@ export const SocialMediaDateItem = ({
   className?: string
 }) => {
   const dateObj = new Date(date)
-  const dateString = dateObj.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })
+
   const startOfDay = new Date(dateObj.setHours(0, 0, 0, 0)).getTime()
   const endOfDay = new Date(dateObj.setHours(23, 59, 59, 999)).getTime()
   const view = useRouteParamsSelector((s) => s.view)
 
   return (
-    <div className={cn(className, "m-auto w-[75ch] gap-3 pl-5 text-base", views[view].wideMode && "flex justify-center")}>
+    <div
+      className={cn(
+        className,
+        "m-auto w-[75ch] gap-3 pl-5 text-base",
+        views[view].wideMode && "flex justify-center",
+      )}
+    >
       <MarkAllButton
         filter={{
           startTime: startOfDay,
           endTime: endOfDay,
         }}
       />
-      {dateString}
+      <RelativeDay date={dateObj} />
     </div>
   )
 }

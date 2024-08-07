@@ -32,9 +32,9 @@ import type { FC, ReactNode } from "react"
 import { useEffect, useLayoutEffect, useState } from "react"
 
 import { LoadingCircle } from "../../components/ui/loading"
+import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
 import { EntryTranslation } from "../entry-column/translation"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
-import { Daily } from "./daily"
 import { EntryPlaceholderLogo } from "./entry-placeholder"
 import { EntryHeader } from "./header"
 import { EntryContentProvider } from "./provider"
@@ -53,7 +53,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
       >
         <EntryPlaceholderLogo />
         {feedId === ROUTE_FEED_PENDING && view === FeedViewType.Articles && (
-          <Daily view={view} />
+          <EntryPlaceholderDaily view={view} />
         )}
       </m.div>
     )

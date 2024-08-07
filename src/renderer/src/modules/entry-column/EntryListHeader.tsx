@@ -5,7 +5,6 @@ import {
 import { useWhoami } from "@renderer/atoms/user"
 import { ActionButton } from "@renderer/components/ui/button"
 import { DividerVertical } from "@renderer/components/ui/divider"
-import { useModalStack } from "@renderer/components/ui/modal"
 import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
 import {
   FEED_COLLECTION_LIST,
@@ -23,7 +22,7 @@ import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC } from "react"
 
-import { Daily } from "../entry-content/daily"
+import { useAIDailyReportModal } from "../ai/ai-daily/hooks"
 import { EntryHeader } from "../entry-content/header"
 import { MarkAllButton } from "./mark-all-button"
 
@@ -169,21 +168,10 @@ export const EntryListHeader: FC<{
 }
 
 const DailyReportButton: FC = () => {
-  const { present } = useModalStack()
-
+  const present = useAIDailyReportModal()
   return (
     <ActionButton
-      onClick={() => {
-        present({
-          title: "Daily Report",
-          content: () => (
-            <Daily
-              view={FeedViewType.SocialMedia}
-
-            />
-          ),
-        })
-      }}
+      onClick={present}
       tooltip="Daily Report"
     >
       <i className="i-mgc-magic-2-cute-re" />

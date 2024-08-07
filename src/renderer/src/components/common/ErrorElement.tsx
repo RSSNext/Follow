@@ -42,7 +42,7 @@ export function ErrorElement() {
   }
 
   return (
-    <div className="m-auto flex min-h-full max-w-prose select-text flex-col p-8 pt-12">
+    <div className="m-auto flex min-h-full max-w-prose select-text flex-col p-8 pt-24">
       <div className="drag-region fixed inset-x-0 top-0 h-12" />
       <div className="center flex flex-col">
         <i className="i-mgc-bug-cute-re size-12 text-red-400" />
