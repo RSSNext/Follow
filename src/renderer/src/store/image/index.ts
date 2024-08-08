@@ -35,5 +35,7 @@ export const imageActions = new ImageActions()
 /// // HOOKS
 export const useImageDimensions = (url: string) =>
   useImageStore((state) => state.images[url])
-export const useImagesHasDimensions = (urls: string[]) =>
-  useImageStore((state) => urls.every((url) => state.images[url]))
+export const useImagesHasDimensions = (urls?: string[]) =>
+  useImageStore((state) =>
+    urls ? urls?.every((url) => state.images[url]) : false,
+  )

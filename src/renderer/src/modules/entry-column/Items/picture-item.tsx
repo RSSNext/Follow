@@ -3,21 +3,21 @@ import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholde
 import { Skeleton } from "@renderer/components/ui/skeleton"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { FeedViewType } from "@renderer/lib/enum"
-import { fetchImageDimensions } from "@renderer/lib/img-proxy"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 import {
   useImageDimensions,
-  useImagesHasDimensions,
 } from "@renderer/store/image"
 import type { PropsWithChildren } from "react"
-import { memo, useEffect } from "react"
+import { memo } from "react"
 
 import { usePreviewMedia } from "../../../components/ui/media/hooks"
 import { EntryItemWrapper } from "../layouts/EntryItemWrapper"
 import { GridItem } from "../templates/grid-item-template"
 import type { UniversalItemProps } from "../types"
-import { useMasonryItemWidth } from "./ctx"
+import {
+  useMasonryItemWidth,
+} from "./picture-masonry-context"
 
 export function PictureItem({
   entryId,
@@ -80,18 +80,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   )
 
   const previewMedia = usePreviewMedia()
-  useEffect(() => {
-    const media = entry?.entries.media
-    if (!media) return
-    for (const med of media) {
-      fetchImageDimensions(med.url)
-    }
-  }, [entry?.entries.media])
 
-  const hasAllDim = useImagesHasDimensions(
-    entry?.entries.media?.map((m) => m.url) || [],
-  )
-  if (!hasAllDim) return null
   if (!entry) return null
 
   return (

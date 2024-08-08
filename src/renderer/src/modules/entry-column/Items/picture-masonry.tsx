@@ -1,13 +1,22 @@
 import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid"
 import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
 import { FeedViewType } from "@renderer/lib/enum"
+import { fetchImageDimensions } from "@renderer/lib/img-proxy"
+import { useEntryStore } from "@renderer/store/entry"
+import { useImagesHasDimensions } from "@renderer/store/image"
 import { throttle } from "lodash-es"
 import type { CSSProperties, PropsWithChildren } from "react"
-import { useLayoutEffect, useMemo, useRef, useState } from "react"
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 
 import { EntryItemSkeleton } from "../item"
-import { MasonryItemWidthContext } from "./ctx"
 import { PictureWaterFallItem } from "./picture-item"
+import { MasonryItemWidthContext } from "./picture-masonry-context"
 
 // grid grid-cols-1 @lg:grid-cols-2 @3xl:grid-cols-3 @6xl:grid-cols-4 @7xl:grid-cols-5 px-4 gap-1.5
 
@@ -61,14 +70,23 @@ export const PictureMasonry = ({
     if (!$warpper) return
     const recal = throttle(() => {
       const column = getCurrentColumn($warpper.clientWidth)
-      setCurrentItemWidth($warpper.clientWidth / column - 20)
+      setCurrentItemWidth(Math.trunc($warpper.clientWidth / column - 20))
 
       setCurrentColumn(column)
 
       masonryRef.current?.renderItems()
     }, 50)
-    const resizeObserver = new ResizeObserver(() => {
-      recal()
+
+    let previousWidth = $warpper.offsetWidth
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const newWidth = entry.contentRect.width
+
+        if (newWidth !== previousWidth) {
+          previousWidth = newWidth
+          recal()
+        }
+      }
     })
     recal()
     resizeObserver.observe($warpper)
@@ -83,8 +101,8 @@ export const PictureMasonry = ({
   )
 
   return (
-    <MasonryItemWidthContext.Provider value={currentItemWidth}>
-      <div ref={containerRef} className="p-4">
+    <div ref={containerRef} className="p-4">
+      <MasonryItemWidthContext.Provider value={currentItemWidth}>
         <MasonryInfiniteGrid
           ref={masonryRef}
           placeholder={<LoadingSkeletonItem itemStyle={itemStyle} />}
@@ -97,25 +115,26 @@ export const PictureMasonry = ({
               e.ready()
             })
           }}
-          useResizeObserver
           scrollContainer={$scroll}
+          // useResizeObserver
           observeChildren
-          gap={{ vertical: 24 }}
           useFirstRender
+          gap={{ vertical: 24 }}
           column={currentColumn}
         >
           {data.map((entryId, index) => (
             <ItemWrapper
-              data-grid-groupkey={Math.trunc(index / 20)}
+              data-grid-groupkey={index}
               itemStyle={itemStyle}
               key={entryId}
+              entryId={entryId}
             >
               <PictureWaterFallItem entryId={entryId} />
             </ItemWrapper>
           ))}
         </MasonryInfiniteGrid>
-      </div>
-    </MasonryItemWidthContext.Provider>
+      </MasonryItemWidthContext.Provider>
+    </div>
   )
 }
 
@@ -129,18 +148,35 @@ const ItemWrapper = ({
   itemStyle,
   style,
   children,
+  entryId,
   ...rest
 }: {
   itemStyle: CSSProperties
+  entryId: string
 } & React.HtmlHTMLAttributes<HTMLDivElement> &
-PropsWithChildren) => (
-  <div
-    style={{
-      ...style,
-      ...itemStyle,
-    }}
-    {...rest}
-  >
-    {children}
-  </div>
-)
+PropsWithChildren) => {
+  const urls = useEntryStore((state) =>
+    state.flatMapEntries[entryId]?.entries?.media?.map((m) => m.url),
+  )
+  const hasAllDim = useImagesHasDimensions(urls)
+  useEffect(() => {
+    if (!urls) return
+    for (const url of urls) {
+      fetchImageDimensions(url)
+    }
+  }, [JSON.stringify(urls)])
+
+  if (!hasAllDim) return null
+
+  return (
+    <div
+      style={{
+        ...style,
+        ...itemStyle,
+      }}
+      {...rest}
+    >
+      {children}
+    </div>
+  )
+}

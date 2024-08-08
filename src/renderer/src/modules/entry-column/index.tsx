@@ -209,9 +209,11 @@ const ListGird = ({
 }) => {
   const masonry = useUISettingKey("pictureViewMasonry")
   const view = useRouteParamsSelector((s) => s.view)
+  const feedId = useRouteParamsSelector((s) => s.feedId)
   if (masonry && view === FeedViewType.Pictures) {
     return (
       <PictureMasonry
+        key={feedId}
         hasNextPage={virtuosoOptions.totalCount! > virtuosoOptions.data.length}
         endReached={virtuosoOptions.endReached}
         data={virtuosoOptions.data}
