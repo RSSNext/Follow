@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
 import { callGlobalContextMethod } from "@shared/bridge"
+import { imageRefererMatches } from "@shared/image"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, Menu, shell } from "electron"
 
@@ -106,16 +107,6 @@ export function createWindow(
     })
   }
 
-  const refererMatchs = [
-    {
-      url: /^https:\/\/\w+\.sinaimg.cn/,
-      referer: "https://weibo.com",
-    },
-    {
-      url: /^https:\/\/i\.pximg\.net/,
-      referer: "https://www.pixiv.net",
-    },
-  ]
   window.webContents.session.webRequest.onBeforeSendHeaders(
     (details, callback) => {
       const trueUrl =
@@ -130,7 +121,9 @@ export function createWindow(
             ),
           ) :
           details.url
-      const refererMatch = refererMatchs.find((item) => item.url.test(trueUrl))
+      const refererMatch = imageRefererMatches.find((item) =>
+        item.url.test(trueUrl),
+      )
       callback({
         requestHeaders: {
           ...details.requestHeaders,

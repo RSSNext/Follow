@@ -25,9 +25,13 @@ export const DailyItem = ({ view, day }: DailyItemProps) => {
   return (
     <Collapse
       hideArrow
-      title={
-        <DailyReportTitle title={title} startDate={startDate} endDate={endDate} />
-      }
+      title={(
+        <DailyReportTitle
+          title={title}
+          startDate={startDate}
+          endDate={endDate}
+        />
+      )}
       className="mx-auto w-full max-w-lg border-b pb-6 last:border-b-0"
     >
       <DailyReportContent endDate={endDate} view={view} startDate={startDate} />

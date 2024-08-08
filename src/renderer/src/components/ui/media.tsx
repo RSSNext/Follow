@@ -47,7 +47,7 @@ const MediaImpl: FC<MediaProps> = ({
 }) => {
   const { src, style, type, previewImageUrl, ...rest } = props
   const [hidden, setHidden] = useState(!src)
-  const [imgSrc, setImgSrc] = useState(
+  const [imgSrc, setImgSrc] = useState(() =>
     proxy && src && !failedList.has(src) ?
       getProxyUrl({
         url: src,

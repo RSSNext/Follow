@@ -6,6 +6,7 @@ import {
   MarkdownP,
 } from "@renderer/components/ui/markdown/renderers"
 import { Media } from "@renderer/components/ui/media"
+import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
@@ -60,19 +61,7 @@ export const parseHtml = async (
       components: {
         a: ({ node, ...props }) =>
           createElement(MarkdownLink, { ...props } as any),
-        img: ({ node, ...props }) => {
-          if (node?.properties.inline) {
-            return createElement(Media, {
-              type: "photo",
-              ...props,
-              mediaContainerClassName: tw`max-w-full inline size-auto`,
-              popper: true,
-              className: tw`inline`,
-            })
-          }
-
-          return createElement(MarkdownBlockImage, props)
-        },
+        img: Img,
         video: ({ node, ...props }) =>
           createElement(Media, { ...props, popper: true, type: "video" }),
         p: ({ node, ...props }) => {
@@ -141,4 +130,23 @@ export const parseHtml = async (
       },
     }),
   }
+}
+
+const Img: Components["img"] = ({ node, ...props }) => {
+  const nextProps = {
+    ...props,
+    proxy: { height: 0, width: 700 },
+  }
+  if (node?.properties.inline) {
+    return createElement(Media, {
+      type: "photo",
+      ...nextProps,
+
+      mediaContainerClassName: tw`max-w-full inline size-auto`,
+      popper: true,
+      className: tw`inline`,
+    })
+  }
+
+  return createElement(MarkdownBlockImage, nextProps)
 }

@@ -4,7 +4,12 @@ import { useWrappedElementSize } from "@renderer/providers/wrapped-element-provi
 import { Media } from "../../media"
 
 export const MarkdownBlockImage = (
-  props: React.ImgHTMLAttributes<HTMLImageElement>,
+  props: React.ImgHTMLAttributes<HTMLImageElement> & {
+    proxy?: {
+      width: number
+      height: number
+    }
+  },
 ) => {
   const size = useWrappedElementSize()
 

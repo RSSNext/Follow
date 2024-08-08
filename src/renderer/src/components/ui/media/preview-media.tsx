@@ -2,14 +2,15 @@ import { m } from "@renderer/components/common/Motion"
 import { COPY_MAP } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { stopPropagation } from "@renderer/lib/dom"
+import { replaceImgUrlIfNeed } from "@renderer/lib/img-proxy"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { FC } from "react"
-import { useCallback, useState } from "react"
+import { Fragment, useCallback, useState } from "react"
 import type { MediaModel } from "src/hono"
 import { Keyboard, Mousewheel, Scrollbar } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 
-import { ActionButton } from "../button"
+import { ActionButton, MotionButtonBase } from "../button"
 import { microReboundPreset } from "../constants/spring"
 import { useCurrentModal } from "../modal"
 
@@ -112,7 +113,7 @@ export const PreviewMediaContent: FC<{
             onClick={(e) => e.stopPropagation()}
           />
         ) : (
-          <img
+          <FallbackableImage
             className="size-full object-contain"
             alt="cover"
             src={src}
@@ -143,7 +144,11 @@ export const PreviewMediaContent: FC<{
         className="size-full"
       >
         {media.map((med, index) => (
-          <SwiperSlide key={med.url} virtualIndex={index} className="center !flex">
+          <SwiperSlide
+            key={med.url}
+            virtualIndex={index}
+            className="center !flex"
+          >
             {med.type === "video" ? (
               <video
                 src={med.url}
@@ -152,7 +157,7 @@ export const PreviewMediaContent: FC<{
                 onClick={(e) => e.stopPropagation()}
               />
             ) : (
-              <img
+              <FallbackableImage
                 onContextMenu={(e) => handleContextMenu(med.url, e)}
                 className="size-full object-contain"
                 alt="cover"
@@ -164,5 +169,59 @@ export const PreviewMediaContent: FC<{
         ))}
       </Swiper>
     </Wrapper>
+  )
+}
+
+const FallbackableImage: FC<
+  Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> & {
+    src: string
+  }
+> = ({ src, onError, ...props }) => {
+  const [currentSrc, setCurrentSrc] = useState(() => replaceImgUrlIfNeed(src))
+
+  const [isAllError, setIsAllError] = useState(false)
+
+  const handleError = useCallback(
+    (e) => {
+      if (currentSrc !== src) {
+        setCurrentSrc(src)
+      } else {
+        onError?.(e as any)
+        setIsAllError(true)
+      }
+    },
+    [currentSrc, onError, src],
+  )
+  return (
+    <Fragment>
+      {!isAllError && <img src={currentSrc} onError={handleError} {...props} />}
+      {isAllError && (
+        <div className="center flex-col gap-6">
+          <i className="i-mgc-close-cute-re text-[60px] text-red-500" />
+
+          <span>Failed to load image</span>
+          <div className="center gap-4">
+            <MotionButtonBase
+              className="underline underline-offset-4"
+              onClick={() => {
+                setCurrentSrc(replaceImgUrlIfNeed(src))
+                setIsAllError(false)
+              }}
+            >
+              Retry
+            </MotionButtonBase>
+            Or
+            <a
+              className="underline underline-offset-4"
+              href={src}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Visit Original
+            </a>
+          </div>
+        </div>
+      )}
+    </Fragment>
   )
 }
