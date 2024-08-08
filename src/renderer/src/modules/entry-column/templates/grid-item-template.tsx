@@ -59,7 +59,7 @@ export function GridItem({
             entry={entry.entries}
             size={18}
           />
-          <span>{feeds?.title}</span>
+          <span className="min-w-0 truncate">{feeds?.title}</span>
           <span className="text-zinc-500">·</span>
           <span className="text-zinc-500">
             {dayjs
