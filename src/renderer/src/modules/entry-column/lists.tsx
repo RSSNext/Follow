@@ -150,7 +150,7 @@ function getGetGroupDataIndex<T>(
 
 const EntryHeadDateItem: FC<{
   entryId: string
-}> = ({ entryId }) => {
+}> = memo(({ entryId }) => {
   const entry = useEntry(entryId)
 
   const view = useRouteParamsSelector((s) => s.view)
@@ -158,4 +158,6 @@ const EntryHeadDateItem: FC<{
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   const date = new Date(entry.entries.publishedAt).toDateString()
   return <DateItem date={date} view={view} isFirst={true} />
-}
+})
+
+EntryHeadDateItem.displayName = "EntryHeadDateItem"
