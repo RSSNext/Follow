@@ -8,13 +8,13 @@ import { Skeleton } from "@renderer/components/ui/skeleton"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { urlToIframe } from "@renderer/lib/url-to-iframe"
 import { cn } from "@renderer/lib/utils"
-import { GridItem } from "@renderer/modules/entry-column/grid-item-template"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useHover } from "@use-gesture/react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
-import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
-import type { UniversalItemProps } from "./types"
+import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
+import { GridItem } from "../templates/grid-item-template"
+import type { UniversalItemProps } from "../types"
 
 const ViewTag = window.electron ? "webview" : "iframe"
 

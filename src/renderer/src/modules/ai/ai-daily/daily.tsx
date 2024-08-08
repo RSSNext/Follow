@@ -13,7 +13,7 @@ import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { parseMarkdown } from "@renderer/lib/parse-markdown"
-import { MarkAllButton } from "@renderer/modules/entry-column/mark-all-button"
+import { MarkAllButton } from "@renderer/modules/entry-column/components/mark-all-button"
 import type { FC } from "react"
 import { useMemo, useState } from "react"
 

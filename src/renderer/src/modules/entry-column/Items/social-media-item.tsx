@@ -13,11 +13,11 @@ import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
 
-import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
-import { MarkAllButton } from "./mark-all-button"
-import { StarIcon } from "./star-icon"
-import { EntryTranslation } from "./translation"
-import type { EntryListItemFC } from "./types"
+import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
+import { MarkAllButton } from "../components/mark-all-button"
+import { StarIcon } from "../star-icon"
+import { EntryTranslation } from "../translation"
+import type { EntryListItemFC } from "../types"
 
 export const SocialMediaItem: EntryListItemFC = ({
   entryId,

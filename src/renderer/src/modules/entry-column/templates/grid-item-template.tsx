@@ -8,8 +8,8 @@ import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
 import dayjs from "dayjs"
 
-import { StarIcon } from "./star-icon"
-import type { UniversalItemProps } from "./types"
+import { StarIcon } from "../star-icon"
+import type { UniversalItemProps } from "../types"
 
 export function GridItem({
   entryId,

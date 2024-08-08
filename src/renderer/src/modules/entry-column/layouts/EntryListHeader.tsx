@@ -17,13 +17,13 @@ import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { useIsOnline } from "@renderer/hooks/common"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn, getOS, isBizId } from "@renderer/lib/utils"
+import { useAIDailyReportModal } from "@renderer/modules/ai/ai-daily/hooks"
+import { EntryHeader } from "@renderer/modules/entry-content/header"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC } from "react"
 
-import { useAIDailyReportModal } from "../ai/ai-daily/hooks"
-import { EntryHeader } from "../entry-content/header"
-import { MarkAllButton } from "./mark-all-button"
+import { MarkAllButton } from "../components/mark-all-button"
 
 export const EntryListHeader: FC<{
   totalCount: number

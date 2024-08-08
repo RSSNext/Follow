@@ -2,13 +2,15 @@ import { SwipeMedia } from "@renderer/components/ui/media/swipe-media"
 import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholder"
 import { Skeleton } from "@renderer/components/ui/skeleton"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
+import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
-import { GridItem } from "@renderer/modules/entry-column/grid-item-template"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { memo } from "react"
 
-import { usePreviewMedia } from "../../components/ui/media/hooks"
-import type { UniversalItemProps } from "./types"
+import { usePreviewMedia } from "../../../components/ui/media/hooks"
+import { EntryItemWrapper } from "../layouts/EntryItemWrapper"
+import { GridItem } from "../templates/grid-item-template"
+import type { UniversalItemProps } from "../types"
 
 export function PictureItem({
   entryId,
@@ -63,7 +65,6 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   entryId,
   entryPreview,
   translation,
-
 }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
@@ -74,29 +75,35 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   const previewMedia = usePreviewMedia()
   if (!entry) return null
   return (
-    <GridItem
-      entryId={entryId}
-      entryPreview={entryPreview}
-      translation={translation}
+    <EntryItemWrapper
+      view={FeedViewType.Pictures}
+      entry={entry}
+      itemClassName="group hover:bg-theme-item-hover"
     >
-      <div className="relative flex gap-2 overflow-x-auto">
-        {entry.entries.media ? (
-          <SwipeMedia
-            media={entry.entries.media}
-            className={cn(
-              "w-full shrink-0 rounded-md",
-              isActive && "rounded-b-none",
-            )}
-            proxySize={proxySize}
-            imgClassName="object-cover"
-            uniqueKey={entryId}
-            onPreview={(media, i) => {
-              previewMedia(media, i)
-            }}
-          />
-        ) : null}
-      </div>
-    </GridItem>
+      <GridItem
+        entryId={entryId}
+        entryPreview={entryPreview}
+        translation={translation}
+      >
+        <div className="relative flex gap-2 overflow-x-auto">
+          {entry.entries.media ? (
+            <SwipeMedia
+              media={entry.entries.media}
+              className={cn(
+                "w-full shrink-0 rounded-md",
+                isActive && "rounded-b-none",
+              )}
+              proxySize={proxySize}
+              imgClassName="object-cover"
+              uniqueKey={entryId}
+              onPreview={(media, i) => {
+                previewMedia(media, i)
+              }}
+            />
+          ) : null}
+        </div>
+      </GridItem>
+    </EntryItemWrapper>
   )
 })
 

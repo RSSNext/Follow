@@ -28,15 +28,14 @@ import type {
 } from "react-virtuoso"
 import { VirtuosoGrid } from "react-virtuoso"
 
-import { EntryListHeader } from "./EntryListHeader"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
 import {
   EntryItem,
   EntryItemSkeleton,
-  EntryItemSkeletonWithDelayShow,
 } from "./item"
+import { PictureMasonry } from "./Items/picture-masonry"
+import { EntryListHeader } from "./layouts/EntryListHeader"
 import { EntryEmptyList, EntryList, EntryListContent } from "./lists"
-import { PictureMasonry } from "./picture-masonry"
 import { girdClassNames } from "./styles"
 
 const scrollSeekConfiguration: ScrollSeekConfiguration = {
@@ -84,7 +83,7 @@ export function EntryColumn() {
       List: EntryListContent,
       Footer: useCallback(() => {
         if (!isFetchingNextPage) return null
-        return <EntryItemSkeletonWithDelayShow view={view} />
+        return <EntryItemSkeleton view={view} />
       }, [isFetchingNextPage, view]),
       ScrollSeekPlaceholder: useCallback(
         () => <EntryItemSkeleton view={view} single />,
