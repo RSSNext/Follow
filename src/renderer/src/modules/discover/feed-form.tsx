@@ -21,11 +21,12 @@ import { useDeleteSubscription } from "@renderer/hooks/biz/useSubscriptionAction
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { tipcClient } from "@renderer/lib/client"
-import { nextFrame } from "@renderer/lib/dom"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useFeed } from "@renderer/queries/feed"
+import { useFeedByIdOrUrl } from "@renderer/store/feed"
+import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { feedUnreadActions } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
 import { Fragment, useEffect, useRef } from "react"
@@ -52,12 +53,13 @@ export const FeedForm: Component<{
 
   onSuccess?: () => void
 }> = ({ id, defaultValues = defaultValue, url, asWidget, onSuccess }) => {
-  const feed = useFeed({
-    url,
-    id,
-  })
+  const queryParams = { id, url }
+  const feedQuery = useFeed(queryParams)
 
-  const isSubscribed = !!feed.data?.subscription
+  const feed = useFeedByIdOrUrl(queryParams)
+
+  const hasSub = useSubscriptionByFeedId(feed?.id || "")
+  const isSubscribed = !!feedQuery.data?.subscription || hasSub
 
   return (
     <div
@@ -76,30 +78,31 @@ export const FeedForm: Component<{
           follow
         </div>
       )}
-      {feed.isLoading ? (
-        <div className="flex flex-1 items-center justify-center">
-          <LoadingCircle size="large" />
-        </div>
-      ) : !feed.data?.feed ?
+
+      {feed ? (
+        <FeedInnerForm {...{ defaultValues, id, url, asWidget, onSuccess }} />
+      ) : feedQuery.isLoading ?
           (
-            <div className="flex flex-1 flex-col items-center justify-center gap-2">
-              {feed.error ? (
-                <div className="center flex-col gap-3">
-                  <i className="i-mgc-bug-cute-re size-7 text-red-500" />
-                  <p>Error in fetching feed.</p>
-                  <p className="break-all px-8 text-center">{getFetchErrorMessage(feed.error)}</p>
-                </div>
-              ) : (
-                <Fragment>
-                  <p>Feed not found.</p>
-                  <p>{url}</p>
-                </Fragment>
-              )}
+            <div className="flex flex-1 items-center justify-center">
+              <LoadingCircle size="large" />
             </div>
           ) :
-          (
-            <FeedInnerForm {...{ defaultValues, id, url, asWidget, onSuccess }} />
-          )}
+        feedQuery.error ?
+            (
+              <div className="center flex-col gap-3">
+                <i className="i-mgc-bug-cute-re size-7 text-red-500" />
+                <p>Error in fetching feed.</p>
+                <p className="break-all px-8 text-center">
+                  {getFetchErrorMessage(feedQuery.error)}
+                </p>
+              </div>
+            ) :
+            (
+              <Fragment>
+                <p>Feed not found.</p>
+                <p>{url}</p>
+              </Fragment>
+            )}
     </div>
   )
 }
@@ -117,12 +120,10 @@ const FeedInnerForm = ({
   asWidget?: boolean
   onSuccess?: () => void
 }) => {
-  const feed = useFeed({
-    url,
-    id,
-  })!
+  const subscription = useSubscriptionByFeedId(id || "")
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const isSubscribed = !!feed.data?.subscription
+  const isSubscribed = !!subscription
+  const feed = useFeedByIdOrUrl({ id, url })!
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -136,21 +137,21 @@ const FeedInnerForm = ({
   }, [form.formState.isDirty])
 
   useEffect(() => {
-    if (feed.data?.subscription) {
-      form.setValue("view", `${feed.data?.subscription?.view}`)
-      form.setValue("category", feed.data?.subscription?.category)
-      form.setValue("isPrivate", feed.data?.subscription?.isPrivate || false)
+    if (subscription) {
+      form.setValue("view", `${subscription?.view}`)
+      form.setValue("category", subscription?.category)
+      form.setValue("isPrivate", subscription?.isPrivate || false)
     }
-  }, [feed.data?.subscription])
+  }, [subscription])
 
   const followMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const body = {
-        url: feed.data?.feed.url,
+        url: feed.url,
         view: Number.parseInt(values.view),
         category: values.category,
         isPrivate: values.isPrivate,
-        ...(isSubscribed && { feedId: feed.data?.feed.id }),
+        ...(isSubscribed && { feedId: feed.id }),
       }
       const $method = isSubscribed ?
         apiClient.subscriptions.$patch :
@@ -162,15 +163,12 @@ const FeedInnerForm = ({
       })
     },
     onSuccess: (_, variables) => {
-      if (
-        isSubscribed &&
-        variables.view !== `${feed.data?.subscription?.view}`
-      ) {
-        Queries.subscription.byView(feed.data?.subscription?.view).invalidate()
+      if (isSubscribed && variables.view !== `${subscription?.view}`) {
+        Queries.subscription.byView(subscription?.view).invalidate()
         tipcClient?.invalidateQuery(
-          Queries.subscription.byView(feed.data?.subscription?.view).key,
+          Queries.subscription.byView(subscription?.view).key,
         )
-        feedUnreadActions.fetchUnreadByView(feed.data?.subscription?.view)
+        feedUnreadActions.fetchUnreadByView(subscription?.view)
       }
       Queries.subscription.byView(Number.parseInt(variables.view)).invalidate()
       tipcClient?.invalidateQuery(
@@ -178,7 +176,7 @@ const FeedInnerForm = ({
       )
       feedUnreadActions.fetchUnreadByView(Number.parseInt(variables.view))
 
-      const feedId = feed.data?.feed.id
+      const feedId = feed.id
       if (feedId) {
         Queries.feed.byId({ id: feedId }).invalidate()
         tipcClient?.invalidateQuery(Queries.feed.byId({ id: feedId }).key)
@@ -216,15 +214,15 @@ const FeedInnerForm = ({
     Queries.subscription.categories(Number.parseInt(form.watch("view"))),
   )
 
-  useEffect(() => {
-    if (feed.isSuccess) nextFrame(() => buttonRef.current?.focus())
-  }, [feed.isSuccess])
+  // useEffect(() => {
+  //   if (feed.isSuccess) nextFrame(() => buttonRef.current?.focus());
+  // }, [feed.isSuccess]);
 
   return (
     <div className="flex flex-1 flex-col gap-y-4">
       <Card>
         <CardHeader>
-          <FollowSummary feed={feed.data!.feed} />
+          <FollowSummary feed={feed} />
         </CardHeader>
       </Card>
       <Form {...form}>
@@ -332,8 +330,8 @@ const FeedInnerForm = ({
                 className="text-red-500"
                 onClick={(e) => {
                   e.preventDefault()
-                  if (feed.data?.subscription) {
-                    deleteSubscription.mutate(feed.data.subscription)
+                  if (subscription) {
+                    deleteSubscription.mutate(subscription)
                   }
                 }}
               >

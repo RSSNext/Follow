@@ -6,7 +6,7 @@ import { FeedService } from "@renderer/services"
 import { produce } from "immer"
 
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
-import type { FeedState } from "./types"
+import type { FeedQueryParams, FeedState } from "./types"
 
 export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
   feeds: {},
@@ -70,6 +70,22 @@ class FeedActions {
       },
       { doTranscationWhenMutationFail: false, waitMutation: true },
     )
+  }
+
+  // API Fetcher
+  //
+
+  async fetchFeedById({ id, url }: FeedQueryParams) {
+    const res = await apiClient.feeds.$get({
+      query: {
+        id,
+        url,
+      },
+    })
+
+    this.upsertMany([res.data.feed])
+
+    return res.data
   }
 }
 export const feedActions = new FeedActions()

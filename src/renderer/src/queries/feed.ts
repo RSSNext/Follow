@@ -2,6 +2,7 @@ import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { formatXml } from "@renderer/lib/utils"
+import type { FeedQueryParams } from "@renderer/store/feed"
 import { feedActions } from "@renderer/store/feed"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
@@ -9,19 +10,14 @@ import { toast } from "sonner"
 import { entries } from "./entries"
 
 export const feed = {
-  byId: ({ id, url }: { id?: string, url?: string }) =>
+  byId: ({ id, url }: FeedQueryParams) =>
     defineQuery(
       ["feed", id, url],
-      async () => {
-        const res = await apiClient.feeds.$get({
-          query: {
-            id,
-            url,
-          },
-        })
-
-        return res.data
-      },
+      async () =>
+        feedActions.fetchFeedById({
+          id,
+          url,
+        }),
       {
         rootKey: ["feed"],
       },
@@ -41,7 +37,7 @@ export const feed = {
       })),
 }
 
-export const useFeed = ({ id, url }: { id?: string, url?: string }) =>
+export const useFeed = ({ id, url }: FeedQueryParams) =>
   useAuthQuery(
     feed.byId({
       id,
