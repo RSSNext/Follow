@@ -29,7 +29,7 @@ import { useFeedByIdOrUrl } from "@renderer/store/feed"
 import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { feedUnreadActions } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
-import { Fragment, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -89,8 +89,8 @@ export const FeedForm: Component<{
           ) :
         feedQuery.error ?
             (
-              <div className="center flex-col gap-3">
-                <i className="i-mgc-bug-cute-re size-7 text-red-500" />
+              <div className="center grow flex-col gap-3">
+                <i className="i-mgc-close-cute-re size-7 text-red-500" />
                 <p>Error in fetching feed.</p>
                 <p className="break-all px-8 text-center">
                   {getFetchErrorMessage(feedQuery.error)}
@@ -98,10 +98,11 @@ export const FeedForm: Component<{
               </div>
             ) :
             (
-              <Fragment>
+              <div className="center h-full grow flex-col">
+                <i className="i-mgc-question-cute-re mb-6 size-12 text-zinc-500" />
                 <p>Feed not found.</p>
                 <p>{url}</p>
-              </Fragment>
+              </div>
             )}
     </div>
   )

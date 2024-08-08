@@ -4,6 +4,7 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedModel } from "@renderer/models"
 import { FeedService } from "@renderer/services"
 import { produce } from "immer"
+import { nanoid } from "nanoid"
 
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import type { FeedQueryParams, FeedState } from "./types"
@@ -28,6 +29,10 @@ class FeedActions {
         for (const feed of feeds) {
           if (feed.id) {
             state.feeds[feed.id] = feed
+          } else {
+            // Store temp feed in memory
+            const nonce = nanoid(8)
+            state.feeds[nonce] = { ...feed, id: nonce }
           }
         }
       }),
