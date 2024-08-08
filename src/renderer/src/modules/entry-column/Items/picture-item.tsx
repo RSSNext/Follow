@@ -7,13 +7,17 @@ import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useImageDimensions } from "@renderer/store/image"
 import type { PropsWithChildren } from "react"
-import { memo, useState } from "react"
+import { memo, useEffect, useState } from "react"
 
 import { usePreviewMedia } from "../../../components/ui/media/hooks"
 import { EntryItemWrapper } from "../layouts/EntryItemWrapper"
 import { GridItem } from "../templates/grid-item-template"
 import type { UniversalItemProps } from "../types"
-import { useMasonryItemWidth } from "./picture-masonry-context"
+import {
+  useMasonryItemRatio,
+  useMasonryItemWidth,
+  useSetStableMasonryItemRatio,
+} from "./contexts/picture-masonry-context"
 
 export function PictureItem({
   entryId,
@@ -125,13 +129,20 @@ const MasonryItemFixedDimensionWrapper = (
 
   const itemHeight = dim ? itemWidth / dim.ratio : itemWidth
   const stableRadio = useState(() => itemWidth / itemHeight || 1)[0]
+  const setItemStableRatio = useSetStableMasonryItemRatio()
+
+  const stableRadioCtx = useMasonryItemRatio(url)
+
+  useEffect(() => {
+    setItemStableRatio(url, stableRadio)
+  }, [setItemStableRatio, stableRadio, url])
 
   return (
     <div
       className="relative flex h-full gap-2 overflow-x-auto"
       style={{
         width: itemWidth,
-        height: itemWidth / stableRadio,
+        height: itemWidth / stableRadioCtx,
       }}
     >
       {children}

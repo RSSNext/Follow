@@ -5,11 +5,22 @@ import { fetchImageDimensions } from "@renderer/lib/img-proxy"
 import { useEntryStore } from "@renderer/store/entry"
 import { throttle } from "lodash-es"
 import type { CSSProperties, PropsWithChildren } from "react"
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import {
+  memo,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 
 import { EntryItemSkeleton } from "../item"
+import {
+  MasonryItemsAspectRatioContext,
+  MasonryItemsAspectRatioSetterContext,
+  MasonryItemWidthContext,
+} from "./contexts/picture-masonry-context"
 import { PictureWaterFallItem } from "./picture-item"
-import { MasonryItemWidthContext } from "./picture-masonry-context"
 
 // grid grid-cols-1 @lg:grid-cols-2 @3xl:grid-cols-3 @6xl:grid-cols-4 @7xl:grid-cols-5 px-4 gap-1.5
 
@@ -93,40 +104,49 @@ export const PictureMasonry = ({
     [currentItemWidth],
   )
 
+  const [masonryItemsRadio, setMasonryItemsRadio] = useState<
+    Record<string, number>
+  >({})
   return (
     <div ref={containerRef} className="p-4">
-      <MasonryItemWidthContext.Provider value={currentItemWidth}>
-        <MasonryInfiniteGrid
-          ref={masonryRef}
-          placeholder={<LoadingSkeletonItem itemStyle={itemStyle} />}
-          onRequestAppend={(e) => {
-            if (!hasNextPage) return
-            e.wait()
-            const nextGroupKey = (+e.groupKey! || 0) + 1
-            e.currentTarget.appendPlaceholders(10, nextGroupKey)
-            endReached().finally(() => {
-              e.ready()
-            })
-          }}
-          scrollContainer={$scroll}
-          // useResizeObserver
-          observeChildren
-          useFirstRender
-          gap={{ vertical: 24 }}
-          column={currentColumn}
-        >
-          {data.map((entryId, index) => (
-            <ItemWrapper
-              data-grid-groupkey={index}
-              itemStyle={itemStyle}
-              key={entryId}
-              entryId={entryId}
+      <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
+        <MasonryItemWidthContext.Provider value={currentItemWidth}>
+          <MasonryItemsAspectRatioSetterContext.Provider
+            value={setMasonryItemsRadio}
+          >
+            <MasonryInfiniteGrid
+              ref={masonryRef}
+              placeholder={<LoadingSkeletonItem itemStyle={itemStyle} />}
+              onRequestAppend={(e) => {
+                if (!hasNextPage) return
+                e.wait()
+                const nextGroupKey = (+e.groupKey! || 0) + 1
+                e.currentTarget.appendPlaceholders(10, nextGroupKey)
+                endReached().finally(() => {
+                  e.ready()
+                })
+              }}
+              scrollContainer={$scroll}
+              // useResizeObserver
+              observeChildren
+              useFirstRender
+              gap={{ vertical: 24 }}
+              column={currentColumn}
             >
-              <PictureWaterFallItem entryId={entryId} />
-            </ItemWrapper>
-          ))}
-        </MasonryInfiniteGrid>
-      </MasonryItemWidthContext.Provider>
+              {data.map((entryId, index) => (
+                <ItemWrapper
+                  data-grid-groupkey={index}
+                  itemStyle={itemStyle}
+                  key={entryId}
+                  entryId={entryId}
+                >
+                  <PictureWaterFallItem entryId={entryId} />
+                </ItemWrapper>
+              ))}
+            </MasonryInfiniteGrid>
+          </MasonryItemsAspectRatioSetterContext.Provider>
+        </MasonryItemWidthContext.Provider>
+      </MasonryItemsAspectRatioContext.Provider>
     </div>
   )
 }
@@ -137,7 +157,7 @@ const LoadingSkeletonItem = ({ itemStyle }: { itemStyle: CSSProperties }) => (
   </div>
 )
 
-const ItemWrapper = ({
+const ItemWrapperImpl = ({
   itemStyle,
   style,
   children,
@@ -171,3 +191,5 @@ PropsWithChildren) => {
     </div>
   )
 }
+
+const ItemWrapper = memo(ItemWrapperImpl)
