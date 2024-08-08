@@ -46,7 +46,7 @@ export const fetchImageDimensions = async (url: string) => {
   const req = async () => {
     urlIsProcessing.add(url)
     const response = await fetch(
-      `${env.VITE_IMGPROXY_URL}/unsafe/meta/0x0/${encodeURIComponent(url)}`,
+      `${env.VITE_IMGPROXY_URL}/unsafe/meta/${encodeURIComponent(url)}`,
     ).then((res) => res.json())
 
     const json = response.thumbor.source
