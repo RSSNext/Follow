@@ -16,8 +16,10 @@ export function GridItem({
   entryPreview,
   translation,
   children,
+  wrapperClassName,
 }: UniversalItemProps & {
   children?: React.ReactNode
+  wrapperClassName?: string
 }) {
   const entry = useEntry(entryId) || entryPreview
   const feeds = useFeedById(entry?.feedId)
@@ -26,7 +28,7 @@ export function GridItem({
 
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
-    <div className="p-1.5">
+    <div className={cn("p-1.5", wrapperClassName)}>
       {children}
       <div
         className={cn(

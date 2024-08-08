@@ -3,14 +3,21 @@ import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholde
 import { Skeleton } from "@renderer/components/ui/skeleton"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { FeedViewType } from "@renderer/lib/enum"
+import { fetchImageDimensions } from "@renderer/lib/img-proxy"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
-import { memo } from "react"
+import {
+  useImageDimensions,
+  useImagesHasDimensions,
+} from "@renderer/store/image"
+import type { PropsWithChildren } from "react"
+import { memo, useEffect } from "react"
 
 import { usePreviewMedia } from "../../../components/ui/media/hooks"
 import { EntryItemWrapper } from "../layouts/EntryItemWrapper"
 import { GridItem } from "../templates/grid-item-template"
 import type { UniversalItemProps } from "../types"
+import { useMasonryItemWidth } from "./ctx"
 
 export function PictureItem({
   entryId,
@@ -73,6 +80,18 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   )
 
   const previewMedia = usePreviewMedia()
+  useEffect(() => {
+    const media = entry?.entries.media
+    if (!media) return
+    for (const med of media) {
+      fetchImageDimensions(med.url)
+    }
+  }, [entry?.entries.media])
+
+  const hasAllDim = useImagesHasDimensions(
+    entry?.entries.media?.map((m) => m.url) || [],
+  )
+  if (!hasAllDim) return null
   if (!entry) return null
 
   return (
@@ -82,12 +101,13 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
       itemClassName="group hover:bg-theme-item-hover"
     >
       <GridItem
+        wrapperClassName="p-0"
         entryId={entryId}
         entryPreview={entryPreview}
         translation={translation}
       >
-        <div className="relative flex gap-2 overflow-x-auto">
-          {entry.entries.media ? (
+        {entry.entries.media ? (
+          <MasonryItemFixedDimensionWrapper url={entry.entries.media[0].url}>
             <SwipeMedia
               forceSwiper
               media={entry.entries.media}
@@ -102,12 +122,34 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
                 previewMedia(media, i)
               }}
             />
-          ) : null}
-        </div>
+          </MasonryItemFixedDimensionWrapper>
+        ) : null}
       </GridItem>
     </EntryItemWrapper>
   )
 })
+
+const MasonryItemFixedDimensionWrapper = (
+  props: PropsWithChildren<{
+    url: string
+  }>,
+) => {
+  const { url, children } = props
+  const dim = useImageDimensions(url)
+  const itemWidth = useMasonryItemWidth()
+
+  const itemHeight = dim ? itemWidth / dim.ratio : 0
+
+  if (!dim) return null
+  return (
+    <div
+      className="relative flex gap-2 overflow-x-auto"
+      style={{ width: itemWidth, height: itemHeight }}
+    >
+      {children}
+    </div>
+  )
+}
 
 export const PictureItemSkeleton = (
   <div className="relative max-w-md rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">

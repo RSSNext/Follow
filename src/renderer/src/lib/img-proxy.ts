@@ -1,4 +1,5 @@
 import { env } from "@env"
+import { imageActions } from "@renderer/store/image"
 import { imageRefererMatches } from "@shared/image"
 
 export const getProxyUrl = ({
@@ -22,3 +23,35 @@ export const replaceImgUrlIfNeed = (url: string) => {
   }
   return url
 }
+
+export const fetchImageDimensions = (url: string) =>
+  new Promise<{ width: number, height: number, ratio: number }>(
+    (resolve, reject) => {
+      const image = imageActions.getImage(url)
+      if (image) {
+        return resolve(image)
+      }
+
+      fetch(
+        `${env.VITE_IMGPROXY_URL}/unsafe/meta/0x0/${encodeURIComponent(url)}`,
+      )
+        .then((res) => res.json())
+        .then(({ thumbor: { source: json } }) => {
+          resolve({
+            width: json.width,
+            height: json.height,
+            ratio: json.width / json.height,
+          })
+
+          imageActions.saveImages([
+            {
+              src: url,
+              width: json.width,
+              height: json.height,
+              ratio: json.width / json.height,
+            },
+          ])
+        })
+        .catch(reject)
+    },
+  )

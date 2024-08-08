@@ -3,14 +3,10 @@ import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
 import { FeedViewType } from "@renderer/lib/enum"
 import { throttle } from "lodash-es"
 import type { CSSProperties, PropsWithChildren } from "react"
-import {
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import { useLayoutEffect, useMemo, useRef, useState } from "react"
 
 import { EntryItemSkeleton } from "../item"
+import { MasonryItemWidthContext } from "./ctx"
 import { PictureWaterFallItem } from "./picture-item"
 
 // grid grid-cols-1 @lg:grid-cols-2 @3xl:grid-cols-3 @6xl:grid-cols-4 @7xl:grid-cols-5 px-4 gap-1.5
@@ -87,37 +83,39 @@ export const PictureMasonry = ({
   )
 
   return (
-    <div ref={containerRef} className="p-4">
-      <MasonryInfiniteGrid
-        ref={masonryRef}
-        placeholder={<LoadingSkeletonItem itemStyle={itemStyle} />}
-        onRequestAppend={(e) => {
-          if (!hasNextPage) return
-          e.wait()
-          const nextGroupKey = (+e.groupKey! || 0) + 1
-          e.currentTarget.appendPlaceholders(10, nextGroupKey)
-          endReached().finally(() => {
-            e.ready()
-          })
-        }}
-        useResizeObserver
-        scrollContainer={$scroll}
-        observeChildren
-        gap={{ vertical: 24 }}
-        useFirstRender
-        column={currentColumn}
-      >
-        {data.map((entryId, index) => (
-          <ItemWrapper
-            data-grid-groupkey={Math.trunc(index / 20)}
-            itemStyle={itemStyle}
-            key={entryId}
-          >
-            <PictureWaterFallItem entryId={entryId} />
-          </ItemWrapper>
-        ))}
-      </MasonryInfiniteGrid>
-    </div>
+    <MasonryItemWidthContext.Provider value={currentItemWidth}>
+      <div ref={containerRef} className="p-4">
+        <MasonryInfiniteGrid
+          ref={masonryRef}
+          placeholder={<LoadingSkeletonItem itemStyle={itemStyle} />}
+          onRequestAppend={(e) => {
+            if (!hasNextPage) return
+            e.wait()
+            const nextGroupKey = (+e.groupKey! || 0) + 1
+            e.currentTarget.appendPlaceholders(10, nextGroupKey)
+            endReached().finally(() => {
+              e.ready()
+            })
+          }}
+          useResizeObserver
+          scrollContainer={$scroll}
+          observeChildren
+          gap={{ vertical: 24 }}
+          useFirstRender
+          column={currentColumn}
+        >
+          {data.map((entryId, index) => (
+            <ItemWrapper
+              data-grid-groupkey={Math.trunc(index / 20)}
+              itemStyle={itemStyle}
+              key={entryId}
+            >
+              <PictureWaterFallItem entryId={entryId} />
+            </ItemWrapper>
+          ))}
+        </MasonryInfiniteGrid>
+      </div>
+    </MasonryItemWidthContext.Provider>
   )
 }
 
