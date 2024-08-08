@@ -1,8 +1,11 @@
 import { env } from "@env"
 import { imageActions } from "@renderer/store/image"
+import {
+  getImageDimensionsFromDb,
+  saveImageDimensionsToDb,
+} from "@renderer/store/image/db"
 import { imageRefererMatches } from "@shared/image"
 import { AsyncQueue } from "@shared/queue"
-import { createStore, get, set } from "idb-keyval"
 
 export const getProxyUrl = ({
   url,
@@ -27,7 +30,6 @@ export const replaceImgUrlIfNeed = (url: string) => {
 }
 const asyncQueue = new AsyncQueue(10)
 const urlIsProcessing = new Set<string>()
-const db = createStore("FOLLOW_IMAGE_DIMENSIONS", "image-dimensions")
 
 export const fetchImageDimensions = async (url: string) => {
   const image = imageActions.getImage(url)
@@ -35,7 +37,7 @@ export const fetchImageDimensions = async (url: string) => {
     return image
   }
 
-  const dbData = await get(url, db)
+  const dbData = await getImageDimensionsFromDb(url)
 
   if (dbData) {
     imageActions.saveImages([dbData])
@@ -56,7 +58,8 @@ export const fetchImageDimensions = async (url: string) => {
     }
 
     imageActions.saveImages([record])
-    set(url, record, db)
+
+    saveImageDimensionsToDb(url, record)
     // Error will not delete the url from the processing set
     urlIsProcessing.delete(url)
 
