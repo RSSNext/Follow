@@ -5,19 +5,15 @@ import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
-import {
-  useImageDimensions,
-} from "@renderer/store/image"
+import { useImageDimensions } from "@renderer/store/image"
 import type { PropsWithChildren } from "react"
-import { memo } from "react"
+import { memo, useState } from "react"
 
 import { usePreviewMedia } from "../../../components/ui/media/hooks"
 import { EntryItemWrapper } from "../layouts/EntryItemWrapper"
 import { GridItem } from "../templates/grid-item-template"
 import type { UniversalItemProps } from "../types"
-import {
-  useMasonryItemWidth,
-} from "./picture-masonry-context"
+import { useMasonryItemWidth } from "./picture-masonry-context"
 
 export function PictureItem({
   entryId,
@@ -90,7 +86,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
       itemClassName="group hover:bg-theme-item-hover"
     >
       <GridItem
-        wrapperClassName="p-0"
+        wrapperClassName="p-0 h-full flex flex-col"
         entryId={entryId}
         entryPreview={entryPreview}
         translation={translation}
@@ -101,7 +97,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
               forceSwiper
               media={entry.entries.media}
               className={cn(
-                "w-full shrink-0 rounded-md",
+                "w-full shrink-0 grow rounded-md",
                 isActive && "rounded-b-none",
               )}
               proxySize={proxySize}
@@ -127,13 +123,16 @@ const MasonryItemFixedDimensionWrapper = (
   const dim = useImageDimensions(url)
   const itemWidth = useMasonryItemWidth()
 
-  const itemHeight = dim ? itemWidth / dim.ratio : 0
+  const itemHeight = dim ? itemWidth / dim.ratio : itemWidth
+  const stableRadio = useState(() => itemWidth / itemHeight || 1)[0]
 
-  if (!dim) return null
   return (
     <div
-      className="relative flex gap-2 overflow-x-auto"
-      style={{ width: itemWidth, height: itemHeight }}
+      className="relative flex h-full gap-2 overflow-x-auto"
+      style={{
+        width: itemWidth,
+        height: itemWidth / stableRadio,
+      }}
     >
       {children}
     </div>

@@ -3,16 +3,9 @@ import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
 import { FeedViewType } from "@renderer/lib/enum"
 import { fetchImageDimensions } from "@renderer/lib/img-proxy"
 import { useEntryStore } from "@renderer/store/entry"
-import { useImagesHasDimensions } from "@renderer/store/image"
 import { throttle } from "lodash-es"
 import type { CSSProperties, PropsWithChildren } from "react"
-import {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 
 import { EntryItemSkeleton } from "../item"
 import { PictureWaterFallItem } from "./picture-item"
@@ -158,15 +151,13 @@ PropsWithChildren) => {
   const urls = useEntryStore((state) =>
     state.flatMapEntries[entryId]?.entries?.media?.map((m) => m.url),
   )
-  const hasAllDim = useImagesHasDimensions(urls)
+
   useEffect(() => {
     if (!urls) return
     for (const url of urls) {
       fetchImageDimensions(url)
     }
   }, [JSON.stringify(urls)])
-
-  if (!hasAllDim) return null
 
   return (
     <div

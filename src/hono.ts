@@ -3231,6 +3231,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             type: "photo" | "video";
                             url: string;
                             preview_image_url?: string | undefined;
+                            height?: number | undefined;
+                            width?: number | undefined;
                         }[] | null | undefined;
                         attachments?: {
                             url: string;
