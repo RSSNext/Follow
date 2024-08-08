@@ -29,7 +29,7 @@ import { Queries } from "@renderer/queries"
 import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC, ReactNode } from "react"
-import { useEffect, useLayoutEffect, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 
 import { LoadingCircle } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
@@ -136,6 +136,11 @@ function EntryContentRender({ entryId }: { entryId: string }) {
   const view = useRouteParamsSelector((route) => route.view)
 
   const isInReadabilityMode = useEntryIsInReadability(entryId)
+  const scrollerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    scrollerRef.current?.scrollTo(0, 0)
+  }, [entryId])
   if (!entry) return null
 
   return (
@@ -155,6 +160,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
         mask={false}
         rootClassName="h-0 grow min-w-0 overflow-y-auto @container"
         viewportClassName="p-5"
+        ref={scrollerRef}
       >
         <m.div
           style={
@@ -278,6 +284,9 @@ const TitleMetaHandler: Component<{
   const { title: feedTitle } = useFeedById(feedId)!
 
   const atTop = useIsSoFWrappedElement()
+  useEffect(() => {
+    setEntryContentScrollToTop(false)
+  }, [entryId])
   useLayoutEffect(() => {
     setEntryContentScrollToTop(atTop)
   }, [atTop])
