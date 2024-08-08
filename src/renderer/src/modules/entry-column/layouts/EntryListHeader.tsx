@@ -4,6 +4,7 @@ import {
 } from "@renderer/atoms/settings/general"
 import { setUISetting, useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useWhoami } from "@renderer/atoms/user"
+import { ImpressionView } from "@renderer/components/common/ImpressionTracker"
 import { ActionButton } from "@renderer/components/ui/button"
 import { DividerVertical } from "@renderer/components/ui/divider"
 import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
@@ -179,17 +180,28 @@ const DailyReportButton: FC = () => {
 const SwitchToMasonryButton = () => {
   const isMasonry = useUISettingKey("pictureViewMasonry")
   return (
-    <ActionButton
-      onClick={() => {
-        setUISetting("pictureViewMasonry", !isMasonry)
+    <ImpressionView
+      event="Switch to Masonry"
+      properties={{
+        masonry: isMasonry ? 1 : 0,
       }}
-      tooltip={`Switch to ${isMasonry ? "Grid" : "Masonry"}`}
     >
-      <i
-        className={cn(
-          !isMasonry ? "i-mgc-grid-cute-re" : "i-mgc-grid-2-cute-re",
-        )}
-      />
-    </ActionButton>
+      <ActionButton
+        onClick={() => {
+          setUISetting("pictureViewMasonry", !isMasonry)
+          window.posthog?.capture("Switch to Masonry", {
+            masonry: !isMasonry ? 1 : 0,
+            click: 1,
+          })
+        }}
+        tooltip={`Switch to ${isMasonry ? "Grid" : "Masonry"}`}
+      >
+        <i
+          className={cn(
+            !isMasonry ? "i-mgc-grid-cute-re" : "i-mgc-grid-2-cute-re",
+          )}
+        />
+      </ActionButton>
+    </ImpressionView>
   )
 }
