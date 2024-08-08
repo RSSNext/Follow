@@ -24,6 +24,7 @@ export function SwipeMedia({
   imgClassName,
   onPreview,
   proxySize = defaultProxySize,
+  forceSwiper,
 }: {
   media?: MediaModel[] | null
   uniqueKey?: string
@@ -34,11 +35,12 @@ export function SwipeMedia({
     width: number
     height: number
   }
+  forceSwiper?: boolean
 }) {
   const uniqMedia = uniqBy(media, "url")
 
   const hoverRef = useRef<HTMLDivElement>(null)
-  const [enableSwipe, setEnableSwipe] = useState(false)
+  const [enableSwipe, setEnableSwipe] = useState(!!forceSwiper)
   useHover(
     (event) => {
       if (event.active) {
@@ -47,6 +49,7 @@ export function SwipeMedia({
     },
     {
       target: hoverRef,
+      enabled: !forceSwiper,
     },
   )
 

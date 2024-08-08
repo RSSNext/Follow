@@ -109,7 +109,7 @@ export const PictureMasonry = ({
       >
         {data.map((entryId, index) => (
           <ItemWrapper
-            data-grid-groupkey={index}
+            data-grid-groupkey={Math.trunc(index / 20)}
             itemStyle={itemStyle}
             key={entryId}
           >

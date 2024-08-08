@@ -74,6 +74,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
 
   const previewMedia = usePreviewMedia()
   if (!entry) return null
+
   return (
     <EntryItemWrapper
       view={FeedViewType.Pictures}
@@ -88,6 +89,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
         <div className="relative flex gap-2 overflow-x-auto">
           {entry.entries.media ? (
             <SwipeMedia
+              forceSwiper
               media={entry.entries.media}
               className={cn(
                 "w-full shrink-0 rounded-md",
