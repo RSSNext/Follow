@@ -15,10 +15,12 @@ import {
   useRouteParamsSelector,
   useRouteParms,
 } from "@renderer/hooks/biz/useRouteParams"
+import { useTitle } from "@renderer/hooks/common"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn, isBizId } from "@renderer/lib/utils"
 import { useFeed } from "@renderer/queries/feed"
 import { entryActions, useEntry } from "@renderer/store/entry"
+import { useFeedByIdSelector } from "@renderer/store/feed"
 import { useCallback, useEffect, useRef } from "react"
 import type {
   ScrollSeekConfiguration,
@@ -29,10 +31,7 @@ import type {
 import { VirtuosoGrid } from "react-virtuoso"
 
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
-import {
-  EntryItem,
-  EntryItemSkeleton,
-} from "./item"
+import { EntryItem, EntryItemSkeleton } from "./item"
 import { PictureMasonry } from "./Items/picture-masonry"
 import { EntryListHeader } from "./layouts/EntryListHeader"
 import { EntryEmptyList, EntryList, EntryListContent } from "./lists"
@@ -61,6 +60,8 @@ export function EntryColumn() {
     isCollection,
   } = useRouteParms()
   const activeEntry = useEntry(activeEntryId)
+  const feedTitle = useFeedByIdSelector(routeFeedId, (feed) => feed?.title)
+  useTitle(feedTitle)
 
   useEffect(() => {
     if (!activeEntryId) return
