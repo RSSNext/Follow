@@ -28,7 +28,7 @@ const createDefaultSettings = (): UISettings => ({
   codeHighlightTheme: "github-dark",
 
   // View
-  pictureViewMasonry: false,
+  pictureViewMasonry: true,
 })
 
 export const {
