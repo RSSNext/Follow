@@ -1,5 +1,5 @@
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { Card, CardHeader } from "@renderer/components/ui/card"
+import { Card, CardContent } from "@renderer/components/ui/card"
 import { Collapse } from "@renderer/components/ui/collapse"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { Markdown } from "@renderer/components/ui/markdown"
@@ -13,9 +13,9 @@ import {
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
+import { cn } from "@renderer/lib/utils"
 import { MarkAllButton } from "@renderer/modules/entry-column/components/mark-all-button"
-import type { FC } from "react"
-import { useState } from "react"
+import { Fragment, useState } from "react"
 
 import { useParseDailyDate } from "./hooks"
 import type { DailyItemProps, DailyView } from "./types"
@@ -88,11 +88,20 @@ export const DailyReportTitle = ({
   </div>
 )
 
-export const DailyReportContent: FC<{
+export const DailyReportContent: Component<{
   view: DailyView
   startDate: number
   endDate: number
-}> = ({ endDate, startDate, view }) => {
+  viewportClassName?: string
+  autoResize?: boolean
+}> = ({
+  endDate,
+  startDate,
+  autoResize = true,
+  view,
+  className,
+  viewportClassName,
+}) => {
   const content = useAuthQuery(
     defineQuery(["daily", view, startDate, endDate], async () => {
       const res = await apiClient.ai.daily.$get({
@@ -113,15 +122,16 @@ export const DailyReportContent: FC<{
   const [markAllButtonRef, setMarkAllButtonRef] =
     useState<HTMLButtonElement | null>(null)
 
+  const ResizeSwitch = autoResize ? AutoResizeHeight : Fragment
   return (
     <Card className="border-none bg-transparent">
-      <CardHeader className="space-y-0 p-0">
+      <CardContent className={cn("space-y-0 p-0", className)}>
         <ScrollArea.ScrollArea
           mask={false}
           flex
-          viewportClassName="max-h-[calc(100vh-500px)]"
+          viewportClassName={cn("max-h-[calc(100vh-500px)]", viewportClassName)}
         >
-          <AutoResizeHeight spring>
+          <ResizeSwitch spring>
             {content.isLoading ? (
               <LoadingCircle size="large" className="mt-8 text-center" />
             ) : (
@@ -131,7 +141,7 @@ export const DailyReportContent: FC<{
                 </Markdown>
               )
             )}
-          </AutoResizeHeight>
+          </ResizeSwitch>
         </ScrollArea.ScrollArea>
         {!!content.data && (
           <button
@@ -152,7 +162,7 @@ export const DailyReportContent: FC<{
             <span>Mark all as read</span>
           </button>
         )}
-      </CardHeader>
+      </CardContent>
     </Card>
   )
 }

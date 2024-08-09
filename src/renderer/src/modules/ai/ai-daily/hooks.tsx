@@ -65,7 +65,10 @@ export const useAIDailyReportModal = () => {
     present({
       content: () => <FeedDailyModalContent />,
       title: "AI Daily Report",
+      resizeable: true,
       clickOutsideToDismiss: true,
+
+      resizeDefaultSize: { width: 660, height: 450 },
     })
   }, [present])
 }

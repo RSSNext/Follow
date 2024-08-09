@@ -9,6 +9,7 @@ import { cn } from "@renderer/lib/utils"
 import { useAnimationControls, useDragControls } from "framer-motion"
 import { produce } from "immer"
 import { useSetAtom } from "jotai"
+import { Resizable } from "re-resizable"
 import type { PointerEventHandler, SyntheticEvent } from "react"
 import {
   createElement,
@@ -55,6 +56,8 @@ export const ModalInternal: Component<{
       canClose = true,
 
       draggable = false,
+      resizeable = false,
+      resizeDefaultSize,
     } = item
 
     const setStack = useSetAtom(modalStackAtom)
@@ -238,6 +241,8 @@ export const ModalInternal: Component<{
       )
     }
 
+    const ResizeSwitch = resizeable ? Resizable : Fragment
+
     return (
       <Wrapper>
         <Dialog.Root open onOpenChange={onClose}>
@@ -284,30 +289,32 @@ export const ModalInternal: Component<{
                     cursor: "grabbing",
                   }}
                 >
-                  <div
-                    className="relative flex items-center"
-                    onPointerDownCapture={handleDrag}
-                  >
-                    <Dialog.Title className="flex shrink-0 grow items-center gap-2 px-4 py-1 text-lg font-semibold">
-                      {icon && <span className="size-4">{icon}</span>}
+                  <ResizeSwitch defaultSize={resizeDefaultSize} className="flex grow flex-col">
+                    <div
+                      className="relative flex items-center"
+                      onPointerDownCapture={handleDrag}
+                    >
+                      <Dialog.Title className="flex shrink-0 grow items-center gap-2 px-4 py-1 text-lg font-semibold">
+                        {icon && <span className="size-4">{icon}</span>}
 
-                      <span>{title}</span>
-                    </Dialog.Title>
-                    {canClose && (
-                      <Dialog.DialogClose
-                        className="center p-2"
-                        tabIndex={1}
-                        onClick={close}
-                      >
-                        <i className="i-mgc-close-cute-re" />
-                      </Dialog.DialogClose>
-                    )}
-                  </div>
-                  <Divider className="my-2 shrink-0 border-slate-200 opacity-80 dark:border-neutral-800" />
+                        <span>{title}</span>
+                      </Dialog.Title>
+                      {canClose && (
+                        <Dialog.DialogClose
+                          className="center p-2"
+                          tabIndex={1}
+                          onClick={close}
+                        >
+                          <i className="i-mgc-close-cute-re" />
+                        </Dialog.DialogClose>
+                      )}
+                    </div>
+                    <Divider className="my-2 shrink-0 border-slate-200 opacity-80 dark:border-neutral-800" />
 
-                  <div className="min-h-0 shrink grow overflow-auto px-4 py-2">
-                    {finalChildren}
-                  </div>
+                    <div className="min-h-0 shrink grow overflow-auto px-4 py-2">
+                      {finalChildren}
+                    </div>
+                  </ResizeSwitch>
                 </m.div>
               </div>
             </Dialog.Content>

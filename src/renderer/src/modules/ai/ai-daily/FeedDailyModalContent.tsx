@@ -1,4 +1,3 @@
-import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import {
   Tabs,
   TabsContent,
@@ -18,26 +17,28 @@ export const FeedDailyModalContent = () => {
   const yesterday = useParseDailyDate(DayOf.Yesterday)
 
   return (
-    <Tabs defaultValue={DayOf.Today as any}>
+    <Tabs defaultValue={DayOf.Today as any} className="flex h-full flex-col">
       <TabsList className="w-full">
         {tabs.map((tab: any) => (
           <TabsTrigger key={tab} value={tab}>
-            {/* {tab} */}
             <DailyReportTitle {...(tab === DayOf.Today ? today : yesterday)} />
           </TabsTrigger>
         ))}
       </TabsList>
-      <AutoResizeHeight spring>
+
+      <div className="flex grow flex-col items-center overflow-auto">
         {tabs.map((tab: any) => (
-          <TabsContent key={tab} value={tab} className="mt-8">
+          <TabsContent key={tab} value={tab}>
             <DailyReportContent
+              viewportClassName="max-h-[100vh] h-auto"
               // TODO support other view types
+              autoResize={false}
               view={FeedViewType.SocialMedia}
               {...(tab === DayOf.Today ? today : yesterday)}
             />
           </TabsContent>
         ))}
-      </AutoResizeHeight>
+      </div>
     </Tabs>
   )
 }
