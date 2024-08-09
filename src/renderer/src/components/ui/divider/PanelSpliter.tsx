@@ -10,7 +10,7 @@ export const PanelSplitter = (
     <div
       tabIndex={-1}
       {...props}
-      className="absolute inset-0 z-[11] w-[2px] -translate-x-1/2 cursor-ew-resize bg-transparent hover:bg-gray-400 active:bg-theme-accent hover:dark:bg-neutral-500"
+      className="absolute inset-0 z-[11] w-[2px] -translate-x-1/2 cursor-ew-resize bg-transparent hover:bg-gray-400 active:!bg-theme-accent hover:dark:bg-neutral-500"
     />
   </div>
 )
