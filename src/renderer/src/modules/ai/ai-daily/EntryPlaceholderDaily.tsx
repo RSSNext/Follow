@@ -15,7 +15,7 @@ export const EntryPlaceholderDaily = ({
   view: DailyView
   className?: string
 }) => (
-  <div className={cn(className, "mx-auto flex w-[75ch] flex-col gap-6")}>
+  <div className={cn(className, "mx-auto flex w-full max-w-[75ch] flex-col gap-6")}>
     <CollapseGroup>
       <CtxConsumer />
       <DailyItem day={DayOf.Today} view={view} />

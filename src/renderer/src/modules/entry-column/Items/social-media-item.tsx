@@ -187,8 +187,8 @@ export const SocialMediaDateItem = ({
     <div
       className={cn(
         className,
-        "m-auto w-[75ch] gap-3 pl-5 text-base",
-        views[view].wideMode && "flex justify-center",
+        "m-auto w-[67ch] gap-3 pl-5 text-lg",
+        views[view].wideMode && "flex",
       )}
     >
       <MarkAllButton

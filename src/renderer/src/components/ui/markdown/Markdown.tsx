@@ -6,7 +6,7 @@ import { useMemo, useState } from "react"
 export const Markdown: Component<
   {
     children: string
-  } & Partial<RemarkOptions>,
+  } & Partial<RemarkOptions>
 > = ({ children, components, className }) => {
   const stableRemarkOptions = useState({ components })[0]
 
