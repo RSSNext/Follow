@@ -12,7 +12,7 @@ import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { stopPropagation } from "@renderer/lib/dom"
+import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { Routes } from "@renderer/lib/enum"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { clamp, cn } from "@renderer/lib/utils"
@@ -205,7 +205,6 @@ export function FeedColumn({ children }: PropsWithChildren) {
           className="relative flex items-center gap-1"
           onClick={stopPropagation}
         >
-
           <SearchActionButton />
 
           <Link to="/discover" tabIndex={-1}>
@@ -283,9 +282,27 @@ const SwipeWrapper: Component<{
   const reduceMotion = useReduceMotion()
 
   const carouselWidth = useAtomValue(carouselWidthAtom)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const $container = containerRef.current
+    if (!$container) return
+
+    const x = -active * carouselWidth
+    // NOTE: To fix the misalignment of the browser's layout, use display to re-render it.
+    if (x !== $container.getBoundingClientRect().x) {
+      $container.style.display = "none"
+
+      nextFrame(() => {
+        $container.style.display = ""
+      })
+    }
+  }, [])
+
   if (reduceMotion) {
     return (
       <div
+        ref={containerRef}
         className="absolute inset-0"
         style={{
           transform: `translateX(${-active * carouselWidth}px)`,
@@ -297,6 +314,7 @@ const SwipeWrapper: Component<{
   }
   return (
     <m.div
+      ref={containerRef}
       className="absolute inset-0"
       style={{
         x: spring,
