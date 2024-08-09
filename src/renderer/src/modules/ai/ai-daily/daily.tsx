@@ -30,6 +30,7 @@ import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry"
 import { useFeedById } from "@renderer/store/feed"
 import { m, useAnimationControls } from "framer-motion"
+import type { Components } from "hast-util-to-jsx-runtime"
 import { useEffect, useState } from "react"
 
 import { useParseDailyDate } from "./hooks"
@@ -243,7 +244,8 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
   )
 }
 
-const RelatedEntryLink = (props: LinkProps) => {
+// @ts-expect-error
+const RelatedEntryLink: Components["a"] = (props: LinkProps) => {
   const { href, children } = props
   const entryId = isBizId(href) ? href : null
 
