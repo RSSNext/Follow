@@ -24,14 +24,16 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame } from "@renderer/lib/dom"
 import { cn, isBizId } from "@renderer/lib/utils"
-import { MarkAllButton } from "@renderer/modules/entry-column/components/mark-all-button"
+import {
+  FlatMarkAllButton,
+} from "@renderer/modules/entry-column/components/mark-all-button"
 import { StarIcon } from "@renderer/modules/entry-column/star-icon"
 import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry"
 import { useFeedById } from "@renderer/store/feed"
 import { m, useAnimationControls } from "framer-motion"
 import type { Components } from "hast-util-to-jsx-runtime"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import { useParseDailyDate } from "./hooks"
 import type { DailyItemProps, DailyView } from "./types"
@@ -140,8 +142,6 @@ export const DailyReportContent: Component<DailyReportContentProps> = ({
   className,
 }) => {
   const content = useQueryData({ endDate, startDate, view })
-  const [markAllButtonRef, setMarkAllButtonRef] =
-    useState<HTMLButtonElement | null>(null)
 
   return (
     <Card className="border-none bg-transparent">
@@ -164,23 +164,13 @@ export const DailyReportContent: Component<DailyReportContentProps> = ({
           </AutoResizeHeight>
         </ScrollArea.ScrollArea>
         {!!content.data && (
-          <button
-            type="button"
-            onClick={() => {
-              markAllButtonRef?.click()
+          <FlatMarkAllButton
+            className="ml-auto"
+            filter={{
+              startTime: startDate,
+              endTime: endDate,
             }}
-            className="!mt-4 ml-auto flex items-center rounded-lg py-1 pr-2 duration-200 hover:!bg-theme-button-hover"
-          >
-            <MarkAllButton
-              ref={setMarkAllButtonRef}
-              filter={{
-                startTime: startDate,
-                endTime: endDate,
-              }}
-              className="pointer-events-none text-[1.05rem]"
-            />
-            <span>Mark all as read</span>
-          </button>
+          />
         )}
       </CardContent>
     </Card>
@@ -193,8 +183,6 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
   view,
 }) => {
   const content = useQueryData({ endDate, startDate, view })
-  const [markAllButtonRef, setMarkAllButtonRef] =
-    useState<HTMLButtonElement | null>(null)
 
   return (
     <div className="center flex-col">
@@ -222,23 +210,13 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
           )}
 
       {!!content.data && (
-        <button
-          type="button"
-          onClick={() => {
-            markAllButtonRef?.click()
+        <FlatMarkAllButton
+          className="ml-auto"
+          filter={{
+            startTime: startDate,
+            endTime: endDate,
           }}
-          className="!mt-4 ml-auto flex items-center rounded-lg py-1 pr-2 duration-200 hover:!bg-theme-button-hover"
-        >
-          <MarkAllButton
-            ref={setMarkAllButtonRef}
-            filter={{
-              startTime: startDate,
-              endTime: endDate,
-            }}
-            className="pointer-events-none"
-          />
-          <span>Mark all as read</span>
-        </button>
+        />
       )}
     </div>
   )

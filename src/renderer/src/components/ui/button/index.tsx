@@ -68,7 +68,7 @@ Button.displayName = "Button"
 interface ActionButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   icon?: React.ReactNode | React.FC<ComponentType>
-  tooltip: string
+  tooltip: React.ReactNode
   tooltipSide?: "top" | "bottom"
   active?: boolean
   shortcut?: string
@@ -106,7 +106,7 @@ export const ActionButton = React.forwardRef<
             fn={() => buttonRef.current?.click()}
           />
         )}
-        <Tooltip key={tooltip} disableHoverableContent>
+        <Tooltip disableHoverableContent>
           <TooltipTrigger asChild>
             <Button
               as={as}

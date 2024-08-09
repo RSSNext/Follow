@@ -1,5 +1,9 @@
 import { PopoverPortal } from "@radix-ui/react-popover"
-import { ActionButton, StyledButton } from "@renderer/components/ui/button"
+import {
+  ActionButton,
+  Button,
+  StyledButton,
+} from "@renderer/components/ui/button"
 import {
   Popover,
   PopoverClose,
@@ -8,24 +12,142 @@ import {
 } from "@renderer/components/ui/popover"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
+import { cn } from "@renderer/lib/utils"
 import {
   subscriptionActions,
   useFolderFeedsByFeedId,
 } from "@renderer/store/subscription"
+import { AnimatePresence, m } from "framer-motion"
+import type { FC, ReactNode } from "react"
 import { forwardRef, useCallback, useState } from "react"
 
-export const MarkAllButton = forwardRef<
-  HTMLButtonElement,
-  {
-    filter?: {
-      startTime: number
-      endTime: number
-    }
-    className?: string
+interface MarkAllButtonProps {
+  filter?: {
+    startTime: number
+    endTime: number
   }
->(({ filter, className }, ref) => {
-  const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
+  className?: string
+  which?: ReactNode
+}
+export const MarkAllButton = forwardRef<HTMLButtonElement, MarkAllButtonProps>(
+  ({ filter, className, which = "all" }, ref) => {
+    const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
 
+    const handleMarkAllAsRead = useMarkAll(filter)
+
+    return (
+      <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
+        <PopoverTrigger asChild>
+          <ActionButton
+            shortcut={shortcuts.entries.markAllAsRead.key}
+            tooltip={(
+              <span>
+                Mark
+                {which}
+                {" "}
+                as read
+              </span>
+            )}
+            className={className}
+            ref={ref}
+          >
+            <i className="i-mgc-check-circle-cute-re" />
+          </ActionButton>
+        </PopoverTrigger>
+        <PopoverPortal>
+          <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
+            <div>
+              Mark
+              {which}
+              {" "}
+              as read?
+            </div>
+            <div className="space-x-4">
+              <PopoverClose>
+                <StyledButton variant="outline">Cancel</StyledButton>
+              </PopoverClose>
+
+              <StyledButton
+                onClick={() => {
+                  handleMarkAllAsRead()
+                  setMarkPopoverOpen(false)
+                }}
+              >
+                Confirm
+              </StyledButton>
+            </div>
+          </PopoverContent>
+        </PopoverPortal>
+      </Popover>
+    )
+  },
+)
+
+export const FlatMarkAllButton: FC<MarkAllButtonProps> = (props) => {
+  const { className, filter, which } = props
+  const [status, setStatus] = useState<"initial" | "confirm" | "done">(
+    "initial",
+  )
+  const handleMarkAll = useMarkAll(filter)
+
+  if (status === "done") return null
+  const animate = {
+    initial: { rotate: -30, opacity: 0.9 },
+    exit: { rotate: -30, opacity: 0.9 },
+    animate: { rotate: 0, opacity: 1 },
+  }
+  return (
+    <Button
+      variant="ghost"
+      className={cn("center relative flex h-auto gap-1 !py-1.5", className)}
+      onMouseLeave={() => {
+        if (status === "confirm") {
+          setStatus("initial")
+        }
+      }}
+      onClick={() => {
+        if (status === "confirm") {
+          handleMarkAll()
+            .then(() => setStatus("done"))
+            .catch(() => setStatus("initial"))
+          return
+        }
+
+        setStatus("confirm")
+      }}
+    >
+      <AnimatePresence mode="wait">
+        {status === "confirm" ? (
+          <m.i key={1} {...animate} className="i-mgc-question-cute-re" />
+        ) : (
+          <m.i key={2} {...animate} className="i-mgc-check-circle-cute-re" />
+        )}
+      </AnimatePresence>
+      <span
+        className={cn(
+          status === "confirm" ? "opacity-0" : "opacity-100",
+          "duration-200",
+        )}
+      >
+        Mark
+        {which}
+        {" "}
+        as read
+      </span>
+      <span
+        className={cn(
+          "center absolute inset-y-0 left-5 right-0 flex",
+          status === "confirm" ? "opacity-100" : "opacity-0",
+          "duration-200",
+        )}
+      >
+        Confirm?
+      </span>
+    </Button>
+  )
+}
+
+const useMarkAll = (filter: MarkAllButtonProps["filter"]) => {
   const routerParams = useRouteParms()
   const { feedId, view } = routerParams
   const folderIds = useFolderFeedsByFeedId({
@@ -33,7 +155,7 @@ export const MarkAllButton = forwardRef<
     view,
   })
 
-  const handleMarkAllAsRead = useCallback(async () => {
+  return useCallback(async () => {
     if (!routerParams) return
 
     if (typeof routerParams.feedId === "number" || routerParams.isAllFeeds) {
@@ -47,39 +169,5 @@ export const MarkAllButton = forwardRef<
         filter,
       )
     }
-  }, [feedId, folderIds, filter, routerParams])
-
-  return (
-    <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
-      <PopoverTrigger asChild>
-        <ActionButton
-          shortcut={shortcuts.entries.markAllAsRead.key}
-          tooltip="Mark All as Read"
-          className={className}
-          ref={ref}
-        >
-          <i className="i-mgc-check-circle-cute-re" />
-        </ActionButton>
-      </PopoverTrigger>
-      <PopoverPortal>
-        <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
-          <div>Mark all as read?</div>
-          <div className="space-x-4">
-            <PopoverClose>
-              <StyledButton variant="outline">Cancel</StyledButton>
-            </PopoverClose>
-            {/* TODO */}
-            <StyledButton
-              onClick={() => {
-                handleMarkAllAsRead()
-                setMarkPopoverOpen(false)
-              }}
-            >
-              Confirm
-            </StyledButton>
-          </div>
-        </PopoverContent>
-      </PopoverPortal>
-    </Popover>
-  )
-})
+  }, [routerParams, folderIds, view, filter])
+}

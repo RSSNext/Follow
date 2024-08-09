@@ -182,6 +182,7 @@ export const SocialMediaDateItem = ({
   const endOfDay = new Date(dateObj.setHours(23, 59, 59, 999)).getTime()
   const view = useRouteParamsSelector((s) => s.view)
 
+  const RelativeElement = <RelativeDay date={dateObj} />
   return (
     <div
       className={cn(
@@ -195,8 +196,9 @@ export const SocialMediaDateItem = ({
           startTime: startOfDay,
           endTime: endOfDay,
         }}
+        which={RelativeElement}
       />
-      <RelativeDay date={dateObj} />
+      {RelativeElement}
     </div>
   )
 }
