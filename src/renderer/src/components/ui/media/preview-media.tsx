@@ -37,6 +37,13 @@ const Wrapper: Component<{
         className="absolute bottom-4 right-4 flex gap-3"
         onClick={stopPropagation}
       >
+        <button
+          onClick={dismiss}
+          className="center fixed right-6 top-6 size-8 rounded-full border bg-theme-background text-foreground/60"
+          type="button"
+        >
+          <i className="i-mgc-close-cute-re" />
+        </button>
         {!!window.electron && (
           <ActionButton
             tooltip="Download"

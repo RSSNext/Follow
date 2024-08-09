@@ -186,6 +186,7 @@ const MediaImpl: FC<MediaProps> = ({
     disableContextMenu,
     errorHandle,
     handleClick,
+    handleOnLoad,
     hidden,
     imgSrc,
     mediaContainerClassName,
