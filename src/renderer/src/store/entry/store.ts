@@ -166,17 +166,6 @@ class EntryActions {
     feedUnreadActions.updateByFeedId(feedId, 0)
   }
 
-  private patchAll(changed: Partial<CombinedEntryModel>) {
-    set((state) =>
-      produce(state, (draft) => {
-        for (const entry of Object.values(draft.flatMapEntries)) {
-          Object.assign(entry, changed)
-        }
-        return draft
-      }),
-    )
-  }
-
   upsertMany(data: CombinedEntryModel[]) {
     const feeds = [] as FeedModel[]
     const entries = [] as EntryModel[]

@@ -1,4 +1,7 @@
+import type { EntryModel } from "@renderer/models"
+
 import { createZustandStore } from "../utils/helper"
+import { getImageDimensionsFromDb } from "./db"
 
 export interface StoreImageType {
   src: string
@@ -29,6 +32,28 @@ class ImageActions {
       }
       return { images: newImages }
     })
+  }
+
+  async fetchDimensionsFromDb(images: string[]) {
+    const dims = [] as StoreImageType[]
+    for (const image of images) {
+      const dbData = await getImageDimensionsFromDb(image)
+      if (dbData) {
+        dims.push(dbData)
+      }
+    }
+    imageActions.saveImages(dims)
+  }
+
+  getImagesFromEntry(entry: EntryModel) {
+    const images = [] as string[]
+    if (!entry.media) return images
+    for (const media of entry.media) {
+      if (media.type === "photo") {
+        images.push(media.url)
+      }
+    }
+    return images
   }
 }
 export const imageActions = new ImageActions()

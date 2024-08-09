@@ -1,10 +1,10 @@
 import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid"
 import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
 import { FeedViewType } from "@renderer/lib/enum"
-import { fetchImageDimensions } from "@renderer/lib/img-proxy"
-import { useEntryStore } from "@renderer/store/entry"
+import { getEntry } from "@renderer/store/entry"
+import { imageActions } from "@renderer/store/image"
 import { throttle } from "lodash-es"
-import type { CSSProperties, PropsWithChildren } from "react"
+import type { CSSProperties, FC, PropsWithChildren } from "react"
 import {
   memo,
   useEffect,
@@ -13,6 +13,7 @@ import {
   useRef,
   useState,
 } from "react"
+import { useEventCallback } from "usehooks-ts"
 
 import { EntryItemSkeleton } from "../item"
 import {
@@ -54,15 +55,43 @@ const getCurrentColumn = (w: number) => {
   return columns
 }
 
-export const PictureMasonry = ({
-  data,
-  endReached,
-  hasNextPage,
-}: {
+export const PictureMasonry: FC<MasonryProps> = (props) => {
+  const { data } = props
+  const [isInit, setIsInit] = useState(false)
+
+  const restoreDimensions = useEventCallback(async () => {
+    const images = [] as string[]
+    data.forEach((entryId) => {
+      const entry = getEntry(entryId)
+
+      images.push(...imageActions.getImagesFromEntry(entry.entries))
+    })
+    return imageActions.fetchDimensionsFromDb(images)
+  })
+  useEffect(() => {
+    restoreDimensions().finally(() => {
+      setIsInit(true)
+    })
+  }, [])
+
+  if (!isInit) return null
+
+  return (
+    <PictureMasonryImpl {...props} restoreDimensions={restoreDimensions} />
+  )
+}
+interface MasonryProps {
   data: string[]
   endReached: () => Promise<any>
   hasNextPage: boolean
-}) => {
+}
+
+const PictureMasonryImpl = ({
+  data,
+  endReached,
+  hasNextPage,
+  restoreDimensions,
+}: MasonryProps & { restoreDimensions: () => Promise<void> }) => {
   const masonryRef = useRef<MasonryInfiniteGrid>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [currentItemWidth, setCurrentItemWidth] = useState(0)
@@ -107,6 +136,7 @@ export const PictureMasonry = ({
   const [masonryItemsRadio, setMasonryItemsRadio] = useState<
     Record<string, number>
   >({})
+
   return (
     <div ref={containerRef} className="p-4">
       <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
@@ -122,12 +152,12 @@ export const PictureMasonry = ({
                 e.wait()
                 const nextGroupKey = (+e.groupKey! || 0) + 1
                 e.currentTarget.appendPlaceholders(10, nextGroupKey)
-                endReached().finally(() => {
-                  e.ready()
-                })
+                endReached()
+                  .then(restoreDimensions).finally(() => {
+                    e.ready()
+                  })
               }}
               scrollContainer={$scroll}
-              // useResizeObserver
               observeChildren
               useFirstRender
               gap={{ vertical: 24 }}
@@ -167,29 +197,16 @@ const ItemWrapperImpl = ({
   itemStyle: CSSProperties
   entryId: string
 } & React.HtmlHTMLAttributes<HTMLDivElement> &
-PropsWithChildren) => {
-  const urls = useEntryStore((state) =>
-    state.flatMapEntries[entryId]?.entries?.media?.map((m) => m.url),
-  )
-
-  useEffect(() => {
-    if (!urls) return
-    for (const url of urls) {
-      fetchImageDimensions(url)
-    }
-  }, [JSON.stringify(urls)])
-
-  return (
-    <div
-      style={{
-        ...style,
-        ...itemStyle,
-      }}
-      {...rest}
-    >
-      {children}
-    </div>
-  )
-}
+PropsWithChildren) => (
+  <div
+    style={{
+      ...style,
+      ...itemStyle,
+    }}
+    {...rest}
+  >
+    {children}
+  </div>
+)
 
 const ItemWrapper = memo(ItemWrapperImpl)

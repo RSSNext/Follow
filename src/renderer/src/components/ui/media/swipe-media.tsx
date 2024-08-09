@@ -15,7 +15,7 @@ import styles from "./index.module.css"
 
 const defaultProxySize = {
   width: 600,
-  height: 600,
+  height: 0,
 }
 export function SwipeMedia({
   media,
@@ -85,6 +85,7 @@ export function SwipeMedia({
                 <Media
                   className={cn(imgClassName, "size-full rounded-none")}
                   alt="cover"
+                  cacheDimensions={med.type === "photo"}
                   src={med.url}
                   type={med.type}
                   previewImageUrl={med.preview_image_url}
@@ -121,6 +122,7 @@ export function SwipeMedia({
                 e.stopPropagation()
                 onPreview?.(uniqMedia)
               }}
+              cacheDimensions={uniqMedia[0].type === "photo"}
               className="size-full rounded-none object-cover sm:transition-transform sm:duration-300 sm:ease-in-out sm:group-hover:scale-105"
               alt="cover"
               src={uniqMedia[0].url}

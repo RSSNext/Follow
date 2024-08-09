@@ -98,7 +98,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
         {entry.entries.media ? (
           <MasonryItemFixedDimensionWrapper url={entry.entries.media[0].url}>
             <SwipeMedia
-              forceSwiper
+
               media={entry.entries.media}
               className={cn(
                 "w-full shrink-0 grow rounded-md",
