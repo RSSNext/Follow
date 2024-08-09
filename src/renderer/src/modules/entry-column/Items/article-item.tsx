@@ -1,7 +1,7 @@
 import { Skeleton } from "@renderer/components/ui/skeleton"
-import { ListItem } from "@renderer/modules/entry-column/list-item-template"
+import { ListItem } from "@renderer/modules/entry-column/templates/list-item-template"
 
-import type { UniversalItemProps } from "./types"
+import type { UniversalItemProps } from "../types"
 
 export function ArticleItem({
   entryId,

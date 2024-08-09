@@ -10,9 +10,9 @@ import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
 
-import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
-import { StarIcon } from "./star-icon"
-import type { UniversalItemProps } from "./types"
+import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
+import { StarIcon } from "../star-icon"
+import type { UniversalItemProps } from "../types"
 
 export function ListItem({
   entryId,

@@ -29,7 +29,7 @@ export const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {
 
         <div className="center gap-4">
           <StyledButton onClick={() => props.resetError()} variant="primary">
-            Reset
+            Retry
           </StyledButton>
 
           <StyledButton

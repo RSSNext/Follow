@@ -10,7 +10,7 @@ import { forwardRef, memo, useCallback } from "react"
 import type { VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { GroupedVirtuoso, Virtuoso } from "react-virtuoso"
 
-import { DateItem } from "./date-item"
+import { DateItem } from "./components/DateItem"
 import { EntryColumnShortcutHandler } from "./EntryColumnShortcutHandler"
 
 export const EntryListContent = forwardRef<HTMLDivElement>((props, ref) => (

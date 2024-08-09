@@ -3,8 +3,8 @@ import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import { memo } from "react"
 
+import { SocialMediaDateItem } from "../Items/social-media-item"
 import { MarkAllButton } from "./mark-all-button"
-import { SocialMediaDateItem } from "./social-media-item"
 
 export const DateItem = memo(
   ({

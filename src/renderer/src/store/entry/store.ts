@@ -4,7 +4,11 @@ import {
   getEntriesParams,
   omitObjectUndefinedValue,
 } from "@renderer/lib/utils"
-import type { CombinedEntryModel, EntryModel, FeedModel, UserModel,
+import type {
+  CombinedEntryModel,
+  EntryModel,
+  FeedModel,
+  UserModel,
 } from "@renderer/models"
 import { EntryService } from "@renderer/services"
 import { produce } from "immer"
@@ -12,6 +16,7 @@ import { merge, omit } from "lodash-es"
 import type { EntryReadHistoriesModel } from "src/hono"
 
 import { feedActions } from "../feed"
+import { imageActions } from "../image"
 import { feedUnreadActions } from "../unread"
 import { userActions } from "../user"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
@@ -121,10 +126,14 @@ class EntryActions {
     )
   }
 
-  patchManyByFeedId(feedId: string, changed: Partial<CombinedEntryModel>, filter?: {
-    startTime: number
-    endTime: number
-  }) {
+  patchManyByFeedId(
+    feedId: string,
+    changed: Partial<CombinedEntryModel>,
+    filter?: {
+      startTime: number
+      endTime: number
+    },
+  ) {
     set((state) =>
       produce(state, (draft) => {
         const ids = draft.entries[feedId]
@@ -155,17 +164,6 @@ class EntryActions {
       entries.map((entryId) => this.markRead(feedId, entryId, true)),
     )
     feedUnreadActions.updateByFeedId(feedId, 0)
-  }
-
-  private patchAll(changed: Partial<CombinedEntryModel>) {
-    set((state) =>
-      produce(state, (draft) => {
-        for (const entry of Object.values(draft.flatMapEntries)) {
-          Object.assign(entry, changed)
-        }
-        return draft
-      }),
-    )
   }
 
   upsertMany(data: CombinedEntryModel[]) {
@@ -223,6 +221,20 @@ class EntryActions {
           // Push entryCollection
           if (item.collections) {
             entryCollection[item.entries.id] = item.collections
+          }
+
+          if (item.entries.media) {
+            for (const media of item.entries.media) {
+              if (!media.height || !media.width) continue
+              imageActions.saveImages([
+                {
+                  src: media.url,
+                  width: media.width,
+                  height: media.height,
+                  ratio: media.width / media.height,
+                },
+              ])
+            }
           }
         }
 

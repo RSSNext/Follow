@@ -2,7 +2,9 @@ import {
   setGeneralSetting,
   useGeneralSettingKey,
 } from "@renderer/atoms/settings/general"
+import { setUISetting, useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useWhoami } from "@renderer/atoms/user"
+import { ImpressionView } from "@renderer/components/common/ImpressionTracker"
 import { ActionButton } from "@renderer/components/ui/button"
 import { DividerVertical } from "@renderer/components/ui/divider"
 import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
@@ -12,19 +14,17 @@ import {
   views,
 } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
-import {
-  useRouteParms,
-} from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { useIsOnline } from "@renderer/hooks/common"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn, getOS, isBizId } from "@renderer/lib/utils"
+import { useAIDailyReportModal } from "@renderer/modules/ai/ai-daily/hooks"
+import { EntryHeader } from "@renderer/modules/entry-content/header"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC } from "react"
 
-import { useAIDailyReportModal } from "../ai/ai-daily/hooks"
-import { EntryHeader } from "../entry-content/header"
-import { MarkAllButton } from "./mark-all-button"
+import { MarkAllButton } from "../components/mark-all-button"
 
 export const EntryListHeader: FC<{
   totalCount: number
@@ -113,6 +113,7 @@ export const EntryListHeader: FC<{
           )}
 
           {view === FeedViewType.SocialMedia && <DailyReportButton />}
+          {view === FeedViewType.Pictures && <SwitchToMasonryButton />}
 
           {isOnline ? (
             feed?.ownerUserId === user?.id && isBizId(routerParams.feedId!) ?
@@ -170,11 +171,37 @@ export const EntryListHeader: FC<{
 const DailyReportButton: FC = () => {
   const present = useAIDailyReportModal()
   return (
-    <ActionButton
-      onClick={present}
-      tooltip="Daily Report"
-    >
+    <ActionButton onClick={present} tooltip="Daily Report">
       <i className="i-mgc-magic-2-cute-re" />
     </ActionButton>
+  )
+}
+
+const SwitchToMasonryButton = () => {
+  const isMasonry = useUISettingKey("pictureViewMasonry")
+  return (
+    <ImpressionView
+      event="Switch to Masonry"
+      properties={{
+        masonry: isMasonry ? 1 : 0,
+      }}
+    >
+      <ActionButton
+        onClick={() => {
+          setUISetting("pictureViewMasonry", !isMasonry)
+          window.posthog?.capture("Switch to Masonry", {
+            masonry: !isMasonry ? 1 : 0,
+            click: 1,
+          })
+        }}
+        tooltip={`Switch to ${isMasonry ? "Grid" : "Masonry"}`}
+      >
+        <i
+          className={cn(
+            !isMasonry ? "i-mgc-grid-cute-re" : "i-mgc-grid-2-cute-re",
+          )}
+        />
+      </ActionButton>
+    </ImpressionView>
   )
 }

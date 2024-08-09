@@ -2,6 +2,7 @@ import { tipcClient } from "@renderer/lib/client"
 import { getProxyUrl } from "@renderer/lib/img-proxy"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
+import { saveImageDimensionsToDb } from "@renderer/store/image/db"
 import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { memo, useMemo, useState } from "react"
 import { toast } from "sonner"
@@ -25,6 +26,7 @@ export type MediaProps = BaseProps &
       popper?: boolean
       type: "photo"
       previewImageUrl?: string
+      cacheDimensions?: boolean
     })
     | (VideoHTMLAttributes<HTMLVideoElement> & {
       proxy?: {
@@ -82,6 +84,18 @@ const MediaImpl: FC<MediaProps> = ({
     }
     props.onClick?.(e as any)
   })
+  const handleOnLoad: React.ReactEventHandler<HTMLImageElement> =
+    useEventCallback((e) => {
+      rest.onLoad?.(e as any)
+      if ("cacheDimensions" in props && props.cacheDimensions && src) {
+        saveImageDimensionsToDb(src, {
+          src,
+          width: e.currentTarget.naturalWidth,
+          height: e.currentTarget.naturalHeight,
+          ratio: e.currentTarget.naturalWidth / e.currentTarget.naturalHeight,
+        })
+      }
+    })
 
   const InnerContent = useMemo(() => {
     switch (type) {
@@ -98,6 +112,7 @@ const MediaImpl: FC<MediaProps> = ({
               mediaContainerClassName,
             )}
             src={imgSrc}
+            onLoad={handleOnLoad}
             onClick={handleClick}
             {...(!disableContextMenu ?
                 {
@@ -171,6 +186,7 @@ const MediaImpl: FC<MediaProps> = ({
     disableContextMenu,
     errorHandle,
     handleClick,
+    handleOnLoad,
     hidden,
     imgSrc,
     mediaContainerClassName,
