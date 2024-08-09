@@ -138,10 +138,7 @@ const CornerPlayerImpl = () => {
         <div className="relative truncate px-2 py-1 text-center text-sm">
           <Marquee
             play={playerValue.status === "playing"}
-            className="font-medium"
-            gradient
-            gradientWidth={24}
-            gradientColor="var(--fo-modal-background)"
+            className="mask-horizontal font-medium"
             speed={30}
           >
             {entry.entries.title}
