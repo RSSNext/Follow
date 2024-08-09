@@ -3,7 +3,8 @@ import { FeedViewType } from "@renderer/lib/enum"
 import { isBizId } from "@renderer/lib/utils"
 import { useEntryContentContext } from "@renderer/modules/entry-content/hooks"
 import { useEntry } from "@renderer/store/entry"
-import { useCallback } from "react"
+import { useFeedByIdSelector } from "@renderer/store/feed"
+import { useCallback, useMemo } from "react"
 
 import type { LinkProps } from "../../link"
 import {
@@ -14,9 +15,26 @@ import {
 } from "../../tooltip"
 import { ensureAndRenderTimeStamp } from "../utils"
 
+const safeUrl = (url: string, baseUrl: string) => {
+  try {
+    return new URL(url, baseUrl).href
+  } catch {
+    return url
+  }
+}
 export const MarkdownLink = (props: LinkProps) => {
-  const { view } = useEntryContentContext()
+  const { view, feedId } = useEntryContentContext()
 
+  const feedSiteUrl = useFeedByIdSelector(feedId, (feed) => feed?.siteUrl)
+
+  const populatedFullHref = useMemo(() => {
+    const { href } = props
+    if (!href) return "#"
+
+    if (href.startsWith("http")) return href
+    if (href.startsWith("/") && feedSiteUrl) return safeUrl(href, feedSiteUrl)
+    return href
+  }, [feedSiteUrl, props])
   const entryId = isBizId(props.href) ? props.href : null
   const entry = useEntry(entryId)
 
@@ -48,7 +66,7 @@ export const MarkdownLink = (props: LinkProps) => {
       <TooltipTrigger asChild>
         <a
           className="follow-link--underline font-semibold text-foreground no-underline"
-          href={props.href}
+          href={populatedFullHref}
           title={props.title}
           target="_blank"
           onClick={onClick}
@@ -63,7 +81,7 @@ export const MarkdownLink = (props: LinkProps) => {
       {!!props.href && (
         <TooltipPortal>
           <TooltipContent align="start" className="break-all" side="bottom">
-            {entry?.entries.title || props.href}
+            {entry?.entries.title || populatedFullHref}
           </TooltipContent>
         </TooltipPortal>
       )}
