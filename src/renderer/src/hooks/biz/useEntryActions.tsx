@@ -104,7 +104,7 @@ export const useEntryActions = ({
 }) => {
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
-    enabled: !!entry?.entries.url && !!view,
+    enabled: !!entry?.entries.url && view !== undefined,
     queryFn: async () => {
       try {
         await ofetch("http://localhost:41595")
