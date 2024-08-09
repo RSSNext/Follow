@@ -62,11 +62,6 @@ class EntryServiceStatic extends BaseService<EntryModel> {
     return EntryRelatedService.upsert(EntryRelatedKey.READ, record)
   }
 
-  /** @deprecated */
-  bulkStoreFeedId(record: Record<string, string>) {
-    return EntryRelatedService.upsert(EntryRelatedKey.FEED_ID, record)
-  }
-
   async bulkStoreCollection(record: Record<string, EntryCollection>) {
     return EntryRelatedService.upsert(EntryRelatedKey.COLLECTION, record)
   }

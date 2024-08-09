@@ -2,6 +2,7 @@ import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { Card, CardHeader } from "@renderer/components/ui/card"
 import { Collapse } from "@renderer/components/ui/collapse"
 import { LoadingCircle } from "@renderer/components/ui/loading"
+import { Markdown } from "@renderer/components/ui/markdown"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
   Tooltip,
@@ -12,10 +13,9 @@ import {
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import { parseMarkdown } from "@renderer/lib/parse-markdown"
 import { MarkAllButton } from "@renderer/modules/entry-column/components/mark-all-button"
 import type { FC } from "react"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 
 import { useParseDailyDate } from "./hooks"
 import type { DailyItemProps, DailyView } from "./types"
@@ -113,12 +113,6 @@ export const DailyReportContent: FC<{
   const [markAllButtonRef, setMarkAllButtonRef] =
     useState<HTMLButtonElement | null>(null)
 
-  const eleContent = useMemo(() => {
-    if (!content.data) return null
-    const { content: _content } = parseMarkdown(content.data)
-    return _content
-  }, [content.data])
-
   return (
     <Card className="border-none bg-transparent">
       <CardHeader className="space-y-0 p-0">
@@ -131,15 +125,15 @@ export const DailyReportContent: FC<{
             {content.isLoading ? (
               <LoadingCircle size="large" className="mt-8 text-center" />
             ) : (
-              eleContent && (
-                <div className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-theme-accent">
-                  {eleContent}
-                </div>
+              !!content.data && (
+                <Markdown className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-theme-accent">
+                  {content.data}
+                </Markdown>
               )
             )}
           </AutoResizeHeight>
         </ScrollArea.ScrollArea>
-        {eleContent && (
+        {!!content.data && (
           <button
             type="button"
             onClick={() => {
