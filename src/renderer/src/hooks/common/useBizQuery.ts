@@ -78,8 +78,3 @@ export function useAuthInfiniteQuery<
     },
   )
 }
-
-/**
- * @deprecated use `useAuthQuery` instead
- */
-export const useBizQuery = useAuthQuery

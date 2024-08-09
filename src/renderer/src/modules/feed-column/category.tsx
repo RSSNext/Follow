@@ -1,7 +1,3 @@
-import {
-  Collapsible,
-  CollapsibleTrigger,
-} from "@renderer/components/ui/collapsible"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { ROUTE_FEED_IN_FOLDER, views } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
@@ -118,11 +114,7 @@ function FeedCategoryImpl({
     })
 
   return (
-    <Collapsible
-      open={open}
-      onOpenChange={(o) => setOpen(o)}
-      onClick={(e) => e.stopPropagation()}
-    >
+    <div tabIndex={-1} onClick={stopPropagation}>
       {!!showCollapse && (
         <div
           className={cn(
@@ -191,8 +183,13 @@ function FeedCategoryImpl({
           }}
         >
           <div className="flex w-full min-w-0 items-center">
-            <CollapsibleTrigger
-              onClick={stopPropagation}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                setOpen(!open)
+              }}
+              data-state={open ? "open" : "close"}
               className={cn(
                 "flex h-8 items-center [&_.i-mgc-right-cute-fi]:data-[state=open]:rotate-90",
               )}
@@ -202,10 +199,10 @@ function FeedCategoryImpl({
                 <LoadingCircle size="small" className="mr-2 size-[16px]" />
               ) : (
                 <div className="mr-2 size-[16px]">
-                  <i className="i-mgc-right-cute-fi  transition-transform" />
+                  <i className="i-mgc-right-cute-fi transition-transform" />
                 </div>
               )}
-            </CollapsibleTrigger>
+            </button>
             <span
               className={cn(
                 "truncate",
@@ -249,7 +246,7 @@ function FeedCategoryImpl({
           </m.div>
         )}
       </AnimatePresence>
-    </Collapsible>
+    </div>
   )
 }
 
