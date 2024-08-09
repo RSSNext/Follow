@@ -171,9 +171,19 @@ export const EntryListHeader: FC<{
 const DailyReportButton: FC = () => {
   const present = useAIDailyReportModal()
   return (
-    <ActionButton onClick={present} tooltip="Daily Report">
-      <i className="i-mgc-magic-2-cute-re" />
-    </ActionButton>
+    <ImpressionView event="Daily Report Modal">
+      <ActionButton
+        onClick={() => {
+          present()
+          window.posthog?.capture("Daily Report Modal", {
+            click: 1,
+          })
+        }}
+        tooltip="Daily Report"
+      >
+        <i className="i-mgc-magic-2-cute-re" />
+      </ActionButton>
+    </ImpressionView>
   )
 }
 

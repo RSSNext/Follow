@@ -7,7 +7,10 @@ import {
 import { FeedViewType } from "@renderer/lib/enum"
 
 import { DayOf } from "./constants"
-import { DailyReportContent, DailyReportTitle } from "./daily"
+import {
+  DailyReportModalContent,
+  DailyReportTitle,
+} from "./daily"
 import { useParseDailyDate } from "./hooks"
 
 const tabs = [DayOf.Today, DayOf.Yesterday]
@@ -29,10 +32,7 @@ export const FeedDailyModalContent = () => {
       <div className="flex grow flex-col items-center overflow-auto">
         {tabs.map((tab: any) => (
           <TabsContent key={tab} value={tab}>
-            <DailyReportContent
-              viewportClassName="max-h-[100vh] h-auto"
-              // TODO support other view types
-              autoResize={false}
+            <DailyReportModalContent
               view={FeedViewType.SocialMedia}
               {...(tab === DayOf.Today ? today : yesterday)}
             />

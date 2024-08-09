@@ -5,6 +5,7 @@ import "remark-gh-alerts/styles/github-base.css"
 
 import remarkCalloutDirectives from "@microflash/remark-callout-directives"
 import { MarkdownLink } from "@renderer/components/ui/markdown/renderers"
+import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
 import { Fragment, jsx, jsxs } from "react/jsx-runtime"
@@ -17,8 +18,15 @@ import remarkRehype from "remark-rehype"
 import { unified } from "unified"
 import { VFile } from "vfile"
 
-export const parseMarkdown = (content: string) => {
+export interface RemarkOptions {
+  components: Partial<Components>
+}
+export const parseMarkdown = (
+  content: string,
+  options?: Partial<RemarkOptions>,
+) => {
   const file = new VFile(content)
+  const { components } = options || {}
 
   const pipeline = unified()
     .use(remarkParse)
@@ -73,6 +81,7 @@ export const parseMarkdown = (content: string) => {
       components: {
         a: ({ node, ...props }) =>
           createElement(MarkdownLink, { ...props } as any),
+        ...components,
       },
     }),
   }

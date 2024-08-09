@@ -1,5 +1,6 @@
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { FeedViewType } from "@renderer/lib/enum"
+import { isBizId } from "@renderer/lib/utils"
 import { useEntryContentContext } from "@renderer/modules/entry-content/hooks"
 import { useEntry } from "@renderer/store/entry"
 import { useCallback } from "react"
@@ -16,18 +17,21 @@ import { ensureAndRenderTimeStamp } from "../utils"
 export const MarkdownLink = (props: LinkProps) => {
   const { view } = useEntryContentContext()
 
-  const entryId = (/^\w{17}$/.test(props.href)) ? props.href : null
+  const entryId = isBizId(props.href) ? props.href : null
   const entry = useEntry(entryId)
 
   const navigate = useNavigateEntry()
-  const onClick = useCallback((e: React.MouseEvent) => {
-    if (entryId) {
-      e.preventDefault()
-      navigate({
-        entryId,
-      })
-    }
-  }, [entryId, navigate])
+  const onClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (entryId) {
+        e.preventDefault()
+        navigate({
+          entryId,
+        })
+      }
+    },
+    [entryId, navigate],
+  )
 
   const parseTimeStamp = view === FeedViewType.Audios
   if (parseTimeStamp) {

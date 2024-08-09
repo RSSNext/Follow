@@ -1,8 +1,17 @@
+import { FeedIcon } from "@renderer/components/feed-icon"
+import { EmptyIcon } from "@renderer/components/icons/empty"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { Card, CardContent } from "@renderer/components/ui/card"
 import { Collapse } from "@renderer/components/ui/collapse"
+import { RelativeTime } from "@renderer/components/ui/datetime"
+import type { LinkProps } from "@renderer/components/ui/link"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { Markdown } from "@renderer/components/ui/markdown"
+import { MarkdownLink } from "@renderer/components/ui/markdown/renderers"
+import { Media } from "@renderer/components/ui/media"
+import { usePreviewMedia } from "@renderer/components/ui/media/hooks"
+import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
+import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
   Tooltip,
@@ -13,9 +22,15 @@ import {
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import { cn } from "@renderer/lib/utils"
+import { nextFrame } from "@renderer/lib/dom"
+import { cn, isBizId } from "@renderer/lib/utils"
 import { MarkAllButton } from "@renderer/modules/entry-column/components/mark-all-button"
-import { Fragment, useState } from "react"
+import { StarIcon } from "@renderer/modules/entry-column/star-icon"
+import { Queries } from "@renderer/queries"
+import { useEntry } from "@renderer/store/entry"
+import { useFeedById } from "@renderer/store/feed"
+import { m, useAnimationControls } from "framer-motion"
+import { useEffect, useState } from "react"
 
 import { useParseDailyDate } from "./hooks"
 import type { DailyItemProps, DailyView } from "./types"
@@ -88,21 +103,12 @@ export const DailyReportTitle = ({
   </div>
 )
 
-export const DailyReportContent: Component<{
-  view: DailyView
-  startDate: number
-  endDate: number
-  viewportClassName?: string
-  autoResize?: boolean
-}> = ({
+const useQueryData = ({
   endDate,
   startDate,
-  autoResize = true,
   view,
-  className,
-  viewportClassName,
-}) => {
-  const content = useAuthQuery(
+}: Pick<DailyReportContentProps, "view" | "startDate" | "endDate">) =>
+  useAuthQuery(
     defineQuery(["daily", view, startDate, endDate], async () => {
       const res = await apiClient.ai.daily.$get({
         query: {
@@ -119,19 +125,32 @@ export const DailyReportContent: Component<{
     },
   )
 
+interface DailyReportContentProps {
+  view: DailyView
+  startDate: number
+  endDate: number
+}
+
+export const DailyReportContent: Component<DailyReportContentProps> = ({
+  endDate,
+  startDate,
+
+  view,
+  className,
+}) => {
+  const content = useQueryData({ endDate, startDate, view })
   const [markAllButtonRef, setMarkAllButtonRef] =
     useState<HTMLButtonElement | null>(null)
 
-  const ResizeSwitch = autoResize ? AutoResizeHeight : Fragment
   return (
     <Card className="border-none bg-transparent">
       <CardContent className={cn("space-y-0 p-0", className)}>
         <ScrollArea.ScrollArea
           mask={false}
           flex
-          viewportClassName={cn("max-h-[calc(100vh-500px)]", viewportClassName)}
+          viewportClassName="max-h-[calc(100vh-500px)]"
         >
-          <ResizeSwitch spring>
+          <AutoResizeHeight spring>
             {content.isLoading ? (
               <LoadingCircle size="large" className="mt-8 text-center" />
             ) : (
@@ -141,7 +160,7 @@ export const DailyReportContent: Component<{
                 </Markdown>
               )
             )}
-          </ResizeSwitch>
+          </AutoResizeHeight>
         </ScrollArea.ScrollArea>
         {!!content.data && (
           <button
@@ -164,5 +183,212 @@ export const DailyReportContent: Component<{
         )}
       </CardContent>
     </Card>
+  )
+}
+
+export const DailyReportModalContent: Component<DailyReportContentProps> = ({
+  endDate,
+  startDate,
+  view,
+}) => {
+  const content = useQueryData({ endDate, startDate, view })
+  const [markAllButtonRef, setMarkAllButtonRef] =
+    useState<HTMLButtonElement | null>(null)
+
+  return (
+    <div className="center flex-col">
+      {content.isLoading ? (
+        <LoadingCircle
+          size="large"
+          className="center pointer-events-none absolute inset-0 mt-8 text-center"
+        />
+      ) : content.data ?
+          (
+            <Markdown
+              components={{
+                a: RelatedEntryLink,
+              }}
+              className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-theme-accent"
+            >
+              {content.data}
+            </Markdown>
+          ) :
+          (
+            <div className="center pointer-events-none absolute inset-0 translate-y-6 flex-col gap-4 opacity-80">
+              <EmptyIcon />
+              <p>No AI news found for this period.</p>
+            </div>
+          )}
+
+      {!!content.data && (
+        <button
+          type="button"
+          onClick={() => {
+            markAllButtonRef?.click()
+          }}
+          className="!mt-4 ml-auto flex items-center rounded-lg py-1 pr-2 duration-200 hover:!bg-theme-button-hover"
+        >
+          <MarkAllButton
+            ref={setMarkAllButtonRef}
+            filter={{
+              startTime: startDate,
+              endTime: endDate,
+            }}
+            className="pointer-events-none"
+          />
+          <span>Mark all as read</span>
+        </button>
+      )}
+    </div>
+  )
+}
+
+const RelatedEntryLink = (props: LinkProps) => {
+  const { href, children } = props
+  const entryId = isBizId(href) ? href : null
+
+  const { present } = useModalStack()
+
+  if (!entryId) {
+    return <MarkdownLink {...props} />
+  }
+  return (
+    <button
+      type="button"
+      className="follow-link--underline cursor-pointer font-semibold text-foreground no-underline"
+      onClick={() => {
+        present({
+          title: "Entry Preview",
+          CustomModalComponent: NoopChildren,
+          content: () => <EntryPreview entryId={entryId} />,
+          overlay: false,
+          clickOutsideToDismiss: true,
+        })
+      }}
+    >
+      {children}
+      <i className="i-mgc-arrow-right-up-cute-re size-[0.9em] translate-y-[2px] opacity-70" />
+    </button>
+  )
+}
+
+const EntryPreview = ({ entryId }: { entryId: string }) => {
+  const modal = useCurrentModal()
+  useAuthQuery(Queries.entries.byId(entryId))
+
+  const variants = {
+    enter: {
+      x: 0,
+      opacity: 1,
+    },
+    initial: {
+      x: 700,
+      opacity: 0.9,
+    },
+    exit: {
+      x: 750,
+      opacity: 0,
+    },
+  }
+  const entry = useEntry(entryId)
+  const feed = useFeedById(entry?.feedId || "")
+  const controller = useAnimationControls()
+  useEffect(() => {
+    nextFrame(() => controller.start("enter"))
+  }, [controller])
+
+  const previewMedia = usePreviewMedia()
+  if (!entry || !feed) {
+    return null
+  }
+
+  return (
+    <div className="flex justify-end" onClick={modal.dismiss}>
+      <m.div
+        onClick={(e) => e.stopPropagation()}
+        tabIndex={-1}
+        initial="initial"
+        animate={controller}
+        variants={variants}
+        transition={{
+          type: "spring",
+          mass: 0.4,
+          tension: 120,
+          friction: 1.4,
+        }}
+        exit="exit"
+        layout="size"
+        className={cn(
+          "shadow-perfect relative flex flex-col items-center rounded-xl border bg-theme-background p-8",
+          "mr-4 mt-4 max-h-[500px] w-[60ch] max-w-full overflow-auto",
+        )}
+      >
+        <button
+          onClick={modal.dismiss}
+          className="center fixed right-6 top-6 size-8 text-foreground/60"
+          type="button"
+        >
+          <i className="i-mgc-close-cute-re" />
+        </button>
+        <div className="flex w-full gap-3">
+          <FeedIcon
+            fallback
+            className="mask-squircle mask"
+            feed={feed}
+            entry={entry.entries}
+            size={36}
+          />
+          <div className="flex flex-col">
+            <div className="w-[calc(100%-10rem)] space-x-1">
+              <span className="font-semibold">{entry.entries.author}</span>
+              <span className="text-zinc-500">·</span>
+              <span className="text-zinc-500">
+                <RelativeTime date={entry.entries.publishedAt} />
+              </span>
+            </div>
+            <div
+              className={cn(
+                "relative mt-0.5 whitespace-pre-line text-base",
+                !!entry.collections && "pr-5",
+              )}
+            >
+              <div
+                className={cn(
+                  "rounded-xl p-3 align-middle text-[15px]",
+                  "rounded-tl-none bg-zinc-600/5 dark:bg-zinc-500/20",
+                  "mt-1 -translate-x-3",
+                )}
+              >
+                {entry.entries.description}
+              </div>
+              {!!entry.collections && <StarIcon />}
+            </div>
+
+            <div className="mt-1 flex gap-2 overflow-x-auto">
+              {entry.entries.media?.map((media, i, mediaList) => (
+                <Media
+                  key={media.url}
+                  src={media.url}
+                  type={media.type}
+                  previewImageUrl={media.preview_image_url}
+                  className="size-28 shrink-0"
+                  loading="lazy"
+                  proxy={{
+                    width: 224,
+                    height: 224,
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    previewMedia(mediaList, i)
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* End right column */}
+          </div>
+        </div>
+      </m.div>
+    </div>
   )
 }
