@@ -1,9 +1,10 @@
 import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid"
+import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
 import { FeedViewType } from "@renderer/lib/enum"
 import { getEntry } from "@renderer/store/entry"
 import { imageActions } from "@renderer/store/image"
-import { throttle } from "lodash-es"
+import { debounce, throttle } from "lodash-es"
 import type { CSSProperties, FC, PropsWithChildren } from "react"
 import {
   memo,
@@ -15,6 +16,7 @@ import {
 } from "react"
 import { useEventCallback } from "usehooks-ts"
 
+import { batchMarkRead } from "../hooks"
 import { EntryItemSkeleton } from "../item"
 import {
   MasonryItemsAspectRatioContext,
@@ -137,6 +139,28 @@ const PictureMasonryImpl = ({
     Record<string, number>
   >({})
 
+  const scrollMarkUnread = useGeneralSettingKey("scrollMarkUnread")
+  const inViewMarkRead = useGeneralSettingKey("renderMarkUnread")
+  const handleScroll = useEventCallback(
+    debounce(() => {
+      if (!scrollMarkUnread) return
+      const $masonryRef = masonryRef.current
+      if (!$masonryRef) return
+      const items = $masonryRef.getVisibleItems()
+
+      const first = items[0]
+      if (!first) return
+      const itemIndex = first.element?.dataset.index
+      if (itemIndex === undefined) return
+      const prevIndex = +itemIndex - 1
+      if (Number.isNaN(prevIndex)) return
+      if (prevIndex < 0) return
+      const markReadIdsSlice = data.slice(0, prevIndex + 1)
+
+      batchMarkRead(markReadIdsSlice)
+    }, 100),
+  )
+
   return (
     <div ref={containerRef} className="p-4">
       <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
@@ -146,6 +170,21 @@ const PictureMasonryImpl = ({
           >
             <MasonryInfiniteGrid
               ref={masonryRef}
+              onRenderComplete={useEventCallback((e) => {
+                if (!inViewMarkRead) {
+                  return
+                }
+                const entryIds: string[] = []
+                for (const mount of e.mounted) {
+                  const index = +(mount.element?.dataset.index as string)
+                  if (Number.isNaN(index)) return
+                  const entryId = data[index]
+
+                  if (!entryId) continue
+                  entryIds.push(entryId)
+                }
+                batchMarkRead(entryIds)
+              })}
               placeholder={<LoadingSkeletonItem itemStyle={itemStyle} />}
               onRequestAppend={(e) => {
                 if (!hasNextPage) return
@@ -153,10 +192,12 @@ const PictureMasonryImpl = ({
                 const nextGroupKey = (+e.groupKey! || 0) + 1
                 e.currentTarget.appendPlaceholders(10, nextGroupKey)
                 endReached()
-                  .then(restoreDimensions).finally(() => {
+                  .then(restoreDimensions)
+                  .finally(() => {
                     e.ready()
                   })
               }}
+              onChangeScroll={handleScroll}
               scrollContainer={$scroll}
               observeChildren
               useFirstRender
@@ -165,7 +206,8 @@ const PictureMasonryImpl = ({
             >
               {data.map((entryId, index) => (
                 <ItemWrapper
-                  data-grid-groupkey={index}
+                  data-grid-groupkey={(index / 5) | 0}
+                  data-index={index}
                   itemStyle={itemStyle}
                   key={entryId}
                   entryId={entryId}

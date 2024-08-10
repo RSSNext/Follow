@@ -201,7 +201,7 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
   }
 }
 
-function batchMarkRead(ids: string[]) {
+export function batchMarkRead(ids: string[]) {
   const batchLikeIds = [] as [string, string][]
   const entriesId2Map = entryActions.getFlattenMapEntries()
   for (const id of ids) {

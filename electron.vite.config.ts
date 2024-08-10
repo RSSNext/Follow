@@ -41,7 +41,7 @@ export default defineConfig({
       sentryVitePlugin({
         org: "follow-rg",
         project: "follow",
-        disable: process.env.NODE_ENV === "development",
+        disable: !process.env.CI,
         bundleSizeOptimizations: {
           excludeDebugStatements: true,
           // Only relevant if you added `browserTracingIntegration`
@@ -53,7 +53,7 @@ export default defineConfig({
         },
         moduleMetadata: {
           appVersion:
-            process.env.NODE_ENV === "development" ? "dev" : pkg.version,
+            pkg.version,
         },
         sourcemaps: {
           filesToDeleteAfterUpload: ["dist/renderer/assets/*.js.map"],
