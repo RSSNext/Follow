@@ -7,6 +7,7 @@ export interface ModalProps {
   icon?: ReactNode
 
   CustomModalComponent?: FC<PropsWithChildren>
+
   content: FC<ModalActionsInternal>
   clickOutsideToDismiss?: boolean
   modalClassName?: string
