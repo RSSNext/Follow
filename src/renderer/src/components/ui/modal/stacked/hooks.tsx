@@ -35,6 +35,7 @@ export const useModalStack = (options?: ModalStackOptions) => {
           const uiSettings = getUISettings()
           const modalConfig: Partial<ModalProps> = {
             draggable: uiSettings.modalDraggable,
+            modal: true,
           }
           jotaiStore.set(modalStackAtom, (p) => {
             const modalProps: ModalProps = {

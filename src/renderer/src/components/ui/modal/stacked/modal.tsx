@@ -1,6 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog"
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { AppErrorBoundary } from "@renderer/components/common/AppErrorBoundary"
+import { SafeFragment } from "@renderer/components/common/Fragment"
 import { m } from "@renderer/components/common/Motion"
 import { ErrorComponentType } from "@renderer/components/errors"
 import { useSwitchHotKeyScope } from "@renderer/hooks/common/useSwitchHotkeyScope"
@@ -67,6 +68,7 @@ export const ModalInternal = memo(
             draggable = false,
             resizeable = false,
             resizeDefaultSize,
+            modal = true,
           } = item
 
           const setStack = useSetAtom(modalStackAtom)
@@ -230,7 +232,7 @@ export const ModalInternal = memo(
           if (CustomModalComponent) {
             return (
               <Wrapper>
-                <Dialog.Root open onOpenChange={onClose}>
+                <Dialog.Root open onOpenChange={onClose} modal={modal}>
                   <Dialog.Portal>
                     <Dialog.DialogTitle className="sr-only">
                       {title}
@@ -239,14 +241,17 @@ export const ModalInternal = memo(
                       <div
                         ref={edgeElementRef}
                         className={cn(
-                          "no-drag-region fixed inset-0 z-20 overflow-auto",
+                          "no-drag-region fixed z-20",
+                          modal ? "inset-0 overflow-auto" : "left-0 top-0",
                           currentIsClosing ?
                             "!pointer-events-none" :
                             "!pointer-events-auto",
                           modalContainerClassName,
                         )}
                         onClick={
-                          clickOutsideToDismiss && canClose ? dismiss : undefined
+                          clickOutsideToDismiss && canClose && modal ?
+                            dismiss :
+                            undefined
                         }
                         style={zIndexStyle}
                       >
@@ -265,24 +270,27 @@ export const ModalInternal = memo(
             )
           }
 
-          const ResizeSwitch = resizeable ? Resizable : Fragment
+          const ResizeSwitch = resizeable ? Resizable : SafeFragment
 
           return (
             <Wrapper>
-              <Dialog.Root open onOpenChange={onClose}>
+              <Dialog.Root modal={modal} open onOpenChange={onClose}>
                 <Dialog.Portal>
                   <Dialog.Content asChild>
                     <div
                       ref={edgeElementRef}
                       style={zIndexStyle}
                       className={cn(
-                        "fixed inset-0 z-20 flex",
+                        "fixed z-20 flex",
+                        modal ? "inset-0 overflow-auto" : "left-0 top-0",
                         currentIsClosing && "!pointer-events-none",
                         modalContainerClassName,
                         !isResizeable && "center",
                       )}
                       onClick={
-                        clickOutsideToDismiss && canClose ? dismiss : noticeModal
+                        clickOutsideToDismiss && canClose && modal ?
+                          dismiss :
+                          noticeModal
                       }
                     >
                       <m.div

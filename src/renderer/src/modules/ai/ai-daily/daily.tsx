@@ -10,7 +10,7 @@ import { Markdown } from "@renderer/components/ui/markdown"
 import { MarkdownLink } from "@renderer/components/ui/markdown/renderers"
 import { Media } from "@renderer/components/ui/media"
 import { usePreviewMedia } from "@renderer/components/ui/media/hooks"
-import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
+import { useModalStack } from "@renderer/components/ui/modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
@@ -22,11 +22,9 @@ import {
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import { nextFrame } from "@renderer/lib/dom"
+import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn, isBizId } from "@renderer/lib/utils"
-import {
-  FlatMarkAllButton,
-} from "@renderer/modules/entry-column/components/mark-all-button"
+import { FlatMarkAllButton } from "@renderer/modules/entry-column/components/mark-all-button"
 import { StarIcon } from "@renderer/modules/entry-column/star-icon"
 import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry"
@@ -242,7 +240,9 @@ const RelatedEntryLink: Components["a"] = (props: LinkProps) => {
           CustomModalComponent: NoopChildren,
           content: () => <EntryPreview entryId={entryId} />,
           overlay: false,
+          modal: false,
           clickOutsideToDismiss: true,
+          modalContainerClassName: "right-0 left-[auto]",
         })
       }}
     >
@@ -253,7 +253,6 @@ const RelatedEntryLink: Components["a"] = (props: LinkProps) => {
 }
 
 const EntryPreview = ({ entryId }: { entryId: string }) => {
-  const modal = useCurrentModal()
   useAuthQuery(Queries.entries.byId(entryId))
 
   const variants = {
@@ -273,22 +272,26 @@ const EntryPreview = ({ entryId }: { entryId: string }) => {
   const entry = useEntry(entryId)
   const feed = useFeedById(entry?.feedId || "")
   const controller = useAnimationControls()
+
+  const isDisplay = !!entry && !!feed
   useEffect(() => {
-    nextFrame(() => controller.start("enter"))
-  }, [controller])
+    if (isDisplay) {
+      nextFrame(() => controller.start("enter"))
+    }
+  }, [controller, isDisplay])
 
   const previewMedia = usePreviewMedia()
-  if (!entry || !feed) {
-    return null
-  }
+
+  if (!isDisplay) return null
 
   return (
-    <div className="flex justify-end" onClick={modal.dismiss}>
+    <>
       <m.div
-        onClick={(e) => e.stopPropagation()}
         tabIndex={-1}
         initial="initial"
         animate={controller}
+        onPointerDown={stopPropagation}
+        onPointerDownCapture={stopPropagation}
         variants={variants}
         transition={{
           type: "spring",
@@ -303,13 +306,6 @@ const EntryPreview = ({ entryId }: { entryId: string }) => {
           "mr-4 mt-4 max-h-[500px] w-[60ch] max-w-full overflow-auto",
         )}
       >
-        <button
-          onClick={modal.dismiss}
-          className="center fixed right-6 top-6 size-8 text-foreground/60"
-          type="button"
-        >
-          <i className="i-mgc-close-cute-re" />
-        </button>
         <div className="flex w-full gap-3">
           <FeedIcon
             fallback
@@ -318,7 +314,7 @@ const EntryPreview = ({ entryId }: { entryId: string }) => {
             entry={entry.entries}
             size={36}
           />
-          <div className="flex flex-col">
+          <div className="flex min-w-0 grow flex-col">
             <div className="w-[calc(100%-10rem)] space-x-1">
               <span className="font-semibold">{entry.entries.author}</span>
               <span className="text-zinc-500">·</span>
@@ -340,35 +336,37 @@ const EntryPreview = ({ entryId }: { entryId: string }) => {
                 )}
               >
                 {entry.entries.description}
+
+                {!!entry.entries.media?.length && (
+                  <div className="mt-1 flex w-full gap-2 overflow-x-auto">
+                    {entry.entries.media.map((media, i, mediaList) => (
+                      <Media
+                        key={media.url}
+                        src={media.url}
+                        type={media.type}
+                        previewImageUrl={media.preview_image_url}
+                        className="size-28 shrink-0 cursor-zoom-in"
+                        loading="lazy"
+                        proxy={{
+                          width: 224,
+                          height: 224,
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          previewMedia(mediaList, i)
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
               {!!entry.collections && <StarIcon />}
-            </div>
-
-            <div className="mt-1 flex gap-2 overflow-x-auto">
-              {entry.entries.media?.map((media, i, mediaList) => (
-                <Media
-                  key={media.url}
-                  src={media.url}
-                  type={media.type}
-                  previewImageUrl={media.preview_image_url}
-                  className="size-28 shrink-0"
-                  loading="lazy"
-                  proxy={{
-                    width: 224,
-                    height: 224,
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    previewMedia(mediaList, i)
-                  }}
-                />
-              ))}
             </div>
 
             {/* End right column */}
           </div>
         </div>
       </m.div>
-    </div>
+    </>
   )
 }

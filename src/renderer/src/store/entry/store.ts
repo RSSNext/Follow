@@ -69,6 +69,7 @@ class EntryActions {
         // patch data, should omit `read` because the network race condition or server cache
         omit(data, "read") as any,
       ])
+      feedActions.upsertMany([data.feeds])
       userActions.upsert(data.users as Record<string, UserModel>)
       if (data.entryReadHistories) {
         this.updateReadHistory(entryId, data.entryReadHistories)

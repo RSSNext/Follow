@@ -22,6 +22,9 @@ export interface ModalProps {
   canClose?: boolean
   resizeable?: boolean
   resizeDefaultSize?: { width: number, height: number }
+
+  modal?: boolean
+
 }
 export interface ModalStackOptions {
   wrapper?: FC
