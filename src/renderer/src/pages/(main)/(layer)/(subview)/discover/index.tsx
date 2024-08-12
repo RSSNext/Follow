@@ -1,4 +1,3 @@
-import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
   Tabs,
   TabsContent,
@@ -11,6 +10,8 @@ import { Recommendations } from "@renderer/modules/discover/recommendations"
 import { DiscoverRSS3 } from "@renderer/modules/discover/rss3-form"
 import { createElement } from "react"
 import { useSearchParams } from "react-router-dom"
+
+import { useSubViewTitle } from "../hooks"
 
 const tabs = [
   {
@@ -42,13 +43,9 @@ const tabs = [
 
 export function Component() {
   const [search, setSearch] = useSearchParams()
+  useSubViewTitle("Discover")
   return (
-    <ScrollArea.ScrollArea
-      mask={false}
-      flex
-      rootClassName="w-full"
-      viewportClassName="pb-10 pt-40 [&>div]:items-center [&>div]:gap-8"
-    >
+    <>
       <div className="text-2xl font-bold">Discover</div>
       <Tabs
         value={search.get("type") || "search"}
@@ -81,7 +78,7 @@ export function Component() {
         ))}
       </Tabs>
       <Recommendations />
-    </ScrollArea.ScrollArea>
+    </>
   )
 }
 
