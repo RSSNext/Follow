@@ -14,6 +14,7 @@ const failedList = new Set<string | undefined>()
 
 type BaseProps = {
   mediaContainerClassName?: string
+  showFallback?: boolean
 }
 export type MediaProps = BaseProps &
   (
@@ -47,7 +48,7 @@ const MediaImpl: FC<MediaProps> = ({
   mediaContainerClassName,
   ...props
 }) => {
-  const { src, style, type, previewImageUrl, ...rest } = props
+  const { src, style, type, previewImageUrl, showFallback, ...rest } = props
   const [hidden, setHidden] = useState(!src)
   const [imgSrc, setImgSrc] = useState(() =>
     proxy && src && !failedList.has(src) ?
@@ -198,7 +199,9 @@ const MediaImpl: FC<MediaProps> = ({
     type,
   ])
 
-  if (hidden) return <FallbackMedia {...props} />
+  if (hidden) {
+    if (showFallback) { return <FallbackMedia {...props} /> } else { return null }
+  }
   return (
     <div className={cn("overflow-hidden rounded", className)} style={style}>
       {InnerContent}
@@ -232,9 +235,13 @@ const FallbackMedia: FC<MediaProps> = ({
     <p className="flex items-center gap-1">
       Go to
       {" "}
-      <a href={props.src} target="_blank" rel="noreferrer" className="follow-link--underline">
+      <a
+        href={props.src}
+        target="_blank"
+        rel="noreferrer"
+        className="follow-link--underline"
+      >
         {props.src}
-
       </a>
       <i className="i-mgc-external-link-cute-re" />
     </p>

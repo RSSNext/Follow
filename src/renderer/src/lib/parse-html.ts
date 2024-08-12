@@ -156,6 +156,7 @@ const Img: Components["img"] = ({ node, ...props }) => {
       mediaContainerClassName: tw`max-w-full inline size-auto`,
       popper: true,
       className: tw`inline`,
+      showFallback: true,
     })
   }
 
