@@ -315,6 +315,9 @@ export const ModalInternal = memo(
                         }}
                       >
                         <ResizeSwitch
+                          enable={{
+                            bottomRight: true,
+                          }}
                           onResizeStart={handleResizeEnable}
                           defaultSize={resizeDefaultSize}
                           className="flex grow flex-col"

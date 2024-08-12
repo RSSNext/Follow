@@ -7,7 +7,7 @@ import { cn } from "@renderer/lib/utils"
 import { useDragControls } from "framer-motion"
 import { Resizable } from "re-resizable"
 import type { PointerEventHandler, PropsWithChildren } from "react"
-import { useCallback, useEffect, useRef } from "react"
+import { Suspense, useCallback, useEffect, useRef } from "react"
 
 import { settings } from "../constants"
 import { SettingsSidebarTitle } from "../title"
@@ -78,6 +78,9 @@ export function SettingModalLayout(
       >
         <Resizable
           onResizeStart={handlePointDown}
+          enable={{
+            bottomRight: true,
+          }}
           style={{ ...resizeableStyle, position: "static" }}
           defaultSize={{
             width: 800,
@@ -119,7 +122,7 @@ export function SettingModalLayout(
               ))}
             </div>
             <div className="relative flex h-full flex-1 flex-col bg-theme-background pt-1">
-              {children}
+              <Suspense>{children}</Suspense>
             </div>
           </div>
         </Resizable>

@@ -20,7 +20,7 @@ import { imageActions } from "../image"
 import { feedUnreadActions } from "../unread"
 import { userActions } from "../user"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
-import { interval_batchMarkRead } from "./helper"
+import { internal_batchMarkRead } from "./helper"
 import type { EntryState, FlatEntryModel } from "./types"
 
 const createState = (): EntryState => ({
@@ -325,7 +325,7 @@ class EntryActions {
       // Send api request
       async () => {
         if (read) {
-          await interval_batchMarkRead([feedId, entryId])
+          await internal_batchMarkRead([feedId, entryId])
         } else {
           await apiClient.reads.$delete({
             json: {

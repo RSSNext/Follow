@@ -14,6 +14,9 @@ patchedDependencies:
   immer@10.1.1:
     hash: og7mbnoo5vh43tjlw5rbmrdbvu
     path: patches/immer@10.1.1.patch
+  re-resizable@6.9.17:
+    hash: yitcmpfwcomg2fky72uc3lhk2i
+    path: patches/re-resizable@6.9.17.patch
   sonner@1.5.0:
     hash: 6s3tquyt5wnkqaogymn3mkivuq
     path: patches/sonner@1.5.0.patch
@@ -231,7 +234,7 @@ importers:
         version: 4.0.1
       re-resizable:
         specifier: 6.9.17
-        version: 6.9.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 6.9.17(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-error-boundary:
         specifier: 4.0.13
         version: 4.0.13(react@18.3.1)
@@ -13516,7 +13519,7 @@ snapshots:
       murmur-32: 0.2.0
     optional: true
 
-  re-resizable@6.9.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  re-resizable@6.9.17(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)

@@ -40,7 +40,7 @@ export function Component() {
           "absolute inset-x-0 top-0 z-10 p-4",
           "grid grid-cols-[1fr_auto_1fr] items-center gap-4",
           isTitleSticky &&
-          "group border-b bg-white/80 backdrop-blur-xl dark:bg-black/90",
+          "group border-b bg-zinc-50/80 backdrop-blur-xl dark:bg-neutral-900/90",
         )}
       >
         <MotionButtonBase

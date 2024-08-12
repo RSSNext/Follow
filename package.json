@@ -146,7 +146,6 @@
     "@tailwindcss/container-queries": "0.1.1",
     "@tailwindcss/typography": "0.5.13",
     "@types/lodash-es": "4.17.12",
-
     "@types/node": "^20.14.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -182,7 +181,8 @@
       "sonner@1.5.0": "patches/sonner@1.5.0.patch",
       "hono@4.4.7": "patches/hono@4.4.7.patch",
       "immer@10.1.1": "patches/immer@10.1.1.patch",
-      "@mozilla/readability@0.5.0": "patches/@mozilla__readability@0.5.0.patch"
+      "@mozilla/readability@0.5.0": "patches/@mozilla__readability@0.5.0.patch",
+      "re-resizable@6.9.17": "patches/re-resizable@6.9.17.patch"
     }
   },
   "simple-git-hooks": {
