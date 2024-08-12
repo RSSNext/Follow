@@ -60,7 +60,7 @@ export default defineConfig({
       }),
     ],
     build: {
-      sourcemap: true,
+      sourcemap: !!process.env.CI,
     },
     define: {
       APP_VERSION: JSON.stringify(pkg.version),

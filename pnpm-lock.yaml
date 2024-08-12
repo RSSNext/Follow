@@ -139,9 +139,6 @@ importers:
       '@use-gesture/react':
         specifier: 10.3.1
         version: 10.3.1(react@18.3.1)
-      '@vscode/vscode-languagedetection':
-        specifier: 1.0.22
-        version: 1.0.22
       '@yornaath/batshit':
         specifier: 0.10.1
         version: 0.10.1
@@ -319,6 +316,9 @@ importers:
       vfile:
         specifier: 6.0.2
         version: 6.0.2
+      vscode-languagedetection:
+        specifier: npm:@vscode/vscode-languagedetection@^1.0.22
+        version: '@vscode/vscode-languagedetection@1.0.22'
       zod:
         specifier: 3.23.8
         version: 3.23.8

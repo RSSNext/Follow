@@ -20,9 +20,9 @@ export const readerRoute = {
   detectCodeStringLanguage: t.procedure
     .input<{ codeString: string }>()
     .action(async ({ input }) => {
-      const { ModelOperations } = require("@vscode/vscode-languagedetection")
-      const modulOperations = new ModelOperations()
-      const result = await modulOperations.runModel(input.codeString)
+      const { ModelOperations } = require("vscode-languagedetection")
+      const modelOperations = new ModelOperations()
+      const result = await modelOperations.runModel(input.codeString)
       return result
     }),
 }

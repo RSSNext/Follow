@@ -1,4 +1,3 @@
-import pkg from "@pkg"
 import { attachOpenInEditor } from "@renderer/lib/dev"
 import { getNewIssueUrl } from "@renderer/lib/issues"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
@@ -6,8 +5,8 @@ import { useEffect, useRef } from "react"
 import { isRouteErrorResponse, useRouteError } from "react-router-dom"
 import { toast } from "sonner"
 
-import { Logo } from "../icons/logo"
 import { StyledButton } from "../ui/button"
+import { PoweredByFooter } from "./PoweredByFooter"
 
 export function ErrorElement() {
   const error = useRouteError()
@@ -85,20 +84,8 @@ export function ErrorElement() {
 
       <FallbackIssue message={message} stack={stack} />
       <div className="grow" />
-      <footer className="center mt-12 flex gap-2">
-        Powered by
-        {" "}
-        <Logo className="size-5" />
-        {" "}
-        <a
-          href={pkg.homepage}
-          className="cursor-pointer font-bold text-theme-accent"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {APP_NAME}
-        </a>
-      </footer>
+
+      <PoweredByFooter />
     </div>
   )
 }

@@ -69,7 +69,6 @@
     "@tanstack/react-query-devtools": "5.51.15",
     "@tanstack/react-query-persist-client": "5.51.15",
     "@use-gesture/react": "10.3.1",
-    "@vscode/vscode-languagedetection": "1.0.22",
     "@yornaath/batshit": "0.10.1",
     "builder-util-runtime": "9.2.5-alpha.3",
     "class-variance-authority": "0.7.0",
@@ -129,6 +128,7 @@
     "use-context-selector": "2.0.0",
     "usehooks-ts": "3.1.0",
     "vfile": "6.0.2",
+    "vscode-languagedetection": "npm:@vscode/vscode-languagedetection@^1.0.22",
     "zod": "3.23.8",
     "zustand": "4.5.4"
   },

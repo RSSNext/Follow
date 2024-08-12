@@ -24,6 +24,7 @@ const ymlMapsMap = {
   win32: "latest.yml",
 }
 
+const keepModules = new Set(["font-list", "vscode-languagedetection"])
 // remove folders & files not to be included in the app
 async function cleanSources(
   buildPath,
@@ -41,7 +42,7 @@ async function cleanSources(
   ])
 
   // Keep only node_modules to be included in the app
-  const modules = new Set(["font-list", "@vscode/vscode-languagedetection"])
+
   await Promise.all([
     ...(await readdir(buildPath).then((items) =>
       items
@@ -50,13 +51,18 @@ async function cleanSources(
     )),
     ...(await readdir(path.join(buildPath, "node_modules")).then((items) =>
       items
-        .filter((item) => !modules.has(item))
+        .filter((item) => !keepModules.has(item))
         .map((item) => rimraf(path.join(buildPath, "node_modules", item))),
     )),
   ])
 
   callback()
 }
+
+const ignorePattern = new RegExp(
+  `^/node_modules/(?!${[...keepModules].join("|")})`,
+)
+
 const config: ForgeConfig = {
   packagerConfig: {
     appBundleId: "is.follow",
@@ -70,7 +76,7 @@ const config: ForgeConfig = {
     ],
     afterCopy: [cleanSources],
     asar: true,
-    ignore: [/^\/node_modules\/(?!font-list|@vscode\/vscode-languagedetection)/],
+    ignore: [ignorePattern],
     prune: true,
     ...(process.env.APPLE_ID &&
       process.env.APPLE_PASSWORD &&
@@ -171,7 +177,11 @@ const config: ForgeConfig = {
       makeResults = makeResults.map((result) => {
         result.artifacts = result.artifacts.map((artifact) => {
           if (artifactRegex.test(artifact)) {
-            const newArtifact = `${path.dirname(artifact)}/${result.packageJSON.name}-${result.packageJSON.version}-${platformNamesMap[result.platform]}-${result.arch}${path.extname(artifact)}`
+            const newArtifact = `${path.dirname(artifact)}/${
+              result.packageJSON.name
+            }-${result.packageJSON.version}-${
+              platformNamesMap[result.platform]
+            }-${result.arch}${path.extname(artifact)}`
             fs.renameSync(artifact, newArtifact)
 
             try {
@@ -200,17 +210,18 @@ const config: ForgeConfig = {
       yml.releaseDate = new Date().toISOString()
       const ymlStr =
         `version: ${yml.version}\n` +
-        `files:\n${
-        yml.files
-          .map((file) => (
+        `files:\n${yml.files
+          .map(
+            (file) =>
               `  - url: ${file.url}\n` +
               `    sha512: ${file.sha512}\n` +
-              `    size: ${file.size}\n`
-            ))
-          .join("")
-        }releaseDate: ${yml.releaseDate}\n`
+              `    size: ${file.size}\n`,
+          )
+          .join("")}releaseDate: ${yml.releaseDate}\n`
 
-      const ymlPath = `${path.dirname(makeResults[0].artifacts[0])}/${ymlMapsMap[makeResults[0].platform]}`
+      const ymlPath = `${path.dirname(makeResults[0].artifacts[0])}/${
+        ymlMapsMap[makeResults[0].platform]
+      }`
       fs.writeFileSync(ymlPath, ymlStr)
 
       makeResults.push({
