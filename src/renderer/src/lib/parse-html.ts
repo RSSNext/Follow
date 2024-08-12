@@ -44,6 +44,7 @@ export const parseHtml = async (
         "video": ["src", "poster"],
       },
     })
+
     .use(rehypeInferDescriptionMeta)
     .use(rehypeStringify)
 
@@ -165,16 +166,27 @@ function extractCodeFromHtml(htmlString: string) {
   const tempDiv = document.createElement("div")
   tempDiv.innerHTML = htmlString
 
+  // 1. line break via <div />
   const divElements = tempDiv.querySelectorAll("div")
 
   let code = ""
 
-  divElements.forEach((div) => {
-    code += `${div.textContent}\n`
-  })
+  if (divElements.length > 0) {
+    divElements.forEach((div) => {
+      code += `${div.textContent}\n`
+    })
+    return code
+  }
 
-  if (divElements.length === 0) {
-    return tempDiv.textContent
+  // 2. line wrapper like <span><span>...</span></span>
+  const spanElements = tempDiv.querySelectorAll("span > span")
+
+  if (spanElements.length > 0) {
+    for (const node of tempDiv.children) {
+      code += `${node.textContent}\n`
+    }
+
+    return code
   }
 
   return code

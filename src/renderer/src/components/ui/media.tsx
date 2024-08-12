@@ -198,6 +198,7 @@ const MediaImpl: FC<MediaProps> = ({
     type,
   ])
 
+  if (hidden) return <FallbackMedia {...props} />
   return (
     <div className={cn("overflow-hidden rounded", className)} style={style}>
       {InnerContent}
@@ -208,3 +209,34 @@ const MediaImpl: FC<MediaProps> = ({
 export const Media: FC<MediaProps> = memo((props) => (
   <MediaImpl {...props} key={props.src} />
 ))
+
+const FallbackMedia: FC<MediaProps> = ({
+  type,
+  mediaContainerClassName,
+  ...props
+}) => (
+  <div
+    className={cn(
+      !(props.width || props.height) && "size-full",
+      "center relative h-24 rounded bg-zinc-100 object-cover dark:bg-neutral-900",
+      "not-prose flex max-h-full flex-col space-y-1",
+      mediaContainerClassName,
+    )}
+    style={{
+      height: props.height ? `${props.height}px` : "",
+      width: props.width ? `${props.width}px` : "100%",
+      ...props.style,
+    }}
+  >
+    <p>Media loaded failed</p>
+    <p className="flex items-center gap-1">
+      Go to
+      {" "}
+      <a href={props.src} target="_blank" rel="noreferrer" className="follow-link--underline">
+        {props.src}
+
+      </a>
+      <i className="i-mgc-external-link-cute-re" />
+    </p>
+  </div>
+)
