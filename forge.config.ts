@@ -11,14 +11,9 @@ import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 import setLanguages from "electron-packager-languages"
+import { dump } from "js-yaml"
 import { rimraf, rimrafSync } from "rimraf"
 
-const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
-const platformNamesMap = {
-  darwin: "macos",
-  linux: "linux",
-  win32: "windows",
-}
 const ymlMapsMap = {
   darwin: "latest-mac.yml",
   linux: "latest-linux.yml",
@@ -114,8 +109,9 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerZIP({}, ["darwin"]),
-    new MakerDMG({
+    new MakerDMG((arch) => ({
       overwrite: true,
+      name: `Follow${arch === "universal" ? "" : `-${arch}`}`,
       background: "resources/dmg-background.png",
       icon: "resources/dmg-icon.icns",
       iconSize: 160,
@@ -141,7 +137,7 @@ const config: ForgeConfig = {
           path: "/Applications",
         },
       ],
-    }),
+    })),
     new MakerSquirrel({
       name: "Follow",
       setupIcon: "resources/icon.ico",
@@ -180,74 +176,35 @@ const config: ForgeConfig = {
   ],
   hooks: {
     postMake: async (config, makeResults) => {
-      const yml: {
-        version?: string
-        files: {
+      const updaterObject = {
+        version: makeResults[0].packageJSON.version,
+        files: [] as {
           url: string
           sha512: string
           size: number
-        }[]
-        releaseDate?: string
-      } = {
-        version: makeResults[0].packageJSON.version,
-        files: [],
+        }[],
+        releaseDate: new Date().toISOString(),
       }
-      makeResults = makeResults.map((result) => {
-        result.artifacts = result.artifacts.map((artifact) => {
-          if (artifactRegex.test(artifact)) {
-            const newArtifact = `${path.dirname(artifact)}/${
-              result.packageJSON.name
-            }-${result.packageJSON.version}-${
-              platformNamesMap[result.platform]
-            }-${result.arch}${path.extname(artifact)}`
-            fs.renameSync(artifact, newArtifact)
 
-            try {
-              const fileData = fs.readFileSync(newArtifact)
-              const hash = crypto
-                .createHash("sha512")
-                .update(fileData)
-                .digest("base64")
-              const { size } = fs.statSync(newArtifact)
+      for (const result of makeResults) {
+        const fileData = fs.readFileSync(result.artifacts[0])
+        const hash = crypto
+          .createHash("sha512")
+          .update(fileData)
+          .digest("base64")
+        const { size } = fs.statSync(result.artifacts[0])
 
-              yml.files.push({
-                url: path.basename(newArtifact),
-                sha512: hash,
-                size,
-              })
-            } catch {
-              console.error(`Failed to hash ${newArtifact}`)
-            }
-            return newArtifact
-          } else {
-            return artifact
-          }
+        updaterObject.files.push({
+          url: path.basename(result.artifacts[0]),
+          sha512: hash,
+          size,
         })
-        return result
-      })
-      yml.releaseDate = new Date().toISOString()
-      const ymlStr =
-        `version: ${yml.version}\n` +
-        `files:\n${yml.files
-          .map(
-            (file) =>
-              `  - url: ${file.url}\n` +
-              `    sha512: ${file.sha512}\n` +
-              `    size: ${file.size}\n`,
-          )
-          .join("")}releaseDate: ${yml.releaseDate}\n`
+      }
 
-      const ymlPath = `${path.dirname(makeResults[0].artifacts[0])}/${
-        ymlMapsMap[makeResults[0].platform]
-      }`
-      fs.writeFileSync(ymlPath, ymlStr)
-
-      makeResults.push({
-        artifacts: [ymlPath],
-        platform: makeResults[0].platform,
-        arch: makeResults[0].arch,
-        packageJSON: makeResults[0].packageJSON,
-      })
+      fs.writeFileSync(
+        resolve(__dirname, "./out/make", ymlMapsMap[makeResults[0].platform]),
+        dump(updaterObject),
+      )
 
       return makeResults
     },
