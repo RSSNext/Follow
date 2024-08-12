@@ -1,7 +1,7 @@
 import crypto from "node:crypto"
-import fs from "node:fs"
+import fs, { readdirSync } from "node:fs"
 import { readdir } from "node:fs/promises"
-import path from "node:path"
+import path, { resolve } from "node:path"
 
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
 import { MakerDMG } from "@electron-forge/maker-dmg"
@@ -11,7 +11,7 @@ import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
 import setLanguages from "electron-packager-languages"
-import { rimraf } from "rimraf"
+import { rimraf, rimrafSync } from "rimraf"
 
 const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
 const platformNamesMap = {
@@ -26,6 +26,7 @@ const ymlMapsMap = {
 }
 
 const keepModules = new Set(["font-list", "vscode-languagedetection"])
+const keepLanguages = new Set(["en", "en_GB", "zh_CN"])
 // remove folders & files not to be included in the app
 async function cleanSources(
   buildPath,
@@ -41,6 +42,19 @@ async function cleanSources(
     "package.json",
     "resources",
   ])
+
+  if (platform === "darwin") {
+    const frameworkResourcePath = resolve(
+      buildPath,
+      "../../Frameworks/Electron Framework.framework/Versions/A/Resources",
+    )
+
+    for (const file of readdirSync(frameworkResourcePath)) {
+      if (file.endsWith(".lproj") && !keepLanguages.has(file.split(".")[0])) {
+        rimrafSync(resolve(frameworkResourcePath, file))
+      }
+    }
+  }
 
   // Keep only node_modules to be included in the app
 
@@ -76,7 +90,7 @@ const config: ForgeConfig = {
       },
     ],
 
-    afterCopy: [cleanSources, setLanguages(["en", "en_GB", "zh_CN"])],
+    afterCopy: [cleanSources, setLanguages([...keepLanguages])],
     asar: true,
     ignore: [ignorePattern],
 
@@ -101,6 +115,7 @@ const config: ForgeConfig = {
   makers: [
     new MakerZIP({}, ["darwin"]),
     new MakerDMG({
+      overwrite: true,
       background: "resources/dmg-background.png",
       icon: "resources/dmg-icon.icns",
       iconSize: 160,
