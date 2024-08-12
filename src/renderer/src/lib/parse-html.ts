@@ -189,5 +189,5 @@ function extractCodeFromHtml(htmlString: string) {
     return code
   }
 
-  return code
+  return tempDiv.textContent
 }

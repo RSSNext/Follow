@@ -24,6 +24,7 @@ export interface UISettings {
   readerFontFamily: string
   readerRenderInlineStyle: boolean
   codeHighlightTheme: string
+  guessCodeLanguage: boolean
 
   // view
   pictureViewMasonry: boolean

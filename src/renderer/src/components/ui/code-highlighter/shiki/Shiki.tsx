@@ -1,4 +1,8 @@
-import { useUISettingSelector } from "@renderer/atoms/settings/ui"
+import {
+  useUISettingKey,
+  useUISettingSelector,
+} from "@renderer/atoms/settings/ui"
+import { isElectronBuild } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { cn } from "@renderer/lib/utils"
 import type { FC } from "react"
@@ -53,8 +57,10 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
     language || "plaintext",
   )
 
+  const guessCodeLanguage = useUISettingKey("guessCodeLanguage")
   useInsertionEffect(() => {
-    if (language || !ELECTRON) return
+    if (!guessCodeLanguage) return
+    if (language || !isElectronBuild) return
 
     if (!bundledLanguagesKeysSet) {
       import("shiki/langs")
@@ -79,7 +85,7 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
           }
         })
     }
-  }, [])
+  }, [guessCodeLanguage])
 
   const loadThemesRef = useRef([] as string[])
   const loadLanguagesRef = useRef([] as string[])

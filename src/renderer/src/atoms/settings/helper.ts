@@ -1,7 +1,10 @@
 import { useRefValue } from "@renderer/hooks/common"
 import { createAtomHooks } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
-import { createSettingBuilder } from "@renderer/modules/settings/setting-builder"
+import type { SettingItem } from "@renderer/modules/settings/setting-builder"
+import {
+  createSettingBuilder,
+} from "@renderer/modules/settings/setting-builder"
 import { useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
@@ -87,9 +90,10 @@ export const createDefineSettingItem =
         label: string
         description?: string
         onChange?: (value: T[K]) => void
+        hide?: boolean
       },
-    ) => {
-    const { label, description, onChange } = options
+    ): any => {
+    const { label, description, onChange, hide } = options
     return {
       key,
       label,
@@ -98,7 +102,8 @@ export const createDefineSettingItem =
         if (onChange) return onChange(value as any)
         setSetting(key, value as any)
       },
-    } as any
+      disabled: hide,
+    } as SettingItem<any>
   }
 
 export const createSetting = <T extends object>(

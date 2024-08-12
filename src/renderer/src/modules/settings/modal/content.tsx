@@ -4,7 +4,7 @@ import { useCurrentModal } from "@renderer/components/ui/modal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { SettingsTitle } from "@renderer/modules/settings/title"
 import type { FC } from "react"
-import { Suspense, useDeferredValue } from "react"
+import { Suspense, useDeferredValue, useLayoutEffect, useState } from "react"
 
 import { settings } from "../constants"
 import { SettingTabProvider, useSettingTab } from "./context"
@@ -53,6 +53,14 @@ const Content = () => {
   const key = useDeferredValue(useSettingTab() || "general")
   const { Component, loader } = pages[key]
 
+  const [scroller, setScroller] = useState<HTMLDivElement | null>(null)
+
+  useLayoutEffect(() => {
+    if (scroller) {
+      scroller.scrollTop = 0
+    }
+  }, [key])
+
   if (!Component) return null
 
   return (
@@ -61,6 +69,7 @@ const Content = () => {
       <Close />
       <ScrollArea.ScrollArea
         mask={false}
+        ref={setScroller}
         rootClassName="h-full grow flex-1 shrink-0 overflow-auto pl-8 pr-7"
         viewportClassName="pr-1 min-h-full [&>div]:min-h-full [&>div]:relative pb-8"
       >
