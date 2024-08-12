@@ -127,6 +127,17 @@ export const parseHtml = async (
             language: language.toLowerCase(),
           })
         },
+        table: ({ node, ...props }) => createElement(
+          "div",
+          {
+            className: "w-full overflow-x-auto",
+          },
+
+          createElement("table", {
+            ...props,
+            className: tw`w-full my-0`,
+          }),
+        ),
       },
     }),
   }
