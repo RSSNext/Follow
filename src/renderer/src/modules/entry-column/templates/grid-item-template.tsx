@@ -30,26 +30,30 @@ export function GridItem({
   return (
     <div className={cn("p-1.5", wrapperClassName)}>
       {children}
-      <div
-        className={cn(
-          "relative px-2 py-1 text-sm",
-          !asRead &&
-          "before:absolute before:-left-0.5 before:top-[14.5px] before:block before:size-1.5 before:rounded-full before:bg-theme-accent",
-        )}
-      >
-        <div
-          className={cn(
-            "relative mb-1 mt-1.5 truncate font-medium leading-none",
-            !!entry.collections && "pr-5",
-          )}
-        >
-          <TitleMarquee>
-            <EntryTranslation
-              source={entry.entries.title}
-              target={translation?.title}
-            />
-          </TitleMarquee>
-          {!!entry.collections && <StarIcon />}
+      <div className={cn("relative px-2 py-1 text-sm")}>
+        <div className="flex items-center">
+          <div
+            className={cn(
+              "mr-1 size-1.5 shrink-0 self-center rounded-full bg-theme-accent duration-200",
+              asRead && "mr-0 w-0",
+            )}
+          />
+          <div
+            className={cn(
+              "relative mb-1 mt-1.5 flex w-full items-center gap-1 truncate font-medium leading-none",
+              !!entry.collections && "pr-5",
+            )}
+          >
+            <TitleMarquee className="min-w-0 grow">
+              <EntryTranslation
+                source={entry.entries.title}
+                target={translation?.title}
+              />
+            </TitleMarquee>
+            {!!entry.collections && (
+              <StarIcon className="static shrink-0 self-end" />
+            )}
+          </div>
         </div>
         <div className="flex items-center gap-1 truncate text-[13px]">
           <FeedIcon

@@ -7,14 +7,19 @@ export const TitleMarquee = ({
   children,
   speed = 30,
   play,
+  className,
   ...rest
-}: PropsWithChildren & MarqueeProps) => {
+}: PropsWithChildren &
+MarqueeProps & {
+  className?: string
+}) => {
   const [hovered, setHovered] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
   const $wrapper = useRef<HTMLDivElement>(null)
   return (
     <div
+      className={className}
       ref={$wrapper}
       // className="[&_*]:scrollbar-none"
       onMouseEnter={useCallback(() => {
@@ -49,7 +54,13 @@ export const TitleMarquee = ({
         })
       }, [])}
     >
-      <Marquee className="overflow-hidden" play={hovered} ref={ref} speed={speed} {...rest}>
+      <Marquee
+        className="overflow-hidden"
+        play={hovered}
+        ref={ref}
+        speed={speed}
+        {...rest}
+      >
         {children}
       </Marquee>
     </div>
