@@ -10,7 +10,7 @@ export default defineConfig(
       lineBreak: "after",
     },
     lessOpinionated: true,
-    ignores: ["src/renderer/src/hono.ts", "src/hono.ts"],
+    ignores: ["src/renderer/src/hono.ts", "src/hono.ts", "resources/**"],
     preferESM: false,
   },
   {

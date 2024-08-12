@@ -41,7 +41,7 @@ async function cleanSources(
   ])
 
   // Keep only node_modules to be included in the app
-  const modules = new Set(["font-list"])
+  const modules = new Set(["font-list", "@vscode/vscode-languagedetection"])
   await Promise.all([
     ...(await readdir(buildPath).then((items) =>
       items
@@ -70,7 +70,7 @@ const config: ForgeConfig = {
     ],
     afterCopy: [cleanSources],
     asar: true,
-    ignore: [/^\/node_modules\/(?!font-list)/],
+    ignore: [/^\/node_modules\/(?!font-list|@vscode\/vscode-languagedetection)/],
     prune: true,
     ...(process.env.APPLE_ID &&
       process.env.APPLE_PASSWORD &&

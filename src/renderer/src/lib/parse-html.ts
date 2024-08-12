@@ -92,14 +92,13 @@ export const parseHtml = async (
         pre: ({ node, ...props }) => {
           if (!props.children) return null
 
-          let language = "plaintext"
+          let language = ""
           let codeString = null as string | null
           if (props.className?.includes("language-")) {
             language = props.className.replace("language-", "")
           }
 
           if (typeof props.children !== "object") {
-            language = "plaintext"
             codeString = props.children.toString()
           } else {
             if (
@@ -115,9 +114,8 @@ export const parseHtml = async (
             const code =
               "props" in props.children && props.children.props.children
             if (!code) return null
-            const $text = document.createElement("div")
-            $text.innerHTML = renderToString(code)
-            codeString = $text.textContent
+
+            codeString = extractCodeFromHtml(renderToString(code))
           }
 
           if (!codeString) return null
@@ -127,17 +125,18 @@ export const parseHtml = async (
             language: language.toLowerCase(),
           })
         },
-        table: ({ node, ...props }) => createElement(
-          "div",
-          {
-            className: "w-full overflow-x-auto",
-          },
+        table: ({ node, ...props }) =>
+          createElement(
+            "div",
+            {
+              className: "w-full overflow-x-auto",
+            },
 
-          createElement("table", {
-            ...props,
-            className: tw`w-full my-0`,
-          }),
-        ),
+            createElement("table", {
+              ...props,
+              className: tw`w-full my-0`,
+            }),
+          ),
       },
     }),
   }
@@ -160,4 +159,23 @@ const Img: Components["img"] = ({ node, ...props }) => {
   }
 
   return createElement(MarkdownBlockImage, nextProps)
+}
+
+function extractCodeFromHtml(htmlString: string) {
+  const tempDiv = document.createElement("div")
+  tempDiv.innerHTML = htmlString
+
+  const divElements = tempDiv.querySelectorAll("div")
+
+  let code = ""
+
+  divElements.forEach((div) => {
+    code += `${div.textContent}\n`
+  })
+
+  if (divElements.length === 0) {
+    return tempDiv.textContent
+  }
+
+  return code
 }

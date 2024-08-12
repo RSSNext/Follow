@@ -16,10 +16,18 @@ export const env = createEnv({
   },
 
   emptyStringAsUndefined: true,
-  runtimeEnv:
-    "process" in globalThis ? process.env : injectExternalEnv(import.meta.env),
+  runtimeEnv: getRuntimeEnv(),
+
   skipValidation: !isDev,
 })
+
+function getRuntimeEnv() {
+  try {
+    return injectExternalEnv(import.meta.env)
+  } catch {
+    return process.env
+  }
+}
 
 function injectExternalEnv<T>(originEnv: T): T {
   if (!("document" in globalThis)) {

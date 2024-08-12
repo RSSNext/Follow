@@ -52,8 +52,7 @@ export default defineConfig({
           excludeReplayWorker: true,
         },
         moduleMetadata: {
-          appVersion:
-            pkg.version,
+          appVersion: pkg.version,
         },
         sourcemaps: {
           filesToDeleteAfterUpload: ["dist/renderer/assets/*.js.map"],
