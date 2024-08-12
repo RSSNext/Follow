@@ -392,6 +392,9 @@ importers:
       electron-devtools-installer:
         specifier: 3.2.0
         version: 3.2.0
+      electron-packager-languages:
+        specifier: 0.5.0
+        version: 0.5.0
       electron-vite:
         specifier: ^2.3.0
         version: 2.3.0(vite@5.3.4(@types/node@20.14.12))
@@ -3616,6 +3619,10 @@ packages:
   electron-log@5.1.7:
     resolution: {integrity: sha512-/PjrS9zGkrZCDTHt6IgNE3FeciBbi4wd7U76NG9jAoNXF99E9IJdvBkqvaUJ1NjLojYDKs0kTvn9YhKy1/Zi+Q==}
     engines: {node: '>= 14'}
+
+  electron-packager-languages@0.5.0:
+    resolution: {integrity: sha512-ryJsVXgHq0+7eZpJ+YSUQNYUnH4yPq2J4gXtmP9HEq8N6PHtygLEmohKMm4VrwI5qTir4HRCxy+O1UNo8mbwgg==}
+    engines: {node: '>6.0.0'}
 
   electron-publish@24.13.1:
     resolution: {integrity: sha512-2ZgdEqJ8e9D17Hwp5LEq5mLQPjqU3lv/IALvgp+4W8VeNhryfGhYEQC/PgDPMrnWUp+l60Ou5SJLsu+k4mhQ8A==}
@@ -10806,6 +10813,10 @@ snapshots:
 
   electron-log@5.1.7: {}
 
+  electron-packager-languages@0.5.0:
+    dependencies:
+      rimraf: 2.6.3
+
   electron-publish@24.13.1:
     dependencies:
       '@types/fs-extra': 9.0.13
@@ -13882,7 +13893,6 @@ snapshots:
   rimraf@2.6.3:
     dependencies:
       glob: 7.2.3
-    optional: true
 
   rimraf@3.0.2:
     dependencies:

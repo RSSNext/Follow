@@ -10,6 +10,7 @@ import { MakerZIP } from "@electron-forge/maker-zip"
 import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
+import setLanguages from "electron-packager-languages"
 import { rimraf } from "rimraf"
 
 const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
@@ -74,9 +75,11 @@ const config: ForgeConfig = {
         schemes: ["follow"],
       },
     ],
-    afterCopy: [cleanSources],
+
+    afterCopy: [cleanSources, setLanguages(["en", "en_GB", "zh_CN"])],
     asar: true,
     ignore: [ignorePattern],
+
     prune: true,
     ...(process.env.APPLE_ID &&
       process.env.APPLE_PASSWORD &&
