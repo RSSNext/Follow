@@ -13,6 +13,7 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import { ActionButton, MotionButtonBase } from "../button"
 import { microReboundPreset } from "../constants/spring"
 import { useCurrentModal } from "../modal"
+import { VideoPlayer } from "./video-player"
 
 const Wrapper: Component<{
   src: string
@@ -111,7 +112,7 @@ export const PreviewMediaContent: FC<{
     return (
       <Wrapper src={src}>
         {media[0].type === "video" ? (
-          <video
+          <VideoPlayer
             src={src}
             controls
             autoPlay
@@ -157,7 +158,7 @@ export const PreviewMediaContent: FC<{
             className="center !flex"
           >
             {med.type === "video" ? (
-              <video
+              <VideoPlayer
                 src={med.url}
                 controls
                 className="max-h-full max-w-full object-contain"

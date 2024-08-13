@@ -1,14 +1,18 @@
 import { tipcClient } from "@renderer/lib/client"
+import { nextFrame } from "@renderer/lib/dom"
 import { getProxyUrl } from "@renderer/lib/img-proxy"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { saveImageDimensionsToDb } from "@renderer/store/image/db"
+import { useForceUpdate } from "framer-motion"
 import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { memo, useMemo, useState } from "react"
 import { toast } from "sonner"
 import { useEventCallback } from "usehooks-ts"
 
 import { usePreviewMedia } from "./media/hooks"
+import type { VideoPlayerRef } from "./media/video-player"
+import { VideoPlayer } from "./media/video-player"
 
 const failedList = new Set<string | undefined>()
 
@@ -164,18 +168,7 @@ const MediaImpl: FC<MediaProps> = ({
             )}
             onClick={handleClick}
           >
-            {previewImageUrl ? (
-              <img src={previewImageUrl} className="size-full object-cover" />
-            ) : (
-              <video
-                src={src}
-                muted
-                className="relative size-full object-cover"
-              />
-            )}
-            <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-3xl text-white/80">
-              <i className="i-mgc-play-cute-fi" />
-            </div>
+            <VideoPreview src={src!} previewImageUrl={previewImageUrl} />
           </div>
         )
       }
@@ -199,7 +192,9 @@ const MediaImpl: FC<MediaProps> = ({
     type,
   ])
 
-  if (hidden && showFallback) { return <FallbackMedia {...props} /> }
+  if (hidden && showFallback) {
+    return <FallbackMedia {...props} />
+  }
   return (
     <div className={cn("overflow-hidden rounded", className)} style={style}>
       {InnerContent}
@@ -245,3 +240,51 @@ const FallbackMedia: FC<MediaProps> = ({
     </p>
   </div>
 )
+
+const VideoPreview: FC<{
+  src: string
+  previewImageUrl?: string
+}> = ({ src, previewImageUrl }) => {
+  const [isInitVideoPlayer, setIsInitVideoPlayer] = useState(!previewImageUrl)
+
+  const [videoRef, setVideoRef] = useState<VideoPlayerRef | null>(null)
+  const isPaused = videoRef?.getState().paused
+  const [forceUpdate] = useForceUpdate()
+  return (
+    <div
+      onMouseEnter={() => {
+        videoRef?.controls.play()?.then(forceUpdate)
+      }}
+      onMouseLeave={() => {
+        videoRef?.controls.pause()
+        nextFrame(forceUpdate)
+      }}
+    >
+      {isInitVideoPlayer ? (
+        <img
+          src={previewImageUrl}
+          className="size-full object-cover"
+          onMouseEnter={() => {
+            setIsInitVideoPlayer(true)
+          }}
+        />
+      ) : (
+        <VideoPlayer
+          src={src}
+          ref={setVideoRef}
+          muted
+          className="relative size-full object-cover"
+        />
+      )}
+
+      <div
+        className={cn(
+          "absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-3xl text-white/80 duration-200",
+          isPaused ? "opacity-100" : "opacity-0",
+        )}
+      >
+        <i className="i-mgc-play-cute-fi" />
+      </div>
+    </div>
+  )
+}
