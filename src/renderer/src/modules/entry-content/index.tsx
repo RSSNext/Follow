@@ -1,3 +1,4 @@
+import { repository } from "@pkg"
 import {
   ReadabilityStatus,
   useEntryInReadabilityStatus,
@@ -8,9 +9,8 @@ import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { StyledButton } from "@renderer/components/ui/button"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { ROUTE_FEED_PENDING } from "@renderer/constants"
+import { isWebBuild, ROUTE_FEED_PENDING } from "@renderer/constants"
 import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
 import {
   useRouteParamsSelector,
@@ -81,7 +81,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
   const [content, setContent] = useState<JSX.Element>()
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Fallback data, if local data is broken should fallback to cached query data.
     const processContent = entry?.entries.content ?? data?.entries.content
     if (processContent) {
@@ -306,7 +306,7 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
   const result = useEntryReadabilityContent(entryId)
 
   const [renderer, setRenderer] = useState<ReactNode | null>(null)
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!result) return
     const { content: processContent } = result
 
@@ -322,7 +322,7 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
   }, [result, parseHtml])
 
   return (
-    <div>
+    <div className="grow">
       {result ? (
         <p className="rounded-xl border p-3 text-sm opacity-80">
           <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
@@ -330,8 +330,11 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
           anomalies, please go to the source site to view the original content.
         </p>
       ) : (
-        <div className="center mt-12">
+        <div className="center mt-16 flex flex-col gap-2">
           <LoadingCircle size="large" />
+          <span className="text-sm">
+            Fetching original content and processing...
+          </span>
         </div>
       )}
       {renderer}
@@ -343,27 +346,57 @@ const NoContent: FC<{
   id: string
   url: string
 }> = ({ id, url }) => {
-  const toggle = useEntryReadabilityToggle({
-    id,
-    url,
-  })
-
   const status = useEntryInReadabilityStatus(id)
-  if (status !== ReadabilityStatus.INITIAL) {
+
+  if (
+    status !== ReadabilityStatus.INITIAL &&
+    status !== ReadabilityStatus.FAILURE
+  ) {
     return null
   }
   return (
     <div className="center">
       <div className="space-y-2 text-balance text-center text-sm text-zinc-400">
-        <span>No content</span>
-        {url && window.electron && (
-          <div className="flex flex-col items-center justify-center gap-4">
-            But you can try to get the source site's content and parse and
-            render it by using the button below.
-            <StyledButton onClick={toggle}>Readability</StyledButton>
+        {(isWebBuild || status === ReadabilityStatus.FAILURE) && (
+          <span>No content</span>
+        )}
+        {isWebBuild && (
+          <div>
+            <span>
+              Maybe web app doesn't support this content type. But you can
+              {" "}
+              <a
+                target="_blank"
+                rel="noreferrer"
+                className="text-theme-accent underline"
+                href={`${repository.url}/releases`}
+              >
+                download
+              </a>
+              {" "}
+              the desktop app.
+            </span>
           </div>
         )}
+        {url && window.electron && <ReadabilityAutoToggle url={url} id={id} />}
       </div>
     </div>
   )
+}
+
+const ReadabilityAutoToggle = ({ url, id }: { url: string, id: string }) => {
+  const toggle = useEntryReadabilityToggle({
+    id,
+    url,
+  })
+  const onceRef = useRef(false)
+
+  useEffect(() => {
+    if (!onceRef.current) {
+      onceRef.current = true
+      toggle()
+    }
+  }, [toggle])
+
+  return null
 }
