@@ -5,9 +5,15 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
+  '@electron-forge/maker-squirrel@7.4.0':
+    hash: z5qhsv3exd4digkxdnw2qcwcia
+    path: patches/@electron-forge__maker-squirrel@7.4.0.patch
   '@mozilla/readability@0.5.0':
     hash: fgkvsbckled47trggkhdkimzbm
     path: patches/@mozilla__readability@0.5.0.patch
+  '@pengx17/electron-forge-maker-appimage@1.2.1':
+    hash: lkzxc4lgynwdubdk7x7peddenm
+    path: patches/@pengx17__electron-forge-maker-appimage@1.2.1.patch
   hono@4.4.7:
     hash: ycbk46disqruhfjducp47b5fl4
     path: patches/hono@4.4.7.patch
@@ -337,7 +343,7 @@ importers:
         version: 7.4.0
       '@electron-forge/maker-squirrel':
         specifier: 7.4.0
-        version: 7.4.0
+        version: 7.4.0(patch_hash=z5qhsv3exd4digkxdnw2qcwcia)
       '@electron-forge/maker-zip':
         specifier: 7.4.0
         version: 7.4.0
@@ -358,13 +364,16 @@ importers:
         version: 1.1.18
       '@pengx17/electron-forge-maker-appimage':
         specifier: 1.2.1
-        version: 1.2.1(dmg-builder@24.13.3(electron-builder-squirrel-windows@24.13.3))(electron-builder-squirrel-windows@24.13.3(dmg-builder@24.13.3))
+        version: 1.2.1(patch_hash=lkzxc4lgynwdubdk7x7peddenm)(dmg-builder@24.13.3(electron-builder-squirrel-windows@24.13.3))(electron-builder-squirrel-windows@24.13.3(dmg-builder@24.13.3))
       '@tailwindcss/container-queries':
         specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.4.7)
       '@tailwindcss/typography':
         specifier: 0.5.13
         version: 0.5.13(tailwindcss@3.4.7)
+      '@types/js-yaml':
+        specifier: 4.0.9
+        version: 4.0.9
       '@types/lodash-es':
         specifier: 4.17.12
         version: 4.17.12
@@ -410,6 +419,9 @@ importers:
       hono:
         specifier: 4.4.7
         version: 4.4.7(patch_hash=ycbk46disqruhfjducp47b5fl4)
+      js-yaml:
+        specifier: 4.1.0
+        version: 4.1.0
       lint-staged:
         specifier: 15.2.7
         version: 15.2.7
@@ -2479,6 +2491,9 @@ packages:
 
   '@types/http-errors@2.0.4':
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
+
+  '@types/js-yaml@4.0.9':
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -7364,7 +7379,7 @@ snapshots:
       - bluebird
       - supports-color
 
-  '@electron-forge/maker-squirrel@7.4.0':
+  '@electron-forge/maker-squirrel@7.4.0(patch_hash=z5qhsv3exd4digkxdnw2qcwcia)':
     dependencies:
       '@electron-forge/maker-base': 7.4.0
       '@electron-forge/shared-types': 7.4.0
@@ -8386,7 +8401,7 @@ snapshots:
 
   '@panva/hkdf@1.2.0': {}
 
-  '@pengx17/electron-forge-maker-appimage@1.2.1(dmg-builder@24.13.3(electron-builder-squirrel-windows@24.13.3))(electron-builder-squirrel-windows@24.13.3(dmg-builder@24.13.3))':
+  '@pengx17/electron-forge-maker-appimage@1.2.1(patch_hash=lkzxc4lgynwdubdk7x7peddenm)(dmg-builder@24.13.3(electron-builder-squirrel-windows@24.13.3))(electron-builder-squirrel-windows@24.13.3(dmg-builder@24.13.3))':
     dependencies:
       '@electron-forge/maker-base': 7.4.0
       '@electron-forge/shared-types': 7.4.0
@@ -9588,6 +9603,8 @@ snapshots:
   '@types/http-cache-semantics@4.0.4': {}
 
   '@types/http-errors@2.0.4': {}
+
+  '@types/js-yaml@4.0.9': {}
 
   '@types/json-schema@7.0.15': {}
 

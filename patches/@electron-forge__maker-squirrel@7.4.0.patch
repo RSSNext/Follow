@@ -1,0 +1,13 @@
+diff --git a/dist/MakerSquirrel.js b/dist/MakerSquirrel.js
+index 000386fe230f228dfe82a8b107d78c212e365aeb..d587de3e5ba64cfa007299e8c53086bcb8221c6f 100644
+--- a/dist/MakerSquirrel.js
++++ b/dist/MakerSquirrel.js
+@@ -21,7 +21,7 @@ class MakerSquirrel extends maker_base_1.MakerBase {
+         const outPath = path_1.default.resolve(makeDir, `squirrel.windows/${targetArch}`);
+         await this.ensureDirectory(outPath);
+         const winstallerConfig = {
+-            name: typeof packageJSON.name === 'string' ? packageJSON.name.replace(/-/g, '_') : undefined,
++            name: this.config.name || (typeof packageJSON.name === 'string' ? packageJSON.name.replace(/-/g, '_') : undefined),
+             title: appName,
+             noMsi: true,
+             exe: `${forgeConfig.packagerConfig.executableName || appName}.exe`,
