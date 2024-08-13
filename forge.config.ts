@@ -2,6 +2,7 @@ import crypto from "node:crypto"
 import fs, { readdirSync } from "node:fs"
 import { readdir } from "node:fs/promises"
 import path, { resolve } from "node:path"
+import { inspect } from "node:util"
 
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
 import { MakerDMG } from "@electron-forge/maker-dmg"
@@ -121,7 +122,6 @@ const config: ForgeConfig = {
             width: 660,
             height: 400,
           },
-
         },
       },
       contents: (opts) => [
@@ -189,15 +189,26 @@ const config: ForgeConfig = {
       }
 
       for (const result of makeResults) {
-        const fileData = fs.readFileSync(result.artifacts[0])
+        const applicationOrExecutable = result.artifacts.find(
+          (artifact) =>
+            artifact.endsWith(".dmg") ||
+            artifact.endsWith(".exe") ||
+            artifact.endsWith(".AppImage"),
+        )
+        if (!applicationOrExecutable) {
+          throw new Error(`No application or executable found: ${inspect(result)}`)
+        }
+        const fileData = fs.readFileSync(
+          applicationOrExecutable,
+        )
         const hash = crypto
           .createHash("sha512")
           .update(fileData)
           .digest("base64")
-        const { size } = fs.statSync(result.artifacts[0])
+        const { size } = fs.statSync(applicationOrExecutable)
 
         updaterObject.files.push({
-          url: path.basename(result.artifacts[0]),
+          url: path.basename(applicationOrExecutable),
           sha512: hash,
           size,
         })
