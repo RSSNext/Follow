@@ -121,6 +121,7 @@ const config: ForgeConfig = {
             width: 660,
             height: 400,
           },
+
         },
       },
       contents: (opts) => [

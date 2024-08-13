@@ -1,5 +1,5 @@
 diff --git a/dist/src/MakerAppimage.js b/dist/src/MakerAppimage.js
-index a57b183ad759c91aa36691a430e87c385ba63f62..6f2e249e9852e7042dd7f11d2995f04d30bc5775 100644
+index a57b183ad759c91aa36691a430e87c385ba63f62..1aabeae41f84bcbf8dcc542f67494c8ed21179a5 100644
 --- a/dist/src/MakerAppimage.js
 +++ b/dist/src/MakerAppimage.js
 @@ -69,7 +69,7 @@ class MakerAppImage extends maker_base_1.default {
@@ -11,3 +11,21 @@ index a57b183ad759c91aa36691a430e87c385ba63f62..6f2e249e9852e7042dd7f11d2995f04d
              const appPath = path_1.default.join(makeDir, appFileName);
              // translate macos protocols to linux mime types.
              const mimeTypes = ((_b = (_a = forgeConfig.packagerConfig) === null || _a === void 0 ? void 0 : _a.protocols) !== null && _b !== void 0 ? _b : []).flatMap((p) => p.schemes.map((s) => "x-scheme-handler/" + s.toLowerCase()));
+@@ -101,7 +101,7 @@ class MakerAppImage extends maker_base_1.default {
+                 { file: `${iconPath}/128x128.png`, size: 128 },
+                 { file: `${iconPath}/256x256.png`, size: 256 },
+             ];
+-            const stageDir = path_1.default.join(makeDir, "__appImage-x64");
++            const stageDir = path_1.default.join(makeDir, "__appImage-" + targetArch);
+             if (!(0, fs_1.existsSync)(makeDir)) {
+                 (0, fs_1.mkdirSync)(makeDir, { recursive: true });
+             }
+@@ -119,7 +119,7 @@ class MakerAppImage extends maker_base_1.default {
+                 "--stage",
+                 stageDir,
+                 "--arch",
+-                "x64",
++                targetArch,
+                 "--output",
+                 appPath,
+                 "--app",

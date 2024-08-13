@@ -6,13 +6,13 @@ settings:
 
 patchedDependencies:
   '@electron-forge/maker-squirrel@7.4.0':
-    hash: epgu6pouniu7d5pdzpetqb67ji
+    hash: z5qhsv3exd4digkxdnw2qcwcia
     path: patches/@electron-forge__maker-squirrel@7.4.0.patch
   '@mozilla/readability@0.5.0':
     hash: fgkvsbckled47trggkhdkimzbm
     path: patches/@mozilla__readability@0.5.0.patch
   '@pengx17/electron-forge-maker-appimage@1.2.1':
-    hash: fdf2gxh3b22iwwewfgvsolffym
+    hash: lkzxc4lgynwdubdk7x7peddenm
     path: patches/@pengx17__electron-forge-maker-appimage@1.2.1.patch
   hono@4.4.7:
     hash: ycbk46disqruhfjducp47b5fl4
@@ -343,7 +343,7 @@ importers:
         version: 7.4.0
       '@electron-forge/maker-squirrel':
         specifier: 7.4.0
-        version: 7.4.0(patch_hash=epgu6pouniu7d5pdzpetqb67ji)
+        version: 7.4.0(patch_hash=z5qhsv3exd4digkxdnw2qcwcia)
       '@electron-forge/maker-zip':
         specifier: 7.4.0
         version: 7.4.0
@@ -364,7 +364,7 @@ importers:
         version: 1.1.18
       '@pengx17/electron-forge-maker-appimage':
         specifier: 1.2.1
-        version: 1.2.1(patch_hash=fdf2gxh3b22iwwewfgvsolffym)(dmg-builder@24.13.3(electron-builder-squirrel-windows@24.13.3))(electron-builder-squirrel-windows@24.13.3(dmg-builder@24.13.3))
+        version: 1.2.1(patch_hash=lkzxc4lgynwdubdk7x7peddenm)(dmg-builder@24.13.3(electron-builder-squirrel-windows@24.13.3))(electron-builder-squirrel-windows@24.13.3(dmg-builder@24.13.3))
       '@tailwindcss/container-queries':
         specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.4.7)
@@ -7379,7 +7379,7 @@ snapshots:
       - bluebird
       - supports-color
 
-  '@electron-forge/maker-squirrel@7.4.0(patch_hash=epgu6pouniu7d5pdzpetqb67ji)':
+  '@electron-forge/maker-squirrel@7.4.0(patch_hash=z5qhsv3exd4digkxdnw2qcwcia)':
     dependencies:
       '@electron-forge/maker-base': 7.4.0
       '@electron-forge/shared-types': 7.4.0
@@ -8401,7 +8401,7 @@ snapshots:
 
   '@panva/hkdf@1.2.0': {}
 
-  '@pengx17/electron-forge-maker-appimage@1.2.1(patch_hash=fdf2gxh3b22iwwewfgvsolffym)(dmg-builder@24.13.3(electron-builder-squirrel-windows@24.13.3))(electron-builder-squirrel-windows@24.13.3(dmg-builder@24.13.3))':
+  '@pengx17/electron-forge-maker-appimage@1.2.1(patch_hash=lkzxc4lgynwdubdk7x7peddenm)(dmg-builder@24.13.3(electron-builder-squirrel-windows@24.13.3))(electron-builder-squirrel-windows@24.13.3(dmg-builder@24.13.3))':
     dependencies:
       '@electron-forge/maker-base': 7.4.0
       '@electron-forge/shared-types': 7.4.0
