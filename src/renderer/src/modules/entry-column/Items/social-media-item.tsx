@@ -117,6 +117,7 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
   const { items } = useEntryActions({
     entry,
     view,
+    type: "toolbar",
   })
   return (
     <div className="flex origin-right scale-90 items-center gap-1">

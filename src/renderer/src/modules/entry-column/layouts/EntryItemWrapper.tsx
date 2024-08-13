@@ -25,6 +25,7 @@ export const EntryItemWrapper: FC<
   const { items } = useEntryActions({
     view,
     entry,
+    type: "entryList",
   })
 
   const { items: feedItems } = useFeedActions({

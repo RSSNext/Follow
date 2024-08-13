@@ -98,9 +98,11 @@ export const useUnread = () =>
 export const useEntryActions = ({
   view,
   entry,
+  type,
 }: {
   view?: number
   entry?: FlatEntryModel | null
+  type?: "toolbar" | "entryList"
 }) => {
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
@@ -221,7 +223,7 @@ export const useEntryActions = ({
             "",
         ),
         key: "readability",
-        hide:
+        hide: type === "entryList" ||
           views[view].wideMode ||
           !populatedEntry.entries.url ||
           !window.electron,

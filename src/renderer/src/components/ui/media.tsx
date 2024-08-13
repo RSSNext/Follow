@@ -199,9 +199,7 @@ const MediaImpl: FC<MediaProps> = ({
     type,
   ])
 
-  if (hidden) {
-    if (showFallback) { return <FallbackMedia {...props} /> } else { return null }
-  }
+  if (hidden && showFallback) { return <FallbackMedia {...props} /> }
   return (
     <div className={cn("overflow-hidden rounded", className)} style={style}>
       {InnerContent}
