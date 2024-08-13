@@ -122,6 +122,7 @@ const EntryGroupedList = forwardRef<
       )}
       groupCounts={groupCounts}
       onKeyDown={onKeyDown}
+
       {...virtuosoOptions}
       itemContent={useCallback(
         (index: number, _: number, __: string, c: any) => {
@@ -150,6 +151,7 @@ function getGetGroupDataIndex<T>(
 
 const EntryHeadDateItem: FC<{
   entryId: string
+
 }> = memo(({ entryId }) => {
   const entry = useEntry(entryId)
 
@@ -157,7 +159,7 @@ const EntryHeadDateItem: FC<{
 
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   const date = new Date(entry.entries.publishedAt).toDateString()
-  return <DateItem date={date} view={view} isFirst={true} />
+  return <DateItem date={date} view={view} />
 })
 
 EntryHeadDateItem.displayName = "EntryHeadDateItem"

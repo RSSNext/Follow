@@ -1,11 +1,10 @@
 import { Slot } from "@radix-ui/react-slot"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { ActionButton } from "@renderer/components/ui/button"
-import { RelativeDay, RelativeTime } from "@renderer/components/ui/datetime"
+import { RelativeTime } from "@renderer/components/ui/datetime"
 import { Media } from "@renderer/components/ui/media"
 import { usePreviewMedia } from "@renderer/components/ui/media/hooks"
 import { Skeleton } from "@renderer/components/ui/skeleton"
-import { views } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
@@ -14,7 +13,6 @@ import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
 
 import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
-import { MarkAllButton } from "../components/mark-all-button"
 import { StarIcon } from "../star-icon"
 import { EntryTranslation } from "../translation"
 import type { EntryListItemFC } from "../types"
@@ -75,7 +73,7 @@ export const SocialMediaItem: EntryListItemFC = ({
             {!!entry.collections && <StarIcon />}
           </div>
         </div>
-        <div className="mt-1 flex gap-2 overflow-x-auto">
+        <div className="mt-1 flex gap-2 overflow-x-auto pb-2">
           {entry.entries.media?.map((media, i, mediaList) => (
             <Media
               key={media.url}
@@ -169,37 +167,3 @@ export const SocialMediaItemSkeleton = (
     </div>
   </div>
 )
-
-export const SocialMediaDateItem = ({
-  date,
-  className,
-}: {
-  date: string
-  className?: string
-}) => {
-  const dateObj = new Date(date)
-
-  const startOfDay = new Date(dateObj.setHours(0, 0, 0, 0)).getTime()
-  const endOfDay = new Date(dateObj.setHours(23, 59, 59, 999)).getTime()
-  const view = useRouteParamsSelector((s) => s.view)
-
-  const RelativeElement = <RelativeDay date={dateObj} />
-  return (
-    <div
-      className={cn(
-        className,
-        "m-auto w-[67ch] gap-3 pl-5 text-lg",
-        views[view].wideMode && "flex",
-      )}
-    >
-      <MarkAllButton
-        filter={{
-          startTime: startOfDay,
-          endTime: endOfDay,
-        }}
-        which={RelativeElement}
-      />
-      {RelativeElement}
-    </div>
-  )
-}
