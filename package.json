@@ -14,7 +14,7 @@
   },
   "main": "./dist/main/index.js",
   "scripts": {
-    "build": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make --arch=x64 && electron-forge make --arch=arm64",
+    "build": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make --arch=x64,arm64",
     "build:macos": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make --arch=universal,x64,arm64 --platform=darwin",
     "build:web": "rm -rf out/web && vite build",
     "dev": "electron-vite dev --outDir=dist",
