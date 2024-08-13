@@ -161,7 +161,7 @@ export const UserProfileModalContent: FC<{
         exit="exit"
         layout="size"
         className={cn(
-          "shadow-perfect perfect-sm relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8",
+          "shadow-perfect perfect-sm relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
           variant === "drawer" ?
             "my-auto mr-4 h-[calc(100%-4rem)] w-[60ch] max-w-full" :
             "h-[80vh] w-[500px] max-w-full lg:max-h-[calc(100vh-10rem)]",
@@ -254,8 +254,8 @@ export const UserProfileModalContent: FC<{
             </div>
             <ScrollArea.ScrollArea
               ref={setScrollerRef}
-              rootClassName="mb-4 h-[400px] grow max-w-full px-5 w-full"
-              viewportClassName="[&>div]:space-y-4"
+              rootClassName="h-[400px] grow max-w-full px-5 w-full"
+              viewportClassName="[&>div]:space-y-4 pb-4"
             >
               {subscriptions.isLoading ? (
                 <LoadingCircle
