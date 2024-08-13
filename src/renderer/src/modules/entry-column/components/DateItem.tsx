@@ -2,17 +2,19 @@ import { RelativeDay } from "@renderer/components/ui/datetime"
 import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
-import { memo, useLayoutEffect, useRef, useState } from "react"
+import { throttle } from "lodash-es"
+import { memo, useLayoutEffect, useMemo, useRef, useState } from "react"
 
 import { MarkAllButton } from "./mark-all-button"
 
-const useParseDate = (date: string) => {
+const useParseDate = (date: string) => useMemo(() => {
   const dateObj = new Date(date)
   return {
+    dateObj,
     startOfDay: new Date(dateObj.setHours(0, 0, 0, 0)).getTime(),
     endOfDay: new Date(dateObj.setHours(23, 59, 59, 999)).getTime(),
   }
-}
+}, [date])
 
 const useSticky = () => {
   const $scroller = useScrollViewElement()
@@ -22,7 +24,7 @@ const useSticky = () => {
   useLayoutEffect(() => {
     const $ = itemRef.current?.parentElement
     if (!$) return
-    const handler = (e: HTMLElementEventMap["scroll"]) => {
+    const handler = throttle((e: HTMLElementEventMap["scroll"]) => {
       if ((e.target as HTMLElement).scrollTop < 10) {
         setIsSticky(false)
         return
@@ -30,7 +32,7 @@ const useSticky = () => {
       const isSticky = $.offsetTop <= 0
 
       setIsSticky(isSticky)
-    }
+    }, 16)
     $scroller?.addEventListener("scroll", handler)
     return () => {
       $scroller?.removeEventListener("scroll", handler)
@@ -59,8 +61,7 @@ const UniversalDateItem = ({
   date: string
   className?: string
 }) => {
-  const dateObj = new Date(date)
-  const { startOfDay, endOfDay } = useParseDate(date)
+  const { startOfDay, endOfDay, dateObj } = useParseDate(date)
 
   const { isSticky, itemRef } = useSticky()
   const RelativeElement = <RelativeDay date={dateObj} />
@@ -85,8 +86,7 @@ const SocialMediaDateItem = ({
   date: string
   className?: string
 }) => {
-  const dateObj = new Date(date)
-  const { startOfDay, endOfDay } = useParseDate(date)
+  const { startOfDay, endOfDay, dateObj } = useParseDate(date)
 
   const { isSticky, itemRef } = useSticky()
   const RelativeElement = <RelativeDay date={dateObj} />

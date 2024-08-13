@@ -144,7 +144,7 @@ export function FeedList({
               onClick={() => setExpansion(true)}
             />
           )}
-          <UnreadNumber unread={totalUnread} className="text-xs" />
+          <UnreadNumber unread={totalUnread} className="text-xs !text-inherit" />
         </div>
       </div>
       <ScrollArea.ScrollArea
