@@ -28,9 +28,11 @@ interface MarkAllButtonProps {
   }
   className?: string
   which?: ReactNode
+
+  shortcut?: boolean
 }
 export const MarkAllButton = forwardRef<HTMLButtonElement, MarkAllButtonProps>(
-  ({ filter, className, which = "all" }, ref) => {
+  ({ filter, className, which = "all", shortcut }, ref) => {
     const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
 
     const handleMarkAllAsRead = useMarkAll(filter)
@@ -39,10 +41,13 @@ export const MarkAllButton = forwardRef<HTMLButtonElement, MarkAllButtonProps>(
       <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
         <PopoverTrigger asChild>
           <ActionButton
-            shortcut={shortcuts.entries.markAllAsRead.key}
+            shortcut={
+              shortcut ? shortcuts.entries.markAllAsRead.key : undefined
+            }
             tooltip={(
               <span>
                 Mark
+                {" "}
                 {which}
                 {" "}
                 as read

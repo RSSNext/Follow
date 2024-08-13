@@ -29,17 +29,18 @@ export const DateItem = memo(
     if (view === FeedViewType.SocialMedia) {
       return <SocialMediaDateItem date={date} className={className} />
     }
-
+    const RelativeElement = <RelativeDay date={dateObj} />
     return (
       <div className={className}>
         <MarkAllButton
+          which={RelativeElement}
           className="size-7 text-base"
           filter={{
             startTime: startOfDay,
             endTime: endOfDay,
           }}
         />
-        <RelativeDay date={dateObj} />
+        {RelativeElement}
       </div>
     )
   },

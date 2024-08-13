@@ -150,7 +150,7 @@ export const EntryListHeader: FC<{
                 )
           ) : null}
           <ActionButton
-            tooltip={unreadOnly ? "Unread Only" : "All"}
+            tooltip={unreadOnly ? "Show unread Only" : "Show all"}
             shortcut={shortcuts.entries.toggleUnreadOnly.key}
             onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
           >
@@ -160,7 +160,7 @@ export const EntryListHeader: FC<{
               <i className="i-mgc-round-cute-re" />
             )}
           </ActionButton>
-          <MarkAllButton />
+          <MarkAllButton shortcut />
         </div>
       </div>
       {titleAtBottom && titleInfo}
