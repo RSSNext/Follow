@@ -100,13 +100,7 @@ export const useFeedActions = ({
         type: "separator" as const,
         disabled: isEntryList,
       },
-      {
-        type: "text" as const,
-        label: "Copy Feed URL",
-        disabled: isEntryList,
-        shortcut: "Meta+C",
-        click: () => navigator.clipboard.writeText(feed.url),
-      },
+
       {
         type: "separator",
         disabled: isEntryList,
@@ -137,7 +131,15 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
+        label: "Copy Feed URL",
+        disabled: isEntryList,
+        shortcut: "Meta+C",
+        click: () => navigator.clipboard.writeText(feed.url),
+      },
+      {
+        type: "text" as const,
         label: "Copy Feed ID",
+        shortcut: "Meta+Shift+C",
         disabled: isEntryList,
         click: () => {
           navigator.clipboard.writeText(feedId)

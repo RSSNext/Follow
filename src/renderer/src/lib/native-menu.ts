@@ -16,11 +16,29 @@ export type NativeMenuItem =
   }
   | { type: "separator", disabled?: boolean }
 
+function sortShortcutsString(shortcut: string) {
+  // always order by Shift, Ctrl, Alt, Meta
+  const arr = shortcut.split("+")
+  const order = ["Shift", "Ctrl", "Alt", "Meta"]
+  arr.sort((a, b) => order.indexOf(a) - order.indexOf(b))
+
+  return arr.join("+")
+}
 export const showNativeMenu = async (
   items: Array<Nullable<NativeMenuItem | false>>,
   e?: MouseEvent | React.MouseEvent,
 ) => {
-  const nextItems = items.filter(Boolean) as NativeMenuItem[]
+  const nextItems = (items.filter(Boolean) as NativeMenuItem[]).map((item) => {
+    if (item.type === "text") {
+      return {
+        ...item,
+        shortcut: item.shortcut ?
+          sortShortcutsString(item.shortcut) :
+          undefined,
+      }
+    }
+    return item
+  }) as NativeMenuItem[]
 
   const el = e && e.currentTarget
 
@@ -99,6 +117,7 @@ export const showNativeMenu = async (
           enabled: item.enabled ?? (item.click !== undefined || !!item.submenu),
           click: undefined,
           submenu: item.submenu ? transformMenuItems(item.submenu) : undefined,
+          shortcut: item.shortcut?.replace("Meta", "CmdOrCtrl"),
         }
       }
       return item
