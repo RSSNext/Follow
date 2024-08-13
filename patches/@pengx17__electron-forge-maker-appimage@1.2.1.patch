@@ -1,0 +1,13 @@
+diff --git a/dist/src/MakerAppimage.js b/dist/src/MakerAppimage.js
+index a57b183ad759c91aa36691a430e87c385ba63f62..6f2e249e9852e7042dd7f11d2995f04d30bc5775 100644
+--- a/dist/src/MakerAppimage.js
++++ b/dist/src/MakerAppimage.js
+@@ -69,7 +69,7 @@ class MakerAppImage extends maker_base_1.default {
+             if (maker !== undefined && isIForgeResolvableMaker(maker)) {
+                 config = maker.config;
+             }
+-            const appFileName = `${appName}-${packageJSON.version}.AppImage`;
++            const appFileName = `${this.config.options.name || appName}-${packageJSON.version}.AppImage`;
+             const appPath = path_1.default.join(makeDir, appFileName);
+             // translate macos protocols to linux mime types.
+             const mimeTypes = ((_b = (_a = forgeConfig.packagerConfig) === null || _a === void 0 ? void 0 : _a.protocols) !== null && _b !== void 0 ? _b : []).flatMap((p) => p.schemes.map((s) => "x-scheme-handler/" + s.toLowerCase()));

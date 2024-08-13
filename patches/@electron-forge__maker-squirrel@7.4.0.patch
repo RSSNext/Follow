@@ -1,0 +1,13 @@
+diff --git a/dist/MakerSquirrel.js b/dist/MakerSquirrel.js
+index 000386fe230f228dfe82a8b107d78c212e365aeb..a7957ffe133ed25d45545eb07eb5cb5c25d24d08 100644
+--- a/dist/MakerSquirrel.js
++++ b/dist/MakerSquirrel.js
+@@ -24,7 +24,7 @@ class MakerSquirrel extends maker_base_1.MakerBase {
+             name: typeof packageJSON.name === 'string' ? packageJSON.name.replace(/-/g, '_') : undefined,
+             title: appName,
+             noMsi: true,
+-            exe: `${forgeConfig.packagerConfig.executableName || appName}.exe`,
++            exe: `${forgeConfig.packagerConfig.executableName || this.config.name || appName}.exe`,
+             setupExe: `${appName}-${packageJSON.version} Setup.exe`,
+             ...this.config,
+             appDirectory: dir,

@@ -186,7 +186,9 @@
       "hono@4.4.7": "patches/hono@4.4.7.patch",
       "immer@10.1.1": "patches/immer@10.1.1.patch",
       "@mozilla/readability@0.5.0": "patches/@mozilla__readability@0.5.0.patch",
-      "re-resizable@6.9.17": "patches/re-resizable@6.9.17.patch"
+      "re-resizable@6.9.17": "patches/re-resizable@6.9.17.patch",
+      "@pengx17/electron-forge-maker-appimage@1.2.1": "patches/@pengx17__electron-forge-maker-appimage@1.2.1.patch",
+      "@electron-forge/maker-squirrel@7.4.0": "patches/@electron-forge__maker-squirrel@7.4.0.patch"
     }
   },
   "simple-git-hooks": {
