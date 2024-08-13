@@ -138,16 +138,17 @@ const config: ForgeConfig = {
         },
       ],
     })),
-    new MakerSquirrel({
-      name: "Follow",
+    new MakerSquirrel((arch) => ({
+      name: `Follow-${arch}`,
       setupIcon: "resources/icon.ico",
-    }),
-    new MakerAppImage({
+    })),
+    new MakerAppImage((arch) => ({
       options: {
+        name: `Follow-${arch}`,
         icon: "resources/icon.png",
         mimeType: ["x-scheme-handler/follow"],
       },
-    }),
+    })),
   ],
   plugins: [
     // Fuses are used to enable/disable various Electron functionality
