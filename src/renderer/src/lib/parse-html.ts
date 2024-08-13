@@ -182,9 +182,27 @@ function extractCodeFromHtml(htmlString: string) {
   // 2. line wrapper like <span><span>...</span></span>
   const spanElements = tempDiv.querySelectorAll("span > span")
 
+  // 2.1 outside <span /> as a line break?
+
+  let spanAsLineBreak = false
+
+  if (tempDiv.children.length > 2) {
+    for (const node of tempDiv.children) {
+      const span = node as HTMLSpanElement
+      // 2.2 If the span has only one child and it's a line break, then span can be as a line break
+      spanAsLineBreak =
+        span.children.length === 1 &&
+        span.childNodes.item(0).textContent === "\n"
+      if (spanAsLineBreak) break
+    }
+  }
   if (spanElements.length > 0) {
     for (const node of tempDiv.children) {
-      code += `${node.textContent}\n`
+      if (spanAsLineBreak) {
+        code += `${node.textContent}`
+      } else {
+        code += `${node.textContent}\n`
+      }
     }
 
     return code
