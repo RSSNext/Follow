@@ -7,7 +7,7 @@ import { getMainWindow } from "../window"
 import { t } from "./_instance"
 
 type MenuItem = ActionMenuItem | { type: "separator" }
-interface ActionMenuItem {
+export interface ActionMenuItem {
   type: "text"
   label: string
   enabled?: boolean

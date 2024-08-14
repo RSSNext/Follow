@@ -122,7 +122,6 @@ jobs:
       - name: Setup Version
         id: version
         uses: ./.github/actions/setup-version
-
       - name: Create Release Draft
         if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@v2
@@ -137,3 +136,23 @@ jobs:
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
+  changelog:
+    needs: [release]
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - run: npx changelogithub # or changelogithub@0.12 if ensure the stable result
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

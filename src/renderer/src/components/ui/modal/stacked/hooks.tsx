@@ -1,6 +1,8 @@
 import { getUISettings } from "@renderer/atoms/settings/ui"
 import { jotaiStore } from "@renderer/lib/jotai"
-import { useCallback, useContext, useId, useRef } from "react"
+import { useCallback, useContext, useId, useRef, useState } from "react"
+import { flushSync } from "react-dom"
+import { useEventCallback } from "usehooks-ts"
 
 import { modalStackAtom } from "./atom"
 import { CurrentModalContext } from "./context"
@@ -33,6 +35,7 @@ export const useModalStack = (options?: ModalStackOptions) => {
           const uiSettings = getUISettings()
           const modalConfig: Partial<ModalProps> = {
             draggable: uiSettings.modalDraggable,
+            modal: true,
           }
           jotaiStore.set(modalStackAtom, (p) => {
             const modalProps: ModalProps = {
@@ -73,3 +76,42 @@ const actions = {
 }
 
 export const useCurrentModal = () => useContext(CurrentModalContext)
+
+export const useResizeableModal = (
+  modalElementRef: React.RefObject<HTMLDivElement>,
+  {
+    enableResizeable,
+  }: {
+    enableResizeable: boolean
+  },
+) => {
+  const [resizeableStyle, setResizeableStyle] = useState(
+    {} as React.CSSProperties,
+  )
+  const [isResizeable, setIsResizeable] = useState(false)
+
+  const handlePointDown = useEventCallback(() => {
+    if (!enableResizeable) return
+    if (isResizeable) return
+    const $modalElement = modalElementRef.current
+    if (!$modalElement) return
+
+    const rect = $modalElement.getBoundingClientRect()
+    const { x, y } = rect
+
+    flushSync(() => {
+      setIsResizeable(true)
+      setResizeableStyle({
+        position: "fixed",
+        top: `${y}px`,
+        left: `${x}px`,
+      })
+    })
+  })
+
+  return {
+    resizeableStyle,
+    isResizeable,
+    handlePointDown,
+  }
+}

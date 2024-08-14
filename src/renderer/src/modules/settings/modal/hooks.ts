@@ -1,4 +1,5 @@
 import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
+import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { createElement, useCallback } from "react"
 
 import { SettingModalContent } from "./content"
@@ -15,14 +16,7 @@ export const useSettingModal = () => {
           createElement(SettingModalContent, {
             initialTab,
           }),
-        CustomModalComponent: (props) =>
-          createElement(
-            "div",
-            {
-              className: "center h-full center",
-            },
-            props.children,
-          ),
+        CustomModalComponent: NoopChildren,
         modalContainerClassName: "overflow-hidden",
       }),
     [present],

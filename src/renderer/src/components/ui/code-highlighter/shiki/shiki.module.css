@@ -12,7 +12,7 @@
 
   :global {
     pre {
-      @apply !m-0 overflow-auto p-2;
+      @apply !m-0 overflow-auto p-4;
 
       font-size: min(1em, 16px);
     }
@@ -71,10 +71,10 @@
     }
 
     .highlighted {
-      @apply bg-accent/20;
+      @apply bg-theme-accent/20;
 
       &::before {
-        @apply bg-accent;
+        @apply bg-theme-accent;
       }
     }
   }

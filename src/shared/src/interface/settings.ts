@@ -6,6 +6,7 @@ export interface GeneralSettings {
   scrollMarkUnread: boolean
   hoverMarkUnread: boolean
   renderMarkUnread: boolean
+  groupByDate: boolean
 }
 
 export interface UISettings {
@@ -23,4 +24,8 @@ export interface UISettings {
   readerFontFamily: string
   readerRenderInlineStyle: boolean
   codeHighlightTheme: string
+  guessCodeLanguage: boolean
+
+  // view
+  pictureViewMasonry: boolean
 }

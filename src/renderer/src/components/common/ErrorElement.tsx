@@ -1,4 +1,3 @@
-import pkg from "@pkg"
 import { attachOpenInEditor } from "@renderer/lib/dev"
 import { getNewIssueUrl } from "@renderer/lib/issues"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
@@ -6,8 +5,8 @@ import { useEffect, useRef } from "react"
 import { isRouteErrorResponse, useRouteError } from "react-router-dom"
 import { toast } from "sonner"
 
-import { Logo } from "../icons/logo"
 import { StyledButton } from "../ui/button"
+import { PoweredByFooter } from "./PoweredByFooter"
 
 export function ErrorElement() {
   const error = useRouteError()
@@ -42,7 +41,7 @@ export function ErrorElement() {
   }
 
   return (
-    <div className="m-auto flex min-h-full max-w-prose select-text flex-col p-8 pt-12">
+    <div className="m-auto flex min-h-full max-w-prose select-text flex-col p-8 pt-24">
       <div className="drag-region fixed inset-x-0 top-0 h-12" />
       <div className="center flex flex-col">
         <i className="i-mgc-bug-cute-re size-12 text-red-400" />
@@ -83,36 +82,34 @@ export function ErrorElement() {
         </StyledButton>
       </div>
 
-      <p className="mt-8">
-        Still having this issue? Please give feedback in Github, thanks!
-        <a
-          className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-theme-accent"
-          href={getNewIssueUrl({
-            title: `Error: ${message}`,
-            body: `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
-            label: "bug",
-          })}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Submit Issue
-        </a>
-      </p>
+      <FallbackIssue message={message} stack={stack} />
       <div className="grow" />
-      <footer className="center mt-12 flex gap-2">
-        Powered by
-        {" "}
-        <Logo className="size-5" />
-        {" "}
-        <a
-          href={pkg.homepage}
-          className="cursor-pointer font-bold text-theme-accent"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {APP_NAME}
-        </a>
-      </footer>
+
+      <PoweredByFooter />
     </div>
   )
 }
+
+export const FallbackIssue = ({
+  message,
+  stack,
+}: {
+  message: string
+  stack: string | null | undefined
+}) => (
+  <p className="mt-8">
+    Still having this issue? Please give feedback in Github, thanks!
+    <a
+      className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-theme-accent"
+      href={getNewIssueUrl({
+        title: `Error: ${message}`,
+        body: `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
+        label: "bug",
+      })}
+      target="_blank"
+      rel="noreferrer"
+    >
+      Submit Issue
+    </a>
+  </p>
+)

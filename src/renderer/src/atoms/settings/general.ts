@@ -18,6 +18,7 @@ const createDefaultSettings = (): GeneralSettings => ({
   renderMarkUnread: false,
   // UX
   // autoHideFeedColumn: true,
+  groupByDate: true,
 })
 
 export const {

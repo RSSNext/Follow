@@ -1,5 +1,3 @@
-import "dotenv/config"
-
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@shared/constants"
 import { extractElectronWindowOptions } from "@shared/electron"

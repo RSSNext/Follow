@@ -12,7 +12,7 @@ import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { stopPropagation } from "@renderer/lib/dom"
+import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { Routes } from "@renderer/lib/enum"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { clamp, cn } from "@renderer/lib/utils"
@@ -102,6 +102,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
       spring.jump(-active * jotaiStore.get(carouselWidthAtom))
     }
     const dispose = jotaiStore.sub(carouselWidthAtom, handler)
+
     spring.set(-active * jotaiStore.get(carouselWidthAtom))
     return () => {
       dispose()
@@ -204,7 +205,6 @@ export function FeedColumn({ children }: PropsWithChildren) {
           className="relative flex items-center gap-1"
           onClick={stopPropagation}
         >
-
           <SearchActionButton />
 
           <Link to="/discover" tabIndex={-1}>
@@ -249,12 +249,15 @@ export function FeedColumn({ children }: PropsWithChildren) {
           </ActionButton>
         ))}
       </div>
-      <div className="size-full overflow-hidden" ref={carouselRef}>
+      <div className="relative size-full overflow-hidden" ref={carouselRef}>
         <SwipeWrapper active={active} spring={spring}>
           {views.map((item, index) => (
             <section
               key={item.name}
-              className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center"
+              className="absolute h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center"
+              style={{
+                left: `${index * 100}%`,
+              }}
             >
               {active === index && (
                 <FeedList
@@ -279,10 +282,28 @@ const SwipeWrapper: Component<{
   const reduceMotion = useReduceMotion()
 
   const carouselWidth = useAtomValue(carouselWidthAtom)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const $container = containerRef.current
+    if (!$container) return
+
+    const x = -active * carouselWidth
+    // NOTE: To fix the misalignment of the browser's layout, use display to re-render it.
+    if (x !== $container.getBoundingClientRect().x) {
+      $container.style.display = "none"
+
+      nextFrame(() => {
+        $container.style.display = ""
+      })
+    }
+  }, [])
+
   if (reduceMotion) {
     return (
       <div
-        className="flex h-full"
+        ref={containerRef}
+        className="absolute inset-0"
         style={{
           transform: `translateX(${-active * carouselWidth}px)`,
         }}
@@ -293,7 +314,8 @@ const SwipeWrapper: Component<{
   }
   return (
     <m.div
-      className="flex h-full"
+      ref={containerRef}
+      className="absolute inset-0"
       style={{
         x: spring,
       }}

@@ -31,7 +31,7 @@ const ContextMenuSubTrigger = React.forwardRef<
     {...props}
   >
     {children}
-    <i className="i-mgc-right-cute-re ml-auto size-3" />
+    <i className="i-mingcute-right-fill ml-auto size-3.5" />
   </ContextMenuPrimitive.SubTrigger>
 ))
 ContextMenuSubTrigger.displayName = ContextMenuPrimitive.SubTrigger.displayName
@@ -44,7 +44,7 @@ const ContextMenuSubContent = React.forwardRef<
     <ContextMenuPrimitive.SubContent
       ref={ref}
       className={cn(
-        "z-[1001] min-w-32 overflow-hidden rounded-md border bg-theme-background p-1 text-theme-foreground/90 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "z-[1001] min-w-32 overflow-hidden rounded-md border bg-theme-modal-background-opaque p-1 text-theme-foreground/90 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:shadow-zinc-800/60",
         className,
       )}
       {...props}
@@ -61,7 +61,7 @@ const ContextMenuContent = React.forwardRef<
     <ContextMenuPrimitive.Content
       ref={ref}
       className={cn(
-        "z-[999] min-w-32 overflow-hidden rounded-md border border-border bg-theme-background p-1 text-theme-foreground/90 shadow-lg",
+        "z-[999] min-w-32 overflow-hidden rounded-md border border-border bg-theme-modal-background-opaque p-1 text-theme-foreground/90 shadow-lg dark:shadow-zinc-800/60",
         "text-xs",
         className,
       )}
@@ -81,7 +81,7 @@ const ContextMenuItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-theme-item-hover focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "focus-within:outline-transparent data-[highlighted]:bg-theme-item-hover",
+      "focus-within:outline-transparent data-[highlighted]:bg-theme-item-hover dark:data-[highlighted]:bg-neutral-800",
       inset && "pl-8",
       className,
     )}
@@ -104,7 +104,7 @@ const ContextMenuCheckboxItem = React.forwardRef<
     checked={checked}
     {...props}
   >
-    <span className="absolute left-2 flex size-3.5 items-center justify-center">
+    <span className="absolute left-2 flex items-center justify-center">
       <ContextMenuPrimitive.ItemIndicator>
         <i className="i-mgc-check-filled size-4" />
       </ContextMenuPrimitive.ItemIndicator>

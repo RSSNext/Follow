@@ -1,16 +1,14 @@
 import { attachOpenInEditor } from "@renderer/lib/dev"
-import { getNewIssueUrl } from "@renderer/lib/issues"
-import type { FallbackRender } from "@sentry/react"
 import type { FC } from "react"
 
+import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
+import { FallbackIssue } from "../common/ErrorElement"
 import { m } from "../common/Motion"
 import { StyledButton } from "../ui/button"
 import { useCurrentModal } from "../ui/modal"
 import { parseError } from "./helper"
 
-export const ModalErrorFallback: FC<Parameters<FallbackRender>[0]> = (
-  props,
-) => {
+export const ModalErrorFallback: FC<AppErrorFallbackProps> = (props) => {
   const { message, stack } = parseError(props.error)
   const modal = useCurrentModal()
   return (
@@ -49,21 +47,7 @@ export const ModalErrorFallback: FC<Parameters<FallbackRender>[0]> = (
           </StyledButton>
         </div>
 
-        <p className="mt-8">
-          Still having this issue? Please give feedback in Github, thanks!
-          <a
-            className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-theme-accent"
-            href={getNewIssueUrl({
-              title: `Error: ${message}`,
-              body: `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
-              label: "bug",
-            })}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Submit Issue
-          </a>
-        </p>
+        <FallbackIssue message={message!} stack={stack} />
       </div>
     </m.div>
   )

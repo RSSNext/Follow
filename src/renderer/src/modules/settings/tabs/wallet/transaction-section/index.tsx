@@ -1,4 +1,4 @@
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { Logo } from "@renderer/components/icons/logo"
 import {
   Avatar,
@@ -21,7 +21,7 @@ import { SettingSectionTitle } from "@renderer/modules/settings/section"
 import { useWallet, useWalletTransactions } from "@renderer/queries/wallet"
 
 export const TransactionsSection = () => {
-  const user = useMe()
+  const user = useWhoami()
   const wallet = useWallet({ userId: user?.id })
   const myWallet = wallet.data?.[0]
 
@@ -146,7 +146,7 @@ const UserRenderer = ({
     | "fromUser"
     | "toUser"]
 }) => {
-  const me = useMe()
+  const me = useWhoami()
   const isMe = user?.id === me?.id
 
   const name = isMe ? "You" : user?.name || APP_NAME

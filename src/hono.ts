@@ -2723,6 +2723,22 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+    "/ai/daily": {
+        $get: {
+            input: {
+                query: {
+                    view: "0" | "1";
+                    startDate: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: string;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
 } & {
     "/actions": {
         $get: {
@@ -3215,6 +3231,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             type: "photo" | "video";
                             url: string;
                             preview_image_url?: string | undefined;
+                            height?: number | undefined;
+                            width?: number | undefined;
                         }[] | null | undefined;
                         attachments?: {
                             url: string;

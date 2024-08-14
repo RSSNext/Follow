@@ -1,7 +1,7 @@
 import crypto from "node:crypto"
-import fs from "node:fs"
+import fs, { readdirSync } from "node:fs"
 import { readdir } from "node:fs/promises"
-import path from "node:path"
+import path, { resolve } from "node:path"
 
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
 import { MakerDMG } from "@electron-forge/maker-dmg"
@@ -10,7 +10,8 @@ import { MakerZIP } from "@electron-forge/maker-zip"
 import { FusesPlugin } from "@electron-forge/plugin-fuses"
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import MakerAppImage from "@pengx17/electron-forge-maker-appimage"
-import { rimraf } from "rimraf"
+import setLanguages from "electron-packager-languages"
+import { rimraf, rimrafSync } from "rimraf"
 
 const artifactRegex = /.*\.(?:exe|dmg|AppImage|zip)$/
 const platformNamesMap = {
@@ -24,6 +25,8 @@ const ymlMapsMap = {
   win32: "latest.yml",
 }
 
+const keepModules = new Set(["font-list", "vscode-languagedetection"])
+const keepLanguages = new Set(["en", "en_GB", "zh_CN"])
 // remove folders & files not to be included in the app
 async function cleanSources(
   buildPath,
@@ -40,8 +43,21 @@ async function cleanSources(
     "resources",
   ])
 
+  if (platform === "darwin") {
+    const frameworkResourcePath = resolve(
+      buildPath,
+      "../../Frameworks/Electron Framework.framework/Versions/A/Resources",
+    )
+
+    for (const file of readdirSync(frameworkResourcePath)) {
+      if (file.endsWith(".lproj") && !keepLanguages.has(file.split(".")[0])) {
+        rimrafSync(resolve(frameworkResourcePath, file))
+      }
+    }
+  }
+
   // Keep only node_modules to be included in the app
-  const modules = new Set(["font-list"])
+
   await Promise.all([
     ...(await readdir(buildPath).then((items) =>
       items
@@ -50,13 +66,18 @@ async function cleanSources(
     )),
     ...(await readdir(path.join(buildPath, "node_modules")).then((items) =>
       items
-        .filter((item) => !modules.has(item))
+        .filter((item) => !keepModules.has(item))
         .map((item) => rimraf(path.join(buildPath, "node_modules", item))),
     )),
   ])
 
   callback()
 }
+
+const ignorePattern = new RegExp(
+  `^/node_modules/(?!${[...keepModules].join("|")})`,
+)
+
 const config: ForgeConfig = {
   packagerConfig: {
     appBundleId: "is.follow",
@@ -68,9 +89,11 @@ const config: ForgeConfig = {
         schemes: ["follow"],
       },
     ],
-    afterCopy: [cleanSources],
+
+    afterCopy: [cleanSources, setLanguages([...keepLanguages])],
     asar: true,
-    ignore: [/^\/node_modules\/(?!font-list)/],
+    ignore: [ignorePattern],
+
     prune: true,
     ...(process.env.APPLE_ID &&
       process.env.APPLE_PASSWORD &&
@@ -92,6 +115,7 @@ const config: ForgeConfig = {
   makers: [
     new MakerZIP({}, ["darwin"]),
     new MakerDMG({
+      overwrite: true,
       background: "resources/dmg-background.png",
       icon: "resources/dmg-icon.icns",
       iconSize: 160,
@@ -171,7 +195,11 @@ const config: ForgeConfig = {
       makeResults = makeResults.map((result) => {
         result.artifacts = result.artifacts.map((artifact) => {
           if (artifactRegex.test(artifact)) {
-            const newArtifact = `${path.dirname(artifact)}/${result.packageJSON.name}-${result.packageJSON.version}-${platformNamesMap[result.platform]}-${result.arch}${path.extname(artifact)}`
+            const newArtifact = `${path.dirname(artifact)}/${
+              result.packageJSON.name
+            }-${result.packageJSON.version}-${
+              platformNamesMap[result.platform]
+            }-${result.arch}${path.extname(artifact)}`
             fs.renameSync(artifact, newArtifact)
 
             try {
@@ -200,17 +228,18 @@ const config: ForgeConfig = {
       yml.releaseDate = new Date().toISOString()
       const ymlStr =
         `version: ${yml.version}\n` +
-        `files:\n${
-        yml.files
-          .map((file) => (
+        `files:\n${yml.files
+          .map(
+            (file) =>
               `  - url: ${file.url}\n` +
               `    sha512: ${file.sha512}\n` +
-              `    size: ${file.size}\n`
-            ))
-          .join("")
-        }releaseDate: ${yml.releaseDate}\n`
+              `    size: ${file.size}\n`,
+          )
+          .join("")}releaseDate: ${yml.releaseDate}\n`
 
-      const ymlPath = `${path.dirname(makeResults[0].artifacts[0])}/${ymlMapsMap[makeResults[0].platform]}`
+      const ymlPath = `${path.dirname(makeResults[0].artifacts[0])}/${
+        ymlMapsMap[makeResults[0].platform]
+      }`
       fs.writeFileSync(ymlPath, ymlStr)
 
       makeResults.push({

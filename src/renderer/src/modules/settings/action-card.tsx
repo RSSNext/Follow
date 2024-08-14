@@ -263,7 +263,7 @@ const SettingCollapsible = ({
         onOpenChange={onOpenChange}
         title={title}
       >
-        <div className="pt-2">{children}</div>
+        <div className="px-1 pt-2">{children}</div>
       </CollapseControlled>
     )
   }
@@ -320,7 +320,7 @@ export function ActionCard({
             </div>
           )}
         >
-          <div className="mt-4 space-y-4">
+          <div className="mt-4 space-y-4 px-1">
             <div className="space-y-3">
               <p className="font-medium text-zinc-500">When feeds match…</p>
               <div className="flex flex-col gap-2">
@@ -430,7 +430,7 @@ export function ActionCard({
             <div className="space-y-4">
               <p className="font-medium text-zinc-500">Then do…</p>
               <div className="w-full space-y-4">
-                <div className="flex w-full cursor-pointer items-center justify-between">
+                <div className="flex w-full items-center justify-between">
                   <span className="w-0 shrink grow truncate">
                     Generate summary using AI
                   </span>
@@ -444,7 +444,7 @@ export function ActionCard({
                 </div>
                 <Divider />
 
-                <div className="flex w-full cursor-pointer items-center justify-between">
+                <div className="flex w-full items-center justify-between">
                   <span className="w-0 shrink grow truncate">
                     Translate into
                   </span>

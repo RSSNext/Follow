@@ -2,6 +2,7 @@ import { tipcClient } from "@renderer/lib/client"
 import { getProxyUrl } from "@renderer/lib/img-proxy"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
+import { saveImageDimensionsToDb } from "@renderer/store/image/db"
 import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { memo, useMemo, useState } from "react"
 import { toast } from "sonner"
@@ -13,6 +14,7 @@ const failedList = new Set<string | undefined>()
 
 type BaseProps = {
   mediaContainerClassName?: string
+  showFallback?: boolean
 }
 export type MediaProps = BaseProps &
   (
@@ -25,6 +27,7 @@ export type MediaProps = BaseProps &
       popper?: boolean
       type: "photo"
       previewImageUrl?: string
+      cacheDimensions?: boolean
     })
     | (VideoHTMLAttributes<HTMLVideoElement> & {
       proxy?: {
@@ -45,9 +48,9 @@ const MediaImpl: FC<MediaProps> = ({
   mediaContainerClassName,
   ...props
 }) => {
-  const { src, style, type, previewImageUrl, ...rest } = props
+  const { src, style, type, previewImageUrl, showFallback, ...rest } = props
   const [hidden, setHidden] = useState(!src)
-  const [imgSrc, setImgSrc] = useState(
+  const [imgSrc, setImgSrc] = useState(() =>
     proxy && src && !failedList.has(src) ?
       getProxyUrl({
         url: src,
@@ -82,6 +85,18 @@ const MediaImpl: FC<MediaProps> = ({
     }
     props.onClick?.(e as any)
   })
+  const handleOnLoad: React.ReactEventHandler<HTMLImageElement> =
+    useEventCallback((e) => {
+      rest.onLoad?.(e as any)
+      if ("cacheDimensions" in props && props.cacheDimensions && src) {
+        saveImageDimensionsToDb(src, {
+          src,
+          width: e.currentTarget.naturalWidth,
+          height: e.currentTarget.naturalHeight,
+          ratio: e.currentTarget.naturalWidth / e.currentTarget.naturalHeight,
+        })
+      }
+    })
 
   const InnerContent = useMemo(() => {
     switch (type) {
@@ -98,6 +113,7 @@ const MediaImpl: FC<MediaProps> = ({
               mediaContainerClassName,
             )}
             src={imgSrc}
+            onLoad={handleOnLoad}
             onClick={handleClick}
             {...(!disableContextMenu ?
                 {
@@ -171,6 +187,7 @@ const MediaImpl: FC<MediaProps> = ({
     disableContextMenu,
     errorHandle,
     handleClick,
+    handleOnLoad,
     hidden,
     imgSrc,
     mediaContainerClassName,
@@ -182,6 +199,7 @@ const MediaImpl: FC<MediaProps> = ({
     type,
   ])
 
+  if (hidden && showFallback) { return <FallbackMedia {...props} /> }
   return (
     <div className={cn("overflow-hidden rounded", className)} style={style}>
       {InnerContent}
@@ -192,3 +210,38 @@ const MediaImpl: FC<MediaProps> = ({
 export const Media: FC<MediaProps> = memo((props) => (
   <MediaImpl {...props} key={props.src} />
 ))
+
+const FallbackMedia: FC<MediaProps> = ({
+  type,
+  mediaContainerClassName,
+  ...props
+}) => (
+  <div
+    className={cn(
+      !(props.width || props.height) && "size-full",
+      "center relative h-24 rounded bg-zinc-100 object-cover dark:bg-neutral-900",
+      "not-prose flex max-h-full flex-col space-y-1",
+      mediaContainerClassName,
+    )}
+    style={{
+      height: props.height ? `${props.height}px` : "",
+      width: props.width ? `${props.width}px` : "100%",
+      ...props.style,
+    }}
+  >
+    <p>Media loaded failed</p>
+    <p className="flex items-center gap-1">
+      Go to
+      {" "}
+      <a
+        href={props.src}
+        target="_blank"
+        rel="noreferrer"
+        className="follow-link--underline"
+      >
+        {props.src}
+      </a>
+      <i className="i-mgc-external-link-cute-re" />
+    </p>
+  </div>
+)

@@ -26,6 +26,10 @@ const createDefaultSettings = (): UISettings => ({
   // Content
   readerRenderInlineStyle: false,
   codeHighlightTheme: "github-dark",
+  guessCodeLanguage: true,
+
+  // View
+  pictureViewMasonry: true,
 })
 
 export const {

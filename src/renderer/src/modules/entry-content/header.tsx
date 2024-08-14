@@ -23,6 +23,7 @@ export function EntryHeader({
   const { items } = useEntryActions({
     view,
     entry,
+    type: "toolbar",
   })
 
   const entryTitleMeta = useEntryTitleMeta()
@@ -76,9 +77,7 @@ export function EntryHeader({
               <ActionButton
                 icon={
                   item.icon ? (
-                    <Slot className="size-4">
-                      {item.icon}
-                    </Slot>
+                    <Slot className="size-4">{item.icon}</Slot>
                   ) : (
                     <i className={item.className} />
                   )

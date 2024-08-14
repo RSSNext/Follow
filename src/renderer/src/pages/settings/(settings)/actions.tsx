@@ -1,6 +1,6 @@
 import { StyledButton } from "@renderer/components/ui/button"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient } from "@renderer/lib/api-fetch"
+import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import type { ActionsResponse } from "@renderer/models"
 import { ActionCard } from "@renderer/modules/settings/action-card"
 import { SettingsTitle } from "@renderer/modules/settings/title"
@@ -85,6 +85,9 @@ export function Component() {
     onSuccess: () => {
       Queries.action.getAll().invalidate()
       toast("🎉 Actions saved.")
+    },
+    onError: (error) => {
+      toast.error(getFetchErrorMessage(error))
     },
   })
 

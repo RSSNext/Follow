@@ -1,3 +1,4 @@
+import { repository } from "@pkg"
 import {
   ReadabilityStatus,
   useEntryInReadabilityStatus,
@@ -5,16 +6,19 @@ import {
   useEntryReadabilityContent,
 } from "@renderer/atoms/readability"
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
-import { Logo } from "@renderer/components/icons/logo"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { StyledButton } from "@renderer/components/ui/button"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
+import { isWebBuild, ROUTE_FEED_PENDING } from "@renderer/constants"
 import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
-import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
+import {
+  useRouteParamsSelector,
+  useRouteParms,
+} from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
+import { FeedViewType } from "@renderer/lib/enum"
 import { parseHtml } from "@renderer/lib/parse-html"
 import type { ActiveEntryId } from "@renderer/models"
 import {
@@ -25,28 +29,32 @@ import { Queries } from "@renderer/queries"
 import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC, ReactNode } from "react"
-import { useEffect, useLayoutEffect, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 
 import { LoadingCircle } from "../../components/ui/loading"
+import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
 import { EntryTranslation } from "../entry-column/translation"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
+import { EntryPlaceholderLogo } from "./entry-placeholder"
 import { EntryHeader } from "./header"
 import { EntryContentProvider } from "./provider"
 
 export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   const title = useFeedHeaderTitle()
+  const { feedId, view } = useRouteParms()
 
   useTitle(title)
   if (!entryId) {
     return (
       <m.div
-        onContextMenu={stopPropagation}
-        className="-mt-2 flex size-full min-w-0 flex-col items-center justify-center gap-1 text-balance px-12 text-center text-lg font-medium text-zinc-400"
+        className="center size-full flex-col"
         initial={{ opacity: 0.01, y: 300 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <Logo className="size-16 opacity-40 grayscale" />
-        <span className="max-w-[60ch]">{title}</span>
+        <EntryPlaceholderLogo />
+        {feedId === ROUTE_FEED_PENDING && view === FeedViewType.Articles && (
+          <EntryPlaceholderDaily view={view} />
+        )}
       </m.div>
     )
   }
@@ -55,7 +63,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 }
 
 function EntryContentRender({ entryId }: { entryId: string }) {
-  const user = useMe()
+  const user = useWhoami()
 
   const { error, data, isPending } = useAuthQuery(
     Queries.entries.byId(entryId),
@@ -73,7 +81,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
   const [content, setContent] = useState<JSX.Element>()
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Fallback data, if local data is broken should fallback to cached query data.
     const processContent = entry?.entries.content ?? data?.entries.content
     if (processContent) {
@@ -128,6 +136,11 @@ function EntryContentRender({ entryId }: { entryId: string }) {
   const view = useRouteParamsSelector((route) => route.view)
 
   const isInReadabilityMode = useEntryIsInReadability(entryId)
+  const scrollerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    scrollerRef.current?.scrollTo(0, 0)
+  }, [entryId])
   if (!entry) return null
 
   return (
@@ -147,6 +160,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
         mask={false}
         rootClassName="h-0 grow min-w-0 overflow-y-auto @container"
         viewportClassName="p-5"
+        ref={scrollerRef}
       >
         <m.div
           style={
@@ -163,7 +177,7 @@ function EntryContentRender({ entryId }: { entryId: string }) {
         >
           <article
             onContextMenu={stopPropagation}
-            className="relative m-auto min-w-0 max-w-[550px] @4xl:max-w-[70ch]"
+            className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
           >
             <a
               href={entry.entries.url || void 0}
@@ -270,6 +284,9 @@ const TitleMetaHandler: Component<{
   const { title: feedTitle } = useFeedById(feedId)!
 
   const atTop = useIsSoFWrappedElement()
+  useEffect(() => {
+    setEntryContentScrollToTop(false)
+  }, [entryId])
   useLayoutEffect(() => {
     setEntryContentScrollToTop(atTop)
   }, [atTop])
@@ -289,7 +306,7 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
   const result = useEntryReadabilityContent(entryId)
 
   const [renderer, setRenderer] = useState<ReactNode | null>(null)
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!result) return
     const { content: processContent } = result
 
@@ -305,7 +322,7 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
   }, [result, parseHtml])
 
   return (
-    <div>
+    <div className="grow">
       {result ? (
         <p className="rounded-xl border p-3 text-sm opacity-80">
           <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
@@ -313,8 +330,11 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
           anomalies, please go to the source site to view the original content.
         </p>
       ) : (
-        <div className="center mt-12">
+        <div className="center mt-16 flex flex-col gap-2">
           <LoadingCircle size="large" />
+          <span className="text-sm">
+            Fetching original content and processing...
+          </span>
         </div>
       )}
       {renderer}
@@ -326,27 +346,57 @@ const NoContent: FC<{
   id: string
   url: string
 }> = ({ id, url }) => {
-  const toggle = useEntryReadabilityToggle({
-    id,
-    url,
-  })
-
   const status = useEntryInReadabilityStatus(id)
-  if (status !== ReadabilityStatus.INITIAL) {
+
+  if (
+    status !== ReadabilityStatus.INITIAL &&
+    status !== ReadabilityStatus.FAILURE
+  ) {
     return null
   }
   return (
     <div className="center">
       <div className="space-y-2 text-balance text-center text-sm text-zinc-400">
-        <span>No content</span>
-        {url && window.electron && (
-          <div className="flex flex-col items-center justify-center gap-4">
-            But you can try to get the source site's content and parse and
-            render it by using the button below.
-            <StyledButton onClick={toggle}>Readability</StyledButton>
+        {(isWebBuild || status === ReadabilityStatus.FAILURE) && (
+          <span>No content</span>
+        )}
+        {isWebBuild && (
+          <div>
+            <span>
+              Maybe web app doesn't support this content type. But you can
+              {" "}
+              <a
+                target="_blank"
+                rel="noreferrer"
+                className="text-theme-accent underline"
+                href={`${repository.url}/releases`}
+              >
+                download
+              </a>
+              {" "}
+              the desktop app.
+            </span>
           </div>
         )}
+        {url && window.electron && <ReadabilityAutoToggle url={url} id={id} />}
       </div>
     </div>
   )
+}
+
+const ReadabilityAutoToggle = ({ url, id }: { url: string, id: string }) => {
+  const toggle = useEntryReadabilityToggle({
+    id,
+    url,
+  })
+  const onceRef = useRef(false)
+
+  useEffect(() => {
+    if (!onceRef.current) {
+      onceRef.current = true
+      toggle()
+    }
+  }, [toggle])
+
+  return null
 }

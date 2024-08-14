@@ -128,7 +128,8 @@ class SubscriptionActions {
         const state = get()
         for (const feedId in state.data) {
           if (state.data[feedId].view === view) {
-            feedUnreadActions.updateByFeedId(feedId, 0)
+            // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
+            !filter && feedUnreadActions.updateByFeedId(feedId, 0)
             entryActions.patchManyByFeedId(feedId, { read: true }, filter)
           }
         }
@@ -154,7 +155,8 @@ class SubscriptionActions {
         }),
       async () => {
         for (const feedId of feedIds) {
-          feedUnreadActions.updateByFeedId(feedId, 0)
+          // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
+          !filter && feedUnreadActions.updateByFeedId(feedId, 0)
           entryActions.patchManyByFeedId(feedId, { read: true }, filter)
         }
         if (filter) {

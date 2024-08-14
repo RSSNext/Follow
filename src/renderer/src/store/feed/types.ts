@@ -11,3 +11,5 @@ export interface FeedActions {
   clear: () => void
   patch: (feedId: FeedId, patch: Partial<FeedModel>) => void
 }
+
+export type FeedQueryParams = { id?: string, url?: string }

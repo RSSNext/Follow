@@ -21,6 +21,7 @@
     "!unused-imports/no-unused-imports",
     "!@stylistic/jsx-self-closing-comp",
     "!tailwindcss/classnames-order",
+    "!arrow-body-style",
     "*"
   ],
 
@@ -39,5 +40,6 @@
     "rsshub"
   ],
   "editor.foldingImportsByDefault": true,
-  "commentTranslate.hover.enabled": false
+  "commentTranslate.hover.enabled": false,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

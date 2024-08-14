@@ -3,6 +3,7 @@ import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import * as React from "react"
 
+import { ScrollElementContext } from "./ctx"
 import styles from "./index.module.css"
 
 const Corner = React.forwardRef<
@@ -24,6 +25,10 @@ const Thumb = React.forwardRef<
 >(({ className, ...rest }, forwardedRef) => (
   <ScrollAreaBase.Thumb
     {...rest}
+    onClick={(e) => {
+      e.stopPropagation()
+      rest.onClick?.(e)
+    }}
     ref={forwardedRef}
     className={cn(
       "relative w-full flex-1 rounded-xl transition-colors duration-150",
@@ -32,13 +37,14 @@ const Thumb = React.forwardRef<
       "dark:bg-neutral-500 hover:dark:bg-neutral-400/80 active:dark:bg-neutral-400",
       "before:absolute before:-left-1/2 before:-top-1/2 before:h-full before:min-h-[44]",
       "before:w-full before:min-w-[44] before:-translate-x-full before:-translate-y-full before:content-[\"\"]",
+
       className,
     )}
   />
 ))
 Thumb.displayName = "ScrollArea.Thumb"
 
-export const Scrollbar = React.forwardRef<
+const Scrollbar = React.forwardRef<
   React.ElementRef<typeof ScrollAreaBase.Scrollbar>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Scrollbar>
 >(({ className, children, ...rest }, forwardedRef) => {
@@ -52,6 +58,7 @@ export const Scrollbar = React.forwardRef<
         orientation === "horizontal" ?
           `h-2.5 w-full flex-col` :
           `w-2.5 flex-row`,
+        "animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in",
         className,
       )}
     >
@@ -62,7 +69,7 @@ export const Scrollbar = React.forwardRef<
 })
 Scrollbar.displayName = "ScrollArea.Scrollbar"
 
-export const Viewport = React.forwardRef<
+const Viewport = React.forwardRef<
   React.ElementRef<typeof ScrollAreaBase.Viewport>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Viewport> & {
     mask?: boolean
@@ -80,7 +87,7 @@ export const Viewport = React.forwardRef<
     if (!$el) return
     if (!$child) return
     const handler = () => {
-      setShouldAddMask($el.scrollHeight > ($el.clientHeight + 48 * 2))
+      setShouldAddMask($el.scrollHeight > $el.clientHeight + 48 * 2)
     }
     const observer = new ResizeObserver(handler)
     handler()
@@ -104,12 +111,13 @@ export const Viewport = React.forwardRef<
 })
 Viewport.displayName = "ScrollArea.Viewport"
 
-export const Root = React.forwardRef<
+const Root = React.forwardRef<
   React.ElementRef<typeof ScrollAreaBase.Root>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Root>
 >(({ className, children, ...rest }, forwardedRef) => (
   <ScrollAreaBase.Root
     {...rest}
+    scrollHideDelay={0}
     ref={forwardedRef}
     className={cn("overflow-hidden", className)}
   >
@@ -139,20 +147,29 @@ export const ScrollArea = React.forwardRef<
       mask = false,
     },
     ref,
-  ) => (
-    <Root className={rootClassName}>
-      <Viewport
-        ref={ref}
-        onWheel={stopPropagation}
-        className={cn(
-          flex ? "[&>div]:!flex [&>div]:!flex-col" : "",
-          viewportClassName,
-        )}
-        mask={mask}
-      >
-        {children}
-      </Viewport>
-      <Scrollbar className={scrollbarClassName} />
-    </Root>
-  ),
+  ) => {
+    const [viewportRef, setViewportRef] = React.useState<HTMLDivElement | null>(
+      null,
+    )
+    React.useImperativeHandle(ref, () => viewportRef as HTMLDivElement)
+
+    return (
+      <ScrollElementContext.Provider value={viewportRef}>
+        <Root className={rootClassName}>
+          <Viewport
+            ref={setViewportRef}
+            onWheel={stopPropagation}
+            className={cn(
+              flex ? "[&>div]:!flex [&>div]:!flex-col" : "",
+              viewportClassName,
+            )}
+            mask={mask}
+          >
+            {children}
+          </Viewport>
+          <Scrollbar className={scrollbarClassName} />
+        </Root>
+      </ScrollElementContext.Provider>
+    )
+  },
 )

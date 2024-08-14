@@ -1,12 +1,13 @@
-import { getMe } from "@renderer/atoms/user"
+import { whoami } from "@renderer/atoms/user"
 import { runTransactionInScope } from "@renderer/database"
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedModel } from "@renderer/models"
 import { FeedService } from "@renderer/services"
 import { produce } from "immer"
+import { nanoid } from "nanoid"
 
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
-import type { FeedState } from "./types"
+import type { FeedQueryParams, FeedState } from "./types"
 
 export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
   feeds: {},
@@ -28,6 +29,10 @@ class FeedActions {
         for (const feed of feeds) {
           if (feed.id) {
             state.feeds[feed.id] = feed
+          } else {
+            // Store temp feed in memory
+            const nonce = nanoid(8)
+            state.feeds[nonce] = { ...feed, id: nonce }
           }
         }
       }),
@@ -61,7 +66,7 @@ class FeedActions {
         }),
 
       async () => {
-        const currentUser = getMe()
+        const currentUser = whoami()
         if (!currentUser) return
         this.updateFeedOwnership(feedId, currentUser.id)
         const feed = get().feeds[feedId]
@@ -70,6 +75,22 @@ class FeedActions {
       },
       { doTranscationWhenMutationFail: false, waitMutation: true },
     )
+  }
+
+  // API Fetcher
+  //
+
+  async fetchFeedById({ id, url }: FeedQueryParams) {
+    const res = await apiClient.feeds.$get({
+      query: {
+        id,
+        url,
+      },
+    })
+
+    this.upsertMany([res.data.feed])
+
+    return res.data
   }
 }
 export const feedActions = new FeedActions()

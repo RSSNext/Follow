@@ -1,49 +1,40 @@
-import {
-  setGeneralSetting,
-  useGeneralSettingKey,
-} from "@renderer/atoms/settings/general"
-import { useMe } from "@renderer/atoms/user"
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { m } from "@renderer/components/common/Motion"
-import { EmptyIcon } from "@renderer/components/icons/empty"
+import { FeedFoundCanBeFollowError } from "@renderer/components/errors/FeedFoundCanBeFollowErrorFallback"
+import { FeedNotFound } from "@renderer/components/errors/FeedNotFound"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { ActionButton } from "@renderer/components/ui/button"
-import { DividerVertical } from "@renderer/components/ui/divider"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { EllipsisHorizontalTextWithTooltip } from "@renderer/components/ui/typography"
 import {
   FEED_COLLECTION_LIST,
-  ROUTE_ENTRY_PENDING,
+  ROUTE_FEED_PENDING,
   views,
 } from "@renderer/constants"
-import { shortcuts } from "@renderer/constants/shortcuts"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
-import { useIsOnline } from "@renderer/hooks/common/useIsOnline"
-import { cn, getOS, isBizId } from "@renderer/lib/utils"
-import { EntryHeader } from "@renderer/modules/entry-content/header"
-import { useRefreshFeedMutation } from "@renderer/queries/feed"
+import {
+  useRouteParamsSelector,
+  useRouteParms,
+} from "@renderer/hooks/biz/useRouteParams"
+import { useTitle } from "@renderer/hooks/common"
+import { FeedViewType } from "@renderer/lib/enum"
+import { cn, isBizId } from "@renderer/lib/utils"
+import { useFeed } from "@renderer/queries/feed"
 import { entryActions, useEntry } from "@renderer/store/entry"
-import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
-import type { HTMLMotionProps } from "framer-motion"
-import type { FC } from "react"
-import { forwardRef, useCallback, useEffect, useRef } from "react"
+import { useFeedByIdSelector } from "@renderer/store/feed"
+import { useCallback, useEffect, useRef } from "react"
 import type {
   ScrollSeekConfiguration,
+  VirtuosoGridProps,
   VirtuosoHandle,
   VirtuosoProps,
 } from "react-virtuoso"
-import { Virtuoso, VirtuosoGrid } from "react-virtuoso"
+import { VirtuosoGrid } from "react-virtuoso"
 
-import { DateItem } from "./date-item"
-import { EntryColumnShortcutHandler } from "./EntryColumnShortcutHandler"
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
-import {
-  EntryItem,
-  EntryItemSkeleton,
-  EntryItemSkeletonWithDelayShow,
-} from "./item"
-import { MarkAllButton } from "./mark-all-button"
+import { EntryItem, EntryItemSkeleton } from "./item"
+import { PictureMasonry } from "./Items/picture-masonry"
+import { EntryListHeader } from "./layouts/EntryListHeader"
+import { EntryEmptyList, EntryList, EntryListContent } from "./lists"
 import { girdClassNames } from "./styles"
 
 const scrollSeekConfiguration: ScrollSeekConfiguration = {
@@ -59,7 +50,7 @@ export function EntryColumn() {
       })
     }, []),
   })
-  const { entriesIds, isFetchingNextPage } = entries
+  const { entriesIds, isFetchingNextPage, groupedCounts } = entries
 
   const {
     entryId: activeEntryId,
@@ -69,6 +60,8 @@ export function EntryColumn() {
     isCollection,
   } = useRouteParms()
   const activeEntry = useEntry(activeEntryId)
+  const feedTitle = useFeedByIdSelector(routeFeedId, (feed) => feed?.title)
+  useTitle(feedTitle)
 
   useEffect(() => {
     if (!activeEntryId) return
@@ -88,10 +81,10 @@ export function EntryColumn() {
   const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {
     components: {
-      List: ListContent,
+      List: EntryListContent,
       Footer: useCallback(() => {
         if (!isFetchingNextPage) return null
-        return <EntryItemSkeletonWithDelayShow view={view} />
+        return <EntryItemSkeleton view={view} />
       }, [isFetchingNextPage, view]),
       ScrollSeekPlaceholder: useCallback(
         () => <EntryItemSkeleton view={view} single />,
@@ -107,11 +100,11 @@ export function EntryColumn() {
     customScrollParent: scrollRef.current!,
 
     totalCount: entries.totalCount,
-    endReached: () => {
+    endReached: useCallback(async () => {
       if (!entries.isFetchingNextPage && entries.hasNextPage) {
-        entries.fetchNextPage()
+        await entries.fetchNextPage()
       }
-    },
+    }, [entries]),
     data: entriesIds,
     onScroll: () => {
       if (!isInteracted.current) {
@@ -119,14 +112,10 @@ export function EntryColumn() {
       }
     },
     itemContent: useCallback(
-      (index, entryId) => {
+      (_, entryId) => {
         if (!entryId) return null
 
-        if (entryId.includes(" ")) {
-          return <DateItem date={entryId} view={view} isFirst={index === 0} />
-        } else {
-          return <EntryItem key={entryId} entryId={entryId} view={view} />
-        }
+        return <EntryItem key={entryId} entryId={entryId} view={view} />
       },
       [view],
     ),
@@ -134,6 +123,7 @@ export function EntryColumn() {
 
   const navigate = useNavigateEntry()
   const isRefreshing = entries.isFetching && !entries.isFetchingNextPage
+
   return (
     <div
       className="relative flex h-full flex-1 flex-col @container"
@@ -143,7 +133,11 @@ export function EntryColumn() {
         })}
       data-total-count={virtuosoOptions.totalCount}
     >
-      <ListHeader
+      {virtuosoOptions.totalCount === 0 &&
+        !entries.isLoading &&
+        !entries.error && <AddFeedHelper />}
+
+      <EntryListHeader
         refetch={entries.refetch}
         isRefreshing={isRefreshing}
         totalCount={virtuosoOptions.totalCount}
@@ -165,25 +159,26 @@ export function EntryColumn() {
         exit={{ opacity: 0.01, y: -100 }}
       >
         <ScrollArea.ScrollArea
-          scrollbarClassName="mt-3 w-2"
+          scrollbarClassName={cn(
+            "mt-3",
+            !views[view].wideMode ? "w-[5px] p-0" : "",
+          )}
           mask={false}
           ref={scrollRef}
           rootClassName="h-full"
           viewportClassName="[&>div]:grow flex"
-
         >
           {virtuosoOptions.totalCount === 0 ? (
             entries.isLoading ?
               null :
                 (
-                  <EmptyList />
+                  <EntryEmptyList />
                 )
           ) : view && views[view].gridMode ?
               (
-                <VirtuosoGrid
-                  listClassName={girdClassNames}
-                  {...virtuosoOptions}
-                  ref={virtuosoRef}
+                <ListGird
+                  virtuosoOptions={virtuosoOptions}
+                  virtuosoRef={virtuosoRef}
                 />
               ) :
               (
@@ -191,6 +186,7 @@ export function EntryColumn() {
                   {...virtuosoOptions}
                   virtuosoRef={virtuosoRef}
                   refetch={entries.refetch}
+                  groupCounts={groupedCounts}
                 />
               )}
         </ScrollArea.ScrollArea>
@@ -199,201 +195,62 @@ export function EntryColumn() {
   )
 }
 
-const ListHeader: FC<{
-  totalCount: number
-  refetch: () => void
-  isRefreshing: boolean
-  hasUpdate: boolean
-}> = ({ totalCount, refetch, isRefreshing, hasUpdate }) => {
-  const routerParams = useRouteParms()
-
-  const unreadOnly = useGeneralSettingKey("unreadOnly")
-
-  const { feedId, entryId, view } = routerParams
-
-  const headerTitle = useFeedHeaderTitle()
-  const os = getOS()
-
-  const titleAtBottom = window.electron && os === "macOS"
-  const isInCollectionList = feedId === FEED_COLLECTION_LIST
-
-  const titleInfo = !!headerTitle && (
-    <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
-      <div className="min-w-0 break-all text-lg font-bold leading-none">
-        <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
-          {headerTitle}
-        </EllipsisHorizontalTextWithTooltip>
-      </div>
-      <div className="text-xs font-medium text-zinc-400">
-        {totalCount || 0}
-        {" "}
-        {unreadOnly && !isInCollectionList ? "Unread" : ""}
-        {" "}
-        Items
-      </div>
-    </div>
-  )
-  const { mutateAsync: refreshFeed, isPending } = useRefreshFeedMutation(
-    routerParams.feedId,
-  )
-
-  const user = useMe()
-  const isOnline = useIsOnline()
-
-  const feed = useFeedById(routerParams.feedId)
-
-  const titleStyleBasedView = [
-    "pl-12",
-    "pl-7",
-    "pl-7",
-    "pl-7",
-    "px-5",
-    "pl-12",
-  ]
-
+const ListGird = ({
+  virtuosoOptions,
+  virtuosoRef,
+}: {
+  virtuosoOptions: Omit<
+    VirtuosoGridProps<string, unknown>,
+    "data" | "endReached"
+  > & {
+    data: string[]
+    endReached: () => Promise<any>
+  }
+  virtuosoRef: React.RefObject<VirtuosoHandle>
+}) => {
+  const masonry = useUISettingKey("pictureViewMasonry")
+  const view = useRouteParamsSelector((s) => s.view)
+  const feedId = useRouteParamsSelector((s) => s.feedId)
+  if (masonry && view === FeedViewType.Pictures) {
+    return (
+      <PictureMasonry
+        key={feedId}
+        hasNextPage={virtuosoOptions.totalCount! > virtuosoOptions.data.length}
+        endReached={virtuosoOptions.endReached}
+        data={virtuosoOptions.data}
+      />
+    )
+  }
   return (
-    <div
-      className={cn(
-        "mb-2 flex w-full flex-col pr-4 pt-2.5",
-        titleStyleBasedView[view],
-      )}
-    >
-      <div
-        className={cn(
-          "flex w-full",
-          titleAtBottom ? "justify-end" : "justify-between",
-        )}
-      >
-        {!titleAtBottom && titleInfo}
-
-        <div
-          className={cn(
-            "relative z-[1] flex items-center gap-1 self-baseline text-zinc-500",
-            (isInCollectionList || !headerTitle) &&
-            "pointer-events-none opacity-0",
-
-            "translate-x-[6px]",
-          )}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {views[view].wideMode &&
-            entryId &&
-            entryId !== ROUTE_ENTRY_PENDING && (
-            <>
-              <EntryHeader view={view} entryId={entryId} />
-              <DividerVertical className="w-px" />
-            </>
-          )}
-          {isOnline ? (
-            feed?.ownerUserId === user?.id && isBizId(routerParams.feedId) ?
-                (
-                  <ActionButton
-                    tooltip="Refresh"
-                    onClick={() => {
-                      refreshFeed()
-                    }}
-                  >
-                    <i
-                      className={cn(
-                        "i-mgc-refresh-2-cute-re",
-                        isPending && "animate-spin",
-                      )}
-                    />
-                  </ActionButton>
-                ) :
-                (
-                  <ActionButton
-                    tooltip={hasUpdate ? "New entries available" : "Refetch"}
-                    onClick={() => {
-                      refetch()
-                    }}
-                  >
-                    <i
-                      className={cn(
-                        "i-mgc-refresh-2-cute-re",
-                        isRefreshing && "animate-spin",
-                        hasUpdate && "text-theme-accent",
-                      )}
-                    />
-                  </ActionButton>
-                )
-          ) : null}
-          <ActionButton
-            tooltip={unreadOnly ? "Unread Only" : "All"}
-            shortcut={shortcuts.entries.toggleUnreadOnly.key}
-            onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
-          >
-            {unreadOnly ? (
-              <i className="i-mgc-round-cute-fi" />
-            ) : (
-              <i className="i-mgc-round-cute-re" />
-            )}
-          </ActionButton>
-          <MarkAllButton />
-        </div>
-      </div>
-      {titleAtBottom && titleInfo}
-    </div>
+    <VirtuosoGrid
+      listClassName={girdClassNames}
+      {...virtuosoOptions}
+      ref={virtuosoRef}
+    />
   )
 }
 
-const ListContent = forwardRef<HTMLDivElement>((props, ref) => (
-  <div className="px-2" {...props} ref={ref} />
-))
+const AddFeedHelper = () => {
+  const feedId = useRouteParamsSelector((s) => s.feedId)
+  const feedQuery = useFeed({ id: feedId })
 
-const EmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
-  (props, ref) => {
-    const unreadOnly = useGeneralSettingKey("unreadOnly")
-    return (
-      <m.div
-        className="absolute -mt-6 flex size-full grow flex-col items-center justify-center gap-2 text-zinc-400"
-        {...props}
-        ref={ref}
-      >
-        {unreadOnly ? (
-          <>
-            <i className="i-mgc-celebrate-cute-re -mt-11 text-3xl" />
-            <span className="text-base">Zero Unread</span>
-          </>
-        ) : (
-          <div className="flex -translate-y-6 flex-col items-center justify-center gap-2">
-            <EmptyIcon className="size-[30px]" />
-            <span className="text-base">Zero Items</span>
-          </div>
-        )}
-      </m.div>
-    )
-  },
-)
-
-const EntryList: FC<
-  VirtuosoProps<string, unknown> & {
-    virtuosoRef: React.RefObject<VirtuosoHandle>
-
-    refetch: () => void
+  if (!feedId) {
+    return
   }
-> = ({ virtuosoRef, refetch, ...virtuosoOptions }) => {
-  // Prevent scroll list move when press up/down key, the up/down key should be taken over by the shortcut key we defined.
-  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = useCallback(
-    (e) => {
-      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-        e.preventDefault()
-      }
-    },
-    [],
-  )
-  return (
-    <>
-      <Virtuoso
-        onKeyDown={handleKeyDown}
-        {...virtuosoOptions}
-        ref={virtuosoRef}
-      />
-      <EntryColumnShortcutHandler
-        refetch={refetch}
-        data={virtuosoOptions.data!}
-        virtuosoRef={virtuosoRef}
-      />
-    </>
-  )
+  if (feedId === FEED_COLLECTION_LIST || feedId === ROUTE_FEED_PENDING) {
+    return null
+  }
+  if (!isBizId(feedId)) {
+    return null
+  }
+
+  if (feedQuery.error && feedQuery.error.statusCode === 404) {
+    throw new FeedNotFound()
+  }
+
+  if (!feedQuery.data) {
+    return null
+  }
+
+  throw new FeedFoundCanBeFollowError(feedQuery.data.feed)
 }

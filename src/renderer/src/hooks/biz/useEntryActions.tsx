@@ -6,6 +6,7 @@ import {
   setReadabilityStatus,
   useEntryInReadabilityStatus,
 } from "@renderer/atoms/readability"
+import { whoami } from "@renderer/atoms/user"
 import { SimpleIconsEagle } from "@renderer/components/ui/platform-icon/icons"
 import { COPY_MAP, views } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
@@ -97,13 +98,15 @@ export const useUnread = () =>
 export const useEntryActions = ({
   view,
   entry,
+  type,
 }: {
   view?: number
   entry?: FlatEntryModel | null
+  type?: "toolbar" | "entryList"
 }) => {
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
-    enabled: !!entry?.entries.url && !!view,
+    enabled: !!entry?.entries.url && view !== undefined,
     queryFn: async () => {
       try {
         await ofetch("http://localhost:41595")
@@ -159,6 +162,7 @@ export const useEntryActions = ({
         shortcut: shortcuts.entry.tip.key,
         name: `Tip`,
         className: "i-mgc-power-outline",
+        hide: feed?.ownerUserId === whoami()?.id,
         onClick: () => {
           nextFrame(openTipModal)
         },
@@ -219,7 +223,7 @@ export const useEntryActions = ({
             "",
         ),
         key: "readability",
-        hide:
+        hide: type === "entryList" ||
           views[view].wideMode ||
           !populatedEntry.entries.url ||
           !window.electron,

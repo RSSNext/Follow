@@ -1,4 +1,4 @@
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { Divider } from "@renderer/components/ui/divider"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import {
@@ -15,7 +15,7 @@ import { ClaimDailyReward } from "./claim-daily-reward"
 import { CreateWallet } from "./create-wallet"
 
 export const MyWalletSection = () => {
-  const user = useMe()
+  const user = useWhoami()
   const wallet = useWallet({ userId: user?.id })
   const myWallet = wallet.data?.[0]
 
@@ -55,7 +55,7 @@ export const MyWalletSection = () => {
           <TooltipPortal>
             <TooltipContent align="start" className="z-[999]">
               <p>1. Daily Power can only be used for tipping others.</p>
-              <p>2. You claim Daily Power for free once every 24 hours.</p>
+              <p>2. You mint Daily Power for free once every 24 hours.</p>
             </TooltipContent>
           </TooltipPortal>
         </Tooltip>

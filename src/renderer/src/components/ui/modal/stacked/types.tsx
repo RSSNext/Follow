@@ -7,6 +7,7 @@ export interface ModalProps {
   icon?: ReactNode
 
   CustomModalComponent?: FC<PropsWithChildren>
+
   content: FC<ModalActionsInternal>
   clickOutsideToDismiss?: boolean
   modalClassName?: string
@@ -19,6 +20,11 @@ export interface ModalProps {
   overlay?: boolean
   draggable?: boolean
   canClose?: boolean
+  resizeable?: boolean
+  resizeDefaultSize?: { width: number, height: number }
+
+  modal?: boolean
+
 }
 export interface ModalStackOptions {
   wrapper?: FC

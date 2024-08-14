@@ -88,13 +88,14 @@ export function FeedIcon({
               {
                 "width": size,
                 "height": size,
+                "lineHeight": `${size}px`,
 
                 "--fo-light-background": colors.light.background,
                 "--fo-dark-background": colors.dark.background,
               } as any
             }
             className={cn(
-              "mr-2 flex shrink-0 items-center justify-center rounded-sm text-xs font-medium",
+              "mr-2 flex shrink-0 justify-center rounded-sm text-xs font-medium",
               "bg-[var(--fo-light-background)] text-white dark:bg-[var(--fo-dark-background)] dark:text-black",
               className,
             )}

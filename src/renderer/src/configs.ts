@@ -2,6 +2,8 @@ import { env } from "@env"
 import type { BrowserOptions } from "@sentry/react"
 import { FetchError } from "ofetch"
 
+import { CustomSafeError } from "./components/errors/helper"
+
 export const SentryConfig: BrowserOptions = {
   // Performance Monitoring
   tracesSampleRate: 1, //  Capture 100% of the transactions
@@ -22,6 +24,10 @@ export const SentryConfig: BrowserOptions = {
         /adsbygoogle/i.test(error.message) ||
         /Failed to fetch/i.test(error.message))
     ) {
+      return null
+    }
+
+    if (error instanceof CustomSafeError) {
       return null
     }
     if (error instanceof FetchError) {

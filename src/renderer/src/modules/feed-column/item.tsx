@@ -1,7 +1,6 @@
 import { getMainContainerElement } from "@renderer/atoms/dom"
-import { useMe } from "@renderer/atoms/user"
+import { useWhoami } from "@renderer/atoms/user"
 import { FeedIcon } from "@renderer/components/feed-icon"
-import { PhCrown } from "@renderer/components/icons/crown"
 import {
   Tooltip,
   TooltipContent,
@@ -64,7 +63,7 @@ const FeedItemImpl = ({
   const feed = useFeedById(feedId)
 
   const { items } = useFeedActions({ feedId, view })
-  const me = useMe()
+  const me = useWhoami()
   const isOwned = feed && feed.ownerUserId === me?.id
 
   if (!feed) return null
@@ -128,8 +127,8 @@ const FeedItemImpl = ({
           </div>
           {isOwned && (
             <Tooltip delayDuration={300}>
-              <TooltipTrigger>
-                <PhCrown className="ml-1 shrink-0 text-base" />
+              <TooltipTrigger asChild>
+                <i className="i-mgc-flag-1-cute-fi ml-1 shrink-0 text-base text-theme-accent" />
               </TooltipTrigger>
 
               <TooltipPortal>

@@ -30,13 +30,16 @@ const handleClickPlay = () => {
 
 export const CornerPlayer = () => {
   const show = usePlayerAtomSelector((v) => v.show)
+  const entryId = usePlayerAtomSelector((v) => v.entryId)
+  const entry = useEntry(entryId)
+  const feed = useFeedById(entry?.feedId)
 
   return (
     <AnimatePresence>
-      {show && (
+      {show && entry && feed && (
         <m.div
           key="corner-player"
-          className="group relative z-10 !-mt-8 !mb-0 w-full pr-px"
+          className="group relative z-10 !mb-0 w-full pr-px"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
@@ -105,7 +108,7 @@ const CornerPlayerImpl = () => {
 
   return (
     <>
-      <div className="relative flex border-y bg-theme-modal-background backdrop-blur transition-all duration-200 ease-in-out">
+      <div className="relative flex border-y bg-white transition-all duration-200 ease-in-out dark:bg-neutral-800">
         {/* play cover */}
         <div className="relative h-full">
           <FeedIcon
@@ -122,10 +125,10 @@ const CornerPlayerImpl = () => {
             >
               <i
                 className={cn("size-6", {
-                  "i-mingcute-pause-fill": playerValue.status === "playing",
-                  "i-mingcute-loading-fill animate-spin":
+                  "i-mgc-pause-cute-fi": playerValue.status === "playing",
+                  "i-mgc-loading-3-cute-re animate-spin":
                     playerValue.status === "loading",
-                  "i-mingcute-play-fill": playerValue.status === "paused",
+                  "i-mgc-play-cute-fi": playerValue.status === "paused",
                 })}
               />
             </button>
@@ -135,10 +138,7 @@ const CornerPlayerImpl = () => {
         <div className="relative truncate px-2 py-1 text-center text-sm">
           <Marquee
             play={playerValue.status === "playing"}
-            className="font-medium"
-            gradient
-            gradientWidth={24}
-            gradientColor="var(--fo-modal-background)"
+            className="mask-horizontal font-medium"
             speed={30}
           >
             {entry.entries.title}

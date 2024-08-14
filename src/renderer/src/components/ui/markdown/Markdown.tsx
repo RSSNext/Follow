@@ -1,27 +1,28 @@
+import type { RemarkOptions } from "@renderer/lib/parse-markdown"
+import { parseMarkdown } from "@renderer/lib/parse-markdown"
 import { cn } from "@renderer/lib/utils"
-import markdownit from "markdown-it"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 
-import styles from "./index.module.css"
-import { createContainer } from "./plugins/container"
+export const Markdown: Component<
+  {
+    children: string
+  } & Partial<RemarkOptions>
+> = ({ children, components, className }) => {
+  const stableRemarkOptions = useState({ components })[0]
 
-const md = markdownit()
-  .use(...createContainer("tip", "TIP", () => md))
-  .use(...createContainer("info", "INFO", () => md))
-  .use(...createContainer("warning", "WARNING", () => md))
-  .use(...createContainer("danger", "DANGER", () => md))
-  .use(...createContainer("details", "Details", () => md))
+  const markdownElement = useMemo(
+    () => parseMarkdown(children, { ...stableRemarkOptions }).content,
+    [children, stableRemarkOptions],
+  )
 
-export const Markdown: Component<{
-  children: string
-}> = (props) => (
-  <div
-    className={cn(styles.markdown, props.className, "prose dark:prose-invert prose-th:text-left")}
-    dangerouslySetInnerHTML={useMemo(
-      () => ({
-        __html: md.render(props.children as string),
-      }),
-      [props.children],
-    )}
-  />
-)
+  return (
+    <article
+      className={cn(
+        "prose relative cursor-auto select-text dark:prose-invert prose-th:text-left",
+        className,
+      )}
+    >
+      {markdownElement}
+    </article>
+  )
+}

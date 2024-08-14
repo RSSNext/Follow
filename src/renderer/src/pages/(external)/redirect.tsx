@@ -1,4 +1,4 @@
-import { Logo } from "@renderer/components/icons/logo"
+import { PoweredByFooter } from "@renderer/components/common/PoweredByFooter"
 import { StyledButton } from "@renderer/components/ui/button"
 import { UserAvatar } from "@renderer/components/user-button"
 import { apiClient } from "@renderer/lib/api-fetch"
@@ -28,23 +28,18 @@ export function Component() {
   }, [])
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center gap-10 px-4">
-      <Logo className="size-20" />
-      <UserAvatar className="bg-stone-100 px-10 py-4 text-2xl" />
-      <h1 className="text-center text-3xl font-bold">
-        Successfully connected to
-        {" "}
-        {APP_NAME}
-        {" "}
-        Account
-      </h1>
+    <div className="flex h-screen w-full flex-col items-center justify-center gap-10 px-4 pb-12 pt-[30vh]">
+      <UserAvatar className="gap-8 px-10 py-4 text-2xl" />
       <h2 className="text-center">
         You have successfully connected to
         {" "}
         {APP_NAME}
         {" "}
-        Account. Now is the time
-        to open
+        Account.
+        {" "}
+        <br />
+        <br />
+        Now is the time to open
         {" "}
         {APP_NAME}
         {" "}
@@ -60,7 +55,7 @@ export function Component() {
         </StyledButton>
 
         <StyledButton
-          className="h-14 !rounded-full px-10 text-lg"
+          className="h-14 !rounded-full px-5 text-lg"
           onClick={async () => window.open(await getCallbackUrl(), "_top")}
         >
           Open
@@ -68,6 +63,8 @@ export function Component() {
           {APP_NAME}
         </StyledButton>
       </div>
+      <div className="grow" />
+      <PoweredByFooter />
     </div>
   )
 }
