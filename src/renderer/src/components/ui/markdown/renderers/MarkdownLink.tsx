@@ -1,7 +1,9 @@
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
+import { useAuthQuery } from "@renderer/hooks/common"
 import { FeedViewType } from "@renderer/lib/enum"
 import { isBizId } from "@renderer/lib/utils"
 import { useEntryContentContext } from "@renderer/modules/entry-content/hooks"
+import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry"
 import { useFeedByIdSelector } from "@renderer/store/feed"
 import { useCallback, useMemo } from "react"
@@ -37,6 +39,10 @@ export const MarkdownLink = (props: LinkProps) => {
   }, [feedSiteUrl, props])
   const entryId = isBizId(props.href) ? props.href : null
   const entry = useEntry(entryId)
+  useAuthQuery(Queries.entries.byId(entryId!), {
+    enabled: !!entryId && !entry,
+    staleTime: 1000 * 60 * 5,
+  })
 
   const navigate = useNavigateEntry()
   const onClick = useCallback(
