@@ -133,7 +133,7 @@ const ShikiTheme = () => {
         <SelectTrigger size="sm" className="w-48">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="h-64">
+        <SelectContent align="end" className="h-64">
           {Object.keys(bundledThemes)?.map((theme) => (
             <SelectItem key={theme} value={theme}>
               {theme}
@@ -168,7 +168,7 @@ const TextSize = () => {
           )
         }}
       >
-        <SelectTrigger size="sm" className="w-24 capitalize">
+        <SelectTrigger size="sm" className="w-48 capitalize">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

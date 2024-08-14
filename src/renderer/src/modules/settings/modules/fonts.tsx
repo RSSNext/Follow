@@ -20,7 +20,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect, useMemo, useRef } from "react"
 import * as React from "react"
 
-const FALLBACK_FONT = "Default"
+const FALLBACK_FONT = "Default (UI Font)"
 const DEFAULT_FONT = "SN Pro"
 const CUSTOM_FONT = "Custom"
 const useFontDataElectron = () => {
