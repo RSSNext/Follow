@@ -14,7 +14,7 @@ import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import { nextFrame } from "@renderer/lib/dom"
+import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import type { SubscriptionModel } from "@renderer/models"
 import { useUserSubscriptionsQuery } from "@renderer/modules/profile/hooks"
@@ -137,17 +137,16 @@ export const UserProfileModalContent: FC<{
   }, [variant, winHeight])
 
   const [itemStyle, setItemStyle] = useState("loose" as ItemVariant)
+
   return (
     <div
-      className={
-        variant === "drawer" ?
-          "flex h-full justify-end overflow-hidden" :
-          "container center h-full"
-      }
-      onClick={modal.dismiss}
+      className={variant === "drawer" ? "h-full" : "container center h-full"}
+      onPointerDown={variant === "dialog" ? modal.dismiss : undefined}
+      onClick={stopPropagation}
     >
       <m.div
-        onClick={(e) => e.stopPropagation()}
+        onPointerDown={stopPropagation}
+        onPointerDownCapture={stopPropagation}
         tabIndex={-1}
         initial="initial"
         animate={controller}
@@ -161,10 +160,10 @@ export const UserProfileModalContent: FC<{
         exit="exit"
         layout="size"
         className={cn(
-          "shadow-perfect perfect-sm relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
+          "relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0 shadow",
           variant === "drawer" ?
-            "my-auto mr-4 h-[calc(100%-4rem)] w-[60ch] max-w-full" :
-            "h-[80vh] w-[500px] max-w-full lg:max-h-[calc(100vh-10rem)]",
+            "h-full w-[60ch] max-w-full" :
+            "h-[80vh] w-[800px] max-w-full lg:max-h-[calc(100vh-10rem)]",
         )}
       >
         <div className="absolute right-2 top-2 z-10 flex items-center gap-2 text-[20px] opacity-80">
@@ -232,7 +231,7 @@ export const UserProfileModalContent: FC<{
               <m.div
                 layout
                 className={cn(
-                  "flex flex-col items-center",
+                  "flex cursor-text select-text flex-col items-center",
                   isHeaderSimple ? "ml-8 items-start" : "",
                 )}
               >
@@ -338,7 +337,7 @@ const SubscriptionItem: FC<{
               present({
                 title: `${isFollowed ? "Edit " : ""}${APP_NAME} - ${
                   subscription.feeds.title
-                  }`,
+                }`,
                 clickOutsideToDismiss: true,
                 content: ({ dismiss }) => (
                   <FeedForm

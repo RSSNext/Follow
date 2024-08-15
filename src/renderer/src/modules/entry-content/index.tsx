@@ -20,6 +20,7 @@ import {
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { FeedViewType } from "@renderer/lib/enum"
+import { cn } from "@renderer/lib/utils"
 import type { ActiveEntryId } from "@renderer/models"
 import {
   useIsSoFWrappedElement,
@@ -62,7 +63,10 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   return <EntryContentRender entryId={entryId} />
 }
 
-function EntryContentRender({ entryId }: { entryId: string }) {
+export const EntryContentRender: Component<{ entryId: string }> = ({
+  entryId,
+  className,
+}) => {
   const user = useWhoami()
 
   const { error, data, isPending } = useAuthQuery(
@@ -139,7 +143,10 @@ function EntryContentRender({ entryId }: { entryId: string }) {
 
       <ScrollArea.ScrollArea
         mask={false}
-        rootClassName="h-0 grow min-w-0 overflow-y-auto @container"
+        rootClassName={cn(
+          "h-0 min-w-0 grow overflow-y-auto @container",
+          className,
+        )}
         viewportClassName="p-5"
         ref={scrollerRef}
       >
@@ -215,7 +222,9 @@ function EntryContentRender({ entryId }: { entryId: string }) {
                 )}
                 <article>
                   {!isInReadabilityMode ? (
-                    <HTML renderInlineStyle={readerRenderInlineStyle}>{content}</HTML>
+                    <HTML renderInlineStyle={readerRenderInlineStyle}>
+                      {content}
+                    </HTML>
                   ) : (
                     <ReadabilityContent entryId={entryId} />
                   )}
@@ -305,11 +314,8 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
         </div>
       )}
       <article>
-        <HTML>
-          {result?.content ?? ""}
-        </HTML>
+        <HTML>{result?.content ?? ""}</HTML>
       </article>
-
     </div>
   )
 }

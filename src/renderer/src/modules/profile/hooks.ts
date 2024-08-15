@@ -59,6 +59,9 @@ export const usePresentUserProfileModal = (
           }),
         CustomModalComponent: NoopChildren,
         clickOutsideToDismiss: true,
+        modal: variant === "dialog",
+        overlay: variant === "dialog",
+        modalContainerClassName: variant === "drawer" ? "right-4 left-[auto] top-4 bottom-4" : "",
       })
     },
     [present, variant],
