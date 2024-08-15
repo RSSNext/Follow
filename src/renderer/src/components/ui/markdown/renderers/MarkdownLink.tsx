@@ -39,6 +39,7 @@ export const MarkdownLink = (props: LinkProps) => {
   }, [feedSiteUrl, props])
   const entryId = isBizId(props.href) ? props.href : null
   const entry = useEntry(entryId)
+
   useAuthQuery(Queries.entries.byId(entryId!), {
     enabled: !!entryId && !entry,
     staleTime: 1000 * 60 * 5,

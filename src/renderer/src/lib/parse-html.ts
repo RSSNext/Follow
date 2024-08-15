@@ -5,6 +5,7 @@ import {
   MarkdownLink,
   MarkdownP,
 } from "@renderer/components/ui/markdown/renderers"
+import { BlockError } from "@renderer/components/ui/markdown/renderers/BlockErrorBoundary"
 import { Media } from "@renderer/components/ui/media"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
@@ -18,11 +19,11 @@ import rehypeStringify from "rehype-stringify"
 import { unified } from "unified"
 import { VFile } from "vfile"
 
-export const parseHtml = async (
+export const parseHtml = (
   content: string,
-  options?: {
+  options?: Partial<{
     renderInlineStyle: boolean
-  },
+  }>,
 ) => {
   const file = new VFile(content)
   const { renderInlineStyle = false } = options || {}
@@ -94,6 +95,7 @@ export const parseHtml = async (
           if (!props.children) return null
 
           let language = ""
+
           let codeString = null as string | null
           if (props.className?.includes("language-")) {
             language = props.className.replace("language-", "")
@@ -116,7 +118,14 @@ export const parseHtml = async (
               "props" in props.children && props.children.props.children
             if (!code) return null
 
-            codeString = extractCodeFromHtml(renderToString(code))
+            try {
+              codeString = extractCodeFromHtml(renderToString(code))
+            } catch (error) {
+              return createElement(BlockError, {
+                error,
+                message: "Code Block Render Error",
+              })
+            }
           }
 
           if (!codeString) return null

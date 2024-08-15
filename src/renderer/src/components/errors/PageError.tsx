@@ -17,9 +17,9 @@ export const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {
         </div>
         <div className="text-lg font-bold">{message}</div>
         {import.meta.env.DEV && stack ? (
-          <div className="mt-4 cursor-text overflow-auto whitespace-pre rounded-md bg-red-50 p-4 text-left font-mono text-sm text-red-600">
+          <pre className="mt-4 max-h-48 cursor-text overflow-auto whitespace-pre-line rounded-md bg-red-50 p-4 text-left font-mono text-sm text-red-600">
             {attachOpenInEditor(stack)}
-          </div>
+          </pre>
         ) : null}
 
         <p className="my-8">

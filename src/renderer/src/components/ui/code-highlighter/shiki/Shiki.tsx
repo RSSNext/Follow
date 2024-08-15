@@ -5,10 +5,10 @@ import {
 import { isElectronBuild } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { cn } from "@renderer/lib/utils"
+import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import type { FC } from "react"
 import {
   useInsertionEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -95,7 +95,7 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
   const codeTheme = useUISettingSelector(
     (s) => overrideTheme || s.codeHighlightTheme,
   )
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     let isMounted = true
     setLoaded(false)
 
@@ -214,7 +214,10 @@ const ShikiCode: FC<
         className,
       )}
     >
-      <div dangerouslySetInnerHTML={{ __html: rendered }} />
+      <div
+        dangerouslySetInnerHTML={{ __html: rendered }}
+        data-language={language}
+      />
       <CopyButton
         value={code}
         className="absolute right-1 top-1 opacity-0 duration-200 group-hover:opacity-100"
