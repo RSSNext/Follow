@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-finally */
 import { runTransactionInScope } from "@renderer/database"
 import { unstable_batchedUpdates } from "react-dom"
 import type { StateCreator } from "zustand"
@@ -89,33 +90,43 @@ export type MutationAndTranscationOptions = {
    */
   doTranscationWhenMutationFail?: boolean
 }
-export const doMutationAndTransaction = async (
-  mutationFn: () => Promise<any>,
-  transaction: () => Promise<any>,
+export const doMutationAndTransaction = async <M, T>(
+  mutationFn: () => Promise<M>,
+  transaction: () => Promise<T>,
   options?: MutationAndTranscationOptions,
-) => {
+): Promise<[M | null | void, T | null | void]> => {
   const isOnline = navigator.onLine
   const { waitMutation = false, doTranscationWhenMutationFail = !isOnline } =
     options || {}
-  const wrappedTransaction = () =>
-    runTransactionInScope(() => unstable_batchedUpdates(() => transaction()))
+  const wrappedTransaction = () => {
+    const ret = runTransactionInScope(() =>
+      unstable_batchedUpdates(() => transaction()),
+    )
+
+    if (ret instanceof Promise) {
+      return ret
+    }
+    return null
+  }
   const wrappedMutation = () => (isOnline ? mutationFn() : Promise.resolve())
 
   if (waitMutation) {
-    let runOnce = false
-    await wrappedMutation()
-      .then(() => {
-        runOnce = true
-        return wrappedTransaction()
-      })
-      .finally(() => {
-        if (runOnce) return
-        if (doTranscationWhenMutationFail) {
-          return wrappedTransaction()
-        }
-        return
-      })
+    let runTransactionOnce = false
+
+    try {
+      const mutationRet = await wrappedMutation()
+      runTransactionOnce = true
+      const transactionRet = await wrappedTransaction()
+      return [mutationRet, transactionRet]
+    } finally {
+      if (!runTransactionOnce && doTranscationWhenMutationFail) {
+        const transactionRet = await wrappedTransaction()
+
+        return [null, transactionRet]
+      }
+      return [null, null]
+    }
   } else {
-    await Promise.all([wrappedMutation(), wrappedTransaction()])
+    return await Promise.all([wrappedMutation(), wrappedTransaction()])
   }
 }

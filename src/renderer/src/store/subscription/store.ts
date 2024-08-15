@@ -246,7 +246,7 @@ class SubscriptionActions {
           })
           .then(() => feed),
       () => SubscriptionService.removeSubscription(whoami()!.id, feedId),
-    )
+    ).then(() => feed)
   }
 
   async changeCategoryView(
