@@ -1,3 +1,4 @@
+import { whoami } from "@renderer/atoms/user"
 import { runTransactionInScope } from "@renderer/database"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { FeedViewType } from "@renderer/lib/enum"
@@ -235,13 +236,17 @@ class SubscriptionActions {
     // Clear feed's unread count
     feedUnreadActions.updateByFeedId(feedId, 0)
 
-    return apiClient.subscriptions
-      .$delete({
-        json: {
-          feedId,
-        },
-      })
-      .then(() => feed)
+    return doMutationAndTransaction(
+      () =>
+        apiClient.subscriptions
+          .$delete({
+            json: {
+              feedId,
+            },
+          })
+          .then(() => feed),
+      () => SubscriptionService.removeSubscription(whoami()!.id, feedId),
+    )
   }
 
   async changeCategoryView(
