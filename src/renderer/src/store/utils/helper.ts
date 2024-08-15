@@ -45,6 +45,7 @@ export const createZustandStore =
         createWithEqualityFn(store, shallow)
 
       storeMap[name] = newStore
+
       window.store =
       window.store ||
       new Proxy(

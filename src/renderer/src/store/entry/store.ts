@@ -10,9 +10,7 @@ import type {
   FeedModel,
   UserModel,
 } from "@renderer/models"
-import {
-  EntryService,
-} from "@renderer/services"
+import { EntryService } from "@renderer/services"
 import { produce } from "immer"
 import { isNil, merge, omit } from "lodash-es"
 import type { EntryReadHistoriesModel } from "src/hono"
@@ -144,6 +142,8 @@ class EntryActions {
 
     const changedReadStatusMap = {} as Record<string, boolean>
 
+    // TODO collection patch in db
+
     set((state) =>
       produce(state, (draft) => {
         const ids = draft.entries[feedId]
@@ -235,7 +235,9 @@ class EntryActions {
           // Push entry
           entries.push(mergedEntry)
           // Push entry2Read
-          entry2Read[item.entries.id] = item.read || false
+          if (!isNil(item.read)) {
+            entry2Read[item.entries.id] = item.read
+          }
           // Push entryFeedMap
           entryFeedMap[item.entries.id] = item.feeds.id
           // Push entryCollection

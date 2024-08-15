@@ -72,15 +72,32 @@ class EntryServiceStatic extends BaseService<EntryModel> {
   }
 
   async deleteCollection(entryId: string) {
-    return EntryRelatedService.deleteItem(EntryRelatedKey.COLLECTION, entryId)
+    return EntryRelatedService.deleteItems(EntryRelatedKey.COLLECTION, [
+      entryId,
+    ])
   }
 
   async deleteEntries(entryIds: string[]) {
-    await this.table.bulkDelete(entryIds)
+    await Promise.all([
+      this.table.bulkDelete(entryIds),
+      EntryRelatedService.deleteItems(EntryRelatedKey.READ, entryIds),
+      EntryRelatedService.deleteItems(EntryRelatedKey.COLLECTION, entryIds),
+    ])
   }
 
   async deleteEntriesByFeedIds(feedIds: string[]) {
-    await this.table.where("feedId").anyOf(feedIds).delete()
+    const deleteEntryIds = await this.table
+      .where("feedId")
+      .anyOf(feedIds)
+      .primaryKeys()
+    await Promise.all([
+      this.table.where("feedId").anyOf(feedIds).delete(),
+      EntryRelatedService.deleteItems(EntryRelatedKey.READ, deleteEntryIds),
+      EntryRelatedService.deleteItems(
+        EntryRelatedKey.COLLECTION,
+        deleteEntryIds,
+      ),
+    ])
   }
 }
 
