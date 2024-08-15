@@ -24,7 +24,7 @@ import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC } from "react"
 
-import { MarkAllButton } from "../components/mark-all-button"
+import { MarkAllReadButton } from "../components/mark-all-button"
 
 export const EntryListHeader: FC<{
   totalCount: number
@@ -160,7 +160,7 @@ export const EntryListHeader: FC<{
               <i className="i-mgc-round-cute-re" />
             )}
           </ActionButton>
-          <MarkAllButton shortcut />
+          <MarkAllReadButton shortcut />
         </div>
       </div>
       {titleAtBottom && titleInfo}

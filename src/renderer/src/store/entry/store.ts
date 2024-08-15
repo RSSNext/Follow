@@ -10,9 +10,11 @@ import type {
   FeedModel,
   UserModel,
 } from "@renderer/models"
-import { EntryService } from "@renderer/services"
+import {
+  EntryService,
+} from "@renderer/services"
 import { produce } from "immer"
-import { merge, omit } from "lodash-es"
+import { isNil, merge, omit } from "lodash-es"
 import type { EntryReadHistoriesModel } from "src/hono"
 
 import { feedActions } from "../feed"
@@ -135,6 +137,13 @@ class EntryActions {
       endTime: number
     },
   ) {
+    const patchChangedEntriesInDb = [] as {
+      key: string
+      changes: Partial<EntryModel>
+    }[]
+
+    const changedReadStatusMap = {} as Record<string, boolean>
+
     set((state) =>
       produce(state, (draft) => {
         const ids = draft.entries[feedId]
@@ -151,20 +160,30 @@ class EntryActions {
             }
           }
           Object.assign(draft.flatMapEntries[entryId], changed)
+
+          if (changed.entries) {
+            patchChangedEntriesInDb.push({
+              key: entryId,
+              changes: changed.entries,
+            })
+          }
+
+          if (!isNil(changed.read)) {
+            // EntryService.bulkStoreReadStatus()
+            changedReadStatusMap[entryId] = changed.read
+          }
         })
 
         return draft
       }),
     )
-  }
+    runTransactionInScope(() => {
+      if (patchChangedEntriesInDb.length > 0) {
+        EntryService.bulkPatch(patchChangedEntriesInDb)
+      }
 
-  async markReadByFeedId(feedId: string) {
-    const state = get()
-    const entries = state.entries[feedId] || []
-    await Promise.all(
-      entries.map((entryId) => this.markRead(feedId, entryId, true)),
-    )
-    feedUnreadActions.updateByFeedId(feedId, 0)
+      EntryService.bulkStoreReadStatus(changedReadStatusMap)
+    })
   }
 
   upsertMany(data: CombinedEntryModel[]) {

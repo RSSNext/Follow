@@ -34,14 +34,14 @@ class EntryServiceStatic extends BaseService<EntryModel> {
       })
     }
 
-    CleanerService.renew(renewList)
+    CleanerService.reset(renewList)
 
     return super.upsertMany(nextData)
   }
 
   // @ts-ignore
   override async upsert(feedId: string, data: EntryModel): Promise<unknown> {
-    CleanerService.renew([
+    CleanerService.reset([
       {
         type: "entry",
         id: data.id,
@@ -52,6 +52,11 @@ class EntryServiceStatic extends BaseService<EntryModel> {
       // @ts-expect-error
       feedId,
     })
+  }
+
+  async bulkPatch(data: { key: string, changes: Partial<EntryModel> }[]) {
+    await this.table.bulkUpdate(data)
+    CleanerService.reset(data.map((d) => ({ type: "entry", id: d.key })))
   }
 
   override async findAll() {

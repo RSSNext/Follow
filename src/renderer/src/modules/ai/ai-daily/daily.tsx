@@ -26,7 +26,7 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn, isBizId } from "@renderer/lib/utils"
-import { FlatMarkAllButton } from "@renderer/modules/entry-column/components/mark-all-button"
+import { FlatMarkAllReadButton } from "@renderer/modules/entry-column/components/mark-all-button"
 import { StarIcon } from "@renderer/modules/entry-column/star-icon"
 import { EntryContentRender } from "@renderer/modules/entry-content"
 import { Queries } from "@renderer/queries"
@@ -171,7 +171,7 @@ export const DailyReportContent: Component<DailyReportContentProps> = ({
           </AutoResizeHeight>
         </ScrollArea.ScrollArea>
         {!!content.data && (
-          <FlatMarkAllButton
+          <FlatMarkAllReadButton
             className="ml-auto"
             filter={{
               startTime: startDate,
@@ -217,7 +217,7 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
           )}
 
       {!!content.data && (
-        <FlatMarkAllButton
+        <FlatMarkAllReadButton
           className="ml-auto"
           filter={{
             startTime: startDate,

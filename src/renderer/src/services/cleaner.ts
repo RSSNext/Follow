@@ -40,7 +40,7 @@ class CleanerServiceStatic {
   /**
    * Mark the which data recently used
    */
-  renew(list: { type: "feed" | "entry", id: string }[]) {
+  reset(list: { type: "feed" | "entry", id: string }[]) {
     const now = Date.now()
     return cleanerModel.bulkPut(
       list.map((item) => ({

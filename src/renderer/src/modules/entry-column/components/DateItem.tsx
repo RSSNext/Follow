@@ -5,7 +5,7 @@ import { cn } from "@renderer/lib/utils"
 import { throttle } from "lodash-es"
 import { memo, useLayoutEffect, useMemo, useRef, useState } from "react"
 
-import { MarkAllButton } from "./mark-all-button"
+import { MarkAllReadButton } from "./mark-all-button"
 
 const useParseDate = (date: string) => useMemo(() => {
   const dateObj = new Date(date)
@@ -67,7 +67,7 @@ const UniversalDateItem = ({
   const RelativeElement = <RelativeDay date={dateObj} />
   return (
     <div className={cn(className, isSticky && "border-b")} ref={itemRef}>
-      <MarkAllButton
+      <MarkAllReadButton
         which={RelativeElement}
         className="size-7 text-base"
         filter={{
@@ -93,7 +93,7 @@ const SocialMediaDateItem = ({
   return (
     <div className={cn(className, isSticky && "border-b")} ref={itemRef}>
       <div className="m-auto flex w-[67ch] gap-3 pl-5 text-lg">
-        <MarkAllButton
+        <MarkAllReadButton
           filter={{
             startTime: startOfDay,
             endTime: endOfDay,

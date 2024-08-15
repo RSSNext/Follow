@@ -141,11 +141,15 @@ class SubscriptionActions {
     )
   }
 
+  async markReadByFeedIds(feedIds: string[]): Promise<void>
   async markReadByFeedIds(
-    view: FeedViewType,
     feedIds: string[],
-    filter?: MarkReadFilter,
-  ) {
+    view: FeedViewType,
+    filter?: MarkReadFilter
+  ): Promise<void>
+  async markReadByFeedIds(...args: [string[], FeedViewType?, MarkReadFilter?]) {
+    const [feedIds, view, filter] = args
+
     doMutationAndTransaction(
       () =>
         apiClient.reads.all.$post({

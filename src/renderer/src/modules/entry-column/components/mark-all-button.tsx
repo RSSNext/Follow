@@ -31,64 +31,62 @@ interface MarkAllButtonProps {
 
   shortcut?: boolean
 }
-export const MarkAllButton = forwardRef<HTMLButtonElement, MarkAllButtonProps>(
-  ({ filter, className, which = "all", shortcut }, ref) => {
-    const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
+export const MarkAllReadButton = forwardRef<
+  HTMLButtonElement,
+  MarkAllButtonProps
+>(({ filter, className, which = "all", shortcut }, ref) => {
+  const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
 
-    const handleMarkAllAsRead = useMarkAll(filter)
+  const handleMarkAllAsRead = useMarkAll(filter)
 
-    return (
-      <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
-        <PopoverTrigger asChild>
-          <ActionButton
-            shortcut={
-              shortcut ? shortcuts.entries.markAllAsRead.key : undefined
-            }
-            tooltip={(
-              <span>
-                Mark
-                {" "}
-                {which}
-                {" "}
-                as read
-              </span>
-            )}
-            className={className}
-            ref={ref}
-          >
-            <i className="i-mgc-check-circle-cute-re" />
-          </ActionButton>
-        </PopoverTrigger>
-        <PopoverPortal>
-          <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
-            <div>
+  return (
+    <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
+      <PopoverTrigger asChild>
+        <ActionButton
+          shortcut={shortcut ? shortcuts.entries.markAllAsRead.key : undefined}
+          tooltip={(
+            <span>
               Mark
               {which}
               {" "}
-              as read?
-            </div>
-            <div className="space-x-4">
-              <PopoverClose>
-                <StyledButton variant="outline">Cancel</StyledButton>
-              </PopoverClose>
+              as read
+            </span>
+          )}
+          className={className}
+          ref={ref}
+        >
+          <i className="i-mgc-check-circle-cute-re" />
+        </ActionButton>
+      </PopoverTrigger>
+      <PopoverPortal>
+        <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
+          <div>
+            Mark
+            {which}
+            {" "}
+            as read?
+          </div>
+          <div className="space-x-4">
+            <PopoverClose>
+              <StyledButton variant="outline">Cancel</StyledButton>
+            </PopoverClose>
 
-              <StyledButton
-                onClick={() => {
-                  handleMarkAllAsRead()
-                  setMarkPopoverOpen(false)
-                }}
-              >
-                Confirm
-              </StyledButton>
-            </div>
-          </PopoverContent>
-        </PopoverPortal>
-      </Popover>
-    )
-  },
-)
+            <StyledButton
+              onClick={() => {
+                handleMarkAllAsRead()
+                setMarkPopoverOpen(false)
+              }}
+            >
+              Confirm
+            </StyledButton>
+          </div>
+        </PopoverContent>
+      </PopoverPortal>
+    </Popover>
+  )
+})
 
-export const FlatMarkAllButton: FC<MarkAllButtonProps> = (props) => {
+export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
   const { className, filter, which } = props
   const [status, setStatus] = useState<"initial" | "confirm" | "done">(
     "initial",
@@ -166,11 +164,11 @@ const useMarkAll = (filter: MarkAllButtonProps["filter"]) => {
     if (typeof routerParams.feedId === "number" || routerParams.isAllFeeds) {
       subscriptionActions.markReadByView(view, filter)
     } else if (folderIds) {
-      subscriptionActions.markReadByFeedIds(view, folderIds, filter)
+      subscriptionActions.markReadByFeedIds(folderIds, view, filter)
     } else if (routerParams.feedId) {
       subscriptionActions.markReadByFeedIds(
-        view,
         routerParams.feedId?.split(","),
+        view,
         filter,
       )
     }
