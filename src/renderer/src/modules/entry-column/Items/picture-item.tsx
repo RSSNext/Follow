@@ -82,12 +82,14 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   const previewMedia = usePreviewMedia()
 
   if (!entry) return null
+  const hasMedia = entry.entries.media && entry.entries.media.length > 0
 
+  if (!hasMedia) return null
   return (
     <EntryItemWrapper
       view={FeedViewType.Pictures}
       entry={entry}
-      itemClassName="group hover:bg-theme-item-hover"
+      itemClassName="group hover:bg-theme-item-hover rounded-md"
     >
       <GridItem
         wrapperClassName="p-0 h-full flex flex-col"
@@ -95,24 +97,21 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
         entryPreview={entryPreview}
         translation={translation}
       >
-        {entry.entries.media ? (
-          <MasonryItemFixedDimensionWrapper url={entry.entries.media[0].url}>
-            <SwipeMedia
-
-              media={entry.entries.media}
-              className={cn(
-                "w-full shrink-0 grow rounded-md",
-                isActive && "rounded-b-none",
-              )}
-              proxySize={proxySize}
-              imgClassName="object-cover"
-              uniqueKey={entryId}
-              onPreview={(media, i) => {
-                previewMedia(media, i)
-              }}
-            />
-          </MasonryItemFixedDimensionWrapper>
-        ) : null}
+        <MasonryItemFixedDimensionWrapper url={entry.entries.media![0].url}>
+          <SwipeMedia
+            media={entry.entries.media}
+            className={cn(
+              "w-full shrink-0 grow rounded-md",
+              isActive && "rounded-b-none",
+            )}
+            proxySize={proxySize}
+            imgClassName="object-cover"
+            uniqueKey={entryId}
+            onPreview={(media, i) => {
+              previewMedia(media, i)
+            }}
+          />
+        </MasonryItemFixedDimensionWrapper>
       </GridItem>
     </EntryItemWrapper>
   )
