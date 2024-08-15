@@ -3,6 +3,7 @@
  */
 import * as React from "react"
 import { useEffect, useRef } from "react"
+import { useEventCallback } from "usehooks-ts"
 
 import { useSetState } from "../useSetState"
 
@@ -70,6 +71,7 @@ export default function createHTMLMediaHook<
       volume: 1,
       playing: false,
     })
+    const getState = useEventCallback(() => state)
     const ref = useRef<T | null>(null)
 
     const wrapEvent = (userEvent, proxyEvent?) => (event) => {
@@ -156,7 +158,7 @@ export default function createHTMLMediaHook<
     // See: https://bugs.chromium.org/p/chromium/issues/detail?id=593273
     let lockPlay = false
 
-    const controls = {
+    const controls = React.useState(() => ({
       play: () => {
         const el = ref.current
         if (!el) {
@@ -186,6 +188,7 @@ export default function createHTMLMediaHook<
         }
       },
       seek: (time: number) => {
+        const state = getState()
         const el = ref.current
         if (!el || state.duration === undefined) {
           return
@@ -216,7 +219,7 @@ export default function createHTMLMediaHook<
         }
         el.muted = false
       },
-    }
+    }))[0]
 
     useEffect(() => {
       const el = ref.current!

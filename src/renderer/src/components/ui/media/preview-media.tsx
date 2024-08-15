@@ -13,7 +13,7 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import { ActionButton, MotionButtonBase } from "../button"
 import { microReboundPreset } from "../constants/spring"
 import { useCurrentModal } from "../modal"
-import { VideoPlayer } from "./video-player"
+import { VideoPlayer } from "./VideoPlayer"
 
 const Wrapper: Component<{
   src: string

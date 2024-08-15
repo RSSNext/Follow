@@ -11,8 +11,8 @@ import { toast } from "sonner"
 import { useEventCallback } from "usehooks-ts"
 
 import { usePreviewMedia } from "./media/hooks"
-import type { VideoPlayerRef } from "./media/video-player"
-import { VideoPlayer } from "./media/video-player"
+import type { VideoPlayerRef } from "./media/VideoPlayer"
+import { VideoPlayer } from "./media/VideoPlayer"
 
 const failedList = new Set<string | undefined>()
 
@@ -270,6 +270,7 @@ const VideoPreview: FC<{
         />
       ) : (
         <VideoPlayer
+          controls={false}
           src={src}
           ref={setVideoRef}
           muted

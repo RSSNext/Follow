@@ -7,6 +7,7 @@ import {
 } from "@renderer/atoms/player"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { microReboundPreset } from "@renderer/components/ui/constants/spring"
+import { VolumeSlider } from "@renderer/components/ui/media/VolumeSlider"
 import {
   Tooltip,
   TooltipContent,
@@ -190,7 +191,7 @@ const CornerPlayerImpl = () => {
                 "i-mgc-volume-cute-re",
             )}
             onClick={() => Player.toggleMute()}
-            label={<VolumeSlider />}
+            label={<CornerPlayerVolumeSlider />}
             labelDelayDuration={0}
           />
           <ActionIcon
@@ -300,27 +301,10 @@ const ActionIcon = ({
   </Tooltip>
 )
 
-const VolumeSlider = () => {
+const CornerPlayerVolumeSlider = () => {
   const volume = usePlayerAtomSelector((v) => v.volume)
 
-  return (
-    <Slider.Root
-      className="relative flex h-16 w-1 flex-col items-center overflow-hidden rounded p-1"
-      max={1}
-      step={0.01}
-      orientation="vertical"
-      value={[volume ?? 0.8]}
-      onValueChange={(value) => Player.setVolume(value[0])}
-    >
-      <Slider.Track className="relative w-1 grow rounded bg-zinc-500">
-        <Slider.Range className="absolute w-full rounded bg-black dark:bg-white" />
-      </Slider.Track>
-      <Slider.Thumb
-        className="block rounded bg-black dark:bg-white"
-        aria-label="Volume"
-      />
-    </Slider.Root>
-  )
+  return <VolumeSlider volume={volume!} onVolumeChange={Player.setVolume.bind(Player)} />
 }
 
 const PlaybackRateSelector = () => {

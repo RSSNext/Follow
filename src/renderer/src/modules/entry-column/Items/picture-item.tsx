@@ -1,4 +1,4 @@
-import { SwipeMedia } from "@renderer/components/ui/media/swipe-media"
+import { SwipeMedia } from "@renderer/components/ui/media/SwipeMedia"
 import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholder"
 import { Skeleton } from "@renderer/components/ui/skeleton"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
