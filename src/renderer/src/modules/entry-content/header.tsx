@@ -48,7 +48,7 @@ export function EntryHeader({
       >
         <EntryReadHistory entryId={entryId} />
       </div>
-      <div className="relative z-10 flex w-full items-center justify-between gap-3 bg-background">
+      <div className="relative z-10 flex w-full items-center justify-between gap-3">
         <div className="flex min-w-0 shrink grow">
           <AnimatePresence>
             {shouldShowMeta && (
