@@ -33,6 +33,8 @@ export interface HTMLMediaState {
   time: number
   volume: number
   playing: boolean
+
+  hasAudio: boolean
 }
 
 export interface HTMLMediaControls {
@@ -70,6 +72,7 @@ export default function createHTMLMediaHook<
       muted: false,
       volume: 1,
       playing: false,
+      hasAudio: false,
     })
     const getState = useEventCallback(() => state)
     const ref = useRef<T | null>(null)
@@ -121,6 +124,14 @@ export default function createHTMLMediaHook<
       }
       setState({ buffered: parseTimeRanges(el.buffered) })
     }
+    const onLoadedData = () => {
+      const el = ref.current
+      if (!el) {
+        return
+      }
+      // @ts-expect-error
+      setState({ hasAudio: !!el.mozHasAudio || !!el.webkitAudioDecodedByteCount || !!el.audioTracks })
+    }
 
     if (element) {
       element = React.cloneElement(element, {
@@ -135,6 +146,7 @@ export default function createHTMLMediaHook<
         onDurationChange: wrapEvent(props.onDurationChange, onDurationChange),
         onTimeUpdate: wrapEvent(props.onTimeUpdate, onTimeUpdate),
         onProgress: wrapEvent(props.onProgress, onProgress),
+        onLoadedData: wrapEvent(props.onLoadedData, onLoadedData),
       })
     } else {
       element = React.createElement(tag, {
@@ -149,6 +161,7 @@ export default function createHTMLMediaHook<
         onDurationChange: wrapEvent(props.onDurationChange, onDurationChange),
         onTimeUpdate: wrapEvent(props.onTimeUpdate, onTimeUpdate),
         onProgress: wrapEvent(props.onProgress, onProgress),
+        onLoadedData: wrapEvent(props.onLoadedData, onLoadedData),
       } as any) // TODO: fix this typing.
     }
 

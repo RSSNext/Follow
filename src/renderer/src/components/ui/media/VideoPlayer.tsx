@@ -5,17 +5,15 @@ import type { HTMLMediaState } from "@renderer/hooks/common/factory/createHTMLMe
 import { useVideo } from "@renderer/hooks/common/useVideo"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
-import {
-  m,
-  useDragControls,
-  useSpring,
-} from "framer-motion"
+import { m, useDragControls, useSpring } from "framer-motion"
 import type { PropsWithChildren } from "react"
 import {
   forwardRef,
   memo,
+  startTransition,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState,
 } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
@@ -28,6 +26,7 @@ import { useEventCallback } from "usehooks-ts"
 
 import { MotionButtonBase } from "../button"
 import { softSpringPreset } from "../constants/spring"
+import { KbdCombined } from "../kbd/Kbd"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
 import { VolumeSlider } from "./VolumeSlider"
 
@@ -47,11 +46,15 @@ export type VideoPlayerRef = {
     mute: () => void
     unmute: () => void
   }
+
+  wrapperRef: React.RefObject<HTMLDivElement>
 }
 
 interface VideoPlayerContextValue {
   state: HTMLMediaState
   controls: VideoPlayerRef["controls"]
+  wrapperRef: React.RefObject<HTMLDivElement>
+  src: string
 }
 const VideoPlayerContext = createContext<VideoPlayerContextValue>(null!)
 export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
@@ -102,20 +105,21 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
 
     const stateRef = useRefValue(state)
     const memoedControls = useState(controls)[0]
-
+    const wrapperRef = useRef<HTMLDivElement>(null)
     useImperativeHandle(
       ref,
       () => ({
         getElement: () => videoRef.current,
         getState: () => stateRef.current,
         controls: memoedControls,
+        wrapperRef,
       }),
 
       [stateRef, videoRef, memoedControls],
     )
 
     return (
-      <div className="center relative size-full">
+      <div className="center relative size-full" ref={wrapperRef}>
         {element}
 
         <div className="center pointer-events-none absolute inset-0">
@@ -135,7 +139,10 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
         </div>
 
         <VideoPlayerContext.Provider
-          value={useMemo(() => ({ state, controls }), [state, controls])}
+          value={useMemo(
+            () => ({ state, controls, wrapperRef, src }),
+            [state, controls, src],
+          )}
         >
           {rest.controls && <ControlBar />}
         </VideoPlayerContext.Provider>
@@ -171,40 +178,116 @@ const ControlBar = memo(() => {
         onPointerDownCapture={dragControls.start.bind(dragControls)}
         className="absolute inset-0 z-[1]"
       />
-      <MotionButtonBase
-        className="center relative z-[1] flex"
-        onClick={() => {
-          if (isPaused) {
-            controls.play()
-          } else {
-            controls.pause()
-          }
-        }}
-      >
-        <IconScaleTransition
-          status={isPaused ? "init" : "done"}
-          icon1="i-mgc-play-cute-fi"
-          icon2="i-mgc-pause-cute-fi"
-        />
-      </MotionButtonBase>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <MotionButtonBase
+            className="center relative z-[1] flex"
+            onClick={() => {
+              if (isPaused) {
+                controls.play()
+              } else {
+                controls.pause()
+              }
+            }}
+          >
+            <IconScaleTransition
+              status={isPaused ? "init" : "done"}
+              icon1="i-mgc-play-cute-fi"
+              icon2="i-mgc-pause-cute-fi"
+            />
+          </MotionButtonBase>
+        </TooltipTrigger>
+        <TooltipContent className="flex items-center gap-1 bg-theme-modal-background">
+          {isPaused ? "Play" : "Pause"}
+          <KbdCombined>Space</KbdCombined>
+        </TooltipContent>
+      </Tooltip>
 
       {/* Progress bar */}
       <PlayProgressBar />
 
       {/* Right Action */}
-      <m.div className="relative z-[1] flex items-center gap-3">
+      <m.div className="relative z-[1] flex items-center gap-1">
         <VolumeControl />
+        <DownloadVideo />
+        <FullScreenControl />
       </m.div>
     </m.div>
   )
 })
+
+const FullScreenControl = () => {
+  const ref = useContextSelector(VideoPlayerContext, (v) => v.wrapperRef)
+  const [isFullScreen, setIsFullScreen] = useState(false)
+  return (
+    <ActionIcon
+      label="Full Screen"
+      shortcut="f"
+      labelDelayDuration={1}
+      onClick={() => {
+        if (!ref.current) return
+
+        if (isFullScreen) {
+          document.exitFullscreen()
+        } else {
+          ref.current.requestFullscreen()
+        }
+
+        setIsFullScreen((v) => !v)
+      }}
+    >
+      <i className="i-mgc-fullscreen-2-cute-re" />
+    </ActionIcon>
+  )
+}
+
+const DownloadVideo = () => {
+  const src = useContextSelector(VideoPlayerContext, (v) => v.src)
+  const [isDownloading, setIsDownloading] = useState(false)
+  const download = useEventCallback(() => {
+    setIsDownloading(true)
+    fetch(src)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = src.split("/").pop()!
+        a.click()
+        URL.revokeObjectURL(url)
+        setIsDownloading(false)
+      })
+  })
+
+  return (
+    <ActionIcon
+      shortcut="d"
+      label="Download"
+      labelDelayDuration={1}
+      onClick={download}
+    >
+      {isDownloading ? (
+        <i className="i-mgc-loading-3-cute-re animate-spin" />
+      ) : (
+        <i className="i-mgc-download-2-cute-re" />
+      )}
+    </ActionIcon>
+  )
+}
 const VolumeControl = () => {
+  const hasAudio = useContextSelector(
+    VideoPlayerContext,
+    (v) => v.state.hasAudio,
+  )
+
   const controls = useContextSelector(VideoPlayerContext, (v) => v.controls)
   const volume = useContextSelector(VideoPlayerContext, (v) => v.state.volume)
   const muted = useContextSelector(VideoPlayerContext, (v) => v.state.muted)
+  if (!hasAudio) return null
   return (
     <ActionIcon
       label={<VolumeSlider onVolumeChange={controls.volume} volume={volume} />}
+      shortcut="m"
       onClick={() => {
         if (muted) {
           controls.unmute()
@@ -225,24 +308,42 @@ const VolumeControl = () => {
 
 const PlayProgressBar = () => {
   const { state, controls } = useContext(VideoPlayerContext)
+  const [currentDragging, setCurrentDragging] = useState(false)
+  const [dragTime, setDragTime] = useState(0)
 
+  useHotkeys("left", (e) => {
+    e.preventDefault()
+    controls.seek(state.time - 5)
+  })
+
+  useHotkeys("right", (e) => {
+    e.preventDefault()
+    controls.seek(state.time + 5)
+  })
   return (
     <Slider.Root
-      className="relative z-[1] flex h-1 w-full items-center transition-all duration-200 ease-in-out"
+      className="relative z-[1] flex size-full items-center transition-all duration-200 ease-in-out"
       min={0}
       max={state.duration}
       step={0.01}
-      value={[state.time]}
+      value={[currentDragging ? dragTime : state.time]}
       onPointerDown={() => {
         if (state.playing) {
           controls.pause()
         }
+        setDragTime(state.time)
+        setCurrentDragging(true)
       }}
       onValueChange={(value) => {
-        controls.seek(value[0])
+        setDragTime(value[0])
+        startTransition(() => {
+          controls.seek(value[0])
+        })
       }}
       onValueCommit={() => {
         controls.play()
+        setCurrentDragging(false)
+        controls.seek(dragTime)
       }}
     >
       <Slider.Track className="relative h-1 w-full grow rounded bg-neutral-800">
@@ -264,25 +365,40 @@ const ActionIcon = ({
   label,
   labelDelayDuration = 700,
   children,
+  shortcut,
 }: {
   className?: string
   onClick?: () => void
   label: React.ReactNode
   labelDelayDuration?: number
   children?: React.ReactNode
-}) => (
-  <Tooltip delayDuration={labelDelayDuration}>
-    <TooltipTrigger>
-      <button
-        type="button"
-        className="center size-6 rounded-md text-zinc-500 hover:bg-theme-button-hover"
-        onClick={onClick}
-      >
-        {children || <i className={className} />}
-      </button>
-    </TooltipTrigger>
-    <TooltipContent className="bg-theme-modal-background">
-      {label}
-    </TooltipContent>
-  </Tooltip>
-)
+  shortcut?: string
+}) => {
+  useHotkeys(
+    shortcut || "",
+    (e) => {
+      e.preventDefault()
+      onClick?.()
+    },
+    {
+      enabled: !!shortcut,
+    },
+  )
+  return (
+    <Tooltip delayDuration={labelDelayDuration}>
+      <TooltipTrigger>
+        <button
+          type="button"
+          className="center size-6 rounded-md hover:bg-theme-button-hover"
+          onClick={onClick}
+        >
+          {children || <i className={className} />}
+        </button>
+      </TooltipTrigger>
+      <TooltipContent className="flex items-center gap-1 bg-theme-modal-background">
+        {label}
+        {shortcut && <KbdCombined>{shortcut}</KbdCombined>}
+      </TooltipContent>
+    </Tooltip>
+  )
+}

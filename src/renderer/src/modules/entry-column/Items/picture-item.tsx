@@ -54,7 +54,7 @@ export function PictureItem({
             }}
           />
         ) : (
-          <div className="center aspect-square w-full flex-col gap-1 bg-muted text-xs text-muted-foreground">
+          <div className="center aspect-square  w-full flex-col gap-1 rounded-md bg-muted text-xs text-muted-foreground">
             <i className="i-mgc-sad-cute-re size-6" />
             No media available
           </div>
