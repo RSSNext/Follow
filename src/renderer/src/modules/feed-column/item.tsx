@@ -1,6 +1,7 @@
 import { getMainContainerElement } from "@renderer/atoms/dom"
 import { useWhoami } from "@renderer/atoms/user"
 import { FeedIcon } from "@renderer/components/feed-icon"
+import { OouiUserAnonymous } from "@renderer/components/icons/OouiUserAnonymous"
 import {
   Tooltip,
   TooltipContent,
@@ -166,8 +167,8 @@ const FeedItemImpl = ({
           )}
           {subscription.isPrivate && (
             <Tooltip delayDuration={300}>
-              <TooltipTrigger asChild>
-                <i className="i-mgc-eye-close-cute-re ml-1 shrink-0 text-base" />
+              <TooltipTrigger>
+                <OouiUserAnonymous className="ml-1 shrink-0 text-base" />
               </TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>
