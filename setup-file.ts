@@ -8,7 +8,9 @@ globalThis.window = {
   __dbIsReady: true,
 }
 
-globalThis.navigator = {
-  onLine: true,
+if (!globalThis.navigator) {
+  globalThis.navigator = {
+    onLine: true,
+  }
 }
 enableMapSet()
