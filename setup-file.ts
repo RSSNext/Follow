@@ -6,9 +6,9 @@ import { enableMapSet } from "immer"
 globalThis.window = {
   location: new URL("https://example.com"),
   __dbIsReady: true,
-  navigator: {
-    onLine: true,
-  },
+}
 
+globalThis.navigator = {
+  onLine: true,
 }
 enableMapSet()
