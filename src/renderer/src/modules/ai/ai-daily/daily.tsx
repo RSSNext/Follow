@@ -70,8 +70,10 @@ export const DailyReportTitle = ({
   <div className="flex items-center justify-center gap-2 text-base">
     <i className="i-mgc-magic-2-cute-re" />
     <div className="font-medium">
+      Top News -
+      {" "}
       {title}
-      's Top News
+
     </div>
     <Tooltip>
       <TooltipTrigger asChild>
@@ -407,6 +409,6 @@ const EntryToastPreview = ({ entryId }: { entryId: string }) => {
 
 const EntryModalPreview = ({ entryId }: { entryId: string }) => (
   <Paper className="!p-0">
-    <EntryContentRender className="h-auto" entryId={entryId} />
+    <EntryContentRender className="h-auto [&_#entry-action-header-bar]:!bg-transparent" entryId={entryId} />
   </Paper>
 )
