@@ -4,6 +4,12 @@ import { FetchError } from "ofetch"
 export const initializeSentry = () => {
   Sentry.init({
     dsn: process.env.VITE_SENTRY_DSN,
+    integrations: [
+      Sentry.captureConsoleIntegration({
+        levels: ["error"],
+      }),
+    ],
+
     beforeSend(event, hint) {
       const error = hint.originalException
 
