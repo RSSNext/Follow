@@ -24,7 +24,6 @@ import {
 } from "use-context-selector"
 import { useEventCallback } from "usehooks-ts"
 
-import { MotionButtonBase } from "../button"
 import { softSpringPreset } from "../constants/spring"
 import { KbdCombined } from "../kbd/Kbd"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
@@ -179,30 +178,27 @@ const ControlBar = memo(() => {
         onPointerDownCapture={dragControls.start.bind(dragControls)}
         className="absolute inset-0 z-[1]"
       />
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <MotionButtonBase
-            className="center relative z-[1] flex"
-            onClick={() => {
-              if (isPaused) {
-                controls.play()
-              } else {
-                controls.pause()
-              }
-            }}
-          >
-            <IconScaleTransition
-              status={isPaused ? "init" : "done"}
-              icon1="i-mgc-play-cute-fi"
-              icon2="i-mgc-pause-cute-fi"
-            />
-          </MotionButtonBase>
-        </TooltipTrigger>
-        <TooltipContent className="flex items-center gap-1 bg-theme-modal-background">
-          {isPaused ? "Play" : "Pause"}
-          <KbdCombined>Space</KbdCombined>
-        </TooltipContent>
-      </Tooltip>
+
+      <ActionIcon
+        shortcut="Space"
+        label={isPaused ? "Play" : "Pause"}
+        className="center relative flex"
+        onClick={() => {
+          if (isPaused) {
+            controls.play()
+          } else {
+            controls.pause()
+          }
+        }}
+      >
+        <span>
+          <IconScaleTransition
+            status={isPaused ? "init" : "done"}
+            icon1="i-mgc-play-cute-fi"
+            icon2="i-mgc-pause-cute-fi"
+          />
+        </span>
+      </ActionIcon>
 
       {/* Progress bar */}
       <PlayProgressBar />
@@ -237,11 +233,11 @@ const FullScreenControl = () => {
         setIsFullScreen((v) => !v)
       }}
     >
-      {
-        isFullScreen ?
-            <i className="i-mgc-fullscreen-exit-cute-re" /> :
-            <i className="i-mgc-fullscreen-cute-re" />
-      }
+      {isFullScreen ? (
+        <i className="i-mgc-fullscreen-exit-cute-re" />
+      ) : (
+        <i className="i-mgc-fullscreen-cute-re" />
+      )}
     </ActionIcon>
   )
 }
@@ -292,7 +288,6 @@ const VolumeControl = () => {
   return (
     <ActionIcon
       label={<VolumeSlider onVolumeChange={controls.volume} volume={volume} />}
-      shortcut="m"
       onClick={() => {
         if (muted) {
           controls.unmute()
@@ -391,10 +386,10 @@ const ActionIcon = ({
   )
   return (
     <Tooltip delayDuration={labelDelayDuration}>
-      <TooltipTrigger>
+      <TooltipTrigger asChild>
         <button
           type="button"
-          className="center size-6 rounded-md hover:bg-theme-button-hover"
+          className="center relative z-[1] size-6 rounded-md hover:bg-theme-button-hover"
           onClick={onClick}
         >
           {children || <i className={className} />}
