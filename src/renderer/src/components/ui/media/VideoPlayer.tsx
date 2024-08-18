@@ -169,8 +169,9 @@ const ControlBar = memo(() => {
       dragMomentum={false}
       dragConstraints={{ current: document.documentElement }}
       className={cn(
-        "absolute inset-x-2 bottom-2 h-8 rounded-2xl bg-neutral-700/90 backdrop-blur-xl",
+        "absolute inset-x-2 bottom-2 h-8 rounded-2xl border bg-zinc-100/90 backdrop-blur-xl dark:border-transparent dark:bg-neutral-700/90",
         "flex items-center gap-3 px-3",
+        "mx-auto max-w-[80vw]",
       )}
     >
       {/* Drag Area */}
@@ -236,7 +237,11 @@ const FullScreenControl = () => {
         setIsFullScreen((v) => !v)
       }}
     >
-      <i className="i-mgc-fullscreen-2-cute-re" />
+      {
+        isFullScreen ?
+            <i className="i-mgc-fullscreen-exit-cute-re" /> :
+            <i className="i-mgc-fullscreen-cute-re" />
+      }
     </ActionIcon>
   )
 }
@@ -346,13 +351,13 @@ const PlayProgressBar = () => {
         controls.seek(dragTime)
       }}
     >
-      <Slider.Track className="relative h-1 w-full grow rounded bg-neutral-800">
-        <Slider.Range className="absolute h-1 rounded bg-neutral-600" />
+      <Slider.Track className="relative h-1 w-full grow rounded bg-white dark:bg-neutral-800">
+        <Slider.Range className="absolute h-1 rounded bg-zinc-500/40 dark:bg-neutral-600" />
       </Slider.Track>
 
       {/* indicator */}
       <Slider.Thumb
-        className="block h-3 w-[3px] rounded-[1px] bg-zinc-400"
+        className="block h-3 w-[3px] rounded-[1px] bg-zinc-500 dark:bg-zinc-400"
         aria-label="Progress"
       />
     </Slider.Root>
