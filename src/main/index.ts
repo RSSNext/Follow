@@ -6,7 +6,7 @@ import squirrelStartup from "electron-squirrel-startup"
 
 import { env } from "../env"
 import { isDev, isMacOS } from "./env"
-import { initializationApp } from "./init"
+import { initializeApp } from "./init"
 import { setAuthSessionToken } from "./lib/user"
 import { registerUpdater } from "./updater"
 import { createMainWindow, createWindow } from "./window"
@@ -28,7 +28,7 @@ function bootsharp() {
 
   let mainWindow: BrowserWindow
 
-  initializationApp()
+  initializeApp()
 
   app.on("second-instance", (_, commandLine) => {
     if (mainWindow) {
