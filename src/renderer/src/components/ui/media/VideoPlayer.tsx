@@ -191,7 +191,7 @@ const ControlBar = memo(() => {
           }
         }}
       >
-        <span>
+        <span className="center">
           <IconScaleTransition
             status={isPaused ? "init" : "done"}
             icon1="i-mgc-play-cute-fi"
