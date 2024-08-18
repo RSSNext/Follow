@@ -68,6 +68,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
     const images = [] as string[]
     data.forEach((entryId) => {
       const entry = getEntry(entryId)
+      if (!entry) return
 
       images.push(...imageActions.getImagesFromEntry(entry.entries))
     })
