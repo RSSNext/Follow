@@ -1,4 +1,4 @@
-import { SwipeMedia } from "@renderer/components/ui/media/swipe-media"
+import { SwipeMedia } from "@renderer/components/ui/media/SwipeMedia"
 import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholder"
 import { Skeleton } from "@renderer/components/ui/skeleton"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
@@ -54,7 +54,7 @@ export function PictureItem({
             }}
           />
         ) : (
-          <div className="center aspect-square w-full flex-col gap-1 bg-muted text-xs text-muted-foreground">
+          <div className="center aspect-square  w-full flex-col gap-1 rounded-md bg-muted text-xs text-muted-foreground">
             <i className="i-mgc-sad-cute-re size-6" />
             No media available
           </div>

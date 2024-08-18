@@ -1,7 +1,9 @@
 import { getRendererHandlers } from "@egoist/tipc/main"
+import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindow } from "electron"
-import { clipboard } from "electron"
+import { clipboard, dialog } from "electron"
 
+import { downloadFile } from "../lib/download"
 import { cleanAuthSessionToken, cleanUser } from "../lib/user"
 import type { RendererHandlers } from "../renderer-handlers"
 import { quitAndInstall } from "../updater"
@@ -109,6 +111,31 @@ export const appRoute = {
       webContents.stopFindInPage("keepSelection")
     },
   ),
+
+  download: t.procedure
+    .input<string>()
+    .action(async ({ input, context: { sender } }) => {
+      const result = await dialog.showSaveDialog({
+        defaultPath: input.split("/").pop(),
+      })
+      if (result.canceled) return
+
+      // return result.filePath;
+      await downloadFile(input, result.filePath).catch((err) => {
+        const senderWindow = (sender as Sender).getOwnerBrowserWindow()
+        if (!senderWindow) return
+        callGlobalContextMethod(senderWindow, "toast.error", [
+          "Download failed!",
+        ])
+        throw err
+      })
+
+      const senderWindow = (sender as Sender).getOwnerBrowserWindow()
+      if (!senderWindow) return
+      callGlobalContextMethod(senderWindow, "toast.success", [
+        "Download success!",
+      ])
+    }),
 }
 interface Sender extends Electron.WebContents {
   getOwnerBrowserWindow: () => Electron.BrowserWindow | null
