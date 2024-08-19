@@ -104,10 +104,6 @@ export const useFeedActions = ({
       },
 
       {
-        type: "separator",
-        disabled: isEntryList,
-      },
-      {
         type: "text" as const,
         label: "Open Feed in Browser",
         disabled: isEntryList,
