@@ -7,7 +7,7 @@ import { cva } from "class-variance-authority"
 export const styledButtonVariant = cva(
   [
     "inline-flex cursor-default select-none items-center justify-center gap-2 outline-offset-2 transition active:transition-none disabled:cursor-not-allowed",
-    "ring-theme-accent/20 duration-200 disabled:ring-0",
+    "ring-accent/20 duration-200 disabled:ring-0",
     "align-middle",
   ],
   {
@@ -39,23 +39,23 @@ export const styledButtonVariant = cva(
       },
       variant: {
         primary: cn(
-          "bg-theme-accent",
+          "bg-accent",
           "hover:contrast-[1.10] active:contrast-125",
           "font-semibold",
           "disabled:bg-theme-disabled disabled:dark:text-zinc-50",
           "text-zinc-100 dark:text-zinc-200/90",
-          "focus:border-theme-accent/80 focus:outline-none focus:ring-2",
+          "focus:border-accent/80 focus:outline-none focus:ring-2",
         ),
 
         outline: cn(
           "bg-theme-background font-semibold transition-colors duration-200",
           "border border-border hover:bg-zinc-50/20 dark:bg-neutral-900/30",
-          "focus:border-theme-accent/80",
+          "focus:border-accent/80",
         ),
         text: cn(
-          "font-semibold text-theme-accent",
+          "font-semibold text-accent",
           "hover:contrast-[1.10] active:contrast-125",
-          "focus:text-theme-accent focus:outline-none",
+          "focus:text-accent focus:outline-none",
         ),
         ghost: cn(
           "px-1.5 font-semibold",

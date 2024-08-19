@@ -59,11 +59,11 @@ export const TextArea = forwardRef<
         return (
           <div
             className={cn(
-              "group relative h-full border ring-0 ring-theme-accent/20 duration-200 [--spotlight-color:oklch(var(--a)_/_0.12)]",
+              "group relative h-full border ring-0 ring-accent/20 duration-200 [--spotlight-color:oklch(var(--a)_/_0.12)]",
               roundedMap[rounded],
 
               "border-transparent",
-              isFocus && "border-theme-accent/80 ring-2",
+              isFocus && "border-accent/80 ring-2",
 
               "dark:text-zinc-200 dark:placeholder:text-zinc-500",
               wrapperClassName,
@@ -86,7 +86,7 @@ export const TextArea = forwardRef<
                 "overflow-auto px-3 py-4",
                 "!outline-none",
                 "text-neutral-900/80 dark:text-slate-100/80",
-                "focus:!bg-theme-accent/5",
+                "focus:!bg-accent/5",
                 roundedMap[rounded],
                 className,
               )}

@@ -195,7 +195,7 @@ export const SearchCmdK: React.FC = () => {
               <Command.Group
                 heading={(
                   <SearchGroupHeading
-                    icon="i-mgc-rss-cute-fi size-4 text-theme-accent"
+                    icon="i-mgc-rss-cute-fi size-4 text-accent"
                     title="Feeds"
                   />
                 )}

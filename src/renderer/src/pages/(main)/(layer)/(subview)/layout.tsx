@@ -49,7 +49,7 @@ export function Component() {
 
             setSidebarActiveView(prevView)
           }}
-          className="no-drag-region inline-flex items-center gap-1 duration-200 hover:text-theme-accent"
+          className="no-drag-region inline-flex items-center gap-1 duration-200 hover:text-accent"
         >
           <i className="i-mingcute-left-line" />
           <span className="text-sm font-medium">Back</span>

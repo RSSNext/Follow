@@ -143,7 +143,7 @@ export const EntryListHeader: FC<{
                       className={cn(
                         "i-mgc-refresh-2-cute-re",
                         isRefreshing && "animate-spin",
-                        hasUpdate && "text-theme-accent",
+                        hasUpdate && "text-accent",
                       )}
                     />
                   </ActionButton>

@@ -77,7 +77,7 @@ const HoverableLink: FC<{
     to={href}
     target={href.startsWith("http") ? "_blank" : undefined}
     className={cn(
-      "group center flex gap-3 duration-200 hover:text-theme-accent",
+      "group center flex gap-3 duration-200 hover:text-accent",
       className,
     )}
   >

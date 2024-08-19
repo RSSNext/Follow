@@ -10,7 +10,7 @@ export const TimeStamp = (props: { time: string }) => {
   if (!src) return <span>{props.time}</span>
   return (
     <span
-      className="cursor-pointer tabular-nums text-theme-accent dark:text-theme-accent-500"
+      className="dark:text-accent-500 cursor-pointer tabular-nums text-accent"
       onClick={() => {
         Player.mount({
           type: "audio",

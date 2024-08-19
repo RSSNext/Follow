@@ -164,7 +164,7 @@ export const DailyReportContent: Component<DailyReportContentProps> = ({
                   components={{
                     a: RelatedEntryLink as Components["a"],
                   }}
-                  className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-theme-accent"
+                  className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
                 >
                   {content.data}
                 </Markdown>
@@ -206,7 +206,7 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
               components={{
                 a: RelatedEntryLink as Components["a"],
               }}
-              className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-theme-accent"
+              className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
             >
               {content.data}
             </Markdown>

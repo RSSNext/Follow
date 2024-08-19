@@ -71,10 +71,10 @@
     }
 
     .highlighted {
-      @apply bg-theme-accent/20;
+      @apply bg-accent/20;
 
       &::before {
-        @apply bg-theme-accent;
+        @apply bg-accent;
       }
     }
   }

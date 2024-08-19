@@ -121,7 +121,7 @@ const CornerPlayerImpl = () => {
           <div className="center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100">
             <button
               type="button"
-              className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-theme-accent hover:text-white hover:opacity-100"
+              className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-accent hover:text-white hover:opacity-100"
               onClick={handleClickPlay}
             >
               <i
@@ -259,12 +259,12 @@ const PlayerProgress = () => {
         onValueCommit={(value) => Player.seek(value[0])}
       >
         <Slider.Track className="relative h-1 w-full grow rounded bg-gray-200 duration-200 group-hover:bg-gray-300 dark:bg-neutral-700 group-hover:dark:bg-neutral-600">
-          <Slider.Range className="absolute h-1 rounded bg-theme-accent-400 dark:bg-theme-accent-700" />
+          <Slider.Range className="bg-accent-400 dark:bg-accent-700 absolute h-1 rounded" />
         </Slider.Track>
 
         {/* indicator */}
         <Slider.Thumb
-          className="block h-2 w-[3px] rounded-[1px] bg-theme-accent"
+          className="block h-2 w-[3px] rounded-[1px] bg-accent"
           aria-label="Progress"
         />
       </Slider.Root>

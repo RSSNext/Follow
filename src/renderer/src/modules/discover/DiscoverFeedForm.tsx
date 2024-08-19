@@ -54,7 +54,7 @@ const FeedMaintainers = ({ maintainers }: { maintainers?: string[] }) => {
             key={maintainer}
             target="_blank"
             rel="noreferrer noopener"
-            className="inline-flex cursor-pointer items-center text-theme-foreground/50 duration-200 hover:text-theme-accent"
+            className="inline-flex cursor-pointer items-center text-theme-foreground/50 duration-200 hover:text-accent"
           >
             @
             {maintainer}

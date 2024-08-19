@@ -46,7 +46,7 @@ export function ListItem({
       className={cn(
         "group relative flex py-4 pl-3 pr-2",
         !asRead &&
-        "before:absolute before:-left-0.5 before:top-[1.4375rem] before:block before:size-2 before:rounded-full before:bg-theme-accent",
+        "before:absolute before:-left-0.5 before:top-[1.4375rem] before:block before:size-2 before:rounded-full before:bg-accent",
       )}
     >
       {!withAudio && <FeedIcon feed={feed} fallback entry={entry.entries} />}
@@ -197,7 +197,7 @@ function AudioCover({
       >
         <button
           type="button"
-          className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-theme-accent hover:text-white hover:opacity-100"
+          className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-accent hover:text-white hover:opacity-100"
         >
           <i
             className={cn("size-6", {

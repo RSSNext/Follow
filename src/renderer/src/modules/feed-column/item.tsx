@@ -129,7 +129,7 @@ const FeedItemImpl = ({
           {isOwned && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
-                <i className="i-mgc-flag-1-cute-fi ml-1 shrink-0 text-base text-theme-accent" />
+                <i className="i-mgc-flag-1-cute-fi ml-1 shrink-0 text-base text-accent" />
               </TooltipTrigger>
 
               <TooltipPortal>

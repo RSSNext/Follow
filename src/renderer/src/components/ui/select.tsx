@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       "flex w-full items-center justify-between whitespace-nowrap rounded-md bg-transparent placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-      "ring-theme-accent/20 duration-200 focus:border-theme-accent/80 focus:outline-none focus:ring-2",
+      "ring-accent/20 duration-200 focus:border-accent/80 focus:outline-none focus:ring-2",
       "border border-border",
       size === "sm" ? "h-7 p-2 text-sm" : "h-9 px-3 py-2 text-sm",
       className,

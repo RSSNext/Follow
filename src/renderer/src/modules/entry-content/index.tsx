@@ -346,7 +346,7 @@ const NoContent: FC<{
               <a
                 target="_blank"
                 rel="noreferrer"
-                className="text-theme-accent underline"
+                className="text-accent underline"
                 href={`${repository.url}/releases`}
               >
                 download

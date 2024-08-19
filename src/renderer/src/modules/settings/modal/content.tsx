@@ -83,7 +83,7 @@ const Content = () => {
           {" "}
           <a
             href={`${repository.url}`}
-            className="text-theme-accent"
+            className="text-accent"
             target="_blank"
           >
             Give us a star on GitHub

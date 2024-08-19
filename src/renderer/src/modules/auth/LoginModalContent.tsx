@@ -28,7 +28,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
       >
         <div className="mb-8 mt-4 text-center align-middle font-sans text-2xl font-bold leading-relaxed">
           <span className="text-xl">Sign in to </span>
-          <span className="center flex translate-y-px gap-2 font-theme text-theme-accent">
+          <span className="center flex translate-y-px gap-2 font-theme text-accent">
             <FollowIcon className="size-4" />
             {APP_NAME}
           </span>

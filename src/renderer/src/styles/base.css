@@ -32,5 +32,5 @@ button {
 }
 
 ::selection {
-  @apply bg-theme-accent/80 text-white;
+  @apply bg-accent/80 text-white;
 }

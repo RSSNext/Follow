@@ -100,7 +100,7 @@ export const FallbackIssue = ({
   <p className="mt-8">
     Still having this issue? Please give feedback in Github, thanks!
     <a
-      className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-theme-accent"
+      className="text-accent-500 ml-2 cursor-pointer duration-200 hover:text-accent"
       href={getNewIssueUrl({
         title: `Error: ${message}`,
         body: `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
