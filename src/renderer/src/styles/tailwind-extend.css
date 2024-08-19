@@ -86,7 +86,7 @@
     --fallback-bc: currentColor;
   }
 
-  .radio-primary {
+  .radio-accent {
     --chkbg: theme(colors.theme.accent.DEFAULT);
     --fallback-bc: theme(colors.theme.accent.DEFAULT);
     --fallback-b1: theme(colors.background);
@@ -269,5 +269,14 @@
   }
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@layer components {
+  .shadow-drawer-left {
+    box-shadow: -12px 0px 17px 2px rgba(41, 41, 41, 0.1);
+  }
+  [data-theme="dark"] .shadow-drawer-left {
+    box-shadow: -12px 0px 17px 2px rgba(0, 0, 0, 0.653);
   }
 }

@@ -160,10 +160,10 @@ export const UserProfileModalContent: FC<{
         exit="exit"
         layout="size"
         className={cn(
-          "relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0 shadow",
+          "relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
           variant === "drawer" ?
-            "h-full w-[60ch] max-w-full" :
-            "h-[80vh] w-[800px] max-w-full lg:max-h-[calc(100vh-10rem)]",
+            "shadow-drawer-left h-full w-[60ch] max-w-full" :
+            "h-[80vh] w-[800px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
         )}
       >
         <div className="absolute right-2 top-2 z-10 flex items-center gap-2 text-[20px] opacity-80">
