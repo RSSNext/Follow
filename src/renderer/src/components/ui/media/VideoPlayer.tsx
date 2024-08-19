@@ -11,6 +11,7 @@ import {
   forwardRef,
   memo,
   startTransition,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -94,6 +95,17 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
       onClick(e) {
         rest.onClick?.(e)
         handleClick(e)
+      },
+      onDoubleClick(e) {
+        rest.onDoubleClick?.(e)
+        if (!rest.controls) return
+        e.preventDefault()
+        e.stopPropagation()
+        if (!document.fullscreenElement) {
+          wrapperRef.current?.requestFullscreen()
+        } else {
+          document.exitFullscreen()
+        }
       },
     })
 
@@ -215,7 +227,20 @@ const ControlBar = memo(() => {
 
 const FullScreenControl = () => {
   const ref = useContextSelector(VideoPlayerContext, (v) => v.wrapperRef)
-  const [isFullScreen, setIsFullScreen] = useState(false)
+  const [isFullScreen, setIsFullScreen] = useState(
+    !!document.fullscreenElement,
+  )
+
+  useEffect(() => {
+    const onFullScreenChange = () => {
+      setIsFullScreen(!!document.fullscreenElement)
+    }
+    document.addEventListener("fullscreenchange", onFullScreenChange)
+    return () => {
+      document.removeEventListener("fullscreenchange", onFullScreenChange)
+    }
+  }, [])
+
   return (
     <ActionIcon
       label="Full Screen"
@@ -229,8 +254,6 @@ const FullScreenControl = () => {
         } else {
           ref.current.requestFullscreen()
         }
-
-        setIsFullScreen((v) => !v)
       }}
     >
       {isFullScreen ? (
