@@ -83,7 +83,6 @@ export function createWindow(
     ...configs,
   })
 
-  window.webContents.openDevTools()
   function refreshBound(timeout = 0) {
     setTimeout(() => {
       const mainWindow = getMainWindow()
