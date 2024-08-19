@@ -5,7 +5,7 @@ type Props = Component<
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 >
 const MacOSVibrancy: Props = ({ className, children, ...rest }) => (
-  <div className={cn("bg-native/50 dark:bg-native/10", className)} {...rest}>
+  <div className={cn("bg-native/30 dark:bg-native/10", className)} {...rest}>
     {children}
   </div>
 )

@@ -53,7 +53,7 @@ export function createWindow(
           x: 18,
           y: 18,
         },
-        vibrancy: "sidebar",
+        vibrancy: "under-window",
         visualEffectState: "active",
         transparent: true,
       } as Electron.BrowserWindowConstructorOptions)

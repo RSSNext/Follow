@@ -99,7 +99,7 @@ export const ContentFontSelector = () => {
 
 export const UIFontSelector = () => {
   // filter out the fallback font
-  const data = useFontData().slice(1)
+  const data = useFontData().slice(1).filter((d) => d.value !== DEFAULT_FONT)
   const uiFont = useUISettingSelector((state) => state.uiFontFamily)
   const setCustom = usePresentCustomFontDialog("uiFontFamily")
   const isCustomFont = useMemo(
