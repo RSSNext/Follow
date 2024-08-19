@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 import { FeedIcon } from "../feed-icon"
-import { StyledButton } from "../ui/button"
+import { Button } from "../ui/button"
 import { useModalStack } from "../ui/modal"
 import { CustomSafeError, useResetErrorWhenRouteChange } from "./helper"
 
@@ -40,7 +40,7 @@ export const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({
           homepage.
         </div>
         <div className="center mt-12 gap-4">
-          <StyledButton
+          <Button
             variant="outline"
             onClick={() => {
               navigate("/")
@@ -50,9 +50,9 @@ export const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({
             }}
           >
             Back
-          </StyledButton>
+          </Button>
 
-          <StyledButton
+          <Button
             onClick={() => {
               present({
                 title: "Add Feed",
@@ -83,7 +83,7 @@ export const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({
             variant="primary"
           >
             Follow
-          </StyledButton>
+          </Button>
         </div>
       </div>
     </div>

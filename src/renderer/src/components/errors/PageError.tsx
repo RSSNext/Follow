@@ -3,7 +3,7 @@ import type { FC } from "react"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 import { FallbackIssue } from "../common/ErrorElement"
-import { StyledButton } from "../ui/button"
+import { Button } from "../ui/button"
 import { parseError } from "./helper"
 
 export const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {
@@ -28,16 +28,16 @@ export const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {
         </p>
 
         <div className="center gap-4">
-          <StyledButton onClick={() => props.resetError()} variant="primary">
+          <Button onClick={() => props.resetError()} variant="primary">
             Retry
-          </StyledButton>
+          </Button>
 
-          <StyledButton
+          <Button
             onClick={() => window.location.reload()}
             variant="outline"
           >
             Reload
-          </StyledButton>
+          </Button>
         </div>
 
         <FallbackIssue message={message!} stack={stack} />

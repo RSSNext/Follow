@@ -7,7 +7,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
-import { ActionButton, StyledButton } from "@renderer/components/ui/button"
+import { ActionButton, Button } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
@@ -328,7 +328,7 @@ const SubscriptionItem: FC<{
           )}
         </div>
         <div className="absolute right-0 opacity-0 transition-opacity group-hover:opacity-100">
-          <StyledButton
+          <Button
             onClick={(e) => {
               e.stopPropagation()
               e.preventDefault()
@@ -361,7 +361,7 @@ const SubscriptionItem: FC<{
                 {APP_NAME}
               </>
             )}
-          </StyledButton>
+          </Button>
         </div>
       </a>
     </div>

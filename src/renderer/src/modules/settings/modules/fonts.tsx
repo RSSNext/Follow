@@ -3,7 +3,7 @@ import {
   setUISetting,
   useUISettingSelector,
 } from "@renderer/atoms/settings/ui"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { Input } from "@renderer/components/ui/input"
 import { useModalStack } from "@renderer/components/ui/modal"
 import {
@@ -179,9 +179,9 @@ const usePresentCustomFontDialog = (
             />
 
             <div className="flex justify-end">
-              <StyledButton type="submit">
+              <Button type="submit">
                 Save
-              </StyledButton>
+              </Button>
             </div>
           </form>
 

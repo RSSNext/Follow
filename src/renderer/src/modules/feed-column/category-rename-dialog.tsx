@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import {
   Form,
   FormControl,
@@ -78,9 +78,9 @@ export function CategoryRenameContent({
           )}
         />
         <div className="flex justify-end">
-          <StyledButton type="submit" isLoading={renameMutation.isPending}>
+          <Button type="submit" isLoading={renameMutation.isPending}>
             Rename
-          </StyledButton>
+          </Button>
         </div>
       </form>
     </Form>

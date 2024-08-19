@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react"
 import { isRouteErrorResponse, useRouteError } from "react-router-dom"
 import { toast } from "sonner"
 
-import { StyledButton } from "../ui/button"
+import { Button } from "../ui/button"
 import { PoweredByFooter } from "./PoweredByFooter"
 
 export function ErrorElement() {
@@ -68,7 +68,7 @@ export function ErrorElement() {
       </p>
 
       <div className="center gap-4">
-        <StyledButton
+        <Button
           variant="outline"
           onClick={() => {
             clearLocalPersistStoreData()
@@ -76,10 +76,10 @@ export function ErrorElement() {
           }}
         >
           Reset Local Database
-        </StyledButton>
-        <StyledButton onClick={() => (window.location.href = "/")}>
+        </Button>
+        <Button onClick={() => (window.location.href = "/")}>
           Reload
-        </StyledButton>
+        </Button>
       </div>
 
       <FallbackIssue message={message} stack={stack} />

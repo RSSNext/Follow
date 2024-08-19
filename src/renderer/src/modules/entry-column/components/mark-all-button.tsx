@@ -2,7 +2,6 @@ import { PopoverPortal } from "@radix-ui/react-popover"
 import {
   ActionButton,
   Button,
-  StyledButton,
 } from "@renderer/components/ui/button"
 import {
   Popover,
@@ -68,17 +67,17 @@ export const MarkAllReadButton = forwardRef<
           </div>
           <div className="space-x-4">
             <PopoverClose>
-              <StyledButton variant="outline">Cancel</StyledButton>
+              <Button variant="outline">Cancel</Button>
             </PopoverClose>
 
-            <StyledButton
+            <Button
               onClick={() => {
                 handleMarkAllAsRead()
                 setMarkPopoverOpen(false)
               }}
             >
               Confirm
-            </StyledButton>
+            </Button>
           </div>
         </PopoverContent>
       </PopoverPortal>
@@ -102,7 +101,7 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
   return (
     <Button
       variant="ghost"
-      className={cn("center relative flex h-auto gap-1 !py-1.5", className)}
+      className={cn("center relative flex h-auto gap-1", className)}
       onMouseLeave={() => {
         if (status === "confirm") {
           setStatus("initial")

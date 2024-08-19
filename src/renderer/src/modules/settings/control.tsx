@@ -1,4 +1,4 @@
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import { Label } from "@renderer/components/ui/label"
 import { Switch } from "@renderer/components/ui/switch"
@@ -67,6 +67,6 @@ export const SettingActionItem = ({
 }) => (
   <div className={cn("relative mb-3 mt-4 flex items-center justify-between gap-4")}>
     <div className="text-sm font-medium">{label}</div>
-    <StyledButton buttonClassName="text-xs absolute right-0" onClick={action}>{buttonText}</StyledButton>
+    <Button buttonClassName="text-xs absolute right-0" onClick={action}>{buttonText}</Button>
   </div>
 )

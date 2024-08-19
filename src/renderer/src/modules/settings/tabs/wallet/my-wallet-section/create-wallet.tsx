@@ -1,4 +1,4 @@
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { useCreateWalletMutation } from "@renderer/queries/wallet"
 
 export const CreateWallet = () => {
@@ -17,13 +17,13 @@ export const CreateWallet = () => {
         reward creators and also get rewarded for your content contributions.
       </p>
       <div className="mt-4 text-right">
-        <StyledButton
+        <Button
           variant="primary"
           isLoading={mutation.isPending}
           onClick={() => mutation.mutate()}
         >
           Create Wallet
-        </StyledButton>
+        </Button>
       </div>
     </div>
   )

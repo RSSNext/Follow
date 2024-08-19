@@ -1,6 +1,6 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { FollowIcon } from "@renderer/components/icons/follow"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { ListItemHoverOverlay } from "@renderer/components/ui/list-item-hover-overlay"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { views } from "@renderer/constants"
@@ -97,10 +97,10 @@ export function Component() {
             {APP_NAME}
           </div>
           <a className="mb-8 cursor-default" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
-            <StyledButton>
+            <Button>
               <FollowIcon className="mr-1 size-3" />
               {APP_NAME}
-            </StyledButton>
+            </Button>
           </a>
           <div
             className={cn(

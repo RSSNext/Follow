@@ -1,4 +1,3 @@
-import { Slot, Slottable } from "@radix-ui/react-slot"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import type { VariantProps } from "class-variance-authority"
@@ -16,81 +15,37 @@ import {
   TooltipPortal,
   TooltipTrigger,
 } from "../tooltip"
-import { buttonVariants, styledButtonVariant } from "./variants"
+import { styledButtonVariant } from "./variants"
 
 export interface BaseButtonProps {
   isLoading?: boolean
 }
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants>,
-  BaseButtonProps {
-  asChild?: boolean
-
-  as?: keyof React.JSX.IntrinsicElements
-}
-
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      asChild = false,
-      isLoading = false,
-      as = "button",
-      ...props
-    },
-    ref,
-  ) => {
-    const Comp = asChild ? Slot : (as as any)
-
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-        disabled={props.disabled || isLoading}
-      >
-        {isLoading && (
-          <i className="i-mgc-loading-3-cute-re mr-2 animate-spin" />
-        )}
-        <Slottable>{props.children}</Slottable>
-      </Comp>
-    )
-  },
-)
-Button.displayName = "Button"
 
 // BIZ buttons
 
 interface ActionButtonProps {
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
   icon?: React.ReactNode | React.FC<ComponentType>
   tooltip: React.ReactNode
   tooltipSide?: "top" | "bottom"
   active?: boolean
   shortcut?: string
-  as?: keyof React.JSX.IntrinsicElements
-  asChild?: boolean
 }
 
 export const ActionButton = React.forwardRef<
   HTMLButtonElement,
-  ComponentType<ActionButtonProps>
+  ComponentType<ActionButtonProps> & React.HTMLAttributes<HTMLButtonElement>
 >(
   (
     {
       icon,
-      onClick,
+
       tooltip,
       className,
       tooltipSide,
       children,
       active,
       shortcut,
-      as,
-      asChild,
+      ...rest
     },
     ref,
   ) => {
@@ -107,21 +62,19 @@ export const ActionButton = React.forwardRef<
         )}
         <Tooltip disableHoverableContent>
           <TooltipTrigger asChild>
-            <Button
-              as={as}
-              asChild={asChild}
+            <button
               ref={buttonRef}
               // @see https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904
               onFocusCapture={stopPropagation}
               className={cn(
-                "no-drag-region flex size-8 items-center text-xl",
+                "no-drag-region inline-flex size-8 items-center justify-center text-xl",
                 active && "bg-zinc-500/15 hover:bg-zinc-500/20",
                 "focus-visible:bg-zinc-500/30 focus-visible:!outline-none",
+                "rounded-md duration-200 hover:bg-theme-button-hover",
                 className,
               )}
-              variant="ghost"
-              size="sm"
-              onClick={onClick}
+              type="button"
+              {...rest}
             >
               {typeof icon === "function" ?
                 React.createElement(icon, {
@@ -130,7 +83,7 @@ export const ActionButton = React.forwardRef<
                 icon}
 
               {children}
-            </Button>
+            </button>
           </TooltipTrigger>
           <TooltipPortal>
             <TooltipContent
@@ -186,7 +139,7 @@ export const MotionButtonBase = React.forwardRef<
 
 MotionButtonBase.displayName = "MotionButtonBase"
 
-export const StyledButton = React.forwardRef<
+export const Button = React.forwardRef<
   HTMLButtonElement,
   React.PropsWithChildren<
     Omit<HTMLMotionProps<"button">, "children"> &

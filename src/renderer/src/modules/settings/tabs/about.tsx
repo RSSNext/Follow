@@ -1,6 +1,7 @@
 import { license, repository } from "@pkg"
 import { Logo } from "@renderer/components/icons/logo"
-import { Button, StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
+import { styledButtonVariant } from "@renderer/components/ui/button/variants"
 import { Divider } from "@renderer/components/ui/divider"
 import { SocialMediaLinks } from "@renderer/constants/social"
 import { getNewIssueUrl } from "@renderer/lib/issues"
@@ -28,22 +29,22 @@ export const SettingAbout = () => (
         </div>
 
         <div className="shrink-0">
-          <StyledButton
+          <Button
             variant="outline"
             onClick={() => {
               window.open(`${repository.url}/releases`, "_blank")
             }}
           >
             Changelog
-          </StyledButton>
+          </Button>
         </div>
       </div>
 
       <p className="mt-6 text-balance text-sm">
         {APP_NAME}
         {" "}
-        is and will always be a free and open-source project. It is licensed under
-        {" "}
+        is and will always be a free and open-source project. It is
+        licensed under
         {license}
         .
       </p>
@@ -60,7 +61,8 @@ export const SettingAbout = () => (
         </a>
         <i className="i-mgc-external-link-cute-re translate-y-px" />
         {" "}
-        and cannot be redistributed.
+        and cannot
+        be redistributed.
       </p>
 
       <p className="mt-3 text-sm">
@@ -68,8 +70,9 @@ export const SettingAbout = () => (
         {" "}
         (
         {GIT_COMMIT_SHA.slice(0, 7).toUpperCase()}
-        ) is in the early stages of development. If you have any feedback or suggestions, please feel
-        free to
+        ) is in the early
+        stages of development. If you have any feedback or suggestions, please
+        feel free to
         {" "}
         <a
           className="inline-flex cursor-pointer items-center gap-1 hover:underline"
@@ -91,18 +94,18 @@ export const SettingAbout = () => (
       </h2>
       <div className="mt-2 flex flex-wrap gap-2">
         {SocialMediaLinks.map((link) => (
-          <Button
-            asChild
+          <span
             key={link.url}
-            variant="outline"
-            className="flex flex-1 cursor-pointer items-center gap-2"
-
+            className={styledButtonVariant({
+              variant: "outline",
+              className: "flex-1",
+            })}
           >
-            <a href={link.url} target="_blank" rel="noreferrer">
+            <a href={link.url} className="center flex w-full gap-1" target="_blank" rel="noreferrer">
               <i className={link.icon} />
               {link.label}
             </a>
-          </Button>
+          </span>
         ))}
       </div>
     </section>

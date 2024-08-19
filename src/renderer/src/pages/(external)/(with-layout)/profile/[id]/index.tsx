@@ -5,7 +5,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
@@ -100,10 +100,10 @@ export function Component() {
                           href={`${DEEPLINK_SCHEME}add?id=${subscription.feeds?.id}`}
                           onClick={stopPropagation}
                         >
-                          <StyledButton>
+                          <Button>
                             <FollowIcon className="mr-1 size-3" />
                             {APP_NAME}
-                          </StyledButton>
+                          </Button>
                         </a>
                       </a>
                     </div>

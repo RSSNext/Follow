@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { FollowSummary } from "@renderer/components/feed-summary"
 import { Logo } from "@renderer/components/icons/logo"
 import { Autocomplete } from "@renderer/components/ui/auto-completion"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { Card, CardHeader } from "@renderer/components/ui/card"
 import {
   Form,
@@ -324,7 +324,7 @@ const FeedInnerForm = ({
 
           <div className="flex flex-1 items-end justify-end gap-4">
             {isSubscribed && (
-              <StyledButton
+              <Button
                 ref={buttonRef}
                 variant="text"
                 isLoading={deleteSubscription.isPending}
@@ -337,15 +337,15 @@ const FeedInnerForm = ({
                 }}
               >
                 Unfollow
-              </StyledButton>
+              </Button>
             )}
-            <StyledButton
+            <Button
               ref={buttonRef}
               type="submit"
               isLoading={followMutation.isPending}
             >
               {isSubscribed ? "Update" : "Follow"}
-            </StyledButton>
+            </Button>
           </div>
         </form>
       </Form>

@@ -1,6 +1,6 @@
 import { FollowSummary } from "@renderer/components/feed-summary"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { Card, CardHeader } from "@renderer/components/ui/card"
 import {
   CopyButton,
@@ -141,7 +141,7 @@ export const FeedClaimModalContent: FC<{
       </Tabs>
 
       <div className="mt-3 flex justify-end">
-        <StyledButton
+        <Button
           disabled={isSuccess}
           isLoading={isPending}
           onClick={() => claim()}
@@ -151,7 +151,7 @@ export const FeedClaimModalContent: FC<{
             <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />
           )}
           Claim
-        </StyledButton>
+        </Button>
       </div>
     </div>
   )

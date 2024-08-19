@@ -59,11 +59,11 @@ export const TextArea = forwardRef<
         return (
           <div
             className={cn(
-              "group relative h-full border ring-0 ring-accent/20 duration-200 [--spotlight-color:oklch(var(--a)_/_0.12)]",
+              "group relative h-full border ring-0 ring-theme-accent/20 duration-200 [--spotlight-color:oklch(var(--a)_/_0.12)]",
               roundedMap[rounded],
 
               "border-transparent",
-              isFocus && "border-accent/80 ring-2",
+              isFocus && "border-theme-accent/80 ring-2",
 
               "dark:text-zinc-200 dark:placeholder:text-zinc-500",
               wrapperClassName,

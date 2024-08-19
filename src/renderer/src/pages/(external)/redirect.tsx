@@ -1,5 +1,5 @@
 import { PoweredByFooter } from "@renderer/components/common/PoweredByFooter"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { UserAvatar } from "@renderer/components/user-button"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { DEEPLINK_SCHEME } from "@shared/constants"
@@ -46,22 +46,22 @@ export function Component() {
         and safely close this page.
       </h2>
       <div className="center flex flex-col gap-4 sm:flex-row">
-        <StyledButton
+        <Button
           variant="text"
           className="h-14 px-10 text-base"
           onClick={() => navigate("/")}
         >
           Continue in Browser
-        </StyledButton>
+        </Button>
 
-        <StyledButton
+        <Button
           className="h-14 !rounded-full px-5 text-lg"
           onClick={async () => window.open(await getCallbackUrl(), "_top")}
         >
           Open
           {" "}
           {APP_NAME}
-        </StyledButton>
+        </Button>
       </div>
       <div className="grow" />
       <PoweredByFooter />

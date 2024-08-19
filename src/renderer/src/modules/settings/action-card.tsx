@@ -193,7 +193,6 @@ const DeleteTableCell = ({
     <Button
       variant="ghost"
       className="w-full px-0"
-      size="sm"
       disabled={disabled}
       onClick={onClick}
     >
@@ -205,8 +204,8 @@ const DeleteTableCell = ({
 const AddTableRow = ({ onClick }: { onClick?: () => void }) => (
   <Button
     variant="outline"
-    size="sm"
     className="mt-1 w-full gap-1"
+    buttonClassName="py-1"
     onClick={onClick}
   >
     <i className="i-mgc-add-cute-re" />
@@ -297,8 +296,6 @@ export function ActionCard({
             <div className="flex w-full items-center gap-2 pr-2">
               <Button
                 variant="ghost"
-                size="sm"
-                className="ml-2"
                 onClick={() => {
                   onChange(null)
                 }}
