@@ -30,7 +30,7 @@ import { useCallback, useLayoutEffect, useRef } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { Link } from "react-router-dom"
 
-import { Vibrancy } from "../../components/ui/background"
+import { WindowUnderBlur } from "../../components/ui/background"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -178,7 +178,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
   })
 
   return (
-    <Vibrancy
+    <WindowUnderBlur
       className="relative flex h-full flex-col space-y-3 rounded-l-[12px] pt-2.5"
       onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
@@ -271,7 +271,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
       </div>
 
       {children}
-    </Vibrancy>
+    </WindowUnderBlur>
   )
 }
 

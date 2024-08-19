@@ -1,25 +1,44 @@
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { cn } from "@renderer/lib/utils"
 
-export const Vibrancy: Component<
+type Props = Component<
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-> = ({ className, children, ...rest }) => {
+>
+const MacOSVibrancy: Props = ({ className, children, ...rest }) => (
+  <div className={cn("bg-native/50 dark:bg-native/10", className)} {...rest}>
+    {children}
+  </div>
+)
+
+const Noop: Props = ({ children, className, ...rest }) => (
+  <div className={cn("bg-native", className)} {...rest}>
+    {children}
+  </div>
+)
+
+const Win32Material: Props = ({ className, children, ...rest }) => (
+  <div className={cn("bg-transparent", className)} {...rest}>
+    {children}
+  </div>
+)
+export const WindowUnderBlur: Props = (props) => {
   const opaqueSidebar = useUISettingKey("opaqueSidebar")
-  const canVibrancy =
-    window.electron &&
-    window.electron.process.platform === "darwin" &&
-    !opaqueSidebar
+  if (opaqueSidebar) {
+    return <Noop {...props} />
+  }
 
-  return (
-    <div
-      className={cn(
-        canVibrancy ? "bg-native/50 dark:bg-native/10" : "bg-native",
-
-        className,
-      )}
-      {...rest}
-    >
-      {children}
-    </div>
-  )
+  if (!window.electron) {
+    return <Noop {...props} />
+  }
+  switch (window.electron.process.platform) {
+    case "darwin": {
+      return <MacOSVibrancy {...props} />
+    }
+    case "win32": {
+      return <Win32Material {...props} />
+    }
+    default: {
+      return <Noop {...props} />
+    }
+  }
 }
