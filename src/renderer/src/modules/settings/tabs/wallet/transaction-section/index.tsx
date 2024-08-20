@@ -109,7 +109,7 @@ const TypeRenderer = ({
 }) => (
   <div
     className={cn("center rounded-full p-px text-xs uppercase", {
-      "bg-accent-700 text-white": type === "tip",
+      "bg-theme-accent-700 text-white": type === "tip",
       "bg-green-700 text-white": type === "mint",
       "bg-red-700 text-white": type === "burn",
       "bg-yellow-700 text-white": type === "withdraw",

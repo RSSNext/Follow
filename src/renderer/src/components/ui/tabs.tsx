@@ -55,9 +55,9 @@ const tabsTriggerVariants = cva("", {
   variants: {
     variant: {
       default:
-        "py-1.5 border-b-2 border-transparent data-[state=active]:text-accent dark:data-[state=active]:text-accent-500",
+        "py-1.5 border-b-2 border-transparent data-[state=active]:text-accent dark:data-[state=active]:text-theme-accent-500",
       rounded:
-        "py-1 rounded-sm data-[state=active]:bg-accent-300 dark:data-[state=active]:bg-accent-800 data-[state=active]:shadow-sm",
+        "py-1 rounded-sm data-[state=active]:bg-theme-accent-300 dark:data-[state=active]:bg-theme-accent-800 data-[state=active]:shadow-sm",
     },
   },
   defaultVariants: {
