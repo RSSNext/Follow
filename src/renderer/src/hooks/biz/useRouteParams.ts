@@ -5,6 +5,7 @@ import {
 import {
   FEED_COLLECTION_LIST,
   ROUTE_ENTRY_PENDING,
+  ROUTE_FEED_IN_FOLDER,
   ROUTE_FEED_PENDING,
 } from "@renderer/constants"
 import { FeedViewType } from "@renderer/lib/enum"
@@ -45,9 +46,13 @@ export interface BizRouteParams {
   isAllFeeds: boolean
   isPendingEntry: boolean
 
+  folderName?: string
 }
 
-const parseRouteParams = (params: Params<any>, search: URLSearchParams): BizRouteParams => {
+const parseRouteParams = (
+  params: Params<any>,
+  search: URLSearchParams,
+): BizRouteParams => {
   const _view = search.get("view")
 
   const view =
@@ -63,6 +68,9 @@ const parseRouteParams = (params: Params<any>, search: URLSearchParams): BizRout
     isCollection: params.feedId === FEED_COLLECTION_LIST,
     isAllFeeds: params.feedId === ROUTE_FEED_PENDING,
     isPendingEntry: params.entryId === ROUTE_ENTRY_PENDING,
+    folderName: params.feedId?.startsWith(ROUTE_FEED_IN_FOLDER) ?
+      params.feedId.slice(ROUTE_FEED_IN_FOLDER.length) :
+      undefined,
   }
 }
 

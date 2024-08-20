@@ -304,6 +304,50 @@ class SubscriptionActions {
       ),
     )
   }
+
+  async renameCategory(lastCategory: string, newCategory: string) {
+    const subscriptionIds = [] as string[]
+    const state = get()
+    for (const feedId in state.data) {
+      const subscription = state.data[feedId]
+      if (
+        subscription.category === lastCategory ||
+        subscription.defaultCategory === lastCategory
+      ) {
+        subscriptionIds.push(feedId)
+      }
+    }
+
+    set((state) =>
+      produce(state, (state) => {
+        for (const feedId of subscriptionIds) {
+          const subscription = state.data[feedId]
+          if (subscription) {
+            subscription.category = newCategory
+            subscription.defaultCategory = undefined
+          }
+        }
+      }),
+    )
+
+    return doMutationAndTransaction(
+      () =>
+        apiClient.categories.$patch({
+          json: {
+            feedIdList: subscriptionIds,
+            category: newCategory,
+          },
+        }),
+      async () =>
+      // Db
+
+        SubscriptionService.renameCategory(
+          whoami()!.id,
+          subscriptionIds,
+          newCategory,
+        ),
+    )
+  }
 }
 
 export const subscriptionActions = new SubscriptionActions()

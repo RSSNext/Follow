@@ -1,3 +1,4 @@
+import { MotionButtonBase } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { ROUTE_FEED_IN_FOLDER, views } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
@@ -16,11 +17,10 @@ import {
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useEffect, useRef, useState } from "react"
+import { Fragment, memo, useEffect, useRef, useState } from "react"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
-import { CategoryRenameContent } from "./category-rename-dialog"
 import { FeedItem } from "./item"
 import { UnreadNumber } from "./unread-number"
 
@@ -83,7 +83,7 @@ function FeedCategoryImpl({
       navigate({
         entryId: null,
         // TODO joint feedId is too long, need to be optimized
-        feedId: `${ROUTE_FEED_IN_FOLDER}${folderName}`,
+        folderName,
         view,
       })
     }
@@ -113,6 +113,31 @@ function FeedCategoryImpl({
       },
     })
 
+  const [isCategoryEditing, setIsCategoryEditing] = useState(false)
+
+  const renameMutation = useMutation({
+    mutationFn: async ({
+      lastCategory,
+      newCategory,
+    }: {
+      lastCategory: string
+      newCategory: string
+    }) => subscriptionActions.renameCategory(lastCategory, newCategory),
+    onMutate({ lastCategory, newCategory }) {
+      const routeParams = getRouteParams()
+
+      if (routeParams.folderName === lastCategory) {
+        navigate({
+          folderName: newCategory,
+        })
+      }
+
+      setIsCategoryEditing(false)
+    },
+  })
+
+  const isCategoryIsWaiting = renameMutation.isPending || isChangePending
+
   return (
     <div tabIndex={-1} onClick={stopPropagation}>
       {!!showCollapse && (
@@ -123,7 +148,9 @@ function FeedCategoryImpl({
           )}
           onClick={(e) => {
             e.stopPropagation()
-            setCategoryActive()
+            if (!isCategoryEditing) {
+              setCategoryActive()
+            }
           }}
           onContextMenu={(e) => {
             showNativeMenu(
@@ -150,18 +177,7 @@ function FeedCategoryImpl({
                   type: "text",
                   label: "Rename category",
                   click: () => {
-                    present({
-                      title: "Rename Category",
-                      clickOutsideToDismiss: true,
-                      content: ({ dismiss }) => (
-                        <CategoryRenameContent
-                          feedIdList={ids}
-                          category={folderName || ""}
-                          view={view}
-                          onSuccess={dismiss}
-                        />
-                      ),
-                    })
+                    setIsCategoryEditing(true)
                   },
                 },
                 {
@@ -186,6 +202,7 @@ function FeedCategoryImpl({
             <button
               type="button"
               onClick={(e) => {
+                if (isCategoryEditing) return
                 e.stopPropagation()
                 setOpen(!open)
               }}
@@ -195,25 +212,66 @@ function FeedCategoryImpl({
               )}
               tabIndex={-1}
             >
-              {isChangePending ? (
+              {isCategoryIsWaiting ? (
                 <LoadingCircle size="small" className="mr-2 size-[16px]" />
-              ) : (
-                <div className="mr-2 size-[16px]">
-                  <i className="i-mgc-right-cute-fi transition-transform" />
-                </div>
-              )}
+              ) : isCategoryEditing ?
+                  (
+                    <MotionButtonBase
+                      onClick={() => {
+                        setIsCategoryEditing(false)
+                      }}
+                      className="center flex"
+                    >
+                      <i className="i-mgc-close-cute-re text-red-500" />
+                    </MotionButtonBase>
+                  ) :
+                  (
+                    <div className="mr-2 size-[16px]">
+                      <i className="i-mgc-right-cute-fi transition-transform" />
+                    </div>
+                  )}
             </button>
-            <span
-              className={cn(
-                "truncate",
-                !showUnreadCount &&
-                (unread ? "font-bold" : "font-medium opacity-70"),
-              )}
-            >
-              {folderName}
-            </span>
+            {isCategoryEditing ? (
+              <form
+                className="ml-3 flex w-full items-center"
+                onSubmit={(e) => {
+                  e.preventDefault()
+
+                  return renameMutation.mutateAsync({
+                    lastCategory: folderName!,
+                    newCategory: e.currentTarget.category.value,
+                  })
+                }}
+              >
+                <input
+                  name="category"
+                  autoFocus
+                  defaultValue={folderName}
+                  className="w-full appearance-none bg-transparent caret-accent"
+                />
+                <MotionButtonBase
+                  type="submit"
+                  className="center -mr-1 flex size-5 shrink-0 rounded-lg text-green-600 hover:bg-theme-button-hover dark:text-green-400"
+                >
+                  <i className="i-mgc-check-filled size-3" />
+                </MotionButtonBase>
+              </form>
+            ) : (
+              <Fragment>
+                <span
+                  className={cn(
+                    "grow truncate",
+                    !showUnreadCount &&
+                    (unread ? "font-bold" : "font-medium opacity-70"),
+                  )}
+                >
+                  {folderName}
+                </span>
+
+                <UnreadNumber unread={unread} className="ml-2" />
+              </Fragment>
+            )}
           </div>
-          <UnreadNumber unread={unread} className="ml-2" />
         </div>
       )}
       <AnimatePresence>
