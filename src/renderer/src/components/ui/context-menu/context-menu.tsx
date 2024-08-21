@@ -31,7 +31,7 @@ const ContextMenuSubTrigger = React.forwardRef<
     {...props}
   >
     {children}
-    <i className="i-mingcute-right-fill ml-auto size-3.5" />
+    <i className="i-mingcute-right-line -mr-1 ml-auto size-3.5" />
   </ContextMenuPrimitive.SubTrigger>
 ))
 ContextMenuSubTrigger.displayName = ContextMenuPrimitive.SubTrigger.displayName
