@@ -1,3 +1,4 @@
+import { SafeFragment } from "@renderer/components/common/Fragment"
 import { ActionButton } from "@renderer/components/ui/button"
 import { RelativeDay } from "@renderer/components/ui/datetime"
 import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
@@ -5,8 +6,10 @@ import { IconScaleTransition } from "@renderer/components/ux/transition/icon"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import { throttle } from "lodash-es"
+import type { FC, PropsWithChildren } from "react"
 import {
   memo,
+  useCallback,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -14,7 +17,6 @@ import {
 } from "react"
 
 import { useMarkAllByRoute } from "../hooks/useMarkAll"
-import { MarkAllReadButton } from "./mark-all-button"
 
 const useParseDate = (date: string) =>
   useMemo(() => {
@@ -73,18 +75,35 @@ const UniversalDateItem = ({
 }) => {
   const { startOfDay, endOfDay, dateObj } = useParseDate(date)
 
-  const { isSticky, itemRef } = useSticky()
+  return (
+    <DateItemInner
+      className={className}
+      date={dateObj}
+      startTime={startOfDay}
+      endTime={endOfDay}
+    />
+  )
+}
 
-  const RelativeElement = <RelativeDay date={dateObj} />
+const DateItemInner: FC<{
+  date: Date
+  startTime: number
+  endTime: number
+  className?: string
+  Wrapper?: FC<PropsWithChildren>
+}> = ({ date, endTime, startTime, className, Wrapper }) => {
+  const RelativeElement = <RelativeDay date={date} />
 
   const handleMarkAllAsRead = useMarkAllByRoute({
-    startTime: startOfDay,
-    endTime: endOfDay,
+    startTime,
+    endTime,
   })
+  const { isSticky, itemRef } = useSticky()
 
   const [confirmMark, setConfirmMark] = useState(false)
 
   const timerRef = useRef<any>()
+  const W = Wrapper ?? SafeFragment
 
   return (
     <div
@@ -99,45 +118,46 @@ const UniversalDateItem = ({
         }, 1000)
       }}
     >
-      <ActionButton
-        tooltip={(
-          <span>
+      <W>
+        <ActionButton
+          tooltip={(
+            <span>
+              Mark
+              <span> </span>
+              {RelativeElement}
+              <span> </span>
+              as read
+            </span>
+          )}
+          onClick={() => {
+            if (confirmMark) {
+              clearTimeout(timerRef.current)
+              handleMarkAllAsRead()
+              setConfirmMark(false)
+            } else {
+              setConfirmMark(true)
+            }
+          }}
+          className="size-7 text-base"
+        >
+          <IconScaleTransition
+            icon1="i-mgc-check-filled text-green-600"
+            icon2="i-mgc-check-circle-cute-re"
+            status={!confirmMark ? "done" : "init"}
+          />
+        </ActionButton>
+        {confirmMark ? (
+          <div className="animate-mask-in">
             Mark
             <span> </span>
             {RelativeElement}
-            <span> </span>
-            as read
-          </span>
+            {" "}
+            as read?
+          </div>
+        ) : (
+          RelativeElement
         )}
-        onClick={() => {
-          if (confirmMark) {
-            clearTimeout(timerRef.current)
-            handleMarkAllAsRead()
-            setConfirmMark(false)
-          } else {
-            setConfirmMark(true)
-          }
-        }}
-        className="size-7 text-base"
-      >
-        <IconScaleTransition
-          icon1="i-mgc-check-filled text-green-600"
-          icon2="i-mgc-check-circle-cute-re"
-          status={!confirmMark ? "done" : "init"}
-        />
-      </ActionButton>
-
-      {confirmMark ? (
-        <div className="animate-mask-in">
-          Mark
-          <span> </span>
-          {RelativeElement}
-          {" "}
-          as read?
-        </div>
-      ) : (
-        RelativeElement
-      )}
+      </W>
     </div>
   )
 }
@@ -150,20 +170,21 @@ const SocialMediaDateItem = ({
 }) => {
   const { startOfDay, endOfDay, dateObj } = useParseDate(date)
 
-  const { isSticky, itemRef } = useSticky()
-  const RelativeElement = <RelativeDay date={dateObj} />
   return (
-    <div className={cn(className, isSticky && "border-b")} ref={itemRef}>
-      <div className="m-auto flex w-[67ch] gap-3 pl-5 text-lg">
-        <MarkAllReadButton
-          filter={{
-            startTime: startOfDay,
-            endTime: endOfDay,
-          }}
-          which={RelativeElement}
-        />
-        {RelativeElement}
-      </div>
-    </div>
+    <DateItemInner
+      // @ts-expect-error
+      Wrapper={useCallback(
+        ({ children }) => (
+          <div className="m-auto flex w-[67ch] gap-3 pl-5 text-lg">
+            {children}
+          </div>
+        ),
+        [],
+      )}
+      className={className}
+      date={dateObj}
+      startTime={startOfDay}
+      endTime={endOfDay}
+    />
   )
 }
