@@ -270,6 +270,7 @@ const VideoPreview: FC<{
         />
       ) : (
         <VideoPlayer
+          variant="preview"
           controls={false}
           src={src}
           ref={setVideoRef}

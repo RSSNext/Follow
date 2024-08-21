@@ -1,10 +1,12 @@
 import * as Slider from "@radix-ui/react-slider"
+import { AudioPlayer } from "@renderer/atoms/player"
 import { IconScaleTransition } from "@renderer/components/ux/transition/icon"
 import { useRefValue } from "@renderer/hooks/common"
 import type { HTMLMediaState } from "@renderer/hooks/common/factory/createHTMLMediaHook"
 import { useVideo } from "@renderer/hooks/common/useVideo"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
+import { useSingleton } from "foxact/use-singleton"
 import { m, useDragControls, useSpring } from "framer-motion"
 import type { PropsWithChildren } from "react"
 import {
@@ -25,6 +27,7 @@ import {
 } from "use-context-selector"
 import { useEventCallback } from "usehooks-ts"
 
+import { MotionButtonBase } from "../button"
 import { softSpringPreset } from "../constants/spring"
 import { KbdCombined } from "../kbd/Kbd"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
@@ -32,6 +35,8 @@ import { VolumeSlider } from "./VolumeSlider"
 
 type VideoPlayerProps = {
   src: string
+
+  variant?: "preview" | "player"
 } & React.VideoHTMLAttributes<HTMLVideoElement> &
 PropsWithChildren
 export type VideoPlayerRef = {
@@ -55,10 +60,12 @@ interface VideoPlayerContextValue {
   controls: VideoPlayerRef["controls"]
   wrapperRef: React.RefObject<HTMLDivElement>
   src: string
+  variant: "preview" | "player"
 }
 const VideoPlayerContext = createContext<VideoPlayerContextValue>(null!)
 export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
-  ({ src, className, ...rest }, ref) => {
+  ({ src, className, variant = "player", ...rest }, ref) => {
+    const isPlayer = variant === "player"
     const [clickToStatus, setClickToStatus] = useState(
       null as "play" | "pause" | null,
     )
@@ -66,7 +73,7 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
     const scaleValue = useSpring(1, softSpringPreset)
     const opacityValue = useSpring(0, softSpringPreset)
     const handleClick = useEventCallback((e?: any) => {
-      if (!rest.controls) return
+      if (!isPlayer) return
       e?.stopPropagation()
 
       if (state.playing) {
@@ -96,9 +103,10 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
         rest.onClick?.(e)
         handleClick(e)
       },
+      muted: isPlayer ? false : true,
       onDoubleClick(e) {
         rest.onDoubleClick?.(e)
-        if (!rest.controls) return
+        if (!isPlayer) return
         e.preventDefault()
         e.stopPropagation()
         if (!document.fullscreenElement) {
@@ -130,7 +138,7 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
     )
 
     return (
-      <div className="center relative size-full" ref={wrapperRef}>
+      <div className="group center relative size-full" ref={wrapperRef}>
         {element}
 
         <div className="center pointer-events-none absolute inset-0">
@@ -149,18 +157,67 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
           </m.div>
         </div>
 
+        {state.hasAudio && !state.muted && state.playing && (
+          <BizControlOutsideMedia />
+        )}
+
         <VideoPlayerContext.Provider
           value={useMemo(
-            () => ({ state, controls, wrapperRef, src }),
-            [state, controls, src],
+            () => ({ state, controls, wrapperRef, src, variant }),
+            [state, controls, src, variant],
           )}
         >
-          {rest.controls && <ControlBar />}
+          {variant === "preview" && <FloatMutedButton />}
+          {isPlayer && <ControlBar />}
         </VideoPlayerContext.Provider>
       </div>
     )
   },
 )
+const BizControlOutsideMedia = () => {
+  const currentAudioPlayerIsPlayRef = useSingleton(
+    () => AudioPlayer.get().status === "playing",
+  )
+  useEffect(() => {
+    const { current } = currentAudioPlayerIsPlayRef
+    if (current) {
+      AudioPlayer.pause()
+    }
+
+    return () => {
+      if (current) {
+        AudioPlayer.play()
+      }
+    }
+  }, [currentAudioPlayerIsPlayRef])
+
+  return null
+}
+
+const FloatMutedButton = () => {
+  const ctx = useContext(VideoPlayerContext)
+  const isMuted = ctx.state.muted
+  return (
+    <MotionButtonBase
+      className="center absolute right-4 top-4 z-10 size-7 rounded-full bg-black/50 opacity-0 duration-200 group-hover:opacity-100"
+      onClick={(e) => {
+        e.stopPropagation()
+        if (isMuted) {
+          ctx.controls.unmute()
+        } else {
+          ctx.controls.mute()
+        }
+      }}
+    >
+      <IconScaleTransition
+        className="size-4 text-white"
+        icon1="i-mgc-volume-cute-re"
+        icon2="i-mgc-volume-mute-cute-re"
+        status={isMuted ? "done" : "init"}
+      />
+    </MotionButtonBase>
+  )
+}
 
 const ControlBar = memo(() => {
   const controls = useContextSelector(VideoPlayerContext, (v) => v.controls)

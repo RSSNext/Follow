@@ -124,13 +124,17 @@ export default function createHTMLMediaHook<
       }
       setState({ buffered: parseTimeRanges(el.buffered) })
     }
-    const onLoadedData = () => {
-      const el = ref.current
-      if (!el) {
-        return
-      }
-      // @ts-expect-error
-      setState({ hasAudio: !!el.mozHasAudio || !!el.webkitAudioDecodedByteCount || !!el.audioTracks })
+    const onCanPlay = (e: React.SyntheticEvent<HTMLVideoElement>) => {
+      const target = e.currentTarget
+
+      const hasAudio =
+        target.srcObject instanceof MediaStream ?
+          target.srcObject.getAudioTracks().length > 0 :
+          target.webkitAudioDecodedByteCount === undefined ?
+            true :
+            target.webkitAudioDecodedByteCount > 0
+
+      setState({ hasAudio })
     }
 
     if (element) {
@@ -146,7 +150,7 @@ export default function createHTMLMediaHook<
         onDurationChange: wrapEvent(props.onDurationChange, onDurationChange),
         onTimeUpdate: wrapEvent(props.onTimeUpdate, onTimeUpdate),
         onProgress: wrapEvent(props.onProgress, onProgress),
-        onLoadedData: wrapEvent(props.onLoadedData, onLoadedData),
+        onCanPlay: wrapEvent(props.onCanPlay, onCanPlay),
       })
     } else {
       element = React.createElement(tag, {
@@ -161,7 +165,7 @@ export default function createHTMLMediaHook<
         onDurationChange: wrapEvent(props.onDurationChange, onDurationChange),
         onTimeUpdate: wrapEvent(props.onTimeUpdate, onTimeUpdate),
         onProgress: wrapEvent(props.onProgress, onProgress),
-        onLoadedData: wrapEvent(props.onLoadedData, onLoadedData),
+        onCanPlay: wrapEvent(props.onCanPlay, onCanPlay),
       } as any) // TODO: fix this typing.
     }
 
@@ -269,5 +273,14 @@ export default function createHTMLMediaHook<
     }, [props.src])
 
     return [element, state, controls, ref] as const
+  }
+}
+
+declare global {
+  interface HTMLVideoElement {
+    /*
+     * @see https://newbedev.com/html5-video-how-to-detect-when-there-is-no-audio-track
+     */
+    webkitAudioDecodedByteCount?: number
   }
 }

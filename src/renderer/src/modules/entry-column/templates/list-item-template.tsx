@@ -1,4 +1,4 @@
-import { Player, usePlayerAtomSelector } from "@renderer/atoms/player"
+import { AudioPlayer, useAudioPlayerAtomSelector } from "@renderer/atoms/player"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { RelativeTime } from "@renderer/components/ui/datetime"
 import { Media } from "@renderer/components/ui/media"
@@ -161,7 +161,7 @@ function AudioCover({
   durationInSeconds?: number
   feedIcon: React.ReactNode
 }) {
-  const playStatus = usePlayerAtomSelector((playerValue) =>
+  const playStatus = useAudioPlayerAtomSelector((playerValue) =>
     playerValue.src === src && playerValue.show ? playerValue.status : false,
   )
 
@@ -172,7 +172,7 @@ function AudioCover({
   const handleClickPlay = () => {
     if (!playStatus) {
       // switch this to play
-      Player.mount({
+      AudioPlayer.mount({
         type: "audio",
         entryId,
         src,
@@ -180,7 +180,7 @@ function AudioCover({
       })
     } else {
       // switch between play and pause
-      Player.togglePlayAndPause()
+      AudioPlayer.togglePlayAndPause()
     }
   }
 
