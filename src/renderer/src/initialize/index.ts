@@ -13,6 +13,7 @@ import duration from "dayjs/plugin/duration"
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { enableMapSet } from "immer"
+import { createElement } from "react"
 import { toast } from "sonner"
 
 import { subscribeNetworkStatus } from "../atoms/network"
@@ -27,6 +28,7 @@ import {
   setHydrated,
 } from "./hydrate"
 import { initPostHog } from "./posthog"
+import { pushAfterReadyCallback } from "./queue"
 import { initSentry } from "./sentry"
 
 const cleanup = subscribeShouldUseIndexedDB((value) => {
@@ -64,7 +66,31 @@ export const initializeApp = async () => {
 
   if (lastVersion && lastVersion !== APP_VERSION) {
     appLog(`Upgrade from ${lastVersion} to ${APP_VERSION}`)
-    // TODO
+
+    pushAfterReadyCallback(() => {
+      setTimeout(() => {
+        toast.success(
+          // `App is upgraded to ${APP_VERSION}, enjoy the new features! 🎉`,
+          createElement("div", {
+            children: [
+              "App is upgraded to ",
+              createElement(
+                "a",
+                {
+                  href: `${repository.url}/releases/tag/${APP_VERSION}`,
+                  target: "_blank",
+                  className: "underline",
+                },
+                createElement("strong", {
+                  children: APP_VERSION,
+                }),
+              ),
+              ", enjoy the new features! 🎉",
+            ],
+          }),
+        )
+      }, 1000)
+    })
   }
   localStorage.setItem(appVersionKey, APP_VERSION)
 
