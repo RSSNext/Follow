@@ -13,7 +13,7 @@ import type { FC, ReactNode } from "react"
 import { forwardRef, useState } from "react"
 
 import type { MarkAllFilter } from "../hooks/useMarkAll"
-import { useMarkAll } from "../hooks/useMarkAll"
+import { useMarkAllByRoute } from "../hooks/useMarkAll"
 
 interface MarkAllButtonProps {
   filter?: MarkAllFilter
@@ -28,7 +28,7 @@ export const MarkAllReadButton = forwardRef<
 >(({ filter, className, which = "all", shortcut }, ref) => {
   const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
 
-  const handleMarkAllAsRead = useMarkAll(filter)
+  const handleMarkAllAsRead = useMarkAllByRoute(filter)
 
   return (
     <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
@@ -87,7 +87,7 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
   const [status, setStatus] = useState<"initial" | "confirm" | "done">(
     "initial",
   )
-  const handleMarkAll = useMarkAll(filter)
+  const handleMarkAll = useMarkAllByRoute(filter)
 
   if (status === "done") return null
   const animate = {

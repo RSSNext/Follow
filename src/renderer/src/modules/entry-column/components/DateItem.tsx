@@ -13,7 +13,7 @@ import {
   useState,
 } from "react"
 
-import { useMarkAll } from "../hooks/useMarkAll"
+import { useMarkAllByRoute } from "../hooks/useMarkAll"
 import { MarkAllReadButton } from "./mark-all-button"
 
 const useParseDate = (date: string) =>
@@ -77,7 +77,7 @@ const UniversalDateItem = ({
 
   const RelativeElement = <RelativeDay date={dateObj} />
 
-  const handleMarkAllAsRead = useMarkAll({
+  const handleMarkAllAsRead = useMarkAllByRoute({
     startTime: startOfDay,
     endTime: endOfDay,
   })

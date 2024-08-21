@@ -41,7 +41,7 @@ export const useFeedActions = ({
     const items: NativeMenuItem[] = [
       {
         type: "text" as const,
-        label: isEntryList ? "Edit Feed" : "Edit",
+        label: isEntryList ? "Edit feed" : "Edit",
         shortcut: "E",
         click: () => {
           present({
@@ -54,13 +54,13 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: isEntryList ? "Unfollow Feed" : "Unfollow",
+        label: isEntryList ? "Unfollow feed" : "Unfollow",
         shortcut: "Meta+Backspace",
         click: () => deleteSubscription.mutate(subscription),
       },
       {
         type: "text" as const,
-        label: "Navigate to Feed",
+        label: "Navigate to feed",
         shortcut: "Meta+G",
         disabled: !isEntryList || getRouteParams().feedId === feedId,
         click: () => {
@@ -73,7 +73,7 @@ export const useFeedActions = ({
       },
       {
         type: "text",
-        label: "Mark All as Read",
+        label: "Mark all as read",
         shortcut: "Meta+Shift+A",
         disabled: isEntryList,
         click: () => subscriptionActions.markReadByFeedIds([feedId]),
@@ -105,7 +105,7 @@ export const useFeedActions = ({
 
       {
         type: "text" as const,
-        label: "Open Feed in Browser",
+        label: "Open feed in browser",
         disabled: isEntryList,
         shortcut: "O",
         click: () =>
@@ -113,7 +113,7 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: "Open Site in Browser",
+        label: "Open site in browser",
         shortcut: "Meta+O",
         disabled: isEntryList,
         click: () => {
@@ -129,14 +129,14 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: "Copy Feed URL",
+        label: "Copy feed URL",
         disabled: isEntryList,
         shortcut: "Meta+C",
         click: () => navigator.clipboard.writeText(feed.url),
       },
       {
         type: "text" as const,
-        label: "Copy Feed ID",
+        label: "Copy feed ID",
         shortcut: "Meta+Shift+C",
         disabled: isEntryList,
         click: () => {

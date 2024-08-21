@@ -154,6 +154,13 @@ function FeedCategoryImpl({
                       },
                     })),
                 },
+                {
+                  type: "text",
+                  label: "Mark as read",
+                  click: () => {
+                    subscriptionActions.markReadByFeedIds(ids)
+                  },
+                },
                 { type: "separator" },
                 {
                   type: "text",

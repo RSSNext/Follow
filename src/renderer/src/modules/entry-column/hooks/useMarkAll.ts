@@ -7,7 +7,7 @@ export interface MarkAllFilter {
   startTime: number
   endTime: number
 }
-export const useMarkAll = (filter?: MarkAllFilter) => {
+export const useMarkAllByRoute = (filter?: MarkAllFilter) => {
   const routerParams = useRouteParms()
   const { feedId, view } = routerParams
   const folderIds = useFolderFeedsByFeedId({
