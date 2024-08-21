@@ -4,6 +4,7 @@ import { repository } from "@pkg"
 import { getUISettings } from "@renderer/atoms/settings/ui"
 import { isElectronBuild } from "@renderer/constants"
 import { browserDB } from "@renderer/database"
+import { getStorageNS } from "@renderer/lib/ns"
 import { InvalidateQueryEvent } from "@renderer/providers/invalidate-query-provider"
 import { CleanerService } from "@renderer/services/cleaner"
 import { registerGlobalContext } from "@shared/bridge"
@@ -44,6 +45,9 @@ declare global {
     version: string
   }
 }
+
+const appVersionKey = getStorageNS("app_version")
+
 export const initializeApp = async () => {
   appLog(`${APP_NAME}: Next generation information browser`, repository.url)
   appLog(`Initialize ${APP_NAME}...`)
@@ -55,6 +59,14 @@ export const initializeApp = async () => {
   document.documentElement.dataset.buildType = isElectronBuild ?
     "electron" :
     "web"
+
+  const lastVersion = localStorage.getItem(appVersionKey)
+
+  if (lastVersion && lastVersion !== APP_VERSION) {
+    appLog(`Upgrade from ${lastVersion} to ${APP_VERSION}`)
+    // TODO
+  }
+  localStorage.setItem(appVersionKey, APP_VERSION)
 
   // Initialize dayjs
   dayjs.extend(duration)
