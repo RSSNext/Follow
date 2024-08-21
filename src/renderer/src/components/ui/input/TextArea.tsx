@@ -54,7 +54,7 @@ export const TextArea = forwardRef<
           [mouseX, mouseY],
         )
 
-        const inputProps = useInputComposition(props)
+        const inputProps = useInputComposition<HTMLTextAreaElement>(props)
         const [isFocus, setIsFocus] = useState(false)
         return (
           <div

@@ -48,7 +48,7 @@ const CmdFImpl: FC<{
 
   const searchIdRef = useRef<number>(0)
 
-  const { isCompositionRef, ...inputProps } = useInputComposition({
+  const { isCompositionRef, ...inputProps } = useInputComposition<HTMLInputElement>({
     onKeyDown: useEventCallback((e) => {
       const $input = inputRef.current
       if (!$input) return

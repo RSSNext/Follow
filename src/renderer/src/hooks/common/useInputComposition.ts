@@ -23,24 +23,24 @@ export const useInputComposition = <E = HTMLInputElement>(
 
   const isCompositionRef = useRef(false)
 
-  const handleCompositionStart: CompositionEventHandler<any> = useCallback(
+  const handleCompositionStart: CompositionEventHandler<E> = useCallback(
     (e) => {
       isCompositionRef.current = true
-      onCompositionStart?.(e)
+      onCompositionStart?.(e as any)
     },
     [onCompositionStart],
   )
 
-  const handleCompositionEnd: CompositionEventHandler<any> = useCallback(
+  const handleCompositionEnd: CompositionEventHandler<E> = useCallback(
     (e) => {
       isCompositionRef.current = false
-      onCompositionEnd?.(e)
+      onCompositionEnd?.(e as any)
     },
     [onCompositionEnd],
   )
 
-  const handleKeyDown: React.KeyboardEventHandler<any> = useCallback(
-    (e) => {
+  const handleKeyDown: React.KeyboardEventHandler<E> = useCallback(
+    (e: any) => {
       // The keydown event stop emit when the composition is being entered
       if (isCompositionRef.current) {
         e.stopPropagation()
