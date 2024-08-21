@@ -191,13 +191,14 @@ export function FeedColumn({ children }: PropsWithChildren) {
       >
         {normalStyle && (
           <div
-            className="relative flex items-center gap-1 text-xl font-bold"
+            className="relative flex items-center gap-1 font-default text-lg font-semibold"
             onClick={(e) => {
               e.stopPropagation()
               navigateBackHome()
             }}
           >
             <Logo className="mr-1 size-6" />
+
             {APP_NAME}
           </div>
         )}

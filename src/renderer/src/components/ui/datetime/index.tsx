@@ -137,7 +137,7 @@ export const RelativeDay = ({ date }: { date: Date }) => {
 
   return (
     <Tooltip>
-      <TooltipTrigger>{dateString}</TooltipTrigger>
+      <TooltipTrigger onFocusCapture={stopPropagation}>{dateString}</TooltipTrigger>
       <TooltipPortal>
         <TooltipContent>{dayjs(date).format("llll")}</TooltipContent>
       </TooltipPortal>

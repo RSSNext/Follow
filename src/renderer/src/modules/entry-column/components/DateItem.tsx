@@ -1,20 +1,30 @@
+import { ActionButton } from "@renderer/components/ui/button"
 import { RelativeDay } from "@renderer/components/ui/datetime"
 import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
+import { IconScaleTransition } from "@renderer/components/ux/transition/icon"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
 import { throttle } from "lodash-es"
-import { memo, useLayoutEffect, useMemo, useRef, useState } from "react"
+import {
+  memo,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 
+import { useMarkAll } from "../hooks/useMarkAll"
 import { MarkAllReadButton } from "./mark-all-button"
 
-const useParseDate = (date: string) => useMemo(() => {
-  const dateObj = new Date(date)
-  return {
-    dateObj,
-    startOfDay: new Date(dateObj.setHours(0, 0, 0, 0)).getTime(),
-    endOfDay: new Date(dateObj.setHours(23, 59, 59, 999)).getTime(),
-  }
-}, [date])
+const useParseDate = (date: string) =>
+  useMemo(() => {
+    const dateObj = new Date(date)
+    return {
+      dateObj,
+      startOfDay: new Date(dateObj.setHours(0, 0, 0, 0)).getTime(),
+      endOfDay: new Date(dateObj.setHours(23, 59, 59, 999)).getTime(),
+    }
+  }, [date])
 
 const useSticky = () => {
   const $scroller = useScrollViewElement()
@@ -64,18 +74,70 @@ const UniversalDateItem = ({
   const { startOfDay, endOfDay, dateObj } = useParseDate(date)
 
   const { isSticky, itemRef } = useSticky()
+
   const RelativeElement = <RelativeDay date={dateObj} />
+
+  const handleMarkAllAsRead = useMarkAll({
+    startTime: startOfDay,
+    endTime: endOfDay,
+  })
+
+  const [confirmMark, setConfirmMark] = useState(false)
+
+  const timerRef = useRef<any>()
+
   return (
-    <div className={cn(className, isSticky && "border-b")} ref={itemRef}>
-      <MarkAllReadButton
-        which={RelativeElement}
-        className="size-7 text-base"
-        filter={{
-          startTime: startOfDay,
-          endTime: endOfDay,
+    <div
+      className={cn(className, isSticky && "border-b")}
+      ref={itemRef}
+      onMouseEnter={() => {
+        clearTimeout(timerRef.current)
+      }}
+      onMouseLeave={() => {
+        timerRef.current = setTimeout(() => {
+          setConfirmMark(false)
+        }, 1000)
+      }}
+    >
+      <ActionButton
+        tooltip={(
+          <span>
+            Mark
+            <span> </span>
+            {RelativeElement}
+            <span> </span>
+            as read
+          </span>
+        )}
+        onClick={() => {
+          if (confirmMark) {
+            clearTimeout(timerRef.current)
+            handleMarkAllAsRead()
+            setConfirmMark(false)
+          } else {
+            setConfirmMark(true)
+          }
         }}
-      />
-      {RelativeElement}
+        className="size-7 text-base"
+      >
+        <IconScaleTransition
+          icon1="i-mgc-check-filled text-green-600"
+          icon2="i-mgc-check-circle-cute-re"
+          status={!confirmMark ? "done" : "init"}
+        />
+      </ActionButton>
+
+      {confirmMark ? (
+        <div className="animate-mask-in">
+          Mark
+          <span> </span>
+          {RelativeElement}
+          {" "}
+          as read?
+        </div>
+      ) : (
+        RelativeElement
+      )}
     </div>
   )
 }

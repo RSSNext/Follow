@@ -1,8 +1,5 @@
 import { PopoverPortal } from "@radix-ui/react-popover"
-import {
-  ActionButton,
-  Button,
-} from "@renderer/components/ui/button"
+import { ActionButton, Button } from "@renderer/components/ui/button"
 import {
   Popover,
   PopoverClose,
@@ -10,21 +7,16 @@ import {
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
 import { shortcuts } from "@renderer/constants/shortcuts"
-import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { cn } from "@renderer/lib/utils"
-import {
-  subscriptionActions,
-  useFolderFeedsByFeedId,
-} from "@renderer/store/subscription"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
-import { forwardRef, useCallback, useState } from "react"
+import { forwardRef, useState } from "react"
+
+import type { MarkAllFilter } from "../hooks/useMarkAll"
+import { useMarkAll } from "../hooks/useMarkAll"
 
 interface MarkAllButtonProps {
-  filter?: {
-    startTime: number
-    endTime: number
-  }
+  filter?: MarkAllFilter
   className?: string
   which?: ReactNode
 
@@ -46,8 +38,9 @@ export const MarkAllReadButton = forwardRef<
           tooltip={(
             <span>
               Mark
+              <span> </span>
               {which}
-              {" "}
+              <span> </span>
               as read
             </span>
           )}
@@ -58,19 +51,23 @@ export const MarkAllReadButton = forwardRef<
         </ActionButton>
       </PopoverTrigger>
       <PopoverPortal>
-        <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 text-[0.94rem] font-medium">
-          <div>
+        <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 font-medium [&_button]:text-xs">
+          <div className="text-sm">
             Mark
+            <span> </span>
             {which}
-            {" "}
+            <span> </span>
             as read?
           </div>
           <div className="space-x-4">
             <PopoverClose>
-              <Button variant="outline">Cancel</Button>
+              <Button className="px-1" variant="outline">
+                Cancel
+              </Button>
             </PopoverClose>
 
             <Button
+              className="px-1"
               onClick={() => {
                 handleMarkAllAsRead()
                 setMarkPopoverOpen(false)
@@ -147,29 +144,4 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
       </span>
     </Button>
   )
-}
-
-const useMarkAll = (filter: MarkAllButtonProps["filter"]) => {
-  const routerParams = useRouteParms()
-  const { feedId, view } = routerParams
-  const folderIds = useFolderFeedsByFeedId({
-    feedId,
-    view,
-  })
-
-  return useCallback(async () => {
-    if (!routerParams) return
-
-    if (typeof routerParams.feedId === "number" || routerParams.isAllFeeds) {
-      subscriptionActions.markReadByView(view, filter)
-    } else if (folderIds) {
-      subscriptionActions.markReadByFeedIds(folderIds, view, filter)
-    } else if (routerParams.feedId) {
-      subscriptionActions.markReadByFeedIds(
-        routerParams.feedId?.split(","),
-        view,
-        filter,
-      )
-    }
-  }, [routerParams, folderIds, view, filter])
 }

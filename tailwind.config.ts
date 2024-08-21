@@ -30,6 +30,7 @@ export default resolveConfig({
     extend: {
       fontFamily: {
         theme: "var(--fo-font-family)",
+        default: "SN pro, sans-serif, system-ui",
       },
       colors: {
         border: "hsl(var(--border) / <alpha-value>)",

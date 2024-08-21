@@ -280,3 +280,21 @@
     box-shadow: -12px 0px 17px 2px rgba(0, 0, 0, 0.653);
   }
 }
+
+@layer components {
+  .animate-mask-in {
+    animation: mask-in 0.5s ease-in-out forwards;
+  }
+  @keyframes mask-in {
+    0% {
+      mask: linear-gradient(90deg, #000 25%, #000000e6 50%, #00000000) 150% 0 /
+        400% no-repeat;
+      opacity: 0.2;
+    }
+    100% {
+      mask: linear-gradient(90deg, #000 25%, #000000e6 50%, #00000000) 0 / 400%
+        no-repeat;
+      opacity: 1;
+    }
+  }
+}
