@@ -1,6 +1,9 @@
 import { Label } from "@radix-ui/react-label"
 import { PopoverPortal } from "@radix-ui/react-popover"
-import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
+import {
+  useGeneralSettingKey,
+  useGeneralSettingValue,
+} from "@renderer/atoms/settings/general"
 import { Button } from "@renderer/components/ui/button"
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import {
@@ -10,6 +13,7 @@ import {
 } from "@renderer/components/ui/popover"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
+import { withSettingEnabled } from "@renderer/modules/settings/helper/withSettingEnable"
 import { m } from "framer-motion"
 import { atomWithStorage } from "jotai/utils"
 import { forwardRef, Fragment, useState } from "react"
@@ -33,7 +37,8 @@ const getURLDomain = (url: string) => {
   }
   return null
 }
-export const WarnGoToExternalLink = forwardRef<
+
+const WarnGoToExternalLinkImpl = forwardRef<
   HTMLAnchorElement,
   React.DetailedHTMLProps<
     React.AnchorHTMLAttributes<HTMLAnchorElement>,
@@ -51,9 +56,11 @@ export const WarnGoToExternalLink = forwardRef<
     if (!href) return
     const domain = getURLDomain(href)
 
-    if (domain &&
+    if (
+      domain &&
       !trustedDefaultLinks.has(domain) &&
-      !jotaiStore.get(trustedAtom).includes(domain)) {
+      !jotaiStore.get(trustedAtom).includes(domain)
+    ) {
       setOpen(true)
       e.preventDefault()
     }
@@ -75,6 +82,7 @@ export const WarnGoToExternalLink = forwardRef<
     function open() {
       if (!rest.href) return
       window.open(rest.href, "_blank", "noopener,noreferrer")
+      setOpen(false)
     }
   }
   return (
@@ -85,7 +93,7 @@ export const WarnGoToExternalLink = forwardRef<
         </PopoverTrigger>
         <PopoverPortal>
           <PopoverContent>
-            <p className="text-sm">
+            <p className="max-w-[50ch] text-sm">
               You are about to leave this site to go to an external page, do you
               trust this URL and go to it?
             </p>
@@ -113,3 +121,8 @@ export const WarnGoToExternalLink = forwardRef<
     </Fragment>
   )
 })
+
+export const WarnGoToExternalLink = withSettingEnabled(
+  useGeneralSettingValue,
+  (s) => s.jumpOutLinkWarn,
+)(WarnGoToExternalLinkImpl, "a")

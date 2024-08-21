@@ -2,9 +2,7 @@ import { useRefValue } from "@renderer/hooks/common"
 import { createAtomHooks } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
 import type { SettingItem } from "@renderer/modules/settings/setting-builder"
-import {
-  createSettingBuilder,
-} from "@renderer/modules/settings/setting-builder"
+import { createSettingBuilder } from "@renderer/modules/settings/setting-builder"
 import { useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
@@ -65,6 +63,10 @@ export const createSettingAtom = <T extends object>(
     setSettings(createDefaultSettings())
   }
 
+  Object.defineProperty(useSettingValue, "select", {
+    value: useSettingSelector,
+  })
+
   return {
     useSettingKey,
     useSettingSelector,
@@ -76,6 +78,17 @@ export const createSettingAtom = <T extends object>(
     getSettings,
 
     settingAtom: atom,
+  } as {
+    useSettingKey: typeof useSettingKey
+    useSettingSelector: typeof useSettingSelector
+    setSetting: typeof setSetting
+    clearSettings: typeof clearSettings
+    initializeDefaultSettings: typeof initializeDefaultSettings
+    useSettingValue: typeof useSettingValue & {
+      select: <T extends keyof ReturnType<() => T>>(key: T) => Awaited<T[T]>
+    }
+    getSettings: typeof getSettings
+    settingAtom: typeof atom
   }
 }
 
