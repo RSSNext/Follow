@@ -7,6 +7,7 @@ export interface GeneralSettings {
   hoverMarkUnread: boolean
   renderMarkUnread: boolean
   groupByDate: boolean
+  jumpOutLinkWarn: boolean
 }
 
 export interface UISettings {

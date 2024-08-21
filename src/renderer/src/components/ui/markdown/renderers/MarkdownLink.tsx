@@ -1,4 +1,5 @@
 import { FeedViewType } from "@renderer/lib/enum"
+import { WarnGoToExternalLink } from "@renderer/modules/entry-content/components/WarnGoToExternalLink"
 import { useEntryContentContext } from "@renderer/modules/entry-content/hooks"
 import { useFeedByIdSelector } from "@renderer/store/feed"
 import { useMemo } from "react"
@@ -46,18 +47,19 @@ export const MarkdownLink = (props: LinkProps) => {
   return (
     <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
-        <a
+        <WarnGoToExternalLink
           className="follow-link--underline font-semibold text-foreground no-underline"
           href={populatedFullHref}
           title={props.title}
           target="_blank"
+          rel="noreferrer"
         >
           {props.children}
 
           {typeof props.children === "string" && (
             <i className="i-mgc-arrow-right-up-cute-re size-[0.9em] translate-y-[2px] opacity-70" />
           )}
-        </a>
+        </WarnGoToExternalLink>
       </TooltipTrigger>
       {!!props.href && (
         <TooltipPortal>

@@ -36,7 +36,8 @@ import { LoadingCircle } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
 import { EntryTranslation } from "../entry-column/translation"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
-import { EntryPlaceholderLogo } from "./entry-placeholder"
+import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
+import { WarnGoToExternalLink } from "./components/WarnGoToExternalLink"
 import { EntryHeader } from "./header"
 import { EntryContentProvider } from "./provider"
 
@@ -147,6 +148,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
           "h-0 min-w-0 grow overflow-y-auto @container",
           className,
         )}
+        scrollbarClassName="mr-1"
         viewportClassName="p-5"
         ref={scrollerRef}
       >
@@ -167,7 +169,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
             onContextMenu={stopPropagation}
             className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
           >
-            <a
+            <WarnGoToExternalLink
               href={entry.entries.url || void 0}
               target="_blank"
               className="-mx-6 block cursor-default rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
@@ -199,7 +201,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                   </span>
                 </div>
               </div>
-            </a>
+            </WarnGoToExternalLink>
 
             <WrappedElementProvider boundingDetection>
               <TitleMetaHandler entryId={entry.entries.id} />

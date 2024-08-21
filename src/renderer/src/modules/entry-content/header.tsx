@@ -7,7 +7,7 @@ import { useEntry } from "@renderer/store/entry/hooks"
 import { AnimatePresence, m } from "framer-motion"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
-import { EntryReadHistory } from "./read-history"
+import { EntryReadHistory } from "./components/EntryReadHistory"
 
 export function EntryHeader({
   view,
