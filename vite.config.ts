@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url"
 
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
-import { cyan, green } from "kolorist"
+import { cyan, dim, green } from "kolorist"
 import { visualizer } from "rollup-plugin-visualizer"
 import type { PluginOption, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
@@ -129,7 +129,7 @@ const devPrint = (): PluginOption => ({
       console.info(
           `  ${green(
             "➜",
-          )}  Online debug: ${cyan("https://web.follow.is/__debug_proxy")}`,
+          )}  ${dim("Online debug")}: ${cyan("https://web.follow.is/__debug_proxy")}`,
       )
     }
   },

@@ -76,11 +76,11 @@ export const SettingGeneral = () => {
               description:
                 "Automatically mark single-level entries (e.g., social media posts, pictures, video views) as read when they enter the view.",
             }),
-            { type: "title", value: "Secure" },
-            defineSettingItem("jumpOutLinkWarn", {
-              label: "Warn when opening external links",
-              description: "When you open an untrusted external link, you need to make sure that you open the link.",
-            }),
+            // { type: "title", value: "Secure" },
+            // defineSettingItem("jumpOutLinkWarn", {
+            //   label: "Warn when opening external links",
+            //   description: "When you open an untrusted external link, you need to make sure that you open the link.",
+            // }),
             {
               type: "title",
               value: "Privacy & Data",

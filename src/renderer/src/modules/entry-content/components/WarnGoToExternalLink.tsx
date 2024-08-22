@@ -4,7 +4,7 @@ import {
   useGeneralSettingKey,
   useGeneralSettingValue,
 } from "@renderer/atoms/settings/general"
-import { Button } from "@renderer/components/ui/button"
+import { IconButton } from "@renderer/components/ui/button"
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import {
   Popover,
@@ -118,15 +118,12 @@ const WarnGoToExternalLinkImpl = forwardRef<
                 <span className="ml-2 text-[13px]">Trust this domain</span>
               </Label>
 
-              <Button
-                variant="ghost"
-                buttonClassName="px-4 hover:bg-accent bg-accent/10 dark:bg-accent/20 dark:hover:bg-accent/60"
-                className="group gap-2"
+              <IconButton
+                icon={<m.i className="i-mingcute-arrow-right-line" />}
                 onClick={handleGo}
               >
-                <m.i className="i-mingcute-arrow-right-line duration-200 group-hover:translate-x-4 group-hover:text-white dark:group-hover:text-inherit" />
                 <span className="duration-200 group-hover:opacity-0">Go</span>
-              </Button>
+              </IconButton>
             </div>
           </PopoverContent>
         </PopoverPortal>

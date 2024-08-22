@@ -191,3 +191,49 @@ export const Button = React.forwardRef<
     )
   },
 )
+
+export const IconButton = React.forwardRef<
+  HTMLButtonElement,
+  React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > &
+  React.PropsWithChildren<{
+    icon: React.JSX.Element
+  }>
+>((props, ref) => {
+  const { icon } = props
+  return (
+    <button
+      ref={ref}
+      type="button"
+      className={cn(
+        styledButtonVariant({
+          variant: "ghost",
+        }),
+        "group relative gap-2 bg-accent/10 px-4 hover:bg-accent dark:bg-accent/20 dark:hover:bg-accent/60",
+      )}
+    >
+      <span className="center">
+        {React.cloneElement(icon, {
+          className: cn(
+            "group-hover:text-white dark:group-hover:text-inherit",
+            "group-hover:invisible",
+            icon.props.className,
+          ),
+        })}
+
+        {React.cloneElement(icon, {
+          className: cn(
+            "group-hover:text-white dark:group-hover:text-inherit",
+            "absolute left-4 top-1/2 -translate-y-1/2 opacity-0 duration-200 group-hover:left-1/2 group-hover:-translate-x-1/2 group-hover:opacity-100",
+            icon.props.className,
+          ),
+        })}
+      </span>
+      <span className="duration-200 group-hover:opacity-0">
+        {props.children}
+      </span>
+    </button>
+  )
+})
