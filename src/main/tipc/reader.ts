@@ -8,9 +8,9 @@ import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts"
 import { readability } from "../lib/readability"
 import { t } from "./_instance"
 
+const require = createRequire(import.meta.url)
 const tts = new MsEdgeTTS()
 
-const require = createRequire(import.meta.url)
 export const readerRoute = {
   readability: t.procedure
     .input<{ url: string }>()

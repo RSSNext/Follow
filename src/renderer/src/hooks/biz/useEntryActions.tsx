@@ -1,4 +1,4 @@
-import { getPlayerAtomValue, Player } from "@renderer/atoms/player"
+import { AudioPlayer, getAudioPlayerAtomValue } from "@renderer/atoms/player"
 import {
   getReadabilityStatus,
   isInReadability,
@@ -227,15 +227,15 @@ export const useEntryActions = ({
           if (ttsLoading) return
           if (!populatedEntry.entries.content) return
           setTtsLoading(true)
-          if (getPlayerAtomValue().entryId === populatedEntry.entries.id) {
-            Player.togglePlayAndPause()
+          if (getAudioPlayerAtomValue().entryId === populatedEntry.entries.id) {
+            AudioPlayer.togglePlayAndPause()
           } else {
             const filePath = await tipcClient?.tts({
               id: populatedEntry.entries.id,
               text: (await parseHtml(populatedEntry.entries.content)).toText(),
             })
             if (filePath) {
-              Player.mount({
+              AudioPlayer.mount({
                 type: "audio",
                 entryId: populatedEntry.entries.id,
                 src: `file://${filePath}`,

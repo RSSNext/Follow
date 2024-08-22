@@ -139,6 +139,9 @@ importers:
       '@yornaath/batshit':
         specifier: 0.10.1
         version: 0.10.1
+      bufferutil:
+        specifier: 4.0.8
+        version: 4.0.8
       builder-util-runtime:
         specifier: 9.2.5-alpha.3
         version: 9.2.5-alpha.3
@@ -219,7 +222,7 @@ importers:
         version: 7.0.1
       msedge-tts:
         specifier: 1.3.4
-        version: 1.3.4
+        version: 1.3.4(bufferutil@4.0.8)(utf-8-validate@6.0.4)
       nanoid:
         specifier: 5.0.7
         version: 5.0.7
@@ -316,6 +319,9 @@ importers:
       usehooks-ts:
         specifier: 3.1.0
         version: 3.1.0(react@18.3.1)
+      utf-8-validate:
+        specifier: 6.0.4
+        version: 6.0.4
       vfile:
         specifier: 6.0.2
         version: 6.0.2
@@ -3105,6 +3111,10 @@ packages:
   buffer@6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
 
+  bufferutil@4.0.8:
+    resolution: {integrity: sha512-4T53u4PdgsXqKaIctwF8ifXlRTTmEPJ8iEPWFdGZvcf7sbwYo6FKFEX9eNNAnzFZ7EzJAQ3CJeOtCRA4rDp7Pw==}
+    engines: {node: '>=6.14.2'}
+
   builder-util-runtime@9.2.4:
     resolution: {integrity: sha512-upp+biKpN/XZMLim7aguUyW8s0FUpDvOtK6sbanMFDAMBzpHDqdhgVYm6zc9HJ6nWo7u2Lxk60i2M6Jd3aiNrA==}
     engines: {node: '>=12.0.0'}
@@ -5579,6 +5589,10 @@ packages:
       encoding:
         optional: true
 
+  node-gyp-build@4.8.1:
+    resolution: {integrity: sha512-OSs33Z9yWr148JZcbZd5WiAXhh/n9z8TxQcdMhIOlpN9AhWpLfvVFO73+m77bBABQMaY9XSvIa+qk0jlI7Gcaw==}
+    hasBin: true
+
   node-gyp@9.4.1:
     resolution: {integrity: sha512-OQkWKbjQKbGkMf/xqI1jjy3oCTgMKJac58G2+bjZb3fza6gW2YrCSdMQYaoTb70crvE//Gngr4f0AgVHmqHvBQ==}
     engines: {node: ^12.13 || ^14.13 || >=16}
@@ -7045,6 +7059,10 @@ packages:
   username@5.1.0:
     resolution: {integrity: sha512-PCKbdWw85JsYMvmCv5GH3kXmM66rCd9m1hBEDutPNv94b/pqCMT4NtcKyeWYvLFiE8b+ha1Jdl8XAaUdPn5QTg==}
     engines: {node: '>=8'}
+
+  utf-8-validate@6.0.4:
+    resolution: {integrity: sha512-xu9GQDeFp+eZ6LnCywXN/zBancWvOpUMzgjLPSjy4BRHSmTelvn2E0DG0o1sTiw5hkCKBHo8rwSKncfRfv2EEQ==}
+    engines: {node: '>=6.14.2'}
 
   utf8-byte-length@1.0.5:
     resolution: {integrity: sha512-Xn0w3MtiQ6zoz2vFyUVruaCL53O/DwUvkEeOvj+uulMm0BkUGYWmBYVyElqZaSLhY6ZD0ulfU3aBra2aVT4xfA==}
@@ -10580,6 +10598,10 @@ snapshots:
       base64-js: 1.5.1
       ieee754: 1.2.1
 
+  bufferutil@4.0.8:
+    dependencies:
+      node-gyp-build: 4.8.1
+
   builder-util-runtime@9.2.4:
     dependencies:
       debug: 4.3.6
@@ -12813,9 +12835,9 @@ snapshots:
 
   isexe@2.0.0: {}
 
-  isomorphic-ws@5.0.0(ws@8.18.0):
+  isomorphic-ws@5.0.0(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.4)):
     dependencies:
-      ws: 8.18.0
+      ws: 8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.4)
 
   jackspeak@3.4.3:
     dependencies:
@@ -13634,15 +13656,15 @@ snapshots:
 
   ms@2.1.3: {}
 
-  msedge-tts@1.3.4:
+  msedge-tts@1.3.4(bufferutil@4.0.8)(utf-8-validate@6.0.4):
     dependencies:
       axios: 1.7.4(debug@4.3.6)
       buffer: 6.0.3
       crypto-browserify: 3.12.0
-      isomorphic-ws: 5.0.0(ws@8.18.0)
+      isomorphic-ws: 5.0.0(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))
       process: 0.11.10
       stream-browserify: 3.0.0
-      ws: 8.18.0
+      ws: 8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.4)
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -13705,6 +13727,8 @@ snapshots:
       whatwg-url: 5.0.0
     optionalDependencies:
       encoding: 0.1.13
+
+  node-gyp-build@4.8.1: {}
 
   node-gyp@9.4.1:
     dependencies:
@@ -15251,6 +15275,10 @@ snapshots:
       execa: 1.0.0
       mem: 4.3.0
 
+  utf-8-validate@6.0.4:
+    dependencies:
+      node-gyp-build: 4.8.1
+
   utf8-byte-length@1.0.5: {}
 
   util-deprecate@1.0.2: {}
@@ -15434,7 +15462,10 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  ws@8.18.0: {}
+  ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.4):
+    optionalDependencies:
+      bufferutil: 4.0.8
+      utf-8-validate: 6.0.4
 
   xmlbuilder@15.1.1: {}
 

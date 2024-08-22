@@ -38,7 +38,7 @@ export const HTML: Component<
   const stableRemarkOptions = useState({ renderInlineStyle })[0]
 
   const markdownElement = useMemo(
-    () => children && parseHtml(children, { ...stableRemarkOptions }).content,
+    () => children && parseHtml(children, { ...stableRemarkOptions }).toContent(),
     [children, stableRemarkOptions],
   )
 
