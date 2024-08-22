@@ -28,6 +28,19 @@ const trustedDefaultLinks = new Set([
   "gitlab.com",
   "google.com",
   "sspai.com",
+  "x.com",
+  "twitter.com",
+  "diygod.me",
+  "diygod.cc",
+
+  "v2ex.com",
+  "pixiv.net",
+  "youtube.com",
+
+  "bilibili.com",
+  "xiaoyuzhoufm.com",
+  "xlog.app",
+  "rss3.io",
 ])
 
 const getURLDomain = (url: string) => {
