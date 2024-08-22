@@ -1,5 +1,6 @@
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { cn } from "@renderer/lib/utils"
+import { SYSTEM_CAN_UNDER_BLUR_WINDOW } from "@shared/constants"
 
 type Props = Component<
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
@@ -21,7 +22,7 @@ const Win32Material: Props = ({ className, children, ...rest }) => (
     {children}
   </div>
 )
-export const WindowUnderBlur: Props = FEATURES.WINDOW_UNDER_BLUR ?
+export const WindowUnderBlur: Props = SYSTEM_CAN_UNDER_BLUR_WINDOW ?
     (props) => {
       const opaqueSidebar = useUISettingKey("opaqueSidebar")
       if (opaqueSidebar) {

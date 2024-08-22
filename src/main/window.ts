@@ -80,12 +80,6 @@ export function createWindow(
     ...configs,
   })
 
-  window.webContents.executeJavaScript(
-    `((() => { globalThis.FEATURES = globalThis.FEATURES || []; globalThis.FEATURES['WINDOW_UNDER_BLUR'] = ${
-      !!baseWindowConfig.backgroundMaterial || !!baseWindowConfig.vibrancy
-    } })())`,
-  )
-
   function refreshBound(timeout = 0) {
     setTimeout(() => {
       const mainWindow = getMainWindow()

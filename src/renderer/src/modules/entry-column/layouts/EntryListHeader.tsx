@@ -222,6 +222,8 @@ const SwitchToMasonryButton = () => {
 const AppendTaildingDivider = ({ children }: { children: React.ReactNode }) => (
   <>
     {children}
-    {React.Children.count(children) > 1 && (<DividerVertical className="mx-2 w-px" />)}
+    {React.Children.toArray(children).filter(Boolean).length > 0 && (
+      <DividerVertical className="mx-2 w-px" />
+    )}
   </>
 )
