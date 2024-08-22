@@ -3,9 +3,11 @@ import { useModalStack } from "@renderer/components/ui/modal"
 import type { NativeMenuItem } from "@renderer/lib/native-menu"
 import { useFeedClaimModal } from "@renderer/modules/claim"
 import { FeedForm } from "@renderer/modules/discover/feed-form"
-import { entryActions } from "@renderer/store/entry"
 import { getFeedById, useFeedById } from "@renderer/store/feed"
-import { useSubscriptionByFeedId } from "@renderer/store/subscription"
+import {
+  subscriptionActions,
+  useSubscriptionByFeedId,
+} from "@renderer/store/subscription"
 import { WEB_URL } from "@shared/constants"
 import { useMemo } from "react"
 
@@ -39,7 +41,7 @@ export const useFeedActions = ({
     const items: NativeMenuItem[] = [
       {
         type: "text" as const,
-        label: isEntryList ? "Edit Feed" : "Edit",
+        label: isEntryList ? "Edit feed" : "Edit",
         shortcut: "E",
         click: () => {
           present({
@@ -52,13 +54,13 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: isEntryList ? "Unfollow Feed" : "Unfollow",
+        label: isEntryList ? "Unfollow feed" : "Unfollow",
         shortcut: "Meta+Backspace",
         click: () => deleteSubscription.mutate(subscription),
       },
       {
         type: "text" as const,
-        label: "Navigate to Feed",
+        label: "Navigate to feed",
         shortcut: "Meta+G",
         disabled: !isEntryList || getRouteParams().feedId === feedId,
         click: () => {
@@ -71,10 +73,10 @@ export const useFeedActions = ({
       },
       {
         type: "text",
-        label: "Mark All as Read",
+        label: "Mark all as read",
         shortcut: "Meta+Shift+A",
         disabled: isEntryList,
-        click: () => entryActions.markReadByFeedId(feedId),
+        click: () => subscriptionActions.markReadByFeedIds([feedId]),
       },
       ...(!feed.ownerUserId && !!feed.id ?
           [
@@ -102,12 +104,8 @@ export const useFeedActions = ({
       },
 
       {
-        type: "separator",
-        disabled: isEntryList,
-      },
-      {
         type: "text" as const,
-        label: "Open Feed in Browser",
+        label: "Open feed in browser",
         disabled: isEntryList,
         shortcut: "O",
         click: () =>
@@ -115,7 +113,7 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: "Open Site in Browser",
+        label: "Open site in browser",
         shortcut: "Meta+O",
         disabled: isEntryList,
         click: () => {
@@ -131,14 +129,14 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: "Copy Feed URL",
+        label: "Copy feed URL",
         disabled: isEntryList,
         shortcut: "Meta+C",
         click: () => navigator.clipboard.writeText(feed.url),
       },
       {
         type: "text" as const,
-        label: "Copy Feed ID",
+        label: "Copy feed ID",
         shortcut: "Meta+Shift+C",
         disabled: isEntryList,
         click: () => {

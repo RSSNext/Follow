@@ -23,7 +23,7 @@ const ContextMenuSubTrigger = React.forwardRef<
   <ContextMenuPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-theme-item-hover focus:text-accent-foreground data-[state=open]:bg-theme-item-hover data-[state=open]:text-accent-foreground",
+      "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-theme-item-hover focus:text-theme-foreground data-[state=open]:bg-theme-item-hover data-[state=open]:text-theme-foreground",
       inset && "pl-8",
       "center gap-2",
       className,
@@ -31,7 +31,7 @@ const ContextMenuSubTrigger = React.forwardRef<
     {...props}
   >
     {children}
-    <i className="i-mingcute-right-fill ml-auto size-3.5" />
+    <i className="i-mingcute-right-line -mr-1 ml-auto size-3.5" />
   </ContextMenuPrimitive.SubTrigger>
 ))
 ContextMenuSubTrigger.displayName = ContextMenuPrimitive.SubTrigger.displayName
@@ -80,7 +80,7 @@ const ContextMenuItem = React.forwardRef<
   <ContextMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-theme-item-hover focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-theme-item-hover focus:text-theme-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "focus-within:outline-transparent data-[highlighted]:bg-theme-item-hover dark:data-[highlighted]:bg-neutral-800",
       inset && "pl-8",
       className,
@@ -97,7 +97,7 @@ const ContextMenuCheckboxItem = React.forwardRef<
   <ContextMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-theme-item-hover focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-theme-item-hover focus:text-theme-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "focus-within:outline-transparent",
       className,
     )}

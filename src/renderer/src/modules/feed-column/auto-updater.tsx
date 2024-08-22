@@ -1,4 +1,4 @@
-import { usePlayerAtomSelector } from "@renderer/atoms/player"
+import { useAudioPlayerAtomSelector } from "@renderer/atoms/player"
 import { setUpdaterStatus, useUpdaterStatus } from "@renderer/atoms/updater"
 import { softBouncePreset } from "@renderer/components/ui/constants/spring"
 import { tipcClient } from "@renderer/lib/client"
@@ -24,7 +24,7 @@ export const AutoUpdater = () => {
     tipcClient?.quitAndInstall()
   }, [])
 
-  const playerIsShow = usePlayerAtomSelector((s) => s.show)
+  const playerIsShow = useAudioPlayerAtomSelector((s) => s.show)
 
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)

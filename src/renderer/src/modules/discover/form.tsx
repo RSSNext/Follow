@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getSidebarActiveView } from "@renderer/atoms/sidebar"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import {
   Card,
   CardContent,
@@ -131,13 +131,13 @@ export function DiscoverForm({ type }: { type: string }) {
             )}
           />
           <div className="center flex">
-            <StyledButton
+            <Button
               disabled={!form.formState.isValid}
               type="submit"
               isLoading={mutation.isPending}
             >
               {info[type].showModal ? "Preview" : "Search"}
-            </StyledButton>
+            </Button>
           </div>
         </form>
       </Form>
@@ -153,7 +153,7 @@ export function DiscoverForm({ type }: { type: string }) {
           </div>
           <div className="space-y-6 text-sm">
             {mutation.data?.map((item) => (
-              <Card key={item.feed.url || item.docs} className="select-text">
+              <Card data-feed-id={item.feed.id} key={item.feed.url || item.docs} className="select-text">
                 <CardHeader>
                   <FollowSummary
                     className="max-w-[462px]"
@@ -164,7 +164,7 @@ export function DiscoverForm({ type }: { type: string }) {
                 {item.docs ? (
                   <CardFooter>
                     <a href={item.docs} target="_blank" rel="noreferrer">
-                      <StyledButton>View Docs</StyledButton>
+                      <Button>View Docs</Button>
                     </a>
                   </CardFooter>
                 ) : (
@@ -207,11 +207,11 @@ export function DiscoverForm({ type }: { type: string }) {
                     </CardContent>
                     <CardFooter>
                       {item.isSubscribed ? (
-                        <StyledButton variant="outline" disabled>
+                        <Button variant="outline" disabled>
                           Followed
-                        </StyledButton>
+                        </Button>
                       ) : (
-                        <StyledButton
+                        <Button
                           onClick={() => {
                             present({
                               title: "Add Feed",
@@ -230,7 +230,7 @@ export function DiscoverForm({ type }: { type: string }) {
                           }}
                         >
                           Follow
-                        </StyledButton>
+                        </Button>
                       )}
                       <div className="ml-6 text-zinc-500">
                         <span className="font-medium text-zinc-800 dark:text-zinc-200">

@@ -1,5 +1,5 @@
 import { useWhoami } from "@renderer/atoms/user"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { Divider } from "@renderer/components/ui/divider"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useCurrentModal } from "@renderer/components/ui/modal"
@@ -64,12 +64,12 @@ export const TipModalContent: FC<{
           You don't have a wallet yet. Please create a wallet to tip.
         </p>
         <div className="flex justify-end">
-          <StyledButton
+          <Button
             variant="primary"
             onClick={() => nextFrame(() => settingModalPresent("wallet"))}
           >
             Create For Free
-          </StyledButton>
+          </Button>
         </div>
       </div>
     )
@@ -92,12 +92,12 @@ export const TipModalContent: FC<{
         </p>
 
         <div className="flex justify-end">
-          <StyledButton
+          <Button
             variant="primary"
             onClick={() => dismiss()}
           >
             OK
-          </StyledButton>
+          </Button>
         </div>
       </div>
     )
@@ -116,7 +116,7 @@ export const TipModalContent: FC<{
             <span className="text-xs text-theme-foreground/80">No one has claimed this feed yet. The received Power will be securely held in the blockchain contract until it is claimed.</span>
           </p>
           <div className="text-center">
-            <StyledButton variant="text" className="w-fit p-0" onClick={() => claimFeed()}>Claim this feed</StyledButton>
+            <Button variant="text" className="w-fit p-0" onClick={() => claimFeed()}>Claim this feed</Button>
           </div>
         </>
       )}
@@ -157,7 +157,7 @@ export const TipModalContent: FC<{
       </div>
 
       <div className="flex justify-end">
-        <StyledButton
+        <Button
           disabled={tipMutation.isSuccess || tipMutation.isPending || wrongNumberRange}
           isLoading={tipMutation.isPending}
           onClick={() => {
@@ -174,7 +174,7 @@ export const TipModalContent: FC<{
             <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />
           )}
           Tip Now
-        </StyledButton>
+        </Button>
       </div>
     </div>
   )

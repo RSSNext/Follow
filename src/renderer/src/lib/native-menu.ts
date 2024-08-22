@@ -17,12 +17,17 @@ export type NativeMenuItem =
   | { type: "separator", disabled?: boolean }
 
 function sortShortcutsString(shortcut: string) {
-  // always order by Shift, Ctrl, Alt, Meta
-  const arr = shortcut.split("+")
   const order = ["Shift", "Ctrl", "Alt", "Meta"]
-  arr.sort((a, b) => order.indexOf(a) - order.indexOf(b))
 
-  return arr.join("+")
+  const arr = shortcut.split("+")
+
+  const sortedModifiers = arr
+    .filter((key) => order.includes(key))
+    .sort((a, b) => order.indexOf(a) - order.indexOf(b))
+
+  const otherKeys = arr.filter((key) => !order.includes(key))
+
+  return [...sortedModifiers, ...otherKeys].join("+")
 }
 export const showNativeMenu = async (
   items: Array<Nullable<NativeMenuItem | false>>,

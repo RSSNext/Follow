@@ -36,9 +36,9 @@ export const RadioCard: FC<
         "flex cursor-pointer items-center rounded-md p-2",
         "border",
 
-        "ring-0 ring-theme-accent/20 duration-200",
+        "ring-0 ring-accent/20 duration-200",
 
-        selected && "border-theme-accent bg-theme-accent/5 font-medium outline-none ring-2",
+        selected && "border-accent bg-accent/5 font-medium outline-none ring-2",
         wrapperClassName,
       )}
     >

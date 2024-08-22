@@ -14,7 +14,7 @@
     pre {
       @apply !m-0 overflow-auto p-4;
 
-      font-size: min(1em, 16px);
+      font-size: 0.875em;
     }
 
     pre code {
@@ -71,10 +71,10 @@
     }
 
     .highlighted {
-      @apply bg-theme-accent/20;
+      @apply bg-accent/20;
 
       &::before {
-        @apply bg-theme-accent;
+        @apply bg-accent;
       }
     }
   }

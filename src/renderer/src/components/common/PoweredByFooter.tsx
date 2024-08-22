@@ -11,7 +11,7 @@ export const PoweredByFooter: Component = ({ className }) => (
     {" "}
     <a
       href={pkg.homepage}
-      className="cursor-pointer font-bold text-theme-accent"
+      className="cursor-pointer font-bold text-accent no-underline"
       target="_blank"
       rel="noreferrer"
     >

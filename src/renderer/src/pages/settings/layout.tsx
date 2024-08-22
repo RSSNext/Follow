@@ -1,5 +1,5 @@
 import { Logo } from "@renderer/components/icons/logo"
-import { Vibrancy } from "@renderer/components/ui/background"
+import { WindowUnderBlur } from "@renderer/components/ui/background"
 import { isElectronBuild } from "@renderer/constants"
 import { preventDefault } from "@renderer/lib/dom"
 import { settings } from "@renderer/modules/settings/constants"
@@ -13,7 +13,7 @@ function Layout() {
   return (
     <div className="flex h-screen flex-col" onContextMenu={preventDefault}>
       <div className="flex flex-1">
-        <Vibrancy className="flex h-full w-44 flex-col border-r px-2.5 py-3 pt-3.5">
+        <WindowUnderBlur className="flex h-full w-44 flex-col border-r px-2.5 py-3 pt-3.5">
           <div className="grow pt-8">
             {settings.map((t) => (
               <Link
@@ -34,7 +34,7 @@ function Layout() {
             <Logo className="size-6" />
             <span className="ml-2 font-semibold">{APP_NAME}</span>
           </div>
-        </Vibrancy>
+        </WindowUnderBlur>
         <div className="h-screen flex-1 overflow-y-auto bg-theme-background p-8 pt-0">
           <Outlet />
         </div>

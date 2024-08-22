@@ -15,7 +15,7 @@ export const usePreviewMedia = () => {
             <PreviewMediaContent initialIndex={initialIndex} media={media} />
           </div>
         ),
-        title: "Image",
+        title: "Media Preview",
         overlay: true,
         CustomModalComponent: NoopChildren,
         clickOutsideToDismiss: true,

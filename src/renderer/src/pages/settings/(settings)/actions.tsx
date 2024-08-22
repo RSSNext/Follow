@@ -1,4 +1,4 @@
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import type { ActionsResponse } from "@renderer/models"
@@ -114,7 +114,7 @@ export function Component() {
             }}
           />
         ))}
-        <StyledButton
+        <Button
           variant="outline"
           className="center w-full gap-1"
           onClick={() => {
@@ -130,15 +130,15 @@ export function Component() {
         >
           <i className="i-mgc-add-cute-re" />
           <span> New Rule</span>
-        </StyledButton>
+        </Button>
         <div className="text-right">
-          <StyledButton
+          <Button
             variant="primary"
             isLoading={mutation.isPending}
             onClick={() => mutation.mutate()}
           >
             Save
-          </StyledButton>
+          </Button>
         </div>
       </div>
     </>

@@ -86,7 +86,7 @@
     --fallback-bc: currentColor;
   }
 
-  .radio-primary {
+  .radio-accent {
     --chkbg: theme(colors.theme.accent.DEFAULT);
     --fallback-bc: theme(colors.theme.accent.DEFAULT);
     --fallback-b1: theme(colors.background);
@@ -159,7 +159,7 @@
     appearance: none;
     border-radius: 5px;
     border-width: 1px;
-    border-color: theme(colors.theme.inactive);
+    border-color: theme(colors.border);
     --tw-border-opacity: 0.2;
   }
 
@@ -269,5 +269,32 @@
   }
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@layer components {
+  .shadow-drawer-left {
+    box-shadow: -12px 0px 17px 2px rgba(41, 41, 41, 0.1);
+  }
+  [data-theme="dark"] .shadow-drawer-left {
+    box-shadow: -12px 0px 17px 2px rgba(0, 0, 0, 0.653);
+  }
+}
+
+@layer components {
+  .animate-mask-in {
+    animation: mask-in 0.5s ease-in-out forwards;
+  }
+  @keyframes mask-in {
+    0% {
+      mask: linear-gradient(90deg, #000 25%, #000000e6 50%, #00000000) 150% 0 /
+        400% no-repeat;
+      opacity: 0.2;
+    }
+    100% {
+      mask: linear-gradient(90deg, #000 25%, #000000e6 50%, #00000000) 0 / 400%
+        no-repeat;
+      opacity: 1;
+    }
   }
 }

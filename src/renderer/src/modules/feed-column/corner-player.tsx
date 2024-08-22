@@ -1,12 +1,13 @@
 import * as Slider from "@radix-ui/react-slider"
 import {
-  getPlayerAtomValue,
-  Player,
-  usePlayerAtomSelector,
-  usePlayerAtomValue,
+  AudioPlayer,
+  getAudioPlayerAtomValue,
+  useAudioPlayerAtomSelector,
+  useAudioPlayerAtomValue,
 } from "@renderer/atoms/player"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { microReboundPreset } from "@renderer/components/ui/constants/spring"
+import { VolumeSlider } from "@renderer/components/ui/media/VolumeSlider"
 import {
   Tooltip,
   TooltipContent,
@@ -25,12 +26,12 @@ import Marquee from "react-fast-marquee"
 import { useHotkeys } from "react-hotkeys-hook"
 
 const handleClickPlay = () => {
-  Player.togglePlayAndPause()
+  AudioPlayer.togglePlayAndPause()
 }
 
 export const CornerPlayer = () => {
-  const show = usePlayerAtomSelector((v) => v.show)
-  const entryId = usePlayerAtomSelector((v) => v.entryId)
+  const show = useAudioPlayerAtomSelector((v) => v.show)
+  const entryId = useAudioPlayerAtomSelector((v) => v.entryId)
   const entry = useEntry(entryId)
   const feed = useFeedById(entry?.feedId)
 
@@ -55,11 +56,11 @@ export const CornerPlayer = () => {
 
 const usePlayerTracker = () => {
   const playerOpenAt = useState(Date.now)[0]
-  const show = usePlayerAtomSelector((v) => v.show)
+  const show = useAudioPlayerAtomSelector((v) => v.show)
 
   useEffect(() => {
     const handler = () => {
-      const playerState = getPlayerAtomValue()
+      const playerState = getAudioPlayerAtomValue()
       window.posthog?.capture(
         "player_open_duration",
         {
@@ -77,7 +78,7 @@ const usePlayerTracker = () => {
 
   useEffect(() => {
     if (!show) {
-      const playerState = getPlayerAtomValue()
+      const playerState = getAudioPlayerAtomValue()
       window.posthog?.capture("player_open_duration", {
         duration: Date.now() - playerOpenAt,
         status: playerState.status,
@@ -87,9 +88,9 @@ const usePlayerTracker = () => {
   }, [show])
 }
 const CornerPlayerImpl = () => {
-  const entryId = usePlayerAtomSelector((v) => v.entryId)
-  const status = usePlayerAtomSelector((v) => v.status)
-  const isMute = usePlayerAtomSelector((v) => v.isMute)
+  const entryId = useAudioPlayerAtomSelector((v) => v.entryId)
+  const status = useAudioPlayerAtomSelector((v) => v.status)
+  const isMute = useAudioPlayerAtomSelector((v) => v.isMute)
 
   const playerValue = { entryId, status, isMute }
 
@@ -120,7 +121,7 @@ const CornerPlayerImpl = () => {
           <div className="center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100">
             <button
               type="button"
-              className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-theme-accent hover:text-white hover:opacity-100"
+              className="center size-10 rounded-full bg-theme-background opacity-95 hover:bg-accent hover:text-white hover:opacity-100"
               onClick={handleClickPlay}
             >
               <i
@@ -157,7 +158,7 @@ const CornerPlayerImpl = () => {
         <div className="flex items-center">
           <ActionIcon
             className="i-mgc-close-cute-re"
-            onClick={() => Player.close()}
+            onClick={() => AudioPlayer.close()}
             label="Close"
           />
           <ActionIcon
@@ -175,7 +176,7 @@ const CornerPlayerImpl = () => {
           <ActionIcon
             label="Download"
             onClick={() => {
-              window.open(Player.get().src, "_blank")
+              window.open(AudioPlayer.get().src, "_blank")
             }}
           >
             <i className="i-mgc-download-2-cute-re" />
@@ -189,18 +190,18 @@ const CornerPlayerImpl = () => {
                 "i-mgc-volume-off-cute-re text-red-500" :
                 "i-mgc-volume-cute-re",
             )}
-            onClick={() => Player.toggleMute()}
-            label={<VolumeSlider />}
+            onClick={() => AudioPlayer.toggleMute()}
+            label={<CornerPlayerVolumeSlider />}
             labelDelayDuration={0}
           />
           <ActionIcon
             className="i-mgc-back-2-cute-re"
-            onClick={() => Player.back(10)}
+            onClick={() => AudioPlayer.back(10)}
             label="Back 10s"
           />
           <ActionIcon
             className="i-mgc-forward-2-cute-re"
-            onClick={() => Player.forward(10)}
+            onClick={() => AudioPlayer.forward(10)}
             label="Forward 10s"
           />
         </div>
@@ -211,7 +212,7 @@ const CornerPlayerImpl = () => {
 
 const ONE_HOUR_IN_SECONDS = 60 * 60
 const PlayerProgress = () => {
-  const playerValue = usePlayerAtomValue()
+  const playerValue = useAudioPlayerAtomValue()
 
   const { currentTime = 0, duration = 0 } = playerValue
   const [controlledCurrentTime, setControlledCurrentTime] =
@@ -255,7 +256,7 @@ const PlayerProgress = () => {
         onPointerDown={() => setIsDraggingProgress(true)}
         onPointerUp={() => setIsDraggingProgress(false)}
         onValueChange={(value) => setControlledCurrentTime(value[0])}
-        onValueCommit={(value) => Player.seek(value[0])}
+        onValueCommit={(value) => AudioPlayer.seek(value[0])}
       >
         <Slider.Track className="relative h-1 w-full grow rounded bg-gray-200 duration-200 group-hover:bg-gray-300 dark:bg-neutral-700 group-hover:dark:bg-neutral-600">
           <Slider.Range className="absolute h-1 rounded bg-theme-accent-400 dark:bg-theme-accent-700" />
@@ -263,7 +264,7 @@ const PlayerProgress = () => {
 
         {/* indicator */}
         <Slider.Thumb
-          className="block h-2 w-[3px] rounded-[1px] bg-theme-accent"
+          className="block h-2 w-[3px] rounded-[1px] bg-accent"
           aria-label="Progress"
         />
       </Slider.Root>
@@ -300,31 +301,14 @@ const ActionIcon = ({
   </Tooltip>
 )
 
-const VolumeSlider = () => {
-  const volume = usePlayerAtomSelector((v) => v.volume)
+const CornerPlayerVolumeSlider = () => {
+  const volume = useAudioPlayerAtomSelector((v) => v.volume)
 
-  return (
-    <Slider.Root
-      className="relative flex h-16 w-1 flex-col items-center overflow-hidden rounded p-1"
-      max={1}
-      step={0.01}
-      orientation="vertical"
-      value={[volume ?? 0.8]}
-      onValueChange={(value) => Player.setVolume(value[0])}
-    >
-      <Slider.Track className="relative w-1 grow rounded bg-zinc-500">
-        <Slider.Range className="absolute w-full rounded bg-black dark:bg-white" />
-      </Slider.Track>
-      <Slider.Thumb
-        className="block rounded bg-black dark:bg-white"
-        aria-label="Volume"
-      />
-    </Slider.Root>
-  )
+  return <VolumeSlider volume={volume!} onVolumeChange={AudioPlayer.setVolume.bind(AudioPlayer)} />
 }
 
 const PlaybackRateSelector = () => {
-  const playbackRate = usePlayerAtomSelector((v) => v.playbackRate)
+  const playbackRate = useAudioPlayerAtomSelector((v) => v.playbackRate)
 
   return (
     <div className="flex flex-col items-center gap-0.5">
@@ -338,7 +322,7 @@ const PlaybackRateSelector = () => {
             "bg-theme-item-hover text-black dark:text-white",
             playbackRate !== rate && "text-zinc-500",
           )}
-          onClick={() => Player.setPlaybackRate(rate)}
+          onClick={() => AudioPlayer.setPlaybackRate(rate)}
         >
           {rate.toFixed(2)}
           x
@@ -349,7 +333,7 @@ const PlaybackRateSelector = () => {
 }
 
 const PlaybackRateButton = () => {
-  const playbackRate = usePlayerAtomSelector((v) => v.playbackRate)
+  const playbackRate = useAudioPlayerAtomSelector((v) => v.playbackRate)
 
   const char = `${playbackRate || 1}`
   return (

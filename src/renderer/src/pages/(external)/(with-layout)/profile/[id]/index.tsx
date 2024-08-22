@@ -1,3 +1,4 @@
+import { PoweredByFooter } from "@renderer/components/common/PoweredByFooter"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { FollowIcon } from "@renderer/components/icons/follow"
 import {
@@ -5,7 +6,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
@@ -36,10 +37,7 @@ export function Component() {
 
   return user.isLoading ?
       (
-        <LoadingCircle
-          size="large"
-          className="center h-48 w-full max-w-full"
-        />
+        <LoadingCircle size="large" className="center h-48 w-full max-w-full" />
       ) :
       (
         <div className="container mx-auto mt-12 flex flex-col items-center justify-center p-4 lg:p-0">
@@ -59,59 +57,63 @@ export function Component() {
                 size="large"
                 className="center h-48 w-full max-w-full"
               />
-            ) : Object.keys(subscriptions.data || {}).map((category) => (
-              <div key={category}>
-                <div className="mb-4 flex items-center text-2xl font-bold">
-                  <h3>{category}</h3>
-                </div>
-                <div>
-                  {subscriptions.data?.[category].map((subscription) => (
-                    <div
-                      key={subscription.feedId}
-                      className="group relative border-b py-5"
-                    >
-                      <a
-                        className="flex flex-1 cursor-default"
-                        href={`/feed/${subscription.feedId}`}
-                        target="_blank"
+            ) : (
+              Object.keys(subscriptions.data || {}).map((category) => (
+                <div key={category}>
+                  <div className="mb-4 flex items-center text-2xl font-bold">
+                    <h3>{category}</h3>
+                  </div>
+                  <div>
+                    {subscriptions.data?.[category].map((subscription) => (
+                      <div
+                        key={subscription.feedId}
+                        className="group relative border-b py-5"
                       >
-                        <FeedIcon
-                          fallback
-                          feed={subscription.feeds}
-                          size={22}
-                          className="mr-3"
-                        />
-                        <div
-                          className={cn(
-                            "w-0 flex-1 grow",
-                            "group-hover:grow-[0.85]",
-                          )}
-                        >
-                          <div className="truncate font-medium leading-none">
-                            {subscription.feeds?.title}
-                          </div>
-                          <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
-                            {subscription.feeds?.description}
-                          </div>
-                        </div>
-
                         <a
-                          className="absolute right-0 opacity-0 transition-opacity group-hover:opacity-100"
-                          href={`${DEEPLINK_SCHEME}add?id=${subscription.feeds?.id}`}
-                          onClick={stopPropagation}
+                          className="flex flex-1 cursor-default"
+                          href={`/feed/${subscription.feedId}`}
+                          target="_blank"
                         >
-                          <StyledButton>
-                            <FollowIcon className="mr-1 size-3" />
-                            {APP_NAME}
-                          </StyledButton>
+                          <FeedIcon
+                            fallback
+                            feed={subscription.feeds}
+                            size={22}
+                            className="mr-3"
+                          />
+                          <div
+                            className={cn(
+                              "w-0 flex-1 grow",
+                              "group-hover:grow-[0.85]",
+                            )}
+                          >
+                            <div className="truncate font-medium leading-none">
+                              {subscription.feeds?.title}
+                            </div>
+                            <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
+                              {subscription.feeds?.description}
+                            </div>
+                          </div>
+
+                          <a
+                            className="absolute right-0 opacity-0 transition-opacity group-hover:opacity-100"
+                            href={`${DEEPLINK_SCHEME}add?id=${subscription.feeds?.id}`}
+                            onClick={stopPropagation}
+                          >
+                            <Button>
+                              <FollowIcon className="mr-1 size-3" />
+                              {APP_NAME}
+                            </Button>
+                          </a>
                         </a>
-                      </a>
-                    </div>
-                  ))}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
+
+          <PoweredByFooter className="pb-12" />
         </div>
       )
 }

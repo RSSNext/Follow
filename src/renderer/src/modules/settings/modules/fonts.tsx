@@ -3,7 +3,7 @@ import {
   setUISetting,
   useUISettingSelector,
 } from "@renderer/atoms/settings/ui"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { Input } from "@renderer/components/ui/input"
 import { useModalStack } from "@renderer/components/ui/modal"
 import {
@@ -20,7 +20,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect, useMemo, useRef } from "react"
 import * as React from "react"
 
-const FALLBACK_FONT = "Default"
+const FALLBACK_FONT = "Default (UI Font)"
 const DEFAULT_FONT = "SN Pro"
 const CUSTOM_FONT = "Custom"
 const useFontDataElectron = () => {
@@ -99,7 +99,7 @@ export const ContentFontSelector = () => {
 
 export const UIFontSelector = () => {
   // filter out the fallback font
-  const data = useFontData().slice(1)
+  const data = useFontData().slice(1).filter((d) => d.value !== DEFAULT_FONT)
   const uiFont = useUISettingSelector((state) => state.uiFontFamily)
   const setCustom = usePresentCustomFontDialog("uiFontFamily")
   const isCustomFont = useMemo(
@@ -179,9 +179,9 @@ const usePresentCustomFontDialog = (
             />
 
             <div className="flex justify-end">
-              <StyledButton type="submit">
+              <Button type="submit">
                 Save
-              </StyledButton>
+              </Button>
             </div>
           </form>
 

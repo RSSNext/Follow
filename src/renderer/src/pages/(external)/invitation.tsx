@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Logo } from "@renderer/components/icons/logo"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import {
   Form,
   FormControl,
@@ -67,13 +67,13 @@ export function Component() {
             )}
           />
           <div className="center flex">
-            <StyledButton
+            <Button
               type="submit"
               disabled={!form.formState.isValid}
               isLoading={invitationMutation.isPending}
             >
               Activate
-            </StyledButton>
+            </Button>
           </div>
         </form>
       </Form>

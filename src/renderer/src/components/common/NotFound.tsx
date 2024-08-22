@@ -5,7 +5,7 @@ import type { Location } from "react-router-dom"
 import { useLocation, useNavigate } from "react-router-dom"
 
 import { Logo } from "../icons/logo"
-import { StyledButton } from "../ui/button"
+import { Button } from "../ui/button"
 import { PoweredByFooter } from "./PoweredByFooter"
 
 class AccessNotFoundError extends Error {
@@ -53,9 +53,9 @@ export const NotFound = () => {
         </p>
 
         <p>
-          <StyledButton onClick={() => navigate("/")}>
+          <Button onClick={() => navigate("/")}>
             Back to Home
-          </StyledButton>
+          </Button>
         </p>
       </main>
 

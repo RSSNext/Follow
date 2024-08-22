@@ -34,7 +34,7 @@ export function GridItem({
         <div className="flex items-center">
           <div
             className={cn(
-              "mr-1 size-1.5 shrink-0 self-center rounded-full bg-theme-accent duration-200",
+              "mr-1 size-1.5 shrink-0 self-center rounded-full bg-accent duration-200",
               asRead && "mr-0 w-0",
             )}
           />

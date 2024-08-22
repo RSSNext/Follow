@@ -35,7 +35,7 @@ export const MyWalletSection = () => {
       <div>
         <SettingSectionTitle title="Balance" />
         <div className="flex items-end justify-between">
-          <Balance className="text-xl font-bold text-theme-accent">
+          <Balance className="text-xl font-bold text-accent">
             {BigInt(myWallet.dailyPowerToken || 0n) +
             BigInt(myWallet.cashablePowerToken || 0n)}
           </Balance>

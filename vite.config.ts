@@ -4,8 +4,9 @@ import { fileURLToPath } from "node:url"
 
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
+import { cyan, dim, green } from "kolorist"
 import { visualizer } from "rollup-plugin-visualizer"
-import type { PluginOption } from "vite"
+import type { PluginOption, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
 import mkcert from "vite-plugin-mkcert"
 
@@ -74,6 +75,7 @@ const vite = ({ mode }) => {
         },
       }),
 
+      devPrint(),
       process.env.ANALYZER && visualizer({ open: true }),
     ],
     define: {
@@ -117,3 +119,18 @@ function htmlPlugin(env: typeof EnvType): PluginOption {
     },
   }
 }
+
+const devPrint = (): PluginOption => ({
+  name: "dev-print",
+  configureServer(server: ViteDevServer) {
+    const _printUrls = server.printUrls
+    server.printUrls = () => {
+      _printUrls()
+      console.info(
+          `  ${green(
+            "➜",
+          )}  ${dim("Online debug")}: ${cyan("https://web.follow.is/__debug_proxy")}`,
+      )
+    }
+  },
+})

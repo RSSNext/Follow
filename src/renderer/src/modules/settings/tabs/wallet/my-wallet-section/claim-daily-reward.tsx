@@ -1,5 +1,5 @@
 import { TooltipTrigger } from "@radix-ui/react-tooltip"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { Tooltip, TooltipContent } from "@renderer/components/ui/tooltip"
 import {
   useClaimWalletDailyRewardMutation,
@@ -42,7 +42,7 @@ export const ClaimDailyReward = () => {
   return (
     <Tooltip>
       <TooltipTrigger>
-        <StyledButton
+        <Button
           variant="primary"
           isLoading={mutation.isPending}
           onClick={() => mutation.mutate()}
@@ -51,7 +51,7 @@ export const ClaimDailyReward = () => {
           {canClaim ?
             "Mint Daily Power" :
             `Mint in ${hour}:${minute}`}
-        </StyledButton>
+        </Button>
       </TooltipTrigger>
       <TooltipContent>
         {canClaim ?

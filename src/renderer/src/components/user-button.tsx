@@ -77,7 +77,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="!outline-none focus-visible:bg-theme-item-hover">
-        <ActionButton as="div" tooltip="Profile">
+        <ActionButton tooltip="Profile">
           <UserAvatar className="h-5 p-0 [&_*]:border-0" hideName />
         </ActionButton>
       </DropdownMenuTrigger>
@@ -101,8 +101,8 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
           onClick={() => {
             presentUserProfile(user?.id)
           }}
+          icon={<i className="i-mgc-user-3-cute-re" />}
         >
-          <i className="i-mgc-user-3-cute-re mr-1.5" />
           Profile
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -113,21 +113,17 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             // and the page freezes after modal is turned off.
             nextFrame(() => settingModalPresent("wallet"))
           }}
+          icon={<i className="i-mgc-power-outline" />}
         >
-          <i className="i-mgc-power-outline mr-1.5" />
           Power
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
             nextFrame(settingModalPresent)
           }}
+          icon={<i className="i-mgc-settings-7-cute-re" />}
         >
-          <i className="i-mgc-settings-7-cute-re mr-1.5" />
           Preferences
-          {/* <div className="ml-auto flex gap-1">
-            <Kbd>Meta</Kbd>
-            <Kbd>,</Kbd>
-          </div> */}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {!window.electron && (
@@ -136,15 +132,17 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
               onClick={() => {
                 window.open(`${repository.url}/releases`)
               }}
+              icon={<i className="i-mgc-download-2-cute-re" />}
             >
-              <i className="i-mgc-download-2-cute-re mr-1.5" />
               Download Desktop app
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>
         )}
-        <DropdownMenuItem onClick={signOut}>
-          <i className="i-mgc-exit-cute-re mr-1.5" />
+        <DropdownMenuItem
+          onClick={signOut}
+          icon={<i className="i-mgc-exit-cute-re" />}
+        >
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

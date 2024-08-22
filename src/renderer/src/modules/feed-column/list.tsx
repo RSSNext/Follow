@@ -44,21 +44,6 @@ const useUpdateUnreadCount = () => {
   useAuthQuery(Queries.subscription.unreadAll(), {
     refetchInterval: false,
   })
-  // const isPageVisible = usePageVisibility()
-
-  // useAccurateInterval(
-  //   () => {
-  //     if (!isPageVisible) {
-  //       refetch()
-  //     }
-  //   },
-  //   {
-  //     enable: !isPageVisible,
-  //     delay:
-  //       // 10s
-  //       10_000,
-  //   },
-  // )
 }
 
 export function FeedList({
@@ -144,7 +129,10 @@ export function FeedList({
               onClick={() => setExpansion(true)}
             />
           )}
-          <UnreadNumber unread={totalUnread} className="text-xs !text-inherit" />
+          <UnreadNumber
+            unread={totalUnread}
+            className="text-xs !text-inherit"
+          />
         </div>
       </div>
       <ScrollArea.ScrollArea

@@ -1,3 +1,4 @@
+import { whoami } from "@renderer/atoms/user"
 import { runTransactionInScope } from "@renderer/database"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { FeedViewType } from "@renderer/lib/enum"
@@ -140,11 +141,15 @@ class SubscriptionActions {
     )
   }
 
+  async markReadByFeedIds(feedIds: string[]): Promise<void>
   async markReadByFeedIds(
-    view: FeedViewType,
     feedIds: string[],
-    filter?: MarkReadFilter,
-  ) {
+    view: FeedViewType,
+    filter?: MarkReadFilter
+  ): Promise<void>
+  async markReadByFeedIds(...args: [string[], FeedViewType?, MarkReadFilter?]) {
+    const [feedIds, view, filter] = args
+
     doMutationAndTransaction(
       () =>
         apiClient.reads.all.$post({
@@ -235,13 +240,17 @@ class SubscriptionActions {
     // Clear feed's unread count
     feedUnreadActions.updateByFeedId(feedId, 0)
 
-    return apiClient.subscriptions
-      .$delete({
-        json: {
-          feedId,
-        },
-      })
-      .then(() => feed)
+    return doMutationAndTransaction(
+      () =>
+        apiClient.subscriptions
+          .$delete({
+            json: {
+              feedId,
+            },
+          })
+          .then(() => feed),
+      () => SubscriptionService.removeSubscription(whoami()!.id, feedId),
+    ).then(() => feed)
   }
 
   async changeCategoryView(
@@ -293,6 +302,50 @@ class SubscriptionActions {
       folderFeedIds.map((feedId) =>
         SubscriptionService.changeView(feedId, changeToView),
       ),
+    )
+  }
+
+  async renameCategory(lastCategory: string, newCategory: string) {
+    const subscriptionIds = [] as string[]
+    const state = get()
+    for (const feedId in state.data) {
+      const subscription = state.data[feedId]
+      if (
+        subscription.category === lastCategory ||
+        subscription.defaultCategory === lastCategory
+      ) {
+        subscriptionIds.push(feedId)
+      }
+    }
+
+    set((state) =>
+      produce(state, (state) => {
+        for (const feedId of subscriptionIds) {
+          const subscription = state.data[feedId]
+          if (subscription) {
+            subscription.category = newCategory
+            subscription.defaultCategory = undefined
+          }
+        }
+      }),
+    )
+
+    return doMutationAndTransaction(
+      () =>
+        apiClient.categories.$patch({
+          json: {
+            feedIdList: subscriptionIds,
+            category: newCategory,
+          },
+        }),
+      async () =>
+      // Db
+
+        SubscriptionService.renameCategory(
+          whoami()!.id,
+          subscriptionIds,
+          newCategory,
+        ),
     )
   }
 }

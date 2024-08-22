@@ -232,12 +232,16 @@ export const ModalInternal = memo(
           if (CustomModalComponent) {
             return (
               <Wrapper>
-                <Dialog.Root open onOpenChange={onClose} modal={modal}>
+                <Dialog.Root
+                  open
+                  onOpenChange={onClose}
+                  modal={modal}
+                >
                   <Dialog.Portal>
                     <Dialog.DialogTitle className="sr-only">
                       {title}
                     </Dialog.DialogTitle>
-                    <Dialog.Content asChild>
+                    <Dialog.Content asChild onFocusCapture={stopPropagation}>
                       <div
                         ref={edgeElementRef}
                         className={cn(
@@ -249,8 +253,10 @@ export const ModalInternal = memo(
                           modalContainerClassName,
                         )}
                         onClick={
-                          clickOutsideToDismiss && canClose && modal ?
-                            dismiss :
+                          modal ?
+                            clickOutsideToDismiss && canClose ?
+                              dismiss :
+                              noticeModal :
                             undefined
                         }
                         style={zIndexStyle}
@@ -276,7 +282,7 @@ export const ModalInternal = memo(
             <Wrapper>
               <Dialog.Root modal={modal} open onOpenChange={onClose}>
                 <Dialog.Portal>
-                  <Dialog.Content asChild>
+                  <Dialog.Content asChild onFocusCapture={stopPropagation}>
                     <div
                       ref={edgeElementRef}
                       style={zIndexStyle}
@@ -288,9 +294,11 @@ export const ModalInternal = memo(
                         !isResizeable && "center",
                       )}
                       onClick={
-                        clickOutsideToDismiss && canClose && modal ?
-                          dismiss :
-                          noticeModal
+                        modal ?
+                          clickOutsideToDismiss && canClose ?
+                            dismiss :
+                            noticeModal :
+                          undefined
                       }
                     >
                       <m.div

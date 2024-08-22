@@ -7,7 +7,7 @@ import { useEntry } from "@renderer/store/entry/hooks"
 import { AnimatePresence, m } from "framer-motion"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
-import { EntryReadHistory } from "./read-history"
+import { EntryReadHistory } from "./components/EntryReadHistory"
 
 export function EntryHeader({
   view,
@@ -48,7 +48,7 @@ export function EntryHeader({
       >
         <EntryReadHistory entryId={entryId} />
       </div>
-      <div className="relative z-10 flex w-full items-center justify-between gap-3 bg-background">
+      <div className="relative z-10 flex w-full items-center justify-between gap-3">
         <div className="flex min-w-0 shrink grow">
           <AnimatePresence>
             {shouldShowMeta && (

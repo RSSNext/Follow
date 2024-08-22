@@ -15,7 +15,7 @@ import { useEntryReadHistory } from "@renderer/store/entry"
 import { useUserById } from "@renderer/store/user"
 import { Fragment } from "react"
 
-import { usePresentUserProfileModal } from "../profile/hooks"
+import { usePresentUserProfileModal } from "../../profile/hooks"
 
 export const EntryReadHistory: Component<{ entryId: string }> = ({
   entryId,

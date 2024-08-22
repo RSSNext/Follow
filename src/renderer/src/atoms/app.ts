@@ -3,7 +3,7 @@ import { getStorageNS } from "@renderer/lib/ns"
 import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 
-export const [, , useAppIsReady, , , setAppIsReady] = createAtomHooks(
+export const [, , useAppIsReady, , appIsReady, setAppIsReady] = createAtomHooks(
   atom(false),
 )
 

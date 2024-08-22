@@ -2,9 +2,7 @@ import {
   setGeneralSetting,
   useGeneralSettingValue,
 } from "@renderer/atoms/settings/general"
-import {
-  createSetting,
-} from "@renderer/atoms/settings/helper"
+import { createSetting } from "@renderer/atoms/settings/helper"
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
@@ -78,7 +76,11 @@ export const SettingGeneral = () => {
               description:
                 "Automatically mark single-level entries (e.g., social media posts, pictures, video views) as read when they enter the view.",
             }),
-
+            // { type: "title", value: "Secure" },
+            // defineSettingItem("jumpOutLinkWarn", {
+            //   label: "Warn when opening external links",
+            //   description: "When you open an untrusted external link, you need to make sure that you open the link.",
+            // }),
             {
               type: "title",
               value: "Privacy & Data",

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { Card, CardContent, CardHeader } from "@renderer/components/ui/card"
 import {
   Form,
@@ -139,13 +139,13 @@ export function DiscoverImport() {
             )}
           />
           <div className="center flex">
-            <StyledButton
+            <Button
               type="submit"
               disabled={!form.formState.dirtyFields.file}
               isLoading={mutation.isPending}
             >
               Import
-            </StyledButton>
+            </Button>
           </div>
         </form>
       </Form>
