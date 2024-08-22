@@ -30,6 +30,9 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
 
       - name: Cache pnpm modules
         uses: actions/cache@v4
