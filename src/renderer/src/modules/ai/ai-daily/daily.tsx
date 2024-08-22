@@ -10,8 +10,10 @@ import { Markdown } from "@renderer/components/ui/markdown"
 import { MarkdownLink } from "@renderer/components/ui/markdown/renderers"
 import { Media } from "@renderer/components/ui/media"
 import { usePreviewMedia } from "@renderer/components/ui/media/hooks"
-import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
+import { useModalStack } from "@renderer/components/ui/modal"
+import { PeekModal } from "@renderer/components/ui/modal/inspire/PeekModal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
+import { Paper } from "@renderer/components/ui/paper"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
   Tooltip,
@@ -22,18 +24,17 @@ import {
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import { nextFrame } from "@renderer/lib/dom"
+import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn, isBizId } from "@renderer/lib/utils"
-import {
-  FlatMarkAllButton,
-} from "@renderer/modules/entry-column/components/mark-all-button"
+import { FlatMarkAllReadButton } from "@renderer/modules/entry-column/components/mark-all-button"
 import { StarIcon } from "@renderer/modules/entry-column/star-icon"
+import { EntryContentRender } from "@renderer/modules/entry-content"
 import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry"
 import { useFeedById } from "@renderer/store/feed"
 import { m, useAnimationControls } from "framer-motion"
 import type { Components } from "hast-util-to-jsx-runtime"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 import { useParseDailyDate } from "./hooks"
 import type { DailyItemProps, DailyView } from "./types"
@@ -69,8 +70,10 @@ export const DailyReportTitle = ({
   <div className="flex items-center justify-center gap-2 text-base">
     <i className="i-mgc-magic-2-cute-re" />
     <div className="font-medium">
+      Top News -
+      {" "}
       {title}
-      's Top News
+
     </div>
     <Tooltip>
       <TooltipTrigger asChild>
@@ -143,6 +146,7 @@ export const DailyReportContent: Component<DailyReportContentProps> = ({
 }) => {
   const content = useQueryData({ endDate, startDate, view })
 
+  const RelatedEntryLink = useState(() => createRelatedEntryLink("modal"))[0]
   return (
     <Card className="border-none bg-transparent">
       <CardContent className={cn("space-y-0 p-0", className)}>
@@ -156,7 +160,12 @@ export const DailyReportContent: Component<DailyReportContentProps> = ({
               <LoadingCircle size="large" className="mt-8 text-center" />
             ) : (
               !!content.data && (
-                <Markdown className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-theme-accent">
+                <Markdown
+                  components={{
+                    a: RelatedEntryLink as Components["a"],
+                  }}
+                  className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
+                >
                   {content.data}
                 </Markdown>
               )
@@ -164,7 +173,7 @@ export const DailyReportContent: Component<DailyReportContentProps> = ({
           </AutoResizeHeight>
         </ScrollArea.ScrollArea>
         {!!content.data && (
-          <FlatMarkAllButton
+          <FlatMarkAllReadButton
             className="ml-auto"
             filter={{
               startTime: startDate,
@@ -183,7 +192,7 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
   view,
 }) => {
   const content = useQueryData({ endDate, startDate, view })
-
+  const RelatedEntryLink = useState(() => createRelatedEntryLink("toast"))[0]
   return (
     <div className="center flex-col">
       {content.isLoading ? (
@@ -195,9 +204,9 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
           (
             <Markdown
               components={{
-                a: RelatedEntryLink,
+                a: RelatedEntryLink as Components["a"],
               }}
-              className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-theme-accent"
+              className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
             >
               {content.data}
             </Markdown>
@@ -210,7 +219,7 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
           )}
 
       {!!content.data && (
-        <FlatMarkAllButton
+        <FlatMarkAllReadButton
           className="ml-auto"
           filter={{
             startTime: startDate,
@@ -222,38 +231,64 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
   )
 }
 
-// @ts-expect-error
-const RelatedEntryLink: Components["a"] = (props: LinkProps) => {
-  const { href, children } = props
-  const entryId = isBizId(href) ? href : null
+const createRelatedEntryLink =
+  (variant: "toast" | "modal") => (props: LinkProps) => {
+    const { href, children } = props
+    const entryId = isBizId(href) ? href : null
 
-  const { present } = useModalStack()
+    const { present } = useModalStack()
 
-  if (!entryId) {
-    return <MarkdownLink {...props} />
+    if (!entryId) {
+      return <MarkdownLink {...props} />
+    }
+    return (
+      <button
+        type="button"
+        className="follow-link--underline cursor-pointer font-semibold text-foreground no-underline"
+        onClick={() => {
+          const basePresentProps = {
+            clickOutsideToDismiss: true,
+            title: "Entry Preview",
+          }
+
+          if (variant === "toast") {
+            present({
+              ...basePresentProps,
+              CustomModalComponent: NoopChildren,
+              content: () => <EntryToastPreview entryId={entryId} />,
+              overlay: false,
+              modal: false,
+              modalContainerClassName: "right-0 left-[auto]",
+            })
+          } else {
+            present({
+              ...basePresentProps,
+
+              modalClassName:
+                "relative mx-auto mt-[10vh] scrollbar-none max-w-full overflow-auto px-2 lg:max-w-[65rem] lg:p-0",
+              // eslint-disable-next-line @eslint-react/no-nested-components
+              CustomModalComponent: ({ children }) => {
+                const { feedId } = useEntry(entryId) || {}
+                return (
+                  <PeekModal to={`/feeds/${feedId}/${entryId}`}>
+                    {children}
+                  </PeekModal>
+                )
+              },
+              content: () => <EntryModalPreview entryId={entryId} />,
+
+              overlay: true,
+            })
+          }
+        }}
+      >
+        {children}
+        <i className="i-mgc-arrow-right-up-cute-re size-[0.9em] translate-y-[2px] opacity-70" />
+      </button>
+    )
   }
-  return (
-    <button
-      type="button"
-      className="follow-link--underline cursor-pointer font-semibold text-foreground no-underline"
-      onClick={() => {
-        present({
-          title: "Entry Preview",
-          CustomModalComponent: NoopChildren,
-          content: () => <EntryPreview entryId={entryId} />,
-          overlay: false,
-          clickOutsideToDismiss: true,
-        })
-      }}
-    >
-      {children}
-      <i className="i-mgc-arrow-right-up-cute-re size-[0.9em] translate-y-[2px] opacity-70" />
-    </button>
-  )
-}
 
-const EntryPreview = ({ entryId }: { entryId: string }) => {
-  const modal = useCurrentModal()
+const EntryToastPreview = ({ entryId }: { entryId: string }) => {
   useAuthQuery(Queries.entries.byId(entryId))
 
   const variants = {
@@ -273,22 +308,26 @@ const EntryPreview = ({ entryId }: { entryId: string }) => {
   const entry = useEntry(entryId)
   const feed = useFeedById(entry?.feedId || "")
   const controller = useAnimationControls()
+
+  const isDisplay = !!entry && !!feed
   useEffect(() => {
-    nextFrame(() => controller.start("enter"))
-  }, [controller])
+    if (isDisplay) {
+      nextFrame(() => controller.start("enter"))
+    }
+  }, [controller, isDisplay])
 
   const previewMedia = usePreviewMedia()
-  if (!entry || !feed) {
-    return null
-  }
+
+  if (!isDisplay) return null
 
   return (
-    <div className="flex justify-end" onClick={modal.dismiss}>
+    <>
       <m.div
-        onClick={(e) => e.stopPropagation()}
         tabIndex={-1}
         initial="initial"
         animate={controller}
+        onPointerDown={stopPropagation}
+        onPointerDownCapture={stopPropagation}
         variants={variants}
         transition={{
           type: "spring",
@@ -303,13 +342,6 @@ const EntryPreview = ({ entryId }: { entryId: string }) => {
           "mr-4 mt-4 max-h-[500px] w-[60ch] max-w-full overflow-auto",
         )}
       >
-        <button
-          onClick={modal.dismiss}
-          className="center fixed right-6 top-6 size-8 text-foreground/60"
-          type="button"
-        >
-          <i className="i-mgc-close-cute-re" />
-        </button>
         <div className="flex w-full gap-3">
           <FeedIcon
             fallback
@@ -318,7 +350,7 @@ const EntryPreview = ({ entryId }: { entryId: string }) => {
             entry={entry.entries}
             size={36}
           />
-          <div className="flex flex-col">
+          <div className="flex min-w-0 grow flex-col">
             <div className="w-[calc(100%-10rem)] space-x-1">
               <span className="font-semibold">{entry.entries.author}</span>
               <span className="text-zinc-500">·</span>
@@ -340,35 +372,43 @@ const EntryPreview = ({ entryId }: { entryId: string }) => {
                 )}
               >
                 {entry.entries.description}
+
+                {!!entry.entries.media?.length && (
+                  <div className="mt-1 flex w-full gap-2 overflow-x-auto">
+                    {entry.entries.media.map((media, i, mediaList) => (
+                      <Media
+                        key={media.url}
+                        src={media.url}
+                        type={media.type}
+                        previewImageUrl={media.preview_image_url}
+                        className="size-28 shrink-0 cursor-zoom-in"
+                        loading="lazy"
+                        proxy={{
+                          width: 224,
+                          height: 224,
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          previewMedia(mediaList, i)
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
               {!!entry.collections && <StarIcon />}
-            </div>
-
-            <div className="mt-1 flex gap-2 overflow-x-auto">
-              {entry.entries.media?.map((media, i, mediaList) => (
-                <Media
-                  key={media.url}
-                  src={media.url}
-                  type={media.type}
-                  previewImageUrl={media.preview_image_url}
-                  className="size-28 shrink-0"
-                  loading="lazy"
-                  proxy={{
-                    width: 224,
-                    height: 224,
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    previewMedia(mediaList, i)
-                  }}
-                />
-              ))}
             </div>
 
             {/* End right column */}
           </div>
         </div>
       </m.div>
-    </div>
+    </>
   )
 }
+
+const EntryModalPreview = ({ entryId }: { entryId: string }) => (
+  <Paper className="!p-0">
+    <EntryContentRender className="h-auto [&_#entry-action-header-bar]:!bg-transparent" entryId={entryId} />
+  </Paper>
+)

@@ -21,6 +21,7 @@ import { cn, isBizId } from "@renderer/lib/utils"
 import { useFeed } from "@renderer/queries/feed"
 import { entryActions, useEntry } from "@renderer/store/entry"
 import { useFeedByIdSelector } from "@renderer/store/feed"
+import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useCallback, useEffect, useRef } from "react"
 import type {
   ScrollSeekConfiguration,
@@ -233,6 +234,12 @@ const ListGird = ({
 const AddFeedHelper = () => {
   const feedId = useRouteParamsSelector((s) => s.feedId)
   const feedQuery = useFeed({ id: feedId })
+
+  const hasSubscription = useSubscriptionByFeedId(feedId || "")
+
+  if (hasSubscription) {
+    return null
+  }
 
   if (!feedId) {
     return

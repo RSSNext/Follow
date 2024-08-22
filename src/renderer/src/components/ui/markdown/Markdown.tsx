@@ -1,3 +1,4 @@
+import { parseHtml } from "@renderer/lib/parse-html"
 import type { RemarkOptions } from "@renderer/lib/parse-markdown"
 import { parseMarkdown } from "@renderer/lib/parse-markdown"
 import { cn } from "@renderer/lib/utils"
@@ -25,4 +26,21 @@ export const Markdown: Component<
       {markdownElement}
     </article>
   )
+}
+
+export const HTML: Component<
+  {
+    children: string | null | undefined
+  } & Partial<{
+    renderInlineStyle: boolean
+  }>
+> = ({ children, renderInlineStyle }) => {
+  const stableRemarkOptions = useState({ renderInlineStyle })[0]
+
+  const markdownElement = useMemo(
+    () => children && parseHtml(children, { ...stableRemarkOptions }).content,
+    [children, stableRemarkOptions],
+  )
+
+  return markdownElement
 }

@@ -97,6 +97,7 @@ export function Component() {
       <SearchCmdK />
       <CmdNTrigger />
       {ELECTRON && <CmdF />}
+
       {isAuthFail && !user && (
         <RootPortal>
           <DeclarativeModal

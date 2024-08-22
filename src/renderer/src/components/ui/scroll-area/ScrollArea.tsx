@@ -13,7 +13,7 @@ const Corner = React.forwardRef<
   <ScrollAreaBase.Corner
     {...rest}
     ref={forwardedRef}
-    className={cn("bg-theme-accent", className)}
+    className={cn("bg-accent", className)}
   />
 ))
 

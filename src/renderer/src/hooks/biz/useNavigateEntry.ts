@@ -3,7 +3,11 @@ import {
   getStableRouterNavigate,
 } from "@renderer/atoms/route"
 import { setSidebarActiveView } from "@renderer/atoms/sidebar"
-import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "@renderer/constants"
+import {
+  ROUTE_ENTRY_PENDING,
+  ROUTE_FEED_IN_FOLDER,
+  ROUTE_FEED_PENDING,
+} from "@renderer/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { isUndefined } from "lodash-es"
 
@@ -11,6 +15,7 @@ type NavigateEntryOptions = Partial<{
   feedId: string | null
   entryId: string | null
   view: FeedViewType
+  folderName: string
 }>
 /**
  * @description a hook to navigate to `feedId`, `entryId`, add search for `view`, `level`
@@ -19,12 +24,16 @@ type NavigateEntryOptions = Partial<{
 export const useNavigateEntry = () => navigateEntry
 
 export const navigateEntry = (options: NavigateEntryOptions) => {
-  const { entryId, feedId, view } = options || {}
+  const { entryId, feedId, view, folderName } = options || {}
   const { params, searchParams } = getReadonlyRoute()
   let finalFeedId = feedId || params.feedId || ROUTE_FEED_PENDING
 
   if ("feedId" in options && feedId === null) {
     finalFeedId = ROUTE_FEED_PENDING
+  }
+
+  if (folderName) {
+    finalFeedId = `${ROUTE_FEED_IN_FOLDER}${folderName}`
   }
 
   finalFeedId = encodeURIComponent(finalFeedId)

@@ -1,4 +1,4 @@
-import { SwipeMedia } from "@renderer/components/ui/media/swipe-media"
+import { SwipeMedia } from "@renderer/components/ui/media/SwipeMedia"
 import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholder"
 import { Skeleton } from "@renderer/components/ui/skeleton"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
@@ -54,7 +54,7 @@ export function PictureItem({
             }}
           />
         ) : (
-          <div className="center aspect-square w-full flex-col gap-1 bg-muted text-xs text-muted-foreground">
+          <div className="center aspect-square  w-full flex-col gap-1 rounded-md bg-muted text-xs text-muted-foreground">
             <i className="i-mgc-sad-cute-re size-6" />
             No media available
           </div>
@@ -82,12 +82,14 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   const previewMedia = usePreviewMedia()
 
   if (!entry) return null
+  const hasMedia = entry.entries.media && entry.entries.media.length > 0
 
+  if (!hasMedia) return null
   return (
     <EntryItemWrapper
       view={FeedViewType.Pictures}
       entry={entry}
-      itemClassName="group hover:bg-theme-item-hover"
+      itemClassName="group hover:bg-theme-item-hover rounded-md"
     >
       <GridItem
         wrapperClassName="p-0 h-full flex flex-col"
@@ -95,24 +97,21 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
         entryPreview={entryPreview}
         translation={translation}
       >
-        {entry.entries.media ? (
-          <MasonryItemFixedDimensionWrapper url={entry.entries.media[0].url}>
-            <SwipeMedia
-
-              media={entry.entries.media}
-              className={cn(
-                "w-full shrink-0 grow rounded-md",
-                isActive && "rounded-b-none",
-              )}
-              proxySize={proxySize}
-              imgClassName="object-cover"
-              uniqueKey={entryId}
-              onPreview={(media, i) => {
-                previewMedia(media, i)
-              }}
-            />
-          </MasonryItemFixedDimensionWrapper>
-        ) : null}
+        <MasonryItemFixedDimensionWrapper url={entry.entries.media![0].url}>
+          <SwipeMedia
+            media={entry.entries.media}
+            className={cn(
+              "w-full shrink-0 grow rounded-md",
+              isActive && "rounded-b-none",
+            )}
+            proxySize={proxySize}
+            imgClassName="object-cover"
+            uniqueKey={entryId}
+            onPreview={(media, i) => {
+              previewMedia(media, i)
+            }}
+          />
+        </MasonryItemFixedDimensionWrapper>
       </GridItem>
     </EntryItemWrapper>
   )

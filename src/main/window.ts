@@ -31,33 +31,56 @@ export function createWindow(
   } & BrowserWindowConstructorOptions,
 ) {
   const { extraPath, height, width, ...configs } = options
-  // Create the browser window.
-  const window = new BrowserWindow({
+
+  const baseWindowConfig: Electron.BrowserWindowConstructorOptions = {
     width,
     height,
     show: false,
     resizable: configs?.resizable ?? true,
     autoHideMenuBar: true,
-    ...(platform !== "darwin" ? { icon: getIconPath() } : {}),
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.mjs"),
       sandbox: false,
       webviewTag: true,
       webSecurity: !isDev,
     },
+  }
 
-    // @windows
-    backgroundMaterial: "mica",
-    titleBarStyle: platform === "win32" ? "hidden" : "hiddenInset",
-    trafficLightPosition: {
-      x: 18,
-      y: 18,
-    },
+  switch (platform) {
+    case "darwin": {
+      Object.assign(baseWindowConfig, {
+        titleBarStyle: "hiddenInset",
+        trafficLightPosition: {
+          x: 18,
+          y: 18,
+        },
+        vibrancy: "under-window",
+        visualEffectState: "active",
+        transparent: true,
+      } as Electron.BrowserWindowConstructorOptions)
+      break
+    }
 
-    transparent: true,
-    backgroundColor: "#00000000", // transparent hexadecimal or anything with transparency,
-    vibrancy: "sidebar",
-    visualEffectState: "active",
+    case "win32": {
+      Object.assign(baseWindowConfig, {
+        icon: getIconPath(),
+        backgroundMaterial: "mica",
+        titleBarStyle: "hidden",
+        // titleBarOverlay: {
+        //   height: 30,
+        // },
+      } as Electron.BrowserWindowConstructorOptions)
+      break
+    }
+
+    default: {
+      baseWindowConfig.icon = getIconPath()
+    }
+  }
+
+  // Create the browser window.
+  const window = new BrowserWindow({
+    ...baseWindowConfig,
     ...configs,
   })
 

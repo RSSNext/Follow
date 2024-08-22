@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useWhoami } from "@renderer/atoms/user"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import {
   Form,
   FormControl,
@@ -109,7 +109,7 @@ export function Component() {
             )}
           />
           <div className="text-right">
-            <StyledButton type="submit">Submit</StyledButton>
+            <Button type="submit">Submit</Button>
           </div>
         </form>
       </Form>

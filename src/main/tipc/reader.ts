@@ -1,4 +1,5 @@
 import fs from "node:fs"
+import { createRequire } from "node:module"
 import path from "node:path"
 
 import { app } from "electron"
@@ -9,6 +10,7 @@ import { t } from "./_instance"
 
 const tts = new MsEdgeTTS()
 
+const require = createRequire(import.meta.url)
 export const readerRoute = {
   readability: t.procedure
     .input<{ url: string }>()
@@ -54,5 +56,14 @@ export const readerRoute = {
     .input<string>()
     .action(async ({ input }) => {
       await tts.setMetadata(input, OUTPUT_FORMAT.WEBM_24KHZ_16BIT_MONO_OPUS)
+    }),
+
+  detectCodeStringLanguage: t.procedure
+    .input<{ codeString: string }>()
+    .action(async ({ input }) => {
+      const { ModelOperations } = require("vscode-languagedetection")
+      const modelOperations = new ModelOperations()
+      const result = await modelOperations.runModel(input.codeString)
+      return result
     }),
 }

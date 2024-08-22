@@ -5,6 +5,11 @@ import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@renderer/components/ui/popover"
 import { ProfileButton } from "@renderer/components/user-button"
 import { HotKeyScopeMap, views } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
@@ -25,12 +30,18 @@ import type { MotionValue } from "framer-motion"
 import { m, useSpring } from "framer-motion"
 import { atom, useAtomValue } from "jotai"
 import { Lethargy } from "lethargy"
-import type { PropsWithChildren } from "react"
-import { useCallback, useLayoutEffect, useRef } from "react"
+import type { FC, PropsWithChildren } from "react"
+import {
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { Link } from "react-router-dom"
+import { toast } from "sonner"
 
-import { Vibrancy } from "../../components/ui/background"
+import { WindowUnderBlur } from "../../components/ui/background"
 import { FeedList } from "./list"
 
 const lethargy = new Lethargy()
@@ -178,7 +189,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
   })
 
   return (
-    <Vibrancy
+    <WindowUnderBlur
       className="relative flex h-full flex-col space-y-3 rounded-l-[12px] pt-2.5"
       onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
@@ -190,16 +201,19 @@ export function FeedColumn({ children }: PropsWithChildren) {
         )}
       >
         {normalStyle && (
-          <div
-            className="relative flex items-center gap-1 text-xl font-bold"
-            onClick={(e) => {
-              e.stopPropagation()
-              navigateBackHome()
-            }}
-          >
-            <Logo className="mr-1 size-6" />
-            {APP_NAME}
-          </div>
+          <LogoContextMenu>
+            <div
+              className="relative flex items-center gap-1 font-default text-lg font-semibold"
+              onClick={(e) => {
+                e.stopPropagation()
+                navigateBackHome()
+              }}
+            >
+              <Logo className="mr-1 size-6" />
+
+              {APP_NAME}
+            </div>
+          </LogoContextMenu>
         )}
         <div
           className="relative flex items-center gap-1"
@@ -271,7 +285,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
       </div>
 
       {children}
-    </Vibrancy>
+    </WindowUnderBlur>
   )
 }
 
@@ -336,5 +350,41 @@ const SearchActionButton = () => {
     >
       <i className="i-mgc-search-2-cute-re size-5 text-theme-vibrancyFg" />
     </ActionButton>
+  )
+}
+
+const LogoContextMenu: FC<PropsWithChildren> = ({ children }) => {
+  const [open, setOpen] = useState(false)
+  const logoRef = useRef<SVGSVGElement>(null)
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger
+        asChild
+        onContextMenu={() => {
+          setOpen(true)
+        }}
+      >
+        {children}
+      </PopoverTrigger>
+      <PopoverContent align="start" className="!p-1">
+        <button
+          type="button"
+          onClick={() => {
+            navigator.clipboard.writeText(logoRef.current?.outerHTML || "")
+            setOpen(false)
+            toast.success("Copied to clipboard")
+          }}
+          className={cn(
+            "relative flex cursor-default select-none items-center rounded-sm px-1 py-0.5 text-sm outline-none",
+            "focus-within:outline-transparent hover:bg-theme-item-hover dark:hover:bg-neutral-800",
+            "gap-2 text-foreground/80 [&_svg]:size-3",
+          )}
+        >
+          <Logo ref={logoRef} />
+          <span>Copy Logo SVG</span>
+        </button>
+      </PopoverContent>
+    </Popover>
   )
 }

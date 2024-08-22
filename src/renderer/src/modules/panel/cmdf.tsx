@@ -48,7 +48,7 @@ const CmdFImpl: FC<{
 
   const searchIdRef = useRef<number>(0)
 
-  const { isCompositionRef, ...inputProps } = useInputComposition({
+  const { isCompositionRef, ...inputProps } = useInputComposition<HTMLInputElement>({
     onKeyDown: useEventCallback((e) => {
       const $input = inputRef.current
       if (!$input) return
@@ -124,14 +124,14 @@ const CmdFImpl: FC<{
         e.preventDefault()
         nativeSearch(value)
       }}
-      className="center shadow-perfect fixed right-8 top-12 z-[1000] size-9 w-64 gap-2 rounded-2xl border bg-zinc-50/90 pl-3 pr-2 backdrop-blur duration-200 focus-within:border-theme-accent dark:bg-neutral-800/80"
+      className="center shadow-perfect fixed right-8 top-12 z-[1000] size-9 w-64 gap-2 rounded-2xl border bg-zinc-50/90 pl-3 pr-2 backdrop-blur duration-200 focus-within:border-accent dark:bg-neutral-800/80"
     >
       <div className="relative h-full grow">
         <input
           {...inputProps}
           ref={inputRef}
           name="search"
-          className="absolute inset-0 size-full appearance-none bg-transparent font-[system-ui] text-[15px] text-transparent caret-theme-accent selection:text-transparent"
+          className="absolute inset-0 size-full appearance-none bg-transparent font-[system-ui] text-[15px] text-transparent caret-accent selection:text-transparent"
           style={{
             visibility: isSearching ? "hidden" : "visible",
           }}

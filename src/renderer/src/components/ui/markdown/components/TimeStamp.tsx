@@ -1,4 +1,4 @@
-import { Player } from "@renderer/atoms/player"
+import { AudioPlayer } from "@renderer/atoms/player"
 import { nextFrame } from "@renderer/lib/dom"
 import { useEntryContentContext } from "@renderer/modules/entry-content/hooks"
 
@@ -10,15 +10,15 @@ export const TimeStamp = (props: { time: string }) => {
   if (!src) return <span>{props.time}</span>
   return (
     <span
-      className="cursor-pointer tabular-nums text-theme-accent dark:text-theme-accent-500"
+      className="cursor-pointer tabular-nums text-accent dark:text-theme-accent-500"
       onClick={() => {
-        Player.mount({
+        AudioPlayer.mount({
           type: "audio",
           entryId,
           src,
           currentTime: 0,
         })
-        nextFrame(() => Player.seek(timeStringToSeconds(props.time) || 0))
+        nextFrame(() => AudioPlayer.seek(timeStringToSeconds(props.time) || 0))
       }}
     >
       {props.time}

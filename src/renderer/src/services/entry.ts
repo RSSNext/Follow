@@ -34,14 +34,14 @@ class EntryServiceStatic extends BaseService<EntryModel> {
       })
     }
 
-    CleanerService.renew(renewList)
+    CleanerService.reset(renewList)
 
     return super.upsertMany(nextData)
   }
 
   // @ts-ignore
   override async upsert(feedId: string, data: EntryModel): Promise<unknown> {
-    CleanerService.renew([
+    CleanerService.reset([
       {
         type: "entry",
         id: data.id,
@@ -52,6 +52,11 @@ class EntryServiceStatic extends BaseService<EntryModel> {
       // @ts-expect-error
       feedId,
     })
+  }
+
+  async bulkPatch(data: { key: string, changes: Partial<EntryModel> }[]) {
+    await this.table.bulkUpdate(data)
+    CleanerService.reset(data.map((d) => ({ type: "entry", id: d.key })))
   }
 
   override async findAll() {
@@ -67,15 +72,32 @@ class EntryServiceStatic extends BaseService<EntryModel> {
   }
 
   async deleteCollection(entryId: string) {
-    return EntryRelatedService.deleteItem(EntryRelatedKey.COLLECTION, entryId)
+    return EntryRelatedService.deleteItems(EntryRelatedKey.COLLECTION, [
+      entryId,
+    ])
   }
 
   async deleteEntries(entryIds: string[]) {
-    await this.table.bulkDelete(entryIds)
+    await Promise.all([
+      this.table.bulkDelete(entryIds),
+      EntryRelatedService.deleteItems(EntryRelatedKey.READ, entryIds),
+      EntryRelatedService.deleteItems(EntryRelatedKey.COLLECTION, entryIds),
+    ])
   }
 
   async deleteEntriesByFeedIds(feedIds: string[]) {
-    await this.table.where("feedId").anyOf(feedIds).delete()
+    const deleteEntryIds = await this.table
+      .where("feedId")
+      .anyOf(feedIds)
+      .primaryKeys()
+    await Promise.all([
+      this.table.where("feedId").anyOf(feedIds).delete(),
+      EntryRelatedService.deleteItems(EntryRelatedKey.READ, deleteEntryIds),
+      EntryRelatedService.deleteItems(
+        EntryRelatedKey.COLLECTION,
+        deleteEntryIds,
+      ),
+    ])
   }
 }
 

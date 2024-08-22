@@ -5,6 +5,7 @@ import {
   MarkdownLink,
   MarkdownP,
 } from "@renderer/components/ui/markdown/renderers"
+import { BlockError } from "@renderer/components/ui/markdown/renderers/BlockErrorBoundary"
 import { Media } from "@renderer/components/ui/media"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
@@ -19,11 +20,11 @@ import rehypeStringify from "rehype-stringify"
 import { unified } from "unified"
 import { VFile } from "vfile"
 
-export const parseHtml = async (
+export const parseHtml = (
   content: string,
-  options?: {
+  options?: Partial<{
     renderInlineStyle: boolean
-  },
+  }>,
 ) => {
   const file = new VFile(content)
   const { renderInlineStyle = false } = options || {}
@@ -45,6 +46,7 @@ export const parseHtml = async (
         "video": ["src", "poster"],
       },
     })
+
     .use(rehypeInferDescriptionMeta)
     .use(rehypeStringify)
 
@@ -93,14 +95,14 @@ export const parseHtml = async (
         pre: ({ node, ...props }) => {
           if (!props.children) return null
 
-          let language = "plaintext"
+          let language = ""
+
           let codeString = null as string | null
           if (props.className?.includes("language-")) {
             language = props.className.replace("language-", "")
           }
 
           if (typeof props.children !== "object") {
-            language = "plaintext"
             codeString = props.children.toString()
           } else {
             if (
@@ -116,9 +118,15 @@ export const parseHtml = async (
             const code =
               "props" in props.children && props.children.props.children
             if (!code) return null
-            const $text = document.createElement("div")
-            $text.innerHTML = renderToString(code)
-            codeString = $text.textContent
+
+            try {
+              codeString = extractCodeFromHtml(renderToString(code))
+            } catch (error) {
+              return createElement(BlockError, {
+                error,
+                message: "Code Block Render Error",
+              })
+            }
           }
 
           if (!codeString) return null
@@ -128,6 +136,18 @@ export const parseHtml = async (
             language: language.toLowerCase(),
           })
         },
+        table: ({ node, ...props }) =>
+          createElement(
+            "div",
+            {
+              className: "w-full overflow-x-auto",
+            },
+
+            createElement("table", {
+              ...props,
+              className: tw`w-full my-0`,
+            }),
+          ),
       },
     }),
     toText: () => toText(hastTree),
@@ -147,8 +167,57 @@ const Img: Components["img"] = ({ node, ...props }) => {
       mediaContainerClassName: tw`max-w-full inline size-auto`,
       popper: true,
       className: tw`inline`,
+      showFallback: true,
     })
   }
 
   return createElement(MarkdownBlockImage, nextProps)
+}
+
+function extractCodeFromHtml(htmlString: string) {
+  const tempDiv = document.createElement("div")
+  tempDiv.innerHTML = htmlString
+
+  // 1. line break via <div />
+  const divElements = tempDiv.querySelectorAll("div")
+
+  let code = ""
+
+  if (divElements.length > 0) {
+    divElements.forEach((div) => {
+      code += `${div.textContent}\n`
+    })
+    return code
+  }
+
+  // 2. line wrapper like <span><span>...</span></span>
+  const spanElements = tempDiv.querySelectorAll("span > span")
+
+  // 2.1 outside <span /> as a line break?
+
+  let spanAsLineBreak = false
+
+  if (tempDiv.children.length > 2) {
+    for (const node of tempDiv.children) {
+      const span = node as HTMLSpanElement
+      // 2.2 If the span has only one child and it's a line break, then span can be as a line break
+      spanAsLineBreak =
+        span.children.length === 1 &&
+        span.childNodes.item(0).textContent === "\n"
+      if (spanAsLineBreak) break
+    }
+  }
+  if (spanElements.length > 0) {
+    for (const node of tempDiv.children) {
+      if (spanAsLineBreak) {
+        code += `${node.textContent}`
+      } else {
+        code += `${node.textContent}\n`
+      }
+    }
+
+    return code
+  }
+
+  return tempDiv.textContent
 }

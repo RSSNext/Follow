@@ -97,7 +97,7 @@ const CmdNPanel = () => {
         <button
           disabled={form.formState.isSubmitting || !form.formState.isValid}
           type="submit"
-          className="center absolute inset-y-0 right-3 pl-2 text-theme-accent duration-200 hover:text-theme-accent/90 disabled:grayscale"
+          className="center absolute inset-y-0 right-3 pl-2 text-accent duration-200 hover:text-accent/90 disabled:grayscale"
         >
           <i className="i-mgc-arrow-right-circle-cute-fi size-6" />
         </button>

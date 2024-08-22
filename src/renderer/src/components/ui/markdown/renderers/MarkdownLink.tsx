@@ -1,10 +1,7 @@
-import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { FeedViewType } from "@renderer/lib/enum"
-import { isBizId } from "@renderer/lib/utils"
 import { useEntryContentContext } from "@renderer/modules/entry-content/hooks"
-import { useEntry } from "@renderer/store/entry"
 import { useFeedByIdSelector } from "@renderer/store/feed"
-import { useCallback, useMemo } from "react"
+import { useMemo } from "react"
 
 import type { LinkProps } from "../../link"
 import {
@@ -35,21 +32,6 @@ export const MarkdownLink = (props: LinkProps) => {
     if (href.startsWith("/") && feedSiteUrl) return safeUrl(href, feedSiteUrl)
     return href
   }, [feedSiteUrl, props])
-  const entryId = isBizId(props.href) ? props.href : null
-  const entry = useEntry(entryId)
-
-  const navigate = useNavigateEntry()
-  const onClick = useCallback(
-    (e: React.MouseEvent) => {
-      if (entryId) {
-        e.preventDefault()
-        navigate({
-          entryId,
-        })
-      }
-    },
-    [entryId, navigate],
-  )
 
   const parseTimeStamp = view === FeedViewType.Audios
   if (parseTimeStamp) {
@@ -69,7 +51,7 @@ export const MarkdownLink = (props: LinkProps) => {
           href={populatedFullHref}
           title={props.title}
           target="_blank"
-          onClick={onClick}
+          rel="noreferrer"
         >
           {props.children}
 
@@ -81,7 +63,7 @@ export const MarkdownLink = (props: LinkProps) => {
       {!!props.href && (
         <TooltipPortal>
           <TooltipContent align="start" className="break-all" side="bottom">
-            {entry?.entries.title || populatedFullHref}
+            {populatedFullHref}
           </TooltipContent>
         </TooltipPortal>
       )}

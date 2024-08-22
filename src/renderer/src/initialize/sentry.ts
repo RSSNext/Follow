@@ -2,7 +2,12 @@ import { env } from "@env"
 import { version } from "@pkg"
 import { channel } from "@renderer/constants"
 import { useEffect } from "react"
-import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from "react-router-dom"
+import {
+  createRoutesFromChildren,
+  matchRoutes,
+  useLocation,
+  useNavigationType,
+} from "react-router-dom"
 
 import { SentryConfig } from "../configs"
 
@@ -25,13 +30,15 @@ export const initSentry = async () => {
         createRoutesFromChildren,
         matchRoutes,
       }),
+      Sentry.captureConsoleIntegration({
+        levels: ["error"],
+      }),
       posthog.sentryIntegration({
         organization: "follow-rg",
 
         projectId: 4507570439979008,
         severityAllowList: ["error", "info"], // optional: here is set to handle captureMessage (info) and captureException (error)
-      },
-      ),
+      }),
     ],
     ...SentryConfig,
   })

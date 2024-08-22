@@ -1,7 +1,7 @@
 import { subscriptionActions } from "@renderer/store/subscription"
 import { useMutation } from "@tanstack/react-query"
 
-import { StyledButton } from "../../components/ui/button"
+import { Button } from "../../components/ui/button"
 import { useCurrentModal } from "../../components/ui/modal"
 
 export function CategoryRemoveDialogContent({
@@ -23,15 +23,15 @@ export function CategoryRemoveDialogContent({
       </p>
 
       <div className="flex items-center justify-end gap-3">
-        <StyledButton variant="outline" onClick={dismiss}>
+        <Button variant="outline" onClick={dismiss}>
           Cancel
-        </StyledButton>
-        <StyledButton
+        </Button>
+        <Button
           isLoading={deleteMutation.isPending}
           onClick={() => deleteMutation.mutateAsync().then(() => dismiss())}
         >
           Continue
-        </StyledButton>
+        </Button>
       </div>
     </div>
   )

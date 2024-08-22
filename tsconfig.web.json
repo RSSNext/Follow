@@ -16,6 +16,7 @@
     "moduleResolution": "Bundler",
     "target": "ES2022",
     "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "strict": true,
     "baseUrl": ".",
     "paths": {

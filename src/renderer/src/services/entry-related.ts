@@ -62,9 +62,11 @@ class ServiceStatic {
     return task
   }
 
-  async deleteItem(type: EntryRelatedKey, key: string) {
+  async deleteItems(type: EntryRelatedKey, keys: string[]) {
     const oldData = await this.findAll(type as any)
-    delete oldData[key]
+    keys.forEach((key) => {
+      delete oldData[key]
+    })
 
     return entryRelatedModel.put({
       data: oldData,

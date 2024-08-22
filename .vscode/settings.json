@@ -12,6 +12,7 @@
     // ["tw\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
 
     ["tw`([^`]*)`", "([^`]*)"]
+
   ],
 
   // If you do not want to autofix some rules on save

@@ -54,7 +54,7 @@ export const TextArea = forwardRef<
           [mouseX, mouseY],
         )
 
-        const inputProps = useInputComposition(props)
+        const inputProps = useInputComposition<HTMLTextAreaElement>(props)
         const [isFocus, setIsFocus] = useState(false)
         return (
           <div
@@ -86,7 +86,7 @@ export const TextArea = forwardRef<
                 "overflow-auto px-3 py-4",
                 "!outline-none",
                 "text-neutral-900/80 dark:text-slate-100/80",
-                "focus:!bg-theme-accent/5",
+                "focus:!bg-accent/5",
                 roundedMap[rounded],
                 className,
               )}

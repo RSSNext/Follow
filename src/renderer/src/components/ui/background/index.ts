@@ -1,1 +1,1 @@
-export * from "./vibrancy"
+export * from "./WindowUnderBlur"

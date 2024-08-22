@@ -39,11 +39,11 @@ const patchedLocalStorage: SyncStorage<PlayerAtomValue> = {
 export const [
   ,
   ,
-  usePlayerAtomValue,
-  useSetPlayerAtom,
-  getPlayerAtomValue,
-  setPlayerAtomValue,
-  usePlayerAtomSelector,
+  useAudioPlayerAtomValue,
+  useAudioSetPlayerAtom,
+  getAudioPlayerAtomValue,
+  setAudioPlayerAtomValue,
+  useAudioPlayerAtomSelector,
 ] = createAtomHooks<PlayerAtomValue>(
   atomWithStorage(
     getStorageNS("player"),
@@ -55,21 +55,23 @@ export const [
   ),
 )
 
-export const Player = {
+export const AudioPlayer = {
   audio: new Audio(),
   currentTimeTimer: null as NodeJS.Timeout | null,
+
+  __currentActionId: 0,
   get() {
-    return getPlayerAtomValue()
+    return getAudioPlayerAtomValue()
   },
   mount(
     v: Omit<PlayerAtomValue, "show" | "status" | "playedSeconds" | "duration">,
   ) {
-    const curV = getPlayerAtomValue()
+    const curV = getAudioPlayerAtomValue()
     if (!v.src || (curV.src === v.src && curV.status === "playing")) {
       return
     }
 
-    setPlayerAtomValue({
+    setAudioPlayerAtomValue({
       ...curV,
       ...v,
       status: "loading",
@@ -85,15 +87,17 @@ export const Player = {
 
     this.currentTimeTimer && clearInterval(this.currentTimeTimer)
     this.currentTimeTimer = setInterval(() => {
-      setPlayerAtomValue({
-        ...getPlayerAtomValue(),
+      setAudioPlayerAtomValue({
+        ...getAudioPlayerAtomValue(),
         currentTime: this.audio.currentTime,
       })
     }, 1000)
 
+    const currentActionId = this.__currentActionId
     return this.audio.play().then(() => {
-      setPlayerAtomValue({
-        ...getPlayerAtomValue(),
+      if (currentActionId !== this.__currentActionId) return
+      setAudioPlayerAtomValue({
+        ...getAudioPlayerAtomValue(),
         status: "playing",
         duration: this.audio.duration,
       })
@@ -104,17 +108,19 @@ export const Player = {
     this.audio.pause()
   },
   play() {
-    const curV = getPlayerAtomValue()
+    ++this.__currentActionId
+    const curV = getAudioPlayerAtomValue()
 
     this.mount(curV)
   },
   pause() {
-    const curV = getPlayerAtomValue()
+    ++this.__currentActionId
+    const curV = getAudioPlayerAtomValue()
     if (curV.status === "paused") {
       return
     }
 
-    setPlayerAtomValue({
+    setAudioPlayerAtomValue({
       ...curV,
       status: "paused",
       currentTime: this.audio.currentTime,
@@ -123,7 +129,7 @@ export const Player = {
     return
   },
   togglePlayAndPause() {
-    const curV = getPlayerAtomValue()
+    const curV = getAudioPlayerAtomValue()
     if (curV.status === "playing") {
       return this.pause()
     } else if (curV.status === "paused") {
@@ -133,8 +139,8 @@ export const Player = {
     }
   },
   close() {
-    setPlayerAtomValue({
-      ...getPlayerAtomValue(),
+    setAudioPlayerAtomValue({
+      ...getAudioPlayerAtomValue(),
       show: false,
       status: "paused",
     })
@@ -143,15 +149,15 @@ export const Player = {
   },
   seek(time: number) {
     this.audio.currentTime = time
-    setPlayerAtomValue({
-      ...getPlayerAtomValue(),
+    setAudioPlayerAtomValue({
+      ...getAudioPlayerAtomValue(),
       currentTime: time,
     })
   },
   setPlaybackRate(speed: number) {
     this.audio.playbackRate = speed
-    setPlayerAtomValue({
-      ...getPlayerAtomValue(),
+    setAudioPlayerAtomValue({
+      ...getAudioPlayerAtomValue(),
       playbackRate: speed,
     })
   },
@@ -163,15 +169,15 @@ export const Player = {
   },
   toggleMute() {
     this.audio.muted = !this.audio.muted
-    setPlayerAtomValue({
-      ...getPlayerAtomValue(),
+    setAudioPlayerAtomValue({
+      ...getAudioPlayerAtomValue(),
       isMute: this.audio.muted,
     })
   },
   setVolume(volume: number) {
     this.audio.volume = volume
-    setPlayerAtomValue({
-      ...getPlayerAtomValue(),
+    setAudioPlayerAtomValue({
+      ...getAudioPlayerAtomValue(),
       volume,
     })
   },

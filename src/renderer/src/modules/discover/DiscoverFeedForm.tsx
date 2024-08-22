@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getSidebarActiveView } from "@renderer/atoms/sidebar"
-import { StyledButton } from "@renderer/components/ui/button"
+import { Button } from "@renderer/components/ui/button"
 import { CopyButton } from "@renderer/components/ui/code-highlighter"
 import { Form, FormItem, FormLabel } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
@@ -54,7 +54,7 @@ const FeedMaintainers = ({ maintainers }: { maintainers?: string[] }) => {
             key={maintainer}
             target="_blank"
             rel="noreferrer noopener"
-            className="inline-flex cursor-pointer items-center text-theme-foreground/50 duration-200 hover:text-theme-accent"
+            className="inline-flex cursor-pointer items-center text-theme-foreground/50 duration-200 hover:text-accent"
           >
             @
             {maintainer}
@@ -275,7 +275,7 @@ export const DiscoverFeedForm = ({
             submitButtonClassName,
           )}
         >
-          <StyledButton type="submit">Preview</StyledButton>
+          <Button type="submit">Preview</Button>
         </div>
       </form>
     </Form>

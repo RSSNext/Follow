@@ -1,5 +1,3 @@
-import "dotenv/config"
-
 import { electronApp, optimizer } from "@electron-toolkit/utils"
 import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@shared/constants"
 import { extractElectronWindowOptions } from "@shared/electron"
@@ -8,7 +6,7 @@ import squirrelStartup from "electron-squirrel-startup"
 
 import { env } from "../env"
 import { isDev, isMacOS } from "./env"
-import { initializationApp } from "./init"
+import { initializeApp } from "./init"
 import { setAuthSessionToken } from "./lib/user"
 import { registerUpdater } from "./updater"
 import { createMainWindow, createWindow } from "./window"
@@ -30,7 +28,7 @@ function bootsharp() {
 
   let mainWindow: BrowserWindow
 
-  initializationApp()
+  initializeApp()
 
   app.on("second-instance", (_, commandLine) => {
     if (mainWindow) {

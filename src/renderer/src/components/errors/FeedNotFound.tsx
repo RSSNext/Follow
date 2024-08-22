@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 import { Logo } from "../icons/logo"
-import { StyledButton } from "../ui/button"
+import { Button } from "../ui/button"
 import { CustomSafeError, useResetErrorWhenRouteChange } from "./helper"
 
 export const FeedNotFoundErrorFallback: FC<AppErrorFallbackProps> = ({
@@ -27,7 +27,7 @@ export const FeedNotFoundErrorFallback: FC<AppErrorFallbackProps> = ({
         </p>
 
         <div className="center mt-12 gap-4">
-          <StyledButton
+          <Button
             variant="outline"
             onClick={() => {
               navigate("/")
@@ -37,7 +37,7 @@ export const FeedNotFoundErrorFallback: FC<AppErrorFallbackProps> = ({
             }}
           >
             Back
-          </StyledButton>
+          </Button>
         </div>
       </div>
     </div>

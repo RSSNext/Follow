@@ -1,6 +1,9 @@
 export const urlToIframe = (url?: string | null, mini?: boolean) => {
   if (url?.match(/\/\/www.bilibili.com\/video\/BV\w+/)) {
-    return `https://www.bilibili.com/blackboard/newplayer.html?${new URLSearchParams({
+    const player = window.electron ?
+      "https://www.bilibili.com/blackboard/newplayer.html" :
+      "https://player.bilibili.com/player.html"
+    return `${player}?${new URLSearchParams({
       isOutside: "true",
       autoplay: "true",
       danmaku: "true",

@@ -1,13 +1,10 @@
-import { callGlobalContextMethod } from "@shared/bridge"
 import type { MenuItemConstructorOptions, MessageBoxOptions } from "electron"
 import { dialog, Menu, ShareMenu } from "electron"
 
-import { downloadFile } from "../lib/download"
-import { getMainWindow } from "../window"
 import { t } from "./_instance"
 
 type MenuItem = ActionMenuItem | { type: "separator" }
-interface ActionMenuItem {
+export interface ActionMenuItem {
   type: "text"
   label: string
   enabled?: boolean
@@ -87,23 +84,4 @@ export const menuRoute = {
         },
       })
     }),
-
-  saveImage: t.procedure.input<string>().action(async ({ input }) => {
-    const result = await dialog.showSaveDialog({
-      defaultPath: input.split("/").pop(),
-    })
-    if (result.canceled) return
-
-    // return result.filePath;
-    await downloadFile(input, result.filePath).catch((err) => {
-      const mainWindow = getMainWindow()
-      if (!mainWindow) return
-      callGlobalContextMethod(mainWindow, "toast.error", ["Download failed!"])
-      throw err
-    })
-
-    const mainWindow = getMainWindow()
-    if (!mainWindow) return
-    callGlobalContextMethod(mainWindow, "toast.success", ["Download success!"])
-  }),
 }

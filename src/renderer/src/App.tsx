@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom"
 import { env } from "../../env.js"
 import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"
+import { applyAfterReadyCallbacks } from "./initialize/queue.js"
 import { appLog } from "./lib/log"
 import { cn, getOS } from "./lib/utils"
 import { Titlebar } from "./modules/app/Titlebar.js"
@@ -43,22 +44,20 @@ function App() {
 
   const windowsElectron = window.electron && getOS() === "Windows"
   return (
-    <>
-      <RootProviders>
-        {window.electron && (
-          <div
-            className={cn(
-              "drag-region absolute inset-x-0 top-0 h-12 shrink-0",
-              windowsElectron && "pointer-events-none z-[9999]",
-            )}
-            aria-hidden
-          >
-            {windowsElectron && <Titlebar />}
-          </div>
-        )}
-        <AppLayer />
-      </RootProviders>
-    </>
+    <RootProviders>
+      {window.electron && (
+        <div
+          className={cn(
+            "drag-region absolute inset-x-0 top-0 h-12 shrink-0",
+            windowsElectron && "pointer-events-none z-[9999]",
+          )}
+          aria-hidden
+        >
+          {windowsElectron && <Titlebar />}
+        </div>
+      )}
+      <AppLayer />
+    </RootProviders>
   )
 }
 
@@ -71,6 +70,8 @@ const AppLayer = () => {
       time: doneTime,
     })
     appLog("App is ready", `${doneTime}ms`)
+
+    applyAfterReadyCallbacks()
   }, [appIsReady])
 
   return appIsReady ? <Outlet /> : <AppSkeleton />

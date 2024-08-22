@@ -33,7 +33,7 @@ export const Radio: FC<
         type="radio"
         id={id ?? fallbackId}
         className={cn(
-          "radio radio-primary radio-sm disabled:radio-current disabled:cursor-not-allowed disabled:text-theme-disabled",
+          "radio radio-accent radio-sm disabled:radio-current disabled:cursor-not-allowed disabled:text-theme-disabled",
           className,
         )}
         value={value}

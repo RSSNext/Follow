@@ -1,3 +1,4 @@
+import { createDefineSettingItem } from "@renderer/atoms/settings/helper"
 import {
   setUISetting,
   useUISettingKey,
@@ -11,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
+import { isElectronBuild } from "@renderer/constants"
 import { useDark, useSetDarkInWebApp } from "@renderer/hooks/common"
 import { tipcClient } from "@renderer/lib/client"
 import { getOS } from "@renderer/lib/utils"
@@ -22,6 +24,7 @@ import { createSettingBuilder } from "../setting-builder"
 import { SettingsTitle } from "../title"
 
 const SettingBuilder = createSettingBuilder(useUISettingValue)
+const defineItem = createDefineSettingItem(useUISettingValue, setUISetting)
 
 export const SettingAppearance = () => {
   const isDark = useDark()
@@ -50,31 +53,26 @@ export const SettingAppearance = () => {
                 }
               }}
             />,
-            {
+
+            defineItem("opaqueSidebar", {
               label: "Opaque sidebars",
-              key: "opaqueSidebar",
-              disabled:
-                !window.electron || !["macOS", "Linux"].includes(getOS()),
-              onChange: (value) => setUISetting("opaqueSidebar", value),
-            },
+              hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
+            }),
 
             {
               type: "title",
               value: "Unread count",
             },
-            {
-              disabled:
-                !window.electron || !["macOS", "Linux"].includes(getOS()),
+
+            defineItem("showDockBadge", {
               label: "Show as Dock badge",
-              key: "showDockBadge",
-              onChange: (value) => setUISetting("showDockBadge", value),
-            },
-            {
+              hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
+            }),
+
+            defineItem("sidebarShowUnreadCount", {
               label: "Show in sidebar",
-              key: "sidebarShowUnreadCount",
-              onChange: (value) =>
-                setUISetting("sidebarShowUnreadCount", value),
-            },
+            }),
+
             {
               type: "title",
               value: "Fonts",
@@ -87,27 +85,33 @@ export const SettingAppearance = () => {
               value: "Content",
             },
             ShikiTheme,
-            {
+
+            defineItem("guessCodeLanguage", {
+              label: "Guess code language",
+              hide: !isElectronBuild,
+              description:
+                "Major programming languages that use models to infer unlabeled code blocks",
+            }),
+
+            defineItem("readerRenderInlineStyle", {
               label: "Render inline style",
-              key: "readerRenderInlineStyle",
-              onChange: (value) =>
-                setUISetting("readerRenderInlineStyle", value),
-            },
+              description:
+                "Allows rendering of the inline style of the original HTML.",
+            }),
             {
               type: "title",
               value: "Misc",
             },
-            {
+
+            defineItem("modalOverlay", {
               label: "Show modal overlay",
-              key: "modalOverlay",
-              onChange: (value) => setUISetting("modalOverlay", value),
-            },
-            {
+              description: "Show modal overlay",
+            }),
+            defineItem("reduceMotion", {
               label: "Reduce motion",
-              key: "reduceMotion",
-              onChange: (value) => setUISetting("reduceMotion", value),
-              description: `Reducing the motion of elements to improve performance and reduce energy consumption.`,
-            },
+              description:
+                "Reducing the motion of elements to improve performance and reduce energy consumption",
+            }),
           ]}
         />
       </div>
@@ -129,7 +133,7 @@ const ShikiTheme = () => {
         <SelectTrigger size="sm" className="w-48">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="h-64">
+        <SelectContent align="end" className="h-64">
           {Object.keys(bundledThemes)?.map((theme) => (
             <SelectItem key={theme} value={theme}>
               {theme}
@@ -164,7 +168,7 @@ const TextSize = () => {
           )
         }}
       >
-        <SelectTrigger size="sm" className="w-24 capitalize">
+        <SelectTrigger size="sm" className="w-48 capitalize">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

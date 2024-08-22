@@ -55,7 +55,7 @@ const tabsTriggerVariants = cva("", {
   variants: {
     variant: {
       default:
-        "py-1.5 border-b-2 border-transparent data-[state=active]:text-theme-accent dark:data-[state=active]:text-theme-accent-500",
+        "py-1.5 border-b-2 border-transparent data-[state=active]:text-accent dark:data-[state=active]:text-theme-accent-500",
       rounded:
         "py-1 rounded-sm data-[state=active]:bg-theme-accent-300 dark:data-[state=active]:bg-theme-accent-800 data-[state=active]:shadow-sm",
     },
@@ -114,7 +114,7 @@ const TabsTrigger = React.forwardRef<
       {isSelect && (
         <m.span
           layoutId={layoutId}
-          className="absolute -bottom-1 h-0.5 w-[calc(100%-16px)] rounded bg-theme-accent"
+          className="absolute -bottom-1 h-0.5 w-[calc(100%-16px)] rounded bg-accent"
         />
       )}
     </TabsPrimitive.Trigger>

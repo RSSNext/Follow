@@ -1,4 +1,4 @@
-import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT, ELECTRON_WINDOWS_RADIUS } from "@renderer/constants"
+import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { useQuery } from "@tanstack/react-query"
 
@@ -12,10 +12,7 @@ export const Titlebar = () => {
     <div
       className="drag-region flex w-full items-center justify-end overflow-hidden"
       style={{
-        height:
-          `${ElECTRON_CUSTOM_TITLEBAR_HEIGHT}px`,
-        borderTopLeftRadius: `${ELECTRON_WINDOWS_RADIUS}px`,
-        borderTopRightRadius: `${ELECTRON_WINDOWS_RADIUS}px`,
+        height: `${ElECTRON_CUSTOM_TITLEBAR_HEIGHT}px`,
       }}
     >
       <button
@@ -36,7 +33,11 @@ export const Titlebar = () => {
           refetch()
         }}
       >
-        {isMaximized ? <i className="i-mingcute-restore-line" /> : <i className="i-mingcute-square-line" />}
+        {isMaximized ? (
+          <i className="i-mingcute-restore-line" />
+        ) : (
+          <i className="i-mingcute-square-line" />
+        )}
       </button>
 
       <button

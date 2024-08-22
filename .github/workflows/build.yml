@@ -2,8 +2,15 @@ name: Build
 
 on:
   push:
+    branches:
+      - "**"
+    tags:
+      - "v*"
   workflow_dispatch:
-
+    inputs:
+      tag_version:
+        description: "Tag Version"
+        required: true
 env:
   VITE_WEB_URL: ${{ vars.VITE_WEB_URL }}
   VITE_API_URL: ${{ vars.VITE_API_URL }}
@@ -23,6 +30,9 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
 
       - name: Cache pnpm modules
         uses: actions/cache@v4
@@ -118,17 +128,21 @@ jobs:
           path: |
             out/make/**/*.dmg
           retention-days: 90
-
+      - run: npx changelogithub
+        if: github.ref_type == 'tag' || github.event.inputs.tag_version != ''
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Setup Version
         id: version
         uses: ./.github/actions/setup-version
       - name: Create Release Draft
-        if: github.ref_type == 'tag'
+        if: github.ref_type == 'tag' || github.event.inputs.tag_version != ''
         uses: softprops/action-gh-release@v2
         with:
           name: v${{ steps.version.outputs.APP_VERSION }}
-          draft: true
-          prerelease: false
+          draft: false
+          prerelease: true
           tag_name: v${{ steps.version.outputs.APP_VERSION }}
           files: |
             out/make/**/*.dmg
@@ -136,23 +150,3 @@ jobs:
             out/make/**/*.exe
             out/make/**/*.AppImage
             out/make/**/*.yml
-  changelog:
-    needs: [release]
-    runs-on: ubuntu-latest
-    if: github.ref_type == 'tag'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: "pnpm"
-
-      - run: npx changelogithub # or changelogithub@0.12 if ensure the stable result
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

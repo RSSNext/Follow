@@ -10,7 +10,7 @@ export default defineConfig(
       lineBreak: "after",
     },
     lessOpinionated: true,
-    ignores: ["src/renderer/src/hono.ts", "src/hono.ts"],
+    ignores: ["src/renderer/src/hono.ts", "src/hono.ts", "resources/**"],
     preferESM: false,
   },
   {
@@ -22,6 +22,8 @@ export default defineConfig(
       },
     },
     rules: {
+      "unicorn/prefer-math-trunc": "off",
+      "@eslint-react/no-clone-element": 0,
       "no-restricted-globals": [
         "error",
         {

@@ -1,4 +1,4 @@
-import { Player } from "@renderer/atoms/player"
+import { AudioPlayer } from "@renderer/atoms/player"
 import { m } from "@renderer/components/common/Motion"
 import { Media } from "@renderer/components/ui/media"
 import type { ModalContentComponent } from "@renderer/components/ui/modal"
@@ -128,15 +128,15 @@ export function VideoItem({
 const PreviewVideoModalContent: ModalContentComponent<{
   src: string
 }> = ({ dismiss, src }) => {
-  const currentAudioPlayerIsPlay = useRef(Player.get().status === "playing")
+  const currentAudioPlayerIsPlay = useRef(AudioPlayer.get().status === "playing")
   useEffect(() => {
     const currentValue = currentAudioPlayerIsPlay.current
     if (currentValue) {
-      Player.pause()
+      AudioPlayer.pause()
     }
     return () => {
       if (currentValue) {
-        Player.play()
+        AudioPlayer.play()
       }
     }
   }, [])

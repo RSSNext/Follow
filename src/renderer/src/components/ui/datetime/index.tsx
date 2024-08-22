@@ -1,3 +1,4 @@
+import { stopPropagation } from "@renderer/lib/dom"
 import dayjs from "dayjs"
 import type { FC } from "react"
 import { useEffect, useRef, useState } from "react"
@@ -75,7 +76,11 @@ export const RelativeTime: FC<{
 
   return (
     <Tooltip>
-      <TooltipTrigger>{relative}</TooltipTrigger>
+
+      {/* https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904 */}
+      <TooltipTrigger onFocusCapture={stopPropagation}>
+        {relative}
+      </TooltipTrigger>
 
       <TooltipPortal>
         <TooltipContent>{dayjs(props.date).format("llll")}</TooltipContent>
@@ -132,7 +137,7 @@ export const RelativeDay = ({ date }: { date: Date }) => {
 
   return (
     <Tooltip>
-      <TooltipTrigger>{dateString}</TooltipTrigger>
+      <TooltipTrigger onFocusCapture={stopPropagation}>{dateString}</TooltipTrigger>
       <TooltipPortal>
         <TooltipContent>{dayjs(date).format("llll")}</TooltipContent>
       </TooltipPortal>

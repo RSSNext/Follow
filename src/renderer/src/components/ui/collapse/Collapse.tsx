@@ -61,7 +61,7 @@ export const CollapseControlled: Component<
     >
       <span className="w-0 shrink grow truncate">{props.title}</span>
       {!props.hideArrow && (
-        <div className="shrink-0 text-gray-400">
+        <div className="inline-flex shrink-0 items-center text-gray-400">
           <i
             className={cn(
               "i-mingcute-down-line duration-200",

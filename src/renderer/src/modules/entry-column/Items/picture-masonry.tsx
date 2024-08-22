@@ -1,12 +1,15 @@
 import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid"
+import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
+import { nextFrame } from "@renderer/lib/dom"
 import { FeedViewType } from "@renderer/lib/enum"
 import { getEntry } from "@renderer/store/entry"
 import { imageActions } from "@renderer/store/image"
-import { throttle } from "lodash-es"
+import { debounce, throttle } from "lodash-es"
 import type { CSSProperties, FC, PropsWithChildren } from "react"
 import {
   memo,
+  useContext,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -15,6 +18,7 @@ import {
 } from "react"
 import { useEventCallback } from "usehooks-ts"
 
+import { batchMarkRead } from "../hooks"
 import { EntryItemSkeleton } from "../item"
 import {
   MasonryItemsAspectRatioContext,
@@ -57,12 +61,14 @@ const getCurrentColumn = (w: number) => {
 
 export const PictureMasonry: FC<MasonryProps> = (props) => {
   const { data } = props
-  const [isInit, setIsInit] = useState(false)
-
+  const [isInitDim, setIsInitDim] = useState(false)
+  const [isInitLayout, setIsInitLayout] = useState(false)
+  const [currentItemWidth, setCurrentItemWidth] = useState(0)
   const restoreDimensions = useEventCallback(async () => {
     const images = [] as string[]
     data.forEach((entryId) => {
       const entry = getEntry(entryId)
+      if (!entry) return
 
       images.push(...imageActions.getImagesFromEntry(entry.entries))
     })
@@ -70,34 +76,11 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
   })
   useEffect(() => {
     restoreDimensions().finally(() => {
-      setIsInit(true)
+      setIsInitDim(true)
     })
   }, [])
-
-  if (!isInit) return null
-
-  return (
-    <PictureMasonryImpl {...props} restoreDimensions={restoreDimensions} />
-  )
-}
-interface MasonryProps {
-  data: string[]
-  endReached: () => Promise<any>
-  hasNextPage: boolean
-}
-
-const PictureMasonryImpl = ({
-  data,
-  endReached,
-  hasNextPage,
-  restoreDimensions,
-}: MasonryProps & { restoreDimensions: () => Promise<void> }) => {
-  const masonryRef = useRef<MasonryInfiniteGrid>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [currentItemWidth, setCurrentItemWidth] = useState(0)
   const [currentColumn, setCurrentColumn] = useState(1)
-  const $scroll = useScrollViewElement()
-
   useLayoutEffect(() => {
     const $warpper = containerRef.current
     if (!$warpper) return
@@ -107,7 +90,9 @@ const PictureMasonryImpl = ({
 
       setCurrentColumn(column)
 
-      masonryRef.current?.renderItems()
+      nextFrame(() => {
+        setIsInitLayout(true)
+      })
     }, 50)
 
     let previousWidth = $warpper.offsetWidth
@@ -128,6 +113,40 @@ const PictureMasonryImpl = ({
     }
   }, [])
 
+  return (
+    <div ref={containerRef} className="p-4">
+      <MasonryItemWidthContext.Provider value={currentItemWidth}>
+        {isInitDim && isInitLayout && (
+          <PictureMasonryImpl
+            {...props}
+            column={currentColumn}
+            restoreDimensions={restoreDimensions}
+          />
+        )}
+      </MasonryItemWidthContext.Provider>
+    </div>
+  )
+}
+interface MasonryProps {
+  data: string[]
+  endReached: () => Promise<any>
+  hasNextPage: boolean
+}
+
+const PictureMasonryImpl = ({
+  data,
+  endReached,
+  hasNextPage,
+  restoreDimensions,
+  column,
+}: MasonryProps & {
+  restoreDimensions: () => Promise<void>
+  column: number
+}) => {
+  const masonryRef = useRef<MasonryInfiniteGrid>(null)
+
+  const $scroll = useScrollViewElement()
+  const currentItemWidth = useContext(MasonryItemWidthContext)
   const itemStyle: CSSProperties = useMemo(
     () => ({ width: currentItemWidth }),
     [currentItemWidth],
@@ -137,47 +156,81 @@ const PictureMasonryImpl = ({
     Record<string, number>
   >({})
 
+  const scrollMarkUnread = useGeneralSettingKey("scrollMarkUnread")
+  const inViewMarkRead = useGeneralSettingKey("renderMarkUnread")
+  const handleScroll = useEventCallback(
+    debounce(() => {
+      if (!scrollMarkUnread) return
+      const $masonryRef = masonryRef.current
+      if (!$masonryRef) return
+      const items = $masonryRef.getVisibleItems()
+
+      const first = items[0]
+      if (!first) return
+      const itemIndex = first.element?.dataset.index
+      if (itemIndex === undefined) return
+      const prevIndex = +itemIndex - 1
+      if (Number.isNaN(prevIndex)) return
+      if (prevIndex < 0) return
+      const markReadIdsSlice = data.slice(0, prevIndex + 1)
+
+      batchMarkRead(markReadIdsSlice)
+    }, 100),
+  )
+
   return (
-    <div ref={containerRef} className="p-4">
-      <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
-        <MasonryItemWidthContext.Provider value={currentItemWidth}>
-          <MasonryItemsAspectRatioSetterContext.Provider
-            value={setMasonryItemsRadio}
-          >
-            <MasonryInfiniteGrid
-              ref={masonryRef}
-              placeholder={<LoadingSkeletonItem itemStyle={itemStyle} />}
-              onRequestAppend={(e) => {
-                if (!hasNextPage) return
-                e.wait()
-                const nextGroupKey = (+e.groupKey! || 0) + 1
-                e.currentTarget.appendPlaceholders(10, nextGroupKey)
-                endReached()
-                  .then(restoreDimensions).finally(() => {
-                    e.ready()
-                  })
-              }}
-              scrollContainer={$scroll}
-              observeChildren
-              useFirstRender
-              gap={{ vertical: 24 }}
-              column={currentColumn}
+    <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
+      <MasonryItemsAspectRatioSetterContext.Provider
+        value={setMasonryItemsRadio}
+      >
+        <MasonryInfiniteGrid
+          ref={masonryRef}
+          onRenderComplete={useEventCallback((e) => {
+            if (!inViewMarkRead) {
+              return
+            }
+            const entryIds: string[] = []
+            for (const mount of e.mounted) {
+              const index = +(mount.element?.dataset.index as string)
+              if (Number.isNaN(index)) return
+              const entryId = data[index]
+
+              if (!entryId) continue
+              entryIds.push(entryId)
+            }
+            batchMarkRead(entryIds)
+          })}
+          placeholder={<LoadingSkeletonItem itemStyle={itemStyle} />}
+          onRequestAppend={(e) => {
+            if (!hasNextPage) return
+            e.wait()
+            const nextGroupKey = (+e.groupKey! || 0) + 1
+            e.currentTarget.appendPlaceholders(10, nextGroupKey)
+            endReached()
+              .then(restoreDimensions)
+              .finally(() => {
+                e.ready()
+              })
+          }}
+          onChangeScroll={handleScroll}
+          scrollContainer={$scroll}
+          gap={{ vertical: 24 }}
+          column={column}
+        >
+          {data.map((entryId, index) => (
+            <ItemWrapper
+              data-grid-groupkey={(index / 5) | 0}
+              data-index={index}
+              itemStyle={itemStyle}
+              key={entryId}
+              entryId={entryId}
             >
-              {data.map((entryId, index) => (
-                <ItemWrapper
-                  data-grid-groupkey={index}
-                  itemStyle={itemStyle}
-                  key={entryId}
-                  entryId={entryId}
-                >
-                  <PictureWaterFallItem entryId={entryId} />
-                </ItemWrapper>
-              ))}
-            </MasonryInfiniteGrid>
-          </MasonryItemsAspectRatioSetterContext.Provider>
-        </MasonryItemWidthContext.Provider>
-      </MasonryItemsAspectRatioContext.Provider>
-    </div>
+              <PictureWaterFallItem entryId={entryId} />
+            </ItemWrapper>
+          ))}
+        </MasonryInfiniteGrid>
+      </MasonryItemsAspectRatioSetterContext.Provider>
+    </MasonryItemsAspectRatioContext.Provider>
   )
 }
 

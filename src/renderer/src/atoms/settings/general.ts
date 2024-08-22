@@ -19,6 +19,8 @@ const createDefaultSettings = (): GeneralSettings => ({
   // UX
   // autoHideFeedColumn: true,
   groupByDate: true,
+  // Secure
+  jumpOutLinkWarn: true,
 })
 
 export const {

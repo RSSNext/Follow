@@ -3,7 +3,7 @@ import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useFeedHeaderTitle } from "@renderer/store/feed"
 
-import { useEntryContentPlaceholderLogoShow } from "./atoms"
+import { useEntryContentPlaceholderLogoShow } from "../atoms"
 
 export const EntryPlaceholderLogo = () => {
   const title = useFeedHeaderTitle()

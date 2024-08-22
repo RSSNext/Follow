@@ -2,6 +2,7 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
+  ContextMenuPortal,
   ContextMenuSeparator,
   ContextMenuSub,
   ContextMenuSubContent,
@@ -16,6 +17,7 @@ import type { NativeMenuItem } from "@renderer/lib/native-menu"
 import { CONTEXT_MENU_SHOW_EVENT_KEY } from "@renderer/lib/native-menu"
 import type { ReactNode } from "react"
 import {
+  Fragment,
   memo,
   useCallback,
   useEffect,
@@ -126,15 +128,17 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
     }
     case "text": {
       const Wrapper = item.submenu ? ContextMenuSubTrigger : ContextMenuItem
+
+      const Sub = item.submenu ? ContextMenuSub : Fragment
       return (
-        <ContextMenuSub>
+        <Sub>
           <Wrapper
             ref={itemRef}
-            disabled={item.enabled === false || (item.click === undefined && !item.submenu)}
+            disabled={item.enabled === false ||
+              (item.click === undefined && !item.submenu)}
             onClick={onClick}
-            className="flex items-center gap-1"
+            className="flex items-center gap-2"
           >
-            {/* {!!item.icon && <span className="mr-1">{item.icon}</span>} */}
             {item.icon}
             {item.label}
 
@@ -143,16 +147,17 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
                 <KbdCombined joint>{item.shortcut}</KbdCombined>
               </div>
             )}
-
-            {item.submenu && (
+          </Wrapper>
+          {item.submenu && (
+            <ContextMenuPortal>
               <ContextMenuSubContent>
                 {item.submenu.map((subItem, index) => (
                   <Item key={index} item={subItem} />
                 ))}
               </ContextMenuSubContent>
-            )}
-          </Wrapper>
-        </ContextMenuSub>
+            </ContextMenuPortal>
+          )}
+        </Sub>
       )
     }
     default: {

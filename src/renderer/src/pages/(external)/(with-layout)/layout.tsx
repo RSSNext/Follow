@@ -5,7 +5,9 @@ export function Component() {
   return (
     <>
       <Header />
-      <Outlet />
+      <main className="pt-[80px]">
+        <Outlet />
+      </main>
     </>
   )
 }

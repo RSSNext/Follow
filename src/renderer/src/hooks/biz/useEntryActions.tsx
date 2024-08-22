@@ -100,13 +100,15 @@ export const useUnread = () =>
 export const useEntryActions = ({
   view,
   entry,
+  type,
 }: {
   view?: number
   entry?: FlatEntryModel | null
+  type?: "toolbar" | "entryList"
 }) => {
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
-    enabled: !!entry?.entries.url && !!view,
+    enabled: !!entry?.entries.url && view !== undefined,
     queryFn: async () => {
       try {
         await ofetch("http://localhost:41595")
@@ -192,7 +194,7 @@ export const useEntryActions = ({
       },
       {
         key: "copyLink",
-        name: "Copy Link",
+        name: "Copy link",
         className: "i-mgc-link-cute-re",
         hide: !populatedEntry.entries.url,
         shortcut: shortcuts.entry.copyLink.key,
@@ -256,6 +258,7 @@ export const useEntryActions = ({
         ),
         key: "readability",
         hide:
+          type === "entryList" ||
           views[view].wideMode ||
           !populatedEntry.entries.url ||
           !window.electron,
@@ -263,7 +266,7 @@ export const useEntryActions = ({
         onClick: readabilityToggle,
       },
       {
-        name: "Save Media to Eagle",
+        name: "Save media to Eagle",
         icon: <SimpleIconsEagle />,
         key: "saveToEagle",
         hide:
@@ -316,7 +319,7 @@ export const useEntryActions = ({
       },
       {
         key: "read",
-        name: `Mark as Read`,
+        name: `Mark as read`,
         shortcut: shortcuts.entry.toggleRead.key,
         className: "i-mgc-round-cute-fi",
         hide: !!(!!populatedEntry.read || populatedEntry.collections),
@@ -326,7 +329,7 @@ export const useEntryActions = ({
       },
       {
         key: "unread",
-        name: `Mark as Unread`,
+        name: `Mark as unread`,
         shortcut: shortcuts.entry.toggleRead.key,
         className: "i-mgc-round-cute-re",
         hide: !!(!populatedEntry.read || populatedEntry.collections),
@@ -349,6 +352,8 @@ export const useEntryActions = ({
     read,
     unread,
     entryReadabilityStatus,
+    feed?.ownerUserId,
+    type,
   ])
 
   return {

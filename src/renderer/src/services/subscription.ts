@@ -61,6 +61,14 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
       return this.table.where("userId").equals(userId).delete()
     }
   }
+
+  async renameCategory(userId: string, feedIdList: string[], category: string) {
+    return this.table
+      .where("userId")
+      .equals(userId)
+      .and((item) => feedIdList.includes(item.feedId))
+      .modify({ category })
+  }
 }
 
 export const SubscriptionService = new SubscriptionServiceStatic()

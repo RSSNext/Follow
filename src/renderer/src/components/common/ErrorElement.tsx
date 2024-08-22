@@ -1,4 +1,3 @@
-import pkg from "@pkg"
 import { attachOpenInEditor } from "@renderer/lib/dev"
 import { getNewIssueUrl } from "@renderer/lib/issues"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
@@ -6,8 +5,8 @@ import { useEffect, useRef } from "react"
 import { isRouteErrorResponse, useRouteError } from "react-router-dom"
 import { toast } from "sonner"
 
-import { Logo } from "../icons/logo"
-import { StyledButton } from "../ui/button"
+import { Button } from "../ui/button"
+import { PoweredByFooter } from "./PoweredByFooter"
 
 export function ErrorElement() {
   const error = useRouteError()
@@ -56,9 +55,9 @@ export function ErrorElement() {
       </div>
       <h3 className="text-xl">{message}</h3>
       {import.meta.env.DEV && stack ? (
-        <div className="mt-4 cursor-text overflow-auto whitespace-pre rounded-md bg-red-50 p-4 text-left font-mono text-sm text-red-600">
+        <pre className="mt-4 max-h-48 cursor-text overflow-auto whitespace-pre-line rounded-md bg-red-50 p-4 text-left font-mono text-sm text-red-600">
           {attachOpenInEditor(stack)}
-        </div>
+        </pre>
       ) : null}
 
       <p className="my-8">
@@ -69,7 +68,7 @@ export function ErrorElement() {
       </p>
 
       <div className="center gap-4">
-        <StyledButton
+        <Button
           variant="outline"
           onClick={() => {
             clearLocalPersistStoreData()
@@ -77,28 +76,16 @@ export function ErrorElement() {
           }}
         >
           Reset Local Database
-        </StyledButton>
-        <StyledButton onClick={() => (window.location.href = "/")}>
+        </Button>
+        <Button onClick={() => (window.location.href = "/")}>
           Reload
-        </StyledButton>
+        </Button>
       </div>
 
       <FallbackIssue message={message} stack={stack} />
       <div className="grow" />
-      <footer className="center mt-12 flex gap-2">
-        Powered by
-        {" "}
-        <Logo className="size-5" />
-        {" "}
-        <a
-          href={pkg.homepage}
-          className="cursor-pointer font-bold text-theme-accent"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {APP_NAME}
-        </a>
-      </footer>
+
+      <PoweredByFooter />
     </div>
   )
 }
@@ -113,7 +100,7 @@ export const FallbackIssue = ({
   <p className="mt-8">
     Still having this issue? Please give feedback in Github, thanks!
     <a
-      className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-theme-accent"
+      className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-accent"
       href={getNewIssueUrl({
         title: `Error: ${message}`,
         body: `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,

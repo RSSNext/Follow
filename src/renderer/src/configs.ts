@@ -22,7 +22,9 @@ export const SentryConfig: BrowserOptions = {
         /Fetch Error/i.test(error.message) ||
         /XHR Error/i.test(error.message) ||
         /adsbygoogle/i.test(error.message) ||
-        /Failed to fetch/i.test(error.message))
+        /Failed to fetch/i.test(error.message) ||
+        error.message.includes("fetch failed") ||
+        error.message.includes("Unable to open cursor"))
     ) {
       return null
     }

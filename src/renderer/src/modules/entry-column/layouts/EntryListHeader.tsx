@@ -24,7 +24,7 @@ import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC } from "react"
 
-import { MarkAllButton } from "../components/mark-all-button"
+import { MarkAllReadButton } from "../components/mark-all-button"
 
 export const EntryListHeader: FC<{
   totalCount: number
@@ -143,14 +143,14 @@ export const EntryListHeader: FC<{
                       className={cn(
                         "i-mgc-refresh-2-cute-re",
                         isRefreshing && "animate-spin",
-                        hasUpdate && "text-theme-accent",
+                        hasUpdate && "text-accent",
                       )}
                     />
                   </ActionButton>
                 )
           ) : null}
           <ActionButton
-            tooltip={unreadOnly ? "Unread Only" : "All"}
+            tooltip={unreadOnly ? "Show unread Only" : "Show all"}
             shortcut={shortcuts.entries.toggleUnreadOnly.key}
             onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
           >
@@ -160,7 +160,7 @@ export const EntryListHeader: FC<{
               <i className="i-mgc-round-cute-re" />
             )}
           </ActionButton>
-          <MarkAllButton />
+          <MarkAllReadButton shortcut />
         </div>
       </div>
       {titleAtBottom && titleInfo}

@@ -4,7 +4,7 @@ import type { FC } from "react"
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 import { FallbackIssue } from "../common/ErrorElement"
 import { m } from "../common/Motion"
-import { StyledButton } from "../ui/button"
+import { Button } from "../ui/button"
 import { useCurrentModal } from "../ui/modal"
 import { parseError } from "./helper"
 
@@ -25,9 +25,9 @@ export const ModalErrorFallback: FC<AppErrorFallbackProps> = (props) => {
         </div>
         <div className="text-lg font-bold">{message}</div>
         {import.meta.env.DEV && stack ? (
-          <div className="mt-4 cursor-text overflow-auto whitespace-pre rounded-md bg-red-50 p-4 text-left font-mono text-sm text-red-600">
+          <pre className="mt-4 max-h-48 cursor-text overflow-auto whitespace-pre-line rounded-md bg-red-50 p-4 text-left font-mono text-sm text-red-600">
             {attachOpenInEditor(stack)}
-          </div>
+          </pre>
         ) : null}
 
         <p className="my-8">
@@ -36,15 +36,15 @@ export const ModalErrorFallback: FC<AppErrorFallbackProps> = (props) => {
         </p>
 
         <div className="center gap-4">
-          <StyledButton onClick={() => modal.dismiss()} variant="outline">
+          <Button onClick={() => modal.dismiss()} variant="outline">
             Close Modal
-          </StyledButton>
-          <StyledButton
+          </Button>
+          <Button
             onClick={() => window.location.reload()}
             variant="outline"
           >
             Reload
-          </StyledButton>
+          </Button>
         </div>
 
         <FallbackIssue message={message!} stack={stack} />

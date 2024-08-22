@@ -2,9 +2,7 @@ import {
   setGeneralSetting,
   useGeneralSettingValue,
 } from "@renderer/atoms/settings/general"
-import {
-  createSetting,
-} from "@renderer/atoms/settings/helper"
+import { createSetting } from "@renderer/atoms/settings/helper"
 import {
   createDefaultSettings,
   setUISetting,
@@ -96,6 +94,11 @@ export const SettingGeneral = () => {
 
             VoiceSelector,
 
+            // { type: "title", value: "Secure" },
+            // defineSettingItem("jumpOutLinkWarn", {
+            //   label: "Warn when opening external links",
+            //   description: "When you open an untrusted external link, you need to make sure that you open the link.",
+            // }),
             {
               type: "title",
               value: "Privacy & Data",

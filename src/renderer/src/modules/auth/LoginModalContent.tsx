@@ -28,15 +28,14 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
       >
         <div className="mb-8 mt-4 text-center align-middle font-sans text-2xl font-bold leading-relaxed">
           <span className="text-xl">Sign in to </span>
-          <span className="center flex translate-y-px gap-2 font-theme text-theme-accent">
+          <span className="center flex translate-y-px gap-2 font-theme text-accent">
             <FollowIcon className="size-4" />
             {APP_NAME}
           </span>
         </div>
         <div className="flex flex-col gap-4">
           <Button
-            className="h-[48px] w-[320px] rounded-[8px] !bg-black font-sans text-base text-white hover:!bg-black/80"
-            size="lg"
+            className="h-[48px] w-[320px] rounded-[8px] !bg-black font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80"
             onClick={() => {
               loginHandler("github", runtime)
             }}
@@ -47,8 +46,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             GitHub
           </Button>
           <Button
-            className="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90"
-            size="xl"
+            className="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80"
             onClick={() => {
               loginHandler("google", runtime)
             }}
