@@ -1,8 +1,7 @@
 import { PopoverPortal } from "@radix-ui/react-popover"
-import { ActionButton, Button } from "@renderer/components/ui/button"
+import { ActionButton, Button, IconButton } from "@renderer/components/ui/button"
 import {
   Popover,
-  PopoverClose,
   PopoverContent,
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
@@ -51,7 +50,7 @@ export const MarkAllReadButton = forwardRef<
         </ActionButton>
       </PopoverTrigger>
       <PopoverPortal>
-        <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 font-medium [&_button]:text-xs">
+        <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 !py-3 [&_button]:text-xs">
           <div className="text-sm">
             Mark
             <span> </span>
@@ -60,13 +59,8 @@ export const MarkAllReadButton = forwardRef<
             as read?
           </div>
           <div className="space-x-4">
-            <PopoverClose>
-              <Button className="px-1" variant="outline">
-                Cancel
-              </Button>
-            </PopoverClose>
-
-            <Button
+            <IconButton
+              icon={<i className="i-mgc-check-filled" />}
               className="px-1"
               onClick={() => {
                 handleMarkAllAsRead()
@@ -74,7 +68,7 @@ export const MarkAllReadButton = forwardRef<
               }}
             >
               Confirm
-            </Button>
+            </IconButton>
           </div>
         </PopoverContent>
       </PopoverPortal>
