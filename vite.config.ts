@@ -79,6 +79,7 @@ const vite = ({ mode }) => {
       process.env.ANALYZER && visualizer({ open: true }),
     ],
     define: {
+
       APP_VERSION: JSON.stringify(pkg.version),
       APP_NAME: JSON.stringify(pkg.name),
       APP_DEV_CWD: JSON.stringify(process.cwd()),
@@ -89,6 +90,9 @@ const vite = ({ mode }) => {
 
       DEBUG: process.env.DEBUG === "true",
       ELECTRON: "false",
+
+      // Proxy Electron Features
+      FEATURES: "{}",
     },
   })
 }

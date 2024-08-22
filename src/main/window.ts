@@ -7,7 +7,7 @@ import { imageRefererMatches } from "@shared/image"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, Menu, shell } from "electron"
 
-import { isMacOS } from "./env"
+import { isMacOS, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
 import { logger } from "./logger"
@@ -63,11 +63,8 @@ export function createWindow(
     case "win32": {
       Object.assign(baseWindowConfig, {
         icon: getIconPath(),
-        backgroundMaterial: "mica",
+        backgroundMaterial: isWindows11 ? "mica" : undefined,
         titleBarStyle: "hidden",
-        // titleBarOverlay: {
-        //   height: 30,
-        // },
       } as Electron.BrowserWindowConstructorOptions)
       break
     }
@@ -82,6 +79,12 @@ export function createWindow(
     ...baseWindowConfig,
     ...configs,
   })
+
+  window.webContents.executeJavaScript(
+    `((() => { globalThis.FEATURES = globalThis.FEATURES || []; globalThis.FEATURES['WINDOW_UNDER_BLUR'] = ${
+      !!baseWindowConfig.backgroundMaterial || !!baseWindowConfig.vibrancy
+    } })())`,
+  )
 
   function refreshBound(timeout = 0) {
     setTimeout(() => {
