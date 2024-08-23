@@ -4,6 +4,7 @@ import { AppErrorBoundary } from "@renderer/components/common/AppErrorBoundary"
 import { SafeFragment } from "@renderer/components/common/Fragment"
 import { m } from "@renderer/components/common/Motion"
 import { ErrorComponentType } from "@renderer/components/errors"
+import { isElectronBuild } from "@renderer/constants"
 import { useSwitchHotKeyScope } from "@renderer/hooks/common/useSwitchHotkeyScope"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
@@ -238,6 +239,7 @@ export const ModalInternal = memo(
                       {title}
                     </Dialog.DialogTitle>
                     <Dialog.Content asChild onFocusCapture={stopPropagation}>
+
                       <div
                         ref={edgeElementRef}
                         className={cn(
@@ -257,6 +259,9 @@ export const ModalInternal = memo(
                         }
                         style={zIndexStyle}
                       >
+                        {isElectronBuild && (
+                          <div className="drag-region fixed inset-x-0 top-0 h-8" />
+                        )}
                         <div
                           className={cn("contents", modalClassName)}
                           onClick={stopPropagation}
@@ -297,6 +302,10 @@ export const ModalInternal = memo(
                           undefined
                       }
                     >
+                      {isElectronBuild && (
+                        <div className="drag-region fixed inset-x-0 top-0 h-8" />
+                      )}
+
                       <m.div
                         ref={modalElementRef}
                         style={modalStyle}

@@ -28,7 +28,9 @@ export function EntryHeader({
 
   const entryTitleMeta = useEntryTitleMeta()
   const isAtTop = useEntryContentScrollToTop()
-  const shouldShowMeta = !isAtTop && entryTitleMeta
+
+  const shouldShowMeta = !isAtTop && !!entryTitleMeta?.title
+
   if (!entry?.entries) return null
 
   return (

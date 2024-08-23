@@ -1,9 +1,11 @@
 import { Button } from "@renderer/components/ui/button"
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import { Label } from "@renderer/components/ui/label"
+import { SegmentGroup, SegmentItem } from "@renderer/components/ui/segement"
 import { Switch } from "@renderer/components/ui/switch"
 import { cn } from "@renderer/lib/utils"
-import { useId } from "react"
+import type { ReactNode } from "react"
+import { useId, useState } from "react"
 
 export const SettingCheckbox: Component<{
   label: string
@@ -45,6 +47,45 @@ export const SettingSwitch: Component<{
   )
 }
 
+export const SettingTabbedSegment: Component<{
+  label: string
+  value: string
+  onValueChanged?: (value: string) => void
+  values: { value: string, label: string, icon?: ReactNode }[]
+}> = ({ label, className, value, values, onValueChanged }) => {
+  const [currentValue, setCurrentValue] = useState(value)
+
+  return (
+    <div
+      className={cn("mb-3 flex items-center justify-between gap-4", className)}
+    >
+      <label className="text-sm font-medium leading-none">{label}</label>
+
+      <SegmentGroup
+        className="h-8"
+        value={currentValue}
+        onValueChanged={(v) => {
+          setCurrentValue(v)
+          onValueChanged?.(v)
+        }}
+      >
+        {values.map((v) => (
+          <SegmentItem
+            key={v.value}
+            value={v.value}
+            label={(
+              <div className="flex items-center gap-1">
+                {v.icon}
+                <span>{v.label}</span>
+              </div>
+            )}
+          />
+        ))}
+      </SegmentGroup>
+    </div>
+  )
+}
+
 export const SettingDescription: Component = ({ children, className }) => (
   <small
     className={cn(
@@ -65,8 +106,12 @@ export const SettingActionItem = ({
   action: () => void
   buttonText: string
 }) => (
-  <div className={cn("relative mb-3 mt-4 flex items-center justify-between gap-4")}>
+  <div
+    className={cn("relative mb-3 mt-4 flex items-center justify-between gap-4")}
+  >
     <div className="text-sm font-medium">{label}</div>
-    <Button buttonClassName="text-xs absolute right-0" onClick={action}>{buttonText}</Button>
+    <Button buttonClassName="text-xs absolute right-0" onClick={action}>
+      {buttonText}
+    </Button>
   </div>
 )

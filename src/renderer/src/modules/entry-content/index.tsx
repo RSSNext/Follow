@@ -147,7 +147,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
           "h-0 min-w-0 grow overflow-y-auto @container",
           className,
         )}
-        scrollbarClassName="mr-1"
+        scrollbarClassName="mr-[1.5px]"
         viewportClassName="p-5"
         ref={scrollerRef}
       >
@@ -278,7 +278,7 @@ const TitleMetaHandler: Component<{
 
   const atTop = useIsSoFWrappedElement()
   useEffect(() => {
-    setEntryContentScrollToTop(false)
+    setEntryContentScrollToTop(true)
   }, [entryId])
   useLayoutEffect(() => {
     setEntryContentScrollToTop(atTop)

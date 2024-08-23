@@ -12,20 +12,6 @@
     <!-- favicon -->
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <title>Follow</title>
-
-    <script>
-      (function () {
-        var e =
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches,
-          t = localStorage.getItem("theme") || '"system"';
-        t && t !== '"system"' && (document.documentElement.dataset.theme = t);
-        t &&
-          t === '"system"' &&
-          e &&
-          (document.documentElement.dataset.theme = "dark");
-      })();
-    </script>
   </head>
   <body>
     <div id="root">

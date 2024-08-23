@@ -1,7 +1,7 @@
-import { useDark } from "@renderer/hooks/common"
+import { useIsDark } from "@renderer/hooks/common"
 
 export const useShikiDefaultTheme = () => {
-  const isDark = useDark()
+  const isDark = useIsDark()
 
   return isDark ? "github-dark" : "github-light"
 }
