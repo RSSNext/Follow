@@ -7,7 +7,7 @@ import { imageRefererMatches } from "@shared/image"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, Menu, shell } from "electron"
 
-import { isMacOS, isWindows11 } from "./env"
+import { isDev, isMacOS, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
 import { logger } from "./logger"
@@ -42,6 +42,7 @@ export function createWindow(
       preload: path.join(__dirname, "../preload/index.mjs"),
       sandbox: false,
       webviewTag: true,
+      webSecurity: !isDev,
     },
   }
 

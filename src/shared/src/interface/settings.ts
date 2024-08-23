@@ -29,4 +29,7 @@ export interface UISettings {
 
   // view
   pictureViewMasonry: boolean
+
+  // tts
+  voice: string
 }
