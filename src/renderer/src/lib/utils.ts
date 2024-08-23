@@ -180,3 +180,21 @@ export const getViewFromRoute = (route: RSSHubRoute) => {
   }
   return null
 }
+
+export const sortByAlphabet = (a: string, b: string) => {
+  const isALetter = /^[a-z]/i.test(a)
+  const isBLetter = /^[a-z]/i.test(b)
+
+  if (isALetter && !isBLetter) {
+    return -1
+  }
+  if (!isALetter && isBLetter) {
+    return 1
+  }
+
+  if (isALetter && isBLetter) {
+    return a.localeCompare(b)
+  }
+
+  return a.localeCompare(b, "zh-CN")
+}

@@ -1,18 +1,35 @@
+import * as HoverCard from "@radix-ui/react-hover-card"
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
+import { IconOpacityTransition } from "@renderer/components/ux/transition/icon"
 import { FEED_COLLECTION_LIST, views } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteFeedId } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
-import { cn } from "@renderer/lib/utils"
+import { cn, sortByAlphabet } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
-import { useSubscriptionByView } from "@renderer/store/subscription"
+import { useFeedStore } from "@renderer/store/feed"
+import {
+  getSubscriptionByFeedId,
+  useSubscriptionByView,
+} from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
-import { useMemo, useState } from "react"
+import {
+  AnimatePresence,
+  m,
+} from "framer-motion"
+import { Fragment, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 
+import {
+  getFeedListSort,
+  setFeedListSortBy,
+  setFeedListSortOrder,
+  useFeedListSort,
+  useFeedListSortSelector,
+} from "./atom"
 import { FeedCategory } from "./category"
 import { UnreadNumber } from "./unread-number"
 
@@ -69,32 +86,10 @@ export function FeedList({
     return unread
   })
 
-  const sortedByUnread = useFeedUnreadStore((state) => {
-    const sortedList = [] as [string, string[]][]
-    const folderUnread = {} as Record<string, number>
-    // Calc total unread count for each folder
-    for (const category in data) {
-      folderUnread[category] = data[category].reduce(
-        (acc, cur) => (state.data[cur] || 0) + acc,
-        0,
-      )
-    }
-
-    // Sort by unread count
-    Object.keys(folderUnread)
-      .sort((a, b) => folderUnread[b] - folderUnread[a])
-      .forEach((key) => {
-        sortedList.push([key, data[key]])
-      })
-
-    return sortedList
-  })
-
   const hasData = Object.keys(data).length > 0
 
   const feedId = useRouteFeedId()
   const navigate = useNavigateEntry()
-  const showUnreadCount = useUISettingKey("sidebarShowUnreadCount")
 
   return (
     <div className={cn(className, "font-medium")}>
@@ -118,14 +113,15 @@ export function FeedList({
           {view !== undefined && views[view].name}
         </div>
         <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
+          <SortButton />
           {expansion ? (
             <i
-              className="i-mgc-list-collapse-cute-fi"
+              className="i-mgc-list-collapse-cute-re"
               onClick={() => setExpansion(false)}
             />
           ) : (
             <i
-              className="i-mgc-list-expansion-cute-fi"
+              className="i-mgc-list-expansion-cute-re"
               onClick={() => setExpansion(true)}
             />
           )}
@@ -161,15 +157,7 @@ export function FeedList({
           Starred
         </div>
         {hasData ? (
-          sortedByUnread?.map(([category, ids]) => (
-            <FeedCategory
-              showUnreadCount={showUnreadCount}
-              key={category}
-              data={ids}
-              view={view}
-              expansion={expansion}
-            />
-          ))
+          <SortableList view={view} expansion={expansion} data={data} />
         ) : (
           <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
             <Link
@@ -185,4 +173,214 @@ export function FeedList({
       </ScrollArea.ScrollArea>
     </div>
   )
+}
+
+const SortButton = () => {
+  const { by, order } = useFeedListSort()
+
+  const LIST = [
+    { icon: "i-mgc-sort-ascending-cute-re", by: "count", order: "asc" },
+    { icon: "i-mgc-sort-descending-cute-re", by: "count", order: "desc" },
+
+    {
+      icon: "i-mgc-az-sort-descending-letters-cute-re",
+      by: "alphabetical",
+      order: "asc",
+    },
+    {
+      icon: "i-mgc-az-sort-ascending-letters-cute-re",
+      by: "alphabetical",
+      order: "desc",
+    },
+  ] as const
+
+  const [open, setOpen] = useState(false)
+
+  return (
+    <HoverCard.Root open={open} onOpenChange={setOpen}>
+      <HoverCard.Trigger
+        onClick={() => {
+          setFeedListSortBy(by === "count" ? "alphabetical" : "count")
+        }}
+      >
+        <IconOpacityTransition
+          icon2={
+            order === "asc" ?
+              tw`i-mgc-az-sort-descending-letters-cute-re` :
+              tw`i-mgc-az-sort-ascending-letters-cute-re`
+          }
+          icon1={
+            order === "asc" ?
+              tw`i-mgc-sort-ascending-cute-re` :
+              tw`i-mgc-sort-descending-cute-re`
+          }
+          status={by === "count" ? "init" : "done"}
+        />
+      </HoverCard.Trigger>
+
+      <HoverCard.Portal forceMount>
+        <HoverCard.Content
+          className="z-10 -translate-x-4"
+          sideOffset={5}
+          forceMount
+        >
+          <AnimatePresence>
+            {open && (
+              <m.div
+                initial={{ opacity: 0, scale: 0.98, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98, y: 10 }}
+                transition={{ type: "spring", duration: 0.3 }}
+                className="relative z-10 rounded-md border border-border bg-theme-modal-background-opaque p-3 shadow-md dark:shadow-zinc-500/20"
+              >
+                <HoverCard.Arrow className="-translate-x-4 fill-border" />
+                <section className="w-[170px] text-center">
+                  <span className="text-[13px]">Select a sorting method</span>
+                  <div className="mt-4 grid grid-cols-2 grid-rows-2 gap-2">
+                    {LIST.map(({ icon, by, order }) => {
+                      const current = getFeedListSort()
+                      const active =
+                        by === current.by && order === current.order
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFeedListSortBy(by)
+                            setFeedListSortOrder(order)
+                          }}
+                          key={`${by}-${order}`}
+                          className={cn(
+                            "center flex aspect-square rounded border border-border",
+
+                            "ring-0 ring-accent/20 duration-200",
+                            active && "border-accent bg-accent/5 ring-2",
+                          )}
+                        >
+                          <i className={`${icon} size-5`} />
+                        </button>
+                      )
+                    })}
+                  </div>
+                </section>
+              </m.div>
+            )}
+          </AnimatePresence>
+        </HoverCard.Content>
+      </HoverCard.Portal>
+    </HoverCard.Root>
+  )
+}
+
+type FeedListProps = {
+  view: number
+  expansion: boolean
+  data: Record<string, string[]>
+}
+const SortByUnreadList = ({ view, expansion, data }: FeedListProps) => {
+  const showUnreadCount = useUISettingKey("sidebarShowUnreadCount")
+  const isDesc = useFeedListSortSelector((s) => s.order === "desc")
+
+  const sortedByUnread = useFeedUnreadStore((state) => {
+    const sortedList = [] as [string, string[]][]
+    const folderUnread = {} as Record<string, number>
+    // Calc total unread count for each folder
+    for (const category in data) {
+      folderUnread[category] = data[category].reduce(
+        (acc, cur) => (state.data[cur] || 0) + acc,
+        0,
+      )
+    }
+
+    // Sort by unread count
+    Object.keys(folderUnread)
+      .sort((a, b) => folderUnread[b] - folderUnread[a])
+      .forEach((key) => {
+        sortedList.push([key, data[key]])
+      })
+
+    if (!isDesc) {
+      sortedList.reverse()
+    }
+    return sortedList
+  })
+
+  return (
+    <Fragment>
+      {sortedByUnread?.map(([category, ids]) => (
+        <FeedCategory
+          showUnreadCount={showUnreadCount}
+          key={category}
+          data={ids}
+          view={view}
+          expansion={expansion}
+        />
+      ))}
+    </Fragment>
+  )
+}
+
+const SortByAlphabeticalList = ({ view, expansion, data }: FeedListProps) => {
+  const categoryName2RealDisplayNameMap = useFeedStore((state) => {
+    const map = {} as Record<string, string>
+    for (const categoryName in data) {
+      const feedId = data[categoryName][0]
+
+      if (!feedId) {
+        continue
+      }
+      const feed = state.feeds[feedId]
+      if (!feed) {
+        continue
+      }
+      const hascategoryNameNotDefault =
+        !!getSubscriptionByFeedId(feedId)?.category
+      const isSingle = data[categoryName].length === 1
+      if (!isSingle || hascategoryNameNotDefault) {
+        map[categoryName] = categoryName
+      } else {
+        map[categoryName] = feed.title!
+      }
+    }
+    return map
+  })
+
+  const isDesc = useFeedListSortSelector((s) => s.order === "desc")
+
+  let sortedByAlphabetical = Object.keys(data).sort((a, b) => {
+    const nameA = categoryName2RealDisplayNameMap[a]
+    const nameB = categoryName2RealDisplayNameMap[b]
+    return sortByAlphabet(nameA, nameB)
+  })
+  if (!isDesc) {
+    sortedByAlphabetical = sortedByAlphabetical.reverse()
+  }
+
+  const showUnreadCount = useUISettingKey("sidebarShowUnreadCount")
+
+  return (
+    <Fragment>
+      {sortedByAlphabetical.map((category) => (
+        <FeedCategory
+          showUnreadCount={showUnreadCount}
+          key={category}
+          data={data[category]}
+          view={view}
+          expansion={expansion}
+        />
+      ))}
+    </Fragment>
+  )
+}
+
+const SortableList = (props: FeedListProps) => {
+  const by = useFeedListSortSelector((s) => s.by)
+
+  switch (by) {
+    case "count": {
+      return <SortByUnreadList {...props} />
+    }
+    case "alphabetical": {
+      return <SortByAlphabeticalList {...props} />
+    }
+  }
 }
