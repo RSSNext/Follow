@@ -81,6 +81,10 @@ export const appRoute = {
               if (isMaximized) {
                 const stored = window[storeKey]
                 if (!stored) return
+
+                window.setResizable(true)
+                window.setMovable(true)
+
                 window.setSize(stored.size[0], stored.size[1])
                 window.setPosition(stored.position[0], stored.position[1])
 
@@ -92,9 +96,13 @@ export const appRoute = {
                   size: currentWindowSize,
                   position: currentWindowPosition,
                 }
+
                 // Maually Resize
                 window.setSize(size.width, size.height)
                 window.setPosition(0, 0)
+
+                window.setResizable(false)
+                window.setMovable(false)
               }
 
               return

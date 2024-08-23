@@ -65,10 +65,10 @@ export function createWindow(
         icon: getIconPath(),
 
         titleBarStyle: "hidden",
-        backgroundMaterial: "mica",
+        backgroundMaterial: isWindows11 ? "mica" : undefined,
         frame: true,
-        maximizable: false,
-        backgroundColor: "#00000000",
+        maximizable: !isWindows11,
+
       } as Electron.BrowserWindowConstructorOptions)
       break
     }
