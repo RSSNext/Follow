@@ -153,7 +153,7 @@
     "@vercel/ncc": "0.38.1",
     "@vitejs/plugin-react": "^4.3.1",
     "drizzle-orm": "0.32.2",
-    "electron": "^30.4.0",
+    "electron": "32.0.1",
     "electron-devtools-installer": "3.2.0",
     "electron-packager-languages": "0.5.0",
     "electron-vite": "^2.3.0",

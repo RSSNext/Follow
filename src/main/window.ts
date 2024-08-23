@@ -63,8 +63,12 @@ export function createWindow(
     case "win32": {
       Object.assign(baseWindowConfig, {
         icon: getIconPath(),
-        backgroundMaterial: isWindows11 ? "mica" : undefined,
+
         titleBarStyle: "hidden",
+        backgroundMaterial: "mica",
+        frame: true,
+        maximizable: false,
+        backgroundColor: "#00000000",
       } as Electron.BrowserWindowConstructorOptions)
       break
     }
@@ -217,6 +221,21 @@ export const createMainWindow = () => {
   })
 
   window.on("close", () => {
+    if (isWindows11) {
+      const windowStoreKey = Symbol.for("maximized")
+      if (window[windowStoreKey]) {
+        const stored = window[windowStoreKey]
+        store.set(storeKey, {
+          width: stored.size[0],
+          height: stored.size[1],
+          x: stored.position[0],
+          y: stored.position[1],
+        })
+
+        return
+      }
+    }
+
     const bounds = window.getBounds()
     store.set(storeKey, {
       width: bounds.width,
