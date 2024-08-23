@@ -160,6 +160,7 @@ export const useEntryActions = ({
       icon?: ReactNode
       hide?: boolean
       active?: boolean
+      disabled?: boolean
       onClick: () => void
     }[] = [
       {
@@ -221,8 +222,11 @@ export const useEntryActions = ({
         key: "tts",
         name: "Play TTS",
         shortcut: shortcuts.entry.tts.key,
-        className: ttsLoading ? "i-mgc-loading-3-cute-re animate-spin" : "i-mgc-voice-cute-re",
-        hide: !populatedEntry.entries.content,
+        className: ttsLoading ?
+          "i-mgc-loading-3-cute-re animate-spin" :
+          "i-mgc-voice-cute-re",
+        hide: type !== "toolbar" || !window.electron,
+        disabled: !populatedEntry.entries.content,
         onClick: async () => {
           if (ttsLoading) return
           if (!populatedEntry.entries.content) return
@@ -354,6 +358,7 @@ export const useEntryActions = ({
     entryReadabilityStatus,
     feed?.ownerUserId,
     type,
+    ttsLoading,
   ])
 
   return {

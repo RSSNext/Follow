@@ -28,6 +28,7 @@ interface ActionButtonProps {
   tooltip: React.ReactNode
   tooltipSide?: "top" | "bottom"
   active?: boolean
+  disabled?: boolean
   shortcut?: string
 }
 
@@ -45,6 +46,7 @@ export const ActionButton = React.forwardRef<
       children,
       active,
       shortcut,
+      disabled,
       ...rest
     },
     ref,
@@ -71,9 +73,11 @@ export const ActionButton = React.forwardRef<
                 active && "bg-zinc-500/15 hover:bg-zinc-500/20",
                 "focus-visible:bg-zinc-500/30 focus-visible:!outline-none",
                 "rounded-md duration-200 hover:bg-theme-button-hover",
+                "disabled:cursor-not-allowed disabled:opacity-50",
                 className,
               )}
               type="button"
+              disabled={disabled}
               {...rest}
             >
               {typeof icon === "function" ?

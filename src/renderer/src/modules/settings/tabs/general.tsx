@@ -90,9 +90,9 @@ export const SettingGeneral = () => {
                 "Automatically mark single-level entries (e.g., social media posts, pictures, video views) as read when they enter the view.",
             }),
 
-            { type: "title", value: "TTS" },
+            { type: "title", value: "TTS", disabled: !window.electron },
 
-            VoiceSelector,
+            window.electron && VoiceSelector,
 
             // { type: "title", value: "Secure" },
             // defineSettingItem("jumpOutLinkWarn", {

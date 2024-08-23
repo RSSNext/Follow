@@ -77,6 +77,7 @@ export function EntryHeader({
             .filter((item) => !item.hide)
             .map((item) => (
               <ActionButton
+                disabled={item.disabled}
                 icon={
                   item.icon ? (
                     <Slot className="size-4">{item.icon}</Slot>
