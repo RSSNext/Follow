@@ -227,47 +227,53 @@ const PlayerProgress = () => {
     .startOf("y")
     .second(controlledCurrentTime)
     .format(controlledCurrentTime > ONE_HOUR_IN_SECONDS ? "H:mm:ss" : "m:ss")
-  const remainingTimeIndicator = dayjs()
-    .startOf("y")
-    .second(duration - controlledCurrentTime)
-    .format(
-      duration - controlledCurrentTime > ONE_HOUR_IN_SECONDS ?
-        "H:mm:ss" :
-        "m:ss",
-    )
+  const remainingTimeIndicator = duration ?
+    dayjs()
+      .startOf("y")
+      .second(duration - controlledCurrentTime)
+      .format(
+        duration - controlledCurrentTime > ONE_HOUR_IN_SECONDS ?
+          "H:mm:ss" :
+          "m:ss",
+      ) :
+    null
 
   return (
     <div className="relative mt-2">
       <div className="absolute bottom-1 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-200 ease-in-out group-hover:opacity-100">
         <div className="text-xs">{currentTimeIndicator}</div>
-        <div className="text-xs">
-          -
-          {remainingTimeIndicator}
-        </div>
+        {!!remainingTimeIndicator && (
+          <div className="text-xs">
+            -
+            {remainingTimeIndicator}
+          </div>
+        )}
       </div>
 
       {/* slider */}
-      <Slider.Root
-        className="relative flex h-1 w-full items-center transition-all duration-200 ease-in-out"
-        min={0}
-        max={duration}
-        step={1}
-        value={[controlledCurrentTime]}
-        onPointerDown={() => setIsDraggingProgress(true)}
-        onPointerUp={() => setIsDraggingProgress(false)}
-        onValueChange={(value) => setControlledCurrentTime(value[0])}
-        onValueCommit={(value) => AudioPlayer.seek(value[0])}
-      >
-        <Slider.Track className="relative h-1 w-full grow rounded bg-gray-200 duration-200 group-hover:bg-gray-300 dark:bg-neutral-700 group-hover:dark:bg-neutral-600">
-          <Slider.Range className="absolute h-1 rounded bg-theme-accent-400 dark:bg-theme-accent-700" />
-        </Slider.Track>
+      {!!duration && (
+        <Slider.Root
+          className="relative flex h-1 w-full items-center transition-all duration-200 ease-in-out"
+          min={0}
+          max={duration}
+          step={1}
+          value={[controlledCurrentTime]}
+          onPointerDown={() => setIsDraggingProgress(true)}
+          onPointerUp={() => setIsDraggingProgress(false)}
+          onValueChange={(value) => setControlledCurrentTime(value[0])}
+          onValueCommit={(value) => AudioPlayer.seek(value[0])}
+        >
+          <Slider.Track className="relative h-1 w-full grow rounded bg-gray-200 duration-200 group-hover:bg-gray-300 dark:bg-neutral-700 group-hover:dark:bg-neutral-600">
+            <Slider.Range className="absolute h-1 rounded bg-theme-accent-400 dark:bg-theme-accent-700" />
+          </Slider.Track>
 
-        {/* indicator */}
-        <Slider.Thumb
-          className="block h-2 w-[3px] rounded-[1px] bg-accent"
-          aria-label="Progress"
-        />
-      </Slider.Root>
+          {/* indicator */}
+          <Slider.Thumb
+            className="block h-2 w-[3px] rounded-[1px] bg-accent"
+            aria-label="Progress"
+          />
+        </Slider.Root>
+      )}
     </div>
   )
 }
