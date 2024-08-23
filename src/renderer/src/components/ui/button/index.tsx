@@ -202,16 +202,18 @@ export const IconButton = React.forwardRef<
     icon: React.JSX.Element
   }>
 >((props, ref) => {
-  const { icon } = props
+  const { icon, ...rest } = props
   return (
     <button
       ref={ref}
       type="button"
+      {...rest}
       className={cn(
         styledButtonVariant({
           variant: "ghost",
         }),
         "group relative gap-2 bg-accent/10 px-4 hover:bg-accent dark:bg-accent/20 dark:hover:bg-accent/60",
+        rest.className,
       )}
     >
       <span className="center">

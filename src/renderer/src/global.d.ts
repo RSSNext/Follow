@@ -23,6 +23,10 @@ declare global {
     SENTRY_RELEASE: typeof SENTRY_RELEASE
   }
 
+  export const FEATURES: {
+    WINDOW_UNDER_BLUR: boolean
+  }
+
   export function tw(strings: TemplateStringsArray, ...values: any[]): string
 }
 

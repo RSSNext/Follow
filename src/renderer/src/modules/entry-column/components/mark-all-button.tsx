@@ -1,5 +1,9 @@
 import { PopoverPortal } from "@radix-ui/react-popover"
-import { ActionButton, Button, IconButton } from "@renderer/components/ui/button"
+import {
+  ActionButton,
+  Button,
+  IconButton,
+} from "@renderer/components/ui/button"
 import {
   Popover,
   PopoverContent,
@@ -61,7 +65,6 @@ export const MarkAllReadButton = forwardRef<
           <div className="space-x-4">
             <IconButton
               icon={<i className="i-mgc-check-filled" />}
-              className="px-1"
               onClick={() => {
                 handleMarkAllAsRead()
                 setMarkPopoverOpen(false)

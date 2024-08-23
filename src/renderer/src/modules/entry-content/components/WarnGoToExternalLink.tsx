@@ -14,7 +14,6 @@ import {
 import { jotaiStore } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
 import { withSettingEnabled } from "@renderer/modules/settings/helper/withSettingEnable"
-import { m } from "framer-motion"
 import { atomWithStorage } from "jotai/utils"
 import { forwardRef, Fragment, useState } from "react"
 
@@ -119,7 +118,7 @@ const WarnGoToExternalLinkImpl = forwardRef<
               </Label>
 
               <IconButton
-                icon={<m.i className="i-mingcute-arrow-right-line" />}
+                icon={<i className="i-mingcute-arrow-right-line" />}
                 onClick={handleGo}
               >
                 <span className="duration-200 group-hover:opacity-0">Go</span>

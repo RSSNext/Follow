@@ -7,7 +7,7 @@ import { imageRefererMatches } from "@shared/image"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, Menu, shell } from "electron"
 
-import { isDev, isMacOS } from "./env"
+import { isDev, isMacOS, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
 import { logger } from "./logger"
@@ -64,11 +64,12 @@ export function createWindow(
     case "win32": {
       Object.assign(baseWindowConfig, {
         icon: getIconPath(),
-        backgroundMaterial: "mica",
+
         titleBarStyle: "hidden",
-        // titleBarOverlay: {
-        //   height: 30,
-        // },
+        backgroundMaterial: isWindows11 ? "mica" : undefined,
+        frame: true,
+        maximizable: !isWindows11,
+
       } as Electron.BrowserWindowConstructorOptions)
       break
     }
@@ -221,6 +222,21 @@ export const createMainWindow = () => {
   })
 
   window.on("close", () => {
+    if (isWindows11) {
+      const windowStoreKey = Symbol.for("maximized")
+      if (window[windowStoreKey]) {
+        const stored = window[windowStoreKey]
+        store.set(storeKey, {
+          width: stored.size[0],
+          height: stored.size[1],
+          x: stored.position[0],
+          y: stored.position[1],
+        })
+
+        return
+      }
+    }
+
     const bounds = window.getBounds()
     store.set(storeKey, {
       width: bounds.width,

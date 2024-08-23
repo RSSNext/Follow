@@ -23,6 +23,7 @@ import { EntryHeader } from "@renderer/modules/entry-content/header"
 import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC } from "react"
+import * as React from "react"
 
 import { MarkAllReadButton } from "../components/mark-all-button"
 
@@ -108,12 +109,14 @@ export const EntryListHeader: FC<{
             entryId !== ROUTE_ENTRY_PENDING && (
             <>
               <EntryHeader view={view} entryId={entryId} />
-              <DividerVertical className="w-px" />
+              <DividerVertical className="mx-2 w-px" />
             </>
           )}
 
-          {view === FeedViewType.SocialMedia && <DailyReportButton />}
-          {view === FeedViewType.Pictures && <SwitchToMasonryButton />}
+          <AppendTaildingDivider>
+            {view === FeedViewType.SocialMedia && <DailyReportButton />}
+            {view === FeedViewType.Pictures && <SwitchToMasonryButton />}
+          </AppendTaildingDivider>
 
           {isOnline ? (
             feed?.ownerUserId === user?.id && isBizId(routerParams.feedId!) ?
@@ -215,3 +218,12 @@ const SwitchToMasonryButton = () => {
     </ImpressionView>
   )
 }
+
+const AppendTaildingDivider = ({ children }: { children: React.ReactNode }) => (
+  <>
+    {children}
+    {React.Children.toArray(children).filter(Boolean).length > 0 && (
+      <DividerVertical className="mx-2 w-px" />
+    )}
+  </>
+)

@@ -127,9 +127,9 @@ const devPrint = (): PluginOption => ({
     server.printUrls = () => {
       _printUrls()
       console.info(
-          `  ${green(
-            "➜",
-          )}  ${dim("Online debug")}: ${cyan("https://web.follow.is/__debug_proxy")}`,
+        `  ${green("➜")}  ${dim("Online debug")}: ${cyan(
+          "https://web.follow.is/__debug_proxy",
+        )}`,
       )
     }
   },

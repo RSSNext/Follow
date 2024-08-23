@@ -232,11 +232,7 @@ export const ModalInternal = memo(
           if (CustomModalComponent) {
             return (
               <Wrapper>
-                <Dialog.Root
-                  open
-                  onOpenChange={onClose}
-                  modal={modal}
-                >
+                <Dialog.Root open onOpenChange={onClose} modal={modal}>
                   <Dialog.Portal>
                     <Dialog.DialogTitle className="sr-only">
                       {title}
@@ -312,9 +308,7 @@ export const ModalInternal = memo(
                             "bg-theme-modal-background-opaque" :
                             "bg-theme-modal-background backdrop-blur-sm",
                           "shadow-modal",
-                          max ?
-                            "h-[90vh] w-[90vw]" :
-                            "max-h-[70vh] min-w-[300px] max-w-[90vw] lg:max-h-[calc(100vh-20rem)] lg:max-w-[70vw]",
+                          max ? "h-[90vh] w-[90vw]" : "",
 
                           "border border-slate-200 dark:border-neutral-800",
                           modalClassName,
@@ -339,7 +333,10 @@ export const ModalInternal = memo(
                           className="flex grow flex-col"
                         >
                           <div
-                            className="relative flex items-center"
+                            className={cn(
+                              "relative flex items-center",
+                              "max-h-[70vh] min-w-[300px] max-w-[90vw] lg:max-h-[calc(100vh-20rem)] lg:max-w-[70vw]",
+                            )}
                             onPointerDownCapture={handleDrag}
                             onPointerDown={handleResizeEnable}
                           >
