@@ -19,6 +19,7 @@ import rehypeParse from "rehype-parse"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 import rehypeStringify from "rehype-stringify"
 import { unified } from "unified"
+import { visit } from "unist-util-visit"
 import { VFile } from "vfile"
 
 export const parseHtml = (
@@ -55,110 +56,120 @@ export const parseHtml = (
 
   const hastTree = pipeline.runSync(tree, file)
 
+  let imgCount = 0
+
+  visit(tree, "element", (node) => {
+    if (node.tagName === "img") {
+      imgCount++
+    }
+  })
+
   return {
-    toContent: () => toJsxRuntime(hastTree, {
-      Fragment,
-      ignoreInvalidStyle: true,
-      jsx: (type, props, key) => jsx(type as any, props, key),
-      jsxs: (type, props, key) => jsxs(type as any, props, key),
-      passNode: true,
-      components: {
-        a: ({ node, ...props }) =>
-          createElement(MarkdownLink, { ...props } as any),
-        img: Img,
+    imgCount,
+    toContent: () =>
+      toJsxRuntime(hastTree, {
+        Fragment,
+        ignoreInvalidStyle: true,
+        jsx: (type, props, key) => jsx(type as any, props, key),
+        jsxs: (type, props, key) => jsxs(type as any, props, key),
+        passNode: true,
+        components: {
+          a: ({ node, ...props }) =>
+            createElement(MarkdownLink, { ...props } as any),
+          img: Img,
 
-        h1: createHeadingRenderer(1),
-        h2: createHeadingRenderer(2),
-        h3: createHeadingRenderer(3),
-        h4: createHeadingRenderer(4),
-        h5: createHeadingRenderer(5),
-        h6: createHeadingRenderer(6),
+          h1: createHeadingRenderer(1),
+          h2: createHeadingRenderer(2),
+          h3: createHeadingRenderer(3),
+          h4: createHeadingRenderer(4),
+          h5: createHeadingRenderer(5),
+          h6: createHeadingRenderer(6),
 
-        video: ({ node, ...props }) =>
-          createElement(Media, { ...props, popper: true, type: "video" }),
-        p: ({ node, ...props }) => {
-          if (node?.children && node.children.length !== 1) {
-            for (const item of node.children) {
-              item.type === "element" &&
-              item.tagName === "img" &&
-              ((item.properties as any).inline = true)
+          video: ({ node, ...props }) =>
+            createElement(Media, { ...props, popper: true, type: "video" }),
+          p: ({ node, ...props }) => {
+            if (node?.children && node.children.length !== 1) {
+              for (const item of node.children) {
+                item.type === "element" &&
+                item.tagName === "img" &&
+                ((item.properties as any).inline = true)
+              }
             }
-          }
-          return createElement(MarkdownP, props, props.children)
-        },
-        hr: ({ node, ...props }) =>
-          createElement("hr", {
-            ...props,
-            className: tw`scale-x-50`,
-          }),
-        input: ({ node, ...props }) => {
-          if (props.type === "checkbox") {
-            return createElement(Checkbox, {
+            return createElement(MarkdownP, props, props.children)
+          },
+          hr: ({ node, ...props }) =>
+            createElement("hr", {
               ...props,
-              disabled: false,
-              className: tw`pointer-events-none mr-2`,
-            })
-          }
-          return createElement("input", props)
-        },
-        pre: ({ node, ...props }) => {
-          if (!props.children) return null
-
-          let language = ""
-
-          let codeString = null as string | null
-          if (props.className?.includes("language-")) {
-            language = props.className.replace("language-", "")
-          }
-
-          if (typeof props.children !== "object") {
-            codeString = props.children.toString()
-          } else {
-            if (
-              "type" in props.children &&
-              props.children.type === "code" &&
-              props.children.props.className?.includes("language-")
-            ) {
-              language = props.children.props.className.replace(
-                "language-",
-                "",
-              )
-            }
-            const code =
-              "props" in props.children && props.children.props.children
-            if (!code) return null
-
-            try {
-              codeString = extractCodeFromHtml(renderToString(code))
-            } catch (error) {
-              return createElement(BlockError, {
-                error,
-                message: "Code Block Render Error",
+              className: tw`scale-x-50`,
+            }),
+          input: ({ node, ...props }) => {
+            if (props.type === "checkbox") {
+              return createElement(Checkbox, {
+                ...props,
+                disabled: false,
+                className: tw`pointer-events-none mr-2`,
               })
             }
-          }
+            return createElement("input", props)
+          },
+          pre: ({ node, ...props }) => {
+            if (!props.children) return null
 
-          if (!codeString) return null
+            let language = ""
 
-          return createElement(ShikiHighLighter, {
-            code: codeString.trimEnd(),
-            language: language.toLowerCase(),
-          })
+            let codeString = null as string | null
+            if (props.className?.includes("language-")) {
+              language = props.className.replace("language-", "")
+            }
+
+            if (typeof props.children !== "object") {
+              codeString = props.children.toString()
+            } else {
+              if (
+                "type" in props.children &&
+                props.children.type === "code" &&
+                props.children.props.className?.includes("language-")
+              ) {
+                language = props.children.props.className.replace(
+                  "language-",
+                  "",
+                )
+              }
+              const code =
+                "props" in props.children && props.children.props.children
+              if (!code) return null
+
+              try {
+                codeString = extractCodeFromHtml(renderToString(code))
+              } catch (error) {
+                return createElement(BlockError, {
+                  error,
+                  message: "Code Block Render Error",
+                })
+              }
+            }
+
+            if (!codeString) return null
+
+            return createElement(ShikiHighLighter, {
+              code: codeString.trimEnd(),
+              language: language.toLowerCase(),
+            })
+          },
+          table: ({ node, ...props }) =>
+            createElement(
+              "div",
+              {
+                className: "w-full overflow-x-auto",
+              },
+
+              createElement("table", {
+                ...props,
+                className: tw`w-full my-0`,
+              }),
+            ),
         },
-        table: ({ node, ...props }) =>
-          createElement(
-            "div",
-            {
-              className: "w-full overflow-x-auto",
-            },
-
-            createElement("table", {
-              ...props,
-              className: tw`w-full my-0`,
-            }),
-          ),
-      },
-    }),
+      }),
     toText: () => toText(hastTree),
   }
 }

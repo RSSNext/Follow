@@ -1,20 +1,16 @@
-import { AudioPlayer, getAudioPlayerAtomValue } from "@renderer/atoms/player"
 import {
   getReadabilityStatus,
-  isInReadability,
   ReadabilityStatus,
   setReadabilityContent,
   setReadabilityStatus,
-  useEntryInReadabilityStatus,
 } from "@renderer/atoms/readability"
 import { whoami } from "@renderer/atoms/user"
 import { SimpleIconsEagle } from "@renderer/components/ui/platform-icon/icons"
-import { COPY_MAP, views } from "@renderer/constants"
+import { COPY_MAP } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
-import { parseHtml } from "@renderer/lib/parse-html"
-import { cn, getOS } from "@renderer/lib/utils"
+import { getOS } from "@renderer/lib/utils"
 import type { CombinedEntryModel } from "@renderer/models"
 import { useTipModal } from "@renderer/modules/wallet/hooks"
 import type { FlatEntryModel } from "@renderer/store/entry"
@@ -24,7 +20,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
 import type { ReactNode } from "react"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo } from "react"
 import { toast } from "sonner"
 
 export const useEntryReadabilityToggle = ({
@@ -100,7 +96,6 @@ export const useUnread = () =>
 export const useEntryActions = ({
   view,
   entry,
-  type,
 }: {
   view?: number
   entry?: FlatEntryModel | null
@@ -120,7 +115,6 @@ export const useEntryActions = ({
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
-  const entryReadabilityStatus = useEntryInReadabilityStatus(entry?.entries.id)
 
   const feed = useFeedById(entry?.feedId)
 
@@ -142,13 +136,6 @@ export const useEntryActions = ({
   const uncollect = useUnCollect(populatedEntry)
   const read = useRead()
   const unread = useUnread()
-
-  const readabilityToggle = useEntryReadabilityToggle({
-    id: populatedEntry?.entries.id ?? "",
-    url: populatedEntry?.entries.url ?? "",
-  })
-
-  const [ttsLoading, setTtsLoading] = useState(false)
 
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
@@ -218,57 +205,7 @@ export const useEntryActions = ({
           window.open(populatedEntry.entries.url, "_blank")
         },
       },
-      {
-        key: "tts",
-        name: "Play TTS",
-        shortcut: shortcuts.entry.tts.key,
-        className: ttsLoading ?
-          "i-mgc-loading-3-cute-re animate-spin" :
-          "i-mgc-voice-cute-re",
-        hide: type !== "toolbar" || !window.electron,
-        disabled: !populatedEntry.entries.content,
-        onClick: async () => {
-          if (ttsLoading) return
-          if (!populatedEntry.entries.content) return
-          setTtsLoading(true)
-          if (getAudioPlayerAtomValue().entryId === populatedEntry.entries.id) {
-            AudioPlayer.togglePlayAndPause()
-          } else {
-            const filePath = await tipcClient?.tts({
-              id: populatedEntry.entries.id,
-              text: (await parseHtml(populatedEntry.entries.content)).toText(),
-            })
-            if (filePath) {
-              AudioPlayer.mount({
-                type: "audio",
-                entryId: populatedEntry.entries.id,
-                src: `file://${filePath}`,
-                currentTime: 0,
-              })
-            }
-          }
-          setTtsLoading(false)
-        },
-      },
-      {
-        name: "Readability",
-        className: cn(
-          isInReadability(entryReadabilityStatus) ?
-            `i-mgc-sparkles-2-filled` :
-            `i-mgc-sparkles-2-cute-re`,
-          entryReadabilityStatus === ReadabilityStatus.WAITING ?
-            `animate-pulse` :
-            "",
-        ),
-        key: "readability",
-        hide:
-          type === "entryList" ||
-          views[view].wideMode ||
-          !populatedEntry.entries.url ||
-          !window.electron,
-        active: isInReadability(entryReadabilityStatus),
-        onClick: readabilityToggle,
-      },
+
       {
         name: "Save media to Eagle",
         icon: <SimpleIconsEagle />,
@@ -352,13 +289,9 @@ export const useEntryActions = ({
     openTipModal,
     collect,
     uncollect,
-    readabilityToggle,
     read,
     unread,
-    entryReadabilityStatus,
     feed?.ownerUserId,
-    type,
-    ttsLoading,
   ])
 
   return {
