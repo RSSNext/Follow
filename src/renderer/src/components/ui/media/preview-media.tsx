@@ -5,9 +5,10 @@ import { stopPropagation } from "@renderer/lib/dom"
 import { replaceImgUrlIfNeed } from "@renderer/lib/img-proxy"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import type { FC } from "react"
-import { Fragment, useCallback, useState } from "react"
+import { Fragment, useCallback, useEffect, useRef, useState } from "react"
 import type { MediaModel } from "src/hono"
-import { Keyboard, Mousewheel, Scrollbar } from "swiper/modules"
+import { Keyboard, Mousewheel } from "swiper/modules"
+import type { SwiperRef } from "swiper/react"
 import { Swiper, SwiperSlide } from "swiper/react"
 
 import { ActionButton, MotionButtonBase } from "../button"
@@ -23,7 +24,6 @@ const Wrapper: Component<{
 
   return (
     <div className="center relative size-full p-12" onClick={dismiss}>
-
       <m.div
         className="center size-full"
         initial={{ scale: 0.94, opacity: 0 }}
@@ -37,12 +37,12 @@ const Wrapper: Component<{
         initial={{ opacity: 0.8 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute bottom-4 right-4 flex gap-3"
+        className="absolute bottom-4 right-4 flex gap-3 text-white/70 [&_button]:hover:text-white"
         onClick={stopPropagation}
       >
         <button
           onClick={dismiss}
-          className="center fixed right-6 top-6 size-8 rounded-full border bg-theme-background text-foreground/60"
+          className="center fixed right-6 top-6 size-8 rounded-full border border-white/20 bg-neutral-900 text-white"
           type="button"
         >
           <i className="i-mgc-close-cute-re" />
@@ -112,6 +112,17 @@ export const PreviewMediaContent: FC<{
     },
     [],
   )
+
+  const swiperRef = useRef<SwiperRef>(null)
+  const [showActions, setShowActions] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowActions(true)
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [])
+
   if (media.length === 0) return null
   if (media.length === 1) {
     const src = media[0].url
@@ -139,17 +150,11 @@ export const PreviewMediaContent: FC<{
     )
   }
   return (
-    <Wrapper
-      src={currentMedia.url}
-      showActions={currentMedia.type !== "video"}
-    >
+    <Wrapper src={currentMedia.url} showActions={currentMedia.type !== "video"}>
       <Swiper
-
+        ref={swiperRef}
         loop
         initialSlide={initialIndex}
-        scrollbar={{
-          hide: true,
-        }}
         mousewheel={{
           forceToAxis: true,
         }}
@@ -159,9 +164,35 @@ export const PreviewMediaContent: FC<{
         onSlideChange={({ realIndex }) => {
           setCurrentMedia(media[realIndex])
         }}
-        modules={[Scrollbar, Mousewheel, Keyboard]}
+        modules={[Mousewheel, Keyboard]}
         className="size-full"
       >
+        {showActions && (
+          <div onClick={stopPropagation}>
+            <m.button
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ type: "spring" }}
+              onClick={() => swiperRef.current?.swiper.slidePrev()}
+              type="button"
+              className="center fixed left-4 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
+            >
+              <i className="i-mingcute-arrow-left-line" />
+            </m.button>
+
+            <m.button
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ type: "spring" }}
+              onClick={() => swiperRef.current?.swiper.slideNext()}
+              type="button"
+              className="center fixed right-4 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
+            >
+              <i className="i-mingcute-arrow-right-line" />
+            </m.button>
+          </div>
+        )}
+
         {media.map((med, index) => (
           <SwiperSlide
             key={med.url}
