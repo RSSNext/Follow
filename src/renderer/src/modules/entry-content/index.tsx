@@ -221,7 +221,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                     </AutoResizeHeight>
                   </div>
                 )}
-                <article>
+                <article className="prose-h1:text-[1.6em]">
                   {!isInReadabilityMode ? (
                     <HTML renderInlineStyle={readerRenderInlineStyle}>
                       {content}

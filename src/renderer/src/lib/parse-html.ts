@@ -6,6 +6,7 @@ import {
   MarkdownP,
 } from "@renderer/components/ui/markdown/renderers"
 import { BlockError } from "@renderer/components/ui/markdown/renderers/BlockErrorBoundary"
+import { createHeadingRenderer } from "@renderer/components/ui/markdown/renderers/Heading"
 import { Media } from "@renderer/components/ui/media"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
@@ -65,6 +66,14 @@ export const parseHtml = (
         a: ({ node, ...props }) =>
           createElement(MarkdownLink, { ...props } as any),
         img: Img,
+
+        h1: createHeadingRenderer(1),
+        h2: createHeadingRenderer(2),
+        h3: createHeadingRenderer(3),
+        h4: createHeadingRenderer(4),
+        h5: createHeadingRenderer(5),
+        h6: createHeadingRenderer(6),
+
         video: ({ node, ...props }) =>
           createElement(Media, { ...props, popper: true, type: "video" }),
         p: ({ node, ...props }) => {

@@ -10,7 +10,7 @@ export const getProxyUrl = ({
   width: number
   height: number
 }) =>
-  `${env.VITE_IMGPROXY_URL}/unsafe/${width}x${height}/${encodeURIComponent(
+  `${env.VITE_IMGPROXY_URL}/unsafe/fit-in/${width}x${height}/${encodeURIComponent(
     url,
   )}`
 
