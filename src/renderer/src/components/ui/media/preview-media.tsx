@@ -4,6 +4,7 @@ import { tipcClient } from "@renderer/lib/client"
 import { stopPropagation } from "@renderer/lib/dom"
 import { replaceImgUrlIfNeed } from "@renderer/lib/img-proxy"
 import { showNativeMenu } from "@renderer/lib/native-menu"
+import { cn } from "@renderer/lib/utils"
 import type { FC } from "react"
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
 import type { MediaModel } from "src/hono"
@@ -78,6 +79,7 @@ export const PreviewMediaContent: FC<{
   initialIndex?: number
 }> = ({ media, initialIndex = 0 }) => {
   const [currentMedia, setCurrentMedia] = useState(media[initialIndex])
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex)
 
   const handleContextMenu = useCallback(
     (image: string, e: React.MouseEvent<HTMLImageElement>) => {
@@ -114,6 +116,7 @@ export const PreviewMediaContent: FC<{
   )
 
   const swiperRef = useRef<SwiperRef>(null)
+  // This only to delay show
   const [showActions, setShowActions] = useState(false)
 
   useEffect(() => {
@@ -163,33 +166,63 @@ export const PreviewMediaContent: FC<{
         }}
         onSlideChange={({ realIndex }) => {
           setCurrentMedia(media[realIndex])
+          setCurrentSlideIndex(realIndex)
         }}
         modules={[Mousewheel, Keyboard]}
         className="size-full"
       >
         {showActions && (
-          <div onClick={stopPropagation}>
+          <div tabIndex={-1} onClick={stopPropagation}>
             <m.button
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ type: "spring" }}
+              initial={{ opacity: 0, x: -20, scale: 0.94 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ ease: "easeInOut", duration: 0.2 }}
               onClick={() => swiperRef.current?.swiper.slidePrev()}
               type="button"
-              className="center fixed left-4 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
+              className="center fixed left-2 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
             >
               <i className="i-mingcute-arrow-left-line" />
             </m.button>
 
             <m.button
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ type: "spring" }}
+              initial={{ opacity: 0, x: 20, scale: 0.94 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ ease: "easeInOut", duration: 0.2 }}
               onClick={() => swiperRef.current?.swiper.slideNext()}
               type="button"
-              className="center fixed right-4 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
+              className="center fixed right-2 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
             >
               <i className="i-mingcute-arrow-right-line" />
             </m.button>
+          </div>
+        )}
+
+        {showActions && (
+          <div>
+            <div className="fixed bottom-4 left-4 text-sm tabular-nums text-white/60 animate-in fade-in-0 slide-in-from-bottom-6">
+              {currentSlideIndex + 1} / {media.length}
+            </div>
+            <div
+              tabIndex={-1}
+              onClick={stopPropagation}
+              className="center fixed bottom-4 left-1/2 h-6 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200 animate-in fade-in-0 slide-in-from-bottom-6"
+            >
+              {Array.from({ length: media.length })
+                .fill(0)
+                .map((_, index) => (
+                  <button
+                    onClick={() => {
+                      swiperRef.current?.swiper.slideTo(index)
+                    }}
+                    type="button"
+                    key={index}
+                    className={cn(
+                      "inline-block size-[6px] rounded-full",
+                      currentSlideIndex === index ? "bg-white" : "bg-white/20",
+                    )}
+                  />
+                ))}
+            </div>
           </div>
         )}
 
