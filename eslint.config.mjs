@@ -24,6 +24,7 @@ export default defineConfig(
     rules: {
       "unicorn/prefer-math-trunc": "off",
       "@eslint-react/no-clone-element": 0,
+      "no-restricted-syntax": 0,
       "no-restricted-globals": [
         "error",
         {

@@ -1,4 +1,5 @@
 /* eslint-disable @eslint-react/no-array-index-key */
+import { isNil } from "lodash-es"
 import type { FC, ReactNode } from "react"
 import * as React from "react"
 import { isValidElement } from "react"
@@ -49,7 +50,7 @@ export const createSettingBuilder =
       const settingObject = useSetting()
 
       return settings
-        .filter((i) => typeof i !== "boolean")
+        .filter((i) => !isNil(i))
         .map((setting, index) => {
           if (isValidElement(setting)) return setting
           if (typeof setting === "function") {

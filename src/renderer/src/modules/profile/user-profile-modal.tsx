@@ -8,7 +8,10 @@ import {
   AvatarImage,
 } from "@renderer/components/ui/avatar"
 import { ActionButton, Button } from "@renderer/components/ui/button"
-import { LoadingCircle } from "@renderer/components/ui/loading"
+import {
+  LoadingCircle,
+  LoadingWithIcon,
+} from "@renderer/components/ui/loading"
 import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { useAuthQuery } from "@renderer/hooks/common"
@@ -277,8 +280,9 @@ export const UserProfileModalContent: FC<{
               viewportClassName="[&>div]:space-y-4 pb-4"
             >
               {subscriptions.isLoading ? (
-                <LoadingCircle
+                <LoadingWithIcon
                   size="large"
+                  icon={<i className="i-mgc-user-3-cute-re" />}
                   className="center h-48 w-full max-w-full"
                 />
               ) : (

@@ -53,10 +53,10 @@ export const TransactionsSection = () => {
               <TableHead className="text-center" size="sm">
                 Amount
               </TableHead>
-              <TableHead className="text-center" size="sm">
+              <TableHead className="pl-5" size="sm">
                 From
               </TableHead>
-              <TableHead className="text-center" size="sm">
+              <TableHead className="pl-5" size="sm">
                 To
               </TableHead>
               <TableHead className="text-center" size="sm">
@@ -152,7 +152,7 @@ const UserRenderer = ({
   const name = isMe ? "You" : user?.name || APP_NAME
 
   return (
-    <div className="center">
+    <div className="flex">
       {name === APP_NAME ? (
         <Logo className="aspect-square size-4" />
       ) : (

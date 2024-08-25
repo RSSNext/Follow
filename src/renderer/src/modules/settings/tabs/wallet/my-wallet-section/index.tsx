@@ -1,6 +1,6 @@
 import { useWhoami } from "@renderer/atoms/user"
 import { Divider } from "@renderer/components/ui/divider"
-import { LoadingCircle } from "@renderer/components/ui/loading"
+import { LoadingWithIcon } from "@renderer/components/ui/loading"
 import {
   Tooltip,
   TooltipContent,
@@ -22,7 +22,11 @@ export const MyWalletSection = () => {
   if (wallet.isPending) {
     return (
       <div className="center absolute inset-0 flex">
-        <LoadingCircle size="large" className="-translate-y-full" />
+        <LoadingWithIcon
+          icon={<i className="i-mgc-power" />}
+          size="large"
+          className="-translate-y-full"
+        />
       </div>
     )
   }
@@ -63,9 +67,7 @@ export const MyWalletSection = () => {
           <TooltipTrigger className="block">
             <div className="flex flex-row items-center gap-x-2 text-xs text-zinc-600 dark:text-neutral-400">
               <span className="flex w-[120px] items-center gap-1 text-left">
-                Cashable Power
-                {" "}
-                <i className="i-mingcute-question-line" />
+                Cashable Power <i className="i-mingcute-question-line" />
               </span>
 
               <Balance>{myWallet.cashablePowerToken}</Balance>
@@ -77,8 +79,8 @@ export const MyWalletSection = () => {
                 1. Cashable Power can be withdrawn to your wallet for trading.
               </p>
               <p>
-                2. Cashable Power is the Power you have recharged and the tips you
-                have received.
+                2. Cashable Power is the Power you have recharged and the tips
+                you have received.
               </p>
             </TooltipContent>
           </TooltipPortal>

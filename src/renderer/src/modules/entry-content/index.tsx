@@ -32,7 +32,7 @@ import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC } from "react"
 import { useEffect, useLayoutEffect, useRef } from "react"
 
-import { LoadingCircle } from "../../components/ui/loading"
+import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
 import { EntryTranslation } from "../entry-column/translation"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
@@ -235,7 +235,12 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
             {!content && (
               <div className="center mt-16">
                 {isPending ? (
-                  <LoadingCircle size="large" />
+                  <LoadingWithIcon
+                    size="large"
+                    icon={
+                      <i className="i-mgc-rss-cute-fi" />
+                    }
+                  />
                 ) : error ?
                     (
                       <div className="center flex flex-col gap-2">
@@ -308,7 +313,10 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
         </p>
       ) : (
         <div className="center mt-16 flex flex-col gap-2">
-          <LoadingCircle size="large" />
+          <LoadingWithIcon
+            size="large"
+            icon={<i className="i-mgc-sparkles-2-cute-re" />}
+          />
           <span className="text-sm">
             Fetching original content and processing...
           </span>
