@@ -238,7 +238,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                   <LoadingWithIcon
                     size="large"
                     icon={
-                      <i className="i-mgc-rss-cute-fi" />
+                      <i className="i-mgc-rss-cute-fi text-accent" />
                     }
                   />
                 ) : error ?
