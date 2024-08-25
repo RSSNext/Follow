@@ -279,6 +279,13 @@
   [data-theme="dark"] .shadow-drawer-left {
     box-shadow: -12px 0px 17px 2px rgba(0, 0, 0, 0.653);
   }
+
+  .shadow-drawer-right {
+    box-shadow: 12px 0px 17px 2px rgba(41, 41, 41, 0.1);
+  }
+  [data-theme="dark"] .shadow-drawer-right {
+    box-shadow: 12px 0px 17px 2px rgba(0, 0, 0, 0.653);
+  }
 }
 
 @layer components {

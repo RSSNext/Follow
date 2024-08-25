@@ -1,7 +1,7 @@
 import { repository } from "@pkg"
-import { useFeedColumnShow } from "@renderer/atoms/app"
 import { setMainContainerElement } from "@renderer/atoms/dom"
 import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
+import { setFeedColumnShow, useFeedColumnShow } from "@renderer/atoms/sidebar"
 import { useLoginModalShow, useWhoami } from "@renderer/atoms/user"
 import { AppErrorBoundary } from "@renderer/components/common/AppErrorBoundary"
 import { ErrorComponentType } from "@renderer/components/errors"
@@ -9,6 +9,7 @@ import { PanelSplitter } from "@renderer/components/ui/divider"
 import { DeclarativeModal } from "@renderer/components/ui/modal/stacked/declarative-modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { RootPortal } from "@renderer/components/ui/portal"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import { preventDefault } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { EnvironmentIndicator } from "@renderer/modules/app/EnvironmentIndicator"
@@ -20,8 +21,10 @@ import { CornerPlayer } from "@renderer/modules/feed-column/corner-player"
 import { CmdF } from "@renderer/modules/panel/cmdf"
 import { SearchCmdK } from "@renderer/modules/panel/cmdk"
 import { CmdNTrigger } from "@renderer/modules/panel/cmdn"
+import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+import { useHotkeys } from "react-hotkeys-hook"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
@@ -87,9 +90,7 @@ export function Component() {
         // NOTE: tabIndex for main element can get by `document.activeElement`
         tabIndex={-1}
       >
-        <AppErrorBoundary
-          errorType={errorTypes}
-        >
+        <AppErrorBoundary errorType={errorTypes}>
           <Outlet />
         </AppErrorBoundary>
       </main>
@@ -138,14 +139,61 @@ const FeedResponsiveResizerContainer = ({
   })
 
   const feedColumnShow = useFeedColumnShow()
+  const [feedColumnTempShow, setFeedColumnTempShow] = useState(false)
+
+  useEffect(() => {
+    const handler = throttle((e: MouseEvent) => {
+      const mouseX = e.clientX
+      const { feedColWidth } = getUISettings()
+
+      if (mouseX < feedColWidth) {
+        setFeedColumnTempShow(true)
+      } else {
+        setFeedColumnTempShow(false)
+      }
+    }, 300)
+
+    document.addEventListener("mousemove", handler)
+    return () => {
+      document.removeEventListener("mousemove", handler)
+    }
+  }, [])
+
+  useHotkeys(shortcuts.layout.toggleSidebar.key, () => {
+    setFeedColumnShow(!feedColumnShow)
+  })
+
+  const [delayShowSplitter, setDelayShowSplitter] = useState(feedColumnShow)
+
+  useEffect(() => {
+    let timer: any
+    if (feedColumnShow) {
+      // eslint-disable-next-line @eslint-react/web-api/no-leaked-timeout
+      timer = setTimeout(() => {
+        setDelayShowSplitter(true)
+      }, 200)
+    } else {
+      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+      setDelayShowSplitter(false)
+    }
+
+    return () => {
+      timer = clearTimeout(timer)
+    }
+  }, [feedColumnShow])
 
   return (
     <>
       <div
         className={cn(
           "shrink-0 overflow-hidden",
-          "absolute inset-y-0 z-10",
-          !feedColumnShow ? "-translate-x-full" : "",
+          "absolute inset-y-0 z-10 duration-200",
+          feedColumnTempShow &&
+          !feedColumnShow &&
+          "shadow-drawer-right z-[12] border-r",
+          !feedColumnShow && !feedColumnTempShow ?
+            "-translate-x-full delay-200" :
+            "",
         )}
         style={{
           "width": `${position}px`,
@@ -163,7 +211,7 @@ const FeedResponsiveResizerContainer = ({
         }}
       />
 
-      {feedColumnShow && <PanelSplitter {...separatorProps} />}
+      {delayShowSplitter && <PanelSplitter {...separatorProps} />}
     </>
   )
 }

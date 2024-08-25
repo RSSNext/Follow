@@ -47,3 +47,6 @@ viewAtom.onMount = () => {
     setSidebarActiveView(view)
   }
 }
+export const [, , useFeedColumnShow, , , setFeedColumnShow] = createAtomHooks(
+  atom(true),
+)

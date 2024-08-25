@@ -56,16 +56,17 @@ export const parseHtml = (
 
   const hastTree = pipeline.runSync(tree, file)
 
-  let imgCount = 0
+  const images = [] as string[]
 
   visit(tree, "element", (node) => {
-    if (node.tagName === "img") {
-      imgCount++
+    if (node.tagName === "img" && node.properties.src) {
+      images.push(node.properties.src as string)
     }
   })
 
   return {
-    imgCount,
+    hastTree,
+    images,
     toContent: () =>
       toJsxRuntime(hastTree, {
         Fragment,
