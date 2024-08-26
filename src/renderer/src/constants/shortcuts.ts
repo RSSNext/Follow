@@ -29,7 +29,7 @@ export const shortcuts = {
   },
   layout: {
     toggleSidebar: {
-      name: "Toggle Feed Sidebar",
+      name: "Show/Hide Feed Sidebar",
       key: "Meta+B",
     },
   },

@@ -9,6 +9,7 @@ import { PanelSplitter } from "@renderer/components/ui/divider"
 import { DeclarativeModal } from "@renderer/components/ui/modal/stacked/declarative-modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { RootPortal } from "@renderer/components/ui/portal"
+import { HotKeyScopeMap } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { preventDefault } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
@@ -144,9 +145,9 @@ const FeedResponsiveResizerContainer = ({
   useEffect(() => {
     const handler = throttle((e: MouseEvent) => {
       const mouseX = e.clientX
-      const { feedColWidth } = getUISettings()
+      const threshold = feedColumnTempShow ? getUISettings().feedColWidth : 100
 
-      if (mouseX < feedColWidth) {
+      if (mouseX < threshold) {
         setFeedColumnTempShow(true)
       } else {
         setFeedColumnTempShow(false)
@@ -157,11 +158,17 @@ const FeedResponsiveResizerContainer = ({
     return () => {
       document.removeEventListener("mousemove", handler)
     }
-  }, [])
+  }, [feedColumnTempShow])
 
-  useHotkeys(shortcuts.layout.toggleSidebar.key, () => {
-    setFeedColumnShow(!feedColumnShow)
-  })
+  useHotkeys(
+    shortcuts.layout.toggleSidebar.key,
+    () => {
+      setFeedColumnShow(!feedColumnShow)
+    },
+    {
+      scopes: HotKeyScopeMap.Home,
+    },
+  )
 
   const [delayShowSplitter, setDelayShowSplitter] = useState(feedColumnShow)
 
