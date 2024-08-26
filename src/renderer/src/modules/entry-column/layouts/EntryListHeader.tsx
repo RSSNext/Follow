@@ -25,7 +25,9 @@ import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC } from "react"
 import * as React from "react"
 
-import { MarkAllReadButton } from "../components/mark-all-button"
+import {
+  MarkAllReadWithOverlay,
+} from "../components/mark-all-button"
 
 export const EntryListHeader: FC<{
   totalCount: number
@@ -79,8 +81,11 @@ export const EntryListHeader: FC<{
     "pl-12",
   ]
 
+  const containerRef = React.useRef<HTMLDivElement>(null)
+
   return (
     <div
+      ref={containerRef}
       className={cn(
         "mb-2 flex w-full flex-col pr-4 pt-2.5",
         titleStyleBasedView[view],
@@ -163,7 +168,7 @@ export const EntryListHeader: FC<{
               <i className="i-mgc-round-cute-re" />
             )}
           </ActionButton>
-          <MarkAllReadButton shortcut />
+          <MarkAllReadWithOverlay containerRef={containerRef} shortcut />
         </div>
       </div>
       {titleAtBottom && titleInfo}
