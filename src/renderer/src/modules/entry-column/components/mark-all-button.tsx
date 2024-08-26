@@ -42,6 +42,52 @@ export const MarkAllReadWithOverlay = forwardRef<
   useOnClickOutside({ current: popoverRef }, () => {
     setShow(false)
   })
+  const renderPopup = () => {
+    const $parent = containerRef.current!
+    const rect = $parent.getBoundingClientRect()
+    const paddingLeft = $parent.offsetLeft
+    return (
+      <RootPortal to={$parent}>
+        <m.div
+          ref={setPopoverRef}
+          initial={{ y: -70 }}
+          animate={{ y: 0 }}
+          exit={{ y: -70 }}
+          transition={{ type: "spring", damping: 20, stiffness: 300 }}
+          className="shadow-modal fixed z-50 bg-theme-modal-background-opaque shadow"
+          style={{
+            left: -paddingLeft,
+            top: rect.top,
+            width: rect.width,
+          }}
+        >
+          <div className="flex w-full translate-x-[-2px] items-center justify-between gap-3 !py-3 pl-6 pr-3 [&_button]:text-xs">
+            <span className="center gap-[calc(0.5rem+2px)]">
+              <i className="i-mgc-check-circle-cute-re" />
+              <span className="text-sm font-bold">
+                Mark
+                <span> </span>
+                {which}
+                <span> </span>
+                as read?
+              </span>
+            </span>
+            <div className="space-x-4">
+              <IconButton
+                icon={<i className="i-mgc-check-filled" />}
+                onClick={() => {
+                  handleMarkAllAsRead()
+                  setShow(false)
+                }}
+              >
+                Confirm
+              </IconButton>
+            </div>
+          </div>
+        </m.div>
+      </RootPortal>
+    )
+  }
   return (
     <Fragment>
       <ActionButton
@@ -64,49 +110,7 @@ export const MarkAllReadWithOverlay = forwardRef<
         <i className="i-mgc-check-circle-cute-re" />
       </ActionButton>
 
-      <AnimatePresence>
-        {show && (
-          <RootPortal>
-            <m.div
-              ref={setPopoverRef}
-              initial={{ y: -70 }}
-              animate={{ y: 0 }}
-              exit={{ y: -70 }}
-              transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="shadow-modal fixed z-50 bg-theme-modal-background-opaque shadow"
-              style={{
-                left: containerRef.current?.getBoundingClientRect().left,
-                top: containerRef.current?.getBoundingClientRect().top,
-                width: containerRef.current?.getBoundingClientRect().width,
-              }}
-            >
-              <div className="flex w-full translate-x-[-2px] items-center justify-between gap-3 !py-3 pl-6 pr-3 [&_button]:text-xs">
-                <span className="center gap-[calc(0.5rem+2px)]">
-                  <i className="i-mgc-check-circle-cute-re" />
-                  <span className="text-sm font-bold">
-                    Mark
-                    <span> </span>
-                    {which}
-                    <span> </span>
-                    as read?
-                  </span>
-                </span>
-                <div className="space-x-4">
-                  <IconButton
-                    icon={<i className="i-mgc-check-filled" />}
-                    onClick={() => {
-                      handleMarkAllAsRead()
-                      setShow(false)
-                    }}
-                  >
-                    Confirm
-                  </IconButton>
-                </div>
-              </div>
-            </m.div>
-          </RootPortal>
-        )}
-      </AnimatePresence>
+      <AnimatePresence>{show && renderPopup()}</AnimatePresence>
     </Fragment>
   )
 })

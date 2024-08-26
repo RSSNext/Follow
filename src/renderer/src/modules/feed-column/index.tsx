@@ -1,5 +1,8 @@
+/* eslint-disable @eslint-react/hooks-extra/no-direct-set-state-in-use-layout-effect */
 import { getReadonlyRoute } from "@renderer/atoms/route"
-import { useUISettingKey } from "@renderer/atoms/settings/ui"
+import {
+  useUISettingKey,
+} from "@renderer/atoms/settings/ui"
 import { useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { ActionButton } from "@renderer/components/ui/button"
 import { HotKeyScopeMap, views } from "@renderer/constants"
@@ -8,21 +11,23 @@ import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { nextFrame, stopPropagation } from "@renderer/lib/dom"
+import { stopPropagation } from "@renderer/lib/dom"
 import { Routes } from "@renderer/lib/enum"
-import { jotaiStore } from "@renderer/lib/jotai"
 import { clamp, cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useSubscriptionStore } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { useSubscribeElectronEvent } from "@shared/event"
 import { useWheel } from "@use-gesture/react"
-import type { MotionValue } from "framer-motion"
-import { m, useSpring } from "framer-motion"
-import { atom, useAtomValue } from "jotai"
+import { AnimatePresence, m } from "framer-motion"
 import { Lethargy } from "lethargy"
-import type { PropsWithChildren } from "react"
-import { useCallback, useLayoutEffect, useRef } from "react"
+import type { FC, PropsWithChildren } from "react"
+import {
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 
 import { WindowUnderBlur } from "../../components/ui/background"
@@ -64,15 +69,11 @@ const useUnreadByView = () => {
   return totalUnread
 }
 
-const carouselWidthAtom = atom(256)
 export function FeedColumn({ children }: PropsWithChildren) {
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive_] = useSidebarActiveView()
-  const spring = useSpring(0, {
-    stiffness: 700,
-    damping: 40,
-  })
+
   const navigateBackHome = useBackHome(active)
   const setActive: typeof setActive_ = useCallback(
     (args) => {
@@ -83,7 +84,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
         navigateBackHome(nextActive)
       }
     },
-    [active, navigateBackHome, spring],
+    [active, navigateBackHome],
   )
 
   useLayoutEffect(() => {
@@ -92,18 +93,6 @@ export function FeedColumn({ children }: PropsWithChildren) {
       setActive_(view)
     }
   }, [setActive_])
-
-  useLayoutEffect(() => {
-    const handler = () => {
-      spring.jump(-active * jotaiStore.get(carouselWidthAtom))
-    }
-    const dispose = jotaiStore.sub(carouselWidthAtom, handler)
-
-    spring.set(-active * jotaiStore.get(carouselWidthAtom))
-    return () => {
-      dispose()
-    }
-  }, [active, spring])
 
   useHotkeys(
     shortcuts.feeds.switchBetweenViews.key,
@@ -146,22 +135,6 @@ export function FeedColumn({ children }: PropsWithChildren) {
       target: carouselRef,
     },
   )
-
-  useLayoutEffect(() => {
-    const $carousel = carouselRef.current
-    if (!$carousel) return
-
-    const handler = () => {
-      const width = $carousel.clientWidth
-
-      jotaiStore.set(carouselWidthAtom, width)
-    }
-    handler()
-    new ResizeObserver(handler).observe($carousel)
-    return () => {
-      new ResizeObserver(handler).disconnect()
-    }
-  }, [])
 
   const unreadByView = useUnreadByView()
 
@@ -212,14 +185,11 @@ export function FeedColumn({ children }: PropsWithChildren) {
         ))}
       </div>
       <div className="relative size-full overflow-hidden" ref={carouselRef}>
-        <SwipeWrapper active={active} spring={spring}>
+        <SwipeWrapper active={active}>
           {views.map((item, index) => (
             <section
               key={item.name}
-              className="absolute h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center"
-              style={{
-                left: `${index * 100}%`,
-              }}
+              className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center"
             >
               {active === index && (
                 <FeedList
@@ -237,52 +207,78 @@ export function FeedColumn({ children }: PropsWithChildren) {
   )
 }
 
-const SwipeWrapper: Component<{
+const SwipeWrapper: FC<{
   active: number
-  spring: MotionValue<number>
-}> = ({ children, active, spring }) => {
+  children: React.JSX.Element[]
+}> = ({ children, active }) => {
   const reduceMotion = useReduceMotion()
 
-  const carouselWidth = useAtomValue(carouselWidthAtom)
+  const feedColumnWidth = useUISettingKey("feedColWidth")
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // useLayoutEffect(() => {
+  //   const $container = containerRef.current;
+  //   if (!$container) return;
+
+  //   const x = -active * feedColumnWidth;
+  //   // NOTE: To fix the misalignment of the browser's layout, use display to re-render it.
+  //   if (x !== $container.getBoundingClientRect().x) {
+  //     $container.style.display = "none";
+
+  //     nextFrame(() => {
+  //       $container.style.display = "";
+  //     });
+  //   }
+  // }, []);
+
+  const prevActiveIndexRef = useRef(-1)
+  const [isReady, setIsReady] = useState(false)
+
+  const [direction, setDirection] = useState<"left" | "right">("right")
+  const [currentAnimtedActive, setCurrentAnimatedActive] = useState(active)
+
   useLayoutEffect(() => {
-    const $container = containerRef.current
-    if (!$container) return
-
-    const x = -active * carouselWidth
-    // NOTE: To fix the misalignment of the browser's layout, use display to re-render it.
-    if (x !== $container.getBoundingClientRect().x) {
-      $container.style.display = "none"
-
-      nextFrame(() => {
-        $container.style.display = ""
-      })
+    const prevActiveIndex = prevActiveIndexRef.current
+    if (prevActiveIndex !== active) {
+      if (prevActiveIndex < active) {
+        setDirection("right")
+      } else {
+        setDirection("left")
+      }
     }
-  }, [])
+    setCurrentAnimatedActive(active)
+    if (prevActiveIndexRef.current !== -1) {
+      setIsReady(true)
+    }
+    prevActiveIndexRef.current = active
+  }, [active])
 
   if (reduceMotion) {
-    return (
-      <div
-        ref={containerRef}
-        className="absolute inset-0"
-        style={{
-          transform: `translateX(${-active * carouselWidth}px)`,
-        }}
-      >
-        {children}
-      </div>
-    )
+    return <div ref={containerRef}>{children}</div>
   }
+
   return (
-    <m.div
-      ref={containerRef}
-      className="absolute inset-0"
-      style={{
-        x: spring,
-      }}
-    >
-      {children}
-    </m.div>
+    <AnimatePresence mode="popLayout">
+      <m.div
+        key={currentAnimtedActive}
+        initial={
+          isReady ?
+              {
+                x: direction === "right" ? -feedColumnWidth : feedColumnWidth,
+              } :
+            true
+        }
+        animate={{ x: 0 }}
+        exit={{
+          x: direction === "right" ? feedColumnWidth : -feedColumnWidth,
+        }}
+        transition={{
+          x: { type: "spring", stiffness: 700, damping: 40 },
+        }}
+        ref={containerRef}
+      >
+        {children[currentAnimtedActive]}
+      </m.div>
+    </AnimatePresence>
   )
 }
