@@ -807,14 +807,20 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     media: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
         url: z.ZodString;
         type: z.ZodEnum<["photo", "video"]>;
+        width: z.ZodOptional<z.ZodNumber>;
+        height: z.ZodOptional<z.ZodNumber>;
         preview_image_url: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         type: "photo" | "video";
         url: string;
+        width?: number | undefined;
+        height?: number | undefined;
         preview_image_url?: string | undefined;
     }, {
         type: "photo" | "video";
         url: string;
+        width?: number | undefined;
+        height?: number | undefined;
         preview_image_url?: string | undefined;
     }>, "many">>>;
 }>, "strip", z.ZodTypeAny, {
@@ -834,6 +840,8 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     media?: {
         type: "photo" | "video";
         url: string;
+        width?: number | undefined;
+        height?: number | undefined;
         preview_image_url?: string | undefined;
     }[] | null | undefined;
     attachments?: {
@@ -860,6 +868,8 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     media?: {
         type: "photo" | "video";
         url: string;
+        width?: number | undefined;
+        height?: number | undefined;
         preview_image_url?: string | undefined;
     }[] | null | undefined;
     attachments?: {
@@ -3095,6 +3105,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         media?: {
                             type: "photo" | "video";
                             url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
                             preview_image_url?: string | undefined;
                         }[] | null | undefined;
                         attachments?: {
@@ -3232,6 +3244,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         media?: {
                             type: "photo" | "video";
                             url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
                             preview_image_url?: string | undefined;
                         }[] | null | undefined;
                         attachments?: {
@@ -3299,6 +3313,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         media?: {
                             type: "photo" | "video";
                             url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
                             preview_image_url?: string | undefined;
                         }[] | null | undefined;
                         attachments?: {
@@ -3380,6 +3396,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     media?: {
                         type: "photo" | "video";
                         url: string;
+                        width?: number | undefined;
+                        height?: number | undefined;
                         preview_image_url?: string | undefined;
                     }[] | null | undefined;
                     attachments?: {

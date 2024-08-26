@@ -24,24 +24,13 @@ import {
 import { ViewSelectContent } from "@renderer/components/view-select-content"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
-import type { SupportedLanguages } from "@renderer/models"
-
-type Operation =
-  | "contains"
-  | "not_contains"
-  | "eq"
-  | "not_eq"
-  | "gt"
-  | "lt"
-  | "regex"
-type EntryField = "all" | "title" | "content" | "author" | "url" | "order"
-type FeedField = "view" | "title" | "site_url" | "feed_url"
+import type { ActionEntryField, ActionFeedField, ActionOperation, SupportedLanguages } from "@renderer/models"
 
 type ActionsInput = {
   name: string
   condition: {
-    field?: FeedField
-    operator?: Operation
+    field?: ActionFeedField
+    operator?: ActionOperation
     value?: string
   }[]
   result: {
@@ -52,8 +41,8 @@ type ActionsInput = {
       to: string
     }[]
     blockRules?: {
-      field?: EntryField
-      operator?: Operation
+      field?: ActionEntryField
+      operator?: ActionOperation
       value?: string | number
     }[]
   }
@@ -220,8 +209,8 @@ const OperationTableCell = ({
   onValueChange,
 }: {
   type: string
-  value?: Operation
-  onValueChange?: (value: Operation) => void
+  value?: ActionOperation
+  onValueChange?: (value: ActionOperation) => void
 }) => {
   const options = OperationOptions.filter((option) =>
     option.types.includes(type),
@@ -368,7 +357,7 @@ export function ActionCard({
                             <TableCell size="sm">
                               <Select
                                 value={condition.field}
-                                onValueChange={(value: FeedField) =>
+                                onValueChange={(value: ActionFeedField) =>
                                   change("field", value)}
                               >
                                 <CommonSelectTrigger />
