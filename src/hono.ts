@@ -70,16 +70,16 @@ declare const languageSchema: z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>;
 declare const actionsItemOpenAPISchema: z.ZodObject<{
     name: z.ZodString;
     condition: z.ZodArray<z.ZodObject<{
-        field: z.ZodEnum<["view", "title", "site_url", "feed_url"]>;
+        field: z.ZodEnum<["view", "title", "site_url", "feed_url", "category"]>;
         operator: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
         value: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         value: string;
-        field: "title" | "view" | "site_url" | "feed_url";
+        field: "title" | "view" | "site_url" | "category" | "feed_url";
         operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
     }, {
         value: string;
-        field: "title" | "view" | "site_url" | "feed_url";
+        field: "title" | "view" | "site_url" | "category" | "feed_url";
         operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
     }>, "many">;
     result: z.ZodObject<{
@@ -137,7 +137,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
     name: string;
     condition: {
         value: string;
-        field: "title" | "view" | "site_url" | "feed_url";
+        field: "title" | "view" | "site_url" | "category" | "feed_url";
         operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
     }[];
     result: {
@@ -157,7 +157,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
     name: string;
     condition: {
         value: string;
-        field: "title" | "view" | "site_url" | "feed_url";
+        field: "title" | "view" | "site_url" | "category" | "feed_url";
         operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
     }[];
     result: {
@@ -185,16 +185,16 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     rules: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
         name: z.ZodString;
         condition: z.ZodArray<z.ZodObject<{
-            field: z.ZodEnum<["view", "title", "site_url", "feed_url"]>;
+            field: z.ZodEnum<["view", "title", "site_url", "feed_url", "category"]>;
             operator: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
             value: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             value: string;
-            field: "title" | "view" | "site_url" | "feed_url";
+            field: "title" | "view" | "site_url" | "category" | "feed_url";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }, {
             value: string;
-            field: "title" | "view" | "site_url" | "feed_url";
+            field: "title" | "view" | "site_url" | "category" | "feed_url";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }>, "many">;
         result: z.ZodObject<{
@@ -252,7 +252,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         name: string;
         condition: {
             value: string;
-            field: "title" | "view" | "site_url" | "feed_url";
+            field: "title" | "view" | "site_url" | "category" | "feed_url";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[];
         result: {
@@ -272,7 +272,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         name: string;
         condition: {
             value: string;
-            field: "title" | "view" | "site_url" | "feed_url";
+            field: "title" | "view" | "site_url" | "category" | "feed_url";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[];
         result: {
@@ -295,7 +295,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         name: string;
         condition: {
             value: string;
-            field: "title" | "view" | "site_url" | "feed_url";
+            field: "title" | "view" | "site_url" | "category" | "feed_url";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[];
         result: {
@@ -318,7 +318,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         name: string;
         condition: {
             value: string;
-            field: "title" | "view" | "site_url" | "feed_url";
+            field: "title" | "view" | "site_url" | "category" | "feed_url";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[];
         result: {
@@ -458,6 +458,8 @@ type MediaModel = {
     url: string;
     type: "photo" | "video";
     preview_image_url?: string;
+    width?: number;
+    height?: number;
 };
 type AttachmentsModel = {
     url: string;
@@ -2751,7 +2753,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         name: string;
                         condition: {
                             value: string;
-                            field: "title" | "view" | "site_url" | "feed_url";
+                            field: "title" | "view" | "site_url" | "category" | "feed_url";
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
                         result: {
@@ -2780,7 +2782,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         name: string;
                         condition: {
                             value: string;
-                            field: "title" | "view" | "site_url" | "feed_url";
+                            field: "title" | "view" | "site_url" | "category" | "feed_url";
                             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                         }[];
                         result: {
@@ -3231,8 +3233,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             type: "photo" | "video";
                             url: string;
                             preview_image_url?: string | undefined;
-                            height?: number | undefined;
-                            width?: number | undefined;
                         }[] | null | undefined;
                         attachments?: {
                             url: string;

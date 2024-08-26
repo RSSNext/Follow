@@ -252,6 +252,8 @@ export const createMainWindow = () => {
     if (isMacOS) {
       event.preventDefault()
       window.hide()
+
+      callGlobalContextMethod(window, "electronClose")
     } else {
       windows.mainWindow = null
     }
@@ -260,7 +262,7 @@ export const createMainWindow = () => {
   window.on("show", () => {
     cancelPollingUpdateUnreadCount()
 
-    callGlobalContextMethod(window, "invalidateQueries")
+    callGlobalContextMethod(window, "electronShow")
   })
 
   window.on("hide", async () => {

@@ -5,12 +5,16 @@ import { useEffect, useRef } from "react"
 
 const slateTime = 600000 // 10min
 
-const DISPATCH_KEY = "invalidate-query-key"
-
-export class InvalidateQueryEvent extends Event {
-  static type = DISPATCH_KEY
+export class ElectronCloseEvent extends Event {
+  static type = "electron-close"
   constructor() {
-    super(DISPATCH_KEY)
+    super("electron-close")
+  }
+}
+export class ElectronShowEvent extends Event {
+  static type = "electron-show"
+  constructor() {
+    super("electron-show")
   }
 }
 
@@ -21,25 +25,37 @@ export class InvalidateQueryEvent extends Event {
 const InvalidateQueryProviderElectron = () => {
   const queryClient = useQueryClient()
 
-  const currentTimeRef = useRef(Date.now())
+  const currentTimeRef = useRef(0)
+
+  useEffect(() => {
+    const handler = () => {
+      currentTimeRef.current = Date.now()
+      appLog("Window switch to close")
+    }
+
+    document.addEventListener(ElectronCloseEvent.type, handler)
+
+    return () => {
+      document.removeEventListener(ElectronCloseEvent.type, handler)
+    }
+  }, [queryClient])
 
   useEffect(() => {
     const handler = () => {
       const now = Date.now()
-      if (now - currentTimeRef.current < slateTime) {
-        return
+      if (!currentTimeRef.current || (now - currentTimeRef.current < slateTime)) {
+        appLog(`Window switch to visible, but skip invalidation, ${currentTimeRef.current ? now - currentTimeRef.current : 0}`)
+      } else {
+        appLog("Window switch to visible, invalidate all queries")
+        queryClient.invalidateQueries()
       }
-
-      currentTimeRef.current = now
-
-      appLog("Window switch to visible, invalidate all queries")
-      queryClient.invalidateQueries()
+      currentTimeRef.current = 0
     }
 
-    document.addEventListener(InvalidateQueryEvent.type, handler)
+    document.addEventListener(ElectronShowEvent.type, handler)
 
     return () => {
-      document.removeEventListener(InvalidateQueryEvent.type, handler)
+      document.removeEventListener(ElectronShowEvent.type, handler)
     }
   }, [queryClient])
   return null

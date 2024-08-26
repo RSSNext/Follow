@@ -9,7 +9,9 @@ interface RenderGlobalContext {
   getGeneralSettings: () => GeneralSettings
   getUISettings: () => UISettings
 
-  invalidateQueries: () => void
+  electronClose: () => void
+  electronShow: () => void
+
   toast: typeof toast
 }
 
