@@ -282,7 +282,14 @@ export const UserProfileModalContent: FC<{
               {subscriptions.isLoading ? (
                 <LoadingWithIcon
                   size="large"
-                  icon={<i className="i-mgc-user-3-cute-re" />}
+                  icon={(
+                    <Avatar className="aspect-square size-4">
+                      <AvatarImage src={userInfo.avatar || undefined} />
+                      <AvatarFallback>
+                        {userInfo.name?.slice(0, 2)}
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
                   className="center h-48 w-full max-w-full"
                 />
               ) : (

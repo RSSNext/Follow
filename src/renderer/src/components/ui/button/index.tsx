@@ -222,17 +222,13 @@ export const IconButton = React.forwardRef<
     >
       <span className="center">
         {React.cloneElement(icon, {
-          className: cn(
-            "group-hover:text-white dark:group-hover:text-inherit",
-            "group-hover:invisible",
-            icon.props.className,
-          ),
+          className: cn("invisible", icon.props.className),
         })}
 
         {React.cloneElement(icon, {
           className: cn(
             "group-hover:text-white dark:group-hover:text-inherit",
-            "absolute left-4 top-1/2 -translate-y-1/2 opacity-0 duration-200 group-hover:left-1/2 group-hover:-translate-x-1/2 group-hover:opacity-100",
+            "absolute left-4 top-1/2 -translate-y-1/2 duration-200 group-hover:left-1/2 group-hover:-translate-x-1/2",
             icon.props.className,
           ),
         })}
