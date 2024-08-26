@@ -1,7 +1,7 @@
 import { cn } from "@renderer/lib/utils"
 import { format } from "dnum"
 
-import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../components/ui/tooltip"
 
 export const Balance = ({
   children,

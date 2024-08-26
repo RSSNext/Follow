@@ -1,13 +1,10 @@
 import { useWhoami } from "@renderer/atoms/user"
 import { Button } from "@renderer/components/ui/button"
 import { Divider } from "@renderer/components/ui/divider"
-import {
-  LoadingWithIcon,
-} from "@renderer/components/ui/loading"
+import { LoadingWithIcon } from "@renderer/components/ui/loading"
 import { useCurrentModal } from "@renderer/components/ui/modal"
 import { RadioGroup } from "@renderer/components/ui/radio-group"
 import { RadioCard } from "@renderer/components/ui/radio-group/RadioCard"
-import { Balance } from "@renderer/components/ui/wallet/balance"
 import { UserAvatar } from "@renderer/components/user-button"
 import { nextFrame } from "@renderer/lib/dom"
 import {
@@ -21,6 +18,7 @@ import { useState } from "react"
 
 import { useFeedClaimModal } from "../claim"
 import { useSettingModal } from "../settings/modal/hooks-hack"
+import { Balance } from "./balance"
 
 const DEFAULT_RECOMMENDED_TIP = 1
 
@@ -43,9 +41,7 @@ export const TipModalContent: FC<{
   const myWallet = useMyWallet()
 
   if (!myWallet.data) {
-    return (
-      <Loading />
-    )
+    return <Loading />
   }
   return <TipModalContent_ {...props} />
 }
@@ -91,9 +87,7 @@ const TipModalContent_: FC<{
   })
 
   if (transactionsQuery.isPending || myWallet.isPending) {
-    return (
-      <Loading />
-    )
+    return <Loading />
   }
 
   if (!myWalletData) {

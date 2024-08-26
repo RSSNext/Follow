@@ -1,6 +1,7 @@
 import Versions from "../../components/Versions"
 
 export function Component() {
+  if (!import.meta.env.DEV) return null
   const ipcHandle = (): void => window.electron?.ipcRenderer.send("ping")
 
   return (

@@ -15,9 +15,9 @@ import {
   TableHeader,
   TableRow,
 } from "@renderer/components/ui/table"
-import { Balance } from "@renderer/components/ui/wallet/balance"
 import { cn } from "@renderer/lib/utils"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
+import { Balance } from "@renderer/modules/wallet/balance"
 import { useWallet, useWalletTransactions } from "@renderer/queries/wallet"
 
 export const TransactionsSection = () => {

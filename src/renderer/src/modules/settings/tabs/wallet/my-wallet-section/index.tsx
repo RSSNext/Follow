@@ -7,8 +7,8 @@ import {
   TooltipPortal,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
-import { Balance } from "@renderer/components/ui/wallet/balance"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
+import { Balance } from "@renderer/modules/wallet/balance"
 import { useWallet } from "@renderer/queries/wallet"
 
 import { ClaimDailyReward } from "./claim-daily-reward"
