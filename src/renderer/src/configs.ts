@@ -35,6 +35,7 @@ export const SentryConfig: BrowserOptions = {
     if (error instanceof FetchError) {
       return null
     }
+
     return event
   },
 }

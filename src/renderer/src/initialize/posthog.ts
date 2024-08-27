@@ -5,7 +5,6 @@ import type { CaptureOptions, Properties } from "posthog-js"
 declare global {
   interface Window {
     posthog?: {
-      identify: InstanceType<typeof import("posthog-js").PostHog>["identify"]
       capture: InstanceType<typeof import("posthog-js").PostHog>["capture"]
       reset: InstanceType<typeof import("posthog-js").PostHog>["reset"]
     }
@@ -20,10 +19,9 @@ export const initPostHog = async () => {
     person_profiles: "identified_only",
   })
 
-  const { capture, identify, reset } = posthog
+  const { capture, reset } = posthog
 
   window.posthog = {
-    identify,
     reset,
     capture(
       event_name: string,

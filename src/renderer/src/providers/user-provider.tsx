@@ -1,4 +1,5 @@
-import { useSetWhoami } from "@renderer/atoms/user"
+import { setWhoami } from "@renderer/atoms/user"
+import { setIntegrationIdentify } from "@renderer/initialize/helper"
 import { tipcClient } from "@renderer/lib/client"
 import { useSession } from "@renderer/queries/auth"
 import { CleanerService } from "@renderer/services/cleaner"
@@ -6,21 +7,18 @@ import { useEffect } from "react"
 
 export const UserProvider = () => {
   const { session } = useSession()
-  const setUser = useSetWhoami()
+
   useEffect(() => {
     if (!session?.user) return
-    setUser(session.user)
+    setWhoami(session.user)
 
-    window.posthog?.identify(session.user.id, {
-      name: session.user.name,
-      handle: session.user.handle,
-    })
+    setIntegrationIdentify(session.user)
 
     tipcClient?.trackerIdentify({
       user: session.user,
     })
     CleanerService.cleanRemainingData(session.user.id)
-  }, [session?.user, setUser])
+  }, [session?.user])
 
   return null
 }
