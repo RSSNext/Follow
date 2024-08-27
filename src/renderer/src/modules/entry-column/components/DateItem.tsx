@@ -3,18 +3,22 @@ import { ActionButton } from "@renderer/components/ui/button"
 import { RelativeDay } from "@renderer/components/ui/datetime"
 import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
 import { IconScaleTransition } from "@renderer/components/ux/transition/icon"
+import { stopPropagation } from "@renderer/lib/dom"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
+import { m } from "framer-motion"
 import { throttle } from "lodash-es"
 import type { FC, PropsWithChildren } from "react"
 import {
   memo,
   useCallback,
+  useId,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react"
+import { useDebounceCallback } from "usehooks-ts"
 
 import { useMarkAllByRoute } from "../hooks/useMarkAll"
 
@@ -92,7 +96,12 @@ const DateItemInner: FC<{
   className?: string
   Wrapper?: FC<PropsWithChildren>
 }> = ({ date, endTime, startTime, className, Wrapper }) => {
-  const RelativeElement = <RelativeDay date={date} />
+  const rid = useId()
+  const RelativeElement = (
+    <m.span key="b" layout layoutId={rid}>
+      <RelativeDay date={date} />
+    </m.span>
+  )
 
   const handleMarkAllAsRead = useMarkAllByRoute({
     startTime,
@@ -101,6 +110,15 @@ const DateItemInner: FC<{
   const { isSticky, itemRef } = useSticky()
 
   const [confirmMark, setConfirmMark] = useState(false)
+  const removeConfirm = useDebounceCallback(
+    () => {
+      setConfirmMark(false)
+    },
+    1000,
+    {
+      leading: false,
+    },
+  )
 
   const timerRef = useRef<any>()
   const W = Wrapper ?? SafeFragment
@@ -109,14 +127,9 @@ const DateItemInner: FC<{
     <div
       className={cn(className, isSticky && "border-b")}
       ref={itemRef}
-      onMouseEnter={() => {
-        clearTimeout(timerRef.current)
-      }}
-      onMouseLeave={() => {
-        timerRef.current = setTimeout(() => {
-          setConfirmMark(false)
-        }, 1000)
-      }}
+      onClick={stopPropagation}
+      onMouseEnter={removeConfirm.cancel}
+      onMouseLeave={removeConfirm}
     >
       <W>
         <ActionButton
@@ -146,8 +159,9 @@ const DateItemInner: FC<{
             status={!confirmMark ? "done" : "init"}
           />
         </ActionButton>
+
         {confirmMark ? (
-          <div className="animate-mask-in">
+          <div className="animate-mask-in" key="a">
             Mark
             <span> </span>
             {RelativeElement}
