@@ -44,7 +44,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({
   if (!entryHistory.userIds) return null
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center duration-200 animate-in fade-in">
       <LayoutGroup>
         {entryHistory.userIds
           .filter((id) => id !== me?.id)
