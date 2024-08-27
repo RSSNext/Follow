@@ -3,6 +3,7 @@ import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
 import { memoize } from "lodash-es"
 import { twMerge } from "tailwind-merge"
+import { parse } from "tldts"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "../constants/app"
 import { FeedViewType } from "./enum"
@@ -88,10 +89,7 @@ export function detectBrowser() {
     return "Safari"
   } else if (userAgent.includes("Opera")) {
     return "Opera"
-  } else if (
-    userAgent.includes("Trident") ||
-    userAgent.includes("MSIE")
-  ) {
+  } else if (userAgent.includes("Trident") || userAgent.includes("MSIE")) {
     return "Internet Explorer"
   }
 
@@ -219,4 +217,29 @@ export const sortByAlphabet = (a: string, b: string) => {
   }
 
   return a.localeCompare(b, "zh-CN")
+}
+
+export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
+  let src: string
+  let fallbackUrl = ""
+
+  try {
+    const { host } = new URL(url)
+    const pureDomain = parse(host).domainWithoutSuffix
+    fallbackUrl = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain
+      ?.slice(0, 2)
+      .toUpperCase()}`
+    src = `https://unavatar.follow.is/${host}?fallback=${fallback || false}`
+  } catch {
+    const pureDomain = parse(url).domainWithoutSuffix
+    src = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain
+      ?.slice(0, 2)
+      .toUpperCase()}`
+  }
+  const ret = {
+    src,
+    fallbackUrl,
+  }
+
+  return ret
 }

@@ -14,7 +14,7 @@ import { Queries } from "@renderer/queries"
 import { useEntryReadHistory } from "@renderer/store/entry"
 import { useUserById } from "@renderer/store/user"
 import { LayoutGroup, m } from "framer-motion"
-import { Fragment } from "react"
+import { Fragment, useEffect, useState } from "react"
 
 import { usePresentUserProfileModal } from "../../profile/hooks"
 
@@ -24,9 +24,20 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({
   const me = useWhoami()
   const entryHistory = useEntryReadHistory(entryId)
 
+  const [isEnabledPolling, setIsEnabledPolling] = useState(false)
   useAuthQuery(Queries.entries.entryReadingHistory(entryId), {
     refetchInterval: 1000 * 60,
+    enabled: isEnabledPolling,
   })
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsEnabledPolling(true)
+    }, 1000 * 60)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [entryId])
 
   if (!entryHistory) return null
   if (!me) return null

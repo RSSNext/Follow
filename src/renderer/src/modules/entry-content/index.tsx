@@ -42,6 +42,7 @@ import { EntryTranslation } from "../entry-column/translation"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
 import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
 import { EntryHeader } from "./header"
+import { EntryContentLoading } from "./loading"
 import { EntryContentProvider } from "./provider"
 
 export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
@@ -242,13 +243,11 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                 </ErrorBoundary>
               </div>
             </WrappedElementProvider>
+
             {!content && (
               <div className="center mt-16">
                 {isPending ? (
-                  <LoadingWithIcon
-                    size="large"
-                    icon={<i className="i-mgc-rss-cute-fi text-accent" />}
-                  />
+                  <EntryContentLoading icon={feed?.siteUrl!} />
                 ) : error ?
                     (
                       <div className="center flex flex-col gap-2">
@@ -331,7 +330,10 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
         </div>
       )}
 
-      <HTML as="article" className="prose dark:prose-invert prose-h1:text-[1.6em]">
+      <HTML
+        as="article"
+        className="prose dark:prose-invert prose-h1:text-[1.6em]"
+      >
         {result?.content ?? ""}
       </HTML>
     </div>

@@ -1,7 +1,6 @@
 import { getColorScheme, stringToHue } from "@renderer/lib/color"
-import { cn } from "@renderer/lib/utils"
+import { cn, getUrlIcon } from "@renderer/lib/utils"
 import { useEffect, useMemo, useState } from "react"
-import { parse } from "tldts"
 
 import { PlatformIcon } from "./ui/platform-icon"
 
@@ -21,8 +20,7 @@ export function SiteIcon({
   fallback?: boolean
   fallbackText?: string
 }) {
-  let host: string
-  let src: string
+  let src = ""
   let fallbackUrl = ""
 
   const colors = useMemo(
@@ -37,19 +35,9 @@ export function SiteIcon({
 
   if (!url) return null
 
-  try {
-    host = new URL(url).host
-    const pureDomain = parse(host).domainWithoutSuffix
-    fallbackUrl = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain
-      ?.slice(0, 2)
-      .toUpperCase()}`
-    src = `https://unavatar.follow.is/${host}?fallback=${fallback}`
-  } catch {
-    const pureDomain = parse(url).domainWithoutSuffix
-    src = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain
-      ?.slice(0, 2)
-      .toUpperCase()}`
-  }
+  const ret = getUrlIcon(url, fallback)
+  src = ret.src
+  fallbackUrl = ret.fallbackUrl
 
   return (
     <PlatformIcon
