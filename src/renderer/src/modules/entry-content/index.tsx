@@ -8,6 +8,7 @@ import {
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
+import { ShadowDOM } from "@renderer/components/common/ShadowDOM"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { HTML } from "@renderer/components/ui/markdown"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
@@ -204,42 +205,45 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
 
             <WrappedElementProvider boundingDetection>
               <TitleMetaHandler entryId={entry.entries.id} />
-              <div className="prose mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
-                {(summary.isLoading || summary.data) && (
-                  <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
-                    <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
-                      <i className="i-mgc-magic-2-cute-re align-middle" />
-                      <span>AI summary</span>
+              <ShadowDOM>
+                <div className="prose mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
+                  {(summary.isLoading || summary.data) && (
+                    <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
+                      <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
+                        <i className="i-mgc-magic-2-cute-re align-middle" />
+                        <span>AI summary</span>
+                      </div>
+                      <AutoResizeHeight
+                        spring
+                        className="text-sm leading-relaxed"
+                      >
+                        {summary.isLoading ?
+                          SummaryLoadingSkeleton :
+                          summary.data}
+                      </AutoResizeHeight>
                     </div>
-                    <AutoResizeHeight
-                      spring
-                      className="text-sm leading-relaxed"
-                    >
-                      {summary.isLoading ?
-                        SummaryLoadingSkeleton :
-                        summary.data}
-                    </AutoResizeHeight>
-                  </div>
-                )}
-                <article className="prose-h1:text-[1.6em]">
+                  )}
+
                   {!isInReadabilityMode ? (
-                    <HTML renderInlineStyle={readerRenderInlineStyle}>
+                    <HTML
+                      as="article"
+                      className="prose-h1:text-[1.6em]"
+                      renderInlineStyle={readerRenderInlineStyle}
+                    >
                       {content}
                     </HTML>
                   ) : (
                     <ReadabilityContent entryId={entryId} />
                   )}
-                </article>
-              </div>
+                </div>
+              </ShadowDOM>
             </WrappedElementProvider>
             {!content && (
               <div className="center mt-16">
                 {isPending ? (
                   <LoadingWithIcon
                     size="large"
-                    icon={
-                      <i className="i-mgc-rss-cute-fi text-accent" />
-                    }
+                    icon={<i className="i-mgc-rss-cute-fi text-accent" />}
                   />
                 ) : error ?
                     (
@@ -322,9 +326,10 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
           </span>
         </div>
       )}
-      <article>
-        <HTML>{result?.content ?? ""}</HTML>
-      </article>
+
+      <HTML as="article" className="prose-h1:text-[1.6em]">
+        {result?.content ?? ""}
+      </HTML>
     </div>
   )
 }

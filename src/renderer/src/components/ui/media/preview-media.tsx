@@ -139,7 +139,7 @@ export const PreviewMediaContent: FC<{
             autoPlay
             muted
             className="max-h-full max-w-full object-contain"
-            onClick={(e) => e.stopPropagation()}
+            onClick={stopPropagation}
           />
         ) : (
           <FallbackableImage
@@ -279,8 +279,12 @@ const FallbackableImage: FC<
     <Fragment>
       {!isAllError && <img src={currentSrc} onError={handleError} {...props} />}
       {isAllError && (
-        <div className="center flex-col gap-6">
-          <i className="i-mgc-close-cute-re text-[60px] text-red-500" />
+        <div
+          className="center flex-col gap-6 text-white/80"
+          onClick={stopPropagation}
+          tabIndex={-1}
+        >
+          <i className="i-mgc-close-cute-re text-[60px] text-red-400" />
 
           <span>Failed to load image</span>
           <div className="center gap-4">
