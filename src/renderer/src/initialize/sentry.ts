@@ -24,6 +24,7 @@ export const initSentry = async () => {
     environment: channel,
     integrations: [
       Sentry.moduleMetadataIntegration(),
+      Sentry.httpClientIntegration(),
       Sentry.reactRouterV6BrowserTracingIntegration({
         useEffect,
         useLocation,
