@@ -156,7 +156,7 @@ const UserRenderer = ({
       {name === APP_NAME ? (
         <Logo className="aspect-square size-4" />
       ) : (
-        <Avatar className="aspect-square size-4">
+        <Avatar className="aspect-square size-4 duration-200 animate-in fade-in-0">
           <AvatarImage src={user?.image || undefined} />
           <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
         </Avatar>

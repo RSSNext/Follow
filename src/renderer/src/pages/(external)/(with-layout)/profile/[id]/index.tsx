@@ -42,7 +42,7 @@ export function Component() {
       (
         <div className="container mx-auto mt-12 flex flex-col items-center justify-center p-4 lg:p-0">
           <Avatar className="aspect-square size-16">
-            <AvatarImage src={user.data?.image || undefined} />
+            <AvatarImage className="duration-200 animate-in fade-in-0" src={user.data?.image || undefined} />
             <AvatarFallback>{user.data?.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col items-center">

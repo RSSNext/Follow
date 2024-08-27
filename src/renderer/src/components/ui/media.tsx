@@ -64,8 +64,12 @@ const MediaImpl: FC<MediaProps> = ({
       src,
   )
 
+  const [mediaLoadState, setMediaLoadState] = useState<
+    "loading" | "loaded" | "error"
+  >("loading")
   const errorHandle: React.ReactEventHandler<HTMLImageElement> =
     useEventCallback((e) => {
+      setMediaLoadState("error")
       if (imgSrc !== props.src) {
         setImgSrc(props.src)
         failedList.add(props.src)
@@ -91,6 +95,7 @@ const MediaImpl: FC<MediaProps> = ({
   })
   const handleOnLoad: React.ReactEventHandler<HTMLImageElement> =
     useEventCallback((e) => {
+      setMediaLoadState("loaded")
       rest.onLoad?.(e as any)
       if ("cacheDimensions" in props && props.cacheDimensions && src) {
         saveImageDimensionsToDb(src, {
@@ -112,8 +117,10 @@ const MediaImpl: FC<MediaProps> = ({
             className={cn(
               hidden && "hidden",
               !(props.width || props.height) && "size-full",
-              "bg-gray-200 object-cover dark:bg-neutral-800",
+              "bg-gray-200 object-cover duration-200 dark:bg-neutral-800",
               popper && "cursor-zoom-in",
+              mediaLoadState === "loaded" ? "opacity-100" : "opacity-0",
+
               mediaContainerClassName,
             )}
             src={imgSrc}

@@ -241,7 +241,11 @@ export const UserProfileModalContent: FC<{
                 )}
               >
                 <m.span layout>
-                  <AvatarImage asChild src={userInfo.avatar || undefined}>
+                  <AvatarImage
+                    className="duration-200 animate-in fade-in-0"
+                    asChild
+                    src={userInfo.avatar || undefined}
+                  >
                     <m.img layout />
                   </AvatarImage>
                   <AvatarFallback>{userInfo.name?.slice(0, 2)}</AvatarFallback>
