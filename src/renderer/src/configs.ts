@@ -29,13 +29,18 @@ export const SentryConfig: BrowserOptions = {
       return null
     }
 
-    if (error instanceof CustomSafeError) {
-      return null
-    }
-    if (error instanceof FetchError) {
-      return null
-    }
+    const isPassthroughError = [CustomSafeError, FetchError].some(
+      (errorType) => {
+        if (error instanceof errorType) {
+          return true
+        }
+        return false
+      },
+    )
 
+    if (isPassthroughError) {
+      return null
+    }
     return event
   },
 }

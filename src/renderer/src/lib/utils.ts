@@ -76,6 +76,28 @@ export const getOS = memoize((): OS => {
   return os as OS
 })
 
+export function detectBrowser() {
+  const { userAgent } = navigator
+  if (userAgent.includes("Edg")) {
+    return "Microsoft Edge"
+  } else if (userAgent.includes("Chrome")) {
+    return "Chrome"
+  } else if (userAgent.includes("Firefox")) {
+    return "Firefox"
+  } else if (userAgent.includes("Safari")) {
+    return "Safari"
+  } else if (userAgent.includes("Opera")) {
+    return "Opera"
+  } else if (
+    userAgent.includes("Trident") ||
+    userAgent.includes("MSIE")
+  ) {
+    return "Internet Explorer"
+  }
+
+  return "Unknown"
+}
+
 export const isSafari = memoize(() => {
   if (ELECTRON) return false
   const ua = window.navigator.userAgent

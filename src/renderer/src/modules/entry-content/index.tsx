@@ -21,6 +21,7 @@ import {
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { FeedViewType } from "@renderer/lib/enum"
+import { getNewIssueUrl } from "@renderer/lib/issues"
 import { cn } from "@renderer/lib/utils"
 import type { ActiveEntryId } from "@renderer/models"
 import {
@@ -30,6 +31,8 @@ import {
 import { Queries } from "@renderer/queries"
 import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
+import type { FallbackRender } from "@sentry/react"
+import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
 import { useEffect, useLayoutEffect, useRef } from "react"
 
@@ -205,38 +208,39 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
 
             <WrappedElementProvider boundingDetection>
               <TitleMetaHandler entryId={entry.entries.id} />
-              <ShadowDOM>
-                <div className="prose mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
-                  {(summary.isLoading || summary.data) && (
-                    <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
-                      <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
-                        <i className="i-mgc-magic-2-cute-re align-middle" />
-                        <span>AI summary</span>
-                      </div>
-                      <AutoResizeHeight
-                        spring
-                        className="text-sm leading-relaxed"
-                      >
-                        {summary.isLoading ?
-                          SummaryLoadingSkeleton :
-                          summary.data}
-                      </AutoResizeHeight>
+              <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem]">
+                {(summary.isLoading || summary.data) && (
+                  <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
+                    <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
+                      <i className="i-mgc-magic-2-cute-re align-middle" />
+                      <span>AI summary</span>
                     </div>
-                  )}
-
-                  {!isInReadabilityMode ? (
-                    <HTML
-                      as="article"
-                      className="prose-h1:text-[1.6em]"
-                      renderInlineStyle={readerRenderInlineStyle}
+                    <AutoResizeHeight
+                      spring
+                      className="text-sm leading-relaxed"
                     >
-                      {content}
-                    </HTML>
+                      {summary.isLoading ?
+                        SummaryLoadingSkeleton :
+                        summary.data}
+                    </AutoResizeHeight>
+                  </div>
+                )}
+                <ErrorBoundary fallback={RenderError}>
+                  {!isInReadabilityMode ? (
+                    <ShadowDOM>
+                      <HTML
+                        as="article"
+                        className="prose dark:prose-invert prose-h1:text-[1.6em]"
+                        renderInlineStyle={readerRenderInlineStyle}
+                      >
+                        {content}
+                      </HTML>
+                    </ShadowDOM>
                   ) : (
                     <ReadabilityContent entryId={entryId} />
                   )}
-                </div>
-              </ShadowDOM>
+                </ErrorBoundary>
+              </div>
             </WrappedElementProvider>
             {!content && (
               <div className="center mt-16">
@@ -327,7 +331,7 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
         </div>
       )}
 
-      <HTML as="article" className="prose-h1:text-[1.6em]">
+      <HTML as="article" className="prose dark:prose-invert prose-h1:text-[1.6em]">
         {result?.content ?? ""}
       </HTML>
     </div>
@@ -391,4 +395,38 @@ const ReadabilityAutoToggle = ({ url, id }: { url: string, id: string }) => {
   }, [toggle])
 
   return null
+}
+
+const RenderError: FallbackRender = ({ error }) => {
+  const nextError =
+    typeof error === "string" ? new Error(error) : (error as Error)
+  return (
+    <div className="center mt-16 flex flex-col gap-2">
+      <i className="i-mgc-close-cute-re text-3xl text-red-500" />
+      <span className="font-sans text-sm">
+        Render error: {nextError.message}
+      </span>
+      <a
+        href={getNewIssueUrl({
+          body: [
+            "### Error",
+            "",
+            nextError.message,
+            "",
+            "### Stack",
+            "",
+            "```",
+            nextError.stack,
+            "```",
+          ].join("\n"),
+          label: "bug",
+          title: "Render error",
+        })}
+        target="_blank"
+        rel="noreferrer"
+      >
+        Report issue
+      </a>
+    </div>
+  )
 }

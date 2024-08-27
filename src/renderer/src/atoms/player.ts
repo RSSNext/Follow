@@ -1,5 +1,6 @@
 import { createAtomHooks } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
+import { noop } from "foxact/noop"
 import { atomWithStorage, createJSONStorage } from "jotai/utils"
 import type { SyncStorage } from "jotai/vanilla/utils/atomWithStorage"
 
@@ -104,7 +105,7 @@ export const AudioPlayer = {
         status: "playing",
         duration: this.audio.duration === Infinity ? 0 : this.audio.duration,
       })
-    })
+    }).catch(noop)
   },
   teardown() {
     this.currentTimeTimer && clearInterval(this.currentTimeTimer)
