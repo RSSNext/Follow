@@ -1,8 +1,6 @@
 /* eslint-disable @eslint-react/hooks-extra/no-direct-set-state-in-use-layout-effect */
 import { getReadonlyRoute } from "@renderer/atoms/route"
-import {
-  useUISettingKey,
-} from "@renderer/atoms/settings/ui"
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { ActionButton } from "@renderer/components/ui/button"
 import { HotKeyScopeMap, views } from "@renderer/constants"
@@ -22,12 +20,7 @@ import { useWheel } from "@use-gesture/react"
 import { AnimatePresence, m } from "framer-motion"
 import { Lethargy } from "lethargy"
 import type { FC, PropsWithChildren } from "react"
-import {
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react"
+import { useCallback, useLayoutEffect, useRef, useState } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 
 import { WindowUnderBlur } from "../../components/ui/background"
@@ -184,19 +177,17 @@ export function FeedColumn({ children }: PropsWithChildren) {
           </ActionButton>
         ))}
       </div>
-      <div className="relative size-full overflow-hidden" ref={carouselRef}>
+      <div className="relative flex size-full overflow-hidden" ref={carouselRef}>
         <SwipeWrapper active={active}>
           {views.map((item, index) => (
             <section
               key={item.name}
               className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center"
             >
-              {active === index && (
-                <FeedList
-                  className="flex size-full flex-col text-sm"
-                  view={index}
-                />
-              )}
+              <FeedList
+                className="flex size-full flex-col text-sm"
+                view={index}
+              />
             </section>
           ))}
         </SwipeWrapper>
@@ -260,6 +251,7 @@ const SwipeWrapper: FC<{
   return (
     <AnimatePresence mode="popLayout">
       <m.div
+        className="grow"
         key={currentAnimtedActive}
         initial={
           isReady ?

@@ -1,4 +1,7 @@
-import { AudioPlayer, useAudioPlayerAtomSelector } from "@renderer/atoms/player"
+import {
+  AudioPlayer,
+  useAudioPlayerAtomSelector,
+} from "@renderer/atoms/player"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { RelativeTime } from "@renderer/components/ui/datetime"
 import { Media } from "@renderer/components/ui/media"
@@ -10,7 +13,7 @@ import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
-import { useCallback, useEffect, useRef } from "react"
+import { useDebounceCallback } from "usehooks-ts"
 
 import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
 import { StarIcon } from "../star-icon"
@@ -35,15 +38,15 @@ export function ListItem({
   )
 
   const feed = useFeedById(entry?.feedId) || entryPreview?.feeds
-  const delayTimerRef = useRef<any>()
-  const handlePrefetchEntry = useCallback(() => {
-    delayTimerRef.current = setTimeout(() => {
+
+  const handlePrefetchEntry = useDebounceCallback(
+    () => {
       Queries.entries.byId(entryId).prefetch()
-    }, 300)
-  }, [entryId])
-  useEffect(() => () => {
-    clearTimeout(delayTimerRef.current)
-  }, [entryId])
+    },
+    300,
+    { leading: false },
+  )
+
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
@@ -54,7 +57,7 @@ export function ListItem({
   return (
     <div
       onMouseEnter={handlePrefetchEntry}
-      onMouseLeave={() => clearTimeout(delayTimerRef.current)}
+      onMouseLeave={handlePrefetchEntry.cancel}
       className={cn(
         "group relative flex py-4 pl-3 pr-2",
         !asRead &&

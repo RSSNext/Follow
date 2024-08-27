@@ -119,7 +119,7 @@ export const EntryItemWrapper: FC<
         )}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
-        onMouseLeave={() => handleMouseEnter.cancel()}
+        onMouseLeave={handleMouseEnter.cancel}
         onDoubleClick={handleDoubleClick}
         onContextMenu={handleContextMenu}
       >
