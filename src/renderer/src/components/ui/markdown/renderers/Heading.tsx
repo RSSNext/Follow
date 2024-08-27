@@ -1,8 +1,9 @@
 import { springScrollToElement } from "@renderer/lib/scroller"
 import { cn } from "@renderer/lib/utils"
-import { useId } from "react"
+import { useContext, useId } from "react"
 
 import { useScrollViewElement } from "../../scroll-area/hooks"
+import { MarkdownRenderContainerRefContext } from "../context"
 
 export const createHeadingRenderer =
   (level: number) =>
@@ -16,13 +17,13 @@ export const createHeadingRenderer =
 
       const As = `h${level}` as any
       const { node, ...rest } = props as any
-      const finalId = rest.id || rid
 
       const scroller = useScrollViewElement()
+      const renderContainer = useContext(MarkdownRenderContainerRefContext)
       return (
         <As
           {...rest}
-          id={finalId}
+          data-rid={rid}
           className={cn(rest.className, "group relative")}
         >
           {rest.children}
@@ -34,9 +35,10 @@ export const createHeadingRenderer =
             )}
             aria-hidden
             onClick={() => {
+              if (!renderContainer) return
+
               springScrollToElement(
-              // eslint-disable-next-line unicorn/prefer-query-selector
-                document.getElementById(finalId)!,
+                renderContainer.querySelector(`[data-rid="${rid}"]`)!,
                 -100,
                 scroller!,
               )

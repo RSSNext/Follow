@@ -2,7 +2,9 @@ import { parseHtml } from "@renderer/lib/parse-html"
 import type { RemarkOptions } from "@renderer/lib/parse-markdown"
 import { parseMarkdown } from "@renderer/lib/parse-markdown"
 import { cn } from "@renderer/lib/utils"
-import { useMemo, useState } from "react"
+import { createElement, useMemo, useRef, useState } from "react"
+
+import { MarkdownRenderContainerRefContext } from "./context"
 
 export const Markdown: Component<
   {
@@ -28,13 +30,16 @@ export const Markdown: Component<
   )
 }
 
-export const HTML: Component<
-  {
+export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
+  props: {
     children: string | null | undefined
-  } & Partial<{
+    as: A
+  } & JSX.IntrinsicElements[A] &
+  Partial<{
     renderInlineStyle: boolean
-  }>
-> = ({ children, renderInlineStyle }) => {
+  }>,
+) => {
+  const { children, renderInlineStyle, as = "div", ...rest } = props
   const stableRemarkOptions = useState({ renderInlineStyle })[0]
 
   const markdownElement = useMemo(
@@ -45,6 +50,11 @@ export const HTML: Component<
       }).toContent(),
     [children, stableRemarkOptions],
   )
+  const ref = useRef<HTMLElement>(null)
 
-  return markdownElement
+  return (
+    <MarkdownRenderContainerRefContext.Provider value={ref.current}>
+      {createElement(as, { ...rest, ref }, markdownElement)}
+    </MarkdownRenderContainerRefContext.Provider>
+  )
 }
