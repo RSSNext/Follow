@@ -1,3 +1,4 @@
+import { ShadowDOM } from "@renderer/components/common/ShadowDOM"
 import { Checkbox } from "@renderer/components/ui/checkbox"
 import { ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
 import {
@@ -35,14 +36,12 @@ export const parseHtml = (
     .use(rehypeParse, { fragment: true })
     .use(rehypeSanitize, {
       ...defaultSchema,
-      tagNames: renderInlineStyle ?
-        defaultSchema.tagNames :
-          [...defaultSchema.tagNames!, "video"],
+      tagNames: [...defaultSchema.tagNames!, "video", "style"],
       attributes: {
         ...defaultSchema.attributes,
 
         "*": renderInlineStyle ?
-            [...defaultSchema.attributes!["*"], "style"] :
+            [...defaultSchema.attributes!["*"], "style", "class"] :
           defaultSchema.attributes!["*"],
 
         "video": ["src", "poster"],
@@ -85,6 +84,7 @@ export const parseHtml = (
           h4: createHeadingRenderer(4),
           h5: createHeadingRenderer(5),
           h6: createHeadingRenderer(6),
+          style: Style,
 
           video: ({ node, ...props }) =>
             createElement(Media, { ...props, popper: true, type: "video" }),
@@ -241,4 +241,15 @@ function extractCodeFromHtml(htmlString: string) {
   }
 
   return tempDiv.textContent
+}
+
+const Style: Components["style"] = ({ node, ...props }) => {
+  const isShadowDOM = ShadowDOM.useIsShadowDOM()
+
+  if (isShadowDOM) {
+    return createElement("style", {
+      ...props,
+    })
+  }
+  return null
 }
