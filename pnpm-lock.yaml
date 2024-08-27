@@ -4,6 +4,10 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  is-core-module: npm:@nolyfill/is-core-module@^1
+  isarray: npm:@nolyfill/isarray@^1
+
 patchedDependencies:
   '@mozilla/readability@0.5.0':
     hash: fgkvsbckled47trggkhdkimzbm
@@ -1787,6 +1791,14 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@nolyfill/is-core-module@1.0.39':
+    resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
+    engines: {node: '>=12.4.0'}
+
+  '@nolyfill/isarray@1.0.29':
+    resolution: {integrity: sha512-YXk/GW1mquC9LpdjrwhY/RjGWp3ud4JZopFjU0XDHHOCy1h1lzMaiUzH8cjLDrbgSDe3yuk2wL4DNPgpkypulA==}
+    engines: {node: '>=12.4.0'}
 
   '@npmcli/fs@2.1.2':
     resolution: {integrity: sha512-yOJKRvohFOaLqipNtwYB9WugyZKhC/DZC4VYPmpaCzDBrA8YpK3qHZ8/HGscMnE4GqbkLNuVcCnxkeQEdGt6LQ==}
@@ -5333,10 +5345,6 @@ packages:
     resolution: {integrity: sha512-ZYvCgrefwqoQ6yTyYUbQu64HsITZ3NfKX1lzaEYdkTDcfKzzCI/wthRRYKkdjHKFVgNiXKAKm65Zo1pk2as/QQ==}
     hasBin: true
 
-  is-core-module@2.15.1:
-    resolution: {integrity: sha512-z0vtXSwucUJtANQWldhbtbt7BnL0vxiFjIdDLAatwhDYty2bad6s+rijD6Ri4YuYJubLzIJLUidCh09e1djEVQ==}
-    engines: {node: '>= 0.4'}
-
   is-decimal@2.0.1:
     resolution: {integrity: sha512-AAB9hiomQs5DXWcRB1rqsxGUstbRroFOPPVAomNk/3XHR5JyEZChOyTWe2oayKnsSsr/kcGqF+z6yuH6HHpN0A==}
 
@@ -5433,9 +5441,6 @@ packages:
   is-wsl@2.2.0:
     resolution: {integrity: sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww==}
     engines: {node: '>=8'}
-
-  isarray@1.0.0:
-    resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
 
   isbinaryfile@4.0.10:
     resolution: {integrity: sha512-iHrqe5shvBUcFbmZq9zOQHBoeOhZJu6RQGrDpBgenUm/Am+F3JM2MgQj+rK3Z601fzrL5gLZWtAPH2OBaSVcyw==}
@@ -9631,6 +9636,10 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
+  '@nolyfill/is-core-module@1.0.39': {}
+
+  '@nolyfill/isarray@1.0.29': {}
+
   '@npmcli/fs@2.1.2':
     dependencies:
       '@gar/promisify': 1.1.3
@@ -12812,7 +12821,7 @@ snapshots:
   eslint-import-resolver-node@0.3.9:
     dependencies:
       debug: 3.2.7
-      is-core-module: 2.15.1
+      is-core-module: '@nolyfill/is-core-module@1.0.39'
       resolve: 1.22.8
     transitivePeerDependencies:
       - supports-color
@@ -13358,7 +13367,8 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  function-bind@1.1.2: {}
+  function-bind@1.1.2:
+    optional: true
 
   fuse.js@7.0.0: {}
 
@@ -13642,6 +13652,7 @@ snapshots:
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
+    optional: true
 
   hast-util-excerpt@2.0.0:
     dependencies:
@@ -13990,10 +14001,6 @@ snapshots:
     dependencies:
       ci-info: 3.9.0
 
-  is-core-module@2.15.1:
-    dependencies:
-      hasown: 2.0.2
-
   is-decimal@2.0.1: {}
 
   is-docker@2.2.1: {}
@@ -14066,8 +14073,6 @@ snapshots:
   is-wsl@2.2.0:
     dependencies:
       is-docker: 2.2.1
-
-  isarray@1.0.0: {}
 
   isbinaryfile@4.0.10: {}
 
@@ -15645,7 +15650,7 @@ snapshots:
     dependencies:
       core-util-is: 1.0.3
       inherits: 2.0.4
-      isarray: 1.0.0
+      isarray: '@nolyfill/isarray@1.0.29'
       process-nextick-args: 2.0.1
       safe-buffer: 5.1.2
       string_decoder: 1.1.1
@@ -15824,7 +15829,7 @@ snapshots:
 
   resolve@1.22.8:
     dependencies:
-      is-core-module: 2.15.1
+      is-core-module: '@nolyfill/is-core-module@1.0.39'
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 

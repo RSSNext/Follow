@@ -23,6 +23,7 @@
     "dev:web": "vite",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "polyfill-optimize": "pnpx nolyfill install",
     "prepare": "pnpm exec simple-git-hooks && shx test -f .env || shx cp .env.example .env",
     "publish": "electron-vite build --outDir=dist && electron-forge publish",
     "start": "electron-vite preview",
@@ -193,6 +194,10 @@
       "@mozilla/readability@0.5.0": "patches/@mozilla__readability@0.5.0.patch",
       "re-resizable@6.9.17": "patches/re-resizable@6.9.17.patch",
       "hono": "patches/hono.patch"
+    },
+    "overrides": {
+      "is-core-module": "npm:@nolyfill/is-core-module@^1",
+      "isarray": "npm:@nolyfill/isarray@^1"
     }
   },
   "simple-git-hooks": {
