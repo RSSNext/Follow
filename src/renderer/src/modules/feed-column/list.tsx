@@ -202,6 +202,7 @@ const SortButton = () => {
         onClick={() => {
           setFeedListSortBy(by === "count" ? "alphabetical" : "count")
         }}
+        className="center"
       >
         <IconOpacityTransition
           icon2={
