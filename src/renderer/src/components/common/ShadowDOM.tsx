@@ -1,4 +1,4 @@
-import { useThemeAtomValue } from "@renderer/hooks/common"
+import { useIsDark } from "@renderer/hooks/common"
 import type { FC, PropsWithChildren } from "react"
 import { createContext, useContext, useState } from "react"
 import root from "react-shadow"
@@ -13,11 +13,11 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
     ...document.head.querySelectorAll("style").values(),
   ])
 
-  const theme = useThemeAtomValue()
+  const dark = useIsDark()
   return (
     <root.div {...rest}>
       <ShadowDOMContext.Provider value={true}>
-        <html data-theme={theme}>
+        <html data-theme={dark ? "dark" : "light"}>
           <head>
             {stylesElements.map((styleElement, index) => (
               <style
