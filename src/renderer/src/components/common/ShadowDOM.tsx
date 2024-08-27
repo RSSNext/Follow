@@ -1,3 +1,4 @@
+import { useThemeAtomValue } from "@renderer/hooks/common"
 import type { FC, PropsWithChildren } from "react"
 import { createContext, useContext, useState } from "react"
 import root from "react-shadow"
@@ -12,16 +13,21 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
     ...document.head.querySelectorAll("style").values(),
   ])
 
+  const theme = useThemeAtomValue()
   return (
     <root.div {...rest}>
       <ShadowDOMContext.Provider value={true}>
-        {stylesElements.map((styleElement, index) => (
-          <style
-            key={index}
-            dangerouslySetInnerHTML={{ __html: styleElement.innerHTML }}
-          />
-        ))}
-        {props.children}
+        <html data-theme={theme}>
+          <head>
+            {stylesElements.map((styleElement, index) => (
+              <style
+                key={index}
+                dangerouslySetInnerHTML={{ __html: styleElement.innerHTML }}
+              />
+            ))}
+          </head>
+          {props.children}
+        </html>
       </ShadowDOMContext.Provider>
     </root.div>
   )
