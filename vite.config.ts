@@ -3,6 +3,7 @@ import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { sentryVitePlugin } from "@sentry/vite-plugin"
+import legacy from "@vitejs/plugin-legacy"
 import react from "@vitejs/plugin-react"
 import { cyan, dim, green } from "kolorist"
 import { visualizer } from "rollup-plugin-visualizer"
@@ -49,6 +50,13 @@ const vite = ({ mode }) => {
       port: 2233,
     },
     plugins: [
+      mode !== "development" &&
+      legacy({
+        targets: "defaults",
+        renderLegacyChunks: false,
+        modernTargets: ">0.3%, last 2 versions, Firefox ESR, not dead",
+        modernPolyfills: ["es.array.find-last-index", "es.array.find-last"],
+      }),
       htmlPlugin(typedEnv),
       react(),
       mkcert(),

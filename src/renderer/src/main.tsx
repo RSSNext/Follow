@@ -11,7 +11,7 @@ import { initializeApp } from "./initialize"
 import { getOS } from "./lib/utils"
 import { router } from "./router"
 
-await initializeApp().finally(() => {
+initializeApp().finally(() => {
   setAppIsReady(true)
 })
 
