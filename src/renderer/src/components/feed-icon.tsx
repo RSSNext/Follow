@@ -65,6 +65,18 @@ export function FeedIcon({
       )
       break
     }
+    default: {
+      ImageElement = (
+        <i
+          className="i-mgc-link-cute-re mr-2 shrink-0"
+          style={{
+            width: size,
+            height: size,
+          }}
+        />
+      )
+      break
+    }
   }
 
   const colors = useMemo(

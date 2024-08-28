@@ -36,11 +36,14 @@ function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
     const cloned: SubscriptionFlatModel = { ...subscription }
     if (!subscription.category && subscription.feeds) {
       const { siteUrl } = subscription.feeds
-      if (!siteUrl) continue
-      const parsed = parse(siteUrl)
+      if (!siteUrl) {
+        cloned.defaultCategory = subscription.feedId
+      } else {
+        const parsed = parse(siteUrl)
 
-      if (parsed.domain) {
-        cloned.defaultCategory = capitalizeFirstLetter(parsed.domain)
+        if (parsed.domain) {
+          cloned.defaultCategory = capitalizeFirstLetter(parsed.domain)
+        }
       }
     }
     result.push(cloned)
