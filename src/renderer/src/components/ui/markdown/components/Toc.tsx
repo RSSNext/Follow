@@ -1,13 +1,9 @@
 import { springScrollToElement } from "@renderer/lib/scroller"
 import { cn } from "@renderer/lib/utils"
-import {
-  useGetWrappedElementPosition,
-} from "@renderer/providers/wrapped-element-provider"
-import { atom, useAtom } from "jotai"
+import { useGetWrappedElementPosition } from "@renderer/providers/wrapped-element-provider"
 import { throttle } from "lodash-es"
 import {
   memo,
-  startTransition,
   useContext,
   useEffect,
   useMemo,
@@ -72,17 +68,18 @@ export const Toc: Component = ({ className }) => {
   )
 
   const [_, setTreeRef] = useState<HTMLUListElement | null>()
-  const [activeId, setActiveId] = useActiveId($headings)
+  // const [activeId, setActiveId] = useActiveId($headings)
 
   const scrollContainerElement = useScrollViewElement()
 
   const handleScrollTo = useEventCallback(
-    (i: number, $el: HTMLElement | null, anchorId: string) => {
+    (i: number, $el: HTMLElement | null, _anchorId: string) => {
       if ($el) {
         const handle = () => {
-          springScrollToElement($el, -100, scrollContainerElement!).then(() => {
-            setActiveId?.(anchorId)
-          })
+          springScrollToElement($el, -100, scrollContainerElement!)
+          //   .then(() => {
+          //   setActiveId?.(anchorId)
+          // })
         }
         handle()
       }
@@ -151,7 +148,7 @@ export const Toc: Component = ({ className }) => {
         {toc.map((heading, index) => (
           <MemoedItem
             heading={heading}
-            active={heading.anchorId === activeId}
+            // active={heading.anchorId === activeId}
             key={heading.title}
             rootDepth={rootDepth}
             onClick={handleScrollTo}
@@ -163,40 +160,41 @@ export const Toc: Component = ({ className }) => {
     </div>
   )
 }
-const tocActiveIdAtom = atom<string | null>(null)
-function useActiveId($headings: HTMLHeadingElement[]) {
-  const [activeId, setActiveId] = useAtom(tocActiveIdAtom)
-  const scrollContainerElement = useScrollViewElement()
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            startTransition(() => {
-              setActiveId((entry.target as HTMLElement).dataset.rid || "")
-            })
-          }
-        })
-      },
-      { rootMargin: `-100px 0px -100px 0px`, root: scrollContainerElement },
-    )
-    $headings.forEach(($heading) => {
-      observer.observe($heading)
-    })
-    return () => {
-      observer.disconnect()
-    }
-  }, [$headings, scrollContainerElement, setActiveId])
+// const tocActiveIdAtom = atom<string | null>(null)
+// function useActiveId($headings: HTMLHeadingElement[]) {
+//   const [activeId, setActiveId] = useAtom(tocActiveIdAtom)
+//   const scrollContainerElement = useScrollViewElement()
+//   useEffect(() => {
+//     const observer = new IntersectionObserver(
+//       (entries) => {
+//         entries.forEach((entry) => {
+//           if (entry.isIntersecting) {
+//             startTransition(() => {
+//               setActiveId((entry.target as HTMLElement).dataset.rid || "")
+//             })
+//           }
+//         })
+//       },
+//       { rootMargin: `-100px 0px -100px 0px`, root: scrollContainerElement },
+//     )
+//     $headings.forEach(($heading) => {
+//       observer.observe($heading)
+//     })
+//     return () => {
+//       observer.disconnect()
+//     }
+//   }, [$headings, scrollContainerElement, setActiveId])
 
-  return [activeId, setActiveId] as const
-}
+//   return [activeId, setActiveId] as const
+// }
 
 const MemoedItem = memo<TocItemProps>((props) => {
   const {
-    active,
-
+    // active,
+    range,
     ...rest
   } = props
+  const active = range > 0
 
   const itemRef = useRef<HTMLElement>(null)
 
@@ -221,6 +219,6 @@ const MemoedItem = memo<TocItemProps>((props) => {
     }
   }, [active])
 
-  return <TocItem active={active} {...rest} />
+  return <TocItem range={range} {...rest} />
 })
 MemoedItem.displayName = "MemoedItem"

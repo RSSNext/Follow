@@ -13,7 +13,7 @@ export interface ITocItem {
 
 export interface TocItemProps {
   heading: ITocItem
-  active: boolean
+  // active: boolean
   rootDepth: number
   onClick?: (i: number, $el: HTMLElement | null, anchorId: string) => void
 
@@ -22,7 +22,7 @@ export interface TocItemProps {
 }
 
 export const TocItem: FC<TocItemProps> = memo((props) => {
-  const { active, onClick, heading, isScrollOut, range } = props
+  const { onClick, heading, isScrollOut, range } = props
   const { $heading, anchorId, depth, index, title } = heading
 
   const $ref = useRef<HTMLButtonElement>(null)
@@ -48,7 +48,7 @@ export const TocItem: FC<TocItemProps> = memo((props) => {
         style={{
           width: widthMap[depth],
         }}
-        data-active={active}
+        data-active={!!range}
         className={cn(
           "relative inline-block h-1.5 rounded-full",
           "bg-zinc-100 duration-200 hover:!bg-zinc-400 group-hover:bg-zinc-400/50",
@@ -56,7 +56,7 @@ export const TocItem: FC<TocItemProps> = memo((props) => {
 
           "dark:bg-zinc-800/80 dark:hover:!bg-zinc-600 dark:group-hover:bg-zinc-600/50",
           isScrollOut && "dark:bg-zinc-700",
-          active &&
+          !!range &&
           "!bg-zinc-400/50 data-[active=true]:group-hover:!bg-zinc-500 dark:!bg-zinc-600",
         )}
       >
