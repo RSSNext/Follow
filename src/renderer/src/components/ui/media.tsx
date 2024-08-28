@@ -180,7 +180,7 @@ const MediaImpl: FC<MediaProps> = ({
         )
       }
       default: {
-        throw new Error("Invalid type")
+        return null
       }
     }
   }, [
@@ -191,6 +191,7 @@ const MediaImpl: FC<MediaProps> = ({
     hidden,
     imgSrc,
     mediaContainerClassName,
+    mediaLoadState,
     popper,
     previewImageUrl,
     props,
@@ -198,6 +199,7 @@ const MediaImpl: FC<MediaProps> = ({
     src,
     type,
   ])
+  if (!type || !src) return null
 
   if (hidden && showFallback) {
     return <FallbackMedia {...props} />
