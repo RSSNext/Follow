@@ -53,11 +53,12 @@ export const TocItem: FC<{
         style={{
           width: widthMap[depth],
         }}
+        data-active={active}
         className={cn(
           "inline-block h-1.5 rounded-full",
-          "bg-stone-100 duration-200 hover:!bg-stone-400 group-hover:bg-stone-400/50",
-          "dark:bg-stone-800 dark:hover:!bg-stone-600 dark:group-hover:bg-stone-600/50",
-          active && "!bg-stone-400 dark:!bg-stone-600",
+          "bg-zinc-100 duration-200 hover:!bg-zinc-400 group-hover:bg-zinc-400/50",
+          "dark:bg-zinc-800/80 dark:hover:!bg-zinc-600 dark:group-hover:bg-zinc-600/50",
+          active && "!bg-zinc-400/50 data-[active=true]:group-hover:!bg-zinc-500 dark:!bg-zinc-600",
         )}
       />
     </button>

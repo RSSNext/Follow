@@ -22,13 +22,13 @@ const TooltipContent = React.forwardRef<
     asChild
     sideOffset={sideOffset}
     className={cn(
-      "relative z-[101] border border-accent/10 bg-white px-2 py-1 text-foreground backdrop-blur-xl dark:bg-neutral-950",
+      "relative z-[101] border border-accent/10 bg-white px-2 py-1 text-foreground dark:bg-neutral-950",
       // "animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out  data-[state=closed]:zoom-out-95 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2",
       "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
       "rounded-lg text-sm",
       "max-w-[75ch] select-text",
 
-      "data-[side=top]:shadow-tooltip-bottom data-[side=bottom]:shadow-tooltip-top",
+      "drop-shadow data-[side=top]:shadow-tooltip-bottom data-[side=bottom]:shadow-tooltip-top",
 
       className,
     )}
@@ -39,13 +39,11 @@ const TooltipContent = React.forwardRef<
       animate={{ opacity: 1, scale: 1 }}
       transition={{
         type: "spring",
-
         tension: 280,
         friction: 60,
 
         duration: 0.1,
       }}
-      className="relative z-50"
     >
       {/* https://github.com/radix-ui/primitives/discussions/868 */}
       <TooltipPrimitive.Arrow className="z-50 fill-white drop-shadow-[0_0_1px_theme(colors.accent.DEFAULT/0.3)] [clip-path:inset(0_-10px_-10px_-10px)] dark:fill-neutral-950" />
