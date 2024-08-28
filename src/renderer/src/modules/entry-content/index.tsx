@@ -11,6 +11,8 @@ import { m } from "@renderer/components/common/Motion"
 import { ShadowDOM } from "@renderer/components/common/ShadowDOM"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { HTML } from "@renderer/components/ui/markdown"
+import { Toc } from "@renderer/components/ui/markdown/components/Toc"
+import { RootPortal } from "@renderer/components/ui/portal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { isWebBuild, ROUTE_FEED_PENDING } from "@renderer/constants"
 import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
@@ -26,6 +28,7 @@ import { cn } from "@renderer/lib/utils"
 import type { ActiveEntryId } from "@renderer/models"
 import {
   useIsSoFWrappedElement,
+  useWrappedElement,
   WrappedElementProvider,
 } from "@renderer/providers/wrapped-element-provider"
 import { Queries } from "@renderer/queries"
@@ -207,8 +210,8 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
               </div>
             </a>
 
+            <TitleMetaHandler entryId={entry.entries.id} />
             <WrappedElementProvider boundingDetection>
-              <TitleMetaHandler entryId={entry.entries.id} />
               <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem]">
                 {(summary.isLoading || summary.data) && (
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
@@ -230,6 +233,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                   {!isInReadabilityMode ? (
                     <ShadowDOM>
                       <HTML
+                        accessory={<ContainerToc entryId={entryId} />}
                         as="article"
                         className="prose dark:prose-invert prose-h1:text-[1.6em]"
                         renderInlineStyle={readerRenderInlineStyle}
@@ -430,5 +434,23 @@ const RenderError: FallbackRender = ({ error }) => {
         Report issue
       </a>
     </div>
+  )
+}
+
+const ContainerToc: FC<{
+  entryId: string
+}> = (props) => {
+  const wrappedElement = useWrappedElement()
+  return (
+    <RootPortal to={wrappedElement!}>
+      <div className="absolute right-[-130px] top-0 h-full w-[100px]">
+        <div className="sticky top-0">
+          <Toc
+            className="flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring-soft @[900px]:items-start"
+            key={props.entryId}
+          />
+        </div>
+      </div>
+    </RootPortal>
   )
 }

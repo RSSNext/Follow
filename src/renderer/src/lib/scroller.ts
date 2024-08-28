@@ -12,28 +12,31 @@ export const springScrollTo = (
   const stopSpringScrollHandler = () => {
     animation.stop()
   }
+  const el = scrollerElement || window
   const animation = animateValue({
     keyframes: [scrollTop + 1, y],
     autoplay: true,
     ...microDampingPreset,
     onPlay() {
-      window.addEventListener("wheel", stopSpringScrollHandler)
-      window.addEventListener("touchmove", stopSpringScrollHandler)
+      el.addEventListener("wheel", stopSpringScrollHandler)
+      el.addEventListener("touchmove", stopSpringScrollHandler)
     },
 
     onUpdate(latest) {
       if (latest <= 0) {
         animation.stop()
       }
-      const el = scrollerElement || window
+
       el.scrollTo(0, latest)
     },
   })
 
   animation.then(() => {
-    window.removeEventListener("wheel", stopSpringScrollHandler)
-    window.removeEventListener("touchmove", stopSpringScrollHandler)
+    el.removeEventListener("wheel", stopSpringScrollHandler)
+    el.removeEventListener("touchmove", stopSpringScrollHandler)
   })
+
+  return animation
 }
 
 export const springScrollToElement = (

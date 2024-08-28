@@ -18,15 +18,19 @@ export const Markdown: Component<
     [children, stableRemarkOptions],
   )
 
+  const ref = useRef<HTMLElement>(null)
   return (
-    <article
-      className={cn(
-        "prose relative cursor-auto select-text dark:prose-invert prose-th:text-left",
-        className,
-      )}
-    >
-      {markdownElement}
-    </article>
+    <MarkdownRenderContainerRefContext.Provider value={ref.current}>
+      <article
+        className={cn(
+          "prose relative cursor-auto select-text dark:prose-invert prose-th:text-left",
+          className,
+        )}
+        ref={ref}
+      >
+        {markdownElement}
+      </article>
+    </MarkdownRenderContainerRefContext.Provider>
   )
 }
 
@@ -34,12 +38,14 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
   props: {
     children: string | null | undefined
     as: A
+
+    accessory?: React.ReactNode
   } & JSX.IntrinsicElements[A] &
   Partial<{
     renderInlineStyle: boolean
   }>,
 ) => {
-  const { children, renderInlineStyle, as = "div", ...rest } = props
+  const { children, renderInlineStyle, as = "div", accessory, ...rest } = props
   const stableRemarkOptions = useState({ renderInlineStyle })[0]
 
   const markdownElement = useMemo(
@@ -55,6 +61,7 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
   return (
     <MarkdownRenderContainerRefContext.Provider value={ref.current}>
       {createElement(as, { ...rest, ref }, markdownElement)}
+      {accessory}
     </MarkdownRenderContainerRefContext.Provider>
   )
 }
