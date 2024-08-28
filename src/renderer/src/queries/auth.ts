@@ -1,6 +1,7 @@
 import type { Session } from "@auth/core/types"
 import type { GetSessionParams } from "@hono/auth-js/react"
 import { authConfigManager } from "@hono/auth-js/react"
+import { isDev } from "@renderer/constants"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import type { FetchError } from "ofetch"
@@ -9,6 +10,8 @@ import { ofetch } from "ofetch"
 export const auth = {
   getSession: () => defineQuery(["auth", "session"], () => getSession()),
 }
+
+type SessionStatus = "loading" | "authenticated" | "unauthenticated" | "error"
 
 export const useSession = (options?: { enabled?: boolean }) => {
   const { data, isLoading, ...rest } = useAuthQuery(auth.getSession(), {
@@ -36,9 +39,9 @@ export const useSession = (options?: { enabled?: boolean }) => {
       "loading" :
       data ?
         "authenticated" :
-        fetchError?.statusCode === 401 ?
+        fetchError?.statusCode === 401 || data === null ?
           "unauthenticated" :
-          "error",
+          "error" as SessionStatus,
   }
 }
 
@@ -51,6 +54,9 @@ async function fetchData<T = any>(
   req: any = {},
 ): Promise<T | null> {
   const config = authConfigManager.getConfig()
+  if (isDev && config.basePath !== "/auth") {
+    return null
+  }
   const url = `${config.baseUrl}${config.basePath}/${path}`
 
   const options: RequestInit = {
