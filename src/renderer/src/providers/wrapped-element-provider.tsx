@@ -1,8 +1,19 @@
+/* eslint-disable react-refresh/only-export-components */
 import { ProviderComposer } from "@renderer/components/common/ProviderComposer"
+import { jotaiStore } from "@renderer/lib/jotai"
 import { cn } from "@renderer/lib/utils"
 import { createContextState } from "foxact/create-context-state"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
-import { memo, useEffect, useRef } from "react"
+import type { PrimitiveAtom } from "jotai"
+import { atom, useAtomValue, useSetAtom } from "jotai"
+import {
+  createContext,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from "react"
 
 const [
   WrappedElementProviderInternal,
@@ -19,14 +30,9 @@ const [
   w: 0,
 })
 
-const [
-  ElementPositionProviderInternal,
-  useWrappedElementPosition,
-  useSetElementPosition,
-] = createContextState({
-  x: 0,
-  y: 0,
-})
+const ElementPositionProviderInternal = createContext<
+  PrimitiveAtom<{ x: number, y: number }>
+>(null!)
 
 const [
   IsEndOfElementProviderInternal,
@@ -43,7 +49,13 @@ const [
 const Providers = [
   <WrappedElementProviderInternal key="ArticleElementProviderInternal" />,
   <ElementSizeProviderInternal key="ElementSizeProviderInternal" />,
-  <ElementPositionProviderInternal key="ElementPositionProviderInternal" />,
+  <ElementPositionProviderInternal.Provider
+    key="ElementPositionProviderInternal"
+    value={atom({
+      x: 0,
+      y: 0,
+    })}
+  />,
   <IsEndOfElementProviderInternal key="IsEndOfElementProviderInternal" />,
   <IsStartOfElementProviderInternal key="IsStartOfElementProviderInternal" />,
 ]
@@ -67,26 +79,30 @@ export const WrappedElementProvider: Component<WrappedElementProviderProps> = ({
 )
 const ArticleElementResizeObserver = () => {
   const setSize = useSetWrappedElementSize()
-  const setPos = useSetElementPosition()
-  const $article = useWrappedElement()
+
+  const setPosition = useSetAtom(useContext(ElementPositionProviderInternal))
+  const $element = useWrappedElement()
   useIsomorphicLayoutEffect(() => {
-    if (!$article) return
-    const { height, width, x, y } = $article.getBoundingClientRect()
+    if (!$element) return
+    const { height, width, x, y } = $element.getBoundingClientRect()
     setSize({ h: height, w: width })
-    setPos({ x, y })
+
+    setPosition({ x, y })
 
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0]
-      const { height, width, x, y } = entry.contentRect
+      const { height, width } = entry.contentRect
+      const { x, y } = entry.target.getBoundingClientRect()
+
       setSize({ h: height, w: width })
-      setPos({ x, y })
+      setPosition({ x, y })
     })
-    observer.observe($article)
+    observer.observe($element)
     return () => {
-      observer.unobserve($article)
+      observer.unobserve($element)
       observer.disconnect()
     }
-  }, [$article])
+  }, [$element, setPosition])
 
   return null
 }
@@ -139,11 +155,18 @@ const BoundingDetection: Component<{
   return <div ref={ref} />
 }
 
+export const useWrappedElementPosition = () =>
+  useAtomValue(useContext(ElementPositionProviderInternal))
+
+export const useGetWrappedElementPosition = () => {
+  const atom = useContext(ElementPositionProviderInternal)
+  return useCallback(() => jotaiStore.get(atom), [atom])
+}
+
 export {
   useIsEoFWrappedElement,
   useIsSoFWrappedElement,
   useSetWrappedElement,
   useWrappedElement,
-  useWrappedElementPosition,
   useWrappedElementSize,
 }

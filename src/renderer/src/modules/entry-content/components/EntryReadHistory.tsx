@@ -14,7 +14,7 @@ import { Queries } from "@renderer/queries"
 import { useEntryReadHistory } from "@renderer/store/entry"
 import { useUserById } from "@renderer/store/user"
 import { LayoutGroup, m } from "framer-motion"
-import { Fragment, useEffect, useState } from "react"
+import { memo, useEffect, useState } from "react"
 
 import { usePresentUserProfileModal } from "../../profile/hooks"
 
@@ -51,9 +51,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({
           .slice(0, 10)
 
           .map((userId, i) => (
-            <Fragment key={userId}>
-              <EntryUser userId={userId} i={i} />
-            </Fragment>
+            <EntryUser userId={userId} i={i} key={userId} />
           ))}
       </LayoutGroup>
 
@@ -85,7 +83,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({
 const EntryUser: Component<{
   userId: string
   i: number
-}> = ({ userId, i }) => {
+}> = memo(({ userId, i }) => {
   const user = useUserById(userId)
   const presentUserProfile = usePresentUserProfileModal("drawer")
   if (!user) return null
@@ -116,4 +114,4 @@ const EntryUser: Component<{
       <TooltipContent side="top">Recent reader: {user.name}</TooltipContent>
     </Tooltip>
   )
-}
+})

@@ -1,6 +1,10 @@
 import { springScrollToElement } from "@renderer/lib/scroller"
 import { cn } from "@renderer/lib/utils"
+import {
+  useGetWrappedElementPosition,
+} from "@renderer/providers/wrapped-element-provider"
 import { atom, useAtom } from "jotai"
+import { throttle } from "lodash-es"
 import {
   memo,
   startTransition,
@@ -14,6 +18,7 @@ import { useEventCallback } from "usehooks-ts"
 
 import { useScrollViewElement } from "../../scroll-area/hooks"
 import { MarkdownRenderContainerRefContext } from "../context"
+import type { TocItemProps } from "./TocItem"
 import { TocItem } from "./TocItem"
 
 export interface ITocItem {
@@ -83,6 +88,59 @@ export const Toc: Component = ({ className }) => {
       }
     },
   )
+
+  const [currentScrollRange, setCurrentScrollRange] = useState([-1, 0])
+  const titleBetweenPositionTopRangeMap = useMemo(() => {
+    // calculate the range of data-container-top between each two headings
+    const titleBetweenPositionTopRangeMap = [] as [number, number][]
+    for (let i = 0; i < $headings.length - 1; i++) {
+      const $heading = $headings[i]
+      const $nextHeading = $headings[i + 1]
+      const top = Number.parseInt($heading.dataset["containerTop"] || "0")
+      const nextTop = Number.parseInt(
+        $nextHeading.dataset["containerTop"] || "0",
+      )
+
+      titleBetweenPositionTopRangeMap.push([top, nextTop])
+    }
+    return titleBetweenPositionTopRangeMap
+  }, [$headings])
+
+  const getWrappedElPos = useGetWrappedElementPosition()
+
+  useEffect(() => {
+    if (!scrollContainerElement) return
+
+    const handler = throttle(() => {
+      const top = scrollContainerElement.scrollTop + getWrappedElPos().y
+
+      // current top is in which range?
+      const currentRangeIndex = titleBetweenPositionTopRangeMap.findIndex(
+        ([start, end]) => top >= start && top <= end,
+      )
+      const currentRange = titleBetweenPositionTopRangeMap[currentRangeIndex]
+
+      if (currentRange) {
+        const [start, end] = currentRange
+
+        // current top is this range, the precent is ?
+        const precent = (top - start) / (end - start)
+
+        // position , precent
+        setCurrentScrollRange([currentRangeIndex, precent])
+      }
+    }, 100)
+    scrollContainerElement.addEventListener("scroll", handler)
+
+    return () => {
+      scrollContainerElement.removeEventListener("scroll", handler)
+    }
+  }, [
+    getWrappedElPos,
+    scrollContainerElement,
+    titleBetweenPositionTopRangeMap,
+  ])
+
   if (toc.length === 0) return null
   return (
     <div className="flex grow flex-col scroll-smooth px-2 scrollbar-none">
@@ -90,13 +148,15 @@ export const Toc: Component = ({ className }) => {
         ref={setTreeRef}
         className={cn("group overflow-auto scrollbar-none", className)}
       >
-        {toc?.map((heading) => (
+        {toc.map((heading, index) => (
           <MemoedItem
             heading={heading}
-            isActive={heading.anchorId === activeId}
+            active={heading.anchorId === activeId}
             key={heading.title}
             rootDepth={rootDepth}
             onClick={handleScrollTo}
+            isScrollOut={index < currentScrollRange[0]}
+            range={index === currentScrollRange[0] ? currentScrollRange[1] : 0}
           />
         ))}
       </ul>
@@ -131,51 +191,36 @@ function useActiveId($headings: HTMLHeadingElement[]) {
   return [activeId, setActiveId] as const
 }
 
-const MemoedItem = memo<{
-  isActive: boolean
-  heading: ITocItem
-  rootDepth: number
-  onClick?: (i: number, $el: HTMLElement | null, anchorId: string) => void
-}>((props) => {
-      const {
-        heading,
-        isActive,
-        onClick,
-        rootDepth,
-        // containerRef
-      } = props
+const MemoedItem = memo<TocItemProps>((props) => {
+  const {
+    active,
 
-      const itemRef = useRef<HTMLElement>(null)
+    ...rest
+  } = props
 
-      useEffect(() => {
-        if (!isActive) return
+  const itemRef = useRef<HTMLElement>(null)
 
-        const $item = itemRef.current
-        if (!$item) return
-        const $container = $item.parentElement
-        if (!$container) return
+  useEffect(() => {
+    if (!active) return
 
-        const containerHeight = $container.clientHeight
-        const itemHeight = $item.clientHeight
-        const itemOffsetTop = $item.offsetTop
-        const { scrollTop } = $container
+    const $item = itemRef.current
+    if (!$item) return
+    const $container = $item.parentElement
+    if (!$container) return
 
-        const itemTop = itemOffsetTop - scrollTop
-        const itemBottom = itemTop + itemHeight
-        if (itemTop < 0 || itemBottom > containerHeight) {
-          $container.scrollTop =
+    const containerHeight = $container.clientHeight
+    const itemHeight = $item.clientHeight
+    const itemOffsetTop = $item.offsetTop
+    const { scrollTop } = $container
+
+    const itemTop = itemOffsetTop - scrollTop
+    const itemBottom = itemTop + itemHeight
+    if (itemTop < 0 || itemBottom > containerHeight) {
+      $container.scrollTop =
         itemOffsetTop - containerHeight / 2 + itemHeight / 2
-        }
-      }, [isActive])
+    }
+  }, [active])
 
-      return (
-        <TocItem
-          heading={heading}
-          onClick={onClick}
-          active={isActive}
-          key={heading.title}
-          rootDepth={rootDepth}
-        />
-      )
-    })
+  return <TocItem active={active} {...rest} />
+})
 MemoedItem.displayName = "MemoedItem"

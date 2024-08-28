@@ -166,9 +166,10 @@ const MediaImpl: FC<MediaProps> = ({
       }
       case "video": {
         return (
-          <div
+          <span
             className={cn(
               hidden && "hidden",
+              "block",
               !(props.width || props.height) && "size-full",
               "relative bg-stone-100 object-cover",
               mediaContainerClassName,
@@ -176,7 +177,7 @@ const MediaImpl: FC<MediaProps> = ({
             onClick={handleClick}
           >
             <VideoPreview src={src!} previewImageUrl={previewImageUrl} />
-          </div>
+          </span>
         )
       }
       default: {
@@ -205,9 +206,9 @@ const MediaImpl: FC<MediaProps> = ({
     return <FallbackMedia {...props} />
   }
   return (
-    <div className={cn("overflow-hidden rounded", className)} style={style}>
+    <span className={cn("block overflow-hidden rounded", className)} style={style}>
       {InnerContent}
-    </div>
+    </span>
   )
 }
 

@@ -210,9 +210,9 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
               </div>
             </a>
 
-            <TitleMetaHandler entryId={entry.entries.id} />
             <WrappedElementProvider boundingDetection>
               <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem]">
+                <TitleMetaHandler entryId={entry.entries.id} />
                 {(summary.isLoading || summary.data) && (
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
                     <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">

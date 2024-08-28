@@ -1,6 +1,6 @@
 import { springScrollToElement } from "@renderer/lib/scroller"
 import { cn } from "@renderer/lib/utils"
-import { useContext, useId } from "react"
+import { useContext, useId, useLayoutEffect, useRef, useState } from "react"
 
 import { useScrollViewElement } from "../../scroll-area/hooks"
 import { MarkdownRenderContainerRefContext } from "../context"
@@ -20,8 +20,21 @@ export const createHeadingRenderer =
 
       const scroller = useScrollViewElement()
       const renderContainer = useContext(MarkdownRenderContainerRefContext)
+      const ref = useRef<HTMLHeadingElement>(null)
+
+      const [currentTitleTop, setCurrentTitleTop] = useState(0)
+      useLayoutEffect(() => {
+        const $heading = ref.current
+        if (!$heading) return
+        const { top } = $heading.getBoundingClientRect()
+        // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-layout-effect
+        setCurrentTitleTop(top | 0)
+      }, [])
+
       return (
         <As
+          ref={ref}
+          data-container-top={currentTitleTop}
           {...rest}
           data-rid={rid}
           className={cn(rest.className, "group relative")}

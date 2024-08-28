@@ -29,10 +29,10 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
   return (
     <root.div {...rest}>
       <ShadowDOMContext.Provider value={true}>
-        <html data-theme={dark ? "dark" : "light"}>
+        <div data-theme={dark ? "dark" : "light"}>
           <head>{stylesElements}</head>
           {props.children}
-        </html>
+        </div>
       </ShadowDOMContext.Provider>
     </root.div>
   )
