@@ -12,6 +12,11 @@ type Env = {
     Bindings: HttpBindings;
 };
 
+declare const languageSchema: z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>;
+declare const conditionFieldSchema: z.ZodEnum<["view", "title", "site_url", "feed_url", "category"]>;
+declare const conditionOperatorSchema: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
+declare const ruleFieldSchema: z.ZodEnum<["all", "title", "content", "author", "url", "order"]>;
+declare const ruleOperatorSchema: z.ZodEnum<["contains", "not_contains", "eq", "not_eq", "gt", "lt", "regex"]>;
 declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "actions";
     schema: undefined;
@@ -35,38 +40,42 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
         rules: drizzle_orm_pg_core.PgColumn<{
             name: "rules";
             tableName: "actions";
-            dataType: "array";
-            columnType: "PgArray";
-            data: unknown[];
-            driverParam: string | unknown[];
+            dataType: "json";
+            columnType: "PgJsonb";
+            data: {
+                name: string;
+                condition: {
+                    field: z.infer<typeof conditionFieldSchema>;
+                    operator: z.infer<typeof conditionOperatorSchema>;
+                    value: string;
+                }[];
+                result: {
+                    translation?: z.infer<typeof languageSchema>;
+                    summary?: boolean;
+                    rewriteRules?: {
+                        from: string;
+                        to: string;
+                    }[];
+                    blockRules?: {
+                        field: z.infer<typeof ruleFieldSchema>;
+                        operator: z.infer<typeof ruleOperatorSchema>;
+                        value: string | number;
+                    }[];
+                };
+            }[];
+            driverParam: unknown;
             notNull: false;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
             enumValues: undefined;
-            baseColumn: drizzle_orm.Column<{
-                name: "rules";
-                tableName: "actions";
-                dataType: "json";
-                columnType: "PgJsonb";
-                data: unknown;
-                driverParam: unknown;
-                notNull: false;
-                hasDefault: false;
-                isPrimaryKey: false;
-                isAutoincrement: false;
-                hasRuntimeDefault: false;
-                enumValues: undefined;
-                baseColumn: never;
-                generated: undefined;
-            }, object, object>;
+            baseColumn: never;
             generated: undefined;
         }, {}, {}>;
     };
     dialect: "pg";
 }>;
-declare const languageSchema: z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>;
 declare const actionsItemOpenAPISchema: z.ZodObject<{
     name: z.ZodString;
     condition: z.ZodArray<z.ZodObject<{
@@ -176,11 +185,11 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
 }>;
 declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     userId: z.ZodString;
-    rules: z.ZodNullable<z.ZodArray<z.ZodType<string | number | boolean | {
+    rules: z.ZodNullable<z.ZodType<string | number | boolean | {
         [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
     } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
         [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>, "many">>;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
 }, "rules">, {
     rules: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
         name: z.ZodString;
@@ -667,32 +676,17 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
         media: drizzle_orm_pg_core.PgColumn<{
             name: "media";
             tableName: "entries";
-            dataType: "array";
-            columnType: "PgArray";
-            data: unknown[];
-            driverParam: string | unknown[];
+            dataType: "json";
+            columnType: "PgJsonb";
+            data: MediaModel[];
+            driverParam: unknown;
             notNull: false;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
             enumValues: undefined;
-            baseColumn: drizzle_orm.Column<{
-                name: "media";
-                tableName: "entries";
-                dataType: "json";
-                columnType: "PgJsonb";
-                data: unknown;
-                driverParam: unknown;
-                notNull: false;
-                hasDefault: false;
-                isPrimaryKey: false;
-                isAutoincrement: false;
-                hasRuntimeDefault: false;
-                enumValues: undefined;
-                baseColumn: never;
-                generated: undefined;
-            }, object, object>;
+            baseColumn: never;
             generated: undefined;
         }, {}, {}>;
         categories: drizzle_orm_pg_core.PgColumn<{
@@ -729,32 +723,17 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
         attachments: drizzle_orm_pg_core.PgColumn<{
             name: "attachments";
             tableName: "entries";
-            dataType: "array";
-            columnType: "PgArray";
-            data: unknown[];
-            driverParam: string | unknown[];
+            dataType: "json";
+            columnType: "PgJsonb";
+            data: AttachmentsModel[];
+            driverParam: unknown;
             notNull: false;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
             enumValues: undefined;
-            baseColumn: drizzle_orm.Column<{
-                name: "attachments";
-                tableName: "entries";
-                dataType: "json";
-                columnType: "PgJsonb";
-                data: unknown;
-                driverParam: unknown;
-                notNull: false;
-                hasDefault: false;
-                isPrimaryKey: false;
-                isAutoincrement: false;
-                hasRuntimeDefault: false;
-                enumValues: undefined;
-                baseColumn: never;
-                generated: undefined;
-            }, object, object>;
+            baseColumn: never;
             generated: undefined;
         }, {}, {}>;
     };
@@ -773,17 +752,17 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     authorAvatar: z.ZodNullable<z.ZodString>;
     insertedAt: z.ZodString;
     publishedAt: z.ZodString;
-    media: z.ZodNullable<z.ZodArray<z.ZodType<string | number | boolean | {
+    media: z.ZodNullable<z.ZodType<string | number | boolean | {
         [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
     } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
         [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>, "many">>;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
     categories: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
-    attachments: z.ZodNullable<z.ZodArray<z.ZodType<string | number | boolean | {
+    attachments: z.ZodNullable<z.ZodType<string | number | boolean | {
         [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
     } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
         [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
-    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>, "many">>;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
 }, "media" | "attachments">, {
     attachments: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
         url: z.ZodString;

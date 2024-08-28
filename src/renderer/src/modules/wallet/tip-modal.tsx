@@ -119,7 +119,7 @@ const TipModalContent_: FC<{
           Tip sent successfully! Thank you for your support.
         </p>
         <p>
-          <Balance withSuffix>{amountBigInt}</Balance>
+          <Balance className="mr-1 inline-block text-sm" withSuffix>{amountBigInt}</Balance>
           {" "}
           has been sent to the
           author.
