@@ -305,3 +305,15 @@
     }
   }
 }
+
+@layer components {
+  .shadow-tooltip-bottom {
+    --bg: theme(colors.accent.DEFAULT/0.3);
+    box-shadow: 0px 5px 20px -11px var(--bg);
+  }
+
+  .shadow-tooltip-top {
+    --bg: theme(colors.accent.DEFAULT/0.3);
+    box-shadow: 0px -5px 20px -11px var(--bg);
+  }
+}

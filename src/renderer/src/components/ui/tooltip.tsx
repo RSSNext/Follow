@@ -1,5 +1,6 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 import { cn } from "@renderer/lib/utils"
+import { m } from "framer-motion"
 import * as React from "react"
 
 const TooltipProvider = TooltipPrimitive.Provider
@@ -18,16 +19,39 @@ const TooltipContent = React.forwardRef<
 >(({ className, sideOffset = 4, ...props }, ref) => (
   <TooltipPrimitive.Content
     ref={ref}
+    asChild
     sideOffset={sideOffset}
     className={cn(
-      "z-[101] overflow-hidden border border-border bg-theme-tooltip-background px-1.5 py-1 text-theme-tooltip-foreground backdrop-blur-xl",
-      "animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-      "rounded-lg text-xs",
+      "relative z-[101] border border-accent/10 bg-white px-2 py-1 text-foreground backdrop-blur-xl dark:bg-neutral-950",
+      // "animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out  data-[state=closed]:zoom-out-95 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2",
+      "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
+      "rounded-lg text-sm",
       "max-w-[75ch] select-text",
+
+      "data-[side=top]:shadow-tooltip-bottom data-[side=bottom]:shadow-tooltip-top",
+
       className,
     )}
     {...props}
-  />
+  >
+    <m.div
+      initial={{ opacity: 0.82, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        type: "spring",
+
+        tension: 280,
+        friction: 60,
+
+        duration: 0.1,
+      }}
+      className="relative z-50"
+    >
+      {/* https://github.com/radix-ui/primitives/discussions/868 */}
+      <TooltipPrimitive.Arrow className="z-50 fill-white drop-shadow-[0_0_1px_theme(colors.accent.DEFAULT/0.3)] [clip-path:inset(0_-10px_-10px_-10px)] dark:fill-neutral-950" />
+      {props.children}
+    </m.div>
+  </TooltipPrimitive.Content>
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
