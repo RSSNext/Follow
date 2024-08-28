@@ -55,9 +55,9 @@ export const TocItem: FC<{
         }}
         className={cn(
           "inline-block h-1.5 rounded-full",
-          "bg-gray-200 duration-200 hover:!bg-gray-400 group-hover:bg-gray-400/50",
+          "bg-stone-100 duration-200 hover:!bg-stone-400 group-hover:bg-stone-400/50",
           "dark:bg-stone-800 dark:hover:!bg-stone-600 dark:group-hover:bg-stone-600/50",
-          active && "!bg-gray-400 dark:!bg-stone-600",
+          active && "!bg-stone-400 dark:!bg-stone-600",
         )}
       />
     </button>

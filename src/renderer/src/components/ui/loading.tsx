@@ -24,10 +24,16 @@ export const LoadingCircle: Component<LoadingCircleProps> = ({
   </div>
 )
 
+const sizeMap2 = {
+  small: 30,
+  medium: 40,
+  large: 50,
+}
+
 const smallIconSizeMap = {
-  small: 12,
-  medium: 14,
-  large: 16,
+  small: 16,
+  medium: 18,
+  large: 24,
 }
 export const LoadingWithIcon: Component<
   LoadingCircleProps & {
@@ -35,7 +41,7 @@ export const LoadingWithIcon: Component<
     order?: "loading-first" | "icon-first"
   }
 > = ({ order = "loading-first", size, className, icon, children }) => {
-  const rootStyle = { width: sizeMap[size], height: sizeMap[size] }
+  const rootStyle = { width: sizeMap2[size], height: sizeMap2[size] }
 
   const smallIconStyle = {
     height: smallIconSizeMap[size],
@@ -51,7 +57,7 @@ export const LoadingWithIcon: Component<
             {cloneElement(icon, {
               style: {
                 ...icon.props.style,
-                fontSize: sizeMap[size],
+                fontSize: sizeMap2[size],
               },
               className: cn(icon.props.className),
             })}
@@ -80,12 +86,12 @@ export const LoadingWithIcon: Component<
           <span
             className="block size-full"
             style={{
-              clipPath: `polygon(0% 0%, 0% 100%, ${smallIconSizeMap[size]}px 100%, ${smallIconSizeMap[size]}px ${smallIconSizeMap[size]}px, 100% ${smallIconSizeMap[size]}px, 100% 100%, 100% 100%, 100% 0%)`,
+              clipPath: `polygon(0% 0%, 0% 100%, calc(100% - ${smallIconSizeMap[size]}) 100%, ${smallIconSizeMap[size]} ${smallIconSizeMap[size]}, 100% calc(100% - ${smallIconSizeMap[size]}), 100% 100%, 100% 100%, 100% 0%)`,
             }}
           >
             <i
-              className="i-mgc-loading-3-cute-re animate-spin"
-              style={{ fontSize: sizeMap[size] }}
+              className="i-mgc-loading-3-cute-li animate-spin"
+              style={{ fontSize: sizeMap2[size] }}
             />
           </span>
           <span
@@ -99,6 +105,8 @@ export const LoadingWithIcon: Component<
               style: {
                 ...icon.props.style,
                 fontSize: smallIconSizeMap[size],
+                width: smallIconSizeMap[size],
+                height: smallIconSizeMap[size],
               },
               className: icon.props.className,
             })}
