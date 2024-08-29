@@ -23,9 +23,10 @@ function Login() {
   const urlParams = new URLSearchParams(location.search)
   const provider = urlParams.get("provider")
 
-  const onContinue = () => {
-    if (status === "authenticated") {
-      navigate("/redirect?app=follow")
+  const isAuthenticated = status === "authenticated"
+  const onOpenInWebApp = () => {
+    if (isAuthenticated) {
+      navigate("/")
     }
   }
 
@@ -46,20 +47,41 @@ function Login() {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10">
       <Logo className="size-20" />
-      <h1 className="text-3xl font-bold">
-        Log in to
-        {` ${APP_NAME}`}
-      </h1>
+      {!isAuthenticated ? (
+        <h1 className="text-3xl font-bold">
+          Log in to
+          {` ${APP_NAME}`}
+        </h1>
+      ) : (
+        <h1 className="-mb-6 text-3xl font-bold">
+          Welcome to
+          {` ${APP_NAME}`}
+        </h1>
+      )}
       {redirecting ? (
         <div>Redirecting</div>
       ) : (
         <div className="flex flex-col gap-3">
-          {status === "authenticated" ? (
+          {isAuthenticated ? (
             <>
-              <UserAvatar className="gap-8 px-10 py-4 text-2xl" />
+              <div className="center flex">
+                <UserAvatar className="gap-8 px-10 py-4 text-2xl" />
+                <Button variant="ghost" onClick={signOut}>
+                  <i className="i-mingcute-exit-line" />
+                </Button>
+              </div>
               <div className="flex items-center justify-center gap-4">
-                <Button variant="outline" onClick={signOut}>Log out</Button>
-                <Button onClick={onContinue}>Continue</Button>
+                <Button variant="outline" onClick={onOpenInWebApp}>
+                  Back To Web App
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    navigate("/redirect?app=follow")
+                  }}
+                >
+                  Open App
+                </Button>
               </div>
             </>
           ) : (
@@ -72,8 +94,8 @@ function Login() {
               >
                 <i className="i-mgc-github-cute-fi mr-2 text-xl" />
                 {" "}
-                Continue with
-                GitHub
+                Continue
+                with GitHub
               </Button>
               <Button
                 className="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80"
@@ -83,8 +105,8 @@ function Login() {
               >
                 <i className="i-mgc-google-cute-fi mr-2 text-xl" />
                 {" "}
-                Continue with
-                Google
+                Continue
+                with Google
               </Button>
             </>
           )}
