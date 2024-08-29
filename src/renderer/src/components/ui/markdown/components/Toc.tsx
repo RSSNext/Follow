@@ -13,6 +13,10 @@ import { MarkdownRenderContainerRefContext } from "../context"
 import type { TocItemProps } from "./TocItem"
 import { TocItem } from "./TocItem"
 
+type DebouncedFuncLeading<T extends (...args: any[]) => any> = T & {
+  cancel: () => void
+  flush: () => void
+}
 export interface ITocItem {
   depth: number
   title: string
@@ -67,12 +71,19 @@ export const Toc: Component = ({ className }) => {
 
   const scrollContainerElement = useScrollViewElement()
 
+  const scrollDelayHandlerRef = useRef<any>(null)
+
   const handleScrollTo = useEventCallback(
     (i: number, $el: HTMLElement | null, _anchorId: string) => {
       if ($el) {
         const handle = () => {
+          scrollDelayHandlerRef.current &&
+          clearTimeout(scrollDelayHandlerRef.current)
           springScrollToElement($el, -100, scrollContainerElement!).then(() => {
-            setCurrentScrollRange([i, 0])
+            throttleCallerRef.current?.cancel()
+            scrollDelayHandlerRef.current = setTimeout(() => {
+              setCurrentScrollRange([i, 1])
+            }, 36)
           })
         }
         handle()
@@ -97,6 +108,7 @@ export const Toc: Component = ({ className }) => {
     return titleBetweenPositionTopRangeMap
   }, [$headings])
 
+  const throttleCallerRef = useRef<DebouncedFuncLeading<() => void>>()
   const getWrappedElPos = useGetWrappedElementPosition()
 
   useEffect(() => {
@@ -121,8 +133,9 @@ export const Toc: Component = ({ className }) => {
         const [start, end] = currentRange
 
         // current top is this range, the precent is ?
-        const precent = (top - start) / (end - start)
+        const precent = ((actualTop - start) / (end - start))
 
+        // console.log("currentRange", currentRange, precent)
         // position , precent
         setCurrentScrollRange([currentRangeIndex, precent])
       } else {
@@ -133,10 +146,12 @@ export const Toc: Component = ({ className }) => {
             1,
           ])
         } else {
-          setCurrentScrollRange([-1, 0])
+          setCurrentScrollRange([-1, 1])
         }
       }
     }, 100)
+
+    throttleCallerRef.current = handler
     scrollContainerElement.addEventListener("scroll", handler)
 
     return () => {
@@ -148,7 +163,7 @@ export const Toc: Component = ({ className }) => {
     titleBetweenPositionTopRangeMap,
   ])
 
-  const [hoverShow, setHoverShow] = useState(!!1)
+  const [hoverShow, setHoverShow] = useState(false)
 
   if (toc.length === 0) return null
   return (
@@ -187,7 +202,7 @@ export const Toc: Component = ({ className }) => {
                   animate={{ opacity: 1, x: 100 }}
                   exit={{ opacity: 0, x: 110, transition: { duration: 0.1 } }}
                   transition={{ duration: 0.5, type: "spring" }}
-                  className="relative z-10 -mt-1 rounded-xl border bg-white px-3 py-1 text-xs drop-shadow-xl"
+                  className="relative z-10 -mt-1 rounded-xl border bg-white px-3 py-1 text-xs drop-shadow-xl dark:bg-neutral-950"
                 >
                   {toc.map((heading, index) => (
                     <li
@@ -212,7 +227,7 @@ export const Toc: Component = ({ className }) => {
                           {heading.title}
                         </span>
 
-                        <span className="text-[8px] opacity-50">
+                        <span className="ml-4 text-[8px] opacity-50">
                           H{heading.depth}
                         </span>
                       </button>
