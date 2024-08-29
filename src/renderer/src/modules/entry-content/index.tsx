@@ -233,7 +233,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                   {!isInReadabilityMode ? (
                     <ShadowDOM>
                       <HTML
-                        accessory={<ContainerToc entryId={entryId} />}
+                        accessory={<ContainerToc key={entryId} />}
                         as="article"
                         className="prose dark:prose-invert prose-h1:text-[1.6em]"
                         renderInlineStyle={readerRenderInlineStyle}
@@ -437,18 +437,13 @@ const RenderError: FallbackRender = ({ error }) => {
   )
 }
 
-const ContainerToc: FC<{
-  entryId: string
-}> = (props) => {
+const ContainerToc: FC = () => {
   const wrappedElement = useWrappedElement()
   return (
     <RootPortal to={wrappedElement!}>
       <div className="absolute right-[-130px] top-0 h-full w-[100px]">
         <div className="sticky top-0">
-          <Toc
-            className="flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring-soft @[900px]:items-start"
-            key={props.entryId}
-          />
+          <Toc className="flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring-soft @[900px]:items-start" />
         </div>
       </div>
     </RootPortal>

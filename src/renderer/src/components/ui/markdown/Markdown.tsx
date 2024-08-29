@@ -61,7 +61,7 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
   return (
     <MarkdownRenderContainerRefContext.Provider value={ref.current}>
       {createElement(as, { ...rest, ref }, markdownElement)}
-      {accessory}
+      {accessory && <span key={children}>{accessory}</span>}
     </MarkdownRenderContainerRefContext.Provider>
   )
 }

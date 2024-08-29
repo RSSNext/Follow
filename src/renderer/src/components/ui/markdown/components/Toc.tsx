@@ -1,15 +1,9 @@
+import { getViewport } from "@renderer/atoms/hooks/viewport"
 import { springScrollToElement } from "@renderer/lib/scroller"
 import { cn } from "@renderer/lib/utils"
 import { useGetWrappedElementPosition } from "@renderer/providers/wrapped-element-provider"
 import { throttle } from "lodash-es"
-import {
-  memo,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import { memo, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { useEventCallback } from "usehooks-ts"
 
 import { useScrollViewElement } from "../../scroll-area/hooks"
@@ -109,11 +103,17 @@ export const Toc: Component = ({ className }) => {
     if (!scrollContainerElement) return
 
     const handler = throttle(() => {
-      const top = scrollContainerElement.scrollTop + getWrappedElPos().y
+      const { y } = getWrappedElPos()
+      const top = scrollContainerElement.scrollTop + y
+      const winHeight = getViewport().h
+      const deltaHeight =
+        top >= winHeight ? winHeight : (top / winHeight) * winHeight
+
+      const actualTop = Math.floor(Math.max(0, top - y + deltaHeight)) || 0
 
       // current top is in which range?
       const currentRangeIndex = titleBetweenPositionTopRangeMap.findIndex(
-        ([start, end]) => top >= start && top <= end,
+        ([start, end]) => actualTop >= start && actualTop <= end,
       )
       const currentRange = titleBetweenPositionTopRangeMap[currentRangeIndex]
 
@@ -125,6 +125,16 @@ export const Toc: Component = ({ className }) => {
 
         // position , precent
         setCurrentScrollRange([currentRangeIndex, precent])
+      } else {
+        const last = titleBetweenPositionTopRangeMap.at(-1) || [0, 0]
+        if (top > last[1]) {
+          setCurrentScrollRange([
+            titleBetweenPositionTopRangeMap.length - 1,
+            1,
+          ])
+        } else {
+          setCurrentScrollRange([-1, 0])
+        }
       }
     }, 100)
     scrollContainerElement.addEventListener("scroll", handler)
