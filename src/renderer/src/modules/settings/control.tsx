@@ -52,14 +52,17 @@ export const SettingInput: Component<{
   label: string
   value: string
   onChange: ChangeEventHandler<HTMLInputElement>
-}> = ({ value, label, onChange, className }) => {
+  type: string
+}> = ({ value, label, onChange, className, type }) => {
   const id = useId()
+
   return (
     <div
       className={cn("mb-1 flex items-center justify-between gap-12", className)}
     >
       <Label className="shrink-0" htmlFor={id}>{label}</Label>
       <Input
+        type={type}
         id={id}
         value={value}
         onChange={onChange}

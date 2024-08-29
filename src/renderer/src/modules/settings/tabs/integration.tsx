@@ -49,6 +49,7 @@ export const SettingIntegration = () => (
           }),
           defineSettingItem("readwiseToken", {
             label: "Readwise Access Token",
+            type: "password",
             description: <>You can get it here: <a target="_blank" className="underline" rel="noreferrer noopener" href="https://readwise.io/access_token">readwise.io/access_token</a>.</>,
           }),
           {
@@ -64,6 +65,7 @@ export const SettingIntegration = () => (
           }),
           defineSettingItem("instapaperPassword", {
             label: "Instapaper Password",
+            type: "password",
           }),
         ]}
       />
