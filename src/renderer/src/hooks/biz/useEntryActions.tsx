@@ -4,8 +4,9 @@ import {
   setReadabilityContent,
   setReadabilityStatus,
 } from "@renderer/atoms/readability"
+import { useIntegrationSettingKey } from "@renderer/atoms/settings/integration"
 import { whoami } from "@renderer/atoms/user"
-import { SimpleIconsEagle } from "@renderer/components/ui/platform-icon/icons"
+import { SimpleIconsEagle, SimpleIconsReadwise } from "@renderer/components/ui/platform-icon/icons"
 import { COPY_MAP } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { tipcClient } from "@renderer/lib/client"
@@ -136,6 +137,9 @@ export const useEntryActions = ({
   const uncollect = useUnCollect(populatedEntry)
   const read = useRead()
   const unread = useUnread()
+  const enableEagle = useIntegrationSettingKey("enableEagle")
+  const enableReadwise = useIntegrationSettingKey("enableReadwise")
+  const readwiseToken = useIntegrationSettingKey("readwiseToken")
 
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
@@ -150,6 +154,68 @@ export const useEntryActions = ({
       disabled?: boolean
       onClick: () => void
     }[] = [
+      {
+        name: "Save media to Eagle",
+        icon: <SimpleIconsEagle />,
+        key: "saveToEagle",
+        hide:
+          !enableEagle || (checkEagle.isLoading ? true : !checkEagle.data) ||
+          !populatedEntry.entries.media?.length,
+        onClick: async () => {
+          if (
+            !populatedEntry.entries.url ||
+            !populatedEntry.entries.media?.length
+          ) {
+            return
+          }
+          const response = await tipcClient?.saveToEagle({
+            url: populatedEntry.entries.url,
+            mediaUrls: populatedEntry.entries.media.map((m) => m.url),
+          })
+          if (response?.status === "success") {
+            toast.success("Saved to Eagle.", {
+              duration: 3000,
+            })
+          } else {
+            toast.error("Failed to save to Eagle.", {
+              duration: 3000,
+            })
+          }
+        },
+      },
+      {
+        name: "Save to Readwise",
+        icon: <SimpleIconsReadwise />,
+        key: "saveToReadwise",
+        hide: !enableReadwise || !readwiseToken || !populatedEntry.entries.url,
+        onClick: async () => {
+          try {
+            const data = await ofetch("https://readwise.io/api/v3/save/", {
+              method: "POST",
+              headers: {
+                Authorization: `Token ${readwiseToken}`,
+              },
+              body: {
+                url: populatedEntry.entries.url,
+                html: populatedEntry.entries.content || undefined,
+                title: populatedEntry.entries.title || undefined,
+                author: populatedEntry.entries.author || undefined,
+                summary: populatedEntry.entries.description || undefined,
+                published_date: populatedEntry.entries.publishedAt || undefined,
+                image_url: populatedEntry.entries.media?.[0]?.url || undefined,
+                saved_using: "Follow",
+              },
+            })
+            toast.success(<>Saved to Readwise, <a target="_blank" className="underline" href={data.url}>view</a></>, {
+              duration: 3000,
+            })
+          } catch {
+            toast.error("Failed to save to Readwise.", {
+              duration: 3000,
+            })
+          }
+        },
+      },
       {
         key: "tip",
         shortcut: shortcuts.entry.tip.key,
@@ -203,36 +269,6 @@ export const useEntryActions = ({
         onClick: () => {
           if (!populatedEntry.entries.url) return
           window.open(populatedEntry.entries.url, "_blank")
-        },
-      },
-
-      {
-        name: "Save media to Eagle",
-        icon: <SimpleIconsEagle />,
-        key: "saveToEagle",
-        hide:
-          (checkEagle.isLoading ? true : !checkEagle.data) ||
-          !populatedEntry.entries.media?.length,
-        onClick: async () => {
-          if (
-            !populatedEntry.entries.url ||
-            !populatedEntry.entries.media?.length
-          ) {
-            return
-          }
-          const response = await tipcClient?.saveToEagle({
-            url: populatedEntry.entries.url,
-            mediaUrls: populatedEntry.entries.media.map((m) => m.url),
-          })
-          if (response?.status === "success") {
-            toast("Saved to Eagle.", {
-              duration: 3000,
-            })
-          } else {
-            toast("Failed to save to Eagle.", {
-              duration: 3000,
-            })
-          }
         },
       },
       {

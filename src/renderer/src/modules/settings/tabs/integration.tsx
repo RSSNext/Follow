@@ -33,7 +33,7 @@ export const SettingIntegration = () => (
         settings={[
           {
             type: "title",
-            value: <span className="flex items-center gap-1"><SimpleIconsEagle />Eagle</span>,
+            value: <span className="flex items-center gap-2"><SimpleIconsEagle />Eagle</span>,
           },
           defineSettingItem("enableEagle", {
             label: "Enable",
@@ -41,7 +41,7 @@ export const SettingIntegration = () => (
           }),
           {
             type: "title",
-            value: <span className="flex items-center gap-1"><SimpleIconsReadwise />Readwise</span>,
+            value: <span className="flex items-center gap-2"><SimpleIconsReadwise />Readwise</span>,
           },
           defineSettingItem("enableReadwise", {
             label: "Enable",

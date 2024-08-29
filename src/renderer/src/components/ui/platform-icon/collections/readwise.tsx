@@ -8,8 +8,8 @@ export function SimpleIconsReadwise(props: SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 50 50"
-      className={cn(props.className, "rounded-sm")}
       {...props}
+      className={cn(props.className, "rounded-[2px]")}
     >
       <g>
         <path d="M50 0H0V50H50V0Z" fill="currentColor" />
