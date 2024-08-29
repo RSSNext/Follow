@@ -33,3 +33,9 @@ export interface UISettings {
   // tts
   voice: string
 }
+
+export interface IntegrationSettings {
+  enableEagle: boolean
+  enableReadwise: boolean
+  readwiseToken: string
+}

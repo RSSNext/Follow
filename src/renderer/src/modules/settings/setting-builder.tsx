@@ -7,6 +7,7 @@ import { isValidElement } from "react"
 import {
   SettingActionItem,
   SettingDescription,
+  SettingInput,
   SettingSwitch,
 } from "./control"
 import { SettingItemGroup, SettingSectionTitle } from "./section"
@@ -93,7 +94,16 @@ export const createSettingBuilder =
                 break
               }
               case "string": {
-                return null
+                ControlElement = (
+                  <SettingInput
+                    className="mt-4"
+                    value={settingObject[assertSetting.key] as string}
+                    onChange={(event) =>
+                      assertSetting.onChange(event.target.value as T[keyof T])}
+                    label={assertSetting.label}
+                  />
+                )
+                break
               }
               default: {
                 return null

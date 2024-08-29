@@ -1,10 +1,11 @@
 import { Button } from "@renderer/components/ui/button"
 import { Checkbox } from "@renderer/components/ui/checkbox"
+import { Input } from "@renderer/components/ui/input"
 import { Label } from "@renderer/components/ui/label"
 import { SegmentGroup, SegmentItem } from "@renderer/components/ui/segement"
 import { Switch } from "@renderer/components/ui/switch"
 import { cn } from "@renderer/lib/utils"
-import type { ReactNode } from "react"
+import type { ChangeEventHandler, ReactNode } from "react"
 import { useId, useState } from "react"
 
 export const SettingCheckbox: Component<{
@@ -42,6 +43,27 @@ export const SettingSwitch: Component<{
         checked={checked}
         onCheckedChange={onCheckedChange}
         className="cursor-auto"
+      />
+    </div>
+  )
+}
+
+export const SettingInput: Component<{
+  label: string
+  value: string
+  onChange: ChangeEventHandler<HTMLInputElement>
+}> = ({ value, label, onChange, className }) => {
+  const id = useId()
+  return (
+    <div
+      className={cn("mb-1 flex items-center justify-between gap-12", className)}
+    >
+      <Label className="shrink-0" htmlFor={id}>{label}</Label>
+      <Input
+        id={id}
+        value={value}
+        onChange={onChange}
+        className="text-xs"
       />
     </div>
   )

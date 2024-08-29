@@ -101,7 +101,7 @@ export const createDefineSettingItem =
       key: K,
       options: {
         label: string
-        description?: string
+        description?: string | JSX.Element
         onChange?: (value: T[K]) => void
         hide?: boolean
       },
