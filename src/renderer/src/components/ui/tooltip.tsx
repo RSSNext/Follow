@@ -28,7 +28,7 @@ const TooltipContent = React.forwardRef<
       "rounded-lg text-sm",
       "max-w-[75ch] select-text",
 
-      "drop-shadow data-[side=top]:shadow-tooltip-bottom data-[side=bottom]:shadow-tooltip-top",
+      "drop-shadow data-[side=top]:shadow-tooltip-bottom data-[side=bottom]:shadow-tooltip-top dark:border-border",
 
       className,
     )}
