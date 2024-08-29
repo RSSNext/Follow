@@ -237,7 +237,10 @@ const SwipeWrapper: FC<{
         setDirection("left")
       }
     }
-    setCurrentAnimatedActive(active)
+    // eslint-disable-next-line @eslint-react/web-api/no-leaked-timeout
+    setTimeout(() => {
+      setCurrentAnimatedActive(active)
+    }, 0)
     if (prevActiveIndexRef.current !== -1) {
       setIsReady(true)
     }
@@ -256,13 +259,13 @@ const SwipeWrapper: FC<{
         initial={
           isReady ?
               {
-                x: direction === "right" ? -feedColumnWidth : feedColumnWidth,
+                x: direction === "right" ? feedColumnWidth : -feedColumnWidth,
               } :
             true
         }
         animate={{ x: 0 }}
         exit={{
-          x: direction === "right" ? feedColumnWidth : -feedColumnWidth,
+          x: direction === "right" ? -feedColumnWidth : feedColumnWidth,
         }}
         transition={{
           x: { type: "spring", stiffness: 700, damping: 40 },
