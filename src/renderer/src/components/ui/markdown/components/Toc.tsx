@@ -1,7 +1,9 @@
+import * as HoverCard from "@radix-ui/react-hover-card"
 import { getViewport } from "@renderer/atoms/hooks/viewport"
 import { springScrollToElement } from "@renderer/lib/scroller"
 import { cn } from "@renderer/lib/utils"
 import { useGetWrappedElementPosition } from "@renderer/providers/wrapped-element-provider"
+import { AnimatePresence, m } from "framer-motion"
 import { throttle } from "lodash-es"
 import { memo, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { useEventCallback } from "usehooks-ts"
@@ -62,7 +64,6 @@ export const Toc: Component = ({ className }) => {
   )
 
   const [_, setTreeRef] = useState<HTMLUListElement | null>()
-  // const [activeId, setActiveId] = useActiveId($headings)
 
   const scrollContainerElement = useScrollViewElement()
 
@@ -70,10 +71,9 @@ export const Toc: Component = ({ className }) => {
     (i: number, $el: HTMLElement | null, _anchorId: string) => {
       if ($el) {
         const handle = () => {
-          springScrollToElement($el, -100, scrollContainerElement!)
-          //   .then(() => {
-          //   setActiveId?.(anchorId)
-          // })
+          springScrollToElement($el, -100, scrollContainerElement!).then(() => {
+            setCurrentScrollRange([i, 0])
+          })
         }
         handle()
       }
@@ -148,55 +148,85 @@ export const Toc: Component = ({ className }) => {
     titleBetweenPositionTopRangeMap,
   ])
 
+  const [hoverShow, setHoverShow] = useState(!!1)
+
   if (toc.length === 0) return null
   return (
     <div className="flex grow flex-col scroll-smooth px-2 scrollbar-none">
-      <ul
-        ref={setTreeRef}
-        className={cn("group overflow-auto scrollbar-none", className)}
+      <HoverCard.Root
+        openDelay={100}
+        open={hoverShow}
+        onOpenChange={setHoverShow}
       >
-        {toc.map((heading, index) => (
-          <MemoedItem
-            heading={heading}
-            // active={heading.anchorId === activeId}
-            key={heading.title}
-            rootDepth={rootDepth}
-            onClick={handleScrollTo}
-            isScrollOut={index < currentScrollRange[0]}
-            range={index === currentScrollRange[0] ? currentScrollRange[1] : 0}
-          />
-        ))}
-      </ul>
+        <HoverCard.Trigger>
+          <ul
+            ref={setTreeRef}
+            className={cn("group overflow-auto scrollbar-none", className)}
+          >
+            {toc.map((heading, index) => (
+              <MemoedItem
+                heading={heading}
+                // active={heading.anchorId === activeId}
+                key={heading.title}
+                rootDepth={rootDepth}
+                onClick={handleScrollTo}
+                isScrollOut={index < currentScrollRange[0]}
+                range={
+                  index === currentScrollRange[0] ? currentScrollRange[1] : 0
+                }
+              />
+            ))}
+          </ul>
+        </HoverCard.Trigger>
+        <HoverCard.Portal forceMount>
+          <AnimatePresence>
+            {hoverShow && (
+              <HoverCard.Content side="left" align="start" asChild>
+                <m.ul
+                  initial={{ opacity: 0, x: 110 }}
+                  animate={{ opacity: 1, x: 100 }}
+                  exit={{ opacity: 0, x: 110, transition: { duration: 0.1 } }}
+                  transition={{ duration: 0.5, type: "spring" }}
+                  className="relative z-10 -mt-1 rounded-xl border bg-white px-3 py-1 text-xs drop-shadow-xl"
+                >
+                  {toc.map((heading, index) => (
+                    <li
+                      key={heading.title}
+                      className="flex h-[24px] w-full items-center"
+                    >
+                      <button
+                        className={cn(
+                          "group flex w-full cursor-pointer justify-between",
+                          index === currentScrollRange[0] ? "text-accent" : "",
+                        )}
+                        type="button"
+                        onClick={() => {
+                          handleScrollTo(
+                            index,
+                            heading.$heading,
+                            heading.anchorId,
+                          )
+                        }}
+                      >
+                        <span className="duration-200 group-hover:text-accent/80">
+                          {heading.title}
+                        </span>
+
+                        <span className="text-[8px] opacity-50">
+                          H{heading.depth}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </m.ul>
+              </HoverCard.Content>
+            )}
+          </AnimatePresence>
+        </HoverCard.Portal>
+      </HoverCard.Root>
     </div>
   )
 }
-// const tocActiveIdAtom = atom<string | null>(null)
-// function useActiveId($headings: HTMLHeadingElement[]) {
-//   const [activeId, setActiveId] = useAtom(tocActiveIdAtom)
-//   const scrollContainerElement = useScrollViewElement()
-//   useEffect(() => {
-//     const observer = new IntersectionObserver(
-//       (entries) => {
-//         entries.forEach((entry) => {
-//           if (entry.isIntersecting) {
-//             startTransition(() => {
-//               setActiveId((entry.target as HTMLElement).dataset.rid || "")
-//             })
-//           }
-//         })
-//       },
-//       { rootMargin: `-100px 0px -100px 0px`, root: scrollContainerElement },
-//     )
-//     $headings.forEach(($heading) => {
-//       observer.observe($heading)
-//     })
-//     return () => {
-//       observer.disconnect()
-//     }
-//   }, [$headings, scrollContainerElement, setActiveId])
-
-//   return [activeId, setActiveId] as const
-// }
 
 const MemoedItem = memo<TocItemProps>((props) => {
   const {

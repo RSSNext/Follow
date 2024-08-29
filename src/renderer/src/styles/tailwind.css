@@ -59,4 +59,9 @@
   table table {
     margin: 0;
   }
+
+  p {
+    word-break: break-word;
+    @apply break-words;
+  }
 }
