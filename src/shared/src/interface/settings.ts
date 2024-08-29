@@ -38,4 +38,7 @@ export interface IntegrationSettings {
   enableEagle: boolean
   enableReadwise: boolean
   readwiseToken: string
+  enableInstapaper: boolean
+  instapaperUsername: string
+  instapaperPassword: string
 }

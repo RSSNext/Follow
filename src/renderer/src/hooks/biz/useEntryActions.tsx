@@ -6,7 +6,7 @@ import {
 } from "@renderer/atoms/readability"
 import { useIntegrationSettingKey } from "@renderer/atoms/settings/integration"
 import { whoami } from "@renderer/atoms/user"
-import { SimpleIconsEagle, SimpleIconsReadwise } from "@renderer/components/ui/platform-icon/icons"
+import { SimpleIconsEagle, SimpleIconsInstapaper, SimpleIconsReadwise } from "@renderer/components/ui/platform-icon/icons"
 import { COPY_MAP } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { tipcClient } from "@renderer/lib/client"
@@ -140,6 +140,9 @@ export const useEntryActions = ({
   const enableEagle = useIntegrationSettingKey("enableEagle")
   const enableReadwise = useIntegrationSettingKey("enableReadwise")
   const readwiseToken = useIntegrationSettingKey("readwiseToken")
+  const enableInstapaper = useIntegrationSettingKey("enableInstapaper")
+  const instapaperUsername = useIntegrationSettingKey("instapaperUsername")
+  const instapaperPassword = useIntegrationSettingKey("instapaperPassword")
 
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
@@ -211,6 +214,34 @@ export const useEntryActions = ({
             })
           } catch {
             toast.error("Failed to save to Readwise.", {
+              duration: 3000,
+            })
+          }
+        },
+      },
+      {
+        name: "Save to Instapaper",
+        icon: <SimpleIconsInstapaper />,
+        key: "saveToInstapaper",
+        hide: !enableInstapaper || !instapaperPassword || !instapaperUsername || !populatedEntry.entries.url,
+        onClick: async () => {
+          try {
+            const data = await ofetch("https://www.instapaper.com/api/add", {
+              query: {
+                url: populatedEntry.entries.url,
+                title: populatedEntry.entries.title,
+              },
+              method: "POST",
+              headers: {
+                Authorization: `Basic ${btoa(`${instapaperUsername}:${instapaperPassword}`)}`,
+              },
+              parseResponse: JSON.parse,
+            })
+            toast.success(<>Saved to Instapaper, <a target="_blank" className="underline" href={`https://www.instapaper.com/read/${data.bookmark_id}`}>view</a></>, {
+              duration: 3000,
+            })
+          } catch {
+            toast.error("Failed to save to Instapaper.", {
               duration: 3000,
             })
           }

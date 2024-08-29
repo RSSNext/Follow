@@ -6,6 +6,9 @@ export const createDefaultSettings = (): IntegrationSettings => ({
   enableEagle: true,
   enableReadwise: true,
   readwiseToken: "",
+  enableInstapaper: true,
+  instapaperUsername: "",
+  instapaperPassword: "",
 })
 
 export const {
