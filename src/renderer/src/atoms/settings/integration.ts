@@ -4,9 +4,9 @@ import { createSettingAtom } from "./helper"
 
 export const createDefaultSettings = (): IntegrationSettings => ({
   enableEagle: true,
-  enableReadwise: true,
+  enableReadwise: false,
   readwiseToken: "",
-  enableInstapaper: true,
+  enableInstapaper: false,
   instapaperUsername: "",
   instapaperPassword: "",
 })

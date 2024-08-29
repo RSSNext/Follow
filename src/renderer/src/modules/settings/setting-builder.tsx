@@ -22,6 +22,14 @@ export type SettingItem<T, K extends keyof T = keyof T> = {
   description?: string
   onChange: (value: T[K]) => void
   type?: "password"
+
+  vertical?: boolean
+
+  componentProps?: {
+    labelClassName?: string
+    className?: string
+    [key: string]: any
+  }
 } & SharedSettingItem
 
 type SectionSettingItem = {
@@ -97,6 +105,8 @@ export const createSettingBuilder =
               case "string": {
                 ControlElement = (
                   <SettingInput
+                    vertical={assertSetting.vertical}
+                    labelClassName={assertSetting.componentProps?.labelClassName}
                     type={assertSetting.type || "text"}
                     className="mt-4"
                     value={settingObject[assertSetting.key] as string}

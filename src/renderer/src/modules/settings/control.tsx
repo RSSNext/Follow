@@ -53,14 +53,32 @@ export const SettingInput: Component<{
   value: string
   onChange: ChangeEventHandler<HTMLInputElement>
   type: string
-}> = ({ value, label, onChange, className, type }) => {
+  vertical?: boolean
+  labelClassName?: string
+}> = ({
+  value,
+  label,
+  onChange,
+  labelClassName,
+  className,
+  type,
+  vertical,
+}) => {
   const id = useId()
 
   return (
     <div
-      className={cn("mb-1 flex items-center justify-between gap-12", className)}
+      className={cn(
+        "mb-1 flex",
+        vertical ?
+          "mb-2 flex-col gap-3" :
+          "flex-row items-center justify-between gap-12",
+        className,
+      )}
     >
-      <Label className="shrink-0" htmlFor={id}>{label}</Label>
+      <Label className={cn("shrink-0", labelClassName)} htmlFor={id}>
+        {label}
+      </Label>
       <Input
         type={type}
         id={id}
