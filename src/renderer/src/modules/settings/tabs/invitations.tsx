@@ -3,7 +3,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
-import { Button } from "@renderer/components/ui/button"
+import { Button, MotionButtonBase } from "@renderer/components/ui/button"
 import { CopyButton } from "@renderer/components/ui/code-highlighter"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
@@ -48,7 +48,7 @@ export const SettingInvitations = () => {
       <SettingsTitle />
       <div className="relative mt-4">
         <RootPortal to={scrollViewElement!}>
-          <button
+          <MotionButtonBase
             type="button"
             onClick={() => {
               newInvitation.mutate()
@@ -56,7 +56,7 @@ export const SettingInvitations = () => {
             className="center absolute bottom-4 right-4 size-8 rounded-full bg-accent text-white drop-shadow"
           >
             <i className="i-mingcute-user-add-2-line size-4" />
-          </button>
+          </MotionButtonBase>
         </RootPortal>
 
         {invitations.data?.length ? (
