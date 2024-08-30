@@ -1,6 +1,11 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
-import { Button } from "@renderer/components/ui/button"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@renderer/components/ui/avatar"
 import { CopyButton } from "@renderer/components/ui/code-highlighter"
+import { RootPortal } from "@renderer/components/ui/portal"
+import { useScrollViewElement } from "@renderer/components/ui/scroll-area/hooks"
 import {
   Table,
   TableBody,
@@ -27,22 +32,33 @@ export const SettingInvitations = () => {
     async onError(err) {
       toast.error(getFetchErrorMessage(err))
     },
-    onSuccess() {
+    onSuccess(data) {
       Queries.invitations.list().invalidate()
-      toast("🎉 New invitation generated")
+      toast("🎉 New invitation generated, invite code is copied")
+      navigator.clipboard.writeText(data.data)
     },
   })
   const presentUserProfile = usePresentUserProfileModal("drawer")
 
+  const scrollViewElement = useScrollViewElement()
+
   return (
     <>
       <SettingsTitle />
-      <div className="mt-4">
-        <Button onClick={() => newInvitation.mutate()}>
-          New invitation
-        </Button>
+      <div className="relative mt-4">
+        <RootPortal to={scrollViewElement!}>
+          <button
+            type="button"
+            onClick={() => {
+              newInvitation.mutate()
+            }}
+            className="center absolute bottom-4 right-4 size-8 rounded-full bg-accent text-white drop-shadow"
+          >
+            <i className="i-mingcute-user-add-2-line size-4" />
+          </button>
+        </RootPortal>
         <Table className="mt-4">
-          <TableHeader>
+          <TableHeader className="border-b">
             <TableRow className="[&_*]:!font-semibold">
               <TableHead className="w-16 text-center" size="sm">
                 Code
@@ -55,19 +71,19 @@ export const SettingInvitations = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="border-t-[12px] border-transparent">
             {invitations.data?.map((row) => (
               <TableRow key={row.code}>
                 <TableCell align="center" size="sm">
-                  <div className="group relative flex items-center justify-center gap-2">
+                  <div className="group relative flex items-center justify-center gap-2 font-mono">
                     <span>{row.code}</span>
                     <CopyButton
                       value={row.code}
-                      className="absolute -right-6 p-0.5 opacity-0 group-hover:opacity-100"
+                      className="absolute -right-6 p-1 opacity-0 group-hover:opacity-100 [&_i]:size-3"
                     />
                   </div>
                 </TableCell>
-                <TableCell align="center" size="sm">
+                <TableCell align="center" className="tabular-nums" size="sm">
                   {row.createdAt && new Date(row.createdAt).toLocaleString()}
                 </TableCell>
                 <TableCell align="center" size="sm">
@@ -79,11 +95,14 @@ export const SettingInvitations = () => {
                     >
                       <Avatar className="aspect-square size-5 border border-border ring-1 ring-background">
                         <AvatarImage src={row.users?.image || undefined} />
-                        <AvatarFallback>{row.users?.name?.slice(0, 2)}</AvatarFallback>
+                        <AvatarFallback>
+                          {row.users?.name?.slice(0, 2)}
+                        </AvatarFallback>
                       </Avatar>
                     </div>
-                  ) : "Not used"}
-
+                  ) : (
+                    "Not used"
+                  )}
                 </TableCell>
               </TableRow>
             ))}
