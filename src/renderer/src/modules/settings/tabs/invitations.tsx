@@ -46,20 +46,20 @@ export const SettingInvitations = () => {
       <SettingsTitle />
       <div className="absolute inset-x-0 bottom-10 top-4 flex flex-col">
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <MotionButtonBase
               type="button"
               onClick={() => {
                 newInvitation.mutate()
               }}
-              className="center absolute bottom-0 right-2 size-10 rounded-full bg-accent text-white drop-shadow"
+              className="center absolute bottom-0 right-2 z-10 size-10 rounded-full bg-accent text-white drop-shadow"
             >
               <i className="i-mingcute-user-add-2-line size-4" />
             </MotionButtonBase>
           </TooltipTrigger>
 
           <TooltipContent>
-            new invitation
+            New invitation
           </TooltipContent>
         </Tooltip>
         <ScrollArea.ScrollArea scrollbarClassName="w-1" rootClassName="flex grow">
