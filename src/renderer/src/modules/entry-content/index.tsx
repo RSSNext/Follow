@@ -443,7 +443,12 @@ const ContainerToc: FC = () => {
     <RootPortal to={wrappedElement!}>
       <div className="absolute right-[-130px] top-0 h-full w-[100px]">
         <div className="sticky top-0">
-          <Toc className="flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring-soft @[900px]:items-start" />
+          <Toc
+            className={cn(
+              "flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring-soft @[900px]:items-start",
+              "max-h-[calc(100vh-100px)] overflow-auto scrollbar-none",
+            )}
+          />
         </div>
       </div>
     </RootPortal>

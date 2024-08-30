@@ -134,7 +134,7 @@ export const Toc: Component = ({ className }) => {
         const [start, end] = currentRange
 
         // current top is this range, the precent is ?
-        const precent = ((actualTop - start) / (end - start))
+        const precent = (actualTop - start) / (end - start)
 
         // console.log("currentRange", currentRange, precent)
         // position , precent
@@ -174,7 +174,7 @@ export const Toc: Component = ({ className }) => {
         open={hoverShow}
         onOpenChange={setHoverShow}
       >
-        <HoverCard.Trigger>
+        <HoverCard.Trigger asChild>
           <ul
             ref={setTreeRef}
             className={cn("group overflow-auto scrollbar-none", className)}
@@ -182,7 +182,6 @@ export const Toc: Component = ({ className }) => {
             {toc.map((heading, index) => (
               <MemoedItem
                 heading={heading}
-                // active={heading.anchorId === activeId}
                 key={heading.title}
                 rootDepth={rootDepth}
                 onClick={handleScrollTo}
@@ -203,7 +202,10 @@ export const Toc: Component = ({ className }) => {
                   animate={{ opacity: 1, x: 100 }}
                   exit={{ opacity: 0, x: 110, transition: { duration: 0.1 } }}
                   transition={{ duration: 0.5, type: "spring" }}
-                  className="relative z-10 -mt-1 rounded-xl border bg-white px-3 py-1 text-xs drop-shadow-xl dark:bg-neutral-950"
+                  className={cn(
+                    "relative z-10 -mt-1 rounded-xl border bg-white px-3 py-1 text-xs drop-shadow-xl dark:bg-neutral-950",
+                    "max-h-[calc(100svh-4rem)] overflow-auto scrollbar-none",
+                  )}
                 >
                   {toc.map((heading, index) => (
                     <li

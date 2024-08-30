@@ -58,12 +58,13 @@ export const TocItem: FC<TocItemProps> = memo((props) => {
           isScrollOut && "dark:bg-zinc-700",
           !!range &&
           "!bg-zinc-400/50 data-[active=true]:group-hover:!bg-zinc-500 dark:!bg-zinc-600",
+          "overflow-hidden",
         )}
       >
         <span
-          className="absolute inset-y-0 left-0 z-[1] rounded-full bg-zinc-600 duration-75 ease-linear dark:bg-zinc-400"
+          className="absolute inset-y-0 left-0 z-[1] ml-[-12px] rounded-full bg-zinc-600 duration-75 ease-linear dark:bg-zinc-400"
           style={{
-            width: `${range * 100}%`,
+            width: `calc(${range * 100}% + 12px)`,
           }}
         />
       </span>
@@ -72,12 +73,12 @@ export const TocItem: FC<TocItemProps> = memo((props) => {
 })
 
 const widthMap = {
-  1: 72,
-  2: 60,
-  3: 48,
-  4: 36,
-  5: 24,
-  6: 12,
+  1: 72 - 6,
+  2: 60 - 6,
+  3: 48 - 6,
+  4: 36 - 6,
+  5: 24 - 6,
+  6: 12 - 6,
 }
 
 TocItem.displayName = "TocItem"
