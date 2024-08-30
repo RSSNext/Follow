@@ -34,9 +34,10 @@ class FeedUnreadActions {
       for (const [key, value] of data) {
         state.data[key] = value
       }
-      FeedUnreadService.updateFeedUnread(data)
       return { ...state }
     })
+
+    FeedUnreadService.updateFeedUnread(data)
   }
 
   async fetchUnreadByView(view: FeedViewType | undefined) {

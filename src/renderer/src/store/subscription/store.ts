@@ -153,16 +153,18 @@ class SubscriptionActions {
   async markReadByFeedIds(...args: [string[], FeedViewType?, MarkReadFilter?]) {
     const [feedIds, view, filter] = args
 
+    const stableFeedIds = feedIds.concat()
+
     doMutationAndTransaction(
       () =>
         apiClient.reads.all.$post({
           json: {
-            feedIdList: feedIds,
+            feedIdList: stableFeedIds,
             ...filter,
           },
         }),
       async () => {
-        for (const feedId of feedIds) {
+        for (const feedId of stableFeedIds) {
           // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
           !filter && feedUnreadActions.updateByFeedId(feedId, 0)
           entryActions.patchManyByFeedId(feedId, { read: true }, filter)
