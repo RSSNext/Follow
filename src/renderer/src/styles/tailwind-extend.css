@@ -248,6 +248,10 @@
 
     background-position: left 1.1em;
 
+    &::selection {
+      text-shadow: none;
+    }
+
     &:hover {
       background-size: 100% 1.5px;
       text-shadow: 0.05em 0 theme(colors.background),
