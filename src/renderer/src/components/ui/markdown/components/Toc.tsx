@@ -1,5 +1,6 @@
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { getViewport } from "@renderer/atoms/hooks/viewport"
+import { getElementTop } from "@renderer/lib/dom"
 import { springScrollToElement } from "@renderer/lib/scroller"
 import { cn } from "@renderer/lib/utils"
 import { useGetWrappedElementPosition } from "@renderer/providers/wrapped-element-provider"
@@ -98,13 +99,24 @@ export const Toc: Component = ({ className }) => {
     const titleBetweenPositionTopRangeMap = [] as [number, number][]
     for (let i = 0; i < $headings.length - 1; i++) {
       const $heading = $headings[i]
-      const $nextHeading = $headings[i + 1]
-      const top = Number.parseInt($heading.dataset["containerTop"] || "0")
-      const nextTop = Number.parseInt(
-        $nextHeading.dataset["containerTop"] || "0",
-      )
 
-      titleBetweenPositionTopRangeMap.push([top, nextTop])
+      const headingTop =
+        Number.parseInt($heading.dataset["containerTop"] || "0") ||
+        getElementTop($heading)
+      if (!$heading.dataset) {
+        // @ts-expect-error
+        $heading.dataset["containerTop"] = headingTop.toString()
+      }
+
+      const $nextHeading = $headings[i + 1]
+
+      const nextTop = getElementTop($nextHeading)
+      if (!$nextHeading.dataset) {
+        // @ts-expect-error
+        $nextHeading.dataset["containerTop"] = nextTop.toString()
+      }
+
+      titleBetweenPositionTopRangeMap.push([headingTop, nextTop])
     }
     return titleBetweenPositionTopRangeMap
   }, [$headings])
@@ -136,7 +148,6 @@ export const Toc: Component = ({ className }) => {
         // current top is this range, the precent is ?
         const precent = (actualTop - start) / (end - start)
 
-        // console.log("currentRange", currentRange, precent)
         // position , precent
         setCurrentScrollRange([currentRangeIndex, precent])
       } else {

@@ -1,7 +1,6 @@
 import { springScrollToElement } from "@renderer/lib/scroller"
 import { cn } from "@renderer/lib/utils"
-import { useWrappedElementSize } from "@renderer/providers/wrapped-element-provider"
-import { useContext, useId, useLayoutEffect, useRef, useState } from "react"
+import { useContext, useId, useRef } from "react"
 
 import { useScrollViewElement } from "../../scroll-area/hooks"
 import { MarkdownRenderContainerRefContext } from "../context"
@@ -23,22 +22,9 @@ export const createHeadingRenderer =
       const renderContainer = useContext(MarkdownRenderContainerRefContext)
       const ref = useRef<HTMLHeadingElement>(null)
 
-      const [currentTitleTop, setCurrentTitleTop] = useState(0)
-      const { h } = useWrappedElementSize()
-      useLayoutEffect(() => {
-        const $heading = ref.current
-        if (!$heading) return
-        // const { top } = $heading.getBoundingClientRect()
-        // // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-layout-effect
-        // setCurrentTitleTop(top | 0)
-        const top = getElementTop($heading)
-        setCurrentTitleTop(top)
-      }, [h])
-
       return (
         <As
           ref={ref}
-          data-container-top={currentTitleTop}
           {...rest}
           data-rid={rid}
           className={cn(rest.className, "group relative")}
@@ -69,13 +55,3 @@ export const createHeadingRenderer =
         </As>
       )
     }
-
-const getElementTop = (element: HTMLElement) => {
-  let actualTop = element.offsetTop
-  let current = element.offsetParent as HTMLElement
-  while (current !== null) {
-    actualTop += current.offsetTop
-    current = current.offsetParent as HTMLElement
-  }
-  return actualTop
-}
