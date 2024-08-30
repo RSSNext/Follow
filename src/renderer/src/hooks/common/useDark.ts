@@ -19,15 +19,13 @@ const themeAtom = !window.electron ?
     },
   ) :
   atom("system" as ColorMode)
-function useDarkElectron() {
-  return useAtomValue(themeAtom) === "dark"
-}
+
 function useDarkWebApp() {
   const systemIsDark = useDarkQuery()
   const mode = useAtomValue(themeAtom)
   return mode === "dark" || (mode === "system" && systemIsDark)
 }
-export const useIsDark = window.electron ? useDarkElectron : useDarkWebApp
+export const useIsDark = useDarkWebApp
 
 export const useThemeAtomValue = () => useAtomValue(themeAtom)
 
