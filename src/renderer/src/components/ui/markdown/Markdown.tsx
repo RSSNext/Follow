@@ -2,7 +2,7 @@ import { parseHtml } from "@renderer/lib/parse-html"
 import type { RemarkOptions } from "@renderer/lib/parse-markdown"
 import { parseMarkdown } from "@renderer/lib/parse-markdown"
 import { cn } from "@renderer/lib/utils"
-import { createElement, useMemo, useRef, useState } from "react"
+import { createElement, Fragment, useMemo, useState } from "react"
 
 import { MarkdownRenderContainerRefContext } from "./context"
 
@@ -17,16 +17,16 @@ export const Markdown: Component<
     () => parseMarkdown(children, { ...stableRemarkOptions }).content,
     [children, stableRemarkOptions],
   )
+  const [refElement, setRefElement] = useState<HTMLElement | null>(null)
 
-  const ref = useRef<HTMLElement>(null)
   return (
-    <MarkdownRenderContainerRefContext.Provider value={ref.current}>
+    <MarkdownRenderContainerRefContext.Provider value={refElement}>
       <article
         className={cn(
           "prose relative cursor-auto select-text dark:prose-invert prose-th:text-left",
           className,
         )}
-        ref={ref}
+        ref={setRefElement}
       >
         {markdownElement}
       </article>
@@ -48,6 +48,8 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
   const { children, renderInlineStyle, as = "div", accessory, ...rest } = props
   const stableRemarkOptions = useState({ renderInlineStyle })[0]
 
+  const [refElement, setRefElement] = useState<HTMLElement | null>(null)
+
   const markdownElement = useMemo(
     () =>
       children &&
@@ -56,12 +58,12 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
       }).toContent(),
     [children, stableRemarkOptions],
   )
-  const ref = useRef<HTMLElement>(null)
 
+  if (!markdownElement) return null
   return (
-    <MarkdownRenderContainerRefContext.Provider value={ref.current}>
-      {createElement(as, { ...rest, ref }, markdownElement)}
-      {accessory && <span key={children}>{accessory}</span>}
+    <MarkdownRenderContainerRefContext.Provider value={refElement}>
+      {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
+      {accessory && <Fragment key={children}>{accessory}</Fragment>}
     </MarkdownRenderContainerRefContext.Provider>
   )
 }

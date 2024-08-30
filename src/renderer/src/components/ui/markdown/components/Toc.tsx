@@ -35,6 +35,7 @@ export const Toc: Component = ({ className }) => {
         []) as HTMLHeadingElement[],
     [markdownElement],
   )
+
   const toc: ITocItem[] = useMemo(
     () =>
       Array.from($headings).map((el, idx) => {
