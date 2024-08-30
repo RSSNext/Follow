@@ -448,7 +448,8 @@ const ContainerToc: FC = () => {
               "flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring-soft",
               "max-h-[calc(100vh-100px)] overflow-auto scrollbar-none",
 
-              "@[600px]:-translate-x-16 @[900px]:translate-x-0 @[900px]:items-start",
+              "@[500px]:-translate-x-12",
+              "@[700px]:-translate-x-8 @[800px]:-translate-x-16 @[900px]:translate-x-0 @[900px]:items-start",
             )}
           />
         </div>
