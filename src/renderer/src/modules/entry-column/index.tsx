@@ -85,10 +85,10 @@ export function EntryColumn() {
       List: EntryListContent,
       Footer: useCallback(() => {
         if (!isFetchingNextPage) return null
-        return <EntryItemSkeleton view={view} />
+        return <EntryItemSkeleton view={view} count={Math.min(entries.data?.pages?.[0].data?.length || 20, entries.data?.pages.at(-1)?.remaining || 20)} />
       }, [isFetchingNextPage, view]),
       ScrollSeekPlaceholder: useCallback(
-        () => <EntryItemSkeleton view={view} single />,
+        () => <EntryItemSkeleton view={view} count={1} />,
         [view],
       ),
     },

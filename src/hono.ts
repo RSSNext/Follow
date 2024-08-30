@@ -1336,6 +1336,25 @@ declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
     };
     dialect: "pg";
 }>;
+declare const invitationsOpenAPISchema: zod.ZodObject<{
+    code: zod.ZodString;
+    createdAt: zod.ZodNullable<zod.ZodString>;
+    fromUserId: zod.ZodString;
+    toUserId: zod.ZodNullable<zod.ZodString>;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    code: string;
+    createdAt: string | null;
+    fromUserId: string;
+    toUserId: string | null;
+}, {
+    code: string;
+    createdAt: string | null;
+    fromUserId: string;
+    toUserId: string | null;
+}>;
+declare const invitationsRelations: drizzle_orm.Relations<"invitations", {
+    users: drizzle_orm.One<"user", false>;
+}>;
 
 declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "subscriptions";
@@ -2493,6 +2512,26 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+    "/invitations": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    code: string;
+                    createdAt: string | null;
+                    users: {
+                        name: string | null;
+                        id: string;
+                        image: string | null;
+                    } | null;
+                    toUserId: string | null;
+                }[];
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
 } & {
     "/wallets/transactions/tip": {
         $post: {
@@ -3206,7 +3245,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             };
             output: {
                 code: 0;
-                total: number;
+                remaining: number;
                 data?: {
                     entries: {
                         description: string | null;
@@ -3263,6 +3302,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         }[] | undefined;
                     } | undefined;
                 }[] | undefined;
+                total?: number | undefined;
             };
             outputFormat: "json";
             status: 200;
@@ -3495,4 +3535,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsInputSchema, feedsOpenAPISchema, feedsRelations, invitations, languageSchema, sessions, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsInputSchema, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, sessions, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

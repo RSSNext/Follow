@@ -117,10 +117,10 @@ const LoadingCircleFallback = (
 
 export const EntryItemSkeleton: FC<{
   view: FeedViewType
-  single?: boolean
-}> = memo(({ view, single }) => {
+  count?: number
+}> = memo(({ view, count }) => {
   const SkeletonItem = SkeletonItemMap[view]
-  if (single) {
+  if (count === 1) {
     return SkeletonItem
   }
 
@@ -129,7 +129,7 @@ export const EntryItemSkeleton: FC<{
         <div
           className={cn(views[view].gridMode ? girdClassNames : "flex flex-col")}
         >
-          {createSkeletonItems(SkeletonItem)}
+          {createSkeletonItems(SkeletonItem, count || 10)}
         </div>
       ) :
       (
@@ -137,9 +137,9 @@ export const EntryItemSkeleton: FC<{
       )
 })
 
-const createSkeletonItems = (element: ReactNode) => {
+const createSkeletonItems = (element: ReactNode, count: number) => {
   const children = [] as ReactNode[]
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < count; i++) {
     children.push(element)
   }
   return children
