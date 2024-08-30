@@ -1,7 +1,7 @@
 import { Button } from "@renderer/components/ui/button"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
-import type { ActionsResponse } from "@renderer/models"
+import type { ActionEntryField, ActionFeedField, ActionOperation, ActionsResponse } from "@renderer/models"
 import { ActionCard } from "@renderer/modules/settings/action-card"
 import { SettingsTitle } from "@renderer/modules/settings/title"
 import { defineSettingPage } from "@renderer/modules/settings/utils"
@@ -20,22 +20,11 @@ export const loader = defineSettingPage({
   priority,
 })
 
-type Operation =
-  | "contains"
-  | "not_contains"
-  | "eq"
-  | "not_eq"
-  | "gt"
-  | "lt"
-  | "regex"
-type EntryField = "all" | "title" | "content" | "author" | "url" | "order"
-type FeedField = "view" | "title" | "site_url" | "feed_url"
-
 type ActionsInput = {
   name: string
   condition: {
-    field?: FeedField
-    operator?: Operation
+    field?: ActionFeedField
+    operator?: ActionOperation
     value?: string
   }[]
   result: {
@@ -46,8 +35,8 @@ type ActionsInput = {
       to: string
     }[]
     blockRules?: {
-      field?: EntryField
-      operator?: Operation
+      field?: ActionEntryField
+      operator?: ActionOperation
       value?: string | number
     }[]
   }

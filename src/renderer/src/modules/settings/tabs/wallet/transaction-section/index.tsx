@@ -15,9 +15,9 @@ import {
   TableHeader,
   TableRow,
 } from "@renderer/components/ui/table"
-import { Balance } from "@renderer/components/ui/wallet/balance"
 import { cn } from "@renderer/lib/utils"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
+import { Balance } from "@renderer/modules/wallet/balance"
 import { useWallet, useWalletTransactions } from "@renderer/queries/wallet"
 
 export const TransactionsSection = () => {
@@ -53,10 +53,10 @@ export const TransactionsSection = () => {
               <TableHead className="text-center" size="sm">
                 Amount
               </TableHead>
-              <TableHead className="text-center" size="sm">
+              <TableHead className="pl-5" size="sm">
                 From
               </TableHead>
-              <TableHead className="text-center" size="sm">
+              <TableHead className="pl-5" size="sm">
                 To
               </TableHead>
               <TableHead className="text-center" size="sm">
@@ -152,11 +152,11 @@ const UserRenderer = ({
   const name = isMe ? "You" : user?.name || APP_NAME
 
   return (
-    <div className="center">
+    <div className="flex">
       {name === APP_NAME ? (
         <Logo className="aspect-square size-4" />
       ) : (
-        <Avatar className="aspect-square size-4">
+        <Avatar className="aspect-square size-4 duration-200 animate-in fade-in-0">
           <AvatarImage src={user?.image || undefined} />
           <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
         </Avatar>

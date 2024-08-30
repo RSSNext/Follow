@@ -6,9 +6,6 @@
   /* TODO replace with own color */
   --fo-background: theme(colors.background);
 
-  --fo-tooltip-background: 0, 0%, 98%;
-  --fo-tooltip-foreground: 0, 0%, 10%;
-
   --fo-inactive: 0, 0%, 80%;
   --fo-disabled: 0, 0%, 70%;
 
@@ -30,9 +27,6 @@
 
   --fo-item-active: theme(colors.neutral.600/0.4);
   --fo-item-hover: theme(colors.neutral.700/0.3);
-
-  --fo-tooltip-background: 0, 0%, 15%;
-  --fo-tooltip-foreground: 0, 0%, 96%;
 
   --fo-inactive: 0, 0%, 50%;
   --fo-disabled: 0, 0%, 35%;

@@ -1,4 +1,5 @@
 import { initializeDefaultGeneralSettings } from "@renderer/atoms/settings/general"
+import { initializeDefaultIntegrationSettings } from "@renderer/atoms/settings/integration"
 import { initializeDefaultUISettings } from "@renderer/atoms/settings/ui"
 import { appLog } from "@renderer/lib/log"
 import { sleep } from "@renderer/lib/utils"
@@ -108,4 +109,5 @@ const logHydrateError = (message: string) => {
 export const hydrateSettings = () => {
   initializeDefaultUISettings()
   initializeDefaultGeneralSettings()
+  initializeDefaultIntegrationSettings()
 }

@@ -36,11 +36,14 @@ function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
     const cloned: SubscriptionFlatModel = { ...subscription }
     if (!subscription.category && subscription.feeds) {
       const { siteUrl } = subscription.feeds
-      if (!siteUrl) continue
-      const parsed = parse(siteUrl)
+      if (!siteUrl) {
+        cloned.defaultCategory = subscription.feedId
+      } else {
+        const parsed = parse(siteUrl)
 
-      if (parsed.domain) {
-        cloned.defaultCategory = capitalizeFirstLetter(parsed.domain)
+        if (parsed.domain) {
+          cloned.defaultCategory = capitalizeFirstLetter(parsed.domain)
+        }
       }
     }
     result.push(cloned)
@@ -150,16 +153,18 @@ class SubscriptionActions {
   async markReadByFeedIds(...args: [string[], FeedViewType?, MarkReadFilter?]) {
     const [feedIds, view, filter] = args
 
+    const stableFeedIds = feedIds.concat()
+
     doMutationAndTransaction(
       () =>
         apiClient.reads.all.$post({
           json: {
-            feedIdList: feedIds,
+            feedIdList: stableFeedIds,
             ...filter,
           },
         }),
       async () => {
-        for (const feedId of feedIds) {
+        for (const feedId of stableFeedIds) {
           // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
           !filter && feedUnreadActions.updateByFeedId(feedId, 0)
           entryActions.patchManyByFeedId(feedId, { read: true }, filter)

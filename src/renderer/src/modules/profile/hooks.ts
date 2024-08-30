@@ -11,7 +11,7 @@ import { UserProfileModalContent } from "./user-profile-modal"
 
 export const useUserSubscriptionsQuery = (userId: string | undefined) => {
   const subscriptions = useAuthQuery(
-    defineQuery(["subscriptions", userId], async () => {
+    defineQuery(["subscriptions", "group", userId], async () => {
       const res = await apiClient.subscriptions.$get({
         query: { userId },
       })
@@ -61,7 +61,8 @@ export const usePresentUserProfileModal = (
         clickOutsideToDismiss: true,
         modal: variant === "dialog",
         overlay: variant === "dialog",
-        modalContainerClassName: variant === "drawer" ? "right-4 left-[auto] top-4 bottom-4" : "",
+        modalContainerClassName:
+          variant === "drawer" ? "right-4 left-[auto] top-4 bottom-4" : "",
       })
     },
     [present, variant],

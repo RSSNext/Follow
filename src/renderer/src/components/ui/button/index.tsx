@@ -28,6 +28,7 @@ interface ActionButtonProps {
   tooltip: React.ReactNode
   tooltipSide?: "top" | "bottom"
   active?: boolean
+  disabled?: boolean
   shortcut?: string
 }
 
@@ -45,6 +46,7 @@ export const ActionButton = React.forwardRef<
       children,
       active,
       shortcut,
+      disabled,
       ...rest
     },
     ref,
@@ -71,9 +73,11 @@ export const ActionButton = React.forwardRef<
                 active && "bg-zinc-500/15 hover:bg-zinc-500/20",
                 "focus-visible:bg-zinc-500/30 focus-visible:!outline-none",
                 "rounded-md duration-200 hover:bg-theme-button-hover",
+                "disabled:cursor-not-allowed disabled:opacity-50",
                 className,
               )}
               type="button"
+              disabled={disabled}
               {...rest}
             >
               {typeof icon === "function" ?
@@ -202,31 +206,29 @@ export const IconButton = React.forwardRef<
     icon: React.JSX.Element
   }>
 >((props, ref) => {
-  const { icon } = props
+  const { icon, ...rest } = props
   return (
     <button
       ref={ref}
       type="button"
+      {...rest}
       className={cn(
         styledButtonVariant({
           variant: "ghost",
         }),
         "group relative gap-2 bg-accent/10 px-4 hover:bg-accent dark:bg-accent/20 dark:hover:bg-accent/60",
+        rest.className,
       )}
     >
       <span className="center">
         {React.cloneElement(icon, {
-          className: cn(
-            "group-hover:text-white dark:group-hover:text-inherit",
-            "group-hover:invisible",
-            icon.props.className,
-          ),
+          className: cn("invisible", icon.props.className),
         })}
 
         {React.cloneElement(icon, {
           className: cn(
             "group-hover:text-white dark:group-hover:text-inherit",
-            "absolute left-4 top-1/2 -translate-y-1/2 opacity-0 duration-200 group-hover:left-1/2 group-hover:-translate-x-1/2 group-hover:opacity-100",
+            "absolute left-4 top-1/2 -translate-y-1/2 duration-200 group-hover:left-1/2 group-hover:-translate-x-1/2",
             icon.props.className,
           ),
         })}

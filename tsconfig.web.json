@@ -8,7 +8,8 @@
     "src/shared/src/**/*",
     "types/**/*.d.ts",
     "src/env.ts",
-    "src/hono.ts"
+    "src/hono.ts",
+    "src/shared/src/global.d.ts"
   ],
   "compilerOptions": {
     "composite": true,

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import {
   Tooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipTrigger,
 } from "../tooltip"
 
@@ -70,15 +71,16 @@ export const EllipsisTextWithTooltip = (props: EllipsisProps) => {
     <Tooltip>
       <TooltipTrigger asChild>{Content}</TooltipTrigger>
 
-      <TooltipContent>
-        <span
-          className="whitespace-pre-line break-all"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {children}
-        </span>
-      </TooltipContent>
-
+      <TooltipPortal>
+        <TooltipContent>
+          <span
+            className="whitespace-pre-line break-all"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {children}
+          </span>
+        </TooltipContent>
+      </TooltipPortal>
     </Tooltip>
   )
 }

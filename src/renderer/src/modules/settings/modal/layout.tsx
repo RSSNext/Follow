@@ -62,7 +62,7 @@ export function SettingModalLayout(
           scale: 0.96,
         }}
         className={cn(
-          "relative flex max-h-[80vh] max-w-[95vw] overflow-hidden rounded-xl border border-border",
+          "relative flex overflow-hidden rounded-xl border border-border",
           !overlay && "shadow-perfect",
         )}
         style={resizeableStyle}
@@ -86,6 +86,10 @@ export function SettingModalLayout(
             width: 800,
             height: 700,
           }}
+          maxHeight="80vh"
+          minHeight={500}
+          minWidth={600}
+          maxWidth="95vw"
           className="flex flex-col"
         >
           {draggable && (

@@ -11,6 +11,10 @@ on:
       tag_version:
         description: "Tag Version"
         required: true
+# https://docs.github.com/en/enterprise-cloud@latest/actions/writing-workflows/choosing-what-your-workflow-does/control-the-concurrency-of-workflows-and-jobs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 env:
   VITE_WEB_URL: ${{ vars.VITE_WEB_URL }}
   VITE_API_URL: ${{ vars.VITE_API_URL }}
@@ -28,8 +32,18 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
+      - name: Check out Git repository Fully
+        uses: actions/checkout@v4
+        if: github.event.inputs.tag_version != '' || github.ref_type == 'tag'
+        with:
+          fetch-depth: 0
+          lfs: true
       - name: Check out Git repository
         uses: actions/checkout@v4
+        if: github.event.inputs.tag_version  == '' && github.ref_type != 'tag'
+        with:
+          fetch-depth: 1
+          lfs: true
 
       - name: Cache pnpm modules
         uses: actions/cache@v4

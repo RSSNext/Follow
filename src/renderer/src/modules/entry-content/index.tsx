@@ -8,8 +8,11 @@ import {
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
+import { ShadowDOM } from "@renderer/components/common/ShadowDOM"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { HTML } from "@renderer/components/ui/markdown"
+import { Toc } from "@renderer/components/ui/markdown/components/Toc"
+import { RootPortal } from "@renderer/components/ui/portal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { isWebBuild, ROUTE_FEED_PENDING } from "@renderer/constants"
 import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
@@ -20,24 +23,29 @@ import {
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { FeedViewType } from "@renderer/lib/enum"
+import { getNewIssueUrl } from "@renderer/lib/issues"
 import { cn } from "@renderer/lib/utils"
 import type { ActiveEntryId } from "@renderer/models"
 import {
   useIsSoFWrappedElement,
+  useWrappedElement,
   WrappedElementProvider,
 } from "@renderer/providers/wrapped-element-provider"
 import { Queries } from "@renderer/queries"
 import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
+import type { FallbackRender } from "@sentry/react"
+import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
 import { useEffect, useLayoutEffect, useRef } from "react"
 
-import { LoadingCircle } from "../../components/ui/loading"
+import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
 import { EntryTranslation } from "../entry-column/translation"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
 import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
 import { EntryHeader } from "./header"
+import { EntryContentLoading } from "./loading"
 import { EntryContentProvider } from "./provider"
 
 export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
@@ -147,7 +155,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
           "h-0 min-w-0 grow overflow-y-auto @container",
           className,
         )}
-        scrollbarClassName="mr-1"
+        scrollbarClassName="mr-[1.5px]"
         viewportClassName="p-5"
         ref={scrollerRef}
       >
@@ -203,8 +211,8 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
             </a>
 
             <WrappedElementProvider boundingDetection>
-              <TitleMetaHandler entryId={entry.entries.id} />
-              <div className="prose mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem] dark:prose-invert">
+              <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem]">
+                <TitleMetaHandler entryId={entry.entries.id} />
                 {(summary.isLoading || summary.data) && (
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
                     <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
@@ -221,21 +229,29 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                     </AutoResizeHeight>
                   </div>
                 )}
-                <article>
+                <ErrorBoundary fallback={RenderError}>
                   {!isInReadabilityMode ? (
-                    <HTML renderInlineStyle={readerRenderInlineStyle}>
-                      {content}
-                    </HTML>
+                    <ShadowDOM>
+                      <HTML
+                        accessory={<ContainerToc key={entryId} />}
+                        as="article"
+                        className="prose dark:prose-invert prose-h1:text-[1.6em]"
+                        renderInlineStyle={readerRenderInlineStyle}
+                      >
+                        {content}
+                      </HTML>
+                    </ShadowDOM>
                   ) : (
                     <ReadabilityContent entryId={entryId} />
                   )}
-                </article>
+                </ErrorBoundary>
               </div>
             </WrappedElementProvider>
+
             {!content && (
               <div className="center mt-16">
                 {isPending ? (
-                  <LoadingCircle size="large" />
+                  <EntryContentLoading icon={feed?.siteUrl!} />
                 ) : error ?
                     (
                       <div className="center flex flex-col gap-2">
@@ -278,7 +294,7 @@ const TitleMetaHandler: Component<{
 
   const atTop = useIsSoFWrappedElement()
   useEffect(() => {
-    setEntryContentScrollToTop(false)
+    setEntryContentScrollToTop(true)
   }, [entryId])
   useLayoutEffect(() => {
     setEntryContentScrollToTop(atTop)
@@ -308,15 +324,22 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
         </p>
       ) : (
         <div className="center mt-16 flex flex-col gap-2">
-          <LoadingCircle size="large" />
+          <LoadingWithIcon
+            size="large"
+            icon={<i className="i-mgc-sparkles-2-cute-re" />}
+          />
           <span className="text-sm">
             Fetching original content and processing...
           </span>
         </div>
       )}
-      <article>
-        <HTML>{result?.content ?? ""}</HTML>
-      </article>
+
+      <HTML
+        as="article"
+        className="prose dark:prose-invert prose-h1:text-[1.6em]"
+      >
+        {result?.content ?? ""}
+      </HTML>
     </div>
   )
 }
@@ -378,4 +401,59 @@ const ReadabilityAutoToggle = ({ url, id }: { url: string, id: string }) => {
   }, [toggle])
 
   return null
+}
+
+const RenderError: FallbackRender = ({ error }) => {
+  const nextError =
+    typeof error === "string" ? new Error(error) : (error as Error)
+  return (
+    <div className="center mt-16 flex flex-col gap-2">
+      <i className="i-mgc-close-cute-re text-3xl text-red-500" />
+      <span className="font-sans text-sm">
+        Render error: {nextError.message}
+      </span>
+      <a
+        href={getNewIssueUrl({
+          body: [
+            "### Error",
+            "",
+            nextError.message,
+            "",
+            "### Stack",
+            "",
+            "```",
+            nextError.stack,
+            "```",
+          ].join("\n"),
+          label: "bug",
+          title: "Render error",
+        })}
+        target="_blank"
+        rel="noreferrer"
+      >
+        Report issue
+      </a>
+    </div>
+  )
+}
+
+const ContainerToc: FC = () => {
+  const wrappedElement = useWrappedElement()
+  return (
+    <RootPortal to={wrappedElement!}>
+      <div className="absolute right-[-130px] top-0 h-full w-[100px]">
+        <div className="sticky top-0">
+          <Toc
+            className={cn(
+              "flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring-soft",
+              "max-h-[calc(100vh-100px)] overflow-auto scrollbar-none",
+
+              "@[500px]:-translate-x-12",
+              "@[700px]:-translate-x-8 @[800px]:-translate-x-16 @[900px]:translate-x-0 @[900px]:items-start",
+            )}
+          />
+        </div>
+      </div>
+    </RootPortal>
+  )
 }

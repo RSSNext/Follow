@@ -3,6 +3,7 @@ import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
 import { memoize } from "lodash-es"
 import { twMerge } from "tailwind-merge"
+import { parse } from "tldts"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "../constants/app"
 import { FeedViewType } from "./enum"
@@ -75,6 +76,25 @@ export const getOS = memoize((): OS => {
 
   return os as OS
 })
+
+export function detectBrowser() {
+  const { userAgent } = navigator
+  if (userAgent.includes("Edg")) {
+    return "Microsoft Edge"
+  } else if (userAgent.includes("Chrome")) {
+    return "Chrome"
+  } else if (userAgent.includes("Firefox")) {
+    return "Firefox"
+  } else if (userAgent.includes("Safari")) {
+    return "Safari"
+  } else if (userAgent.includes("Opera")) {
+    return "Opera"
+  } else if (userAgent.includes("Trident") || userAgent.includes("MSIE")) {
+    return "Internet Explorer"
+  }
+
+  return "Unknown"
+}
 
 export const isSafari = memoize(() => {
   if (ELECTRON) return false
@@ -179,4 +199,47 @@ export const getViewFromRoute = (route: RSSHubRoute) => {
     }
   }
   return null
+}
+
+export const sortByAlphabet = (a: string, b: string) => {
+  const isALetter = /^[a-z]/i.test(a)
+  const isBLetter = /^[a-z]/i.test(b)
+
+  if (isALetter && !isBLetter) {
+    return -1
+  }
+  if (!isALetter && isBLetter) {
+    return 1
+  }
+
+  if (isALetter && isBLetter) {
+    return a.localeCompare(b)
+  }
+
+  return a.localeCompare(b, "zh-CN")
+}
+
+export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
+  let src: string
+  let fallbackUrl = ""
+
+  try {
+    const { host } = new URL(url)
+    const pureDomain = parse(host).domainWithoutSuffix
+    fallbackUrl = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain
+      ?.slice(0, 2)
+      .toUpperCase()}`
+    src = `https://unavatar.follow.is/${host}?fallback=${fallback || false}`
+  } catch {
+    const pureDomain = parse(url).domainWithoutSuffix
+    src = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain
+      ?.slice(0, 2)
+      .toUpperCase()}`
+  }
+  const ret = {
+    src,
+    fallbackUrl,
+  }
+
+  return ret
 }

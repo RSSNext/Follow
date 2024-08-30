@@ -5,7 +5,7 @@ import { getUISettings } from "@renderer/atoms/settings/ui"
 import { isElectronBuild } from "@renderer/constants"
 import { browserDB } from "@renderer/database"
 import { getStorageNS } from "@renderer/lib/ns"
-import { InvalidateQueryEvent } from "@renderer/providers/invalidate-query-provider"
+import { ElectronCloseEvent, ElectronShowEvent } from "@renderer/providers/invalidate-query-provider"
 import { CleanerService } from "@renderer/services/cleaner"
 import { registerGlobalContext } from "@shared/bridge"
 import dayjs from "dayjs"
@@ -111,9 +111,13 @@ export const initializeApp = async () => {
     /**
      * Electron app only
      */
-    invalidateQueries() {
-      document.dispatchEvent(new InvalidateQueryEvent())
+    electronClose() {
+      document.dispatchEvent(new ElectronCloseEvent())
     },
+    electronShow() {
+      document.dispatchEvent(new ElectronShowEvent())
+    },
+
     toast,
   })
 

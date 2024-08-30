@@ -1,4 +1,3 @@
-import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { isASCII } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
@@ -46,7 +45,7 @@ export function Recommendations() {
   }, [data])
 
   if (rsshubPopular.isLoading) {
-    return <LoadingCircle className="mt-16" size="medium" />
+    return null
   }
 
   if (!data) {

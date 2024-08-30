@@ -4,6 +4,7 @@ import { AppErrorBoundary } from "@renderer/components/common/AppErrorBoundary"
 import { SafeFragment } from "@renderer/components/common/Fragment"
 import { m } from "@renderer/components/common/Motion"
 import { ErrorComponentType } from "@renderer/components/errors"
+import { isElectronBuild } from "@renderer/constants"
 import { useSwitchHotKeyScope } from "@renderer/hooks/common/useSwitchHotkeyScope"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
@@ -232,16 +233,13 @@ export const ModalInternal = memo(
           if (CustomModalComponent) {
             return (
               <Wrapper>
-                <Dialog.Root
-                  open
-                  onOpenChange={onClose}
-                  modal={modal}
-                >
+                <Dialog.Root open onOpenChange={onClose} modal={modal}>
                   <Dialog.Portal>
                     <Dialog.DialogTitle className="sr-only">
                       {title}
                     </Dialog.DialogTitle>
                     <Dialog.Content asChild onFocusCapture={stopPropagation}>
+
                       <div
                         ref={edgeElementRef}
                         className={cn(
@@ -261,6 +259,9 @@ export const ModalInternal = memo(
                         }
                         style={zIndexStyle}
                       >
+                        {isElectronBuild && (
+                          <div className="drag-region fixed inset-x-0 top-0 h-8" />
+                        )}
                         <div
                           className={cn("contents", modalClassName)}
                           onClick={stopPropagation}
@@ -301,6 +302,10 @@ export const ModalInternal = memo(
                           undefined
                       }
                     >
+                      {isElectronBuild && (
+                        <div className="drag-region fixed inset-x-0 top-0 h-8" />
+                      )}
+
                       <m.div
                         ref={modalElementRef}
                         style={modalStyle}
@@ -312,9 +317,7 @@ export const ModalInternal = memo(
                             "bg-theme-modal-background-opaque" :
                             "bg-theme-modal-background backdrop-blur-sm",
                           "shadow-modal",
-                          max ?
-                            "h-[90vh] w-[90vw]" :
-                            "max-h-[70vh] min-w-[300px] max-w-[90vw] lg:max-h-[calc(100vh-20rem)] lg:max-w-[70vw]",
+                          max ? "h-[90vh] w-[90vw]" : "",
 
                           "border border-slate-200 dark:border-neutral-800",
                           modalClassName,
@@ -339,7 +342,10 @@ export const ModalInternal = memo(
                           className="flex grow flex-col"
                         >
                           <div
-                            className="relative flex items-center"
+                            className={cn(
+                              "relative flex items-center",
+                              "max-h-[70vh] min-w-[300px] max-w-[90vw] lg:max-h-[calc(100vh-20rem)] lg:max-w-[70vw]",
+                            )}
                             onPointerDownCapture={handleDrag}
                             onPointerDown={handleResizeEnable}
                           >

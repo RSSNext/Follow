@@ -1,3 +1,4 @@
+import { ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "@renderer/constants"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
@@ -44,7 +45,7 @@ export const useFeed = ({ id, url }: FeedQueryParams) =>
       url,
     }),
     {
-      enabled: !!id || !!url,
+      enabled: (!!id || !!url) && id !== ROUTE_FEED_PENDING && !id?.startsWith(ROUTE_FEED_IN_FOLDER),
     },
   )
 

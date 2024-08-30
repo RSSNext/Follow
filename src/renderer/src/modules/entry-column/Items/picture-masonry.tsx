@@ -236,7 +236,7 @@ const PictureMasonryImpl = ({
 
 const LoadingSkeletonItem = ({ itemStyle }: { itemStyle: CSSProperties }) => (
   <div style={itemStyle}>
-    <EntryItemSkeleton single view={FeedViewType.Pictures} />
+    <EntryItemSkeleton count={1} view={FeedViewType.Pictures} />
   </div>
 )
 

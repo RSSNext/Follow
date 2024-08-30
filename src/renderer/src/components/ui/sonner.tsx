@@ -1,11 +1,11 @@
-import { useDark } from "@renderer/hooks/common"
+import { useIsDark } from "@renderer/hooks/common"
 import { Toaster as Sonner } from "sonner"
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
 const Toaster = ({ ...props }: ToasterProps) => (
   <Sonner
-    theme={useDark() ? "dark" : "light"}
+    theme={useIsDark() ? "dark" : "light"}
     className="toaster group"
     toastOptions={{
       classNames: {

@@ -112,7 +112,7 @@ export const useEntries = ({
   useAuthInfiniteQuery(entries.entries({ id, view, read }), {
     enabled: id !== undefined,
     getNextPageParam: (lastPage) => {
-      if (!lastPage.data?.length) {
+      if (!lastPage.data?.length || lastPage.remaining === 0) {
         return null
       }
       return lastPage.data.at(-1)!.entries.publishedAt

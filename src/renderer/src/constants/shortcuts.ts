@@ -29,7 +29,7 @@ export const shortcuts = {
   },
   layout: {
     toggleSidebar: {
-      name: "Toggle Feed Sidebar",
+      name: "Show/Hide Feed Sidebar",
       key: "Meta+B",
     },
   },
@@ -68,6 +68,10 @@ export const shortcuts = {
       name: COPY_MAP.OpenInBrowser(),
       key: "B",
       extra: "Double Click",
+    },
+    tts: {
+      name: "Play TTS",
+      key: "Shift+Meta+V",
     },
     copyLink: {
       name: "Copy Link",

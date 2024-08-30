@@ -8,7 +8,10 @@ import {
   AvatarImage,
 } from "@renderer/components/ui/avatar"
 import { ActionButton, Button } from "@renderer/components/ui/button"
-import { LoadingCircle } from "@renderer/components/ui/loading"
+import {
+  LoadingCircle,
+  LoadingWithIcon,
+} from "@renderer/components/ui/loading"
 import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { useAuthQuery } from "@renderer/hooks/common"
@@ -19,6 +22,7 @@ import { cn } from "@renderer/lib/utils"
 import type { SubscriptionModel } from "@renderer/models"
 import { useUserSubscriptionsQuery } from "@renderer/modules/profile/hooks"
 import { useSubscriptionStore } from "@renderer/store/subscription"
+import { useUserById } from "@renderer/store/user"
 import { useAnimationControls } from "framer-motion"
 import { throttle } from "lodash-es"
 import type { FC } from "react"
@@ -40,6 +44,21 @@ export const UserProfileModalContent: FC<{
       return res.data
     }),
   )
+  const storeUser = useUserById(userId)
+
+  const userInfo = user.data ?
+      {
+        avatar: user.data.image,
+        name: user.data.name,
+        handle: user.data.handle,
+      } :
+    storeUser ?
+        {
+          avatar: storeUser.image,
+          name: storeUser.name,
+          handle: storeUser.handle,
+        } :
+      null
 
   const subscriptions = useUserSubscriptionsQuery(user.data?.id)
   const modal = useCurrentModal()
@@ -206,7 +225,7 @@ export const UserProfileModalContent: FC<{
           </ActionButton>
         </div>
 
-        {user.data && (
+        {userInfo && (
           <Fragment>
             <div
               className={cn(
@@ -222,10 +241,14 @@ export const UserProfileModalContent: FC<{
                 )}
               >
                 <m.span layout>
-                  <AvatarImage asChild src={user.data.image || undefined}>
+                  <AvatarImage
+                    className="duration-200 animate-in fade-in-0"
+                    asChild
+                    src={userInfo.avatar || undefined}
+                  >
                     <m.img layout />
                   </AvatarImage>
-                  <AvatarFallback>{user.data.name?.slice(0, 2)}</AvatarFallback>
+                  <AvatarFallback>{userInfo.name?.slice(0, 2)}</AvatarFallback>
                 </m.span>
               </Avatar>
               <m.div
@@ -241,14 +264,18 @@ export const UserProfileModalContent: FC<{
                     isHeaderSimple ? "" : "mt-4",
                   )}
                 >
-                  <m.h1 layout>{user.data.name}</m.h1>
+                  <m.h1 layout>{userInfo.name}</m.h1>
                 </m.div>
-                {!!user.data.handle && (
-                  <m.div className="mb-0 text-sm text-zinc-500" layout>
-                    @
-                    {user.data.handle}
-                  </m.div>
-                )}
+
+                <m.div
+                  className={cn(
+                    "mb-0 text-sm text-zinc-500",
+                    userInfo.handle ? "visible" : "invisible select-none",
+                  )}
+                  layout
+                >
+                  @{userInfo.handle}
+                </m.div>
               </m.div>
             </div>
             <ScrollArea.ScrollArea
@@ -257,8 +284,16 @@ export const UserProfileModalContent: FC<{
               viewportClassName="[&>div]:space-y-4 pb-4"
             >
               {subscriptions.isLoading ? (
-                <LoadingCircle
+                <LoadingWithIcon
                   size="large"
+                  icon={(
+                    <Avatar className="aspect-square size-4">
+                      <AvatarImage src={userInfo.avatar || undefined} />
+                      <AvatarFallback>
+                        {userInfo.name?.slice(0, 2)}
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
                   className="center h-48 w-full max-w-full"
                 />
               ) : (
@@ -284,7 +319,7 @@ export const UserProfileModalContent: FC<{
           </Fragment>
         )}
 
-        {!user.data && <LoadingCircle size="large" className="center h-full" />}
+        {!userInfo && <LoadingCircle size="large" className="center h-full" />}
       </m.div>
     </div>
   )

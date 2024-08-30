@@ -10,7 +10,8 @@ import { useInputComposition } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
-import { cn } from "@renderer/lib/utils"
+import { cn, sortByAlphabet } from "@renderer/lib/utils"
+import { useFeedStore } from "@renderer/store/feed"
 import {
   subscriptionActions,
   useSubscriptionByFeedId,
@@ -23,6 +24,7 @@ import { Fragment, memo, useEffect, useRef, useState } from "react"
 import { useOnClickOutside } from "usehooks-ts"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
+import { useFeedListSortSelector } from "./atom"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { FeedItem } from "./item"
 import { UnreadNumber } from "./unread-number"
@@ -261,15 +263,12 @@ function FeedCategoryImpl({
               opacity: 0.01,
             }}
           >
-            {sortByUnreadFeedList.map((feedId) => (
-              <FeedItem
-                showUnreadCount={showUnreadCount}
-                key={feedId}
-                feedId={feedId}
-                view={view}
-                className={showCollapse ? "pl-6" : "pl-2.5"}
-              />
-            ))}
+            <SortedFeedItems
+              ids={ids}
+              showCollapse={showCollapse as boolean}
+              view={view as FeedViewType}
+              showUnreadCount={showUnreadCount}
+            />
           </m.div>
         )}
       </AnimatePresence>
@@ -351,5 +350,83 @@ const RenameCategoryForm: FC<{
         <i className="i-mgc-check-filled size-3" />
       </MotionButtonBase>
     </form>
+  )
+}
+
+type SortListProps = {
+  ids: string[]
+  showUnreadCount?: boolean
+  view: FeedViewType
+  showCollapse: boolean
+}
+const SortedFeedItems = (props: SortListProps) => {
+  const by = useFeedListSortSelector((s) => s.by)
+  switch (by) {
+    case "count": {
+      return <SortByUnreadList {...props} />
+    }
+    case "alphabetical": {
+      return <SortByAlphabeticalList {...props} />
+    }
+
+    default: {
+      return <SortByUnreadList {...props} />
+    }
+  }
+}
+
+const SortByAlphabeticalList = (props: SortListProps) => {
+  const { ids, showUnreadCount, showCollapse, view } = props
+  const isDesc = useFeedListSortSelector((s) => s.order === "desc")
+  const sortedFeedList = useFeedStore((state) => {
+    const res = ids.sort((a, b) => {
+      const feedTitleA = state.feeds[a]?.title || ""
+      const feedTitleB = state.feeds[b]?.title || ""
+      return sortByAlphabet(feedTitleA, feedTitleB)
+    })
+
+    if (isDesc) {
+      return res
+    }
+    return res.reverse()
+  })
+  return (
+    <Fragment>
+      {sortedFeedList.map((feedId) => (
+        <FeedItem
+          showUnreadCount={showUnreadCount}
+          key={feedId}
+          feedId={feedId}
+          view={view}
+          className={showCollapse ? "pl-6" : "pl-2.5"}
+        />
+      ))}
+    </Fragment>
+  )
+}
+const SortByUnreadList = ({
+  ids,
+  showUnreadCount,
+  showCollapse,
+  view,
+}: SortListProps) => {
+  const isDesc = useFeedListSortSelector((s) => s.order === "desc")
+  const sortByUnreadFeedList = useFeedUnreadStore((state) => {
+    const res = ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0))
+    return isDesc ? res : res.reverse()
+  })
+
+  return (
+    <Fragment>
+      {sortByUnreadFeedList.map((feedId) => (
+        <FeedItem
+          showUnreadCount={showUnreadCount}
+          key={feedId}
+          feedId={feedId}
+          view={view}
+          className={showCollapse ? "pl-6" : "pl-2.5"}
+        />
+      ))}
+    </Fragment>
   )
 }

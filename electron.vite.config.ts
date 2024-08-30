@@ -36,6 +36,7 @@ export default defineConfig({
         "@env": resolve("./src/env.ts"),
       },
     },
+
     plugins: [
       react(),
       sentryVitePlugin({
@@ -61,6 +62,7 @@ export default defineConfig({
     ],
     build: {
       sourcemap: !!process.env.CI,
+      target: "esnext",
     },
     define: {
       APP_VERSION: JSON.stringify(pkg.version),

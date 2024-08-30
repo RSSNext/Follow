@@ -12,3 +12,13 @@ export const nextFrame = (fn: (...args: any[]) => any) => {
     })
   })
 }
+
+export const getElementTop = (element: HTMLElement) => {
+  let actualTop = element.offsetTop
+  let current = element.offsetParent as HTMLElement
+  while (current !== null) {
+    actualTop += current.offsetTop
+    current = current.offsetParent as HTMLElement
+  }
+  return actualTop
+}

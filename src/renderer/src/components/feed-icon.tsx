@@ -65,6 +65,18 @@ export function FeedIcon({
       )
       break
     }
+    default: {
+      ImageElement = (
+        <i
+          className="i-mgc-link-cute-re mr-2 shrink-0"
+          style={{
+            width: size,
+            height: size,
+          }}
+        />
+      )
+      break
+    }
   }
 
   const colors = useMemo(
@@ -79,7 +91,11 @@ export function FeedIcon({
   if (fallback && !!image) {
     return (
       <Avatar>
-        <AvatarImage src={image || ""} asChild>
+        <AvatarImage
+          className="duration-200 animate-in fade-in-0"
+          src={image || ""}
+          asChild
+        >
           {ImageElement}
         </AvatarImage>
         <AvatarFallback asChild>

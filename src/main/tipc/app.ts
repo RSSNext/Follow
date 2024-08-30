@@ -1,8 +1,9 @@
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindow } from "electron"
-import { clipboard, dialog } from "electron"
+import { clipboard, dialog, screen } from "electron"
 
+import { isWindows11 } from "../env"
 import { downloadFile } from "../lib/download"
 import { cleanAuthSessionToken, cleanUser } from "../lib/user"
 import type { RendererHandlers } from "../renderer-handlers"
@@ -65,16 +66,81 @@ export const appRoute = {
             window.minimize()
             break
           }
+
           case "maximum": {
+            // FIXME: this is a electron bug, see https://github.com/RSSNext/Follow/issues/231
+            // So in this way we use a workaround to fix it, that is manually resize the window
+            if (isWindows11) {
+              const size = screen.getDisplayMatching(
+                window.getBounds(),
+              ).workAreaSize
+
+              const isMaximized = size.height === window.getSize()[1]
+
+              const storeKey = Symbol.for("maximized")
+              if (isMaximized) {
+                const stored = window[storeKey]
+                if (!stored) return
+
+                window.setResizable(true)
+                window.setMovable(true)
+
+                window.setSize(stored.size[0], stored.size[1])
+                window.setPosition(stored.position[0], stored.position[1])
+
+                delete window[storeKey]
+              } else {
+                const currentWindowSize = window.getSize()
+                const currentWindowPosition = window.getPosition()
+                window[storeKey] = {
+                  size: currentWindowSize,
+                  position: currentWindowPosition,
+                }
+
+                // Maually Resize
+                window.setSize(size.width, size.height)
+                window.setPosition(0, 0)
+
+                window.setResizable(false)
+                window.setMovable(false)
+              }
+
+              return
+            }
+
             if (window.isMaximized()) {
               window.unmaximize()
             } else {
               window.maximize()
             }
+
             break
           }
         }
       }
+    }),
+  getWindowIsMaximized: t.procedure
+    .input<void>()
+    .action(async ({ context }) => {
+      const window: BrowserWindow | null = (
+        context.sender as Sender
+      ).getOwnerBrowserWindow()
+
+      if (isWindows11 && window) {
+        const size = screen.getDisplayMatching(window.getBounds()).workAreaSize
+
+        const windowSize = window.getSize()
+        const windowPosition = window.getPosition()
+        const isMaximized =
+          windowSize[0] === size.width &&
+          windowSize[1] === size.height &&
+          windowPosition[0] === 0 &&
+          windowPosition[1] === 0
+
+        return !!isMaximized
+      }
+
+      return window?.isMaximized()
     }),
   quitAndInstall: t.procedure.action(async () => {
     quitAndInstall()

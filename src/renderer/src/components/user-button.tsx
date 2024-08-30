@@ -190,6 +190,7 @@ export function UserAvatar({
     >
       <Avatar className="aspect-square h-full w-auto overflow-hidden rounded-full border bg-stone-300">
         <AvatarImage
+          className="duration-200 animate-in fade-in-0"
           src={(profile.data || session?.user)?.image || undefined}
         />
         <AvatarFallback>

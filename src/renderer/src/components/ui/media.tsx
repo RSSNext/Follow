@@ -64,8 +64,12 @@ const MediaImpl: FC<MediaProps> = ({
       src,
   )
 
+  const [mediaLoadState, setMediaLoadState] = useState<
+    "loading" | "loaded" | "error"
+  >("loading")
   const errorHandle: React.ReactEventHandler<HTMLImageElement> =
     useEventCallback((e) => {
+      setMediaLoadState("error")
       if (imgSrc !== props.src) {
         setImgSrc(props.src)
         failedList.add(props.src)
@@ -91,6 +95,7 @@ const MediaImpl: FC<MediaProps> = ({
   })
   const handleOnLoad: React.ReactEventHandler<HTMLImageElement> =
     useEventCallback((e) => {
+      setMediaLoadState("loaded")
       rest.onLoad?.(e as any)
       if ("cacheDimensions" in props && props.cacheDimensions && src) {
         saveImageDimensionsToDb(src, {
@@ -112,8 +117,10 @@ const MediaImpl: FC<MediaProps> = ({
             className={cn(
               hidden && "hidden",
               !(props.width || props.height) && "size-full",
-              "bg-gray-200 object-cover dark:bg-neutral-800",
+              "bg-gray-200 object-cover duration-200 dark:bg-neutral-800",
               popper && "cursor-zoom-in",
+              mediaLoadState === "loaded" ? "opacity-100" : "opacity-0",
+
               mediaContainerClassName,
             )}
             src={imgSrc}
@@ -159,9 +166,10 @@ const MediaImpl: FC<MediaProps> = ({
       }
       case "video": {
         return (
-          <div
+          <span
             className={cn(
               hidden && "hidden",
+              "block",
               !(props.width || props.height) && "size-full",
               "relative bg-stone-100 object-cover",
               mediaContainerClassName,
@@ -169,11 +177,11 @@ const MediaImpl: FC<MediaProps> = ({
             onClick={handleClick}
           >
             <VideoPreview src={src!} previewImageUrl={previewImageUrl} />
-          </div>
+          </span>
         )
       }
       default: {
-        throw new Error("Invalid type")
+        return null
       }
     }
   }, [
@@ -184,6 +192,7 @@ const MediaImpl: FC<MediaProps> = ({
     hidden,
     imgSrc,
     mediaContainerClassName,
+    mediaLoadState,
     popper,
     previewImageUrl,
     props,
@@ -191,14 +200,15 @@ const MediaImpl: FC<MediaProps> = ({
     src,
     type,
   ])
+  if (!type || !src) return null
 
   if (hidden && showFallback) {
     return <FallbackMedia {...props} />
   }
   return (
-    <div className={cn("overflow-hidden rounded", className)} style={style}>
+    <span className={cn("block overflow-hidden rounded", className)} style={style}>
       {InnerContent}
-    </div>
+    </span>
   )
 }
 

@@ -29,4 +29,16 @@ export interface UISettings {
 
   // view
   pictureViewMasonry: boolean
+
+  // tts
+  voice: string
+}
+
+export interface IntegrationSettings {
+  enableEagle: boolean
+  enableReadwise: boolean
+  readwiseToken: string
+  enableInstapaper: boolean
+  instapaperUsername: string
+  instapaperPassword: string
 }

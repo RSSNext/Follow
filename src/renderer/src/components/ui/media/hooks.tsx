@@ -17,6 +17,10 @@ export const usePreviewMedia = () => {
         ),
         title: "Media Preview",
         overlay: true,
+        overlayOptions: {
+          blur: true,
+          className: "bg-black/80",
+        },
         CustomModalComponent: NoopChildren,
         clickOutsideToDismiss: true,
       })

@@ -2,9 +2,10 @@ import path from "node:path"
 
 import { registerIpcMain } from "@egoist/tipc/main"
 import { APP_PROTOCOL } from "@shared/constants"
-import { app } from "electron"
+import { app, nativeTheme } from "electron"
 
 import { getIconPath } from "./helper"
+import { store } from "./lib/store"
 import { registerAppMenu } from "./menu"
 import { initializeSentry } from "./sentry"
 import { router } from "./tipc"
@@ -39,6 +40,11 @@ export const initializeApp = () => {
     app.dock.setIcon(getIconPath())
   }
 
+  // store.set("appearance", input);
+  const appearance = store.get("appearance")
+  if (appearance && ["light", "dark", "system"].includes(appearance)) {
+    nativeTheme.themeSource = appearance
+  }
   // In this file you can include the rest of your app"s specific main process
   // code. You can also put them in separate files and require them here.
   registerAppMenu()

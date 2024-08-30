@@ -87,3 +87,14 @@ export type SupportedLanguages = Parameters<
 >[0]["query"]["language"]
 
 export type RecommendationItem = ExtractBizResponse<typeof apiClient.discover.rsshub.$get>["data"][string]
+
+export type ActionOperation =
+  | "contains"
+  | "not_contains"
+  | "eq"
+  | "not_eq"
+  | "gt"
+  | "lt"
+  | "regex"
+export type ActionEntryField = "all" | "title" | "content" | "author" | "url" | "order"
+export type ActionFeedField = "view" | "title" | "site_url" | "feed_url" | "category"

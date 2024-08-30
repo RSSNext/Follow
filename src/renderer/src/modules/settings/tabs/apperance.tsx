@@ -13,12 +13,11 @@ import {
   SelectValue,
 } from "@renderer/components/ui/select"
 import { isElectronBuild } from "@renderer/constants"
-import { useDark, useSetDarkInWebApp } from "@renderer/hooks/common"
-import { tipcClient } from "@renderer/lib/client"
+import { useSetTheme, useThemeAtomValue } from "@renderer/hooks/common"
 import { getOS } from "@renderer/lib/utils"
 import { bundledThemes } from "shiki/themes"
 
-import { SettingSwitch } from "../control"
+import { SettingTabbedSegment } from "../control"
 import { ContentFontSelector, UIFontSelector } from "../modules/fonts"
 import { createSettingBuilder } from "../setting-builder"
 import { SettingsTitle } from "../title"
@@ -26,98 +25,82 @@ import { SettingsTitle } from "../title"
 const SettingBuilder = createSettingBuilder(useUISettingValue)
 const defineItem = createDefineSettingItem(useUISettingValue, setUISetting)
 
-export const SettingAppearance = () => {
-  const isDark = useDark()
+export const SettingAppearance = () => (
+  <>
+    <SettingsTitle />
+    <div className="mt-4">
+      <SettingBuilder
+        settings={[
+          {
+            type: "title",
+            value: "General",
+          },
+          AppThemeSegment,
 
-  const setDarkInWebApp = useSetDarkInWebApp()
+          defineItem("opaqueSidebar", {
+            label: "Opaque sidebars",
+            // hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
+            hide: !window.api?.canWindowBlur,
+          }),
 
-  return (
-    <>
-      <SettingsTitle />
-      <div className="mt-4">
-        <SettingBuilder
-          settings={[
-            {
-              type: "title",
-              value: "General",
-            },
-            <SettingSwitch
-              key="darkMode"
-              label="Dark mode"
-              checked={isDark}
-              onCheckedChange={(e) => {
-                if (window.electron) {
-                  tipcClient?.setAppearance(e ? "dark" : "light")
-                } else {
-                  setDarkInWebApp(e ? "dark" : "light")
-                }
-              }}
-            />,
+          {
+            type: "title",
+            value: "Unread count",
+          },
 
-            defineItem("opaqueSidebar", {
-              label: "Opaque sidebars",
-              hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
-            }),
+          defineItem("showDockBadge", {
+            label: "Show as Dock badge",
+            hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
+          }),
 
-            {
-              type: "title",
-              value: "Unread count",
-            },
+          defineItem("sidebarShowUnreadCount", {
+            label: "Show in sidebar",
+          }),
 
-            defineItem("showDockBadge", {
-              label: "Show as Dock badge",
-              hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
-            }),
+          {
+            type: "title",
+            value: "Fonts",
+          },
+          TextSize,
+          UIFontSelector,
+          ContentFontSelector,
+          {
+            type: "title",
+            value: "Content",
+          },
+          ShikiTheme,
 
-            defineItem("sidebarShowUnreadCount", {
-              label: "Show in sidebar",
-            }),
+          defineItem("guessCodeLanguage", {
+            label: "Guess code language",
+            hide: !isElectronBuild,
+            description:
+              "Major programming languages that use models to infer unlabeled code blocks",
+          }),
 
-            {
-              type: "title",
-              value: "Fonts",
-            },
-            TextSize,
-            UIFontSelector,
-            ContentFontSelector,
-            {
-              type: "title",
-              value: "Content",
-            },
-            ShikiTheme,
+          defineItem("readerRenderInlineStyle", {
+            label: "Render inline style",
+            description:
+              "Allows rendering of the inline style of the original HTML.",
+          }),
+          {
+            type: "title",
+            value: "Misc",
+          },
 
-            defineItem("guessCodeLanguage", {
-              label: "Guess code language",
-              hide: !isElectronBuild,
-              description:
-                "Major programming languages that use models to infer unlabeled code blocks",
-            }),
-
-            defineItem("readerRenderInlineStyle", {
-              label: "Render inline style",
-              description:
-                "Allows rendering of the inline style of the original HTML.",
-            }),
-            {
-              type: "title",
-              value: "Misc",
-            },
-
-            defineItem("modalOverlay", {
-              label: "Show modal overlay",
-              description: "Show modal overlay",
-            }),
-            defineItem("reduceMotion", {
-              label: "Reduce motion",
-              description:
-                "Reducing the motion of elements to improve performance and reduce energy consumption",
-            }),
-          ]}
-        />
-      </div>
-    </>
-  )
-}
+          defineItem("modalOverlay", {
+            label: "Show modal overlay",
+            description: "Show modal overlay",
+          }),
+          defineItem("reduceMotion", {
+            label: "Reduce motion",
+            description:
+              "Reducing the motion of elements to improve performance and reduce energy consumption",
+          }),
+        ]}
+      />
+    </div>
+  </>
+)
 const ShikiTheme = () => {
   const codeHighlightTheme = useUISettingKey("codeHighlightTheme")
   return (
@@ -184,5 +167,38 @@ const TextSize = () => {
         </SelectContent>
       </Select>
     </div>
+  )
+}
+
+const AppThemeSegment = () => {
+  const theme = useThemeAtomValue()
+  const setTheme = useSetTheme()
+
+  return (
+    <SettingTabbedSegment
+      key="theme"
+      label="Theme"
+      value={theme}
+      values={[
+        {
+          value: "system",
+          label: "System",
+          icon: <i className="i-mingcute-monitor-line" />,
+        },
+        {
+          value: "light",
+          label: "Light",
+          icon: <i className="i-mingcute-sun-line" />,
+        },
+        {
+          value: "dark",
+          label: "Dark",
+          icon: <i className="i-mingcute-moon-line" />,
+        },
+      ]}
+      onValueChanged={(value) => {
+        setTheme(value as "light" | "dark" | "system")
+      }}
+    />
   )
 }

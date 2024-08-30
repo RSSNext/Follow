@@ -2,7 +2,7 @@ import { attachOpenInEditor } from "@renderer/lib/dev"
 import { getNewIssueUrl } from "@renderer/lib/issues"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useEffect, useRef } from "react"
-import { isRouteErrorResponse, useRouteError } from "react-router-dom"
+import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router-dom"
 import { toast } from "sonner"
 
 import { Button } from "../ui/button"
@@ -10,6 +10,7 @@ import { PoweredByFooter } from "./PoweredByFooter"
 
 export function ErrorElement() {
   const error = useRouteError()
+  const navigate = useNavigate()
   const message = isRouteErrorResponse(error) ?
     `${error.status} ${error.statusText}` :
     error instanceof Error ?
@@ -46,11 +47,7 @@ export function ErrorElement() {
       <div className="center flex flex-col">
         <i className="i-mgc-bug-cute-re size-12 text-red-400" />
         <h2 className="mb-4 mt-12 text-2xl">
-          Sorry,
-          {" "}
-          {APP_NAME}
-          {" "}
-          has encountered an error
+          Sorry, {APP_NAME} has encountered an error
         </h2>
       </div>
       <h3 className="text-xl">{message}</h3>
@@ -77,7 +74,11 @@ export function ErrorElement() {
         >
           Reset Local Database
         </Button>
-        <Button onClick={() => (window.location.href = "/")}>
+        <Button onClick={() => {
+          navigate("/")
+          window.location.reload()
+        }}
+        >
           Reload
         </Button>
       </div>
@@ -103,7 +104,18 @@ export const FallbackIssue = ({
       className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-accent"
       href={getNewIssueUrl({
         title: `Error: ${message}`,
-        body: `### Error\n\n${message}\n\n### Stack\n\n\`\`\`\n${stack}\n\`\`\``,
+        body: [
+          "### Error",
+          "",
+          message,
+          "",
+          "### Stack",
+          "",
+          "```",
+          stack,
+          "```",
+
+        ].join("\n"),
         label: "bug",
       })}
       target="_blank"

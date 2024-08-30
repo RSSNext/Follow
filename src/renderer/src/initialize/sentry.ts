@@ -1,5 +1,6 @@
 import { env } from "@env"
 import { version } from "@pkg"
+import { whoami } from "@renderer/atoms/user"
 import { channel } from "@renderer/constants"
 import { useEffect } from "react"
 import {
@@ -23,6 +24,7 @@ export const initSentry = async () => {
     environment: channel,
     integrations: [
       Sentry.moduleMetadataIntegration(),
+      Sentry.httpClientIntegration(),
       Sentry.reactRouterV6BrowserTracingIntegration({
         useEffect,
         useLocation,
@@ -43,7 +45,11 @@ export const initSentry = async () => {
     ...SentryConfig,
   })
 
-  Sentry.setTags({
-    appVersion: version,
-  })
+  const user = whoami()
+  if (user) {
+    Sentry.setTag("user_id", user.id)
+    Sentry.setTag("user_name", user.name)
+  }
+
+  Sentry.setTag("appVersion", version)
 }

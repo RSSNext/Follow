@@ -1,3 +1,4 @@
+import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
@@ -8,7 +9,7 @@ import { useMediaQuery } from "usehooks-ts"
 
 const useDarkQuery = () => useMediaQuery("(prefers-color-scheme: dark)")
 type ColorMode = "light" | "dark" | "system"
-const darkAtom = !window.electron ?
+const themeAtom = !window.electron ?
   atomWithStorage(
     getStorageNS("color-mode"),
     "system" as ColorMode,
@@ -19,28 +20,38 @@ const darkAtom = !window.electron ?
   ) :
   atom("system" as ColorMode)
 function useDarkElectron() {
-  return useAtomValue(darkAtom) === "dark"
+  return useAtomValue(themeAtom) === "dark"
 }
 function useDarkWebApp() {
   const systemIsDark = useDarkQuery()
-  const mode = useAtomValue(darkAtom)
+  const mode = useAtomValue(themeAtom)
   return mode === "dark" || (mode === "system" && systemIsDark)
 }
-export const useDark = window.electron ? useDarkElectron : useDarkWebApp
+export const useIsDark = window.electron ? useDarkElectron : useDarkWebApp
 
-const useSyncDarkElectron = () => {
+export const useThemeAtomValue = () => useAtomValue(themeAtom)
+
+const useSyncThemeElectron = () => {
   const appIsDark = useDarkQuery()
 
   useLayoutEffect(() => {
-    document.documentElement.dataset.theme = appIsDark ? "dark" : "light"
-    disableTransition(["[role=switch]>*"])()
+    let isMounted = true
+    tipcClient?.getAppearance().then((appearance) => {
+      if (!isMounted) return
+      jotaiStore.set(themeAtom, appearance)
+      disableTransition(["[role=switch]>*"])()
 
-    jotaiStore.set(darkAtom, appIsDark ? "dark" : "light")
+      document.documentElement.dataset.theme =
+        appearance === "system" ? (appIsDark ? "dark" : "light") : appearance
+    })
+    return () => {
+      isMounted = false
+    }
   }, [appIsDark])
 }
 
-const useSyncDarkWebApp = () => {
-  const colorMode = useAtomValue(darkAtom)
+const useSyncThemeWebApp = () => {
+  const colorMode = useAtomValue(themeAtom)
   const systemIsDark = useDarkQuery()
   useLayoutEffect(() => {
     const realColorMode: Exclude<ColorMode, "system"> =
@@ -50,21 +61,18 @@ const useSyncDarkWebApp = () => {
   }, [colorMode, systemIsDark])
 }
 
-export const useSyncDark = window.electron ?
-  useSyncDarkElectron :
-  useSyncDarkWebApp
+export const useSyncThemeark = window.electron ?
+  useSyncThemeElectron :
+  useSyncThemeWebApp
 
-export const useSetDarkInWebApp = () => {
-  const systemColorMode = useDarkQuery() ? "dark" : "light"
-  return useCallback(
-    (colorMode: Exclude<ColorMode, "system">) =>
-      jotaiStore.set(
-        darkAtom,
-        colorMode === systemColorMode ? "system" : colorMode,
-      ),
-    [systemColorMode],
-  )
-}
+export const useSetTheme = () =>
+  useCallback((colorMode: ColorMode) => {
+    jotaiStore.set(themeAtom, colorMode)
+
+    if (window.electron) {
+      tipcClient?.setAppearance(colorMode)
+    }
+  }, [])
 
 function disableTransition(disableTransitionExclude: string[] = []) {
   const css = document.createElement("style")

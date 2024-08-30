@@ -101,12 +101,14 @@ export const createDefineSettingItem =
       key: K,
       options: {
         label: string
-        description?: string
+        description?: string | JSX.Element
         onChange?: (value: T[K]) => void
         hide?: boolean
-      },
+
+      } & Omit<SettingItem<any>, "onChange" | "description" | "label" | "hide" | "key">,
     ): any => {
-    const { label, description, onChange, hide } = options
+    const { label, description, onChange, hide, ...rest } = options
+
     return {
       key,
       label,
@@ -116,6 +118,7 @@ export const createDefineSettingItem =
         setSetting(key, value as any)
       },
       disabled: hide,
+      ...rest,
     } as SettingItem<any>
   }
 

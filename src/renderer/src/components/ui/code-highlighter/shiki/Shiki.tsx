@@ -9,6 +9,7 @@ import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import type { FC } from "react"
 import {
   useInsertionEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -18,6 +19,7 @@ import type {
   BundledTheme,
   DynamicImportLanguageRegistration,
   DynamicImportThemeRegistration,
+  HighlighterCore,
 } from "shiki"
 import { createHighlighterCore } from "shiki/core"
 import { default as getWasm } from "shiki/wasm"
@@ -26,7 +28,7 @@ import { CopyButton } from "../copy-button"
 import { shikiTransformers } from "./shared"
 import styles from "./shiki.module.css"
 
-const shiki = await createHighlighterCore({
+const shikiPromise = createHighlighterCore({
   themes: [import("shiki/themes/github-dark.mjs")],
   langs: [],
   loadWasm: getWasm,
@@ -51,8 +53,39 @@ let langModule: Record<
 let themeModule: Record<BundledTheme, DynamicImportThemeRegistration> | null =
   null
 let bundledLanguagesKeysSet: Set<string> | null = null
+let resolvedShiki: HighlighterCore | null = null
+
+shikiPromise.then((shiki) => {
+  resolvedShiki = shiki
+})
 export const ShikiHighLighter: FC<ShikiProps> = (props) => {
-  const { code, language, className, theme: overrideTheme } = props
+  const [shiki, setShiki] = useState(resolvedShiki)
+
+  useLayoutEffect(() => {
+    shikiPromise.then((shiki) => {
+      resolvedShiki = shiki
+      setShiki(shiki)
+    })
+  }, [])
+
+  if (!shiki) {
+    const { code, className } = props
+    return (
+      <pre className={className}>
+        <code>{code}</code>
+      </pre>
+    )
+  }
+
+  return <ShikiHighLighterRender {...props} shiki={shiki} />
+}
+
+const ShikiHighLighterRender: FC<
+  ShikiProps & {
+    shiki: HighlighterCore
+  }
+> = (props) => {
+  const { code, language, className, theme: overrideTheme, shiki } = props
   const [currentLanguage, setCurrentLanguage] = useState(
     language || "plaintext",
   )
@@ -180,8 +213,9 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
 const ShikiCode: FC<
   ShikiProps & {
     codeTheme: string
+    shiki: HighlighterCore
   }
-> = ({ code, language, codeTheme, className, transparent }) => {
+> = ({ code, language, codeTheme, className, transparent, shiki }) => {
   const rendered = useMemo(() => {
     try {
       return shiki.codeToHtml(code, {

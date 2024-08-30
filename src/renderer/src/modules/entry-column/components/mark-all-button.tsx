@@ -1,15 +1,21 @@
 import { PopoverPortal } from "@radix-ui/react-popover"
-import { ActionButton, Button, IconButton } from "@renderer/components/ui/button"
+import {
+  ActionButton,
+  Button,
+  IconButton,
+} from "@renderer/components/ui/button"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
+import { RootPortal } from "@renderer/components/ui/portal"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { cn } from "@renderer/lib/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
-import { forwardRef, useState } from "react"
+import { forwardRef, Fragment, useState } from "react"
+import { useOnClickOutside } from "usehooks-ts"
 
 import type { MarkAllFilter } from "../hooks/useMarkAll"
 import { useMarkAllByRoute } from "../hooks/useMarkAll"
@@ -21,7 +27,98 @@ interface MarkAllButtonProps {
 
   shortcut?: boolean
 }
-export const MarkAllReadButton = forwardRef<
+
+export const MarkAllReadWithOverlay = forwardRef<
+  HTMLButtonElement,
+  MarkAllButtonProps & {
+    containerRef: React.RefObject<HTMLDivElement>
+  }
+>(({ filter, className, which = "all", shortcut, containerRef }, ref) => {
+  const [show, setShow] = useState(false)
+
+  const handleMarkAllAsRead = useMarkAllByRoute(filter)
+
+  const [popoverRef, setPopoverRef] = useState<HTMLDivElement | null>(null)
+  useOnClickOutside({ current: popoverRef }, () => {
+    setShow(false)
+  })
+  const renderPopup = () => {
+    const $parent = containerRef.current!
+    const rect = $parent.getBoundingClientRect()
+    const paddingLeft = $parent.offsetLeft
+    return (
+      <RootPortal to={$parent}>
+        <m.div
+          ref={setPopoverRef}
+          initial={{ y: -70 }}
+          animate={{ y: 0 }}
+          exit={{ y: -70 }}
+          transition={{ type: "spring", damping: 20, stiffness: 300 }}
+          className="shadow-modal fixed z-50 bg-theme-modal-background-opaque shadow"
+          style={{
+            left: -paddingLeft,
+            top: rect.top,
+            width: rect.width,
+          }}
+        >
+          <div className="flex w-full translate-x-[-2px] items-center justify-between gap-3 !py-3 pl-6 pr-3 [&_button]:text-xs">
+            <span className="center gap-[calc(0.5rem+2px)]">
+              <i className="i-mgc-check-circle-cute-re" />
+              <span className="text-sm font-bold">
+                Mark
+                <span> </span>
+                {which}
+                <span> </span>
+                as read?
+              </span>
+            </span>
+            <div className="space-x-4">
+              <IconButton
+                icon={<i className="i-mgc-check-filled" />}
+                onClick={() => {
+                  handleMarkAllAsRead()
+                  setShow(false)
+                }}
+              >
+                Confirm
+              </IconButton>
+            </div>
+          </div>
+        </m.div>
+      </RootPortal>
+    )
+  }
+  return (
+    <Fragment>
+      <ActionButton
+        shortcut={shortcut ? shortcuts.entries.markAllAsRead.key : undefined}
+        tooltip={(
+          <span>
+            Mark
+            <span> </span>
+            {which}
+            <span> </span>
+            as read
+          </span>
+        )}
+        className={className}
+        ref={ref}
+        onClick={() => {
+          setShow(true)
+        }}
+      >
+        <i className="i-mgc-check-circle-cute-re" />
+      </ActionButton>
+
+      <AnimatePresence>{show && renderPopup()}</AnimatePresence>
+    </Fragment>
+  )
+})
+
+/**
+ * @deprecated
+ */
+export const MarkAllReadPopover = forwardRef<
   HTMLButtonElement,
   MarkAllButtonProps
 >(({ filter, className, which = "all", shortcut }, ref) => {
@@ -61,7 +158,6 @@ export const MarkAllReadButton = forwardRef<
           <div className="space-x-4">
             <IconButton
               icon={<i className="i-mgc-check-filled" />}
-              className="px-1"
               onClick={() => {
                 handleMarkAllAsRead()
                 setMarkPopoverOpen(false)

@@ -1,4 +1,5 @@
 /* eslint-disable @eslint-react/no-array-index-key */
+import { isNil } from "lodash-es"
 import type { FC, ReactNode } from "react"
 import * as React from "react"
 import { isValidElement } from "react"
@@ -6,6 +7,7 @@ import { isValidElement } from "react"
 import {
   SettingActionItem,
   SettingDescription,
+  SettingInput,
   SettingSwitch,
 } from "./control"
 import { SettingItemGroup, SettingSectionTitle } from "./section"
@@ -19,6 +21,15 @@ export type SettingItem<T, K extends keyof T = keyof T> = {
   label: string
   description?: string
   onChange: (value: T[K]) => void
+  type?: "password"
+
+  vertical?: boolean
+
+  componentProps?: {
+    labelClassName?: string
+    className?: string
+    [key: string]: any
+  }
 } & SharedSettingItem
 
 type SectionSettingItem = {
@@ -49,7 +60,7 @@ export const createSettingBuilder =
       const settingObject = useSetting()
 
       return settings
-        .filter((i) => typeof i !== "boolean")
+        .filter((i) => !isNil(i))
         .map((setting, index) => {
           if (isValidElement(setting)) return setting
           if (typeof setting === "function") {
@@ -71,7 +82,7 @@ export const createSettingBuilder =
               <SettingSectionTitle key={index} title={assertSetting.value} />
             )
           }
-          if ("type" in assertSetting) {
+          if ("type" in assertSetting && assertSetting.type === "title") {
             return null
           }
 
@@ -92,7 +103,19 @@ export const createSettingBuilder =
                 break
               }
               case "string": {
-                return null
+                ControlElement = (
+                  <SettingInput
+                    vertical={assertSetting.vertical}
+                    labelClassName={assertSetting.componentProps?.labelClassName}
+                    type={assertSetting.type || "text"}
+                    className="mt-4"
+                    value={settingObject[assertSetting.key] as string}
+                    onChange={(event) =>
+                      assertSetting.onChange(event.target.value as T[keyof T])}
+                    label={assertSetting.label}
+                  />
+                )
+                break
               }
               default: {
                 return null

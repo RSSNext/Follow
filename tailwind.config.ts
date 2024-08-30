@@ -88,11 +88,6 @@ export default resolveConfig({
             hover: "var(--fo-item-hover)",
           },
 
-          "tooltip": {
-            background: "hsl(var(--fo-tooltip-background), <alpha-value>)",
-            foreground: "hsl(var(--fo-tooltip-foreground), <alpha-value>)",
-          },
-
           "inactive": "hsl(var(--fo-inactive), <alpha-value>)",
           "disabled": "hsl(var(--fo-disabled), <alpha-value>)",
 

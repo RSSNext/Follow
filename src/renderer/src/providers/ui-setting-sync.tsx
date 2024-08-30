@@ -1,12 +1,12 @@
 import { useUISettingValue } from "@renderer/atoms/settings/ui"
-import { useSyncDark } from "@renderer/hooks/common"
+import { useSyncThemeark } from "@renderer/hooks/common"
 import { tipcClient } from "@renderer/lib/client"
 import { feedUnreadActions } from "@renderer/store/unread"
 import { useEffect, useInsertionEffect } from "react"
 
 const useUISettingSync = () => {
   const setting = useUISettingValue()
-  useSyncDark()
+  useSyncThemeark()
   useInsertionEffect(() => {
     const root = document.documentElement
     root.style.fontSize = `${setting.uiTextSize}px`
@@ -36,6 +36,12 @@ const useUISettingSync = () => {
     }
     return
   }, [setting.showDockBadge])
+
+  useEffect(() => {
+    if (setting.voice) {
+      tipcClient?.setVoice(setting.voice)
+    }
+  }, [setting.voice])
 }
 export const SettingSync = () => {
   useUISettingSync()

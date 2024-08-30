@@ -1,18 +1,17 @@
 import {
   getReadabilityStatus,
-  isInReadability,
   ReadabilityStatus,
   setReadabilityContent,
   setReadabilityStatus,
-  useEntryInReadabilityStatus,
 } from "@renderer/atoms/readability"
+import { useIntegrationSettingKey } from "@renderer/atoms/settings/integration"
 import { whoami } from "@renderer/atoms/user"
-import { SimpleIconsEagle } from "@renderer/components/ui/platform-icon/icons"
-import { COPY_MAP, views } from "@renderer/constants"
+import { SimpleIconsEagle, SimpleIconsInstapaper, SimpleIconsReadwise } from "@renderer/components/ui/platform-icon/icons"
+import { COPY_MAP } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
-import { cn, getOS } from "@renderer/lib/utils"
+import { getOS } from "@renderer/lib/utils"
 import type { CombinedEntryModel } from "@renderer/models"
 import { useTipModal } from "@renderer/modules/wallet/hooks"
 import type { FlatEntryModel } from "@renderer/store/entry"
@@ -98,7 +97,6 @@ export const useUnread = () =>
 export const useEntryActions = ({
   view,
   entry,
-  type,
 }: {
   view?: number
   entry?: FlatEntryModel | null
@@ -118,7 +116,6 @@ export const useEntryActions = ({
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
-  const entryReadabilityStatus = useEntryInReadabilityStatus(entry?.entries.id)
 
   const feed = useFeedById(entry?.feedId)
 
@@ -140,11 +137,13 @@ export const useEntryActions = ({
   const uncollect = useUnCollect(populatedEntry)
   const read = useRead()
   const unread = useUnread()
+  const enableEagle = useIntegrationSettingKey("enableEagle")
+  const enableReadwise = useIntegrationSettingKey("enableReadwise")
+  const readwiseToken = useIntegrationSettingKey("readwiseToken")
+  const enableInstapaper = useIntegrationSettingKey("enableInstapaper")
+  const instapaperUsername = useIntegrationSettingKey("instapaperUsername")
+  const instapaperPassword = useIntegrationSettingKey("instapaperPassword")
 
-  const readabilityToggle = useEntryReadabilityToggle({
-    id: populatedEntry?.entries.id ?? "",
-    url: populatedEntry?.entries.url ?? "",
-  })
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
     const items: {
@@ -155,8 +154,99 @@ export const useEntryActions = ({
       icon?: ReactNode
       hide?: boolean
       active?: boolean
+      disabled?: boolean
       onClick: () => void
     }[] = [
+      {
+        name: "Save media to Eagle",
+        icon: <SimpleIconsEagle />,
+        key: "saveToEagle",
+        hide:
+          !enableEagle || (checkEagle.isLoading ? true : !checkEagle.data) ||
+          !populatedEntry.entries.media?.length,
+        onClick: async () => {
+          if (
+            !populatedEntry.entries.url ||
+            !populatedEntry.entries.media?.length
+          ) {
+            return
+          }
+          const response = await tipcClient?.saveToEagle({
+            url: populatedEntry.entries.url,
+            mediaUrls: populatedEntry.entries.media.map((m) => m.url),
+          })
+          if (response?.status === "success") {
+            toast.success("Saved to Eagle.", {
+              duration: 3000,
+            })
+          } else {
+            toast.error("Failed to save to Eagle.", {
+              duration: 3000,
+            })
+          }
+        },
+      },
+      {
+        name: "Save to Readwise",
+        icon: <SimpleIconsReadwise />,
+        key: "saveToReadwise",
+        hide: !enableReadwise || !readwiseToken || !populatedEntry.entries.url,
+        onClick: async () => {
+          try {
+            const data = await ofetch("https://readwise.io/api/v3/save/", {
+              method: "POST",
+              headers: {
+                Authorization: `Token ${readwiseToken}`,
+              },
+              body: {
+                url: populatedEntry.entries.url,
+                html: populatedEntry.entries.content || undefined,
+                title: populatedEntry.entries.title || undefined,
+                author: populatedEntry.entries.author || undefined,
+                summary: populatedEntry.entries.description || undefined,
+                published_date: populatedEntry.entries.publishedAt || undefined,
+                image_url: populatedEntry.entries.media?.[0]?.url || undefined,
+                saved_using: "Follow",
+              },
+            })
+            toast.success(<>Saved to Readwise, <a target="_blank" className="underline" href={data.url}>view</a></>, {
+              duration: 3000,
+            })
+          } catch {
+            toast.error("Failed to save to Readwise.", {
+              duration: 3000,
+            })
+          }
+        },
+      },
+      {
+        name: "Save to Instapaper",
+        icon: <SimpleIconsInstapaper />,
+        key: "saveToInstapaper",
+        hide: !enableInstapaper || !instapaperPassword || !instapaperUsername || !populatedEntry.entries.url,
+        onClick: async () => {
+          try {
+            const data = await ofetch("https://www.instapaper.com/api/add", {
+              query: {
+                url: populatedEntry.entries.url,
+                title: populatedEntry.entries.title,
+              },
+              method: "POST",
+              headers: {
+                Authorization: `Basic ${btoa(`${instapaperUsername}:${instapaperPassword}`)}`,
+              },
+              parseResponse: JSON.parse,
+            })
+            toast.success(<>Saved to Instapaper, <a target="_blank" className="underline" href={`https://www.instapaper.com/read/${data.bookmark_id}`}>view</a></>, {
+              duration: 3000,
+            })
+          } catch {
+            toast.error("Failed to save to Instapaper.", {
+              duration: 3000,
+            })
+          }
+        },
+      },
       {
         key: "tip",
         shortcut: shortcuts.entry.tip.key,
@@ -213,54 +303,6 @@ export const useEntryActions = ({
         },
       },
       {
-        name: "Readability",
-        className: cn(
-          isInReadability(entryReadabilityStatus) ?
-            `i-mgc-sparkles-2-filled` :
-            `i-mgc-sparkles-2-cute-re`,
-          entryReadabilityStatus === ReadabilityStatus.WAITING ?
-            `animate-pulse` :
-            "",
-        ),
-        key: "readability",
-        hide:
-          type === "entryList" ||
-          views[view].wideMode ||
-          !populatedEntry.entries.url ||
-          !window.electron,
-        active: isInReadability(entryReadabilityStatus),
-        onClick: readabilityToggle,
-      },
-      {
-        name: "Save media to Eagle",
-        icon: <SimpleIconsEagle />,
-        key: "saveToEagle",
-        hide:
-          (checkEagle.isLoading ? true : !checkEagle.data) ||
-          !populatedEntry.entries.media?.length,
-        onClick: async () => {
-          if (
-            !populatedEntry.entries.url ||
-            !populatedEntry.entries.media?.length
-          ) {
-            return
-          }
-          const response = await tipcClient?.saveToEagle({
-            url: populatedEntry.entries.url,
-            mediaUrls: populatedEntry.entries.media.map((m) => m.url),
-          })
-          if (response?.status === "success") {
-            toast("Saved to Eagle.", {
-              duration: 3000,
-            })
-          } else {
-            toast("Failed to save to Eagle.", {
-              duration: 3000,
-            })
-          }
-        },
-      },
-      {
         name: "Share",
         key: "share",
         className:
@@ -314,12 +356,9 @@ export const useEntryActions = ({
     openTipModal,
     collect,
     uncollect,
-    readabilityToggle,
     read,
     unread,
-    entryReadabilityStatus,
     feed?.ownerUserId,
-    type,
   ])
 
   return {

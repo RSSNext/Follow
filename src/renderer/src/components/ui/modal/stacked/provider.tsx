@@ -24,7 +24,10 @@ const ModalStack = () => {
   const allForceHideOverlay = stack.every((item) => item.overlay === false)
 
   const topModalIndex = stack.findLastIndex((item) => item.modal)
-  const overlayZIndex = stack.findLastIndex((item) => item.overlay || item.modal)
+  const overlayIndex = stack.findLastIndex(
+    (item) => item.overlay || item.modal,
+  )
+  const overlayOptions = stack[overlayIndex]?.overlayOptions
   return (
     <AnimatePresence mode="popLayout">
       {stack.map((item, index) => (
@@ -38,7 +41,11 @@ const ModalStack = () => {
       {stack.length > 0 &&
         (modalSettingOverlay || forceOverlay) &&
         !allForceHideOverlay && (
-        <ModalOverlay zIndex={MODAL_STACK_Z_INDEX + overlayZIndex + 1} />
+        <ModalOverlay
+          zIndex={MODAL_STACK_Z_INDEX + overlayIndex + 1}
+          blur={overlayOptions?.blur}
+          className={overlayOptions?.className}
+        />
       )}
     </AnimatePresence>
   )
