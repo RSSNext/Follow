@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [0.0.1-alpha.8](https://github.com/RSSNext/follow/compare/v0.0.1-alpha.3...v0.0.1-alpha.8) (2024-08-30)
+## [0.0.1-alpha.9](https://github.com/RSSNext/follow/compare/v0.0.1-alpha.3...v0.0.1-alpha.9) (2024-08-30)
 
 
 ### Bug Fixes
@@ -43,6 +43,7 @@
 * copywrite ([8967d20](https://github.com/RSSNext/follow/commit/8967d20102bc1ad6f2f94b38909c7abfca6168d1))
 * daily report animation ([ff16272](https://github.com/RSSNext/follow/commit/ff162722a927d3708f3d857626e6412ae35d3880))
 * daily report link title ([0a58159](https://github.com/RSSNext/follow/commit/0a58159acd4fbc12e970f745f27e6488904a99d9))
+* dark mode entry content color in electron ([06073d5](https://github.com/RSSNext/follow/commit/06073d53bc6e69867b3e6102c755e6bd1f9be9bf))
 * date item layout animation ([e2fec9c](https://github.com/RSSNext/follow/commit/e2fec9c250b9641a645d0f24ec3f038a5b630cfd))
 * **db:** remove remaining data if unfollow feed ([1edf560](https://github.com/RSSNext/follow/commit/1edf5605e9621219e6cdfc732f12e6464113f765))
 * debug proxy inject env ([6b80cdc](https://github.com/RSSNext/follow/commit/6b80cdc6e7141913643f77a0b9a089333b86278d))
@@ -103,6 +104,7 @@
 * only windows 11 can manually resize logic ([338803a](https://github.com/RSSNext/follow/commit/338803a18936c29fcea694c95baef1b3e8650980))
 * optimize ai daily modal ([8872067](https://github.com/RSSNext/follow/commit/88720679df1371543c0feb5d3a48b7b7e664a20b))
 * optimize code string parser ([b3d32d0](https://github.com/RSSNext/follow/commit/b3d32d09fd4d5b53ae1692ffdc154e8d37a77fdd))
+* optimize invitation page ([5f93e4b](https://github.com/RSSNext/follow/commit/5f93e4baac340998b08aaa273e2185893fe88e92))
 * optional response data for check new, fixed [#195](https://github.com/RSSNext/follow/issues/195) ([2c650b0](https://github.com/RSSNext/follow/commit/2c650b08ae031e18dbe4b25d9c124c3eb7ff4f9a))
 * panel split color in dark mode ([3a0cfa1](https://github.com/RSSNext/follow/commit/3a0cfa1ebf794351d7f7b1132c0068a55ff2e9a6))
 * peek modal header background color and copywrite ([b8be81b](https://github.com/RSSNext/follow/commit/b8be81b2105d2c229955a433af91c43f5286194a))
@@ -252,6 +254,7 @@
 * toast when upgrade ([2a71bfc](https://github.com/RSSNext/follow/commit/2a71bfc0756011c0226c16ef53a755a47cf44acb))
 * toc hoverable ([3be6f2b](https://github.com/RSSNext/follow/commit/3be6f2ba019cb914e8ff452065d252e01e7ae496))
 * toc position calcation ([a7828d4](https://github.com/RSSNext/follow/commit/a7828d41e1e8e849a4f7df7e0c5e50c5d15a2491))
+* update invitations ([84c7b46](https://github.com/RSSNext/follow/commit/84c7b46155c064eab1dbd030add4a00dee412469))
 * update readwise logo ([c85460c](https://github.com/RSSNext/follow/commit/c85460c5bd13a3dadda1d4592b1ce6e434f4a8c6))
 * update redirect page layout ([bca6276](https://github.com/RSSNext/follow/commit/bca627696eca663abb02483ffb5c98ed2dc0eebc))
 * video player ([#225](https://github.com/RSSNext/follow/issues/225)) ([bb7d312](https://github.com/RSSNext/follow/commit/bb7d3127a9fe4543af12edfc49ce745e6ee7099e))
