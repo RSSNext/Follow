@@ -219,7 +219,7 @@ const FeedResponsiveResizerContainer = ({
         }}
       />
 
-      {delayShowSplitter && <PanelSplitter {...separatorProps} />}
+      {delayShowSplitter && <PanelSplitter isDragging={isDragging} {...separatorProps} />}
     </>
   )
 }
