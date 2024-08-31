@@ -12,6 +12,7 @@ import { ShadowDOM } from "@renderer/components/common/ShadowDOM"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { HTML } from "@renderer/components/ui/markdown"
 import { Toc } from "@renderer/components/ui/markdown/components/Toc"
+import { useInPeekModal } from "@renderer/components/ui/modal/inspire/PeekModal"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { isWebBuild, ROUTE_FEED_PENDING } from "@renderer/constants"
@@ -132,6 +133,8 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
   useEffect(() => {
     scrollerRef.current?.scrollTo(0, 0)
   }, [entryId])
+
+  const isPeekModal = useInPeekModal()
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -233,7 +236,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                   {!isInReadabilityMode ? (
                     <ShadowDOM>
                       <HTML
-                        accessory={<ContainerToc key={entryId} />}
+                        accessory={isPeekModal ? undefined : <ContainerToc key={entryId} />}
                         as="article"
                         className="prose dark:prose-invert prose-h1:text-[1.6em]"
                         renderInlineStyle={readerRenderInlineStyle}
