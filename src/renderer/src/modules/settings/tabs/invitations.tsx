@@ -5,6 +5,7 @@ import {
 } from "@renderer/components/ui/avatar"
 import { Button, MotionButtonBase } from "@renderer/components/ui/button"
 import { CopyButton } from "@renderer/components/ui/code-highlighter"
+import { LoadingCircle } from "@renderer/components/ui/loading"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
   Table,
@@ -14,7 +15,12 @@ import {
   TableHeader,
   TableRow,
 } from "@renderer/components/ui/table"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@renderer/components/ui/tooltip"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
@@ -58,11 +64,12 @@ export const SettingInvitations = () => {
             </MotionButtonBase>
           </TooltipTrigger>
 
-          <TooltipContent>
-            New invitation
-          </TooltipContent>
+          <TooltipContent>New invitation</TooltipContent>
         </Tooltip>
-        <ScrollArea.ScrollArea scrollbarClassName="w-1" rootClassName="flex grow">
+        <ScrollArea.ScrollArea
+          scrollbarClassName="w-1"
+          rootClassName="flex grow"
+        >
           {invitations.data?.length ? (
             <Table className="mt-4">
               <TableHeader className="border-b">
@@ -100,18 +107,31 @@ export const SettingInvitations = () => {
                     </TableCell>
                     <TableCell align="center" size="sm">
                       {row.users ? (
-                        <div
-                          onClick={() => {
-                            presentUserProfile(row.users?.id)
-                          }}
-                        >
-                          <Avatar className="aspect-square size-5 border border-border ring-1 ring-background">
-                            <AvatarImage src={row.users?.image || undefined} />
-                            <AvatarFallback>
-                              {row.users?.name?.slice(0, 2)}
-                            </AvatarFallback>
-                          </Avatar>
-                        </div>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <button
+                              type="button"
+                              className="cursor-pointer"
+                              onClick={() => {
+                                presentUserProfile(row.users?.id)
+                              }}
+                            >
+                              <Avatar className="aspect-square size-5 border border-border ring-1 ring-background">
+                                <AvatarImage
+                                  src={row.users?.image || undefined}
+                                />
+                                <AvatarFallback>
+                                  {row.users?.name?.slice(0, 2)}
+                                </AvatarFallback>
+                              </Avatar>
+                            </button>
+                          </TooltipTrigger>
+                          {row.users?.name && (
+                            <TooltipPortal>
+                              <TooltipContent>{row.users?.name}</TooltipContent>
+                            </TooltipPortal>
+                          )}
+                        </Tooltip>
                       ) : (
                         "Not used"
                       )}
@@ -120,21 +140,25 @@ export const SettingInvitations = () => {
                 ))}
               </TableBody>
             </Table>
-          ) : (
-            <div className="mt-36 w-full text-center text-sm text-zinc-400">
-              <p>No invitations</p>
+          ) : invitations.isLoading ?
+              (
+                <LoadingCircle size="large" className="center absolute inset-0" />
+              ) :
+              (
+                <div className="mt-36 w-full text-center text-sm text-zinc-400">
+                  <p>No invitations</p>
 
-              <div className="mt-6">
-                <Button
-                  onClick={() => {
-                    newInvitation.mutate()
-                  }}
-                >
-                  Create Invitation
-                </Button>
-              </div>
-            </div>
-          )}
+                  <div className="mt-6">
+                    <Button
+                      onClick={() => {
+                        newInvitation.mutate()
+                      }}
+                    >
+                      Create Invitation
+                    </Button>
+                  </div>
+                </div>
+              )}
         </ScrollArea.ScrollArea>
       </div>
     </>

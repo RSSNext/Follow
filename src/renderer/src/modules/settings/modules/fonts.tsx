@@ -82,7 +82,7 @@ export const ContentFontSelector = () => {
         <SelectTrigger size="sm" className="w-48">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="h-64">
+        <SelectContent position="item-aligned">
           {isCustomFont && (
             <SelectItem value={readerFontFamily}>{readerFontFamily}</SelectItem>
           )}
@@ -127,7 +127,7 @@ export const UIFontSelector = () => {
         <SelectTrigger size="sm" className="w-48">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="h-64">
+        <SelectContent position="item-aligned">
           {isCustomFont && <SelectItem value={uiFont}>{uiFont}</SelectItem>}
           <SelectItem value={DEFAULT_FONT}>{DEFAULT_FONT}</SelectItem>
           {data.map(({ label, value }) => (
