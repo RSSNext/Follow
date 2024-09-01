@@ -29,6 +29,41 @@ body:
       description: If possible, please provide a video that demonstrates the bug.
     validations:
       required: false
+  - type: dropdown
+    id: app-type
+    attributes:
+      label: App Type
+      options:
+        - Web
+        - Electron / App
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The version of the app you are using.
+      placeholder: 1.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Windows 11
+        - Windows 10
+        - macOS
+        - Linux
+    validations:
+      required: true
+  - type: input
+    id: browser-info
+    attributes:
+      label: Browser Info
+      description: If you are using the web version, please provide your browser info.
+      placeholder: Browser name and version
 
   - type: checkboxes
     id: checkboxes
