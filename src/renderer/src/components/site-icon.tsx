@@ -30,8 +30,8 @@ export function SiteIcon({
 
   const [showFallback, setShowFallback] = useState(false)
   useEffect(() => {
-    showFallback && fallback && setShowFallback(false)
-  }, [fallback, showFallback, url])
+    setShowFallback(false)
+  }, [url])
 
   if (!url) return null
 
