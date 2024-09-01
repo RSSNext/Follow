@@ -94,7 +94,7 @@ export function FeedIcon({
 
   if (fallback && !!image) {
     return (
-      <Avatar>
+      <Avatar className="shrink-0">
         <AvatarImage
           className="duration-200 animate-in fade-in-0"
           src={image || ""}
