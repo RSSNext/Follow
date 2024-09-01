@@ -36,4 +36,7 @@ const IconMap = {
   twitter: tw`i-mgc-twitter-cute-fi text-[#55acee]`,
   x: tw`i-mgc-social-x-cute-li`,
   youtube: tw`i-mgc-youtube-cute-fi text-[#ff0000]`,
+  gcore: tw`i-simple-icons-gcore text-[#f83055]`,
+  v2ex: tw`i-simple-icons-v2ex text-foreground`,
+  pixiv: tw`i-simple-icons-pixiv text-[#0096fa]`,
 }

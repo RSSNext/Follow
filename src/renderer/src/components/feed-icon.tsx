@@ -7,6 +7,8 @@ import type { CombinedEntryModel, FeedModel } from "@renderer/models"
 import type { ReactNode } from "react"
 import { useMemo } from "react"
 
+import { PlatformIcon } from "./ui/platform-icon"
+
 export function FeedIcon({
   feed,
   entry,
@@ -32,20 +34,22 @@ export function FeedIcon({
   switch (true) {
     case !!image: {
       ImageElement = (
-        <Media
-          src={image}
-          type="photo"
-          loading="lazy"
-          className={cn("mr-2 shrink-0 rounded-sm", className)}
-          style={{
-            width: size,
-            height: size,
-          }}
-          proxy={{
-            width: size * 2,
-            height: size * 2,
-          }}
-        />
+        <PlatformIcon className="mr-2 shrink-0 rounded-sm" url={image}>
+          <Media
+            src={feed.siteUrl || image}
+            type="photo"
+            loading="lazy"
+            className={cn("rounded-sm", className)}
+            style={{
+              width: size,
+              height: size,
+            }}
+            proxy={{
+              width: size * 2,
+              height: size * 2,
+            }}
+          />
+        </PlatformIcon>
       )
       break
     }

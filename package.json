@@ -150,6 +150,7 @@
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@hono/node-server": "1.12.2",
     "@iconify-json/mingcute": "1.1.20",
+    "@iconify-json/simple-icons": "^1.2.1",
     "@pengx17/electron-forge-maker-appimage": "1.2.1",
     "@tailwindcss/container-queries": "0.1.1",
     "@tailwindcss/typography": "0.5.15",

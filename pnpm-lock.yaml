@@ -193,7 +193,7 @@ importers:
         version: 0.2.37(react@18.3.1)
       framer-motion:
         specifier: 11.0.10
-        version: 11.3.31(@emotion/is-prop-valid@1.3.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 11.0.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       franc-min:
         specifier: 6.2.0
         version: 6.2.0
@@ -375,6 +375,9 @@ importers:
       '@iconify-json/mingcute':
         specifier: 1.1.20
         version: 1.1.20
+      '@iconify-json/simple-icons':
+        specifier: ^1.2.1
+        version: 1.2.1
       '@pengx17/electron-forge-maker-appimage':
         specifier: 1.2.1
         version: 1.2.1(dmg-builder@25.0.0-alpha.10(electron-builder-squirrel-windows@25.0.0-alpha.10))(electron-builder-squirrel-windows@25.0.0-alpha.10(dmg-builder@25.0.0-alpha.10))
@@ -1318,11 +1321,11 @@ packages:
     engines: {node: '>=14.14'}
     hasBin: true
 
-  '@emotion/is-prop-valid@1.3.0':
-    resolution: {integrity: sha512-SHetuSLvJDzuNbOdtPVbq6yMMMlLoW5Q94uDqJZqy50gcmAjxFkVqmzqSGEFq9gT2iMuIeKV1PXVWmvUhuZLlQ==}
+  '@emotion/is-prop-valid@0.8.8':
+    resolution: {integrity: sha512-u5WtneEAr5IDG2Wv65yhunPSMLIpuKsbuOktRojfrEiEvRyC85LgPMZI63cr7NUqT8ZIGdSVg8ZKGxIug4lXcA==}
 
-  '@emotion/memoize@0.9.0':
-    resolution: {integrity: sha512-30FAj7/EoJ5mwVPOWhAyCX+FPfMDrVecJAM+Iw9NRoSl4BBAQeqj4cApHHUXOVvIPgLVDsCFoz/hGD+5QQD1GQ==}
+  '@emotion/memoize@0.7.4':
+    resolution: {integrity: sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==}
 
   '@es-joy/jsdoccomment@0.43.1':
     resolution: {integrity: sha512-I238eDtOolvCuvtxrnqtlBaw0BwdQuYqK7eA6XIonicMdOOOb75mqdIzkGDUbS04+1Di007rgm9snFRNeVrOog==}
@@ -1741,6 +1744,9 @@ packages:
 
   '@iconify-json/mingcute@1.1.20':
     resolution: {integrity: sha512-cLrKrnb9gsi+G6bRtqoFB0KcZnuD/f+p1mwmCTOJdfT8XUFOeZ/ObyBDcAsD2alwL1JmwvqRF08RDW0pfWZAnA==}
+
+  '@iconify-json/simple-icons@1.2.1':
+    resolution: {integrity: sha512-eBXREU+jazfOBTl944Uq/ZpOJnbx1/IBw1MpLw0VmmNk0HSvmnvhdcz+3obja7uAp25yNtVcKo3I04ppnuv3NQ==}
 
   '@iconify/tools@4.0.5':
     resolution: {integrity: sha512-l8KoA1lxlN/FFjlMd3vjfD7BtcX/QnFWtlBapILMlJSBgM5zhDYak/ldw/LkKG3258q/0YmXa48sO/QpxX7ptg==}
@@ -5034,15 +5040,12 @@ packages:
       react:
         optional: true
 
-  framer-motion@11.3.31:
-    resolution: {integrity: sha512-Xmxs08WBXnc2tNzNZbFSpquI33lvleJg4Y+hmZ+vFkn+laN9ZnR3gbZnNGKDtuz7c/x3u8dLg05OU3EhLobCsg==}
+  framer-motion@11.0.10:
+    resolution: {integrity: sha512-aaImib9FQlfno2yiZAdkvN6zLXLr8a9uGsGFlQO64hSm8NoCeiUng2//5ok7RHCW2ufzT74uuPsmWzUsrHPYDQ==}
     peerDependencies:
-      '@emotion/is-prop-valid': '*'
       react: ^18.0.0
       react-dom: ^18.0.0
     peerDependenciesMeta:
-      '@emotion/is-prop-valid':
-        optional: true
       react:
         optional: true
       react-dom:
@@ -9426,12 +9429,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@emotion/is-prop-valid@1.3.0':
+  '@emotion/is-prop-valid@0.8.8':
     dependencies:
-      '@emotion/memoize': 0.9.0
+      '@emotion/memoize': 0.7.4
     optional: true
 
-  '@emotion/memoize@0.9.0':
+  '@emotion/memoize@0.7.4':
     optional: true
 
   '@es-joy/jsdoccomment@0.43.1':
@@ -9794,6 +9797,10 @@ snapshots:
   '@hutson/parse-repository-url@5.0.0': {}
 
   '@iconify-json/mingcute@1.1.20':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/simple-icons@1.2.1':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -11526,7 +11533,7 @@ snapshots:
 
   '@types/pg@8.11.8':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 22.5.1
       pg-protocol: 1.6.1
       pg-types: 4.0.2
     optional: true
@@ -11539,7 +11546,7 @@ snapshots:
 
   '@types/plist@3.0.5':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 22.5.1
       xmlbuilder: 15.1.1
     optional: true
 
@@ -13805,11 +13812,11 @@ snapshots:
     optionalDependencies:
       react: 18.3.1
 
-  framer-motion@11.3.31(@emotion/is-prop-valid@1.3.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  framer-motion@11.0.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       tslib: 2.6.3
     optionalDependencies:
-      '@emotion/is-prop-valid': 1.3.0
+      '@emotion/is-prop-valid': 0.8.8
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 

@@ -1,6 +1,9 @@
 import {
+  isGCoreUrl,
   isGithubUrl,
+  isPixivUrl,
   isTwitterUrl,
+  isV2exUrl,
   isXUrl,
   isYoutubeUrl,
 } from "@renderer/lib/link-parser"
@@ -23,6 +26,15 @@ export const getSupportedPlatformIconName = (url: string) => {
     }
     case isYoutubeUrl(safeUrl): {
       return "youtube"
+    }
+    case isGCoreUrl(safeUrl): {
+      return "gcore"
+    }
+    case isV2exUrl(safeUrl): {
+      return "v2ex"
+    }
+    case isPixivUrl(safeUrl): {
+      return "pixiv"
     }
   }
 

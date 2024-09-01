@@ -125,7 +125,7 @@ export default resolveConfig({
   plugins: [
     iconsPlugin({
       collections: {
-        ...getIconCollections(["mingcute"]),
+        ...getIconCollections(["mingcute", "simple-icons"]),
         mgc: getCollections(path.resolve(__dirname, "./icons/mgc")),
       },
     }),
