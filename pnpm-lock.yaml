@@ -372,6 +372,9 @@ importers:
       '@hono/node-server':
         specifier: 1.12.2
         version: 1.12.2(hono@4.5.10(patch_hash=iej2g43ojhll5opwbnvyorjq4e))
+      '@iconify-json/logos':
+        specifier: 1.2.0
+        version: 1.2.0
       '@iconify-json/mingcute':
         specifier: 1.1.20
         version: 1.1.20
@@ -1741,6 +1744,9 @@ packages:
   '@hutson/parse-repository-url@5.0.0':
     resolution: {integrity: sha512-e5+YUKENATs1JgYHMzTr2MW/NDcXGfYFAuOQU8gJgF/kEh4EqKgfGrfLI67bMD4tbhZVlkigz/9YYwWcbOFthg==}
     engines: {node: '>=10.13.0'}
+
+  '@iconify-json/logos@1.2.0':
+    resolution: {integrity: sha512-VkU9QSqeZR2guWbecdqkcoZEAJfgJJTUm6QAsypuZQ7Cve6zy39wOXDjp2H31I8QyQy4O3Cz96+pNji6UQFg4w==}
 
   '@iconify-json/mingcute@1.1.20':
     resolution: {integrity: sha512-cLrKrnb9gsi+G6bRtqoFB0KcZnuD/f+p1mwmCTOJdfT8XUFOeZ/ObyBDcAsD2alwL1JmwvqRF08RDW0pfWZAnA==}
@@ -9795,6 +9801,10 @@ snapshots:
   '@humanwhocodes/retry@0.3.0': {}
 
   '@hutson/parse-repository-url@5.0.0': {}
+
+  '@iconify-json/logos@1.2.0':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify-json/mingcute@1.1.20':
     dependencies:

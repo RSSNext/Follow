@@ -125,8 +125,9 @@ export default resolveConfig({
   plugins: [
     iconsPlugin({
       collections: {
-        ...getIconCollections(["mingcute", "simple-icons"]),
+        ...getIconCollections(["mingcute", "simple-icons", "logos"]),
         mgc: getCollections(path.resolve(__dirname, "./icons/mgc")),
+
       },
     }),
     require("tailwindcss-animate"),
