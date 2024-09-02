@@ -79,9 +79,14 @@ export const entries = {
           query.feedId = query.feedIdList[0]
           delete query.feedIdList
         }
-        // @ts-expect-error
         return apiClient.entries["check-new"].$get({
-          query,
+          query: {
+            insertedAfter: `${query.insertedAfter}`,
+            view: `${query.view}`,
+            feedId: query.feedId,
+            read: typeof query.read === "boolean" ? JSON.stringify(query.read) : undefined,
+            feedIdList: query.feedIdList,
+          },
         }) as Promise<{ data: { has_new: boolean, lastest_at?: string } }>
       },
 

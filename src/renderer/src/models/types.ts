@@ -1,5 +1,6 @@
 import type { apiClient } from "@renderer/lib/api-fetch"
-import type { users } from "src/hono"
+import type { languageSchema, users } from "src/hono"
+import type { z } from "zod"
 
 export type UserModel = Omit<typeof users.$inferSelect, "emailVerified">
 
@@ -82,9 +83,7 @@ export type FeedListModel = {
   }[]
 }
 
-export type SupportedLanguages = Parameters<
-  typeof apiClient.ai.translation.$get
->[0]["query"]["language"]
+export type SupportedLanguages = z.infer<typeof languageSchema>
 
 export type RecommendationItem = ExtractBizResponse<typeof apiClient.discover.rsshub.$get>["data"][string]
 

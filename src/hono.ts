@@ -1,6 +1,4 @@
 import * as hono_hono_base from 'hono/hono-base';
-import * as hono_utils_http_status from 'hono/utils/http-status';
-import * as hono from 'hono';
 import { HttpBindings } from '@hono/node-server';
 import * as drizzle_orm from 'drizzle-orm';
 import { InferInsertModel } from 'drizzle-orm';
@@ -2443,7 +2441,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    type?: "completed" | "failed" | undefined;
+                    type?: string | string[] | undefined;
                 };
             };
             output: {
@@ -2458,7 +2456,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     };
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2467,7 +2465,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    id: string;
+                    id: string | string[];
                 };
             };
             output: {
@@ -2482,7 +2480,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     createdAt: string;
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2494,7 +2492,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 code: 0;
                 data: string;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2508,7 +2506,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2528,7 +2526,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     toUserId: string | null;
                 }[];
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2548,7 +2546,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     transactionHash: string;
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2556,13 +2554,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    type?: "tip" | "mint" | "burn" | "withdraw" | undefined;
-                    hash?: string | undefined;
-                    fromOrToUserId?: string | undefined;
-                    fromUserId?: string | undefined;
-                    toUserId?: string | undefined;
-                    toFeedId?: string | undefined;
-                    createdAfter?: string | undefined;
+                    type?: string | string[] | undefined;
+                    hash?: string | string[] | undefined;
+                    fromOrToUserId?: string | string[] | undefined;
+                    fromUserId?: string | string[] | undefined;
+                    toUserId?: string | string[] | undefined;
+                    toFeedId?: string | string[] | undefined;
+                    createdAfter?: string | string[] | undefined;
                 };
             };
             output: {
@@ -2611,7 +2609,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     } | null;
                 }[];
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2624,7 +2622,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     transactionHash: string;
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2637,7 +2635,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     ttl: number;
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2645,7 +2643,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    feedId?: string | undefined;
+                    feedId?: string | string[] | undefined;
                 };
             };
             output: {
@@ -2656,7 +2654,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     powerToken: string;
                 }[];
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2673,7 +2671,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     transactionHash: string;
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2681,8 +2679,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    userId?: string | undefined;
-                    address?: string | undefined;
+                    userId?: string | string[] | undefined;
+                    address?: string | string[] | undefined;
                 };
             };
             output: {
@@ -2696,7 +2694,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     cashablePowerToken: string;
                 }[];
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $post: {
@@ -2712,7 +2710,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     cashablePowerToken: string;
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2721,9 +2719,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    id: string;
-                    language: "en" | "ja" | "zh-CN" | "zh-TW";
-                    fields: string;
+                    id: string | string[];
+                    language: string | string[];
+                    fields: string | string[];
                 };
             };
             output: {
@@ -2733,7 +2731,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     title?: string | undefined;
                 } | undefined;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2741,15 +2739,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    id: string;
-                    language?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                    id: string | string[];
+                    language?: string | string[] | undefined;
                 };
             };
             output: {
                 code: 0;
                 data?: string | undefined;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2757,15 +2755,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    view: "0" | "1";
-                    startDate: string;
+                    view: string | string[];
+                    startDate: string | string[];
                 };
             };
             output: {
                 code: 0;
                 data: string;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2800,7 +2798,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     }[] | null | undefined;
                 } | undefined;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $put: {
@@ -2832,7 +2830,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2847,7 +2845,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $delete: {
@@ -2859,13 +2857,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $get: {
             input: {
                 query: {
-                    view?: string | undefined;
+                    view?: string | string[] | undefined;
                 };
             };
             output: {
@@ -2874,7 +2872,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     [x: string]: number;
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2892,7 +2890,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2905,7 +2903,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     count: number;
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2914,14 +2912,14 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    entryId: string;
+                    entryId: string | string[];
                 };
             };
             output: {
                 code: 0;
                 data: boolean;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $post: {
@@ -2933,7 +2931,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $delete: {
@@ -2945,7 +2943,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2954,13 +2952,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    view?: string | undefined;
+                    view?: string | string[] | undefined;
                 };
             };
             output: {
                 data?: string[] | undefined;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $delete: {
@@ -2973,7 +2971,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $patch: {
@@ -2986,7 +2984,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -2995,7 +2993,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    feedId: string;
+                    feedId: string | string[];
                 };
             };
             output: {
@@ -3007,7 +3005,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     content: string;
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -3021,7 +3019,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -3029,8 +3027,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    id?: string | undefined;
-                    url?: string | undefined;
+                    id?: string | string[] | undefined;
+                    url?: string | string[] | undefined;
                 };
             };
             output: {
@@ -3063,7 +3061,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     } | undefined;
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -3071,13 +3069,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    id: string;
+                    id: string | string[];
                 };
             };
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -3140,7 +3138,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     subscriptionCount?: number | undefined;
                 }[];
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -3148,8 +3146,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    category?: string | undefined;
-                    namespace?: string | undefined;
+                    category?: string | string[] | undefined;
+                    namespace?: string | string[] | undefined;
                 };
             };
             output: {
@@ -3176,7 +3174,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     };
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -3192,7 +3190,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     expires: string;
                 };
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -3208,25 +3206,65 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
 } & {
-    [x: `/entries/read-histories/${string}`]: {
-        [x: `$${Lowercase<string>}`]: {
-            input: Partial<hono.ValidationTargets>;
-            output: any;
-            outputFormat: string;
-            status: hono_utils_http_status.StatusCode;
+    "/entries/read-histories/:id": {
+        $get: {
+            input: {
+                param: {
+                    id?: string | undefined;
+                };
+            } & {
+                query: {
+                    page?: string | string[] | undefined;
+                    size?: string | string[] | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    users: {
+                        [x: string]: {
+                            name: string | null;
+                            id: string;
+                            image: string | null;
+                            handle: string | null;
+                        };
+                    };
+                    entryReadHistories: {
+                        userIds: string[];
+                        readCount: number;
+                    } | null;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
         };
     };
-    [x: `/entries/check-new/${string}`]: {
-        [x: `$${Lowercase<string>}`]: {
-            input: Partial<hono.ValidationTargets>;
-            output: any;
-            outputFormat: string;
-            status: hono_utils_http_status.StatusCode;
+    "/entries/check-new": {
+        $get: {
+            input: {
+                query: {
+                    insertedAfter: string | string[];
+                    view?: string | string[] | undefined;
+                    feedId?: string | string[] | undefined;
+                    feedIdList?: string | string[] | undefined;
+                    read?: string | string[] | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    has_new: boolean;
+                    lastest_at?: string | undefined;
+                    entry_id?: string | undefined;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
         };
     };
     "/entries": {
@@ -3304,13 +3342,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 }[] | undefined;
                 total?: number | undefined;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $get: {
             input: {
                 query: {
-                    id: string;
+                    id: string | string[];
                 };
             };
             output: {
@@ -3385,7 +3423,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     } | undefined;
                 } | undefined;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -3393,7 +3431,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    id: string;
+                    id: string | string[];
                 };
             };
             output: {
@@ -3428,7 +3466,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     }[] | null | undefined;
                 }[];
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -3437,8 +3475,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    view?: string | undefined;
-                    userId?: string | undefined;
+                    view?: string | string[] | undefined;
+                    userId?: string | string[] | undefined;
                 };
             };
             output: {
@@ -3467,7 +3505,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     isPrivate: boolean;
                 }[];
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $post: {
@@ -3482,7 +3520,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $delete: {
@@ -3495,7 +3533,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
         $patch: {
@@ -3510,7 +3548,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
@@ -3528,7 +3566,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
             };
-            outputFormat: "json";
+            outputFormat: "json" | "text";
             status: 200;
         };
     };
