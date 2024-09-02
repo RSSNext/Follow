@@ -17,6 +17,8 @@ export const withSettingEnabled =
       forwardRef<any, P>((props, ref) => {
         const res = useSettings.select(condition)
         return res ?
+          // @ts-expect-error
           createElement(IfComponent, { ...props, ref }) :
+          // @ts-expect-error
           createElement(ElseComponent, { ...props, ref })
       })
