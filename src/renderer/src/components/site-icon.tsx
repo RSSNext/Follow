@@ -1,15 +1,22 @@
 import { getColorScheme, stringToHue } from "@renderer/lib/color"
+import { getProxyUrl } from "@renderer/lib/img-proxy"
 import { cn, getUrlIcon } from "@renderer/lib/utils"
 import { useEffect, useMemo, useState } from "react"
 
 import { PlatformIcon } from "./ui/platform-icon"
-
+/**
+ *
+ * @deprecated please use `FeedIcon` instead
+ * @returns
+ */
 export function SiteIcon({
   url,
   className,
   style,
   fallback,
   fallbackText,
+  proxy,
+  src,
 }: {
   url?: string
   className?: string
@@ -19,36 +26,59 @@ export function SiteIcon({
    */
   fallback?: boolean
   fallbackText?: string
-}) {
-  let src = ""
-  let fallbackUrl = ""
 
-  const colors = useMemo(
-    () => (url && fallback ? getColorScheme(stringToHue(url), true) : null),
-    [fallback, url],
-  )
+  src?: string
+  proxy?: {
+    width: number
+    height: number
+  }
+}) {
+  const colors = useMemo(() => {
+    const id = src || url
+    return id && fallback ? getColorScheme(stringToHue(id), true) : null
+  }, [fallback, src, url])
 
   const [showFallback, setShowFallback] = useState(false)
   useEffect(() => {
     setShowFallback(false)
   }, [url])
 
-  if (!url) return null
+  const stableProxy = useState(proxy)[0]
 
-  const ret = getUrlIcon(url, fallback)
-  src = ret.src
-  fallbackUrl = ret.fallbackUrl
+  const [nextSrc, fallbackUrl] = useMemo((): [string, string] => {
+    // src ? getProxyUrl(src) : "";
+    if (src) {
+      if (stableProxy) {
+        return [
+          getProxyUrl({
+            url: src,
+            width: stableProxy.width,
+            height: stableProxy.height,
+          }),
+          "",
+        ]
+      }
+
+      return [src, ""]
+    }
+    if (!url) return ["", ""]
+    const ret = getUrlIcon(url, fallback)
+
+    return [ret.src, ret.fallbackUrl]
+  }, [fallback, stableProxy, src, url])
+
+  if (!nextSrc) return null
 
   return (
     <PlatformIcon
-      url={url}
+      url={nextSrc}
       style={style}
       className={cn("relative mr-2 size-5 shrink-0 rounded-sm", className)}
     >
       {showFallback && fallback ? (
         <div
-          data-error-image={src || fallbackUrl}
-          className="center absolute inset-0 bg-[var(--fo-light-background)] text-[9px] text-white dark:bg-[var(--fo-dark-background)] dark:text-black"
+          data-error-image={nextSrc || fallbackUrl}
+          className="center absolute inset-0 bg-[var(--fo-light-background)] text-[9px] text-white dark:bg-[var(--fo-dark-background)]"
           style={
             {
               "--fo-light-background": colors.light.background,
@@ -60,7 +90,7 @@ export function SiteIcon({
         </div>
       ) : (
         <img
-          src={src}
+          src={nextSrc}
           loading="lazy"
           onError={(e) => {
             if (fallbackUrl && e.currentTarget.src !== fallbackUrl) {
