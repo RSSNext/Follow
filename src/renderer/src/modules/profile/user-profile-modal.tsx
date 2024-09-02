@@ -377,6 +377,7 @@ const SubscriptionItem: FC<{
                 content: ({ dismiss }) => (
                   <FeedForm
                     asWidget
+                    id={subscription.feedId}
                     url={subscription.feeds.url}
                     defaultValues={{
                       view: defaultView.toString(),
