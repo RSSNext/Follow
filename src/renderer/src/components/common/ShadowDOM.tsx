@@ -104,7 +104,9 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
   const [renderInNextTick, setRenderInNextTick] = useState(false)
 
   useEffect(() => {
-    setRenderInNextTick(true)
+    setTimeout(() => {
+      setRenderInNextTick(true)
+    }, 100)
   }, [])
   return (
     <root.div {...rest}>
