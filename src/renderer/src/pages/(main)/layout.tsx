@@ -73,6 +73,8 @@ export function Component() {
       ref={containerRef}
       onContextMenu={preventDefault}
     >
+      {!import.meta.env.PROD && <EnvironmentIndicator />}
+
       <FeedResponsiveResizerContainer containerRef={containerRef}>
         <FeedColumn>
           <CornerPlayer />
@@ -82,7 +84,6 @@ export function Component() {
           {ELECTRON && <AutoUpdater />}
 
           <NetworkStatusIndicator />
-          {!import.meta.env.PROD && <EnvironmentIndicator />}
         </FeedColumn>
       </FeedResponsiveResizerContainer>
       <main
@@ -219,7 +220,9 @@ const FeedResponsiveResizerContainer = ({
         }}
       />
 
-      {delayShowSplitter && <PanelSplitter isDragging={isDragging} {...separatorProps} />}
+      {delayShowSplitter && (
+        <PanelSplitter isDragging={isDragging} {...separatorProps} />
+      )}
     </>
   )
 }

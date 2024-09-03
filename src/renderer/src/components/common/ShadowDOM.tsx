@@ -1,32 +1,68 @@
 import { useIsDark } from "@renderer/hooks/common"
+import { nanoid } from "nanoid"
 import type { FC, PropsWithChildren, ReactNode } from "react"
 import {
   createContext,
   createElement,
+  memo,
   useContext,
   useLayoutEffect,
+  useMemo,
   useState,
 } from "react"
 import root from "react-shadow"
 
 const ShadowDOMContext = createContext(false)
 
-const cloneStylesElement = () => {
+const MemoedDangerousHTMLStyle: FC<{ children: string }> = memo(
+  ({ children }) => (
+    <style
+      dangerouslySetInnerHTML={useMemo(
+        () => ({
+          __html: children,
+        }),
+        [children],
+      )}
+    />
+  ),
+)
+
+const weakMapElementKey = new WeakMap<
+  HTMLStyleElement | HTMLLinkElement,
+  string
+>()
+const cloneStylesElement = (_mutationRecord?: MutationRecord) => {
   const $styles = document.head.querySelectorAll("style").values()
   const reactNodes = [] as ReactNode[]
-  let i = 0
-  for (const style of $styles) {
-    const key = `style-${i++}`
+
+  for (const $style of $styles) {
+    let key = weakMapElementKey.get($style)
+
+    if (!key) {
+      key = nanoid(8)
+
+      weakMapElementKey.set($style, key)
+    }
+
     reactNodes.push(
-      createElement("style", {
+      createElement(MemoedDangerousHTMLStyle, {
         key,
-        dangerouslySetInnerHTML: { __html: style.innerHTML },
+        children: $style.innerHTML,
       }),
     )
   }
 
-  document.head.querySelectorAll("link[rel=stylesheet]").forEach((link) => {
-    const key = `link-${i++}`
+  const $links = document.head.querySelectorAll(
+    "link[rel=stylesheet]",
+  ) as unknown as HTMLLinkElement[]
+
+  $links.forEach((link) => {
+    let key = weakMapElementKey.get(link)
+    if (!key) {
+      key = nanoid(8)
+      weakMapElementKey.set(link, key)
+    }
+
     reactNodes.push(
       createElement("link", {
         key,
@@ -48,8 +84,10 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
     useState<ReactNode[]>(cloneStylesElement)
 
   useLayoutEffect(() => {
-    const mutationObserver = new MutationObserver(() => {
-      setStylesElements(cloneStylesElement())
+    const mutationObserver = new MutationObserver((e) => {
+      const event = e[0]
+
+      setStylesElements(cloneStylesElement(event))
     })
     mutationObserver.observe(document.head, {
       childList: true,
