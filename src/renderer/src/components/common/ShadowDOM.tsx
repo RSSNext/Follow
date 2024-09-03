@@ -52,27 +52,6 @@ const cloneStylesElement = (_mutationRecord?: MutationRecord) => {
     )
   }
 
-  const $links = document.head.querySelectorAll(
-    "link[rel=stylesheet]",
-  ) as unknown as HTMLLinkElement[]
-
-  $links.forEach((link) => {
-    let key = weakMapElementKey.get(link)
-    if (!key) {
-      key = nanoid(8)
-      weakMapElementKey.set(link, key)
-    }
-
-    reactNodes.push(
-      createElement("link", {
-        key,
-        rel: "stylesheet",
-        href: link.getAttribute("href"),
-        // crossOrigin: link.getAttribute("crossorigin"),
-      }),
-    )
-  })
-
   return reactNodes
 }
 export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
@@ -101,6 +80,8 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
 
   const dark = useIsDark()
 
+  const staticStyleSheet = useState(getLinkedStaticStyleSheet)[0]
+
   return (
     <root.div {...rest}>
       <ShadowDOMContext.Provider value={true}>
@@ -109,6 +90,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
           data-theme={dark ? "dark" : "light"}
           className="font-theme"
         >
+          <MemoedDangerousHTMLStyle>{staticStyleSheet}</MemoedDangerousHTMLStyle>
           {stylesElements}
           {props.children}
         </div>
@@ -118,3 +100,16 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
 }
 
 ShadowDOM.useIsShadowDOM = () => useContext(ShadowDOMContext)
+
+function getLinkedStaticStyleSheet() {
+  let cssText = ""
+
+  for (const sheet of document.styleSheets) {
+    if (!sheet.href) continue
+    const rules = sheet.cssRules || sheet.rules
+    for (const rule of rules) {
+      cssText += `${rule.cssText}\n`
+    }
+  }
+  return cssText
+}
