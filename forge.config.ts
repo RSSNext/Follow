@@ -26,7 +26,7 @@ const ymlMapsMap = {
 }
 
 const keepModules = new Set(["font-list", "vscode-languagedetection"])
-const keepLanguages = new Set(["en", "en_GB", "zh_CN"])
+const keepLanguages = new Set(["en", "en_GB", "zh_CN", "zh-CN", "en-GB"])
 // remove folders & files not to be included in the app
 async function cleanSources(
   buildPath,
