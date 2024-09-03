@@ -103,8 +103,12 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
   return (
     <root.div {...rest}>
       <ShadowDOMContext.Provider value={true}>
-        <div data-theme={dark ? "dark" : "light"}>
-          <head>{stylesElements}</head>
+        <div
+          id="shadow-html"
+          data-theme={dark ? "dark" : "light"}
+          className="font-theme"
+        >
+          {stylesElements}
           {props.children}
         </div>
       </ShadowDOMContext.Provider>

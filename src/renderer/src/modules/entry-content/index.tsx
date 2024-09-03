@@ -236,9 +236,20 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                   {!isInReadabilityMode ? (
                     <ShadowDOM>
                       <HTML
-                        accessory={isPeekModal ? undefined : <ContainerToc key={entryId} />}
+                        accessory={
+                          isPeekModal ? undefined : (
+                            <ContainerToc key={entryId} />
+                          )
+                        }
                         as="article"
                         className="prose dark:prose-invert prose-h1:text-[1.6em]"
+                        style={
+                          readerFontFamily ?
+                              {
+                                fontFamily: readerFontFamily,
+                              } :
+                            undefined
+                        }
                         renderInlineStyle={readerRenderInlineStyle}
                       >
                         {content}

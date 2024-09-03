@@ -76,7 +76,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="!outline-none focus-visible:bg-theme-item-hover">
+      <DropdownMenuTrigger asChild className="!outline-none focus-visible:bg-theme-item-hover">
         <ActionButton tooltip="Profile">
           <UserAvatar className="h-5 p-0 [&_*]:border-0" hideName />
         </ActionButton>

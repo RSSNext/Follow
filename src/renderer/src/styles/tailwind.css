@@ -4,7 +4,14 @@
 
 @layer base {
   /* shadcn colors */
-  :root {
+
+  :root,
+  #shadow-html {
+    --radius: 0.5rem;
+    --a: theme("colors.theme.accent.DEFAULT");
+  }
+
+  [data-theme="light"] {
     --background: 0 0% 100%;
     --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;
@@ -36,10 +43,6 @@
     --destructive-foreground: 60 9.1% 97.8%;
     --border: 0 0% 22.1%;
   }
-}
-
-:root {
-  --a: theme("colors.theme.accent.DEFAULT");
 }
 
 @layer base {
