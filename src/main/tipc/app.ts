@@ -71,9 +71,8 @@ export const appRoute = {
             // FIXME: this is a electron bug, see https://github.com/RSSNext/Follow/issues/231
             // So in this way we use a workaround to fix it, that is manually resize the window
             if (isWindows11) {
-              const size = screen.getDisplayMatching(
-                window.getBounds(),
-              ).workAreaSize
+              const display = screen.getDisplayMatching(window.getBounds())
+              const size = display.workAreaSize
 
               const isMaximized = size.height === window.getSize()[1]
 
@@ -85,8 +84,12 @@ export const appRoute = {
                 window.setResizable(true)
                 window.setMovable(true)
 
-                window.setSize(stored.size[0], stored.size[1])
-                window.setPosition(stored.position[0], stored.position[1])
+                window.setBounds({
+                  width: stored.size[0],
+                  height: stored.size[1],
+                  x: stored.position[0],
+                  y: stored.position[1],
+                }, true)
 
                 delete window[storeKey]
               } else {
@@ -98,8 +101,14 @@ export const appRoute = {
                 }
 
                 // Maually Resize
-                window.setSize(size.width, size.height)
-                window.setPosition(0, 0)
+                const { workArea } = display
+
+                window.setBounds({
+                  x: workArea.x,
+                  y: workArea.y,
+                  width: workArea.width,
+                  height: workArea.height,
+                }, true)
 
                 window.setResizable(false)
                 window.setMovable(false)
