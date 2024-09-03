@@ -65,7 +65,7 @@
     "@sentry/electron": "5.4.0",
     "@sentry/react": "8.27.0",
     "@sentry/vite-plugin": "2.22.3",
-    "@shikijs/transformers": "1.15.1",
+    "@shikijs/transformers": "1.16.1",
     "@t3-oss/env-core": "^0.11.1",
     "@tanstack/query-sync-storage-persister": "5.53.1",
     "@tanstack/react-query": "5.53.1",
