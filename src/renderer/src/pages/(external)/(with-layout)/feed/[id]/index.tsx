@@ -117,7 +117,7 @@ export function Component() {
                 target="_blank"
                 key={entry.id}
               >
-                <ListItemHoverOverlay>
+                <ListItemHoverOverlay className="rounded">
                   <Item
                     entryPreview={{
                       entries: entry,
