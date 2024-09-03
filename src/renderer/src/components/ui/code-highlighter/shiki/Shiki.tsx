@@ -9,7 +9,6 @@ import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import type { FC } from "react"
 import {
   useInsertionEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -21,17 +20,20 @@ import type {
   DynamicImportThemeRegistration,
   HighlighterCore,
 } from "shiki"
-import { createHighlighterCore } from "shiki/core"
-import { default as getWasm } from "shiki/wasm"
+import {
+  createHighlighterCoreSync,
+  createJavaScriptRegexEngine,
+} from "shiki/core"
 
 import { CopyButton } from "../copy-button"
 import { shikiTransformers } from "./shared"
 import styles from "./shiki.module.css"
 
-const shikiPromise = createHighlighterCore({
-  themes: [import("shiki/themes/github-dark.mjs")],
+const js = createJavaScriptRegexEngine()
+const shiki = createHighlighterCoreSync({
+  themes: [],
   langs: [],
-  loadWasm: getWasm,
+  engine: js,
 })
 
 export interface ShikiProps {
@@ -53,21 +55,8 @@ let langModule: Record<
 let themeModule: Record<BundledTheme, DynamicImportThemeRegistration> | null =
   null
 let bundledLanguagesKeysSet: Set<string> | null = null
-let resolvedShiki: HighlighterCore | null = null
 
-shikiPromise.then((shiki) => {
-  resolvedShiki = shiki
-})
 export const ShikiHighLighter: FC<ShikiProps> = (props) => {
-  const [shiki, setShiki] = useState(resolvedShiki)
-
-  useLayoutEffect(() => {
-    shikiPromise.then((shiki) => {
-      resolvedShiki = shiki
-      setShiki(shiki)
-    })
-  }, [])
-
   if (!shiki) {
     const { code, className } = props
     return (
@@ -230,7 +219,7 @@ const ShikiCode: FC<
       // console.error(err)
       return null
     }
-  }, [code, language, codeTheme])
+  }, [shiki, code, language, codeTheme])
 
   if (!rendered) {
     return (

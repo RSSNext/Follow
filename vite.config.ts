@@ -6,9 +6,10 @@ import { sentryVitePlugin } from "@sentry/vite-plugin"
 import legacy from "@vitejs/plugin-legacy"
 import react from "@vitejs/plugin-react"
 import { cyan, dim, green } from "kolorist"
-import { visualizer } from "rollup-plugin-visualizer"
+import { prerelease } from "semver"
 import type { PluginOption, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
+import { analyzer } from "vite-bundle-analyzer"
 import mkcert from "vite-plugin-mkcert"
 
 import { getGitHash } from "./scripts/lib"
@@ -84,7 +85,7 @@ const vite = ({ mode }) => {
       }),
 
       devPrint(),
-      process.env.ANALYZER && visualizer({ open: true }),
+      process.env.ANALYZER && analyzer(),
     ],
     define: {
       APP_VERSION: JSON.stringify(pkg.version),
@@ -93,6 +94,10 @@ const vite = ({ mode }) => {
 
       GIT_COMMIT_SHA: JSON.stringify(
         process.env.VERCEL_GIT_COMMIT_SHA || getGitHash(),
+      ),
+
+      RELEASE_CHANNEL: JSON.stringify(
+        (prerelease(pkg.version)?.[0] as string) || "stable",
       ),
 
       DEBUG: process.env.DEBUG === "true",

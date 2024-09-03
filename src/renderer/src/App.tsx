@@ -45,7 +45,6 @@ function App() {
   const windowsElectron = window.electron && getOS() === "Windows"
   return (
     <RootProviders>
-
       {window.electron && (
         <div
           className={cn(

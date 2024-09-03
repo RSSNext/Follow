@@ -1,8 +1,13 @@
 import { attachOpenInEditor } from "@renderer/lib/dev"
 import { getNewIssueUrl } from "@renderer/lib/issues"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
+import { captureException } from "@sentry/react"
 import { useEffect, useRef } from "react"
-import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router-dom"
+import {
+  isRouteErrorResponse,
+  useNavigate,
+  useRouteError,
+} from "react-router-dom"
 import { toast } from "sonner"
 
 import { Button } from "../ui/button"
@@ -23,9 +28,8 @@ export function ErrorElement() {
       "Error handled by React Router default ErrorBoundary:",
       error,
     )
-    import("@sentry/react").then(({ captureException }) => {
-      captureException(error)
-    })
+
+    captureException(error)
   }, [error])
 
   const reloadRef = useRef(false)
@@ -74,10 +78,11 @@ export function ErrorElement() {
         >
           Reset Local Database
         </Button>
-        <Button onClick={() => {
-          navigate("/")
-          window.location.reload()
-        }}
+        <Button
+          onClick={() => {
+            navigate("/")
+            window.location.reload()
+          }}
         >
           Reload
         </Button>
@@ -114,7 +119,6 @@ export const FallbackIssue = ({
           "```",
           stack,
           "```",
-
         ].join("\n"),
         label: "bug",
       })}

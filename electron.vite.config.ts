@@ -4,6 +4,7 @@ import { resolve } from "node:path"
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "electron-vite"
+import { prerelease } from "semver"
 
 import { getGitHash } from "./scripts/lib"
 
@@ -72,6 +73,10 @@ export default defineConfig({
 
       DEBUG: process.env.DEBUG === "true",
       ELECTRON: "true",
+
+      RELEASE_CHANNEL: JSON.stringify(
+        (prerelease(pkg.version)?.[0] as string) || "stable",
+      ),
     },
   },
 })
