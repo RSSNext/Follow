@@ -6,7 +6,6 @@ import {
   createElement,
   memo,
   useContext,
-  useLayoutEffect,
   useMemo,
   useState,
 } from "react"
@@ -80,24 +79,24 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
 } = (props) => {
   const { ...rest } = props
 
-  const [stylesElements, setStylesElements] =
+  const [stylesElements, _setStylesElements] =
     useState<ReactNode[]>(cloneStylesElement)
 
-  useLayoutEffect(() => {
-    const mutationObserver = new MutationObserver((e) => {
-      const event = e[0]
+  // useLayoutEffect(() => {
+  //   const mutationObserver = new MutationObserver((e) => {
+  //     const event = e[0]
 
-      setStylesElements(cloneStylesElement(event))
-    })
-    mutationObserver.observe(document.head, {
-      childList: true,
-      subtree: true,
-    })
+  //     setStylesElements(cloneStylesElement(event))
+  //   })
+  //   mutationObserver.observe(document.head, {
+  //     childList: true,
+  //     subtree: true,
+  //   })
 
-    return () => {
-      mutationObserver.disconnect()
-    }
-  }, [])
+  //   return () => {
+  //     mutationObserver.disconnect()
+  //   }
+  // }, [])
 
   const dark = useIsDark()
   return (
