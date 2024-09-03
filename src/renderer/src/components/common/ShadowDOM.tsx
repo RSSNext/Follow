@@ -6,7 +6,7 @@ import {
   createElement,
   memo,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
 } from "react"
@@ -68,7 +68,7 @@ const cloneStylesElement = (_mutationRecord?: MutationRecord) => {
         key,
         rel: "stylesheet",
         href: link.getAttribute("href"),
-        crossOrigin: link.getAttribute("crossorigin"),
+        // crossOrigin: link.getAttribute("crossorigin"),
       }),
     )
   })
@@ -80,34 +80,27 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
 } = (props) => {
   const { ...rest } = props
 
-  const [stylesElements, _setStylesElements] =
+  const [stylesElements, setStylesElements] =
     useState<ReactNode[]>(cloneStylesElement)
 
-  // useLayoutEffect(() => {
-  //   const mutationObserver = new MutationObserver((e) => {
-  //     const event = e[0]
+  useLayoutEffect(() => {
+    const mutationObserver = new MutationObserver((e) => {
+      const event = e[0]
 
-  //     setStylesElements(cloneStylesElement(event))
-  //   })
-  //   mutationObserver.observe(document.head, {
-  //     childList: true,
-  //     subtree: true,
-  //   })
+      setStylesElements(cloneStylesElement(event))
+    })
+    mutationObserver.observe(document.head, {
+      childList: true,
+      subtree: true,
+    })
 
-  //   return () => {
-  //     mutationObserver.disconnect()
-  //   }
-  // }, [])
+    return () => {
+      mutationObserver.disconnect()
+    }
+  }, [])
 
   const dark = useIsDark()
 
-  const [renderInNextTick, setRenderInNextTick] = useState(false)
-
-  useEffect(() => {
-    setTimeout(() => {
-      setRenderInNextTick(true)
-    }, 100)
-  }, [])
   return (
     <root.div {...rest}>
       <ShadowDOMContext.Provider value={true}>
@@ -117,7 +110,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
           className="font-theme"
         >
           {stylesElements}
-          {renderInNextTick && props.children}
+          {props.children}
         </div>
       </ShadowDOMContext.Provider>
     </root.div>
