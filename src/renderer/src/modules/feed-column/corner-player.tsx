@@ -116,6 +116,7 @@ const CornerPlayerImpl = () => {
             feed={feed}
             entry={entry.entries}
             size={58}
+            fallback={false}
             className="m-0 size-[3.625rem] rounded-none"
           />
           <div className="center absolute inset-0 w-full opacity-0 transition-all duration-200 ease-in-out group-hover:opacity-100">

@@ -218,6 +218,13 @@ export function FeedIcon({
       >
         {ImageElement}
       </AvatarImage>
+      <AvatarFallback>
+        <div
+          className={cn("mr-2", className)}
+          style={sizeStyle}
+          data-placeholder={finalSrc}
+        />
+      </AvatarFallback>
     </Avatar>
   )
 }

@@ -139,10 +139,11 @@ export function ListItem({
           )}
           feedIcon={(
             <FeedIcon
+              fallback={false}
               feed={feed}
               entry={entry.entries}
               size={80}
-              className="m-0"
+              className="m-0 rounded"
             />
           )}
         />
