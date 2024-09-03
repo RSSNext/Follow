@@ -1,3 +1,4 @@
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useIsDark } from "@renderer/hooks/common"
 import { nanoid } from "nanoid"
 import type { FC, PropsWithChildren, ReactNode } from "react"
@@ -80,12 +81,16 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
 
   const dark = useIsDark()
 
+  const uiFont = useUISettingKey("uiFontFamily")
   const staticStyleSheet = useState(getLinkedStaticStyleSheet)[0]
 
   return (
     <root.div {...rest}>
       <ShadowDOMContext.Provider value={true}>
         <div
+          style={useMemo(() => ({
+            fontFamily: uiFont,
+          }), [uiFont])}
           id="shadow-html"
           data-theme={dark ? "dark" : "light"}
           className="font-theme"
