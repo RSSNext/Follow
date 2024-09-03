@@ -49,7 +49,7 @@ export const styledButtonVariant = cva(
 
         outline: cn(
           "bg-theme-background font-semibold transition-colors duration-200",
-          "border border-border hover:bg-zinc-50/20 dark:bg-neutral-900/30",
+          "border border-border hover:bg-zinc-50 dark:bg-neutral-900/30 dark:hover:bg-neutral-900/80",
           "focus:border-accent/80",
         ),
         text: cn(

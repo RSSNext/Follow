@@ -56,7 +56,13 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
     scrollMarkUnread,
   ])
 }
-export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
+export const useEntriesByView = ({
+  onReset,
+  isArchived,
+}: {
+  onReset?: () => void
+  isArchived?: boolean
+}) => {
   const routeParams = useRouteParms()
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
@@ -71,6 +77,7 @@ export const useEntriesByView = ({ onReset }: { onReset?: () => void }) => {
     id: folderIds?.join(",") || feedId,
     view,
     ...(unreadOnly === true && { read: false }),
+    isArchived,
   }
   const query = useEntries(entriesOptions)
 

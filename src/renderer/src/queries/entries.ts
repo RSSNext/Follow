@@ -11,11 +11,13 @@ export const entries = {
     view,
     read,
     limit,
+    isArchived,
   }: {
     id?: number | string
     view?: number
     read?: boolean
     limit?: number
+    isArchived?: boolean
   }) =>
     defineQuery(
       ["entries", id, view, read, limit],
@@ -26,6 +28,7 @@ export const entries = {
           read,
           limit,
           pageParam: pageParam as string,
+          isArchived,
         }),
       {
         rootKey: ["entries", id],
@@ -109,19 +112,16 @@ export const useEntries = ({
   id,
   view,
   read,
+  isArchived,
 }: {
   id?: number | string
   view?: number
   read?: boolean
+  isArchived?: boolean
 }) =>
-  useAuthInfiniteQuery(entries.entries({ id, view, read }), {
+  useAuthInfiniteQuery(entries.entries({ id, view, read, isArchived }), {
     enabled: id !== undefined,
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.data?.length || lastPage.remaining === 0) {
-        return null
-      }
-      return lastPage.data.at(-1)!.entries.publishedAt
-    },
+    getNextPageParam: (lastPage) => lastPage.data?.at(-1)?.entries.publishedAt,
     initialPageParam: undefined,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

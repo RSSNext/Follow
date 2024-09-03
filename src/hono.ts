@@ -3279,6 +3279,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     publishedAfter?: string | undefined;
                     publishedBefore?: string | undefined;
                     collected?: boolean | undefined;
+                    isCollection?: boolean | undefined;
+                    isArchived?: boolean | undefined;
                 };
             };
             output: {

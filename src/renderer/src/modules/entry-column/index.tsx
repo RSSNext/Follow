@@ -1,8 +1,10 @@
+import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { m } from "@renderer/components/common/Motion"
 import { FeedFoundCanBeFollowError } from "@renderer/components/errors/FeedFoundCanBeFollowErrorFallback"
 import { FeedNotFound } from "@renderer/components/errors/FeedNotFound"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
+import { Button } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
@@ -22,7 +24,7 @@ import { useFeed } from "@renderer/queries/feed"
 import { entryActions, useEntry } from "@renderer/store/entry"
 import { useFeedByIdSelector } from "@renderer/store/feed"
 import { useSubscriptionByFeedId } from "@renderer/store/subscription"
-import { useCallback, useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import type {
   ScrollSeekConfiguration,
   VirtuosoGridProps,
@@ -44,12 +46,15 @@ const scrollSeekConfiguration: ScrollSeekConfiguration = {
 }
 export function EntryColumn() {
   const virtuosoRef = useRef<VirtuosoHandle>(null)
+  const [isArchived, setIsArchived] = useState(false)
+  const unreadOnly = useGeneralSettingKey("unreadOnly")
   const entries = useEntriesByView({
     onReset: useCallback(() => {
       virtuosoRef.current?.scrollTo({
         top: 0,
       })
     }, []),
+    isArchived,
   })
   const { entriesIds, isFetchingNextPage, groupedCounts } = entries
 
@@ -79,14 +84,41 @@ export function EntryColumn() {
 
   const handleMarkReadInRange = useEntryMarkReadHandler(entriesIds)
 
+  useEffect(() => {
+    if (isArchived) {
+      if (entries.hasNextPage) {
+        entries.fetchNextPage()
+      } else {
+        entries.refetch()
+      }
+    }
+  }, [isArchived])
+
+  const showArchivedButton = !isArchived && !unreadOnly && !isCollection && routeFeedId !== ROUTE_FEED_PENDING && entries.totalCount < 40
   const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {
     components: {
       List: EntryListContent,
       Footer: useCallback(() => {
-        if (!isFetchingNextPage) return null
-        return <EntryItemSkeleton view={view} count={Math.min(entries.data?.pages?.[0].data?.length || 20, entries.data?.pages.at(-1)?.remaining || 20)} />
-      }, [isFetchingNextPage, view]),
+        if (!isFetchingNextPage) {
+          if (showArchivedButton) {
+            return (
+              <div className="flex justify-center py-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsArchived(true)}
+                >
+                  Load archived entries
+                </Button>
+              </div>
+            )
+          } else {
+            return null
+          }
+        } else {
+          return <EntryItemSkeleton view={view} count={Math.min(entries.data?.pages?.[0].data?.length || 20, entries.data?.pages.at(-1)?.remaining || 20)} />
+        }
+      }, [isFetchingNextPage, view, unreadOnly, isArchived, entries]),
       ScrollSeekPlaceholder: useCallback(
         () => <EntryItemSkeleton view={view} count={1} />,
         [view],
@@ -102,8 +134,11 @@ export function EntryColumn() {
 
     totalCount: entries.totalCount,
     endReached: useCallback(async () => {
-      if (!entries.isFetchingNextPage && entries.hasNextPage) {
-        await entries.fetchNextPage()
+      if (!entries.isFetchingNextPage) {
+        const remaining = entries.data?.pages.at(-1)?.remaining
+        if (entries.hasNextPage && remaining) {
+          await entries.fetchNextPage()
+        }
       }
     }, [entries]),
     data: entriesIds,
@@ -169,7 +204,7 @@ export function EntryColumn() {
           rootClassName="h-full"
           viewportClassName="[&>div]:grow flex"
         >
-          {virtuosoOptions.totalCount === 0 ? (
+          {virtuosoOptions.totalCount === 0 && !showArchivedButton ? (
             entries.isLoading ?
               null :
                 (
