@@ -1,7 +1,6 @@
 import { env } from "@env"
 import { version } from "@pkg"
 import { whoami } from "@renderer/atoms/user"
-import { channel } from "@renderer/constants"
 import { useEffect } from "react"
 import {
   createRoutesFromChildren,
@@ -21,7 +20,7 @@ export const initSentry = async () => {
   ])
   Sentry.init({
     dsn: env.VITE_SENTRY_DSN,
-    environment: channel,
+    environment: RELEASE_CHANNEL,
     integrations: [
       Sentry.moduleMetadataIntegration(),
       Sentry.httpClientIntegration(),

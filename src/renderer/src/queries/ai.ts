@@ -3,7 +3,6 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import type { SupportedLanguages } from "@renderer/models"
 import type { FlatEntryModel } from "@renderer/store/entry"
-import { franc } from "franc-min"
 
 const LanguageMap: Record<
   SupportedLanguages,
@@ -48,6 +47,7 @@ export const ai = {
       if (extraFields) {
         fields = [...fields, ...extraFields]
       }
+      const { franc } = await import("franc-min")
 
       fields = fields.filter((field) => {
         if (entry.settings?.translation && entry.entries[field]) {
