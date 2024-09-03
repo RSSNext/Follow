@@ -24,7 +24,10 @@ export const SentryConfig: BrowserOptions = {
         /adsbygoogle/i.test(error.message) ||
         /Failed to fetch/i.test(error.message) ||
         error.message.includes("fetch failed") ||
-        error.message.includes("Unable to open cursor"))
+        error.message.includes("Unable to open cursor") ||
+        error.message.includes(
+          "Document is not focused.",
+        ))
     ) {
       return null
     }
@@ -37,8 +40,9 @@ export const SentryConfig: BrowserOptions = {
         return false
       },
     )
+    const isAbortError = error instanceof Error && error.name === "AbortError"
 
-    if (isPassthroughError) {
+    if (isPassthroughError || isAbortError) {
       return null
     }
     return event

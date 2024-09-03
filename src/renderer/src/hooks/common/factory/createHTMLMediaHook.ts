@@ -1,6 +1,7 @@
 /**
  * @see https://github.com/streamich/react-use/blob/master/src/factory/createHTMLMediaHook.ts
  */
+import { noop } from "foxact/noop"
 import * as React from "react"
 import { useEffect, useRef } from "react"
 import { useEventCallback } from "usehooks-ts"
@@ -183,7 +184,7 @@ export default function createHTMLMediaHook<
         }
 
         if (!lockPlay) {
-          const promise = el.play()
+          const promise = el.play().catch(noop)
           const isPromise = typeof promise === "object"
 
           if (isPromise) {
