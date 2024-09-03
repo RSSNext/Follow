@@ -20,7 +20,7 @@ import { Media } from "@renderer/components/ui/media"
 import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedViewType } from "@renderer/lib/enum"
-import { useMutation } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -63,17 +63,6 @@ export function DiscoverForm({ type }: { type: string }) {
       keyword: prefix || "",
     },
   })
-  const mutation = useMutation({
-    mutationFn: async (keyword: string) => {
-      const { data } = await apiClient.discover.$post({
-        json: {
-          keyword,
-        },
-      })
-
-      return data
-    },
-  })
 
   const { present, dismissAll } = useModalStack()
 
@@ -95,7 +84,7 @@ export function DiscoverForm({ type }: { type: string }) {
         ),
       })
     } else {
-      mutation.mutate(values.keyword)
+      query.refetch()
     }
   }
 
@@ -109,6 +98,22 @@ export function DiscoverForm({ type }: { type: string }) {
       }
     }
   }, [keyword])
+
+  const query = useQuery({
+    queryKey: ["discover", keyword],
+    queryFn: async () => {
+      const { data } = await apiClient.discover.$post({
+        json: {
+          keyword,
+        },
+      })
+
+      return data
+    },
+    enabled: false,
+  })
+
+  const queryClient = useQueryClient()
 
   return (
     <>
@@ -134,25 +139,25 @@ export function DiscoverForm({ type }: { type: string }) {
             <Button
               disabled={!form.formState.isValid}
               type="submit"
-              isLoading={mutation.isPending}
+              isLoading={query.isLoading}
             >
               {info[type].showModal ? "Preview" : "Search"}
             </Button>
           </div>
         </form>
       </Form>
-      {mutation.isSuccess && (
+      {query.isSuccess && (
         <div className="mt-8 max-w-lg">
           <div className="mb-4 text-zinc-500">
             Found
             {" "}
-            {mutation.data?.length || 0}
+            {query.data?.length || 0}
             {" "}
             feed
-            {mutation.data?.length > 1 && "s"}
+            {query.data?.length > 1 && "s"}
           </div>
           <div className="space-y-6 text-sm">
-            {mutation.data?.map((item) => (
+            {query.data?.map((item) => (
               <Card data-feed-id={item.feed.id} key={item.feed.url || item.docs} className="select-text">
                 <CardHeader>
                   <FollowSummary
@@ -223,7 +228,25 @@ export function DiscoverForm({ type }: { type: string }) {
                                   defaultValues={{
                                     view: getSidebarActiveView().toString(),
                                   }}
-                                  onSuccess={dismiss}
+                                  onSuccess={() => {
+                                    queryClient.setQueryData(["discover", keyword], (oldData) => {
+                                      if (!Array.isArray(oldData)) return oldData
+                                      return oldData.map((oldItem) => {
+                                        if (oldItem.feed.id === item.feed.id) {
+                                          return {
+                                            ...oldItem,
+                                            isSubscribed: true,
+                                            subscriptionCount: oldItem.subscriptionCount + 1,
+                                          }
+                                        }
+                                        return oldItem
+                                      })
+                                    })
+                                    dismiss()
+                                    queryClient.invalidateQueries({
+                                      queryKey: ["discover", keyword],
+                                    })
+                                  }}
                                 />
                               ),
                             })
