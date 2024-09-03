@@ -112,7 +112,7 @@ export function FeedIcon({
 
       ImageElement = (
         <PlatformIcon url={siteUrl} style={sizeStyle} className="center">
-          <img className={className} style={sizeStyle} />
+          <img className={cn("mr-2", className)} style={sizeStyle} />
         </PlatformIcon>
       )
       break
@@ -124,8 +124,12 @@ export function FeedIcon({
         height: size * 2,
       })
       ImageElement = (
-        <PlatformIcon url={image} style={sizeStyle} className="center">
-          <img className={className} style={sizeStyle} />
+        <PlatformIcon
+          url={image}
+          style={sizeStyle}
+          className={cn("center mr-2", className)}
+        >
+          <img className={cn("mr-2", className)} style={sizeStyle} />
         </PlatformIcon>
       )
       break
@@ -143,9 +147,13 @@ export function FeedIcon({
       finalSrc = src
 
       ImageElement = (
-        <PlatformIcon url={feed?.siteUrl!} style={sizeStyle} className="center">
+        <PlatformIcon
+          url={feed?.siteUrl!}
+          style={sizeStyle}
+          className={cn("center mr-2", className)}
+        >
           <FallbackableImage
-            className={className}
+            className={cn("mr-2", className)}
             style={sizeStyle}
             fallbackUrl={fallbackSrc}
           />
@@ -167,7 +175,7 @@ export function FeedIcon({
 
   if (fallback && !!finalSrc) {
     return (
-      <Avatar className={cn("mr-2 shrink-0", className)}>
+      <Avatar className="shrink-0">
         <AvatarImage
           className="rounded-sm duration-200 animate-in fade-in-0"
           asChild
@@ -187,7 +195,7 @@ export function FeedIcon({
             className={cn(
               "flex shrink-0 items-center justify-center rounded-sm",
               "bg-[var(--fo-light-background)] text-white dark:bg-[var(--fo-dark-background)]",
-
+              "mr-2",
               className,
             )}
           >
