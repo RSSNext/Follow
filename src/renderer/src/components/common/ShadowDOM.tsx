@@ -6,6 +6,7 @@ import {
   createElement,
   memo,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react"
@@ -99,6 +100,12 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
   // }, [])
 
   const dark = useIsDark()
+
+  const [renderInNextTick, setRenderInNextTick] = useState(false)
+
+  useEffect(() => {
+    setRenderInNextTick(true)
+  }, [])
   return (
     <root.div {...rest}>
       <ShadowDOMContext.Provider value={true}>
@@ -108,7 +115,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
           className="font-theme"
         >
           {stylesElements}
-          {props.children}
+          {renderInNextTick && props.children}
         </div>
       </ShadowDOMContext.Provider>
     </root.div>
