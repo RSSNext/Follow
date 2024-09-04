@@ -42,6 +42,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
                     icon: (
                       <FeedIcon
                         className="size-4"
+                        size={16}
                         siteUrl={`https://${data.url}`}
                       />
                     ),

@@ -111,8 +111,12 @@ export function FeedIcon({
       finalSrc = src
 
       ImageElement = (
-        <PlatformIcon url={siteUrl} style={sizeStyle} className="center">
-          <img className={cn("mr-2", className)} style={sizeStyle} />
+        <PlatformIcon
+          url={siteUrl}
+          style={sizeStyle}
+          className={cn("center mr-2", className)}
+        >
+          <img style={sizeStyle} />
         </PlatformIcon>
       )
       break

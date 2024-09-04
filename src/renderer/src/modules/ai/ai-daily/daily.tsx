@@ -77,7 +77,7 @@ export const DailyReportTitle = ({
     </div>
     <Tooltip>
       <TooltipTrigger asChild>
-        <i className="i-mgc-question-cute-re translate-y-px" />
+        <i className="i-mgc-question-cute-re translate-y-px text-sm" />
       </TooltipTrigger>
       <TooltipPortal>
         <TooltipContent>
