@@ -2675,6 +2675,17 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+    "/wallets/transactions/claim-check": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: boolean;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
     "/wallets": {
         $get: {
             input: {

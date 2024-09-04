@@ -20,9 +20,9 @@ export const wallet = {
       },
     ),
 
-  claimDailyRewardTtl: () =>
-    defineQuery(["wallet", "claimDailyRewardTtl"], async () =>
-      apiClient.wallets.transactions.claim_daily_ttl.$get()),
+  claimCheck: () =>
+    defineQuery(["wallet", "claimCheck"], async () =>
+      apiClient.wallets.transactions["claim-check"].$get()),
 
   transactions: {
     get: (
@@ -64,8 +64,8 @@ export const useCreateWalletMutation = () =>
     },
   })
 
-export const useClaimWalletDailyRewardTtl = () =>
-  useAuthQuery(wallet.claimDailyRewardTtl(), { refetchInterval: 5000 })
+export const useClaimCheck = () =>
+  useAuthQuery(wallet.claimCheck())
 
 export const useClaimWalletDailyRewardMutation = () =>
   useMutation({
@@ -76,7 +76,7 @@ export const useClaimWalletDailyRewardMutation = () =>
     },
     onSuccess() {
       wallet.get().invalidate()
-      wallet.claimDailyRewardTtl().invalidate()
+      wallet.claimCheck().invalidate()
       window.posthog?.capture("daily_reward_claimed")
       toast("🎉 Daily reward claimed.")
     },

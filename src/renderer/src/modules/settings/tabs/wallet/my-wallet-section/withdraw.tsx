@@ -13,7 +13,7 @@ export const WithdrawButton = () => (
       </Button>
     </TooltipTrigger>
     <TooltipContent>
-      Comming soon
+      Comming soon...
     </TooltipContent>
   </Tooltip>
 )

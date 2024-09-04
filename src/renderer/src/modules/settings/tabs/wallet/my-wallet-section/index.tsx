@@ -73,7 +73,7 @@ export const MyWalletSection = () => {
           <TooltipPortal>
             <TooltipContent align="start" className="z-[999]">
               <p>1. Daily Power can only be used for tipping others.</p>
-              <p>2. You mint Daily Power for free once every 24 hours.</p>
+              <p>2. You can claim 2 free Daily Power daily.</p>
             </TooltipContent>
           </TooltipPortal>
         </Tooltip>
