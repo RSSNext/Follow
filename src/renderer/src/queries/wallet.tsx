@@ -1,6 +1,7 @@
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
+import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
@@ -65,10 +66,14 @@ export const useCreateWalletMutation = () =>
   })
 
 export const useClaimCheck = () =>
-  useAuthQuery(wallet.claimCheck())
+  useAuthQuery(wallet.claimCheck(), {
+    refetchInterval: 1 * 60 * 60 * 1000,
+  })
 
-export const useClaimWalletDailyRewardMutation = () =>
-  useMutation({
+export const useClaimWalletDailyRewardMutation = () => {
+  const settingModalPresent = useSettingModal()
+
+  return useMutation({
     mutationKey: ["claimWalletDailyReward"],
     mutationFn: () => apiClient.wallets.transactions.claim_daily.$post(),
     async onError(err) {
@@ -78,9 +83,25 @@ export const useClaimWalletDailyRewardMutation = () =>
       wallet.get().invalidate()
       wallet.claimCheck().invalidate()
       window.posthog?.capture("daily_reward_claimed")
-      toast("🎉 Daily reward claimed.")
+
+      toast(
+        <div
+          className="flex items-center gap-1 text-lg"
+          onClick={() => settingModalPresent("wallet")}
+        >
+          <i className="i-mgc-power" />
+        </div>,
+        {
+          unstyled: true,
+          position: "bottom-left",
+          classNames: {
+            toast: "w-full flex justify-start !shadow-none !bg-transparent",
+          },
+        },
+      )
     },
   })
+}
 
 export const useWalletTipMutation = () =>
   useMutation({

@@ -2713,12 +2713,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
-                    userId: string;
-                    createdAt: string;
-                    address: string | null;
+                    address: string;
                     addressIndex: number;
-                    dailyPowerToken: string;
-                    cashablePowerToken: string;
                 };
             };
             outputFormat: "json" | "text";

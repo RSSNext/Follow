@@ -1,17 +1,13 @@
-import { getStorageNS } from "@renderer/lib/ns"
-import { useClaimWalletDailyRewardMutation } from "@renderer/queries/wallet"
+import { useClaimCheck, useClaimWalletDailyRewardMutation } from "@renderer/queries/wallet"
 import { useEffect } from "react"
 
-const CLAIM_DAILY_KEY = getStorageNS("claimDaily")
 export const useDailyTask = () => {
   const { mutateAsync: claimDaily } = useClaimWalletDailyRewardMutation()
+  const check = useClaimCheck()
 
   useEffect(() => {
-    const today = new Date().toDateString()
-
-    if (localStorage.getItem(CLAIM_DAILY_KEY) === today) return
-    claimDaily().then(() => {
-      localStorage.setItem(CLAIM_DAILY_KEY, today)
-    })
-  }, [claimDaily])
+    if (check.data?.data) {
+      claimDaily()
+    }
+  }, [claimDaily, check.data?.data])
 }
