@@ -1,6 +1,6 @@
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { tooltipStyle } from "@renderer/components/ui/tooltip"
+import { tooltipStyle } from "@renderer/components/ui/tooltip/styles"
 import { useMeasure } from "@renderer/hooks/common"
 import { cn } from "@renderer/lib/utils"
 
