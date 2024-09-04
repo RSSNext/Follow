@@ -8,6 +8,7 @@ import {
 import { MotionButtonBase } from "@renderer/components/ui/button"
 import { RelativeTime } from "@renderer/components/ui/datetime"
 import { LoadingCircle } from "@renderer/components/ui/loading"
+import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
   Table,
   TableBody,
@@ -45,7 +46,7 @@ export const TransactionsSection = () => {
     <div className="mt-8">
       <SettingSectionTitle title="Transactions" />
 
-      <div className="overflow-x-auto">
+      <ScrollArea.ScrollArea viewportClassName="max-h-[210px]">
         <Table>
           <TableHeader>
             <TableRow className="[&_*]:!font-semibold">
@@ -97,7 +98,7 @@ export const TransactionsSection = () => {
             No transactions
           </div>
         )}
-      </div>
+      </ScrollArea.ScrollArea>
     </div>
   )
 }
