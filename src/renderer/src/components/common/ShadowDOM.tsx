@@ -15,18 +15,25 @@ import root from "react-shadow"
 
 const ShadowDOMContext = createContext(false)
 
-const MemoedDangerousHTMLStyle: FC<{ children: string }> = memo(
-  ({ children }) => (
-    <style
-      dangerouslySetInnerHTML={useMemo(
-        () => ({
-          __html: children,
-        }),
-        [children],
-      )}
-    />
-  ),
-)
+const MemoedDangerousHTMLStyle: FC<
+  {
+    children: string
+  } & React.DetailedHTMLProps<
+    React.StyleHTMLAttributes<HTMLStyleElement>,
+    HTMLStyleElement
+  > &
+  Record<string, unknown>
+> = memo(({ children, ...rest }) => (
+  <style
+    {...rest}
+    dangerouslySetInnerHTML={useMemo(
+      () => ({
+        __html: children,
+      }),
+      [children],
+    )}
+  />
+))
 
 const weakMapElementKey = new WeakMap<
   HTMLStyleElement | HTMLLinkElement,
@@ -51,6 +58,24 @@ const cloneStylesElement = (_mutationRecord?: MutationRecord) => {
         children: $style.innerHTML,
       }),
     )
+
+    const styles = getLinkedStaticStyleSheets()
+
+    for (const style of styles) {
+      let key = weakMapElementKey.get(style.ref)
+      if (!key) {
+        key = nanoid(8)
+        weakMapElementKey.set(style.ref, key)
+      }
+
+      reactNodes.push(
+        createElement(MemoedDangerousHTMLStyle, {
+          key,
+          children: style.cssText,
+          ["data-href"]: style.ref.href,
+        }),
+      )
+    }
   }
 
   return reactNodes
@@ -82,20 +107,21 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
   const dark = useIsDark()
 
   const uiFont = useUISettingKey("uiFontFamily")
-  const staticStyleSheet = useState(getLinkedStaticStyleSheet)[0]
 
   return (
     <root.div {...rest}>
       <ShadowDOMContext.Provider value={true}>
         <div
-          style={useMemo(() => ({
-            fontFamily: uiFont,
-          }), [uiFont])}
+          style={useMemo(
+            () => ({
+              fontFamily: uiFont,
+            }),
+            [uiFont],
+          )}
           id="shadow-html"
           data-theme={dark ? "dark" : "light"}
           className="font-theme"
         >
-          <MemoedDangerousHTMLStyle>{staticStyleSheet}</MemoedDangerousHTMLStyle>
           {stylesElements}
           {props.children}
         </div>
@@ -106,15 +132,47 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
 
 ShadowDOM.useIsShadowDOM = () => useContext(ShadowDOMContext)
 
-function getLinkedStaticStyleSheet() {
-  let cssText = ""
+const cacheCssTextMap = {} as Record<string, string>
+
+function getLinkedStaticStyleSheets() {
+  const $links = document.head
+    .querySelectorAll("link[rel=stylesheet]")
+    .values() as unknown as HTMLLinkElement[]
+
+  const styleSheetMap = new WeakMap<
+    Element | ProcessingInstruction,
+    CSSStyleSheet
+  >()
+
+  const cssArray = [] as { cssText: string, ref: HTMLLinkElement }[]
 
   for (const sheet of document.styleSheets) {
     if (!sheet.href) continue
-    const rules = sheet.cssRules || sheet.rules
-    for (const rule of rules) {
-      cssText += `${rule.cssText}\n`
-    }
+    if (!sheet.ownerNode) continue
+    styleSheetMap.set(sheet.ownerNode, sheet)
   }
-  return cssText
+
+  for (const $link of $links) {
+    const sheet = styleSheetMap.get($link)
+    if (!sheet) continue
+    if (!sheet.href) continue
+    const hasCache = cacheCssTextMap[sheet.href]
+    if (!hasCache) {
+      if (!sheet.href) continue
+      const rules = sheet.cssRules || sheet.rules
+      let cssText = ""
+      for (const rule of rules) {
+        cssText += rule.cssText
+      }
+
+      cacheCssTextMap[sheet.href] = cssText
+    }
+
+    cssArray.push({
+      cssText: cacheCssTextMap[sheet.href],
+      ref: $link,
+    })
+  }
+
+  return cssArray
 }
