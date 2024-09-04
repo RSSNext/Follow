@@ -72,7 +72,7 @@ export const SettingInvitations = () => {
               content: ({ dismiss }) => (
                 <>
                   <div className="flex items-center">
-                    <span>Generating an invitation code will cost you 10 </span><i className="i-mgc-power mx-1 text-base" /><span>Power. Are you sure you want to continue?</span>
+                    <span>Generating an invitation code will cost you 10 </span><i className="i-mgc-power mx-1 text-base" /><span>Power. Do you want to continue?</span>
                   </div>
                   <div className="mt-4 flex items-center justify-end gap-3">
                     <Button variant="outline" onClick={dismiss}>
