@@ -153,7 +153,7 @@ const UserRenderer = ({
 
   const name = isMe ? "You" : user?.name || APP_NAME
 
-  const presentUserModal = usePresentUserProfileModal()
+  const presentUserModal = usePresentUserProfileModal("drawer")
   return (
     <MotionButtonBase
       onClick={() => {

@@ -10,7 +10,7 @@ export const useDailyTask = () => {
     const today = new Date().toDateString()
 
     if (localStorage.getItem(CLAIM_DAILY_KEY) === today) return
-    claimDaily().finally(() => {
+    claimDaily().then(() => {
       localStorage.setItem(CLAIM_DAILY_KEY, today)
     })
   }, [claimDaily])
