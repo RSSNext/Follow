@@ -10,12 +10,13 @@ import {
   TooltipTrigger,
 } from "../tooltip"
 
+const formatTemplateString = "lll"
 const formatTime = (date: string | Date, relativeBeforeDay?: number) => {
   if (
     relativeBeforeDay &&
     Math.abs(dayjs(date).diff(new Date(), "d")) > relativeBeforeDay
   ) {
-    return dayjs(date).format("lll")
+    return dayjs(date).format(formatTemplateString)
   }
   return dayjs
     .duration(dayjs(date).diff(dayjs(), "minute"), "minute")
@@ -73,17 +74,20 @@ export const RelativeTime: FC<{
       clearTimeout(timerRef.current)
     }
   }, [props.date, displayAbsoluteTimeAfterDay])
+  const formated = dayjs(props.date).format(formatTemplateString)
 
+  if (formated === relative) {
+    return <>{relative}</>
+  }
   return (
     <Tooltip>
-
       {/* https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904 */}
       <TooltipTrigger onFocusCapture={stopPropagation}>
         {relative}
       </TooltipTrigger>
 
       <TooltipPortal>
-        <TooltipContent>{dayjs(props.date).format("llll")}</TooltipContent>
+        <TooltipContent>{formated}</TooltipContent>
       </TooltipPortal>
     </Tooltip>
   )
@@ -135,11 +139,17 @@ export const RelativeDay = ({ date }: { date: Date }) => {
     }
   }, [date])
 
+  const formated = dayjs(date).format(formatTemplateString)
+  if (formated === dateString) {
+    return <>{dateString}</>
+  }
   return (
     <Tooltip>
-      <TooltipTrigger onFocusCapture={stopPropagation}>{dateString}</TooltipTrigger>
+      <TooltipTrigger onFocusCapture={stopPropagation}>
+        {dateString}
+      </TooltipTrigger>
       <TooltipPortal>
-        <TooltipContent>{dayjs(date).format("llll")}</TooltipContent>
+        <TooltipContent>{formated}</TooltipContent>
       </TooltipPortal>
     </Tooltip>
   )

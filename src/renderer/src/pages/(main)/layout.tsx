@@ -11,6 +11,7 @@ import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { HotKeyScopeMap } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
+import { useDailyTask } from "@renderer/hooks/biz/useDailyTask"
 import { preventDefault } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { EnvironmentIndicator } from "@renderer/modules/app/EnvironmentIndicator"
@@ -66,6 +67,8 @@ export function Component() {
   const user = useWhoami()
 
   const containerRef = useRef<HTMLDivElement>(null)
+
+  useDailyTask()
 
   return (
     <div
@@ -181,7 +184,6 @@ const FeedResponsiveResizerContainer = ({
         setDelayShowSplitter(true)
       }, 200)
     } else {
-      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
       setDelayShowSplitter(false)
     }
 

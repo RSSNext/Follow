@@ -5,6 +5,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
+import { MotionButtonBase } from "@renderer/components/ui/button"
 import { RelativeTime } from "@renderer/components/ui/datetime"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import {
@@ -16,6 +17,7 @@ import {
   TableRow,
 } from "@renderer/components/ui/table"
 import { cn } from "@renderer/lib/utils"
+import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
 import { Balance } from "@renderer/modules/wallet/balance"
 import { useWallet, useWalletTransactions } from "@renderer/queries/wallet"
@@ -53,13 +55,13 @@ export const TransactionsSection = () => {
               <TableHead className="text-center" size="sm">
                 Amount
               </TableHead>
-              <TableHead className="pl-5" size="sm">
+              <TableHead className="pl-8" size="sm">
                 From
               </TableHead>
-              <TableHead className="pl-5" size="sm">
+              <TableHead className="pl-8" size="sm">
                 To
               </TableHead>
-              <TableHead className="text-center" size="sm">
+              <TableHead className="pl-6" size="sm">
                 Date
               </TableHead>
             </TableRow>
@@ -76,14 +78,14 @@ export const TransactionsSection = () => {
                     amount={row.powerToken}
                   />
                 </TableCell>
-                <TableCell align="center" size="sm">
+                <TableCell align="left" className="px-3" size="sm">
                   <UserRenderer user={row.fromUser} />
                 </TableCell>
-                <TableCell align="center" size="sm">
+                <TableCell align="left" className="px-3" size="sm">
                   <UserRenderer user={row.toUser} />
                 </TableCell>
-                {/* <TableCell align="center" size="sm"><FeedRenderer feed={row.toFeed} /></TableCell> */}
-                <TableCell align="center" size="sm">
+
+                <TableCell align="left" size="sm" className="pl-6">
                   <RelativeTime date={row.createdAt} />
                 </TableCell>
               </TableRow>
@@ -151,8 +153,17 @@ const UserRenderer = ({
 
   const name = isMe ? "You" : user?.name || APP_NAME
 
+  const presentUserModal = usePresentUserProfileModal()
   return (
-    <div className="flex">
+    <MotionButtonBase
+      onClick={() => {
+        if (user?.id) presentUserModal(user.id)
+      }}
+      className={cn(
+        "flex items-center",
+        user?.id ? "cursor-pointer" : "cursor-default",
+      )}
+    >
       {name === APP_NAME ? (
         <Logo className="aspect-square size-4" />
       ) : (
@@ -165,6 +176,6 @@ const UserRenderer = ({
       <div className="ml-1">
         {isMe ? <span className="font-bold">You</span> : name}
       </div>
-    </div>
+    </MotionButtonBase>
   )
 }
