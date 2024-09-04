@@ -6,7 +6,7 @@ export const WithdrawButton = () => (
   <Tooltip>
     <TooltipTrigger>
       <Button
-        variant="primary"
+        variant="outline"
         disabled={true}
       >
         Withdraw

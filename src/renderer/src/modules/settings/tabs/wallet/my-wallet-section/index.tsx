@@ -39,17 +39,38 @@ export const MyWalletSection = () => {
     <div className="space-y-8">
       <div>
         <div className="text-sm">
-          <p>Power is an ERC-20 token on the <a className="underline" target="_blank" href="https://scan.rss3.io/token/0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8">VSL blockchain</a>.</p>
-          <p>You can claim 2 free Power daily, which can be used to tip RSS entries on Follow.</p>
+          <p>
+            Power is an ERC-20 token on the
+            <a
+              className="underline"
+              target="_blank"
+              href="https://scan.rss3.io/token/0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8"
+              rel="noreferrer noopener"
+            >
+              VSL blockchain
+            </a>
+            .
+          </p>
+          <p>
+            You can claim 2 free Power daily, which can be used to tip RSS
+            entries on Follow.
+          </p>
         </div>
-        <SettingSectionTitle title="Your Address" />
+        <SettingSectionTitle margin="compact" title="Your Address" />
         <div className="flex items-center gap-2 text-sm">
-          <a href={`https://scan.rss3.io/address/${myWallet.address}`} target="_blank" className="underline">
+          <a
+            href={`https://scan.rss3.io/address/${myWallet.address}`}
+            target="_blank"
+            className="underline"
+          >
             {myWallet.address}
           </a>
-          <CopyButton value={myWallet.address!} className="p-1 [&_i]:size-2.5" />
+          <CopyButton
+            value={myWallet.address!}
+            className="p-1 [&_i]:size-2.5"
+          />
         </div>
-        <SettingSectionTitle title="Your Balance" />
+        <SettingSectionTitle title="Your Balance" margin="compact" />
         <div className="mb-2 flex items-end justify-between">
           <Balance className="text-xl font-bold text-accent">
             {BigInt(myWallet.dailyPowerToken || 0n) +
