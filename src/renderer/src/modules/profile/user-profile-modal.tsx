@@ -35,7 +35,7 @@ import { FeedForm } from "../discover/feed-form"
 
 const itemVariantAtom = atomWithStorage(
   getStorageNS("item-variant"),
-  "loose",
+  "loose" as ItemVariant,
   undefined,
   {
     getOnInit: true,

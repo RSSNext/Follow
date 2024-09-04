@@ -103,7 +103,7 @@ const Viewport = React.forwardRef<
       ref={ref}
       className={cn(
         "block size-full",
-        shouldAddMask && styles["scroller"],
+        shouldAddMask && styles["mask-scroller"],
         className,
       )}
     />
