@@ -5,7 +5,11 @@ import { getUISettings } from "@renderer/atoms/settings/ui"
 import { isElectronBuild } from "@renderer/constants"
 import { browserDB } from "@renderer/database"
 import { getStorageNS } from "@renderer/lib/ns"
-import { ElectronCloseEvent, ElectronShowEvent } from "@renderer/providers/invalidate-query-provider"
+import { settingSyncQueue } from "@renderer/modules/settings/helper/sync-queue"
+import {
+  ElectronCloseEvent,
+  ElectronShowEvent,
+} from "@renderer/providers/invalidate-query-provider"
 import { CleanerService } from "@renderer/services/cleaner"
 import { registerGlobalContext } from "@shared/bridge"
 import dayjs from "dayjs"
@@ -28,7 +32,7 @@ import {
   setHydrated,
 } from "./hydrate"
 import { initPostHog } from "./posthog"
-import { pushAfterReadyCallback } from "./queue"
+import { waitAppReady } from "./queue"
 import { initSentry } from "./sentry"
 
 const cleanup = subscribeShouldUseIndexedDB((value) => {
@@ -67,30 +71,28 @@ export const initializeApp = async () => {
   if (lastVersion && lastVersion !== APP_VERSION) {
     appLog(`Upgrade from ${lastVersion} to ${APP_VERSION}`)
 
-    pushAfterReadyCallback(() => {
-      setTimeout(() => {
-        toast.success(
-          // `App is upgraded to ${APP_VERSION}, enjoy the new features! 🎉`,
-          createElement("div", {
-            children: [
-              "App is upgraded to ",
-              createElement(
-                "a",
-                {
-                  href: `${repository.url}/releases/tag/${APP_VERSION}`,
-                  target: "_blank",
-                  className: "underline",
-                },
-                createElement("strong", {
-                  children: APP_VERSION,
-                }),
-              ),
-              ", enjoy the new features! 🎉",
-            ],
-          }),
-        )
-      }, 1000)
-    })
+    waitAppReady(() => {
+      toast.success(
+        // `App is upgraded to ${APP_VERSION}, enjoy the new features! 🎉`,
+        createElement("div", {
+          children: [
+            "App is upgraded to ",
+            createElement(
+              "a",
+              {
+                href: `${repository.url}/releases/tag/${APP_VERSION}`,
+                target: "_blank",
+                className: "underline",
+              },
+              createElement("strong", {
+                children: APP_VERSION,
+              }),
+            ),
+            ", enjoy the new features! 🎉",
+          ],
+        }),
+      )
+    }, 1000)
   }
   localStorage.setItem(appVersionKey, APP_VERSION)
 
@@ -122,6 +124,10 @@ export const initializeApp = async () => {
   })
 
   hydrateSettings()
+
+  settingSyncQueue.subscribe()
+  // await settingSyncQueue.replaceRemote()
+
   // should after hydrateSettings
   const { dataPersist: enabledDataPersist, sendAnonymousData } =
     getGeneralSettings()

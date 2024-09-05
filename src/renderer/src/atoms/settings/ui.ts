@@ -44,3 +44,10 @@ export const {
   getSettings: getUISettings,
   useSettingValue: useUISettingValue,
 } = createSettingAtom("ui", createDefaultSettings)
+
+export const uiServerSyncWhiteListKeys: (keyof UISettings)[] = [
+  "uiFontFamily",
+  "readerFontFamily",
+  "opaqueSidebar",
+  "voice",
+]
