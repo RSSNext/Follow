@@ -40,7 +40,7 @@ export const CornerPlayer = () => {
       {show && entry && feed && (
         <m.div
           key="corner-player"
-          className="group relative z-10 !mb-0 w-full pr-px"
+          className="group relative z-10 !my-0 w-full pr-px"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}

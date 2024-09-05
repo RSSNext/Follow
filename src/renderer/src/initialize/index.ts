@@ -4,8 +4,11 @@ import { repository } from "@pkg"
 import { getUISettings } from "@renderer/atoms/settings/ui"
 import { isElectronBuild } from "@renderer/constants"
 import { browserDB } from "@renderer/database"
-import { getStorageNS } from "@renderer/lib/ns"
-import { ElectronCloseEvent, ElectronShowEvent } from "@renderer/providers/invalidate-query-provider"
+import { settingSyncQueue } from "@renderer/modules/settings/helper/sync-queue"
+import {
+  ElectronCloseEvent,
+  ElectronShowEvent,
+} from "@renderer/providers/invalidate-query-provider"
 import { CleanerService } from "@renderer/services/cleaner"
 import { registerGlobalContext } from "@shared/bridge"
 import dayjs from "dayjs"
@@ -13,7 +16,6 @@ import duration from "dayjs/plugin/duration"
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { enableMapSet } from "immer"
-import { createElement } from "react"
 import { toast } from "sonner"
 
 import { subscribeNetworkStatus } from "../atoms/network"
@@ -27,8 +29,8 @@ import {
   hydrateSettings,
   setHydrated,
 } from "./hydrate"
+import { doMigration } from "./migrates"
 import { initPostHog } from "./posthog"
-import { pushAfterReadyCallback } from "./queue"
 import { initSentry } from "./sentry"
 
 const cleanup = subscribeShouldUseIndexedDB((value) => {
@@ -48,8 +50,6 @@ declare global {
   }
 }
 
-const appVersionKey = getStorageNS("app_version")
-
 export const initializeApp = async () => {
   appLog(`${APP_NAME}: Next generation information browser`, repository.url)
   appLog(`Initialize ${APP_NAME}...`)
@@ -62,37 +62,7 @@ export const initializeApp = async () => {
     "electron" :
     "web"
 
-  const lastVersion = localStorage.getItem(appVersionKey)
-
-  if (lastVersion && lastVersion !== APP_VERSION) {
-    appLog(`Upgrade from ${lastVersion} to ${APP_VERSION}`)
-
-    pushAfterReadyCallback(() => {
-      setTimeout(() => {
-        toast.success(
-          // `App is upgraded to ${APP_VERSION}, enjoy the new features! 🎉`,
-          createElement("div", {
-            children: [
-              "App is upgraded to ",
-              createElement(
-                "a",
-                {
-                  href: `${repository.url}/releases/tag/${APP_VERSION}`,
-                  target: "_blank",
-                  className: "underline",
-                },
-                createElement("strong", {
-                  children: APP_VERSION,
-                }),
-              ),
-              ", enjoy the new features! 🎉",
-            ],
-          }),
-        )
-      }, 1000)
-    })
-  }
-  localStorage.setItem(appVersionKey, APP_VERSION)
+  doMigration()
 
   // Initialize dayjs
   dayjs.extend(duration)
@@ -122,6 +92,10 @@ export const initializeApp = async () => {
   })
 
   hydrateSettings()
+
+  settingSyncQueue.init()
+  settingSyncQueue.syncLocal()
+
   // should after hydrateSettings
   const { dataPersist: enabledDataPersist, sendAnonymousData } =
     getGeneralSettings()
