@@ -65,6 +65,9 @@ export const TransactionsSection = () => {
               <TableHead className="pl-6" size="sm">
                 Date
               </TableHead>
+              <TableHead className="pl-6" size="sm">
+                Tx
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -89,6 +92,9 @@ export const TransactionsSection = () => {
                 <TableCell align="left" size="sm" className="pl-6">
                   <RelativeTime date={row.createdAt} />
                 </TableCell>
+                <TableCell align="left" size="sm" className="pl-6">
+                  <a target="_blank" href={`https://scan.rss3.io/tx/${row.hash}`}>{row.hash.slice(0, 6)}...</a>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -111,11 +117,12 @@ const TypeRenderer = ({
   >[number]["type"]
 }) => (
   <div
-    className={cn("center rounded-full p-px text-xs uppercase", {
+    className={cn("center rounded-full px-1.5 py-px text-xs", {
       "bg-theme-accent-700 text-white": type === "tip",
       "bg-green-700 text-white": type === "mint",
       "bg-red-700 text-white": type === "burn",
       "bg-yellow-700 text-white": type === "withdraw",
+      "bg-blue-700 text-white": type === "purchase",
     })}
   >
     {type}
