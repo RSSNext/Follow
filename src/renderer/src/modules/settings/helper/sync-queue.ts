@@ -1,15 +1,18 @@
 import {
   generalServerSyncWhiteListKeys,
   getGeneralSettings,
+  setGeneralSetting,
 } from "@renderer/atoms/settings/general"
 import {
   getUISettings,
+  setUISetting,
   uiServerSyncWhiteListKeys,
 } from "@renderer/atoms/settings/ui"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { EventBus } from "@renderer/lib/event-bus"
 import { getStorageNS } from "@renderer/lib/ns"
 import { sleep } from "@renderer/lib/utils"
+import { settings } from "@renderer/queries/settings"
 import type { GeneralSettings, UISettings } from "@shared/interface/settings"
 import { omit } from "lodash-es"
 
@@ -26,6 +29,10 @@ const localSettingGetterMap = {
     omit(getGeneralSettings(), generalServerSyncWhiteListKeys, omitKeys),
 }
 
+const localsettingSetterMap = {
+  appearance: setUISetting,
+  general: setGeneralSetting,
+}
 const settingWhiteListMap = {
   appearance: uiServerSyncWhiteListKeys,
   general: generalServerSyncWhiteListKeys,
@@ -197,7 +204,6 @@ class SettingSyncQueue {
         promises.push(promise)
       }
 
-      // Lock
       this.chain = this.chain.finally(() => Promise.all(promises))
       return this.chain
     } else {
@@ -216,7 +222,41 @@ class SettingSyncQueue {
     }
   }
 
-  syncLocal() {}
+  async syncLocal() {
+    const remoteSettings = await settings.get().refetch()
+    if (!remoteSettings) return
+
+    if (Object.keys(remoteSettings.settings).length === 0) return
+
+    for (const tab in remoteSettings.settings) {
+      const remoteSettingPayload = remoteSettings.settings[tab]
+      const updated = remoteSettings.updated[tab]
+
+      if (!updated) {
+        continue
+      }
+
+      const remoteUpdatedDate = new Date(updated).getTime()
+
+      const localSettings = localSettingGetterMap[tab]()
+      const localSettingsUpdated = localSettings.updated
+
+      if (remoteUpdatedDate > localSettingsUpdated) {
+        // Use remote and update local
+        const nextPayload = omit(
+          remoteSettingPayload,
+          omitKeys,
+          settingWhiteListMap[tab],
+        )
+        if (Object.keys(nextPayload).length === 0) {
+          continue
+        }
+
+        const setter = localsettingSetterMap[tab]
+        setter(nextPayload)
+      }
+    }
+  }
 }
 
 export const settingSyncQueue = new SettingSyncQueue()
