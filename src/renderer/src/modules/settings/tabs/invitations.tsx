@@ -35,20 +35,8 @@ import { SettingsTitle } from "../title"
 export const SettingInvitations = () => {
   const invitations = useAuthQuery(Queries.invitations.list())
 
-  const newInvitation = useMutation({
-    mutationKey: ["newInvitation"],
-    mutationFn: () => apiClient.invitations.new.$post(),
-    async onError(err) {
-      toast.error(getFetchErrorMessage(err))
-    },
-    onSuccess(data) {
-      Queries.invitations.list().invalidate()
-      toast("🎉 New invitation generated, invite code is copied")
-      navigator.clipboard.writeText(data.data)
-    },
-  })
-  const presentUserProfile = usePresentUserProfileModal("drawer")
   const { present } = useModalStack()
+  const presentUserProfile = usePresentUserProfileModal("drawer")
 
   return (
     <>
@@ -69,24 +57,7 @@ export const SettingInvitations = () => {
           onClick={() => {
             present({
               title: "Confirm",
-              content: ({ dismiss }) => (
-                <>
-                  <div className="flex items-center">
-                    <span>Generating an invitation code will cost you 10 </span><i className="i-mgc-power mx-1 text-base" /><span>Power. Do you want to continue?</span>
-                  </div>
-                  <div className="mt-4 flex items-center justify-end gap-3">
-                    <Button variant="outline" onClick={dismiss}>
-                      Cancel
-                    </Button>
-                    <Button
-                      isLoading={newInvitation.isPending}
-                      onClick={() => newInvitation.mutateAsync().then(() => dismiss())}
-                    >
-                      Continue
-                    </Button>
-                  </div>
-                </>
-              ),
+              content: ({ dismiss }) => <ConfirmModalContent dismiss={dismiss} />,
             })
           }}
         >
@@ -173,21 +144,50 @@ export const SettingInvitations = () => {
                 (
                   <div className="mt-36 w-full text-center text-sm text-zinc-400">
                     <p>No invitations</p>
-
-                    <div className="mt-6">
-                      <Button
-                        onClick={() => {
-                          newInvitation.mutate()
-                        }}
-                      >
-                        Create Invitation
-                      </Button>
-                    </div>
                   </div>
                 )}
           </ScrollArea.ScrollArea>
         </div>
       </section>
+    </>
+  )
+}
+
+const ConfirmModalContent = ({
+  dismiss,
+}: {
+  dismiss: () => void
+}) => {
+  const newInvitation = useMutation({
+    mutationKey: ["newInvitation"],
+    mutationFn: () => apiClient.invitations.new.$post(),
+    async onError(err) {
+      toast.error(getFetchErrorMessage(err))
+    },
+    onSuccess(data) {
+      Queries.invitations.list().invalidate()
+      toast("🎉 New invitation generated, invite code is copied")
+      navigator.clipboard.writeText(data.data)
+      dismiss()
+    },
+  })
+
+  return (
+    <>
+      <div className="flex items-center">
+        <span>Generating an invitation code will cost you 10 </span><i className="i-mgc-power mx-1 text-base" /><span>Power. Do you want to continue?</span>
+      </div>
+      <div className="mt-4 flex items-center justify-end gap-3">
+        <Button variant="outline" onClick={dismiss}>
+          Cancel
+        </Button>
+        <Button
+          isLoading={newInvitation.isPending}
+          onClick={() => newInvitation.mutate()}
+        >
+          Continue
+        </Button>
+      </div>
     </>
   )
 }
