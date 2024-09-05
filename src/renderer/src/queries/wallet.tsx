@@ -119,7 +119,7 @@ export const useWalletTipMutation = () =>
       wallet.transactions.get().invalidate()
       window.posthog?.capture("tip_sent", {
         amount: variables.amount,
-        feedId: variables.feedId,
+        entryId: variables.entryId,
       })
       toast("🎉 Tipped.")
     },
