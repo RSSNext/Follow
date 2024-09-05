@@ -40,13 +40,14 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
     as: A
 
     accessory?: React.ReactNode
+    noMedia?: boolean
   } & JSX.IntrinsicElements[A] &
   Partial<{
     renderInlineStyle: boolean
   }>,
 ) => {
-  const { children, renderInlineStyle, as = "div", accessory, ...rest } = props
-  const [remarkOptions, setRemarkOptions] = useState({ renderInlineStyle })
+  const { children, renderInlineStyle, as = "div", accessory, noMedia, ...rest } = props
+  const [remarkOptions, setRemarkOptions] = useState({ renderInlineStyle, noMedia })
   const [shouldForceReMountKey, setShouldForceReMountKey] = useState(0)
 
   useEffect(() => {
@@ -54,9 +55,9 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
       if (renderInlineStyle === options.renderInlineStyle) return options
 
       setShouldForceReMountKey((key) => key + 1)
-      return { ...options, renderInlineStyle }
+      return { ...options, renderInlineStyle, noMedia }
     })
-  }, [renderInlineStyle])
+  }, [renderInlineStyle, noMedia])
 
   const [refElement, setRefElement] = useState<HTMLElement | null>(null)
 

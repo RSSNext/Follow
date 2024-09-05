@@ -1,4 +1,5 @@
 import * as HoverCard from "@radix-ui/react-hover-card"
+import { HTML } from "@renderer/components/ui/markdown"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { tooltipStyle } from "@renderer/components/ui/tooltip/styles"
 import { useMeasure } from "@renderer/hooks/common"
@@ -11,7 +12,8 @@ export const EntryTranslation: Component<{
   side?: "top" | "bottom"
 
   useOverlay?: boolean
-}> = ({ source, target, className, side, useOverlay }) => {
+  isHTML?: boolean
+}> = ({ source, target, className, side, useOverlay, isHTML }) => {
   let nextTarget = target
   if (source === target) {
     nextTarget = undefined
@@ -20,13 +22,31 @@ export const EntryTranslation: Component<{
   const [ref, bounds] = useMeasure({ debounce: 60 })
 
   if (!nextTarget && source) {
-    return <div className={className}>{source}</div>
+    return isHTML ?
+        (
+          <HTML
+            as="div"
+            className={cn("prose dark:prose-invert", className)}
+            noMedia
+          >
+            {source}
+          </HTML>
+        ) :
+        <div className={className}>{source}</div>
   }
   return (
     <HoverCard.Root>
       <HoverCard.Trigger className={className} ref={ref}>
         <i className="i-mgc-translate-2-cute-re mr-1 align-middle" />
-        <span className="align-middle">{nextTarget}</span>
+        {isHTML ? (
+          <HTML
+            as="span"
+            className="align-middle"
+            noMedia
+          >
+            {nextTarget}
+          </HTML>
+        ) : <span className="align-middle">{nextTarget}</span>}
       </HoverCard.Trigger>
       <HoverCard.Portal>
         <HoverCard.Content
@@ -49,11 +69,29 @@ export const EntryTranslation: Component<{
                 )}
                 viewportClassName="max-h-[12ch]"
               >
-                <span className="align-middle">{source}</span>
+                {isHTML ? (
+                  <HTML
+                    as="span"
+                    className="align-middle"
+                    noMedia
+                  >
+                    {source}
+                  </HTML>
+                ) : <span className="align-middle">{source}</span>}
               </ScrollArea.ScrollArea>
             </div>
           ) : (
-            <span className={cn(tooltipStyle.content)}>{source}</span>
+            isHTML ?
+                (
+                  <HTML
+                    as="span"
+                    className={cn(tooltipStyle.content)}
+                    noMedia
+                  >
+                    {source}
+                  </HTML>
+                ) :
+                <span className={cn(tooltipStyle.content)}>{source}</span>
           )}
         </HoverCard.Content>
       </HoverCard.Portal>

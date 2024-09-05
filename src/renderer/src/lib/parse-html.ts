@@ -27,26 +27,32 @@ export const parseHtml = (
   content: string,
   options?: Partial<{
     renderInlineStyle: boolean
+    noMedia?: boolean
   }>,
 ) => {
   const file = new VFile(content)
-  const { renderInlineStyle = false } = options || {}
+  const { renderInlineStyle = false, noMedia = false } = options || {}
 
   const pipeline = unified()
     .use(rehypeParse, { fragment: true })
-    .use(rehypeSanitize, {
-      ...defaultSchema,
-      tagNames: [...defaultSchema.tagNames!, "video", "style"],
-      attributes: {
-        ...defaultSchema.attributes,
+    .use(rehypeSanitize, noMedia ?
+        {
+          ...defaultSchema,
+          tagNames: defaultSchema.tagNames?.filter((tag) => tag !== "img" && tag !== "picture"),
+        } :
+        {
+          ...defaultSchema,
+          tagNames: [...defaultSchema.tagNames!, "video", "style"],
+          attributes: {
+            ...defaultSchema.attributes,
 
-        "*": renderInlineStyle ?
-            [...defaultSchema.attributes!["*"], "style", "class"] :
-          defaultSchema.attributes!["*"],
+            "*": renderInlineStyle ?
+                [...defaultSchema.attributes!["*"], "style", "class"] :
+              defaultSchema.attributes!["*"],
 
-        "video": ["src", "poster"],
-      },
-    })
+            "video": ["src", "poster"],
+          },
+        })
 
     .use(rehypeInferDescriptionMeta)
     .use(rehypeStringify)

@@ -26,12 +26,16 @@ export function getEntriesParams({
   const params: {
     feedId?: string
     feedIdList?: string[]
-    collected?: boolean
+    isCollection?: boolean
+    withContent?: boolean
   } = {}
   if (id === FEED_COLLECTION_LIST) {
-    params.collected = true
+    params.isCollection = true
   } else if (id && id !== ROUTE_FEED_PENDING) {
     params.feedIdList = `${id}`.split(",")
+  }
+  if (view === FeedViewType.SocialMedia) {
+    params.withContent = true
   }
   return {
     view,

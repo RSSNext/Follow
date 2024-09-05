@@ -10,6 +10,7 @@ export type UniversalItemProps = {
   translation?: {
     title?: string
     description?: string
+    content?: string
   } | null
 }
 

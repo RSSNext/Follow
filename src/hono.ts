@@ -2752,6 +2752,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 data?: {
                     description?: string | undefined;
                     title?: string | undefined;
+                    content?: string | undefined;
                 } | undefined;
             };
             outputFormat: "json" | "text";
@@ -3304,6 +3305,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     collected?: boolean | undefined;
                     isCollection?: boolean | undefined;
                     isArchived?: boolean | undefined;
+                    withContent?: boolean | undefined;
                 };
             };
             output: {
