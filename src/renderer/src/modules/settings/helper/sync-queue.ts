@@ -9,6 +9,7 @@ import {
 import { apiClient } from "@renderer/lib/api-fetch"
 import { EventBus } from "@renderer/lib/event-bus"
 import { getStorageNS } from "@renderer/lib/ns"
+import { sleep } from "@renderer/lib/utils"
 import type { GeneralSettings, UISettings } from "@shared/interface/settings"
 import { omit } from "lodash-es"
 
@@ -65,7 +66,8 @@ class SettingSyncQueue {
       if (Object.keys(nextPayload).length === 0) return
       this.enqueue(tab, nextPayload)
     })
-    const onlineHandler = () => this.flush
+    const onlineHandler = () =>
+      (this.chain = this.chain.finally(() => this.flush()))
 
     window.addEventListener("online", onlineHandler)
     const d2 = () => window.removeEventListener("online", onlineHandler)
@@ -106,6 +108,8 @@ class SettingSyncQueue {
     }
   }
 
+  private chain = Promise.resolve()
+
   private threshold = 1000
   private enqueueTime = Date.now()
 
@@ -120,9 +124,10 @@ class SettingSyncQueue {
       date: now,
     })
 
-    // TODO maybe need a lock
     if (now - this.enqueueTime > this.threshold) {
-      await this.flush()
+      this.chain = this.chain
+        .then(() => sleep(this.threshold))
+        .finally(() => this.flush())
       this.enqueueTime = Date.now()
     }
   }
@@ -193,16 +198,21 @@ class SettingSyncQueue {
       }
 
       // Lock
-      return Promise.all(promises)
+      this.chain = this.chain.finally(() => Promise.all(promises))
+      return this.chain
     } else {
       const payload = localSettingGetterMap[tab]()
 
-      return apiClient.settings[":tab"].$patch({
-        param: {
-          tab,
-        },
-        json: payload,
-      })
+      this.chain = this.chain.finally(() =>
+        apiClient.settings[":tab"].$patch({
+          param: {
+            tab,
+          },
+          json: payload,
+        }),
+      )
+
+      return this.chain
     }
   }
 

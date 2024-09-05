@@ -143,7 +143,7 @@ export function formatXml(xml: string, indent = 4) {
 }
 
 export const sleep = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms))
+  new Promise<void>((resolve) => setTimeout(resolve, ms))
 
 export const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)
