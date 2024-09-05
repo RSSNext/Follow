@@ -2297,6 +2297,22 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        toEntryId: drizzle_orm_pg_core.PgColumn<{
+            name: "to_entry_id";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
         powerToken: drizzle_orm_pg_core.PgColumn<{
             name: "power_token";
             tableName: "transactions";
@@ -2354,6 +2370,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     fromUserId: zod.ZodNullable<zod.ZodString>;
     toUserId: zod.ZodNullable<zod.ZodString>;
     toFeedId: zod.ZodNullable<zod.ZodString>;
+    toEntryId: zod.ZodNullable<zod.ZodString>;
     powerToken: zod.ZodString;
     createdAt: zod.ZodString;
     comment: zod.ZodNullable<zod.ZodString>;
@@ -2364,6 +2381,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     fromUserId: string | null;
     toUserId: string | null;
     toFeedId: string | null;
+    toEntryId: string | null;
     powerToken: string;
     comment: string | null;
 }, {
@@ -2373,6 +2391,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     fromUserId: string | null;
     toUserId: string | null;
     toFeedId: string | null;
+    toEntryId: string | null;
     powerToken: string;
     comment: string | null;
 }>;
@@ -2535,9 +2554,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $post: {
             input: {
                 json: {
-                    amount: string;
-                    userId?: string | undefined;
-                    feedId?: string | undefined;
+                    entryId: string;
+                    amount: "1000000000000000000" | "2000000000000000000";
                 };
             };
             output: {
@@ -2572,6 +2590,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     fromUserId: string | null;
                     toUserId: string | null;
                     toFeedId: string | null;
+                    toEntryId: string | null;
                     powerToken: string;
                     comment: string | null;
                     fromUser: {

@@ -10,9 +10,8 @@ import { nextFrame } from "@renderer/lib/dom"
 import {
   useWallet,
   useWalletTipMutation,
-  useWalletTransactions,
 } from "@renderer/queries/wallet"
-import { from, toNumber } from "dnum"
+import { from } from "dnum"
 import type { FC } from "react"
 import { useState } from "react"
 
@@ -36,7 +35,8 @@ const Loading = () => (
 
 export const TipModalContent: FC<{
   userId?: string
-  feedId?: string
+  feedId: string
+  entryId: string
 }> = (props) => {
   const myWallet = useMyWallet()
 
@@ -47,31 +47,19 @@ export const TipModalContent: FC<{
 }
 const TipModalContent_: FC<{
   userId?: string
-  feedId?: string
-}> = ({ userId, feedId }) => {
+  feedId: string
+  entryId: string
+}> = ({ userId, feedId, entryId }) => {
   const myWallet = useMyWallet()
   const myWalletData = myWallet.data?.[0]
 
   const dPowerBigInt = BigInt(myWalletData?.dailyPowerToken ?? 0)
   const cPowerBigInt = BigInt(myWalletData?.cashablePowerToken ?? 0)
   const balanceBigInt = cPowerBigInt + dPowerBigInt
-  const balanceNumber = toNumber(from(balanceBigInt, 18), {
-    digits: 2,
-    trailingZeros: true,
-  })
-
-  const transactionsQuery = useWalletTransactions({
-    toUserId: userId,
-    toFeedId: feedId,
-  })
 
   const tipMutation = useWalletTipMutation()
 
-  const [amount, setAmount] = useState(
-    DEFAULT_RECOMMENDED_TIP > balanceNumber ?
-      balanceNumber :
-      DEFAULT_RECOMMENDED_TIP,
-  )
+  const [amount, setAmount] = useState<1 | 2>(DEFAULT_RECOMMENDED_TIP)
 
   const amountBigInt = from(amount, 18)[0]
 
@@ -86,7 +74,7 @@ const TipModalContent_: FC<{
     feedId,
   })
 
-  if (transactionsQuery.isPending || myWallet.isPending) {
+  if (myWallet.isPending) {
     return <Loading />
   }
 
@@ -176,7 +164,7 @@ const TipModalContent_: FC<{
 
         <RadioGroup
           value={amount.toString()}
-          onValueChange={(value) => setAmount(Number(value))}
+          onValueChange={(value) => setAmount(Number(value) as 1 | 2)}
         >
           <div className="grid grid-cols-2 gap-2">
             <RadioCard
@@ -213,9 +201,8 @@ const TipModalContent_: FC<{
           onClick={() => {
             if (tipMutation.isPending) return
             tipMutation.mutate({
-              userId,
-              feedId,
-              amount: amountBigInt.toString(),
+              entryId,
+              amount: amountBigInt.toString() as "1000000000000000000" | "2000000000000000000",
             })
           }}
           variant={tipMutation.isSuccess ? "outline" : "primary"}

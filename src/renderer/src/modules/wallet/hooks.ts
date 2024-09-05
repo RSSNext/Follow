@@ -7,22 +7,24 @@ import { TipModalContent } from "./tip-modal"
 export const useTipModal = ({
   userId,
   feedId,
+  entryId,
 }: {
   userId?: string
   feedId?: string
+  entryId?: string
 }) => {
   const { present } = useModalStack()
 
   return useCallback(() => {
-    if (!userId && !feedId) {
+    if (!feedId || !entryId) {
       // this should not happen unless there is a bug in the code
-      toast.error("Invalid user id or feed id")
+      toast.error("Invalid feed id or entry id")
       return
     }
     window.posthog?.capture("tip_modal_opened", { feedId })
     present({
       title: "Tip Power",
-      content: () => createElement(TipModalContent, { userId, feedId }),
+      content: () => createElement(TipModalContent, { userId, feedId, entryId }),
     })
-  }, [present, userId, feedId])
+  }, [present, userId, feedId, entryId])
 }
