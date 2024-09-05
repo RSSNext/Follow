@@ -18,7 +18,7 @@ import { getOS } from "@renderer/lib/utils"
 import { bundledThemes } from "shiki/themes"
 
 import { SettingTabbedSegment } from "../control"
-import { ContentFontSelector, UIFontSelector } from "../modules/fonts"
+import { ContentFontSelector, UIFontSelector } from "../sections/fonts"
 import { createSettingBuilder } from "../setting-builder"
 import { SettingsTitle } from "../title"
 

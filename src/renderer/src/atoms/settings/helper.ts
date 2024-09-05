@@ -1,4 +1,5 @@
 import { useRefValue } from "@renderer/hooks/common"
+import { EventBus } from "@renderer/lib/event-bus"
 import { createAtomHooks } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
 import type { SettingItem } from "@renderer/modules/settings/setting-builder"
@@ -6,6 +7,16 @@ import { createSettingBuilder } from "@renderer/modules/settings/setting-builder
 import { useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
+
+declare module "@renderer/lib/event-bus" {
+  interface CustomEvent {
+    SETTING_CHANGE_EVENT: {
+      updated: number
+      payload: Record<string, any>
+      key: string
+    }
+  }
+}
 
 export const createSettingAtom = <T extends object>(
   settingKey: string,
@@ -19,6 +30,7 @@ export const createSettingAtom = <T extends object>(
       getOnInit: true,
     },
   )
+
   const [, , useSettingValue, , getSettings, setSettings] =
     createAtomHooks(atom)
 
@@ -53,9 +65,18 @@ export const createSettingAtom = <T extends object>(
     key: K,
     value: ReturnType<typeof getSettings>[K],
   ) => {
+    const updated = Date.now()
     setSettings({
       ...getSettings(),
       [key]: value,
+
+      updated,
+    })
+
+    EventBus.dispatch("SETTING_CHANGE_EVENT", {
+      payload: { [key]: value },
+      updated,
+      key: settingKey,
     })
   }
 
@@ -104,8 +125,10 @@ export const createDefineSettingItem =
         description?: string | JSX.Element
         onChange?: (value: T[K]) => void
         hide?: boolean
-
-      } & Omit<SettingItem<any>, "onChange" | "description" | "label" | "hide" | "key">,
+      } & Omit<
+      SettingItem<any>,
+      "onChange" | "description" | "label" | "hide" | "key"
+    >,
     ): any => {
     const { label, description, onChange, hide, ...rest } = options
 

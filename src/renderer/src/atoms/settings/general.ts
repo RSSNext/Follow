@@ -40,3 +40,9 @@ export const subscribeShouldUseIndexedDB = (
 ) =>
   jotaiStore.sub(__generalSettingAtom, () =>
     callback(getGeneralSettings().dataPersist))
+
+export const generalServerSyncWhiteListKeys: (keyof GeneralSettings)[] = [
+  "appLaunchOnStartup",
+  "dataPersist",
+  "sendAnonymousData",
+]

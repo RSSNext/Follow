@@ -82,11 +82,11 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         value: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         value: string;
-        field: "title" | "view" | "site_url" | "category" | "feed_url";
+        field: "title" | "view" | "site_url" | "feed_url" | "category";
         operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
     }, {
         value: string;
-        field: "title" | "view" | "site_url" | "category" | "feed_url";
+        field: "title" | "view" | "site_url" | "feed_url" | "category";
         operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
     }>, "many">;
     result: z.ZodObject<{
@@ -108,11 +108,11 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
             value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
         }, "strip", z.ZodTypeAny, {
             value: string | number;
-            field: "title" | "content" | "url" | "all" | "author" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }, {
             value: string | number;
-            field: "title" | "content" | "url" | "all" | "author" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
@@ -124,7 +124,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "url" | "all" | "author" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
     }, {
@@ -136,7 +136,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "url" | "all" | "author" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
     }>;
@@ -144,7 +144,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
     name: string;
     condition: {
         value: string;
-        field: "title" | "view" | "site_url" | "category" | "feed_url";
+        field: "title" | "view" | "site_url" | "feed_url" | "category";
         operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
     }[];
     result: {
@@ -156,7 +156,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "url" | "all" | "author" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
     };
@@ -164,7 +164,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
     name: string;
     condition: {
         value: string;
-        field: "title" | "view" | "site_url" | "category" | "feed_url";
+        field: "title" | "view" | "site_url" | "feed_url" | "category";
         operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
     }[];
     result: {
@@ -176,7 +176,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "url" | "all" | "author" | "order";
+            field: "title" | "content" | "all" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
     };
@@ -197,11 +197,11 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             value: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             value: string;
-            field: "title" | "view" | "site_url" | "category" | "feed_url";
+            field: "title" | "view" | "site_url" | "feed_url" | "category";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }, {
             value: string;
-            field: "title" | "view" | "site_url" | "category" | "feed_url";
+            field: "title" | "view" | "site_url" | "feed_url" | "category";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }>, "many">;
         result: z.ZodObject<{
@@ -223,11 +223,11 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
             }, "strip", z.ZodTypeAny, {
                 value: string | number;
-                field: "title" | "content" | "url" | "all" | "author" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }, {
                 value: string | number;
-                field: "title" | "content" | "url" | "all" | "author" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }>, "many">>;
         }, "strip", z.ZodTypeAny, {
@@ -239,7 +239,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "url" | "all" | "author" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         }, {
@@ -251,7 +251,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "url" | "all" | "author" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         }>;
@@ -259,7 +259,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         name: string;
         condition: {
             value: string;
-            field: "title" | "view" | "site_url" | "category" | "feed_url";
+            field: "title" | "view" | "site_url" | "feed_url" | "category";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[];
         result: {
@@ -271,7 +271,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "url" | "all" | "author" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         };
@@ -279,7 +279,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         name: string;
         condition: {
             value: string;
-            field: "title" | "view" | "site_url" | "category" | "feed_url";
+            field: "title" | "view" | "site_url" | "feed_url" | "category";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[];
         result: {
@@ -291,7 +291,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "url" | "all" | "author" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         };
@@ -302,7 +302,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         name: string;
         condition: {
             value: string;
-            field: "title" | "view" | "site_url" | "category" | "feed_url";
+            field: "title" | "view" | "site_url" | "feed_url" | "category";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[];
         result: {
@@ -314,7 +314,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "url" | "all" | "author" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         };
@@ -325,7 +325,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         name: string;
         condition: {
             value: string;
-            field: "title" | "view" | "site_url" | "category" | "feed_url";
+            field: "title" | "view" | "site_url" | "feed_url" | "category";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[];
         result: {
@@ -337,7 +337,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "url" | "all" | "author" | "order";
+                field: "title" | "content" | "all" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         };
@@ -443,15 +443,15 @@ declare const collectionsOpenAPISchema: zod.ZodObject<{
     createdAt: zod.ZodString;
     view: zod.ZodNumber;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    view: number;
-    userId: string;
     createdAt: string;
+    userId: string;
+    view: number;
     feedId: string;
     entryId: string;
 }, {
-    view: number;
-    userId: string;
     createdAt: string;
+    userId: string;
+    view: number;
     feedId: string;
     entryId: string;
 }>;
@@ -805,10 +805,10 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     title: string | null;
     content: string | null;
     id: string;
+    author: string | null;
     url: string | null;
     feedId: string;
     guid: string;
-    author: string | null;
     authorUrl: string | null;
     authorAvatar: string | null;
     insertedAt: string;
@@ -833,10 +833,10 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     title: string | null;
     content: string | null;
     id: string;
+    author: string | null;
     url: string | null;
     feedId: string;
     guid: string;
-    author: string | null;
     authorUrl: string | null;
     authorAvatar: string | null;
     insertedAt: string;
@@ -1354,6 +1354,110 @@ declare const invitationsRelations: drizzle_orm.Relations<"invitations", {
     users: drizzle_orm.One<"user", false>;
 }>;
 
+declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "settings";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "settings";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "settings";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        tab: drizzle_orm_pg_core.PgColumn<{
+            name: "tab";
+            tableName: "settings";
+            dataType: "string";
+            columnType: "PgText";
+            data: "general" | "appearance" | "integration";
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: ["general", "appearance", "integration"];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        payload: drizzle_orm_pg_core.PgColumn<{
+            name: "payload";
+            tableName: "settings";
+            dataType: "json";
+            columnType: "PgJsonb";
+            data: Record<string, any>;
+            driverParam: unknown;
+            notNull: false;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        updateAt: drizzle_orm_pg_core.PgColumn<{
+            name: "update_at";
+            tableName: "settings";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        version: drizzle_orm_pg_core.PgColumn<{
+            name: "version";
+            tableName: "settings";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+
 declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "subscriptions";
     schema: undefined;
@@ -1466,17 +1570,17 @@ declare const subscriptionsOpenAPISchema: zod.ZodObject<{
     isPrivate: zod.ZodBoolean;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     title: string | null;
-    view: number;
     userId: string;
-    feedId: string;
+    view: number;
     category: string | null;
+    feedId: string;
     isPrivate: boolean;
 }, {
     title: string | null;
-    view: number;
     userId: string;
-    feedId: string;
+    view: number;
     category: string | null;
+    feedId: string;
     isPrivate: boolean;
 }>;
 declare const subscriptionsRelations: drizzle_orm.Relations<"subscriptions", {
@@ -1612,21 +1716,21 @@ declare const timelineOpenAPISchema: zod.ZodObject<{
     view: zod.ZodNumber;
     read: zod.ZodNullable<zod.ZodBoolean>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    view: number;
     userId: string;
+    view: number;
     feedId: string;
-    read: boolean | null;
     insertedAt: string;
     publishedAt: string;
     entryId: string;
+    read: boolean | null;
 }, {
-    view: number;
     userId: string;
+    view: number;
     feedId: string;
-    read: boolean | null;
     insertedAt: string;
     publishedAt: string;
     entryId: string;
+    read: boolean | null;
 }>;
 declare const timelineRelations: drizzle_orm.Relations<"timeline", {
     entries: drizzle_orm.One<"entries", true>;
@@ -2193,15 +2297,15 @@ declare const walletsOpenAPISchema: zod.ZodObject<{
     dailyPowerToken: zod.ZodString;
     cashablePowerToken: zod.ZodString;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    userId: string;
     createdAt: string;
+    userId: string;
     address: string | null;
     addressIndex: number;
     dailyPowerToken: string;
     cashablePowerToken: string;
 }, {
-    userId: string;
     createdAt: string;
+    userId: string;
     address: string | null;
     addressIndex: number;
     dailyPowerToken: string;
@@ -2377,9 +2481,9 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
     createdAt: string;
-    hash: string;
     fromUserId: string | null;
     toUserId: string | null;
+    hash: string;
     toFeedId: string | null;
     toEntryId: string | null;
     powerToken: string;
@@ -2387,9 +2491,9 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
 }, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
     createdAt: string;
-    hash: string;
     fromUserId: string | null;
     toUserId: string | null;
+    hash: string;
     toFeedId: string | null;
     toEntryId: string | null;
     powerToken: string;
@@ -2456,100 +2560,6 @@ declare const feedPowerTokensRelations: drizzle_orm.Relations<"feedPowerTokens",
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
-    "/metrics": {
-        $get: {
-            input: {
-                query: {
-                    type?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    data: number[];
-                    count: number;
-                    meta: {
-                        count: number;
-                        prevTS: number;
-                        prevCount: number;
-                    };
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/profiles": {
-        $get: {
-            input: {
-                query: {
-                    id: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    name: string | null;
-                    id: string;
-                    email: string;
-                    emailVerified: string | null;
-                    image: string | null;
-                    handle: string | null;
-                    createdAt: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/invitations/new": {
-        $post: {
-            input: {};
-            output: {
-                code: 0;
-                data: string;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/invitations/use": {
-        $post: {
-            input: {
-                json: {
-                    code: string;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/invitations": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    code: string;
-                    createdAt: string | null;
-                    users: {
-                        name: string | null;
-                        id: string;
-                        image: string | null;
-                    } | null;
-                    toUserId: string | null;
-                }[];
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
     "/wallets/transactions/tip": {
         $post: {
             input: {
@@ -2573,10 +2583,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 query: {
                     type?: string | string[] | undefined;
-                    hash?: string | string[] | undefined;
-                    fromOrToUserId?: string | string[] | undefined;
                     fromUserId?: string | string[] | undefined;
                     toUserId?: string | string[] | undefined;
+                    hash?: string | string[] | undefined;
+                    fromOrToUserId?: string | string[] | undefined;
                     toFeedId?: string | string[] | undefined;
                     createdAfter?: string | string[] | undefined;
                 };
@@ -2586,9 +2596,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 data: {
                     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
                     createdAt: string;
-                    hash: string;
                     fromUserId: string | null;
                     toUserId: string | null;
+                    hash: string;
                     toFeedId: string | null;
                     toEntryId: string | null;
                     powerToken: string;
@@ -2716,8 +2726,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
-                    userId: string;
                     createdAt: string;
+                    userId: string;
                     address: string | null;
                     addressIndex: number;
                     dailyPowerToken: string;
@@ -2738,118 +2748,134 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
-    "/ai/translation": {
+    "/subscriptions": {
         $get: {
             input: {
                 query: {
-                    id: string | string[];
-                    language: string | string[];
-                    fields: string | string[];
+                    userId?: string | string[] | undefined;
+                    view?: string | string[] | undefined;
                 };
             };
             output: {
                 code: 0;
-                data?: {
-                    description?: string | undefined;
-                    title?: string | undefined;
-                    content?: string | undefined;
-                } | undefined;
+                data: {
+                    title: string | null;
+                    userId: string;
+                    view: number;
+                    category: string | null;
+                    feedId: string;
+                    feeds: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        image: string | null;
+                        url: string;
+                        siteUrl: string | null;
+                        checkedAt: string;
+                        lastModifiedHeader: string | null;
+                        etagHeader: string | null;
+                        ttl: number | null;
+                        errorMessage: string | null;
+                        errorAt: string | null;
+                        ownerUserId: string | null;
+                    };
+                    isPrivate: boolean;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $post: {
+            input: {
+                json: {
+                    view: number;
+                    url: string;
+                    category?: string | null | undefined;
+                    isPrivate?: boolean | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $delete: {
+            input: {
+                json: {
+                    url?: string | undefined;
+                    feedId?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $patch: {
+            input: {
+                json: {
+                    view: number;
+                    feedId: string;
+                    category?: string | null | undefined;
+                    isPrivate?: boolean | undefined;
+                };
+            };
+            output: {
+                code: 0;
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
-    "/ai/summary": {
+    "/subscriptions/export": {
         $get: {
-            input: {
-                query: {
-                    id: string | string[];
-                    language?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data?: string | undefined;
-            };
-            outputFormat: "json" | "text";
+            input: {};
+            output: {};
+            outputFormat: string;
             status: 200;
         };
     };
-    "/ai/daily": {
-        $get: {
-            input: {
-                query: {
-                    view: string | string[];
-                    startDate: string | string[];
-                };
-            };
+    "/subscriptions/import": {
+        $post: {
+            input: {};
             output: {
                 code: 0;
-                data: string;
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
 } & {
-    "/actions": {
+    "/settings": {
         $get: {
-            input: {};
+            input: {
+                query: {
+                    tab?: string | string[] | undefined;
+                };
+            };
             output: {
                 code: 0;
-                data?: {
-                    userId: string;
-                    rules?: {
-                        name: string;
-                        condition: {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "category" | "feed_url";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[];
-                        result: {
-                            summary?: boolean | undefined;
-                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
-                            rewriteRules?: {
-                                from: string;
-                                to: string;
-                            }[] | undefined;
-                            blockRules?: {
-                                value: string | number;
-                                field: "title" | "content" | "url" | "all" | "author" | "order";
-                                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                            }[] | undefined;
-                        };
-                    }[] | null | undefined;
-                } | undefined;
+                settings: {
+                    [x: string]: any;
+                };
+                updated: {
+                    [x: string]: string;
+                };
             };
             outputFormat: "json" | "text";
             status: 200;
         };
-        $put: {
+    };
+    "/settings/:tab": {
+        $patch: {
             input: {
-                json: {
-                    rules?: {
-                        name: string;
-                        condition: {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "category" | "feed_url";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[];
-                        result: {
-                            summary?: boolean | undefined;
-                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
-                            rewriteRules?: {
-                                from: string;
-                                to: string;
-                            }[] | undefined;
-                            blockRules?: {
-                                value: string | number;
-                                field: "title" | "content" | "url" | "all" | "author" | "order";
-                                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                            }[] | undefined;
-                        };
-                    }[] | null | undefined;
+                param: {
+                    tab: string;
                 };
+            } & {
+                json: Record<string, any>;
             };
             output: {
                 code: 0;
@@ -2905,8 +2931,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     view?: number | undefined;
-                    feedId?: string | undefined;
                     feedIdList?: string[] | undefined;
+                    feedId?: string | undefined;
                     startTime?: number | undefined;
                     endTime?: number | undefined;
                 };
@@ -2925,6 +2951,553 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 code: 0;
                 data: {
                     count: number;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/profiles": {
+        $get: {
+            input: {
+                query: {
+                    id: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    name: string | null;
+                    id: string;
+                    email: string;
+                    emailVerified: string | null;
+                    image: string | null;
+                    handle: string | null;
+                    createdAt: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/metrics": {
+        $get: {
+            input: {
+                query: {
+                    type?: string | string[] | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    data: number[];
+                    meta: {
+                        count: number;
+                        prevTS: number;
+                        prevCount: number;
+                    };
+                    count: number;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/invitations/new": {
+        $post: {
+            input: {};
+            output: {
+                code: 0;
+                data: string;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/invitations/use": {
+        $post: {
+            input: {
+                json: {
+                    code: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/invitations": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    code: string;
+                    createdAt: string | null;
+                    users: {
+                        name: string | null;
+                        id: string;
+                        image: string | null;
+                    } | null;
+                    toUserId: string | null;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/feeds/claim/message": {
+        $get: {
+            input: {
+                query: {
+                    feedId: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    json: string;
+                    description: string;
+                    xml: string;
+                    content: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/feeds/claim/challenge": {
+        $post: {
+            input: {
+                json: {
+                    feedId: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/feeds": {
+        $get: {
+            input: {
+                query: {
+                    id?: string | string[] | undefined;
+                    url?: string | string[] | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    feed: {
+                        url: string;
+                        checkedAt: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        id?: string | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        lastModifiedHeader?: string | null | undefined;
+                        etagHeader?: string | null | undefined;
+                        ttl?: number | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                    };
+                    subscriptionCount: number;
+                    readCount: number;
+                    subscription?: {
+                        title: string | null;
+                        userId: string;
+                        view: number;
+                        category: string | null;
+                        feedId: string;
+                        isPrivate: boolean;
+                    } | undefined;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/feeds/refresh": {
+        $get: {
+            input: {
+                query: {
+                    id: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/entries/read-histories/:id": {
+        $get: {
+            input: {
+                param: {
+                    id?: string | undefined;
+                };
+            } & {
+                query: {
+                    page?: string | string[] | undefined;
+                    size?: string | string[] | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    users: {
+                        [x: string]: {
+                            name: string | null;
+                            id: string;
+                            image: string | null;
+                            handle: string | null;
+                        };
+                    };
+                    entryReadHistories: {
+                        userIds: string[];
+                        readCount: number;
+                    } | null;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/entries/check-new": {
+        $get: {
+            input: {
+                query: {
+                    insertedAfter: string | string[];
+                    view?: string | string[] | undefined;
+                    feedIdList?: string | string[] | undefined;
+                    feedId?: string | string[] | undefined;
+                    read?: string | string[] | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    has_new: boolean;
+                    entry_id?: string | undefined;
+                    lastest_at?: string | undefined;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/entries": {
+        $post: {
+            input: {
+                json: {
+                    view?: number | undefined;
+                    feedIdList?: string[] | undefined;
+                    feedId?: string | undefined;
+                    read?: boolean | undefined;
+                    limit?: number | undefined;
+                    publishedAfter?: string | undefined;
+                    publishedBefore?: string | undefined;
+                    collected?: boolean | undefined;
+                    isCollection?: boolean | undefined;
+                    isArchived?: boolean | undefined;
+                    withContent?: boolean | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                remaining: number;
+                data?: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        categories: string[] | null;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                    };
+                    feeds: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        image: string | null;
+                        url: string;
+                        siteUrl: string | null;
+                        checkedAt: string;
+                        lastModifiedHeader: string | null;
+                        etagHeader: string | null;
+                        ttl: number | null;
+                        errorMessage: string | null;
+                        errorAt: string | null;
+                        ownerUserId: string | null;
+                    };
+                    read: boolean | null;
+                    collections?: {
+                        createdAt: string;
+                    } | undefined;
+                    settings?: {
+                        summary?: boolean | undefined;
+                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                        rewriteRules?: {
+                            from: string;
+                            to: string;
+                        }[] | undefined;
+                    } | undefined;
+                }[] | undefined;
+                total?: number | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $get: {
+            input: {
+                query: {
+                    id: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data?: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        content: string | null;
+                        id: string;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        categories: string[] | null;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                    };
+                    collections: {
+                        createdAt: string;
+                    };
+                    feeds: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        image: string | null;
+                        url: string;
+                        siteUrl: string | null;
+                        checkedAt: string;
+                        lastModifiedHeader: string | null;
+                        etagHeader: string | null;
+                        ttl: number | null;
+                        errorMessage: string | null;
+                        errorAt: string | null;
+                        ownerUserId: string | null;
+                    };
+                    read: boolean | null;
+                    users: {
+                        [x: string]: {
+                            name: string | null;
+                            id: string;
+                            image: string | null;
+                            handle: string | null;
+                        };
+                    };
+                    entryReadHistories: {
+                        userIds: string[];
+                        readCount: number;
+                    } | null;
+                    settings?: {
+                        summary?: boolean | undefined;
+                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                        rewriteRules?: {
+                            from: string;
+                            to: string;
+                        }[] | undefined;
+                    } | undefined;
+                } | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/entries/preview": {
+        $get: {
+            input: {
+                query: {
+                    id: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    description: string | null;
+                    title: string | null;
+                    content: string | null;
+                    id: string;
+                    author: string | null;
+                    url: string | null;
+                    feedId: string;
+                    guid: string;
+                    authorUrl: string | null;
+                    authorAvatar: string | null;
+                    insertedAt: string;
+                    publishedAt: string;
+                    categories: string[] | null;
+                    media?: {
+                        type: "photo" | "video";
+                        url: string;
+                        width?: number | undefined;
+                        height?: number | undefined;
+                        preview_image_url?: string | undefined;
+                    }[] | null | undefined;
+                    attachments?: {
+                        url: string;
+                        title?: string | undefined;
+                        duration_in_seconds?: number | undefined;
+                        mime_type?: string | undefined;
+                        size_in_bytes?: number | undefined;
+                    }[] | null | undefined;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
+    "/discover": {
+        $post: {
+            input: {
+                json: {
+                    keyword: string;
+                };
+            };
+            output: {
+                data: {
+                    feed: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        image: string | null;
+                        url: string;
+                        siteUrl: string | null;
+                        checkedAt: string;
+                        lastModifiedHeader: string | null;
+                        etagHeader: string | null;
+                        ttl: number | null;
+                        errorMessage: string | null;
+                        errorAt: string | null;
+                        ownerUserId: string | null;
+                    };
+                    entries?: {
+                        description: string | null;
+                        title: string | null;
+                        content: string | null;
+                        id: string;
+                        author: string | null;
+                        url: string | null;
+                        feedId: string;
+                        guid: string;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        categories: string[] | null;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                    }[] | undefined;
+                    docs?: string | undefined;
+                    isSubscribed?: boolean | undefined;
+                    subscriptionCount?: number | undefined;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/discover/rsshub": {
+        $get: {
+            input: {
+                query: {
+                    category?: string | string[] | undefined;
+                    namespace?: string | string[] | undefined;
+                };
+            };
+            output: {
+                data: {
+                    [x: string]: {
+                        description: string;
+                        name: string;
+                        url: string;
+                        routes: {
+                            [x: string]: {
+                                description: string;
+                                parameters: {
+                                    [x: string]: string;
+                                };
+                                path: string;
+                                example: string;
+                                name: string;
+                                categories: string[];
+                                maintainers: string[];
+                                location: string;
+                                view?: number | undefined;
+                            };
+                        };
+                    };
                 };
             };
             outputFormat: "json" | "text";
@@ -3013,196 +3586,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
-    "/feeds/claim/message": {
-        $get: {
-            input: {
-                query: {
-                    feedId: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    json: string;
-                    description: string;
-                    xml: string;
-                    content: string;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/feeds/claim/challenge": {
-        $post: {
-            input: {
-                json: {
-                    feedId: string;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/feeds": {
-        $get: {
-            input: {
-                query: {
-                    id?: string | string[] | undefined;
-                    url?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    readCount: number;
-                    feed: {
-                        url: string;
-                        checkedAt: string;
-                        description?: string | null | undefined;
-                        title?: string | null | undefined;
-                        id?: string | undefined;
-                        image?: string | null | undefined;
-                        siteUrl?: string | null | undefined;
-                        lastModifiedHeader?: string | null | undefined;
-                        etagHeader?: string | null | undefined;
-                        ttl?: number | null | undefined;
-                        errorMessage?: string | null | undefined;
-                        errorAt?: string | null | undefined;
-                        ownerUserId?: string | null | undefined;
-                    };
-                    subscriptionCount: number;
-                    subscription?: {
-                        title: string | null;
-                        view: number;
-                        userId: string;
-                        feedId: string;
-                        category: string | null;
-                        isPrivate: boolean;
-                    } | undefined;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/feeds/refresh": {
-        $get: {
-            input: {
-                query: {
-                    id: string | string[];
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
-    "/discover": {
-        $post: {
-            input: {
-                json: {
-                    keyword: string;
-                };
-            };
-            output: {
-                data: {
-                    feed: {
-                        description: string | null;
-                        title: string | null;
-                        id: string;
-                        image: string | null;
-                        url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                    };
-                    entries?: {
-                        description: string | null;
-                        title: string | null;
-                        content: string | null;
-                        id: string;
-                        url: string | null;
-                        feedId: string;
-                        guid: string;
-                        author: string | null;
-                        authorUrl: string | null;
-                        authorAvatar: string | null;
-                        insertedAt: string;
-                        publishedAt: string;
-                        categories: string[] | null;
-                        media?: {
-                            type: "photo" | "video";
-                            url: string;
-                            width?: number | undefined;
-                            height?: number | undefined;
-                            preview_image_url?: string | undefined;
-                        }[] | null | undefined;
-                        attachments?: {
-                            url: string;
-                            title?: string | undefined;
-                            duration_in_seconds?: number | undefined;
-                            mime_type?: string | undefined;
-                            size_in_bytes?: number | undefined;
-                        }[] | null | undefined;
-                    }[] | undefined;
-                    docs?: string | undefined;
-                    isSubscribed?: boolean | undefined;
-                    subscriptionCount?: number | undefined;
-                }[];
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/discover/rsshub": {
-        $get: {
-            input: {
-                query: {
-                    category?: string | string[] | undefined;
-                    namespace?: string | string[] | undefined;
-                };
-            };
-            output: {
-                data: {
-                    [x: string]: {
-                        description: string;
-                        name: string;
-                        url: string;
-                        routes: {
-                            [x: string]: {
-                                description: string;
-                                parameters: {
-                                    [x: string]: string;
-                                };
-                                path: string;
-                                example: string;
-                                name: string;
-                                categories: string[];
-                                maintainers: string[];
-                                location: string;
-                                view?: number | undefined;
-                            };
-                        };
-                    };
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-} & {
     "/auth-app/new-session": {
         $post: {
             input: {};
@@ -3235,361 +3618,119 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
-    "/entries/read-histories/:id": {
-        $get: {
-            input: {
-                param: {
-                    id?: string | undefined;
-                };
-            } & {
-                query: {
-                    page?: string | string[] | undefined;
-                    size?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    users: {
-                        [x: string]: {
-                            name: string | null;
-                            id: string;
-                            image: string | null;
-                            handle: string | null;
-                        };
-                    };
-                    entryReadHistories: {
-                        userIds: string[];
-                        readCount: number;
-                    } | null;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/entries/check-new": {
-        $get: {
-            input: {
-                query: {
-                    insertedAfter: string | string[];
-                    view?: string | string[] | undefined;
-                    feedId?: string | string[] | undefined;
-                    feedIdList?: string | string[] | undefined;
-                    read?: string | string[] | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                data: {
-                    has_new: boolean;
-                    lastest_at?: string | undefined;
-                    entry_id?: string | undefined;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/entries": {
-        $post: {
-            input: {
-                json: {
-                    view?: number | undefined;
-                    feedId?: string | undefined;
-                    feedIdList?: string[] | undefined;
-                    read?: boolean | undefined;
-                    limit?: number | undefined;
-                    publishedAfter?: string | undefined;
-                    publishedBefore?: string | undefined;
-                    collected?: boolean | undefined;
-                    isCollection?: boolean | undefined;
-                    isArchived?: boolean | undefined;
-                    withContent?: boolean | undefined;
-                };
-            };
-            output: {
-                code: 0;
-                remaining: number;
-                data?: {
-                    entries: {
-                        description: string | null;
-                        title: string | null;
-                        id: string;
-                        url: string | null;
-                        guid: string;
-                        author: string | null;
-                        authorUrl: string | null;
-                        authorAvatar: string | null;
-                        insertedAt: string;
-                        publishedAt: string;
-                        categories: string[] | null;
-                        media?: {
-                            type: "photo" | "video";
-                            url: string;
-                            width?: number | undefined;
-                            height?: number | undefined;
-                            preview_image_url?: string | undefined;
-                        }[] | null | undefined;
-                        attachments?: {
-                            url: string;
-                            title?: string | undefined;
-                            duration_in_seconds?: number | undefined;
-                            mime_type?: string | undefined;
-                            size_in_bytes?: number | undefined;
-                        }[] | null | undefined;
-                    };
-                    feeds: {
-                        description: string | null;
-                        title: string | null;
-                        id: string;
-                        image: string | null;
-                        url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                    };
-                    read: boolean | null;
-                    collections?: {
-                        createdAt: string;
-                    } | undefined;
-                    settings?: {
-                        summary?: boolean | undefined;
-                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
-                        rewriteRules?: {
-                            from: string;
-                            to: string;
-                        }[] | undefined;
-                    } | undefined;
-                }[] | undefined;
-                total?: number | undefined;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
+    "/ai/translation": {
         $get: {
             input: {
                 query: {
                     id: string | string[];
+                    language: string | string[];
+                    fields: string | string[];
                 };
             };
             output: {
                 code: 0;
                 data?: {
-                    entries: {
-                        description: string | null;
-                        title: string | null;
-                        content: string | null;
-                        id: string;
-                        url: string | null;
-                        guid: string;
-                        author: string | null;
-                        authorUrl: string | null;
-                        authorAvatar: string | null;
-                        insertedAt: string;
-                        publishedAt: string;
-                        categories: string[] | null;
-                        media?: {
-                            type: "photo" | "video";
-                            url: string;
-                            width?: number | undefined;
-                            height?: number | undefined;
-                            preview_image_url?: string | undefined;
-                        }[] | null | undefined;
-                        attachments?: {
-                            url: string;
-                            title?: string | undefined;
-                            duration_in_seconds?: number | undefined;
-                            mime_type?: string | undefined;
-                            size_in_bytes?: number | undefined;
-                        }[] | null | undefined;
-                    };
-                    feeds: {
-                        description: string | null;
-                        title: string | null;
-                        id: string;
-                        image: string | null;
-                        url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                    };
-                    read: boolean | null;
-                    users: {
-                        [x: string]: {
-                            name: string | null;
-                            id: string;
-                            image: string | null;
-                            handle: string | null;
-                        };
-                    };
-                    entryReadHistories: {
-                        userIds: string[];
-                        readCount: number;
-                    } | null;
-                    collections: {
-                        createdAt: string;
-                    };
-                    settings?: {
-                        summary?: boolean | undefined;
-                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
-                        rewriteRules?: {
-                            from: string;
-                            to: string;
-                        }[] | undefined;
-                    } | undefined;
+                    description?: string | undefined;
+                    title?: string | undefined;
+                    content?: string | undefined;
                 } | undefined;
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
-    "/entries/preview": {
+    "/ai/summary": {
         $get: {
             input: {
                 query: {
                     id: string | string[];
+                    language?: string | string[] | undefined;
                 };
             };
             output: {
                 code: 0;
-                data: {
-                    description: string | null;
-                    title: string | null;
-                    content: string | null;
-                    id: string;
-                    url: string | null;
-                    feedId: string;
-                    guid: string;
-                    author: string | null;
-                    authorUrl: string | null;
-                    authorAvatar: string | null;
-                    insertedAt: string;
-                    publishedAt: string;
-                    categories: string[] | null;
-                    media?: {
-                        type: "photo" | "video";
-                        url: string;
-                        width?: number | undefined;
-                        height?: number | undefined;
-                        preview_image_url?: string | undefined;
-                    }[] | null | undefined;
-                    attachments?: {
-                        url: string;
-                        title?: string | undefined;
-                        duration_in_seconds?: number | undefined;
-                        mime_type?: string | undefined;
-                        size_in_bytes?: number | undefined;
-                    }[] | null | undefined;
-                }[];
+                data?: string | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/ai/daily": {
+        $get: {
+            input: {
+                query: {
+                    view: string | string[];
+                    startDate: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: string;
             };
             outputFormat: "json" | "text";
             status: 200;
         };
     };
 } & {
-    "/subscriptions": {
+    "/actions": {
         $get: {
-            input: {
-                query: {
-                    view?: string | string[] | undefined;
-                    userId?: string | string[] | undefined;
-                };
-            };
+            input: {};
             output: {
                 code: 0;
-                data: {
-                    title: string | null;
-                    view: number;
+                data?: {
                     userId: string;
-                    feeds: {
-                        description: string | null;
-                        title: string | null;
-                        id: string;
-                        image: string | null;
-                        url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                    };
-                    feedId: string;
-                    category: string | null;
-                    isPrivate: boolean;
-                }[];
+                    rules?: {
+                        name: string;
+                        condition: {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[];
+                        result: {
+                            summary?: boolean | undefined;
+                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                            rewriteRules?: {
+                                from: string;
+                                to: string;
+                            }[] | undefined;
+                            blockRules?: {
+                                value: string | number;
+                                field: "title" | "content" | "all" | "author" | "url" | "order";
+                                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                            }[] | undefined;
+                        };
+                    }[] | null | undefined;
+                } | undefined;
             };
             outputFormat: "json" | "text";
             status: 200;
         };
-        $post: {
+        $put: {
             input: {
                 json: {
-                    view: number;
-                    url: string;
-                    category?: string | null | undefined;
-                    isPrivate?: boolean | undefined;
+                    rules?: {
+                        name: string;
+                        condition: {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[];
+                        result: {
+                            summary?: boolean | undefined;
+                            translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                            rewriteRules?: {
+                                from: string;
+                                to: string;
+                            }[] | undefined;
+                            blockRules?: {
+                                value: string | number;
+                                field: "title" | "content" | "all" | "author" | "url" | "order";
+                                operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                            }[] | undefined;
+                        };
+                    }[] | null | undefined;
                 };
             };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $delete: {
-            input: {
-                json: {
-                    url?: string | undefined;
-                    feedId?: string | undefined;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $patch: {
-            input: {
-                json: {
-                    view: number;
-                    feedId: string;
-                    category?: string | null | undefined;
-                    isPrivate?: boolean | undefined;
-                };
-            };
-            output: {
-                code: 0;
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
-    "/subscriptions/export": {
-        $get: {
-            input: {};
-            output: {};
-            outputFormat: string;
-            status: 200;
-        };
-    };
-    "/subscriptions/import": {
-        $post: {
-            input: {};
             output: {
                 code: 0;
             };
@@ -3600,4 +3741,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsInputSchema, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, sessions, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsInputSchema, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
