@@ -95,7 +95,6 @@ export const initializeApp = async () => {
 
   settingSyncQueue.init()
   settingSyncQueue.syncLocal()
-  // await settingSyncQueue.replaceRemote()
 
   // should after hydrateSettings
   const { dataPersist: enabledDataPersist, sendAnonymousData } =

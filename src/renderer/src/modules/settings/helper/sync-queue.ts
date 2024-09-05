@@ -1,19 +1,21 @@
 import {
+  __generalSettingAtom,
   generalServerSyncWhiteListKeys,
   getGeneralSettings,
-  setGeneralSetting,
 } from "@renderer/atoms/settings/general"
 import {
+  __uiSettingAtom,
   getUISettings,
-  setUISetting,
   uiServerSyncWhiteListKeys,
 } from "@renderer/atoms/settings/ui"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { EventBus } from "@renderer/lib/event-bus"
+import { jotaiStore } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
 import { sleep } from "@renderer/lib/utils"
 import { settings } from "@renderer/queries/settings"
 import type { GeneralSettings, UISettings } from "@shared/interface/settings"
+import type { PrimitiveAtom } from "jotai"
 import { omit } from "lodash-es"
 
 type SettingMapping = {
@@ -29,9 +31,14 @@ const localSettingGetterMap = {
     omit(getGeneralSettings(), generalServerSyncWhiteListKeys, omitKeys),
 }
 
+const createInternalSetter = <T>(atom: PrimitiveAtom<T>) => (payload: T) => {
+  const current = jotaiStore.get(atom)
+  jotaiStore.set(atom, { ...current, ...payload })
+}
+
 const localsettingSetterMap = {
-  appearance: setUISetting,
-  general: setGeneralSetting,
+  appearance: createInternalSetter(__uiSettingAtom),
+  general: createInternalSetter(__generalSettingAtom),
 }
 const settingWhiteListMap = {
   appearance: uiServerSyncWhiteListKeys,
@@ -168,7 +175,9 @@ class SettingSyncQueue {
     for (const tab in groupedTab) {
       const json = omit(groupedTab[tab], omitKeys, settingWhiteListMap[tab])
 
-      if (Object.keys(json).length === 0) { continue }
+      if (Object.keys(json).length === 0) {
+        continue
+      }
       const promise = apiClient.settings[":tab"]
         .$patch({
           param: {
@@ -226,7 +235,8 @@ class SettingSyncQueue {
   }
 
   async syncLocal() {
-    const remoteSettings = await settings.get().refetch()
+    const remoteSettings = await settings.get().prefetch()
+
     if (!remoteSettings) return
 
     if (Object.keys(remoteSettings.settings).length === 0) return
@@ -244,18 +254,20 @@ class SettingSyncQueue {
       const localSettings = localSettingGetterMap[tab]()
       const localSettingsUpdated = localSettings.updated
 
-      if (remoteUpdatedDate > localSettingsUpdated) {
+      if (!localSettingsUpdated || remoteUpdatedDate > localSettingsUpdated) {
         // Use remote and update local
         const nextPayload = omit(
           remoteSettingPayload,
           omitKeys,
           settingWhiteListMap[tab],
         )
+
         if (Object.keys(nextPayload).length === 0) {
           continue
         }
 
         const setter = localsettingSetterMap[tab]
+
         setter(nextPayload)
       }
     }
