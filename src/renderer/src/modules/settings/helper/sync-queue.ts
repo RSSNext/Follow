@@ -9,7 +9,6 @@ import {
 import { apiClient } from "@renderer/lib/api-fetch"
 import { EventBus } from "@renderer/lib/event-bus"
 import { getStorageNS } from "@renderer/lib/ns"
-import { sleep } from "@renderer/lib/utils"
 import type { GeneralSettings, UISettings } from "@shared/interface/settings"
 import { omit } from "lodash-es"
 
@@ -18,9 +17,17 @@ type SettingMapping = {
   general: GeneralSettings
 }
 
+const omitKeys = ["updated"]
+
 const localSettingGetterMap = {
-  appearance: () => omit(getUISettings(), uiServerSyncWhiteListKeys),
-  general: () => omit(getGeneralSettings(), generalServerSyncWhiteListKeys),
+  appearance: () => omit(getUISettings(), uiServerSyncWhiteListKeys, omitKeys),
+  general: () =>
+    omit(getGeneralSettings(), generalServerSyncWhiteListKeys, omitKeys),
+}
+
+const settingWhiteListMap = {
+  appearance: uiServerSyncWhiteListKeys,
+  general: generalServerSyncWhiteListKeys,
 }
 
 const bizSettingKeyToTabMapping = {
@@ -50,7 +57,13 @@ class SettingSyncQueue {
       const tab = bizSettingKeyToTabMapping[data.key]
       if (!tab) return
 
-      this.enqueue(tab, data.payload)
+      const nextPayload = omit(
+        data.payload,
+        omitKeys,
+        settingWhiteListMap[tab],
+      )
+      if (Object.keys(nextPayload).length === 0) return
+      this.enqueue(tab, nextPayload)
     })
     const onlineHandler = () => this.flush
 
@@ -69,6 +82,7 @@ class SettingSyncQueue {
     for (const disposer of this.disposers) {
       disposer()
     }
+    this.queue = []
   }
 
   private readonly storageKey = getStorageNS("setting_sync_queue")
@@ -92,18 +106,25 @@ class SettingSyncQueue {
     }
   }
 
+  private threshold = 1000
+  private enqueueTime = Date.now()
+
   async enqueue<T extends SettingSyncTab>(
     tab: T,
     payload: Partial<SettingMapping[T]>,
   ) {
+    const now = Date.now()
     this.queue.push({
       tab,
       payload,
-      date: Date.now(),
+      date: now,
     })
 
-    // batch call
-    await sleep(0).then(() => this.flush())
+    // TODO maybe need a lock
+    if (now - this.enqueueTime > this.threshold) {
+      await this.flush()
+      this.enqueueTime = Date.now()
+    }
   }
 
   private async flush() {
@@ -184,6 +205,8 @@ class SettingSyncQueue {
       })
     }
   }
+
+  syncLocal() {}
 }
 
 export const settingSyncQueue = new SettingSyncQueue()

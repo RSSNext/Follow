@@ -2316,7 +2316,7 @@ declare const walletsRelations: drizzle_orm.Relations<"wallets", {
     transactionsFrom: drizzle_orm.Many<"transactions">;
     transactionTo: drizzle_orm.Many<"transactions">;
 }>;
-declare const transactionType: drizzle_orm_pg_core.PgEnum<["tip", "mint", "burn", "withdraw"]>;
+declare const transactionType: drizzle_orm_pg_core.PgEnum<["tip", "mint", "burn", "withdraw", "purchase"]>;
 declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "transactions";
     schema: undefined;
@@ -2342,14 +2342,14 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             tableName: "transactions";
             dataType: "string";
             columnType: "PgEnumColumn";
-            data: "tip" | "mint" | "burn" | "withdraw";
+            data: "tip" | "mint" | "burn" | "withdraw" | "purchase";
             driverParam: string;
             notNull: true;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: ["tip", "mint", "burn", "withdraw"];
+            enumValues: ["tip", "mint", "burn", "withdraw", "purchase"];
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
@@ -2470,7 +2470,7 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
 }>;
 declare const transactionsOpenAPISchema: zod.ZodObject<{
     hash: zod.ZodString;
-    type: zod.ZodEnum<["tip", "mint", "burn", "withdraw"]>;
+    type: zod.ZodEnum<["tip", "mint", "burn", "withdraw", "purchase"]>;
     fromUserId: zod.ZodNullable<zod.ZodString>;
     toUserId: zod.ZodNullable<zod.ZodString>;
     toFeedId: zod.ZodNullable<zod.ZodString>;
@@ -2479,7 +2479,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     createdAt: zod.ZodString;
     comment: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    type: "tip" | "mint" | "burn" | "withdraw";
+    type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
     createdAt: string;
     fromUserId: string | null;
     toUserId: string | null;
@@ -2489,7 +2489,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     powerToken: string;
     comment: string | null;
 }, {
-    type: "tip" | "mint" | "burn" | "withdraw";
+    type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
     createdAt: string;
     fromUserId: string | null;
     toUserId: string | null;
@@ -2594,7 +2594,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
-                    type: "tip" | "mint" | "burn" | "withdraw";
+                    type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
                     createdAt: string;
                     fromUserId: string | null;
                     toUserId: string | null;
@@ -2859,6 +2859,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 code: 0;
                 settings: {
                     [x: string]: any;
+                };
+                updated: {
+                    [x: string]: string;
                 };
             };
             outputFormat: "json" | "text";
