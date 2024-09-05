@@ -12,7 +12,7 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { EventBus } from "@renderer/lib/event-bus"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
-import { sleep } from "@renderer/lib/utils"
+import { isEmptyObject, sleep } from "@renderer/lib/utils"
 import { settings } from "@renderer/queries/settings"
 import type { GeneralSettings, UISettings } from "@shared/interface/settings"
 import type { PrimitiveAtom } from "jotai"
@@ -31,10 +31,12 @@ const localSettingGetterMap = {
     omit(getGeneralSettings(), generalServerSyncWhiteListKeys, omitKeys),
 }
 
-const createInternalSetter = <T>(atom: PrimitiveAtom<T>) => (payload: T) => {
-  const current = jotaiStore.get(atom)
-  jotaiStore.set(atom, { ...current, ...payload })
-}
+const createInternalSetter =
+  <T>(atom: PrimitiveAtom<T>) =>
+    (payload: T) => {
+      const current = jotaiStore.get(atom)
+      jotaiStore.set(atom, { ...current, ...payload })
+    }
 
 const localsettingSetterMap = {
   appearance: createInternalSetter(__uiSettingAtom),
@@ -77,7 +79,7 @@ class SettingSyncQueue {
         omitKeys,
         settingWhiteListMap[tab],
       )
-      if (Object.keys(nextPayload).length === 0) return
+      if (isEmptyObject(nextPayload)) return
       this.enqueue(tab, nextPayload)
     })
     const onlineHandler = () =>
@@ -111,6 +113,7 @@ class SettingSyncQueue {
 
   private load() {
     const queue = localStorage.getItem(this.storageKey)
+    localStorage.removeItem(this.storageKey)
     if (!queue) {
       return
     }
@@ -132,6 +135,9 @@ class SettingSyncQueue {
     payload: Partial<SettingMapping[T]>,
   ) {
     const now = Date.now()
+    if (isEmptyObject(payload)) {
+      return
+    }
     this.queue.push({
       tab,
       payload,
@@ -175,7 +181,7 @@ class SettingSyncQueue {
     for (const tab in groupedTab) {
       const json = omit(groupedTab[tab], omitKeys, settingWhiteListMap[tab])
 
-      if (Object.keys(json).length === 0) {
+      if (isEmptyObject(json)) {
         continue
       }
       const promise = apiClient.settings[":tab"]
@@ -239,7 +245,7 @@ class SettingSyncQueue {
 
     if (!remoteSettings) return
 
-    if (Object.keys(remoteSettings.settings).length === 0) return
+    if (isEmptyObject(remoteSettings.settings)) return
 
     for (const tab in remoteSettings.settings) {
       const remoteSettingPayload = remoteSettings.settings[tab]
@@ -262,7 +268,7 @@ class SettingSyncQueue {
           settingWhiteListMap[tab],
         )
 
-        if (Object.keys(nextPayload).length === 0) {
+        if (isEmptyObject(nextPayload)) {
           continue
         }
 

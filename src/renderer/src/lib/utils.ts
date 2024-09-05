@@ -243,3 +243,5 @@ export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
 
   return ret
 }
+
+export const isEmptyObject = (obj: Record<string, any>) => Object.keys(obj).length === 0
