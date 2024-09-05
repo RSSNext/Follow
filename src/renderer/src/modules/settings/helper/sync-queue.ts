@@ -166,12 +166,15 @@ class SettingSyncQueue {
 
     const promises = [] as Promise<any>[]
     for (const tab in groupedTab) {
+      const json = omit(groupedTab[tab], omitKeys, settingWhiteListMap[tab])
+
+      if (Object.keys(json).length === 0) { continue }
       const promise = apiClient.settings[":tab"]
         .$patch({
           param: {
             tab,
           },
-          json: groupedTab[tab],
+          json,
         })
         .then(() => {
           // remove from queue

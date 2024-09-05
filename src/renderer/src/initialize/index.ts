@@ -94,6 +94,7 @@ export const initializeApp = async () => {
   hydrateSettings()
 
   settingSyncQueue.init()
+  settingSyncQueue.syncLocal()
   // await settingSyncQueue.replaceRemote()
 
   // should after hydrateSettings
