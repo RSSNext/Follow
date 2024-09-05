@@ -125,7 +125,7 @@ export const initializeApp = async () => {
 
   hydrateSettings()
 
-  settingSyncQueue.subscribe()
+  settingSyncQueue.init()
   // await settingSyncQueue.replaceRemote()
 
   // should after hydrateSettings

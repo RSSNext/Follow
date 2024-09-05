@@ -8,6 +8,7 @@ import {
 } from "@renderer/atoms/settings/ui"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { EventBus } from "@renderer/lib/event-bus"
+import { getStorageNS } from "@renderer/lib/ns"
 import { sleep } from "@renderer/lib/utils"
 import type { GeneralSettings, UISettings } from "@shared/interface/settings"
 import { omit } from "lodash-es"
@@ -38,13 +39,57 @@ export interface SettingSyncQueueItem<
 class SettingSyncQueue {
   queue: SettingSyncQueueItem[] = []
 
-  async subscribe() {
-    EventBus.subscribe("SETTING_CHANGE_EVENT", (data) => {
+  private disposers: (() => void)[] = []
+  async init() {
+    this.teardown()
+
+    this.load()
+    this.flush()
+
+    const d1 = EventBus.subscribe("SETTING_CHANGE_EVENT", (data) => {
       const tab = bizSettingKeyToTabMapping[data.key]
       if (!tab) return
 
       this.enqueue(tab, data.payload)
     })
+    const onlineHandler = () => this.flush
+
+    window.addEventListener("online", onlineHandler)
+    const d2 = () => window.removeEventListener("online", onlineHandler)
+
+    const unloadHandler = () => this.persist()
+
+    window.addEventListener("beforeunload", unloadHandler)
+    const d3 = () => window.removeEventListener("beforeunload", unloadHandler)
+
+    this.disposers.push(d1, d2, d3)
+  }
+
+  teardown() {
+    for (const disposer of this.disposers) {
+      disposer()
+    }
+  }
+
+  private readonly storageKey = getStorageNS("setting_sync_queue")
+  private persist() {
+    if (this.queue.length === 0) {
+      return
+    }
+    localStorage.setItem(this.storageKey, JSON.stringify(this.queue))
+  }
+
+  private load() {
+    const queue = localStorage.getItem(this.storageKey)
+    if (!queue) {
+      return
+    }
+
+    try {
+      this.queue = JSON.parse(queue)
+    } catch {
+      /* empty */
+    }
   }
 
   async enqueue<T extends SettingSyncTab>(
