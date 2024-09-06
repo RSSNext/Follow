@@ -3317,9 +3317,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             size_in_bytes?: number | undefined;
                         }[] | null | undefined;
                     };
-                    collections: {
-                        createdAt: string;
-                    };
                     feeds: {
                         description: string | null;
                         title: string | null;
@@ -3335,7 +3332,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         errorAt: string | null;
                         ownerUserId: string | null;
                     };
-                    read: boolean | null;
                     users: {
                         [x: string]: {
                             name: string | null;
@@ -3348,14 +3344,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         userIds: string[];
                         readCount: number;
                     } | null;
-                    settings?: {
-                        summary?: boolean | undefined;
-                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
-                        rewriteRules?: {
-                            from: string;
-                            to: string;
-                        }[] | undefined;
-                    } | undefined;
                 } | undefined;
             };
             outputFormat: "json" | "text";
