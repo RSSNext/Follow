@@ -42,7 +42,7 @@ const ModalStack = () => {
         (modalSettingOverlay || forceOverlay) &&
         !allForceHideOverlay && (
         <ModalOverlay
-          zIndex={MODAL_STACK_Z_INDEX + overlayIndex * 2}
+          zIndex={MODAL_STACK_Z_INDEX + overlayIndex * 2 - 2}
           blur={overlayOptions?.blur}
           className={overlayOptions?.className}
         />
