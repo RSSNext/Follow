@@ -32,21 +32,21 @@ export const EntryTranslation: Component<{
             {source}
           </HTML>
         ) :
-        <div className={className}>{source}</div>
+        (
+          <div className={className}>{source}</div>
+        )
   }
   return (
     <HoverCard.Root>
       <HoverCard.Trigger className={className} ref={ref}>
         <i className="i-mgc-translate-2-cute-re mr-1 align-middle" />
         {isHTML ? (
-          <HTML
-            as="span"
-            className="align-middle"
-            noMedia
-          >
+          <HTML as="span" className="align-middle" noMedia>
             {nextTarget}
           </HTML>
-        ) : <span className="align-middle">{nextTarget}</span>}
+        ) : (
+          <span className="align-middle">{nextTarget}</span>
+        )}
       </HoverCard.Trigger>
       <HoverCard.Portal>
         <HoverCard.Content
@@ -66,33 +66,28 @@ export const EntryTranslation: Component<{
                   "shadow-modal rounded-xl border bg-background p-2",
                   "group-data-[side=top]:top-0",
                   "group-data-[side=bottom]:top-full",
+                  "max-w-[30ch]",
                 )}
                 viewportClassName="max-h-[12ch]"
               >
                 {isHTML ? (
-                  <HTML
-                    as="span"
-                    className="align-middle"
-                    noMedia
-                  >
+                  <HTML as="div" className="align-middle" noMedia>
                     {source}
                   </HTML>
-                ) : <span className="align-middle">{source}</span>}
+                ) : (
+                  <span className="align-middle">{source}</span>
+                )}
               </ScrollArea.ScrollArea>
             </div>
-          ) : (
-            isHTML ?
-                (
-                  <HTML
-                    as="span"
-                    className={cn(tooltipStyle.content)}
-                    noMedia
-                  >
-                    {source}
-                  </HTML>
-                ) :
+          ) : isHTML ?
+              (
+                <HTML as="div" className={cn(tooltipStyle.content)} noMedia>
+                  {source}
+                </HTML>
+              ) :
+              (
                 <span className={cn(tooltipStyle.content)}>{source}</span>
-          )}
+              )}
         </HoverCard.Content>
       </HoverCard.Portal>
     </HoverCard.Root>

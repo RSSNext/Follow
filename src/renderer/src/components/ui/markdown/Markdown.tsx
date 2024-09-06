@@ -46,13 +46,26 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
     renderInlineStyle: boolean
   }>,
 ) => {
-  const { children, renderInlineStyle, as = "div", accessory, noMedia, ...rest } = props
-  const [remarkOptions, setRemarkOptions] = useState({ renderInlineStyle, noMedia })
+  const {
+    children,
+    renderInlineStyle,
+    as = "div",
+    accessory,
+    noMedia,
+    ...rest
+  } = props
+  const [remarkOptions, setRemarkOptions] = useState({
+    renderInlineStyle,
+    noMedia,
+  })
   const [shouldForceReMountKey, setShouldForceReMountKey] = useState(0)
 
   useEffect(() => {
     setRemarkOptions((options) => {
-      if (renderInlineStyle === options.renderInlineStyle) return options
+      if (
+        renderInlineStyle === options.renderInlineStyle ||
+        noMedia === options.noMedia
+      ) { return options }
 
       setShouldForceReMountKey((key) => key + 1)
       return { ...options, renderInlineStyle, noMedia }
@@ -74,7 +87,9 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
   return (
     <MarkdownRenderContainerRefContext.Provider value={refElement}>
       {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
-      {accessory && <Fragment key={shouldForceReMountKey}>{accessory}</Fragment>}
+      {accessory && (
+        <Fragment key={shouldForceReMountKey}>{accessory}</Fragment>
+      )}
     </MarkdownRenderContainerRefContext.Provider>
   )
 }
