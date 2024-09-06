@@ -148,7 +148,7 @@ export const PreviewMediaContent: FC<{
         ) : (
           <FallbackableImage
             fallbackUrl={media[0].fallbackUrl}
-            className="size-full object-contain"
+            className="h-auto w-fit object-contain"
             alt="cover"
             src={src}
             onContextMenu={(e) => handleContextMenu(src, e)}
@@ -270,44 +270,55 @@ const FallbackableImage: FC<
   const [currentSrc, setCurrentSrc] = useState(() => replaceImgUrlIfNeed(src))
   const [isAllError, setIsAllError] = useState(false)
 
+  const [isLoading, setIsLoading] = useState(true)
+
   const [currentState, setCurrentState] = useState<
     "proxy" | "origin" | "fallback"
   >(() => (currentSrc === src ? "origin" : "proxy"))
 
-  const handleError = useCallback(
-    () => {
-      switch (currentState) {
-        case "proxy": {
-          if (currentSrc !== src) {
-            setCurrentSrc(src)
-            setCurrentState("origin")
-          } else {
-            if (fallbackUrl) {
-              setCurrentSrc(fallbackUrl)
-              setCurrentState("fallback")
-            }
-          }
-
-          break
-        }
-        case "origin": {
+  const handleError = useCallback(() => {
+    switch (currentState) {
+      case "proxy": {
+        if (currentSrc !== src) {
+          setCurrentSrc(src)
+          setCurrentState("origin")
+        } else {
           if (fallbackUrl) {
             setCurrentSrc(fallbackUrl)
             setCurrentState("fallback")
           }
-          break
         }
-        case "fallback": {
-          setIsAllError(true)
-        }
+
+        break
       }
-    },
-    [currentSrc, currentState, fallbackUrl, src],
-  )
+      case "origin": {
+        if (fallbackUrl) {
+          setCurrentSrc(fallbackUrl)
+          setCurrentState("fallback")
+        }
+        break
+      }
+      case "fallback": {
+        setIsAllError(true)
+      }
+    }
+  }, [currentSrc, currentState, fallbackUrl, src])
 
   return (
-    <Fragment>
-      {!isAllError && <img src={currentSrc} onError={handleError} {...props} />}
+    <div className="flex flex-col">
+      {isLoading && !isAllError && (
+        <div className="center absolute size-full">
+          <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+        </div>
+      )}
+      {!isAllError && (
+        <img
+          src={currentSrc}
+          onLoad={() => setIsLoading(false)}
+          onError={handleError}
+          {...props}
+        />
+      )}
       {isAllError && (
         <div
           className="center flex-col gap-6 text-white/80"
@@ -327,7 +338,7 @@ const FallbackableImage: FC<
             >
               Retry
             </MotionButtonBase>
-            Or
+            or
             <a
               className="underline underline-offset-4"
               href={src}
@@ -339,6 +350,25 @@ const FallbackableImage: FC<
           </div>
         </div>
       )}
-    </Fragment>
+
+      {currentState === "fallback" && (
+        <div className="mt-4 text-xs">
+          <span>
+            This image is preview in low quality, because the original image is
+            not available.
+          </span>
+          <br />
+          <span>
+            You can
+            {" "}
+            <a href={src} target="_blank" rel="noreferrer" className="underline duration-200 hover:text-accent">
+              visit the original image
+            </a>
+            {" "}
+            if you want to see the full quality.
+          </span>
+        </div>
+      )}
+    </div>
   )
 }
