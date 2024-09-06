@@ -65,7 +65,9 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
       if (
         renderInlineStyle === options.renderInlineStyle ||
         noMedia === options.noMedia
-      ) { return options }
+      ) {
+        return options
+      }
 
       setShouldForceReMountKey((key) => key + 1)
       return { ...options, renderInlineStyle, noMedia }

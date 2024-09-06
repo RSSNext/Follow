@@ -249,7 +249,7 @@
     background-position: left 1.1em;
 
     &::selection {
-      text-shadow: none;
+      text-shadow: none !important;
     }
 
     &:hover {

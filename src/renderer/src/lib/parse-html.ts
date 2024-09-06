@@ -9,6 +9,7 @@ import {
 import { BlockError } from "@renderer/components/ui/markdown/renderers/BlockErrorBoundary"
 import { createHeadingRenderer } from "@renderer/components/ui/markdown/renderers/Heading"
 import { Media } from "@renderer/components/ui/media"
+import type { Element, Text } from "hast"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { toText } from "hast-util-to-text"
@@ -20,6 +21,7 @@ import rehypeParse from "rehype-parse"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 import rehypeStringify from "rehype-stringify"
 import { unified } from "unified"
+import type { Node } from "unist"
 import { visit } from "unist-util-visit"
 import { VFile } from "vfile"
 
@@ -35,29 +37,38 @@ export const parseHtml = (
 
   const pipeline = unified()
     .use(rehypeParse, { fragment: true })
-    .use(rehypeSanitize, noMedia ?
-        {
-          ...defaultSchema,
-          tagNames: defaultSchema.tagNames?.filter((tag) => tag !== "img" && tag !== "picture"),
-        } :
-        {
-          ...defaultSchema,
-          tagNames: [...defaultSchema.tagNames!, "video", "style"],
-          attributes: {
-            ...defaultSchema.attributes,
+    .use(
+      rehypeSanitize,
+      noMedia ?
+          {
+            ...defaultSchema,
+            tagNames: defaultSchema.tagNames?.filter(
+              (tag) => tag !== "img" && tag !== "picture",
+            ),
+          } :
+          {
+            ...defaultSchema,
+            tagNames: [...defaultSchema.tagNames!, "video", "style"],
+            attributes: {
+              ...defaultSchema.attributes,
 
-            "*": renderInlineStyle ?
-                [...defaultSchema.attributes!["*"], "style", "class"] :
-              defaultSchema.attributes!["*"],
+              "*": renderInlineStyle ?
+                  [...defaultSchema.attributes!["*"], "style", "class"] :
+                defaultSchema.attributes!["*"],
 
-            "video": ["src", "poster"],
+              "video": ["src", "poster"],
+            },
           },
-        })
+    )
 
     .use(rehypeInferDescriptionMeta)
     .use(rehypeStringify)
 
   const tree = pipeline.parse(content)
+
+  rehypeUrlToAnchor(tree)
+
+  // console.log("tree", tree)
 
   const hastTree = pipeline.runSync(tree, file)
 
@@ -258,4 +269,52 @@ const Style: Components["style"] = ({ node, ...props }) => {
     })
   }
   return null
+}
+
+function rehypeUrlToAnchor(tree: Node) {
+  // https://chatgpt.com/share/37e0ceec-5c9e-4086-b9d6-5afc1af13bb0
+  visit(tree, "text", (node: Text, index, parent: Node) => {
+    const urlRegex = /https?:\/\/\S+/g
+    const text = node.value
+    const matches = [...text.matchAll(urlRegex)]
+
+    if (matches.length === 0 || !parent || !("children" in parent)) return
+
+    if ((parent as Element).tagName === "a") {
+      return
+    }
+
+    const newNodes: (Text | Element)[] = []
+    let lastIndex = 0
+
+    matches.forEach((match) => {
+      const [url] = match
+      const urlIndex = match.index || 0
+
+      if (urlIndex > lastIndex) {
+        newNodes.push({
+          type: "text",
+          value: text.slice(lastIndex, urlIndex),
+        })
+      }
+
+      newNodes.push({
+        type: "element",
+        tagName: "a",
+        properties: { href: url },
+        children: [{ type: "text", value: url }],
+      })
+
+      lastIndex = urlIndex + url.length
+    })
+
+    if (lastIndex < text.length) {
+      newNodes.push({
+        type: "text",
+        value: text.slice(lastIndex),
+      })
+    }
+
+    (parent.children as (Text | Element)[]).splice(index, 1, ...newNodes)
+  })
 }
