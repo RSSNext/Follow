@@ -74,8 +74,12 @@ const Wrapper: Component<{
     </div>
   )
 }
+
+export interface PreviewMediaProps extends MediaModel {
+  fallbackUrl?: string
+}
 export const PreviewMediaContent: FC<{
-  media: MediaModel[]
+  media: PreviewMediaProps[]
   initialIndex?: number
 }> = ({ media, initialIndex = 0 }) => {
   const [currentMedia, setCurrentMedia] = useState(media[initialIndex])
@@ -143,6 +147,7 @@ export const PreviewMediaContent: FC<{
           />
         ) : (
           <FallbackableImage
+            fallbackUrl={media[0].fallbackUrl}
             className="size-full object-contain"
             alt="cover"
             src={src}
@@ -241,6 +246,7 @@ export const PreviewMediaContent: FC<{
               />
             ) : (
               <FallbackableImage
+                fallbackUrl={med.fallbackUrl}
                 onContextMenu={(e) => handleContextMenu(med.url, e)}
                 className="size-full object-contain"
                 alt="cover"
@@ -258,23 +264,47 @@ export const PreviewMediaContent: FC<{
 const FallbackableImage: FC<
   Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> & {
     src: string
+    fallbackUrl?: string
   }
-> = ({ src, onError, ...props }) => {
+> = ({ src, onError, fallbackUrl, ...props }) => {
   const [currentSrc, setCurrentSrc] = useState(() => replaceImgUrlIfNeed(src))
-
   const [isAllError, setIsAllError] = useState(false)
 
+  const [currentState, setCurrentState] = useState<
+    "proxy" | "origin" | "fallback"
+  >(() => (currentSrc === src ? "origin" : "proxy"))
+
   const handleError = useCallback(
-    (e) => {
-      if (currentSrc !== src) {
-        setCurrentSrc(src)
-      } else {
-        onError?.(e as any)
-        setIsAllError(true)
+    () => {
+      switch (currentState) {
+        case "proxy": {
+          if (currentSrc !== src) {
+            setCurrentSrc(src)
+            setCurrentState("origin")
+          } else {
+            if (fallbackUrl) {
+              setCurrentSrc(fallbackUrl)
+              setCurrentState("fallback")
+            }
+          }
+
+          break
+        }
+        case "origin": {
+          if (fallbackUrl) {
+            setCurrentSrc(fallbackUrl)
+            setCurrentState("fallback")
+          }
+          break
+        }
+        case "fallback": {
+          setIsAllError(true)
+        }
       }
     },
-    [currentSrc, onError, src],
+    [currentSrc, currentState, fallbackUrl, src],
   )
+
   return (
     <Fragment>
       {!isAllError && <img src={currentSrc} onError={handleError} {...props} />}

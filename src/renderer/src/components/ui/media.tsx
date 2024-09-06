@@ -86,6 +86,7 @@ const MediaImpl: FC<MediaProps> = ({
           {
             url: src,
             type,
+            fallbackUrl: imgSrc,
           },
         ],
         0,
@@ -206,7 +207,10 @@ const MediaImpl: FC<MediaProps> = ({
     return <FallbackMedia {...props} />
   }
   return (
-    <span className={cn("block overflow-hidden rounded", className)} style={style}>
+    <span
+      className={cn("block overflow-hidden rounded", className)}
+      style={style}
+    >
       {InnerContent}
     </span>
   )
