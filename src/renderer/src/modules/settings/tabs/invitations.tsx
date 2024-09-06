@@ -87,7 +87,9 @@ export const SettingInvitations = () => {
                     <TableRow key={row.code}>
                       <TableCell align="center" size="sm">
                         <div className="group relative flex items-center justify-center gap-2 font-mono">
-                          <span>{row.code}</span>
+                          <span className="shrink-0">
+                            {row.code}
+                          </span>
                           <CopyButton
                             value={row.code}
                             className="absolute -right-6 p-1 opacity-0 group-hover:opacity-100 [&_i]:size-3"
