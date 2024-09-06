@@ -1,41 +1,82 @@
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useIsDark } from "@renderer/hooks/common"
+import { nanoid } from "nanoid"
 import type { FC, PropsWithChildren, ReactNode } from "react"
 import {
   createContext,
   createElement,
+  memo,
   useContext,
   useLayoutEffect,
+  useMemo,
   useState,
 } from "react"
 import root from "react-shadow"
 
 const ShadowDOMContext = createContext(false)
 
-const cloneStylesElement = () => {
+const MemoedDangerousHTMLStyle: FC<
+  {
+    children: string
+  } & React.DetailedHTMLProps<
+    React.StyleHTMLAttributes<HTMLStyleElement>,
+    HTMLStyleElement
+  > &
+  Record<string, unknown>
+> = memo(({ children, ...rest }) => (
+  <style
+    {...rest}
+    dangerouslySetInnerHTML={useMemo(
+      () => ({
+        __html: children,
+      }),
+      [children],
+    )}
+  />
+))
+
+const weakMapElementKey = new WeakMap<
+  HTMLStyleElement | HTMLLinkElement,
+  string
+>()
+const cloneStylesElement = (_mutationRecord?: MutationRecord) => {
   const $styles = document.head.querySelectorAll("style").values()
   const reactNodes = [] as ReactNode[]
-  let i = 0
-  for (const style of $styles) {
-    const key = `style-${i++}`
-    reactNodes.push(
-      createElement("style", {
-        key,
-        dangerouslySetInnerHTML: { __html: style.innerHTML },
-      }),
-    )
-  }
 
-  document.head.querySelectorAll("link[rel=stylesheet]").forEach((link) => {
-    const key = `link-${i++}`
+  for (const $style of $styles) {
+    let key = weakMapElementKey.get($style)
+
+    if (!key) {
+      key = nanoid(8)
+
+      weakMapElementKey.set($style, key)
+    }
+
     reactNodes.push(
-      createElement("link", {
+      createElement(MemoedDangerousHTMLStyle, {
         key,
-        rel: "stylesheet",
-        href: link.getAttribute("href"),
-        crossOrigin: link.getAttribute("crossorigin"),
+        children: $style.innerHTML,
       }),
     )
-  })
+
+    const styles = getLinkedStaticStyleSheets()
+
+    for (const style of styles) {
+      let key = weakMapElementKey.get(style.ref)
+      if (!key) {
+        key = nanoid(8)
+        weakMapElementKey.set(style.ref, key)
+      }
+
+      reactNodes.push(
+        createElement(MemoedDangerousHTMLStyle, {
+          key,
+          children: style.cssText,
+          ["data-href"]: style.ref.href,
+        }),
+      )
+    }
+  }
 
   return reactNodes
 }
@@ -48,8 +89,10 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
     useState<ReactNode[]>(cloneStylesElement)
 
   useLayoutEffect(() => {
-    const mutationObserver = new MutationObserver(() => {
-      setStylesElements(cloneStylesElement())
+    const mutationObserver = new MutationObserver((e) => {
+      const event = e[0]
+
+      setStylesElements(cloneStylesElement(event))
     })
     mutationObserver.observe(document.head, {
       childList: true,
@@ -62,11 +105,24 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
   }, [])
 
   const dark = useIsDark()
+
+  const uiFont = useUISettingKey("uiFontFamily")
+
   return (
     <root.div {...rest}>
       <ShadowDOMContext.Provider value={true}>
-        <div data-theme={dark ? "dark" : "light"}>
-          <head>{stylesElements}</head>
+        <div
+          style={useMemo(
+            () => ({
+              fontFamily: uiFont,
+            }),
+            [uiFont],
+          )}
+          id="shadow-html"
+          data-theme={dark ? "dark" : "light"}
+          className="font-theme"
+        >
+          {stylesElements}
           {props.children}
         </div>
       </ShadowDOMContext.Provider>
@@ -75,3 +131,48 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
 }
 
 ShadowDOM.useIsShadowDOM = () => useContext(ShadowDOMContext)
+
+const cacheCssTextMap = {} as Record<string, string>
+
+function getLinkedStaticStyleSheets() {
+  const $links = document.head
+    .querySelectorAll("link[rel=stylesheet]")
+    .values() as unknown as HTMLLinkElement[]
+
+  const styleSheetMap = new WeakMap<
+    Element | ProcessingInstruction,
+    CSSStyleSheet
+  >()
+
+  const cssArray = [] as { cssText: string, ref: HTMLLinkElement }[]
+
+  for (const sheet of document.styleSheets) {
+    if (!sheet.href) continue
+    if (!sheet.ownerNode) continue
+    styleSheetMap.set(sheet.ownerNode, sheet)
+  }
+
+  for (const $link of $links) {
+    const sheet = styleSheetMap.get($link)
+    if (!sheet) continue
+    if (!sheet.href) continue
+    const hasCache = cacheCssTextMap[sheet.href]
+    if (!hasCache) {
+      if (!sheet.href) continue
+      const rules = sheet.cssRules || sheet.rules
+      let cssText = ""
+      for (const rule of rules) {
+        cssText += rule.cssText
+      }
+
+      cacheCssTextMap[sheet.href] = cssText
+    }
+
+    cssArray.push({
+      cssText: cacheCssTextMap[sheet.href],
+      ref: $link,
+    })
+  }
+
+  return cssArray
+}

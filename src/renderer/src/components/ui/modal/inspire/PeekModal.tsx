@@ -1,10 +1,13 @@
 import { m } from "framer-motion"
 import type { PropsWithChildren } from "react"
+import { createContext, useContext } from "react"
 import { Link } from "react-router-dom"
 
 import { microReboundPreset } from "../../constants/spring"
 import { useModalStack } from "../stacked"
 
+const InPeekModal = createContext(false)
+export const useInPeekModal = () => useContext(InPeekModal)
 export const PeekModal = (
   props: PropsWithChildren<{
     to: string
@@ -22,7 +25,7 @@ export const PeekModal = (
         transition={microReboundPreset}
         className="scrollbar-none"
       >
-        {children}
+        <InPeekModal.Provider value={true}>{children}</InPeekModal.Provider>
       </m.div>
 
       <m.div

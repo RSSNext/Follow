@@ -3,10 +3,22 @@ import { getViewport } from "@renderer/atoms/hooks/viewport"
 import { getElementTop } from "@renderer/lib/dom"
 import { springScrollToElement } from "@renderer/lib/scroller"
 import { cn } from "@renderer/lib/utils"
-import { useGetWrappedElementPosition } from "@renderer/providers/wrapped-element-provider"
+import {
+  useGetWrappedElementPosition,
+  useWrappedElementSize,
+} from "@renderer/providers/wrapped-element-provider"
 import { AnimatePresence, m } from "framer-motion"
 import { throttle } from "lodash-es"
-import { memo, useContext, useEffect, useMemo, useRef, useState } from "react"
+import {
+  memo,
+  startTransition,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { useEventCallback } from "usehooks-ts"
 
 import { useScrollViewElement } from "../../scroll-area/hooks"
@@ -93,8 +105,10 @@ export const Toc: Component = ({ className }) => {
     },
   )
 
+  const { h } = useWrappedElementSize()
   const [currentScrollRange, setCurrentScrollRange] = useState([-1, 0])
-  const titleBetweenPositionTopRangeMap = useMemo(() => {
+
+  const headingRangeParser = () => {
     // calculate the range of data-container-top between each two headings
     const titleBetweenPositionTopRangeMap = [] as [number, number][]
     for (let i = 0; i < $headings.length - 1; i++) {
@@ -119,7 +133,16 @@ export const Toc: Component = ({ className }) => {
       titleBetweenPositionTopRangeMap.push([headingTop, nextTop])
     }
     return titleBetweenPositionTopRangeMap
-  }, [$headings])
+  }
+
+  const [titleBetweenPositionTopRangeMap, setTitleBetweenPositionTopRangeMap] =
+    useState(headingRangeParser)
+
+  useLayoutEffect(() => {
+    startTransition(() => {
+      setTitleBetweenPositionTopRangeMap(headingRangeParser)
+    })
+  }, [$headings, h])
 
   const throttleCallerRef = useRef<DebouncedFuncLeading<() => void>>()
   const getWrappedElPos = useGetWrappedElementPosition()
@@ -152,10 +175,11 @@ export const Toc: Component = ({ className }) => {
         setCurrentScrollRange([currentRangeIndex, precent])
       } else {
         const last = titleBetweenPositionTopRangeMap.at(-1) || [0, 0]
-        if (top > last[1]) {
+
+        if (top + winHeight > last[1]) {
           setCurrentScrollRange([
-            titleBetweenPositionTopRangeMap.length - 1,
-            1,
+            titleBetweenPositionTopRangeMap.length,
+            1 - (last[1] - top) / winHeight,
           ])
         } else {
           setCurrentScrollRange([-1, 1])
@@ -168,6 +192,7 @@ export const Toc: Component = ({ className }) => {
 
     return () => {
       scrollContainerElement.removeEventListener("scroll", handler)
+      handler.cancel()
     }
   }, [
     getWrappedElPos,
@@ -205,52 +230,54 @@ export const Toc: Component = ({ className }) => {
           </ul>
         </HoverCard.Trigger>
         <HoverCard.Portal forceMount>
-          <AnimatePresence>
-            {hoverShow && (
-              <HoverCard.Content side="left" align="start" asChild>
-                <m.ul
-                  initial={{ opacity: 0, x: 110 }}
-                  animate={{ opacity: 1, x: 100 }}
-                  exit={{ opacity: 0, x: 110, transition: { duration: 0.1 } }}
-                  transition={{ duration: 0.5, type: "spring" }}
-                  className={cn(
-                    "relative z-10 -mt-1 rounded-xl border bg-white px-3 py-1 text-xs drop-shadow-xl dark:bg-neutral-950",
-                    "max-h-[calc(100svh-4rem)] overflow-auto scrollbar-none",
-                  )}
-                >
-                  {toc.map((heading, index) => (
-                    <li
-                      key={heading.title}
-                      className="flex h-[24px] w-full items-center"
-                    >
-                      <button
-                        className={cn(
-                          "group flex w-full cursor-pointer justify-between",
-                          index === currentScrollRange[0] ? "text-accent" : "",
-                        )}
-                        type="button"
-                        onClick={() => {
-                          handleScrollTo(
-                            index,
-                            heading.$heading,
-                            heading.anchorId,
-                          )
-                        }}
+          <div>
+            <AnimatePresence>
+              {hoverShow && (
+                <HoverCard.Content side="left" align="start" asChild>
+                  <m.ul
+                    initial={{ opacity: 0, x: 110 }}
+                    animate={{ opacity: 1, x: 100 }}
+                    exit={{ opacity: 0, x: 110, transition: { duration: 0.1 } }}
+                    transition={{ duration: 0.5, type: "spring" }}
+                    className={cn(
+                      "relative z-10 -mt-1 rounded-xl border bg-white px-3 py-1 text-xs drop-shadow-xl dark:bg-neutral-950",
+                      "max-h-[calc(100svh-4rem)] overflow-auto scrollbar-none",
+                    )}
+                  >
+                    {toc.map((heading, index) => (
+                      <li
+                        key={heading.title}
+                        className="flex h-[24px] w-full items-center"
                       >
-                        <span className="duration-200 group-hover:text-accent/80">
-                          {heading.title}
-                        </span>
+                        <button
+                          className={cn(
+                            "group flex w-full cursor-pointer justify-between",
+                            index === currentScrollRange[0] ? "text-accent" : "",
+                          )}
+                          type="button"
+                          onClick={() => {
+                            handleScrollTo(
+                              index,
+                              heading.$heading,
+                              heading.anchorId,
+                            )
+                          }}
+                        >
+                          <span className="duration-200 group-hover:text-accent/80">
+                            {heading.title}
+                          </span>
 
-                        <span className="ml-4 text-[8px] opacity-50">
-                          H{heading.depth}
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                </m.ul>
-              </HoverCard.Content>
-            )}
-          </AnimatePresence>
+                          <span className="ml-4 text-[8px] opacity-50">
+                            H{heading.depth}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </m.ul>
+                </HoverCard.Content>
+              )}
+            </AnimatePresence>
+          </div>
         </HoverCard.Portal>
       </HoverCard.Root>
     </div>

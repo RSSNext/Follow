@@ -1,4 +1,5 @@
-html {
+html,
+#shadow-html {
   --fo-font-family: "SN Pro", system-ui, sans-serif;
 }
 

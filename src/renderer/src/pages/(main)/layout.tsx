@@ -11,6 +11,7 @@ import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { HotKeyScopeMap } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
+import { useDailyTask } from "@renderer/hooks/biz/useDailyTask"
 import { preventDefault } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { EnvironmentIndicator } from "@renderer/modules/app/EnvironmentIndicator"
@@ -67,12 +68,16 @@ export function Component() {
 
   const containerRef = useRef<HTMLDivElement>(null)
 
+  useDailyTask()
+
   return (
     <div
       className="flex h-screen overflow-hidden"
       ref={containerRef}
       onContextMenu={preventDefault}
     >
+      {!import.meta.env.PROD && <EnvironmentIndicator />}
+
       <FeedResponsiveResizerContainer containerRef={containerRef}>
         <FeedColumn>
           <CornerPlayer />
@@ -82,7 +87,6 @@ export function Component() {
           {ELECTRON && <AutoUpdater />}
 
           <NetworkStatusIndicator />
-          {!import.meta.env.PROD && <EnvironmentIndicator />}
         </FeedColumn>
       </FeedResponsiveResizerContainer>
       <main
@@ -180,7 +184,6 @@ const FeedResponsiveResizerContainer = ({
         setDelayShowSplitter(true)
       }, 200)
     } else {
-      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
       setDelayShowSplitter(false)
     }
 
@@ -219,7 +222,9 @@ const FeedResponsiveResizerContainer = ({
         }}
       />
 
-      {delayShowSplitter && <PanelSplitter {...separatorProps} />}
+      {delayShowSplitter && (
+        <PanelSplitter isDragging={isDragging} {...separatorProps} />
+      )}
     </>
   )
 }

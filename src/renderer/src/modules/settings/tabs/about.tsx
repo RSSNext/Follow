@@ -89,7 +89,6 @@ export const SettingAbout = () => (
       <Divider className="scale-x-50" />
 
       <h2 className="text-base font-semibold">
-        {/* 社区与资讯 */}
         Social Media
       </h2>
       <div className="mt-2 flex flex-wrap gap-2">

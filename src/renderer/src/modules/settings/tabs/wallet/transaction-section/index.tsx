@@ -5,8 +5,10 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@renderer/components/ui/avatar"
+import { MotionButtonBase } from "@renderer/components/ui/button"
 import { RelativeTime } from "@renderer/components/ui/datetime"
 import { LoadingCircle } from "@renderer/components/ui/loading"
+import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
   Table,
   TableBody,
@@ -16,6 +18,7 @@ import {
   TableRow,
 } from "@renderer/components/ui/table"
 import { cn } from "@renderer/lib/utils"
+import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
 import { Balance } from "@renderer/modules/wallet/balance"
 import { useWallet, useWalletTransactions } from "@renderer/queries/wallet"
@@ -43,7 +46,7 @@ export const TransactionsSection = () => {
     <div className="mt-8">
       <SettingSectionTitle title="Transactions" />
 
-      <div className="overflow-x-auto">
+      <ScrollArea.ScrollArea viewportClassName="max-h-[210px]">
         <Table>
           <TableHeader>
             <TableRow className="[&_*]:!font-semibold">
@@ -53,14 +56,17 @@ export const TransactionsSection = () => {
               <TableHead className="text-center" size="sm">
                 Amount
               </TableHead>
-              <TableHead className="pl-5" size="sm">
+              <TableHead className="pl-8" size="sm">
                 From
               </TableHead>
-              <TableHead className="pl-5" size="sm">
+              <TableHead className="pl-8" size="sm">
                 To
               </TableHead>
-              <TableHead className="text-center" size="sm">
+              <TableHead className="pl-6" size="sm">
                 Date
+              </TableHead>
+              <TableHead className="pl-6" size="sm">
+                Tx
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -76,15 +82,18 @@ export const TransactionsSection = () => {
                     amount={row.powerToken}
                   />
                 </TableCell>
-                <TableCell align="center" size="sm">
+                <TableCell align="left" className="px-3" size="sm">
                   <UserRenderer user={row.fromUser} />
                 </TableCell>
-                <TableCell align="center" size="sm">
+                <TableCell align="left" className="px-3" size="sm">
                   <UserRenderer user={row.toUser} />
                 </TableCell>
-                {/* <TableCell align="center" size="sm"><FeedRenderer feed={row.toFeed} /></TableCell> */}
-                <TableCell align="center" size="sm">
+
+                <TableCell align="left" size="sm" className="pl-6">
                   <RelativeTime date={row.createdAt} />
+                </TableCell>
+                <TableCell align="left" size="sm" className="pl-6">
+                  <a target="_blank" href={`https://scan.rss3.io/tx/${row.hash}`}>{row.hash.slice(0, 6)}...</a>
                 </TableCell>
               </TableRow>
             ))}
@@ -95,7 +104,7 @@ export const TransactionsSection = () => {
             No transactions
           </div>
         )}
-      </div>
+      </ScrollArea.ScrollArea>
     </div>
   )
 }
@@ -108,11 +117,12 @@ const TypeRenderer = ({
   >[number]["type"]
 }) => (
   <div
-    className={cn("center rounded-full p-px text-xs uppercase", {
+    className={cn("center rounded-full px-1.5 py-px text-xs", {
       "bg-theme-accent-700 text-white": type === "tip",
       "bg-green-700 text-white": type === "mint",
       "bg-red-700 text-white": type === "burn",
       "bg-yellow-700 text-white": type === "withdraw",
+      "bg-blue-700 text-white": type === "purchase",
     })}
   >
     {type}
@@ -151,8 +161,17 @@ const UserRenderer = ({
 
   const name = isMe ? "You" : user?.name || APP_NAME
 
+  const presentUserModal = usePresentUserProfileModal("drawer")
   return (
-    <div className="flex">
+    <MotionButtonBase
+      onClick={() => {
+        if (user?.id) presentUserModal(user.id)
+      }}
+      className={cn(
+        "flex items-center",
+        user?.id ? "cursor-pointer" : "cursor-default",
+      )}
+    >
       {name === APP_NAME ? (
         <Logo className="aspect-square size-4" />
       ) : (
@@ -165,6 +184,6 @@ const UserRenderer = ({
       <div className="ml-1">
         {isMe ? <span className="font-bold">You</span> : name}
       </div>
-    </div>
+    </MotionButtonBase>
   )
 }

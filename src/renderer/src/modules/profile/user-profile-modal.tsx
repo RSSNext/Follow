@@ -18,18 +18,29 @@ import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
+import { getStorageNS } from "@renderer/lib/ns"
 import { cn } from "@renderer/lib/utils"
 import type { SubscriptionModel } from "@renderer/models"
 import { useUserSubscriptionsQuery } from "@renderer/modules/profile/hooks"
 import { useSubscriptionStore } from "@renderer/store/subscription"
 import { useUserById } from "@renderer/store/user"
 import { useAnimationControls } from "framer-motion"
+import { useAtom } from "jotai"
+import { atomWithStorage } from "jotai/utils"
 import { throttle } from "lodash-es"
 import type { FC } from "react"
 import { Fragment, useEffect, useMemo, useRef, useState } from "react"
 
 import { FeedForm } from "../discover/feed-form"
 
+const itemVariantAtom = atomWithStorage(
+  getStorageNS("item-variant"),
+  "loose" as ItemVariant,
+  undefined,
+  {
+    getOnInit: true,
+  },
+)
 type ItemVariant = "loose" | "compact"
 export const UserProfileModalContent: FC<{
   userId: string
@@ -155,7 +166,7 @@ export const UserProfileModalContent: FC<{
     }
   }, [variant, winHeight])
 
-  const [itemStyle, setItemStyle] = useState("loose" as ItemVariant)
+  const [itemStyle, setItemStyle] = useAtom(itemVariantAtom)
 
   return (
     <div
@@ -377,6 +388,7 @@ const SubscriptionItem: FC<{
                 content: ({ dismiss }) => (
                   <FeedForm
                     asWidget
+                    id={subscription.feedId}
                     url={subscription.feeds.url}
                     defaultValues={{
                       view: defaultView.toString(),

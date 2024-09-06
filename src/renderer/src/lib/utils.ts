@@ -26,12 +26,16 @@ export function getEntriesParams({
   const params: {
     feedId?: string
     feedIdList?: string[]
-    collected?: boolean
+    isCollection?: boolean
+    withContent?: boolean
   } = {}
   if (id === FEED_COLLECTION_LIST) {
-    params.collected = true
+    params.isCollection = true
   } else if (id && id !== ROUTE_FEED_PENDING) {
     params.feedIdList = `${id}`.split(",")
+  }
+  if (view === FeedViewType.SocialMedia) {
+    params.withContent = true
   }
   return {
     view,
@@ -143,7 +147,7 @@ export function formatXml(xml: string, indent = 4) {
 }
 
 export const sleep = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms))
+  new Promise<void>((resolve) => setTimeout(resolve, ms))
 
 export const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)
@@ -243,3 +247,5 @@ export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
 
   return ret
 }
+
+export const isEmptyObject = (obj: Record<string, any>) => Object.keys(obj).length === 0

@@ -1,5 +1,5 @@
 import { useWhoami } from "@renderer/atoms/user"
-import { Divider } from "@renderer/components/ui/divider"
+import { CopyButton } from "@renderer/components/ui/code-highlighter"
 import { LoadingWithIcon } from "@renderer/components/ui/loading"
 import {
   Tooltip,
@@ -13,6 +13,7 @@ import { useWallet } from "@renderer/queries/wallet"
 
 import { ClaimDailyReward } from "./claim-daily-reward"
 import { CreateWallet } from "./create-wallet"
+import { WithdrawButton } from "./withdraw"
 
 export const MyWalletSection = () => {
   const user = useWhoami()
@@ -37,15 +38,49 @@ export const MyWalletSection = () => {
   return (
     <div className="space-y-8">
       <div>
-        <SettingSectionTitle title="Balance" />
-        <div className="flex items-end justify-between">
+        <div className="text-sm">
+          <p>
+            Power is an ERC-20 token on the
+            <a
+              className="underline"
+              target="_blank"
+              href="https://scan.rss3.io/token/0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8"
+              rel="noreferrer noopener"
+            >
+              VSL blockchain
+            </a>
+            .
+          </p>
+          <p>
+            You can claim 2 free Power daily, which can be used to tip RSS
+            entries on Follow.
+          </p>
+        </div>
+        <SettingSectionTitle margin="compact" title="Your Address" />
+        <div className="flex items-center gap-2 text-sm">
+          <a
+            href={`https://scan.rss3.io/address/${myWallet.address}`}
+            target="_blank"
+            className="underline"
+          >
+            {myWallet.address}
+          </a>
+          <CopyButton
+            value={myWallet.address!}
+            className="p-1 [&_i]:size-2.5"
+          />
+        </div>
+        <SettingSectionTitle title="Your Balance" margin="compact" />
+        <div className="mb-2 flex items-end justify-between">
           <Balance className="text-xl font-bold text-accent">
             {BigInt(myWallet.dailyPowerToken || 0n) +
             BigInt(myWallet.cashablePowerToken || 0n)}
           </Balance>
-          <ClaimDailyReward />
+          <div className="flex gap-2">
+            <WithdrawButton />
+            <ClaimDailyReward />
+          </div>
         </div>
-        <Divider className="my-4" />
         <Tooltip>
           <TooltipTrigger className="block">
             <div className="flex flex-row items-center gap-x-2 text-xs text-zinc-600 dark:text-neutral-400">
@@ -59,7 +94,7 @@ export const MyWalletSection = () => {
           <TooltipPortal>
             <TooltipContent align="start" className="z-[999]">
               <p>1. Daily Power can only be used for tipping others.</p>
-              <p>2. You mint Daily Power for free once every 24 hours.</p>
+              <p>2. You can claim 2 free Daily Power daily.</p>
             </TooltipContent>
           </TooltipPortal>
         </Tooltip>

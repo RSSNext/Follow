@@ -2,7 +2,7 @@ import { parseHtml } from "@renderer/lib/parse-html"
 import type { RemarkOptions } from "@renderer/lib/parse-markdown"
 import { parseMarkdown } from "@renderer/lib/parse-markdown"
 import { cn } from "@renderer/lib/utils"
-import { createElement, Fragment, useMemo, useState } from "react"
+import { createElement, Fragment, useEffect, useMemo, useState } from "react"
 
 import { MarkdownRenderContainerRefContext } from "./context"
 
@@ -40,13 +40,39 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
     as: A
 
     accessory?: React.ReactNode
+    noMedia?: boolean
   } & JSX.IntrinsicElements[A] &
   Partial<{
     renderInlineStyle: boolean
   }>,
 ) => {
-  const { children, renderInlineStyle, as = "div", accessory, ...rest } = props
-  const stableRemarkOptions = useState({ renderInlineStyle })[0]
+  const {
+    children,
+    renderInlineStyle,
+    as = "div",
+    accessory,
+    noMedia,
+    ...rest
+  } = props
+  const [remarkOptions, setRemarkOptions] = useState({
+    renderInlineStyle,
+    noMedia,
+  })
+  const [shouldForceReMountKey, setShouldForceReMountKey] = useState(0)
+
+  useEffect(() => {
+    setRemarkOptions((options) => {
+      if (
+        renderInlineStyle === options.renderInlineStyle ||
+        noMedia === options.noMedia
+      ) {
+        return options
+      }
+
+      setShouldForceReMountKey((key) => key + 1)
+      return { ...options, renderInlineStyle, noMedia }
+    })
+  }, [renderInlineStyle, noMedia])
 
   const [refElement, setRefElement] = useState<HTMLElement | null>(null)
 
@@ -54,16 +80,18 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
     () =>
       children &&
       parseHtml(children, {
-        ...stableRemarkOptions,
+        ...remarkOptions,
       }).toContent(),
-    [children, stableRemarkOptions],
+    [children, remarkOptions],
   )
 
   if (!markdownElement) return null
   return (
     <MarkdownRenderContainerRefContext.Provider value={refElement}>
       {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
-      {accessory && <Fragment key={children}>{accessory}</Fragment>}
+      {accessory && (
+        <Fragment key={shouldForceReMountKey}>{accessory}</Fragment>
+      )}
     </MarkdownRenderContainerRefContext.Provider>
   )
 }

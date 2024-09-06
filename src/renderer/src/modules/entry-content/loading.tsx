@@ -15,7 +15,7 @@ export const EntryContentLoading = (props: { icon?: string }) => {
     )
   }
   return (
-    <div className="center flex flex-col gap-4">
+    <div className="center mb-14 flex flex-col gap-4">
       <Avatar className="animate-pulse rounded-sm">
         <AvatarImage src={getUrlIcon(props.icon).src} />
       </Avatar>

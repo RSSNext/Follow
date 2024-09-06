@@ -2,9 +2,9 @@ import { appIsReady } from "@renderer/atoms/app"
 
 const afterReadyCallbackQueue = [] as Array<() => void>
 
-export const pushAfterReadyCallback = (callback: () => void) => {
+export const waitAppReady = (callback: () => void, delay = 0) => {
   if (appIsReady()) {
-    callback()
+    delay ? callback() : setTimeout(callback, delay)
   } else {
     afterReadyCallbackQueue.push(callback)
   }

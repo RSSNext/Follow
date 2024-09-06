@@ -1,4 +1,4 @@
-import { SiteIcon } from "@renderer/components/site-icon"
+import { FeedIcon } from "@renderer/components/feed-icon"
 import {
   Card,
   CardContent,
@@ -23,7 +23,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
     <Card className="shadow-none">
       <CardHeader className="p-5 pb-3">
         <CardTitle className="flex items-center text-base">
-          <SiteIcon url={`https://${data.url}`} />
+          <FeedIcon siteUrl={`https://${data.url}`} />
           {data.name}
         </CardTitle>
       </CardHeader>
@@ -40,9 +40,10 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
                       <RecommendationContent routePrefix={routePrefix} route={data.routes[route]} />
                     ),
                     icon: (
-                      <SiteIcon
+                      <FeedIcon
                         className="size-4"
-                        url={`https://${data.url}`}
+                        size={16}
+                        siteUrl={`https://${data.url}`}
                       />
                     ),
                     title: `${data.name} - ${data.routes[route].name}`,

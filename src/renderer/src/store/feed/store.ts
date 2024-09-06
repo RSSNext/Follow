@@ -27,6 +27,9 @@ class FeedActions {
     set((state) =>
       produce(state, (state) => {
         for (const feed of feeds) {
+          if (feed.errorAt && new Date(feed.errorAt).getTime() > Date.now() - 1000 * 60 * 60 * 9) {
+            feed.errorAt = null
+          }
           if (feed.id) {
             state.feeds[feed.id] = feed
           } else {

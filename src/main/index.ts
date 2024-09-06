@@ -106,6 +106,8 @@ function bootsharp() {
   })
 
   const handleOpen = (url: string) => {
+    const isValid = URL.canParse(url)
+    if (!isValid) return
     const urlObj = new URL(url)
 
     if (urlObj.hostname === "auth" || urlObj.pathname === "//auth") {

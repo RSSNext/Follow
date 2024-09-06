@@ -1,9 +1,9 @@
 import { setAppSearchOpen, useAppSearchOpen } from "@renderer/atoms/app"
 import { ExPromise } from "@renderer/components/common/ExPromise"
 import { LoadMoreIndicator } from "@renderer/components/common/LoadMoreIndicator"
+import { FeedIcon } from "@renderer/components/feed-icon"
 import { EmptyIcon } from "@renderer/components/icons/empty"
 import { Logo } from "@renderer/components/icons/logo"
-import { SiteIcon } from "@renderer/components/site-icon"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import {
   Select,
@@ -247,11 +247,13 @@ const SearchItem = memo(function Item({
   title,
   entryId,
   feedId,
-  icon,
+
   subtitle,
   view,
 }: {} & SearchListType) {
   const navigateEntry = useNavigateEntry()
+
+  const feed = getFeedById(feedId!)
 
   return (
     <Command.Item
@@ -273,7 +275,7 @@ const SearchItem = memo(function Item({
       }}
     >
       <div className="relative z-10 flex w-full items-center justify-between px-1 py-2">
-        {icon && <SiteIcon className="mr-2 size-5 shrink-0" url={icon} />}
+        {feed && <FeedIcon className="mr-2 size-5 shrink-0 rounded" feed={feed} />}
         <span className="block min-w-0 flex-1 shrink-0 truncate">{title}</span>
         <span className="block min-w-0 shrink-0 grow-0 text-xs font-medium text-zinc-800 opacity-60 dark:text-slate-200/80">
           {subtitle}
@@ -299,6 +301,7 @@ const SearchResultCount: FC<{
   const searchInstance = React.useContext(SearchCmdKContext)
   const hasKeyword = useSearchStore((s) => !!s.keyword)
   const searchType = useSearchStore((s) => s.searchType)
+  // eslint-disable-next-line react-compiler/react-compiler
   const recordCountPromise = useMemo(async () => {
     let count = 0
     const counts = await searchInstance?.then((s) => s.counts)
@@ -321,19 +324,13 @@ const SearchResultCount: FC<{
         <small className="center absolute bottom-3 right-3 shrink-0 gap-1 opacity-80">
           {hasKeyword ? (
             <span>
-              {count}
-              {" "}
-              {pluralize("result", count || 0)}
+              {count} {pluralize("result", count || 0)}
             </span>
           ) : (
             <ExPromise promise={recordCountPromise}>
               {(count) => (
                 <>
-                  {count}
-                  {" "}
-                  local
-                  {" "}
-                  {pluralize("record", count)}
+                  {count} local {pluralize("record", count)}
                 </>
               )}
             </ExPromise>
@@ -344,7 +341,8 @@ const SearchResultCount: FC<{
         </small>
       </TooltipTrigger>
       <TooltipContent>
-        This search covers locally available data. Try a Refetch to include the latest data.
+        This search covers locally available data. Try a Refetch to include the
+        latest data.
       </TooltipContent>
     </Tooltip>
   )

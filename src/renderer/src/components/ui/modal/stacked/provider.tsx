@@ -34,15 +34,15 @@ const ModalStack = () => {
         <ModalInternal
           key={item.id}
           item={item}
-          index={index}
-          isTop={index === topModalIndex}
+          index={index * 2}
+          isTop={index === topModalIndex * 2}
         />
       ))}
       {stack.length > 0 &&
         (modalSettingOverlay || forceOverlay) &&
         !allForceHideOverlay && (
         <ModalOverlay
-          zIndex={MODAL_STACK_Z_INDEX + overlayIndex + 1}
+          zIndex={MODAL_STACK_Z_INDEX + overlayIndex * 2 - 2}
           blur={overlayOptions?.blur}
           className={overlayOptions?.className}
         />

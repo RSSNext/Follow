@@ -140,7 +140,7 @@ const FeedInnerForm = ({
   useEffect(() => {
     if (subscription) {
       form.setValue("view", `${subscription?.view}`)
-      form.setValue("category", subscription?.category)
+      subscription?.category && form.setValue("category", subscription.category)
       form.setValue("isPrivate", subscription?.isPrivate || false)
     }
   }, [subscription])

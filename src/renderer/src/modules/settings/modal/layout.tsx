@@ -10,6 +10,7 @@ import type { PointerEventHandler, PropsWithChildren } from "react"
 import { Suspense, useCallback, useEffect, useRef } from "react"
 
 import { settings } from "../constants"
+import { SyncIndicator } from "../helper/SyncIndicator"
 import { SettingsSidebarTitle } from "../title"
 import { useSetSettingTab, useSettingTab } from "./context"
 
@@ -102,28 +103,34 @@ export function SettingModalLayout(
             className="flex h-0 flex-1 bg-theme-modal-background-opaque"
             ref={elementRef}
           >
-            <div className="w-44 border-r px-2 py-6">
+            <div className="flex min-h-0 w-44 flex-col border-r px-2 py-6">
               <div className="mb-4 flex h-8 items-center gap-2 px-2 font-bold">
                 <Logo className="mr-1 size-6" />
                 {APP_NAME}
               </div>
-              {settings.map((t) => (
-                <button
-                  key={t.path}
-                  className={`my-1 flex w-full items-center rounded-lg px-2.5 py-0.5 leading-loose text-theme-foreground/70 transition-colors ${
-                    tab === t.path ?
-                      "bg-theme-item-active text-theme-foreground/90" :
-                      ""
-                  }`}
-                  type="button"
-                  onClick={() => setTab(t.path)}
-                >
-                  <SettingsSidebarTitle
-                    path={t.path}
-                    className="text-[0.94rem] font-medium"
-                  />
-                </button>
-              ))}
+              <nav className="flex grow flex-col">
+                {settings.map((t) => (
+                  <button
+                    key={t.path}
+                    className={`my-0.5 flex w-full items-center rounded-lg px-2.5 py-0.5 leading-loose text-theme-foreground/70 transition-colors ${
+                      tab === t.path ?
+                        "bg-theme-item-active text-theme-foreground/90" :
+                        ""
+                    }`}
+                    type="button"
+                    onClick={() => setTab(t.path)}
+                  >
+                    <SettingsSidebarTitle
+                      path={t.path}
+                      className="text-[0.94rem] font-medium"
+                    />
+                  </button>
+                ))}
+              </nav>
+
+              <div className="relative -mb-5 h-8 shrink-0">
+                <SyncIndicator />
+              </div>
             </div>
             <div className="relative flex h-full flex-1 flex-col bg-theme-background pt-1">
               <Suspense>{children}</Suspense>

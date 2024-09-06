@@ -40,6 +40,7 @@ import { CurrentModalContext } from "./context"
 import { useResizeableModal } from "./hooks"
 import type { ModalProps } from "./types"
 
+const DragBar = isElectronBuild ? <span className="drag-region fixed left-0 right-36 top-0 h-8" /> : null
 export const ModalInternal = memo(
   forwardRef<
     HTMLDivElement,
@@ -259,9 +260,7 @@ export const ModalInternal = memo(
                         }
                         style={zIndexStyle}
                       >
-                        {isElectronBuild && (
-                          <div className="drag-region fixed inset-x-0 top-0 h-8" />
-                        )}
+                        {DragBar}
                         <div
                           className={cn("contents", modalClassName)}
                           onClick={stopPropagation}
@@ -302,9 +301,7 @@ export const ModalInternal = memo(
                           undefined
                       }
                     >
-                      {isElectronBuild && (
-                        <div className="drag-region fixed inset-x-0 top-0 h-8" />
-                      )}
+                      {DragBar}
 
                       <m.div
                         ref={modalElementRef}

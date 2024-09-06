@@ -28,7 +28,7 @@ export const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({
   return (
     <div className="flex w-full flex-col items-center justify-center rounded-md bg-theme-modal-background-opaque p-2">
       <div className="center m-auto flex max-w-prose flex-col gap-4 text-center">
-        <FeedIcon feed={feed} size={60} />
+        <FeedIcon feed={feed} size={60} className="rounded" />
 
         <div className="text-lg font-bold">{feed.title}</div>
 

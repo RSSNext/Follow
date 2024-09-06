@@ -99,12 +99,16 @@ export function ListItem({
         >
           {entry.entries.title ? (
             <EntryTranslation
+              useOverlay
+              side="top"
               className={envIsSafari ? "line-clamp-2 break-all" : undefined}
               source={entry.entries.title}
               target={translation?.title}
             />
           ) : (
             <EntryTranslation
+              useOverlay
+              side="top"
               source={entry.entries.description}
               target={translation?.description}
             />
@@ -121,6 +125,8 @@ export function ListItem({
             )}
           >
             <EntryTranslation
+              useOverlay
+              side="top"
               className={envIsSafari ? "line-clamp-2 break-all" : undefined}
               source={entry.entries.description}
               target={translation?.description}
@@ -139,10 +145,11 @@ export function ListItem({
           )}
           feedIcon={(
             <FeedIcon
+              fallback={false}
               feed={feed}
               entry={entry.entries}
               size={80}
-              className="m-0"
+              className="m-0 rounded"
             />
           )}
         />

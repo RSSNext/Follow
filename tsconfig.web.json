@@ -20,6 +20,7 @@
     "noUnusedParameters": false,
     "strict": true,
     "baseUrl": ".",
+    "noImplicitReturns": false,
     "paths": {
       "@renderer/*": [
         "src/renderer/src/*"

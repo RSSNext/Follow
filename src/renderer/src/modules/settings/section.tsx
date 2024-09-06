@@ -1,7 +1,7 @@
-/* eslint-disable @eslint-react/no-clone-element */
 /* eslint-disable @eslint-react/no-children-to-array */
 /* eslint-disable @eslint-react/no-children-map */
 
+import { cn } from "@renderer/lib/utils"
 import type { FC, PropsWithChildren, ReactNode } from "react"
 import { cloneElement } from "react"
 import * as React from "react"
@@ -14,8 +14,17 @@ import {
 
 export const SettingSectionTitle: FC<{
   title: string
-}> = ({ title }) => (
-  <div className="mb-4 mt-8 text-sm font-medium capitalize text-gray-400 first:mt-0 dark:text-neutral-500">
+
+  margin?: "compact" | "normal"
+}> = ({ title, margin }) => (
+  <div
+    className={cn(
+      "text-sm font-medium capitalize text-gray-400 first:mt-0 dark:text-neutral-500",
+      margin === "compact" ?
+        "mb-2 mt-4" :
+        "mb-4 mt-8",
+    )}
+  >
     {title}
   </div>
 )

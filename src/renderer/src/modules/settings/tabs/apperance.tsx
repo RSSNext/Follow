@@ -18,7 +18,7 @@ import { getOS } from "@renderer/lib/utils"
 import { bundledThemes } from "shiki/themes"
 
 import { SettingTabbedSegment } from "../control"
-import { ContentFontSelector, UIFontSelector } from "../modules/fonts"
+import { ContentFontSelector, UIFontSelector } from "../sections/fonts"
 import { createSettingBuilder } from "../setting-builder"
 import { SettingsTitle } from "../title"
 
@@ -107,6 +107,7 @@ const ShikiTheme = () => {
     <div className="mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">Code highlight theme</span>
       <Select
+
         defaultValue="github-dark"
         value={codeHighlightTheme}
         onValueChange={(value) => {
@@ -116,7 +117,7 @@ const ShikiTheme = () => {
         <SelectTrigger size="sm" className="w-48">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent align="end" className="h-64">
+        <SelectContent position="item-aligned">
           {Object.keys(bundledThemes)?.map((theme) => (
             <SelectItem key={theme} value={theme}>
               {theme}
@@ -154,7 +155,7 @@ const TextSize = () => {
         <SelectTrigger size="sm" className="w-48 capitalize">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent position="item-aligned">
           {Object.entries(textSizeMap).map(([size, value]) => (
             <SelectItem
               className="capitalize"

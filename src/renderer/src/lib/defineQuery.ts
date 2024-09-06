@@ -20,7 +20,7 @@ export type DefinedQuery<TQueryKey extends QueryKey, TData> = Readonly<{
   invalidateRoot: () => void
 
   refetch: () => Promise<TData | undefined>
-  prefetch: () => Promise<void>
+  prefetch: () => Promise<TData | undefined>
 
   setData: <Data = TData>(
     updater: (draft: Draft<Data>) => ValidRecipeReturnType<Draft<Data>>
@@ -98,6 +98,7 @@ export function defineQuery<
         queryKey: key,
         queryFn: fn,
       })
+      return queryClient.getQueryData<TData>(key)
     },
     cancel: async (keyExtactor) => {
       const queryKey =

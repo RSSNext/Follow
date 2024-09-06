@@ -1,8 +1,14 @@
 import { Slot } from "@radix-ui/react-slot"
+import * as LinkParsers from "@renderer/lib/link-parser"
 import { cn } from "@renderer/lib/utils"
 import type { FC } from "react"
 
 import { getSupportedPlatformIconName } from "./utils"
+
+const IconMap = Object.values(LinkParsers).reduce((acc, parser) => {
+  acc[parser.parserName] = parser.icon
+  return acc
+}, {} as Record<string, string>)
 
 export const PlatformIcon: FC<{
   url: string
@@ -12,7 +18,7 @@ export const PlatformIcon: FC<{
 }> = ({ className, url, children, style, ...rest }) => {
   const iconName = getSupportedPlatformIconName(url)
 
-  if (!iconName) {
+  if (!iconName || !IconMap[iconName]) {
     return (
       <Slot className={className} style={style} {...rest}>
         {children}
@@ -29,11 +35,4 @@ export const PlatformIcon: FC<{
       }}
     />
   )
-}
-
-const IconMap = {
-  github: tw`i-mgc-github-2-cute-fi text-black dark:text-white`,
-  twitter: tw`i-mgc-twitter-cute-fi text-[#55acee]`,
-  x: tw`i-mgc-social-x-cute-li`,
-  youtube: tw`i-mgc-youtube-cute-fi text-[#ff0000]`,
 }

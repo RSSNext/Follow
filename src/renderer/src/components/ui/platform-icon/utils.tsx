@@ -1,9 +1,4 @@
-import {
-  isGithubUrl,
-  isTwitterUrl,
-  isXUrl,
-  isYoutubeUrl,
-} from "@renderer/lib/link-parser"
+import * as validator from "@renderer/lib/link-parser"
 
 export const getSupportedPlatformIconName = (url: string) => {
   const safeUrl = parseSafeUrl(url)
@@ -11,22 +6,17 @@ export const getSupportedPlatformIconName = (url: string) => {
   if (!safeUrl) {
     return false
   }
-  switch (true) {
-    case isGithubUrl(safeUrl): {
-      return "github"
-    }
-    case isTwitterUrl(safeUrl): {
-      return "twitter"
-    }
-    case isXUrl(safeUrl): {
-      return "x"
-    }
-    case isYoutubeUrl(safeUrl): {
-      return "youtube"
-    }
-  }
 
-  return false
+  return (
+    Object.values(validator).find((parser) => {
+      const res = parser(safeUrl)
+
+      if (res.validate) {
+        return true
+      }
+      return false
+    })?.parserName || false
+  )
 }
 
 const parseSafeUrl = (url: string) => {

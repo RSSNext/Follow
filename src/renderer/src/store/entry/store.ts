@@ -85,18 +85,21 @@ class EntryActions {
     read,
     limit,
     pageParam,
+    isArchived,
   }: {
     id?: number | string
     view?: number
     read?: boolean
     limit?: number
     pageParam?: string
+    isArchived?: boolean
   }) {
     const data = await apiClient.entries.$post({
       json: {
         publishedAfter: pageParam,
         read,
         limit,
+        isArchived,
         // withContent: true,
         ...getEntriesParams({
           id,

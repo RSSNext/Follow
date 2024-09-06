@@ -1,3 +1,4 @@
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { useQuery } from "@tanstack/react-query"
@@ -8,11 +9,14 @@ export const Titlebar = () => {
     queryKey: ["windowIsMaximized"],
   })
 
+  const feedColWidth = useUISettingKey("feedColWidth")
+
   return (
     <div
-      className="drag-region flex w-full items-center justify-end overflow-hidden"
+      className="drag-region absolute right-0 flex items-center justify-end overflow-hidden"
       style={{
         height: `${ElECTRON_CUSTOM_TITLEBAR_HEIGHT}px`,
+        left: `${feedColWidth}px`,
       }}
     >
       <button

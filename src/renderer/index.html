@@ -29,6 +29,10 @@
       name="twitter:image"
       content="https://app.follow.is/opengraph-image.png"
     />
+
+    <script>
+    function setTheme(){let e="follow:color-mode",t=document.documentElement,a=localStorage.getItem(e);function h(){return window.matchMedia?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":window.matchMedia("(prefers-color-scheme: light)").matches?"light":void 0:void 0}if(!a){t.dataset.theme=h()||"light";return}switch(a=JSON.parse(a)){case"dark":t.dataset.theme="dark";break;case"light":t.dataset.theme="light";break;case"system":t.dataset.theme=h()||"light"}}setTheme();
+    </script>
   </head>
   <body>
     <div id="root">

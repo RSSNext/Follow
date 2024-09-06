@@ -12,6 +12,7 @@ import { ShadowDOM } from "@renderer/components/common/ShadowDOM"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { HTML } from "@renderer/components/ui/markdown"
 import { Toc } from "@renderer/components/ui/markdown/components/Toc"
+import { useInPeekModal } from "@renderer/components/ui/modal/inspire/PeekModal"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { isWebBuild, ROUTE_FEED_PENDING } from "@renderer/constants"
@@ -132,6 +133,8 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
   useEffect(() => {
     scrollerRef.current?.scrollTo(0, 0)
   }, [entryId])
+
+  const isPeekModal = useInPeekModal()
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -159,7 +162,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
         viewportClassName="p-5"
         ref={scrollerRef}
       >
-        <m.div
+        <div
           style={
             readerFontFamily ?
                 {
@@ -167,9 +170,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                 } :
               undefined
           }
-          initial={{ opacity: 0.01, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0.01, y: -100 }}
+          className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24"
           key={entry.entries.id}
         >
           <article
@@ -233,9 +234,20 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                   {!isInReadabilityMode ? (
                     <ShadowDOM>
                       <HTML
-                        accessory={<ContainerToc key={entryId} />}
+                        accessory={
+                          isPeekModal ? undefined : (
+                            <ContainerToc key={entryId} />
+                          )
+                        }
                         as="article"
                         className="prose dark:prose-invert prose-h1:text-[1.6em]"
+                        style={
+                          readerFontFamily ?
+                              {
+                                fontFamily: readerFontFamily,
+                              } :
+                            undefined
+                        }
                         renderInlineStyle={readerRenderInlineStyle}
                       >
                         {content}
@@ -257,6 +269,8 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                       <div className="center flex flex-col gap-2">
                         <i className="i-mgc-close-cute-re text-3xl text-red-500" />
                         <span className="font-sans text-sm">Network Error</span>
+
+                        <pre>{error.message}</pre>
                       </div>
                     ) :
                     (
@@ -268,7 +282,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
               </div>
             )}
           </article>
-        </m.div>
+        </div>
       </ScrollArea.ScrollArea>
     </EntryContentProvider>
   )
@@ -445,7 +459,7 @@ const ContainerToc: FC = () => {
         <div className="sticky top-0">
           <Toc
             className={cn(
-              "flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring-soft",
+              "flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring spring-soft",
               "max-h-[calc(100vh-100px)] overflow-auto scrollbar-none",
 
               "@[500px]:-translate-x-12",

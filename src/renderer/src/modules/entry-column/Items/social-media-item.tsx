@@ -31,6 +31,8 @@ export const SocialMediaItem: EntryListItemFC = ({
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
+  const content = entry.entries.content || entry.entries.description
+
   return (
     <div
 
@@ -52,7 +54,7 @@ export const SocialMediaItem: EntryListItemFC = ({
         <div
           className={cn(
             "-mt-0.5 flex-1 text-sm",
-            entry.entries.description && "line-clamp-5",
+            content && "line-clamp-[10]",
           )}
         >
           <div className="w-[calc(100%-10rem)] space-x-1">
@@ -69,8 +71,10 @@ export const SocialMediaItem: EntryListItemFC = ({
             )}
           >
             <EntryTranslation
-              source={entry.entries.description}
-              target={translation?.description}
+              className="cursor-auto select-text"
+              source={content}
+              target={translation?.content}
+              isHTML
             />
             {!!entry.collections && <StarIcon />}
           </div>

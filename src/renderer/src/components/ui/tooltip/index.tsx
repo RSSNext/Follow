@@ -3,6 +3,8 @@ import { cn } from "@renderer/lib/utils"
 import { m } from "framer-motion"
 import * as React from "react"
 
+import { tooltipStyle } from "./styles"
+
 const TooltipProvider = TooltipPrimitive.Provider
 
 const Tooltip: typeof TooltipProvider = ({ children, ...props }) => (
@@ -21,17 +23,7 @@ const TooltipContent = React.forwardRef<
     ref={ref}
     asChild
     sideOffset={sideOffset}
-    className={cn(
-      "relative z-[101] border border-accent/10 bg-white px-2 py-1 text-foreground dark:bg-neutral-950",
-      // "animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out  data-[state=closed]:zoom-out-95 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2",
-      "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
-      "rounded-lg text-sm",
-      "max-w-[75ch] select-text",
-
-      "drop-shadow data-[side=top]:shadow-tooltip-bottom data-[side=bottom]:shadow-tooltip-top dark:border-border",
-
-      className,
-    )}
+    className={cn(tooltipStyle.content, className)}
     {...props}
   >
     <m.div

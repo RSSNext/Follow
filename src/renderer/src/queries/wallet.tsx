@@ -1,6 +1,7 @@
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
+import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
@@ -20,9 +21,9 @@ export const wallet = {
       },
     ),
 
-  claimDailyRewardTtl: () =>
-    defineQuery(["wallet", "claimDailyRewardTtl"], async () =>
-      apiClient.wallets.transactions.claim_daily_ttl.$get()),
+  claimCheck: () =>
+    defineQuery(["wallet", "claimCheck"], async () =>
+      apiClient.wallets.transactions["claim-check"].$get()),
 
   transactions: {
     get: (
@@ -64,11 +65,15 @@ export const useCreateWalletMutation = () =>
     },
   })
 
-export const useClaimWalletDailyRewardTtl = () =>
-  useAuthQuery(wallet.claimDailyRewardTtl(), { refetchInterval: 5000 })
+export const useClaimCheck = () =>
+  useAuthQuery(wallet.claimCheck(), {
+    refetchInterval: 1 * 60 * 60 * 1000,
+  })
 
-export const useClaimWalletDailyRewardMutation = () =>
-  useMutation({
+export const useClaimWalletDailyRewardMutation = () => {
+  const settingModalPresent = useSettingModal()
+
+  return useMutation({
     mutationKey: ["claimWalletDailyReward"],
     mutationFn: () => apiClient.wallets.transactions.claim_daily.$post(),
     async onError(err) {
@@ -76,11 +81,27 @@ export const useClaimWalletDailyRewardMutation = () =>
     },
     onSuccess() {
       wallet.get().invalidate()
-      wallet.claimDailyRewardTtl().invalidate()
+      wallet.claimCheck().invalidate()
       window.posthog?.capture("daily_reward_claimed")
-      toast("🎉 Daily reward claimed.")
+
+      toast(
+        <div
+          className="flex items-center gap-1 text-lg"
+          onClick={() => settingModalPresent("wallet")}
+        >
+          <i className="i-mgc-power animate-flip" />
+        </div>,
+        {
+          unstyled: true,
+          position: "bottom-left",
+          classNames: {
+            toast: "w-full flex justify-start !shadow-none !bg-transparent",
+          },
+        },
+      )
     },
   })
+}
 
 export const useWalletTipMutation = () =>
   useMutation({
@@ -98,7 +119,7 @@ export const useWalletTipMutation = () =>
       wallet.transactions.get().invalidate()
       window.posthog?.capture("tip_sent", {
         amount: variables.amount,
-        feedId: variables.feedId,
+        entryId: variables.entryId,
       })
       toast("🎉 Tipped.")
     },
