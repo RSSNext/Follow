@@ -90,7 +90,8 @@ export const UserProfileModalContent: FC<{
     if (!$ref) return
 
     const initialHeaderHeight = 136
-    $ref.onscroll = throttle(() => {
+
+    const scrollHandler = throttle(() => {
       const currentH = $ref.scrollTop
 
       setHeaderSimple((current) => {
@@ -102,6 +103,7 @@ export const UserProfileModalContent: FC<{
         return current
       })
     }, 16)
+    $ref.addEventListener("scroll", scrollHandler)
 
     const currentVisible = new Set<string>()
     const ob = new IntersectionObserver((en) => {
@@ -123,7 +125,7 @@ export const UserProfileModalContent: FC<{
       ob.observe(el)
     })
     return () => {
-      $ref.onscroll = null
+      $ref.removeEventListener("scroll", scrollHandler)
 
       ob.disconnect()
     }
@@ -176,7 +178,7 @@ export const UserProfileModalContent: FC<{
     >
       <m.div
         onPointerDown={stopPropagation}
-        onPointerDownCapture={stopPropagation}
+        // onPointerDownCapture={stopPropagation}
         tabIndex={-1}
         initial="initial"
         animate={controller}
@@ -291,7 +293,7 @@ export const UserProfileModalContent: FC<{
             </div>
             <ScrollArea.ScrollArea
               ref={setScrollerRef}
-              rootClassName="h-[400px] grow max-w-full px-5 w-full"
+              rootClassName="grow max-w-full px-5 w-full"
               viewportClassName="[&>div]:space-y-4 pb-4"
             >
               {subscriptions.isLoading ? (

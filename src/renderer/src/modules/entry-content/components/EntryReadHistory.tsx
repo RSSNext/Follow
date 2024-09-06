@@ -90,16 +90,16 @@ const EntryUser: Component<{
   return (
     <Tooltip>
       <TooltipTrigger
-        className="relative"
+        className="no-drag-region relative cursor-pointer"
         style={{
           right: `${i * 8}px`,
           zIndex: i,
         }}
+        asChild
       >
         <m.button
           layout="position"
           layoutId={userId}
-          className="no-drag-region cursor-pointer"
           type="button"
           onClick={() => {
             presentUserProfile(userId)

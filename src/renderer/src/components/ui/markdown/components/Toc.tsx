@@ -26,7 +26,7 @@ import { MarkdownRenderContainerRefContext } from "../context"
 import type { TocItemProps } from "./TocItem"
 import { TocItem } from "./TocItem"
 
-type DebouncedFuncLeading<T extends (...args: any[]) => any> = T & {
+type DebouncedFuncLeading<T extends (..._args: any[]) => any> = T & {
   cancel: () => void
   flush: () => void
 }
@@ -218,7 +218,7 @@ export const Toc: Component = ({ className }) => {
             {toc.map((heading, index) => (
               <MemoedItem
                 heading={heading}
-                key={heading.title}
+                key={heading.anchorId}
                 rootDepth={rootDepth}
                 onClick={handleScrollTo}
                 isScrollOut={index < currentScrollRange[0]}
@@ -246,7 +246,7 @@ export const Toc: Component = ({ className }) => {
                   >
                     {toc.map((heading, index) => (
                       <li
-                        key={heading.title}
+                        key={heading.anchorId}
                         className="flex h-[24px] w-full items-center"
                       >
                         <button

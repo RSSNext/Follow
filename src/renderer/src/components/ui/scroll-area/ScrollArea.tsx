@@ -53,6 +53,7 @@ const Scrollbar = React.forwardRef<
     <ScrollAreaBase.Scrollbar
       {...rest}
       ref={forwardedRef}
+      forceMount
       className={cn(
         "z-[99] flex w-2.5 touch-none select-none p-0.5",
         orientation === "horizontal" ?
