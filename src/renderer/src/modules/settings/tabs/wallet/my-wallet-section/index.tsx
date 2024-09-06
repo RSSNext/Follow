@@ -40,7 +40,8 @@ export const MyWalletSection = () => {
       <div>
         <div className="text-sm">
           <p>
-            Power is an ERC-20 token on the 
+            Power is an ERC-20 token on the
+            {" "}
             <a
               className="underline"
               target="_blank"
