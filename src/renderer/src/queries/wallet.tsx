@@ -89,7 +89,7 @@ export const useClaimWalletDailyRewardMutation = () => {
           className="flex items-center gap-1 text-lg"
           onClick={() => settingModalPresent("wallet")}
         >
-          <i className="i-mgc-power" />
+          <i className="i-mgc-power animate-flip" />
         </div>,
         {
           unstyled: true,
