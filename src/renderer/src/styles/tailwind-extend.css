@@ -323,7 +323,11 @@
 }
 
 @layer utilities {
-  .easing-spring-soft {
+  .easing-spring {
+    animation-timing-function: var(--spring-easing);
+    animation-duration: var(--spring-duration);
+  }
+  .spring-soft {
     --spring-easing: linear(
       0,
       0.0019,
@@ -353,8 +357,5 @@
       0.9993 99.95%
     );
     --spring-duration: 1.157s;
-
-    animation-timing-function: var(--spring-easing);
-    animation-duration: var(--spring-duration);
   }
 }

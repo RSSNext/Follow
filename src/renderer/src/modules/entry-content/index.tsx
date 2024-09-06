@@ -162,7 +162,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
         viewportClassName="p-5"
         ref={scrollerRef}
       >
-        <m.div
+        <div
           style={
             readerFontFamily ?
                 {
@@ -170,9 +170,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                 } :
               undefined
           }
-          initial={{ opacity: 0.01, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0.01, y: -100 }}
+          className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24"
           key={entry.entries.id}
         >
           <article
@@ -272,9 +270,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                         <i className="i-mgc-close-cute-re text-3xl text-red-500" />
                         <span className="font-sans text-sm">Network Error</span>
 
-                        <pre>
-                          {error.message}
-                        </pre>
+                        <pre>{error.message}</pre>
                       </div>
                     ) :
                     (
@@ -286,7 +282,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
               </div>
             )}
           </article>
-        </m.div>
+        </div>
       </ScrollArea.ScrollArea>
     </EntryContentProvider>
   )
@@ -463,7 +459,7 @@ const ContainerToc: FC = () => {
         <div className="sticky top-0">
           <Toc
             className={cn(
-              "flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring-soft",
+              "flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring spring-soft",
               "max-h-[calc(100vh-100px)] overflow-auto scrollbar-none",
 
               "@[500px]:-translate-x-12",
