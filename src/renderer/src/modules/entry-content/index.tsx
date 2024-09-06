@@ -271,6 +271,10 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                       <div className="center flex flex-col gap-2">
                         <i className="i-mgc-close-cute-re text-3xl text-red-500" />
                         <span className="font-sans text-sm">Network Error</span>
+
+                        <pre>
+                          {error.message}
+                        </pre>
                       </div>
                     ) :
                     (

@@ -41,7 +41,7 @@ export const EntryTranslation: Component<{
       <HoverCard.Trigger className={className} ref={ref}>
         <i className="i-mgc-translate-2-cute-re mr-1 align-middle" />
         {isHTML ? (
-          <HTML as="span" className="align-middle" noMedia>
+          <HTML as="div" className="align-middle" noMedia>
             {nextTarget}
           </HTML>
         ) : (
