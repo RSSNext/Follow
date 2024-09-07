@@ -3,6 +3,7 @@ import { browserDB } from "@renderer/database"
 
 import { entryActions } from "../entry"
 import { feedActions } from "../feed"
+import { clearImageDimensionsDb } from "../image/db"
 import { subscriptionActions } from "../subscription"
 import { feedUnreadActions } from "../unread"
 
@@ -16,5 +17,6 @@ export const clearLocalPersistStoreData = async () => {
 
   clearUISettings()
 
+  await clearImageDimensionsDb()
   await browserDB.delete().catch(() => null)
 }

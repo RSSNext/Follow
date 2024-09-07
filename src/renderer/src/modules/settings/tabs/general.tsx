@@ -8,6 +8,8 @@ import {
   setUISetting,
   useUISettingSelector,
 } from "@renderer/atoms/settings/ui"
+import { Button } from "@renderer/components/ui/button"
+import { useModalStack } from "@renderer/components/ui/modal"
 import {
   Select,
   SelectContent,
@@ -40,6 +42,7 @@ export const SettingGeneral = () => {
     setGeneralSetting("appLaunchOnStartup", checked)
   }, [])
 
+  const { present } = useModalStack()
   return (
     <>
       <SettingsTitle />
@@ -128,8 +131,31 @@ export const SettingGeneral = () => {
             {
               label: "Rebuild Database",
               action: async () => {
-                await clearLocalPersistStoreData()
-                window.location.reload()
+                present({
+                  title: "Rebuild Database",
+                  clickOutsideToDismiss: true,
+                  content: () => (
+                    <div className="text-sm">
+                      <p>
+                        Rebuilding the database will clear all your local data.
+                      </p>
+                      <p>Are you sure you want to continue?</p>
+
+                      <div className="mt-4 flex justify-end">
+                        <Button
+                          className="text-red-500 px-3"
+                          variant="ghost"
+                          onClick={async () => {
+                            await clearLocalPersistStoreData()
+                            window.location.reload()
+                          }}
+                        >
+                          Yes
+                        </Button>
+                      </div>
+                    </div>
+                  ),
+                })
               },
               description:
                 "If you are experiencing rendering issues, rebuilding the database may solve them.",

@@ -27,3 +27,8 @@ export const saveImageDimensionsToDb = async (
   url: string,
   dimensions: StoreImageType,
 ) => await set(url, dimensions, db)
+
+export const clearImageDimensionsDb = async () => {
+  const store = await db("readwrite", (store) => store.clear())
+  return store
+}
