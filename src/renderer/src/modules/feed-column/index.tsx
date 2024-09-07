@@ -177,7 +177,10 @@ export function FeedColumn({ children }: PropsWithChildren) {
           </ActionButton>
         ))}
       </div>
-      <div className="relative flex size-full overflow-hidden" ref={carouselRef}>
+      <div
+        className="relative flex size-full overflow-hidden"
+        ref={carouselRef}
+      >
         <SwipeWrapper active={active}>
           {views.map((item, index) => (
             <section
@@ -207,21 +210,6 @@ const SwipeWrapper: FC<{
   const feedColumnWidth = useUISettingKey("feedColWidth")
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // useLayoutEffect(() => {
-  //   const $container = containerRef.current;
-  //   if (!$container) return;
-
-  //   const x = -active * feedColumnWidth;
-  //   // NOTE: To fix the misalignment of the browser's layout, use display to re-render it.
-  //   if (x !== $container.getBoundingClientRect().x) {
-  //     $container.style.display = "none";
-
-  //     nextFrame(() => {
-  //       $container.style.display = "";
-  //     });
-  //   }
-  // }, []);
-
   const prevActiveIndexRef = useRef(-1)
   const [isReady, setIsReady] = useState(false)
 
@@ -248,7 +236,14 @@ const SwipeWrapper: FC<{
   }, [active])
 
   if (reduceMotion) {
-    return <div ref={containerRef}>{children}</div>
+    return (
+      <div
+        ref={containerRef}
+
+      >
+        {children[currentAnimtedActive]}
+      </div>
+    )
   }
 
   return (
