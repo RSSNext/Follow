@@ -82,9 +82,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   const previewMedia = usePreviewMedia()
 
   if (!entry) return null
-  const hasMedia = entry.entries.media && entry.entries.media.length > 0
 
-  if (!hasMedia) return null
   return (
     <EntryItemWrapper
       view={FeedViewType.Pictures}
@@ -97,21 +95,29 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
         entryPreview={entryPreview}
         translation={translation}
       >
-        <MasonryItemFixedDimensionWrapper url={entry.entries.media![0].url}>
-          <SwipeMedia
-            media={entry.entries.media}
-            className={cn(
-              "w-full shrink-0 grow rounded-md",
-              isActive && "rounded-b-none",
-            )}
-            proxySize={proxySize}
-            imgClassName="object-cover"
-            uniqueKey={entryId}
-            onPreview={(media, i) => {
-              previewMedia(media, i)
-            }}
-          />
-        </MasonryItemFixedDimensionWrapper>
+        {entry.entries.media && entry.entries.media.length > 0 ? (
+          <MasonryItemFixedDimensionWrapper url={entry.entries.media[0].url}>
+            <SwipeMedia
+              media={entry.entries.media}
+              className={cn(
+                "w-full shrink-0 grow rounded-md",
+                isActive && "rounded-b-none",
+              )}
+              proxySize={proxySize}
+              imgClassName="object-cover"
+              uniqueKey={entryId}
+              onPreview={(media, i) => {
+                previewMedia(media, i)
+              }}
+            />
+          </MasonryItemFixedDimensionWrapper>
+        ) : (
+          <div className="center aspect-video flex-col gap-1 bg-muted text-xs text-muted-foreground">
+            <i className="i-mgc-sad-cute-re size-6" />
+            No media available
+          </div>
+        )}
+
       </GridItem>
     </EntryItemWrapper>
   )
