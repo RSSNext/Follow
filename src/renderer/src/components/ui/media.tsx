@@ -262,7 +262,7 @@ const VideoPreview: FC<{
   const [isInitVideoPlayer, setIsInitVideoPlayer] = useState(!previewImageUrl)
 
   const [videoRef, setVideoRef] = useState<VideoPlayerRef | null>(null)
-  const isPaused = videoRef?.getState().paused
+  const isPaused = videoRef ? videoRef?.getState().paused : true
   const [forceUpdate] = useForceUpdate()
   return (
     <div
@@ -274,7 +274,7 @@ const VideoPreview: FC<{
         nextFrame(forceUpdate)
       }}
     >
-      {isInitVideoPlayer ? (
+      {!isInitVideoPlayer ? (
         <img
           src={previewImageUrl}
           className="size-full object-cover"
