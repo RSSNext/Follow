@@ -91,7 +91,7 @@ export const SettingInput: Component<{
 }
 
 export const SettingTabbedSegment: Component<{
-  label: string
+  label: ReactNode
   value: string
   onValueChanged?: (value: string) => void
   values: { value: string, label: string, icon?: ReactNode }[]

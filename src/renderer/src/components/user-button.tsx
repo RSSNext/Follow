@@ -5,13 +5,18 @@ import {
   AvatarImage,
 } from "@renderer/components/ui/avatar"
 import { useSignOut } from "@renderer/hooks/biz/useSignOut"
-import { useAuthQuery } from "@renderer/hooks/common"
+import {
+  useAuthQuery,
+  useSetTheme,
+  useThemeAtomValue,
+} from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { LoginModalContent } from "@renderer/modules/auth/LoginModalContent"
 import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
+import { SettingTabbedSegment } from "@renderer/modules/settings/control"
 import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useSession } from "@renderer/queries/auth"
 import type { FC } from "react"
@@ -76,7 +81,10 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className="!outline-none focus-visible:bg-theme-item-hover">
+      <DropdownMenuTrigger
+        asChild
+        className="!outline-none focus-visible:bg-theme-item-hover"
+      >
         <ActionButton tooltip="Profile">
           <UserAvatar className="h-5 p-0 [&_*]:border-0" hideName />
         </ActionButton>
@@ -106,6 +114,13 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
           Profile
         </DropdownMenuItem>
         <DropdownMenuSeparator />
+
+        <DropdownMenuLabel>
+          <AppTheme />
+        </DropdownMenuLabel>
+
+        <DropdownMenuSeparator />
+
         <DropdownMenuItem
           onClick={() => {
             // Here we need to delay one frame, so it's two raf,
@@ -199,5 +214,44 @@ export function UserAvatar({
       </Avatar>
       {!hideName && <div>{(profile.data || session?.user)?.name}</div>}
     </div>
+  )
+}
+
+const AppTheme = () => {
+  const theme = useThemeAtomValue()
+  const setTheme = useSetTheme()
+  return (
+    <SettingTabbedSegment
+      className="mb-0"
+      label={(
+        <span>
+          <i className="i-mgc-palette-cute-re mr-2 translate-y-0.5" />
+          <span className="text-sm font-normal">
+            Theme
+          </span>
+        </span>
+      )}
+      value={theme}
+      values={[
+        {
+          value: "system",
+          label: "",
+          icon: <i className="i-mingcute-monitor-line" />,
+        },
+        {
+          value: "light",
+          label: "",
+          icon: <i className="i-mingcute-sun-line" />,
+        },
+        {
+          value: "dark",
+          label: "",
+          icon: <i className="i-mingcute-moon-line" />,
+        },
+      ]}
+      onValueChanged={(value) => {
+        setTheme(value as "light" | "dark" | "system")
+      }}
+    />
   )
 }
