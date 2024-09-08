@@ -240,7 +240,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                           )
                         }
                         as="article"
-                        className="prose dark:prose-invert prose-h1:text-[1.6em]"
+                        className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em]"
                         style={
                           readerFontFamily ?
                               {
