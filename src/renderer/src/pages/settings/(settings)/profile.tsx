@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useWhoami } from "@renderer/atoms/user"
+import { setWhoami, useWhoami } from "@renderer/atoms/user"
 import { Button } from "@renderer/components/ui/button"
 import {
   Form,
@@ -51,7 +51,10 @@ export function Component() {
       apiClient["auth-app"]["update-account"].$patch({
         json: values,
       }),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      if (user && variables) {
+        setWhoami({ ...user, ...variables })
+      }
       toast("Profile updated.", {
         duration: 3000,
       })
@@ -109,7 +112,12 @@ export function Component() {
             )}
           />
           <div className="text-right">
-            <Button type="submit">Submit</Button>
+            <Button
+              type="submit"
+              isLoading={updateMutation.isPending}
+            >
+              Submit
+            </Button>
           </div>
         </form>
       </Form>
