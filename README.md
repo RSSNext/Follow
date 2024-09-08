@@ -16,9 +16,8 @@ Currently, Follow is still in the early developer preview stage (alpha) and is o
 If you have access, you are welcome to use the following methods to download and install it:
 
 - You can get the installation packages for each platform from the [Release page](https://github.com/RSSNext/Follow/releases).
-- If you are using Arch linux, you can install it using the community-contributed aur method:
-  - https://aur.archlinux.org/packages/follow-appimage by [timochan](https://github.com/ttimochan)
-  - https://aur.archlinux.org/packages/follow-bin by [@OnlyXuanwo](https://x.com/OnlyXuanwo)
+- If you are using Arch linux, you can install package [follow-appimage](https://aur.archlinux.org/packages/follow-appimage) that maintained by [timochan](https://github.com/ttimochan)
+
 
 ## Contributing
 
