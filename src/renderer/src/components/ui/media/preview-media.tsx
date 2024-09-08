@@ -305,7 +305,7 @@ const FallbackableImage: FC<
   }, [currentSrc, currentState, fallbackUrl, src])
 
   return (
-    <div className="flex flex-col">
+    <div className="flex size-full flex-col">
       {isLoading && !isAllError && (
         <div className="center absolute size-full">
           <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
