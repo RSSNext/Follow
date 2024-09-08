@@ -71,7 +71,7 @@ export const SocialMediaItem: EntryListItemFC = ({
             )}
           >
             <EntryTranslation
-              className="cursor-auto select-text"
+              className="cursor-auto select-text [&_br:last-child]:hidden"
               source={content}
               target={translation?.content}
               isHTML

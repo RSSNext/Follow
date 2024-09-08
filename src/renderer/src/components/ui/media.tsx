@@ -170,7 +170,7 @@ const MediaImpl: FC<MediaProps> = ({
           <span
             className={cn(
               hidden && "hidden",
-              "block",
+              "center",
               !(props.width || props.height) && "size-full",
               "relative bg-stone-100 object-cover",
               mediaContainerClassName,
