@@ -81,7 +81,6 @@ export function Component() {
       <FeedResponsiveResizerContainer containerRef={containerRef}>
         <FeedColumn>
           <CornerPlayer />
-
           <FooterInfo />
 
           {ELECTRON && <AutoUpdater />}
@@ -191,6 +190,22 @@ const FeedResponsiveResizerContainer = ({
       timer = clearTimeout(timer)
     }
   }, [feedColumnShow])
+
+  useEffect(() => {
+    if (!isDragging) return
+    const $css = document.createElement("style")
+
+    $css.innerHTML = `
+      * {
+        cursor: ew-resize !important;
+      }
+    `
+
+    document.head.append($css)
+    return () => {
+      $css.remove()
+    }
+  }, [isDragging])
 
   return (
     <>

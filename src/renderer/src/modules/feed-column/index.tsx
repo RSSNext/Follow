@@ -236,14 +236,7 @@ const SwipeWrapper: FC<{
   }, [active])
 
   if (reduceMotion) {
-    return (
-      <div
-        ref={containerRef}
-
-      >
-        {children[currentAnimtedActive]}
-      </div>
-    )
+    return <div ref={containerRef}>{children[currentAnimtedActive]}</div>
   }
 
   return (
