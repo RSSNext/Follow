@@ -142,13 +142,13 @@ export const PreviewMediaContent: FC<{
             controls
             autoPlay
             muted
-            className="max-h-full max-w-full object-contain"
+            className="size-full object-contain"
             onClick={stopPropagation}
           />
         ) : (
           <FallbackableImage
             fallbackUrl={media[0].fallbackUrl}
-            className="h-auto w-fit object-contain"
+            className="size-full object-contain"
             alt="cover"
             src={src}
             onContextMenu={(e) => handleContextMenu(src, e)}
@@ -241,7 +241,7 @@ export const PreviewMediaContent: FC<{
               <VideoPlayer
                 src={med.url}
                 controls
-                className="max-h-full max-w-full object-contain"
+                className="size-full object-contain"
                 onClick={(e) => e.stopPropagation()}
               />
             ) : (
