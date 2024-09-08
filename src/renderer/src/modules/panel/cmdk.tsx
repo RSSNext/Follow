@@ -135,8 +135,8 @@ export const SearchCmdK: React.FC = () => {
         onOpenChange={setAppSearchOpen}
         className={cn(
           "h-[600px] max-h-[80vh] w-[800px] max-w-[100vw] rounded-none md:h-screen md:max-h-[60vh] md:max-w-[80vw]",
-          "flex min-h-[50vh] flex-col bg-zinc-50/85 shadow-2xl backdrop-blur-md dark:bg-neutral-900/80 md:rounded-xl",
-          "border-0 border-zinc-200 dark:border-zinc-800 md:border",
+          "flex min-h-[50vh] flex-col bg-zinc-50/85 shadow-2xl backdrop-blur-xl dark:bg-neutral-900/90 md:rounded-xl",
+          "border-0 border-zinc-300 dark:border-zinc-700 md:border",
           "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
           "z-10",
         )}
