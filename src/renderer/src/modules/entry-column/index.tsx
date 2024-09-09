@@ -6,11 +6,13 @@ import { FeedNotFound } from "@renderer/components/errors/FeedNotFound"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { Button } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
+import { ReactVirtuosoItemPlaceholder } from "@renderer/components/ui/placeholder"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING, views } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector, useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { useTitle } from "@renderer/hooks/common"
+import { useTypeScriptHappyCallback } from "@renderer/hooks/common/useTypescriptHappyCallback"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn, isBizId } from "@renderer/lib/utils"
 import { useFeed } from "@renderer/queries/feed"
@@ -147,9 +149,9 @@ export function EntryColumn() {
         isInteracted.current = true
       }
     },
-    itemContent: useCallback(
+    itemContent: useTypeScriptHappyCallback(
       (_, entryId) => {
-        if (!entryId) return null
+        if (!entryId) return <ReactVirtuosoItemPlaceholder />
 
         return <EntryItem key={entryId} entryId={entryId} view={view} />
       },
