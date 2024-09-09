@@ -1,4 +1,5 @@
 import { repository } from "@pkg"
+import { Slot } from "@radix-ui/react-slot"
 import { setMainContainerElement } from "@renderer/atoms/dom"
 import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
 import { setFeedColumnShow, useFeedColumnShow } from "@renderer/atoms/sidebar"
@@ -25,7 +26,7 @@ import { SearchCmdK } from "@renderer/modules/panel/cmdk"
 import { CmdNTrigger } from "@renderer/modules/panel/cmdn"
 import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
-import { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
@@ -202,7 +203,10 @@ const FeedResponsiveResizerContainer = ({
           "--fo-feed-col-w": `${position}px`,
         }}
       >
-        {children}
+        {/* {React.cloneElement(children, {
+          className: "!bg-native",
+        })} */}
+        <Slot className={!feedColumnShow ? "!bg-native" : ""}>{children}</Slot>
       </div>
 
       <div

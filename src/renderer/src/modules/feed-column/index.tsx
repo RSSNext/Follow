@@ -62,7 +62,7 @@ const useUnreadByView = () => {
   return totalUnread
 }
 
-export function FeedColumn({ children }: PropsWithChildren) {
+export function FeedColumn({ children, className }: PropsWithChildren<{ className?: string }>) {
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive_] = useSidebarActiveView()
@@ -139,7 +139,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
 
   return (
     <WindowUnderBlur
-      className="relative flex h-full flex-col space-y-3 rounded-l-[12px] pt-2.5"
+      className={cn("relative flex h-full flex-col space-y-3 rounded-l-[12px] pt-2.5", className)}
       onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
       <FeedColumnHeader />
