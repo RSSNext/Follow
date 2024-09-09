@@ -22,7 +22,7 @@ import { z } from "zod"
 const formSchema = z.object({
   handle: z.string().max(50),
   name: z.string().min(3).max(50),
-  avatar: z.string().url(),
+  image: z.string().url(),
 })
 
 const iconName = "i-mgc-user-setting-cute-re"
@@ -42,7 +42,7 @@ export function Component() {
     defaultValues: {
       handle: user?.handle || "",
       name: user?.name || "",
-      avatar: user?.image || "",
+      image: user?.image || "",
     },
   })
 
@@ -100,7 +100,7 @@ export function Component() {
           />
           <FormField
             control={form.control}
-            name="avatar"
+            name="image"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Avatar</FormLabel>
