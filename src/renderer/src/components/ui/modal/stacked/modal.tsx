@@ -229,7 +229,7 @@ export const ModalInternal = memo(
           <Dialog.Root open onOpenChange={onClose} modal={modal}>
             <Dialog.Portal>
               <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
-              <Dialog.Content asChild onFocusCapture={stopPropagation}>
+              <Dialog.Content asChild>
                 <div
                   ref={edgeElementRef}
                   className={cn(
@@ -265,7 +265,7 @@ export const ModalInternal = memo(
       <Wrapper>
         <Dialog.Root modal={modal} open onOpenChange={onClose}>
           <Dialog.Portal>
-            <Dialog.Content asChild onFocusCapture={stopPropagation}>
+            <Dialog.Content asChild>
               <div
                 ref={edgeElementRef}
                 style={zIndexStyle}
