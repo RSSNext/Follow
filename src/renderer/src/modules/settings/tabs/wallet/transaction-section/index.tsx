@@ -17,6 +17,12 @@ import {
   TableHeader,
   TableRow,
 } from "@renderer/components/ui/table"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@renderer/components/ui/tooltip"
 import { cn } from "@renderer/lib/utils"
 import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
@@ -90,10 +96,22 @@ export const TransactionsSection = () => {
                 </TableCell>
 
                 <TableCell align="left" size="sm" className="pl-6">
-                  <RelativeTime date={row.createdAt} />
+                  <RelativeTime date={row.createdAt} dateFormatTemplate="l" />
                 </TableCell>
                 <TableCell align="left" size="sm" className="pl-6">
-                  <a target="_blank" href={`https://scan.rss3.io/tx/${row.hash}`}>{row.hash.slice(0, 6)}...</a>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <a
+                        target="_blank"
+                        href={`https://scan.rss3.io/tx/${row.hash}`}
+                      >
+                        {row.hash.slice(0, 6)}...
+                      </a>
+                    </TooltipTrigger>
+                    <TooltipPortal>
+                      <TooltipContent>{row.hash}</TooltipContent>
+                    </TooltipPortal>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             ))}

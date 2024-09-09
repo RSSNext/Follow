@@ -11,12 +11,16 @@ import {
 } from "../tooltip"
 
 const formatTemplateString = "lll"
-const formatTime = (date: string | Date, relativeBeforeDay?: number) => {
+const formatTime = (
+  date: string | Date,
+  relativeBeforeDay?: number,
+  template = formatTemplateString,
+) => {
   if (
     relativeBeforeDay &&
     Math.abs(dayjs(date).diff(new Date(), "d")) > relativeBeforeDay
   ) {
-    return dayjs(date).format(formatTemplateString)
+    return dayjs(date).format(template)
   }
   return dayjs
     .duration(dayjs(date).diff(dayjs(), "minute"), "minute")
@@ -47,17 +51,23 @@ const getUpdateInterval = (date: string | Date, relativeBeforeDay?: number) => {
 export const RelativeTime: FC<{
   date: string | Date
   displayAbsoluteTimeAfterDay?: number
+  dateFormatTemplate?: string
 }> = (props) => {
-  const { displayAbsoluteTimeAfterDay = 29 } = props
+  const {
+    displayAbsoluteTimeAfterDay = 29,
+    dateFormatTemplate = formatTemplateString,
+  } = props
   const [relative, setRelative] = useState<string>(() =>
-    formatTime(props.date, displayAbsoluteTimeAfterDay),
+    formatTime(props.date, displayAbsoluteTimeAfterDay, dateFormatTemplate),
   )
 
   const timerRef = useRef<any>(null)
 
   useEffect(() => {
     const updateRelativeTime = () => {
-      setRelative(formatTime(props.date, displayAbsoluteTimeAfterDay))
+      setRelative(
+        formatTime(props.date, displayAbsoluteTimeAfterDay, dateFormatTemplate),
+      )
       const updateInterval = getUpdateInterval(
         props.date,
         displayAbsoluteTimeAfterDay,
@@ -73,8 +83,8 @@ export const RelativeTime: FC<{
     return () => {
       clearTimeout(timerRef.current)
     }
-  }, [props.date, displayAbsoluteTimeAfterDay])
-  const formated = dayjs(props.date).format(formatTemplateString)
+  }, [props.date, displayAbsoluteTimeAfterDay, dateFormatTemplate])
+  const formated = dayjs(props.date).format(dateFormatTemplate)
 
   if (formated === relative) {
     return <>{relative}</>
