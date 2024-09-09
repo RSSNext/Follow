@@ -20,7 +20,6 @@ export const router = routerCreator([
     element: <App />,
     children: tree,
     errorElement: <ErrorElement />,
-
   },
   {
     path: "*",
