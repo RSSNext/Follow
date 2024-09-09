@@ -8,6 +8,22 @@ export const PanelSplitter = (
 ) => {
   const { isDragging, ...rest } = props
 
+  React.useEffect(() => {
+    if (!isDragging) return
+    const $css = document.createElement("style")
+
+    $css.innerHTML = `
+      * {
+        cursor: ew-resize !important;
+      }
+    `
+
+    document.head.append($css)
+    return () => {
+      $css.remove()
+    }
+  }, [isDragging])
+
   return (
     <div className="relative h-full w-0 shrink-0">
       <div
