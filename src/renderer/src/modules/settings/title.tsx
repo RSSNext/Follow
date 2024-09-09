@@ -37,9 +37,11 @@ export const SettingsTitle = ({
   className?: string
   loader?: () => SettingPageConfig
 }) => {
-  const { iconName, name: title } = (useLoaderData() ||
-    loader?.() ||
-    {}) as SettingPageConfig
+  const {
+    iconName,
+    name: title,
+    headerIcon,
+  } = (useLoaderData() || loader?.() || {}) as SettingPageConfig
 
   if (!title) {
     return null
@@ -52,7 +54,7 @@ export const SettingsTitle = ({
         className,
       )}
     >
-      <i className={iconName} />
+      <i className={headerIcon || iconName} />
       <span>{title}</span>
     </div>
   )
