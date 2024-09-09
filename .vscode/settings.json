@@ -1,9 +1,10 @@
 {
   "[javascript][javascriptreact][typescript][typescriptreact][json][jsonc]": {
-    "editor.formatOnSave": false,
+    "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
-    }
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
   "tailwindCSS.experimental.classRegex": [
