@@ -23,6 +23,7 @@ import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
 import { tipcClient } from "@renderer/lib/client"
 import { FeedViewType } from "@renderer/lib/enum"
+import { getNewIssueUrl } from "@renderer/lib/issues"
 import { cn } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useFeed } from "@renderer/queries/feed"
@@ -86,6 +87,44 @@ export const FeedForm: Component<{
           <i className="i-mgc-close-cute-re size-7 text-red-500" />
           <p>Error in fetching feed.</p>
           <p className="break-all px-8 text-center">{getFetchErrorMessage(feedQuery.error)}</p>
+
+          <div className="flex items-center gap-4">
+            <Button
+              variant="text"
+              onClick={() => {
+                feedQuery.refetch()
+              }}
+            >
+              Retry
+            </Button>
+
+            <Button
+              variant="primary"
+              onClick={() => {
+                window.open(
+                  getNewIssueUrl({
+                    body: [
+                      "### Info:",
+                      "",
+                      "Feed URL:",
+                      "```",
+                      url,
+                      "```",
+                      "",
+                      "Error:",
+                      "```",
+                      getFetchErrorMessage(feedQuery.error),
+                      "```",
+                    ].join("\n"),
+                    title: `Error in fetching feed: ${id ?? url}`,
+                  }),
+                  "_blank",
+                )
+              }}
+            >
+              Fallback
+            </Button>
+          </div>
         </div>
       ) : (
         <div className="center h-full grow flex-col">
