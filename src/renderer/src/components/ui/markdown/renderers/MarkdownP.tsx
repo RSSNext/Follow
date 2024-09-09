@@ -5,10 +5,7 @@ import * as React from "react"
 import { ensureAndRenderTimeStamp } from "../utils"
 
 export const MarkdownP: Component<
-  React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLParagraphElement>,
-    HTMLParagraphElement
-  >
+  React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>
 > = ({ children, ...props }) => {
   const { view } = useEntryContentContext()
   const parseTimeline = view === FeedViewType.Audios

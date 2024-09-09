@@ -44,13 +44,7 @@ export const DailyItem = ({ view, day }: DailyItemProps) => {
   return (
     <Collapse
       hideArrow
-      title={(
-        <DailyReportTitle
-          title={title}
-          startDate={startDate}
-          endDate={endDate}
-        />
-      )}
+      title={<DailyReportTitle title={title} startDate={startDate} endDate={endDate} />}
       className="mx-auto w-full max-w-lg border-b pb-6 last:border-b-0"
     >
       <DailyReportContent endDate={endDate} view={view} startDate={startDate} />
@@ -69,12 +63,7 @@ export const DailyReportTitle = ({
 }) => (
   <div className="flex items-center justify-center gap-2 text-base">
     <i className="i-mgc-magic-2-cute-re" />
-    <div className="font-medium">
-      Top News -
-      {" "}
-      {title}
-
-    </div>
+    <div className="font-medium">Top News - {title}</div>
     <Tooltip>
       <TooltipTrigger asChild>
         <i className="i-mgc-question-cute-re translate-y-px text-sm" />
@@ -89,10 +78,8 @@ export const DailyReportTitle = ({
                 weekday: "short",
                 hour: "numeric",
                 minute: "numeric",
-              })}
-              {" "}
-              -
-              {" "}
+              })}{" "}
+              -{" "}
               {new Date(endDate + 1).toLocaleTimeString("en-US", {
                 weekday: "short",
                 hour: "numeric",
@@ -150,11 +137,7 @@ export const DailyReportContent: Component<DailyReportContentProps> = ({
   return (
     <Card className="border-none bg-transparent">
       <CardContent className={cn("space-y-0 p-0", className)}>
-        <ScrollArea.ScrollArea
-          mask={false}
-          flex
-          viewportClassName="max-h-[calc(100vh-500px)]"
-        >
+        <ScrollArea.ScrollArea mask={false} flex viewportClassName="max-h-[calc(100vh-500px)]">
           <AutoResizeHeight spring>
             {content.isLoading ? (
               <LoadingCircle size="large" className="mt-8 text-center" />
@@ -200,23 +183,21 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
           size="large"
           className="center pointer-events-none absolute inset-0 mt-8 text-center"
         />
-      ) : content.data ?
-          (
-            <Markdown
-              components={{
-                a: RelatedEntryLink as Components["a"],
-              }}
-              className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
-            >
-              {content.data}
-            </Markdown>
-          ) :
-          (
-            <div className="center pointer-events-none absolute inset-0 translate-y-6 flex-col gap-4 opacity-80">
-              <EmptyIcon />
-              <p>No AI news found for this period.</p>
-            </div>
-          )}
+      ) : content.data ? (
+        <Markdown
+          components={{
+            a: RelatedEntryLink as Components["a"],
+          }}
+          className="prose-sm mt-4 px-6 prose-p:my-1 prose-ul:my-1 prose-ul:list-outside prose-ul:list-disc prose-li:marker:text-accent"
+        >
+          {content.data}
+        </Markdown>
+      ) : (
+        <div className="center pointer-events-none absolute inset-0 translate-y-6 flex-col gap-4 opacity-80">
+          <EmptyIcon />
+          <p>No AI news found for this period.</p>
+        </div>
+      )}
 
       {!!content.data && (
         <FlatMarkAllReadButton
@@ -231,62 +212,57 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
   )
 }
 
-const createRelatedEntryLink =
-  (variant: "toast" | "modal") => (props: LinkProps) => {
-    const { href, children } = props
-    const entryId = isBizId(href) ? href : null
+const createRelatedEntryLink = (variant: "toast" | "modal") => (props: LinkProps) => {
+  const { href, children } = props
+  const entryId = isBizId(href) ? href : null
 
-    const { present } = useModalStack()
+  const { present } = useModalStack()
 
-    if (!entryId) {
-      return <MarkdownLink {...props} />
-    }
-    return (
-      <button
-        type="button"
-        className="follow-link--underline cursor-pointer font-semibold text-foreground no-underline"
-        onClick={() => {
-          const basePresentProps = {
-            clickOutsideToDismiss: true,
-            title: "Entry Preview",
-          }
-
-          if (variant === "toast") {
-            present({
-              ...basePresentProps,
-              CustomModalComponent: NoopChildren,
-              content: () => <EntryToastPreview entryId={entryId} />,
-              overlay: false,
-              modal: false,
-              modalContainerClassName: "right-0 left-[auto]",
-            })
-          } else {
-            present({
-              ...basePresentProps,
-
-              modalClassName:
-                "relative mx-auto mt-[10vh] scrollbar-none max-w-full overflow-auto px-2 lg:max-w-[65rem] lg:p-0",
-              // eslint-disable-next-line @eslint-react/no-nested-components
-              CustomModalComponent: ({ children }) => {
-                const { feedId } = useEntry(entryId) || {}
-                return (
-                  <PeekModal to={`/feeds/${feedId}/${entryId}`}>
-                    {children}
-                  </PeekModal>
-                )
-              },
-              content: () => <EntryModalPreview entryId={entryId} />,
-
-              overlay: true,
-            })
-          }
-        }}
-      >
-        {children}
-        <i className="i-mgc-arrow-right-up-cute-re size-[0.9em] translate-y-[2px] opacity-70" />
-      </button>
-    )
+  if (!entryId) {
+    return <MarkdownLink {...props} />
   }
+  return (
+    <button
+      type="button"
+      className="follow-link--underline cursor-pointer font-semibold text-foreground no-underline"
+      onClick={() => {
+        const basePresentProps = {
+          clickOutsideToDismiss: true,
+          title: "Entry Preview",
+        }
+
+        if (variant === "toast") {
+          present({
+            ...basePresentProps,
+            CustomModalComponent: NoopChildren,
+            content: () => <EntryToastPreview entryId={entryId} />,
+            overlay: false,
+            modal: false,
+            modalContainerClassName: "right-0 left-[auto]",
+          })
+        } else {
+          present({
+            ...basePresentProps,
+
+            modalClassName:
+              "relative mx-auto mt-[10vh] scrollbar-none max-w-full overflow-auto px-2 lg:max-w-[65rem] lg:p-0",
+            // eslint-disable-next-line @eslint-react/no-nested-components
+            CustomModalComponent: ({ children }) => {
+              const { feedId } = useEntry(entryId) || {}
+              return <PeekModal to={`/feeds/${feedId}/${entryId}`}>{children}</PeekModal>
+            },
+            content: () => <EntryModalPreview entryId={entryId} />,
+
+            overlay: true,
+          })
+        }
+      }}
+    >
+      {children}
+      <i className="i-mgc-arrow-right-up-cute-re size-[0.9em] translate-y-[2px] opacity-70" />
+    </button>
+  )
+}
 
 const EntryToastPreview = ({ entryId }: { entryId: string }) => {
   useAuthQuery(Queries.entries.byId(entryId))
@@ -409,6 +385,9 @@ const EntryToastPreview = ({ entryId }: { entryId: string }) => {
 
 const EntryModalPreview = ({ entryId }: { entryId: string }) => (
   <Paper className="!p-0">
-    <EntryContentRender className="h-auto [&_#entry-action-header-bar]:!bg-transparent" entryId={entryId} />
+    <EntryContentRender
+      className="h-auto [&_#entry-action-header-bar]:!bg-transparent"
+      entryId={entryId}
+    />
   </Paper>
 )

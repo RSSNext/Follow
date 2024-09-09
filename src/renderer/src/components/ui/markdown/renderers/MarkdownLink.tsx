@@ -4,12 +4,7 @@ import { useFeedByIdSelector } from "@renderer/store/feed"
 import { useMemo } from "react"
 
 import type { LinkProps } from "../../link"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "../../tooltip"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../../tooltip"
 import { ensureAndRenderTimeStamp } from "../utils"
 
 const safeUrl = (url: string, baseUrl: string) => {

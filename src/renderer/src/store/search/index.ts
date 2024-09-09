@@ -22,8 +22,7 @@ const createState = (): SearchState => ({
   keyword: "",
   searchType: SearchType.All,
 })
-export const useSearchStore =
-  createZustandStore<SearchState>("search")(createState)
+export const useSearchStore = createZustandStore<SearchState>("search")(createState)
 
 const { getState: get, setState: set } = useSearchStore
 
@@ -48,17 +47,9 @@ class SearchActions {
       EntryRelatedService.findAll(EntryRelatedKey.FEED_ID),
     ])
 
-    const entriesFuse = this.createFuse(entries, [
-      "title",
-      "content",
-      "description",
-      "id",
-    ])
+    const entriesFuse = this.createFuse(entries, ["title", "content", "description", "id"])
     const feedsFuse = this.createFuse(feeds, ["title", "description", "id"])
-    const subscriptionsFuse = this.createFuse(subscriptions, [
-      "title",
-      "category",
-    ])
+    const subscriptionsFuse = this.createFuse(subscriptions, ["title", "category"])
 
     return defineSearchInstance({
       counts: {
@@ -68,19 +59,13 @@ class SearchActions {
       },
       search(keyword: string) {
         const type = get().searchType
-        const entries =
-          type & SearchType.Entry ? entriesFuse.search(keyword) : []
+        const entries = type & SearchType.Entry ? entriesFuse.search(keyword) : []
         const feeds = type & SearchType.Feed ? feedsFuse.search(keyword) : []
 
         const subscriptions =
-          type & SearchType.Subscription ?
-            subscriptionsFuse.search(keyword) :
-              []
+          type & SearchType.Subscription ? subscriptionsFuse.search(keyword) : []
 
-        const processedEntries = [] as SearchResult<
-          EntryModel,
-          { feedId: string }
-        >[]
+        const processedEntries = [] as SearchResult<EntryModel, { feedId: string }>[]
         for (const entry of entries) {
           const feedId = entryRelated[entry.item.id]
           if (feedId) {

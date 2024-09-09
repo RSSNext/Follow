@@ -6,11 +6,7 @@ import type { FC, PropsWithChildren, ReactNode } from "react"
 import { cloneElement } from "react"
 import * as React from "react"
 
-import {
-  SettingActionItem,
-  SettingDescription,
-  SettingSwitch,
-} from "./control"
+import { SettingActionItem, SettingDescription, SettingSwitch } from "./control"
 
 export const SettingSectionTitle: FC<{
   title: string
@@ -20,9 +16,7 @@ export const SettingSectionTitle: FC<{
   <div
     className={cn(
       "text-sm font-medium capitalize text-gray-400 first:mt-0 dark:text-neutral-500",
-      margin === "compact" ?
-        "mb-2 mt-4" :
-        "mb-4 mt-8",
+      margin === "compact" ? "mb-2 mt-4" : "mb-4 mt-8",
     )}
   >
     {title}

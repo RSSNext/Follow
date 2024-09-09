@@ -1,17 +1,9 @@
 import { setAppSearchOpen } from "@renderer/atoms/app"
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
-import {
-  setFeedColumnShow,
-  useFeedColumnShow,
-  useSidebarActiveView,
-} from "@renderer/atoms/sidebar"
+import { setFeedColumnShow, useFeedColumnShow, useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@renderer/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@renderer/components/ui/popover"
 import { ProfileButton } from "@renderer/components/user-button"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { stopPropagation } from "@renderer/lib/dom"
@@ -41,8 +33,7 @@ export const FeedColumnHeader = () => {
   const [active] = useSidebarActiveView()
 
   const navigateBackHome = useBackHome(active)
-  const normalStyle =
-    !window.electron || window.electron.process.platform !== "darwin"
+  const normalStyle = !window.electron || window.electron.process.platform !== "darwin"
   return (
     <div
       className={cn(
@@ -66,10 +57,7 @@ export const FeedColumnHeader = () => {
           </div>
         </LogoContextMenu>
       )}
-      <div
-        className="relative flex items-center gap-1"
-        onClick={stopPropagation}
-      >
+      <div className="relative flex items-center gap-1" onClick={stopPropagation}>
         <SearchActionButton />
 
         <Link to="/discover" tabIndex={-1}>
@@ -88,14 +76,18 @@ const LayoutActionButton = () => {
   const feedColumnShow = useFeedColumnShow()
 
   return (
-    <m.div
-      animate={{ width: !feedColumnShow ? "auto" : 0 }}
-      className="overflow-hidden"
-    >
+    <m.div animate={{ width: !feedColumnShow ? "auto" : 0 }} className="overflow-hidden">
       <ActionButton
         tooltip="Toggle Sidebar"
         icon={
-          <i className={cn(!feedColumnShow ? "i-mgc-layout-leftbar-open-cute-re " : "i-mgc-layout-leftbar-close-cute-re", "text-theme-vibrancyFg")} />
+          <i
+            className={cn(
+              !feedColumnShow
+                ? "i-mgc-layout-leftbar-open-cute-re "
+                : "i-mgc-layout-leftbar-close-cute-re",
+              "text-theme-vibrancyFg",
+            )}
+          />
         }
         onClick={() => setFeedColumnShow(!feedColumnShow)}
       />
@@ -143,11 +135,7 @@ const SearchActionButton = () => {
   const canSearch = useGeneralSettingKey("dataPersist")
   if (!canSearch) return null
   return (
-    <ActionButton
-      shortcut="Meta+K"
-      tooltip="Search"
-      onClick={() => setAppSearchOpen(true)}
-    >
+    <ActionButton shortcut="Meta+K" tooltip="Search" onClick={() => setAppSearchOpen(true)}>
       <i className="i-mgc-search-2-cute-re size-5 text-theme-vibrancyFg" />
     </ActionButton>
   )

@@ -6,13 +6,9 @@ import { feedUnreadActions } from "@renderer/store/unread"
 
 export const subscription = {
   byView: (view?: FeedViewType) =>
-    defineQuery(
-      ["subscriptions", view],
-      async () => subscriptionActions.fetchByView(view),
-      {
-        rootKey: ["subscriptions"],
-      },
-    ),
+    defineQuery(["subscriptions", view], async () => subscriptionActions.fetchByView(view), {
+      rootKey: ["subscriptions"],
+    }),
   categories: (view?: number) =>
     defineQuery(["subscription-categories", view], async () => {
       const res = await apiClient.categories.$get({
@@ -22,6 +18,5 @@ export const subscription = {
       return res.data
     }),
 
-  unreadAll: () =>
-    defineQuery(["unread-all"], async () => feedUnreadActions.fetchUnreadAll()),
+  unreadAll: () => defineQuery(["unread-all"], async () => feedUnreadActions.fetchUnreadAll()),
 }

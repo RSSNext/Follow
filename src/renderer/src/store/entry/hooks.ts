@@ -1,7 +1,4 @@
-import {
-  FEED_COLLECTION_LIST,
-  ROUTE_FEED_IN_FOLDER,
-} from "@renderer/constants"
+import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "@renderer/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
 import type { EntryReadHistoriesModel } from "src/hono"
 import { useShallow } from "zustand/react/shallow"
@@ -12,9 +9,7 @@ import { useEntryStore } from "./store"
 import type { EntryFilter, FlatEntryModel } from "./types"
 
 export const useEntry = (entryId: Nullable<string>): FlatEntryModel | null =>
-  useEntryStore(
-    useShallow((state) => (entryId ? state.flatMapEntries[entryId] : null)),
-  )
+  useEntryStore(useShallow((state) => (entryId ? state.flatMapEntries[entryId] : null)))
 // feedId: single feedId, multiple feedId joint by `,`, and `collections`
 export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
   useEntryStore(
@@ -34,9 +29,7 @@ export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
       } else if (feedId === FEED_COLLECTION_LIST) {
         const result = [] as string[]
         state.starIds.forEach((entryId) => {
-          if (
-            getEntryIsInView(entryId)?.toString() === filter?.view?.toString()
-          ) {
+          if (getEntryIsInView(entryId)?.toString() === filter?.view?.toString()) {
             result.push(entryId)
           }
         })
@@ -72,17 +65,15 @@ export const useEntryIdsByView = (view: FeedViewType, filter?: EntryFilter) => {
   return useEntryStore(useShallow(() => getFilteredFeedIds(feedIds, filter)))
 }
 
-export const useEntryIdsByFeedIds = (
-  feedIds: string[],
-  filter: EntryFilter = {},
-) => useEntryStore(
-  useShallow(() => {
-    if (!feedIds) return null
-    if ((!Array.isArray(feedIds))) return null
+export const useEntryIdsByFeedIds = (feedIds: string[], filter: EntryFilter = {}) =>
+  useEntryStore(
+    useShallow(() => {
+      if (!feedIds) return null
+      if (!Array.isArray(feedIds)) return null
 
-    return getFilteredFeedIds(feedIds, filter)
-  }),
-)
+      return getFilteredFeedIds(feedIds, filter)
+    }),
+  )
 export const useEntryIdsByFeedIdOrView = (
   feedIdOrView: string | string[] | FeedViewType,
   filter: EntryFilter = {},
@@ -99,4 +90,7 @@ export const useEntryIdsByFeedIdOrView = (
   }
 }
 
-export const useEntryReadHistory = (entryId: string): Omit<EntryReadHistoriesModel, "entryId"> | null => useEntryStore(useShallow((state) => state.readHistory[entryId]))
+export const useEntryReadHistory = (
+  entryId: string,
+): Omit<EntryReadHistoriesModel, "entryId"> | null =>
+  useEntryStore(useShallow((state) => state.readHistory[entryId]))

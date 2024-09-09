@@ -1,7 +1,12 @@
 import { Button } from "@renderer/components/ui/button"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
-import type { ActionEntryField, ActionFeedField, ActionOperation, ActionsResponse } from "@renderer/models"
+import type {
+  ActionEntryField,
+  ActionFeedField,
+  ActionOperation,
+  ActionsResponse,
+} from "@renderer/models"
 import { ActionCard } from "@renderer/modules/settings/action-card"
 import { SettingsTitle } from "@renderer/modules/settings/title"
 import { defineSettingPage } from "@renderer/modules/settings/utils"
@@ -55,12 +60,8 @@ export function Component() {
   const mutation = useMutation({
     mutationFn: async () => {
       actionsData.forEach((action) => {
-        action.condition = action.condition.filter(
-          (c) => c.field && c.operator && c.value,
-        )
-        action.result.rewriteRules = action.result.rewriteRules?.filter(
-          (r) => r.from && r.to,
-        )
+        action.condition = action.condition.filter((c) => c.field && c.operator && c.value)
+        action.result.rewriteRules = action.result.rewriteRules?.filter((r) => r.from && r.to)
         action.result.blockRules = action.result.blockRules?.filter(
           (r) => r.field && r.operator && r.value,
         )
@@ -90,15 +91,9 @@ export function Component() {
             data={action}
             onChange={(newAction) => {
               if (!newAction) {
-                setActionsData(
-                  actionsData.filter((_, idx) => idx !== actionIdx),
-                )
+                setActionsData(actionsData.filter((_, idx) => idx !== actionIdx))
               } else {
-                setActionsData(
-                  actionsData.map((a, idx) =>
-                    idx === actionIdx ? newAction : a,
-                  ),
-                )
+                setActionsData(actionsData.map((a, idx) => (idx === actionIdx ? newAction : a)))
               }
             }}
           />

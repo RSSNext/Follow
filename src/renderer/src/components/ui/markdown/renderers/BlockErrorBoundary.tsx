@@ -1,7 +1,7 @@
 import { captureException } from "@sentry/react"
 import { useEffect } from "react"
 
-export const BlockError = (props: { error: any, message: string }) => {
+export const BlockError = (props: { error: any; message: string }) => {
   useEffect(() => {
     captureException(props.error)
   }, [])

@@ -8,10 +8,7 @@ import { forwardRef } from "react"
 // @see https://foxact.skk.moe/use-composition-input
 export const Input = forwardRef<
   HTMLInputElement,
-  Omit<
-    DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
-    "ref"
-  >
+  Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">
 >(({ className, ...props }, ref) => {
   const inputProps = useInputComposition(props)
   return (
@@ -25,9 +22,7 @@ export const Input = forwardRef<
         "focus:!bg-accent/5",
         "border border-border",
         "dark:text-zinc-200 dark:placeholder:text-zinc-500",
-        props.type === "password" ?
-          "font-mono placeholder:font-sans" :
-          "font-sans",
+        props.type === "password" ? "font-mono placeholder:font-sans" : "font-sans",
         "w-full",
         className,
       )}

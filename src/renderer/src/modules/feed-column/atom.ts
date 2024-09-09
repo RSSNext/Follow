@@ -4,25 +4,18 @@ import { atomWithStorage } from "jotai/utils"
 
 export type FeedListSortBy = "count" | "alphabetical"
 export type FeedListSortOrder = "asc" | "desc"
-const [
-  ,
-  ,
-  useFeedListSort,
-  ,
-  getFeedListSort,
-  setFeedListSort,
-  useFeedListSortSelector,
-] = createAtomHooks(
-  atomWithStorage(
-    getStorageNS("feedListSort"),
-    {
-      by: "count" as FeedListSortBy,
-      order: "desc" as FeedListSortOrder,
-    },
-    undefined,
-    { getOnInit: true },
-  ),
-)
+const [, , useFeedListSort, , getFeedListSort, setFeedListSort, useFeedListSortSelector] =
+  createAtomHooks(
+    atomWithStorage(
+      getStorageNS("feedListSort"),
+      {
+        by: "count" as FeedListSortBy,
+        order: "desc" as FeedListSortOrder,
+      },
+      undefined,
+      { getOnInit: true },
+    ),
+  )
 
 export { getFeedListSort, useFeedListSort, useFeedListSortSelector }
 

@@ -1,12 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Button } from "@renderer/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@renderer/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader } from "@renderer/components/ui/card"
 import {
   Form,
   FormControl,
@@ -86,7 +81,6 @@ export function DiscoverForm({ type }: { type: string }) {
           <FeedForm
             asWidget
             url={values.keyword}
-
             defaultValues={{
               view: defaultView.toString(),
             }}
@@ -113,10 +107,7 @@ export function DiscoverForm({ type }: { type: string }) {
   return (
     <>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[512px] space-y-8"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-[512px] space-y-8">
           <FormField
             control={form.control}
             name="keyword"
@@ -131,11 +122,7 @@ export function DiscoverForm({ type }: { type: string }) {
             )}
           />
           <div className="center flex">
-            <Button
-              disabled={!form.formState.isValid}
-              type="submit"
-              isLoading={mutation.isPending}
-            >
+            <Button disabled={!form.formState.isValid} type="submit" isLoading={mutation.isPending}>
               {info[type].showModal ? "Preview" : "Search"}
             </Button>
           </div>
@@ -144,22 +131,18 @@ export function DiscoverForm({ type }: { type: string }) {
       {mutation.isSuccess && (
         <div className="mt-8 max-w-lg">
           <div className="mb-4 text-zinc-500">
-            Found
-            {" "}
-            {mutation.data?.length || 0}
-            {" "}
-            feed
+            Found {mutation.data?.length || 0} feed
             {mutation.data?.length > 1 && "s"}
           </div>
           <div className="space-y-6 text-sm">
             {mutation.data?.map((item) => (
-              <Card data-feed-id={item.feed.id} key={item.feed.url || item.docs} className="select-text">
+              <Card
+                data-feed-id={item.feed.id}
+                key={item.feed.url || item.docs}
+                className="select-text"
+              >
                 <CardHeader>
-                  <FollowSummary
-                    className="max-w-[462px]"
-                    feed={item.feed}
-                    docs={item.docs}
-                  />
+                  <FollowSummary className="max-w-[462px]" feed={item.feed} docs={item.docs} />
                 </CardHeader>
                 {item.docs ? (
                   <CardFooter>
@@ -235,8 +218,7 @@ export function DiscoverForm({ type }: { type: string }) {
                       <div className="ml-6 text-zinc-500">
                         <span className="font-medium text-zinc-800 dark:text-zinc-200">
                           {item.subscriptionCount}
-                        </span>
-                        {" "}
+                        </span>{" "}
                         Followers
                       </div>
                     </CardFooter>

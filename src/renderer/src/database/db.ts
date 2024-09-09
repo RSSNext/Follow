@@ -2,13 +2,7 @@ import type { Transaction } from "dexie"
 import Dexie from "dexie"
 
 import { LOCAL_DB_NAME } from "./constants"
-import {
-  dbSchemaV1,
-  dbSchemaV2,
-  dbSchemaV3,
-  dbSchemaV4,
-  dbSchemaV5,
-} from "./db_schema"
+import { dbSchemaV1, dbSchemaV2, dbSchemaV3, dbSchemaV4, dbSchemaV5 } from "./db_schema"
 import type { DB_Cleaner } from "./schemas/cleaner"
 import type { DB_Entry, DB_EntryRelated } from "./schemas/entry"
 import type { DB_Feed, DB_FeedUnread } from "./schemas/feed"
@@ -67,7 +61,6 @@ export type BrowserDBSchema = {
   [t in keyof LocalDBSchemaMap]: {
     model: LocalDBSchemaMap[t]
     table: Dexie.Table<LocalDBSchemaMap[t], string>
-  };
+  }
 }
-type BrowserDBTable<T extends keyof LocalDBSchemaMap> =
-  BrowserDBSchema[T]["table"]
+type BrowserDBTable<T extends keyof LocalDBSchemaMap> = BrowserDBSchema[T]["table"]

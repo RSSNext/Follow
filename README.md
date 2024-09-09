@@ -18,7 +18,6 @@ If you have access, you are welcome to use the following methods to download and
 - You can get the installation packages for each platform from the [Release page](https://github.com/RSSNext/Follow/releases).
 - If you are using Arch linux, you can install package [follow-appimage](https://aur.archlinux.org/packages/follow-appimage) that maintained by [timochan](https://github.com/ttimochan)
 
-
 ## Contributing
 
 If you are eligible to use Follow, you are welcome to join the open source community to build together.

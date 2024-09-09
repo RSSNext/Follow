@@ -1,7 +1,4 @@
-import {
-  setGeneralSetting,
-  useGeneralSettingValue,
-} from "@renderer/atoms/settings/general"
+import { setGeneralSetting, useGeneralSettingValue } from "@renderer/atoms/settings/general"
 import { createSetting } from "@renderer/atoms/settings/helper"
 import {
   createDefaultSettings,
@@ -68,8 +65,7 @@ export const SettingGeneral = () => {
             },
             defineSettingItem("unreadOnly", {
               label: "Show unread content on launch",
-              description:
-                "Display only unread content when the app is launched.",
+              description: "Display only unread content when the app is launched.",
             }),
             defineSettingItem("groupByDate", {
               label: "Group by date",
@@ -80,8 +76,7 @@ export const SettingGeneral = () => {
 
             defineSettingItem("scrollMarkUnread", {
               label: "Mark as read when scrolling",
-              description:
-                "Automatically mark entries as read when scrolled out of the view.",
+              description: "Automatically mark entries as read when scrolled out of the view.",
             }),
             defineSettingItem("hoverMarkUnread", {
               label: "Mark as read when hovering",
@@ -109,8 +104,7 @@ export const SettingGeneral = () => {
 
             defineSettingItem("dataPersist", {
               label: "Persist data for offline usage",
-              description:
-                "Persist data locally to enable offline access and local search.",
+              description: "Persist data locally to enable offline access and local search.",
             }),
 
             defineSettingItem("sendAnonymousData", {
@@ -136,14 +130,12 @@ export const SettingGeneral = () => {
                   clickOutsideToDismiss: true,
                   content: () => (
                     <div className="text-sm">
-                      <p>
-                        Rebuilding the database will clear all your local data.
-                      </p>
+                      <p>Rebuilding the database will clear all your local data.</p>
                       <p>Are you sure you want to continue?</p>
 
                       <div className="mt-4 flex justify-end">
                         <Button
-                          className="text-red-500 px-3"
+                          className="px-3 text-red-500"
                           variant="ghost"
                           onClick={async () => {
                             await clearLocalPersistStoreData()

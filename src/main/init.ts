@@ -31,10 +31,7 @@ export const initializeApp = () => {
 
   registerIpcMain(router)
 
-  app.setPath(
-    "appData",
-    path.join(app.getPath("appData"), isDev ? appFolder.dev : appFolder.prod),
-  )
+  app.setPath("appData", path.join(app.getPath("appData"), isDev ? appFolder.dev : appFolder.prod))
 
   if (app.dock) {
     app.dock.setIcon(getIconPath())

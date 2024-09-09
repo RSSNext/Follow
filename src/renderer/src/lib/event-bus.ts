@@ -4,7 +4,10 @@ export interface EventBusMap extends CustomEvent {}
 
 class EventBusEvent extends Event {
   static type = "EventBusEvent"
-  constructor(public _type: string, public data: any) {
+  constructor(
+    public _type: string,
+    public data: any,
+  ) {
     super(EventBusEvent.type)
   }
 }
@@ -13,10 +16,7 @@ class EventBusStatic {
     window.dispatchEvent(new EventBusEvent(event, data))
   }
 
-  subscribe<T extends keyof EventBusMap>(
-    event: T,
-    callback: (data: EventBusMap[T]) => void,
-  ) {
+  subscribe<T extends keyof EventBusMap>(event: T, callback: (data: EventBusMap[T]) => void) {
     const handler = (e: any) => {
       if (e instanceof EventBusEvent && e._type === event) {
         callback(e.data)

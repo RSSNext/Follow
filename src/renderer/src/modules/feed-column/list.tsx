@@ -11,15 +11,9 @@ import type { FeedViewType } from "@renderer/lib/enum"
 import { cn, sortByAlphabet } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useFeedStore } from "@renderer/store/feed"
-import {
-  getSubscriptionByFeedId,
-  useSubscriptionByView,
-} from "@renderer/store/subscription"
+import { getSubscriptionByFeedId, useSubscriptionByView } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
-import {
-  AnimatePresence,
-  m,
-} from "framer-motion"
+import { AnimatePresence, m } from "framer-motion"
 import { Fragment, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 
@@ -63,13 +57,7 @@ const useUpdateUnreadCount = () => {
   })
 }
 
-export function FeedList({
-  className,
-  view,
-}: {
-  className?: string
-  view: number
-}) {
+export function FeedList({ className, view }: { className?: string; view: number }) {
   const [expansion, setExpansion] = useState(false)
   const data = useGroupedData(view)
 
@@ -115,28 +103,14 @@ export function FeedList({
         <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
           <SortButton />
           {expansion ? (
-            <i
-              className="i-mgc-list-collapse-cute-re"
-              onClick={() => setExpansion(false)}
-            />
+            <i className="i-mgc-list-collapse-cute-re" onClick={() => setExpansion(false)} />
           ) : (
-            <i
-              className="i-mgc-list-expansion-cute-re"
-              onClick={() => setExpansion(true)}
-            />
+            <i className="i-mgc-list-expansion-cute-re" onClick={() => setExpansion(true)} />
           )}
-          <UnreadNumber
-            unread={totalUnread}
-            className="text-xs !text-inherit"
-          />
+          <UnreadNumber unread={totalUnread} className="text-xs !text-inherit" />
         </div>
       </div>
-      <ScrollArea.ScrollArea
-        mask={false}
-        flex
-        viewportClassName="!px-3"
-        rootClassName="h-full"
-      >
+      <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3" rootClassName="h-full">
         <div
           className={cn(
             "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 transition-colors",
@@ -206,25 +180,19 @@ const SortButton = () => {
       >
         <IconOpacityTransition
           icon2={
-            order === "asc" ?
-              tw`i-mgc-az-sort-descending-letters-cute-re` :
-              tw`i-mgc-az-sort-ascending-letters-cute-re`
+            order === "asc"
+              ? tw`i-mgc-az-sort-descending-letters-cute-re`
+              : tw`i-mgc-az-sort-ascending-letters-cute-re`
           }
           icon1={
-            order === "asc" ?
-              tw`i-mgc-sort-ascending-cute-re` :
-              tw`i-mgc-sort-descending-cute-re`
+            order === "asc" ? tw`i-mgc-sort-ascending-cute-re` : tw`i-mgc-sort-descending-cute-re`
           }
           status={by === "count" ? "init" : "done"}
         />
       </HoverCard.Trigger>
 
       <HoverCard.Portal forceMount>
-        <HoverCard.Content
-          className="z-10 -translate-x-4"
-          sideOffset={5}
-          forceMount
-        >
+        <HoverCard.Content className="z-10 -translate-x-4" sideOffset={5} forceMount>
           <AnimatePresence>
             {open && (
               <m.div
@@ -240,8 +208,7 @@ const SortButton = () => {
                   <div className="mt-4 grid grid-cols-2 grid-rows-2 gap-2">
                     {LIST.map(({ icon, by, order }) => {
                       const current = getFeedListSort()
-                      const active =
-                        by === current.by && order === current.order
+                      const active = by === current.by && order === current.order
                       return (
                         <button
                           type="button"
@@ -286,10 +253,7 @@ const SortByUnreadList = ({ view, expansion, data }: FeedListProps) => {
     const folderUnread = {} as Record<string, number>
     // Calc total unread count for each folder
     for (const category in data) {
-      folderUnread[category] = data[category].reduce(
-        (acc, cur) => (state.data[cur] || 0) + acc,
-        0,
-      )
+      folderUnread[category] = data[category].reduce((acc, cur) => (state.data[cur] || 0) + acc, 0)
     }
 
     // Sort by unread count
@@ -333,8 +297,7 @@ const SortByAlphabeticalList = ({ view, expansion, data }: FeedListProps) => {
       if (!feed) {
         continue
       }
-      const hascategoryNameNotDefault =
-        !!getSubscriptionByFeedId(feedId)?.category
+      const hascategoryNameNotDefault = !!getSubscriptionByFeedId(feedId)?.category
       const isSingle = data[categoryName].length === 1
       if (!isSingle || hascategoryNameNotDefault) {
         map[categoryName] = categoryName

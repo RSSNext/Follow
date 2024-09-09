@@ -20,47 +20,40 @@ type IconTransitionProps = {
 
 const createIconTransition =
   (transitionType: TransitionType) =>
-    ({
-      icon1,
-      icon2,
-      status,
-      className,
-      icon1ClassName,
-      icon2ClassName,
-    }: IconTransitionProps) => {
-      const [isMount, setIsMounted] = useState(false)
-      useEffect(() => {
-      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
-        setIsMounted(true)
-        return () => setIsMounted(false)
-      }, [])
+  ({ icon1, icon2, status, className, icon1ClassName, icon2ClassName }: IconTransitionProps) => {
+    const [isMount, setIsMounted] = useState(false)
+    useEffect(() => {
+       
+      setIsMounted(true)
+      return () => setIsMounted(false)
+    }, [])
 
-      const initial = isMount ? transitionType.initial : true
-      const { animate } = transitionType
-      const { exit } = transitionType
+    const initial = isMount ? transitionType.initial : true
+    const { animate } = transitionType
+    const { exit } = transitionType
 
-      return (
-        <AnimatePresence mode="popLayout">
-          {status === "init" ? (
-            <m.i
-              className={cn(icon1ClassName, className, icon1)}
-              key="1"
-              initial={initial}
-              animate={animate}
-              exit={exit}
-            />
-          ) : (
-            <m.i
-              className={cn(icon2ClassName, className, icon2)}
-              key="2"
-              initial={initial}
-              animate={animate}
-              exit={exit}
-            />
-          )}
-        </AnimatePresence>
-      )
-    }
+    return (
+      <AnimatePresence mode="popLayout">
+        {status === "init" ? (
+          <m.i
+            className={cn(icon1ClassName, className, icon1)}
+            key="1"
+            initial={initial}
+            animate={animate}
+            exit={exit}
+          />
+        ) : (
+          <m.i
+            className={cn(icon2ClassName, className, icon2)}
+            key="2"
+            initial={initial}
+            animate={animate}
+            exit={exit}
+          />
+        )}
+      </AnimatePresence>
+    )
+  }
 
 export const IconScaleTransition = createIconTransition({
   initial: { scale: 0 },

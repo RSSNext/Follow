@@ -60,16 +60,11 @@ export const AutoUpdater = () => {
         className="absolute inset-0 opacity-0 duration-500 group-hover:opacity-5"
         style={
           {
-
             background,
           } as any
         }
       />
-      <div className="font-medium">
-        {APP_NAME}
-        {" "}
-        is ready to update!
-      </div>
+      <div className="font-medium">{APP_NAME} is ready to update!</div>
       <div className="text-xs text-zinc-500">Click to restart</div>
     </m.div>
   )

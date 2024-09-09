@@ -18,11 +18,8 @@ const ShadowDOMContext = createContext(false)
 const MemoedDangerousHTMLStyle: FC<
   {
     children: string
-  } & React.DetailedHTMLProps<
-    React.StyleHTMLAttributes<HTMLStyleElement>,
-    HTMLStyleElement
-  > &
-  Record<string, unknown>
+  } & React.DetailedHTMLProps<React.StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement> &
+    Record<string, unknown>
 > = memo(({ children, ...rest }) => (
   <style
     {...rest}
@@ -35,10 +32,7 @@ const MemoedDangerousHTMLStyle: FC<
   />
 ))
 
-const weakMapElementKey = new WeakMap<
-  HTMLStyleElement | HTMLLinkElement,
-  string
->()
+const weakMapElementKey = new WeakMap<HTMLStyleElement | HTMLLinkElement, string>()
 const cloneStylesElement = (_mutationRecord?: MutationRecord) => {
   const $styles = document.head.querySelectorAll("style").values()
   const reactNodes = [] as ReactNode[]
@@ -85,8 +79,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
 } = (props) => {
   const { ...rest } = props
 
-  const [stylesElements, setStylesElements] =
-    useState<ReactNode[]>(cloneStylesElement)
+  const [stylesElements, setStylesElements] = useState<ReactNode[]>(cloneStylesElement)
 
   useLayoutEffect(() => {
     const mutationObserver = new MutationObserver((e) => {
@@ -139,12 +132,9 @@ function getLinkedStaticStyleSheets() {
     .querySelectorAll("link[rel=stylesheet]")
     .values() as unknown as HTMLLinkElement[]
 
-  const styleSheetMap = new WeakMap<
-    Element | ProcessingInstruction,
-    CSSStyleSheet
-  >()
+  const styleSheetMap = new WeakMap<Element | ProcessingInstruction, CSSStyleSheet>()
 
-  const cssArray = [] as { cssText: string, ref: HTMLLinkElement }[]
+  const cssArray = [] as { cssText: string; ref: HTMLLinkElement }[]
 
   for (const sheet of document.styleSheets) {
     if (!sheet.href) continue

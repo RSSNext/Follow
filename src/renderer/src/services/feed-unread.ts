@@ -3,9 +3,7 @@ import { browserDB } from "@renderer/database"
 const feedUnreadModel = browserDB.feedUnreads
 class ServiceStatic {
   updateFeedUnread(list: [string, number][]) {
-    return feedUnreadModel.bulkPut(
-      list.map(([feedId, count]) => ({ id: feedId, count })),
-    )
+    return feedUnreadModel.bulkPut(list.map(([feedId, count]) => ({ id: feedId, count })))
   }
 
   getAll() {

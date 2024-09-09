@@ -177,20 +177,14 @@ export function FeedColumn({ children }: PropsWithChildren) {
           </ActionButton>
         ))}
       </div>
-      <div
-        className="relative flex size-full overflow-hidden"
-        ref={carouselRef}
-      >
+      <div className="relative flex size-full overflow-hidden" ref={carouselRef}>
         <SwipeWrapper active={active}>
           {views.map((item, index) => (
             <section
               key={item.name}
               className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center"
             >
-              <FeedList
-                className="flex size-full flex-col text-sm"
-                view={index}
-              />
+              <FeedList className="flex size-full flex-col text-sm" view={index} />
             </section>
           ))}
         </SwipeWrapper>
@@ -245,11 +239,11 @@ const SwipeWrapper: FC<{
         className="grow"
         key={currentAnimtedActive}
         initial={
-          isReady ?
-              {
+          isReady
+            ? {
                 x: direction === "right" ? feedColumnWidth : -feedColumnWidth,
-              } :
-            true
+              }
+            : true
         }
         animate={{ x: 0 }}
         exit={{

@@ -22,6 +22,7 @@
     "dev": "electron-vite dev --outDir=dist",
     "dev:debug": "export DEBUG=true && vite --debug",
     "dev:web": "vite",
+    "format": "prettier --write .",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "polyfill-optimize": "pnpx nolyfill install",
@@ -177,6 +178,7 @@
     "nbump": "2.0.4",
     "postcss": "8.4.41",
     "postcss-js": "4.0.1",
+    "prettier": "3.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rimraf": "6.0.1",
@@ -208,7 +210,10 @@
     "pre-commit": "pnpm exec lint-staged"
   },
   "lint-staged": {
-    "*": "eslint --fix"
+    "*": "eslint --fix",
+    "*.{js,jsx,ts,tsx,json}": [
+      "prettier --ignore-path ./.gitignore --write "
+    ]
   },
   "bump": {
     "before": [

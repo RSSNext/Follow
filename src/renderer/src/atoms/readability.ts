@@ -16,8 +16,8 @@ type Readability = {
 
 const mergeObjectSetter =
   <T>(setter: (prev: T) => void, getter: () => T) =>
-    (value: Partial<T>) =>
-      setter({ ...getter(), ...value })
+  (value: Partial<T>) =>
+    setter({ ...getter(), ...value })
 
 export const [
   ,
@@ -48,24 +48,17 @@ export const [
   __setReadabilityStatus,
   useReadabilityStatusSelector,
 ] = createAtomHooks(atom<Record<string, ReadabilityStatus>>({}))
-export const setReadabilityStatus = mergeObjectSetter(
-  __setReadabilityStatus,
-  getReadabilityStatus,
-)
+export const setReadabilityStatus = mergeObjectSetter(__setReadabilityStatus, getReadabilityStatus)
 
 export const useEntryIsInReadability = (entryId?: string) =>
   useReadabilityStatusSelector(
-    (map) =>
-      entryId ? (map[entryId] ? isInReadability(map[entryId]) : false) : false,
+    (map) => (entryId ? (map[entryId] ? isInReadability(map[entryId]) : false) : false),
     [entryId],
   )
 
 export const useEntryInReadabilityStatus = (entryId?: string) =>
   useReadabilityStatusSelector(
-    (map) =>
-      entryId ?
-        map[entryId] || ReadabilityStatus.INITIAL :
-        ReadabilityStatus.INITIAL,
+    (map) => (entryId ? map[entryId] || ReadabilityStatus.INITIAL : ReadabilityStatus.INITIAL),
     [entryId],
   )
 

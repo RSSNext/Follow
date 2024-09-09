@@ -30,12 +30,7 @@ interface FeedItemProps {
   className?: string
   showUnreadCount?: boolean
 }
-const FeedItemImpl = ({
-  view,
-  feedId,
-  className,
-  showUnreadCount = true,
-}: FeedItemProps) => {
+const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedItemProps) => {
   const subscription = useSubscriptionByFeedId(feedId)
   const navigate = useNavigateEntry()
   const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
@@ -57,9 +52,7 @@ const FeedItemImpl = ({
 
   const feedUnread = useFeedUnreadStore((state) => state.data[feedId] || 0)
 
-  const isActive = useRouteParamsSelector(
-    (routerParams) => routerParams.feedId === feedId,
-  )
+  const isActive = useRouteParamsSelector((routerParams) => routerParams.feedId === feedId)
 
   const feed = useFeedById(feedId)
 
@@ -120,8 +113,7 @@ const FeedItemImpl = ({
           <div
             className={cn(
               "truncate",
-              !showUnreadCount &&
-              (feedUnread ? "font-bold" : "font-medium opacity-70"),
+              !showUnreadCount && (feedUnread ? "font-bold" : "font-medium opacity-70"),
             )}
           >
             {getPreferredTitle(feed)}
@@ -146,13 +138,9 @@ const FeedItemImpl = ({
                 <TooltipContent>
                   <div className="flex items-center gap-1">
                     <i className="i-mgc-time-cute-re" />
-                    Error since
-                    {" "}
+                    Error since{" "}
                     {dayjs
-                      .duration(
-                        dayjs(feed.errorAt).diff(dayjs(), "minute"),
-                        "minute",
-                      )
+                      .duration(dayjs(feed.errorAt).diff(dayjs(), "minute"), "minute")
                       .humanize(true)}
                   </div>
                   {!!feed.errorMessage && (
@@ -171,9 +159,7 @@ const FeedItemImpl = ({
                 <OouiUserAnonymous className="ml-1 shrink-0 text-base" />
               </TooltipTrigger>
               <TooltipPortal>
-                <TooltipContent>
-                  Not publicly visible on your profile page
-                </TooltipContent>
+                <TooltipContent>Not publicly visible on your profile page</TooltipContent>
               </TooltipPortal>
             </Tooltip>
           )}

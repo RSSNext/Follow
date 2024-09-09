@@ -14,14 +14,8 @@ const defaultContextValue: EntryContentContext = {
   feedId: "",
   view: FeedViewType.Articles,
 }
-export const EntryContentContext =
-  createContext<EntryContentContext>(defaultContextValue)
+export const EntryContentContext = createContext<EntryContentContext>(defaultContextValue)
 
-export const EntryContentProvider: Component<EntryContentContext> = ({
-  children,
-  ...value
-}) => (
-  <EntryContentContext.Provider value={value}>
-    {children}
-  </EntryContentContext.Provider>
+export const EntryContentProvider: Component<EntryContentContext> = ({ children, ...value }) => (
+  <EntryContentContext.Provider value={value}>{children}</EntryContentContext.Provider>
 )

@@ -28,20 +28,9 @@ const ymlMapsMap = {
 const keepModules = new Set(["font-list", "vscode-languagedetection"])
 const keepLanguages = new Set(["en", "en_GB", "zh_CN", "zh-CN", "en-GB"])
 // remove folders & files not to be included in the app
-async function cleanSources(
-  buildPath,
-  electronVersion,
-  platform,
-  arch,
-  callback,
-) {
+async function cleanSources(buildPath, electronVersion, platform, arch, callback) {
   // folders & files to be included in the app
-  const appItems = new Set([
-    "dist",
-    "node_modules",
-    "package.json",
-    "resources",
-  ])
+  const appItems = new Set(["dist", "node_modules", "package.json", "resources"])
 
   if (platform === "darwin") {
     const frameworkResourcePath = resolve(
@@ -60,9 +49,7 @@ async function cleanSources(
 
   await Promise.all([
     ...(await readdir(buildPath).then((items) =>
-      items
-        .filter((item) => !appItems.has(item))
-        .map((item) => rimraf(path.join(buildPath, item))),
+      items.filter((item) => !appItems.has(item)).map((item) => rimraf(path.join(buildPath, item))),
     )),
     ...(await readdir(path.join(buildPath, "node_modules")).then((items) =>
       items
@@ -74,9 +61,7 @@ async function cleanSources(
   callback()
 }
 
-const ignorePattern = new RegExp(
-  `^/node_modules/(?!${[...keepModules].join("|")})`,
-)
+const ignorePattern = new RegExp(`^/node_modules/(?!${[...keepModules].join("|")})`)
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -98,18 +83,18 @@ const config: ForgeConfig = {
     ...(process.env.APPLE_ID &&
       process.env.APPLE_PASSWORD &&
       process.env.APPLE_TEAM_ID && {
-      osxSign: {
-        optionsForFile: () => ({
-          entitlements: "build/entitlements.mac.plist",
-        }),
-        keychain: process.env.KEYCHAIN_PATH,
-      },
-      osxNotarize: {
-        appleId: process.env.APPLE_ID!,
-        appleIdPassword: process.env.APPLE_PASSWORD!,
-        teamId: process.env.APPLE_TEAM_ID!,
-      },
-    }),
+        osxSign: {
+          optionsForFile: () => ({
+            entitlements: "build/entitlements.mac.plist",
+          }),
+          keychain: process.env.KEYCHAIN_PATH,
+        },
+        osxNotarize: {
+          appleId: process.env.APPLE_ID!,
+          appleIdPassword: process.env.APPLE_PASSWORD!,
+          teamId: process.env.APPLE_TEAM_ID!,
+        },
+      }),
   },
   rebuildConfig: {},
   makers: [
@@ -204,10 +189,7 @@ const config: ForgeConfig = {
 
             try {
               const fileData = fs.readFileSync(newArtifact)
-              const hash = crypto
-                .createHash("sha512")
-                .update(fileData)
-                .digest("base64")
+              const hash = crypto.createHash("sha512").update(fileData).digest("base64")
               const { size } = fs.statSync(newArtifact)
 
               yml.files.push({

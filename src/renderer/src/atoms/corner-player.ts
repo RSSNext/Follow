@@ -21,10 +21,7 @@ export const [
   getCornerPlayerAtomValue,
   setCornerPlayerAtomValue,
 ] = createAtomHooks<CornerPlayerAtomValue>(
-  atomWithStorage(
-    getStorageNS("corner-player"),
-    cornerPlayerInitialValue,
-    undefined,
-    { getOnInit: true },
-  ),
+  atomWithStorage(getStorageNS("corner-player"), cornerPlayerInitialValue, undefined, {
+    getOnInit: true,
+  }),
 )

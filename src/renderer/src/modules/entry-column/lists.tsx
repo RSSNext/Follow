@@ -17,10 +17,7 @@ export const EntryListContent = forwardRef<HTMLDivElement>((props, ref) => (
   <div className="px-2" {...props} ref={ref} />
 ))
 
-export const EntryEmptyList = forwardRef<
-  HTMLDivElement,
-  HTMLMotionProps<"div">
->((props, ref) => {
+export const EntryEmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>((props, ref) => {
   const unreadOnly = useGeneralSettingKey("unreadOnly")
   return (
     <m.div
@@ -59,12 +56,11 @@ export const EntryList: FC<EntryListProps> = memo(
     ...virtuosoOptions
   }) => {
     // Prevent scroll list move when press up/down key, the up/down key should be taken over by the shortcut key we defined.
-    const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> =
-      useCallback((e) => {
-        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-          e.preventDefault()
-        }
-      }, [])
+    const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = useCallback((e) => {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault()
+      }
+    }, [])
 
     return (
       <>
@@ -76,11 +72,7 @@ export const EntryList: FC<EntryListProps> = memo(
             ref={virtuosoRef}
           />
         ) : (
-          <Virtuoso
-            onKeyDown={handleKeyDown}
-            {...virtuosoOptions}
-            ref={virtuosoRef}
-          />
+          <Virtuoso onKeyDown={handleKeyDown} {...virtuosoOptions} ref={virtuosoRef} />
         )}
         <EntryColumnShortcutHandler
           refetch={refetch}
@@ -95,51 +87,34 @@ export const EntryList: FC<EntryListProps> = memo(
 const EntryGroupedList = forwardRef<
   VirtuosoHandle,
   VirtuosoProps<string, unknown> &
-  DOMAttributes<HTMLDivElement> & {
-    groupCounts: number[]
-  }
->(
-  (
-    {
-      groupCounts,
-      itemContent,
-      onKeyDown,
-      data,
-      totalCount,
-      ...virtuosoOptions
-    },
-    ref,
-  ) => (
-    <GroupedVirtuoso
-      ref={ref}
-      groupContent={useCallback(
-        (index: number) => {
-          const entryId = getGetGroupDataIndex(groupCounts!, index, data!)
+    DOMAttributes<HTMLDivElement> & {
+      groupCounts: number[]
+    }
+>(({ groupCounts, itemContent, onKeyDown, data, totalCount, ...virtuosoOptions }, ref) => (
+  <GroupedVirtuoso
+    ref={ref}
+    groupContent={useCallback(
+      (index: number) => {
+        const entryId = getGetGroupDataIndex(groupCounts!, index, data!)
 
-          return <EntryHeadDateItem entryId={entryId} />
-        },
-        [groupCounts, data],
-      )}
-      groupCounts={groupCounts}
-      onKeyDown={onKeyDown}
+        return <EntryHeadDateItem entryId={entryId} />
+      },
+      [groupCounts, data],
+    )}
+    groupCounts={groupCounts}
+    onKeyDown={onKeyDown}
+    {...virtuosoOptions}
+    itemContent={useCallback(
+      (index: number, _: number, __: string, c: any) => {
+        const entryId = data![index]
+        return itemContent?.(index, entryId, c)
+      },
+      [itemContent, JSON.stringify(data)],
+    )}
+  />
+))
 
-      {...virtuosoOptions}
-      itemContent={useCallback(
-        (index: number, _: number, __: string, c: any) => {
-          const entryId = data![index]
-          return itemContent?.(index, entryId, c)
-        },
-        [itemContent, JSON.stringify(data)],
-      )}
-    />
-  ),
-)
-
-function getGetGroupDataIndex<T>(
-  groupCounts: number[],
-  groupIndex: number,
-  data: readonly T[],
-) {
+function getGetGroupDataIndex<T>(groupCounts: number[], groupIndex: number, data: readonly T[]) {
   // Get first grouped of data index
   //
   let sum = 0
@@ -151,7 +126,6 @@ function getGetGroupDataIndex<T>(
 
 const EntryHeadDateItem: FC<{
   entryId: string
-
 }> = memo(({ entryId }) => {
   const entry = useEntry(entryId)
 

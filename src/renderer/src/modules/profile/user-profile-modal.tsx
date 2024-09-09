@@ -2,16 +2,9 @@ import { env } from "@env"
 import { m } from "@renderer/components/common/Motion"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { FollowIcon } from "@renderer/components/icons/follow"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@renderer/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import { ActionButton, Button } from "@renderer/components/ui/button"
-import {
-  LoadingCircle,
-  LoadingWithIcon,
-} from "@renderer/components/ui/loading"
+import { LoadingCircle, LoadingWithIcon } from "@renderer/components/ui/loading"
 import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { useAuthQuery } from "@renderer/hooks/common"
@@ -57,19 +50,19 @@ export const UserProfileModalContent: FC<{
   )
   const storeUser = useUserById(userId)
 
-  const userInfo = user.data ?
-      {
+  const userInfo = user.data
+    ? {
         avatar: user.data.image,
         name: user.data.name,
         handle: user.data.handle,
-      } :
-    storeUser ?
-        {
+      }
+    : storeUser
+      ? {
           avatar: storeUser.image,
           name: storeUser.name,
           handle: storeUser.handle,
-        } :
-      null
+        }
+      : null
 
   const subscriptions = useUserSubscriptionsQuery(user.data?.id)
   const modal = useCurrentModal()
@@ -193,9 +186,9 @@ export const UserProfileModalContent: FC<{
         layout="size"
         className={cn(
           "relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
-          variant === "drawer" ?
-            "shadow-drawer-left h-full w-[60ch] max-w-full" :
-            "h-[80vh] w-[800px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
+          variant === "drawer"
+            ? "shadow-drawer-left h-full w-[60ch] max-w-full"
+            : "h-[80vh] w-[800px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
         )}
       >
         <div className="absolute right-2 top-2 z-10 flex items-center gap-2 text-[20px] opacity-80">
@@ -205,23 +198,17 @@ export const UserProfileModalContent: FC<{
               const currentVisible = currentVisibleRef.current
               const topOfCurrent = currentVisible?.values().next().value
 
-              setItemStyle((current) =>
-                current === "loose" ? "compact" : "loose",
-              )
+              setItemStyle((current) => (current === "loose" ? "compact" : "loose"))
               if (!topOfCurrent) return
 
               nextFrame(() => {
-                scrollerRef
-                  ?.querySelector(`[data-feed-id="${topOfCurrent}"]`)
-                  ?.scrollIntoView()
+                scrollerRef?.querySelector(`[data-feed-id="${topOfCurrent}"]`)?.scrollIntoView()
               })
             }}
           >
             <i
               className={cn(
-                itemStyle === "loose" ?
-                  "i-mgc-list-check-3-cute-re" :
-                  "i-mgc-list-check-cute-re",
+                itemStyle === "loose" ? "i-mgc-list-check-3-cute-re" : "i-mgc-list-check-cute-re",
               )}
             />
           </ActionButton>
@@ -248,10 +235,7 @@ export const UserProfileModalContent: FC<{
             >
               <Avatar
                 asChild
-                className={cn(
-                  "aspect-square",
-                  isHeaderSimple ? "size-12" : "size-16",
-                )}
+                className={cn("aspect-square", isHeaderSimple ? "size-12" : "size-16")}
               >
                 <m.span layout>
                   <AvatarImage
@@ -299,14 +283,12 @@ export const UserProfileModalContent: FC<{
               {subscriptions.isLoading ? (
                 <LoadingWithIcon
                   size="large"
-                  icon={(
+                  icon={
                     <Avatar className="aspect-square size-4">
                       <AvatarImage src={userInfo.avatar || undefined} />
-                      <AvatarFallback>
-                        {userInfo.name?.slice(0, 2)}
-                      </AvatarFallback>
+                      <AvatarFallback>{userInfo.name?.slice(0, 2)}</AvatarFallback>
                     </Avatar>
-                  )}
+                  }
                   className="center h-48 w-full max-w-full"
                 />
               ) : (
@@ -343,9 +325,7 @@ const SubscriptionItem: FC<{
 
   variant: ItemVariant
 }> = ({ subscription, variant }) => {
-  const isFollowed = !!useSubscriptionStore(
-    (state) => state.data[subscription.feedId],
-  )
+  const isFollowed = !!useSubscriptionStore((state) => state.data[subscription.feedId])
   const { present } = useModalStack()
   const isLoose = variant === "loose"
   return (
@@ -353,11 +333,7 @@ const SubscriptionItem: FC<{
       className={cn("group relative", isLoose ? "border-b py-5" : "py-2")}
       data-feed-id={subscription.feedId}
     >
-      <a
-        className="flex flex-1 cursor-default"
-        href={subscription.feeds.siteUrl!}
-        target="_blank"
-      >
+      <a className="flex flex-1 cursor-default" href={subscription.feeds.siteUrl!} target="_blank">
         <FeedIcon feed={subscription.feeds} size={22} className="mr-3" />
         <div
           className={cn(
@@ -366,9 +342,7 @@ const SubscriptionItem: FC<{
             !isLoose && "flex items-center",
           )}
         >
-          <div className="truncate font-medium leading-none">
-            {subscription.feeds?.title}
-          </div>
+          <div className="truncate font-medium leading-none">{subscription.feeds?.title}</div>
           {isLoose && (
             <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
               {subscription.feeds?.description}
@@ -383,9 +357,7 @@ const SubscriptionItem: FC<{
               const defaultView = subscription.view
 
               present({
-                title: `${isFollowed ? "Edit " : ""}${APP_NAME} - ${
-                  subscription.feeds.title
-                }`,
+                title: `${isFollowed ? "Edit " : ""}${APP_NAME} - ${subscription.feeds.title}`,
                 clickOutsideToDismiss: true,
                 content: ({ dismiss }) => (
                   <FeedForm

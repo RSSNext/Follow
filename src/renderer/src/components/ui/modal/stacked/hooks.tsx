@@ -53,8 +53,7 @@ export const useModalStack = (options?: ModalStackOptions) => {
         }
 
         return () => {
-          jotaiStore.set(modalStackAtom, (p) =>
-            p.filter((item) => item.id !== modalId))
+          jotaiStore.set(modalStackAtom, (p) => p.filter((item) => item.id !== modalId))
         }
       },
       [id, wrapper],
@@ -85,9 +84,7 @@ export const useResizeableModal = (
     enableResizeable: boolean
   },
 ) => {
-  const [resizeableStyle, setResizeableStyle] = useState(
-    {} as React.CSSProperties,
-  )
+  const [resizeableStyle, setResizeableStyle] = useState({} as React.CSSProperties)
   const [isResizeable, setIsResizeable] = useState(false)
 
   const handlePointDown = useEventCallback(() => {

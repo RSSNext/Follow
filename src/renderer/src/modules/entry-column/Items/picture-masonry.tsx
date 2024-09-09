@@ -7,15 +7,7 @@ import { getEntry } from "@renderer/store/entry"
 import { imageActions } from "@renderer/store/image"
 import { debounce, throttle } from "lodash-es"
 import type { CSSProperties, FC, PropsWithChildren } from "react"
-import {
-  memo,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import { memo, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useEventCallback } from "usehooks-ts"
 
 import { batchMarkRead } from "../hooks"
@@ -147,14 +139,9 @@ const PictureMasonryImpl = ({
 
   const $scroll = useScrollViewElement()
   const currentItemWidth = useContext(MasonryItemWidthContext)
-  const itemStyle: CSSProperties = useMemo(
-    () => ({ width: currentItemWidth }),
-    [currentItemWidth],
-  )
+  const itemStyle: CSSProperties = useMemo(() => ({ width: currentItemWidth }), [currentItemWidth])
 
-  const [masonryItemsRadio, setMasonryItemsRadio] = useState<
-    Record<string, number>
-  >({})
+  const [masonryItemsRadio, setMasonryItemsRadio] = useState<Record<string, number>>({})
 
   const scrollMarkUnread = useGeneralSettingKey("scrollMarkUnread")
   const inViewMarkRead = useGeneralSettingKey("renderMarkUnread")
@@ -180,9 +167,7 @@ const PictureMasonryImpl = ({
 
   return (
     <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
-      <MasonryItemsAspectRatioSetterContext.Provider
-        value={setMasonryItemsRadio}
-      >
+      <MasonryItemsAspectRatioSetterContext.Provider value={setMasonryItemsRadio}>
         <MasonryInfiniteGrid
           ref={masonryRef}
           onRenderComplete={useEventCallback((e) => {
@@ -250,7 +235,7 @@ const ItemWrapperImpl = ({
   itemStyle: CSSProperties
   entryId: string
 } & React.HtmlHTMLAttributes<HTMLDivElement> &
-PropsWithChildren) => (
+  PropsWithChildren) => (
   <div
     style={{
       ...style,

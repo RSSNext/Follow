@@ -16,14 +16,7 @@ import { nextFrame } from "@renderer/lib/dom"
 import type { NativeMenuItem } from "@renderer/lib/native-menu"
 import { CONTEXT_MENU_SHOW_EVENT_KEY } from "@renderer/lib/native-menu"
 import type { ReactNode } from "react"
-import {
-  Fragment,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react"
+import { Fragment, memo, useCallback, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 
 export const ContextMenuProvider: Component = ({ children }) => (
@@ -64,20 +57,12 @@ const Handler = () => {
       }
       if (!bizEvent.detail) return
 
-      if (
-        !("items" in bizEvent.detail) ||
-        !("x" in bizEvent.detail) ||
-        !("y" in bizEvent.detail)
-      ) {
+      if (!("items" in bizEvent.detail) || !("x" in bizEvent.detail) || !("y" in bizEvent.detail)) {
         return
       }
       if (!Array.isArray(bizEvent.detail?.items)) return
 
-      setNode(
-        bizEvent.detail.items.map((item, index) => (
-          <Item key={index} item={item} />
-        )),
-      )
+      setNode(bizEvent.detail.items.map((item, index) => <Item key={index} item={item} />))
 
       fakeElement.dispatchEvent(
         new MouseEvent("contextmenu", {
@@ -116,8 +101,7 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
   }, [item])
   const itemRef = useRef<HTMLDivElement>(null)
   useHotkeys((item as any).shortcut, () => itemRef.current?.click(), {
-    enabled:
-      (item as any).enabled !== false && (item as any).shortcut !== undefined,
+    enabled: (item as any).enabled !== false && (item as any).shortcut !== undefined,
     scopes: HotKeyScopeMap.Menu,
     preventDefault: true,
   })
@@ -134,8 +118,7 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
         <Sub>
           <Wrapper
             ref={itemRef}
-            disabled={item.enabled === false ||
-              (item.click === undefined && !item.submenu)}
+            disabled={item.enabled === false || (item.click === undefined && !item.submenu)}
             onClick={onClick}
             className="flex items-center gap-2"
           >

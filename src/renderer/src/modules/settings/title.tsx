@@ -4,13 +4,7 @@ import { useLoaderData } from "react-router-dom"
 import { settings } from "./constants"
 import type { SettingPageConfig } from "./utils"
 
-export const SettingsSidebarTitle = ({
-  path,
-  className,
-}: {
-  path: string
-  className?: string
-}) => {
+export const SettingsSidebarTitle = ({ path, className }: { path: string; className?: string }) => {
   const tab = settings.find((t) => t.path === path)
 
   if (!tab) {
@@ -18,12 +12,7 @@ export const SettingsSidebarTitle = ({
   }
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-2 text-[0.94rem] font-medium",
-        className,
-      )}
-    >
+    <div className={cn("flex items-center gap-2 text-[0.94rem] font-medium", className)}>
       <i className={tab.iconName} />
       <span>{tab.name}</span>
     </div>

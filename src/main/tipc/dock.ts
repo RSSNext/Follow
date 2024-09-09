@@ -14,9 +14,7 @@ const pollingMap = {
 export const dockRoute = {
   pollingUpdateUnreadCount: t.procedure.action(pollingUpdateUnreadCount),
 
-  cancelPollingUpdateUnreadCount: t.procedure.action(
-    cancelPollingUpdateUnreadCount,
-  ),
+  cancelPollingUpdateUnreadCount: t.procedure.action(cancelPollingUpdateUnreadCount),
 
   updateUnreadCount: t.procedure.action(async () => {
     await updateUnreadCount()
@@ -36,7 +34,9 @@ export async function pollingUpdateUnreadCount() {
   pollingMap.unread = true
   while (pollingMap.unread) {
     await sleep(UNREAD_BACKGROUND_POLLING_INTERVAL)
-    if (pollingMap.unread) { await updateUnreadCount() }
+    if (pollingMap.unread) {
+      await updateUnreadCount()
+    }
   }
 }
 

@@ -52,12 +52,12 @@ const vite = ({ mode }) => {
     },
     plugins: [
       mode !== "development" &&
-      legacy({
-        targets: "defaults",
-        renderLegacyChunks: false,
-        modernTargets: ">0.3%, last 2 versions, Firefox ESR, not dead",
-        modernPolyfills: ["es.array.find-last-index", "es.array.find-last"],
-      }),
+        legacy({
+          targets: "defaults",
+          renderLegacyChunks: false,
+          modernTargets: ">0.3%, last 2 versions, Firefox ESR, not dead",
+          modernPolyfills: ["es.array.find-last-index", "es.array.find-last"],
+        }),
       htmlPlugin(typedEnv),
       react(),
       mkcert(),
@@ -75,8 +75,7 @@ const vite = ({ mode }) => {
           excludeReplayWorker: true,
         },
         moduleMetadata: {
-          appVersion:
-            process.env.NODE_ENV === "development" ? "dev" : pkg.version,
+          appVersion: process.env.NODE_ENV === "development" ? "dev" : pkg.version,
           electron: false,
         },
         sourcemaps: {
@@ -92,13 +91,9 @@ const vite = ({ mode }) => {
       APP_NAME: JSON.stringify(pkg.name),
       APP_DEV_CWD: JSON.stringify(process.cwd()),
 
-      GIT_COMMIT_SHA: JSON.stringify(
-        process.env.VERCEL_GIT_COMMIT_SHA || getGitHash(),
-      ),
+      GIT_COMMIT_SHA: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA || getGitHash()),
 
-      RELEASE_CHANNEL: JSON.stringify(
-        (prerelease(pkg.version)?.[0] as string) || "stable",
-      ),
+      RELEASE_CHANNEL: JSON.stringify((prerelease(pkg.version)?.[0] as string) || "stable"),
 
       DEBUG: process.env.DEBUG === "true",
       ELECTRON: "false",

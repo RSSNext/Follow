@@ -22,8 +22,8 @@ const Win32Material: Props = ({ className, children, ...rest }) => (
     {children}
   </div>
 )
-export const WindowUnderBlur: Props = SYSTEM_CAN_UNDER_BLUR_WINDOW ?
-    (props) => {
+export const WindowUnderBlur: Props = SYSTEM_CAN_UNDER_BLUR_WINDOW
+  ? (props) => {
       const opaqueSidebar = useUISettingKey("opaqueSidebar")
       if (opaqueSidebar) {
         return <Noop {...props} />
@@ -43,5 +43,5 @@ export const WindowUnderBlur: Props = SYSTEM_CAN_UNDER_BLUR_WINDOW ?
           return <Noop {...props} />
         }
       }
-    } :
-  Noop
+    }
+  : Noop

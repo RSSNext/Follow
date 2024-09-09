@@ -9,16 +9,11 @@ import { useMediaQuery } from "usehooks-ts"
 
 const useDarkQuery = () => useMediaQuery("(prefers-color-scheme: dark)")
 type ColorMode = "light" | "dark" | "system"
-const themeAtom = !window.electron ?
-  atomWithStorage(
-    getStorageNS("color-mode"),
-    "system" as ColorMode,
-    undefined,
-    {
+const themeAtom = !window.electron
+  ? atomWithStorage(getStorageNS("color-mode"), "system" as ColorMode, undefined, {
       getOnInit: true,
-    },
-  ) :
-  atom("system" as ColorMode)
+    })
+  : atom("system" as ColorMode)
 
 function useDarkWebApp() {
   const systemIsDark = useDarkQuery()
@@ -59,9 +54,7 @@ const useSyncThemeWebApp = () => {
   }, [colorMode, systemIsDark])
 }
 
-export const useSyncThemeark = window.electron ?
-  useSyncThemeElectron :
-  useSyncThemeWebApp
+export const useSyncThemeark = window.electron ? useSyncThemeElectron : useSyncThemeWebApp
 
 export const useSetTheme = () =>
   useCallback((colorMode: ColorMode) => {
@@ -91,7 +84,7 @@ function disableTransition(disableTransitionExclude: string[] = []) {
 
   return () => {
     // Force restyle
-    (() => window.getComputedStyle(document.body))()
+    ;(() => window.getComputedStyle(document.body))()
 
     // Wait for next tick before removing
     nextFrame(() => {

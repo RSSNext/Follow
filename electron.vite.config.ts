@@ -74,9 +74,7 @@ export default defineConfig({
       DEBUG: process.env.DEBUG === "true",
       ELECTRON: "true",
 
-      RELEASE_CHANNEL: JSON.stringify(
-        (prerelease(pkg.version)?.[0] as string) || "stable",
-      ),
+      RELEASE_CHANNEL: JSON.stringify((prerelease(pkg.version)?.[0] as string) || "stable"),
     },
   },
 })

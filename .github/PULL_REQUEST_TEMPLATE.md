@@ -17,7 +17,6 @@ Before submitting the PR, please make sure you do the following:
 
 ### Linked Issues
 
-
 ### Additional context
 
 <!-- e.g. is there anything you'd like reviewers to focus on? -->

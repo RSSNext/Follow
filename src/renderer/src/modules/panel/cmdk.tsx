@@ -12,11 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
 import { ROUTE_ENTRY_PENDING } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import type { FeedViewType } from "@renderer/lib/enum"
@@ -35,9 +31,7 @@ import { memo, useMemo } from "react"
 
 import styles from "./cmdk.module.css"
 
-const SearchCmdKContext = React.createContext<Promise<SearchInstance> | null>(
-  null,
-)
+const SearchCmdKContext = React.createContext<Promise<SearchInstance> | null>(null)
 export const SearchCmdK: React.FC = () => {
   const open = useAppSearchOpen()
 
@@ -66,8 +60,8 @@ export const SearchCmdK: React.FC = () => {
       $input.focus()
     }
   }, [open])
-  const handleKeyDownToFocusInput: React.EventHandler<React.KeyboardEvent> =
-    React.useCallback((e) => {
+  const handleKeyDownToFocusInput: React.EventHandler<React.KeyboardEvent> = React.useCallback(
+    (e) => {
       const $input = inputRef.current
       if (e.key === "Escape") {
         setAppSearchOpen(false)
@@ -79,7 +73,9 @@ export const SearchCmdK: React.FC = () => {
       if (!e.ctrlKey && !e.metaKey && !e.altKey) {
         $input?.focus()
       }
-    }, [])
+    },
+    [],
+  )
   const [isPending, startTransition] = React.useTransition()
   const handleSearch = React.useCallback(
     async (value: string) => {
@@ -98,10 +94,7 @@ export const SearchCmdK: React.FC = () => {
   // Performance optimization
   const [page, setPage] = React.useState(0)
   const pageSize = 16
-  const renderedEntries = useMemo(
-    () => entries.slice(0, (page + 1) * pageSize),
-    [entries, page],
-  )
+  const renderedEntries = useMemo(() => entries.slice(0, (page + 1) * pageSize), [entries, page])
 
   const renderedFeeds = useMemo(() => {
     const delta = entries.length - renderedEntries.length
@@ -109,10 +102,7 @@ export const SearchCmdK: React.FC = () => {
     if (delta > pageSize) return []
 
     const entriesTotalPage = Math.ceil(entries.length / pageSize)
-    const right =
-      entriesTotalPage === page + 1 ?
-        delta :
-        pageSize * page + 1 - entries.length
+    const right = entriesTotalPage === page + 1 ? delta : pageSize * page + 1 - entries.length
 
     return feeds.slice(0, right)
   }, [entries.length, feeds, page, renderedEntries.length])
@@ -147,9 +137,7 @@ export const SearchCmdK: React.FC = () => {
           placeholder={searchActions.getCurrentKeyword() || "Search..."}
           onValueChange={handleSearch}
         />
-        <div
-          className={cn(styles["status-bar"], isPending && styles["loading"])}
-        />
+        <div className={cn(styles["status-bar"], isPending && styles["loading"])} />
 
         <ScrollArea.ScrollArea
           ref={scrollViewRef}
@@ -162,12 +150,7 @@ export const SearchCmdK: React.FC = () => {
 
             {renderedEntries.length > 0 && (
               <Command.Group
-                heading={(
-                  <SearchGroupHeading
-                    icon="i-mgc-paper-cute-fi size-4"
-                    title="Entries"
-                  />
-                )}
+                heading={<SearchGroupHeading icon="i-mgc-paper-cute-fi size-4" title="Entries" />}
                 className="flex w-full min-w-0 flex-col py-2"
               >
                 {renderedEntries.map((entry) => {
@@ -175,11 +158,7 @@ export const SearchCmdK: React.FC = () => {
                   return (
                     <SearchItem
                       key={entry.item.id}
-                      view={
-                        feed?.id ?
-                          getSubscriptionByFeedId(feed.id)?.view :
-                          undefined
-                      }
+                      view={feed?.id ? getSubscriptionByFeedId(feed.id)?.view : undefined}
                       title={entry.item.title!}
                       feedId={entry.feedId}
                       entryId={entry.item.id}
@@ -193,12 +172,9 @@ export const SearchCmdK: React.FC = () => {
             )}
             {renderedFeeds.length > 0 && (
               <Command.Group
-                heading={(
-                  <SearchGroupHeading
-                    icon="i-mgc-rss-cute-fi size-4 text-accent"
-                    title="Feeds"
-                  />
-                )}
+                heading={
+                  <SearchGroupHeading icon="i-mgc-rss-cute-fi size-4 text-accent" title="Feeds" />
+                }
                 className="py-2"
               >
                 {renderedFeeds.map((feed) => (
@@ -210,19 +186,12 @@ export const SearchCmdK: React.FC = () => {
                     entryId={ROUTE_ENTRY_PENDING}
                     id={feed.item.id!}
                     icon={feed.item.siteUrl}
-                    subtitle={useFeedUnreadStore
-                      .getState()
-                      .data[feed.item.id!]?.toString()}
+                    subtitle={useFeedUnreadStore.getState().data[feed.item.id!]?.toString()}
                   />
                 ))}
               </Command.Group>
             )}
-            {canLoadMore && (
-              <LoadMoreIndicator
-                className="center w-full"
-                onLoading={loadMore}
-              />
-            )}
+            {canLoadMore && <LoadMoreIndicator className="center w-full" onLoading={loadMore} />}
           </Command.List>
         </ScrollArea.ScrollArea>
         <SearchOptions />
@@ -285,10 +254,7 @@ const SearchItem = memo(function Item({
   )
 })
 
-const SearchGroupHeading: FC<{ icon: string, title: string }> = ({
-  icon,
-  title,
-}) => (
+const SearchGroupHeading: FC<{ icon: string; title: string }> = ({ icon, title }) => (
   <div className="mb-2 flex items-center gap-2">
     <i className={icon} />
     <span className="text-sm font-semibold">{title}</span>
@@ -334,15 +300,13 @@ const SearchResultCount: FC<{
                 </>
               )}
             </ExPromise>
-          )}
-          {" "}
+          )}{" "}
           (Local mode)
           <i className="i-mingcute-question-line" />
         </small>
       </TooltipTrigger>
       <TooltipContent>
-        This search covers locally available data. Try a Refetch to include the
-        latest data.
+        This search covers locally available data. Try a Refetch to include the latest data.
       </TooltipContent>
     </Tooltip>
   )

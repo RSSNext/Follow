@@ -1,9 +1,6 @@
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { views } from "@renderer/constants"
-import {
-  useRouteParamsSelector,
-  useRouteParms,
-} from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParamsSelector, useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { entries, useEntries } from "@renderer/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
@@ -49,13 +46,7 @@ export const useEntryMarkReadHandler = (entriesIds: string[]) => {
       return handleMarkReadInRange
     }
     return
-  }, [
-    feedView,
-    handleMarkReadInRange,
-    handleRenderAsRead,
-    renderAsRead,
-    scrollMarkUnread,
-  ])
+  }, [feedView, handleMarkReadInRange, handleRenderAsRead, renderAsRead, scrollMarkUnread])
 }
 export const useEntriesByView = ({
   onReset,
@@ -117,13 +108,10 @@ export const useEntriesByView = ({
     [query.data?.pages],
   )
 
-  const currentEntries = useEntryIdsByFeedIdOrView(
-    isAllFeeds ? view : folderIds || feedId!,
-    {
-      unread: unreadOnly,
-      view,
-    },
-  )
+  const currentEntries = useEntryIdsByFeedIdOrView(isAllFeeds ? view : folderIds || feedId!, {
+    unread: unreadOnly,
+    view,
+  })
 
   // If remote data is not available, we use the local data, get the local data length
   // FIXME: remote first, then local store data
@@ -163,9 +151,9 @@ export const useEntriesByView = ({
     setMergedEntries(nextIds)
   }, [entryIdsAsDeps])
 
-  const sortEntries = isCollection ?
-    sortEntriesIdByStarAt(mergedEntries) :
-    sortEntriesIdByEntryPublishedAt(mergedEntries)
+  const sortEntries = isCollection
+    ? sortEntriesIdByStarAt(mergedEntries)
+    : sortEntriesIdByEntryPublishedAt(mergedEntries)
 
   const groupByDate = useGeneralSettingKey("groupByDate")
   const groupedCounts: number[] | undefined = useMemo(() => {
@@ -235,9 +223,7 @@ function sortEntriesIdByEntryPublishedAt(entries: string[]) {
   return entries
     .slice()
     .sort((a, b) =>
-      entriesId2Map[b]?.entries.publishedAt.localeCompare(
-        entriesId2Map[a]?.entries.publishedAt,
-      ),
+      entriesId2Map[b]?.entries.publishedAt.localeCompare(entriesId2Map[a]?.entries.publishedAt),
     )
 }
 

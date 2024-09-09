@@ -8,7 +8,11 @@ import {
   setUISetting,
   useUISettingSelector,
 } from "@renderer/atoms/settings/ui"
-import { SimpleIconsEagle, SimpleIconsInstapaper, SimpleIconsReadwise } from "@renderer/components/ui/platform-icon/icons"
+import {
+  SimpleIconsEagle,
+  SimpleIconsInstapaper,
+  SimpleIconsReadwise,
+} from "@renderer/components/ui/platform-icon/icons"
 import {
   Select,
   SelectContent,
@@ -33,33 +37,73 @@ export const SettingIntegration = () => (
         settings={[
           {
             type: "title",
-            value: <span className="flex items-center gap-2"><SimpleIconsEagle />Eagle</span>,
+            value: (
+              <span className="flex items-center gap-2">
+                <SimpleIconsEagle />
+                Eagle
+              </span>
+            ),
           },
           defineSettingItem("enableEagle", {
             label: "Enable",
-            description: <>Display <i>Save media to Eagle</i> button when available.</>,
+            description: (
+              <>
+                Display <i>Save media to Eagle</i> button when available.
+              </>
+            ),
           }),
           {
             type: "title",
-            value: <span className="flex items-center gap-2"><SimpleIconsReadwise />Readwise</span>,
+            value: (
+              <span className="flex items-center gap-2">
+                <SimpleIconsReadwise />
+                Readwise
+              </span>
+            ),
           },
           defineSettingItem("enableReadwise", {
             label: "Enable",
-            description: <>Display <i>Save to Readwise</i> button when available.</>,
+            description: (
+              <>
+                Display <i>Save to Readwise</i> button when available.
+              </>
+            ),
           }),
           defineSettingItem("readwiseToken", {
             label: "Readwise Access Token",
             vertical: true,
             type: "password",
-            description: <>You can get it here: <a target="_blank" className="underline" rel="noreferrer noopener" href="https://readwise.io/access_token">readwise.io/access_token</a>.</>,
+            description: (
+              <>
+                You can get it here:{" "}
+                <a
+                  target="_blank"
+                  className="underline"
+                  rel="noreferrer noopener"
+                  href="https://readwise.io/access_token"
+                >
+                  readwise.io/access_token
+                </a>
+                .
+              </>
+            ),
           }),
           {
             type: "title",
-            value: <span className="flex items-center gap-2"><SimpleIconsInstapaper />Instapaper</span>,
+            value: (
+              <span className="flex items-center gap-2">
+                <SimpleIconsInstapaper />
+                Instapaper
+              </span>
+            ),
           },
           defineSettingItem("enableInstapaper", {
             label: "Enable",
-            description: <>Display <i>Save to Instapaper</i> button when available.</>,
+            description: (
+              <>
+                Display <i>Save to Instapaper</i> button when available.
+              </>
+            ),
           }),
           defineSettingItem("instapaperUsername", {
             label: "Instapaper Username",

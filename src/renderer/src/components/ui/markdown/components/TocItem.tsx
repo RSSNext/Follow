@@ -57,7 +57,7 @@ export const TocItem: FC<TocItemProps> = memo((props) => {
           "dark:bg-zinc-800/80 dark:hover:!bg-zinc-600 dark:group-hover:bg-zinc-600/50",
           isScrollOut && "dark:bg-zinc-700",
           !!range &&
-          "!bg-zinc-400/50 data-[active=true]:group-hover:!bg-zinc-500 dark:!bg-zinc-600",
+            "!bg-zinc-400/50 data-[active=true]:group-hover:!bg-zinc-500 dark:!bg-zinc-600",
           "overflow-hidden",
         )}
       >

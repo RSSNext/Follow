@@ -10,11 +10,9 @@ interface UnreadState {
 /**
  * Store for `feed` unread count
  */
-export const useFeedUnreadStore = createZustandStore<UnreadState>("unread")(
-  () => ({
-    data: {},
-  }),
-)
+export const useFeedUnreadStore = createZustandStore<UnreadState>("unread")(() => ({
+  data: {},
+}))
 
 const set = useFeedUnreadStore.setState
 const get = useFeedUnreadStore.getState

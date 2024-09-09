@@ -2,10 +2,7 @@ import { cn } from "@renderer/lib/utils"
 import * as React from "react"
 
 export const PanelSplitter = (
-  props: React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLDivElement>,
-    HTMLDivElement
-  > & {
+  props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
     isDragging?: boolean
   },
 ) => {

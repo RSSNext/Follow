@@ -34,9 +34,7 @@ const FooterInfo = () => (
   <div className="relative">
     {APP_VERSION?.[0] === "0" && (
       <div className="pointer-events-none !mt-0 w-full py-3 text-center text-xs opacity-20">
-        Early Access
-        {" "}
-        {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
+        Early Access {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
       </div>
     )}
 
@@ -113,10 +111,7 @@ export function Component() {
             canClose={false}
             clickOutsideToDismiss={false}
           >
-            <LoginModalContent
-              canClose={false}
-              runtime={window.electron ? "app" : "browser"}
-            />
+            <LoginModalContent canClose={false} runtime={window.electron ? "app" : "browser"} />
           </DeclarativeModal>
         </RootPortal>
       )}
@@ -213,16 +208,12 @@ const FeedResponsiveResizerContainer = ({
         className={cn(
           "shrink-0 overflow-hidden",
           "absolute inset-y-0 z-10",
-          feedColumnTempShow &&
-          !feedColumnShow &&
-          "shadow-drawer-right z-[12] border-r",
-          !feedColumnShow && !feedColumnTempShow ?
-            "-translate-x-full delay-200" :
-            "",
+          feedColumnTempShow && !feedColumnShow && "shadow-drawer-right z-[12] border-r",
+          !feedColumnShow && !feedColumnTempShow ? "-translate-x-full delay-200" : "",
           !isDragging ? "duration-200" : "",
         )}
         style={{
-          "width": `${position}px`,
+          width: `${position}px`,
           // @ts-expect-error
           "--fo-feed-col-w": `${position}px`,
         }}
@@ -237,9 +228,7 @@ const FeedResponsiveResizerContainer = ({
         }}
       />
 
-      {delayShowSplitter && (
-        <PanelSplitter isDragging={isDragging} {...separatorProps} />
-      )}
+      {delayShowSplitter && <PanelSplitter isDragging={isDragging} {...separatorProps} />}
     </>
   )
 }

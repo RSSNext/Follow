@@ -12,11 +12,7 @@ import { toast } from "sonner"
 import { navigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
 
-export const useDeleteSubscription = ({
-  onSuccess,
-}: {
-  onSuccess?: () => void
-}) =>
+export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void }) =>
   useMutation({
     mutationFn: async (subscription: SubscriptionFlatModel) =>
       subscriptionActions.unfollow(subscription.feedId).then((feed) => {
@@ -41,21 +37,20 @@ export const useDeleteSubscription = ({
 
           toast.dismiss(toastId)
         }
-        const toastId = toast(
-          <UnfollowInfo title={feed.title!} undo={undo} />,
-          {
-            duration: 3000,
-            action: {
-              label: (
-                <span className="flex items-center gap-1">
-                  Undo
-                  <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">Meta+Z</Kbd>
-                </span>
-              ),
-              onClick: undo,
-            },
+        const toastId = toast(<UnfollowInfo title={feed.title!} undo={undo} />, {
+          duration: 3000,
+          action: {
+            label: (
+              <span className="flex items-center gap-1">
+                Undo
+                <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">
+                  Meta+Z
+                </Kbd>
+              </span>
+            ),
+            onClick: undo,
           },
-        )
+        })
       }),
 
     onSuccess: (_) => {
@@ -72,18 +67,14 @@ export const useDeleteSubscription = ({
     },
   })
 
-const UnfollowInfo = ({ title, undo }: { title: string, undo: () => any }) => {
+const UnfollowInfo = ({ title, undo }: { title: string; undo: () => any }) => {
   useHotkeys("ctrl+z,meta+z", undo, {
     scopes: HotKeyScopeMap.Home,
     preventDefault: true,
   })
   return (
     <>
-      Feed
-      {" "}
-      <i className="mr-px font-semibold">{title}</i>
-      {" "}
-      has been unfollowed.
+      Feed <i className="mr-px font-semibold">{title}</i> has been unfollowed.
     </>
   )
 }

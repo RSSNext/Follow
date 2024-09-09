@@ -91,10 +91,7 @@ export function DiscoverImport() {
   return (
     <>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[512px] space-y-8"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-[512px] space-y-8">
           <FormField
             control={form.control}
             name="file"
@@ -110,17 +107,13 @@ export function DiscoverImport() {
                       <Fragment>
                         <i className="i-mgc-file-upload-cute-re size-5" />
 
-                        <span className="ml-2 text-sm font-semibold opacity-80">
-                          {value.name}
-                        </span>
+                        <span className="ml-2 text-sm font-semibold opacity-80">{value.name}</span>
                       </Fragment>
                     ) : (
                       <Fragment>
                         <i className="i-mgc-file-upload-cute-re size-5" />
 
-                        <span className="ml-2 text-sm opacity-80">
-                          Click to upload OPML file
-                        </span>
+                        <span className="ml-2 text-sm opacity-80">Click to upload OPML file</span>
                       </Fragment>
                     )}
                   </label>
@@ -131,8 +124,7 @@ export function DiscoverImport() {
                   type="file"
                   accept=".opml,.xml"
                   className="hidden"
-                  onChange={(event) =>
-                    onChange(event.target.files && event.target.files[0])}
+                  onChange={(event) => onChange(event.target.files && event.target.files[0])}
                 />
                 <FormMessage />
               </FormItem>
@@ -155,40 +147,27 @@ export function DiscoverImport() {
             <CardHeader className="block text-zinc-500">
               <span className="font-bold text-zinc-800">
                 {mutation.data?.successfulItems.length || 0}
-              </span>
-              {" "}
-              feeds were successfully imported,
-              {" "}
+              </span>{" "}
+              feeds were successfully imported,{" "}
               <span className="font-bold text-zinc-800">
                 {mutation.data?.conflictItems.length || 0}
-              </span>
-              {" "}
-              were already subscribed to, and
-              {" "}
+              </span>{" "}
+              were already subscribed to, and{" "}
               <span className="font-bold text-zinc-800">
                 {mutation.data?.parsedErrorItems.length || 0}
-              </span>
-              {" "}
+              </span>{" "}
               failed to import.
             </CardHeader>
             <CardContent className="space-y-6">
               {list.map((item) => (
                 <div key={item.key}>
-                  <div
-                    className={cn("mb-4 text-lg font-medium", item.className)}
-                  >
-                    {item.title}
-                  </div>
+                  <div className={cn("mb-4 text-lg font-medium", item.className)}>{item.title}</div>
                   <div className="space-y-4">
                     {!mutation.data?.[item.key].length && (
                       <div className="text-zinc-500">No items</div>
                     )}
                     {mutation.data?.[item.key].map((feed: FeedResponse) => (
-                      <FollowSummary
-                        className="max-w-[462px]"
-                        key={feed.id}
-                        feed={feed}
-                      />
+                      <FollowSummary className="max-w-[462px]" key={feed.id} feed={feed} />
                     ))}
                   </div>
                 </div>

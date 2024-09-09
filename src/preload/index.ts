@@ -13,9 +13,7 @@ export const isWindows11 = isWindows && os.version().startsWith("Windows 11")
 
 // Custom APIs for renderer
 const api = {
-  canWindowBlur:
-    process.platform === "darwin" ||
-    (process.platform === "win32" && isWindows11),
+  canWindowBlur: process.platform === "darwin" || (process.platform === "win32" && isWindows11),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
