@@ -281,14 +281,12 @@ const ActionIcon = ({
   children?: React.ReactNode
 }) => (
   <Tooltip delayDuration={labelDelayDuration}>
-    <TooltipTrigger>
-      <button
-        type="button"
-        className="center size-6 rounded-md text-zinc-500 hover:bg-theme-button-hover"
-        onClick={onClick}
-      >
-        {children || <i className={className} />}
-      </button>
+    <TooltipTrigger
+      className="center size-6 rounded-md text-zinc-500 hover:bg-theme-button-hover"
+      onClick={onClick}
+      asChild
+    >
+      <button type="button">{children || <i className={className} />}</button>
     </TooltipTrigger>
     <TooltipContent align={tooltipAlign}>{label}</TooltipContent>
   </Tooltip>

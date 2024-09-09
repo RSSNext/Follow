@@ -75,8 +75,12 @@ export const FeedColumnHeader = () => {
 const LayoutActionButton = () => {
   const feedColumnShow = useFeedColumnShow()
 
+  const [animation] = useState({
+    width: !feedColumnShow ? "auto" : 0,
+  })
+
   return (
-    <m.div animate={{ width: !feedColumnShow ? "auto" : 0 }} className="overflow-hidden">
+    <m.div initial={animation} animate={animation} className="overflow-hidden">
       <ActionButton
         tooltip="Toggle Sidebar"
         icon={
