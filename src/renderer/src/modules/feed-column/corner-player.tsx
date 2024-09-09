@@ -290,9 +290,7 @@ const ActionIcon = ({
         {children || <i className={className} />}
       </button>
     </TooltipTrigger>
-    <TooltipContent className="bg-theme-modal-background" align={tooltipAlign}>
-      {label}
-    </TooltipContent>
+    <TooltipContent align={tooltipAlign}>{label}</TooltipContent>
   </Tooltip>
 )
 
