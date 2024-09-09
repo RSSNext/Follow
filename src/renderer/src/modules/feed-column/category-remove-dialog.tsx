@@ -4,11 +4,7 @@ import { useMutation } from "@tanstack/react-query"
 import { Button } from "../../components/ui/button"
 import { useCurrentModal } from "../../components/ui/modal"
 
-export function CategoryRemoveDialogContent({
-  feedIdList,
-}: {
-  feedIdList: string[]
-}) {
+export function CategoryRemoveDialogContent({ feedIdList }: { feedIdList: string[] }) {
   const deleteMutation = useMutation({
     mutationFn: () => subscriptionActions.deleteCategory(feedIdList),
   })
@@ -18,8 +14,8 @@ export function CategoryRemoveDialogContent({
   return (
     <div className="flex w-[65ch] max-w-full flex-col gap-4">
       <p>
-        This operation will delete your category, but the feeds it contains will
-        be retained and grouped by website.
+        This operation will delete your category, but the feeds it contains will be retained and
+        grouped by website.
       </p>
 
       <div className="flex items-center justify-end gap-3">

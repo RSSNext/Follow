@@ -1,20 +1,12 @@
 import { PopoverPortal } from "@radix-ui/react-popover"
-import {
-  ActionButton,
-  Button,
-  IconButton,
-} from "@renderer/components/ui/button"
+import { ActionButton, Button, IconButton } from "@renderer/components/ui/button"
 import { Kbd, KbdCombined } from "@renderer/components/ui/kbd/Kbd"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@renderer/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@renderer/components/ui/popover"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { HotKeyScopeMap } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { cn } from "@renderer/lib/utils"
-import { AnimatePresence, calcLength, m } from "framer-motion"
+import { AnimatePresence, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
 import { forwardRef, Fragment, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
@@ -131,7 +123,8 @@ export const MarkAllReadWithOverlay = forwardRef<
   return (
     <Fragment>
       <ActionButton
-        tooltip={<>
+        tooltip={
+          <>
             <span>
               Mark
               <span> </span>
@@ -146,7 +139,8 @@ export const MarkAllReadWithOverlay = forwardRef<
                 </KbdCombined>
               </div>
             )}
-          </>}
+          </>
+        }
         className={className}
         ref={ref}
         onClick={() => {
@@ -169,9 +163,7 @@ const ConfirmMarkAllReadInfo = ({ undo }: { undo: () => any }) => {
   return (
     <div>
       <p>Confirm mark all as read?</p>
-      <small className="opacity-50">
-        Will confirmed automatically after 3s.
-      </small>
+      <small className="opacity-50">Will confirmed automatically after 3s.</small>
     </div>
   )
 }
@@ -179,65 +171,62 @@ const ConfirmMarkAllReadInfo = ({ undo }: { undo: () => any }) => {
 /**
  * @deprecated
  */
-export const MarkAllReadPopover = forwardRef<
-  HTMLButtonElement,
-  MarkAllButtonProps
->(({ filter, className, which = "all", shortcut }, ref) => {
-  const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
+export const MarkAllReadPopover = forwardRef<HTMLButtonElement, MarkAllButtonProps>(
+  ({ filter, className, which = "all", shortcut }, ref) => {
+    const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
 
-  const handleMarkAllAsRead = useMarkAllByRoute(filter)
+    const handleMarkAllAsRead = useMarkAllByRoute(filter)
 
-  return (
-    <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
-      <PopoverTrigger asChild>
-        <ActionButton
-          shortcut={shortcut ? shortcuts.entries.markAllAsRead.key : undefined}
-          tooltip={(
-            <span>
+    return (
+      <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
+        <PopoverTrigger asChild>
+          <ActionButton
+            shortcut={shortcut ? shortcuts.entries.markAllAsRead.key : undefined}
+            tooltip={
+              <span>
+                Mark
+                <span> </span>
+                {which}
+                <span> </span>
+                as read
+              </span>
+            }
+            className={className}
+            ref={ref}
+          >
+            <i className="i-mgc-check-circle-cute-re" />
+          </ActionButton>
+        </PopoverTrigger>
+        <PopoverPortal>
+          <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 !py-3 [&_button]:text-xs">
+            <div className="text-sm">
               Mark
               <span> </span>
               {which}
               <span> </span>
-              as read
-            </span>
-          )}
-          className={className}
-          ref={ref}
-        >
-          <i className="i-mgc-check-circle-cute-re" />
-        </ActionButton>
-      </PopoverTrigger>
-      <PopoverPortal>
-        <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 !py-3 [&_button]:text-xs">
-          <div className="text-sm">
-            Mark
-            <span> </span>
-            {which}
-            <span> </span>
-            as read?
-          </div>
-          <div className="space-x-4">
-            <IconButton
-              icon={<i className="i-mgc-check-filled" />}
-              onClick={() => {
-                handleMarkAllAsRead()
-                setMarkPopoverOpen(false)
-              }}
-            >
-              Confirm
-            </IconButton>
-          </div>
-        </PopoverContent>
-      </PopoverPortal>
-    </Popover>
-  )
-})
+              as read?
+            </div>
+            <div className="space-x-4">
+              <IconButton
+                icon={<i className="i-mgc-check-filled" />}
+                onClick={() => {
+                  handleMarkAllAsRead()
+                  setMarkPopoverOpen(false)
+                }}
+              >
+                Confirm
+              </IconButton>
+            </div>
+          </PopoverContent>
+        </PopoverPortal>
+      </Popover>
+    )
+  },
+)
 
 export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
   const { className, filter, which } = props
-  const [status, setStatus] = useState<"initial" | "confirm" | "done">(
-    "initial",
-  )
+  const [status, setStatus] = useState<"initial" | "confirm" | "done">("initial")
   const handleMarkAll = useMarkAllByRoute(filter)
 
   if (status === "done") return null
@@ -273,16 +262,9 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
           <m.i key={2} {...animate} className="i-mgc-check-circle-cute-re" />
         )}
       </AnimatePresence>
-      <span
-        className={cn(
-          status === "confirm" ? "opacity-0" : "opacity-100",
-          "duration-200",
-        )}
-      >
+      <span className={cn(status === "confirm" ? "opacity-0" : "opacity-100", "duration-200")}>
         Mark
-        {which}
-        {" "}
-        as read
+        {which} as read
       </span>
       <span
         className={cn(

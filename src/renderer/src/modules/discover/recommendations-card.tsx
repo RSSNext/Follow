@@ -39,13 +39,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
                     content: () => (
                       <RecommendationContent routePrefix={routePrefix} route={data.routes[route]} />
                     ),
-                    icon: (
-                      <FeedIcon
-                        className="size-4"
-                        size={16}
-                        siteUrl={`https://${data.url}`}
-                      />
-                    ),
+                    icon: <FeedIcon className="size-4" size={16} siteUrl={`https://${data.url}`} />,
                     title: `${data.name} - ${data.routes[route].name}`,
                   })
                 }}
@@ -58,5 +52,4 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
       </CardContent>
     </Card>
   )
-},
-)
+})

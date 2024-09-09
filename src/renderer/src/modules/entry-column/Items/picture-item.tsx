@@ -19,25 +19,15 @@ import {
   useSetStableMasonryItemRatio,
 } from "./contexts/picture-masonry-context"
 
-export function PictureItem({
-  entryId,
-  entryPreview,
-  translation,
-}: UniversalItemProps) {
+export function PictureItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
-  const isActive = useRouteParamsSelector(
-    ({ entryId }) => entryId === entry?.entries.id,
-  )
+  const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
   const previewMedia = usePreviewMedia()
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
-    <GridItem
-      entryId={entryId}
-      entryPreview={entryPreview}
-      translation={translation}
-    >
+    <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div className="relative flex gap-2 overflow-x-auto">
         {entry.entries.media ? (
           <SwipeMedia
@@ -75,9 +65,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
 }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
-  const isActive = useRouteParamsSelector(
-    ({ entryId }) => entryId === entry?.entries.id,
-  )
+  const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
   const previewMedia = usePreviewMedia()
 
@@ -99,10 +87,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
           <MasonryItemFixedDimensionWrapper url={entry.entries.media[0].url}>
             <SwipeMedia
               media={entry.entries.media}
-              className={cn(
-                "w-full shrink-0 grow rounded-md",
-                isActive && "rounded-b-none",
-              )}
+              className={cn("w-full shrink-0 grow rounded-md", isActive && "rounded-b-none")}
               proxySize={proxySize}
               imgClassName="object-cover"
               uniqueKey={entryId}
@@ -117,7 +102,6 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
             No media available
           </div>
         )}
-
       </GridItem>
     </EntryItemWrapper>
   )

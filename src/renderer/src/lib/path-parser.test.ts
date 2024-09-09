@@ -1,13 +1,18 @@
 import { compile, pathToRegexp } from "path-to-regexp"
 import { describe, expect, test } from "vitest"
 
-import { MissingOptionalParamError, MissingRequiredParamError, parseFullPathParams, parseRegexpPathParams, regexpPathToPath, transformUriPath } from "./path-parser"
+import {
+  MissingOptionalParamError,
+  MissingRequiredParamError,
+  parseFullPathParams,
+  parseRegexpPathParams,
+  regexpPathToPath,
+  transformUriPath,
+} from "./path-parser"
 
 describe("test `transformUriPath()`", () => {
   test("normal path", () => {
-    expect(transformUriPath("/issues/all")).toMatchInlineSnapshot(
-      `"/issues/all"`,
-    )
+    expect(transformUriPath("/issues/all")).toMatchInlineSnapshot(`"/issues/all"`)
   })
 
   test("has tailing optional params", () => {
@@ -54,9 +59,7 @@ describe("test `transformUriPath()`", () => {
 
   test("has many optional params", () => {
     const path = transformUriPath("/issue/:user/:repo/:state?/:labels?")
-    expect(path).toMatchInlineSnapshot(
-      `"/issue{/:user}{/:repo}{/:state}?{/:labels}?"`,
-    )
+    expect(path).toMatchInlineSnapshot(`"/issue{/:user}{/:repo}{/:state}?{/:labels}?"`)
     expect(
       compile(path)({
         user: "user",
@@ -139,17 +142,11 @@ describe("test `transformUriPath()`", () => {
 
 describe("test `regexpPathToPath()`", () => {
   test("normal path", () => {
-    expect(regexpPathToPath("/issues/all", {})).toMatchInlineSnapshot(
-      `"/issues/all"`,
-    )
+    expect(regexpPathToPath("/issues/all", {})).toMatchInlineSnapshot(`"/issues/all"`)
   })
   test("path with optional params", () => {
-    expect(regexpPathToPath("/issues/:id?", {})).toMatchInlineSnapshot(
-      `"/issues"`,
-    )
-    expect(regexpPathToPath("/issues/:id?", { id: "1" })).toMatchInlineSnapshot(
-      `"/issues/1"`,
-    )
+    expect(regexpPathToPath("/issues/:id?", {})).toMatchInlineSnapshot(`"/issues"`)
+    expect(regexpPathToPath("/issues/:id?", { id: "1" })).toMatchInlineSnapshot(`"/issues/1"`)
   })
 
   test("path with many optional params", () => {
@@ -162,8 +159,8 @@ describe("test `regexpPathToPath()`", () => {
   })
 
   test("path with many optional params, but when using the optional parameter(s) after the optional parameter(s), the previous optional parameter(s) is/are not filled in.", () => {
-    expect(
-      () => regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
+    expect(() =>
+      regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
         user: "rssnext",
         repo: "follow",
         labels: "rss",
@@ -171,70 +168,96 @@ describe("test `regexpPathToPath()`", () => {
     ).toThrowError(MissingOptionalParamError)
   })
   test("path with many optional params, but when using the optional parameter(s) after the optional parameter(s), the previous optional parameter(s) is/are not filled in.", () => {
-    expect(
-      () => regexpPathToPath("/ranking/:rid?/:day?/:arc_type?/:disableEmbed?", {
+    expect(() =>
+      regexpPathToPath("/ranking/:rid?/:day?/:arc_type?/:disableEmbed?", {
         day: "1",
       }),
     ).toThrowError(MissingOptionalParamError)
   })
 
   test("missing required param", () => {
-    expect(() => regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {})).toThrow(MissingRequiredParamError)
+    expect(() => regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {})).toThrow(
+      MissingRequiredParamError,
+    )
   })
 
   test("catch all path", () => {
-    expect(regexpPathToPath("*", {
-      catchAll: "a/b/c",
-    })).toMatchInlineSnapshot(`"/a%2Fb%2Fc"`)
+    expect(
+      regexpPathToPath("*", {
+        catchAll: "a/b/c",
+      }),
+    ).toMatchInlineSnapshot(`"/a%2Fb%2Fc"`)
   })
 
   test("path with many optional params and all inputted", () => {
-    expect(regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
-      user: "rssnext",
-      repo: "follow",
-      state: "open",
-      labels: "rss",
-    })).toMatchInlineSnapshot(`"/issue/rssnext/follow/open/rss"`)
+    expect(
+      regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
+        user: "rssnext",
+        repo: "follow",
+        state: "open",
+        labels: "rss",
+      }),
+    ).toMatchInlineSnapshot(`"/issue/rssnext/follow/open/rss"`)
   })
 
   test("omit empty string and nil value", () => {
-    expect(regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
-      user: "rssnext",
-      repo: "follow",
-      state: "open",
-      labels: "",
-    }, {
-      omitNilAndEmptyString: true,
-    })).toMatchInlineSnapshot(`"/issue/rssnext/follow/open"`)
+    expect(
+      regexpPathToPath(
+        "/issue/:user/:repo/:state?/:labels?",
+        {
+          user: "rssnext",
+          repo: "follow",
+          state: "open",
+          labels: "",
+        },
+        {
+          omitNilAndEmptyString: true,
+        },
+      ),
+    ).toMatchInlineSnapshot(`"/issue/rssnext/follow/open"`)
   })
 
   test("omit empty string and nil value will throw", () => {
-    expect(() => regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
-      user: "rssnext",
-      repo: "follow",
-      state: "",
-      labels: "l",
-    }, {
-      omitNilAndEmptyString: true,
-    })).toThrow(MissingOptionalParamError)
+    expect(() =>
+      regexpPathToPath(
+        "/issue/:user/:repo/:state?/:labels?",
+        {
+          user: "rssnext",
+          repo: "follow",
+          state: "",
+          labels: "l",
+        },
+        {
+          omitNilAndEmptyString: true,
+        },
+      ),
+    ).toThrow(MissingOptionalParamError)
   })
 
   test("omit empty string and nil value will throw (default behavior)", () => {
-    expect(() => regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
-      user: "rssnext",
-      repo: "follow",
-      state: "",
-      labels: "l",
-    })).toThrow(MissingOptionalParamError)
+    expect(() =>
+      regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
+        user: "rssnext",
+        repo: "follow",
+        state: "",
+        labels: "l",
+      }),
+    ).toThrow(MissingOptionalParamError)
   })
 
   test("empty string will pass", () => {
-    expect(regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {
-      user: "rssnext",
-      repo: "follow",
-      state: "",
-      labels: "l",
-    }, { omitNilAndEmptyString: false })).toMatchInlineSnapshot(`"/issue/rssnext/follow//l"`)
+    expect(
+      regexpPathToPath(
+        "/issue/:user/:repo/:state?/:labels?",
+        {
+          user: "rssnext",
+          repo: "follow",
+          state: "",
+          labels: "l",
+        },
+        { omitNilAndEmptyString: false },
+      ),
+    ).toMatchInlineSnapshot(`"/issue/rssnext/follow//l"`)
   })
 })
 
@@ -368,9 +391,11 @@ describe("test `parseRegexpPathParams()`", () => {
   })
 
   test("with excludeNames", () => {
-    expect(parseRegexpPathParams("/issue/:user/:repo/:state?/:labels?/:routeParams?", {
-      excludeNames: ["state", "routeParams"],
-    })).toMatchInlineSnapshot(`
+    expect(
+      parseRegexpPathParams("/issue/:user/:repo/:state?/:labels?/:routeParams?", {
+        excludeNames: ["state", "routeParams"],
+      }),
+    ).toMatchInlineSnapshot(`
       {
         "array": [
           {
@@ -421,7 +446,8 @@ describe("test `parseFullPathParams()`", () => {
     `)
   })
   test("case 2", () => {
-    expect(parseFullPathParams("/build/wangqiru/ttrss", "/build/:user/:name")).toMatchInlineSnapshot(`
+    expect(parseFullPathParams("/build/wangqiru/ttrss", "/build/:user/:name"))
+      .toMatchInlineSnapshot(`
       {
         "name": "ttrss",
         "user": "wangqiru",

@@ -90,7 +90,7 @@ export const entries = {
             read: typeof query.read === "boolean" ? JSON.stringify(query.read) : undefined,
             feedIdList: query.feedIdList,
           },
-        }) as Promise<{ data: { has_new: boolean, lastest_at?: string } }>
+        }) as Promise<{ data: { has_new: boolean; lastest_at?: string } }>
       },
 
       {

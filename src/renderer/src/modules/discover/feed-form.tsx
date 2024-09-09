@@ -42,9 +42,7 @@ const formSchema = z.object({
   title: z.string().optional(),
 })
 
-const defaultValue = { view: FeedViewType.Articles.toString() } as z.infer<
-  typeof formSchema
->
+const defaultValue = { view: FeedViewType.Articles.toString() } as z.infer<typeof formSchema>
 export const FeedForm: Component<{
   url?: string
   id?: string
@@ -67,45 +65,35 @@ export const FeedForm: Component<{
     <div
       className={cn(
         "flex h-full flex-col",
-        asWidget ?
-          "min-h-[420px] w-[550px] max-w-full" :
-          "px-[18px] pb-[18px] pt-12",
+        asWidget ? "min-h-[420px] w-[550px] max-w-full" : "px-[18px] pb-[18px] pt-12",
       )}
     >
       {!asWidget && (
         <div className="mb-4 mt-2 flex items-center gap-2 text-[22px] font-bold">
           <Logo className="size-8" />
-          {isSubscribed ? "Update" : "Add"}
-          {" "}
-          follow
+          {isSubscribed ? "Update" : "Add"} follow
         </div>
       )}
 
       {feed ? (
         <FeedInnerForm {...{ defaultValues, id, url, asWidget, onSuccess }} />
-      ) : feedQuery.isLoading ?
-          (
-            <div className="flex flex-1 items-center justify-center">
-              <LoadingCircle size="large" />
-            </div>
-          ) :
-        feedQuery.error ?
-            (
-              <div className="center grow flex-col gap-3">
-                <i className="i-mgc-close-cute-re size-7 text-red-500" />
-                <p>Error in fetching feed.</p>
-                <p className="break-all px-8 text-center">
-                  {getFetchErrorMessage(feedQuery.error)}
-                </p>
-              </div>
-            ) :
-            (
-              <div className="center h-full grow flex-col">
-                <i className="i-mgc-question-cute-re mb-6 size-12 text-zinc-500" />
-                <p>Feed not found.</p>
-                <p>{url}</p>
-              </div>
-            )}
+      ) : feedQuery.isLoading ? (
+        <div className="flex flex-1 items-center justify-center">
+          <LoadingCircle size="large" />
+        </div>
+      ) : feedQuery.error ? (
+        <div className="center grow flex-col gap-3">
+          <i className="i-mgc-close-cute-re size-7 text-red-500" />
+          <p>Error in fetching feed.</p>
+          <p className="break-all px-8 text-center">{getFetchErrorMessage(feedQuery.error)}</p>
+        </div>
+      ) : (
+        <div className="center h-full grow flex-col">
+          <i className="i-mgc-question-cute-re mb-6 size-12 text-zinc-500" />
+          <p>Feed not found.</p>
+          <p>{url}</p>
+        </div>
+      )}
     </div>
   )
 }
@@ -158,9 +146,7 @@ const FeedInnerForm = ({
         title: values.title,
         ...(isSubscribed && { feedId: feed.id }),
       }
-      const $method = isSubscribed ?
-        apiClient.subscriptions.$patch :
-        apiClient.subscriptions.$post
+      const $method = isSubscribed ? apiClient.subscriptions.$patch : apiClient.subscriptions.$post
 
       return $method({
         // @ts-expect-error
@@ -170,15 +156,11 @@ const FeedInnerForm = ({
     onSuccess: (_, variables) => {
       if (isSubscribed && variables.view !== `${subscription?.view}`) {
         Queries.subscription.byView(subscription?.view).invalidate()
-        tipcClient?.invalidateQuery(
-          Queries.subscription.byView(subscription?.view).key,
-        )
+        tipcClient?.invalidateQuery(Queries.subscription.byView(subscription?.view).key)
         feedUnreadActions.fetchUnreadByView(subscription?.view)
       }
       Queries.subscription.byView(Number.parseInt(variables.view)).invalidate()
-      tipcClient?.invalidateQuery(
-        Queries.subscription.byView(Number.parseInt(variables.view)).key,
-      )
+      tipcClient?.invalidateQuery(Queries.subscription.byView(Number.parseInt(variables.view)).key)
       feedUnreadActions.fetchUnreadByView(Number.parseInt(variables.view))
 
       const feedId = feed.id
@@ -231,10 +213,7 @@ const FeedInnerForm = ({
         </CardHeader>
       </Card>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col gap-y-4"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-1 flex-col gap-y-4">
           <FormField
             control={form.control}
             name="view"
@@ -304,10 +283,12 @@ const FeedInnerForm = ({
                     <Autocomplete
                       maxHeight={window.innerHeight < 600 ? 120 : 240}
                       portal
-                      suggestions={categories.data?.map((i) => ({
-                        name: i,
-                        value: i,
-                      })) || []}
+                      suggestions={
+                        categories.data?.map((i) => ({
+                          name: i,
+                          value: i,
+                        })) || []
+                      }
                       {...(field as any)}
                       onSuggestionSelected={(suggestion) => {
                         field.onChange(suggestion.value)
@@ -328,8 +309,7 @@ const FeedInnerForm = ({
                   <div>
                     <FormLabel>Private Follow</FormLabel>
                     <FormDescription>
-                      Whether this follow is publicly visible on your profile
-                      page.
+                      Whether this follow is publicly visible on your profile page.
                     </FormDescription>
                   </div>
                   <FormControl>
@@ -362,11 +342,7 @@ const FeedInnerForm = ({
                 Unfollow
               </Button>
             )}
-            <Button
-              ref={buttonRef}
-              type="submit"
-              isLoading={followMutation.isPending}
-            >
+            <Button ref={buttonRef} type="submit" isLoading={followMutation.isPending}>
               {isSubscribed ? "Update" : "Follow"}
             </Button>
           </div>

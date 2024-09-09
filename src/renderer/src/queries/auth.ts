@@ -32,13 +32,13 @@ export const useSession = (options?: { enabled?: boolean }) => {
   return {
     session: data,
     ...rest,
-    status: isLoading ?
-      "loading" :
-      data ?
-        "authenticated" :
-        fetchError?.statusCode === 401 ?
-          "unauthenticated" :
-          "error",
+    status: isLoading
+      ? "loading"
+      : data
+        ? "authenticated"
+        : fetchError?.statusCode === 401
+          ? "unauthenticated"
+          : "error",
   }
 }
 

@@ -1,10 +1,6 @@
 import { PhCloudCheck } from "@renderer/components/icons/PhCloudCheck"
 import { PhCloudX } from "@renderer/components/icons/PhCloudX"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
 import { useAuthQuery, useIsOnline } from "@renderer/hooks/common"
 import { settings } from "@renderer/queries/settings"
 import { useEffect, useRef } from "react"
@@ -32,17 +28,11 @@ export const SyncIndicator = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <div className="center absolute right-2 size-5">
-          {isOnline ? (
-            <PhCloudCheck className="size-4" />
-          ) : (
-            <PhCloudX className="size-4" />
-          )}
+          {isOnline ? <PhCloudCheck className="size-4" /> : <PhCloudX className="size-4" />}
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <div className="text-center text-xs">
-          {isOnline ? "Synced with server" : "Offline"}
-        </div>
+        <div className="text-center text-xs">{isOnline ? "Synced with server" : "Offline"}</div>
       </TooltipContent>
     </Tooltip>
   )

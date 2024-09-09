@@ -22,17 +22,11 @@ export const createSettingAtom = <T extends object>(
   settingKey: string,
   createDefaultSettings: () => T,
 ) => {
-  const atom = atomWithStorage(
-    getStorageNS(settingKey),
-    createDefaultSettings(),
-    undefined,
-    {
-      getOnInit: true,
-    },
-  )
+  const atom = atomWithStorage(getStorageNS(settingKey), createDefaultSettings(), undefined, {
+    getOnInit: true,
+  })
 
-  const [, , useSettingValue, , getSettings, setSettings] =
-    createAtomHooks(atom)
+  const [, , useSettingValue, , getSettings, setSettings] = createAtomHooks(atom)
 
   const initializeDefaultSettings = () => {
     const currentSettings = getSettings()
@@ -42,17 +36,16 @@ export const createSettingAtom = <T extends object>(
     setSettings(newSettings)
   }
 
-  const useSettingKey = <T extends keyof ReturnType<typeof getSettings>>(
-    key: T,
-  ) => useAtomValue(useMemo(() => selectAtom(atom, (s) => s[key]), [key]))
+  const useSettingKey = <T extends keyof ReturnType<typeof getSettings>>(key: T) =>
+    useAtomValue(useMemo(() => selectAtom(atom, (s) => s[key]), [key]))
 
   const useSettingSelector = <
     T extends keyof ReturnType<typeof getSettings>,
     S extends ReturnType<typeof getSettings>,
     R = S[T],
   >(
-      selector: (s: S) => R,
-    ): R => {
+    selector: (s: S) => R,
+  ): R => {
     const stableSelector = useRefValue(selector)
 
     return useAtomValue(
@@ -114,22 +107,16 @@ export const createSettingAtom = <T extends object>(
 }
 
 export const createDefineSettingItem =
-  <T>(
-    _getSetting: () => T,
-    setSetting: (key: any, value: Partial<T>) => void,
-  ) =>
+  <T>(_getSetting: () => T, setSetting: (key: any, value: Partial<T>) => void) =>
   <K extends keyof T>(
-      key: K,
-      options: {
-        label: string
-        description?: string | JSX.Element
-        onChange?: (value: T[K]) => void
-        hide?: boolean
-      } & Omit<
-      SettingItem<any>,
-      "onChange" | "description" | "label" | "hide" | "key"
-    >,
-    ): any => {
+    key: K,
+    options: {
+      label: string
+      description?: string | JSX.Element
+      onChange?: (value: T[K]) => void
+      hide?: boolean
+    } & Omit<SettingItem<any>, "onChange" | "description" | "label" | "hide" | "key">,
+  ): any => {
     const { label, description, onChange, hide, ...rest } = options
 
     return {

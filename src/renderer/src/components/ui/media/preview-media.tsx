@@ -85,39 +85,36 @@ export const PreviewMediaContent: FC<{
   const [currentMedia, setCurrentMedia] = useState(media[initialIndex])
   const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex)
 
-  const handleContextMenu = useCallback(
-    (image: string, e: React.MouseEvent<HTMLImageElement>) => {
-      if (!window.electron) return
+  const handleContextMenu = useCallback((image: string, e: React.MouseEvent<HTMLImageElement>) => {
+    if (!window.electron) return
 
-      showNativeMenu(
-        [
-          {
-            label: COPY_MAP.OpenInBrowser(),
-            type: "text",
-            click: () => {
-              window.open(image)
-            },
+    showNativeMenu(
+      [
+        {
+          label: COPY_MAP.OpenInBrowser(),
+          type: "text",
+          click: () => {
+            window.open(image)
           },
-          {
-            label: "Copy image address",
-            type: "text",
-            click: () => {
-              navigator.clipboard.writeText(image)
-            },
+        },
+        {
+          label: "Copy image address",
+          type: "text",
+          click: () => {
+            navigator.clipboard.writeText(image)
           },
-          {
-            label: "Save image as...",
-            type: "text",
-            click: () => {
-              tipcClient?.download(image)
-            },
+        },
+        {
+          label: "Save image as...",
+          type: "text",
+          click: () => {
+            tipcClient?.download(image)
           },
-        ],
-        e,
-      )
-    },
-    [],
-  )
+        },
+      ],
+      e,
+    )
+  }, [])
 
   const swiperRef = useRef<SwiperRef>(null)
   // This only to delay show
@@ -232,11 +229,7 @@ export const PreviewMediaContent: FC<{
         )}
 
         {media.map((med, index) => (
-          <SwiperSlide
-            key={med.url}
-            virtualIndex={index}
-            className="center !flex"
-          >
+          <SwiperSlide key={med.url} virtualIndex={index} className="center !flex">
             {med.type === "video" ? (
               <VideoPlayer
                 src={med.url}
@@ -272,9 +265,9 @@ const FallbackableImage: FC<
 
   const [isLoading, setIsLoading] = useState(true)
 
-  const [currentState, setCurrentState] = useState<
-    "proxy" | "origin" | "fallback"
-  >(() => (currentSrc === src ? "origin" : "proxy"))
+  const [currentState, setCurrentState] = useState<"proxy" | "origin" | "fallback">(() =>
+    currentSrc === src ? "origin" : "proxy",
+  )
 
   const handleError = useCallback(() => {
     switch (currentState) {
@@ -312,12 +305,7 @@ const FallbackableImage: FC<
         </div>
       )}
       {!isAllError && (
-        <img
-          src={currentSrc}
-          onLoad={() => setIsLoading(false)}
-          onError={handleError}
-          {...props}
-        />
+        <img src={currentSrc} onLoad={() => setIsLoading(false)} onError={handleError} {...props} />
       )}
       {isAllError && (
         <div
@@ -339,12 +327,7 @@ const FallbackableImage: FC<
               Retry
             </MotionButtonBase>
             or
-            <a
-              className="underline underline-offset-4"
-              href={src}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a className="underline underline-offset-4" href={src} target="_blank" rel="noreferrer">
               Visit Original
             </a>
           </div>
@@ -354,17 +337,19 @@ const FallbackableImage: FC<
       {currentState === "fallback" && (
         <div className="mt-4 text-xs">
           <span>
-            This image is preview in low quality, because the original image is
-            not available.
+            This image is preview in low quality, because the original image is not available.
           </span>
           <br />
           <span>
-            You can
-            {" "}
-            <a href={src} target="_blank" rel="noreferrer" className="underline duration-200 hover:text-accent">
+            You can{" "}
+            <a
+              href={src}
+              target="_blank"
+              rel="noreferrer"
+              className="underline duration-200 hover:text-accent"
+            >
               visit the original image
-            </a>
-            {" "}
+            </a>{" "}
             if you want to see the full quality.
           </span>
         </div>

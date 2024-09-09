@@ -25,21 +25,17 @@ export const SentryConfig: BrowserOptions = {
         /Failed to fetch/i.test(error.message) ||
         error.message.includes("fetch failed") ||
         error.message.includes("Unable to open cursor") ||
-        error.message.includes(
-          "Document is not focused.",
-        ))
+        error.message.includes("Document is not focused."))
     ) {
       return null
     }
 
-    const isPassthroughError = [CustomSafeError, FetchError].some(
-      (errorType) => {
-        if (error instanceof errorType) {
-          return true
-        }
-        return false
-      },
-    )
+    const isPassthroughError = [CustomSafeError, FetchError].some((errorType) => {
+      if (error instanceof errorType) {
+        return true
+      }
+      return false
+    })
     const isAbortError = error instanceof Error && error.name === "AbortError"
 
     if (isPassthroughError || isAbortError) {

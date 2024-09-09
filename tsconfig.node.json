@@ -12,21 +12,13 @@
   ],
   "compilerOptions": {
     "composite": true,
-    "types": [
-      "electron-vite/node"
-    ],
+    "types": ["electron-vite/node"],
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {
-      "@shared/*": [
-        "src/shared/src/*"
-      ],
-      "@env": [
-        "./src/env.ts"
-      ],
-      "@pkg": [
-        "./package.json"
-      ]
+      "@shared/*": ["src/shared/src/*"],
+      "@env": ["./src/env.ts"],
+      "@pkg": ["./package.json"]
     }
   }
 }

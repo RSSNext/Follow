@@ -20,9 +20,7 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
       (await this.table
         .toCollection()
         .uniqueKeys()
-        .then((keys) =>
-          keys.map((k) => k.toString().split("/")[0]),
-        )) as string[],
+        .then((keys) => keys.map((k) => k.toString().split("/")[0]))) as string[],
     )
   }
 

@@ -39,24 +39,22 @@ export const parseHtml = (
     .use(rehypeParse, { fragment: true })
     .use(
       rehypeSanitize,
-      noMedia ?
-          {
+      noMedia
+        ? {
             ...defaultSchema,
-            tagNames: defaultSchema.tagNames?.filter(
-              (tag) => tag !== "img" && tag !== "picture",
-            ),
-          } :
-          {
+            tagNames: defaultSchema.tagNames?.filter((tag) => tag !== "img" && tag !== "picture"),
+          }
+        : {
             ...defaultSchema,
             tagNames: [...defaultSchema.tagNames!, "video", "style"],
             attributes: {
               ...defaultSchema.attributes,
 
-              "*": renderInlineStyle ?
-                  [...defaultSchema.attributes!["*"], "style", "class"] :
-                defaultSchema.attributes!["*"],
+              "*": renderInlineStyle
+                ? [...defaultSchema.attributes!["*"], "style", "class"]
+                : defaultSchema.attributes!["*"],
 
-              "video": ["src", "poster"],
+              video: ["src", "poster"],
             },
           },
     )
@@ -91,8 +89,7 @@ export const parseHtml = (
         jsxs: (type, props, key) => jsxs(type as any, props, key),
         passNode: true,
         components: {
-          a: ({ node, ...props }) =>
-            createElement(MarkdownLink, { ...props } as any),
+          a: ({ node, ...props }) => createElement(MarkdownLink, { ...props } as any),
           img: Img,
 
           h1: createHeadingRenderer(1),
@@ -109,8 +106,8 @@ export const parseHtml = (
             if (node?.children && node.children.length !== 1) {
               for (const item of node.children) {
                 item.type === "element" &&
-                item.tagName === "img" &&
-                ((item.properties as any).inline = true)
+                  item.tagName === "img" &&
+                  ((item.properties as any).inline = true)
               }
             }
             return createElement(MarkdownP, props, props.children)
@@ -148,13 +145,9 @@ export const parseHtml = (
                 props.children.type === "code" &&
                 props.children.props.className?.includes("language-")
               ) {
-                language = props.children.props.className.replace(
-                  "language-",
-                  "",
-                )
+                language = props.children.props.className.replace("language-", "")
               }
-              const code =
-                "props" in props.children && props.children.props.children
+              const code = "props" in props.children && props.children.props.children
               if (!code) return null
 
               try {
@@ -239,9 +232,7 @@ function extractCodeFromHtml(htmlString: string) {
     for (const node of tempDiv.children) {
       const span = node as HTMLSpanElement
       // 2.2 If the span has only one child and it's a line break, then span can be as a line break
-      spanAsLineBreak =
-        span.children.length === 1 &&
-        span.childNodes.item(0).textContent === "\n"
+      spanAsLineBreak = span.children.length === 1 && span.childNodes.item(0).textContent === "\n"
       if (spanAsLineBreak) break
     }
   }
@@ -315,6 +306,6 @@ function rehypeUrlToAnchor(tree: Node) {
       })
     }
 
-    (parent.children as (Text | Element)[]).splice(index, 1, ...newNodes)
+    ;(parent.children as (Text | Element)[]).splice(index, 1, ...newNodes)
   })
 }

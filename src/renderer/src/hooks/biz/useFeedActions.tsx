@@ -4,10 +4,7 @@ import type { NativeMenuItem } from "@renderer/lib/native-menu"
 import { useFeedClaimModal } from "@renderer/modules/claim"
 import { FeedForm } from "@renderer/modules/discover/feed-form"
 import { getFeedById, useFeedById } from "@renderer/store/feed"
-import {
-  subscriptionActions,
-  useSubscriptionByFeedId,
-} from "@renderer/store/subscription"
+import { subscriptionActions, useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { WEB_URL } from "@shared/constants"
 import { useMemo } from "react"
 
@@ -46,9 +43,7 @@ export const useFeedActions = ({
         click: () => {
           present({
             title: "Edit Feed",
-            content: ({ dismiss }) => (
-              <FeedForm asWidget id={feedId} onSuccess={dismiss} />
-            ),
+            content: ({ dismiss }) => <FeedForm asWidget id={feedId} onSuccess={dismiss} />,
           })
         },
       },
@@ -78,8 +73,8 @@ export const useFeedActions = ({
         disabled: isEntryList,
         click: () => subscriptionActions.markReadByFeedIds([feedId]),
       },
-      ...(!feed.ownerUserId && !!feed.id ?
-          [
+      ...(!feed.ownerUserId && !!feed.id
+        ? [
             {
               type: "text" as const,
               label: isEntryList ? "Claim Feed" : "Claim",
@@ -88,16 +83,16 @@ export const useFeedActions = ({
                 claimFeed()
               },
             },
-          ] :
-          []),
-      ...(feed.ownerUserId === whoami()?.id ?
-          [
+          ]
+        : []),
+      ...(feed.ownerUserId === whoami()?.id
+        ? [
             {
               type: "text" as const,
               label: "This feed is owned by you",
             },
-          ] :
-          []),
+          ]
+        : []),
       {
         type: "separator" as const,
         disabled: isEntryList,
@@ -108,8 +103,7 @@ export const useFeedActions = ({
         label: "Open feed in browser",
         disabled: isEntryList,
         shortcut: "O",
-        click: () =>
-          window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank"),
+        click: () => window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank"),
       },
       {
         type: "text" as const,

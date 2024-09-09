@@ -10,9 +10,9 @@ export const TitleMarquee = ({
   className,
   ...rest
 }: PropsWithChildren &
-MarqueeProps & {
-  className?: string
-}) => {
+  MarqueeProps & {
+    className?: string
+  }) => {
   const [hovered, setHovered] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -42,9 +42,7 @@ MarqueeProps & {
         const $container = ref.current
         if (!$container) return
         const marqueeContainer = $container
-        const marqueeChildren = Array.from(
-          marqueeContainer.children,
-        ) as HTMLElement[]
+        const marqueeChildren = Array.from(marqueeContainer.children) as HTMLElement[]
 
         // Force a reflow on marquee child nodes to reset animation
         marqueeChildren.forEach((marquee: HTMLElement) => {
@@ -54,13 +52,7 @@ MarqueeProps & {
         })
       }, [])}
     >
-      <Marquee
-        className="overflow-hidden"
-        play={hovered}
-        ref={ref}
-        speed={speed}
-        {...rest}
-      >
+      <Marquee className="overflow-hidden" play={hovered} ref={ref} speed={speed} {...rest}>
         {children}
       </Marquee>
     </div>

@@ -47,15 +47,11 @@ export const NotFound = () => {
           You have come to a desert of knowledge where there is nothing.
         </p>
         <p>
-          Current path:
-          {" "}
-          <code>{location.pathname}</code>
+          Current path: <code>{location.pathname}</code>
         </p>
 
         <p>
-          <Button onClick={() => navigate("/")}>
-            Back to Home
-          </Button>
+          <Button onClick={() => navigate("/")}>Back to Home</Button>
         </p>
       </main>
 

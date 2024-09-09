@@ -35,14 +35,10 @@ export const menuRoute = {
             click() {
               context.sender.send(
                 "menu-click",
-                parentIndex !== undefined ?
-                  `${parentIndex}-${index}` :
-                  `${index}`,
+                parentIndex !== undefined ? `${parentIndex}-${index}` : `${index}`,
               )
             },
-            submenu: item.submenu ?
-              transformMenuItems(item.submenu, index) :
-              undefined,
+            submenu: item.submenu ? transformMenuItems(item.submenu, index) : undefined,
           } as MenuItemConstructorOptions
         })
       }
@@ -71,17 +67,15 @@ export const menuRoute = {
       return result.response === 0
     }),
 
-  showShareMenu: t.procedure
-    .input<string>()
-    .action(async ({ input, context }) => {
-      const menu = new ShareMenu({
-        urls: [input],
-      })
+  showShareMenu: t.procedure.input<string>().action(async ({ input, context }) => {
+    const menu = new ShareMenu({
+      urls: [input],
+    })
 
-      menu.popup({
-        callback: () => {
-          context.sender.send("menu-closed")
-        },
-      })
-    }),
+    menu.popup({
+      callback: () => {
+        context.sender.send("menu-closed")
+      },
+    })
+  }),
 }

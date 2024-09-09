@@ -21,10 +21,7 @@ import { VFile } from "vfile"
 export interface RemarkOptions {
   components: Partial<Components>
 }
-export const parseMarkdown = (
-  content: string,
-  options?: Partial<RemarkOptions>,
-) => {
+export const parseMarkdown = (content: string, options?: Partial<RemarkOptions>) => {
   const file = new VFile(content)
   const { components } = options || {}
 
@@ -79,8 +76,7 @@ export const parseMarkdown = (
       jsxs: (type, props, key) => jsxs(type as any, props, key),
       passNode: true,
       components: {
-        a: ({ node, ...props }) =>
-          createElement(MarkdownLink, { ...props } as any),
+        a: ({ node, ...props }) => createElement(MarkdownLink, { ...props } as any),
         ...components,
       },
     }),

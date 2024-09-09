@@ -1,7 +1,4 @@
-import {
-  AudioPlayer,
-  useAudioPlayerAtomSelector,
-} from "@renderer/atoms/player"
+import { AudioPlayer, useAudioPlayerAtomSelector } from "@renderer/atoms/player"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { RelativeTime } from "@renderer/components/ui/datetime"
 import { Media } from "@renderer/components/ui/media"
@@ -33,9 +30,7 @@ export function ListItem({
 
   const asRead = useAsRead(entry)
 
-  const inInCollection = useRouteParamsSelector(
-    (s) => s.feedId === FEED_COLLECTION_LIST,
-  )
+  const inInCollection = useRouteParamsSelector((s) => s.feedId === FEED_COLLECTION_LIST)
 
   const feed = useFeedById(entry?.feedId) || entryPreview?.feeds
 
@@ -50,9 +45,7 @@ export function ListItem({
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
-  const displayTime = inInCollection ?
-    entry.collections?.createdAt :
-    entry.entries.publishedAt
+  const displayTime = inInCollection ? entry.collections?.createdAt : entry.entries.publishedAt
   const envIsSafari = isSafari()
   return (
     <div
@@ -61,7 +54,7 @@ export function ListItem({
       className={cn(
         "group relative flex py-4 pl-3 pr-2",
         !asRead &&
-        "before:absolute before:-left-0.5 before:top-[1.4375rem] before:block before:size-2 before:rounded-full before:bg-accent",
+          "before:absolute before:-left-0.5 before:top-[1.4375rem] before:block before:size-2 before:rounded-full before:bg-accent",
       )}
     >
       {!withAudio && <FeedIcon feed={feed} fallback entry={entry.entries} />}
@@ -76,25 +69,19 @@ export function ListItem({
         <div
           className={cn(
             "flex gap-1 text-[10px] font-bold",
-            asRead ?
-              "text-zinc-400 dark:text-neutral-500" :
-              "text-zinc-500 dark:text-zinc-400",
+            asRead ? "text-zinc-400 dark:text-neutral-500" : "text-zinc-500 dark:text-zinc-400",
             entry.collections && "text-zinc-600 dark:text-zinc-500",
           )}
         >
           <span className="truncate">{getPreferredTitle(feed)}</span>
           <span>·</span>
-          <span className="shrink-0">
-            {!!displayTime && <RelativeTime date={displayTime} />}
-          </span>
+          <span className="shrink-0">{!!displayTime && <RelativeTime date={displayTime} />}</span>
         </div>
         <div
           className={cn(
             "relative my-0.5 break-words",
             !!entry.collections && "pr-5",
-            entry.entries.title ?
-                (withDetails || withAudio) && "font-medium" :
-              "text-[13px]",
+            entry.entries.title ? (withDetails || withAudio) && "font-medium" : "text-[13px]",
           )}
         >
           {entry.entries.title ? (
@@ -119,9 +106,9 @@ export function ListItem({
           <div
             className={cn(
               "text-[13px]",
-              asRead ?
-                "text-zinc-400 dark:text-neutral-500" :
-                "text-zinc-500 dark:text-neutral-400",
+              asRead
+                ? "text-zinc-400 dark:text-neutral-500"
+                : "text-zinc-500 dark:text-neutral-400",
             )}
           >
             <EntryTranslation
@@ -143,7 +130,7 @@ export function ListItem({
             String(entry.entries?.attachments?.[0].duration_in_seconds ?? 0),
             10,
           )}
-          feedIcon={(
+          feedIcon={
             <FeedIcon
               fallback={false}
               feed={feed}
@@ -151,7 +138,7 @@ export function ListItem({
               size={80}
               className="m-0 rounded"
             />
-          )}
+          }
         />
       )}
 
@@ -187,9 +174,7 @@ function AudioCover({
     playerValue.src === src && playerValue.show ? playerValue.status : false,
   )
 
-  const estimatedMins = durationInSeconds ?
-    Math.floor(durationInSeconds / 60) :
-    undefined
+  const estimatedMins = durationInSeconds ? Math.floor(durationInSeconds / 60) : undefined
 
   const handleClickPlay = () => {
     if (!playStatus) {
@@ -224,8 +209,7 @@ function AudioCover({
           <i
             className={cn("size-6", {
               "i-mingcute-pause-fill": playStatus && playStatus === "playing",
-              "i-mingcute-loading-fill animate-spin":
-                playStatus && playStatus === "loading",
+              "i-mingcute-loading-fill animate-spin": playStatus && playStatus === "loading",
               "i-mingcute-play-fill": !playStatus || playStatus === "paused",
             })}
           />

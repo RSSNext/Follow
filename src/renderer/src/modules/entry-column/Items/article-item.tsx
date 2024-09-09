@@ -3,18 +3,9 @@ import { ListItem } from "@renderer/modules/entry-column/templates/list-item-tem
 
 import type { UniversalItemProps } from "../types"
 
-export function ArticleItem({
-  entryId,
-  entryPreview,
-  translation,
-}: UniversalItemProps) {
+export function ArticleItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   return (
-    <ListItem
-      entryId={entryId}
-      entryPreview={entryPreview}
-      translation={translation}
-      withDetails
-    />
+    <ListItem entryId={entryId} entryPreview={entryPreview} translation={translation} withDetails />
   )
 }
 

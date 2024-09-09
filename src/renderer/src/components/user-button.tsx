@@ -1,22 +1,13 @@
 import { repository } from "@pkg"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@renderer/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import { useSignOut } from "@renderer/hooks/biz/useSignOut"
-import {
-  useAuthQuery,
-  useSetTheme,
-  useThemeAtomValue,
-} from "@renderer/hooks/common"
+import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { LoginModalContent } from "@renderer/modules/auth/LoginModalContent"
 import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
-import { SettingTabbedSegment } from "@renderer/modules/settings/control"
 import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useSession } from "@renderer/queries/auth"
 import type { FC } from "react"
@@ -46,21 +37,17 @@ export const LoginButton: FC<LoginProps> = (props) => {
     <ActionButton
       className="relative z-[1]"
       onClick={
-        method === "modal" ?
-            () => {
+        method === "modal"
+          ? () => {
               modalStack.present({
                 CustomModalComponent: NoopChildren,
                 title: "Login",
                 id: "login",
-                content: () => (
-                  <LoginModalContent
-                    runtime={window.electron ? "app" : "browser"}
-                  />
-                ),
+                content: () => <LoginModalContent runtime={window.electron ? "app" : "browser"} />,
                 clickOutsideToDismiss: true,
               })
-            } :
-          undefined
+            }
+          : undefined
       }
       tooltip="Login"
     >
@@ -81,26 +68,19 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        asChild
-        className="!outline-none focus-visible:bg-theme-item-hover"
-      >
+      <DropdownMenuTrigger asChild className="!outline-none focus-visible:bg-theme-item-hover">
         <ActionButton tooltip="Profile">
           <UserAvatar className="h-5 p-0 [&_*]:border-0" hideName />
         </ActionButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-[180px]" side="bottom" align="end">
-        <DropdownMenuLabel className="text-xs text-theme-foreground/60">
-          Account
-        </DropdownMenuLabel>
+        <DropdownMenuLabel className="text-xs text-theme-foreground/60">Account</DropdownMenuLabel>
         <DropdownMenuLabel>
           <div className="-mt-1 flex items-center gap-2">
             <UserAvatar className="h-7 shrink-0 p-0" hideName />
             <div className="max-w-40 leading-none">
               <div className="truncate">{user?.name}</div>
-              <div className="truncate text-xs font-medium text-zinc-500">
-                {user?.handle}
-              </div>
+              <div className="truncate text-xs font-medium text-zinc-500">{user?.handle}</div>
             </div>
           </div>
         </DropdownMenuLabel>
@@ -154,10 +134,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             <DropdownMenuSeparator />
           </>
         )}
-        <DropdownMenuItem
-          onClick={signOut}
-          icon={<i className="i-mgc-exit-cute-re" />}
-        >
+        <DropdownMenuItem onClick={signOut} icon={<i className="i-mgc-exit-cute-re" />}>
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -208,9 +185,7 @@ export function UserAvatar({
           className="duration-200 animate-in fade-in-0"
           src={(profile.data || session?.user)?.image || undefined}
         />
-        <AvatarFallback>
-          {(profile.data || session?.user)?.name?.slice(0, 2)}
-        </AvatarFallback>
+        <AvatarFallback>{(profile.data || session?.user)?.name?.slice(0, 2)}</AvatarFallback>
       </Avatar>
       {!hideName && <div>{(profile.data || session?.user)?.name}</div>}
     </div>

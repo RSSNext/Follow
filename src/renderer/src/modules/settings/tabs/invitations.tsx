@@ -1,8 +1,4 @@
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@renderer/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import { Button } from "@renderer/components/ui/button"
 import { CopyButton } from "@renderer/components/ui/code-highlighter"
 import { Divider } from "@renderer/components/ui/divider"
@@ -44,14 +40,14 @@ export const SettingInvitations = () => {
       <section className="mt-4">
         <div className="mb-4 space-y-2 text-sm">
           <p>
-            Follow is currently in
-            {" "}
-            <strong>early access</strong>
-            {" "}
-            and
-            requires an invitation code to use.
+            Follow is currently in <strong>early access</strong> and requires an invitation code to
+            use.
           </p>
-          <p className="flex items-center"><span>You can spend 10 </span><i className="i-mgc-power ml-1 mr-0.5 text-base" /><span> Power to generate an invitation code for your friends.</span></p>
+          <p className="flex items-center">
+            <span>You can spend 10 </span>
+            <i className="i-mgc-power ml-1 mr-0.5 text-base" />
+            <span> Power to generate an invitation code for your friends.</span>
+          </p>
         </div>
         <Button
           onClick={() => {
@@ -87,22 +83,15 @@ export const SettingInvitations = () => {
                     <TableRow key={row.code}>
                       <TableCell align="center" size="sm">
                         <div className="group relative flex items-center justify-center gap-2 font-mono">
-                          <span className="shrink-0">
-                            {row.code}
-                          </span>
+                          <span className="shrink-0">{row.code}</span>
                           <CopyButton
                             value={row.code}
                             className="absolute -right-6 p-1 opacity-0 group-hover:opacity-100 [&_i]:size-3"
                           />
                         </div>
                       </TableCell>
-                      <TableCell
-                        align="center"
-                        className="tabular-nums"
-                        size="sm"
-                      >
-                        {row.createdAt &&
-                          new Date(row.createdAt).toLocaleString()}
+                      <TableCell align="center" className="tabular-nums" size="sm">
+                        {row.createdAt && new Date(row.createdAt).toLocaleString()}
                       </TableCell>
                       <TableCell align="center" size="sm">
                         {row.users ? (
@@ -116,12 +105,8 @@ export const SettingInvitations = () => {
                                 }}
                               >
                                 <Avatar className="aspect-square size-5 border border-border ring-1 ring-background">
-                                  <AvatarImage
-                                    src={row.users?.image || undefined}
-                                  />
-                                  <AvatarFallback>
-                                    {row.users?.name?.slice(0, 2)}
-                                  </AvatarFallback>
+                                  <AvatarImage src={row.users?.image || undefined} />
+                                  <AvatarFallback>{row.users?.name?.slice(0, 2)}</AvatarFallback>
                                 </Avatar>
                               </button>
                             </TooltipTrigger>
@@ -139,15 +124,13 @@ export const SettingInvitations = () => {
                   ))}
                 </TableBody>
               </Table>
-            ) : invitations.isLoading ?
-                (
-                  <LoadingCircle size="large" className="center absolute inset-0" />
-                ) :
-                (
-                  <div className="mt-36 w-full text-center text-sm text-zinc-400">
-                    <p>No invitations</p>
-                  </div>
-                )}
+            ) : invitations.isLoading ? (
+              <LoadingCircle size="large" className="center absolute inset-0" />
+            ) : (
+              <div className="mt-36 w-full text-center text-sm text-zinc-400">
+                <p>No invitations</p>
+              </div>
+            )}
           </ScrollArea.ScrollArea>
         </div>
       </section>
@@ -155,11 +138,7 @@ export const SettingInvitations = () => {
   )
 }
 
-const ConfirmModalContent = ({
-  dismiss,
-}: {
-  dismiss: () => void
-}) => {
+const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
   const newInvitation = useMutation({
     mutationKey: ["newInvitation"],
     mutationFn: () => apiClient.invitations.new.$post(),
@@ -177,16 +156,15 @@ const ConfirmModalContent = ({
   return (
     <>
       <div className="flex items-center">
-        <span>Generating an invitation code will cost you 10 </span><i className="i-mgc-power mx-1 text-base" /><span>Power. Do you want to continue?</span>
+        <span>Generating an invitation code will cost you 10 </span>
+        <i className="i-mgc-power mx-1 text-base" />
+        <span>Power. Do you want to continue?</span>
       </div>
       <div className="mt-4 flex items-center justify-end gap-3">
         <Button variant="outline" onClick={dismiss}>
           Cancel
         </Button>
-        <Button
-          isLoading={newInvitation.isPending}
-          onClick={() => newInvitation.mutate()}
-        >
+        <Button isLoading={newInvitation.isPending} onClick={() => newInvitation.mutate()}>
           Continue
         </Button>
       </div>

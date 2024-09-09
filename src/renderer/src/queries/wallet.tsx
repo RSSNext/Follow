@@ -23,14 +23,11 @@ export const wallet = {
 
   claimCheck: () =>
     defineQuery(["wallet", "claimCheck"], async () =>
-      apiClient.wallets.transactions["claim-check"].$get()),
+      apiClient.wallets.transactions["claim-check"].$get(),
+    ),
 
   transactions: {
-    get: (
-      query: Parameters<
-        typeof apiClient.wallets.transactions.$get
-      >[0]["query"] = {},
-    ) =>
+    get: (query: Parameters<typeof apiClient.wallets.transactions.$get>[0]["query"] = {}) =>
       defineQuery(
         ["wallet", "transactions", query].filter(Boolean),
         async () => {
@@ -48,9 +45,8 @@ export const wallet = {
 export const useWallet = ({ userId }: { userId?: string } = {}) =>
   useAuthQuery(wallet.get({ userId }), { enabled: !!userId })
 
-export const useWalletTransactions = (
-  query: Parameters<typeof wallet.transactions.get>[0] = {},
-) => useAuthQuery(wallet.transactions.get(query))
+export const useWalletTransactions = (query: Parameters<typeof wallet.transactions.get>[0] = {}) =>
+  useAuthQuery(wallet.transactions.get(query))
 
 export const useCreateWalletMutation = () =>
   useMutation({
@@ -106,11 +102,8 @@ export const useClaimWalletDailyRewardMutation = () => {
 export const useWalletTipMutation = () =>
   useMutation({
     mutationKey: ["walletTip"],
-    mutationFn: (
-      data: Parameters<
-        typeof apiClient.wallets.transactions.tip.$post
-      >[0]["json"],
-    ) => apiClient.wallets.transactions.tip.$post({ json: data }),
+    mutationFn: (data: Parameters<typeof apiClient.wallets.transactions.tip.$post>[0]["json"]) =>
+      apiClient.wallets.transactions.tip.$post({ json: data }),
     async onError(err) {
       toast.error(getFetchErrorMessage(err))
     },

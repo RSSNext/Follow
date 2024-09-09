@@ -18,10 +18,7 @@ export const useSignOut = () =>
     clearStorage()
     window.posthog?.reset()
     // clear local store data
-    await Promise.allSettled([
-      clearLocalPersistStoreData(),
-      tipcClient?.cleanAuthSessionToken(),
-    ])
+    await Promise.allSettled([clearLocalPersistStoreData(), tipcClient?.cleanAuthSessionToken()])
     // Sign out
     await signOut()
   }, [])

@@ -19,16 +19,9 @@ import { enableMapSet } from "immer"
 import { toast } from "sonner"
 
 import { subscribeNetworkStatus } from "../atoms/network"
-import {
-  getGeneralSettings,
-  subscribeShouldUseIndexedDB,
-} from "../atoms/settings/general"
+import { getGeneralSettings, subscribeShouldUseIndexedDB } from "../atoms/settings/general"
 import { appLog } from "../lib/log"
-import {
-  hydrateDatabaseToStore,
-  hydrateSettings,
-  setHydrated,
-} from "./hydrate"
+import { hydrateDatabaseToStore, hydrateSettings, setHydrated } from "./hydrate"
 import { doMigration } from "./migrates"
 import { initPostHog } from "./posthog"
 import { initSentry } from "./sentry"
@@ -58,9 +51,7 @@ export const initializeApp = async () => {
   const now = Date.now()
 
   // Set Environment
-  document.documentElement.dataset.buildType = isElectronBuild ?
-    "electron" :
-    "web"
+  document.documentElement.dataset.buildType = isElectronBuild ? "electron" : "web"
 
   doMigration()
 
@@ -97,8 +88,7 @@ export const initializeApp = async () => {
   settingSyncQueue.syncLocal()
 
   // should after hydrateSettings
-  const { dataPersist: enabledDataPersist, sendAnonymousData } =
-    getGeneralSettings()
+  const { dataPersist: enabledDataPersist, sendAnonymousData } = getGeneralSettings()
 
   initSentry()
   if (sendAnonymousData) initPostHog()

@@ -48,17 +48,9 @@ export const CopyButton: Component<{
     >
       <AnimatePresence mode="wait">
         {copied ? (
-          <m.i
-            key="copied"
-            className="i-mgc-check-filled size-4"
-            {...copyIconVariants}
-          />
+          <m.i key="copied" className="i-mgc-check-filled size-4" {...copyIconVariants} />
         ) : (
-          <m.i
-            key="copy"
-            className="i-mgc-copy-2-cute-re size-4"
-            {...copyIconVariants}
-          />
+          <m.i key="copy" className="i-mgc-copy-2-cute-re size-4" {...copyIconVariants} />
         )}
       </AnimatePresence>
     </MotionButtonBase>

@@ -12,10 +12,7 @@ import { memo } from "react"
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
 import { ArticleItem, ArticleItemSkeleton } from "./Items/article-item"
 import { AudioItem, AudioItemSkeleton } from "./Items/audio-item"
-import {
-  NotificationItem,
-  NotificationItemSkeleton,
-} from "./Items/notification-item"
+import { NotificationItem, NotificationItemSkeleton } from "./Items/notification-item"
 import { PictureItem, PictureItemSkeleton } from "./Items/picture-item"
 import { SocialMediaItem, SocialMediaItemSkeleton } from "./Items/social-media-item"
 import { VideoItem, VideoItemSkeleton } from "./Items/video-item"
@@ -27,13 +24,7 @@ interface EntryItemProps {
   entryId: string
   view?: number
 }
-function EntryItemImpl({
-  entry,
-  view,
-}: {
-  entry: FlatEntryModel
-  view?: number
-}) {
+function EntryItemImpl({ entry, view }: { entry: FlatEntryModel; view?: number }) {
   const translation = useAuthQuery(
     Queries.ai.translation({
       entry,
@@ -83,12 +74,7 @@ function EntryItemImpl({
   }
 
   return (
-    <EntryItemWrapper
-      itemClassName={Item.wrapperClassName}
-      entry={entry}
-      view={view}
-      overlay
-    >
+    <EntryItemWrapper itemClassName={Item.wrapperClassName} entry={entry} view={view} overlay>
       <Item entryId={entry.entries.id} translation={translation.data} />
     </EntryItemWrapper>
   )
@@ -124,17 +110,13 @@ export const EntryItemSkeleton: FC<{
     return SkeletonItem
   }
 
-  return SkeletonItem ?
-      (
-        <div
-          className={cn(views[view].gridMode ? girdClassNames : "flex flex-col")}
-        >
-          {createSkeletonItems(SkeletonItem, count || 10)}
-        </div>
-      ) :
-      (
-        LoadingCircleFallback
-      )
+  return SkeletonItem ? (
+    <div className={cn(views[view].gridMode ? girdClassNames : "flex flex-col")}>
+      {createSkeletonItems(SkeletonItem, count || 10)}
+    </div>
+  ) : (
+    LoadingCircleFallback
+  )
 })
 
 const createSkeletonItems = (element: ReactNode, count: number) => {

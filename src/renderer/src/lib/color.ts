@@ -1,14 +1,6 @@
-const getRandomColor = (
-  lightness: [number, number],
-  saturation: [number, number],
-  hue: number,
-) => {
-  const satAccent = Math.floor(
-    Math.random() * (saturation[1] - saturation[0] + 1) + saturation[0],
-  )
-  const lightAccent = Math.floor(
-    Math.random() * (lightness[1] - lightness[0] + 1) + lightness[0],
-  )
+const getRandomColor = (lightness: [number, number], saturation: [number, number], hue: number) => {
+  const satAccent = Math.floor(Math.random() * (saturation[1] - saturation[0] + 1) + saturation[0])
+  const lightAccent = Math.floor(Math.random() * (lightness[1] - lightness[0] + 1) + lightness[0])
 
   // Generate the background color by increasing the lightness and decreasing the saturation
   const satBackground = satAccent > 30 ? satAccent - 30 : 0

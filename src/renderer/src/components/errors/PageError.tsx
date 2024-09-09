@@ -23,8 +23,8 @@ export const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {
         ) : null}
 
         <p className="my-8">
-          The App has a temporary problem, click the button below to try
-          reloading the app or another solution?
+          The App has a temporary problem, click the button below to try reloading the app or
+          another solution?
         </p>
 
         <div className="center gap-4">
@@ -32,10 +32,7 @@ export const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {
             Retry
           </Button>
 
-          <Button
-            onClick={() => window.location.reload()}
-            variant="outline"
-          >
+          <Button onClick={() => window.location.reload()} variant="outline">
             Reload
           </Button>
         </div>

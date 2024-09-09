@@ -9,15 +9,7 @@ import { cn } from "@renderer/lib/utils"
 import { m } from "framer-motion"
 import { throttle } from "lodash-es"
 import type { FC, PropsWithChildren } from "react"
-import {
-  memo,
-  useCallback,
-  useId,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import { memo, useCallback, useId, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { useMarkAllByRoute } from "../hooks/useMarkAll"
@@ -57,35 +49,22 @@ const useSticky = () => {
 
   return { isSticky, itemRef }
 }
-export const DateItem = memo(
-  ({ date, view }: { date: string, view: FeedViewType }) => {
-    const className = cn(
-      "pt-2",
-      `relative z-10 -mx-2 flex items-center gap-1 bg-background px-4 text-base font-bold text-zinc-800 dark:text-neutral-400`,
-    )
+export const DateItem = memo(({ date, view }: { date: string; view: FeedViewType }) => {
+  const className = cn(
+    "pt-2",
+    `relative z-10 -mx-2 flex items-center gap-1 bg-background px-4 text-base font-bold text-zinc-800 dark:text-neutral-400`,
+  )
 
-    if (view === FeedViewType.SocialMedia) {
-      return <SocialMediaDateItem date={date} className={className} />
-    }
-    return <UniversalDateItem date={date} className={className} />
-  },
-)
-const UniversalDateItem = ({
-  date,
-  className,
-}: {
-  date: string
-  className?: string
-}) => {
+  if (view === FeedViewType.SocialMedia) {
+    return <SocialMediaDateItem date={date} className={className} />
+  }
+  return <UniversalDateItem date={date} className={className} />
+})
+const UniversalDateItem = ({ date, className }: { date: string; className?: string }) => {
   const { startOfDay, endOfDay, dateObj } = useParseDate(date)
 
   return (
-    <DateItemInner
-      className={className}
-      date={dateObj}
-      startTime={startOfDay}
-      endTime={endOfDay}
-    />
+    <DateItemInner className={className} date={dateObj} startTime={startOfDay} endTime={endOfDay} />
   )
 }
 
@@ -133,7 +112,7 @@ const DateItemInner: FC<{
     >
       <W>
         <ActionButton
-          tooltip={(
+          tooltip={
             <span>
               Mark
               <span> </span>
@@ -141,7 +120,7 @@ const DateItemInner: FC<{
               <span> </span>
               as read
             </span>
-          )}
+          }
           onClick={() => {
             if (confirmMark) {
               clearTimeout(timerRef.current)
@@ -164,9 +143,7 @@ const DateItemInner: FC<{
           <div className="animate-mask-in" key="a">
             Mark
             <span> </span>
-            {RelativeElement}
-            {" "}
-            as read?
+            {RelativeElement} as read?
           </div>
         ) : (
           RelativeElement
@@ -175,13 +152,7 @@ const DateItemInner: FC<{
     </div>
   )
 }
-const SocialMediaDateItem = ({
-  date,
-  className,
-}: {
-  date: string
-  className?: string
-}) => {
+const SocialMediaDateItem = ({ date, className }: { date: string; className?: string }) => {
   const { startOfDay, endOfDay, dateObj } = useParseDate(date)
 
   return (
@@ -189,9 +160,7 @@ const SocialMediaDateItem = ({
       // @ts-expect-error
       Wrapper={useCallback(
         ({ children }) => (
-          <div className="m-auto flex w-[67ch] gap-3 pl-5 text-lg">
-            {children}
-          </div>
+          <div className="m-auto flex w-[67ch] gap-3 pl-5 text-lg">{children}</div>
         ),
         [],
       )}

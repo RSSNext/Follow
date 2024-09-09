@@ -3,11 +3,7 @@ import { getNewIssueUrl } from "@renderer/lib/issues"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { captureException } from "@sentry/react"
 import { useEffect, useRef } from "react"
-import {
-  isRouteErrorResponse,
-  useNavigate,
-  useRouteError,
-} from "react-router-dom"
+import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router-dom"
 import { toast } from "sonner"
 
 import { Button } from "../ui/button"
@@ -16,18 +12,15 @@ import { PoweredByFooter } from "./PoweredByFooter"
 export function ErrorElement() {
   const error = useRouteError()
   const navigate = useNavigate()
-  const message = isRouteErrorResponse(error) ?
-    `${error.status} ${error.statusText}` :
-    error instanceof Error ?
-      error.message :
-      JSON.stringify(error)
+  const message = isRouteErrorResponse(error)
+    ? `${error.status} ${error.statusText}`
+    : error instanceof Error
+      ? error.message
+      : JSON.stringify(error)
   const stack = error instanceof Error ? error.stack : null
 
   useEffect(() => {
-    console.error(
-      "Error handled by React Router default ErrorBoundary:",
-      error,
-    )
+    console.error("Error handled by React Router default ErrorBoundary:", error)
 
     captureException(error)
   }, [error])
@@ -50,9 +43,7 @@ export function ErrorElement() {
       <div className="drag-region fixed inset-x-0 top-0 h-12" />
       <div className="center flex flex-col">
         <i className="i-mgc-bug-cute-re size-12 text-red-400" />
-        <h2 className="mb-4 mt-12 text-2xl">
-          Sorry, {APP_NAME} has encountered an error
-        </h2>
+        <h2 className="mb-4 mt-12 text-2xl">Sorry, {APP_NAME} has encountered an error</h2>
       </div>
       <h3 className="text-xl">{message}</h3>
       {import.meta.env.DEV && stack ? (
@@ -62,10 +53,8 @@ export function ErrorElement() {
       ) : null}
 
       <p className="my-8">
-        {APP_NAME}
-        {" "}
-        has a temporary problem, click the button below to try
-        reloading the app or another solution?
+        {APP_NAME} has a temporary problem, click the button below to try reloading the app or
+        another solution?
       </p>
 
       <div className="center gap-4">
@@ -109,17 +98,7 @@ export const FallbackIssue = ({
       className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-accent"
       href={getNewIssueUrl({
         title: `Error: ${message}`,
-        body: [
-          "### Error",
-          "",
-          message,
-          "",
-          "### Stack",
-          "",
-          "```",
-          stack,
-          "```",
-        ].join("\n"),
+        body: ["### Error", "", message, "", "### Stack", "", "```", stack, "```"].join("\n"),
         label: "bug",
       })}
       target="_blank"

@@ -23,9 +23,7 @@ export const RadioGroup: Component<{
         [stableOnValueChange],
       )}
     >
-      <RadioGroupValueProvider value={currentValue}>
-        {props.children}
-      </RadioGroupValueProvider>
+      <RadioGroupValueProvider value={currentValue}>{props.children}</RadioGroupValueProvider>
     </RadioGroupContextProvider>
   )
 }

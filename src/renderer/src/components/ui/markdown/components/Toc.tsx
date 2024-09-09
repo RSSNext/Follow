@@ -44,8 +44,7 @@ export const Toc: Component = ({ className }) => {
 
   const $headings = useMemo(
     () =>
-      (markdownElement?.querySelectorAll("h1, h2, h3, h4, h5, h6") ||
-        []) as HTMLHeadingElement[],
+      (markdownElement?.querySelectorAll("h1, h2, h3, h4, h5, h6") || []) as HTMLHeadingElement[],
     [markdownElement],
   )
 
@@ -72,12 +71,12 @@ export const Toc: Component = ({ className }) => {
 
   const rootDepth = useMemo(
     () =>
-      toc?.length ?
-          (toc.reduce(
+      toc?.length
+        ? (toc.reduce(
             (d: number, cur) => Math.min(d, cur.depth),
             toc[0]?.depth || 0,
-          ) as any as number) :
-        0,
+          ) as any as number)
+        : 0,
     [toc],
   )
 
@@ -91,8 +90,7 @@ export const Toc: Component = ({ className }) => {
     (i: number, $el: HTMLElement | null, _anchorId: string) => {
       if ($el) {
         const handle = () => {
-          scrollDelayHandlerRef.current &&
-          clearTimeout(scrollDelayHandlerRef.current)
+          scrollDelayHandlerRef.current && clearTimeout(scrollDelayHandlerRef.current)
           springScrollToElement($el, -100, scrollContainerElement!).then(() => {
             throttleCallerRef.current?.cancel()
             scrollDelayHandlerRef.current = setTimeout(() => {
@@ -115,8 +113,7 @@ export const Toc: Component = ({ className }) => {
       const $heading = $headings[i]
 
       const headingTop =
-        Number.parseInt($heading.dataset["containerTop"] || "0") ||
-        getElementTop($heading)
+        Number.parseInt($heading.dataset["containerTop"] || "0") || getElementTop($heading)
       if (!$heading.dataset) {
         // @ts-expect-error
         $heading.dataset["containerTop"] = headingTop.toString()
@@ -154,8 +151,7 @@ export const Toc: Component = ({ className }) => {
       const { y } = getWrappedElPos()
       const top = scrollContainerElement.scrollTop + y
       const winHeight = getViewport().h
-      const deltaHeight =
-        top >= winHeight ? winHeight : (top / winHeight) * winHeight
+      const deltaHeight = top >= winHeight ? winHeight : (top / winHeight) * winHeight
 
       const actualTop = Math.floor(Math.max(0, top - y + deltaHeight)) || 0
 
@@ -194,27 +190,16 @@ export const Toc: Component = ({ className }) => {
       scrollContainerElement.removeEventListener("scroll", handler)
       handler.cancel()
     }
-  }, [
-    getWrappedElPos,
-    scrollContainerElement,
-    titleBetweenPositionTopRangeMap,
-  ])
+  }, [getWrappedElPos, scrollContainerElement, titleBetweenPositionTopRangeMap])
 
   const [hoverShow, setHoverShow] = useState(false)
 
   if (toc.length === 0) return null
   return (
     <div className="flex grow flex-col scroll-smooth px-2 scrollbar-none">
-      <HoverCard.Root
-        openDelay={100}
-        open={hoverShow}
-        onOpenChange={setHoverShow}
-      >
+      <HoverCard.Root openDelay={100} open={hoverShow} onOpenChange={setHoverShow}>
         <HoverCard.Trigger asChild>
-          <ul
-            ref={setTreeRef}
-            className={cn("group overflow-auto scrollbar-none", className)}
-          >
+          <ul ref={setTreeRef} className={cn("group overflow-auto scrollbar-none", className)}>
             {toc.map((heading, index) => (
               <MemoedItem
                 heading={heading}
@@ -222,9 +207,7 @@ export const Toc: Component = ({ className }) => {
                 rootDepth={rootDepth}
                 onClick={handleScrollTo}
                 isScrollOut={index < currentScrollRange[0]}
-                range={
-                  index === currentScrollRange[0] ? currentScrollRange[1] : 0
-                }
+                range={index === currentScrollRange[0] ? currentScrollRange[1] : 0}
               />
             ))}
           </ul>
@@ -245,10 +228,7 @@ export const Toc: Component = ({ className }) => {
                     )}
                   >
                     {toc.map((heading, index) => (
-                      <li
-                        key={heading.anchorId}
-                        className="flex h-[24px] w-full items-center"
-                      >
+                      <li key={heading.anchorId} className="flex h-[24px] w-full items-center">
                         <button
                           className={cn(
                             "group flex w-full cursor-pointer justify-between",
@@ -256,20 +236,14 @@ export const Toc: Component = ({ className }) => {
                           )}
                           type="button"
                           onClick={() => {
-                            handleScrollTo(
-                              index,
-                              heading.$heading,
-                              heading.anchorId,
-                            )
+                            handleScrollTo(index, heading.$heading, heading.anchorId)
                           }}
                         >
                           <span className="duration-200 group-hover:text-accent/80">
                             {heading.title}
                           </span>
 
-                          <span className="ml-4 text-[8px] opacity-50">
-                            H{heading.depth}
-                          </span>
+                          <span className="ml-4 text-[8px] opacity-50">H{heading.depth}</span>
                         </button>
                       </li>
                     ))}
@@ -310,8 +284,7 @@ const MemoedItem = memo<TocItemProps>((props) => {
     const itemTop = itemOffsetTop - scrollTop
     const itemBottom = itemTop + itemHeight
     if (itemTop < 0 || itemBottom > containerHeight) {
-      $container.scrollTop =
-        itemOffsetTop - containerHeight / 2 + itemHeight / 2
+      $container.scrollTop = itemOffsetTop - containerHeight / 2 + itemHeight / 2
     }
   }, [active])
 

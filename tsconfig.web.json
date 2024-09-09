@@ -22,21 +22,11 @@
     "baseUrl": ".",
     "noImplicitReturns": false,
     "paths": {
-      "@renderer/*": [
-        "src/renderer/src/*"
-      ],
-      "@main/*": [
-        "src/main/*"
-      ],
-      "@shared/*": [
-        "src/shared/src/*"
-      ],
-      "@pkg": [
-        "./package.json"
-      ],
-      "@env": [
-        "./src/env.ts"
-      ]
+      "@renderer/*": ["src/renderer/src/*"],
+      "@main/*": ["src/main/*"],
+      "@shared/*": ["src/shared/src/*"],
+      "@pkg": ["./package.json"],
+      "@env": ["./src/env.ts"]
     }
   }
 }

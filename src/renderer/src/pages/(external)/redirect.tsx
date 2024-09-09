@@ -31,26 +31,12 @@ export function Component() {
     <div className="flex h-screen w-full flex-col items-center justify-center gap-10 px-4 pb-12 pt-[30vh]">
       <UserAvatar className="gap-8 px-10 py-4 text-2xl" />
       <h2 className="text-center">
-        You have successfully connected to
-        {" "}
-        {APP_NAME}
-        {" "}
-        Account.
-        {" "}
+        You have successfully connected to {APP_NAME} Account. <br />
         <br />
-        <br />
-        Now is the time to open
-        {" "}
-        {APP_NAME}
-        {" "}
-        and safely close this page.
+        Now is the time to open {APP_NAME} and safely close this page.
       </h2>
       <div className="center flex flex-col gap-4 sm:flex-row">
-        <Button
-          variant="text"
-          className="h-14 px-10 text-base"
-          onClick={() => navigate("/")}
-        >
+        <Button variant="text" className="h-14 px-10 text-base" onClick={() => navigate("/")}>
           Continue in Browser
         </Button>
 
@@ -58,9 +44,7 @@ export function Component() {
           className="h-14 !rounded-full px-5 text-lg"
           onClick={async () => window.open(await getCallbackUrl(), "_top")}
         >
-          Open
-          {" "}
-          {APP_NAME}
+          Open {APP_NAME}
         </Button>
       </div>
       <div className="grow" />

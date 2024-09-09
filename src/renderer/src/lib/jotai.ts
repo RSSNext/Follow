@@ -6,10 +6,7 @@ import { useCallback } from "react"
 export const jotaiStore = createStore()
 
 export const createAtomAccessor = <T>(atom: PrimitiveAtom<T>) =>
-  [
-    () => jotaiStore.get(atom),
-    (value: T) => jotaiStore.set(atom, value),
-  ] as const
+  [() => jotaiStore.get(atom), (value: T) => jotaiStore.set(atom, value)] as const
 
 const options = { store: jotaiStore }
 /**

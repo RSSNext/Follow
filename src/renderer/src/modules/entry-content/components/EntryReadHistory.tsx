@@ -1,14 +1,6 @@
 import { useWhoami } from "@renderer/atoms/user"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@renderer/components/ui/avatar"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
+import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { Queries } from "@renderer/queries"
 import { useEntryReadHistory } from "@renderer/store/entry"
@@ -18,9 +10,7 @@ import { memo, useEffect, useState } from "react"
 
 import { usePresentUserProfileModal } from "../../profile/hooks"
 
-export const EntryReadHistory: Component<{ entryId: string }> = ({
-  entryId,
-}) => {
+export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) => {
   const me = useWhoami()
   const entryHistory = useEntryReadHistory(entryId)
 
@@ -59,23 +49,23 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({
         entryHistory.readCount > 10 &&
         entryHistory.userIds &&
         entryHistory.userIds.length >= 10 && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div
-              style={{
-                right: "80px",
-                zIndex: 11,
-              }}
-              className="relative z-[11] flex size-7 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
-            >
-              <span className="text-[10px] font-medium text-muted-foreground">
-                +{Math.min(entryHistory.readCount - 10, 99)}
-              </span>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent side="top">More</TooltipContent>
-        </Tooltip>
-      )}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div
+                style={{
+                  right: "80px",
+                  zIndex: 11,
+                }}
+                className="relative z-[11] flex size-7 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
+              >
+                <span className="text-[10px] font-medium text-muted-foreground">
+                  +{Math.min(entryHistory.readCount - 10, 99)}
+                </span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="top">More</TooltipContent>
+          </Tooltip>
+        )}
     </div>
   )
 }

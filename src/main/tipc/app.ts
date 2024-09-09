@@ -13,7 +13,7 @@ import { t } from "./_instance"
 
 export const appRoute = {
   saveToEagle: t.procedure
-    .input<{ url: string, mediaUrls: string[] }>()
+    .input<{ url: string; mediaUrls: string[] }>()
     .action(async ({ input }) => {
       try {
         const res = await fetch("http://localhost:41595/api/item/addFromURLs", {
@@ -42,9 +42,7 @@ export const appRoute = {
     .action(async ({ input }) => {
       const mainWindow = getMainWindow()
       if (!mainWindow) return
-      const handlers = getRendererHandlers<RendererHandlers>(
-        mainWindow.webContents,
-      )
+      const handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
       handlers.invalidateQuery.send(input)
     }),
 
@@ -52,9 +50,7 @@ export const appRoute = {
     .input<{ action: "close" | "minimize" | "maximum" }>()
     .action(async ({ input, context }) => {
       if (context.sender.getType() === "window") {
-        const window: BrowserWindow | null = (
-          context.sender as Sender
-        ).getOwnerBrowserWindow()
+        const window: BrowserWindow | null = (context.sender as Sender).getOwnerBrowserWindow()
 
         if (!window) return
         switch (input.action) {
@@ -84,12 +80,15 @@ export const appRoute = {
                 window.setResizable(true)
                 window.setMovable(true)
 
-                window.setBounds({
-                  width: stored.size[0],
-                  height: stored.size[1],
-                  x: stored.position[0],
-                  y: stored.position[1],
-                }, true)
+                window.setBounds(
+                  {
+                    width: stored.size[0],
+                    height: stored.size[1],
+                    x: stored.position[0],
+                    y: stored.position[1],
+                  },
+                  true,
+                )
 
                 delete window[storeKey]
               } else {
@@ -103,12 +102,15 @@ export const appRoute = {
                 // Maually Resize
                 const { workArea } = display
 
-                window.setBounds({
-                  x: workArea.x,
-                  y: workArea.y,
-                  width: workArea.width,
-                  height: workArea.height,
-                }, true)
+                window.setBounds(
+                  {
+                    x: workArea.x,
+                    y: workArea.y,
+                    width: workArea.width,
+                    height: workArea.height,
+                  },
+                  true,
+                )
 
                 window.setResizable(false)
                 window.setMovable(false)
@@ -128,29 +130,25 @@ export const appRoute = {
         }
       }
     }),
-  getWindowIsMaximized: t.procedure
-    .input<void>()
-    .action(async ({ context }) => {
-      const window: BrowserWindow | null = (
-        context.sender as Sender
-      ).getOwnerBrowserWindow()
+  getWindowIsMaximized: t.procedure.input<void>().action(async ({ context }) => {
+    const window: BrowserWindow | null = (context.sender as Sender).getOwnerBrowserWindow()
 
-      if (isWindows11 && window) {
-        const size = screen.getDisplayMatching(window.getBounds()).workAreaSize
+    if (isWindows11 && window) {
+      const size = screen.getDisplayMatching(window.getBounds()).workAreaSize
 
-        const windowSize = window.getSize()
-        const windowPosition = window.getPosition()
-        const isMaximized =
-          windowSize[0] === size.width &&
-          windowSize[1] === size.height &&
-          windowPosition[0] === 0 &&
-          windowPosition[1] === 0
+      const windowSize = window.getSize()
+      const windowPosition = window.getPosition()
+      const isMaximized =
+        windowSize[0] === size.width &&
+        windowSize[1] === size.height &&
+        windowPosition[0] === 0 &&
+        windowPosition[1] === 0
 
-        return !!isMaximized
-      }
+      return !!isMaximized
+    }
 
-      return window?.isMaximized()
-    }),
+    return window?.isMaximized()
+  }),
   quitAndInstall: t.procedure.action(async () => {
     quitAndInstall()
   }),
@@ -171,8 +169,7 @@ export const appRoute = {
     .action(async ({ input, context }) => {
       const { sender: webContents } = context
 
-      const { promise, resolve } =
-        Promise.withResolvers<Electron.Result | null>()
+      const { promise, resolve } = Promise.withResolvers<Electron.Result | null>()
 
       let requestId = -1
       webContents.once("found-in-page", (_, result) => {
@@ -181,36 +178,28 @@ export const appRoute = {
       requestId = webContents.findInPage(input.text, input.options)
       return promise
     }),
-  clearSearch: t.procedure.action(
-    async ({ context: { sender: webContents } }) => {
-      webContents.stopFindInPage("keepSelection")
-    },
-  ),
+  clearSearch: t.procedure.action(async ({ context: { sender: webContents } }) => {
+    webContents.stopFindInPage("keepSelection")
+  }),
 
-  download: t.procedure
-    .input<string>()
-    .action(async ({ input, context: { sender } }) => {
-      const result = await dialog.showSaveDialog({
-        defaultPath: input.split("/").pop(),
-      })
-      if (result.canceled) return
+  download: t.procedure.input<string>().action(async ({ input, context: { sender } }) => {
+    const result = await dialog.showSaveDialog({
+      defaultPath: input.split("/").pop(),
+    })
+    if (result.canceled) return
 
-      // return result.filePath;
-      await downloadFile(input, result.filePath).catch((err) => {
-        const senderWindow = (sender as Sender).getOwnerBrowserWindow()
-        if (!senderWindow) return
-        callGlobalContextMethod(senderWindow, "toast.error", [
-          "Download failed!",
-        ])
-        throw err
-      })
-
+    // return result.filePath;
+    await downloadFile(input, result.filePath).catch((err) => {
       const senderWindow = (sender as Sender).getOwnerBrowserWindow()
       if (!senderWindow) return
-      callGlobalContextMethod(senderWindow, "toast.success", [
-        "Download success!",
-      ])
-    }),
+      callGlobalContextMethod(senderWindow, "toast.error", ["Download failed!"])
+      throw err
+    })
+
+    const senderWindow = (sender as Sender).getOwnerBrowserWindow()
+    if (!senderWindow) return
+    callGlobalContextMethod(senderWindow, "toast.success", ["Download success!"])
+  }),
 }
 interface Sender extends Electron.WebContents {
   getOwnerBrowserWindow: () => Electron.BrowserWindow | null

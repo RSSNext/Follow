@@ -27,15 +27,11 @@ export const feed = {
     defineQuery(["feed", "claimMessage", feedId], async () =>
       apiClient.feeds.claim.message.$get({ query: { feedId } }).then((res) => {
         res.data.json = JSON.stringify(JSON.parse(res.data.json), null, 2)
-        const $document = new DOMParser().parseFromString(
-          res.data.xml,
-          "text/xml",
-        )
-        res.data.xml = formatXml(
-          new XMLSerializer().serializeToString($document),
-        )
+        const $document = new DOMParser().parseFromString(res.data.xml, "text/xml")
+        res.data.xml = formatXml(new XMLSerializer().serializeToString($document))
         return res
-      })),
+      }),
+    ),
 }
 
 export const useFeed = ({ id, url }: FeedQueryParams) =>
@@ -45,7 +41,8 @@ export const useFeed = ({ id, url }: FeedQueryParams) =>
       url,
     }),
     {
-      enabled: (!!id || !!url) && id !== ROUTE_FEED_PENDING && !id?.startsWith(ROUTE_FEED_IN_FOLDER),
+      enabled:
+        (!!id || !!url) && id !== ROUTE_FEED_PENDING && !id?.startsWith(ROUTE_FEED_IN_FOLDER),
     },
   )
 

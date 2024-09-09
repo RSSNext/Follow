@@ -8,10 +8,10 @@ type ObserveResize = {
 }
 
 let _resizeObserver: ResizeObserver | null = null
-const elementsMap = new WeakMap<Element, Array<ObserveResize>>();
+const elementsMap = new WeakMap<Element, Array<ObserveResize>>()
 
 // for debugging
-(window as any)._resizeObserverElementsMap = elementsMap
+;(window as any)._resizeObserverElementsMap = elementsMap
 
 /**
  * @internal get or initialize the ResizeObserver instance
@@ -61,10 +61,7 @@ const removeListener = (element: Element, listener: ObserveResize) => {
  * ```
  * @return A function to dispose the observer.
  */
-export const observeResize = (
-  element: Element,
-  callback: ObserveResize["callback"],
-) => {
+export const observeResize = (element: Element, callback: ObserveResize["callback"]) => {
   const observer = getResizeObserver()
   if (!elementsMap.has(element)) {
     observer.observe(element)

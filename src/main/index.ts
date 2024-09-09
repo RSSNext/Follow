@@ -84,12 +84,8 @@ function bootsharp() {
 
     if (process.env.NODE_ENV === "development") {
       import("electron-devtools-installer").then(
-        ({
-          default: installExtension,
-          REDUX_DEVTOOLS,
-          REACT_DEVELOPER_TOOLS,
-        }) => {
-          [REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS].forEach((extension) => {
+        ({ default: installExtension, REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS }) => {
+          ;[REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS].forEach((extension) => {
             installExtension(extension, {
               loadExtensionOptions: { allowFileAccess: true },
             })
@@ -113,8 +109,7 @@ function bootsharp() {
     if (urlObj.hostname === "auth" || urlObj.pathname === "//auth") {
       const token = urlObj.searchParams.get("token")
 
-      const apiURL =
-        process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
+      const apiURL = process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
       if (token && apiURL) {
         setAuthSessionToken(token)
         mainWindow.webContents.session.cookies.set({

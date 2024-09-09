@@ -16,32 +16,31 @@ import type { FeedQueryParams } from "./types"
 export const useFeedById = (feedId: Nullable<string>): FeedModel | null =>
   useFeedStore((state) => (feedId ? state.feeds[feedId] : null))
 
-export const useFeedByIdOrUrl = (feed: FeedQueryParams) => useFeedStore((state) => {
-  if (feed.id) {
-    return state.feeds[feed.id]
-  }
-  if (feed.url) {
-    return Object.values(state.feeds).find((f) => f.url === feed.url) || null
-  }
-  return null
-})
+export const useFeedByIdOrUrl = (feed: FeedQueryParams) =>
+  useFeedStore((state) => {
+    if (feed.id) {
+      return state.feeds[feed.id]
+    }
+    if (feed.url) {
+      return Object.values(state.feeds).find((f) => f.url === feed.url) || null
+    }
+    return null
+  })
 
 export const useFeedByIdSelector = <T>(
   feedId: Nullable<string>,
   selector: (feed: FeedModel) => T,
 ) =>
-    useFeedStore(
-      useShallow((state) =>
-        feedId && state.feeds[feedId] ? selector(state.feeds[feedId]) : null,
-      ),
-    )
+  useFeedStore(
+    useShallow((state) => (feedId && state.feeds[feedId] ? selector(state.feeds[feedId]) : null)),
+  )
 
 export const useFeedHeaderTitle = () => {
   const { feedId: currentFeedId, view } = useRouteParms()
 
   const feedTitle = useFeedByIdSelector(currentFeedId, (feed) => feed.title)
   const subscriptionTitle = useMemo(
-    () => currentFeedId ? getSubscriptionByFeedId(currentFeedId)?.title ?? "" : "",
+    () => (currentFeedId ? (getSubscriptionByFeedId(currentFeedId)?.title ?? "") : ""),
     [currentFeedId],
   )
 

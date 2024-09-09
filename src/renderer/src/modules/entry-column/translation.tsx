@@ -22,19 +22,13 @@ export const EntryTranslation: Component<{
   const [ref, bounds] = useMeasure({ debounce: 60 })
 
   if (!nextTarget && source) {
-    return isHTML ?
-        (
-          <HTML
-            as="div"
-            className={cn("prose dark:prose-invert", className)}
-            noMedia
-          >
-            {source}
-          </HTML>
-        ) :
-        (
-          <div className={className}>{source}</div>
-        )
+    return isHTML ? (
+      <HTML as="div" className={cn("prose dark:prose-invert", className)} noMedia>
+        {source}
+      </HTML>
+    ) : (
+      <div className={className}>{source}</div>
+    )
   }
   return (
     <HoverCard.Root>
@@ -79,15 +73,13 @@ export const EntryTranslation: Component<{
                 )}
               </ScrollArea.ScrollArea>
             </div>
-          ) : isHTML ?
-              (
-                <HTML as="div" className={cn(tooltipStyle.content)} noMedia>
-                  {source}
-                </HTML>
-              ) :
-              (
-                <span className={cn(tooltipStyle.content)}>{source}</span>
-              )}
+          ) : isHTML ? (
+            <HTML as="div" className={cn(tooltipStyle.content)} noMedia>
+              {source}
+            </HTML>
+          ) : (
+            <span className={cn(tooltipStyle.content)}>{source}</span>
+          )}
         </HoverCard.Content>
       </HoverCard.Portal>
     </HoverCard.Root>

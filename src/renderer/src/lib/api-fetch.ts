@@ -28,16 +28,13 @@ export const apiFetch = ofetch.create({
       if (options.body instanceof FormData) {
         options.body.append("csrfToken", csrfToken)
       } else {
-        (options.body as Record<string, unknown>).csrfToken = csrfToken
+        ;(options.body as Record<string, unknown>).csrfToken = csrfToken
       }
 
       const header = new Headers(options.headers)
 
       header.set("x-app-version", PKG.version)
-      header.set(
-        "X-App-Dev",
-        process.env.NODE_ENV === "development" ? "1" : "0",
-      )
+      header.set("X-App-Dev", process.env.NODE_ENV === "development" ? "1" : "0")
       options.headers = header
     }
   },
@@ -72,14 +69,13 @@ export const apiFetch = ofetch.create({
 })
 
 export const apiClient = hc<AppType>(env.VITE_API_URL, {
-  fetch: async (input, options = {}) => apiFetch(input.toString(), options).catch(
-    (err) => {
+  fetch: async (input, options = {}) =>
+    apiFetch(input.toString(), options).catch((err) => {
       if (err instanceof FetchError && !err.response) {
         setApiStatus(NetworkStatus.OFFLINE)
       }
       throw err
-    },
-  ),
+    }),
   headers() {
     return {
       "X-App-Version": PKG.version,

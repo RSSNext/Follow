@@ -18,8 +18,7 @@ const defaultCtxValue: CurrentModalContentProps = {
   ref: { current: null },
 }
 
-export const CurrentModalContext =
-  createContext<CurrentModalContentProps>(defaultCtxValue)
+export const CurrentModalContext = createContext<CurrentModalContentProps>(defaultCtxValue)
 
 export type ModalContentComponent<T = object> = FC<ModalActionsInternal & T>
 export type ModalActionsInternal = {

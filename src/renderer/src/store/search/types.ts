@@ -4,8 +4,7 @@ import type { SubscriptionFlatModel } from "../subscription"
 import type { SearchType } from "./constants"
 
 // @ts-expect-error
-export interface SearchResult<T extends object, A extends object = object>
-  extends A {
+export interface SearchResult<T extends object, A extends object = object> extends A {
   item: T
 }
 

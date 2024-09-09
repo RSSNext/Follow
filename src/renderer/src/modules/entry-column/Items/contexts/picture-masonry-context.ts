@@ -1,18 +1,13 @@
 import { noop } from "foxact/noop"
 import type { Dispatch, SetStateAction } from "react"
 import { createContext, useCallback, useContext } from "react"
-import {
-  createContext as createContextSelector,
-  useContextSelector,
-} from "use-context-selector"
+import { createContext as createContextSelector, useContextSelector } from "use-context-selector"
 
 export const MasonryItemWidthContext = createContext(0)
 
 export const useMasonryItemWidth = () => useContext(MasonryItemWidthContext)
 
-export const MasonryItemsAspectRatioContext = createContextSelector(
-  {} as Record<string, number>,
-)
+export const MasonryItemsAspectRatioContext = createContextSelector({} as Record<string, number>)
 
 export const useMasonryItemRatio = (url: string) =>
   useContextSelector(MasonryItemsAspectRatioContext, (ctx) => ctx[url])

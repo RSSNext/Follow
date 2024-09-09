@@ -49,10 +49,7 @@ export function Component() {
     <div className="container flex h-screen w-full flex-col items-center justify-center gap-14">
       <Logo className="size-20" />
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[512px] max-w-full"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-[512px] max-w-full">
           <FormField
             control={form.control}
             name="code"
@@ -81,12 +78,8 @@ export function Component() {
       </Form>
       <div className="space-y-2 text-balance text-center text-sm text-zinc-600 md:text-left">
         <p>
-          😰 Sorry, Follow is currently in
-          {" "}
-          <strong>early access</strong>
-          {" "}
-          and
-          requires an invitation code to use.
+          😰 Sorry, Follow is currently in <strong>early access</strong> and requires an invitation
+          code to use.
         </p>
         <p>You can get an invitation code in the following ways:</p>
         <p>
@@ -104,7 +97,12 @@ export function Component() {
               className: "flex-1",
             })}
           >
-            <a href={link.url} className="center flex w-full gap-1" target="_blank" rel="noreferrer">
+            <a
+              href={link.url}
+              className="center flex w-full gap-1"
+              target="_blank"
+              rel="noreferrer"
+            >
               <i className={link.icon} />
               {link.label}
             </a>

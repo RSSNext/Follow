@@ -5,15 +5,10 @@ import { Tooltip, TooltipContent } from "@renderer/components/ui/tooltip"
 export const WithdrawButton = () => (
   <Tooltip>
     <TooltipTrigger>
-      <Button
-        variant="outline"
-        disabled={true}
-      >
+      <Button variant="outline" disabled={true}>
         Withdraw
       </Button>
     </TooltipTrigger>
-    <TooltipContent>
-      Comming soon...
-    </TooltipContent>
+    <TooltipContent>Comming soon...</TooltipContent>
   </Tooltip>
 )

@@ -12,7 +12,6 @@
     // ["tw\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
 
     ["tw`([^`]*)`", "([^`]*)"]
-
   ],
 
   // If you do not want to autofix some rules on save
@@ -37,9 +36,7 @@
     { "rule": "prefer-const", "severity": "off" },
     { "rule": "unused-imports/no-unused-imports", "severity": "off" }
   ],
-  "cSpell.words": [
-    "rsshub"
-  ],
+  "cSpell.words": ["rsshub"],
   "editor.foldingImportsByDefault": true,
   "commentTranslate.hover.enabled": false,
   "typescript.tsdk": "node_modules/typescript/lib"

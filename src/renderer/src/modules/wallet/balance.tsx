@@ -23,9 +23,7 @@ export const Balance = ({
 
   const Content = (
     <div className={cn("font-mono tabular-nums", className)}>
-      {formatted}
-      {" "}
-      {withSuffix && <span>POWER</span>}
+      {formatted} {withSuffix && <span>POWER</span>}
     </div>
   )
 
@@ -33,14 +31,10 @@ export const Balance = ({
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        {Content}
-      </TooltipTrigger>
+      <TooltipTrigger asChild>{Content}</TooltipTrigger>
       <TooltipContent>
         <div className="font-mono text-sm">
-          <span className="font-bold tabular-nums">{formattedFull}</span>
-          {" "}
-          <span>POWER</span>
+          <span className="font-bold tabular-nums">{formattedFull}</span> <span>POWER</span>
         </div>
       </TooltipContent>
     </Tooltip>

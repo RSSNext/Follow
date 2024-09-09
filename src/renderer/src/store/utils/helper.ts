@@ -30,23 +30,21 @@ export const localStorage: PersistStorage<any> = {
 const storeMap = {} as Record<string, UseBoundStoreWithEqualityFn<any>>
 
 export const createZustandStore =
-  <S, T extends StateCreator<S, [], []> = StateCreator<S, [], []>>(
-    name: string,
-  ) =>
-    (store: T) => {
-      const newStore = import.meta.env.DEV ?
-        createWithEqualityFn(
+  <S, T extends StateCreator<S, [], []> = StateCreator<S, [], []>>(name: string) =>
+  (store: T) => {
+    const newStore = import.meta.env.DEV
+      ? createWithEqualityFn(
           devtools(store, {
             enabled: DEBUG,
             name,
           }),
           shallow,
-        ) :
-        createWithEqualityFn(store, shallow)
+        )
+      : createWithEqualityFn(store, shallow)
 
-      storeMap[name] = newStore
+    storeMap[name] = newStore
 
-      window.store =
+    window.store =
       window.store ||
       new Proxy(
         {},
@@ -60,10 +58,10 @@ export const createZustandStore =
         },
       )
 
-      return newStore
-    }
+    return newStore
+  }
 type FunctionKeys<T> = {
-  [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
+  [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never
 }[keyof T]
 
 type FunctionProps<T> = Pick<T, FunctionKeys<T>>
@@ -97,12 +95,9 @@ export const doMutationAndTransaction = async <M, T>(
   options?: MutationAndTranscationOptions,
 ): Promise<[M | null | void, T | null | void]> => {
   const isOnline = navigator.onLine
-  const { waitMutation = false, doTranscationWhenMutationFail = !isOnline } =
-    options || {}
+  const { waitMutation = false, doTranscationWhenMutationFail = !isOnline } = options || {}
   const wrappedTransaction = () => {
-    const ret = runTransactionInScope(() =>
-      unstable_batchedUpdates(() => transaction()),
-    )
+    const ret = runTransactionInScope(() => unstable_batchedUpdates(() => transaction()))
 
     if (ret instanceof Promise) {
       return ret

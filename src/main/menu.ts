@@ -10,8 +10,8 @@ import { createSettingWindow, createWindow, getMainWindow } from "./window"
 
 export const registerAppMenu = () => {
   const menus: Array<MenuItemConstructorOptions | MenuItem> = [
-    ...(isMacOS ?
-        ([
+    ...(isMacOS
+      ? ([
           {
             label: name,
             submenu: [
@@ -37,8 +37,8 @@ export const registerAppMenu = () => {
               { role: "quit" },
             ],
           },
-        ] as MenuItemConstructorOptions[]) :
-        []),
+        ] as MenuItemConstructorOptions[])
+      : []),
 
     {
       role: "fileMenu",
@@ -90,8 +90,8 @@ export const registerAppMenu = () => {
             dispatchEventOnWindow(window, "OpenSearch")
           },
         },
-        ...((isMacOS ?
-            [
+        ...((isMacOS
+          ? [
               { role: "pasteAndMatchStyle" },
               { role: "delete" },
               { role: "selectAll" },
@@ -100,8 +100,8 @@ export const registerAppMenu = () => {
                 label: "Speech",
                 submenu: [{ role: "startSpeaking" }, { role: "stopSpeaking" }],
               },
-            ] :
-            [
+            ]
+          : [
               { role: "delete" },
               { type: "separator" },
               { role: "selectAll" },

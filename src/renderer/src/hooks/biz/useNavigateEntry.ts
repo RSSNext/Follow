@@ -1,13 +1,6 @@
-import {
-  getReadonlyRoute,
-  getStableRouterNavigate,
-} from "@renderer/atoms/route"
+import { getReadonlyRoute, getStableRouterNavigate } from "@renderer/atoms/route"
 import { setSidebarActiveView } from "@renderer/atoms/sidebar"
-import {
-  ROUTE_ENTRY_PENDING,
-  ROUTE_FEED_IN_FOLDER,
-  ROUTE_FEED_PENDING,
-} from "@renderer/constants"
+import { ROUTE_ENTRY_PENDING, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "@renderer/constants"
 import { FeedViewType } from "@renderer/lib/enum"
 import { isUndefined } from "lodash-es"
 
@@ -55,8 +48,6 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
   }
 
   return getStableRouterNavigate()?.(
-    `/feeds/${finalFeedId}/${
-      entryId || ROUTE_ENTRY_PENDING
-    }?${nextSearchParams.toString()}`,
+    `/feeds/${finalFeedId}/${entryId || ROUTE_ENTRY_PENDING}?${nextSearchParams.toString()}`,
   )
 }

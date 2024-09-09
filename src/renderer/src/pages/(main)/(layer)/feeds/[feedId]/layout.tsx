@@ -1,9 +1,7 @@
 import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
 import { PanelSplitter } from "@renderer/components/ui/divider"
 import { views } from "@renderer/constants"
-import {
-  useRouteParms,
-} from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { cn, isSafari } from "@renderer/lib/utils"
 import { EntryColumn } from "@renderer/modules/entry-column"
 import { useMemo, useRef } from "react"
@@ -33,11 +31,7 @@ export function Component() {
   return (
     <div ref={containerRef} className="flex min-w-0 grow">
       <div
-        className={cn(
-          "h-full shrink-0",
-          inWideMode ? "flex-1" : "border-r",
-          "will-change-[width]",
-        )}
+        className={cn("h-full shrink-0", inWideMode ? "flex-1" : "border-r", "will-change-[width]")}
         style={{
           width: position,
         }}

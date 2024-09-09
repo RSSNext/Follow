@@ -112,10 +112,7 @@ export function Component() {
             )}
           />
           <div className="text-right">
-            <Button
-              type="submit"
-              isLoading={updateMutation.isPending}
-            >
+            <Button type="submit" isLoading={updateMutation.isPending}>
               Submit
             </Button>
           </div>

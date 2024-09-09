@@ -23,9 +23,8 @@ export async function readability(url: string) {
 
   document.querySelectorAll("a").forEach((a) => {
     a.href = replaceRelativeAddress(baseUrl, a.href)
-  });
-
-  (["img", "audio", "video"] as const).forEach((tag) => {
+  })
+  ;(["img", "audio", "video"] as const).forEach((tag) => {
     document.querySelectorAll(tag).forEach((img) => {
       img.src = img.src && replaceRelativeAddress(baseUrl, img.src)
     })

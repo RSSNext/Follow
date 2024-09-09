@@ -17,9 +17,7 @@ export type ActiveList = {
 
 export type FeedResponse = SubscriptionResponse[number]["feeds"]
 
-export type FeedModel = ExtractBizResponse<
-  typeof apiClient.feeds.$get
->["data"]["feed"]
+export type FeedModel = ExtractBizResponse<typeof apiClient.feeds.$get>["data"]["feed"]
 
 export type SubscriptionResponse = Array<
   ExtractBizResponse<typeof apiClient.subscriptions.$get>["data"][number] & {
@@ -28,18 +26,12 @@ export type SubscriptionResponse = Array<
 >
 
 export type EntryResponse = Exclude<
-  Extract<
-    ExtractBizResponse<typeof apiClient.entries.$get>,
-    { code: 0 }
-  >["data"],
+  Extract<ExtractBizResponse<typeof apiClient.entries.$get>, { code: 0 }>["data"],
   undefined
 >
 
 export type EntriesResponse = Array<
-  Exclude<
-    Awaited<ReturnType<typeof apiClient.entries.$post>>["data"],
-    undefined
-  >
+  Exclude<Awaited<ReturnType<typeof apiClient.entries.$post>>["data"], undefined>
 >[number]
 
 export type CombinedEntryModel = EntriesResponse[number] & {
@@ -49,10 +41,7 @@ export type CombinedEntryModel = EntriesResponse[number] & {
 }
 export type EntryModel = CombinedEntryModel["entries"]
 export type DiscoverResponse = Array<
-  Exclude<
-    ExtractBizResponse<typeof apiClient.discover.$post>["data"],
-    undefined
-  >[number]
+  Exclude<ExtractBizResponse<typeof apiClient.discover.$post>["data"], undefined>[number]
 >
 
 export type ActionsResponse = Exclude<
@@ -85,15 +74,10 @@ export type FeedListModel = {
 
 export type SupportedLanguages = z.infer<typeof languageSchema>
 
-export type RecommendationItem = ExtractBizResponse<typeof apiClient.discover.rsshub.$get>["data"][string]
+export type RecommendationItem = ExtractBizResponse<
+  typeof apiClient.discover.rsshub.$get
+>["data"][string]
 
-export type ActionOperation =
-  | "contains"
-  | "not_contains"
-  | "eq"
-  | "not_eq"
-  | "gt"
-  | "lt"
-  | "regex"
+export type ActionOperation = "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex"
 export type ActionEntryField = "all" | "title" | "content" | "author" | "url" | "order"
 export type ActionFeedField = "view" | "title" | "site_url" | "feed_url" | "category"
