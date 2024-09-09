@@ -26,7 +26,7 @@ const useMyWallet = () => {
 
 const Loading = () => (
   <div className="center h-32 w-[350px]">
-    <LoadingWithIcon icon={<i className="i-mgc-power" />} size="large" />
+    <LoadingWithIcon icon={<i className="i-mgc-power text-accent" />} size="large" />
   </div>
 )
 
@@ -142,7 +142,7 @@ const TipModalContent_: FC<{
 
       <div className="flex flex-col justify-center gap-y-2">
         <div className="flex flex-row items-center gap-x-2 font-bold">
-          <i className="i-mgc-power" />
+          <i className="i-mgc-power text-accent" />
           <span>Amount</span>
         </div>
 

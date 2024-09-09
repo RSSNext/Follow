@@ -45,7 +45,7 @@ export const SettingInvitations = () => {
           </p>
           <p className="flex items-center">
             <span>You can spend 10 </span>
-            <i className="i-mgc-power ml-1 mr-0.5 text-base" />
+            <i className="i-mgc-power ml-1 mr-0.5 text-base text-accent" />
             <span> Power to generate an invitation code for your friends.</span>
           </p>
         </div>
@@ -157,7 +157,7 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
     <>
       <div className="flex items-center">
         <span>Generating an invitation code will cost you 10 </span>
-        <i className="i-mgc-power mx-1 text-base" />
+        <i className="i-mgc-power mx-1 text-base text-accent" />
         <span>Power. Do you want to continue?</span>
       </div>
       <div className="mt-4 flex items-center justify-end gap-3">

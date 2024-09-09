@@ -24,7 +24,7 @@ export const MyWalletSection = () => {
     return (
       <div className="center absolute inset-0 flex">
         <LoadingWithIcon
-          icon={<i className="i-mgc-power" />}
+          icon={<i className="i-mgc-power text-accent" />}
           size="large"
           className="-translate-y-full"
         />
