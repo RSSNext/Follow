@@ -6,6 +6,7 @@ import { FeedService } from "@renderer/services"
 import { produce } from "immer"
 import { nanoid } from "nanoid"
 
+import { getSubscriptionByFeedId } from "../subscription"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import type { FeedQueryParams, FeedState } from "./types"
 
@@ -100,3 +101,12 @@ export const feedActions = new FeedActions()
 
 export const getFeedById = (feedId: string): Nullable<FeedModel> =>
   useFeedStore.getState().feeds[feedId]
+
+export const getPreferredTitle = (feed?: FeedModel | null) => {
+  if (!feed?.id) {
+    return feed?.title
+  }
+
+  const subscription = getSubscriptionByFeedId(feed.id)
+  return subscription?.title || feed.title
+}

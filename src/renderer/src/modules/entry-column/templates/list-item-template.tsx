@@ -12,7 +12,7 @@ import { cn, isSafari } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry/hooks"
-import { useFeedById } from "@renderer/store/feed"
+import { getPreferredTitle, useFeedById } from "@renderer/store/feed"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
@@ -82,7 +82,7 @@ export function ListItem({
             entry.collections && "text-zinc-600 dark:text-zinc-500",
           )}
         >
-          <span className="truncate">{feed.title}</span>
+          <span className="truncate">{getPreferredTitle(feed)}</span>
           <span>·</span>
           <span className="shrink-0">
             {!!displayTime && <RelativeTime date={displayTime} />}

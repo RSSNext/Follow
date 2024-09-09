@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@renderer/components/ui/form"
+import { Input } from "@renderer/components/ui/input"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useCurrentModal } from "@renderer/components/ui/modal"
 import { Switch } from "@renderer/components/ui/switch"
@@ -38,6 +39,7 @@ const formSchema = z.object({
   view: z.string(),
   category: z.string().nullable().optional(),
   isPrivate: z.boolean().optional(),
+  title: z.string().optional(),
 })
 
 const defaultValue = { view: FeedViewType.Articles.toString() } as z.infer<
@@ -142,6 +144,7 @@ const FeedInnerForm = ({
       form.setValue("view", `${subscription?.view}`)
       subscription?.category && form.setValue("category", subscription.category)
       form.setValue("isPrivate", subscription?.isPrivate || false)
+      form.setValue("title", subscription?.title || "")
     }
   }, [subscription])
 
@@ -152,6 +155,7 @@ const FeedInnerForm = ({
         view: Number.parseInt(values.view),
         category: values.category,
         isPrivate: values.isPrivate,
+        title: values.title,
         ...(isSubscribed && { feedId: feed.id }),
       }
       const $method = isSubscribed ?
@@ -268,6 +272,24 @@ const FeedInnerForm = ({
           />
           <FormField
             control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <div>
+                  <FormLabel>Tile</FormLabel>
+                  <FormDescription>
+                    Custom title for this Feed. Leave empty to use the default.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="category"
             render={({ field }) => (
               <FormItem>
@@ -325,6 +347,7 @@ const FeedInnerForm = ({
           <div className="flex flex-1 items-end justify-end gap-4">
             {isSubscribed && (
               <Button
+                type="button"
                 ref={buttonRef}
                 variant="text"
                 isLoading={deleteSubscription.isPending}

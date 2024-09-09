@@ -2790,6 +2790,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 json: {
                     view: number;
                     url: string;
+                    title?: string | null | undefined;
                     category?: string | null | undefined;
                     isPrivate?: boolean | undefined;
                 };
@@ -2818,6 +2819,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 json: {
                     view: number;
                     feedId: string;
+                    title?: string | null | undefined;
                     category?: string | null | undefined;
                     isPrivate?: boolean | undefined;
                 };

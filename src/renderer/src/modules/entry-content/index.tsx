@@ -34,7 +34,7 @@ import {
 } from "@renderer/providers/wrapped-element-provider"
 import { Queries } from "@renderer/queries"
 import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
-import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
+import { getPreferredTitle, useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
@@ -190,7 +190,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                 />
               </div>
               <div className="mt-2 text-[13px] font-medium text-zinc-500">
-                {feed?.title}
+                {getPreferredTitle(feed)}
               </div>
               <div className="flex items-center gap-2 text-[13px] text-zinc-500">
                 {entry.entries.publishedAt &&
