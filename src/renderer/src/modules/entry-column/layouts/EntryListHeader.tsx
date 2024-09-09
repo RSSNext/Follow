@@ -118,7 +118,7 @@ export const EntryListHeader: FC<{
             )
           ) : null}
           <ActionButton
-            tooltip={unreadOnly ? "Show unread Only" : "Show all"}
+            tooltip={!unreadOnly ? "Show unread Only" : "Show all"}
             shortcut={shortcuts.entries.toggleUnreadOnly.key}
             onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
           >
