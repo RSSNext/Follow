@@ -6,6 +6,7 @@ import { FeedService } from "@renderer/services"
 import { produce } from "immer"
 import { nanoid } from "nanoid"
 
+import { getSubscriptionByFeedId } from "../subscription"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import type { FeedQueryParams, FeedState } from "./types"
 
@@ -20,7 +21,11 @@ class FeedActions {
     set({ feeds: {} })
   }
 
-  upsertMany(feeds: FeedModel[]) {
+  upsertMany(_feeds: FeedModel[]) {
+    const feeds = _feeds.map((feed) => ({
+      ...feed,
+      title: feed.id ? getSubscriptionByFeedId(feed.id)?.title || feed.title : feed.title,
+    }))
     runTransactionInScope(() => {
       FeedService.upsertMany(feeds)
     })
