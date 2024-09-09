@@ -3,12 +3,7 @@ import { defineConfig } from "eslint-config-hyoban"
 
 export default defineConfig(
   {
-    formatting: {
-      quotes: "double",
-      arrowParens: true,
-      braceStyle: "1tbs",
-      lineBreak: "after",
-    },
+    formatting: false,
     lessOpinionated: true,
     ignores: ["src/renderer/src/hono.ts", "src/hono.ts", "resources/**"],
     preferESM: false,
