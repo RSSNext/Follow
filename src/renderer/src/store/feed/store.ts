@@ -21,11 +21,7 @@ class FeedActions {
     set({ feeds: {} })
   }
 
-  upsertMany(_feeds: FeedModel[]) {
-    const feeds = _feeds.map((feed) => ({
-      ...feed,
-      title: feed.id ? getSubscriptionByFeedId(feed.id)?.title || feed.title : feed.title,
-    }))
+  upsertMany(feeds: FeedModel[]) {
     runTransactionInScope(() => {
       FeedService.upsertMany(feeds)
     })
@@ -105,3 +101,12 @@ export const feedActions = new FeedActions()
 
 export const getFeedById = (feedId: string): Nullable<FeedModel> =>
   useFeedStore.getState().feeds[feedId]
+
+export const getPreferredTitle = (feed?: FeedModel | null) => {
+  if (!feed?.id) {
+    return feed?.title
+  }
+
+  const subscription = getSubscriptionByFeedId(feed.id)
+  return subscription?.title || feed.title
+}

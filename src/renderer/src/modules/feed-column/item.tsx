@@ -15,7 +15,7 @@ import { nextFrame } from "@renderer/lib/dom"
 import { getNewIssueUrl } from "@renderer/lib/issues"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import { useFeedById } from "@renderer/store/feed"
+import { getPreferredTitle, useFeedById } from "@renderer/store/feed"
 import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { WEB_URL } from "@shared/constants"
@@ -124,7 +124,7 @@ const FeedItemImpl = ({
               (feedUnread ? "font-bold" : "font-medium opacity-70"),
             )}
           >
-            {feed.title}
+            {getPreferredTitle(feed)}
           </div>
           {isOwned && (
             <Tooltip delayDuration={300}>

@@ -5,7 +5,7 @@ import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
-import { useFeedById } from "@renderer/store/feed"
+import { getPreferredTitle, useFeedById } from "@renderer/store/feed"
 import dayjs from "dayjs"
 
 import { StarIcon } from "../star-icon"
@@ -63,7 +63,7 @@ export function GridItem({
             entry={entry.entries}
             size={18}
           />
-          <span className="min-w-0 truncate">{feeds?.title}</span>
+          <span className="min-w-0 truncate">{getPreferredTitle(feeds)}</span>
           <span className="text-zinc-500">·</span>
           <span className="text-zinc-500">
             {dayjs
