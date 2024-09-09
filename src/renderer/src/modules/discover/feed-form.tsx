@@ -347,6 +347,7 @@ const FeedInnerForm = ({
           <div className="flex flex-1 items-end justify-end gap-4">
             {isSubscribed && (
               <Button
+                type="button"
                 ref={buttonRef}
                 variant="text"
                 isLoading={deleteSubscription.isPending}
