@@ -4,17 +4,21 @@ import {
   Button,
   IconButton,
 } from "@renderer/components/ui/button"
+import { Kbd, KbdCombined } from "@renderer/components/ui/kbd/Kbd"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@renderer/components/ui/popover"
 import { RootPortal } from "@renderer/components/ui/portal"
+import { HotKeyScopeMap } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { cn } from "@renderer/lib/utils"
-import { AnimatePresence, m } from "framer-motion"
+import { AnimatePresence, calcLength, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
 import { forwardRef, Fragment, useState } from "react"
+import { useHotkeys } from "react-hotkeys-hook"
+import { toast } from "sonner"
 import { useOnClickOutside } from "usehooks-ts"
 
 import type { MarkAllFilter } from "../hooks/useMarkAll"
@@ -88,19 +92,61 @@ export const MarkAllReadWithOverlay = forwardRef<
       </RootPortal>
     )
   }
+  useHotkeys(
+    shortcuts.entries.markAllAsRead.key,
+    () => {
+      setShow(false)
+
+      let cancel = false
+      const undo = () => {
+        toast.dismiss(id)
+        if (cancel) return
+        cancel = true
+      }
+      const id = toast(<ConfirmMarkAllReadInfo undo={undo} />, {
+        duration: 3000,
+        onAutoClose() {
+          if (cancel) return
+          handleMarkAllAsRead()
+        },
+        action: {
+          label: (
+            <span className="flex items-center gap-1">
+              Undo
+              <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">
+                Meta+Z
+              </Kbd>
+            </span>
+          ),
+          onClick: undo,
+        },
+      })
+    },
+    {
+      preventDefault: true,
+      scopes: HotKeyScopeMap.Home,
+    },
+  )
+
   return (
     <Fragment>
       <ActionButton
-        shortcut={shortcut ? shortcuts.entries.markAllAsRead.key : undefined}
-        tooltip={(
-          <span>
-            Mark
-            <span> </span>
-            {which}
-            <span> </span>
-            as read
-          </span>
-        )}
+        tooltip={<>
+            <span>
+              Mark
+              <span> </span>
+              {which}
+              <span> </span>
+              as read
+            </span>
+            {shortcut && (
+              <div className="ml-1">
+                <KbdCombined className="text-foreground/80">
+                  {shortcuts.entries.markAllAsRead.key}
+                </KbdCombined>
+              </div>
+            )}
+          </>}
         className={className}
         ref={ref}
         onClick={() => {
@@ -114,6 +160,21 @@ export const MarkAllReadWithOverlay = forwardRef<
     </Fragment>
   )
 })
+
+const ConfirmMarkAllReadInfo = ({ undo }: { undo: () => any }) => {
+  useHotkeys("ctrl+z,meta+z", undo, {
+    scopes: HotKeyScopeMap.Home,
+    preventDefault: true,
+  })
+  return (
+    <div>
+      <p>Confirm mark all as read?</p>
+      <small className="opacity-50">
+        Will confirmed automatically after 3s.
+      </small>
+    </div>
+  )
+}
 
 /**
  * @deprecated

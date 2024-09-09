@@ -113,11 +113,11 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         >
           Profile
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator />
 
         <DropdownMenuLabel>
           <AppTheme />
-        </DropdownMenuLabel>
+        </DropdownMenuLabel> */}
 
         <DropdownMenuSeparator />
 
@@ -217,41 +217,41 @@ export function UserAvatar({
   )
 }
 
-const AppTheme = () => {
-  const theme = useThemeAtomValue()
-  const setTheme = useSetTheme()
-  return (
-    <SettingTabbedSegment
-      className="mb-0"
-      label={(
-        <span>
-          <i className="i-mgc-palette-cute-re mr-2 translate-y-0.5" />
-          <span className="text-sm font-normal">
-            Theme
-          </span>
-        </span>
-      )}
-      value={theme}
-      values={[
-        {
-          value: "system",
-          label: "",
-          icon: <i className="i-mingcute-monitor-line" />,
-        },
-        {
-          value: "light",
-          label: "",
-          icon: <i className="i-mingcute-sun-line" />,
-        },
-        {
-          value: "dark",
-          label: "",
-          icon: <i className="i-mingcute-moon-line" />,
-        },
-      ]}
-      onValueChanged={(value) => {
-        setTheme(value as "light" | "dark" | "system")
-      }}
-    />
-  )
-}
+// const AppTheme = () => {
+//   const theme = useThemeAtomValue()
+//   const setTheme = useSetTheme()
+//   return (
+//     <SettingTabbedSegment
+//       className="mb-0"
+//       label={(
+//         <span>
+//           <i className="i-mgc-palette-cute-re mr-2 translate-y-0.5" />
+//           <span className="text-sm font-normal">
+//             Theme
+//           </span>
+//         </span>
+//       )}
+//       value={theme}
+//       values={[
+//         {
+//           value: "system",
+//           label: "",
+//           icon: <i className="i-mingcute-monitor-line" />,
+//         },
+//         {
+//           value: "light",
+//           label: "",
+//           icon: <i className="i-mingcute-sun-line" />,
+//         },
+//         {
+//           value: "dark",
+//           label: "",
+//           icon: <i className="i-mingcute-moon-line" />,
+//         },
+//       ]}
+//       onValueChanged={(value) => {
+//         setTheme(value as "light" | "dark" | "system")
+//       }}
+//     />
+//   )
+// }
