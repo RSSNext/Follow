@@ -1,4 +1,5 @@
 import * as Slider from "@radix-ui/react-slider"
+import type { TooltipContentProps } from "@radix-ui/react-tooltip"
 import {
   AudioPlayer,
   getAudioPlayerAtomValue,
@@ -204,6 +205,7 @@ const CornerPlayerImpl = () => {
             className="i-mgc-forward-2-cute-re"
             onClick={() => AudioPlayer.forward(10)}
             label="Forward 10s"
+            tooltipAlign="end"
           />
         </div>
       </div>
@@ -284,12 +286,14 @@ const ActionIcon = ({
   onClick,
   label,
   labelDelayDuration = 700,
+  tooltipAlign,
   children,
 }: {
   className?: string
   onClick?: () => void
   label: React.ReactNode
   labelDelayDuration?: number
+  tooltipAlign?: TooltipContentProps["align"]
   children?: React.ReactNode
 }) => (
   <Tooltip delayDuration={labelDelayDuration}>
@@ -302,7 +306,7 @@ const ActionIcon = ({
         {children || <i className={className} />}
       </button>
     </TooltipTrigger>
-    <TooltipContent className="bg-theme-modal-background">
+    <TooltipContent className="bg-theme-modal-background" align={tooltipAlign}>
       {label}
     </TooltipContent>
   </Tooltip>
