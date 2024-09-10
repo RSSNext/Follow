@@ -1,4 +1,4 @@
-import { LoadingWithIcon } from "@renderer/components/ui/loading"
+import { LoadingCircle } from "@renderer/components/ui/loading"
 import { TokenBrandedRss3 } from "@renderer/components/ui/platform-icon/icons"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { Queries } from "@renderer/queries"
@@ -19,7 +19,10 @@ export function DiscoverRSS3() {
 
   if (isLoading) {
     return (
-      <LoadingWithIcon icon={<TokenBrandedRss3 />} size="large" className="center flex w-full" />
+      <div className="center mt-12 flex w-full flex-col gap-8">
+        <TokenBrandedRss3 className="size-[50px]" />
+        <LoadingCircle size="large" />
+      </div>
     )
   }
 
