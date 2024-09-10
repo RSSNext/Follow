@@ -33,34 +33,38 @@ Supported Platforms: Follow Desktop for Windows, macOS, Linux, and Browser; Foll
 
 The project is currently under active development. The following screenshots are for reference only and may differ from the final release version.
 
-- Six types of views
-  ![Screenshot 2024-09-10 at 6 22 18 PM](https://github.com/user-attachments/assets/bca27f18-a078-4828-bfb1-fb19470a81f5)
-  ![Screenshot 2024-09-10 at 6 22 47 PM](https://github.com/user-attachments/assets/f8a90d09-e070-4807-9339-d7360925257a)
-  ![Screenshot 2024-09-10 at 6 23 07 PM](https://github.com/user-attachments/assets/427c5160-d983-4c41-8afe-1478969e32c3)
-  ![Screenshot 2024-09-10 at 6 23 31 PM](https://github.com/user-attachments/assets/18701743-0a27-45fb-ba7b-815af9e0707e)
-  ![Screenshot 2024-09-10 at 6 23 47 PM](https://github.com/user-attachments/assets/7afaeaf7-5591-4cc1-8280-3e80aba697b6)
-  ![Screenshot 2024-09-10 at 6 24 11 PM](https://github.com/user-attachments/assets/31ba2bc5-ac01-4d1c-b374-d9a0f448fbba)
+- Use different views for various types of content to offer an experience equal to or better than the original platform - Articles, Social Media, Pictures, Videos, Podcasts, and Notifications
+  ![Screenshot 2024-09-10 at 6 22 18 PM](https://github.com/user-attachments/assets/1958ec70-1916-47c5-82d0-3bd8e43f3a26)
+  ![Screenshot 2024-09-10 at 6 22 47 PM](https://github.com/user-attachments/assets/1d0c3ed7-3da5-45e6-a264-399e8ea4071b)
+  ![Screenshot 2024-09-10 at 6 23 07 PM](https://github.com/user-attachments/assets/d21d54be-c343-4ac6-99f0-90c1e410245a)
+  ![Screenshot 2024-09-10 at 6 23 31 PM](https://github.com/user-attachments/assets/1781f368-8375-4b50-a66c-c8d8340f3ffb)
+
+- Everything is RSSible. Our [RSSHub](https://github.com/DIYgod/RSSHub) community, comprising over 1,000 developers, has spent six years adapting nearly a thousand websites to provide almost all the content you need. This includes platforms like X (Twitter), Instagram, PlayStation, Spotify, Telegram, YouTube, and more. You can also write your own scripts to adapt additional websites.
+  ![Screenshot 2024-09-10 at 8 09 36 PM](https://github.com/user-attachments/assets/5bd445f3-e005-4273-b892-7b29212970e2)
+  ![Screenshot 2024-09-10 at 8 10 01 PM](https://github.com/user-attachments/assets/25fbc9d2-ea10-4477-a4e9-1732f59fcb57)
+
+- Actions and AI features. Follow leverages advanced AI to assist your operations. Beyond basic AI translation, summarization, and recommendations, it provides twice-daily AI reports to highlight key information from your subscriptions. Additionally, it offers a personalized AI knowledge base built from your subscriptions.
+
+  ![Screenshot 2024-09-10 at 9 44 23 PM](https://github.com/user-attachments/assets/1801f1ba-e57f-4daf-8120-32631b0bdc2c)
+  ![Screenshot 2024-09-10 at 6 25 27 PM](https://github.com/user-attachments/assets/ddd14398-f735-433c-91cb-a2898ddf2098)
+
+- Blockchain features and $Power token. Follow uses blockchain technology as an incentive mechanism for active users and outstanding creators. Users can obtain more services and benefits by holding and using Power Token. Creators can obtain more rewards by providing high-quality content and services.
+  ![Screenshot 2024-09-10 at 6 25 43 PM](https://github.com/user-attachments/assets/351ac415-d94e-4d5a-af42-37656c3e535c)
+  ![Screenshot 2024-09-10 at 6 27 08 PM](https://github.com/user-attachments/assets/82d71c46-c039-41b9-b3cd-5ad078ff14a5)
+  ![Screenshot 2024-09-10 at 8 10 56 PM](https://github.com/user-attachments/assets/2424dfd4-59a6-4dad-8eb7-8db61a711b45)
+
+- Social features. Follow is also a social platform that allows you to follow other users, share your subscriptions, and discover new content. It also offers a subscription list synchronization feature, enabling your friends to sync with your subscriptions. Click [here](https://app.follow.is/profile/54728159538884608) to view my automatically generated personal page.
+  ![Screenshot 2024-09-10 at 6 26 37 PM](https://github.com/user-attachments/assets/b636fd6d-0fcb-436b-8856-f7a965dba12d)
 
 - Extensive customization options
-  ![Screenshot 2024-09-10 at 6 24 38 PM](https://github.com/user-attachments/assets/bef35f32-660c-4f3d-b040-bfdb1f280e1e)
-  ![Screenshot 2024-09-10 at 6 24 48 PM](https://github.com/user-attachments/assets/767f9f03-26e8-47e6-895b-aa22eec9ad8f)
-
-- Actions and AI features
-
-  ![Screenshot 2024-09-10 at 6 25 27 PM](https://github.com/user-attachments/assets/f22606b5-1d84-42aa-aa39-cb70095b1e12)
+  ![Screenshot 2024-09-10 at 6 24 38 PM](https://github.com/user-attachments/assets/53ff78cd-02d0-4eeb-a10f-40ae21d85912)
+  ![Screenshot 2024-09-10 at 6 24 48 PM](https://github.com/user-attachments/assets/64bf2e9e-d9fe-4a90-bb3d-975ddb3e6558)
 
 - Third-party integrations
-  ![Screenshot 2024-09-10 at 6 25 33 PM](https://github.com/user-attachments/assets/4c358860-e6ba-4c03-9f36-e14c521cae90)
+  ![Screenshot 2024-09-10 at 6 25 33 PM](https://github.com/user-attachments/assets/ea86fdbd-4b53-47ae-8bc5-d9a382ef07b5)
 
 - Shortcuts and gestures
-  ![Screenshot 2024-09-10 at 6 25 38 PM](https://github.com/user-attachments/assets/09e84397-8fea-40fb-b4aa-2cacee1055ef)
-
-- Blockchain features and $Power token
-  ![Screenshot 2024-09-10 at 6 25 43 PM](https://github.com/user-attachments/assets/469bc3fc-80d0-47d2-b8c0-302db9e2674f)
-  ![Screenshot 2024-09-10 at 6 27 08 PM](https://github.com/user-attachments/assets/e892a688-35e5-4acf-ba03-56c3b43b3ff6)
-
-- Social features
-  ![Screenshot 2024-09-10 at 6 26 37 PM](https://github.com/user-attachments/assets/3fef2ce9-0542-4eaf-bef0-c1930efb498d)
+  ![Screenshot 2024-09-10 at 6 25 38 PM](https://github.com/user-attachments/assets/43116bea-47b9-4c17-bc4f-92fb101a37a5)
 
 ## Release
 
