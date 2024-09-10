@@ -19,7 +19,7 @@ import { useFeed } from "@renderer/queries/feed"
 import { entryActions, useEntry } from "@renderer/store/entry"
 import { useFeedByIdSelector } from "@renderer/store/feed"
 import { useSubscriptionByFeedId } from "@renderer/store/subscription"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { memo, useCallback, useEffect, useRef, useState } from "react"
 import type {
   ScrollSeekConfiguration,
   VirtuosoGridProps,
@@ -39,7 +39,7 @@ const scrollSeekConfiguration: ScrollSeekConfiguration = {
   enter: (velocity) => Math.abs(velocity) > 1000,
   exit: (velocity) => Math.abs(velocity) < 1000,
 }
-export function EntryColumn() {
+function EntryColumnImpl() {
   const virtuosoRef = useRef<VirtuosoHandle>(null)
   const [isArchived, setIsArchived] = useState(false)
   const unreadOnly = useGeneralSettingKey("unreadOnly")
@@ -280,3 +280,5 @@ const AddFeedHelper = () => {
 
   throw new FeedFoundCanBeFollowError(feedQuery.data.feed)
 }
+
+export const EntryColumn = memo(EntryColumnImpl)

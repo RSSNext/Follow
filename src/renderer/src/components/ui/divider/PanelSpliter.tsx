@@ -4,9 +4,10 @@ import * as React from "react"
 export const PanelSplitter = (
   props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
     isDragging?: boolean
+    cursor?: string
   },
 ) => {
-  const { isDragging, ...rest } = props
+  const { isDragging, cursor, ...rest } = props
 
   React.useEffect(() => {
     if (!isDragging) return
@@ -14,7 +15,7 @@ export const PanelSplitter = (
 
     $css.innerHTML = `
       * {
-        cursor: ew-resize !important;
+        cursor: ${cursor} !important;
       }
     `
 
@@ -22,7 +23,7 @@ export const PanelSplitter = (
     return () => {
       $css.remove()
     }
-  }, [isDragging])
+  }, [cursor, isDragging])
 
   return (
     <div className="relative h-full w-0 shrink-0">

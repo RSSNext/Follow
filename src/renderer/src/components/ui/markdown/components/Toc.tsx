@@ -199,7 +199,13 @@ export const Toc: Component = ({ className }) => {
     <div className="flex grow flex-col scroll-smooth px-2 scrollbar-none">
       <HoverCard.Root openDelay={100} open={hoverShow} onOpenChange={setHoverShow}>
         <HoverCard.Trigger asChild>
-          <ul ref={setTreeRef} className={cn("group overflow-auto scrollbar-none", className)}>
+          <ul
+            ref={setTreeRef}
+            className={cn(
+              "group overflow-auto opacity-60 duration-200 scrollbar-none group-hover:opacity-100",
+              className,
+            )}
+          >
             {toc.map((heading, index) => (
               <MemoedItem
                 heading={heading}

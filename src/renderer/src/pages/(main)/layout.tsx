@@ -126,7 +126,7 @@ const FeedResponsiveResizerContainer = ({
 }: {
   containerRef: React.RefObject<HTMLDivElement>
 } & PropsWithChildren) => {
-  const { isDragging, position, separatorProps } = useResizable({
+  const { isDragging, position, separatorProps, separatorCursor } = useResizable({
     axis: "x",
     min: 256,
     max: 300,
@@ -174,7 +174,7 @@ const FeedResponsiveResizerContainer = ({
   useEffect(() => {
     let timer: any
     if (feedColumnShow) {
-      // eslint-disable-next-line @eslint-react/web-api/no-leaked-timeout
+       
       timer = setTimeout(() => {
         setDelayShowSplitter(true)
       }, 200)
@@ -216,7 +216,9 @@ const FeedResponsiveResizerContainer = ({
         }}
       />
 
-      {delayShowSplitter && <PanelSplitter isDragging={isDragging} {...separatorProps} />}
+      {delayShowSplitter && (
+        <PanelSplitter isDragging={isDragging} cursor={separatorCursor} {...separatorProps} />
+      )}
     </>
   )
 }

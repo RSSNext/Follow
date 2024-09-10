@@ -264,8 +264,8 @@ importers:
         specifier: 9.13.1
         version: 9.13.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-resizable-layout:
-        specifier: 0.7.2
-        version: 0.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: npm:@innei/react-resizable-layout@0.7.3-fork.1
+        version: '@innei/react-resizable-layout@0.7.3-fork.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)'
       react-router-dom:
         specifier: 6.26.1
         version: 6.26.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1789,6 +1789,12 @@ packages:
 
   '@iconify/utils@2.1.32':
     resolution: {integrity: sha512-LeifFZPPKu28O3AEDpYJNdEbvS4/ojAPyIW+pF/vUpJTYnbTiXUHkCh0bwgFRzKvdpb8H4Fbfd/742++MF4fPQ==}
+
+  '@innei/react-resizable-layout@0.7.3-fork.1':
+    resolution: {integrity: sha512-xBgY0+prk58+Hq235dmdi9AI60xYxqGEYxP44t2+3IqZoa/MUNC3FbGz1ICFGhaQurY/hUPQGOawZNVmcw8tNw==}
+    peerDependencies:
+      react: '>=17.0.0'
+      react-dom: '>=17.0.0'
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -6996,12 +7002,6 @@ packages:
       '@types/react':
         optional: true
 
-  react-resizable-layout@0.7.2:
-    resolution: {integrity: sha512-GrVzAecB6+osdAx5PPP3G8R9n7A2uDd3NL+PyrHWNRaVBivZmW/o0+yFjQdS5Bo016A2fIP11fAhefsknWN4aw==}
-    peerDependencies:
-      react: '>=17.0.0'
-      react-dom: '>=17.0.0'
-
   react-router-dom@6.26.1:
     resolution: {integrity: sha512-veut7m41S1fLql4pLhxeSW3jlqs+4MtjRLj0xvuCEXsxusJCbs6I8yn9BxzzDX2XDgafrccY6hwjmd/bL54tFw==}
     engines: {node: '>=14.0.0'}
@@ -9932,6 +9932,11 @@ snapshots:
       mlly: 1.7.1
     transitivePeerDependencies:
       - supports-color
+
+  '@innei/react-resizable-layout@0.7.3-fork.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -16211,11 +16216,6 @@ snapshots:
       use-sidecar: 1.1.2(@types/react@18.3.5)(react@18.3.1)
     optionalDependencies:
       '@types/react': 18.3.5
-
-  react-resizable-layout@0.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
 
   react-router-dom@6.26.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:

@@ -16,7 +16,7 @@ export function Component() {
   const entryColWidth = useMemo(() => getUISettings().entryColWidth, [])
   const { feedId, view } = useRouteParms()
   const inWideMode = view ? views[view].wideMode : false
-  const { position, separatorProps, isDragging } = useResizable({
+  const { position, separatorProps, isDragging, separatorCursor } = useResizable({
     axis: "x",
     // FIXME: Less than this width causes grid images to overflow on safari
     min: isSafari() ? 356 : 300,
@@ -38,7 +38,9 @@ export function Component() {
       >
         <EntryColumn key={`${feedId}-${view}`} />
       </div>
-      {!inWideMode && <PanelSplitter {...separatorProps} isDragging={isDragging} />}
+      {!inWideMode && (
+        <PanelSplitter {...separatorProps} cursor={separatorCursor} isDragging={isDragging} />
+      )}
       <Outlet />
     </div>
   )

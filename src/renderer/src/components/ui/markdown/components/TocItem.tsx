@@ -51,13 +51,12 @@ export const TocItem: FC<TocItemProps> = memo((props) => {
         data-active={!!range}
         className={cn(
           "relative inline-block h-1.5 rounded-full",
-          "bg-zinc-100 duration-200 hover:!bg-zinc-400 group-hover:bg-zinc-400/50",
+          "bg-zinc-100 duration-200 hover:!bg-zinc-400",
           isScrollOut && "bg-zinc-400/80",
 
-          "dark:bg-zinc-800/80 dark:hover:!bg-zinc-600 dark:group-hover:bg-zinc-600/50",
+          "dark:bg-zinc-800/80 dark:hover:!bg-zinc-600",
           isScrollOut && "dark:bg-zinc-700",
-          !!range &&
-            "!bg-zinc-400/50 data-[active=true]:group-hover:!bg-zinc-500 dark:!bg-zinc-600",
+          !!range && "!bg-zinc-400/50 dark:!bg-zinc-600",
           "overflow-hidden",
         )}
       >

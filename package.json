@@ -113,7 +113,7 @@
     "react-hook-form": "7.53.0",
     "react-hotkeys-hook": "4.5.1",
     "react-intersection-observer": "9.13.1",
-    "react-resizable-layout": "0.7.2",
+    "react-resizable-layout": "npm:@innei/react-resizable-layout@0.7.3-fork.1",
     "react-router-dom": "6.26.1",
     "react-shadow": "20.5.0",
     "react-virtuoso": "4.10.3",
