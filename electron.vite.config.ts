@@ -1,14 +1,8 @@
-import fs from "node:fs"
 import { resolve } from "node:path"
 
-import { sentryVitePlugin } from "@sentry/vite-plugin"
-import react from "@vitejs/plugin-react"
 import { defineConfig } from "electron-vite"
-import { prerelease } from "semver"
 
-import { getGitHash } from "./scripts/lib"
-
-const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"))
+import { viteRenderBaseConfig } from "./configs/vite.render.config"
 
 export default defineConfig({
   main: {
@@ -29,54 +23,15 @@ export default defineConfig({
     },
   },
   renderer: {
-    resolve: {
-      alias: {
-        "@renderer": resolve("src/renderer/src"),
-        "@shared": resolve("src/shared/src"),
-        "@pkg": resolve("./package.json"),
-        "@env": resolve("./src/env.ts"),
-      },
-    },
+    ...viteRenderBaseConfig,
 
-    plugins: [
-      react(),
-      sentryVitePlugin({
-        org: "follow-rg",
-        project: "follow",
-        disable: !process.env.CI,
-        bundleSizeOptimizations: {
-          excludeDebugStatements: true,
-          // Only relevant if you added `browserTracingIntegration`
-          excludePerformanceMonitoring: true,
-          // Only relevant if you added `replayIntegration`
-          excludeReplayIframe: true,
-          excludeReplayShadowDom: true,
-          excludeReplayWorker: true,
-        },
-        moduleMetadata: {
-          appVersion: pkg.version,
-        },
-        sourcemaps: {
-          filesToDeleteAfterUpload: ["dist/renderer/assets/*.js.map"],
-        },
-      }),
-    ],
     build: {
       sourcemap: !!process.env.CI,
       target: "esnext",
     },
     define: {
-      APP_VERSION: JSON.stringify(pkg.version),
-      APP_NAME: JSON.stringify(pkg.name),
-      APP_DEV_CWD: JSON.stringify(process.cwd()),
-      GIT_COMMIT_SHA: JSON.stringify(getGitHash()),
-
-      DEBUG: process.env.DEBUG === "true",
+      ...viteRenderBaseConfig.define,
       ELECTRON: "true",
-
-      RELEASE_CHANNEL: JSON.stringify(
-        (prerelease(pkg.version)?.[0] as string) || "stable",
-      ),
     },
   },
 })

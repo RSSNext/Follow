@@ -40,7 +40,7 @@ export const CopyButton: Component<{
       type="button"
       onClick={handleCopy}
       className={cn(
-        "center flex text-xs",
+        "center pointer-events-auto flex text-xs",
         "rounded-md border border-accent/5 bg-accent/80 p-1.5 text-white backdrop-blur duration-200",
 
         className,
@@ -48,17 +48,9 @@ export const CopyButton: Component<{
     >
       <AnimatePresence mode="wait">
         {copied ? (
-          <m.i
-            key="copied"
-            className="i-mgc-check-filled size-4"
-            {...copyIconVariants}
-          />
+          <m.i key="copied" className="i-mgc-check-filled size-4" {...copyIconVariants} />
         ) : (
-          <m.i
-            key="copy"
-            className="i-mgc-copy-2-cute-re size-4"
-            {...copyIconVariants}
-          />
+          <m.i key="copy" className="i-mgc-copy-2-cute-re size-4" {...copyIconVariants} />
         )}
       </AnimatePresence>
     </MotionButtonBase>

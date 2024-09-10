@@ -24,9 +24,7 @@ function nestPaths(paths: string[]): NestedStructure {
   return result
 }
 
-export function buildGlobRoutes(
-  glob: Record<string, () => Promise<any>>,
-): RouteObject[] {
+export function buildGlobRoutes(glob: Record<string, () => Promise<any>>): RouteObject[] {
   const keys = Object.keys(glob)
   const paths = nestPaths(keys)
   const pathGetterSet = new Set<string>()
@@ -118,12 +116,7 @@ export function buildGlobRoutes(
 
         const childrenChildren: RouteObject[] = []
         // should omit layout, because layout is already handled
-        dtsRoutes(
-          parentKey,
-          childrenChildren,
-          omit(paths, "layout"),
-          parentPath,
-        )
+        dtsRoutes(parentKey, childrenChildren, omit(paths, "layout"), parentPath)
         children.push({
           path: "",
           lazy: globGetter,
@@ -162,12 +155,7 @@ export function buildGlobRoutes(
         } else {
           const childrenChildren: RouteObject[] = []
           const fullPath = `${parentPath}/${normalizeKey}`
-          dtsRoutes(
-            `${segmentPathKey}/`,
-            childrenChildren,
-            paths[key],
-            fullPath,
-          )
+          dtsRoutes(`${segmentPathKey}/`, childrenChildren, paths[key], fullPath)
           children.push({
             path: normalizeKey,
             children: childrenChildren,

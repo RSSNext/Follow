@@ -61,78 +61,66 @@ export function Component() {
   return (
     <>
       {feed.isLoading ? (
-        <LoadingCircle
-          size="large"
-          className="center h-48 w-full max-w-full"
-        />
-      ) : feed.data?.feed && (
-        <div className="mx-auto mt-12 flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
-          <FeedIcon
-            fallback
-            feed={feed.data.feed}
-            className="mask-squircle mask shrink-0"
-            size={64}
-          />
-          <div className="flex flex-col items-center">
-            <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
-              <h1>{feed.data.feed.title}</h1>
+        <LoadingCircle size="large" className="center h-48 w-full max-w-full" />
+      ) : (
+        feed.data?.feed && (
+          <div className="mx-auto mt-12 flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
+            <FeedIcon
+              fallback
+              feed={feed.data.feed}
+              className="mask-squircle mask shrink-0"
+              size={64}
+            />
+            <div className="flex flex-col items-center">
+              <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
+                <h1>{feed.data.feed.title}</h1>
+              </div>
+              <div className="mb-8 text-sm text-zinc-500">{feed.data.feed.description}</div>
             </div>
-            <div className="mb-8 text-sm text-zinc-500">
-              {feed.data.feed.description}
-            </div>
-          </div>
-          <div className="mb-4 text-sm">
-            <strong>{feed.data.subscriptionCount}</strong>
-            {" "}
-            {pluralize("follow", feed.data.subscriptionCount)}
-            {" "}
-            with
-            {" "}
-            <strong>{feed.data.readCount}</strong>
-            {" "}
-            {pluralize("read", feed.data.readCount)}
-            {" "}
-            on
-            {" "}
-            {APP_NAME}
-          </div>
-          <a className="mb-8 cursor-default" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
-            <Button>
-              <FollowIcon className="mr-1 size-3" />
+            <div className="mb-4 text-sm">
+              <strong>{feed.data.subscriptionCount}</strong>{" "}
+              {pluralize("follow", feed.data.subscriptionCount)} with{" "}
+              <strong>{feed.data.readCount}</strong> {pluralize("read", feed.data.readCount)} on{" "}
               {APP_NAME}
-            </Button>
-          </a>
-          <div
-            className={cn(
-              "w-full pb-12",
-              views[view].gridMode ?
-                "grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4" :
-                "flex max-w-3xl flex-col gap-6",
-            )}
-          >
-            {entries.data?.map((entry) => (
-              <a
-                className="relative cursor-pointer"
-                href={entry.url || void 0}
-                target="_blank"
-                key={entry.id}
-              >
-                <ListItemHoverOverlay className="rounded">
-                  <Item
-                    entryPreview={{
-                      entries: entry,
-                      // @ts-expect-error
-                      feeds: feed.data.feed as FeedModel,
-                      read: true,
-                      feedId: feed.data.feed.id!,
-                    }}
-                    entryId={entry.id}
-                  />
-                </ListItemHoverOverlay>
-              </a>
-            ))}
+            </div>
+            <a className="mb-8 cursor-default" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
+              <Button>
+                <FollowIcon className="mr-1 size-3" />
+                {APP_NAME}
+              </Button>
+            </a>
+            <div
+              className={cn(
+                "w-full pb-12",
+                views[view].gridMode
+                  ? "grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
+                  : "flex max-w-3xl flex-col gap-6",
+              )}
+            >
+              {entries.data?.map((entry) => (
+                <a
+                  className="relative cursor-pointer"
+                  href={entry.url || void 0}
+                  target="_blank"
+                  key={entry.id}
+                >
+                  <ListItemHoverOverlay className="rounded">
+                    <Item
+                      entryPreview={{
+                        entries: entry,
+                        // @ts-expect-error
+                        feeds: feed.data.feed as FeedModel,
+                        read: true,
+                        feedId: feed.data.feed.id!,
+                      }}
+                      entryId={entry.id}
+                    />
+                  </ListItemHoverOverlay>
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
+        )
       )}
     </>
   )

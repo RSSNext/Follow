@@ -16,31 +16,19 @@
 }
 
 .mask-b {
-  mask-image: linear-gradient(
-    rgb(255, 255, 255) calc(100% - 20px),
-    rgba(255, 255, 255, 0) 100%
-  );
+  mask-image: linear-gradient(rgb(255, 255, 255) calc(100% - 20px), rgba(255, 255, 255, 0) 100%);
 }
 
 .mask-b-lg {
-  mask-image: linear-gradient(
-    rgb(255, 255, 255) calc(100% - 50px),
-    rgba(255, 255, 255, 0) 100%
-  );
+  mask-image: linear-gradient(rgb(255, 255, 255) calc(100% - 50px), rgba(255, 255, 255, 0) 100%);
 }
 
 .mask-t {
-  mask-image: linear-gradient(
-    rgba(255, 255, 255, 0) 0%,
-    rgb(255, 255, 255) 20px
-  );
+  mask-image: linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 20px);
 }
 
 .mask-t-lg {
-  mask-image: linear-gradient(
-    rgba(255, 255, 255, 0) 0%,
-    rgb(255, 255, 255) 50px
-  );
+  mask-image: linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 50px);
 }
 
 .mask-horizontal {

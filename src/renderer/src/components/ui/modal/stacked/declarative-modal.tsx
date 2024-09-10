@@ -51,9 +51,7 @@ const DeclarativeModalImpl: FC<DeclarativeModalProps> = ({
 }
 
 const FooterAction: Component = ({ children, className }) => (
-  <div className={cn("mt-4 flex items-center justify-end gap-2", className)}>
-    {children}
-  </div>
+  <div className={cn("mt-4 flex items-center justify-end gap-2", className)}>{children}</div>
 )
 
 export const DeclarativeModal = Object.assign(DeclarativeModalImpl, {

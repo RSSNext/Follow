@@ -33,8 +33,8 @@
     */
     --shade: hsl(from var(--base) calc(h + 8) 25 calc(l - 5));
     --perfect-shadow: 0 0 0 1px var(--base), 0 1px 1px -0.5px var(--shade),
-      0 3px 3px -1.5px var(--shade), 0 6px 6px -3px var(--shade),
-      0 12px 12px -6px var(--base), 0 24px 24px -12px var(--base);
+      0 3px 3px -1.5px var(--shade), 0 6px 6px -3px var(--shade), 0 12px 12px -6px var(--base),
+      0 24px 24px -12px var(--base);
     box-shadow: var(--perfect-shadow);
   }
 
@@ -109,23 +109,27 @@
     );
     background-image: none;
     animation: radiomark var(--animation-input, 0.2s) ease-out;
-    box-shadow: 0 0 0 4px var(--fallback-b1, oklch(var(--b1) / 1)) inset,
+    box-shadow:
+      0 0 0 4px var(--fallback-b1, oklch(var(--b1) / 1)) inset,
       0 0 0 4px var(--fallback-b1, oklch(var(--b1) / 1)) inset;
   }
 
   @keyframes radiomark {
     0% {
-      box-shadow: 0 0 0 12px var(--fallback-b1, oklch(var(--b1) / 1)) inset,
+      box-shadow:
+        0 0 0 12px var(--fallback-b1, oklch(var(--b1) / 1)) inset,
         0 0 0 12px var(--fallback-b1, oklch(var(--b1) / 1)) inset;
     }
 
     50% {
-      box-shadow: 0 0 0 3px var(--fallback-b1, oklch(var(--b1) / 1)) inset,
+      box-shadow:
+        0 0 0 3px var(--fallback-b1, oklch(var(--b1) / 1)) inset,
         0 0 0 3px var(--fallback-b1, oklch(var(--b1) / 1)) inset;
     }
 
     to {
-      box-shadow: 0 0 0 4px var(--fallback-b1, oklch(var(--b1) / 1)) inset,
+      box-shadow:
+        0 0 0 4px var(--fallback-b1, oklch(var(--b1) / 1)) inset,
         0 0 0 4px var(--fallback-b1, oklch(var(--b1) / 1)) inset;
     }
   }
@@ -190,11 +194,7 @@
     animation: checkmark var(--animation-input, 0.2s) ease-out;
     border-color: theme(colors.theme.accent.DEFAULT);
     background-color: var(--chkbg);
-    background-image: linear-gradient(
-        -45deg,
-        transparent 65%,
-        var(--chkbg) 65.99%
-      ),
+    background-image: linear-gradient(-45deg, transparent 65%, var(--chkbg) 65.99%),
       linear-gradient(45deg, transparent 75%, var(--chkbg) 75.99%),
       linear-gradient(-45deg, var(--chkbg) 40%, transparent 40.99%),
       linear-gradient(
@@ -225,8 +225,10 @@
 /* Context menu */
 @layer components {
   .shadow-context-menu {
-    box-shadow: rgba(0, 0, 0, 0.067) 0px 3px 8px,
-      rgba(0, 0, 0, 0.067) 0px 2px 5px, rgba(0, 0, 0, 0.067) 0px 1px 1px;
+    box-shadow:
+      rgba(0, 0, 0, 0.067) 0px 3px 8px,
+      rgba(0, 0, 0, 0.067) 0px 2px 5px,
+      rgba(0, 0, 0, 0.067) 0px 1px 1px;
   }
 }
 
@@ -249,12 +251,13 @@
     background-position: left 1.1em;
 
     &::selection {
-      text-shadow: none;
+      text-shadow: none !important;
     }
 
     &:hover {
       background-size: 100% 1.5px;
-      text-shadow: 0.05em 0 theme(colors.background),
+      text-shadow:
+        0.05em 0 theme(colors.background),
         -0.05em 0 theme(colors.background);
 
       transition: all 250ms ease;
@@ -298,13 +301,11 @@
   }
   @keyframes mask-in {
     0% {
-      mask: linear-gradient(90deg, #000 25%, #000000e6 50%, #00000000) 150% 0 /
-        400% no-repeat;
+      mask: linear-gradient(90deg, #000 25%, #000000e6 50%, #00000000) 150% 0 / 400% no-repeat;
       opacity: 0.2;
     }
     100% {
-      mask: linear-gradient(90deg, #000 25%, #000000e6 50%, #00000000) 0 / 400%
-        no-repeat;
+      mask: linear-gradient(90deg, #000 25%, #000000e6 50%, #00000000) 0 / 400% no-repeat;
       opacity: 1;
     }
   }
@@ -323,7 +324,11 @@
 }
 
 @layer utilities {
-  .easing-spring-soft {
+  .easing-spring {
+    animation-timing-function: var(--spring-easing);
+    animation-duration: var(--spring-duration);
+  }
+  .spring-soft {
     --spring-easing: linear(
       0,
       0.0019,
@@ -353,8 +358,20 @@
       0.9993 99.95%
     );
     --spring-duration: 1.157s;
+  }
+}
 
-    animation-timing-function: var(--spring-easing);
-    animation-duration: var(--spring-duration);
+@layer utilities {
+  .animate-flip {
+    animation: flip 0.5s ease-in-out infinite;
+  }
+
+  @keyframes flip {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(180deg);
+    }
   }
 }

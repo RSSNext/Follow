@@ -16,8 +16,7 @@ const queryClient = new QueryClient({
         console.error(error)
         if (
           error instanceof FetchError &&
-          (error.statusCode === undefined ||
-            DO_NOT_RETRY_CODES.has(error.statusCode))
+          (error.statusCode === undefined || DO_NOT_RETRY_CODES.has(error.statusCode))
         ) {
           return false
         }
@@ -41,10 +40,7 @@ declare module "@tanstack/react-query" {
   interface Register extends Meta {}
 }
 
-export const persistConfig: OmitKeyof<
-  PersistQueryClientOptions,
-  "queryClient"
-> = {
+export const persistConfig: OmitKeyof<PersistQueryClientOptions, "queryClient"> = {
   persister: localStoragePersister,
   // 7 day
   maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -54,8 +50,7 @@ export const persistConfig: OmitKeyof<
       const queryIsReadyForPersistence = query.state.status === "success"
       if (queryIsReadyForPersistence) {
         return (
-          !((query.state?.data as any)?.pages?.length > 1) &&
-          query.queryKey?.[0] !== "check-eagle"
+          !((query.state?.data as any)?.pages?.length > 1) && query.queryKey?.[0] !== "check-eagle"
         )
       } else {
         return false

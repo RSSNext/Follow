@@ -1,12 +1,12 @@
 import { ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "@renderer/constants"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
+import { toastFetchError } from "@renderer/lib/error-parser"
 import { formatXml } from "@renderer/lib/utils"
 import type { FeedQueryParams } from "@renderer/store/feed"
 import { feedActions } from "@renderer/store/feed"
 import { useMutation } from "@tanstack/react-query"
-import { toast } from "sonner"
 
 import { entries } from "./entries"
 
@@ -27,15 +27,11 @@ export const feed = {
     defineQuery(["feed", "claimMessage", feedId], async () =>
       apiClient.feeds.claim.message.$get({ query: { feedId } }).then((res) => {
         res.data.json = JSON.stringify(JSON.parse(res.data.json), null, 2)
-        const $document = new DOMParser().parseFromString(
-          res.data.xml,
-          "text/xml",
-        )
-        res.data.xml = formatXml(
-          new XMLSerializer().serializeToString($document),
-        )
+        const $document = new DOMParser().parseFromString(res.data.xml, "text/xml")
+        res.data.xml = formatXml(new XMLSerializer().serializeToString($document))
         return res
-      })),
+      }),
+    ),
 }
 
 export const useFeed = ({ id, url }: FeedQueryParams) =>
@@ -45,7 +41,8 @@ export const useFeed = ({ id, url }: FeedQueryParams) =>
       url,
     }),
     {
-      enabled: (!!id || !!url) && id !== ROUTE_FEED_PENDING && !id?.startsWith(ROUTE_FEED_IN_FOLDER),
+      enabled:
+        (!!id || !!url) && id !== ROUTE_FEED_PENDING && !id?.startsWith(ROUTE_FEED_IN_FOLDER),
     },
   )
 
@@ -55,7 +52,7 @@ export const useClaimFeedMutation = (feedId: string) =>
     mutationFn: () => feedActions.claimFeed(feedId),
 
     async onError(err) {
-      toast.error(getFetchErrorMessage(err))
+      toastFetchError(err)
     },
     onSuccess() {
       window.posthog?.capture("feed_claimed", {
@@ -78,6 +75,6 @@ export const useRefreshFeedMutation = (feedId?: string) =>
         .invalidateRoot()
     },
     async onError(err) {
-      toast.error(getFetchErrorMessage(err))
+      toastFetchError(err)
     },
   })

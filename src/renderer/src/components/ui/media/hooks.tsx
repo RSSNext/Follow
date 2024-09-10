@@ -1,14 +1,14 @@
 import { useCallback } from "react"
-import type { MediaModel } from "src/hono"
 
 import { useModalStack } from "../modal/stacked/hooks"
 import { NoopChildren } from "../modal/stacked/utils"
+import type { PreviewMediaProps } from "./preview-media"
 import { PreviewMediaContent } from "./preview-media"
 
 export const usePreviewMedia = () => {
   const { present } = useModalStack()
   return useCallback(
-    (media: MediaModel[], initialIndex = 0) => {
+    (media: PreviewMediaProps[], initialIndex = 0) => {
       present({
         content: () => (
           <div className="relative size-full">

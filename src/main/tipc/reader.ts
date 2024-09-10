@@ -12,18 +12,16 @@ const require = createRequire(import.meta.url)
 const tts = new MsEdgeTTS()
 
 export const readerRoute = {
-  readability: t.procedure
-    .input<{ url: string }>()
-    .action(async ({ input }) => {
-      const { url } = input
+  readability: t.procedure.input<{ url: string }>().action(async ({ input }) => {
+    const { url } = input
 
-      if (!url) {
-        return null
-      }
-      const result = await readability(url)
+    if (!url) {
+      return null
+    }
+    const result = await readability(url)
 
-      return result
-    }),
+    return result
+  }),
 
   tts: t.procedure
     .input<{
@@ -46,17 +44,14 @@ export const readerRoute = {
       }
     }),
 
-  getVoices: t.procedure
-    .action(async () => {
-      const voices = await tts.getVoices()
-      return voices
-    }),
+  getVoices: t.procedure.action(async () => {
+    const voices = await tts.getVoices()
+    return voices
+  }),
 
-  setVoice: t.procedure
-    .input<string>()
-    .action(async ({ input }) => {
-      await tts.setMetadata(input, OUTPUT_FORMAT.WEBM_24KHZ_16BIT_MONO_OPUS)
-    }),
+  setVoice: t.procedure.input<string>().action(async ({ input }) => {
+    await tts.setMetadata(input, OUTPUT_FORMAT.WEBM_24KHZ_16BIT_MONO_OPUS)
+  }),
 
   detectCodeStringLanguage: t.procedure
     .input<{ codeString: string }>()

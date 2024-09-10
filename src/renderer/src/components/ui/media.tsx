@@ -23,26 +23,26 @@ type BaseProps = {
 export type MediaProps = BaseProps &
   (
     | (ImgHTMLAttributes<HTMLImageElement> & {
-      proxy?: {
-        width: number
-        height: number
-      }
-      disableContextMenu?: boolean
-      popper?: boolean
-      type: "photo"
-      previewImageUrl?: string
-      cacheDimensions?: boolean
-    })
+        proxy?: {
+          width: number
+          height: number
+        }
+        disableContextMenu?: boolean
+        popper?: boolean
+        type: "photo"
+        previewImageUrl?: string
+        cacheDimensions?: boolean
+      })
     | (VideoHTMLAttributes<HTMLVideoElement> & {
-      proxy?: {
-        width: number
-        height: number
-      }
-      disableContextMenu?: boolean
-      popper?: boolean
-      type: "video"
-      previewImageUrl?: string
-    })
+        proxy?: {
+          width: number
+          height: number
+        }
+        disableContextMenu?: boolean
+        popper?: boolean
+        type: "video"
+        previewImageUrl?: string
+      })
   )
 const MediaImpl: FC<MediaProps> = ({
   className,
@@ -55,29 +55,26 @@ const MediaImpl: FC<MediaProps> = ({
   const { src, style, type, previewImageUrl, showFallback, ...rest } = props
   const [hidden, setHidden] = useState(!src)
   const [imgSrc, setImgSrc] = useState(() =>
-    proxy && src && !failedList.has(src) ?
-      getProxyUrl({
-        url: src,
-        width: proxy.width,
-        height: proxy.height,
-      }) :
-      src,
+    proxy && src && !failedList.has(src)
+      ? getProxyUrl({
+          url: src,
+          width: proxy.width,
+          height: proxy.height,
+        })
+      : src,
   )
 
-  const [mediaLoadState, setMediaLoadState] = useState<
-    "loading" | "loaded" | "error"
-  >("loading")
-  const errorHandle: React.ReactEventHandler<HTMLImageElement> =
-    useEventCallback((e) => {
-      setMediaLoadState("error")
-      if (imgSrc !== props.src) {
-        setImgSrc(props.src)
-        failedList.add(props.src)
-      } else {
-        setHidden(true)
-        props.onError?.(e as any)
-      }
-    })
+  const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded" | "error">("loading")
+  const errorHandle: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
+    setMediaLoadState("error")
+    if (imgSrc !== props.src) {
+      setImgSrc(props.src)
+      failedList.add(props.src)
+    } else {
+      setHidden(true)
+      props.onError?.(e as any)
+    }
+  })
   const previewMedia = usePreviewMedia()
   const handleClick = useEventCallback((e: React.MouseEvent) => {
     if (popper && src) {
@@ -86,6 +83,7 @@ const MediaImpl: FC<MediaProps> = ({
           {
             url: src,
             type,
+            fallbackUrl: imgSrc,
           },
         ],
         0,
@@ -93,19 +91,18 @@ const MediaImpl: FC<MediaProps> = ({
     }
     props.onClick?.(e as any)
   })
-  const handleOnLoad: React.ReactEventHandler<HTMLImageElement> =
-    useEventCallback((e) => {
-      setMediaLoadState("loaded")
-      rest.onLoad?.(e as any)
-      if ("cacheDimensions" in props && props.cacheDimensions && src) {
-        saveImageDimensionsToDb(src, {
-          src,
-          width: e.currentTarget.naturalWidth,
-          height: e.currentTarget.naturalHeight,
-          ratio: e.currentTarget.naturalWidth / e.currentTarget.naturalHeight,
-        })
-      }
-    })
+  const handleOnLoad: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
+    setMediaLoadState("loaded")
+    rest.onLoad?.(e as any)
+    if ("cacheDimensions" in props && props.cacheDimensions && src) {
+      saveImageDimensionsToDb(src, {
+        src,
+        width: e.currentTarget.naturalWidth,
+        height: e.currentTarget.naturalHeight,
+        ratio: e.currentTarget.naturalWidth / e.currentTarget.naturalHeight,
+      })
+    }
+  })
 
   const InnerContent = useMemo(() => {
     switch (type) {
@@ -126,8 +123,8 @@ const MediaImpl: FC<MediaProps> = ({
             src={imgSrc}
             onLoad={handleOnLoad}
             onClick={handleClick}
-            {...(!disableContextMenu ?
-                {
+            {...(!disableContextMenu
+              ? {
                   onContextMenu: (e) => {
                     e.stopPropagation()
                     e.preventDefault()
@@ -159,8 +156,8 @@ const MediaImpl: FC<MediaProps> = ({
                       e,
                     )
                   },
-                } :
-                {})}
+                }
+              : {})}
           />
         )
       }
@@ -169,7 +166,7 @@ const MediaImpl: FC<MediaProps> = ({
           <span
             className={cn(
               hidden && "hidden",
-              "block",
+              "center",
               !(props.width || props.height) && "size-full",
               "relative bg-stone-100 object-cover",
               mediaContainerClassName,
@@ -212,15 +209,9 @@ const MediaImpl: FC<MediaProps> = ({
   )
 }
 
-export const Media: FC<MediaProps> = memo((props) => (
-  <MediaImpl {...props} key={props.src} />
-))
+export const Media: FC<MediaProps> = memo((props) => <MediaImpl {...props} key={props.src} />)
 
-const FallbackMedia: FC<MediaProps> = ({
-  type,
-  mediaContainerClassName,
-  ...props
-}) => (
+const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, ...props }) => (
   <div
     className={cn(
       !(props.width || props.height) && "size-full",
@@ -236,14 +227,8 @@ const FallbackMedia: FC<MediaProps> = ({
   >
     <p>Media loaded failed</p>
     <p className="flex items-center gap-1">
-      Go to
-      {" "}
-      <a
-        href={props.src}
-        target="_blank"
-        rel="noreferrer"
-        className="follow-link--underline"
-      >
+      Go to{" "}
+      <a href={props.src} target="_blank" rel="noreferrer" className="follow-link--underline">
         {props.src}
       </a>
       <i className="i-mgc-external-link-cute-re" />
@@ -258,7 +243,7 @@ const VideoPreview: FC<{
   const [isInitVideoPlayer, setIsInitVideoPlayer] = useState(!previewImageUrl)
 
   const [videoRef, setVideoRef] = useState<VideoPlayerRef | null>(null)
-  const isPaused = videoRef?.getState().paused
+  const isPaused = videoRef ? videoRef?.getState().paused : true
   const [forceUpdate] = useForceUpdate()
   return (
     <div
@@ -270,7 +255,7 @@ const VideoPreview: FC<{
         nextFrame(forceUpdate)
       }}
     >
-      {isInitVideoPlayer ? (
+      {!isInitVideoPlayer ? (
         <img
           src={previewImageUrl}
           className="size-full object-cover"

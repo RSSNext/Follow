@@ -1,12 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getSidebarActiveView } from "@renderer/atoms/sidebar"
 import { m } from "@renderer/components/common/Motion"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from "@renderer/components/ui/form"
+import { Form, FormControl, FormField, FormItem } from "@renderer/components/ui/form"
 import { useModalStack } from "@renderer/components/ui/modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { HotKeyScopeMap } from "@renderer/constants"

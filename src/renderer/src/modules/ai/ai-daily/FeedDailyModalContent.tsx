@@ -1,16 +1,8 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@renderer/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
 import { FeedViewType } from "@renderer/lib/enum"
 
 import { DayOf } from "./constants"
-import {
-  DailyReportModalContent,
-  DailyReportTitle,
-} from "./daily"
+import { DailyReportModalContent, DailyReportTitle } from "./daily"
 import { useParseDailyDate } from "./hooks"
 
 const tabs = [DayOf.Today, DayOf.Yesterday]

@@ -36,8 +36,7 @@ export const EntryColumnShortcutHandler: FC<{
     if (!$mainContainer) return
     const handler = () => {
       const target = document.activeElement
-      const isFocusIn =
-        $mainContainer.contains(target) || $mainContainer === target
+      const isFocusIn = $mainContainer.contains(target) || $mainContainer === target
 
       setEnabledArrowKey(isFocusIn)
     }
@@ -54,9 +53,7 @@ export const EntryColumnShortcutHandler: FC<{
     shortcuts.entries.next.key,
     () => {
       const data = dataRef.current
-      const currentActiveEntryIndex = data.indexOf(
-        currentEntryIdRef.current || "",
-      )
+      const currentActiveEntryIndex = data.indexOf(currentEntryIdRef.current || "")
 
       const nextIndex = Math.min(currentActiveEntryIndex + 1, data.length - 1)
 
@@ -75,14 +72,10 @@ export const EntryColumnShortcutHandler: FC<{
     shortcuts.entries.previous.key,
     () => {
       const data = dataRef.current
-      const currentActiveEntryIndex = data.indexOf(
-        currentEntryIdRef.current || "",
-      )
+      const currentActiveEntryIndex = data.indexOf(currentEntryIdRef.current || "")
 
       const nextIndex =
-        currentActiveEntryIndex === -1 ?
-          data.length - 1 :
-          Math.max(0, currentActiveEntryIndex - 1)
+        currentActiveEntryIndex === -1 ? data.length - 1 : Math.max(0, currentActiveEntryIndex - 1)
 
       virtuosoRef.current?.scrollIntoView?.({
         index: nextIndex,

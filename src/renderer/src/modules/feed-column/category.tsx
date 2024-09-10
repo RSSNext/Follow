@@ -2,20 +2,14 @@ import { MotionButtonBase } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { ROUTE_FEED_IN_FOLDER, views } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import {
-  getRouteParams,
-  useRouteParamsSelector,
-} from "@renderer/hooks/biz/useRouteParams"
+import { getRouteParams, useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { useInputComposition } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn, sortByAlphabet } from "@renderer/lib/utils"
 import { useFeedStore } from "@renderer/store/feed"
-import {
-  subscriptionActions,
-  useSubscriptionByFeedId,
-} from "@renderer/store/subscription"
+import { subscriptionActions, useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
@@ -52,8 +46,7 @@ function FeedCategoryImpl({
   const subscription = useSubscriptionByFeedId(ids[0])
   const folderName = subscription?.category || subscription.defaultCategory
 
-  const showCollapse =
-    sortByUnreadFeedList.length > 1 || subscription?.category
+  const showCollapse = sortByUnreadFeedList.length > 1 || subscription?.category
   const [open, setOpen] = useState(!showCollapse)
 
   const shouldOpen = useRouteParamsSelector(
@@ -69,12 +62,10 @@ function FeedCategoryImpl({
       const $items = itemsRef.current
 
       if (!$items) return
-      $items
-        .querySelector(`[data-feed-id="${getRouteParams().feedId}"]`)
-        ?.scrollIntoView({
-          block: "center",
-          behavior: "smooth",
-        })
+      $items.querySelector(`[data-feed-id="${getRouteParams().feedId}"]`)?.scrollIntoView({
+        block: "center",
+        behavior: "smooth",
+      })
     }
   }, [shouldOpen])
   useEffect(() => {
@@ -99,24 +90,18 @@ function FeedCategoryImpl({
   )
 
   const isActive = useRouteParamsSelector(
-    (routerParams) =>
-      routerParams.feedId === `${ROUTE_FEED_IN_FOLDER}${folderName}`,
+    (routerParams) => routerParams.feedId === `${ROUTE_FEED_IN_FOLDER}${folderName}`,
   )
   const { present } = useModalStack()
 
-  const { mutateAsync: changeCategoryView, isPending: isChangePending } =
-    useMutation({
-      mutationKey: ["changeCategoryView", folderName, view],
-      mutationFn: async (nextView: FeedViewType) => {
-        if (!folderName) return
-        if (typeof view !== "number") return
-        return subscriptionActions.changeCategoryView(
-          folderName,
-          view,
-          nextView,
-        )
-      },
-    })
+  const { mutateAsync: changeCategoryView, isPending: isChangePending } = useMutation({
+    mutationKey: ["changeCategoryView", folderName, view],
+    mutationFn: async (nextView: FeedViewType) => {
+      if (!folderName) return
+      if (typeof view !== "number") return
+      return subscriptionActions.changeCategoryView(folderName, view, nextView)
+    },
+  })
 
   const [isCategoryEditing, setIsCategoryEditing] = useState(false)
 
@@ -178,9 +163,7 @@ function FeedCategoryImpl({
                   click: async () => {
                     present({
                       title: `Delete category ${folderName}?`,
-                      content: () => (
-                        <CategoryRemoveDialogContent feedIdList={ids} />
-                      ),
+                      content: () => <CategoryRemoveDialogContent feedIdList={ids} />,
                     })
                   },
                 },
@@ -205,22 +188,20 @@ function FeedCategoryImpl({
             >
               {isCategoryIsWaiting ? (
                 <LoadingCircle size="small" className="mr-2 size-[16px]" />
-              ) : isCategoryEditing ?
-                  (
-                    <MotionButtonBase
-                      onClick={() => {
-                        setIsCategoryEditing(false)
-                      }}
-                      className="center -ml-1 flex size-5 shrink-0 rounded-lg hover:bg-theme-button-hover"
-                    >
-                      <i className="i-mgc-close-cute-re text-red-500 dark:text-red-400" />
-                    </MotionButtonBase>
-                  ) :
-                  (
-                    <div className="mr-2 size-[16px]">
-                      <i className="i-mgc-right-cute-fi transition-transform" />
-                    </div>
-                  )}
+              ) : isCategoryEditing ? (
+                <MotionButtonBase
+                  onClick={() => {
+                    setIsCategoryEditing(false)
+                  }}
+                  className="center -ml-1 flex size-5 shrink-0 rounded-lg hover:bg-theme-button-hover"
+                >
+                  <i className="i-mgc-close-cute-re text-red-500 dark:text-red-400" />
+                </MotionButtonBase>
+              ) : (
+                <div className="mr-2 size-[16px]">
+                  <i className="i-mgc-right-cute-fi transition-transform" />
+                </div>
+              )}
             </button>
             {isCategoryEditing ? (
               <RenameCategoryForm
@@ -232,8 +213,7 @@ function FeedCategoryImpl({
                 <span
                   className={cn(
                     "grow truncate",
-                    !showUnreadCount &&
-                    (unread ? "font-bold" : "font-medium opacity-70"),
+                    !showUnreadCount && (unread ? "font-bold" : "font-medium opacity-70"),
                   )}
                 >
                   {folderName}
@@ -250,10 +230,12 @@ function FeedCategoryImpl({
           <m.div
             ref={itemsRef}
             className="overflow-hidden"
-            initial={!!showCollapse && {
-              height: 0,
-              opacity: 0.01,
-            }}
+            initial={
+              !!showCollapse && {
+                height: 0,
+                opacity: 0.01,
+              }
+            }
             animate={{
               height: "auto",
               opacity: 1,
@@ -404,12 +386,7 @@ const SortByAlphabeticalList = (props: SortListProps) => {
     </Fragment>
   )
 }
-const SortByUnreadList = ({
-  ids,
-  showUnreadCount,
-  showCollapse,
-  view,
-}: SortListProps) => {
+const SortByUnreadList = ({ ids, showUnreadCount, showCollapse, view }: SortListProps) => {
   const isDesc = useFeedListSortSelector((s) => s.order === "desc")
   const sortByUnreadFeedList = useFeedUnreadStore((state) => {
     const res = ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0))

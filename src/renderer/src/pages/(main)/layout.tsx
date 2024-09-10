@@ -1,4 +1,5 @@
 import { repository } from "@pkg"
+import { Slot } from "@radix-ui/react-slot"
 import { setMainContainerElement } from "@renderer/atoms/dom"
 import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
 import { setFeedColumnShow, useFeedColumnShow } from "@renderer/atoms/sidebar"
@@ -25,7 +26,7 @@ import { SearchCmdK } from "@renderer/modules/panel/cmdk"
 import { CmdNTrigger } from "@renderer/modules/panel/cmdn"
 import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
-import { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
@@ -34,9 +35,7 @@ const FooterInfo = () => (
   <div className="relative">
     {APP_VERSION?.[0] === "0" && (
       <div className="pointer-events-none !mt-0 w-full py-3 text-center text-xs opacity-20">
-        Early Access
-        {" "}
-        {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
+        Early Access {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
       </div>
     )}
 
@@ -81,7 +80,6 @@ export function Component() {
       <FeedResponsiveResizerContainer containerRef={containerRef}>
         <FeedColumn>
           <CornerPlayer />
-
           <FooterInfo />
 
           {ELECTRON && <AutoUpdater />}
@@ -114,10 +112,7 @@ export function Component() {
             canClose={false}
             clickOutsideToDismiss={false}
           >
-            <LoginModalContent
-              canClose={false}
-              runtime={window.electron ? "app" : "browser"}
-            />
+            <LoginModalContent canClose={false} runtime={window.electron ? "app" : "browser"} />
           </DeclarativeModal>
         </RootPortal>
       )}
@@ -131,7 +126,7 @@ const FeedResponsiveResizerContainer = ({
 }: {
   containerRef: React.RefObject<HTMLDivElement>
 } & PropsWithChildren) => {
-  const { isDragging, position, separatorProps } = useResizable({
+  const { isDragging, position, separatorProps, separatorCursor } = useResizable({
     axis: "x",
     min: 256,
     max: 300,
@@ -179,7 +174,7 @@ const FeedResponsiveResizerContainer = ({
   useEffect(() => {
     let timer: any
     if (feedColumnShow) {
-      // eslint-disable-next-line @eslint-react/web-api/no-leaked-timeout
+       
       timer = setTimeout(() => {
         setDelayShowSplitter(true)
       }, 200)
@@ -198,21 +193,20 @@ const FeedResponsiveResizerContainer = ({
         className={cn(
           "shrink-0 overflow-hidden",
           "absolute inset-y-0 z-10",
-          feedColumnTempShow &&
-          !feedColumnShow &&
-          "shadow-drawer-right z-[12] border-r",
-          !feedColumnShow && !feedColumnTempShow ?
-            "-translate-x-full delay-200" :
-            "",
+          feedColumnTempShow && !feedColumnShow && "shadow-drawer-right z-[12] border-r",
+          !feedColumnShow && !feedColumnTempShow ? "-translate-x-full delay-200" : "",
           !isDragging ? "duration-200" : "",
         )}
         style={{
-          "width": `${position}px`,
+          width: `${position}px`,
           // @ts-expect-error
           "--fo-feed-col-w": `${position}px`,
         }}
       >
-        {children}
+        {/* {React.cloneElement(children, {
+          className: "!bg-native",
+        })} */}
+        <Slot className={!feedColumnShow ? "!bg-native" : ""}>{children}</Slot>
       </div>
 
       <div
@@ -223,7 +217,7 @@ const FeedResponsiveResizerContainer = ({
       />
 
       {delayShowSplitter && (
-        <PanelSplitter isDragging={isDragging} {...separatorProps} />
+        <PanelSplitter isDragging={isDragging} cursor={separatorCursor} {...separatorProps} />
       )}
     </>
   )

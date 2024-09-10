@@ -43,8 +43,10 @@ const InvalidateQueryProviderElectron = () => {
   useEffect(() => {
     const handler = () => {
       const now = Date.now()
-      if (!currentTimeRef.current || (now - currentTimeRef.current < slateTime)) {
-        appLog(`Window switch to visible, but skip invalidation, ${currentTimeRef.current ? now - currentTimeRef.current : 0}`)
+      if (!currentTimeRef.current || now - currentTimeRef.current < slateTime) {
+        appLog(
+          `Window switch to visible, but skip invalidation, ${currentTimeRef.current ? now - currentTimeRef.current : 0}`,
+        )
       } else {
         appLog("Window switch to visible, invalidate all queries")
         queryClient.invalidateQueries()
@@ -93,6 +95,6 @@ const InvalidateQueryProviderWebApp = () => {
   return null
 }
 
-export const InvalidateQueryProvider = window.electron ?
-  InvalidateQueryProviderElectron :
-  InvalidateQueryProviderWebApp
+export const InvalidateQueryProvider = window.electron
+  ? InvalidateQueryProviderElectron
+  : InvalidateQueryProviderWebApp

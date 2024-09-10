@@ -11,18 +11,11 @@ import type {
 } from "builder-util-runtime"
 import { HttpError, newError, parseXml } from "builder-util-runtime"
 import { app } from "electron"
-import type {
-  AppUpdater,
-  ResolvedUpdateFileInfo,
-  UpdateInfo,
-} from "electron-updater"
+import type { AppUpdater, ResolvedUpdateFileInfo, UpdateInfo } from "electron-updater"
 import { CancellationToken } from "electron-updater"
 import { BaseGitHubProvider } from "electron-updater/out/providers/GitHubProvider"
 import type { ProviderRuntimeOptions } from "electron-updater/out/providers/Provider"
-import {
-  parseUpdateInfo,
-  resolveFiles,
-} from "electron-updater/out/providers/Provider"
+import { parseUpdateInfo, resolveFiles } from "electron-updater/out/providers/Provider"
 import * as semver from "semver"
 
 import { isWindows } from "../env"
@@ -72,18 +65,12 @@ export class CustomGitHubProvider extends BaseGitHubProvider<GithubUpdateInfo> {
     )
 
     if (!feedXml) {
-      throw new Error(
-        `Cannot find feed in the remote server (${this.baseUrl.href})`,
-      )
+      throw new Error(`Cannot find feed in the remote server (${this.baseUrl.href})`)
     }
 
     const feed = parseXml(feedXml)
     // noinspection TypeScriptValidateJSTypes
-    let latestRelease = feed.element(
-      "entry",
-      false,
-      `No published versions on GitHub`,
-    )
+    let latestRelease = feed.element("entry", false, `No published versions on GitHub`)
     let tag: string | null = null
     try {
       const currentChannel =
@@ -99,15 +86,10 @@ export class CustomGitHubProvider extends BaseGitHubProvider<GithubUpdateInfo> {
         )
       }
 
-      const releaseTag = await this.getLatestTagByRelease(
-        currentChannel,
-        cancellationToken,
-      )
+      const releaseTag = await this.getLatestTagByRelease(currentChannel, cancellationToken)
       for (const element of feed.getElements("entry")) {
         // noinspection TypeScriptValidateJSTypes
-        const hrefElement = hrefRegExp.exec(
-          element.element("link").attribute("href"),
-        )
+        const hrefElement = hrefRegExp.exec(element.element("link").attribute("href"))
 
         // If this is null then something is wrong and skip this release
         if (hrefElement === null) continue
@@ -116,8 +98,7 @@ export class CustomGitHubProvider extends BaseGitHubProvider<GithubUpdateInfo> {
         const hrefTag = hrefElement[1]
         // Get Channel from this release's tag
         // If it is null, we believe it is stable version
-        const hrefChannel =
-          (semver.prerelease(hrefTag)?.[0] as string) || "stable"
+        const hrefChannel = (semver.prerelease(hrefTag)?.[0] as string) || "stable"
 
         let isNextPreRelease = false
         if (releaseTag) {
@@ -134,18 +115,13 @@ export class CustomGitHubProvider extends BaseGitHubProvider<GithubUpdateInfo> {
       }
     } catch (e: any) {
       throw newError(
-        `Cannot parse releases feed: ${
-          e.stack || e.message
-        },\nXML:\n${feedXml}`,
+        `Cannot parse releases feed: ${e.stack || e.message},\nXML:\n${feedXml}`,
         "ERR_UPDATER_INVALID_RELEASE_FEED",
       )
     }
 
     if (tag === null || tag === undefined) {
-      throw newError(
-        `No published versions on GitHub`,
-        "ERR_UPDATER_NO_PUBLISHED_VERSIONS",
-      )
+      throw newError(`No published versions on GitHub`, "ERR_UPDATER_NO_PUBLISHED_VERSIONS")
     }
 
     let rawData: string | null = null
@@ -174,11 +150,9 @@ export class CustomGitHubProvider extends BaseGitHubProvider<GithubUpdateInfo> {
     }
 
     try {
-      const channel = this.updater.allowPrerelease ?
-        this.getCustomChannelName(
-          String(semver.prerelease(tag)?.[0] || "latest"),
-        ) :
-        this.getDefaultChannelName()
+      const channel = this.updater.allowPrerelease
+        ? this.getCustomChannelName(String(semver.prerelease(tag)?.[0] || "latest"))
+        : this.getDefaultChannelName()
       rawData = await fetchData(channel)
     } catch (e: any) {
       if (this.updater.allowPrerelease) {
@@ -227,7 +201,7 @@ export class CustomGitHubProvider extends BaseGitHubProvider<GithubUpdateInfo> {
       const releasesStr = await this.httpRequest(
         newUrlFromBase(`/repos${this.basePath}`, this.baseApiUrl),
         {
-          "accept": "Accept: application/vnd.github+json",
+          accept: "Accept: application/vnd.github+json",
           "X-GitHub-Api-Version": "2022-11-28",
         },
         cancellationToken,
@@ -244,8 +218,7 @@ export class CustomGitHubProvider extends BaseGitHubProvider<GithubUpdateInfo> {
         }
 
         const releaseTag = release.tag_name
-        const releaseChannel =
-          (semver.prerelease(releaseTag)?.[0] as string) || "stable"
+        const releaseChannel = (semver.prerelease(releaseTag)?.[0] as string) || "stable"
         if (releaseChannel === currentChannel) {
           return release.tag_name
         }
@@ -264,15 +237,14 @@ export class CustomGitHubProvider extends BaseGitHubProvider<GithubUpdateInfo> {
       const isSquirrel = isSquirrelBuild()
       // @ts-expect-error we should be able to modify the object
       filteredUpdateInfo.files = updateInfo.files.filter((file) =>
-        isSquirrel ?
-            !file.url.includes("nsis.exe") :
-          file.url.includes("nsis.exe"),
+        isSquirrel ? !file.url.includes("nsis.exe") : file.url.includes("nsis.exe"),
       )
     }
 
     // still replace space to - due to backward compatibility
     return resolveFiles(filteredUpdateInfo, this.baseUrl, (p) =>
-      this.getBaseDownloadPath(filteredUpdateInfo.tag, p.replaceAll(" ", "-")))
+      this.getBaseDownloadPath(filteredUpdateInfo.tag, p.replaceAll(" ", "-")),
+    )
   }
 
   private getBaseDownloadPath(tag: string, fileName: string): string {
@@ -306,9 +278,7 @@ export function computeReleaseNotes(
   const releaseNotes: Array<ReleaseNoteInfo> = []
   for (const release of feed.getElements("entry")) {
     // noinspection TypeScriptValidateJSTypes
-    const versionRelease = /\/tag\/v?([^/]+)$/.exec(
-      release.element("link").attribute("href"),
-    )?.[1]
+    const versionRelease = /\/tag\/v?([^/]+)$/.exec(release.element("link").attribute("href"))?.[1]
     if (versionRelease && semver.lt(currentVersion, versionRelease)) {
       releaseNotes.push({
         version: versionRelease,
@@ -321,11 +291,7 @@ export function computeReleaseNotes(
 
 // addRandomQueryToAvoidCaching is false by default because in most cases URL already contains version number,
 // so, it makes sense only for Generic Provider for channel files
-function newUrlFromBase(
-  pathname: string,
-  baseUrl: URL,
-  addRandomQueryToAvoidCaching = false,
-): URL {
+function newUrlFromBase(pathname: string, baseUrl: URL, addRandomQueryToAvoidCaching = false): URL {
   const result = new URL(pathname, baseUrl)
   // search is not propagated (search is an empty string if not specified)
   const { search } = baseUrl

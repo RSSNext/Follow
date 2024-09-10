@@ -17,10 +17,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
   const { canClose = true, runtime } = props
 
   return (
-    <div
-      className="center flex h-full"
-      onClick={canClose ? modal.dismiss : undefined}
-    >
+    <div className="center flex h-full" onClick={canClose ? modal.dismiss : undefined}>
       <m.div
         className="shadow-modal rounded-lg border border-border bg-theme-background p-4 px-8 pb-8"
         onClick={stopPropagation}
@@ -40,10 +37,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
               loginHandler("github", runtime)
             }}
           >
-            <i className="i-mgc-github-cute-fi mr-2 text-xl" />
-            {" "}
-            Continue with
-            GitHub
+            <i className="i-mgc-github-cute-fi mr-2 text-xl" /> Continue with GitHub
           </Button>
           <Button
             className="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80"
@@ -51,10 +45,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
               loginHandler("google", runtime)
             }}
           >
-            <i className="i-mgc-google-cute-fi mr-2 text-xl" />
-            {" "}
-            Continue with
-            Google
+            <i className="i-mgc-google-cute-fi mr-2 text-xl" /> Continue with Google
           </Button>
         </div>
       </m.div>

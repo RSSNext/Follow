@@ -35,8 +35,11 @@ export const {
   settingAtom: __generalSettingAtom,
 } = createSettingAtom("general", createDefaultSettings)
 
-export const subscribeShouldUseIndexedDB = (
-  callback: (value: boolean) => void,
-) =>
-  jotaiStore.sub(__generalSettingAtom, () =>
-    callback(getGeneralSettings().dataPersist))
+export const subscribeShouldUseIndexedDB = (callback: (value: boolean) => void) =>
+  jotaiStore.sub(__generalSettingAtom, () => callback(getGeneralSettings().dataPersist))
+
+export const generalServerSyncWhiteListKeys: (keyof GeneralSettings)[] = [
+  "appLaunchOnStartup",
+  "dataPersist",
+  "sendAnonymousData",
+]

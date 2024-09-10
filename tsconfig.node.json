@@ -8,25 +8,19 @@
     "src/shared/src/**/*",
     "src/env.ts",
     "./src/hono.ts",
-    "src/shared/src/global.d.ts"
+    "src/shared/src/global.d.ts",
+    "configs/vite.render.config.ts",
+    "./scripts/**/*"
   ],
   "compilerOptions": {
     "composite": true,
-    "types": [
-      "electron-vite/node"
-    ],
+    "types": ["electron-vite/node"],
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {
-      "@shared/*": [
-        "src/shared/src/*"
-      ],
-      "@env": [
-        "./src/env.ts"
-      ],
-      "@pkg": [
-        "./package.json"
-      ]
+      "@shared/*": ["src/shared/src/*"],
+      "@env": ["./src/env.ts"],
+      "@pkg": ["./package.json"]
     }
   }
 }

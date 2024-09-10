@@ -1,7 +1,7 @@
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, dev]
 
 name: CI Typecheck and Lint
 concurrency:

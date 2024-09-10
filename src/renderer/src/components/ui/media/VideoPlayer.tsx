@@ -20,11 +20,7 @@ import {
   useState,
 } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
-import {
-  createContext,
-  useContext,
-  useContextSelector,
-} from "use-context-selector"
+import { createContext, useContext, useContextSelector } from "use-context-selector"
 import { useEventCallback } from "usehooks-ts"
 
 import { MotionButtonBase } from "../button"
@@ -38,7 +34,7 @@ type VideoPlayerProps = {
 
   variant?: "preview" | "player"
 } & React.VideoHTMLAttributes<HTMLVideoElement> &
-PropsWithChildren
+  PropsWithChildren
 export type VideoPlayerRef = {
   getElement: () => HTMLVideoElement | null
 
@@ -66,9 +62,7 @@ const VideoPlayerContext = createContext<VideoPlayerContextValue>(null!)
 export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
   ({ src, className, variant = "player", ...rest }, ref) => {
     const isPlayer = variant === "player"
-    const [clickToStatus, setClickToStatus] = useState(
-      null as "play" | "pause" | null,
-    )
+    const [clickToStatus, setClickToStatus] = useState(null as "play" | "pause" | null)
 
     const scaleValue = useSpring(1, softSpringPreset)
     const opacityValue = useSpring(0, softSpringPreset)
@@ -149,17 +143,13 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
             <i
               className={cn(
                 "size-8 text-white",
-                clickToStatus === "play" ?
-                  "i-mgc-play-cute-fi" :
-                  "i-mgc-pause-cute-fi",
+                clickToStatus === "play" ? "i-mgc-play-cute-fi" : "i-mgc-pause-cute-fi",
               )}
             />
           </m.div>
         </div>
 
-        {state.hasAudio && !state.muted && state.playing && (
-          <BizControlOutsideMedia />
-        )}
+        {state.hasAudio && !state.muted && state.playing && <BizControlOutsideMedia />}
 
         <VideoPlayerContext.Provider
           value={useMemo(
@@ -175,9 +165,7 @@ export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
   },
 )
 const BizControlOutsideMedia = () => {
-  const currentAudioPlayerIsPlayRef = useSingleton(
-    () => AudioPlayer.get().status === "playing",
-  )
+  const currentAudioPlayerIsPlayRef = useSingleton(() => AudioPlayer.get().status === "playing")
   useEffect(() => {
     const { current } = currentAudioPlayerIsPlayRef
     if (current) {
@@ -221,10 +209,7 @@ const FloatMutedButton = () => {
 
 const ControlBar = memo(() => {
   const controls = useContextSelector(VideoPlayerContext, (v) => v.controls)
-  const isPaused = useContextSelector(
-    VideoPlayerContext,
-    (v) => v.state.paused,
-  )
+  const isPaused = useContextSelector(VideoPlayerContext, (v) => v.state.paused)
   const dragControls = useDragControls()
 
   return (
@@ -284,9 +269,7 @@ const ControlBar = memo(() => {
 
 const FullScreenControl = () => {
   const ref = useContextSelector(VideoPlayerContext, (v) => v.wrapperRef)
-  const [isFullScreen, setIsFullScreen] = useState(
-    !!document.fullscreenElement,
-  )
+  const [isFullScreen, setIsFullScreen] = useState(!!document.fullscreenElement)
 
   useEffect(() => {
     const onFullScreenChange = () => {
@@ -341,12 +324,7 @@ const DownloadVideo = () => {
   })
 
   return (
-    <ActionIcon
-      shortcut="d"
-      label="Download"
-      labelDelayDuration={1}
-      onClick={download}
-    >
+    <ActionIcon shortcut="d" label="Download" labelDelayDuration={1} onClick={download}>
       {isDownloading ? (
         <i className="i-mgc-loading-3-cute-re animate-spin" />
       ) : (
@@ -356,10 +334,7 @@ const DownloadVideo = () => {
   )
 }
 const VolumeControl = () => {
-  const hasAudio = useContextSelector(
-    VideoPlayerContext,
-    (v) => v.state.hasAudio,
-  )
+  const hasAudio = useContextSelector(VideoPlayerContext, (v) => v.state.hasAudio)
 
   const controls = useContextSelector(VideoPlayerContext, (v) => v.controls)
   const volume = useContextSelector(VideoPlayerContext, (v) => v.state.volume)
@@ -377,11 +352,7 @@ const VolumeControl = () => {
       }}
       labelDelayDuration={1}
     >
-      {muted ? (
-        <i className="i-mgc-volume-mute-cute-re" />
-      ) : (
-        <i className="i-mgc-volume-cute-re" />
-      )}
+      {muted ? <i className="i-mgc-volume-mute-cute-re" /> : <i className="i-mgc-volume-cute-re" />}
     </ActionIcon>
   )
 }

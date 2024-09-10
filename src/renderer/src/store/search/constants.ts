@@ -9,4 +9,4 @@ export const SearchType = {
   All: Object.values(SearchTypeBase).reduce((acc, cur) => acc | cur, 0),
 }
 
-export type SearchType = typeof SearchType[keyof typeof SearchType]
+export type SearchType = (typeof SearchType)[keyof typeof SearchType]

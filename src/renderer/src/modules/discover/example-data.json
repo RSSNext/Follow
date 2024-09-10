@@ -3,10 +3,7 @@
     "routes": {
       "/rss/:category?": {
         "path": "/rss/:category?",
-        "categories": [
-          "traditional-media",
-          "popular"
-        ],
+        "categories": ["traditional-media", "popular"],
         "example": "/apnews/rss/business",
         "parameters": {
           "category": {
@@ -24,18 +21,12 @@
         },
         "radar": [
           {
-            "source": [
-              "apnews.com/:rss"
-            ],
+            "source": ["apnews.com/:rss"],
             "target": "/rss/:rss"
           }
         ],
         "name": "News",
-        "maintainers": [
-          "zoenglinghou",
-          "mjysci",
-          "TonyRL"
-        ],
+        "maintainers": ["zoenglinghou", "mjysci", "TonyRL"],
         "location": "rss.ts"
       }
     },
@@ -46,10 +37,7 @@
     "routes": {
       "/user/dynamic/:uid/:routeParams?": {
         "path": "/user/dynamic/:uid/:routeParams?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/bilibili/user/dynamic/2267573",
         "parameters": {
           "uid": "用户 id, 可在 UP 主主页中找到",
@@ -71,32 +59,20 @@
         },
         "radar": [
           {
-            "source": [
-              "space.bilibili.com/:uid"
-            ],
+            "source": ["space.bilibili.com/:uid"],
             "target": "/user/dynamic/:uid"
           }
         ],
         "name": "UP 主动态",
-        "maintainers": [
-          "DIYgod",
-          "zytomorrow",
-          "CaoMeiYouRen",
-          "JimenezLi"
-        ],
+        "maintainers": ["DIYgod", "zytomorrow", "CaoMeiYouRen", "JimenezLi"],
         "description": "| 键           | 含义                              | 接受的值       | 默认值 |\n  | ------------ | --------------------------------- | -------------- | ------ |\n  | showEmoji    | 显示或隐藏表情图片                | 0/1/true/false | false  |\n  | disableEmbed | 关闭内嵌视频                      | 0/1/true/false | false  |\n  | useAvid      | 视频链接使用 AV 号 (默认为 BV 号) | 0/1/true/false | false  |\n  | directLink   | 使用内容直链                      | 0/1/true/false | false  |\n\n  用例：`/bilibili/user/dynamic/2267573/showEmoji=1&disableEmbed=1&useAvid=1`\n\n  :::tip 动态的专栏显示全文\n  动态的专栏显示全文请使用通用参数里的 `mode=fulltext`\n\n  举例：bilibili 专栏全文输出 /bilibili/user/dynamic/2267573/?mode=fulltext\n  :::",
         "location": "dynamic.ts"
       },
       "/ranking/:rid?/:day?/:arc_type?/:disableEmbed?": {
         "path": "/ranking/:rid?/:day?/:arc_type?/:disableEmbed?",
         "name": "排行榜",
-        "maintainers": [
-          "DIYgod"
-        ],
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "maintainers": ["DIYgod"],
+        "categories": ["social-media", "popular"],
         "example": "/bilibili/ranking/0/3/1",
         "parameters": {
           "rid": {
@@ -200,10 +176,7 @@
       },
       "/user/video/:uid/:disableEmbed?": {
         "path": "/user/video/:uid/:disableEmbed?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/bilibili/user/video/2267573",
         "parameters": {
           "uid": "用户 id, 可在 UP 主主页中找到",
@@ -219,16 +192,12 @@
         },
         "radar": [
           {
-            "source": [
-              "space.bilibili.com/:uid"
-            ],
+            "source": ["space.bilibili.com/:uid"],
             "target": "/user/video/:uid"
           }
         ],
         "name": "UP 主投稿",
-        "maintainers": [
-          "DIYgod"
-        ],
+        "maintainers": ["DIYgod"],
         "description": ":::tip 动态的专栏显示全文\n  可以使用 [UP 主动态](#bilibili-up-zhu-dong-tai) 路由作为代替绕过反爬限制\n  :::",
         "location": "video.ts"
       }
@@ -240,10 +209,7 @@
     "routes": {
       "/build/:owner/:image/:tag?": {
         "path": "/build/:owner/:image/:tag?",
-        "categories": [
-          "program-update",
-          "popular"
-        ],
+        "categories": ["program-update", "popular"],
         "example": "/dockerhub/build/wangqiru/ttrss",
         "parameters": {
           "owner": "Image owner",
@@ -262,9 +228,7 @@
           "supportScihub": false
         },
         "name": "Image New Build",
-        "maintainers": [
-          "HenryQW"
-        ],
+        "maintainers": ["HenryQW"],
         "description": ":::warning\n  The owner of the official image fills in the library, for example: [https://rsshub.app/dockerhub/build/library/mysql](https://rsshub.app/dockerhub/build/library/mysql)\n  :::",
         "location": "build.ts"
       }
@@ -276,10 +240,7 @@
     "routes": {
       "/group/:groupid/:type?": {
         "path": "/group/:groupid/:type?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/douban/group/648102",
         "parameters": {
           "groupid": "豆瓣小组的 id",
@@ -311,16 +272,12 @@
         },
         "radar": [
           {
-            "source": [
-              "www.douban.com/group/:groupid"
-            ],
+            "source": ["www.douban.com/group/:groupid"],
             "target": "/group/:groupid"
           }
         ],
         "name": "豆瓣小组",
-        "maintainers": [
-          "DIYgod"
-        ],
+        "maintainers": ["DIYgod"],
         "location": "other/group.ts"
       }
     },
@@ -331,10 +288,7 @@
     "routes": {
       "/issue/:user/:repo/:state?/:labels?": {
         "path": "/issue/:user/:repo/:state?/:labels?",
-        "categories": [
-          "programming",
-          "popular"
-        ],
+        "categories": ["programming", "popular"],
         "example": "/github/issue/vuejs/core/all/wontfix",
         "parameters": {
           "user": "GitHub username",
@@ -370,10 +324,7 @@
           }
         ],
         "name": "Repo Issues",
-        "maintainers": [
-          "HenryQW",
-          "AndreyMZ"
-        ],
+        "maintainers": ["HenryQW", "AndreyMZ"],
         "location": "issue.ts"
       }
     },
@@ -385,10 +336,7 @@
     "routes": {
       "/:category/:key": {
         "path": "/:category/:key",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/instagram/user/stefaniejoosten",
         "parameters": {
           "category": "Feed category, see table above",
@@ -409,10 +357,7 @@
           "supportScihub": false
         },
         "name": "User Profile / Hashtag - Private API",
-        "maintainers": [
-          "oppilate",
-          "DIYgod"
-        ],
+        "maintainers": ["oppilate", "DIYgod"],
         "description": ":::warning\nDue to [Instagram Private API](https://github.com/dilame/instagram-private-api) restrictions, you have to setup your credentials on the server. 2FA is not supported. See [deployment guide](https://docs.rsshub.app/deploy/) for more.\n:::",
         "location": "private-api/index.ts"
       }
@@ -427,23 +372,13 @@
         "path": "/:path{.+}?",
         "radar": [
           {
-            "source": [
-              "www.javbus.com/:path*"
-            ],
+            "source": ["www.javbus.com/:path*"],
             "target": "/:path"
           }
         ],
         "name": "Works",
-        "maintainers": [
-          "MegrezZhu",
-          "CoderTonyChan",
-          "nczitzk",
-          "Felix2yu"
-        ],
-        "categories": [
-          "multimedia",
-          "popular"
-        ],
+        "maintainers": ["MegrezZhu", "CoderTonyChan", "nczitzk", "Felix2yu"],
+        "categories": ["multimedia", "popular"],
         "url": "www.javbus.com",
         "example": "/javbus/star/rwt",
         "parameters": {
@@ -462,10 +397,7 @@
     "routes": {
       "/topic/:id/:showUid?": {
         "path": "/topic/:id/:showUid?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/jike/topic/556688fae4b00c57d9dd46ee",
         "parameters": {
           "id": "圈子 id, 可在即刻 web 端圈子页或 APP 分享出来的圈子页 URL 中找到",
@@ -481,25 +413,17 @@
         },
         "radar": [
           {
-            "source": [
-              "web.okjike.com/topic/:id"
-            ],
+            "source": ["web.okjike.com/topic/:id"],
             "target": "/topic/:id"
           }
         ],
         "name": "圈子",
-        "maintainers": [
-          "DIYgod",
-          "prnake"
-        ],
+        "maintainers": ["DIYgod", "prnake"],
         "location": "topic.ts"
       },
       "/user/:id": {
         "path": "/user/:id",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/jike/user/3EE02BC9-C5B3-4209-8750-4ED1EE0F67BB",
         "parameters": {
           "id": "用户 id, 可在即刻分享出来的单条动态页点击用户头像进入个人主页，然后在个人主页的 URL 中找到，或者在单条动态页使用 RSSHub Radar 插件"
@@ -514,17 +438,12 @@
         },
         "radar": [
           {
-            "source": [
-              "web.okjike.com/u/:uid"
-            ],
+            "source": ["web.okjike.com/u/:uid"],
             "target": "/user/:uid"
           }
         ],
         "name": "用户动态",
-        "maintainers": [
-          "DIYgod",
-          "prnake"
-        ],
+        "maintainers": ["DIYgod", "prnake"],
         "location": "user.ts"
       }
     },
@@ -535,10 +454,7 @@
     "routes": {
       "/user/:name?": {
         "path": "/user/:name?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/lofter/user/i",
         "parameters": {
           "name": "Lofter user name, can be found in the URL"
@@ -552,11 +468,7 @@
           "supportScihub": false
         },
         "name": "User",
-        "maintainers": [
-          "hondajojo",
-          "nczitzk",
-          "LucunJi"
-        ],
+        "maintainers": ["hondajojo", "nczitzk", "LucunJi"],
         "location": "user.ts"
       }
     },
@@ -567,10 +479,7 @@
     "routes": {
       "/ranking/:mode/:date?": {
         "path": "/ranking/:mode/:date?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/pixiv/ranking/week",
         "parameters": {
           "mode": "rank type",
@@ -585,18 +494,13 @@
           "supportScihub": false
         },
         "name": "Rankings",
-        "maintainers": [
-          "EYHN"
-        ],
+        "maintainers": ["EYHN"],
         "description": "| daily rank | weekly rank | monthly rank | male rank | female rank | AI-generated work Rankings | original rank  | rookie user rank |\n  | ---------- | ----------- | ------------ | --------- | ----------- | -------------------------- | -------------- | ---------------- |\n  | day        | week        | month        | day_male | day_female | day_ai                    | week_original | week_rookie     |\n\n  | R-18 daily rank | R-18 AI-generated work | R-18 male rank | R-18 female rank | R-18 weekly rank | R-18G rank |\n  | --------------- | ---------------------- | -------------- | ---------------- | ---------------- | ---------- |\n  | day_r18        | day_r18_ai           | day_male_r18 | day_female_r18 | week_r18        | week_r18g |",
         "location": "ranking.ts"
       },
       "/search/:keyword/:order?/:mode?": {
         "path": "/search/:keyword/:order?/:mode?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/pixiv/search/Nezuko/popular",
         "parameters": {
           "keyword": "keyword",
@@ -642,17 +546,12 @@
           "supportScihub": false
         },
         "name": "Keyword",
-        "maintainers": [
-          "DIYgod"
-        ],
+        "maintainers": ["DIYgod"],
         "location": "search.ts"
       },
       "/user/:id": {
         "path": "/user/:id",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/pixiv/user/15288095",
         "parameters": {
           "id": "user id, available in user's homepage URL"
@@ -667,15 +566,11 @@
         },
         "radar": [
           {
-            "source": [
-              "www.pixiv.net/users/:id"
-            ]
+            "source": ["www.pixiv.net/users/:id"]
           }
         ],
         "name": "User Activity",
-        "maintainers": [
-          "DIYgod"
-        ],
+        "maintainers": ["DIYgod"],
         "location": "user.ts"
       }
     },
@@ -686,10 +581,7 @@
     "routes": {
       "/routes/:lang?": {
         "path": "/routes/:lang?",
-        "categories": [
-          "program-update",
-          "popular"
-        ],
+        "categories": ["program-update", "popular"],
         "example": "/rsshub/routes/en",
         "parameters": {
           "lang": {
@@ -709,16 +601,12 @@
         },
         "radar": [
           {
-            "source": [
-              "docs.rsshub.app/*"
-            ],
+            "source": ["docs.rsshub.app/*"],
             "target": "/routes"
           }
         ],
         "name": "New routes",
-        "maintainers": [
-          "DIYgod"
-        ],
+        "maintainers": ["DIYgod"],
         "url": "docs.rsshub.app/*",
         "location": "routes.ts"
       }
@@ -730,10 +618,7 @@
     "routes": {
       "/user/:uid": {
         "path": "/user/:uid",
-        "categories": [
-          "multimedia",
-          "popular"
-        ],
+        "categories": ["multimedia", "popular"],
         "example": "/sehuatang/user/411096",
         "parameters": {
           "uid": "用户 uid, 可在用户主页 URL 中找到"
@@ -752,9 +637,7 @@
           "supportScihub": false
         },
         "name": "作者文章",
-        "maintainers": [
-          "JamYiz"
-        ],
+        "maintainers": ["JamYiz"],
         "location": "user.ts"
       }
     },
@@ -765,10 +648,7 @@
     "routes": {
       "/channel/:username/:routeParams?": {
         "path": "/channel/:username/:routeParams?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/telegram/channel/awesomeDIYgod/searchQuery=twitter",
         "parameters": {
           "username": "channel username",
@@ -784,17 +664,12 @@
         },
         "radar": [
           {
-            "source": [
-              "t.me/s/:username"
-            ],
+            "source": ["t.me/s/:username"],
             "target": "/channel/:username"
           }
         ],
         "name": "Channel",
-        "maintainers": [
-          "DIYgod",
-          "Rongronggg9"
-        ],
+        "maintainers": ["DIYgod", "Rongronggg9"],
         "description": "\n  | Key                    | Description                                                           | Accepts                                            | Defaults to  |\n  | ---------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | ------------ |\n  | showLinkPreview        | Show the link preview from Telegram                                   | 0/1/true/false                                     | true         |\n  | showViaBot             | For messages sent via bot, show the bot                               | 0/1/true/false                                     | true         |\n  | showReplyTo            | For reply messages, show the target of the reply                      | 0/1/true/false                                     | true         |\n  | showFwdFrom            | For forwarded messages, show the forwarding source                    | 0/1/true/false                                     | true         |\n  | showFwdFromAuthor      | For forwarded messages, show the author of the forwarding source      | 0/1/true/false                                     | true         |\n  | showInlineButtons      | Show inline buttons                                                   | 0/1/true/false                                     | false        |\n  | showMediaTagInTitle    | Show media tags in the title                                          | 0/1/true/false                                     | true         |\n  | showMediaTagAsEmoji    | Show media tags as emoji                                              | 0/1/true/false                                     | true         |\n  | showHashtagAsHyperlink | Show hashtags as hyperlinks (`https://t.me/s/channel?q=%23hashtag`) | 0/1/true/false                                     | true         |\n  | includeFwd             | Include forwarded messages                                            | 0/1/true/false                                     | true         |\n  | includeReply           | Include reply messages                                                | 0/1/true/false                                     | true         |\n  | includeServiceMsg      | Include service messages (e.g. message pinned, channel photo updated) | 0/1/true/false                                     | true         |\n  | includeUnsupportedMsg  | Include messages unsupported by t.me                                  | 0/1/true/false                                     | false        |\n  | searchQuery            | search query                                                          | keywords; replace `#hashtag` with `%23hashtag` | (no keyword) |\n\n  Specify different option values than default values can meet different needs, URL\n\n  ```\n  https://rsshub.app/telegram/channel/NewlearnerChannel/showLinkPreview=0&showViaBot=0&showReplyTo=0&showFwdFrom=0&showFwdFromAuthor=0&showInlineButtons=0&showMediaTagInTitle=1&showMediaTagAsEmoji=1&includeFwd=0&includeReply=1&includeServiceMsg=0&includeUnsupportedMsg=0\n  ```\n\n  generates an RSS without any link previews and annoying metadata, with emoji media tags in the title, without forwarded messages (but with reply messages), and without messages you don't care about (service messages and unsupported messages), for people who prefer pure subscriptions.\n\n  :::tip\n  For backward compatibility reasons, invalid `routeParams` will be treated as `searchQuery` .\n\n  Due to Telegram restrictions, some channels involving pornography, copyright, and politics cannot be subscribed. You can confirm by visiting `https://t.me/s/:username`.\n  :::",
         "location": "channel.ts"
       }
@@ -806,10 +681,7 @@
     "routes": {
       "/keyword/:keyword/:routeParams?": {
         "path": "/keyword/:keyword/:routeParams?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/twitter/keyword/RSSHub",
         "parameters": {
           "keyword": "keyword",
@@ -837,26 +709,17 @@
           "supportScihub": false
         },
         "name": "Keyword",
-        "maintainers": [
-          "DIYgod",
-          "yindaheng98",
-          "Rongronggg9"
-        ],
+        "maintainers": ["DIYgod", "yindaheng98", "Rongronggg9"],
         "radar": [
           {
-            "source": [
-              "x.com/search"
-            ]
+            "source": ["x.com/search"]
           }
         ],
         "location": "keyword.ts"
       },
       "/media/:id/:routeParams?": {
         "path": "/media/:id/:routeParams?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/twitter/media/DIYgod",
         "parameters": {
           "id": "username; in particular, if starts with `+`, it will be recognized as a [unique ID](https://github.com/DIYgod/RSSHub/issues/12221), e.g. `+44196397`",
@@ -884,16 +747,10 @@
           "supportScihub": false
         },
         "name": "User media",
-        "maintainers": [
-          "DIYgod",
-          "yindaheng98",
-          "Rongronggg9"
-        ],
+        "maintainers": ["DIYgod", "yindaheng98", "Rongronggg9"],
         "radar": [
           {
-            "source": [
-              "x.com/:id/media"
-            ],
+            "source": ["x.com/:id/media"],
             "target": "/media/:id"
           }
         ],
@@ -901,10 +758,7 @@
       },
       "/user/:id/:routeParams?": {
         "path": "/user/:id/:routeParams?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/twitter/user/DIYgod",
         "parameters": {
           "id": "username; in particular, if starts with `+`, it will be recognized as a [unique ID](https://github.com/DIYgod/RSSHub/issues/12221), e.g. `+44196397`",
@@ -937,16 +791,10 @@
           "supportScihub": false
         },
         "name": "User timeline",
-        "maintainers": [
-          "DIYgod",
-          "yindaheng98",
-          "Rongronggg9"
-        ],
+        "maintainers": ["DIYgod", "yindaheng98", "Rongronggg9"],
         "radar": [
           {
-            "source": [
-              "x.com/:id"
-            ],
+            "source": ["x.com/:id"],
             "target": "/user/:id"
           }
         ],
@@ -961,10 +809,7 @@
     "routes": {
       "/keyword/:keyword/:routeParams?": {
         "path": "/keyword/:keyword/:routeParams?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/weibo/keyword/DIYgod",
         "parameters": {
           "keyword": "你想订阅的微博关键词",
@@ -979,18 +824,12 @@
           "supportScihub": false
         },
         "name": "关键词",
-        "maintainers": [
-          "DIYgod",
-          "Rongronggg9"
-        ],
+        "maintainers": ["DIYgod", "Rongronggg9"],
         "location": "keyword.ts"
       },
       "/user/:uid/:routeParams?": {
         "path": "/user/:uid/:routeParams?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/weibo/user/1195230310",
         "parameters": {
           "uid": "用户 id, 博主主页打开控制台执行 `$CONFIG.oid` 获取",
@@ -1006,20 +845,12 @@
         },
         "radar": [
           {
-            "source": [
-              "m.weibo.cn/u/:uid",
-              "m.weibo.cn/profile/:uid",
-              "www.weibo.com/u/:uid"
-            ],
+            "source": ["m.weibo.cn/u/:uid", "m.weibo.cn/profile/:uid", "www.weibo.com/u/:uid"],
             "target": "/user/:uid"
           }
         ],
         "name": "博主",
-        "maintainers": [
-          "DIYgod",
-          "iplusx",
-          "Rongronggg9"
-        ],
+        "maintainers": ["DIYgod", "iplusx", "Rongronggg9"],
         "description": ":::warning\n  部分博主仅登录可见，未提供 Cookie 的情况下不支持订阅，可以通过打开 `https://m.weibo.cn/u/:uid` 验证。如需要订阅该部分博主，可配置 Cookie 后订阅。\n\n  未提供 Cookie 的情况下偶尔会触发反爬限制，提供 Cookie 可缓解该情况。\n\n  微博用户 Cookie 的配置可参照部署文档\n  :::",
         "location": "user.ts"
       }
@@ -1032,10 +863,7 @@
     "routes": {
       "/podcast/:id": {
         "path": "/podcast/:id",
-        "categories": [
-          "multimedia",
-          "popular"
-        ],
+        "categories": ["multimedia", "popular"],
         "example": "/xiaoyuzhou/podcast/6021f949a789fca4eff4492c",
         "parameters": {
           "id": "播客 id，可以在小宇宙播客的 URL 中找到"
@@ -1050,16 +878,11 @@
         },
         "radar": [
           {
-            "source": [
-              "xiaoyuzhoufm.com/podcast/:id"
-            ]
+            "source": ["xiaoyuzhoufm.com/podcast/:id"]
           }
         ],
         "name": "播客",
-        "maintainers": [
-          "hondajojo",
-          "jtsang4"
-        ],
+        "maintainers": ["hondajojo", "jtsang4"],
         "url": "xiaoyuzhoufm.com/",
         "location": "podcast.ts"
       }
@@ -1070,13 +893,8 @@
   "ximalaya": {
     "routes": {
       "/:type/:id/:all/:shownote?": {
-        "path": [
-          "/:type/:id/:all/:shownote?"
-        ],
-        "categories": [
-          "multimedia",
-          "popular"
-        ],
+        "path": ["/:type/:id/:all/:shownote?"],
+        "categories": ["multimedia", "popular"],
         "example": "/ximalaya/album/299146",
         "parameters": {
           "type": "专辑类型，通常可以使用 `album`，可在对应专辑页面的 URL 中找到",
@@ -1097,11 +915,7 @@
           "supportScihub": false
         },
         "name": "专辑",
-        "maintainers": [
-          "lengthmin",
-          "jjeejj",
-          "prnake"
-        ],
+        "maintainers": ["lengthmin", "jjeejj", "prnake"],
         "description": "目前喜马拉雅的 API 只能一集一集的获取各节目上的 ShowNote，会极大的占用系统资源，所以默认为不获取节目的 ShowNote。\n\n  :::warning\n  专辑类型即 url 中的分类拼音，使用通用分类 `album` 通常是可行的，专辑 id 是跟在**分类拼音**后的那个 id, 不要输成某集的 id 了\n\n  **付费内容需要配置好已购买账户的 token 才能收听，详情见部署页面的配置模块**\n  :::",
         "location": "album.ts"
       }
@@ -1113,10 +927,7 @@
     "routes": {
       "/user/:username/:embed?": {
         "path": "/user/:username/:embed?",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/youtube/user/@JFlaMusic",
         "parameters": {
           "username": "YouTuber username with @",
@@ -1137,16 +948,12 @@
         },
         "radar": [
           {
-            "source": [
-              "www.youtube.com/user/:username"
-            ],
+            "source": ["www.youtube.com/user/:username"],
             "target": "/user/:username"
           }
         ],
         "name": "Channel with username",
-        "maintainers": [
-          "DIYgod"
-        ],
+        "maintainers": ["DIYgod"],
         "location": "user.ts"
       }
     },
@@ -1157,10 +964,7 @@
     "routes": {
       "/people/activities/:id": {
         "path": "/people/activities/:id",
-        "categories": [
-          "social-media",
-          "popular"
-        ],
+        "categories": ["social-media", "popular"],
         "example": "/zhihu/people/activities/diygod",
         "parameters": {
           "id": "作者 id，可在用户主页 URL 中找到"
@@ -1175,15 +979,11 @@
         },
         "radar": [
           {
-            "source": [
-              "www.zhihu.com/people/:id"
-            ]
+            "source": ["www.zhihu.com/people/:id"]
           }
         ],
         "name": "用户动态",
-        "maintainers": [
-          "DIYgod"
-        ],
+        "maintainers": ["DIYgod"],
         "location": "activities.ts"
       }
     },

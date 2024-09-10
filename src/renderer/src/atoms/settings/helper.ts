@@ -1,4 +1,5 @@
 import { useRefValue } from "@renderer/hooks/common"
+import { EventBus } from "@renderer/lib/event-bus"
 import { createAtomHooks } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
 import type { SettingItem } from "@renderer/modules/settings/setting-builder"
@@ -7,20 +8,25 @@ import { useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
 
+declare module "@renderer/lib/event-bus" {
+  interface CustomEvent {
+    SETTING_CHANGE_EVENT: {
+      updated: number
+      payload: Record<string, any>
+      key: string
+    }
+  }
+}
+
 export const createSettingAtom = <T extends object>(
   settingKey: string,
   createDefaultSettings: () => T,
 ) => {
-  const atom = atomWithStorage(
-    getStorageNS(settingKey),
-    createDefaultSettings(),
-    undefined,
-    {
-      getOnInit: true,
-    },
-  )
-  const [, , useSettingValue, , getSettings, setSettings] =
-    createAtomHooks(atom)
+  const atom = atomWithStorage(getStorageNS(settingKey), createDefaultSettings(), undefined, {
+    getOnInit: true,
+  })
+
+  const [, , useSettingValue, , getSettings, setSettings] = createAtomHooks(atom)
 
   const initializeDefaultSettings = () => {
     const currentSettings = getSettings()
@@ -30,17 +36,16 @@ export const createSettingAtom = <T extends object>(
     setSettings(newSettings)
   }
 
-  const useSettingKey = <T extends keyof ReturnType<typeof getSettings>>(
-    key: T,
-  ) => useAtomValue(useMemo(() => selectAtom(atom, (s) => s[key]), [key]))
+  const useSettingKey = <T extends keyof ReturnType<typeof getSettings>>(key: T) =>
+    useAtomValue(useMemo(() => selectAtom(atom, (s) => s[key]), [key]))
 
   const useSettingSelector = <
     T extends keyof ReturnType<typeof getSettings>,
     S extends ReturnType<typeof getSettings>,
     R = S[T],
   >(
-      selector: (s: S) => R,
-    ): R => {
+    selector: (s: S) => R,
+  ): R => {
     const stableSelector = useRefValue(selector)
 
     return useAtomValue(
@@ -53,9 +58,18 @@ export const createSettingAtom = <T extends object>(
     key: K,
     value: ReturnType<typeof getSettings>[K],
   ) => {
+    const updated = Date.now()
     setSettings({
       ...getSettings(),
       [key]: value,
+
+      updated,
+    })
+
+    EventBus.dispatch("SETTING_CHANGE_EVENT", {
+      payload: { [key]: value },
+      updated,
+      key: settingKey,
     })
   }
 
@@ -93,20 +107,16 @@ export const createSettingAtom = <T extends object>(
 }
 
 export const createDefineSettingItem =
-  <T>(
-    _getSetting: () => T,
-    setSetting: (key: any, value: Partial<T>) => void,
-  ) =>
+  <T>(_getSetting: () => T, setSetting: (key: any, value: Partial<T>) => void) =>
   <K extends keyof T>(
-      key: K,
-      options: {
-        label: string
-        description?: string | JSX.Element
-        onChange?: (value: T[K]) => void
-        hide?: boolean
-
-      } & Omit<SettingItem<any>, "onChange" | "description" | "label" | "hide" | "key">,
-    ): any => {
+    key: K,
+    options: {
+      label: string
+      description?: string | JSX.Element
+      onChange?: (value: T[K]) => void
+      hide?: boolean
+    } & Omit<SettingItem<any>, "onChange" | "description" | "label" | "hide" | "key">,
+  ): any => {
     const { label, description, onChange, hide, ...rest } = options
 
     return {

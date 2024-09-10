@@ -17,11 +17,7 @@ import { StarIcon } from "../star-icon"
 import { EntryTranslation } from "../translation"
 import type { EntryListItemFC } from "../types"
 
-export const SocialMediaItem: EntryListItemFC = ({
-  entryId,
-  entryPreview,
-  translation,
-}) => {
+export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, translation }) => {
   const entry = useEntry(entryId) || entryPreview
 
   const previewMedia = usePreviewMedia()
@@ -31,14 +27,15 @@ export const SocialMediaItem: EntryListItemFC = ({
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
+  const content = entry.entries.content || entry.entries.description
+
   return (
     <div
-
       className={cn(
         "relative flex py-4 pl-3 pr-2",
         "group",
         !asRead &&
-        "before:absolute before:-left-4 before:top-[28px] before:block before:size-2 before:rounded-full before:bg-accent",
+          "before:absolute before:-left-4 before:top-[28px] before:block before:size-2 before:rounded-full before:bg-accent",
       )}
     >
       <FeedIcon
@@ -49,12 +46,7 @@ export const SocialMediaItem: EntryListItemFC = ({
         size={36}
       />
       <div className="ml-2 min-w-0 flex-1">
-        <div
-          className={cn(
-            "-mt-0.5 flex-1 text-sm",
-            entry.entries.description && "line-clamp-5",
-          )}
-        >
+        <div className={cn("-mt-0.5 flex-1 text-sm", content && "line-clamp-[10]")}>
           <div className="w-[calc(100%-10rem)] space-x-1">
             <span className="font-semibold">{entry.entries.author}</span>
             <span className="text-zinc-500">·</span>
@@ -69,8 +61,10 @@ export const SocialMediaItem: EntryListItemFC = ({
             )}
           >
             <EntryTranslation
-              source={entry.entries.description}
-              target={translation?.description}
+              className="cursor-auto select-text [&_br:last-child]:hidden"
+              source={content}
+              target={translation?.content}
+              isHTML
             />
             {!!entry.collections && <StarIcon />}
           </div>
@@ -122,9 +116,7 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
   return (
     <div className="flex origin-right scale-90 items-center gap-1">
       {items
-        .filter(
-          (item) => !item.hide && item.key !== "read" && item.key !== "unread",
-        )
+        .filter((item) => !item.hide && item.key !== "read" && item.key !== "unread")
         .map((item) => (
           <ActionButton
             icon={

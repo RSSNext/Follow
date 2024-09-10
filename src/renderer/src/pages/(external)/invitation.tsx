@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Logo } from "@renderer/components/icons/logo"
 import { Button } from "@renderer/components/ui/button"
+import { styledButtonVariant } from "@renderer/components/ui/button/variants"
 import {
   Form,
   FormControl,
@@ -10,7 +11,8 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
-import { getFetchErrorMessage } from "@renderer/lib/api-fetch"
+import { SocialMediaLinks } from "@renderer/constants/social"
+import { getFetchErrorMessage } from "@renderer/lib/error-parser"
 import { useInvitationMutation } from "@renderer/queries/invitations"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
@@ -44,13 +46,10 @@ export function Component() {
   }, [invitationMutation.isSuccess, navigate])
 
   return (
-    <div className="container flex h-screen w-full flex-col items-center justify-center gap-10">
+    <div className="container flex h-screen w-full flex-col items-center justify-center gap-14">
       <Logo className="size-20" />
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[512px] max-w-full space-y-8"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-[512px] max-w-full">
           <FormField
             control={form.control}
             name="code"
@@ -77,13 +76,38 @@ export function Component() {
           </div>
         </form>
       </Form>
-      <div className="text-balance text-center text-sm text-zinc-500 md:text-left">
-        😰 Sorry, Follow is currently in
-        {" "}
-        <strong>early access</strong>
-        {" "}
-        and
-        requires an invitation to use.
+      <div className="space-y-2 text-balance text-center text-sm text-zinc-600 md:text-left">
+        <p>
+          😰 Sorry, Follow is currently in <strong>early access</strong> and requires an invitation
+          code to use.
+        </p>
+        <p>You can get an invitation code in the following ways:</p>
+        <p>
+          <p>1. Looking for any beta user to invite you.</p>
+          <p>2. Join our Discord server for occasional giveaways.</p>
+          <p>3. Follow our X account for occasional giveaways.</p>
+        </p>
+      </div>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {SocialMediaLinks.map((link) => (
+          <span
+            key={link.url}
+            className={styledButtonVariant({
+              variant: "outline",
+              className: "flex-1",
+            })}
+          >
+            <a
+              href={link.url}
+              className="center flex w-full gap-1"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <i className={link.icon} />
+              {link.label}
+            </a>
+          </span>
+        ))}
       </div>
     </div>
   )

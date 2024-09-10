@@ -60,9 +60,7 @@ const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
   [FeedViewType.Videos]: [],
 }
 
-export const useSubscriptionStore = createZustandStore<SubscriptionState>(
-  "subscription",
-)(() => ({
+export const useSubscriptionStore = createZustandStore<SubscriptionState>("subscription")(() => ({
   data: {},
   feedIdByView: { ...emptyDataIdByView },
 }))
@@ -148,7 +146,7 @@ class SubscriptionActions {
   async markReadByFeedIds(
     feedIds: string[],
     view: FeedViewType,
-    filter?: MarkReadFilter
+    filter?: MarkReadFilter,
   ): Promise<void>
   async markReadByFeedIds(...args: [string[], FeedViewType?, MarkReadFilter?]) {
     const [feedIds, view, filter] = args
@@ -208,17 +206,13 @@ class SubscriptionActions {
                 subscription.category = null
                 // The logic for removing Category here is to use domain as the default category name.
                 parsed.domain &&
-                (subscription.defaultCategory = capitalizeFirstLetter(
-                  parsed.domain,
-                ))
+                  (subscription.defaultCategory = capitalizeFirstLetter(parsed.domain))
               }
             })
           }),
         )
         const { data } = get()
-        return ids.map(
-          (id) => data[id] && SubscriptionService.upsert(data[id]),
-        )
+        return ids.map((id) => data[id] && SubscriptionService.upsert(data[id]))
       },
       {
         doTranscationWhenMutationFail: false,
@@ -268,10 +262,7 @@ class SubscriptionActions {
     for (const feedId of state.feedIdByView[currentView]) {
       const subscription = state.data[feedId]
       if (!subscription) continue
-      if (
-        subscription.category === category ||
-        subscription.defaultCategory === category
-      ) {
+      if (subscription.category === category || subscription.defaultCategory === category) {
         folderFeedIds.push(feedId)
       }
     }
@@ -291,12 +282,8 @@ class SubscriptionActions {
         for (const feedId of folderFeedIds) {
           const feed = state.data[feedId]
           if (feed) feed.view = changeToView
-          const currentViewFeedIds = state.feedIdByView[
-            currentView
-          ] as string[]
-          const changeToViewFeedIds = state.feedIdByView[
-            changeToView
-          ] as string[]
+          const currentViewFeedIds = state.feedIdByView[currentView] as string[]
+          const changeToViewFeedIds = state.feedIdByView[changeToView] as string[]
           currentViewFeedIds.splice(currentViewFeedIds.indexOf(feedId), 1)
           changeToViewFeedIds.push(feedId)
         }
@@ -304,9 +291,7 @@ class SubscriptionActions {
     )
 
     await Promise.all(
-      folderFeedIds.map((feedId) =>
-        SubscriptionService.changeView(feedId, changeToView),
-      ),
+      folderFeedIds.map((feedId) => SubscriptionService.changeView(feedId, changeToView)),
     )
   }
 
@@ -315,10 +300,7 @@ class SubscriptionActions {
     const state = get()
     for (const feedId in state.data) {
       const subscription = state.data[feedId]
-      if (
-        subscription.category === lastCategory ||
-        subscription.defaultCategory === lastCategory
-      ) {
+      if (subscription.category === lastCategory || subscription.defaultCategory === lastCategory) {
         subscriptionIds.push(feedId)
       }
     }
@@ -344,13 +326,9 @@ class SubscriptionActions {
           },
         }),
       async () =>
-      // Db
+        // Db
 
-        SubscriptionService.renameCategory(
-          whoami()!.id,
-          subscriptionIds,
-          newCategory,
-        ),
+        SubscriptionService.renameCategory(whoami()!.id, subscriptionIds, newCategory),
     )
   }
 }

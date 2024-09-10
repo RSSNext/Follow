@@ -5,7 +5,7 @@ import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { cn } from "@renderer/lib/utils"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { useEntry } from "@renderer/store/entry/hooks"
-import { useFeedById } from "@renderer/store/feed"
+import { getPreferredTitle, useFeedById } from "@renderer/store/feed"
 import dayjs from "dayjs"
 
 import { StarIcon } from "../star-icon"
@@ -45,14 +45,9 @@ export function GridItem({
             )}
           >
             <TitleMarquee className="min-w-0 grow">
-              <EntryTranslation
-                source={entry.entries.title}
-                target={translation?.title}
-              />
+              <EntryTranslation source={entry.entries.title} target={translation?.title} />
             </TitleMarquee>
-            {!!entry.collections && (
-              <StarIcon className="static shrink-0 self-end" />
-            )}
+            {!!entry.collections && <StarIcon className="static shrink-0 self-end" />}
           </div>
         </div>
         <div className="flex items-center gap-1 truncate text-[13px]">
@@ -63,14 +58,11 @@ export function GridItem({
             entry={entry.entries}
             size={18}
           />
-          <span className="min-w-0 truncate">{feeds?.title}</span>
+          <span className="min-w-0 truncate">{getPreferredTitle(feeds)}</span>
           <span className="text-zinc-500">·</span>
           <span className="text-zinc-500">
             {dayjs
-              .duration(
-                dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"),
-                "minute",
-              )
+              .duration(dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"), "minute")
               .humanize()}
           </span>
         </div>

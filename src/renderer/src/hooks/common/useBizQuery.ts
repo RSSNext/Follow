@@ -12,9 +12,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 
 // TODO split normal define query and infinite define query for better type checking
-export type SafeReturnType<T> = T extends (...args: any[]) => infer R
-  ? R
-  : never
+export type SafeReturnType<T> = T extends (...args: any[]) => infer R ? R : never
 
 export type CombinedObject<T, U> = T & U
 export function useAuthQuery<
@@ -24,14 +22,8 @@ export function useAuthQuery<
   TData = TQueryFnData,
 >(
   query: TQuery,
-  options: Omit<
-    UseQueryOptions<TQueryFnData, TError>,
-    "queryKey" | "queryFn"
-  > = {},
-): CombinedObject<
-  UseQueryResult<TData, TError>,
-  { key: TQuery["key"], fn: TQuery["fn"] }
-  > {
+  options: Omit<UseQueryOptions<TQueryFnData, TError>, "queryKey" | "queryFn"> = {},
+): CombinedObject<UseQueryResult<TData, TError>, { key: TQuery["key"]; fn: TQuery["fn"] }> {
   const authFail = useLoginModalShow()
   // @ts-expect-error
   return Object.assign(
@@ -59,8 +51,8 @@ export function useAuthInfiniteQuery<
   options: Omit<UseInfiniteQueryOptions<FNR, E>, "queryKey" | "queryFn">,
 ): CombinedObject<
   UseInfiniteQueryResult<InfiniteData<R>, FetchError>,
-  { key: T["key"], fn: T["fn"] }
-  > {
+  { key: T["key"]; fn: T["fn"] }
+> {
   const authFail = useLoginModalShow()
   // @ts-expect-error
   return Object.assign(

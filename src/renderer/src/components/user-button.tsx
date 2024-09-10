@@ -1,9 +1,5 @@
 import { repository } from "@pkg"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@renderer/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import { useSignOut } from "@renderer/hooks/biz/useSignOut"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
@@ -41,21 +37,17 @@ export const LoginButton: FC<LoginProps> = (props) => {
     <ActionButton
       className="relative z-[1]"
       onClick={
-        method === "modal" ?
-            () => {
+        method === "modal"
+          ? () => {
               modalStack.present({
                 CustomModalComponent: NoopChildren,
                 title: "Login",
                 id: "login",
-                content: () => (
-                  <LoginModalContent
-                    runtime={window.electron ? "app" : "browser"}
-                  />
-                ),
+                content: () => <LoginModalContent runtime={window.electron ? "app" : "browser"} />,
                 clickOutsideToDismiss: true,
               })
-            } :
-          undefined
+            }
+          : undefined
       }
       tooltip="Login"
     >
@@ -82,17 +74,13 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         </ActionButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-[180px]" side="bottom" align="end">
-        <DropdownMenuLabel className="text-xs text-theme-foreground/60">
-          Account
-        </DropdownMenuLabel>
+        <DropdownMenuLabel className="text-xs text-theme-foreground/60">Account</DropdownMenuLabel>
         <DropdownMenuLabel>
           <div className="-mt-1 flex items-center gap-2">
             <UserAvatar className="h-7 shrink-0 p-0" hideName />
             <div className="max-w-40 leading-none">
               <div className="truncate">{user?.name}</div>
-              <div className="truncate text-xs font-medium text-zinc-500">
-                {user?.handle}
-              </div>
+              <div className="truncate text-xs font-medium text-zinc-500">{user?.handle}</div>
             </div>
           </div>
         </DropdownMenuLabel>
@@ -105,7 +93,14 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         >
           Profile
         </DropdownMenuItem>
+        {/* <DropdownMenuSeparator />
+
+        <DropdownMenuLabel>
+          <AppTheme />
+        </DropdownMenuLabel> */}
+
         <DropdownMenuSeparator />
+
         <DropdownMenuItem
           onClick={() => {
             // Here we need to delay one frame, so it's two raf,
@@ -139,10 +134,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             <DropdownMenuSeparator />
           </>
         )}
-        <DropdownMenuItem
-          onClick={signOut}
-          icon={<i className="i-mgc-exit-cute-re" />}
-        >
+        <DropdownMenuItem onClick={signOut} icon={<i className="i-mgc-exit-cute-re" />}>
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -193,11 +185,48 @@ export function UserAvatar({
           className="duration-200 animate-in fade-in-0"
           src={(profile.data || session?.user)?.image || undefined}
         />
-        <AvatarFallback>
-          {(profile.data || session?.user)?.name?.slice(0, 2)}
-        </AvatarFallback>
+        <AvatarFallback>{(profile.data || session?.user)?.name?.slice(0, 2)}</AvatarFallback>
       </Avatar>
       {!hideName && <div>{(profile.data || session?.user)?.name}</div>}
     </div>
   )
 }
+
+// const AppTheme = () => {
+//   const theme = useThemeAtomValue()
+//   const setTheme = useSetTheme()
+//   return (
+//     <SettingTabbedSegment
+//       className="mb-0"
+//       label={(
+//         <span>
+//           <i className="i-mgc-palette-cute-re mr-2 translate-y-0.5" />
+//           <span className="text-sm font-normal">
+//             Theme
+//           </span>
+//         </span>
+//       )}
+//       value={theme}
+//       values={[
+//         {
+//           value: "system",
+//           label: "",
+//           icon: <i className="i-mingcute-monitor-line" />,
+//         },
+//         {
+//           value: "light",
+//           label: "",
+//           icon: <i className="i-mingcute-sun-line" />,
+//         },
+//         {
+//           value: "dark",
+//           label: "",
+//           icon: <i className="i-mingcute-moon-line" />,
+//         },
+//       ]}
+//       onValueChanged={(value) => {
+//         setTheme(value as "light" | "dark" | "system")
+//       }}
+//     />
+//   )
+// }

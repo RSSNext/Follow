@@ -57,6 +57,6 @@
 }
 
 [data-build-type="web"][data-theme="dark"] {
-  --fo-native: 240 5.9% 10%;
-  --fo-native-active: 240 3.7% 15.9%;
+  --fo-native: 220 8.1% 14.5%;
+  --fo-native-active: 198 31.3% 6.3%;
 }

@@ -24,7 +24,12 @@ import {
 import { ViewSelectContent } from "@renderer/components/view-select-content"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
-import type { ActionEntryField, ActionFeedField, ActionOperation, SupportedLanguages } from "@renderer/models"
+import type {
+  ActionEntryField,
+  ActionFeedField,
+  ActionOperation,
+  SupportedLanguages,
+} from "@renderer/models"
 
 type ActionsInput = {
   name: string
@@ -171,35 +176,17 @@ const FieldTableHeader = () => (
   </TableHeader>
 )
 
-const DeleteTableCell = ({
-  disabled,
-  onClick,
-}: {
-  disabled?: boolean
-  onClick?: () => void
-}) => (
+const DeleteTableCell = ({ disabled, onClick }: { disabled?: boolean; onClick?: () => void }) => (
   <TableCell size="sm" className="flex h-10 items-center pr-1">
-    <Button
-      variant="ghost"
-      className="w-full px-0"
-      disabled={disabled}
-      onClick={onClick}
-    >
+    <Button variant="ghost" className="w-full px-0" disabled={disabled} onClick={onClick}>
       <i className="i-mgc-delete-2-cute-re text-zinc-600" />
     </Button>
   </TableCell>
 )
 
 const AddTableRow = ({ onClick }: { onClick?: () => void }) => (
-  <Button
-    variant="outline"
-    className="mt-1 w-full gap-1"
-    buttonClassName="py-1"
-    onClick={onClick}
-  >
-    <i className="i-mgc-add-cute-re" />
-    {" "}
-    Add
+  <Button variant="outline" className="mt-1 w-full gap-1" buttonClassName="py-1" onClick={onClick}>
+    <i className="i-mgc-add-cute-re" /> Add
   </Button>
 )
 
@@ -212,9 +199,7 @@ const OperationTableCell = ({
   value?: ActionOperation
   onValueChange?: (value: ActionOperation) => void
 }) => {
-  const options = OperationOptions.filter((option) =>
-    option.types.includes(type),
-  )
+  const options = OperationOptions.filter((option) => option.types.includes(type))
   return (
     <TableCell size="sm">
       <Select value={value} onValueChange={onValueChange}>
@@ -246,11 +231,7 @@ const SettingCollapsible = ({
 }) => {
   if (typeof open === "boolean" && typeof onOpenChange === "function") {
     return (
-      <CollapseControlled
-        isOpened={open}
-        onOpenChange={onOpenChange}
-        title={title}
-      >
+      <CollapseControlled isOpened={open} onOpenChange={onOpenChange} title={title}>
         <div className="px-1 pt-2">{children}</div>
       </CollapseControlled>
     )
@@ -281,7 +262,7 @@ export function ActionCard({
       <CardHeader className="space-y-4 px-6 py-4">
         <Collapse
           className="[&_.name-placeholder]:data-[state=open]:hidden [&_input.name-input]:data-[state=open]:block"
-          title={(
+          title={
             <div className="flex w-full items-center gap-2 pr-2">
               <Button
                 variant="ghost"
@@ -304,7 +285,7 @@ export function ActionCard({
 
               <div className="name-placeholder flex-1 text-sm">{data.name}</div>
             </div>
-          )}
+          }
         >
           <div className="mt-4 space-y-4 px-1">
             <div className="space-y-3">
@@ -332,10 +313,7 @@ export function ActionCard({
                     <FieldTableHeader />
                     <TableBody>
                       {data.condition.map((condition, conditionIdx) => {
-                        const change = (
-                          key: string,
-                          value: string | number,
-                        ) => {
+                        const change = (key: string, value: string | number) => {
                           if (!data.condition[conditionIdx]) {
                             data.condition[conditionIdx] = {}
                           }
@@ -343,9 +321,8 @@ export function ActionCard({
                           onChange(data)
                         }
                         const type =
-                          FeedOptions.find(
-                            (option) => option.value === condition.field,
-                          )?.type || "text"
+                          FeedOptions.find((option) => option.value === condition.field)?.type ||
+                          "text"
                         return (
                           <TableRow key={conditionIdx}>
                             <DeleteTableCell
@@ -357,16 +334,12 @@ export function ActionCard({
                             <TableCell size="sm">
                               <Select
                                 value={condition.field}
-                                onValueChange={(value: ActionFeedField) =>
-                                  change("field", value)}
+                                onValueChange={(value: ActionFeedField) => change("field", value)}
                               >
                                 <CommonSelectTrigger />
                                 <SelectContent>
                                   {FeedOptions.map((option) => (
-                                    <SelectItem
-                                      key={option.value}
-                                      value={option.value}
-                                    >
+                                    <SelectItem key={option.value} value={option.value}>
                                       {option.name}
                                     </SelectItem>
                                   ))}
@@ -376,14 +349,12 @@ export function ActionCard({
                             <OperationTableCell
                               type={type}
                               value={condition.operator}
-                              onValueChange={(value) =>
-                                change("operator", value)}
+                              onValueChange={(value) => change("operator", value)}
                             />
                             <TableCell size="sm">
                               {type === "view" ? (
                                 <Select
-                                  onValueChange={(value) =>
-                                    change("value", value)}
+                                  onValueChange={(value) => change("value", value)}
                                   value={condition.value}
                                 >
                                   <CommonSelectTrigger />
@@ -394,8 +365,7 @@ export function ActionCard({
                                   type={type}
                                   value={condition.value}
                                   className="h-8"
-                                  onChange={(e) =>
-                                    change("value", e.target.value)}
+                                  onChange={(e) => change("value", e.target.value)}
                                 />
                               )}
                             </TableCell>
@@ -417,9 +387,7 @@ export function ActionCard({
               <p className="font-medium text-zinc-500">Then do…</p>
               <div className="w-full space-y-4">
                 <div className="flex w-full items-center justify-between">
-                  <span className="w-0 shrink grow truncate">
-                    Generate summary using AI
-                  </span>
+                  <span className="w-0 shrink grow truncate">Generate summary using AI</span>
                   <Switch
                     checked={data.result.summary}
                     onCheckedChange={(checked) => {
@@ -431,9 +399,7 @@ export function ActionCard({
                 <Divider />
 
                 <div className="flex w-full items-center justify-between">
-                  <span className="w-0 shrink grow truncate">
-                    Translate into
-                  </span>
+                  <span className="w-0 shrink grow truncate">Translate into</span>
                   <Select
                     value={data.result.translation}
                     onValueChange={(value) => {
@@ -471,8 +437,7 @@ export function ActionCard({
                     onChange(data)
                   }}
                 >
-                  {data.result.rewriteRules &&
-                    data.result.rewriteRules.length > 0 && (
+                  {data.result.rewriteRules && data.result.rewriteRules.length > 0 && (
                     <>
                       <Table>
                         <TableHeader>
@@ -483,50 +448,40 @@ export function ActionCard({
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {data.result.rewriteRules.map(
-                            (rule, rewriteIdx) => {
-                              const change = (key: string, value: string) => {
-                                data.result.rewriteRules![rewriteIdx][key] =
-                                    value
-                                onChange(data)
-                              }
-                              return (
-                                <TableRow key={rewriteIdx}>
-                                  <DeleteTableCell
-                                    onClick={() => {
-                                      if (
-                                        data.result.rewriteRules?.length === 1
-                                      ) {
-                                        delete data.result.rewriteRules
-                                      } else {
-                                        data.result.rewriteRules?.splice(
-                                          rewriteIdx,
-                                          1,
-                                        )
-                                      }
-                                      onChange(data)
-                                    }}
+                          {data.result.rewriteRules.map((rule, rewriteIdx) => {
+                            const change = (key: string, value: string) => {
+                              data.result.rewriteRules![rewriteIdx][key] = value
+                              onChange(data)
+                            }
+                            return (
+                              <TableRow key={rewriteIdx}>
+                                <DeleteTableCell
+                                  onClick={() => {
+                                    if (data.result.rewriteRules?.length === 1) {
+                                      delete data.result.rewriteRules
+                                    } else {
+                                      data.result.rewriteRules?.splice(rewriteIdx, 1)
+                                    }
+                                    onChange(data)
+                                  }}
+                                />
+                                <TableCell size="sm">
+                                  <Input
+                                    value={rule.from}
+                                    className="h-8"
+                                    onChange={(e) => change("from", e.target.value)}
                                   />
-                                  <TableCell size="sm">
-                                    <Input
-                                      value={rule.from}
-                                      className="h-8"
-                                      onChange={(e) =>
-                                        change("from", e.target.value)}
-                                    />
-                                  </TableCell>
-                                  <TableCell size="sm">
-                                    <Input
-                                      value={rule.to}
-                                      className="h-8"
-                                      onChange={(e) =>
-                                        change("to", e.target.value)}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                              )
-                            },
-                          )}
+                                </TableCell>
+                                <TableCell size="sm">
+                                  <Input
+                                    value={rule.to}
+                                    className="h-8"
+                                    onChange={(e) => change("to", e.target.value)}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            )
+                          })}
                         </TableBody>
                       </Table>
                       <AddTableRow
@@ -554,37 +509,27 @@ export function ActionCard({
                     onChange(data)
                   }}
                 >
-                  {data.result.blockRules &&
-                    data.result.blockRules.length > 0 && (
+                  {data.result.blockRules && data.result.blockRules.length > 0 && (
                     <>
                       <Table>
                         <FieldTableHeader />
                         <TableBody>
                           {data.result.blockRules.map((rule, index) => {
-                            const change = (
-                              key: string,
-                              value: string | number,
-                            ) => {
+                            const change = (key: string, value: string | number) => {
                               data.result.blockRules![index][key] = value
                               onChange(data)
                             }
                             const type =
-                                EntryOptions.find(
-                                  (option) => option.value === rule.field,
-                                )?.type || "text"
+                              EntryOptions.find((option) => option.value === rule.field)?.type ||
+                              "text"
                             return (
                               <TableRow key={index}>
                                 <DeleteTableCell
                                   onClick={() => {
-                                    if (
-                                      data.result.blockRules?.length === 1
-                                    ) {
+                                    if (data.result.blockRules?.length === 1) {
                                       delete data.result.blockRules
                                     } else {
-                                      data.result.blockRules?.splice(
-                                        index,
-                                        1,
-                                      )
+                                      data.result.blockRules?.splice(index, 1)
                                     }
                                     onChange(data)
                                   }}
@@ -592,16 +537,12 @@ export function ActionCard({
                                 <TableCell size="sm">
                                   <Select
                                     value={rule.field}
-                                    onValueChange={(value) =>
-                                      change("field", value)}
+                                    onValueChange={(value) => change("field", value)}
                                   >
                                     <CommonSelectTrigger />
                                     <SelectContent>
                                       {EntryOptions.map((option) => (
-                                        <SelectItem
-                                          key={option.value}
-                                          value={option.value}
-                                        >
+                                        <SelectItem key={option.value} value={option.value}>
                                           {option.name}
                                         </SelectItem>
                                       ))}
@@ -611,16 +552,14 @@ export function ActionCard({
                                 <OperationTableCell
                                   type={type}
                                   value={rule.operator}
-                                  onValueChange={(value) =>
-                                    change("operator", value)}
+                                  onValueChange={(value) => change("operator", value)}
                                 />
                                 <TableCell size="sm">
                                   <Input
                                     type={type}
                                     value={rule.value}
                                     className="h-8"
-                                    onChange={(e) =>
-                                      change("value", e.target.value)}
+                                    onChange={(e) => change("value", e.target.value)}
                                   />
                                 </TableCell>
                               </TableRow>

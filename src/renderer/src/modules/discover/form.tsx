@@ -1,12 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Button } from "@renderer/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@renderer/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader } from "@renderer/components/ui/card"
 import {
   Form,
   FormControl,
@@ -36,8 +31,9 @@ const info: Record<
   string,
   {
     label: string
-    prefix?: string
+    prefix?: string[]
     showModal?: boolean
+    default?: string
   }
 > = {
   search: {
@@ -45,22 +41,24 @@ const info: Record<
   },
   rss: {
     label: "RSS URL",
-    prefix: "https://",
+    default: "https://",
+    prefix: ["https://", "http://"],
     showModal: true,
   },
   rsshub: {
     label: "RSSHub Route",
-    prefix: "rsshub://",
+    prefix: ["rsshub://"],
+    default: "rsshub://",
     showModal: true,
   },
 }
 
 export function DiscoverForm({ type }: { type: string }) {
-  const { prefix } = info[type]
+  const { prefix, default: defaultValue } = info[type]
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      keyword: prefix || "",
+      keyword: defaultValue || "",
     },
   })
 
@@ -75,7 +73,6 @@ export function DiscoverForm({ type }: { type: string }) {
           <FeedForm
             asWidget
             url={values.keyword}
-
             defaultValues={{
               view: defaultView.toString(),
             }}
@@ -90,14 +87,18 @@ export function DiscoverForm({ type }: { type: string }) {
 
   const keyword = form.watch("keyword")
   useEffect(() => {
-    if (prefix) {
-      if (!keyword.startsWith(prefix)) {
-        form.setValue("keyword", prefix)
-      } else if (keyword.startsWith(`${prefix}${prefix}`)) {
-        form.setValue("keyword", keyword.slice(prefix.length))
-      }
+    if (!prefix) return
+    const isValidPrefix = prefix.find((p) => keyword.startsWith(p))
+    if (!isValidPrefix) {
+      form.setValue("keyword", prefix[0])
+
+      return
     }
-  }, [keyword])
+
+    if (keyword.startsWith(`${isValidPrefix}${isValidPrefix}`)) {
+      form.setValue("keyword", keyword.slice(isValidPrefix.length))
+    }
+  }, [form, keyword, prefix])
 
   const query = useQuery({
     queryKey: ["discover", keyword],
@@ -118,10 +119,7 @@ export function DiscoverForm({ type }: { type: string }) {
   return (
     <>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[512px] space-y-8"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-[512px] space-y-8">
           <FormField
             control={form.control}
             name="keyword"
@@ -160,11 +158,7 @@ export function DiscoverForm({ type }: { type: string }) {
             {query.data?.map((item) => (
               <Card data-feed-id={item.feed.id} key={item.feed.url || item.docs} className="select-text">
                 <CardHeader>
-                  <FollowSummary
-                    className="max-w-[462px]"
-                    feed={item.feed}
-                    docs={item.docs}
-                  />
+                  <FollowSummary className="max-w-[462px]" feed={item.feed} docs={item.docs} />
                 </CardHeader>
                 {item.docs ? (
                   <CardFooter>
@@ -258,8 +252,7 @@ export function DiscoverForm({ type }: { type: string }) {
                       <div className="ml-6 text-zinc-500">
                         <span className="font-medium text-zinc-800 dark:text-zinc-200">
                           {item.subscriptionCount}
-                        </span>
-                        {" "}
+                        </span>{" "}
                         Followers
                       </div>
                     </CardFooter>

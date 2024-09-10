@@ -1,9 +1,4 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "../tooltip"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../tooltip"
 
 export interface LinkProps {
   href: string

@@ -10,10 +10,10 @@ const LanguageMap: Record<
     code: string
   }
 > = {
-  "en": {
+  en: {
     code: "eng",
   },
-  "ja": {
+  ja: {
     code: "jpn",
   },
   "zh-CN": {
@@ -41,9 +41,7 @@ export const ai = {
         return null
       }
       let fields =
-        entry.settings?.translation && view !== undefined ?
-          views[view!].translation.split(",") :
-            []
+        entry.settings?.translation && view !== undefined ? views[view!].translation.split(",") : []
       if (extraFields) {
         fields = [...fields, ...extraFields]
       }
@@ -76,13 +74,7 @@ export const ai = {
         return null
       }
     }),
-  summary: ({
-    entryId,
-    language,
-  }: {
-    entryId: string
-    language?: SupportedLanguages
-  }) =>
+  summary: ({ entryId, language }: { entryId: string; language?: SupportedLanguages }) =>
     defineQuery(["summary", entryId, language], async () => {
       const res = await apiClient.ai.summary.$get({
         query: {

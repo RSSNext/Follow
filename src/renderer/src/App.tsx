@@ -90,10 +90,7 @@ const AppSkeleton = () => {
         }}
       />
       <div className="relative size-full grow bg-theme-background">
-        <div
-          className="absolute inset-y-0 w-px bg-border"
-          style={{ left: entryColWidth }}
-        />
+        <div className="absolute inset-y-0 w-px bg-border" style={{ left: entryColWidth }} />
       </div>
     </div>
   )

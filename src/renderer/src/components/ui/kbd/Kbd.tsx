@@ -2,6 +2,7 @@ import { cn, getOS } from "@renderer/lib/utils"
 import type { FC } from "react"
 import { Fragment, memo } from "react"
 import * as React from "react"
+import { isHotkeyPressed } from "react-hotkeys-hook"
 
 const SharedKeys = {
   backspace: "⌫",
@@ -69,41 +70,57 @@ export const KbdCombined: FC<{
     </div>
   )
 }
+export const Kbd: FC<{ children: string; className?: string }> = memo(({ children, className }) => {
+  let specialKeys = (SpecialKeys as any)[os] as Record<string, string>
+  specialKeys = { ...SharedKeys, ...specialKeys }
 
-export const Kbd: FC<{ children: string, className?: string }> = memo(
-  ({ children, className }) => {
-    let specialKeys = (SpecialKeys as any)[os] as Record<string, string>
-    specialKeys = { ...SharedKeys, ...specialKeys }
+  const [isKeyPressed, setIsKeyPressed] = React.useState(false)
+  React.useEffect(() => {
+    const handler = () => {
+      setIsKeyPressed(isHotkeyPressed(children.toLowerCase()))
+    }
+    document.addEventListener("keydown", handler)
+    document.addEventListener("keyup", handler)
 
-    return (
-      <kbd
-        className={cn("kbd h-4 space-x-1 font-mono text-[0.7rem]", className)}
-      >
-        {children.split("+").map((key_) => {
-          let key: string = key_.toLowerCase()
-          for (const [k, v] of Object.entries(specialKeys)) {
-            key = key.replace(k, v)
+    return () => {
+      document.removeEventListener("keydown", handler)
+      document.removeEventListener("keyup", handler)
+    }
+  }, [children])
+
+  return (
+    <kbd
+      className={cn(
+        "kbd h-4 space-x-1 font-mono text-[0.7rem]",
+
+        isKeyPressed ? "" : "border-b-2",
+        className,
+      )}
+    >
+      {children.split("+").map((key_) => {
+        let key: string = key_.toLowerCase()
+        for (const [k, v] of Object.entries(specialKeys)) {
+          key = key.replace(k, v)
+        }
+
+        switch (key) {
+          case SharedKeys.space: {
+            return <i className="i-mingcute-space-line" key={key} />
           }
 
-          switch (key) {
-            case SharedKeys.space: {
-              return <i className="i-mingcute-space-line" key={key} />
-            }
-
-            case SharedKeys.backspace: {
-              return <i className="i-mingcute-delete-back-line" key={key} />
-            }
-
-            default: {
-              return (
-                <span className="capitalize" key={key}>
-                  {key}
-                </span>
-              )
-            }
+          case SharedKeys.backspace: {
+            return <i className="i-mingcute-delete-back-line" key={key} />
           }
-        })}
-      </kbd>
-    )
-  },
-)
+
+          default: {
+            return (
+              <span className="capitalize" key={key}>
+                {key}
+              </span>
+            )
+          }
+        }
+      })}
+    </kbd>
+  )
+})

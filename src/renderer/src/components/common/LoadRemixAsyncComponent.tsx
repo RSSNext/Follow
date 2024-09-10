@@ -1,15 +1,11 @@
 import type { FC, ReactNode } from "react"
-import {
-  createElement,
-  useEffect,
-  useState,
-} from "react"
+import { createElement, useEffect, useState } from "react"
 
 import { LoadingCircle } from "../ui/loading"
 
 export const LoadRemixAsyncComponent: FC<{
   loader: () => Promise<any>
-  Header: FC<{ loader: () => any, [key: string]: any }>
+  Header: FC<{ loader: () => any; [key: string]: any }>
 }> = ({ loader, Header }) => {
   const [loading, setLoading] = useState(true)
 

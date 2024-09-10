@@ -6,10 +6,7 @@ import { Logo } from "../icons/logo"
 import { Button } from "../ui/button"
 import { CustomSafeError, useResetErrorWhenRouteChange } from "./helper"
 
-export const FeedNotFoundErrorFallback: FC<AppErrorFallbackProps> = ({
-  resetError,
-  error,
-}) => {
+export const FeedNotFoundErrorFallback: FC<AppErrorFallbackProps> = ({ resetError, error }) => {
   if (!(error instanceof FeedNotFound)) {
     throw error
   }

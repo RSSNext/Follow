@@ -76,17 +76,16 @@ export const registerUpdater = async () => {
   autoUpdater.autoInstallOnAppQuit = true
   autoUpdater.autoRunAppAfterInstall = true
 
-  const feedUrl: Exclude<Parameters<typeof autoUpdater.setFeedURL>[0], string> =
-    {
-      channel,
-      // hack for custom provider
-      provider: "custom" as "github",
-      repo: "follow",
-      owner: "RSSNext",
-      releaseType: channel === "stable" ? "release" : "prerelease",
-      // @ts-expect-error hack for custom provider
-      updateProvider: CustomGitHubProvider,
-    }
+  const feedUrl: Exclude<Parameters<typeof autoUpdater.setFeedURL>[0], string> = {
+    channel,
+    // hack for custom provider
+    provider: "custom" as "github",
+    repo: "follow",
+    owner: "RSSNext",
+    releaseType: channel === "stable" ? "release" : "prerelease",
+    // @ts-expect-error hack for custom provider
+    updateProvider: CustomGitHubProvider,
+  }
 
   logger.debug("auto-updater feed config", {
     ...feedUrl,
@@ -119,9 +118,7 @@ export const registerUpdater = async () => {
 
     const mainWindow = getMainWindow()
     if (!mainWindow) return
-    const handlers = getRendererHandlers<RendererHandlers>(
-      mainWindow.webContents,
-    )
+    const handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
 
     trackEvent("update_ready_to_install", {
       version: e.version,

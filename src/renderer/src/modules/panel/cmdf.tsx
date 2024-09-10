@@ -10,13 +10,7 @@ import { observeResize } from "@renderer/lib/observe-resize"
 import { useSubscribeElectronEvent } from "@shared/event"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react"
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useDebounceCallback, useEventCallback } from "usehooks-ts"
 
 const CmdFImpl: FC<{
@@ -39,9 +33,7 @@ const CmdFImpl: FC<{
     inputRef.current?.focus()
     // Select all
 
-    nextFrame(() =>
-      inputRef.current?.setSelectionRange(0, currentValue.current.length),
-    )
+    nextFrame(() => inputRef.current?.setSelectionRange(0, currentValue.current.length))
   }, [currentValue])
 
   const [isSearching, setIsSearching] = useState(false)
@@ -188,11 +180,7 @@ const CmdFImpl: FC<{
   )
 }
 
-const drawText = (
-  canvas: HTMLCanvasElement,
-  text: string,
-  scrollLeft: number,
-) => {
+const drawText = (canvas: HTMLCanvasElement, text: string, scrollLeft: number) => {
   const ctx = canvas.getContext("2d")
   if (!ctx) {
     return
@@ -204,9 +192,7 @@ const drawText = (
 
   const rootStyles = getComputedStyle(document.documentElement)
 
-  const textColor = `hsl(${rootStyles
-    .getPropertyValue("--foreground")
-    .trim()})`
+  const textColor = `hsl(${rootStyles.getPropertyValue("--foreground").trim()})`
 
   ctx.scale(dpr, dpr)
   ctx.clearRect(0, 0, canvas.width, canvas.height)

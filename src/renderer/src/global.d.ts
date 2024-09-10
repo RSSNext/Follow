@@ -6,7 +6,7 @@ declare global {
   export type ComponentType<P = object> = {
     className?: string
   } & PropsWithChildren &
-  P
+    P
   export type Nullable<T> = T | null | undefined
 
   // BIZ ID

@@ -1,9 +1,10 @@
 {
   "[javascript][javascriptreact][typescript][typescriptreact][json][jsonc]": {
-    "editor.formatOnSave": false,
+    "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
-    }
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
   "tailwindCSS.experimental.classRegex": [
@@ -12,7 +13,6 @@
     // ["tw\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
 
     ["tw`([^`]*)`", "([^`]*)"]
-
   ],
 
   // If you do not want to autofix some rules on save
@@ -37,9 +37,7 @@
     { "rule": "prefer-const", "severity": "off" },
     { "rule": "unused-imports/no-unused-imports", "severity": "off" }
   ],
-  "cSpell.words": [
-    "rsshub"
-  ],
+  "cSpell.words": ["rsshub"],
   "editor.foldingImportsByDefault": true,
   "commentTranslate.hover.enabled": false,
   "typescript.tsdk": "node_modules/typescript/lib"

@@ -7,11 +7,7 @@ interface IssueOptions {
   body: string
   label: string
 }
-export const getNewIssueUrl = ({
-  body,
-  label,
-  title,
-}: Partial<IssueOptions> = {}) => {
+export const getNewIssueUrl = ({ body, label, title }: Partial<IssueOptions> = {}) => {
   const baseUrl = `${repository.url}/issues/new`
 
   const searchParams = new URLSearchParams()

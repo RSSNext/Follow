@@ -10,5 +10,4 @@ export enum FeedViewType {
 export enum Routes {
   Feeds = "/feeds",
   Discover = "/discover",
-
 }

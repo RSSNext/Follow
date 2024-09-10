@@ -33,9 +33,7 @@ export const EntryItemWrapper: FC<
     type: "entryList",
   })
 
-  const isActive = useRouteParamsSelector(
-    ({ entryId }) => entryId === entry.entries.id,
-  )
+  const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry.entries.id)
 
   const asRead = useAsRead(entry)
   const hoverMarkUnread = useGeneralSettingKey("hoverMarkUnread")
@@ -65,56 +63,52 @@ export const EntryItemWrapper: FC<
     },
     [entry.entries.id, navigate],
   )
-  const handleDoubleClick: React.MouseEventHandler<HTMLDivElement> =
-    useCallback(
-      () => entry.entries.url && window.open(entry.entries.url, "_blank"),
-      [entry.entries.url],
-    )
-  const handleContextMenu: React.MouseEventHandler<HTMLDivElement> =
-    useCallback(
-      (e) => {
-        e.preventDefault()
+  const handleDoubleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
+    () => entry.entries.url && window.open(entry.entries.url, "_blank"),
+    [entry.entries.url],
+  )
+  const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      e.preventDefault()
 
-        showNativeMenu(
-          [
-            ...items
-              .filter((item) => !item.hide)
-              .map((item) => ({
-                type: "text" as const,
-                label: item.name,
-                click: item.onClick,
-                shortcut: item.shortcut,
-              })),
-            {
-              type: "separator" as const,
-            },
-            ...feedItems.filter((item) => !item.disabled),
-
-            {
-              type: "separator" as const,
-            },
-            {
+      showNativeMenu(
+        [
+          ...items
+            .filter((item) => !item.hide)
+            .map((item) => ({
               type: "text" as const,
-              label: "Copy Entry ID",
-              click: () => {
-                navigator.clipboard.writeText(entry.entries.id)
-              },
+              label: item.name,
+              click: item.onClick,
+              shortcut: item.shortcut,
+            })),
+          {
+            type: "separator" as const,
+          },
+          ...feedItems.filter((item) => !item.disabled),
+
+          {
+            type: "separator" as const,
+          },
+          {
+            type: "text" as const,
+            label: "Copy Entry ID",
+            click: () => {
+              navigator.clipboard.writeText(entry.entries.id)
             },
-          ],
-          e,
-        )
-      },
-      [items, feedItems, entry.entries.id],
-    )
+          },
+        ],
+        e,
+      )
+    },
+    [items, feedItems, entry.entries.id],
+  )
 
   return (
     <div data-entry-id={entry.entries.id}>
       <div
         className={cn(
           "relative",
-          asRead ?
-            "text-zinc-700 dark:text-neutral-400" :
-            "text-zinc-900 dark:text-neutral-300",
+          asRead ? "text-zinc-700 dark:text-neutral-400" : "text-zinc-900 dark:text-neutral-300",
           itemClassName,
         )}
         onClick={handleClick}
@@ -124,9 +118,7 @@ export const EntryItemWrapper: FC<
         onContextMenu={handleContextMenu}
       >
         {overlay ? (
-          <ListItemHoverOverlay isActive={isActive}>
-            {children}
-          </ListItemHoverOverlay>
+          <ListItemHoverOverlay isActive={isActive}>{children}</ListItemHoverOverlay>
         ) : (
           children
         )}

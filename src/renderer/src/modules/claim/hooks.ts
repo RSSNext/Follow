@@ -4,9 +4,7 @@ import { createElement, useCallback } from "react"
 
 import { FeedClaimModalContent } from "./feed-claim-modal"
 
-export const useFeedClaimModal = ({ feedId }: {
-  feedId?: string
-}) => {
+export const useFeedClaimModal = ({ feedId }: { feedId?: string }) => {
   const { present } = useModalStack()
 
   return useCallback(() => {

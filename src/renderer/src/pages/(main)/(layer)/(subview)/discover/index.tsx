@@ -1,9 +1,4 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@renderer/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
 import { DiscoverForm } from "@renderer/modules/discover/form"
 import { DiscoverImport } from "@renderer/modules/discover/import"
 import { Recommendations } from "@renderer/modules/discover/recommendations"
@@ -58,11 +53,7 @@ export function Component() {
       >
         <TabsList className="w-full">
           {tabs.map((tab) => (
-            <TabsTrigger
-              key={tab.name}
-              value={tab.value}
-              disabled={tab.disabled}
-            >
+            <TabsTrigger key={tab.name} value={tab.value} disabled={tab.disabled}>
               {tab.name}
             </TabsTrigger>
           ))}

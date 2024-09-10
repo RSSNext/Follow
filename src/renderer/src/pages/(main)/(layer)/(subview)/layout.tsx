@@ -1,8 +1,5 @@
 import { getReadonlyRoute } from "@renderer/atoms/route"
-import {
-  getSidebarActiveView,
-  setSidebarActiveView,
-} from "@renderer/atoms/sidebar"
+import { getSidebarActiveView, setSidebarActiveView } from "@renderer/atoms/sidebar"
 import { MotionButtonBase } from "@renderer/components/ui/button"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { cn } from "@renderer/lib/utils"
@@ -39,8 +36,7 @@ export function Component() {
         className={cn(
           "absolute inset-x-0 top-0 z-10 p-4",
           "grid grid-cols-[1fr_auto_1fr] items-center gap-4",
-          isTitleSticky &&
-          "group border-b bg-zinc-50/80 backdrop-blur-xl dark:bg-neutral-900/90",
+          isTitleSticky && "group border-b bg-zinc-50/80 backdrop-blur-xl dark:bg-neutral-900/90",
         )}
       >
         <MotionButtonBase
@@ -55,9 +51,7 @@ export function Component() {
           <span className="text-sm font-medium">Back</span>
         </MotionButtonBase>
         <div>
-          <div className="font-bold opacity-0 duration-200 group-[.group]:opacity-100">
-            {title}
-          </div>
+          <div className="font-bold opacity-0 duration-200 group-[.group]:opacity-100">{title}</div>
         </div>
         <div />
       </div>

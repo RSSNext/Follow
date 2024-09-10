@@ -16,22 +16,20 @@ export function clamp(value, min, max) {
   return Math.max(Math.min(max, value), min)
 }
 
-export function getEntriesParams({
-  id,
-  view,
-}: {
-  id?: number | string
-  view?: number
-}) {
+export function getEntriesParams({ id, view }: { id?: number | string; view?: number }) {
   const params: {
     feedId?: string
     feedIdList?: string[]
-    collected?: boolean
+    isCollection?: boolean
+    withContent?: boolean
   } = {}
   if (id === FEED_COLLECTION_LIST) {
-    params.collected = true
+    params.isCollection = true
   } else if (id && id !== ROUTE_FEED_PENDING) {
     params.feedIdList = `${id}`.split(",")
+  }
+  if (view === FeedViewType.SocialMedia) {
+    params.withContent = true
   }
   return {
     view,
@@ -142,8 +140,7 @@ export function formatXml(xml: string, indent = 4) {
   return formatted.trim()
 }
 
-export const sleep = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms))
+export const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
 
 export const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)
@@ -181,10 +178,10 @@ export const omitObjectUndefinedValue = (obj: Record<string, any>) => {
 }
 
 const rsshubCategoryMap: Partial<Record<string, FeedViewType>> = {
-  "design": FeedViewType.Pictures,
-  "forecast": FeedViewType.Notifications,
-  "live": FeedViewType.Notifications,
-  "picture": FeedViewType.Pictures,
+  design: FeedViewType.Pictures,
+  forecast: FeedViewType.Notifications,
+  live: FeedViewType.Notifications,
+  picture: FeedViewType.Pictures,
   "program-update": FeedViewType.Notifications,
   "social-media": FeedViewType.SocialMedia,
 }
@@ -232,9 +229,7 @@ export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
     src = `https://unavatar.follow.is/${host}?fallback=${fallback || false}`
   } catch {
     const pureDomain = parse(url).domainWithoutSuffix
-    src = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain
-      ?.slice(0, 2)
-      .toUpperCase()}`
+    src = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain?.slice(0, 2).toUpperCase()}`
   }
   const ret = {
     src,
@@ -243,3 +238,5 @@ export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
 
   return ret
 }
+
+export const isEmptyObject = (obj: Record<string, any>) => Object.keys(obj).length === 0

@@ -35,8 +35,7 @@ export const AutoResizeHeight: React.FC<AnimateChangeInHeightProps> = ({
       const style = getComputedStyle(target)
 
       const marginHeight =
-        Number.parseFloat(style.marginTop) +
-        Number.parseFloat(style.marginBottom)
+        Number.parseFloat(style.marginTop) + Number.parseFloat(style.marginBottom)
       // add margin top
       setHeight(observedHeight + marginHeight)
     })
@@ -55,12 +54,12 @@ export const AutoResizeHeight: React.FC<AnimateChangeInHeightProps> = ({
       initial={false}
       animate={{ height }}
       transition={
-        spring ?
-            {
+        spring
+          ? {
               ...softSpringPreset,
               duration,
-            } :
-            {
+            }
+          : {
               duration,
             }
       }

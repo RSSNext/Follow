@@ -10,10 +10,7 @@ const sizeMap = {
   medium: 24,
   large: 30,
 }
-export const LoadingCircle: Component<LoadingCircleProps> = ({
-  className,
-  size,
-}) => (
+export const LoadingCircle: Component<LoadingCircleProps> = ({ className, size }) => (
   <div
     className={className}
     style={{
@@ -95,10 +92,7 @@ export const LoadingWithIcon: Component<
             />
           </span>
           <span
-            className={cn(
-              "absolute bottom-0 right-0",
-              "animate-pulse duration-700",
-            )}
+            className={cn("absolute bottom-0 right-0", "animate-pulse duration-700")}
             style={smallIconStyle}
           >
             {cloneElement(icon, {

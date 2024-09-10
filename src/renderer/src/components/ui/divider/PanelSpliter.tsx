@@ -2,14 +2,28 @@ import { cn } from "@renderer/lib/utils"
 import * as React from "react"
 
 export const PanelSplitter = (
-  props: React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLDivElement>,
-    HTMLDivElement
-  > & {
+  props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
     isDragging?: boolean
+    cursor?: string
   },
 ) => {
-  const { isDragging, ...rest } = props
+  const { isDragging, cursor, ...rest } = props
+
+  React.useEffect(() => {
+    if (!isDragging) return
+    const $css = document.createElement("style")
+
+    $css.innerHTML = `
+      * {
+        cursor: ${cursor} !important;
+      }
+    `
+
+    document.head.append($css)
+    return () => {
+      $css.remove()
+    }
+  }, [cursor, isDragging])
 
   return (
     <div className="relative h-full w-0 shrink-0">

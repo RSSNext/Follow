@@ -17,8 +17,7 @@ import { StableRouterProvider } from "./stable-router-provider"
 import { SettingSync } from "./ui-setting-sync"
 import { UserProvider } from "./user-provider"
 
-const loadFeatures = () =>
-  import("../framer-lazy-feature").then((res) => res.default)
+const loadFeatures = () => import("../framer-lazy-feature").then((res) => res.default)
 export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
   <LazyMotion features={loadFeatures} strict key="framer">
     <MotionConfig
@@ -28,10 +27,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
         ease: "easeInOut",
       }}
     >
-      <PersistQueryClientProvider
-        persistOptions={persistConfig}
-        client={queryClient}
-      >
+      <PersistQueryClientProvider persistOptions={persistConfig} client={queryClient}>
         <HotkeysProvider initiallyActiveScopes={HotKeyScopeMap.Home}>
           <Provider store={jotaiStore}>
             <EventProvider />
@@ -54,8 +50,6 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
 
 const Devtools = () => (
   <>
-    {!window.electron && (
-      <ReactQueryDevtools buttonPosition="bottom-left" client={queryClient} />
-    )}
+    {!window.electron && <ReactQueryDevtools buttonPosition="bottom-left" client={queryClient} />}
   </>
 )

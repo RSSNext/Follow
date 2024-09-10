@@ -14,11 +14,8 @@ class EntryServiceStatic extends BaseService<EntryModel> {
   }
 
   // @ts-expect-error
-  override async upsertMany(
-    data: EntryModel[],
-    entryFeedMap: Record<string, string>,
-  ) {
-    const renewList = [] as { type: "entry", id: string }[]
+  override async upsertMany(data: EntryModel[], entryFeedMap: Record<string, string>) {
+    const renewList = [] as { type: "entry"; id: string }[]
     const nextData = [] as (EntryModel & { feedId: string })[]
 
     for (const item of data) {
@@ -54,7 +51,7 @@ class EntryServiceStatic extends BaseService<EntryModel> {
     })
   }
 
-  async bulkPatch(data: { key: string, changes: Partial<EntryModel> }[]) {
+  async bulkPatch(data: { key: string; changes: Partial<EntryModel> }[]) {
     await this.table.bulkUpdate(data)
     CleanerService.reset(data.map((d) => ({ type: "entry", id: d.key })))
   }
@@ -72,9 +69,7 @@ class EntryServiceStatic extends BaseService<EntryModel> {
   }
 
   async deleteCollection(entryId: string) {
-    return EntryRelatedService.deleteItems(EntryRelatedKey.COLLECTION, [
-      entryId,
-    ])
+    return EntryRelatedService.deleteItems(EntryRelatedKey.COLLECTION, [entryId])
   }
 
   async deleteEntries(entryIds: string[]) {
@@ -86,17 +81,11 @@ class EntryServiceStatic extends BaseService<EntryModel> {
   }
 
   async deleteEntriesByFeedIds(feedIds: string[]) {
-    const deleteEntryIds = await this.table
-      .where("feedId")
-      .anyOf(feedIds)
-      .primaryKeys()
+    const deleteEntryIds = await this.table.where("feedId").anyOf(feedIds).primaryKeys()
     await Promise.all([
       this.table.where("feedId").anyOf(feedIds).delete(),
       EntryRelatedService.deleteItems(EntryRelatedKey.READ, deleteEntryIds),
-      EntryRelatedService.deleteItems(
-        EntryRelatedKey.COLLECTION,
-        deleteEntryIds,
-      ),
+      EntryRelatedService.deleteItems(EntryRelatedKey.COLLECTION, deleteEntryIds),
     ])
   }
 }

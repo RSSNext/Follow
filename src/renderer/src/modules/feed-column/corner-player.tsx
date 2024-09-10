@@ -1,4 +1,5 @@
 import * as Slider from "@radix-ui/react-slider"
+import type { TooltipContentProps } from "@radix-ui/react-tooltip"
 import {
   AudioPlayer,
   getAudioPlayerAtomValue,
@@ -8,11 +9,7 @@ import {
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { microReboundPreset } from "@renderer/components/ui/constants/spring"
 import { VolumeSlider } from "@renderer/components/ui/media/VolumeSlider"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
 import { HotKeyScopeMap } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { FeedViewType } from "@renderer/lib/enum"
@@ -40,7 +37,7 @@ export const CornerPlayer = () => {
       {show && entry && feed && (
         <m.div
           key="corner-player"
-          className="group relative z-10 !mb-0 w-full pr-px"
+          className="group relative z-10 !my-0 w-full pr-px"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
@@ -128,8 +125,7 @@ const CornerPlayerImpl = () => {
               <i
                 className={cn("size-6", {
                   "i-mgc-pause-cute-fi": playerValue.status === "playing",
-                  "i-mgc-loading-3-cute-re animate-spin":
-                    playerValue.status === "loading",
+                  "i-mgc-loading-3-cute-re animate-spin": playerValue.status === "loading",
                   "i-mgc-play-cute-fi": playerValue.status === "paused",
                 })}
               />
@@ -169,7 +165,8 @@ const CornerPlayerImpl = () => {
                 entryId: entry.entries.id,
                 feedId: feed.id,
                 view: FeedViewType.Audios,
-              })}
+              })
+            }
             label="Open Entry"
           />
         </div>
@@ -187,9 +184,7 @@ const CornerPlayerImpl = () => {
           </ActionIcon>
           <ActionIcon
             className={cn(
-              playerValue.isMute ?
-                "i-mgc-volume-off-cute-re text-red-500" :
-                "i-mgc-volume-cute-re",
+              playerValue.isMute ? "i-mgc-volume-off-cute-re text-red-500" : "i-mgc-volume-cute-re",
             )}
             onClick={() => AudioPlayer.toggleMute()}
             label={<CornerPlayerVolumeSlider />}
@@ -204,6 +199,7 @@ const CornerPlayerImpl = () => {
             className="i-mgc-forward-2-cute-re"
             onClick={() => AudioPlayer.forward(10)}
             label="Forward 10s"
+            tooltipAlign="end"
           />
         </div>
       </div>
@@ -216,8 +212,7 @@ const PlayerProgress = () => {
   const playerValue = useAudioPlayerAtomValue()
 
   const { currentTime = 0, duration = 0 } = playerValue
-  const [controlledCurrentTime, setControlledCurrentTime] =
-    useState(currentTime)
+  const [controlledCurrentTime, setControlledCurrentTime] = useState(currentTime)
   const [isDraggingProgress, setIsDraggingProgress] = useState(false)
   useEffect(() => {
     if (isDraggingProgress) return
@@ -228,27 +223,18 @@ const PlayerProgress = () => {
     .startOf("y")
     .second(controlledCurrentTime)
     .format(controlledCurrentTime > ONE_HOUR_IN_SECONDS ? "H:mm:ss" : "m:ss")
-  const remainingTimeIndicator = duration ?
-    dayjs()
-      .startOf("y")
-      .second(duration - controlledCurrentTime)
-      .format(
-        duration - controlledCurrentTime > ONE_HOUR_IN_SECONDS ?
-          "H:mm:ss" :
-          "m:ss",
-      ) :
-    null
+  const remainingTimeIndicator = duration
+    ? dayjs()
+        .startOf("y")
+        .second(duration - controlledCurrentTime)
+        .format(duration - controlledCurrentTime > ONE_HOUR_IN_SECONDS ? "H:mm:ss" : "m:ss")
+    : null
 
   return (
     <div className="relative mt-2">
       <div className="absolute bottom-1 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-200 ease-in-out group-hover:opacity-100">
         <div className="text-xs">{currentTimeIndicator}</div>
-        {!!remainingTimeIndicator && (
-          <div className="text-xs">
-            -
-            {remainingTimeIndicator}
-          </div>
-        )}
+        {!!remainingTimeIndicator && <div className="text-xs">-{remainingTimeIndicator}</div>}
       </div>
 
       {/* slider */}
@@ -284,27 +270,25 @@ const ActionIcon = ({
   onClick,
   label,
   labelDelayDuration = 700,
+  tooltipAlign,
   children,
 }: {
   className?: string
   onClick?: () => void
   label: React.ReactNode
   labelDelayDuration?: number
+  tooltipAlign?: TooltipContentProps["align"]
   children?: React.ReactNode
 }) => (
   <Tooltip delayDuration={labelDelayDuration}>
-    <TooltipTrigger>
-      <button
-        type="button"
-        className="center size-6 rounded-md text-zinc-500 hover:bg-theme-button-hover"
-        onClick={onClick}
-      >
-        {children || <i className={className} />}
-      </button>
+    <TooltipTrigger
+      className="center size-6 rounded-md text-zinc-500 hover:bg-theme-button-hover"
+      onClick={onClick}
+      asChild
+    >
+      <button type="button">{children || <i className={className} />}</button>
     </TooltipTrigger>
-    <TooltipContent className="bg-theme-modal-background">
-      {label}
-    </TooltipContent>
+    <TooltipContent align={tooltipAlign}>{label}</TooltipContent>
   </Tooltip>
 )
 
@@ -325,14 +309,12 @@ const PlaybackRateSelector = () => {
           type="button"
           className={cn(
             "center rounded-md p-1 font-mono hover:bg-theme-item-hover",
-            playbackRate === rate &&
-            "bg-theme-item-hover text-black dark:text-white",
+            playbackRate === rate && "bg-theme-item-hover text-black dark:text-white",
             playbackRate !== rate && "text-zinc-500",
           )}
           onClick={() => AudioPlayer.setPlaybackRate(rate)}
         >
-          {rate.toFixed(2)}
-          x
+          {rate.toFixed(2)}x
         </button>
       ))}
     </div>
@@ -344,14 +326,8 @@ const PlaybackRateButton = () => {
 
   const char = `${playbackRate || 1}`
   return (
-    <span
-      className={cn(
-        char.length > 1 ? "text-[9px]" : "text-xs",
-        "block font-mono",
-      )}
-    >
-      {char}
-      x
+    <span className={cn(char.length > 1 ? "text-[9px]" : "text-xs", "block font-mono")}>
+      {char}x
     </span>
   )
 }

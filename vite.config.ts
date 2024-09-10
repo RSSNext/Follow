@@ -1,111 +1,19 @@
-import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
-import { sentryVitePlugin } from "@sentry/vite-plugin"
 import legacy from "@vitejs/plugin-legacy"
-import react from "@vitejs/plugin-react"
 import { cyan, dim, green } from "kolorist"
-import { prerelease } from "semver"
 import type { PluginOption, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
 import { analyzer } from "vite-bundle-analyzer"
 import mkcert from "vite-plugin-mkcert"
 
-import { getGitHash } from "./scripts/lib"
+import { viteRenderBaseConfig } from "./configs/vite.render.config"
 import type { env as EnvType } from "./src/env"
 
-const pkg = JSON.parse(readFileSync("package.json", "utf8"))
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
 const ROOT = "./src/renderer"
-
-const vite = ({ mode }) => {
-  const env = loadEnv(mode, process.cwd())
-  const typedEnv = env as typeof EnvType
-
-  return defineConfig({
-    build: {
-      outDir: resolve(__dirname, "out/web"),
-      target: "ES2022",
-      sourcemap: isCI,
-      rollupOptions: {
-        input: {
-          main: resolve(ROOT, "/index.html"),
-          __debug_proxy: resolve(ROOT, "/__debug_proxy.html"),
-        },
-      },
-    },
-    root: ROOT,
-    envDir: resolve(__dirname, "."),
-    resolve: {
-      alias: {
-        "@renderer": resolve("src/renderer/src"),
-        "@shared": resolve("src/shared/src"),
-        "@pkg": resolve("./package.json"),
-        "@env": resolve("./src/env.ts"),
-      },
-    },
-    base: "/",
-    server: {
-      port: 2233,
-    },
-    plugins: [
-      mode !== "development" &&
-      legacy({
-        targets: "defaults",
-        renderLegacyChunks: false,
-        modernTargets: ">0.3%, last 2 versions, Firefox ESR, not dead",
-        modernPolyfills: ["es.array.find-last-index", "es.array.find-last"],
-      }),
-      htmlPlugin(typedEnv),
-      react(),
-      mkcert(),
-      sentryVitePlugin({
-        org: "follow-rg",
-        project: "follow",
-        disable: !isCI,
-        bundleSizeOptimizations: {
-          excludeDebugStatements: true,
-          // Only relevant if you added `browserTracingIntegration`
-          excludePerformanceMonitoring: true,
-          // Only relevant if you added `replayIntegration`
-          excludeReplayIframe: true,
-          excludeReplayShadowDom: true,
-          excludeReplayWorker: true,
-        },
-        moduleMetadata: {
-          appVersion:
-            process.env.NODE_ENV === "development" ? "dev" : pkg.version,
-          electron: false,
-        },
-        sourcemaps: {
-          filesToDeleteAfterUpload: ["out/web/assets/*.js.map"],
-        },
-      }),
-
-      devPrint(),
-      process.env.ANALYZER && analyzer(),
-    ],
-    define: {
-      APP_VERSION: JSON.stringify(pkg.version),
-      APP_NAME: JSON.stringify(pkg.name),
-      APP_DEV_CWD: JSON.stringify(process.cwd()),
-
-      GIT_COMMIT_SHA: JSON.stringify(
-        process.env.VERCEL_GIT_COMMIT_SHA || getGitHash(),
-      ),
-
-      RELEASE_CHANNEL: JSON.stringify(
-        (prerelease(pkg.version)?.[0] as string) || "stable",
-      ),
-
-      DEBUG: process.env.DEBUG === "true",
-      ELECTRON: "false",
-    },
-  })
-}
-export default vite
 
 function htmlPlugin(env: typeof EnvType): PluginOption {
   return {
@@ -152,3 +60,48 @@ const devPrint = (): PluginOption => ({
     }
   },
 })
+
+export default ({ mode }) => {
+  const env = loadEnv(mode, process.cwd())
+  const typedEnv = env as typeof EnvType
+
+  return defineConfig({
+    ...viteRenderBaseConfig,
+    root: ROOT,
+    envDir: resolve(__dirname, "."),
+    build: {
+      outDir: resolve(__dirname, "out/web"),
+      target: "ES2022",
+      sourcemap: isCI,
+      rollupOptions: {
+        input: {
+          main: resolve(ROOT, "/index.html"),
+          __debug_proxy: resolve(ROOT, "/__debug_proxy.html"),
+        },
+      },
+    },
+    server: {
+      port: 2233,
+    },
+    plugins: [
+      ...((viteRenderBaseConfig.plugins ?? []) as any),
+      mode !== "development" &&
+        legacy({
+          targets: "defaults",
+          renderLegacyChunks: false,
+          modernTargets: ">0.3%, last 2 versions, Firefox ESR, not dead",
+          modernPolyfills: ["es.array.find-last-index", "es.array.find-last"],
+        }),
+      htmlPlugin(typedEnv),
+      mkcert(),
+
+      devPrint(),
+
+      process.env.ANALYZER && analyzer(),
+    ],
+    define: {
+      ...viteRenderBaseConfig.define,
+      ELECTRON: "false",
+    },
+  })
+}

@@ -24,7 +24,7 @@ export const MyWalletSection = () => {
     return (
       <div className="center absolute inset-0 flex">
         <LoadingWithIcon
-          icon={<i className="i-mgc-power" />}
+          icon={<i className="i-mgc-power text-accent" />}
           size="large"
           className="-translate-y-full"
         />
@@ -40,7 +40,7 @@ export const MyWalletSection = () => {
       <div>
         <div className="text-sm">
           <p>
-            Power is an ERC-20 token on the
+            Power is an ERC-20 token on the{" "}
             <a
               className="underline"
               target="_blank"
@@ -51,10 +51,7 @@ export const MyWalletSection = () => {
             </a>
             .
           </p>
-          <p>
-            You can claim 2 free Power daily, which can be used to tip RSS
-            entries on Follow.
-          </p>
+          <p>You can claim 2 free Power daily, which can be used to tip RSS entries on Follow.</p>
         </div>
         <SettingSectionTitle margin="compact" title="Your Address" />
         <div className="flex items-center gap-2 text-sm">
@@ -65,16 +62,12 @@ export const MyWalletSection = () => {
           >
             {myWallet.address}
           </a>
-          <CopyButton
-            value={myWallet.address!}
-            className="p-1 [&_i]:size-2.5"
-          />
+          <CopyButton value={myWallet.address!} className="p-1 [&_i]:size-2.5" />
         </div>
         <SettingSectionTitle title="Your Balance" margin="compact" />
         <div className="mb-2 flex items-end justify-between">
           <Balance className="text-xl font-bold text-accent">
-            {BigInt(myWallet.dailyPowerToken || 0n) +
-            BigInt(myWallet.cashablePowerToken || 0n)}
+            {BigInt(myWallet.dailyPowerToken || 0n) + BigInt(myWallet.cashablePowerToken || 0n)}
           </Balance>
           <div className="flex gap-2">
             <WithdrawButton />
@@ -110,12 +103,9 @@ export const MyWalletSection = () => {
           </TooltipTrigger>
           <TooltipPortal>
             <TooltipContent align="start" className="z-[999]">
+              <p>1. Cashable Power can be withdrawn to your wallet for trading.</p>
               <p>
-                1. Cashable Power can be withdrawn to your wallet for trading.
-              </p>
-              <p>
-                2. Cashable Power is the Power you have recharged and the tips
-                you have received.
+                2. Cashable Power is the Power you have recharged and the tips you have received.
               </p>
             </TooltipContent>
           </TooltipPortal>

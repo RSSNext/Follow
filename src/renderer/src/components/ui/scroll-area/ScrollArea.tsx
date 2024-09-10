@@ -10,11 +10,7 @@ const Corner = React.forwardRef<
   React.ElementRef<typeof ScrollAreaBase.Corner>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaBase.Corner>
 >(({ className, ...rest }, forwardedRef) => (
-  <ScrollAreaBase.Corner
-    {...rest}
-    ref={forwardedRef}
-    className={cn("bg-accent", className)}
-  />
+  <ScrollAreaBase.Corner {...rest} ref={forwardedRef} className={cn("bg-accent", className)} />
 ))
 
 Corner.displayName = "ScrollArea.Corner"
@@ -36,7 +32,7 @@ const Thumb = React.forwardRef<
       "active:bg-neutral-400",
       "dark:bg-neutral-500 hover:dark:bg-neutral-400/80 active:dark:bg-neutral-400",
       "before:absolute before:-left-1/2 before:-top-1/2 before:h-full before:min-h-[44]",
-      "before:w-full before:min-w-[44] before:-translate-x-full before:-translate-y-full before:content-[\"\"]",
+      'before:w-full before:min-w-[44] before:-translate-x-full before:-translate-y-full before:content-[""]',
 
       className,
     )}
@@ -55,9 +51,7 @@ const Scrollbar = React.forwardRef<
       ref={forwardedRef}
       className={cn(
         "z-[99] flex w-2.5 touch-none select-none p-0.5",
-        orientation === "horizontal" ?
-          `h-2.5 w-full flex-col` :
-          `w-2.5 flex-row`,
+        orientation === "horizontal" ? `h-2.5 w-full flex-col` : `w-2.5 flex-row`,
         "animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in",
         className,
       )}
@@ -101,11 +95,7 @@ const Viewport = React.forwardRef<
     <ScrollAreaBase.Viewport
       {...rest}
       ref={ref}
-      className={cn(
-        "block size-full",
-        shouldAddMask && styles["mask-scroller"],
-        className,
-      )}
+      className={cn("block size-full", shouldAddMask && styles["mask-scroller"], className)}
     />
   )
 })
@@ -136,40 +126,23 @@ export const ScrollArea = React.forwardRef<
     flex?: boolean
     mask?: boolean
   }
->(
-  (
-    {
-      flex,
-      children,
-      rootClassName,
-      viewportClassName,
-      scrollbarClassName,
-      mask = false,
-    },
-    ref,
-  ) => {
-    const [viewportRef, setViewportRef] = React.useState<HTMLDivElement | null>(
-      null,
-    )
-    React.useImperativeHandle(ref, () => viewportRef as HTMLDivElement)
+>(({ flex, children, rootClassName, viewportClassName, scrollbarClassName, mask = false }, ref) => {
+  const [viewportRef, setViewportRef] = React.useState<HTMLDivElement | null>(null)
+  React.useImperativeHandle(ref, () => viewportRef as HTMLDivElement)
 
-    return (
-      <ScrollElementContext.Provider value={viewportRef}>
-        <Root className={rootClassName}>
-          <Viewport
-            ref={setViewportRef}
-            onWheel={stopPropagation}
-            className={cn(
-              flex ? "[&>div]:!flex [&>div]:!flex-col" : "",
-              viewportClassName,
-            )}
-            mask={mask}
-          >
-            {children}
-          </Viewport>
-          <Scrollbar className={scrollbarClassName} />
-        </Root>
-      </ScrollElementContext.Provider>
-    )
-  },
-)
+  return (
+    <ScrollElementContext.Provider value={viewportRef}>
+      <Root className={rootClassName}>
+        <Viewport
+          ref={setViewportRef}
+          onWheel={stopPropagation}
+          className={cn(flex ? "[&>div]:!flex [&>div]:!flex-col" : "", viewportClassName)}
+          mask={mask}
+        >
+          {children}
+        </Viewport>
+        <Scrollbar className={scrollbarClassName} />
+      </Root>
+    </ScrollElementContext.Provider>
+  )
+})

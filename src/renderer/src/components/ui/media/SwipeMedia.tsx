@@ -115,31 +115,29 @@ export function SwipeMedia({
             <i className="i-mgc-right-cute-fi" />
           </div>
         </>
-      ) : uniqMedia?.length >= 1 ?
-          (
-            <Media
-              onClick={(e) => {
-                e.stopPropagation()
-                onPreview?.(uniqMedia)
-              }}
-              cacheDimensions={uniqMedia[0].type === "photo"}
-              className="size-full rounded-none object-cover sm:transition-transform sm:duration-300 sm:ease-in-out sm:group-hover:scale-105"
-              alt="cover"
-              src={uniqMedia[0].url}
-              type={uniqMedia[0].type}
-              previewImageUrl={uniqMedia[0].preview_image_url}
-              loading="lazy"
-              proxy={proxySize}
-              disableContextMenu
-            />
-          ) :
-          (
-            <div className="relative flex aspect-video w-full items-center overflow-hidden rounded-t-2xl border-b">
-              <div className="flex size-full items-center justify-center p-3 text-center sm:transition-transform sm:duration-500 sm:ease-in-out sm:group-hover:scale-105">
-                <div className="text-xl font-extrabold text-zinc-600" />
-              </div>
-            </div>
-          )}
+      ) : uniqMedia?.length >= 1 ? (
+        <Media
+          onClick={(e) => {
+            e.stopPropagation()
+            onPreview?.(uniqMedia)
+          }}
+          cacheDimensions={uniqMedia[0].type === "photo"}
+          className="size-full rounded-none object-cover sm:transition-transform sm:duration-300 sm:ease-in-out sm:group-hover:scale-105"
+          alt="cover"
+          src={uniqMedia[0].url}
+          type={uniqMedia[0].type}
+          previewImageUrl={uniqMedia[0].preview_image_url}
+          loading="lazy"
+          proxy={proxySize}
+          disableContextMenu
+        />
+      ) : (
+        <div className="relative flex aspect-video w-full items-center overflow-hidden rounded-t-2xl border-b">
+          <div className="flex size-full items-center justify-center p-3 text-center sm:transition-transform sm:duration-500 sm:ease-in-out sm:group-hover:scale-105">
+            <div className="text-xl font-extrabold text-zinc-600" />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -2,12 +2,7 @@ import { cn } from "@renderer/lib/utils"
 import type { PropsWithChildren } from "react"
 import { useEffect, useState } from "react"
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "../tooltip"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../tooltip"
 
 const isTextOverflowed = (element: HTMLElement, dir: "h" | "v") => {
   if (dir === "h") {
@@ -55,11 +50,11 @@ export const EllipsisTextWithTooltip = (props: EllipsisProps) => {
       className={className}
       ref={setTextElRef}
       style={
-        width ?
-            {
+        width
+          ? {
               maxWidth: width,
-            } :
-          undefined
+            }
+          : undefined
       }
     >
       {children}
@@ -73,10 +68,7 @@ export const EllipsisTextWithTooltip = (props: EllipsisProps) => {
 
       <TooltipPortal>
         <TooltipContent>
-          <span
-            className="whitespace-pre-line break-all"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <span className="whitespace-pre-line break-all" onClick={(e) => e.stopPropagation()}>
             {children}
           </span>
         </TooltipContent>
@@ -90,11 +82,5 @@ export const EllipsisTextWithTooltip = (props: EllipsisProps) => {
  */
 export const EllipsisHorizontalTextWithTooltip = (props: EllipsisProps) => {
   const { className, ...rest } = props
-  return (
-    <EllipsisTextWithTooltip
-      className={cn("block truncate", className)}
-      {...rest}
-      dir="h"
-    />
-  )
+  return <EllipsisTextWithTooltip className={cn("block truncate", className)} {...rest} dir="h" />
 }

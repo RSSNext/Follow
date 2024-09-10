@@ -15,7 +15,7 @@ export const views = [
     className: "text-sky-600 dark:text-sky-500",
     peerClassName: "peer-checked:text-sky-600 peer-checked:dark:text-sky-500",
     wideMode: true,
-    translation: "description",
+    translation: "content",
     view: FeedViewType.SocialMedia,
   },
   {
@@ -54,5 +54,4 @@ export const views = [
     translation: "title",
     view: FeedViewType.Notifications,
   },
-
 ]

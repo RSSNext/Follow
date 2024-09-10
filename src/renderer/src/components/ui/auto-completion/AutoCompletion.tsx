@@ -23,8 +23,7 @@ export type Suggestion = {
   name: string
   value: string
 }
-export interface AutocompleteProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface AutocompleteProps extends React.InputHTMLAttributes<HTMLInputElement> {
   suggestions: Suggestion[]
   renderSuggestion?: (suggestion: Suggestion) => any
 
@@ -59,11 +58,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     },
     forwardedRef,
   ) => {
-    const [filterableSuggestions, setFilterableSuggestions] =
-      useState(suggestions)
-    const [inputValue, setInputValue] = useState(
-      inputProps.value || inputProps.defaultValue || "",
-    )
+    const [filterableSuggestions, setFilterableSuggestions] = useState(suggestions)
+    const [inputValue, setInputValue] = useState(inputProps.value || inputProps.defaultValue || "")
 
     const doFilter = useEventCallback(() => {
       const fuse = new Fuse(suggestions, {
@@ -101,15 +97,16 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       setIsOpen(false)
     })
 
-    const handleInputKeyDown: React.KeyboardEventHandler<HTMLInputElement> =
-      useEventCallback((e) => {
+    const handleInputKeyDown: React.KeyboardEventHandler<HTMLInputElement> = useEventCallback(
+      (e) => {
         if (e.key === "Enter") {
           e.preventDefault()
           onConfirm?.((e.target as HTMLInputElement).value)
           setIsOpen(false)
         }
         inputProps.onKeyDown?.(e)
-      })
+      },
+    )
     const inputRef = useRef<HTMLInputElement>(null)
     useImperativeHandle(forwardedRef, () => inputRef.current!)
 
@@ -122,18 +119,14 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       if (!$input) return
       const handleKeyDown = (e: KeyboardEvent) => {
         const currentActiveIndex = currentActiveIndexRef.current
-        const filterableSuggestionsLength =
-          filterableSuggestionsRef.current.length
+        const filterableSuggestionsLength = filterableSuggestionsRef.current.length
         const filterableSuggestions = filterableSuggestionsRef.current
 
         if (e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault()
           const nextIndex =
-            currentActiveIndex +
-            (e.key === "ArrowDown" ? 1 : e.key === "ArrowUp" ? -1 : 0)
-          setCurrentActiveIndex(
-            Math.max(0, Math.min(nextIndex, filterableSuggestionsLength - 1)),
-          )
+            currentActiveIndex + (e.key === "ArrowDown" ? 1 : e.key === "ArrowUp" ? -1 : 0)
+          setCurrentActiveIndex(Math.max(0, Math.min(nextIndex, filterableSuggestionsLength - 1)))
         } else if (
           (e.key === "Enter" || e.key === "Tab") &&
           currentActiveIndex >= 0 &&
@@ -220,19 +213,16 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         }, [])}
         style={merge(
           {},
-          portal && inputRect ?
-              {
+          portal && inputRect
+            ? {
                 width: `${inputRect.width}px`,
                 left: `${inputRect.x}px`,
                 top: `${inputRect.y + inputRect.height}px`,
                 bottom: dropdownPos === "up" ? 0 : undefined,
-                transform:
-                  dropdownPos === "up" ?
-                    `translateY(-${dropdownHeight}px)` :
-                    undefined,
+                transform: dropdownPos === "up" ? `translateY(-${dropdownHeight}px)` : undefined,
                 maxHeight,
-              } :
-              {},
+              }
+            : {},
         )}
       >
         <ul
@@ -258,8 +248,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 className={cn(
                   "cursor-default px-4 py-1.5 text-sm",
 
-                  currentActiveIndex === index &&
-                  "bg-theme-item-hover dark:bg-neutral-800",
+                  currentActiveIndex === index && "bg-theme-item-hover dark:bg-neutral-800",
                 )}
                 key={suggestion.value}
                 onMouseDown={handleClick}
@@ -272,11 +261,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         </ul>
       </div>
     )
-    const handleFocus: React.FocusEventHandler<HTMLInputElement> =
-      useEventCallback((e) => {
-        setIsOpen(true)
-        inputProps.onFocus?.(e)
-      })
+    const handleFocus: React.FocusEventHandler<HTMLInputElement> = useEventCallback((e) => {
+      setIsOpen(true)
+      inputProps.onFocus?.(e)
+    })
 
     return (
       <div className={cn("pointer-events-auto relative", wrapperClassName)}>

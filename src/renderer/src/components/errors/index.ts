@@ -19,5 +19,4 @@ export const ErrorFallbackMap = {
   [ErrorComponentType.FeedNotFound]: FeedNotFoundErrorFallback,
 }
 
-export const getErrorFallback = (type: ErrorComponentType) =>
-  ErrorFallbackMap[type]
+export const getErrorFallback = (type: ErrorComponentType) => ErrorFallbackMap[type]

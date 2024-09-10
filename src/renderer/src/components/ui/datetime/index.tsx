@@ -3,24 +3,18 @@ import dayjs from "dayjs"
 import type { FC } from "react"
 import { useEffect, useRef, useState } from "react"
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "../tooltip"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../tooltip"
 
 const formatTemplateString = "lll"
-const formatTime = (date: string | Date, relativeBeforeDay?: number) => {
-  if (
-    relativeBeforeDay &&
-    Math.abs(dayjs(date).diff(new Date(), "d")) > relativeBeforeDay
-  ) {
-    return dayjs(date).format(formatTemplateString)
+const formatTime = (
+  date: string | Date,
+  relativeBeforeDay?: number,
+  template = formatTemplateString,
+) => {
+  if (relativeBeforeDay && Math.abs(dayjs(date).diff(new Date(), "d")) > relativeBeforeDay) {
+    return dayjs(date).format(template)
   }
-  return dayjs
-    .duration(dayjs(date).diff(dayjs(), "minute"), "minute")
-    .humanize()
+  return dayjs.duration(dayjs(date).diff(dayjs(), "minute"), "minute").humanize()
 }
 
 const getUpdateInterval = (date: string | Date, relativeBeforeDay?: number) => {
@@ -47,21 +41,19 @@ const getUpdateInterval = (date: string | Date, relativeBeforeDay?: number) => {
 export const RelativeTime: FC<{
   date: string | Date
   displayAbsoluteTimeAfterDay?: number
+  dateFormatTemplate?: string
 }> = (props) => {
-  const { displayAbsoluteTimeAfterDay = 29 } = props
+  const { displayAbsoluteTimeAfterDay = 29, dateFormatTemplate = formatTemplateString } = props
   const [relative, setRelative] = useState<string>(() =>
-    formatTime(props.date, displayAbsoluteTimeAfterDay),
+    formatTime(props.date, displayAbsoluteTimeAfterDay, dateFormatTemplate),
   )
 
   const timerRef = useRef<any>(null)
 
   useEffect(() => {
     const updateRelativeTime = () => {
-      setRelative(formatTime(props.date, displayAbsoluteTimeAfterDay))
-      const updateInterval = getUpdateInterval(
-        props.date,
-        displayAbsoluteTimeAfterDay,
-      )
+      setRelative(formatTime(props.date, displayAbsoluteTimeAfterDay, dateFormatTemplate))
+      const updateInterval = getUpdateInterval(props.date, displayAbsoluteTimeAfterDay)
 
       if (updateInterval !== null) {
         timerRef.current = setTimeout(updateRelativeTime, updateInterval)
@@ -73,8 +65,8 @@ export const RelativeTime: FC<{
     return () => {
       clearTimeout(timerRef.current)
     }
-  }, [props.date, displayAbsoluteTimeAfterDay])
-  const formated = dayjs(props.date).format(formatTemplateString)
+  }, [props.date, displayAbsoluteTimeAfterDay, dateFormatTemplate])
+  const formated = dayjs(props.date).format(dateFormatTemplate)
 
   if (formated === relative) {
     return <>{relative}</>
@@ -82,9 +74,7 @@ export const RelativeTime: FC<{
   return (
     <Tooltip>
       {/* https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904 */}
-      <TooltipTrigger onFocusCapture={stopPropagation}>
-        {relative}
-      </TooltipTrigger>
+      <TooltipTrigger onFocusCapture={stopPropagation}>{relative}</TooltipTrigger>
 
       <TooltipPortal>
         <TooltipContent>{formated}</TooltipContent>
@@ -99,11 +89,7 @@ export const RelativeDay = ({ date }: { date: Date }) => {
 
     // Remove the time part for comparison
     const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    const inputDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-    )
+    const inputDate = new Date(date.getFullYear(), date.getMonth(), date.getDate())
 
     const diffTime = nowDate.getTime() - inputDate.getTime()
     const diffDays = diffTime / (1000 * 3600 * 24)
@@ -121,9 +107,7 @@ export const RelativeDay = ({ date }: { date: Date }) => {
     }
   }
   const timerRef = useRef<any>(null)
-  const [dateString, setDateString] = useState<string>(() =>
-    formatDateString(date),
-  )
+  const [dateString, setDateString] = useState<string>(() => formatDateString(date))
 
   useEffect(() => {
     const updateInterval = getUpdateInterval(date, 3)
@@ -145,9 +129,7 @@ export const RelativeDay = ({ date }: { date: Date }) => {
   }
   return (
     <Tooltip>
-      <TooltipTrigger onFocusCapture={stopPropagation}>
-        {dateString}
-      </TooltipTrigger>
+      <TooltipTrigger onFocusCapture={stopPropagation}>{dateString}</TooltipTrigger>
       <TooltipPortal>
         <TooltipContent>{formated}</TooltipContent>
       </TooltipPortal>

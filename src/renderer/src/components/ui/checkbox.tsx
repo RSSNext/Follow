@@ -8,17 +8,17 @@ const Checkbox = React.forwardRef<
     onCheckedChange?: (checked: boolean) => void
   }
 >(({ className, onCheckedChange, ...props }, ref) => (
-        <input
-          type="checkbox"
-          ref={ref}
-          className={cn("checkbox", className)}
-          {...props}
-          onChange={(event) => {
-            onCheckedChange?.(event.target.checked)
-            props.onChange?.(event)
-          }}
-        />
-      ))
+  <input
+    type="checkbox"
+    ref={ref}
+    className={cn("checkbox", className)}
+    {...props}
+    onChange={(event) => {
+      onCheckedChange?.(event.target.checked)
+      props.onChange?.(event)
+    }}
+  />
+))
 Checkbox.displayName = CheckboxPrimitive.Root.displayName
 
 export { Checkbox }
