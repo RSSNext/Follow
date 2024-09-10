@@ -87,6 +87,7 @@ export const registerAppMenu = () => {
           accelerator: "CmdOrCtrl+F",
           click(_e, window) {
             if (!window) return
+            // @ts-expect-error TODO: fix this type error
             dispatchEventOnWindow(window, "OpenSearch")
           },
         },
