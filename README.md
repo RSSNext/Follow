@@ -38,6 +38,8 @@ The project is currently under active development. The following screenshots are
   ![Screenshot 2024-09-10 at 6 22 47 PM](https://github.com/user-attachments/assets/1d0c3ed7-3da5-45e6-a264-399e8ea4071b)
   ![Screenshot 2024-09-10 at 6 23 07 PM](https://github.com/user-attachments/assets/d21d54be-c343-4ac6-99f0-90c1e410245a)
   ![Screenshot 2024-09-10 at 6 23 31 PM](https://github.com/user-attachments/assets/1781f368-8375-4b50-a66c-c8d8340f3ffb)
+  ![Screenshot 2024-09-10 at 6 23 47 PM](https://github.com/user-attachments/assets/6ccfeada-dbc3-4c76-8ca2-5dcac8c06804)
+  ![Screenshot 2024-09-10 at 6 24 11 PM](https://github.com/user-attachments/assets/f723d62a-1be7-48b1-a42c-83960af133be)
 
 - Everything is RSSible. Our [RSSHub](https://github.com/DIYgod/RSSHub) community, comprising over 1,000 developers, has spent six years adapting nearly a thousand websites to provide almost all the content you need. This includes platforms like X (Twitter), Instagram, PlayStation, Spotify, Telegram, YouTube, and more. You can also write your own scripts to adapt additional websites.
   ![Screenshot 2024-09-10 at 8 09 36 PM](https://github.com/user-attachments/assets/5bd445f3-e005-4273-b892-7b29212970e2)
@@ -66,7 +68,7 @@ The project is currently under active development. The following screenshots are
 - Shortcuts and gestures
   ![Screenshot 2024-09-10 at 6 25 38 PM](https://github.com/user-attachments/assets/43116bea-47b9-4c17-bc4f-92fb101a37a5)
 
-## Release
+## Releases
 
 [![Discord](https://img.shields.io/discord/1243823539426033696?logo=discord&label=Discord&style=flat-square&color=5865F2)](https://discord.gg/xHCVQZ6wmZ) [![](https://img.shields.io/badge/any_text-Follow-blue?color=2CA5E0&label=_&logo=x&cacheSeconds=3600&style=flat-square)](https://x.com/intent/follow?screen_name=follow_app_)
 
@@ -80,8 +82,8 @@ You can get an invitation code in the following ways:
 
 If you have access, you are welcome to use the following methods to download and install it:
 
-- You can get the installation packages for each platform from the [Release page](https://github.com/RSSNext/Follow/releases).
-- If you are using Arch linux, you can install package [follow-appimage](https://aur.archlinux.org/packages/follow-appimage) that maintained by [timochan](https://github.com/ttimochan)
+- You can get the installation packages for each platform from the [Releases page](https://github.com/RSSNext/Follow/releases).
+- If you are using Arch linux, you can install package [follow-appimage](https://aur.archlinux.org/packages/follow-appimage) that maintained by [timochan](https://github.com/ttimochan).
 
 ## Contributing
 
