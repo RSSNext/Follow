@@ -31,8 +31,9 @@ const info: Record<
   string,
   {
     label: string
-    prefix?: string
+    prefix?: string[]
     showModal?: boolean
+    default?: string
   }
 > = {
   search: {
@@ -40,22 +41,24 @@ const info: Record<
   },
   rss: {
     label: "RSS URL",
-    prefix: "https://",
+    default: "https://",
+    prefix: ["https://", "http://"],
     showModal: true,
   },
   rsshub: {
     label: "RSSHub Route",
-    prefix: "rsshub://",
+    prefix: ["rsshub://"],
+    default: "rsshub://",
     showModal: true,
   },
 }
 
 export function DiscoverForm({ type }: { type: string }) {
-  const { prefix } = info[type]
+  const { prefix, default: defaultValue } = info[type]
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      keyword: prefix || "",
+      keyword: defaultValue || "",
     },
   })
   const mutation = useMutation({
@@ -95,14 +98,18 @@ export function DiscoverForm({ type }: { type: string }) {
 
   const keyword = form.watch("keyword")
   useEffect(() => {
-    if (prefix) {
-      if (!keyword.startsWith(prefix)) {
-        form.setValue("keyword", prefix)
-      } else if (keyword.startsWith(`${prefix}${prefix}`)) {
-        form.setValue("keyword", keyword.slice(prefix.length))
-      }
+    if (!prefix) return
+    const isValidPrefix = prefix.find((p) => keyword.startsWith(p))
+    if (!isValidPrefix) {
+      form.setValue("keyword", prefix[0])
+
+      return
     }
-  }, [keyword])
+
+    if (keyword.startsWith(`${isValidPrefix}${isValidPrefix}`)) {
+      form.setValue("keyword", keyword.slice(isValidPrefix.length))
+    }
+  }, [form, keyword, prefix])
 
   return (
     <>

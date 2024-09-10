@@ -92,9 +92,18 @@ class FeedActions {
       },
     })
 
-    this.upsertMany([res.data.feed])
+    const nonce = nanoid(8)
 
-    return res.data
+    const finalData = {
+      ...res.data.feed,
+      id: id || res.data.feed.id || nonce,
+    }
+    this.upsertMany([finalData])
+
+    return {
+      ...res.data,
+      feed: finalData,
+    }
   }
 }
 export const feedActions = new FeedActions()

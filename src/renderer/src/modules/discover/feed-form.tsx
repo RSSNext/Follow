@@ -54,11 +54,15 @@ export const FeedForm: Component<{
   asWidget?: boolean
 
   onSuccess?: () => void
-}> = ({ id, defaultValues = defaultValue, url, asWidget, onSuccess }) => {
-  const queryParams = { id, url }
+}> = ({ id: _id, defaultValues = defaultValue, url, asWidget, onSuccess }) => {
+  const queryParams = { id: _id, url }
   const feedQuery = useFeed(queryParams)
 
-  const feed = useFeedByIdOrUrl(queryParams)
+  const id = feedQuery.data?.feed.id || _id
+  const feed = useFeedByIdOrUrl({
+    id,
+    url,
+  })
 
   const hasSub = useSubscriptionByFeedId(feed?.id || "")
   const isSubscribed = !!feedQuery.data?.subscription || hasSub

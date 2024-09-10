@@ -20,7 +20,7 @@ export const DividerVertical: FC<
   return (
     <span
       className={cn(
-        "mx-4 inline-block h-full w-[0.5px] select-none bg-black !bg-opacity-30 text-transparent dark:bg-white",
+        "mx-4 inline-block h-full w-[0.5px] select-none bg-black text-transparent !opacity-20 dark:bg-white",
         className,
       )}
       {...rest}
