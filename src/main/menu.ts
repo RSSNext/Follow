@@ -1,6 +1,6 @@
 import { name } from "@pkg"
 import { dispatchEventOnWindow } from "@shared/event"
-import type { MenuItem, MenuItemConstructorOptions } from "electron"
+import type { BrowserWindow, MenuItem, MenuItemConstructorOptions } from "electron"
 import { Menu } from "electron"
 
 import { isDev, isMacOS } from "./env"
