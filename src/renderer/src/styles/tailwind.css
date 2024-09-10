@@ -64,7 +64,8 @@
   }
 
   p {
-    word-break: break-word;
     @apply break-words;
   }
+
+  word-break: break-word;
 }

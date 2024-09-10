@@ -240,7 +240,3 @@ export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
 }
 
 export const isEmptyObject = (obj: Record<string, any>) => Object.keys(obj).length === 0
-
-export const isTextWrappedInHtmlTag = (text: string) => {
-  return /^<[^>]+>.*<\/[^>]+>$/.test(text)
-}

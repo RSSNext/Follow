@@ -22,7 +22,7 @@ import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { FeedViewType } from "@renderer/lib/enum"
 import { getNewIssueUrl } from "@renderer/lib/issues"
-import { cn, isTextWrappedInHtmlTag } from "@renderer/lib/utils"
+import { cn } from "@renderer/lib/utils"
 import type { ActiveEntryId } from "@renderer/models"
 import {
   useIsSoFWrappedElement,
@@ -128,13 +128,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
   const isPeekModal = useInPeekModal()
   if (!entry) return null
 
-  const rawContent = entry?.entries.content ?? data?.entries.content
-
-  const content = isTextWrappedInHtmlTag(rawContent ?? "")
-    ? rawContent
-    : rawContent
-      ? `<p>${rawContent}</p>`
-      : undefined
+  const content = entry?.entries.content ?? data?.entries.content
 
   return (
     <EntryContentProvider
