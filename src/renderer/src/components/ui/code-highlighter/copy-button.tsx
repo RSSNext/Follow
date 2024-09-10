@@ -40,7 +40,7 @@ export const CopyButton: Component<{
       type="button"
       onClick={handleCopy}
       className={cn(
-        "center flex text-xs",
+        "center pointer-events-auto flex text-xs",
         "rounded-md border border-accent/5 bg-accent/80 p-1.5 text-white backdrop-blur duration-200",
 
         className,

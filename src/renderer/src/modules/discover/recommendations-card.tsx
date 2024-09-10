@@ -2,7 +2,6 @@ import { FeedIcon } from "@renderer/components/feed-icon"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@renderer/components/ui/card"
@@ -28,27 +27,25 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
         </CardTitle>
       </CardHeader>
       <CardContent className="p-5 pt-0">
-        <CardDescription>
-          <ul className="space-y-1">
-            {Object.keys(data.routes).map((route) => (
-              <li
-                key={route}
-                className="duration-200 hover:text-theme-foreground-hover"
-                onClick={() => {
-                  present({
-                    content: () => (
-                      <RecommendationContent routePrefix={routePrefix} route={data.routes[route]} />
-                    ),
-                    icon: <FeedIcon className="size-4" size={16} siteUrl={`https://${data.url}`} />,
-                    title: `${data.name} - ${data.routes[route].name}`,
-                  })
-                }}
-              >
-                {data.routes[route].name}
-              </li>
-            ))}
-          </ul>
-        </CardDescription>
+        <ul className="space-y-1 text-sm text-muted-foreground">
+          {Object.keys(data.routes).map((route) => (
+            <li
+              key={route}
+              className="duration-200 hover:text-theme-foreground-hover"
+              onClick={() => {
+                present({
+                  content: () => (
+                    <RecommendationContent routePrefix={routePrefix} route={data.routes[route]} />
+                  ),
+                  icon: <FeedIcon className="size-4" size={16} siteUrl={`https://${data.url}`} />,
+                  title: `${data.name} - ${data.routes[route].name}`,
+                })
+              }}
+            >
+              {data.routes[route].name}
+            </li>
+          ))}
+        </ul>
       </CardContent>
     </Card>
   )

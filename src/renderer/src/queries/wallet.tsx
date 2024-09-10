@@ -1,5 +1,5 @@
 import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
+import { apiClient, getFetchErrorMessage, toastFetchError } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useMutation } from "@tanstack/react-query"
@@ -73,7 +73,7 @@ export const useClaimWalletDailyRewardMutation = () => {
     mutationKey: ["claimWalletDailyReward"],
     mutationFn: () => apiClient.wallets.transactions.claim_daily.$post(),
     async onError(err) {
-      toast.error(getFetchErrorMessage(err))
+      toastFetchError(err)
     },
     onSuccess() {
       wallet.get().invalidate()
@@ -105,7 +105,7 @@ export const useWalletTipMutation = () =>
     mutationFn: (data: Parameters<typeof apiClient.wallets.transactions.tip.$post>[0]["json"]) =>
       apiClient.wallets.transactions.tip.$post({ json: data }),
     async onError(err) {
-      toast.error(getFetchErrorMessage(err))
+      toastFetchError(err)
     },
     onSuccess(_, variables) {
       wallet.get().invalidate()

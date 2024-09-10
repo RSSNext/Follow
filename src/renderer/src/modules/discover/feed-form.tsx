@@ -20,7 +20,7 @@ import { Switch } from "@renderer/components/ui/switch"
 import { views } from "@renderer/constants"
 import { useDeleteSubscription } from "@renderer/hooks/biz/useSubscriptionActions"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
+import { apiClient, getFetchErrorMessage, toastFetchError } from "@renderer/lib/api-fetch"
 import { tipcClient } from "@renderer/lib/client"
 import { FeedViewType } from "@renderer/lib/enum"
 import { getNewIssueUrl } from "@renderer/lib/issues"
@@ -218,7 +218,7 @@ const FeedInnerForm = ({
       onSuccess?.()
     },
     async onError(err) {
-      toast.error(getFetchErrorMessage(err))
+      toastFetchError(err)
     },
   })
 

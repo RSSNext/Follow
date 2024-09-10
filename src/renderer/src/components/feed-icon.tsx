@@ -72,6 +72,7 @@ export function FeedIcon({
   size = 20,
   fallback = true,
   siteUrl,
+  useMedia,
 }: {
   feed?: FeedModel
   entry?: CombinedEntryModel["entries"]
@@ -83,8 +84,13 @@ export function FeedIcon({
    * Image loading error fallback to site icon
    */
   fallback?: boolean
+
+  useMedia?: boolean
 }) {
-  const image = entry?.authorAvatar || feed?.image
+  const image =
+    (useMedia
+      ? entry?.media?.find((i) => i.type === "photo")?.url || entry?.authorAvatar
+      : entry?.authorAvatar) || feed?.image
 
   if (!feed && !siteUrl) {
     throw new Error("You must provide either a feed or a siteUrl")

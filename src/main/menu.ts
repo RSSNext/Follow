@@ -1,6 +1,6 @@
 import { name } from "@pkg"
 import { dispatchEventOnWindow } from "@shared/event"
-import type { MenuItem, MenuItemConstructorOptions } from "electron"
+import type { BrowserWindow, MenuItem, MenuItemConstructorOptions } from "electron"
 import { Menu } from "electron"
 
 import { isDev, isMacOS } from "./env"
@@ -87,7 +87,7 @@ export const registerAppMenu = () => {
           accelerator: "CmdOrCtrl+F",
           click(_e, window) {
             if (!window) return
-            dispatchEventOnWindow(window, "OpenSearch")
+            dispatchEventOnWindow(window as BrowserWindow, "OpenSearch")
           },
         },
         ...((isMacOS

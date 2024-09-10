@@ -1,6 +1,6 @@
 import { Button } from "@renderer/components/ui/button"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
+import { apiClient, toastFetchError } from "@renderer/lib/api-fetch"
 import type {
   ActionEntryField,
   ActionFeedField,
@@ -77,7 +77,7 @@ export function Component() {
       toast("🎉 Actions saved.")
     },
     onError: (error) => {
-      toast.error(getFetchErrorMessage(error))
+      toastFetchError(error)
     },
   })
 
