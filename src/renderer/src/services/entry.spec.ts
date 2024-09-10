@@ -1,6 +1,6 @@
 import { browserDB } from "@renderer/database"
 import { sleep } from "@renderer/lib/utils"
-import { entryActions } from "@renderer/store/entry"
+import { entryActions } from "@renderer/store/entry/store"
 import { beforeAll, beforeEach, describe, expect, test } from "vitest"
 
 import mockEntiresData from "./__mock__data__/entries.json"

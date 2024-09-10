@@ -10,7 +10,8 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
-import { apiFetch, toastFetchError } from "@renderer/lib/api-fetch"
+import { apiFetch } from "@renderer/lib/api-fetch"
+import { toastFetchError } from "@renderer/lib/error-parser"
 import { cn } from "@renderer/lib/utils"
 import type { FeedResponse } from "@renderer/models"
 import { Queries } from "@renderer/queries"

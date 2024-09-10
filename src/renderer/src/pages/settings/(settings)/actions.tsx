@@ -1,6 +1,7 @@
 import { Button } from "@renderer/components/ui/button"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient, toastFetchError } from "@renderer/lib/api-fetch"
+import { apiClient } from "@renderer/lib/api-fetch"
+import { toastFetchError } from "@renderer/lib/error-parser"
 import type {
   ActionEntryField,
   ActionFeedField,

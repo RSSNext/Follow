@@ -12,7 +12,7 @@ import {
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
 import { SocialMediaLinks } from "@renderer/constants/social"
-import { getFetchErrorMessage } from "@renderer/lib/api-fetch"
+import { getFetchErrorMessage } from "@renderer/lib/error-parser"
 import { useInvitationMutation } from "@renderer/queries/invitations"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"

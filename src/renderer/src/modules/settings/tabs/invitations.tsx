@@ -20,7 +20,8 @@ import {
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient, toastFetchError } from "@renderer/lib/api-fetch"
+import { apiClient } from "@renderer/lib/api-fetch"
+import { toastFetchError } from "@renderer/lib/error-parser"
 import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
 import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
