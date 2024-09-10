@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Button } from "@renderer/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@renderer/components/ui/card"
 import {
   Form,
   FormControl,
@@ -11,16 +10,15 @@ import {
   FormMessage,
 } from "@renderer/components/ui/form"
 import { Input } from "@renderer/components/ui/input"
-import { Media } from "@renderer/components/ui/media"
 import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import { apiClient } from "@renderer/lib/api-fetch"
 import type { FeedViewType } from "@renderer/lib/enum"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { FollowSummary } from "../../components/feed-summary"
+import { FeedCard } from "./feed-card"
 import { FeedForm } from "./feed-form"
 
 const formSchema = z.object({
@@ -114,8 +112,6 @@ export function DiscoverForm({ type }: { type: string }) {
     enabled: false,
   })
 
-  const queryClient = useQueryClient()
-
   return (
     <>
       <Form {...form}>
@@ -156,109 +152,7 @@ export function DiscoverForm({ type }: { type: string }) {
           </div>
           <div className="space-y-6 text-sm">
             {query.data?.map((item) => (
-              <Card data-feed-id={item.feed.id} key={item.feed.url || item.docs} className="select-text">
-                <CardHeader>
-                  <FollowSummary className="max-w-[462px]" feed={item.feed} docs={item.docs} />
-                </CardHeader>
-                {item.docs ? (
-                  <CardFooter>
-                    <a href={item.docs} target="_blank" rel="noreferrer">
-                      <Button>View Docs</Button>
-                    </a>
-                  </CardFooter>
-                ) : (
-                  <>
-                    <CardContent>
-                      {!!item.entries?.length && (
-                        <div className="grid grid-cols-4 gap-4">
-                          {item.entries
-                            .filter((e) => !!e)
-                            .map((entry) => {
-                              const assertEntry = entry
-                              return (
-                                <a
-                                  key={assertEntry.id}
-                                  href={assertEntry.url || void 0}
-                                  target="_blank"
-                                  className="flex min-w-0 flex-1 flex-col items-center gap-1"
-                                  rel="noreferrer"
-                                >
-                                  {assertEntry.media?.[0] ? (
-                                    <Media
-                                      src={assertEntry.media?.[0].url}
-                                      type={assertEntry.media?.[0].type}
-                                      previewImageUrl={assertEntry.media?.[0].preview_image_url}
-                                      className="aspect-square w-full"
-                                    />
-                                  ) : (
-                                    <div className="flex aspect-square w-full overflow-hidden rounded bg-stone-100 p-2 text-xs leading-tight text-zinc-500">
-                                      {assertEntry.title}
-                                    </div>
-                                  )}
-                                  <div className="line-clamp-2 w-full text-xs leading-tight">
-                                    {assertEntry.title}
-                                  </div>
-                                </a>
-                              )
-                            })}
-                        </div>
-                      )}
-                    </CardContent>
-                    <CardFooter>
-                      {item.isSubscribed ? (
-                        <Button variant="outline" disabled>
-                          Followed
-                        </Button>
-                      ) : (
-                        <Button
-                          onClick={() => {
-                            present({
-                              title: "Add Feed",
-                              content: ({ dismiss }) => (
-                                <FeedForm
-                                  asWidget
-                                  url={item.feed.url}
-                                  id={item.feed.id}
-                                  defaultValues={{
-                                    view: getSidebarActiveView().toString(),
-                                  }}
-                                  onSuccess={() => {
-                                    queryClient.setQueryData(["discover", keyword], (oldData) => {
-                                      if (!Array.isArray(oldData)) return oldData
-                                      return oldData.map((oldItem) => {
-                                        if (oldItem.feed.id === item.feed.id) {
-                                          return {
-                                            ...oldItem,
-                                            isSubscribed: true,
-                                            subscriptionCount: oldItem.subscriptionCount + 1,
-                                          }
-                                        }
-                                        return oldItem
-                                      })
-                                    })
-                                    dismiss()
-                                    queryClient.invalidateQueries({
-                                      queryKey: ["discover", keyword],
-                                    })
-                                  }}
-                                />
-                              ),
-                            })
-                          }}
-                        >
-                          Follow
-                        </Button>
-                      )}
-                      <div className="ml-6 text-zinc-500">
-                        <span className="font-medium text-zinc-800 dark:text-zinc-200">
-                          {item.subscriptionCount}
-                        </span>{" "}
-                        Followers
-                      </div>
-                    </CardFooter>
-                  </>
-                )}
-              </Card>
+              <FeedCard key={item.feed.id} data={item} />
             ))}
           </div>
         </div>
