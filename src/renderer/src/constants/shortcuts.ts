@@ -2,18 +2,6 @@ import { COPY_MAP } from "@renderer/constants"
 
 export const shortcuts = {
   feeds: {
-    // previous: {
-    //   name: "Previous Subscription",
-    //   key: "P",
-    // },
-    // next: {
-    //   name: "Next Subscription",
-    //   key: "N",
-    // },
-    // toggleFolder: {
-    //   name: "Toggle Folder",
-    //   key: "X",
-    // },
     add: {
       name: "Add Subscription",
       key: "Meta+T",
@@ -84,6 +72,14 @@ export const shortcuts = {
     share: {
       name: "Share",
       key: "Meta+Alt+S",
+    },
+    scrollUp: {
+      name: "Scroll Up",
+      key: "PageUp",
+    },
+    scrollDown: {
+      name: "Scroll Down",
+      key: "PageDown",
     },
   },
 

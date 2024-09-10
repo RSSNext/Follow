@@ -16,6 +16,7 @@ import { useInPeekModal } from "@renderer/components/ui/modal/inspire/PeekModal"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { isWebBuild, ROUTE_FEED_PENDING } from "@renderer/constants"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
 import { useRouteParamsSelector, useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
@@ -36,6 +37,7 @@ import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
 import { useEffect, useLayoutEffect, useRef } from "react"
+import { useHotkeys } from "react-hotkeys-hook"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
@@ -124,6 +126,14 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
   useEffect(() => {
     scrollerRef.current?.scrollTo(0, 0)
   }, [entryId])
+
+  useHotkeys(shortcuts.entry.scrollDown.key, () => {
+    scrollerRef.current?.scrollBy(0, window.innerHeight / 2)
+  })
+
+  useHotkeys(shortcuts.entry.scrollUp.key, () => {
+    scrollerRef.current?.scrollBy(0, -window.innerHeight / 2)
+  })
 
   const isPeekModal = useInPeekModal()
   if (!entry) return null
