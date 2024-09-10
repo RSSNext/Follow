@@ -67,6 +67,12 @@ export const FeedClaimModalContent: FC<{
         <AutoResizeHeight duration={0.1}>
           <TabsContent className="mt-0 pt-3" value="content">
             <p>Copy the content below and post it to your latest RSS feed.</p>
+            {feed.url.startsWith("rsshub://") && (
+              <p className="mt-1 leading-tight text-orange-800">
+                This feed is provided by RSSHub with a 1 hour cache time. Please allow up to 1 hour
+                for changes to appear after publishing content.
+              </p>
+            )}
 
             <BaseCodeBlock>{claimMessage?.data.content || ""}</BaseCodeBlock>
           </TabsContent>
@@ -79,6 +85,12 @@ export const FeedClaimModalContent: FC<{
               Copy the following content and paste it into the{" "}
               <code className="text-sm">{`<description />`}</code> field of your RSS feed.
             </p>
+            {feed.url.startsWith("rsshub://") && (
+              <p className="mt-1 leading-tight text-orange-800">
+                This feed is provided by RSSHub with a 1 hour cache time. Please allow up to 1 hour
+                for changes to appear after modifying description.
+              </p>
+            )}
             <BaseCodeBlock>{claimMessage?.data.description || ""}</BaseCodeBlock>
           </TabsContent>
           <TabsContent className="mt-0 pt-3" value="rss">
