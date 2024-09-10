@@ -35,7 +35,7 @@ class FeedActions {
             state.feeds[feed.id] = feed
           } else {
             // Store temp feed in memory
-            const nonce = nanoid(8)
+            const nonce = feed["nonce"] || nanoid(8)
             state.feeds[nonce] = { ...feed, id: nonce }
           }
         }
@@ -96,13 +96,16 @@ class FeedActions {
 
     const finalData = {
       ...res.data.feed,
-      id: id || res.data.feed.id || nonce,
+    }
+
+    if (!finalData.id) {
+      finalData["nonce"] = nonce
     }
     this.upsertMany([finalData])
 
     return {
       ...res.data,
-      feed: finalData,
+      feed: !finalData.id ? { ...finalData, id: nonce } : finalData,
     }
   }
 }
