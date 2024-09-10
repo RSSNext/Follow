@@ -7,7 +7,7 @@ import { produce } from "immer"
 import { nanoid } from "nanoid"
 
 import { getSubscriptionByFeedId } from "../subscription"
-import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import { createZustandStore } from "../utils/helper"
 import type { FeedQueryParams, FeedState } from "./types"
 
 export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
@@ -61,24 +61,19 @@ class FeedActions {
   }
 
   async claimFeed(feedId: string) {
-    await doMutationAndTransaction(
-      () =>
-        apiClient.feeds.claim.challenge.$post({
-          json: {
-            feedId,
-          },
-        }),
-
-      async () => {
-        const currentUser = whoami()
-        if (!currentUser) return
-        this.updateFeedOwnership(feedId, currentUser.id)
-        const feed = get().feeds[feedId]
-        if (!feed) return
-        await FeedService.upsert(feed)
+    await apiClient.feeds.claim.challenge.$post({
+      json: {
+        feedId,
       },
-      { doTranscationWhenMutationFail: false, waitMutation: true },
-    )
+    })
+    runTransactionInScope(async () => {
+      const currentUser = whoami()
+      if (!currentUser) return
+      this.updateFeedOwnership(feedId, currentUser.id)
+      const feed = get().feeds[feedId]
+      if (!feed) return
+      await FeedService.upsert(feed)
+    })
   }
 
   // API Fetcher
