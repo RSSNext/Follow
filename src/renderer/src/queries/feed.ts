@@ -1,12 +1,11 @@
 import { ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "@renderer/constants"
 import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
+import { apiClient, toastFetchError } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { formatXml } from "@renderer/lib/utils"
 import type { FeedQueryParams } from "@renderer/store/feed"
 import { feedActions } from "@renderer/store/feed"
 import { useMutation } from "@tanstack/react-query"
-import { toast } from "sonner"
 
 import { entries } from "./entries"
 
@@ -52,7 +51,7 @@ export const useClaimFeedMutation = (feedId: string) =>
     mutationFn: () => feedActions.claimFeed(feedId),
 
     async onError(err) {
-      toast.error(getFetchErrorMessage(err))
+      toastFetchError(err)
     },
     onSuccess() {
       window.posthog?.capture("feed_claimed", {
@@ -75,6 +74,6 @@ export const useRefreshFeedMutation = (feedId?: string) =>
         .invalidateRoot()
     },
     async onError(err) {
-      toast.error(getFetchErrorMessage(err))
+      toastFetchError(err)
     },
   })
