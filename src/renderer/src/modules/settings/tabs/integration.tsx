@@ -3,25 +3,12 @@ import {
   setIntegrationSetting,
   useIntegrationSettingValue,
 } from "@renderer/atoms/settings/integration"
-import {
-  createDefaultSettings,
-  setUISetting,
-  useUISettingSelector,
-} from "@renderer/atoms/settings/ui"
+import { Divider } from "@renderer/components/ui/divider"
 import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
   SimpleIconsReadwise,
 } from "@renderer/components/ui/platform-icon/icons"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@renderer/components/ui/select"
-import { tipcClient } from "@renderer/lib/client"
-import { useQuery } from "@tanstack/react-query"
 
 import { SettingsTitle } from "../title"
 
@@ -38,7 +25,7 @@ export const SettingIntegration = () => (
           {
             type: "title",
             value: (
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2 font-bold">
                 <SimpleIconsEagle />
                 Eagle
               </span>
@@ -55,7 +42,7 @@ export const SettingIntegration = () => (
           {
             type: "title",
             value: (
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2 font-bold">
                 <SimpleIconsReadwise />
                 Readwise
               </span>
@@ -91,7 +78,7 @@ export const SettingIntegration = () => (
           {
             type: "title",
             value: (
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2 font-bold">
                 <SimpleIconsInstapaper />
                 Instapaper
               </span>
@@ -118,40 +105,21 @@ export const SettingIntegration = () => (
               labelClassName: "w-[150px]",
             },
           }),
+
+          BottomTip,
         ]}
       />
     </div>
   </>
 )
 
-export const VoiceSelector = () => {
-  const { data } = useQuery({
-    queryFn: () => tipcClient?.getVoices(),
-    queryKey: ["voices"],
-  })
-  const voice = useUISettingSelector((state) => state.voice)
-
+const BottomTip = () => {
   return (
-    <div className="-mt-1 mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">Voices</span>
-      <Select
-        defaultValue={createDefaultSettings().voice}
-        value={voice}
-        onValueChange={(value) => {
-          setUISetting("voice", value)
-        }}
-      >
-        <SelectTrigger size="sm" className="w-48">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent className="h-64">
-          {data?.map((item) => (
-            <SelectItem key={item.ShortName} value={item.ShortName}>
-              {item.FriendlyName}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <div className="mt-6">
+      <Divider />
+      <p className="opacity-60">
+        <small>Tip: Your sensitive data is stored locally and is not uploaded to the server.</small>
+      </p>
     </div>
   )
 }
