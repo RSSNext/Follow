@@ -405,7 +405,7 @@ const ContainerToc: FC = () => {
   const wrappedElement = useWrappedElement()
   return (
     <RootPortal to={wrappedElement!}>
-      <div className="absolute right-[-130px] top-0 h-full w-[100px]">
+      <div className="group absolute right-[-130px] top-0 h-full w-[100px]">
         <div className="sticky top-0">
           <Toc
             className={cn(
