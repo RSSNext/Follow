@@ -53,6 +53,17 @@ function bootsharp() {
 
     registerUpdater()
 
+    //remove Electron, Follow from user agent
+    session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+      let userAgent = details.requestHeaders["User-Agent"]
+      if (userAgent) {
+        userAgent = userAgent.replace(/\s?Electron\/[\d.]+/, "")
+        userAgent = userAgent.replace(/\s?Follow\/[\d.a-zA-Z-]+/, "")
+      }
+      details.requestHeaders["User-Agent"] = userAgent
+      callback({ cancel: false, requestHeaders: details.requestHeaders })
+    })
+
     app.on("activate", () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
