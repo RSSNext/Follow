@@ -1,0 +1,12 @@
+{
+  "words": {
+    "search": "Search",
+    "import": "Import",
+    "discover": "Discover"
+  },
+  "signin": {
+    "continue_with_github": "Continue with GitHub",
+    "continue_with_google": "Continue with Google",
+    "sign_in_to": "Sign in to"
+  }
+}

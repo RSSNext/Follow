@@ -1,4 +1,5 @@
 import "./styles/main.css"
+import "../../shared/src/i18n"
 
 import { ClickToComponent } from "click-to-react-component"
 import * as React from "react"

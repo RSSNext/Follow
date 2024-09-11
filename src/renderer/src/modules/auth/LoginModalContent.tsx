@@ -6,6 +6,7 @@ import type { LoginRuntime } from "@renderer/lib/auth"
 import { loginHandler } from "@renderer/lib/auth"
 import { stopPropagation } from "@renderer/lib/dom"
 import { m } from "framer-motion"
+import { useTranslation } from "react-i18next"
 
 interface LoginModalContentProps {
   runtime?: LoginRuntime
@@ -16,6 +17,8 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
 
   const { canClose = true, runtime } = props
 
+  const { t } = useTranslation()
+
   return (
     <div className="center flex h-full" onClick={canClose ? modal.dismiss : undefined}>
       <m.div
@@ -24,7 +27,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
         {...modalMontionConfig}
       >
         <div className="mb-8 mt-4 text-center align-middle font-sans text-2xl font-bold leading-relaxed">
-          <span className="text-xl">Sign in to </span>
+          <span className="text-xl">{t("signin.sign_in_to")}</span>
           <span className="center flex translate-y-px gap-2 font-theme text-accent">
             <FollowIcon className="size-4" />
             {APP_NAME}
@@ -37,7 +40,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
               loginHandler("github", runtime)
             }}
           >
-            <i className="i-mgc-github-cute-fi mr-2 text-xl" /> Continue with GitHub
+            <i className="i-mgc-github-cute-fi mr-2 text-xl" /> {t("signin.continue_with_github")}
           </Button>
           <Button
             className="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80"
@@ -45,7 +48,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
               loginHandler("google", runtime)
             }}
           >
-            <i className="i-mgc-google-cute-fi mr-2 text-xl" /> Continue with Google
+            <i className="i-mgc-google-cute-fi mr-2 text-xl" /> {t("signin.continue_with_google")}
           </Button>
         </div>
       </m.div>

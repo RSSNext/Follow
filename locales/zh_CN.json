@@ -1,0 +1,12 @@
+{
+  "words": {
+    "search": "搜索",
+    "import": "导入",
+    "discover": "发现"
+  },
+  "signin": {
+    "continue_with_github": "使用 GitHub 登录",
+    "continue_with_google": "使用 Google 登录",
+    "sign_in_to": "登录到"
+  }
+}
