@@ -15,6 +15,7 @@ import { getSubscriptionByFeedId, useSubscriptionByView } from "@renderer/store/
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { AnimatePresence, m } from "framer-motion"
 import { Fragment, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import {
@@ -79,6 +80,8 @@ export function FeedList({ className, view }: { className?: string; view: number
   const feedId = useRouteFeedId()
   const navigate = useNavigateEntry()
 
+  const { t } = useTranslation()
+
   return (
     <div className={cn(className, "font-medium")}>
       <div
@@ -98,7 +101,7 @@ export function FeedList({ className, view }: { className?: string; view: number
             }
           }}
         >
-          {view !== undefined && views[view].name}
+          {view !== undefined && t(views[view].name)}
         </div>
         <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
           <SortButton />
@@ -128,7 +131,7 @@ export function FeedList({ className, view }: { className?: string; view: number
           }}
         >
           <i className="i-mgc-star-cute-fi mr-2 text-orange-500" />
-          Starred
+          {t("words.starred")}
         </div>
         {hasData ? (
           <SortableList view={view} expansion={expansion} data={data} />

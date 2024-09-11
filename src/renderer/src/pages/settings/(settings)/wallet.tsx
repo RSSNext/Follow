@@ -2,7 +2,7 @@ import { SettingWallet } from "@renderer/modules/settings/tabs/wallet"
 import { defineSettingPage } from "@renderer/modules/settings/utils"
 
 const iconName = `i-mgc-power-outline`
-const name = "Power"
+const name = "settings.wallet.sidebar_title"
 const priority = 1050
 
 export const loader = defineSettingPage({

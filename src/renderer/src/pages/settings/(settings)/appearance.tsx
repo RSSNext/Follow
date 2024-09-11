@@ -2,7 +2,7 @@ import { SettingAppearance } from "@renderer/modules/settings/tabs/apperance"
 import { defineSettingPage } from "@renderer/modules/settings/utils"
 
 const iconName = "i-mgc-palette-cute-re"
-const name = "Appearance"
+const name = "settings.appearance.sidebar_title"
 const priority = 1010
 
 export const loader = defineSettingPage({

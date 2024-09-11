@@ -1,10 +1,12 @@
 import { cn } from "@renderer/lib/utils"
+import { useTranslation } from "react-i18next"
 import { useLoaderData } from "react-router-dom"
 
 import { settings } from "./constants"
 import type { SettingPageConfig } from "./utils"
 
 export const SettingsSidebarTitle = ({ path, className }: { path: string; className?: string }) => {
+  const { t } = useTranslation()
   const tab = settings.find((t) => t.path === path)
 
   if (!tab) {
@@ -14,7 +16,7 @@ export const SettingsSidebarTitle = ({ path, className }: { path: string; classN
   return (
     <div className={cn("flex items-center gap-2 text-[0.94rem] font-medium", className)}>
       <i className={tab.iconName} />
-      <span>{tab.name}</span>
+      <span>{t(tab.name)}</span>
     </div>
   )
 }
@@ -26,6 +28,7 @@ export const SettingsTitle = ({
   className?: string
   loader?: () => SettingPageConfig
 }) => {
+  const { t } = useTranslation()
   const {
     iconName,
     name: title,
@@ -44,7 +47,7 @@ export const SettingsTitle = ({
       )}
     >
       <i className={headerIcon || iconName} />
-      <span>{title}</span>
+      <span>{t(title)}</span>
     </div>
   )
 }

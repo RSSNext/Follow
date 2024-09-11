@@ -20,6 +20,7 @@ import { entryActions, useEntry } from "@renderer/store/entry"
 import { useFeedByIdSelector } from "@renderer/store/feed"
 import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { memo, useCallback, useEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import type {
   ScrollSeekConfiguration,
   VirtuosoGridProps,
@@ -40,6 +41,7 @@ const scrollSeekConfiguration: ScrollSeekConfiguration = {
   exit: (velocity) => Math.abs(velocity) < 1000,
 }
 function EntryColumnImpl() {
+  const { t } = useTranslation()
   const virtuosoRef = useRef<VirtuosoHandle>(null)
   const [isArchived, setIsArchived] = useState(false)
   const unreadOnly = useGeneralSettingKey("unreadOnly")
@@ -105,7 +107,7 @@ function EntryColumnImpl() {
             return (
               <div className="flex justify-center py-4">
                 <Button variant="outline" onClick={() => setIsArchived(true)}>
-                  Load archived entries
+                  {t("words.load_archived_entries")}
                 </Button>
               </div>
             )

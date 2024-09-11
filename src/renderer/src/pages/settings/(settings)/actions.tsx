@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 const iconName = "i-mgc-magic-2-cute-re"
-const name = "Actions"
+const name = "settings.actions.sidebar_title"
 const priority = 1020
 
 export const loader = defineSettingPage({

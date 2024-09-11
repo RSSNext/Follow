@@ -34,6 +34,7 @@ import { feedUnreadActions } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -241,6 +242,8 @@ const FeedInnerForm = ({
     followMutation.mutate(values)
   }
 
+  const { t } = useTranslation()
+
   const categories = useAuthQuery(subscriptionQuery.categories(Number.parseInt(form.watch("view"))))
 
   // useEffect(() => {
@@ -281,7 +284,7 @@ const FeedInnerForm = ({
                           )}
                         >
                           <span className="text-lg">{view.icon}</span>
-                          {view.name}
+                          {t(view.name)}
                         </label>
                       </div>
                     ))}

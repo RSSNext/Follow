@@ -5,7 +5,7 @@ import { SettingsTitle } from "@renderer/modules/settings/title"
 import { defineSettingPage } from "@renderer/modules/settings/utils"
 
 const iconName = "i-mgc-hotkey-cute-re"
-const name = "Shortcuts"
+const name = "settings.shortcuts.sidebar_title"
 const priority = 1040
 
 export const loader = defineSettingPage({

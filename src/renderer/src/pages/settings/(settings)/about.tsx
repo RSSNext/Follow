@@ -3,7 +3,7 @@ import { defineSettingPage } from "@renderer/modules/settings/utils"
 
 export const loader = defineSettingPage({
   iconName: "i-mgc-information-cute-re",
-  name: "About",
+  name: "settings.about.sidebar_title",
   priority: 9999,
 })
 export const Component = () => <SettingAbout />

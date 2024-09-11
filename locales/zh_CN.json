@@ -3,7 +3,10 @@
     "search": "搜索",
     "import": "导入",
     "discover": "发现",
-    "language": "语言"
+    "language": "语言",
+    "starred": "收藏",
+    "load_archived_entries": "加载存档条目",
+    "zero_items": "没有内容"
   },
   "signin": {
     "continue_with_github": "使用 GitHub 登录",
@@ -58,14 +61,16 @@
         "label": "启动时显示未读内容"
       },
       "timeline": "时间轴",
-      "voices": "声音"
+      "voices": "声音",
+      "sidebar_title": "一般的"
     },
     "actions": {
       "actionName": "指令 {{number}}",
       "newRule": "新规则",
       "save": "保存",
       "saveSuccess": "🎉 指令已保存。",
-      "title": "指令"
+      "title": "指令",
+      "sidebar_title": "指令"
     },
     "appearance": {
       "code_highlight_theme": "代码高亮主题",
@@ -106,7 +111,8 @@
         "system": "跟随系统"
       },
       "title": "外观",
-      "unread_count": "未读数"
+      "unread_count": "未读数",
+      "sidebar_title": "外观"
     },
     "integration": {
       "eagle": {
@@ -141,7 +147,8 @@
         }
       },
       "tip": "提示：您的敏感数据存储在本地，不会上传到服务器。",
-      "title": "一体化"
+      "title": "第三方接入",
+      "sidebar_title": "第三方接入"
     },
     "profile": {
       "avatar": {
@@ -157,7 +164,8 @@
       },
       "submit": "提交",
       "title": "配置文件设置",
-      "updateSuccess": "个人资料已更新。"
+      "updateSuccess": "个人资料已更新。",
+      "sidebar_title": "个人资料"
     },
     "invitation": {
       "activate": "激活",
@@ -186,14 +194,30 @@
         "code": "代码",
         "creationTime": "创建时间",
         "usedBy": "使用者"
-      }
+      },
+      "sidebar_title": "邀请"
     },
     "about": {
       "changelog": "变更日志",
       "feedbackInfo": "{{appName}} ({{commitSha}}) 正处于开发的早期阶段。\n如果您有任何反馈或建议，请随时在我们的 GitHub 上<0>提出问题<1></1></0>。",
       "iconLibrary": "使用的图标库版权归<IconLibraryLink></IconLibraryLink><Icon></Icon>所有，不能重新分发。",
       "licenseInfo": "{{appName}} 现在和将来都是一个免费的开源项目。开源协议为 {{license}} 。",
-      "socialMedia": "社交媒体"
+      "socialMedia": "社交媒体",
+      "sidebar_title": "关于"
+    },
+    "shortcuts": {
+      "sidebar_title": "快捷键"
+    },
+    "wallet": {
+      "sidebar_title": "钱包"
     }
+  },
+  "feed_view_type": {
+    "articles": "文章",
+    "audios": "音频",
+    "notifications": "通知",
+    "pictures": "图片",
+    "social_media": "社交媒体",
+    "videos": "视频"
   }
 }
