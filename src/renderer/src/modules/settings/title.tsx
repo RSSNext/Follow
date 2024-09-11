@@ -9,7 +9,6 @@ export const SettingsSidebarTitle = ({ path, className }: { path: string; classN
   const { t } = useTranslation()
   const tab = settings.find((t) => t.path === path)
 
-  const { t } = useTranslation()
   if (!tab) {
     return null
   }
@@ -36,7 +35,6 @@ export const SettingsTitle = ({
     headerIcon,
   } = (useLoaderData() || loader?.() || {}) as SettingPageConfig
 
-  const { t } = useTranslation()
   if (!title) {
     return null
   }

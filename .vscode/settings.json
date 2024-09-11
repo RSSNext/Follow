@@ -59,6 +59,6 @@
   "editor.foldingImportsByDefault": true,
   "commentTranslate.hover.enabled": false,
   "typescript.tsdk": "node_modules/typescript/lib",
-  "i18n-ally.localesPaths": ["locales"],
+  "i18n-ally.localesPaths": ["locales", "locales/namespaces/common"],
   "i18n-ally.keystyle": "nested"
 }

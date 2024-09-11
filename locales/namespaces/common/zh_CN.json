@@ -1,5 +1,239 @@
 {
-  "confirm": "确认",
-  "ok": "好",
-  "cancel": "取消"
+  "words": {
+    "search": "搜索",
+    "import": "导入",
+    "discover": "发现",
+    "language": "语言",
+    "starred": "收藏",
+    "load_archived_entries": "加载存档条目",
+    "zero_items": "没有内容",
+    "add": "添加",
+    "login": "登录"
+  },
+  "signin": {
+    "continue_with_github": "使用 GitHub 登录",
+    "continue_with_google": "使用 Google 登录",
+    "sign_in_to": "登录到"
+  },
+  "settings": {
+    "titles": {
+      "general": "常规",
+      "appearance": "外观",
+      "actions": "操作",
+      "integration": "集成",
+      "about": "关于",
+      "profile": "个人资料",
+      "shortcuts": "热键",
+      "power": "Power",
+      "invitations": "邀请"
+    },
+    "general": {
+      "app": "应用程序",
+      "data_persist": {
+        "description": "在本地保留数据以启用离线访问和本地搜索。",
+        "label": "保留数据以供离线使用"
+      },
+      "group_by_date": {
+        "description": "按日期对条目进行分组。",
+        "label": "按日期分组"
+      },
+      "launch_at_login": "登录时启动",
+      "mark_as_read": {
+        "hover": {
+          "description": "悬停时自动将条目标记为已读。",
+          "label": "悬停时标记为已读"
+        },
+        "render": {
+          "description": "当单级条目（例如社交媒体帖子、图片、视频视图）进入视图时自动将其标记为已读。",
+          "label": "在视图中标记为已读"
+        },
+        "scroll": {
+          "description": "当滚动出视图时自动将条目标记为已读。",
+          "label": "滚动时标记为已读"
+        }
+      },
+      "privacy_data": "隐私",
+      "rebuild_database": {
+        "button": "重建",
+        "description": "如果您遇到渲染问题，重建数据库可能会解决这些问题。",
+        "label": "重建数据库",
+        "title": "重建数据库",
+        "warning[0]": "重建数据库将清除所有本地数据。",
+        "warning[1]": "您确定要继续吗？",
+        "warning": {
+          "line1": "重建数据库将清除所有本地数据。",
+          "line2": "您确定要继续吗？"
+        }
+      },
+      "send_anonymous_data": {
+        "description": "通过选择发送匿名遥测数据，您可以为改善“关注”的整体用户体验做出贡献。",
+        "label": "发送匿名数据"
+      },
+      "show_unread_on_launch": {
+        "description": "启动时显示未读内容",
+        "label": "启动时显示未读内容"
+      },
+      "timeline": "时间轴",
+      "voices": "声音",
+      "sidebar_title": "一般的"
+    },
+    "actions": {
+      "actionName": "指令 {{number}}",
+      "newRule": "新规则",
+      "save": "保存",
+      "saveSuccess": "🎉 指令已保存。",
+      "title": "指令",
+      "sidebar_title": "指令"
+    },
+    "appearance": {
+      "code_highlight_theme": "代码高亮主题",
+      "content": "内容",
+      "fonts": "字体",
+      "general": "一般的",
+      "guess_code_language": {
+        "description": "使用模型来推断未标记代码块的主要编程语言",
+        "label": "猜测代码语言"
+      },
+      "misc": "杂项",
+      "modal_overlay": {
+        "description": "显示模态叠加",
+        "label": "显示模态叠加"
+      },
+      "opaque_sidebars": {
+        "label": "不透明侧边栏"
+      },
+      "reader_render_inline_style": {
+        "description": "允许渲染原始 HTML 的内联样式。",
+        "label": "渲染内联样式"
+      },
+      "reduce_motion": {
+        "description": "减少动效以提高性能并降低能耗",
+        "label": "减少动效"
+      },
+      "show_dock_badge": {
+        "label": "显示为 Dock 徽章"
+      },
+      "sidebar_show_unread_count": {
+        "label": "在侧边栏中显示"
+      },
+      "text_size": "文字大小",
+      "theme": {
+        "dark": "深色",
+        "label": "主题",
+        "light": "亮色",
+        "system": "跟随系统"
+      },
+      "title": "外观",
+      "unread_count": "未读数",
+      "sidebar_title": "外观"
+    },
+    "integration": {
+      "eagle": {
+        "enable": {
+          "description": "显示“将媒体保存到 Eagle”按钮（如果可用）。",
+          "label": "启用"
+        },
+        "title": "Eagle"
+      },
+      "instapaper": {
+        "enable": {
+          "description": "显示“保存到 Instapaper”按钮（如果可用）。",
+          "label": "启用"
+        },
+        "password": {
+          "label": "密码"
+        },
+        "title": "Instapaper",
+        "username": {
+          "label": "Instapaper 用户名"
+        }
+      },
+      "readwise": {
+        "enable": {
+          "description": "显示“保存到 Readwise”按钮（如果可用）。",
+          "label": "启用"
+        },
+        "title": "Readwise",
+        "token": {
+          "description": "您可以在这里获取它",
+          "label": "Readwise 访问令牌"
+        }
+      },
+      "tip": "提示：您的敏感数据存储在本地，不会上传到服务器。",
+      "title": "第三方接入",
+      "sidebar_title": "第三方接入"
+    },
+    "profile": {
+      "avatar": {
+        "label": "头像"
+      },
+      "handle": {
+        "description": "您的唯一标识符。",
+        "label": "Handle"
+      },
+      "name": {
+        "description": "您的公开显示名称。",
+        "label": "显示名称"
+      },
+      "submit": "提交",
+      "title": "配置文件设置",
+      "updateSuccess": "个人资料已更新。",
+      "sidebar_title": "个人资料"
+    },
+    "invitation": {
+      "activate": "激活",
+      "codeOptions": {
+        "betaUser": "1. 寻找邀请您的测试版用户。",
+        "discord": "2. 加入我们的 Discord 服务器，偶尔获得赠品。",
+        "xAccount": "3.关注我们的X账户，不定期有赠品。"
+      },
+      "earlyAccessMessage": "😰 抱歉，关注目前处于抢先体验阶段，需要邀请码才能使用。",
+      "getCodeMessage": "您可以通过以下方式获取邀请码：",
+      "title": "邀请码",
+      "confirmModal": {
+        "cancel": "取消",
+        "continue": "继续",
+        "message": "生成邀请码将花费您 10 <PowerIcon>Power</PowerIcon>。",
+        "confirm": "您想继续吗？",
+        "title": "确认"
+      },
+      "earlyAccess": "Follow 目前处于<strong>早期开发</strong>状态，需要邀请码才能使用。",
+      "generateButton": "生成邀请码",
+      "generateCost": "您可以花费 10 <PowerIcon>Power</PowerIcon> 为您的朋友生成邀请码。",
+      "newInvitationSuccess": "🎉 新邀请已生成，邀请码已复制",
+      "noInvitations": "没有邀请",
+      "notUsed": "未使用",
+      "tableHeaders": {
+        "code": "代码",
+        "creationTime": "创建时间",
+        "usedBy": "使用者"
+      },
+      "sidebar_title": "邀请"
+    },
+    "about": {
+      "changelog": "变更日志",
+      "feedbackInfo": "{{appName}} ({{commitSha}}) 正处于开发的早期阶段。\n如果您有任何反馈或建议，请随时在我们的 GitHub 上<0>提出问题<1></1></0>。",
+      "iconLibrary": "使用的图标库版权归<IconLibraryLink></IconLibraryLink><Icon></Icon>所有，不能重新分发。",
+      "licenseInfo": "{{appName}} 现在和将来都是一个免费的开源项目。开源协议为 {{license}} 。",
+      "socialMedia": "社交媒体",
+      "sidebar_title": "关于"
+    },
+    "shortcuts": {
+      "sidebar_title": "快捷键"
+    },
+    "wallet": {
+      "sidebar_title": "钱包"
+    }
+  },
+  "feed_view_type": {
+    "articles": "文章",
+    "audios": "音频",
+    "notifications": "通知",
+    "pictures": "图片",
+    "social_media": "社交媒体",
+    "videos": "视频"
+  },
+  "sidebar": {
+    "select_sort_method": "选择排序方法"
+  }
 }
