@@ -44,7 +44,7 @@
         },
         "render": {
           "label": "Mark as read when in the view",
-          "description": "Automatically mark single-level entries (e.g., social media posts, pictures, video views) as read when they enter the view."
+          "description": "Automatically mark single-level entries (e.g. social media posts, pictures, video views) as read when they enter the view."
         }
       },
       "privacy_data": "Privacy & Data",

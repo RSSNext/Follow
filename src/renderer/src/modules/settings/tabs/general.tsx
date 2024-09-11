@@ -18,10 +18,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
+import { currentSupportedLanguages, fallbackLanguage, languageCodeToName } from "@renderer/i18n"
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
-import { currentSupportedLanguages, fallbackLanguage, languageCodeToName } from "@shared/i18n"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
