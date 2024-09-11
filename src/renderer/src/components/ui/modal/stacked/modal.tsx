@@ -257,9 +257,8 @@ export const ModalInternal = memo(
                     currentIsClosing ? "!pointer-events-none" : "!pointer-events-auto",
                     modalContainerClassName,
                   )}
-                  onClick={
-                    modal ? (clickOutsideToDismiss && canClose ? dismiss : noticeModal) : undefined
-                  }
+                  onPointerUp={handleDetectSelectEnd}
+                  onClick={handleClickOutsideToDismiss}
                   style={zIndexStyle}
                 >
                   {DragBar}
@@ -267,6 +266,8 @@ export const ModalInternal = memo(
                     className={cn("contents", modalClassName)}
                     onClick={stopPropagation}
                     ref={modalElementRef}
+                    onSelect={handleSelectStart}
+                    onKeyUp={handleDetectSelectEnd}
                   >
                     <CustomModalComponent>{finalChildren}</CustomModalComponent>
                   </div>
