@@ -21,6 +21,7 @@ import {
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
+import { currentSupportedLanguages, fallbackLanguage, languageCodeToName } from "@shared/i18n"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
@@ -198,12 +199,16 @@ export const VoiceSelector = () => {
 export const LanguageSelector = () => {
   const { t, i18n } = useTranslation()
   const language = useGeneralSettingSelector((state) => state.language)
+
+  const finalRenderLanguage = currentSupportedLanguages.includes(language)
+    ? language
+    : fallbackLanguage
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("words.language")}</span>
       <Select
-        defaultValue={language}
-        value={language}
+        defaultValue={finalRenderLanguage}
+        value={finalRenderLanguage}
         onValueChange={(value) => {
           setGeneralSetting("language", value as string)
           i18n.changeLanguage(value as string)
@@ -213,8 +218,11 @@ export const LanguageSelector = () => {
           <SelectValue />
         </SelectTrigger>
         <SelectContent position="item-aligned">
-          <SelectItem value="en">English</SelectItem>
-          <SelectItem value="zh">中文（部分完成）</SelectItem>
+          {currentSupportedLanguages.map((lang) => (
+            <SelectItem key={lang} value={lang}>
+              {languageCodeToName[lang]}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>

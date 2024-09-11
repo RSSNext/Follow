@@ -11,6 +11,7 @@ import {
 } from "@renderer/providers/invalidate-query-provider"
 import { CleanerService } from "@renderer/services/cleaner"
 import { registerGlobalContext } from "@shared/bridge"
+import { initI18n } from "@shared/i18n"
 import dayjs from "dayjs"
 import duration from "dayjs/plugin/duration"
 import localizedFormat from "dayjs/plugin/localizedFormat"
@@ -90,7 +91,9 @@ export const initializeApp = async () => {
   // should after hydrateSettings
   const { dataPersist: enabledDataPersist, sendAnonymousData } = getGeneralSettings()
 
+  initI18n()
   initSentry()
+
   if (sendAnonymousData) initPostHog()
 
   let dataHydratedTime: undefined | number
