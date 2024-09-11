@@ -236,7 +236,14 @@ export const createMainWindow = () => {
   window.on("close", (event) => {
     if (isMacOS) {
       event.preventDefault()
-      window.hide()
+      if (window.isFullScreen()) {
+        window.once("leave-full-screen", () => {
+          window.hide()
+        })
+        window.setFullScreen(false)
+      } else {
+        window.hide()
+      }
 
       callGlobalContextMethod(window, "electronClose")
     } else {
