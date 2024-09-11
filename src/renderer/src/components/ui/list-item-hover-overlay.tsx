@@ -1,7 +1,8 @@
+import { m } from "@renderer/components/common/Motion"
 import { views } from "@renderer/constants"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import clsx from "clsx"
-import { AnimatePresence, m } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
 
 export const ListItemHoverOverlay = ({

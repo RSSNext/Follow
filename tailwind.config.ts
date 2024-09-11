@@ -1,10 +1,11 @@
-import "./cssAsPlugin"
+import "./configs/tw-css-plugin"
 
 import path from "node:path"
 
 import { getIconCollections, iconsPlugin } from "@egoist/tailwindcss-icons"
 import { cleanupSVG, importDirectorySync, isEmptyColor, parseColors, runSVGO } from "@iconify/tools"
 import { compareColors, stringToColor } from "@iconify/utils/lib/colors"
+import plugin from "tailwindcss/plugin"
 import resolveConfig from "tailwindcss/resolveConfig"
 
 /** @type {import('tailwindcss').Config} */
@@ -115,6 +116,7 @@ export default resolveConfig({
       }),
     },
   },
+
   plugins: [
     iconsPlugin({
       collections: {
@@ -126,6 +128,11 @@ export default resolveConfig({
     require("@tailwindcss/container-queries"),
     require("@tailwindcss/typography"),
     require("./src/renderer/src/styles/tailwind-extend.css"),
+    plugin(({ addVariant }) => {
+      addVariant("f-motion-reduce", '[data-motion-reduce="true"] &')
+      addVariant("group-motion-reduce", ':merge(.group)[data-motion-reduce="true"] &')
+      addVariant("peer-motion-reduce", ':merge(.peer)[data-motion-reduce="true"] ~ &')
+    }),
   ],
 })
 

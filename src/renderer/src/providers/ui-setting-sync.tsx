@@ -1,8 +1,9 @@
 import { useUISettingValue } from "@renderer/atoms/settings/ui"
+import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { useSyncThemeark } from "@renderer/hooks/common"
 import { tipcClient } from "@renderer/lib/client"
 import { feedUnreadActions } from "@renderer/store/unread"
-import { useEffect, useInsertionEffect } from "react"
+import { useEffect, useInsertionEffect, useLayoutEffect } from "react"
 
 const useUISettingSync = () => {
   const setting = useUISettingValue()
@@ -43,7 +44,15 @@ const useUISettingSync = () => {
     }
   }, [setting.voice])
 }
+
+const useUXSettingSync = () => {
+  const reduceMotion = useReduceMotion()
+  useLayoutEffect(() => {
+    document.documentElement.dataset.motionReduce = reduceMotion ? "true" : "false"
+  }, [reduceMotion])
+}
 export const SettingSync = () => {
   useUISettingSync()
+  useUXSettingSync()
   return null
 }

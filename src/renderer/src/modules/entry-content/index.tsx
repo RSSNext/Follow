@@ -136,6 +136,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
   })
 
   const isPeekModal = useInPeekModal()
+
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -168,7 +169,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
                 }
               : undefined
           }
-          className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24"
+          className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
           key={entry.entries.id}
         >
           <article

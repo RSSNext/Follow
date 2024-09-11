@@ -16,11 +16,18 @@ export const m: typeof M = new Proxy(M, {
       const nextProps = { ...props }
       if (shouldReduceMotion) {
         if (props.exit) {
-          delete nextProps.exit
+          nextProps.exit = {
+            opacity: 0,
+          }
         }
 
         if (props.initial) {
-          nextProps.initial = true
+          nextProps.initial = {
+            opacity: 0,
+          }
+        }
+        nextProps.animate = {
+          opacity: 1,
         }
       }
 
