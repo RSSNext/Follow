@@ -54,7 +54,7 @@ export const initializeApp = async () => {
   // Set Environment
   document.documentElement.dataset.buildType = isElectronBuild ? "electron" : "web"
 
-  doMigration()
+  apm("migration", doMigration)
 
   // Initialize dayjs
   dayjs.extend(duration)
@@ -83,23 +83,25 @@ export const initializeApp = async () => {
     toast,
   })
 
-  hydrateSettings()
+  apm("hydrateSettings", hydrateSettings)
 
-  settingSyncQueue.init()
-  settingSyncQueue.syncLocal()
+  apm("setting sync", () => {
+    settingSyncQueue.init()
+    settingSyncQueue.syncLocal()
+  })
 
   // should after hydrateSettings
   const { dataPersist: enabledDataPersist, sendAnonymousData } = getGeneralSettings()
 
   initSentry()
-  await initI18n()
+  await apm("i18n", initI18n)
 
   if (sendAnonymousData) initPostHog()
 
   let dataHydratedTime: undefined | number
   // Initialize the database
   if (enabledDataPersist) {
-    dataHydratedTime = await hydrateDatabaseToStore()
+    dataHydratedTime = await apm("hydrateDatabaseToStore", hydrateDatabaseToStore)
     CleanerService.cleanOutdatedData()
   }
 
@@ -122,3 +124,11 @@ export const initializeApp = async () => {
 }
 
 import.meta.hot?.dispose(cleanup)
+
+const apm = async (label: string, fn: () => Promise<any> | any) => {
+  const start = Date.now()
+  const result = await fn()
+  const end = Date.now()
+  appLog(`${label} took ${end - start}ms`)
+  return result
+}

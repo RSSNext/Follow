@@ -16,6 +16,17 @@
     "sign_in_to": "登录到"
   },
   "settings": {
+    "titles": {
+      "general": "常规",
+      "appearance": "外观",
+      "actions": "操作",
+      "integration": "集成",
+      "about": "关于",
+      "profile": "个人资料",
+      "shortcuts": "热键",
+      "power": "Power",
+      "invitations": "邀请"
+    },
     "general": {
       "app": "应用程序",
       "data_persist": {

@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
-import { currentSupportedLanguages, fallbackLanguage, languageCodeToName } from "@renderer/i18n"
+import { currentSupportedLanguages, fallbackLanguage } from "@renderer/i18n"
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
@@ -198,6 +198,7 @@ export const VoiceSelector = () => {
 
 export const LanguageSelector = () => {
   const { t, i18n } = useTranslation()
+  const { t: langT } = useTranslation("lang")
   const language = useGeneralSettingSelector((state) => state.language)
 
   const finalRenderLanguage = currentSupportedLanguages.includes(language)
@@ -220,7 +221,7 @@ export const LanguageSelector = () => {
         <SelectContent position="item-aligned">
           {currentSupportedLanguages.map((lang) => (
             <SelectItem key={lang} value={lang}>
-              {languageCodeToName[lang]}
+              {langT(`langs.${lang}` as any)}
             </SelectItem>
           ))}
         </SelectContent>

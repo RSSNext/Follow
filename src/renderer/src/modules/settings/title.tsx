@@ -9,6 +9,7 @@ export const SettingsSidebarTitle = ({ path, className }: { path: string; classN
   const { t } = useTranslation()
   const tab = settings.find((t) => t.path === path)
 
+  const { t } = useTranslation()
   if (!tab) {
     return null
   }
@@ -16,7 +17,7 @@ export const SettingsSidebarTitle = ({ path, className }: { path: string; classN
   return (
     <div className={cn("flex items-center gap-2 text-[0.94rem] font-medium", className)}>
       <i className={tab.iconName} />
-      <span>{t(tab.name)}</span>
+      <span>{t(tab.name as any)}</span>
     </div>
   )
 }
@@ -35,6 +36,7 @@ export const SettingsTitle = ({
     headerIcon,
   } = (useLoaderData() || loader?.() || {}) as SettingPageConfig
 
+  const { t } = useTranslation()
   if (!title) {
     return null
   }
@@ -47,7 +49,7 @@ export const SettingsTitle = ({
       )}
     >
       <i className={headerIcon || iconName} />
-      <span>{t(title)}</span>
+      <span>{t(title as any)}</span>
     </div>
   )
 }

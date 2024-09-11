@@ -10,7 +10,7 @@ import type {
 } from "@renderer/models"
 import { ActionCard } from "@renderer/modules/settings/action-card"
 import { SettingsTitle } from "@renderer/modules/settings/title"
-import { defineSettingPage } from "@renderer/modules/settings/utils"
+import { defineSettingPageData } from "@renderer/modules/settings/utils"
 import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
@@ -18,12 +18,11 @@ import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 const iconName = "i-mgc-magic-2-cute-re"
-const name = "settings.actions.sidebar_title"
 const priority = 1020
 
-export const loader = defineSettingPage({
+export const loader = defineSettingPageData({
   iconName,
-  name,
+  name: "settings.titles.actions",
   priority,
 })
 

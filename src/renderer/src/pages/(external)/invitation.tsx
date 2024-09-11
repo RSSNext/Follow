@@ -82,9 +82,14 @@ export function Component() {
         <p>{t("settings.invitation.earlyAccessMessage")}</p>
         <p>{t("settings.invitation.getCodeMessage")}</p>
         <p>
-          <p>{t("settings.invitation.codeOptions.betaUser")}</p>
-          <p>{t("settings.invitation.codeOptions.discord")}</p>
-          <p>{t("settings.invitation.codeOptions.xAccount")}</p>
+          😰 Sorry, Follow is currently in <strong>early access</strong> and requires an invitation
+          code to use.
+        </p>
+        <p>You can get an invitation code in the following ways:</p>
+        <p>
+          <p>1. Looking for any alpha test user to invite you.</p>
+          <p>2. Join our Discord server for occasional giveaways.</p>
+          <p>3. Follow our X account for occasional giveaways.</p>
         </p>
       </div>
       <div className="mt-2 flex flex-wrap gap-2">
