@@ -9,6 +9,7 @@ import {
   SimpleIconsInstapaper,
   SimpleIconsReadwise,
 } from "@renderer/components/ui/platform-icon/icons"
+import { useTranslation } from "react-i18next"
 
 import { SettingsTitle } from "../title"
 
@@ -16,109 +17,101 @@ const { defineSettingItem, SettingBuilder } = createSetting(
   useIntegrationSettingValue,
   setIntegrationSetting,
 )
-export const SettingIntegration = () => (
-  <>
-    <SettingsTitle />
-    <div className="mt-4">
-      <SettingBuilder
-        settings={[
-          {
-            type: "title",
-            value: (
-              <span className="flex items-center gap-2 font-bold">
-                <SimpleIconsEagle />
-                Eagle
-              </span>
-            ),
-          },
-          defineSettingItem("enableEagle", {
-            label: "Enable",
-            description: (
-              <>
-                Display <i>Save media to Eagle</i> button when available.
-              </>
-            ),
-          }),
-          {
-            type: "title",
-            value: (
-              <span className="flex items-center gap-2 font-bold">
-                <SimpleIconsReadwise />
-                Readwise
-              </span>
-            ),
-          },
-          defineSettingItem("enableReadwise", {
-            label: "Enable",
-            description: (
-              <>
-                Display <i>Save to Readwise</i> button when available.
-              </>
-            ),
-          }),
-          defineSettingItem("readwiseToken", {
-            label: "Readwise Access Token",
-            vertical: true,
-            type: "password",
-            description: (
-              <>
-                You can get it here:{" "}
-                <a
-                  target="_blank"
-                  className="underline"
-                  rel="noreferrer noopener"
-                  href="https://readwise.io/access_token"
-                >
-                  readwise.io/access_token
-                </a>
-                .
-              </>
-            ),
-          }),
-          {
-            type: "title",
-            value: (
-              <span className="flex items-center gap-2 font-bold">
-                <SimpleIconsInstapaper />
-                Instapaper
-              </span>
-            ),
-          },
-          defineSettingItem("enableInstapaper", {
-            label: "Enable",
-            description: (
-              <>
-                Display <i>Save to Instapaper</i> button when available.
-              </>
-            ),
-          }),
-          defineSettingItem("instapaperUsername", {
-            label: "Instapaper Username",
-            componentProps: {
-              labelClassName: "w-[150px]",
+export const SettingIntegration = () => {
+  const { t } = useTranslation()
+  return (
+    <>
+      <SettingsTitle />
+      <div className="mt-4">
+        <SettingBuilder
+          settings={[
+            {
+              type: "title",
+              value: (
+                <span className="flex items-center gap-2 font-bold">
+                  <SimpleIconsEagle />
+                  {t("settings.integration.eagle.title")}
+                </span>
+              ),
             },
-          }),
-          defineSettingItem("instapaperPassword", {
-            label: "Instapaper Password",
-            type: "password",
-            componentProps: {
-              labelClassName: "w-[150px]",
+            defineSettingItem("enableEagle", {
+              label: t("settings.integration.eagle.enable.label"),
+              description: t("settings.integration.eagle.enable.description"),
+            }),
+            {
+              type: "title",
+              value: (
+                <span className="flex items-center gap-2 font-bold">
+                  <SimpleIconsReadwise />
+                  {t("settings.integration.readwise.title")}
+                </span>
+              ),
             },
-          }),
+            defineSettingItem("enableReadwise", {
+              label: t("settings.integration.readwise.enable.label"),
+              description: t("settings.integration.readwise.enable.description"),
+            }),
+            defineSettingItem("readwiseToken", {
+              label: t("settings.integration.readwise.token.label"),
+              vertical: true,
+              type: "password",
+              description: (
+                <>
+                  {t("settings.integration.readwise.token.description")}{" "}
+                  <a
+                    target="_blank"
+                    className="underline"
+                    rel="noreferrer noopener"
+                    href="https://readwise.io/access_token"
+                  >
+                    readwise.io/access_token
+                  </a>
+                  .
+                </>
+              ),
+            }),
+            {
+              type: "title",
+              value: (
+                <span className="flex items-center gap-2 font-bold">
+                  <SimpleIconsInstapaper />
+                  {t("settings.integration.instapaper.title")}
+                </span>
+              ),
+            },
+            defineSettingItem("enableInstapaper", {
+              label: t("settings.integration.instapaper.enable.label"),
+              description: t("settings.integration.instapaper.enable.description"),
+            }),
+            defineSettingItem("instapaperUsername", {
+              label: t("settings.integration.instapaper.username.label"),
+              componentProps: {
+                labelClassName: "w-[150px]",
+              },
+            }),
+            defineSettingItem("instapaperPassword", {
+              label: t("settings.integration.instapaper.password.label"),
+              type: "password",
+              componentProps: {
+                labelClassName: "w-[150px]",
+              },
+            }),
 
-          BottomTip,
-        ]}
-      />
-    </div>
-  </>
-)
+            BottomTip,
+          ]}
+        />
+      </div>
+    </>
+  )
+}
 
 const BottomTip = () => {
+  const { t } = useTranslation()
   return (
     <div className="mt-6">
       <Divider />
       <p className="opacity-60">
-        <small>Tip: Your sensitive data is stored locally and is not uploaded to the server.</small>
+        <small>{t("settings.integration.tip")}</small>
       </p>
     </div>
   )

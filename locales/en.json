@@ -9,5 +9,89 @@
     "continue_with_github": "Continue with GitHub",
     "continue_with_google": "Continue with Google",
     "sign_in_to": "Sign in to"
+  },
+  "settings": {
+    "general": {
+      "app": "App",
+      "launch_at_login": "Launch at login",
+      "timeline": "Timeline",
+      "show_unread_on_launch": {
+        "description": "Show unread content on launch",
+        "label": "Show unread content on launch"
+      },
+      "rebuild_database": {
+        "warning": {
+          "line1": "Rebuilding the database will clear all your local data.",
+          "line2": "Are you sure you want to continue?"
+        },
+        "label": "Rebuild Database",
+        "description": "If you are experiencing rendering issues, rebuilding the database may solve them.",
+        "button": "Rebuild",
+        "title": "Rebuild Database"
+      },
+      "group_by_date": {
+        "label": "Group by date",
+        "description": "Group entries by date."
+      },
+      "mark_as_read": {
+        "scroll": {
+          "label": "Mark as read when scrolling",
+          "description": "Automatically mark entries as read when scrolled out of the view."
+        },
+        "hover": {
+          "label": "Mark as read when hovering",
+          "description": "Automatically mark entries as read when hovered."
+        },
+        "render": {
+          "label": "Mark as read when in the view",
+          "description": "Automatically mark single-level entries (e.g., social media posts, pictures, video views) as read when they enter the view."
+        }
+      },
+      "privacy_data": "Privacy & Data",
+      "data_persist": {
+        "label": "Persist data for offline usage",
+        "description": "Persist data locally to enable offline access and local search."
+      },
+      "send_anonymous_data": {
+        "label": "Send anonymous data",
+        "description": "By opting to send anonymized telemetry data, you contribute to improving the overall user experience of Follow."
+      },
+      "voices": "Voices"
+    },
+    "integration": {
+      "title": "Integration",
+      "eagle": {
+        "title": "Eagle",
+        "enable": {
+          "label": "Enable",
+          "description": "Display 'Save media to Eagle' button when available."
+        }
+      },
+      "readwise": {
+        "title": "Readwise",
+        "enable": {
+          "label": "Enable",
+          "description": "Display 'Save to Readwise' button when available."
+        },
+        "token": {
+          "label": "Readwise Access Token",
+          "description": "You can get it here: readwise.io/access_token."
+        }
+      },
+      "instapaper": {
+        "title": "Instapaper",
+        "enable": {
+          "label": "Enable",
+          "description": "Display 'Save to Instapaper' button when available."
+        },
+        "username": {
+          "label": "Instapaper Username"
+        },
+        "password": {
+          "label": "Instapaper Password"
+        }
+      },
+      "tip": "Tip: Your sensitive data is stored locally and is not uploaded to the server."
+    }
   }
 }
