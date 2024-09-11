@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://github.com/PlayCover/PlayCover">
+  <a href="https://github.com/RSSNext/Follow">
     <img src="https://github.com/RSSNext/follow/assets/41265413/c6c02ad5-cddc-46f5-8420-a47afe1c82fe" alt="Logo" width="80" height="80">
   </a>
 
