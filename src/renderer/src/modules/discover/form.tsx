@@ -213,7 +213,10 @@ export function DiscoverForm({ type }: { type: string }) {
                                   defaultValues={{
                                     view: getSidebarActiveView().toString(),
                                   }}
-                                  onSuccess={dismiss}
+                                  onSuccess={() => {
+                                    dismiss()
+                                    mutation.mutate(keyword)
+                                  }}
                                 />
                               ),
                             })
