@@ -6,7 +6,9 @@
     "language": "Language",
     "starred": "Starred",
     "load_archived_entries": "Load archived entries",
-    "zero_items": "Zero items"
+    "zero_items": "Zero items",
+    "add": "Add",
+    "login": "Login"
   },
   "feed_view_type": {
     "articles": "Articles",
@@ -208,5 +210,8 @@
     "shortcuts": {
       "sidebar_title": "Shortcuts"
     }
+  },
+  "sidebar": {
+    "select_sort_method": "Select a sort method"
   }
 }

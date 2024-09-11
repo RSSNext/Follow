@@ -12,6 +12,7 @@ import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useSession } from "@renderer/queries/auth"
 import type { FC } from "react"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { UserArrowLeftIcon } from "./icons/user"
@@ -33,6 +34,7 @@ interface LoginProps {
 export const LoginButton: FC<LoginProps> = (props) => {
   const { method } = props
   const modalStack = useModalStack()
+  const { t } = useTranslation()
   const Content = (
     <ActionButton
       className="relative z-[1]"
@@ -49,7 +51,7 @@ export const LoginButton: FC<LoginProps> = (props) => {
             }
           : undefined
       }
-      tooltip="Login"
+      tooltip={t("words.login")}
     >
       <UserArrowLeftIcon className="size-4" />
     </ActionButton>

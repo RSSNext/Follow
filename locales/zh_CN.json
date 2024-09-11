@@ -6,7 +6,9 @@
     "language": "语言",
     "starred": "收藏",
     "load_archived_entries": "加载存档条目",
-    "zero_items": "没有内容"
+    "zero_items": "没有内容",
+    "add": "添加",
+    "login": "登录"
   },
   "signin": {
     "continue_with_github": "使用 GitHub 登录",
@@ -219,5 +221,8 @@
     "pictures": "图片",
     "social_media": "社交媒体",
     "videos": "视频"
+  },
+  "sidebar": {
+    "select_sort_method": "选择排序方法"
   }
 }

@@ -154,7 +154,7 @@ export function FeedList({ className, view }: { className?: string; view: number
 
 const SortButton = () => {
   const { by, order } = useFeedListSort()
-
+  const { t } = useTranslation()
   const LIST = [
     { icon: "i-mgc-sort-ascending-cute-re", by: "count", order: "asc" },
     { icon: "i-mgc-sort-descending-cute-re", by: "count", order: "desc" },
@@ -207,7 +207,7 @@ const SortButton = () => {
               >
                 <HoverCard.Arrow className="-translate-x-4 fill-border" />
                 <section className="w-[170px] text-center">
-                  <span className="text-[13px]">Select a sorting method</span>
+                  <span className="text-[13px]">{t("sidebar.select_sort_method")}</span>
                   <div className="mt-4 grid grid-cols-2 grid-rows-2 gap-2">
                     {LIST.map(({ icon, by, order }) => {
                       const current = getFeedListSort()
