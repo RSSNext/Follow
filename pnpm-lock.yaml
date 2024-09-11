@@ -450,12 +450,6 @@ importers:
       hono:
         specifier: 4.5.11
         version: 4.5.11(patch_hash=iej2g43ojhll5opwbnvyorjq4e)
-      i18next-hmr:
-        specifier: 3.1.3
-        version: 3.1.3
-      i18next-http-backend:
-        specifier: 2.6.1
-        version: 2.6.1(encoding@0.1.13)
       lint-staged:
         specifier: 15.2.10
         version: 15.2.10
@@ -4109,9 +4103,6 @@ packages:
   cross-dirname@0.1.0:
     resolution: {integrity: sha512-+R08/oI0nl3vfPcqftZRpytksBXDzOUveBq/NBVx0sUp1axwzPQrKinNx5yd5sxPu8j1wIy8AfnVQ+5eFdha6Q==}
 
-  cross-fetch@4.0.0:
-    resolution: {integrity: sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==}
-
   cross-spawn@6.0.5:
     resolution: {integrity: sha512-eTVLrBSt7fjbDygz805pMnstIs2VTBNkRm0qxZd+M7A5XDdxVRWO5MxGBXZhjY4cqLYLdtrGqRf8mBPmzwSpWQ==}
     engines: {node: '>=4.8'}
@@ -5357,12 +5348,6 @@ packages:
 
   humps@2.0.1:
     resolution: {integrity: sha512-E0eIbrFWUhwfXJmsbdjRQFQPrl5pTEoKlz163j1mTqqUnU9PgR4AgB8AIITzuB3vLBdxZXyZ9TDIrwB2OASz4g==}
-
-  i18next-hmr@3.1.3:
-    resolution: {integrity: sha512-zoM4B6toVk48rAMl0t9eV+ldEq9HIO9+bek8H1aGSLQZAjPSBQCUggkxdk0vQjEWSKLsssxZqZBAWS+Ow1rcsA==}
-
-  i18next-http-backend@2.6.1:
-    resolution: {integrity: sha512-rCilMAnlEQNeKOZY1+x8wLM5IpYOj10guGvEpeC59tNjj6MMreLIjIW8D1RclhD3ifLwn6d/Y9HEM1RUE6DSog==}
 
   i18next@23.15.1:
     resolution: {integrity: sha512-wB4abZ3uK7EWodYisHl/asf8UYEhrI/vj/8aoSsrj/ZDxj4/UXPOa1KvFt1Fq5hkUHquNqwFlDprmjZ8iySgYA==}
@@ -12765,12 +12750,6 @@ snapshots:
 
   cross-dirname@0.1.0: {}
 
-  cross-fetch@4.0.0(encoding@0.1.13):
-    dependencies:
-      node-fetch: 2.7.0(encoding@0.1.13)
-    transitivePeerDependencies:
-      - encoding
-
   cross-spawn@6.0.5:
     dependencies:
       nice-try: 1.0.5
@@ -14423,14 +14402,6 @@ snapshots:
       ms: 2.1.3
 
   humps@2.0.1: {}
-
-  i18next-hmr@3.1.3: {}
-
-  i18next-http-backend@2.6.1(encoding@0.1.13):
-    dependencies:
-      cross-fetch: 4.0.0(encoding@0.1.13)
-    transitivePeerDependencies:
-      - encoding
 
   i18next@23.15.1:
     dependencies:
