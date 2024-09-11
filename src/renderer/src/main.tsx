@@ -7,12 +7,10 @@ import { RouterProvider } from "react-router-dom"
 
 import { setAppIsReady } from "./atoms/app"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "./constants"
-import { initI18n } from "./i18n"
 import { initializeApp } from "./initialize"
 import { getOS } from "./lib/utils"
 import { router } from "./router"
 
-initI18n()
 initializeApp().finally(() => {
   setAppIsReady(true)
 })

@@ -4,6 +4,7 @@ import { repository } from "@pkg"
 import { getUISettings } from "@renderer/atoms/settings/ui"
 import { isElectronBuild } from "@renderer/constants"
 import { browserDB } from "@renderer/database"
+import { initI18n } from "@renderer/i18n"
 import { settingSyncQueue } from "@renderer/modules/settings/helper/sync-queue"
 import {
   ElectronCloseEvent,
@@ -91,6 +92,7 @@ export const initializeApp = async () => {
   const { dataPersist: enabledDataPersist, sendAnonymousData } = getGeneralSettings()
 
   initSentry()
+  await initI18n()
 
   if (sendAnonymousData) initPostHog()
 
