@@ -15,7 +15,7 @@ export const initI18n = async () => {
     lng: language,
     fallbackLng: fallbackLanguage,
     defaultNS,
-    debug: true,
+    debug: import.meta.env.DEV,
     resources,
   })
 }
