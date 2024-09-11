@@ -1,4 +1,5 @@
 import { useWhoami } from "@renderer/atoms/user"
+import { Button } from "@renderer/components/ui/button"
 import { CopyButton } from "@renderer/components/ui/code-highlighter"
 import { LoadingWithIcon } from "@renderer/components/ui/loading"
 import {
@@ -7,9 +8,13 @@ import {
   TooltipPortal,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
+import { DAILY_CLAIM_AMOUNT } from "@renderer/constants"
+import { apiClient } from "@renderer/lib/api-fetch"
+import { cn } from "@renderer/lib/utils"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
 import { Balance } from "@renderer/modules/wallet/balance"
 import { useWallet } from "@renderer/queries/wallet"
+import { useMutation } from "@tanstack/react-query"
 
 import { ClaimDailyReward } from "./claim-daily-reward"
 import { CreateWallet } from "./create-wallet"
@@ -19,6 +24,13 @@ export const MyWalletSection = () => {
   const user = useWhoami()
   const wallet = useWallet({ userId: user?.id })
   const myWallet = wallet.data?.[0]
+
+  const refreshMutation = useMutation({
+    mutationFn: async () => {
+      await apiClient.wallets.refresh.$post()
+      await wallet.refetch()
+    },
+  })
 
   if (wallet.isPending) {
     return (
@@ -51,7 +63,10 @@ export const MyWalletSection = () => {
             </a>
             .
           </p>
-          <p>You can claim 2 free Power daily, which can be used to tip RSS entries on Follow.</p>
+          <p>
+            You can claim {DAILY_CLAIM_AMOUNT} free Power daily, which can be used to tip RSS
+            entries on Follow.
+          </p>
         </div>
         <SettingSectionTitle margin="compact" title="Your Address" />
         <div className="flex items-center gap-2 text-sm">
@@ -66,9 +81,23 @@ export const MyWalletSection = () => {
         </div>
         <SettingSectionTitle title="Your Balance" margin="compact" />
         <div className="mb-2 flex items-end justify-between">
-          <Balance className="text-xl font-bold text-accent">
-            {BigInt(myWallet.dailyPowerToken || 0n) + BigInt(myWallet.cashablePowerToken || 0n)}
-          </Balance>
+          <div className="flex items-center gap-1">
+            <Balance className="text-xl font-bold text-accent">
+              {BigInt(myWallet.dailyPowerToken || 0n) + BigInt(myWallet.cashablePowerToken || 0n)}
+            </Balance>
+            <Button
+              variant="ghost"
+              onClick={() => refreshMutation.mutate()}
+              disabled={refreshMutation.isPending}
+            >
+              <i
+                className={cn(
+                  "i-mgc-refresh-2-cute-re",
+                  refreshMutation.isPending && "animate-spin",
+                )}
+              />
+            </Button>
+          </div>
           <div className="flex gap-2">
             <WithdrawButton />
             <ClaimDailyReward />
@@ -87,7 +116,7 @@ export const MyWalletSection = () => {
           <TooltipPortal>
             <TooltipContent align="start" className="z-[999]">
               <p>1. Daily Power can only be used for tipping others.</p>
-              <p>2. You can claim 2 free Daily Power daily.</p>
+              <p>2. You can claim {DAILY_CLAIM_AMOUNT} free Daily Power daily.</p>
             </TooltipContent>
           </TooltipPortal>
         </Tooltip>
