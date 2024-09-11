@@ -21,7 +21,7 @@ export const initI18n = async () => {
 
   i18next.on("languageChanged", async (lang) => {
     if (loadingLangLock.has(lang)) return
-    const isSupport = currentSupportedLanguages.includes(lang)
+    const isSupport = currentSupportedLanguages.find((l) => lang === l.code)
     if (!isSupport) {
       return
     }

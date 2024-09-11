@@ -7,6 +7,7 @@ import { getFeedById, useFeedById } from "@renderer/store/feed"
 import { subscriptionActions, useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { WEB_URL } from "@shared/constants"
 import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useNavigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
@@ -21,6 +22,7 @@ export const useFeedActions = ({
   view?: number
   type?: "feedList" | "entryList"
 }) => {
+  const { t } = useTranslation()
   const feed = useFeedById(feedId)
   const subscription = useSubscriptionByFeedId(feedId)
 
@@ -38,24 +40,28 @@ export const useFeedActions = ({
     const items: NativeMenuItem[] = [
       {
         type: "text" as const,
-        label: isEntryList ? "Edit feed" : "Edit",
+        label: isEntryList
+          ? t("sidebar.feed_item.context_menu.edit_feed")
+          : t("sidebar.feed_item.context_menu.edit"),
         shortcut: "E",
         click: () => {
           present({
-            title: "Edit Feed",
+            title: t("sidebar.feed_item.context_menu.edit_feed"),
             content: ({ dismiss }) => <FeedForm asWidget id={feedId} onSuccess={dismiss} />,
           })
         },
       },
       {
         type: "text" as const,
-        label: isEntryList ? "Unfollow feed" : "Unfollow",
+        label: isEntryList
+          ? t("sidebar.feed_item.context_menu.unfollow_feed")
+          : t("sidebar.feed_item.context_menu.unfollow"),
         shortcut: "Meta+Backspace",
         click: () => deleteSubscription.mutate(subscription),
       },
       {
         type: "text" as const,
-        label: "Navigate to feed",
+        label: t("sidebar.feed_item.context_menu.navigate_to_feed"),
         shortcut: "Meta+G",
         disabled: !isEntryList || getRouteParams().feedId === feedId,
         click: () => {
@@ -68,7 +74,7 @@ export const useFeedActions = ({
       },
       {
         type: "text",
-        label: "Mark all as read",
+        label: t("sidebar.feed_item.context_menu.mark_all_as_read"),
         shortcut: "Meta+Shift+A",
         disabled: isEntryList,
         click: () => subscriptionActions.markReadByFeedIds([feedId]),
@@ -77,7 +83,9 @@ export const useFeedActions = ({
         ? [
             {
               type: "text" as const,
-              label: isEntryList ? "Claim Feed" : "Claim",
+              label: isEntryList
+                ? t("sidebar.feed_item.context_menu.claim_feed")
+                : t("sidebar.feed_item.context_menu.claim"),
               shortcut: "C",
               click: () => {
                 claimFeed()
@@ -89,7 +97,7 @@ export const useFeedActions = ({
         ? [
             {
               type: "text" as const,
-              label: "This feed is owned by you",
+              label: t("sidebar.feed_item.context_menu.owned_by_you"),
             },
           ]
         : []),
@@ -100,14 +108,14 @@ export const useFeedActions = ({
 
       {
         type: "text" as const,
-        label: "Open feed in browser",
+        label: t("sidebar.feed_item.context_menu.open_feed_in_browser"),
         disabled: isEntryList,
         shortcut: "O",
         click: () => window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank"),
       },
       {
         type: "text" as const,
-        label: "Open site in browser",
+        label: t("sidebar.feed_item.context_menu.open_site_in_browser"),
         shortcut: "Meta+O",
         disabled: isEntryList,
         click: () => {
@@ -123,14 +131,14 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: "Copy feed URL",
+        label: t("sidebar.feed_item.context_menu.copy_feed_url"),
         disabled: isEntryList,
         shortcut: "Meta+C",
         click: () => navigator.clipboard.writeText(feed.url),
       },
       {
         type: "text" as const,
-        label: "Copy feed ID",
+        label: t("sidebar.feed_item.context_menu.copy_feed_id"),
         shortcut: "Meta+Shift+C",
         disabled: isEntryList,
         click: () => {
@@ -141,6 +149,7 @@ export const useFeedActions = ({
 
     return items
   }, [
+    t,
     claimFeed,
     deleteSubscription,
     feed,

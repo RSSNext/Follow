@@ -198,12 +198,12 @@ export const VoiceSelector = () => {
 
 export const LanguageSelector = () => {
   const { t, i18n } = useTranslation()
-  const { t: langT } = useTranslation("lang")
   const language = useGeneralSettingSelector((state) => state.language)
 
-  const finalRenderLanguage = currentSupportedLanguages.includes(language)
+  const finalRenderLanguage = currentSupportedLanguages.find((lang) => lang.code === language)
     ? language
     : fallbackLanguage
+
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("words.language")}</span>
@@ -220,8 +220,8 @@ export const LanguageSelector = () => {
         </SelectTrigger>
         <SelectContent position="item-aligned">
           {currentSupportedLanguages.map((lang) => (
-            <SelectItem key={lang} value={lang}>
-              {langT(`langs.${lang}` as any)}
+            <SelectItem key={lang.code} value={lang.code}>
+              {lang.title}
             </SelectItem>
           ))}
         </SelectContent>
