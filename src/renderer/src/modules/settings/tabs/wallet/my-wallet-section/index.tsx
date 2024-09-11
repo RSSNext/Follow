@@ -13,7 +13,7 @@ import { apiClient } from "@renderer/lib/api-fetch"
 import { cn } from "@renderer/lib/utils"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
 import { Balance } from "@renderer/modules/wallet/balance"
-import { useWallet } from "@renderer/queries/wallet"
+import { useWallet, wallet as walletActions } from "@renderer/queries/wallet"
 import { useMutation } from "@tanstack/react-query"
 
 import { ClaimDailyReward } from "./claim-daily-reward"
@@ -28,7 +28,9 @@ export const MyWalletSection = () => {
   const refreshMutation = useMutation({
     mutationFn: async () => {
       await apiClient.wallets.refresh.$post()
-      await wallet.refetch()
+    },
+    onSuccess: () => {
+      walletActions.get().invalidate()
     },
   })
 
@@ -134,7 +136,8 @@ export const MyWalletSection = () => {
             <TooltipContent align="start" className="z-[999]">
               <p>1. Cashable Power can be withdrawn to your wallet for trading.</p>
               <p>
-                2. Cashable Power is the Power you have recharged and the tips you have received.
+                2. Cashable Power includes both the tips you've received and the Power you've
+                recharged.
               </p>
             </TooltipContent>
           </TooltipPortal>

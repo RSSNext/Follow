@@ -16,7 +16,7 @@ import { useFeedClaimModal } from "../claim"
 import { useSettingModal } from "../settings/modal/hooks-hack"
 import { Balance } from "./balance"
 
-const DEFAULT_RECOMMENDED_TIP = 1
+const DEFAULT_RECOMMENDED_TIP = 10
 
 const useMyWallet = () => {
   const user = useWhoami()
@@ -56,7 +56,7 @@ const TipModalContent_: FC<{
 
   const tipMutation = useWalletTipMutation()
 
-  const [amount, setAmount] = useState<1 | 2>(DEFAULT_RECOMMENDED_TIP)
+  const [amount, setAmount] = useState<number>(DEFAULT_RECOMMENDED_TIP)
 
   const amountBigInt = from(amount, 18)[0]
 
@@ -146,10 +146,7 @@ const TipModalContent_: FC<{
           <span>Amount</span>
         </div>
 
-        <RadioGroup
-          value={amount.toString()}
-          onValueChange={(value) => setAmount(Number(value) as 1 | 2)}
-        >
+        <RadioGroup value={amount.toString()} onValueChange={(value) => setAmount(Number(value))}>
           <div className="grid grid-cols-2 gap-2">
             <RadioCard wrapperClassName="justify-center" label="10 Power" value="10" />
             <RadioCard wrapperClassName="justify-center" label="20 Power" value="20" />
