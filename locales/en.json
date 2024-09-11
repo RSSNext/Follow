@@ -92,6 +92,47 @@
         }
       },
       "tip": "Tip: Your sensitive data is stored locally and is not uploaded to the server."
+    },
+    "appearance": {
+      "title": "Appearance",
+      "general": "General",
+      "unread_count": "Unread count",
+      "fonts": "Fonts",
+      "content": "Content",
+      "misc": "Misc",
+      "opaque_sidebars": {
+        "label": "Opaque sidebars"
+      },
+      "show_dock_badge": {
+        "label": "Show as Dock badge"
+      },
+      "sidebar_show_unread_count": {
+        "label": "Show in sidebar"
+      },
+      "text_size": "Text size",
+      "code_highlight_theme": "Code highlight theme",
+      "guess_code_language": {
+        "label": "Guess code language",
+        "description": "Major programming languages that use models to infer unlabeled code blocks"
+      },
+      "reader_render_inline_style": {
+        "label": "Render inline style",
+        "description": "Allows rendering of the inline style of the original HTML."
+      },
+      "modal_overlay": {
+        "label": "Show modal overlay",
+        "description": "Show modal overlay"
+      },
+      "reduce_motion": {
+        "label": "Reduce motion",
+        "description": "Reducing the motion of elements to improve performance and reduce energy consumption"
+      },
+      "theme": {
+        "label": "Theme",
+        "system": "System",
+        "light": "Light",
+        "dark": "Dark"
+      }
     }
   }
 }

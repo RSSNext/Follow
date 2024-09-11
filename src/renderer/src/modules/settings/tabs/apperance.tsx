@@ -15,6 +15,7 @@ import {
 import { isElectronBuild } from "@renderer/constants"
 import { useSetTheme, useThemeAtomValue } from "@renderer/hooks/common"
 import { getOS } from "@renderer/lib/utils"
+import { useTranslation } from "react-i18next"
 import { bundledThemes } from "shiki/themes"
 
 import { SettingTabbedSegment } from "../control"
@@ -25,86 +26,90 @@ import { SettingsTitle } from "../title"
 const SettingBuilder = createSettingBuilder(useUISettingValue)
 const defineItem = createDefineSettingItem(useUISettingValue, setUISetting)
 
-export const SettingAppearance = () => (
-  <>
-    <SettingsTitle />
-    <div className="mt-4">
-      <SettingBuilder
-        settings={[
-          {
-            type: "title",
-            value: "General",
-          },
-          AppThemeSegment,
+export const SettingAppearance = () => {
+  const { t } = useTranslation()
+  return (
+    <>
+      <SettingsTitle />
+      <div className="mt-4">
+        <SettingBuilder
+          settings={[
+            {
+              type: "title",
+              value: t("settings.appearance.general"),
+            },
+            AppThemeSegment,
 
-          defineItem("opaqueSidebar", {
-            label: "Opaque sidebars",
-            // hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
-            hide: !window.api?.canWindowBlur,
-          }),
+            defineItem("opaqueSidebar", {
+              label: t("settings.appearance.opaque_sidebars.label"),
+              hide: !window.api?.canWindowBlur,
+            }),
 
-          {
-            type: "title",
-            value: "Unread count",
-          },
+            {
+              type: "title",
+              value: t("settings.appearance.unread_count"),
+            },
 
-          defineItem("showDockBadge", {
-            label: "Show as Dock badge",
-            hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
-          }),
+            defineItem("showDockBadge", {
+              label: t("settings.appearance.show_dock_badge.label"),
+              hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
+            }),
 
-          defineItem("sidebarShowUnreadCount", {
-            label: "Show in sidebar",
-          }),
+            defineItem("sidebarShowUnreadCount", {
+              label: t("settings.appearance.sidebar_show_unread_count.label"),
+            }),
 
-          {
-            type: "title",
-            value: "Fonts",
-          },
-          TextSize,
-          UIFontSelector,
-          ContentFontSelector,
-          {
-            type: "title",
-            value: "Content",
-          },
-          ShikiTheme,
+            {
+              type: "title",
+              value: t("settings.appearance.fonts"),
+            },
+            TextSize,
+            UIFontSelector,
+            ContentFontSelector,
+            {
+              type: "title",
+              value: t("settings.appearance.content"),
+            },
+            ShikiTheme,
 
-          defineItem("guessCodeLanguage", {
-            label: "Guess code language",
-            hide: !isElectronBuild,
-            description:
-              "Major programming languages that use models to infer unlabeled code blocks",
-          }),
+            defineItem("guessCodeLanguage", {
+              label: t("settings.appearance.guess_code_language.label"),
+              hide: !isElectronBuild,
+              description: t("settings.appearance.guess_code_language.description"),
+            }),
 
-          defineItem("readerRenderInlineStyle", {
-            label: "Render inline style",
-            description: "Allows rendering of the inline style of the original HTML.",
-          }),
-          {
-            type: "title",
-            value: "Misc",
-          },
+            defineItem("readerRenderInlineStyle", {
+              label: t("settings.appearance.reader_render_inline_style.label"),
+              description: t("settings.appearance.reader_render_inline_style.description"),
+            }),
+            {
+              type: "title",
+              value: t("settings.appearance.misc"),
+            },
 
-          defineItem("modalOverlay", {
-            label: "Show modal overlay",
-            description: "Show modal overlay",
-          }),
-          defineItem("reduceMotion", {
-            label: "Reduce motion",
-            description:
-              "Reducing the motion of elements to improve performance and reduce energy consumption",
-          }),
-        ]}
-      />
-    </div>
-  </>
-)
+            defineItem("modalOverlay", {
+              label: t("settings.appearance.modal_overlay.label"),
+              description: t("settings.appearance.modal_overlay.description"),
+            }),
+            defineItem("reduceMotion", {
+              label: t("settings.appearance.reduce_motion.label"),
+              description: t("settings.appearance.reduce_motion.description"),
+            }),
+          ]}
+        />
+      </div>
+    </>
+  )
+}
+
 const ShikiTheme = () => {
+  const { t } = useTranslation()
   const codeHighlightTheme = useUISettingKey("codeHighlightTheme")
   return (
     <div className="mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">Code highlight theme</span>
+      <span className="shrink-0 text-sm font-medium">
+        {t("settings.appearance.code_highlight_theme")}
+      </span>
       <Select
         defaultValue="github-dark"
         value={codeHighlightTheme}
@@ -135,11 +140,12 @@ const textSizeMap = {
 }
 
 const TextSize = () => {
+  const { t } = useTranslation()
   const uiTextSize = useUISettingSelector((state) => state.uiTextSize)
 
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">Text size</span>
+      <span className="shrink-0 text-sm font-medium">{t("settings.appearance.text_size")}</span>
       <Select
         defaultValue={textSizeMap.default.toString()}
         value={uiTextSize.toString() || textSizeMap.default.toString()}
@@ -163,28 +169,29 @@ const TextSize = () => {
 }
 
 const AppThemeSegment = () => {
+  const { t } = useTranslation()
   const theme = useThemeAtomValue()
   const setTheme = useSetTheme()
 
   return (
     <SettingTabbedSegment
       key="theme"
-      label="Theme"
+      label={t("settings.appearance.theme.label")}
       value={theme}
       values={[
         {
           value: "system",
-          label: "System",
+          label: t("settings.appearance.theme.system"),
           icon: <i className="i-mingcute-monitor-line" />,
         },
         {
           value: "light",
-          label: "Light",
+          label: t("settings.appearance.theme.light"),
           icon: <i className="i-mingcute-sun-line" />,
         },
         {
           value: "dark",
-          label: "Dark",
+          label: t("settings.appearance.theme.dark"),
           icon: <i className="i-mingcute-moon-line" />,
         },
       ]}
