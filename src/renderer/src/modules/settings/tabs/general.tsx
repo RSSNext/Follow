@@ -46,6 +46,7 @@ export const SettingGeneral = () => {
   }, [])
 
   const { present } = useModalStack()
+
   return (
     <>
       <SettingsTitle />
@@ -55,16 +56,15 @@ export const SettingGeneral = () => {
             {
               type: "title",
               value: t("settings.general.app"),
-              disabled: !window.electron,
             },
 
-            window.electron &&
-              defineSettingItem("appLaunchOnStartup", {
-                label: t("settings.general.launch_at_login"),
-                onChange(value) {
-                  saveLoginSetting(value)
-                },
-              }),
+            defineSettingItem("appLaunchOnStartup", {
+              label: t("settings.general.launch_at_login"),
+              disabled: !tipcClient,
+              onChange(value) {
+                saveLoginSetting(value)
+              },
+            }),
             LanguageSelector,
             {
               type: "title",
@@ -199,7 +199,7 @@ export const LanguageSelector = () => {
   const { t, i18n } = useTranslation()
   const language = useGeneralSettingSelector((state) => state.language)
   return (
-    <div className="-mt-1 mb-3 flex items-center justify-between">
+    <div className="mb-3 mt-4 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("words.language")}</span>
       <Select
         defaultValue={language}
@@ -212,7 +212,7 @@ export const LanguageSelector = () => {
         <SelectTrigger size="sm" className="w-48">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent position="item-aligned">
           <SelectItem value="en">English</SelectItem>
           <SelectItem value="zh">中文（部分完成）</SelectItem>
         </SelectContent>
