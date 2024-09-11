@@ -31,7 +31,7 @@ export const ModalErrorFallback: FC<AppErrorFallbackProps> = (props) => {
         ) : null}
 
         <p className="my-8">
-          The App has a temporary problem, click the button below to try reloading the app or
+          {APP_NAME} has a temporary problem, click the button below to try reloading the app or
           another solution?
         </p>
 

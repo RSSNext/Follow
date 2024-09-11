@@ -93,7 +93,7 @@ export const FallbackIssue = ({
   stack: string | null | undefined
 }) => (
   <p className="mt-8">
-    Still having this issue? Please give feedback in Github, thanks!
+    Still having this issue? Please give feedback in GitHub, thanks!
     <a
       className="ml-2 cursor-pointer text-theme-accent-500 duration-200 hover:text-accent"
       href={getNewIssueUrl({
