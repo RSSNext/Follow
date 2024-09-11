@@ -4,10 +4,12 @@ import type { FC, PropsWithChildren } from "react"
 import { useEffect, useState } from "react"
 import { I18nextProvider } from "react-i18next"
 
-export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [currentI18NInstance, update] = useState(i18next)
-  if (import.meta.env.DEV)
-    // eslint-disable-next-line react-compiler/react-compiler, react-hooks/rules-of-hooks
+let I18nProvider: FC<PropsWithChildren>
+
+if (import.meta.env.DEV) {
+  I18nProvider = ({ children }) => {
+    const [currentI18NInstance, update] = useState(i18next)
+
     useEffect(
       () =>
         EventBus.subscribe("I18N_UPDATE", () => {
@@ -15,5 +17,10 @@ export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
         }),
       [],
     )
-  return <I18nextProvider i18n={currentI18NInstance}>{children}</I18nextProvider>
+    return <I18nextProvider i18n={currentI18NInstance}>{children}</I18nextProvider>
+  }
+} else {
+  I18nProvider = ({ children }) => <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
 }
+
+export { I18nProvider }
