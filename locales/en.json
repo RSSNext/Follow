@@ -224,6 +224,36 @@
     }
   },
   "sidebar": {
-    "select_sort_method": "Select a sort method"
+    "select_sort_method": "Select a sort method",
+    "feed_actions": {
+      "edit_feed": "Edit feed",
+      "edit": "Edit",
+      "unfollow_feed": "Unfollow feed",
+      "unfollow": "Unfollow",
+      "navigate_to_feed": "Navigate to feed",
+      "mark_all_as_read": "Mark all as read",
+      "claim_feed": "Claim Feed",
+      "claim": "Claim",
+      "feed_owned_by_you": "This feed is owned by you",
+      "open_feed_in_browser": "Open feed in browser",
+      "open_site_in_browser": "Open site in browser",
+      "copy_feed_url": "Copy feed URL",
+      "copy_feed_id": "Copy feed ID"
+    },
+    "feed_column": {
+      "context_menu": {
+        "change_to_other_view": "Change to other view",
+        "mark_as_read": "Mark as read",
+        "rename_category": "Rename category",
+        "delete_category": "Delete category",
+        "delete_category_confirmation": "Delete category {{folderName}}?"
+      }
+    },
+    "category_remove_dialog": {
+      "title": "Remove Category",
+      "description": "This operation will delete your category, but the feeds it contains will be retained and grouped by website.",
+      "cancel": "Cancel",
+      "continue": "Continue"
+    }
   }
 }

@@ -235,6 +235,36 @@
     "videos": "视频"
   },
   "sidebar": {
-    "select_sort_method": "选择排序方法"
+    "select_sort_method": "选择排序方法",
+    "feed_actions": {
+      "claim": "认领",
+      "claim_feed": "认领 Feed",
+      "copy_feed_id": "复制 Feed ID",
+      "copy_feed_url": "复制 Feed URL",
+      "edit": "编辑",
+      "edit_feed": "编辑 Feed",
+      "feed_owned_by_you": "此 Feed 归您所有",
+      "mark_all_as_read": "全部标记为已读",
+      "navigate_to_feed": "跳转至 Feed",
+      "open_feed_in_browser": "在浏览器中打开 Feed",
+      "open_site_in_browser": "在浏览器中打开网站",
+      "unfollow": "取消关注",
+      "unfollow_feed": "取消关注 Feed"
+    },
+    "feed_column": {
+      "context_menu": {
+        "change_to_other_view": "更改为其他视图",
+        "delete_category": "删除类别",
+        "delete_category_confirmation": "删除类别 {{folderName}}？",
+        "mark_as_read": "标记为已读",
+        "rename_category": "重命名类别"
+      }
+    },
+    "category_remove_dialog": {
+      "cancel": "取消",
+      "continue": "继续",
+      "description": "此操作将删除您的类别，但其中包含的 Feed 将保留并按网站分组。",
+      "title": "删除类别"
+    }
   }
 }

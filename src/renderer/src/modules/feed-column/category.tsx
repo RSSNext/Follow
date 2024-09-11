@@ -15,6 +15,7 @@ import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
 import { Fragment, memo, useEffect, useRef, useState } from "react"
+import {useTranslation  } from "react-i18next"
 import { useOnClickOutside } from "usehooks-ts"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
@@ -37,6 +38,8 @@ function FeedCategoryImpl({
   expansion,
   showUnreadCount = true,
 }: FeedCategoryProps) {
+  const { t } = useTranslation()
+
   const sortByUnreadFeedList = useFeedUnreadStore((state) =>
     ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0)),
   )
@@ -127,11 +130,12 @@ function FeedCategoryImpl({
                 {
                   type: "text",
                   enabled: !!(folderName && typeof view === "number"),
-                  label: "Change to other view",
+                  label: t("sidebar.feed_column.context_menu.change_to_other_view"),
                   submenu: views
                     .filter((v) => v.view !== view)
                     .map((v) => ({
-                      label: v.name,
+                      // TODO: fix this type error
+                      label: t(v.name),
                       enabled: true,
                       type: "text",
                       shortcut: (v.view + 1).toString(),
@@ -143,7 +147,7 @@ function FeedCategoryImpl({
                 },
                 {
                   type: "text",
-                  label: "Mark as read",
+                  label: t("sidebar.feed_column.context_menu.mark_as_read"),
                   click: () => {
                     subscriptionActions.markReadByFeedIds(ids)
                   },
@@ -151,18 +155,19 @@ function FeedCategoryImpl({
                 { type: "separator" },
                 {
                   type: "text",
-                  label: "Rename category",
+                  label: t("sidebar.feed_column.context_menu.rename_category"),
                   click: () => {
                     setIsCategoryEditing(true)
                   },
                 },
                 {
                   type: "text",
-                  label: "Delete category",
-
+                  label: t("sidebar.feed_column.context_menu.delete_category"),
                   click: async () => {
                     present({
-                      title: `Delete category ${folderName}?`,
+                      title: t("sidebar.feed_column.context_menu.delete_category_confirmation", {
+                        folderName,
+                      }),
                       content: () => <CategoryRemoveDialogContent feedIdList={ids} />,
                     })
                   },
