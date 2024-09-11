@@ -1,13 +1,13 @@
 import { SettingWallet } from "@renderer/modules/settings/tabs/wallet"
-import { defineSettingPage } from "@renderer/modules/settings/utils"
+import { defineSettingPageData } from "@renderer/modules/settings/utils"
 
 const iconName = `i-mgc-power-outline`
-const name = "Power"
+
 const priority = 1050
 
-export const loader = defineSettingPage({
+export const loader = defineSettingPageData({
   iconName,
-  name,
+  name: "settings.titles.power",
   priority,
   headerIcon: `i-mgc-power text-accent`,
 })

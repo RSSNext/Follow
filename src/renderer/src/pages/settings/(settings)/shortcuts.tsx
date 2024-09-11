@@ -2,15 +2,15 @@ import { KbdCombined } from "@renderer/components/ui/kbd/Kbd"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { cn } from "@renderer/lib/utils"
 import { SettingsTitle } from "@renderer/modules/settings/title"
-import { defineSettingPage } from "@renderer/modules/settings/utils"
+import { defineSettingPageData } from "@renderer/modules/settings/utils"
 
 const iconName = "i-mgc-hotkey-cute-re"
-const name = "Shortcuts"
+
 const priority = 1040
 
-export const loader = defineSettingPage({
+export const loader = defineSettingPageData({
   iconName,
-  name,
+  name: "settings.titles.shortcuts",
   priority,
 })
 export function Component() {

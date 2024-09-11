@@ -15,11 +15,8 @@ export const initI18n = async () => {
     lng: language,
     fallbackLng: fallbackLanguage,
     defaultNS,
-    ns: [defaultNS],
     debug: true,
     resources,
-
-    backend: [],
   })
 }
 
@@ -32,16 +29,16 @@ if (import.meta.hot) {
     const resources = JSON.parse(content)
 
     // `file` is absolute path e.g. /Users/innei/git/follow/locales/en.json
-    // Absolute path e.g. /Users/innei/git/follow/locales/modules/<module-name>/en.json
+    // Absolute path e.g. /Users/innei/git/follow/locales/namespaces/<module-name>/en.json
 
     // 1. parse root language
-    if (!file.includes("locales/modules")) {
+    if (!file.includes("locales/namespaces")) {
       const lang = file.split("/").pop()?.replace(".json", "")
       if (!lang) return
       i18next.addResourceBundle(lang, defaultNS, resources, true, true)
       i18next.reloadResources(lang, defaultNS)
     } else {
-      const nsName = file.match(/locales\/modules\/(.+?)\//)?.[1]
+      const nsName = file.match(/locales\/namespaces\/(.+?)\//)?.[1]
 
       if (!nsName) return
       const lang = file.split("/").pop()?.replace(".json", "")
