@@ -1,4 +1,3 @@
-
 import { getGeneralSettings } from "@renderer/atoms/settings/general"
 import { EventBus } from "@renderer/lib/event-bus"
 import i18next from "i18next"
@@ -51,7 +50,7 @@ if (import.meta.hot) {
       i18next.reloadResources(lang, nsName)
     }
 
-    EventBus.dispatch("I18N_UPDATE", "")
+    import.meta.env.DEV && EventBus.dispatch("I18N_UPDATE", "")
   })
 }
 
@@ -60,5 +59,3 @@ declare module "@renderer/lib/event-bus" {
     I18N_UPDATE: string
   }
 }
-
-window["i18n"] = i18next.t("lang:name")
