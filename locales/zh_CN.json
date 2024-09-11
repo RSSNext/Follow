@@ -1,0 +1,64 @@
+{
+  "words": {
+    "search": "搜索",
+    "import": "导入",
+    "discover": "发现",
+    "language": "语言"
+  },
+  "signin": {
+    "continue_with_github": "使用 GitHub 登录",
+    "continue_with_google": "使用 Google 登录",
+    "sign_in_to": "登录到"
+  },
+  "settings": {
+    "general": {
+      "app": "应用程序",
+      "data_persist": {
+        "description": "在本地保留数据以启用离线访问和本地搜索。",
+        "label": "保留数据以供离线使用"
+      },
+      "group_by_date": {
+        "description": "按日期对条目进行分组。",
+        "label": "按日期分组"
+      },
+      "launch_at_login": "登录时启动",
+      "mark_as_read": {
+        "hover": {
+          "description": "悬停时自动将条目标记为已读。",
+          "label": "悬停时标记为已读"
+        },
+        "render": {
+          "description": "当单级条目（例如社交媒体帖子、图片、视频视图）进入视图时自动将其标记为已读。",
+          "label": "在视图中标记为已读"
+        },
+        "scroll": {
+          "description": "当滚动出视图时自动将条目标记为已读。",
+          "label": "滚动时标记为已读"
+        }
+      },
+      "privacy_data": "隐私",
+      "rebuild_database": {
+        "button": "重建",
+        "description": "如果您遇到渲染问题，重建数据库可能会解决这些问题。",
+        "label": "重建数据库",
+        "title": "重建数据库",
+        "warning[0]": "重建数据库将清除所有本地数据。",
+        "warning[1]": "您确定要继续吗？",
+        "warning": {
+          "line1": "重建数据库将清除所有本地数据。",
+          "line2": "您确定要继续吗？"
+        }
+      },
+      "send_anonymous_data": {
+        "description": "通过选择发送匿名遥测数据，您可以为改善“关注”的整体用户体验做出贡献。",
+        "label": "发送匿名数据"
+      },
+      "show_unread_on_launch": {
+        "description": "启动时显示未读内容",
+        "label": "启动时显示未读内容"
+      },
+      "timeline": "时间轴",
+      "voices": "声音"
+    }
+  }
+}

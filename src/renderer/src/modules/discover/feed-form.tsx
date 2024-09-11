@@ -26,8 +26,8 @@ import { FeedViewType } from "@renderer/lib/enum"
 import { getFetchErrorMessage, toastFetchError } from "@renderer/lib/error-parser"
 import { getNewIssueUrl } from "@renderer/lib/issues"
 import { cn } from "@renderer/lib/utils"
-import { Queries } from "@renderer/queries"
-import { useFeed } from "@renderer/queries/feed"
+import { feed as feedQuery, useFeed } from "@renderer/queries/feed"
+import { subscription as subscriptionQuery } from "@renderer/queries/subscriptions"
 import { useFeedByIdOrUrl } from "@renderer/store/feed"
 import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { feedUnreadActions } from "@renderer/store/unread"
@@ -199,18 +199,18 @@ const FeedInnerForm = ({
     },
     onSuccess: (_, variables) => {
       if (isSubscribed && variables.view !== `${subscription?.view}`) {
-        Queries.subscription.byView(subscription?.view).invalidate()
-        tipcClient?.invalidateQuery(Queries.subscription.byView(subscription?.view).key)
+        subscriptionQuery.byView(subscription?.view).invalidate()
+        tipcClient?.invalidateQuery(subscriptionQuery.byView(subscription?.view).key)
         feedUnreadActions.fetchUnreadByView(subscription?.view)
       }
-      Queries.subscription.byView(Number.parseInt(variables.view)).invalidate()
-      tipcClient?.invalidateQuery(Queries.subscription.byView(Number.parseInt(variables.view)).key)
+      subscriptionQuery.byView(Number.parseInt(variables.view)).invalidate()
+      tipcClient?.invalidateQuery(subscriptionQuery.byView(Number.parseInt(variables.view)).key)
       feedUnreadActions.fetchUnreadByView(Number.parseInt(variables.view))
 
       const feedId = feed.id
       if (feedId) {
-        Queries.feed.byId({ id: feedId }).invalidate()
-        tipcClient?.invalidateQuery(Queries.feed.byId({ id: feedId }).key)
+        feedQuery.byId({ id: feedId }).invalidate()
+        tipcClient?.invalidateQuery(feedQuery.byId({ id: feedId }).key)
       }
       toast(isSubscribed ? "🎉 Updated." : "🎉 Followed.", {
         duration: 1000,
@@ -241,9 +241,7 @@ const FeedInnerForm = ({
     followMutation.mutate(values)
   }
 
-  const categories = useAuthQuery(
-    Queries.subscription.categories(Number.parseInt(form.watch("view"))),
-  )
+  const categories = useAuthQuery(subscriptionQuery.categories(Number.parseInt(form.watch("view"))))
 
   // useEffect(() => {
   //   if (feed.isSuccess) nextFrame(() => buttonRef.current?.focus());

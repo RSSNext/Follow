@@ -6,6 +6,7 @@ import { createSettingAtom } from "./helper"
 const createDefaultSettings = (): GeneralSettings => ({
   // App
   appLaunchOnStartup: false,
+  language: "en",
   // Data control
   dataPersist: true,
   sendAnonymousData: true,

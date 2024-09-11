@@ -107,7 +107,7 @@ export const SettingTabbedSegment: Component<{
 export const SettingDescription: Component = ({ children, className }) => (
   <small
     className={cn(
-      "block w-4/5 text-balance text-[13px] leading-tight text-gray-400 dark:text-neutral-500",
+      "block w-4/5 text-[13px] leading-tight text-gray-400 dark:text-neutral-500",
       className,
     )}
   >

@@ -5,7 +5,7 @@ import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
 import { setFeedColumnShow, useFeedColumnShow } from "@renderer/atoms/sidebar"
 import { useLoginModalShow, useWhoami } from "@renderer/atoms/user"
 import { AppErrorBoundary } from "@renderer/components/common/AppErrorBoundary"
-import { ErrorComponentType } from "@renderer/components/errors"
+import { ErrorComponentType } from "@renderer/components/errors/enum"
 import { PanelSplitter } from "@renderer/components/ui/divider"
 import { DeclarativeModal } from "@renderer/components/ui/modal/stacked/declarative-modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
@@ -174,7 +174,6 @@ const FeedResponsiveResizerContainer = ({
   useEffect(() => {
     let timer: any
     if (feedColumnShow) {
-       
       timer = setTimeout(() => {
         setDelayShowSplitter(true)
       }, 200)

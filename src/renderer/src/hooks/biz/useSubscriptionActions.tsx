@@ -1,7 +1,7 @@
 import { Kbd } from "@renderer/components/ui/kbd/Kbd"
 import { HotKeyScopeMap } from "@renderer/constants"
 import { apiClient } from "@renderer/lib/api-fetch"
-import { Queries } from "@renderer/queries"
+import { subscription as subscriptionQuery } from "@renderer/queries/subscriptions"
 import type { SubscriptionFlatModel } from "@renderer/store/subscription"
 import { subscriptionActions } from "@renderer/store/subscription"
 import { feedUnreadActions } from "@renderer/store/unread"
@@ -16,7 +16,7 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
   useMutation({
     mutationFn: async (subscription: SubscriptionFlatModel) =>
       subscriptionActions.unfollow(subscription.feedId).then((feed) => {
-        Queries.subscription.byView(subscription.view).invalidate()
+        subscriptionQuery.byView(subscription.view).invalidate()
         feedUnreadActions.updateByFeedId(subscription.feedId, 0)
 
         if (!subscription) return
@@ -32,7 +32,7 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
             },
           })
 
-          Queries.subscription.byView(subscription.view).invalidate()
+          subscriptionQuery.byView(subscription.view).invalidate()
           feedUnreadActions.fetchUnreadByView(subscription.view)
 
           toast.dismiss(toastId)
