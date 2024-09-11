@@ -57,14 +57,14 @@ export const SettingGeneral = () => {
               value: t("settings.general.app"),
               disabled: !window.electron,
             },
-            {
-              disabled: !window.electron,
-              label: t("settings.general.launch_at_login"),
-              key: "appLaunchOnStartup",
-              onChange(value) {
-                saveLoginSetting(value)
-              },
-            },
+
+            window.electron &&
+              defineSettingItem("appLaunchOnStartup", {
+                label: t("settings.general.launch_at_login"),
+                onChange(value) {
+                  saveLoginSetting(value)
+                },
+              }),
             LanguageSelector,
             {
               type: "title",
