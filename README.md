@@ -3,9 +3,9 @@
     <img src="https://github.com/RSSNext/follow/assets/41265413/c6c02ad5-cddc-46f5-8420-a47afe1c82fe" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Follow</h3>
+  <h3>Follow</h3>
 
-  <p align="center">
+  <p>
     Next generation information browser.
     <br />
     <br />
@@ -14,6 +14,9 @@
     <a href="https://x.com/intent/follow?screen_name=follow_app_">Twitter</a>
     ·
     <a href="https://github.com/RSSNext/Follow/releases">Releases</a>
+    <br />
+    <br />
+    <a href="https://trendshift.io/repositories/9938" target="_blank"><img src="https://trendshift.io/api/badge/repositories/9938" alt="RSSNext%2Ffollow | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
   </p>
 </div>
 
