@@ -79,7 +79,7 @@ Currently, Follow is still in the early developer preview stage (alpha) and is o
 
 You can get an invitation code in the following ways:
 
-- Looking for any beta user to invite you.
+- Looking for any alpha test user to invite you.
 - Join our Discord server for occasional giveaways.
 - Follow our X account for occasional giveaways.
 
