@@ -221,7 +221,26 @@ export const ModalInternal = memo(
       () => ({ ...zIndexStyle, ...resizeableStyle }),
       [resizeableStyle, zIndexStyle],
     )
+    const isSelectingRef = useRef(false)
+    const handleSelectStart = useCallback(() => {
+      isSelectingRef.current = true
+    }, [])
+    const handleDetectSelectEnd = useCallback(() => {
+      nextFrame(() => {
+        if (isSelectingRef.current) {
+          isSelectingRef.current = false
+        }
+      })
+    }, [])
 
+    const handleClickOutsideToDismiss = useCallback(
+      (e: SyntheticEvent) => {
+        if (isSelectingRef.current) return
+        const fn = modal ? (clickOutsideToDismiss && canClose ? dismiss : noticeModal) : undefined
+        fn?.(e)
+      },
+      [canClose, clickOutsideToDismiss, dismiss, modal, noticeModal],
+    )
     useImperativeHandle(ref, () => modalElementRef.current!)
     if (CustomModalComponent) {
       return (
@@ -276,9 +295,8 @@ export const ModalInternal = memo(
                   modalContainerClassName,
                   !isResizeable && "center",
                 )}
-                onClick={
-                  modal ? (clickOutsideToDismiss && canClose ? dismiss : noticeModal) : undefined
-                }
+                onPointerUp={handleDetectSelectEnd}
+                onClick={handleClickOutsideToDismiss}
               >
                 {DragBar}
 
@@ -299,6 +317,8 @@ export const ModalInternal = memo(
                     modalClassName,
                   )}
                   onClick={stopPropagation}
+                  onSelect={handleSelectStart}
+                  onKeyUp={handleDetectSelectEnd}
                   drag
                   dragControls={dragController}
                   dragElastic={0}
