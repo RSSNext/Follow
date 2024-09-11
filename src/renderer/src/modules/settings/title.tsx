@@ -34,6 +34,7 @@ export const SettingsTitle = ({
     headerIcon,
   } = (useLoaderData() || loader?.() || {}) as SettingPageConfig
 
+  const { t } = useTranslation()
   if (!title) {
     return null
   }
@@ -46,7 +47,7 @@ export const SettingsTitle = ({
       )}
     >
       <i className={headerIcon || iconName} />
-      <span>{title}</span>
+      <span>{t(title as any)}</span>
     </div>
   )
 }
