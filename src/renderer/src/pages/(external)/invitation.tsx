@@ -16,6 +16,7 @@ import { getFetchErrorMessage } from "@renderer/lib/error-parser"
 import { useInvitationMutation } from "@renderer/queries/invitations"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 
@@ -24,6 +25,7 @@ const formSchema = z.object({
 })
 
 export function Component() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,7 +57,7 @@ export function Component() {
             name="code"
             render={({ field }) => (
               <FormItem className="flex flex-col items-center gap-2 md:block">
-                <FormLabel>Invitation Code</FormLabel>
+                <FormLabel>{t("settings.invitation.title")}</FormLabel>
                 <FormControl>
                   <Input autoFocus {...field} />
                 </FormControl>
@@ -71,21 +73,18 @@ export function Component() {
               disabled={!form.formState.isValid}
               isLoading={invitationMutation.isPending}
             >
-              Activate
+              {t("settings.invitation.activate")}
             </Button>
           </div>
         </form>
       </Form>
       <div className="space-y-2 text-balance text-center text-sm text-zinc-600 md:text-left">
+        <p>{t("settings.invitation.earlyAccessMessage")}</p>
+        <p>{t("settings.invitation.getCodeMessage")}</p>
         <p>
-          😰 Sorry, Follow is currently in <strong>early access</strong> and requires an invitation
-          code to use.
-        </p>
-        <p>You can get an invitation code in the following ways:</p>
-        <p>
-          <p>1. Looking for any beta user to invite you.</p>
-          <p>2. Join our Discord server for occasional giveaways.</p>
-          <p>3. Follow our X account for occasional giveaways.</p>
+          <p>{t("settings.invitation.codeOptions.betaUser")}</p>
+          <p>{t("settings.invitation.codeOptions.discord")}</p>
+          <p>{t("settings.invitation.codeOptions.xAccount")}</p>
         </p>
       </div>
       <div className="mt-2 flex flex-wrap gap-2">

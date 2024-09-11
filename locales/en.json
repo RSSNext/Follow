@@ -133,6 +133,56 @@
         "light": "Light",
         "dark": "Dark"
       }
+    },
+    "actions": {
+      "title": "Actions",
+      "newRule": "New Rule",
+      "save": "Save",
+      "saveSuccess": "🎉 Actions saved.",
+      "actionName": "Action {{number}}"
+    },
+    "profile": {
+      "title": "Profile Settings",
+      "handle": {
+        "label": "Handle",
+        "description": "Your unique identifier."
+      },
+      "name": {
+        "label": "Display Name",
+        "description": "Your public display name."
+      },
+      "avatar": {
+        "label": "Avatar"
+      },
+      "submit": "Submit",
+      "updateSuccess": "Profile updated."
+    },
+    "invitation": {
+      "title": "Invitation Code",
+      "earlyAccess": "Follow is currently in <strong>early access</strong> and requires an invitation code to use.",
+      "generateCost": "You can spend 10 <i>Power</i> to generate an invitation code for your friends.",
+      "generateButton": "Generate new code",
+      "noInvitations": "No invitations",
+      "tableHeaders": {
+        "code": "Code",
+        "creationTime": "Creation Time",
+        "usedBy": "Used by"
+      },
+      "notUsed": "Not used",
+      "confirmModal": {
+        "title": "Confirm",
+        "message": "Generating an invitation code will cost you 10 <i>Power</i>. Do you want to continue?",
+        "cancel": "Cancel",
+        "continue": "Continue"
+      },
+      "newInvitationSuccess": "🎉 New invitation generated, invite code is copied"
+    },
+    "about": {
+      "changelog": "Changelog",
+      "licenseInfo": "{{appName}} is and will always be a free and open-source project. It is licensed under {{license}}.",
+      "iconLibrary": "The icon library used is copyrighted by <IconLibraryLink></IconLibraryLink><Icon></Icon> and cannot be redistributed.",
+      "feedbackInfo": "{{appName}} ({{commitSha}}) is in the early stages of development. If you have any feedback or suggestions, please feel free to <0>open an issue<1></1></0> on our GitHub.",
+      "socialMedia": "Social Media"
     }
   }
 }
