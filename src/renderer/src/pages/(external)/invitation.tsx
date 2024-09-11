@@ -83,7 +83,7 @@ export function Component() {
         </p>
         <p>You can get an invitation code in the following ways:</p>
         <p>
-          <p>1. Looking for any beta user to invite you.</p>
+          <p>1. Looking for any alpha test user to invite you.</p>
           <p>2. Join our Discord server for occasional giveaways.</p>
           <p>3. Follow our X account for occasional giveaways.</p>
         </p>

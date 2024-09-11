@@ -11,6 +11,17 @@
     "sign_in_to": "Sign in to"
   },
   "settings": {
+    "titles": {
+      "general": "General",
+      "appearance": "Appearance",
+      "actions": "Actions",
+      "integration": "Integration",
+      "about": "About",
+      "profile": "Profile",
+      "shortcuts": "Shortcuts",
+      "power": "Power",
+      "invitations": "Invitations"
+    },
     "general": {
       "app": "App",
       "launch_at_login": "Launch at login",

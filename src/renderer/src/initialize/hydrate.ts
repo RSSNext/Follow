@@ -23,15 +23,12 @@ export const setHydrated = (v: boolean) => {
 }
 
 export const hydrateDatabaseToStore = async () => {
-  appLog("Hydrate database data to store task start...")
-
   async function hydrate() {
     const now = Date.now()
     await Promise.all([hydrateFeed(), hydrateSubscription(), hydrateFeedUnread(), hydrateEntry()])
 
     window.__dbIsReady = true
     const costTime = Date.now() - now
-    appLog("Hydrate data done,", `${costTime}ms`)
 
     return costTime
   }

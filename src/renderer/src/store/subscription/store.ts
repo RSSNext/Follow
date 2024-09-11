@@ -43,6 +43,8 @@ function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
 
         if (parsed.domain) {
           cloned.defaultCategory = capitalizeFirstLetter(parsed.domain)
+        } else {
+          cloned.defaultCategory = subscription.feedId
         }
       }
     }
