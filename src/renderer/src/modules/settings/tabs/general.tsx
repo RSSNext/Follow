@@ -1,4 +1,8 @@
-import { setGeneralSetting, useGeneralSettingValue } from "@renderer/atoms/settings/general"
+import {
+  setGeneralSetting,
+  useGeneralSettingSelector,
+  useGeneralSettingValue,
+} from "@renderer/atoms/settings/general"
 import { createSetting } from "@renderer/atoms/settings/helper"
 import {
   createDefaultSettings,
@@ -19,6 +23,7 @@ import { tipcClient } from "@renderer/lib/client"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 
 import { SettingsTitle } from "../title"
 
@@ -59,6 +64,7 @@ export const SettingGeneral = () => {
                 saveLoginSetting(value)
               },
             },
+            LanguageSelector,
             {
               type: "title",
               value: "timeline",
@@ -186,6 +192,32 @@ export const VoiceSelector = () => {
               {item.FriendlyName}
             </SelectItem>
           ))}
+        </SelectContent>
+      </Select>
+    </div>
+  )
+}
+
+export const LanguageSelector = () => {
+  const { t, i18n } = useTranslation()
+  const language = useGeneralSettingSelector((state) => state.language)
+  return (
+    <div className="-mt-1 mb-3 flex items-center justify-between">
+      <span className="shrink-0 text-sm font-medium">{t("words.language")}</span>
+      <Select
+        defaultValue={language}
+        value={language}
+        onValueChange={(value) => {
+          setGeneralSetting("language", value as string)
+          i18n.changeLanguage(value as string)
+        }}
+      >
+        <SelectTrigger size="sm" className="w-48">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="en">English</SelectItem>
+          <SelectItem value="zh">中文</SelectItem>
         </SelectContent>
       </Select>
     </div>

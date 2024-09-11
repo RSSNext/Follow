@@ -2,7 +2,8 @@
   "words": {
     "search": "Search",
     "import": "Import",
-    "discover": "Discover"
+    "discover": "Discover",
+    "language": "Language"
   },
   "signin": {
     "continue_with_github": "Continue with GitHub",

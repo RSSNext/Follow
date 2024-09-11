@@ -1,5 +1,6 @@
 export interface GeneralSettings {
   appLaunchOnStartup: boolean
+  language: string
   dataPersist: boolean
   sendAnonymousData: boolean
   unreadOnly: boolean
