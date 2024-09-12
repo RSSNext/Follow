@@ -1,7 +1,9 @@
 import { getReadonlyRoute } from "@renderer/atoms/route"
 import { getSidebarActiveView, setSidebarActiveView } from "@renderer/atoms/sidebar"
 import { MotionButtonBase } from "@renderer/components/ui/button"
+import { FABContainer, FABPortable } from "@renderer/components/ui/fab"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
+import { springScrollTo } from "@renderer/lib/scroller"
 import { cn } from "@renderer/lib/utils"
 import { useEffect, useRef, useState } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
@@ -20,13 +22,14 @@ export function Component() {
     const $scroll = scrollRef
 
     if (!$scroll) return
-    $scroll.scrollTop = 0
 
-    $scroll.onscroll = () => {
+    springScrollTo(0, $scroll)
+    const handler = () => {
       setIsTitleSticky($scroll.scrollTop > 120)
     }
+    $scroll.addEventListener("scroll", handler)
     return () => {
-      $scroll.onscroll = null
+      $scroll.removeEventListener("scroll", handler)
     }
   }, [scrollRef, title])
 
@@ -65,6 +68,23 @@ export function Component() {
       >
         <Outlet />
       </ScrollArea.ScrollArea>
+
+      <FABContainer>
+        <BackToTopFAB show={isTitleSticky} scrollRef={scrollRef} />
+      </FABContainer>
     </div>
+  )
+}
+
+const BackToTopFAB = ({ show, scrollRef }: { show: boolean; scrollRef: any }) => {
+  return (
+    <FABPortable
+      onClick={() => {
+        springScrollTo(0, scrollRef)
+      }}
+      show={show}
+    >
+      <i className="i-mingcute-arow-to-up-line" />
+    </FABPortable>
   )
 }

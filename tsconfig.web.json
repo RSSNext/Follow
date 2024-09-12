@@ -26,7 +26,8 @@
       "@main/*": ["src/main/*"],
       "@shared/*": ["src/shared/src/*"],
       "@pkg": ["./package.json"],
-      "@env": ["./src/env.ts"]
+      "@env": ["./src/env.ts"],
+      "@locales/*": ["./locales/*"]
     }
   }
 }

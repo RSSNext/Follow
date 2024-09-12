@@ -1,0 +1,8 @@
+{
+  "confirm": "确认",
+  "ok": "好",
+  "cancel": "取消",
+  "tips": {
+    "load-lng-error": "加载语言包失败"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "confirm": "Confirm",
+  "ok": "OK",
+  "cancel": "Cancel",
+  "tips": {
+    "load-lng-error": "Failed to load language pack"
+  }
+}

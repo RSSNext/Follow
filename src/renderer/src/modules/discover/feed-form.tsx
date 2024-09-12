@@ -92,7 +92,9 @@ export const FeedForm: Component<{
         <div className="center grow flex-col gap-3">
           <i className="i-mgc-close-cute-re size-7 text-red-500" />
           <p>Error in fetching feed.</p>
-          <p className="break-all px-8 text-center">{getFetchErrorMessage(feedQuery.error)}</p>
+          <p className="cursor-text select-text break-all px-8 text-center">
+            {getFetchErrorMessage(feedQuery.error)}
+          </p>
 
           <div className="flex items-center gap-4">
             <Button

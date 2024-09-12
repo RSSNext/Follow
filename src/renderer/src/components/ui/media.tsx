@@ -112,7 +112,6 @@ const MediaImpl: FC<MediaProps> = ({
             {...(rest as ImgHTMLAttributes<HTMLImageElement>)}
             onError={errorHandle}
             className={cn(
-              hidden && "hidden",
               !(props.width || props.height) && "size-full",
               "bg-gray-200 object-cover duration-200 dark:bg-neutral-800",
               popper && "cursor-zoom-in",
@@ -165,7 +164,6 @@ const MediaImpl: FC<MediaProps> = ({
         return (
           <span
             className={cn(
-              hidden && "hidden",
               "center",
               !(props.width || props.height) && "size-full",
               "relative bg-stone-100 object-cover",
@@ -186,7 +184,6 @@ const MediaImpl: FC<MediaProps> = ({
     errorHandle,
     handleClick,
     handleOnLoad,
-    hidden,
     imgSrc,
     mediaContainerClassName,
     mediaLoadState,
@@ -203,7 +200,10 @@ const MediaImpl: FC<MediaProps> = ({
     return <FallbackMedia {...props} />
   }
   return (
-    <span className={cn("block overflow-hidden rounded", className)} style={style}>
+    <span
+      className={cn("block overflow-hidden rounded", hidden && "hidden", className)}
+      style={style}
+    >
       {InnerContent}
     </span>
   )

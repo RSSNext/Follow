@@ -80,7 +80,7 @@ export const SettingGeneral = () => {
               description: t("settings.general.group_by_date.description"),
             }),
 
-            { type: "title", value: t("settings.general.unread") },
+            { type: "title", value: "unread" },
 
             defineSettingItem("scrollMarkUnread", {
               label: t("settings.general.mark_as_read.scroll.label"),
@@ -165,6 +165,7 @@ export const SettingGeneral = () => {
 
 export const VoiceSelector = () => {
   const { t } = useTranslation()
+
   const { data } = useQuery({
     queryFn: () => tipcClient?.getVoices(),
     queryKey: ["voices"],
@@ -198,12 +199,12 @@ export const VoiceSelector = () => {
 
 export const LanguageSelector = () => {
   const { t, i18n } = useTranslation()
+  const { t: langT } = useTranslation("lang")
   const language = useGeneralSettingSelector((state) => state.language)
 
-  const finalRenderLanguage = currentSupportedLanguages.find((lang) => lang.code === language)
+  const finalRenderLanguage = currentSupportedLanguages.includes(language)
     ? language
     : fallbackLanguage
-
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("words.language")}</span>
@@ -220,8 +221,8 @@ export const LanguageSelector = () => {
         </SelectTrigger>
         <SelectContent position="item-aligned">
           {currentSupportedLanguages.map((lang) => (
-            <SelectItem key={lang.code} value={lang.code}>
-              {lang.title}
+            <SelectItem key={lang} value={lang}>
+              {langT(`langs.${lang}` as any)}
             </SelectItem>
           ))}
         </SelectContent>
