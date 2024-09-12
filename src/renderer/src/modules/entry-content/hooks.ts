@@ -1,5 +1,5 @@
 import { isDev } from "@renderer/constants"
-import { useContext } from "react"
+import { useContext, useContextSelector } from "use-context-selector"
 
 import { EntryContentContext } from "./provider"
 
@@ -10,3 +10,6 @@ export const useEntryContentContext = () => {
   }
   return ctx
 }
+
+export const useEntryContentContextSelector = <T>(selector: (ctx: EntryContentContext) => T) =>
+  useContextSelector(EntryContentContext, selector)

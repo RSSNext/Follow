@@ -20,12 +20,12 @@ import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
 import { noop } from "foxact/noop"
 import { AnimatePresence, m } from "framer-motion"
-import { useMemo, useState } from "react"
+import { memo, useMemo, useState } from "react"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"
 
-export function EntryHeader({
+function EntryHeaderImpl({
   view,
   entryId,
   className,
@@ -211,3 +211,5 @@ const ElectronAdditionActions = window.electron
       )
     }
   : noop
+
+export const EntryHeader = memo(EntryHeaderImpl)
