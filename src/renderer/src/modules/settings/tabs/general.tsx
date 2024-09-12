@@ -80,7 +80,7 @@ export const SettingGeneral = () => {
               description: t("settings.general.group_by_date.description"),
             }),
 
-            { type: "title", value: "unread" },
+            { type: "title", value: t("settings.general.unread") },
 
             defineSettingItem("scrollMarkUnread", {
               label: t("settings.general.mark_as_read.scroll.label"),

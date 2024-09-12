@@ -82,7 +82,8 @@
         "label": "Send anonymous data",
         "description": "By opting to send anonymized telemetry data, you contribute to improving the overall user experience of Follow."
       },
-      "voices": "Voices"
+      "voices": "Voices",
+      "unread": "Unread"
     },
     "integration": {
       "sidebar_title": "Integration",

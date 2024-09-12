@@ -76,7 +76,8 @@
       },
       "timeline": "时间轴",
       "voices": "声音",
-      "sidebar_title": "一般的"
+      "sidebar_title": "一般的",
+      "unread": "未读"
     },
     "actions": {
       "actionName": "指令 {{number}}",
