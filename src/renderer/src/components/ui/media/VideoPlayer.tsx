@@ -222,7 +222,7 @@ const ControlBar = memo(() => {
       dragMomentum={false}
       dragConstraints={{ current: document.documentElement }}
       className={cn(
-        "absolute inset-x-2 bottom-2 h-8 rounded-2xl border bg-zinc-100/90 backdrop-blur-xl dark:border-transparent dark:bg-neutral-700/90",
+        "absolute inset-x-2 -bottom-10 h-8 rounded-2xl border bg-zinc-100/90 backdrop-blur-xl dark:border-transparent dark:bg-neutral-700/90",
         "flex items-center gap-3 px-3",
         "mx-auto max-w-[80vw]",
       )}
