@@ -1,6 +1,7 @@
 import en from "../../../../locales/app/en.json"
 import common_en from "../../../../locales/common/en.json"
 import common_zhCN from "../../../../locales/common/zh_CN.json"
+import external_en from "../../../../locales/external/en.json"
 import lang_en from "../../../../locales/lang/en.json"
 
 /**
@@ -16,6 +17,7 @@ export const defaultResources = {
     app: en,
     lang: lang_en,
     common: common_en,
+    external: external_en,
   },
 
   zh_CN: {
