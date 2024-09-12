@@ -18,7 +18,7 @@ export type ActiveList = {
 export type FeedResponse = SubscriptionResponse[number]["feeds"]
 
 export type FeedModel = ExtractBizResponse<typeof apiClient.feeds.$get>["data"]["feed"] & {
-  owner?: UserModel | null
+  owner?: Omit<UserModel, "createdAt"> | null
 }
 
 export type SubscriptionResponse = Array<
