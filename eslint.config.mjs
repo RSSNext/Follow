@@ -30,4 +30,16 @@ export default defineConfig(
       ],
     },
   },
+  {
+    files: ["locales/**/*.json"],
+    rules: {
+      "jsonc/sort-keys": [
+        "error",
+        {
+          pathPattern: ".*",
+          order: { type: "asc" },
+        },
+      ],
+    },
+  },
 )
