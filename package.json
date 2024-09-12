@@ -84,6 +84,7 @@
     "dexie": "4.0.8",
     "dnum": "^2.13.1",
     "dotenv": "16.4.5",
+    "electron-context-menu": "4.0.4",
     "electron-log": "5.2.0",
     "electron-squirrel-startup": "1.0.1",
     "electron-updater": "^6.3.4",
