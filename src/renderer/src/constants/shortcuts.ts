@@ -3,53 +3,53 @@ import { COPY_MAP } from "@renderer/constants"
 export const shortcuts = {
   feeds: {
     add: {
-      name: "Add Subscription",
+      name: "settings.shortcuts.keys.feeds.add",
       key: "Meta+T",
     },
     switchToView: {
-      name: "Switch to View",
+      name: "settings.shortcuts.keys.feeds.switchToView",
       key: "1, 2, 3, 4, 5, 6",
     },
     switchBetweenViews: {
-      name: "Switch Between Views",
+      name: "settings.shortcuts.keys.feeds.switchBetweenViews",
       key: "Tab, Left, Right",
     },
   },
   layout: {
     toggleSidebar: {
-      name: "Show/Hide Feed Sidebar",
+      name: "settings.shortcuts.keys.layout.toggleSidebar",
       key: "Meta+B",
     },
   },
   entries: {
     refetch: {
-      name: "Refetch",
+      name: "settings.shortcuts.keys.entries.refetch",
       key: "R",
     },
     previous: {
-      name: "Previous Entry",
+      name: "settings.shortcuts.keys.entries.previous",
       key: "K, Up",
     },
     next: {
-      name: "Next Entry",
+      name: "settings.shortcuts.keys.entries.next",
       key: "J, Down",
     },
     markAllAsRead: {
-      name: "Mark All as Read",
+      name: "settings.shortcuts.keys.entries.markAllAsRead",
       key: "Shift+Meta+A",
     },
     toggleUnreadOnly: {
-      name: "Toggle Unread Only",
+      name: "settings.shortcuts.keys.entries.toggleUnreadOnly",
       key: "U",
     },
   },
   entry: {
     toggleRead: {
-      name: "Toggle Read",
+      name: "settings.shortcuts.keys.entry.toggleRead",
       key: "M",
     },
     toggleStarred: {
-      name: "Toggle Starred",
+      name: "settings.shortcuts.keys.entry.toggleStarred",
       key: "S",
     },
     openInBrowser: {
@@ -58,34 +58,33 @@ export const shortcuts = {
       extra: "Double Click",
     },
     tts: {
-      name: "Play TTS",
+      name: "settings.shortcuts.keys.entry.tts",
       key: "Shift+Meta+V",
     },
     copyLink: {
-      name: "Copy Link",
+      name: "settings.shortcuts.keys.entry.copyLink",
       key: "Shift+Meta+C",
     },
     tip: {
-      name: "Tip Power",
+      name: "settings.shortcuts.keys.entry.tip",
       key: "Shift+Meta+T",
     },
     share: {
-      name: "Share",
+      name: "settings.shortcuts.keys.entry.share",
       key: "Meta+Alt+S",
     },
     scrollUp: {
-      name: "Scroll Up",
+      name: "settings.shortcuts.keys.entry.scrollUp",
       key: "PageUp",
     },
     scrollDown: {
-      name: "Scroll Down",
+      name: "settings.shortcuts.keys.entry.scrollDown",
       key: "PageDown",
     },
   },
-
   audio: {
     "play/pause": {
-      name: "Play/Pause (When the audio player is open)",
+      name: "settings.shortcuts.keys.audio.playPause",
       key: "Space",
     },
   },

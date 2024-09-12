@@ -266,7 +266,38 @@
       "sidebar_title": "Power"
     },
     "shortcuts": {
-      "sidebar_title": "Shortcuts"
+      "sidebar_title": "Shortcuts",
+      "keys": {
+        "feeds": {
+          "add": "Add Subscription",
+          "switchToView": "Switch to View",
+          "switchBetweenViews": "Switch Between Views"
+        },
+        "layout": {
+          "toggleSidebar": "Show/Hide Feed Sidebar"
+        },
+        "entries": {
+          "refetch": "Refetch",
+          "previous": "Previous Entry",
+          "next": "Next Entry",
+          "markAllAsRead": "Mark All as Read",
+          "toggleUnreadOnly": "Toggle Unread Only"
+        },
+        "entry": {
+          "toggleRead": "Toggle Read",
+          "toggleStarred": "Toggle Starred",
+          "openInBrowser": "Open in Browser",
+          "tts": "Play TTS",
+          "copyLink": "Copy Link",
+          "tip": "Tip Power",
+          "share": "Share",
+          "scrollUp": "Scroll Up",
+          "scrollDown": "Scroll Down"
+        },
+        "audio": {
+          "playPause": "Play/Pause (When the audio player is open)"
+        }
+      }
     }
   },
   "sidebar": {

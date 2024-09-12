@@ -24,7 +24,7 @@
       "integration": "集成",
       "about": "关于",
       "profile": "个人资料",
-      "shortcuts": "热键",
+      "shortcuts": "快捷键",
       "power": "Power",
       "invitations": "邀请"
     },
@@ -266,7 +266,38 @@
       "sidebar_title": "关于"
     },
     "shortcuts": {
-      "sidebar_title": "快捷键"
+      "sidebar_title": "快捷键",
+      "keys": {
+        "audio": {
+          "playPause": "播放/暂停（当音频播放器打开时）"
+        },
+        "entries": {
+          "markAllAsRead": "全部标记为已读",
+          "next": "下一个条目",
+          "previous": "上一个条目",
+          "refetch": "刷新",
+          "toggleUnreadOnly": "切换仅未读"
+        },
+        "entry": {
+          "copyLink": "复制链接",
+          "openInBrowser": "在浏览器中打开",
+          "scrollDown": "向下滚动",
+          "scrollUp": "向上滚动",
+          "share": "分享",
+          "tip": "打赏",
+          "toggleRead": "标记为已读/未读",
+          "toggleStarred": "加入收藏/取消收藏",
+          "tts": "TTS"
+        },
+        "feeds": {
+          "add": "添加 Feed",
+          "switchBetweenViews": "在视图之间切换",
+          "switchToView": "切换到视图"
+        },
+        "layout": {
+          "toggleSidebar": "显示/隐藏提要侧边栏"
+        }
+      }
     },
     "wallet": {
       "sidebar_title": "钱包"
