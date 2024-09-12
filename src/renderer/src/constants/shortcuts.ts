@@ -20,6 +20,10 @@ export const shortcuts = {
       name: "settings.shortcuts.keys.layout.toggleSidebar",
       key: "Meta+B",
     },
+    showShortcuts: {
+      name: "Show Shortcuts",
+      key: "H",
+    },
   },
   entries: {
     refetch: {
