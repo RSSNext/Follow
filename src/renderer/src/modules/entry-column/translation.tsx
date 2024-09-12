@@ -21,6 +21,10 @@ export const EntryTranslation: Component<{
 
   const [ref, bounds] = useMeasure({ debounce: 60 })
 
+  if (!source) {
+    return null
+  }
+
   if (!nextTarget && source) {
     return isHTML ? (
       <HTML as="div" className={cn("prose dark:prose-invert", className)} noMedia>
