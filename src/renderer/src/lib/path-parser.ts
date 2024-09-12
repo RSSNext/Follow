@@ -1,6 +1,6 @@
 import { isNil } from "lodash-es"
 import type { CompileOptions } from "path-to-regexp"
-import { compile, pathToRegexp } from "path-to-regexp"
+import { compile, match, parse } from "path-to-regexp"
 
 const CATCH_ALL_GROUP_KEY = "__catchAll__"
 export function transformUriPath(uri: string): string {
@@ -11,11 +11,11 @@ export function transformUriPath(uri: string): string {
     if (!part) continue
     if (part.startsWith(":")) {
       if (part.includes("{") && part.includes("}")) {
-        result += `{/:${part.slice(1, part.indexOf("{"))}}*`
+        result += `{/*${part.slice(1, part.indexOf("{"))}}`
       } else if (part.endsWith("?")) {
-        result += `{/:${part.slice(1, -1)}}?`
+        result += `{/:${part.slice(1, -1)}}`
       } else {
-        result += `{/:${part.slice(1)}}`
+        result += `/:${part.slice(1)}`
       }
     } else if (part === "*") {
       result += `{/:${CATCH_ALL_GROUP_KEY}}`
@@ -64,16 +64,17 @@ export const regexpPathToPath = (
 
   const transformedPath = transformUriPath(regexpPath)
 
-  const paramsKeys = pathToRegexp(transformedPath).keys
+  const paramsKeys = parseRegexpPathParams(regexpPath)
   const inputtedKeys = new Set(Object.keys(nextParams))
   let prevKeyIsOptional = false
   let prevKeyIsInputted = false
   for (const key of paramsKeys) {
-    if (key.name === CATCH_ALL_GROUP_KEY) {
-      nextParams[CATCH_ALL_GROUP_KEY] = nextParams.catchAll
+    const value = nextParams[key.name]
+    if (key.isCatchAll && typeof value === "string") {
+      nextParams[key.name] = value.split("/")
       break
     }
-    const isOptional = key.modifier === "?"
+    const isOptional = key.optional
     const userInputted = inputtedKeys.has(key.name)
     if (!isOptional && !userInputted) {
       throw new MissingRequiredParamError(key.name)
@@ -91,8 +92,6 @@ export const regexpPathToPath = (
     prevKeyIsInputted = userInputted
   }
   return compile(transformedPath, {
-    validate: false,
-
     ...compileConfigs,
   })(nextParams)
 }
@@ -112,41 +111,51 @@ export const parseRegexpPathParams = (
 ) => {
   const { excludeNames = [] } = options || {}
   const transformedPath = transformUriPath(regexpPath)
-  const array: PathParams[] = []
+  const { tokens } = parse(transformedPath)
 
-  for (const item of pathToRegexp(transformedPath).keys) {
-    if (excludeNames.includes(item.name)) continue
-
-    array.push({
-      name: item.name,
-      optional: item.modifier === "?" || item.modifier === "*",
-      isCatchAll: item.name === CATCH_ALL_GROUP_KEY || item.modifier === "*",
+  return tokens
+    .map((token) => {
+      switch (token.type) {
+        case "param": {
+          return {
+            name: token.name,
+            optional: false,
+          }
+        }
+        case "wildcard": {
+          return {
+            name: token.name,
+            optional: false,
+            isCatchAll: true,
+          }
+        }
+        case "group": {
+          if ("name" in token.tokens[1]) {
+            return {
+              name: token.tokens[1].name,
+              optional: true,
+              isCatchAll: token.tokens[1].type === "wildcard",
+            }
+          } else {
+            console.warn("Invalid token", token)
+            return ""
+          }
+        }
+        default: {
+          return ""
+        }
+      }
     })
-  }
-
-  const map = array.reduce((acc, { name, optional, isCatchAll }) => {
-    acc[name] = { name, optional, isCatchAll }
-    return acc
-  }, {}) as Record<string, PathParams>
-  return {
-    array,
-    map,
-    length: array.length,
-  }
+    .filter(
+      (item) => typeof item === "object" && "name" in item && !excludeNames.includes(item.name),
+    ) as PathParams[]
 }
 export const parseFullPathParams = (path: string, regexpPath: string) => {
   // path: /user/123344
   // regexpPath: /user/:id
   // return {id: '123344'}
   const transformedPath = transformUriPath(regexpPath)
-  const { keys } = pathToRegexp(transformedPath)
-  const result = pathToRegexp(transformedPath).exec(path)
+  const result = match(transformedPath)(path)
   if (!result) return {}
-  return keys.reduce(
-    (acc, key, index) => {
-      acc[key.name] = result[index + 1]
-      return acc
-    },
-    {} as Record<string, string>,
-  )
+  return result.params as Record<string, string>
 }
