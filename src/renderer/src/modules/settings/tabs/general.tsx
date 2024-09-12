@@ -165,6 +165,7 @@ export const SettingGeneral = () => {
 
 export const VoiceSelector = () => {
   const { t } = useTranslation()
+
   const { data } = useQuery({
     queryFn: () => tipcClient?.getVoices(),
     queryKey: ["voices"],
