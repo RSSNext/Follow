@@ -5,5 +5,6 @@ export const tooltipStyle = {
     "rounded-lg text-sm",
     "max-w-[75ch] select-text",
     "drop-shadow data-[side=top]:shadow-tooltip-bottom data-[side=bottom]:shadow-tooltip-top",
+    tw`dark:drop-shadow-[0_0_1px_theme(colors.white/0.5)]`,
   ],
 }
