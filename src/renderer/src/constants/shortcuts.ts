@@ -20,6 +20,10 @@ export const shortcuts = {
       name: "Show/Hide Feed Sidebar",
       key: "Meta+B",
     },
+    showShortcuts: {
+      name: "Show Shortcuts",
+      key: "H",
+    },
   },
   entries: {
     refetch: {
