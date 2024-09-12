@@ -1,4 +1,5 @@
 import { EventBus } from "@renderer/lib/event-bus"
+import dayjs from "dayjs"
 import i18next from "i18next"
 import { atom } from "jotai"
 import { initReactI18next } from "react-i18next"
@@ -20,6 +21,8 @@ export const initI18n = async () => {
     debug: import.meta.env.DEV,
     resources: defaultResources,
   })
+
+  dayjs.locale("en")
 }
 
 if (import.meta.hot) {
