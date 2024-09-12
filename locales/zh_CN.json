@@ -126,7 +126,11 @@
       },
       "title": "外观",
       "unread_count": "未读数",
-      "sidebar_title": "外观"
+      "sidebar_title": "外观",
+      "content_font": "内容字体",
+      "custom_font": "自定义字体",
+      "save": "保存",
+      "ui_font": "软件界面字体"
     },
     "integration": {
       "eagle": {

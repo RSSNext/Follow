@@ -126,6 +126,10 @@
       "general": "General",
       "unread_count": "Unread count",
       "fonts": "Fonts",
+      "content_font": "Content Font",
+      "ui_font": "UI Font",
+      "custom_font": "Custom Font",
+      "save": "Save",
       "content": "Content",
       "misc": "Misc",
       "opaque_sidebars": {

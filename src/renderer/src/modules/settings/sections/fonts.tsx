@@ -16,6 +16,7 @@ import { getStorageNS } from "@renderer/lib/ns"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect, useMemo, useRef } from "react"
 import * as React from "react"
+import {useTranslation  } from "react-i18next"
 
 const FALLBACK_FONT = "Default (UI Font)"
 const DEFAULT_FONT = "SN Pro"
@@ -48,6 +49,7 @@ const useFontDataWeb = () => [
 
 const useFontData = window.electron ? useFontDataElectron : useFontDataWeb
 export const ContentFontSelector = () => {
+  const { t } = useTranslation()
   const data = useFontData()
   const readerFontFamily = useUISettingSelector((state) => state.readerFontFamily || DEFAULT_FONT)
   const setCustom = usePresentCustomFontDialog("readerFontFamily")
@@ -61,7 +63,7 @@ export const ContentFontSelector = () => {
 
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">Content Font</span>
+      <span className="shrink-0 text-sm font-medium">{t("settings.appearance.content_font")}</span>
       <Select
         defaultValue={FALLBACK_FONT}
         value={readerFontFamily}
@@ -91,6 +93,7 @@ export const ContentFontSelector = () => {
 }
 
 export const UIFontSelector = () => {
+  const { t } = useTranslation()
   // filter out the fallback font
   const data = useFontData()
     .slice(1)
@@ -104,7 +107,7 @@ export const UIFontSelector = () => {
 
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">UI Font</span>
+      <span className="shrink-0 text-sm font-medium">{t("settings.appearance.ui_font")}</span>
       <Select
         defaultValue={FALLBACK_FONT}
         value={uiFont}
@@ -137,10 +140,11 @@ export const UIFontSelector = () => {
 const usePresentCustomFontDialog = (setKey: "uiFontFamily" | "readerFontFamily") => {
   const HISTORY_KEY = getStorageNS("customFonts")
   const { present } = useModalStack()
+  const { t } = useTranslation()
 
   return useCallback(() => {
     present({
-      title: "Custom Font",
+      title: t("settings.appearance.custom_font"),
       clickOutsideToDismiss: true,
       content: function Content({ dismiss, setClickOutSideToDismiss }) {
         const inputRef = useRef<HTMLInputElement>(null)
@@ -169,11 +173,11 @@ const usePresentCustomFontDialog = (setKey: "uiFontFamily" | "readerFontFamily")
             />
 
             <div className="flex justify-end">
-              <Button type="submit">Save</Button>
+              <Button type="submit">{t("settings.appearance.save")}</Button>
             </div>
           </form>
         )
       },
     })
-  }, [HISTORY_KEY, present, setKey])
+  }, [HISTORY_KEY, present, setKey, t])
 }
