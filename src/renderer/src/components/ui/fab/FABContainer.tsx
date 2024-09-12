@@ -1,5 +1,5 @@
 import { m } from "@renderer/components/common/Motion"
-import { useTypeScriptHappyCallback } from "@renderer/hooks/common/useTypescriptHappyCallback"
+import { useTypeScriptHappyCallback } from "@renderer/hooks/common"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { cn } from "@renderer/lib/utils"
 import clsx from "clsx"

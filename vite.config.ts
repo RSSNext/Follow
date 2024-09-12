@@ -78,6 +78,9 @@ export default ({ mode }) => {
           main: resolve(ROOT, "/index.html"),
           __debug_proxy: resolve(ROOT, "/__debug_proxy.html"),
         },
+        output: {
+          experimentalMinChunkSize: 500_000,
+        },
       },
     },
     server: {
