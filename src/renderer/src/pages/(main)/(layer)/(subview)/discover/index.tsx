@@ -41,6 +41,7 @@ export function Component() {
   const [search, setSearch] = useSearchParams()
   const { t } = useTranslation()
   useSubViewTitle("Discover")
+
   return (
     <>
       <div className="text-2xl font-bold">{t("words.discover")}</div>
