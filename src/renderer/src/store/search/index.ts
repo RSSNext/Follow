@@ -1,7 +1,5 @@
 import type { EntryModel } from "@renderer/models"
 import {
-  EntryRelatedKey,
-  EntryRelatedService,
   EntryService,
   FeedService,
   SubscriptionService,
@@ -40,15 +38,16 @@ class SearchActions {
   }
 
   async createLocalDbSearch() {
-    const [entries, feeds, subscriptions, entryRelated] = await Promise.all([
+    const [entries, feeds, subscriptions] = await Promise.all([
       EntryService.findAll(),
       FeedService.findAll(),
       SubscriptionService.findAll(),
-      EntryRelatedService.findAll(EntryRelatedKey.FEED_ID),
     ])
 
+    const feedsMap = new Map(feeds.map((feed) => [feed.id, feed]))
+
     const entriesFuse = this.createFuse(entries, ["title", "content", "description", "id"])
-    const feedsFuse = this.createFuse(feeds, ["title", "description", "id"])
+    const feedsFuse = this.createFuse(feeds, ["title", "description", "id", "siteUrl", "url"])
     const subscriptionsFuse = this.createFuse(subscriptions, ["title", "category"])
 
     return defineSearchInstance({
@@ -67,7 +66,7 @@ class SearchActions {
 
         const processedEntries = [] as SearchResult<EntryModel, { feedId: string }>[]
         for (const entry of entries) {
-          const feedId = entryRelated[entry.item.id]
+          const feedId = feedsMap.get(entry.item.feedId)?.id
           if (feedId) {
             processedEntries.push({ item: entry.item, feedId })
           }

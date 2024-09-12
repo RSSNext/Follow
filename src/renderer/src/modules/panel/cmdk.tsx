@@ -334,7 +334,7 @@ const SearchOptions: Component = memo(({ children }) => {
         <SelectTrigger size="sm">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent position="item-aligned">
           <SelectItem
             className="hover:bg-theme-item-hover"
             value={`${SearchType.All}`}
