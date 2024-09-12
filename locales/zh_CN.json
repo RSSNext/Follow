@@ -20,7 +20,7 @@
     "titles": {
       "general": "常规",
       "appearance": "外观",
-      "actions": "操作",
+      "actions": "指令",
       "integration": "集成",
       "about": "关于",
       "profile": "个人资料",
@@ -85,7 +85,48 @@
       "save": "保存",
       "saveSuccess": "🎉 指令已保存。",
       "title": "指令",
-      "sidebar_title": "指令"
+      "sidebar_title": "指令",
+      "action_card": {
+        "add": "添加",
+        "all": "全部",
+        "block_rules": "阻止规则",
+        "custom_filters": "过滤",
+        "field": "字段",
+        "from": "从",
+        "generate_summary": "使用 AI 生成摘要",
+        "name": "名称",
+        "operator": "运算符",
+        "rewrite_rules": "重写规则",
+        "then_do": "然后做……",
+        "to": "到",
+        "translate_into": "翻译成",
+        "value": "值",
+        "when_feeds_match": "当 Feed 匹配：",
+        "operation_options": {
+          "contains": "包含",
+          "does_not_contain": "不包含",
+          "is_equal_to": "等于",
+          "is_greater_than": "大于",
+          "is_less_than": "小于",
+          "is_not_equal_to": "不等于",
+          "matches_regex": "匹配正则表达式"
+        },
+        "entry_options": {
+          "all": "全部",
+          "author": "作者",
+          "content": "内容",
+          "order": "顺序",
+          "title": "标题",
+          "url": "URL"
+        },
+        "feed_options": {
+          "category": "类别",
+          "feed_url": "Feed 地址",
+          "site_url": "网站 URL",
+          "title": "标题",
+          "view": "视图"
+        }
+      }
     },
     "appearance": {
       "code_highlight_theme": "代码高亮主题",

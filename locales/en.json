@@ -173,7 +173,48 @@
       "newRule": "New Rule",
       "save": "Save",
       "saveSuccess": "🎉 Actions saved.",
-      "actionName": "Action {{number}}"
+      "actionName": "Action {{number}}",
+      "action_card": {
+        "name": "Name",
+        "when_feeds_match": "When feeds match…",
+        "all": "All",
+        "custom_filters": "Custom filters",
+        "then_do": "Then do…",
+        "generate_summary": "Generate summary using AI",
+        "translate_into": "Translate into",
+        "rewrite_rules": "Rewrite Rules",
+        "block_rules": "Block Rules",
+        "from": "From",
+        "to": "To",
+        "field": "Field",
+        "operator": "Operator",
+        "value": "Value",
+        "add": "Add",
+        "operation_options": {
+          "contains": "contains",
+          "does_not_contain": "does not contain",
+          "is_equal_to": "is equal to",
+          "is_not_equal_to": "is not equal to",
+          "is_greater_than": "is greater than",
+          "is_less_than": "is less than",
+          "matches_regex": "matches regex"
+        },
+        "entry_options": {
+          "all": "All",
+          "title": "Title",
+          "content": "Content",
+          "author": "Author",
+          "url": "Url",
+          "order": "Order"
+        },
+        "feed_options": {
+          "view": "View",
+          "title": "Title",
+          "category": "Category",
+          "site_url": "Site URL",
+          "feed_url": "Feed URL"
+        }
+      }
     },
     "profile": {
       "sidebar_title": "Profile",
