@@ -88,10 +88,7 @@ export function ListItem({
             <EntryTranslation
               useOverlay
               side="top"
-              className={cn(
-                envIsSafari ? "line-clamp-2 break-all" : undefined,
-                asRead ? "text-zinc-400 dark:text-neutral-500" : undefined,
-              )}
+              className={envIsSafari ? "line-clamp-2 break-all" : undefined}
               source={entry.entries.title}
               target={translation?.title}
             />
