@@ -9,7 +9,13 @@
     "load_archived_entries": "Load archived entries",
     "zero_items": "Zero items",
     "add": "Add",
-    "login": "Login"
+    "login": "Login",
+    "unread": "Unread",
+    "items": "Items",
+    "confirm": "Confirm",
+    "which": {
+      "all": "all"
+    }
   },
   "feed_view_type": {
     "articles": "Articles",
@@ -333,5 +339,42 @@
       "cancel": "Cancel",
       "continue": "Continue"
     }
+  },
+  "entry_actions": {
+    "save_media_to_eagle": "Save media to Eagle",
+    "save_to_readwise": "Save to Readwise",
+    "save_to_instapaper": "Save to Instapaper",
+    "tip": "Tip",
+    "star": "Star",
+    "unstar": "Unstar",
+    "copy_link": "Copy link",
+    "open_in_browser": "Open in browser",
+    "share": "Share",
+    "mark_as_read": "Mark as read",
+    "mark_as_unread": "Mark as unread"
+  },
+  "entry_list_header": {
+    "unread": "unread",
+    "items": "items",
+    "refresh": "Refresh",
+    "new_entries_available": "New entries available",
+    "refetch": "Refetch",
+    "show_unread_only": "Show unread Only",
+    "show_all": "Show all",
+    "daily_report": "Daily Report",
+    "switch_to_grid": "Switch to Grid",
+    "switch_to_masonry": "Switch to Masonry"
+  },
+  "mark_all_read_button": {
+    "mark_all_as_read": "Mark all as read",
+    "mark_as_read": "Mark {{which}} as read",
+    "confirm_mark_all": "Mark {{which}} as read?",
+    "confirm": "Confirm",
+    "undo": "Undo",
+    "confirm_mark_all_info": "Confirm mark all as read?",
+    "auto_confirm_info": "Will be confirmed automatically after 3s."
+  },
+  "entry_column": {
+    "refreshing": "Refreshing new entries..."
   }
 }

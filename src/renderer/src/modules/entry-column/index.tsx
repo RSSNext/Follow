@@ -188,7 +188,7 @@ function EntryColumnImpl() {
         {isRefreshing && (
           <div className="center box-content h-7 gap-2 py-3 text-xs">
             <LoadingCircle size="small" />
-            Refreshing new entries...
+            {t("entry_column.refreshing")}
           </div>
         )}
       </AutoResizeHeight>

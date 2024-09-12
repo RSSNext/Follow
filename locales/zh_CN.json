@@ -9,7 +9,13 @@
     "load_archived_entries": "加载存档条目",
     "zero_items": "没有内容",
     "add": "添加",
-    "login": "登录"
+    "login": "登录",
+    "unread": "未读",
+    "items": "内容",
+    "confirm": "确认",
+    "which": {
+      "all": "全部"
+    }
   },
   "signin": {
     "continue_with_github": "使用 GitHub 登录",
@@ -343,5 +349,42 @@
       "description": "此操作将删除您的类别，但其中包含的 Feed 将保留并按网站分组。",
       "title": "删除类别"
     }
+  },
+  "entry_actions": {
+    "copy_link": "复制链接",
+    "mark_as_read": "标记为已读",
+    "mark_as_unread": "标记为未读",
+    "open_in_browser": "在浏览器中打开",
+    "save_media_to_eagle": "将媒体保存到 Eagle",
+    "save_to_instapaper": "保存到 Instapaper",
+    "save_to_readwise": "保存到 Readwise",
+    "share": "分享",
+    "star": "收藏",
+    "tip": "打赏",
+    "unstar": "取消收藏"
+  },
+  "entry_list_header": {
+    "daily_report": "每日报告",
+    "items": "内容",
+    "new_entries_available": "有新内容",
+    "refetch": "重新获取",
+    "refresh": "刷新",
+    "show_all": "显示全部",
+    "show_unread_only": "仅显示未读",
+    "switch_to_grid": "切换到网格",
+    "switch_to_masonry": "切换到瀑布流",
+    "unread": "未读"
+  },
+  "mark_all_read_button": {
+    "auto_confirm_info": "3秒后自动确认。",
+    "confirm": "确认",
+    "confirm_mark_all": "将 {{which}} 标记为已读？",
+    "confirm_mark_all_info": "确认将全部标记为已读？",
+    "mark_all_as_read": "全部标记为已读",
+    "mark_as_read": "标记{{ which }}为已读",
+    "undo": "撤消"
+  },
+  "entry_column": {
+    "refreshing": "正在刷新"
   }
 }
