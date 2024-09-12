@@ -1,3 +1,4 @@
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { MotionButtonBase } from "@renderer/components/ui/button"
 import { KbdCombined } from "@renderer/components/ui/kbd/Kbd"
 import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
@@ -5,19 +6,39 @@ import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { cn } from "@renderer/lib/utils"
-import { m } from "framer-motion"
+import clsx from "clsx"
+import { m, useDragControls } from "framer-motion"
 import { useCallback } from "react"
 
 const ShortcutModalContent = () => {
   const { dismiss } = useCurrentModal()
+  const modalOverlay = useUISettingKey("modalOverlay")
+  const dragControls = useDragControls()
   return (
     <m.div
+      drag
+      dragListener={false}
+      dragControls={dragControls}
+      dragMomentum={false}
+      dragElastic={0}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="center absolute inset-0 m-auto flex max-h-[80vh] w-[60ch] max-w-[90vw] flex-col rounded-md border bg-theme-modal-background-opaque"
+      whileDrag={{
+        cursor: "grabbing",
+      }}
+      className={clsx(
+        "center absolute inset-0 m-auto flex max-h-[80vh] w-[60ch] max-w-[90vw] flex-col rounded-xl border bg-theme-modal-background-opaque",
+
+        !modalOverlay && "shadow-modal",
+      )}
     >
-      <h2 className="mb-2 mt-6 font-medium">Shortcuts Guideline</h2>
+      <h2
+        onPointerDownCapture={dragControls.start.bind(dragControls)}
+        className="mb-2 pt-6 font-medium"
+      >
+        Shortcuts Guideline
+      </h2>
       <MotionButtonBase onClick={dismiss} className="absolute right-3 top-5 p-2">
         <i className="i-mgc-close-cute-re" />
       </MotionButtonBase>
