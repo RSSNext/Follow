@@ -1,5 +1,5 @@
-import type { t } from "i18next"
 import type { FC, PropsWithChildren } from "react"
+import type { useTranslation } from "react-i18next"
 
 declare global {
   export type Component<P = object> = FC<ComponentType & P>
@@ -28,6 +28,11 @@ declare global {
     WINDOW_UNDER_BLUR: boolean
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = useTranslation()
+  /**
+   * This function is a macro, will replace in the build stage.
+   */
   export function tw(strings: TemplateStringsArray, ...values: any[]): string
 
   export type I18nKeys = OmitStringType<Parameters<typeof t>[0]>

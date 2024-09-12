@@ -1,6 +1,17 @@
 import { FeedViewType } from "@renderer/lib/enum"
+import type React from "react"
 
-export const views = [
+interface ViewDefinition {
+  name: I18nKeys
+  icon: React.JSX.Element
+  className: string
+  peerClassName: string
+  translation: string
+  view: FeedViewType
+  wideMode?: boolean
+  gridMode?: boolean
+}
+export const views: ViewDefinition[] = [
   {
     name: "feed_view_type.articles",
     icon: <i className="i-mgc-paper-cute-fi" />,

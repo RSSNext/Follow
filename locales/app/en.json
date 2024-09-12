@@ -258,7 +258,15 @@
         "confirm": "Do you want to continue?",
         "continue": "Continue"
       },
-      "newInvitationSuccess": "🎉 New invitation generated, invite code is copied"
+      "newInvitationSuccess": "🎉 New invitation generated, invite code is copied",
+      "activate": "Activate",
+      "codeOptions": {
+        "betaUser": "1. Find a beta user who invites you.",
+        "discord": "2. Join our Discord server and occasionally get gifts.",
+        "xAccount": "3. Follow our X account, and get gifts from time to time."
+      },
+      "earlyAccessMessage": "😰 Sorry, Follow is currently in early access and requires an invitation code to use.",
+      "getCodeMessage": "You can get an invitation code through the following methods:"
     },
     "about": {
       "sidebar_title": "About",
