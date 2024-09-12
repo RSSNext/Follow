@@ -267,7 +267,7 @@ const SearchResultCount: FC<{
   const searchInstance = React.useContext(SearchCmdKContext)
   const hasKeyword = useSearchStore((s) => !!s.keyword)
   const searchType = useSearchStore((s) => s.searchType)
-  // eslint-disable-next-line react-compiler/react-compiler
+   
   const recordCountPromise = useMemo(async () => {
     let count = 0
     const counts = await searchInstance?.then((s) => s.counts)
@@ -334,7 +334,7 @@ const SearchOptions: Component = memo(({ children }) => {
         <SelectTrigger size="sm">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent position="item-aligned">
           <SelectItem
             className="hover:bg-theme-item-hover"
             value={`${SearchType.All}`}

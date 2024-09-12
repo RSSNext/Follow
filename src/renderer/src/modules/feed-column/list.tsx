@@ -14,7 +14,7 @@ import { useFeedStore } from "@renderer/store/feed"
 import { getSubscriptionByFeedId, useSubscriptionByView } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { AnimatePresence, m } from "framer-motion"
-import { Fragment, useMemo, useState } from "react"
+import { Fragment, memo, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
@@ -58,7 +58,7 @@ const useUpdateUnreadCount = () => {
   })
 }
 
-export function FeedList({ className, view }: { className?: string; view: number }) {
+function FeedListImpl({ className, view }: { className?: string; view: number }) {
   const [expansion, setExpansion] = useState(false)
   const data = useGroupedData(view)
 
@@ -351,3 +351,5 @@ const SortableList = (props: FeedListProps) => {
     }
   }
 }
+
+export const FeedList = memo(FeedListImpl)

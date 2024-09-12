@@ -137,11 +137,13 @@ function bootsharp() {
     } else {
       const options = extractElectronWindowOptions(url)
 
-      const { height, resizable, width } = options || {}
+      const { height, resizable = true, width } = options || {}
       createWindow({
         extraPath: `#${url.replace(DEEPLINK_SCHEME, "/")}`,
         width: width ?? 800,
-        height: height ?? 600,
+        height: height ?? 900,
+        minWidth: 600,
+        minHeight: 600,
         resizable,
       })
     }

@@ -1,4 +1,4 @@
-import { Kbd, KbdCombined } from "@renderer/components/ui/kbd/Kbd"
+import { KbdCombined } from "@renderer/components/ui/kbd/Kbd"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { cn } from "@renderer/lib/utils"
 import { SettingsTitle } from "@renderer/modules/settings/title"
@@ -18,9 +18,7 @@ export function Component() {
   return (
     <>
       <SettingsTitle />
-      <p className="text-sm">
-        Press <Kbd>H</Kbd> to show this Shortcuts modal.
-      </p>
+
       <div className="mt-4 space-y-6">
         {Object.keys(shortcuts).map((type) => (
           <section key={type}>

@@ -2,7 +2,7 @@ import { parseHtml } from "@renderer/lib/parse-html"
 import type { RemarkOptions } from "@renderer/lib/parse-markdown"
 import { parseMarkdown } from "@renderer/lib/parse-markdown"
 import { cn } from "@renderer/lib/utils"
-import { createElement, Fragment, useEffect, useMemo, useState } from "react"
+import { createElement, Fragment, memo, useEffect, useMemo, useState } from "react"
 
 import { MarkdownRenderContainerRefContext } from "./context"
 
@@ -34,7 +34,7 @@ export const Markdown: Component<
   )
 }
 
-export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
+const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
   props: {
     children: string | null | undefined
     as: A
@@ -83,3 +83,5 @@ export const HTML = <A extends keyof JSX.IntrinsicElements = "div">(
     </MarkdownRenderContainerRefContext.Provider>
   )
 }
+
+export const HTML = memo(HTMLImpl)

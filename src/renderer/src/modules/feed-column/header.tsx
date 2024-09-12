@@ -10,7 +10,7 @@ import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { m } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
-import { useCallback, useRef, useState } from "react"
+import { memo, useCallback, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
@@ -30,7 +30,7 @@ const useBackHome = (active: number) => {
   )
 }
 
-export const FeedColumnHeader = () => {
+export const FeedColumnHeader = memo(() => {
   const [active] = useSidebarActiveView()
   const { t } = useTranslation()
   const navigateBackHome = useBackHome(active)
@@ -71,7 +71,7 @@ export const FeedColumnHeader = () => {
       </div>
     </div>
   )
-}
+})
 
 const LayoutActionButton = () => {
   const feedColumnShow = useFeedColumnShow()

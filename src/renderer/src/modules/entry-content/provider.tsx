@@ -1,5 +1,5 @@
 import { FeedViewType } from "@renderer/lib/enum"
-import { createContext } from "react"
+import { createContext } from "use-context-selector"
 
 export interface EntryContentContext {
   entryId: string
