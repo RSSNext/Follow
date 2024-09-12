@@ -108,25 +108,8 @@ export const MyWalletSection = () => {
         <Tooltip>
           <TooltipTrigger className="block">
             <div className="flex flex-row items-center gap-x-2 text-xs text-zinc-600 dark:text-neutral-400">
-              <span className="flex w-[120px] items-center gap-1 text-left">
-                Daily Power
-                <i className="i-mingcute-question-line" />
-              </span>
-              <Balance>{myWallet.dailyPowerToken}</Balance>
-            </div>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent align="start" className="z-[999]">
-              <p>1. Daily Power can only be used for tipping others.</p>
-              <p>2. You can claim {DAILY_CLAIM_AMOUNT} free Daily Power daily.</p>
-            </TooltipContent>
-          </TooltipPortal>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger className="block">
-            <div className="flex flex-row items-center gap-x-2 text-xs text-zinc-600 dark:text-neutral-400">
-              <span className="flex w-[120px] items-center gap-1 text-left">
-                Cashable Power <i className="i-mingcute-question-line" />
+              <span className="flex items-center gap-1 text-left">
+                Withdrawable <i className="i-mingcute-question-line" />
               </span>
 
               <Balance>{myWallet.cashablePowerToken}</Balance>
@@ -134,9 +117,8 @@ export const MyWalletSection = () => {
           </TooltipTrigger>
           <TooltipPortal>
             <TooltipContent align="start" className="z-[999]">
-              <p>1. Cashable Power can be withdrawn to your wallet for trading.</p>
               <p>
-                2. Cashable Power includes both the tips you've received and the Power you've
+                Withdrawable Power includes both the tips you've received and the Power you've
                 recharged.
               </p>
             </TooltipContent>

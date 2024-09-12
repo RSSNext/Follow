@@ -90,7 +90,7 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
       <div className={cn(!cashablePowerTokenNumber && "text-orange-700", "mb-4 text-sm")}>
         You have{" "}
         <Balance className="inline-block">{wallet.data?.[0].cashablePowerToken || "0"}</Balance>{" "}
-        Cashable Power in your wallet.
+        withdrawable Power in your wallet.
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-96 space-y-4">
