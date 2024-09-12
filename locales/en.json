@@ -237,7 +237,7 @@
       "sidebar_title": "Invitations",
       "title": "Invitation Code",
       "earlyAccess": "Follow is currently in <strong>early access</strong> and requires an invitation code to use.",
-      "generateCost": "You can spend 10 <i>Power</i> to generate an invitation code for your friends.",
+      "generateCost": "You can spend 10 <PowerIcon /> Power to generate an invitation code for your friends.",
       "generateButton": "Generate new code",
       "noInvitations": "No invitations",
       "tableHeaders": {
@@ -248,8 +248,9 @@
       "notUsed": "Not used",
       "confirmModal": {
         "title": "Confirm",
-        "message": "Generating an invitation code will cost you 10 <i>Power</i>. Do you want to continue?",
+        "message": "Generating an invitation code will cost you 10 <PowerIcon /> Power.",
         "cancel": "Cancel",
+        "confirm": "Do you want to continue?",
         "continue": "Continue"
       },
       "newInvitationSuccess": "🎉 New invitation generated, invite code is copied"
