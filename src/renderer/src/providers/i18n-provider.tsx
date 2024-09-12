@@ -1,7 +1,6 @@
 import { defaultResources } from "@renderer/@types/default-resource"
 import { getGeneralSettings } from "@renderer/atoms/settings/general"
 import { currentSupportedLanguages, defaultNS, i18nAtom } from "@renderer/i18n"
-import { nextFrame } from "@renderer/lib/dom"
 import { EventBus } from "@renderer/lib/event-bus"
 import { jotaiStore } from "@renderer/lib/jotai"
 import i18next from "i18next"
@@ -76,9 +75,11 @@ export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
     useEffect(
       () =>
         EventBus.subscribe("I18N_UPDATE", () => {
-          nextFrame(() => {
-            update(i18next.cloneInstance())
+          const lang = getGeneralSettings().language
+          const nextI18n = i18next.cloneInstance({
+            lng: lang,
           })
+          update(nextI18n)
         }),
       [update],
     )

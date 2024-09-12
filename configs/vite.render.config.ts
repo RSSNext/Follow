@@ -57,6 +57,11 @@ export const viteRenderBaseConfig = {
     {
       name: "custom-i18n-hmr",
       handleHotUpdate({ file, server }) {
+        server.ws.send({
+          type: "custom",
+          event: "hmr",
+          data: {},
+        })
         if (file.endsWith(".json") && file.includes("locales")) {
           server.ws.send({
             type: "custom",

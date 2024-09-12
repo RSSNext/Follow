@@ -31,7 +31,7 @@ import type {
   SupportedLanguages,
 } from "@renderer/models"
 import { useMemo } from "react"
-import {useTranslation } from "react-i18next"
+import { useTranslation } from "react-i18next"
 
 type ActionsInput = {
   name: string

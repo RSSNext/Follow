@@ -21,7 +21,6 @@ import { bundledThemes } from "shiki/themes"
 import { SettingTabbedSegment } from "../control"
 import { ContentFontSelector, UIFontSelector } from "../sections/fonts"
 import { createSettingBuilder } from "../setting-builder"
-import { SettingsTitle } from "../title"
 
 const SettingBuilder = createSettingBuilder(useUISettingValue)
 const defineItem = createDefineSettingItem(useUISettingValue, setUISetting)
@@ -29,76 +28,73 @@ const defineItem = createDefineSettingItem(useUISettingValue, setUISetting)
 export const SettingAppearance = () => {
   const { t } = useTranslation()
   return (
-    <>
-      <SettingsTitle />
-      <div className="mt-4">
-        <SettingBuilder
-          settings={[
-            {
-              type: "title",
-              value: t("settings.appearance.general"),
-            },
-            AppThemeSegment,
+    <div className="mt-4">
+      <SettingBuilder
+        settings={[
+          {
+            type: "title",
+            value: t("settings.appearance.general"),
+          },
+          AppThemeSegment,
 
-            defineItem("opaqueSidebar", {
-              label: t("settings.appearance.opaque_sidebars.label"),
-              hide: !window.api?.canWindowBlur,
-            }),
+          defineItem("opaqueSidebar", {
+            label: t("settings.appearance.opaque_sidebars.label"),
+            hide: !window.api?.canWindowBlur,
+          }),
 
-            {
-              type: "title",
-              value: t("settings.appearance.unread_count"),
-            },
+          {
+            type: "title",
+            value: t("settings.appearance.unread_count"),
+          },
 
-            defineItem("showDockBadge", {
-              label: t("settings.appearance.show_dock_badge.label"),
-              hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
-            }),
+          defineItem("showDockBadge", {
+            label: t("settings.appearance.show_dock_badge.label"),
+            hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
+          }),
 
-            defineItem("sidebarShowUnreadCount", {
-              label: t("settings.appearance.sidebar_show_unread_count.label"),
-            }),
+          defineItem("sidebarShowUnreadCount", {
+            label: t("settings.appearance.sidebar_show_unread_count.label"),
+          }),
 
-            {
-              type: "title",
-              value: t("settings.appearance.fonts"),
-            },
-            TextSize,
-            UIFontSelector,
-            ContentFontSelector,
-            {
-              type: "title",
-              value: t("settings.appearance.content"),
-            },
-            ShikiTheme,
+          {
+            type: "title",
+            value: t("settings.appearance.fonts"),
+          },
+          TextSize,
+          UIFontSelector,
+          ContentFontSelector,
+          {
+            type: "title",
+            value: t("settings.appearance.content"),
+          },
+          ShikiTheme,
 
-            defineItem("guessCodeLanguage", {
-              label: t("settings.appearance.guess_code_language.label"),
-              hide: !isElectronBuild,
-              description: t("settings.appearance.guess_code_language.description"),
-            }),
+          defineItem("guessCodeLanguage", {
+            label: t("settings.appearance.guess_code_language.label"),
+            hide: !isElectronBuild,
+            description: t("settings.appearance.guess_code_language.description"),
+          }),
 
-            defineItem("readerRenderInlineStyle", {
-              label: t("settings.appearance.reader_render_inline_style.label"),
-              description: t("settings.appearance.reader_render_inline_style.description"),
-            }),
-            {
-              type: "title",
-              value: t("settings.appearance.misc"),
-            },
+          defineItem("readerRenderInlineStyle", {
+            label: t("settings.appearance.reader_render_inline_style.label"),
+            description: t("settings.appearance.reader_render_inline_style.description"),
+          }),
+          {
+            type: "title",
+            value: t("settings.appearance.misc"),
+          },
 
-            defineItem("modalOverlay", {
-              label: t("settings.appearance.modal_overlay.label"),
-              description: t("settings.appearance.modal_overlay.description"),
-            }),
-            defineItem("reduceMotion", {
-              label: t("settings.appearance.reduce_motion.label"),
-              description: t("settings.appearance.reduce_motion.description"),
-            }),
-          ]}
-        />
-      </div>
-    </>
+          defineItem("modalOverlay", {
+            label: t("settings.appearance.modal_overlay.label"),
+            description: t("settings.appearance.modal_overlay.description"),
+          }),
+          defineItem("reduceMotion", {
+            label: t("settings.appearance.reduce_motion.label"),
+            description: t("settings.appearance.reduce_motion.description"),
+          }),
+        ]}
+      />
+    </div>
   )
 }
 

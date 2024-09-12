@@ -23,30 +23,33 @@ export const initI18n = async () => {
 }
 
 if (import.meta.hot) {
-  import.meta.hot.on("i18n-update", ({ file, content }: { file: string; content: string }) => {
-    const resources = JSON.parse(content)
-    const i18next = jotaiStore.get(i18nAtom)
-    // `file` is absolute path e.g. /Users/innei/git/follow/locales/en.json
-    // Absolute path e.g. /Users/innei/git/follow/locales/<module-name>/en.json
+  import.meta.hot.on(
+    "i18n-update",
+    async ({ file, content }: { file: string; content: string }) => {
+      const resources = JSON.parse(content)
+      const i18next = jotaiStore.get(i18nAtom)
+      // `file` is absolute path e.g. /Users/innei/git/follow/locales/en.json
+      // Absolute path e.g. /Users/innei/git/follow/locales/<module-name>/en.json
 
-    // 1. parse root language
-    if (!file.includes("locales/namespaces")) {
-      const lang = file.split("/").pop()?.replace(".json", "")
-      if (!lang) return
-      i18next.addResourceBundle(lang, defaultNS, resources, true, true)
-      i18next.reloadResources(lang, defaultNS)
-    } else {
-      const nsName = file.match(/locales\/namespaces\/(.+?)\//)?.[1]
+      // 1. parse root language
+      if (!file.includes("locales/namespaces")) {
+        const lang = file.split("/").pop()?.replace(".json", "")
+        if (!lang) return
+        i18next.addResourceBundle(lang, defaultNS, resources, true, true)
+        i18next.reloadResources(lang, defaultNS)
+      } else {
+        const nsName = file.match(/locales\/namespaces\/(.+?)\//)?.[1]
 
-      if (!nsName) return
-      const lang = file.split("/").pop()?.replace(".json", "")
-      if (!lang) return
-      i18next.addResourceBundle(lang, nsName, resources, true, true)
-      i18next.reloadResources(lang, nsName)
-    }
+        if (!nsName) return
+        const lang = file.split("/").pop()?.replace(".json", "")
+        if (!lang) return
+        i18next.addResourceBundle(lang, nsName, resources, true, true)
+        await i18next.reloadResources(lang, nsName)
+      }
 
-    import.meta.env.DEV && EventBus.dispatch("I18N_UPDATE", "")
-  })
+      import.meta.env.DEV && EventBus.dispatch("I18N_UPDATE", "")
+    },
+  )
 }
 
 declare module "@renderer/lib/event-bus" {
