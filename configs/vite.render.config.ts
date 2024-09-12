@@ -22,6 +22,7 @@ export const viteRenderBaseConfig = {
       "@shared": resolve("src/shared/src"),
       "@pkg": resolve("./package.json"),
       "@env": resolve("./src/env.ts"),
+      "@locales": resolve("./locales"),
     },
   },
   base: "/",
