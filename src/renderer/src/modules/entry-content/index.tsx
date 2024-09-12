@@ -245,15 +245,17 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
             </WrappedElementProvider>
 
             {!content && (
-              <div className="center mt-16">
+              <div className="center mt-16 min-w-0">
                 {isPending ? (
                   <EntryContentLoading icon={feed?.siteUrl!} />
                 ) : error ? (
-                  <div className="center flex flex-col gap-2">
+                  <div className="center flex min-w-0 flex-col gap-2">
                     <i className="i-mgc-close-cute-re text-3xl text-red-500" />
                     <span className="font-sans text-sm">Network Error</span>
 
-                    <pre>{error.message}</pre>
+                    <pre className="mt-6 w-full overflow-auto whitespace-pre-wrap break-all">
+                      {error.message}
+                    </pre>
                   </div>
                 ) : (
                   <NoContent id={entry.entries.id} url={entry.entries.url ?? ""} />
