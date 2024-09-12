@@ -300,7 +300,7 @@ const FallbackableImage: FC<
   return (
     <div className="flex size-full flex-col">
       {isLoading && !isAllError && (
-        <div className="center absolute size-full">
+        <div className="center absolute inset-0 size-full">
           <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
         </div>
       )}
@@ -335,7 +335,7 @@ const FallbackableImage: FC<
       )}
 
       {currentState === "fallback" && (
-        <div className="mt-4 text-xs">
+        <div className="mt-4 text-center text-xs">
           <span>
             This image is preview in low quality, because the original image is not available.
           </span>
