@@ -5,15 +5,21 @@ import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
 import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { shortcuts } from "@renderer/constants/shortcuts"
+import { useSwitchHotKeyScope } from "@renderer/hooks/common"
 import { cn } from "@renderer/lib/utils"
 import clsx from "clsx"
 import { m, useDragControls } from "framer-motion"
-import { useCallback } from "react"
+import { useCallback, useEffect } from "react"
 
 const ShortcutModalContent = () => {
   const { dismiss } = useCurrentModal()
   const modalOverlay = useUISettingKey("modalOverlay")
   const dragControls = useDragControls()
+
+  const switchScope = useSwitchHotKeyScope()
+  useEffect(() => {
+    switchScope("Home")
+  }, [])
   return (
     <m.div
       drag
