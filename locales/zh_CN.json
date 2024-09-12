@@ -258,9 +258,9 @@
       "sidebar_title": "邀请"
     },
     "about": {
-      "changelog": "变更日志",
-      "feedbackInfo": "{{appName}} ({{commitSha}}) 正处于开发的早期阶段。\n如果您有任何反馈或建议，请随时在我们的 GitHub 上<0>提出问题<1></1></0>。",
-      "iconLibrary": "使用的图标库版权归<IconLibraryLink></IconLibraryLink><Icon></Icon>所有，不能重新分发。",
+      "changelog": "更新日志",
+      "feedbackInfo": "{{appName}} ({{commitSha}}) 正处于开发的早期阶段。\n如果您有任何反馈或建议，请随时在我们的 GitHub 上<OpenIssueLink>提出问题</OpenIssueLink> <ExternalLinkIcon />",
+      "iconLibrary": "使用的图标库版权归 <IconLibraryLink /><ExternalLinkIcon /> 所有，不能重新分发。",
       "licenseInfo": "{{appName}} 现在和将来都是一个免费的开源项目。开源协议为 {{license}} 。",
       "socialMedia": "社交媒体",
       "sidebar_title": "关于"
