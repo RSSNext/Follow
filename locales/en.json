@@ -376,5 +376,14 @@
   },
   "entry_column": {
     "refreshing": "Refreshing new entries..."
+  },
+  "entry_content": {
+    "ai_summary": "AI summary",
+    "readability_notice": "This content is provided by Readability. If you find typographical anomalies, please go to the source site to view the original content.",
+    "fetching_content": "Fetching original content and processing...",
+    "no_content": "No content",
+    "web_app_notice": "Maybe web app doesn't support this content type. But you can download the desktop app.",
+    "render_error": "Render error:",
+    "report_issue": "Report issue"
   }
 }
