@@ -4,7 +4,9 @@ import { ListItem } from "@renderer/modules/entry-column/templates/list-item-tem
 import type { UniversalItemProps } from "../types"
 
 export function NotificationItem({ entryId, entryPreview, translation }: UniversalItemProps) {
-  return <ListItem entryId={entryId} entryPreview={entryPreview} translation={translation} />
+  return (
+    <ListItem entryId={entryId} entryPreview={entryPreview} translation={translation} withFollow />
+  )
 }
 
 export const NotificationItemSkeleton = (
