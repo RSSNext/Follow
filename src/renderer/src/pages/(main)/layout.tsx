@@ -24,6 +24,7 @@ import { CornerPlayer } from "@renderer/modules/feed-column/corner-player"
 import { CmdF } from "@renderer/modules/panel/cmdf"
 import { SearchCmdK } from "@renderer/modules/panel/cmdk"
 import { CmdNTrigger } from "@renderer/modules/panel/cmdn"
+import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
 import React, { useEffect, useRef, useState } from "react"
@@ -163,6 +164,16 @@ const FeedResponsiveResizerContainer = ({
     shortcuts.layout.toggleSidebar.key,
     () => {
       setFeedColumnShow(!feedColumnShow)
+    },
+    {
+      scopes: HotKeyScopeMap.Home,
+    },
+  )
+  const settingModalPresent = useSettingModal()
+  useHotkeys(
+    shortcuts.layout.showShortcuts.key,
+    () => {
+      settingModalPresent("shortcuts")
     },
     {
       scopes: HotKeyScopeMap.Home,
