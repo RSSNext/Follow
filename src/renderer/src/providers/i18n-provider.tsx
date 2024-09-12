@@ -23,7 +23,6 @@ const langChangedHandler = async (lang: string) => {
   const loaded = i18next.getResourceBundle(lang, defaultNS)
 
   if (loaded) {
-    EventBus.dispatch("I18N_UPDATE", lang)
     return
   }
 
@@ -77,13 +76,9 @@ export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
     // eslint-disable-next-line react-compiler/react-compiler, react-hooks/rules-of-hooks
     useEffect(
       () =>
-        EventBus.subscribe("I18N_UPDATE", (lang) => {
+        EventBus.subscribe("I18N_UPDATE", () => {
           nextFrame(() => {
-            update(
-              i18next.cloneInstance({
-                lng: lang,
-              }),
-            )
+            update(i18next.cloneInstance())
           })
         }),
       [update],
