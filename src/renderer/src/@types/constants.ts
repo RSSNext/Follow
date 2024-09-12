@@ -7,3 +7,8 @@ export const currentSupportedLanguages = (() => {
   }
   return langs
 })()
+
+export const dayjsLocaleImportMap = {
+  en: ["en", () => import("dayjs/locale/en")],
+  zh_CN: ["zh-cn", () => import("dayjs/locale/zh-cn")],
+}

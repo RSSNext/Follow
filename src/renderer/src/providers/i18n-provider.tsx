@@ -1,8 +1,10 @@
+import { dayjsLocaleImportMap } from "@renderer/@types/constants"
 import { defaultResources } from "@renderer/@types/default-resource"
 import { getGeneralSettings } from "@renderer/atoms/settings/general"
 import { currentSupportedLanguages, defaultNS, i18nAtom } from "@renderer/i18n"
 import { EventBus } from "@renderer/lib/event-bus"
 import { jotaiStore } from "@renderer/lib/jotai"
+import dayjs from "dayjs"
 import i18next from "i18next"
 import { useAtom } from "jotai"
 import type { FC, PropsWithChildren } from "react"
@@ -13,6 +15,15 @@ import { toast } from "sonner"
 const loadingLangLock = new Set<string>()
 
 const langChangedHandler = async (lang: string) => {
+  const dayjsImport = dayjsLocaleImportMap[lang]
+
+  if (dayjsImport) {
+    const [locale, loader] = dayjsImport
+    loader().then(() => {
+      dayjs.locale(locale)
+    })
+  }
+
   const { t } = jotaiStore.get(i18nAtom)
   if (loadingLangLock.has(lang)) return
   const isSupport = currentSupportedLanguages.includes(lang)
