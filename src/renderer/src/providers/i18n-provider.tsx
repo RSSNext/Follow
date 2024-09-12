@@ -28,24 +28,23 @@ const langChangedHandler = async (lang: string) => {
 
   loadingLangLock.add(lang)
 
-  const rootGlobbyMap = import.meta.glob("@locales/*.json")
-  const nsGlobbyMap = import.meta.glob("@locales/namespaces/*/*.json")
+  const nsGlobbyMap = import.meta.glob("@locales/*/*.json")
 
-  const rootResources = await rootGlobbyMap[`../../locales/${lang}.json`]()
-    .then((m: any) => m.default)
-    .catch(() => {
-      toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
-    })
-
-  i18next.addResourceBundle(lang, defaultNS, rootResources, true, true)
+  // const rootGlobbyMap = import.meta.glob("@locales/*.json")
+  // const rootResources = await rootGlobbyMap[`../../locales/${lang}.json`]()
+  //   .then((m: any) => m.default)
+  //   .catch(() => {
+  //     toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
+  //   })
+  // i18next.addResourceBundle(lang, defaultNS, rootResources, true, true)
 
   const namespaces = Object.keys(defaultResources.en)
 
   const res = await Promise.allSettled(
     namespaces.map(async (ns) => {
-      if (ns === defaultNS) return
+      // if (ns === defaultNS) return
 
-      const loader = nsGlobbyMap[`../../locales/namespaces/${ns}/${lang}.json`]
+      const loader = nsGlobbyMap[`../../locales/${ns}/${lang}.json`]
 
       if (!loader) return
       const nsResources = await loader().then((m: any) => m.default)

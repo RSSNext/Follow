@@ -12,6 +12,9 @@
     // ["tw\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
     ["tw`([^`]*)`", "([^`]*)"]
   ],
+  "i18n-ally.namespace": true,
+  "i18n-ally.pathMatcher": "{namespaces}/{locale}.json",
+  "i18n-ally.defaultNamespace": "app",
   // If you do not want to autofix some rules on save
   // You can put this in your user settings or workspace settings
   "eslint.codeActionsOnSave.rules": [

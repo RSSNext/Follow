@@ -8,7 +8,7 @@ import { jotaiStore } from "./lib/jotai"
 
 export const i18nAtom = atom(i18next)
 
-export const defaultNS = "translation"
+export const defaultNS = "app"
 
 export const fallbackLanguage = "en"
 export const initI18n = async () => {
@@ -27,7 +27,7 @@ if (import.meta.hot) {
     const resources = JSON.parse(content)
     const i18next = jotaiStore.get(i18nAtom)
     // `file` is absolute path e.g. /Users/innei/git/follow/locales/en.json
-    // Absolute path e.g. /Users/innei/git/follow/locales/namespaces/<module-name>/en.json
+    // Absolute path e.g. /Users/innei/git/follow/locales/<module-name>/en.json
 
     // 1. parse root language
     if (!file.includes("locales/namespaces")) {
