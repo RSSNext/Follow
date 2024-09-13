@@ -27,8 +27,6 @@ const ShortcutModalContent = () => {
       dragControls={dragControls}
       dragMomentum={false}
       dragElastic={0}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       whileDrag={{
         cursor: "grabbing",
@@ -85,6 +83,8 @@ export const useShortcutsModal = () => {
   return useCallback(() => {
     present({
       title: "Shortcuts",
+      overlay: false,
+      id: "shortcuts",
       content: () => <ShortcutModalContent />,
       CustomModalComponent: NoopChildren,
       clickOutsideToDismiss: true,
