@@ -1,7 +1,5 @@
 {
-  "langs": {
-    "en": "English",
-    "zh_CN": "简体中文（部分完成）"
-  },
+  "langs.en": "English",
+  "langs.zh_CN": "简体中文（部分完成）",
   "name": "English"
 }
