@@ -10,6 +10,7 @@
   "actions.action_card.all": "All",
   "actions.action_card.block_rules": "Block Rules",
   "actions.action_card.custom_filters": "Custom filters",
+  "actions.action_card.enable_readability": "Enable readability",
   "actions.action_card.entry_options.all": "All",
   "actions.action_card.entry_options.author": "Author",
   "actions.action_card.entry_options.content": "Content",

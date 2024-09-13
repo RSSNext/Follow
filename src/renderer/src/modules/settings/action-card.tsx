@@ -43,6 +43,7 @@ type ActionsInput = {
   result: {
     translation?: string
     summary?: boolean
+    readability?: boolean
     rewriteRules?: {
       from: string
       to: string
@@ -446,7 +447,20 @@ export function ActionCard({
                     </SelectContent>
                   </Select>
                 </div>
+                <Divider />
 
+                <div className="flex w-full items-center justify-between">
+                  <span className="w-0 shrink grow truncate">
+                    {t("actions.action_card.enable_readability")}
+                  </span>
+                  <Switch
+                    checked={data.result.readability}
+                    onCheckedChange={(checked) => {
+                      data.result.readability = checked
+                      onChange(data)
+                    }}
+                  />
+                </div>
                 <Divider />
 
                 <SettingCollapsible

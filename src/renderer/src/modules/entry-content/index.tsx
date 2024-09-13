@@ -1,6 +1,7 @@
 import { repository } from "@pkg"
 import {
   ReadabilityStatus,
+  setReadabilityStatus,
   useEntryInReadabilityStatus,
   useEntryIsInReadability,
   useEntryReadabilityContent,
@@ -266,6 +267,10 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
               </div>
             </WrappedElementProvider>
 
+            {entry.settings?.readability && (
+              <ReadabilityAutoToggle id={entry.entries.id} url={entry.entries.url ?? ""} />
+            )}
+
             {!content && (
               <div className="center mt-16 min-w-0">
                 {isPending ? (
@@ -398,6 +403,9 @@ const ReadabilityAutoToggle = ({ url, id }: { url: string; id: string }) => {
   useEffect(() => {
     if (!onceRef.current) {
       onceRef.current = true
+      setReadabilityStatus({
+        [id]: ReadabilityStatus.INITIAL,
+      })
       toggle()
     }
   }, [toggle])
