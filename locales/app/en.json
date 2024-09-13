@@ -1,4 +1,7 @@
 {
+  "ai_daily.title": "Top News - {{title}}",
+  "ai_daily.tooltip.content": "Here is news selected by AI from your timeline (<From /> - <To />) that may be important to you.",
+  "ai_daily.tooltip.update_schedule": "Update daily at 8 AM and 8 PM.",
   "entry_actions.copy_link": "Copy link",
   "entry_actions.mark_as_read": "Mark as read",
   "entry_actions.mark_as_unread": "Mark as unread",

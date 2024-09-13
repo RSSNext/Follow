@@ -1,4 +1,7 @@
 {
+  "ai_daily.title": "头条 - {{title}}",
+  "ai_daily.tooltip.content": "这里是通过 AI 从您的时间线中选择的头条新闻（<From /> - <To />），可能对您很重要。",
+  "ai_daily.tooltip.update_schedule": "每天早上 8 点、晚上 8 点更新。",
   "entry_actions.copy_link": "复制链接",
   "entry_actions.mark_as_read": "标记为已读",
   "entry_actions.mark_as_unread": "标记为未读",

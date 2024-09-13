@@ -2,6 +2,10 @@
   "cancel": "Cancel",
   "confirm": "Confirm",
   "ok": "OK",
+  "time.last_night": "Last Night",
+  "time.the_night_before_last": "The Night Before Last",
+  "time.today": "Today",
+  "time.yesterday": "Yesterday",
   "tips.load-lng-error": "Failed to load language pack",
   "words.which.all": "All"
 }

@@ -1,11 +1,14 @@
 import { useModalStack } from "@renderer/components/ui/modal"
 import { useCallback, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 
 import { DayOf } from "./constants"
 import { FeedDailyModalContent } from "./FeedDailyModalContent"
 
-export const useParseDailyDate = (day: DayOf) =>
-  useMemo(() => {
+export const useParseDailyDate = (day: DayOf) => {
+  const { t } = useTranslation("common")
+
+  return useMemo(() => {
     const dateObj = new Date()
 
     const nowHour = dateObj.getHours()
@@ -27,36 +30,37 @@ export const useParseDailyDate = (day: DayOf) =>
       if (isToday) {
         endDate = today8PM - 1
         startDate = today8AM
-        title = "Today"
+        title = t("time.today")
       } else {
         endDate = today8AM - 1
         startDate = yesterday8PM
-        title = "Last Night"
+        title = t("time.last_night")
       }
     } else if (nowHour >= 8) {
       if (isToday) {
         endDate = today8AM - 1
         startDate = yesterday8PM
-        title = "Last Night"
+        title = t("time.last_night")
       } else {
         endDate = yesterday8PM - 1
         startDate = yesterday8AM
-        title = "Yesterday"
+        title = t("time.yesterday")
       }
     } else {
       if (isToday) {
         endDate = yesterday8PM - 1
         startDate = yesterday8AM
-        title = "Yesterday"
+        title = t("time.yesterday")
       } else {
         endDate = yesterday8AM - 1
         startDate = dayBeforeYesterday8PM
-        title = "The Night Before Last"
+        title = t("time.the_night_before_last")
       }
     }
 
     return { title, startDate, endDate }
-  }, [day])
+  }, [day, t])
+}
 
 export const useAIDailyReportModal = () => {
   const { present } = useModalStack()

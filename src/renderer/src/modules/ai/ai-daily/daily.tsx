@@ -35,6 +35,7 @@ import { useFeedById } from "@renderer/store/feed"
 import { m, useAnimationControls } from "framer-motion"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { useEffect, useState } from "react"
+import { Trans, useTranslation } from "react-i18next"
 
 import { useParseDailyDate } from "./hooks"
 import type { DailyItemProps, DailyView } from "./types"
@@ -60,41 +61,52 @@ export const DailyReportTitle = ({
   title: string
   startDate: number
   endDate: number
-}) => (
-  <div className="flex items-center justify-center gap-2 text-base">
-    <i className="i-mgc-magic-2-cute-re" />
-    <div className="font-medium">Top News - {title}</div>
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <i className="i-mgc-question-cute-re translate-y-px text-sm" />
-      </TooltipTrigger>
-      <TooltipPortal>
-        <TooltipContent>
-          <ul className="list-outside list-decimal text-wrap pl-6 text-left text-sm">
-            <li>
-              Here is news selected by AI from your timeline
-              {" ("}
-              {new Date(startDate).toLocaleTimeString("en-US", {
-                weekday: "short",
-                hour: "numeric",
-                minute: "numeric",
-              })}{" "}
-              -{" "}
-              {new Date(endDate + 1).toLocaleTimeString("en-US", {
-                weekday: "short",
-                hour: "numeric",
-                minute: "numeric",
-              })}
-              {") "}
-              that may be important to you.
-            </li>
-            <li>Update daily at 8 AM and 8 PM.</li>
-          </ul>
-        </TooltipContent>
-      </TooltipPortal>
-    </Tooltip>
-  </div>
-)
+}) => {
+  const { t } = useTranslation()
+  return (
+    <div className="flex items-center justify-center gap-2 text-base">
+      <i className="i-mgc-magic-2-cute-re" />
+      <div className="font-medium">{t("ai_daily.title", { title })}</div>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <i className="i-mgc-question-cute-re translate-y-px text-sm" />
+        </TooltipTrigger>
+        <TooltipPortal>
+          <TooltipContent>
+            <ul className="list-outside list-decimal text-wrap pl-6 text-left text-sm">
+              <li>
+                <Trans
+                  i18nKey="ai_daily.tooltip.content"
+                  components={{
+                    From: (
+                      <span>
+                        {new Date(startDate).toLocaleTimeString("en-US", {
+                          weekday: "short",
+                          hour: "numeric",
+                          minute: "numeric",
+                        })}
+                      </span>
+                    ),
+                    To: (
+                      <span>
+                        {new Date(endDate + 1).toLocaleTimeString("en-US", {
+                          weekday: "short",
+                          hour: "numeric",
+                          minute: "numeric",
+                        })}
+                      </span>
+                    ),
+                  }}
+                 />
+              </li>
+              <li>{t("ai_daily.tooltip.update_schedule")}</li>
+            </ul>
+          </TooltipContent>
+        </TooltipPortal>
+      </Tooltip>
+    </div>
+  )
+}
 
 const useQueryData = ({
   endDate,

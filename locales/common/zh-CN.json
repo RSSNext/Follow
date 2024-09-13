@@ -2,6 +2,10 @@
   "cancel": "取消",
   "confirm": "确认",
   "ok": "好",
+  "time.last_night": "昨天晚上",
+  "time.the_night_before_last": "前天晚上",
+  "time.today": "今天",
+  "time.yesterday": "昨天",
   "tips.load-lng-error": "加载语言包失败",
   "words.which.all": "全部"
 }
