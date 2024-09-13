@@ -32,6 +32,11 @@ class FeedActions {
             feed.errorAt = null
           }
           if (feed.id) {
+            // Not all API return the owner, so merging is needed here.
+            if (state.feeds[feed.id]?.owner && !feed.owner) {
+              feed.owner = state.feeds[feed.id]?.owner
+            }
+
             state.feeds[feed.id] = feed
           } else {
             // Store temp feed in memory

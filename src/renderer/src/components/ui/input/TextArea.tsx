@@ -1,6 +1,6 @@
 "use client"
 
-import { useInputComposition } from "@renderer/hooks/common/useInputComposition"
+import { useInputComposition } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import clsx from "clsx"

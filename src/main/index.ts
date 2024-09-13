@@ -53,6 +53,17 @@ function bootsharp() {
 
     registerUpdater()
 
+    //remove Electron, Follow from user agent
+    session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+      let userAgent = details.requestHeaders["User-Agent"]
+      if (userAgent) {
+        userAgent = userAgent.replace(/\s?Electron\/[\d.]+/, "")
+        userAgent = userAgent.replace(/\s?Follow\/[\d.a-zA-Z-]+/, "")
+      }
+      details.requestHeaders["User-Agent"] = userAgent
+      callback({ cancel: false, requestHeaders: details.requestHeaders })
+    })
+
     app.on("activate", () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
@@ -126,11 +137,13 @@ function bootsharp() {
     } else {
       const options = extractElectronWindowOptions(url)
 
-      const { height, resizable, width } = options || {}
+      const { height, resizable = true, width } = options || {}
       createWindow({
         extraPath: `#${url.replace(DEEPLINK_SCHEME, "/")}`,
         width: width ?? 800,
-        height: height ?? 600,
+        height: height ?? 900,
+        minWidth: 600,
+        minHeight: 600,
         resizable,
       })
     }

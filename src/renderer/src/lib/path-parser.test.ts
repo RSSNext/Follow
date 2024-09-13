@@ -17,18 +17,14 @@ describe("test `transformUriPath()`", () => {
 
   test("has tailing optional params", () => {
     const path = transformUriPath("/issues/:id?")
-    expect(path).toMatchInlineSnapshot(`"/issues{/:id}?"`)
+    expect(path).toMatchInlineSnapshot(`"/issues{/:id}"`)
     expect(compile(path)({})).toMatchInlineSnapshot(`"/issues"`)
     const regexp = pathToRegexp(path)
     expect(regexp.keys).toMatchInlineSnapshot(`
       [
         {
-          "modifier": "?",
           "name": "id",
-          "pattern": undefined,
-          "prefix": "/",
-          "separator": undefined,
-          "suffix": "",
+          "type": "param",
         },
       ]
     `)
@@ -46,59 +42,8 @@ describe("test `transformUriPath()`", () => {
     expect(regexp.keys).toMatchInlineSnapshot(`
       [
         {
-          "modifier": "?",
           "name": "id",
-          "pattern": undefined,
-          "prefix": "/",
-          "separator": undefined,
-          "suffix": "",
-        },
-      ]
-    `)
-  })
-
-  test("has many optional params", () => {
-    const path = transformUriPath("/issue/:user/:repo/:state?/:labels?")
-    expect(path).toMatchInlineSnapshot(`"/issue{/:user}{/:repo}{/:state}?{/:labels}?"`)
-    expect(
-      compile(path)({
-        user: "user",
-        repo: "repo",
-      }),
-    ).toMatchInlineSnapshot(`"/issue/user/repo"`)
-    expect(pathToRegexp(path).keys).toMatchInlineSnapshot(`
-      [
-        {
-          "modifier": undefined,
-          "name": "user",
-          "pattern": undefined,
-          "prefix": "/",
-          "separator": undefined,
-          "suffix": "",
-        },
-        {
-          "modifier": undefined,
-          "name": "repo",
-          "pattern": undefined,
-          "prefix": "/",
-          "separator": undefined,
-          "suffix": "",
-        },
-        {
-          "modifier": "?",
-          "name": "state",
-          "pattern": undefined,
-          "prefix": "/",
-          "separator": undefined,
-          "suffix": "",
-        },
-        {
-          "modifier": "?",
-          "name": "labels",
-          "pattern": undefined,
-          "prefix": "/",
-          "separator": undefined,
-          "suffix": "",
+          "type": "param",
         },
       ]
     `)
@@ -106,7 +51,7 @@ describe("test `transformUriPath()`", () => {
 
   test("catch all path", () => {
     const path = transformUriPath("/:path{.+}?")
-    expect(path).toMatchInlineSnapshot(`"{/:path}*"`)
+    expect(path).toMatchInlineSnapshot(`"{/*path}"`)
     expect(
       compile(path)({
         path: ["a", "b", "c"],
@@ -116,7 +61,7 @@ describe("test `transformUriPath()`", () => {
 
   test("catch all path with leading route", () => {
     const path = transformUriPath("/issues/:path{.+}?")
-    expect(path).toMatchInlineSnapshot(`"/issues{/:path}*"`)
+    expect(path).toMatchInlineSnapshot(`"/issues{/*path}"`)
     expect(
       compile(path)({
         path: ["a", "b", "c"],
@@ -126,7 +71,7 @@ describe("test `transformUriPath()`", () => {
 
   test("catch all path but value is query search string", () => {
     const path = transformUriPath("/issues/:path{.+}?")
-    expect(path).toMatchInlineSnapshot(`"/issues{/:path}*"`)
+    expect(path).toMatchInlineSnapshot(`"/issues{/*path}"`)
     expect(
       compile(path)({
         path: ["a=1&b=2"],
@@ -179,14 +124,6 @@ describe("test `regexpPathToPath()`", () => {
     expect(() => regexpPathToPath("/issue/:user/:repo/:state?/:labels?", {})).toThrow(
       MissingRequiredParamError,
     )
-  })
-
-  test("catch all path", () => {
-    expect(
-      regexpPathToPath("*", {
-        catchAll: "a/b/c",
-      }),
-    ).toMatchInlineSnapshot(`"/a%2Fb%2Fc"`)
   })
 
   test("path with many optional params and all inputted", () => {
@@ -264,129 +201,58 @@ describe("test `regexpPathToPath()`", () => {
 describe("test `parseRegexpPathParams()`", () => {
   test("normal path", () => {
     expect(parseRegexpPathParams("/issues/all")).toMatchInlineSnapshot(`
-      {
-        "array": [],
-        "length": 0,
-        "map": {},
-      }
+      []
     `)
   })
 
   test("path with optional params", () => {
     expect(parseRegexpPathParams("/issues/:id?")).toMatchInlineSnapshot(`
-      {
-        "array": [
-          {
-            "isCatchAll": false,
-            "name": "id",
-            "optional": true,
-          },
-        ],
-        "length": 1,
-        "map": {
-          "id": {
-            "isCatchAll": false,
-            "name": "id",
-            "optional": true,
-          },
+      [
+        {
+          "isCatchAll": false,
+          "name": "id",
+          "optional": true,
         },
-      }
+      ]
     `)
   })
 
   test("path with many optional params", () => {
     expect(parseRegexpPathParams("/issue/:user/:repo/:state?/:labels?")).toMatchInlineSnapshot(`
-      {
-        "array": [
-          {
-            "isCatchAll": false,
-            "name": "user",
-            "optional": false,
-          },
-          {
-            "isCatchAll": false,
-            "name": "repo",
-            "optional": false,
-          },
-          {
-            "isCatchAll": false,
-            "name": "state",
-            "optional": true,
-          },
-          {
-            "isCatchAll": false,
-            "name": "labels",
-            "optional": true,
-          },
-        ],
-        "length": 4,
-        "map": {
-          "labels": {
-            "isCatchAll": false,
-            "name": "labels",
-            "optional": true,
-          },
-          "repo": {
-            "isCatchAll": false,
-            "name": "repo",
-            "optional": false,
-          },
-          "state": {
-            "isCatchAll": false,
-            "name": "state",
-            "optional": true,
-          },
-          "user": {
-            "isCatchAll": false,
-            "name": "user",
-            "optional": false,
-          },
+      [
+        {
+          "isCatchAll": false,
+          "name": "user",
+          "optional": false,
         },
-      }
+        {
+          "isCatchAll": false,
+          "name": "repo",
+          "optional": false,
+        },
+        {
+          "isCatchAll": false,
+          "name": "state",
+          "optional": true,
+        },
+        {
+          "isCatchAll": false,
+          "name": "labels",
+          "optional": true,
+        },
+      ]
     `)
   })
 
   test("catch all path", () => {
     expect(parseRegexpPathParams("/:path{.+}?")).toMatchInlineSnapshot(`
-      {
-        "array": [
-          {
-            "isCatchAll": true,
-            "name": "path",
-            "optional": true,
-          },
-        ],
-        "length": 1,
-        "map": {
-          "path": {
-            "isCatchAll": true,
-            "name": "path",
-            "optional": true,
-          },
+      [
+        {
+          "isCatchAll": true,
+          "name": "path",
+          "optional": true,
         },
-      }
-    `)
-  })
-
-  test("catch all path via `*`", () => {
-    expect(parseRegexpPathParams("*")).toMatchInlineSnapshot(`
-      {
-        "array": [
-          {
-            "isCatchAll": true,
-            "name": "__catchAll__",
-            "optional": false,
-          },
-        ],
-        "length": 1,
-        "map": {
-          "__catchAll__": {
-            "isCatchAll": true,
-            "name": "__catchAll__",
-            "optional": false,
-          },
-        },
-      }
+      ]
     `)
   })
 
@@ -396,43 +262,23 @@ describe("test `parseRegexpPathParams()`", () => {
         excludeNames: ["state", "routeParams"],
       }),
     ).toMatchInlineSnapshot(`
-      {
-        "array": [
-          {
-            "isCatchAll": false,
-            "name": "user",
-            "optional": false,
-          },
-          {
-            "isCatchAll": false,
-            "name": "repo",
-            "optional": false,
-          },
-          {
-            "isCatchAll": false,
-            "name": "labels",
-            "optional": true,
-          },
-        ],
-        "length": 3,
-        "map": {
-          "labels": {
-            "isCatchAll": false,
-            "name": "labels",
-            "optional": true,
-          },
-          "repo": {
-            "isCatchAll": false,
-            "name": "repo",
-            "optional": false,
-          },
-          "user": {
-            "isCatchAll": false,
-            "name": "user",
-            "optional": false,
-          },
+      [
+        {
+          "isCatchAll": false,
+          "name": "user",
+          "optional": false,
         },
-      }
+        {
+          "isCatchAll": false,
+          "name": "repo",
+          "optional": false,
+        },
+        {
+          "isCatchAll": false,
+          "name": "labels",
+          "optional": true,
+        },
+      ]
     `)
   })
 })

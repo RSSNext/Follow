@@ -2,6 +2,7 @@
 
 import fs from "node:fs"
 import path from "node:path"
+import { URL } from "node:url"
 
 import type {
   CustomPublishOptions,

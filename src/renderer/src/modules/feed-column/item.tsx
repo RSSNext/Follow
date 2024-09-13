@@ -2,6 +2,7 @@ import { getMainContainerElement } from "@renderer/atoms/dom"
 import { useWhoami } from "@renderer/atoms/user"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { OouiUserAnonymous } from "@renderer/components/icons/OouiUserAnonymous"
+import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import {
   Tooltip,
   TooltipContent,
@@ -22,6 +23,7 @@ import { WEB_URL } from "@shared/constants"
 import dayjs from "dayjs"
 import { memo, useCallback } from "react"
 
+import { usePresentUserProfileModal } from "../profile/hooks"
 import { UnreadNumber } from "./unread-number"
 
 interface FeedItemProps {
@@ -58,7 +60,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
 
   const { items } = useFeedActions({ feedId, view })
   const me = useWhoami()
-  const isOwned = feed && feed.ownerUserId === me?.id
+  const presentUserProfile = usePresentUserProfileModal("drawer")
 
   if (!feed) return null
 
@@ -118,17 +120,56 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
           >
             {getPreferredTitle(feed)}
           </div>
-          {isOwned && (
-            <Tooltip delayDuration={300}>
-              <TooltipTrigger asChild>
-                <i className="i-mgc-flag-1-cute-fi ml-1 shrink-0 text-base text-accent" />
-              </TooltipTrigger>
+          {feed.ownerUserId &&
+            (feed.ownerUserId === me?.id ? (
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <i className="i-mgc-certificate-cute-fi ml-1.5 shrink-0 text-[15px] text-accent" />
+                </TooltipTrigger>
 
-              <TooltipPortal>
-                <TooltipContent>This feed is owned by you</TooltipContent>
-              </TooltipPortal>
-            </Tooltip>
-          )}
+                <TooltipPortal>
+                  <TooltipContent className="px-4 py-2">
+                    <div className="flex items-center text-base font-semibold">
+                      <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-accent" />
+                      Claimed feed
+                    </div>
+                    <div>This feed is claimed by you.</div>
+                  </TooltipContent>
+                </TooltipPortal>
+              </Tooltip>
+            ) : (
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <i className="i-mgc-certificate-cute-fi ml-1.5 shrink-0 text-[15px] text-amber-500" />
+                </TooltipTrigger>
+
+                <TooltipPortal>
+                  <TooltipContent className="px-4 py-2">
+                    <div className="flex items-center text-base font-semibold">
+                      <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-amber-500" />
+                      Claimed feed
+                    </div>
+                    <div className="mt-1 flex items-center gap-1.5">
+                      <span>This feed is claimed by</span>
+                      {feed.owner ? (
+                        <Avatar
+                          className="inline-flex aspect-square size-5 rounded-full"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            presentUserProfile(feed.owner!.id)
+                          }}
+                        >
+                          <AvatarImage src={feed.owner.image || undefined} />
+                          <AvatarFallback>{feed.owner.name?.slice(0, 2)}</AvatarFallback>
+                        </Avatar>
+                      ) : (
+                        <span>its owner.</span>
+                      )}
+                    </div>
+                  </TooltipContent>
+                </TooltipPortal>
+              </Tooltip>
+            ))}
           {feed.errorAt && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>

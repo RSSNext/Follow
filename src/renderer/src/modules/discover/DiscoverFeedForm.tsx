@@ -104,7 +104,7 @@ export const DiscoverFeedForm = ({
     () =>
       z.object({
         ...Object.fromEntries(
-          keys.array.map((keyItem) => [
+          keys.map((keyItem) => [
             keyItem.name,
             keyItem.optional ? z.string().optional().nullable() : z.string().min(1),
           ]),
@@ -155,15 +155,15 @@ export const DiscoverFeedForm = ({
       } catch (err: unknown) {
         if (err instanceof MissingOptionalParamError) {
           toast.error(err.message)
-          const idx = keys.array.findIndex((item) => item.name === err.param)
+          const idx = keys.findIndex((item) => item.name === err.param)
 
-          form.setFocus(keys.array[idx === 0 ? 0 : idx - 1].name, {
+          form.setFocus(keys[idx === 0 ? 0 : idx - 1].name, {
             shouldSelect: true,
           })
         }
       }
     },
-    [dismissAll, form, keys.array, present, route.path, routePrefix],
+    [dismissAll, form, keys, present, route.path, routePrefix],
   )
 
   const formElRef = useRef<HTMLFormElement>(null)
@@ -186,7 +186,7 @@ export const DiscoverFeedForm = ({
         <PreviewUrl watch={form.watch} path={route.path} routePrefix={`rsshub://${routePrefix}`} />
       )}
       <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)} ref={formElRef}>
-        {keys.array.map((keyItem) => {
+        {keys.map((keyItem) => {
           const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
 
           const formRegister = form.register(keyItem.name)

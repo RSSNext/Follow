@@ -1,4 +1,5 @@
 import { SettingInvitations } from "@renderer/modules/settings/tabs/invitations"
+import { SettingsTitle } from "@renderer/modules/settings/title"
 import { defineSettingPageData } from "@renderer/modules/settings/utils"
 
 const iconName = "i-mgc-heart-hand-cute-re"
@@ -12,5 +13,10 @@ export const loader = defineSettingPageData({
 })
 
 export function Component() {
-  return <SettingInvitations />
+  return (
+    <>
+      <SettingsTitle />
+      <SettingInvitations />
+    </>
+  )
 }

@@ -11,7 +11,7 @@ import {
 } from "@renderer/components/ui/context-menu"
 import { KbdCombined } from "@renderer/components/ui/kbd/Kbd"
 import { HotKeyScopeMap } from "@renderer/constants"
-import { useSwitchHotKeyScope } from "@renderer/hooks/common/useSwitchHotkeyScope"
+import { useSwitchHotKeyScope } from "@renderer/hooks/common"
 import { nextFrame } from "@renderer/lib/dom"
 import type { NativeMenuItem } from "@renderer/lib/native-menu"
 import { CONTEXT_MENU_SHOW_EVENT_KEY } from "@renderer/lib/native-menu"

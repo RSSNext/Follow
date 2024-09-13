@@ -1,4 +1,5 @@
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
+import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { useIsDark } from "@renderer/hooks/common"
 import { nanoid } from "nanoid"
 import type { FC, PropsWithChildren, ReactNode } from "react"
@@ -100,6 +101,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
   const dark = useIsDark()
 
   const uiFont = useUISettingKey("uiFontFamily")
+  const reduceMotion = useReduceMotion()
 
   return (
     <root.div {...rest}>
@@ -112,6 +114,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
             [uiFont],
           )}
           id="shadow-html"
+          data-motion-reduce={reduceMotion}
           data-theme={dark ? "dark" : "light"}
           className="font-theme"
         >

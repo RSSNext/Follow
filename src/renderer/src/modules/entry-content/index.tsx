@@ -36,7 +36,7 @@ import { getPreferredTitle, useFeedById, useFeedHeaderTitle } from "@renderer/st
 import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
-import { useEffect, useLayoutEffect, useRef } from "react"
+import { memo, useEffect, useLayoutEffect, useMemo, useRef } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
@@ -137,6 +137,19 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
 
   const isPeekModal = useInPeekModal()
 
+  const contentAccessories = useMemo(
+    () => (isPeekModal ? undefined : <ContainerToc key={entryId} />),
+    [entryId, isPeekModal],
+  )
+  const stableRenderStyle = useMemo(
+    () =>
+      readerFontFamily
+        ? {
+            fontFamily: readerFontFamily,
+          }
+        : undefined,
+    [readerFontFamily],
+  )
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -162,13 +175,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
         ref={scrollerRef}
       >
         <div
-          style={
-            readerFontFamily
-              ? {
-                  fontFamily: readerFontFamily,
-                }
-              : undefined
-          }
+          style={stableRenderStyle}
           className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
           key={entry.entries.id}
         >
@@ -222,16 +229,10 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
                   {!isInReadabilityMode ? (
                     <ShadowDOM>
                       <HTML
-                        accessory={isPeekModal ? undefined : <ContainerToc key={entryId} />}
+                        accessory={contentAccessories}
                         as="article"
                         className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em]"
-                        style={
-                          readerFontFamily
-                            ? {
-                                fontFamily: readerFontFamily,
-                              }
-                            : undefined
-                        }
+                        style={stableRenderStyle}
                         renderInlineStyle={readerRenderInlineStyle}
                       >
                         {content}
@@ -245,15 +246,17 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
             </WrappedElementProvider>
 
             {!content && (
-              <div className="center mt-16">
+              <div className="center mt-16 min-w-0">
                 {isPending ? (
                   <EntryContentLoading icon={feed?.siteUrl!} />
                 ) : error ? (
-                  <div className="center flex flex-col gap-2">
+                  <div className="center flex min-w-0 flex-col gap-2">
                     <i className="i-mgc-close-cute-re text-3xl text-red-500" />
                     <span className="font-sans text-sm">Network Error</span>
 
-                    <pre>{error.message}</pre>
+                    <pre className="mt-6 w-full overflow-auto whitespace-pre-wrap break-all">
+                      {error.message}
+                    </pre>
                   </div>
                 ) : (
                   <NoContent id={entry.entries.id} url={entry.entries.url ?? ""} />
@@ -412,7 +415,7 @@ const RenderError: FallbackRender = ({ error }) => {
   )
 }
 
-const ContainerToc: FC = () => {
+const ContainerToc: FC = memo(() => {
   const wrappedElement = useWrappedElement()
   return (
     <RootPortal to={wrappedElement!}>
@@ -431,4 +434,4 @@ const ContainerToc: FC = () => {
       </div>
     </RootPortal>
   )
-}
+})

@@ -1,13 +1,10 @@
-import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
 import { getProxyUrl } from "@renderer/lib/img-proxy"
-import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { saveImageDimensionsToDb } from "@renderer/store/image/db"
 import { useForceUpdate } from "framer-motion"
 import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { memo, useMemo, useState } from "react"
-import { toast } from "sonner"
 import { useEventCallback } from "usehooks-ts"
 
 import { usePreviewMedia } from "./media/hooks"
@@ -27,7 +24,6 @@ export type MediaProps = BaseProps &
           width: number
           height: number
         }
-        disableContextMenu?: boolean
         popper?: boolean
         type: "photo"
         previewImageUrl?: string
@@ -38,7 +34,6 @@ export type MediaProps = BaseProps &
           width: number
           height: number
         }
-        disableContextMenu?: boolean
         popper?: boolean
         type: "video"
         previewImageUrl?: string
@@ -47,7 +42,6 @@ export type MediaProps = BaseProps &
 const MediaImpl: FC<MediaProps> = ({
   className,
   proxy,
-  disableContextMenu,
   popper = false,
   mediaContainerClassName,
   ...props
@@ -112,7 +106,6 @@ const MediaImpl: FC<MediaProps> = ({
             {...(rest as ImgHTMLAttributes<HTMLImageElement>)}
             onError={errorHandle}
             className={cn(
-              hidden && "hidden",
               !(props.width || props.height) && "size-full",
               "bg-gray-200 object-cover duration-200 dark:bg-neutral-800",
               popper && "cursor-zoom-in",
@@ -123,41 +116,6 @@ const MediaImpl: FC<MediaProps> = ({
             src={imgSrc}
             onLoad={handleOnLoad}
             onClick={handleClick}
-            {...(!disableContextMenu
-              ? {
-                  onContextMenu: (e) => {
-                    e.stopPropagation()
-                    e.preventDefault()
-                    props.onContextMenu?.(e)
-                    showNativeMenu(
-                      [
-                        {
-                          type: "text",
-                          label: "Open Image in New Window",
-                          click: () => {
-                            if (props.src && imgSrc && tipcClient) {
-                              window.open(props.src, "_blank")
-                            }
-                          },
-                        },
-                        {
-                          type: "text",
-                          label: "Copy Image Address",
-                          click: () => {
-                            if (props.src) {
-                              navigator.clipboard.writeText(props.src)
-                              toast("Address copied to clipboard.", {
-                                duration: 1000,
-                              })
-                            }
-                          },
-                        },
-                      ],
-                      e,
-                    )
-                  },
-                }
-              : {})}
           />
         )
       }
@@ -165,7 +123,6 @@ const MediaImpl: FC<MediaProps> = ({
         return (
           <span
             className={cn(
-              hidden && "hidden",
               "center",
               !(props.width || props.height) && "size-full",
               "relative bg-stone-100 object-cover",
@@ -182,11 +139,9 @@ const MediaImpl: FC<MediaProps> = ({
       }
     }
   }, [
-    disableContextMenu,
     errorHandle,
     handleClick,
     handleOnLoad,
-    hidden,
     imgSrc,
     mediaContainerClassName,
     mediaLoadState,
@@ -203,7 +158,10 @@ const MediaImpl: FC<MediaProps> = ({
     return <FallbackMedia {...props} />
   }
   return (
-    <span className={cn("block overflow-hidden rounded", className)} style={style}>
+    <span
+      className={cn("block overflow-hidden rounded", hidden && "hidden", className)}
+      style={style}
+    >
       {InnerContent}
     </span>
   )

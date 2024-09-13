@@ -4603,6 +4603,15 @@ declare const _routes: hono_hono_base.HonoBase<
               errorMessage: string | null
               errorAt: string | null
               ownerUserId: string | null
+              owner: {
+                name: string | null
+                id: string
+                email: string
+                emailVerified: string | null
+                image: string | null
+                handle: string | null
+                createdAt: string
+              } | null
             }
             isPrivate: boolean
           }[]

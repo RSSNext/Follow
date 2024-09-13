@@ -3,7 +3,6 @@ import { COPY_MAP } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { stopPropagation } from "@renderer/lib/dom"
 import { replaceImgUrlIfNeed } from "@renderer/lib/img-proxy"
-import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { FC } from "react"
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
@@ -84,38 +83,6 @@ export const PreviewMediaContent: FC<{
 }> = ({ media, initialIndex = 0 }) => {
   const [currentMedia, setCurrentMedia] = useState(media[initialIndex])
   const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex)
-
-  const handleContextMenu = useCallback((image: string, e: React.MouseEvent<HTMLImageElement>) => {
-    if (!window.electron) return
-
-    showNativeMenu(
-      [
-        {
-          label: COPY_MAP.OpenInBrowser(),
-          type: "text",
-          click: () => {
-            window.open(image)
-          },
-        },
-        {
-          label: "Copy image address",
-          type: "text",
-          click: () => {
-            navigator.clipboard.writeText(image)
-          },
-        },
-        {
-          label: "Save image as...",
-          type: "text",
-          click: () => {
-            tipcClient?.download(image)
-          },
-        },
-      ],
-      e,
-    )
-  }, [])
-
   const swiperRef = useRef<SwiperRef>(null)
   // This only to delay show
   const [showActions, setShowActions] = useState(false)
@@ -148,7 +115,6 @@ export const PreviewMediaContent: FC<{
             className="size-full object-contain"
             alt="cover"
             src={src}
-            onContextMenu={(e) => handleContextMenu(src, e)}
           />
         )}
       </Wrapper>
@@ -240,7 +206,6 @@ export const PreviewMediaContent: FC<{
             ) : (
               <FallbackableImage
                 fallbackUrl={med.fallbackUrl}
-                onContextMenu={(e) => handleContextMenu(med.url, e)}
                 className="size-full object-contain"
                 alt="cover"
                 src={med.url}
@@ -300,7 +265,7 @@ const FallbackableImage: FC<
   return (
     <div className="flex size-full flex-col">
       {isLoading && !isAllError && (
-        <div className="center absolute size-full">
+        <div className="center absolute inset-0 size-full">
           <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
         </div>
       )}
@@ -335,7 +300,7 @@ const FallbackableImage: FC<
       )}
 
       {currentState === "fallback" && (
-        <div className="mt-4 text-xs">
+        <div className="mt-4 text-center text-xs">
           <span>
             This image is preview in low quality, because the original image is not available.
           </span>

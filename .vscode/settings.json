@@ -59,6 +59,15 @@
   "editor.foldingImportsByDefault": true,
   "commentTranslate.hover.enabled": false,
   "typescript.tsdk": "node_modules/typescript/lib",
-  "i18n-ally.localesPaths": ["locales"],
-  "i18n-ally.keystyle": "nested"
+  "i18n-ally.enabledFrameworks": ["i18next"],
+  "i18n-ally.displayLanguage": "en",
+  "i18n-ally.localesPaths": [
+    // "locales/app",
+    // "locales/lang",
+    // "locales/common",
+    "locales/**/*"
+  ]
+  // "i18n-ally.namespace": true,
+  // "i18n-ally.pathMatcher": "{namespace}/{locale}.json",
+  // "i18n-ally.defaultNamespace": "app",
 }

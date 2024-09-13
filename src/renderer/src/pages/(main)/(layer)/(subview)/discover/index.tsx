@@ -3,6 +3,7 @@ import { DiscoverForm } from "@renderer/modules/discover/form"
 import { DiscoverImport } from "@renderer/modules/discover/import"
 import { Recommendations } from "@renderer/modules/discover/recommendations"
 import { DiscoverRSS3 } from "@renderer/modules/discover/rss3-form"
+import { DiscoverUser } from "@renderer/modules/discover/user-form"
 import { createElement } from "react"
 import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
@@ -27,6 +28,10 @@ const tabs = [
     value: "rss3",
   },
   {
+    name: "User",
+    value: "user",
+  },
+  {
     name: "Email",
     value: "email",
     disabled: true,
@@ -41,6 +46,7 @@ export function Component() {
   const [search, setSearch] = useSearchParams()
   const { t } = useTranslation()
   useSubViewTitle("Discover")
+
   return (
     <>
       <div className="text-2xl font-bold">{t("words.discover")}</div>
@@ -78,4 +84,5 @@ export function Component() {
 const TabComponent = {
   import: DiscoverImport,
   rss3: DiscoverRSS3,
+  user: DiscoverUser,
 }

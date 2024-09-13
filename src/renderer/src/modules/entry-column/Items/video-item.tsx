@@ -94,7 +94,6 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
                 width: 640,
                 height: 360,
               }}
-              disableContextMenu
             />
           ) : (
             <div className="center aspect-video w-full flex-col gap-1 bg-muted text-xs text-muted-foreground">

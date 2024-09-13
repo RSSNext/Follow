@@ -16,6 +16,7 @@
     "composite": true,
     "types": ["electron-vite/node"],
     "moduleResolution": "Bundler",
+    "noImplicitReturns": false,
     "baseUrl": ".",
     "paths": {
       "@shared/*": ["src/shared/src/*"],

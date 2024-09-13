@@ -1,15 +1,21 @@
+import { env } from "@env"
 import { AudioPlayer, useAudioPlayerAtomSelector } from "@renderer/atoms/player"
 import { FeedIcon } from "@renderer/components/feed-icon"
+import { FollowIcon } from "@renderer/components/icons/follow"
+import { Button } from "@renderer/components/ui/button"
 import { RelativeTime } from "@renderer/components/ui/datetime"
 import { Media } from "@renderer/components/ui/media"
+import { useModalStack } from "@renderer/components/ui/modal"
 import { FEED_COLLECTION_LIST } from "@renderer/constants"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import { cn, isSafari } from "@renderer/lib/utils"
+import { FeedForm } from "@renderer/modules/discover/feed-form"
 import { EntryTranslation } from "@renderer/modules/entry-column/translation"
 import { Queries } from "@renderer/queries"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { getPreferredTitle, useFeedById } from "@renderer/store/feed"
+import { useSubscriptionStore } from "@renderer/store/subscription"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
@@ -22,9 +28,11 @@ export function ListItem({
   translation,
   withDetails,
   withAudio,
+  withFollow,
 }: UniversalItemProps & {
   withDetails?: boolean
   withAudio?: boolean
+  withFollow?: boolean
 }) {
   const entry = useEntry(entryId) || entryPreview
 
@@ -41,6 +49,13 @@ export function ListItem({
     300,
     { leading: false },
   )
+
+  const isSubscription = withFollow && entry?.entries.url?.startsWith(`${env.VITE_WEB_URL}/feed/`)
+  const feedId = isSubscription
+    ? entry?.entries.url?.replace(`${env.VITE_WEB_URL}/feed/`, "")
+    : undefined
+  const isFollowed = !!useSubscriptionStore((state) => feedId && state.data[feedId])
+  const { present } = useModalStack()
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
@@ -88,10 +103,7 @@ export function ListItem({
             <EntryTranslation
               useOverlay
               side="top"
-              className={cn(
-                envIsSafari ? "line-clamp-2 break-all" : undefined,
-                asRead ? "text-zinc-400 dark:text-neutral-500" : undefined,
-              )}
+              className={envIsSafari ? "line-clamp-2 break-all" : undefined}
               source={entry.entries.title}
               target={translation?.title}
             />
@@ -124,6 +136,27 @@ export function ListItem({
           </div>
         )}
       </div>
+
+      {feedId && !isFollowed && (
+        <Button
+          onClick={(e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            present({
+              title: `${APP_NAME}`,
+              clickOutsideToDismiss: true,
+              content: ({ dismiss }) => <FeedForm asWidget id={feedId} onSuccess={dismiss} />,
+            })
+          }}
+          variant="outline"
+          className="h-8"
+        >
+          <>
+            <FollowIcon className="mr-1 size-3" />
+            {APP_NAME}
+          </>
+        </Button>
+      )}
 
       {withAudio && entry.entries?.attachments?.[0].url && (
         <AudioCover

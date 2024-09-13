@@ -17,6 +17,7 @@ export function Component() {
   return (
     <>
       <SettingsTitle />
+
       <div className="mt-4 space-y-6">
         {Object.keys(shortcuts).map((type) => (
           <section key={type}>

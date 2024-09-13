@@ -1,77 +1,41 @@
-import { getGeneralSettings } from "@renderer/atoms/settings/general"
 import { EventBus } from "@renderer/lib/event-bus"
+import dayjs from "dayjs"
 import i18next from "i18next"
+import LanguageDetector from "i18next-browser-languagedetector"
+import { atom } from "jotai"
 import { initReactI18next } from "react-i18next"
 
-import { currentSupportedLanguages } from "./@types/constants"
 import { defaultResources } from "./@types/default-resource"
+import { jotaiStore } from "./lib/jotai"
 
-export const defaultNS = "translation"
+export const i18nAtom = atom(i18next)
 
-const loadingLangLock = new Set<string>()
+export const defaultNS = "app"
+
 export const fallbackLanguage = "en"
 export const initI18n = async () => {
-  await i18next.use(initReactI18next).init({
-    lng: "en",
-    fallbackLng: fallbackLanguage,
-    defaultNS,
-    debug: import.meta.env.DEV,
-    resources: defaultResources,
-  })
+  const i18next = jotaiStore.get(i18nAtom)
+  await i18next
+    .use(initReactI18next)
+    .use(LanguageDetector)
+    .init({
+      lng: "en",
 
-  i18next.on("languageChanged", async (lang) => {
-    if (loadingLangLock.has(lang)) return
-    const isSupport = currentSupportedLanguages.includes(lang)
-    if (!isSupport) {
-      return
-    }
-    const loaded = i18next.getResourceBundle(lang, defaultNS)
+      fallbackLng: fallbackLanguage,
+      defaultNS,
+      debug: import.meta.env.DEV,
+      resources: defaultResources,
+    })
 
-    if (loaded) return
-
-    loadingLangLock.add(lang)
-
-    const rootGlobbyMap = import.meta.glob("../../../locales/*.json")
-    const nsGlobbyMap = import.meta.glob("../../../locales/namespaces/*/*.json")
-
-    const rootResources = await rootGlobbyMap[`../../../locales/${lang}.json`]().then(
-      (m: any) => m.default,
-    )
-
-    i18next.addResourceBundle(lang, defaultNS, rootResources, true, true)
-
-    const namespaces = Object.keys(defaultResources.en)
-
-    await Promise.all(
-      namespaces.map(async (ns) => {
-        if (ns === defaultNS) return
-
-        const loader = nsGlobbyMap[`../../../locales/namespaces/${ns}/${lang}.json`]
-
-        if (!loader) return
-        const nsResources = await loader().then((m: any) => m.default)
-
-        i18next.addResourceBundle(lang, ns, nsResources, true, true)
-      }),
-    )
-
-    await i18next.reloadResources()
-    await i18next.changeLanguage(lang)
-    loadingLangLock.delete(lang)
-    EventBus.dispatch("I18N_UPDATE", "")
-  })
-
-  const { language } = getGeneralSettings()
-
-  i18next.changeLanguage(language)
+  dayjs.locale("en")
 }
 
 if (import.meta.hot) {
   import.meta.hot.on("i18n-update", ({ file, content }: { file: string; content: string }) => {
     const resources = JSON.parse(content)
-
+    const i18next = jotaiStore.get(i18nAtom)
     // `file` is absolute path e.g. /Users/innei/git/follow/locales/en.json
-    // Absolute path e.g. /Users/innei/git/follow/locales/namespaces/<module-name>/en.json
+    // Absolute path e.g. /Users/innei/git/follow/locales/<module-name>/en.json
 
     // 1. parse root language
     if (!file.includes("locales/namespaces")) {
