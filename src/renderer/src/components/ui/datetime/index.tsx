@@ -1,7 +1,9 @@
+import { useGeneralSettingSelector } from "@renderer/atoms/settings/general"
 import { stopPropagation } from "@renderer/lib/dom"
 import dayjs from "dayjs"
 import type { FC } from "react"
 import { useEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../tooltip"
 
@@ -84,6 +86,9 @@ export const RelativeTime: FC<{
 }
 
 export const RelativeDay = ({ date }: { date: Date }) => {
+  const { t } = useTranslation("common")
+  const language = useGeneralSettingSelector((s) => s.language)
+
   const formatDateString = (date: Date) => {
     const now = new Date()
 
@@ -95,11 +100,11 @@ export const RelativeDay = ({ date }: { date: Date }) => {
     const diffDays = diffTime / (1000 * 3600 * 24)
 
     if (diffDays === 0) {
-      return "Today"
+      return t("time.today")
     } else if (diffDays === 1) {
-      return "Yesterday"
+      return t("time.yesterday")
     } else {
-      return date.toLocaleDateString("en-US", {
+      return date.toLocaleDateString(new Intl.Locale(language), {
         weekday: "long",
         month: "short",
         day: "numeric",
@@ -121,7 +126,7 @@ export const RelativeDay = ({ date }: { date: Date }) => {
     return () => {
       clearTimeout(timerRef.current)
     }
-  }, [date])
+  }, [date, language])
 
   const formated = dayjs(date).format(formatTemplateString)
   if (formated === dateString) {
