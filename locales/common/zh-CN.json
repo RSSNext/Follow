@@ -7,5 +7,9 @@
   "time.today": "今天",
   "time.yesterday": "昨天",
   "tips.load-lng-error": "加载语言包失败",
+  "words.copy": "复制",
+  "words.entry": "条目",
+  "words.id": "ID",
+  "words.space": "",
   "words.which.all": "全部"
 }

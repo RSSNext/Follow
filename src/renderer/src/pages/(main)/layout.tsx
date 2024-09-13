@@ -29,33 +29,38 @@ import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
 import React, { useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
+import { useTranslation } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
-const FooterInfo = () => (
-  <div className="relative">
-    {APP_VERSION?.[0] === "0" && (
-      <div className="pointer-events-none !mt-0 w-full py-3 text-center text-xs opacity-20">
-        Early Access {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
-      </div>
-    )}
+const FooterInfo = () => {
+  const { t } = useTranslation()
+  return (
+    <div className="relative">
+      {APP_VERSION?.[0] === "0" && (
+        <div className="pointer-events-none !mt-0 w-full py-3 text-center text-xs opacity-20">
+          {t("early_access")}{" "}
+          {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
+        </div>
+      )}
 
-    {!ELECTRON && (
-      <div className="center absolute inset-y-0 right-2">
-        <button
-          type="button"
-          aria-label="Download Desktop App"
-          onClick={() => {
-            window.open(`${repository.url}/releases`)
-          }}
-          className="center cursor-pointer rounded-full border bg-background p-1.5 shadow-sm"
-        >
-          <i className="i-mgc-download-2-cute-re size-3.5 opacity-80" />
-        </button>
-      </div>
-    )}
-  </div>
-)
+      {!ELECTRON && (
+        <div className="center absolute inset-y-0 right-2">
+          <button
+            type="button"
+            aria-label="Download Desktop App"
+            onClick={() => {
+              window.open(`${repository.url}/releases`)
+            }}
+            className="center cursor-pointer rounded-full border bg-background p-1.5 shadow-sm"
+          >
+            <i className="i-mgc-download-2-cute-re size-3.5 opacity-80" />
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
 
 const errorTypes = [
   ErrorComponentType.Page,

@@ -48,7 +48,8 @@ export const EntryListHeader: FC<{
         </EllipsisHorizontalTextWithTooltip>
       </div>
       <div className="text-xs font-medium text-zinc-400">
-        {totalCount || 0} {unreadOnly && !isInCollectionList ? t("words.unread") : ""}{" "}
+        {totalCount || 0} {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
+        {t("words.space", { ns: "common" })}
         {t("words.items")}
       </div>
     </div>

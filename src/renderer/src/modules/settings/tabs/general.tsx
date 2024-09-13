@@ -1,3 +1,4 @@
+import { currentSupportedLanguages } from "@renderer/@types/constants"
 import {
   setGeneralSetting,
   useGeneralSettingSelector,
@@ -18,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
-import { currentSupportedLanguages, fallbackLanguage } from "@renderer/i18n"
+import { fallbackLanguage } from "@renderer/i18n"
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"

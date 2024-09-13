@@ -3,18 +3,17 @@ import i18next from "i18next"
 import { atom } from "jotai"
 import { initReactI18next } from "react-i18next"
 
+import { defaultNS, ns } from "./@types/constants"
 import { defaultResources } from "./@types/default-resource"
 import { jotaiStore } from "./lib/jotai"
 
 export const i18nAtom = atom(i18next)
 
-export const defaultNS = "app"
-
 export const fallbackLanguage = "en"
 export const initI18n = async () => {
   const i18next = jotaiStore.get(i18nAtom)
   await i18next.use(initReactI18next).init({
-    ns: ["app", "common", "lang", "settings", "shortcuts"],
+    ns,
     lng: "en",
     fallbackLng: fallbackLanguage,
     defaultNS,
@@ -61,7 +60,3 @@ declare module "@renderer/lib/event-bus" {
     I18N_UPDATE: string
   }
 }
-
-export { currentSupportedLanguages } from "./@types/constants"
-
-window["i18next"] = i18next

@@ -7,5 +7,9 @@
   "time.today": "Today",
   "time.yesterday": "Yesterday",
   "tips.load-lng-error": "Failed to load language pack",
+  "words.copy": "Copy",
+  "words.entry": "Entry",
+  "words.id": "ID",
+  "words.space": " ",
   "words.which.all": "All"
 }

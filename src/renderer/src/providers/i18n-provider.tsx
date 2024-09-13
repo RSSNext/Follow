@@ -1,7 +1,11 @@
-import { dayjsLocaleImportMap } from "@renderer/@types/constants"
+import {
+  currentSupportedLanguages,
+  dayjsLocaleImportMap,
+  defaultNS,
+} from "@renderer/@types/constants"
 import { defaultResources } from "@renderer/@types/default-resource"
 import { getGeneralSettings } from "@renderer/atoms/settings/general"
-import { currentSupportedLanguages, defaultNS, i18nAtom } from "@renderer/i18n"
+import { i18nAtom } from "@renderer/i18n"
 import { EventBus } from "@renderer/lib/event-bus"
 import { jotaiStore } from "@renderer/lib/jotai"
 import dayjs from "dayjs"

@@ -1,6 +1,9 @@
 import type { FC, PropsWithChildren } from "react"
 import type { useTranslation } from "react-i18next"
-
+// eslint-disable-next-line react-hooks/rules-of-hooks, unused-imports/no-unused-vars
+const { t } = useTranslation()
+// eslint-disable-next-line react-hooks/rules-of-hooks, unused-imports/no-unused-vars
+const { t: settingsT } = useTranslation("settings")
 declare global {
   export type Component<P = object> = FC<ComponentType & P>
 
@@ -27,11 +30,6 @@ declare global {
   export const FEATURES: {
     WINDOW_UNDER_BLUR: boolean
   }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { t } = useTranslation()
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { t: settingsT } = useTranslation("settings")
 
   /**
    * This function is a macro, will replace in the build stage.
