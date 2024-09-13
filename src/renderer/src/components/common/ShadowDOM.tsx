@@ -109,7 +109,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
         <div
           style={useMemo(
             () => ({
-              fontFamily: uiFont,
+              fontFamily: `${uiFont},"SN Pro", system-ui, sans-serif`,
             }),
             [uiFont],
           )}
