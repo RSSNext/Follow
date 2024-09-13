@@ -26,6 +26,7 @@ import type { FC } from "react"
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from "react"
 import type { UseFormReturn } from "react-hook-form"
 import { useForm } from "react-hook-form"
+import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -40,36 +41,40 @@ const FeedMaintainers = ({ maintainers }: { maintainers?: string[] }) => {
 
   return (
     <div className="mb-2 flex flex-col gap-x-1 text-sm text-theme-foreground/80">
-      <span>This feed is provided by RSSHub, with credit to</span>
-      <span className="inline-flex flex-wrap items-center gap-2">
-        {maintainers.map((maintainer) => (
-          <a
-            href={`https://github.com/${maintainer}`}
-            key={maintainer}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="inline-flex cursor-pointer items-center text-theme-foreground/50 duration-200 hover:text-accent"
-          >
-            @{maintainer}
-            <i className="i-mgc-external-link-cute-re ml-0.5" />
-          </a>
-        ))}
-      </span>
+      <Trans
+        i18nKey="discover.feed_maintainers"
+        components={{
+          maintainers: (
+            <span className="inline-flex flex-wrap items-center gap-2">
+              {maintainers.map((maintainer) => (
+                <a
+                  href={`https://github.com/${maintainer}`}
+                  key={maintainer}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex cursor-pointer items-center text-theme-foreground/50 duration-200 hover:text-accent"
+                >
+                  @{maintainer}
+                  <i className="i-mgc-external-link-cute-re ml-0.5" />
+                </a>
+              ))}
+            </span>
+          ),
+        }}
+      />
     </div>
   )
 }
 
 const FeedDescription = ({ description }: { description?: string }) => {
+  const { t } = useTranslation()
   if (!description) {
     return null
   }
 
   return (
     <>
-      <p>
-        The description of this feed is as follows, and you can fill out the parameter form with the
-        relevant information.
-      </p>
+      <p>{t("discover.feed_description")}</p>
       <Markdown className="my-4 w-full max-w-full cursor-text select-text break-all">
         {description}
       </Markdown>
@@ -88,6 +93,7 @@ export const DiscoverFeedForm = ({
   noDescription?: boolean
   submitButtonClassName?: string
 }) => {
+  const { t } = useTranslation()
   const keys = useMemo(
     () =>
       parseRegexpPathParams(route.path, {
@@ -207,13 +213,13 @@ export const DiscoverFeedForm = ({
                 >
                   {/* Select focused ref on `SelectTrigger` or `Select` */}
                   <SelectTrigger ref={formRegister.ref}>
-                    <SelectValue placeholder="Select" />
+                    <SelectValue placeholder={t("discover.select_placeholder")} />
                   </SelectTrigger>
                   <SelectContent>
                     {parameters.options.map((option) => (
                       <SelectItem key={option.value} value={option.value || ""}>
                         {option.label}
-                        {parameters.default === option.value && " (default)"}
+                        {parameters.default === option.value && t("discover.default_option")}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -246,7 +252,7 @@ export const DiscoverFeedForm = ({
             submitButtonClassName,
           )}
         >
-          <Button type="submit">Preview</Button>
+          <Button type="submit">{t("discover.preview")}</Button>
         </div>
       </form>
     </Form>

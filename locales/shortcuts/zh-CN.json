@@ -7,6 +7,7 @@
   "keys.entries.toggleUnreadOnly": "切换仅未读",
   "keys.entry.copyLink": "复制链接",
   "keys.entry.openInBrowser": "在浏览器中打开",
+  "keys.entry.openInNewTab": "在新的标签页中打开",
   "keys.entry.scrollDown": "向下滚动",
   "keys.entry.scrollUp": "向上滚动",
   "keys.entry.share": "分享",

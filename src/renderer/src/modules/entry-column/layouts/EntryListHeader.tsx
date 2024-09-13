@@ -48,9 +48,10 @@ export const EntryListHeader: FC<{
         </EllipsisHorizontalTextWithTooltip>
       </div>
       <div className="text-xs font-medium text-zinc-400">
-        {totalCount || 0} {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
+        {totalCount || 0} {t("quantifier.piece", { ns: "common" })}
+        {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
         {t("words.space", { ns: "common" })}
-        {t("words.items")}
+        {t("words.items", { ns: "common", count: totalCount })}
       </div>
     </div>
   )
@@ -68,7 +69,10 @@ export const EntryListHeader: FC<{
   return (
     <div
       ref={containerRef}
-      className={cn("mb-2 flex w-full flex-col pr-4 pt-2.5", titleStyleBasedView[view])}
+      className={cn(
+        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-200",
+        titleStyleBasedView[view],
+      )}
     >
       <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
         {!titleAtBottom && titleInfo}
