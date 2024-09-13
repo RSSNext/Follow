@@ -1,8 +1,7 @@
 import { getMainContainerElement } from "@renderer/atoms/dom"
-import { useWhoami } from "@renderer/atoms/user"
+import { FeedCertification } from "@renderer/components/feed-certification"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { OouiUserAnonymous } from "@renderer/components/icons/OouiUserAnonymous"
-import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import {
   Tooltip,
   TooltipContent,
@@ -24,7 +23,6 @@ import dayjs from "dayjs"
 import { memo, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 
-import { usePresentUserProfileModal } from "../profile/hooks"
 import { UnreadNumber } from "./unread-number"
 
 interface FeedItemProps {
@@ -61,8 +59,6 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
   const feed = useFeedById(feedId)
 
   const { items } = useFeedActions({ feedId, view })
-  const me = useWhoami()
-  const presentUserProfile = usePresentUserProfileModal("drawer")
 
   if (!feed) return null
 
@@ -122,56 +118,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
           >
             {getPreferredTitle(feed)}
           </div>
-          {feed.ownerUserId &&
-            (feed.ownerUserId === me?.id ? (
-              <Tooltip delayDuration={300}>
-                <TooltipTrigger asChild>
-                  <i className="i-mgc-certificate-cute-fi ml-1.5 shrink-0 text-[15px] text-accent" />
-                </TooltipTrigger>
-
-                <TooltipPortal>
-                  <TooltipContent className="px-4 py-2">
-                    <div className="flex items-center text-base font-semibold">
-                      <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-accent" />
-                      {t("feed_item.claimed_feed")}
-                    </div>
-                    <div>{t("feed_item.claimed_by_you")}</div>
-                  </TooltipContent>
-                </TooltipPortal>
-              </Tooltip>
-            ) : (
-              <Tooltip delayDuration={300}>
-                <TooltipTrigger asChild>
-                  <i className="i-mgc-certificate-cute-fi ml-1.5 shrink-0 text-[15px] text-amber-500" />
-                </TooltipTrigger>
-
-                <TooltipPortal>
-                  <TooltipContent className="px-4 py-2">
-                    <div className="flex items-center text-base font-semibold">
-                      <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-amber-500" />
-                      {t("feed_item.claimed_feed")}
-                    </div>
-                    <div className="mt-1 flex items-center gap-1.5">
-                      <span>{t("feed_item.claimed_by_owner")}</span>
-                      {feed.owner ? (
-                        <Avatar
-                          className="inline-flex aspect-square size-5 rounded-full"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            presentUserProfile(feed.owner!.id)
-                          }}
-                        >
-                          <AvatarImage src={feed.owner.image || undefined} />
-                          <AvatarFallback>{feed.owner.name?.slice(0, 2)}</AvatarFallback>
-                        </Avatar>
-                      ) : (
-                        <span>{t("feed_item.claimed_by_unknown")}</span>
-                      )}
-                    </div>
-                  </TooltipContent>
-                </TooltipPortal>
-              </Tooltip>
-            ))}
+          <FeedCertification feed={feed} className="text-[15px]" />
           {feed.errorAt && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
