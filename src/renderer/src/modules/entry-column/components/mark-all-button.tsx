@@ -65,12 +65,12 @@ export const MarkAllReadWithOverlay = forwardRef<
             <span className="center gap-[calc(0.5rem+2px)]">
               <i className="i-mgc-check-circle-cute-re" />
               <span className="text-sm font-bold">
-                {/* should be fixed by using `as const` but it's not working */}
-                {/* @ts-expect-error https://www.i18next.com/overview/typescript#type-error-template-literal */}
                 <Trans
                   i18nKey="mark_all_read_button.mark_as_read"
+                  // should be fixed by using `as const` but it's not working
+                  // @ts-expect-error https://www.i18next.com/overview/typescript#type-error-template-literal
                   values={{ which: commonT(`words.which.${which}`) }}
-                 />
+                />
               </span>
             </span>
             <div className="space-x-4">
@@ -137,7 +137,7 @@ export const MarkAllReadWithOverlay = forwardRef<
                 // should be fixed by using `as const` but it's not working
                 which: commonT(`words.which.${which}`),
               }}
-             />
+            />
             {shortcut && (
               <div className="ml-1">
                 <KbdCombined className="text-foreground/80">
@@ -214,7 +214,7 @@ export const MarkAllReadPopover = forwardRef<HTMLButtonElement, MarkAllButtonPro
                   // should be fixed by using `as const` but it's not working
                   which: commonT(`words.which.${which}`),
                 }}
-               />
+              />
             </div>
             <div className="space-x-4">
               <IconButton
@@ -282,7 +282,7 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
             // should be fixed by using `as const` but it's not working
             which: commonT(`words.which.${which}`),
           }}
-         />
+        />
       </span>
       <span
         className={cn(

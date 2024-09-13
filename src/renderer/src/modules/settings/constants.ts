@@ -4,7 +4,7 @@ function getSettings() {
   const map = import.meta.glob("../../pages/settings/\\(settings\\)/*", { eager: true })
 
   const settings = [] as {
-    name: I18nKeys
+    name: I18nKeysForSettings
     iconName: string
     path: string
     Component: () => JSX.Element
