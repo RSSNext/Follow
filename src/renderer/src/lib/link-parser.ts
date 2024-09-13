@@ -1,3 +1,5 @@
+import { parseSafeUrl } from "@renderer/components/ui/platform-icon/utils"
+
 const GITHUB_HOST = "github.com"
 
 export type LinkParserOptions = {
@@ -6,13 +8,6 @@ export type LinkParserOptions = {
   icon: string
 }
 
-export const parseSafeUrl = (url: string) => {
-  try {
-    return new URL(url)
-  } catch {
-    return null
-  }
-}
 const defineLinkParser = (options: LinkParserOptions) => {
   const define = (url: URL | string) => {
     const safeUrl = typeof url === "string" ? parseSafeUrl(url) : url

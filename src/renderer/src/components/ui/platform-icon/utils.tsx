@@ -19,7 +19,7 @@ export const getSupportedPlatformIconName = (url: string) => {
   )
 }
 
-const parseSafeUrl = (url: string) => {
+export const parseSafeUrl = (url: string) => {
   try {
     return new URL(url)
   } catch {
