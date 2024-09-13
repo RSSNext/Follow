@@ -48,6 +48,14 @@ import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
 import { EntryContentProvider } from "./provider"
 
+const safeUrl = (url: string, baseUrl: string) => {
+  try {
+    return new URL(url, baseUrl).href
+  } catch {
+    return url
+  }
+}
+
 export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   const title = useFeedHeaderTitle()
   const { feedId, view } = useRouteParms()
@@ -150,6 +158,17 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
         : undefined,
     [readerFontFamily],
   )
+
+  const populatedFullHref = useMemo(() => {
+    const href = entry?.entries.url
+    if (!href) return "#"
+
+    if (href.startsWith("http")) return href
+    const feedSiteUrl = feed?.siteUrl
+    if (href.startsWith("/") && feedSiteUrl) return safeUrl(href, feedSiteUrl)
+    return href
+  }, [entry?.entries.url, feed?.siteUrl])
+
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -184,7 +203,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
             className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
           >
             <a
-              href={entry.entries.url || void 0}
+              href={populatedFullHref || void 0}
               target="_blank"
               className="-mx-6 block cursor-default rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
               rel="noreferrer"
