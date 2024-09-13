@@ -5,6 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@renderer/components/ui
 import { RootPortal } from "@renderer/components/ui/portal"
 import { HotKeyScopeMap } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
+import { useI18n } from "@renderer/hooks/common"
 import { cn } from "@renderer/lib/utils"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
@@ -235,8 +236,8 @@ export const MarkAllReadPopover = forwardRef<HTMLButtonElement, MarkAllButtonPro
 )
 
 export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
-  const { t } = useTranslation()
-  const { t: commonT } = useTranslation("common")
+  const t = useI18n()
+
   const { className, filter, which } = props
   const [status, setStatus] = useState<"initial" | "confirm" | "done">("initial")
   const handleMarkAll = useMarkAllByRoute(filter)
@@ -278,9 +279,7 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
         <Trans
           i18nKey="mark_all_read_button.mark_as_read"
           values={{
-            // @ts-expect-error https://www.i18next.com/overview/typescript#type-error-template-literal
-            // should be fixed by using `as const` but it's not working
-            which: commonT(`words.which.${which}`),
+            which: typeof which === "string" ? t.common(`words.which.${which}` as any) : which,
           }}
         />
       </span>

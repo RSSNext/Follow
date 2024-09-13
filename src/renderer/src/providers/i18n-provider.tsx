@@ -8,6 +8,7 @@ import { getGeneralSettings } from "@renderer/atoms/settings/general"
 import { i18nAtom } from "@renderer/i18n"
 import { EventBus } from "@renderer/lib/event-bus"
 import { jotaiStore } from "@renderer/lib/jotai"
+import { isEmptyObject } from "@renderer/lib/utils"
 import dayjs from "dayjs"
 import i18next from "i18next"
 import { useAtom } from "jotai"
@@ -67,8 +68,17 @@ const langChangedHandler = async (lang: string) => {
       }
     }
   } else {
-    const res = await eval(`import('/locales/${lang}.js').then((res) => res?.default || res)`)
+    const res = await eval(
+      `import('/locales/${lang}.js').then((res) => res?.default || res)`,
+    ).catch(() => {
+      toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
+      loadingLangLock.delete(lang)
+      return {}
+    })
 
+    if (isEmptyObject(res)) {
+      return
+    }
     for (const namespace in res) {
       i18next.addResourceBundle(lang, namespace, res[namespace], true, true)
     }

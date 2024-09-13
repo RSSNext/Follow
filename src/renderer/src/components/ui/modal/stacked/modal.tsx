@@ -113,7 +113,7 @@ export const ModalInternal = memo(
     })
     const animateController = useAnimationControls()
     useEffect(() => {
-      requestAnimationFrame(() => {
+      nextFrame(() => {
         animateController.start(modalMontionConfig.animate)
       })
     }, [animateController])
@@ -259,6 +259,7 @@ export const ModalInternal = memo(
                   )}
                   onPointerUp={handleDetectSelectEnd}
                   onClick={handleClickOutsideToDismiss}
+                  onFocus={stopPropagation}
                   style={zIndexStyle}
                 >
                   {DragBar}
@@ -296,6 +297,7 @@ export const ModalInternal = memo(
                   modalContainerClassName,
                   !isResizeable && "center",
                 )}
+                onFocus={stopPropagation}
                 onPointerUp={handleDetectSelectEnd}
                 onClick={handleClickOutsideToDismiss}
               >

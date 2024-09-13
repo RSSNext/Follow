@@ -10,10 +10,18 @@
   "tips.load-lng-error": "Failed to load language pack",
   "words.back": "Back",
   "words.copy": "Copy",
+  "words.edit": "Edit",
   "words.entry": "Entry",
   "words.id": "ID",
   "words.items_one": "Item",
   "words.items_other": "Items",
+  "words.local": "local",
+  "words.record": "record",
+  "words.record_one": "record",
+  "words.record_other": "records",
+  "words.result": "result",
+  "words.result_one": "result",
+  "words.result_other": "results",
   "words.space": " ",
   "words.which.all": "All"
 }

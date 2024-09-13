@@ -90,7 +90,7 @@
     "electron-updater": "^6.3.4",
     "font-list": "1.5.1",
     "foxact": "0.2.38",
-    "framer-motion": "11.0.10",
+    "framer-motion": "11.5.4",
     "franc-min": "6.2.0",
     "fuse.js": "7.0.0",
     "hast-util-to-jsx-runtime": "2.3.0",

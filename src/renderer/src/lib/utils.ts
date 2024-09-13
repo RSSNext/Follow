@@ -145,6 +145,9 @@ export const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(r
 export const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)
 
+/**
+ * @deprecated
+ */
 export const pluralize = (
   noun: string,
   count: number,

@@ -15,8 +15,9 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
 import { ROUTE_ENTRY_PENDING } from "@renderer/constants"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
+import { useI18n } from "@renderer/hooks/common"
 import type { FeedViewType } from "@renderer/lib/enum"
-import { cn, pluralize } from "@renderer/lib/utils"
+import { cn } from "@renderer/lib/utils"
 import { getFeedById } from "@renderer/store/feed"
 import { searchActions, useSearchStore } from "@renderer/store/search"
 import { SearchType } from "@renderer/store/search/constants"
@@ -28,11 +29,13 @@ import { Command } from "cmdk"
 import type { FC } from "react"
 import * as React from "react"
 import { memo, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 
 import styles from "./cmdk.module.css"
 
 const SearchCmdKContext = React.createContext<Promise<SearchInstance> | null>(null)
 export const SearchCmdK: React.FC = () => {
+  const { t } = useTranslation()
   const open = useAppSearchOpen()
 
   const [searchInstance, setSearchInstance] = React.useState(() =>
@@ -134,7 +137,7 @@ export const SearchCmdK: React.FC = () => {
         <Command.Input
           className="w-full shrink-0 border-b border-zinc-200 bg-transparent p-4 px-5 text-lg leading-4 dark:border-neutral-700"
           ref={inputRef}
-          placeholder={searchActions.getCurrentKeyword() || "Search..."}
+          placeholder={searchActions.getCurrentKeyword() || t("search.placeholder")}
           onValueChange={handleSearch}
         />
         <div className={cn(styles["status-bar"], isPending && styles["loading"])} />
@@ -150,7 +153,12 @@ export const SearchCmdK: React.FC = () => {
 
             {renderedEntries.length > 0 && (
               <Command.Group
-                heading={<SearchGroupHeading icon="i-mgc-paper-cute-fi size-4" title="Entries" />}
+                heading={
+                  <SearchGroupHeading
+                    icon="i-mgc-paper-cute-fi size-4"
+                    title={t("search.group.entries")}
+                  />
+                }
                 className="flex w-full min-w-0 flex-col py-2"
               >
                 {renderedEntries.map((entry) => {
@@ -173,7 +181,10 @@ export const SearchCmdK: React.FC = () => {
             {renderedFeeds.length > 0 && (
               <Command.Group
                 heading={
-                  <SearchGroupHeading icon="i-mgc-rss-cute-fi size-4 text-accent" title="Feeds" />
+                  <SearchGroupHeading
+                    icon="i-mgc-rss-cute-fi size-4 text-accent"
+                    title={t("search.group.feeds")}
+                  />
                 }
                 className="py-2"
               >
@@ -264,10 +275,11 @@ const SearchGroupHeading: FC<{ icon: string; title: string }> = ({ icon, title }
 const SearchResultCount: FC<{
   count?: number
 }> = ({ count }) => {
+  const t = useI18n()
   const searchInstance = React.useContext(SearchCmdKContext)
   const hasKeyword = useSearchStore((s) => !!s.keyword)
   const searchType = useSearchStore((s) => s.searchType)
-   
+
   const recordCountPromise = useMemo(async () => {
     let count = 0
     const counts = await searchInstance?.then((s) => s.counts)
@@ -290,35 +302,37 @@ const SearchResultCount: FC<{
         <small className="center absolute bottom-3 right-3 shrink-0 gap-1 opacity-80">
           {hasKeyword ? (
             <span>
-              {count} {pluralize("result", count || 0)}
+              {count} {t.common("words.result", { count })}
             </span>
           ) : (
             <ExPromise promise={recordCountPromise}>
               {(count) => (
                 <>
-                  {count} local {pluralize("record", count)}
+                  {count} {t.common("quantifier.piece")}
+                  {t.common("words.local")}
+                  {t.common("words.space")}
+                  {t.common("words.record", { count })}
                 </>
               )}
             </ExPromise>
           )}{" "}
-          (Local mode)
+          {t("search.result_count_local_mode")}
           <i className="i-mingcute-question-line" />
         </small>
       </TooltipTrigger>
-      <TooltipContent>
-        This search covers locally available data. Try a Refetch to include the latest data.
-      </TooltipContent>
+      <TooltipContent>{t("search.tooltip.local_search")}</TooltipContent>
     </Tooltip>
   )
 }
 const SearchOptions: Component = memo(({ children }) => {
+  const { t } = useTranslation()
   const searchType = useSearchStore((s) => s.searchType)
 
   const searchInstance = React.useContext(SearchCmdKContext)
 
   return (
     <div className="absolute bottom-2 left-4 flex items-center gap-2 text-sm text-theme-foreground/80">
-      <span className="shrink-0">Search Type</span>
+      <span className="shrink-0">{t("search.options.search_type")}</span>
 
       <Select
         onValueChange={async (value) => {
@@ -340,21 +354,21 @@ const SearchOptions: Component = memo(({ children }) => {
             value={`${SearchType.All}`}
             disabled={searchType === SearchType.All}
           >
-            All
+            {t("search.options.all")}
           </SelectItem>
           <SelectItem
             className="hover:bg-theme-item-hover"
             value={`${SearchType.Entry}`}
             disabled={searchType === SearchType.Entry}
           >
-            Entries
+            {t("search.options.entries")}
           </SelectItem>
           <SelectItem
             className="hover:bg-theme-item-hover"
             value={`${SearchType.Feed}`}
             disabled={searchType === SearchType.Feed}
           >
-            Feeds
+            {t("search.options.feeds")}
           </SelectItem>
         </SelectContent>
       </Select>
@@ -365,13 +379,14 @@ const SearchOptions: Component = memo(({ children }) => {
 })
 
 const SearchPlaceholder = () => {
+  const { t } = useTranslation()
   const hasKeyword = useSearchStore((s) => !!s.keyword)
   return (
     <Command.Empty className="center absolute inset-0">
       {hasKeyword ? (
         <div className="flex flex-col items-center justify-center gap-2 opacity-80">
           <EmptyIcon />
-          No results found.
+          {t("search.empty.no_results")}
         </div>
       ) : (
         <Logo className="size-12 opacity-80 grayscale" />

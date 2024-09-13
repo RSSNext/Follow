@@ -17,6 +17,8 @@
     "types": ["electron-vite/node"],
     "moduleResolution": "Bundler",
     "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "baseUrl": ".",
     "paths": {
       "@shared/*": ["src/shared/src/*"],
