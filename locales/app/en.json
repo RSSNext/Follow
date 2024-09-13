@@ -88,6 +88,8 @@
   "signin.continue_with_github": "Continue with GitHub",
   "signin.continue_with_google": "Continue with Google",
   "signin.sign_in_to": "Sign in to",
+  "sync_indicator.offline": "Offline",
+  "sync_indicator.synced": "Synced with server",
   "words.add": "Add",
   "words.confirm": "Confirm",
   "words.discover": "Discover",

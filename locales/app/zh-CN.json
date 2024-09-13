@@ -20,6 +20,7 @@
   "entry_content.readability_notice": "此内容由 Readability 提供。\n如果您发现排版异常，请前往来源站点查看原始内容。",
   "entry_content.render_error": "渲染错误：",
   "entry_content.report_issue": "报告问题",
+  "entry_content.web_app_notice": "Web 应用可能不支持此内容类型。但您可以下载桌面应用。",
   "entry_list_header.daily_report": "每日报告",
   "entry_list_header.items": "内容",
   "entry_list_header.new_entries_available": "有新内容",
@@ -87,6 +88,8 @@
   "signin.continue_with_github": "使用 GitHub 登录",
   "signin.continue_with_google": "使用 Google 登录",
   "signin.sign_in_to": "登录到",
+  "sync_indicator.offline": "离线",
+  "sync_indicator.synced": "已与服务器同步",
   "words.add": "添加",
   "words.confirm": "确认",
   "words.discover": "发现",
@@ -98,6 +101,6 @@
   "words.search": "搜索",
   "words.starred": "收藏",
   "words.unread": "未读",
-  "words.which_all": "全部",
+  "words.which.all": "全部",
   "words.zero_items": "没有内容"
 }

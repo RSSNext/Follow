@@ -34,20 +34,22 @@ if (import.meta.hot) {
       // Absolute path e.g. /Users/innei/git/follow/locales/<module-name>/en.json
 
       // 1. parse root language
-      if (!file.includes("locales/namespaces")) {
-        const lang = file.split("/").pop()?.replace(".json", "")
-        if (!lang) return
-        i18next.addResourceBundle(lang, defaultNS, resources, true, true)
-        i18next.reloadResources(lang, defaultNS)
-      } else {
-        const nsName = file.match(/locales\/namespaces\/(.+?)\//)?.[1]
+      // if (!file.includes("locales/namespaces")) {
+      //   const lang = file.split("/").pop()?.replace(".json", "")
+      //   if (!lang) return
+      //   i18next.addResourceBundle(lang, defaultNS, resources, true, true)
+      //   i18next.reloadResources(lang, defaultNS)
+      // } else {
+      const nsName = file.match(/locales\/(.+?)\//)?.[1]
 
-        if (!nsName) return
-        const lang = file.split("/").pop()?.replace(".json", "")
-        if (!lang) return
-        i18next.addResourceBundle(lang, nsName, resources, true, true)
-        await i18next.reloadResources(lang, nsName)
-      }
+      if (!nsName) return
+      const lang = file.split("/").pop()?.replace(".json", "")
+      if (!lang) return
+      i18next.addResourceBundle(lang, nsName, resources, true, true)
+
+      console.info("reload", lang, nsName)
+      await i18next.reloadResources(lang, nsName)
+      // }
 
       import.meta.env.DEV && EventBus.dispatch("I18N_UPDATE", "")
     },
