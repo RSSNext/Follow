@@ -19,7 +19,7 @@ function localesPlugin(): Plugin {
     name: "locales-merge",
     enforce: "post",
     generateBundle(options, bundle) {
-      const localesDir = path.resolve(__dirname, "locales")
+      const localesDir = path.resolve(__dirname, "../locales")
       const namespaces = fs.readdirSync(localesDir)
       const languageResources = {}
 
