@@ -11,6 +11,7 @@ import { prerelease } from "semver"
 import type { Plugin, UserConfig } from "vite"
 
 import { getGitHash } from "../scripts/lib"
+import i18nCompleteness from "./i18n-completeness"
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
@@ -134,6 +135,8 @@ export const viteRenderBaseConfig = {
     RELEASE_CHANNEL: JSON.stringify((prerelease(pkg.version)?.[0] as string) || "stable"),
 
     DEBUG: process.env.DEBUG === "true",
+
+    I18N_COMPLETENESS_MAP: JSON.stringify({ ...i18nCompleteness, en: 100 }),
   },
 } satisfies UserConfig
 

@@ -6,6 +6,7 @@ import { ActionButton } from "@renderer/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@renderer/components/ui/popover"
 import { ProfileButton } from "@renderer/components/user-button"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
+import { useI18n } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { m } from "framer-motion"
@@ -53,7 +54,6 @@ export const FeedColumnHeader = memo(() => {
             }}
           >
             <Logo className="mr-1 size-6" />
-
             {APP_NAME}
           </div>
         </LogoContextMenu>
@@ -80,10 +80,11 @@ const LayoutActionButton = () => {
     width: !feedColumnShow ? "auto" : 0,
   })
 
+  const t = useI18n()
   return (
     <m.div initial={animation} animate={animation} className="overflow-hidden">
       <ActionButton
-        tooltip="Toggle Sidebar"
+        tooltip={t("app.toggle_sidebar")}
         icon={
           <i
             className={cn(
@@ -103,6 +104,7 @@ const LayoutActionButton = () => {
 const LogoContextMenu: FC<PropsWithChildren> = ({ children }) => {
   const [open, setOpen] = useState(false)
   const logoRef = useRef<SVGSVGElement>(null)
+  const t = useI18n()
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -120,7 +122,7 @@ const LogoContextMenu: FC<PropsWithChildren> = ({ children }) => {
           onClick={() => {
             navigator.clipboard.writeText(logoRef.current?.outerHTML || "")
             setOpen(false)
-            toast.success("Copied to clipboard")
+            toast.success(t.common("app.copied_to_clipboard"))
           }}
           className={cn(
             "relative flex cursor-default select-none items-center rounded-sm px-1 py-0.5 text-sm outline-none",
@@ -129,7 +131,7 @@ const LogoContextMenu: FC<PropsWithChildren> = ({ children }) => {
           )}
         >
           <Logo ref={logoRef} />
-          <span>Copy Logo SVG</span>
+          <span>{t("app.copy_logo_svg")}</span>
         </button>
       </PopoverContent>
     </Popover>

@@ -1,16 +1,9 @@
-export const currentSupportedLanguages = (() => {
-  const langsFiles = import.meta.glob("../../../../locales/app/*.json")
-
-  const langs = [] as string[]
-  for (const key in langsFiles) {
-    langs.push(key.split("/").pop()?.replace(".json", "") as string)
-  }
-  return langs
-})()
+export const currentSupportedLanguages = ["en", "ja", "zh-CN"]
 
 export const dayjsLocaleImportMap = {
   en: ["en", () => import("dayjs/locale/en")],
   ["zh-CN"]: ["zh-cn", () => import("dayjs/locale/zh-cn")],
+  ["ja"]: ["ja", () => import("dayjs/locale/ja")],
 }
 
 export const ns = ["app", "common", "lang", "settings", "shortcuts"] as const

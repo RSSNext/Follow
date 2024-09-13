@@ -1,7 +1,5 @@
-import { PopoverPortal } from "@radix-ui/react-popover"
 import { ActionButton, Button, IconButton } from "@renderer/components/ui/button"
 import { Kbd, KbdCombined } from "@renderer/components/ui/kbd/Kbd"
-import { Popover, PopoverContent, PopoverTrigger } from "@renderer/components/ui/popover"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { HotKeyScopeMap } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
@@ -175,65 +173,6 @@ const ConfirmMarkAllReadInfo = ({ undo }: { undo: () => any }) => {
     </div>
   )
 }
-
-/**
- * @deprecated
- */
-export const MarkAllReadPopover = forwardRef<HTMLButtonElement, MarkAllButtonProps>(
-  ({ filter, className, which = "all", shortcut }, ref) => {
-    const [markPopoverOpen, setMarkPopoverOpen] = useState(false)
-
-    const handleMarkAllAsRead = useMarkAllByRoute(filter)
-
-    return (
-      <Popover open={markPopoverOpen} onOpenChange={setMarkPopoverOpen}>
-        <PopoverTrigger asChild>
-          <ActionButton
-            shortcut={shortcut ? shortcuts.entries.markAllAsRead.key : undefined}
-            tooltip={
-              <span>
-                Mark
-                <span> </span>
-                {which}
-                <span> </span>
-                as read
-              </span>
-            }
-            className={className}
-            ref={ref}
-          >
-            <i className="i-mgc-check-circle-cute-re" />
-          </ActionButton>
-        </PopoverTrigger>
-        <PopoverPortal>
-          <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 !py-3 [&_button]:text-xs">
-            <div className="text-sm">
-              <Trans
-                i18nKey="mark_all_read_button.mark_as_read"
-                values={{
-                  // @ts-expect-error https://www.i18next.com/overview/typescript#type-error-template-literal
-                  // should be fixed by using `as const` but it's not working
-                  which: commonT(`words.which.${which}`),
-                }}
-              />
-            </div>
-            <div className="space-x-4">
-              <IconButton
-                icon={<i className="i-mgc-check-filled" />}
-                onClick={() => {
-                  handleMarkAllAsRead()
-                  setMarkPopoverOpen(false)
-                }}
-              >
-                Confirm
-              </IconButton>
-            </div>
-          </PopoverContent>
-        </PopoverPortal>
-      </Popover>
-    )
-  },
-)
 
 export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
   const t = useI18n()

@@ -9,7 +9,7 @@
     "src/env.ts",
     "./src/hono.ts",
     "src/shared/src/global.d.ts",
-    "configs/vite.render.config.ts",
+    "configs/*",
     "./scripts/**/*"
   ],
   "compilerOptions": {
