@@ -25,7 +25,7 @@ const formSchema = z.object({
 })
 
 export function Component() {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
   const navigate = useNavigate()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,7 +57,7 @@ export function Component() {
             name="code"
             render={({ field }) => (
               <FormItem className="flex flex-col items-center gap-2 md:block">
-                <FormLabel>{t("settings:invitation.title")}</FormLabel>
+                <FormLabel>{t("invitation.title")}</FormLabel>
                 <FormControl>
                   <Input autoFocus {...field} />
                 </FormControl>
@@ -73,14 +73,14 @@ export function Component() {
               disabled={!form.formState.isValid}
               isLoading={invitationMutation.isPending}
             >
-              {t("settings:invitation.activate")}
+              {t("invitation.activate")}
             </Button>
           </div>
         </form>
       </Form>
       <div className="space-y-2 text-balance text-center text-sm text-zinc-600 md:text-left">
-        <p>{t("settings:invitation.earlyAccessMessage")}</p>
-        <p>{t("settings:invitation.getCodeMessage")}</p>
+        <p>{t("invitation.earlyAccessMessage")}</p>
+        <p>{t("invitation.getCodeMessage")}</p>
         <p>
           😰 Sorry, Follow is currently in <strong>early access</strong> and requires an invitation
           code to use.

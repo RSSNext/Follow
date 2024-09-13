@@ -49,7 +49,7 @@ type ActionsInput = {
 }[]
 
 export function Component() {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
   const actions = useAuthQuery(Queries.action.getAll())
   const [actionsData, setActionsData] = useState<ActionsInput>([])
 
@@ -76,7 +76,7 @@ export function Component() {
     },
     onSuccess: () => {
       Queries.action.getAll().invalidate()
-      toast(t("settings:actions.saveSuccess"))
+      toast(t("actions.saveSuccess"))
     },
     onError: (error) => {
       toastFetchError(error)
@@ -107,7 +107,7 @@ export function Component() {
             setActionsData([
               ...actionsData,
               {
-                name: t("settings:actions.actionName", { number: actionsData.length + 1 }),
+                name: t("actions.actionName", { number: actionsData.length + 1 }),
                 condition: [],
                 result: {},
               },
@@ -115,7 +115,7 @@ export function Component() {
           }}
         >
           <i className="i-mgc-add-cute-re" />
-          <span>{t("settings:actions.newRule")}</span>
+          <span>{t("actions.newRule")}</span>
         </Button>
         <div className="text-right">
           <Button
@@ -123,7 +123,7 @@ export function Component() {
             isLoading={mutation.isPending}
             onClick={() => mutation.mutate()}
           >
-            {t("settings:actions.save")}
+            {t("actions.save")}
           </Button>
         </div>
       </div>

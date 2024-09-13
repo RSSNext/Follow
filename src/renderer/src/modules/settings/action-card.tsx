@@ -78,14 +78,14 @@ const TransitionOptions: {
 ]
 
 const FieldTableHeader = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
   return (
     <TableHeader>
       <TableRow>
         <TableHead size="sm" />
-        <TableHead size="sm">{t("settings:actions.action_card.field")}</TableHead>
-        <TableHead size="sm">{t("settings:actions.action_card.operator")}</TableHead>
-        <TableHead size="sm">{t("settings:actions.action_card.value")}</TableHead>
+        <TableHead size="sm">{t("actions.action_card.field")}</TableHead>
+        <TableHead size="sm">{t("actions.action_card.operator")}</TableHead>
+        <TableHead size="sm">{t("actions.action_card.value")}</TableHead>
       </TableRow>
     </TableHeader>
   )
@@ -100,7 +100,7 @@ const DeleteTableCell = ({ disabled, onClick }: { disabled?: boolean; onClick?: 
 )
 
 const AddTableRow = ({ onClick }: { onClick?: () => void }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
   return (
     <Button
       variant="outline"
@@ -108,7 +108,7 @@ const AddTableRow = ({ onClick }: { onClick?: () => void }) => {
       buttonClassName="py-1"
       onClick={onClick}
     >
-      <i className="i-mgc-add-cute-re" /> {t("settings:actions.action_card.add")}
+      <i className="i-mgc-add-cute-re" /> {t("actions.action_card.add")}
     </Button>
   )
 }
@@ -122,42 +122,42 @@ const OperationTableCell = ({
   value?: ActionOperation
   onValueChange?: (value: ActionOperation) => void
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
 
   const OperationOptions = useMemo(() => {
     return [
       {
-        name: t("settings:actions.action_card.operation_options.contains"),
+        name: t("actions.action_card.operation_options.contains"),
         value: "contains",
         types: ["text"],
       },
       {
-        name: t("settings:actions.action_card.operation_options.does_not_contain"),
+        name: t("actions.action_card.operation_options.does_not_contain"),
         value: "not_contains",
         types: ["text"],
       },
       {
-        name: t("settings:actions.action_card.operation_options.is_equal_to"),
+        name: t("actions.action_card.operation_options.is_equal_to"),
         value: "eq",
         types: ["number", "text", "view"],
       },
       {
-        name: t("settings:actions.action_card.operation_options.is_not_equal_to"),
+        name: t("actions.action_card.operation_options.is_not_equal_to"),
         value: "not_eq",
         types: ["number", "text", "view"],
       },
       {
-        name: t("settings:actions.action_card.operation_options.is_greater_than"),
+        name: t("actions.action_card.operation_options.is_greater_than"),
         value: "gt",
         types: ["number"],
       },
       {
-        name: t("settings:actions.action_card.operation_options.is_less_than"),
+        name: t("actions.action_card.operation_options.is_less_than"),
         value: "lt",
         types: ["number"],
       },
       {
-        name: t("settings:actions.action_card.operation_options.matches_regex"),
+        name: t("actions.action_card.operation_options.matches_regex"),
         value: "regex",
         types: ["text"],
       },
@@ -222,32 +222,32 @@ export function ActionCard({
   data: ActionsInput[number]
   onChange: (data: ActionsInput[number] | null) => void
 }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
 
   const EntryOptions = useMemo(() => {
     return [
       {
-        name: t("settings:actions.action_card.entry_options.all"),
+        name: t("actions.action_card.entry_options.all"),
         value: "all",
       },
       {
-        name: t("settings:actions.action_card.entry_options.title"),
+        name: t("actions.action_card.entry_options.title"),
         value: "title",
       },
       {
-        name: t("settings:actions.action_card.entry_options.content"),
+        name: t("actions.action_card.entry_options.content"),
         value: "content",
       },
       {
-        name: t("settings:actions.action_card.entry_options.author"),
+        name: t("actions.action_card.entry_options.author"),
         value: "author",
       },
       {
-        name: t("settings:actions.action_card.entry_options.url"),
+        name: t("actions.action_card.entry_options.url"),
         value: "url",
       },
       {
-        name: t("settings:actions.action_card.entry_options.order"),
+        name: t("actions.action_card.entry_options.order"),
         value: "order",
         type: "number",
       },
@@ -257,24 +257,24 @@ export function ActionCard({
   const FeedOptions = useMemo(() => {
     return [
       {
-        name: t("settings:actions.action_card.feed_options.view"),
+        name: t("actions.action_card.feed_options.view"),
         value: "view",
         type: "view",
       },
       {
-        name: t("settings:actions.action_card.feed_options.title"),
+        name: t("actions.action_card.feed_options.title"),
         value: "title",
       },
       {
-        name: t("settings:actions.action_card.feed_options.category"),
+        name: t("actions.action_card.feed_options.category"),
         value: "category",
       },
       {
-        name: t("settings:actions.action_card.feed_options.site_url"),
+        name: t("actions.action_card.feed_options.site_url"),
         value: "site_url",
       },
       {
-        name: t("settings:actions.action_card.feed_options.feed_url"),
+        name: t("actions.action_card.feed_options.feed_url"),
         value: "feed_url",
       },
     ]
@@ -295,9 +295,7 @@ export function ActionCard({
               >
                 <i className="i-mgc-delete-2-cute-re text-zinc-600" />
               </Button>
-              <p className="shrink-0 font-medium text-zinc-500">
-                {t("settings:actions.action_card.name")}
-              </p>
+              <p className="shrink-0 font-medium text-zinc-500">{t("actions.action_card.name")}</p>
               <Input
                 value={data.name}
                 className="name-input hidden h-8"
@@ -315,7 +313,7 @@ export function ActionCard({
           <div className="mt-4 space-y-4 px-1">
             <div className="space-y-3">
               <p className="font-medium text-zinc-500">
-                {t("settings:actions.action_card.when_feeds_match")}
+                {t("actions.action_card.when_feeds_match")}
               </p>
               <div className="flex flex-col gap-2">
                 <RadioGroup
@@ -329,8 +327,8 @@ export function ActionCard({
                     onChange(data)
                   }}
                 >
-                  <Radio label={t("settings:actions.action_card.all")} value="all" />
-                  <Radio label={t("settings:actions.action_card.custom_filters")} value="filter" />
+                  <Radio label={t("actions.action_card.all")} value="all" />
+                  <Radio label={t("actions.action_card.custom_filters")} value="filter" />
                 </RadioGroup>
               </div>
 
@@ -411,13 +409,11 @@ export function ActionCard({
               )}
             </div>
             <div className="space-y-4">
-              <p className="font-medium text-zinc-500">
-                {t("settings:actions.action_card.then_do")}
-              </p>
+              <p className="font-medium text-zinc-500">{t("actions.action_card.then_do")}</p>
               <div className="w-full space-y-4">
                 <div className="flex w-full items-center justify-between">
                   <span className="w-0 shrink grow truncate">
-                    {t("settings:actions.action_card.generate_summary")}
+                    {t("actions.action_card.generate_summary")}
                   </span>
                   <Switch
                     checked={data.result.summary}
@@ -431,7 +427,7 @@ export function ActionCard({
 
                 <div className="flex w-full items-center justify-between">
                   <span className="w-0 shrink grow truncate">
-                    {t("settings:actions.action_card.translate_into")}
+                    {t("actions.action_card.translate_into")}
                   </span>
                   <Select
                     value={data.result.translation}
@@ -454,7 +450,7 @@ export function ActionCard({
                 <Divider />
 
                 <SettingCollapsible
-                  title={t("settings:actions.action_card.rewrite_rules")}
+                  title={t("actions.action_card.rewrite_rules")}
                   open={!!data.result.rewriteRules}
                   onOpenChange={(open) => {
                     if (open) {
@@ -476,10 +472,8 @@ export function ActionCard({
                         <TableHeader>
                           <TableRow>
                             <TableHead size="sm" />
-                            <TableHead size="sm">
-                              {t("settings:actions.action_card.from")}
-                            </TableHead>
-                            <TableHead size="sm">{t("settings:actions.action_card.to")}</TableHead>
+                            <TableHead size="sm">{t("actions.action_card.from")}</TableHead>
+                            <TableHead size="sm">{t("actions.action_card.to")}</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -533,7 +527,7 @@ export function ActionCard({
                 </SettingCollapsible>
                 <Divider />
                 <SettingCollapsible
-                  title={t("settings:actions.action_card.block_rules")}
+                  title={t("actions.action_card.block_rules")}
                   open={!!data.result.blockRules}
                   onOpenChange={(open) => {
                     if (open) {
