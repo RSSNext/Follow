@@ -2,5 +2,6 @@
   "cancel": "Cancel",
   "confirm": "Confirm",
   "ok": "OK",
-  "tips.load-lng-error": "Failed to load language pack"
+  "tips.load-lng-error": "Failed to load language pack",
+  "words.which.all": "All"
 }

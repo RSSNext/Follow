@@ -2,5 +2,6 @@
   "cancel": "取消",
   "confirm": "确认",
   "ok": "好",
-  "tips.load-lng-error": "加载语言包失败"
+  "tips.load-lng-error": "加载语言包失败",
+  "words.which.all": "全部"
 }
