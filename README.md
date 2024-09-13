@@ -85,6 +85,7 @@ You can get an invitation code in the following ways:
 
 If you have access, you are welcome to use the following methods to download and install it:
 
+- Visit our online webapp at [app.follow.is](https://app.follow.is)
 - You can get the installation packages for each platform from the [Releases page](https://github.com/RSSNext/Follow/releases).
 - If you are using Arch linux, you can install package [follow-appimage](https://aur.archlinux.org/packages/follow-appimage) that maintained by [timochan](https://github.com/ttimochan).
 
