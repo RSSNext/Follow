@@ -141,7 +141,7 @@ function bootsharp() {
       createWindow({
         extraPath: `#${url.replace(DEEPLINK_SCHEME, "/")}`,
         width: width ?? 800,
-        height: height ?? 900,
+        height: height ?? 700,
         minWidth: 600,
         minHeight: 600,
         resizable,

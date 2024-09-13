@@ -10,7 +10,7 @@ import { Trans, useTranslation } from "react-i18next"
 import { SettingsTitle } from "../title"
 
 export const SettingAbout = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
 
   return (
     <div>
@@ -35,17 +35,17 @@ export const SettingAbout = () => {
                 window.open(`${repository.url}/releases`, "_blank")
               }}
             >
-              {t("settings:about.changelog")}
+              {t("about.changelog")}
             </Button>
           </div>
         </div>
 
         <p className="mt-6 text-balance text-sm">
-          {t("settings:about.licenseInfo", { appName: APP_NAME, license })}
+          {t("about.licenseInfo", { appName: APP_NAME, license })}
         </p>
         <p className="mt-3 text-balance text-sm">
           <Trans
-            i18nKey="settings:about.iconLibrary"
+            i18nKey="about.iconLibrary"
             components={{
               IconLibraryLink: (
                 <a
@@ -64,7 +64,7 @@ export const SettingAbout = () => {
 
         <p className="mt-3 text-sm">
           <Trans
-            i18nKey="settings:about.feedbackInfo"
+            i18nKey="about.feedbackInfo"
             values={{ appName: APP_NAME, commitSha: GIT_COMMIT_SHA.slice(0, 7).toUpperCase() }}
             components={{
               OpenIssueLink: (
@@ -84,7 +84,7 @@ export const SettingAbout = () => {
 
         <Divider className="scale-x-50" />
 
-        <h2 className="text-base font-semibold">{t("settings:about.socialMedia")}</h2>
+        <h2 className="text-base font-semibold">{t("about.socialMedia")}</h2>
         <div className="mt-2 flex flex-wrap gap-2">
           {SocialMediaLinks.map((link) => (
             <span

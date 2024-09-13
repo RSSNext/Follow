@@ -6,7 +6,7 @@ export type LinkParserOptions = {
   icon: string
 }
 
-const parseSafeUrl = (url: string) => {
+export const parseSafeUrl = (url: string) => {
   try {
     return new URL(url)
   } catch {
@@ -27,6 +27,7 @@ const defineLinkParser = (options: LinkParserOptions) => {
   define.icon = options.icon
   return define
 }
+
 export const isYoutubeUrl = defineLinkParser({
   name: "youtube",
   validator: (url) => url.hostname.includes("youtube.com"),

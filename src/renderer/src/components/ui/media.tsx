@@ -152,6 +152,7 @@ const MediaImpl: FC<MediaProps> = ({
     src,
     type,
   ])
+
   if (!type || !src) return null
 
   if (hidden && showFallback) {
@@ -173,8 +174,8 @@ const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, ...props
   <div
     className={cn(
       !(props.width || props.height) && "size-full",
-      "center relative h-24 rounded bg-zinc-100 object-cover dark:bg-neutral-900",
-      "not-prose flex max-h-full flex-col space-y-1",
+      "center relative box-content h-24 rounded bg-zinc-100 object-cover dark:bg-neutral-900",
+      "not-prose flex max-h-full flex-col space-y-1 p-4",
       mediaContainerClassName,
     )}
     style={{
@@ -183,14 +184,15 @@ const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, ...props
       ...props.style,
     }}
   >
+    <i className="i-mgc-close-cute-re text-xl text-red-500" />
     <p>Media loaded failed</p>
-    <p className="flex items-center gap-1">
+    <div className="space-x-1 break-all px-4 text-sm">
       Go to{" "}
       <a href={props.src} target="_blank" rel="noreferrer" className="follow-link--underline">
         {props.src}
       </a>
-      <i className="i-mgc-external-link-cute-re" />
-    </p>
+      <i className="i-mgc-external-link-cute-re translate-y-px" />
+    </div>
   </div>
 )
 
