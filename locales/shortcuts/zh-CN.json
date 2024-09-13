@@ -1,0 +1,23 @@
+{
+  "keys.audio.playPause": "播放/暂停（当音频播放器打开时）",
+  "keys.entries.markAllAsRead": "全部标记为已读",
+  "keys.entries.next": "下一个条目",
+  "keys.entries.previous": "上一个条目",
+  "keys.entries.refetch": "刷新",
+  "keys.entries.toggleUnreadOnly": "切换仅未读",
+  "keys.entry.copyLink": "复制链接",
+  "keys.entry.openInBrowser": "在浏览器中打开",
+  "keys.entry.scrollDown": "向下滚动",
+  "keys.entry.scrollUp": "向上滚动",
+  "keys.entry.share": "分享",
+  "keys.entry.tip": "打赏",
+  "keys.entry.toggleRead": "标记为已读/未读",
+  "keys.entry.toggleStarred": "加入收藏/取消收藏",
+  "keys.entry.tts": "TTS",
+  "keys.feeds.add": "添加 Feed",
+  "keys.feeds.switchBetweenViews": "在视图之间切换",
+  "keys.feeds.switchToView": "切换到视图",
+  "keys.layout.showShortcuts": "显示/隐藏快捷键",
+  "keys.layout.toggleSidebar": "显示/隐藏提要侧边栏",
+  "sidebar_title": "快捷键"
+}

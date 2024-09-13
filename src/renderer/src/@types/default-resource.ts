@@ -6,6 +6,8 @@ import lang_en from "../../../../locales/lang/en.json"
 import lang_zhCN from "../../../../locales/lang/zh-CN.json"
 import settings_en from "../../../../locales/settings/en.json"
 import settings_zhCN from "../../../../locales/settings/zh-CN.json"
+import shortcuts_en from "../../../../locales/shortcuts/en.json"
+import shortcuts_zhCN from "../../../../locales/shortcuts/zh-CN.json"
 
 /**
  * This file is the language resource that is loaded in full when the app is initialized.
@@ -22,10 +24,12 @@ export const defaultResources = {
     common: common_en,
     external: external_en,
     settings: settings_en,
+    shortcuts: shortcuts_en,
   },
   "zh-CN": {
     lang: lang_zhCN,
     common: common_zhCN,
     settings: settings_zhCN,
+    shortcuts: shortcuts_zhCN,
   },
 }

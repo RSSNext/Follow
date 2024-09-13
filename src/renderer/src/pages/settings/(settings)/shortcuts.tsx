@@ -14,7 +14,7 @@ export const loader = defineSettingPageData({
   priority,
 })
 export function Component() {
-  const { t } = useTranslation()
+  const { t } = useTranslation("shortcuts")
   return (
     <>
       <SettingsTitle />

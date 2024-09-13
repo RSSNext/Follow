@@ -1,7 +1,5 @@
 import { EventBus } from "@renderer/lib/event-bus"
-import dayjs from "dayjs"
 import i18next from "i18next"
-import LanguageDetector from "i18next-browser-languagedetector"
 import { atom } from "jotai"
 import { initReactI18next } from "react-i18next"
 
@@ -16,7 +14,7 @@ export const fallbackLanguage = "en"
 export const initI18n = async () => {
   const i18next = jotaiStore.get(i18nAtom)
   await i18next.use(initReactI18next).init({
-    ns: ["app", "common", "lang", "settings"],
+    ns: ["app", "common", "lang", "settings", "shortcuts"],
     lng: "en",
     fallbackLng: fallbackLanguage,
     defaultNS,
