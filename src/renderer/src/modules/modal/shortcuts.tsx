@@ -43,7 +43,7 @@ const ShortcutModalContent = () => {
         onPointerDownCapture={dragControls.start.bind(dragControls)}
         className="center w-full border-b p-3 font-medium"
       >
-        Shortcuts Guideline
+        {t("shortcuts.guide.title", { ns: "app" })}
       </h2>
       <MotionButtonBase onClick={dismiss} className="absolute right-3 top-2 p-2">
         <i className="i-mgc-close-cute-re" />

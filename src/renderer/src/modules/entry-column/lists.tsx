@@ -30,7 +30,7 @@ export const EntryEmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>
       {unreadOnly ? (
         <>
           <i className="i-mgc-celebrate-cute-re -mt-11 text-3xl" />
-          <span className="text-base">Zero Unread</span>
+          <span className="text-base">{t("entry_list.zero_unread")}</span>
         </>
       ) : (
         <div className="flex -translate-y-6 flex-col items-center justify-center gap-2">

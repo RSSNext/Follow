@@ -22,6 +22,7 @@ import { useFeedUnreadStore } from "@renderer/store/unread"
 import { WEB_URL } from "@shared/constants"
 import dayjs from "dayjs"
 import { memo, useCallback } from "react"
+import { useTranslation } from "react-i18next"
 
 import { usePresentUserProfileModal } from "../profile/hooks"
 import { UnreadNumber } from "./unread-number"
@@ -33,6 +34,7 @@ interface FeedItemProps {
   showUnreadCount?: boolean
 }
 const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedItemProps) => {
+  const { t } = useTranslation()
   const subscription = useSubscriptionByFeedId(feedId)
   const navigate = useNavigateEntry()
   const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
@@ -131,9 +133,9 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
                   <TooltipContent className="px-4 py-2">
                     <div className="flex items-center text-base font-semibold">
                       <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-accent" />
-                      Claimed feed
+                      {t("feed_item.claimed_feed")}
                     </div>
-                    <div>This feed is claimed by you.</div>
+                    <div>{t("feed_item.claimed_by_you")}</div>
                   </TooltipContent>
                 </TooltipPortal>
               </Tooltip>
@@ -147,10 +149,10 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
                   <TooltipContent className="px-4 py-2">
                     <div className="flex items-center text-base font-semibold">
                       <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-amber-500" />
-                      Claimed feed
+                      {t("feed_item.claimed_feed")}
                     </div>
                     <div className="mt-1 flex items-center gap-1.5">
-                      <span>This feed is claimed by</span>
+                      <span>{t("feed_item.claimed_by_owner")}</span>
                       {feed.owner ? (
                         <Avatar
                           className="inline-flex aspect-square size-5 rounded-full"
@@ -163,7 +165,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
                           <AvatarFallback>{feed.owner.name?.slice(0, 2)}</AvatarFallback>
                         </Avatar>
                       ) : (
-                        <span>its owner.</span>
+                        <span>{t("feed_item.claimed_by_unknown")}</span>
                       )}
                     </div>
                   </TooltipContent>
@@ -179,7 +181,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
                 <TooltipContent>
                   <div className="flex items-center gap-1">
                     <i className="i-mgc-time-cute-re" />
-                    Error since{" "}
+                    {t("feed_item.error_since")}{" "}
                     {dayjs
                       .duration(dayjs(feed.errorAt).diff(dayjs(), "minute"), "minute")
                       .humanize(true)}
@@ -200,7 +202,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
                 <OouiUserAnonymous className="ml-1 shrink-0 text-base" />
               </TooltipTrigger>
               <TooltipPortal>
-                <TooltipContent>Not publicly visible on your profile page</TooltipContent>
+                <TooltipContent>{t("feed_item.not_publicly_visible")}</TooltipContent>
               </TooltipPortal>
             </Tooltip>
           )}
