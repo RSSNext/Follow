@@ -8,7 +8,8 @@ import { useUserById } from "@renderer/store/user"
 import { LayoutGroup, m } from "framer-motion"
 import { memo, useEffect, useState } from "react"
 
-import { usePresentUserProfileModal } from "../../profile/hooks"
+import { usePresentUserProfileModal } from "../../../profile/hooks"
+import { useEntryReadHistoryModal } from "./hooks"
 
 export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) => {
   const me = useWhoami()
@@ -28,6 +29,8 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
       clearTimeout(timer)
     }
   }, [entryId])
+
+  const presentEntryReadHistoryModal = useEntryReadHistoryModal({ entryId })
 
   if (!entryHistory) return null
   if (!me) return null
@@ -50,18 +53,22 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
         entryHistory.userIds &&
         entryHistory.userIds.length >= 10 && (
           <Tooltip>
-            <TooltipTrigger asChild>
-              <div
+            <TooltipTrigger className="no-drag-region relative cursor-pointer" asChild>
+              <button
+                onClick={() => {
+                  presentEntryReadHistoryModal()
+                }}
+                type="button"
                 style={{
                   right: "80px",
                   zIndex: 11,
                 }}
-                className="relative z-[11] flex size-7 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
+                className="relative flex size-7 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
               >
                 <span className="text-[10px] font-medium text-muted-foreground">
                   +{Math.min(entryHistory.readCount - 10, 99)}
                 </span>
-              </div>
+              </button>
             </TooltipTrigger>
             <TooltipContent side="top">More</TooltipContent>
           </Tooltip>

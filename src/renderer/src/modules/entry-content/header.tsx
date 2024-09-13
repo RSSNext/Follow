@@ -23,7 +23,7 @@ import { AnimatePresence, m } from "framer-motion"
 import { memo, useMemo, useState } from "react"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
-import { EntryReadHistory } from "./components/EntryReadHistory"
+import { EntryReadHistory } from "./components/entry-read-history"
 
 function EntryHeaderImpl({
   view,
@@ -52,7 +52,7 @@ function EntryHeaderImpl({
   return (
     <div
       className={cn(
-        "relative flex min-w-0 items-center justify-between gap-3 overflow-hidden text-lg text-zinc-500",
+        "relative flex min-w-0 items-center justify-between gap-3 text-lg text-zinc-500",
         shouldShowMeta && "border-b border-border",
         className,
       )}
