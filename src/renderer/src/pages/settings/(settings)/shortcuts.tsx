@@ -10,7 +10,7 @@ const priority = 1040
 
 export const loader = defineSettingPageData({
   iconName,
-  name: "settings:titles.shortcuts",
+  name: "titles.shortcuts",
   priority,
 })
 export function Component() {

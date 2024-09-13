@@ -1,6 +1,6 @@
 export interface SettingPageConfig {
   iconName: string
-  name: I18nKeys
+  name: I18nKeysForSettings
   priority: number
   headerIcon?: string
 }

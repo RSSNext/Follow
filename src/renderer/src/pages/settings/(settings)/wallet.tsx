@@ -6,7 +6,7 @@ const priority = 1050
 
 export const loader = defineSettingPageData({
   iconName,
-  name: "settings:titles.power",
+  name: "titles.power",
   priority,
   headerIcon: `i-mgc-power text-accent`,
 })

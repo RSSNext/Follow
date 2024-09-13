@@ -22,7 +22,7 @@ const priority = 1020
 
 export const loader = defineSettingPageData({
   iconName,
-  name: "settings:titles.actions",
+  name: "titles.actions",
   priority,
 })
 

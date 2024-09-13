@@ -7,7 +7,7 @@ const priority = 1010
 
 export const loader = defineSettingPageData({
   iconName,
-  name: "settings:titles.appearance",
+  name: "titles.appearance",
   priority,
 })
 

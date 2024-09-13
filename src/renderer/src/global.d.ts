@@ -30,12 +30,16 @@ declare global {
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation()
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t: settingsT } = useTranslation("settings")
+
   /**
    * This function is a macro, will replace in the build stage.
    */
   export function tw(strings: TemplateStringsArray, ...values: any[]): string
 
   export type I18nKeys = OmitStringType<Parameters<typeof t>[0]>
+  export type I18nKeysForSettings = OmitStringType<Parameters<typeof settingsT>[0]>
 
   type IsLiteralString<T> = T extends string ? (string extends T ? never : T) : never
 
