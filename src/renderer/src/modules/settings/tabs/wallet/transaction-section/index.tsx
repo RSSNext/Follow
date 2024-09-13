@@ -24,8 +24,10 @@ import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
 import { Balance } from "@renderer/modules/wallet/balance"
 import { useWallet, useWalletTransactions } from "@renderer/queries/wallet"
+import { useTranslation } from "react-i18next"
 
 export const TransactionsSection = () => {
+  const { t } = useTranslation("settings")
   const user = useWhoami()
   const wallet = useWallet({ userId: user?.id })
   const myWallet = wallet.data?.[0]
@@ -42,33 +44,31 @@ export const TransactionsSection = () => {
     )
   }
 
-  // if (transactions.data?.length === 0) return <div className="text-theme-disabled">No transactions</div>
-
   return (
     <div className="mt-8">
-      <SettingSectionTitle title="Transactions" />
+      <SettingSectionTitle title={t("wallet.transactions.title")} />
 
       <ScrollArea.ScrollArea viewportClassName="max-h-[210px]">
         <Table>
           <TableHeader>
             <TableRow className="[&_*]:!font-semibold">
               <TableHead className="w-16 text-center" size="sm">
-                Type
+                {t("wallet.transactions.type")}
               </TableHead>
               <TableHead className="text-center" size="sm">
-                Amount
+                {t("wallet.transactions.amount")}
               </TableHead>
               <TableHead className="pl-8" size="sm">
-                From
+                {t("wallet.transactions.from")}
               </TableHead>
               <TableHead className="pl-8" size="sm">
-                To
+                {t("wallet.transactions.to")}
               </TableHead>
               <TableHead className="pl-6" size="sm">
-                Date
+                {t("wallet.transactions.date")}
               </TableHead>
               <TableHead className="pl-6" size="sm">
-                Tx
+                {t("wallet.transactions.tx")}
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -111,7 +111,9 @@ export const TransactionsSection = () => {
           </TableBody>
         </Table>
         {!transactions.data?.length && (
-          <div className="my-2 w-full text-center text-sm text-zinc-400">No transactions</div>
+          <div className="my-2 w-full text-center text-sm text-zinc-400">
+            {t("wallet.transactions.noTransactions")}
+          </div>
         )}
       </ScrollArea.ScrollArea>
     </div>
@@ -122,19 +124,22 @@ const TypeRenderer = ({
   type,
 }: {
   type: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["type"]
-}) => (
-  <div
-    className={cn("center rounded-full px-1.5 py-px text-xs", {
-      "bg-theme-accent-700 text-white": type === "tip",
-      "bg-green-700 text-white": type === "mint",
-      "bg-red-700 text-white": type === "burn",
-      "bg-yellow-700 text-white": type === "withdraw",
-      "bg-blue-700 text-white": type === "purchase",
-    })}
-  >
-    {type}
-  </div>
-)
+}) => {
+  const { t } = useTranslation("settings")
+  return (
+    <div
+      className={cn("center rounded-full px-1.5 py-px text-xs", {
+        "bg-theme-accent-700 text-white": type === "tip",
+        "bg-green-700 text-white": type === "mint",
+        "bg-red-700 text-white": type === "burn",
+        "bg-yellow-700 text-white": type === "withdraw",
+        "bg-blue-700 text-white": type === "purchase",
+      })}
+    >
+      {t(`wallet.transactions.types.${type}`)}
+    </div>
+  )
+}
 
 const BalanceRenderer = ({
   sign,
@@ -161,10 +166,11 @@ const UserRenderer = ({
     | "fromUser"
     | "toUser"]
 }) => {
+  const { t } = useTranslation("settings")
   const me = useWhoami()
   const isMe = user?.id === me?.id
 
-  const name = isMe ? "You" : user?.name || APP_NAME
+  const name = isMe ? t("wallet.transactions.you") : user?.name || APP_NAME
 
   const presentUserModal = usePresentUserProfileModal("drawer")
   return (
@@ -183,7 +189,9 @@ const UserRenderer = ({
         </Avatar>
       )}
 
-      <div className="ml-1">{isMe ? <span className="font-bold">You</span> : name}</div>
+      <div className="ml-1">
+        {isMe ? <span className="font-bold">{t("wallet.transactions.you")}</span> : name}
+      </div>
     </MotionButtonBase>
   )
 }

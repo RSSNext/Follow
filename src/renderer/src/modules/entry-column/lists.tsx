@@ -7,6 +7,7 @@ import { useEntry } from "@renderer/store/entry"
 import type { HTMLMotionProps } from "framer-motion"
 import type { DOMAttributes, FC } from "react"
 import { forwardRef, memo, useCallback } from "react"
+import { useTranslation } from "react-i18next"
 import type { VirtuosoHandle, VirtuosoProps } from "react-virtuoso"
 import { GroupedVirtuoso, Virtuoso } from "react-virtuoso"
 
@@ -19,6 +20,7 @@ export const EntryListContent = forwardRef<HTMLDivElement>((props, ref) => (
 
 export const EntryEmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>((props, ref) => {
   const unreadOnly = useGeneralSettingKey("unreadOnly")
+  const { t } = useTranslation()
   return (
     <m.div
       className="absolute -mt-6 flex size-full grow flex-col items-center justify-center gap-2 text-zinc-400"
@@ -33,7 +35,7 @@ export const EntryEmptyList = forwardRef<HTMLDivElement, HTMLMotionProps<"div">>
       ) : (
         <div className="flex -translate-y-6 flex-col items-center justify-center gap-2">
           <EmptyIcon className="size-[30px]" />
-          <span className="text-base">Zero Items</span>
+          <span className="text-base">{t("words.zero_items")}</span>
         </div>
       )}
     </m.div>

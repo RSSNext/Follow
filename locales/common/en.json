@@ -1,8 +1,19 @@
 {
+  "cancel": "Cancel",
   "confirm": "Confirm",
   "ok": "OK",
-  "cancel": "Cancel",
-  "tips": {
-    "load-lng-error": "Failed to load language pack"
-  }
+  "quantifier.piece": "",
+  "time.last_night": "Last Night",
+  "time.the_night_before_last": "The Night Before Last",
+  "time.today": "Today",
+  "time.yesterday": "Yesterday",
+  "tips.load-lng-error": "Failed to load language pack",
+  "words.back": "Back",
+  "words.copy": "Copy",
+  "words.entry": "Entry",
+  "words.id": "ID",
+  "words.items_one": "Item",
+  "words.items_other": "Items",
+  "words.space": " ",
+  "words.which.all": "All"
 }

@@ -14,7 +14,7 @@ export function Component() {
   // Memo this initial value to avoid re-render
 
   const entryColWidth = useMemo(() => getUISettings().entryColWidth, [])
-  const { feedId, view } = useRouteParms()
+  const { view } = useRouteParms()
   const inWideMode = view ? views[view].wideMode : false
   const { position, separatorProps, isDragging, separatorCursor } = useResizable({
     axis: "x",
@@ -36,7 +36,7 @@ export function Component() {
           width: position,
         }}
       >
-        <EntryColumn key={`${feedId}-${view}`} />
+        <EntryColumn />
       </div>
       {!inWideMode && (
         <PanelSplitter {...separatorProps} cursor={separatorCursor} isDragging={isDragging} />

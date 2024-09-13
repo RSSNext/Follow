@@ -17,6 +17,7 @@ import { useRefreshFeedMutation } from "@renderer/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FC } from "react"
 import * as React from "react"
+import { useTranslation } from "react-i18next"
 
 import { MarkAllReadWithOverlay } from "../components/mark-all-button"
 
@@ -27,6 +28,7 @@ export const EntryListHeader: FC<{
   hasUpdate: boolean
 }> = ({ totalCount, refetch, isRefreshing, hasUpdate }) => {
   const routerParams = useRouteParms()
+  const { t } = useTranslation()
 
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
@@ -46,7 +48,10 @@ export const EntryListHeader: FC<{
         </EllipsisHorizontalTextWithTooltip>
       </div>
       <div className="text-xs font-medium text-zinc-400">
-        {totalCount || 0} {unreadOnly && !isInCollectionList ? "Unread" : ""} Items
+        {totalCount || 0} {t("quantifier.piece", { ns: "common" })}
+        {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
+        {t("words.space", { ns: "common" })}
+        {t("words.items", { ns: "common", count: totalCount })}
       </div>
     </div>
   )
@@ -64,7 +69,10 @@ export const EntryListHeader: FC<{
   return (
     <div
       ref={containerRef}
-      className={cn("mb-2 flex w-full flex-col pr-4 pt-2.5", titleStyleBasedView[view])}
+      className={cn(
+        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-200",
+        titleStyleBasedView[view],
+      )}
     >
       <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
         {!titleAtBottom && titleInfo}
@@ -102,7 +110,11 @@ export const EntryListHeader: FC<{
               </ActionButton>
             ) : (
               <ActionButton
-                tooltip={hasUpdate ? "New entries available" : "Refetch"}
+                tooltip={
+                  hasUpdate
+                    ? t("entry_list_header.new_entries_available")
+                    : t("entry_list_header.refetch")
+                }
                 onClick={() => {
                   refetch()
                 }}
@@ -118,7 +130,11 @@ export const EntryListHeader: FC<{
             )
           ) : null}
           <ActionButton
-            tooltip={!unreadOnly ? "Show unread Only" : "Show all"}
+            tooltip={
+              !unreadOnly
+                ? t("entry_list_header.show_unread_only")
+                : t("entry_list_header.show_all")
+            }
             shortcut={shortcuts.entries.toggleUnreadOnly.key}
             onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
           >
@@ -138,6 +154,8 @@ export const EntryListHeader: FC<{
 
 const DailyReportButton: FC = () => {
   const present = useAIDailyReportModal()
+  const { t } = useTranslation()
+
   return (
     <ImpressionView event="Daily Report Modal">
       <ActionButton
@@ -147,7 +165,7 @@ const DailyReportButton: FC = () => {
             click: 1,
           })
         }}
-        tooltip="Daily Report"
+        tooltip={t("entry_list_header.daily_report")}
       >
         <i className="i-mgc-magic-2-cute-re" />
       </ActionButton>
@@ -157,6 +175,8 @@ const DailyReportButton: FC = () => {
 
 const SwitchToMasonryButton = () => {
   const isMasonry = useUISettingKey("pictureViewMasonry")
+  const { t } = useTranslation()
+
   return (
     <ImpressionView
       event="Switch to Masonry"
@@ -172,7 +192,11 @@ const SwitchToMasonryButton = () => {
             click: 1,
           })
         }}
-        tooltip={`Switch to ${isMasonry ? "Grid" : "Masonry"}`}
+        tooltip={
+          isMasonry
+            ? t("entry_list_header.switch_to_masonry")
+            : t("entry_list_header.switch_to_grid")
+        }
       >
         <i className={cn(!isMasonry ? "i-mgc-grid-cute-re" : "i-mgc-grid-2-cute-re")} />
       </ActionButton>

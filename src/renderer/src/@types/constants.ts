@@ -10,5 +10,8 @@ export const currentSupportedLanguages = (() => {
 
 export const dayjsLocaleImportMap = {
   en: ["en", () => import("dayjs/locale/en")],
-  zh_CN: ["zh-cn", () => import("dayjs/locale/zh-cn")],
+  ["zh-CN"]: ["zh-cn", () => import("dayjs/locale/zh-cn")],
 }
+
+export const ns = ["app", "common", "lang", "settings", "shortcuts"] as const
+export const defaultNS = "app" as const

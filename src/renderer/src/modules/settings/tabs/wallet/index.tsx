@@ -1,4 +1,3 @@
-import { Divider } from "@renderer/components/ui/divider"
 
 import { SettingsTitle } from "../../title"
 import { MyWalletSection } from "./my-wallet-section"
@@ -9,8 +8,6 @@ export const SettingWallet = () => (
     <SettingsTitle />
 
     <MyWalletSection />
-
-    <Divider className="my-8" />
 
     <TransactionsSection />
   </div>

@@ -11,6 +11,7 @@ import { cn } from "@renderer/lib/utils"
 import { m } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
 import { memo, useCallback, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
@@ -31,7 +32,7 @@ const useBackHome = (active: number) => {
 
 export const FeedColumnHeader = memo(() => {
   const [active] = useSidebarActiveView()
-
+  const { t } = useTranslation()
   const navigateBackHome = useBackHome(active)
   const normalStyle = !window.electron || window.electron.process.platform !== "darwin"
   return (
@@ -61,7 +62,7 @@ export const FeedColumnHeader = memo(() => {
         <SearchActionButton />
 
         <Link to="/discover" tabIndex={-1}>
-          <ActionButton shortcut="Meta+T" tooltip="Add">
+          <ActionButton shortcut="Meta+T" tooltip={t("words.add")}>
             <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
           </ActionButton>
         </Link>
@@ -137,9 +138,14 @@ const LogoContextMenu: FC<PropsWithChildren> = ({ children }) => {
 
 const SearchActionButton = () => {
   const canSearch = useGeneralSettingKey("dataPersist")
+  const { t } = useTranslation()
   if (!canSearch) return null
   return (
-    <ActionButton shortcut="Meta+K" tooltip="Search" onClick={() => setAppSearchOpen(true)}>
+    <ActionButton
+      shortcut="Meta+K"
+      tooltip={t("words.search")}
+      onClick={() => setAppSearchOpen(true)}
+    >
       <i className="i-mgc-search-2-cute-re size-5 text-theme-vibrancyFg" />
     </ActionButton>
   )

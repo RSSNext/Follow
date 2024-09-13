@@ -6,6 +6,7 @@ import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { springScrollTo } from "@renderer/lib/scroller"
 import { cn } from "@renderer/lib/utils"
 import { useEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Outlet, useNavigate } from "react-router-dom"
 
 import { useSubViewTitleValue } from "./hooks"
@@ -33,6 +34,7 @@ export function Component() {
     }
   }, [scrollRef, title])
 
+  const { t } = useTranslation()
   return (
     <div className="relative flex size-full">
       <div
@@ -51,10 +53,12 @@ export function Component() {
           className="no-drag-region inline-flex items-center gap-1 duration-200 hover:text-accent"
         >
           <i className="i-mingcute-left-line" />
-          <span className="text-sm font-medium">Back</span>
+          <span className="text-sm font-medium">{t("words.back", { ns: "common" })}</span>
         </MotionButtonBase>
         <div>
-          <div className="font-bold opacity-0 duration-200 group-[.group]:opacity-100">{title}</div>
+          <div className="font-bold opacity-0 duration-200 group-[.group]:opacity-100">
+            {title && t(title)}
+          </div>
         </div>
         <div />
       </div>

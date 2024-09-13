@@ -2,6 +2,7 @@ import { useAuthQuery } from "@renderer/hooks/common"
 import { isASCII } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
 import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 
 import { RecommendationCard } from "./recommendations-card"
 
@@ -44,6 +45,7 @@ export function Recommendations() {
     }
   }, [data])
 
+  const { t } = useTranslation()
   if (rsshubPopular.isLoading) {
     return null
   }
@@ -54,7 +56,7 @@ export function Recommendations() {
 
   return (
     <div className="mt-8">
-      <div className="text-center text-lg font-bold">Popular</div>
+      <div className="text-center text-lg font-bold">{t("discover.popular")}</div>
 
       <div className="mt-4 grid grid-cols-3 gap-4 px-3">
         {keys.map((key) => (

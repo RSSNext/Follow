@@ -32,4 +32,22 @@ export default defineConfig(
       ],
     },
   },
+  {
+    files: ["**/*.tsx"],
+    rules: {
+      "@stylistic/jsx-self-closing-comp": "error",
+    },
+  },
+  {
+    files: ["locales/**/*.json"],
+    rules: {
+      "jsonc/sort-keys": [
+        "error",
+        {
+          pathPattern: ".*",
+          order: { type: "asc" },
+        },
+      ],
+    },
+  },
 )

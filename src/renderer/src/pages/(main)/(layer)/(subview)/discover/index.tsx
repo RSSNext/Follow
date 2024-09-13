@@ -10,34 +10,38 @@ import { useSearchParams } from "react-router-dom"
 
 import { useSubViewTitle } from "../hooks"
 
-const tabs = [
+const tabs: {
+  name: I18nKeys
+  value: string
+  disabled?: boolean
+}[] = [
   {
-    name: "Search",
+    name: "words.search",
     value: "search",
   },
   {
-    name: "RSS",
+    name: "words.rss",
     value: "rss",
   },
   {
-    name: "RSSHub",
+    name: "words.rsshub",
     value: "rsshub",
   },
   {
-    name: "RSS3",
+    name: "words.rss3",
     value: "rss3",
   },
   {
-    name: "User",
+    name: "words.user",
     value: "user",
   },
   {
-    name: "Email",
+    name: "words.email",
     value: "email",
     disabled: true,
   },
   {
-    name: "Import",
+    name: "words.import",
     value: "import",
   },
 ]
@@ -45,7 +49,7 @@ const tabs = [
 export function Component() {
   const [search, setSearch] = useSearchParams()
   const { t } = useTranslation()
-  useSubViewTitle("Discover")
+  useSubViewTitle("words.discover")
 
   return (
     <>
@@ -62,7 +66,7 @@ export function Component() {
         <TabsList className="w-full">
           {tabs.map((tab) => (
             <TabsTrigger key={tab.name} value={tab.value} disabled={tab.disabled}>
-              {tab.name}
+              {t(tab.name)}
             </TabsTrigger>
           ))}
         </TabsList>

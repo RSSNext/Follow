@@ -10,6 +10,7 @@ import { AnimatePresence, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
 import { forwardRef, Fragment, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
+import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useOnClickOutside } from "usehooks-ts"
 
@@ -30,6 +31,9 @@ export const MarkAllReadWithOverlay = forwardRef<
     containerRef: React.RefObject<HTMLDivElement>
   }
 >(({ filter, className, which = "all", shortcut, containerRef }, ref) => {
+  const { t } = useTranslation()
+  const { t: commonT } = useTranslation("common")
+
   const [show, setShow] = useState(false)
 
   const handleMarkAllAsRead = useMarkAllByRoute(filter)
@@ -61,11 +65,12 @@ export const MarkAllReadWithOverlay = forwardRef<
             <span className="center gap-[calc(0.5rem+2px)]">
               <i className="i-mgc-check-circle-cute-re" />
               <span className="text-sm font-bold">
-                Mark
-                <span> </span>
-                {which}
-                <span> </span>
-                as read?
+                <Trans
+                  i18nKey="mark_all_read_button.mark_as_read"
+                  // should be fixed by using `as const` but it's not working
+                  // @ts-expect-error https://www.i18next.com/overview/typescript#type-error-template-literal
+                  values={{ which: commonT(`words.which.${which}`) }}
+                />
               </span>
             </span>
             <div className="space-x-4">
@@ -76,7 +81,7 @@ export const MarkAllReadWithOverlay = forwardRef<
                   setShow(false)
                 }}
               >
-                Confirm
+                {t("words.confirm")}
               </IconButton>
             </div>
           </div>
@@ -125,13 +130,14 @@ export const MarkAllReadWithOverlay = forwardRef<
       <ActionButton
         tooltip={
           <>
-            <span>
-              Mark
-              <span> </span>
-              {which}
-              <span> </span>
-              as read
-            </span>
+            <Trans
+              i18nKey="mark_all_read_button.mark_as_read"
+              values={{
+                // @ts-expect-error https://www.i18next.com/overview/typescript#type-error-template-literal
+                // should be fixed by using `as const` but it's not working
+                which: commonT(`words.which.${which}`),
+              }}
+            />
             {shortcut && (
               <div className="ml-1">
                 <KbdCombined className="text-foreground/80">
@@ -156,14 +162,15 @@ export const MarkAllReadWithOverlay = forwardRef<
 })
 
 const ConfirmMarkAllReadInfo = ({ undo }: { undo: () => any }) => {
+  const { t } = useTranslation()
   useHotkeys("ctrl+z,meta+z", undo, {
     scopes: HotKeyScopeMap.Home,
     preventDefault: true,
   })
   return (
     <div>
-      <p>Confirm mark all as read?</p>
-      <small className="opacity-50">Will confirmed automatically after 3s.</small>
+      <p>{t("mark_all_read_button.confirm_mark_all_info")}</p>
+      <small className="opacity-50">{t("mark_all_read_button.auto_confirm_info")}</small>
     </div>
   )
 }
@@ -200,11 +207,14 @@ export const MarkAllReadPopover = forwardRef<HTMLButtonElement, MarkAllButtonPro
         <PopoverPortal>
           <PopoverContent className="flex w-fit flex-col items-center justify-center gap-3 !py-3 [&_button]:text-xs">
             <div className="text-sm">
-              Mark
-              <span> </span>
-              {which}
-              <span> </span>
-              as read?
+              <Trans
+                i18nKey="mark_all_read_button.mark_as_read"
+                values={{
+                  // @ts-expect-error https://www.i18next.com/overview/typescript#type-error-template-literal
+                  // should be fixed by using `as const` but it's not working
+                  which: commonT(`words.which.${which}`),
+                }}
+              />
             </div>
             <div className="space-x-4">
               <IconButton
@@ -225,6 +235,8 @@ export const MarkAllReadPopover = forwardRef<HTMLButtonElement, MarkAllButtonPro
 )
 
 export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
+  const { t } = useTranslation()
+  const { t: commonT } = useTranslation("common")
   const { className, filter, which } = props
   const [status, setStatus] = useState<"initial" | "confirm" | "done">("initial")
   const handleMarkAll = useMarkAllByRoute(filter)
@@ -263,8 +275,14 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
         )}
       </AnimatePresence>
       <span className={cn(status === "confirm" ? "opacity-0" : "opacity-100", "duration-200")}>
-        Mark
-        {which} as read
+        <Trans
+          i18nKey="mark_all_read_button.mark_as_read"
+          values={{
+            // @ts-expect-error https://www.i18next.com/overview/typescript#type-error-template-literal
+            // should be fixed by using `as const` but it's not working
+            which: commonT(`words.which.${which}`),
+          }}
+        />
       </span>
       <span
         className={cn(
@@ -273,7 +291,7 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
           "duration-200",
         )}
       >
-        Confirm?
+        {t("mark_all_read_button.confirm")}
       </span>
     </Button>
   )

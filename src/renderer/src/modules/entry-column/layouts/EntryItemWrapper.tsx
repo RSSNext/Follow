@@ -11,6 +11,7 @@ import type { FlatEntryModel } from "@renderer/store/entry"
 import { entryActions } from "@renderer/store/entry"
 import type { FC, PropsWithChildren } from "react"
 import { useCallback } from "react"
+import { useTranslation } from "react-i18next"
 import { useDebounceCallback } from "usehooks-ts"
 
 export const EntryItemWrapper: FC<
@@ -32,6 +33,8 @@ export const EntryItemWrapper: FC<
     view,
     type: "entryList",
   })
+
+  const { t } = useTranslation("common")
 
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry.entries.id)
 
@@ -91,7 +94,7 @@ export const EntryItemWrapper: FC<
           },
           {
             type: "text" as const,
-            label: "Copy Entry ID",
+            label: `${t("words.copy")}${t("words.space")}${t("words.entry")} ${t("words.id")}`,
             click: () => {
               navigator.clipboard.writeText(entry.entries.id)
             },
@@ -100,7 +103,7 @@ export const EntryItemWrapper: FC<
         e,
       )
     },
-    [items, feedItems, entry.entries.id],
+    [items, feedItems, t, entry.entries.id],
   )
 
   return (

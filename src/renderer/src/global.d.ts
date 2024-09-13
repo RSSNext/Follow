@@ -1,6 +1,9 @@
-import type { t } from "i18next"
 import type { FC, PropsWithChildren } from "react"
-
+import type { useTranslation } from "react-i18next"
+// eslint-disable-next-line react-hooks/rules-of-hooks, unused-imports/no-unused-vars
+const { t } = useTranslation()
+// eslint-disable-next-line react-hooks/rules-of-hooks, unused-imports/no-unused-vars
+const { t: settingsT } = useTranslation("settings")
 declare global {
   export type Component<P = object> = FC<ComponentType & P>
 
@@ -28,9 +31,13 @@ declare global {
     WINDOW_UNDER_BLUR: boolean
   }
 
+  /**
+   * This function is a macro, will replace in the build stage.
+   */
   export function tw(strings: TemplateStringsArray, ...values: any[]): string
 
   export type I18nKeys = OmitStringType<Parameters<typeof t>[0]>
+  export type I18nKeysForSettings = OmitStringType<Parameters<typeof settingsT>[0]>
 
   type IsLiteralString<T> = T extends string ? (string extends T ? never : T) : never
 

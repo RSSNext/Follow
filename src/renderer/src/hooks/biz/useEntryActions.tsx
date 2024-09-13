@@ -11,7 +11,6 @@ import {
   SimpleIconsInstapaper,
   SimpleIconsReadwise,
 } from "@renderer/components/ui/platform-icon/icons"
-import { COPY_MAP } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
@@ -26,6 +25,7 @@ import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
 import type { ReactNode } from "react"
 import { useCallback, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 export const useEntryReadabilityToggle = ({ id, url }: { id: string; url: string }) =>
@@ -104,6 +104,8 @@ export const useEntryActions = ({
   entry?: FlatEntryModel | null
   type?: "toolbar" | "entryList"
 }) => {
+  const { t } = useTranslation()
+
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
     enabled: !!entry?.entries.url && view !== undefined,
@@ -161,7 +163,7 @@ export const useEntryActions = ({
       onClick: () => void
     }[] = [
       {
-        name: "Save media to Eagle",
+        name: t("entry_actions.save_media_to_eagle"),
         icon: <SimpleIconsEagle />,
         key: "saveToEagle",
         hide:
@@ -188,7 +190,7 @@ export const useEntryActions = ({
         },
       },
       {
-        name: "Save to Readwise",
+        name: t("entry_actions.save_to_readwise"),
         icon: <SimpleIconsReadwise />,
         key: "saveToReadwise",
         hide: !enableReadwise || !readwiseToken || !populatedEntry.entries.url,
@@ -229,7 +231,7 @@ export const useEntryActions = ({
         },
       },
       {
-        name: "Save to Instapaper",
+        name: t("entry_actions.save_to_instapaper"),
         icon: <SimpleIconsInstapaper />,
         key: "saveToInstapaper",
         hide:
@@ -275,7 +277,7 @@ export const useEntryActions = ({
       {
         key: "tip",
         shortcut: shortcuts.entry.tip.key,
-        name: `Tip`,
+        name: t("entry_actions.tip"),
         className: "i-mgc-power-outline",
         hide: feed?.ownerUserId === whoami()?.id,
         onClick: () => {
@@ -285,7 +287,7 @@ export const useEntryActions = ({
       {
         key: "star",
         shortcut: shortcuts.entry.toggleStarred.key,
-        name: `Star`,
+        name: t("entry_actions.star"),
         className: "i-mgc-star-cute-re",
         hide: !!populatedEntry.collections,
         onClick: () => {
@@ -294,7 +296,7 @@ export const useEntryActions = ({
       },
       {
         key: "unstar",
-        name: `Unstar`,
+        name: t("entry_actions.unstar"),
         shortcut: shortcuts.entry.toggleStarred.key,
         className: "i-mgc-star-cute-fi text-orange-500",
         hide: !populatedEntry.collections,
@@ -304,7 +306,7 @@ export const useEntryActions = ({
       },
       {
         key: "copyLink",
-        name: "Copy link",
+        name: t("entry_actions.copy_link"),
         className: "i-mgc-link-cute-re",
         hide: !populatedEntry.entries.url,
         shortcut: shortcuts.entry.copyLink.key,
@@ -318,7 +320,7 @@ export const useEntryActions = ({
       },
       {
         key: "openInBrowser",
-        name: COPY_MAP.OpenInBrowser(),
+        name: t("entry_actions.open_in_browser"),
         shortcut: shortcuts.entry.openInBrowser.key,
         className: "i-mgc-world-2-cute-re",
         hide: !populatedEntry.entries.url,
@@ -328,7 +330,7 @@ export const useEntryActions = ({
         },
       },
       {
-        name: "Share",
+        name: t("entry_actions.share"),
         key: "share",
         className: getOS() === "macOS" ? `i-mgc-share-3-cute-re` : "i-mgc-share-forward-cute-re",
         shortcut: shortcuts.entry.share.key,
@@ -349,7 +351,7 @@ export const useEntryActions = ({
       },
       {
         key: "read",
-        name: `Mark as read`,
+        name: t("entry_actions.mark_as_read"),
         shortcut: shortcuts.entry.toggleRead.key,
         className: "i-mgc-round-cute-fi",
         hide: !!(!!populatedEntry.read || populatedEntry.collections),
@@ -359,7 +361,7 @@ export const useEntryActions = ({
       },
       {
         key: "unread",
-        name: `Mark as unread`,
+        name: t("entry_actions.mark_as_unread"),
         shortcut: shortcuts.entry.toggleRead.key,
         className: "i-mgc-round-cute-re",
         hide: !!(!populatedEntry.read || populatedEntry.collections),
@@ -381,6 +383,7 @@ export const useEntryActions = ({
     read,
     unread,
     feed?.ownerUserId,
+    t,
   ])
 
   return {
