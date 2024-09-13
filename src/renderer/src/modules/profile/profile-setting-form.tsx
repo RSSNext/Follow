@@ -26,7 +26,7 @@ const formSchema = z.object({
 })
 
 export const ProfileSettingForm = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
   const user = useWhoami()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,7 +47,7 @@ export const ProfileSettingForm = () => {
       if (user && variables) {
         setWhoami({ ...user, ...variables })
       }
-      toast(t("settings.profile.updateSuccess"), {
+      toast(t("profile.updateSuccess"), {
         duration: 3000,
       })
     },
@@ -65,11 +65,11 @@ export const ProfileSettingForm = () => {
           name="handle"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("settings.profile.handle.label")}</FormLabel>
+              <FormLabel>{t("profile.handle.label")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              <FormDescription>{t("settings.profile.handle.description")}</FormDescription>
+              <FormDescription>{t("profile.handle.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -79,11 +79,11 @@ export const ProfileSettingForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("settings.profile.name.label")}</FormLabel>
+              <FormLabel>{t("profile.name.label")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              <FormDescription>{t("settings.profile.name.description")}</FormDescription>
+              <FormDescription>{t("profile.name.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -95,7 +95,7 @@ export const ProfileSettingForm = () => {
           render={({ field }) => (
             <div className="flex gap-4">
               <FormItem className="w-full">
-                <FormLabel>{t("settings.profile.avatar.label")}</FormLabel>
+                <FormLabel>{t("profile.avatar.label")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -111,7 +111,7 @@ export const ProfileSettingForm = () => {
 
         <div className="text-right">
           <Button type="submit" isLoading={updateMutation.isPending}>
-            {t("settings.profile.submit")}
+            {t("profile.submit")}
           </Button>
         </div>
       </form>

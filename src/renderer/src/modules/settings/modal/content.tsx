@@ -3,8 +3,9 @@ import { MotionButtonBase } from "@renderer/components/ui/button"
 import { useCurrentModal } from "@renderer/components/ui/modal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { SettingsTitle } from "@renderer/modules/settings/title"
+import i18next from "i18next"
 import type { FC } from "react"
-import { Suspense, useDeferredValue, useLayoutEffect, useState } from "react"
+import { Suspense, useDeferredValue, useEffect, useLayoutEffect, useState } from "react"
 
 import { settings } from "../constants"
 import { SettingTabProvider, useSettingTab } from "./context"
@@ -24,15 +25,21 @@ const pages = (() => {
 })()
 export const SettingModalContent: FC<{
   initialTab?: string
-}> = ({ initialTab }) => (
-  <SettingTabProvider>
-    <SettingModalLayout
-      initialTab={initialTab ? (initialTab in pages ? initialTab : undefined) : undefined}
-    >
-      <Content />
-    </SettingModalLayout>
-  </SettingTabProvider>
-)
+}> = ({ initialTab }) => {
+  useEffect(() => {
+    // load i18n
+    i18next.loadNamespaces("settings")
+  }, [])
+  return (
+    <SettingTabProvider>
+      <SettingModalLayout
+        initialTab={initialTab ? (initialTab in pages ? initialTab : undefined) : undefined}
+      >
+        <Content />
+      </SettingModalLayout>
+    </SettingTabProvider>
+  )
+}
 
 const Close = () => {
   const { dismiss } = useCurrentModal()

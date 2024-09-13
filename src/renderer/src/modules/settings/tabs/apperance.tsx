@@ -33,64 +33,64 @@ export const SettingAppearance = () => {
         settings={[
           {
             type: "title",
-            value: t("settings.appearance.general"),
+            value: t("settings:appearance.general"),
           },
           AppThemeSegment,
 
           defineItem("opaqueSidebar", {
-            label: t("settings.appearance.opaque_sidebars.label"),
+            label: t("settings:appearance.opaque_sidebars.label"),
             hide: !window.api?.canWindowBlur,
           }),
 
           {
             type: "title",
-            value: t("settings.appearance.unread_count"),
+            value: t("settings:appearance.unread_count"),
           },
 
           defineItem("showDockBadge", {
-            label: t("settings.appearance.show_dock_badge.label"),
+            label: t("settings:appearance.show_dock_badge.label"),
             hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
           }),
 
           defineItem("sidebarShowUnreadCount", {
-            label: t("settings.appearance.sidebar_show_unread_count.label"),
+            label: t("settings:appearance.sidebar_show_unread_count.label"),
           }),
 
           {
             type: "title",
-            value: t("settings.appearance.fonts"),
+            value: t("settings:appearance.fonts"),
           },
           TextSize,
           UIFontSelector,
           ContentFontSelector,
           {
             type: "title",
-            value: t("settings.appearance.content"),
+            value: t("settings:appearance.content"),
           },
           ShikiTheme,
 
           defineItem("guessCodeLanguage", {
-            label: t("settings.appearance.guess_code_language.label"),
+            label: t("settings:appearance.guess_code_language.label"),
             hide: !isElectronBuild,
-            description: t("settings.appearance.guess_code_language.description"),
+            description: t("settings:appearance.guess_code_language.description"),
           }),
 
           defineItem("readerRenderInlineStyle", {
-            label: t("settings.appearance.reader_render_inline_style.label"),
-            description: t("settings.appearance.reader_render_inline_style.description"),
+            label: t("settings:appearance.reader_render_inline_style.label"),
+            description: t("settings:appearance.reader_render_inline_style.description"),
           }),
           {
             type: "title",
-            value: t("settings.appearance.misc"),
+            value: t("settings:appearance.misc"),
           },
 
           defineItem("modalOverlay", {
-            label: t("settings.appearance.modal_overlay.label"),
-            description: t("settings.appearance.modal_overlay.description"),
+            label: t("settings:appearance.modal_overlay.label"),
+            description: t("settings:appearance.modal_overlay.description"),
           }),
           defineItem("reduceMotion", {
-            label: t("settings.appearance.reduce_motion.label"),
-            description: t("settings.appearance.reduce_motion.description"),
+            label: t("settings:appearance.reduce_motion.label"),
+            description: t("settings:appearance.reduce_motion.description"),
           }),
         ]}
       />
@@ -104,7 +104,7 @@ const ShikiTheme = () => {
   return (
     <div className="mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">
-        {t("settings.appearance.code_highlight_theme")}
+        {t("settings:appearance.code_highlight_theme")}
       </span>
       <Select
         defaultValue="github-dark"
@@ -141,7 +141,7 @@ const TextSize = () => {
 
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("settings.appearance.text_size")}</span>
+      <span className="shrink-0 text-sm font-medium">{t("settings:appearance.text_size")}</span>
       <Select
         defaultValue={textSizeMap.default.toString()}
         value={uiTextSize.toString() || textSizeMap.default.toString()}
@@ -172,22 +172,22 @@ const AppThemeSegment = () => {
   return (
     <SettingTabbedSegment
       key="theme"
-      label={t("settings.appearance.theme.label")}
+      label={t("settings:appearance.theme.label")}
       value={theme}
       values={[
         {
           value: "system",
-          label: t("settings.appearance.theme.system"),
+          label: t("settings:appearance.theme.system"),
           icon: <i className="i-mingcute-monitor-line" />,
         },
         {
           value: "light",
-          label: t("settings.appearance.theme.light"),
+          label: t("settings:appearance.theme.light"),
           icon: <i className="i-mingcute-sun-line" />,
         },
         {
           value: "dark",
-          label: t("settings.appearance.theme.dark"),
+          label: t("settings:appearance.theme.dark"),
           icon: <i className="i-mingcute-moon-line" />,
         },
       ]}

@@ -5,7 +5,7 @@ import { styledButtonVariant } from "@renderer/components/ui/button/variants"
 import { Divider } from "@renderer/components/ui/divider"
 import { SocialMediaLinks } from "@renderer/constants/social"
 import { getNewIssueUrl } from "@renderer/lib/issues"
-import { Trans,useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 
 import { SettingsTitle } from "../title"
 
@@ -35,17 +35,17 @@ export const SettingAbout = () => {
                 window.open(`${repository.url}/releases`, "_blank")
               }}
             >
-              {t("settings.about.changelog")}
+              {t("settings:about.changelog")}
             </Button>
           </div>
         </div>
 
         <p className="mt-6 text-balance text-sm">
-          {t("settings.about.licenseInfo", { appName: APP_NAME, license })}
+          {t("settings:about.licenseInfo", { appName: APP_NAME, license })}
         </p>
         <p className="mt-3 text-balance text-sm">
           <Trans
-            i18nKey="settings.about.iconLibrary"
+            i18nKey="settings:about.iconLibrary"
             components={{
               IconLibraryLink: (
                 <a
@@ -59,12 +59,12 @@ export const SettingAbout = () => {
               ),
               ExternalLinkIcon: <i className="i-mgc-external-link-cute-re translate-y-px" />,
             }}
-           />
+          />
         </p>
 
         <p className="mt-3 text-sm">
           <Trans
-            i18nKey="settings.about.feedbackInfo"
+            i18nKey="settings:about.feedbackInfo"
             values={{ appName: APP_NAME, commitSha: GIT_COMMIT_SHA.slice(0, 7).toUpperCase() }}
             components={{
               OpenIssueLink: (
@@ -79,12 +79,12 @@ export const SettingAbout = () => {
               ),
               ExternalLinkIcon: <i className="i-mgc-external-link-cute-re" />,
             }}
-           />
+          />
         </p>
 
         <Divider className="scale-x-50" />
 
-        <h2 className="text-base font-semibold">{t("settings.about.socialMedia")}</h2>
+        <h2 className="text-base font-semibold">{t("settings:about.socialMedia")}</h2>
         <div className="mt-2 flex flex-wrap gap-2">
           {SocialMediaLinks.map((link) => (
             <span

@@ -57,7 +57,7 @@ export function Component() {
             name="code"
             render={({ field }) => (
               <FormItem className="flex flex-col items-center gap-2 md:block">
-                <FormLabel>{t("settings.invitation.title")}</FormLabel>
+                <FormLabel>{t("settings:invitation.title")}</FormLabel>
                 <FormControl>
                   <Input autoFocus {...field} />
                 </FormControl>
@@ -73,14 +73,14 @@ export function Component() {
               disabled={!form.formState.isValid}
               isLoading={invitationMutation.isPending}
             >
-              {t("settings.invitation.activate")}
+              {t("settings:invitation.activate")}
             </Button>
           </div>
         </form>
       </Form>
       <div className="space-y-2 text-balance text-center text-sm text-zinc-600 md:text-left">
-        <p>{t("settings.invitation.earlyAccessMessage")}</p>
-        <p>{t("settings.invitation.getCodeMessage")}</p>
+        <p>{t("settings:invitation.earlyAccessMessage")}</p>
+        <p>{t("settings:invitation.getCodeMessage")}</p>
         <p>
           😰 Sorry, Follow is currently in <strong>early access</strong> and requires an invitation
           code to use.

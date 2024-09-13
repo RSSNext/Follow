@@ -16,7 +16,7 @@ import { getStorageNS } from "@renderer/lib/ns"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect, useMemo, useRef } from "react"
 import * as React from "react"
-import {useTranslation  } from "react-i18next"
+import { useTranslation } from "react-i18next"
 
 const FALLBACK_FONT = "Default (UI Font)"
 const DEFAULT_FONT = "SN Pro"
@@ -63,7 +63,7 @@ export const ContentFontSelector = () => {
 
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("settings.appearance.content_font")}</span>
+      <span className="shrink-0 text-sm font-medium">{t("settings:appearance.content_font")}</span>
       <Select
         defaultValue={FALLBACK_FONT}
         value={readerFontFamily}
@@ -107,7 +107,7 @@ export const UIFontSelector = () => {
 
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("settings.appearance.ui_font")}</span>
+      <span className="shrink-0 text-sm font-medium">{t("settings:appearance.ui_font")}</span>
       <Select
         defaultValue={FALLBACK_FONT}
         value={uiFont}
@@ -144,7 +144,7 @@ const usePresentCustomFontDialog = (setKey: "uiFontFamily" | "readerFontFamily")
 
   return useCallback(() => {
     present({
-      title: t("settings.appearance.custom_font"),
+      title: t("settings:appearance.custom_font"),
       clickOutsideToDismiss: true,
       content: function Content({ dismiss, setClickOutSideToDismiss }) {
         const inputRef = useRef<HTMLInputElement>(null)
@@ -173,7 +173,7 @@ const usePresentCustomFontDialog = (setKey: "uiFontFamily" | "readerFontFamily")
             />
 
             <div className="flex justify-end">
-              <Button type="submit">{t("settings.appearance.save")}</Button>
+              <Button type="submit">{t("settings:appearance.save")}</Button>
             </div>
           </form>
         )

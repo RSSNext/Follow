@@ -61,13 +61,7 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "i18n-ally.enabledFrameworks": ["i18next"],
   "i18n-ally.displayLanguage": "en",
-  "i18n-ally.localesPaths": [
-    // "locales/app",
-    // "locales/lang",
-    // "locales/common",
-    "locales/**/*"
-  ]
-  // "i18n-ally.namespace": true,
-  // "i18n-ally.pathMatcher": "{namespace}/{locale}.json",
-  // "i18n-ally.defaultNamespace": "app",
+  "i18n-ally.localesPaths": ["locales"],
+  "i18n-ally.namespace": true,
+  "i18n-ally.pathMatcher": "{namespaces}/{locale}.json"
 }

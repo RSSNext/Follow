@@ -39,7 +39,7 @@ export const SettingInvitations = () => {
   return (
     <section className="mt-4">
       <div className="mb-4 space-y-2 text-sm">
-        <Trans i18nKey="settings.invitation.earlyAccess">
+        <Trans i18nKey="settings:invitation.earlyAccess">
           Follow is currently in <strong>early access</strong> and requires an invitation code to
           use.
         </Trans>
@@ -48,7 +48,7 @@ export const SettingInvitations = () => {
             components={{
               PowerIcon: <i className="i-mgc-power ml-1 mr-0.5 text-base text-accent" />,
             }}
-            i18nKey="settings.invitation.generateCost"
+            i18nKey="settings:invitation.generateCost"
           >
             <span>You can spend 10 </span>
             <i className="i-mgc-power ml-1 mr-0.5 text-base text-accent" />
@@ -59,13 +59,13 @@ export const SettingInvitations = () => {
       <Button
         onClick={() => {
           present({
-            title: t("settings.invitation.confirmModal.title"),
+            title: t("settings:invitation.confirmModal.title"),
             content: ({ dismiss }) => <ConfirmModalContent dismiss={dismiss} />,
           })
         }}
       >
         <i className="i-mgc-heart-hand-cute-re mr-1" />
-        {t("settings.invitation.generateButton")}
+        {t("settings:invitation.generateButton")}
       </Button>
       <Divider className="mb-6 mt-8" />
       <div className="flex flex-1 flex-col">
@@ -75,13 +75,13 @@ export const SettingInvitations = () => {
               <TableHeader className="border-b">
                 <TableRow className="[&_*]:!font-semibold">
                   <TableHead className="w-16 text-center" size="sm">
-                    {t("settings.invitation.tableHeaders.code")}
+                    {t("settings:invitation.tableHeaders.code")}
                   </TableHead>
                   <TableHead className="text-center" size="sm">
-                    {t("settings.invitation.tableHeaders.creationTime")}
+                    {t("settings:invitation.tableHeaders.creationTime")}
                   </TableHead>
                   <TableHead className="text-center" size="sm">
-                    {t("settings.invitation.tableHeaders.usedBy")}
+                    {t("settings:invitation.tableHeaders.usedBy")}
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -124,7 +124,7 @@ export const SettingInvitations = () => {
                           )}
                         </Tooltip>
                       ) : (
-                        t("settings.invitation.notUsed")
+                        t("settings:invitation.notUsed")
                       )}
                     </TableCell>
                   </TableRow>
@@ -135,7 +135,7 @@ export const SettingInvitations = () => {
             <LoadingCircle size="large" className="center absolute inset-0" />
           ) : (
             <div className="mt-36 w-full text-center text-sm text-zinc-400">
-              <p>{t("settings.invitation.noInvitations")}</p>
+              <p>{t("settings:invitation.noInvitations")}</p>
             </div>
           )}
         </ScrollArea.ScrollArea>
@@ -154,7 +154,7 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
     },
     onSuccess(data) {
       Queries.invitations.list().invalidate()
-      toast(t("settings.invitation.newInvitationSuccess"))
+      toast(t("settings:invitation.newInvitationSuccess"))
       navigator.clipboard.writeText(data.data)
       dismiss()
     },
@@ -168,20 +168,20 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
             PowerIcon: <i className="i-mgc-power mx-1 text-base text-accent" />,
             div: <div />,
           }}
-          i18nKey="settings.invitation.confirmModal.message"
+          i18nKey="settings:invitation.confirmModal.message"
         >
           <span>Generating an invitation code will cost you 10 </span>
           <i className="i-mgc-power mx-1 text-base text-accent" />
           <span>Power</span>
         </Trans>
       </div>
-      <div>{t("settings.invitation.confirmModal.confirm")}</div>
+      <div>{t("settings:invitation.confirmModal.confirm")}</div>
       <div className="mt-4 flex items-center justify-end gap-3">
         <Button variant="outline" onClick={dismiss}>
-          {t("settings.invitation.confirmModal.cancel")}
+          {t("settings:invitation.confirmModal.cancel")}
         </Button>
         <Button isLoading={newInvitation.isPending} onClick={() => newInvitation.mutate()}>
-          {t("settings.invitation.confirmModal.continue")}
+          {t("settings:invitation.confirmModal.continue")}
         </Button>
       </div>
     </>

@@ -1,8 +1,11 @@
 import en from "../../../../locales/app/en.json"
 import common_en from "../../../../locales/common/en.json"
-import common_zhCN from "../../../../locales/common/zh_CN.json"
+import common_zhCN from "../../../../locales/common/zh-CN.json"
 import external_en from "../../../../locales/external/en.json"
 import lang_en from "../../../../locales/lang/en.json"
+import lang_zhCN from "../../../../locales/lang/zh-CN.json"
+import settings_en from "../../../../locales/settings/en.json"
+import settings_zhCN from "../../../../locales/settings/zh-CN.json"
 
 /**
  * This file is the language resource that is loaded in full when the app is initialized.
@@ -18,9 +21,11 @@ export const defaultResources = {
     lang: lang_en,
     common: common_en,
     external: external_en,
+    settings: settings_en,
   },
-
-  zh_CN: {
+  "zh-CN": {
+    lang: lang_zhCN,
     common: common_zhCN,
+    settings: settings_zhCN,
   },
 }

@@ -15,19 +15,15 @@ export const defaultNS = "app"
 export const fallbackLanguage = "en"
 export const initI18n = async () => {
   const i18next = jotaiStore.get(i18nAtom)
-  await i18next
-    .use(initReactI18next)
-    .use(LanguageDetector)
-    .init({
-      lng: "en",
+  await i18next.use(initReactI18next).init({
+    ns: ["app", "common", "lang", "settings"],
+    lng: "en",
+    fallbackLng: fallbackLanguage,
+    defaultNS,
+    debug: import.meta.env.DEV,
 
-      fallbackLng: fallbackLanguage,
-      defaultNS,
-      debug: import.meta.env.DEV,
-      resources: defaultResources,
-    })
-
-  dayjs.locale("en")
+    resources: defaultResources,
+  })
 }
 
 if (import.meta.hot) {

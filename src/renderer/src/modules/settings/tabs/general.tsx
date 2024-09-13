@@ -33,7 +33,7 @@ const { defineSettingItem, SettingBuilder } = createSetting(
   setGeneralSetting,
 )
 export const SettingGeneral = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
   useEffect(() => {
     tipcClient?.getLoginItemSettings().then((settings) => {
       setGeneralSetting("appLaunchOnStartup", settings.openAtLogin)
@@ -56,11 +56,11 @@ export const SettingGeneral = () => {
           settings={[
             {
               type: "title",
-              value: t("settings.general.app"),
+              value: t("settings:general.app"),
             },
 
             defineSettingItem("appLaunchOnStartup", {
-              label: t("settings.general.launch_at_login"),
+              label: t("settings:general.launch_at_login"),
               disabled: !tipcClient,
               onChange(value) {
                 saveLoginSetting(value)
@@ -69,30 +69,30 @@ export const SettingGeneral = () => {
             LanguageSelector,
             {
               type: "title",
-              value: t("settings.general.timeline"),
+              value: t("settings:general.timeline"),
             },
             defineSettingItem("unreadOnly", {
-              label: t("settings.general.show_unread_on_launch.label"),
-              description: t("settings.general.show_unread_on_launch.description"),
+              label: t("settings:general.show_unread_on_launch.label"),
+              description: t("settings:general.show_unread_on_launch.description"),
             }),
             defineSettingItem("groupByDate", {
-              label: t("settings.general.group_by_date.label"),
-              description: t("settings.general.group_by_date.description"),
+              label: t("settings:general.group_by_date.label"),
+              description: t("settings:general.group_by_date.description"),
             }),
 
             { type: "title", value: "unread" },
 
             defineSettingItem("scrollMarkUnread", {
-              label: t("settings.general.mark_as_read.scroll.label"),
-              description: t("settings.general.mark_as_read.scroll.description"),
+              label: t("settings:general.mark_as_read.scroll.label"),
+              description: t("settings:general.mark_as_read.scroll.description"),
             }),
             defineSettingItem("hoverMarkUnread", {
-              label: t("settings.general.mark_as_read.hover.label"),
-              description: t("settings.general.mark_as_read.hover.description"),
+              label: t("settings:general.mark_as_read.hover.label"),
+              description: t("settings:general.mark_as_read.hover.description"),
             }),
             defineSettingItem("renderMarkUnread", {
-              label: t("settings.general.mark_as_read.render.label"),
-              description: t("settings.general.mark_as_read.render.description"),
+              label: t("settings:general.mark_as_read.render.label"),
+              description: t("settings:general.mark_as_read.render.description"),
             }),
 
             { type: "title", value: "TTS", disabled: !window.electron },
@@ -106,17 +106,17 @@ export const SettingGeneral = () => {
             // }),
             {
               type: "title",
-              value: t("settings.general.privacy_data"),
+              value: t("settings:general.privacy_data"),
             },
 
             defineSettingItem("dataPersist", {
-              label: t("settings.general.data_persist.label"),
-              description: t("settings.general.data_persist.description"),
+              label: t("settings:general.data_persist.label"),
+              description: t("settings:general.data_persist.description"),
             }),
 
             defineSettingItem("sendAnonymousData", {
-              label: t("settings.general.send_anonymous_data.label"),
-              description: t("settings.general.send_anonymous_data.description"),
+              label: t("settings:general.send_anonymous_data.label"),
+              description: t("settings:general.send_anonymous_data.description"),
               onChange(value) {
                 setGeneralSetting("sendAnonymousData", value)
                 if (value) {
@@ -128,15 +128,15 @@ export const SettingGeneral = () => {
               },
             }),
             {
-              label: t("settings.general.rebuild_database.label"),
+              label: t("settings:general.rebuild_database.label"),
               action: async () => {
                 present({
-                  title: t("settings.general.rebuild_database.title"),
+                  title: t("settings:general.rebuild_database.title"),
                   clickOutsideToDismiss: true,
                   content: () => (
                     <div className="text-sm">
-                      <p>{t("settings.general.rebuild_database.warning.line1")}</p>
-                      <p>{t("settings.general.rebuild_database.warning.line2")}</p>
+                      <p>{t("settings:general.rebuild_database.warning.line1")}</p>
+                      <p>{t("settings:general.rebuild_database.warning.line2")}</p>
                       <div className="mt-4 flex justify-end">
                         <Button
                           className="px-3 text-red-500"
@@ -153,8 +153,8 @@ export const SettingGeneral = () => {
                   ),
                 })
               },
-              description: t("settings.general.rebuild_database.description"),
-              buttonText: t("settings.general.rebuild_database.button"),
+              description: t("settings:general.rebuild_database.description"),
+              buttonText: t("settings:general.rebuild_database.button"),
             },
           ]}
         />
@@ -174,7 +174,7 @@ export const VoiceSelector = () => {
 
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("settings.general.voices")}</span>
+      <span className="shrink-0 text-sm font-medium">{t("settings:general.voices")}</span>
       <Select
         defaultValue={createDefaultSettings().voice}
         value={voice}
@@ -207,7 +207,7 @@ export const LanguageSelector = () => {
     : fallbackLanguage
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("words.language")}</span>
+      <span className="shrink-0 text-sm font-medium">{t("settings:general.language")}</span>
       <Select
         defaultValue={finalRenderLanguage}
         value={finalRenderLanguage}
