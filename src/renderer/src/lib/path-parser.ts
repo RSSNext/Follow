@@ -120,6 +120,7 @@ export const parseRegexpPathParams = (
           return {
             name: token.name,
             optional: false,
+            isCatchAll: false,
           }
         }
         case "wildcard": {
