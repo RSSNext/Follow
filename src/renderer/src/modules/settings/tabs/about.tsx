@@ -45,6 +45,7 @@ export const SettingAbout = () => {
         </p>
         <p className="mt-3 text-balance text-sm">
           <Trans
+            ns="settings"
             i18nKey="about.iconLibrary"
             components={{
               IconLibraryLink: (
@@ -64,6 +65,7 @@ export const SettingAbout = () => {
 
         <p className="mt-3 text-sm">
           <Trans
+            ns="settings"
             i18nKey="about.feedbackInfo"
             values={{ appName: APP_NAME, commitSha: GIT_COMMIT_SHA.slice(0, 7).toUpperCase() }}
             components={{
