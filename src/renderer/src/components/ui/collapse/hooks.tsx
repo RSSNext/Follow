@@ -15,5 +15,4 @@ export const [
   ____CollapseGroupItemStateContext,
 ] = createContextState<Record<string, boolean>>({})
 export const useCollapseId = () => useContext(____CollapseStateContext)
-export const useCollapseGroupItem = () =>
-  useContext(____CollapseGroupItemStateContext)
+export const useCollapseGroupItem = () => useContext(____CollapseGroupItemStateContext)

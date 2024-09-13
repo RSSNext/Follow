@@ -54,5 +54,4 @@ export const views = [
     translation: "title",
     view: FeedViewType.Notifications,
   },
-
 ]

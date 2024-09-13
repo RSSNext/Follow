@@ -2,19 +2,11 @@ import { FollowSummary } from "@renderer/components/feed-summary"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
 import { Button } from "@renderer/components/ui/button"
 import { Card, CardHeader } from "@renderer/components/ui/card"
-import {
-  CopyButton,
-  ShikiHighLighter,
-} from "@renderer/components/ui/code-highlighter"
+import { CopyButton, ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
 import { useShikiDefaultTheme } from "@renderer/components/ui/code-highlighter/shiki/hooks"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useCurrentModal } from "@renderer/components/ui/modal"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@renderer/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { Queries } from "@renderer/queries"
 import { useClaimFeedMutation } from "@renderer/queries/feed"
@@ -35,11 +27,7 @@ export const FeedClaimModalContent: FC<{
   })
   const { setClickOutSideToDismiss } = useCurrentModal()
 
-  const {
-    mutateAsync: claim,
-    isPending,
-    isSuccess,
-  } = useClaimFeedMutation(feedId)
+  const { mutateAsync: claim, isPending, isSuccess } = useClaimFeedMutation(feedId)
 
   useEffect(() => {
     setClickOutSideToDismiss(!isPending)
@@ -69,10 +57,7 @@ export const FeedClaimModalContent: FC<{
         </CardHeader>
       </Card>
       <p>To claim this feed as your own, you need to verify ownership.</p>
-      <p>
-        There are three ways to choose from, you can choose one of them to
-        verify.
-      </p>
+      <p>There are three ways to choose from, you can choose one of them to verify.</p>
       <Tabs defaultValue="content" className="mt-4">
         <TabsList className="w-full justify-start">
           <TabsTrigger value="content">Content</TabsTrigger>
@@ -82,34 +67,38 @@ export const FeedClaimModalContent: FC<{
         <AutoResizeHeight duration={0.1}>
           <TabsContent className="mt-0 pt-3" value="content">
             <p>Copy the content below and post it to your latest RSS feed.</p>
+            {feed.url.startsWith("rsshub://") && (
+              <p className="mt-1 leading-tight text-orange-800">
+                This feed is provided by RSSHub with a 1 hour cache time. Please allow up to 1 hour
+                for changes to appear after publishing content.
+              </p>
+            )}
 
             <BaseCodeBlock>{claimMessage?.data.content || ""}</BaseCodeBlock>
           </TabsContent>
           <TabsContent className="mt-0 pt-3" value="description">
             <p className="mb-2 leading-none">
               Current description:
-              <span className="ml-2 text-xs text-zinc-500">
-                {feed.description}
-              </span>
+              <span className="ml-2 text-xs text-zinc-500">{feed.description}</span>
             </p>
             <p>
-              Copy the following content and paste it into the
-              {" "}
-              <code className="text-sm">{`<description />`}</code>
-              {" "}
-              field of your
-              RSS feed.
+              Copy the following content and paste it into the{" "}
+              <code className="text-sm">{`<description />`}</code> field of your RSS feed.
             </p>
-            <BaseCodeBlock>
-              {claimMessage?.data.description || ""}
-            </BaseCodeBlock>
+            {feed.url.startsWith("rsshub://") && (
+              <p className="mt-1 leading-tight text-orange-800">
+                This feed is provided by RSSHub with a 1 hour cache time. Please allow up to 1 hour
+                for changes to appear after modifying description.
+              </p>
+            )}
+            <BaseCodeBlock>{claimMessage?.data.description || ""}</BaseCodeBlock>
           </TabsContent>
           <TabsContent className="mt-0 pt-3" value="rss">
             <div className="space-y-3">
               <p>Copy the code below and paste it into your RSS generator.</p>
               <p>
-                RSS generators generally have two formats to choose from. Please
-                copy the XML and JSON formats below as needed.
+                RSS generators generally have two formats to choose from. Please copy the XML and
+                JSON formats below as needed.
               </p>
               <p>
                 <b>XML Format</b>
@@ -128,11 +117,7 @@ export const FeedClaimModalContent: FC<{
                 transparent
                 theme={shikiTheme}
                 className="group relative mt-3 cursor-auto select-text whitespace-pre break-words rounded-lg border border-border bg-zinc-100 p-2 text-sm dark:bg-neutral-800 [&_pre]:whitespace-pre [&_pre]:break-words [&_pre]:!p-0"
-                code={JSON.stringify(
-                  JSON.parse(claimMessage?.data.json || "{}"),
-                  null,
-                  2,
-                )}
+                code={JSON.stringify(JSON.parse(claimMessage?.data.json || "{}"), null, 2)}
                 language="json"
               />
             </div>
@@ -147,9 +132,7 @@ export const FeedClaimModalContent: FC<{
           onClick={() => claim()}
           variant={isSuccess ? "outline" : "primary"}
         >
-          {isSuccess && (
-            <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />
-          )}
+          {isSuccess && <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />}
           Claim
         </Button>
       </div>

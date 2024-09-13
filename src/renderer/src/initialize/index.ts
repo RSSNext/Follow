@@ -4,6 +4,7 @@ import { repository } from "@pkg"
 import { getUISettings } from "@renderer/atoms/settings/ui"
 import { isElectronBuild } from "@renderer/constants"
 import { browserDB } from "@renderer/database"
+import { initI18n } from "@renderer/i18n"
 import { settingSyncQueue } from "@renderer/modules/settings/helper/sync-queue"
 import {
   ElectronCloseEvent,
@@ -19,16 +20,9 @@ import { enableMapSet } from "immer"
 import { toast } from "sonner"
 
 import { subscribeNetworkStatus } from "../atoms/network"
-import {
-  getGeneralSettings,
-  subscribeShouldUseIndexedDB,
-} from "../atoms/settings/general"
+import { getGeneralSettings, subscribeShouldUseIndexedDB } from "../atoms/settings/general"
 import { appLog } from "../lib/log"
-import {
-  hydrateDatabaseToStore,
-  hydrateSettings,
-  setHydrated,
-} from "./hydrate"
+import { hydrateDatabaseToStore, hydrateSettings, setHydrated } from "./hydrate"
 import { doMigration } from "./migrates"
 import { initPostHog } from "./posthog"
 import { initSentry } from "./sentry"
@@ -58,11 +52,9 @@ export const initializeApp = async () => {
   const now = Date.now()
 
   // Set Environment
-  document.documentElement.dataset.buildType = isElectronBuild ?
-    "electron" :
-    "web"
+  document.documentElement.dataset.buildType = isElectronBuild ? "electron" : "web"
 
-  doMigration()
+  apm("migration", doMigration)
 
   // Initialize dayjs
   dayjs.extend(duration)
@@ -91,22 +83,25 @@ export const initializeApp = async () => {
     toast,
   })
 
-  hydrateSettings()
+  apm("hydrateSettings", hydrateSettings)
 
-  settingSyncQueue.init()
-  settingSyncQueue.syncLocal()
+  apm("setting sync", () => {
+    settingSyncQueue.init()
+    settingSyncQueue.syncLocal()
+  })
 
   // should after hydrateSettings
-  const { dataPersist: enabledDataPersist, sendAnonymousData } =
-    getGeneralSettings()
+  const { dataPersist: enabledDataPersist, sendAnonymousData } = getGeneralSettings()
 
   initSentry()
+  await apm("i18n", initI18n)
+
   if (sendAnonymousData) initPostHog()
 
   let dataHydratedTime: undefined | number
   // Initialize the database
   if (enabledDataPersist) {
-    dataHydratedTime = await hydrateDatabaseToStore()
+    dataHydratedTime = await apm("hydrateDatabaseToStore", hydrateDatabaseToStore)
     CleanerService.cleanOutdatedData()
   }
 
@@ -129,3 +124,11 @@ export const initializeApp = async () => {
 }
 
 import.meta.hot?.dispose(cleanup)
+
+const apm = async (label: string, fn: () => Promise<any> | any) => {
+  const start = Date.now()
+  const result = await fn()
+  const end = Date.now()
+  appLog(`${label} took ${end - start}ms`)
+  return result
+}

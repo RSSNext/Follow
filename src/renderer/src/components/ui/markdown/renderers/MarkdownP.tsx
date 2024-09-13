@@ -1,16 +1,13 @@
 import { FeedViewType } from "@renderer/lib/enum"
-import { useEntryContentContext } from "@renderer/modules/entry-content/hooks"
+import { useEntryContentContextSelector } from "@renderer/modules/entry-content/hooks"
 import * as React from "react"
 
 import { ensureAndRenderTimeStamp } from "../utils"
 
 export const MarkdownP: Component<
-  React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLParagraphElement>,
-    HTMLParagraphElement
-  >
+  React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>
 > = ({ children, ...props }) => {
-  const { view } = useEntryContentContext()
+  const view = useEntryContentContextSelector((s) => s.view)
   const parseTimeline = view === FeedViewType.Audios
   if (parseTimeline && typeof children === "string") {
     const renderer = ensureAndRenderTimeStamp(children)

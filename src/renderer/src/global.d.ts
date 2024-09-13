@@ -1,3 +1,4 @@
+import type { t } from "i18next"
 import type { FC, PropsWithChildren } from "react"
 
 declare global {
@@ -6,7 +7,7 @@ declare global {
   export type ComponentType<P = object> = {
     className?: string
   } & PropsWithChildren &
-  P
+    P
   export type Nullable<T> = T | null | undefined
 
   // BIZ ID
@@ -28,6 +29,12 @@ declare global {
   }
 
   export function tw(strings: TemplateStringsArray, ...values: any[]): string
+
+  export type I18nKeys = OmitStringType<Parameters<typeof t>[0]>
+
+  type IsLiteralString<T> = T extends string ? (string extends T ? never : T) : never
+
+  type OmitStringType<T> = T extends any[] ? OmitStringType<T[number]> : IsLiteralString<T>
 }
 
 export {}

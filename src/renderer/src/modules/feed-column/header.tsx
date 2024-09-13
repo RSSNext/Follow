@@ -1,24 +1,16 @@
 import { setAppSearchOpen } from "@renderer/atoms/app"
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
-import {
-  setFeedColumnShow,
-  useFeedColumnShow,
-  useSidebarActiveView,
-} from "@renderer/atoms/sidebar"
+import { setFeedColumnShow, useFeedColumnShow, useSidebarActiveView } from "@renderer/atoms/sidebar"
 import { Logo } from "@renderer/components/icons/logo"
 import { ActionButton } from "@renderer/components/ui/button"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@renderer/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@renderer/components/ui/popover"
 import { ProfileButton } from "@renderer/components/user-button"
 import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
 import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { m } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
-import { useCallback, useRef, useState } from "react"
+import { memo, useCallback, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
@@ -37,12 +29,11 @@ const useBackHome = (active: number) => {
   )
 }
 
-export const FeedColumnHeader = () => {
+export const FeedColumnHeader = memo(() => {
   const [active] = useSidebarActiveView()
 
   const navigateBackHome = useBackHome(active)
-  const normalStyle =
-    !window.electron || window.electron.process.platform !== "darwin"
+  const normalStyle = !window.electron || window.electron.process.platform !== "darwin"
   return (
     <div
       className={cn(
@@ -66,10 +57,7 @@ export const FeedColumnHeader = () => {
           </div>
         </LogoContextMenu>
       )}
-      <div
-        className="relative flex items-center gap-1"
-        onClick={stopPropagation}
-      >
+      <div className="relative flex items-center gap-1" onClick={stopPropagation}>
         <SearchActionButton />
 
         <Link to="/discover" tabIndex={-1}>
@@ -82,20 +70,28 @@ export const FeedColumnHeader = () => {
       </div>
     </div>
   )
-}
+})
 
 const LayoutActionButton = () => {
   const feedColumnShow = useFeedColumnShow()
 
+  const [animation] = useState({
+    width: !feedColumnShow ? "auto" : 0,
+  })
+
   return (
-    <m.div
-      animate={{ width: !feedColumnShow ? "auto" : 0 }}
-      className="overflow-hidden"
-    >
+    <m.div initial={animation} animate={animation} className="overflow-hidden">
       <ActionButton
         tooltip="Toggle Sidebar"
         icon={
-          <i className={cn(!feedColumnShow ? "i-mgc-layout-leftbar-open-cute-re " : "i-mgc-layout-leftbar-close-cute-re", "text-theme-vibrancyFg")} />
+          <i
+            className={cn(
+              !feedColumnShow
+                ? "i-mgc-layout-leftbar-open-cute-re "
+                : "i-mgc-layout-leftbar-close-cute-re",
+              "text-theme-vibrancyFg",
+            )}
+          />
         }
         onClick={() => setFeedColumnShow(!feedColumnShow)}
       />
@@ -143,11 +139,7 @@ const SearchActionButton = () => {
   const canSearch = useGeneralSettingKey("dataPersist")
   if (!canSearch) return null
   return (
-    <ActionButton
-      shortcut="Meta+K"
-      tooltip="Search"
-      onClick={() => setAppSearchOpen(true)}
-    >
+    <ActionButton shortcut="Meta+K" tooltip="Search" onClick={() => setAppSearchOpen(true)}>
       <i className="i-mgc-search-2-cute-re size-5 text-theme-vibrancyFg" />
     </ActionButton>
   )

@@ -1,14 +1,11 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@renderer/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
 import { DiscoverForm } from "@renderer/modules/discover/form"
 import { DiscoverImport } from "@renderer/modules/discover/import"
 import { Recommendations } from "@renderer/modules/discover/recommendations"
 import { DiscoverRSS3 } from "@renderer/modules/discover/rss3-form"
+import { DiscoverUser } from "@renderer/modules/discover/user-form"
 import { createElement } from "react"
+import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 
 import { useSubViewTitle } from "../hooks"
@@ -31,6 +28,10 @@ const tabs = [
     value: "rss3",
   },
   {
+    name: "User",
+    value: "user",
+  },
+  {
     name: "Email",
     value: "email",
     disabled: true,
@@ -43,10 +44,12 @@ const tabs = [
 
 export function Component() {
   const [search, setSearch] = useSearchParams()
+  const { t } = useTranslation()
   useSubViewTitle("Discover")
+
   return (
     <>
-      <div className="text-2xl font-bold">Discover</div>
+      <div className="text-2xl font-bold">{t("words.discover")}</div>
       <Tabs
         value={search.get("type") || "search"}
         onValueChange={(val) => {
@@ -58,11 +61,7 @@ export function Component() {
       >
         <TabsList className="w-full">
           {tabs.map((tab) => (
-            <TabsTrigger
-              key={tab.name}
-              value={tab.value}
-              disabled={tab.disabled}
-            >
+            <TabsTrigger key={tab.name} value={tab.value} disabled={tab.disabled}>
               {tab.name}
             </TabsTrigger>
           ))}
@@ -85,4 +84,5 @@ export function Component() {
 const TabComponent = {
   import: DiscoverImport,
   rss3: DiscoverRSS3,
+  user: DiscoverUser,
 }

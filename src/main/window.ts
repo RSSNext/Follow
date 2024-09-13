@@ -11,10 +11,7 @@ import { isDev, isMacOS, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
 import { logger } from "./logger"
-import {
-  cancelPollingUpdateUnreadCount,
-  pollingUpdateUnreadCount,
-} from "./tipc/dock"
+import { cancelPollingUpdateUnreadCount, pollingUpdateUnreadCount } from "./tipc/dock"
 
 const windows = {
   settingWindow: null as BrowserWindow | null,
@@ -69,7 +66,6 @@ export function createWindow(
         backgroundMaterial: isWindows11 ? "mica" : undefined,
         frame: true,
         maximizable: !isWindows11,
-
       } as Electron.BrowserWindowConstructorOptions)
       break
     }
@@ -115,13 +111,9 @@ export function createWindow(
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-    window.loadURL(
-      process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""),
-    )
+    window.loadURL(process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""))
 
-    logger.log(
-      process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""),
-    )
+    logger.log(process.env["ELECTRON_RENDERER_URL"] + (options?.extraPath || ""))
   } else {
     const openPath = path.resolve(__dirname, "../renderer/index.html")
     window.loadFile(openPath, {
@@ -132,31 +124,24 @@ export function createWindow(
     })
   }
 
-  window.webContents.session.webRequest.onBeforeSendHeaders(
-    (details, callback) => {
-      const trueUrl =
-        process.env["VITE_IMGPROXY_URL"] &&
-        details.url.startsWith(process.env["VITE_IMGPROXY_URL"]) ?
-          decodeURIComponent(
+  window.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
+    const trueUrl =
+      process.env["VITE_IMGPROXY_URL"] && details.url.startsWith(process.env["VITE_IMGPROXY_URL"])
+        ? decodeURIComponent(
             details.url.replace(
-              new RegExp(
-                  `^${process.env["VITE_IMGPROXY_URL"]}/unsafe/\\d+x\\d+/`,
-              ),
+              new RegExp(`^${process.env["VITE_IMGPROXY_URL"]}/unsafe/\\d+x\\d+/`),
               "",
             ),
-          ) :
-          details.url
-      const refererMatch = imageRefererMatches.find((item) =>
-        item.url.test(trueUrl),
-      )
-      callback({
-        requestHeaders: {
-          ...details.requestHeaders,
-          Referer: refererMatch?.referer || trueUrl,
-        },
-      })
-    },
-  )
+          )
+        : details.url
+    const refererMatch = imageRefererMatches.find((item) => item.url.test(trueUrl))
+    callback({
+      requestHeaders: {
+        ...details.requestHeaders,
+        Referer: refererMatch?.referer || trueUrl,
+      },
+    })
+  })
 
   const selectionMenu = Menu.buildFromTemplate([
     { role: "copy", accelerator: "CmdOrCtrl+C" },
@@ -251,7 +236,14 @@ export const createMainWindow = () => {
   window.on("close", (event) => {
     if (isMacOS) {
       event.preventDefault()
-      window.hide()
+      if (window.isFullScreen()) {
+        window.once("leave-full-screen", () => {
+          window.hide()
+        })
+        window.setFullScreen(false)
+      } else {
+        window.hide()
+      }
 
       callGlobalContextMethod(window, "electronClose")
     } else {

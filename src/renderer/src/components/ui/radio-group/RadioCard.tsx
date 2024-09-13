@@ -6,26 +6,21 @@ import { useEventCallback } from "usehooks-ts"
 import { useRadioContext, useRadioGroupValue } from "./context"
 
 export const RadioCard: FC<
-  React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > & {
+  React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
     label: ReactNode
     wrapperClassName?: string
   }
 > = (props) => {
-  const { id, label, className, wrapperClassName, value, onChange, ...rest } =
-    props
+  const { id, label, className, wrapperClassName, value, onChange, ...rest } = props
   const { onChange: ctxOnChange } = useRadioContext() || {}
   const fallbackId = useId()
 
   const ctxValue = useRadioGroupValue()
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> =
-    useEventCallback((e) => {
-      ctxOnChange?.(e.target.value)
-      onChange?.(e)
-    })
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = useEventCallback((e) => {
+    ctxOnChange?.(e.target.value)
+    onChange?.(e)
+  })
 
   const selected = value === ctxValue
 

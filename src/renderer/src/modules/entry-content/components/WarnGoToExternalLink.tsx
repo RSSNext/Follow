@@ -1,16 +1,9 @@
 import { Label } from "@radix-ui/react-label"
 import { PopoverPortal } from "@radix-ui/react-popover"
-import {
-  useGeneralSettingKey,
-  useGeneralSettingValue,
-} from "@renderer/atoms/settings/general"
+import { useGeneralSettingKey, useGeneralSettingValue } from "@renderer/atoms/settings/general"
 import { IconButton } from "@renderer/components/ui/button"
 import { Checkbox } from "@renderer/components/ui/checkbox"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@renderer/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@renderer/components/ui/popover"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
 import { withSettingEnabled } from "@renderer/modules/settings/helper/withSettingEnable"
@@ -52,10 +45,7 @@ const getURLDomain = (url: string) => {
 
 const WarnGoToExternalLinkImpl = forwardRef<
   HTMLAnchorElement,
-  React.DetailedHTMLProps<
-    React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    HTMLAnchorElement
-  >
+  React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
 >(({ ...rest }, ref) => {
   const [open, setOpen] = useState(false)
   const [checked, setChecked] = useState(false)
@@ -106,8 +96,8 @@ const WarnGoToExternalLinkImpl = forwardRef<
         <PopoverPortal>
           <PopoverContent>
             <p className="max-w-[50ch] text-sm">
-              You are about to leave this site to go to an external page, do you
-              trust this URL and go to it?
+              You are about to leave this site to go to an external page, do you trust this URL and
+              go to it?
             </p>
             <p className="mt-2 text-center text-sm underline">{rest.href}</p>
 
@@ -117,10 +107,7 @@ const WarnGoToExternalLinkImpl = forwardRef<
                 <span className="ml-2 text-[13px]">Trust this domain</span>
               </Label>
 
-              <IconButton
-                icon={<i className="i-mingcute-arrow-right-line" />}
-                onClick={handleGo}
-              >
+              <IconButton icon={<i className="i-mingcute-arrow-right-line" />} onClick={handleGo}>
                 <span className="duration-200 group-hover:opacity-0">Go</span>
               </IconButton>
             </div>

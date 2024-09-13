@@ -1,18 +1,10 @@
-import {
-  useUISettingKey,
-  useUISettingSelector,
-} from "@renderer/atoms/settings/ui"
+import { useUISettingKey, useUISettingSelector } from "@renderer/atoms/settings/ui"
 import { isElectronBuild } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { cn } from "@renderer/lib/utils"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import type { FC } from "react"
-import {
-  useInsertionEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import { useInsertionEffect, useMemo, useRef, useState } from "react"
 import type {
   BundledLanguage,
   BundledTheme,
@@ -20,10 +12,7 @@ import type {
   DynamicImportThemeRegistration,
   HighlighterCore,
 } from "shiki"
-import {
-  createHighlighterCoreSync,
-  createJavaScriptRegexEngine,
-} from "shiki/core"
+import { createHighlighterCoreSync, createJavaScriptRegexEngine } from "shiki/core"
 
 import { CopyButton } from "../copy-button"
 import { shikiTransformers } from "./shared"
@@ -48,12 +37,8 @@ export interface ShikiProps {
   theme?: string
 }
 
-let langModule: Record<
-  BundledLanguage,
-  DynamicImportLanguageRegistration
-> | null = null
-let themeModule: Record<BundledTheme, DynamicImportThemeRegistration> | null =
-  null
+let langModule: Record<BundledLanguage, DynamicImportLanguageRegistration> | null = null
+let themeModule: Record<BundledTheme, DynamicImportThemeRegistration> | null = null
 let bundledLanguagesKeysSet: Set<string> | null = null
 
 export const ShikiHighLighter: FC<ShikiProps> = (props) => {
@@ -75,9 +60,7 @@ const ShikiHighLighterRender: FC<
   }
 > = (props) => {
   const { code, language, className, theme: overrideTheme, shiki } = props
-  const [currentLanguage, setCurrentLanguage] = useState(
-    language || "plaintext",
-  )
+  const [currentLanguage, setCurrentLanguage] = useState(language || "plaintext")
 
   const guessCodeLanguage = useUISettingKey("guessCodeLanguage")
   useInsertionEffect(() => {
@@ -96,16 +79,14 @@ const ShikiHighLighterRender: FC<
     }
 
     function guessLanguage() {
-      tipcClient
-        ?.detectCodeStringLanguage({ codeString: code })
-        .then((result) => {
-          for (const item of result) {
-            if (bundledLanguagesKeysSet?.has(item.languageId)) {
-              setCurrentLanguage(item.languageId)
-              break
-            }
+      tipcClient?.detectCodeStringLanguage({ codeString: code }).then((result) => {
+        for (const item of result) {
+          if (bundledLanguagesKeysSet?.has(item.languageId)) {
+            setCurrentLanguage(item.languageId)
+            break
           }
-        })
+        }
+      })
     }
   }, [guessCodeLanguage])
 
@@ -114,9 +95,7 @@ const ShikiHighLighterRender: FC<
 
   const [loaded, setLoaded] = useState(false)
 
-  const codeTheme = useUISettingSelector(
-    (s) => overrideTheme || s.codeHighlightTheme,
-  )
+  const codeTheme = useUISettingSelector((s) => overrideTheme || s.codeHighlightTheme)
   useIsomorphicLayoutEffect(() => {
     let isMounted = true
     setLoaded(false)
@@ -138,14 +117,14 @@ const ShikiHighLighterRender: FC<
       if (!currentLanguage || !codeTheme) return
 
       const [{ bundledLanguages }, { bundledThemes }] =
-        langModule && themeModule ?
-            [
+        langModule && themeModule
+          ? [
               {
                 bundledLanguages: langModule,
               },
               { bundledThemes: themeModule },
-            ] :
-          await Promise.all([import("shiki/langs"), import("shiki/themes")])
+            ]
+          : await Promise.all([import("shiki/langs"), import("shiki/themes")])
 
       langModule = bundledLanguages
       themeModule = bundledThemes
@@ -194,9 +173,7 @@ const ShikiHighLighterRender: FC<
       </pre>
     )
   }
-  return (
-    <ShikiCode {...props} language={currentLanguage} codeTheme={codeTheme} />
-  )
+  return <ShikiCode {...props} language={currentLanguage} codeTheme={codeTheme} />
 }
 
 const ShikiCode: FC<
@@ -237,10 +214,7 @@ const ShikiCode: FC<
         className,
       )}
     >
-      <div
-        dangerouslySetInnerHTML={{ __html: rendered }}
-        data-language={language}
-      />
+      <div dangerouslySetInnerHTML={{ __html: rendered }} data-language={language} />
       <CopyButton
         value={code}
         className="absolute right-1 top-1 opacity-0 duration-200 group-hover:opacity-100"

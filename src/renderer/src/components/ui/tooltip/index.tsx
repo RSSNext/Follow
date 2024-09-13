@@ -38,7 +38,7 @@ const TooltipContent = React.forwardRef<
       }}
     >
       {/* https://github.com/radix-ui/primitives/discussions/868 */}
-      <TooltipPrimitive.Arrow className="z-50 fill-white drop-shadow-[0_0_1px_theme(colors.accent.DEFAULT/0.3)] [clip-path:inset(0_-10px_-10px_-10px)] dark:fill-neutral-950" />
+      <TooltipPrimitive.Arrow className="z-50 fill-white [clip-path:inset(0_-10px_-10px_-10px)] dark:fill-neutral-950 dark:drop-shadow-[0_0_1px_theme(colors.white/0.5)]" />
       {props.children}
     </m.div>
   </TooltipPrimitive.Content>

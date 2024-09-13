@@ -44,7 +44,8 @@ const unread = create({
  * Only call in store action
  * @internal
  */
-export const internal_batchMarkRead = (...args: Parameters<typeof unread.fetch>) => unread.fetch.apply(null, args)
+export const internal_batchMarkRead = (...args: Parameters<typeof unread.fetch>) =>
+  unread.fetch.apply(null, args)
 
 export const getEntryIsInView = (entryId: string) => {
   const state = useEntryStore.getState()

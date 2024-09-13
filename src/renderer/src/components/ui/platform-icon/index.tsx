@@ -5,10 +5,13 @@ import type { FC } from "react"
 
 import { getSupportedPlatformIconName } from "./utils"
 
-const IconMap = Object.values(LinkParsers).reduce((acc, parser) => {
-  acc[parser.parserName] = parser.icon
-  return acc
-}, {} as Record<string, string>)
+const IconMap = Object.values(LinkParsers).reduce(
+  (acc, parser) => {
+    acc[parser.parserName] = parser.icon
+    return acc
+  },
+  {} as Record<string, string>,
+)
 
 export const PlatformIcon: FC<{
   url: string

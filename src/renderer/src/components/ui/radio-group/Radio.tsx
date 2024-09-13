@@ -6,26 +6,21 @@ import { useEventCallback } from "usehooks-ts"
 import { useRadioContext, useRadioGroupValue } from "./context"
 
 export const Radio: FC<
-  React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > & {
+  React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
     label: ReactNode
     wrapperClassName?: string
   }
 > = (props) => {
-  const { id, label, className, wrapperClassName, value, onChange, ...rest } =
-    props
+  const { id, label, className, wrapperClassName, value, onChange, ...rest } = props
   const { onChange: ctxOnChange } = useRadioContext() || {}
   const fallbackId = useId()
 
   const ctxValue = useRadioGroupValue()
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> =
-    useEventCallback((e) => {
-      ctxOnChange?.(e.target.value)
-      onChange?.(e)
-    })
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = useEventCallback((e) => {
+    ctxOnChange?.(e.target.value)
+    onChange?.(e)
+  })
   return (
     <div className={cn("flex items-center gap-2", wrapperClassName)}>
       <input
@@ -41,12 +36,7 @@ export const Radio: FC<
         onChange={handleChange}
       />
 
-      <label
-        className={cn(
-          rest.disabled ? "text-theme-disabled" : "",
-        )}
-        htmlFor={id ?? fallbackId}
-      >
+      <label className={cn(rest.disabled ? "text-theme-disabled" : "")} htmlFor={id ?? fallbackId}>
         {label}
       </label>
     </div>

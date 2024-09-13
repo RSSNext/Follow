@@ -18,22 +18,13 @@ import type { UniversalItemProps } from "../types"
 
 const ViewTag = window.electron ? "webview" : "iframe"
 
-export function VideoItem({
-  entryId,
-  entryPreview,
-  translation,
-}: UniversalItemProps) {
+export function VideoItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview
 
-  const isActive = useRouteParamsSelector(
-    ({ entryId }) => entryId === entry?.entries.id,
-  )
+  const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
   const [miniIframeSrc, iframeSrc] = useMemo(
-    () => [
-      urlToIframe(entry?.entries.url, true),
-      urlToIframe(entry?.entries.url),
-    ],
+    () => [urlToIframe(entry?.entries.url, true), urlToIframe(entry?.entries.url)],
     [entry?.entries.url],
   )
   const modalStack = useModalStack()
@@ -64,20 +55,14 @@ export function VideoItem({
 
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
-    <GridItem
-      entryId={entryId}
-      entryPreview={entryPreview}
-      translation={translation}
-    >
+    <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div
         className="w-full"
         onClick={() => {
           if (iframeSrc) {
             modalStack.present({
               title: "",
-              content: (props) => (
-                <PreviewVideoModalContent src={iframeSrc} {...props} />
-              ),
+              content: (props) => <PreviewVideoModalContent src={iframeSrc} {...props} />,
               clickOutsideToDismiss: true,
               CustomModalComponent: NoopChildren,
               overlay: true,
@@ -94,31 +79,28 @@ export function VideoItem({
                 isActive && "rounded-b-none",
               )}
             />
-          ) : entry.entries.media ?
-              (
-                <Media
-                  key={entry.entries.media?.[0].url}
-                  src={entry.entries.media?.[0].url}
-                  type={entry.entries.media?.[0].type}
-                  previewImageUrl={entry.entries.media?.[0].preview_image_url}
-                  className={cn(
-                    "aspect-video w-full shrink-0 rounded-md object-cover",
-                    isActive && "rounded-b-none",
-                  )}
-                  loading="lazy"
-                  proxy={{
-                    width: 640,
-                    height: 360,
-                  }}
-                  disableContextMenu
-                />
-              ) :
-              (
-                <div className="center aspect-video w-full flex-col gap-1 bg-muted text-xs text-muted-foreground">
-                  <i className="i-mgc-sad-cute-re size-6" />
-                  No media available
-                </div>
+          ) : entry.entries.media ? (
+            <Media
+              key={entry.entries.media?.[0].url}
+              src={entry.entries.media?.[0].url}
+              type={entry.entries.media?.[0].type}
+              previewImageUrl={entry.entries.media?.[0].preview_image_url}
+              className={cn(
+                "aspect-video w-full shrink-0 rounded-md object-cover",
+                isActive && "rounded-b-none",
               )}
+              loading="lazy"
+              proxy={{
+                width: 640,
+                height: 360,
+              }}
+            />
+          ) : (
+            <div className="center aspect-video w-full flex-col gap-1 bg-muted text-xs text-muted-foreground">
+              <i className="i-mgc-sad-cute-re size-6" />
+              No media available
+            </div>
+          )}
         </div>
       </div>
     </GridItem>
@@ -141,11 +123,7 @@ const PreviewVideoModalContent: ModalContentComponent<{
     }
   }, [])
   return (
-    <m.div
-      exit={{ scale: 0.94, opacity: 0 }}
-      className="size-full p-12"
-      onClick={() => dismiss()}
-    >
+    <m.div exit={{ scale: 0.94, opacity: 0 }} className="size-full p-12" onClick={() => dismiss()}>
       <ViewTag src={src} className="size-full" />
     </m.div>
   )

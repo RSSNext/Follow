@@ -1,21 +1,16 @@
-import "./cssAsPlugin"
+import "./configs/tw-css-plugin"
 
 import path from "node:path"
 
 import { getIconCollections, iconsPlugin } from "@egoist/tailwindcss-icons"
-import {
-  cleanupSVG,
-  importDirectorySync,
-  isEmptyColor,
-  parseColors,
-  runSVGO,
-} from "@iconify/tools"
+import { cleanupSVG, importDirectorySync, isEmptyColor, parseColors, runSVGO } from "@iconify/tools"
 import { compareColors, stringToColor } from "@iconify/utils/lib/colors"
+import plugin from "tailwindcss/plugin"
 import resolveConfig from "tailwindcss/resolveConfig"
 
 /** @type {import('tailwindcss').Config} */
 export default resolveConfig({
-  darkMode: ["class", "[data-theme=\"dark\"]"],
+  darkMode: ["class", '[data-theme="dark"]'],
   content: ["./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
@@ -65,7 +60,7 @@ export default resolveConfig({
 
         theme: {
           // https://uicolors.app/create
-          "accent": {
+          accent: {
             DEFAULT: "#ff5c00",
             50: "#fff7ec",
             100: "#ffeed3",
@@ -80,28 +75,27 @@ export default resolveConfig({
             950: "#461304",
           },
 
-          "vibrancyFg": "hsl(var(--fo-vibrancy-foreground), <alpha-value>)",
-          "vibrancyBg": "var(--fo-vibrancy-background)",
+          vibrancyFg: "hsl(var(--fo-vibrancy-foreground), <alpha-value>)",
+          vibrancyBg: "var(--fo-vibrancy-background)",
 
-          "item": {
+          item: {
             active: "var(--fo-item-active)",
             hover: "var(--fo-item-hover)",
           },
 
-          "inactive": "hsl(var(--fo-inactive), <alpha-value>)",
-          "disabled": "hsl(var(--fo-disabled), <alpha-value>)",
+          inactive: "hsl(var(--fo-inactive), <alpha-value>)",
+          disabled: "hsl(var(--fo-disabled), <alpha-value>)",
 
-          "foreground": "hsl(var(--fo-text-primary), <alpha-value>)",
-          "background": "var(--fo-background)",
+          foreground: "hsl(var(--fo-text-primary), <alpha-value>)",
+          background: "var(--fo-background)",
 
-          "foreground-hover":
-            "hsl(var(--fo-text-primary-hover), <alpha-value>)",
+          "foreground-hover": "hsl(var(--fo-text-primary-hover), <alpha-value>)",
 
-          "modal": {
-            "background": "var(--fo-modal-background)",
+          modal: {
+            background: "var(--fo-modal-background)",
             "background-opaque": "var(--fo-modal-background-opaque)",
           },
-          "button": {
+          button: {
             hover: "var(--fo-button-hover)",
           },
         },
@@ -122,18 +116,23 @@ export default resolveConfig({
       }),
     },
   },
+
   plugins: [
     iconsPlugin({
       collections: {
         ...getIconCollections(["mingcute", "simple-icons", "logos"]),
         mgc: getCollections(path.resolve(__dirname, "./icons/mgc")),
-
       },
     }),
     require("tailwindcss-animate"),
     require("@tailwindcss/container-queries"),
     require("@tailwindcss/typography"),
     require("./src/renderer/src/styles/tailwind-extend.css"),
+    plugin(({ addVariant }) => {
+      addVariant("f-motion-reduce", '[data-motion-reduce="true"] &')
+      addVariant("group-motion-reduce", ':merge(.group)[data-motion-reduce="true"] &')
+      addVariant("peer-motion-reduce", ':merge(.peer)[data-motion-reduce="true"] ~ &')
+    }),
   ],
 })
 
@@ -170,9 +169,7 @@ function getCollections(dir: string) {
         callback: (attr, colorStr, color) => {
           if (!color) {
             // Color cannot be parsed!
-            throw new Error(
-              `Invalid color: "${colorStr}" in attribute ${attr}`,
-            )
+            throw new Error(`Invalid color: "${colorStr}" in attribute ${attr}`)
           }
 
           if (isEmptyColor(color)) {

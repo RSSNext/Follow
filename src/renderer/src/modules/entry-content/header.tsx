@@ -9,10 +9,7 @@ import { ActionButton } from "@renderer/components/ui/button"
 import { DividerVertical } from "@renderer/components/ui/divider"
 import { views } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
-import {
-  useEntryActions,
-  useEntryReadabilityToggle,
-} from "@renderer/hooks/biz/useEntryActions"
+import { useEntryActions, useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
 import { tipcClient } from "@renderer/lib/client"
 import { FeedViewType } from "@renderer/lib/enum"
 import { parseHtml } from "@renderer/lib/parse-html"
@@ -23,12 +20,12 @@ import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
 import { noop } from "foxact/noop"
 import { AnimatePresence, m } from "framer-motion"
-import { useMemo, useState } from "react"
+import { memo, useMemo, useState } from "react"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"
 
-export function EntryHeader({
+function EntryHeaderImpl({
   view,
   entryId,
   className,
@@ -79,9 +76,7 @@ export function EntryHeader({
                 exit={{ opacity: 0.01, y: 30 }}
                 className="flex min-w-0 shrink items-end gap-2 truncate text-sm leading-tight text-theme-foreground"
               >
-                <span className="min-w-0 shrink truncate font-bold">
-                  {entryTitleMeta.title}
-                </span>
+                <span className="min-w-0 shrink truncate font-bold">{entryTitleMeta.title}</span>
                 <i className="i-mgc-line-cute-re size-[10px] shrink-0 translate-y-[-3px] rotate-[-25deg]" />
                 <span className="shrink-0 truncate text-xs opacity-80">
                   {entryTitleMeta.description}
@@ -92,11 +87,7 @@ export function EntryHeader({
         </div>
 
         <div className="relative flex shrink-0 items-center justify-end gap-3">
-          <ElectronAdditionActions
-            view={view}
-            entry={entry}
-            key={entry.entries.id}
-          />
+          <ElectronAdditionActions view={view} entry={entry} key={entry.entries.id} />
 
           {items
             .filter((item) => !item.hide)
@@ -123,17 +114,15 @@ export function EntryHeader({
   )
 }
 
-const ElectronAdditionActions = window.electron ?
-    ({
+const ElectronAdditionActions = window.electron
+  ? ({
       view = FeedViewType.Articles,
       entry,
     }: {
       view: FeedViewType
       entry?: FlatEntryModel | null
     }) => {
-      const entryReadabilityStatus = useEntryInReadabilityStatus(
-        entry?.entries.id,
-      )
+      const entryReadabilityStatus = useEntryInReadabilityStatus(entry?.entries.id)
 
       const feed = useFeedById(entry?.feedId)
 
@@ -160,25 +149,19 @@ const ElectronAdditionActions = window.electron ?
           key: "tts",
           name: "Play TTS",
           shortcut: shortcuts.entry.tts.key,
-          className: ttsLoading ?
-            "i-mgc-loading-3-cute-re animate-spin" :
-            "i-mgc-voice-cute-re",
+          className: ttsLoading ? "i-mgc-loading-3-cute-re animate-spin" : "i-mgc-voice-cute-re",
 
           disabled: !populatedEntry.entries.content,
           onClick: async () => {
             if (ttsLoading) return
             if (!populatedEntry.entries.content) return
             setTtsLoading(true)
-            if (
-              getAudioPlayerAtomValue().entryId === populatedEntry.entries.id
-            ) {
+            if (getAudioPlayerAtomValue().entryId === populatedEntry.entries.id) {
               AudioPlayer.togglePlayAndPause()
             } else {
               const filePath = await tipcClient?.tts({
                 id: populatedEntry.entries.id,
-                text: (
-                  await parseHtml(populatedEntry.entries.content)
-                ).toText(),
+                text: (await parseHtml(populatedEntry.entries.content)).toText(),
               })
               if (filePath) {
                 AudioPlayer.mount({
@@ -195,12 +178,10 @@ const ElectronAdditionActions = window.electron ?
         {
           name: "Readability",
           className: cn(
-            isInReadability(entryReadabilityStatus) ?
-              `i-mgc-sparkles-2-filled` :
-              `i-mgc-sparkles-2-cute-re`,
-            entryReadabilityStatus === ReadabilityStatus.WAITING ?
-              `animate-pulse` :
-              "",
+            isInReadability(entryReadabilityStatus)
+              ? `i-mgc-sparkles-2-filled`
+              : `i-mgc-sparkles-2-cute-re`,
+            entryReadabilityStatus === ReadabilityStatus.WAITING ? `animate-pulse` : "",
           ),
           key: "readability",
           hide: views[view].wideMode || !populatedEntry.entries.url,
@@ -228,5 +209,7 @@ const ElectronAdditionActions = window.electron ?
           <DividerVertical className="mx-2 w-px" />
         </>
       )
-    } :
-  noop
+    }
+  : noop
+
+export const EntryHeader = memo(EntryHeaderImpl)

@@ -9,12 +9,7 @@ import type { OptionsOrDependencyArray } from "react-hotkeys-hook/dist/types"
 
 import { KbdCombined } from "../kbd/Kbd"
 import { LoadingCircle } from "../loading"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "../tooltip"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../tooltip"
 import { styledButtonVariant } from "./variants"
 
 export interface BaseButtonProps {
@@ -56,12 +51,7 @@ export const ActionButton = React.forwardRef<
 
     return (
       <>
-        {shortcut && (
-          <HotKeyTrigger
-            shortcut={shortcut}
-            fn={() => buttonRef.current?.click()}
-          />
-        )}
+        {shortcut && <HotKeyTrigger shortcut={shortcut} fn={() => buttonRef.current?.click()} />}
         <Tooltip disableHoverableContent>
           <TooltipTrigger asChild>
             <button
@@ -80,26 +70,21 @@ export const ActionButton = React.forwardRef<
               disabled={disabled}
               {...rest}
             >
-              {typeof icon === "function" ?
-                React.createElement(icon, {
-                  className: "size-4 grayscale text-current",
-                }) :
-                icon}
+              {typeof icon === "function"
+                ? React.createElement(icon, {
+                    className: "size-4 grayscale text-current",
+                  })
+                : icon}
 
               {children}
             </button>
           </TooltipTrigger>
           <TooltipPortal>
-            <TooltipContent
-              className="flex items-center gap-1"
-              side={tooltipSide ?? "bottom"}
-            >
+            <TooltipContent className="flex items-center gap-1" side={tooltipSide ?? "bottom"}>
               {tooltip}
               {!!shortcut && (
                 <div className="ml-1">
-                  <KbdCombined className="text-foreground/80">
-                    {shortcut}
-                  </KbdCombined>
+                  <KbdCombined className="text-foreground/80">{shortcut}</KbdCombined>
                 </div>
               )}
             </TooltipContent>
@@ -125,21 +110,20 @@ const HotKeyTrigger = ({
   })
   return null
 }
-export const MotionButtonBase = React.forwardRef<
-  HTMLButtonElement,
-  HTMLMotionProps<"button">
->(({ children, ...rest }, ref) => (
-  <m.button
-    layout="size"
-    initial
-    whileFocus={{ scale: 1.02 }}
-    whileTap={{ scale: 0.95 }}
-    {...rest}
-    ref={ref}
-  >
-    {children}
-  </m.button>
-))
+export const MotionButtonBase = React.forwardRef<HTMLButtonElement, HTMLMotionProps<"button">>(
+  ({ children, ...rest }, ref) => (
+    <m.button
+      layout="size"
+      initial
+      whileFocus={{ scale: 1.02 }}
+      whileTap={{ scale: 0.95 }}
+      {...rest}
+      ref={ref}
+    >
+      {children}
+    </m.button>
+  ),
+)
 
 MotionButtonBase.displayName = "MotionButtonBase"
 
@@ -147,64 +131,55 @@ export const Button = React.forwardRef<
   HTMLButtonElement,
   React.PropsWithChildren<
     Omit<HTMLMotionProps<"button">, "children"> &
-    BaseButtonProps &
-    VariantProps<typeof styledButtonVariant> & {
-      buttonClassName?: string
-    }
+      BaseButtonProps &
+      VariantProps<typeof styledButtonVariant> & {
+        buttonClassName?: string
+      }
   >
->(
-  (
-    { className, buttonClassName, isLoading, variant, status, ...props },
-    ref,
-  ) => {
-    const handleClick: React.MouseEventHandler<HTMLButtonElement> =
-      React.useCallback(
-        (e) => {
-          if (isLoading || props.disabled) {
-            e.preventDefault()
-            return
-          }
+>(({ className, buttonClassName, isLoading, variant, status, ...props }, ref) => {
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
+    (e) => {
+      if (isLoading || props.disabled) {
+        e.preventDefault()
+        return
+      }
 
-          props.onClick?.(e)
-        },
-        [isLoading, props],
-      )
-    return (
-      <MotionButtonBase
-        ref={ref}
-        className={cn(
-          styledButtonVariant({
-            variant,
-            status: isLoading || props.disabled ? "disabled" : undefined,
-          }),
-          className,
-          buttonClassName,
+      props.onClick?.(e)
+    },
+    [isLoading, props],
+  )
+  return (
+    <MotionButtonBase
+      ref={ref}
+      className={cn(
+        styledButtonVariant({
+          variant,
+          status: isLoading || props.disabled ? "disabled" : undefined,
+        }),
+        className,
+        buttonClassName,
+      )}
+      {...props}
+      onClick={handleClick}
+    >
+      <m.span className="center">
+        {isLoading && (
+          <m.span className="center">
+            <LoadingCircle size="small" className="center mr-2" />
+          </m.span>
         )}
-        {...props}
-        onClick={handleClick}
-      >
-        <m.span className="center">
-          {isLoading && (
-            <m.span className="center">
-              <LoadingCircle size="small" className="center mr-2" />
-            </m.span>
-          )}
-          <m.span className={cn("center", className)}>{props.children}</m.span>
-        </m.span>
-      </MotionButtonBase>
-    )
-  },
-)
+        <m.span className={cn("center", className)}>{props.children}</m.span>
+      </m.span>
+    </MotionButtonBase>
+  )
+})
 
 export const IconButton = React.forwardRef<
   HTMLButtonElement,
-  React.DetailedHTMLProps<
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    HTMLButtonElement
-  > &
-  React.PropsWithChildren<{
-    icon: React.JSX.Element
-  }>
+  React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> &
+    React.PropsWithChildren<{
+      icon: React.JSX.Element
+    }>
 >((props, ref) => {
   const { icon, ...rest } = props
   return (
@@ -233,9 +208,7 @@ export const IconButton = React.forwardRef<
           ),
         })}
       </span>
-      <span className="duration-200 group-hover:opacity-0">
-        {props.children}
-      </span>
+      <span className="duration-200 group-hover:opacity-0">{props.children}</span>
     </button>
   )
 })

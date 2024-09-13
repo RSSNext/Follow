@@ -23,11 +23,7 @@ export const initPostHog = async () => {
 
   window.posthog = {
     reset,
-    capture(
-      event_name: string,
-      properties?: Properties | null,
-      options?: CaptureOptions,
-    ) {
+    capture(event_name: string, properties?: Properties | null, options?: CaptureOptions) {
       return capture.apply(posthog, [
         event_name,
         {

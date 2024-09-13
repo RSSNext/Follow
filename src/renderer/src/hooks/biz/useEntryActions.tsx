@@ -28,13 +28,7 @@ import type { ReactNode } from "react"
 import { useCallback, useMemo } from "react"
 import { toast } from "sonner"
 
-export const useEntryReadabilityToggle = ({
-  id,
-  url,
-}: {
-  id: string
-  url: string
-}) =>
+export const useEntryReadabilityToggle = ({ id, url }: { id: string; url: string }) =>
   useCallback(async () => {
     const status = getReadabilityStatus()[id]
     const isTurnOn = status !== ReadabilityStatus.INITIAL && !!status
@@ -71,8 +65,7 @@ export const useEntryReadabilityToggle = ({
   }, [id, url])
 export const useCollect = (entry: Nullable<CombinedEntryModel>) =>
   useMutation({
-    mutationFn: async () =>
-      entry && entryActions.markStar(entry.entries.id, true),
+    mutationFn: async () => entry && entryActions.markStar(entry.entries.id, true),
 
     onSuccess: () => {
       toast.success("Starred.", {
@@ -83,8 +76,7 @@ export const useCollect = (entry: Nullable<CombinedEntryModel>) =>
 
 export const useUnCollect = (entry: Nullable<CombinedEntryModel>) =>
   useMutation({
-    mutationFn: async () =>
-      entry && entryActions.markStar(entry.entries.id, false),
+    mutationFn: async () => entry && entryActions.markStar(entry.entries.id, false),
 
     onSuccess: () => {
       toast.success("Unstarred.", {
@@ -177,10 +169,7 @@ export const useEntryActions = ({
           (checkEagle.isLoading ? true : !checkEagle.data) ||
           !populatedEntry.entries.media?.length,
         onClick: async () => {
-          if (
-            !populatedEntry.entries.url ||
-            !populatedEntry.entries.media?.length
-          ) {
+          if (!populatedEntry.entries.url || !populatedEntry.entries.media?.length) {
             return
           }
           const response = await tipcClient?.saveToEagle({
@@ -223,8 +212,7 @@ export const useEntryActions = ({
             })
             toast.success(
               <>
-                Saved to Readwise,
-                {" "}
+                Saved to Readwise,{" "}
                 <a target="_blank" className="underline" href={data.url}>
                   view
                 </a>
@@ -258,16 +246,13 @@ export const useEntryActions = ({
               },
               method: "POST",
               headers: {
-                Authorization: `Basic ${btoa(
-                  `${instapaperUsername}:${instapaperPassword}`,
-                )}`,
+                Authorization: `Basic ${btoa(`${instapaperUsername}:${instapaperPassword}`)}`,
               },
               parseResponse: JSON.parse,
             })
             toast.success(
               <>
-                Saved to Instapaper,
-                {" "}
+                Saved to Instapaper,{" "}
                 <a
                   target="_blank"
                   className="underline"
@@ -345,10 +330,7 @@ export const useEntryActions = ({
       {
         name: "Share",
         key: "share",
-        className:
-          getOS() === "macOS" ?
-            `i-mgc-share-3-cute-re` :
-            "i-mgc-share-forward-cute-re",
+        className: getOS() === "macOS" ? `i-mgc-share-3-cute-re` : "i-mgc-share-forward-cute-re",
         shortcut: shortcuts.entry.share.key,
         hide: !window.electron && !navigator.share,
 

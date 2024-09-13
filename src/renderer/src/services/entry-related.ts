@@ -8,11 +8,10 @@ export enum EntryRelatedKey {
 }
 
 const taskQueue = new Map<EntryRelatedKey, Promise<any>>(
-  [
-    EntryRelatedKey.READ,
-    EntryRelatedKey.FEED_ID,
-    EntryRelatedKey.COLLECTION,
-  ].map((key) => [key, Promise.resolve()]),
+  [EntryRelatedKey.READ, EntryRelatedKey.FEED_ID, EntryRelatedKey.COLLECTION].map((key) => [
+    key,
+    Promise.resolve(),
+  ]),
 )
 
 type IdToIdRecord = Record<string, string>
@@ -34,18 +33,9 @@ class ServiceStatic {
    * @param data key is entryId, value is read status
    * @returns
    */
-  async upsert(
-    type: EntryRelatedKey.READ,
-    data: IdToBooleanRecord
-  ): Promise<void>
-  async upsert(
-    type: EntryRelatedKey.FEED_ID,
-    data: IdToIdRecord
-  ): Promise<void>
-  async upsert(
-    type: EntryRelatedKey.COLLECTION,
-    data: IdToAnyObjectRecord
-  ): Promise<void>
+  async upsert(type: EntryRelatedKey.READ, data: IdToBooleanRecord): Promise<void>
+  async upsert(type: EntryRelatedKey.FEED_ID, data: IdToIdRecord): Promise<void>
+  async upsert(type: EntryRelatedKey.COLLECTION, data: IdToAnyObjectRecord): Promise<void>
   async upsert(type: any, data: Record<string, any>) {
     const getPreviousTask = taskQueue.get(type) || Promise.resolve()
 

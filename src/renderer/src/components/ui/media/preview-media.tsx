@@ -3,7 +3,6 @@ import { COPY_MAP } from "@renderer/constants"
 import { tipcClient } from "@renderer/lib/client"
 import { stopPropagation } from "@renderer/lib/dom"
 import { replaceImgUrlIfNeed } from "@renderer/lib/img-proxy"
-import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import type { FC } from "react"
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
@@ -74,47 +73,16 @@ const Wrapper: Component<{
     </div>
   )
 }
+
+export interface PreviewMediaProps extends MediaModel {
+  fallbackUrl?: string
+}
 export const PreviewMediaContent: FC<{
-  media: MediaModel[]
+  media: PreviewMediaProps[]
   initialIndex?: number
 }> = ({ media, initialIndex = 0 }) => {
   const [currentMedia, setCurrentMedia] = useState(media[initialIndex])
   const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex)
-
-  const handleContextMenu = useCallback(
-    (image: string, e: React.MouseEvent<HTMLImageElement>) => {
-      if (!window.electron) return
-
-      showNativeMenu(
-        [
-          {
-            label: COPY_MAP.OpenInBrowser(),
-            type: "text",
-            click: () => {
-              window.open(image)
-            },
-          },
-          {
-            label: "Copy image address",
-            type: "text",
-            click: () => {
-              navigator.clipboard.writeText(image)
-            },
-          },
-          {
-            label: "Save image as...",
-            type: "text",
-            click: () => {
-              tipcClient?.download(image)
-            },
-          },
-        ],
-        e,
-      )
-    },
-    [],
-  )
-
   const swiperRef = useRef<SwiperRef>(null)
   // This only to delay show
   const [showActions, setShowActions] = useState(false)
@@ -138,15 +106,15 @@ export const PreviewMediaContent: FC<{
             controls
             autoPlay
             muted
-            className="max-h-full max-w-full object-contain"
+            className="size-full object-contain"
             onClick={stopPropagation}
           />
         ) : (
           <FallbackableImage
+            fallbackUrl={media[0].fallbackUrl}
             className="size-full object-contain"
             alt="cover"
             src={src}
-            onContextMenu={(e) => handleContextMenu(src, e)}
           />
         )}
       </Wrapper>
@@ -227,21 +195,17 @@ export const PreviewMediaContent: FC<{
         )}
 
         {media.map((med, index) => (
-          <SwiperSlide
-            key={med.url}
-            virtualIndex={index}
-            className="center !flex"
-          >
+          <SwiperSlide key={med.url} virtualIndex={index} className="center !flex">
             {med.type === "video" ? (
               <VideoPlayer
                 src={med.url}
                 controls
-                className="max-h-full max-w-full object-contain"
+                className="size-full object-contain"
                 onClick={(e) => e.stopPropagation()}
               />
             ) : (
               <FallbackableImage
-                onContextMenu={(e) => handleContextMenu(med.url, e)}
+                fallbackUrl={med.fallbackUrl}
                 className="size-full object-contain"
                 alt="cover"
                 src={med.url}
@@ -258,26 +222,56 @@ export const PreviewMediaContent: FC<{
 const FallbackableImage: FC<
   Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> & {
     src: string
+    fallbackUrl?: string
   }
-> = ({ src, onError, ...props }) => {
+> = ({ src, onError, fallbackUrl, ...props }) => {
   const [currentSrc, setCurrentSrc] = useState(() => replaceImgUrlIfNeed(src))
-
   const [isAllError, setIsAllError] = useState(false)
 
-  const handleError = useCallback(
-    (e) => {
-      if (currentSrc !== src) {
-        setCurrentSrc(src)
-      } else {
-        onError?.(e as any)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const [currentState, setCurrentState] = useState<"proxy" | "origin" | "fallback">(() =>
+    currentSrc === src ? "origin" : "proxy",
+  )
+
+  const handleError = useCallback(() => {
+    switch (currentState) {
+      case "proxy": {
+        if (currentSrc !== src) {
+          setCurrentSrc(src)
+          setCurrentState("origin")
+        } else {
+          if (fallbackUrl) {
+            setCurrentSrc(fallbackUrl)
+            setCurrentState("fallback")
+          }
+        }
+
+        break
+      }
+      case "origin": {
+        if (fallbackUrl) {
+          setCurrentSrc(fallbackUrl)
+          setCurrentState("fallback")
+        }
+        break
+      }
+      case "fallback": {
         setIsAllError(true)
       }
-    },
-    [currentSrc, onError, src],
-  )
+    }
+  }, [currentSrc, currentState, fallbackUrl, src])
+
   return (
-    <Fragment>
-      {!isAllError && <img src={currentSrc} onError={handleError} {...props} />}
+    <div className="flex size-full flex-col">
+      {isLoading && !isAllError && (
+        <div className="center absolute inset-0 size-full">
+          <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+        </div>
+      )}
+      {!isAllError && (
+        <img src={currentSrc} onLoad={() => setIsLoading(false)} onError={handleError} {...props} />
+      )}
       {isAllError && (
         <div
           className="center flex-col gap-6 text-white/80"
@@ -297,18 +291,34 @@ const FallbackableImage: FC<
             >
               Retry
             </MotionButtonBase>
-            Or
-            <a
-              className="underline underline-offset-4"
-              href={src}
-              target="_blank"
-              rel="noreferrer"
-            >
+            or
+            <a className="underline underline-offset-4" href={src} target="_blank" rel="noreferrer">
               Visit Original
             </a>
           </div>
         </div>
       )}
-    </Fragment>
+
+      {currentState === "fallback" && (
+        <div className="mt-4 text-center text-xs">
+          <span>
+            This image is preview in low quality, because the original image is not available.
+          </span>
+          <br />
+          <span>
+            You can{" "}
+            <a
+              href={src}
+              target="_blank"
+              rel="noreferrer"
+              className="underline duration-200 hover:text-accent"
+            >
+              visit the original image
+            </a>{" "}
+            if you want to see the full quality.
+          </span>
+        </div>
+      )}
+    </div>
   )
 }

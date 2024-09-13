@@ -10,7 +10,9 @@ export const DB_NOT_READY_OR_DISABLED = "Database is not ready or disabled"
  *
  */
 
-export const runTransactionInScope = <T>(fn: (db: typeof browserDB) => T): T | typeof DB_NOT_READY_OR_DISABLED => {
+export const runTransactionInScope = <T>(
+  fn: (db: typeof browserDB) => T,
+): T | typeof DB_NOT_READY_OR_DISABLED => {
   if (!window.__dbIsReady) {
     // Or, push to waiting queue
     return DB_NOT_READY_OR_DISABLED

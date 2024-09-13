@@ -1,8 +1,4 @@
-import type {
-  InfiniteData,
-  QueryFunction,
-  QueryKey,
-} from "@tanstack/react-query"
+import type { InfiniteData, QueryFunction, QueryKey } from "@tanstack/react-query"
 import type { Draft, ValidRecipeReturnType } from "immer"
 import { produce } from "immer"
 
@@ -23,17 +19,17 @@ export type DefinedQuery<TQueryKey extends QueryKey, TData> = Readonly<{
   prefetch: () => Promise<TData | undefined>
 
   setData: <Data = TData>(
-    updater: (draft: Draft<Data>) => ValidRecipeReturnType<Draft<Data>>
+    updater: (draft: Draft<Data>) => ValidRecipeReturnType<Draft<Data>>,
   ) => void
   setInfiniteData: (
     updater: (
-      draft: Draft<InfiniteData<TData>>
-    ) => ValidRecipeReturnType<Draft<InfiniteData<TData>>>
+      draft: Draft<InfiniteData<TData>>,
+    ) => ValidRecipeReturnType<Draft<InfiniteData<TData>>>,
   ) => void
   getData: () => TData | undefined
 
   optimisticUpdate: <Data = TData>(
-    updater: (draft: Draft<Data>) => ValidRecipeReturnType<Draft<Data>> | void
+    updater: (draft: Draft<Data>) => ValidRecipeReturnType<Draft<Data>> | void,
   ) => Promise<{
     previousData: Awaited<Data> | undefined
     restore: () => void
@@ -42,8 +38,8 @@ export type DefinedQuery<TQueryKey extends QueryKey, TData> = Readonly<{
 
   optimisticInfiniteUpdate: (
     updater: (
-      draft: Draft<InfiniteData<TData>>
-    ) => ValidRecipeReturnType<Draft<InfiniteData<TData>>>
+      draft: Draft<InfiniteData<TData>>,
+    ) => ValidRecipeReturnType<Draft<InfiniteData<TData>>>,
   ) => Promise<{
     previousData: Awaited<InfiniteData<TData>> | undefined
     restore: () => void
@@ -71,7 +67,7 @@ export function defineQuery<
 >(
   key: TQueryKey,
   fn: TQueryFn,
-  options?: DefinedQueryOptions<TData>
+  options?: DefinedQueryOptions<TData>,
 ): DefinedQuery<TQueryKey, TData>
 
 export function defineQuery<
@@ -101,21 +97,18 @@ export function defineQuery<
       return queryClient.getQueryData<TData>(key)
     },
     cancel: async (keyExtactor) => {
-      const queryKey =
-        typeof keyExtactor === "function" ? keyExtactor(key) : key
+      const queryKey = typeof keyExtactor === "function" ? keyExtactor(key) : key
       await queryClient.cancelQueries({
         queryKey,
       })
       options?.onCancel?.()
     },
     remove: async (keyExtactor) => {
-      const queryKey =
-        typeof keyExtactor === "function" ? keyExtactor(key) : key
+      const queryKey = typeof keyExtactor === "function" ? keyExtactor(key) : key
       queryClient.removeQueries({ queryKey })
     },
     invalidate: async (keyExtactor) => {
-      const queryKey =
-        typeof keyExtactor === "function" ? keyExtactor(key) : key
+      const queryKey = typeof keyExtactor === "function" ? keyExtactor(key) : key
 
       await queryClient.invalidateQueries({
         queryKey,
@@ -140,8 +133,7 @@ export function defineQuery<
         return produce(old, updater)
       }),
 
-    setInfiniteData: (updater) =>
-      queryDefine.setData<InfiniteData<TData>>(updater),
+    setInfiniteData: (updater) => queryDefine.setData<InfiniteData<TData>>(updater),
     getData: () => queryClient.getQueryData<TData>(key),
 
     optimisticUpdate: async <Data = TData>(

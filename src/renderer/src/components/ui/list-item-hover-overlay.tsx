@@ -1,7 +1,8 @@
+import { m } from "@renderer/components/common/Motion"
 import { views } from "@renderer/constants"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
 import clsx from "clsx"
-import { AnimatePresence, m } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
 
 export const ListItemHoverOverlay = ({
@@ -39,9 +40,7 @@ export const ListItemHoverOverlay = ({
   const mClassName = clsx(
     "absolute z-[-1]",
     "bg-zinc-200/80 dark:bg-neutral-800",
-    views[view].wideMode ?
-      "inset-x-0 inset-y-1 rounded-xl" :
-      "-inset-x-2 inset-y-0",
+    views[view].wideMode ? "inset-x-0 inset-y-1 rounded-xl" : "-inset-x-2 inset-y-0",
     className,
   )
   const motionConfig = {

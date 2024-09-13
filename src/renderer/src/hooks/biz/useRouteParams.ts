@@ -1,7 +1,4 @@
-import {
-  getReadonlyRoute,
-  useReadonlyRouteSelector,
-} from "@renderer/atoms/route"
+import { getReadonlyRoute, useReadonlyRouteSelector } from "@renderer/atoms/route"
 import {
   FEED_COLLECTION_LIST,
   ROUTE_ENTRY_PENDING,
@@ -22,9 +19,8 @@ export const useRouteView = () => {
   const view = search.get("view")
 
   return (
-    (view && FeedViewTypeValues.includes(view) ?
-        +view :
-      FeedViewType.Articles) || FeedViewType.Articles
+    (view && FeedViewTypeValues.includes(view) ? +view : FeedViewType.Articles) ||
+    FeedViewType.Articles
   )
 }
 
@@ -49,16 +45,12 @@ export interface BizRouteParams {
   folderName?: string
 }
 
-const parseRouteParams = (
-  params: Params<any>,
-  search: URLSearchParams,
-): BizRouteParams => {
+const parseRouteParams = (params: Params<any>, search: URLSearchParams): BizRouteParams => {
   const _view = search.get("view")
 
   const view =
-    (_view && FeedViewTypeValues.includes(_view) ?
-        +_view :
-      FeedViewType.Articles) || FeedViewType.Articles
+    (_view && FeedViewTypeValues.includes(_view) ? +_view : FeedViewType.Articles) ||
+    FeedViewType.Articles
 
   return {
     view,
@@ -68,9 +60,9 @@ const parseRouteParams = (
     isCollection: params.feedId === FEED_COLLECTION_LIST,
     isAllFeeds: params.feedId === ROUTE_FEED_PENDING,
     isPendingEntry: params.entryId === ROUTE_ENTRY_PENDING,
-    folderName: params.feedId?.startsWith(ROUTE_FEED_IN_FOLDER) ?
-      params.feedId.slice(ROUTE_FEED_IN_FOLDER.length) :
-      undefined,
+    folderName: params.feedId?.startsWith(ROUTE_FEED_IN_FOLDER)
+      ? params.feedId.slice(ROUTE_FEED_IN_FOLDER.length)
+      : undefined,
   }
 }
 
@@ -85,11 +77,11 @@ export const useRouteParamsSelector = <T>(
   selector: (params: BizRouteParams) => T,
   deps = noop,
 ): T =>
-    useReadonlyRouteSelector((route) => {
-      const { searchParams, params } = route
+  useReadonlyRouteSelector((route) => {
+    const { searchParams, params } = route
 
-      return selector(parseRouteParams(params, searchParams))
-    }, deps)
+    return selector(parseRouteParams(params, searchParams))
+  }, deps)
 
 export const getRouteParams = () => {
   const route = getReadonlyRoute()

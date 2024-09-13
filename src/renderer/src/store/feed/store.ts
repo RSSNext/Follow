@@ -6,7 +6,8 @@ import { FeedService } from "@renderer/services"
 import { produce } from "immer"
 import { nanoid } from "nanoid"
 
-import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import { getSubscriptionByFeedId } from "../subscription"
+import { createZustandStore } from "../utils/helper"
 import type { FeedQueryParams, FeedState } from "./types"
 
 export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
@@ -31,10 +32,15 @@ class FeedActions {
             feed.errorAt = null
           }
           if (feed.id) {
+            // Not all API return the owner, so merging is needed here.
+            if (state.feeds[feed.id]?.owner && !feed.owner) {
+              feed.owner = state.feeds[feed.id]?.owner
+            }
+
             state.feeds[feed.id] = feed
           } else {
             // Store temp feed in memory
-            const nonce = nanoid(8)
+            const nonce = feed["nonce"] || nanoid(8)
             state.feeds[nonce] = { ...feed, id: nonce }
           }
         }
@@ -60,24 +66,19 @@ class FeedActions {
   }
 
   async claimFeed(feedId: string) {
-    await doMutationAndTransaction(
-      () =>
-        apiClient.feeds.claim.challenge.$post({
-          json: {
-            feedId,
-          },
-        }),
-
-      async () => {
-        const currentUser = whoami()
-        if (!currentUser) return
-        this.updateFeedOwnership(feedId, currentUser.id)
-        const feed = get().feeds[feedId]
-        if (!feed) return
-        await FeedService.upsert(feed)
+    await apiClient.feeds.claim.challenge.$post({
+      json: {
+        feedId,
       },
-      { doTranscationWhenMutationFail: false, waitMutation: true },
-    )
+    })
+    runTransactionInScope(async () => {
+      const currentUser = whoami()
+      if (!currentUser) return
+      this.updateFeedOwnership(feedId, currentUser.id)
+      const feed = get().feeds[feedId]
+      if (!feed) return
+      await FeedService.upsert(feed)
+    })
   }
 
   // API Fetcher
@@ -91,12 +92,33 @@ class FeedActions {
       },
     })
 
-    this.upsertMany([res.data.feed])
+    const nonce = nanoid(8)
 
-    return res.data
+    const finalData = {
+      ...res.data.feed,
+    }
+
+    if (!finalData.id) {
+      finalData["nonce"] = nonce
+    }
+    this.upsertMany([finalData])
+
+    return {
+      ...res.data,
+      feed: !finalData.id ? { ...finalData, id: nonce } : finalData,
+    }
   }
 }
 export const feedActions = new FeedActions()
 
 export const getFeedById = (feedId: string): Nullable<FeedModel> =>
   useFeedStore.getState().feeds[feedId]
+
+export const getPreferredTitle = (feed?: FeedModel | null) => {
+  if (!feed?.id) {
+    return feed?.title
+  }
+
+  const subscription = getSubscriptionByFeedId(feed.id)
+  return subscription?.title || feed.title
+}

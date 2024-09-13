@@ -1,5 +1,5 @@
 import { FeedViewType } from "@renderer/lib/enum"
-import { createContext } from "react"
+import { createContext } from "use-context-selector"
 
 export interface EntryContentContext {
   entryId: string
@@ -14,14 +14,8 @@ const defaultContextValue: EntryContentContext = {
   feedId: "",
   view: FeedViewType.Articles,
 }
-export const EntryContentContext =
-  createContext<EntryContentContext>(defaultContextValue)
+export const EntryContentContext = createContext<EntryContentContext>(defaultContextValue)
 
-export const EntryContentProvider: Component<EntryContentContext> = ({
-  children,
-  ...value
-}) => (
-  <EntryContentContext.Provider value={value}>
-    {children}
-  </EntryContentContext.Provider>
+export const EntryContentProvider: Component<EntryContentContext> = ({ children, ...value }) => (
+  <EntryContentContext.Provider value={value}>{children}</EntryContentContext.Provider>
 )

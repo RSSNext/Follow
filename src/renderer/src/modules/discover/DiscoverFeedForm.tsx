@@ -23,13 +23,7 @@ import {
 import { cn, getViewFromRoute } from "@renderer/lib/utils"
 import { omit } from "lodash-es"
 import type { FC } from "react"
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-} from "react"
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from "react"
 import type { UseFormReturn } from "react-hook-form"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -56,8 +50,7 @@ const FeedMaintainers = ({ maintainers }: { maintainers?: string[] }) => {
             rel="noreferrer noopener"
             className="inline-flex cursor-pointer items-center text-theme-foreground/50 duration-200 hover:text-accent"
           >
-            @
-            {maintainer}
+            @{maintainer}
             <i className="i-mgc-external-link-cute-re ml-0.5" />
           </a>
         ))}
@@ -74,8 +67,8 @@ const FeedDescription = ({ description }: { description?: string }) => {
   return (
     <>
       <p>
-        The description of this feed is as follows, and you can fill out the
-        parameter form with the relevant information.
+        The description of this feed is as follows, and you can fill out the parameter form with the
+        relevant information.
       </p>
       <Markdown className="my-4 w-full max-w-full cursor-text select-text break-all">
         {description}
@@ -105,20 +98,15 @@ export const DiscoverFeedForm = ({
 
   const formPlaceholder = useMemo<Record<string, string>>(() => {
     if (!route.example) return {}
-    return parseFullPathParams(
-      route.example.replace(`/${routePrefix}`, ""),
-      route.path,
-    )
+    return parseFullPathParams(route.example.replace(`/${routePrefix}`, ""), route.path)
   }, [route.example, route.path, routePrefix])
   const dynamicFormSchema = useMemo(
     () =>
       z.object({
         ...Object.fromEntries(
-          keys.array.map((keyItem) => [
+          keys.map((keyItem) => [
             keyItem.name,
-            keyItem.optional ?
-              z.string().optional().nullable() :
-              z.string().min(1),
+            keyItem.optional ? z.string().optional().nullable() : z.string().min(1),
           ]),
         ),
       }),
@@ -149,8 +137,7 @@ export const DiscoverFeedForm = ({
       try {
         const fillRegexpPath = regexpPathToPath(route.path, data)
         const url = `rsshub://${routePrefix}${fillRegexpPath}`
-        const defaultView =
-          getViewFromRoute(route) || (getSidebarActiveView() as FeedViewType)
+        const defaultView = getViewFromRoute(route) || (getSidebarActiveView() as FeedViewType)
 
         present({
           title: "Add Feed",
@@ -158,10 +145,8 @@ export const DiscoverFeedForm = ({
             <FeedForm
               asWidget
               url={url}
-
               defaultValues={{
                 view: defaultView.toString(),
-
               }}
               onSuccess={dismissAll}
             />
@@ -170,15 +155,15 @@ export const DiscoverFeedForm = ({
       } catch (err: unknown) {
         if (err instanceof MissingOptionalParamError) {
           toast.error(err.message)
-          const idx = keys.array.findIndex((item) => item.name === err.param)
+          const idx = keys.findIndex((item) => item.name === err.param)
 
-          form.setFocus(keys.array[idx === 0 ? 0 : idx - 1].name, {
+          form.setFocus(keys[idx === 0 ? 0 : idx - 1].name, {
             shouldSelect: true,
           })
         }
       }
     },
-    [dismissAll, form, keys.array, present, route.path, routePrefix],
+    [dismissAll, form, keys, present, route.path, routePrefix],
   )
 
   const formElRef = useRef<HTMLFormElement>(null)
@@ -198,21 +183,11 @@ export const DiscoverFeedForm = ({
   return (
     <Form {...form}>
       {!noDescription && (
-        <PreviewUrl
-          watch={form.watch}
-          path={route.path}
-          routePrefix={`rsshub://${routePrefix}`}
-        />
+        <PreviewUrl watch={form.watch} path={route.path} routePrefix={`rsshub://${routePrefix}`} />
       )}
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={form.handleSubmit(onSubmit)}
-        ref={formElRef}
-      >
-        {keys.array.map((keyItem) => {
-          const parameters = normalizeRSSHubParameters(
-            route.parameters[keyItem.name],
-          )
+      <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)} ref={formElRef}>
+        {keys.map((keyItem) => {
+          const parameters = normalizeRSSHubParameters(route.parameters[keyItem.name])
 
           const formRegister = form.register(keyItem.name)
 
@@ -220,9 +195,7 @@ export const DiscoverFeedForm = ({
             <FormItem key={keyItem.name} className="flex flex-col space-y-2">
               <FormLabel className="capitalize">
                 {keyItem.name}
-                {!keyItem.optional && (
-                  <sup className="ml-1 align-sub text-red-500">*</sup>
-                )}
+                {!keyItem.optional && <sup className="ml-1 align-sub text-red-500">*</sup>}
               </FormLabel>
               {parameters?.options ? (
                 <Select
@@ -249,16 +222,14 @@ export const DiscoverFeedForm = ({
                 <Input
                   {...formRegister}
                   placeholder={
-                    parameters?.default ?? formPlaceholder[keyItem.name] ?
-                      `e.g. ${formPlaceholder[keyItem.name]}` :
-                      void 0
+                    (parameters?.default ?? formPlaceholder[keyItem.name])
+                      ? `e.g. ${formPlaceholder[keyItem.name]}`
+                      : void 0
                   }
                 />
               )}
               {!!parameters && (
-                <p className="text-xs text-theme-foreground/50">
-                  {parameters.description}
-                </p>
+                <p className="text-xs text-theme-foreground/50">{parameters.description}</p>
               )}
             </FormItem>
           )

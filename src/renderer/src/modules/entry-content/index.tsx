@@ -16,11 +16,9 @@ import { useInPeekModal } from "@renderer/components/ui/modal/inspire/PeekModal"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
 import { isWebBuild, ROUTE_FEED_PENDING } from "@renderer/constants"
+import { shortcuts } from "@renderer/constants/shortcuts"
 import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
-import {
-  useRouteParamsSelector,
-  useRouteParms,
-} from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParamsSelector, useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { useAuthQuery, useTitle } from "@renderer/hooks/common"
 import { stopPropagation } from "@renderer/lib/dom"
 import { FeedViewType } from "@renderer/lib/enum"
@@ -34,11 +32,12 @@ import {
 } from "@renderer/providers/wrapped-element-provider"
 import { Queries } from "@renderer/queries"
 import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
-import { useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
+import { getPreferredTitle, useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
-import { useEffect, useLayoutEffect, useRef } from "react"
+import { memo, useEffect, useLayoutEffect, useMemo, useRef } from "react"
+import { useHotkeys } from "react-hotkeys-hook"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
@@ -72,18 +71,12 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   return <EntryContentRender entryId={entryId} />
 }
 
-export const EntryContentRender: Component<{ entryId: string }> = ({
-  entryId,
-  className,
-}) => {
+export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, className }) => {
   const user = useWhoami()
 
-  const { error, data, isPending } = useAuthQuery(
-    Queries.entries.byId(entryId),
-    {
-      staleTime: 300_000,
-    },
-  )
+  const { error, data, isPending } = useAuthQuery(Queries.entries.byId(entryId), {
+    staleTime: 300_000,
+  })
 
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
@@ -134,7 +127,29 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
     scrollerRef.current?.scrollTo(0, 0)
   }, [entryId])
 
+  useHotkeys(shortcuts.entry.scrollDown.key, () => {
+    scrollerRef.current?.scrollBy(0, window.innerHeight / 2)
+  })
+
+  useHotkeys(shortcuts.entry.scrollUp.key, () => {
+    scrollerRef.current?.scrollBy(0, -window.innerHeight / 2)
+  })
+
   const isPeekModal = useInPeekModal()
+
+  const contentAccessories = useMemo(
+    () => (isPeekModal ? undefined : <ContainerToc key={entryId} />),
+    [entryId, isPeekModal],
+  )
+  const stableRenderStyle = useMemo(
+    () =>
+      readerFontFamily
+        ? {
+            fontFamily: readerFontFamily,
+          }
+        : undefined,
+    [readerFontFamily],
+  )
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -149,28 +164,19 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
-        className="h-[55px] shrink-0 px-3"
+        className="h-[55px] shrink-0 px-3 @container"
       />
 
       <ScrollArea.ScrollArea
         mask={false}
-        rootClassName={cn(
-          "h-0 min-w-0 grow overflow-y-auto @container",
-          className,
-        )}
+        rootClassName={cn("h-0 min-w-0 grow overflow-y-auto @container", className)}
         scrollbarClassName="mr-[1.5px]"
         viewportClassName="p-5"
         ref={scrollerRef}
       >
         <div
-          style={
-            readerFontFamily ?
-                {
-                  fontFamily: readerFontFamily,
-                } :
-              undefined
-          }
-          className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24"
+          style={stableRenderStyle}
+          className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
           key={entry.entries.id}
         >
           <article
@@ -184,26 +190,20 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
               rel="noreferrer"
             >
               <div className="select-text break-words text-3xl font-bold">
-                <EntryTranslation
-                  source={entry.entries.title}
-                  target={translation.data?.title}
-                />
+                <EntryTranslation source={entry.entries.title} target={translation.data?.title} />
               </div>
               <div className="mt-2 text-[13px] font-medium text-zinc-500">
-                {feed?.title}
+                {getPreferredTitle(feed)}
               </div>
               <div className="flex items-center gap-2 text-[13px] text-zinc-500">
-                {entry.entries.publishedAt &&
-                  new Date(entry.entries.publishedAt).toLocaleString()}
+                {entry.entries.publishedAt && new Date(entry.entries.publishedAt).toLocaleString()}
 
                 <div className="flex items-center gap-1">
                   <i className="i-mgc-eye-2-cute-re" />
                   <span>
                     {(
                       (entryHistory?.readCount ?? 0) +
-                      (entryHistory?.userIds?.every((id) => id !== user?.id) ?
-                        1 :
-                        0)
+                      (entryHistory?.userIds?.every((id) => id !== user?.id) ? 1 : 0)
                     ) // if no me, +1
                       .toLocaleString()}
                   </span>
@@ -220,13 +220,8 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                       <i className="i-mgc-magic-2-cute-re align-middle" />
                       <span>AI summary</span>
                     </div>
-                    <AutoResizeHeight
-                      spring
-                      className="text-sm leading-relaxed"
-                    >
-                      {summary.isLoading ?
-                        SummaryLoadingSkeleton :
-                        summary.data}
+                    <AutoResizeHeight spring className="text-sm leading-relaxed">
+                      {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
                     </AutoResizeHeight>
                   </div>
                 )}
@@ -234,20 +229,10 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
                   {!isInReadabilityMode ? (
                     <ShadowDOM>
                       <HTML
-                        accessory={
-                          isPeekModal ? undefined : (
-                            <ContainerToc key={entryId} />
-                          )
-                        }
+                        accessory={contentAccessories}
                         as="article"
-                        className="prose dark:prose-invert prose-h1:text-[1.6em]"
-                        style={
-                          readerFontFamily ?
-                              {
-                                fontFamily: readerFontFamily,
-                              } :
-                            undefined
-                        }
+                        className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em]"
+                        style={stableRenderStyle}
                         renderInlineStyle={readerRenderInlineStyle}
                       >
                         {content}
@@ -261,24 +246,21 @@ export const EntryContentRender: Component<{ entryId: string }> = ({
             </WrappedElementProvider>
 
             {!content && (
-              <div className="center mt-16">
+              <div className="center mt-16 min-w-0">
                 {isPending ? (
                   <EntryContentLoading icon={feed?.siteUrl!} />
-                ) : error ?
-                    (
-                      <div className="center flex flex-col gap-2">
-                        <i className="i-mgc-close-cute-re text-3xl text-red-500" />
-                        <span className="font-sans text-sm">Network Error</span>
+                ) : error ? (
+                  <div className="center flex min-w-0 flex-col gap-2">
+                    <i className="i-mgc-close-cute-re text-3xl text-red-500" />
+                    <span className="font-sans text-sm">Network Error</span>
 
-                        <pre>{error.message}</pre>
-                      </div>
-                    ) :
-                    (
-                      <NoContent
-                        id={entry.entries.id}
-                        url={entry.entries.url ?? ""}
-                      />
-                    )}
+                    <pre className="mt-6 w-full overflow-auto whitespace-pre-wrap break-all">
+                      {error.message}
+                    </pre>
+                  </div>
+                ) : (
+                  <NoContent id={entry.entries.id} url={entry.entries.url ?? ""} />
+                )}
               </div>
             )}
           </article>
@@ -333,25 +315,17 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
       {result ? (
         <p className="rounded-xl border p-3 text-sm opacity-80">
           <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
-          This content is provided by Readability. If you find typographical
-          anomalies, please go to the source site to view the original content.
+          This content is provided by Readability. If you find typographical anomalies, please go to
+          the source site to view the original content.
         </p>
       ) : (
         <div className="center mt-16 flex flex-col gap-2">
-          <LoadingWithIcon
-            size="large"
-            icon={<i className="i-mgc-sparkles-2-cute-re" />}
-          />
-          <span className="text-sm">
-            Fetching original content and processing...
-          </span>
+          <LoadingWithIcon size="large" icon={<i className="i-mgc-sparkles-2-cute-re" />} />
+          <span className="text-sm">Fetching original content and processing...</span>
         </div>
       )}
 
-      <HTML
-        as="article"
-        className="prose dark:prose-invert prose-h1:text-[1.6em]"
-      >
+      <HTML as="article" className="prose dark:prose-invert prose-h1:text-[1.6em]">
         {result?.content ?? ""}
       </HTML>
     </div>
@@ -364,23 +338,17 @@ const NoContent: FC<{
 }> = ({ id, url }) => {
   const status = useEntryInReadabilityStatus(id)
 
-  if (
-    status !== ReadabilityStatus.INITIAL &&
-    status !== ReadabilityStatus.FAILURE
-  ) {
+  if (status !== ReadabilityStatus.INITIAL && status !== ReadabilityStatus.FAILURE) {
     return null
   }
   return (
     <div className="center">
       <div className="space-y-2 text-balance text-center text-sm text-zinc-400">
-        {(isWebBuild || status === ReadabilityStatus.FAILURE) && (
-          <span>No content</span>
-        )}
+        {(isWebBuild || status === ReadabilityStatus.FAILURE) && <span>No content</span>}
         {isWebBuild && (
           <div>
             <span>
-              Maybe web app doesn't support this content type. But you can
-              {" "}
+              Maybe web app doesn't support this content type. But you can{" "}
               <a
                 target="_blank"
                 rel="noreferrer"
@@ -388,8 +356,7 @@ const NoContent: FC<{
                 href={`${repository.url}/releases`}
               >
                 download
-              </a>
-              {" "}
+              </a>{" "}
               the desktop app.
             </span>
           </div>
@@ -400,7 +367,7 @@ const NoContent: FC<{
   )
 }
 
-const ReadabilityAutoToggle = ({ url, id }: { url: string, id: string }) => {
+const ReadabilityAutoToggle = ({ url, id }: { url: string; id: string }) => {
   const toggle = useEntryReadabilityToggle({
     id,
     url,
@@ -418,14 +385,11 @@ const ReadabilityAutoToggle = ({ url, id }: { url: string, id: string }) => {
 }
 
 const RenderError: FallbackRender = ({ error }) => {
-  const nextError =
-    typeof error === "string" ? new Error(error) : (error as Error)
+  const nextError = typeof error === "string" ? new Error(error) : (error as Error)
   return (
     <div className="center mt-16 flex flex-col gap-2">
       <i className="i-mgc-close-cute-re text-3xl text-red-500" />
-      <span className="font-sans text-sm">
-        Render error: {nextError.message}
-      </span>
+      <span className="font-sans text-sm">Render error: {nextError.message}</span>
       <a
         href={getNewIssueUrl({
           body: [
@@ -451,11 +415,11 @@ const RenderError: FallbackRender = ({ error }) => {
   )
 }
 
-const ContainerToc: FC = () => {
+const ContainerToc: FC = memo(() => {
   const wrappedElement = useWrappedElement()
   return (
     <RootPortal to={wrappedElement!}>
-      <div className="absolute right-[-130px] top-0 h-full w-[100px]">
+      <div className="group absolute right-[-130px] top-0 h-full w-[100px]">
         <div className="sticky top-0">
           <Toc
             className={cn(
@@ -470,4 +434,4 @@ const ContainerToc: FC = () => {
       </div>
     </RootPortal>
   )
-}
+})

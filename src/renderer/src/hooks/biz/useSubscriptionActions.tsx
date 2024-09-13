@@ -1,7 +1,7 @@
 import { Kbd } from "@renderer/components/ui/kbd/Kbd"
 import { HotKeyScopeMap } from "@renderer/constants"
 import { apiClient } from "@renderer/lib/api-fetch"
-import { Queries } from "@renderer/queries"
+import { subscription as subscriptionQuery } from "@renderer/queries/subscriptions"
 import type { SubscriptionFlatModel } from "@renderer/store/subscription"
 import { subscriptionActions } from "@renderer/store/subscription"
 import { feedUnreadActions } from "@renderer/store/unread"
@@ -12,15 +12,11 @@ import { toast } from "sonner"
 import { navigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
 
-export const useDeleteSubscription = ({
-  onSuccess,
-}: {
-  onSuccess?: () => void
-}) =>
+export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void }) =>
   useMutation({
     mutationFn: async (subscription: SubscriptionFlatModel) =>
       subscriptionActions.unfollow(subscription.feedId).then((feed) => {
-        Queries.subscription.byView(subscription.view).invalidate()
+        subscriptionQuery.byView(subscription.view).invalidate()
         feedUnreadActions.updateByFeedId(subscription.feedId, 0)
 
         if (!subscription) return
@@ -36,26 +32,25 @@ export const useDeleteSubscription = ({
             },
           })
 
-          Queries.subscription.byView(subscription.view).invalidate()
+          subscriptionQuery.byView(subscription.view).invalidate()
           feedUnreadActions.fetchUnreadByView(subscription.view)
 
           toast.dismiss(toastId)
         }
-        const toastId = toast(
-          <UnfollowInfo title={feed.title!} undo={undo} />,
-          {
-            duration: 3000,
-            action: {
-              label: (
-                <span className="flex items-center gap-1">
-                  Undo
-                  <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">Meta+Z</Kbd>
-                </span>
-              ),
-              onClick: undo,
-            },
+        const toastId = toast(<UnfollowInfo title={feed.title!} undo={undo} />, {
+          duration: 3000,
+          action: {
+            label: (
+              <span className="flex items-center gap-1">
+                Undo
+                <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">
+                  Meta+Z
+                </Kbd>
+              </span>
+            ),
+            onClick: undo,
           },
-        )
+        })
       }),
 
     onSuccess: (_) => {
@@ -72,18 +67,14 @@ export const useDeleteSubscription = ({
     },
   })
 
-const UnfollowInfo = ({ title, undo }: { title: string, undo: () => any }) => {
+const UnfollowInfo = ({ title, undo }: { title: string; undo: () => any }) => {
   useHotkeys("ctrl+z,meta+z", undo, {
     scopes: HotKeyScopeMap.Home,
     preventDefault: true,
   })
   return (
     <>
-      Feed
-      {" "}
-      <i className="mr-px font-semibold">{title}</i>
-      {" "}
-      has been unfollowed.
+      Feed <i className="mr-px font-semibold">{title}</i> has been unfollowed.
     </>
   )
 }

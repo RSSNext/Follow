@@ -2,7 +2,6 @@ import { createContext, useContext } from "react"
 
 interface RadioContext {
   onChange: (value: string) => void
-
 }
 const RadioContext = createContext<RadioContext>(null!)
 

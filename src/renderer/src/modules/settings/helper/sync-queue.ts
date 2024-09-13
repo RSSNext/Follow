@@ -27,16 +27,15 @@ const omitKeys = ["updated"]
 
 const localSettingGetterMap = {
   appearance: () => omit(getUISettings(), uiServerSyncWhiteListKeys, omitKeys),
-  general: () =>
-    omit(getGeneralSettings(), generalServerSyncWhiteListKeys, omitKeys),
+  general: () => omit(getGeneralSettings(), generalServerSyncWhiteListKeys, omitKeys),
 }
 
 const createInternalSetter =
   <T>(atom: PrimitiveAtom<T>) =>
-    (payload: T) => {
-      const current = jotaiStore.get(atom)
-      jotaiStore.set(atom, { ...current, ...payload })
-    }
+  (payload: T) => {
+    const current = jotaiStore.get(atom)
+    jotaiStore.set(atom, { ...current, ...payload })
+  }
 
 const localsettingSetterMap = {
   appearance: createInternalSetter(__uiSettingAtom),
@@ -53,9 +52,7 @@ const bizSettingKeyToTabMapping = {
 }
 
 export type SettingSyncTab = keyof SettingMapping
-export interface SettingSyncQueueItem<
-  T extends SettingSyncTab = SettingSyncTab,
-> {
+export interface SettingSyncQueueItem<T extends SettingSyncTab = SettingSyncTab> {
   tab: T
   payload: Partial<SettingMapping[T]>
   date: number
@@ -74,16 +71,11 @@ class SettingSyncQueue {
       const tab = bizSettingKeyToTabMapping[data.key]
       if (!tab) return
 
-      const nextPayload = omit(
-        data.payload,
-        omitKeys,
-        settingWhiteListMap[tab],
-      )
+      const nextPayload = omit(data.payload, omitKeys, settingWhiteListMap[tab])
       if (isEmptyObject(nextPayload)) return
       this.enqueue(tab, nextPayload)
     })
-    const onlineHandler = () =>
-      (this.chain = this.chain.finally(() => this.flush()))
+    const onlineHandler = () => (this.chain = this.chain.finally(() => this.flush()))
 
     window.addEventListener("online", onlineHandler)
     const d2 = () => window.removeEventListener("online", onlineHandler)
@@ -130,10 +122,7 @@ class SettingSyncQueue {
   private threshold = 1000
   private enqueueTime = Date.now()
 
-  async enqueue<T extends SettingSyncTab>(
-    tab: T,
-    payload: Partial<SettingMapping[T]>,
-  ) {
+  async enqueue<T extends SettingSyncTab>(tab: T, payload: Partial<SettingMapping[T]>) {
     const now = Date.now()
     if (isEmptyObject(payload)) {
       return
@@ -145,9 +134,7 @@ class SettingSyncQueue {
     })
 
     if (now - this.enqueueTime > this.threshold) {
-      this.chain = this.chain
-        .then(() => sleep(this.threshold))
-        .finally(() => this.flush())
+      this.chain = this.chain.then(() => sleep(this.threshold)).finally(() => this.flush())
       this.enqueueTime = Date.now()
     }
   }
@@ -159,10 +146,7 @@ class SettingSyncQueue {
 
     const groupedTab = {} as Record<SettingSyncTab, any>
 
-    const referenceMap = {} as Record<
-      SettingSyncTab,
-      Set<SettingSyncQueueItem>
-    >
+    const referenceMap = {} as Record<SettingSyncTab, Set<SettingSyncQueueItem>>
     for (const item of this.queue) {
       if (!groupedTab[item.tab]) {
         groupedTab[item.tab] = {}
@@ -262,11 +246,7 @@ class SettingSyncQueue {
 
       if (!localSettingsUpdated || remoteUpdatedDate > localSettingsUpdated) {
         // Use remote and update local
-        const nextPayload = omit(
-          remoteSettingPayload,
-          omitKeys,
-          settingWhiteListMap[tab],
-        )
+        const nextPayload = omit(remoteSettingPayload, omitKeys, settingWhiteListMap[tab])
 
         if (isEmptyObject(nextPayload)) {
           continue

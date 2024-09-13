@@ -2,7 +2,8 @@ import path from "node:path"
 
 import { registerIpcMain } from "@egoist/tipc/main"
 import { APP_PROTOCOL } from "@shared/constants"
-import { app, nativeTheme } from "electron"
+import { app, nativeTheme, shell } from "electron"
+import contextMenu from "electron-context-menu"
 
 import { getIconPath } from "./helper"
 import { store } from "./lib/store"
@@ -31,10 +32,7 @@ export const initializeApp = () => {
 
   registerIpcMain(router)
 
-  app.setPath(
-    "appData",
-    path.join(app.getPath("appData"), isDev ? appFolder.dev : appFolder.prod),
-  )
+  app.setPath("appData", path.join(app.getPath("appData"), isDev ? appFolder.dev : appFolder.prod))
 
   if (app.dock) {
     app.dock.setIcon(getIconPath())
@@ -48,4 +46,34 @@ export const initializeApp = () => {
   // In this file you can include the rest of your app"s specific main process
   // code. You can also put them in separate files and require them here.
   registerAppMenu()
+
+  contextMenu({
+    showSaveImageAs: true,
+    showCopyLink: true,
+    showCopyImageAddress: true,
+    showCopyImage: true,
+    showInspectElement: isDev,
+    showSelectAll: false,
+    showCopyVideoAddress: true,
+    showSaveVideoAs: true,
+    prepend: (_defaultActions, params) => {
+      return [
+        {
+          label: "Open Image in Browser",
+          visible: params.mediaType === "image",
+          click: () => {
+            shell.openExternal(params.srcURL)
+          },
+        },
+
+        {
+          label: "Open Link in Browser",
+          visible: params.linkURL !== "",
+          click: () => {
+            shell.openExternal(params.linkURL)
+          },
+        },
+      ]
+    },
+  })
 }

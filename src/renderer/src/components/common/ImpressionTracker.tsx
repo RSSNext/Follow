@@ -6,9 +6,7 @@ type ImpressionProps = {
   onTrack?: () => any
   properties?: Record<string, any>
 }
-export const ImpressionView: Component<
-  { shouldTrack?: boolean } & ImpressionProps
-> = (props) => {
+export const ImpressionView: Component<{ shouldTrack?: boolean } & ImpressionProps> = (props) => {
   const { shouldTrack = true, ...rest } = props
   if (!shouldTrack) {
     return <>{props.children}</>

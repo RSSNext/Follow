@@ -3,8 +3,8 @@ import { ErrorBoundary } from "@sentry/react"
 import type { FC, PropsWithChildren } from "react"
 import { createElement, useCallback } from "react"
 
-import type { ErrorComponentType } from "../errors"
 import { getErrorFallback } from "../errors"
+import type { ErrorComponentType } from "../errors/enum"
 
 export interface AppErrorBoundaryProps extends PropsWithChildren {
   height?: number | string
@@ -31,19 +31,12 @@ export const AppErrorBoundary: FC<
     )
   }
 
-  return (
-    <AppErrorBoundaryItem errorType={errorType}>
-      {children}
-    </AppErrorBoundaryItem>
-  )
+  return <AppErrorBoundaryItem errorType={errorType}>{children}</AppErrorBoundaryItem>
 }
 
 type ErrorFallbackProps = Parameters<FallbackRender>["0"]
 export type AppErrorFallbackProps = ErrorFallbackProps & {}
-const AppErrorBoundaryItem: FC<AppErrorBoundaryProps> = ({
-  errorType,
-  children,
-}) => {
+const AppErrorBoundaryItem: FC<AppErrorBoundaryProps> = ({ errorType, children }) => {
   const fallbackRender = useCallback(
     (fallbackProps: ErrorFallbackProps) =>
       createElement(getErrorFallback(errorType), fallbackProps),

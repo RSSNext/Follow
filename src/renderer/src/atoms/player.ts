@@ -46,14 +46,9 @@ export const [
   setAudioPlayerAtomValue,
   useAudioPlayerAtomSelector,
 ] = createAtomHooks<PlayerAtomValue>(
-  atomWithStorage(
-    getStorageNS("player"),
-    playerInitialValue,
-    patchedLocalStorage,
-    {
-      getOnInit: true,
-    },
-  ),
+  atomWithStorage(getStorageNS("player"), playerInitialValue, patchedLocalStorage, {
+    getOnInit: true,
+  }),
 )
 
 export const AudioPlayer = {
@@ -64,9 +59,7 @@ export const AudioPlayer = {
   get() {
     return getAudioPlayerAtomValue()
   },
-  mount(
-    v: Omit<PlayerAtomValue, "show" | "status" | "playedSeconds" | "duration">,
-  ) {
+  mount(v: Omit<PlayerAtomValue, "show" | "status" | "playedSeconds" | "duration">) {
     const curV = getAudioPlayerAtomValue()
     if (!v.src || (curV.src === v.src && curV.status === "playing")) {
       return
@@ -98,14 +91,17 @@ export const AudioPlayer = {
     }
 
     const currentActionId = this.__currentActionId
-    return this.audio.play().then(() => {
-      if (currentActionId !== this.__currentActionId) return
-      setAudioPlayerAtomValue({
-        ...getAudioPlayerAtomValue(),
-        status: "playing",
-        duration: this.audio.duration === Infinity ? 0 : this.audio.duration,
+    return this.audio
+      .play()
+      .then(() => {
+        if (currentActionId !== this.__currentActionId) return
+        setAudioPlayerAtomValue({
+          ...getAudioPlayerAtomValue(),
+          status: "playing",
+          duration: this.audio.duration === Infinity ? 0 : this.audio.duration,
+        })
       })
-    }).catch(noop)
+      .catch(noop)
   },
   teardown() {
     this.currentTimeTimer && clearInterval(this.currentTimeTimer)

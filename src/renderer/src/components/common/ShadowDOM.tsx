@@ -1,4 +1,5 @@
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
+import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { useIsDark } from "@renderer/hooks/common"
 import { nanoid } from "nanoid"
 import type { FC, PropsWithChildren, ReactNode } from "react"
@@ -18,11 +19,8 @@ const ShadowDOMContext = createContext(false)
 const MemoedDangerousHTMLStyle: FC<
   {
     children: string
-  } & React.DetailedHTMLProps<
-    React.StyleHTMLAttributes<HTMLStyleElement>,
-    HTMLStyleElement
-  > &
-  Record<string, unknown>
+  } & React.DetailedHTMLProps<React.StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement> &
+    Record<string, unknown>
 > = memo(({ children, ...rest }) => (
   <style
     {...rest}
@@ -35,10 +33,7 @@ const MemoedDangerousHTMLStyle: FC<
   />
 ))
 
-const weakMapElementKey = new WeakMap<
-  HTMLStyleElement | HTMLLinkElement,
-  string
->()
+const weakMapElementKey = new WeakMap<HTMLStyleElement | HTMLLinkElement, string>()
 const cloneStylesElement = (_mutationRecord?: MutationRecord) => {
   const $styles = document.head.querySelectorAll("style").values()
   const reactNodes = [] as ReactNode[]
@@ -85,8 +80,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
 } = (props) => {
   const { ...rest } = props
 
-  const [stylesElements, setStylesElements] =
-    useState<ReactNode[]>(cloneStylesElement)
+  const [stylesElements, setStylesElements] = useState<ReactNode[]>(cloneStylesElement)
 
   useLayoutEffect(() => {
     const mutationObserver = new MutationObserver((e) => {
@@ -107,6 +101,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
   const dark = useIsDark()
 
   const uiFont = useUISettingKey("uiFontFamily")
+  const reduceMotion = useReduceMotion()
 
   return (
     <root.div {...rest}>
@@ -114,11 +109,12 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
         <div
           style={useMemo(
             () => ({
-              fontFamily: uiFont,
+              fontFamily: `${uiFont},"SN Pro", system-ui, sans-serif`,
             }),
             [uiFont],
           )}
           id="shadow-html"
+          data-motion-reduce={reduceMotion}
           data-theme={dark ? "dark" : "light"}
           className="font-theme"
         >
@@ -139,12 +135,9 @@ function getLinkedStaticStyleSheets() {
     .querySelectorAll("link[rel=stylesheet]")
     .values() as unknown as HTMLLinkElement[]
 
-  const styleSheetMap = new WeakMap<
-    Element | ProcessingInstruction,
-    CSSStyleSheet
-  >()
+  const styleSheetMap = new WeakMap<Element | ProcessingInstruction, CSSStyleSheet>()
 
-  const cssArray = [] as { cssText: string, ref: HTMLLinkElement }[]
+  const cssArray = [] as { cssText: string; ref: HTMLLinkElement }[]
 
   for (const sheet of document.styleSheets) {
     if (!sheet.href) continue

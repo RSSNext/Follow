@@ -9,7 +9,7 @@ import { useEventCallback } from "usehooks-ts"
 import { useSetState } from "../useSetState"
 
 function parseTimeRanges(ranges: TimeRanges) {
-  const result: { start: number, end: number }[] = []
+  const result: { start: number; end: number }[] = []
 
   for (let i = 0; i < ranges.length; i++) {
     result.push({
@@ -22,7 +22,7 @@ function parseTimeRanges(ranges: TimeRanges) {
 }
 export interface HTMLMediaProps
   extends React.AudioHTMLAttributes<any>,
-  React.VideoHTMLAttributes<any> {
+    React.VideoHTMLAttributes<any> {
   src: string
 }
 
@@ -51,9 +51,9 @@ type MediaPropsWithRef<T> = HTMLMediaProps & {
   ref?: React.MutableRefObject<T | null>
 }
 
-export default function createHTMLMediaHook<
-  T extends HTMLAudioElement | HTMLVideoElement,
->(tag: "audio" | "video") {
+export default function createHTMLMediaHook<T extends HTMLAudioElement | HTMLVideoElement>(
+  tag: "audio" | "video",
+) {
   return (elOrProps: HTMLMediaProps | React.ReactElement<HTMLMediaProps>) => {
     let element: React.ReactElement<MediaPropsWithRef<T>> | undefined
     let props: MediaPropsWithRef<T>
@@ -129,11 +129,11 @@ export default function createHTMLMediaHook<
       const target = e.currentTarget
 
       const hasAudio =
-        target.srcObject instanceof MediaStream ?
-          target.srcObject.getAudioTracks().length > 0 :
-          target.webkitAudioDecodedByteCount === undefined ?
-            true :
-            target.webkitAudioDecodedByteCount > 0
+        target.srcObject instanceof MediaStream
+          ? target.srcObject.getAudioTracks().length > 0
+          : target.webkitAudioDecodedByteCount === undefined
+            ? true
+            : target.webkitAudioDecodedByteCount > 0
 
       setState({ hasAudio })
     }
@@ -247,14 +247,14 @@ export default function createHTMLMediaHook<
           if (tag === "audio") {
             console.error(
               "useAudio() ref to <audio> element is empty at mount. " +
-              "It seem you have not rendered the audio element, which it " +
-              "returns as the first argument const [audio] = useAudio(...).",
+                "It seem you have not rendered the audio element, which it " +
+                "returns as the first argument const [audio] = useAudio(...).",
             )
           } else if (tag === "video") {
             console.error(
               "useVideo() ref to <video> element is empty at mount. " +
-              "It seem you have not rendered the video element, which it " +
-              "returns as the first argument const [video] = useVideo(...).",
+                "It seem you have not rendered the video element, which it " +
+                "returns as the first argument const [video] = useVideo(...).",
             )
           }
         }

@@ -1,7 +1,4 @@
-import {
-  FEED_COLLECTION_LIST,
-  ROUTE_FEED_IN_FOLDER,
-} from "@renderer/constants"
+import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "@renderer/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
 
 import { useSubscriptionStore } from "../subscription"
@@ -10,20 +7,12 @@ type FeedId = string
 export const useFeedIdByView = (view: FeedViewType) =>
   useSubscriptionStore((state) => state.feedIdByView[view] || [])
 export const useSubscriptionByView = (view: FeedViewType) =>
-  useSubscriptionStore((state) =>
-    state.feedIdByView[view].map((id) => state.data[id]),
-  )
+  useSubscriptionStore((state) => state.feedIdByView[view].map((id) => state.data[id]))
 
 export const useSubscriptionByFeedId = (feedId: FeedId) =>
   useSubscriptionStore((state) => state.data[feedId])
 
-export const useFolderFeedsByFeedId = ({
-  feedId,
-  view,
-}: {
-  feedId?: string
-  view: FeedViewType
-}) =>
+export const useFolderFeedsByFeedId = ({ feedId, view }: { feedId?: string; view: FeedViewType }) =>
   useSubscriptionStore((state): string[] | null => {
     if (typeof feedId !== "string") return null
     if (feedId === FEED_COLLECTION_LIST) {
@@ -38,7 +27,10 @@ export const useFolderFeedsByFeedId = ({
     const feedIds: string[] = []
     for (const feedId in state.data) {
       const subscription = state.data[feedId]
-      if (subscription.view === view && (subscription.category === folderName || subscription.defaultCategory === folderName)) {
+      if (
+        subscription.view === view &&
+        (subscription.category === folderName || subscription.defaultCategory === folderName)
+      ) {
         feedIds.push(feedId)
       }
     }

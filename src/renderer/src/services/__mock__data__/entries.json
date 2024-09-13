@@ -33,13 +33,7 @@
           "type": "photo"
         }
       ],
-      "categories": [
-        "Windows",
-        "美化主题",
-        "模糊",
-        "玻璃",
-        "透明"
-      ],
+      "categories": ["Windows", "美化主题", "模糊", "玻璃", "透明"],
       "attachments": null
     },
     "feeds": {

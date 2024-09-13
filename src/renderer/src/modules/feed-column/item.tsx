@@ -2,6 +2,7 @@ import { getMainContainerElement } from "@renderer/atoms/dom"
 import { useWhoami } from "@renderer/atoms/user"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { OouiUserAnonymous } from "@renderer/components/icons/OouiUserAnonymous"
+import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import {
   Tooltip,
   TooltipContent,
@@ -15,13 +16,14 @@ import { nextFrame } from "@renderer/lib/dom"
 import { getNewIssueUrl } from "@renderer/lib/issues"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
-import { useFeedById } from "@renderer/store/feed"
+import { getPreferredTitle, useFeedById } from "@renderer/store/feed"
 import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { WEB_URL } from "@shared/constants"
 import dayjs from "dayjs"
 import { memo, useCallback } from "react"
 
+import { usePresentUserProfileModal } from "../profile/hooks"
 import { UnreadNumber } from "./unread-number"
 
 interface FeedItemProps {
@@ -30,12 +32,7 @@ interface FeedItemProps {
   className?: string
   showUnreadCount?: boolean
 }
-const FeedItemImpl = ({
-  view,
-  feedId,
-  className,
-  showUnreadCount = true,
-}: FeedItemProps) => {
+const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedItemProps) => {
   const subscription = useSubscriptionByFeedId(feedId)
   const navigate = useNavigateEntry()
   const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
@@ -57,15 +54,13 @@ const FeedItemImpl = ({
 
   const feedUnread = useFeedUnreadStore((state) => state.data[feedId] || 0)
 
-  const isActive = useRouteParamsSelector(
-    (routerParams) => routerParams.feedId === feedId,
-  )
+  const isActive = useRouteParamsSelector((routerParams) => routerParams.feedId === feedId)
 
   const feed = useFeedById(feedId)
 
   const { items } = useFeedActions({ feedId, view })
   const me = useWhoami()
-  const isOwned = feed && feed.ownerUserId === me?.id
+  const presentUserProfile = usePresentUserProfileModal("drawer")
 
   if (!feed) return null
 
@@ -120,23 +115,61 @@ const FeedItemImpl = ({
           <div
             className={cn(
               "truncate",
-              !showUnreadCount &&
-              (feedUnread ? "font-bold" : "font-medium opacity-70"),
+              !showUnreadCount && (feedUnread ? "font-bold" : "font-medium opacity-70"),
             )}
           >
-            {feed.title}
+            {getPreferredTitle(feed)}
           </div>
-          {isOwned && (
-            <Tooltip delayDuration={300}>
-              <TooltipTrigger asChild>
-                <i className="i-mgc-flag-1-cute-fi ml-1 shrink-0 text-base text-accent" />
-              </TooltipTrigger>
+          {feed.ownerUserId &&
+            (feed.ownerUserId === me?.id ? (
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <i className="i-mgc-certificate-cute-fi ml-1.5 shrink-0 text-[15px] text-accent" />
+                </TooltipTrigger>
 
-              <TooltipPortal>
-                <TooltipContent>This feed is owned by you</TooltipContent>
-              </TooltipPortal>
-            </Tooltip>
-          )}
+                <TooltipPortal>
+                  <TooltipContent className="px-4 py-2">
+                    <div className="flex items-center text-base font-semibold">
+                      <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-accent" />
+                      Claimed feed
+                    </div>
+                    <div>This feed is claimed by you.</div>
+                  </TooltipContent>
+                </TooltipPortal>
+              </Tooltip>
+            ) : (
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <i className="i-mgc-certificate-cute-fi ml-1.5 shrink-0 text-[15px] text-amber-500" />
+                </TooltipTrigger>
+
+                <TooltipPortal>
+                  <TooltipContent className="px-4 py-2">
+                    <div className="flex items-center text-base font-semibold">
+                      <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-amber-500" />
+                      Claimed feed
+                    </div>
+                    <div className="mt-1 flex items-center gap-1.5">
+                      <span>This feed is claimed by</span>
+                      {feed.owner ? (
+                        <Avatar
+                          className="inline-flex aspect-square size-5 rounded-full"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            presentUserProfile(feed.owner!.id)
+                          }}
+                        >
+                          <AvatarImage src={feed.owner.image || undefined} />
+                          <AvatarFallback>{feed.owner.name?.slice(0, 2)}</AvatarFallback>
+                        </Avatar>
+                      ) : (
+                        <span>its owner.</span>
+                      )}
+                    </div>
+                  </TooltipContent>
+                </TooltipPortal>
+              </Tooltip>
+            ))}
           {feed.errorAt && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
@@ -146,13 +179,9 @@ const FeedItemImpl = ({
                 <TooltipContent>
                   <div className="flex items-center gap-1">
                     <i className="i-mgc-time-cute-re" />
-                    Error since
-                    {" "}
+                    Error since{" "}
                     {dayjs
-                      .duration(
-                        dayjs(feed.errorAt).diff(dayjs(), "minute"),
-                        "minute",
-                      )
+                      .duration(dayjs(feed.errorAt).diff(dayjs(), "minute"), "minute")
                       .humanize(true)}
                   </div>
                   {!!feed.errorMessage && (
@@ -171,9 +200,7 @@ const FeedItemImpl = ({
                 <OouiUserAnonymous className="ml-1 shrink-0 text-base" />
               </TooltipTrigger>
               <TooltipPortal>
-                <TooltipContent>
-                  Not publicly visible on your profile page
-                </TooltipContent>
+                <TooltipContent>Not publicly visible on your profile page</TooltipContent>
               </TooltipPortal>
             </Tooltip>
           )}

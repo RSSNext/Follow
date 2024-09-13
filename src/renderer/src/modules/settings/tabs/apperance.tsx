@@ -79,8 +79,7 @@ export const SettingAppearance = () => (
 
           defineItem("readerRenderInlineStyle", {
             label: "Render inline style",
-            description:
-              "Allows rendering of the inline style of the original HTML.",
+            description: "Allows rendering of the inline style of the original HTML.",
           }),
           {
             type: "title",
@@ -107,7 +106,6 @@ const ShikiTheme = () => {
     <div className="mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">Code highlight theme</span>
       <Select
-
         defaultValue="github-dark"
         value={codeHighlightTheme}
         onValueChange={(value) => {
@@ -146,10 +144,7 @@ const TextSize = () => {
         defaultValue={textSizeMap.default.toString()}
         value={uiTextSize.toString() || textSizeMap.default.toString()}
         onValueChange={(value) => {
-          setUISetting(
-            "uiTextSize",
-            Number.parseInt(value) || textSizeMap.default,
-          )
+          setUISetting("uiTextSize", Number.parseInt(value) || textSizeMap.default)
         }}
       >
         <SelectTrigger size="sm" className="w-48 capitalize">
@@ -157,11 +152,7 @@ const TextSize = () => {
         </SelectTrigger>
         <SelectContent position="item-aligned">
           {Object.entries(textSizeMap).map(([size, value]) => (
-            <SelectItem
-              className="capitalize"
-              key={size}
-              value={value.toString()}
-            >
+            <SelectItem className="capitalize" key={size} value={value.toString()}>
               {size}
             </SelectItem>
           ))}

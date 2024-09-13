@@ -1,11 +1,5 @@
 import type { EntryModel } from "@renderer/models"
-import {
-  EntryRelatedKey,
-  EntryRelatedService,
-  EntryService,
-  FeedService,
-  SubscriptionService,
-} from "@renderer/services"
+import { EntryService, FeedService, SubscriptionService } from "@renderer/services"
 import type { IFuseOptions } from "fuse.js"
 import Fuse from "fuse.js"
 
@@ -22,8 +16,7 @@ const createState = (): SearchState => ({
   keyword: "",
   searchType: SearchType.All,
 })
-export const useSearchStore =
-  createZustandStore<SearchState>("search")(createState)
+export const useSearchStore = createZustandStore<SearchState>("search")(createState)
 
 const { getState: get, setState: set } = useSearchStore
 
@@ -41,24 +34,17 @@ class SearchActions {
   }
 
   async createLocalDbSearch() {
-    const [entries, feeds, subscriptions, entryRelated] = await Promise.all([
+    const [entries, feeds, subscriptions] = await Promise.all([
       EntryService.findAll(),
       FeedService.findAll(),
       SubscriptionService.findAll(),
-      EntryRelatedService.findAll(EntryRelatedKey.FEED_ID),
     ])
 
-    const entriesFuse = this.createFuse(entries, [
-      "title",
-      "content",
-      "description",
-      "id",
-    ])
-    const feedsFuse = this.createFuse(feeds, ["title", "description", "id"])
-    const subscriptionsFuse = this.createFuse(subscriptions, [
-      "title",
-      "category",
-    ])
+    const feedsMap = new Map(feeds.map((feed) => [feed.id, feed]))
+
+    const entriesFuse = this.createFuse(entries, ["title", "content", "description", "id"])
+    const feedsFuse = this.createFuse(feeds, ["title", "description", "id", "siteUrl", "url"])
+    const subscriptionsFuse = this.createFuse(subscriptions, ["title", "category"])
 
     return defineSearchInstance({
       counts: {
@@ -68,21 +54,15 @@ class SearchActions {
       },
       search(keyword: string) {
         const type = get().searchType
-        const entries =
-          type & SearchType.Entry ? entriesFuse.search(keyword) : []
+        const entries = type & SearchType.Entry ? entriesFuse.search(keyword) : []
         const feeds = type & SearchType.Feed ? feedsFuse.search(keyword) : []
 
         const subscriptions =
-          type & SearchType.Subscription ?
-            subscriptionsFuse.search(keyword) :
-              []
+          type & SearchType.Subscription ? subscriptionsFuse.search(keyword) : []
 
-        const processedEntries = [] as SearchResult<
-          EntryModel,
-          { feedId: string }
-        >[]
+        const processedEntries = [] as SearchResult<EntryModel, { feedId: string }>[]
         for (const entry of entries) {
-          const feedId = entryRelated[entry.item.id]
+          const feedId = feedsMap.get(entry.item.feedId)?.id
           if (feedId) {
             processedEntries.push({ item: entry.item, feedId })
           }

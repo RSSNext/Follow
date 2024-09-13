@@ -1,9 +1,7 @@
 import { getUISettings, setUISetting } from "@renderer/atoms/settings/ui"
 import { PanelSplitter } from "@renderer/components/ui/divider"
 import { views } from "@renderer/constants"
-import {
-  useRouteParms,
-} from "@renderer/hooks/biz/useRouteParams"
+import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import { cn, isSafari } from "@renderer/lib/utils"
 import { EntryColumn } from "@renderer/modules/entry-column"
 import { useMemo, useRef } from "react"
@@ -18,7 +16,7 @@ export function Component() {
   const entryColWidth = useMemo(() => getUISettings().entryColWidth, [])
   const { feedId, view } = useRouteParms()
   const inWideMode = view ? views[view].wideMode : false
-  const { position, separatorProps, isDragging } = useResizable({
+  const { position, separatorProps, isDragging, separatorCursor } = useResizable({
     axis: "x",
     // FIXME: Less than this width causes grid images to overflow on safari
     min: isSafari() ? 356 : 300,
@@ -33,18 +31,16 @@ export function Component() {
   return (
     <div ref={containerRef} className="flex min-w-0 grow">
       <div
-        className={cn(
-          "h-full shrink-0",
-          inWideMode ? "flex-1" : "border-r",
-          "will-change-[width]",
-        )}
+        className={cn("h-full shrink-0", inWideMode ? "flex-1" : "border-r", "will-change-[width]")}
         style={{
           width: position,
         }}
       >
         <EntryColumn key={`${feedId}-${view}`} />
       </div>
-      {!inWideMode && <PanelSplitter {...separatorProps} isDragging={isDragging} />}
+      {!inWideMode && (
+        <PanelSplitter {...separatorProps} cursor={separatorCursor} isDragging={isDragging} />
+      )}
       <Outlet />
     </div>
   )

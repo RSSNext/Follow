@@ -5,6 +5,4 @@ export interface SegmentGroupContextValue {
   setValue: (value: string) => void
   componentId: string
 }
-export const SegmentGroupContext = createContext<SegmentGroupContextValue>(
-  null!,
-)
+export const SegmentGroupContext = createContext<SegmentGroupContextValue>(null!)

@@ -6,45 +6,26 @@ import { createContextState } from "foxact/create-context-state"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import type { PrimitiveAtom } from "jotai"
 import { atom, useAtomValue, useSetAtom } from "jotai"
-import {
-  createContext,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-} from "react"
+import { createContext, memo, useCallback, useContext, useEffect, useRef } from "react"
 
-const [
-  WrappedElementProviderInternal,
-  useWrappedElement,
-  useSetWrappedElement,
-] = createContextState<HTMLDivElement | null>(undefined as any)
+const [WrappedElementProviderInternal, useWrappedElement, useSetWrappedElement] =
+  createContextState<HTMLDivElement | null>(undefined as any)
 
-const [
-  ElementSizeProviderInternal,
-  useWrappedElementSize,
-  useSetWrappedElementSize,
-] = createContextState({
-  h: 0,
-  w: 0,
-})
+const [ElementSizeProviderInternal, useWrappedElementSize, useSetWrappedElementSize] =
+  createContextState({
+    h: 0,
+    w: 0,
+  })
 
-const ElementPositionProviderInternal = createContext<
-  PrimitiveAtom<{ x: number, y: number }>
->(null!)
+const ElementPositionProviderInternal = createContext<PrimitiveAtom<{ x: number; y: number }>>(
+  null!,
+)
 
-const [
-  IsEndOfElementProviderInternal,
-  useIsEoFWrappedElement,
-  useSetIsEOfElement,
-] = createContextState<boolean>(false)
+const [IsEndOfElementProviderInternal, useIsEoFWrappedElement, useSetIsEOfElement] =
+  createContextState<boolean>(false)
 
-const [
-  IsStartOfElementProviderInternal,
-  useIsSoFWrappedElement,
-  useSetIsSOfElement,
-] = createContextState<boolean>(false)
+const [IsStartOfElementProviderInternal, useIsSoFWrappedElement, useSetIsSOfElement] =
+  createContextState<boolean>(false)
 
 const Providers = [
   <WrappedElementProviderInternal key="ArticleElementProviderInternal" />,

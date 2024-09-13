@@ -21,6 +21,7 @@ export const TimeStamp = (props: { time: string }) => {
         nextFrame(() => AudioPlayer.seek(timeStringToSeconds(props.time) || 0))
       }}
     >
+      <i className="i-mgc-time-cute-re translate-y-0.5 mr-1" />
       {props.time}
     </span>
   )

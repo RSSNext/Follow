@@ -23,31 +23,21 @@ export const setHydrated = (v: boolean) => {
 }
 
 export const hydrateDatabaseToStore = async () => {
-  appLog("Hydrate database data to store task start...")
-
   async function hydrate() {
     const now = Date.now()
-    await Promise.all([
-      hydrateFeed(),
-      hydrateSubscription(),
-      hydrateFeedUnread(),
-      hydrateEntry(),
-    ])
+    await Promise.all([hydrateFeed(), hydrateSubscription(), hydrateFeedUnread(), hydrateEntry()])
 
     window.__dbIsReady = true
     const costTime = Date.now() - now
-    appLog("Hydrate data done,", `${costTime}ms`)
 
     return costTime
   }
-  return Promise.race([hydrate(), sleep(1000).then(() => 10e10)]).then(
-    (result) => {
-      if (result === 10e10) {
-        appLog("Hydrate data timeout")
-      }
-      return result
-    },
-  )
+  return Promise.race([hydrate(), sleep(1000).then(() => 10e10)]).then((result) => {
+    if (result === 10e10) {
+      appLog("Hydrate data timeout")
+    }
+    return result
+  })
 }
 
 async function hydrateFeed() {
@@ -101,9 +91,7 @@ async function hydrateSubscription() {
 
 const logHydrateError = (message: string) => {
   // eslint-disable-next-line no-console
-  console.debug(
-    `Hydrate error: ${message}, maybe local database data is dirty.`,
-  )
+  console.debug(`Hydrate error: ${message}, maybe local database data is dirty.`)
 }
 
 export const hydrateSettings = () => {

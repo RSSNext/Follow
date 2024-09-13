@@ -1,9 +1,10 @@
+
 export interface SettingPageConfig {
   iconName: string
-  name: string
+  name: I18nKeys
   priority: number
-
+  headerIcon?: string
 }
-export const defineSettingPage = (config: SettingPageConfig) => () => ({
+export const defineSettingPageData = (config: SettingPageConfig) => () => ({
   ...config,
 })

@@ -62,7 +62,7 @@ const useUnreadByView = () => {
   return totalUnread
 }
 
-export function FeedColumn({ children }: PropsWithChildren) {
+export function FeedColumn({ children, className }: PropsWithChildren<{ className?: string }>) {
   const carouselRef = useRef<HTMLDivElement>(null)
 
   const [active, setActive_] = useSidebarActiveView()
@@ -139,7 +139,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
 
   return (
     <WindowUnderBlur
-      className="relative flex h-full flex-col space-y-3 rounded-l-[12px] pt-2.5"
+      className={cn("relative flex h-full flex-col space-y-3 rounded-l-[12px] pt-2.5", className)}
       onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
       <FeedColumnHeader />
@@ -184,10 +184,7 @@ export function FeedColumn({ children }: PropsWithChildren) {
               key={item.name}
               className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center"
             >
-              <FeedList
-                className="flex size-full flex-col text-sm"
-                view={index}
-              />
+              <FeedList className="flex size-full flex-col text-sm" view={index} />
             </section>
           ))}
         </SwipeWrapper>
@@ -206,21 +203,6 @@ const SwipeWrapper: FC<{
 
   const feedColumnWidth = useUISettingKey("feedColWidth")
   const containerRef = useRef<HTMLDivElement>(null)
-
-  // useLayoutEffect(() => {
-  //   const $container = containerRef.current;
-  //   if (!$container) return;
-
-  //   const x = -active * feedColumnWidth;
-  //   // NOTE: To fix the misalignment of the browser's layout, use display to re-render it.
-  //   if (x !== $container.getBoundingClientRect().x) {
-  //     $container.style.display = "none";
-
-  //     nextFrame(() => {
-  //       $container.style.display = "";
-  //     });
-  //   }
-  // }, []);
 
   const prevActiveIndexRef = useRef(-1)
   const [isReady, setIsReady] = useState(false)
@@ -248,7 +230,7 @@ const SwipeWrapper: FC<{
   }, [active])
 
   if (reduceMotion) {
-    return <div ref={containerRef}>{children}</div>
+    return <div ref={containerRef}>{children[currentAnimtedActive]}</div>
   }
 
   return (
@@ -257,11 +239,11 @@ const SwipeWrapper: FC<{
         className="grow"
         key={currentAnimtedActive}
         initial={
-          isReady ?
-              {
+          isReady
+            ? {
                 x: direction === "right" ? feedColumnWidth : -feedColumnWidth,
-              } :
-            true
+              }
+            : true
         }
         animate={{ x: 0 }}
         exit={{

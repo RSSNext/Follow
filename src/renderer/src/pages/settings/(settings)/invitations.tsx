@@ -1,16 +1,22 @@
 import { SettingInvitations } from "@renderer/modules/settings/tabs/invitations"
-import { defineSettingPage } from "@renderer/modules/settings/utils"
+import { SettingsTitle } from "@renderer/modules/settings/title"
+import { defineSettingPageData } from "@renderer/modules/settings/utils"
 
 const iconName = "i-mgc-heart-hand-cute-re"
-const name = "Invitations"
+
 const priority = 1055
 
-export const loader = defineSettingPage({
+export const loader = defineSettingPageData({
   iconName,
-  name,
+  name: "settings.titles.invitations",
   priority,
 })
 
 export function Component() {
-  return <SettingInvitations />
+  return (
+    <>
+      <SettingsTitle />
+      <SettingInvitations />
+    </>
+  )
 }

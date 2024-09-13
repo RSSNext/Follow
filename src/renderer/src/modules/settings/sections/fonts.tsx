@@ -1,8 +1,5 @@
 /* eslint-disable @eslint-react/hooks-extra/ensure-custom-hooks-using-other-hooks */
-import {
-  setUISetting,
-  useUISettingSelector,
-} from "@renderer/atoms/settings/ui"
+import { setUISetting, useUISettingSelector } from "@renderer/atoms/settings/ui"
 import { Button } from "@renderer/components/ui/button"
 import { Input } from "@renderer/components/ui/input"
 import { useModalStack } from "@renderer/components/ui/modal"
@@ -52,9 +49,7 @@ const useFontDataWeb = () => [
 const useFontData = window.electron ? useFontDataElectron : useFontDataWeb
 export const ContentFontSelector = () => {
   const data = useFontData()
-  const readerFontFamily = useUISettingSelector(
-    (state) => state.readerFontFamily || DEFAULT_FONT,
-  )
+  const readerFontFamily = useUISettingSelector((state) => state.readerFontFamily || DEFAULT_FONT)
   const setCustom = usePresentCustomFontDialog("readerFontFamily")
 
   const isCustomFont = useMemo(
@@ -83,9 +78,7 @@ export const ContentFontSelector = () => {
           <SelectValue />
         </SelectTrigger>
         <SelectContent position="item-aligned">
-          {isCustomFont && (
-            <SelectItem value={readerFontFamily}>{readerFontFamily}</SelectItem>
-          )}
+          {isCustomFont && <SelectItem value={readerFontFamily}>{readerFontFamily}</SelectItem>}
           {data.map(({ label, value }) => (
             <SelectItem key={value} value={value}>
               {label}
@@ -99,13 +92,13 @@ export const ContentFontSelector = () => {
 
 export const UIFontSelector = () => {
   // filter out the fallback font
-  const data = useFontData().slice(1).filter((d) => d.value !== DEFAULT_FONT)
+  const data = useFontData()
+    .slice(1)
+    .filter((d) => d.value !== DEFAULT_FONT)
   const uiFont = useUISettingSelector((state) => state.uiFontFamily)
   const setCustom = usePresentCustomFontDialog("uiFontFamily")
   const isCustomFont = useMemo(
-    () =>
-      uiFont !== DEFAULT_FONT &&
-      data.find((d) => d.value === uiFont) === undefined,
+    () => uiFont !== DEFAULT_FONT && data.find((d) => d.value === uiFont) === undefined,
     [data, uiFont],
   )
 
@@ -141,9 +134,7 @@ export const UIFontSelector = () => {
   )
 }
 
-const usePresentCustomFontDialog = (
-  setKey: "uiFontFamily" | "readerFontFamily",
-) => {
+const usePresentCustomFontDialog = (setKey: "uiFontFamily" | "readerFontFamily") => {
   const HISTORY_KEY = getStorageNS("customFonts")
   const { present } = useModalStack()
 
@@ -168,7 +159,6 @@ const usePresentCustomFontDialog = (
           }
         }
         return (
-
           <form className="flex flex-col gap-2" onSubmit={save}>
             <Input
               defaultValue={localStorage.getItem(HISTORY_KEY) || ""}
@@ -179,12 +169,9 @@ const usePresentCustomFontDialog = (
             />
 
             <div className="flex justify-end">
-              <Button type="submit">
-                Save
-              </Button>
+              <Button type="submit">Save</Button>
             </div>
           </form>
-
         )
       },
     })

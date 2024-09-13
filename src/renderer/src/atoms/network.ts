@@ -6,10 +6,9 @@ export enum NetworkStatus {
   OFFLINE,
 }
 
-export const [, , useNetworkStatus, , getNetworkStatus, setNetworkStatus] =
-  createAtomHooks(
-    atom(navigator.onLine ? NetworkStatus.ONLINE : NetworkStatus.OFFLINE),
-  )
+export const [, , useNetworkStatus, , getNetworkStatus, setNetworkStatus] = createAtomHooks(
+  atom(navigator.onLine ? NetworkStatus.ONLINE : NetworkStatus.OFFLINE),
+)
 
 export const [, , useApiStatus, , getApiStatus, setApiStatus] = createAtomHooks(
   atom(NetworkStatus.ONLINE),
@@ -22,9 +21,7 @@ export const subscribeNetworkStatus = () => {
   window.addEventListener("online", handleOnline)
   window.addEventListener("offline", handleOffline)
 
-  setNetworkStatus(
-    navigator.onLine ? NetworkStatus.ONLINE : NetworkStatus.OFFLINE,
-  )
+  setNetworkStatus(navigator.onLine ? NetworkStatus.ONLINE : NetworkStatus.OFFLINE)
 
   return () => {
     window.removeEventListener("online", handleOnline)

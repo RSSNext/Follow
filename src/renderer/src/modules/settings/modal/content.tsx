@@ -27,9 +27,7 @@ export const SettingModalContent: FC<{
 }> = ({ initialTab }) => (
   <SettingTabProvider>
     <SettingModalLayout
-      initialTab={
-        initialTab ? (initialTab in pages ? initialTab : undefined) : undefined
-      }
+      initialTab={initialTab ? (initialTab in pages ? initialTab : undefined) : undefined}
     >
       <Content />
     </SettingModalLayout>
@@ -40,10 +38,7 @@ const Close = () => {
   const { dismiss } = useCurrentModal()
 
   return (
-    <MotionButtonBase
-      className="absolute right-8 top-8 z-[99]"
-      onClick={dismiss}
-    >
+    <MotionButtonBase className="absolute right-8 top-8 z-[99]" onClick={dismiss}>
       <i className="i-mgc-close-cute-re" />
     </MotionButtonBase>
   )
@@ -77,15 +72,8 @@ const Content = () => {
 
         <div className="h-12" />
         <p className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 text-xs opacity-80">
-          <i className="i-mgc-heart-cute-fi" />
-          {" "}
-          Love our product?
-          {" "}
-          <a
-            href={`${repository.url}`}
-            className="text-accent"
-            target="_blank"
-          >
+          <i className="i-mgc-heart-cute-fi" /> Love our product?{" "}
+          <a href={`${repository.url}`} className="text-accent" target="_blank">
             Give us a star on GitHub
           </a>
           !

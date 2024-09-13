@@ -36,13 +36,7 @@ export const Collapse: Component<CollapseProps> = (props) => {
   React.useEffect(() => {
     setIsOpened(currentId === id)
   }, [currentId, id])
-  return (
-    <CollapseControlled
-      isOpened={isOpened}
-      onOpenChange={setIsOpened}
-      {...props}
-    />
-  )
+  return <CollapseControlled isOpened={isOpened} onOpenChange={setIsOpened} {...props} />
 }
 
 export const CollapseControlled: Component<
@@ -63,17 +57,12 @@ export const CollapseControlled: Component<
       {!props.hideArrow && (
         <div className="inline-flex shrink-0 items-center text-gray-400">
           <i
-            className={cn(
-              "i-mingcute-down-line duration-200",
-              props.isOpened ? "rotate-180" : "",
-            )}
+            className={cn("i-mingcute-down-line duration-200", props.isOpened ? "rotate-180" : "")}
           />
         </div>
       )}
     </div>
-    <CollapseContent isOpened={props.isOpened}>
-      {props.children}
-    </CollapseContent>
+    <CollapseContent isOpened={props.isOpened}>{props.children}</CollapseContent>
   </div>
 )
 export const CollapseContent: Component<{

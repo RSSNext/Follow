@@ -1,13 +1,10 @@
-import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
 import { getProxyUrl } from "@renderer/lib/img-proxy"
-import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn } from "@renderer/lib/utils"
 import { saveImageDimensionsToDb } from "@renderer/store/image/db"
 import { useForceUpdate } from "framer-motion"
 import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { memo, useMemo, useState } from "react"
-import { toast } from "sonner"
 import { useEventCallback } from "usehooks-ts"
 
 import { usePreviewMedia } from "./media/hooks"
@@ -23,31 +20,28 @@ type BaseProps = {
 export type MediaProps = BaseProps &
   (
     | (ImgHTMLAttributes<HTMLImageElement> & {
-      proxy?: {
-        width: number
-        height: number
-      }
-      disableContextMenu?: boolean
-      popper?: boolean
-      type: "photo"
-      previewImageUrl?: string
-      cacheDimensions?: boolean
-    })
+        proxy?: {
+          width: number
+          height: number
+        }
+        popper?: boolean
+        type: "photo"
+        previewImageUrl?: string
+        cacheDimensions?: boolean
+      })
     | (VideoHTMLAttributes<HTMLVideoElement> & {
-      proxy?: {
-        width: number
-        height: number
-      }
-      disableContextMenu?: boolean
-      popper?: boolean
-      type: "video"
-      previewImageUrl?: string
-    })
+        proxy?: {
+          width: number
+          height: number
+        }
+        popper?: boolean
+        type: "video"
+        previewImageUrl?: string
+      })
   )
 const MediaImpl: FC<MediaProps> = ({
   className,
   proxy,
-  disableContextMenu,
   popper = false,
   mediaContainerClassName,
   ...props
@@ -55,29 +49,26 @@ const MediaImpl: FC<MediaProps> = ({
   const { src, style, type, previewImageUrl, showFallback, ...rest } = props
   const [hidden, setHidden] = useState(!src)
   const [imgSrc, setImgSrc] = useState(() =>
-    proxy && src && !failedList.has(src) ?
-      getProxyUrl({
-        url: src,
-        width: proxy.width,
-        height: proxy.height,
-      }) :
-      src,
+    proxy && src && !failedList.has(src)
+      ? getProxyUrl({
+          url: src,
+          width: proxy.width,
+          height: proxy.height,
+        })
+      : src,
   )
 
-  const [mediaLoadState, setMediaLoadState] = useState<
-    "loading" | "loaded" | "error"
-  >("loading")
-  const errorHandle: React.ReactEventHandler<HTMLImageElement> =
-    useEventCallback((e) => {
-      setMediaLoadState("error")
-      if (imgSrc !== props.src) {
-        setImgSrc(props.src)
-        failedList.add(props.src)
-      } else {
-        setHidden(true)
-        props.onError?.(e as any)
-      }
-    })
+  const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded" | "error">("loading")
+  const errorHandle: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
+    setMediaLoadState("error")
+    if (imgSrc !== props.src) {
+      setImgSrc(props.src)
+      failedList.add(props.src)
+    } else {
+      setHidden(true)
+      props.onError?.(e as any)
+    }
+  })
   const previewMedia = usePreviewMedia()
   const handleClick = useEventCallback((e: React.MouseEvent) => {
     if (popper && src) {
@@ -86,6 +77,7 @@ const MediaImpl: FC<MediaProps> = ({
           {
             url: src,
             type,
+            fallbackUrl: imgSrc,
           },
         ],
         0,
@@ -93,19 +85,18 @@ const MediaImpl: FC<MediaProps> = ({
     }
     props.onClick?.(e as any)
   })
-  const handleOnLoad: React.ReactEventHandler<HTMLImageElement> =
-    useEventCallback((e) => {
-      setMediaLoadState("loaded")
-      rest.onLoad?.(e as any)
-      if ("cacheDimensions" in props && props.cacheDimensions && src) {
-        saveImageDimensionsToDb(src, {
-          src,
-          width: e.currentTarget.naturalWidth,
-          height: e.currentTarget.naturalHeight,
-          ratio: e.currentTarget.naturalWidth / e.currentTarget.naturalHeight,
-        })
-      }
-    })
+  const handleOnLoad: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
+    setMediaLoadState("loaded")
+    rest.onLoad?.(e as any)
+    if ("cacheDimensions" in props && props.cacheDimensions && src) {
+      saveImageDimensionsToDb(src, {
+        src,
+        width: e.currentTarget.naturalWidth,
+        height: e.currentTarget.naturalHeight,
+        ratio: e.currentTarget.naturalWidth / e.currentTarget.naturalHeight,
+      })
+    }
+  })
 
   const InnerContent = useMemo(() => {
     switch (type) {
@@ -115,7 +106,6 @@ const MediaImpl: FC<MediaProps> = ({
             {...(rest as ImgHTMLAttributes<HTMLImageElement>)}
             onError={errorHandle}
             className={cn(
-              hidden && "hidden",
               !(props.width || props.height) && "size-full",
               "bg-gray-200 object-cover duration-200 dark:bg-neutral-800",
               popper && "cursor-zoom-in",
@@ -126,41 +116,6 @@ const MediaImpl: FC<MediaProps> = ({
             src={imgSrc}
             onLoad={handleOnLoad}
             onClick={handleClick}
-            {...(!disableContextMenu ?
-                {
-                  onContextMenu: (e) => {
-                    e.stopPropagation()
-                    e.preventDefault()
-                    props.onContextMenu?.(e)
-                    showNativeMenu(
-                      [
-                        {
-                          type: "text",
-                          label: "Open Image in New Window",
-                          click: () => {
-                            if (props.src && imgSrc && tipcClient) {
-                              window.open(props.src, "_blank")
-                            }
-                          },
-                        },
-                        {
-                          type: "text",
-                          label: "Copy Image Address",
-                          click: () => {
-                            if (props.src) {
-                              navigator.clipboard.writeText(props.src)
-                              toast("Address copied to clipboard.", {
-                                duration: 1000,
-                              })
-                            }
-                          },
-                        },
-                      ],
-                      e,
-                    )
-                  },
-                } :
-                {})}
           />
         )
       }
@@ -168,8 +123,7 @@ const MediaImpl: FC<MediaProps> = ({
         return (
           <span
             className={cn(
-              hidden && "hidden",
-              "block",
+              "center",
               !(props.width || props.height) && "size-full",
               "relative bg-stone-100 object-cover",
               mediaContainerClassName,
@@ -185,11 +139,9 @@ const MediaImpl: FC<MediaProps> = ({
       }
     }
   }, [
-    disableContextMenu,
     errorHandle,
     handleClick,
     handleOnLoad,
-    hidden,
     imgSrc,
     mediaContainerClassName,
     mediaLoadState,
@@ -200,32 +152,30 @@ const MediaImpl: FC<MediaProps> = ({
     src,
     type,
   ])
+
   if (!type || !src) return null
 
   if (hidden && showFallback) {
     return <FallbackMedia {...props} />
   }
   return (
-    <span className={cn("block overflow-hidden rounded", className)} style={style}>
+    <span
+      className={cn("block overflow-hidden rounded", hidden && "hidden", className)}
+      style={style}
+    >
       {InnerContent}
     </span>
   )
 }
 
-export const Media: FC<MediaProps> = memo((props) => (
-  <MediaImpl {...props} key={props.src} />
-))
+export const Media: FC<MediaProps> = memo((props) => <MediaImpl {...props} key={props.src} />)
 
-const FallbackMedia: FC<MediaProps> = ({
-  type,
-  mediaContainerClassName,
-  ...props
-}) => (
+const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, ...props }) => (
   <div
     className={cn(
       !(props.width || props.height) && "size-full",
-      "center relative h-24 rounded bg-zinc-100 object-cover dark:bg-neutral-900",
-      "not-prose flex max-h-full flex-col space-y-1",
+      "center relative box-content h-24 rounded bg-zinc-100 object-cover dark:bg-neutral-900",
+      "not-prose flex max-h-full flex-col space-y-1 p-4",
       mediaContainerClassName,
     )}
     style={{
@@ -234,20 +184,15 @@ const FallbackMedia: FC<MediaProps> = ({
       ...props.style,
     }}
   >
+    <i className="i-mgc-close-cute-re text-xl text-red-500" />
     <p>Media loaded failed</p>
-    <p className="flex items-center gap-1">
-      Go to
-      {" "}
-      <a
-        href={props.src}
-        target="_blank"
-        rel="noreferrer"
-        className="follow-link--underline"
-      >
+    <div className="space-x-1 break-all px-4 text-sm">
+      Go to{" "}
+      <a href={props.src} target="_blank" rel="noreferrer" className="follow-link--underline">
         {props.src}
       </a>
-      <i className="i-mgc-external-link-cute-re" />
-    </p>
+      <i className="i-mgc-external-link-cute-re translate-y-px" />
+    </div>
   </div>
 )
 
@@ -258,7 +203,7 @@ const VideoPreview: FC<{
   const [isInitVideoPlayer, setIsInitVideoPlayer] = useState(!previewImageUrl)
 
   const [videoRef, setVideoRef] = useState<VideoPlayerRef | null>(null)
-  const isPaused = videoRef?.getState().paused
+  const isPaused = videoRef ? videoRef?.getState().paused : true
   const [forceUpdate] = useForceUpdate()
   return (
     <div
@@ -270,7 +215,7 @@ const VideoPreview: FC<{
         nextFrame(forceUpdate)
       }}
     >
-      {isInitVideoPlayer ? (
+      {!isInitVideoPlayer ? (
         <img
           src={previewImageUrl}
           className="size-full object-cover"

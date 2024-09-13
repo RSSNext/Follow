@@ -1,6 +1,7 @@
 import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient, getFetchErrorMessage } from "@renderer/lib/api-fetch"
+import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
+import { getFetchErrorMessage, toastFetchError } from "@renderer/lib/error-parser"
 import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
@@ -23,14 +24,11 @@ export const wallet = {
 
   claimCheck: () =>
     defineQuery(["wallet", "claimCheck"], async () =>
-      apiClient.wallets.transactions["claim-check"].$get()),
+      apiClient.wallets.transactions["claim-check"].$get(),
+    ),
 
   transactions: {
-    get: (
-      query: Parameters<
-        typeof apiClient.wallets.transactions.$get
-      >[0]["query"] = {},
-    ) =>
+    get: (query: Parameters<typeof apiClient.wallets.transactions.$get>[0]["query"] = {}) =>
       defineQuery(
         ["wallet", "transactions", query].filter(Boolean),
         async () => {
@@ -48,9 +46,8 @@ export const wallet = {
 export const useWallet = ({ userId }: { userId?: string } = {}) =>
   useAuthQuery(wallet.get({ userId }), { enabled: !!userId })
 
-export const useWalletTransactions = (
-  query: Parameters<typeof wallet.transactions.get>[0] = {},
-) => useAuthQuery(wallet.transactions.get(query))
+export const useWalletTransactions = (query: Parameters<typeof wallet.transactions.get>[0] = {}) =>
+  useAuthQuery(wallet.transactions.get(query))
 
 export const useCreateWalletMutation = () =>
   useMutation({
@@ -77,7 +74,7 @@ export const useClaimWalletDailyRewardMutation = () => {
     mutationKey: ["claimWalletDailyReward"],
     mutationFn: () => apiClient.wallets.transactions.claim_daily.$post(),
     async onError(err) {
-      toast.error(getFetchErrorMessage(err))
+      toastFetchError(err)
     },
     onSuccess() {
       wallet.get().invalidate()
@@ -89,7 +86,7 @@ export const useClaimWalletDailyRewardMutation = () => {
           className="flex items-center gap-1 text-lg"
           onClick={() => settingModalPresent("wallet")}
         >
-          <i className="i-mgc-power animate-flip" />
+          <i className="i-mgc-power text-accent animate-flip" />
         </div>,
         {
           unstyled: true,
@@ -106,13 +103,10 @@ export const useClaimWalletDailyRewardMutation = () => {
 export const useWalletTipMutation = () =>
   useMutation({
     mutationKey: ["walletTip"],
-    mutationFn: (
-      data: Parameters<
-        typeof apiClient.wallets.transactions.tip.$post
-      >[0]["json"],
-    ) => apiClient.wallets.transactions.tip.$post({ json: data }),
+    mutationFn: (data: Parameters<typeof apiClient.wallets.transactions.tip.$post>[0]["json"]) =>
+      apiClient.wallets.transactions.tip.$post({ json: data }),
     async onError(err) {
-      toast.error(getFetchErrorMessage(err))
+      toastFetchError(err)
     },
     onSuccess(_, variables) {
       wallet.get().invalidate()

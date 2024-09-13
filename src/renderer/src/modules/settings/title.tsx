@@ -1,31 +1,22 @@
 import { cn } from "@renderer/lib/utils"
+import { useTranslation } from "react-i18next"
 import { useLoaderData } from "react-router-dom"
 
 import { settings } from "./constants"
 import type { SettingPageConfig } from "./utils"
 
-export const SettingsSidebarTitle = ({
-  path,
-  className,
-}: {
-  path: string
-  className?: string
-}) => {
+export const SettingsSidebarTitle = ({ path, className }: { path: string; className?: string }) => {
   const tab = settings.find((t) => t.path === path)
 
+  const { t } = useTranslation()
   if (!tab) {
     return null
   }
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-2 text-[0.94rem] font-medium",
-        className,
-      )}
-    >
+    <div className={cn("flex items-center gap-2 text-[0.94rem] font-medium", className)}>
       <i className={tab.iconName} />
-      <span>{tab.name}</span>
+      <span>{t(tab.name as any)}</span>
     </div>
   )
 }
@@ -37,10 +28,13 @@ export const SettingsTitle = ({
   className?: string
   loader?: () => SettingPageConfig
 }) => {
-  const { iconName, name: title } = (useLoaderData() ||
-    loader?.() ||
-    {}) as SettingPageConfig
+  const {
+    iconName,
+    name: title,
+    headerIcon,
+  } = (useLoaderData() || loader?.() || {}) as SettingPageConfig
 
+  const { t } = useTranslation()
   if (!title) {
     return null
   }
@@ -52,8 +46,8 @@ export const SettingsTitle = ({
         className,
       )}
     >
-      <i className={iconName} />
-      <span>{title}</span>
+      <i className={headerIcon || iconName} />
+      <span>{t(title as any)}</span>
     </div>
   )
 }

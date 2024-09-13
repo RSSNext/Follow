@@ -30,16 +30,13 @@ export const apiFetch = ofetch.create({
 })
 
 export const apiClient = hc<AppType>("", {
-
   fetch: async (input, options = {}) => apiFetch(input.toString(), options),
   headers() {
     const authSessionToken = getAuthSessionToken()
     return {
       "X-App-Version": PKG.version,
       "X-App-Dev": process.env.NODE_ENV === "development" ? "1" : "0",
-      "Cookie": authSessionToken ?
-        `authjs.session-token=${authSessionToken}` :
-        "",
+      Cookie: authSessionToken ? `authjs.session-token=${authSessionToken}` : "",
     }
   },
 })

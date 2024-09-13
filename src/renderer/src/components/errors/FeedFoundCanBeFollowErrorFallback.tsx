@@ -36,8 +36,7 @@ export const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({
 
         <div className="center gap-1 opacity-80">
           <i className="i-mgc-information-cute-re" />
-          We found this feed in our database, you can follow it or go back to
-          homepage.
+          We found this feed in our database, you can follow it or go back to homepage.
         </div>
         <div className="center mt-12 gap-4">
           <Button

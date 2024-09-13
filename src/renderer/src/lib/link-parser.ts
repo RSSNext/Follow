@@ -29,15 +29,13 @@ const defineLinkParser = (options: LinkParserOptions) => {
 }
 export const isYoutubeUrl = defineLinkParser({
   name: "youtube",
-  validator: (url) =>
-    url.hostname.includes("youtube.com"),
+  validator: (url) => url.hostname.includes("youtube.com"),
   icon: "i-logos-youtube-icon",
 })
 
 export const isGithubUrl = defineLinkParser({
   name: "github",
-  validator: (url) =>
-    url.hostname === GITHUB_HOST || url.hostname === "github.blog",
+  validator: (url) => url.hostname === GITHUB_HOST || url.hostname === "github.blog",
   icon: "i-mgc-github-2-cute-fi text-black dark:text-white",
 })
 

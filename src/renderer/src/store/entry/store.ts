@@ -1,15 +1,7 @@
 import { runTransactionInScope } from "@renderer/database"
 import { apiClient } from "@renderer/lib/api-fetch"
-import {
-  getEntriesParams,
-  omitObjectUndefinedValue,
-} from "@renderer/lib/utils"
-import type {
-  CombinedEntryModel,
-  EntryModel,
-  FeedModel,
-  UserModel,
-} from "@renderer/models"
+import { getEntriesParams, omitObjectUndefinedValue } from "@renderer/lib/utils"
+import type { CombinedEntryModel, EntryModel, FeedModel, UserModel } from "@renderer/models"
 import { EntryService } from "@renderer/services"
 import { produce } from "immer"
 import { isNil, merge, omit } from "lodash-es"
@@ -213,15 +205,9 @@ class EntryActions {
             draft.internal_feedId2entryIdSet[item.feeds.id] = new Set()
           }
 
-          if (
-            !draft.internal_feedId2entryIdSet[item.feeds.id].has(
-              item.entries.id,
-            )
-          ) {
+          if (!draft.internal_feedId2entryIdSet[item.feeds.id].has(item.entries.id)) {
             draft.entries[item.feeds.id].push(item.entries.id)
-            draft.internal_feedId2entryIdSet[item.feeds.id].add(
-              item.entries.id,
-            )
+            draft.internal_feedId2entryIdSet[item.feeds.id].add(item.entries.id)
           }
 
           draft.flatMapEntries[item.entries.id] = merge(
@@ -301,9 +287,7 @@ class EntryActions {
             draft.internal_feedId2entryIdSet[item.feedId] = new Set()
           }
 
-          if (
-            !draft.internal_feedId2entryIdSet[item.feedId].has(item.entries.id)
-          ) {
+          if (!draft.internal_feedId2entryIdSet[item.feedId].has(item.entries.id)) {
             draft.entries[item.feedId].push(item.entries.id)
             draft.internal_feedId2entryIdSet[item.feedId].add(item.entries.id)
           }
@@ -368,11 +352,11 @@ class EntryActions {
 
   async markStar(entryId: string, star: boolean) {
     this.patch(entryId, {
-      collections: star ?
-          {
+      collections: star
+        ? {
             createdAt: new Date().toISOString(),
-          } :
-          (null as unknown as undefined),
+          }
+        : (null as unknown as undefined),
     })
 
     set((state) =>
@@ -412,10 +396,7 @@ class EntryActions {
     )
   }
 
-  updateReadHistory(
-    entryId: string,
-    readHistory: Omit<EntryReadHistoriesModel, "entryId">,
-  ) {
+  updateReadHistory(entryId: string, readHistory: Omit<EntryReadHistoriesModel, "entryId">) {
     set((state) => ({
       ...state,
       readHistory: {
@@ -428,5 +409,4 @@ class EntryActions {
 
 export const entryActions = new EntryActions()
 
-export const getEntry = (entryId: string) =>
-  useEntryStore.getState().flatMapEntries[entryId]
+export const getEntry = (entryId: string) => useEntryStore.getState().flatMapEntries[entryId]

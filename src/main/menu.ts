@@ -1,6 +1,6 @@
 import { name } from "@pkg"
 import { dispatchEventOnWindow } from "@shared/event"
-import type { MenuItem, MenuItemConstructorOptions } from "electron"
+import type { BrowserWindow, MenuItem, MenuItemConstructorOptions } from "electron"
 import { Menu } from "electron"
 
 import { isDev, isMacOS } from "./env"
@@ -10,8 +10,8 @@ import { createSettingWindow, createWindow, getMainWindow } from "./window"
 
 export const registerAppMenu = () => {
   const menus: Array<MenuItemConstructorOptions | MenuItem> = [
-    ...(isMacOS ?
-        ([
+    ...(isMacOS
+      ? ([
           {
             label: name,
             submenu: [
@@ -37,8 +37,8 @@ export const registerAppMenu = () => {
               { role: "quit" },
             ],
           },
-        ] as MenuItemConstructorOptions[]) :
-        []),
+        ] as MenuItemConstructorOptions[])
+      : []),
 
     {
       role: "fileMenu",
@@ -87,11 +87,11 @@ export const registerAppMenu = () => {
           accelerator: "CmdOrCtrl+F",
           click(_e, window) {
             if (!window) return
-            dispatchEventOnWindow(window, "OpenSearch")
+            dispatchEventOnWindow(window as BrowserWindow, "OpenSearch")
           },
         },
-        ...((isMacOS ?
-            [
+        ...((isMacOS
+          ? [
               { role: "pasteAndMatchStyle" },
               { role: "delete" },
               { role: "selectAll" },
@@ -100,8 +100,8 @@ export const registerAppMenu = () => {
                 label: "Speech",
                 submenu: [{ role: "startSpeaking" }, { role: "stopSpeaking" }],
               },
-            ] :
-            [
+            ]
+          : [
               { role: "delete" },
               { type: "separator" },
               { role: "selectAll" },

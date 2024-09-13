@@ -5,17 +5,17 @@ import { getOS } from "./utils"
 
 export type NativeMenuItem =
   | {
-    type: "text"
-    label: string
-    click?: () => void
-    enabled?: boolean
-    /** only work in web app */
-    icon?: React.ReactNode
-    shortcut?: string
-    disabled?: boolean
-    submenu?: NativeMenuItem[]
-  }
-  | { type: "separator", disabled?: boolean }
+      type: "text"
+      label: string
+      click?: () => void
+      enabled?: boolean
+      /** only work in web app */
+      icon?: React.ReactNode
+      shortcut?: string
+      disabled?: boolean
+      submenu?: NativeMenuItem[]
+    }
+  | { type: "separator"; disabled?: boolean }
 
 function sortShortcutsString(shortcut: string) {
   const order = ["Shift", "Ctrl", "Alt", "Meta"]
@@ -38,9 +38,7 @@ export const showNativeMenu = async (
     if (item.type === "text") {
       return {
         ...item,
-        shortcut: item.shortcut ?
-          sortShortcutsString(item.shortcut) :
-          undefined,
+        shortcut: item.shortcut ? sortShortcutsString(item.shortcut) : undefined,
       }
     }
     return item
@@ -85,25 +83,22 @@ export const showNativeMenu = async (
     }
   }
 
-  const unlisten = window.electron?.ipcRenderer.on(
-    "menu-click",
-    (_, combinedIndex: string) => {
-      const arr = combinedIndex.split("-")
-      const accessors = [] as string[]
-      for (let i = 0; i < arr.length; i++) {
-        accessors.push(arr[i])
+  const unlisten = window.electron?.ipcRenderer.on("menu-click", (_, combinedIndex: string) => {
+    const arr = combinedIndex.split("-")
+    const accessors = [] as string[]
+    for (let i = 0; i < arr.length; i++) {
+      accessors.push(arr[i])
 
-        if (i !== arr.length - 1) {
-          accessors.push("submenu")
-        }
+      if (i !== arr.length - 1) {
+        accessors.push("submenu")
       }
-      const item = get(nextItems, accessors)
+    }
+    const item = get(nextItems, accessors)
 
-      if (item && item.type === "text") {
-        item.click?.()
-      }
-    },
-  )
+    if (item && item.type === "text") {
+      item.click?.()
+    }
+  })
 
   window.electron?.ipcRenderer.once("menu-closed", () => {
     unlisten?.()

@@ -17,7 +17,7 @@ const getFeedIconSrc = ({
   src?: string
   siteUrl?: string
   fallback?: boolean
-  proxy?: { height: number, width: number }
+  proxy?: { height: number; width: number }
 } = {}) => {
   // src ? getProxyUrl(src) : "";
   if (src) {
@@ -72,6 +72,7 @@ export function FeedIcon({
   size = 20,
   fallback = true,
   siteUrl,
+  useMedia,
 }: {
   feed?: FeedModel
   entry?: CombinedEntryModel["entries"]
@@ -83,16 +84,20 @@ export function FeedIcon({
    * Image loading error fallback to site icon
    */
   fallback?: boolean
+
+  useMedia?: boolean
 }) {
-  const image = entry?.authorAvatar || feed?.image
+  const image =
+    (useMedia
+      ? entry?.media?.find((i) => i.type === "photo")?.url || entry?.authorAvatar
+      : entry?.authorAvatar) || feed?.image
 
   if (!feed && !siteUrl) {
     throw new Error("You must provide either a feed or a siteUrl")
   }
 
   const colors = useMemo(
-    () =>
-      getColorScheme(stringToHue(feed?.title || feed?.url || siteUrl!), true),
+    () => getColorScheme(stringToHue(feed?.title || feed?.url || siteUrl!), true),
     [feed?.title, feed?.url, siteUrl],
   )
   let ImageElement: ReactNode
@@ -111,11 +116,7 @@ export function FeedIcon({
       finalSrc = src
 
       ImageElement = (
-        <PlatformIcon
-          url={siteUrl}
-          style={sizeStyle}
-          className={cn("center mr-2", className)}
-        >
+        <PlatformIcon url={siteUrl} style={sizeStyle} className={cn("center mr-2", className)}>
           <img style={sizeStyle} />
         </PlatformIcon>
       )
@@ -128,11 +129,7 @@ export function FeedIcon({
         height: size * 2,
       })
       ImageElement = (
-        <PlatformIcon
-          url={image}
-          style={sizeStyle}
-          className={cn("center mr-2", className)}
-        >
+        <PlatformIcon url={image} style={sizeStyle} className={cn("center mr-2", className)}>
           <img className={cn("mr-2", className)} style={sizeStyle} />
         </PlatformIcon>
       )
@@ -166,9 +163,7 @@ export function FeedIcon({
       break
     }
     default: {
-      ImageElement = (
-        <i className="i-mgc-link-cute-re mr-2 shrink-0" style={sizeStyle} />
-      )
+      ImageElement = <i className="i-mgc-link-cute-re mr-2 shrink-0" style={sizeStyle} />
       break
     }
   }
@@ -215,19 +210,11 @@ export function FeedIcon({
   // Else
   return (
     <Avatar className="shrink-0">
-      <AvatarImage
-        className="duration-200 animate-in fade-in-0"
-        asChild
-        src={finalSrc}
-      >
+      <AvatarImage className="duration-200 animate-in fade-in-0" asChild src={finalSrc}>
         {ImageElement}
       </AvatarImage>
       <AvatarFallback>
-        <div
-          className={cn("mr-2", className)}
-          style={sizeStyle}
-          data-placeholder={finalSrc}
-        />
+        <div className={cn("mr-2", className)} style={sizeStyle} data-placeholder={finalSrc} />
       </AvatarFallback>
     </Avatar>
   )

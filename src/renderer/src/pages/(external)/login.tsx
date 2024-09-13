@@ -92,10 +92,7 @@ function Login() {
                   loginHandler("github")
                 }}
               >
-                <i className="i-mgc-github-cute-fi mr-2 text-xl" />
-                {" "}
-                Continue
-                with GitHub
+                <i className="i-mgc-github-cute-fi mr-2 text-xl" /> Continue with GitHub
               </Button>
               <Button
                 className="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80"
@@ -103,10 +100,7 @@ function Login() {
                   loginHandler("google")
                 }}
               >
-                <i className="i-mgc-google-cute-fi mr-2 text-xl" />
-                {" "}
-                Continue
-                with Google
+                <i className="i-mgc-google-cute-fi mr-2 text-xl" /> Continue with Google
               </Button>
             </>
           )}

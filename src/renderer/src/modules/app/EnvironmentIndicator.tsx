@@ -9,7 +9,7 @@ import {
 export const EnvironmentIndicator = () => (
   <Tooltip>
     <TooltipTrigger asChild>
-      <div className="fixed bottom-0 right-0 rounded-tl bg-accent px-1 py-0.5 text-xs text-white">
+      <div className="fixed bottom-0 right-0 z-[99999] rounded-tl bg-accent px-1 py-0.5 text-xs text-white">
         {import.meta.env.MODE}
       </div>
     </TooltipTrigger>

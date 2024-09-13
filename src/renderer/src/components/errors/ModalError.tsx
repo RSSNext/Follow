@@ -31,18 +31,15 @@ export const ModalErrorFallback: FC<AppErrorFallbackProps> = (props) => {
         ) : null}
 
         <p className="my-8">
-          The App has a temporary problem, click the button below to try
-          reloading the app or another solution?
+          {APP_NAME} has a temporary problem, click the button below to try reloading the app or
+          another solution?
         </p>
 
         <div className="center gap-4">
           <Button onClick={() => modal.dismiss()} variant="outline">
             Close Modal
           </Button>
-          <Button
-            onClick={() => window.location.reload()}
-            variant="outline"
-          >
+          <Button onClick={() => window.location.reload()} variant="outline">
             Reload
           </Button>
         </div>

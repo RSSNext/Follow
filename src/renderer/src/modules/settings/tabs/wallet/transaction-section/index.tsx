@@ -1,10 +1,6 @@
 import { useWhoami } from "@renderer/atoms/user"
 import { Logo } from "@renderer/components/icons/logo"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@renderer/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import { MotionButtonBase } from "@renderer/components/ui/button"
 import { RelativeTime } from "@renderer/components/ui/datetime"
 import { LoadingCircle } from "@renderer/components/ui/loading"
@@ -17,6 +13,12 @@ import {
   TableHeader,
   TableRow,
 } from "@renderer/components/ui/table"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@renderer/components/ui/tooltip"
 import { cn } from "@renderer/lib/utils"
 import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
 import { SettingSectionTitle } from "@renderer/modules/settings/section"
@@ -90,19 +92,26 @@ export const TransactionsSection = () => {
                 </TableCell>
 
                 <TableCell align="left" size="sm" className="pl-6">
-                  <RelativeTime date={row.createdAt} />
+                  <RelativeTime date={row.createdAt} dateFormatTemplate="l" />
                 </TableCell>
                 <TableCell align="left" size="sm" className="pl-6">
-                  <a target="_blank" href={`https://scan.rss3.io/tx/${row.hash}`}>{row.hash.slice(0, 6)}...</a>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <a target="_blank" href={`https://scan.rss3.io/tx/${row.hash}`}>
+                        {row.hash.slice(0, 6)}...
+                      </a>
+                    </TooltipTrigger>
+                    <TooltipPortal>
+                      <TooltipContent>{row.hash}</TooltipContent>
+                    </TooltipPortal>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
         {!transactions.data?.length && (
-          <div className="my-2 w-full text-center text-sm text-zinc-400">
-            No transactions
-          </div>
+          <div className="my-2 w-full text-center text-sm text-zinc-400">No transactions</div>
         )}
       </ScrollArea.ScrollArea>
     </div>
@@ -112,9 +121,7 @@ export const TransactionsSection = () => {
 const TypeRenderer = ({
   type,
 }: {
-  type: NonNullable<
-    ReturnType<typeof useWalletTransactions>["data"]
-  >[number]["type"]
+  type: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["type"]
 }) => (
   <div
     className={cn("center rounded-full px-1.5 py-px text-xs", {
@@ -134,9 +141,7 @@ const BalanceRenderer = ({
   amount,
 }: {
   sign: "+" | "-"
-  amount: NonNullable<
-    ReturnType<typeof useWalletTransactions>["data"]
-  >[number]["powerToken"]
+  amount: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["powerToken"]
 }) => (
   <div
     className={cn("flex items-center justify-center", {
@@ -167,10 +172,7 @@ const UserRenderer = ({
       onClick={() => {
         if (user?.id) presentUserModal(user.id)
       }}
-      className={cn(
-        "flex items-center",
-        user?.id ? "cursor-pointer" : "cursor-default",
-      )}
+      className={cn("flex items-center", user?.id ? "cursor-pointer" : "cursor-default")}
     >
       {name === APP_NAME ? (
         <Logo className="aspect-square size-4" />
@@ -181,9 +183,7 @@ const UserRenderer = ({
         </Avatar>
       )}
 
-      <div className="ml-1">
-        {isMe ? <span className="font-bold">You</span> : name}
-      </div>
+      <div className="ml-1">{isMe ? <span className="font-bold">You</span> : name}</div>
     </MotionButtonBase>
   )
 }

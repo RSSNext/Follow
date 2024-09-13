@@ -18,9 +18,6 @@ export const VolumeSlider: FC<{
     <Slider.Track className="relative w-1 grow rounded bg-zinc-500">
       <Slider.Range className="absolute w-full rounded bg-black dark:bg-white" />
     </Slider.Track>
-    <Slider.Thumb
-      className="block rounded bg-black dark:bg-white"
-      aria-label="Volume"
-    />
+    <Slider.Thumb className="block rounded bg-black dark:bg-white" aria-label="Volume" />
   </Slider.Root>
 )
