@@ -29,16 +29,7 @@ if (import.meta.hot) {
     async ({ file, content }: { file: string; content: string }) => {
       const resources = JSON.parse(content)
       const i18next = jotaiStore.get(i18nAtom)
-      // `file` is absolute path e.g. /Users/innei/git/follow/locales/en.json
-      // Absolute path e.g. /Users/innei/git/follow/locales/<module-name>/en.json
 
-      // 1. parse root language
-      // if (!file.includes("locales/namespaces")) {
-      //   const lang = file.split("/").pop()?.replace(".json", "")
-      //   if (!lang) return
-      //   i18next.addResourceBundle(lang, defaultNS, resources, true, true)
-      //   i18next.reloadResources(lang, defaultNS)
-      // } else {
       const nsName = file.match(/locales\/(.+?)\//)?.[1]
 
       if (!nsName) return
@@ -48,7 +39,6 @@ if (import.meta.hot) {
 
       console.info("reload", lang, nsName)
       await i18next.reloadResources(lang, nsName)
-      // }
 
       import.meta.env.DEV && EventBus.dispatch("I18N_UPDATE", "")
     },

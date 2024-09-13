@@ -42,37 +42,35 @@ const langChangedHandler = async (lang: string) => {
 
   loadingLangLock.add(lang)
 
-  const nsGlobbyMap = import.meta.glob("@locales/*/*.json")
+  if (import.meta.env.DEV) {
+    const nsGlobbyMap = import.meta.glob("@locales/*/*.json")
 
-  // const rootGlobbyMap = import.meta.glob("@locales/*.json")
-  // const rootResources = await rootGlobbyMap[`../../locales/${lang}.json`]()
-  //   .then((m: any) => m.default)
-  //   .catch(() => {
-  //     toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
-  //   })
-  // i18next.addResourceBundle(lang, defaultNS, rootResources, true, true)
+    const namespaces = Object.keys(defaultResources.en)
 
-  const namespaces = Object.keys(defaultResources.en)
+    const res = await Promise.allSettled(
+      namespaces.map(async (ns) => {
+        const loader = nsGlobbyMap[`../../locales/${ns}/${lang}.json`]
 
-  const res = await Promise.allSettled(
-    namespaces.map(async (ns) => {
-      // if (ns === defaultNS) return
+        if (!loader) return
+        const nsResources = await loader().then((m: any) => m.default)
 
-      const loader = nsGlobbyMap[`../../locales/${ns}/${lang}.json`]
+        i18next.addResourceBundle(lang, ns, nsResources, true, true)
+      }),
+    )
 
-      if (!loader) return
-      const nsResources = await loader().then((m: any) => m.default)
+    for (const r of res) {
+      if (r.status === "rejected") {
+        toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
+        loadingLangLock.delete(lang)
 
-      i18next.addResourceBundle(lang, ns, nsResources, true, true)
-    }),
-  )
+        return
+      }
+    }
+  } else {
+    const res = await eval(`import('/locales/${lang}.js').then((res) => res?.default || res)`)
 
-  for (const r of res) {
-    if (r.status === "rejected") {
-      toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
-      loadingLangLock.delete(lang)
-
-      return
+    for (const namespace in res) {
+      i18next.addResourceBundle(lang, namespace, res[namespace], true, true)
     }
   }
 
