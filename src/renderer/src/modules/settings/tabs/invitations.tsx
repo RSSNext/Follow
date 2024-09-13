@@ -19,6 +19,7 @@ import {
   TooltipPortal,
   TooltipTrigger,
 } from "@renderer/components/ui/tooltip"
+import { INVITATION_PRICE } from "@renderer/constants"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { toastFetchError } from "@renderer/lib/error-parser"
@@ -42,8 +43,8 @@ export const SettingInvitations = () => {
           use.
         </p>
         <p className="flex items-center">
-          <span>You can spend 10 </span>
-          <i className="i-mgc-power ml-1 mr-0.5 text-base text-accent" />
+          <span>You can spend {INVITATION_PRICE} </span>
+          <i className="i-mgc-power mx-0.5 text-base text-accent" />
           <span> Power to generate an invitation code for your friends.</span>
         </p>
       </div>
@@ -153,7 +154,7 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
   return (
     <>
       <div className="flex items-center">
-        <span>Generating an invitation code will cost you 10 </span>
+        <span>Generating an invitation code will cost you {INVITATION_PRICE} </span>
         <i className="i-mgc-power mx-1 text-base text-accent" />
         <span>Power. Do you want to continue?</span>
       </div>

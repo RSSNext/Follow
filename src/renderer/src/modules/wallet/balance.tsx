@@ -22,8 +22,8 @@ export const Balance = ({
   const formattedFull = format(n, { digits: 18, trailingZeros: true })
 
   const Content = (
-    <div className={cn("font-mono tabular-nums", className)}>
-      {formatted} {withSuffix && <span>POWER</span>}
+    <div className={cn("tabular-nums", className)}>
+      {formatted} {withSuffix && <span>Power</span>}
     </div>
   )
 
@@ -33,8 +33,8 @@ export const Balance = ({
     <Tooltip>
       <TooltipTrigger asChild>{Content}</TooltipTrigger>
       <TooltipContent>
-        <div className="font-mono text-sm">
-          <span className="font-bold tabular-nums">{formattedFull}</span> <span>POWER</span>
+        <div className="text-sm">
+          <span className="font-bold tabular-nums">{formattedFull}</span> <span>Power</span>
         </div>
       </TooltipContent>
     </Tooltip>

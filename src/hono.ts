@@ -4362,7 +4362,7 @@ declare const _routes: hono_hono_base.HonoBase<
         input: {
           json: {
             entryId: string
-            amount: "1000000000000000000" | "2000000000000000000"
+            amount: string
           }
         }
         output: {
@@ -4465,7 +4465,7 @@ declare const _routes: hono_hono_base.HonoBase<
         status: 200
       }
     }
-    "/wallets/transactions/withdrawable": {
+    "/wallets/transactions/feed-withdrawable": {
       $get: {
         input: {
           query: {
@@ -4484,11 +4484,29 @@ declare const _routes: hono_hono_base.HonoBase<
         status: 200
       }
     }
-    "/wallets/transactions/withdraw": {
+    "/wallets/transactions/feed-withdraw": {
       $post: {
         input: {
           json: {
             feedId: string
+          }
+        }
+        output: {
+          code: 0
+          data: {
+            transactionHash: string
+          }
+        }
+        outputFormat: "json" | "text"
+        status: 200
+      }
+    }
+    "/wallets/transactions/withdraw": {
+      $post: {
+        input: {
+          json: {
+            address: string
+            amount: string
           }
         }
         output: {
@@ -4539,6 +4557,16 @@ declare const _routes: hono_hono_base.HonoBase<
         output: {
           code: 0
           data: string
+        }
+        outputFormat: "json" | "text"
+        status: 200
+      }
+    }
+    "/wallets/refresh": {
+      $post: {
+        input: {}
+        output: {
+          code: 0
         }
         outputFormat: "json" | "text"
         status: 200

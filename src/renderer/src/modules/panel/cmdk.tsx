@@ -267,7 +267,7 @@ const SearchResultCount: FC<{
   const searchInstance = React.useContext(SearchCmdKContext)
   const hasKeyword = useSearchStore((s) => !!s.keyword)
   const searchType = useSearchStore((s) => s.searchType)
-  // eslint-disable-next-line react-compiler/react-compiler
+   
   const recordCountPromise = useMemo(async () => {
     let count = 0
     const counts = await searchInstance?.then((s) => s.counts)

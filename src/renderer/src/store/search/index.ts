@@ -1,9 +1,5 @@
 import type { EntryModel } from "@renderer/models"
-import {
-  EntryService,
-  FeedService,
-  SubscriptionService,
-} from "@renderer/services"
+import { EntryService, FeedService, SubscriptionService } from "@renderer/services"
 import type { IFuseOptions } from "fuse.js"
 import Fuse from "fuse.js"
 

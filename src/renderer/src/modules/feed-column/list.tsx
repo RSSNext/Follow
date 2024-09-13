@@ -1,4 +1,3 @@
-
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
