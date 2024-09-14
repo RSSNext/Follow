@@ -8,7 +8,6 @@ import lang_ja from "../../../../locales/lang/ja.json"
 import lang_zhCN from "../../../../locales/lang/zh-CN.json"
 import settings_en from "../../../../locales/settings/en.json"
 import shortcuts_en from "../../../../locales/shortcuts/en.json"
-
 /**
  * This file is the language resource that is loaded in full when the app is initialized.
  * When switching languages, the app will automatically download the required language resources,
@@ -16,7 +15,6 @@ import shortcuts_en from "../../../../locales/shortcuts/en.json"
  * Generally, we only load english resources synchronously by default.
  * In addition, we attach common resources for other languages, and the size of the common resources must be controlled.
  */
-
 export const defaultResources = {
   en: {
     app: en,
@@ -34,4 +32,5 @@ export const defaultResources = {
     lang: lang_ja,
     common: common_ja,
   },
+  ja: { lang: lang_ja, common: common_ja },
 }
