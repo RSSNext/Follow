@@ -2,11 +2,13 @@ import en from "../../../../locales/app/en.json"
 import common_en from "../../../../locales/common/en.json"
 import common_ja from "../../../../locales/common/ja.json"
 import common_ru from "../../../../locales/common/ru.json"
+import common_pt from "../../../../locales/common/pt.json"
 import common_zhCN from "../../../../locales/common/zh-CN.json"
 import external_en from "../../../../locales/external/en.json"
 import lang_en from "../../../../locales/lang/en.json"
 import lang_ja from "../../../../locales/lang/ja.json"
 import lang_ru from "../../../../locales/lang/ru.json"
+import lang_pt from "../../../../locales/lang/pt.json"
 import lang_zhCN from "../../../../locales/lang/zh-CN.json"
 import settings_en from "../../../../locales/settings/en.json"
 import shortcuts_en from "../../../../locales/shortcuts/en.json"
@@ -35,4 +37,6 @@ export const defaultResources = {
     common: common_ja,
   },
   ru: { lang: lang_ru, common: common_ru },
+  pt: { lang: lang_pt, common: common_pt },
+  ja: { lang: lang_ja, common: common_ja },
 }

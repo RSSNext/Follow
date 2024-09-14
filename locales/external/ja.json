@@ -1,0 +1,42 @@
+{
+  "feed": {
+    "follow_one": "フォロー",
+    "follow_other": "フォロー",
+    "followsAndReads": "{{appName}} で {{subscriptionCount}} {{subscriptionNoun}} と {{readCount}} {{readNoun}}",
+    "read_one": "読んだ",
+    "read_other": "既読"
+  },
+  "header": {
+    "app": "アプリ",
+    "download": "ダウンロード"
+  },
+  "invitation": {
+    "activate": "有効化",
+    "codeOptions": {
+      "1": "招待してくれるアルファテストユーザーを探しましょう。",
+      "2": "時折行われるプレゼント企画のために、私たちのDiscordサーバーに参加しましょう。",
+      "3": "時折行われるプレゼント企画のために、私たちのXアカウントをフォローしましょう。"
+    },
+    "earlyAccess": "現在、Followはアーリーアクセス中で、利用には招待コードが必要です。",
+    "earlyAccessMessage": "😰 申し訳ありませんが、Followは現在アーリーアクセス中で、招待コードが必要です。",
+    "generateButton": "新しいコードを生成",
+    "generateCost": "友達のために招待コードを生成するには、{{INVITATION_PRICE}} Power を消費できます。",
+    "getCodeMessage": "以下の方法で招待コードを入手できます：",
+    "title": "招待コード"
+  },
+  "login": {
+    "backToWebApp": "ウェブアプリに戻る",
+    "continueWithGitHub": "GitHubで続行",
+    "continueWithGoogle": "Googleで続行",
+    "logInTo": "ログイン ",
+    "openApp": "アプリを開く",
+    "redirecting": "リダイレクト中",
+    "welcomeTo": "ようこそ "
+  },
+  "redirect": {
+    "continueInBrowser": "ブラウザで続行",
+    "instruction": "今が{{APP_NAME}}を開き、このページを安全に閉じる時です。",
+    "openApp": "{{APP_NAME}}を開く",
+    "successMessage": "{{APP_NAME}}アカウントに正常に接続されました。"
+  }
+}
