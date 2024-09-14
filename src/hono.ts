@@ -3492,21 +3492,23 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
   dialect: "pg"
 }>
 declare const usersOpenApiSchema: z.ZodObject<
-  {
-    id: z.ZodString
-    name: z.ZodNullable<z.ZodString>
-    email: z.ZodString
-    emailVerified: z.ZodNullable<z.ZodString>
-    image: z.ZodNullable<z.ZodString>
-    handle: z.ZodNullable<z.ZodString>
-    createdAt: z.ZodDate
-  },
+  Omit<
+    {
+      id: z.ZodString
+      name: z.ZodNullable<z.ZodString>
+      email: z.ZodString
+      emailVerified: z.ZodNullable<z.ZodString>
+      image: z.ZodNullable<z.ZodString>
+      handle: z.ZodNullable<z.ZodString>
+      createdAt: z.ZodDate
+    },
+    "email"
+  >,
   z.UnknownKeysParam,
   z.ZodTypeAny,
   {
     name: string | null
     id: string
-    email: string
     emailVerified: string | null
     image: string | null
     handle: string | null
@@ -3515,7 +3517,6 @@ declare const usersOpenApiSchema: z.ZodObject<
   {
     name: string | null
     id: string
-    email: string
     emailVerified: string | null
     image: string | null
     handle: string | null
@@ -4416,7 +4417,6 @@ declare const _routes: hono_hono_base.HonoBase<
             fromUser: {
               name: string | null
               id: string
-              email: string
               emailVerified: string | null
               image: string | null
               handle: string | null
@@ -4425,7 +4425,6 @@ declare const _routes: hono_hono_base.HonoBase<
             toUser: {
               name: string | null
               id: string
-              email: string
               emailVerified: string | null
               image: string | null
               handle: string | null
@@ -4619,7 +4618,6 @@ declare const _routes: hono_hono_base.HonoBase<
               owner: {
                 name: string | null
                 id: string
-                email: string
                 emailVerified: string | null
                 image: string | null
                 handle: string | null
@@ -4819,7 +4817,6 @@ declare const _routes: hono_hono_base.HonoBase<
           data: {
             name: string | null
             id: string
-            email: string
             emailVerified: string | null
             image: string | null
             handle: string | null
@@ -4895,6 +4892,17 @@ declare const _routes: hono_hono_base.HonoBase<
             } | null
             toUserId: string | null
           }[]
+        }
+        outputFormat: "json" | "text"
+        status: 200
+      }
+    }
+    "/invitations/limitation": {
+      $get: {
+        input: {}
+        output: {
+          code: 0
+          data: number
         }
         outputFormat: "json" | "text"
         status: 200
@@ -5300,7 +5308,6 @@ declare const _routes: hono_hono_base.HonoBase<
               owner: {
                 name: string | null
                 id: string
-                email: string
                 emailVerified: string | null
                 image: string | null
                 handle: string | null
