@@ -24,7 +24,7 @@ import { memo, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
-import { EntryReadHistory } from "./components/entry-read-history"
+import { EntryReadHistory } from "./components/EntryReadHistory"
 
 function EntryHeaderImpl({
   view,
