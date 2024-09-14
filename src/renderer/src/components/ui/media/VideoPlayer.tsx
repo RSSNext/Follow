@@ -20,6 +20,7 @@ import {
   useState,
 } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
+import { useTranslation } from "react-i18next"
 import { createContext, useContext, useContextSelector } from "use-context-selector"
 import { useEventCallback } from "usehooks-ts"
 
@@ -208,6 +209,7 @@ const FloatMutedButton = () => {
 }
 
 const ControlBar = memo(() => {
+  const { t } = useTranslation()
   const controls = useContextSelector(VideoPlayerContext, (v) => v.controls)
   const isPaused = useContextSelector(VideoPlayerContext, (v) => v.state.paused)
   const dragControls = useDragControls()
@@ -235,7 +237,7 @@ const ControlBar = memo(() => {
 
       <ActionIcon
         shortcut="Space"
-        label={isPaused ? "Play" : "Pause"}
+        label={isPaused ? t("player.play") : t("player.pause")}
         className="center relative flex"
         onClick={() => {
           if (isPaused) {
@@ -268,6 +270,7 @@ const ControlBar = memo(() => {
 })
 
 const FullScreenControl = () => {
+  const { t } = useTranslation()
   const ref = useContextSelector(VideoPlayerContext, (v) => v.wrapperRef)
   const [isFullScreen, setIsFullScreen] = useState(!!document.fullscreenElement)
 
@@ -283,7 +286,7 @@ const FullScreenControl = () => {
 
   return (
     <ActionIcon
-      label="Full Screen"
+      label={isFullScreen ? t("player.exit_full_screen") : t("player.full_screen")}
       shortcut="f"
       labelDelayDuration={1}
       onClick={() => {
@@ -306,6 +309,7 @@ const FullScreenControl = () => {
 }
 
 const DownloadVideo = () => {
+  const { t } = useTranslation()
   const src = useContextSelector(VideoPlayerContext, (v) => v.src)
   const [isDownloading, setIsDownloading] = useState(false)
   const download = useEventCallback(() => {
@@ -324,7 +328,7 @@ const DownloadVideo = () => {
   })
 
   return (
-    <ActionIcon shortcut="d" label="Download" labelDelayDuration={1} onClick={download}>
+    <ActionIcon shortcut="d" label={t("player.download")} labelDelayDuration={1} onClick={download}>
       {isDownloading ? (
         <i className="i-mgc-loading-3-cute-re animate-spin" />
       ) : (
@@ -334,6 +338,7 @@ const DownloadVideo = () => {
   )
 }
 const VolumeControl = () => {
+  const { t } = useTranslation()
   const hasAudio = useContextSelector(VideoPlayerContext, (v) => v.state.hasAudio)
 
   const controls = useContextSelector(VideoPlayerContext, (v) => v.controls)
@@ -352,7 +357,11 @@ const VolumeControl = () => {
       }}
       labelDelayDuration={1}
     >
-      {muted ? <i className="i-mgc-volume-mute-cute-re" /> : <i className="i-mgc-volume-cute-re" />}
+      {muted ? (
+        <i className="i-mgc-volume-mute-cute-re" title={t("player.unmute")} />
+      ) : (
+        <i className="i-mgc-volume-cute-re" title={t("player.mute")} />
+      )}
     </ActionIcon>
   )
 }
@@ -446,7 +455,7 @@ const ActionIcon = ({
           {children || <i className={className} />}
         </button>
       </TooltipTrigger>
-      <TooltipContent className="flex items-center gap-1 bg-theme-modal-background">
+      <TooltipContent className="flex items-center gap-1 text-xs">
         {label}
         {shortcut && <KbdCombined>{shortcut}</KbdCombined>}
       </TooltipContent>

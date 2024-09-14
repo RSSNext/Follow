@@ -2,7 +2,7 @@ import { attachOpenInEditor } from "@renderer/lib/dev"
 import type { FC } from "react"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
-import { FallbackIssue } from "../common/ErrorElement"
+import { FeedbackIssue } from "../common/ErrorElement"
 import { Button } from "../ui/button"
 import { parseError, useResetErrorWhenRouteChange } from "./helper"
 
@@ -37,7 +37,7 @@ export const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {
           </Button>
         </div>
 
-        <FallbackIssue message={message!} stack={stack} />
+        <FeedbackIssue message={message!} stack={stack} />
       </div>
     </div>
   )

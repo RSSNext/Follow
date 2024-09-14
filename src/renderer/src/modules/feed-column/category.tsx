@@ -15,8 +15,8 @@ import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
 import { Fragment, memo, useEffect, useRef, useState } from "react"
-import {useTranslation  } from "react-i18next"
-import { useOnClickOutside } from "usehooks-ts"
+import { useTranslation } from "react-i18next"
+import { useClickAnyWhere, useOnClickOutside } from "usehooks-ts"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 import { useFeedListSortSelector } from "./atom"
@@ -108,6 +108,10 @@ function FeedCategoryImpl({
 
   const [isCategoryEditing, setIsCategoryEditing] = useState(false)
 
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+  useClickAnyWhere(() => {
+    setIsContextMenuOpen(false)
+  })
   const isCategoryIsWaiting = isChangePending
 
   return (
@@ -116,7 +120,7 @@ function FeedCategoryImpl({
         <div
           className={cn(
             "flex w-full items-center justify-between rounded-md px-2.5 transition-colors",
-            isActive && "bg-native-active",
+            (isActive || isContextMenuOpen) && "bg-native-active",
           )}
           onClick={(e) => {
             e.stopPropagation()
@@ -125,6 +129,7 @@ function FeedCategoryImpl({
             }
           }}
           onContextMenu={(e) => {
+            setIsContextMenuOpen(true)
             showNativeMenu(
               [
                 {

@@ -45,10 +45,10 @@ export const TransactionsSection = () => {
   }
 
   return (
-    <div className="mt-8">
+    <div className="grow">
       <SettingSectionTitle title={t("wallet.transactions.title")} />
 
-      <ScrollArea.ScrollArea viewportClassName="max-h-[210px]">
+      <ScrollArea.ScrollArea viewportClassName="grow">
         <Table>
           <TableHeader>
             <TableRow className="[&_*]:!font-semibold">
@@ -128,7 +128,7 @@ const TypeRenderer = ({
   const { t } = useTranslation("settings")
   return (
     <div
-      className={cn("center rounded-full px-1.5 py-px text-xs", {
+      className={cn("center rounded-full px-1.5 py-px text-xs uppercase", {
         "bg-theme-accent-700 text-white": type === "tip",
         "bg-green-700 text-white": type === "mint",
         "bg-red-700 text-white": type === "burn",

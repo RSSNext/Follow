@@ -23,7 +23,12 @@ export const Balance = ({
 
   const Content = (
     <div className={cn("tabular-nums", className)}>
-      {formatted} {withSuffix && <span>Power</span>}
+      {formatted}{" "}
+      {withSuffix && (
+        <span>
+          Power <i className="i-mgc-power align-text-bottom text-accent" />
+        </span>
+      )}
     </div>
   )
 

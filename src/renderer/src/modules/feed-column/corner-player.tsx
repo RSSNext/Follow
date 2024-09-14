@@ -21,6 +21,7 @@ import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useState } from "react"
 import Marquee from "react-fast-marquee"
 import { useHotkeys } from "react-hotkeys-hook"
+import { useTranslation } from "react-i18next"
 
 const handleClickPlay = () => {
   AudioPlayer.togglePlayAndPause()
@@ -85,6 +86,7 @@ const usePlayerTracker = () => {
   }, [show])
 }
 const CornerPlayerImpl = () => {
+  const { t } = useTranslation()
   const entryId = useAudioPlayerAtomSelector((v) => v.entryId)
   const status = useAudioPlayerAtomSelector((v) => v.status)
   const isMute = useAudioPlayerAtomSelector((v) => v.isMute)
@@ -156,7 +158,7 @@ const CornerPlayerImpl = () => {
           <ActionIcon
             className="i-mgc-close-cute-re"
             onClick={() => AudioPlayer.close()}
-            label="Close"
+            label={t("player.close")}
           />
           <ActionIcon
             className="i-mgc-external-link-cute-re"
@@ -167,12 +169,12 @@ const CornerPlayerImpl = () => {
                 view: FeedViewType.Audios,
               })
             }
-            label="Open Entry"
+            label={t("player.open_entry")}
           />
         </div>
         <div className="flex items-center">
           <ActionIcon
-            label="Download"
+            label={t("player.download")}
             onClick={() => {
               window.open(AudioPlayer.get().src, "_blank")
             }}
@@ -193,12 +195,12 @@ const CornerPlayerImpl = () => {
           <ActionIcon
             className="i-mgc-back-2-cute-re"
             onClick={() => AudioPlayer.back(10)}
-            label="Back 10s"
+            label={t("player.back_10s")}
           />
           <ActionIcon
             className="i-mgc-forward-2-cute-re"
             onClick={() => AudioPlayer.forward(10)}
-            label="Forward 10s"
+            label={t("player.forward_10s")}
             tooltipAlign="end"
           />
         </div>

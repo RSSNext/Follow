@@ -30,6 +30,7 @@ export interface UISettings {
 
   // view
   pictureViewMasonry: boolean
+  pictureViewFilterNoImage: boolean
 
   // tts
   voice: string

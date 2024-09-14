@@ -2,7 +2,7 @@ import { attachOpenInEditor } from "@renderer/lib/dev"
 import type { FC } from "react"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
-import { FallbackIssue } from "../common/ErrorElement"
+import { FeedbackIssue } from "../common/ErrorElement"
 import { m } from "../common/Motion"
 import { Button } from "../ui/button"
 import { useCurrentModal } from "../ui/modal"
@@ -44,7 +44,7 @@ export const ModalErrorFallback: FC<AppErrorFallbackProps> = (props) => {
           </Button>
         </div>
 
-        <FallbackIssue message={message!} stack={stack} />
+        <FeedbackIssue message={message!} stack={stack} />
       </div>
     </m.div>
   )

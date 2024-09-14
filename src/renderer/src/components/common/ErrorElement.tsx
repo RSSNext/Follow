@@ -77,7 +77,7 @@ export function ErrorElement() {
         </Button>
       </div>
 
-      <FallbackIssue message={message} stack={stack} />
+      <FeedbackIssue message={message} stack={stack} />
       <div className="grow" />
 
       <PoweredByFooter />
@@ -85,7 +85,7 @@ export function ErrorElement() {
   )
 }
 
-export const FallbackIssue = ({
+export const FeedbackIssue = ({
   message,
   stack,
 }: {

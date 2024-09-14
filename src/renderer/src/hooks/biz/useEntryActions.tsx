@@ -63,27 +63,31 @@ export const useEntryReadabilityToggle = ({ id, url }: { id: string; url: string
       })
     }
   }, [id, url])
-export const useCollect = (entry: Nullable<CombinedEntryModel>) =>
-  useMutation({
+export const useCollect = (entry: Nullable<CombinedEntryModel>) => {
+  const { t } = useTranslation()
+  return useMutation({
     mutationFn: async () => entry && entryActions.markStar(entry.entries.id, true),
 
     onSuccess: () => {
-      toast.success("Starred.", {
+      toast.success(t("entry_actions.starred"), {
         duration: 1000,
       })
     },
   })
+}
 
-export const useUnCollect = (entry: Nullable<CombinedEntryModel>) =>
-  useMutation({
+export const useUnCollect = (entry: Nullable<CombinedEntryModel>) => {
+  const { t } = useTranslation()
+  return useMutation({
     mutationFn: async () => entry && entryActions.markStar(entry.entries.id, false),
 
     onSuccess: () => {
-      toast.success("Unstarred.", {
+      toast.success(t("entry_actions.unstarred"), {
         duration: 1000,
       })
     },
   })
+}
 
 export const useRead = () =>
   useMutation({
@@ -179,11 +183,11 @@ export const useEntryActions = ({
             mediaUrls: populatedEntry.entries.media.map((m) => m.url),
           })
           if (response?.status === "success") {
-            toast.success("Saved to Eagle.", {
+            toast.success(t("entry_actions.saved_to_eagle"), {
               duration: 3000,
             })
           } else {
-            toast.error("Failed to save to Eagle.", {
+            toast.error(t("entry_actions.failed_to_save_to_eagle"), {
               duration: 3000,
             })
           }
@@ -214,7 +218,7 @@ export const useEntryActions = ({
             })
             toast.success(
               <>
-                Saved to Readwise,{" "}
+                {t("entry_actions.saved_to_readwise")},{" "}
                 <a target="_blank" className="underline" href={data.url}>
                   view
                 </a>
@@ -224,7 +228,7 @@ export const useEntryActions = ({
               },
             )
           } catch {
-            toast.error("Failed to save to Readwise.", {
+            toast.error(t("entry_actions.failed_to_save_to_readwise"), {
               duration: 3000,
             })
           }
@@ -254,7 +258,7 @@ export const useEntryActions = ({
             })
             toast.success(
               <>
-                Saved to Instapaper,{" "}
+                {t("entry_actions.saved_to_instapaper")},{" "}
                 <a
                   target="_blank"
                   className="underline"
@@ -268,7 +272,7 @@ export const useEntryActions = ({
               },
             )
           } catch {
-            toast.error("Failed to save to Instapaper.", {
+            toast.error(t("entry_actions.failed_to_save_to_instapaper"), {
               duration: 3000,
             })
           }
@@ -313,7 +317,7 @@ export const useEntryActions = ({
         onClick: () => {
           if (!populatedEntry.entries.url) return
           navigator.clipboard.writeText(populatedEntry.entries.url)
-          toast("Link copied to clipboard.", {
+          toast(t("entry_actions.link_copied"), {
             duration: 1000,
           })
         },
@@ -375,15 +379,21 @@ export const useEntryActions = ({
   }, [
     populatedEntry,
     view,
+    t,
+    enableEagle,
     checkEagle.isLoading,
     checkEagle.data,
+    enableReadwise,
+    readwiseToken,
+    enableInstapaper,
+    instapaperPassword,
+    instapaperUsername,
+    feed?.ownerUserId,
     openTipModal,
     collect,
     uncollect,
     read,
     unread,
-    feed?.ownerUserId,
-    t,
   ])
 
   return {
