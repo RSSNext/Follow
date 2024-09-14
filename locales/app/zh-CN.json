@@ -2,7 +2,6 @@
   "ai_daily.title": "头条 - {{title}}",
   "ai_daily.tooltip.content": "这里是通过 AI 从您的时间线中选择的头条新闻（<From /> - <To />），可能对您很重要。",
   "ai_daily.tooltip.update_schedule": "每天早上 8 点、晚上 8 点更新。",
-  "app.app_name": "APP_NAME",
   "app.copy_logo_svg": "复制 Logo SVG",
   "app.toggle_sidebar": "切换侧边栏",
   "discover.any_url_or_keyword": "任何 URL 或关键词",

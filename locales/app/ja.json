@@ -2,7 +2,6 @@
   "ai_daily.title": "トップニュース - {{title}}",
   "ai_daily.tooltip.content": "こちらは、AIがあなたのタイムラインから選んだニュースです（<From /> - <To />）。あなたにとって重要なニュースかもしれません。",
   "ai_daily.tooltip.update_schedule": "毎日午前8時と午後8時に更新されます。",
-  "app.app_name": "APP_NAME",
   "app.copy_logo_svg": "ロゴSVGをコピー",
   "app.toggle_sidebar": "サイドバーを切り替え",
   "discover.any_url_or_keyword": "任意のURLまたはキーワード",
