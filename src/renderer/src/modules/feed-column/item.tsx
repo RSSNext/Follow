@@ -20,8 +20,9 @@ import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { WEB_URL } from "@shared/constants"
 import dayjs from "dayjs"
-import { memo, useCallback } from "react"
+import { memo, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useClickAnyWhere } from "usehooks-ts"
 
 import { UnreadNumber } from "./unread-number"
 
@@ -60,6 +61,10 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
 
   const { items } = useFeedActions({ feedId, view })
 
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+  useClickAnyWhere(() => {
+    setIsContextMenuOpen(false)
+  })
   if (!feed) return null
 
   return (
@@ -68,7 +73,8 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
         data-feed-id={feedId}
         className={cn(
           "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
-          isActive && "bg-native-active",
+          (isActive || isContextMenuOpen) && "bg-native-active",
+
           className,
         )}
         onClick={handleNavigate}
@@ -76,6 +82,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
           window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank")
         }}
         onContextMenu={(e) => {
+          setIsContextMenuOpen(true)
           const nextItems = items.concat()
           if (feed.errorAt && feed.errorMessage) {
             nextItems.push(
