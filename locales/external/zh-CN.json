@@ -1,0 +1,42 @@
+{
+  "feed": {
+    "follow_one": "关注",
+    "follow_other": "关注者",
+    "followsAndReads": "{{subscriptionCount}} 个{{subscriptionNoun}}，在 {{appName}} 上有 {{readCount}} 个{{readNoun}}",
+    "read_one": "阅读",
+    "read_other": "阅读者"
+  },
+  "header": {
+    "app": "应用",
+    "download": "下载"
+  },
+  "invitation": {
+    "activate": "激活",
+    "codeOptions": {
+      "1": "寻找任何内测用户来邀请你。",
+      "2": "加入我们的 Discord 服务器，获取不定期的赠送机会。",
+      "3": "关注我们的 X 账号，获取不定期的赠送机会。"
+    },
+    "earlyAccess": "Follow 目前处于早期访问阶段，需要邀请码才能使用。",
+    "earlyAccessMessage": "😰 抱歉，Follow 目前处于早期访问阶段，需要邀请码才能使用。",
+    "generateButton": "生成新邀请码",
+    "generateCost": "你可以花费 {{INVITATION_PRICE}} Power 生成一个邀请码给你的朋友。",
+    "getCodeMessage": "你可以通过以下方式获取邀请码：",
+    "title": "邀请码"
+  },
+  "login": {
+    "backToWebApp": "返回网页版",
+    "continueWithGitHub": "通过 GitHub 继续",
+    "continueWithGoogle": "通过 Google 继续",
+    "logInTo": "登录到 ",
+    "openApp": "打开应用",
+    "redirecting": "重定向中",
+    "welcomeTo": "欢迎来到 "
+  },
+  "redirect": {
+    "continueInBrowser": "在浏览器中继续",
+    "instruction": "现在可以打开 {{APP_NAME}} 并安心地关闭此页面。",
+    "openApp": "打开 {{APP_NAME}}",
+    "successMessage": "你已成功连接到 {{APP_NAME}} 账户。"
+  }
+}
