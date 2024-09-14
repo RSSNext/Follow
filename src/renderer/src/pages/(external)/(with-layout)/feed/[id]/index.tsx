@@ -6,7 +6,7 @@ import { LoadingCircle } from "@renderer/components/ui/loading"
 import { views } from "@renderer/constants"
 import { useTitle } from "@renderer/hooks/common"
 import { FeedViewType } from "@renderer/lib/enum"
-import { cn, pluralize } from "@renderer/lib/utils"
+import { cn } from "@renderer/lib/utils"
 import { ArticleItem } from "@renderer/modules/entry-column/Items/article-item"
 import { NotificationItem } from "@renderer/modules/entry-column/Items/notification-item"
 import { PictureItem } from "@renderer/modules/entry-column/Items/picture-item"
@@ -17,6 +17,7 @@ import { useEntriesPreview } from "@renderer/queries/entries"
 import { useFeed } from "@renderer/queries/feed"
 import { DEEPLINK_SCHEME } from "@shared/constants"
 import type { FC } from "react"
+import { useTranslation } from "react-i18next"
 import { useParams, useSearchParams } from "react-router-dom"
 
 export function Component() {
@@ -57,6 +58,7 @@ export function Component() {
       Item = ArticleItem
     }
   }
+  const { t } = useTranslation("external")
   useTitle(feed.data?.feed.title)
   return (
     <>
@@ -78,10 +80,13 @@ export function Component() {
               <div className="mb-8 text-sm text-zinc-500">{feed.data.feed.description}</div>
             </div>
             <div className="mb-4 text-sm">
-              <strong>{feed.data.subscriptionCount}</strong>{" "}
-              {pluralize("follow", feed.data.subscriptionCount)} with{" "}
-              <strong>{feed.data.readCount}</strong> {pluralize("read", feed.data.readCount)} on{" "}
-              {APP_NAME}
+              {t("feed.followsAndReads", {
+                subscriptionCount: feed.data.subscriptionCount,
+                subscriptionNoun: t("feed.follow", { count: feed.data.subscriptionCount }),
+                readCount: feed.data.readCount,
+                readNoun: t("feed.read", { count: feed.data.readCount }),
+                appName: APP_NAME,
+              })}
             </div>
             <a className="mb-8 cursor-default" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
               <Button>

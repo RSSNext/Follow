@@ -25,7 +25,7 @@ const formSchema = z.object({
 })
 
 export function Component() {
-  const { t } = useTranslation("settings")
+  const { t } = useTranslation("external")
   const navigate = useNavigate()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,14 +82,9 @@ export function Component() {
         <p>{t("invitation.earlyAccessMessage")}</p>
         <p>{t("invitation.getCodeMessage")}</p>
         <p>
-          😰 Sorry, Follow is currently in <strong>early access</strong> and requires an invitation
-          code to use.
-        </p>
-        <p>You can get an invitation code in the following ways:</p>
-        <p>
-          <p>1. Looking for any alpha test user to invite you.</p>
-          <p>2. Join our Discord server for occasional giveaways.</p>
-          <p>3. Follow our X account for occasional giveaways.</p>
+          <p>1. {t("invitation.codeOptions.1")}</p>
+          <p>2. {t("invitation.codeOptions.2")}</p>
+          <p>3. {t("invitation.codeOptions.3")}</p>
         </p>
       </div>
       <div className="mt-2 flex flex-wrap gap-2">
