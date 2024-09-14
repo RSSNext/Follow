@@ -6,6 +6,7 @@ import { m } from "@renderer/components/common/Motion"
 import { ErrorComponentType } from "@renderer/components/errors/enum"
 import { isElectronBuild } from "@renderer/constants"
 import { useSwitchHotKeyScope } from "@renderer/hooks/common"
+import { debugStack } from "@renderer/lib/dev"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useAnimationControls, useDragControls } from "framer-motion"
@@ -83,6 +84,7 @@ export const ModalInternal = memo(
 
     const onClose = useCallback(
       (open: boolean): void => {
+        debugStack()
         if (!open) {
           close()
         }
