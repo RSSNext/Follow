@@ -1,4 +1,5 @@
 import { SettingIntegration } from "@renderer/modules/settings/tabs/integration"
+import { SettingsTitle } from "@renderer/modules/settings/title"
 import { defineSettingPageData } from "@renderer/modules/settings/utils"
 
 const iconName = "i-mgc-department-cute-re"
@@ -11,5 +12,10 @@ export const loader = defineSettingPageData({
 })
 
 export function Component() {
-  return <SettingIntegration />
+  return (
+    <>
+      <SettingsTitle />
+      <SettingIntegration />
+    </>
+  )
 }
