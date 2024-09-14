@@ -1,10 +1,10 @@
 {
   "feed": {
-    "follow_one": "关注",
+    "follow_one": "关注者",
     "follow_other": "关注者",
     "followsAndReads": "{{subscriptionCount}} 个{{subscriptionNoun}}，在 {{appName}} 上有 {{readCount}} 个{{readNoun}}",
     "read_one": "阅读",
-    "read_other": "阅读者"
+    "read_other": "阅读"
   },
   "header": {
     "app": "应用",
