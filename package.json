@@ -147,6 +147,7 @@
   },
   "devDependencies": {
     "@babel/generator": "7.25.6",
+    "@clack/prompts": "0.7.0",
     "@egoist/tailwindcss-icons": "1.8.1",
     "@electron-forge/cli": "7.4.0",
     "@electron-forge/maker-dmg": "7.4.0",
