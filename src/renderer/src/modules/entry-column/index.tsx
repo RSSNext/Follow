@@ -15,10 +15,10 @@ import { useTitle, useTypeScriptHappyCallback } from "@renderer/hooks/common"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn, isBizId } from "@renderer/lib/utils"
 import { useFeed } from "@renderer/queries/feed"
-import { entryActions, useEntry } from "@renderer/store/entry"
+import { entryActions, getEntry, useEntry } from "@renderer/store/entry"
 import { useFeedByIdSelector } from "@renderer/store/feed"
 import { useSubscriptionByFeedId } from "@renderer/store/subscription"
-import { memo, useCallback, useEffect, useRef, useState } from "react"
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import type {
   ScrollSeekConfiguration,
@@ -238,17 +238,34 @@ const ListGird = ({
   const masonry = useUISettingKey("pictureViewMasonry")
   const view = useRouteParamsSelector((s) => s.view)
   const feedId = useRouteParamsSelector((s) => s.feedId)
+  const filterNoImage = useUISettingKey("pictureViewFilterNoImage")
+  const nextData = useMemo(() => {
+    if (filterNoImage) {
+      return virtuosoOptions.data.filter((entryId) => {
+        const entry = getEntry(entryId)
+        return entry?.entries.media?.length && entry.entries.media.length > 0
+      })
+    }
+    return virtuosoOptions.data
+  }, [virtuosoOptions.data, filterNoImage])
   if (masonry && view === FeedViewType.Pictures) {
     return (
       <PictureMasonry
         key={feedId}
         hasNextPage={virtuosoOptions.totalCount! > virtuosoOptions.data.length}
         endReached={virtuosoOptions.endReached}
-        data={virtuosoOptions.data}
+        data={nextData}
       />
     )
   }
-  return <VirtuosoGrid listClassName={girdClassNames} {...virtuosoOptions} ref={virtuosoRef} />
+  return (
+    <VirtuosoGrid
+      listClassName={girdClassNames}
+      {...virtuosoOptions}
+      data={nextData}
+      ref={virtuosoRef}
+    />
+  )
 }
 
 const AddFeedHelper = () => {

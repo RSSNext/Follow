@@ -96,6 +96,7 @@ export const EntryListHeader: FC<{
           <AppendTaildingDivider>
             {view === FeedViewType.SocialMedia && <DailyReportButton />}
             {view === FeedViewType.Pictures && <SwitchToMasonryButton />}
+            {view === FeedViewType.Pictures && <FilterNoImageButton />}
           </AppendTaildingDivider>
 
           {isOnline ? (
@@ -173,6 +174,25 @@ const DailyReportButton: FC = () => {
   )
 }
 
+const FilterNoImageButton = () => {
+  const enabled = useUISettingKey("pictureViewFilterNoImage")
+  const { t } = useTranslation()
+
+  return (
+    <ActionButton
+      active={enabled}
+      onClick={() => {
+        setUISetting("pictureViewFilterNoImage", !enabled)
+      }}
+      tooltip={t(
+        enabled ? "entry_list_header.show_all_items" : "entry_list_header.hide_no_image_items",
+      )}
+    >
+      <i className="i-mgc-photo-album-cute-re" />
+    </ActionButton>
+  )
+}
+
 const SwitchToMasonryButton = () => {
   const isMasonry = useUISettingKey("pictureViewMasonry")
   const { t } = useTranslation()
@@ -193,7 +213,7 @@ const SwitchToMasonryButton = () => {
           })
         }}
         tooltip={
-          isMasonry
+          !isMasonry
             ? t("entry_list_header.switch_to_masonry")
             : t("entry_list_header.switch_to_grid")
         }
