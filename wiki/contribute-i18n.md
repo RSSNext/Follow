@@ -2,6 +2,10 @@
 
 We welcome contributions to our internationalization efforts! This guide will help you get started with adding or updating translations for our project.
 
+## Pay Attention
+
+If it's a new language, please check for [existing issues](https://github.com/RSSNext/Follow/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3Ai18n) before starting. If none exist, submit a new issue to avoid duplicating efforts.
+
 ## Adding a New Language
 
 To add support for a new language:
