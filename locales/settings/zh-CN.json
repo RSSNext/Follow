@@ -10,6 +10,7 @@
   "actions.action_card.all": "全部",
   "actions.action_card.block_rules": "阻止规则",
   "actions.action_card.custom_filters": "指定条件",
+  "actions.action_card.enable_readability": "启用阅读模式",
   "actions.action_card.entry_options.all": "全部",
   "actions.action_card.entry_options.author": "作者",
   "actions.action_card.entry_options.content": "内容",
