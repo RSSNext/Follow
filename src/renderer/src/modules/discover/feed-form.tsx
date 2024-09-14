@@ -248,7 +248,7 @@ const FeedInnerForm = ({
 
   const { t } = useTranslation()
 
-  const categories = useAuthQuery(subscriptionQuery.categories(Number.parseInt(form.watch("view"))))
+  const categories = useAuthQuery(subscriptionQuery.categories())
 
   // useEffect(() => {
   //   if (feed.isSuccess) nextFrame(() => buttonRef.current?.focus());
