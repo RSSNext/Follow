@@ -4,7 +4,7 @@ export const dayjsLocaleImportMap = {
   en: ["en", () => import("dayjs/locale/en")],
   ["zh-CN"]: ["zh-cn", () => import("dayjs/locale/zh-cn")],
   ["ja"]: ["ja", () => import("dayjs/locale/ja")],
-  ["zh-TW"]: ["zh-TW", () => import("dayjs/locale/zh-TW")],
+  ["zh-TW"]: ["zh-tw", () => import("dayjs/locale/zh-tw")],
 }
 export const ns = ["app", "common", "lang", "settings", "shortcuts"] as const
 export const defaultNS = "app" as const
