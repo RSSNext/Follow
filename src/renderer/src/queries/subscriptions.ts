@@ -12,7 +12,7 @@ export const subscription = {
   categories: (view?: number) =>
     defineQuery(["subscription-categories", view], async () => {
       const res = await apiClient.categories.$get({
-        query: { view: String(view) },
+        query: { view: view ? String(view) : undefined },
       })
 
       return res.data
