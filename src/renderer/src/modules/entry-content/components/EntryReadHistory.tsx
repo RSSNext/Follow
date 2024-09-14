@@ -1,3 +1,9 @@
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardPortal,
+  HoverCardTrigger,
+} from "@radix-ui/react-hover-card"
 import { useWhoami } from "@renderer/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import {
@@ -10,6 +16,7 @@ import { useAuthQuery } from "@renderer/hooks/common"
 import { Queries } from "@renderer/queries"
 import { useEntryReadHistory } from "@renderer/store/entry"
 import { useUserById } from "@renderer/store/user"
+import clsx from "clsx"
 import { LayoutGroup, m } from "framer-motion"
 import { memo, useEffect, useState } from "react"
 
@@ -54,28 +61,74 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
         entryHistory.readCount > 10 &&
         entryHistory.userIds &&
         entryHistory.userIds.length >= 10 && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div
+          <HoverCard open>
+            <HoverCardTrigger asChild>
+              <button
+                type="button"
                 style={{
                   right: "80px",
                   zIndex: 11,
                 }}
-                className="relative z-[11] flex size-7 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
+                className="relative flex size-7 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
               >
                 <span className="text-[10px] font-medium text-muted-foreground">
                   +{Math.min(entryHistory.readCount - 10, 99)}
                 </span>
-              </div>
-            </TooltipTrigger>
-            <TooltipPortal>
-              <TooltipContent side="top">More</TooltipContent>
-            </TooltipPortal>
-          </Tooltip>
+              </button>
+            </HoverCardTrigger>
+
+            <HoverCardPortal>
+              <HoverCardContent
+                sideOffset={12}
+                align="start"
+                side="right"
+                asChild
+                className={clsx(
+                  "flex max-h-[300px] flex-col overflow-y-auto rounded-md border bg-background drop-shadow",
+                  // Animation, fade up
+                  "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-3",
+                )}
+              >
+                <ul>
+                  {entryHistory.userIds
+                    .filter((id) => id !== me?.id)
+                    .slice(10)
+                    .map((userId) => (
+                      <EntryRow userId={userId} key={userId} />
+                    ))}
+                </ul>
+              </HoverCardContent>
+            </HoverCardPortal>
+          </HoverCard>
         )}
     </div>
   )
 }
+
+const EntryRow: Component<{ userId: string }> = memo(({ userId }) => {
+  const user = useUserById(userId)
+  const presentUserProfile = usePresentUserProfileModal("drawer")
+  if (!user) return null
+
+  return (
+    <li className="relative flex min-w-0 max-w-[50ch] rounded-md p-1 hover:bg-muted">
+      <button
+        type="button"
+        className="flex min-w-0 items-center gap-2 truncate"
+        onClick={() => {
+          presentUserProfile(userId)
+        }}
+      >
+        <Avatar className="aspect-square size-7 overflow-hidden rounded-full border border-border ring-1 ring-background">
+          <AvatarImage src={user?.image || undefined} />
+          <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
+        </Avatar>
+
+        {user.name && <p className="truncate pr-8 text-xs font-medium">{user.name}</p>}
+      </button>
+    </li>
+  )
+})
 
 const EntryUser: Component<{
   userId: string
