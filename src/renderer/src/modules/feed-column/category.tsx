@@ -15,7 +15,7 @@ import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
 import { Fragment, memo, useEffect, useRef, useState } from "react"
-import {useTranslation  } from "react-i18next"
+import { useTranslation } from "react-i18next"
 import { useOnClickOutside } from "usehooks-ts"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
@@ -115,7 +115,7 @@ function FeedCategoryImpl({
       {!!showCollapse && (
         <div
           className={cn(
-            "flex w-full items-center justify-between rounded-md px-2.5 transition-colors",
+            "flex w-full items-center justify-between rounded-md px-2.5 transition-colors hover:bg-native-active",
             isActive && "bg-native-active",
           )}
           onClick={(e) => {

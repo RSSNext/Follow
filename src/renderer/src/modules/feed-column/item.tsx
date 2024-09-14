@@ -67,7 +67,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
       <div
         data-feed-id={feedId}
         className={cn(
-          "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
+          "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose hover:bg-native-active",
           isActive && "bg-native-active",
           className,
         )}
