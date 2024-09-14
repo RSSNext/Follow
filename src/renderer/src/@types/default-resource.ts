@@ -35,4 +35,5 @@ export const defaultResources = {
     common: common_ja,
   },
   pt: { lang: lang_pt, common: common_pt },
+  ja: { lang: lang_ja, common: common_ja },
 }
