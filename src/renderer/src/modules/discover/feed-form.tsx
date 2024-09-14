@@ -132,7 +132,7 @@ export const FeedForm: Component<{
                 )
               }}
             >
-              {t("feed_form.fallback")}
+              {t("feed_form.feedback")}
             </Button>
           </div>
         </div>
