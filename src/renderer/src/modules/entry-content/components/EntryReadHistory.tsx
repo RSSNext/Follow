@@ -61,7 +61,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
         entryHistory.readCount > 10 &&
         entryHistory.userIds &&
         entryHistory.userIds.length >= 10 && (
-          <HoverCard>
+          <HoverCard open>
             <HoverCardTrigger asChild>
               <button
                 type="button"
@@ -111,10 +111,10 @@ const EntryRow: Component<{ userId: string }> = memo(({ userId }) => {
   if (!user) return null
 
   return (
-    <li className="rounded-md p-1 pr-4 hover:bg-muted">
+    <li className="relative flex min-w-0 max-w-[50ch] rounded-md p-1 hover:bg-muted">
       <button
         type="button"
-        className="flex items-center gap-2"
+        className="flex min-w-0 items-center gap-2 truncate"
         onClick={() => {
           presentUserProfile(userId)
         }}
@@ -124,7 +124,7 @@ const EntryRow: Component<{ userId: string }> = memo(({ userId }) => {
           <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
         </Avatar>
 
-        {user.name && <p className="text-xs font-medium">{user.name}</p>}
+        {user.name && <p className="truncate pr-8 text-xs font-medium">{user.name}</p>}
       </button>
     </li>
   )
