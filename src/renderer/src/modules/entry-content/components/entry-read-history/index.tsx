@@ -1,6 +1,11 @@
 import { useWhoami } from "@renderer/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@renderer/components/ui/tooltip"
 import { useAuthQuery } from "@renderer/hooks/common"
 import { Queries } from "@renderer/queries"
 import { useEntryReadHistory } from "@renderer/store/entry"
@@ -70,7 +75,9 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
                 </span>
               </button>
             </TooltipTrigger>
-            <TooltipContent side="top">More</TooltipContent>
+            <TooltipPortal>
+              <TooltipContent side="top">More</TooltipContent>
+            </TooltipPortal>
           </Tooltip>
         )}
     </div>
@@ -108,7 +115,9 @@ const EntryUser: Component<{
           </Avatar>
         </m.button>
       </TooltipTrigger>
-      <TooltipContent side="top">Recent reader: {user.name}</TooltipContent>
+      <TooltipPortal>
+        <TooltipContent side="top">Recent reader: {user.name}</TooltipContent>
+      </TooltipPortal>
     </Tooltip>
   )
 })

@@ -27,9 +27,11 @@ import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
 import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
 import dayjs from "dayjs"
+import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 export const SettingInvitations = () => {
+  const { t } = useTranslation("settings")
   const invitations = useAuthQuery(Queries.invitations.list())
 
   const { present } = useModalStack()
@@ -38,26 +40,33 @@ export const SettingInvitations = () => {
   return (
     <section className="mt-4">
       <div className="mb-4 space-y-2 text-sm">
-        <p>
+        <Trans ns="settings" i18nKey="invitation.earlyAccess">
           Follow is currently in <strong>early access</strong> and requires an invitation code to
           use.
-        </p>
+        </Trans>
         <p className="flex items-center">
-          <span>You can spend {INVITATION_PRICE} </span>
-          <i className="i-mgc-power mx-0.5 text-base text-accent" />
-          <span> Power to generate an invitation code for your friends.</span>
+          <Trans
+            ns="settings"
+            values={{
+              INVITATION_PRICE,
+            }}
+            components={{
+              PowerIcon: <i className="i-mgc-power ml-1 mr-0.5 text-base text-accent" />,
+            }}
+            i18nKey="invitation.generateCost"
+           />
         </p>
       </div>
       <Button
         onClick={() => {
           present({
-            title: "Confirm",
+            title: t("invitation.confirmModal.title"),
             content: ({ dismiss }) => <ConfirmModalContent dismiss={dismiss} />,
           })
         }}
       >
         <i className="i-mgc-heart-hand-cute-re mr-1" />
-        Generate new code
+        {t("invitation.generateButton")}
       </Button>
       <Divider className="mb-6 mt-8" />
       <div className="flex flex-1 flex-col">
@@ -67,13 +76,13 @@ export const SettingInvitations = () => {
               <TableHeader className="border-b">
                 <TableRow className="[&_*]:!font-semibold">
                   <TableHead className="w-16 text-center" size="sm">
-                    Code
+                    {t("invitation.tableHeaders.code")}
                   </TableHead>
                   <TableHead className="text-center" size="sm">
-                    Creation Time
+                    {t("invitation.tableHeaders.creationTime")}
                   </TableHead>
                   <TableHead className="text-center" size="sm">
-                    Used by
+                    {t("invitation.tableHeaders.usedBy")}
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -95,10 +104,10 @@ export const SettingInvitations = () => {
                     <TableCell align="center" size="sm">
                       {row.users ? (
                         <Tooltip>
-                          <TooltipTrigger asChild>
+                          <TooltipTrigger>
                             <button
                               type="button"
-                              className="center h-full cursor-pointer"
+                              className="cursor-pointer"
                               onClick={() => {
                                 presentUserProfile(row.users?.id)
                               }}
@@ -116,7 +125,7 @@ export const SettingInvitations = () => {
                           )}
                         </Tooltip>
                       ) : (
-                        "-"
+                        t("invitation.notUsed")
                       )}
                     </TableCell>
                   </TableRow>
@@ -127,7 +136,7 @@ export const SettingInvitations = () => {
             <LoadingCircle size="large" className="center absolute inset-0" />
           ) : (
             <div className="mt-36 w-full text-center text-sm text-zinc-400">
-              <p>No invitations</p>
+              <p>{t("invitation.noInvitations")}</p>
             </div>
           )}
         </ScrollArea.ScrollArea>
@@ -137,6 +146,7 @@ export const SettingInvitations = () => {
 }
 
 const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
+  const { t } = useTranslation("settings")
   const newInvitation = useMutation({
     mutationKey: ["newInvitation"],
     mutationFn: () => apiClient.invitations.new.$post(),
@@ -145,7 +155,7 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
     },
     onSuccess(data) {
       Queries.invitations.list().invalidate()
-      toast("🎉 New invitation generated, invite code is copied")
+      toast(t("invitation.newInvitationSuccess"))
       navigator.clipboard.writeText(data.data)
       dismiss()
     },
@@ -154,16 +164,25 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
   return (
     <>
       <div className="flex items-center">
-        <span>Generating an invitation code will cost you {INVITATION_PRICE} </span>
-        <i className="i-mgc-power mx-1 text-base text-accent" />
-        <span>Power. Do you want to continue?</span>
+        <Trans
+          ns="settings"
+          values={{
+            INVITATION_PRICE,
+          }}
+          components={{
+            PowerIcon: <i className="i-mgc-power mx-1 text-base text-accent" />,
+            div: <div />,
+          }}
+          i18nKey="invitation.confirmModal.message"
+         />
       </div>
+      <div>{t("invitation.confirmModal.confirm")}</div>
       <div className="mt-4 flex items-center justify-end gap-3">
         <Button variant="outline" onClick={dismiss}>
-          Cancel
+          {t("invitation.confirmModal.cancel")}
         </Button>
         <Button isLoading={newInvitation.isPending} onClick={() => newInvitation.mutate()}>
-          Continue
+          {t("invitation.confirmModal.continue")}
         </Button>
       </div>
     </>

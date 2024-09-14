@@ -1,8 +1,8 @@
 {
   "redirect": {
-    "successMessage": "You have successfully connected to {{APP_NAME}} Account.",
-    "instruction": "Now is the time to open {{APP_NAME}} and safely close this page.",
     "continueInBrowser": "Continue in Browser",
-    "openApp": "Open {{APP_NAME}}"
+    "instruction": "Now is the time to open {{APP_NAME}} and safely close this page.",
+    "openApp": "Open {{APP_NAME}}",
+    "successMessage": "You have successfully connected to {{APP_NAME}} Account."
   }
 }

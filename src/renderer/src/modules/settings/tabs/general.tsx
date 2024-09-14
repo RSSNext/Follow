@@ -1,3 +1,4 @@
+import { currentSupportedLanguages } from "@renderer/@types/constants"
 import {
   setGeneralSetting,
   useGeneralSettingSelector,
@@ -18,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
-import { currentSupportedLanguages, fallbackLanguage } from "@renderer/i18n"
+import { fallbackLanguage } from "@renderer/i18n"
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
@@ -33,7 +34,7 @@ const { defineSettingItem, SettingBuilder } = createSetting(
   setGeneralSetting,
 )
 export const SettingGeneral = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
   useEffect(() => {
     tipcClient?.getLoginItemSettings().then((settings) => {
       setGeneralSetting("appLaunchOnStartup", settings.openAtLogin)
@@ -56,11 +57,11 @@ export const SettingGeneral = () => {
           settings={[
             {
               type: "title",
-              value: t("settings.general.app"),
+              value: t("general.app"),
             },
 
             defineSettingItem("appLaunchOnStartup", {
-              label: t("settings.general.launch_at_login"),
+              label: t("general.launch_at_login"),
               disabled: !tipcClient,
               onChange(value) {
                 saveLoginSetting(value)
@@ -69,30 +70,30 @@ export const SettingGeneral = () => {
             LanguageSelector,
             {
               type: "title",
-              value: t("settings.general.timeline"),
+              value: t("general.timeline"),
             },
             defineSettingItem("unreadOnly", {
-              label: t("settings.general.show_unread_on_launch.label"),
-              description: t("settings.general.show_unread_on_launch.description"),
+              label: t("general.show_unread_on_launch.label"),
+              description: t("general.show_unread_on_launch.description"),
             }),
             defineSettingItem("groupByDate", {
-              label: t("settings.general.group_by_date.label"),
-              description: t("settings.general.group_by_date.description"),
+              label: t("general.group_by_date.label"),
+              description: t("general.group_by_date.description"),
             }),
 
             { type: "title", value: "unread" },
 
             defineSettingItem("scrollMarkUnread", {
-              label: t("settings.general.mark_as_read.scroll.label"),
-              description: t("settings.general.mark_as_read.scroll.description"),
+              label: t("general.mark_as_read.scroll.label"),
+              description: t("general.mark_as_read.scroll.description"),
             }),
             defineSettingItem("hoverMarkUnread", {
-              label: t("settings.general.mark_as_read.hover.label"),
-              description: t("settings.general.mark_as_read.hover.description"),
+              label: t("general.mark_as_read.hover.label"),
+              description: t("general.mark_as_read.hover.description"),
             }),
             defineSettingItem("renderMarkUnread", {
-              label: t("settings.general.mark_as_read.render.label"),
-              description: t("settings.general.mark_as_read.render.description"),
+              label: t("general.mark_as_read.render.label"),
+              description: t("general.mark_as_read.render.description"),
             }),
 
             { type: "title", value: "TTS", disabled: !window.electron },
@@ -106,17 +107,17 @@ export const SettingGeneral = () => {
             // }),
             {
               type: "title",
-              value: t("settings.general.privacy_data"),
+              value: t("general.privacy_data"),
             },
 
             defineSettingItem("dataPersist", {
-              label: t("settings.general.data_persist.label"),
-              description: t("settings.general.data_persist.description"),
+              label: t("general.data_persist.label"),
+              description: t("general.data_persist.description"),
             }),
 
             defineSettingItem("sendAnonymousData", {
-              label: t("settings.general.send_anonymous_data.label"),
-              description: t("settings.general.send_anonymous_data.description"),
+              label: t("general.send_anonymous_data.label"),
+              description: t("general.send_anonymous_data.description"),
               onChange(value) {
                 setGeneralSetting("sendAnonymousData", value)
                 if (value) {
@@ -128,15 +129,15 @@ export const SettingGeneral = () => {
               },
             }),
             {
-              label: t("settings.general.rebuild_database.label"),
+              label: t("general.rebuild_database.label"),
               action: async () => {
                 present({
-                  title: t("settings.general.rebuild_database.title"),
+                  title: t("general.rebuild_database.title"),
                   clickOutsideToDismiss: true,
                   content: () => (
                     <div className="text-sm">
-                      <p>{t("settings.general.rebuild_database.warning.line1")}</p>
-                      <p>{t("settings.general.rebuild_database.warning.line2")}</p>
+                      <p>{t("general.rebuild_database.warning.line1")}</p>
+                      <p>{t("general.rebuild_database.warning.line2")}</p>
                       <div className="mt-4 flex justify-end">
                         <Button
                           className="px-3 text-red-500"
@@ -153,8 +154,8 @@ export const SettingGeneral = () => {
                   ),
                 })
               },
-              description: t("settings.general.rebuild_database.description"),
-              buttonText: t("settings.general.rebuild_database.button"),
+              description: t("general.rebuild_database.description"),
+              buttonText: t("general.rebuild_database.button"),
             },
           ]}
         />
@@ -164,7 +165,7 @@ export const SettingGeneral = () => {
 }
 
 export const VoiceSelector = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
 
   const { data } = useQuery({
     queryFn: () => tipcClient?.getVoices(),
@@ -174,7 +175,7 @@ export const VoiceSelector = () => {
 
   return (
     <div className="-mt-1 mb-3 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("settings.general.voices")}</span>
+      <span className="shrink-0 text-sm font-medium">{t("general.voices")}</span>
       <Select
         defaultValue={createDefaultSettings().voice}
         value={voice}
@@ -198,7 +199,7 @@ export const VoiceSelector = () => {
 }
 
 export const LanguageSelector = () => {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation("settings")
   const { t: langT } = useTranslation("lang")
   const language = useGeneralSettingSelector((state) => state.language)
 
@@ -207,7 +208,7 @@ export const LanguageSelector = () => {
     : fallbackLanguage
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
-      <span className="shrink-0 text-sm font-medium">{t("words.language")}</span>
+      <span className="shrink-0 text-sm font-medium">{t("general.language")}</span>
       <Select
         defaultValue={finalRenderLanguage}
         value={finalRenderLanguage}
@@ -220,11 +221,16 @@ export const LanguageSelector = () => {
           <SelectValue />
         </SelectTrigger>
         <SelectContent position="item-aligned">
-          {currentSupportedLanguages.map((lang) => (
-            <SelectItem key={lang} value={lang}>
-              {langT(`langs.${lang}` as any)}
-            </SelectItem>
-          ))}
+          {currentSupportedLanguages.map((lang) => {
+            const percent = I18N_COMPLETENESS_MAP[lang]
+
+            return (
+              <SelectItem key={lang} value={lang}>
+                {langT(`langs.${lang}` as any)}{" "}
+                {typeof percent === "number" ? (percent === 100 ? null : `(${percent}%)`) : null}
+              </SelectItem>
+            )
+          })}
         </SelectContent>
       </Select>
     </div>

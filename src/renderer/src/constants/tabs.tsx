@@ -1,8 +1,19 @@
 import { FeedViewType } from "@renderer/lib/enum"
+import type React from "react"
 
-export const views = [
+interface ViewDefinition {
+  name: I18nKeys
+  icon: React.JSX.Element
+  className: string
+  peerClassName: string
+  translation: string
+  view: FeedViewType
+  wideMode?: boolean
+  gridMode?: boolean
+}
+export const views: ViewDefinition[] = [
   {
-    name: "Articles",
+    name: "feed_view_type.articles",
     icon: <i className="i-mgc-paper-cute-fi" />,
     className: "text-accent",
     peerClassName: "peer-checked:text-accent",
@@ -10,7 +21,7 @@ export const views = [
     view: FeedViewType.Articles,
   },
   {
-    name: "Social Media",
+    name: "feed_view_type.social_media",
     icon: <i className="i-mgc-twitter-cute-fi" />,
     className: "text-sky-600 dark:text-sky-500",
     peerClassName: "peer-checked:text-sky-600 peer-checked:dark:text-sky-500",
@@ -19,7 +30,7 @@ export const views = [
     view: FeedViewType.SocialMedia,
   },
   {
-    name: "Pictures",
+    name: "feed_view_type.pictures",
     icon: <i className="i-mgc-pic-cute-fi" />,
     className: "text-green-600 dark:text-green-500",
     peerClassName: "peer-checked:text-green-600 peer-checked:dark:text-green-500",
@@ -29,7 +40,7 @@ export const views = [
     view: FeedViewType.Pictures,
   },
   {
-    name: "Videos",
+    name: "feed_view_type.videos",
     icon: <i className="i-mgc-video-cute-fi" />,
     className: "text-red-600 dark:text-red-500",
     peerClassName: "peer-checked:text-red-600 peer-checked:dark:text-red-500",
@@ -39,7 +50,7 @@ export const views = [
     view: FeedViewType.Videos,
   },
   {
-    name: "Audios",
+    name: "feed_view_type.audios",
     icon: <i className="i-mgc-mic-cute-fi" />,
     className: "text-purple-600 dark:text-purple-500",
     peerClassName: "peer-checked:text-purple-600 peer-checked:dark:text-purple-500",
@@ -47,7 +58,7 @@ export const views = [
     view: FeedViewType.Audios,
   },
   {
-    name: "Notifications",
+    name: "feed_view_type.notifications",
     icon: <i className="i-mgc-announcement-cute-fi" />,
     className: "text-yellow-600 dark:text-yellow-500",
     peerClassName: "peer-checked:text-yellow-600 peer-checked:dark:text-yellow-500",

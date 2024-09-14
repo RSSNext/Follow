@@ -1,4 +1,5 @@
-const OpenInBrowser = (_t?: any) => (window.electron ? "Open in browser" : "Open in new tab")
+const OpenInBrowser = (_t?: any) =>
+  window.electron ? "keys.entry.openInBrowser" : "keys.entry.openInNewTab"
 
 export const COPY_MAP = {
   OpenInBrowser,

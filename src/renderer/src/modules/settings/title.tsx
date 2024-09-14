@@ -6,9 +6,9 @@ import { settings } from "./constants"
 import type { SettingPageConfig } from "./utils"
 
 export const SettingsSidebarTitle = ({ path, className }: { path: string; className?: string }) => {
+  const { t } = useTranslation("settings")
   const tab = settings.find((t) => t.path === path)
 
-  const { t } = useTranslation()
   if (!tab) {
     return null
   }
@@ -28,13 +28,13 @@ export const SettingsTitle = ({
   className?: string
   loader?: () => SettingPageConfig
 }) => {
+  const { t } = useTranslation("settings")
   const {
     iconName,
     name: title,
     headerIcon,
   } = (useLoaderData() || loader?.() || {}) as SettingPageConfig
 
-  const { t } = useTranslation()
   if (!title) {
     return null
   }

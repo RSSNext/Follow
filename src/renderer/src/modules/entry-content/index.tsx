@@ -1,6 +1,7 @@
 import { repository } from "@pkg"
 import {
   ReadabilityStatus,
+  setReadabilityStatus,
   useEntryInReadabilityStatus,
   useEntryIsInReadability,
   useEntryReadabilityContent,
@@ -38,6 +39,7 @@ import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
 import { memo, useEffect, useLayoutEffect, useMemo, useRef } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
+import { useTranslation } from "react-i18next"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
@@ -80,6 +82,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 }
 
 export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, className }) => {
+  const { t } = useTranslation()
   const user = useWhoami()
 
   const { error, data, isPending } = useAuthQuery(Queries.entries.byId(entryId), {
@@ -237,7 +240,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
                     <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
                       <i className="i-mgc-magic-2-cute-re align-middle" />
-                      <span>AI summary</span>
+                      <span>{t("entry_content.ai_summary")}</span>
                     </div>
                     <AutoResizeHeight spring className="text-sm leading-relaxed">
                       {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
@@ -263,6 +266,10 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
                 </ErrorBoundary>
               </div>
             </WrappedElementProvider>
+
+            {entry.settings?.readability && (
+              <ReadabilityAutoToggle id={entry.entries.id} url={entry.entries.url ?? ""} />
+            )}
 
             {!content && (
               <div className="center mt-16 min-w-0">
@@ -327,6 +334,7 @@ const TitleMetaHandler: Component<{
 }
 
 const ReadabilityContent = ({ entryId }: { entryId: string }) => {
+  const { t } = useTranslation()
   const result = useEntryReadabilityContent(entryId)
 
   return (
@@ -334,13 +342,12 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
       {result ? (
         <p className="rounded-xl border p-3 text-sm opacity-80">
           <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
-          This content is provided by Readability. If you find typographical anomalies, please go to
-          the source site to view the original content.
+          {t("entry_content.readability_notice")}
         </p>
       ) : (
         <div className="center mt-16 flex flex-col gap-2">
           <LoadingWithIcon size="large" icon={<i className="i-mgc-sparkles-2-cute-re" />} />
-          <span className="text-sm">Fetching original content and processing...</span>
+          <span className="text-sm">{t("entry_content.fetching_content")}</span>
         </div>
       )}
 
@@ -396,6 +403,9 @@ const ReadabilityAutoToggle = ({ url, id }: { url: string; id: string }) => {
   useEffect(() => {
     if (!onceRef.current) {
       onceRef.current = true
+      setReadabilityStatus({
+        [id]: ReadabilityStatus.INITIAL,
+      })
       toggle()
     }
   }, [toggle])
@@ -404,11 +414,14 @@ const ReadabilityAutoToggle = ({ url, id }: { url: string; id: string }) => {
 }
 
 const RenderError: FallbackRender = ({ error }) => {
+  const { t } = useTranslation()
   const nextError = typeof error === "string" ? new Error(error) : (error as Error)
   return (
     <div className="center mt-16 flex flex-col gap-2">
       <i className="i-mgc-close-cute-re text-3xl text-red-500" />
-      <span className="font-sans text-sm">Render error: {nextError.message}</span>
+      <span className="font-sans text-sm">
+        {t("entry_content.render_error")} {nextError.message}
+      </span>
       <a
         href={getNewIssueUrl({
           body: [
@@ -428,7 +441,7 @@ const RenderError: FallbackRender = ({ error }) => {
         target="_blank"
         rel="noreferrer"
       >
-        Report issue
+        {t("entry_content.report_issue")}
       </a>
     </div>
   )

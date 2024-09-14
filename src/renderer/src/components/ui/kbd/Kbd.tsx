@@ -175,7 +175,7 @@ export const Kbd: FC<{ children: string; className?: string }> = memo(({ childre
             }
 
             case SharedKeys.backspace: {
-              return <MaterialSymbolsBackspace key={key} />
+              return <MaterialSymbolsBackspaceOutlineSharp key={key} />
             }
             case SpecialKeys.macOS.meta: {
               return <MaterialSymbolsKeyboardCommandKey key={key} />
@@ -271,13 +271,14 @@ function MaterialSymbolsSpaceBarRounded(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   )
 }
-function MaterialSymbolsBackspace(props: React.SVGProps<SVGSVGElement>) {
+
+function MaterialSymbolsBackspaceOutlineSharp(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
       <path
         fill="currentColor"
-        d="M7.95 19L3 12l4.95-7H21v14zm3.45-3l2.6-2.6l2.6 2.6l1.4-1.4l-2.6-2.6L18 9.4L16.6 8L14 10.6L11.4 8L10 9.4l2.6 2.6l-2.6 2.6z"
-      />
+        d="M7.95 19L3 12l4.95-7H21v14zM9 17h10V7H9l-3.55 5zm2.4-1l2.6-2.6l2.6 2.6l1.4-1.4l-2.6-2.6L18 9.4L16.6 8L14 10.6L11.4 8L10 9.4l2.6 2.6l-2.6 2.6zm7.6 1V7z"
+       />
     </svg>
   )
 }

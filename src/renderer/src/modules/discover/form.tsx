@@ -18,6 +18,7 @@ import type { FeedViewType } from "@renderer/lib/enum"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { z } from "zod"
 
 import { FollowSummary } from "../../components/feed-summary"
@@ -30,23 +31,23 @@ const formSchema = z.object({
 const info: Record<
   string,
   {
-    label: string
+    label: I18nKeys
     prefix?: string[]
     showModal?: boolean
     default?: string
   }
 > = {
   search: {
-    label: "Any URL or Keyword",
+    label: "discover.any_url_or_keyword",
   },
   rss: {
-    label: "RSS URL",
+    label: "discover.rss_url",
     default: "https://",
     prefix: ["https://", "http://"],
     showModal: true,
   },
   rsshub: {
-    label: "RSSHub Route",
+    label: "discover.rss_hub_route",
     prefix: ["rsshub://"],
     default: "rsshub://",
     showModal: true,
@@ -61,6 +62,7 @@ export function DiscoverForm({ type }: { type: string }) {
       keyword: defaultValue || "",
     },
   })
+  const { t } = useTranslation()
   const mutation = useMutation({
     mutationFn: async (keyword: string) => {
       const { data } = await apiClient.discover.$post({
@@ -120,7 +122,7 @@ export function DiscoverForm({ type }: { type: string }) {
             name="keyword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{info[type]?.label}</FormLabel>
+                <FormLabel>{t(info[type]?.label)}</FormLabel>
                 <FormControl>
                   <Input autoFocus {...field} />
                 </FormControl>
@@ -130,7 +132,7 @@ export function DiscoverForm({ type }: { type: string }) {
           />
           <div className="center flex">
             <Button disabled={!form.formState.isValid} type="submit" isLoading={mutation.isPending}>
-              {info[type].showModal ? "Preview" : "Search"}
+              {info[type].showModal ? t("discover.preview") : t("words.search")}
             </Button>
           </div>
         </form>
@@ -142,7 +144,7 @@ export function DiscoverForm({ type }: { type: string }) {
             {mutation.data?.length > 1 && "s"}
           </div>
           <div className="space-y-6 text-sm">
-            {mutation.data?.map((item) => (
+            {mutation.data.map((item) => (
               <Card
                 data-feed-id={item.feed.id}
                 key={item.feed.url || item.docs}

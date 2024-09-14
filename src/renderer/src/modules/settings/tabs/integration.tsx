@@ -18,7 +18,7 @@ const { defineSettingItem, SettingBuilder } = createSetting(
   setIntegrationSetting,
 )
 export const SettingIntegration = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
   return (
     <>
       <SettingsTitle />
@@ -30,34 +30,34 @@ export const SettingIntegration = () => {
               value: (
                 <span className="flex items-center gap-2 font-bold">
                   <SimpleIconsEagle />
-                  {t("settings.integration.eagle.title")}
+                  {t("integration.eagle.title")}
                 </span>
               ),
             },
             defineSettingItem("enableEagle", {
-              label: t("settings.integration.eagle.enable.label"),
-              description: t("settings.integration.eagle.enable.description"),
+              label: t("integration.eagle.enable.label"),
+              description: t("integration.eagle.enable.description"),
             }),
             {
               type: "title",
               value: (
                 <span className="flex items-center gap-2 font-bold">
                   <SimpleIconsReadwise />
-                  {t("settings.integration.readwise.title")}
+                  {t("integration.readwise.title")}
                 </span>
               ),
             },
             defineSettingItem("enableReadwise", {
-              label: t("settings.integration.readwise.enable.label"),
-              description: t("settings.integration.readwise.enable.description"),
+              label: t("integration.readwise.enable.label"),
+              description: t("integration.readwise.enable.description"),
             }),
             defineSettingItem("readwiseToken", {
-              label: t("settings.integration.readwise.token.label"),
+              label: t("integration.readwise.token.label"),
               vertical: true,
               type: "password",
               description: (
                 <>
-                  {t("settings.integration.readwise.token.description")}{" "}
+                  {t("integration.readwise.token.description")}{" "}
                   <a
                     target="_blank"
                     className="underline"
@@ -75,22 +75,22 @@ export const SettingIntegration = () => {
               value: (
                 <span className="flex items-center gap-2 font-bold">
                   <SimpleIconsInstapaper />
-                  {t("settings.integration.instapaper.title")}
+                  {t("integration.instapaper.title")}
                 </span>
               ),
             },
             defineSettingItem("enableInstapaper", {
-              label: t("settings.integration.instapaper.enable.label"),
-              description: t("settings.integration.instapaper.enable.description"),
+              label: t("integration.instapaper.enable.label"),
+              description: t("integration.instapaper.enable.description"),
             }),
             defineSettingItem("instapaperUsername", {
-              label: t("settings.integration.instapaper.username.label"),
+              label: t("integration.instapaper.username.label"),
               componentProps: {
                 labelClassName: "w-[150px]",
               },
             }),
             defineSettingItem("instapaperPassword", {
-              label: t("settings.integration.instapaper.password.label"),
+              label: t("integration.instapaper.password.label"),
               type: "password",
               componentProps: {
                 labelClassName: "w-[150px]",
@@ -106,12 +106,12 @@ export const SettingIntegration = () => {
 }
 
 const BottomTip = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation("settings")
   return (
     <div className="mt-6">
       <Divider />
       <p className="opacity-60">
-        <small>{t("settings.integration.tip")}</small>
+        <small>{t("integration.tip")}</small>
       </p>
     </div>
   )

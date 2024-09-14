@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs"
-import { resolve } from "node:path"
+import fs, { readFileSync } from "node:fs"
+import path, { resolve } from "node:path"
 
 import * as babel from "@babel/core"
 import generate from "@babel/generator"
@@ -11,9 +11,55 @@ import { prerelease } from "semver"
 import type { Plugin, UserConfig } from "vite"
 
 import { getGitHash } from "../scripts/lib"
+import i18nCompleteness from "./i18n-completeness"
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
+function localesPlugin(): Plugin {
+  return {
+    name: "locales-merge",
+    enforce: "post",
+    generateBundle(options, bundle) {
+      const localesDir = path.resolve(__dirname, "../locales")
+      const namespaces = fs.readdirSync(localesDir)
+      const languageResources = {}
+
+      namespaces.forEach((namespace) => {
+        const namespacePath = path.join(localesDir, namespace)
+        const files = fs.readdirSync(namespacePath).filter((file) => file.endsWith(".json"))
+
+        files.forEach((file) => {
+          const lang = path.basename(file, ".json")
+          const filePath = path.join(namespacePath, file)
+          const content = JSON.parse(fs.readFileSync(filePath, "utf-8"))
+
+          if (!languageResources[lang]) {
+            languageResources[lang] = {}
+          }
+          languageResources[lang][namespace] = content
+        })
+      })
+
+      Object.entries(languageResources).forEach(([lang, resources]) => {
+        const fileName = `locales/${lang}.js`
+        const content = `export default ${JSON.stringify(resources)};`
+
+        this.emitFile({
+          type: "asset",
+          fileName,
+          source: content,
+        })
+      })
+
+      // Remove original JSON chunks
+      Object.keys(bundle).forEach((key) => {
+        if (key.startsWith("locales/") && key.endsWith(".json")) {
+          delete bundle[key]
+        }
+      })
+    },
+  }
+}
 
 export const viteRenderBaseConfig = {
   resolve: {
@@ -52,11 +98,17 @@ export const viteRenderBaseConfig = {
       },
     }),
 
+    localesPlugin(),
     viteTwToRawString(),
 
     {
       name: "custom-i18n-hmr",
       handleHotUpdate({ file, server }) {
+        server.ws.send({
+          type: "custom",
+          event: "hmr",
+          data: {},
+        })
         if (file.endsWith(".json") && file.includes("locales")) {
           server.ws.send({
             type: "custom",
@@ -83,6 +135,8 @@ export const viteRenderBaseConfig = {
     RELEASE_CHANNEL: JSON.stringify((prerelease(pkg.version)?.[0] as string) || "stable"),
 
     DEBUG: process.env.DEBUG === "true",
+
+    I18N_COMPLETENESS_MAP: JSON.stringify({ ...i18nCompleteness, en: 100 }),
   },
 } satisfies UserConfig
 

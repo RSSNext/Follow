@@ -59,6 +59,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
           result: {
             translation?: z.infer<typeof languageSchema>
             summary?: boolean
+            readability?: boolean
             rewriteRules?: {
               from: string
               to: string
@@ -115,6 +116,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<
       {
         translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>
         summary: z.ZodOptional<z.ZodBoolean>
+        readability: z.ZodOptional<z.ZodBoolean>
         rewriteRules: z.ZodOptional<
           z.ZodArray<
             z.ZodObject<
@@ -168,6 +170,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<
       {
         summary?: boolean | undefined
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+        readability?: boolean | undefined
         rewriteRules?:
           | {
               from: string
@@ -185,6 +188,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<
       {
         summary?: boolean | undefined
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+        readability?: boolean | undefined
         rewriteRules?:
           | {
               from: string
@@ -213,6 +217,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<
     result: {
       summary?: boolean | undefined
       translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+      readability?: boolean | undefined
       rewriteRules?:
         | {
             from: string
@@ -238,6 +243,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<
     result: {
       summary?: boolean | undefined
       translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+      readability?: boolean | undefined
       rewriteRules?:
         | {
             from: string
@@ -652,6 +658,7 @@ declare const actionsOpenAPISchema: z.ZodObject<
                   {
                     translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>
                     summary: z.ZodOptional<z.ZodBoolean>
+                    readability: z.ZodOptional<z.ZodBoolean>
                     rewriteRules: z.ZodOptional<
                       z.ZodArray<
                         z.ZodObject<
@@ -719,6 +726,7 @@ declare const actionsOpenAPISchema: z.ZodObject<
                   {
                     summary?: boolean | undefined
                     translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+                    readability?: boolean | undefined
                     rewriteRules?:
                       | {
                           from: string
@@ -743,6 +751,7 @@ declare const actionsOpenAPISchema: z.ZodObject<
                   {
                     summary?: boolean | undefined
                     translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+                    readability?: boolean | undefined
                     rewriteRules?:
                       | {
                           from: string
@@ -778,6 +787,7 @@ declare const actionsOpenAPISchema: z.ZodObject<
                 result: {
                   summary?: boolean | undefined
                   translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+                  readability?: boolean | undefined
                   rewriteRules?:
                     | {
                         from: string
@@ -810,6 +820,7 @@ declare const actionsOpenAPISchema: z.ZodObject<
                 result: {
                   summary?: boolean | undefined
                   translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+                  readability?: boolean | undefined
                   rewriteRules?:
                     | {
                         from: string
@@ -854,6 +865,7 @@ declare const actionsOpenAPISchema: z.ZodObject<
           result: {
             summary?: boolean | undefined
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+            readability?: boolean | undefined
             rewriteRules?:
               | {
                   from: string
@@ -885,6 +897,7 @@ declare const actionsOpenAPISchema: z.ZodObject<
           result: {
             summary?: boolean | undefined
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+            readability?: boolean | undefined
             rewriteRules?:
               | {
                   from: string
@@ -5117,6 +5130,7 @@ declare const _routes: hono_hono_base.HonoBase<
                   | {
                       summary?: boolean | undefined
                       translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+                      readability?: boolean | undefined
                       rewriteRules?:
                         | {
                             from: string
@@ -5283,6 +5297,15 @@ declare const _routes: hono_hono_base.HonoBase<
               errorMessage: string | null
               errorAt: string | null
               ownerUserId: string | null
+              owner: {
+                name: string | null
+                id: string
+                email: string
+                emailVerified: string | null
+                image: string | null
+                handle: string | null
+                createdAt: string
+              } | null
             }
             entries?:
               | {
@@ -5562,6 +5585,7 @@ declare const _routes: hono_hono_base.HonoBase<
                       result: {
                         summary?: boolean | undefined
                         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+                        readability?: boolean | undefined
                         rewriteRules?:
                           | {
                               from: string
@@ -5606,6 +5630,7 @@ declare const _routes: hono_hono_base.HonoBase<
                   result: {
                     summary?: boolean | undefined
                     translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined
+                    readability?: boolean | undefined
                     rewriteRules?:
                       | {
                           from: string

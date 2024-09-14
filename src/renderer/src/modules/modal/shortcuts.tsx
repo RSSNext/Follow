@@ -10,6 +10,7 @@ import { cn } from "@renderer/lib/utils"
 import clsx from "clsx"
 import { m, useDragControls } from "framer-motion"
 import { useCallback, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 
 const ShortcutModalContent = () => {
   const { dismiss } = useCurrentModal()
@@ -20,6 +21,7 @@ const ShortcutModalContent = () => {
   useEffect(() => {
     switchScope("Home")
   }, [])
+  const { t } = useTranslation("shortcuts")
   return (
     <m.div
       drag
@@ -39,15 +41,15 @@ const ShortcutModalContent = () => {
     >
       <h2
         onPointerDownCapture={dragControls.start.bind(dragControls)}
-        className="mb-2 pt-6 font-medium"
+        className="center w-full border-b p-3 font-medium"
       >
-        Shortcuts Guideline
+        {t("shortcuts.guide.title", { ns: "app" })}
       </h2>
-      <MotionButtonBase onClick={dismiss} className="absolute right-3 top-5 p-2">
+      <MotionButtonBase onClick={dismiss} className="absolute right-3 top-2 p-2">
         <i className="i-mgc-close-cute-re" />
       </MotionButtonBase>
       <ScrollArea.ScrollArea scrollbarClassName="w-2" rootClassName="w-full h-full">
-        <div className="w-full space-y-6 px-4 pb-5">
+        <div className="w-full space-y-6 px-4 pb-5 pt-3">
           {Object.keys(shortcuts).map((type) => (
             <section key={type}>
               <div className="mb-2 text-base font-medium capitalize">{type}</div>
@@ -60,7 +62,7 @@ const ShortcutModalContent = () => {
                       index % 2 && "bg-native/40",
                     )}
                   >
-                    <div>{shortcuts[type][action].name}</div>
+                    <div>{t(shortcuts[type][action].name)}</div>
                     <div>
                       <KbdCombined joint>
                         {`${shortcuts[type][action].key}${shortcuts[type][action].extra ? `, ${shortcuts[type][action].extra}` : ""}`}

@@ -4,10 +4,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui
 import { useAuthQuery, useIsOnline } from "@renderer/hooks/common"
 import { settings } from "@renderer/queries/settings"
 import { useEffect, useRef } from "react"
+import { useTranslation } from "react-i18next"
 
 import { settingSyncQueue } from "./sync-queue"
 
 export const SyncIndicator = () => {
+  const { t } = useTranslation()
   const { data: remoteSettings, isLoading } = useAuthQuery(settings.get(), {})
 
   const isOnline = useIsOnline()
@@ -32,7 +34,9 @@ export const SyncIndicator = () => {
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <div className="text-center text-xs">{isOnline ? "Synced with server" : "Offline"}</div>
+        <div className="text-center text-xs">
+          {isOnline ? t("sync_indicator.synced") : t("sync_indicator.offline")}
+        </div>
       </TooltipContent>
     </Tooltip>
   )

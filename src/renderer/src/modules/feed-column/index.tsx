@@ -1,4 +1,4 @@
-/* eslint-disable @eslint-react/hooks-extra/no-direct-set-state-in-use-layout-effect */
+ 
 import { getReadonlyRoute } from "@renderer/atoms/route"
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useSidebarActiveView } from "@renderer/atoms/sidebar"
@@ -22,6 +22,7 @@ import { Lethargy } from "lethargy"
 import type { FC, PropsWithChildren } from "react"
 import { useCallback, useLayoutEffect, useRef, useState } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
+import { useTranslation } from "react-i18next"
 
 import { WindowUnderBlur } from "../../components/ui/background"
 import { FeedColumnHeader } from "./header"
@@ -130,6 +131,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
   )
 
   const unreadByView = useUnreadByView()
+  const { t } = useTranslation()
 
   const showSidebarUnreadCount = useUISettingKey("sidebarShowUnreadCount")
 
@@ -151,7 +153,8 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         {views.map((item, index) => (
           <ActionButton
             key={item.name}
-            tooltip={`${item.name}`}
+            // TODO: fix this type error
+            tooltip={t(item.name)}
             shortcut={`${index + 1}`}
             className={cn(
               active === index && item.className,

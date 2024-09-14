@@ -14,15 +14,15 @@ import { defineSettingPageData } from "@renderer/modules/settings/utils"
 import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 const iconName = "i-mgc-magic-2-cute-re"
-
 const priority = 1020
 
 export const loader = defineSettingPageData({
   iconName,
-  name: "settings.titles.actions",
+  name: "titles.actions",
   priority,
 })
 
@@ -49,6 +49,7 @@ type ActionsInput = {
 }[]
 
 export function Component() {
+  const { t } = useTranslation("settings")
   const actions = useAuthQuery(Queries.action.getAll())
   const [actionsData, setActionsData] = useState<ActionsInput>([])
 
@@ -75,7 +76,7 @@ export function Component() {
     },
     onSuccess: () => {
       Queries.action.getAll().invalidate()
-      toast("🎉 Actions saved.")
+      toast(t("actions.saveSuccess"))
     },
     onError: (error) => {
       toastFetchError(error)
@@ -106,7 +107,7 @@ export function Component() {
             setActionsData([
               ...actionsData,
               {
-                name: `Action ${actionsData.length + 1}`,
+                name: t("actions.actionName", { number: actionsData.length + 1 }),
                 condition: [],
                 result: {},
               },
@@ -114,7 +115,7 @@ export function Component() {
           }}
         >
           <i className="i-mgc-add-cute-re" />
-          <span> New Rule</span>
+          <span>{t("actions.newRule")}</span>
         </Button>
         <div className="text-right">
           <Button
@@ -122,7 +123,7 @@ export function Component() {
             isLoading={mutation.isPending}
             onClick={() => mutation.mutate()}
           >
-            Save
+            {t("actions.save")}
           </Button>
         </div>
       </div>

@@ -23,6 +23,6 @@ if (window.electron && getOS() === "Windows") {
 ReactDOM.createRoot($container).render(
   <React.StrictMode>
     <RouterProvider router={router} />
-    <ClickToComponent />
+    <ClickToComponent editor="cursor" />
   </React.StrictMode>,
 )
