@@ -2,12 +2,12 @@ import en from "../../../../locales/app/en.json"
 import common_en from "../../../../locales/common/en.json"
 import common_ja from "../../../../locales/common/ja.json"
 import common_zhCN from "../../../../locales/common/zh-CN.json"
-import common_zhtw from "../../../../locales/common/zh-tw.json"
+import common_zhTW from "../../../../locales/common/zh-TW.json"
 import external_en from "../../../../locales/external/en.json"
 import lang_en from "../../../../locales/lang/en.json"
 import lang_ja from "../../../../locales/lang/ja.json"
 import lang_zhCN from "../../../../locales/lang/zh-CN.json"
-import lang_zhtw from "../../../../locales/lang/zh-tw.json"
+import lang_zhTW from "../../../../locales/lang/zh-TW.json"
 import settings_en from "../../../../locales/settings/en.json"
 import shortcuts_en from "../../../../locales/shortcuts/en.json"
 /**
@@ -34,5 +34,5 @@ export const defaultResources = {
     lang: lang_ja,
     common: common_ja,
   },
-  "zh-tw": { lang: lang_zhtw, common: common_zhtw },
+  "zh-TW": { lang: lang_zhTW, common: common_zhTW },
 }
