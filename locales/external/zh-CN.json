@@ -13,21 +13,21 @@
   "invitation": {
     "activate": "激活",
     "codeOptions": {
-      "1": "寻找任何内测用户来邀请你。",
-      "2": "加入我们的 Discord 服务器，获取不定期的赠送机会。",
-      "3": "关注我们的 X 账号，获取不定期的赠送机会。"
+      "1": "寻找任何内测用户帮你生成邀请码",
+      "2": "加入官方 Discord 频道，不定期发放邀请码",
+      "3": "关注官方 X 账号动态，不定期发放邀请码"
     },
-    "earlyAccess": "Follow 目前处于早期访问阶段，需要邀请码才能使用。",
-    "earlyAccessMessage": "😰 抱歉，Follow 目前处于早期访问阶段，需要邀请码才能使用。",
-    "generateButton": "生成新邀请码",
-    "generateCost": "你可以花费 {{INVITATION_PRICE}} Power 生成一个邀请码给你的朋友。",
-    "getCodeMessage": "你可以通过以下方式获取邀请码：",
+    "earlyAccess": "Follow 目前处于早期体验阶段，需要邀请码才能使用",
+    "earlyAccessMessage": "😰 抱歉，Follow 目前处于早期体验阶段，需要邀请码才能使用",
+    "generateButton": "生成邀请码",
+    "generateCost": "花费 {{INVITATION_PRICE}} Power 生成一个邀请码给你的朋友。",
+    "getCodeMessage": "通过以下方式获取：",
     "title": "邀请码"
   },
   "login": {
     "backToWebApp": "返回网页版",
-    "continueWithGitHub": "通过 GitHub 继续",
-    "continueWithGoogle": "通过 Google 继续",
+    "continueWithGitHub": "使用 GitHub 继续",
+    "continueWithGoogle": "使用 Google 继续",
     "logInTo": "登录到 ",
     "openApp": "打开应用",
     "redirecting": "重定向中",
@@ -35,8 +35,8 @@
   },
   "redirect": {
     "continueInBrowser": "在浏览器中继续",
-    "instruction": "现在可以打开 {{APP_NAME}} 并安心地关闭此页面。",
+    "instruction": "现在可以打开 {{APP_NAME}} 并关闭此页面",
     "openApp": "打开 {{APP_NAME}}",
-    "successMessage": "你已成功连接到 {{APP_NAME}} 账户。"
+    "successMessage": "已成功连接到 {{APP_NAME}} 账户。"
   }
 }
