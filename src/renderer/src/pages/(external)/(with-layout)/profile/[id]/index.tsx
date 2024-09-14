@@ -1,10 +1,11 @@
+import { useWhoami } from "@renderer/atoms/user"
 import { PoweredByFooter } from "@renderer/components/common/PoweredByFooter"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { FollowIcon } from "@renderer/components/icons/follow"
 import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import { Button } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
-import { useAuthQuery, useTitle } from "@renderer/hooks/common"
+import { useAuthQuery, useI18n, useTitle } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { stopPropagation } from "@renderer/lib/dom"
@@ -14,6 +15,7 @@ import { DEEPLINK_SCHEME } from "@shared/constants"
 import { useParams } from "react-router-dom"
 
 export function Component() {
+  const t = useI18n()
   const { id } = useParams()
 
   const user = useAuthQuery(
@@ -30,6 +32,8 @@ export function Component() {
 
   const subscriptions = useUserSubscriptionsQuery(user.data?.id)
   useTitle(user.data?.name)
+  const me = useWhoami()
+  const isMe = user.data?.id === me?.id
 
   return user.isLoading ? (
     <LoadingCircle size="large" className="center h-48 w-full max-w-full" />
@@ -81,8 +85,14 @@ export function Component() {
                         onClick={stopPropagation}
                       >
                         <Button>
-                          <FollowIcon className="mr-1 size-3" />
-                          {APP_NAME}
+                          {isMe ? (
+                            t.common("words.edit")
+                          ) : (
+                            <>
+                              <FollowIcon className="mr-1 size-3" />
+                              {APP_NAME}
+                            </>
+                          )}
                         </Button>
                       </a>
                     </a>
