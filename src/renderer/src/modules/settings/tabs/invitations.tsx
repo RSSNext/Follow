@@ -80,7 +80,7 @@ export const SettingInvitations = () => {
       </Button>
       <Divider className="mb-6 mt-8" />
       <div className="flex flex-1 flex-col">
-        <ScrollArea.ScrollArea viewportClassName="max-h-[380px]">
+        <ScrollArea.ScrollArea>
           {invitations.data?.length ? (
             <Table className="mt-4">
               <TableHeader className="border-b">
@@ -91,7 +91,7 @@ export const SettingInvitations = () => {
                   <TableHead className="text-center" size="sm">
                     {t("invitation.tableHeaders.creationTime")}
                   </TableHead>
-                  <TableHead className="text-center" size="sm">
+                  <TableHead className="max-w-[12ch] text-center" size="sm">
                     {t("invitation.tableHeaders.usedBy")}
                   </TableHead>
                 </TableRow>

@@ -188,7 +188,7 @@ const FilterNoImageButton = () => {
         enabled ? "entry_list_header.show_all_items" : "entry_list_header.hide_no_image_items",
       )}
     >
-      <i className="i-mgc-photo-album-cute-re" />
+      <i className={!enabled ? "i-mgc-photo-album-cute-re" : "i-mgc-photo-album-cute-fi"} />
     </ActionButton>
   )
 }
