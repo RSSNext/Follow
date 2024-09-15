@@ -1,0 +1,42 @@
+{
+  "feed": {
+    "follow_one": "Folgen",
+    "follow_other": "Follows",
+    "followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} mit {{readCount}} {{readNoun}} auf {{appName}}",
+    "read_one": "Lesen",
+    "read_other": "Lesungen"
+  },
+  "header": {
+    "app": "App",
+    "download": "Herunterladen"
+  },
+  "invitation": {
+    "activate": "Aktivieren",
+    "codeOptions": {
+      "1": "Suche nach einem Alpha-Testbenutzer, der dich einlädt.",
+      "2": "Treten Sie unserem Discord-Server bei, um gelegentliche Giveaways zu erhalten.",
+      "3": "Folgen Sie unserem X-Konto für gelegentliche Giveaways."
+    },
+    "earlyAccess": "Follow befindet sich derzeit in der Early-Access-Phase und erfordert einen Einladungscode.",
+    "earlyAccessMessage": "😰 Entschuldigung, Follow befindet sich derzeit in der Early-Access-Phase und erfordert einen Einladungscode.",
+    "generateButton": "Neuen Code generieren",
+    "generateCost": "Sie können {{INVITATION_PRICE}} Power ausgeben, um einen Einladungscode für Ihre Freunde zu generieren.",
+    "getCodeMessage": "Sie können auf folgende Weise einen Einladungscode erhalten:",
+    "title": "Einladungscode"
+  },
+  "login": {
+    "backToWebApp": "Zurück zur Web-App",
+    "continueWithGitHub": "Mit GitHub fortfahren",
+    "continueWithGoogle": "Mit Google fortfahren",
+    "logInTo": "Anmelden bei ",
+    "openApp": "App öffnen",
+    "redirecting": "Weiterleitung",
+    "welcomeTo": "Willkommen bei "
+  },
+  "redirect": {
+    "continueInBrowser": "Im Browser fortfahren",
+    "instruction": "Jetzt ist es an der Zeit, {{APP_NAME}} zu öffnen und diese Seite sicher zu schließen.",
+    "openApp": "{{APP_NAME}} öffnen",
+    "successMessage": "Sie haben sich erfolgreich mit dem {{APP_NAME}}-Konto verbunden."
+  }
+}

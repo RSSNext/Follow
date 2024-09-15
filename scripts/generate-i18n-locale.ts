@@ -36,6 +36,7 @@ const locales = [
   "da-at",
   "da-ch",
   "da",
+  "de",
   "dv",
 
   "el",
