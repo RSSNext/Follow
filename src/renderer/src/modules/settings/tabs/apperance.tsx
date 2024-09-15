@@ -79,6 +79,12 @@ export const SettingAppearance = () => {
             label: t("appearance.reader_render_inline_style.label"),
             description: t("appearance.reader_render_inline_style.description"),
           }),
+
+          defineItem("compactMode", {
+            label: t("appearance.compact_mode.label"),
+            description: t("appearance.compact_mode.description"),
+          }),
+
           {
             type: "title",
             value: t("appearance.misc"),

@@ -25,6 +25,7 @@ export interface UISettings {
   uiFontFamily: string
   readerFontFamily: string
   readerRenderInlineStyle: boolean
+  compactMode: boolean
   codeHighlightTheme: string
   guessCodeLanguage: boolean
 
