@@ -68,13 +68,13 @@ const langChangedHandler = async (lang: string) => {
       }
     }
   } else {
-    const res = await eval(
-      `import('/locales/${lang}.js').then((res) => res?.default || res)`,
-    ).catch(() => {
-      toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
-      loadingLangLock.delete(lang)
-      return {}
-    })
+    const res = await import(`/locales/${lang}.js`)
+      .then((res) => res?.default || res)
+      .catch(() => {
+        toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
+        loadingLangLock.delete(lang)
+        return {}
+      })
 
     if (isEmptyObject(res)) {
       return
