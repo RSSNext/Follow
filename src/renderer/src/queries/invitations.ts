@@ -19,4 +19,10 @@ export const invitations = {
       const res = await apiClient.invitations.$get()
       return res.data
     }),
+
+  limitation: () =>
+    defineQuery(["invitations", "limitation"], async () => {
+      const res = await apiClient.invitations.limitation.$get()
+      return res.data
+    }),
 }
