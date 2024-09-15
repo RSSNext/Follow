@@ -4943,6 +4943,36 @@ declare const _routes: hono_hono_base.HonoBase<
         status: 200
       }
     }
+    "/feeds/claim/list": {
+      $get: {
+        input: {}
+        output: {
+          code: 0
+          data: {
+            feed: {
+              description: string | null
+              title: string | null
+              id: string
+              image: string | null
+              url: string
+              siteUrl: string | null
+              checkedAt: string
+              lastModifiedHeader: string | null
+              etagHeader: string | null
+              ttl: number | null
+              errorMessage: string | null
+              errorAt: string | null
+              ownerUserId: string | null
+            }
+            subscriptionCount: number
+            tipAmount: number
+            entryCount: number
+          }[]
+        }
+        outputFormat: "json" | "text"
+        status: 200
+      }
+    }
     "/feeds": {
       $get: {
         input: {
