@@ -8,6 +8,7 @@ import { useEntry } from "@renderer/store/entry/hooks"
 import { useImageDimensions } from "@renderer/store/image"
 import type { PropsWithChildren } from "react"
 import { memo, useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { usePreviewMedia } from "../../../components/ui/media/hooks"
 import { EntryItemWrapper } from "../layouts/EntryItemWrapper"
@@ -24,6 +25,7 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
 
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
+  const { t } = useTranslation()
   const previewMedia = usePreviewMedia()
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
@@ -46,7 +48,7 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
         ) : (
           <div className="center aspect-square  w-full flex-col gap-1 rounded-md bg-muted text-xs text-muted-foreground">
             <i className="i-mgc-sad-cute-re size-6" />
-            No media available
+            {t("entry_content.no_content")}
           </div>
         )}
       </div>
@@ -97,7 +99,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
             />
           </MasonryItemFixedDimensionWrapper>
         ) : (
-          <div className="center aspect-video flex-col gap-1 bg-muted text-xs text-muted-foreground">
+          <div className="center aspect-video flex-col gap-1 rounded-md bg-muted text-xs text-muted-foreground">
             <i className="i-mgc-sad-cute-re size-6" />
             No media available
           </div>
