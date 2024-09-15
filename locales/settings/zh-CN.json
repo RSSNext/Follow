@@ -188,7 +188,7 @@
   "wallet.transactions.you": "你",
   "wallet.withdraw.addressLabel": "以太坊地址",
   "wallet.withdraw.amountLabel": "数量",
-  "wallet.withdraw.availableBalance": "钱包中有 <Balance></Balance> 可提取的 Power",
+  "wallet.withdraw.availableBalance": "钱包中有 <Balance></Balance> 个可提取的 Power",
   "wallet.withdraw.button": "提取",
   "wallet.withdraw.error": "提取失败：{{error}}",
   "wallet.withdraw.modalTitle": "提取 Power",
