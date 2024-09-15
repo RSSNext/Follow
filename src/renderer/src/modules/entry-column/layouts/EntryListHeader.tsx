@@ -70,7 +70,7 @@ export const EntryListHeader: FC<{
     <div
       ref={containerRef}
       className={cn(
-        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-200",
+        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
         titleStyleBasedView[view],
       )}
     >
