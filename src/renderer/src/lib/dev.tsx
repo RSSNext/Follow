@@ -53,3 +53,11 @@ export const attachOpenInEditor = (stack: string) => {
 const openInEditor = (file: string) => {
   fetch(`/__open-in-editor?file=${encodeURIComponent(`${file}`)}`)
 }
+
+export const debugStack = () => {
+  try {
+    throw new Error("debug stack")
+  } catch (e: any) {
+    console.error(e.stack)
+  }
+}

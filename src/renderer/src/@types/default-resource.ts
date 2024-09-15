@@ -3,15 +3,21 @@ import common_ardz from "../../../../locales/common/ar-dz.json"
 import common_arma from "../../../../locales/common/ar-ma.json"
 import common_arsa from "../../../../locales/common/ar-sa.json"
 import common_en from "../../../../locales/common/en.json"
+import common_fr from "../../../../locales/common/fr.json"
 import common_ja from "../../../../locales/common/ja.json"
+import common_pt from "../../../../locales/common/pt.json"
 import common_zhCN from "../../../../locales/common/zh-CN.json"
+import common_zhTW from "../../../../locales/common/zh-TW.json"
 import external_en from "../../../../locales/external/en.json"
 import lang_ardz from "../../../../locales/lang/ar-dz.json"
 import lang_arma from "../../../../locales/lang/ar-ma.json"
 import lang_arsa from "../../../../locales/lang/ar-sa.json"
 import lang_en from "../../../../locales/lang/en.json"
+import lang_fr from "../../../../locales/lang/fr.json"
 import lang_ja from "../../../../locales/lang/ja.json"
+import lang_pt from "../../../../locales/lang/pt.json"
 import lang_zhCN from "../../../../locales/lang/zh-CN.json"
+import lang_zhTW from "../../../../locales/lang/zh-TW.json"
 import settings_en from "../../../../locales/settings/en.json"
 import shortcuts_en from "../../../../locales/shortcuts/en.json"
 /**
@@ -34,6 +40,7 @@ export const defaultResources = {
     lang: lang_zhCN,
     common: common_zhCN,
   },
+  "zh-tw": { lang: lang_zhTW, common: common_zhTW },
   ja: {
     lang: lang_ja,
     common: common_ja,
@@ -41,4 +48,6 @@ export const defaultResources = {
   "ar-dz": { lang: lang_ardz, common: common_ardz },
   "ar-sa": { lang: lang_arsa, common: common_arsa },
   "ar-ma": { lang: lang_arma, common: common_arma },
+  fr: { lang: lang_fr, common: common_fr },
+  pt: { lang: lang_pt, common: common_pt },
 }

@@ -1,4 +1,4 @@
-const langs = ["en", "ja", "zh-CN", "ar-dz", "ar-sa", "ar-ma"]
+const langs = ["en", "ja", "zh-CN", "zh-TW", "pt", "fr", "ar-dz", "ar-sa", "ar-ma"]
 export const currentSupportedLanguages = langs.sort()
 export const dayjsLocaleImportMap = {
   en: ["en", () => import("dayjs/locale/en")],
@@ -7,6 +7,9 @@ export const dayjsLocaleImportMap = {
   ["ar-dz"]: ["ar-dz", () => import("dayjs/locale/ar-dz")],
   ["ar-sa"]: ["ar-sa", () => import("dayjs/locale/ar-sa")],
   ["ar-ma"]: ["ar-ma", () => import("dayjs/locale/ar-ma")],
+  ["fr"]: ["fr", () => import("dayjs/locale/fr")],
+  ["pt"]: ["pt", () => import("dayjs/locale/pt")],
+  ["zh-TW"]: ["zh-tw", () => import("dayjs/locale/zh-tw")],
 }
 export const ns = ["app", "common", "lang", "settings", "shortcuts"] as const
 export const defaultNS = "app" as const

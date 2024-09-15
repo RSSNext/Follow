@@ -131,6 +131,7 @@
   "invitation.generateButton": "Generate new code",
   "invitation.generateCost": "You can spend {{INVITATION_PRICE}} <PowerIcon /> Power to generate an invitation code for your friends.",
   "invitation.getCodeMessage": "You can get an invitation code through the following methods:",
+  "invitation.limitationMessage": "Based on your usage time, you can generate up to {{limitation}} invitation codes.",
   "invitation.newInvitationSuccess": "🎉 New invitation generated, invite code is copied",
   "invitation.noInvitations": "No invitations",
   "invitation.notUsed": "Not used",

@@ -33,6 +33,7 @@ import { toast } from "sonner"
 export const SettingInvitations = () => {
   const { t } = useTranslation("settings")
   const invitations = useAuthQuery(Queries.invitations.list())
+  const limitation = useAuthQuery(Queries.invitations.limitation())
 
   const { present } = useModalStack()
   const presentUserProfile = usePresentUserProfileModal("drawer")
@@ -54,7 +55,16 @@ export const SettingInvitations = () => {
               PowerIcon: <i className="i-mgc-power ml-1 mr-0.5 text-base text-accent" />,
             }}
             i18nKey="invitation.generateCost"
-           />
+          />
+        </p>
+        <p>
+          <Trans
+            ns="settings"
+            values={{
+              limitation: limitation.data,
+            }}
+            i18nKey="invitation.limitationMessage"
+          />
         </p>
       </div>
       <Button
@@ -174,7 +184,7 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
             div: <div />,
           }}
           i18nKey="invitation.confirmModal.message"
-         />
+        />
       </div>
       <div>{t("invitation.confirmModal.confirm")}</div>
       <div className="mt-4 flex items-center justify-end gap-3">
