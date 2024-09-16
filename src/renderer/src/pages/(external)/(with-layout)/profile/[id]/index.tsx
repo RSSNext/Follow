@@ -70,13 +70,20 @@ export function Component() {
                       target="_blank"
                     >
                       <FeedIcon fallback feed={subscription.feeds} size={22} className="mr-3" />
-                      <div className={cn("w-0 flex-1 grow", "group-hover:grow-[0.85]")}>
+                      <div
+                        className={cn(
+                          "flex w-0 flex-1 grow flex-col justify-center",
+                          "group-hover:grow-[0.85]",
+                        )}
+                      >
                         <div className="truncate font-medium leading-none">
                           {subscription.feeds?.title}
                         </div>
-                        <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
-                          {subscription.feeds?.description}
-                        </div>
+                        {subscription.feeds?.description && (
+                          <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
+                            {subscription.feeds.description}
+                          </div>
+                        )}
                       </div>
                     </a>
                     <span className="center absolute inset-y-0 right-0 opacity-0 transition-opacity group-hover:opacity-100">
