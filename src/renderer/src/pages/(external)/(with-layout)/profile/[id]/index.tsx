@@ -5,14 +5,12 @@ import { FollowIcon } from "@renderer/components/icons/follow"
 import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import { Button } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
-import { useModalStack } from "@renderer/components/ui/modal"
+import { usePresentFeedFormModal } from "@renderer/hooks/biz/useFeedFormModal"
 import { useAuthQuery, useI18n, useTitle } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { cn } from "@renderer/lib/utils"
-import { FeedForm } from "@renderer/modules/discover/feed-form"
 import { useUserSubscriptionsQuery } from "@renderer/modules/profile/hooks"
-import { DEEPLINK_SCHEME } from "@shared/constants"
 import { useParams } from "react-router-dom"
 
 export function Component() {
@@ -35,7 +33,7 @@ export function Component() {
   useTitle(user.data?.name)
   const me = useWhoami()
   const isMe = user.data?.id === me?.id
-  const { present } = useModalStack()
+  const presentFeedFormModal = usePresentFeedFormModal()
 
   return user.isLoading ? (
     <LoadingCircle size="large" className="center h-48 w-full max-w-full" />
@@ -85,16 +83,8 @@ export function Component() {
                       <Button
                         onClick={(e) => {
                           e.stopPropagation()
-                          if (me) {
-                            present({
-                              title: t("sidebar.feed_actions.edit_feed"),
-                              content: ({ dismiss }) => (
-                                <FeedForm asWidget id={subscription.feedId} onSuccess={dismiss} />
-                              ),
-                            })
-                          } else {
-                            window.location.href = `${DEEPLINK_SCHEME}add?id=${subscription.feeds?.id}`
-                          }
+
+                          presentFeedFormModal(subscription.feedId)
                         }}
                       >
                         {isMe ? (

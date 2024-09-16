@@ -4,6 +4,7 @@ import { Button } from "@renderer/components/ui/button"
 import { ListItemHoverOverlay } from "@renderer/components/ui/list-item-hover-overlay"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { views } from "@renderer/constants"
+import { usePresentFeedFormModal } from "@renderer/hooks/biz/useFeedFormModal"
 import { useTitle } from "@renderer/hooks/common"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn } from "@renderer/lib/utils"
@@ -15,7 +16,6 @@ import { VideoItem } from "@renderer/modules/entry-column/Items/video-item"
 import type { UniversalItemProps } from "@renderer/modules/entry-column/types"
 import { useEntriesPreview } from "@renderer/queries/entries"
 import { useFeed } from "@renderer/queries/feed"
-import { DEEPLINK_SCHEME } from "@shared/constants"
 import type { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { useParams, useSearchParams } from "react-router-dom"
@@ -60,6 +60,7 @@ export function Component() {
   }
   const { t } = useTranslation("external")
   useTitle(feed.data?.feed.title)
+  const presentFeedFormModal = usePresentFeedFormModal()
   return (
     <>
       {feed.isLoading ? (
@@ -88,12 +89,16 @@ export function Component() {
                 appName: APP_NAME,
               })}
             </div>
-            <a className="mb-8 cursor-default" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
-              <Button>
+            <span className="mb-8 cursor-default">
+              <Button
+                onClick={() => {
+                  presentFeedFormModal(id!)
+                }}
+              >
                 <FollowIcon className="mr-1 size-3" />
                 {APP_NAME}
               </Button>
-            </a>
+            </span>
             <div
               className={cn(
                 "w-full pb-12",
