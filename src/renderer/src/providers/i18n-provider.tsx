@@ -1,9 +1,7 @@
-import {
-  currentSupportedLanguages,
-  dayjsLocaleImportMap,
-} from "@renderer/@types/constants"
+import { currentSupportedLanguages, dayjsLocaleImportMap } from "@renderer/@types/constants"
 import { defaultResources } from "@renderer/@types/default-resource"
 import { getGeneralSettings, setGeneralSetting } from "@renderer/atoms/settings/general"
+import { IS_MANUAL_CHANGE_LANGUAGE_KEY } from "@renderer/constants"
 import { fallbackLanguage, i18nAtom, LocaleCache } from "@renderer/i18n"
 import { EventBus } from "@renderer/lib/event-bus"
 import { jotaiStore } from "@renderer/lib/jotai"
@@ -110,17 +108,6 @@ export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const callOnce = useRef(false)
   const detectOnce = useRef(false)
-  useLayoutEffect(() => {
-    if (detectOnce.current) return
-    const languageDetector = new LanguageDetector()
-    const userLang = languageDetector.detect()
-    if (!userLang) return
-    const firstUserLang = Array.isArray(userLang) ? userLang[0] : userLang
-    if (currentSupportedLanguages.includes(firstUserLang)) {
-      setGeneralSetting("language", firstUserLang)
-    }
-    detectOnce.current = true
-  }, [])
 
   useLayoutEffect(() => {
     const i18next = currentI18NInstance
@@ -131,6 +118,19 @@ export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
       i18next.off("languageChanged")
     }
   }, [currentI18NInstance])
+
+  useLayoutEffect(() => {
+    if (localStorage.getItem(IS_MANUAL_CHANGE_LANGUAGE_KEY)) return
+    if (detectOnce.current) return
+    const languageDetector = new LanguageDetector()
+    const userLang = languageDetector.detect()
+    if (!userLang) return
+    const firstUserLang = Array.isArray(userLang) ? userLang[0] : userLang
+    if (currentSupportedLanguages.includes(firstUserLang)) {
+      setGeneralSetting("language", firstUserLang)
+    }
+    detectOnce.current = true
+  }, [])
 
   useLayoutEffect(() => {
     if (callOnce.current) return

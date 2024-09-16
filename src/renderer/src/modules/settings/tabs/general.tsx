@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
+import { IS_MANUAL_CHANGE_LANGUAGE_KEY } from "@renderer/constants"
 import { fallbackLanguage } from "@renderer/i18n"
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
@@ -213,6 +214,7 @@ export const LanguageSelector = () => {
         defaultValue={finalRenderLanguage}
         value={finalRenderLanguage}
         onValueChange={(value) => {
+          localStorage.setItem(IS_MANUAL_CHANGE_LANGUAGE_KEY, "true")
           setGeneralSetting("language", value as string)
           i18n.changeLanguage(value as string)
         }}
