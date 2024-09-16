@@ -1,7 +1,7 @@
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindow } from "electron"
-import { clipboard, dialog, screen } from "electron"
+import { app, clipboard, dialog, screen } from "electron"
 
 import { isWindows11 } from "../env"
 import { downloadFile } from "../lib/download"
@@ -200,6 +200,8 @@ export const appRoute = {
     if (!senderWindow) return
     callGlobalContextMethod(senderWindow, "toast.success", ["Download success!"])
   }),
+
+  getAppPath: t.procedure.action(async () => app.getAppPath()),
 }
 interface Sender extends Electron.WebContents {
   getOwnerBrowserWindow: () => Electron.BrowserWindow | null

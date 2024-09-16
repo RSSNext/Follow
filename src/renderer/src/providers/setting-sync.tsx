@@ -1,8 +1,13 @@
+import { langLoadingLockMapAtom } from "@renderer/atoms/lang"
+import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
 import { useUISettingValue } from "@renderer/atoms/settings/ui"
 import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import { useSyncThemeark } from "@renderer/hooks/common"
 import { tipcClient } from "@renderer/lib/client"
+import { loadLanguageAndApply } from "@renderer/lib/load-language"
 import { feedUnreadActions } from "@renderer/store/unread"
+import i18next from "i18next"
+import { useSetAtom } from "jotai"
 import { useEffect, useInsertionEffect, useLayoutEffect } from "react"
 
 const useUISettingSync = () => {
@@ -51,8 +56,24 @@ const useUXSettingSync = () => {
     document.documentElement.dataset.motionReduce = reduceMotion ? "true" : "false"
   }, [reduceMotion])
 }
+
+const useLanguageSync = () => {
+  const setLoadingLanguageLockMap = useSetAtom(langLoadingLockMapAtom)
+  const language = useGeneralSettingKey("language")
+  useEffect(() => {
+    setLoadingLanguageLockMap((state) => ({ ...state, [language]: true }))
+    loadLanguageAndApply(language as string)
+      .then(() => {
+        i18next.changeLanguage(language as string)
+      })
+      .finally(() => {
+        setLoadingLanguageLockMap((state) => ({ ...state, [language]: false }))
+      })
+  }, [setLoadingLanguageLockMap, language])
+}
 export const SettingSync = () => {
   useUISettingSync()
   useUXSettingSync()
+  useLanguageSync()
   return null
 }

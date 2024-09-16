@@ -139,6 +139,10 @@ export const useEntriesByView = ({
   const [mergedEntries, setMergedEntries] = useState<string[]>([])
 
   const entryIdsAsDeps = entryIds.toString()
+
+  useEffect(() => {
+    prevEntryIdsRef.current = []
+  }, [feedId])
   useEffect(() => {
     if (!prevEntryIdsRef.current) {
       prevEntryIdsRef.current = entryIds

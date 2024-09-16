@@ -1,7 +1,7 @@
 {
   "feed": {
-    "follow_one": "フォロー",
-    "follow_other": "フォロー",
+    "follower_one": "フォロー",
+    "follower_other": "フォロー",
     "followsAndReads": "{{appName}} で {{subscriptionCount}} {{subscriptionNoun}} と {{readCount}} {{readNoun}}",
     "read_one": "読んだ",
     "read_other": "既読"

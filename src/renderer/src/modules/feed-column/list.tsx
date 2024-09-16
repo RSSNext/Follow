@@ -10,7 +10,7 @@ import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn, sortByAlphabet } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
-import { useFeedStore } from "@renderer/store/feed"
+import { getPreferredTitle, useFeedStore } from "@renderer/store/feed"
 import { getSubscriptionByFeedId, useSubscriptionByView } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { AnimatePresence, m } from "framer-motion"
@@ -305,7 +305,7 @@ const SortByAlphabeticalList = ({ view, expansion, data }: FeedListProps) => {
       if (!isSingle || hascategoryNameNotDefault) {
         map[categoryName] = categoryName
       } else {
-        map[categoryName] = feed.title!
+        map[categoryName] = getPreferredTitle(feed)!
       }
     }
     return map

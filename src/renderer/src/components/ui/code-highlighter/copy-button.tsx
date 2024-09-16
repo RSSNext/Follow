@@ -23,7 +23,8 @@ const copyIconVariants: Variants = {
 
 export const CopyButton: Component<{
   value: string
-}> = ({ value, className }) => {
+  style?: React.CSSProperties
+}> = ({ value, className, style }) => {
   const [copied, setCopied] = useState(false)
   const copiedTimerRef = useRef<any>()
   const handleCopy = useCallback(() => {
@@ -45,6 +46,7 @@ export const CopyButton: Component<{
 
         className,
       )}
+      style={style}
     >
       <AnimatePresence mode="wait">
         {copied ? (

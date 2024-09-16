@@ -61,7 +61,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
         entryHistory.readCount > 10 &&
         entryHistory.userIds &&
         entryHistory.userIds.length >= 10 && (
-          <HoverCard open>
+          <HoverCard>
             <HoverCardTrigger asChild>
               <button
                 type="button"
@@ -69,7 +69,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
                   right: "80px",
                   zIndex: 11,
                 }}
-                className="relative flex size-7 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
+                className="no-drag-region relative flex size-7 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
               >
                 <span className="text-[10px] font-medium text-muted-foreground">
                   +{Math.min(entryHistory.readCount - 10, 99)}
@@ -94,7 +94,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
                     .filter((id) => id !== me?.id)
                     .slice(10)
                     .map((userId) => (
-                      <EntryRow userId={userId} key={userId} />
+                      <EntryUserRow userId={userId} key={userId} />
                     ))}
                 </ul>
               </HoverCardContent>
@@ -105,7 +105,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
   )
 }
 
-const EntryRow: Component<{ userId: string }> = memo(({ userId }) => {
+const EntryUserRow: Component<{ userId: string }> = memo(({ userId }) => {
   const user = useUserById(userId)
   const presentUserProfile = usePresentUserProfileModal("drawer")
   if (!user) return null
