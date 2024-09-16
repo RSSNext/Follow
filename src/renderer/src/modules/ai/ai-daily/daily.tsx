@@ -255,7 +255,7 @@ const createRelatedEntryLink = (variant: "toast" | "modal") => (props: LinkProps
         } else {
           present({
             ...basePresentProps,
-
+            autoFocus: false,
             modalClassName:
               "relative mx-auto mt-[10vh] scrollbar-none max-w-full overflow-auto px-2 lg:max-w-[65rem] lg:p-0",
             // eslint-disable-next-line @eslint-react/no-nested-components
