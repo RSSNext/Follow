@@ -23,8 +23,10 @@ import { IS_MANUAL_CHANGE_LANGUAGE_KEY } from "@renderer/constants"
 import { fallbackLanguage } from "@renderer/i18n"
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
+import { loadLanguageAndApply } from "@renderer/lib/load-language"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useQuery } from "@tanstack/react-query"
+import i18next from "i18next"
 import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -200,7 +202,7 @@ export const VoiceSelector = () => {
 }
 
 export const LanguageSelector = () => {
-  const { t, i18n } = useTranslation("settings")
+  const { t } = useTranslation("settings")
   const { t: langT } = useTranslation("lang")
   const language = useGeneralSettingSelector((state) => state.language)
 
@@ -215,8 +217,10 @@ export const LanguageSelector = () => {
         value={finalRenderLanguage}
         onValueChange={(value) => {
           localStorage.setItem(IS_MANUAL_CHANGE_LANGUAGE_KEY, "true")
-          setGeneralSetting("language", value as string)
-          i18n.changeLanguage(value as string)
+          loadLanguageAndApply(value as string).then(() => {
+            i18next.changeLanguage(value as string)
+            setGeneralSetting("language", value as string)
+          })
         }}
       >
         <SelectTrigger size="sm" className="w-48">
