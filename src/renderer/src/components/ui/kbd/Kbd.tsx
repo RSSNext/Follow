@@ -278,7 +278,7 @@ function MaterialSymbolsBackspaceOutlineSharp(props: React.SVGProps<SVGSVGElemen
       <path
         fill="currentColor"
         d="M7.95 19L3 12l4.95-7H21v14zM9 17h10V7H9l-3.55 5zm2.4-1l2.6-2.6l2.6 2.6l1.4-1.4l-2.6-2.6L18 9.4L16.6 8L14 10.6L11.4 8L10 9.4l2.6 2.6l-2.6 2.6zm7.6 1V7z"
-       />
+      />
     </svg>
   )
 }
