@@ -210,7 +210,11 @@ function EntryColumnImpl() {
               <EntryEmptyList />
             )
           ) : view && views[view].gridMode ? (
-            <ListGird virtuosoOptions={virtuosoOptions} virtuosoRef={virtuosoRef} />
+            <ListGird
+              virtuosoOptions={virtuosoOptions}
+              virtuosoRef={virtuosoRef}
+              hasNextPage={entries.hasNextPage}
+            />
           ) : (
             <EntryList
               {...virtuosoOptions}
@@ -228,12 +232,14 @@ function EntryColumnImpl() {
 const ListGird = ({
   virtuosoOptions,
   virtuosoRef,
+  hasNextPage,
 }: {
   virtuosoOptions: Omit<VirtuosoGridProps<string, unknown>, "data" | "endReached"> & {
     data: string[]
     endReached: () => Promise<any>
   }
   virtuosoRef: React.RefObject<VirtuosoHandle>
+  hasNextPage: boolean
 }) => {
   const masonry = useUISettingKey("pictureViewMasonry")
   const view = useRouteParamsSelector((s) => s.view)
@@ -270,7 +276,7 @@ const ListGird = ({
 
   const hasFilteredContent = nextData.length < virtuosoOptions.data.length
 
-  const FilteredContentTip = hasFilteredContent && (
+  const FilteredContentTip = hasFilteredContent && !hasNextPage && (
     <div className="center mb-6 flex flex-col gap-5">
       <i className="i-mgc-photo-album-cute-fi size-12" />
       <div>{t("entry_column.filtered_content_tip_2")}</div>
