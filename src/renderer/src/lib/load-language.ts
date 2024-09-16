@@ -7,6 +7,8 @@ import dayjs from "dayjs"
 import i18next from "i18next"
 import { toast } from "sonner"
 
+import { tipcClient } from "./client"
+
 const loadingLangLock = new Set<string>()
 const loadedLangs = new Set<string>([fallbackLanguage])
 
@@ -59,7 +61,15 @@ export const loadLanguageAndApply = async (lang: string) => {
       }
     }
   } else {
-    const res = await eval(`import('/locales/${lang}.js')`)
+    let importFilePath = ""
+
+    if (window.electron) {
+      const electronAsarPath = await tipcClient?.getAppPath()
+      importFilePath = `${electronAsarPath}/dist/renderer/locales/${lang}.js`
+    } else {
+      importFilePath = `/locales/${lang}.js`
+    }
+    const res = await eval(`import('${importFilePath}')`)
       .then((res: any) => res?.default || res)
       .catch(() => {
         toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)

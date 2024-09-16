@@ -1,4 +1,5 @@
 import { currentSupportedLanguages } from "@renderer/@types/constants"
+import { langLoadingLockMapAtom } from "@renderer/atoms/lang"
 import {
   setGeneralSetting,
   useGeneralSettingSelector,
@@ -24,12 +25,11 @@ import { IS_MANUAL_CHANGE_LANGUAGE_KEY } from "@renderer/constants"
 import { fallbackLanguage } from "@renderer/i18n"
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
-import { loadLanguageAndApply } from "@renderer/lib/load-language"
 import { cn } from "@renderer/lib/utils"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useQuery } from "@tanstack/react-query"
-import i18next from "i18next"
-import { useCallback, useEffect, useState } from "react"
+import { useAtom } from "jotai"
+import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
 import { SettingsTitle } from "../title"
@@ -212,9 +212,8 @@ export const LanguageSelector = () => {
     ? language
     : fallbackLanguage
 
-  const [loadingLanguageLockMap, setLoadingLanguageLockMap] = useState(
-    {} as Record<string, boolean>,
-  )
+  const [loadingLanguageLockMap] = useAtom(langLoadingLockMapAtom)
+
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("general.language")}</span>
@@ -224,16 +223,7 @@ export const LanguageSelector = () => {
         disabled={loadingLanguageLockMap[finalRenderLanguage]}
         onValueChange={(value) => {
           localStorage.setItem(IS_MANUAL_CHANGE_LANGUAGE_KEY, "true")
-          setLoadingLanguageLockMap((state) => ({ ...state, [value]: true }))
-          loadLanguageAndApply(value as string)
-            .then(() => {
-              i18next.changeLanguage(value as string)
-
-              setGeneralSetting("language", value as string)
-            })
-            .finally(() => {
-              setLoadingLanguageLockMap((state) => ({ ...state, [value]: false }))
-            })
+          setGeneralSetting("language", value as string)
         }}
       >
         <SelectTrigger
