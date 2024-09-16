@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [0.0.1-alpha.12](https://github.com/RSSNext/follow/compare/v0.0.1-alpha.3...v0.0.1-alpha.12) (2024-09-16)
+## [0.0.1-alpha.13](https://github.com/RSSNext/follow/compare/v0.0.1-alpha.3...v0.0.1-alpha.13) (2024-09-16)
 
 
 ### Bug Fixes
@@ -53,6 +53,7 @@
 * clean local async data ([ae26dd7](https://github.com/RSSNext/follow/commit/ae26dd7763fe32990086e76fa896ec09dec170cd))
 * config `__dirname` resolve ([f3f3cac](https://github.com/RSSNext/follow/commit/f3f3cac2b4ff0865f863b848397f0e27caa435b3))
 * context menu sub menu ([9352dd1](https://github.com/RSSNext/follow/commit/9352dd1a2a2d4d30c04cb41a22b95a0dda3eeb40))
+* copy grammatical ([0267b08](https://github.com/RSSNext/follow/commit/0267b080c01733671ac4fc12cfd5ec9c1807c928))
 * copywrite ([8967d20](https://github.com/RSSNext/follow/commit/8967d20102bc1ad6f2f94b38909c7abfca6168d1))
 * corner player tooltip bg color ([16b91f9](https://github.com/RSSNext/follow/commit/16b91f9a7d3267f34f525c2e820efff6e1cbc049))
 * correct follower word ([#438](https://github.com/RSSNext/follow/issues/438)) ([e31e343](https://github.com/RSSNext/follow/commit/e31e3433dfdafcab2276f2794065af81ca1f75fe))
@@ -73,6 +74,7 @@
 * draggable panel dragging bg color ([8de7078](https://github.com/RSSNext/follow/commit/8de7078d10b733456c480117ba8ed8d2166e20b9))
 * drawer edge shadow style ([cbb8649](https://github.com/RSSNext/follow/commit/cbb8649fde99e7a800153ad35aa041aaf44e6dcf))
 * duplicated separator ([6e1ee50](https://github.com/RSSNext/follow/commit/6e1ee50536ded4b65f76cdb35bdf98c4657a1a74))
+* dynamic load i18n resource in electron prod ([2328648](https://github.com/RSSNext/follow/commit/232864852a934d571a2b47af7f4d02c787cc8250))
 * eagle icon ([021dfab](https://github.com/RSSNext/follow/commit/021dfab5eeb888f155982cc1cd3636b2b4ca52a3))
 * electron exit webview fullscreen sidebar color ([bc7914f](https://github.com/RSSNext/follow/commit/bc7914f803939897d817080972e5307cf58f8caf))
 * electron external window size option ([399d5d7](https://github.com/RSSNext/follow/commit/399d5d7a2cda5c7a7f9ce91ae9b9125f9ece7c54))
@@ -134,6 +136,7 @@
 * invitation page error display area ([5915357](https://github.com/RSSNext/follow/commit/59153573d8a5d368adfe41b0f5cebc4d6d44a9f3))
 * **item:** center content if no desc ([18e26a4](https://github.com/RSSNext/follow/commit/18e26a41c3cf80316bc97c44a1239e6ec45c5db9))
 * kbd cls and set home scope in shortcuts guideline ([d9999a3](https://github.com/RSSNext/follow/commit/d9999a3fc6cfeae0f3b45b6390cf79d9135566b7))
+* language setting syncing ([fa1dc5d](https://github.com/RSSNext/follow/commit/fa1dc5df35a2225bb22320a8fc049d3c0b75fa5b))
 * link underline style when selected ([781b120](https://github.com/RSSNext/follow/commit/781b1200f8eae3f61b39dc53151c5a688fa36d1b))
 * lint ([ef0d80d](https://github.com/RSSNext/follow/commit/ef0d80d8546c804b1b52c58fca7640d2f541188a))
 * list item overlay style ([20ef773](https://github.com/RSSNext/follow/commit/20ef77342e73d205409644386c162dc164da009e))
