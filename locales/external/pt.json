@@ -1,0 +1,42 @@
+{
+  "feed": {
+    "follower_one": "seguir",
+    "follower_other": "seguimentos",
+    "followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} com {{readCount}} {{readNoun}} no {{appName}}",
+    "read_one": "leitura",
+    "read_other": "leituras"
+  },
+  "header": {
+    "app": "App",
+    "download": "Descarregar"
+  },
+  "invitation": {
+    "activate": "Ativar",
+    "codeOptions": {
+      "1": "Procure um utilizador de teste alpha que o convide.",
+      "2": "Junte-se ao nosso servidor Discord para receber ofertas ocasionais.",
+      "3": "Siga a nossa conta no X para receber ofertas ocasionais."
+    },
+    "earlyAccess": "O Follow está atualmente em acesso antecipado e requer um código de convite para ser utilizado.",
+    "earlyAccessMessage": "😰 Lamentamos, o Follow está atualmente em acesso antecipado e requer um código de convite.",
+    "generateButton": "Gerar novo código",
+    "generateCost": "Pode gastar {{INVITATION_PRICE}} Power para gerar um código de convite para os seus amigos.",
+    "getCodeMessage": "Pode obter um código de convite das seguintes maneiras:",
+    "title": "Código de Convite"
+  },
+  "login": {
+    "backToWebApp": "Voltar à App Web",
+    "continueWithGitHub": "Continuar com GitHub",
+    "continueWithGoogle": "Continuar com Google",
+    "logInTo": "Iniciar sessão em ",
+    "openApp": "Abrir Aplicação",
+    "redirecting": "A redirecionar",
+    "welcomeTo": "Bem-vindo ao "
+  },
+  "redirect": {
+    "continueInBrowser": "Continuar no Navegador",
+    "instruction": "Agora é o momento de abrir {{APP_NAME}} e fechar esta página com segurança.",
+    "openApp": "Abrir {{APP_NAME}}",
+    "successMessage": "Conectou-se com sucesso à conta {{APP_NAME}}."
+  }
+}

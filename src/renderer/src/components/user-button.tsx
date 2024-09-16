@@ -141,17 +141,22 @@ ProfileButton.displayName = "ProfileButton"
 
 export function UserAvatar({
   className,
+  avatarClassName,
   hideName,
   userId,
+  enableModal,
   ...props
 }: {
   className?: string
+  avatarClassName?: string
   hideName?: boolean
   userId?: string
+  enableModal?: boolean
 } & LoginProps) {
   const { session, status } = useSession({
     enabled: !userId,
   })
+  const presentUserProfile = usePresentUserProfileModal("drawer")
 
   const profile = useAuthQuery(
     defineQuery(["profiles", userId], async () => {
@@ -175,8 +180,14 @@ export function UserAvatar({
         "flex h-20 items-center justify-center gap-2 px-5 py-2 font-medium text-zinc-600 dark:text-zinc-300",
         className,
       )}
+      onClick={enableModal ? () => presentUserProfile(userId) : undefined}
     >
-      <Avatar className="aspect-square h-full w-auto overflow-hidden rounded-full border bg-stone-300">
+      <Avatar
+        className={cn(
+          "aspect-square h-full w-auto overflow-hidden rounded-full border bg-stone-300",
+          avatarClassName,
+        )}
+      >
         <AvatarImage
           className="duration-200 animate-in fade-in-0"
           src={(profile.data || session?.user)?.image || undefined}

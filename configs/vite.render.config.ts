@@ -61,6 +61,27 @@ function localesPlugin(): Plugin {
   }
 }
 
+function customI18nHmrPlugin(): Plugin {
+  return {
+    name: "custom-i18n-hmr",
+    handleHotUpdate({ file, server }) {
+      if (file.endsWith(".json") && file.includes("locales")) {
+        server.ws.send({
+          type: "custom",
+          event: "i18n-update",
+          data: {
+            file,
+            content: readFileSync(file, "utf-8"),
+          },
+        })
+
+        // return empty array to prevent the default HMR
+        return []
+      }
+    },
+  }
+}
+
 export const viteRenderBaseConfig = {
   resolve: {
     alias: {
@@ -100,30 +121,7 @@ export const viteRenderBaseConfig = {
 
     localesPlugin(),
     viteTwToRawString(),
-
-    {
-      name: "custom-i18n-hmr",
-      handleHotUpdate({ file, server }) {
-        server.ws.send({
-          type: "custom",
-          event: "hmr",
-          data: {},
-        })
-        if (file.endsWith(".json") && file.includes("locales")) {
-          server.ws.send({
-            type: "custom",
-            event: "i18n-update",
-            data: {
-              file,
-              content: readFileSync(file, "utf-8"),
-            },
-          })
-
-          // return empty array to prevent the default HMR
-          return []
-        }
-      },
-    },
+    customI18nHmrPlugin(),
   ],
   define: {
     APP_VERSION: JSON.stringify(pkg.version),

@@ -1,0 +1,42 @@
+{
+  "feed": {
+    "follow_one": "seguir",
+    "follow_other": "seguidores",
+    "followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} con {{readCount}} {{readNoun}} en {{appName}}",
+    "read_one": "leer",
+    "read_other": "lecturas"
+  },
+  "header": {
+    "app": "Aplicación",
+    "download": "Descargar"
+  },
+  "invitation": {
+    "activate": "Activar",
+    "codeOptions": {
+      "1": "Buscando a algún usuario de prueba alfa que te invite.",
+      "2": "Únete a nuestro servidor de Discord para sorteos ocasionales.",
+      "3": "Sigue nuestra cuenta de X para sorteos ocasionales."
+    },
+    "earlyAccess": "Follow está actualmente en acceso anticipado y requiere un código de invitación para usarlo.",
+    "earlyAccessMessage": "😰 Lo sentimos, Follow está actualmente en acceso anticipado y requiere un código de invitación para usarlo.",
+    "generateButton": "Generar nuevo código",
+    "generateCost": "Puedes gastar {{INVITATION_PRICE}} Power para generar un código de invitación para tus amigos.",
+    "getCodeMessage": "Puedes obtener un código de invitación de las siguientes maneras:",
+    "title": "Código de Invitación"
+  },
+  "login": {
+    "backToWebApp": "Volver a la aplicación web",
+    "continueWithGitHub": "Continuar con GitHub",
+    "continueWithGoogle": "Continuar con Google",
+    "logInTo": "Iniciar sesión en ",
+    "openApp": "Abrir aplicación",
+    "redirecting": "Redirigiendo",
+    "welcomeTo": "Bienvenido a "
+  },
+  "redirect": {
+    "continueInBrowser": "Continuar en el navegador",
+    "instruction": "Es hora de abrir {{APP_NAME}} y cerrar esta página de forma segura.",
+    "openApp": "Abrir {{APP_NAME}}",
+    "successMessage": "Te has conectado exitosamente a la cuenta de {{APP_NAME}}."
+  }
+}
