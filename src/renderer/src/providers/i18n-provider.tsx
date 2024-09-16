@@ -1,16 +1,16 @@
 import {
   currentSupportedLanguages,
   dayjsLocaleImportMap,
-  defaultNS,
 } from "@renderer/@types/constants"
 import { defaultResources } from "@renderer/@types/default-resource"
-import { getGeneralSettings } from "@renderer/atoms/settings/general"
-import { i18nAtom } from "@renderer/i18n"
+import { getGeneralSettings, setGeneralSetting } from "@renderer/atoms/settings/general"
+import { fallbackLanguage, i18nAtom, LocaleCache } from "@renderer/i18n"
 import { EventBus } from "@renderer/lib/event-bus"
 import { jotaiStore } from "@renderer/lib/jotai"
 import { isEmptyObject } from "@renderer/lib/utils"
 import dayjs from "dayjs"
 import i18next from "i18next"
+import LanguageDetector from "i18next-browser-languagedetector"
 import { useAtom } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import { useEffect, useLayoutEffect, useRef } from "react"
@@ -18,6 +18,7 @@ import { I18nextProvider } from "react-i18next"
 import { toast } from "sonner"
 
 const loadingLangLock = new Set<string>()
+const loadedLangs = new Set<string>([fallbackLanguage])
 
 const langChangedHandler = async (lang: string) => {
   const dayjsImport = dayjsLocaleImportMap[lang]
@@ -35,7 +36,7 @@ const langChangedHandler = async (lang: string) => {
   if (!isSupport) {
     return
   }
-  const loaded = i18next.getResourceBundle(lang, defaultNS)
+  const loaded = loadedLangs.has(lang)
 
   if (loaded) {
     return
@@ -68,13 +69,13 @@ const langChangedHandler = async (lang: string) => {
       }
     }
   } else {
-    const res = await eval(
-      `import('/locales/${lang}.js').then((res) => res?.default || res)`,
-    ).catch(() => {
-      toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
-      loadingLangLock.delete(lang)
-      return {}
-    })
+    const res = await eval(`import('/locales/${lang}.js')`)
+      .then((res: any) => res?.default || res)
+      .catch(() => {
+        toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
+        loadingLangLock.delete(lang)
+        return {}
+      })
 
     if (isEmptyObject(res)) {
       return
@@ -86,10 +87,10 @@ const langChangedHandler = async (lang: string) => {
 
   await i18next.reloadResources()
   await i18next.changeLanguage(lang)
+  LocaleCache.shared.set(lang)
+  loadedLangs.add(lang)
   loadingLangLock.delete(lang)
 }
-
-langChangedHandler(getGeneralSettings().language)
 export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
   const [currentI18NInstance, update] = useAtom(i18nAtom)
 
@@ -108,6 +109,18 @@ export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
     )
 
   const callOnce = useRef(false)
+  const detectOnce = useRef(false)
+  useLayoutEffect(() => {
+    if (detectOnce.current) return
+    const languageDetector = new LanguageDetector()
+    const userLang = languageDetector.detect()
+    if (!userLang) return
+    const firstUserLang = Array.isArray(userLang) ? userLang[0] : userLang
+    if (currentSupportedLanguages.includes(firstUserLang)) {
+      setGeneralSetting("language", firstUserLang)
+    }
+    detectOnce.current = true
+  }, [])
 
   useLayoutEffect(() => {
     const i18next = currentI18NInstance

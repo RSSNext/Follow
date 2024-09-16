@@ -220,7 +220,7 @@
   "lint-staged": {
     "*": "eslint --fix",
     "*.{js,jsx,ts,tsx,json}": [
-      "prettier --ignore-path ./.gitignore --write "
+      "prettier --write "
     ]
   },
   "bump": {

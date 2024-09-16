@@ -1,10 +1,10 @@
 {
   "feed": {
     "follow_one": "追蹤",
-    "follow_other": "追蹤",
-    "followsAndReads": "{{subscriptionCount}} 個 {{subscriptionNoun}}，在 {{appName}} 上有 {{readCount}} 個 {{readNoun}}",
+    "follow_other": "追蹤數",
+    "followsAndReads": "{{subscriptionCount}} 個 {{subscriptionNoun}} 和 {{readCount}} 個 {{readNoun}} 在 {{appName}}",
     "read_one": "閱讀",
-    "read_other": "閱讀"
+    "read_other": "閱讀數"
   },
   "header": {
     "app": "應用程式",
@@ -13,30 +13,30 @@
   "invitation": {
     "activate": "啟用",
     "codeOptions": {
-      "1": "尋找任何內測用戶邀請你。",
-      "2": "加入我們的 Discord 伺服器，偶爾會有贈品。",
-      "3": "追蹤我們的 X 帳號，偶爾會有贈品。"
+      "1": "尋找任何內測用戶邀請您。",
+      "2": "加入我們的 Discord 伺服器，不定期贈送邀請碼。",
+      "3": "關注我們的 X 帳號，不定期贈送邀請碼。"
     },
-    "earlyAccess": "Follow 目前處於搶先體驗階段，使用需要邀請碼。",
-    "earlyAccessMessage": "😰 抱歉，Follow 目前處於搶先體驗階段，使用需要邀請碼。",
+    "earlyAccess": "Follow 目前處於搶先體驗階段，需要邀請碼才能使用。",
+    "earlyAccessMessage": "😰 抱歉，Follow 目前處於搶先體驗階段，需要邀請碼才能使用。",
     "generateButton": "生成新邀請碼",
-    "generateCost": "你可以花費 {{INVITATION_PRICE}} Power 為朋友生成邀請碼。",
-    "getCodeMessage": "你可以通過以下方式獲取邀請碼：",
+    "generateCost": "您可以花費 {{INVITATION_PRICE}} 點 Power 為您的朋友生成邀請碼。",
+    "getCodeMessage": "您可以通過以下方式獲取邀請碼：",
     "title": "邀請碼"
   },
   "login": {
-    "backToWebApp": "返回 Web 應用程式",
-    "continueWithGitHub": "使用 GitHub 繼續",
-    "continueWithGoogle": "使用 Google 繼續",
-    "logInTo": "登入到 ",
-    "openApp": "打開應用程式",
+    "backToWebApp": "返回網頁應用程式",
+    "continueWithGitHub": "繼續使用 GitHub",
+    "continueWithGoogle": "繼續使用 Google",
+    "logInTo": "登入至 ",
+    "openApp": "開啟應用程式",
     "redirecting": "正在重定向",
     "welcomeTo": "歡迎來到 "
   },
   "redirect": {
     "continueInBrowser": "在瀏覽器中繼續",
-    "instruction": "現在請打開 {{APP_NAME}} 並安全地關閉此頁面。",
-    "openApp": "打開 {{APP_NAME}}",
-    "successMessage": "你已成功連接到 {{APP_NAME}} 帳戶。"
+    "instruction": "現在是時候打開 {{APP_NAME}} 並安全地關閉此頁面。",
+    "openApp": "開啟 {{APP_NAME}}",
+    "successMessage": "您已成功連接至 {{APP_NAME}} 帳戶。"
   }
 }

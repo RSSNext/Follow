@@ -28,7 +28,7 @@ export function Component() {
                 <div
                   key={`${type}-${action}`}
                   className={cn(
-                    "flex items-center justify-between px-3 py-1.5",
+                    "flex h-9 items-center justify-between px-3 py-1.5",
                     index % 2 && "bg-native/40",
                   )}
                 >
