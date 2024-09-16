@@ -304,7 +304,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
               <>
                 <Divider />
 
-                <div className="my-32 flex flex-col items-center gap-8">
+                <div className="my-16 flex flex-col items-center gap-8">
                   <UserAvatar
                     className="w-40 flex-col gap-3 p-0"
                     avatarClassName="size-12"
@@ -315,7 +315,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
                     <i className="i-mgc-power-outline mr-1.5 text-lg" />
                     {t("entry_content.support_creator")}
                   </Button>
-                  {feed.tipUsers?.length && (
+                  {!!feed.tipUsers?.length && (
                     <>
                       <div className="text-sm text-zinc-500">
                         {t("entry_content.support_amount", { amount: feed.tipUsers.length })}
