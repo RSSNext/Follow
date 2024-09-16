@@ -33,6 +33,13 @@ class FeedActions {
             feed.errorAt = null
           }
           if (feed.id) {
+            if (feed.owner) {
+              userActions.upsert(feed.owner as UserModel)
+            }
+            if (feed.tipUsers) {
+              userActions.upsert(feed.tipUsers)
+            }
+
             // Not all API return these fields, so merging is needed here.
             const optionalFields = ["owner", "tipUsers"] as const
             optionalFields.forEach((field) => {
@@ -40,13 +47,6 @@ class FeedActions {
                 ;(feed as any)[field] = state.feeds[feed.id!]?.[field]
               }
             })
-
-            if (feed.owner) {
-              userActions.upsert(feed.owner as UserModel)
-            }
-            if (feed.tipUsers) {
-              userActions.upsert(feed.tipUsers)
-            }
 
             state.feeds[feed.id] = feed
           } else {
