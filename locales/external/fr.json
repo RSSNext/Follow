@@ -1,7 +1,7 @@
 {
   "feed": {
-    "follow_one": "suivi",
-    "follow_other": "suivis",
+    "follower_one": "suivi",
+    "follower_other": "suivis",
     "followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} avec {{readCount}} {{readNoun}} sur {{appName}}",
     "read_one": "lecture",
     "read_other": "lectures"

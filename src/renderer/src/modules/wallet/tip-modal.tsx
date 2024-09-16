@@ -114,7 +114,11 @@ const TipModalContent_: FC<{
       {userId ? (
         <>
           <p className="text-sm font-medium">{t("tip_modal.feed_owner")}</p>
-          <UserAvatar className="h-8 justify-start bg-transparent p-0" userId={userId} />
+          <UserAvatar
+            className="h-8 justify-start bg-transparent p-0"
+            userId={userId}
+            enableModal={true}
+          />
         </>
       ) : (
         <>

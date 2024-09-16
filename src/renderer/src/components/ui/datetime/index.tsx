@@ -104,7 +104,14 @@ export const RelativeDay = ({ date }: { date: Date }) => {
     } else if (diffDays === 1) {
       return t("time.yesterday")
     } else {
-      return date.toLocaleDateString(new Intl.Locale(language), {
+      let locale: Intl.Locale
+
+      try {
+        locale = new Intl.Locale(language.replace("_", "-"))
+      } catch {
+        locale = new Intl.Locale("en-US")
+      }
+      return date.toLocaleDateString(locale, {
         weekday: "long",
         month: "short",
         day: "numeric",

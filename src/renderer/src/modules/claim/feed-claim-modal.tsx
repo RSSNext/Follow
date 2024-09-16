@@ -84,7 +84,7 @@ export const FeedClaimModalContent: FC<{
             <Trans
               i18nKey="feed_claim_modal.description_instructions"
               components={{ code: <code className="text-sm">{"<description />"}</code> }}
-             />
+            />
             {feed.url.startsWith("rsshub://") && (
               <p className="mt-1 leading-tight text-orange-800">
                 {t("feed_claim_modal.rsshub_notice")}

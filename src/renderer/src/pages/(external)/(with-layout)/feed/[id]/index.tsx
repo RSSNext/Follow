@@ -19,6 +19,7 @@ import { useFeed } from "@renderer/queries/feed"
 import type { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { useParams, useSearchParams } from "react-router-dom"
+import { toast } from "sonner"
 
 export function Component() {
   const { id } = useParams()
@@ -83,13 +84,33 @@ export function Component() {
             <div className="mb-4 text-sm">
               {t("feed.followsAndReads", {
                 subscriptionCount: feed.data.subscriptionCount,
-                subscriptionNoun: t("feed.follow", { count: feed.data.subscriptionCount }),
+                subscriptionNoun: t("feed.follower", { count: feed.data.subscriptionCount }),
                 readCount: feed.data.readCount,
                 readNoun: t("feed.read", { count: feed.data.readCount }),
                 appName: APP_NAME,
               })}
             </div>
-            <span className="mb-8 cursor-default">
+            <span className="center mb-8 flex gap-4">
+              {feed.data.feed.url.startsWith("https://") ? (
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    window.open(feed.data.feed.url, "_blank")
+                  }}
+                >
+                  View Feed URL
+                </Button>
+              ) : (
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    toast.success(t("copied_link"))
+                    navigator.clipboard.writeText(feed.data.feed.url)
+                  }}
+                >
+                  Copy Feed URL
+                </Button>
+              )}
               <Button
                 onClick={() => {
                   presentFeedFormModal(id!)

@@ -11,11 +11,14 @@ import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { ShadowDOM } from "@renderer/components/common/ShadowDOM"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
+import { Button } from "@renderer/components/ui/button"
+import { Divider } from "@renderer/components/ui/divider"
 import { HTML } from "@renderer/components/ui/markdown"
 import { Toc } from "@renderer/components/ui/markdown/components/Toc"
 import { useInPeekModal } from "@renderer/components/ui/modal/inspire/PeekModal"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
+import { UserAvatar } from "@renderer/components/user-button"
 import { isWebBuild, ROUTE_FEED_PENDING } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
@@ -44,6 +47,7 @@ import { useTranslation } from "react-i18next"
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
 import { EntryTranslation } from "../entry-column/translation"
+import { useTipModal } from "../wallet/hooks"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
 import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
 import { EntryHeader } from "./header"
@@ -172,6 +176,12 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
     return href
   }, [entry?.entries.url, feed?.siteUrl])
 
+  const openTipModal = useTipModal({
+    userId: feed?.ownerUserId ?? undefined,
+    feedId: entry?.feedId,
+    entryId,
+  })
+
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -288,6 +298,45 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
                   <NoContent id={entry.entries.id} url={entry.entries.url ?? ""} />
                 )}
               </div>
+            )}
+
+            {feed?.ownerUserId && (
+              <>
+                <Divider />
+
+                <div className="my-16 flex flex-col items-center gap-8">
+                  <UserAvatar
+                    className="w-40 flex-col gap-3 p-0"
+                    avatarClassName="size-12"
+                    userId={feed.ownerUserId}
+                    enableModal={true}
+                  />
+                  <Button className="text-base" onClick={() => openTipModal()}>
+                    <i className="i-mgc-power-outline mr-1.5 text-lg" />
+                    {t("entry_content.support_creator")}
+                  </Button>
+                  {!!feed.tipUsers?.length && (
+                    <>
+                      <div className="text-sm text-zinc-500">
+                        {t("entry_content.support_amount", { amount: feed.tipUsers.length })}
+                      </div>
+                      <div className="flex w-fit max-w-80 flex-wrap gap-4">
+                        {feed.tipUsers?.map((user) => (
+                          <div key={user.id} className="size-8">
+                            <UserAvatar
+                              className="h-auto p-0"
+                              avatarClassName="size-8"
+                              userId={user?.id}
+                              enableModal={true}
+                              hideName={true}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </>
             )}
           </article>
         </div>

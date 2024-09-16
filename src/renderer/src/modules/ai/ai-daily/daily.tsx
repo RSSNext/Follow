@@ -97,7 +97,7 @@ export const DailyReportTitle = ({
                       </span>
                     ),
                   }}
-                 />
+                />
               </li>
               <li>{t("ai_daily.tooltip.update_schedule")}</li>
             </ul>

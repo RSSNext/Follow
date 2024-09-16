@@ -2,7 +2,10 @@ import type { apiClient } from "@renderer/lib/api-fetch"
 import type { languageSchema, users } from "src/hono"
 import type { z } from "zod"
 
-export type UserModel = Omit<Omit<typeof users.$inferSelect, "emailVerified">, "email">
+export type UserModel = Omit<
+  Omit<Omit<typeof users.$inferSelect, "emailVerified">, "email">,
+  "createdAt"
+>
 
 export type ExtractBizResponse<T extends (...args: any[]) => any> = Exclude<
   Awaited<ReturnType<T>>,
@@ -17,8 +20,13 @@ export type ActiveList = {
 
 export type FeedResponse = SubscriptionResponse[number]["feeds"]
 
+export type TransactionModel = ExtractBizResponse<
+  typeof apiClient.wallets.transactions.$get
+>["data"][number]
+
 export type FeedModel = ExtractBizResponse<typeof apiClient.feeds.$get>["data"]["feed"] & {
-  owner?: Omit<UserModel, "createdAt"> | null
+  owner?: UserModel | null
+  tipUsers?: UserModel[] | null
 }
 
 export type SubscriptionResponse = Array<

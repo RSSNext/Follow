@@ -1,7 +1,7 @@
 {
   "feed": {
-    "follow_one": "追蹤",
-    "follow_other": "追蹤數",
+    "follower_one": "追隨者",
+    "follower_other": "追隨者",
     "followsAndReads": "{{subscriptionCount}} 個 {{subscriptionNoun}} 和 {{readCount}} 個 {{readNoun}} 在 {{appName}}",
     "read_one": "閱讀",
     "read_other": "閱讀數"

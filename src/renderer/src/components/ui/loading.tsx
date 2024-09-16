@@ -83,7 +83,7 @@ export const LoadingWithIcon: Component<
           <span
             className="block size-full"
             style={{
-              clipPath: `polygon(0% 0%, 0% 100%, calc(100% - ${smallIconSizeMap[size]}) 100%, ${smallIconSizeMap[size]} ${smallIconSizeMap[size]}, 100% calc(100% - ${smallIconSizeMap[size]}), 100% 100%, 100% 100%, 100% 0%)`,
+              clipPath: `polygon(0% 0%, 0% 100%, calc(100% - ${smallIconSizeMap[size]}px) 100%, ${smallIconSizeMap[size]}px ${smallIconSizeMap[size]}px, 100% calc(100% - ${smallIconSizeMap[size]}px), 100% 100%, 100% 100%, 100% 0%)`,
             }}
           >
             <i
