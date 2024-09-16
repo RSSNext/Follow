@@ -75,12 +75,12 @@ export const SettingInvitations = () => {
           })
         }}
       >
-        <i className="i-mgc-heart-hand-cute-re mr-1" />
+        <i className="i-mgc-heart-hand-cute-re mr-1 text-base" />
         {t("invitation.generateButton")}
       </Button>
       <Divider className="mb-6 mt-8" />
       <div className="flex flex-1 flex-col">
-        <ScrollArea.ScrollArea viewportClassName="max-h-[380px]">
+        <ScrollArea.ScrollArea>
           {invitations.data?.length ? (
             <Table className="mt-4">
               <TableHeader className="border-b">
@@ -91,7 +91,7 @@ export const SettingInvitations = () => {
                   <TableHead className="text-center" size="sm">
                     {t("invitation.tableHeaders.creationTime")}
                   </TableHead>
-                  <TableHead className="text-center" size="sm">
+                  <TableHead className="max-w-[12ch] text-center" size="sm">
                     {t("invitation.tableHeaders.usedBy")}
                   </TableHead>
                 </TableRow>
@@ -173,7 +173,7 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
 
   return (
     <>
-      <div className="flex items-center">
+      <div className="flex items-center text-sm">
         <Trans
           ns="settings"
           values={{
@@ -186,7 +186,7 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
           i18nKey="invitation.confirmModal.message"
         />
       </div>
-      <div>{t("invitation.confirmModal.confirm")}</div>
+      <div className="mt-2 text-sm">{t("invitation.confirmModal.confirm")}</div>
       <div className="mt-4 flex items-center justify-end gap-3">
         <Button variant="outline" onClick={dismiss}>
           {t("invitation.confirmModal.cancel")}

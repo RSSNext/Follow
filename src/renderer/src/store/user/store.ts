@@ -17,7 +17,9 @@ class UserActions {
       set((state) =>
         produce(state, (state) => {
           for (const u of user) {
-            state.users[u.id] = u
+            if (u?.id) {
+              state.users[u.id] = u
+            }
           }
         }),
       )

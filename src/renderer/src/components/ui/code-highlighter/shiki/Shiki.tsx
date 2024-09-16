@@ -10,20 +10,12 @@ import type {
   BundledTheme,
   DynamicImportLanguageRegistration,
   DynamicImportThemeRegistration,
-  HighlighterCore,
 } from "shiki"
-import { createHighlighterCoreSync, createJavaScriptRegexEngine } from "shiki/core"
 
+import { getLanguageColor, getLanguageIcon } from "../constants"
 import { CopyButton } from "../copy-button"
-import { shikiTransformers } from "./shared"
+import { shiki, shikiTransformers } from "./shared"
 import styles from "./shiki.module.css"
-
-const js = createJavaScriptRegexEngine()
-const shiki = createHighlighterCoreSync({
-  themes: [],
-  langs: [],
-  engine: js,
-})
 
 export interface ShikiProps {
   language: string | undefined
@@ -42,24 +34,7 @@ let themeModule: Record<BundledTheme, DynamicImportThemeRegistration> | null = n
 let bundledLanguagesKeysSet: Set<string> | null = null
 
 export const ShikiHighLighter: FC<ShikiProps> = (props) => {
-  if (!shiki) {
-    const { code, className } = props
-    return (
-      <pre className={className}>
-        <code>{code}</code>
-      </pre>
-    )
-  }
-
-  return <ShikiHighLighterRender {...props} shiki={shiki} />
-}
-
-const ShikiHighLighterRender: FC<
-  ShikiProps & {
-    shiki: HighlighterCore
-  }
-> = (props) => {
-  const { code, language, className, theme: overrideTheme, shiki } = props
+  const { code, language, className, theme: overrideTheme } = props
   const [currentLanguage, setCurrentLanguage] = useState(language || "plaintext")
 
   const guessCodeLanguage = useUISettingKey("guessCodeLanguage")
@@ -179,9 +154,8 @@ const ShikiHighLighterRender: FC<
 const ShikiCode: FC<
   ShikiProps & {
     codeTheme: string
-    shiki: HighlighterCore
   }
-> = ({ code, language, codeTheme, className, transparent, shiki }) => {
+> = ({ code, language, codeTheme, className, transparent }) => {
   const rendered = useMemo(() => {
     try {
       return shiki.codeToHtml(code, {
@@ -193,10 +167,9 @@ const ShikiCode: FC<
         transformers: shikiTransformers,
       })
     } catch {
-      // console.error(err)
       return null
     }
-  }, [shiki, code, language, codeTheme])
+  }, [code, language, codeTheme])
 
   if (!rendered) {
     return (
@@ -205,6 +178,7 @@ const ShikiCode: FC<
       </pre>
     )
   }
+
   return (
     <div
       className={cn(
@@ -217,8 +191,17 @@ const ShikiCode: FC<
       <div dangerouslySetInnerHTML={{ __html: rendered }} data-language={language} />
       <CopyButton
         value={code}
-        className="absolute right-1 top-1 opacity-0 duration-200 group-hover:opacity-100"
+        style={{
+          backgroundColor: getLanguageColor(language),
+        }}
+        className={"absolute right-2 top-2 opacity-0 duration-200 group-hover:opacity-100"}
       />
+      {language !== "plaintext" && (
+        <span className="center absolute bottom-2 right-2 flex gap-1 text-xs uppercase text-white opacity-80">
+          <span className="center [&_svg]:size-4">{getLanguageIcon(language)}</span>
+          <span>{language}</span>
+        </span>
+      )}
     </div>
   )
 }

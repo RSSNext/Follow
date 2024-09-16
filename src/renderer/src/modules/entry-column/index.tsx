@@ -1,5 +1,5 @@
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
-import { useUISettingKey } from "@renderer/atoms/settings/ui"
+import { setUISetting, useUISettingKey } from "@renderer/atoms/settings/ui"
 import { m } from "@renderer/components/common/Motion"
 import { FeedFoundCanBeFollowError } from "@renderer/components/errors/FeedFoundCanBeFollowErrorFallback"
 import { FeedNotFound } from "@renderer/components/errors/FeedNotFound"
@@ -210,7 +210,11 @@ function EntryColumnImpl() {
               <EntryEmptyList />
             )
           ) : view && views[view].gridMode ? (
-            <ListGird virtuosoOptions={virtuosoOptions} virtuosoRef={virtuosoRef} />
+            <ListGird
+              virtuosoOptions={virtuosoOptions}
+              virtuosoRef={virtuosoRef}
+              hasNextPage={entries.hasNextPage}
+            />
           ) : (
             <EntryList
               {...virtuosoOptions}
@@ -228,12 +232,14 @@ function EntryColumnImpl() {
 const ListGird = ({
   virtuosoOptions,
   virtuosoRef,
+  hasNextPage,
 }: {
   virtuosoOptions: Omit<VirtuosoGridProps<string, unknown>, "data" | "endReached"> & {
     data: string[]
     endReached: () => Promise<any>
   }
   virtuosoRef: React.RefObject<VirtuosoHandle>
+  hasNextPage: boolean
 }) => {
   const masonry = useUISettingKey("pictureViewMasonry")
   const view = useRouteParamsSelector((s) => s.view)
@@ -248,23 +254,67 @@ const ListGird = ({
     }
     return virtuosoOptions.data
   }, [virtuosoOptions.data, filterNoImage])
+  const { t } = useTranslation()
+  if (nextData.length === 0 && virtuosoOptions.data.length > 0) {
+    return (
+      <div className="center absolute inset-x-0 inset-y-12 -translate-y-12 flex-col gap-5">
+        <i className="i-mgc-photo-album-cute-fi size-12" />
+        <div className="text-sm text-muted-foreground">
+          {t("entry_column.filtered_content_tip")}
+        </div>
+
+        <Button
+          onClick={() => {
+            setUISetting("pictureViewFilterNoImage", false)
+          }}
+        >
+          Show All
+        </Button>
+      </div>
+    )
+  }
+
+  const hasFilteredContent = nextData.length < virtuosoOptions.data.length
+
+  const FilteredContentTip = hasFilteredContent && !hasNextPage && (
+    <div className="center mb-6 flex flex-col gap-5">
+      <i className="i-mgc-photo-album-cute-fi size-12" />
+      <div>{t("entry_column.filtered_content_tip_2")}</div>
+
+      <Button
+        onClick={() => {
+          setUISetting("pictureViewFilterNoImage", false)
+        }}
+      >
+        Show All
+      </Button>
+    </div>
+  )
+
   if (masonry && view === FeedViewType.Pictures) {
     return (
-      <PictureMasonry
-        key={feedId}
-        hasNextPage={virtuosoOptions.totalCount! > virtuosoOptions.data.length}
-        endReached={virtuosoOptions.endReached}
-        data={nextData}
-      />
+      <>
+        <PictureMasonry
+          key={feedId}
+          hasNextPage={virtuosoOptions.totalCount! > virtuosoOptions.data.length}
+          endReached={virtuosoOptions.endReached}
+          data={nextData}
+        />
+
+        {FilteredContentTip}
+      </>
     )
   }
   return (
-    <VirtuosoGrid
-      listClassName={girdClassNames}
-      {...virtuosoOptions}
-      data={nextData}
-      ref={virtuosoRef}
-    />
+    <>
+      <VirtuosoGrid
+        listClassName={girdClassNames}
+        {...virtuosoOptions}
+        data={nextData}
+        ref={virtuosoRef}
+      />
+      {FilteredContentTip}
+    </>
   )
 }
 

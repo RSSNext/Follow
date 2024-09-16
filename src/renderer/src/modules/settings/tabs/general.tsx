@@ -1,4 +1,5 @@
 import { currentSupportedLanguages } from "@renderer/@types/constants"
+import { langLoadingLockMapAtom } from "@renderer/atoms/lang"
 import {
   setGeneralSetting,
   useGeneralSettingSelector,
@@ -11,6 +12,7 @@ import {
   useUISettingSelector,
 } from "@renderer/atoms/settings/ui"
 import { Button } from "@renderer/components/ui/button"
+import { LoadingCircle } from "@renderer/components/ui/loading"
 import { useModalStack } from "@renderer/components/ui/modal"
 import {
   Select,
@@ -19,11 +21,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@renderer/components/ui/select"
+import { IS_MANUAL_CHANGE_LANGUAGE_KEY } from "@renderer/constants"
 import { fallbackLanguage } from "@renderer/i18n"
 import { initPostHog } from "@renderer/initialize/posthog"
 import { tipcClient } from "@renderer/lib/client"
+import { cn } from "@renderer/lib/utils"
 import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useQuery } from "@tanstack/react-query"
+import { useAtom } from "jotai"
 import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -199,26 +204,34 @@ export const VoiceSelector = () => {
 }
 
 export const LanguageSelector = () => {
-  const { t, i18n } = useTranslation("settings")
+  const { t } = useTranslation("settings")
   const { t: langT } = useTranslation("lang")
   const language = useGeneralSettingSelector((state) => state.language)
 
   const finalRenderLanguage = currentSupportedLanguages.includes(language)
     ? language
     : fallbackLanguage
+
+  const [loadingLanguageLockMap] = useAtom(langLoadingLockMapAtom)
+
   return (
     <div className="mb-3 mt-4 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("general.language")}</span>
       <Select
         defaultValue={finalRenderLanguage}
         value={finalRenderLanguage}
+        disabled={loadingLanguageLockMap[finalRenderLanguage]}
         onValueChange={(value) => {
+          localStorage.setItem(IS_MANUAL_CHANGE_LANGUAGE_KEY, "true")
           setGeneralSetting("language", value as string)
-          i18n.changeLanguage(value as string)
         }}
       >
-        <SelectTrigger size="sm" className="w-48">
+        <SelectTrigger
+          size="sm"
+          className={cn("w-48", loadingLanguageLockMap[finalRenderLanguage] && "opacity-50")}
+        >
           <SelectValue />
+          {loadingLanguageLockMap[finalRenderLanguage] && <LoadingCircle size="small" />}
         </SelectTrigger>
         <SelectContent position="item-aligned">
           {currentSupportedLanguages.map((lang) => {

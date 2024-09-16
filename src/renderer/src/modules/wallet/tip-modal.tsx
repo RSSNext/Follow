@@ -114,7 +114,11 @@ const TipModalContent_: FC<{
       {userId ? (
         <>
           <p className="text-sm font-medium">{t("tip_modal.feed_owner")}</p>
-          <UserAvatar className="h-8 justify-start bg-transparent p-0" userId={userId} />
+          <UserAvatar
+            className="h-8 justify-start bg-transparent p-0"
+            userId={userId}
+            enableModal={true}
+          />
         </>
       ) : (
         <>
@@ -141,8 +145,24 @@ const TipModalContent_: FC<{
 
         <RadioGroup value={amount.toString()} onValueChange={(value) => setAmount(Number(value))}>
           <div className="grid grid-cols-2 gap-2">
-            <RadioCard wrapperClassName="justify-center" label="10 Power" value="10" />
-            <RadioCard wrapperClassName="justify-center" label="20 Power" value="20" />
+            <RadioCard
+              wrapperClassName="justify-center"
+              label={
+                <span className="flex items-center gap-1">
+                  10 <i className="i-mgc-power text-accent" />
+                </span>
+              }
+              value="10"
+            />
+            <RadioCard
+              wrapperClassName="justify-center group"
+              label={
+                <span className="flex items-center gap-1">
+                  20 <i className="i-mgc-power text-accent" />
+                </span>
+              }
+              value="20"
+            />
           </div>
         </RadioGroup>
 
