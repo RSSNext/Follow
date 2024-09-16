@@ -66,11 +66,11 @@ export const FeedClaimModalContent: FC<{
           <TabsTrigger value="description">{t("feed_claim_modal.tab_description")}</TabsTrigger>
           <TabsTrigger value="rss">{t("feed_claim_modal.tab_rss")}</TabsTrigger>
         </TabsList>
-        <AutoResizeHeight duration={0.1}>
+        <AutoResizeHeight duration={0.1} className="px-2">
           <TabsContent className="mt-0 pt-3" value="content">
             <p>{t("feed_claim_modal.content_instructions")}</p>
             {feed.url.startsWith("rsshub://") && (
-              <p className="mt-1 leading-tight text-orange-800">
+              <p className="mt-2 text-sm leading-tight text-orange-800 dark:text-orange-500/70">
                 {t("feed_claim_modal.rsshub_notice")}
               </p>
             )}
@@ -121,7 +121,7 @@ export const FeedClaimModalContent: FC<{
         </AutoResizeHeight>
       </Tabs>
 
-      <div className="mt-3 flex justify-end">
+      <div className="mt-4 flex justify-end">
         <Button
           disabled={isSuccess}
           isLoading={isPending}
