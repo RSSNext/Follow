@@ -36,11 +36,11 @@ export const defaultResources = {
     lang: lang_zhCN,
     common: common_zhCN,
   },
-  "zh-tw": { lang: lang_zhTW, common: common_zhTW },
   ja: {
     lang: lang_ja,
     common: common_ja,
   },
+  "zh-TW": { lang: lang_zhTW, common: common_zhTW },
   es: { lang: lang_es, common: common_es },
   fr: { lang: lang_fr, common: common_fr },
   pt: { lang: lang_pt, common: common_pt },
