@@ -15,6 +15,7 @@ import { Input } from "@renderer/components/ui/input"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -25,6 +26,7 @@ const formSchema = z.object({
 })
 
 export const ProfileSettingForm = () => {
+  const { t } = useTranslation("settings")
   const user = useWhoami()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -45,7 +47,7 @@ export const ProfileSettingForm = () => {
       if (user && variables) {
         setWhoami({ ...user, ...variables })
       }
-      toast("Profile updated.", {
+      toast(t("profile.updateSuccess"), {
         duration: 3000,
       })
     },
@@ -63,11 +65,11 @@ export const ProfileSettingForm = () => {
           name="handle"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Handle</FormLabel>
+              <FormLabel>{t("profile.handle.label")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              <FormDescription>Your unique identifier.</FormDescription>
+              <FormDescription>{t("profile.handle.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -77,11 +79,11 @@ export const ProfileSettingForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Display Name</FormLabel>
+              <FormLabel>{t("profile.name.label")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              <FormDescription>Your public display name.</FormDescription>
+              <FormDescription>{t("profile.name.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -93,7 +95,7 @@ export const ProfileSettingForm = () => {
           render={({ field }) => (
             <div className="flex gap-4">
               <FormItem className="w-full">
-                <FormLabel>Avatar</FormLabel>
+                <FormLabel>{t("profile.avatar.label")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -109,7 +111,7 @@ export const ProfileSettingForm = () => {
 
         <div className="text-right">
           <Button type="submit" isLoading={updateMutation.isPending}>
-            Submit
+            {t("profile.submit")}
           </Button>
         </div>
       </form>

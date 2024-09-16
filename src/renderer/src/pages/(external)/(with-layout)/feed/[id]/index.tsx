@@ -4,9 +4,10 @@ import { Button } from "@renderer/components/ui/button"
 import { ListItemHoverOverlay } from "@renderer/components/ui/list-item-hover-overlay"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { views } from "@renderer/constants"
+import { usePresentFeedFormModal } from "@renderer/hooks/biz/useFeedFormModal"
 import { useTitle } from "@renderer/hooks/common"
 import { FeedViewType } from "@renderer/lib/enum"
-import { cn, pluralize } from "@renderer/lib/utils"
+import { cn } from "@renderer/lib/utils"
 import { ArticleItem } from "@renderer/modules/entry-column/Items/article-item"
 import { NotificationItem } from "@renderer/modules/entry-column/Items/notification-item"
 import { PictureItem } from "@renderer/modules/entry-column/Items/picture-item"
@@ -15,9 +16,10 @@ import { VideoItem } from "@renderer/modules/entry-column/Items/video-item"
 import type { UniversalItemProps } from "@renderer/modules/entry-column/types"
 import { useEntriesPreview } from "@renderer/queries/entries"
 import { useFeed } from "@renderer/queries/feed"
-import { DEEPLINK_SCHEME } from "@shared/constants"
 import type { FC } from "react"
+import { useTranslation } from "react-i18next"
 import { useParams, useSearchParams } from "react-router-dom"
+import { toast } from "sonner"
 
 export function Component() {
   const { id } = useParams()
@@ -57,7 +59,9 @@ export function Component() {
       Item = ArticleItem
     }
   }
+  const { t } = useTranslation("external")
   useTitle(feed.data?.feed.title)
+  const presentFeedFormModal = usePresentFeedFormModal()
   return (
     <>
       {feed.isLoading ? (
@@ -78,17 +82,44 @@ export function Component() {
               <div className="mb-8 text-sm text-zinc-500">{feed.data.feed.description}</div>
             </div>
             <div className="mb-4 text-sm">
-              <strong>{feed.data.subscriptionCount}</strong>{" "}
-              {pluralize("follow", feed.data.subscriptionCount)} with{" "}
-              <strong>{feed.data.readCount}</strong> {pluralize("read", feed.data.readCount)} on{" "}
-              {APP_NAME}
+              {t("feed.followsAndReads", {
+                subscriptionCount: feed.data.subscriptionCount,
+                subscriptionNoun: t("feed.follower", { count: feed.data.subscriptionCount }),
+                readCount: feed.data.readCount,
+                readNoun: t("feed.read", { count: feed.data.readCount }),
+                appName: APP_NAME,
+              })}
             </div>
-            <a className="mb-8 cursor-default" href={`${DEEPLINK_SCHEME}add?id=${id}`}>
-              <Button>
+            <span className="center mb-8 flex gap-4">
+              {feed.data.feed.url.startsWith("https://") ? (
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    window.open(feed.data.feed.url, "_blank")
+                  }}
+                >
+                  View Feed URL
+                </Button>
+              ) : (
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    toast.success(t("copied_link"))
+                    navigator.clipboard.writeText(feed.data.feed.url)
+                  }}
+                >
+                  Copy Feed URL
+                </Button>
+              )}
+              <Button
+                onClick={() => {
+                  presentFeedFormModal(id!)
+                }}
+              >
                 <FollowIcon className="mr-1 size-3" />
                 {APP_NAME}
               </Button>
-            </a>
+            </span>
             <div
               className={cn(
                 "w-full pb-12",

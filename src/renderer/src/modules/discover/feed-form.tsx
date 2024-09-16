@@ -34,6 +34,7 @@ import { feedUnreadActions } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -67,6 +68,8 @@ export const FeedForm: Component<{
   const hasSub = useSubscriptionByFeedId(feed?.id || "")
   const isSubscribed = !!feedQuery.data?.subscription || hasSub
 
+  const { t } = useTranslation()
+
   return (
     <div
       className={cn(
@@ -77,7 +80,7 @@ export const FeedForm: Component<{
       {!asWidget && (
         <div className="mb-4 mt-2 flex items-center gap-2 text-[22px] font-bold">
           <Logo className="size-8" />
-          {isSubscribed ? "Update" : "Add"} follow
+          {isSubscribed ? t("feed_form.update_follow") : t("feed_form.add_follow")}
         </div>
       )}
 
@@ -90,7 +93,7 @@ export const FeedForm: Component<{
       ) : feedQuery.error ? (
         <div className="center grow flex-col gap-3">
           <i className="i-mgc-close-cute-re size-7 text-red-500" />
-          <p>Error in fetching feed.</p>
+          <p>{t("feed_form.error_fetching_feed")}</p>
           <p className="cursor-text select-text break-all px-8 text-center">
             {getFetchErrorMessage(feedQuery.error)}
           </p>
@@ -102,7 +105,7 @@ export const FeedForm: Component<{
                 feedQuery.refetch()
               }}
             >
-              Retry
+              {t("feed_form.retry")}
             </Button>
 
             <Button
@@ -129,14 +132,14 @@ export const FeedForm: Component<{
                 )
               }}
             >
-              Fallback
+              {t("feed_form.feedback")}
             </Button>
           </div>
         </div>
       ) : (
         <div className="center h-full grow flex-col">
           <i className="i-mgc-question-cute-re mb-6 size-12 text-zinc-500" />
-          <p>Feed not found.</p>
+          <p>{t("feed_form.feed_not_found")}</p>
           <p>{url}</p>
         </div>
       )}
@@ -214,7 +217,7 @@ const FeedInnerForm = ({
         feedQuery.byId({ id: feedId }).invalidate()
         tipcClient?.invalidateQuery(feedQuery.byId({ id: feedId }).key)
       }
-      toast(isSubscribed ? "🎉 Updated." : "🎉 Followed.", {
+      toast(isSubscribed ? t("feed_form.updated") : t("feed_form.followed"), {
         duration: 1000,
       })
 
@@ -243,7 +246,9 @@ const FeedInnerForm = ({
     followMutation.mutate(values)
   }
 
-  const categories = useAuthQuery(subscriptionQuery.categories(Number.parseInt(form.watch("view"))))
+  const { t } = useTranslation()
+
+  const categories = useAuthQuery(subscriptionQuery.categories())
 
   // useEffect(() => {
   //   if (feed.isSuccess) nextFrame(() => buttonRef.current?.focus());
@@ -263,7 +268,7 @@ const FeedInnerForm = ({
             name="view"
             render={() => (
               <FormItem>
-                <FormLabel>View</FormLabel>
+                <FormLabel>{t("feed_form.view")}</FormLabel>
                 <Card>
                   <CardHeader className="grid grid-cols-6 space-y-0 px-2 py-3">
                     {views.map((view) => (
@@ -283,7 +288,7 @@ const FeedInnerForm = ({
                           )}
                         >
                           <span className="text-lg">{view.icon}</span>
-                          {view.name}
+                          {t(view.name)}
                         </label>
                       </div>
                     ))}
@@ -299,10 +304,8 @@ const FeedInnerForm = ({
             render={({ field }) => (
               <FormItem>
                 <div>
-                  <FormLabel>Tile</FormLabel>
-                  <FormDescription>
-                    Custom title for this Feed. Leave empty to use the default.
-                  </FormDescription>
+                  <FormLabel>{t("feed_form.title")}</FormLabel>
+                  <FormDescription>{t("feed_form.title_description")}</FormDescription>
                 </div>
                 <FormControl>
                   <Input {...field} />
@@ -317,10 +320,8 @@ const FeedInnerForm = ({
             render={({ field }) => (
               <FormItem>
                 <div>
-                  <FormLabel>Category</FormLabel>
-                  <FormDescription>
-                    By default, your follows will be grouped by website.
-                  </FormDescription>
+                  <FormLabel>{t("feed_form.category")}</FormLabel>
+                  <FormDescription>{t("feed_form.category_description")}</FormDescription>
                 </div>
                 <FormControl>
                   <div>
@@ -351,10 +352,8 @@ const FeedInnerForm = ({
               <FormItem>
                 <div className="flex items-center justify-between">
                   <div>
-                    <FormLabel>Private Follow</FormLabel>
-                    <FormDescription>
-                      Whether this follow is publicly visible on your profile page.
-                    </FormDescription>
+                    <FormLabel>{t("feed_form.private_follow")}</FormLabel>
+                    <FormDescription>{t("feed_form.private_follow_description")}</FormDescription>
                   </div>
                   <FormControl>
                     <Switch
@@ -383,11 +382,11 @@ const FeedInnerForm = ({
                   }
                 }}
               >
-                Unfollow
+                {t("feed_form.unfollow")}
               </Button>
             )}
             <Button ref={buttonRef} type="submit" isLoading={followMutation.isPending}>
-              {isSubscribed ? "Update" : "Follow"}
+              {isSubscribed ? t("feed_form.update") : t("feed_form.follow")}
             </Button>
           </div>
         </form>

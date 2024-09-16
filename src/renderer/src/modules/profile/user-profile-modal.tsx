@@ -7,7 +7,7 @@ import { ActionButton, Button } from "@renderer/components/ui/button"
 import { LoadingCircle, LoadingWithIcon } from "@renderer/components/ui/loading"
 import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { useAuthQuery } from "@renderer/hooks/common"
+import { useAuthQuery, useI18n } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
@@ -23,6 +23,7 @@ import { atomWithStorage } from "jotai/utils"
 import { throttle } from "lodash-es"
 import type { FC } from "react"
 import { Fragment, useEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { FeedForm } from "../discover/feed-form"
 
@@ -40,6 +41,7 @@ export const UserProfileModalContent: FC<{
 
   variant: "drawer" | "dialog"
 }> = ({ userId, variant }) => {
+  const { t } = useTranslation()
   const user = useAuthQuery(
     defineQuery(["profiles", userId], async () => {
       const res = await apiClient.profiles.$get({
@@ -171,7 +173,6 @@ export const UserProfileModalContent: FC<{
     >
       <m.div
         onPointerDown={stopPropagation}
-        // onPointerDownCapture={stopPropagation}
         tabIndex={-1}
         initial="initial"
         animate={controller}
@@ -193,7 +194,7 @@ export const UserProfileModalContent: FC<{
       >
         <div className="absolute right-2 top-2 z-10 flex items-center gap-2 text-[20px] opacity-80">
           <ActionButton
-            tooltip="Toggle Item Style"
+            tooltip={t("user_profile.toggle_item_style")}
             onClick={() => {
               const currentVisible = currentVisibleRef.current
               const topOfCurrent = currentVisible?.values().next().value
@@ -213,14 +214,14 @@ export const UserProfileModalContent: FC<{
             />
           </ActionButton>
           <ActionButton
-            tooltip="Share"
+            tooltip={t("user_profile.share")}
             onClick={() => {
               window.open(`${env.VITE_WEB_URL}/profile/${user.data?.id}`)
             }}
           >
             <i className="i-mgc-share-3-cute-re" />
           </ActionButton>
-          <ActionButton tooltip="Close" onClick={modal.dismiss}>
+          <ActionButton tooltip={t("user_profile.close")} onClick={modal.dismiss}>
             <i className="i-mgc-close-cute-re" />
           </ActionButton>
         </div>
@@ -267,7 +268,7 @@ export const UserProfileModalContent: FC<{
                 <m.div
                   className={cn(
                     "mb-0 text-sm text-zinc-500",
-                    userInfo.handle ? "visible" : "invisible select-none",
+                    userInfo.handle ? "visible" : "hidden select-none",
                   )}
                   layout
                 >
@@ -325,6 +326,7 @@ const SubscriptionItem: FC<{
 
   variant: ItemVariant
 }> = ({ subscription, variant }) => {
+  const t = useI18n()
   const isFollowed = !!useSubscriptionStore((state) => state.data[subscription.feedId])
   const { present } = useModalStack()
   const isLoose = variant === "loose"
@@ -354,10 +356,11 @@ const SubscriptionItem: FC<{
             onClick={(e) => {
               e.stopPropagation()
               e.preventDefault()
+
               const defaultView = subscription.view
 
               present({
-                title: `${isFollowed ? "Edit " : ""}${APP_NAME} - ${subscription.feeds.title}`,
+                title: `${isFollowed ? `${t.common("words.edit")} ` : ""}${APP_NAME} - ${subscription.feeds.title}`,
                 clickOutsideToDismiss: true,
                 content: ({ dismiss }) => (
                   <FeedForm
@@ -375,7 +378,7 @@ const SubscriptionItem: FC<{
             }}
           >
             {isFollowed ? (
-              "Edit"
+              t("user_profile.edit")
             ) : (
               <>
                 <FollowIcon className="mr-1 size-3" />

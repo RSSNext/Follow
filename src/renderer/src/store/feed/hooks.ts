@@ -7,6 +7,7 @@ import {
 import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
 import type { FeedModel } from "@renderer/models"
 import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import { useShallow } from "zustand/react/shallow"
 
 import { getSubscriptionByFeedId } from "../subscription"
@@ -36,6 +37,8 @@ export const useFeedByIdSelector = <T>(
   )
 
 export const useFeedHeaderTitle = () => {
+  const { t } = useTranslation()
+
   const { feedId: currentFeedId, view } = useRouteParms()
 
   const feedTitle = useFeedByIdSelector(currentFeedId, (feed) => feed.title)
@@ -46,10 +49,11 @@ export const useFeedHeaderTitle = () => {
 
   switch (currentFeedId) {
     case ROUTE_FEED_PENDING: {
-      return views[view].name
+      // TODO: fix this type error
+      return t(views[view].name)
     }
     case FEED_COLLECTION_LIST: {
-      return "Starred"
+      return t("words.starred")
     }
     default: {
       if (currentFeedId?.startsWith(ROUTE_FEED_IN_FOLDER)) {

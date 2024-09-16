@@ -1,22 +1,26 @@
 import { Button } from "@renderer/components/ui/button"
 import { useCreateWalletMutation } from "@renderer/queries/wallet"
+import { Trans, useTranslation } from "react-i18next"
 
 export const CreateWallet = () => {
   const mutation = useCreateWalletMutation()
+  const { t } = useTranslation("settings")
 
   return (
     <div>
       <p className="text-base">
-        Create a free wallet to receive{" "}
-        <strong className="inline-flex items-baseline gap-1 font-medium">
-          <i className="i-mgc-power translate-y-[2px] text-accent" />
-          Power
-        </strong>
-        , which can be used to reward creators and also get rewarded for your content contributions.
+        <Trans
+          i18nKey="wallet.create.description"
+          ns="settings"
+          components={{
+            PowerIcon: <i className="i-mgc-power translate-y-[2px] text-accent" />,
+            strong: <strong />,
+          }}
+         />
       </p>
       <div className="mt-4 text-right">
         <Button variant="primary" isLoading={mutation.isPending} onClick={() => mutation.mutate()}>
-          Create Wallet
+          {t("wallet.create.button")}
         </Button>
       </div>
     </div>

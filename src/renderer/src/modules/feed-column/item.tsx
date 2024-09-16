@@ -1,8 +1,7 @@
 import { getMainContainerElement } from "@renderer/atoms/dom"
-import { useWhoami } from "@renderer/atoms/user"
+import { FeedCertification } from "@renderer/components/feed-certification"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { OouiUserAnonymous } from "@renderer/components/icons/OouiUserAnonymous"
-import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import {
   Tooltip,
   TooltipContent,
@@ -21,9 +20,10 @@ import { useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { WEB_URL } from "@shared/constants"
 import dayjs from "dayjs"
-import { memo, useCallback } from "react"
+import { memo, useCallback, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { useClickAnyWhere } from "usehooks-ts"
 
-import { usePresentUserProfileModal } from "../profile/hooks"
 import { UnreadNumber } from "./unread-number"
 
 interface FeedItemProps {
@@ -33,6 +33,7 @@ interface FeedItemProps {
   showUnreadCount?: boolean
 }
 const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedItemProps) => {
+  const { t } = useTranslation()
   const subscription = useSubscriptionByFeedId(feedId)
   const navigate = useNavigateEntry()
   const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
@@ -59,9 +60,11 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
   const feed = useFeedById(feedId)
 
   const { items } = useFeedActions({ feedId, view })
-  const me = useWhoami()
-  const presentUserProfile = usePresentUserProfileModal("drawer")
 
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+  useClickAnyWhere(() => {
+    setIsContextMenuOpen(false)
+  })
   if (!feed) return null
 
   return (
@@ -70,7 +73,8 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
         data-feed-id={feedId}
         className={cn(
           "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
-          isActive && "bg-native-active",
+          (isActive || isContextMenuOpen) && "bg-native-active",
+
           className,
         )}
         onClick={handleNavigate}
@@ -78,6 +82,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
           window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank")
         }}
         onContextMenu={(e) => {
+          setIsContextMenuOpen(true)
           const nextItems = items.concat()
           if (feed.errorAt && feed.errorMessage) {
             nextItems.push(
@@ -120,56 +125,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
           >
             {getPreferredTitle(feed)}
           </div>
-          {feed.ownerUserId &&
-            (feed.ownerUserId === me?.id ? (
-              <Tooltip delayDuration={300}>
-                <TooltipTrigger asChild>
-                  <i className="i-mgc-certificate-cute-fi ml-1.5 shrink-0 text-[15px] text-accent" />
-                </TooltipTrigger>
-
-                <TooltipPortal>
-                  <TooltipContent className="px-4 py-2">
-                    <div className="flex items-center text-base font-semibold">
-                      <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-accent" />
-                      Claimed feed
-                    </div>
-                    <div>This feed is claimed by you.</div>
-                  </TooltipContent>
-                </TooltipPortal>
-              </Tooltip>
-            ) : (
-              <Tooltip delayDuration={300}>
-                <TooltipTrigger asChild>
-                  <i className="i-mgc-certificate-cute-fi ml-1.5 shrink-0 text-[15px] text-amber-500" />
-                </TooltipTrigger>
-
-                <TooltipPortal>
-                  <TooltipContent className="px-4 py-2">
-                    <div className="flex items-center text-base font-semibold">
-                      <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-amber-500" />
-                      Claimed feed
-                    </div>
-                    <div className="mt-1 flex items-center gap-1.5">
-                      <span>This feed is claimed by</span>
-                      {feed.owner ? (
-                        <Avatar
-                          className="inline-flex aspect-square size-5 rounded-full"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            presentUserProfile(feed.owner!.id)
-                          }}
-                        >
-                          <AvatarImage src={feed.owner.image || undefined} />
-                          <AvatarFallback>{feed.owner.name?.slice(0, 2)}</AvatarFallback>
-                        </Avatar>
-                      ) : (
-                        <span>its owner.</span>
-                      )}
-                    </div>
-                  </TooltipContent>
-                </TooltipPortal>
-              </Tooltip>
-            ))}
+          <FeedCertification feed={feed} className="text-[15px]" />
           {feed.errorAt && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
@@ -179,7 +135,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
                 <TooltipContent>
                   <div className="flex items-center gap-1">
                     <i className="i-mgc-time-cute-re" />
-                    Error since{" "}
+                    {t("feed_item.error_since")}{" "}
                     {dayjs
                       .duration(dayjs(feed.errorAt).diff(dayjs(), "minute"), "minute")
                       .humanize(true)}
@@ -200,7 +156,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
                 <OouiUserAnonymous className="ml-1 shrink-0 text-base" />
               </TooltipTrigger>
               <TooltipPortal>
-                <TooltipContent>Not publicly visible on your profile page</TooltipContent>
+                <TooltipContent>{t("feed_item.not_publicly_visible")}</TooltipContent>
               </TooltipPortal>
             </Tooltip>
           )}

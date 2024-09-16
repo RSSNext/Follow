@@ -1,14 +1,19 @@
 import { PhCloudCheck } from "@renderer/components/icons/PhCloudCheck"
+import { PhCloudWarning } from "@renderer/components/icons/PhCloudWarning"
 import { PhCloudX } from "@renderer/components/icons/PhCloudX"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
 import { useAuthQuery, useIsOnline } from "@renderer/hooks/common"
 import { settings } from "@renderer/queries/settings"
-import { useEffect, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
+import { useTranslation } from "react-i18next"
 
+import { useSettingContextSelector } from "../modal/hooks"
 import { settingSyncQueue } from "./sync-queue"
 
-export const SyncIndicator = () => {
+export const SettingSyncIndicator = () => {
+  const { t } = useTranslation()
   const { data: remoteSettings, isLoading } = useAuthQuery(settings.get(), {})
+  const canSync = useSettingContextSelector((s) => s.canSync)
 
   const isOnline = useIsOnline()
   const onceRef = useRef(false)
@@ -24,15 +29,41 @@ export const SyncIndicator = () => {
     }
   }, [remoteSettings, isLoading])
 
+  const metaInfo: {
+    icon: React.FC<React.SVGProps<SVGSVGElement>>
+    text: string
+  } = useMemo(() => {
+    switch (true) {
+      case !isOnline: {
+        return {
+          icon: PhCloudX,
+          text: t("sync_indicator.offline"),
+        }
+      }
+      case !canSync: {
+        return {
+          icon: PhCloudWarning,
+          text: t("sync_indicator.disabled"),
+        }
+      }
+      default: {
+        return {
+          icon: PhCloudCheck,
+          text: t("sync_indicator.synced"),
+        }
+      }
+    }
+  }, [isOnline, canSync, t])
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <div className="center absolute right-2 size-5">
-          {isOnline ? <PhCloudCheck className="size-4" /> : <PhCloudX className="size-4" />}
+          <metaInfo.icon className="size-4" />
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <div className="text-center text-xs">{isOnline ? "Synced with server" : "Offline"}</div>
+        <div className="text-center text-xs">{metaInfo.text}</div>
       </TooltipContent>
     </Tooltip>
   )

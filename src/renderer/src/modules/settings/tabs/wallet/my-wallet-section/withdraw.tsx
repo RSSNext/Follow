@@ -19,27 +19,30 @@ import { useMutation } from "@tanstack/react-query"
 import { from, toNumber } from "dnum"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
 export const WithdrawButton = () => {
+  const { t } = useTranslation("settings")
   const { present } = useModalStack()
 
   const onClick = () => {
     present({
-      title: "Withdraw Power",
+      title: t("wallet.withdraw.modalTitle"),
       content: ({ dismiss }) => <WithdrawModalContent dismiss={dismiss} />,
     })
   }
 
   return (
     <Button variant="outline" onClick={onClick}>
-      Withdraw
+      {t("wallet.withdraw.button")}
     </Button>
   )
 }
 
 const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
+  const { t } = useTranslation("settings")
   const user = useWhoami()
   const wallet = useWallet({ userId: user?.id })
   const cashablePowerTokenBigInt = [BigInt(wallet.data?.[0].cashablePowerToken || 0n), 18] as const
@@ -72,25 +75,35 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
 
   useEffect(() => {
     if (mutation.isError) {
-      toast.error(`Withdrawal failed: ${mutation.error?.message}`)
+      toast.error(t("wallet.withdraw.error", { error: mutation.error?.message }))
     }
-  }, [mutation.isError])
+  }, [mutation.isError, t])
 
   useEffect(() => {
     if (mutation.isSuccess) {
-      toast.success("Withdrawal successful!")
+      toast.success(t("wallet.withdraw.success"))
       walletActions.get().invalidate()
       walletActions.transactions.get().invalidate()
       dismiss()
     }
-  }, [mutation.isSuccess])
+  }, [mutation.isSuccess, t, dismiss])
 
   return (
     <>
       <div className={cn(!cashablePowerTokenNumber && "text-orange-700", "mb-4 text-sm")}>
-        You have{" "}
-        <Balance className="inline-block">{wallet.data?.[0].cashablePowerToken || "0"}</Balance>{" "}
-        withdrawable Power in your wallet.
+        <Trans
+          i18nKey="wallet.withdraw.availableBalance"
+          components={{
+            Balance: (
+              <Balance className="inline-block">
+                {wallet.data?.[0].cashablePowerToken || "0"}
+              </Balance>
+            ),
+          }}
+          ns="settings"
+        >
+          {wallet.data?.[0].cashablePowerToken || "0"}
+        </Trans>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-96 space-y-4">
@@ -99,7 +112,7 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
             name="address"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Your Ethereum Address</FormLabel>
+                <FormLabel>{t("wallet.withdraw.addressLabel")}</FormLabel>
                 <FormControl>
                   <Input autoFocus {...field} placeholder="0x..." />
                 </FormControl>
@@ -112,7 +125,7 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
             name="amount"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Amount</FormLabel>
+                <FormLabel>{t("wallet.withdraw.amountLabel")}</FormLabel>
                 <FormControl>
                   <Input
                     autoFocus
@@ -127,7 +140,7 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
           />
           <div className="center flex">
             <Button disabled={!form.formState.isValid} type="submit" isLoading={mutation.isPending}>
-              Submit
+              {t("wallet.withdraw.submitButton")}
             </Button>
           </div>
         </form>

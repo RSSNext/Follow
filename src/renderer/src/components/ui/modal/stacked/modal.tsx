@@ -6,6 +6,7 @@ import { m } from "@renderer/components/common/Motion"
 import { ErrorComponentType } from "@renderer/components/errors/enum"
 import { isElectronBuild } from "@renderer/constants"
 import { useSwitchHotKeyScope } from "@renderer/hooks/common"
+import { debugStack } from "@renderer/lib/dev"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useAnimationControls, useDragControls } from "framer-motion"
@@ -83,6 +84,7 @@ export const ModalInternal = memo(
 
     const onClose = useCallback(
       (open: boolean): void => {
+        debugStack()
         if (!open) {
           close()
         }
@@ -113,7 +115,7 @@ export const ModalInternal = memo(
     })
     const animateController = useAnimationControls()
     useEffect(() => {
-      requestAnimationFrame(() => {
+      nextFrame(() => {
         animateController.start(modalMontionConfig.animate)
       })
     }, [animateController])
@@ -259,6 +261,7 @@ export const ModalInternal = memo(
                   )}
                   onPointerUp={handleDetectSelectEnd}
                   onClick={handleClickOutsideToDismiss}
+                  onFocus={stopPropagation}
                   style={zIndexStyle}
                 >
                   {DragBar}
@@ -296,6 +299,7 @@ export const ModalInternal = memo(
                   modalContainerClassName,
                   !isResizeable && "center",
                 )}
+                onFocus={stopPropagation}
                 onPointerUp={handleDetectSelectEnd}
                 onClick={handleClickOutsideToDismiss}
               >

@@ -1,8 +1,43 @@
 {
+  "copied_link": "Copied link to clipboard",
+  "feed": {
+    "follower_one": "follower",
+    "follower_other": "followers",
+    "followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} with {{readCount}} {{readNoun}} on {{appName}}",
+    "read_one": "read",
+    "read_other": "reads"
+  },
+  "header": {
+    "app": "App",
+    "download": "Download"
+  },
+  "invitation": {
+    "activate": "Activate",
+    "codeOptions": {
+      "1": "Looking for any alpha test user to invite you.",
+      "2": "Join our Discord server for occasional giveaways.",
+      "3": "Follow our X account for occasional giveaways."
+    },
+    "earlyAccess": "Follow is currently in early access and requires an invitation code to use.",
+    "earlyAccessMessage": "😰 Sorry, Follow is currently in early access and requires an invitation code to use.",
+    "generateButton": "Generate new code",
+    "generateCost": "You can spend {{INVITATION_PRICE}} Power to generate an invitation code for your friends.",
+    "getCodeMessage": "You can get an invitation code in the following ways:",
+    "title": "Invitation Code"
+  },
+  "login": {
+    "backToWebApp": "Back To Web App",
+    "continueWithGitHub": "Continue with GitHub",
+    "continueWithGoogle": "Continue with Google",
+    "logInTo": "Log in to ",
+    "openApp": "Open App",
+    "redirecting": "Redirecting",
+    "welcomeTo": "Welcome to "
+  },
   "redirect": {
-    "successMessage": "You have successfully connected to {{APP_NAME}} Account.",
-    "instruction": "Now is the time to open {{APP_NAME}} and safely close this page.",
     "continueInBrowser": "Continue in Browser",
-    "openApp": "Open {{APP_NAME}}"
+    "instruction": "Now is the time to open {{APP_NAME}} and safely close this page.",
+    "openApp": "Open {{APP_NAME}}",
+    "successMessage": "You have successfully connected to {{APP_NAME}} Account."
   }
 }

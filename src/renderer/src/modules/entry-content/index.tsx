@@ -1,6 +1,7 @@
 import { repository } from "@pkg"
 import {
   ReadabilityStatus,
+  setReadabilityStatus,
   useEntryInReadabilityStatus,
   useEntryIsInReadability,
   useEntryReadabilityContent,
@@ -10,11 +11,14 @@ import { useWhoami } from "@renderer/atoms/user"
 import { m } from "@renderer/components/common/Motion"
 import { ShadowDOM } from "@renderer/components/common/ShadowDOM"
 import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
+import { Button } from "@renderer/components/ui/button"
+import { Divider } from "@renderer/components/ui/divider"
 import { HTML } from "@renderer/components/ui/markdown"
 import { Toc } from "@renderer/components/ui/markdown/components/Toc"
 import { useInPeekModal } from "@renderer/components/ui/modal/inspire/PeekModal"
 import { RootPortal } from "@renderer/components/ui/portal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
+import { UserAvatar } from "@renderer/components/user-button"
 import { isWebBuild, ROUTE_FEED_PENDING } from "@renderer/constants"
 import { shortcuts } from "@renderer/constants/shortcuts"
 import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
@@ -38,15 +42,25 @@ import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
 import { memo, useEffect, useLayoutEffect, useMemo, useRef } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
+import { useTranslation } from "react-i18next"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
 import { EntryTranslation } from "../entry-column/translation"
+import { useTipModal } from "../wallet/hooks"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
 import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
 import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
 import { EntryContentProvider } from "./provider"
+
+const safeUrl = (url: string, baseUrl: string) => {
+  try {
+    return new URL(url, baseUrl).href
+  } catch {
+    return url
+  }
+}
 
 export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   const title = useFeedHeaderTitle()
@@ -72,6 +86,7 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 }
 
 export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, className }) => {
+  const { t } = useTranslation()
   const user = useWhoami()
 
   const { error, data, isPending } = useAuthQuery(Queries.entries.byId(entryId), {
@@ -150,6 +165,23 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
         : undefined,
     [readerFontFamily],
   )
+
+  const populatedFullHref = useMemo(() => {
+    const href = entry?.entries.url
+    if (!href) return "#"
+
+    if (href.startsWith("http")) return href
+    const feedSiteUrl = feed?.siteUrl
+    if (href.startsWith("/") && feedSiteUrl) return safeUrl(href, feedSiteUrl)
+    return href
+  }, [entry?.entries.url, feed?.siteUrl])
+
+  const openTipModal = useTipModal({
+    userId: feed?.ownerUserId ?? undefined,
+    feedId: entry?.feedId,
+    entryId,
+  })
+
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
@@ -184,7 +216,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
             className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
           >
             <a
-              href={entry.entries.url || void 0}
+              href={populatedFullHref || void 0}
               target="_blank"
               className="-mx-6 block cursor-default rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
               rel="noreferrer"
@@ -218,7 +250,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
                   <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
                     <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
                       <i className="i-mgc-magic-2-cute-re align-middle" />
-                      <span>AI summary</span>
+                      <span>{t("entry_content.ai_summary")}</span>
                     </div>
                     <AutoResizeHeight spring className="text-sm leading-relaxed">
                       {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
@@ -245,6 +277,10 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
               </div>
             </WrappedElementProvider>
 
+            {entry.settings?.readability && (
+              <ReadabilityAutoToggle id={entry.entries.id} url={entry.entries.url ?? ""} />
+            )}
+
             {!content && (
               <div className="center mt-16 min-w-0">
                 {isPending ? (
@@ -262,6 +298,45 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
                   <NoContent id={entry.entries.id} url={entry.entries.url ?? ""} />
                 )}
               </div>
+            )}
+
+            {feed?.ownerUserId && (
+              <>
+                <Divider />
+
+                <div className="my-16 flex flex-col items-center gap-8">
+                  <UserAvatar
+                    className="w-40 flex-col gap-3 p-0"
+                    avatarClassName="size-12"
+                    userId={feed.ownerUserId}
+                    enableModal={true}
+                  />
+                  <Button className="text-base" onClick={() => openTipModal()}>
+                    <i className="i-mgc-power-outline mr-1.5 text-lg" />
+                    {t("entry_content.support_creator")}
+                  </Button>
+                  {!!feed.tipUsers?.length && (
+                    <>
+                      <div className="text-sm text-zinc-500">
+                        {t("entry_content.support_amount", { amount: feed.tipUsers.length })}
+                      </div>
+                      <div className="flex w-fit max-w-80 flex-wrap gap-4">
+                        {feed.tipUsers?.map((user) => (
+                          <div key={user.id} className="size-8">
+                            <UserAvatar
+                              className="h-auto p-0"
+                              avatarClassName="size-8"
+                              userId={user?.id}
+                              enableModal={true}
+                              hideName={true}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </>
             )}
           </article>
         </div>
@@ -308,6 +383,7 @@ const TitleMetaHandler: Component<{
 }
 
 const ReadabilityContent = ({ entryId }: { entryId: string }) => {
+  const { t } = useTranslation()
   const result = useEntryReadabilityContent(entryId)
 
   return (
@@ -315,13 +391,12 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
       {result ? (
         <p className="rounded-xl border p-3 text-sm opacity-80">
           <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
-          This content is provided by Readability. If you find typographical anomalies, please go to
-          the source site to view the original content.
+          {t("entry_content.readability_notice")}
         </p>
       ) : (
         <div className="center mt-16 flex flex-col gap-2">
           <LoadingWithIcon size="large" icon={<i className="i-mgc-sparkles-2-cute-re" />} />
-          <span className="text-sm">Fetching original content and processing...</span>
+          <span className="text-sm">{t("entry_content.fetching_content")}</span>
         </div>
       )}
 
@@ -377,6 +452,9 @@ const ReadabilityAutoToggle = ({ url, id }: { url: string; id: string }) => {
   useEffect(() => {
     if (!onceRef.current) {
       onceRef.current = true
+      setReadabilityStatus({
+        [id]: ReadabilityStatus.INITIAL,
+      })
       toggle()
     }
   }, [toggle])
@@ -385,11 +463,14 @@ const ReadabilityAutoToggle = ({ url, id }: { url: string; id: string }) => {
 }
 
 const RenderError: FallbackRender = ({ error }) => {
+  const { t } = useTranslation()
   const nextError = typeof error === "string" ? new Error(error) : (error as Error)
   return (
     <div className="center mt-16 flex flex-col gap-2">
       <i className="i-mgc-close-cute-re text-3xl text-red-500" />
-      <span className="font-sans text-sm">Render error: {nextError.message}</span>
+      <span className="font-sans text-sm">
+        {t("entry_content.render_error")} {nextError.message}
+      </span>
       <a
         href={getNewIssueUrl({
           body: [
@@ -409,7 +490,7 @@ const RenderError: FallbackRender = ({ error }) => {
         target="_blank"
         rel="noreferrer"
       >
-        Report issue
+        {t("entry_content.report_issue")}
       </a>
     </div>
   )

@@ -1,10 +1,12 @@
 import { subscriptionActions } from "@renderer/store/subscription"
 import { useMutation } from "@tanstack/react-query"
+import { Trans,useTranslation } from "react-i18next"
 
 import { Button } from "../../components/ui/button"
 import { useCurrentModal } from "../../components/ui/modal"
 
 export function CategoryRemoveDialogContent({ feedIdList }: { feedIdList: string[] }) {
+  const { t } = useTranslation()
   const deleteMutation = useMutation({
     mutationFn: () => subscriptionActions.deleteCategory(feedIdList),
   })
@@ -13,20 +15,22 @@ export function CategoryRemoveDialogContent({ feedIdList }: { feedIdList: string
 
   return (
     <div className="flex w-[65ch] max-w-full flex-col gap-4">
-      <p>
-        This operation will delete your category, but the feeds it contains will be retained and
-        grouped by website.
-      </p>
+      <Trans i18nKey="sidebar.category_remove_dialog.description">
+        <p>
+          This operation will delete your category, but the feeds it contains will be retained and
+          grouped by website.
+        </p>
+      </Trans>
 
       <div className="flex items-center justify-end gap-3">
         <Button variant="outline" onClick={dismiss}>
-          Cancel
+          {t("sidebar.category_remove_dialog.cancel")}
         </Button>
         <Button
           isLoading={deleteMutation.isPending}
           onClick={() => deleteMutation.mutateAsync().then(() => dismiss())}
         >
-          Continue
+          {t("sidebar.category_remove_dialog.continue")}
         </Button>
       </div>
     </div>

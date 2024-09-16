@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.0.1-alpha.11",
+  "version": "0.0.1-alpha.12",
   "private": true,
   "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c",
   "description": "Next generation information browser",
@@ -23,6 +23,7 @@
     "dev:debug": "export DEBUG=true && vite --debug",
     "dev:web": "vite",
     "format": "prettier --write .",
+    "generator:i18n-template": "tsx scripts/generate-i18n-locale.ts",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "polyfill-optimize": "pnpx nolyfill install",
@@ -90,7 +91,7 @@
     "electron-updater": "^6.3.4",
     "font-list": "1.5.1",
     "foxact": "0.2.38",
-    "framer-motion": "11.0.10",
+    "framer-motion": "11.5.4",
     "franc-min": "6.2.0",
     "fuse.js": "7.0.0",
     "hast-util-to-jsx-runtime": "2.3.0",
@@ -147,6 +148,7 @@
   },
   "devDependencies": {
     "@babel/generator": "7.25.6",
+    "@clack/prompts": "0.7.0",
     "@egoist/tailwindcss-icons": "1.8.1",
     "@electron-forge/cli": "7.4.0",
     "@electron-forge/maker-dmg": "7.4.0",
@@ -191,6 +193,7 @@
     "simple-git-hooks": "2.11.1",
     "tailwindcss": "3.4.11",
     "tailwindcss-animate": "1.0.7",
+    "tsx": "4.19.1",
     "typescript": "^5.6.2",
     "vite": "^5.4.4",
     "vite-bundle-analyzer": "0.10.6",
@@ -217,7 +220,7 @@
   "lint-staged": {
     "*": "eslint --fix",
     "*.{js,jsx,ts,tsx,json}": [
-      "prettier --ignore-path ./.gitignore --write "
+      "prettier --write "
     ]
   },
   "bump": {

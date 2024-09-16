@@ -3,17 +3,18 @@ import { shortcuts } from "@renderer/constants/shortcuts"
 import { cn } from "@renderer/lib/utils"
 import { SettingsTitle } from "@renderer/modules/settings/title"
 import { defineSettingPageData } from "@renderer/modules/settings/utils"
+import { useTranslation } from "react-i18next"
 
 const iconName = "i-mgc-hotkey-cute-re"
-
 const priority = 1040
 
 export const loader = defineSettingPageData({
   iconName,
-  name: "settings.titles.shortcuts",
+  name: "titles.shortcuts",
   priority,
 })
 export function Component() {
+  const { t } = useTranslation("shortcuts")
   return (
     <>
       <SettingsTitle />
@@ -27,11 +28,11 @@ export function Component() {
                 <div
                   key={`${type}-${action}`}
                   className={cn(
-                    "flex items-center justify-between px-3 py-1.5",
+                    "flex h-9 items-center justify-between px-3 py-1.5",
                     index % 2 && "bg-native/40",
                   )}
                 >
-                  <div>{shortcuts[type][action].name}</div>
+                  <div>{t(shortcuts[type][action].name)}</div>
                   <div>
                     <KbdCombined joint>
                       {`${shortcuts[type][action].key}${shortcuts[type][action].extra ? `, ${shortcuts[type][action].extra}` : ""}`}

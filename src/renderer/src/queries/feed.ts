@@ -32,6 +32,11 @@ export const feed = {
         return res
       }),
     ),
+  claimedList: () =>
+    defineQuery(["feed", "claimedList"], async () => {
+      const res = await apiClient.feeds.claim.list.$get()
+      return res.data
+    }),
 }
 
 export const useFeed = ({ id, url }: FeedQueryParams) =>

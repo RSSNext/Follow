@@ -18,6 +18,7 @@ import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
 import { Fragment } from "react/jsx-runtime"
 import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { z } from "zod"
 
 import { FollowSummary } from "../../components/feed-summary"
@@ -87,6 +88,7 @@ export function DiscoverImport() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutation.mutate(values.file)
   }
+  const { t } = useTranslation()
 
   return (
     <>
@@ -113,7 +115,9 @@ export function DiscoverImport() {
                       <Fragment>
                         <i className="i-mgc-file-upload-cute-re size-5" />
 
-                        <span className="ml-2 text-sm opacity-80">Click to upload OPML file</span>
+                        <span className="ml-2 text-sm opacity-80">
+                          {t("discover.import.click_to_upload")}
+                        </span>
                       </Fragment>
                     )}
                   </label>
@@ -136,7 +140,7 @@ export function DiscoverImport() {
               disabled={!form.formState.dirtyFields.file}
               isLoading={mutation.isPending}
             >
-              Import
+              {t("words.import")}
             </Button>
           </div>
         </form>

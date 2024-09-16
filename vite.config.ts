@@ -79,7 +79,8 @@ export default ({ mode }) => {
           __debug_proxy: resolve(ROOT, "/__debug_proxy.html"),
         },
         output: {
-          experimentalMinChunkSize: 500_000,
+          // 10KB
+          experimentalMinChunkSize: 10_000,
         },
       },
     },
@@ -97,7 +98,6 @@ export default ({ mode }) => {
         }),
       htmlPlugin(typedEnv),
       mkcert(),
-
       devPrint(),
 
       process.env.ANALYZER && analyzer(),

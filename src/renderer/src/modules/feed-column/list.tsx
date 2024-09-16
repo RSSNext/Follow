@@ -10,11 +10,12 @@ import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { cn, sortByAlphabet } from "@renderer/lib/utils"
 import { Queries } from "@renderer/queries"
-import { useFeedStore } from "@renderer/store/feed"
+import { getPreferredTitle, useFeedStore } from "@renderer/store/feed"
 import { getSubscriptionByFeedId, useSubscriptionByView } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { AnimatePresence, m } from "framer-motion"
 import { Fragment, memo, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import {
@@ -79,6 +80,8 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   const feedId = useRouteFeedId()
   const navigate = useNavigateEntry()
 
+  const { t } = useTranslation()
+
   return (
     <div className={cn(className, "font-medium")}>
       <div
@@ -98,7 +101,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             }
           }}
         >
-          {view !== undefined && views[view].name}
+          {view !== undefined && t(views[view].name)}
         </div>
         <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
           <SortButton />
@@ -128,7 +131,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           }}
         >
           <i className="i-mgc-star-cute-fi mr-2 text-orange-500" />
-          Starred
+          {t("words.starred")}
         </div>
         {hasData ? (
           <SortableList view={view} expansion={expansion} data={data} />
@@ -151,7 +154,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
 
 const SortButton = () => {
   const { by, order } = useFeedListSort()
-
+  const { t } = useTranslation()
   const LIST = [
     { icon: "i-mgc-sort-ascending-cute-re", by: "count", order: "asc" },
     { icon: "i-mgc-sort-descending-cute-re", by: "count", order: "desc" },
@@ -204,7 +207,7 @@ const SortButton = () => {
               >
                 <HoverCard.Arrow className="-translate-x-4 fill-border" />
                 <section className="w-[170px] text-center">
-                  <span className="text-[13px]">Select a sorting method</span>
+                  <span className="text-[13px]">{t("sidebar.select_sort_method")}</span>
                   <div className="mt-4 grid grid-cols-2 grid-rows-2 gap-2">
                     {LIST.map(({ icon, by, order }) => {
                       const current = getFeedListSort()
@@ -302,7 +305,7 @@ const SortByAlphabeticalList = ({ view, expansion, data }: FeedListProps) => {
       if (!isSingle || hascategoryNameNotDefault) {
         map[categoryName] = categoryName
       } else {
-        map[categoryName] = feed.title!
+        map[categoryName] = getPreferredTitle(feed)!
       }
     }
     return map

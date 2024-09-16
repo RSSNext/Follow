@@ -13,10 +13,12 @@ import { useClaimFeedMutation } from "@renderer/queries/feed"
 import { useFeedById } from "@renderer/store/feed"
 import type { FC } from "react"
 import { useEffect } from "react"
+import { Trans, useTranslation } from "react-i18next"
 
 export const FeedClaimModalContent: FC<{
   feedId: string
 }> = ({ feedId }) => {
+  const { t } = useTranslation()
   const feed = useFeedById(feedId)
   const {
     data: claimMessage,
@@ -46,7 +48,7 @@ export const FeedClaimModalContent: FC<{
   }
 
   if (error) {
-    return <div>Failed to load claim message</div>
+    return <div>{t("feed_claim_modal.failed_to_load")}</div>
   }
 
   return (
@@ -56,52 +58,46 @@ export const FeedClaimModalContent: FC<{
           <FollowSummary feed={feed} />
         </CardHeader>
       </Card>
-      <p>To claim this feed as your own, you need to verify ownership.</p>
-      <p>There are three ways to choose from, you can choose one of them to verify.</p>
+      <p>{t("feed_claim_modal.verify_ownership")}</p>
+      <p>{t("feed_claim_modal.choose_verification_method")}</p>
       <Tabs defaultValue="content" className="mt-4">
         <TabsList className="w-full justify-start">
-          <TabsTrigger value="content">Content</TabsTrigger>
-          <TabsTrigger value="description">Description</TabsTrigger>
-          <TabsTrigger value="rss">RSS Tag</TabsTrigger>
+          <TabsTrigger value="content">{t("feed_claim_modal.tab_content")}</TabsTrigger>
+          <TabsTrigger value="description">{t("feed_claim_modal.tab_description")}</TabsTrigger>
+          <TabsTrigger value="rss">{t("feed_claim_modal.tab_rss")}</TabsTrigger>
         </TabsList>
         <AutoResizeHeight duration={0.1}>
           <TabsContent className="mt-0 pt-3" value="content">
-            <p>Copy the content below and post it to your latest RSS feed.</p>
+            <p>{t("feed_claim_modal.content_instructions")}</p>
             {feed.url.startsWith("rsshub://") && (
               <p className="mt-1 leading-tight text-orange-800">
-                This feed is provided by RSSHub with a 1 hour cache time. Please allow up to 1 hour
-                for changes to appear after publishing content.
+                {t("feed_claim_modal.rsshub_notice")}
               </p>
             )}
-
             <BaseCodeBlock>{claimMessage?.data.content || ""}</BaseCodeBlock>
           </TabsContent>
           <TabsContent className="mt-0 pt-3" value="description">
             <p className="mb-2 leading-none">
-              Current description:
+              {t("feed_claim_modal.description_current")}
               <span className="ml-2 text-xs text-zinc-500">{feed.description}</span>
             </p>
-            <p>
-              Copy the following content and paste it into the{" "}
-              <code className="text-sm">{`<description />`}</code> field of your RSS feed.
-            </p>
+            <Trans
+              i18nKey="feed_claim_modal.description_instructions"
+              components={{ code: <code className="text-sm">{"<description />"}</code> }}
+             />
             {feed.url.startsWith("rsshub://") && (
               <p className="mt-1 leading-tight text-orange-800">
-                This feed is provided by RSSHub with a 1 hour cache time. Please allow up to 1 hour
-                for changes to appear after modifying description.
+                {t("feed_claim_modal.rsshub_notice")}
               </p>
             )}
             <BaseCodeBlock>{claimMessage?.data.description || ""}</BaseCodeBlock>
           </TabsContent>
           <TabsContent className="mt-0 pt-3" value="rss">
             <div className="space-y-3">
-              <p>Copy the code below and paste it into your RSS generator.</p>
+              <p>{t("feed_claim_modal.rss_instructions")}</p>
+              <p>{t("feed_claim_modal.rss_format_choice")}</p>
               <p>
-                RSS generators generally have two formats to choose from. Please copy the XML and
-                JSON formats below as needed.
-              </p>
-              <p>
-                <b>XML Format</b>
+                <b>{t("feed_claim_modal.rss_xml_format")}</b>
               </p>
               <ShikiHighLighter
                 transparent
@@ -111,7 +107,7 @@ export const FeedClaimModalContent: FC<{
                 language="xml"
               />
               <p>
-                <b>JSON Format</b>
+                <b>{t("feed_claim_modal.rss_json_format")}</b>
               </p>
               <ShikiHighLighter
                 transparent
@@ -133,7 +129,7 @@ export const FeedClaimModalContent: FC<{
           variant={isSuccess ? "outline" : "primary"}
         >
           {isSuccess && <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />}
-          Claim
+          {t("feed_claim_modal.claim_button")}
         </Button>
       </div>
     </div>

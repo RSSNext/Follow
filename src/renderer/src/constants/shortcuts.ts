@@ -3,57 +3,57 @@ import { COPY_MAP } from "@renderer/constants"
 export const shortcuts = {
   feeds: {
     add: {
-      name: "Add Subscription",
+      name: "keys.feeds.add",
       key: "Meta+T",
     },
     switchToView: {
-      name: "Switch to View",
+      name: "keys.feeds.switchToView",
       key: "1, 2, 3, 4, 5, 6",
     },
     switchBetweenViews: {
-      name: "Switch Between Views",
+      name: "keys.feeds.switchBetweenViews",
       key: "Tab, Left, Right",
     },
   },
   layout: {
     toggleSidebar: {
-      name: "Show/Hide Feed Sidebar",
+      name: "keys.layout.toggleSidebar",
       key: "Meta+B",
     },
     showShortcuts: {
-      name: "Show Shortcuts",
+      name: "keys.layout.showShortcuts",
       key: "H",
     },
   },
   entries: {
     refetch: {
-      name: "Refetch",
+      name: "keys.entries.refetch",
       key: "R",
     },
     previous: {
-      name: "Previous Entry",
+      name: "keys.entries.previous",
       key: "K, Up",
     },
     next: {
-      name: "Next Entry",
+      name: "keys.entries.next",
       key: "J, Down",
     },
     markAllAsRead: {
-      name: "Mark All as Read",
+      name: "keys.entries.markAllAsRead",
       key: "Shift+Meta+A",
     },
     toggleUnreadOnly: {
-      name: "Toggle Unread Only",
+      name: "keys.entries.toggleUnreadOnly",
       key: "U",
     },
   },
   entry: {
     toggleRead: {
-      name: "Toggle Read",
+      name: "keys.entry.toggleRead",
       key: "M",
     },
     toggleStarred: {
-      name: "Toggle Starred",
+      name: "keys.entry.toggleStarred",
       key: "S",
     },
     openInBrowser: {
@@ -62,34 +62,33 @@ export const shortcuts = {
       extra: "Double Click",
     },
     tts: {
-      name: "Play TTS",
+      name: "keys.entry.tts",
       key: "Shift+Meta+V",
     },
     copyLink: {
-      name: "Copy Link",
+      name: "keys.entry.copyLink",
       key: "Shift+Meta+C",
     },
     tip: {
-      name: "Tip Power",
+      name: "keys.entry.tip",
       key: "Shift+Meta+T",
     },
     share: {
-      name: "Share",
+      name: "keys.entry.share",
       key: "Meta+Alt+S",
     },
     scrollUp: {
-      name: "Scroll Up",
+      name: "keys.entry.scrollUp",
       key: "PageUp",
     },
     scrollDown: {
-      name: "Scroll Down",
+      name: "keys.entry.scrollDown",
       key: "PageDown",
     },
   },
-
   audio: {
     "play/pause": {
-      name: "Play/Pause (When the audio player is open)",
+      name: "keys.audio.playPause",
       key: "Space",
     },
   },

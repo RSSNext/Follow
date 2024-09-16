@@ -6,6 +6,7 @@ import { useCurrentModal } from "@renderer/components/ui/modal"
 import { RadioGroup } from "@renderer/components/ui/radio-group"
 import { RadioCard } from "@renderer/components/ui/radio-group/RadioCard"
 import { UserAvatar } from "@renderer/components/user-button"
+import { useI18n } from "@renderer/hooks/common"
 import { nextFrame } from "@renderer/lib/dom"
 import { useWallet, useWalletTipMutation } from "@renderer/queries/wallet"
 import { from } from "dnum"
@@ -47,6 +48,7 @@ const TipModalContent_: FC<{
   feedId: string
   entryId: string
 }> = ({ userId, feedId, entryId }) => {
+  const t = useI18n()
   const myWallet = useMyWallet()
   const myWalletData = myWallet.data?.[0]
 
@@ -77,38 +79,30 @@ const TipModalContent_: FC<{
   if (!myWalletData) {
     return (
       <div className="flex w-[80vw] max-w-[350px] flex-col gap-5">
-        <p className="text-sm text-theme-foreground/80">
-          You don't have a wallet yet. Please create a wallet to tip.
-        </p>
+        <p className="text-sm text-theme-foreground/80">{t("tip_modal.no_wallet")}</p>
         <div className="flex justify-end">
           <Button variant="primary" onClick={() => nextFrame(() => settingModalPresent("wallet"))}>
-            Create For Free
+            {t("tip_modal.create_wallet")}
           </Button>
         </div>
       </div>
     )
   }
 
-  // if (transactionsQuery.error) {
-  //   return <div>Failed to load transactions history.</div>
-  // }
-
   if (tipMutation.isSuccess) {
     return (
       <div className="flex w-[80vw] max-w-[350px] flex-col gap-5">
-        <p className="text-sm text-theme-foreground/80">
-          Tip sent successfully! Thank you for your support.
-        </p>
+        <p className="text-sm text-theme-foreground/80">{t("tip_modal.tip_sent")}</p>
         <p>
           <Balance className="mr-1 inline-block text-sm" withSuffix>
             {amountBigInt}
           </Balance>{" "}
-          has been sent to the author.
+          {t("tip_modal.tip_amount_sent")}
         </p>
 
         <div className="flex justify-end">
           <Button variant="primary" onClick={() => dismiss()}>
-            OK
+            {t.common("ok")}
           </Button>
         </div>
       </div>
@@ -119,37 +113,56 @@ const TipModalContent_: FC<{
     <div className="flex w-[80vw] max-w-[350px] flex-col gap-3">
       {userId ? (
         <>
-          <p className="text-sm font-medium">Feed Owner</p>
-          <UserAvatar className="h-8 justify-start bg-transparent p-0" userId={userId} />
+          <p className="text-sm font-medium">{t("tip_modal.feed_owner")}</p>
+          <UserAvatar
+            className="h-8 justify-start bg-transparent p-0"
+            userId={userId}
+            enableModal={true}
+          />
         </>
       ) : (
         <>
           <p className="leading-none">
             <span className="text-xs text-theme-foreground/80">
-              No one has claimed this feed yet. The received Power will be securely held in the
-              blockchain contract until it is claimed.
+              {t("tip_modal.unclaimed_feed")}
             </span>
           </p>
           <div className="text-center">
             <Button variant="text" className="w-fit p-0" onClick={() => claimFeed()}>
-              Claim this feed
+              {t("tip_modal.claim_feed")}
             </Button>
           </div>
         </>
       )}
       <Divider className="my-2" />
-      <p className="text-sm text-theme-foreground/80">⭐ Tip to show your support!</p>
+      <p className="text-sm text-theme-foreground/80">{t("tip_modal.tip_support")}</p>
 
       <div className="flex flex-col justify-center gap-y-2">
         <div className="flex flex-row items-center gap-x-2 font-bold">
           <i className="i-mgc-power text-accent" />
-          <span>Amount</span>
+          <span>{t("tip_modal.amount")}</span>
         </div>
 
         <RadioGroup value={amount.toString()} onValueChange={(value) => setAmount(Number(value))}>
           <div className="grid grid-cols-2 gap-2">
-            <RadioCard wrapperClassName="justify-center" label="10 Power" value="10" />
-            <RadioCard wrapperClassName="justify-center" label="20 Power" value="20" />
+            <RadioCard
+              wrapperClassName="justify-center"
+              label={
+                <span className="flex items-center gap-1">
+                  10 <i className="i-mgc-power text-accent" />
+                </span>
+              }
+              value="10"
+            />
+            <RadioCard
+              wrapperClassName="justify-center group"
+              label={
+                <span className="flex items-center gap-1">
+                  20 <i className="i-mgc-power text-accent" />
+                </span>
+              }
+              value="20"
+            />
           </div>
         </RadioGroup>
 
@@ -158,7 +171,7 @@ const TipModalContent_: FC<{
           <>
             <Divider className="my-2" />
             <div className="text-xs text-red-500">
-              <span>Your balance is not enough to cover this tip. Please adjust the amount.</span>
+              <span>{t("tip_modal.low_balance")}</span>
             </div>
           </>
         )}
@@ -178,7 +191,7 @@ const TipModalContent_: FC<{
           variant={tipMutation.isSuccess ? "outline" : "primary"}
         >
           {tipMutation.isSuccess && <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />}
-          Tip Now
+          {t("tip_modal.tip_now")}
         </Button>
       </div>
     </div>

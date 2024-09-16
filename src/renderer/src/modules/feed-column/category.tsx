@@ -8,14 +8,15 @@ import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn, sortByAlphabet } from "@renderer/lib/utils"
-import { useFeedStore } from "@renderer/store/feed"
+import { getPreferredTitle, useFeedStore } from "@renderer/store/feed"
 import { subscriptionActions, useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
 import { Fragment, memo, useEffect, useRef, useState } from "react"
-import { useOnClickOutside } from "usehooks-ts"
+import { useTranslation } from "react-i18next"
+import { useClickAnyWhere, useOnClickOutside } from "usehooks-ts"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
 import { useFeedListSortSelector } from "./atom"
@@ -37,6 +38,8 @@ function FeedCategoryImpl({
   expansion,
   showUnreadCount = true,
 }: FeedCategoryProps) {
+  const { t } = useTranslation()
+
   const sortByUnreadFeedList = useFeedUnreadStore((state) =>
     ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0)),
   )
@@ -105,6 +108,10 @@ function FeedCategoryImpl({
 
   const [isCategoryEditing, setIsCategoryEditing] = useState(false)
 
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+  useClickAnyWhere(() => {
+    setIsContextMenuOpen(false)
+  })
   const isCategoryIsWaiting = isChangePending
 
   return (
@@ -113,7 +120,7 @@ function FeedCategoryImpl({
         <div
           className={cn(
             "flex w-full items-center justify-between rounded-md px-2.5 transition-colors",
-            isActive && "bg-native-active",
+            (isActive || isContextMenuOpen) && "bg-native-active",
           )}
           onClick={(e) => {
             e.stopPropagation()
@@ -122,16 +129,18 @@ function FeedCategoryImpl({
             }
           }}
           onContextMenu={(e) => {
+            setIsContextMenuOpen(true)
             showNativeMenu(
               [
                 {
                   type: "text",
                   enabled: !!(folderName && typeof view === "number"),
-                  label: "Change to other view",
+                  label: t("sidebar.feed_column.context_menu.change_to_other_view"),
                   submenu: views
                     .filter((v) => v.view !== view)
                     .map((v) => ({
-                      label: v.name,
+                      // TODO: fix this type error
+                      label: t(v.name),
                       enabled: true,
                       type: "text",
                       shortcut: (v.view + 1).toString(),
@@ -143,7 +152,7 @@ function FeedCategoryImpl({
                 },
                 {
                   type: "text",
-                  label: "Mark as read",
+                  label: t("sidebar.feed_column.context_menu.mark_as_read"),
                   click: () => {
                     subscriptionActions.markReadByFeedIds(ids)
                   },
@@ -151,18 +160,19 @@ function FeedCategoryImpl({
                 { type: "separator" },
                 {
                   type: "text",
-                  label: "Rename category",
+                  label: t("sidebar.feed_column.context_menu.rename_category"),
                   click: () => {
                     setIsCategoryEditing(true)
                   },
                 },
                 {
                   type: "text",
-                  label: "Delete category",
-
+                  label: t("sidebar.feed_column.context_menu.delete_category"),
                   click: async () => {
                     present({
-                      title: `Delete category ${folderName}?`,
+                      title: t("sidebar.feed_column.context_menu.delete_category_confirmation", {
+                        folderName,
+                      }),
                       content: () => <CategoryRemoveDialogContent feedIdList={ids} />,
                     })
                   },
@@ -362,8 +372,8 @@ const SortByAlphabeticalList = (props: SortListProps) => {
   const isDesc = useFeedListSortSelector((s) => s.order === "desc")
   const sortedFeedList = useFeedStore((state) => {
     const res = ids.sort((a, b) => {
-      const feedTitleA = state.feeds[a]?.title || ""
-      const feedTitleB = state.feeds[b]?.title || ""
+      const feedTitleA = getPreferredTitle(state.feeds[a]) || ""
+      const feedTitleB = getPreferredTitle(state.feeds[b]) || ""
       return sortByAlphabet(feedTitleA, feedTitleB)
     })
 

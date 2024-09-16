@@ -21,6 +21,7 @@ import { useFeedById } from "@renderer/store/feed"
 import { noop } from "foxact/noop"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"
@@ -62,6 +63,7 @@ function EntryHeaderImpl({
           "absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500",
           isAtTop ? "visible z-[11]" : "invisible z-[-99]",
           views[view].wideMode && "static",
+          shouldShowMeta && "hidden",
         )}
       >
         <EntryReadHistory entryId={entryId} />
@@ -124,6 +126,8 @@ const ElectronAdditionActions = window.electron
     }) => {
       const entryReadabilityStatus = useEntryInReadabilityStatus(entry?.entries.id)
 
+      const { t } = useTranslation()
+
       const feed = useFeedById(entry?.feedId)
 
       const populatedEntry = useMemo(() => {
@@ -147,7 +151,7 @@ const ElectronAdditionActions = window.electron
       const items = [
         {
           key: "tts",
-          name: "Play TTS",
+          name: t("entry_content.header.play_tts"),
           shortcut: shortcuts.entry.tts.key,
           className: ttsLoading ? "i-mgc-loading-3-cute-re animate-spin" : "i-mgc-voice-cute-re",
 
@@ -176,7 +180,7 @@ const ElectronAdditionActions = window.electron
           },
         },
         {
-          name: "Readability",
+          name: t("entry_content.header.readability"),
           className: cn(
             isInReadability(entryReadabilityStatus)
               ? `i-mgc-sparkles-2-filled`

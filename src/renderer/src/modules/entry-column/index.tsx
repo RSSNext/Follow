@@ -1,5 +1,5 @@
 import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
-import { useUISettingKey } from "@renderer/atoms/settings/ui"
+import { setUISetting, useUISettingKey } from "@renderer/atoms/settings/ui"
 import { m } from "@renderer/components/common/Motion"
 import { FeedFoundCanBeFollowError } from "@renderer/components/errors/FeedFoundCanBeFollowErrorFallback"
 import { FeedNotFound } from "@renderer/components/errors/FeedNotFound"
@@ -15,10 +15,11 @@ import { useTitle, useTypeScriptHappyCallback } from "@renderer/hooks/common"
 import { FeedViewType } from "@renderer/lib/enum"
 import { cn, isBizId } from "@renderer/lib/utils"
 import { useFeed } from "@renderer/queries/feed"
-import { entryActions, useEntry } from "@renderer/store/entry"
+import { entryActions, getEntry, useEntry } from "@renderer/store/entry"
 import { useFeedByIdSelector } from "@renderer/store/feed"
 import { useSubscriptionByFeedId } from "@renderer/store/subscription"
-import { memo, useCallback, useEffect, useRef, useState } from "react"
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import type {
   ScrollSeekConfiguration,
   VirtuosoGridProps,
@@ -39,6 +40,7 @@ const scrollSeekConfiguration: ScrollSeekConfiguration = {
   exit: (velocity) => Math.abs(velocity) < 1000,
 }
 function EntryColumnImpl() {
+  const { t } = useTranslation()
   const virtuosoRef = useRef<VirtuosoHandle>(null)
   const [isArchived, setIsArchived] = useState(false)
   const unreadOnly = useGeneralSettingKey("unreadOnly")
@@ -104,7 +106,7 @@ function EntryColumnImpl() {
             return (
               <div className="flex justify-center py-4">
                 <Button variant="outline" onClick={() => setIsArchived(true)}>
-                  Load archived entries
+                  {t("words.load_archived_entries")}
                 </Button>
               </div>
             )
@@ -185,7 +187,7 @@ function EntryColumnImpl() {
         {isRefreshing && (
           <div className="center box-content h-7 gap-2 py-3 text-xs">
             <LoadingCircle size="small" />
-            Refreshing new entries...
+            {t("entry_column.refreshing")}
           </div>
         )}
       </AutoResizeHeight>
@@ -208,7 +210,11 @@ function EntryColumnImpl() {
               <EntryEmptyList />
             )
           ) : view && views[view].gridMode ? (
-            <ListGird virtuosoOptions={virtuosoOptions} virtuosoRef={virtuosoRef} />
+            <ListGird
+              virtuosoOptions={virtuosoOptions}
+              virtuosoRef={virtuosoRef}
+              hasNextPage={entries.hasNextPage}
+            />
           ) : (
             <EntryList
               {...virtuosoOptions}
@@ -226,27 +232,90 @@ function EntryColumnImpl() {
 const ListGird = ({
   virtuosoOptions,
   virtuosoRef,
+  hasNextPage,
 }: {
   virtuosoOptions: Omit<VirtuosoGridProps<string, unknown>, "data" | "endReached"> & {
     data: string[]
     endReached: () => Promise<any>
   }
   virtuosoRef: React.RefObject<VirtuosoHandle>
+  hasNextPage: boolean
 }) => {
   const masonry = useUISettingKey("pictureViewMasonry")
   const view = useRouteParamsSelector((s) => s.view)
   const feedId = useRouteParamsSelector((s) => s.feedId)
-  if (masonry && view === FeedViewType.Pictures) {
+  const filterNoImage = useUISettingKey("pictureViewFilterNoImage")
+  const nextData = useMemo(() => {
+    if (filterNoImage) {
+      return virtuosoOptions.data.filter((entryId) => {
+        const entry = getEntry(entryId)
+        return entry?.entries.media?.length && entry.entries.media.length > 0
+      })
+    }
+    return virtuosoOptions.data
+  }, [virtuosoOptions.data, filterNoImage])
+  const { t } = useTranslation()
+  if (nextData.length === 0 && virtuosoOptions.data.length > 0) {
     return (
-      <PictureMasonry
-        key={feedId}
-        hasNextPage={virtuosoOptions.totalCount! > virtuosoOptions.data.length}
-        endReached={virtuosoOptions.endReached}
-        data={virtuosoOptions.data}
-      />
+      <div className="center absolute inset-x-0 inset-y-12 -translate-y-12 flex-col gap-5">
+        <i className="i-mgc-photo-album-cute-fi size-12" />
+        <div className="text-sm text-muted-foreground">
+          {t("entry_column.filtered_content_tip")}
+        </div>
+
+        <Button
+          onClick={() => {
+            setUISetting("pictureViewFilterNoImage", false)
+          }}
+        >
+          Show All
+        </Button>
+      </div>
     )
   }
-  return <VirtuosoGrid listClassName={girdClassNames} {...virtuosoOptions} ref={virtuosoRef} />
+
+  const hasFilteredContent = nextData.length < virtuosoOptions.data.length
+
+  const FilteredContentTip = hasFilteredContent && !hasNextPage && (
+    <div className="center mb-6 flex flex-col gap-5">
+      <i className="i-mgc-photo-album-cute-fi size-12" />
+      <div>{t("entry_column.filtered_content_tip_2")}</div>
+
+      <Button
+        onClick={() => {
+          setUISetting("pictureViewFilterNoImage", false)
+        }}
+      >
+        Show All
+      </Button>
+    </div>
+  )
+
+  if (masonry && view === FeedViewType.Pictures) {
+    return (
+      <>
+        <PictureMasonry
+          key={feedId}
+          hasNextPage={virtuosoOptions.totalCount! > virtuosoOptions.data.length}
+          endReached={virtuosoOptions.endReached}
+          data={nextData}
+        />
+
+        {FilteredContentTip}
+      </>
+    )
+  }
+  return (
+    <>
+      <VirtuosoGrid
+        listClassName={girdClassNames}
+        {...virtuosoOptions}
+        data={nextData}
+        ref={virtuosoRef}
+      />
+      {FilteredContentTip}
+    </>
+  )
 }
 
 const AddFeedHelper = () => {

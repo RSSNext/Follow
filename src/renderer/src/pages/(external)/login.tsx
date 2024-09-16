@@ -5,6 +5,7 @@ import { UserAvatar } from "@renderer/components/user-button"
 import { useSignOut } from "@renderer/hooks/biz/useSignOut"
 import { LOGIN_CALLBACK_URL, loginHandler } from "@renderer/lib/auth"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useLocation, useNavigate } from "react-router-dom"
 
 export function Component() {
@@ -30,6 +31,8 @@ function Login() {
     }
   }
 
+  const { t } = useTranslation("external")
+
   useEffect(() => {
     if (!window.electron && provider) {
       if (status === "authenticated") {
@@ -49,17 +52,17 @@ function Login() {
       <Logo className="size-20" />
       {!isAuthenticated ? (
         <h1 className="text-3xl font-bold">
-          Log in to
+          {t("login.logInTo")}
           {` ${APP_NAME}`}
         </h1>
       ) : (
         <h1 className="-mb-6 text-3xl font-bold">
-          Welcome to
+          {t("login.welcomeTo")}
           {` ${APP_NAME}`}
         </h1>
       )}
       {redirecting ? (
-        <div>Redirecting</div>
+        <div>{t("login.redirecting")}</div>
       ) : (
         <div className="flex flex-col gap-3">
           {isAuthenticated ? (
@@ -72,7 +75,7 @@ function Login() {
               </div>
               <div className="flex items-center justify-center gap-4">
                 <Button variant="outline" onClick={onOpenInWebApp}>
-                  Back To Web App
+                  {t("login.backToWebApp")}
                 </Button>
                 <Button
                   variant="primary"
@@ -80,7 +83,7 @@ function Login() {
                     navigate("/redirect?app=follow")
                   }}
                 >
-                  Open App
+                  {t("login.openApp")}
                 </Button>
               </div>
             </>
@@ -92,7 +95,7 @@ function Login() {
                   loginHandler("github")
                 }}
               >
-                <i className="i-mgc-github-cute-fi mr-2 text-xl" /> Continue with GitHub
+                <i className="i-mgc-github-cute-fi mr-2 text-xl" /> {t("login.continueWithGitHub")}
               </Button>
               <Button
                 className="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80"
@@ -100,7 +103,7 @@ function Login() {
                   loginHandler("google")
                 }}
               >
-                <i className="i-mgc-google-cute-fi mr-2 text-xl" /> Continue with Google
+                <i className="i-mgc-google-cute-fi mr-2 text-xl" /> {t("login.continueWithGoogle")}
               </Button>
             </>
           )}

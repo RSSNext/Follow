@@ -5,6 +5,7 @@ import type { MotionValue } from "framer-motion"
 import { useMotionValueEvent, useScroll } from "framer-motion"
 import type { FC } from "react"
 import { cloneElement, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { FollowIcon } from "./icons/follow"
@@ -19,6 +20,7 @@ const useMotionValueToState = (value: MotionValue<number>) => {
 
 export function Header() {
   const present = usePresentUserProfileModal()
+  const { t } = useTranslation("external")
 
   const { scrollY } = useScroll()
   const scrollYState = useMotionValueToState(scrollY)
@@ -40,12 +42,16 @@ export function Header() {
             </div>
 
             <div className="mx-6 hidden gap-12 text-sm font-medium lg:flex [&>div]:hover:cursor-pointer">
-              <HoverableLink href="/" icon={<FollowIcon />} label="App" />
+              <HoverableLink
+                href="/"
+                icon={<FollowIcon className="!size-3" />}
+                label={t("header.app")}
+              />
 
               <HoverableLink
                 href="https://github.com/RSSNext/follow/releases"
                 icon={<i className="i-mgc-download-2-cute-fi" />}
-                label="Download"
+                label={t("header.download")}
               />
             </div>
           </div>
@@ -75,7 +81,9 @@ const HoverableLink: FC<{
     target={href.startsWith("http") ? "_blank" : undefined}
     className={cn("group center flex gap-3 duration-200 hover:text-accent", className)}
   >
-    <span>{cloneElement(icon, { className: `size-3 ${icon.props.className}` })}</span>
+    <span className="center">
+      {cloneElement(icon, { className: `size-4 ${icon.props.className}` })}
+    </span>
     <span className="inline-flex h-[1.5em] flex-col overflow-hidden leading-[1.5em]">
       <span className="inline-flex flex-col gap-2 duration-200 group-hover:translate-y-[calc(-50%-0.25em)]">
         <span>{label}</span>

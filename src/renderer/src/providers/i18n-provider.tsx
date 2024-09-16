@@ -1,84 +1,16 @@
-import { dayjsLocaleImportMap } from "@renderer/@types/constants"
-import { defaultResources } from "@renderer/@types/default-resource"
-import { getGeneralSettings } from "@renderer/atoms/settings/general"
-import { currentSupportedLanguages, defaultNS, i18nAtom } from "@renderer/i18n"
-import { nextFrame } from "@renderer/lib/dom"
+import { currentSupportedLanguages } from "@renderer/@types/constants"
+import { getGeneralSettings, setGeneralSetting } from "@renderer/atoms/settings/general"
+import { IS_MANUAL_CHANGE_LANGUAGE_KEY } from "@renderer/constants"
+import { i18nAtom } from "@renderer/i18n"
 import { EventBus } from "@renderer/lib/event-bus"
-import { jotaiStore } from "@renderer/lib/jotai"
-import dayjs from "dayjs"
+import { loadLanguageAndApply } from "@renderer/lib/load-language"
 import i18next from "i18next"
+import LanguageDetector from "i18next-browser-languagedetector"
 import { useAtom } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import { useEffect, useLayoutEffect, useRef } from "react"
 import { I18nextProvider } from "react-i18next"
-import { toast } from "sonner"
 
-const loadingLangLock = new Set<string>()
-
-const langChangedHandler = async (lang: string) => {
-  const dayjsImport = dayjsLocaleImportMap[lang]
-
-  if (dayjsImport) {
-    const [locale, loader] = dayjsImport
-    loader().then(() => {
-      dayjs.locale(locale)
-    })
-  }
-
-  const { t } = jotaiStore.get(i18nAtom)
-  if (loadingLangLock.has(lang)) return
-  const isSupport = currentSupportedLanguages.includes(lang)
-  if (!isSupport) {
-    return
-  }
-  const loaded = i18next.getResourceBundle(lang, defaultNS)
-
-  if (loaded) {
-    return
-  }
-
-  loadingLangLock.add(lang)
-
-  const nsGlobbyMap = import.meta.glob("@locales/*/*.json")
-
-  // const rootGlobbyMap = import.meta.glob("@locales/*.json")
-  // const rootResources = await rootGlobbyMap[`../../locales/${lang}.json`]()
-  //   .then((m: any) => m.default)
-  //   .catch(() => {
-  //     toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
-  //   })
-  // i18next.addResourceBundle(lang, defaultNS, rootResources, true, true)
-
-  const namespaces = Object.keys(defaultResources.en)
-
-  const res = await Promise.allSettled(
-    namespaces.map(async (ns) => {
-      // if (ns === defaultNS) return
-
-      const loader = nsGlobbyMap[`../../locales/${ns}/${lang}.json`]
-
-      if (!loader) return
-      const nsResources = await loader().then((m: any) => m.default)
-
-      i18next.addResourceBundle(lang, ns, nsResources, true, true)
-    }),
-  )
-
-  for (const r of res) {
-    if (r.status === "rejected") {
-      toast.error(`${t("common:tips.load-lng-error")}: ${lang}`)
-      loadingLangLock.delete(lang)
-
-      return
-    }
-  }
-
-  await i18next.reloadResources()
-  await i18next.changeLanguage(lang)
-  loadingLangLock.delete(lang)
-}
-
-langChangedHandler(getGeneralSettings().language)
 export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
   const [currentI18NInstance, update] = useAtom(i18nAtom)
 
@@ -87,24 +19,40 @@ export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
     useEffect(
       () =>
         EventBus.subscribe("I18N_UPDATE", () => {
-          nextFrame(() => {
-            update(i18next.cloneInstance())
+          const lang = getGeneralSettings().language
+          const nextI18n = i18next.cloneInstance({
+            lng: lang,
           })
+          update(nextI18n)
         }),
       [update],
     )
 
   const callOnce = useRef(false)
+  const detectOnce = useRef(false)
 
   useLayoutEffect(() => {
     const i18next = currentI18NInstance
 
-    i18next.on("languageChanged", langChangedHandler)
+    i18next.on("languageChanged", loadLanguageAndApply)
 
     return () => {
       i18next.off("languageChanged")
     }
   }, [currentI18NInstance])
+
+  useLayoutEffect(() => {
+    if (localStorage.getItem(IS_MANUAL_CHANGE_LANGUAGE_KEY)) return
+    if (detectOnce.current) return
+    const languageDetector = new LanguageDetector()
+    const userLang = languageDetector.detect()
+    if (!userLang) return
+    const firstUserLang = Array.isArray(userLang) ? userLang[0] : userLang
+    if (currentSupportedLanguages.includes(firstUserLang)) {
+      setGeneralSetting("language", firstUserLang)
+    }
+    detectOnce.current = true
+  }, [])
 
   useLayoutEffect(() => {
     if (callOnce.current) return
