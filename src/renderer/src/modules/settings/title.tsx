@@ -15,7 +15,7 @@ export const SettingsSidebarTitle = ({ path, className }: { path: string; classN
 
   return (
     <div className={cn("flex items-center gap-2 text-[0.94rem] font-medium", className)}>
-      <i className={tab.iconName} />
+      <i className={`${tab.iconName} text-[19px]`} />
       <span>{t(tab.name as any)}</span>
     </div>
   )

@@ -8,7 +8,7 @@ import { stopPropagation } from "@renderer/lib/dom"
 import type { FeedViewType } from "@renderer/lib/enum"
 import { showNativeMenu } from "@renderer/lib/native-menu"
 import { cn, sortByAlphabet } from "@renderer/lib/utils"
-import { useFeedStore } from "@renderer/store/feed"
+import { getPreferredTitle, useFeedStore } from "@renderer/store/feed"
 import { subscriptionActions, useSubscriptionByFeedId } from "@renderer/store/subscription"
 import { useFeedUnreadStore } from "@renderer/store/unread"
 import { useMutation } from "@tanstack/react-query"
@@ -372,8 +372,8 @@ const SortByAlphabeticalList = (props: SortListProps) => {
   const isDesc = useFeedListSortSelector((s) => s.order === "desc")
   const sortedFeedList = useFeedStore((state) => {
     const res = ids.sort((a, b) => {
-      const feedTitleA = state.feeds[a]?.title || ""
-      const feedTitleB = state.feeds[b]?.title || ""
+      const feedTitleA = getPreferredTitle(state.feeds[a]) || ""
+      const feedTitleB = getPreferredTitle(state.feeds[b]) || ""
       return sortByAlphabet(feedTitleA, feedTitleB)
     })
 

@@ -70,7 +70,7 @@ export const EntryListHeader: FC<{
     <div
       ref={containerRef}
       className={cn(
-        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-200",
+        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
         titleStyleBasedView[view],
       )}
     >
@@ -188,7 +188,7 @@ const FilterNoImageButton = () => {
         enabled ? "entry_list_header.show_all_items" : "entry_list_header.hide_no_image_items",
       )}
     >
-      <i className="i-mgc-photo-album-cute-re" />
+      <i className={!enabled ? "i-mgc-photo-album-cute-re" : "i-mgc-photo-album-cute-fi"} />
     </ActionButton>
   )
 }

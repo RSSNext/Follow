@@ -27,6 +27,7 @@ export const RadioCard: FC<
   return (
     <label
       htmlFor={id ?? fallbackId}
+      data-state={selected ? "selected" : "unselected"}
       className={cn(
         "flex cursor-pointer items-center rounded-md p-2",
         "border",

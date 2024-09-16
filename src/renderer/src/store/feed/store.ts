@@ -1,12 +1,13 @@
 import { whoami } from "@renderer/atoms/user"
 import { runTransactionInScope } from "@renderer/database"
 import { apiClient } from "@renderer/lib/api-fetch"
-import type { FeedModel } from "@renderer/models"
+import type { FeedModel, UserModel } from "@renderer/models"
 import { FeedService } from "@renderer/services"
 import { produce } from "immer"
 import { nanoid } from "nanoid"
 
 import { getSubscriptionByFeedId } from "../subscription"
+import { userActions } from "../user"
 import { createZustandStore } from "../utils/helper"
 import type { FeedQueryParams, FeedState } from "./types"
 
@@ -32,10 +33,20 @@ class FeedActions {
             feed.errorAt = null
           }
           if (feed.id) {
-            // Not all API return the owner, so merging is needed here.
-            if (state.feeds[feed.id]?.owner && !feed.owner) {
-              feed.owner = state.feeds[feed.id]?.owner
+            if (feed.owner) {
+              userActions.upsert(feed.owner as UserModel)
             }
+            if (feed.tipUsers) {
+              userActions.upsert(feed.tipUsers)
+            }
+
+            // Not all API return these fields, so merging is needed here.
+            const optionalFields = ["owner", "tipUsers"] as const
+            optionalFields.forEach((field) => {
+              if (state.feeds[feed.id!]?.[field] && !(field in feed)) {
+                ;(feed as any)[field] = state.feeds[feed.id!]?.[field]
+              }
+            })
 
             state.feeds[feed.id] = feed
           } else {
