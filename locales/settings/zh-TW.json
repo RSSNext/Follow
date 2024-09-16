@@ -73,6 +73,7 @@
   "appearance.title": "外觀",
   "appearance.ui_font": "介面字體",
   "appearance.unread_count": "未讀計數",
+
   "general.app": "App",
   "general.data_persist.description": "本地保存數據以啟用離線訪問和本地搜尋。",
   "general.data_persist.label": "離線時保持資料",

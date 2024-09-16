@@ -1,7 +1,7 @@
 {
-  "langs.ar-dz": "العربية (الجزائر)",
-  "langs.ar-ma": "العربية (المغرب)",
-  "langs.ar-sa": "العربية (السعودية)",
+  "langs.ar-DZ": "العربية (الجزائر)",
+  "langs.ar-MA": "العربية (المغرب)",
+  "langs.ar-SA": "العربية (السعودية)",
   "langs.en": "English",
   "langs.es": "Español",
   "langs.fr": "Français",
@@ -9,5 +9,5 @@
   "langs.pt": "Português",
   "langs.zh-CN": "简体中文",
   "langs.zh-TW": "繁體中文（台灣）",
-  "name": "العربية (السعودية)"
+  "name": "العربية (الجزائر)"
 }
