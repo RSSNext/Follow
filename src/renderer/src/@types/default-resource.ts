@@ -1,4 +1,6 @@
 import en from "../../../../locales/app/en.json"
+import lang_nl from "../../../../locales/lang/nl.json"
+import common_nl from "../../../../locales/common/nl.json"
 import common_en from "../../../../locales/common/en.json"
 import common_fr from "../../../../locales/common/fr.json"
 import common_ja from "../../../../locales/common/ja.json"
@@ -41,4 +43,5 @@ export const defaultResources = {
   },
   fr: { lang: lang_fr, common: common_fr },
   pt: { lang: lang_pt, common: common_pt },
+  nl: { lang: lang_nl, common: common_nl },
 }
