@@ -42,7 +42,11 @@ export function Header() {
             </div>
 
             <div className="mx-6 hidden gap-12 text-sm font-medium lg:flex [&>div]:hover:cursor-pointer">
-              <HoverableLink href="/" icon={<FollowIcon />} label={t("header.app")} />
+              <HoverableLink
+                href="/"
+                icon={<FollowIcon className="!size-3" />}
+                label={t("header.app")}
+              />
 
               <HoverableLink
                 href="https://github.com/RSSNext/follow/releases"
@@ -77,7 +81,9 @@ const HoverableLink: FC<{
     target={href.startsWith("http") ? "_blank" : undefined}
     className={cn("group center flex gap-3 duration-200 hover:text-accent", className)}
   >
-    <span>{cloneElement(icon, { className: `size-3 ${icon.props.className}` })}</span>
+    <span className="center">
+      {cloneElement(icon, { className: `size-4 ${icon.props.className}` })}
+    </span>
     <span className="inline-flex h-[1.5em] flex-col overflow-hidden leading-[1.5em]">
       <span className="inline-flex flex-col gap-2 duration-200 group-hover:translate-y-[calc(-50%-0.25em)]">
         <span>{label}</span>
