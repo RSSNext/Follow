@@ -96,7 +96,6 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
           components={{
             Balance: (
               <Balance className="inline-block">
-                {/* {{ balance: wallet.data?.[0].cashablePowerToken || "0" }} */}
                 {wallet.data?.[0].cashablePowerToken || "0"}
               </Balance>
             ),
