@@ -2614,23 +2614,23 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     toEntryId: string | null;
                     powerToken: string;
                     comment: string | null;
-                    fromUser: {
+                    fromUser?: {
                         name: string | null;
                         id: string;
                         emailVerified: string | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
-                    } | null;
-                    toUser: {
+                    } | null | undefined;
+                    toUser?: {
                         name: string | null;
                         id: string;
                         emailVerified: string | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
-                    } | null;
-                    toFeed: {
+                    } | null | undefined;
+                    toFeed?: {
                         description: string | null;
                         title: string | null;
                         id: string;
@@ -2644,7 +2644,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         errorMessage: string | null;
                         errorAt: string | null;
                         ownerUserId: string | null;
-                    } | null;
+                    } | null | undefined;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -3383,6 +3383,12 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         errorMessage: string | null;
                         errorAt: string | null;
                         ownerUserId: string | null;
+                        tipUsers: {
+                            name: string | null;
+                            id: string;
+                            image: string | null;
+                            handle: string | null;
+                        }[];
                     };
                     users: {
                         [x: string]: {

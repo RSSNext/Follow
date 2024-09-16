@@ -5,13 +5,12 @@ import { FollowIcon } from "@renderer/components/icons/follow"
 import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
 import { Button } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
+import { usePresentFeedFormModal } from "@renderer/hooks/biz/useFeedFormModal"
 import { useAuthQuery, useI18n, useTitle } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
-import { stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useUserSubscriptionsQuery } from "@renderer/modules/profile/hooks"
-import { DEEPLINK_SCHEME } from "@shared/constants"
 import { useParams } from "react-router-dom"
 
 export function Component() {
@@ -34,6 +33,7 @@ export function Component() {
   useTitle(user.data?.name)
   const me = useWhoami()
   const isMe = user.data?.id === me?.id
+  const presentFeedFormModal = usePresentFeedFormModal()
 
   return user.isLoading ? (
     <LoadingCircle size="large" className="center h-48 w-full max-w-full" />
@@ -70,32 +70,40 @@ export function Component() {
                       target="_blank"
                     >
                       <FeedIcon fallback feed={subscription.feeds} size={22} className="mr-3" />
-                      <div className={cn("w-0 flex-1 grow", "group-hover:grow-[0.85]")}>
+                      <div
+                        className={cn(
+                          "flex w-0 flex-1 grow flex-col justify-center",
+                          "group-hover:grow-[0.85]",
+                        )}
+                      >
                         <div className="truncate font-medium leading-none">
                           {subscription.feeds?.title}
                         </div>
-                        <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
-                          {subscription.feeds?.description}
-                        </div>
+                        {subscription.feeds?.description && (
+                          <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
+                            {subscription.feeds.description}
+                          </div>
+                        )}
                       </div>
-
-                      <a
-                        className="absolute right-0 opacity-0 transition-opacity group-hover:opacity-100"
-                        href={`${DEEPLINK_SCHEME}add?id=${subscription.feeds?.id}`}
-                        onClick={stopPropagation}
-                      >
-                        <Button>
-                          {isMe ? (
-                            t.common("words.edit")
-                          ) : (
-                            <>
-                              <FollowIcon className="mr-1 size-3" />
-                              {APP_NAME}
-                            </>
-                          )}
-                        </Button>
-                      </a>
                     </a>
+                    <span className="center absolute inset-y-0 right-0 opacity-0 transition-opacity group-hover:opacity-100">
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation()
+
+                          presentFeedFormModal(subscription.feedId)
+                        }}
+                      >
+                        {isMe ? (
+                          t.common("words.edit")
+                        ) : (
+                          <>
+                            <FollowIcon className="mr-1 size-3" />
+                            {APP_NAME}
+                          </>
+                        )}
+                      </Button>
+                    </span>
                   </div>
                 ))}
               </div>
