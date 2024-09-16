@@ -1,8 +1,8 @@
 {
   "copied_link": "Copied link to clipboard",
   "feed": {
-    "follow_one": "follow",
-    "follow_other": "follows",
+    "follower_one": "follower",
+    "follower_other": "followers",
     "followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} with {{readCount}} {{readNoun}} on {{appName}}",
     "read_one": "read",
     "read_other": "reads"

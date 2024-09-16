@@ -84,7 +84,7 @@ export function Component() {
             <div className="mb-4 text-sm">
               {t("feed.followsAndReads", {
                 subscriptionCount: feed.data.subscriptionCount,
-                subscriptionNoun: t("feed.follow", { count: feed.data.subscriptionCount }),
+                subscriptionNoun: t("feed.follower", { count: feed.data.subscriptionCount }),
                 readCount: feed.data.readCount,
                 readNoun: t("feed.read", { count: feed.data.readCount }),
                 appName: APP_NAME,
