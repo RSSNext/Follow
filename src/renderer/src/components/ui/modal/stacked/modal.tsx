@@ -326,7 +326,7 @@ export const ModalInternal = memo(
                       ? "bg-theme-modal-background-opaque"
                       : "bg-theme-modal-background backdrop-blur-sm",
                     "shadow-modal",
-                    max ? "h-[90vh] w-[90vw]" : "",
+                    max ? "h-[90vh] w-[90vw]" : "max-h-[90vh]",
 
                     "border border-slate-200 dark:border-neutral-800",
                     modalClassName,
