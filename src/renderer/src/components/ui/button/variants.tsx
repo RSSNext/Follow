@@ -28,6 +28,11 @@ export const styledButtonVariant = cva(
         status: "disabled",
         className: "opacity-60",
       },
+      {
+        variant: "ghost",
+        status: "disabled",
+        className: "opacity-50 hover:!bg-transparent",
+      },
     ],
     variants: {
       size: {

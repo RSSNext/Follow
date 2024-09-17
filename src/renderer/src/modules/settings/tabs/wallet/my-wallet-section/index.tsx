@@ -68,10 +68,10 @@ export const MyWalletSection = () => {
                     target="_blank"
                     href="https://scan.rss3.io/token/0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8"
                     rel="noreferrer noopener"
-                   />
+                  />
                 ),
               }}
-             />
+            />
             <p>{t("wallet.power.dailyClaim", { amount: DAILY_CLAIM_AMOUNT })}</p>
           </div>
           <SettingSectionTitle margin="compact" title={t("wallet.address.title")} />

@@ -1,3 +1,5 @@
+import path from "node:path"
+
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindow } from "electron"
@@ -202,6 +204,9 @@ export const appRoute = {
   }),
 
   getAppPath: t.procedure.action(async () => app.getAppPath()),
+  resolveAppAsarPath: t.procedure.input<string>().action(async ({ input }) => {
+    return path.resolve(app.getAppPath(), input)
+  }),
 }
 interface Sender extends Electron.WebContents {
   getOwnerBrowserWindow: () => Electron.BrowserWindow | null

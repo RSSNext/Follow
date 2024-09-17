@@ -29,6 +29,8 @@ export interface ModalProps {
   resizeDefaultSize?: { width: number; height: number }
 
   modal?: boolean
+
+  autoFocus?: boolean
 }
 export interface ModalStackOptions {
   wrapper?: FC
