@@ -76,7 +76,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
   useLayoutEffect(() => {
     const $warpper = containerRef.current
     if (!$warpper) return
-    const recal = throttle(() => {
+    const handler = () => {
       const column = getCurrentColumn($warpper.clientWidth)
       setCurrentItemWidth(Math.trunc($warpper.clientWidth / column - 20))
 
@@ -85,7 +85,8 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
       nextFrame(() => {
         setIsInitLayout(true)
       })
-    }, 50)
+    }
+    const recal = throttle(handler, 50)
 
     let previousWidth = $warpper.offsetWidth
     const resizeObserver = new ResizeObserver((entries) => {
@@ -94,6 +95,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
 
         if (newWidth !== previousWidth) {
           previousWidth = newWidth
+
           recal()
         }
       }

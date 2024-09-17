@@ -93,65 +93,67 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
             {!!entry.collections && <StarIcon />}
           </div>
         </div>
-        <div className="mt-4 flex gap-[8px] overflow-x-auto pb-2">
-          {entry.entries.media?.map((media, i, mediaList) => {
-            const style: Partial<{
-              width: string
-              height: string
-            }> = {}
-            const boundsWidth = jotaiStore.get(socialMediaContentWidthAtom)
-            if (media.height && media.width) {
-              // has 1 picture, max width is container width, but max height is less than window height: 2/3
-              if (mediaList.length === 1) {
-                style.width = `${boundsWidth}px`
-                style.height = `${(boundsWidth * media.height) / media.width}px`
-                if (Number.parseInt(style.height) > (window.innerHeight * 2) / 3) {
-                  style.height = `${(window.innerHeight * 2) / 3}px`
-                  style.width = `${(Number.parseInt(style.height) * media.width) / media.height}px`
+        {!!entry.entries.media?.length && (
+          <div className="mt-4 flex gap-[8px] overflow-x-auto pb-2">
+            {entry.entries.media.map((media, i, mediaList) => {
+              const style: Partial<{
+                width: string
+                height: string
+              }> = {}
+              const boundsWidth = jotaiStore.get(socialMediaContentWidthAtom)
+              if (media.height && media.width) {
+                // has 1 picture, max width is container width, but max height is less than window height: 2/3
+                if (mediaList.length === 1) {
+                  style.width = `${boundsWidth}px`
+                  style.height = `${(boundsWidth * media.height) / media.width}px`
+                  if (Number.parseInt(style.height) > (window.innerHeight * 2) / 3) {
+                    style.height = `${(window.innerHeight * 2) / 3}px`
+                    style.width = `${(Number.parseInt(style.height) * media.width) / media.height}px`
+                  }
+                }
+                // has 2 pictures, max width is container half width, and - gap 8px
+                else if (mediaList.length === 2) {
+                  style.width = `${(boundsWidth - 8) / 2}px`
+                  style.height = `${(((boundsWidth - 8) / 2) * media.height) / media.width}px`
+                }
+                // has over 2 pictures, max width is container 1/3 width
+                else if (mediaList.length > 2) {
+                  style.width = `${boundsWidth / 3}px`
+                  style.height = `${((boundsWidth / 3) * media.height) / media.width}px`
                 }
               }
-              // has 2 pictures, max width is container half width, and - gap 8px
-              else if (mediaList.length === 2) {
-                style.width = `${(boundsWidth - 8) / 2}px`
-                style.height = `${(((boundsWidth - 8) / 2) * media.height) / media.width}px`
-              }
-              // has over 2 pictures, max width is container 1/3 width
-              else if (mediaList.length > 2) {
-                style.width = `${boundsWidth / 3}px`
-                style.height = `${((boundsWidth / 3) * media.height) / media.width}px`
-              }
-            }
 
-            const proxySize = {
-              width: Number.parseInt(style.width || "0") || 0,
-              height: Number.parseInt(style.height || "0") || 0,
-            }
-            return (
-              <Media
-                style={style}
-                key={media.url}
-                src={media.url}
-                type={media.type}
-                previewImageUrl={media.preview_image_url}
-                className="size-28 shrink-0 data-[state=loading]:!bg-zinc-200 dark:data-[state=loading]:!bg-neutral-700"
-                loading="lazy"
-                proxy={proxySize}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  previewMedia(
-                    mediaList.map((m) => ({
-                      url: m.url,
-                      type: m.type,
-                      fallbackUrl:
-                        m.preview_image_url ?? getImageProxyUrl({ url: m.url, ...proxySize }),
-                    })),
-                    i,
-                  )
-                }}
-              />
-            )
-          })}
-        </div>
+              const proxySize = {
+                width: Number.parseInt(style.width || "0") || 0,
+                height: Number.parseInt(style.height || "0") || 0,
+              }
+              return (
+                <Media
+                  style={style}
+                  key={media.url}
+                  src={media.url}
+                  type={media.type}
+                  previewImageUrl={media.preview_image_url}
+                  className="size-28 shrink-0 data-[state=loading]:!bg-zinc-200 dark:data-[state=loading]:!bg-neutral-700"
+                  loading="lazy"
+                  proxy={proxySize}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    previewMedia(
+                      mediaList.map((m) => ({
+                        url: m.url,
+                        type: m.type,
+                        fallbackUrl:
+                          m.preview_image_url ?? getImageProxyUrl({ url: m.url, ...proxySize }),
+                      })),
+                      i,
+                    )
+                  }}
+                />
+              )
+            })}
+          </div>
+        )}
       </div>
 
       <div
