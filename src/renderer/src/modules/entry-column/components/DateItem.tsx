@@ -160,7 +160,7 @@ const SocialMediaDateItem = ({ date, className }: { date: string; className?: st
       // @ts-expect-error
       Wrapper={useCallback(
         ({ children }) => (
-          <div className="m-auto flex w-[67ch] gap-3 pl-5 text-lg">{children}</div>
+          <div className="m-auto flex w-[645px] gap-3 pl-5 text-lg">{children}</div>
         ),
         [],
       )}

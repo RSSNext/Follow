@@ -1,5 +1,5 @@
 import { nextFrame } from "@renderer/lib/dom"
-import { getProxyUrl } from "@renderer/lib/img-proxy"
+import { getImageProxyUrl } from "@renderer/lib/img-proxy"
 import { cn } from "@renderer/lib/utils"
 import { saveImageDimensionsToDb } from "@renderer/store/image/db"
 import { useForceUpdate } from "framer-motion"
@@ -50,7 +50,7 @@ const MediaImpl: FC<MediaProps> = ({
   const [hidden, setHidden] = useState(!src)
   const [imgSrc, setImgSrc] = useState(() =>
     proxy && src && !failedList.has(src)
-      ? getProxyUrl({
+      ? getImageProxyUrl({
           url: src,
           width: proxy.width,
           height: proxy.height,
@@ -160,6 +160,7 @@ const MediaImpl: FC<MediaProps> = ({
   }
   return (
     <span
+      data-state={type !== "video" ? mediaLoadState : undefined}
       className={cn("block overflow-hidden rounded", hidden && "hidden", className)}
       style={style}
     >

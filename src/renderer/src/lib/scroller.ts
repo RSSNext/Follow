@@ -1,7 +1,13 @@
 // @see https://github.com/Innei/sprightly/blob/2444dcdb789ca585337a4d241095640a524231db/src/lib/scroller.ts
-import { microDampingPreset } from "@renderer/components/ui/constants/spring"
+
+import type { Spring } from "framer-motion"
 import { animateValue } from "framer-motion"
 
+const spring: Spring = {
+  type: "spring",
+  stiffness: 1000,
+  damping: 250,
+}
 // TODO scroller lock
 export const springScrollTo = (
   y: number,
@@ -16,7 +22,7 @@ export const springScrollTo = (
   const animation = animateValue({
     keyframes: [scrollTop + 1, y],
     autoplay: true,
-    ...microDampingPreset,
+    ...spring,
     onPlay() {
       el.addEventListener("wheel", stopSpringScrollHandler)
       el.addEventListener("touchmove", stopSpringScrollHandler)

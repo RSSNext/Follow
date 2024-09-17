@@ -23,7 +23,8 @@
     "paths": {
       "@shared/*": ["src/shared/src/*"],
       "@env": ["./src/env.ts"],
-      "@pkg": ["./package.json"]
+      "@pkg": ["./package.json"],
+      "@locales/*": ["./locales/*"]
     }
   }
 }

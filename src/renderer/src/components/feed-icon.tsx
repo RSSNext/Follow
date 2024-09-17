@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { getColorScheme, stringToHue } from "@renderer/lib/color"
-import { getProxyUrl } from "@renderer/lib/img-proxy"
+import { getImageProxyUrl } from "@renderer/lib/img-proxy"
 import { cn, getUrlIcon } from "@renderer/lib/utils"
 import type { CombinedEntryModel, FeedModel } from "@renderer/models"
 import type { ReactNode } from "react"
@@ -23,7 +23,7 @@ const getFeedIconSrc = ({
   if (src) {
     if (proxy) {
       return [
-        getProxyUrl({
+        getImageProxyUrl({
           url: src,
           width: proxy.width,
           height: proxy.height,
@@ -123,7 +123,7 @@ export function FeedIcon({
       break
     }
     case !!image: {
-      finalSrc = getProxyUrl({
+      finalSrc = getImageProxyUrl({
         url: image,
         width: size * 2,
         height: size * 2,

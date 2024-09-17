@@ -75,7 +75,7 @@ const FeedDescription = ({ description }: { description?: string }) => {
   return (
     <>
       <p>{t("discover.feed_description")}</p>
-      <Markdown className="my-4 w-full max-w-full cursor-text select-text break-all">
+      <Markdown className="w-full max-w-full cursor-text select-text break-all prose-p:my-1">
         {description}
       </Markdown>
     </>
@@ -97,7 +97,16 @@ export const DiscoverFeedForm = ({
   const keys = useMemo(
     () =>
       parseRegexpPathParams(route.path, {
-        excludeNames: ["routeParams", "functionalFlag", "fulltext"],
+        excludeNames: [
+          "routeParams",
+          "functionalFlag",
+          "fulltext",
+          "disableEmbed",
+          "date",
+          "language",
+          "lang",
+          "sort",
+        ],
       }),
     [route.path],
   )

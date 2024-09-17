@@ -11,6 +11,7 @@ import { setAuthSessionToken } from "./lib/user"
 import { registerUpdater } from "./updater"
 import { createMainWindow, createWindow } from "./window"
 
+app.commandLine.appendSwitch("lang", "zh_CN")
 if (isDev) console.info("[main] env loaded:", env)
 
 if (squirrelStartup) {

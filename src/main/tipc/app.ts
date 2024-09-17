@@ -1,10 +1,14 @@
+import path from "node:path"
+
 import { getRendererHandlers } from "@egoist/tipc/main"
 import { callGlobalContextMethod } from "@shared/bridge"
 import type { BrowserWindow } from "electron"
 import { app, clipboard, dialog, screen } from "electron"
 
 import { isWindows11 } from "../env"
+import { registerMenuAndContextMenu } from "../init"
 import { downloadFile } from "../lib/download"
+import { i18n } from "../lib/i18n"
 import { cleanAuthSessionToken, cleanUser } from "../lib/user"
 import type { RendererHandlers } from "../renderer-handlers"
 import { quitAndInstall } from "../updater"
@@ -202,7 +206,17 @@ export const appRoute = {
   }),
 
   getAppPath: t.procedure.action(async () => app.getAppPath()),
+  resolveAppAsarPath: t.procedure.input<string>().action(async ({ input }) => {
+    return path.resolve(app.getAppPath(), input)
+  }),
+
+  switchAppLocale: t.procedure.input<string>().action(async ({ input }) => {
+    i18n.changeLanguage(input)
+    registerMenuAndContextMenu()
+    app.commandLine.appendSwitch("lang", input)
+  }),
 }
+
 interface Sender extends Electron.WebContents {
   getOwnerBrowserWindow: () => Electron.BrowserWindow | null
 }

@@ -2492,9 +2492,9 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
     createdAt: string;
+    hash: string;
     fromUserId: string | null;
     toUserId: string | null;
-    hash: string;
     toFeedId: string | null;
     toEntryId: string | null;
     powerToken: string;
@@ -2502,9 +2502,9 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
 }, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
     createdAt: string;
+    hash: string;
     fromUserId: string | null;
     toUserId: string | null;
-    hash: string;
     toFeedId: string | null;
     toEntryId: string | null;
     powerToken: string;
@@ -2594,11 +2594,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 query: {
                     type?: string | string[] | undefined;
+                    hash?: string | string[] | undefined;
                     fromUserId?: string | string[] | undefined;
                     toUserId?: string | string[] | undefined;
-                    hash?: string | string[] | undefined;
-                    fromOrToUserId?: string | string[] | undefined;
                     toFeedId?: string | string[] | undefined;
+                    fromOrToUserId?: string | string[] | undefined;
                     createdAfter?: string | string[] | undefined;
                 };
             };
@@ -2607,30 +2607,30 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 data: {
                     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
                     createdAt: string;
+                    hash: string;
                     fromUserId: string | null;
                     toUserId: string | null;
-                    hash: string;
                     toFeedId: string | null;
                     toEntryId: string | null;
                     powerToken: string;
                     comment: string | null;
-                    fromUser?: {
+                    fromUser: {
                         name: string | null;
                         id: string;
                         emailVerified: string | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
-                    } | null | undefined;
-                    toUser?: {
+                    } | null;
+                    toUser: {
                         name: string | null;
                         id: string;
                         emailVerified: string | null;
                         image: string | null;
                         handle: string | null;
                         createdAt: string;
-                    } | null | undefined;
-                    toFeed?: {
+                    } | null;
+                    toFeed: {
                         description: string | null;
                         title: string | null;
                         id: string;
@@ -2644,7 +2644,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         errorMessage: string | null;
                         errorAt: string | null;
                         ownerUserId: string | null;
-                    } | null | undefined;
+                    } | null;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -3383,12 +3383,26 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         errorMessage: string | null;
                         errorAt: string | null;
                         ownerUserId: string | null;
-                        tipUsers: {
-                            name: string | null;
-                            id: string;
-                            image: string | null;
-                            handle: string | null;
-                        }[];
+                        tipHistory?: {
+                            type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
+                            createdAt: string;
+                            hash: string;
+                            fromUserId: string | null;
+                            toUserId: string | null;
+                            toFeedId: string | null;
+                            toEntryId: string | null;
+                            powerToken: string;
+                            comment: string | null;
+                            fromUser: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            } | null;
+                        }[] | undefined;
+                        tipCount?: number | undefined;
                     };
                     users: {
                         [x: string]: {
