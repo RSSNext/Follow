@@ -50,7 +50,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
         "relative flex px-8 py-6",
         "group",
         !asRead &&
-          "before:absolute before:-left-4 before:top-[28px] before:block before:size-2 before:rounded-full before:bg-accent",
+          "before:absolute before:left-2 before:top-10 before:block before:size-2 before:rounded-full before:bg-accent",
       )}
     >
       <FeedIcon fallback feed={feed} entry={entry.entries} size={32} className="mt-1" />
