@@ -234,10 +234,14 @@ export const Toc: Component = ({ className }) => {
                     )}
                   >
                     {toc.map((heading, index) => (
-                      <li key={heading.anchorId} className="flex h-[24px] w-full items-center">
+                      <li
+                        key={heading.anchorId}
+                        className="flex w-full items-center"
+                        style={{ paddingLeft: `${(heading.depth - rootDepth) * 12}px` }}
+                      >
                         <button
                           className={cn(
-                            "group flex w-full cursor-pointer justify-between",
+                            "group flex w-full cursor-pointer justify-between py-1",
                             index === currentScrollRange[0] ? "text-accent" : "",
                           )}
                           type="button"
