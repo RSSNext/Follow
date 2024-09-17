@@ -23,7 +23,6 @@ const createIconTransition =
   ({ icon1, icon2, status, className, icon1ClassName, icon2ClassName }: IconTransitionProps) => {
     const [isMount, setIsMounted] = useState(false)
     useEffect(() => {
-       
       setIsMounted(true)
       return () => setIsMounted(false)
     }, [])

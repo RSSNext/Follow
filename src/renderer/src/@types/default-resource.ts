@@ -1,7 +1,7 @@
 import en from "../../../../locales/app/en.json"
-import common_ardz from "../../../../locales/common/ar-dz.json"
-import common_arma from "../../../../locales/common/ar-ma.json"
-import common_arsa from "../../../../locales/common/ar-sa.json"
+import common_ardz from "../../../../locales/common/ar-DZ.json"
+import common_arma from "../../../../locales/common/ar-MA.json"
+import common_arsa from "../../../../locales/common/ar-SA.json"
 import common_en from "../../../../locales/common/en.json"
 import common_es from "../../../../locales/common/es.json"
 import common_fr from "../../../../locales/common/fr.json"
@@ -10,9 +10,9 @@ import common_pt from "../../../../locales/common/pt.json"
 import common_zhCN from "../../../../locales/common/zh-CN.json"
 import common_zhTW from "../../../../locales/common/zh-TW.json"
 import external_en from "../../../../locales/external/en.json"
-import lang_ardz from "../../../../locales/lang/ar-dz.json"
-import lang_arma from "../../../../locales/lang/ar-ma.json"
-import lang_arsa from "../../../../locales/lang/ar-sa.json"
+import lang_ardz from "../../../../locales/lang/ar-DZ.json"
+import lang_arma from "../../../../locales/lang/ar-MA.json"
+import lang_arsa from "../../../../locales/lang/ar-SA.json"
 import lang_en from "../../../../locales/lang/en.json"
 import lang_es from "../../../../locales/lang/es.json"
 import lang_fr from "../../../../locales/lang/fr.json"
@@ -46,9 +46,9 @@ export const defaultResources = {
     lang: lang_ja,
     common: common_ja,
   },
-  "ar-dz": { lang: lang_ardz, common: common_ardz },
-  "ar-sa": { lang: lang_arsa, common: common_arsa },
-  "ar-ma": { lang: lang_arma, common: common_arma },
+  "ar-DZ": { lang: lang_ardz, common: common_ardz },
+  "ar-SA": { lang: lang_arsa, common: common_arsa },
+  "ar-MA": { lang: lang_arma, common: common_arma },
   "zh-TW": { lang: lang_zhTW, common: common_zhTW },
   es: { lang: lang_es, common: common_es },
   fr: { lang: lang_fr, common: common_fr },
