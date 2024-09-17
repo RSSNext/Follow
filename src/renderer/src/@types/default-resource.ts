@@ -1,6 +1,7 @@
 import en from "../../../../locales/app/en.json"
 import common_ardz from "../../../../locales/common/ar-DZ.json"
 import common_ariq from "../../../../locales/common/ar-iq.json"
+import common_arkw from "../../../../locales/common/ar-kw.json"
 import common_arma from "../../../../locales/common/ar-MA.json"
 import common_arsa from "../../../../locales/common/ar-SA.json"
 import common_en from "../../../../locales/common/en.json"
@@ -13,6 +14,7 @@ import common_zhTW from "../../../../locales/common/zh-TW.json"
 import external_en from "../../../../locales/external/en.json"
 import lang_ardz from "../../../../locales/lang/ar-DZ.json"
 import lang_ariq from "../../../../locales/lang/ar-iq.json"
+import lang_arkw from "../../../../locales/lang/ar-KW.json"
 import lang_arma from "../../../../locales/lang/ar-MA.json"
 import lang_arsa from "../../../../locales/lang/ar-SA.json"
 import lang_en from "../../../../locales/lang/en.json"
@@ -56,4 +58,5 @@ export const defaultResources = {
   fr: { lang: lang_fr, common: common_fr },
   pt: { lang: lang_pt, common: common_pt },
   "ar-IQ": { lang: lang_ariq, common: common_ariq },
+  "ar-KW": { lang: lang_arkw, common: common_arkw },
 }
