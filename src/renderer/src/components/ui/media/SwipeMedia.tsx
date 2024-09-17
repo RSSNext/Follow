@@ -95,6 +95,7 @@ export function SwipeMedia({
                     e.stopPropagation()
                     onPreview?.(uniqMedia, i)
                   }}
+                  showFallback={true}
                 />
               </SwiperSlide>
             ))}
@@ -128,6 +129,7 @@ export function SwipeMedia({
           previewImageUrl={uniqMedia[0].preview_image_url}
           loading="lazy"
           proxy={proxySize}
+          showFallback={true}
         />
       ) : (
         <div className="relative flex aspect-video w-full items-center overflow-hidden rounded-t-2xl border-b">
