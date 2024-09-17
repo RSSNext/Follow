@@ -124,8 +124,8 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
               }
 
               const proxySize = {
-                width: Number.parseInt(style.width || "0") || 0,
-                height: Number.parseInt(style.height || "0") || 0,
+                width: Number.parseInt(style.width || "0") * 2 || 0,
+                height: Number.parseInt(style.height || "0") * 2 || 0,
               }
               return (
                 <Media
