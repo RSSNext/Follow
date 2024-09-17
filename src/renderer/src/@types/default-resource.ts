@@ -1,7 +1,12 @@
 import en from "../../../../locales/app/en.json"
+
+import lang_nl from "../../../../locales/lang/nl.json"
+import common_nl from "../../../../locales/common/nl.json"
+
 import common_ardz from "../../../../locales/common/ar-dz.json"
 import common_arma from "../../../../locales/common/ar-ma.json"
 import common_arsa from "../../../../locales/common/ar-sa.json"
+
 import common_en from "../../../../locales/common/en.json"
 import common_es from "../../../../locales/common/es.json"
 import common_fr from "../../../../locales/common/fr.json"
@@ -53,4 +58,5 @@ export const defaultResources = {
   es: { lang: lang_es, common: common_es },
   fr: { lang: lang_fr, common: common_fr },
   pt: { lang: lang_pt, common: common_pt },
+  nl: { lang: lang_nl, common: common_nl },
 }
