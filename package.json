@@ -120,6 +120,7 @@
     "react-intersection-observer": "9.13.1",
     "react-resizable-layout": "npm:@innei/react-resizable-layout@0.7.3-fork.1",
     "react-router-dom": "6.26.2",
+    "react-selecto": "1.26.3",
     "react-shadow": "20.5.0",
     "react-virtuoso": "4.10.4",
     "rehype-infer-description-meta": "2.0.0",

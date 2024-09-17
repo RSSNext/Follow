@@ -11,6 +11,7 @@ export default defineConfig({
         "@shared": resolve("src/shared/src"),
         "@env": resolve("./src/env.ts"),
         "@pkg": resolve("./package.json"),
+        "@locales": resolve("./locales"),
       },
     },
   },
@@ -19,6 +20,7 @@ export default defineConfig({
       alias: {
         "@env": resolve("./src/env.ts"),
         "@pkg": resolve("./package.json"),
+        "@locales": resolve("./locales"),
       },
     },
   },

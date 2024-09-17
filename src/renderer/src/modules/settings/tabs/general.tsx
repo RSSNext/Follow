@@ -240,7 +240,7 @@ export const LanguageSelector = () => {
             return (
               <SelectItem key={lang} value={lang}>
                 {langT(`langs.${lang}` as any)}{" "}
-                {typeof percent === "number" ? (percent === 100 ? null : `(${percent}%)`) : null}
+                {typeof percent === "number" ? (percent >= 100 ? null : `(${percent}%)`) : null}
               </SelectItem>
             )
           })}

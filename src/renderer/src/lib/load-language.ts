@@ -22,6 +22,8 @@ export const loadLanguageAndApply = async (lang: string) => {
     })
   }
 
+  tipcClient?.switchAppLocale(lang)
+
   const { t } = jotaiStore.get(i18nAtom)
   if (loadingLangLock.has(lang)) return
   const isSupport = currentSupportedLanguages.includes(lang)
