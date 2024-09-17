@@ -1,4 +1,5 @@
 import { Slot } from "@radix-ui/react-slot"
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { ActionButton } from "@renderer/components/ui/button"
 import { RelativeTime } from "@renderer/components/ui/datetime"
@@ -8,7 +9,7 @@ import { Skeleton } from "@renderer/components/ui/skeleton"
 import { useAsRead } from "@renderer/hooks/biz/useAsRead"
 import { useEntryActions } from "@renderer/hooks/biz/useEntryActions"
 import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
-import { cn } from "@renderer/lib/utils"
+import { cn, isSafari } from "@renderer/lib/utils"
 import { useEntry } from "@renderer/store/entry/hooks"
 import { useFeedById } from "@renderer/store/feed"
 
@@ -23,10 +24,11 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
   const previewMedia = usePreviewMedia()
   const asRead = useAsRead(entry)
   const feed = useFeedById(entry?.feedId)
+  const compactMode = useUISettingKey("compactMode")
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
-
+  const envIsSafari = isSafari()
   const content = entry.entries.content || entry.entries.description
 
   return (
@@ -38,13 +40,15 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
           "before:absolute before:-left-4 before:top-[28px] before:block before:size-2 before:rounded-full before:bg-accent",
       )}
     >
-      <FeedIcon
-        fallback
-        className="mask-squircle mask"
-        feed={feed}
-        entry={entry.entries}
-        size={36}
-      />
+      {!compactMode && (
+        <FeedIcon
+          fallback
+          className="mask-squircle mask"
+          feed={feed}
+          entry={entry.entries}
+          size={36}
+        />
+      )}
       <div className="ml-2 min-w-0 flex-1">
         <div className={cn("-mt-0.5 flex-1 text-sm", content && "line-clamp-[10]")}>
           <div className="w-[calc(100%-10rem)] space-x-1">
@@ -58,6 +62,8 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
             className={cn(
               "relative mt-0.5 whitespace-pre-line text-base",
               !!entry.collections && "pr-5",
+              // FIXME: Safari bug, not support line-clamp cross elements
+              !envIsSafari && "line-clamp-4",
             )}
           >
             <EntryTranslation
@@ -69,26 +75,28 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
             {!!entry.collections && <StarIcon />}
           </div>
         </div>
-        <div className="mt-1 flex gap-2 overflow-x-auto pb-2">
-          {entry.entries.media?.map((media, i, mediaList) => (
-            <Media
-              key={media.url}
-              src={media.url}
-              type={media.type}
-              previewImageUrl={media.preview_image_url}
-              className="size-28 shrink-0"
-              loading="lazy"
-              proxy={{
-                width: 224,
-                height: 224,
-              }}
-              onClick={(e) => {
-                e.stopPropagation()
-                previewMedia(mediaList, i)
-              }}
-            />
-          ))}
-        </div>
+        {!compactMode && (
+          <div className="mt-1 flex gap-2 overflow-x-auto pb-2">
+            {entry.entries.media?.map((media, i, mediaList) => (
+              <Media
+                key={media.url}
+                src={media.url}
+                type={media.type}
+                previewImageUrl={media.preview_image_url}
+                className="size-28 shrink-0"
+                loading="lazy"
+                proxy={{
+                  width: 224,
+                  height: 224,
+                }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  previewMedia(mediaList, i)
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <div

@@ -1,5 +1,6 @@
 import { env } from "@env"
 import { AudioPlayer, useAudioPlayerAtomSelector } from "@renderer/atoms/player"
+import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { FollowIcon } from "@renderer/components/icons/follow"
 import { Button } from "@renderer/components/ui/button"
@@ -56,6 +57,7 @@ export function ListItem({
     : undefined
   const isFollowed = !!useSubscriptionStore((state) => feedId && state.data[feedId])
   const { present } = useModalStack()
+  const compactMode = useUISettingKey("compactMode")
 
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
@@ -72,7 +74,7 @@ export function ListItem({
           "before:absolute before:-left-0.5 before:top-[1.4375rem] before:block before:size-2 before:rounded-full before:bg-accent",
       )}
     >
-      {!withAudio && <FeedIcon feed={feed} fallback entry={entry.entries} />}
+      {!compactMode && !withAudio && <FeedIcon feed={feed} fallback entry={entry.entries} />}
       <div
         className={cn(
           "-mt-0.5 flex-1 text-sm leading-tight",
@@ -158,7 +160,7 @@ export function ListItem({
         </Button>
       )}
 
-      {withAudio && entry.entries?.attachments?.[0].url && (
+      {!compactMode && withAudio && entry.entries?.attachments?.[0].url && (
         <AudioCover
           entryId={entryId}
           src={entry.entries?.attachments?.[0].url}
@@ -179,7 +181,7 @@ export function ListItem({
         />
       )}
 
-      {withDetails && entry.entries.media?.[0] && (
+      {!compactMode && withDetails && entry.entries.media?.[0] && (
         <Media
           src={entry.entries.media[0].url}
           type={entry.entries.media[0].type}

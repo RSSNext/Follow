@@ -46,6 +46,8 @@
   "actions.sidebar_title": "Actions",
   "actions.title": "Actions",
   "appearance.code_highlight_theme": "Code highlight theme",
+  "appearance.compact_mode.description": "Fit more messages on screen at one time",
+  "appearance.compact_mode.label": "Compact Mode",
   "appearance.content": "Content",
   "appearance.content_font": "Content Font",
   "appearance.custom_font": "Custom Font",

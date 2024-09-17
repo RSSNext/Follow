@@ -46,6 +46,8 @@
   "actions.sidebar_title": "自动化",
   "actions.title": "自动化",
   "appearance.code_highlight_theme": "代码高亮主题",
+  "appearance.compact_mode.description": "尽可能显示更多的文本信息",
+  "appearance.compact_mode.label": "紧凑模式",
   "appearance.content": "内容",
   "appearance.content_font": "正文字体",
   "appearance.custom_font": "自定义字体",
