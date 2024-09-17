@@ -1,5 +1,5 @@
 import { getColorScheme, stringToHue } from "@renderer/lib/color"
-import { getProxyUrl } from "@renderer/lib/img-proxy"
+import { getImageProxyUrl } from "@renderer/lib/img-proxy"
 import { cn, getUrlIcon } from "@renderer/lib/utils"
 import { useEffect, useMemo, useState } from "react"
 
@@ -50,7 +50,7 @@ export function SiteIcon({
     if (src) {
       if (stableProxy) {
         return [
-          getProxyUrl({
+          getImageProxyUrl({
             url: src,
             width: stableProxy.width,
             height: stableProxy.height,

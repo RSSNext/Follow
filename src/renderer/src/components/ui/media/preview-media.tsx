@@ -253,6 +253,8 @@ const FallbackableImage: FC<
         if (fallbackUrl) {
           setCurrentSrc(fallbackUrl)
           setCurrentState("fallback")
+        } else {
+          setIsAllError(true)
         }
         break
       }
@@ -274,7 +276,7 @@ const FallbackableImage: FC<
       )}
       {isAllError && (
         <div
-          className="center flex-col gap-6 text-white/80"
+          className="center pointer-events-none absolute inset-0 flex-col gap-6 text-white/80"
           onClick={stopPropagation}
           tabIndex={-1}
         >
@@ -283,7 +285,7 @@ const FallbackableImage: FC<
           <span>Failed to load image</span>
           <div className="center gap-4">
             <MotionButtonBase
-              className="underline underline-offset-4"
+              className="pointer-events-auto underline underline-offset-4"
               onClick={() => {
                 setCurrentSrc(replaceImgUrlIfNeed(src))
                 setIsAllError(false)
@@ -292,7 +294,12 @@ const FallbackableImage: FC<
               Retry
             </MotionButtonBase>
             or
-            <a className="underline underline-offset-4" href={src} target="_blank" rel="noreferrer">
+            <a
+              className="pointer-events-auto underline underline-offset-4"
+              href={src}
+              target="_blank"
+              rel="noreferrer"
+            >
               Visit Original
             </a>
           </div>
