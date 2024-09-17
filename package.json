@@ -199,7 +199,7 @@
     "vite-bundle-analyzer": "0.10.6",
     "vite-plugin-mkcert": "1.17.6",
     "vite-tsconfig-paths": "5.0.1",
-    "vitest": "2.1.1"
+    "vitest": "2.0.5"
   },
   "pnpm": {
     "patchedDependencies": {
