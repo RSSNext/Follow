@@ -8,9 +8,9 @@ const langs = [
   "ar-DZ",
   "ar-SA",
   "ar-MA",
-  "ar-iq",
-  "ar-kw",
-  "ar-tn",
+  "ar-IQ",
+  "ar-KW",
+  "ar-TN",
 ]
 export const currentSupportedLanguages = langs.sort()
 export const dayjsLocaleImportMap = {
