@@ -19,6 +19,7 @@ import {
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 import { apiClient } from "~/lib/api-fetch"
+import { toastFetchError } from "~/lib/error-parser"
 
 const formSchema = z.object({
   handle: z.string().max(50),
@@ -44,6 +45,9 @@ export const ProfileSettingForm = () => {
       apiClient["auth-app"]["update-account"].$patch({
         json: values,
       }),
+    onError: (error) => {
+      toastFetchError(error)
+    },
     onSuccess: (_, variables) => {
       if (user && variables) {
         setWhoami({ ...user, ...variables })
