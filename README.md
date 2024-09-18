@@ -88,6 +88,7 @@ If you have access, you are welcome to use the following methods to download and
 - Visit our online webapp at [app.follow.is](https://app.follow.is)
 - You can get the installation packages for each platform from the [Releases page](https://github.com/RSSNext/Follow/releases).
 - If you are using Arch linux, you can install package [follow-appimage](https://aur.archlinux.org/packages/follow-appimage) that maintained by [timochan](https://github.com/ttimochan).
+- If you are using Nix, you can install package [follow](https://github.com/NixOS/nixpkgs/pull/341356) that maintained by [iosmanthus](https://github.com/NixOS/nixpkgs/pull/341356), currently in the review process.
 
 ## Contributing
 
