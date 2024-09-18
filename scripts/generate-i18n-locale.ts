@@ -179,7 +179,7 @@ async function selectLocale(): Promise<string> {
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const LOCALE_DIR = path.resolve(__dirname, "../locales")
-const CONFIG_DIR = path.resolve(__dirname, "../src/renderer/src/@types")
+const CONFIG_DIR = path.resolve(__dirname, "../apps/renderer/src/@types")
 
 async function main() {
   const selectedLocale = await selectLocale()
