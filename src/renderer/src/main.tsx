@@ -1,5 +1,7 @@
 import "./styles/main.css"
 
+import { env } from "@env"
+import { authConfigManager } from "@hono/auth-js/react"
 import { ClickToComponent } from "click-to-react-component"
 import * as React from "react"
 import ReactDOM from "react-dom/client"
@@ -10,6 +12,13 @@ import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "./constants"
 import { initializeApp } from "./initialize"
 import { getOS } from "./lib/utils"
 import { router } from "./router"
+
+// Initialize the auth config
+authConfigManager.setConfig({
+  baseUrl: env.VITE_API_URL,
+  basePath: "/auth",
+  credentials: "include",
+})
 
 initializeApp().finally(() => {
   setAppIsReady(true)
