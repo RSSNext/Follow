@@ -1,7 +1,7 @@
+import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { useWhoami } from "@renderer/atoms/user"
 import { useModalStack } from "@renderer/components/ui/modal"
 import { FeedForm } from "@renderer/modules/discover/feed-form"
-import { DEEPLINK_SCHEME } from "@follow/shared/constants"
 import { useCallback } from "react"
 
 import { useI18n } from "../common"

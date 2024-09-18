@@ -1,3 +1,4 @@
+import { WEB_URL } from "@follow/shared/constants"
 import { FeedIcon } from "@renderer/components/feed-icon"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
@@ -12,7 +13,6 @@ import {
 import { useAuthQuery } from "@renderer/hooks/common"
 import { Balance } from "@renderer/modules/wallet/balance"
 import { Queries } from "@renderer/queries"
-import { WEB_URL } from "@follow/shared/constants"
 import { useTranslation } from "react-i18next"
 
 export const SettingFeeds = () => {

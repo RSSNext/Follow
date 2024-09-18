@@ -1,5 +1,5 @@
-import { signIn } from "@hono/auth-js/react"
 import { WEB_URL } from "@follow/shared/constants"
+import { signIn } from "@hono/auth-js/react"
 
 export const LOGIN_CALLBACK_URL = `${WEB_URL}/redirect?app=follow`
 export type LoginRuntime = "browser" | "app"

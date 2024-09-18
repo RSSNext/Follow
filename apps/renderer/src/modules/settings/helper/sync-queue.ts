@@ -1,3 +1,4 @@
+import type { GeneralSettings, UISettings } from "@follow/shared/interface/settings"
 import {
   __generalSettingAtom,
   generalServerSyncWhiteListKeys,
@@ -14,7 +15,6 @@ import { jotaiStore } from "@renderer/lib/jotai"
 import { getStorageNS } from "@renderer/lib/ns"
 import { isEmptyObject, sleep } from "@renderer/lib/utils"
 import { settings } from "@renderer/queries/settings"
-import type { GeneralSettings, UISettings } from "@follow/shared/interface/settings"
 import type { PrimitiveAtom } from "jotai"
 import { omit } from "lodash-es"
 

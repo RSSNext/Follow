@@ -1,3 +1,4 @@
+import type { EntryReadHistoriesModel } from "@follow/shared/hono"
 import { runTransactionInScope } from "@renderer/database"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { getEntriesParams, omitObjectUndefinedValue } from "@renderer/lib/utils"
@@ -5,7 +6,6 @@ import type { CombinedEntryModel, EntryModel, FeedModel, UserModel } from "@rend
 import { EntryService } from "@renderer/services"
 import { produce } from "immer"
 import { isNil, merge, omit } from "lodash-es"
-import type { EntryReadHistoriesModel } from "@follow/shared/hono"
 
 import { feedActions } from "../feed"
 import { imageActions } from "../image"

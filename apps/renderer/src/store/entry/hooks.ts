@@ -1,6 +1,6 @@
+import type { EntryReadHistoriesModel } from "@follow/shared/hono"
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "@renderer/constants"
 import type { FeedViewType } from "@renderer/lib/enum"
-import type { EntryReadHistoriesModel } from "@follow/shared/hono"
 import { useShallow } from "zustand/react/shallow"
 
 import { useFeedIdByView } from "../subscription"

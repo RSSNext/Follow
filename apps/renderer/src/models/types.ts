@@ -1,5 +1,5 @@
-import type { apiClient } from "@renderer/lib/api-fetch"
 import type { languageSchema, users } from "@follow/shared/hono"
+import type { apiClient } from "@renderer/lib/api-fetch"
 import type { z } from "zod"
 
 export type UserModel = Omit<

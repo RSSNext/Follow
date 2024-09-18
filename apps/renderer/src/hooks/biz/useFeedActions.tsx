@@ -1,3 +1,4 @@
+import { WEB_URL } from "@follow/shared/constants"
 import { whoami } from "@renderer/atoms/user"
 import { useModalStack } from "@renderer/components/ui/modal"
 import type { NativeMenuItem } from "@renderer/lib/native-menu"
@@ -5,7 +6,6 @@ import { useFeedClaimModal } from "@renderer/modules/claim"
 import { FeedForm } from "@renderer/modules/discover/feed-form"
 import { getFeedById, useFeedById } from "@renderer/store/feed"
 import { subscriptionActions, useSubscriptionByFeedId } from "@renderer/store/subscription"
-import { WEB_URL } from "@follow/shared/constants"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 

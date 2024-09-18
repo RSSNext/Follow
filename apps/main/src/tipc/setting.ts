@@ -4,8 +4,8 @@ import { app, nativeTheme } from "electron"
 
 import { setDockCount } from "../lib/dock"
 import { store } from "../lib/store"
-import { t } from "./_instance"
 import { createSettingWindow } from "../window"
+import { t } from "./_instance"
 
 const require = createRequire(import.meta.url)
 export const settingRoute = {

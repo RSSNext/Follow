@@ -2,12 +2,12 @@
  * @see https://github.com/toeverything/AFFiNE/blob/98e35384a6f71bf64c668b8f13afcaf28c9b8e97/packages/frontend/core/src/modules/find-in-page/view/find-in-page-modal.tsx
  * @copyright AFFiNE, Follow
  */
+import { useSubscribeElectronEvent } from "@follow/shared/event"
 import { softSpringPreset } from "@renderer/components/ui/constants/spring"
 import { useInputComposition, useRefValue } from "@renderer/hooks/common"
 import { tipcClient } from "@renderer/lib/client"
 import { nextFrame } from "@renderer/lib/dom"
 import { observeResize } from "@renderer/lib/observe-resize"
-import { useSubscribeElectronEvent } from "@follow/shared/event"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"

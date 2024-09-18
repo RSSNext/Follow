@@ -1,12 +1,11 @@
 import { env } from "@follow/shared/env"
+import type { AppType } from "@follow/shared/hono"
 import { getCsrfToken } from "@hono/auth-js/react"
 import PKG from "@pkg"
 import { NetworkStatus, setApiStatus } from "@renderer/atoms/network"
 import { setLoginModalShow } from "@renderer/atoms/user"
 import { hc } from "hono/client"
 import { FetchError, ofetch } from "ofetch"
-
-import type { AppType } from "@follow/shared/hono"
 
 let csrfTokenPromise: Promise<string> | null = null
 export const apiFetch = ofetch.create({
