@@ -6,25 +6,35 @@
     "src/preload/**/*",
     "types/**/*.d.ts",
     "src/shared/src/**/*",
-    "src/env.ts",
-    "./src/hono.ts",
+    "packages/shared/src/env.ts",
+    "packages/shared/src/hono.ts",
     "src/shared/src/global.d.ts",
     "configs/*",
     "./scripts/**/*"
   ],
   "compilerOptions": {
     "composite": true,
-    "types": ["electron-vite/node"],
+    "types": [
+      "electron-vite/node"
+    ],
     "moduleResolution": "Bundler",
     "noImplicitReturns": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "baseUrl": ".",
     "paths": {
-      "@shared/*": ["src/shared/src/*"],
-      "@env": ["./src/env.ts"],
-      "@pkg": ["./package.json"],
-      "@locales/*": ["./locales/*"]
+      "@shared/*": [
+        "src/shared/src/*"
+      ],
+      "@env": [
+        "packages/shared/src/env.ts"
+      ],
+      "@pkg": [
+        "./package.json"
+      ],
+      "@locales/*": [
+        "./locales/*"
+      ]
     }
   }
 }

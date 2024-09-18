@@ -6,12 +6,18 @@ import { viteRenderBaseConfig } from "./configs/vite.render.config"
 
 export default defineConfig({
   main: {
+    build: {
+      lib: {
+        entry: "./apps/main/src/index.ts",
+      },
+    },
     resolve: {
       alias: {
-        "@shared": resolve("src/shared/src"),
+        "@shared": resolve("packages/shared/src"),
         "@env": resolve("./src/env.ts"),
         "@pkg": resolve("./package.json"),
         "@locales": resolve("./locales"),
+        "~": resolve("./apps/main/src"),
       },
     },
   },

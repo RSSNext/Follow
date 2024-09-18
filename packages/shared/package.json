@@ -1,7 +1,6 @@
 {
-  "name": "Follow",
+  "name": "@follow/shared",
   "type": "module",
-  "version": "0.0.1-alpha.13",
   "private": true,
   "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c",
   "description": "Next generation information browser",
@@ -12,29 +11,21 @@
     "url": "https://github.com/RSSNext/follow",
     "type": "git"
   },
-  "main": "./dist/main/index.js",
-  "scripts": {
-    "analyze:web": "rm -rf out/web && ANALYZER=1 vite build",
-    "build": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make",
-    "build:macos": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make --arch=universal --platform=darwin",
-    "build:web": "rm -rf out/web && vite build",
-    "bump": "vv",
-    "dev": "electron-vite dev --outDir=dist",
-    "dev:debug": "export DEBUG=true && vite --debug",
-    "dev:web": "vite",
-    "format": "prettier --write .",
-    "generator:i18n-template": "tsx scripts/generate-i18n-locale.ts",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
-    "polyfill-optimize": "pnpx nolyfill install",
-    "prepare": "pnpm exec simple-git-hooks && shx test -f .env || shx cp .env.example .env",
-    "publish": "electron-vite build --outDir=dist && electron-forge publish",
-    "start": "electron-vite preview",
-    "test": "vitest",
-    "typecheck": "npm run typecheck:node && npm run typecheck:web",
-    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
-    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false"
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./interface/*": {
+      "import": "./src/interface/*.ts",
+      "types": "./src/interface/*.ts"
+    },
+    "./*": {
+      "import": "./src/*.ts",
+      "types": "./src/*.ts"
+    }
   },
+  "scripts": {},
   "dependencies": {
     "@egjs/react-infinitegrid": "4.12.0",
     "@egoist/tipc": "0.3.2",
@@ -201,42 +192,5 @@
     "vite-plugin-mkcert": "1.17.6",
     "vite-tsconfig-paths": "5.0.1",
     "vitest": "2.0.5"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "sonner@1.5.0": "patches/sonner@1.5.0.patch",
-      "immer@10.1.1": "patches/immer@10.1.1.patch",
-      "@mozilla/readability@0.5.0": "patches/@mozilla__readability@0.5.0.patch",
-      "re-resizable": "patches/re-resizable@6.9.17.patch",
-      "hono": "patches/hono.patch"
-    },
-    "overrides": {
-      "is-core-module": "npm:@nolyfill/is-core-module@^1",
-      "isarray": "npm:@nolyfill/isarray@^1"
-    }
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm exec lint-staged"
-  },
-  "lint-staged": {
-    "*": "eslint --fix",
-    "*.{js,jsx,ts,tsx,json}": [
-      "prettier --write "
-    ]
-  },
-  "bump": {
-    "before": [
-      "git pull --rebase"
-    ],
-    "after": [
-      "gh pr create --title 'chore: Release v${NEW_VERSION}' --body 'v${NEW_VERSION}' --base main --head dev"
-    ],
-    "commit_message": "chore(release): release v${NEW_VERSION}",
-    "tag": false,
-    "changelog": true,
-    "allowed_branches": [
-      "dev"
-    ]
-  },
-  "productName": "Follow"
+  }
 }
