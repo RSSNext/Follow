@@ -163,7 +163,7 @@ export const SettingGeneral = () => {
             },
 
             { type: "title", value: t("general.network"), disabled: !window.electron },
-            NettingSetting,
+            window.electron && NettingSetting,
           ]}
         />
       </div>
