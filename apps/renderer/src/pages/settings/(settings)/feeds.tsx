@@ -3,7 +3,7 @@ import { SettingsTitle } from "@renderer/modules/settings/title"
 import { defineSettingPageData } from "@renderer/modules/settings/utils"
 
 const iconName = "i-mgc-certificate-cute-re"
-const priority = 1053
+const priority = 1060
 
 export const loader = defineSettingPageData({
   iconName,

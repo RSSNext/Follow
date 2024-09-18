@@ -6,7 +6,7 @@ import { defineSettingPageData } from "@renderer/modules/settings/utils"
 import { useTranslation } from "react-i18next"
 
 const iconName = "i-mgc-hotkey-cute-re"
-const priority = 1040
+const priority = 1080
 
 export const loader = defineSettingPageData({
   iconName,
