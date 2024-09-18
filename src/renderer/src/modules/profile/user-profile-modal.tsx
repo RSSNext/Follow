@@ -7,7 +7,7 @@ import { ActionButton, Button } from "@renderer/components/ui/button"
 import { LoadingCircle, LoadingWithIcon } from "@renderer/components/ui/loading"
 import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
 import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { useAuthQuery, useI18n } from "@renderer/hooks/common"
+import { useAuthQuery, useI18n, useToggleCategories } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
@@ -77,6 +77,7 @@ export const UserProfileModalContent: FC<{
 
   const [scrollerRef, setScrollerRef] = useState<HTMLDivElement | null>(null)
   const [isHeaderSimple, setHeaderSimple] = useState(false)
+  const [expandedCategories, toggleCategory] = useToggleCategories()
 
   const currentVisibleRef = useRef<Set<string>>()
   useEffect(() => {
@@ -297,16 +298,23 @@ export const UserProfileModalContent: FC<{
                 Object.keys(subscriptions.data).map((category) => (
                   <div key={category}>
                     <div className="mb-2 flex items-center text-2xl font-bold">
-                      <h3>{category}</h3>
+                      <h3
+                        onClick={() => {
+                          toggleCategory(category)
+                        }}
+                      >
+                        {category}
+                      </h3>
                     </div>
                     <div>
-                      {subscriptions.data?.[category].map((subscription) => (
-                        <SubscriptionItem
-                          variant={itemStyle}
-                          key={subscription.feedId}
-                          subscription={subscription}
-                        />
-                      ))}
+                      {!expandedCategories[category] &&
+                        subscriptions.data?.[category].map((subscription) => (
+                          <SubscriptionItem
+                            variant={itemStyle}
+                            key={subscription.feedId}
+                            subscription={subscription}
+                          />
+                        ))}
                     </div>
                   </div>
                 ))

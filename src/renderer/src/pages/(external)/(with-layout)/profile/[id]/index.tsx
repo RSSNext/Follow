@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/ava
 import { Button } from "@renderer/components/ui/button"
 import { LoadingCircle } from "@renderer/components/ui/loading"
 import { usePresentFeedFormModal } from "@renderer/hooks/biz/useFeedFormModal"
-import { useAuthQuery, useI18n, useTitle } from "@renderer/hooks/common"
+import { useAuthQuery, useI18n, useTitle, useToggleCategories } from "@renderer/hooks/common"
 import { apiClient } from "@renderer/lib/api-fetch"
 import { defineQuery } from "@renderer/lib/defineQuery"
 import { cn } from "@renderer/lib/utils"
@@ -34,6 +34,7 @@ export function Component() {
   const me = useWhoami()
   const isMe = user.data?.id === me?.id
   const presentFeedFormModal = usePresentFeedFormModal()
+  const [expandedCategories, toggleCategory] = useToggleCategories()
 
   return user.isLoading ? (
     <LoadingCircle size="large" className="center h-48 w-full max-w-full" />
@@ -59,53 +60,54 @@ export function Component() {
           Object.keys(subscriptions.data || {}).map((category) => (
             <div key={category}>
               <div className="mb-4 flex items-center text-2xl font-bold">
-                <h3>{category}</h3>
+                <h3 onClick={() => toggleCategory(category)}>{category}</h3>
               </div>
               <div>
-                {subscriptions.data?.[category].map((subscription) => (
-                  <div key={subscription.feedId} className="group relative border-b py-5">
-                    <a
-                      className="flex flex-1 cursor-default"
-                      href={`/feed/${subscription.feedId}`}
-                      target="_blank"
-                    >
-                      <FeedIcon fallback feed={subscription.feeds} size={22} className="mr-3" />
-                      <div
-                        className={cn(
-                          "flex w-0 flex-1 grow flex-col justify-center",
-                          "group-hover:grow-[0.85]",
-                        )}
+                {!expandedCategories[category] &&
+                  subscriptions.data?.[category].map((subscription) => (
+                    <div key={subscription.feedId} className="group relative border-b py-5">
+                      <a
+                        className="flex flex-1 cursor-default"
+                        href={`/feed/${subscription.feedId}`}
+                        target="_blank"
                       >
-                        <div className="truncate font-medium leading-none">
-                          {subscription.feeds?.title}
-                        </div>
-                        {subscription.feeds?.description && (
-                          <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
-                            {subscription.feeds.description}
+                        <FeedIcon fallback feed={subscription.feeds} size={22} className="mr-3" />
+                        <div
+                          className={cn(
+                            "flex w-0 flex-1 grow flex-col justify-center",
+                            "group-hover:grow-[0.85]",
+                          )}
+                        >
+                          <div className="truncate font-medium leading-none">
+                            {subscription.feeds?.title}
                           </div>
-                        )}
-                      </div>
-                    </a>
-                    <span className="center absolute inset-y-0 right-0 opacity-0 transition-opacity group-hover:opacity-100">
-                      <Button
-                        onClick={(e) => {
-                          e.stopPropagation()
+                          {subscription.feeds?.description && (
+                            <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
+                              {subscription.feeds.description}
+                            </div>
+                          )}
+                        </div>
+                      </a>
+                      <span className="center absolute inset-y-0 right-0 opacity-0 transition-opacity group-hover:opacity-100">
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation()
 
-                          presentFeedFormModal(subscription.feedId)
-                        }}
-                      >
-                        {isMe ? (
-                          t.common("words.edit")
-                        ) : (
-                          <>
-                            <FollowIcon className="mr-1 size-3" />
-                            {APP_NAME}
-                          </>
-                        )}
-                      </Button>
-                    </span>
-                  </div>
-                ))}
+                            presentFeedFormModal(subscription.feedId)
+                          }}
+                        >
+                          {isMe ? (
+                            t.common("words.edit")
+                          ) : (
+                            <>
+                              <FollowIcon className="mr-1 size-3" />
+                              {APP_NAME}
+                            </>
+                          )}
+                        </Button>
+                      </span>
+                    </div>
+                  ))}
               </div>
             </div>
           ))
