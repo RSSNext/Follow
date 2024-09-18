@@ -1,3 +1,4 @@
+import { registerGlobalContext } from "@follow/shared/bridge"
 import { env } from "@follow/shared/env"
 import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
@@ -11,7 +12,6 @@ import {
   ElectronShowEvent,
 } from "@renderer/providers/invalidate-query-provider"
 import { CleanerService } from "@renderer/services/cleaner"
-import { registerGlobalContext } from "@follow/shared/bridge"
 import dayjs from "dayjs"
 import duration from "dayjs/plugin/duration"
 import localizedFormat from "dayjs/plugin/localizedFormat"
@@ -50,6 +50,12 @@ export const initializeApp = async () => {
   window.version = APP_VERSION
 
   const now = Date.now()
+  // Initialize the auth config first
+  authConfigManager.setConfig({
+    baseUrl: env.VITE_API_URL,
+    basePath: "/auth",
+    credentials: "include",
+  })
 
   // Set Environment
   document.documentElement.dataset.buildType = isElectronBuild ? "electron" : "web"
@@ -105,12 +111,6 @@ export const initializeApp = async () => {
     CleanerService.cleanOutdatedData()
   }
 
-  // Initialize the auth config
-  authConfigManager.setConfig({
-    baseUrl: env.VITE_API_URL,
-    basePath: "/auth",
-    credentials: "include",
-  })
   const loadingTime = Date.now() - now
   appLog(`Initialize ${APP_NAME} done,`, `${loadingTime}ms`)
 

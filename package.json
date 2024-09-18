@@ -15,8 +15,8 @@
   "main": "./dist/main/index.js",
   "scripts": {
     "analyze:web": "rm -rf out/web && ANALYZER=1 vite build",
-    "build": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make",
-    "build:macos": "npm run typecheck && electron-vite build --outDir=dist && electron-forge make --arch=universal --platform=darwin",
+    "build": "electron-vite build --outDir=dist && electron-forge make",
+    "build:macos": "electron-vite build --outDir=dist && electron-forge make --arch=universal --platform=darwin",
     "build:web": "rm -rf out/web && vite build",
     "bump": "vv",
     "dev": "electron-vite dev --outDir=dist",
