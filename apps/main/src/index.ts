@@ -7,7 +7,7 @@ import squirrelStartup from "electron-squirrel-startup"
 
 import { isDev, isMacOS } from "./env"
 import { initializeAppStage0, initializeAppStage1 } from "./init"
-import { setProxyConfig } from "./lib/proxy"
+import { updateProxy } from "./lib/proxy"
 import { setAuthSessionToken } from "./lib/user"
 import { registerUpdater } from "./updater"
 import { createMainWindow, createWindow } from "./window"
@@ -53,7 +53,7 @@ function bootstrap() {
 
     mainWindow = createMainWindow()
 
-    setProxyConfig()
+    updateProxy()
     registerUpdater()
 
     //remove Electron, Follow from user agent
