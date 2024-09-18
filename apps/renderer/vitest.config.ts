@@ -3,15 +3,14 @@ import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import tsconfigPath from "vite-tsconfig-paths"
-import { defineConfig } from "vitest/config"
+import { defineProject } from "vitest/config"
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"))
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
-export default defineConfig({
+
+export default defineProject({
   root: "./",
   test: {
-    include: ["**/*.test.ts", "**/*.spec.ts"],
-
     globals: true,
     setupFiles: [resolve(__dirname, "./setup-file.ts")],
     environment: "node",
@@ -30,7 +29,7 @@ export default defineConfig({
 
   plugins: [
     tsconfigPath({
-      projects: [resolve(__dirname, "./tsconfig.json")],
+      projects: ["./tsconfig.json"],
     }),
   ],
 })

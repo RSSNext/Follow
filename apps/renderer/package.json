@@ -4,6 +4,7 @@
   "private": true,
   "main": "./dist/main/index.js",
   "scripts": {
+    "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
