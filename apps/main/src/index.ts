@@ -1,9 +1,6 @@
 import { electronApp, optimizer } from "@electron-toolkit/utils"
-// @ts-ignore
 import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@follow/shared/constants"
-// @ts-ignore
 import { extractElectronWindowOptions } from "@follow/shared/electron"
-// @ts-ignore
 import { env } from "@follow/shared/env"
 import { app, BrowserWindow, session } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
