@@ -1,5 +1,5 @@
-const langs = ["en", "ja", "zh-CN", "zh-TW", "pt", "fr", "ar-DZ", "ar-SA", "ar-MA", "zh-HK"]
-export const currentSupportedLanguages = langs.sort()
+const langs = ["ja", "zh-CN", "zh-TW", "pt", "fr", "ar-DZ", "ar-SA", "ar-MA", "zh-HK"]
+export const currentSupportedLanguages = ["en", ...langs.sort()]
 export const dayjsLocaleImportMap = {
   en: ["en", () => import("dayjs/locale/en")],
   ["zh-CN"]: ["zh-cn", () => import("dayjs/locale/zh-cn")],
