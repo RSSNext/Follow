@@ -4,6 +4,7 @@ import type { BrowserWindow, MenuItem, MenuItemConstructorOptions } from "electr
 import { Menu } from "electron"
 
 import { isDev, isMacOS } from "./env"
+import { t } from "./lib/i18n"
 import { revealLogFile } from "./logger"
 import { checkForUpdates, quitAndInstall } from "./updater"
 import { createSettingWindow, createWindow, getMainWindow } from "./window"
@@ -17,24 +18,24 @@ export const registerAppMenu = () => {
             submenu: [
               {
                 type: "normal",
-                label: `About ${name}`,
+                label: t("menu.about", { name }),
                 click: () => {
                   createSettingWindow("about")
                 },
               },
               { type: "separator" },
               {
-                label: "Settings...",
+                label: t("menu.settings"),
                 accelerator: "CmdOrCtrl+,",
                 click: () => createSettingWindow(),
               },
               { type: "separator" },
-              { role: "services" },
+              { role: "services", label: t("menu.services") },
               { type: "separator" },
-              { role: "hide" },
-              { role: "hideOthers" },
+              { role: "hide", label: t("menu.hide", { name }) },
+              { role: "hideOthers", label: t("menu.hideOthers") },
               { type: "separator" },
-              { role: "quit" },
+              { role: "quit", label: t("menu.quit", { name }) },
             ],
           },
         ] as MenuItemConstructorOptions[])
@@ -42,10 +43,11 @@ export const registerAppMenu = () => {
 
     {
       role: "fileMenu",
+      label: t("menu.file"),
       submenu: [
         {
           type: "normal",
-          label: "Quick Add",
+          label: t("menu.quickAdd"),
           accelerator: "CmdOrCtrl+N",
           click: () => {
             const mainWindow = getMainWindow()
@@ -57,7 +59,7 @@ export const registerAppMenu = () => {
 
         {
           type: "normal",
-          label: "Discover",
+          label: t("menu.discover"),
           accelerator: "CmdOrCtrl+T",
           click: () => {
             const mainWindow = getMainWindow()
@@ -68,22 +70,22 @@ export const registerAppMenu = () => {
         },
 
         { type: "separator" },
-        { role: "close" },
+        { role: "close", label: t("menu.close") },
       ],
     },
     {
-      label: "Edit",
+      label: t("menu.edit"),
       submenu: [
-        { role: "undo" },
-        { role: "redo" },
+        { role: "undo", label: t("menu.undo") },
+        { role: "redo", label: t("menu.redo") },
         { type: "separator" },
-        { role: "cut" },
-        { role: "copy" },
-        { role: "paste" },
+        { role: "cut", label: t("menu.cut") },
+        { role: "copy", label: t("menu.copy") },
+        { role: "paste", label: t("menu.paste") },
         { type: "separator" },
         {
           type: "normal",
-          label: "Search",
+          label: t("menu.search"),
           accelerator: "CmdOrCtrl+F",
           click(_e, window) {
             if (!window) return
@@ -92,37 +94,73 @@ export const registerAppMenu = () => {
         },
         ...((isMacOS
           ? [
-              { role: "pasteAndMatchStyle" },
-              { role: "delete" },
-              { role: "selectAll" },
+              { role: "pasteAndMatchStyle", label: t("menu.pasteAndMatchStyle") },
+              { role: "delete", label: t("menu.delete") },
+              { role: "selectAll", label: t("menu.selectAll") },
               { type: "separator" },
               {
-                label: "Speech",
-                submenu: [{ role: "startSpeaking" }, { role: "stopSpeaking" }],
+                label: t("menu.speech"),
+                submenu: [
+                  { role: "startSpeaking", label: t("menu.startSpeaking") },
+                  { role: "stopSpeaking", label: t("menu.stopSpeaking") },
+                ],
               },
             ]
           : [
-              { role: "delete" },
+              { role: "delete", label: t("menu.delete") },
               { type: "separator" },
-              { role: "selectAll" },
+              { role: "selectAll", label: t("menu.selectAll") },
             ]) as MenuItemConstructorOptions[]),
       ],
     },
     {
       role: "viewMenu",
+      label: t("menu.view"),
+      submenu: [
+        { role: "reload", label: t("menu.reload") },
+        { role: "forceReload", label: t("menu.forceReload") },
+        { role: "toggleDevTools", label: t("menu.toggleDevTools") },
+        { type: "separator" },
+        { role: "resetZoom", label: t("menu.actualSize") },
+        { role: "zoomIn", label: t("menu.zoomIn") },
+        { role: "zoomOut", label: t("menu.zoomOut") },
+        { type: "separator" },
+        { role: "togglefullscreen", label: t("menu.toggleFullScreen") },
+      ],
     },
-    { role: "windowMenu" },
     {
-      role: "help",
+      role: "windowMenu",
+      label: t("menu.window"),
       submenu: [
         {
-          label: "Open log file",
+          role: "minimize",
+          label: t("menu.minimize"),
+        },
+        {
+          role: "zoom",
+          label: t("menu.zoom"),
+        },
+        {
+          type: "separator",
+        },
+        {
+          role: "front",
+          label: t("menu.front"),
+        },
+      ],
+    },
+    {
+      role: "help",
+      label: t("menu.help"),
+      submenu: [
+        {
+          label: t("menu.openLogFile"),
           click: async () => {
             await revealLogFile()
           },
         },
         {
-          label: "Check for Updates",
+          label: t("menu.checkForUpdates"),
           click: async () => {
             getMainWindow()?.show()
             await checkForUpdates()
@@ -134,10 +172,10 @@ export const registerAppMenu = () => {
 
   if (isDev) {
     menus.push({
-      label: "Debug",
+      label: t("menu.debug"),
       submenu: [
         {
-          label: "follow https://github.com/RSSNext/follow/releases.atom",
+          label: t("menu.followReleases"),
           click: () => {
             createWindow({
               extraPath: `#add?url=${encodeURIComponent(
@@ -150,7 +188,7 @@ export const registerAppMenu = () => {
         },
         {
           type: "normal",
-          label: "Debug: Quit and Install Update",
+          label: t("menu.quitAndInstallUpdate"),
           click() {
             quitAndInstall()
           },

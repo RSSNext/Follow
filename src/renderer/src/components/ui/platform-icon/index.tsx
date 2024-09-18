@@ -13,6 +13,7 @@ const IconMap = Object.values(LinkParsers).reduce(
   {} as Record<string, string>,
 )
 
+const shouldAddWhiteBgUrls = ["1x.com"]
 export const PlatformIcon: FC<{
   url: string
   children: React.JSX.Element
@@ -23,7 +24,11 @@ export const PlatformIcon: FC<{
 
   if (!iconName || !IconMap[iconName]) {
     return (
-      <Slot className={className} style={style} {...rest}>
+      <Slot
+        className={`${shouldAddWhiteBgUrls.some((_) => url.includes(_)) ? "bg-white" : ""} ${className}`}
+        style={style}
+        {...rest}
+      >
         {children}
       </Slot>
     )

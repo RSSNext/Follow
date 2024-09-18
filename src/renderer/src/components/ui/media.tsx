@@ -1,5 +1,5 @@
 import { nextFrame } from "@renderer/lib/dom"
-import { getProxyUrl } from "@renderer/lib/img-proxy"
+import { getImageProxyUrl } from "@renderer/lib/img-proxy"
 import { cn } from "@renderer/lib/utils"
 import { saveImageDimensionsToDb } from "@renderer/store/image/db"
 import { useForceUpdate } from "framer-motion"
@@ -50,7 +50,7 @@ const MediaImpl: FC<MediaProps> = ({
   const [hidden, setHidden] = useState(!src)
   const [imgSrc, setImgSrc] = useState(() =>
     proxy && src && !failedList.has(src)
-      ? getProxyUrl({
+      ? getImageProxyUrl({
           url: src,
           width: proxy.width,
           height: proxy.height,
@@ -156,10 +156,17 @@ const MediaImpl: FC<MediaProps> = ({
   if (!type || !src) return null
 
   if (hidden && showFallback) {
-    return <FallbackMedia {...props} />
+    return (
+      <FallbackMedia
+        mediaContainerClassName={mediaContainerClassName}
+        className={className}
+        {...props}
+      />
+    )
   }
   return (
     <span
+      data-state={type !== "video" ? mediaLoadState : undefined}
       className={cn("block overflow-hidden rounded", hidden && "hidden", className)}
       style={style}
     >
@@ -170,28 +177,30 @@ const MediaImpl: FC<MediaProps> = ({
 
 export const Media: FC<MediaProps> = memo((props) => <MediaImpl {...props} key={props.src} />)
 
-const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, ...props }) => (
-  <div
-    className={cn(
-      !(props.width || props.height) && "size-full",
-      "center relative box-content h-24 rounded bg-zinc-100 object-cover dark:bg-neutral-900",
-      "not-prose flex max-h-full flex-col space-y-1 p-4",
-      mediaContainerClassName,
-    )}
-    style={{
-      height: props.height ? `${props.height}px` : "",
-      width: props.width ? `${props.width}px` : "100%",
-      ...props.style,
-    }}
-  >
-    <i className="i-mgc-close-cute-re text-xl text-red-500" />
-    <p>Media loaded failed</p>
-    <div className="space-x-1 break-all px-4 text-sm">
-      Go to{" "}
-      <a href={props.src} target="_blank" rel="noreferrer" className="follow-link--underline">
-        {props.src}
-      </a>
-      <i className="i-mgc-external-link-cute-re translate-y-px" />
+const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, className, ...props }) => (
+  <div className={className}>
+    <div
+      className={cn(
+        !(props.width || props.height) && "size-full",
+        "center relative rounded bg-zinc-100 object-cover dark:bg-neutral-900",
+        "not-prose flex max-h-full flex-col space-y-1 p-4",
+        mediaContainerClassName,
+      )}
+      style={{
+        height: props.height ? `${props.height}px` : "",
+        width: props.width ? `${props.width}px` : "100%",
+        ...props.style,
+      }}
+    >
+      <i className="i-mgc-close-cute-re text-xl text-red-500" />
+      <p>Media loaded failed</p>
+      <div className="space-x-1 break-all px-4 text-sm">
+        Go to{" "}
+        <a href={props.src} target="_blank" rel="noreferrer" className="follow-link--underline">
+          {props.src}
+        </a>
+        <i className="i-mgc-external-link-cute-re translate-y-px" />
+      </div>
     </div>
   </div>
 )

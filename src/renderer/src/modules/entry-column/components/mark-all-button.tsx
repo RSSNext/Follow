@@ -181,7 +181,6 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
   const [status, setStatus] = useState<"initial" | "confirm" | "done">("initial")
   const handleMarkAll = useMarkAllByRoute(filter)
 
-  if (status === "done") return null
   const animate = {
     initial: { rotate: -30, opacity: 0.9 },
     exit: { rotate: -30, opacity: 0.9 },
@@ -190,7 +189,12 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
   return (
     <Button
       variant="ghost"
-      className={cn("center relative flex h-auto gap-1", className)}
+      disabled={status === "done"}
+      className={cn(
+        "center relative flex h-auto gap-1",
+
+        className,
+      )}
       onMouseLeave={() => {
         if (status === "confirm") {
           setStatus("initial")
@@ -215,12 +219,9 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
         )}
       </AnimatePresence>
       <span className={cn(status === "confirm" ? "opacity-0" : "opacity-100", "duration-200")}>
-        <Trans
-          i18nKey="mark_all_read_button.mark_as_read"
-          values={{
-            which: typeof which === "string" ? t.common(`words.which.${which}` as any) : which,
-          }}
-        />
+        {t("mark_all_read_button.mark_as_read", {
+          which: typeof which === "string" ? t.common(`words.which.${which}` as any) : which,
+        })}
       </span>
       <span
         className={cn(

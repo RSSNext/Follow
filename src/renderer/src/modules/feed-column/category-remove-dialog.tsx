@@ -1,6 +1,6 @@
 import { subscriptionActions } from "@renderer/store/subscription"
 import { useMutation } from "@tanstack/react-query"
-import { Trans,useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 
 import { Button } from "../../components/ui/button"
 import { useCurrentModal } from "../../components/ui/modal"

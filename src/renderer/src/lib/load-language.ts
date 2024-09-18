@@ -2,7 +2,7 @@ import { currentSupportedLanguages, dayjsLocaleImportMap } from "@renderer/@type
 import { defaultResources } from "@renderer/@types/default-resource"
 import { fallbackLanguage, i18nAtom, LocaleCache } from "@renderer/i18n"
 import { jotaiStore } from "@renderer/lib/jotai"
-import { isEmptyObject } from "@renderer/lib/utils"
+import { getOS, isEmptyObject } from "@renderer/lib/utils"
 import dayjs from "dayjs"
 import i18next from "i18next"
 import { toast } from "sonner"
@@ -21,6 +21,8 @@ export const loadLanguageAndApply = async (lang: string) => {
       dayjs.locale(locale)
     })
   }
+
+  tipcClient?.switchAppLocale(lang)
 
   const { t } = jotaiStore.get(i18nAtom)
   if (loadingLangLock.has(lang)) return
@@ -64,8 +66,13 @@ export const loadLanguageAndApply = async (lang: string) => {
     let importFilePath = ""
 
     if (window.electron) {
-      const electronAsarPath = await tipcClient?.getAppPath()
-      importFilePath = `${electronAsarPath}/dist/renderer/locales/${lang}.js`
+      importFilePath =
+        (await tipcClient?.resolveAppAsarPath(`dist/renderer/locales/${lang}.js`)) || ""
+
+      // FUCK windows
+      if (getOS() === "Windows") {
+        importFilePath = importFilePath.replaceAll("\\", "/")
+      }
     } else {
       importFilePath = `/locales/${lang}.js`
     }

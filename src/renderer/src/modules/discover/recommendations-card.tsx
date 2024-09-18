@@ -1,10 +1,5 @@
 import { FeedIcon } from "@renderer/components/feed-icon"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@renderer/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@renderer/components/ui/card"
 import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import type { FC } from "react"
 import { memo } from "react"

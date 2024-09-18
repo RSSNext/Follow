@@ -1,4 +1,3 @@
- 
 import { getReadonlyRoute } from "@renderer/atoms/route"
 import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useSidebarActiveView } from "@renderer/atoms/sidebar"

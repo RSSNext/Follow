@@ -6,6 +6,7 @@ import { app, nativeTheme, shell } from "electron"
 import contextMenu from "electron-context-menu"
 
 import { getIconPath } from "./helper"
+import { t } from "./lib/i18n"
 import { store } from "./lib/store"
 import { registerAppMenu } from "./menu"
 import { initializeSentry } from "./sentry"
@@ -45,8 +46,12 @@ export const initializeApp = () => {
   }
   // In this file you can include the rest of your app"s specific main process
   // code. You can also put them in separate files and require them here.
-  registerAppMenu()
 
+  registerMenuAndContextMenu()
+}
+
+export const registerMenuAndContextMenu = () => {
+  registerAppMenu()
   contextMenu({
     showSaveImageAs: true,
     showCopyLink: true,
@@ -56,18 +61,28 @@ export const initializeApp = () => {
     showSelectAll: false,
     showCopyVideoAddress: true,
     showSaveVideoAs: true,
+
+    labels: {
+      saveImageAs: t("contextMenu.saveImageAs"),
+      copyLink: t("contextMenu.copyLink"),
+      copyImageAddress: t("contextMenu.copyImageAddress"),
+      copyImage: t("contextMenu.copyImage"),
+      copyVideoAddress: t("contextMenu.copyVideoAddress"),
+      saveVideoAs: t("contextMenu.saveVideoAs"),
+      inspect: t("contextMenu.inspect"),
+    },
+
     prepend: (_defaultActions, params) => {
       return [
         {
-          label: "Open Image in Browser",
+          label: t("contextMenu.openImageInBrowser"),
           visible: params.mediaType === "image",
           click: () => {
             shell.openExternal(params.srcURL)
           },
         },
-
         {
-          label: "Open Link in Browser",
+          label: t("contextMenu.openLinkInBrowser"),
           visible: params.linkURL !== "",
           click: () => {
             shell.openExternal(params.linkURL)

@@ -6,7 +6,6 @@ import { m } from "@renderer/components/common/Motion"
 import { ErrorComponentType } from "@renderer/components/errors/enum"
 import { isElectronBuild } from "@renderer/constants"
 import { useSwitchHotKeyScope } from "@renderer/hooks/common"
-import { debugStack } from "@renderer/lib/dev"
 import { nextFrame, stopPropagation } from "@renderer/lib/dom"
 import { cn } from "@renderer/lib/utils"
 import { useAnimationControls, useDragControls } from "framer-motion"
@@ -67,6 +66,7 @@ export const ModalInternal = memo(
       resizeable = false,
       resizeDefaultSize,
       modal = true,
+      autoFocus = true,
     } = item
 
     const setStack = useSetAtom(modalStackAtom)
@@ -84,7 +84,6 @@ export const ModalInternal = memo(
 
     const onClose = useCallback(
       (open: boolean): void => {
-        debugStack()
         if (!open) {
           close()
         }
@@ -243,6 +242,15 @@ export const ModalInternal = memo(
       },
       [canClose, clickOutsideToDismiss, dismiss, modal, noticeModal],
     )
+
+    const openAutoFocus = useCallback(
+      (event: Event) => {
+        if (!autoFocus) {
+          event.preventDefault()
+        }
+      },
+      [autoFocus],
+    )
     useImperativeHandle(ref, () => modalElementRef.current!)
     if (CustomModalComponent) {
       return (
@@ -250,7 +258,7 @@ export const ModalInternal = memo(
           <Dialog.Root open onOpenChange={onClose} modal={modal}>
             <Dialog.Portal>
               <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
-              <Dialog.Content asChild>
+              <Dialog.Content asChild onOpenAutoFocus={openAutoFocus}>
                 <div
                   ref={edgeElementRef}
                   className={cn(
@@ -288,7 +296,7 @@ export const ModalInternal = memo(
       <Wrapper>
         <Dialog.Root modal={modal} open onOpenChange={onClose}>
           <Dialog.Portal>
-            <Dialog.Content asChild>
+            <Dialog.Content asChild onOpenAutoFocus={openAutoFocus}>
               <div
                 ref={edgeElementRef}
                 style={zIndexStyle}
@@ -316,7 +324,7 @@ export const ModalInternal = memo(
                       ? "bg-theme-modal-background-opaque"
                       : "bg-theme-modal-background backdrop-blur-sm",
                     "shadow-modal",
-                    max ? "h-[90vh] w-[90vw]" : "",
+                    max ? "h-[90vh] w-[90vw]" : "max-h-[90vh]",
 
                     "border border-slate-200 dark:border-neutral-800",
                     modalClassName,

@@ -16,7 +16,7 @@ export const CreateWallet = () => {
             PowerIcon: <i className="i-mgc-power translate-y-[2px] text-accent" />,
             strong: <strong />,
           }}
-         />
+        />
       </p>
       <div className="mt-4 text-right">
         <Button variant="primary" isLoading={mutation.isPending} onClick={() => mutation.mutate()}>
