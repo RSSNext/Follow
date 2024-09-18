@@ -1,12 +1,4 @@
 import * as HoverCard from "@radix-ui/react-hover-card"
-import { getViewport } from "@renderer/atoms/hooks/viewport"
-import { getElementTop } from "@renderer/lib/dom"
-import { springScrollToElement } from "@renderer/lib/scroller"
-import { cn } from "@renderer/lib/utils"
-import {
-  useGetWrappedElementPosition,
-  useWrappedElementSize,
-} from "@renderer/providers/wrapped-element-provider"
 import { AnimatePresence, m } from "framer-motion"
 import { throttle } from "lodash-es"
 import {
@@ -20,6 +12,15 @@ import {
   useState,
 } from "react"
 import { useEventCallback } from "usehooks-ts"
+
+import { getViewport } from "~/atoms/hooks/viewport"
+import { getElementTop } from "~/lib/dom"
+import { springScrollToElement } from "~/lib/scroller"
+import { cn } from "~/lib/utils"
+import {
+  useGetWrappedElementPosition,
+  useWrappedElementSize,
+} from "~/providers/wrapped-element-provider"
 
 import { useScrollViewElement } from "../../scroll-area/hooks"
 import { MarkdownRenderContainerRefContext } from "../context"

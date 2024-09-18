@@ -5,7 +5,7 @@ import {
   MdiLanguageTypescript,
   RiMarkdownFill,
   UilReact,
-} from "@renderer/components/icons/Language"
+} from "~/components/icons/Language"
 
 const LanguageAlias = {
   ts: "typescript",

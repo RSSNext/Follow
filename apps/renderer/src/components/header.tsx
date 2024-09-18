@@ -1,12 +1,13 @@
-import { whoami } from "@renderer/atoms/user"
-import { cn } from "@renderer/lib/utils"
-import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
 import type { MotionValue } from "framer-motion"
 import { useMotionValueEvent, useScroll } from "framer-motion"
 import type { FC } from "react"
 import { cloneElement, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
+
+import { whoami } from "~/atoms/user"
+import { cn } from "~/lib/utils"
+import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 
 import { FollowIcon } from "./icons/follow"
 import { Logo } from "./icons/logo"

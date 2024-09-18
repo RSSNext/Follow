@@ -1,4 +1,4 @@
-import { browserDB } from "@renderer/database"
+import { browserDB } from "~/database"
 
 const feedUnreadModel = browserDB.feedUnreads
 class ServiceStatic {

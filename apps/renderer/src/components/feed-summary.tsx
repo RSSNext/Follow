@@ -1,6 +1,6 @@
-import { FeedIcon } from "@renderer/components/feed-icon"
-import { cn } from "@renderer/lib/utils"
-import type { FeedModel } from "@renderer/models"
+import { FeedIcon } from "~/components/feed-icon"
+import { cn } from "~/lib/utils"
+import type { FeedModel } from "~/models"
 
 import { FeedCertification } from "./feed-certification"
 import { EllipsisHorizontalTextWithTooltip } from "./ui/typography"

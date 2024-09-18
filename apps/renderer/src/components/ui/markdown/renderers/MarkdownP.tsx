@@ -1,6 +1,7 @@
-import { FeedViewType } from "@renderer/lib/enum"
-import { useEntryContentContextSelector } from "@renderer/modules/entry-content/hooks"
 import * as React from "react"
+
+import { FeedViewType } from "~/lib/enum"
+import { useEntryContentContextSelector } from "~/modules/entry-content/hooks"
 
 import { ensureAndRenderTimeStamp } from "../utils"
 

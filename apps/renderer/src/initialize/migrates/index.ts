@@ -1,8 +1,9 @@
 import { repository } from "@pkg"
-import { appLog } from "@renderer/lib/log"
-import { getStorageNS } from "@renderer/lib/ns"
 import { createElement } from "react"
 import { toast } from "sonner"
+
+import { appLog } from "~/lib/log"
+import { getStorageNS } from "~/lib/ns"
 
 import { waitAppReady } from "../queue"
 

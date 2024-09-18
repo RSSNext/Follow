@@ -1,5 +1,6 @@
-import { FeedViewType } from "@renderer/lib/enum"
 import { createContext } from "use-context-selector"
+
+import { FeedViewType } from "~/lib/enum"
 
 export interface EntryContentContext {
   entryId: string

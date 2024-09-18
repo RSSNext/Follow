@@ -1,20 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useWhoami } from "@renderer/atoms/user"
-import { Button } from "@renderer/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@renderer/components/ui/form"
-import { Input } from "@renderer/components/ui/input"
-import { useModalStack } from "@renderer/components/ui/modal"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { cn } from "@renderer/lib/utils"
-import { Balance } from "@renderer/modules/wallet/balance"
-import { useWallet, wallet as walletActions } from "@renderer/queries/wallet"
 import { useMutation } from "@tanstack/react-query"
 import { from, toNumber } from "dnum"
 import { useEffect } from "react"
@@ -22,6 +6,23 @@ import { useForm } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
+
+import { useWhoami } from "~/atoms/user"
+import { Button } from "~/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { useModalStack } from "~/components/ui/modal"
+import { apiClient } from "~/lib/api-fetch"
+import { cn } from "~/lib/utils"
+import { Balance } from "~/modules/wallet/balance"
+import { useWallet, wallet as walletActions } from "~/queries/wallet"
 
 export const WithdrawButton = () => {
   const { t } = useTranslation("settings")

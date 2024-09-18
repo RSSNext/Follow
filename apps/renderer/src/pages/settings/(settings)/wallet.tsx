@@ -1,5 +1,5 @@
-import { SettingWallet } from "@renderer/modules/settings/tabs/wallet"
-import { defineSettingPageData } from "@renderer/modules/settings/utils"
+import { SettingWallet } from "~/modules/settings/tabs/wallet"
+import { defineSettingPageData } from "~/modules/settings/utils"
 
 const iconName = `i-mgc-power-outline`
 const priority = 1050

@@ -1,8 +1,8 @@
-import { apiClient } from "@renderer/lib/api-fetch"
-import { defineQuery } from "@renderer/lib/defineQuery"
-import type { FeedViewType } from "@renderer/lib/enum"
-import { subscriptionActions } from "@renderer/store/subscription"
-import { feedUnreadActions } from "@renderer/store/unread"
+import { apiClient } from "~/lib/api-fetch"
+import { defineQuery } from "~/lib/defineQuery"
+import type { FeedViewType } from "~/lib/enum"
+import { subscriptionActions } from "~/store/subscription"
+import { feedUnreadActions } from "~/store/unread"
 
 export const subscription = {
   byView: (view?: FeedViewType) =>

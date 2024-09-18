@@ -1,11 +1,12 @@
-import { getSidebarActiveView } from "@renderer/atoms/sidebar"
-import { getRouteParams } from "@renderer/hooks/biz/useRouteParams"
-import { nextFrame } from "@renderer/lib/dom"
-import type { FeedModel } from "@renderer/models"
-import { FeedForm } from "@renderer/modules/discover/feed-form"
-import { entries } from "@renderer/queries/entries"
 import type { FC } from "react"
 import { useNavigate } from "react-router-dom"
+
+import { getSidebarActiveView } from "~/atoms/sidebar"
+import { getRouteParams } from "~/hooks/biz/useRouteParams"
+import { nextFrame } from "~/lib/dom"
+import type { FeedModel } from "~/models"
+import { FeedForm } from "~/modules/discover/feed-form"
+import { entries } from "~/queries/entries"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
 import { FeedIcon } from "../feed-icon"

@@ -1,11 +1,12 @@
-import { nextFrame } from "@renderer/lib/dom"
-import { getImageProxyUrl } from "@renderer/lib/img-proxy"
-import { cn } from "@renderer/lib/utils"
-import { saveImageDimensionsToDb } from "@renderer/store/image/db"
 import { useForceUpdate } from "framer-motion"
 import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { memo, useMemo, useState } from "react"
 import { useEventCallback } from "usehooks-ts"
+
+import { nextFrame } from "~/lib/dom"
+import { getImageProxyUrl } from "~/lib/img-proxy"
+import { cn } from "~/lib/utils"
+import { saveImageDimensionsToDb } from "~/store/image/db"
 
 import { usePreviewMedia } from "./media/hooks"
 import type { VideoPlayerRef } from "./media/VideoPlayer"

@@ -1,4 +1,4 @@
-import type { EntryModel } from "@renderer/models"
+import type { EntryModel } from "~/models"
 
 export type DB_Entry = EntryModel & { feedId: string }
 

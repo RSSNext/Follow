@@ -1,5 +1,5 @@
-import { apiClient } from "@renderer/lib/api-fetch"
-import type { UserModel } from "@renderer/models"
+import { apiClient } from "~/lib/api-fetch"
+import type { UserModel } from "~/models"
 
 import { entryActions } from "../entry/store"
 import { userActions } from "../user"

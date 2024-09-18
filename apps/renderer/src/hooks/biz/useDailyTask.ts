@@ -1,5 +1,6 @@
-import { useClaimCheck, useClaimWalletDailyRewardMutation } from "@renderer/queries/wallet"
 import { useEffect } from "react"
+
+import { useClaimCheck, useClaimWalletDailyRewardMutation } from "~/queries/wallet"
 
 export const useDailyTask = () => {
   const { mutateAsync: claimDaily } = useClaimWalletDailyRewardMutation()

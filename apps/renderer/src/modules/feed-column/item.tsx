@@ -1,28 +1,24 @@
 import { WEB_URL } from "@follow/shared/constants"
-import { getMainContainerElement } from "@renderer/atoms/dom"
-import { FeedCertification } from "@renderer/components/feed-certification"
-import { FeedIcon } from "@renderer/components/feed-icon"
-import { OouiUserAnonymous } from "@renderer/components/icons/OouiUserAnonymous"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
-import { useFeedActions } from "@renderer/hooks/biz/useFeedActions"
-import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
-import { nextFrame } from "@renderer/lib/dom"
-import { getNewIssueUrl } from "@renderer/lib/issues"
-import { showNativeMenu } from "@renderer/lib/native-menu"
-import { cn } from "@renderer/lib/utils"
-import { getPreferredTitle, useFeedById } from "@renderer/store/feed"
-import { useSubscriptionByFeedId } from "@renderer/store/subscription"
-import { useFeedUnreadStore } from "@renderer/store/unread"
 import dayjs from "dayjs"
 import { memo, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useClickAnyWhere } from "usehooks-ts"
+
+import { getMainContainerElement } from "~/atoms/dom"
+import { FeedCertification } from "~/components/feed-certification"
+import { FeedIcon } from "~/components/feed-icon"
+import { OouiUserAnonymous } from "~/components/icons/OouiUserAnonymous"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
+import { useFeedActions } from "~/hooks/biz/useFeedActions"
+import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { nextFrame } from "~/lib/dom"
+import { getNewIssueUrl } from "~/lib/issues"
+import { showNativeMenu } from "~/lib/native-menu"
+import { cn } from "~/lib/utils"
+import { getPreferredTitle, useFeedById } from "~/store/feed"
+import { useSubscriptionByFeedId } from "~/store/subscription"
+import { useFeedUnreadStore } from "~/store/unread"
 
 import { UnreadNumber } from "./unread-number"
 

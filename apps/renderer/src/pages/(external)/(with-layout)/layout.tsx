@@ -1,5 +1,6 @@
-import { Header } from "@renderer/components/header"
 import { Outlet } from "react-router-dom"
+
+import { Header } from "~/components/header"
 
 export function Component() {
   return (

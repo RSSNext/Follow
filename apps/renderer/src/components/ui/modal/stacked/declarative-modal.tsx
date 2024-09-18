@@ -1,8 +1,9 @@
-import { jotaiStore } from "@renderer/lib/jotai"
-import { cn } from "@renderer/lib/utils"
 import { AnimatePresence } from "framer-motion"
 import type { FC, ReactNode } from "react"
 import { useId, useMemo } from "react"
+
+import { jotaiStore } from "~/lib/jotai"
+import { cn } from "~/lib/utils"
 
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX } from "./constants"

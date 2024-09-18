@@ -1,15 +1,11 @@
-import { useWhoami } from "@renderer/atoms/user"
-import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
-import { cn } from "@renderer/lib/utils"
-import type { FeedModel } from "@renderer/models"
-import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
 import { useTranslation } from "react-i18next"
+
+import { useWhoami } from "~/atoms/user"
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
+import { cn } from "~/lib/utils"
+import type { FeedModel } from "~/models"
+import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 
 export const FeedCertification = ({ feed, className }: { feed: FeedModel; className?: string }) => {
   const me = useWhoami()

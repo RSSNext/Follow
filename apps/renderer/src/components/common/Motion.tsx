@@ -1,7 +1,8 @@
-import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
 import type { MotionProps } from "framer-motion"
 import { m as M } from "framer-motion"
 import { createElement, forwardRef } from "react"
+
+import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
 
 const cacheMap = new Map<string, any>()
 export const m: typeof M = new Proxy(M, {

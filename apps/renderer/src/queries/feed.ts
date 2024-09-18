@@ -1,12 +1,13 @@
-import { ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "@renderer/constants"
-import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { defineQuery } from "@renderer/lib/defineQuery"
-import { toastFetchError } from "@renderer/lib/error-parser"
-import { formatXml } from "@renderer/lib/utils"
-import type { FeedQueryParams } from "@renderer/store/feed"
-import { feedActions } from "@renderer/store/feed"
 import { useMutation } from "@tanstack/react-query"
+
+import { ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "~/constants"
+import { useAuthQuery } from "~/hooks/common"
+import { apiClient } from "~/lib/api-fetch"
+import { defineQuery } from "~/lib/defineQuery"
+import { toastFetchError } from "~/lib/error-parser"
+import { formatXml } from "~/lib/utils"
+import type { FeedQueryParams } from "~/store/feed"
+import { feedActions } from "~/store/feed"
 
 import { entries } from "./entries"
 

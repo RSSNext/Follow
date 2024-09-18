@@ -1,5 +1,6 @@
-import { createAtomHooks } from "@renderer/lib/jotai"
 import { atom } from "jotai"
+
+import { createAtomHooks } from "~/lib/jotai"
 
 export const [, , useEntryTitleMeta, , getEntryTitleMeta, setEntryTitleMeta] = createAtomHooks(
   atom(

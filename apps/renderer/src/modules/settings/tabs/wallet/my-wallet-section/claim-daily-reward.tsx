@@ -1,9 +1,10 @@
 import { TooltipTrigger } from "@radix-ui/react-tooltip"
-import { Button } from "@renderer/components/ui/button"
-import { Tooltip, TooltipContent } from "@renderer/components/ui/tooltip"
-import { DAILY_CLAIM_AMOUNT } from "@renderer/constants"
-import { useClaimCheck, useClaimWalletDailyRewardMutation } from "@renderer/queries/wallet"
 import { Trans, useTranslation } from "react-i18next"
+
+import { Button } from "~/components/ui/button"
+import { Tooltip, TooltipContent } from "~/components/ui/tooltip"
+import { DAILY_CLAIM_AMOUNT } from "~/constants"
+import { useClaimCheck, useClaimWalletDailyRewardMutation } from "~/queries/wallet"
 
 export const ClaimDailyReward = () => {
   const mutation = useClaimWalletDailyRewardMutation()

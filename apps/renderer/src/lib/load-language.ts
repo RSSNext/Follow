@@ -1,11 +1,12 @@
-import { currentSupportedLanguages, dayjsLocaleImportMap } from "@renderer/@types/constants"
-import { defaultResources } from "@renderer/@types/default-resource"
-import { fallbackLanguage, i18nAtom, LocaleCache } from "@renderer/i18n"
-import { jotaiStore } from "@renderer/lib/jotai"
-import { getOS, isEmptyObject } from "@renderer/lib/utils"
 import dayjs from "dayjs"
 import i18next from "i18next"
 import { toast } from "sonner"
+
+import { currentSupportedLanguages, dayjsLocaleImportMap } from "~/@types/constants"
+import { defaultResources } from "~/@types/default-resource"
+import { fallbackLanguage, i18nAtom, LocaleCache } from "~/i18n"
+import { jotaiStore } from "~/lib/jotai"
+import { getOS, isEmptyObject } from "~/lib/utils"
 
 import { tipcClient } from "./client"
 

@@ -1,22 +1,19 @@
 import type { GeneralSettings, UISettings } from "@follow/shared/interface/settings"
+import type { PrimitiveAtom } from "jotai"
+import { omit } from "lodash-es"
+
 import {
   __generalSettingAtom,
   generalServerSyncWhiteListKeys,
   getGeneralSettings,
-} from "@renderer/atoms/settings/general"
-import {
-  __uiSettingAtom,
-  getUISettings,
-  uiServerSyncWhiteListKeys,
-} from "@renderer/atoms/settings/ui"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { EventBus } from "@renderer/lib/event-bus"
-import { jotaiStore } from "@renderer/lib/jotai"
-import { getStorageNS } from "@renderer/lib/ns"
-import { isEmptyObject, sleep } from "@renderer/lib/utils"
-import { settings } from "@renderer/queries/settings"
-import type { PrimitiveAtom } from "jotai"
-import { omit } from "lodash-es"
+} from "~/atoms/settings/general"
+import { __uiSettingAtom, getUISettings, uiServerSyncWhiteListKeys } from "~/atoms/settings/ui"
+import { apiClient } from "~/lib/api-fetch"
+import { EventBus } from "~/lib/event-bus"
+import { jotaiStore } from "~/lib/jotai"
+import { getStorageNS } from "~/lib/ns"
+import { isEmptyObject, sleep } from "~/lib/utils"
+import { settings } from "~/queries/settings"
 
 type SettingMapping = {
   appearance: UISettings

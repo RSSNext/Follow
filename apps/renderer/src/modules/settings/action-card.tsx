@@ -1,18 +1,21 @@
-import { Button } from "@renderer/components/ui/button"
-import { Card, CardHeader } from "@renderer/components/ui/card"
-import { Collapse, CollapseControlled } from "@renderer/components/ui/collapse"
-import { Divider } from "@renderer/components/ui/divider"
-import { Input } from "@renderer/components/ui/input"
-import { Radio } from "@renderer/components/ui/radio-group"
-import { RadioGroup } from "@renderer/components/ui/radio-group/RadioGroup"
+import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
+
+import { Button } from "~/components/ui/button"
+import { Card, CardHeader } from "~/components/ui/card"
+import { Collapse, CollapseControlled } from "~/components/ui/collapse"
+import { Divider } from "~/components/ui/divider"
+import { Input } from "~/components/ui/input"
+import { Radio } from "~/components/ui/radio-group"
+import { RadioGroup } from "~/components/ui/radio-group/RadioGroup"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@renderer/components/ui/select"
-import { Switch } from "@renderer/components/ui/switch"
+} from "~/components/ui/select"
+import { Switch } from "~/components/ui/switch"
 import {
   Table,
   TableBody,
@@ -20,18 +23,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@renderer/components/ui/table"
-import { ViewSelectContent } from "@renderer/components/view-select-content"
-import { stopPropagation } from "@renderer/lib/dom"
-import { cn } from "@renderer/lib/utils"
+} from "~/components/ui/table"
+import { ViewSelectContent } from "~/components/view-select-content"
+import { stopPropagation } from "~/lib/dom"
+import { cn } from "~/lib/utils"
 import type {
   ActionEntryField,
   ActionFeedField,
   ActionOperation,
   SupportedLanguages,
-} from "@renderer/models"
-import { useMemo } from "react"
-import { useTranslation } from "react-i18next"
+} from "~/models"
 
 type ActionsInput = {
   name: string

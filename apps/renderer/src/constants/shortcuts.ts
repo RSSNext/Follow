@@ -1,4 +1,4 @@
-import { COPY_MAP } from "@renderer/constants"
+import { COPY_MAP } from "~/constants"
 
 export const shortcuts = {
   feeds: {

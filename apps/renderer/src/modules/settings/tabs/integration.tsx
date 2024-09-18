@@ -1,16 +1,14 @@
-import { createSetting } from "@renderer/atoms/settings/helper"
-import {
-  setIntegrationSetting,
-  useIntegrationSettingValue,
-} from "@renderer/atoms/settings/integration"
-import { Divider } from "@renderer/components/ui/divider"
+import { useEffect } from "react"
+import { useTranslation } from "react-i18next"
+
+import { createSetting } from "~/atoms/settings/helper"
+import { setIntegrationSetting, useIntegrationSettingValue } from "~/atoms/settings/integration"
+import { Divider } from "~/components/ui/divider"
 import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
   SimpleIconsReadwise,
-} from "@renderer/components/ui/platform-icon/icons"
-import { useEffect } from "react"
-import { useTranslation } from "react-i18next"
+} from "~/components/ui/platform-icon/icons"
 
 import { useSetSettingCanSync } from "../modal/hooks"
 

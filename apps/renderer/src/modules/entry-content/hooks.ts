@@ -1,5 +1,6 @@
-import { isDev } from "@renderer/constants"
 import { useContext, useContextSelector } from "use-context-selector"
+
+import { isDev } from "~/constants"
 
 import { EntryContentContext } from "./provider"
 

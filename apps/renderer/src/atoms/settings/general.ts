@@ -1,5 +1,6 @@
 import type { GeneralSettings } from "@follow/shared/interface/settings"
-import { jotaiStore } from "@renderer/lib/jotai"
+
+import { jotaiStore } from "~/lib/jotai"
 
 import { createSettingAtom } from "./helper"
 

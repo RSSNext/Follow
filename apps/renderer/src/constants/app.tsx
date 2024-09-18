@@ -1,4 +1,4 @@
-import { getStorageNS } from "@renderer/lib/ns"
+import { getStorageNS } from "~/lib/ns"
 
 /// Feed
 export const FEED_COLLECTION_LIST = "collections"

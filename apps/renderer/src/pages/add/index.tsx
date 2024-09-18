@@ -1,7 +1,8 @@
-import { FeedViewType } from "@renderer/lib/enum"
-import { FeedForm } from "@renderer/modules/discover/feed-form"
 import { useLayoutEffect } from "react"
 import { useSearchParams } from "react-router-dom"
+
+import { FeedViewType } from "~/lib/enum"
+import { FeedForm } from "~/modules/discover/feed-form"
 
 export function Component() {
   const [urlSearchParams] = useSearchParams()

@@ -1,7 +1,8 @@
-import { SelectContent, SelectItem } from "@renderer/components/ui/select"
-import { views } from "@renderer/constants"
-import { cn } from "@renderer/lib/utils"
 import { useTranslation } from "react-i18next"
+
+import { SelectContent, SelectItem } from "~/components/ui/select"
+import { views } from "~/constants"
+import { cn } from "~/lib/utils"
 
 export const ViewSelectContent = () => {
   const { t } = useTranslation()

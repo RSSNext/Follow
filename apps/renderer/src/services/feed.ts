@@ -1,5 +1,5 @@
-import { browserDB } from "@renderer/database"
-import type { FeedModel } from "@renderer/models/types"
+import { browserDB } from "~/database"
+import type { FeedModel } from "~/models/types"
 
 import { BaseService } from "./base"
 import { CleanerService } from "./cleaner"

@@ -1,11 +1,12 @@
-import { tipcClient } from "@renderer/lib/client"
-import { nextFrame } from "@renderer/lib/dom"
-import { jotaiStore } from "@renderer/lib/jotai"
-import { getStorageNS } from "@renderer/lib/ns"
 import { atom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { useCallback, useLayoutEffect } from "react"
 import { useMediaQuery } from "usehooks-ts"
+
+import { tipcClient } from "~/lib/client"
+import { nextFrame } from "~/lib/dom"
+import { jotaiStore } from "~/lib/jotai"
+import { getStorageNS } from "~/lib/ns"
 
 const useDarkQuery = () => useMediaQuery("(prefers-color-scheme: dark)")
 type ColorMode = "light" | "dark" | "system"

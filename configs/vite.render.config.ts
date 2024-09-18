@@ -85,7 +85,7 @@ function customI18nHmrPlugin(): Plugin {
 export const viteRenderBaseConfig = {
   resolve: {
     alias: {
-      "@renderer": resolve("apps/renderer/src"),
+      "~": resolve("apps/renderer/src"),
       "@pkg": resolve("package.json"),
       "@env": resolve("src/env.ts"),
       "@locales": resolve("locales"),

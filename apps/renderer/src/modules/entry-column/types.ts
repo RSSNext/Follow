@@ -1,5 +1,6 @@
-import type { CombinedEntryModel, FeedModel } from "@renderer/models"
 import type { FC } from "react"
+
+import type { CombinedEntryModel, FeedModel } from "~/models"
 
 export type UniversalItemProps = {
   entryId: string

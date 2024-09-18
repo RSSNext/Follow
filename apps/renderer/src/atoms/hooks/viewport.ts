@@ -1,8 +1,9 @@
-import { jotaiStore } from "@renderer/lib/jotai"
 import type { ExtractAtomValue } from "jotai"
 import { useAtomValue } from "jotai"
 import { selectAtom } from "jotai/utils"
 import { useCallback } from "react"
+
+import { jotaiStore } from "~/lib/jotai"
 
 import { viewportAtom } from "../viewport"
 

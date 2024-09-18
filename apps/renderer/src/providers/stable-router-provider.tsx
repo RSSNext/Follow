@@ -1,8 +1,9 @@
-import { setNavigate, setRoute } from "@renderer/atoms/route"
-import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useEffect, useLayoutEffect } from "react"
 import type { NavigateFunction } from "react-router-dom"
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
+
+import { setNavigate, setRoute } from "~/atoms/route"
+import { useSettingModal } from "~/modules/settings/modal/hooks"
 
 declare global {
   export const router: {

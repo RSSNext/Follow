@@ -1,11 +1,12 @@
 import { repository } from "@pkg"
-import { MotionButtonBase } from "@renderer/components/ui/button"
-import { useCurrentModal } from "@renderer/components/ui/modal"
-import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { SettingsTitle } from "@renderer/modules/settings/title"
 import i18next from "i18next"
 import type { FC } from "react"
 import { Suspense, useDeferredValue, useEffect, useLayoutEffect, useState } from "react"
+
+import { MotionButtonBase } from "~/components/ui/button"
+import { useCurrentModal } from "~/components/ui/modal"
+import { ScrollArea } from "~/components/ui/scroll-area"
+import { SettingsTitle } from "~/modules/settings/title"
 
 import { settings } from "../constants"
 import { SettingTabProvider, useSettingTab } from "./context"

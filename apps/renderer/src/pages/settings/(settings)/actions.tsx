@@ -1,21 +1,17 @@
-import { Button } from "@renderer/components/ui/button"
-import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { toastFetchError } from "@renderer/lib/error-parser"
-import type {
-  ActionEntryField,
-  ActionFeedField,
-  ActionOperation,
-  ActionsResponse,
-} from "@renderer/models"
-import { ActionCard } from "@renderer/modules/settings/action-card"
-import { SettingsTitle } from "@renderer/modules/settings/title"
-import { defineSettingPageData } from "@renderer/modules/settings/utils"
-import { Queries } from "@renderer/queries"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
+
+import { Button } from "~/components/ui/button"
+import { useAuthQuery } from "~/hooks/common"
+import { apiClient } from "~/lib/api-fetch"
+import { toastFetchError } from "~/lib/error-parser"
+import type { ActionEntryField, ActionFeedField, ActionOperation, ActionsResponse } from "~/models"
+import { ActionCard } from "~/modules/settings/action-card"
+import { SettingsTitle } from "~/modules/settings/title"
+import { defineSettingPageData } from "~/modules/settings/utils"
+import { Queries } from "~/queries"
 
 const iconName = "i-mgc-magic-2-cute-re"
 const priority = 1020

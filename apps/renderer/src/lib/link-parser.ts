@@ -1,4 +1,4 @@
-import { parseSafeUrl } from "@renderer/components/ui/platform-icon/utils"
+import { parseSafeUrl } from "~/components/ui/platform-icon/utils"
 
 const GITHUB_HOST = "github.com"
 

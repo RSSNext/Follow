@@ -1,12 +1,13 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@renderer/components/ui/tabs"
-import { DiscoverForm } from "@renderer/modules/discover/form"
-import { DiscoverImport } from "@renderer/modules/discover/import"
-import { Recommendations } from "@renderer/modules/discover/recommendations"
-import { DiscoverRSS3 } from "@renderer/modules/discover/rss3-form"
-import { DiscoverUser } from "@renderer/modules/discover/user-form"
 import { createElement } from "react"
 import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { DiscoverForm } from "~/modules/discover/form"
+import { DiscoverImport } from "~/modules/discover/import"
+import { Recommendations } from "~/modules/discover/recommendations"
+import { DiscoverRSS3 } from "~/modules/discover/rss3-form"
+import { DiscoverUser } from "~/modules/discover/user-form"
 
 import { useSubViewTitle } from "../hooks"
 

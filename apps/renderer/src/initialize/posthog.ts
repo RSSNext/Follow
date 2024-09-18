@@ -1,6 +1,7 @@
 import { env } from "@follow/shared/env"
-import { whoami } from "@renderer/atoms/user"
 import type { CaptureOptions, Properties } from "posthog-js"
+
+import { whoami } from "~/atoms/user"
 
 declare global {
   interface Window {

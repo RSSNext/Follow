@@ -1,6 +1,7 @@
-import { cn } from "@renderer/lib/utils"
 import type { FC, MouseEvent } from "react"
 import { memo, useCallback, useRef } from "react"
+
+import { cn } from "~/lib/utils"
 
 export interface ITocItem {
   depth: number

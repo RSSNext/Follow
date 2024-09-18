@@ -1,6 +1,7 @@
-import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import { createElement, useCallback } from "react"
 import { toast } from "sonner"
+
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 
 import { TipModalContent } from "./tip-modal"
 

@@ -1,6 +1,7 @@
-import { HotKeyScopeMap } from "@renderer/constants"
 import { useCallback } from "react"
 import { useHotkeysContext } from "react-hotkeys-hook"
+
+import { HotKeyScopeMap } from "~/constants"
 
 const allScopes = Object.keys(HotKeyScopeMap).reduce((acc, key) => {
   acc.push(...HotKeyScopeMap[key])

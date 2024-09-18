@@ -1,5 +1,6 @@
-import { FeedViewType } from "@renderer/lib/enum"
 import type React from "react"
+
+import { FeedViewType } from "~/lib/enum"
 
 interface ViewDefinition {
   name: I18nKeys

@@ -1,27 +1,28 @@
 import * as Slider from "@radix-ui/react-slider"
 import type { TooltipContentProps } from "@radix-ui/react-tooltip"
-import {
-  AudioPlayer,
-  getAudioPlayerAtomValue,
-  useAudioPlayerAtomSelector,
-  useAudioPlayerAtomValue,
-} from "@renderer/atoms/player"
-import { FeedIcon } from "@renderer/components/feed-icon"
-import { microReboundPreset } from "@renderer/components/ui/constants/spring"
-import { VolumeSlider } from "@renderer/components/ui/media/VolumeSlider"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
-import { HotKeyScopeMap } from "@renderer/constants"
-import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { FeedViewType } from "@renderer/lib/enum"
-import { cn } from "@renderer/lib/utils"
-import { useEntry } from "@renderer/store/entry"
-import { useFeedById } from "@renderer/store/feed"
 import dayjs from "dayjs"
 import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useState } from "react"
 import Marquee from "react-fast-marquee"
 import { useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
+
+import {
+  AudioPlayer,
+  getAudioPlayerAtomValue,
+  useAudioPlayerAtomSelector,
+  useAudioPlayerAtomValue,
+} from "~/atoms/player"
+import { FeedIcon } from "~/components/feed-icon"
+import { microReboundPreset } from "~/components/ui/constants/spring"
+import { VolumeSlider } from "~/components/ui/media/VolumeSlider"
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
+import { HotKeyScopeMap } from "~/constants"
+import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { FeedViewType } from "~/lib/enum"
+import { cn } from "~/lib/utils"
+import { useEntry } from "~/store/entry"
+import { useFeedById } from "~/store/feed"
 
 const handleClickPlay = () => {
   AudioPlayer.togglePlayAndPause()

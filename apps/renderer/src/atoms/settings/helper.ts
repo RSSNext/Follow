@@ -1,14 +1,15 @@
-import { useRefValue } from "@renderer/hooks/common"
-import { EventBus } from "@renderer/lib/event-bus"
-import { createAtomHooks } from "@renderer/lib/jotai"
-import { getStorageNS } from "@renderer/lib/ns"
-import type { SettingItem } from "@renderer/modules/settings/setting-builder"
-import { createSettingBuilder } from "@renderer/modules/settings/setting-builder"
 import { useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
 
-declare module "@renderer/lib/event-bus" {
+import { useRefValue } from "~/hooks/common"
+import { EventBus } from "~/lib/event-bus"
+import { createAtomHooks } from "~/lib/jotai"
+import { getStorageNS } from "~/lib/ns"
+import type { SettingItem } from "~/modules/settings/setting-builder"
+import { createSettingBuilder } from "~/modules/settings/setting-builder"
+
+declare module "~/lib/event-bus" {
   interface CustomEvent {
     SETTING_CHANGE_EVENT: {
       updated: number

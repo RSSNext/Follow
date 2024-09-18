@@ -1,11 +1,12 @@
 import { license, repository } from "@pkg"
-import { Logo } from "@renderer/components/icons/logo"
-import { Button } from "@renderer/components/ui/button"
-import { styledButtonVariant } from "@renderer/components/ui/button/variants"
-import { Divider } from "@renderer/components/ui/divider"
-import { SocialMediaLinks } from "@renderer/constants/social"
-import { getNewIssueUrl } from "@renderer/lib/issues"
 import { Trans, useTranslation } from "react-i18next"
+
+import { Logo } from "~/components/icons/logo"
+import { Button } from "~/components/ui/button"
+import { styledButtonVariant } from "~/components/ui/button/variants"
+import { Divider } from "~/components/ui/divider"
+import { SocialMediaLinks } from "~/constants/social"
+import { getNewIssueUrl } from "~/lib/issues"
 
 import { SettingsTitle } from "../title"
 

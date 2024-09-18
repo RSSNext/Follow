@@ -1,7 +1,3 @@
-import { useUISettingKey, useUISettingSelector } from "@renderer/atoms/settings/ui"
-import { isElectronBuild } from "@renderer/constants"
-import { tipcClient } from "@renderer/lib/client"
-import { cn } from "@renderer/lib/utils"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import type { FC } from "react"
 import { useInsertionEffect, useMemo, useRef, useState } from "react"
@@ -11,6 +7,11 @@ import type {
   DynamicImportLanguageRegistration,
   DynamicImportThemeRegistration,
 } from "shiki"
+
+import { useUISettingKey, useUISettingSelector } from "~/atoms/settings/ui"
+import { isElectronBuild } from "~/constants"
+import { tipcClient } from "~/lib/client"
+import { cn } from "~/lib/utils"
 
 import { getLanguageColor, getLanguageIcon } from "../constants"
 import { CopyButton } from "../copy-button"

@@ -1,5 +1,6 @@
 import pkg from "@pkg"
-import { cn } from "@renderer/lib/utils"
+
+import { cn } from "~/lib/utils"
 
 import { Logo } from "../icons/logo"
 

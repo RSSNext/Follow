@@ -1,6 +1,7 @@
-import { apiClient } from "@renderer/lib/api-fetch"
-import { defineQuery } from "@renderer/lib/defineQuery"
 import { useMutation } from "@tanstack/react-query"
+
+import { apiClient } from "~/lib/api-fetch"
+import { defineQuery } from "~/lib/defineQuery"
 
 import type { MutationBaseProps } from "./types"
 

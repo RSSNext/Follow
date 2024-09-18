@@ -1,10 +1,11 @@
-import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { defineQuery } from "@renderer/lib/defineQuery"
-import { getFetchErrorMessage, toastFetchError } from "@renderer/lib/error-parser"
-import { useSettingModal } from "@renderer/modules/settings/modal/hooks"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
+
+import { useAuthQuery } from "~/hooks/common"
+import { apiClient } from "~/lib/api-fetch"
+import { defineQuery } from "~/lib/defineQuery"
+import { getFetchErrorMessage, toastFetchError } from "~/lib/error-parser"
+import { useSettingModal } from "~/modules/settings/modal/hooks"
 
 export const wallet = {
   get: ({ userId }: { userId?: string } = {}) =>

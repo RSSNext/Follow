@@ -1,48 +1,49 @@
 import { repository } from "@pkg"
-import {
-  ReadabilityStatus,
-  setReadabilityStatus,
-  useEntryInReadabilityStatus,
-  useEntryIsInReadability,
-  useEntryReadabilityContent,
-} from "@renderer/atoms/readability"
-import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { useWhoami } from "@renderer/atoms/user"
-import { m } from "@renderer/components/common/Motion"
-import { ShadowDOM } from "@renderer/components/common/ShadowDOM"
-import { AutoResizeHeight } from "@renderer/components/ui/auto-resize-height"
-import { Button } from "@renderer/components/ui/button"
-import { Divider } from "@renderer/components/ui/divider"
-import { HTML } from "@renderer/components/ui/markdown"
-import { Toc } from "@renderer/components/ui/markdown/components/Toc"
-import { useInPeekModal } from "@renderer/components/ui/modal/inspire/PeekModal"
-import { RootPortal } from "@renderer/components/ui/portal"
-import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { UserAvatar } from "@renderer/components/user-button"
-import { isWebBuild, ROUTE_FEED_PENDING } from "@renderer/constants"
-import { shortcuts } from "@renderer/constants/shortcuts"
-import { useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
-import { useRouteParamsSelector, useRouteParms } from "@renderer/hooks/biz/useRouteParams"
-import { useAuthQuery, useTitle } from "@renderer/hooks/common"
-import { stopPropagation } from "@renderer/lib/dom"
-import { FeedViewType } from "@renderer/lib/enum"
-import { getNewIssueUrl } from "@renderer/lib/issues"
-import { cn } from "@renderer/lib/utils"
-import type { ActiveEntryId } from "@renderer/models"
-import {
-  useIsSoFWrappedElement,
-  useWrappedElement,
-  WrappedElementProvider,
-} from "@renderer/providers/wrapped-element-provider"
-import { Queries } from "@renderer/queries"
-import { useEntry, useEntryReadHistory } from "@renderer/store/entry"
-import { getPreferredTitle, useFeedById, useFeedHeaderTitle } from "@renderer/store/feed"
 import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
 import { memo, useEffect, useLayoutEffect, useMemo, useRef } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
+
+import {
+  ReadabilityStatus,
+  setReadabilityStatus,
+  useEntryInReadabilityStatus,
+  useEntryIsInReadability,
+  useEntryReadabilityContent,
+} from "~/atoms/readability"
+import { useUISettingKey } from "~/atoms/settings/ui"
+import { useWhoami } from "~/atoms/user"
+import { m } from "~/components/common/Motion"
+import { ShadowDOM } from "~/components/common/ShadowDOM"
+import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
+import { Button } from "~/components/ui/button"
+import { Divider } from "~/components/ui/divider"
+import { HTML } from "~/components/ui/markdown"
+import { Toc } from "~/components/ui/markdown/components/Toc"
+import { useInPeekModal } from "~/components/ui/modal/inspire/PeekModal"
+import { RootPortal } from "~/components/ui/portal"
+import { ScrollArea } from "~/components/ui/scroll-area"
+import { UserAvatar } from "~/components/user-button"
+import { isWebBuild, ROUTE_FEED_PENDING } from "~/constants"
+import { shortcuts } from "~/constants/shortcuts"
+import { useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
+import { useRouteParamsSelector, useRouteParms } from "~/hooks/biz/useRouteParams"
+import { useAuthQuery, useTitle } from "~/hooks/common"
+import { stopPropagation } from "~/lib/dom"
+import { FeedViewType } from "~/lib/enum"
+import { getNewIssueUrl } from "~/lib/issues"
+import { cn } from "~/lib/utils"
+import type { ActiveEntryId } from "~/models"
+import {
+  useIsSoFWrappedElement,
+  useWrappedElement,
+  WrappedElementProvider,
+} from "~/providers/wrapped-element-provider"
+import { Queries } from "~/queries"
+import { useEntry, useEntryReadHistory } from "~/store/entry"
+import { getPreferredTitle, useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"

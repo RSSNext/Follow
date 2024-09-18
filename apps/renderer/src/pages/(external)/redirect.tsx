@@ -1,11 +1,12 @@
 import { DEEPLINK_SCHEME } from "@follow/shared/constants"
-import { PoweredByFooter } from "@renderer/components/common/PoweredByFooter"
-import { Button } from "@renderer/components/ui/button"
-import { UserAvatar } from "@renderer/components/user-button"
-import { apiClient } from "@renderer/lib/api-fetch"
 import { useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
+
+import { PoweredByFooter } from "~/components/common/PoweredByFooter"
+import { Button } from "~/components/ui/button"
+import { UserAvatar } from "~/components/user-button"
+import { apiClient } from "~/lib/api-fetch"
 
 export function Component() {
   const navigate = useNavigate()

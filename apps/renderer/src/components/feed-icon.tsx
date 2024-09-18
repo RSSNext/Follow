@@ -1,10 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
-import { getColorScheme, stringToHue } from "@renderer/lib/color"
-import { getImageProxyUrl } from "@renderer/lib/img-proxy"
-import { cn, getUrlIcon } from "@renderer/lib/utils"
-import type { CombinedEntryModel, FeedModel } from "@renderer/models"
 import type { ReactNode } from "react"
 import { forwardRef, useMemo } from "react"
+
+import { getColorScheme, stringToHue } from "~/lib/color"
+import { getImageProxyUrl } from "~/lib/img-proxy"
+import { cn, getUrlIcon } from "~/lib/utils"
+import type { CombinedEntryModel, FeedModel } from "~/models"
 
 import { PlatformIcon } from "./ui/platform-icon"
 

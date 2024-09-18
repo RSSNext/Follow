@@ -1,6 +1,6 @@
-import { Avatar, AvatarImage } from "@renderer/components/ui/avatar"
-import { LoadingCircle, LoadingWithIcon } from "@renderer/components/ui/loading"
-import { getUrlIcon } from "@renderer/lib/utils"
+import { Avatar, AvatarImage } from "~/components/ui/avatar"
+import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
+import { getUrlIcon } from "~/lib/utils"
 
 export const EntryContentLoading = (props: { icon?: string }) => {
   if (!props.icon) {

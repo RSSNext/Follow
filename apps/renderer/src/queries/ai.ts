@@ -1,8 +1,8 @@
-import { views } from "@renderer/constants"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { defineQuery } from "@renderer/lib/defineQuery"
-import type { SupportedLanguages } from "@renderer/models"
-import type { FlatEntryModel } from "@renderer/store/entry"
+import { views } from "~/constants"
+import { apiClient } from "~/lib/api-fetch"
+import { defineQuery } from "~/lib/defineQuery"
+import type { SupportedLanguages } from "~/models"
+import type { FlatEntryModel } from "~/store/entry"
 
 const LanguageMap: Record<
   SupportedLanguages,

@@ -1,36 +1,33 @@
-import { currentSupportedLanguages } from "@renderer/@types/constants"
-import { langLoadingLockMapAtom } from "@renderer/atoms/lang"
+import { useQuery } from "@tanstack/react-query"
+import { useAtom } from "jotai"
+import { useCallback, useEffect } from "react"
+import { useTranslation } from "react-i18next"
+
+import { currentSupportedLanguages } from "~/@types/constants"
+import { langLoadingLockMapAtom } from "~/atoms/lang"
 import {
   setGeneralSetting,
   useGeneralSettingSelector,
   useGeneralSettingValue,
-} from "@renderer/atoms/settings/general"
-import { createSetting } from "@renderer/atoms/settings/helper"
-import {
-  createDefaultSettings,
-  setUISetting,
-  useUISettingSelector,
-} from "@renderer/atoms/settings/ui"
-import { Button } from "@renderer/components/ui/button"
-import { LoadingCircle } from "@renderer/components/ui/loading"
-import { useModalStack } from "@renderer/components/ui/modal"
+} from "~/atoms/settings/general"
+import { createSetting } from "~/atoms/settings/helper"
+import { createDefaultSettings, setUISetting, useUISettingSelector } from "~/atoms/settings/ui"
+import { Button } from "~/components/ui/button"
+import { LoadingCircle } from "~/components/ui/loading"
+import { useModalStack } from "~/components/ui/modal"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@renderer/components/ui/select"
-import { IS_MANUAL_CHANGE_LANGUAGE_KEY } from "@renderer/constants"
-import { fallbackLanguage } from "@renderer/i18n"
-import { initPostHog } from "@renderer/initialize/posthog"
-import { tipcClient } from "@renderer/lib/client"
-import { cn } from "@renderer/lib/utils"
-import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
-import { useQuery } from "@tanstack/react-query"
-import { useAtom } from "jotai"
-import { useCallback, useEffect } from "react"
-import { useTranslation } from "react-i18next"
+} from "~/components/ui/select"
+import { IS_MANUAL_CHANGE_LANGUAGE_KEY } from "~/constants"
+import { fallbackLanguage } from "~/i18n"
+import { initPostHog } from "~/initialize/posthog"
+import { tipcClient } from "~/lib/client"
+import { cn } from "~/lib/utils"
+import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
 import { SettingsTitle } from "../title"
 

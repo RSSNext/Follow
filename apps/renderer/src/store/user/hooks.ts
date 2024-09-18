@@ -1,4 +1,4 @@
-import type { UserModel } from "@renderer/models"
+import type { UserModel } from "~/models"
 
 import { useUserStore } from "./store"
 

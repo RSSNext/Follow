@@ -1,8 +1,9 @@
-import { FeedIcon } from "@renderer/components/feed-icon"
-import { Card, CardContent, CardHeader, CardTitle } from "@renderer/components/ui/card"
-import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
 import type { FC } from "react"
 import { memo } from "react"
+
+import { FeedIcon } from "~/components/feed-icon"
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 
 import { RecommendationContent } from "./recommendation-content"
 import type { RSSHubRouteDeclaration } from "./types"

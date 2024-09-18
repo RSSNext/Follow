@@ -1,12 +1,13 @@
-import { FollowIcon } from "@renderer/components/icons/follow"
-import { Button } from "@renderer/components/ui/button"
-import { useCurrentModal } from "@renderer/components/ui/modal"
-import { modalMontionConfig } from "@renderer/components/ui/modal/stacked/constants"
-import type { LoginRuntime } from "@renderer/lib/auth"
-import { loginHandler } from "@renderer/lib/auth"
-import { stopPropagation } from "@renderer/lib/dom"
 import { m } from "framer-motion"
 import { useTranslation } from "react-i18next"
+
+import { FollowIcon } from "~/components/icons/follow"
+import { Button } from "~/components/ui/button"
+import { useCurrentModal } from "~/components/ui/modal"
+import { modalMontionConfig } from "~/components/ui/modal/stacked/constants"
+import type { LoginRuntime } from "~/lib/auth"
+import { loginHandler } from "~/lib/auth"
+import { stopPropagation } from "~/lib/dom"
 
 interface LoginModalContentProps {
   runtime?: LoginRuntime

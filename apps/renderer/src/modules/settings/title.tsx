@@ -1,6 +1,7 @@
-import { cn } from "@renderer/lib/utils"
 import { useTranslation } from "react-i18next"
 import { useLoaderData } from "react-router-dom"
+
+import { cn } from "~/lib/utils"
 
 import { settings } from "./constants"
 import type { SettingPageConfig } from "./utils"

@@ -1,4 +1,4 @@
-import { appIsReady } from "@renderer/atoms/app"
+import { appIsReady } from "~/atoms/app"
 
 const afterReadyCallbackQueue = [] as Array<() => void>
 

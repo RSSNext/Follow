@@ -1,3 +1,7 @@
+import type { ReactNode } from "react"
+import { Fragment, memo, useCallback, useEffect, useRef, useState } from "react"
+import { useHotkeys } from "react-hotkeys-hook"
+
 import {
   ContextMenu,
   ContextMenuContent,
@@ -8,16 +12,13 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from "@renderer/components/ui/context-menu"
-import { KbdCombined } from "@renderer/components/ui/kbd/Kbd"
-import { HotKeyScopeMap } from "@renderer/constants"
-import { useSwitchHotKeyScope } from "@renderer/hooks/common"
-import { nextFrame } from "@renderer/lib/dom"
-import type { NativeMenuItem } from "@renderer/lib/native-menu"
-import { CONTEXT_MENU_SHOW_EVENT_KEY } from "@renderer/lib/native-menu"
-import type { ReactNode } from "react"
-import { Fragment, memo, useCallback, useEffect, useRef, useState } from "react"
-import { useHotkeys } from "react-hotkeys-hook"
+} from "~/components/ui/context-menu"
+import { KbdCombined } from "~/components/ui/kbd/Kbd"
+import { HotKeyScopeMap } from "~/constants"
+import { useSwitchHotKeyScope } from "~/hooks/common"
+import { nextFrame } from "~/lib/dom"
+import type { NativeMenuItem } from "~/lib/native-menu"
+import { CONTEXT_MENU_SHOW_EVENT_KEY } from "~/lib/native-menu"
 
 export const ContextMenuProvider: Component = ({ children }) => (
   <>

@@ -1,15 +1,16 @@
-import { currentSupportedLanguages } from "@renderer/@types/constants"
-import { getGeneralSettings, setGeneralSetting } from "@renderer/atoms/settings/general"
-import { IS_MANUAL_CHANGE_LANGUAGE_KEY } from "@renderer/constants"
-import { i18nAtom } from "@renderer/i18n"
-import { EventBus } from "@renderer/lib/event-bus"
-import { loadLanguageAndApply } from "@renderer/lib/load-language"
 import i18next from "i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
 import { useAtom } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import { useEffect, useLayoutEffect, useRef } from "react"
 import { I18nextProvider } from "react-i18next"
+
+import { currentSupportedLanguages } from "~/@types/constants"
+import { getGeneralSettings, setGeneralSetting } from "~/atoms/settings/general"
+import { IS_MANUAL_CHANGE_LANGUAGE_KEY } from "~/constants"
+import { i18nAtom } from "~/i18n"
+import { EventBus } from "~/lib/event-bus"
+import { loadLanguageAndApply } from "~/lib/load-language"
 
 export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
   const [currentI18NInstance, update] = useAtom(i18nAtom)

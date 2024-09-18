@@ -1,6 +1,7 @@
 import { SYSTEM_CAN_UNDER_BLUR_WINDOW } from "@follow/shared/constants"
-import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { cn } from "@renderer/lib/utils"
+
+import { useUISettingKey } from "~/atoms/settings/ui"
+import { cn } from "~/lib/utils"
 
 type Props = Component<
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>

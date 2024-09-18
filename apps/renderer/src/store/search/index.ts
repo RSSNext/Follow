@@ -1,7 +1,8 @@
-import type { EntryModel } from "@renderer/models"
-import { EntryService, FeedService, SubscriptionService } from "@renderer/services"
 import type { IFuseOptions } from "fuse.js"
 import Fuse from "fuse.js"
+
+import type { EntryModel } from "~/models"
+import { EntryService, FeedService, SubscriptionService } from "~/services"
 
 import type { SubscriptionFlatModel } from "../subscription"
 import { createZustandStore } from "../utils/helper"

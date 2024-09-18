@@ -1,5 +1,6 @@
-import { nextFrame } from "@renderer/lib/dom"
 import { useLayoutEffect } from "react"
+
+import { nextFrame } from "~/lib/dom"
 
 export const Component = () => {
   useLayoutEffect(() => {

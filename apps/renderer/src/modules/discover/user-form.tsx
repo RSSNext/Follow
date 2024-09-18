@@ -1,6 +1,6 @@
-import { LoadingCircle } from "@renderer/components/ui/loading"
-import { useAuthQuery } from "@renderer/hooks/common"
-import { Queries } from "@renderer/queries"
+import { LoadingCircle } from "~/components/ui/loading"
+import { useAuthQuery } from "~/hooks/common"
+import { Queries } from "~/queries"
 
 import { DiscoverFeedForm } from "./DiscoverFeedForm"
 

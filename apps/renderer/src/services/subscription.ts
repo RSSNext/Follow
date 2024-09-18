@@ -1,6 +1,7 @@
-import { browserDB } from "@renderer/database"
-import type { SubscriptionFlatModel } from "@renderer/store/subscription"
 import { uniq } from "lodash-es"
+
+import { browserDB } from "~/database"
+import type { SubscriptionFlatModel } from "~/store/subscription"
 
 import { BaseService } from "./base"
 
