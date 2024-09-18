@@ -1,7 +1,7 @@
 import path from "node:path"
 
 import { getRendererHandlers } from "@egoist/tipc/main"
-import { callGlobalContextMethod } from "@follow/shared/src/bridge"
+import { callGlobalContextMethod } from "@follow/shared/bridge"
 import type { BrowserWindow } from "electron"
 import { app, clipboard, dialog, screen } from "electron"
 

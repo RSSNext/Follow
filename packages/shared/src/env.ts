@@ -13,7 +13,7 @@ export const env = createEnv({
   },
 
   emptyStringAsUndefined: true,
-  runtimeEnv: getRuntimeEnv(),
+  runtimeEnv: getRuntimeEnv() as any,
 
   skipValidation: !isDev,
 })

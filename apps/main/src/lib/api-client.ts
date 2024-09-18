@@ -1,10 +1,10 @@
-import { env } from "@env"
-// @ts-ignore
-import type { AppType } from "../../../../packages/shared/src/hono"
+import { env } from "@follow/shared/env"
 import PKG from "@pkg"
 import { hc } from "hono/client"
 import { ofetch } from "ofetch"
 
+// @ts-ignore
+import type { AppType } from "../../../../packages/shared/src/hono"
 import { logger } from "../logger"
 import { getAuthSessionToken } from "./user"
 

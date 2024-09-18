@@ -4,7 +4,7 @@ import { resources } from "../@types/resources"
 
 export const defaultNS = "native"
 
-export const i18n = i18next.createInstance()
+export const i18n = i18next.createInstance() as typeof i18next
 
 i18n.init({
   fallbackLng: "en",

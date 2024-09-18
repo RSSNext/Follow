@@ -1,7 +1,7 @@
 import path from "node:path"
 
 import { registerIpcMain } from "@egoist/tipc/main"
-import { APP_PROTOCOL } from "@follow/shared/src/constants"
+import { APP_PROTOCOL } from "@follow/shared/constants"
 import { app, nativeTheme, shell } from "electron"
 import contextMenu from "electron-context-menu"
 

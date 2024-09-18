@@ -1,5 +1,5 @@
+import { dispatchEventOnWindow } from "@follow/shared/event"
 import { name } from "@pkg"
-import { dispatchEventOnWindow } from "@follow/shared/src/event"
 import type { BrowserWindow, MenuItem, MenuItemConstructorOptions } from "electron"
 import { Menu } from "electron"
 

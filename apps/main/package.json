@@ -13,11 +13,11 @@
   },
   "exports": {
     ".": {
-      "types": "./export.ts",
-      "import": "./export.ts"
+      "types": "./dist/export.d.ts",
+      "import": "./dist/export.js"
     }
   },
-  "main": "./dist/main/index.js",
+  "main": "./src/index.ts",
   "scripts": {},
   "dependencies": {
     "@egjs/react-infinitegrid": "4.12.0",

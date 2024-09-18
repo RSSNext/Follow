@@ -1,4 +1,4 @@
-import { env } from "@env"
+import { env } from "@follow/shared/env"
 import { PostHog } from "posthog-node"
 
 import { getUser } from "./user"

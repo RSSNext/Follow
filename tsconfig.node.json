@@ -3,7 +3,7 @@
   "include": [
     "electron.vite.config.*",
     "src/main/**/*",
-    "src/preload/**/*",
+    "apps/main/preload/**/*",
     "types/**/*.d.ts",
     "src/shared/src/**/*",
     "packages/shared/src/env.ts",
@@ -14,27 +14,17 @@
   ],
   "compilerOptions": {
     "composite": true,
-    "types": [
-      "electron-vite/node"
-    ],
+    "types": ["electron-vite/node"],
     "moduleResolution": "Bundler",
     "noImplicitReturns": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "baseUrl": ".",
     "paths": {
-      "@shared/*": [
-        "src/shared/src/*"
-      ],
-      "@env": [
-        "packages/shared/src/env.ts"
-      ],
-      "@pkg": [
-        "./package.json"
-      ],
-      "@locales/*": [
-        "./locales/*"
-      ]
+      "@shared/*": ["src/shared/src/*"],
+      "@env": ["packages/shared/src/env.ts"],
+      "@pkg": ["./package.json"],
+      "@locales/*": ["./locales/*"]
     }
   }
 }

@@ -2,8 +2,8 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
-import { callGlobalContextMethod } from "@follow/shared/src/bridge"
-import { imageRefererMatches } from "@follow/shared/src/image"
+import { callGlobalContextMethod } from "@follow/shared/bridge"
+import { imageRefererMatches } from "@follow/shared/image"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, Menu, shell } from "electron"
 

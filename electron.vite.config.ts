@@ -22,6 +22,11 @@ export default defineConfig({
     },
   },
   preload: {
+    build: {
+      lib: {
+        entry: "./apps/main/preload/index.ts",
+      },
+    },
     resolve: {
       alias: {
         "@env": resolve("./src/env.ts"),
@@ -33,9 +38,15 @@ export default defineConfig({
   renderer: {
     ...viteRenderBaseConfig,
 
+    root: "apps/renderer",
     build: {
       sourcemap: !!process.env.CI,
       target: "esnext",
+      rollupOptions: {
+        input: {
+          main: resolve("index.html"),
+        },
+      },
     },
     define: {
       ...viteRenderBaseConfig.define,
