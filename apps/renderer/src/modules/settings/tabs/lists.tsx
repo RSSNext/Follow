@@ -1,7 +1,9 @@
 import { WEB_URL } from "@follow/shared/constants"
-import { FeedIcon } from "@renderer/components/feed-icon"
-import { LoadingCircle } from "@renderer/components/ui/loading"
-import { ScrollArea } from "@renderer/components/ui/scroll-area"
+import { useTranslation } from "react-i18next"
+
+import { FeedIcon } from "~/components/feed-icon"
+import { LoadingCircle } from "~/components/ui/loading"
+import { ScrollArea } from "~/components/ui/scroll-area"
 import {
   Table,
   TableBody,
@@ -9,11 +11,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@renderer/components/ui/table"
-import { useAuthQuery } from "@renderer/hooks/common"
-import { Balance } from "@renderer/modules/wallet/balance"
-import { Queries } from "@renderer/queries"
-import { useTranslation } from "react-i18next"
+} from "~/components/ui/table"
+import { useAuthQuery } from "~/hooks/common"
+import { Balance } from "~/modules/wallet/balance"
+import { Queries } from "~/queries"
 
 export const SettingLists = () => {
   const { t } = useTranslation("settings")
