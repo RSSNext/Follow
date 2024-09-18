@@ -4,11 +4,12 @@ import { toast } from "sonner"
 
 import { currentSupportedLanguages, dayjsLocaleImportMap } from "~/@types/constants"
 import { defaultResources } from "~/@types/default-resource"
-import { fallbackLanguage, i18nAtom, LocaleCache } from "~/i18n"
+import { fallbackLanguage, i18nAtom, langChain, LocaleCache } from "~/i18n"
 import { jotaiStore } from "~/lib/jotai"
 import { getOS, isEmptyObject } from "~/lib/utils"
 
 import { tipcClient } from "./client"
+import { appLog } from "./log"
 
 const loadingLangLock = new Set<string>()
 const loadedLangs = new Set<string>([fallbackLanguage])
@@ -19,7 +20,10 @@ export const loadLanguageAndApply = async (lang: string) => {
   if (dayjsImport) {
     const [locale, loader] = dayjsImport
     loader().then(() => {
-      dayjs.locale(locale)
+      appLog("dayjs loaded: ", locale)
+      langChain.next(() => {
+        return dayjs.locale(locale)
+      })
     })
   }
 
@@ -94,7 +98,7 @@ export const loadLanguageAndApply = async (lang: string) => {
   }
 
   await i18next.reloadResources()
-  await i18next.changeLanguage(lang)
+
   LocaleCache.shared.set(lang)
   loadedLangs.add(lang)
   loadingLangLock.delete(lang)

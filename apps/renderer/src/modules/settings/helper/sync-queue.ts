@@ -20,7 +20,7 @@ type SettingMapping = {
   general: GeneralSettings
 }
 
-const omitKeys = ["updated"]
+const omitKeys = []
 
 const localSettingGetterMap = {
   appearance: () => omit(getUISettings(), uiServerSyncWhiteListKeys, omitKeys),

@@ -44,4 +44,5 @@ export const generalServerSyncWhiteListKeys: (keyof GeneralSettings)[] = [
   "appLaunchOnStartup",
   "dataPersist",
   "sendAnonymousData",
+  "language",
 ]

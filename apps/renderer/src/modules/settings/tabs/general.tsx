@@ -22,7 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
-import { IS_MANUAL_CHANGE_LANGUAGE_KEY } from "~/constants"
 import { fallbackLanguage } from "~/i18n"
 import { initPostHog } from "~/initialize/posthog"
 import { tipcClient } from "~/lib/client"
@@ -219,7 +218,6 @@ export const LanguageSelector = () => {
         value={finalRenderLanguage}
         disabled={loadingLanguageLockMap[finalRenderLanguage]}
         onValueChange={(value) => {
-          localStorage.setItem(IS_MANUAL_CHANGE_LANGUAGE_KEY, "true")
           setGeneralSetting("language", value as string)
         }}
       >
