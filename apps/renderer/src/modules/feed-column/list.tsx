@@ -116,7 +116,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
       <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3" rootClassName="h-full">
         <div
           className={cn(
-            "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 transition-colors",
+            "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 font-semibold transition-colors",
             feedId === FEED_COLLECTION_LIST && "bg-native-active",
           )}
           onClick={(e) => {
@@ -130,8 +130,16 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             }
           }}
         >
-          <i className="i-mgc-star-cute-fi mr-2 text-orange-500" />
+          <i className="i-mgc-star-cute-fi mr-2 text-amber-500" />
           {t("words.starred")}
+        </div>
+        <div className="flex h-8 w-full shrink-0 items-center rounded-md px-2.5 font-semibold transition-colors">
+          <i className="i-mgc-rada-cute-fi mr-2 text-lime-500" />
+          {t("words.lists")}
+        </div>
+        <div className="flex h-8 w-full shrink-0 items-center rounded-md px-2.5 font-semibold transition-colors">
+          <i className="i-mgc-rss-2-cute-fi mr-2 text-orange-500" />
+          {t("words.feeds")}
         </div>
         {hasData ? (
           <SortableList view={view} expansion={expansion} data={data} />

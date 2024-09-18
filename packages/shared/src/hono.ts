@@ -1,10 +1,10 @@
-import type { HttpBindings } from '@hono/node-server';
-import type * as drizzle_orm from 'drizzle-orm';
-import type { InferInsertModel } from 'drizzle-orm';
-import type * as drizzle_orm_pg_core from 'drizzle-orm/pg-core';
-import type * as hono_hono_base from 'hono/hono-base';
-import type * as zod from 'zod';
-import type { z } from 'zod';
+import * as hono_hono_base from 'hono/hono-base';
+import { HttpBindings } from '@hono/node-server';
+import * as drizzle_orm from 'drizzle-orm';
+import { InferInsertModel } from 'drizzle-orm';
+import * as drizzle_orm_pg_core from 'drizzle-orm/pg-core';
+import * as zod from 'zod';
+import { z } from 'zod';
 
 type Env = {
     Bindings: HttpBindings;
@@ -189,7 +189,11 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
 }>;
 declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     userId: z.ZodString;
-    rules: z.ZodNullable<z.ZodType<string | number | boolean | Record<string, string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null> | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | Record<string, string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null> | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+    rules: z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
 }, "rules">, {
     rules: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
         name: z.ZodString;
@@ -759,9 +763,17 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     authorAvatar: z.ZodNullable<z.ZodString>;
     insertedAt: z.ZodString;
     publishedAt: z.ZodString;
-    media: z.ZodNullable<z.ZodType<string | number | boolean | Record<string, string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null> | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | Record<string, string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null> | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+    media: z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
     categories: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
-    attachments: z.ZodNullable<z.ZodType<string | number | boolean | Record<string, string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null> | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | Record<string, string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null> | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+    attachments: z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
 }, "media" | "attachments">, {
     attachments: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
         url: z.ZodString;
@@ -1495,6 +1507,22 @@ declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        listId: drizzle_orm_pg_core.PgColumn<{
+            name: "list_id";
+            tableName: "subscriptions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
         view: drizzle_orm_pg_core.PgColumn<{
             name: "view";
             tableName: "subscriptions";
@@ -1565,6 +1593,7 @@ declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
 declare const subscriptionsOpenAPISchema: zod.ZodObject<{
     userId: zod.ZodString;
     feedId: zod.ZodString;
+    listId: zod.ZodNullable<zod.ZodString>;
     view: zod.ZodNumber;
     category: zod.ZodNullable<zod.ZodString>;
     title: zod.ZodNullable<zod.ZodString>;
@@ -1575,6 +1604,7 @@ declare const subscriptionsOpenAPISchema: zod.ZodObject<{
     view: number;
     category: string | null;
     feedId: string;
+    listId: string | null;
     isPrivate: boolean;
 }, {
     title: string | null;
@@ -1582,11 +1612,13 @@ declare const subscriptionsOpenAPISchema: zod.ZodObject<{
     view: number;
     category: string | null;
     feedId: string;
+    listId: string | null;
     isPrivate: boolean;
 }>;
 declare const subscriptionsRelations: drizzle_orm.Relations<"subscriptions", {
     users: drizzle_orm.One<"user", true>;
     feeds: drizzle_orm.One<"feeds", true>;
+    lists: drizzle_orm.One<"lists", false>;
 }>;
 
 declare const timeline: drizzle_orm_pg_core.PgTableWithColumns<{
@@ -2480,9 +2512,9 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
     createdAt: string;
+    hash: string;
     fromUserId: string | null;
     toUserId: string | null;
-    hash: string;
     toFeedId: string | null;
     toEntryId: string | null;
     powerToken: string;
@@ -2490,9 +2522,9 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
 }, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
     createdAt: string;
+    hash: string;
     fromUserId: string | null;
     toUserId: string | null;
-    hash: string;
     toFeedId: string | null;
     toEntryId: string | null;
     powerToken: string;
@@ -2558,7 +2590,291 @@ declare const feedPowerTokensRelations: drizzle_orm.Relations<"feedPowerTokens",
     feed: drizzle_orm.One<"feeds", true>;
 }>;
 
+declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "lists";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        creatorId: drizzle_orm_pg_core.PgColumn<{
+            name: "creator_id";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        feedIds: drizzle_orm_pg_core.PgColumn<{
+            name: "feed_ids";
+            tableName: "lists";
+            dataType: "array";
+            columnType: "PgArray";
+            data: string[];
+            driverParam: string | string[];
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: drizzle_orm.Column<{
+                name: "feed_ids";
+                tableName: "lists";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                driverParam: string;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                generated: undefined;
+            }, object, object>;
+            generated: undefined;
+        }, {}, {}>;
+        view: drizzle_orm_pg_core.PgColumn<{
+            name: "view";
+            tableName: "lists";
+            dataType: "number";
+            columnType: "PgSmallInt";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        title: drizzle_orm_pg_core.PgColumn<{
+            name: "title";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        image: drizzle_orm_pg_core.PgColumn<{
+            name: "image";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        price: drizzle_orm_pg_core.PgColumn<{
+            name: "price";
+            tableName: "lists";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        timelineUpdatedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "timeline_updated_at";
+            tableName: "lists";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const listsOpenAPISchema: zod.ZodObject<{
+    id: zod.ZodString;
+    creatorId: zod.ZodString;
+    feedIds: zod.ZodArray<zod.ZodString, "many">;
+    view: zod.ZodNumber;
+    title: zod.ZodString;
+    image: zod.ZodNullable<zod.ZodString>;
+    price: zod.ZodNumber;
+    timelineUpdatedAt: zod.ZodString;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    title: string;
+    id: string;
+    image: string | null;
+    view: number;
+    creatorId: string;
+    feedIds: string[];
+    price: number;
+    timelineUpdatedAt: string;
+}, {
+    title: string;
+    id: string;
+    image: string | null;
+    view: number;
+    creatorId: string;
+    feedIds: string[];
+    price: number;
+    timelineUpdatedAt: string;
+}>;
+declare const listsRelations: drizzle_orm.Relations<"lists", {
+    creator: drizzle_orm.One<"user", true>;
+    subscriptions: drizzle_orm.Many<"subscriptions">;
+}>;
+
 declare const _routes: hono_hono_base.HonoBase<Env, {
+    "/lists": {
+        $get: {
+            input: {
+                query: {
+                    listId: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    title: string;
+                    id: string;
+                    image: string | null;
+                    view: number;
+                    feeds: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        image: string | null;
+                        url: string;
+                        siteUrl: string | null;
+                        checkedAt: string;
+                        lastModifiedHeader: string | null;
+                        etagHeader: string | null;
+                        ttl: number | null;
+                        errorMessage: string | null;
+                        errorAt: string | null;
+                        ownerUserId: string | null;
+                    }[];
+                    creatorId: string;
+                    feedIds: string[];
+                    price: number;
+                    timelineUpdatedAt: string;
+                    creator: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $post: {
+            input: {
+                json: {
+                    title: string;
+                    view: number;
+                    price: number;
+                    image?: string | null | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    title: string;
+                    id: string;
+                    image: string | null;
+                    view: number;
+                    creatorId: string;
+                    feedIds: string[];
+                    price: number;
+                    timelineUpdatedAt: string;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $delete: {
+            input: {
+                json: {
+                    listId: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $patch: {
+            input: {
+                json: {
+                    title: string;
+                    view: number;
+                    price: number;
+                    listId: string;
+                    image?: string | null | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
     "/wallets/transactions/tip": {
         $post: {
             input: {
@@ -2582,9 +2898,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 query: {
                     type?: string | string[] | undefined;
+                    hash?: string | string[] | undefined;
                     fromUserId?: string | string[] | undefined;
                     toUserId?: string | string[] | undefined;
-                    hash?: string | string[] | undefined;
                     fromOrToUserId?: string | string[] | undefined;
                     toFeedId?: string | string[] | undefined;
                     createdAfter?: string | string[] | undefined;
@@ -2595,9 +2911,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 data: {
                     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
                     createdAt: string;
+                    hash: string;
                     fromUserId: string | null;
                     toUserId: string | null;
-                    hash: string;
                     toFeedId: string | null;
                     toEntryId: string | null;
                     powerToken: string;
@@ -2776,6 +3092,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             createdAt: string;
                         } | null;
                     };
+                    listId: string | null;
                     isPrivate: boolean;
                 }[];
             };
@@ -2856,8 +3173,12 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             };
             output: {
                 code: 0;
-                settings: Record<string, any>;
-                updated: Record<string, string>;
+                settings: {
+                    [x: string]: any;
+                };
+                updated: {
+                    [x: string]: string;
+                };
             };
             outputFormat: "json" | "text";
             status: 200;
@@ -2913,7 +3234,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             };
             output: {
                 code: 0;
-                data: Record<string, number>;
+                data: {
+                    [x: string]: number;
+                };
             };
             outputFormat: "json" | "text";
             status: 200;
@@ -3153,6 +3476,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         view: number;
                         category: string | null;
                         feedId: string;
+                        listId: string | null;
                         isPrivate: boolean;
                     } | undefined;
                 };
@@ -3191,12 +3515,14 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
-                    users: Record<string, {
+                    users: {
+                        [x: string]: {
                             name: string | null;
                             id: string;
                             image: string | null;
                             handle: string | null;
-                        }>;
+                        };
+                    };
                     entryReadHistories: {
                         userIds: string[];
                         readCount: number;
@@ -3370,12 +3696,14 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             handle: string | null;
                         }[];
                     };
-                    users: Record<string, {
+                    users: {
+                        [x: string]: {
                             name: string | null;
                             id: string;
                             image: string | null;
                             handle: string | null;
-                        }>;
+                        };
+                    };
                     entryReadHistories: {
                         userIds: string[];
                         readCount: number;
@@ -3509,13 +3837,17 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 };
             };
             output: {
-                data: Record<string, {
+                data: {
+                    [x: string]: {
                         description: string;
                         name: string;
                         url: string;
-                        routes: Record<string, {
+                        routes: {
+                            [x: string]: {
                                 description: string;
-                                parameters: Record<string, string>;
+                                parameters: {
+                                    [x: string]: string;
+                                };
                                 path: string;
                                 example: string;
                                 name: string;
@@ -3523,8 +3855,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                                 maintainers: string[];
                                 location: string;
                                 view?: number | undefined;
-                            }>;
-                    }>;
+                            };
+                        };
+                    };
+                };
             };
             outputFormat: "json" | "text";
             status: 200;
@@ -3769,4 +4103,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { accounts, actions, actionsItemOpenAPISchema, type ActionsModel, actionsOpenAPISchema, actionsRelations, type AppType, type AttachmentsModel, collections, collectionsOpenAPISchema, collectionsRelations, entries, type EntriesModel, entriesOpenAPISchema, entriesRelations, entryReadHistories, type EntryReadHistoriesModel, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, type FeedModel, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsInputSchema, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, type MediaModel, sessions, settings, type SettingsModel, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactions, transactionsOpenAPISchema, transactionsRelations, transactionType, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsInputSchema, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
