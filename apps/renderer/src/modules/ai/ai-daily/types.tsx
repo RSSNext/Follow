@@ -1,4 +1,4 @@
-import type { FeedViewType } from "@renderer/lib/enum"
+import type { FeedViewType } from "~/lib/enum"
 
 import type { DayOf } from "./constants"
 

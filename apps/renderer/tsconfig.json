@@ -12,7 +12,7 @@
     "noEmit": true,
     "skipLibCheck": true,
     "paths": {
-      "@renderer/*": ["src/*"],
+      "~/*": ["src/*"],
       "@pkg": ["../../package.json"],
       "@locales/*": ["../../locales/*"]
     }

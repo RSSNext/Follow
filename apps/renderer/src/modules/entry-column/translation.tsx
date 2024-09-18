@@ -1,9 +1,10 @@
 import * as HoverCard from "@radix-ui/react-hover-card"
-import { HTML } from "@renderer/components/ui/markdown"
-import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { tooltipStyle } from "@renderer/components/ui/tooltip/styles"
-import { useMeasure } from "@renderer/hooks/common"
-import { cn } from "@renderer/lib/utils"
+
+import { HTML } from "~/components/ui/markdown"
+import { ScrollArea } from "~/components/ui/scroll-area"
+import { tooltipStyle } from "~/components/ui/tooltip/styles"
+import { useMeasure } from "~/hooks/common"
+import { cn } from "~/lib/utils"
 
 export const EntryTranslation: Component<{
   source?: string | null

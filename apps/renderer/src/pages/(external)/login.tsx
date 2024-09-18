@@ -1,12 +1,13 @@
 import { SessionProvider, signIn, useSession } from "@hono/auth-js/react"
-import { Logo } from "@renderer/components/icons/logo"
-import { Button } from "@renderer/components/ui/button"
-import { UserAvatar } from "@renderer/components/user-button"
-import { useSignOut } from "@renderer/hooks/biz/useSignOut"
-import { LOGIN_CALLBACK_URL, loginHandler } from "@renderer/lib/auth"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useLocation, useNavigate } from "react-router-dom"
+
+import { Logo } from "~/components/icons/logo"
+import { Button } from "~/components/ui/button"
+import { UserAvatar } from "~/components/user-button"
+import { useSignOut } from "~/hooks/biz/useSignOut"
+import { LOGIN_CALLBACK_URL, loginHandler } from "~/lib/auth"
 
 export function Component() {
   return (

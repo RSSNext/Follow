@@ -1,6 +1,7 @@
 import type { EntryReadHistoriesModel } from "@follow/shared/hono"
-import type { FeedViewType } from "@renderer/lib/enum"
-import type { CombinedEntryModel } from "@renderer/models"
+
+import type { FeedViewType } from "~/lib/enum"
+import type { CombinedEntryModel } from "~/models"
 
 type FeedId = string
 type EntryId = string

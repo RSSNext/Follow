@@ -1,27 +1,24 @@
 import { electronApp, optimizer } from "@electron-toolkit/utils"
-// @ts-ignore
 import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@follow/shared/constants"
-// @ts-ignore
 import { extractElectronWindowOptions } from "@follow/shared/electron"
-// @ts-ignore
 import { env } from "@follow/shared/env"
 import { app, BrowserWindow, session } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
 
 import { isDev, isMacOS } from "./env"
-import { initializeApp } from "./init"
+import { initializeAppStage0, initializeAppStage1 } from "./init"
 import { setAuthSessionToken } from "./lib/user"
 import { registerUpdater } from "./updater"
 import { createMainWindow, createWindow } from "./window"
 
-app.commandLine.appendSwitch("lang", "zh_CN")
 if (isDev) console.info("[main] env loaded:", env)
 
 if (squirrelStartup) {
   app.quit()
 }
 
-function bootsharp() {
+function bootstrap() {
+  initializeAppStage0()
   const gotTheLock = app.requestSingleInstanceLock()
 
   if (!gotTheLock) {
@@ -32,7 +29,7 @@ function bootsharp() {
 
   let mainWindow: BrowserWindow
 
-  initializeApp()
+  initializeAppStage1()
 
   app.on("second-instance", (_, commandLine) => {
     if (mainWindow) {
@@ -168,4 +165,4 @@ function bootsharp() {
   })
 }
 
-bootsharp()
+bootstrap()

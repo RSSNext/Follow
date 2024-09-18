@@ -1,10 +1,11 @@
 "use client"
 
-import { viewportAtom } from "@renderer/atoms/viewport"
-import { jotaiStore } from "@renderer/lib/jotai"
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import { throttle } from "lodash-es"
 import type { FC } from "react"
+
+import { viewportAtom } from "~/atoms/viewport"
+import { jotaiStore } from "~/lib/jotai"
 
 export const EventProvider: FC = () => {
   useIsomorphicLayoutEffect(() => {

@@ -1,6 +1,7 @@
-import { createAtomHooks } from "@renderer/lib/jotai"
-import { getStorageNS } from "@renderer/lib/ns"
 import { atomWithStorage } from "jotai/utils"
+
+import { createAtomHooks } from "~/lib/jotai"
+import { getStorageNS } from "~/lib/ns"
 
 type CornerPlayerAtomValue = {
   show: boolean

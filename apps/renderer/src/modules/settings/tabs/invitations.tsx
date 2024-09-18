@@ -1,10 +1,15 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
-import { Button } from "@renderer/components/ui/button"
-import { CopyButton } from "@renderer/components/ui/code-highlighter"
-import { Divider } from "@renderer/components/ui/divider"
-import { LoadingCircle } from "@renderer/components/ui/loading"
-import { useModalStack } from "@renderer/components/ui/modal"
-import { ScrollArea } from "@renderer/components/ui/scroll-area"
+import { useMutation } from "@tanstack/react-query"
+import dayjs from "dayjs"
+import { Trans, useTranslation } from "react-i18next"
+import { toast } from "sonner"
+
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
+import { Button } from "~/components/ui/button"
+import { CopyButton } from "~/components/ui/code-highlighter"
+import { Divider } from "~/components/ui/divider"
+import { LoadingCircle } from "~/components/ui/loading"
+import { useModalStack } from "~/components/ui/modal"
+import { ScrollArea } from "~/components/ui/scroll-area"
 import {
   Table,
   TableBody,
@@ -12,23 +17,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@renderer/components/ui/table"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
-import { INVITATION_PRICE } from "@renderer/constants"
-import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { toastFetchError } from "@renderer/lib/error-parser"
-import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
-import { Queries } from "@renderer/queries"
-import { useMutation } from "@tanstack/react-query"
-import dayjs from "dayjs"
-import { Trans, useTranslation } from "react-i18next"
-import { toast } from "sonner"
+} from "~/components/ui/table"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
+import { INVITATION_PRICE } from "~/constants"
+import { useAuthQuery } from "~/hooks/common"
+import { apiClient } from "~/lib/api-fetch"
+import { toastFetchError } from "~/lib/error-parser"
+import { usePresentUserProfileModal } from "~/modules/profile/hooks"
+import { Queries } from "~/queries"
 
 export const SettingInvitations = () => {
   const { t } = useTranslation("settings")

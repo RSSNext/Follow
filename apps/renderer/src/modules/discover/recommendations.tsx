@@ -1,8 +1,9 @@
-import { useAuthQuery } from "@renderer/hooks/common"
-import { isASCII } from "@renderer/lib/utils"
-import { Queries } from "@renderer/queries"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
+
+import { useAuthQuery } from "~/hooks/common"
+import { isASCII } from "~/lib/utils"
+import { Queries } from "~/queries"
 
 import { RecommendationCard } from "./recommendations-card"
 

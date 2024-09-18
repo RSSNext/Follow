@@ -1,4 +1,4 @@
-import type { EntryModel } from "@renderer/models"
+import type { EntryModel } from "~/models"
 
 import { createZustandStore } from "../utils/helper"
 import { getImageDimensionsFromDb } from "./db"

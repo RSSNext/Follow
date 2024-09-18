@@ -1,7 +1,8 @@
 import type { EntryReadHistoriesModel } from "@follow/shared/hono"
-import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "@renderer/constants"
-import type { FeedViewType } from "@renderer/lib/enum"
 import { useShallow } from "zustand/react/shallow"
+
+import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "~/constants"
+import type { FeedViewType } from "~/lib/enum"
 
 import { useFeedIdByView } from "../subscription"
 import { getEntryIsInView, getFilteredFeedIds } from "./helper"

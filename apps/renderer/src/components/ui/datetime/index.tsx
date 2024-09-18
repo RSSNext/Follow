@@ -1,9 +1,10 @@
-import { useGeneralSettingSelector } from "@renderer/atoms/settings/general"
-import { stopPropagation } from "@renderer/lib/dom"
 import dayjs from "dayjs"
 import type { FC } from "react"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+
+import { useGeneralSettingSelector } from "~/atoms/settings/general"
+import { stopPropagation } from "~/lib/dom"
 
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../tooltip"
 

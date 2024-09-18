@@ -1,35 +1,36 @@
-import { setAppSearchOpen, useAppSearchOpen } from "@renderer/atoms/app"
-import { ExPromise } from "@renderer/components/common/ExPromise"
-import { LoadMoreIndicator } from "@renderer/components/common/LoadMoreIndicator"
-import { FeedIcon } from "@renderer/components/feed-icon"
-import { EmptyIcon } from "@renderer/components/icons/empty"
-import { Logo } from "@renderer/components/icons/logo"
-import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@renderer/components/ui/select"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
-import { ROUTE_ENTRY_PENDING } from "@renderer/constants"
-import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { useI18n } from "@renderer/hooks/common"
-import type { FeedViewType } from "@renderer/lib/enum"
-import { cn } from "@renderer/lib/utils"
-import { getFeedById } from "@renderer/store/feed"
-import { searchActions, useSearchStore } from "@renderer/store/search"
-import { SearchType } from "@renderer/store/search/constants"
-import type { SearchInstance } from "@renderer/store/search/types"
-import { getSubscriptionByFeedId } from "@renderer/store/subscription"
-import { useFeedUnreadStore } from "@renderer/store/unread"
 import clsx from "clsx"
 import { Command } from "cmdk"
 import type { FC } from "react"
 import * as React from "react"
 import { memo, useMemo } from "react"
 import { useTranslation } from "react-i18next"
+
+import { setAppSearchOpen, useAppSearchOpen } from "~/atoms/app"
+import { ExPromise } from "~/components/common/ExPromise"
+import { LoadMoreIndicator } from "~/components/common/LoadMoreIndicator"
+import { FeedIcon } from "~/components/feed-icon"
+import { EmptyIcon } from "~/components/icons/empty"
+import { Logo } from "~/components/icons/logo"
+import { ScrollArea } from "~/components/ui/scroll-area"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select"
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
+import { ROUTE_ENTRY_PENDING } from "~/constants"
+import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { useI18n } from "~/hooks/common"
+import type { FeedViewType } from "~/lib/enum"
+import { cn } from "~/lib/utils"
+import { getFeedById } from "~/store/feed"
+import { searchActions, useSearchStore } from "~/store/search"
+import { SearchType } from "~/store/search/constants"
+import type { SearchInstance } from "~/store/search/types"
+import { getSubscriptionByFeedId } from "~/store/subscription"
+import { useFeedUnreadStore } from "~/store/unread"
 
 import styles from "./cmdk.module.css"
 

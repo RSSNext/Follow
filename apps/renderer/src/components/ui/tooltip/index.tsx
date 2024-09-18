@@ -1,7 +1,8 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip"
-import { cn } from "@renderer/lib/utils"
 import { m } from "framer-motion"
 import * as React from "react"
+
+import { cn } from "~/lib/utils"
 
 import { tooltipStyle } from "./styles"
 

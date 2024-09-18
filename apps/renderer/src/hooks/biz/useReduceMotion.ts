@@ -1,5 +1,6 @@
-import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { useReducedMotion } from "framer-motion"
+
+import { useUISettingKey } from "~/atoms/settings/ui"
 
 export const useReduceMotion = () => {
   const appReduceMotion = useUISettingKey("reduceMotion")

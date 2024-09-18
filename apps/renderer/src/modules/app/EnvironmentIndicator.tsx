@@ -1,10 +1,6 @@
 import { env } from "@follow/shared/env"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
+
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 
 export const EnvironmentIndicator = () => (
   <Tooltip>

@@ -1,4 +1,4 @@
-import { getStorageNS } from "@renderer/lib/ns"
+import { getStorageNS } from "~/lib/ns"
 
 /// Feed
 export const FEED_COLLECTION_LIST = "collections"
@@ -12,6 +12,3 @@ export const ROUTE_FEED_IN_FOLDER = "folder-"
 
 export const DAILY_CLAIM_AMOUNT = "20"
 export const INVITATION_PRICE = "100"
-
-// NS key
-export const IS_MANUAL_CHANGE_LANGUAGE_KEY = getStorageNS("isManualChangeLanguage")

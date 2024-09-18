@@ -1,7 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { setWhoami, useWhoami } from "@renderer/atoms/user"
-import { Avatar, AvatarImage } from "@renderer/components/ui/avatar"
-import { Button } from "@renderer/components/ui/button"
+import { useMutation } from "@tanstack/react-query"
+import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
+import { z } from "zod"
+
+import { setWhoami, useWhoami } from "~/atoms/user"
+import { Avatar, AvatarImage } from "~/components/ui/avatar"
+import { Button } from "~/components/ui/button"
 import {
   Form,
   FormControl,
@@ -10,14 +16,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@renderer/components/ui/form"
-import { Input } from "@renderer/components/ui/input"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { useMutation } from "@tanstack/react-query"
-import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { toast } from "sonner"
-import { z } from "zod"
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { apiClient } from "~/lib/api-fetch"
+import { toastFetchError } from "~/lib/error-parser"
 
 const formSchema = z.object({
   handle: z.string().max(50),
@@ -43,6 +45,9 @@ export const ProfileSettingForm = () => {
       apiClient["auth-app"]["update-account"].$patch({
         json: values,
       }),
+    onError: (error) => {
+      toastFetchError(error)
+    },
     onSuccess: (_, variables) => {
       if (user && variables) {
         setWhoami({ ...user, ...variables })

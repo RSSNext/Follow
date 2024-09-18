@@ -1,13 +1,14 @@
-import { getReadonlyRoute } from "@renderer/atoms/route"
-import { getSidebarActiveView, setSidebarActiveView } from "@renderer/atoms/sidebar"
-import { MotionButtonBase } from "@renderer/components/ui/button"
-import { FABContainer, FABPortable } from "@renderer/components/ui/fab"
-import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { springScrollTo } from "@renderer/lib/scroller"
-import { cn } from "@renderer/lib/utils"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Outlet, useNavigate } from "react-router-dom"
+
+import { getReadonlyRoute } from "~/atoms/route"
+import { getSidebarActiveView, setSidebarActiveView } from "~/atoms/sidebar"
+import { MotionButtonBase } from "~/components/ui/button"
+import { FABContainer, FABPortable } from "~/components/ui/fab"
+import { ScrollArea } from "~/components/ui/scroll-area"
+import { springScrollTo } from "~/lib/scroller"
+import { cn } from "~/lib/utils"
 
 import { useSubViewTitleValue } from "./hooks"
 

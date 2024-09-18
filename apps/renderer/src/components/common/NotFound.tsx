@@ -1,8 +1,9 @@
-import { isElectronBuild } from "@renderer/constants"
 import { captureException } from "@sentry/react"
 import { useEffect } from "react"
 import type { Location } from "react-router-dom"
 import { useLocation, useNavigate } from "react-router-dom"
+
+import { isElectronBuild } from "~/constants"
 
 import { Logo } from "../icons/logo"
 import { Button } from "../ui/button"

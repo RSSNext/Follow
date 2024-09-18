@@ -4,7 +4,6 @@ import "remark-gh-alerts/styles/github-colors-dark-media.css"
 import "remark-gh-alerts/styles/github-base.css"
 
 import remarkCalloutDirectives from "@microflash/remark-callout-directives"
-import { MarkdownLink } from "@renderer/components/ui/markdown/renderers"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { createElement } from "react"
@@ -17,6 +16,8 @@ import remarkParse from "remark-parse"
 import remarkRehype from "remark-rehype"
 import { unified } from "unified"
 import { VFile } from "vfile"
+
+import { MarkdownLink } from "~/components/ui/markdown/renderers"
 
 export interface RemarkOptions {
   components: Partial<Components>

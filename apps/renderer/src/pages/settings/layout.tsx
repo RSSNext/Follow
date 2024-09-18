@@ -1,10 +1,11 @@
-import { Logo } from "@renderer/components/icons/logo"
-import { WindowUnderBlur } from "@renderer/components/ui/background"
-import { isElectronBuild } from "@renderer/constants"
-import { preventDefault } from "@renderer/lib/dom"
-import { settings } from "@renderer/modules/settings/constants"
-import { SettingsSidebarTitle } from "@renderer/modules/settings/title"
 import { Link, Outlet, useLocation } from "react-router-dom"
+
+import { Logo } from "~/components/icons/logo"
+import { WindowUnderBlur } from "~/components/ui/background"
+import { isElectronBuild } from "~/constants"
+import { preventDefault } from "~/lib/dom"
+import { settings } from "~/modules/settings/constants"
+import { SettingsSidebarTitle } from "~/modules/settings/title"
 
 function Layout() {
   const location = useLocation()

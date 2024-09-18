@@ -1,5 +1,5 @@
-import { cn } from "@renderer/lib/utils"
-import { useWrappedElementSize } from "@renderer/providers/wrapped-element-provider"
+import { cn } from "~/lib/utils"
+import { useWrappedElementSize } from "~/providers/wrapped-element-provider"
 
 import { Media } from "../../media"
 

@@ -1,5 +1,4 @@
 /* eslint-disable no-unsafe-finally */
-import { runTransactionInScope } from "@renderer/database"
 import { unstable_batchedUpdates } from "react-dom"
 import type { StateCreator } from "zustand"
 import type { PersistStorage } from "zustand/middleware"
@@ -7,6 +6,8 @@ import { devtools } from "zustand/middleware"
 import { shallow } from "zustand/shallow"
 import type { UseBoundStoreWithEqualityFn } from "zustand/traditional"
 import { createWithEqualityFn } from "zustand/traditional"
+
+import { runTransactionInScope } from "~/database"
 
 declare const window: any
 export const localStorage: PersistStorage<any> = {

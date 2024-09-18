@@ -1,5 +1,6 @@
-import type { UserModel } from "@renderer/models"
 import { produce } from "immer"
+
+import type { UserModel } from "~/models"
 
 import { createZustandStore } from "../utils/helper"
 

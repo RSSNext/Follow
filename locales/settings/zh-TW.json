@@ -53,7 +53,7 @@
   "appearance.general": "一般",
   "appearance.guess_code_language.description": "使用模型來推斷未標記程式碼區塊的主要程式語言",
   "appearance.guess_code_language.label": "推測程式碼語言",
-  "appearance.misc": "Misc",
+  "appearance.misc": "其他",
   "appearance.modal_overlay.description": "顯示模態覆蓋層",
   "appearance.modal_overlay.label": "顯示模態覆蓋層",
   "appearance.opaque_sidebars.label": "不透明側邊欄",

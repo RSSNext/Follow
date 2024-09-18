@@ -1,9 +1,10 @@
-import type { RSSHubRoute } from "@renderer/modules/discover/types"
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
 import { memoize } from "lodash-es"
 import { twMerge } from "tailwind-merge"
 import { parse } from "tldts"
+
+import type { RSSHubRoute } from "~/modules/discover/types"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "../constants/app"
 import { FeedViewType } from "./enum"

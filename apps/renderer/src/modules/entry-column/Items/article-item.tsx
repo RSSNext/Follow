@@ -1,5 +1,5 @@
-import { Skeleton } from "@renderer/components/ui/skeleton"
-import { ListItem } from "@renderer/modules/entry-column/templates/list-item-template"
+import { Skeleton } from "~/components/ui/skeleton"
+import { ListItem } from "~/modules/entry-column/templates/list-item-template"
 
 import type { UniversalItemProps } from "../types"
 

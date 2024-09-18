@@ -1,8 +1,9 @@
-import { useInputComposition } from "@renderer/hooks/common"
-import { stopPropagation } from "@renderer/lib/dom"
-import { cn } from "@renderer/lib/utils"
 import type { DetailedHTMLProps, InputHTMLAttributes } from "react"
 import { forwardRef } from "react"
+
+import { useInputComposition } from "~/hooks/common"
+import { stopPropagation } from "~/lib/dom"
+import { cn } from "~/lib/utils"
 
 // This composition handler is not perfect
 // @see https://foxact.skk.moe/use-composition-input

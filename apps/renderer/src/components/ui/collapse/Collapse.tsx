@@ -1,7 +1,8 @@
-import { cn } from "@renderer/lib/utils"
 import type { Variants } from "framer-motion"
 import { AnimatePresence, m } from "framer-motion"
 import * as React from "react"
+
+import { cn } from "~/lib/utils"
 
 import {
   CollapseGroupItemStateProvider,

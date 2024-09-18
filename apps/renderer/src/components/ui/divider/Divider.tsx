@@ -1,5 +1,6 @@
-import { cn } from "@renderer/lib/utils"
 import type { DetailedHTMLProps, FC, HTMLAttributes } from "react"
+
+import { cn } from "~/lib/utils"
 
 export const Divider: FC<DetailedHTMLProps<HTMLAttributes<HTMLHRElement>, HTMLHRElement>> = (
   props,

@@ -1,5 +1,6 @@
 import type { GeneralSettings } from "@follow/shared/interface/settings"
-import { jotaiStore } from "@renderer/lib/jotai"
+
+import { jotaiStore } from "~/lib/jotai"
 
 import { createSettingAtom } from "./helper"
 
@@ -43,4 +44,5 @@ export const generalServerSyncWhiteListKeys: (keyof GeneralSettings)[] = [
   "appLaunchOnStartup",
   "dataPersist",
   "sendAnonymousData",
+  "language",
 ]

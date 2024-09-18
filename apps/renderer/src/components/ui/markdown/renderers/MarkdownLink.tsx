@@ -1,7 +1,8 @@
-import { FeedViewType } from "@renderer/lib/enum"
-import { useEntryContentContext } from "@renderer/modules/entry-content/hooks"
-import { useFeedByIdSelector } from "@renderer/store/feed"
 import { useMemo } from "react"
+
+import { FeedViewType } from "~/lib/enum"
+import { useEntryContentContext } from "~/modules/entry-content/hooks"
+import { useFeedByIdSelector } from "~/store/feed"
 
 import type { LinkProps } from "../../link"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../../tooltip"

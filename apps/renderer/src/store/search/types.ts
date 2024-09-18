@@ -1,4 +1,4 @@
-import type { EntryModel, FeedModel } from "@renderer/models"
+import type { EntryModel, FeedModel } from "~/models"
 
 import type { SubscriptionFlatModel } from "../subscription"
 import type { SearchType } from "./constants"

@@ -1,4 +1,4 @@
-import { useIsDark } from "@renderer/hooks/common"
+import { useIsDark } from "~/hooks/common"
 
 export const useShikiDefaultTheme = () => {
   const isDark = useIsDark()

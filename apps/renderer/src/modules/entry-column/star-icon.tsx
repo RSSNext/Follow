@@ -1,4 +1,4 @@
-import { cn } from "@renderer/lib/utils"
+import { cn } from "~/lib/utils"
 
 export const StarIcon: Component = ({ className }) => (
   <i

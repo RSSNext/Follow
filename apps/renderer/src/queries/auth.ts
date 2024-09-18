@@ -1,10 +1,11 @@
 import type { Session } from "@auth/core/types"
 import type { GetSessionParams } from "@hono/auth-js/react"
 import { authConfigManager } from "@hono/auth-js/react"
-import { useAuthQuery } from "@renderer/hooks/common"
-import { defineQuery } from "@renderer/lib/defineQuery"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
+
+import { useAuthQuery } from "~/hooks/common"
+import { defineQuery } from "~/lib/defineQuery"
 
 export const auth = {
   getSession: () => defineQuery(["auth", "session"], () => getSession()),

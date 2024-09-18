@@ -1,6 +1,7 @@
 import type { languageSchema, users } from "@follow/shared/hono"
-import type { apiClient } from "@renderer/lib/api-fetch"
 import type { z } from "zod"
+
+import type { apiClient } from "~/lib/api-fetch"
 
 export type UserModel = Omit<
   Omit<Omit<typeof users.$inferSelect, "emailVerified">, "email">,

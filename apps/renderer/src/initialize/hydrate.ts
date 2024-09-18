@@ -1,8 +1,8 @@
-import { initializeDefaultGeneralSettings } from "@renderer/atoms/settings/general"
-import { initializeDefaultIntegrationSettings } from "@renderer/atoms/settings/integration"
-import { initializeDefaultUISettings } from "@renderer/atoms/settings/ui"
-import { appLog } from "@renderer/lib/log"
-import { sleep } from "@renderer/lib/utils"
+import { initializeDefaultGeneralSettings } from "~/atoms/settings/general"
+import { initializeDefaultIntegrationSettings } from "~/atoms/settings/integration"
+import { initializeDefaultUISettings } from "~/atoms/settings/ui"
+import { appLog } from "~/lib/log"
+import { sleep } from "~/lib/utils"
 import {
   EntryRelatedKey,
   EntryRelatedService,
@@ -10,8 +10,8 @@ import {
   FeedService,
   FeedUnreadService,
   SubscriptionService,
-} from "@renderer/services"
-import type { FlatEntryModel } from "@renderer/store/entry"
+} from "~/services"
+import type { FlatEntryModel } from "~/store/entry"
 
 import { entryActions, useEntryStore } from "../store/entry/store"
 import { feedActions, useFeedStore } from "../store/feed"

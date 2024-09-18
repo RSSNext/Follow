@@ -1,6 +1,7 @@
-import { EnvironmentIndicator } from "@renderer/modules/app/EnvironmentIndicator"
-import { UserProvider } from "@renderer/providers/user-provider"
 import { Outlet } from "react-router-dom"
+
+import { EnvironmentIndicator } from "~/modules/app/EnvironmentIndicator"
+import { UserProvider } from "~/providers/user-provider"
 
 export function Component() {
   return (

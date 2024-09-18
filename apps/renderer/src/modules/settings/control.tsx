@@ -1,12 +1,13 @@
-import { Button } from "@renderer/components/ui/button"
-import { Checkbox } from "@renderer/components/ui/checkbox"
-import { Input } from "@renderer/components/ui/input"
-import { Label } from "@renderer/components/ui/label"
-import { SegmentGroup, SegmentItem } from "@renderer/components/ui/segement"
-import { Switch } from "@renderer/components/ui/switch"
-import { cn } from "@renderer/lib/utils"
 import type { ChangeEventHandler, ReactNode } from "react"
 import { useId, useState } from "react"
+
+import { Button } from "~/components/ui/button"
+import { Checkbox } from "~/components/ui/checkbox"
+import { Input } from "~/components/ui/input"
+import { Label } from "~/components/ui/label"
+import { SegmentGroup, SegmentItem } from "~/components/ui/segement"
+import { Switch } from "~/components/ui/switch"
+import { cn } from "~/lib/utils"
 
 export const SettingCheckbox: Component<{
   label: string

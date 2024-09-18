@@ -1,6 +1,7 @@
-import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "@renderer/constants"
-import { FeedViewType } from "@renderer/lib/enum"
 import { redirect } from "react-router-dom"
+
+import { ROUTE_ENTRY_PENDING, ROUTE_FEED_PENDING } from "~/constants"
+import { FeedViewType } from "~/lib/enum"
 
 export function Component() {
   return null

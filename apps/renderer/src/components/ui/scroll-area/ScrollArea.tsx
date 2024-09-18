@@ -1,7 +1,8 @@
 import * as ScrollAreaBase from "@radix-ui/react-scroll-area"
-import { stopPropagation } from "@renderer/lib/dom"
-import { cn } from "@renderer/lib/utils"
 import * as React from "react"
+
+import { stopPropagation } from "~/lib/dom"
+import { cn } from "~/lib/utils"
 
 import { ScrollElementContext } from "./ctx"
 import styles from "./index.module.css"

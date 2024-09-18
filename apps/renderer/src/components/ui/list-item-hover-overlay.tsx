@@ -1,10 +1,11 @@
-import { m } from "@renderer/components/common/Motion"
-import { views } from "@renderer/constants"
-import { useRouteParamsSelector } from "@renderer/hooks/biz/useRouteParams"
-import { FeedViewType } from "@renderer/lib/enum"
 import clsx from "clsx"
 import { AnimatePresence } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
+
+import { m } from "~/components/common/Motion"
+import { views } from "~/constants"
+import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { FeedViewType } from "~/lib/enum"
 
 export const ListItemHoverOverlay = ({
   className,

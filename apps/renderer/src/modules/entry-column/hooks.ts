@@ -1,14 +1,15 @@
-import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
-import { views } from "@renderer/constants"
-import { useRouteParamsSelector, useRouteParms } from "@renderer/hooks/biz/useRouteParams"
-import { useAuthQuery } from "@renderer/hooks/common"
-import { entries, useEntries } from "@renderer/queries/entries"
-import { entryActions, useEntryIdsByFeedIdOrView } from "@renderer/store/entry"
-import { useFolderFeedsByFeedId } from "@renderer/store/subscription"
-import { feedUnreadActions } from "@renderer/store/unread"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import type { ListRange } from "react-virtuoso"
 import { useDebounceCallback } from "usehooks-ts"
+
+import { useGeneralSettingKey } from "~/atoms/settings/general"
+import { views } from "~/constants"
+import { useRouteParamsSelector, useRouteParms } from "~/hooks/biz/useRouteParams"
+import { useAuthQuery } from "~/hooks/common"
+import { entries, useEntries } from "~/queries/entries"
+import { entryActions, useEntryIdsByFeedIdOrView } from "~/store/entry"
+import { useFolderFeedsByFeedId } from "~/store/subscription"
+import { feedUnreadActions } from "~/store/unread"
 
 export const useEntryMarkReadHandler = (entriesIds: string[]) => {
   const renderAsRead = useGeneralSettingKey("renderMarkUnread")

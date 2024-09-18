@@ -1,6 +1,3 @@
-import { useRefValue } from "@renderer/hooks/common"
-import { nextFrame, stopPropagation } from "@renderer/lib/dom"
-import { cn } from "@renderer/lib/utils"
 import clsx from "clsx"
 import { AnimatePresence } from "framer-motion"
 import Fuse from "fuse.js"
@@ -15,6 +12,10 @@ import {
   useState,
 } from "react"
 import { useEventCallback } from "usehooks-ts"
+
+import { useRefValue } from "~/hooks/common"
+import { nextFrame, stopPropagation } from "~/lib/dom"
+import { cn } from "~/lib/utils"
 
 import { Input } from "../input"
 import { RootPortal } from "../portal"

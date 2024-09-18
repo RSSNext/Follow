@@ -1,5 +1,5 @@
-import { browserDB } from "@renderer/database"
-import { appLog } from "@renderer/lib/log"
+import { browserDB } from "~/database"
+import { appLog } from "~/lib/log"
 
 import { EntryService } from "./entry"
 import { FeedService } from "./feed"

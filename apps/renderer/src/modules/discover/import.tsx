@@ -1,6 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@renderer/components/ui/button"
-import { Card, CardContent, CardHeader } from "@renderer/components/ui/card"
+import { useMutation } from "@tanstack/react-query"
+import { Fragment } from "react/jsx-runtime"
+import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { z } from "zod"
+
+import { Button } from "~/components/ui/button"
+import { Card, CardContent, CardHeader } from "~/components/ui/card"
 import {
   Form,
   FormControl,
@@ -8,18 +14,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@renderer/components/ui/form"
-import { Input } from "@renderer/components/ui/input"
-import { apiFetch } from "@renderer/lib/api-fetch"
-import { toastFetchError } from "@renderer/lib/error-parser"
-import { cn } from "@renderer/lib/utils"
-import type { FeedResponse } from "@renderer/models"
-import { Queries } from "@renderer/queries"
-import { useMutation } from "@tanstack/react-query"
-import { Fragment } from "react/jsx-runtime"
-import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { z } from "zod"
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { apiFetch } from "~/lib/api-fetch"
+import { toastFetchError } from "~/lib/error-parser"
+import { cn } from "~/lib/utils"
+import type { FeedResponse } from "~/models"
+import { Queries } from "~/queries"
 
 import { FollowSummary } from "../../components/feed-summary"
 

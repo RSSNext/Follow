@@ -1,13 +1,14 @@
-import { useMainContainerElement } from "@renderer/atoms/dom"
-import { HotKeyScopeMap } from "@renderer/constants"
-import { shortcuts } from "@renderer/constants/shortcuts"
-import { useNavigateEntry } from "@renderer/hooks/biz/useNavigateEntry"
-import { useRouteEntryId } from "@renderer/hooks/biz/useRouteParams"
-import { useRefValue } from "@renderer/hooks/common"
 import type { FC } from "react"
 import { memo, useLayoutEffect, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import type { VirtuosoHandle } from "react-virtuoso"
+
+import { useMainContainerElement } from "~/atoms/dom"
+import { HotKeyScopeMap } from "~/constants"
+import { shortcuts } from "~/constants/shortcuts"
+import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
+import { useRouteEntryId } from "~/hooks/biz/useRouteParams"
+import { useRefValue } from "~/hooks/common"
 
 export const EntryColumnShortcutHandler: FC<{
   refetch: () => void

@@ -1,6 +1,7 @@
-import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
-import { getFeedById } from "@renderer/store/feed"
 import { createElement, useCallback } from "react"
+
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { getFeedById } from "~/store/feed"
 
 import { FeedClaimModalContent } from "./feed-claim-modal"
 

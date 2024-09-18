@@ -1,5 +1,5 @@
-import { apiClient } from "@renderer/lib/api-fetch"
-import { defineQuery } from "@renderer/lib/defineQuery"
+import { apiClient } from "~/lib/api-fetch"
+import { defineQuery } from "~/lib/defineQuery"
 
 export const discover = {
   rsshubCategory: ({ category }: { category: string }) =>

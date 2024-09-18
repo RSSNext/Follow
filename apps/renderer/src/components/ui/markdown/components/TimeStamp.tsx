@@ -1,6 +1,6 @@
-import { AudioPlayer } from "@renderer/atoms/player"
-import { nextFrame } from "@renderer/lib/dom"
-import { useEntryContentContext } from "@renderer/modules/entry-content/hooks"
+import { AudioPlayer } from "~/atoms/player"
+import { nextFrame } from "~/lib/dom"
+import { useEntryContentContext } from "~/modules/entry-content/hooks"
 
 import { timeStringToSeconds } from "../utils"
 

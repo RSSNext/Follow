@@ -1,5 +1,5 @@
-import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "@renderer/constants"
-import type { FeedViewType } from "@renderer/lib/enum"
+import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "~/constants"
+import type { FeedViewType } from "~/lib/enum"
 
 import { useSubscriptionStore } from "../subscription"
 

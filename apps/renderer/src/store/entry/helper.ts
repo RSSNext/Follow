@@ -1,5 +1,6 @@
-import { apiClient } from "@renderer/lib/api-fetch"
 import { create, keyResolver, windowScheduler } from "@yornaath/batshit"
+
+import { apiClient } from "~/lib/api-fetch"
 
 import { useFeedStore } from "../feed"
 import { useSubscriptionStore } from "../subscription"

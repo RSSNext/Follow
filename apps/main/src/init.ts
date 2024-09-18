@@ -18,7 +18,14 @@ const appFolder = {
 }
 
 const isDev = process.env.NODE_ENV === "development"
-export const initializeApp = () => {
+
+/**
+ * Mandatory and fast initializers for the app
+ */
+export function initializeAppStage0() {
+  app.setPath("appData", path.join(app.getPath("appData"), isDev ? appFolder.dev : appFolder.prod))
+}
+export const initializeAppStage1 = () => {
   if (process.defaultApp) {
     if (process.argv.length >= 2) {
       app.setAsDefaultProtocolClient(APP_PROTOCOL, process.execPath, [
@@ -32,8 +39,6 @@ export const initializeApp = () => {
   initializeSentry()
 
   registerIpcMain(router)
-
-  app.setPath("appData", path.join(app.getPath("appData"), isDev ? appFolder.dev : appFolder.prod))
 
   if (app.dock) {
     app.dock.setIcon(getIconPath())

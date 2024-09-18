@@ -4,21 +4,17 @@ import {
   HoverCardPortal,
   HoverCardTrigger,
 } from "@radix-ui/react-hover-card"
-import { useWhoami } from "@renderer/atoms/user"
-import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
-import { useAuthQuery } from "@renderer/hooks/common"
-import { Queries } from "@renderer/queries"
-import { useEntryReadHistory } from "@renderer/store/entry"
-import { useUserById } from "@renderer/store/user"
 import clsx from "clsx"
 import { LayoutGroup, m } from "framer-motion"
 import { memo, useEffect, useState } from "react"
+
+import { useWhoami } from "~/atoms/user"
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
+import { useAuthQuery } from "~/hooks/common"
+import { Queries } from "~/queries"
+import { useEntryReadHistory } from "~/store/entry"
+import { useUserById } from "~/store/user"
 
 import { usePresentUserProfileModal } from "../../profile/hooks"
 

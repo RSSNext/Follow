@@ -1,16 +1,17 @@
-import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { MotionButtonBase } from "@renderer/components/ui/button"
-import { KbdCombined } from "@renderer/components/ui/kbd/Kbd"
-import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
-import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
-import { ScrollArea } from "@renderer/components/ui/scroll-area"
-import { shortcuts } from "@renderer/constants/shortcuts"
-import { useSwitchHotKeyScope } from "@renderer/hooks/common"
-import { cn } from "@renderer/lib/utils"
 import clsx from "clsx"
 import { m, useDragControls } from "framer-motion"
 import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
+
+import { useUISettingKey } from "~/atoms/settings/ui"
+import { MotionButtonBase } from "~/components/ui/button"
+import { KbdCombined } from "~/components/ui/kbd/Kbd"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal"
+import { NoopChildren } from "~/components/ui/modal/stacked/utils"
+import { ScrollArea } from "~/components/ui/scroll-area"
+import { shortcuts } from "~/constants/shortcuts"
+import { useSwitchHotKeyScope } from "~/hooks/common"
+import { cn } from "~/lib/utils"
 
 const ShortcutModalContent = () => {
   const { dismiss } = useCurrentModal()
