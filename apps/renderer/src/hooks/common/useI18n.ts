@@ -1,7 +1,8 @@
-import { ns } from "@renderer/@types/constants"
 import { useMemo } from "react"
 import type { FallbackNs, UseTranslationResponse } from "react-i18next"
 import { useTranslation } from "react-i18next"
+
+import { ns } from "~/@types/constants"
 
 const allNameSpaces = ns
 

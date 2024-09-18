@@ -1,9 +1,10 @@
-import { KbdCombined } from "@renderer/components/ui/kbd/Kbd"
-import { shortcuts } from "@renderer/constants/shortcuts"
-import { cn } from "@renderer/lib/utils"
-import { SettingsTitle } from "@renderer/modules/settings/title"
-import { defineSettingPageData } from "@renderer/modules/settings/utils"
 import { useTranslation } from "react-i18next"
+
+import { KbdCombined } from "~/components/ui/kbd/Kbd"
+import { shortcuts } from "~/constants/shortcuts"
+import { cn } from "~/lib/utils"
+import { SettingsTitle } from "~/modules/settings/title"
+import { defineSettingPageData } from "~/modules/settings/utils"
 
 const iconName = "i-mgc-hotkey-cute-re"
 const priority = 1080

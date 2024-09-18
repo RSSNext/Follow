@@ -1,22 +1,18 @@
-import { useWhoami } from "@renderer/atoms/user"
-import { Button } from "@renderer/components/ui/button"
-import { CopyButton } from "@renderer/components/ui/code-highlighter"
-import { Divider } from "@renderer/components/ui/divider"
-import { LoadingWithIcon } from "@renderer/components/ui/loading"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
-import { DAILY_CLAIM_AMOUNT } from "@renderer/constants"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { cn } from "@renderer/lib/utils"
-import { SettingSectionTitle } from "@renderer/modules/settings/section"
-import { Balance } from "@renderer/modules/wallet/balance"
-import { useWallet, wallet as walletActions } from "@renderer/queries/wallet"
 import { useMutation } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
+
+import { useWhoami } from "~/atoms/user"
+import { Button } from "~/components/ui/button"
+import { CopyButton } from "~/components/ui/code-highlighter"
+import { Divider } from "~/components/ui/divider"
+import { LoadingWithIcon } from "~/components/ui/loading"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
+import { DAILY_CLAIM_AMOUNT } from "~/constants"
+import { apiClient } from "~/lib/api-fetch"
+import { cn } from "~/lib/utils"
+import { SettingSectionTitle } from "~/modules/settings/section"
+import { Balance } from "~/modules/wallet/balance"
+import { useWallet, wallet as walletActions } from "~/queries/wallet"
 
 import { ClaimDailyReward } from "./claim-daily-reward"
 import { CreateWallet } from "./create-wallet"

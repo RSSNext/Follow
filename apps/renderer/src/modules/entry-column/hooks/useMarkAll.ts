@@ -1,7 +1,8 @@
-import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
-import { subscriptionActions } from "@renderer/store/subscription"
-import { useFolderFeedsByFeedId } from "@renderer/store/subscription/hooks"
 import { useCallback } from "react"
+
+import { useRouteParms } from "~/hooks/biz/useRouteParams"
+import { subscriptionActions } from "~/store/subscription"
+import { useFolderFeedsByFeedId } from "~/store/subscription/hooks"
 
 export interface MarkAllFilter {
   startTime: number

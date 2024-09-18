@@ -1,22 +1,23 @@
-import { createDefineSettingItem } from "@renderer/atoms/settings/helper"
+import { useTranslation } from "react-i18next"
+import { bundledThemes } from "shiki/themes"
+
+import { createDefineSettingItem } from "~/atoms/settings/helper"
 import {
   setUISetting,
   useUISettingKey,
   useUISettingSelector,
   useUISettingValue,
-} from "@renderer/atoms/settings/ui"
+} from "~/atoms/settings/ui"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@renderer/components/ui/select"
-import { isElectronBuild } from "@renderer/constants"
-import { useSetTheme, useThemeAtomValue } from "@renderer/hooks/common"
-import { getOS } from "@renderer/lib/utils"
-import { useTranslation } from "react-i18next"
-import { bundledThemes } from "shiki/themes"
+} from "~/components/ui/select"
+import { isElectronBuild } from "~/constants"
+import { useSetTheme, useThemeAtomValue } from "~/hooks/common"
+import { getOS } from "~/lib/utils"
 
 import { SettingTabbedSegment } from "../control"
 import { ContentFontSelector, UIFontSelector } from "../sections/fonts"

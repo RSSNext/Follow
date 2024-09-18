@@ -1,14 +1,3 @@
-import { ShadowDOM } from "@renderer/components/common/ShadowDOM"
-import { Checkbox } from "@renderer/components/ui/checkbox"
-import { ShikiHighLighter } from "@renderer/components/ui/code-highlighter"
-import {
-  MarkdownBlockImage,
-  MarkdownLink,
-  MarkdownP,
-} from "@renderer/components/ui/markdown/renderers"
-import { BlockError } from "@renderer/components/ui/markdown/renderers/BlockErrorBoundary"
-import { createHeadingRenderer } from "@renderer/components/ui/markdown/renderers/Heading"
-import { Media } from "@renderer/components/ui/media"
 import type { Element, Text } from "hast"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
@@ -24,6 +13,14 @@ import { unified } from "unified"
 import type { Node } from "unist"
 import { visit } from "unist-util-visit"
 import { VFile } from "vfile"
+
+import { ShadowDOM } from "~/components/common/ShadowDOM"
+import { Checkbox } from "~/components/ui/checkbox"
+import { ShikiHighLighter } from "~/components/ui/code-highlighter"
+import { MarkdownBlockImage, MarkdownLink, MarkdownP } from "~/components/ui/markdown/renderers"
+import { BlockError } from "~/components/ui/markdown/renderers/BlockErrorBoundary"
+import { createHeadingRenderer } from "~/components/ui/markdown/renderers/Heading"
+import { Media } from "~/components/ui/media"
 
 export const parseHtml = (
   content: string,

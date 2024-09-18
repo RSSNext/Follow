@@ -1,9 +1,10 @@
-import { setWhoami } from "@renderer/atoms/user"
-import { setIntegrationIdentify } from "@renderer/initialize/helper"
-import { tipcClient } from "@renderer/lib/client"
-import { useSession } from "@renderer/queries/auth"
-import { CleanerService } from "@renderer/services/cleaner"
 import { useEffect } from "react"
+
+import { setWhoami } from "~/atoms/user"
+import { setIntegrationIdentify } from "~/initialize/helper"
+import { tipcClient } from "~/lib/client"
+import { useSession } from "~/queries/auth"
+import { CleanerService } from "~/services/cleaner"
 
 export const UserProvider = () => {
   const { session } = useSession()

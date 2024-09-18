@@ -1,8 +1,9 @@
-import { cn } from "@renderer/lib/utils"
 import { m } from "framer-motion"
 import type { ReactNode } from "react"
 import { useId, useMemo, useState } from "react"
 import { useContextSelector } from "use-context-selector"
+
+import { cn } from "~/lib/utils"
 
 import { SegmentGroupContext } from "./ctx"
 

@@ -1,7 +1,8 @@
-import { useUISettingKey } from "@renderer/atoms/settings/ui"
 import { AnimatePresence } from "framer-motion"
 import { useAtomValue } from "jotai"
 import type { FC, PropsWithChildren } from "react"
+
+import { useUISettingKey } from "~/atoms/settings/ui"
 
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX } from "./constants"

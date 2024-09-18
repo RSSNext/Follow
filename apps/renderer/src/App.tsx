@@ -1,7 +1,8 @@
 import { env } from "@follow/shared/env"
-import { queryClient } from "@renderer/lib/query-client"
 import { useEffect, useLayoutEffect } from "react"
 import { Outlet } from "react-router-dom"
+
+import { queryClient } from "~/lib/query-client"
 
 import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"

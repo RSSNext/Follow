@@ -1,14 +1,10 @@
-import {
-  FEED_COLLECTION_LIST,
-  ROUTE_FEED_IN_FOLDER,
-  ROUTE_FEED_PENDING,
-  views,
-} from "@renderer/constants"
-import { useRouteParms } from "@renderer/hooks/biz/useRouteParams"
-import type { FeedModel } from "@renderer/models"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { useShallow } from "zustand/react/shallow"
+
+import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING, views } from "~/constants"
+import { useRouteParms } from "~/hooks/biz/useRouteParams"
+import type { FeedModel } from "~/models"
 
 import { getSubscriptionByFeedId } from "../subscription"
 import { useFeedStore } from "./store"

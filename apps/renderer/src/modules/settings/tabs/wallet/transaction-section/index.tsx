@@ -1,10 +1,12 @@
-import { useWhoami } from "@renderer/atoms/user"
-import { Logo } from "@renderer/components/icons/logo"
-import { Avatar, AvatarFallback, AvatarImage } from "@renderer/components/ui/avatar"
-import { MotionButtonBase } from "@renderer/components/ui/button"
-import { RelativeTime } from "@renderer/components/ui/datetime"
-import { LoadingCircle } from "@renderer/components/ui/loading"
-import { ScrollArea } from "@renderer/components/ui/scroll-area"
+import { useTranslation } from "react-i18next"
+
+import { useWhoami } from "~/atoms/user"
+import { Logo } from "~/components/icons/logo"
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
+import { MotionButtonBase } from "~/components/ui/button"
+import { RelativeTime } from "~/components/ui/datetime"
+import { LoadingCircle } from "~/components/ui/loading"
+import { ScrollArea } from "~/components/ui/scroll-area"
 import {
   Table,
   TableBody,
@@ -12,19 +14,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@renderer/components/ui/table"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "@renderer/components/ui/tooltip"
-import { cn } from "@renderer/lib/utils"
-import { usePresentUserProfileModal } from "@renderer/modules/profile/hooks"
-import { SettingSectionTitle } from "@renderer/modules/settings/section"
-import { Balance } from "@renderer/modules/wallet/balance"
-import { useWallet, useWalletTransactions } from "@renderer/queries/wallet"
-import { useTranslation } from "react-i18next"
+} from "~/components/ui/table"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
+import { cn } from "~/lib/utils"
+import { usePresentUserProfileModal } from "~/modules/profile/hooks"
+import { SettingSectionTitle } from "~/modules/settings/section"
+import { Balance } from "~/modules/wallet/balance"
+import { useWallet, useWalletTransactions } from "~/queries/wallet"
 
 export const TransactionsSection = () => {
   const { t } = useTranslation("settings")

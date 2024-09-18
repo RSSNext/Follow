@@ -3,15 +3,16 @@
  * @copyright AFFiNE, Follow
  */
 import { useSubscribeElectronEvent } from "@follow/shared/event"
-import { softSpringPreset } from "@renderer/components/ui/constants/spring"
-import { useInputComposition, useRefValue } from "@renderer/hooks/common"
-import { tipcClient } from "@renderer/lib/client"
-import { nextFrame } from "@renderer/lib/dom"
-import { observeResize } from "@renderer/lib/observe-resize"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useDebounceCallback, useEventCallback } from "usehooks-ts"
+
+import { softSpringPreset } from "~/components/ui/constants/spring"
+import { useInputComposition, useRefValue } from "~/hooks/common"
+import { tipcClient } from "~/lib/client"
+import { nextFrame } from "~/lib/dom"
+import { observeResize } from "~/lib/observe-resize"
 
 const CmdFImpl: FC<{
   onClose: () => void

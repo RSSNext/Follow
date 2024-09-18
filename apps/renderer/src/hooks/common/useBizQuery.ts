@@ -1,5 +1,3 @@
-import { useLoginModalShow } from "@renderer/atoms/user"
-import type { DefinedQuery } from "@renderer/lib/defineQuery"
 import type {
   InfiniteData,
   QueryKey,
@@ -10,6 +8,9 @@ import type {
 } from "@tanstack/react-query"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
+
+import { useLoginModalShow } from "~/atoms/user"
+import type { DefinedQuery } from "~/lib/defineQuery"
 
 // TODO split normal define query and infinite define query for better type checking
 export type SafeReturnType<T> = T extends (...args: any[]) => infer R ? R : never

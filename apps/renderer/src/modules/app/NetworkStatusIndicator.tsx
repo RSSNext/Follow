@@ -1,7 +1,7 @@
-import { NetworkStatus, useApiStatus, useNetworkStatus } from "@renderer/atoms/network"
-import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
-import { cn } from "@renderer/lib/utils"
+import { NetworkStatus, useApiStatus, useNetworkStatus } from "~/atoms/network"
+import { useGeneralSettingKey } from "~/atoms/settings/general"
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
+import { cn } from "~/lib/utils"
 
 export const NetworkStatusIndicator = () => {
   const networkStatus = useNetworkStatus()

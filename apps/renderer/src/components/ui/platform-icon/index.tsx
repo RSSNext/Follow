@@ -1,7 +1,8 @@
 import { Slot } from "@radix-ui/react-slot"
-import * as LinkParsers from "@renderer/lib/link-parser"
-import { cn } from "@renderer/lib/utils"
 import type { FC } from "react"
+
+import * as LinkParsers from "~/lib/link-parser"
+import { cn } from "~/lib/utils"
 
 import { getSupportedPlatformIconName } from "./utils"
 

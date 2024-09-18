@@ -1,10 +1,11 @@
-import { attachOpenInEditor } from "@renderer/lib/dev"
-import { getNewIssueUrl } from "@renderer/lib/issues"
-import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { captureException } from "@sentry/react"
 import { useEffect, useRef } from "react"
 import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router-dom"
 import { toast } from "sonner"
+
+import { attachOpenInEditor } from "~/lib/dev"
+import { getNewIssueUrl } from "~/lib/issues"
+import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
 import { Button } from "../ui/button"
 import { PoweredByFooter } from "./PoweredByFooter"

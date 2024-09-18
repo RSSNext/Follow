@@ -1,25 +1,3 @@
-import {
-  getReadabilityStatus,
-  ReadabilityStatus,
-  setReadabilityContent,
-  setReadabilityStatus,
-} from "@renderer/atoms/readability"
-import { useIntegrationSettingKey } from "@renderer/atoms/settings/integration"
-import { whoami } from "@renderer/atoms/user"
-import {
-  SimpleIconsEagle,
-  SimpleIconsInstapaper,
-  SimpleIconsReadwise,
-} from "@renderer/components/ui/platform-icon/icons"
-import { shortcuts } from "@renderer/constants/shortcuts"
-import { tipcClient } from "@renderer/lib/client"
-import { nextFrame } from "@renderer/lib/dom"
-import { getOS } from "@renderer/lib/utils"
-import type { CombinedEntryModel } from "@renderer/models"
-import { useTipModal } from "@renderer/modules/wallet/hooks"
-import type { FlatEntryModel } from "@renderer/store/entry"
-import { entryActions } from "@renderer/store/entry"
-import { useFeedById } from "@renderer/store/feed"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
@@ -27,6 +5,29 @@ import type { ReactNode } from "react"
 import { useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
+
+import {
+  getReadabilityStatus,
+  ReadabilityStatus,
+  setReadabilityContent,
+  setReadabilityStatus,
+} from "~/atoms/readability"
+import { useIntegrationSettingKey } from "~/atoms/settings/integration"
+import { whoami } from "~/atoms/user"
+import {
+  SimpleIconsEagle,
+  SimpleIconsInstapaper,
+  SimpleIconsReadwise,
+} from "~/components/ui/platform-icon/icons"
+import { shortcuts } from "~/constants/shortcuts"
+import { tipcClient } from "~/lib/client"
+import { nextFrame } from "~/lib/dom"
+import { getOS } from "~/lib/utils"
+import type { CombinedEntryModel } from "~/models"
+import { useTipModal } from "~/modules/wallet/hooks"
+import type { FlatEntryModel } from "~/store/entry"
+import { entryActions } from "~/store/entry"
+import { useFeedById } from "~/store/feed"
 
 export const useEntryReadabilityToggle = ({ id, url }: { id: string; url: string }) =>
   useCallback(async () => {

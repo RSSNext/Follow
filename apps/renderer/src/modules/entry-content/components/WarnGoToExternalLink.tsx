@@ -1,14 +1,15 @@
 import { Label } from "@radix-ui/react-label"
 import { PopoverPortal } from "@radix-ui/react-popover"
-import { useGeneralSettingKey, useGeneralSettingValue } from "@renderer/atoms/settings/general"
-import { IconButton } from "@renderer/components/ui/button"
-import { Checkbox } from "@renderer/components/ui/checkbox"
-import { Popover, PopoverContent, PopoverTrigger } from "@renderer/components/ui/popover"
-import { jotaiStore } from "@renderer/lib/jotai"
-import { getStorageNS } from "@renderer/lib/ns"
-import { withSettingEnabled } from "@renderer/modules/settings/helper/withSettingEnable"
 import { atomWithStorage } from "jotai/utils"
 import { forwardRef, Fragment, useState } from "react"
+
+import { useGeneralSettingKey, useGeneralSettingValue } from "~/atoms/settings/general"
+import { IconButton } from "~/components/ui/button"
+import { Checkbox } from "~/components/ui/checkbox"
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
+import { jotaiStore } from "~/lib/jotai"
+import { getStorageNS } from "~/lib/ns"
+import { withSettingEnabled } from "~/modules/settings/helper/withSettingEnable"
 
 const TrustedKey = getStorageNS("trusted-external-link")
 const trustedAtom = atomWithStorage(TrustedKey, [] as string[], undefined, {

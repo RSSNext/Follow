@@ -1,8 +1,9 @@
-import { getUISettings } from "@renderer/atoms/settings/ui"
-import { jotaiStore } from "@renderer/lib/jotai"
 import { useCallback, useContext, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { useEventCallback } from "usehooks-ts"
+
+import { getUISettings } from "~/atoms/settings/ui"
+import { jotaiStore } from "~/lib/jotai"
 
 import { modalStackAtom } from "./atom"
 import { CurrentModalContext } from "./context"

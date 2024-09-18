@@ -3,13 +3,14 @@ import "swiper/css/navigation"
 import "swiper/css/scrollbar"
 
 import type { MediaModel } from "@follow/shared/hono"
-import { Media } from "@renderer/components/ui/media"
-import { cn } from "@renderer/lib/utils"
 import { useHover } from "@use-gesture/react"
 import { uniqBy } from "lodash-es"
 import { useRef, useState } from "react"
 import { Mousewheel, Navigation, Scrollbar } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
+
+import { Media } from "~/components/ui/media"
+import { cn } from "~/lib/utils"
 
 import styles from "./index.module.css"
 

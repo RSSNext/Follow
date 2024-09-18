@@ -1,5 +1,5 @@
-import { SettingAbout } from "@renderer/modules/settings/tabs/about"
-import { defineSettingPageData } from "@renderer/modules/settings/utils"
+import { SettingAbout } from "~/modules/settings/tabs/about"
+import { defineSettingPageData } from "~/modules/settings/utils"
 
 export const loader = defineSettingPageData({
   iconName: "i-mgc-information-cute-re",

@@ -1,8 +1,9 @@
-import { createAtomHooks } from "@renderer/lib/jotai"
 import { atom, useAtomValue } from "jotai"
 import { selectAtom } from "jotai/utils"
 import { useMemo } from "react"
 import type { Location, NavigateFunction, Params } from "react-router-dom"
+
+import { createAtomHooks } from "~/lib/jotai"
 
 interface RouteAtom {
   params: Readonly<Params<string>>

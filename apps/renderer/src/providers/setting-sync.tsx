@@ -1,14 +1,14 @@
-import { langLoadingLockMapAtom } from "@renderer/atoms/lang"
-import { useGeneralSettingKey } from "@renderer/atoms/settings/general"
-import { useUISettingValue } from "@renderer/atoms/settings/ui"
-import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
-import { useSyncThemeark } from "@renderer/hooks/common"
-import { tipcClient } from "@renderer/lib/client"
-import { loadLanguageAndApply } from "@renderer/lib/load-language"
-import { feedUnreadActions } from "@renderer/store/unread"
 import i18next from "i18next"
-import { useSetAtom } from "jotai"
 import { useEffect, useInsertionEffect, useLayoutEffect } from "react"
+
+import { useGeneralSettingKey } from "~/atoms/settings/general"
+import { useUISettingValue } from "~/atoms/settings/ui"
+import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
+import { useSyncThemeark } from "~/hooks/common"
+import { langChain } from "~/i18n"
+import { tipcClient } from "~/lib/client"
+import { loadLanguageAndApply } from "~/lib/load-language"
+import { feedUnreadActions } from "~/store/unread"
 
 const useUISettingSync = () => {
   const setting = useUISettingValue()
@@ -58,18 +58,22 @@ const useUXSettingSync = () => {
 }
 
 const useLanguageSync = () => {
-  const setLoadingLanguageLockMap = useSetAtom(langLoadingLockMapAtom)
   const language = useGeneralSettingKey("language")
   useEffect(() => {
-    setLoadingLanguageLockMap((state) => ({ ...state, [language]: true }))
-    loadLanguageAndApply(language as string)
-      .then(() => {
-        i18next.changeLanguage(language as string)
+    let mounted = true
+
+    loadLanguageAndApply(language as string).then(() => {
+      langChain.next(() => {
+        if (mounted) {
+          return i18next.changeLanguage(language as string)
+        }
       })
-      .finally(() => {
-        setLoadingLanguageLockMap((state) => ({ ...state, [language]: false }))
-      })
-  }, [setLoadingLanguageLockMap, language])
+    })
+
+    return () => {
+      mounted = false
+    }
+  }, [language])
 }
 export const SettingSync = () => {
   useUISettingSync()

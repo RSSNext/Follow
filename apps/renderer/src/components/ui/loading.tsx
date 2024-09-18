@@ -1,5 +1,6 @@
-import { cn } from "@renderer/lib/utils"
 import React, { cloneElement } from "react"
+
+import { cn } from "~/lib/utils"
 
 interface LoadingCircleProps {
   size: "small" | "medium" | "large"

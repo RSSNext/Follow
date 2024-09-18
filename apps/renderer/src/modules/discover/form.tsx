@@ -1,7 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { getSidebarActiveView } from "@renderer/atoms/sidebar"
-import { Button } from "@renderer/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@renderer/components/ui/card"
+import { useMutation } from "@tanstack/react-query"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { z } from "zod"
+
+import { getSidebarActiveView } from "~/atoms/sidebar"
+import { Button } from "~/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card"
 import {
   Form,
   FormControl,
@@ -9,17 +15,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@renderer/components/ui/form"
-import { Input } from "@renderer/components/ui/input"
-import { Media } from "@renderer/components/ui/media"
-import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
-import { apiClient } from "@renderer/lib/api-fetch"
-import type { FeedViewType } from "@renderer/lib/enum"
-import { useMutation } from "@tanstack/react-query"
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { z } from "zod"
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { Media } from "~/components/ui/media"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { apiClient } from "~/lib/api-fetch"
+import type { FeedViewType } from "~/lib/enum"
 
 import { FollowSummary } from "../../components/feed-summary"
 import { FeedForm } from "./feed-form"

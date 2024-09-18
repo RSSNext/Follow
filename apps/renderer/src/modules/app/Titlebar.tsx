@@ -1,7 +1,8 @@
-import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "@renderer/constants"
-import { tipcClient } from "@renderer/lib/client"
 import { useQuery } from "@tanstack/react-query"
+
+import { useUISettingKey } from "~/atoms/settings/ui"
+import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "~/constants"
+import { tipcClient } from "~/lib/client"
 
 export const Titlebar = () => {
   const { data: isMaximized, refetch } = useQuery({

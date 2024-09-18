@@ -1,27 +1,28 @@
 import { Slot } from "@radix-ui/react-slot"
-import { AudioPlayer, getAudioPlayerAtomValue } from "@renderer/atoms/player"
-import {
-  isInReadability,
-  ReadabilityStatus,
-  useEntryInReadabilityStatus,
-} from "@renderer/atoms/readability"
-import { ActionButton } from "@renderer/components/ui/button"
-import { DividerVertical } from "@renderer/components/ui/divider"
-import { views } from "@renderer/constants"
-import { shortcuts } from "@renderer/constants/shortcuts"
-import { useEntryActions, useEntryReadabilityToggle } from "@renderer/hooks/biz/useEntryActions"
-import { tipcClient } from "@renderer/lib/client"
-import { FeedViewType } from "@renderer/lib/enum"
-import { parseHtml } from "@renderer/lib/parse-html"
-import { cn } from "@renderer/lib/utils"
-import type { CombinedEntryModel } from "@renderer/models"
-import type { FlatEntryModel } from "@renderer/store/entry"
-import { useEntry } from "@renderer/store/entry/hooks"
-import { useFeedById } from "@renderer/store/feed"
 import { noop } from "foxact/noop"
 import { AnimatePresence, m } from "framer-motion"
 import { memo, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+
+import { AudioPlayer, getAudioPlayerAtomValue } from "~/atoms/player"
+import {
+  isInReadability,
+  ReadabilityStatus,
+  useEntryInReadabilityStatus,
+} from "~/atoms/readability"
+import { ActionButton } from "~/components/ui/button"
+import { DividerVertical } from "~/components/ui/divider"
+import { views } from "~/constants"
+import { shortcuts } from "~/constants/shortcuts"
+import { useEntryActions, useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
+import { tipcClient } from "~/lib/client"
+import { FeedViewType } from "~/lib/enum"
+import { parseHtml } from "~/lib/parse-html"
+import { cn } from "~/lib/utils"
+import type { CombinedEntryModel } from "~/models"
+import type { FlatEntryModel } from "~/store/entry"
+import { useEntry } from "~/store/entry/hooks"
+import { useFeedById } from "~/store/feed"
 
 import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"

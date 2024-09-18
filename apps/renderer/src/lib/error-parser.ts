@@ -1,8 +1,9 @@
-import { CopyButton } from "@renderer/components/ui/code-highlighter"
-import { Markdown } from "@renderer/components/ui/markdown"
 import { FetchError } from "ofetch"
 import { createElement } from "react"
 import { toast } from "sonner"
+
+import { CopyButton } from "~/components/ui/code-highlighter"
+import { Markdown } from "~/components/ui/markdown"
 
 export const getFetchErrorMessage = (error: Error) => {
   if (error instanceof FetchError) {

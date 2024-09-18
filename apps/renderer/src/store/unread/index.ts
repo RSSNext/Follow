@@ -1,6 +1,6 @@
-import { apiClient } from "@renderer/lib/api-fetch"
-import type { FeedViewType } from "@renderer/lib/enum"
-import { FeedUnreadService } from "@renderer/services"
+import { apiClient } from "~/lib/api-fetch"
+import type { FeedViewType } from "~/lib/enum"
+import { FeedUnreadService } from "~/services"
 
 import { createZustandStore } from "../utils/helper"
 

@@ -1,8 +1,9 @@
-import { parseHtml } from "@renderer/lib/parse-html"
-import type { RemarkOptions } from "@renderer/lib/parse-markdown"
-import { parseMarkdown } from "@renderer/lib/parse-markdown"
-import { cn } from "@renderer/lib/utils"
 import { createElement, Fragment, memo, useEffect, useMemo, useState } from "react"
+
+import { parseHtml } from "~/lib/parse-html"
+import type { RemarkOptions } from "~/lib/parse-markdown"
+import { parseMarkdown } from "~/lib/parse-markdown"
+import { cn } from "~/lib/utils"
 
 import { MarkdownRenderContainerRefContext } from "./context"
 

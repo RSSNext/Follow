@@ -1,7 +1,8 @@
-import { m } from "@renderer/components/common/Motion"
 import type { PropsWithChildren } from "react"
 import { createContext, useContext } from "react"
 import { Link } from "react-router-dom"
+
+import { m } from "~/components/common/Motion"
 
 import { microReboundPreset } from "../../constants/spring"
 import { useModalStack } from "../stacked"

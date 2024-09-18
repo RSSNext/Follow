@@ -1,5 +1,6 @@
-import { cn } from "@renderer/lib/utils"
 import { format } from "dnum"
+
+import { cn } from "~/lib/utils"
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../components/ui/tooltip"
 

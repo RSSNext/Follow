@@ -1,12 +1,13 @@
 "use client"
 
-import { useInputComposition } from "@renderer/hooks/common"
-import { stopPropagation } from "@renderer/lib/dom"
-import { cn } from "@renderer/lib/utils"
 import clsx from "clsx"
 import { useMotionValue } from "framer-motion"
 import type { DetailedHTMLProps, PropsWithChildren, TextareaHTMLAttributes } from "react"
 import { forwardRef, useCallback, useState } from "react"
+
+import { useInputComposition } from "~/hooks/common"
+import { stopPropagation } from "~/lib/dom"
+import { cn } from "~/lib/utils"
 
 const roundedMap = {
   sm: "rounded-sm",

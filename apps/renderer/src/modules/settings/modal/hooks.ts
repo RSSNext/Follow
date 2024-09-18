@@ -1,9 +1,10 @@
-import { useModalStack } from "@renderer/components/ui/modal/stacked/hooks"
-import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
 import type { ExtractAtomValue, PrimitiveAtom } from "jotai"
 import { atom, useAtomValue, useSetAtom } from "jotai"
 import { createElement, useCallback } from "react"
 import { createContext, useContextSelector } from "use-context-selector"
+
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { NoopChildren } from "~/components/ui/modal/stacked/utils"
 
 import { SettingModalContent } from "./content"
 

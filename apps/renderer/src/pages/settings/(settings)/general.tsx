@@ -1,5 +1,5 @@
-import { SettingGeneral } from "@renderer/modules/settings/tabs/general"
-import { defineSettingPageData } from "@renderer/modules/settings/utils"
+import { SettingGeneral } from "~/modules/settings/tabs/general"
+import { defineSettingPageData } from "~/modules/settings/utils"
 
 const iconName = "i-mgc-settings-7-cute-re"
 const priority = 1000

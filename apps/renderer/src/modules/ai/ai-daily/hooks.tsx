@@ -1,6 +1,7 @@
-import { useModalStack } from "@renderer/components/ui/modal"
 import { useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
+
+import { useModalStack } from "~/components/ui/modal"
 
 import { DayOf } from "./constants"
 import { FeedDailyModalContent } from "./FeedDailyModalContent"

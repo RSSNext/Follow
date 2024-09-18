@@ -1,10 +1,11 @@
 import { signOut } from "@hono/auth-js/react"
-import { setWhoami } from "@renderer/atoms/user"
-import { QUERY_PERSIST_KEY } from "@renderer/constants"
-import { tipcClient } from "@renderer/lib/client"
-import { clearStorage } from "@renderer/lib/ns"
-import { clearLocalPersistStoreData } from "@renderer/store/utils/clear"
 import { useCallback } from "react"
+
+import { setWhoami } from "~/atoms/user"
+import { QUERY_PERSIST_KEY } from "~/constants"
+import { tipcClient } from "~/lib/client"
+import { clearStorage } from "~/lib/ns"
+import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
 export const useSignOut = () =>
   useCallback(async () => {

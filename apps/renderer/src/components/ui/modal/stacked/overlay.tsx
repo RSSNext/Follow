@@ -1,7 +1,8 @@
-import { m } from "@renderer/components/common/Motion"
-import { cn } from "@renderer/lib/utils"
 import type { ForwardedRef } from "react"
 import { forwardRef } from "react"
+
+import { m } from "~/components/common/Motion"
+import { cn } from "~/lib/utils"
 
 import { RootPortal } from "../../portal"
 

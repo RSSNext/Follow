@@ -1,7 +1,8 @@
-import { cn } from "@renderer/lib/utils"
 import type { Target } from "framer-motion"
 import { AnimatePresence, m } from "framer-motion"
 import { useEffect, useState } from "react"
+
+import { cn } from "~/lib/utils"
 
 type TransitionType = {
   initial: Target | boolean

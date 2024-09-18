@@ -1,7 +1,8 @@
-import { usePageVisibility } from "@renderer/hooks/common"
-import { appLog } from "@renderer/lib/log"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
+
+import { usePageVisibility } from "~/hooks/common"
+import { appLog } from "~/lib/log"
 
 const slateTime = 600000 // 10min
 

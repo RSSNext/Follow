@@ -1,13 +1,14 @@
-import { getReadonlyRoute, useReadonlyRouteSelector } from "@renderer/atoms/route"
+import type { Params } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
+
+import { getReadonlyRoute, useReadonlyRouteSelector } from "~/atoms/route"
 import {
   FEED_COLLECTION_LIST,
   ROUTE_ENTRY_PENDING,
   ROUTE_FEED_IN_FOLDER,
   ROUTE_FEED_PENDING,
-} from "@renderer/constants"
-import { FeedViewType } from "@renderer/lib/enum"
-import type { Params } from "react-router-dom"
-import { useParams, useSearchParams } from "react-router-dom"
+} from "~/constants"
+import { FeedViewType } from "~/lib/enum"
 
 // '0', '1', '2', '3', '4', '5',
 const FeedViewTypeValues = (() => {

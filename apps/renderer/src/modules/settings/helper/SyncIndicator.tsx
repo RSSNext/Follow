@@ -1,11 +1,12 @@
-import { PhCloudCheck } from "@renderer/components/icons/PhCloudCheck"
-import { PhCloudWarning } from "@renderer/components/icons/PhCloudWarning"
-import { PhCloudX } from "@renderer/components/icons/PhCloudX"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@renderer/components/ui/tooltip"
-import { useAuthQuery, useIsOnline } from "@renderer/hooks/common"
-import { settings } from "@renderer/queries/settings"
 import { useEffect, useMemo, useRef } from "react"
 import { useTranslation } from "react-i18next"
+
+import { PhCloudCheck } from "~/components/icons/PhCloudCheck"
+import { PhCloudWarning } from "~/components/icons/PhCloudWarning"
+import { PhCloudX } from "~/components/icons/PhCloudX"
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
+import { useAuthQuery, useIsOnline } from "~/hooks/common"
+import { settings } from "~/queries/settings"
 
 import { useSettingContextSelector } from "../modal/hooks"
 import { settingSyncQueue } from "./sync-queue"

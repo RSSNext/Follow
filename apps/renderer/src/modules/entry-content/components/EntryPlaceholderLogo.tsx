@@ -1,7 +1,7 @@
-import { Logo } from "@renderer/components/icons/logo"
-import { stopPropagation } from "@renderer/lib/dom"
-import { cn } from "@renderer/lib/utils"
-import { useFeedHeaderTitle } from "@renderer/store/feed"
+import { Logo } from "~/components/icons/logo"
+import { stopPropagation } from "~/lib/dom"
+import { cn } from "~/lib/utils"
+import { useFeedHeaderTitle } from "~/store/feed"
 
 import { useEntryContentPlaceholderLogoShow } from "../atoms"
 

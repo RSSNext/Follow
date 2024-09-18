@@ -1,6 +1,3 @@
-import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { useReduceMotion } from "@renderer/hooks/biz/useReduceMotion"
-import { useIsDark } from "@renderer/hooks/common"
 import { nanoid } from "nanoid"
 import type { FC, PropsWithChildren, ReactNode } from "react"
 import {
@@ -13,6 +10,10 @@ import {
   useState,
 } from "react"
 import root from "react-shadow"
+
+import { useUISettingKey } from "~/atoms/settings/ui"
+import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
+import { useIsDark } from "~/hooks/common"
 
 const ShadowDOMContext = createContext(false)
 

@@ -1,5 +1,5 @@
-import { clearUISettings } from "@renderer/atoms/settings/ui"
-import { browserDB } from "@renderer/database"
+import { clearUISettings } from "~/atoms/settings/ui"
+import { browserDB } from "~/database"
 
 import { entryActions } from "../entry"
 import { feedActions } from "../feed"

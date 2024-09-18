@@ -1,11 +1,12 @@
-import { useAudioPlayerAtomSelector } from "@renderer/atoms/player"
-import { setUpdaterStatus, useUpdaterStatus } from "@renderer/atoms/updater"
-import { softBouncePreset } from "@renderer/components/ui/constants/spring"
-import { tipcClient } from "@renderer/lib/client"
-import { cn } from "@renderer/lib/utils"
-import { handlers } from "@renderer/tipc"
 import { m, useMotionTemplate, useMotionValue } from "framer-motion"
 import { useCallback, useEffect } from "react"
+
+import { useAudioPlayerAtomSelector } from "~/atoms/player"
+import { setUpdaterStatus, useUpdaterStatus } from "~/atoms/updater"
+import { softBouncePreset } from "~/components/ui/constants/spring"
+import { tipcClient } from "~/lib/client"
+import { cn } from "~/lib/utils"
+import { handlers } from "~/tipc"
 
 export const AutoUpdater = () => {
   const updaterStatus = useUpdaterStatus()

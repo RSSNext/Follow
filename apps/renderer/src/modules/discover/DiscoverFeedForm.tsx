@@ -1,26 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { getSidebarActiveView } from "@renderer/atoms/sidebar"
-import { Button } from "@renderer/components/ui/button"
-import { CopyButton } from "@renderer/components/ui/code-highlighter"
-import { Form, FormItem, FormLabel } from "@renderer/components/ui/form"
-import { Input } from "@renderer/components/ui/input"
-import { Markdown } from "@renderer/components/ui/markdown"
-import { useCurrentModal, useModalStack } from "@renderer/components/ui/modal"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@renderer/components/ui/select"
-import type { FeedViewType } from "@renderer/lib/enum"
-import {
-  MissingOptionalParamError,
-  parseFullPathParams,
-  parseRegexpPathParams,
-  regexpPathToPath,
-} from "@renderer/lib/path-parser"
-import { cn, getViewFromRoute } from "@renderer/lib/utils"
 import { omit } from "lodash-es"
 import type { FC } from "react"
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from "react"
@@ -29,6 +7,29 @@ import { useForm } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
+
+import { getSidebarActiveView } from "~/atoms/sidebar"
+import { Button } from "~/components/ui/button"
+import { CopyButton } from "~/components/ui/code-highlighter"
+import { Form, FormItem, FormLabel } from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { Markdown } from "~/components/ui/markdown"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select"
+import type { FeedViewType } from "~/lib/enum"
+import {
+  MissingOptionalParamError,
+  parseFullPathParams,
+  parseRegexpPathParams,
+  regexpPathToPath,
+} from "~/lib/path-parser"
+import { cn, getViewFromRoute } from "~/lib/utils"
 
 import { FeedForm } from "./feed-form"
 import type { RSSHubRoute } from "./types"

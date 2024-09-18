@@ -1,8 +1,9 @@
-import { createAtomHooks } from "@renderer/lib/jotai"
-import { getStorageNS } from "@renderer/lib/ns"
 import { noop } from "foxact/noop"
 import { atomWithStorage, createJSONStorage } from "jotai/utils"
 import type { SyncStorage } from "jotai/vanilla/utils/atomWithStorage"
+
+import { createAtomHooks } from "~/lib/jotai"
+import { getStorageNS } from "~/lib/ns"
 
 type PlayerAtomValue = {
   show: boolean

@@ -1,5 +1,6 @@
-import { useIsDark } from "@renderer/hooks/common"
 import { Toaster as Sonner } from "sonner"
+
+import { useIsDark } from "~/hooks/common"
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 

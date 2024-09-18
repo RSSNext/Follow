@@ -1,7 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Logo } from "@renderer/components/icons/logo"
-import { Button } from "@renderer/components/ui/button"
-import { styledButtonVariant } from "@renderer/components/ui/button/variants"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
+import { z } from "zod"
+
+import { Logo } from "~/components/icons/logo"
+import { Button } from "~/components/ui/button"
+import { styledButtonVariant } from "~/components/ui/button/variants"
 import {
   Form,
   FormControl,
@@ -9,16 +15,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@renderer/components/ui/form"
-import { Input } from "@renderer/components/ui/input"
-import { SocialMediaLinks } from "@renderer/constants/social"
-import { getFetchErrorMessage } from "@renderer/lib/error-parser"
-import { useInvitationMutation } from "@renderer/queries/invitations"
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
-import { z } from "zod"
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { SocialMediaLinks } from "~/constants/social"
+import { getFetchErrorMessage } from "~/lib/error-parser"
+import { useInvitationMutation } from "~/queries/invitations"
 
 const formSchema = z.object({
   code: z.string().min(1),

@@ -1,11 +1,12 @@
-import { useModalStack } from "@renderer/components/ui/modal"
-import { NoopChildren } from "@renderer/components/ui/modal/stacked/utils"
-import { useAuthQuery } from "@renderer/hooks/common"
-import { apiClient } from "@renderer/lib/api-fetch"
-import { defineQuery } from "@renderer/lib/defineQuery"
-import { capitalizeFirstLetter } from "@renderer/lib/utils"
 import { createElement, useCallback } from "react"
 import { parse } from "tldts"
+
+import { useModalStack } from "~/components/ui/modal"
+import { NoopChildren } from "~/components/ui/modal/stacked/utils"
+import { useAuthQuery } from "~/hooks/common"
+import { apiClient } from "~/lib/api-fetch"
+import { defineQuery } from "~/lib/defineQuery"
+import { capitalizeFirstLetter } from "~/lib/utils"
 
 import { UserProfileModalContent } from "./user-profile-modal"
 

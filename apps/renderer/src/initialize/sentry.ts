@@ -1,6 +1,5 @@
 import { env } from "@follow/shared/env"
 import { version } from "@pkg"
-import { whoami } from "@renderer/atoms/user"
 import { useEffect } from "react"
 import {
   createRoutesFromChildren,
@@ -8,6 +7,8 @@ import {
   useLocation,
   useNavigationType,
 } from "react-router-dom"
+
+import { whoami } from "~/atoms/user"
 
 import { SentryConfig } from "../configs"
 

@@ -1,5 +1,5 @@
-import { useUISettingKey } from "@renderer/atoms/settings/ui"
-import { cn } from "@renderer/lib/utils"
+import { useUISettingKey } from "~/atoms/settings/ui"
+import { cn } from "~/lib/utils"
 
 export const UnreadNumber = ({ unread, className }: { unread: number; className?: string }) => {
   const showUnreadCount = useUISettingKey("sidebarShowUnreadCount")

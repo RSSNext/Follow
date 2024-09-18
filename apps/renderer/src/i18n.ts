@@ -1,15 +1,19 @@
-import { EventBus } from "@renderer/lib/event-bus"
 import i18next from "i18next"
 import { atom } from "jotai"
 import { initReactI18next } from "react-i18next"
 
+import { EventBus } from "~/lib/event-bus"
+
 import { defaultNS, ns } from "./@types/constants"
 import { defaultResources } from "./@types/default-resource"
 import { getGeneralSettings } from "./atoms/settings/general"
+import { Chain } from "./lib/chain"
 import { jotaiStore } from "./lib/jotai"
 import { getStorageNS } from "./lib/ns"
 
 export const i18nAtom = atom(i18next)
+
+export const langChain = new Chain()
 
 export class LocaleCache {
   static shared = new LocaleCache()
@@ -81,7 +85,7 @@ if (import.meta.hot) {
   )
 }
 
-declare module "@renderer/lib/event-bus" {
+declare module "~/lib/event-bus" {
   interface CustomEvent {
     I18N_UPDATE: string
   }
