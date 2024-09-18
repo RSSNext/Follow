@@ -6,6 +6,7 @@ import { SettingsTitle } from "@renderer/modules/settings/title"
 import i18next from "i18next"
 import type { FC } from "react"
 import { Suspense, useDeferredValue, useEffect, useLayoutEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { settings } from "../constants"
 import { SettingTabProvider, useSettingTab } from "./context"
@@ -43,10 +44,15 @@ export const SettingModalContent: FC<{
 
 const Close = () => {
   const { dismiss } = useCurrentModal()
+  const { t } = useTranslation("common")
 
   return (
-    <MotionButtonBase className="absolute right-8 top-8 z-[99]" onClick={dismiss}>
-      <i className="i-mgc-close-cute-re" />
+    <MotionButtonBase
+      aria-label={t("close")}
+      className="absolute right-6 top-6 z-[99] flex size-8 items-center justify-center rounded-md duration-200 hover:bg-theme-button-hover"
+      onClick={dismiss}
+    >
+      <i className="i-mgc-close-cute-re block" />
     </MotionButtonBase>
   )
 }
