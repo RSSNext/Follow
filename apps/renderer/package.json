@@ -3,7 +3,9 @@
   "type": "module",
   "private": true,
   "main": "./dist/main/index.js",
-  "scripts": {},
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@egjs/react-infinitegrid": "4.12.0",
     "@egoist/tipc": "0.3.2",

@@ -18,7 +18,9 @@
     }
   },
   "main": "./src/index.ts",
-  "scripts": {},
+  "scripts": {
+    "typecheck": "tsup && tsc --noEmit"
+  },
   "dependencies": {
     "@egjs/react-infinitegrid": "4.12.0",
     "@egoist/tipc": "0.3.2",
