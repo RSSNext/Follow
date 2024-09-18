@@ -9,12 +9,11 @@ import { app, BrowserWindow, session } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
 
 import { isDev, isMacOS } from "./env"
-import { initializeAppStage0,initializeAppStage1 } from "./init"
+import { initializeAppStage0, initializeAppStage1 } from "./init"
 import { setAuthSessionToken } from "./lib/user"
 import { registerUpdater } from "./updater"
 import { createMainWindow, createWindow } from "./window"
 
-app.commandLine.appendSwitch("lang", "zh_CN")
 if (isDev) console.info("[main] env loaded:", env)
 
 if (squirrelStartup) {
