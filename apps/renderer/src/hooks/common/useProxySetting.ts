@@ -10,7 +10,7 @@ proxyAtom.onMount = (setAtom) => {
   })
 }
 
-export const useProxyAtomValue = () => useAtomValue(proxyAtom)
+export const useProxyValue = () => useAtomValue(proxyAtom)
 
 export const useSetProxy = () => {
   const setProxy = useSetAtom(proxyAtom)

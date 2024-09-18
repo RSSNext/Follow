@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
-import { useProxyAtomValue, useSetProxy } from "~/hooks/common/useProxySetting"
+import {  useProxyValue, useSetProxy } from "~/hooks/common/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
 import { initPostHog } from "~/initialize/posthog"
 import { tipcClient } from "~/lib/client"
@@ -253,7 +253,7 @@ export const LanguageSelector = () => {
 
 const NettingSetting = () => {
   const { t } = useTranslation("settings")
-  const proxyConfig = useProxyAtomValue()
+  const proxyConfig = useProxyValue()
   const setProxyConfig = useSetProxy()
 
   return (

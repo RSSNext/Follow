@@ -41,7 +41,6 @@ const normalizeProxyUri = (userProxy: string) => {
   try {
     const proxyUrl = new URL(userProxy)
     if (!URL_SCHEME.has(proxyUrl.protocol) || !proxyUrl.hostname || !proxyUrl.port) {
-      logger.error(`Invalid scheme in proxy URL: ${userProxy}`)
       return
     }
     // There are multiple ways to specify a proxy in Electron,
@@ -52,7 +51,6 @@ const normalizeProxyUri = (userProxy: string) => {
       "direct://",
     ].join(",")
   } catch {
-    logger.error(`Invalid proxy URL: ${userProxy}`)
     return
   }
 }
