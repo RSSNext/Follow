@@ -1,5 +1,3 @@
-import { env } from "@env"
-import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
 import { getUISettings } from "@renderer/atoms/settings/ui"
 import { isElectronBuild } from "@renderer/constants"
@@ -105,12 +103,6 @@ export const initializeApp = async () => {
     CleanerService.cleanOutdatedData()
   }
 
-  // Initialize the auth config
-  authConfigManager.setConfig({
-    baseUrl: env.VITE_API_URL,
-    basePath: "/auth",
-    credentials: "include",
-  })
   const loadingTime = Date.now() - now
   appLog(`Initialize ${APP_NAME} done,`, `${loadingTime}ms`)
 
