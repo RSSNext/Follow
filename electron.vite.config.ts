@@ -44,7 +44,7 @@ export default defineConfig({
       target: "esnext",
       rollupOptions: {
         input: {
-          main: resolve("index.html"),
+          main: resolve("./apps/renderer/index.html"),
         },
       },
     },

@@ -89,6 +89,7 @@ export const viteRenderBaseConfig = {
       "@pkg": resolve("package.json"),
       "@env": resolve("src/env.ts"),
       "@locales": resolve("locales"),
+      "@follow/electron-main": resolve("apps/main/src"),
     },
   },
   base: "/",
