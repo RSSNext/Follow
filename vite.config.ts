@@ -13,7 +13,7 @@ import type { env as EnvType } from "./src/env"
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
-const ROOT = "./src/renderer"
+const ROOT = "./apps/renderer"
 
 function htmlPlugin(env: typeof EnvType): PluginOption {
   return {
