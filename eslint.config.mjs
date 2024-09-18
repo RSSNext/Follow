@@ -5,7 +5,12 @@ export default defineConfig(
   {
     formatting: false,
     lessOpinionated: true,
-    ignores: ["src/renderer/src/hono.ts", "src/hono.ts", "resources/**"],
+    ignores: [
+      "src/renderer/src/hono.ts",
+      "src/hono.ts",
+      "packages/shared/src/hono.ts",
+      "resources/**",
+    ],
     preferESM: false,
   },
   {
