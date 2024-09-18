@@ -1,6 +1,7 @@
-import { tipcClient } from "@renderer/lib/client"
 import { atom, useAtomValue, useSetAtom } from "jotai"
 import { useCallback } from "react"
+
+import { tipcClient } from "~/lib/client"
 
 const proxyAtom = atom("")
 
