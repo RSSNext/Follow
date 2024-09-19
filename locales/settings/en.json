@@ -46,6 +46,8 @@
   "actions.sidebar_title": "Actions",
   "actions.title": "Actions",
   "appearance.code_highlight_theme": "Code highlight theme",
+  "appearance.code_highlight_theme_dark": "Code highlight theme (dark)",
+  "appearance.code_highlight_theme_light": "Code highlight theme (light)",
   "appearance.content": "Content",
   "appearance.content_font": "Content Font",
   "appearance.custom_font": "Custom Font",
