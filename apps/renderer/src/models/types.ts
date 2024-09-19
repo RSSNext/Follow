@@ -19,8 +19,6 @@ export type ActiveList = {
   view: number
 }
 
-export type FeedResponse = SubscriptionResponse[number]["feeds"]
-
 export type TransactionModel = ExtractBizResponse<
   typeof apiClient.wallets.transactions.$get
 >["data"][number]
@@ -30,11 +28,7 @@ export type FeedModel = ExtractBizResponse<typeof apiClient.feeds.$get>["data"][
   tipUsers?: UserModel[] | null
 }
 
-export type SubscriptionResponse = Array<
-  ExtractBizResponse<typeof apiClient.subscriptions.$get>["data"][number] & {
-    unread?: number
-  }
->
+export type ListModel = ExtractBizResponse<typeof apiClient.lists.$get>["data"]
 
 export type EntryResponse = Exclude<
   Extract<ExtractBizResponse<typeof apiClient.entries.$get>, { code: 0 }>["data"],
@@ -60,13 +54,6 @@ export type ActionsResponse = Exclude<
   undefined
 >["rules"]
 
-export type ListResponse<T> = {
-  code: number
-  data?: T
-  total?: number
-  message?: string
-}
-
 export type DataResponse<T> = {
   code: number
   data?: T
@@ -74,14 +61,14 @@ export type DataResponse<T> = {
 
 export type ActiveEntryId = Nullable<string>
 
-export type SubscriptionModel = SubscriptionResponse[number]
-
-export type FeedListModel = {
-  list: {
-    list: SubscriptionResponse
-    name: string
-  }[]
+export type SubscriptionModel = ExtractBizResponse<
+  typeof apiClient.subscriptions.$get
+>["data"][number] & {
+  unread?: number
 }
+
+export type FeedSubscriptionModel = Extract<SubscriptionModel, { feeds: any }>
+export type ListSubscriptionModel = Extract<SubscriptionModel, { list: any }>
 
 export type SupportedLanguages = z.infer<typeof languageSchema>
 

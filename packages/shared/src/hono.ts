@@ -3007,8 +3007,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 json: {
                     title: string;
                     view: number;
-                    listId: string;
                     fee: number;
+                    listId: string;
                     image?: string | null | undefined;
                 };
             };
@@ -3228,7 +3228,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             };
             output: {
                 code: 0;
-                data: {
+                data: ({
                     title: string | null;
                     userId: string;
                     view: number;
@@ -3258,7 +3258,31 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         } | null;
                     };
                     isPrivate: boolean;
-                }[];
+                } | {
+                    title: string | null;
+                    userId: string;
+                    view: number;
+                    isPrivate: boolean;
+                    lists: {
+                        title: string;
+                        id: string;
+                        image: string | null;
+                        view: number;
+                        creatorId: string;
+                        feedIds: string[];
+                        fee: number;
+                        timelineUpdatedAt: string;
+                        creator: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null;
+                    };
+                    listId: string;
+                })[];
             };
             outputFormat: "json" | "text";
             status: 200;
@@ -3271,6 +3295,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     title?: string | null | undefined;
                     category?: string | null | undefined;
                     isPrivate?: boolean | undefined;
+                    listId?: string | undefined;
                 };
             };
             output: {
@@ -3284,6 +3309,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 json: {
                     url?: string | undefined;
                     feedId?: string | undefined;
+                    listId?: string | undefined;
                 };
             };
             output: {
@@ -3296,10 +3322,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     view: number;
-                    feedId: string;
                     title?: string | null | undefined;
                     category?: string | null | undefined;
+                    feedId?: string | undefined;
                     isPrivate?: boolean | undefined;
+                    listId?: string | undefined;
                 };
             };
             output: {
