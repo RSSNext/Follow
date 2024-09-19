@@ -5,6 +5,7 @@ import common_arsa from "../../../../locales/common/ar-SA.json"
 import common_en from "../../../../locales/common/en.json"
 import common_es from "../../../../locales/common/es.json"
 import common_fr from "../../../../locales/common/fr.json"
+import common_it from "../../../../locales/common/it.json"
 import common_ja from "../../../../locales/common/ja.json"
 import common_pt from "../../../../locales/common/pt.json"
 import common_zhCN from "../../../../locales/common/zh-CN.json"
@@ -17,6 +18,7 @@ import lang_arsa from "../../../../locales/lang/ar-SA.json"
 import lang_en from "../../../../locales/lang/en.json"
 import lang_es from "../../../../locales/lang/es.json"
 import lang_fr from "../../../../locales/lang/fr.json"
+import lang_it from "../../../../locales/lang/it.json"
 import lang_ja from "../../../../locales/lang/ja.json"
 import lang_pt from "../../../../locales/lang/pt.json"
 import lang_zhCN from "../../../../locales/lang/zh-CN.json"
@@ -48,6 +50,7 @@ export const defaultResources = {
     lang: lang_ja,
     common: common_ja,
   },
+  it: { lang: lang_it, common: common_it },
   "ar-DZ": { lang: lang_ardz, common: common_ardz },
   "ar-SA": { lang: lang_arsa, common: common_arsa },
   "ar-MA": { lang: lang_arma, common: common_arma },

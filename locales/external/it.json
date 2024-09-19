@@ -1,0 +1,42 @@
+{
+  "feed": {
+    "follow_one": "segui",
+    "follow_other": "seguono",
+    "followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} con {{readCount}} {{readNoun}} su {{appName}}",
+    "read_one": "letto",
+    "read_other": "letti"
+  },
+  "header": {
+    "app": "App",
+    "download": "Scarica"
+  },
+  "invitation": {
+    "activate": "Attiva",
+    "codeOptions": {
+      "1": "Cerca qualsiasi utente alpha test per invitarti.",
+      "2": "Unisciti al nostro server Discord per partecipare a estrazioni occasionali.",
+      "3": "Segui il nostro account X per partecipare a estrazioni occasionali."
+    },
+    "earlyAccess": "Follow è attualmente in accesso anticipato e richiede un codice di invito per essere utilizzato.",
+    "earlyAccessMessage": "😰 Ci dispiace, Follow è attualmente in accesso anticipato e richiede un codice di invito per essere utilizzato.",
+    "generateButton": "Genera nuovo codice",
+    "generateCost": "Puoi spendere {{INVITATION_PRICE}} Power per generare un codice di invito per i tuoi amici.",
+    "getCodeMessage": "Puoi ottenere un codice di invito nei seguenti modi:",
+    "title": "Codice di Invito"
+  },
+  "login": {
+    "backToWebApp": "Torna all'App Web",
+    "continueWithGitHub": "Continua con GitHub",
+    "continueWithGoogle": "Continua con Google",
+    "logInTo": "Accedi a",
+    "openApp": "Apri App",
+    "redirecting": "Reindirizzamento in corso",
+    "welcomeTo": "Benvenuto su"
+  },
+  "redirect": {
+    "continueInBrowser": "Continua nel Browser",
+    "instruction": "Ora è il momento di aprire {{APP_NAME}} e chiudere in sicurezza questa pagina.",
+    "openApp": "Apri {{APP_NAME}}",
+    "successMessage": "Ti sei connesso con successo all'account {{APP_NAME}}."
+  }
+}
