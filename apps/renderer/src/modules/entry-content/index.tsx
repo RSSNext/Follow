@@ -310,7 +310,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
                     className="w-40 flex-col gap-3 p-0"
                     avatarClassName="size-12"
                     userId={feed.ownerUserId}
-                    enableModal={true}
+                    enableModal
                   />
                   <Button className="text-base" onClick={() => openTipModal()}>
                     <i className="i-mgc-power-outline mr-1.5 text-lg" />
