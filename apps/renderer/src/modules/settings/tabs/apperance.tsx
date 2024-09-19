@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 import { isElectronBuild } from "~/constants"
-import { useSetTheme, useThemeAtomValue } from "~/hooks/common"
+import { useIsDark, useSetTheme, useThemeAtomValue } from "~/hooks/common"
 import { getOS } from "~/lib/utils"
 
 import { SettingTabbedSegment } from "../control"
@@ -101,20 +101,23 @@ export const SettingAppearance = () => {
 
 const ShikiTheme = () => {
   const { t } = useTranslation("settings")
+  const isDark = useIsDark()
   const codeHighlightThemeLight = useUISettingKey("codeHighlightThemeLight")
   const codeHighlightThemeDark = useUISettingKey("codeHighlightThemeDark")
 
   return (
     <>
       <div className="mb-3 flex items-center justify-between">
-        <span className="shrink-0 text-sm font-medium">
-          {t("appearance.code_highlight_theme_light")}
-        </span>
+        <span className="shrink-0 text-sm font-medium">{t("appearance.code_highlight_theme")}</span>
         <Select
-          defaultValue="github-light"
-          value={codeHighlightThemeLight}
+          defaultValue={isDark ? "github-dark" : "github-light"}
+          value={isDark ? codeHighlightThemeDark : codeHighlightThemeLight}
           onValueChange={(value) => {
-            setUISetting("codeHighlightThemeLight", value)
+            if (isDark) {
+              setUISetting("codeHighlightThemeDark", value)
+            } else {
+              setUISetting("codeHighlightThemeLight", value)
+            }
           }}
         >
           <SelectTrigger size="sm" className="w-48">
@@ -122,33 +125,7 @@ const ShikiTheme = () => {
           </SelectTrigger>
           <SelectContent position="item-aligned">
             {bundledThemesInfo
-              .filter((theme) => theme.type === "light")
-              .map((theme) => (
-                <SelectItem key={theme.id} value={theme.id}>
-                  {theme.displayName}
-                </SelectItem>
-              ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="mb-3 flex items-center justify-between">
-        <span className="shrink-0 text-sm font-medium">
-          {t("appearance.code_highlight_theme_dark")}
-        </span>
-        <Select
-          defaultValue="github-dark"
-          value={codeHighlightThemeDark}
-          onValueChange={(value) => {
-            setUISetting("codeHighlightThemeDark", value)
-          }}
-        >
-          <SelectTrigger size="sm" className="w-48">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent position="item-aligned">
-            {bundledThemesInfo
-              .filter((theme) => theme.type === "dark")
+              .filter((theme) => theme.type === (isDark ? "dark" : "light"))
               .map((theme) => (
                 <SelectItem key={theme.id} value={theme.id}>
                   {theme.displayName}
