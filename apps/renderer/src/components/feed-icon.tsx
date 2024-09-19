@@ -177,7 +177,7 @@ export function FeedIcon({
     return (
       <Avatar className="shrink-0">
         <AvatarImage
-          className="rounded-sm duration-200 animate-in fade-in-0"
+          className="rounded-sm object-cover duration-200 animate-in fade-in-0"
           asChild
           src={finalSrc}
         >
