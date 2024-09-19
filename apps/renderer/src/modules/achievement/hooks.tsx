@@ -6,12 +6,14 @@ import Lottie from "lottie-react"
 import { nanoid } from "nanoid"
 import type { FC } from "react"
 import { useCallback, useEffect, useRef } from "react"
+import { Trans } from "react-i18next"
 
 import { Button } from "~/components/ui/button"
 import { styledButtonVariant } from "~/components/ui/button/variants"
 import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
 import { useModalStack } from "~/components/ui/modal"
 import { SlideUpModal } from "~/components/ui/modal/stacked/custom-modal"
+import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { Chain } from "~/lib/chain"
 import achievementAnimation from "~/lottie/achievement.json"
@@ -20,10 +22,13 @@ enum AchievementsActionIdMap {
   FIRST_CLAIM_FEED = 0,
 }
 
-const achievementActionIdCopyMap = {
+const achievementActionIdCopyMap: Record<
+  AchievementsActionIdMap,
+  { title: I18nKeys; description: I18nKeys }
+> = {
   [AchievementsActionIdMap.FIRST_CLAIM_FEED]: {
-    title: "First Claim Feed",
-    description: "Claim your first feed",
+    title: "achievement.first_claim_feed",
+    description: "achievement.first_claim_feed_description",
   },
 }
 
@@ -113,20 +118,26 @@ export const AchievementModalContent: FC = () => {
     },
   })
   const achievementsDataAtom = useSingleton(() => atom<typeof achievements>())
+  const t = useI18n()
 
   return (
     <div className="relative flex w-full grow flex-col items-center">
       <Lottie lottieRef={lottieRef} animationData={achievementAnimation} loop={false} />
 
-      <div className="mt-4 text-xl font-bold">Achievement</div>
+      <div className="mt-4 text-xl font-bold">{t("words.achievement")}</div>
 
       <small className="center gap-1">
-        Mint more{" "}
-        <span className="center gap-0.5 font-semibold">
-          Power
-          <i className="i-mgc-power text-accent" />
-        </span>{" "}
-        by completing achievements.
+        <Trans
+          i18nKey={"achievement.mint_more_power"}
+          components={{
+            power: (
+              <span className="center gap-0.5 font-semibold">
+                {t("words.power")}
+                <i className="i-mgc-power text-accent" />
+              </span>
+            ),
+          }}
+        />
       </small>
 
       <ul className="mt-8 flex w-full grow flex-col gap-2">
@@ -143,7 +154,7 @@ export const AchievementModalContent: FC = () => {
               <li key={achievement.id} className="flex items-center justify-between">
                 <div>
                   <div className="text-base font-bold">
-                    {copy.title}
+                    {t(copy.title)}
 
                     {achievement.power && (
                       <span className="ml-2 inline-flex items-center gap-0.5 text-xs font-normal">
@@ -153,7 +164,7 @@ export const AchievementModalContent: FC = () => {
                     )}
                   </div>
                   <div className="flex items-center text-sm text-muted-foreground">
-                    {copy.description}
+                    {t(copy.description)}
                   </div>
                 </div>
 
@@ -166,7 +177,7 @@ export const AchievementModalContent: FC = () => {
                     })}
                   >
                     <LoadingCircle size="small" className="center absolute inset-0" />
-                    <span className="select-none opacity-0">Mint</span>
+                    <span className="select-none opacity-0">{t("words.mint")}</span>
                   </div>
                 )}
                 {achievement.type === "incomplete" && (
@@ -180,14 +191,14 @@ export const AchievementModalContent: FC = () => {
                       <small className="shrink-0 text-xs leading-tight text-muted-foreground">
                         {achievement.progress} / {achievement.progressMax}
                       </small>
-                      <span className="h-1 w-full rounded-full bg-accent">
+                      <span className="relative h-1 w-full overflow-hidden rounded-full bg-accent/10">
                         <span
-                          className="h-full max-w-full rounded-full bg-accent"
+                          className="absolute -left-3 top-0 inline-block h-1 rounded-full bg-accent"
                           style={{
-                            width: `${Math.min(
+                            width: `calc(${Math.min(
                               (achievement.progress / achievement.progressMax) * 100,
                               100,
-                            )}%`,
+                            )}% + 0.75rem)`,
                           }}
                         />
                       </span>
@@ -204,7 +215,7 @@ export const AchievementModalContent: FC = () => {
                     })}
                   >
                     <i className="i-mgc-check-filled" />
-                    All done!
+                    {t("achievement.all_done")}
                   </div>
                 )}
                 {achievement.type === "completed" && (
@@ -236,7 +247,7 @@ export const AchievementModalContent: FC = () => {
                       }
                     }}
                   >
-                    Mint
+                    {t("words.mint")}
                   </Button>
                 )}
               </li>
