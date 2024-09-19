@@ -106,35 +106,33 @@ const ShikiTheme = () => {
   const codeHighlightThemeDark = useUISettingKey("codeHighlightThemeDark")
 
   return (
-    <>
-      <div className="mb-3 flex items-center justify-between">
-        <span className="shrink-0 text-sm font-medium">{t("appearance.code_highlight_theme")}</span>
-        <Select
-          defaultValue={isDark ? "github-dark" : "github-light"}
-          value={isDark ? codeHighlightThemeDark : codeHighlightThemeLight}
-          onValueChange={(value) => {
-            if (isDark) {
-              setUISetting("codeHighlightThemeDark", value)
-            } else {
-              setUISetting("codeHighlightThemeLight", value)
-            }
-          }}
-        >
-          <SelectTrigger size="sm" className="w-48">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent position="item-aligned">
-            {bundledThemesInfo
-              .filter((theme) => theme.type === (isDark ? "dark" : "light"))
-              .map((theme) => (
-                <SelectItem key={theme.id} value={theme.id}>
-                  {theme.displayName}
-                </SelectItem>
-              ))}
-          </SelectContent>
-        </Select>
-      </div>
-    </>
+    <div className="mb-3 flex items-center justify-between">
+      <span className="shrink-0 text-sm font-medium">{t("appearance.code_highlight_theme")}</span>
+      <Select
+        defaultValue={isDark ? "github-dark" : "github-light"}
+        value={isDark ? codeHighlightThemeDark : codeHighlightThemeLight}
+        onValueChange={(value) => {
+          if (isDark) {
+            setUISetting("codeHighlightThemeDark", value)
+          } else {
+            setUISetting("codeHighlightThemeLight", value)
+          }
+        }}
+      >
+        <SelectTrigger size="sm" className="w-48">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent position="item-aligned">
+          {bundledThemesInfo
+            .filter((theme) => theme.type === (isDark ? "dark" : "light"))
+            .map((theme) => (
+              <SelectItem key={theme.id} value={theme.id}>
+                {theme.displayName}
+              </SelectItem>
+            ))}
+        </SelectContent>
+      </Select>
+    </div>
   )
 }
 
