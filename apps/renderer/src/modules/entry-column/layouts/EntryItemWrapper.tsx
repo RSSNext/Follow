@@ -1,5 +1,5 @@
 import type { FC, PropsWithChildren } from "react"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDebounceCallback } from "usehooks-ts"
 
@@ -10,6 +10,7 @@ import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useFeedActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useAnyPointDown } from "~/hooks/common"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn } from "~/lib/utils"
 import type { FlatEntryModel } from "~/store/entry"
@@ -71,10 +72,12 @@ export const EntryItemWrapper: FC<
     () => entry.entries.url && window.open(entry.entries.url, "_blank"),
     [entry.entries.url],
   )
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+  useAnyPointDown(() => setIsContextMenuOpen(false))
   const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       e.preventDefault()
-
+      setIsContextMenuOpen(true)
       showNativeMenu(
         [
           ...items
@@ -113,6 +116,7 @@ export const EntryItemWrapper: FC<
         className={cn(
           "relative",
           asRead ? "text-zinc-700 dark:text-neutral-400" : "text-zinc-900 dark:text-neutral-300",
+
           itemClassName,
         )}
         onClick={handleClick}
@@ -122,7 +126,9 @@ export const EntryItemWrapper: FC<
         onContextMenu={handleContextMenu}
       >
         {overlay ? (
-          <ListItemHoverOverlay isActive={isActive}>{children}</ListItemHoverOverlay>
+          <ListItemHoverOverlay isActive={isActive || isContextMenuOpen}>
+            {children}
+          </ListItemHoverOverlay>
         ) : (
           children
         )}

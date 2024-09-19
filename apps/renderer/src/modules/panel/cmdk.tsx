@@ -166,7 +166,7 @@ export const SearchCmdK: React.FC = () => {
                   const feed = getFeedById(entry.feedId)
                   return (
                     <SearchItem
-                      key={entry.item.id}
+                      key={`entry-${entry.item.id}-${entry.feedId}`}
                       view={feed?.id ? getSubscriptionByFeedId(feed.id)?.view : undefined}
                       title={entry.item.title!}
                       feedId={entry.feedId}
@@ -191,7 +191,7 @@ export const SearchCmdK: React.FC = () => {
               >
                 {renderedFeeds.map((feed) => (
                   <SearchItem
-                    key={feed.item.id}
+                    key={`feed-${feed.item.id}`}
                     view={getSubscriptionByFeedId(feed.item.id!)?.view}
                     title={feed.item.title!}
                     feedId={feed.item.id!}
@@ -246,7 +246,8 @@ const SearchItem = memo(function Item({
         "min-w-0 max-w-full",
         styles["content-visually"],
       )}
-      key={id}
+      key={`${id}-${feedId}-${entryId}`}
+      id={`${id}-${feedId}-${entryId}`}
       onSelect={() => {
         navigateEntry({
           feedId: feedId!,

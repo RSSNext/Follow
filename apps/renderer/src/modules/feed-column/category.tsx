@@ -3,14 +3,14 @@ import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
 import { Fragment, memo, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useClickAnyWhere, useOnClickOutside } from "usehooks-ts"
+import { useOnClickOutside } from "usehooks-ts"
 
 import { MotionButtonBase } from "~/components/ui/button"
 import { LoadingCircle } from "~/components/ui/loading"
 import { ROUTE_FEED_IN_FOLDER, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { useInputComposition } from "~/hooks/common"
+import { useAnyPointDown, useInputComposition } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
 import { showNativeMenu } from "~/lib/native-menu"
@@ -110,7 +110,7 @@ function FeedCategoryImpl({
   const [isCategoryEditing, setIsCategoryEditing] = useState(false)
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useClickAnyWhere(() => {
+  useAnyPointDown(() => {
     setIsContextMenuOpen(false)
   })
   const isCategoryIsWaiting = isChangePending
