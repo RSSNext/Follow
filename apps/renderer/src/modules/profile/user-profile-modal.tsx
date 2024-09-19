@@ -304,7 +304,7 @@ export const UserProfileModalContent: FC<{
                       {subscriptions.data?.[category].map((subscription) => (
                         <SubscriptionItem
                           variant={itemStyle}
-                          key={subscription.feedId}
+                          key={subscription.id}
                           subscription={subscription}
                         />
                       ))}
@@ -328,16 +328,27 @@ const SubscriptionItem: FC<{
   variant: ItemVariant
 }> = ({ subscription, variant }) => {
   const t = useI18n()
-  const isFollowed = !!useSubscriptionStore((state) => state.data[subscription.feedId])
+  const isFollowed = !!useSubscriptionStore((state) => state.data[subscription.id])
   const { present } = useModalStack()
   const isLoose = variant === "loose"
+  const isFeed = "feedId" in subscription
+
   return (
     <div
       className={cn("group relative", isLoose ? "border-b py-5" : "py-2")}
-      data-feed-id={subscription.feedId}
+      data-feed-id={subscription.id}
     >
-      <a className="flex flex-1 cursor-default" href={subscription.feeds.siteUrl!} target="_blank">
-        <FeedIcon feed={subscription.feeds} size={22} className="mr-3" />
+      <a
+        className="flex flex-1 cursor-default"
+        href={isFeed ? subscription.feeds.siteUrl! : `${env.VITE_WEB_URL}/list/${subscription.id}`}
+        target="_blank"
+      >
+        <FeedIcon
+          feed={"feeds" in subscription ? subscription.feeds : undefined}
+          list={"lists" in subscription ? subscription.lists : undefined}
+          size={22}
+          className="mr-3"
+        />
         <div
           className={cn(
             "w-0 flex-1 grow",
@@ -345,10 +356,12 @@ const SubscriptionItem: FC<{
             !isLoose && "flex items-center",
           )}
         >
-          <div className="truncate font-medium leading-none">{subscription.feeds?.title}</div>
+          <div className="truncate font-medium leading-none">
+            {isFeed ? subscription.feeds?.title : subscription.lists?.title}
+          </div>
           {isLoose && (
             <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
-              {subscription.feeds?.description}
+              {isFeed ? subscription.feeds?.description : subscription.lists?.description}
             </div>
           )}
         </div>
@@ -361,20 +374,22 @@ const SubscriptionItem: FC<{
               const defaultView = subscription.view
 
               present({
-                title: `${isFollowed ? `${t.common("words.edit")} ` : ""}${APP_NAME} - ${subscription.feeds.title}`,
+                title: `${isFollowed ? `${t.common("words.edit")} ` : ""}${APP_NAME} - ${isFeed ? subscription.feeds.title : subscription.lists.title}`,
                 clickOutsideToDismiss: true,
-                content: ({ dismiss }) => (
-                  <FeedForm
-                    asWidget
-                    id={subscription.feedId}
-                    url={subscription.feeds.url}
-                    defaultValues={{
-                      view: defaultView.toString(),
-                      category: subscription.category,
-                    }}
-                    onSuccess={dismiss}
-                  />
-                ),
+                content: ({ dismiss }) =>
+                  // TODO: list form
+                  isFeed && (
+                    <FeedForm
+                      asWidget
+                      id={subscription.feedId}
+                      url={subscription.feeds.url}
+                      defaultValues={{
+                        view: defaultView.toString(),
+                        category: subscription.category,
+                      }}
+                      onSuccess={dismiss}
+                    />
+                  ),
               })
             }}
           >

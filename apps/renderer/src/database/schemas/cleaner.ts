@@ -1,5 +1,5 @@
 export type DB_Cleaner = {
   refId: string
   visitedAt: number
-  type: "entry" | "feed"
+  type: "entry" | "feed" | "list"
 }

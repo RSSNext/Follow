@@ -85,7 +85,6 @@ async function hydrateEntry() {
 
 async function hydrateSubscription() {
   const subscriptions = await SubscriptionService.findAll()
-
   subscriptionActions.upsertMany(subscriptions)
 }
 

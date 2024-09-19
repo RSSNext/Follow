@@ -1762,6 +1762,22 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        description: drizzle_orm_pg_core.PgColumn<{
+            name: "description";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
         fee: drizzle_orm_pg_core.PgColumn<{
             name: "fee";
             tableName: "lists";
@@ -1804,9 +1820,11 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     view: zod.ZodNumber;
     title: zod.ZodString;
     image: zod.ZodNullable<zod.ZodString>;
+    description: zod.ZodNullable<zod.ZodString>;
     fee: zod.ZodNumber;
     timelineUpdatedAt: zod.ZodString;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    description: string | null;
     title: string;
     id: string;
     image: string | null;
@@ -1816,6 +1834,7 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     fee: number;
     timelineUpdatedAt: string;
 }, {
+    description: string | null;
     title: string;
     id: string;
     image: string | null;
@@ -2929,37 +2948,40 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
-                    title: string;
-                    id: string;
-                    image: string | null;
-                    view: number;
-                    feeds: {
+                    list: {
                         description: string | null;
-                        title: string | null;
+                        title: string;
                         id: string;
                         image: string | null;
-                        url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                    }[];
-                    creatorId: string;
-                    feedIds: string[];
-                    fee: number;
-                    timelineUpdatedAt: string;
-                    creator: {
-                        name: string | null;
-                        id: string;
-                        emailVerified: string | null;
-                        image: string | null;
-                        handle: string | null;
-                        createdAt: string;
-                    } | null;
+                        view: number;
+                        creatorId: string;
+                        feedIds: string[];
+                        fee: number;
+                        timelineUpdatedAt: string;
+                        creator: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null;
+                        feeds?: {
+                            description: string | null;
+                            title: string | null;
+                            id: string;
+                            image: string | null;
+                            url: string;
+                            siteUrl: string | null;
+                            checkedAt: string;
+                            lastModifiedHeader: string | null;
+                            etagHeader: string | null;
+                            ttl: number | null;
+                            errorMessage: string | null;
+                            errorAt: string | null;
+                            ownerUserId: string | null;
+                        }[] | undefined;
+                    };
                 };
             };
             outputFormat: "json" | "text";
@@ -2971,12 +2993,14 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     title: string;
                     view: number;
                     fee: number;
+                    description?: string | null | undefined;
                     image?: string | null | undefined;
                 };
             };
             output: {
                 code: 0;
                 data: {
+                    description: string | null;
                     title: string;
                     id: string;
                     image: string | null;
@@ -3009,6 +3033,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     view: number;
                     fee: number;
                     listId: string;
+                    description?: string | null | undefined;
                     image?: string | null | undefined;
                 };
             };
@@ -3025,6 +3050,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
+                    description: string | null;
                     title: string;
                     id: string;
                     image: string | null;
@@ -3230,6 +3256,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 code: 0;
                 data: ({
                     title: string | null;
+                    id: string;
                     userId: string;
                     view: number;
                     category: string | null;
@@ -3260,10 +3287,12 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     isPrivate: boolean;
                 } | {
                     title: string | null;
+                    id: string;
                     userId: string;
                     view: number;
                     isPrivate: boolean;
                     lists: {
+                        description: string | null;
                         title: string;
                         id: string;
                         image: string | null;
@@ -3282,6 +3311,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         } | null;
                     };
                     listId: string;
+                    category?: string | undefined;
                 })[];
             };
             outputFormat: "json" | "text";

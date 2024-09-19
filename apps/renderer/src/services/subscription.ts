@@ -29,7 +29,7 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
     return this.table.bulkPut(
       data.map(({ feeds, ...d }: any) => ({
         ...d,
-        id: this.uniqueId(d.userId, d.feedId),
+        id: this.uniqueId(d.userId, d.id),
       })),
     )
   }
@@ -37,7 +37,7 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
   override upsert(data: SubscriptionFlatModel) {
     return this.table.put({
       ...data,
-      id: this.uniqueId(data.userId, data.feedId),
+      id: this.uniqueId(data.userId, data.id),
     })
   }
 
@@ -65,7 +65,7 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
     return this.table
       .where("userId")
       .equals(userId)
-      .and((item) => feedIdList.includes(item.feedId))
+      .and((item) => "feedId" in item && feedIdList.includes(item.feedId))
       .modify({ category })
   }
 }

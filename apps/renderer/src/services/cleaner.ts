@@ -4,6 +4,7 @@ import { appLog } from "~/lib/log"
 import { EntryService } from "./entry"
 import { FeedService } from "./feed"
 import { FeedUnreadService } from "./feed-unread"
+import { ListService } from "./list"
 import { SubscriptionService } from "./subscription"
 
 const cleanerModel = browserDB.cleaner
@@ -15,14 +16,14 @@ class CleanerServiceStatic {
     const otherUserIds = dbUserIds.filter((id) => id !== currentUserId)
     const remainingSubscriptions = await SubscriptionService.getUserSubscriptions(otherUserIds)
     const currentSubscription = await SubscriptionService.getUserSubscriptions([currentUserId])
-    const currentSubscriptionFeedsSet = new Set(currentSubscription.map((s) => s.feedId))
+    const currentSubscriptionFeedsSet = new Set(currentSubscription.map((s) => s.id))
     // Finds a subscripion that does not exist for the current user, but a feedId that exists in the db
 
     const toRemoveSubscription = remainingSubscriptions.filter(
-      (s) => !currentSubscriptionFeedsSet.has(s.feedId),
+      (s) => !currentSubscriptionFeedsSet.has(s.id),
     )
 
-    const toRemoveFeedIds = toRemoveSubscription.map((s) => s.feedId)
+    const toRemoveFeedIds = toRemoveSubscription.map((s) => s.id)
 
     await Promise.allSettled([
       otherUserIds.map((id) => SubscriptionService.removeSubscription(id)),
@@ -35,7 +36,7 @@ class CleanerServiceStatic {
   /**
    * Mark the which data recently used
    */
-  reset(list: { type: "feed" | "entry"; id: string }[]) {
+  reset(list: { type: "feed" | "entry" | "list"; id: string }[]) {
     const now = Date.now()
     return cleanerModel.bulkPut(
       list.map((item) => ({
@@ -57,6 +58,7 @@ class CleanerServiceStatic {
     if (data.length === 0) {
       return
     }
+    const deleteLists = [] as string[]
     const deleteEntries = [] as string[]
     const deleteFeeds = [] as string[]
     for (const item of data) {
@@ -69,15 +71,28 @@ class CleanerServiceStatic {
           deleteEntries.push(item.refId)
           break
         }
+        case "list": {
+          deleteLists.push(item.refId)
+          break
+        }
       }
     }
 
-    appLog("Clean outdated data...", "feeds:", deleteFeeds.length, "entries:", deleteEntries.length)
+    appLog(
+      "Clean outdated data...",
+      "feeds:",
+      deleteFeeds.length,
+      "entries:",
+      deleteEntries.length,
+      "lists:",
+      deleteLists.length,
+    )
     await Promise.allSettled([
       FeedService.bulkDelete(deleteFeeds),
       EntryService.deleteEntries(deleteEntries),
       EntryService.deleteEntriesByFeedIds(deleteFeeds),
       cleanerModel.bulkDelete(data.map((d) => d.refId)),
+      ListService.bulkDelete(deleteLists),
     ])
   }
 }

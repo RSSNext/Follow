@@ -19,7 +19,7 @@ import { Input } from "~/components/ui/input"
 import { apiFetch } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
 import { cn } from "~/lib/utils"
-import type { FeedResponse } from "~/models"
+import type { FeedModel } from "~/models"
 import { Queries } from "~/queries"
 
 import { FollowSummary } from "../../components/feed-summary"
@@ -171,7 +171,7 @@ export function DiscoverImport() {
                     {!mutation.data?.[item.key].length && (
                       <div className="text-zinc-500">No items</div>
                     )}
-                    {mutation.data?.[item.key].map((feed: FeedResponse) => (
+                    {mutation.data?.[item.key].map((feed: FeedModel) => (
                       <FollowSummary className="max-w-[462px]" key={feed.id} feed={feed} />
                     ))}
                   </div>

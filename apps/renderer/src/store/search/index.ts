@@ -74,9 +74,11 @@ class SearchActions {
           { feedId: string }
         >[]
         for (const subscription of subscriptions) {
-          const { feedId } = subscription.item
-          if (feedId) {
-            processedSubscriptions.push({ item: subscription.item, feedId })
+          if ("feedId" in subscription.item) {
+            const { feedId } = subscription.item
+            if (feedId) {
+              processedSubscriptions.push({ item: subscription.item, feedId })
+            }
           }
         }
 

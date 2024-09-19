@@ -45,7 +45,7 @@ const useGroupedData = (view: FeedViewType) => {
         if (!groupFolder[category]) {
           groupFolder[category] = []
         }
-        groupFolder[category].push(subscription.feedId)
+        groupFolder[category].push(subscription.id)
       }
     }
 

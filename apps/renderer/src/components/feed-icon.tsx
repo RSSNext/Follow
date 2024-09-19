@@ -5,7 +5,7 @@ import { forwardRef, useMemo } from "react"
 import { getColorScheme, stringToHue } from "~/lib/color"
 import { getImageProxyUrl } from "~/lib/img-proxy"
 import { cn, getUrlIcon } from "~/lib/utils"
-import type { CombinedEntryModel, FeedModel } from "~/models"
+import type { CombinedEntryModel, FeedModel, ListModel } from "~/models"
 
 import { PlatformIcon } from "./ui/platform-icon"
 
@@ -67,6 +67,7 @@ const FallbackableImage = forwardRef<
 
 export function FeedIcon({
   feed,
+  list,
   entry,
   fallbackUrl,
   className,
@@ -76,6 +77,7 @@ export function FeedIcon({
   useMedia,
 }: {
   feed?: FeedModel
+  list?: ListModel
   entry?: CombinedEntryModel["entries"]
   fallbackUrl?: string
   className?: string
@@ -91,15 +93,18 @@ export function FeedIcon({
   const image =
     (useMedia
       ? entry?.media?.find((i) => i.type === "photo")?.url || entry?.authorAvatar
-      : entry?.authorAvatar) || feed?.image
+      : entry?.authorAvatar) ||
+    feed?.image ||
+    list?.image
 
-  if (!feed && !siteUrl) {
-    throw new Error("You must provide either a feed or a siteUrl")
+  if (!feed && !siteUrl && !list) {
+    throw new Error("You must provide either a feed or a siteUrl or a list")
   }
 
   const colors = useMemo(
-    () => getColorScheme(stringToHue(feed?.title || feed?.url || siteUrl!), true),
-    [feed?.title, feed?.url, siteUrl],
+    () =>
+      getColorScheme(stringToHue(feed?.title || feed?.url || siteUrl || list?.title || ""), true),
+    [feed?.title, feed?.url, siteUrl, list?.title],
   )
   let ImageElement: ReactNode
   let finalSrc = ""

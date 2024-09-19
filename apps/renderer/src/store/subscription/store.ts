@@ -12,12 +12,21 @@ import { SubscriptionService } from "~/services"
 
 import { entryActions } from "../entry"
 import { feedActions, getFeedById } from "../feed"
+import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 
-export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
+export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds" | "lists"> & {
   defaultCategory?: string
-}
+  category?: string | null
+} & (
+    | {
+        feedId: string
+      }
+    | {
+        listId: string
+      }
+  )
 interface SubscriptionState {
   /**
    * Key: feedId
@@ -35,7 +44,7 @@ function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
   const result: SubscriptionFlatModel[] = []
   for (const subscription of data) {
     const cloned: SubscriptionFlatModel = { ...subscription }
-    if (!subscription.category && subscription.feeds) {
+    if ("feedId" in subscription && !subscription.category) {
       const { siteUrl } = subscription.feeds
       if (!siteUrl) {
         cloned.defaultCategory = subscription.feedId
@@ -48,6 +57,8 @@ function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
           cloned.defaultCategory = subscription.feedId
         }
       }
+    } else if ("listId" in subscription) {
+      cloned.defaultCategory = subscription.listId
     }
     result.push(cloned)
   }
@@ -99,7 +110,8 @@ class SubscriptionActions {
 
     const transformedData = morphResponseData(res.data)
     this.upsertMany(transformedData)
-    feedActions.upsertMany(res.data.map((s) => s.feeds))
+    feedActions.upsertMany(res.data.filter((s) => "feedId" in s).map((s) => s.feeds))
+    listActions.upsertMany(res.data.filter((s) => "listId" in s).map((s) => s.lists))
 
     return res.data
   }
@@ -111,8 +123,13 @@ class SubscriptionActions {
     set((state) =>
       produce(state, (state) => {
         subscriptions.forEach((subscription) => {
-          state.data[subscription.feedId] = omit(subscription, "feeds")
-          state.feedIdByView[subscription.view].push(subscription.feedId)
+          if ("feedId" in subscription) {
+            state.data[subscription.feedId] = omit(subscription, "feeds")
+            state.feedIdByView[subscription.view].push(subscription.feedId)
+          } else {
+            state.data[subscription.listId] = omit(subscription, "lists")
+            state.feedIdByView[subscription.view].push(subscription.listId)
+          }
 
           return state
         })
@@ -201,6 +218,7 @@ class SubscriptionActions {
             Object.keys(state.data).forEach((id) => {
               if (idSet.has(id)) {
                 const subscription = state.data[id]
+                if (!("feedId" in subscription)) return
                 const feed = getFeedById(subscription.feedId)
                 if (!feed) return
                 const { siteUrl } = feed

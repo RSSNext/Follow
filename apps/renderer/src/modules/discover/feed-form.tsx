@@ -199,7 +199,6 @@ const FeedInnerForm = ({
       const $method = isSubscribed ? apiClient.subscriptions.$patch : apiClient.subscriptions.$post
 
       return $method({
-        // @ts-expect-error
         json: body,
       })
     },
