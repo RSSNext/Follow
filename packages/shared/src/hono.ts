@@ -1762,8 +1762,8 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
-        price: drizzle_orm_pg_core.PgColumn<{
-            name: "price";
+        fee: drizzle_orm_pg_core.PgColumn<{
+            name: "fee";
             tableName: "lists";
             dataType: "number";
             columnType: "PgInteger";
@@ -1804,7 +1804,7 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     view: zod.ZodNumber;
     title: zod.ZodString;
     image: zod.ZodNullable<zod.ZodString>;
-    price: zod.ZodNumber;
+    fee: zod.ZodNumber;
     timelineUpdatedAt: zod.ZodString;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     title: string;
@@ -1813,7 +1813,7 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     view: number;
     creatorId: string;
     feedIds: string[];
-    price: number;
+    fee: number;
     timelineUpdatedAt: string;
 }, {
     title: string;
@@ -1822,7 +1822,7 @@ declare const listsOpenAPISchema: zod.ZodObject<{
     view: number;
     creatorId: string;
     feedIds: string[];
-    price: number;
+    fee: number;
     timelineUpdatedAt: string;
 }>;
 declare const listsRelations: drizzle_orm.Relations<"lists", {
@@ -2950,7 +2950,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     }[];
                     creatorId: string;
                     feedIds: string[];
-                    price: number;
+                    fee: number;
                     timelineUpdatedAt: string;
                     creator: {
                         name: string | null;
@@ -2970,7 +2970,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 json: {
                     title: string;
                     view: number;
-                    price: number;
+                    fee: number;
                     image?: string | null | undefined;
                 };
             };
@@ -2983,7 +2983,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     view: number;
                     creatorId: string;
                     feedIds: string[];
-                    price: number;
+                    fee: number;
                     timelineUpdatedAt: string;
                 };
             };
@@ -3008,12 +3008,32 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     title: string;
                     view: number;
                     listId: string;
-                    price: number;
+                    fee: number;
                     image?: string | null | undefined;
                 };
             };
             output: {
                 code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/lists/list": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    title: string;
+                    id: string;
+                    image: string | null;
+                    view: number;
+                    creatorId: string;
+                    feedIds: string[];
+                    fee: number;
+                    timelineUpdatedAt: string;
+                }[];
             };
             outputFormat: "json" | "text";
             status: 200;
