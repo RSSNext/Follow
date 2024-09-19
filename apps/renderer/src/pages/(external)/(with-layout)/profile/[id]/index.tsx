@@ -1,3 +1,4 @@
+import { Fragment } from "react/jsx-runtime"
 import { useParams } from "react-router-dom"
 
 import { useWhoami } from "~/atoms/user"
@@ -18,10 +19,14 @@ export function Component() {
   const t = useI18n()
   const { id } = useParams()
 
+  const isHandle = id?.startsWith("@")
   const user = useAuthQuery(
     defineQuery(["profiles", id], async () => {
       const res = await apiClient.profiles.$get({
-        query: { id: id! },
+        query: {
+          handle: isHandle ? id?.slice(1) : undefined,
+          id: isHandle ? undefined : id,
+        },
       })
       return res.data
     }),

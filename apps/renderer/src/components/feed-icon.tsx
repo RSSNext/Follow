@@ -150,7 +150,7 @@ export function FeedIcon({
 
       ImageElement = (
         <PlatformIcon
-          url={feed?.siteUrl!}
+          url={feed?.siteUrl || fallbackUrl}
           style={sizeStyle}
           className={cn("center mr-2", className)}
         >

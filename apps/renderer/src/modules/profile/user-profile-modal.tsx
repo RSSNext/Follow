@@ -218,7 +218,9 @@ export const UserProfileModalContent: FC<{
           <ActionButton
             tooltip={t("user_profile.share")}
             onClick={() => {
-              window.open(`${env.VITE_WEB_URL}/profile/${user.data?.id}`)
+              window.open(
+                `${env.VITE_WEB_URL}/profile/${user.data?.handle ? `@${user.data.handle}` : user.data?.id}`,
+              )
             }}
           >
             <i className="i-mgc-share-3-cute-re" />

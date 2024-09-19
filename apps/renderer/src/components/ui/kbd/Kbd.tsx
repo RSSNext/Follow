@@ -158,7 +158,7 @@ export const Kbd: FC<{ children: string; className?: string }> = memo(({ childre
     <button type="button" onClick={handleClick}>
       <kbd
         className={cn(
-          "kbd box-border h-5 space-x-1 text-[0.7rem]",
+          "kbd box-border h-5 space-x-1 font-sans text-[0.7rem]",
 
           isKeyPressed ? "" : "border-b-2",
           className,
@@ -176,7 +176,7 @@ export const Kbd: FC<{ children: string; className?: string }> = memo(({ childre
             }
 
             case SharedKeys.backspace: {
-              return <MaterialSymbolsBackspaceOutlineSharp key={key} />
+              return <IcOutlineBackspace key={key} />
             }
             case SpecialKeys.macOS.meta: {
               return <MaterialSymbolsKeyboardCommandKey key={key} />
@@ -273,13 +273,13 @@ function MaterialSymbolsSpaceBarRounded(props: React.SVGProps<SVGSVGElement>) {
   )
 }
 
-function MaterialSymbolsBackspaceOutlineSharp(props: React.SVGProps<SVGSVGElement>) {
+export function IcOutlineBackspace(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
       <path
         fill="currentColor"
-        d="M7.95 19L3 12l4.95-7H21v14zM9 17h10V7H9l-3.55 5zm2.4-1l2.6-2.6l2.6 2.6l1.4-1.4l-2.6-2.6L18 9.4L16.6 8L14 10.6L11.4 8L10 9.4l2.6 2.6l-2.6 2.6zm7.6 1V7z"
-      />
+        d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m0 16H7.07L2.4 12l4.66-7H22zm-11.59-2L14 13.41L17.59 17L19 15.59L15.41 12L19 8.41L17.59 7L14 10.59L10.41 7L9 8.41L12.59 12L9 15.59z"
+       />
     </svg>
   )
 }

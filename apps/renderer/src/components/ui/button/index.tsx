@@ -63,7 +63,7 @@ export const ActionButton = React.forwardRef<
                 "no-drag-region inline-flex size-8 items-center justify-center text-xl",
                 active && "bg-zinc-500/15 hover:bg-zinc-500/20",
                 "focus-visible:bg-zinc-500/30 focus-visible:!outline-none",
-                "rounded-md duration-200 hover:bg-theme-button-hover",
+                "rounded-md duration-200 hover:bg-theme-button-hover data-[state=open]:bg-theme-button-hover",
                 "disabled:cursor-not-allowed disabled:opacity-50",
                 className,
               )}
