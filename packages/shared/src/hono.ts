@@ -6,10 +6,6 @@ import * as drizzle_orm_pg_core from 'drizzle-orm/pg-core';
 import * as drizzle_orm from 'drizzle-orm';
 import { InferInsertModel } from 'drizzle-orm';
 
-declare enum ACHIEVEMENTS_ACTION_ID_MAP {
-    FIRST_CLAIM_FEED = 0
-}
-
 type Env = {
     Bindings: HttpBindings;
 };
@@ -3992,13 +3988,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $put: {
             input: {
                 json: {
-                    actionId: ACHIEVEMENTS_ACTION_ID_MAP;
+                    actionId: number;
                 };
             };
             output: {
                 code: number;
                 data: {
-                    actionId: ACHIEVEMENTS_ACTION_ID_MAP;
+                    actionId: number;
                     result: boolean;
                 };
             };
