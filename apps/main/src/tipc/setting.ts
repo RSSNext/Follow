@@ -3,6 +3,7 @@ import { createRequire } from "node:module"
 import { app, nativeTheme } from "electron"
 
 import { setDockCount } from "../lib/dock"
+import { setProxyConfig, updateProxy } from "../lib/proxy"
 import { store } from "../lib/store"
 import { createSettingWindow } from "../window"
 import { t } from "./_instance"
@@ -38,5 +39,11 @@ export const settingRoute = {
   }),
   setDockBadge: t.procedure.input<number>().action(async ({ input }) => {
     setDockCount(input)
+  }),
+  getProxyConfig: t.procedure.action(async () => store.get("proxy")),
+  setProxyConfig: t.procedure.input<string>().action(async ({ input }) => {
+    const result = setProxyConfig(input)
+    updateProxy()
+    return result
   }),
 }
