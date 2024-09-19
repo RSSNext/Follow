@@ -50,6 +50,7 @@ function EntryColumnImpl() {
       virtuosoRef.current?.scrollTo({
         top: 0,
       })
+      setIsArchived(false)
     }, []),
     isArchived,
   })
