@@ -32,6 +32,7 @@ export const entries = {
         }),
       {
         rootKey: ["entries", id],
+        structuralSharing: false,
       },
     ),
   byId: (id: string) =>
