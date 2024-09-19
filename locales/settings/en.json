@@ -73,6 +73,7 @@
   "appearance.title": "Appearance",
   "appearance.ui_font": "UI Font",
   "appearance.unread_count": "Unread count",
+  "common.give_star": "<HeartIcon />Love our product? <Link>Give us a star on GitHub!</Link>",
   "feeds.claimTips": "To claim your feeds and receive tips, right-click on the feed in your subscription list and select Claim.",
   "feeds.noFeeds": "No claimed feeds",
   "feeds.tableHeaders.entryCount": "Entries",
