@@ -23,6 +23,7 @@
     "dev:debug": "export DEBUG=true && vite --debug",
     "dev:web": "vite",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "generator:i18n-template": "tsx scripts/generate-i18n-locale.ts",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
