@@ -141,7 +141,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
 
   return (
     <WindowUnderBlur
-      className={cn("relative flex h-full flex-col space-y-3 rounded-l-[12px] pt-2.5", className)}
+      className={cn("relative flex h-full flex-col space-y-3 pt-2.5", className)}
       onClick={useCallback(() => navigateBackHome(), [navigateBackHome])}
     >
       <FeedColumnHeader />

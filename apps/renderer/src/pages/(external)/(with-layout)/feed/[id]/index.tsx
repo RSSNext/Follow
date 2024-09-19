@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useParams, useSearchParams } from "react-router-dom"
 import { toast } from "sonner"
 
+import { PoweredByFooter } from "~/components/common/PoweredByFooter"
 import { FeedIcon } from "~/components/feed-icon"
 import { FollowIcon } from "~/components/icons/follow"
 import { Button } from "~/components/ui/button"
@@ -66,7 +67,7 @@ export function Component() {
   return (
     <>
       {feed.isLoading ? (
-        <LoadingCircle size="large" className="center h-48 w-full max-w-full" />
+        <LoadingCircle size="large" className="center fixed inset-0" />
       ) : (
         feed.data?.feed && (
           <div className="mx-auto mt-12 flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
@@ -151,6 +152,7 @@ export function Component() {
                 </a>
               ))}
             </div>
+            <PoweredByFooter className="pb-12" />
           </div>
         )
       )}

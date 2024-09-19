@@ -1,15 +1,16 @@
 import { env } from "@follow/shared/env"
-import { useAnimationControls } from "framer-motion"
+import { AnimatePresence, useAnimationControls } from "framer-motion"
 import { useAtom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { throttle } from "lodash-es"
 import type { FC } from "react"
-import { Fragment, useEffect, useMemo, useRef, useState } from "react"
+import { Fragment, memo, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { m } from "~/components/common/Motion"
 import { FeedIcon } from "~/components/feed-icon"
 import { FollowIcon } from "~/components/icons/follow"
+import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { ActionButton, Button } from "~/components/ui/button"
 import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
@@ -217,7 +218,9 @@ export const UserProfileModalContent: FC<{
           <ActionButton
             tooltip={t("user_profile.share")}
             onClick={() => {
-              window.open(`${env.VITE_WEB_URL}/profile/${user.data?.id}`)
+              window.open(
+                `${env.VITE_WEB_URL}/profile/${user.data?.handle ? `@${user.data.handle}` : user.data?.id}`,
+              )
             }}
           >
             <i className="i-mgc-share-3-cute-re" />
@@ -296,20 +299,12 @@ export const UserProfileModalContent: FC<{
               ) : (
                 subscriptions.data &&
                 Object.keys(subscriptions.data).map((category) => (
-                  <div key={category}>
-                    <div className="mb-2 flex items-center text-2xl font-bold">
-                      <h3>{category}</h3>
-                    </div>
-                    <div>
-                      {subscriptions.data?.[category].map((subscription) => (
-                        <SubscriptionItem
-                          variant={itemStyle}
-                          key={subscription.id}
-                          subscription={subscription}
-                        />
-                      ))}
-                    </div>
-                  </div>
+                  <SubscriptionGroup
+                    key={category}
+                    category={category}
+                    subscriptions={subscriptions.data?.[category]}
+                    itemStyle={itemStyle}
+                  />
                 ))
               )}
             </ScrollArea.ScrollArea>
@@ -321,6 +316,46 @@ export const UserProfileModalContent: FC<{
     </div>
   )
 }
+
+const SubscriptionGroup: FC<{
+  category: string
+  subscriptions: SubscriptionModel[]
+  itemStyle: ItemVariant
+}> = memo(({ category, subscriptions, itemStyle }) => {
+  const [isOpened, setIsOpened] = useState(true)
+  return (
+    <div>
+      <button
+        onClick={() => setIsOpened(!isOpened)}
+        className="mb-2 flex w-full items-center justify-between text-2xl font-bold"
+        type="button"
+      >
+        <h3>{category}</h3>
+
+        <div className="inline-flex shrink-0 items-center opacity-50">
+          <i
+            className={cn("i-mingcute-down-line size-5 duration-200", isOpened ? "rotate-180" : "")}
+          />
+        </div>
+      </button>
+      <AutoResizeHeight duration={0.2}>
+        <AnimatePresence mode="popLayout">
+          {isOpened && (
+            <Fragment>
+              {subscriptions.map((subscription) => (
+                <SubscriptionItem
+                  variant={itemStyle}
+                  key={subscription.id}
+                  subscription={subscription}
+                />
+              ))}
+            </Fragment>
+          )}
+        </AnimatePresence>
+      </AutoResizeHeight>
+    </div>
+  )
+})
 
 const SubscriptionItem: FC<{
   subscription: SubscriptionModel
@@ -334,7 +369,8 @@ const SubscriptionItem: FC<{
   const isFeed = "feedId" in subscription
 
   return (
-    <div
+    <m.div
+      exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.2 } }}
       className={cn("group relative", isLoose ? "border-b py-5" : "py-2")}
       data-feed-id={subscription.id}
     >
@@ -404,6 +440,6 @@ const SubscriptionItem: FC<{
           </Button>
         </div>
       </a>
-    </div>
+    </m.div>
   )
 }

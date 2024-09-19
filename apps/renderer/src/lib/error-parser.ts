@@ -1,3 +1,4 @@
+import { t } from "i18next"
 import { FetchError } from "ofetch"
 import { createElement } from "react"
 import { toast } from "sonner"
@@ -9,10 +10,11 @@ export const getFetchErrorMessage = (error: Error) => {
   if (error instanceof FetchError) {
     try {
       const json = JSON.parse(error.response?._data)
-      // TODO get the biz code to show the error message, and for i18n
-      // const bizCode = json.code
-      const { reason } = json
-      return `${json.message || error.message}${reason ? `: ${reason}` : ""}`
+
+      const { reason, code, message } = json
+      const i18nKey = `errors:${code}` as any
+      const i18nMessage = t(i18nKey) === i18nKey ? message : t(i18nKey)
+      return `${i18nMessage}${reason ? `: ${reason}` : ""}`
     } catch {
       return error.message
     }
@@ -27,11 +29,11 @@ export const toastFetchError = (error: Error) => {
     try {
       const json = JSON.parse(error.response?._data)
 
-      // TODO get the biz code to show the error message, and for i18n
-      // const bizCode = json.code
-      const { reason } = json
+      const { reason, code, message: _message } = json
+      const i18nKey = `errors:${code}` as any
+      const i18nMessage = t(i18nKey) === i18nKey ? message : t(i18nKey)
 
-      message = json.message || error.message
+      message = i18nMessage
 
       if (reason) {
         _reason = reason

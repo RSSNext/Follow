@@ -3,6 +3,7 @@ import { useEffect, useInsertionEffect, useLayoutEffect } from "react"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useUISettingValue } from "~/atoms/settings/ui"
+import { I18N_LOCALE_KEY } from "~/constants"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
 import { useSyncThemeark } from "~/hooks/common"
 import { langChain } from "~/i18n"
@@ -65,6 +66,7 @@ const useLanguageSync = () => {
     loadLanguageAndApply(language as string).then(() => {
       langChain.next(() => {
         if (mounted) {
+          localStorage.setItem(I18N_LOCALE_KEY, language as string)
           return i18next.changeLanguage(language as string)
         }
       })

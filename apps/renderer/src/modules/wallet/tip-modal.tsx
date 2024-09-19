@@ -118,7 +118,7 @@ const TipModalContent_: FC<{
           <UserAvatar
             className="h-8 justify-start bg-transparent p-0"
             userId={userId}
-            enableModal={true}
+            enableModal
           />
         </>
       ) : (

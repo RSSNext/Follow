@@ -6,7 +6,7 @@ export function Component() {
   return (
     <>
       <Header />
-      <main className="pt-[80px]">
+      <main className="flex h-full grow flex-col pt-[80px]">
         <Outlet />
       </main>
     </>
