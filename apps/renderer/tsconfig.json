@@ -1,0 +1,20 @@
+{
+  "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "strict": true,
+    "baseUrl": ".",
+    "noImplicitReturns": false,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "paths": {
+      "~/*": ["src/*"],
+      "@pkg": ["../../package.json"],
+      "@locales/*": ["../../locales/*"]
+    }
+  }
+}

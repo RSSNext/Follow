@@ -7,6 +7,7 @@ import { parse } from "@babel/parser"
 import * as t from "@babel/types"
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
+import { set } from "lodash-es"
 import { prerelease } from "semver"
 import type { Plugin, UserConfig } from "vite"
 
@@ -19,7 +20,7 @@ function localesPlugin(): Plugin {
   return {
     name: "locales-merge",
     enforce: "post",
-    generateBundle(options, bundle) {
+    generateBundle(_options, bundle) {
       const localesDir = path.resolve(__dirname, "../locales")
       const namespaces = fs.readdirSync(localesDir)
       const languageResources = {}
@@ -36,12 +37,21 @@ function localesPlugin(): Plugin {
           if (!languageResources[lang]) {
             languageResources[lang] = {}
           }
-          languageResources[lang][namespace] = content
+
+          const obj = {}
+
+          const keys = Object.keys(content as object)
+          for (const accessorKey of keys) {
+            set(obj, accessorKey, (content as any)[accessorKey])
+          }
+
+          languageResources[lang][namespace] = obj
         })
       })
 
       Object.entries(languageResources).forEach(([lang, resources]) => {
         const fileName = `locales/${lang}.js`
+
         const content = `export default ${JSON.stringify(resources)};`
 
         this.emitFile({
@@ -85,11 +95,11 @@ function customI18nHmrPlugin(): Plugin {
 export const viteRenderBaseConfig = {
   resolve: {
     alias: {
-      "@renderer": resolve("src/renderer/src"),
-      "@shared": resolve("src/shared/src"),
-      "@pkg": resolve("./package.json"),
-      "@env": resolve("./src/env.ts"),
-      "@locales": resolve("./locales"),
+      "~": resolve("apps/renderer/src"),
+      "@pkg": resolve("package.json"),
+      "@env": resolve("src/env.ts"),
+      "@locales": resolve("locales"),
+      "@follow/electron-main": resolve("apps/main/src"),
     },
   },
   base: "/",
