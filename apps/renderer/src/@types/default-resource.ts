@@ -9,6 +9,7 @@ import common_ja from "../../../../locales/common/ja.json"
 import common_pt from "../../../../locales/common/pt.json"
 import common_zhCN from "../../../../locales/common/zh-CN.json"
 import common_zhTW from "../../../../locales/common/zh-TW.json"
+import errors_en from "../../../../locales/errors/en.json"
 import external_en from "../../../../locales/external/en.json"
 import lang_ardz from "../../../../locales/lang/ar-DZ.json"
 import lang_arma from "../../../../locales/lang/ar-MA.json"
@@ -37,6 +38,7 @@ export const defaultResources = {
     external: external_en,
     settings: settings_en,
     shortcuts: shortcuts_en,
+    errors: errors_en,
   },
   "zh-CN": {
     lang: lang_zhCN,

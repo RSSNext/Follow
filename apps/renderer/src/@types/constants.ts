@@ -13,5 +13,5 @@ export const dayjsLocaleImportMap = {
   ["zh-TW"]: ["zh-tw", () => import("dayjs/locale/zh-tw")],
   ["zh-HK"]: ["zh-hk", () => import("dayjs/locale/zh-hk")],
 }
-export const ns = ["app", "common", "lang", "settings", "shortcuts"] as const
+export const ns = ["app", "common", "lang", "settings", "shortcuts", "errors"] as const
 export const defaultNS = "app" as const
