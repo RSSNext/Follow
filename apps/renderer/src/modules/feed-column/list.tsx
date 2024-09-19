@@ -144,7 +144,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
               onClick={stopPropagation}
             >
               <i className="i-mgc-add-cute-re text-3xl" />
-              <span className="text-base">Add some feeds</span>
+              <span className="text-base">{t("sidebar.add_more_feeds")}</span>
             </Link>
           </div>
         )}

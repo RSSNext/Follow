@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import { useHotkeys } from "react-hotkeys-hook"
+import { Trans } from "react-i18next"
 import { toast } from "sonner"
 
 import { Kbd } from "~/components/ui/kbd/Kbd"
@@ -43,7 +44,7 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
           action: {
             label: (
               <span className="flex items-center gap-1">
-                Undo
+                <Trans ns="app" i18nKey="words.undo" />
                 <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">
                   Meta+Z
                 </Kbd>
@@ -75,7 +76,13 @@ const UnfollowInfo = ({ title, undo }: { title: string; undo: () => any }) => {
   })
   return (
     <>
-      Feed <i className="mr-px font-semibold">{title}</i> has been unfollowed.
+      <Trans
+        ns="app"
+        i18nKey="notify.unfollow_feed"
+        components={{
+          FeedItem: <i className="mr-px font-semibold">{title}</i>,
+        }}
+      />
     </>
   )
 }

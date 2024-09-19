@@ -1,4 +1,5 @@
 import { createElement, useCallback } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { getFeedById } from "~/store/feed"
@@ -7,6 +8,7 @@ import { FeedClaimModalContent } from "./feed-claim-modal"
 
 export const useFeedClaimModal = ({ feedId }: { feedId?: string }) => {
   const { present } = useModalStack()
+  const { t } = useTranslation("app")
 
   return useCallback(() => {
     if (!feedId) return
@@ -16,7 +18,7 @@ export const useFeedClaimModal = ({ feedId }: { feedId?: string }) => {
     if (!feed) return
 
     present({
-      title: "Feed Claim",
+      title: t("feed_claim_modal.title"),
       content: () => createElement(FeedClaimModalContent, { feedId }),
       modalClassName: "!h-auto !max-h-screen",
     })
