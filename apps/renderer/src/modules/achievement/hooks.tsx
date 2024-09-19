@@ -61,6 +61,13 @@ export const AchievementModalContent: FC = () => {
   const queryClient = useQueryClient()
   const pollingChain = useSingleton(() => new Chain())
   const defaultAchievements = useSingleton(buildDefaultAchievements)
+
+  const _achievementType = apiClient.achievement.$get({
+    query: {
+      type: "all",
+    },
+  })
+  type Achievement = Awaited<typeof _achievementType>["data"]
   const {
     data: achievements,
     isLoading,
@@ -93,7 +100,7 @@ export const AchievementModalContent: FC = () => {
       jotaiStore.set(achievementsDataAtom.current, res.data)
       return res.data
     },
-    initialData: defaultAchievements.current as typeof achievements,
+    initialData: defaultAchievements.current as Achievement,
   })
 
   const { mutateAsync: mintAchievement, isPending: isMinting } = useMutation({
@@ -122,9 +129,11 @@ export const AchievementModalContent: FC = () => {
         by completing achievements.
       </small>
 
-      <ul className="mt-8 flex w-full flex-col gap-2">
+      <ul className="mt-8 flex w-full grow flex-col gap-2">
         {isLoading ? (
-          <LoadingWithIcon icon={<i className="i-mgc-trophy-cute-re" />} size="large" />
+          <div className="center pointer-events-none grow -translate-y-16">
+            <LoadingWithIcon icon={<i className="i-mgc-trophy-cute-re" />} size="large" />
+          </div>
         ) : (
           achievements?.map((achievement) => {
             const copy = achievementActionIdCopyMap[achievement.actionId]
