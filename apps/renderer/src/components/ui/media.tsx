@@ -108,7 +108,7 @@ const MediaImpl: FC<MediaProps> = ({
             onError={errorHandle}
             className={cn(
               !(props.width || props.height) && "size-full",
-              "bg-gray-200 object-cover duration-200 dark:bg-neutral-800",
+              "cursor-card bg-gray-200 object-cover duration-200 dark:bg-neutral-800",
               popper && "cursor-zoom-in",
               mediaLoadState === "loaded" ? "opacity-100" : "opacity-0",
 
@@ -126,7 +126,7 @@ const MediaImpl: FC<MediaProps> = ({
             className={cn(
               "center",
               !(props.width || props.height) && "size-full",
-              "relative bg-stone-100 object-cover",
+              "relative cursor-card bg-stone-100 object-cover",
               mediaContainerClassName,
             )}
             onClick={handleClick}

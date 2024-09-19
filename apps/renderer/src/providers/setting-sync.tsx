@@ -27,6 +27,7 @@ const useUISettingSync = () => {
       fontFamily: fontCss,
     })
     root.style.cssText += `\n--fo-font-family: ${fontCss}`
+    root.style.cssText += `\n--pointer: ${setting.usePointerCursor ? "pointer" : "default"}`
     Object.assign(document.body.style, {
       fontFamily: fontCss,
     })

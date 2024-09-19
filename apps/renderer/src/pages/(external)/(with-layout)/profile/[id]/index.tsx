@@ -73,7 +73,7 @@ export function Component() {
                     {subscriptions.data?.[category].map((subscription) => (
                       <div key={subscription.feedId} className="group relative border-b py-5">
                         <a
-                          className="flex flex-1 cursor-default"
+                          className="flex flex-1 cursor-button"
                           href={`/feed/${subscription.feedId}`}
                           target="_blank"
                         >

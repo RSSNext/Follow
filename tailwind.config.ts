@@ -27,6 +27,16 @@ export default resolveConfig({
         theme: "var(--fo-font-family)",
         default: "SN pro, sans-serif, system-ui",
       },
+      cursor: {
+        button: "var(--cursor-button)",
+        select: "var(--cursor-select)",
+        checkbox: "var(--cursor-checkbox)",
+        link: "var(--cursor-link)",
+        menu: "var(--cursor-menu)",
+        radio: "var(--cursor-radio)",
+        switch: "var(--cursor-switch)",
+        card: "var(--cursor-card)",
+      },
       colors: {
         border: "hsl(var(--border) / <alpha-value>)",
         background: "hsl(var(--background) / <alpha-value>)",

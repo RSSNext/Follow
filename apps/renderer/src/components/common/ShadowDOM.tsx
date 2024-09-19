@@ -103,6 +103,7 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
 
   const uiFont = useUISettingKey("uiFontFamily")
   const reduceMotion = useReduceMotion()
+  const usePointerCursor = useUISettingKey("usePointerCursor")
 
   return (
     <root.div {...rest}>
@@ -111,8 +112,9 @@ export const ShadowDOM: FC<PropsWithChildren<React.HTMLProps<HTMLElement>>> & {
           style={useMemo(
             () => ({
               fontFamily: `${uiFont},"SN Pro", system-ui, sans-serif`,
+              "--pointer": usePointerCursor ? "pointer" : "default",
             }),
-            [uiFont],
+            [uiFont, usePointerCursor],
           )}
           id="shadow-html"
           data-motion-reduce={reduceMotion}

@@ -93,6 +93,10 @@ export const SettingAppearance = () => {
             label: t("appearance.reduce_motion.label"),
             description: t("appearance.reduce_motion.description"),
           }),
+          defineItem("usePointerCursor", {
+            label: t("appearance.use_pointer_cursor.label"),
+            description: t("appearance.use_pointer_cursor.description"),
+          }),
         ]}
       />
     </div>
