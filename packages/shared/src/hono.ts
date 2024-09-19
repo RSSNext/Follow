@@ -3256,7 +3256,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 code: 0;
                 data: ({
                     title: string | null;
-                    id: string;
                     userId: string;
                     view: number;
                     category: string | null;
@@ -3285,12 +3284,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         } | null;
                     };
                     isPrivate: boolean;
+                    targetId: string;
                 } | {
                     title: string | null;
-                    id: string;
                     userId: string;
                     view: number;
                     isPrivate: boolean;
+                    targetId: string;
                     lists: {
                         description: string | null;
                         title: string;
@@ -3499,7 +3499,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    id: string | string[];
+                    id?: string | string[] | undefined;
+                    handle?: string | string[] | undefined;
                 };
             };
             output: {

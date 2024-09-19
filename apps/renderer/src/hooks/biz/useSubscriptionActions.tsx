@@ -16,9 +16,9 @@ import { getRouteParams } from "./useRouteParams"
 export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void }) =>
   useMutation({
     mutationFn: async (subscription: SubscriptionFlatModel) =>
-      subscriptionActions.unfollow(subscription.id).then((feed) => {
+      subscriptionActions.unfollow(subscription.targetId).then((feed) => {
         subscriptionQuery.byView(subscription.view).invalidate()
-        feedUnreadActions.updateByFeedId(subscription.id, 0)
+        feedUnreadActions.updateByFeedId(subscription.targetId, 0)
 
         if (!subscription) return
         if (!feed) return
@@ -58,7 +58,7 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
       onSuccess?.()
     },
     onMutate(variables) {
-      if (getRouteParams().feedId === variables.id) {
+      if (getRouteParams().feedId === variables.targetId) {
         navigateEntry({
           feedId: null,
           entryId: null,

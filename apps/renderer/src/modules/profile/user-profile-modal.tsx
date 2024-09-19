@@ -345,7 +345,7 @@ const SubscriptionGroup: FC<{
               {subscriptions.map((subscription) => (
                 <SubscriptionItem
                   variant={itemStyle}
-                  key={subscription.id}
+                  key={subscription.targetId}
                   subscription={subscription}
                 />
               ))}
@@ -363,7 +363,7 @@ const SubscriptionItem: FC<{
   variant: ItemVariant
 }> = ({ subscription, variant }) => {
   const t = useI18n()
-  const isFollowed = !!useSubscriptionStore((state) => state.data[subscription.id])
+  const isFollowed = !!useSubscriptionStore((state) => state.data[subscription.targetId])
   const { present } = useModalStack()
   const isLoose = variant === "loose"
   const isFeed = "feedId" in subscription
@@ -372,11 +372,13 @@ const SubscriptionItem: FC<{
     <m.div
       exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.2 } }}
       className={cn("group relative", isLoose ? "border-b py-5" : "py-2")}
-      data-feed-id={subscription.id}
+      data-feed-id={subscription.targetId}
     >
       <a
         className="flex flex-1 cursor-default"
-        href={isFeed ? subscription.feeds.siteUrl! : `${env.VITE_WEB_URL}/list/${subscription.id}`}
+        href={
+          isFeed ? subscription.feeds.siteUrl! : `${env.VITE_WEB_URL}/list/${subscription.listId}`
+        }
         target="_blank"
       >
         <FeedIcon

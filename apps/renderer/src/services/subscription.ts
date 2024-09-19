@@ -29,7 +29,7 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
     return this.table.bulkPut(
       data.map(({ feeds, ...d }: any) => ({
         ...d,
-        id: this.uniqueId(d.userId, d.id),
+        id: this.uniqueId(d.userId, d.targetId),
       })),
     )
   }
@@ -37,7 +37,7 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
   override upsert(data: SubscriptionFlatModel) {
     return this.table.put({
       ...data,
-      id: this.uniqueId(data.userId, data.id),
+      id: this.uniqueId(data.userId, data.targetId),
     })
   }
 
