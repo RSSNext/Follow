@@ -64,7 +64,7 @@ export const AchievementModalContent: FC = () => {
 
   const jotaiStore = useStore()
   const queryClient = useQueryClient()
-  const pollingChain = useSingleton(() => new Chain())
+
   const defaultAchievements = useSingleton(buildDefaultAchievements)
 
   const _achievementType = apiClient.achievement.$get({
@@ -89,24 +89,33 @@ export const AchievementModalContent: FC = () => {
         },
       })
 
-      let shouldPolling = false
-      for (const achievement of res.data) {
-        if (achievement.type === "checking") {
-          shouldPolling = true
-          break
-        }
-      }
-
-      if (shouldPolling) {
-        pollingChain.current.wait(2000).next(() => {
-          refetch()
-        })
-      }
       jotaiStore.set(achievementsDataAtom.current, res.data)
       return res.data
     },
     initialData: defaultAchievements.current as Achievement,
   })
+
+  useEffect(() => {
+    if (!achievements) return
+    let shouldPolling = false
+    const pollingChain = new Chain()
+    for (const achievement of achievements) {
+      if (achievement.type === "checking") {
+        shouldPolling = true
+        break
+      }
+    }
+
+    if (shouldPolling) {
+      pollingChain.wait(2000).next(() => {
+        refetch()
+      })
+    }
+
+    return () => {
+      pollingChain.abort()
+    }
+  }, [achievements, refetch])
 
   const { mutateAsync: mintAchievement, isPending: isMinting } = useMutation({
     mutationFn: async (actionId: number) => {
