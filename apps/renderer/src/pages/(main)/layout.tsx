@@ -15,8 +15,8 @@ import { useLoginModalShow, useWhoami } from "~/atoms/user"
 import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { ErrorComponentType } from "~/components/errors/enum"
 import { PanelSplitter } from "~/components/ui/divider"
+import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
-import { NoopChildren } from "~/components/ui/modal/stacked/utils"
 import { RootPortal } from "~/components/ui/portal"
 import { HotKeyScopeMap } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
@@ -113,7 +113,7 @@ export function Component() {
         <RootPortal>
           <DeclarativeModal
             id="login"
-            CustomModalComponent={NoopChildren}
+            CustomModalComponent={PlainModal}
             open
             title="Login"
             canClose={false}

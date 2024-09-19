@@ -1,3 +1,5 @@
+import { sleep } from "./utils"
+
 export class Chain {
   private chain: Promise<void> = Promise.resolve()
 
@@ -5,5 +7,10 @@ export class Chain {
     this.chain = this.chain.then(() => {
       return fn() || Promise.resolve()
     })
+  }
+
+  wait(ms: number): this {
+    this.chain = this.chain.then(() => sleep(ms))
+    return this
   }
 }

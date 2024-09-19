@@ -2,10 +2,9 @@ import { repository } from "@pkg"
 import i18next from "i18next"
 import type { FC } from "react"
 import { Suspense, useDeferredValue, useEffect, useLayoutEffect, useState } from "react"
-import { Trans, useTranslation } from "react-i18next"
+import { Trans } from "react-i18next"
 
-import { MotionButtonBase } from "~/components/ui/button"
-import { useCurrentModal } from "~/components/ui/modal"
+import { ModalClose } from "~/components/ui/modal/stacked/components"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import { SettingsTitle } from "~/modules/settings/title"
 
@@ -43,21 +42,6 @@ export const SettingModalContent: FC<{
   )
 }
 
-const Close = () => {
-  const { dismiss } = useCurrentModal()
-  const { t } = useTranslation("common")
-
-  return (
-    <MotionButtonBase
-      aria-label={t("close")}
-      className="absolute right-6 top-6 z-[99] flex size-8 items-center justify-center rounded-md duration-200 hover:bg-theme-button-hover"
-      onClick={dismiss}
-    >
-      <i className="i-mgc-close-cute-re block" />
-    </MotionButtonBase>
-  )
-}
-
 const Content = () => {
   const key = useDeferredValue(useSettingTab() || "general")
   const { Component, loader } = pages[key]
@@ -75,7 +59,7 @@ const Content = () => {
   return (
     <Suspense>
       <SettingsTitle loader={loader} className="relative mb-0 px-8" />
-      <Close />
+      <ModalClose />
       <ScrollArea.ScrollArea
         mask={false}
         ref={setScroller}
