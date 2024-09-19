@@ -22,12 +22,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
+import { useProxyValue, useSetProxy } from "~/hooks/common/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
 import { initPostHog } from "~/initialize/posthog"
 import { tipcClient } from "~/lib/client"
 import { cn } from "~/lib/utils"
 import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
+import { SettingDescription, SettingInput } from "../control"
+import { SettingItemGroup } from "../section"
 import { SettingsTitle } from "../title"
 
 const { defineSettingItem, SettingBuilder } = createSetting(
@@ -158,6 +161,9 @@ export const SettingGeneral = () => {
               description: t("general.rebuild_database.description"),
               buttonText: t("general.rebuild_database.button"),
             },
+
+            { type: "title", value: t("general.network"), disabled: !window.electron },
+            window.electron && NettingSetting,
           ]}
         />
       </div>
@@ -171,6 +177,9 @@ export const VoiceSelector = () => {
   const { data } = useQuery({
     queryFn: () => tipcClient?.getVoices(),
     queryKey: ["voices"],
+    meta: {
+      persist: true,
+    },
   })
   const voice = useUISettingSelector((state) => state.voice)
 
@@ -242,5 +251,24 @@ export const LanguageSelector = () => {
         </SelectContent>
       </Select>
     </div>
+  )
+}
+
+const NettingSetting = () => {
+  const { t } = useTranslation("settings")
+  const proxyConfig = useProxyValue()
+  const setProxyConfig = useSetProxy()
+
+  return (
+    <SettingItemGroup>
+      <SettingInput
+        type="text"
+        label={t("general.proxy")}
+        labelClassName="w-[150px]"
+        value={proxyConfig}
+        onChange={(event) => setProxyConfig(event.target.value.trim())}
+      />
+      <SettingDescription>{t("general.proxy.description")}</SettingDescription>
+    </SettingItemGroup>
   )
 }

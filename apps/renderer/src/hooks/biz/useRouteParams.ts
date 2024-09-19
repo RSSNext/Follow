@@ -67,7 +67,7 @@ const parseRouteParams = (params: Params<any>, search: URLSearchParams): BizRout
   }
 }
 
-export const useRouteParms = () => {
+export const useRouteParams = () => {
   const params = useParams()
   const [search] = useSearchParams()
 

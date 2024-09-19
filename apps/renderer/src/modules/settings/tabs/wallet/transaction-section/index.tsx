@@ -48,22 +48,22 @@ export const TransactionsSection = () => {
         <Table>
           <TableHeader>
             <TableRow className="[&_*]:!font-semibold">
-              <TableHead className="w-16 text-center" size="sm">
+              <TableHead className="min-w-16 whitespace-nowrap text-center" size="sm">
                 {t("wallet.transactions.type")}
               </TableHead>
-              <TableHead className="text-center" size="sm">
+              <TableHead className="whitespace-nowrap text-center" size="sm">
                 {t("wallet.transactions.amount")}
               </TableHead>
-              <TableHead className="pl-8" size="sm">
+              <TableHead className="whitespace-nowrap pl-8" size="sm">
                 {t("wallet.transactions.from")}
               </TableHead>
-              <TableHead className="pl-8" size="sm">
+              <TableHead className="whitespace-nowrap pl-8" size="sm">
                 {t("wallet.transactions.to")}
               </TableHead>
-              <TableHead className="pl-6" size="sm">
+              <TableHead className="whitespace-nowrap pl-6" size="sm">
                 {t("wallet.transactions.date")}
               </TableHead>
-              <TableHead className="pl-6" size="sm">
+              <TableHead className="whitespace-nowrap pl-6" size="sm">
                 {t("wallet.transactions.tx")}
               </TableHead>
             </TableRow>

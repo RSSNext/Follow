@@ -4,7 +4,7 @@ import { useDebounceCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { views } from "~/constants"
-import { useRouteParamsSelector, useRouteParms } from "~/hooks/biz/useRouteParams"
+import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { entries, useEntries } from "~/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "~/store/entry"
@@ -56,7 +56,7 @@ export const useEntriesByView = ({
   onReset?: () => void
   isArchived?: boolean
 }) => {
-  const routeParams = useRouteParms()
+  const routeParams = useRouteParams()
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
   const { feedId, view, isAllFeeds, isCollection } = routeParams
@@ -132,12 +132,19 @@ export const useEntriesByView = ({
   useEffect(() => {
     if (!isFetchingFirstPage) {
       prevEntryIdsRef.current = entryIds
-      setMergedEntries(entryIds)
+      setMergedEntries({ ...mergedEntries, [view]: entryIds })
       onReset?.()
     }
   }, [isFetchingFirstPage])
 
-  const [mergedEntries, setMergedEntries] = useState<string[]>([])
+  const [mergedEntries, setMergedEntries] = useState<Record<number, string[]>>({
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+  })
 
   const entryIdsAsDeps = entryIds.toString()
 
@@ -147,18 +154,18 @@ export const useEntriesByView = ({
   useEffect(() => {
     if (!prevEntryIdsRef.current) {
       prevEntryIdsRef.current = entryIds
-      setMergedEntries(entryIds)
+      setMergedEntries({ ...mergedEntries, [view]: entryIds })
       return
     }
     // merge the new entries with the old entries, and unique them
     const nextIds = [...new Set([...prevEntryIdsRef.current, ...entryIds])]
     prevEntryIdsRef.current = nextIds
-    setMergedEntries(nextIds)
+    setMergedEntries({ ...mergedEntries, [view]: entryIds })
   }, [entryIdsAsDeps])
 
   const sortEntries = isCollection
-    ? sortEntriesIdByStarAt(mergedEntries)
-    : sortEntriesIdByEntryPublishedAt(mergedEntries)
+    ? sortEntriesIdByStarAt(mergedEntries[view])
+    : sortEntriesIdByEntryPublishedAt(mergedEntries[view])
 
   const groupByDate = useGeneralSettingKey("groupByDate")
   const groupedCounts: number[] | undefined = useMemo(() => {
@@ -199,7 +206,7 @@ export const useEntriesByView = ({
     }, [query]),
     entriesIds: sortEntries,
     groupedCounts,
-    totalCount: query.data?.pages?.[0]?.total ?? mergedEntries.length,
+    totalCount: query.data?.pages?.[0]?.total ?? mergedEntries[view].length,
   }
 }
 
