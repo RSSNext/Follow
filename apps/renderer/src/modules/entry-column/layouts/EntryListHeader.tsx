@@ -13,6 +13,7 @@ import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, views } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useIsOnline } from "~/hooks/common"
+import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { cn, getOS, isBizId } from "~/lib/utils"
 import { useAIDailyReportModal } from "~/modules/ai/ai-daily/hooks"
@@ -85,7 +86,7 @@ export const EntryListHeader: FC<{
 
             "translate-x-[6px]",
           )}
-          onClick={(e) => e.stopPropagation()}
+          onClick={stopPropagation}
         >
           {views[view].wideMode && entryId && entryId !== ROUTE_ENTRY_PENDING && (
             <>
