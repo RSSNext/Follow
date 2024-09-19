@@ -1,4 +1,5 @@
-import React, { cloneElement } from "react"
+import { m, useAnimation } from "framer-motion"
+import React, { cloneElement, useEffect } from "react"
 
 import { cn } from "~/lib/utils"
 
@@ -111,4 +112,29 @@ export const LoadingWithIcon: Component<
       </div>
     )
   }
+}
+
+export const RotatingRefreshIcon: React.FC<{
+  isRefreshing: boolean
+  className?: string
+}> = ({ isRefreshing, className }) => {
+  const controls = useAnimation()
+
+  useEffect(() => {
+    if (isRefreshing) {
+      controls.set({ rotate: 0 })
+      controls.start({
+        rotate: 360,
+        transition: { duration: 1, repeat: Infinity, ease: "linear" },
+      })
+    } else {
+      controls.stop()
+      controls.start({
+        rotate: 360,
+        transition: { ease: "linear", type: "spring" },
+      })
+    }
+  }, [isRefreshing, controls])
+
+  return <m.i className={cn("i-mgc-refresh-2-cute-re", className)} animate={controls} />
 }

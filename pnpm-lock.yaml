@@ -12,6 +12,9 @@ patchedDependencies:
   '@mozilla/readability@0.5.0':
     hash: fgkvsbckled47trggkhdkimzbm
     path: patches/@mozilla__readability@0.5.0.patch
+  electron-context-menu:
+    hash: c53at4t5fflixuwjz35hmcqdu4
+    path: patches/electron-context-menu.patch
   hono:
     hash: iej2g43ojhll5opwbnvyorjq4e
     path: patches/hono.patch
@@ -262,7 +265,7 @@ importers:
         version: 16.4.5
       electron-context-menu:
         specifier: 4.0.4
-        version: 4.0.4
+        version: 4.0.4(patch_hash=c53at4t5fflixuwjz35hmcqdu4)
       electron-log:
         specifier: 5.2.0
         version: 5.2.0
@@ -855,7 +858,7 @@ importers:
         version: 16.4.5
       electron-context-menu:
         specifier: 4.0.4
-        version: 4.0.4
+        version: 4.0.4(patch_hash=c53at4t5fflixuwjz35hmcqdu4)
       electron-log:
         specifier: 5.2.0
         version: 5.2.0
@@ -13993,7 +13996,7 @@ snapshots:
       - dmg-builder
       - supports-color
 
-  electron-context-menu@4.0.4:
+  electron-context-menu@4.0.4(patch_hash=c53at4t5fflixuwjz35hmcqdu4):
     dependencies:
       cli-truncate: 4.0.0
       electron-dl: 4.0.0

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import { bundledThemes } from "shiki/themes"
+import { bundledThemesInfo } from "shiki/themes"
 
 import { createDefineSettingItem } from "~/atoms/settings/helper"
 import {
@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 import { isElectronBuild } from "~/constants"
-import { useSetTheme, useThemeAtomValue } from "~/hooks/common"
+import { useIsDark, useSetTheme, useThemeAtomValue } from "~/hooks/common"
 import { getOS } from "~/lib/utils"
 
 import { SettingTabbedSegment } from "../control"
@@ -101,26 +101,35 @@ export const SettingAppearance = () => {
 
 const ShikiTheme = () => {
   const { t } = useTranslation("settings")
-  const codeHighlightTheme = useUISettingKey("codeHighlightTheme")
+  const isDark = useIsDark()
+  const codeHighlightThemeLight = useUISettingKey("codeHighlightThemeLight")
+  const codeHighlightThemeDark = useUISettingKey("codeHighlightThemeDark")
+
   return (
     <div className="mb-3 flex items-center justify-between">
       <span className="shrink-0 text-sm font-medium">{t("appearance.code_highlight_theme")}</span>
       <Select
-        defaultValue="github-dark"
-        value={codeHighlightTheme}
+        defaultValue={isDark ? "github-dark" : "github-light"}
+        value={isDark ? codeHighlightThemeDark : codeHighlightThemeLight}
         onValueChange={(value) => {
-          setUISetting("codeHighlightTheme", value)
+          if (isDark) {
+            setUISetting("codeHighlightThemeDark", value)
+          } else {
+            setUISetting("codeHighlightThemeLight", value)
+          }
         }}
       >
         <SelectTrigger size="sm" className="w-48">
           <SelectValue />
         </SelectTrigger>
         <SelectContent position="item-aligned">
-          {Object.keys(bundledThemes)?.map((theme) => (
-            <SelectItem key={theme} value={theme}>
-              {theme}
-            </SelectItem>
-          ))}
+          {bundledThemesInfo
+            .filter((theme) => theme.type === (isDark ? "dark" : "light"))
+            .map((theme) => (
+              <SelectItem key={theme.id} value={theme.id}>
+                {theme.displayName}
+              </SelectItem>
+            ))}
         </SelectContent>
       </Select>
     </div>
