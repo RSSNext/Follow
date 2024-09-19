@@ -55,9 +55,14 @@ export const initializeAppStage1 = () => {
   registerMenuAndContextMenu()
 }
 
+let contextMenuDisposer: () => void
 export const registerMenuAndContextMenu = () => {
   registerAppMenu()
-  contextMenu({
+  if (contextMenuDisposer) {
+    contextMenuDisposer()
+  }
+
+  contextMenuDisposer = contextMenu({
     showSaveImageAs: true,
     showCopyLink: true,
     showCopyImageAddress: true,
@@ -75,6 +80,17 @@ export const registerMenuAndContextMenu = () => {
       copyVideoAddress: t("contextMenu.copyVideoAddress"),
       saveVideoAs: t("contextMenu.saveVideoAs"),
       inspect: t("contextMenu.inspect"),
+      copy: t("contextMenu.copy"),
+      cut: t("contextMenu.cut"),
+      paste: t("contextMenu.paste"),
+      saveImage: t("contextMenu.saveImage"),
+      saveVideo: t("contextMenu.saveVideo"),
+      selectAll: t("contextMenu.selectAll"),
+      services: t("contextMenu.services"),
+      searchWithGoogle: t("contextMenu.searchWithGoogle"),
+      learnSpelling: t("contextMenu.learnSpelling"),
+      lookUpSelection: t("contextMenu.lookUpSelection"),
+      saveLinkAs: t("contextMenu.saveLinkAs"),
     },
 
     prepend: (_defaultActions, params) => {

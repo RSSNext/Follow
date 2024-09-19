@@ -16,17 +16,17 @@ const IconMap = Object.values(LinkParsers).reduce(
 
 const shouldAddWhiteBgUrls = ["1x.com"]
 export const PlatformIcon: FC<{
-  url: string
+  url?: string
   children: React.JSX.Element
   className?: string
   style?: React.CSSProperties
 }> = ({ className, url, children, style, ...rest }) => {
-  const iconName = getSupportedPlatformIconName(url)
+  const iconName = url && getSupportedPlatformIconName(url)
 
-  if (!iconName || !IconMap[iconName]) {
+  if (!iconName || !IconMap[iconName] || !url) {
     return (
       <Slot
-        className={`${shouldAddWhiteBgUrls.some((_) => url.includes(_)) ? "bg-white" : ""} ${className}`}
+        className={`${url && shouldAddWhiteBgUrls.some((_) => url.includes(_)) ? "bg-white" : ""} ${className}`}
         style={style}
         {...rest}
       >

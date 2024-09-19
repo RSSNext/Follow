@@ -83,7 +83,7 @@ export const showNativeMenu = async (
     }
   }
 
-  const unlisten = window.electron?.ipcRenderer.on("menu-click", (_, combinedIndex: string) => {
+  const dispose = window.electron?.ipcRenderer.on("menu-click", (_, combinedIndex: string) => {
     const arr = combinedIndex.split("-")
     const accessors = [] as string[]
     for (let i = 0; i < arr.length; i++) {
@@ -101,10 +101,15 @@ export const showNativeMenu = async (
   })
 
   window.electron?.ipcRenderer.once("menu-closed", () => {
-    unlisten?.()
+    dispose?.()
     if (el instanceof HTMLElement) {
       delete el.dataset.contextMenuOpen
     }
+
+    // dispatch mouse move event
+    // NOTE: in order to remove the highlight of the trigger item
+    // e.g. https://vscode.dev/github/RSSNext/follow/blob/dev/apps/renderer/src/modules/entry-column/layouts/EntryItemWrapper.tsx#L80
+    document.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }))
   })
 
   await tipcClient?.showContextMenu({

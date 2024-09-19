@@ -20,7 +20,7 @@ import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
-import { useRouteParamsSelector, useRouteParms } from "~/hooks/biz/useRouteParams"
+import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useTitle, useTypeScriptHappyCallback } from "~/hooks/common"
 import { FeedViewType } from "~/lib/enum"
 import { cn, isBizId } from "~/lib/utils"
@@ -50,6 +50,7 @@ function EntryColumnImpl() {
       virtuosoRef.current?.scrollTo({
         top: 0,
       })
+      setIsArchived(false)
     }, []),
     isArchived,
   })
@@ -61,7 +62,7 @@ function EntryColumnImpl() {
     feedId: routeFeedId,
     isPendingEntry,
     isCollection,
-  } = useRouteParms()
+  } = useRouteParams()
   const activeEntry = useEntry(activeEntryId)
   const feedTitle = useFeedByIdSelector(routeFeedId, (feed) => feed?.title)
   useTitle(feedTitle)

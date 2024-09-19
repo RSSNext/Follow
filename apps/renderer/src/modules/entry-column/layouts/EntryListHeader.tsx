@@ -8,11 +8,13 @@ import { useWhoami } from "~/atoms/user"
 import { ImpressionView } from "~/components/common/ImpressionTracker"
 import { ActionButton } from "~/components/ui/button"
 import { DividerVertical } from "~/components/ui/divider"
+import { RotatingRefreshIcon } from "~/components/ui/loading"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, views } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
-import { useRouteParms } from "~/hooks/biz/useRouteParams"
+import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useIsOnline } from "~/hooks/common"
+import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { cn, getOS, isBizId } from "~/lib/utils"
 import { useAIDailyReportModal } from "~/modules/ai/ai-daily/hooks"
@@ -28,7 +30,7 @@ export const EntryListHeader: FC<{
   isRefreshing: boolean
   hasUpdate: boolean
 }> = ({ totalCount, refetch, isRefreshing, hasUpdate }) => {
-  const routerParams = useRouteParms()
+  const routerParams = useRouteParams()
   const { t } = useTranslation()
 
   const unreadOnly = useGeneralSettingKey("unreadOnly")
@@ -85,7 +87,7 @@ export const EntryListHeader: FC<{
 
             "translate-x-[6px]",
           )}
-          onClick={(e) => e.stopPropagation()}
+          onClick={stopPropagation}
         >
           {views[view].wideMode && entryId && entryId !== ROUTE_ENTRY_PENDING && (
             <>
@@ -108,7 +110,7 @@ export const EntryListHeader: FC<{
                   refreshFeed()
                 }}
               >
-                <i className={cn("i-mgc-refresh-2-cute-re", isPending && "animate-spin")} />
+                <RotatingRefreshIcon isRefreshing={isPending} />
               </ActionButton>
             ) : (
               <ActionButton
@@ -121,12 +123,9 @@ export const EntryListHeader: FC<{
                   refetch()
                 }}
               >
-                <i
-                  className={cn(
-                    "i-mgc-refresh-2-cute-re",
-                    isRefreshing && "animate-spin",
-                    hasUpdate && "text-accent",
-                  )}
+                <RotatingRefreshIcon
+                  className={cn(hasUpdate && "text-accent")}
+                  isRefreshing={isRefreshing}
                 />
               </ActionButton>
             )

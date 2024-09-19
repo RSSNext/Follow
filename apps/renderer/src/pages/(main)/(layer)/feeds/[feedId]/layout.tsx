@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom"
 import { getUISettings, setUISetting } from "~/atoms/settings/ui"
 import { PanelSplitter } from "~/components/ui/divider"
 import { views } from "~/constants"
-import { useRouteParms } from "~/hooks/biz/useRouteParams"
+import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { cn, isSafari } from "~/lib/utils"
 import { EntryColumn } from "~/modules/entry-column"
 
@@ -15,7 +15,7 @@ export function Component() {
   // Memo this initial value to avoid re-render
 
   const entryColWidth = useMemo(() => getUISettings().entryColWidth, [])
-  const { view } = useRouteParms()
+  const { view } = useRouteParams()
   const inWideMode = view ? views[view].wideMode : false
   const { position, separatorProps, isDragging, separatorCursor } = useResizable({
     axis: "x",
