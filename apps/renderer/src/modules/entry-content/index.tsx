@@ -29,7 +29,7 @@ import { UserAvatar } from "~/components/user-button"
 import { isWebBuild, ROUTE_FEED_PENDING } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
-import { useRouteParamsSelector, useRouteParms } from "~/hooks/biz/useRouteParams"
+import { useRouteParams,useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery, useTitle } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
@@ -65,7 +65,7 @@ const safeUrl = (url: string, baseUrl: string) => {
 
 export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   const title = useFeedHeaderTitle()
-  const { feedId, view } = useRouteParms()
+  const { feedId, view } = useRouteParams()
 
   useTitle(title)
   if (!entryId) {

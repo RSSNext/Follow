@@ -11,7 +11,7 @@ import { DividerVertical } from "~/components/ui/divider"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, views } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
-import { useRouteParms } from "~/hooks/biz/useRouteParams"
+import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useIsOnline } from "~/hooks/common"
 import { FeedViewType } from "~/lib/enum"
 import { cn, getOS, isBizId } from "~/lib/utils"
@@ -28,7 +28,7 @@ export const EntryListHeader: FC<{
   isRefreshing: boolean
   hasUpdate: boolean
 }> = ({ totalCount, refetch, isRefreshing, hasUpdate }) => {
-  const routerParams = useRouteParms()
+  const routerParams = useRouteParams()
   const { t } = useTranslation()
 
   const unreadOnly = useGeneralSettingKey("unreadOnly")
