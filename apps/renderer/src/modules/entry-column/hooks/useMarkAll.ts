@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 
-import { useRouteParms } from "~/hooks/biz/useRouteParams"
+import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { subscriptionActions } from "~/store/subscription"
 import { useFolderFeedsByFeedId } from "~/store/subscription/hooks"
 
@@ -9,7 +9,7 @@ export interface MarkAllFilter {
   endTime: number
 }
 export const useMarkAllByRoute = (filter?: MarkAllFilter) => {
-  const routerParams = useRouteParms()
+  const routerParams = useRouteParams()
   const { feedId, view } = routerParams
   const folderIds = useFolderFeedsByFeedId({
     feedId,

@@ -4,7 +4,7 @@ import { useDebounceCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { views } from "~/constants"
-import { useRouteParamsSelector, useRouteParms } from "~/hooks/biz/useRouteParams"
+import { useRouteParams,useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { entries, useEntries } from "~/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "~/store/entry"
@@ -56,7 +56,7 @@ export const useEntriesByView = ({
   onReset?: () => void
   isArchived?: boolean
 }) => {
-  const routeParams = useRouteParms()
+  const routeParams = useRouteParams()
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
   const { feedId, view, isAllFeeds, isCollection } = routeParams

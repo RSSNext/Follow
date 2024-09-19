@@ -214,6 +214,7 @@ export const appRoute = {
   switchAppLocale: t.procedure.input<string>().action(async ({ input }) => {
     i18n.changeLanguage(input)
     registerMenuAndContextMenu()
+
     app.commandLine.appendSwitch("lang", input)
   }),
 }

@@ -1,4 +1,4 @@
-import en from "@locales/native/en-US.json"
+import en from "@locales/native/en.json"
 import ja from "@locales/native/ja.json"
 import zh from "@locales/native/zh-CN.json"
 
