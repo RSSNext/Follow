@@ -2,7 +2,7 @@ import { repository } from "@pkg"
 import i18next from "i18next"
 import type { FC } from "react"
 import { Suspense, useDeferredValue, useEffect, useLayoutEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 
 import { MotionButtonBase } from "~/components/ui/button"
 import { useCurrentModal } from "~/components/ui/modal"
@@ -86,11 +86,14 @@ const Content = () => {
 
         <div className="h-12" />
         <p className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 text-xs opacity-80">
-          <i className="i-mgc-heart-cute-fi" /> Love our product?{" "}
-          <a href={`${repository.url}`} className="text-accent" target="_blank">
-            Give us a star on GitHub
-          </a>
-          !
+          <Trans
+            ns="settings"
+            i18nKey="common.give_star"
+            components={{
+              Link: <a href={`${repository.url}`} className="text-accent" target="_blank" />,
+              HeartIcon: <i className="i-mgc-heart-cute-fi" />,
+            }}
+          />
         </p>
       </ScrollArea.ScrollArea>
     </Suspense>
