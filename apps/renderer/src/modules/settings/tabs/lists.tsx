@@ -1,11 +1,13 @@
 import { WEB_URL } from "@follow/shared/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
+import { FeedCertification } from "~/components/feed-certification"
 import { Avatar, AvatarImage } from "~/components/ui/avatar"
 import { Button } from "~/components/ui/button"
 import { Card, CardHeader } from "~/components/ui/card"
@@ -37,7 +39,7 @@ import { apiClient } from "~/lib/api-fetch"
 import { cn } from "~/lib/utils"
 import type { ListModel } from "~/models"
 import { Queries } from "~/queries"
-import { useFeedById } from "~/store/feed"
+import { feedActions, useFeedById } from "~/store/feed"
 
 export const SettingLists = () => {
   const { t: appT } = useTranslation()
@@ -75,8 +77,11 @@ export const SettingLists = () => {
                   <TableHead className="w-28 text-center" size="sm">
                     {t("lists.view")}
                   </TableHead>
-                  <TableHead className="w-48 text-center" size="sm">
+                  <TableHead className="w-20 text-center" size="sm">
                     {t("lists.fee")}
+                  </TableHead>
+                  <TableHead className="w-20 text-center" size="sm">
+                    {t("lists.feeds")}
                   </TableHead>
                   <TableHead className="w-20 text-center" size="sm">
                     {t("lists.edit")}
@@ -113,6 +118,19 @@ export const SettingLists = () => {
                         {row.fee}
                         <i className="i-mgc-power shrink-0 text-lg text-accent" />
                       </div>
+                    </TableCell>
+                    <TableCell align="center" size="sm">
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          present({
+                            title: t("lists.feeds.manage"),
+                            content: () => <ListFeedsModalContent id={row.id} />,
+                          })
+                        }}
+                      >
+                        <i className="i-mgc-inbox-cute-re" />
+                      </Button>
                     </TableCell>
                     <TableCell align="center" size="sm">
                       <Button
@@ -325,5 +343,113 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
         </Button>
       </form>
     </Form>
+  )
+}
+
+export const ListFeedsModalContent = ({ id }: { id: string }) => {
+  const list = useFeedById(id) as ListModel
+  const { t } = useTranslation("settings")
+
+  const [addValue, setAddValue] = useState("")
+  const addMutation = useMutation({
+    mutationFn: async (values: string) => {
+      const feed = await apiClient.lists.feeds.$post({
+        json: {
+          listId: id,
+          feedId: values,
+        },
+      })
+      feedActions.upsertMany([feed.data])
+    },
+    onSuccess: () => {
+      toast.success(t("lists.feeds.add.success"))
+      Queries.lists.list().invalidate()
+    },
+    async onError() {
+      toast.error(t("lists.feeds.add.error"))
+    },
+  })
+
+  const removeMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiClient.lists.feeds.$delete({
+        json: {
+          listId: id,
+          feedId: id,
+        },
+      })
+    },
+    onSuccess: () => {
+      toast.success(t("lists.feeds.delete.success"))
+      Queries.lists.list().invalidate()
+    },
+    async onError() {
+      toast.error(t("lists.feeds.delete.error"))
+    },
+  })
+
+  return (
+    <div>
+      <div className="flex items-center gap-2">
+        <Input
+          placeholder={t("lists.feeds.id")}
+          value={addValue}
+          onChange={(e) => setAddValue(e.target.value)}
+        />
+        <Button onClick={() => addMutation.mutate(addValue)}>{t("lists.feeds.add")}</Button>
+      </div>
+      <Divider className="mt-8" />
+      <ScrollArea.ScrollArea viewportClassName="max-h-[380px]">
+        <Table className="mt-4">
+          <TableHeader className="border-b">
+            <TableRow className="[&_*]:!font-semibold">
+              <TableHead className="w-20 text-center" size="sm">
+                {t("lists.feeds.id")}
+              </TableHead>
+              <TableHead className="text-center" size="sm">
+                {t("lists.feeds.title")}
+              </TableHead>
+              <TableHead className="w-20 text-center" size="sm">
+                {t("lists.feeds.owner")}
+              </TableHead>
+              <TableHead className="w-20 text-center" size="sm">
+                {t("lists.feeds.remove")}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody className="border-t-[12px] border-transparent">
+            {list.feeds?.map((row) => (
+              <TableRow key={row.title} className="h-8">
+                <TableCell align="center" size="sm">
+                  {row.id}
+                </TableCell>
+                <TableCell align="center" size="sm">
+                  <a
+                    target="_blank"
+                    href={`${WEB_URL}/list/${row.id}`}
+                    className="flex items-center justify-center gap-2 font-semibold"
+                  >
+                    {row.image && (
+                      <Avatar className="size-6">
+                        <AvatarImage src={row.image} />
+                      </Avatar>
+                    )}
+                    <span className="inline-block max-w-[200px] truncate">{row.title}</span>
+                  </a>
+                </TableCell>
+                <TableCell align="center" size="sm">
+                  <FeedCertification className="ml-0" feed={row} />
+                </TableCell>
+                <TableCell align="center" size="sm">
+                  <Button variant="ghost" onClick={() => removeMutation.mutate(row.id)}>
+                    <i className="i-mgc-delete-2-cute-re" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </ScrollArea.ScrollArea>
+    </div>
   )
 }

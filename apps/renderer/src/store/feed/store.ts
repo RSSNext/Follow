@@ -59,6 +59,9 @@ class FeedActions {
             const nonce = feed["nonce"] || nanoid(8)
             state.feeds[nonce] = { ...feed, id: nonce }
           }
+          if ("feeds" in feed && feed.feeds) {
+            this.upsertMany(feed.feeds)
+          }
         }
       }),
     )

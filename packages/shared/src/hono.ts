@@ -3110,6 +3110,62 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+    "/lists/feeds": {
+        $post: {
+            input: {
+                json: {
+                    feedId: string;
+                    listId: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    type: "feed";
+                    id: string;
+                    url: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    siteUrl?: string | null | undefined;
+                    errorMessage?: string | null | undefined;
+                    errorAt?: string | null | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
+                    tipUsers?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    }[] | null | undefined;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $delete: {
+            input: {
+                json: {
+                    feedId: string;
+                    listId: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
 } & {
     "/wallets/transactions/tip": {
         $post: {
