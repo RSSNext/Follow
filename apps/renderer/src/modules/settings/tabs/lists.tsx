@@ -371,11 +371,11 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
   })
 
   const removeMutation = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (feedId: string) => {
       await apiClient.lists.feeds.$delete({
         json: {
           listId: id,
-          feedId: id,
+          feedId,
         },
       })
     },
