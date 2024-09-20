@@ -86,6 +86,9 @@ export default ({ mode }) => {
     },
     server: {
       port: 2233,
+      watch: {
+        ignored: ["**/dist/**", "**/out/**", "**/public/**", ".git/**"],
+      },
     },
     plugins: [
       ...((viteRenderBaseConfig.plugins ?? []) as any),
