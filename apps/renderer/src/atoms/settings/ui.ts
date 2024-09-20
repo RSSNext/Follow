@@ -25,7 +25,8 @@ export const createDefaultSettings = (): UISettings => ({
   readerFontFamily: "inherit",
   // Content
   readerRenderInlineStyle: false,
-  codeHighlightTheme: "github-dark",
+  codeHighlightThemeLight: "github-light",
+  codeHighlightThemeDark: "github-dark",
   guessCodeLanguage: true,
 
   // View

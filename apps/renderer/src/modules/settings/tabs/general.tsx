@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
-import {  useProxyValue, useSetProxy } from "~/hooks/common/useProxySetting"
+import { useProxyValue, useSetProxy } from "~/hooks/common/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
 import { initPostHog } from "~/initialize/posthog"
 import { tipcClient } from "~/lib/client"
@@ -85,7 +85,7 @@ export const SettingGeneral = () => {
               description: t("general.group_by_date.description"),
             }),
 
-            { type: "title", value: "unread" },
+            { type: "title", value: t("general.unread") },
 
             defineSettingItem("scrollMarkUnread", {
               label: t("general.mark_as_read.scroll.label"),
@@ -177,6 +177,9 @@ export const VoiceSelector = () => {
   const { data } = useQuery({
     queryFn: () => tipcClient?.getVoices(),
     queryKey: ["voices"],
+    meta: {
+      persist: true,
+    },
   })
   const voice = useUISettingSelector((state) => state.voice)
 

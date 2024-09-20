@@ -112,7 +112,9 @@ export const MyWalletSection = () => {
                   {t("wallet.balance.withdrawable")} <i className="i-mingcute-question-line" />
                 </span>
 
-                <Balance>{myWallet.cashablePowerToken}</Balance>
+                <Balance className="center text-[12px] font-medium">
+                  {myWallet.cashablePowerToken}
+                </Balance>
               </div>
             </TooltipTrigger>
             <TooltipPortal>
