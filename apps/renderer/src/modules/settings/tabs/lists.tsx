@@ -35,7 +35,9 @@ import { views } from "~/constants"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { cn } from "~/lib/utils"
+import type { ListModel } from "~/models"
 import { Queries } from "~/queries"
+import { useFeedById } from "~/store/feed"
 
 export const SettingLists = () => {
   const { t: appT } = useTranslation()
@@ -47,7 +49,7 @@ export const SettingLists = () => {
   return (
     <section className="mt-4">
       <div className="mb-4 space-y-2 text-sm">
-        <p>{t("lists.description")}</p>
+        <p>{t("lists.info")}</p>
       </div>
       <Button
         onClick={() => {
@@ -75,6 +77,9 @@ export const SettingLists = () => {
                   </TableHead>
                   <TableHead className="w-48 text-center" size="sm">
                     {t("lists.fee")}
+                  </TableHead>
+                  <TableHead className="w-20 text-center" size="sm">
+                    {t("lists.edit")}
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -109,6 +114,21 @@ export const SettingLists = () => {
                         <i className="i-mgc-power shrink-0 text-lg text-accent" />
                       </div>
                     </TableCell>
+                    <TableCell align="center" size="sm">
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          present({
+                            title: t("lists.edit"),
+                            content: ({ dismiss }) => (
+                              <ListCreationModalContent dismiss={dismiss} id={row.id} />
+                            ),
+                          })
+                        }}
+                      >
+                        <i className="i-mgc-edit-cute-re" />
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -129,37 +149,54 @@ export const SettingLists = () => {
 const formSchema = z.object({
   view: z.string(),
   title: z.string(),
+  description: z.string().optional(),
   image: z.string().optional(),
   fee: z.number().min(0),
 })
 
-const ListCreationModalContent = ({ dismiss }: { dismiss: () => void }) => {
+const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: string }) => {
   const { t: appT } = useTranslation()
   const { t } = useTranslation("settings")
+
+  const list = useFeedById(id) as ListModel
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      view: views[0].view.toString(),
-      fee: 0,
+      view: list?.view.toString() || views[0].view.toString(),
+      fee: list?.fee || 0,
+      title: list?.title || "",
+      description: list?.description || "",
+      image: list?.image || "",
     },
   })
 
   const createMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      await apiClient.lists.$post({
-        json: {
-          ...values,
-          view: Number.parseInt(values.view),
-        },
-      })
+      if (id) {
+        await apiClient.lists.$patch({
+          json: {
+            listId: id,
+            ...values,
+            view: Number.parseInt(values.view),
+          },
+        })
+      } else {
+        await apiClient.lists.$post({
+          json: {
+            ...values,
+            view: Number.parseInt(values.view),
+          },
+        })
+      }
     },
     onSuccess: () => {
-      toast.success(t("lists.created.success"))
+      toast.success(t(id ? "lists.edit.success" : "lists.created.success"))
+      Queries.lists.list().invalidate()
       dismiss()
     },
     async onError() {
-      toast.error(t("lists.created.error"))
+      toast.error(t(id ? "lists.edit.error" : "lists.created.error"))
     },
   })
 
@@ -180,6 +217,21 @@ const ListCreationModalContent = ({ dismiss }: { dismiss: () => void }) => {
                   {t("lists.title")}
                   <sup className="ml-1 align-sub text-red-500">*</sup>
                 </FormLabel>
+              </div>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <div>
+                <FormLabel>{t("lists.description")}</FormLabel>
               </div>
               <FormControl>
                 <Input {...field} />
@@ -255,7 +307,7 @@ const ListCreationModalContent = ({ dismiss }: { dismiss: () => void }) => {
                 <FormDescription>{t("lists.fee.description")}</FormDescription>
               </div>
               <FormControl>
-                <div className="flex w-40 items-center">
+                <div className="flex items-center">
                   <Input
                     {...field}
                     type="number"

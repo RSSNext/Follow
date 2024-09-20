@@ -124,6 +124,13 @@ class FeedActions {
       feed: !finalData.id ? { ...finalData, id: nonce } : finalData,
     }
   }
+
+  async fetchOwnedLists() {
+    const res = await apiClient.lists.list.$get()
+    this.upsertMany(res.data)
+
+    return res.data
+  }
 }
 export const feedActions = new FeedActions()
 

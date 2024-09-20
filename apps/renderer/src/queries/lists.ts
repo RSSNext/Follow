@@ -1,16 +1,9 @@
-import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
+import { feedActions } from "~/store/feed"
 
 export const lists = {
   list: () =>
-    defineQuery(
-      ["lists"],
-      async () => {
-        const res = await apiClient.lists.list.$get()
-        return res.data
-      },
-      {
-        rootKey: ["lists"],
-      },
-    ),
+    defineQuery(["lists"], async () => feedActions.fetchOwnedLists(), {
+      rootKey: ["lists"],
+    }),
 }
