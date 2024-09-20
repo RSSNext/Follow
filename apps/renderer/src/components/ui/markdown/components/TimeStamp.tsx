@@ -18,7 +18,7 @@ export const TimeStamp = (props: { time: string }) => {
 
   return (
     <span
-      className="inline-flex cursor-pointer items-center tabular-nums text-accent dark:text-theme-accent-500"
+      className="cursor-pointer tabular-nums text-accent dark:text-theme-accent-500"
       onClick={() => {
         AudioPlayer.mount({
           type: "audio",
@@ -29,10 +29,9 @@ export const TimeStamp = (props: { time: string }) => {
         nextFrame(() => AudioPlayer.seek(seekTo))
       }}
     >
-      {/* <i className="i-mgc-time-cute-re mr-1 translate-y-0.5" /> */}
       {!!mediaDuration && (
         <CircleProgress
-          className="mr-1 scale-95"
+          className="mr-1 inline translate-y-px scale-95 align-text-top"
           percent={(seekTo / mediaDuration) * 100}
           size={16}
           strokeWidth={2}
