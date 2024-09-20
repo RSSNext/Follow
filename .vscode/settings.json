@@ -55,7 +55,7 @@
       "severity": "off"
     }
   ],
-  "cSpell.words": ["rsshub"],
+  "cSpell.words": ["rsshub", "Русский"],
   "editor.foldingImportsByDefault": true,
   "commentTranslate.hover.enabled": false,
   "typescript.tsdk": "node_modules/typescript/lib",

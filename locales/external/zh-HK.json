@@ -1,0 +1,43 @@
+{
+  "copied_link": "鏈接已複製到剪貼簿",
+  "feed": {
+    "follower_one": "追隨者",
+    "follower_other": "追隨者",
+    "followsAndReads": "{{subscriptionCount}} 個 {{subscriptionNoun}} 和 {{readCount}} 個 {{readNoun}} 在 {{appName}}",
+    "read_one": "閱讀",
+    "read_other": "閱讀數"
+  },
+  "header": {
+    "app": "應用程式",
+    "download": "下載"
+  },
+  "invitation": {
+    "activate": "激活",
+    "codeOptions": {
+      "1": "尋找任何內測測試用戶邀請你。",
+      "2": "加入我們的 Discord 伺服器，不定期贈送邀請碼。",
+      "3": "關注我們的 X 帳戶，不定期贈送邀請碼。"
+    },
+    "earlyAccess": "Follow 目前處於早期訪問階段，使用需要邀請碼。",
+    "earlyAccessMessage": "😰 抱歉，Follow 目前處於早期訪問階段，使用需要邀請碼。",
+    "generateButton": "生成新邀請碼",
+    "generateCost": "你可以花費 {{INVITATION_PRICE}} Power 為你的朋友生成邀請碼。",
+    "getCodeMessage": "你可以通過以下方式獲取邀請碼：",
+    "title": "邀請碼"
+  },
+  "login": {
+    "backToWebApp": "返回網頁應用程式",
+    "continueWithGitHub": "繼續使用 GitHub",
+    "continueWithGoogle": "繼續使用 Google",
+    "logInTo": "登錄到",
+    "openApp": "打開應用程式",
+    "redirecting": "重定向中",
+    "welcomeTo": "歡迎來到"
+  },
+  "redirect": {
+    "continueInBrowser": "在瀏覽器中繼續",
+    "instruction": "現在是時候打開 {{APP_NAME}} 並安全地關閉此頁面。",
+    "openApp": "打開 {{APP_NAME}}",
+    "successMessage": "你已成功連接到 {{APP_NAME}} 帳戶。"
+  }
+}
