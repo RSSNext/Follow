@@ -17,8 +17,9 @@ export const useAb = (feature: FeatureKeys) => {
   return isEnabled
 }
 
-export const getAbValue = (feature: FeatureKeys) => {
-  const enabled = PostHog.getFeatureFlag(feature)
+export const isAbEnabled = (feature: FeatureKeys) => {
+  const featureFlag = PostHog.getFeatureFlag(feature)
+  const enabled = typeof featureFlag === "boolean" ? featureFlag : featureFlag === "enabled"
   const debugOverride = jotaiStore.get(debugFeaturesAtom)
 
   const isEnableOverride = jotaiStore.get(enableDebugOverrideAtom)
@@ -28,4 +29,8 @@ export const getAbValue = (feature: FeatureKeys) => {
   }
 
   return enabled
+}
+
+export const getAbValue = (feature: FeatureKeys) => {
+  return PostHog.getFeatureFlagPayload(feature)
 }
