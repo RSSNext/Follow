@@ -49,9 +49,10 @@ export const useInputComposition = <E = HTMLInputElement>(
       onKeyDown?.(e)
 
       if (e.key === "Escape") {
-        e.currentTarget.blur()
         e.preventDefault()
         e.stopPropagation()
+
+        e.currentTarget.blur()
       }
     },
     [onKeyDown],
