@@ -3,13 +3,13 @@ on:
   push:
     branches: [main, dev]
 
-name: CI Typecheck and Lint
+name: CI Format, Typecheck and Lint
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   build:
-    name: Lint and Typecheck
+    name: Format, Lint and Typecheck
     runs-on: ubuntu-latest
 
     strategy:
@@ -33,10 +33,10 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-      - name: Lint and Typecheck
-
+      - name: Format, Lint and Typecheck
         run: |
+          pnpm run format:check
           pnpm run typecheck
-          npm run lint
+          pnpm run lint
       - name: Run test
         run: pnpm test
