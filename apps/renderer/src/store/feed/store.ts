@@ -4,7 +4,7 @@ import { nanoid } from "nanoid"
 import { whoami } from "~/atoms/user"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type { FeedModel, UserModel } from "~/models"
+import type { TargetModel, UserModel } from "~/models"
 import { FeedService } from "~/services"
 
 import { getSubscriptionByFeedId } from "../subscription"
@@ -23,7 +23,7 @@ class FeedActions {
     set({ feeds: {} })
   }
 
-  upsertMany(feeds: FeedModel[]) {
+  upsertMany(feeds: TargetModel[]) {
     runTransactionInScope(() => {
       FeedService.upsertMany(feeds)
     })
@@ -60,7 +60,7 @@ class FeedActions {
     )
   }
 
-  private patch(feedId: string, patch: Partial<FeedModel>) {
+  private patch(feedId: string, patch: Partial<TargetModel>) {
     set((state) =>
       produce(state, (state) => {
         const feed = state.feeds[feedId]
@@ -123,10 +123,10 @@ class FeedActions {
 }
 export const feedActions = new FeedActions()
 
-export const getFeedById = (feedId: string): Nullable<FeedModel> =>
+export const getFeedById = (feedId: string): Nullable<TargetModel> =>
   useFeedStore.getState().feeds[feedId]
 
-export const getPreferredTitle = (feed?: FeedModel | null) => {
+export const getPreferredTitle = (feed?: TargetModel | null) => {
   if (!feed?.id) {
     return feed?.title
   }

@@ -140,8 +140,7 @@ export function Component() {
                     <Item
                       entryPreview={{
                         entries: entry,
-                        // @ts-expect-error
-                        feeds: feed.data.feed as FeedModel,
+                        feeds: feed.data.feed,
                         read: true,
                         feedId: feed.data.feed.id!,
                       }}

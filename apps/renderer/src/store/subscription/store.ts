@@ -99,7 +99,7 @@ class SubscriptionActions {
 
     const transformedData = morphResponseData(res.data)
     this.upsertMany(transformedData)
-    feedActions.upsertMany(res.data.map((s) => s.feeds))
+    feedActions.upsertMany(res.data.map((s) => ("feeds" in s ? s.feeds : s.lists)))
 
     return res.data
   }

@@ -4,13 +4,13 @@ import { useShallow } from "zustand/react/shallow"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING, views } from "~/constants"
 import { useRouteParms } from "~/hooks/biz/useRouteParams"
-import type { FeedModel } from "~/models"
+import type { TargetModel } from "~/models"
 
 import { getSubscriptionByFeedId } from "../subscription"
 import { useFeedStore } from "./store"
 import type { FeedQueryParams } from "./types"
 
-export const useFeedById = (feedId: Nullable<string>): FeedModel | null =>
+export const useFeedById = (feedId: Nullable<string>): TargetModel | null =>
   useFeedStore((state) => (feedId ? state.feeds[feedId] : null))
 
 export const useFeedByIdOrUrl = (feed: FeedQueryParams) =>
@@ -26,7 +26,7 @@ export const useFeedByIdOrUrl = (feed: FeedQueryParams) =>
 
 export const useFeedByIdSelector = <T>(
   feedId: Nullable<string>,
-  selector: (feed: FeedModel) => T,
+  selector: (feed: TargetModel) => T,
 ) =>
   useFeedStore(
     useShallow((state) => (feedId && state.feeds[feedId] ? selector(state.feeds[feedId]) : null)),

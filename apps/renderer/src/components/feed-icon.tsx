@@ -5,7 +5,7 @@ import { forwardRef, useMemo } from "react"
 import { getColorScheme, stringToHue } from "~/lib/color"
 import { getImageProxyUrl } from "~/lib/img-proxy"
 import { cn, getUrlIcon } from "~/lib/utils"
-import type { CombinedEntryModel, FeedModel } from "~/models"
+import type { CombinedEntryModel, FeedModel,TargetModel } from "~/models"
 
 import { PlatformIcon } from "./ui/platform-icon"
 
@@ -75,7 +75,7 @@ export function FeedIcon({
   siteUrl,
   useMedia,
 }: {
-  feed?: FeedModel
+  feed?: TargetModel
   entry?: CombinedEntryModel["entries"]
   fallbackUrl?: string
   className?: string
@@ -98,8 +98,8 @@ export function FeedIcon({
   }
 
   const colors = useMemo(
-    () => getColorScheme(stringToHue(feed?.title || feed?.url || siteUrl!), true),
-    [feed?.title, feed?.url, siteUrl],
+    () => getColorScheme(stringToHue(feed?.title || (feed as FeedModel)?.url || siteUrl!), true),
+    [feed?.title, (feed as FeedModel)?.url, siteUrl],
   )
   let ImageElement: ReactNode
   let finalSrc = ""
@@ -137,9 +137,9 @@ export function FeedIcon({
       break
     }
     case !!fallbackUrl:
-    case !!feed?.siteUrl: {
+    case !!(feed as FeedModel)?.siteUrl: {
       const [src, fallbackSrc] = getFeedIconSrc({
-        siteUrl: feed?.siteUrl || fallbackUrl,
+        siteUrl: (feed as FeedModel)?.siteUrl || fallbackUrl,
         fallback,
         proxy: {
           width: size * 2,
@@ -150,7 +150,7 @@ export function FeedIcon({
 
       ImageElement = (
         <PlatformIcon
-          url={feed?.siteUrl!}
+          url={(feed as FeedModel)?.siteUrl!}
           style={sizeStyle}
           className={cn("center mr-2", className)}
         >

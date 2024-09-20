@@ -1,15 +1,15 @@
-import type { FeedModel } from "~/models"
+import type { TargetModel } from "~/models"
 
 type FeedId = string
 
 export interface FeedState {
-  feeds: Record<FeedId, FeedModel>
+  feeds: Record<FeedId, TargetModel>
 }
 
 export interface FeedActions {
-  upsertMany: (feeds: FeedModel[]) => void
+  upsertMany: (feeds: TargetModel[]) => void
   clear: () => void
-  patch: (feedId: FeedId, patch: Partial<FeedModel>) => void
+  patch: (feedId: FeedId, patch: Partial<TargetModel>) => void
 }
 
 export type FeedQueryParams = { id?: string; url?: string }

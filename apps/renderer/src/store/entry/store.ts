@@ -5,7 +5,7 @@ import { isNil, merge, omit } from "lodash-es"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { getEntriesParams, omitObjectUndefinedValue } from "~/lib/utils"
-import type { CombinedEntryModel, EntryModel, FeedModel, UserModel } from "~/models"
+import type { CombinedEntryModel, EntryModel, TargetModel, UserModel } from "~/models"
 import { EntryService } from "~/services"
 
 import { feedActions } from "../feed"
@@ -183,7 +183,7 @@ class EntryActions {
   }
 
   upsertMany(data: CombinedEntryModel[]) {
-    const feeds = [] as FeedModel[]
+    const feeds = [] as TargetModel[]
     const entries = [] as EntryModel[]
     const entry2Read = {} as Record<string, boolean>
     const entryFeedMap = {} as Record<string, string>

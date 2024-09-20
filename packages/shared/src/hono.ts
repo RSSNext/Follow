@@ -1226,49 +1226,6 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     errorAt: string | null;
     ownerUserId: string | null;
 }>;
-declare const feedsInputSchema: zod.ZodObject<{
-    description: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    title: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    id: zod.ZodOptional<zod.ZodString>;
-    image: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    url: zod.ZodString;
-    siteUrl: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    checkedAt: zod.ZodString;
-    lastModifiedHeader: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    etagHeader: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    ttl: zod.ZodOptional<zod.ZodNullable<zod.ZodNumber>>;
-    errorMessage: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    errorAt: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    ownerUserId: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-}, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    url: string;
-    checkedAt: string;
-    description?: string | null | undefined;
-    title?: string | null | undefined;
-    id?: string | undefined;
-    image?: string | null | undefined;
-    siteUrl?: string | null | undefined;
-    lastModifiedHeader?: string | null | undefined;
-    etagHeader?: string | null | undefined;
-    ttl?: number | null | undefined;
-    errorMessage?: string | null | undefined;
-    errorAt?: string | null | undefined;
-    ownerUserId?: string | null | undefined;
-}, {
-    url: string;
-    checkedAt: string;
-    description?: string | null | undefined;
-    title?: string | null | undefined;
-    id?: string | undefined;
-    image?: string | null | undefined;
-    siteUrl?: string | null | undefined;
-    lastModifiedHeader?: string | null | undefined;
-    etagHeader?: string | null | undefined;
-    ttl?: number | null | undefined;
-    errorMessage?: string | null | undefined;
-    errorAt?: string | null | undefined;
-    ownerUserId?: string | null | undefined;
-}>;
 declare const feedsRelations: drizzle_orm.Relations<"feeds", {
     subscriptions: drizzle_orm.Many<"subscriptions">;
     entries: drizzle_orm.Many<"entries">;
@@ -1667,22 +1624,6 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
-        creatorId: drizzle_orm_pg_core.PgColumn<{
-            name: "creator_id";
-            tableName: "lists";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
         feedIds: drizzle_orm_pg_core.PgColumn<{
             name: "feed_ids";
             tableName: "lists";
@@ -1714,22 +1655,6 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             }, object, object>;
             generated: undefined;
         }, {}, {}>;
-        view: drizzle_orm_pg_core.PgColumn<{
-            name: "view";
-            tableName: "lists";
-            dataType: "number";
-            columnType: "PgSmallInt";
-            data: number;
-            driverParam: string | number;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
         title: drizzle_orm_pg_core.PgColumn<{
             name: "title";
             tableName: "lists";
@@ -1738,6 +1663,22 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             data: string;
             driverParam: string;
             notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        description: drizzle_orm_pg_core.PgColumn<{
+            name: "description";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
@@ -1759,6 +1700,22 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             isAutoincrement: false;
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        view: drizzle_orm_pg_core.PgColumn<{
+            name: "view";
+            tableName: "lists";
+            dataType: "number";
+            columnType: "PgSmallInt";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
@@ -1794,39 +1751,58 @@ declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        ownerUserId: drizzle_orm_pg_core.PgColumn<{
+            name: "owner_user_id";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
 declare const listsOpenAPISchema: zod.ZodObject<{
     id: zod.ZodString;
-    creatorId: zod.ZodString;
     feedIds: zod.ZodArray<zod.ZodString, "many">;
-    view: zod.ZodNumber;
     title: zod.ZodString;
+    description: zod.ZodNullable<zod.ZodString>;
     image: zod.ZodNullable<zod.ZodString>;
+    view: zod.ZodNumber;
     fee: zod.ZodNumber;
     timelineUpdatedAt: zod.ZodString;
+    ownerUserId: zod.ZodString;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    description: string | null;
     title: string;
     id: string;
     image: string | null;
     view: number;
-    creatorId: string;
+    ownerUserId: string;
     feedIds: string[];
     fee: number;
     timelineUpdatedAt: string;
 }, {
+    description: string | null;
     title: string;
     id: string;
     image: string | null;
     view: number;
-    creatorId: string;
+    ownerUserId: string;
     feedIds: string[];
     fee: number;
     timelineUpdatedAt: string;
 }>;
 declare const listsRelations: drizzle_orm.Relations<"lists", {
-    creator: drizzle_orm.One<"user", true>;
+    owner: drizzle_orm.One<"user", true>;
     listsSubscriptions: drizzle_orm.Many<"lists_subscriptions">;
 }>;
 
@@ -2929,37 +2905,54 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
-                    title: string;
-                    id: string;
-                    image: string | null;
-                    view: number;
-                    feeds: {
-                        description: string | null;
-                        title: string | null;
+                    list: {
+                        type: "list";
                         id: string;
-                        image: string | null;
-                        url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                    }[];
-                    creatorId: string;
-                    feedIds: string[];
-                    fee: number;
-                    timelineUpdatedAt: string;
-                    creator: {
-                        name: string | null;
-                        id: string;
-                        emailVerified: string | null;
-                        image: string | null;
-                        handle: string | null;
-                        createdAt: string;
-                    } | null;
+                        view: number;
+                        feedIds: string[];
+                        fee: number;
+                        timelineUpdatedAt: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        feeds?: {
+                            type: "feed";
+                            id: string;
+                            url: string;
+                            description?: string | null | undefined;
+                            title?: string | null | undefined;
+                            image?: string | null | undefined;
+                            siteUrl?: string | null | undefined;
+                            errorMessage?: string | null | undefined;
+                            errorAt?: string | null | undefined;
+                            ownerUserId?: string | null | undefined;
+                            owner?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            } | null | undefined;
+                            tipUsers?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            }[] | null | undefined;
+                        }[] | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                    };
                 };
             };
             outputFormat: "json" | "text";
@@ -2971,20 +2964,59 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     title: string;
                     view: number;
                     fee: number;
+                    description?: string | null | undefined;
                     image?: string | null | undefined;
                 };
             };
             output: {
                 code: 0;
                 data: {
-                    title: string;
+                    type: "list";
                     id: string;
-                    image: string | null;
                     view: number;
-                    creatorId: string;
                     feedIds: string[];
                     fee: number;
                     timelineUpdatedAt: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    feeds?: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    }[] | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
                 };
             };
             outputFormat: "json" | "text";
@@ -3009,6 +3041,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     view: number;
                     fee: number;
                     listId: string;
+                    description?: string | null | undefined;
                     image?: string | null | undefined;
                 };
             };
@@ -3025,14 +3058,52 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
-                    title: string;
+                    type: "list";
                     id: string;
-                    image: string | null;
                     view: number;
-                    creatorId: string;
                     feedIds: string[];
                     fee: number;
                     timelineUpdatedAt: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    feeds?: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    }[] | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -3100,19 +3171,32 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         createdAt: string;
                     } | null | undefined;
                     toFeed?: {
-                        description: string | null;
-                        title: string | null;
+                        type: "feed";
                         id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     } | null | undefined;
                 }[];
             };
@@ -3235,53 +3319,90 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     category: string | null;
                     feedId: string;
                     feeds: {
-                        description: string | null;
-                        title: string | null;
+                        type: "feed";
                         id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                        owner: {
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
                             name: string | null;
                             id: string;
                             emailVerified: string | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
-                        } | null;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     };
                     isPrivate: boolean;
                 } | {
                     title: string | null;
                     userId: string;
                     view: number;
+                    feedId: string;
                     isPrivate: boolean;
                     lists: {
-                        title: string;
+                        type: "list";
                         id: string;
-                        image: string | null;
                         view: number;
-                        creatorId: string;
                         feedIds: string[];
                         fee: number;
                         timelineUpdatedAt: string;
-                        creator: {
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        feeds?: {
+                            type: "feed";
+                            id: string;
+                            url: string;
+                            description?: string | null | undefined;
+                            title?: string | null | undefined;
+                            image?: string | null | undefined;
+                            siteUrl?: string | null | undefined;
+                            errorMessage?: string | null | undefined;
+                            errorAt?: string | null | undefined;
+                            ownerUserId?: string | null | undefined;
+                            owner?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            } | null | undefined;
+                            tipUsers?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            }[] | null | undefined;
+                        }[] | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
                             name: string | null;
                             id: string;
                             emailVerified: string | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
-                        } | null;
+                        } | null | undefined;
                     };
                     listId: string;
+                    category?: string | undefined;
                 })[];
             };
             outputFormat: "json" | "text";
@@ -3469,7 +3590,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    id: string | string[];
+                    id?: string | string[] | undefined;
+                    handle?: string | string[] | undefined;
                 };
             };
             output: {
@@ -3610,19 +3732,32 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 code: 0;
                 data: {
                     feed: {
-                        description: string | null;
-                        title: string | null;
+                        type: "feed";
                         id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     };
                     subscriptionCount: number;
                     tipAmount: number;
@@ -3645,19 +3780,32 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 code: 0;
                 data: {
                     feed: {
+                        type: "feed";
+                        id: string;
                         url: string;
-                        checkedAt: string;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        id?: string | undefined;
                         image?: string | null | undefined;
                         siteUrl?: string | null | undefined;
-                        lastModifiedHeader?: string | null | undefined;
-                        etagHeader?: string | null | undefined;
-                        ttl?: number | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     };
                     subscriptionCount: number;
                     readCount: number;
@@ -3795,19 +3943,32 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         }[] | null | undefined;
                     };
                     feeds: {
-                        description: string | null;
-                        title: string | null;
+                        type: "feed";
                         id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     };
                     read: boolean | null;
                     collections?: {
@@ -3866,25 +4027,32 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         }[] | null | undefined;
                     };
                     feeds: {
-                        description: string | null;
-                        title: string | null;
+                        type: "feed";
                         id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                        tipUsers: {
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
                             name: string | null;
                             id: string;
+                            emailVerified: string | null;
                             image: string | null;
                             handle: string | null;
-                        }[];
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     };
                     users: {
                         [x: string]: {
@@ -3958,27 +4126,32 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 data: {
                     feed: {
-                        description: string | null;
-                        title: string | null;
+                        type: "feed";
                         id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                        owner: {
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
                             name: string | null;
                             id: string;
                             emailVerified: string | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
-                        } | null;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     };
                     entries?: {
                         description: string | null;
@@ -4293,4 +4466,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsInputSchema, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
