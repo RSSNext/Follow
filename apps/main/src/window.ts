@@ -5,11 +5,11 @@ import { is } from "@electron-toolkit/utils"
 import { callGlobalContextMethod } from "@follow/shared/bridge"
 import { imageRefererMatches } from "@follow/shared/image"
 import type { BrowserWindowConstructorOptions } from "electron"
-import { BrowserWindow, Menu, screen,shell  } from "electron"
+import { BrowserWindow, screen, shell } from "electron"
 
 import { isDev, isMacOS, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
-import { t } from "./lib/i18n"
+import { registerContextMenu } from "./lib/context-menu"
 import { store } from "./lib/store"
 import { logger } from "./logger"
 import { cancelPollingUpdateUnreadCount, pollingUpdateUnreadCount } from "./tipc/dock"
@@ -141,53 +141,7 @@ export function createWindow(
       },
     })
   })
-
-  window.webContents.on("context-menu", (_e, props) => {
-    const { selectionText, isEditable } = props
-
-    const selectionMenu = Menu.buildFromTemplate([
-      { role: "copy", label: t("menu.copy"), accelerator: "CmdOrCtrl+C" },
-      { type: "separator" },
-      { role: "selectAll", label: t("menu.selectAll"), accelerator: "CmdOrCtrl+A" },
-    ])
-
-    const inputMenu = Menu.buildFromTemplate([
-      { role: "undo", label: t("menu.undo"), accelerator: "CmdOrCtrl+Z" },
-      {
-        role: "redo",
-        label: t("menu.redo"),
-        accelerator: "CmdOrCtrl+Shift+Z",
-      },
-      { type: "separator" },
-      {
-        role: "cut",
-        label: t("menu.cut"),
-        accelerator: "CmdOrCtrl+X",
-      },
-      {
-        role: "copy",
-        label: t("menu.copy"),
-        accelerator: "CmdOrCtrl+C",
-      },
-      {
-        role: "paste",
-        label: t("menu.paste"),
-        accelerator: "CmdOrCtrl+V",
-      },
-      {
-        type: "separator",
-      },
-      { role: "selectAll", label: t("menu.selectAll"), accelerator: "CmdOrCtrl+A" },
-    ])
-
-    if (isEditable) {
-      inputMenu.popup({
-        window,
-      })
-    } else if (selectionText && selectionText.trim() !== "") {
-      selectionMenu.popup({ window })
-    }
-  })
+  registerContextMenu(window)
 
   return window
 }
