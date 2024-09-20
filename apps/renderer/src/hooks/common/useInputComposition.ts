@@ -1,5 +1,5 @@
 import type { CompositionEventHandler } from "react"
-import { useCallback, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 
 type InputElementAttributes = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -16,15 +16,19 @@ export const useInputComposition = <E = HTMLInputElement>(
       : E extends HTMLTextAreaElement
         ? TextareaElementAttributes
         : never,
-    "onKeyDown" | "onCompositionEnd" | "onCompositionStart"
+    "onKeyDown" | "onCompositionEnd" | "onCompositionStart" | "onKeyDownCapture"
   >,
 ) => {
   const { onKeyDown, onCompositionStart, onCompositionEnd } = props
 
   const isCompositionRef = useRef(false)
 
+  const currentInputTargetRef = useRef<E | null>(null)
+
   const handleCompositionStart: CompositionEventHandler<E> = useCallback(
     (e) => {
+      currentInputTargetRef.current = e.target as E
+
       isCompositionRef.current = true
       onCompositionStart?.(e as any)
     },
@@ -33,6 +37,7 @@ export const useInputComposition = <E = HTMLInputElement>(
 
   const handleCompositionEnd: CompositionEventHandler<E> = useCallback(
     (e) => {
+      currentInputTargetRef.current = null
       isCompositionRef.current = false
       onCompositionEnd?.(e as any)
     },
@@ -52,11 +57,29 @@ export const useInputComposition = <E = HTMLInputElement>(
         e.preventDefault()
         e.stopPropagation()
 
-        e.currentTarget.blur()
+        if (!isCompositionRef.current) {
+          e.currentTarget.blur()
+        }
       }
     },
     [onKeyDown],
   )
+
+  // Register a global capture keydown listener to prevent the radix `useEscapeKeydown` from working
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && currentInputTargetRef.current) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
+    }
+
+    document.addEventListener("keydown", handleGlobalKeyDown, { capture: true })
+
+    return () => {
+      document.removeEventListener("keydown", handleGlobalKeyDown, { capture: true })
+    }
+  }, [])
 
   const ret = {
     onCompositionEnd: handleCompositionEnd,
