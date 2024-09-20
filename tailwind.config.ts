@@ -40,10 +40,7 @@ export default resolveConfig({
           DEFAULT: "hsl(var(--muted) / <alpha-value>)",
           foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
         },
-        accent: {
-          DEFAULT: "#ff5c00",
-          foreground: "hsl(var(--fo-text-primary), <alpha-value>)",
-        },
+        accent: "hsl(var(--fo-a) / <alpha-value>)",
 
         popover: {
           DEFAULT: "hsl(var(--popover) / <alpha-value>)",
@@ -61,7 +58,7 @@ export default resolveConfig({
         theme: {
           // https://uicolors.app/create
           accent: {
-            DEFAULT: "#ff5c00",
+            DEFAULT: "hsl(var(--fo-a) / <alpha-value>)",
             50: "#fff7ec",
             100: "#ffeed3",
             200: "#ffd9a5",
