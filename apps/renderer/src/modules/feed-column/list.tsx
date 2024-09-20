@@ -2,7 +2,7 @@ import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
 import { Fragment, memo, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ScrollArea } from "~/components/ui/scroll-area"
@@ -100,9 +100,12 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   const hasData = Object.keys(feedsData).length > 0 || Object.keys(listsData).length > 0
 
   const feedId = useRouteFeedId()
-  const navigate = useNavigateEntry()
+  const navigateEntry = useNavigateEntry()
 
   const { t } = useTranslation()
+
+  const location = useLocation()
+  const navigate = useNavigate()
 
   return (
     <div className={cn(className, "font-medium")}>
@@ -115,7 +118,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           onClick={(e) => {
             e.stopPropagation()
             if (view !== undefined) {
-              navigate({
+              navigateEntry({
                 entryId: null,
                 feedId: null,
                 view,
@@ -139,12 +142,25 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         <div
           className={cn(
             "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 font-semibold transition-colors",
+            location.pathname === "/discover" && "bg-native-active",
+          )}
+          onClick={(e) => {
+            e.stopPropagation()
+            navigate(`/discover`)
+          }}
+        >
+          <i className="i-mgc-compass-cute-fi mr-2 text-blue-500" />
+          {t("words.discover")}
+        </div>
+        <div
+          className={cn(
+            "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 font-semibold transition-colors",
             feedId === FEED_COLLECTION_LIST && "bg-native-active",
           )}
           onClick={(e) => {
             e.stopPropagation()
             if (view !== undefined) {
-              navigate({
+              navigateEntry({
                 entryId: null,
                 feedId: FEED_COLLECTION_LIST,
                 view,
@@ -155,11 +171,15 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           <i className="i-mgc-star-cute-fi mr-2 text-amber-500" />
           {t("words.starred")}
         </div>
+        <div className="mt-4 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+          {t("words.lists")}
+        </div>
         {Object.keys(listsData).length > 0 && (
-          <div className="my-2">
-            <SortableList view={view} expansion={expansion} data={listsData} />
-          </div>
+          <SortableList view={view} expansion={expansion} data={listsData} />
         )}
+        <div className="mt-4 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+          {t("words.feeds")}
+        </div>
         {hasData ? (
           <SortableList view={view} expansion={expansion} data={feedsData} />
         ) : (
