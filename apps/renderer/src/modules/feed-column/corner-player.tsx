@@ -2,7 +2,7 @@ import * as Slider from "@radix-ui/react-slider"
 import type { TooltipContentProps } from "@radix-ui/react-tooltip"
 import dayjs from "dayjs"
 import { AnimatePresence, m } from "framer-motion"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import Marquee from "react-fast-marquee"
 import { useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
@@ -154,11 +154,7 @@ const CornerPlayerImpl = () => {
       </div>
 
       {/* advanced controls */}
-      <div
-        className="absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque
-       p-1 opacity-100 transition-all duration-200 ease-in-out
-       group-hover:-translate-y-full group-hover:opacity-100"
-      >
+      <div className="absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque p-1 opacity-100 transition-all duration-200 ease-in-out group-hover:-translate-y-full group-hover:opacity-100">
         <div className="flex items-center">
           <ActionIcon
             className="i-mgc-close-cute-re"
@@ -185,8 +181,8 @@ const CornerPlayerImpl = () => {
             <i className="i-mgc-download-2-cute-re" />
           </ActionIcon>
         </div>
+        {/* audio control */}
         <div className="flex items-center">
-          {/* 音频相关 */}
           <ActionIcon label={<PlaybackRateSelector />} labelDelayDuration={0}>
             <PlaybackRateButton />
           </ActionIcon>
@@ -227,12 +223,12 @@ const PlayerProgress = () => {
     setControlledCurrentTime(currentTime)
   }, [currentTime, isDraggingProgress])
 
-  const getTimeIndicator = useCallback((time: number) => {
+  const getTimeIndicator = (time: number) => {
     return dayjs()
       .startOf("y")
       .second(time)
       .format(time > ONE_HOUR_IN_SECONDS ? "H:mm:ss" : "m:ss")
-  }, [])
+  }
 
   const currentTimeIndicator = getTimeIndicator(controlledCurrentTime)
   const remainingTimeIndicator = duration
@@ -265,7 +261,7 @@ const PlayerProgress = () => {
 
           {/* indicator */}
           <Slider.Thumb
-            className="block h-2 w-[3px] cursor-pointer rounded-[1px] bg-accent duration-200 ease-in-out group-hover:size-2"
+            className="block h-2 w-[3px] rounded-[1px] bg-accent"
             aria-label="Progress"
           />
         </Slider.Root>
