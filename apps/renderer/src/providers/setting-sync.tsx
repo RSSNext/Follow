@@ -31,7 +31,7 @@ const useUISettingSync = () => {
     Object.assign(document.body.style, {
       fontFamily: fontCss,
     })
-  }, [setting.uiFontFamily])
+  }, [setting.uiFontFamily, setting.usePointerCursor])
 
   useEffect(() => {
     if (setting.showDockBadge) {
