@@ -19,7 +19,7 @@ export const createDefaultSettings = (): UISettings => ({
   modalDraggable: true,
   modalOpaque: true,
   reduceMotion: false,
-  usePointerCursor: false,
+  usePointerCursor: null,
 
   // Font
   uiFontFamily: "SN Pro",
