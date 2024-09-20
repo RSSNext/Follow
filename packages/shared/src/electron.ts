@@ -11,7 +11,7 @@ export interface OpenElectronWindowOptions {
  * Work electron and browser,
  * if in electron, open a new window, otherwise open a new tab
  */
-export const openElectronWindow = async (url: string, options: OpenElectronWindowOptions = {}) => {
+export const openElectronWindow = (url: string, options: OpenElectronWindowOptions = {}) => {
   if ("electron" in window) {
     const urlObject = new URL(url)
     const { searchParams } = urlObject
