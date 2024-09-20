@@ -144,7 +144,7 @@ const CornerPlayerImpl = () => {
           >
             {entry.entries.title}
           </Marquee>
-          <div className="mt-0.5 overflow-hidden truncate text-xs text-muted-foreground group-hover:mx-8">
+          <div className="mt-0.5 overflow-hidden truncate text-xs text-muted-foreground group-hover:opacity-0">
             {feed.title}
           </div>
 
@@ -154,7 +154,7 @@ const CornerPlayerImpl = () => {
       </div>
 
       {/* advanced controls */}
-      <div className="absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque p-1 opacity-0 transition-all duration-200 ease-in-out group-hover:-translate-y-full group-hover:opacity-100">
+      <div className="absolute inset-x-0 top-0 z-[-1] flex justify-between border-t bg-theme-modal-background-opaque p-1 opacity-100 transition-all duration-200 ease-in-out group-hover:-translate-y-full group-hover:opacity-100">
         <div className="flex items-center">
           <ActionIcon
             className="i-mgc-close-cute-re"
@@ -172,8 +172,6 @@ const CornerPlayerImpl = () => {
             }
             label={t("player.open_entry")}
           />
-        </div>
-        <div className="flex items-center">
           <ActionIcon
             label={t("player.download")}
             onClick={() => {
@@ -182,6 +180,9 @@ const CornerPlayerImpl = () => {
           >
             <i className="i-mgc-download-2-cute-re" />
           </ActionIcon>
+        </div>
+        {/* audio control */}
+        <div className="flex items-center">
           <ActionIcon label={<PlaybackRateSelector />} labelDelayDuration={0}>
             <PlaybackRateButton />
           </ActionIcon>
@@ -222,20 +223,21 @@ const PlayerProgress = () => {
     setControlledCurrentTime(currentTime)
   }, [currentTime, isDraggingProgress])
 
-  const currentTimeIndicator = dayjs()
-    .startOf("y")
-    .second(controlledCurrentTime)
-    .format(controlledCurrentTime > ONE_HOUR_IN_SECONDS ? "H:mm:ss" : "m:ss")
+  const getTimeIndicator = (time: number) => {
+    return dayjs()
+      .startOf("y")
+      .second(time)
+      .format(time > ONE_HOUR_IN_SECONDS ? "H:mm:ss" : "m:ss")
+  }
+
+  const currentTimeIndicator = getTimeIndicator(controlledCurrentTime)
   const remainingTimeIndicator = duration
-    ? dayjs()
-        .startOf("y")
-        .second(duration - controlledCurrentTime)
-        .format(duration - controlledCurrentTime > ONE_HOUR_IN_SECONDS ? "H:mm:ss" : "m:ss")
+    ? getTimeIndicator(duration - controlledCurrentTime)
     : null
 
   return (
     <div className="relative mt-2">
-      <div className="absolute bottom-1 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-200 ease-in-out group-hover:opacity-100">
+      <div className="absolute bottom-2 flex w-full items-center justify-between text-theme-disabled opacity-0 duration-150 ease-in-out group-hover:opacity-100">
         <div className="text-xs">{currentTimeIndicator}</div>
         {!!remainingTimeIndicator && <div className="text-xs">-{remainingTimeIndicator}</div>}
       </div>
