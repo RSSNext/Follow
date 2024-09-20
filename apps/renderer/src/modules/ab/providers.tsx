@@ -62,7 +62,7 @@ const ABModalContent = () => {
           onCheckedChange={(checked) => {
             setEnableDebugOverride(checked)
           }}
-         />
+        />
       </Label>
 
       <Divider />
