@@ -5,6 +5,7 @@ import common_arkw from "../../../../locales/common/ar-KW.json"
 import common_arma from "../../../../locales/common/ar-MA.json"
 import common_arsa from "../../../../locales/common/ar-SA.json"
 import common_artn from "../../../../locales/common/ar-TN.json"
+import common_de from "../../../../locales/common/de.json"
 import common_en from "../../../../locales/common/en.json"
 import common_es from "../../../../locales/common/es.json"
 import common_fi from "../../../../locales/common/fi.json"
@@ -23,6 +24,7 @@ import lang_arkw from "../../../../locales/lang/ar-KW.json"
 import lang_arma from "../../../../locales/lang/ar-MA.json"
 import lang_arsa from "../../../../locales/lang/ar-SA.json"
 import lang_artn from "../../../../locales/lang/ar-TN.json"
+import lang_de from "../../../../locales/lang/de.json"
 import lang_en from "../../../../locales/lang/en.json"
 import lang_es from "../../../../locales/lang/es.json"
 import lang_fi from "../../../../locales/lang/fi.json"
@@ -73,4 +75,5 @@ export const defaultResources = {
   "ar-IQ": { lang: lang_ariq, common: common_ariq },
   "ar-KW": { lang: lang_arkw, common: common_arkw },
   "ar-TN": { lang: lang_artn, common: common_artn },
+  de: { lang: lang_de, common: common_de },
 }
