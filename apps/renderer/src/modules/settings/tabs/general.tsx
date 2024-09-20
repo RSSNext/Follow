@@ -31,7 +31,6 @@ import { clearLocalPersistStoreData } from "~/store/utils/clear"
 
 import { SettingDescription, SettingInput } from "../control"
 import { SettingItemGroup } from "../section"
-import { SettingsTitle } from "../title"
 
 const { defineSettingItem, SettingBuilder } = createSetting(
   useGeneralSettingValue,
@@ -54,120 +53,116 @@ export const SettingGeneral = () => {
   const { present } = useModalStack()
 
   return (
-    <>
-      <SettingsTitle />
-      <div className="mt-4">
-        <SettingBuilder
-          settings={[
-            {
-              type: "title",
-              value: t("general.app"),
+    <div className="mt-4">
+      <SettingBuilder
+        settings={[
+          {
+            type: "title",
+            value: t("general.app"),
+          },
+
+          defineSettingItem("appLaunchOnStartup", {
+            label: t("general.launch_at_login"),
+            disabled: !tipcClient,
+            onChange(value) {
+              saveLoginSetting(value)
             },
+          }),
+          LanguageSelector,
+          {
+            type: "title",
+            value: t("general.timeline"),
+          },
+          defineSettingItem("unreadOnly", {
+            label: t("general.show_unread_on_launch.label"),
+            description: t("general.show_unread_on_launch.description"),
+          }),
+          defineSettingItem("groupByDate", {
+            label: t("general.group_by_date.label"),
+            description: t("general.group_by_date.description"),
+          }),
 
-            defineSettingItem("appLaunchOnStartup", {
-              label: t("general.launch_at_login"),
-              disabled: !tipcClient,
-              onChange(value) {
-                saveLoginSetting(value)
-              },
-            }),
-            LanguageSelector,
-            {
-              type: "title",
-              value: t("general.timeline"),
+          { type: "title", value: t("general.unread") },
+
+          defineSettingItem("scrollMarkUnread", {
+            label: t("general.mark_as_read.scroll.label"),
+            description: t("general.mark_as_read.scroll.description"),
+          }),
+          defineSettingItem("hoverMarkUnread", {
+            label: t("general.mark_as_read.hover.label"),
+            description: t("general.mark_as_read.hover.description"),
+          }),
+          defineSettingItem("renderMarkUnread", {
+            label: t("general.mark_as_read.render.label"),
+            description: t("general.mark_as_read.render.description"),
+          }),
+
+          { type: "title", value: "TTS", disabled: !window.electron },
+
+          window.electron && VoiceSelector,
+
+          // { type: "title", value: "Secure" },
+          // defineSettingItem("jumpOutLinkWarn", {
+          //   label: "Warn when opening external links",
+          //   description: "When you open an untrusted external link, you need to make sure that you open the link.",
+          // }),
+          {
+            type: "title",
+            value: t("general.privacy_data"),
+          },
+
+          defineSettingItem("dataPersist", {
+            label: t("general.data_persist.label"),
+            description: t("general.data_persist.description"),
+          }),
+
+          defineSettingItem("sendAnonymousData", {
+            label: t("general.send_anonymous_data.label"),
+            description: t("general.send_anonymous_data.description"),
+            onChange(value) {
+              setGeneralSetting("sendAnonymousData", value)
+              if (value) {
+                initPostHog()
+              } else {
+                window.posthog?.reset()
+                delete window.posthog
+              }
             },
-            defineSettingItem("unreadOnly", {
-              label: t("general.show_unread_on_launch.label"),
-              description: t("general.show_unread_on_launch.description"),
-            }),
-            defineSettingItem("groupByDate", {
-              label: t("general.group_by_date.label"),
-              description: t("general.group_by_date.description"),
-            }),
-
-            { type: "title", value: t("general.unread") },
-
-            defineSettingItem("scrollMarkUnread", {
-              label: t("general.mark_as_read.scroll.label"),
-              description: t("general.mark_as_read.scroll.description"),
-            }),
-            defineSettingItem("hoverMarkUnread", {
-              label: t("general.mark_as_read.hover.label"),
-              description: t("general.mark_as_read.hover.description"),
-            }),
-            defineSettingItem("renderMarkUnread", {
-              label: t("general.mark_as_read.render.label"),
-              description: t("general.mark_as_read.render.description"),
-            }),
-
-            { type: "title", value: "TTS", disabled: !window.electron },
-
-            window.electron && VoiceSelector,
-
-            // { type: "title", value: "Secure" },
-            // defineSettingItem("jumpOutLinkWarn", {
-            //   label: "Warn when opening external links",
-            //   description: "When you open an untrusted external link, you need to make sure that you open the link.",
-            // }),
-            {
-              type: "title",
-              value: t("general.privacy_data"),
-            },
-
-            defineSettingItem("dataPersist", {
-              label: t("general.data_persist.label"),
-              description: t("general.data_persist.description"),
-            }),
-
-            defineSettingItem("sendAnonymousData", {
-              label: t("general.send_anonymous_data.label"),
-              description: t("general.send_anonymous_data.description"),
-              onChange(value) {
-                setGeneralSetting("sendAnonymousData", value)
-                if (value) {
-                  initPostHog()
-                } else {
-                  window.posthog?.reset()
-                  delete window.posthog
-                }
-              },
-            }),
-            {
-              label: t("general.rebuild_database.label"),
-              action: async () => {
-                present({
-                  title: t("general.rebuild_database.title"),
-                  clickOutsideToDismiss: true,
-                  content: () => (
-                    <div className="text-sm">
-                      <p>{t("general.rebuild_database.warning.line1")}</p>
-                      <p>{t("general.rebuild_database.warning.line2")}</p>
-                      <div className="mt-4 flex justify-end">
-                        <Button
-                          className="px-3 text-red-500"
-                          variant="ghost"
-                          onClick={async () => {
-                            await clearLocalPersistStoreData()
-                            window.location.reload()
-                          }}
-                        >
-                          Yes
-                        </Button>
-                      </div>
+          }),
+          {
+            label: t("general.rebuild_database.label"),
+            action: async () => {
+              present({
+                title: t("general.rebuild_database.title"),
+                clickOutsideToDismiss: true,
+                content: () => (
+                  <div className="text-sm">
+                    <p>{t("general.rebuild_database.warning.line1")}</p>
+                    <p>{t("general.rebuild_database.warning.line2")}</p>
+                    <div className="mt-4 flex justify-end">
+                      <Button
+                        className="bg-red-600 px-3 text-white dark:bg-red-500"
+                        onClick={async () => {
+                          await clearLocalPersistStoreData()
+                          window.location.reload()
+                        }}
+                      >
+                        {t("ok", { ns: "common" })}
+                      </Button>
                     </div>
-                  ),
-                })
-              },
-              description: t("general.rebuild_database.description"),
-              buttonText: t("general.rebuild_database.button"),
+                  </div>
+                ),
+              })
             },
+            description: t("general.rebuild_database.description"),
+            buttonText: t("general.rebuild_database.button"),
+          },
 
-            { type: "title", value: t("general.network"), disabled: !window.electron },
-            window.electron && NettingSetting,
-          ]}
-        />
-      </div>
-    </>
+          { type: "title", value: t("general.network"), disabled: !window.electron },
+          window.electron && NettingSetting,
+        ]}
+      />
+    </div>
   )
 }
 

@@ -22,7 +22,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { ROUTE_ENTRY_PENDING } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
-import { useI18n } from "~/hooks/common"
+import { useI18n, useInputComposition } from "~/hooks/common"
 import type { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
 import { getFeedById } from "~/store/feed"
@@ -64,10 +64,14 @@ export const SearchCmdK: React.FC = () => {
       $input.focus()
     }
   }, [open])
+
+  const { onCompositionEnd, onCompositionStart, isCompositionRef } =
+    useInputComposition<HTMLInputElement>({})
   const handleKeyDownToFocusInput: React.EventHandler<React.KeyboardEvent> = React.useCallback(
     (e) => {
       const $input = inputRef.current
-      if (e.key === "Escape") {
+
+      if (e.key === "Escape" && !isCompositionRef.current) {
         setAppSearchOpen(false)
         return
       }
@@ -78,7 +82,7 @@ export const SearchCmdK: React.FC = () => {
         $input?.focus()
       }
     },
-    [],
+    [isCompositionRef],
   )
   const [isPending, startTransition] = React.useTransition()
   const handleSearch = React.useCallback(
@@ -140,6 +144,8 @@ export const SearchCmdK: React.FC = () => {
           ref={inputRef}
           placeholder={searchActions.getCurrentKeyword() || t("search.placeholder")}
           onValueChange={handleSearch}
+          onCompositionStart={onCompositionStart}
+          onCompositionEnd={onCompositionEnd}
         />
         <div className={cn(styles["status-bar"], isPending && styles["loading"])} />
 
