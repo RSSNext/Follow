@@ -95,12 +95,11 @@ export const initializeApp = async () => {
   })
 
   // should after hydrateSettings
-  const { dataPersist: enabledDataPersist, sendAnonymousData } = getGeneralSettings()
+  const { dataPersist: enabledDataPersist } = getGeneralSettings()
 
   initSentry()
+  initPostHog()
   await apm("i18n", initI18n)
-
-  if (sendAnonymousData) initPostHog()
 
   let dataHydratedTime: undefined | number
   // Initialize the database
