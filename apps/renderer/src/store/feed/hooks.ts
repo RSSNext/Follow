@@ -19,7 +19,7 @@ export const useFeedByIdOrUrl = (feed: FeedQueryParams) =>
       return state.feeds[feed.id]
     }
     if (feed.url) {
-      return Object.values(state.feeds).find((f) => f.url === feed.url) || null
+      return Object.values(state.feeds).find((f) => f.type === "feed" && f.url === feed.url) || null
     }
     return null
   })

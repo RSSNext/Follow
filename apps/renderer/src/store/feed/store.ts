@@ -30,14 +30,18 @@ class FeedActions {
     set((state) =>
       produce(state, (state) => {
         for (const feed of feeds) {
-          if (feed.errorAt && new Date(feed.errorAt).getTime() > Date.now() - 1000 * 60 * 60 * 9) {
+          if (
+            feed.type === "feed" &&
+            feed.errorAt &&
+            new Date(feed.errorAt).getTime() > Date.now() - 1000 * 60 * 60 * 9
+          ) {
             feed.errorAt = null
           }
           if (feed.id) {
             if (feed.owner) {
               userActions.upsert(feed.owner as UserModel)
             }
-            if (feed.tipUsers) {
+            if (feed.type === "feed" && feed.tipUsers) {
               userActions.upsert(feed.tipUsers)
             }
 

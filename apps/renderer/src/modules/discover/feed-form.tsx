@@ -33,6 +33,7 @@ import { FeedViewType } from "~/lib/enum"
 import { getFetchErrorMessage, toastFetchError } from "~/lib/error-parser"
 import { getNewIssueUrl } from "~/lib/issues"
 import { cn } from "~/lib/utils"
+import type { FeedModel } from "~/models"
 import { feed as feedQuery, useFeed } from "~/queries/feed"
 import { subscription as subscriptionQuery } from "~/queries/subscriptions"
 import { useFeedByIdOrUrl } from "~/store/feed"
@@ -164,7 +165,7 @@ const FeedInnerForm = ({
   const subscription = useSubscriptionByFeedId(id || "")
   const buttonRef = useRef<HTMLButtonElement>(null)
   const isSubscribed = !!subscription
-  const feed = useFeedByIdOrUrl({ id, url })!
+  const feed = useFeedByIdOrUrl({ id, url })! as FeedModel
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -199,7 +200,6 @@ const FeedInnerForm = ({
       const $method = isSubscribed ? apiClient.subscriptions.$patch : apiClient.subscriptions.$post
 
       return $method({
-        // @ts-expect-error
         json: body,
       })
     },

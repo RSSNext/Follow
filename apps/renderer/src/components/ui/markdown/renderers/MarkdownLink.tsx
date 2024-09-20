@@ -18,7 +18,9 @@ const safeUrl = (url: string, baseUrl: string) => {
 export const MarkdownLink = (props: LinkProps) => {
   const { view, feedId } = useEntryContentContext()
 
-  const feedSiteUrl = useFeedByIdSelector(feedId, (feed) => feed?.siteUrl)
+  const feedSiteUrl = useFeedByIdSelector(feedId, (feed) =>
+    "siteUrl" in feed ? feed.siteUrl : undefined,
+  )
 
   const populatedFullHref = useMemo(() => {
     const { href } = props

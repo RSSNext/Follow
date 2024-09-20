@@ -119,7 +119,7 @@ export const useFeedActions = ({
         click: () => {
           const feed = getFeedById(feedId)
           if (feed) {
-            feed.siteUrl && window.open(feed.siteUrl, "_blank")
+            "siteUrl" in feed && feed.siteUrl && window.open(feed.siteUrl, "_blank")
           }
         },
       },
@@ -132,7 +132,9 @@ export const useFeedActions = ({
         label: t("sidebar.feed_actions.copy_feed_url"),
         disabled: isEntryList,
         shortcut: "Meta+C",
-        click: () => navigator.clipboard.writeText(feed.url),
+        click: () => {
+          "url" in feed && navigator.clipboard.writeText(feed.url)
+        },
       },
       {
         type: "text" as const,

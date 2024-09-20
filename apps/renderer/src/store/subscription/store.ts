@@ -35,7 +35,7 @@ function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
   const result: SubscriptionFlatModel[] = []
   for (const subscription of data) {
     const cloned: SubscriptionFlatModel = { ...subscription }
-    if (!subscription.category && subscription.feeds) {
+    if (!subscription.category && "feeds" in subscription && subscription.feeds) {
       const { siteUrl } = subscription.feeds
       if (!siteUrl) {
         cloned.defaultCategory = subscription.feedId
@@ -202,7 +202,7 @@ class SubscriptionActions {
               if (idSet.has(id)) {
                 const subscription = state.data[id]
                 const feed = getFeedById(subscription.feedId)
-                if (!feed) return
+                if (!feed || feed.type !== "feed") return
                 const { siteUrl } = feed
                 if (!siteUrl) return
                 const parsed = parse(siteUrl)

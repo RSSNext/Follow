@@ -80,7 +80,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
         onContextMenu={(e) => {
           setIsContextMenuOpen(true)
           const nextItems = items.concat()
-          if (feed.errorAt && feed.errorMessage) {
+          if (feed.type === "feed" && feed.errorAt && feed.errorMessage) {
             nextItems.push(
               {
                 type: "separator",
@@ -109,7 +109,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
         <div
           className={cn(
             "flex min-w-0 items-center",
-            feed.errorAt && "text-red-900 dark:text-red-500",
+            feed.type === "feed" && feed.errorAt && "text-red-900 dark:text-red-500",
           )}
         >
           <FeedIcon fallback feed={feed} size={16} />
@@ -121,8 +121,8 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
           >
             {getPreferredTitle(feed)}
           </div>
-          <FeedCertification feed={feed} className="text-[15px]" />
-          {feed.errorAt && (
+          {feed.type === "feed" && <FeedCertification feed={feed} className="text-[15px]" />}
+          {feed.type === "feed" && feed.errorAt && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
                 <i className="i-mgc-wifi-off-cute-re ml-1 shrink-0 text-base" />

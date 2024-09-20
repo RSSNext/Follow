@@ -63,50 +63,53 @@ export function Component() {
                 <h3>{category}</h3>
               </div>
               <div>
-                {subscriptions.data?.[category].map((subscription) => (
-                  <div key={subscription.feedId} className="group relative border-b py-5">
-                    <a
-                      className="flex flex-1 cursor-default"
-                      href={`/feed/${subscription.feedId}`}
-                      target="_blank"
-                    >
-                      <FeedIcon fallback feed={subscription.feeds} size={22} className="mr-3" />
-                      <div
-                        className={cn(
-                          "flex w-0 flex-1 grow flex-col justify-center",
-                          "group-hover:grow-[0.85]",
-                        )}
-                      >
-                        <div className="truncate font-medium leading-none">
-                          {subscription.feeds?.title}
-                        </div>
-                        {subscription.feeds?.description && (
-                          <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
-                            {subscription.feeds.description}
+                {subscriptions.data?.[category].map(
+                  (subscription) =>
+                    "feeds" in subscription && (
+                      <div key={subscription.feedId} className="group relative border-b py-5">
+                        <a
+                          className="flex flex-1 cursor-default"
+                          href={`/feed/${subscription.feedId}`}
+                          target="_blank"
+                        >
+                          <FeedIcon fallback feed={subscription.feeds} size={22} className="mr-3" />
+                          <div
+                            className={cn(
+                              "flex w-0 flex-1 grow flex-col justify-center",
+                              "group-hover:grow-[0.85]",
+                            )}
+                          >
+                            <div className="truncate font-medium leading-none">
+                              {subscription.feeds?.title}
+                            </div>
+                            {subscription.feeds?.description && (
+                              <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
+                                {subscription.feeds.description}
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    </a>
-                    <span className="center absolute inset-y-0 right-0 opacity-0 transition-opacity group-hover:opacity-100">
-                      <Button
-                        onClick={(e) => {
-                          e.stopPropagation()
+                        </a>
+                        <span className="center absolute inset-y-0 right-0 opacity-0 transition-opacity group-hover:opacity-100">
+                          <Button
+                            onClick={(e) => {
+                              e.stopPropagation()
 
-                          presentFeedFormModal(subscription.feedId)
-                        }}
-                      >
-                        {isMe ? (
-                          t.common("words.edit")
-                        ) : (
-                          <>
-                            <FollowIcon className="mr-1 size-3" />
-                            {APP_NAME}
-                          </>
-                        )}
-                      </Button>
-                    </span>
-                  </div>
-                ))}
+                              presentFeedFormModal(subscription.feedId)
+                            }}
+                          >
+                            {isMe ? (
+                              t.common("words.edit")
+                            ) : (
+                              <>
+                                <FollowIcon className="mr-1 size-3" />
+                                {APP_NAME}
+                              </>
+                            )}
+                          </Button>
+                        </span>
+                      </div>
+                    ),
+                )}
               </div>
             </div>
           ))

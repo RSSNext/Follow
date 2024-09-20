@@ -3412,9 +3412,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     view: number;
-                    url: string;
                     title?: string | null | undefined;
                     category?: string | null | undefined;
+                    url?: string | undefined;
                     isPrivate?: boolean | undefined;
                     listId?: string | undefined;
                 };

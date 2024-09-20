@@ -35,7 +35,7 @@ import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { getNewIssueUrl } from "~/lib/issues"
 import { cn } from "~/lib/utils"
-import type { ActiveEntryId } from "~/models"
+import type { ActiveEntryId, FeedModel } from "~/models"
 import {
   useIsSoFWrappedElement,
   useWrappedElement,
@@ -97,7 +97,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
 
-  const feed = useFeedById(entry?.feedId)
+  const feed = useFeedById(entry?.feedId) as FeedModel
 
   const entryHistory = useEntryReadHistory(entryId)
 

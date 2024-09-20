@@ -331,6 +331,7 @@ const SubscriptionItem: FC<{
   const isFollowed = !!useSubscriptionStore((state) => state.data[subscription.feedId])
   const { present } = useModalStack()
   const isLoose = variant === "loose"
+  if (!("feeds" in subscription)) return null
   return (
     <div
       className={cn("group relative", isLoose ? "border-b py-5" : "py-2")}
