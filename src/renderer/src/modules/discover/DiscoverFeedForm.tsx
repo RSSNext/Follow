@@ -48,13 +48,13 @@ const FeedMaintainers = ({ maintainers }: { maintainers?: string[] }) => {
             <span className="inline-flex flex-wrap items-center gap-2">
               {maintainers.map((maintainer) => (
                 <a
-                  href={`https://github.com/${maintainer}`}
+                  href={`https://github.com/${maintainer.trim()}`} // Trimmed spaces here
                   key={maintainer}
                   target="_blank"
                   rel="noreferrer noopener"
                   className="inline-flex cursor-pointer items-center text-theme-foreground/50 duration-200 hover:text-accent"
                 >
-                  @{maintainer}
+                  @{maintainer.trim()}
                   <i className="i-mgc-external-link-cute-re ml-0.5" />
                 </a>
               ))}
@@ -106,13 +106,14 @@ export const DiscoverFeedForm = ({
     if (!route.example) return {}
     return parseFullPathParams(route.example.replace(`/${routePrefix}`, ""), route.path)
   }, [route.example, route.path, routePrefix])
+
   const dynamicFormSchema = useMemo(
     () =>
       z.object({
         ...Object.fromEntries(
           keys.map((keyItem) => [
             keyItem.name,
-            keyItem.optional ? z.string().optional().nullable() : z.string().min(1),
+            keyItem.optional ? z.string().optional().nullable() : z.string().min(1).trim(), // Ensure strings are trimmed
           ]),
         ),
       }),
@@ -141,7 +142,12 @@ export const DiscoverFeedForm = ({
   const onSubmit = useCallback(
     (data: Record<string, string>) => {
       try {
-        const fillRegexpPath = regexpPathToPath(route.path, data)
+        const trimmedData = Object.keys(data).reduce((acc, key) => {
+          acc[key] = data[key]?.trim() ?? ''; // Trim input data
+          return acc;
+        }, {} as Record<string, string>)
+
+        const fillRegexpPath = regexpPathToPath(route.path, trimmedData)
         const url = `rsshub://${routePrefix}${fillRegexpPath}`
         const defaultView = getViewFromRoute(route) || (getSidebarActiveView() as FeedViewType)
 
@@ -211,7 +217,6 @@ export const DiscoverFeedForm = ({
                   }}
                   defaultValue={parameters.default || void 0}
                 >
-                  {/* Select focused ref on `SelectTrigger` or `Select` */}
                   <SelectTrigger ref={formRegister.ref}>
                     <SelectValue placeholder={t("discover.select_placeholder")} />
                   </SelectTrigger>
@@ -232,6 +237,7 @@ export const DiscoverFeedForm = ({
                       ? `e.g. ${formPlaceholder[keyItem.name]}`
                       : void 0
                   }
+                  onChange={(e) => form.setValue(keyItem.name, e.target.value.trim())} // Ensure input is trimmed
                 />
               )}
               {!!parameters && (
@@ -268,7 +274,12 @@ const PreviewUrl: FC<{
 
   const fullPath = useMemo(() => {
     try {
-      return regexpPathToPath(path, data)
+      const trimmedData = Object.keys(data).reduce((acc, key) => {
+        acc[key] = data[key]?.trim() ?? ''; // Trim the path data
+        return acc;
+      }, {} as Record<string, string>)
+
+      return regexpPathToPath(path, trimmedData)
     } catch (err: unknown) {
       console.info((err as Error).message)
       return path
@@ -279,10 +290,10 @@ const PreviewUrl: FC<{
   return (
     <div className="group relative min-w-0 pb-4">
       <pre className="w-full whitespace-pre-line break-words text-xs text-theme-foreground/40">
-        {renderedPath}
+        {renderedPath.trim()} {/* Ensure rendered path is trimmed */}
       </pre>
       <CopyButton
-        value={renderedPath}
+        value={renderedPath.trim()} // Ensure copied path is trimmed
         className="absolute right-0 top-0 opacity-0 duration-200 group-hover:opacity-100"
       />
     </div>
