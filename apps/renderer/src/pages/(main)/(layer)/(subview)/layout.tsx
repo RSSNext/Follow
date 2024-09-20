@@ -57,9 +57,7 @@ export function Component() {
           <span className="text-sm font-medium">{t("words.back", { ns: "common" })}</span>
         </MotionButtonBase>
         <div>
-          <div className="font-bold opacity-0 duration-200 group-[.group]:opacity-100">
-            {title && t(title)}
-          </div>
+          <div className="font-bold opacity-0 duration-200 group-[.group]:opacity-100">{title}</div>
         </div>
         <div />
       </div>

@@ -245,7 +245,9 @@ export const DiscoverFeedForm = ({
                 />
               )}
               {!!parameters && (
-                <p className="text-xs text-theme-foreground/50">{parameters.description}</p>
+                <Markdown className="text-xs text-theme-foreground/50">
+                  {parameters.description}
+                </Markdown>
               )}
             </FormItem>
           )

@@ -10,6 +10,7 @@ import type {
 
 import { useUISettingKey, useUISettingSelector } from "~/atoms/settings/ui"
 import { isElectronBuild } from "~/constants"
+import { useIsDark } from "~/hooks/common"
 import { tipcClient } from "~/lib/client"
 import { cn } from "~/lib/utils"
 
@@ -71,7 +72,11 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
 
   const [loaded, setLoaded] = useState(false)
 
-  const codeTheme = useUISettingSelector((s) => overrideTheme || s.codeHighlightTheme)
+  const isDark = useIsDark()
+  const codeThemeLight = useUISettingSelector((s) => overrideTheme || s.codeHighlightThemeLight)
+  const codeThemeDark = useUISettingSelector((s) => overrideTheme || s.codeHighlightThemeDark)
+  const codeTheme = isDark ? codeThemeDark : codeThemeLight
+
   useIsomorphicLayoutEffect(() => {
     let isMounted = true
     setLoaded(false)

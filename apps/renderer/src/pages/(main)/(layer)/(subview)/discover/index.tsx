@@ -73,11 +73,9 @@ export function Component() {
         </TabsList>
         {tabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
-            {TabComponent[tab.value] ? (
-              createElement(TabComponent[tab.value])
-            ) : (
-              <DiscoverForm type={tab.value} />
-            )}
+            {createElement(TabComponent[tab.value] || TabComponent.default, {
+              type: tab.value,
+            })}
           </TabsContent>
         ))}
       </Tabs>
@@ -86,8 +84,9 @@ export function Component() {
   )
 }
 
-const TabComponent = {
+const TabComponent: Record<string, React.FC<{ type: string }>> = {
   import: DiscoverImport,
   rss3: DiscoverRSS3,
   user: DiscoverUser,
+  default: DiscoverForm,
 }

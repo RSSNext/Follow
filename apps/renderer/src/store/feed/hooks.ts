@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useShallow } from "zustand/react/shallow"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING, views } from "~/constants"
-import { useRouteParms } from "~/hooks/biz/useRouteParams"
+import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import type { TargetModel } from "~/models"
 
 import { getSubscriptionByFeedId } from "../subscription"
@@ -35,7 +35,7 @@ export const useFeedByIdSelector = <T>(
 export const useFeedHeaderTitle = () => {
   const { t } = useTranslation()
 
-  const { feedId: currentFeedId, view } = useRouteParms()
+  const { feedId: currentFeedId, view } = useRouteParams()
 
   const feedTitle = useFeedByIdSelector(currentFeedId, (feed) => feed.title)
   const subscriptionTitle = useMemo(

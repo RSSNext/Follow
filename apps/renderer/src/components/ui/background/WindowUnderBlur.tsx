@@ -18,11 +18,12 @@ const Noop: Props = ({ children, className, ...rest }) => (
   </div>
 )
 
-const Win32Material: Props = ({ className, children, ...rest }) => (
-  <div className={cn("bg-transparent", className)} {...rest}>
-    {children}
-  </div>
-)
+// Disable blur effect on Windows, because electron backgroundMaterial has some issues
+// const Win32Material: Props = ({ className, children, ...rest }) => (
+//   <div className={cn("bg-transparent", className)} {...rest}>
+//     {children}
+//   </div>
+// )
 export const WindowUnderBlur: Props = SYSTEM_CAN_UNDER_BLUR_WINDOW
   ? (props) => {
       const opaqueSidebar = useUISettingKey("opaqueSidebar")
@@ -38,7 +39,7 @@ export const WindowUnderBlur: Props = SYSTEM_CAN_UNDER_BLUR_WINDOW
           return <MacOSVibrancy {...props} />
         }
         case "win32": {
-          return <Win32Material {...props} />
+          return <Noop {...props} />
         }
         default: {
           return <Noop {...props} />

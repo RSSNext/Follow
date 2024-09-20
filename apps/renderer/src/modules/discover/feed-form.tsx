@@ -284,8 +284,12 @@ const FeedInnerForm = ({
                         <label
                           htmlFor={view.name}
                           className={cn(
+                            "hover:text-theme-foreground dark:hover:text-white",
                             view.peerClassName,
-                            "center flex h-10 flex-col text-xs leading-none text-theme-vibrancyFg",
+                            "center flex h-10 flex-col text-xs leading-none opacity-80 duration-200",
+                            "text-neutral-800 dark:text-zinc-200",
+                            "peer-checked:opacity-100",
+                            "whitespace-nowrap",
                           )}
                         >
                           <span className="text-lg">{view.icon}</span>

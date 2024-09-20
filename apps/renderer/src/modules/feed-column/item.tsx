@@ -2,7 +2,6 @@ import { WEB_URL } from "@follow/shared/constants"
 import dayjs from "dayjs"
 import { memo, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useClickAnyWhere } from "usehooks-ts"
 
 import { getMainContainerElement } from "~/atoms/dom"
 import { FeedCertification } from "~/components/feed-certification"
@@ -12,6 +11,7 @@ import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/compon
 import { useFeedActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useAnyPointDown } from "~/hooks/common"
 import { nextFrame } from "~/lib/dom"
 import { getNewIssueUrl } from "~/lib/issues"
 import { showNativeMenu } from "~/lib/native-menu"
@@ -58,7 +58,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
   const { items } = useFeedActions({ feedId, view })
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useClickAnyWhere(() => {
+  useAnyPointDown(() => {
     setIsContextMenuOpen(false)
   })
   if (!feed) return null

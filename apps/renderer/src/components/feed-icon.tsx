@@ -5,7 +5,7 @@ import { forwardRef, useMemo } from "react"
 import { getColorScheme, stringToHue } from "~/lib/color"
 import { getImageProxyUrl } from "~/lib/img-proxy"
 import { cn, getUrlIcon } from "~/lib/utils"
-import type { CombinedEntryModel, FeedModel,TargetModel } from "~/models"
+import type { CombinedEntryModel, FeedModel, TargetModel } from "~/models"
 
 import { PlatformIcon } from "./ui/platform-icon"
 
@@ -150,7 +150,7 @@ export function FeedIcon({
 
       ImageElement = (
         <PlatformIcon
-          url={(feed as FeedModel)?.siteUrl!}
+          url={(feed as FeedModel)?.siteUrl || fallbackUrl}
           style={sizeStyle}
           className={cn("center mr-2", className)}
         >
@@ -177,7 +177,7 @@ export function FeedIcon({
     return (
       <Avatar className="shrink-0">
         <AvatarImage
-          className="rounded-sm duration-200 animate-in fade-in-0"
+          className="rounded-sm object-cover duration-200 animate-in fade-in-0"
           asChild
           src={finalSrc}
         >
