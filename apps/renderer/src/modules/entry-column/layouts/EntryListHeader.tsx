@@ -8,6 +8,7 @@ import { useWhoami } from "~/atoms/user"
 import { ImpressionView } from "~/components/common/ImpressionTracker"
 import { ActionButton } from "~/components/ui/button"
 import { DividerVertical } from "~/components/ui/divider"
+import { RotatingRefreshIcon } from "~/components/ui/loading"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, views } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
@@ -109,7 +110,7 @@ export const EntryListHeader: FC<{
                   refreshFeed()
                 }}
               >
-                <i className={cn("i-mgc-refresh-2-cute-re", isPending && "animate-spin")} />
+                <RotatingRefreshIcon isRefreshing={isPending} />
               </ActionButton>
             ) : (
               <ActionButton
@@ -122,12 +123,9 @@ export const EntryListHeader: FC<{
                   refetch()
                 }}
               >
-                <i
-                  className={cn(
-                    "i-mgc-refresh-2-cute-re",
-                    isRefreshing && "animate-spin",
-                    hasUpdate && "text-accent",
-                  )}
+                <RotatingRefreshIcon
+                  className={cn(hasUpdate && "text-accent")}
+                  isRefreshing={isRefreshing}
                 />
               </ActionButton>
             )
