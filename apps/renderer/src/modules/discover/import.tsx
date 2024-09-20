@@ -38,6 +38,24 @@ const formSchema = z.object({
 
 const NumberDisplay = ({ value }) => <span className="font-bold text-zinc-800">{value ?? 0}</span>
 
+const list = [
+  {
+    key: "parsedErrorItems",
+    title: <Trans ns="app" i18nKey="discover.import.parsedErrorItems" />,
+    className: "text-red-500",
+  },
+  {
+    key: "successfulItems",
+    title: <Trans ns="app" i18nKey="discover.import.successfulItems" />,
+    className: "text-green-500",
+  },
+  {
+    key: "conflictItems",
+    title: <Trans ns="app" i18nKey="discover.import.conflictItems" />,
+    className: "text-yellow-500",
+  },
+]
+
 export function DiscoverImport() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -73,25 +91,8 @@ export function DiscoverImport() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutation.mutate(values.file)
   }
-  const { t } = useTranslation()
 
-  const list = [
-    {
-      key: "parsedErrorItems",
-      title: t("discover.import.parsedErrorItems"),
-      className: "text-red-500",
-    },
-    {
-      key: "successfulItems",
-      title: t("discover.import.successfulItems"),
-      className: "text-green-500",
-    },
-    {
-      key: "conflictItems",
-      title: t("discover.import.conflictItems"),
-      className: "text-yellow-500",
-    },
-  ]
+  const { t } = useTranslation()
 
   return (
     <>

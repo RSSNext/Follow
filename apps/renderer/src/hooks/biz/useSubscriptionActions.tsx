@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import { useHotkeys } from "react-hotkeys-hook"
-import { Trans } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 import { Kbd } from "~/components/ui/kbd/Kbd"
@@ -14,8 +14,10 @@ import { feedUnreadActions } from "~/store/unread"
 import { navigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
 
-export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void }) =>
-  useMutation({
+export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void }) => {
+  const { t } = useTranslation("app")
+
+  return useMutation({
     mutationFn: async (subscription: SubscriptionFlatModel) =>
       subscriptionActions.unfollow(subscription.feedId).then((feed) => {
         subscriptionQuery.byView(subscription.view).invalidate()
@@ -39,12 +41,13 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
 
           toast.dismiss(toastId)
         }
+
         const toastId = toast(<UnfollowInfo title={feed.title!} undo={undo} />, {
           duration: 3000,
           action: {
             label: (
               <span className="flex items-center gap-1">
-                <Trans ns="app" i18nKey="words.undo" />
+                {t("words.undo")}
                 <Kbd className="inline-flex items-center border border-border bg-transparent dark:text-white">
                   Meta+Z
                 </Kbd>
@@ -68,6 +71,7 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
       }
     },
   })
+}
 
 const UnfollowInfo = ({ title, undo }: { title: string; undo: () => any }) => {
   useHotkeys("ctrl+z,meta+z", undo, {
