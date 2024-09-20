@@ -256,7 +256,7 @@ function AudioCover({
 
       {!!estimatedMins && (
         <div className="absolute bottom-0 w-full overflow-hidden rounded-b-sm text-center ">
-          <div className="z--1 absolute  left-0 top-0 size-full bg-white/50 opacity-0 duration-200 group-hover:opacity-100 dark:bg-neutral-900/70" />
+          <div className="absolute left-0 top-0 size-full bg-white/50 opacity-0 duration-200 group-hover:opacity-100 dark:bg-neutral-900/70" />
           <div className="text-[13px] opacity-0 backdrop-blur-none duration-200 group-hover:opacity-100 group-hover:backdrop-blur-sm">
             {formatEstimatedMins(estimatedMins)}
           </div>
