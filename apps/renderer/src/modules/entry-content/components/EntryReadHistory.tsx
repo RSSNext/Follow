@@ -57,7 +57,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
         entryHistory.readCount > 10 &&
         entryHistory.userIds &&
         entryHistory.userIds.length >= 10 && (
-          <HoverCard open>
+          <HoverCard>
             <HoverCardTrigger asChild>
               <button
                 type="button"
