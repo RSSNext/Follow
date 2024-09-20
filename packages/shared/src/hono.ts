@@ -1937,6 +1937,22 @@ declare const listsTimeline: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        feedId: drizzle_orm_pg_core.PgColumn<{
+            name: "feedId";
+            tableName: "lists_timeline";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
         entryId: drizzle_orm_pg_core.PgColumn<{
             name: "entry_id";
             tableName: "lists_timeline";
@@ -1953,21 +1969,44 @@ declare const listsTimeline: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        insertedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "inserted_at";
+            tableName: "lists_timeline";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
 declare const listsTimelineOpenAPISchema: zod.ZodObject<{
     listId: zod.ZodString;
+    feedId: zod.ZodString;
     entryId: zod.ZodString;
+    insertedAt: zod.ZodString;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    feedId: string;
+    insertedAt: string;
     entryId: string;
     listId: string;
 }, {
+    feedId: string;
+    insertedAt: string;
     entryId: string;
     listId: string;
 }>;
 declare const listsTimelineRelations: drizzle_orm.Relations<"lists_timeline", {
     entries: drizzle_orm.One<"entries", true>;
+    feeds: drizzle_orm.One<"feeds", true>;
 }>;
 
 declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
