@@ -38,18 +38,25 @@ export const useFeedActions = ({
 
   const items = useMemo(() => {
     if (!feed) return []
+    const isList = feed?.type === "list"
     const items: NativeMenuItem[] = [
-      {
-        type: "text" as const,
-        label: isEntryList ? t("sidebar.feed_actions.edit_feed") : t("sidebar.feed_actions.edit"),
-        shortcut: "E",
-        click: () => {
-          present({
-            title: t("sidebar.feed_actions.edit_feed"),
-            content: ({ dismiss }) => <FeedForm asWidget id={feedId} onSuccess={dismiss} />,
-          })
-        },
-      },
+      ...(!isList
+        ? [
+            {
+              type: "text" as const,
+              label: isEntryList
+                ? t("sidebar.feed_actions.edit_feed")
+                : t("sidebar.feed_actions.edit"),
+              shortcut: "E",
+              click: () => {
+                present({
+                  title: t("sidebar.feed_actions.edit_feed"),
+                  content: ({ dismiss }) => <FeedForm asWidget id={feedId} onSuccess={dismiss} />,
+                })
+              },
+            },
+          ]
+        : []),
       {
         type: "text" as const,
         label: isEntryList
@@ -60,7 +67,11 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: t("sidebar.feed_actions.navigate_to_feed"),
+        label: t(
+          isList
+            ? "sidebar.feed_actions.navigate_to_list"
+            : "sidebar.feed_actions.navigate_to_feed",
+        ),
         shortcut: "Meta+G",
         disabled: !isEntryList || getRouteParams().feedId === feedId,
         click: () => {
@@ -78,7 +89,7 @@ export const useFeedActions = ({
         disabled: isEntryList,
         click: () => subscriptionActions.markReadByFeedIds([feedId]),
       },
-      ...(!feed.ownerUserId && !!feed.id
+      ...(!feed.ownerUserId && !!feed.id && !isList
         ? [
             {
               type: "text" as const,
@@ -96,7 +107,11 @@ export const useFeedActions = ({
         ? [
             {
               type: "text" as const,
-              label: t("sidebar.feed_actions.feed_owned_by_you"),
+              label: t(
+                isList
+                  ? "sidebar.feed_actions.list_owned_by_you"
+                  : "sidebar.feed_actions.feed_owned_by_you",
+              ),
             },
           ]
         : []),
@@ -106,39 +121,58 @@ export const useFeedActions = ({
       },
       {
         type: "text" as const,
-        label: t("sidebar.feed_actions.open_feed_in_browser"),
+        label: t(
+          isList
+            ? "sidebar.feed_actions.open_list_in_browser"
+            : "sidebar.feed_actions.open_feed_in_browser",
+        ),
         disabled: isEntryList,
         shortcut: "O",
-        click: () => window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank"),
+        click: () =>
+          window.open(
+            isList
+              ? `${WEB_URL}/list/${feedId}?view=${view}`
+              : `${WEB_URL}/feed/${feedId}?view=${view}`,
+            "_blank",
+          ),
       },
-      {
-        type: "text" as const,
-        label: t("sidebar.feed_actions.open_site_in_browser"),
-        shortcut: "Meta+O",
-        disabled: isEntryList,
-        click: () => {
-          const feed = getFeedById(feedId)
-          if (feed) {
-            "siteUrl" in feed && feed.siteUrl && window.open(feed.siteUrl, "_blank")
-          }
-        },
-      },
+      ...(!isList
+        ? [
+            {
+              type: "text" as const,
+              label: t("sidebar.feed_actions.open_site_in_browser"),
+              shortcut: "Meta+O",
+              disabled: isEntryList,
+              click: () => {
+                const feed = getFeedById(feedId)
+                if (feed) {
+                  "siteUrl" in feed && feed.siteUrl && window.open(feed.siteUrl, "_blank")
+                }
+              },
+            },
+          ]
+        : []),
       {
         type: "separator",
         disabled: isEntryList,
       },
       {
         type: "text" as const,
-        label: t("sidebar.feed_actions.copy_feed_url"),
+        label: t(
+          isList ? "sidebar.feed_actions.copy_list_url" : "sidebar.feed_actions.copy_feed_url",
+        ),
         disabled: isEntryList,
         shortcut: "Meta+C",
         click: () => {
-          "url" in feed && navigator.clipboard.writeText(feed.url)
+          const url = isList ? `${WEB_URL}/list/${feedId}?view=${view}` : feed.url
+          navigator.clipboard.writeText(url)
         },
       },
       {
         type: "text" as const,
-        label: t("sidebar.feed_actions.copy_feed_id"),
+        label: t(
+          isList ? "sidebar.feed_actions.copy_list_id" : "sidebar.feed_actions.copy_feed_id",
+        ),
         shortcut: "Meta+Shift+C",
         disabled: isEntryList,
         click: () => {

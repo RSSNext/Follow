@@ -26,7 +26,7 @@ import { FeedViewType } from "~/lib/enum"
 import { cn, isBizId } from "~/lib/utils"
 import { useFeed } from "~/queries/feed"
 import { entryActions, getEntry, useEntry } from "~/store/entry"
-import { useFeedByIdSelector } from "~/store/feed"
+import { useFeedById } from "~/store/feed"
 import { useSubscriptionByFeedId } from "~/store/subscription"
 
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
@@ -64,8 +64,8 @@ function EntryColumnImpl() {
     isCollection,
   } = useRouteParams()
   const activeEntry = useEntry(activeEntryId)
-  const feedTitle = useFeedByIdSelector(routeFeedId, (feed) => feed?.title)
-  useTitle(feedTitle)
+  const feed = useFeedById(routeFeedId)
+  useTitle(feed?.title)
 
   useEffect(() => {
     if (!activeEntryId) return
@@ -97,7 +97,9 @@ function EntryColumnImpl() {
     !unreadOnly &&
     !isCollection &&
     routeFeedId !== ROUTE_FEED_PENDING &&
-    entries.totalCount < 40
+    entries.totalCount < 40 &&
+    feed?.type !== "list"
+
   const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {
     components: {
