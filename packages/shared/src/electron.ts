@@ -11,19 +11,19 @@ export interface OpenElectronWindowOptions {
  * Work electron and browser,
  * if in electron, open a new window, otherwise open a new tab
  */
-export const openElectronWindow = (url: string, options: OpenElectronWindowOptions = {}) => {
-  if ("electron" in window) {
+export const openElectronWindow = (() => ("electron" in window)
+  ? ((url: string, options: OpenElectronWindowOptions = {}) => {
     const urlObject = new URL(url)
     const { searchParams } = urlObject
 
     searchParams.set(ELECTRON_QUERY_KEY, encodeURIComponent(JSON.stringify(options)))
 
     window.open(urlObject.toString())
-  } else {
+  })
+  : ((url: string) => {
     // eslint-disable-next-line no-restricted-globals
     window.open(url.replace(DEEPLINK_SCHEME, `${location.origin}/`))
-  }
-}
+  }))()
 
 export const extractElectronWindowOptions = (url: string): OpenElectronWindowOptions => {
   try {
