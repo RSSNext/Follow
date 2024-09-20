@@ -12,6 +12,7 @@ import { useWhoami } from "~/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { useAuthQuery } from "~/hooks/common"
+import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { Queries } from "~/queries"
 import { useEntryReadHistory } from "~/store/entry"
 import { useUserById } from "~/store/user"
@@ -116,7 +117,7 @@ const EntryUserRow: Component<{ userId: string }> = memo(({ userId }) => {
         }}
       >
         <Avatar className="aspect-square size-7 overflow-hidden rounded-full border border-border ring-1 ring-background">
-          <AvatarImage src={user?.image || undefined} />
+          <AvatarImage src={replaceImgUrlIfNeed(user?.image || undefined)} />
           <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
         </Avatar>
 
@@ -152,7 +153,7 @@ const EntryUser: Component<{
           }}
         >
           <Avatar className="aspect-square size-7 border border-border ring-1 ring-background">
-            <AvatarImage src={user?.image || undefined} />
+            <AvatarImage src={replaceImgUrlIfNeed(user?.image || undefined)} />
             <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
         </m.button>

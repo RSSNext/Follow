@@ -10,6 +10,7 @@ import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { nextFrame } from "~/lib/dom"
+import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { cn } from "~/lib/utils"
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
@@ -191,7 +192,7 @@ export function UserAvatar({
       >
         <AvatarImage
           className="duration-200 animate-in fade-in-0"
-          src={(profile.data || session?.user)?.image || undefined}
+          src={replaceImgUrlIfNeed((profile.data || session?.user)?.image || undefined)}
         />
         <AvatarFallback>{(profile.data || session?.user)?.name?.slice(0, 2)}</AvatarFallback>
       </Avatar>
