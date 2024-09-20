@@ -11,10 +11,11 @@ export const getImageProxyUrl = ({
   width: number
   height: number
 }) => {
+  const abValue = getAbValue("Image_Proxy_V2")
   if (isAbEnabled("Image_Proxy_V2")) {
-    return `${getAbValue("Image_Proxy_V2")}?url=${encodeURIComponent(url)}&width=${width}&height=${height}`
+    return `${abValue}?url=${encodeURIComponent(url)}&width=${width}&height=${height}`
   } else {
-    return `${getAbValue("Image_Proxy_V2")}/unsafe/fit-in/${width}x${height}/${encodeURIComponent(url)}`
+    return `${abValue}/unsafe/fit-in/${width}x${height}/${encodeURIComponent(url)}`
   }
 }
 

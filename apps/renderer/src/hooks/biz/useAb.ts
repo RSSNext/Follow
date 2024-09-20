@@ -5,6 +5,7 @@ import { useFeatureFlagEnabled } from "posthog-js/react"
 import { jotaiStore } from "~/lib/jotai"
 import type { FeatureKeys } from "~/modules/ab/atoms"
 import { debugFeaturesAtom, enableDebugOverrideAtom, IS_DEBUG_ENV } from "~/modules/ab/atoms"
+import { abPayloadFallback } from "~/modules/ab/fallback"
 
 export const useAb = (feature: FeatureKeys) => {
   const isEnableDebugOverrides = useAtomValue(enableDebugOverrideAtom)
@@ -32,5 +33,5 @@ export const isAbEnabled = (feature: FeatureKeys) => {
 }
 
 export const getAbValue = (feature: FeatureKeys) => {
-  return PostHog.getFeatureFlagPayload(feature)
+  return PostHog.getFeatureFlagPayload(feature) || abPayloadFallback[feature]
 }
