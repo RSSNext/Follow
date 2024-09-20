@@ -57,7 +57,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
         entryHistory.readCount > 10 &&
         entryHistory.userIds &&
         entryHistory.userIds.length >= 10 && (
-          <HoverCard>
+          <HoverCard open>
             <HoverCardTrigger asChild>
               <button
                 type="button"
@@ -80,7 +80,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
                 side="right"
                 asChild
                 className={clsx(
-                  "flex max-h-[300px] flex-col overflow-y-auto rounded-md border bg-background drop-shadow",
+                  "z-10 flex max-h-[300px] flex-col overflow-y-auto rounded-md border bg-background drop-shadow",
                   // Animation, fade up
                   "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-3",
                 )}
