@@ -101,17 +101,23 @@ export function DiscoverForm({ type }: { type: string }) {
 
   const keyword = form.watch("keyword")
   useEffect(() => {
-    if (!prefix) return
-    const isValidPrefix = prefix.find((p) => keyword.startsWith(p))
+    const trimmedKeyword = keyword.trim()
+    if (!prefix) {
+      form.setValue("keyword", trimmedKeyword)
+      return
+    }
+    const isValidPrefix = prefix.find((p) => trimmedKeyword.startsWith(p))
     if (!isValidPrefix) {
       form.setValue("keyword", prefix[0])
 
       return
     }
 
-    if (keyword.startsWith(`${isValidPrefix}${isValidPrefix}`)) {
-      form.setValue("keyword", keyword.slice(isValidPrefix.length))
+    if (trimmedKeyword.startsWith(`${isValidPrefix}${isValidPrefix}`)) {
+      form.setValue("keyword", trimmedKeyword.slice(isValidPrefix.length))
     }
+
+    form.setValue("keyword", trimmedKeyword)
   }, [form, keyword, prefix])
 
   return (

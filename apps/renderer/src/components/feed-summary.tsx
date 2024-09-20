@@ -29,9 +29,9 @@ export function FollowSummary({
           size={32}
         />
         <div className="truncate text-base font-semibold leading-tight">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center">
             {feed.title}
-            <FeedCertification feed={feed} />
+            <FeedCertification className="center" feed={feed} />
           </div>
           <EllipsisHorizontalTextWithTooltip className="truncate text-xs font-normal text-zinc-500">
             {feed.description}
