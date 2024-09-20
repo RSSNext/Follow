@@ -5,7 +5,7 @@ import { is } from "@electron-toolkit/utils"
 import { callGlobalContextMethod } from "@follow/shared/bridge"
 import { imageRefererMatches } from "@follow/shared/image"
 import type { BrowserWindowConstructorOptions } from "electron"
-import { BrowserWindow, Menu, shell } from "electron"
+import { BrowserWindow, Menu, screen,shell  } from "electron"
 
 import { isDev, isMacOS, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
@@ -64,9 +64,10 @@ export function createWindow(
         icon: getIconPath(),
 
         titleBarStyle: "hidden",
-        backgroundMaterial: isWindows11 ? "mica" : undefined,
+        // Electron material bug, comment this for now
+        // backgroundMaterial: isWindows11 ? "mica" : undefined,
+
         frame: true,
-        maximizable: !isWindows11,
       } as Electron.BrowserWindowConstructorOptions)
       break
     }
@@ -82,18 +83,15 @@ export function createWindow(
     ...configs,
   })
 
-  function refreshBound(timeout = 0) {
-    setTimeout(() => {
-      const mainWindow = getMainWindow()
-      if (!mainWindow) return
-      // FIXME: workaround for theme bug in full screen mode
-      const size = mainWindow.getSize()
-      mainWindow.setSize(size[0] + 1, size[1] + 1)
-      mainWindow.setSize(size[0], size[1])
-    }, timeout)
-  }
-
   window.on("leave-html-full-screen", () => {
+    function refreshBound(timeout = 0) {
+      setTimeout(() => {
+        // FIXME: workaround for theme bug in full screen mode
+        const size = window?.getSize()
+        window?.setSize(size[0] + 1, size[1] + 1)
+        window?.setSize(size[0], size[1])
+      }, timeout)
+    }
     // To solve the vibrancy losing issue when leaving full screen mode
     // @see https://github.com/toeverything/AFFiNE/blob/280e24934a27557529479a70ab38c4f5fc65cb00/packages/frontend/electron/src/main/windows-manager/main-window.ts:L157
     refreshBound()
@@ -193,7 +191,6 @@ export function createWindow(
 
   return window
 }
-
 export const createMainWindow = () => {
   const storeKey = "windowState"
   const windowState = store.get(storeKey) as {
@@ -202,12 +199,29 @@ export const createMainWindow = () => {
     x: number
     y: number
   } | null
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const { width: screenWidth, height: screenHeight } = primaryDisplay.workAreaSize
+
+  // Ensure the window is within screen bounds
+  const ensureInBounds = (value: number, size: number, max: number) => {
+    if (value + size > max) {
+      return Math.max(0, max - size)
+    }
+    return Math.max(0, value)
+  }
+
+  const width = windowState?.width || 1200
+  const height = windowState?.height || 900
+  const x =
+    windowState?.x !== undefined ? ensureInBounds(windowState.x, width, screenWidth) : undefined
+  const y =
+    windowState?.y !== undefined ? ensureInBounds(windowState.y, height, screenHeight) : undefined
 
   const window = createWindow({
     width: windowState?.width || 1200,
     height: windowState?.height || 900,
-    x: windowState?.x,
-    y: windowState?.y,
+    x,
+    y,
     minWidth: 1024,
     minHeight: 500,
   })
