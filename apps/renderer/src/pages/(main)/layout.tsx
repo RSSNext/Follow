@@ -4,7 +4,7 @@ import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
 import React, { useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
@@ -15,12 +15,14 @@ import { useLoginModalShow, useWhoami } from "~/atoms/user"
 import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { ErrorComponentType } from "~/components/errors/enum"
 import { PanelSplitter } from "~/components/ui/divider"
+import { Kbd } from "~/components/ui/kbd/Kbd"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
 import { NoopChildren } from "~/components/ui/modal/stacked/utils"
 import { RootPortal } from "~/components/ui/portal"
 import { HotKeyScopeMap } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
+import { useI18n } from "~/hooks/common"
 import { preventDefault } from "~/lib/dom"
 import { cn } from "~/lib/utils"
 import { EnvironmentIndicator } from "~/modules/app/EnvironmentIndicator"
@@ -200,6 +202,7 @@ const FeedResponsiveResizerContainer = ({
       timer = clearTimeout(timer)
     }
   }, [feedColumnShow])
+  const t = useI18n()
 
   return (
     <>
@@ -217,9 +220,6 @@ const FeedResponsiveResizerContainer = ({
           "--fo-feed-col-w": `${position}px`,
         }}
       >
-        {/* {React.cloneElement(children, {
-          className: "!bg-native",
-        })} */}
         <Slot className={!feedColumnShow ? "!bg-native" : ""}>{children}</Slot>
       </div>
 
@@ -231,7 +231,34 @@ const FeedResponsiveResizerContainer = ({
       />
 
       {delayShowSplitter && (
-        <PanelSplitter isDragging={isDragging} cursor={separatorCursor} {...separatorProps} />
+        <PanelSplitter
+          isDragging={isDragging}
+          cursor={separatorCursor}
+          {...separatorProps}
+          onDoubleClick={() => {
+            setFeedColumnShow(false)
+          }}
+          tooltip={
+            !isDragging && (
+              <>
+                <div>
+                  {/* <b>Drag</b> to resize */}
+                  <Trans t={t} i18nKey="resize.tooltip.drag_to_resize" components={{ b: <b /> }} />
+                </div>
+                <div className="center">
+                  <span>
+                    <Trans
+                      t={t}
+                      i18nKey="resize.tooltip.double_click_to_collapse"
+                      components={{ b: <b /> }}
+                    />
+                  </span>{" "}
+                  <Kbd className="ml-1">{"["}</Kbd>
+                </div>
+              </>
+            )
+          }
+        />
       )}
     </>
   )
