@@ -26,13 +26,13 @@
 
 ## 简介
 
-&nbsp;&nbsp;&nbsp;&nbsp;欢迎访问Follow！本软件可以让您同时关注您最喜欢的那些网站、博客、社交账户和通知消息。其设计内核是一个现代、快速且便捷的多用途信息中心。
+欢迎访问Follow！本软件可以让您同时关注您最喜欢的那些网站、博客、社交账户和通知消息。其设计内核是一个现代、快速且便捷的多用途信息中心。
 
-&nbsp;&nbsp;&nbsp;&nbsp;支持的平台：Windows、macOS、Linux以及浏览器的Follow Desktop；Android和iOS的Follow Mobile（即将推出）。
+支持的平台：Windows、macOS、Linux以及浏览器的Follow Desktop；Android和iOS的Follow Mobile（即将推出）。
 
 ## 快照
 
-&nbsp;&nbsp;&nbsp;&nbsp;该项目目前正处于活跃开发阶段。以下截图仅供参考，可能与最终版本存在差异。
+该项目目前正处于活跃开发阶段。以下截图仅供参考，可能与最终版本存在差异。
 
 - 对不同类型的内容使用不同的视图，以提供与原始平台相同或更好的体验——文章、社交媒体、图片、视频、播客和通知。
   ![Screenshot 2024-09-10 at 6 22 18 PM](https://github.com/user-attachments/assets/1958ec70-1916-47c5-82d0-3bd8e43f3a26)
@@ -73,15 +73,15 @@
 
 [![Discord](https://img.shields.io/discord/1243823539426033696?logo=discord&label=Discord&style=flat-square&color=5865F2)](https://discord.gg/xHCVQZ6wmZ) [![](https://img.shields.io/badge/any_text-Follow-blue?color=2CA5E0&label=_&logo=x&cacheSeconds=3600&style=flat-square)](https://x.com/intent/follow?screen_name=follow_app_)
 
-&nbsp;&nbsp;&nbsp;&nbsp;目前，Follow仍处于早期开发人员预览阶段（alpha），仅对有限数量的通过邀请的用户开放。
+目前，Follow仍处于早期开发人员预览阶段（alpha），仅对有限数量的通过邀请的用户开放。
 
-&nbsp;&nbsp;&nbsp;&nbsp;您可以通过以下方式获取邀请码：
+您可以通过以下方式获取邀请码：
 
 - 找到其他参加alpha测试的用户邀请您。
 - 加入我们的Discord，其中偶尔会发布邀请码。
 - 关注我们的X(推特)，其中偶尔会发布邀请码。
 
-&nbsp;&nbsp;&nbsp;&nbsp;如果您有权限，欢迎使用以下方法下载并安装：
+如果您有权限，欢迎使用以下方法下载并安装：
 
 -  从 [app.follow.is](https://app.follow.is) 访问我们的在线网络程序。
 - 您可以从 [发布页面](https://github.com/RSSNext/Follow/releases) 获取安装包。
