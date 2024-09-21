@@ -348,6 +348,9 @@ importers:
       '@iconify/tools':
         specifier: 4.0.6
         version: 4.0.6
+      '@lottiefiles/dotlottie-react':
+        specifier: 0.8.12
+        version: 0.8.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@microflash/remark-callout-directives':
         specifier: 4.3.1
         version: 4.3.1
@@ -504,9 +507,6 @@ importers:
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
-      lottie-react:
-        specifier: 2.4.0
-        version: 2.4.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nanoid:
         specifier: 5.0.7
         version: 5.0.7
@@ -2050,6 +2050,15 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@lottiefiles/dotlottie-react@0.8.12':
+    resolution: {integrity: sha512-6S9q5mH2l8JDnKAruAq4NP7bzHVzJNUt8UsXONfveSyJPUgT5hGw5b5vCjW19Ra3hgN/d69qUtRLHfmyRAgblQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+
+  '@lottiefiles/dotlottie-web@0.33.0':
+    resolution: {integrity: sha512-/KerIs0UkmwuDKYWlNGWYSSZkZaLNXXHqg6qCnP7P2JuzgI4bHRmlIk3+LoJjl/jWqd3WyI4t5oRV6ch0sQwvg==}
 
   '@malept/cross-spawn-promise@1.1.1':
     resolution: {integrity: sha512-RTBGWL5FWQcg9orDOCcp4LvItNzUPcyEU9bwaeJX0rJ1IQxzucC48Y0/sQLp/g6t99IQgAlGIaesJS+gTn7tVQ==}
@@ -6175,15 +6184,6 @@ packages:
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
-
-  lottie-react@2.4.0:
-    resolution: {integrity: sha512-pDJGj+AQlnlyHvOHFK7vLdsDcvbuqvwPZdMlJ360wrzGFurXeKPr8SiRCjLf3LrNYKANQtSsh5dz9UYQHuqx4w==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-
-  lottie-web@5.12.2:
-    resolution: {integrity: sha512-uvhvYPC8kGPjXT3MyKMrL3JitEAmDMp30lVkuq/590Mw9ok6pWcFCwXJveo0t5uqYw1UREQHofD+jVpdjBv8wg==}
 
   loupe@3.1.1:
     resolution: {integrity: sha512-edNu/8D5MKVfGVFRhFf8aAxiTM6Wumfz5XsaatSxlD3w4R1d/WEKUTydCdPGbl9K7QG/Ca3GnDV2sIKIpXRQcw==}
@@ -10523,6 +10523,14 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@lottiefiles/dotlottie-react@0.8.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@lottiefiles/dotlottie-web': 0.33.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  '@lottiefiles/dotlottie-web@0.33.0': {}
 
   '@malept/cross-spawn-promise@1.1.1':
     dependencies:
@@ -15538,14 +15546,6 @@ snapshots:
   loose-envify@1.4.0:
     dependencies:
       js-tokens: 4.0.0
-
-  lottie-react@2.4.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      lottie-web: 5.12.2
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  lottie-web@5.12.2: {}
 
   loupe@3.1.1:
     dependencies:

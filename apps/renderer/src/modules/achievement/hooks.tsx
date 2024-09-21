@@ -1,11 +1,10 @@
+import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useSingleton } from "foxact/use-singleton"
 import { atom, useStore } from "jotai"
-import type { LottieRef } from "lottie-react"
-import Lottie from "lottie-react"
 import { nanoid } from "nanoid"
 import type { FC } from "react"
-import { useCallback, useEffect, useRef } from "react"
+import { useCallback, useEffect } from "react"
 import { Trans } from "react-i18next"
 
 import { Button } from "~/components/ui/button"
@@ -16,7 +15,9 @@ import { SlideUpModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { Chain } from "~/lib/chain"
-import achievementAnimation from "~/lottie/achievement.json"
+import achievementAnimationUri from "~/lottie/achievement.lottie?url"
+
+const absoluteachievementAnimationUri = new URL(achievementAnimationUri, import.meta.url).href
 
 enum AchievementsActionIdMap {
   FIRST_CLAIM_FEED = 0,
@@ -57,11 +58,6 @@ const buildDefaultAchievements = () => {
   ]
 }
 export const AchievementModalContent: FC = () => {
-  const lottieRef: LottieRef = useRef(null)
-  useEffect(() => {
-    lottieRef.current?.setSpeed(2)
-  }, [])
-
   const jotaiStore = useStore()
   const queryClient = useQueryClient()
 
@@ -131,7 +127,13 @@ export const AchievementModalContent: FC = () => {
 
   return (
     <div className="relative flex w-full grow flex-col items-center">
-      <Lottie lottieRef={lottieRef} animationData={achievementAnimation} loop={false} />
+      <DotLottieReact
+        className="mt-12 size-[100px]"
+        autoplay
+        speed={2}
+        src={absoluteachievementAnimationUri}
+        loop={false}
+      />
 
       <div className="mt-4 text-xl font-bold">{t("words.achievement")}</div>
 
@@ -141,7 +143,7 @@ export const AchievementModalContent: FC = () => {
           components={{
             power: (
               <span className="center gap-0.5 font-semibold">
-                {t("words.power")}
+                <span>{t("words.power")}</span>
                 <i className="i-mgc-power text-accent" />
               </span>
             ),

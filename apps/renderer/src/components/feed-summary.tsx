@@ -16,10 +16,11 @@ export function FollowSummary({
   docs?: string
   className?: string
 }) {
+  const isList = feed.type === "list"
   return (
     <div className={cn("flex select-text flex-col gap-2 text-sm", className)}>
       <a
-        href={feed.type === "feed" ? feed.siteUrl || void 0 : `${WEB_URL}/list/${feed.id}`}
+        href={!isList ? feed.siteUrl || void 0 : `${WEB_URL}/list/${feed.id}`}
         target="_blank"
         className="flex items-center"
         rel="noreferrer"
@@ -33,7 +34,7 @@ export function FollowSummary({
         <div className="truncate text-base font-semibold leading-tight">
           <div className="flex items-center">
             {feed.title}
-            {feed.type === "feed" && <FeedCertification className="center" feed={feed} />}
+            {!isList && <FeedCertification className="center" feed={feed} />}
           </div>
           <EllipsisHorizontalTextWithTooltip className="truncate text-xs font-normal text-zinc-500">
             {feed.description}
@@ -43,11 +44,11 @@ export function FollowSummary({
       <div className="flex items-center gap-1 truncate text-zinc-500">
         <i className="i-mgc-right-cute-re shrink-0" />
         <a
-          href={feed.type === "feed" ? feed.url || docs : `${WEB_URL}/list/${feed.id}`}
+          href={!isList ? feed.url || docs : `${WEB_URL}/list/${feed.id}`}
           target="_blank"
           rel="noreferrer"
         >
-          {feed.type === "feed" ? feed.url || docs : `list:${feed.id}`}
+          {!isList ? feed.url || docs : `list:${feed.id}`}
         </a>
       </div>
     </div>
