@@ -2,7 +2,7 @@ import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
 import { Fragment, memo, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ScrollArea } from "~/components/ui/scroll-area"
@@ -104,15 +104,9 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
 
   const { t } = useTranslation()
 
-  const location = useLocation()
-  const navigate = useNavigate()
-
   return (
     <div className={cn(className, "font-medium")}>
-      <div
-        onClick={stopPropagation}
-        className="mx-3 mb-2 flex items-center justify-between px-2.5 py-1"
-      >
+      <div onClick={stopPropagation} className="mx-3 flex items-center justify-between px-2.5 py-1">
         <div
           className="font-bold"
           onClick={(e) => {
@@ -138,23 +132,11 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           <UnreadNumber unread={totalUnread} className="text-xs !text-inherit" />
         </div>
       </div>
+
       <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3" rootClassName="h-full">
         <div
           className={cn(
-            "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 font-semibold transition-colors",
-            location.pathname === "/discover" && "bg-native-active",
-          )}
-          onClick={(e) => {
-            e.stopPropagation()
-            navigate(`/discover`)
-          }}
-        >
-          <i className="i-mgc-compass-cute-fi mr-2 text-blue-500" />
-          {t("words.discover")}
-        </div>
-        <div
-          className={cn(
-            "flex h-8 w-full shrink-0 cursor-menu items-center rounded-md px-2.5 font-semibold transition-colors",
+            "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-1 rounded-md px-2.5 transition-colors",
             feedId === FEED_COLLECTION_LIST && "bg-native-active",
           )}
           onClick={(e) => {
@@ -168,18 +150,23 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             }
           }}
         >
-          <i className="i-mgc-star-cute-fi mr-2 text-amber-500" />
+          <i className="i-mgc-star-cute-fi mr-2 size-4 -translate-y-px text-amber-500" />
           {t("words.starred")}
         </div>
         {Object.keys(listsData).length > 0 && (
           <>
-            <div className="mt-4 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+            <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
               {t("words.lists")}
             </div>
             <SortableList view={view} expansion={expansion} data={listsData} />
           </>
         )}
-        <div className="mt-4 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+        <div
+          className={cn(
+            "flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
+            Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
+          )}
+        >
           {t("words.feeds")}
         </div>
         {hasData ? (

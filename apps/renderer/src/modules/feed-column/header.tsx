@@ -2,6 +2,7 @@ import { m } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
 import { memo, useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
 import { setAppSearchOpen } from "~/atoms/app"
@@ -35,6 +36,7 @@ export const FeedColumnHeader = memo(() => {
   const [active] = useSidebarActiveView()
   const navigateBackHome = useBackHome(active)
   const normalStyle = !window.electron || window.electron.process.platform !== "darwin"
+  const { t } = useTranslation()
   return (
     <div
       className={cn(
@@ -58,6 +60,11 @@ export const FeedColumnHeader = memo(() => {
         </LogoContextMenu>
       )}
       <div className="relative flex items-center gap-1" onClick={stopPropagation}>
+        <Link to="/discover" tabIndex={-1}>
+          <ActionButton shortcut="Meta+T" tooltip={t("words.discover")}>
+            <i className="i-mgc-compass-3-cute-re size-5 text-theme-vibrancyFg" />
+          </ActionButton>
+        </Link>
         <SearchActionButton />
 
         <ProfileButton method="modal" />
