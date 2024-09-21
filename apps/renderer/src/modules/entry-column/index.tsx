@@ -24,6 +24,7 @@ import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRoutePara
 import { useTitle, useTypeScriptHappyCallback } from "~/hooks/common"
 import { FeedViewType } from "~/lib/enum"
 import { cn, isBizId } from "~/lib/utils"
+import type { FeedModel } from "~/models"
 import { useFeed } from "~/queries/feed"
 import { entryActions, getEntry, useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
@@ -350,7 +351,7 @@ const AddFeedHelper = () => {
     return null
   }
 
-  throw new FeedFoundCanBeFollowError(feedQuery.data.feed)
+  throw new FeedFoundCanBeFollowError(feedQuery.data.feed as FeedModel)
 }
 
 export const EntryColumn = memo(EntryColumnImpl)

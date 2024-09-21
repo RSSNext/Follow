@@ -374,7 +374,7 @@ const FeedInnerForm = ({
               </FormItem>
             )}
           />
-          {isList && !!feed.fee && (
+          {isList && !!feed.fee && !isSubscribed && (
             <div>
               <FormLabel>{t("feed_form.fee")}</FormLabel>
               <FormDescription>{t("feed_form.fee_description")}</FormDescription>

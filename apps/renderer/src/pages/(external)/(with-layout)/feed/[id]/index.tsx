@@ -14,6 +14,7 @@ import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
 import { useTitle } from "~/hooks/common"
 import { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
+import type { FeedModel } from "~/models"
 import { ArticleItem } from "~/modules/entry-column/Items/article-item"
 import { NotificationItem } from "~/modules/entry-column/Items/notification-item"
 import { PictureItem } from "~/modules/entry-column/Items/picture-item"
@@ -31,6 +32,7 @@ export function Component() {
   const feed = useFeed({
     id,
   })
+  const feedData = feed.data?.feed as FeedModel
   const entries = useEntriesPreview({
     id,
   })
@@ -93,11 +95,11 @@ export function Component() {
               })}
             </div>
             <span className="center mb-8 flex gap-4">
-              {feed.data.feed.url.startsWith("https://") ? (
+              {feedData.url.startsWith("https://") ? (
                 <Button
                   variant={"outline"}
                   onClick={() => {
-                    window.open(feed.data.feed.url, "_blank")
+                    window.open(feedData.url, "_blank")
                   }}
                 >
                   View Feed URL
@@ -107,7 +109,7 @@ export function Component() {
                   variant={"outline"}
                   onClick={() => {
                     toast.success(t("copied_link"))
-                    navigator.clipboard.writeText(feed.data.feed.url)
+                    navigator.clipboard.writeText(feedData.url)
                   }}
                 >
                   Copy Feed URL
@@ -141,9 +143,9 @@ export function Component() {
                     <Item
                       entryPreview={{
                         entries: entry,
-                        feeds: feed.data.feed,
+                        feeds: feedData,
                         read: true,
-                        feedId: feed.data.feed.id!,
+                        feedId: feedData.id!,
                       }}
                       entryId={entry.id}
                     />

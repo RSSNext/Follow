@@ -40,23 +40,19 @@ export const useFeedActions = ({
     if (!feed) return []
     const isList = feed?.type === "list"
     const items: NativeMenuItem[] = [
-      ...(!isList
-        ? [
-            {
-              type: "text" as const,
-              label: isEntryList
-                ? t("sidebar.feed_actions.edit_feed")
-                : t("sidebar.feed_actions.edit"),
-              shortcut: "E",
-              click: () => {
-                present({
-                  title: t("sidebar.feed_actions.edit_feed"),
-                  content: ({ dismiss }) => <FeedForm asWidget id={feedId} onSuccess={dismiss} />,
-                })
-              },
-            },
-          ]
-        : []),
+      {
+        type: "text" as const,
+        label: isEntryList ? t("sidebar.feed_actions.edit_feed") : t("sidebar.feed_actions.edit"),
+        shortcut: "E",
+        click: () => {
+          present({
+            title: t("sidebar.feed_actions.edit_feed"),
+            content: ({ dismiss }) => (
+              <FeedForm asWidget id={feedId} onSuccess={dismiss} isList={isList} />
+            ),
+          })
+        },
+      },
       {
         type: "text" as const,
         label: isEntryList

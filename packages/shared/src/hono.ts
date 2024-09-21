@@ -3011,6 +3011,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             createdAt: string;
                         } | null | undefined;
                     };
+                    subscriptionCount: number;
+                    readCount: number;
+                    subscription?: {
+                        title: string | null;
+                        userId: string;
+                        view: number;
+                        isPrivate: boolean;
+                        listId: string;
+                    } | undefined;
                 };
             };
             outputFormat: "json" | "text";
