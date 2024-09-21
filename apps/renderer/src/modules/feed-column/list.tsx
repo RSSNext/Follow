@@ -2,7 +2,7 @@ import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
 import { Fragment, memo, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { ScrollArea } from "~/components/ui/scroll-area"
@@ -29,7 +29,7 @@ import {
 import { FeedCategory } from "./category"
 import { UnreadNumber } from "./unread-number"
 
-const useGroupedData = (view: FeedViewType) => {
+const useFeedsGroupedData = (view: FeedViewType) => {
   const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
 
   const data = useSubscriptionByView(view) || remoteData
@@ -53,6 +53,26 @@ const useGroupedData = (view: FeedViewType) => {
   }, [data])
 }
 
+const useListsGroupedData = (view: FeedViewType) => {
+  const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
+
+  const data = useSubscriptionByView(view) || remoteData
+
+  return useMemo(() => {
+    if (!data || data.length === 0) return {}
+
+    const groupFolder = {} as Record<string, string[]>
+
+    for (const subscription of data) {
+      if (!subscription.category && !subscription.defaultCategory) {
+        groupFolder[subscription.feedId] = [subscription.feedId]
+      }
+    }
+
+    return groupFolder
+  }, [data])
+}
+
 const useUpdateUnreadCount = () => {
   useAuthQuery(Queries.subscription.unreadAll(), {
     refetchInterval: false,
@@ -61,27 +81,31 @@ const useUpdateUnreadCount = () => {
 
 function FeedListImpl({ className, view }: { className?: string; view: number }) {
   const [expansion, setExpansion] = useState(false)
-  const data = useGroupedData(view)
+  const feedsData = useFeedsGroupedData(view)
+  const listsData = useListsGroupedData(view)
 
   useUpdateUnreadCount()
 
   const totalUnread = useFeedUnreadStore((state) => {
     let unread = 0
 
-    for (const category in data) {
-      for (const feedId of data[category]) {
+    for (const category in feedsData) {
+      for (const feedId of feedsData[category]) {
         unread += state.data[feedId] || 0
       }
     }
     return unread
   })
 
-  const hasData = Object.keys(data).length > 0
+  const hasData = Object.keys(feedsData).length > 0 || Object.keys(listsData).length > 0
 
   const feedId = useRouteFeedId()
-  const navigate = useNavigateEntry()
+  const navigateEntry = useNavigateEntry()
 
   const { t } = useTranslation()
+
+  const location = useLocation()
+  const navigate = useNavigate()
 
   return (
     <div className={cn(className, "font-medium")}>
@@ -94,7 +118,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           onClick={(e) => {
             e.stopPropagation()
             if (view !== undefined) {
-              navigate({
+              navigateEntry({
                 entryId: null,
                 feedId: null,
                 view,
@@ -117,13 +141,26 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
       <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3" rootClassName="h-full">
         <div
           className={cn(
-            "flex h-8 w-full shrink-0 cursor-menu items-center rounded-md px-2.5 transition-colors",
+            "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 font-semibold transition-colors",
+            location.pathname === "/discover" && "bg-native-active",
+          )}
+          onClick={(e) => {
+            e.stopPropagation()
+            navigate(`/discover`)
+          }}
+        >
+          <i className="i-mgc-compass-cute-fi mr-2 text-blue-500" />
+          {t("words.discover")}
+        </div>
+        <div
+          className={cn(
+            "flex h-8 w-full shrink-0 cursor-menu items-center rounded-md px-2.5 font-semibold transition-colors",
             feedId === FEED_COLLECTION_LIST && "bg-native-active",
           )}
           onClick={(e) => {
             e.stopPropagation()
             if (view !== undefined) {
-              navigate({
+              navigateEntry({
                 entryId: null,
                 feedId: FEED_COLLECTION_LIST,
                 view,
@@ -131,11 +168,22 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             }
           }}
         >
-          <i className="i-mgc-star-cute-fi mr-2 text-orange-500" />
+          <i className="i-mgc-star-cute-fi mr-2 text-amber-500" />
           {t("words.starred")}
         </div>
+        {Object.keys(listsData).length > 0 && (
+          <>
+            <div className="mt-4 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+              {t("words.lists")}
+            </div>
+            <SortableList view={view} expansion={expansion} data={listsData} />
+          </>
+        )}
+        <div className="mt-4 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+          {t("words.feeds")}
+        </div>
         {hasData ? (
-          <SortableList view={view} expansion={expansion} data={data} />
+          <SortableList view={view} expansion={expansion} data={feedsData} />
         ) : (
           <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
             <Link

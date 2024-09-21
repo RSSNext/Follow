@@ -2,7 +2,6 @@ import { m } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
 import { memo, useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
 import { setAppSearchOpen } from "~/atoms/app"
@@ -34,7 +33,6 @@ const useBackHome = (active: number) => {
 
 export const FeedColumnHeader = memo(() => {
   const [active] = useSidebarActiveView()
-  const { t } = useTranslation()
   const navigateBackHome = useBackHome(active)
   const normalStyle = !window.electron || window.electron.process.platform !== "darwin"
   return (
@@ -62,11 +60,6 @@ export const FeedColumnHeader = memo(() => {
       <div className="relative flex items-center gap-1" onClick={stopPropagation}>
         <SearchActionButton />
 
-        <Link to="/discover" tabIndex={-1}>
-          <ActionButton shortcut="Meta+T" tooltip={t("words.add")}>
-            <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
-          </ActionButton>
-        </Link>
         <ProfileButton method="modal" />
         <LayoutActionButton />
       </div>

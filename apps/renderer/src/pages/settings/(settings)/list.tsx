@@ -1,13 +1,13 @@
-import { SettingInvitations } from "~/modules/settings/tabs/invitations"
+import { SettingLists } from "~/modules/settings/tabs/lists"
 import { SettingsTitle } from "~/modules/settings/title"
 import { defineSettingPageData } from "~/modules/settings/utils"
 
-const iconName = "i-mgc-heart-hand-cute-re"
-const priority = 1070
+const iconName = "i-mgc-rada-cute-re"
+const priority = 1050
 
 export const loader = defineSettingPageData({
   iconName,
-  name: "titles.invitations",
+  name: "titles.lists",
   priority,
 })
 
@@ -15,7 +15,7 @@ export function Component() {
   return (
     <>
       <SettingsTitle />
-      <SettingInvitations />
+      <SettingLists />
     </>
   )
 }

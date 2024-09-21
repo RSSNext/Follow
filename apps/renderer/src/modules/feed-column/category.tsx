@@ -155,7 +155,9 @@ function FeedCategoryImpl({
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.mark_as_read"),
                   click: () => {
-                    subscriptionActions.markReadByFeedIds(ids)
+                    subscriptionActions.markReadByFeedIds({
+                      feedIds: ids,
+                    })
                   },
                 },
                 { type: "separator" },
