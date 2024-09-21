@@ -117,7 +117,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
       <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3" rootClassName="h-full">
         <div
           className={cn(
-            "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 transition-colors",
+            "flex h-8 w-full shrink-0 cursor-menu items-center rounded-md px-2.5 transition-colors",
             feedId === FEED_COLLECTION_LIST && "bg-native-active",
           )}
           onClick={(e) => {
@@ -140,7 +140,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
             <Link
               to="/discover"
-              className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-default flex-col items-center justify-center gap-2"
+              className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
               onClick={stopPropagation}
             >
               <i className="i-mgc-add-cute-re text-3xl" />

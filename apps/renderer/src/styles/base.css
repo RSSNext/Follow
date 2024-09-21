@@ -21,7 +21,7 @@ body,
 }
 
 button {
-  @apply cursor-default;
+  cursor: var(--pointer);
 }
 
 .prose a {

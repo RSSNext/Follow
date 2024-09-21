@@ -126,7 +126,7 @@ const LogoContextMenu: FC<PropsWithChildren> = ({ children }) => {
             toast.success(t.common("app.copied_to_clipboard"))
           }}
           className={cn(
-            "relative flex cursor-default select-none items-center rounded-sm px-1 py-0.5 text-sm outline-none",
+            "relative flex cursor-menu select-none items-center rounded-sm px-1 py-0.5 text-sm outline-none",
             "focus-within:outline-transparent hover:bg-theme-item-hover dark:hover:bg-neutral-800",
             "gap-2 text-foreground/80 [&_svg]:size-3",
           )}

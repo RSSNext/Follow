@@ -68,7 +68,7 @@ export function ListItem({
       onMouseEnter={handlePrefetchEntry}
       onMouseLeave={handlePrefetchEntry.cancel}
       className={cn(
-        "group relative flex py-4 pl-3 pr-2",
+        "group relative flex cursor-menu py-4 pl-3 pr-2",
         !asRead &&
           "before:absolute before:-left-0.5 before:top-[1.4375rem] before:block before:size-2 before:rounded-full before:bg-accent",
       )}
