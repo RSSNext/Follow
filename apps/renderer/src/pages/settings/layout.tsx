@@ -19,7 +19,7 @@ function Layout() {
             {settings.map((t) => (
               <Link
                 key={t.path}
-                className={`my-1 flex cursor-default items-center rounded-md px-2.5 py-0.5 leading-loose text-theme-foreground/70 transition-colors dark:text-theme-foreground/90 ${
+                className={`my-1 flex cursor-menu items-center rounded-md px-2.5 py-0.5 leading-loose text-theme-foreground/70 transition-colors dark:text-theme-foreground/90 ${
                   tab === t.path ? "bg-native-active text-theme-foreground/90" : ""
                 }`}
                 to={`/settings/${t.path}`}

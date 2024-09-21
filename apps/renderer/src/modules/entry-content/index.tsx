@@ -34,7 +34,7 @@ import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { getNewIssueUrl } from "~/lib/issues"
 import { cn } from "~/lib/utils"
-import type { ActiveEntryId } from "~/models"
+import type { ActiveEntryId, FeedModel } from "~/models"
 import {
   useIsSoFWrappedElement,
   useWrappedElement,
@@ -96,7 +96,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
 
-  const feed = useFeedById(entry?.feedId)
+  const feed = useFeedById(entry?.feedId) as FeedModel
 
   const entryHistory = useEntryReadHistory(entryId)
 
@@ -218,7 +218,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
             <a
               href={populatedFullHref || void 0}
               target="_blank"
-              className="-mx-6 block cursor-default rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
+              className="-mx-6 block cursor-button rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
               rel="noreferrer"
             >
               <div className="select-text break-words text-3xl font-bold">

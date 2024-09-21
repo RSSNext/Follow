@@ -58,10 +58,10 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       <div ref={ref} className="ml-2 min-w-0 flex-1">
         <div className={cn("-mt-0.5 flex-1 text-sm", content && "line-clamp-[10]")}>
           <div className="w-[calc(100%-10rem)] space-x-1 leading-6">
-            <span className="text-base font-semibold">
-              {entry.entries.author}
+            <span className="inline-flex items-center gap-1 text-base font-semibold">
+              <span>{entry.entries.author || feed.title}</span>
               {parsed?.type === "x" && (
-                <i className="i-mgc-twitter-cute-fi ml-1 size-3 text-[#4A99E9]" />
+                <i className="i-mgc-twitter-cute-fi size-3 text-[#4A99E9]" />
               )}
             </span>
 

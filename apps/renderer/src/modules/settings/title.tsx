@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next"
 import { useLoaderData } from "react-router-dom"
 
+import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { cn } from "~/lib/utils"
 
 import { settings } from "./constants"
@@ -15,9 +16,9 @@ export const SettingsSidebarTitle = ({ path, className }: { path: string; classN
   }
 
   return (
-    <div className={cn("flex items-center gap-2 text-[0.94rem] font-medium", className)}>
-      <i className={`${tab.iconName} text-[19px]`} />
-      <span>{t(tab.name as any)}</span>
+    <div className={cn("flex min-w-0 items-center gap-2 text-[0.94rem] font-medium", className)}>
+      <i className={`${tab.iconName} shrink-0 text-[19px]`} />
+      <EllipsisHorizontalTextWithTooltip>{t(tab.name as any)}</EllipsisHorizontalTextWithTooltip>
     </div>
   )
 }

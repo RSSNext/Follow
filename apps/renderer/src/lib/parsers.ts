@@ -6,7 +6,7 @@ export const parseSocialMedia = (entry: EntryModel) => {
   const { authorUrl, url, guid } = entry
 
   const parsedUrl = authorUrl || url || guid
-  const isX = isXUrl(parsedUrl) || isTwitterUrl(parsedUrl)
+  const isX = isXUrl(parsedUrl).validate || isTwitterUrl(parsedUrl).validate
 
   if (isX) {
     return {

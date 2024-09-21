@@ -6,7 +6,7 @@ import { m } from "~/components/common/Motion"
 import { Media } from "~/components/ui/media"
 import type { ModalContentComponent } from "~/components/ui/modal"
 import { useModalStack } from "~/components/ui/modal"
-import { NoopChildren } from "~/components/ui/modal/stacked/utils"
+import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { Skeleton } from "~/components/ui/skeleton"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { urlToIframe } from "~/lib/url-to-iframe"
@@ -58,14 +58,14 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div
-        className="w-full"
+        className="w-full cursor-card"
         onClick={() => {
           if (iframeSrc) {
             modalStack.present({
               title: "",
               content: (props) => <PreviewVideoModalContent src={iframeSrc} {...props} />,
               clickOutsideToDismiss: true,
-              CustomModalComponent: NoopChildren,
+              CustomModalComponent: PlainModal,
               overlay: true,
             })
           }

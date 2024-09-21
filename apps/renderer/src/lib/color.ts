@@ -7,8 +7,8 @@ const getRandomColor = (lightness: [number, number], saturation: [number, number
   const lightBackground = lightAccent < 80 ? lightAccent + 20 : 100
 
   return {
-    accent: `hsl(${hue}, ${satAccent}%, ${lightAccent}%)`,
-    background: `hsl(${hue}, ${satBackground}%, ${lightBackground}%)`,
+    accent: `hsl(${hue} ${satAccent}% ${lightAccent}%)`,
+    background: `hsl(${hue} ${satBackground}% ${lightBackground}%)`,
   }
 }
 

@@ -174,7 +174,7 @@ export const PreviewMediaContent: FC<{
             <div
               tabIndex={-1}
               onClick={stopPropagation}
-              className="center fixed bottom-4 left-1/2 h-6 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200 animate-in fade-in-0 slide-in-from-bottom-6"
+              className="center fixed bottom-4 left-1/2 h-6 -translate-x-1/2 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200 animate-in fade-in-0 slide-in-from-bottom-6"
             >
               {Array.from({ length: media.length })
                 .fill(0)

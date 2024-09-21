@@ -27,7 +27,11 @@ export function getEntriesParams({ id, view }: { id?: number | string; view?: nu
   if (id === FEED_COLLECTION_LIST) {
     params.isCollection = true
   } else if (id && id !== ROUTE_FEED_PENDING) {
-    params.feedIdList = `${id}`.split(",")
+    if (id.toString().includes(",")) {
+      params.feedIdList = `${id}`.split(",")
+    } else {
+      params.feedId = `${id}`
+    }
   }
   if (view === FeedViewType.SocialMedia) {
     params.withContent = true

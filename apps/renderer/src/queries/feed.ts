@@ -12,13 +12,14 @@ import { feedActions } from "~/store/feed"
 import { entries } from "./entries"
 
 export const feed = {
-  byId: ({ id, url }: FeedQueryParams) =>
+  byId: ({ id, url, isList }: FeedQueryParams) =>
     defineQuery(
       ["feed", id, url],
       async () =>
         feedActions.fetchFeedById({
           id,
           url,
+          isList,
         }),
       {
         rootKey: ["feed"],
@@ -40,11 +41,12 @@ export const feed = {
     }),
 }
 
-export const useFeed = ({ id, url }: FeedQueryParams) =>
+export const useFeed = ({ id, url, isList }: FeedQueryParams) =>
   useAuthQuery(
     feed.byId({
       id,
       url,
+      isList,
     }),
     {
       enabled:

@@ -29,7 +29,8 @@ export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void })
           // TODO store action
           await apiClient.subscriptions.$post({
             json: {
-              url: feed.url,
+              url: feed.type === "feed" ? feed.url : undefined,
+              listId: feed.type === "list" ? feed.id : undefined,
               view: subscription.view,
               category: subscription.category,
               isPrivate: subscription.isPrivate,

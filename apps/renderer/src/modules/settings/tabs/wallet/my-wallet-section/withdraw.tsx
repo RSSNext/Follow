@@ -129,7 +129,6 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
                 <FormLabel>{t("wallet.withdraw.amountLabel")}</FormLabel>
                 <FormControl>
                   <Input
-                    autoFocus
                     {...field}
                     type="number"
                     onChange={(value) => field.onChange(value.target.valueAsNumber)}

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { FeedModel } from "@follow/shared/hono"
+import type { TargetModel } from "@follow/shared/hono"
 import { beforeAll, describe, expect, test } from "vitest"
 
 import { browserDB } from "~/database"
@@ -42,7 +42,7 @@ const subscriptions: SubscriptionFlatModel[] = [
   },
 ]
 
-const feeds: FeedModel[] = [
+const feeds: TargetModel[] = [
   {
     id: "feed-id-1",
   },

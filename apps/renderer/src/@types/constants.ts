@@ -1,19 +1,23 @@
-const langs = [
+export const currentSupportedLanguages = [
+  "en",
   "ja",
   "zh-CN",
   "zh-TW",
+  "zh-HK",
   "pt",
   "fr",
   "ar-DZ",
   "ar-SA",
   "ar-MA",
-  "zh-HK",
+  "ar-IQ",
+  "ar-KW",
+  "ar-TN",
   "fi",
   "it",
   "ru",
   "es",
 ]
-export const currentSupportedLanguages = ["en", ...langs.sort()]
+
 export const dayjsLocaleImportMap = {
   en: ["en", () => import("dayjs/locale/en")],
   ["zh-CN"]: ["zh-cn", () => import("dayjs/locale/zh-cn")],
@@ -28,6 +32,9 @@ export const dayjsLocaleImportMap = {
   ["fr"]: ["fr", () => import("dayjs/locale/fr")],
   ["pt"]: ["pt", () => import("dayjs/locale/pt")],
   ["zh-TW"]: ["zh-tw", () => import("dayjs/locale/zh-tw")],
+  ["ar-IQ"]: ["ar-iq", () => import("dayjs/locale/ar-iq")],
+  ["ar-KW"]: ["ar-kw", () => import("dayjs/locale/ar-kw")],
+  ["ar-TN"]: ["ar-tn", () => import("dayjs/locale/ar-tn")],
   ["zh-HK"]: ["zh-hk", () => import("dayjs/locale/zh-hk")],
 }
 export const ns = ["app", "common", "lang", "settings", "shortcuts", "errors"] as const

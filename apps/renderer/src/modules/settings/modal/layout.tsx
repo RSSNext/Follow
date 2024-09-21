@@ -6,6 +6,7 @@ import { Suspense, useCallback, useEffect, useRef } from "react"
 import { useUISettingSelector } from "~/atoms/settings/ui"
 import { m } from "~/components/common/Motion"
 import { Logo } from "~/components/icons/logo"
+import { LetsIconsResizeDownRightLight } from "~/components/icons/resize"
 import { useResizeableModal } from "~/components/ui/modal"
 import { preventDefault } from "~/lib/dom"
 import { cn } from "~/lib/utils"
@@ -62,7 +63,7 @@ export function SettingModalLayout(
           scale: 0.96,
         }}
         className={cn(
-          "relative flex overflow-hidden rounded-xl border border-border",
+          "relative flex overflow-hidden rounded-xl rounded-br-none border border-border",
           !overlay && "shadow-perfect",
         )}
         style={resizeableStyle}
@@ -97,8 +98,8 @@ export function SettingModalLayout(
               <div className="absolute inset-x-0 top-0 z-[1] h-8" onPointerDown={handleDrag} />
             )}
             <div className="flex h-0 flex-1 bg-theme-modal-background-opaque" ref={elementRef}>
-              <div className="flex min-h-0 w-44 flex-col border-r px-2 py-6">
-                <div className="mb-4 flex h-8 items-center gap-2 px-2 font-bold">
+              <div className="flex min-h-0 min-w-44 max-w-[20ch] flex-col border-r px-2 py-6">
+                <div className="mb-4 flex h-8 items-center gap-2 px-2 font-default font-bold">
                   <Logo className="mr-1 size-6" />
                   {APP_NAME}
                 </div>
@@ -125,6 +126,8 @@ export function SettingModalLayout(
                 <Suspense>{children}</Suspense>
               </div>
             </div>
+
+            <LetsIconsResizeDownRightLight className="pointer-events-none absolute bottom-0 right-0 size-6 translate-x-px translate-y-px text-border" />
           </Resizable>
         </SettingContext.Provider>
       </m.div>
