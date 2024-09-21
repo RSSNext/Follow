@@ -12,6 +12,7 @@ import { LoadingCircle } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { useAuthQuery } from "~/hooks/common"
+import type { FeedModel } from "~/models"
 import { Queries } from "~/queries"
 import { useClaimFeedMutation } from "~/queries/feed"
 import { useFeedById } from "~/store/feed"
@@ -20,7 +21,7 @@ export const FeedClaimModalContent: FC<{
   feedId: string
 }> = ({ feedId }) => {
   const { t } = useTranslation()
-  const feed = useFeedById(feedId)
+  const feed = useFeedById(feedId) as FeedModel
   const {
     data: claimMessage,
     isLoading,

@@ -54,7 +54,7 @@ export const MarkAllReadWithOverlay = forwardRef<
           animate={{ y: 0 }}
           exit={{ y: -70 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
-          className="shadow-modal fixed z-50 bg-theme-modal-background-opaque shadow"
+          className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"
           style={{
             left: -paddingLeft,
             top: rect.top,

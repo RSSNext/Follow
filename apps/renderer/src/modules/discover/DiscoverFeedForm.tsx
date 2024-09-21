@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
+import { nextFrame } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
 import {
   MissingOptionalParamError,
@@ -237,6 +238,12 @@ export const DiscoverFeedForm = ({
               ) : (
                 <Input
                   {...formRegister}
+                  onBlur={(e) => {
+                    // Fix #535
+                    nextFrame(() => {
+                      formRegister.onBlur(e)
+                    })
+                  }}
                   placeholder={
                     (parameters?.default ?? formPlaceholder[keyItem.name])
                       ? `e.g. ${formPlaceholder[keyItem.name]}`

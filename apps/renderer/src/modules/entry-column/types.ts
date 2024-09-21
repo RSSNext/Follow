@@ -1,11 +1,11 @@
 import type { FC } from "react"
 
-import type { CombinedEntryModel, FeedModel } from "~/models"
+import type { CombinedEntryModel, TargetModel } from "~/models"
 
 export type UniversalItemProps = {
   entryId: string
   entryPreview?: CombinedEntryModel & {
-    feeds: FeedModel
+    feeds: TargetModel
     feedId: string
   }
   translation?: {

@@ -23,6 +23,7 @@ export const Input = forwardRef<
         "focus:!bg-accent/5",
         "border border-border",
         "dark:text-zinc-200 dark:placeholder:text-zinc-500",
+        "hover:border-accent/60",
         props.type === "password" ? "font-mono placeholder:font-sans" : "font-sans",
         "w-full",
         className,

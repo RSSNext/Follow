@@ -120,7 +120,7 @@ function FeedCategoryImpl({
       {!!showCollapse && (
         <div
           className={cn(
-            "flex w-full items-center justify-between rounded-md px-2.5 transition-colors",
+            "flex w-full cursor-menu items-center justify-between rounded-md px-2.5 transition-colors",
             (isActive || isContextMenuOpen) && "bg-native-active",
           )}
           onClick={(e) => {
@@ -155,7 +155,9 @@ function FeedCategoryImpl({
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.mark_as_read"),
                   click: () => {
-                    subscriptionActions.markReadByFeedIds(ids)
+                    subscriptionActions.markReadByFeedIds({
+                      feedIds: ids,
+                    })
                   },
                 },
                 { type: "separator" },

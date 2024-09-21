@@ -1,14 +1,19 @@
 import * as React from "react"
 
+import { useMeasure } from "~/hooks/common"
 import { cn } from "~/lib/utils"
+
+import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
 
 export const PanelSplitter = (
   props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
     isDragging?: boolean
     cursor?: string
+
+    tooltip?: React.ReactNode
   },
 ) => {
-  const { isDragging, cursor, ...rest } = props
+  const { isDragging, cursor, tooltip, ...rest } = props
 
   React.useEffect(() => {
     if (!isDragging) return
@@ -26,16 +31,30 @@ export const PanelSplitter = (
     }
   }, [cursor, isDragging])
 
+  const [ref, { height }] = useMeasure()
+
+  const El = (
+    <div
+      tabIndex={-1}
+      ref={ref}
+      {...rest}
+      className={cn(
+        "absolute inset-0 z-[1] w-[2px] -translate-x-1/2 cursor-ew-resize bg-transparent hover:bg-gray-400 active:!bg-accent hover:dark:bg-neutral-500",
+        isDragging ? "bg-accent" : "",
+      )}
+    />
+  )
+
   return (
     <div className="relative h-full w-0 shrink-0">
-      <div
-        tabIndex={-1}
-        {...rest}
-        className={cn(
-          "absolute inset-0 z-[11] w-[2px] -translate-x-1/2 cursor-ew-resize bg-transparent hover:bg-gray-400 active:!bg-accent hover:dark:bg-neutral-500",
-          isDragging ? "bg-accent" : "",
-        )}
-      />
+      {tooltip ? (
+        <Tooltip>
+          <TooltipTrigger>{El}</TooltipTrigger>
+          <TooltipContent sideOffset={height / 2}>{tooltip}</TooltipContent>
+        </Tooltip>
+      ) : (
+        El
+      )}
     </div>
   )
 }

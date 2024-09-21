@@ -18,7 +18,7 @@ export const shortcuts = {
   layout: {
     toggleSidebar: {
       name: "keys.layout.toggleSidebar",
-      key: "Meta+B",
+      key: "Meta+B, [",
     },
     showShortcuts: {
       name: "keys.layout.showShortcuts",

@@ -1,4 +1,4 @@
-import type { EntryModel, FeedModel } from "~/models"
+import type { EntryModel, TargetModel } from "~/models"
 
 import type { SubscriptionFlatModel } from "../subscription"
 import type { SearchType } from "./constants"
@@ -9,7 +9,7 @@ export interface SearchResult<T extends object, A extends object = object> exten
 }
 
 export interface SearchState {
-  feeds: SearchResult<FeedModel>[]
+  feeds: SearchResult<TargetModel>[]
   entries: SearchResult<EntryModel, { feedId: string }>[]
   subscriptions: SearchResult<SubscriptionFlatModel, { feedId: string }>[]
 

@@ -58,7 +58,7 @@ export function VideoItem({ entryId, entryPreview, translation }: UniversalItemP
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
       <div
-        className="w-full"
+        className="w-full cursor-card"
         onClick={() => {
           if (iframeSrc) {
             modalStack.present({

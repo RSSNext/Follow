@@ -19,7 +19,7 @@ export const useUserSubscriptionsQuery = (userId: string | undefined) => {
       const groupFolder = {} as Record<string, typeof res.data>
 
       for (const subscription of res.data || []) {
-        if (!subscription.category && subscription.feeds) {
+        if (!subscription.category && "feeds" in subscription) {
           const { siteUrl } = subscription.feeds
           if (!siteUrl) continue
           const parsed = parse(siteUrl)

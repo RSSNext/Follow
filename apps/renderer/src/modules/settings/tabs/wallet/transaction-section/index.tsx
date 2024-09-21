@@ -174,7 +174,7 @@ const UserRenderer = ({
       onClick={() => {
         if (user?.id) presentUserModal(user.id)
       }}
-      className={cn("flex items-center", user?.id ? "cursor-pointer" : "cursor-default")}
+      className="flex cursor-button items-center"
     >
       {name === APP_NAME ? (
         <Logo className="aspect-square size-4" />
