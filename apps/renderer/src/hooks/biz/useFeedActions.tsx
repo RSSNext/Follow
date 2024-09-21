@@ -85,7 +85,7 @@ export const useFeedActions = ({
               label: t("sidebar.feed_actions.mark_all_as_read"),
               shortcut: "Meta+Shift+A",
               disabled: isEntryList,
-              click: () => subscriptionActions.markReadByFeedIds([feedId]),
+              click: () => subscriptionActions.markReadByFeedIds({ feedIds: [feedId] }),
             },
           ]
         : []),

@@ -4007,6 +4007,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             handle: string | null;
                         };
                     };
+                    total: number;
                     entryReadHistories: {
                         userIds: string[];
                         readCount: number;
@@ -4200,18 +4201,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             createdAt: string;
                         }[] | null | undefined;
                     };
-                    users: {
-                        [x: string]: {
-                            name: string | null;
-                            id: string;
-                            image: string | null;
-                            handle: string | null;
-                        };
-                    };
-                    entryReadHistories: {
-                        userIds: string[];
-                        readCount: number;
-                    } | null;
                 } | undefined;
             };
             outputFormat: "json" | "text";
