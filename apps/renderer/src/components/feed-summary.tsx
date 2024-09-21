@@ -47,7 +47,7 @@ export function FollowSummary({
           target="_blank"
           rel="noreferrer"
         >
-          {feed.type === "feed" ? feed.url || docs : `/list/${feed.id}`}
+          {feed.type === "feed" ? feed.url || docs : `list:${feed.id}`}
         </a>
       </div>
     </div>

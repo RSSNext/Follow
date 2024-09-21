@@ -78,13 +78,17 @@ export const useFeedActions = ({
         type: "separator" as const,
         disabled: isEntryList,
       },
-      {
-        type: "text",
-        label: t("sidebar.feed_actions.mark_all_as_read"),
-        shortcut: "Meta+Shift+A",
-        disabled: isEntryList,
-        click: () => subscriptionActions.markReadByFeedIds([feedId]),
-      },
+      ...(!isList
+        ? [
+            {
+              type: "text" as const,
+              label: t("sidebar.feed_actions.mark_all_as_read"),
+              shortcut: "Meta+Shift+A",
+              disabled: isEntryList,
+              click: () => subscriptionActions.markReadByFeedIds([feedId]),
+            },
+          ]
+        : []),
       ...(!feed.ownerUserId && !!feed.id && !isList
         ? [
             {
