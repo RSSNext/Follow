@@ -21,9 +21,11 @@ export interface AutocompleteProps extends React.InputHTMLAttributes<HTMLInputEl
 
   // classnames
 
+  searchKeys?: string[]
   maxHeight?: number
 }
 
+const defaultSearchKeys = ["name", "value"]
 const defaultRenderSuggestion = (suggestion: any) => suggestion?.name
 export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
   (
@@ -34,7 +36,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       maxHeight,
       portal,
       value,
-
+      searchKeys = defaultSearchKeys,
       defaultValue,
       ...inputProps
     },
@@ -48,7 +50,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
     const doFilter = useCallback(() => {
       const fuse = new Fuse(suggestions, {
-        keys: ["name", "value"],
+        keys: searchKeys,
       })
 
       const trimInputValue = (value as string)?.trim()
@@ -56,8 +58,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       if (!trimInputValue) return setFilterableSuggestions(suggestions)
 
       const results = fuse.search(trimInputValue)
+
       setFilterableSuggestions(results.map((result) => result.item))
-    }, [suggestions, value])
+    }, [suggestions, value, searchKeys])
     useEffect(() => {
       doFilter()
     }, [doFilter])

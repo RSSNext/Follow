@@ -1,13 +1,16 @@
 import { WEB_URL } from "@follow/shared/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
 import { FeedCertification } from "~/components/feed-certification"
+import { FeedIcon } from "~/components/feed-icon"
+import type { Suggestion } from "~/components/ui/auto-completion"
+import { Autocomplete } from "~/components/ui/auto-completion"
 import { Avatar, AvatarImage } from "~/components/ui/avatar"
 import { Button } from "~/components/ui/button"
 import { Divider } from "~/components/ui/divider"
@@ -35,11 +38,12 @@ import {
 import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
-import { cn } from "~/lib/utils"
+import { cn, isBizId } from "~/lib/utils"
 import type { ListModel } from "~/models"
 import { ViewSelectorRadioGroup } from "~/modules/shared/ViewSelectorRadioGroup"
 import { Queries } from "~/queries"
-import { feedActions, useFeedById } from "~/store/feed"
+import { feedActions, getFeedById, useFeedById } from "~/store/feed"
+import { useSubscriptionStore } from "~/store/subscription"
 
 export const SettingLists = () => {
   // const { t: appT } = useTranslation()
@@ -331,7 +335,7 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
   const list = useFeedById(id) as ListModel
   const { t } = useTranslation("settings")
 
-  const [addValue, setAddValue] = useState("")
+  const [feedSearchFor, setFeedSearchFor] = useState("")
   const addMutation = useMutation({
     mutationFn: async (values: string) => {
       const feed = await apiClient.lists.feeds.$post({
@@ -369,24 +373,67 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
     },
   })
 
+  const allFeeds = useSubscriptionStore((store) => {
+    const feedInfo = [] as { title: string; id: string }[]
+
+    const allSubscriptions = Object.values(store.feedIdByView).flat()
+
+    for (const feedId of allSubscriptions) {
+      const subscription = store.data[feedId]
+      const feed = getFeedById(feedId)
+      if (feed && feed.type === "feed") {
+        feedInfo.push({ title: subscription.title || feed.title || "", id: feed.id })
+      }
+    }
+    return feedInfo
+  })
+
+  const autocompleteSuggestions: Suggestion[] = useMemo(() => {
+    return allFeeds.map((feed) => ({
+      name: feed.title,
+      value: feed.id,
+    }))
+  }, [allFeeds])
+
+  const selectedFeedIdRef = useRef<string | null>()
   return (
-    <div>
+    <>
       <div className="flex items-center gap-2">
-        <Input
-          placeholder={t("lists.feeds.id")}
-          value={addValue}
-          onChange={(e) => setAddValue(e.target.value)}
-        />
-        <Button onClick={() => addMutation.mutate(addValue)}>{t("lists.feeds.add")}</Button>
+        <Autocomplete
+          maxHeight={window.innerHeight < 600 ? 120 : 240}
+          value={feedSearchFor}
+          searchKeys={["name"]}
+          onSuggestionSelected={(e) => {
+            selectedFeedIdRef.current = e?.value
+            setFeedSearchFor(e?.name || "")
+          }}
+          onChange={(e) => {
+            setFeedSearchFor(e.target.value)
+          }}
+          suggestions={autocompleteSuggestions}
+         />
+        <Button
+          onClick={() => {
+            if (isBizId(feedSearchFor)) {
+              addMutation.mutate(feedSearchFor)
+              return
+            }
+            if (selectedFeedIdRef.current) {
+              addMutation.mutate(selectedFeedIdRef.current)
+            }
+          }}
+        >
+          {t("lists.feeds.add")}
+        </Button>
       </div>
       <Divider className="mt-8" />
-      <ScrollArea.ScrollArea viewportClassName="max-h-[380px]">
+      <ScrollArea.ScrollArea viewportClassName="max-h-[380px] w-[450px]">
         <Table className="mt-4">
           <TableHeader className="border-b">
             <TableRow className="[&_*]:!font-semibold">
-              <TableHead className="w-20 text-center" size="sm">
+              {/* <TableHead className="w-20 text-center" size="sm">
                 {t("lists.feeds.id")}
-              </TableHead>
+              </TableHead> */}
               <TableHead className="text-center" size="sm">
                 {t("lists.feeds.title")}
               </TableHead>
@@ -394,27 +441,23 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
                 {t("lists.feeds.owner")}
               </TableHead>
               <TableHead className="w-20 text-center" size="sm">
-                {t("lists.feeds.remove")}
+                {t("lists.feeds.actions")}
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="border-t-[12px] border-transparent">
             {list.feeds?.map((row) => (
               <TableRow key={row.title} className="h-8">
-                <TableCell align="center" size="sm">
+                {/* <TableCell align="center" size="sm">
                   {row.id}
-                </TableCell>
+                </TableCell> */}
                 <TableCell align="center" size="sm">
                   <a
                     target="_blank"
                     href={`${WEB_URL}/list/${row.id}`}
                     className="flex items-center justify-center gap-2 font-semibold"
                   >
-                    {row.image && (
-                      <Avatar className="size-6">
-                        <AvatarImage src={row.image} />
-                      </Avatar>
-                    )}
+                    {row.siteUrl && <FeedIcon className="mr-0" siteUrl={row.siteUrl} />}
                     <span className="inline-block max-w-[200px] truncate">{row.title}</span>
                   </a>
                 </TableCell>
@@ -431,6 +474,6 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
           </TableBody>
         </Table>
       </ScrollArea.ScrollArea>
-    </div>
+    </>
   )
 }
