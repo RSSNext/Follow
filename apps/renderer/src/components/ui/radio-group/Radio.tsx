@@ -23,7 +23,7 @@ export const Radio: FC<
     onChange?.(e)
   })
   return (
-    <div className={cn("flex items-center gap-2", wrapperClassName)}>
+    <div className={cn("flex items-center", wrapperClassName)}>
       <input
         {...rest}
         type="radio"
@@ -37,7 +37,10 @@ export const Radio: FC<
         onChange={handleChange}
       />
 
-      <label className={cn(rest.disabled ? "text-theme-disabled" : "")} htmlFor={id ?? fallbackId}>
+      <label
+        className={cn(rest.disabled ? "text-theme-disabled" : "", "pl-2")}
+        htmlFor={id ?? fallbackId}
+      >
         {label}
       </label>
     </div>
