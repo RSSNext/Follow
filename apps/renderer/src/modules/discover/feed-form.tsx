@@ -24,7 +24,6 @@ import { Input } from "~/components/ui/input"
 import { LoadingCircle } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { Switch } from "~/components/ui/switch"
-import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { tipcClient } from "~/lib/client"
@@ -37,6 +36,8 @@ import { subscription as subscriptionQuery } from "~/queries/subscriptions"
 import { useFeedByIdOrUrl } from "~/store/feed"
 import { useSubscriptionByFeedId } from "~/store/subscription"
 import { feedUnreadActions } from "~/store/unread"
+
+import { ViewSelectorRadioGroup } from "../shared/ViewSelectorRadioGroup"
 
 const formSchema = z.object({
   view: z.string(),
@@ -271,38 +272,12 @@ const FeedInnerForm = ({
             render={() => (
               <FormItem>
                 <FormLabel>{t("feed_form.view")}</FormLabel>
-                <Card>
-                  <CardHeader
-                    className={cn("grid grid-cols-6 space-y-0 px-2 py-3", isList && "opacity-60")}
-                  >
-                    {views.map((view) => (
-                      <div key={view.name}>
-                        <input
-                          className="peer hidden"
-                          type="radio"
-                          id={view.name}
-                          value={view.view}
-                          disabled={isList}
-                          {...form.register("view")}
-                        />
-                        <label
-                          htmlFor={view.name}
-                          className={cn(
-                            "hover:text-theme-foreground dark:hover:text-white",
-                            view.peerClassName,
-                            "center flex h-10 flex-col text-xs leading-none opacity-80 duration-200",
-                            "text-neutral-800 dark:text-zinc-200",
-                            "peer-checked:opacity-100",
-                            "whitespace-nowrap",
-                          )}
-                        >
-                          <span className="text-lg">{view.icon}</span>
-                          {t(view.name)}
-                        </label>
-                      </div>
-                    ))}
-                  </CardHeader>
-                </Card>
+
+                <ViewSelectorRadioGroup
+                  {...form.register("view")}
+                  disabled={isList}
+                  className={cn(isList && "opacity-60")}
+                />
                 <FormMessage />
               </FormItem>
             )}

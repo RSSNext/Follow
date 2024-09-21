@@ -10,7 +10,6 @@ import { z } from "zod"
 import { FeedCertification } from "~/components/feed-certification"
 import { Avatar, AvatarImage } from "~/components/ui/avatar"
 import { Button } from "~/components/ui/button"
-import { Card, CardHeader } from "~/components/ui/card"
 import { Divider } from "~/components/ui/divider"
 import {
   Form,
@@ -34,16 +33,18 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { views } from "~/constants"
-import { useAuthQuery } from "~/hooks/common"
+import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { cn } from "~/lib/utils"
 import type { ListModel } from "~/models"
+import { ViewSelectorRadioGroup } from "~/modules/shared/ViewSelectorRadioGroup"
 import { Queries } from "~/queries"
 import { feedActions, useFeedById } from "~/store/feed"
 
 export const SettingLists = () => {
-  const { t: appT } = useTranslation()
-  const { t } = useTranslation("settings")
+  // const { t: appT } = useTranslation()
+  const t = useI18n()
+  // const { t } = useTranslation("settings")
   const listList = useAuthQuery(Queries.lists.list())
 
   const { present } = useModalStack()
@@ -51,18 +52,18 @@ export const SettingLists = () => {
   return (
     <section className="mt-4">
       <div className="mb-4 space-y-2 text-sm">
-        <p>{t("lists.info")}</p>
+        <p>{t.settings("lists.info")}</p>
       </div>
       <Button
         onClick={() => {
           present({
-            title: t("lists.create"),
+            title: t.settings("lists.create"),
             content: ({ dismiss }) => <ListCreationModalContent dismiss={dismiss} />,
           })
         }}
       >
         <i className="i-mgc-add-cute-re mr-1 text-base" />
-        {t("lists.create")}
+        {t.settings("lists.create")}
       </Button>
       <Divider className="mb-6 mt-8" />
       <div className="flex flex-1 flex-col">
@@ -72,19 +73,19 @@ export const SettingLists = () => {
               <TableHeader className="border-b">
                 <TableRow className="[&_*]:!font-semibold">
                   <TableHead className="text-center" size="sm">
-                    {t("lists.title")}
+                    {t.settings("lists.title")}
                   </TableHead>
                   <TableHead className="w-28 text-center" size="sm">
-                    {t("lists.view")}
+                    {t.settings("lists.view")}
                   </TableHead>
                   <TableHead className="w-20 text-center" size="sm">
-                    {t("lists.fee")}
+                    {t.settings("lists.fee")}
                   </TableHead>
                   <TableHead className="w-20 text-center" size="sm">
-                    {t("lists.feeds")}
+                    {t.settings("lists.feeds")}
                   </TableHead>
                   <TableHead className="w-20 text-center" size="sm">
-                    {t("lists.edit")}
+                    {t.settings("lists.edit")}
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -110,7 +111,7 @@ export const SettingLists = () => {
                         <span className={cn("inline-flex items-center", views[row.view].className)}>
                           {views[row.view].icon}
                         </span>
-                        {appT(views[row.view].name)}
+                        {t(views[row.view].name)}
                       </div>
                     </TableCell>
                     <TableCell align="center" size="sm">
@@ -124,7 +125,7 @@ export const SettingLists = () => {
                         variant="ghost"
                         onClick={() => {
                           present({
-                            title: t("lists.feeds.manage"),
+                            title: t.settings("lists.feeds.manage"),
                             content: () => <ListFeedsModalContent id={row.id} />,
                           })
                         }}
@@ -137,7 +138,7 @@ export const SettingLists = () => {
                         variant="ghost"
                         onClick={() => {
                           present({
-                            title: t("lists.edit"),
+                            title: t.settings("lists.edit"),
                             content: ({ dismiss }) => (
                               <ListCreationModalContent dismiss={dismiss} id={row.id} />
                             ),
@@ -155,7 +156,7 @@ export const SettingLists = () => {
             <LoadingCircle size="large" className="center absolute inset-0" />
           ) : (
             <div className="mt-36 w-full text-center text-sm text-zinc-400">
-              <p>{t("lists.noLists")}</p>
+              <p>{t.settings("lists.noLists")}</p>
             </div>
           )}
         </ScrollArea.ScrollArea>
@@ -173,8 +174,9 @@ const formSchema = z.object({
 })
 
 const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: string }) => {
-  const { t: appT } = useTranslation()
   const { t } = useTranslation("settings")
+
+  const appT = useI18n()
 
   const list = useFeedById(id) as ListModel
 
@@ -224,7 +226,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-[450px] space-y-4">
         <FormField
           control={form.control}
           name="title"
@@ -286,31 +288,8 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
           render={() => (
             <FormItem>
               <FormLabel>{t("lists.view")}</FormLabel>
-              <Card>
-                <CardHeader className="grid grid-cols-6 space-y-0 px-2 py-3">
-                  {views.map((view) => (
-                    <div key={view.name}>
-                      <input
-                        className="peer hidden"
-                        type="radio"
-                        id={view.name}
-                        value={view.view}
-                        {...form.register("view")}
-                      />
-                      <label
-                        htmlFor={view.name}
-                        className={cn(
-                          view.peerClassName,
-                          "center flex h-10 flex-col text-xs leading-none text-theme-vibrancyFg",
-                        )}
-                      >
-                        <span className="text-lg">{view.icon}</span>
-                        {appT(view.name)}
-                      </label>
-                    </div>
-                  ))}
-                </CardHeader>
-              </Card>
+
+              <ViewSelectorRadioGroup {...form.register("view")} />
               <FormMessage />
             </FormItem>
           )}
@@ -338,9 +317,11 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
             </FormItem>
           )}
         />
-        <Button type="submit" isLoading={createMutation.isPending}>
-          {t("lists.submit")}
-        </Button>
+        <div className="flex justify-end">
+          <Button type="submit" isLoading={createMutation.isPending}>
+            {id ? appT.common("words.update") : appT.common("words.create")}
+          </Button>
+        </div>
       </form>
     </Form>
   )
