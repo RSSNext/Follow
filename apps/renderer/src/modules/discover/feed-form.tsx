@@ -32,7 +32,6 @@ import { FeedViewType } from "~/lib/enum"
 import { getFetchErrorMessage, toastFetchError } from "~/lib/error-parser"
 import { getNewIssueUrl } from "~/lib/issues"
 import { cn } from "~/lib/utils"
-import type { FeedModel } from "~/models"
 import { feed as feedQuery, useFeed } from "~/queries/feed"
 import { subscription as subscriptionQuery } from "~/queries/subscriptions"
 import { useFeedByIdOrUrl } from "~/store/feed"
@@ -165,11 +164,17 @@ const FeedInnerForm = ({
   const subscription = useSubscriptionByFeedId(id || "")
   const buttonRef = useRef<HTMLButtonElement>(null)
   const isSubscribed = !!subscription
-  const feed = useFeedByIdOrUrl({ id, url })! as FeedModel
+  const feed = useFeedByIdOrUrl({ id, url })!
+  const isList = feed?.type === "list"
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues: isList
+      ? {
+          ...defaultValues,
+          view: feed.view.toString(),
+        }
+      : defaultValues,
   })
 
   const { setClickOutSideToDismiss, dismiss } = useCurrentModal()
@@ -190,12 +195,12 @@ const FeedInnerForm = ({
   const followMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const body = {
-        url: feed.url,
+        ...(isList ? { listId: feed.id } : { url: feed.url }),
         view: Number.parseInt(values.view),
         category: values.category,
         isPrivate: values.isPrivate,
         title: values.title,
-        ...(isSubscribed && { feedId: feed.id }),
+        ...(isSubscribed && !isList && { feedId: feed.id }),
       }
       const $method = isSubscribed ? apiClient.subscriptions.$patch : apiClient.subscriptions.$post
 
@@ -266,7 +271,9 @@ const FeedInnerForm = ({
               <FormItem>
                 <FormLabel>{t("feed_form.view")}</FormLabel>
                 <Card>
-                  <CardHeader className="grid grid-cols-6 space-y-0 px-2 py-3">
+                  <CardHeader
+                    className={cn("grid grid-cols-6 space-y-0 px-2 py-3", isList && "opacity-60")}
+                  >
                     {views.map((view) => (
                       <div key={view.name}>
                         <input
@@ -274,6 +281,7 @@ const FeedInnerForm = ({
                           type="radio"
                           id={view.name}
                           value={view.view}
+                          disabled={isList}
                           {...form.register("view")}
                         />
                         <label
@@ -314,34 +322,36 @@ const FeedInnerForm = ({
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="category"
-            render={({ field }) => (
-              <FormItem>
-                <div>
-                  <FormLabel>{t("feed_form.category")}</FormLabel>
-                  <FormDescription>{t("feed_form.category_description")}</FormDescription>
-                </div>
-                <FormControl>
+          {!isList && (
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
                   <div>
-                    <Autocomplete
-                      maxHeight={window.innerHeight < 600 ? 120 : 240}
-                      portal
-                      suggestions={suggestions}
-                      {...(field as any)}
-                      onSuggestionSelected={(suggestion) => {
-                        if (suggestion) {
-                          field.onChange(suggestion.value)
-                        }
-                      }}
-                    />
+                    <FormLabel>{t("feed_form.category")}</FormLabel>
+                    <FormDescription>{t("feed_form.category_description")}</FormDescription>
                   </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormControl>
+                    <div>
+                      <Autocomplete
+                        maxHeight={window.innerHeight < 600 ? 120 : 240}
+                        portal
+                        suggestions={suggestions}
+                        {...(field as any)}
+                        onSuggestionSelected={(suggestion) => {
+                          if (suggestion) {
+                            field.onChange(suggestion.value)
+                          }
+                        }}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={form.control}
             name="isPrivate"
@@ -363,7 +373,16 @@ const FeedInnerForm = ({
               </FormItem>
             )}
           />
-
+          {isList && !!feed.fee && (
+            <div>
+              <FormLabel>{t("feed_form.fee")}</FormLabel>
+              <FormDescription>{t("feed_form.fee_description")}</FormDescription>
+              <div className="mt-1 flex items-center gap-1">
+                {feed.fee}
+                <i className="i-mgc-power size-4 text-accent" />
+              </div>
+            </div>
+          )}
           <div className="flex flex-1 items-end justify-end gap-4">
             {isSubscribed && (
               <Button
@@ -378,7 +397,13 @@ const FeedInnerForm = ({
               </Button>
             )}
             <Button ref={buttonRef} type="submit" isLoading={followMutation.isPending}>
-              {isSubscribed ? t("feed_form.update") : t("feed_form.follow")}
+              {isSubscribed
+                ? t("feed_form.update")
+                : isList && feed.fee
+                  ? t("feed_form.follow_with_fee", {
+                      fee: feed.fee,
+                    })
+                  : t("feed_form.follow")}
             </Button>
           </div>
         </form>

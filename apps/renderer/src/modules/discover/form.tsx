@@ -27,6 +27,7 @@ import { Radio } from "~/components/ui/radio-group"
 import { RadioGroup } from "~/components/ui/radio-group/RadioGroup"
 import { apiClient } from "~/lib/api-fetch"
 import type { FeedViewType } from "~/lib/enum"
+import { feedActions } from "~/store/feed"
 
 import { FollowSummary } from "../../components/feed-summary"
 import { FeedForm } from "./feed-form"
@@ -83,6 +84,8 @@ export function DiscoverForm({ type }: { type: string }) {
           target,
         },
       })
+
+      feedActions.upsertMany(data.map((i) => i.feed || i.list).filter((i) => !!i))
 
       jotaiStore.set(discoverSearchDataAtom, data)
 
@@ -144,7 +147,9 @@ export function DiscoverForm({ type }: { type: string }) {
       jotaiStore.set(
         discoverSearchDataAtom,
         produce(currentData, (draft) => {
-          const sub = draft.find((i) => i.feed.id === item.feed.id)
+          const sub = draft.find(
+            (i) => i.feed?.id === item.feed?.id || i.list?.id === item.list?.id,
+          )
           if (!sub) return
           sub.isSubscribed = true
           sub.subscriptionCount = -~(sub.subscriptionCount as number)
@@ -161,7 +166,9 @@ export function DiscoverForm({ type }: { type: string }) {
       jotaiStore.set(
         discoverSearchDataAtom,
         produce(currentData, (draft) => {
-          const sub = draft.find((i) => i.feed.id === item.feed.id)
+          const sub = draft.find(
+            (i) => i.feed?.id === item.feed?.id || i.list?.id === item.list?.id,
+          )
           if (!sub) return
           sub.isSubscribed = false
           sub.subscriptionCount = Number.isNaN(sub.subscriptionCount)
@@ -233,7 +240,7 @@ export function DiscoverForm({ type }: { type: string }) {
           <div className="space-y-6 text-sm">
             {discoverSearchData?.map((item) => (
               <SearchCard
-                key={item.feed.id}
+                key={item.feed?.id || item.list?.id}
                 item={item}
                 onSuccess={handleSuccess}
                 onUnSubscribed={handleUnSubscribed}
@@ -254,9 +261,9 @@ const SearchCard: FC<{
   const { present } = useModalStack()
 
   return (
-    <Card data-feed-id={item.feed.id} key={item.feed.url || item.docs} className="select-text">
+    <Card data-feed-id={item.feed?.id || item.list?.id} className="select-text">
       <CardHeader>
-        <FollowSummary className="max-w-[462px]" feed={item.feed} docs={item.docs} />
+        <FollowSummary className="max-w-[462px]" feed={item.feed || item.list!} docs={item.docs} />
       </CardHeader>
       {item.docs ? (
         <CardFooter>
@@ -315,8 +322,8 @@ const SearchCard: FC<{
                     content: ({ dismiss }) => (
                       <FeedForm
                         asWidget
-                        url={item.feed.url}
-                        id={item.feed.id}
+                        url={item.feed?.url}
+                        id={item.feed?.id || item.list?.id}
                         defaultValues={{
                           view: getSidebarActiveView().toString(),
                         }}

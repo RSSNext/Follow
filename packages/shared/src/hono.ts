@@ -4221,34 +4221,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             };
             output: {
                 data: {
-                    feed: {
-                        type: "feed";
-                        id: string;
-                        url: string;
-                        description?: string | null | undefined;
-                        title?: string | null | undefined;
-                        image?: string | null | undefined;
-                        siteUrl?: string | null | undefined;
-                        errorMessage?: string | null | undefined;
-                        errorAt?: string | null | undefined;
-                        ownerUserId?: string | null | undefined;
-                        owner?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        } | null | undefined;
-                        tipUsers?: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        }[] | null | undefined;
-                    };
                     entries?: {
                         description: string | null;
                         title: string | null;
@@ -4278,6 +4250,82 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             size_in_bytes?: number | undefined;
                         }[] | null | undefined;
                     }[] | undefined;
+                    feed?: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    } | undefined;
+                    list?: {
+                        type: "list";
+                        id: string;
+                        view: number;
+                        feedIds: string[];
+                        fee: number;
+                        timelineUpdatedAt: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        feeds?: {
+                            type: "feed";
+                            id: string;
+                            url: string;
+                            description?: string | null | undefined;
+                            title?: string | null | undefined;
+                            image?: string | null | undefined;
+                            siteUrl?: string | null | undefined;
+                            errorMessage?: string | null | undefined;
+                            errorAt?: string | null | undefined;
+                            ownerUserId?: string | null | undefined;
+                            owner?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            } | null | undefined;
+                            tipUsers?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            }[] | null | undefined;
+                        }[] | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                    } | undefined;
                     docs?: string | undefined;
                     isSubscribed?: boolean | undefined;
                     subscriptionCount?: number | undefined;
