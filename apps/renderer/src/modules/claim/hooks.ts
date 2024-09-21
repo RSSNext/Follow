@@ -8,7 +8,7 @@ import { FeedClaimModalContent } from "./feed-claim-modal"
 
 export const useFeedClaimModal = ({ feedId }: { feedId?: string }) => {
   const { present } = useModalStack()
-  const { t } = useTranslation("app")
+  const { t } = useTranslation()
 
   return useCallback(() => {
     if (!feedId) return
