@@ -23,6 +23,8 @@ import {
 import { Input } from "~/components/ui/input"
 import { Media } from "~/components/ui/media"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
+import { Radio } from "~/components/ui/radio-group"
+import { RadioGroup } from "~/components/ui/radio-group/RadioGroup"
 import { apiClient } from "~/lib/api-fetch"
 import type { FeedViewType } from "~/lib/enum"
 
@@ -31,6 +33,7 @@ import { FeedForm } from "./feed-form"
 
 const formSchema = z.object({
   keyword: z.string().min(1),
+  target: z.enum(["feeds", "lists"]),
 })
 
 const info: Record<
@@ -66,16 +69,18 @@ export function DiscoverForm({ type }: { type: string }) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       keyword: defaultValue || "",
+      target: "feeds",
     },
   })
   const { t } = useTranslation()
 
   const jotaiStore = useStore()
   const mutation = useMutation({
-    mutationFn: async (keyword: string) => {
+    mutationFn: async ({ keyword, target }: { keyword: string; target: "feeds" | "lists" }) => {
       const { data } = await apiClient.discover.$post({
         json: {
           keyword,
+          target,
         },
       })
 
@@ -107,7 +112,7 @@ export function DiscoverForm({ type }: { type: string }) {
         ),
       })
     } else {
-      mutation.mutate(values.keyword)
+      mutation.mutate(values)
     }
   }
 
@@ -167,6 +172,14 @@ export function DiscoverForm({ type }: { type: string }) {
     },
     [discoverSearchDataAtom, jotaiStore],
   )
+
+  const handleTargetChange = useCallback(
+    (value: string) => {
+      form.setValue("target", value as "feeds" | "lists")
+    },
+    [form],
+  )
+
   return (
     <>
       <Form {...form}>
@@ -184,6 +197,26 @@ export function DiscoverForm({ type }: { type: string }) {
               </FormItem>
             )}
           />
+          {type === "search" && (
+            <FormField
+              control={form.control}
+              name="target"
+              render={({ field }) => (
+                <FormItem className="!mt-4">
+                  <FormLabel>{t("discover.target")}</FormLabel>
+                  <FormControl>
+                    <div className="flex gap-6">
+                      <RadioGroup value={field.value} onValueChange={handleTargetChange}>
+                        <Radio label={t("discover.target.feeds")} value="feeds" />
+                        <Radio label={t("discover.target.lists")} value="lists" />
+                      </RadioGroup>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <div className="center flex">
             <Button disabled={!form.formState.isValid} type="submit" isLoading={mutation.isPending}>
               {info[type].showModal ? t("discover.preview") : t("words.search")}

@@ -3447,7 +3447,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     userId: string;
                     view: number;
                     feedId: string;
-                    isPrivate: boolean;
                     lists: {
                         type: "list";
                         id: string;
@@ -3496,6 +3495,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             createdAt: string;
                         } | null | undefined;
                     };
+                    isPrivate: boolean;
                     listId: string;
                     category?: string | undefined;
                 })[];
@@ -4216,6 +4216,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     keyword: string;
+                    target?: "feeds" | "lists" | undefined;
                 };
             };
             output: {
