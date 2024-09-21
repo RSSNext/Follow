@@ -206,11 +206,15 @@ export function DiscoverForm({ type }: { type: string }) {
               control={form.control}
               name="target"
               render={({ field }) => (
-                <FormItem className="!mt-4">
+                <FormItem className="!mt-4 flex items-center justify-between">
                   <FormLabel>{t("discover.target")}</FormLabel>
                   <FormControl>
-                    <div className="flex gap-6">
-                      <RadioGroup value={field.value} onValueChange={handleTargetChange}>
+                    <div className="flex gap-4 text-sm">
+                      <RadioGroup
+                        className="flex items-center"
+                        value={field.value}
+                        onValueChange={handleTargetChange}
+                      >
                         <Radio label={t("discover.target.feeds")} value="feeds" />
                         <Radio label={t("discover.target.lists")} value="lists" />
                       </RadioGroup>

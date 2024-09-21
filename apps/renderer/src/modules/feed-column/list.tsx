@@ -136,7 +136,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
       <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3" rootClassName="h-full">
         <div
           className={cn(
-            "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-1 rounded-md px-2.5 transition-colors",
+            "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5 transition-colors",
             feedId === FEED_COLLECTION_LIST && "bg-native-active",
           )}
           onClick={(e) => {
@@ -150,7 +150,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             }
           }}
         >
-          <i className="i-mgc-star-cute-fi mr-2 size-4 -translate-y-px text-amber-500" />
+          <i className="i-mgc-star-cute-fi size-4 -translate-y-px text-amber-500" />
           {t("words.starred")}
         </div>
         {Object.keys(listsData).length > 0 && (

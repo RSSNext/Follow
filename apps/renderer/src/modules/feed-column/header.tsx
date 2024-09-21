@@ -1,6 +1,7 @@
 import { m } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
 import { memo, useCallback, useEffect, useRef, useState } from "react"
+import { useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
@@ -65,7 +66,7 @@ export const FeedColumnHeader = memo(() => {
             <i className="i-mgc-compass-3-cute-re size-5 text-theme-vibrancyFg" />
           </ActionButton>
         </Link>
-        <SearchActionButton />
+        <SearchTrigger />
 
         <ProfileButton method="modal" />
         <LayoutActionButton />
@@ -145,17 +146,33 @@ const LogoContextMenu: FC<PropsWithChildren> = ({ children }) => {
   )
 }
 
-const SearchActionButton = () => {
+// const SearchActionButton = () => {
+//   const canSearch = useGeneralSettingKey("dataPersist")
+//   const { t } = useTranslation()
+//   if (!canSearch) return null
+//   return (
+//     <ActionButton
+//       shortcut="Meta+K"
+//       tooltip={t("words.search")}
+//       onClick={() => setAppSearchOpen(true)}
+//     >
+//       <i className="i-mgc-search-2-cute-re size-5 text-theme-vibrancyFg" />
+//     </ActionButton>
+//   )
+// }
+
+const SearchTrigger = () => {
   const canSearch = useGeneralSettingKey("dataPersist")
-  const { t } = useTranslation()
-  if (!canSearch) return null
-  return (
-    <ActionButton
-      shortcut="Meta+K"
-      tooltip={t("words.search")}
-      onClick={() => setAppSearchOpen(true)}
-    >
-      <i className="i-mgc-search-2-cute-re size-5 text-theme-vibrancyFg" />
-    </ActionButton>
+
+  useHotkeys(
+    "meta+k",
+    () => {
+      setAppSearchOpen(true)
+    },
+    {
+      enabled: canSearch,
+    },
   )
+
+  return null
 }
