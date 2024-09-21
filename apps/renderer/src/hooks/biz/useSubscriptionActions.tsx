@@ -15,7 +15,7 @@ import { navigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
 
 export const useDeleteSubscription = ({ onSuccess }: { onSuccess?: () => void }) => {
-  const { t } = useTranslation("app")
+  const { t } = useTranslation()
 
   return useMutation({
     mutationFn: async (subscription: SubscriptionFlatModel) =>
