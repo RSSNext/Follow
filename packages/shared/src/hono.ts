@@ -1874,6 +1874,22 @@ declare const listsSubscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        lastViewedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "last_viewed_at";
+            tableName: "lists_subscriptions";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
         isPrivate: drizzle_orm_pg_core.PgColumn<{
             name: "is_private";
             tableName: "lists_subscriptions";
@@ -1898,6 +1914,7 @@ declare const listsSubscriptionsOpenAPISchema: zod.ZodObject<{
     listId: zod.ZodString;
     view: zod.ZodNumber;
     title: zod.ZodNullable<zod.ZodString>;
+    lastViewedAt: zod.ZodNullable<zod.ZodString>;
     isPrivate: zod.ZodBoolean;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     title: string | null;
@@ -1905,12 +1922,14 @@ declare const listsSubscriptionsOpenAPISchema: zod.ZodObject<{
     view: number;
     isPrivate: boolean;
     listId: string;
+    lastViewedAt: string | null;
 }, {
     title: string | null;
     userId: string;
     view: number;
     isPrivate: boolean;
     listId: string;
+    lastViewedAt: string | null;
 }>;
 declare const listsSubscriptionsRelations: drizzle_orm.Relations<"lists_subscriptions", {
     users: drizzle_orm.One<"user", true>;
@@ -3019,6 +3038,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         view: number;
                         isPrivate: boolean;
                         listId: string;
+                        lastViewedAt: string | null;
                     } | undefined;
                 };
             };
@@ -3526,6 +3546,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     };
                     isPrivate: boolean;
                     listId: string;
+                    lastViewedAt: string | null;
                     category?: string | undefined;
                 })[];
             };
@@ -3685,6 +3706,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     view?: number | undefined;
                     feedIdList?: string[] | undefined;
                     feedId?: string | undefined;
+                    listId?: string | undefined;
                     startTime?: number | undefined;
                     endTime?: number | undefined;
                 };
@@ -3985,7 +4007,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             handle: string | null;
                         };
                     };
-                    total: number;
                     entryReadHistories: {
                         userIds: string[];
                         readCount: number;
@@ -4179,6 +4200,18 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             createdAt: string;
                         }[] | null | undefined;
                     };
+                    users: {
+                        [x: string]: {
+                            name: string | null;
+                            id: string;
+                            image: string | null;
+                            handle: string | null;
+                        };
+                    };
+                    entryReadHistories: {
+                        userIds: string[];
+                        readCount: number;
+                    } | null;
                 } | undefined;
             };
             outputFormat: "json" | "text";

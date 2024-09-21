@@ -17,7 +17,7 @@ import { getNewIssueUrl } from "~/lib/issues"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn } from "~/lib/utils"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
-import { useSubscriptionByFeedId } from "~/store/subscription"
+import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { UnreadNumber } from "./unread-number"
@@ -32,6 +32,8 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
   const { t } = useTranslation()
   const subscription = useSubscriptionByFeedId(feedId)
   const navigate = useNavigateEntry()
+  const feed = useFeedById(feedId)
+
   const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       e.stopPropagation()
@@ -41,19 +43,22 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
         entryId: null,
         view,
       })
+      if (feed?.type === "list") {
+        subscriptionActions.markReadByFeedIds({
+          listId: feedId,
+        })
+      }
       // focus to main container in order to let keyboard can navigate entry items by arrow keys
       nextFrame(() => {
         getMainContainerElement()?.focus()
       })
     },
-    [feedId, navigate, view],
+    [feedId, navigate, view, feed?.type],
   )
 
   const feedUnread = useFeedUnreadStore((state) => state.data[feedId] || 0)
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.feedId === feedId)
-
-  const feed = useFeedById(feedId)
 
   const { items } = useFeedActions({ feedId, view })
 
@@ -157,7 +162,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
             </Tooltip>
           )}
         </div>
-        <UnreadNumber unread={feedUnread} className="ml-2" />
+        <UnreadNumber unread={feedUnread} className="ml-2" isList={feed.type === "list"} />
       </div>
     </>
   )

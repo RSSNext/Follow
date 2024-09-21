@@ -145,30 +145,42 @@ class SubscriptionActions {
     )
   }
 
-  async markReadByFeedIds(feedIds: string[]): Promise<void>
-  async markReadByFeedIds(
-    feedIds: string[],
-    view: FeedViewType,
-    filter?: MarkReadFilter,
-  ): Promise<void>
-  async markReadByFeedIds(...args: [string[], FeedViewType?, MarkReadFilter?]) {
-    const [feedIds, view, filter] = args
-
-    const stableFeedIds = feedIds.concat()
+  async markReadByFeedIds({
+    feedIds,
+    view,
+    filter,
+    listId,
+  }: {
+    feedIds?: string[]
+    view?: FeedViewType
+    filter?: MarkReadFilter
+    listId?: string
+  }) {
+    const stableFeedIds = feedIds?.concat() || []
 
     doMutationAndTransaction(
       () =>
         apiClient.reads.all.$post({
           json: {
-            feedIdList: stableFeedIds,
+            ...(listId
+              ? {
+                  listId,
+                }
+              : {
+                  feedIdList: stableFeedIds,
+                }),
             ...filter,
           },
         }),
       async () => {
-        for (const feedId of stableFeedIds) {
-          // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
-          !filter && feedUnreadActions.updateByFeedId(feedId, 0)
-          entryActions.patchManyByFeedId(feedId, { read: true }, filter)
+        if (listId) {
+          feedUnreadActions.updateByFeedId(listId, 0)
+        } else {
+          for (const feedId of stableFeedIds) {
+            // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
+            !filter && feedUnreadActions.updateByFeedId(feedId, 0)
+            entryActions.patchManyByFeedId(feedId, { read: true }, filter)
+          }
         }
         if (filter) {
           feedUnreadActions.fetchUnreadByView(view)
