@@ -15,6 +15,7 @@
     "@follow/electron-main": "workspace:*",
     "@follow/shared": "workspace:*",
     "@fontsource/sn-pro": "5.1.0",
+    "@headlessui/react": "2.1.8",
     "@hono/auth-js": "1.0.10",
     "@hookform/resolvers": "3.9.0",
     "@iconify/tools": "4.0.6",

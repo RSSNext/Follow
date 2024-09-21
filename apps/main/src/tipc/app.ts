@@ -71,58 +71,59 @@ export const appRoute = {
           case "maximum": {
             // FIXME: this is a electron bug, see https://github.com/RSSNext/Follow/issues/231
             // So in this way we use a workaround to fix it, that is manually resize the window
-            if (isWindows11) {
-              const display = screen.getDisplayMatching(window.getBounds())
-              const size = display.workAreaSize
+            // Comemnt the manually handle logic and disable backgroundMaterial for now
+            // if (isWindows11) {
+            //   const display = screen.getDisplayMatching(window.getBounds())
+            //   const size = display.workAreaSize
 
-              const isMaximized = size.height === window.getSize()[1]
+            //   const isMaximized = size.height === window.getSize()[1]
 
-              const storeKey = Symbol.for("maximized")
-              if (isMaximized) {
-                const stored = window[storeKey]
-                if (!stored) return
+            //   const storeKey = Symbol.for("maximized")
+            //   if (isMaximized) {
+            //     const stored = window[storeKey]
+            //     if (!stored) return
 
-                window.setResizable(true)
-                window.setMovable(true)
+            //     window.setResizable(true)
+            //     window.setMovable(true)
 
-                window.setBounds(
-                  {
-                    width: stored.size[0],
-                    height: stored.size[1],
-                    x: stored.position[0],
-                    y: stored.position[1],
-                  },
-                  true,
-                )
+            //     window.setBounds(
+            //       {
+            //         width: stored.size[0],
+            //         height: stored.size[1],
+            //         x: stored.position[0],
+            //         y: stored.position[1],
+            //       },
+            //       true,
+            //     )
 
-                delete window[storeKey]
-              } else {
-                const currentWindowSize = window.getSize()
-                const currentWindowPosition = window.getPosition()
-                window[storeKey] = {
-                  size: currentWindowSize,
-                  position: currentWindowPosition,
-                }
+            //     delete window[storeKey]
+            //   } else {
+            //     const currentWindowSize = window.getSize()
+            //     const currentWindowPosition = window.getPosition()
+            //     window[storeKey] = {
+            //       size: currentWindowSize,
+            //       position: currentWindowPosition,
+            //     }
 
-                // Maually Resize
-                const { workArea } = display
+            //     // Maually Resize
+            //     const { workArea } = display
 
-                window.setBounds(
-                  {
-                    x: workArea.x,
-                    y: workArea.y,
-                    width: workArea.width,
-                    height: workArea.height,
-                  },
-                  true,
-                )
+            //     window.setBounds(
+            //       {
+            //         x: workArea.x,
+            //         y: workArea.y,
+            //         width: workArea.width,
+            //         height: workArea.height,
+            //       },
+            //       true,
+            //     )
 
-                window.setResizable(false)
-                window.setMovable(false)
-              }
+            //     window.setResizable(false)
+            //     window.setMovable(false)
+            //   }
 
-              return
-            }
+            //   return
+            // }
 
             if (window.isMaximized()) {
               window.unmaximize()

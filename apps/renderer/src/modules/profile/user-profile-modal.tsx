@@ -372,7 +372,11 @@ const SubscriptionItem: FC<{
       className={cn("group relative", isLoose ? "border-b py-5" : "py-2")}
       data-feed-id={subscription.feedId}
     >
-      <a className="flex flex-1 cursor-default" href={subscription.feeds.siteUrl!} target="_blank">
+      <a
+        className="flex flex-1 cursor-default items-center"
+        href={subscription.feeds.siteUrl!}
+        target="_blank"
+      >
         <FeedIcon feed={subscription.feeds} size={22} className="mr-3" />
         <div
           className={cn(

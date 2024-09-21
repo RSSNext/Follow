@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { useEffect, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
@@ -25,8 +25,7 @@ import { LoadingCircle } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { Switch } from "~/components/ui/switch"
 import { views } from "~/constants"
-import { useDeleteSubscription } from "~/hooks/biz/useSubscriptionActions"
-import { useAuthQuery } from "~/hooks/common"
+import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { tipcClient } from "~/lib/client"
 import { FeedViewType } from "~/lib/enum"
@@ -58,6 +57,7 @@ export const FeedForm: Component<{
   onSuccess?: () => void
 }> = ({ id: _id, defaultValues = defaultValue, url, asWidget, onSuccess }) => {
   const queryParams = { id: _id, url }
+
   const feedQuery = useFeed(queryParams)
 
   const id = feedQuery.data?.feed.id || _id
@@ -171,7 +171,7 @@ const FeedInnerForm = ({
     defaultValues,
   })
 
-  const { setClickOutSideToDismiss } = useCurrentModal()
+  const { setClickOutSideToDismiss, dismiss } = useCurrentModal()
 
   useEffect(() => {
     setClickOutSideToDismiss(!form.formState.isDirty)
@@ -233,27 +233,22 @@ const FeedInnerForm = ({
     },
   })
 
-  const deleteSubscription = useDeleteSubscription({
-    onSuccess: () => {
-      if (!asWidget && !isSubscribed) {
-        window.close()
-      }
-
-      onSuccess?.()
-    },
-  })
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     followMutation.mutate(values)
   }
 
-  const { t } = useTranslation()
+  const t = useI18n()
 
   const categories = useAuthQuery(subscriptionQuery.categories())
 
-  // useEffect(() => {
-  //   if (feed.isSuccess) nextFrame(() => buttonRef.current?.focus());
-  // }, [feed.isSuccess]);
+  const suggestions = useMemo(
+    () =>
+      categories.data?.map((i) => ({
+        name: i,
+        value: i,
+      })) || [],
+    [categories.data],
+  )
 
   return (
     <div className="flex flex-1 flex-col gap-y-4">
@@ -284,8 +279,10 @@ const FeedInnerForm = ({
                         <label
                           htmlFor={view.name}
                           className={cn(
+                            "hover:text-theme-foreground dark:hover:text-white",
                             view.peerClassName,
-                            "center flex h-10 flex-col text-xs leading-none opacity-80 duration-200 hover:opacity-90",
+                            "center flex h-10 flex-col text-xs leading-none opacity-80 duration-200",
+                            "text-neutral-800 dark:text-zinc-200",
                             "peer-checked:opacity-100",
                             "whitespace-nowrap",
                           )}
@@ -331,15 +328,12 @@ const FeedInnerForm = ({
                     <Autocomplete
                       maxHeight={window.innerHeight < 600 ? 120 : 240}
                       portal
-                      suggestions={
-                        categories.data?.map((i) => ({
-                          name: i,
-                          value: i,
-                        })) || []
-                      }
+                      suggestions={suggestions}
                       {...(field as any)}
                       onSuggestionSelected={(suggestion) => {
-                        field.onChange(suggestion.value)
+                        if (suggestion) {
+                          field.onChange(suggestion.value)
+                        }
                       }}
                     />
                   </div>
@@ -376,16 +370,11 @@ const FeedInnerForm = ({
                 type="button"
                 ref={buttonRef}
                 variant="text"
-                isLoading={deleteSubscription.isPending}
-                className="text-red-500"
-                onClick={(e) => {
-                  e.preventDefault()
-                  if (subscription) {
-                    deleteSubscription.mutate(subscription)
-                  }
+                onClick={() => {
+                  dismiss()
                 }}
               >
-                {t("feed_form.unfollow")}
+                {t.common("cancel")}
               </Button>
             )}
             <Button ref={buttonRef} type="submit" isLoading={followMutation.isPending}>
