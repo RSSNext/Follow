@@ -2,7 +2,6 @@ import { throttle } from "lodash-es"
 import type { FC, PropsWithChildren } from "react"
 import { createContext, useContext, useLayoutEffect, useRef, useState } from "react"
 
-
 const AppLayoutGridContainerWidthContext = createContext<number>(0)
 
 export const AppLayoutGridContainerProvider: FC<PropsWithChildren> = ({ children }) => {
