@@ -26,13 +26,13 @@
 
 ## Introduction
 
-&nbsp;&nbsp;&nbsp;&nbsp;Welcome to Follow! This software is all about allowing you to follow your favorite websites, blogs, social media accounts, podcasts and notifications in one place. It is designed as a modern, fast, and convenient all-in-one information center.
+Welcome to Follow! This software is all about allowing you to follow your favorite websites, blogs, social media accounts, podcasts and notifications in one place. It is designed as a modern, fast, and convenient all-in-one information center.
 
-&nbsp;&nbsp;&nbsp;&nbsp;Supported Platforms: Follow Desktop for Windows, macOS, Linux, and Browser; Follow Mobile for Android and iOS (coming soon).
+Supported Platforms: Follow Desktop for Windows, macOS, Linux, and Browser; Follow Mobile for Android and iOS (coming soon).
 
 ## Screenshots
 
-&nbsp;&nbsp;&nbsp;&nbsp;The project is currently under active development. The following screenshots are for reference only and may differ from the final release version.
+The project is currently under active development. The following screenshots are for reference only and may differ from the final release version.
 
 - Use different views for various types of content to offer an experience equal to or better than the original platform - Articles, Social Media, Pictures, Videos, Podcasts, and Notifications
   ![Screenshot 2024-09-10 at 6 22 18 PM](https://github.com/user-attachments/assets/1958ec70-1916-47c5-82d0-3bd8e43f3a26)
@@ -73,15 +73,15 @@
 
 [![Discord](https://img.shields.io/discord/1243823539426033696?logo=discord&label=Discord&style=flat-square&color=5865F2)](https://discord.gg/xHCVQZ6wmZ) [![](https://img.shields.io/badge/any_text-Follow-blue?color=2CA5E0&label=_&logo=x&cacheSeconds=3600&style=flat-square)](https://x.com/intent/follow?screen_name=follow_app_)
 
-&nbsp;&nbsp;&nbsp;&nbsp;Currently, Follow is still in the early developer preview stage (alpha) and is only available to a limited number of users through an invitation system.
+Currently, Follow is still in the early developer preview stage (alpha) and is only available to a limited number of users through an invitation system.
 
-&nbsp;&nbsp;&nbsp;&nbsp;You can get an invitation code in the following ways:
+You can get an invitation code in the following ways:
 
 - Looking for any alpha test user to invite you.
 - Join our Discord server for occasional giveaways.
 - Follow our X account for occasional giveaways.
 
-&nbsp;&nbsp;&nbsp;&nbsp;If you have access, you are welcome to use the following methods to download and install it:
+If you have access, you are welcome to use the following methods to download and install it:
 
 - Visit our online webapp at [app.follow.is](https://app.follow.is)
 - You can get the installation packages for each platform from the [Releases page](https://github.com/RSSNext/Follow/releases).
