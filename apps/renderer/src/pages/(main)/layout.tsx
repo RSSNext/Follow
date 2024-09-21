@@ -53,7 +53,7 @@ const FooterInfo = () => {
             onClick={() => {
               window.open(`${repository.url}/releases`)
             }}
-            className="center cursor-pointer rounded-full border bg-background p-1.5 shadow-sm"
+            className="center rounded-full border bg-background p-1.5 shadow-sm"
           >
             <i className="i-mgc-download-2-cute-re size-3.5 opacity-80" />
           </button>

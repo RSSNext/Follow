@@ -373,7 +373,7 @@ const SubscriptionItem: FC<{
       data-feed-id={subscription.feedId}
     >
       <a
-        className="flex flex-1 cursor-default items-center"
+        className="flex flex-1 cursor-menu items-center"
         href={subscription.feeds.siteUrl!}
         target="_blank"
       >
