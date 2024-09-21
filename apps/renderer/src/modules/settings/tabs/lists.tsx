@@ -35,6 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
@@ -76,31 +77,27 @@ export const SettingLists = () => {
             <Table className="mt-4">
               <TableHeader className="border-b">
                 <TableRow className="[&_*]:!font-semibold">
-                  <TableHead className="text-center" size="sm">
-                    {t.settings("lists.title")}
-                  </TableHead>
-                  <TableHead className="w-28 text-center" size="sm">
+                  <TableHead size="sm">{t.settings("lists.title")}</TableHead>
+                  <TableHead className="w-28" size="sm">
                     {t.settings("lists.view")}
                   </TableHead>
-                  <TableHead className="w-20 text-center" size="sm">
+                  <TableHead className="w-20" size="sm">
                     {t.settings("lists.fee")}
                   </TableHead>
-                  <TableHead className="w-20 text-center" size="sm">
-                    {t.settings("lists.feeds")}
-                  </TableHead>
-                  <TableHead className="w-20 text-center" size="sm">
-                    {t.settings("lists.edit")}
+
+                  <TableHead className="w-20" size="sm">
+                    {t.common("words.actions")}
                   </TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody className="border-t-[12px] border-transparent">
+              <TableBody className="border-t-[12px] border-transparent [&_td]:!px-3">
                 {listList.data?.map((row) => (
                   <TableRow key={row.title} className="h-8">
                     <TableCell size="sm">
                       <a
                         target="_blank"
                         href={`${WEB_URL}/list/${row.id}`}
-                        className="flex items-center justify-center gap-2 font-semibold"
+                        className="inline-flex items-center gap-2 font-semibold"
                       >
                         {row.image && (
                           <Avatar className="size-6">
@@ -111,46 +108,59 @@ export const SettingLists = () => {
                       </a>
                     </TableCell>
                     <TableCell align="center" size="sm">
-                      <div className="flex items-center justify-center gap-1">
+                      <div className="flex items-center gap-1">
+                        {t(views[row.view].name)}
                         <span className={cn("inline-flex items-center", views[row.view].className)}>
                           {views[row.view].icon}
                         </span>
-                        {t(views[row.view].name)}
                       </div>
                     </TableCell>
                     <TableCell align="center" size="sm">
-                      <div className="flex items-center justify-center gap-1">
+                      <div className="flex items-center gap-1">
                         {row.fee}
                         <i className="i-mgc-power shrink-0 text-lg text-accent" />
                       </div>
                     </TableCell>
+
                     <TableCell align="center" size="sm">
-                      <Button
-                        variant="ghost"
-                        onClick={() => {
-                          present({
-                            title: t.settings("lists.feeds.manage"),
-                            content: () => <ListFeedsModalContent id={row.id} />,
-                          })
-                        }}
-                      >
-                        <i className="i-mgc-inbox-cute-re" />
-                      </Button>
-                    </TableCell>
-                    <TableCell align="center" size="sm">
-                      <Button
-                        variant="ghost"
-                        onClick={() => {
-                          present({
-                            title: t.settings("lists.edit"),
-                            content: ({ dismiss }) => (
-                              <ListCreationModalContent dismiss={dismiss} id={row.id} />
-                            ),
-                          })
-                        }}
-                      >
-                        <i className="i-mgc-edit-cute-re" />
-                      </Button>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Button
+                            variant="ghost"
+                            onClick={() => {
+                              present({
+                                title: t.settings("lists.feeds.manage"),
+                                content: () => <ListFeedsModalContent id={row.id} />,
+                              })
+                            }}
+                          >
+                            <i className="i-mgc-inbox-cute-re" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipPortal>
+                          <TooltipContent>{t.common("words.manage")}</TooltipContent>
+                        </TooltipPortal>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Button
+                            variant="ghost"
+                            onClick={() => {
+                              present({
+                                title: t.settings("lists.edit"),
+                                content: ({ dismiss }) => (
+                                  <ListCreationModalContent dismiss={dismiss} id={row.id} />
+                                ),
+                              })
+                            }}
+                          >
+                            <i className="i-mgc-edit-cute-re" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipPortal>
+                          <TooltipContent>{t.common("words.edit")}</TooltipContent>
+                        </TooltipPortal>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -411,7 +421,7 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
             setFeedSearchFor(e.target.value)
           }}
           suggestions={autocompleteSuggestions}
-         />
+        />
         <Button
           onClick={() => {
             if (isBizId(feedSearchFor)) {
