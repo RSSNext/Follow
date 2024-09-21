@@ -171,11 +171,13 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           <i className="i-mgc-star-cute-fi mr-2 text-amber-500" />
           {t("words.starred")}
         </div>
-        <div className="mt-4 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
-          {t("words.lists")}
-        </div>
         {Object.keys(listsData).length > 0 && (
-          <SortableList view={view} expansion={expansion} data={listsData} />
+          <>
+            <div className="mt-4 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+              {t("words.lists")}
+            </div>
+            <SortableList view={view} expansion={expansion} data={listsData} />
+          </>
         )}
         <div className="mt-4 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
           {t("words.feeds")}
