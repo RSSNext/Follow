@@ -40,10 +40,7 @@ export default resolveConfig({
           DEFAULT: "hsl(var(--muted) / <alpha-value>)",
           foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
         },
-        accent: {
-          DEFAULT: "#ff5c00",
-          foreground: "hsl(var(--fo-text-primary), <alpha-value>)",
-        },
+        accent: "hsl(var(--fo-a) / <alpha-value>)",
 
         popover: {
           DEFAULT: "hsl(var(--popover) / <alpha-value>)",
@@ -61,7 +58,7 @@ export default resolveConfig({
         theme: {
           // https://uicolors.app/create
           accent: {
-            DEFAULT: "#ff5c00",
+            DEFAULT: "hsl(var(--fo-a) / <alpha-value>)",
             50: "#fff7ec",
             100: "#ffeed3",
             200: "#ffd9a5",
@@ -75,7 +72,7 @@ export default resolveConfig({
             950: "#461304",
           },
 
-          vibrancyFg: "hsl(var(--fo-vibrancy-foreground), <alpha-value>)",
+          vibrancyFg: "hsl(var(--fo-vibrancy-foreground) / <alpha-value>)",
           vibrancyBg: "var(--fo-vibrancy-background)",
 
           item: {
@@ -83,13 +80,13 @@ export default resolveConfig({
             hover: "var(--fo-item-hover)",
           },
 
-          inactive: "hsl(var(--fo-inactive), <alpha-value>)",
-          disabled: "hsl(var(--fo-disabled), <alpha-value>)",
+          inactive: "hsl(var(--fo-inactive) / <alpha-value>)",
+          disabled: "hsl(var(--fo-disabled) / <alpha-value>)",
 
-          foreground: "hsl(var(--fo-text-primary), <alpha-value>)",
+          foreground: "hsl(var(--fo-text-primary) / <alpha-value>)",
           background: "var(--fo-background)",
 
-          "foreground-hover": "hsl(var(--fo-text-primary-hover), <alpha-value>)",
+          "foreground-hover": "hsl(var(--fo-text-primary-hover) / <alpha-value>)",
 
           modal: {
             background: "var(--fo-modal-background)",
