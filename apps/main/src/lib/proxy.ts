@@ -16,10 +16,10 @@ import { store } from "./store"
 
 export const setProxyConfig = (inputProxy: string) => {
   const proxyUri = normalizeProxyUri(inputProxy)
+  store.set("proxy", proxyUri)
   if (!proxyUri) {
     return false
   }
-  store.set("proxy", inputProxy)
   return true
 }
 
