@@ -72,7 +72,7 @@ export default resolveConfig({
             950: "#461304",
           },
 
-          vibrancyFg: "hsl(var(--fo-vibrancy-foreground), <alpha-value>)",
+          vibrancyFg: "hsl(var(--fo-vibrancy-foreground) / <alpha-value>)",
           vibrancyBg: "var(--fo-vibrancy-background)",
 
           item: {
@@ -80,13 +80,13 @@ export default resolveConfig({
             hover: "var(--fo-item-hover)",
           },
 
-          inactive: "hsl(var(--fo-inactive), <alpha-value>)",
-          disabled: "hsl(var(--fo-disabled), <alpha-value>)",
+          inactive: "hsl(var(--fo-inactive) / <alpha-value>)",
+          disabled: "hsl(var(--fo-disabled) / <alpha-value>)",
 
-          foreground: "hsl(var(--fo-text-primary), <alpha-value>)",
+          foreground: "hsl(var(--fo-text-primary) / <alpha-value>)",
           background: "var(--fo-background)",
 
-          "foreground-hover": "hsl(var(--fo-text-primary-hover), <alpha-value>)",
+          "foreground-hover": "hsl(var(--fo-text-primary-hover) / <alpha-value>)",
 
           modal: {
             background: "var(--fo-modal-background)",
