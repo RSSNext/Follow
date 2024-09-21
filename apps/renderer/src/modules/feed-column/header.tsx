@@ -63,7 +63,7 @@ export const FeedColumnHeader = memo(() => {
       <div className="relative flex items-center gap-1" onClick={stopPropagation}>
         <Link to="/discover" tabIndex={-1}>
           <ActionButton shortcut="Meta+T" tooltip={t("words.discover")}>
-            <i className="i-mgc-compass-3-cute-re size-5 text-theme-vibrancyFg" />
+            <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
           </ActionButton>
         </Link>
         <SearchTrigger />

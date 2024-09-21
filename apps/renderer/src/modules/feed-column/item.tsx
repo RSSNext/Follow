@@ -73,7 +73,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
       <div
         data-feed-id={feedId}
         className={cn(
-          "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-normal leading-loose",
+          "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
           (isActive || isContextMenuOpen) && "bg-native-active",
           feed.type === "feed" ? "py-[2px]" : "py-1.5",
           className,

@@ -78,7 +78,7 @@ export const SettingLists = () => {
               <TableHeader className="border-b">
                 <TableRow className="[&_*]:!font-semibold">
                   <TableHead size="sm">{t.settings("lists.title")}</TableHead>
-                  <TableHead className="w-28" size="sm">
+                  <TableHead className="w-36" size="sm">
                     {t.settings("lists.view")}
                   </TableHead>
                   <TableHead className="w-20" size="sm">
