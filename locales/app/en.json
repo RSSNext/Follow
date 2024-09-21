@@ -133,6 +133,8 @@
   "player.playback_rate": "Playback Rate",
   "player.unmute": "Unmute",
   "player.volume": "Volume",
+  "resize.tooltip.double_click_to_collapse": "<b>Double click</b> to collapse",
+  "resize.tooltip.drag_to_resize": "<b>Drag</b> to resize",
   "search.empty.no_results": "No results found.",
   "search.group.entries": "Entries",
   "search.group.feeds": "Feeds",

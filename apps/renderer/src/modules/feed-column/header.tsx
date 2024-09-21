@@ -1,6 +1,6 @@
 import { m } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
-import { memo, useCallback, useRef, useState } from "react"
+import { memo, useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
@@ -70,9 +70,15 @@ export const FeedColumnHeader = memo(() => {
 const LayoutActionButton = () => {
   const feedColumnShow = useFeedColumnShow()
 
-  const [animation] = useState({
+  const [animation, setAnimation] = useState({
     width: !feedColumnShow ? "auto" : 0,
   })
+
+  useEffect(() => {
+    setAnimation({
+      width: !feedColumnShow ? "auto" : 0,
+    })
+  }, [feedColumnShow])
 
   const t = useI18n()
   return (
