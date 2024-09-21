@@ -22,6 +22,7 @@ const SelectTrigger = React.forwardRef<
       "ring-accent/20 duration-200 focus:border-accent/80 focus:outline-none focus:ring-2",
       "border border-border",
       size === "sm" ? "h-7 p-2 text-sm" : "h-9 px-3 py-2 text-sm",
+      "hover:border-accent/80",
       className,
     )}
     {...props}
