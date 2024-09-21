@@ -25,20 +25,21 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
       <CardContent className="p-5 pt-0">
         <ul className="space-y-1 text-sm text-muted-foreground">
           {Object.keys(data.routes).map((route) => (
-            <li
-              key={route}
-              className="duration-200 hover:text-theme-foreground-hover"
-              onClick={() => {
-                present({
-                  content: () => (
-                    <RecommendationContent routePrefix={routePrefix} route={data.routes[route]} />
-                  ),
-                  icon: <FeedIcon className="size-4" size={16} siteUrl={`https://${data.url}`} />,
-                  title: `${data.name} - ${data.routes[route].name}`,
-                })
-              }}
-            >
-              {data.routes[route].name}
+            <li key={route} className="duration-200 hover:text-theme-foreground-hover">
+              <button
+                type="button"
+                onClick={() => {
+                  present({
+                    content: () => (
+                      <RecommendationContent routePrefix={routePrefix} route={data.routes[route]} />
+                    ),
+                    icon: <FeedIcon className="size-4" size={16} siteUrl={`https://${data.url}`} />,
+                    title: `${data.name} - ${data.routes[route].name}`,
+                  })
+                }}
+              >
+                {data.routes[route].name}
+              </button>
             </li>
           ))}
         </ul>
