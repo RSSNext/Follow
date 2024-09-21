@@ -39,7 +39,7 @@ export const SlideUpModal = (props: PropsWithChildren) => {
         }}
         className={cn(
           "relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
-          "h-[80vh] w-[800px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
+          "h-[80vh] w-[600px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
         )}
       >
         {props.children}

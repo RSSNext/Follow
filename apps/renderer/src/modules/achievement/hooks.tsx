@@ -38,7 +38,7 @@ export const useAchievementModal = () => {
   return useCallback(() => {
     present({
       id: "achievement",
-      title: "Achievement",
+      title: "Achievements",
       content: AchievementModalContent,
       CustomModalComponent: SlideUpModal,
     })
@@ -135,7 +135,7 @@ export const AchievementModalContent: FC = () => {
 
       <div className="mt-4 text-xl font-bold">{t("words.achievement")}</div>
 
-      <small className="center gap-1">
+      <small className="center mt-1 gap-1 text-theme-vibrancyFg">
         <Trans
           i18nKey={"achievement.mint_more_power"}
           components={{
@@ -149,7 +149,7 @@ export const AchievementModalContent: FC = () => {
         />
       </small>
 
-      <ul className="mt-8 flex w-full grow flex-col gap-2">
+      <ul className="mt-10 flex w-full grow flex-col gap-2">
         {isLoading ? (
           <div className="center pointer-events-none grow -translate-y-16">
             <LoadingWithIcon icon={<i className="i-mgc-trophy-cute-re" />} size="large" />
