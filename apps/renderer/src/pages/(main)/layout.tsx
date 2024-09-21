@@ -33,6 +33,7 @@ import { useShortcutsModal } from "~/modules/modal/shortcuts"
 import { CmdF } from "~/modules/panel/cmdf"
 import { SearchCmdK } from "~/modules/panel/cmdk"
 import { CmdNTrigger } from "~/modules/panel/cmdn"
+import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
 
 const FooterInfo = () => {
   const { t } = useTranslation()
@@ -84,16 +85,19 @@ export function Component() {
     >
       {!import.meta.env.PROD && <EnvironmentIndicator />}
 
-      <FeedResponsiveResizerContainer containerRef={containerRef}>
-        <FeedColumn>
-          <CornerPlayer />
-          <FooterInfo />
+      <AppLayoutGridContainerProvider>
+        <FeedResponsiveResizerContainer containerRef={containerRef}>
+          <FeedColumn>
+            <CornerPlayer />
+            <FooterInfo />
 
-          {ELECTRON && <AutoUpdater />}
+            {ELECTRON && <AutoUpdater />}
 
-          <NetworkStatusIndicator />
-        </FeedColumn>
-      </FeedResponsiveResizerContainer>
+            <NetworkStatusIndicator />
+          </FeedColumn>
+        </FeedResponsiveResizerContainer>
+      </AppLayoutGridContainerProvider>
+
       <main
         ref={setMainContainerElement}
         className="flex min-w-0 flex-1 bg-theme-background pt-[calc(var(--fo-window-padding-top)_-10px)] !outline-none"

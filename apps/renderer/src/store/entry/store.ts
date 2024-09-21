@@ -5,13 +5,12 @@ import { isNil, merge, omit } from "lodash-es"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { getEntriesParams, omitObjectUndefinedValue } from "~/lib/utils"
-import type { CombinedEntryModel, EntryModel, FeedModel, UserModel } from "~/models"
+import type { CombinedEntryModel, EntryModel, FeedModel } from "~/models"
 import { EntryService } from "~/services"
 
 import { feedActions } from "../feed"
 import { imageActions } from "../image"
 import { feedUnreadActions } from "../unread"
-import { userActions } from "../user"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import { internal_batchMarkRead } from "./helper"
 import type { EntryState, FlatEntryModel } from "./types"
@@ -63,10 +62,6 @@ class EntryActions {
         omit(data, "read") as any,
       ])
       feedActions.upsertMany([data.feeds])
-      userActions.upsert(data.users as Record<string, UserModel>)
-      if (data.entryReadHistories) {
-        this.updateReadHistory(entryId, data.entryReadHistories)
-      }
     }
 
     return data
