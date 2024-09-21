@@ -27,7 +27,6 @@ import { Radio } from "~/components/ui/radio-group"
 import { RadioGroup } from "~/components/ui/radio-group/RadioGroup"
 import { apiClient } from "~/lib/api-fetch"
 import type { FeedViewType } from "~/lib/enum"
-import { feedActions } from "~/store/feed"
 
 import { FollowSummary } from "../../components/feed-summary"
 import { FeedForm } from "./feed-form"
@@ -84,8 +83,6 @@ export function DiscoverForm({ type }: { type: string }) {
           target,
         },
       })
-
-      feedActions.upsertMany(data.map((i) => i.feed || i.list).filter((i) => !!i))
 
       jotaiStore.set(discoverSearchDataAtom, data)
 
@@ -324,6 +321,7 @@ const SearchCard: FC<{
                         asWidget
                         url={item.feed?.url}
                         id={item.feed?.id || item.list?.id}
+                        isList={!!item.list?.id}
                         defaultValues={{
                           view: getSidebarActiveView().toString(),
                         }}

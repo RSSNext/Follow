@@ -103,18 +103,24 @@ class FeedActions {
   // API Fetcher
   //
 
-  async fetchFeedById({ id, url }: FeedQueryParams) {
-    const res = await apiClient.feeds.$get({
-      query: {
-        id,
-        url,
-      },
-    })
+  async fetchFeedById({ id, url, isList }: FeedQueryParams) {
+    const res = isList
+      ? await apiClient.lists.$get({
+          query: {
+            listId: id!,
+          },
+        })
+      : await apiClient.feeds.$get({
+          query: {
+            id,
+            url,
+          },
+        })
 
     const nonce = nanoid(8)
 
     const finalData = {
-      ...res.data.feed,
+      ...("list" in res.data ? res.data.list : res.data.feed),
     }
 
     if (!finalData.id) {

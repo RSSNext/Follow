@@ -12,4 +12,4 @@ export interface FeedActions {
   patch: (feedId: FeedId, patch: Partial<TargetModel>) => void
 }
 
-export type FeedQueryParams = { id?: string; url?: string }
+export type FeedQueryParams = { id?: string; url?: string; isList?: boolean }

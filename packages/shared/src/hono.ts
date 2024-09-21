@@ -2775,6 +2775,22 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        toListId: drizzle_orm_pg_core.PgColumn<{
+            name: "to_list_id";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
         toEntryId: drizzle_orm_pg_core.PgColumn<{
             name: "to_entry_id";
             tableName: "transactions";
@@ -2848,6 +2864,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     fromUserId: zod.ZodNullable<zod.ZodString>;
     toUserId: zod.ZodNullable<zod.ZodString>;
     toFeedId: zod.ZodNullable<zod.ZodString>;
+    toListId: zod.ZodNullable<zod.ZodString>;
     toEntryId: zod.ZodNullable<zod.ZodString>;
     powerToken: zod.ZodString;
     createdAt: zod.ZodString;
@@ -2859,6 +2876,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toUserId: string | null;
     hash: string;
     toFeedId: string | null;
+    toListId: string | null;
     toEntryId: string | null;
     powerToken: string;
     comment: string | null;
@@ -2869,6 +2887,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toUserId: string | null;
     hash: string;
     toFeedId: string | null;
+    toListId: string | null;
     toEntryId: string | null;
     powerToken: string;
     comment: string | null;
@@ -3246,6 +3265,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     toUserId: string | null;
                     hash: string;
                     toFeedId: string | null;
+                    toListId: string | null;
                     toEntryId: string | null;
                     powerToken: string;
                     comment: string | null;

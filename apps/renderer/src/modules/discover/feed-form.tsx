@@ -49,14 +49,15 @@ const defaultValue = { view: FeedViewType.Articles.toString() } as z.infer<typeo
 export const FeedForm: Component<{
   url?: string
   id?: string
+  isList?: boolean
 
   defaultValues?: z.infer<typeof formSchema>
 
   asWidget?: boolean
 
   onSuccess?: () => void
-}> = ({ id: _id, defaultValues = defaultValue, url, asWidget, onSuccess }) => {
-  const queryParams = { id: _id, url }
+}> = ({ id: _id, defaultValues = defaultValue, url, asWidget, onSuccess, isList }) => {
+  const queryParams = { id: _id, url, isList }
 
   const feedQuery = useFeed(queryParams)
 
