@@ -1,14 +1,178 @@
 import * as hono_hono_base from 'hono/hono-base';
 import { HttpBindings } from '@hono/node-server';
-import * as drizzle_orm from 'drizzle-orm';
-import { InferInsertModel } from 'drizzle-orm';
-import * as drizzle_orm_pg_core from 'drizzle-orm/pg-core';
 import * as zod from 'zod';
 import { z } from 'zod';
+import * as drizzle_orm_pg_core from 'drizzle-orm/pg-core';
+import * as drizzle_orm from 'drizzle-orm';
+import { InferInsertModel } from 'drizzle-orm';
 
 type Env = {
     Bindings: HttpBindings;
 };
+
+declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "achievements";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "achievements";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "achievements";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        type: drizzle_orm_pg_core.PgColumn<{
+            name: "type";
+            tableName: "achievements";
+            dataType: "string";
+            columnType: "PgText";
+            data: "received" | "checking" | "completed" | "incomplete";
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: ["checking", "completed", "incomplete", "received"];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        actionId: drizzle_orm_pg_core.PgColumn<{
+            name: "action_id";
+            tableName: "achievements";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        progress: drizzle_orm_pg_core.PgColumn<{
+            name: "progress";
+            tableName: "achievements";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        progressMax: drizzle_orm_pg_core.PgColumn<{
+            name: "progress_max";
+            tableName: "achievements";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        done: drizzle_orm_pg_core.PgColumn<{
+            name: "done";
+            tableName: "achievements";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        doneAt: drizzle_orm_pg_core.PgColumn<{
+            name: "done_at";
+            tableName: "achievements";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const achievementsOpenAPISchema: zod.ZodObject<{
+    id: zod.ZodString;
+    userId: zod.ZodString;
+    type: zod.ZodEnum<["checking", "completed", "incomplete", "received"]>;
+    actionId: zod.ZodNumber;
+    progress: zod.ZodNumber;
+    progressMax: zod.ZodNumber;
+    done: zod.ZodBoolean;
+    doneAt: zod.ZodNullable<zod.ZodString>;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    type: "received" | "checking" | "completed" | "incomplete";
+    id: string;
+    userId: string;
+    actionId: number;
+    progress: number;
+    progressMax: number;
+    done: boolean;
+    doneAt: string | null;
+}, {
+    type: "received" | "checking" | "completed" | "incomplete";
+    id: string;
+    userId: string;
+    actionId: number;
+    progress: number;
+    progressMax: number;
+    done: boolean;
+    doneAt: string | null;
+}>;
 
 declare const languageSchema: z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>;
 declare const conditionFieldSchema: z.ZodEnum<["view", "title", "site_url", "feed_url", "category"]>;
@@ -110,11 +274,11 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
             value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
         }, "strip", z.ZodTypeAny, {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }, {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
@@ -127,7 +291,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
     }, {
@@ -140,17 +304,12 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     name: string;
-    condition: {
-        value: string;
-        field: "title" | "view" | "site_url" | "feed_url" | "category";
-        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-    }[];
     result: {
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -161,17 +320,17 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
     };
+    condition: {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url" | "category";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }[];
 }, {
     name: string;
-    condition: {
-        value: string;
-        field: "title" | "view" | "site_url" | "feed_url" | "category";
-        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-    }[];
     result: {
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -182,10 +341,15 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         }[] | undefined;
         blockRules?: {
             value: string | number;
-            field: "title" | "content" | "all" | "author" | "url" | "order";
+            field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
     };
+    condition: {
+        value: string;
+        field: "title" | "view" | "site_url" | "feed_url" | "category";
+        operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+    }[];
 }>;
 declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     userId: z.ZodString;
@@ -230,11 +394,11 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 value: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
             }, "strip", z.ZodTypeAny, {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }, {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }>, "many">>;
         }, "strip", z.ZodTypeAny, {
@@ -247,7 +411,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         }, {
@@ -260,17 +424,12 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         name: string;
-        condition: {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[];
         result: {
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -281,17 +440,17 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         };
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[];
     }, {
         name: string;
-        condition: {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[];
         result: {
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -302,20 +461,20 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         };
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[];
     }>, "many">>>;
 }>, "strip", z.ZodTypeAny, {
     userId: string;
     rules?: {
         name: string;
-        condition: {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[];
         result: {
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -326,20 +485,20 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         };
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[];
     }[] | null | undefined;
 }, {
     userId: string;
     rules?: {
         name: string;
-        condition: {
-            value: string;
-            field: "title" | "view" | "site_url" | "feed_url" | "category";
-            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-        }[];
         result: {
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -350,10 +509,15 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             }[] | undefined;
             blockRules?: {
                 value: string | number;
-                field: "title" | "content" | "all" | "author" | "url" | "order";
+                field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
         };
+        condition: {
+            value: string;
+            field: "title" | "view" | "site_url" | "feed_url" | "category";
+            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+        }[];
     }[] | null | undefined;
 }>;
 declare const actionsRelations: drizzle_orm.Relations<"actions", {
@@ -3999,6 +4163,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
+                    total: number;
                     users: {
                         [x: string]: {
                             name: string | null;
@@ -4007,7 +4172,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             handle: string | null;
                         };
                     };
-                    total: number;
                     entryReadHistories: {
                         userIds: string[];
                         readCount: number;
@@ -4588,11 +4752,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     userId: string;
                     rules?: {
                         name: string;
-                        condition: {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "feed_url" | "category";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[];
                         result: {
                             summary?: boolean | undefined;
                             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -4603,10 +4762,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             }[] | undefined;
                             blockRules?: {
                                 value: string | number;
-                                field: "title" | "content" | "all" | "author" | "url" | "order";
+                                field: "title" | "all" | "content" | "author" | "url" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
                         };
+                        condition: {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[];
                     }[] | null | undefined;
                 } | undefined;
             };
@@ -4618,11 +4782,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 json: {
                     rules?: {
                         name: string;
-                        condition: {
-                            value: string;
-                            field: "title" | "view" | "site_url" | "feed_url" | "category";
-                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
-                        }[];
                         result: {
                             summary?: boolean | undefined;
                             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -4633,10 +4792,15 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             }[] | undefined;
                             blockRules?: {
                                 value: string | number;
-                                field: "title" | "content" | "all" | "author" | "url" | "order";
+                                field: "title" | "all" | "content" | "author" | "url" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
                         };
+                        condition: {
+                            value: string;
+                            field: "title" | "view" | "site_url" | "feed_url" | "category";
+                            operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
+                        }[];
                     }[] | null | undefined;
                 };
             };
@@ -4647,7 +4811,51 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+} & {
+    "/achievement": {
+        $get: {
+            input: {
+                query: {
+                    type?: string | string[] | undefined;
+                };
+            };
+            output: {
+                code: number;
+                data: {
+                    type: "received" | "checking" | "completed" | "incomplete";
+                    id: string;
+                    userId: string;
+                    actionId: number;
+                    progress: number;
+                    progressMax: number;
+                    done: boolean;
+                    doneAt: string | null;
+                    power: string;
+                }[];
+                done: number;
+                total: number;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $put: {
+            input: {
+                json: {
+                    actionId: number;
+                };
+            };
+            output: {
+                code: number;
+                data: {
+                    actionId: number;
+                    result: boolean;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

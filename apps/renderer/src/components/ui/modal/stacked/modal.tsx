@@ -193,15 +193,13 @@ export const ModalInternal = memo(
 
     const finalChildren = useMemo(
       () => (
-        <CurrentModalContext.Provider value={ModalContextProps}>
-          <AppErrorBoundary errorType={ErrorComponentType.Modal}>
-            <RootPortalProvider value={edgeElementRef.current as HTMLElement}>
-              {children ?? createElement(content, ModalProps)}
-            </RootPortalProvider>
-          </AppErrorBoundary>
-        </CurrentModalContext.Provider>
+        <AppErrorBoundary errorType={ErrorComponentType.Modal}>
+          <RootPortalProvider value={edgeElementRef.current as HTMLElement}>
+            {children ?? createElement(content, ModalProps)}
+          </RootPortalProvider>
+        </AppErrorBoundary>
       ),
-      [ModalContextProps, ModalProps, children, content],
+      [ModalProps, children, content],
     )
 
     useEffect(() => {
@@ -281,7 +279,9 @@ export const ModalInternal = memo(
                     onSelect={handleSelectStart}
                     onKeyUp={handleDetectSelectEnd}
                   >
-                    <CustomModalComponent>{finalChildren}</CustomModalComponent>
+                    <CurrentModalContext.Provider value={ModalContextProps}>
+                      <CustomModalComponent>{finalChildren}</CustomModalComponent>
+                    </CurrentModalContext.Provider>
                   </div>
                 </div>
               </Dialog.Content>
@@ -373,7 +373,9 @@ export const ModalInternal = memo(
                     <Divider className="my-2 shrink-0 border-slate-200 opacity-80 dark:border-neutral-800" />
 
                     <div className="min-h-0 shrink grow overflow-auto px-4 py-2">
-                      {finalChildren}
+                      <CurrentModalContext.Provider value={ModalContextProps}>
+                        {finalChildren}
+                      </CurrentModalContext.Provider>
                     </div>
                   </ResizeSwitch>
                 </m.div>
