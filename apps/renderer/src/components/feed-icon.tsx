@@ -109,6 +109,32 @@ export function FeedIcon({
     height: size,
   }
 
+  const fallbackIcon = (
+    <span
+      style={
+        {
+          ...sizeStyle,
+          "--fo-light-background": colors.light.background,
+          "--fo-dark-background": colors.dark.background,
+        } as any
+      }
+      className={cn(
+        "flex shrink-0 items-center justify-center rounded-sm",
+        "bg-[var(--fo-light-background)] text-white dark:bg-[var(--fo-dark-background)]",
+        "mr-2",
+        className,
+      )}
+    >
+      <span
+        style={{
+          fontSize: size / 2,
+        }}
+      >
+        {!!feed?.title && feed.title[0]}
+      </span>
+    </span>
+  )
+
   switch (true) {
     case !feed && !!siteUrl: {
       const [src] = getFeedIconSrc({
@@ -163,6 +189,10 @@ export function FeedIcon({
       )
       break
     }
+    case !!feed?.title && !!feed.title[0]: {
+      ImageElement = fallbackIcon
+      break
+    }
     default: {
       ImageElement = <i className="i-mgc-link-cute-re mr-2 shrink-0" style={sizeStyle} />
       break
@@ -183,25 +213,7 @@ export function FeedIcon({
         >
           {ImageElement}
         </AvatarImage>
-        <AvatarFallback asChild>
-          <span
-            style={
-              {
-                ...sizeStyle,
-                "--fo-light-background": colors.light.background,
-                "--fo-dark-background": colors.dark.background,
-              } as any
-            }
-            className={cn(
-              "flex shrink-0 items-center justify-center rounded-sm",
-              "bg-[var(--fo-light-background)] text-white dark:bg-[var(--fo-dark-background)]",
-              "mr-2",
-              className,
-            )}
-          >
-            <span className="text-[9px]">{!!feed?.title && feed.title[0]}</span>
-          </span>
-        </AvatarFallback>
+        <AvatarFallback asChild>{fallbackIcon}</AvatarFallback>
       </Avatar>
     )
   }
