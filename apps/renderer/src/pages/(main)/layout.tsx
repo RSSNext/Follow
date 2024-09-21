@@ -33,6 +33,7 @@ import { useShortcutsModal } from "~/modules/modal/shortcuts"
 import { CmdF } from "~/modules/panel/cmdf"
 import { SearchCmdK } from "~/modules/panel/cmdk"
 import { CmdNTrigger } from "~/modules/panel/cmdn"
+import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
 
 const FooterInfo = () => {
   const { t } = useTranslation()
@@ -53,7 +54,7 @@ const FooterInfo = () => {
             onClick={() => {
               window.open(`${repository.url}/releases`)
             }}
-            className="center cursor-pointer rounded-full border bg-background p-1.5 shadow-sm"
+            className="center rounded-full border bg-background p-1.5 shadow-sm"
           >
             <i className="i-mgc-download-2-cute-re size-3.5 opacity-80" />
           </button>
@@ -84,16 +85,19 @@ export function Component() {
     >
       {!import.meta.env.PROD && <EnvironmentIndicator />}
 
-      <FeedResponsiveResizerContainer containerRef={containerRef}>
-        <FeedColumn>
-          <CornerPlayer />
-          <FooterInfo />
+      <AppLayoutGridContainerProvider>
+        <FeedResponsiveResizerContainer containerRef={containerRef}>
+          <FeedColumn>
+            <CornerPlayer />
+            <FooterInfo />
 
-          {ELECTRON && <AutoUpdater />}
+            {ELECTRON && <AutoUpdater />}
 
-          <NetworkStatusIndicator />
-        </FeedColumn>
-      </FeedResponsiveResizerContainer>
+            <NetworkStatusIndicator />
+          </FeedColumn>
+        </FeedResponsiveResizerContainer>
+      </AppLayoutGridContainerProvider>
+
       <main
         ref={setMainContainerElement}
         className="flex min-w-0 flex-1 bg-theme-background pt-[calc(var(--fo-window-padding-top)_-10px)] !outline-none"

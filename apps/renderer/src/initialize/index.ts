@@ -7,6 +7,8 @@ import duration from "dayjs/plugin/duration"
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { enableMapSet } from "immer"
+import React from "react"
+import ReactDOM from "react-dom"
 import { toast } from "sonner"
 
 import { getUISettings } from "~/atoms/settings/ui"
@@ -119,6 +121,10 @@ export const initializeApp = async () => {
     data_hydrated_time: dataHydratedTime,
     version: APP_VERSION,
   })
+
+  // expose `React` `ReactDOM` to global, it's easier for developers to make plugins
+  window.React = React
+  window.ReactDOM = ReactDOM
 }
 
 import.meta.hot?.dispose(cleanup)

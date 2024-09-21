@@ -65,7 +65,7 @@ export const DailyReportTitle = ({
       <div className="font-medium">{t("ai_daily.title", { title })}</div>
       <Tooltip>
         <TooltipTrigger asChild>
-          <i className="i-mgc-question-cute-re translate-y-px text-sm" />
+          <i className="i-mgc-question-cute-re text-sm" />
         </TooltipTrigger>
         <TooltipPortal>
           <TooltipContent>
