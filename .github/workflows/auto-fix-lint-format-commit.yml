@@ -33,32 +33,28 @@ jobs:
       - name: Run formatter
         run: pnpm run format
 
-      - name: Check for changes
-        id: git-check
-        run: |
-          git add -A
-          git diff --cached --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
-
       - name: Commit and push changes
-        if: steps.git-check.outputs.changes == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -m "chore: auto-fix linting and formatting issues" --no-verify
-          gh auth setup-git
-          git push origin HEAD:${{ github.head_ref }}
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-fix linting and formatting issues"
+          commit_options: "--no-verify"
+          file_pattern: "."
 
       - name: Add PR comment
         uses: actions/github-script@v7
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const changes = ${{ steps.git-check.outputs.changes == 'true' }};
-            const message = changes
+            const hasChanges = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            }).then(response => response.data.length > 0);
+
+            const message = hasChanges
               ? 'Linting and formatting issues were automatically fixed. Please review the changes.'
               : 'No linting or formatting issues were found.';
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
