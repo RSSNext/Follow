@@ -19,6 +19,7 @@ To add support for a new language:
 2. Select the desired locale from the list.
 
 3. The script will:
+
    - Create new resource files for the selected locale
    - Update the necessary configuration files
 

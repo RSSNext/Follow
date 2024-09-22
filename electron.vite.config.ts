@@ -6,28 +6,48 @@ import { viteRenderBaseConfig } from "./configs/vite.render.config"
 
 export default defineConfig({
   main: {
+    build: {
+      outDir: "dist/main",
+      lib: {
+        entry: "./apps/main/src/index.ts",
+      },
+    },
     resolve: {
       alias: {
-        "@shared": resolve("src/shared/src"),
-        "@env": resolve("./src/env.ts"),
+        "@shared": resolve("packages/shared/src"),
         "@pkg": resolve("./package.json"),
+        "@locales": resolve("./locales"),
+        "~": resolve("./apps/main/src"),
       },
     },
   },
   preload: {
+    build: {
+      outDir: "dist/preload",
+      lib: {
+        entry: "./apps/main/preload/index.ts",
+      },
+    },
     resolve: {
       alias: {
-        "@env": resolve("./src/env.ts"),
         "@pkg": resolve("./package.json"),
+        "@locales": resolve("./locales"),
       },
     },
   },
   renderer: {
     ...viteRenderBaseConfig,
 
+    root: "apps/renderer",
     build: {
+      outDir: "dist/renderer",
       sourcemap: !!process.env.CI,
       target: "esnext",
+      rollupOptions: {
+        input: {
+          main: resolve("./apps/renderer/index.html"),
+        },
+      },
     },
     define: {
       ...viteRenderBaseConfig.define,

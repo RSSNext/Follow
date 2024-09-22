@@ -1,0 +1,41 @@
+{
+  "name": "@follow/shared",
+  "type": "module",
+  "private": true,
+  "author": "Follow Team",
+  "license": "GPL-3.0-only",
+  "homepage": "https://github.com/RSSNext",
+  "repository": {
+    "url": "https://github.com/RSSNext/follow",
+    "type": "git"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./interface/*": {
+      "import": "./src/interface/*.ts",
+      "types": "./src/interface/*.ts"
+    },
+    "./*": {
+      "import": "./src/*.ts",
+      "types": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.1",
+    "@electron-toolkit/tsconfig": "^1.0.1",
+    "@hono/node-server": "^1.13.1",
+    "@t3-oss/env-core": "^0.11.1",
+    "drizzle-orm": "^0.33.0",
+    "electron": "^32.1.2",
+    "hono": "^4.6.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sonner": "^1.5.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,37 @@
+html,
+#shadow-html {
+  --fo-font-family: "SN Pro", system-ui, sans-serif;
+}
+
+body,
+#root {
+  @apply h-screen;
+  @apply cursor-default;
+  @apply select-none;
+  /* @apply bg-white; */
+
+  @apply font-theme;
+
+  overscroll-behavior: none;
+}
+
+:focus-visible {
+  /* outline: theme(colors.theme.accent.DEFAULT) auto 1px; */
+  outline: none;
+}
+
+button {
+  cursor: var(--pointer);
+}
+
+.prose a {
+  @apply cursor-pointer;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+::selection {
+  @apply bg-accent/80 text-white;
+}
