@@ -1,4 +1,5 @@
 {
+  "copied_link": "链接已复制到剪贴板",
   "feed": {
     "follower_one": "关注者",
     "follower_other": "关注者",
@@ -13,7 +14,7 @@
   "invitation": {
     "activate": "激活",
     "codeOptions": {
-      "1": "寻找任何内测用户帮你生成邀请码",
+      "1": "寻找内测用户帮你生成邀请码",
       "2": "加入官方 Discord 频道，不定期发放邀请码",
       "3": "关注官方 X 账号动态，不定期发放邀请码"
     },
@@ -30,7 +31,8 @@
     "continueWithGoogle": "使用 Google 继续",
     "logInTo": "登录到 ",
     "openApp": "打开应用",
-    "redirecting": "重定向中",
+    "redirecting": "正在重定向",
+    "signOut": "登出",
     "welcomeTo": "欢迎来到 "
   },
   "redirect": {
