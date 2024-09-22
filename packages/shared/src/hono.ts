@@ -1390,250 +1390,12 @@ declare const feedsOpenAPISchema: zod.ZodObject<{
     errorAt: string | null;
     ownerUserId: string | null;
 }>;
-declare const feedsInputSchema: zod.ZodObject<{
-    description: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    title: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    id: zod.ZodOptional<zod.ZodString>;
-    image: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    url: zod.ZodString;
-    siteUrl: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    checkedAt: zod.ZodString;
-    lastModifiedHeader: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    etagHeader: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    ttl: zod.ZodOptional<zod.ZodNullable<zod.ZodNumber>>;
-    errorMessage: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    errorAt: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-    ownerUserId: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
-}, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    url: string;
-    checkedAt: string;
-    description?: string | null | undefined;
-    title?: string | null | undefined;
-    id?: string | undefined;
-    image?: string | null | undefined;
-    siteUrl?: string | null | undefined;
-    lastModifiedHeader?: string | null | undefined;
-    etagHeader?: string | null | undefined;
-    ttl?: number | null | undefined;
-    errorMessage?: string | null | undefined;
-    errorAt?: string | null | undefined;
-    ownerUserId?: string | null | undefined;
-}, {
-    url: string;
-    checkedAt: string;
-    description?: string | null | undefined;
-    title?: string | null | undefined;
-    id?: string | undefined;
-    image?: string | null | undefined;
-    siteUrl?: string | null | undefined;
-    lastModifiedHeader?: string | null | undefined;
-    etagHeader?: string | null | undefined;
-    ttl?: number | null | undefined;
-    errorMessage?: string | null | undefined;
-    errorAt?: string | null | undefined;
-    ownerUserId?: string | null | undefined;
-}>;
 declare const feedsRelations: drizzle_orm.Relations<"feeds", {
     subscriptions: drizzle_orm.Many<"subscriptions">;
     entries: drizzle_orm.Many<"entries">;
     owner: drizzle_orm.One<"user", false>;
 }>;
 type FeedModel = InferInsertModel<typeof feeds>;
-
-declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
-    name: "invitations";
-    schema: undefined;
-    columns: {
-        code: drizzle_orm_pg_core.PgColumn<{
-            name: "code";
-            tableName: "invitations";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: true;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        createdAt: drizzle_orm_pg_core.PgColumn<{
-            name: "created_at";
-            tableName: "invitations";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: false;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        fromUserId: drizzle_orm_pg_core.PgColumn<{
-            name: "from_user_id";
-            tableName: "invitations";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        toUserId: drizzle_orm_pg_core.PgColumn<{
-            name: "to_user_id";
-            tableName: "invitations";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-    };
-    dialect: "pg";
-}>;
-declare const invitationsOpenAPISchema: zod.ZodObject<{
-    code: zod.ZodString;
-    createdAt: zod.ZodNullable<zod.ZodString>;
-    fromUserId: zod.ZodString;
-    toUserId: zod.ZodNullable<zod.ZodString>;
-}, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    code: string;
-    createdAt: string | null;
-    fromUserId: string;
-    toUserId: string | null;
-}, {
-    code: string;
-    createdAt: string | null;
-    fromUserId: string;
-    toUserId: string | null;
-}>;
-declare const invitationsRelations: drizzle_orm.Relations<"invitations", {
-    users: drizzle_orm.One<"user", false>;
-}>;
-
-declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
-    name: "settings";
-    schema: undefined;
-    columns: {
-        id: drizzle_orm_pg_core.PgColumn<{
-            name: "id";
-            tableName: "settings";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: true;
-            isAutoincrement: false;
-            hasRuntimeDefault: true;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        userId: drizzle_orm_pg_core.PgColumn<{
-            name: "user_id";
-            tableName: "settings";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        tab: drizzle_orm_pg_core.PgColumn<{
-            name: "tab";
-            tableName: "settings";
-            dataType: "string";
-            columnType: "PgText";
-            data: "general" | "appearance" | "integration";
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: ["general", "appearance", "integration"];
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        payload: drizzle_orm_pg_core.PgColumn<{
-            name: "payload";
-            tableName: "settings";
-            dataType: "json";
-            columnType: "PgJsonb";
-            data: Record<string, any>;
-            driverParam: unknown;
-            notNull: false;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        updateAt: drizzle_orm_pg_core.PgColumn<{
-            name: "update_at";
-            tableName: "settings";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        version: drizzle_orm_pg_core.PgColumn<{
-            name: "version";
-            tableName: "settings";
-            dataType: "number";
-            columnType: "PgInteger";
-            data: number;
-            driverParam: string | number;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-    };
-    dialect: "pg";
-}>;
 
 declare const subscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "subscriptions";
@@ -1913,6 +1675,625 @@ declare const timelineRelations: drizzle_orm.Relations<"timeline", {
     entries: drizzle_orm.One<"entries", true>;
     feeds: drizzle_orm.One<"feeds", true>;
     collections: drizzle_orm.One<"collections", true>;
+}>;
+
+declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "invitations";
+    schema: undefined;
+    columns: {
+        code: drizzle_orm_pg_core.PgColumn<{
+            name: "code";
+            tableName: "invitations";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: drizzle_orm_pg_core.PgColumn<{
+            name: "created_at";
+            tableName: "invitations";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        fromUserId: drizzle_orm_pg_core.PgColumn<{
+            name: "from_user_id";
+            tableName: "invitations";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        toUserId: drizzle_orm_pg_core.PgColumn<{
+            name: "to_user_id";
+            tableName: "invitations";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const invitationsOpenAPISchema: zod.ZodObject<{
+    code: zod.ZodString;
+    createdAt: zod.ZodNullable<zod.ZodString>;
+    fromUserId: zod.ZodString;
+    toUserId: zod.ZodNullable<zod.ZodString>;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    code: string;
+    createdAt: string | null;
+    fromUserId: string;
+    toUserId: string | null;
+}, {
+    code: string;
+    createdAt: string | null;
+    fromUserId: string;
+    toUserId: string | null;
+}>;
+declare const invitationsRelations: drizzle_orm.Relations<"invitations", {
+    users: drizzle_orm.One<"user", false>;
+}>;
+
+declare const lists: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "lists";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        feedIds: drizzle_orm_pg_core.PgColumn<{
+            name: "feed_ids";
+            tableName: "lists";
+            dataType: "array";
+            columnType: "PgArray";
+            data: string[];
+            driverParam: string | string[];
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: drizzle_orm.Column<{
+                name: "feed_ids";
+                tableName: "lists";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                driverParam: string;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                generated: undefined;
+            }, object, object>;
+            generated: undefined;
+        }, {}, {}>;
+        title: drizzle_orm_pg_core.PgColumn<{
+            name: "title";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        description: drizzle_orm_pg_core.PgColumn<{
+            name: "description";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        image: drizzle_orm_pg_core.PgColumn<{
+            name: "image";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        view: drizzle_orm_pg_core.PgColumn<{
+            name: "view";
+            tableName: "lists";
+            dataType: "number";
+            columnType: "PgSmallInt";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        fee: drizzle_orm_pg_core.PgColumn<{
+            name: "fee";
+            tableName: "lists";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        timelineUpdatedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "timeline_updated_at";
+            tableName: "lists";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        ownerUserId: drizzle_orm_pg_core.PgColumn<{
+            name: "owner_user_id";
+            tableName: "lists";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const listsOpenAPISchema: zod.ZodObject<{
+    id: zod.ZodString;
+    feedIds: zod.ZodArray<zod.ZodString, "many">;
+    title: zod.ZodString;
+    description: zod.ZodNullable<zod.ZodString>;
+    image: zod.ZodNullable<zod.ZodString>;
+    view: zod.ZodNumber;
+    fee: zod.ZodNumber;
+    timelineUpdatedAt: zod.ZodString;
+    ownerUserId: zod.ZodString;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    description: string | null;
+    title: string;
+    id: string;
+    image: string | null;
+    view: number;
+    ownerUserId: string;
+    feedIds: string[];
+    fee: number;
+    timelineUpdatedAt: string;
+}, {
+    description: string | null;
+    title: string;
+    id: string;
+    image: string | null;
+    view: number;
+    ownerUserId: string;
+    feedIds: string[];
+    fee: number;
+    timelineUpdatedAt: string;
+}>;
+declare const listsRelations: drizzle_orm.Relations<"lists", {
+    owner: drizzle_orm.One<"user", true>;
+    listsSubscriptions: drizzle_orm.Many<"lists_subscriptions">;
+}>;
+
+declare const listsSubscriptions: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "lists_subscriptions";
+    schema: undefined;
+    columns: {
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "lists_subscriptions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        listId: drizzle_orm_pg_core.PgColumn<{
+            name: "list_id";
+            tableName: "lists_subscriptions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        view: drizzle_orm_pg_core.PgColumn<{
+            name: "view";
+            tableName: "lists_subscriptions";
+            dataType: "number";
+            columnType: "PgSmallInt";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        title: drizzle_orm_pg_core.PgColumn<{
+            name: "title";
+            tableName: "lists_subscriptions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        lastViewedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "last_viewed_at";
+            tableName: "lists_subscriptions";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        isPrivate: drizzle_orm_pg_core.PgColumn<{
+            name: "is_private";
+            tableName: "lists_subscriptions";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const listsSubscriptionsOpenAPISchema: zod.ZodObject<{
+    userId: zod.ZodString;
+    listId: zod.ZodString;
+    view: zod.ZodNumber;
+    title: zod.ZodNullable<zod.ZodString>;
+    lastViewedAt: zod.ZodNullable<zod.ZodString>;
+    isPrivate: zod.ZodBoolean;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    title: string | null;
+    userId: string;
+    view: number;
+    isPrivate: boolean;
+    listId: string;
+    lastViewedAt: string | null;
+}, {
+    title: string | null;
+    userId: string;
+    view: number;
+    isPrivate: boolean;
+    listId: string;
+    lastViewedAt: string | null;
+}>;
+declare const listsSubscriptionsRelations: drizzle_orm.Relations<"lists_subscriptions", {
+    users: drizzle_orm.One<"user", true>;
+    lists: drizzle_orm.One<"lists", true>;
+}>;
+
+declare const listsTimeline: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "lists_timeline";
+    schema: undefined;
+    columns: {
+        listId: drizzle_orm_pg_core.PgColumn<{
+            name: "list_id";
+            tableName: "lists_timeline";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        feedId: drizzle_orm_pg_core.PgColumn<{
+            name: "feedId";
+            tableName: "lists_timeline";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        entryId: drizzle_orm_pg_core.PgColumn<{
+            name: "entry_id";
+            tableName: "lists_timeline";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        insertedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "inserted_at";
+            tableName: "lists_timeline";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const listsTimelineOpenAPISchema: zod.ZodObject<{
+    listId: zod.ZodString;
+    feedId: zod.ZodString;
+    entryId: zod.ZodString;
+    insertedAt: zod.ZodString;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    feedId: string;
+    insertedAt: string;
+    entryId: string;
+    listId: string;
+}, {
+    feedId: string;
+    insertedAt: string;
+    entryId: string;
+    listId: string;
+}>;
+declare const listsTimelineRelations: drizzle_orm.Relations<"lists_timeline", {
+    entries: drizzle_orm.One<"entries", true>;
+    feeds: drizzle_orm.One<"feeds", true>;
+}>;
+
+declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "settings";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "settings";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "settings";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        tab: drizzle_orm_pg_core.PgColumn<{
+            name: "tab";
+            tableName: "settings";
+            dataType: "string";
+            columnType: "PgText";
+            data: "general" | "appearance" | "integration";
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: ["general", "appearance", "integration"];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        payload: drizzle_orm_pg_core.PgColumn<{
+            name: "payload";
+            tableName: "settings";
+            dataType: "json";
+            columnType: "PgJsonb";
+            data: Record<string, any>;
+            driverParam: unknown;
+            notNull: false;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        updateAt: drizzle_orm_pg_core.PgColumn<{
+            name: "update_at";
+            tableName: "settings";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        version: drizzle_orm_pg_core.PgColumn<{
+            name: "version";
+            tableName: "settings";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
 }>;
 
 declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
@@ -2352,6 +2733,7 @@ declare const verificationTokens: drizzle_orm_pg_core.PgTableWithColumns<{
 }>;
 declare const usersRelations: drizzle_orm.Relations<"user", {
     subscriptions: drizzle_orm.Many<"subscriptions">;
+    listsSubscriptions: drizzle_orm.Many<"lists_subscriptions">;
     collections: drizzle_orm.Many<"collections">;
     actions: drizzle_orm.One<"actions", true>;
     wallets: drizzle_orm.One<"wallets", true>;
@@ -2576,6 +2958,22 @@ declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        toListId: drizzle_orm_pg_core.PgColumn<{
+            name: "to_list_id";
+            tableName: "transactions";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
         toEntryId: drizzle_orm_pg_core.PgColumn<{
             name: "to_entry_id";
             tableName: "transactions";
@@ -2649,6 +3047,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     fromUserId: zod.ZodNullable<zod.ZodString>;
     toUserId: zod.ZodNullable<zod.ZodString>;
     toFeedId: zod.ZodNullable<zod.ZodString>;
+    toListId: zod.ZodNullable<zod.ZodString>;
     toEntryId: zod.ZodNullable<zod.ZodString>;
     powerToken: zod.ZodString;
     createdAt: zod.ZodString;
@@ -2660,6 +3059,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toUserId: string | null;
     hash: string;
     toFeedId: string | null;
+    toListId: string | null;
     toEntryId: string | null;
     powerToken: string;
     comment: string | null;
@@ -2670,6 +3070,7 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     toUserId: string | null;
     hash: string;
     toFeedId: string | null;
+    toListId: string | null;
     toEntryId: string | null;
     powerToken: string;
     comment: string | null;
@@ -2735,6 +3136,288 @@ declare const feedPowerTokensRelations: drizzle_orm.Relations<"feedPowerTokens",
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
+    "/lists": {
+        $get: {
+            input: {
+                query: {
+                    listId: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    list: {
+                        type: "list";
+                        id: string;
+                        view: number;
+                        feedIds: string[];
+                        fee: number;
+                        timelineUpdatedAt: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        feeds?: {
+                            type: "feed";
+                            id: string;
+                            url: string;
+                            description?: string | null | undefined;
+                            title?: string | null | undefined;
+                            image?: string | null | undefined;
+                            siteUrl?: string | null | undefined;
+                            errorMessage?: string | null | undefined;
+                            errorAt?: string | null | undefined;
+                            ownerUserId?: string | null | undefined;
+                            owner?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            } | null | undefined;
+                            tipUsers?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            }[] | null | undefined;
+                        }[] | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                    };
+                    subscriptionCount: number;
+                    readCount: number;
+                    subscription?: {
+                        title: string | null;
+                        userId: string;
+                        view: number;
+                        isPrivate: boolean;
+                        listId: string;
+                        lastViewedAt: string | null;
+                    } | undefined;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $post: {
+            input: {
+                json: {
+                    title: string;
+                    view: number;
+                    fee: number;
+                    description?: string | null | undefined;
+                    image?: string | null | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    type: "list";
+                    id: string;
+                    view: number;
+                    feedIds: string[];
+                    fee: number;
+                    timelineUpdatedAt: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    feeds?: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    }[] | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $delete: {
+            input: {
+                json: {
+                    listId: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $patch: {
+            input: {
+                json: {
+                    title: string;
+                    view: number;
+                    fee: number;
+                    listId: string;
+                    description?: string | null | undefined;
+                    image?: string | null | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/lists/list": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    type: "list";
+                    id: string;
+                    view: number;
+                    feedIds: string[];
+                    fee: number;
+                    timelineUpdatedAt: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    feeds?: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    }[] | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
+                }[];
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/lists/feeds": {
+        $post: {
+            input: {
+                json: {
+                    feedId: string;
+                    listId: string;
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    type: "feed";
+                    id: string;
+                    url: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    siteUrl?: string | null | undefined;
+                    errorMessage?: string | null | undefined;
+                    errorAt?: string | null | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
+                    tipUsers?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    }[] | null | undefined;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $delete: {
+            input: {
+                json: {
+                    feedId: string;
+                    listId: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
     "/wallets/transactions/tip": {
         $post: {
             input: {
@@ -2775,6 +3458,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     toUserId: string | null;
                     hash: string;
                     toFeedId: string | null;
+                    toListId: string | null;
                     toEntryId: string | null;
                     powerToken: string;
                     comment: string | null;
@@ -2795,19 +3479,32 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         createdAt: string;
                     } | null | undefined;
                     toFeed?: {
-                        description: string | null;
-                        title: string | null;
+                        type: "feed";
                         id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     } | null | undefined;
                 }[];
             };
@@ -2923,37 +3620,99 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             };
             output: {
                 code: 0;
-                data: {
+                data: ({
                     title: string | null;
                     userId: string;
                     view: number;
                     category: string | null;
                     feedId: string;
                     feeds: {
-                        description: string | null;
-                        title: string | null;
+                        type: "feed";
                         id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                        owner: {
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
                             name: string | null;
                             id: string;
                             emailVerified: string | null;
                             image: string | null;
                             handle: string | null;
                             createdAt: string;
-                        } | null;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     };
                     isPrivate: boolean;
-                }[];
+                } | {
+                    title: string | null;
+                    userId: string;
+                    view: number;
+                    feedId: string;
+                    lists: {
+                        type: "list";
+                        id: string;
+                        view: number;
+                        feedIds: string[];
+                        fee: number;
+                        timelineUpdatedAt: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        feeds?: {
+                            type: "feed";
+                            id: string;
+                            url: string;
+                            description?: string | null | undefined;
+                            title?: string | null | undefined;
+                            image?: string | null | undefined;
+                            siteUrl?: string | null | undefined;
+                            errorMessage?: string | null | undefined;
+                            errorAt?: string | null | undefined;
+                            ownerUserId?: string | null | undefined;
+                            owner?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            } | null | undefined;
+                            tipUsers?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            }[] | null | undefined;
+                        }[] | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                    };
+                    isPrivate: boolean;
+                    listId: string;
+                    lastViewedAt: string | null;
+                    category?: string | undefined;
+                })[];
             };
             outputFormat: "json" | "text";
             status: 200;
@@ -2962,10 +3721,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     view: number;
-                    url: string;
                     title?: string | null | undefined;
                     category?: string | null | undefined;
+                    url?: string | undefined;
                     isPrivate?: boolean | undefined;
+                    listId?: string | undefined;
                 };
             };
             output: {
@@ -2979,6 +3739,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 json: {
                     url?: string | undefined;
                     feedId?: string | undefined;
+                    listId?: string | undefined;
                 };
             };
             output: {
@@ -2991,10 +3752,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     view: number;
-                    feedId: string;
                     title?: string | null | undefined;
                     category?: string | null | undefined;
+                    feedId?: string | undefined;
                     isPrivate?: boolean | undefined;
+                    listId?: string | undefined;
                 };
             };
             output: {
@@ -3108,6 +3870,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     view?: number | undefined;
                     feedIdList?: string[] | undefined;
                     feedId?: string | undefined;
+                    listId?: string | undefined;
                     startTime?: number | undefined;
                     endTime?: number | undefined;
                 };
@@ -3279,19 +4042,32 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 code: 0;
                 data: {
                     feed: {
-                        description: string | null;
-                        title: string | null;
+                        type: "feed";
                         id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     };
                     subscriptionCount: number;
                     tipAmount: number;
@@ -3314,19 +4090,32 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 code: 0;
                 data: {
                     feed: {
+                        type: "feed";
+                        id: string;
                         url: string;
-                        checkedAt: string;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
-                        id?: string | undefined;
                         image?: string | null | undefined;
                         siteUrl?: string | null | undefined;
-                        lastModifiedHeader?: string | null | undefined;
-                        etagHeader?: string | null | undefined;
-                        ttl?: number | null | undefined;
                         errorMessage?: string | null | undefined;
                         errorAt?: string | null | undefined;
                         ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     };
                     subscriptionCount: number;
                     readCount: number;
@@ -3374,6 +4163,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
+                    total: number;
                     users: {
                         [x: string]: {
                             name: string | null;
@@ -3464,19 +4254,32 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         }[] | null | undefined;
                     };
                     feeds: {
-                        description: string | null;
-                        title: string | null;
+                        type: "feed";
                         id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
                     };
                     read: boolean | null;
                     collections?: {
@@ -3535,38 +4338,33 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         }[] | null | undefined;
                     };
                     feeds: {
-                        description: string | null;
-                        title: string | null;
+                        type: "feed";
                         id: string;
-                        image: string | null;
                         url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                        tipUsers: {
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
                             name: string | null;
                             id: string;
+                            emailVerified: string | null;
                             image: string | null;
                             handle: string | null;
-                        }[];
-                    };
-                    users: {
-                        [x: string]: {
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
                             name: string | null;
                             id: string;
+                            emailVerified: string | null;
                             image: string | null;
                             handle: string | null;
-                        };
+                            createdAt: string;
+                        }[] | null | undefined;
                     };
-                    entryReadHistories: {
-                        userIds: string[];
-                        readCount: number;
-                    } | null;
                 } | undefined;
             };
             outputFormat: "json" | "text";
@@ -3622,33 +4420,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     keyword: string;
+                    target?: "feeds" | "lists" | undefined;
                 };
             };
             output: {
                 data: {
-                    feed: {
-                        description: string | null;
-                        title: string | null;
-                        id: string;
-                        image: string | null;
-                        url: string;
-                        siteUrl: string | null;
-                        checkedAt: string;
-                        lastModifiedHeader: string | null;
-                        etagHeader: string | null;
-                        ttl: number | null;
-                        errorMessage: string | null;
-                        errorAt: string | null;
-                        ownerUserId: string | null;
-                        owner: {
-                            name: string | null;
-                            id: string;
-                            emailVerified: string | null;
-                            image: string | null;
-                            handle: string | null;
-                            createdAt: string;
-                        } | null;
-                    };
                     entries?: {
                         description: string | null;
                         title: string | null;
@@ -3678,6 +4454,82 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             size_in_bytes?: number | undefined;
                         }[] | null | undefined;
                     }[] | undefined;
+                    feed?: {
+                        type: "feed";
+                        id: string;
+                        url: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        siteUrl?: string | null | undefined;
+                        errorMessage?: string | null | undefined;
+                        errorAt?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                        tipUsers?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        }[] | null | undefined;
+                    } | undefined;
+                    list?: {
+                        type: "list";
+                        id: string;
+                        view: number;
+                        feedIds: string[];
+                        fee: number;
+                        timelineUpdatedAt: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        feeds?: {
+                            type: "feed";
+                            id: string;
+                            url: string;
+                            description?: string | null | undefined;
+                            title?: string | null | undefined;
+                            image?: string | null | undefined;
+                            siteUrl?: string | null | undefined;
+                            errorMessage?: string | null | undefined;
+                            errorAt?: string | null | undefined;
+                            ownerUserId?: string | null | undefined;
+                            owner?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            } | null | undefined;
+                            tipUsers?: {
+                                name: string | null;
+                                id: string;
+                                emailVerified: string | null;
+                                image: string | null;
+                                handle: string | null;
+                                createdAt: string;
+                            }[] | null | undefined;
+                        }[] | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                    } | undefined;
                     docs?: string | undefined;
                     isSubscribed?: boolean | undefined;
                     subscriptionCount?: number | undefined;
@@ -4006,4 +4858,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsInputSchema, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
