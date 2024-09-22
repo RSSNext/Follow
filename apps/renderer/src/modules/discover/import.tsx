@@ -38,11 +38,10 @@ const formSchema = z.object({
 const NumberDisplay = ({ value }) => <span className="font-bold text-zinc-800">{value ?? 0}</span>
 
 const list: {
-  key: I18nKeys;
-  title: string;
-  className: string;
+  key: I18nKeys
+  title: string
+  className: string
 }[] = [
-   
   {
     key: "parsedErrorItems",
     title: <Trans ns="app" i18nKey="discover.import.parsedErrorItems" />,
