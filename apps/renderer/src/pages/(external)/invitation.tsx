@@ -21,7 +21,9 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { SocialMediaLinks } from "~/constants/social"
+import { useSignOut } from "~/hooks/biz/useSignOut"
 import { getFetchErrorMessage } from "~/lib/error-parser"
 import confettiUrl from "~/lottie/confetti.lottie?url"
 import { useInvitationMutation } from "~/queries/invitations"
@@ -78,6 +80,8 @@ export function Component() {
     setDotLottie(dotLottie)
   }
 
+  const signOut = useSignOut()
+
   return (
     <div className="container flex h-screen w-full flex-col items-center justify-center gap-14">
       <Logo className="size-20" />
@@ -126,6 +130,24 @@ export function Component() {
               )}
               {t("invitation.activate")}
             </Button>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  buttonClassName="absolute -right-2 -top-1 text-foreground/80"
+                  className="size-8 text-lg"
+                  variant="ghost"
+                  type="button"
+                  onClick={() => {
+                    signOut()
+                    window.location.href = "/"
+                  }}
+                >
+                  <i className="i-mingcute-exit-door-line" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t("login.signOut")}</TooltipContent>
+            </Tooltip>
           </div>
         </form>
       </Form>

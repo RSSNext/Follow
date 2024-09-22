@@ -26,6 +26,7 @@
   "login.logInTo": "Log in to ",
   "login.openApp": "Open App",
   "login.redirecting": "Redirecting",
+  "login.signOut": "Sign out",
   "login.welcomeTo": "Welcome to ",
   "redirect.continueInBrowser": "Continue in Browser",
   "redirect.instruction": "Now is the time to open {{APP_NAME}} and safely close this page.",
