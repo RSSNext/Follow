@@ -183,8 +183,7 @@ export const AchievementModalContent: FC = () => {
                   <div
                     className={styledButtonVariant({
                       variant: "outline",
-                      status: "disabled",
-                      className: "relative",
+                      className: "relative border-0 pointer-events-none",
                     })}
                   >
                     <LoadingCircle size="small" className="center absolute inset-0" />
