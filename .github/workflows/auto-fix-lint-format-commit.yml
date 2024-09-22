@@ -1,7 +1,7 @@
 name: Auto Fix Lint and Format
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize]
 
 jobs:
@@ -16,14 +16,16 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install
@@ -34,30 +36,28 @@ jobs:
       - name: Run formatter
         run: pnpm run format
 
-      - name: Check for changes
-        id: git-check
-        run: |
-          git add -A
-          git diff --cached --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
-
       - name: Commit and push changes
-        if: steps.git-check.outputs.changes == 'true'
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -m "chore: auto-fix linting and formatting issues" --no-verify
-          #git push origin HEAD:${{ github.head_ref }}
-          git push https://${{ secrets.PAT }}@github.com/${{ github.repository }}.git HEAD:${{ github.head_ref }}
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-fix linting and formatting issues"
+          commit_options: "--no-verify"
+          file_pattern: "."
 
       - name: Add PR comment
         uses: actions/github-script@v7
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const changes = ${{ steps.git-check.outputs.changes == 'true' }};
-            const message = changes
+            const hasChanges = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            }).then(response => response.data.length > 0);
+
+            const message = hasChanges
               ? 'Linting and formatting issues were automatically fixed. Please review the changes.'
               : 'No linting or formatting issues were found.';
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
