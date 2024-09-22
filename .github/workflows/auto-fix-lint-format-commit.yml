@@ -1,0 +1,64 @@
+name: Auto Fix Lint and Format
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  auto-fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run linter and fix issues
+        run: pnpm run lint:fix
+
+      - name: Run formatter
+        run: pnpm run format
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "chore: auto-fix linting and formatting issues"
+          git push origin HEAD:${{ github.head_ref }}
+
+      - name: Add PR comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const changes = ${{ steps.git-check.outputs.changes == 'true' }};
+            const message = changes
+              ? 'Linting and formatting issues were automatically fixed. Please review the changes.'
+              : 'No linting or formatting issues were found.';
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
