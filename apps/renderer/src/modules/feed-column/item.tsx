@@ -17,7 +17,7 @@ import { getNewIssueUrl } from "~/lib/issues"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn } from "~/lib/utils"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
-import { useSubscriptionByFeedId } from "~/store/subscription"
+import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { UnreadNumber } from "./unread-number"
@@ -32,6 +32,8 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
   const { t } = useTranslation()
   const subscription = useSubscriptionByFeedId(feedId)
   const navigate = useNavigateEntry()
+  const feed = useFeedById(feedId)
+
   const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       e.stopPropagation()
@@ -41,19 +43,22 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
         entryId: null,
         view,
       })
+      if (feed?.type === "list") {
+        subscriptionActions.markReadByFeedIds({
+          listId: feedId,
+        })
+      }
       // focus to main container in order to let keyboard can navigate entry items by arrow keys
       nextFrame(() => {
         getMainContainerElement()?.focus()
       })
     },
-    [feedId, navigate, view],
+    [feedId, navigate, view, feed?.type],
   )
 
   const feedUnread = useFeedUnreadStore((state) => state.data[feedId] || 0)
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.feedId === feedId)
-
-  const feed = useFeedById(feedId)
 
   const { items } = useFeedActions({ feedId, view })
 
@@ -63,14 +68,16 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
   })
   if (!feed) return null
 
+  const isFeed = feed.type === "feed" || !feed.type
+  const isList = feed.type === "list"
   return (
     <>
       <div
         data-feed-id={feedId}
         className={cn(
-          "flex w-full items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
+          "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
           (isActive || isContextMenuOpen) && "bg-native-active",
-
+          isFeed ? "py-[2px]" : "py-1.5",
           className,
         )}
         onClick={handleNavigate}
@@ -80,7 +87,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
         onContextMenu={(e) => {
           setIsContextMenuOpen(true)
           const nextItems = items.concat()
-          if (feed.errorAt && feed.errorMessage) {
+          if (isFeed && feed.errorAt && feed.errorMessage) {
             nextItems.push(
               {
                 type: "separator",
@@ -109,10 +116,10 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
         <div
           className={cn(
             "flex min-w-0 items-center",
-            feed.errorAt && "text-red-900 dark:text-red-500",
+            isFeed && feed.errorAt && "text-red-900 dark:text-red-500",
           )}
         >
-          <FeedIcon fallback feed={feed} size={16} />
+          <FeedIcon fallback feed={feed} size={isList ? 32 : 16} />
           <div
             className={cn(
               "truncate",
@@ -121,8 +128,8 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
           >
             {getPreferredTitle(feed)}
           </div>
-          <FeedCertification feed={feed} className="text-[15px]" />
-          {feed.errorAt && (
+          {isFeed && <FeedCertification feed={feed} className="text-[15px]" />}
+          {isFeed && feed.errorAt && (
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
                 <i className="i-mgc-wifi-off-cute-re ml-1 shrink-0 text-base" />
@@ -157,7 +164,7 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
             </Tooltip>
           )}
         </div>
-        <UnreadNumber unread={feedUnread} className="ml-2" />
+        <UnreadNumber unread={feedUnread} className="ml-2" isList={isList} />
       </div>
     </>
   )

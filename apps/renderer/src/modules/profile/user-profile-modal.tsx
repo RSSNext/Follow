@@ -366,6 +366,7 @@ const SubscriptionItem: FC<{
   const isFollowed = !!useSubscriptionStore((state) => state.data[subscription.feedId])
   const { present } = useModalStack()
   const isLoose = variant === "loose"
+  if (!("feeds" in subscription)) return null
   return (
     <m.div
       exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.2 } }}
@@ -373,7 +374,7 @@ const SubscriptionItem: FC<{
       data-feed-id={subscription.feedId}
     >
       <a
-        className="flex flex-1 cursor-default items-center"
+        className="flex flex-1 cursor-menu items-center"
         href={subscription.feeds.siteUrl!}
         target="_blank"
       >

@@ -4,7 +4,7 @@ import { nanoid } from "nanoid"
 import { whoami } from "~/atoms/user"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type { FeedModel, UserModel } from "~/models"
+import type { TargetModel, UserModel } from "~/models"
 import { FeedService } from "~/services"
 
 import { getSubscriptionByFeedId } from "../subscription"
@@ -23,21 +23,25 @@ class FeedActions {
     set({ feeds: {} })
   }
 
-  upsertMany(feeds: FeedModel[]) {
+  upsertMany(feeds: TargetModel[]) {
     runTransactionInScope(() => {
       FeedService.upsertMany(feeds)
     })
     set((state) =>
       produce(state, (state) => {
         for (const feed of feeds) {
-          if (feed.errorAt && new Date(feed.errorAt).getTime() > Date.now() - 1000 * 60 * 60 * 9) {
+          if (
+            feed.type === "feed" &&
+            feed.errorAt &&
+            new Date(feed.errorAt).getTime() > Date.now() - 1000 * 60 * 60 * 9
+          ) {
             feed.errorAt = null
           }
           if (feed.id) {
             if (feed.owner) {
               userActions.upsert(feed.owner as UserModel)
             }
-            if (feed.tipUsers) {
+            if (feed.type === "feed" && feed.tipUsers) {
               userActions.upsert(feed.tipUsers)
             }
 
@@ -55,12 +59,15 @@ class FeedActions {
             const nonce = feed["nonce"] || nanoid(8)
             state.feeds[nonce] = { ...feed, id: nonce }
           }
+          if ("feeds" in feed && feed.feeds) {
+            this.upsertMany(feed.feeds)
+          }
         }
       }),
     )
   }
 
-  private patch(feedId: string, patch: Partial<FeedModel>) {
+  private patch(feedId: string, patch: Partial<TargetModel>) {
     set((state) =>
       produce(state, (state) => {
         const feed = state.feeds[feedId]
@@ -96,18 +103,24 @@ class FeedActions {
   // API Fetcher
   //
 
-  async fetchFeedById({ id, url }: FeedQueryParams) {
-    const res = await apiClient.feeds.$get({
-      query: {
-        id,
-        url,
-      },
-    })
+  async fetchFeedById({ id, url, isList }: FeedQueryParams) {
+    const res = isList
+      ? await apiClient.lists.$get({
+          query: {
+            listId: id!,
+          },
+        })
+      : await apiClient.feeds.$get({
+          query: {
+            id,
+            url,
+          },
+        })
 
     const nonce = nanoid(8)
 
     const finalData = {
-      ...res.data.feed,
+      ...("list" in res.data ? res.data.list : res.data.feed),
     }
 
     if (!finalData.id) {
@@ -120,13 +133,20 @@ class FeedActions {
       feed: !finalData.id ? { ...finalData, id: nonce } : finalData,
     }
   }
+
+  async fetchOwnedLists() {
+    const res = await apiClient.lists.list.$get()
+    this.upsertMany(res.data)
+
+    return res.data
+  }
 }
 export const feedActions = new FeedActions()
 
-export const getFeedById = (feedId: string): Nullable<FeedModel> =>
+export const getFeedById = (feedId: string): Nullable<TargetModel> =>
   useFeedStore.getState().feeds[feedId]
 
-export const getPreferredTitle = (feed?: FeedModel | null) => {
+export const getPreferredTitle = (feed?: TargetModel | null) => {
   if (!feed?.id) {
     return feed?.title
   }

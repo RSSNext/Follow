@@ -328,7 +328,7 @@ function updateConstantsFile(sourceFile: ts.SourceFile, locale: string): string 
     (context) => (rootNode) => {
       function visit(node: ts.Node): ts.Node {
         if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name)) {
-          if (node.name.text === "langs") {
+          if (node.name.text === "currentSupportedLanguages") {
             return updateLangsArray(node, locale)
           }
           if (node.name.text === "dayjsLocaleImportMap") {

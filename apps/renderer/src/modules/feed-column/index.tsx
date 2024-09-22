@@ -88,10 +88,12 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
     }
   }, [setActive_])
 
+  const [useHotkeysSwitch, setUseHotkeysSwitch] = useState<boolean>(false)
   useHotkeys(
     shortcuts.feeds.switchBetweenViews.key,
     (e) => {
       e.preventDefault()
+      setUseHotkeysSwitch(true)
       if (isHotkeyPressed("Left")) {
         setActive((i) => {
           if (i === 0) {
@@ -161,9 +163,11 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
               "flex flex-col items-center gap-1 text-xl",
               ELECTRON ? "hover:!bg-theme-vibrancyBg" : "",
               showSidebarUnreadCount && "h-11",
+              active === index && useHotkeysSwitch ? "bg-zinc-500/30" : "",
             )}
             onClick={(e) => {
               setActive(index)
+              setUseHotkeysSwitch(false)
               e.stopPropagation()
             }}
           >

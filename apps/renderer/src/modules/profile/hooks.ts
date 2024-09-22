@@ -2,7 +2,7 @@ import { createElement, useCallback } from "react"
 import { parse } from "tldts"
 
 import { useModalStack } from "~/components/ui/modal"
-import { NoopChildren } from "~/components/ui/modal/stacked/utils"
+import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
@@ -19,7 +19,7 @@ export const useUserSubscriptionsQuery = (userId: string | undefined) => {
       const groupFolder = {} as Record<string, typeof res.data>
 
       for (const subscription of res.data || []) {
-        if (!subscription.category && subscription.feeds) {
+        if (!subscription.category && "feeds" in subscription) {
           const { siteUrl } = subscription.feeds
           if (!siteUrl) continue
           const parsed = parse(siteUrl)
@@ -55,7 +55,7 @@ export const usePresentUserProfileModal = (variant: "drawer" | "dialog" = "dialo
             userId,
             variant,
           }),
-        CustomModalComponent: NoopChildren,
+        CustomModalComponent: PlainModal,
         clickOutsideToDismiss: true,
         modal: variant === "dialog",
         overlay: variant === "dialog",

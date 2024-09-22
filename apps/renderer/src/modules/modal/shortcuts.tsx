@@ -7,7 +7,7 @@ import { useUISettingKey } from "~/atoms/settings/ui"
 import { MotionButtonBase } from "~/components/ui/button"
 import { KbdCombined } from "~/components/ui/kbd/Kbd"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal"
-import { NoopChildren } from "~/components/ui/modal/stacked/utils"
+import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import { shortcuts } from "~/constants/shortcuts"
 import { useSwitchHotKeyScope } from "~/hooks/common"
@@ -89,7 +89,7 @@ export const useShortcutsModal = () => {
       overlay: false,
       id: "shortcuts",
       content: () => <ShortcutModalContent />,
-      CustomModalComponent: NoopChildren,
+      CustomModalComponent: PlainModal,
       clickOutsideToDismiss: true,
     })
   }, [present])

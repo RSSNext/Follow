@@ -4,10 +4,16 @@ import { useWhoami } from "~/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { cn } from "~/lib/utils"
-import type { FeedModel } from "~/models"
+import type { TargetModel } from "~/models"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 
-export const FeedCertification = ({ feed, className }: { feed: FeedModel; className?: string }) => {
+export const FeedCertification = ({
+  feed,
+  className,
+}: {
+  feed: TargetModel
+  className?: string
+}) => {
   const me = useWhoami()
   const presentUserProfile = usePresentUserProfileModal("drawer")
   const { t } = useTranslation()

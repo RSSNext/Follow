@@ -9,7 +9,7 @@ import { getSidebarActiveView } from "~/atoms/sidebar"
 import { m } from "~/components/common/Motion"
 import { Form, FormControl, FormField, FormItem } from "~/components/ui/form"
 import { useModalStack } from "~/components/ui/modal"
-import { NoopChildren } from "~/components/ui/modal/stacked/utils"
+import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { HotKeyScopeMap } from "~/constants"
 import { tipcClient } from "~/lib/client"
 import type { FeedViewType } from "~/lib/enum"
@@ -108,7 +108,7 @@ export const CmdNTrigger = () => {
     present({
       title: "Quick Follow",
       content: CmdNPanel,
-      CustomModalComponent: NoopChildren,
+      CustomModalComponent: PlainModal,
       overlay: false,
       id: "quick-add",
       clickOutsideToDismiss: true,
