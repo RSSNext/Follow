@@ -348,6 +348,9 @@ importers:
       '@iconify/tools':
         specifier: 4.0.6
         version: 4.0.6
+      '@lottiefiles/dotlottie-react':
+        specifier: 0.8.12
+        version: 0.8.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@microflash/remark-callout-directives':
         specifier: 4.3.1
         version: 4.3.1
@@ -2047,6 +2050,15 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@lottiefiles/dotlottie-react@0.8.12':
+    resolution: {integrity: sha512-6S9q5mH2l8JDnKAruAq4NP7bzHVzJNUt8UsXONfveSyJPUgT5hGw5b5vCjW19Ra3hgN/d69qUtRLHfmyRAgblQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+
+  '@lottiefiles/dotlottie-web@0.33.0':
+    resolution: {integrity: sha512-/KerIs0UkmwuDKYWlNGWYSSZkZaLNXXHqg6qCnP7P2JuzgI4bHRmlIk3+LoJjl/jWqd3WyI4t5oRV6ch0sQwvg==}
 
   '@malept/cross-spawn-promise@1.1.1':
     resolution: {integrity: sha512-RTBGWL5FWQcg9orDOCcp4LvItNzUPcyEU9bwaeJX0rJ1IQxzucC48Y0/sQLp/g6t99IQgAlGIaesJS+gTn7tVQ==}
@@ -10511,6 +10523,14 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@lottiefiles/dotlottie-react@0.8.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@lottiefiles/dotlottie-web': 0.33.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  '@lottiefiles/dotlottie-web@0.33.0': {}
 
   '@malept/cross-spawn-promise@1.1.1':
     dependencies:

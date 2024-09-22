@@ -6,6 +6,7 @@ import type { BrowserWindow } from "electron"
 import { app, clipboard, dialog, screen } from "electron"
 
 import { registerMenuAndContextMenu } from "~/init"
+import { clearAllData } from "~/lib/cleaner"
 
 import { isWindows11 } from "../env"
 import { downloadFile } from "../lib/download"
@@ -218,6 +219,8 @@ export const appRoute = {
 
     app.commandLine.appendSwitch("lang", input)
   }),
+
+  clearAllData: t.procedure.action(clearAllData),
 }
 
 interface Sender extends Electron.WebContents {

@@ -203,7 +203,7 @@ const ShikiCode: FC<
         className={"absolute right-2 top-2 opacity-0 duration-200 group-hover:opacity-100"}
       />
       {language !== "plaintext" && (
-        <span className="center absolute bottom-2 right-2 flex gap-1 text-xs uppercase text-white opacity-80">
+        <span className="center absolute bottom-2 right-2 flex gap-1 text-xs uppercase opacity-80 dark:text-white">
           <span className="center [&_svg]:size-4">{getLanguageIcon(language)}</span>
           <span>{language}</span>
         </span>

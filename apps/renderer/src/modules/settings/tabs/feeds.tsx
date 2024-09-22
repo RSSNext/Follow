@@ -2,6 +2,7 @@ import { WEB_URL } from "@follow/shared/constants"
 import { useTranslation } from "react-i18next"
 
 import { FeedIcon } from "~/components/feed-icon"
+import { Divider } from "~/components/ui/divider"
 import { LoadingCircle } from "~/components/ui/loading"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import {
@@ -25,6 +26,7 @@ export const SettingFeeds = () => {
       <div className="mb-4 space-y-2 text-sm">
         <p>{t("feeds.claimTips")}</p>
       </div>
+      <Divider className="mb-6 mt-8" />
       <div className="flex flex-1 flex-col">
         <ScrollArea.ScrollArea viewportClassName="max-h-[380px]">
           {claimedList.data?.length ? (

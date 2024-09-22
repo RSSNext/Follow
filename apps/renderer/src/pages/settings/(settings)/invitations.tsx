@@ -3,7 +3,7 @@ import { SettingsTitle } from "~/modules/settings/title"
 import { defineSettingPageData } from "~/modules/settings/utils"
 
 const iconName = "i-mgc-heart-hand-cute-re"
-const priority = 1055
+const priority = 1070
 
 export const loader = defineSettingPageData({
   iconName,

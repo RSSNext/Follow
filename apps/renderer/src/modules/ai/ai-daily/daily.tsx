@@ -17,7 +17,7 @@ import { Media } from "~/components/ui/media"
 import { usePreviewMedia } from "~/components/ui/media/hooks"
 import { useModalStack } from "~/components/ui/modal"
 import { PeekModal } from "~/components/ui/modal/inspire/PeekModal"
-import { NoopChildren } from "~/components/ui/modal/stacked/utils"
+import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { Paper } from "~/components/ui/paper"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
@@ -242,7 +242,7 @@ const createRelatedEntryLink = (variant: "toast" | "modal") => (props: LinkProps
         if (variant === "toast") {
           present({
             ...basePresentProps,
-            CustomModalComponent: NoopChildren,
+            CustomModalComponent: PlainModal,
             content: () => <EntryToastPreview entryId={entryId} />,
             overlay: false,
             modal: false,

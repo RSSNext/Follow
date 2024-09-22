@@ -1,8 +1,11 @@
-import { m } from "framer-motion"
+import clsx from "clsx"
+import { AnimatePresence, m } from "framer-motion"
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { FollowIcon } from "~/components/icons/follow"
-import { Button } from "~/components/ui/button"
+import { MotionButtonBase } from "~/components/ui/button"
+import { LoadingCircle } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { modalMontionConfig } from "~/components/ui/modal/stacked/constants"
 import type { LoginRuntime } from "~/lib/auth"
@@ -20,6 +23,8 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
 
   const { t } = useTranslation()
 
+  const [loadingLockSet, setLoadingLockSet] = useState<false | string>(false)
+
   return (
     <div className="center flex h-full" onClick={canClose ? modal.dismiss : undefined}>
       <m.div
@@ -35,24 +40,79 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
           </span>
         </div>
         <div className="flex flex-col gap-4">
-          <Button
-            className="h-[48px] w-[320px] rounded-[8px] !bg-black font-sans text-base text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80"
+          <MotionButtonBase
+            className={clsx(
+              "center h-[48px] w-[320px] rounded-[8px] !bg-black font-sans text-base font-medium text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
+              !!loadingLockSet && "pointer-events-none opacity-50",
+            )}
+            disabled={!!loadingLockSet}
             onClick={() => {
               loginHandler("github", runtime)
+              setLoadingLockSet("github")
             }}
           >
-            <i className="i-mgc-github-cute-fi mr-2 text-xl" /> {t("signin.continue_with_github")}
-          </Button>
-          <Button
-            className="h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80"
+            <LoginButtonContent isLoading={loadingLockSet === "github"}>
+              <i className="i-mgc-github-cute-fi mr-2 text-xl" />
+              {t("signin.continue_with_github")}
+            </LoginButtonContent>
+          </MotionButtonBase>
+          <MotionButtonBase
+            disabled={!!loadingLockSet}
+            className={clsx(
+              "center h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base font-medium text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80",
+              !!loadingLockSet && "pointer-events-none opacity-50",
+              "overflow-hidden",
+            )}
             onClick={() => {
               loginHandler("google", runtime)
+              setLoadingLockSet("google")
             }}
           >
-            <i className="i-mgc-google-cute-fi mr-2 text-xl" /> {t("signin.continue_with_google")}
-          </Button>
+            <LoginButtonContent isLoading={loadingLockSet === "google"}>
+              <i className="i-mgc-google-cute-fi mr-2 text-xl" />
+              {t("signin.continue_with_google")}
+            </LoginButtonContent>
+          </MotionButtonBase>
         </div>
       </m.div>
     </div>
+  )
+}
+
+const LoginButtonContent = (props: { children: React.ReactNode; isLoading: boolean }) => {
+  const { children, isLoading } = props
+  return (
+    <AnimatePresence mode="popLayout">
+      {isLoading ? (
+        <m.div
+          animate={{
+            y: 0,
+          }}
+          initial={{
+            y: -30,
+          }}
+          transition={{
+            type: "spring",
+          }}
+          key="loading"
+          className="contents"
+        >
+          <LoadingCircle size={"medium"} />
+        </m.div>
+      ) : (
+        <m.div
+          key="text"
+          className="center"
+          transition={{
+            type: "spring",
+          }}
+          exit={{
+            y: "-100%",
+          }}
+        >
+          {children}
+        </m.div>
+      )}
+    </AnimatePresence>
   )
 }

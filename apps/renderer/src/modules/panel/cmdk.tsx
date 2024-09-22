@@ -178,7 +178,7 @@ export const SearchCmdK: React.FC = () => {
                       feedId={entry.feedId}
                       entryId={entry.item.id}
                       id={entry.item.id}
-                      icon={feed?.siteUrl}
+                      icon={feed?.type === "feed" ? feed?.siteUrl : undefined}
                       subtitle={feed?.title}
                     />
                   )
@@ -203,7 +203,7 @@ export const SearchCmdK: React.FC = () => {
                     feedId={feed.item.id!}
                     entryId={ROUTE_ENTRY_PENDING}
                     id={feed.item.id!}
-                    icon={feed.item.siteUrl}
+                    icon={feed.item.type === "feed" ? feed.item.siteUrl : undefined}
                     subtitle={useFeedUnreadStore.getState().data[feed.item.id!]?.toString()}
                   />
                 ))}

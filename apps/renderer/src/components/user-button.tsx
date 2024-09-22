@@ -11,6 +11,7 @@ import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { nextFrame } from "~/lib/dom"
 import { cn } from "~/lib/utils"
+import { useAchievementModal } from "~/modules/achievement/hooks"
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { useSettingModal } from "~/modules/settings/modal/hooks"
@@ -26,8 +27,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu/dropdown-menu"
+import { PlainModal } from "./ui/modal/stacked/custom-modal"
 import { useModalStack } from "./ui/modal/stacked/hooks"
-import { NoopChildren } from "./ui/modal/stacked/utils"
 
 interface LoginProps {
   method?: "redirect" | "modal"
@@ -43,7 +44,7 @@ export const LoginButton: FC<LoginProps> = (props) => {
         method === "modal"
           ? () => {
               modalStack.present({
-                CustomModalComponent: NoopChildren,
+                CustomModalComponent: PlainModal,
                 title: "Login",
                 id: "login",
                 content: () => <LoginModalContent runtime={window.electron ? "app" : "browser"} />,
@@ -65,6 +66,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   const signOut = useSignOut()
   const settingModalPresent = useSettingModal()
   const presentUserProfile = usePresentUserProfileModal("dialog")
+  const presentAchievement = useAchievementModal()
   const { t } = useTranslation()
   if (status !== "authenticated") {
     return <LoginButton {...props} />
@@ -98,6 +100,15 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
           icon={<i className="i-mgc-user-3-cute-re" />}
         >
           {t("user_button.profile")}
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          onClick={() => {
+            presentAchievement()
+          }}
+          icon={<i className="i-mgc-trophy-cute-re" />}
+        >
+          {t("user_button.achievement")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
@@ -175,6 +186,7 @@ export function UserAvatar({
     return <LoginButton {...props} />
   }
 
+  const renderUserData = userId ? profile.data : session?.user
   return (
     <div
       className={cn(
@@ -191,11 +203,11 @@ export function UserAvatar({
       >
         <AvatarImage
           className="duration-200 animate-in fade-in-0"
-          src={(profile.data || session?.user)?.image || undefined}
+          src={renderUserData?.image || undefined}
         />
-        <AvatarFallback>{(profile.data || session?.user)?.name?.slice(0, 2)}</AvatarFallback>
+        <AvatarFallback>{renderUserData?.name?.slice(0, 2)}</AvatarFallback>
       </Avatar>
-      {!hideName && <div>{(profile.data || session?.user)?.name}</div>}
+      {!hideName && <div>{renderUserData?.name}</div>}
     </div>
   )
 }

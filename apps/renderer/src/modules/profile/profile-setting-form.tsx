@@ -102,14 +102,17 @@ export const ProfileSettingForm = () => {
               <FormItem className="w-full">
                 <FormLabel>{t("profile.avatar.label")}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <div className="flex items-center gap-4">
+                    <Input {...field} />
+                    {field.value && (
+                      <Avatar className="size-9">
+                        <AvatarImage src={field.value} />
+                      </Avatar>
+                    )}
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
-
-              <Avatar className="-translate-y-2 self-end">
-                <AvatarImage src={field.value} />
-              </Avatar>
             </div>
           )}
         />

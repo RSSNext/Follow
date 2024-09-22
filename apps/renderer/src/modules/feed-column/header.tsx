@@ -1,6 +1,7 @@
 import { m } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
-import { memo, useCallback, useRef, useState } from "react"
+import { memo, useCallback, useEffect, useRef, useState } from "react"
+import { useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
@@ -34,9 +35,9 @@ const useBackHome = (active: number) => {
 
 export const FeedColumnHeader = memo(() => {
   const [active] = useSidebarActiveView()
-  const { t } = useTranslation()
   const navigateBackHome = useBackHome(active)
   const normalStyle = !window.electron || window.electron.process.platform !== "darwin"
+  const { t } = useTranslation()
   return (
     <div
       className={cn(
@@ -60,13 +61,13 @@ export const FeedColumnHeader = memo(() => {
         </LogoContextMenu>
       )}
       <div className="relative flex items-center gap-1" onClick={stopPropagation}>
-        <SearchActionButton />
-
         <Link to="/discover" tabIndex={-1}>
-          <ActionButton shortcut="Meta+T" tooltip={t("words.add")}>
+          <ActionButton shortcut="Meta+T" tooltip={t("words.discover")}>
             <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
           </ActionButton>
         </Link>
+        <SearchTrigger />
+
         <ProfileButton method="modal" />
         <LayoutActionButton />
       </div>
@@ -77,9 +78,15 @@ export const FeedColumnHeader = memo(() => {
 const LayoutActionButton = () => {
   const feedColumnShow = useFeedColumnShow()
 
-  const [animation] = useState({
+  const [animation, setAnimation] = useState({
     width: !feedColumnShow ? "auto" : 0,
   })
+
+  useEffect(() => {
+    setAnimation({
+      width: !feedColumnShow ? "auto" : 0,
+    })
+  }, [feedColumnShow])
 
   const t = useI18n()
   return (
@@ -139,17 +146,33 @@ const LogoContextMenu: FC<PropsWithChildren> = ({ children }) => {
   )
 }
 
-const SearchActionButton = () => {
+// const SearchActionButton = () => {
+//   const canSearch = useGeneralSettingKey("dataPersist")
+//   const { t } = useTranslation()
+//   if (!canSearch) return null
+//   return (
+//     <ActionButton
+//       shortcut="Meta+K"
+//       tooltip={t("words.search")}
+//       onClick={() => setAppSearchOpen(true)}
+//     >
+//       <i className="i-mgc-search-2-cute-re size-5 text-theme-vibrancyFg" />
+//     </ActionButton>
+//   )
+// }
+
+const SearchTrigger = () => {
   const canSearch = useGeneralSettingKey("dataPersist")
-  const { t } = useTranslation()
-  if (!canSearch) return null
-  return (
-    <ActionButton
-      shortcut="Meta+K"
-      tooltip={t("words.search")}
-      onClick={() => setAppSearchOpen(true)}
-    >
-      <i className="i-mgc-search-2-cute-re size-5 text-theme-vibrancyFg" />
-    </ActionButton>
+
+  useHotkeys(
+    "meta+k",
+    () => {
+      setAppSearchOpen(true)
+    },
+    {
+      enabled: canSearch,
+    },
   )
+
+  return null
 }

@@ -10,7 +10,6 @@
     "baseUrl": ".",
     "paths": {
       "@shared/*": ["./src/*"],
-      "@env": ["src/env.ts"],
       "@pkg": ["../../package.json"],
       "@locales/*": ["../../locales/*"],
       "~/*": ["./src/*"]

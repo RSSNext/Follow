@@ -1,24 +1,24 @@
 import { apiClient } from "~/lib/api-fetch"
-import type { UserModel } from "~/models"
 
 import { entryActions } from "../entry/store"
 import { userActions } from "../user"
 
 class EntryHistoryActions {
   async fetchEntryHistory(entryId: string) {
-    const res = await apiClient.entries["read-histories"][entryId].$get()
-
-    const data = res.data as {
-      users: Record<string, UserModel>
-      entryReadHistories: {
-        entryId: string
-        userIds: string[]
-        readCount: number
-      }
-    }
+    const { data } = await apiClient.entries["read-histories"][":id"].$get({
+      param: {
+        id: entryId,
+      },
+      query: {
+        page: "1",
+        size: "100",
+      },
+    })
 
     userActions.upsert(data.users)
-    entryActions.updateReadHistory(entryId, data.entryReadHistories)
+    if (data.entryReadHistories) {
+      entryActions.updateReadHistory(entryId, data.entryReadHistories)
+    }
 
     return data
   }
