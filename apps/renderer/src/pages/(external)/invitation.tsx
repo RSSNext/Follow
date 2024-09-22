@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { DotLottie } from "@lottiefiles/dotlottie-react"
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
+import { m } from "framer-motion"
 import type { RefCallback } from "react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -109,10 +110,20 @@ export function Component() {
               />
             )}
             <Button
+              variant={showConfetti ? "outline" : "primary"}
               type="submit"
               disabled={!form.formState.isValid}
               isLoading={invitationMutation.isPending}
             >
+              {showConfetti && (
+                <m.i
+                  initial={{ y: 5 }}
+                  animate={{
+                    y: 0,
+                  }}
+                  className="i-mgc-check-circle-filled mr-2 text-green-500"
+                />
+              )}
               {t("invitation.activate")}
             </Button>
           </div>

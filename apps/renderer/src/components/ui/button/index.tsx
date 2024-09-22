@@ -163,14 +163,19 @@ export const Button = React.forwardRef<
       {...props}
       onClick={handleClick}
     >
-      <m.span className="center">
-        {isLoading && (
-          <m.span className="center">
-            <LoadingCircle size="small" className="center mr-2" />
+      <span className="contents">
+        {typeof isLoading === "boolean" && (
+          <m.span
+            className="center"
+            animate={{
+              width: isLoading ? "auto" : "0px",
+            }}
+          >
+            {isLoading && <LoadingCircle size="small" className="center mr-2" />}
           </m.span>
         )}
-        <m.span className={cn("center", className)}>{props.children}</m.span>
-      </m.span>
+        <span className={cn("center", className)}>{props.children}</span>
+      </span>
     </MotionButtonBase>
   )
 })
