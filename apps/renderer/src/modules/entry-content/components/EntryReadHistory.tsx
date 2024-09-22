@@ -47,7 +47,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
         ))}
 
       {!!totalCount && totalCount > LIMIT && (
-        <HoverCard open>
+        <HoverCard>
           <HoverCardTrigger asChild>
             <button
               type="button"
