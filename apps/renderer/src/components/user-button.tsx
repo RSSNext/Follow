@@ -186,6 +186,7 @@ export function UserAvatar({
     return <LoginButton {...props} />
   }
 
+  const renderUserData = userId ? profile.data : session?.user
   return (
     <div
       className={cn(
@@ -202,11 +203,11 @@ export function UserAvatar({
       >
         <AvatarImage
           className="duration-200 animate-in fade-in-0"
-          src={(profile.data || session?.user)?.image || undefined}
+          src={renderUserData?.image || undefined}
         />
-        <AvatarFallback>{(profile.data || session?.user)?.name?.slice(0, 2)}</AvatarFallback>
+        <AvatarFallback>{renderUserData?.name?.slice(0, 2)}</AvatarFallback>
       </Avatar>
-      {!hideName && <div>{(profile.data || session?.user)?.name}</div>}
+      {!hideName && <div>{renderUserData?.name}</div>}
     </div>
   )
 }

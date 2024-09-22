@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { DotLottie } from "@lottiefiles/dotlottie-react"
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
+import { m } from "framer-motion"
 import type { RefCallback } from "react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -20,7 +21,9 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { SocialMediaLinks } from "~/constants/social"
+import { useSignOut } from "~/hooks/biz/useSignOut"
 import { getFetchErrorMessage } from "~/lib/error-parser"
 import confettiUrl from "~/lottie/confetti.lottie?url"
 import { useInvitationMutation } from "~/queries/invitations"
@@ -77,6 +80,8 @@ export function Component() {
     setDotLottie(dotLottie)
   }
 
+  const signOut = useSignOut()
+
   return (
     <div className="container flex h-screen w-full flex-col items-center justify-center gap-14">
       <Logo className="size-20" />
@@ -109,12 +114,40 @@ export function Component() {
               />
             )}
             <Button
+              variant={showConfetti ? "outline" : "primary"}
               type="submit"
               disabled={!form.formState.isValid}
               isLoading={invitationMutation.isPending}
             >
+              {showConfetti && (
+                <m.i
+                  initial={{ y: 5 }}
+                  animate={{
+                    y: 0,
+                  }}
+                  className="i-mgc-check-circle-filled mr-2 text-green-500"
+                />
+              )}
               {t("invitation.activate")}
             </Button>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  buttonClassName="absolute -right-2 -top-1 text-foreground/80"
+                  className="size-8 text-lg"
+                  variant="ghost"
+                  type="button"
+                  onClick={() => {
+                    signOut()
+                    window.location.href = "/"
+                  }}
+                >
+                  <i className="i-mingcute-exit-door-line" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t("login.signOut")}</TooltipContent>
+            </Tooltip>
           </div>
         </form>
       </Form>

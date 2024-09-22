@@ -444,7 +444,7 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
               {/* <TableHead className="w-20 text-center" size="sm">
                 {t("lists.feeds.id")}
               </TableHead> */}
-              <TableHead className="text-center" size="sm">
+              <TableHead size="sm" className="pl-8">
                 {t("lists.feeds.title")}
               </TableHead>
               <TableHead className="w-20 text-center" size="sm">
@@ -461,18 +461,20 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
                 {/* <TableCell align="center" size="sm">
                   {row.id}
                 </TableCell> */}
-                <TableCell align="center" size="sm">
+                <TableCell size="sm">
                   <a
                     target="_blank"
                     href={`${WEB_URL}/list/${row.id}`}
-                    className="flex items-center justify-center gap-2 font-semibold"
+                    className="flex items-center gap-2 font-semibold"
                   >
                     {row.siteUrl && <FeedIcon className="mr-0" siteUrl={row.siteUrl} />}
                     <span className="inline-block max-w-[200px] truncate">{row.title}</span>
                   </a>
                 </TableCell>
                 <TableCell align="center" size="sm">
-                  <FeedCertification className="ml-0" feed={row} />
+                  <div className="center">
+                    <FeedCertification className="ml-0" feed={row} />
+                  </div>
                 </TableCell>
                 <TableCell align="center" size="sm">
                   <Button variant="ghost" onClick={() => removeMutation.mutate(row.id)}>

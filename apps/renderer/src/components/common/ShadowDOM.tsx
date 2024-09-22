@@ -153,25 +153,24 @@ function getLinkedStaticStyleSheets() {
     if (!sheet) continue
     if (!sheet.href) continue
     const hasCache = cacheCssTextMap[sheet.href]
-    try {
-      if (!hasCache) {
-        if (!sheet.href) continue
+    if (!hasCache) {
+      if (!sheet.href) continue
+      try {
         const rules = sheet.cssRules || sheet.rules
         let cssText = ""
         for (const rule of rules) {
           cssText += rule.cssText
         }
-
         cacheCssTextMap[sheet.href] = cssText
-        cssArray.push({
-          cssText: cacheCssTextMap[sheet.href],
-          ref: $link,
-        })
+      } catch (err) {
+        console.error("Failed to get cssText for", sheet.href, err)
       }
-    } catch (e) {
-      console.info("Parse css error", sheet.href)
-      console.error(e)
     }
+
+    cssArray.push({
+      cssText: cacheCssTextMap[sheet.href],
+      ref: $link,
+    })
   }
 
   return cssArray

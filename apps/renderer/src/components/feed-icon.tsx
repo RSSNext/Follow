@@ -98,7 +98,8 @@ export function FeedIcon({
   }
 
   const colors = useMemo(
-    () => getColorScheme(stringToHue(feed?.title || (feed as FeedModel)?.url || siteUrl!), true),
+    () =>
+      getColorScheme(stringToHue(feed?.title || (feed as FeedModel)?.url || siteUrl || ""), true),
     [feed?.title, (feed as FeedModel)?.url, siteUrl],
   )
   let ImageElement: ReactNode

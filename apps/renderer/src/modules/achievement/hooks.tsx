@@ -183,8 +183,7 @@ export const AchievementModalContent: FC = () => {
                   <div
                     className={styledButtonVariant({
                       variant: "outline",
-                      status: "disabled",
-                      className: "relative",
+                      className: "relative border-0 pointer-events-none",
                     })}
                   >
                     <LoadingCircle size="small" className="center absolute inset-0" />
@@ -222,7 +221,7 @@ export const AchievementModalContent: FC = () => {
                     className={styledButtonVariant({
                       variant: "outline",
                       className:
-                        "relative !bg-green-100/50 border-green-200 text-green-800 dark:text-foreground dark:!bg-green-100/5 dark:border-green-200/20",
+                        "relative !bg-green-100/50 gap-1 border-green-200 text-green-800 dark:text-foreground dark:!bg-green-100/5 dark:border-green-200/20",
                     })}
                   >
                     <i className="i-mgc-check-filled" />

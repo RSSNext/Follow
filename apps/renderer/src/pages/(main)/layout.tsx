@@ -209,7 +209,7 @@ const FeedResponsiveResizerContainer = ({
       <div
         className={cn(
           "shrink-0 overflow-hidden",
-          "absolute inset-y-0 z-10",
+          "absolute inset-y-0 z-[2]",
           feedColumnTempShow && !feedColumnShow && "shadow-drawer-right z-[12] border-r",
           !feedColumnShow && !feedColumnTempShow ? "-translate-x-full delay-200" : "",
           !isDragging ? "duration-200" : "",
