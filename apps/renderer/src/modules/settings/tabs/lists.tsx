@@ -181,7 +181,7 @@ export const SettingLists = () => {
 
 const formSchema = z.object({
   view: z.string(),
-  title: z.string(),
+  title: z.string().min(1),
   description: z.string().optional(),
   image: z.string().optional(),
   fee: z.number().min(0),
