@@ -47,12 +47,12 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
         ))}
 
       {!!totalCount && totalCount > LIMIT && (
-        <HoverCard open>
+        <HoverCard>
           <HoverCardTrigger asChild>
             <button
               type="button"
               style={{
-                right: "80px",
+                right: `${LIMIT * 8}px`,
                 zIndex: 11,
               }}
               className="no-drag-region relative flex size-7 items-center justify-center rounded-full border border-border bg-muted ring ring-background"
