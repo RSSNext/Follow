@@ -17,6 +17,7 @@
   },
   "main": "./src/index.ts",
   "scripts": {
+    "build": "tsup",
     "typecheck": "tsup && tsc --noEmit"
   },
   "dependencies": {
