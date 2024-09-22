@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [0.0.1-alpha.15](https://github.com/RSSNext/follow/compare/v0.0.1-alpha.3...v0.0.1-alpha.15) (2024-09-22)
+## [0.0.1-alpha.16](https://github.com/RSSNext/follow/compare/v0.0.1-alpha.3...v0.0.1-alpha.16) (2024-09-22)
 
 
 ### Bug Fixes
@@ -25,6 +25,7 @@
 * add hover bg color when context menu opened ([6ceb263](https://github.com/RSSNext/follow/commit/6ceb263b777ccc9681cd086a28e019ce9bda3a43))
 * add language selector loading lock map ([2d14c1e](https://github.com/RSSNext/follow/commit/2d14c1e5b5ad086b3556dd9a8862a6ce00368c4d))
 * add link ([d9168c0](https://github.com/RSSNext/follow/commit/d9168c01b3f2a16fbfeadb722173e819dd3feb80))
+* add lock when login button click ([539f3bc](https://github.com/RSSNext/follow/commit/539f3bc599f4df9784662ca2bf972a94edf556c4))
 * add nonce id for temp feed ([8f81d99](https://github.com/RSSNext/follow/commit/8f81d99f1dd48e60f9861d69c840c77fa70bde93))
 * add page error boundary ([86d366d](https://github.com/RSSNext/follow/commit/86d366db76add0ad07eb921290b9444b211e2c4f))
 * add show readability tip condition ([208e404](https://github.com/RSSNext/follow/commit/208e4040cea5d3485acf5750e7120fb5f715e30f))
@@ -54,6 +55,7 @@
 * button transition ([f731d1e](https://github.com/RSSNext/follow/commit/f731d1e34e151828b6fa9553361f476da9d7e39b))
 * calc toc scroller range when entry content changed ([66035fe](https://github.com/RSSNext/follow/commit/66035fea72e3ce0c6fbcd8380fbdef612e052cb4))
 * can use under window blur ([9b2656e](https://github.com/RSSNext/follow/commit/9b2656ec53f3865378b7f2392d59a6828b31149c))
+* catch access stylesheet error ([bbc2bef](https://github.com/RSSNext/follow/commit/bbc2bef800c5b01669742bb004e2656c9087f82f))
 * category in route should encodeURLComponent ([d5b79cb](https://github.com/RSSNext/follow/commit/d5b79cba8a5d6d8fe18efee5d58da5610fc3ce68))
 * check undefined view ([71712f4](https://github.com/RSSNext/follow/commit/71712f464d2ab3043b602d4d2c311e4cc851e046))
 * ci and tootip portal ([3729917](https://github.com/RSSNext/follow/commit/37299173c8fcaf88d44b1a54baf7ddc03aa20ca6))
@@ -100,6 +102,7 @@
 * electron window type ([909d692](https://github.com/RSSNext/follow/commit/909d6929da5bd3930a6e1d8aa3342c46d00e5c7d))
 * empty default font on electron app ([#481](https://github.com/RSSNext/follow/issues/481)) ([4f9d4f2](https://github.com/RSSNext/follow/commit/4f9d4f26f22ac86cce64bb9f1582c2be2b3361c3))
 * empty entry list will throw not found feed error, fixed [#224](https://github.com/RSSNext/follow/issues/224) ([c41756d](https://github.com/RSSNext/follow/commit/c41756d2b91173a753e09f5de988b71a27daa9ba))
+* empty title break ([fbbb2a9](https://github.com/RSSNext/follow/commit/fbbb2a98b204ff17d80f1826134b713854a0f40d))
 * ensure unique keys for search items ([#500](https://github.com/RSSNext/follow/issues/500)) ([6c6b082](https://github.com/RSSNext/follow/commit/6c6b0828b83ff62d95c56417dcb0ebc1faed9535))
 * entries hasNext ([4cb5678](https://github.com/RSSNext/follow/commit/4cb56784acfb46516a4320f0088c294eafb32fcf))
 * entry bar action ([ba23dcf](https://github.com/RSSNext/follow/commit/ba23dcf46ff7569562d0a786ab85d46093b8abe8))
@@ -279,6 +282,7 @@
 * style ([#359](https://github.com/RSSNext/follow/issues/359)) ([3d39308](https://github.com/RSSNext/follow/commit/3d393086966826f194ae660b43bcb0cb33b3d6f3))
 * style center ([a5e3311](https://github.com/RSSNext/follow/commit/a5e33112ff2782cdbca316ff1d4dd6fd78116a1c))
 * **style:** button align center and ([38a5cb6](https://github.com/RSSNext/follow/commit/38a5cb682dc0c3082664a2192686ad16f68ecec3))
+* **styles:** add gap for received button ([f1b86b3](https://github.com/RSSNext/follow/commit/f1b86b3068eaebee1d123a7c1b5cedb4b4ebef4f))
 * **style:** video play button align center ([465f1a6](https://github.com/RSSNext/follow/commit/465f1a6acf6a1d96a28e724f071f8a68a327a56d))
 * subcription status & category empty, input value null ([#263](https://github.com/RSSNext/follow/issues/263)) ([93e2ccf](https://github.com/RSSNext/follow/commit/93e2ccfd5831f8a7f43932acd2976785e3adfbff))
 * subview layout ([36a34de](https://github.com/RSSNext/follow/commit/36a34de26caf2ff00847827635eedd3771faadc0))
@@ -333,6 +337,7 @@
 * upload sentry sourcemap ([b23365f](https://github.com/RSSNext/follow/commit/b23365faad9927826140948b642c0caca542f135))
 * use feed enabled condition ([9726d43](https://github.com/RSSNext/follow/commit/9726d4396673e2be02c60ce049ed07c5bf978380))
 * use official embed player in bilibili video when use web ([#219](https://github.com/RSSNext/follow/issues/219)) ([9177a34](https://github.com/RSSNext/follow/commit/9177a349e087cdc60b22e2338146caaefd377694))
+* user avatar use profile data if userId passed, fixed [#550](https://github.com/RSSNext/follow/issues/550) ([176afa7](https://github.com/RSSNext/follow/commit/176afa72ba1e0801ac383982f826cc19b215b242))
 * user button color in dark mode ([04e3c38](https://github.com/RSSNext/follow/commit/04e3c386c5699e6b0907de2a98701668fc7f278b))
 * user modal list padding ([992ea15](https://github.com/RSSNext/follow/commit/992ea1594af02e3815adae2fe99de4f205543239))
 * user profile can not scroll by scrollbar ([eac1965](https://github.com/RSSNext/follow/commit/eac1965cfc3d2bc86e11f256237322f15892b897))
@@ -389,6 +394,7 @@
 * ai daily in article content column ([a625d04](https://github.com/RSSNext/follow/commit/a625d04328ea209ead68ce0391a7108cbb2c4e6a))
 * ai daily modal ([67d9559](https://github.com/RSSNext/follow/commit/67d9559229baca34aa3328ba711d0e29def5bb8e))
 * apm ([602f50a](https://github.com/RSSNext/follow/commit/602f50aa1a2b1ad9559ae22c92c599907df0b8cc))
+* **app:** clear all data ([be7e87c](https://github.com/RSSNext/follow/commit/be7e87c192d3c863b3df2439287054682c69a221))
 * **audio-view:** seek circle indicator ([94b9535](https://github.com/RSSNext/follow/commit/94b9535d28292dbc209e251e3b0cb18d480d6a3b))
 * auto claim daily `POWER`, and update table style ([ca381ce](https://github.com/RSSNext/follow/commit/ca381cebf81cc745e56fe35811004d89b55609ba))
 * auto enable readability if no content ([27ecfc4](https://github.com/RSSNext/follow/commit/27ecfc4a86f3e35f245c1bca2d1dba57ff7364f2))
@@ -456,6 +462,7 @@
 * improve shiki code block renderer and  show language ([590d9cb](https://github.com/RSSNext/follow/commit/590d9cbb94a63f843d00bf54848bba40157d2452))
 * integration settings page ([f9f1938](https://github.com/RSSNext/follow/commit/f9f19386b28e853eb03b3ca5bae629d4f6542cb3))
 * invitation limitation message ([fa37a0c](https://github.com/RSSNext/follow/commit/fa37a0ca2c8235fb5fd47f96c26de7fdcd762ad8))
+* **invitation:** add signout button ([3c0f4e7](https://github.com/RSSNext/follow/commit/3c0f4e779c68a933d57e232d62774fca1c0b86ed))
 * invitations page ([0fc1110](https://github.com/RSSNext/follow/commit/0fc1110e3b1e067a02a65ba7afe5b1456bb76815))
 * invitations page tips ([18de381](https://github.com/RSSNext/follow/commit/18de381343d58f19a36fa6e681711fe06c07b1c1))
 * invitations tips and confirm modal ([c919e59](https://github.com/RSSNext/follow/commit/c919e5907bae4303b667d6cff39c19ebbf6a4dc6))
@@ -561,6 +568,11 @@
 * reduce re-render when ctx menu open ([96ff9f6](https://github.com/RSSNext/follow/commit/96ff9f660c0a469daafbb5f5cad47370bcd3a8f0))
 * shadow dom css cache ([c1e3a02](https://github.com/RSSNext/follow/commit/c1e3a025f7ef8ff570399a44a95797c2c8261e42))
 * speed up user profile modal data loading ([53a5bae](https://github.com/RSSNext/follow/commit/53a5bae316b406ff5c250c3e7772ce4071891bee))
+
+
+### Reverts
+
+* Revert "refactor: migrate to webp" ([e7081cf](https://github.com/RSSNext/follow/commit/e7081cf48592bfcc24308df19a372a80dc324632))
 
 
 
