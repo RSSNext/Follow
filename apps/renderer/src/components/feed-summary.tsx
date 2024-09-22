@@ -34,7 +34,7 @@ export function FollowSummary({
         <div className="truncate text-base font-semibold leading-tight">
           <div className="flex items-center">
             {feed.title}
-            {!isList && <FeedCertification className="center" feed={feed} />}
+            <FeedCertification className="center" feed={feed} />
           </div>
           <EllipsisHorizontalTextWithTooltip className="truncate text-xs font-normal text-zinc-500">
             {feed.description}

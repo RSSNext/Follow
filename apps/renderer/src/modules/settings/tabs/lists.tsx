@@ -472,7 +472,9 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
                   </a>
                 </TableCell>
                 <TableCell align="center" size="sm">
-                  <FeedCertification className="ml-0" feed={row} />
+                  <div className="center">
+                    <FeedCertification className="ml-0" feed={row} />
+                  </div>
                 </TableCell>
                 <TableCell align="center" size="sm">
                   <Button variant="ghost" onClick={() => removeMutation.mutate(row.id)}>
