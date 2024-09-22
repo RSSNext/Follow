@@ -32,9 +32,8 @@
     "logInTo": "登录到 ",
     "openApp": "打开应用",
     "redirecting": "正在重定向",
-    "welcomeTo": "欢迎来到 ",
     "signOut": "登出",
-    "openApp": "打开应用"
+    "welcomeTo": "欢迎来到 "
   },
   "redirect": {
     "continueInBrowser": "在浏览器中继续",
