@@ -1,4 +1,3 @@
-import { repository } from "@pkg"
 import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
@@ -413,6 +412,7 @@ const NoContent: FC<{
   url: string
 }> = ({ id, url }) => {
   const status = useEntryInReadabilityStatus(id)
+  const { t } = useTranslation("app")
 
   if (status !== ReadabilityStatus.INITIAL && status !== ReadabilityStatus.FAILURE) {
     return null
@@ -420,21 +420,12 @@ const NoContent: FC<{
   return (
     <div className="center">
       <div className="space-y-2 text-balance text-center text-sm text-zinc-400">
-        {(isWebBuild || status === ReadabilityStatus.FAILURE) && <span>No content</span>}
+        {(isWebBuild || status === ReadabilityStatus.FAILURE) && (
+          <span>{t("entry_content.no_content")}</span>
+        )}
         {isWebBuild && (
           <div>
-            <span>
-              Maybe web app doesn't support this content type. But you can{" "}
-              <a
-                target="_blank"
-                rel="noreferrer"
-                className="text-accent underline"
-                href={`${repository.url}/releases`}
-              >
-                download
-              </a>{" "}
-              the desktop app.
-            </span>
+            <span>{t("entry_content.web_app_notice")}</span>
           </div>
         )}
         {url && window.electron && <ReadabilityAutoToggle url={url} id={id} />}

@@ -51,14 +51,6 @@ jobs:
           fetch-depth: 1
           lfs: true
 
-      - name: Cache pnpm modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ matrix.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ matrix.os }}-
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
