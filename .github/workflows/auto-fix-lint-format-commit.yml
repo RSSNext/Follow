@@ -42,7 +42,6 @@ jobs:
           commit_message: "chore: auto-fix linting and formatting issues"
           commit_options: "--no-verify"
           file_pattern: "."
-          branch: ${{ github.head_ref }}
 
       - name: Add PR comment
         uses: actions/github-script@v7
