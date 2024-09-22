@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
-          token: ${{ secrets.PAT }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
