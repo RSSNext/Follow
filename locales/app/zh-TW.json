@@ -109,7 +109,7 @@
   "feed_item.claimed_by_unknown": "其擁有者。",
   "feed_item.claimed_by_you": "您已認領",
   "feed_item.claimed_feed": "已認領摘要",
-  "feed_item.error_since": "源失效：",
+  "feed_item.error_since": "錯誤發生時間",
   "feed_item.not_publicly_visible": "在您的個人資料頁面上不公開顯示",
   "feed_view_type.articles": "文章",
   "feed_view_type.audios": "音訊",
