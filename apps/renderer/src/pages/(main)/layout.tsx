@@ -9,6 +9,7 @@ import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
 import { setMainContainerElement } from "~/atoms/dom"
+import { useViewport } from "~/atoms/hooks/viewport"
 import { getUISettings, setUISetting } from "~/atoms/settings/ui"
 import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
 import { useLoginModalShow, useWhoami } from "~/atoms/user"
@@ -78,6 +79,24 @@ export function Component() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useDailyTask()
+
+  const isNotSupportWidth = useViewport((v) => v.w < 1024)
+
+  if (isNotSupportWidth) {
+    return (
+      <div className="center fixed inset-0 flex-col">
+        <i className="i-mingcute-device-line mb-2 size-16 text-muted-foreground" />
+        <div>Please using desktop app to using {APP_NAME}</div>
+
+        <div>
+          Download:{" "}
+          <a className="follow-link--underline" href={repository.url}>
+            {repository.url}
+          </a>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div
