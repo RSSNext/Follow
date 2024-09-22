@@ -1,7 +1,7 @@
 name: Auto Fix Lint and Format
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize]
 
 jobs:
@@ -17,7 +17,6 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-          token: ${{ secrets.PAT }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
