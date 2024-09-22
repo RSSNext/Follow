@@ -1,6 +1,8 @@
 // @ts-check
 import { defineConfig } from "eslint-config-hyoban"
 
+import recursiveSort from "./plugins/eslint-recursive-sort.js"
+
 export default defineConfig(
   {
     formatting: false,
@@ -45,14 +47,11 @@ export default defineConfig(
   },
   {
     files: ["locales/**/*.json"],
+    plugins: {
+      "recursive-sort": recursiveSort,
+    },
     rules: {
-      "jsonc/sort-keys": [
-        "error",
-        {
-          pathPattern: ".*",
-          order: { type: "asc" },
-        },
-      ],
+      "recursive-sort/recursive-sort": "error",
     },
   },
 )
