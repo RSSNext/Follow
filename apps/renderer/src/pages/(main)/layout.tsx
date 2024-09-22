@@ -80,7 +80,7 @@ export function Component() {
 
   useDailyTask()
 
-  const isNotSupportWidth = useViewport((v) => v.w < 1024)
+  const isNotSupportWidth = useViewport((v) => v.w < 1024 && v.w !== 0)
 
   if (isNotSupportWidth) {
     return (
