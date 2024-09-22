@@ -38,23 +38,23 @@ const formSchema = z.object({
 const NumberDisplay = ({ value }) => <span className="font-bold text-zinc-800">{value ?? 0}</span>
 
 const list: {
-  key: I18nKeys
-  title: string
+  key: string
+  title: I18nKeys
   className: string
 }[] = [
   {
     key: "parsedErrorItems",
-    title: <Trans ns="app" i18nKey="discover.import.parsedErrorItems" />,
+    title: "discover.import.parsedErrorItems",
     className: "text-red-500",
   },
   {
     key: "successfulItems",
-    title: <Trans ns="app" i18nKey="discover.import.successfulItems" />,
+    title: "discover.import.successfulItems",
     className: "text-green-500",
   },
   {
     key: "conflictItems",
-    title: <Trans ns="app" i18nKey="discover.import.conflictItems" />,
+    title: "discover.import.conflictItems",
     className: "text-yellow-500",
   },
 ]
@@ -169,7 +169,9 @@ export function DiscoverImport() {
             <CardContent className="space-y-6">
               {list.map((item) => (
                 <div key={item.key}>
-                  <div className={cn("mb-4 text-lg font-medium", item.className)}>{item.title}</div>
+                  <div className={cn("mb-4 text-lg font-medium", item.className)}>
+                    {t(item.title)}
+                  </div>
                   <div className="space-y-4">
                     {!mutation.data?.[item.key].length && (
                       <div className="text-zinc-500">{t("discover.import.noItems")}</div>
