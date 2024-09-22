@@ -9,7 +9,7 @@ export const getImageProxyUrl = ({
   url: string
   width: number
   height: number
-}) => `${env.VITE_IMGPROXY_URL}?url=${encodeURIComponent(url)}&width=${width}&height=${height}`
+}) => `${env.VITE_IMGPROXY_URL}/unsafe/fit-in/${width}x${height}/${encodeURIComponent(url)}`
 
 export const replaceImgUrlIfNeed = (url: string) => {
   for (const rule of imageRefererMatches) {
