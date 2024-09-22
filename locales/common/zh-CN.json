@@ -20,7 +20,7 @@
   "words.items_one": "内容",
   "words.items_other": "内容",
   "words.local": "本地",
-  "words.manage": "管理"
+  "words.manage": "管理",
   "words.record": "记录",
   "words.record_one": "记录",
   "words.record_other": "记录",
@@ -29,6 +29,6 @@
   "words.result_other": "结果",
   "words.space": "",
   "words.submit": "提交",
-  "words.update": "更新"
+  "words.update": "更新",
   "words.which.all": "全部"
 }
