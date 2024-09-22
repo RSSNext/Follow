@@ -36,15 +36,15 @@ jobs:
       - name: Check for changes
         id: git-check
         run: |
-          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+          git add -A
+          git diff --cached --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
 
       - name: Commit and push changes
         if: steps.git-check.outputs.changes == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add -A
-          git commit -m "chore: auto-fix linting and formatting issues"
+          git commit -m "chore: auto-fix linting and formatting issues" --no-verify
           git push origin HEAD:${{ github.head_ref }}
 
       - name: Add PR comment
