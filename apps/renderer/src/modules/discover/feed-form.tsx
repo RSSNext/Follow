@@ -351,12 +351,14 @@ const FeedInnerForm = ({
           />
           {isList && !!feed.fee && !isSubscribed && (
             <div>
-              <FormLabel>{t("feed_form.fee")}</FormLabel>
-              <FormDescription>{t("feed_form.fee_description")}</FormDescription>
-              <div className="mt-1 flex items-center gap-1">
-                {feed.fee}
-                <i className="i-mgc-power size-4 text-accent" />
-              </div>
+              <FormLabel className="flex items-center gap-1">
+                {t("feed_form.fee")}{" "}
+                <div className="ml-2 flex scale-[0.85] items-center gap-1">
+                  {feed.fee}
+                  <i className="i-mgc-power size-4 text-accent" />
+                </div>
+              </FormLabel>
+              <FormDescription className="mt-0.5">{t("feed_form.fee_description")}</FormDescription>
             </div>
           )}
           <div className="flex flex-1 items-end justify-end gap-4">
