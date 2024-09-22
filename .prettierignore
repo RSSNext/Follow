@@ -1,2 +1,4 @@
 packages/shared/src/hono.ts
 pnpm-lock.yaml
+
+CHANGELOG.md
