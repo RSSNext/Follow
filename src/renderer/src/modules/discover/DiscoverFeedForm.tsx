@@ -142,10 +142,13 @@ export const DiscoverFeedForm = ({
   const onSubmit = useCallback(
     (data: Record<string, string>) => {
       try {
-        const trimmedData = Object.keys(data).reduce((acc, key) => {
-          acc[key] = data[key]?.trim() ?? ''; // Trim input data
-          return acc;
-        }, {} as Record<string, string>)
+        const trimmedData = Object.keys(data).reduce(
+          (acc, key) => {
+            acc[key] = data[key]?.trim() ?? "" // Trim input data
+            return acc
+          },
+          {} as Record<string, string>,
+        )
 
         const fillRegexpPath = regexpPathToPath(route.path, trimmedData)
         const url = `rsshub://${routePrefix}${fillRegexpPath}`
@@ -274,10 +277,13 @@ const PreviewUrl: FC<{
 
   const fullPath = useMemo(() => {
     try {
-      const trimmedData = Object.keys(data).reduce((acc, key) => {
-        acc[key] = data[key]?.trim() ?? ''; // Trim the path data
-        return acc;
-      }, {} as Record<string, string>)
+      const trimmedData = Object.keys(data).reduce(
+        (acc, key) => {
+          acc[key] = data[key]?.trim() ?? "" // Trim the path data
+          return acc
+        },
+        {} as Record<string, string>,
+      )
 
       return regexpPathToPath(path, trimmedData)
     } catch (err: unknown) {
@@ -286,7 +292,7 @@ const PreviewUrl: FC<{
     }
   }, [path, data])
 
-  const renderedPath = `${routePrefix}${fullPath}`.trim();
+  const renderedPath = `${routePrefix}${fullPath}`.trim()
   return (
     <div className="group relative min-w-0 pb-4">
       <pre className="w-full whitespace-pre-line break-words text-xs text-theme-foreground/40">
@@ -299,4 +305,3 @@ const PreviewUrl: FC<{
     </div>
   )
 }
-

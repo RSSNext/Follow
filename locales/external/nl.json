@@ -1,43 +1,42 @@
 {
-    "feed": {
-        "follow_one": "volgen",
-        "follow_other": "volgen",
-        "followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} met {{readCount}} {{readNoun}} op {{appName}}",
-        "read_one": "lezen",
-        "read_other": "lezen"
+  "feed": {
+    "follow_one": "volgen",
+    "follow_other": "volgen",
+    "followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} met {{readCount}} {{readNoun}} op {{appName}}",
+    "read_one": "lezen",
+    "read_other": "lezen"
+  },
+  "header": {
+    "app": "App",
+    "download": "Downloaden"
+  },
+  "invitation": {
+    "activate": "Activeren",
+    "codeOptions": {
+      "1": "Op zoek naar een alfa-testgebruiker om je uit te nodigen.",
+      "2": "Word lid van onze Discord-server voor af en toe weggeefacties.",
+      "3": "Volg ons X-account voor af en toe weggeefacties."
     },
-    "header": {
-      "app": "App",
-      "download": "Downloaden"
-    },
-    "invitation": {
-      "activate": "Activeren",
-      "codeOptions": {
-        "1": "Op zoek naar een alfa-testgebruiker om je uit te nodigen.",
-        "2": "Word lid van onze Discord-server voor af en toe weggeefacties.",
-        "3": "Volg ons X-account voor af en toe weggeefacties."
-      },
-      "earlyAccess": "Follow is momenteel in vroege toegang en vereist een uitnodigingscode om te gebruiken.",
-      "earlyAccessMessage": "😰 Sorry, Follow is momenteel in vroege toegang en vereist een uitnodigingscode om te gebruiken.",
-      "generateButton": "Genereer nieuwe code",
-      "generateCost": "Je kunt {{INVITATION_PRICE}} Power uitgeven om een uitnodigingscode voor je vrienden te genereren.",
-      "getCodeMessage": "Je kunt een uitnodigingscode verkrijgen op de volgende manieren:",
-      "title": "Uitnodigingscode"
-    },
-    "login": {
-      "backToWebApp": "Terug naar webapp",
-      "continueWithGitHub": "Doorgaan met GitHub",
-      "continueWithGoogle": "Doorgaan met Google",
-      "logInTo": "Inloggen op ",
-      "openApp": "App openen",
-      "redirecting": "Omleiden",
-      "welcomeTo": "Welkom bij "
-    },
-    "redirect": {
-      "continueInBrowser": "Doorgaan in browser",
-      "instruction": "Dit is het moment om {{APP_NAME}} te openen en deze pagina veilig af te sluiten.",
-      "openApp": "Open {{APP_NAME}}",
-      "successMessage": "Je bent succesvol verbonden met je {{APP_NAME}}-account."
-    }
+    "earlyAccess": "Follow is momenteel in vroege toegang en vereist een uitnodigingscode om te gebruiken.",
+    "earlyAccessMessage": "😰 Sorry, Follow is momenteel in vroege toegang en vereist een uitnodigingscode om te gebruiken.",
+    "generateButton": "Genereer nieuwe code",
+    "generateCost": "Je kunt {{INVITATION_PRICE}} Power uitgeven om een uitnodigingscode voor je vrienden te genereren.",
+    "getCodeMessage": "Je kunt een uitnodigingscode verkrijgen op de volgende manieren:",
+    "title": "Uitnodigingscode"
+  },
+  "login": {
+    "backToWebApp": "Terug naar webapp",
+    "continueWithGitHub": "Doorgaan met GitHub",
+    "continueWithGoogle": "Doorgaan met Google",
+    "logInTo": "Inloggen op ",
+    "openApp": "App openen",
+    "redirecting": "Omleiden",
+    "welcomeTo": "Welkom bij "
+  },
+  "redirect": {
+    "continueInBrowser": "Doorgaan in browser",
+    "instruction": "Dit is het moment om {{APP_NAME}} te openen en deze pagina veilig af te sluiten.",
+    "openApp": "Open {{APP_NAME}}",
+    "successMessage": "Je bent succesvol verbonden met je {{APP_NAME}}-account."
   }
-  
+}
