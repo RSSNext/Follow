@@ -158,7 +158,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
               {t("words.lists")}
             </div>
-            <SortableList view={view} expansion={expansion} data={listsData} />
+            <SortableList view={view} expansion={expansion} data={listsData} by="alphabetical" />
           </>
         )}
         <div
@@ -375,10 +375,10 @@ const SortByAlphabeticalList = ({ view, expansion, data }: FeedListProps) => {
   )
 }
 
-const SortableList = (props: FeedListProps) => {
-  const by = useFeedListSortSelector((s) => s.by)
+const SortableList = (props: FeedListProps & { by?: "count" | "alphabetical" }) => {
+  const userBy = useFeedListSortSelector((s) => s.by)
 
-  switch (by) {
+  switch (props.by || userBy) {
     case "count": {
       return <SortByUnreadList {...props} />
     }

@@ -311,36 +311,31 @@ const SearchCard: FC<{
             )}
           </CardContent>
           <CardFooter>
-            {item.isSubscribed ? (
-              <Button variant="outline" disabled>
-                Followed
-              </Button>
-            ) : (
-              <Button
-                onClick={() => {
-                  present({
-                    title: "Add Feed",
-                    content: ({ dismiss }) => (
-                      <FeedForm
-                        asWidget
-                        url={item.feed?.url}
-                        id={item.feed?.id || item.list?.id}
-                        isList={!!item.list?.id}
-                        defaultValues={{
-                          view: getSidebarActiveView().toString(),
-                        }}
-                        onSuccess={() => {
-                          onSuccess(item)
-                          dismiss()
-                        }}
-                      />
-                    ),
-                  })
-                }}
-              >
-                Follow
-              </Button>
-            )}
+            <Button
+              variant={item.isSubscribed ? "outline" : undefined}
+              onClick={() => {
+                present({
+                  title: "Add Feed",
+                  content: ({ dismiss }) => (
+                    <FeedForm
+                      asWidget
+                      url={item.feed?.url}
+                      id={item.feed?.id || item.list?.id}
+                      isList={!!item.list?.id}
+                      defaultValues={{
+                        view: getSidebarActiveView().toString(),
+                      }}
+                      onSuccess={() => {
+                        onSuccess(item)
+                        dismiss()
+                      }}
+                    />
+                  ),
+                })
+              }}
+            >
+              {item.isSubscribed ? "Followed" : "Follow"}
+            </Button>
             <div className="ml-6 text-zinc-500">
               <span className="font-medium text-zinc-800 dark:text-zinc-200">
                 {item.subscriptionCount}
