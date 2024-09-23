@@ -644,6 +644,7 @@ type MediaModel = {
     preview_image_url?: string;
     width?: number;
     height?: number;
+    blurhash?: string;
 };
 type AttachmentsModel = {
     url: string;
