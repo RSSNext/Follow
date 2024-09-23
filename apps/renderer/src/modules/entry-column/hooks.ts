@@ -8,7 +8,7 @@ import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRoutePara
 import { useAuthQuery } from "~/hooks/common"
 import { entries, useEntries } from "~/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "~/store/entry"
-import { useFolderFeedsByFeedId } from "~/store/subscription"
+import { isSubscriptionAList, useFolderFeedsByFeedId } from "~/store/subscription"
 import { feedUnreadActions } from "~/store/unread"
 
 export const useEntryMarkReadHandler = (entriesIds: string[]) => {
@@ -71,6 +71,7 @@ export const useEntriesByView = ({
     view,
     ...(unreadOnly === true && { read: false }),
     isArchived,
+    isList: isSubscriptionAList(feedId),
   }
   const query = useEntries(entriesOptions)
 
