@@ -65,6 +65,7 @@ export const Masonry = <Item,>(props: MasonryProps<Item>) => {
     initialHeight: props.ssrHeight,
   })
   const containerPos = useContainerPosition(containerRef, windowSize)
+
   const nextProps = Object.assign(
     {
       offset: containerPos.offset,
@@ -87,6 +88,7 @@ export const Masonry = <Item,>(props: MasonryProps<Item>) => {
   }
 
   nextProps.positioner = usePositioner(nextProps, [shrunk && Math.random()])
+
   nextProps.resizeObserver = useResizeObserver(nextProps.positioner)
   nextProps.scrollTop = scrollTop
   nextProps.isScrolling = isScrolling
@@ -183,6 +185,19 @@ function useContainerPosition(
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
+
+  React.useEffect(() => {
+    const resizeObserver = new ResizeObserver(() => {
+      setContainerPosition((prev) => ({
+        ...prev,
+        width: elementRef.current?.offsetWidth || 0,
+      }))
+    })
+    resizeObserver.observe(elementRef.current as HTMLElement)
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [containerPosition, elementRef])
 
   return containerPosition
 }
