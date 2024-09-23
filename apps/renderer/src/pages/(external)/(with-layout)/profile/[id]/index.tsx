@@ -106,7 +106,9 @@ export function Component() {
                                 onClick={(e) => {
                                   e.stopPropagation()
 
-                                  presentFeedFormModal(subscription.feedId)
+                                  presentFeedFormModal({
+                                    feedId: subscription.feedId,
+                                  })
                                 }}
                               >
                                 {isMe ? (

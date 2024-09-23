@@ -12,14 +12,29 @@ export const usePresentFeedFormModal = () => {
   const me = useWhoami()
   const t = useI18n()
   return useCallback(
-    (feedId: string) => {
+    (
+      params:
+        | {
+            feedId: string
+          }
+        | {
+            listId: string
+          },
+    ) => {
       if (me) {
         present({
           title: t("sidebar.feed_actions.edit_feed"),
-          content: ({ dismiss }) => <FeedForm asWidget id={feedId} onSuccess={dismiss} />,
+          content: ({ dismiss }) => (
+            <FeedForm
+              asWidget
+              id={"feedId" in params ? params.feedId : params.listId}
+              isList={!!("listId" in params)}
+              onSuccess={dismiss}
+            />
+          ),
         })
       } else {
-        window.location.href = `${DEEPLINK_SCHEME}add?id=${feedId}`
+        window.location.href = `${DEEPLINK_SCHEME}add?id=${"feedId" in params ? params.feedId : params.listId}`
       }
     },
     [me, present, t],
