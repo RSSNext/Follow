@@ -155,7 +155,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
 })
 
 const maskStyle = {
-  maskImage: "linear-gradient(    rgba(255, 255, 255, 0) 0%,    rgb(255, 255, 255) 10px)",
+  maskImage: "linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 10px)",
 }
 const MasonryItemFixedDimensionWrapper = (
   props: PropsWithChildren<{

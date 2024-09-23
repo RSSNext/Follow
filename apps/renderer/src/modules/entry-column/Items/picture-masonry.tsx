@@ -184,7 +184,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
                   columnGutter={gutter}
                   columnWidth={currentItemWidth}
                   columnCount={currentColumn}
-                  overscanBy={3}
+                  overscanBy={2}
                   render={render}
                   onRender={maybeLoadMore}
                   itemKey={itemKey}
@@ -204,7 +204,7 @@ const render: React.ComponentType<
     entryId: string
   }>
 > = ({ data }) => {
-  if (data.entryId === "placeholder") {
+  if (data.entryId.startsWith("placeholder")) {
     return <LoadingSkeletonItem />
   }
   return <PictureWaterFallItem entryId={data.entryId} />
