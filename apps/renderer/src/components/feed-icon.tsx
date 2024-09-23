@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
+import { m } from "framer-motion"
 import type { ReactNode } from "react"
 import { forwardRef, useMemo } from "react"
 
@@ -145,7 +146,7 @@ export function FeedIcon({
 
       ImageElement = (
         <PlatformIcon url={siteUrl} style={sizeStyle} className={cn("center mr-2", className)}>
-          <img style={sizeStyle} />
+          <m.img style={sizeStyle} initial={{ opacity: 0 }} animate={{ opacity: 1 }} />
         </PlatformIcon>
       )
       break
@@ -158,7 +159,12 @@ export function FeedIcon({
       })
       ImageElement = (
         <PlatformIcon url={image} style={sizeStyle} className={cn("center mr-2", className)}>
-          <img className={cn("mr-2", className)} style={sizeStyle} />
+          <m.img
+            className={cn("mr-2", className)}
+            style={sizeStyle}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          />
         </PlatformIcon>
       )
       break
@@ -207,11 +213,7 @@ export function FeedIcon({
   if (fallback && !!finalSrc) {
     return (
       <Avatar className="shrink-0">
-        <AvatarImage
-          className="rounded-sm object-cover duration-200 animate-in fade-in-0"
-          asChild
-          src={finalSrc}
-        >
+        <AvatarImage className="rounded-sm object-cover" asChild src={finalSrc}>
           {ImageElement}
         </AvatarImage>
         <AvatarFallback asChild>{fallbackIcon}</AvatarFallback>
@@ -224,7 +226,7 @@ export function FeedIcon({
   // Else
   return (
     <Avatar className="shrink-0">
-      <AvatarImage className="duration-200 animate-in fade-in-0" asChild src={finalSrc}>
+      <AvatarImage asChild src={finalSrc}>
         {ImageElement}
       </AvatarImage>
       <AvatarFallback>
