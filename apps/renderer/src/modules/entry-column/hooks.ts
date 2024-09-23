@@ -8,7 +8,7 @@ import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRoutePara
 import { useAuthQuery } from "~/hooks/common"
 import { entries, useEntries } from "~/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "~/store/entry"
-import { isSubscriptionList, useFolderFeedsByFeedId } from "~/store/subscription"
+import { isListSubscription, useFolderFeedsByFeedId } from "~/store/subscription"
 import { feedUnreadActions } from "~/store/unread"
 
 export const useEntryMarkReadHandler = (entriesIds: string[]) => {
@@ -60,6 +60,7 @@ export const useEntriesByView = ({
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
   const { feedId, view, isAllFeeds, isCollection } = routeParams
+  const isList = isListSubscription(feedId)
 
   const folderIds = useFolderFeedsByFeedId({
     feedId,
@@ -71,7 +72,7 @@ export const useEntriesByView = ({
     view,
     ...(unreadOnly === true && { read: false }),
     isArchived,
-    isList: isSubscriptionList(feedId),
+    isList,
   }
   const query = useEntries(entriesOptions)
 
@@ -168,8 +169,10 @@ export const useEntriesByView = ({
     () =>
       isCollection
         ? sortEntriesIdByStarAt(mergedEntries[view])
-        : sortEntriesIdByEntryPublishedAt(mergedEntries[view]),
-    [isCollection, mergedEntries, view],
+        : isList
+          ? sortEntriesIdByEntryInsertedAt(mergedEntries[view])
+          : sortEntriesIdByEntryPublishedAt(mergedEntries[view]),
+    [isCollection, isList, mergedEntries, view],
   )
 
   const groupByDate = useGeneralSettingKey("groupByDate")
@@ -188,7 +191,9 @@ export const useEntriesByView = ({
       if (!entry) {
         continue
       }
-      const date = new Date(entry.entries.publishedAt).toDateString()
+      const date = new Date(
+        isList ? entry.entries.insertedAt : entry.entries.publishedAt,
+      ).toDateString()
       if (date !== lastDate) {
         counts.push(1)
         lastDate = date
@@ -252,4 +257,13 @@ function sortEntriesIdByStarAt(entries: string[]) {
     if (!aStar || !bStar) return 0
     return bStar.localeCompare(aStar)
   })
+}
+
+function sortEntriesIdByEntryInsertedAt(entries: string[]) {
+  const entriesId2Map = entryActions.getFlattenMapEntries()
+  return entries
+    .slice()
+    .sort((a, b) =>
+      entriesId2Map[b]?.entries.insertedAt.localeCompare(entriesId2Map[a]?.entries.insertedAt),
+    )
 }
