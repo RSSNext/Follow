@@ -1,4 +1,3 @@
-import { env } from "@follow/shared/env"
 import { imageRefererMatches, webpCloudPublicServicesMatches } from "@follow/shared/image"
 
 import { getAbValue, isAbEnabled } from "~/hooks/biz/useAb"

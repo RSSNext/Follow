@@ -13,7 +13,6 @@ import { useAuthQuery, useI18n, useTitle } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
-import { cn } from "~/lib/utils"
 import { cn, isBizId } from "~/lib/utils"
 import { useUserSubscriptionsQuery } from "~/modules/profile/hooks"
 
