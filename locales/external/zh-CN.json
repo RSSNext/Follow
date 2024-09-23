@@ -1,44 +1,32 @@
 {
   "copied_link": "链接已复制到剪贴板",
-  "feed": {
-    "follower_one": "关注者",
-    "follower_other": "关注者",
-    "followsAndReads": "在 {{appName}} 上有 {{subscriptionCount}} 个{{subscriptionNoun}}，{{readCount}} 篇{{readNoun}}",
-    "read_one": "文章",
-    "read_other": "文章"
-  },
-  "header": {
-    "app": "应用",
-    "download": "下载"
-  },
-  "invitation": {
-    "activate": "激活",
-    "codeOptions": {
-      "1": "寻找内测用户帮你生成邀请码",
-      "2": "加入官方 Discord 频道，不定期发放邀请码",
-      "3": "关注官方 X 账号动态，不定期发放邀请码"
-    },
-    "earlyAccess": "Follow 目前处于早期体验阶段，需要邀请码才能使用",
-    "earlyAccessMessage": "😰 抱歉，Follow 目前处于早期体验阶段，需要邀请码才能使用",
-    "generateButton": "生成邀请码",
-    "generateCost": "花费 {{INVITATION_PRICE}} Power 生成一个邀请码给你的朋友。",
-    "getCodeMessage": "通过以下方式获取：",
-    "title": "邀请码"
-  },
-  "login": {
-    "backToWebApp": "返回网页版",
-    "continueWithGitHub": "使用 GitHub 继续",
-    "continueWithGoogle": "使用 Google 继续",
-    "logInTo": "登录到 ",
-    "openApp": "打开应用",
-    "redirecting": "正在重定向",
-    "signOut": "登出",
-    "welcomeTo": "欢迎来到 "
-  },
-  "redirect": {
-    "continueInBrowser": "在浏览器中继续",
-    "instruction": "现在可以打开 {{APP_NAME}} 并关闭此页面",
-    "openApp": "打开 {{APP_NAME}}",
-    "successMessage": "已成功连接到 {{APP_NAME}} 账户。"
-  }
+  "feed.follower_one": "关注者",
+  "feed.follower_other": "关注者",
+  "feed.followsAndReads": "在 {{appName}} 上有 {{subscriptionCount}} 个{{subscriptionNoun}}，{{readCount}} 篇{{readNoun}}",
+  "feed.read_one": "文章",
+  "feed.read_other": "文章"
+  "header.app": "应用",
+  "header.download": "下载"
+  "invitation.activate": "激活",
+  "invitation.codeOptions.1": "寻找内测用户帮你生成邀请码",
+  "invitation.codeOptions.2": "加入官方 Discord 频道，不定期发放邀请码",
+  "invitation.codeOptions.3": "关注官方 X 账号动态，不定期发放邀请码"
+  "invitation.earlyAccess": "Follow 目前处于早期体验阶段，需要邀请码才能使用",
+  "invitation.earlyAccessMessage": "😰 抱歉，Follow 目前处于早期体验阶段，需要邀请码才能使用",
+  "invitation.generateButton": "生成邀请码",
+  "invitation.generateCost": "花费 {{INVITATION_PRICE}} Power 生成一个邀请码给你的朋友。",
+  "invitation.getCodeMessage": "通过以下方式获取：",
+  "invitation.title": "邀请码"
+  "login.backToWebApp": "返回网页版",
+  "login.continueWithGitHub": "使用 GitHub 继续",
+  "login.continueWithGoogle": "使用 Google 继续",
+  "login.logInTo": "登录到 ",
+  "login.openApp": "打开应用",
+  "login.redirecting": "正在重定向",
+  "login.signOut": "登出",
+  "login.welcomeTo": "欢迎来到 "
+  "redirect.continueInBrowser": "在浏览器中继续",
+  "redirect.instruction": "现在可以打开 {{APP_NAME}} 并关闭此页面",
+  "redirect.openApp": "打开 {{APP_NAME}}",
+  "redirect.successMessage": "已成功连接到 {{APP_NAME}} 账户。"
 }
