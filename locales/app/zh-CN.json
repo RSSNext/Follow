@@ -171,6 +171,7 @@
   "sidebar.feed_actions.copy_list_url": "复制列表链接",
   "sidebar.feed_actions.edit": "编辑",
   "sidebar.feed_actions.edit_feed": "编辑订阅",
+  "sidebar.feed_actions.edit_list": "编辑列表",
   "sidebar.feed_actions.feed_owned_by_you": "该订阅源归你所有",
   "sidebar.feed_actions.list_owned_by_you": "该列表归你所有",
   "sidebar.feed_actions.mark_all_as_read": "全部标记为已读",
