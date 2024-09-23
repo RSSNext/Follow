@@ -46,7 +46,9 @@ export const useFeedActions = ({
         shortcut: "E",
         click: () => {
           present({
-            title: t("sidebar.feed_actions.edit_feed"),
+            title: isList
+              ? t("sidebar.feed_actions.edit_list")
+              : t("sidebar.feed_actions.edit_feed"),
             content: ({ dismiss }) => (
               <FeedForm asWidget id={feedId} onSuccess={dismiss} isList={isList} />
             ),

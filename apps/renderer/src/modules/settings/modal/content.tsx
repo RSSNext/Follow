@@ -64,7 +64,7 @@ const Content = () => {
         mask={false}
         ref={setScroller}
         rootClassName="h-full grow flex-1 shrink-0 overflow-auto pl-8 pr-7"
-        viewportClassName="pr-1 min-h-full [&>div]:min-h-full [&>div]:relative pb-8"
+        viewportClassName="px-1 min-h-full [&>div]:min-h-full [&>div]:relative pb-8"
       >
         <Component />
 

@@ -88,7 +88,16 @@ export const FeedForm: Component<{
       )}
 
       {feed ? (
-        <FeedInnerForm {...{ defaultValues, id, url, asWidget, onSuccess }} />
+        <FeedInnerForm
+          {...{
+            defaultValues,
+            id,
+            url,
+            asWidget,
+            onSuccess,
+            subscriptionData: feedQuery.data?.subscription,
+          }}
+        />
       ) : feedQuery.isLoading ? (
         <div className="flex flex-1 items-center justify-center">
           <LoadingCircle size="large" />
@@ -156,16 +165,23 @@ const FeedInnerForm = ({
   url,
   asWidget,
   onSuccess,
+  subscriptionData,
 }: {
   defaultValues?: z.infer<typeof formSchema>
   url?: string
   id?: string
   asWidget?: boolean
   onSuccess?: () => void
+  subscriptionData?: {
+    view?: number
+    category?: string | null
+    isPrivate?: boolean
+    title?: string | null
+  }
 }) => {
-  const subscription = useSubscriptionByFeedId(id || "")
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const subscription = useSubscriptionByFeedId(id || "") || subscriptionData
   const isSubscribed = !!subscription
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const feed = useFeedByIdOrUrl({ id, url })!
   const isList = feed?.type === "list"
 
