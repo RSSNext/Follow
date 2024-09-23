@@ -3,7 +3,7 @@ import { throttle } from "lodash-es"
 import type { RenderComponentProps } from "masonic"
 import { useInfiniteLoader } from "masonic"
 import type { FC } from "react"
-import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useEventCallback } from "usehooks-ts"
 
 import { Masonry } from "~/components/ui/Masonry"
@@ -56,7 +56,6 @@ const getCurrentColumn = (w: number) => {
 }
 const gutter = 24
 
-const MemoedMasonry = memo(Masonry)
 export const PictureMasonry: FC<MasonryProps> = (props) => {
   const { data } = props
   const cacheMap = useSingleton(() => new Map<string, object>()).current
@@ -127,16 +126,16 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
       return ret
     }) as { entryId: string; cache?: object }[]
 
-    // if (props.hasNextPage) {
-    //   for (let i = 0; i < 10; i++) {
-    //     result.push({
-    //       entryId: "placeholder",
-    //     })
-    //   }
-    // }
+    if (props.hasNextPage) {
+      for (let i = 0; i < 10; i++) {
+        result.push({
+          entryId: `placeholder${i}`,
+        })
+      }
+    }
 
     return result
-  }, [data, props.hasNextPage])
+  }, [cacheMap, data, props.hasNextPage])
 
   const [masonryItemsRadio, setMasonryItemsRadio] = useState<Record<string, number>>({})
   const maybeLoadMore = useInfiniteLoader(props.endReached, {
@@ -180,7 +179,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
           <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
             <MasonryItemsAspectRatioSetterContext.Provider value={setMasonryItemsRadio}>
               <MasonryIntersectionContext.Provider value={intersectionObserver}>
-                <MemoedMasonry
+                <Masonry
                   items={items}
                   columnGutter={gutter}
                   columnWidth={currentItemWidth}
@@ -188,7 +187,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
                   overscanBy={3}
                   render={render}
                   onRender={maybeLoadMore}
-                  itemKey={itemKey as (data: unknown, index: number) => string | number}
+                  itemKey={itemKey}
                 />
               </MasonryIntersectionContext.Provider>
             </MasonryItemsAspectRatioSetterContext.Provider>

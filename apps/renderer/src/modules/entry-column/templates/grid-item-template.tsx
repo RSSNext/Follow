@@ -33,7 +33,17 @@ export const GridItemFooter = ({
   entryId,
   entryPreview,
   translation,
-}: Pick<GridItemProps, "entryId" | "entryPreview" | "translation">) => {
+
+  // classNames
+
+  titleClassName,
+  descriptionClassName,
+  timeClassName,
+}: Pick<GridItemProps, "entryId" | "entryPreview" | "translation"> & {
+  titleClassName?: string
+  descriptionClassName?: string
+  timeClassName?: string
+}) => {
   const entry = useEntry(entryId) || entryPreview
   const feeds = useFeedById(entry?.feedId)
 
@@ -53,6 +63,7 @@ export const GridItemFooter = ({
           className={cn(
             "relative mb-1 mt-1.5 flex w-full items-center gap-1 truncate font-medium leading-none",
             !!entry.collections && "pr-5",
+            titleClassName,
           )}
         >
           <TitleMarquee className="min-w-0 grow">
@@ -63,9 +74,11 @@ export const GridItemFooter = ({
       </div>
       <div className="flex items-center gap-1 truncate text-[13px]">
         <FeedIcon fallback className="mr-0.5 flex" feed={feeds!} entry={entry.entries} size={18} />
-        <span className="min-w-0 truncate">{getPreferredTitle(feeds)}</span>
-        <span className="text-zinc-500">·</span>
-        <span className="text-zinc-500">
+        <span className={cn("min-w-0 truncate", descriptionClassName)}>
+          {getPreferredTitle(feeds)}
+        </span>
+        <span className={cn("text-zinc-500", timeClassName)}>·</span>
+        <span className={cn("text-zinc-500", timeClassName)}>
           {dayjs
             .duration(dayjs(entry.entries.publishedAt).diff(dayjs(), "minute"), "minute")
             .humanize()}
