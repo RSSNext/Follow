@@ -22,7 +22,7 @@ function localesPlugin(): Plugin {
     enforce: "post",
     generateBundle(_options, bundle) {
       const localesDir = path.resolve(__dirname, "../locales")
-      const namespaces = fs.readdirSync(localesDir)
+      const namespaces = fs.readdirSync(localesDir).filter((dir) => dir !== ".DS_Store")
       const languageResources = {}
 
       namespaces.forEach((namespace) => {
@@ -97,9 +97,9 @@ export const viteRenderBaseConfig = {
     alias: {
       "~": resolve("apps/renderer/src"),
       "@pkg": resolve("package.json"),
-      "@env": resolve("src/env.ts"),
       "@locales": resolve("locales"),
       "@follow/electron-main": resolve("apps/main/src"),
+      "@constants": resolve("constants"),
     },
   },
   base: "/",

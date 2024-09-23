@@ -62,7 +62,7 @@ export const ActionButton = React.forwardRef<
               className={cn(
                 "no-drag-region inline-flex size-8 items-center justify-center text-xl",
                 active && "bg-zinc-500/15 hover:bg-zinc-500/20",
-                "focus-visible:bg-zinc-500/30 focus-visible:!outline-none",
+                //"focus-visible:bg-zinc-500/30 focus-visible:!outline-none",
                 "rounded-md duration-200 hover:bg-theme-button-hover data-[state=open]:bg-theme-button-hover",
                 "disabled:cursor-not-allowed disabled:opacity-50",
                 className,
@@ -163,14 +163,19 @@ export const Button = React.forwardRef<
       {...props}
       onClick={handleClick}
     >
-      <m.span className="center">
-        {isLoading && (
-          <m.span className="center">
-            <LoadingCircle size="small" className="center mr-2" />
+      <span className="contents">
+        {typeof isLoading === "boolean" && (
+          <m.span
+            className="center"
+            animate={{
+              width: isLoading ? "auto" : "0px",
+            }}
+          >
+            {isLoading && <LoadingCircle size="small" className="center mr-2" />}
           </m.span>
         )}
-        <m.span className={cn("center", className)}>{props.children}</m.span>
-      </m.span>
+        <span className={cn("center", className)}>{props.children}</span>
+      </span>
     </MotionButtonBase>
   )
 })

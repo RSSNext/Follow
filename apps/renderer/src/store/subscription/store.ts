@@ -35,7 +35,7 @@ function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
   const result: SubscriptionFlatModel[] = []
   for (const subscription of data) {
     const cloned: SubscriptionFlatModel = { ...subscription }
-    if (!subscription.category && subscription.feeds) {
+    if (!subscription.category && "feeds" in subscription && subscription.feeds) {
       const { siteUrl } = subscription.feeds
       if (!siteUrl) {
         cloned.defaultCategory = subscription.feedId
@@ -99,7 +99,7 @@ class SubscriptionActions {
 
     const transformedData = morphResponseData(res.data)
     this.upsertMany(transformedData)
-    feedActions.upsertMany(res.data.map((s) => s.feeds))
+    feedActions.upsertMany(res.data.map((s) => ("feeds" in s ? s.feeds : s.lists)))
 
     return res.data
   }
@@ -145,30 +145,42 @@ class SubscriptionActions {
     )
   }
 
-  async markReadByFeedIds(feedIds: string[]): Promise<void>
-  async markReadByFeedIds(
-    feedIds: string[],
-    view: FeedViewType,
-    filter?: MarkReadFilter,
-  ): Promise<void>
-  async markReadByFeedIds(...args: [string[], FeedViewType?, MarkReadFilter?]) {
-    const [feedIds, view, filter] = args
-
-    const stableFeedIds = feedIds.concat()
+  async markReadByFeedIds({
+    feedIds,
+    view,
+    filter,
+    listId,
+  }: {
+    feedIds?: string[]
+    view?: FeedViewType
+    filter?: MarkReadFilter
+    listId?: string
+  }) {
+    const stableFeedIds = feedIds?.concat() || []
 
     doMutationAndTransaction(
       () =>
         apiClient.reads.all.$post({
           json: {
-            feedIdList: stableFeedIds,
+            ...(listId
+              ? {
+                  listId,
+                }
+              : {
+                  feedIdList: stableFeedIds,
+                }),
             ...filter,
           },
         }),
       async () => {
-        for (const feedId of stableFeedIds) {
-          // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
-          !filter && feedUnreadActions.updateByFeedId(feedId, 0)
-          entryActions.patchManyByFeedId(feedId, { read: true }, filter)
+        if (listId) {
+          feedUnreadActions.updateByFeedId(listId, 0)
+        } else {
+          for (const feedId of stableFeedIds) {
+            // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
+            !filter && feedUnreadActions.updateByFeedId(feedId, 0)
+            entryActions.patchManyByFeedId(feedId, { read: true }, filter)
+          }
         }
         if (filter) {
           feedUnreadActions.fetchUnreadByView(view)
@@ -202,7 +214,7 @@ class SubscriptionActions {
               if (idSet.has(id)) {
                 const subscription = state.data[id]
                 const feed = getFeedById(subscription.feedId)
-                if (!feed) return
+                if (!feed || feed.type !== "feed") return
                 const { siteUrl } = feed
                 if (!siteUrl) return
                 const parsed = parse(siteUrl)
@@ -341,4 +353,11 @@ export const subscriptionActions = new SubscriptionActions()
 export const getSubscriptionByFeedId = (feedId: FeedId) => {
   const state = get()
   return state.data[feedId]
+}
+
+export const isListSubscription = (feedId?: FeedId) => {
+  if (!feedId) return false
+  const subscription = getSubscriptionByFeedId(feedId)
+  if (!subscription) return false
+  return "listId" in subscription && !!subscription.listId
 }

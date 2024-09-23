@@ -5,10 +5,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { cn } from "~/lib/utils"
-import type { FeedModel } from "~/models"
+import type { TargetModel } from "~/models"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 
-export const FeedCertification = ({ feed, className }: { feed: FeedModel; className?: string }) => {
+export const FeedCertification = ({
+  feed,
+  className,
+}: {
+  feed: TargetModel
+  className?: string
+}) => {
   const me = useWhoami()
   const presentUserProfile = usePresentUserProfileModal("drawer")
   const { t } = useTranslation()
@@ -35,10 +41,7 @@ export const FeedCertification = ({ feed, className }: { feed: FeedModel; classN
       <Tooltip delayDuration={300}>
         <TooltipTrigger asChild>
           <i
-            className={cn(
-              "i-mgc-certificate-cute-fi ml-1.5 size-4 shrink-0 text-amber-500",
-              className,
-            )}
+            className={cn("i-mgc-certificate-cute-fi ml-1.5 shrink-0 text-amber-500", className)}
           />
         </TooltipTrigger>
 

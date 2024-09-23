@@ -3,8 +3,8 @@ import { atom, useAtomValue, useSetAtom } from "jotai"
 import { createElement, useCallback } from "react"
 import { createContext, useContextSelector } from "use-context-selector"
 
+import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
-import { NoopChildren } from "~/components/ui/modal/stacked/utils"
 
 import { SettingModalContent } from "./content"
 
@@ -20,7 +20,7 @@ export const useSettingModal = () => {
           createElement(SettingModalContent, {
             initialTab,
           }),
-        CustomModalComponent: NoopChildren,
+        CustomModalComponent: PlainModal,
         modalContainerClassName: "overflow-hidden",
       }),
     [present],
