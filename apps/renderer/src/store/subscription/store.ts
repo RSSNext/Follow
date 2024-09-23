@@ -355,7 +355,7 @@ export const getSubscriptionByFeedId = (feedId: FeedId) => {
   return state.data[feedId]
 }
 
-export const isSubscriptionAList = (feedId?: FeedId) => {
+export const isSubscriptionList = (feedId?: FeedId) => {
   if (!feedId) return false
   const subscription = getSubscriptionByFeedId(feedId)
   if (!subscription) return false
