@@ -4,19 +4,19 @@
   "feed.follower_other": "关注者",
   "feed.followsAndReads": "在 {{appName}} 上有 {{subscriptionCount}} 个{{subscriptionNoun}}，{{readCount}} 篇{{readNoun}}",
   "feed.read_one": "文章",
-  "feed.read_other": "文章"
+  "feed.read_other": "文章",
   "header.app": "应用",
-  "header.download": "下载"
+  "header.download": "下载",
   "invitation.activate": "激活",
   "invitation.codeOptions.1": "寻找内测用户帮你生成邀请码",
   "invitation.codeOptions.2": "加入官方 Discord 频道，不定期发放邀请码",
-  "invitation.codeOptions.3": "关注官方 X 账号动态，不定期发放邀请码"
+  "invitation.codeOptions.3": "关注官方 X 账号动态，不定期发放邀请码",
   "invitation.earlyAccess": "Follow 目前处于早期体验阶段，需要邀请码才能使用",
   "invitation.earlyAccessMessage": "😰 抱歉，Follow 目前处于早期体验阶段，需要邀请码才能使用",
   "invitation.generateButton": "生成邀请码",
   "invitation.generateCost": "花费 {{INVITATION_PRICE}} Power 生成一个邀请码给你的朋友。",
   "invitation.getCodeMessage": "通过以下方式获取：",
-  "invitation.title": "邀请码"
+  "invitation.title": "邀请码",
   "login.backToWebApp": "返回网页版",
   "login.continueWithGitHub": "使用 GitHub 继续",
   "login.continueWithGoogle": "使用 Google 继续",
@@ -24,7 +24,7 @@
   "login.openApp": "打开应用",
   "login.redirecting": "正在重定向",
   "login.signOut": "登出",
-  "login.welcomeTo": "欢迎来到 "
+  "login.welcomeTo": "欢迎来到 ",
   "redirect.continueInBrowser": "在浏览器中继续",
   "redirect.instruction": "现在可以打开 {{APP_NAME}} 并关闭此页面",
   "redirect.openApp": "打开 {{APP_NAME}}",
