@@ -40,10 +40,7 @@ export const FeedCertification = ({
       <Tooltip delayDuration={300}>
         <TooltipTrigger asChild>
           <i
-            className={cn(
-              "i-mgc-certificate-cute-fi ml-1.5 size-4 shrink-0 text-amber-500",
-              className,
-            )}
+            className={cn("i-mgc-certificate-cute-fi ml-1.5 shrink-0 text-amber-500", className)}
           />
         </TooltipTrigger>
 

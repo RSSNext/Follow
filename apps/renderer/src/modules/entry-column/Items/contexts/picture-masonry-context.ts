@@ -9,6 +9,8 @@ export const useMasonryItemWidth = () => useContext(MasonryItemWidthContext)
 
 export const MasonryItemsAspectRatioContext = createContextSelector({} as Record<string, number>)
 
+export const MasonryIntersectionContext = createContext<IntersectionObserver>(null!)
+
 export const useMasonryItemRatio = (url: string) =>
   useContextSelector(MasonryItemsAspectRatioContext, (ctx) => ctx[url])
 

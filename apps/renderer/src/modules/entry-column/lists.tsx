@@ -9,8 +9,9 @@ import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { m } from "~/components/common/Motion"
 import { EmptyIcon } from "~/components/icons/empty"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
-import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useEntry } from "~/store/entry"
+import { isListSubscription } from "~/store/subscription"
 
 import { DateItem } from "./components/DateItem"
 import { EntryColumnShortcutHandler } from "./EntryColumnShortcutHandler"
@@ -132,10 +133,14 @@ const EntryHeadDateItem: FC<{
 }> = memo(({ entryId }) => {
   const entry = useEntry(entryId)
 
-  const view = useRouteParamsSelector((s) => s.view)
+  const routeParams = useRouteParams()
+  const { feedId, view } = routeParams
+  const isList = isListSubscription(feedId)
 
   if (!entry) return <ReactVirtuosoItemPlaceholder />
-  const date = new Date(entry.entries.publishedAt).toDateString()
+  const date = new Date(
+    isList ? entry.entries.insertedAt : entry.entries.publishedAt,
+  ).toDateString()
   return <DateItem date={date} view={view} />
 })
 

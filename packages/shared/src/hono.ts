@@ -644,6 +644,7 @@ type MediaModel = {
     preview_image_url?: string;
     width?: number;
     height?: number;
+    blurhash?: string;
 };
 type AttachmentsModel = {
     url: string;
@@ -651,6 +652,13 @@ type AttachmentsModel = {
     mime_type?: string;
     size_in_bytes?: number;
     title?: string;
+};
+type ExtraModel = {
+    links?: {
+        url: string;
+        type: string;
+        content_html?: string;
+    }[];
 };
 declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "entries";
@@ -911,6 +919,22 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        extra: drizzle_orm_pg_core.PgColumn<{
+            name: "extra";
+            tableName: "entries";
+            dataType: "json";
+            columnType: "PgJsonb";
+            data: ExtraModel;
+            driverParam: unknown;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -938,7 +962,12 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
         [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
     } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
-}, "media" | "attachments">, {
+    extra: z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+}, "media" | "attachments" | "extra">, {
     attachments: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
         url: z.ZodString;
         duration_in_seconds: z.ZodOptional<z.ZodNumber>;
@@ -977,6 +1006,33 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         height?: number | undefined;
         preview_image_url?: string | undefined;
     }>, "many">>>;
+    extra: z.ZodNullable<z.ZodOptional<z.ZodObject<{
+        links: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+            url: z.ZodString;
+            type: z.ZodString;
+            content_html: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }, {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }>, "many">>>;
+    }, "strip", z.ZodTypeAny, {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    }, {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    }>>>;
 }>, "strip", z.ZodTypeAny, {
     description: string | null;
     title: string | null;
@@ -1005,6 +1061,13 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         mime_type?: string | undefined;
         size_in_bytes?: number | undefined;
     }[] | null | undefined;
+    extra?: {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    } | null | undefined;
 }, {
     description: string | null;
     title: string | null;
@@ -1033,6 +1096,13 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         mime_type?: string | undefined;
         size_in_bytes?: number | undefined;
     }[] | null | undefined;
+    extra?: {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    } | null | undefined;
 }>;
 declare const entriesRelations: drizzle_orm.Relations<"entries", {
     feeds: drizzle_orm.One<"feeds", true>;
@@ -3196,6 +3266,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     };
                     subscriptionCount: number;
                     readCount: number;
+                    feedCount: number;
                     subscription?: {
                         title: string | null;
                         userId: string;
@@ -4252,6 +4323,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             mime_type?: string | undefined;
                             size_in_bytes?: number | undefined;
                         }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
                     };
                     feeds: {
                         type: "feed";
@@ -4336,6 +4414,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             mime_type?: string | undefined;
                             size_in_bytes?: number | undefined;
                         }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
                     };
                     feeds: {
                         type: "feed";
@@ -4408,6 +4493,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         mime_type?: string | undefined;
                         size_in_bytes?: number | undefined;
                     }[] | null | undefined;
+                    extra?: {
+                        links?: {
+                            type: string;
+                            url: string;
+                            content_html?: string | undefined;
+                        }[] | null | undefined;
+                    } | null | undefined;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -4453,6 +4545,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             mime_type?: string | undefined;
                             size_in_bytes?: number | undefined;
                         }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
                     }[] | undefined;
                     feed?: {
                         type: "feed";
@@ -4858,4 +4957,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type FeedModel, type MediaModel, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

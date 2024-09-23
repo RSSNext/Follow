@@ -4,6 +4,7 @@ import { useParams, useSearchParams } from "react-router-dom"
 import { toast } from "sonner"
 
 import { PoweredByFooter } from "~/components/common/PoweredByFooter"
+import { FeedCertification } from "~/components/feed-certification"
 import { FeedIcon } from "~/components/feed-icon"
 import { FollowIcon } from "~/components/icons/follow"
 import { Button } from "~/components/ui/button"
@@ -33,6 +34,7 @@ export function Component() {
     id,
   })
   const feedData = feed.data?.feed as FeedModel
+  const isSubscribed = !!feed.data?.subscription
   const entries = useEntriesPreview({
     id,
   })
@@ -82,6 +84,7 @@ export function Component() {
             <div className="flex flex-col items-center">
               <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
                 <h1>{feed.data.feed.title}</h1>
+                <FeedCertification feed={feed.data.feed} />
               </div>
               <div className="mb-8 text-sm text-zinc-500">{feed.data.feed.description}</div>
             </div>
@@ -116,17 +119,20 @@ export function Component() {
                 </Button>
               )}
               <Button
+                variant={isSubscribed ? "outline" : undefined}
                 onClick={() => {
-                  presentFeedFormModal(id!)
+                  presentFeedFormModal({
+                    feedId: id!,
+                  })
                 }}
               >
                 <FollowIcon className="mr-1 size-3" />
-                {APP_NAME}
+                {isSubscribed ? "Followed" : <>{APP_NAME}</>}
               </Button>
             </span>
             <div
               className={cn(
-                "w-full pb-12",
+                "w-full pb-12 pt-8",
                 views[view].gridMode
                   ? "grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
                   : "flex max-w-3xl flex-col gap-6",

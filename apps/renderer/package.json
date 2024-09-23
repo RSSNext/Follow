@@ -8,7 +8,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@egjs/react-infinitegrid": "4.12.0",
     "@egoist/tipc": "0.3.2",
     "@electron-toolkit/preload": "^3.0.1",
     "@follow/electron-main": "workspace:*",
@@ -71,6 +70,7 @@
     "lethargy": "1.0.9",
     "linkedom": "^0.18.5",
     "lodash-es": "4.17.21",
+    "masonic": "4.0.1",
     "nanoid": "5.0.7",
     "ofetch": "1.4.0",
     "path-to-regexp": "8.1.0",
