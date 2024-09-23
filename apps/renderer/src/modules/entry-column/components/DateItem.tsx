@@ -9,9 +9,11 @@ import { ActionButton } from "~/components/ui/button"
 import { RelativeDay } from "~/components/ui/datetime"
 import { useScrollViewElement } from "~/components/ui/scroll-area/hooks"
 import { IconScaleTransition } from "~/components/ux/transition/icon"
+import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
+import { isListSubscription } from "~/store/subscription"
 
 import { useMarkAllByRoute } from "../hooks/useMarkAll"
 
@@ -103,6 +105,9 @@ const DateItemInner: FC<{
   const timerRef = useRef<any>()
   const W = Wrapper ?? SafeFragment
 
+  const { feedId } = useRouteParams()
+  const isList = isListSubscription(feedId)
+
   return (
     <div
       className={cn(className, isSticky && "border-b")}
@@ -131,7 +136,7 @@ const DateItemInner: FC<{
               setConfirmMark(true)
             }
           }}
-          className="size-7 text-base"
+          className={cn("size-7 text-base", isList && "pointer-events-none opacity-0")}
         >
           <IconScaleTransition
             icon1="i-mgc-check-filled text-green-600"
