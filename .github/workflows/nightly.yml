@@ -89,6 +89,7 @@ jobs:
         run: pnpm i
 
       - name: Set nightly version
+        shell: bash
         run: |
           # Get the current version from package.json
           CURRENT_VERSION=$(node -p "require('./package.json').version")
@@ -99,7 +100,11 @@ jobs:
           NIGHTLY_VERSION="${BASE_VERSION}-nightly.${NIGHTLY_DATE}"
           echo "NIGHTLY_VERSION=$NIGHTLY_VERSION" >> $GITHUB_ENV
           # Update version in package.json
-          sed -i.bak -e "s/\"version\": \".*\"/\"version\": \"$NIGHTLY_VERSION\"/" package.json
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            sed -i "s/\"version\": \".*\"/\"version\": \"$NIGHTLY_VERSION\"/" package.json
+          else
+            sed -i '' "s/\"version\": \".*\"/\"version\": \"$NIGHTLY_VERSION\"/" package.json
+          fi
           echo "Updated version to $NIGHTLY_VERSION"
 
       - name: Build
