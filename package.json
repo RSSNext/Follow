@@ -109,7 +109,6 @@
     "nanoid": "5.0.7",
     "ofetch": "1.3.4",
     "path-to-regexp": "8.1.0",
-    "pnpm": "^9.10.0",
     "posthog-js": "1.161.3",
     "posthog-node": "4.2.0",
     "re-resizable": "6.9.18",
