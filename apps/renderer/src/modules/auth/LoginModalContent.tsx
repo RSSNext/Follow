@@ -44,6 +44,7 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             className={clsx(
               "center h-[48px] w-[320px] rounded-[8px] !bg-black font-sans text-base font-medium text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
               !!loadingLockSet && "pointer-events-none opacity-50",
+              "overflow-hidden",
             )}
             disabled={!!loadingLockSet}
             onClick={() => {
