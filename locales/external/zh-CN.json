@@ -2,7 +2,7 @@
   "copied_link": "链接已复制到剪贴板",
   "feed.feeds_one": "feed",
   "feed.feeds_other": "feeds",
-  "feed.follow_to_view_all": "Follow to view all {{count}} feeds...",
+  "feed.follow_to_view_all": "关注以查看所有的 {{count}} 个订阅...",
   "feed.follower_one": "关注者",
   "feed.follower_other": "关注者",
   "feed.followsAndFeeds": "在 {{appName}} 上有 {{subscriptionCount}} 个{{subscriptionNoun}}和 {{feedsCount}} 个{{feedsNoun}}",
