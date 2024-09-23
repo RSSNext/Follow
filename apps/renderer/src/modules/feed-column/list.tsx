@@ -375,7 +375,7 @@ const SortByAlphabeticalList = ({ view, expansion, data }: FeedListProps) => {
   )
 }
 
-const SortableList = (props: FeedListProps & { by: "count" | "alphabetical" }) => {
+const SortableList = (props: FeedListProps & { by?: "count" | "alphabetical" }) => {
   const userBy = useFeedListSortSelector((s) => s.by)
 
   switch (props.by || userBy) {
