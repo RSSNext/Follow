@@ -4,6 +4,7 @@ import { useCallback, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
 import { currentSupportedLanguages } from "~/@types/constants"
+import { defaultResources } from "~/@types/default-resource"
 import { langLoadingLockMapAtom } from "~/atoms/lang"
 import {
   setGeneralSetting,
@@ -236,9 +237,14 @@ export const LanguageSelector = () => {
           {currentSupportedLanguages.map((lang) => {
             const percent = I18N_COMPLETENESS_MAP[lang]
 
+            const languageName =
+              langT(`langs.${lang}` as any) === `langs.${lang}`
+                ? defaultResources[lang].lang.name
+                : langT(`langs.${lang}` as any)
+
             return (
               <SelectItem key={lang} value={lang}>
-                {langT(`langs.${lang}` as any)}{" "}
+                {languageName}{" "}
                 {typeof percent === "number" ? (percent >= 100 ? null : `(${percent}%)`) : null}
               </SelectItem>
             )
