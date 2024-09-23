@@ -286,16 +286,17 @@ const PreviewUrl: FC<{
     }
   }, [path, data])
 
-  const renderedPath = `${routePrefix}${fullPath}`
+  const renderedPath = `${routePrefix}${fullPath}`.trim();
   return (
     <div className="group relative min-w-0 pb-4">
       <pre className="w-full whitespace-pre-line break-words text-xs text-theme-foreground/40">
-        {renderedPath.trim()} {/* Ensure rendered path is trimmed */}
+        {renderedPath}
       </pre>
       <CopyButton
-        value={renderedPath.trim()} // Ensure copied path is trimmed
+        value={renderedPath}
         className="absolute right-0 top-0 opacity-0 duration-200 group-hover:opacity-100"
       />
     </div>
   )
 }
+
