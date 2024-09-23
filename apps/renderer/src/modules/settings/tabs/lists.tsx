@@ -423,6 +423,7 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
           suggestions={autocompleteSuggestions}
         />
         <Button
+          className="whitespace-nowrap"
           onClick={() => {
             if (isBizId(feedSearchFor)) {
               addMutation.mutate(feedSearchFor)
