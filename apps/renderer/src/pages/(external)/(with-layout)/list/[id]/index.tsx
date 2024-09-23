@@ -1,7 +1,9 @@
 import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
+import { toast } from "sonner"
 
 import { PoweredByFooter } from "~/components/common/PoweredByFooter"
+import { FeedCertification } from "~/components/feed-certification"
 import { FeedIcon } from "~/components/feed-icon"
 import { FollowIcon } from "~/components/icons/follow"
 import { Button } from "~/components/ui/button"
@@ -24,12 +26,12 @@ export function Component() {
   useTitle(feed.data?.feed.title)
   const presentFeedFormModal = usePresentFeedFormModal()
   return (
-    <div className="center h-screen">
+    <>
       {feed.isLoading ? (
         <LoadingCircle size="large" className="center fixed inset-0" />
       ) : (
         feed.data?.feed && (
-          <div className="mx-auto flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
+          <div className="mx-auto mt-12 flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
             <FeedIcon
               fallback
               feed={feed.data.feed}
@@ -39,6 +41,7 @@ export function Component() {
             <div className="flex flex-col items-center">
               <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
                 <h1>{feed.data.feed.title}</h1>
+                <FeedCertification feed={feed.data.feed} />
               </div>
               <div className="mb-8 text-sm text-zinc-500">{feed.data.feed.description}</div>
             </div>
@@ -46,12 +49,21 @@ export function Component() {
               {t("feed.followsAndFeeds", {
                 subscriptionCount: feed.data.subscriptionCount,
                 subscriptionNoun: t("feed.follower", { count: feed.data.subscriptionCount }),
-                feedsCount: listData?.feeds?.length,
+                feedsCount: "feedCount" in feed.data ? feed.data.feedCount : 0,
                 feedsNoun: t("feed.feeds", { count: listData?.feeds?.length }),
                 appName: APP_NAME,
               })}
             </div>
             <span className="center mb-8 flex gap-4">
+              <Button
+                variant={"outline"}
+                onClick={() => {
+                  toast.success(t("copied_link"))
+                  navigator.clipboard.writeText(id!)
+                }}
+              >
+                Copy List ID
+              </Button>
               <Button
                 onClick={() => {
                   presentFeedFormModal({
@@ -63,10 +75,43 @@ export function Component() {
                 {APP_NAME}
               </Button>
             </span>
+            <div className="flex w-full max-w-3xl flex-col gap-4 pb-12 pt-8">
+              {listData.feeds?.slice(0, 5).map((feed) => (
+                <a
+                  className="relative flex cursor-pointer items-center text-base"
+                  href={`/feed/${feed.id}`}
+                  target="_blank"
+                  key={feed.id}
+                >
+                  <FeedIcon
+                    fallback
+                    feed={feed}
+                    className="mask-squircle mask mr-2 shrink-0"
+                    size={20}
+                  />
+                  {feed.title}
+                  <FeedCertification feed={feed} />
+                </a>
+              ))}
+              {"feedCount" in feed.data && (
+                <div
+                  onClick={() => {
+                    presentFeedFormModal({
+                      listId: id!,
+                    })
+                  }}
+                  className="text-sm text-zinc-500"
+                >
+                  {t("feed.follow_to_view_all", {
+                    count: feed.data.feedCount,
+                  })}
+                </div>
+              )}
+            </div>
             <PoweredByFooter className="mt-20 pb-12" />
           </div>
         )
       )}
-    </div>
+    </>
   )
 }
