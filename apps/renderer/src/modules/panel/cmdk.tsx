@@ -253,7 +253,7 @@ const SearchItem = memo(function Item({
         styles["content-visually"],
       )}
       key={`${id}-${feedId}-${entryId}`}
-      id={`${id}-${feedId}-${entryId}`}
+      value={`${id}-${feedId}-${entryId}`}
       onSelect={() => {
         navigateEntry({
           feedId: feedId!,
