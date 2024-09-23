@@ -117,7 +117,9 @@ export function Component() {
               )}
               <Button
                 onClick={() => {
-                  presentFeedFormModal(id!)
+                  presentFeedFormModal({
+                    feedId: id!,
+                  })
                 }}
               >
                 <FollowIcon className="mr-1 size-3" />

@@ -54,7 +54,9 @@ export function Component() {
             <span className="center mb-8 flex gap-4">
               <Button
                 onClick={() => {
-                  presentFeedFormModal(id!)
+                  presentFeedFormModal({
+                    listId: id!,
+                  })
                 }}
               >
                 <FollowIcon className="mr-1 size-3" />
