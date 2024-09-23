@@ -171,6 +171,7 @@
   "sidebar.feed_actions.copy_list_url": "Copy list URL",
   "sidebar.feed_actions.edit": "Edit",
   "sidebar.feed_actions.edit_feed": "Edit feed",
+  "sidebar.feed_actions.edit_list": "Edit list",
   "sidebar.feed_actions.feed_owned_by_you": "This feed is owned by you",
   "sidebar.feed_actions.list_owned_by_you": "This list is owned by you",
   "sidebar.feed_actions.mark_all_as_read": "Mark all as read",

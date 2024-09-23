@@ -22,13 +22,14 @@ export const usePresentFeedFormModal = () => {
           },
     ) => {
       if (me) {
+        const isList = !!("listId" in params)
         present({
-          title: t("sidebar.feed_actions.edit_feed"),
+          title: isList ? t("sidebar.feed_actions.edit_list") : t("sidebar.feed_actions.edit_feed"),
           content: ({ dismiss }) => (
             <FeedForm
               asWidget
-              id={"feedId" in params ? params.feedId : params.listId}
-              isList={!!("listId" in params)}
+              id={isList ? params.listId : params.feedId}
+              isList={isList}
               onSuccess={dismiss}
             />
           ),
