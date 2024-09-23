@@ -21,8 +21,8 @@ if (window.electron && getOS() === "Windows") {
   document.body.style.cssText += `--fo-window-padding-top: ${ElECTRON_CUSTOM_TITLEBAR_HEIGHT}px;`
 }
 ReactDOM.createRoot($container).render(
-  <React.StrictMode>
+  <>
     <RouterProvider router={router} />
     <ClickToComponent editor="cursor" />
-  </React.StrictMode>,
+  </>,
 )

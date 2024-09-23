@@ -164,9 +164,13 @@ export const useEntriesByView = ({
     setMergedEntries({ ...mergedEntries, [view]: entryIds })
   }, [entryIdsAsDeps])
 
-  const sortEntries = isCollection
-    ? sortEntriesIdByStarAt(mergedEntries[view])
-    : sortEntriesIdByEntryPublishedAt(mergedEntries[view])
+  const sortEntries = useMemo(
+    () =>
+      isCollection
+        ? sortEntriesIdByStarAt(mergedEntries[view])
+        : sortEntriesIdByEntryPublishedAt(mergedEntries[view]),
+    [isCollection, mergedEntries, view],
+  )
 
   const groupByDate = useGeneralSettingKey("groupByDate")
   const groupedCounts: number[] | undefined = useMemo(() => {

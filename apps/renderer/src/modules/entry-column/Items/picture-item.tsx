@@ -1,5 +1,6 @@
+import { useLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import type { PropsWithChildren } from "react"
-import { memo, useEffect, useState } from "react"
+import { memo, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { SwipeMedia } from "~/components/ui/media/SwipeMedia"
@@ -13,9 +14,10 @@ import { useImageDimensions } from "~/store/image"
 
 import { usePreviewMedia } from "../../../components/ui/media/hooks"
 import { EntryItemWrapper } from "../layouts/EntryItemWrapper"
-import { GridItem } from "../templates/grid-item-template"
+import { GridItem, GridItemFooter } from "../templates/grid-item-template"
 import type { UniversalItemProps } from "../types"
 import {
+  MasonryIntersectionContext,
   useMasonryItemRatio,
   useMasonryItemWidth,
   useSetStableMasonryItemRatio,
@@ -71,32 +73,48 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
   const previewMedia = usePreviewMedia()
+  const itemWidth = useMasonryItemWidth()
+
+  const [ref, setRef] = useState<HTMLDivElement | null>(null)
+  const intersectionObserver = useContext(MasonryIntersectionContext)
+
+  useLayoutEffect(() => {
+    if (ref) {
+      intersectionObserver.observe(ref)
+    }
+    return () => {
+      if (ref) {
+        intersectionObserver.unobserve(ref)
+      }
+    }
+  }, [ref, intersectionObserver])
 
   if (!entry) return null
 
   return (
-    <EntryItemWrapper
-      view={FeedViewType.Pictures}
-      entry={entry}
-      itemClassName="group hover:bg-theme-item-hover rounded-md"
-    >
-      <GridItem
-        wrapperClassName="p-0 h-full flex flex-col"
-        entryId={entryId}
-        entryPreview={entryPreview}
-        translation={translation}
+    <div ref={setRef} data-entry-id={entryId}>
+      <EntryItemWrapper
+        view={FeedViewType.Pictures}
+        entry={entry}
+        itemClassName="group hover:bg-theme-item-hover rounded-md"
+        style={{
+          width: itemWidth,
+        }}
       >
         {entry.entries.media && entry.entries.media.length > 0 ? (
-          <MasonryItemFixedDimensionWrapper url={entry.entries.media[0].url}>
+          <MasonryItemFixedDimensionWrapper
+            entryId={entryId}
+            entryPreview={entryPreview}
+            translation={translation}
+            url={entry.entries.media[0].url}
+          >
             <SwipeMedia
               media={entry.entries.media}
               className={cn("w-full shrink-0 grow rounded-md", isActive && "rounded-b-none")}
               proxySize={proxySize}
               imgClassName="object-cover"
               uniqueKey={entryId}
-              onPreview={(media, i) => {
-                previewMedia(media, i)
-              }}
+              onPreview={previewMedia}
             />
           </MasonryItemFixedDimensionWrapper>
         ) : (
@@ -105,17 +123,22 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
             No media available
           </div>
         )}
-      </GridItem>
-    </EntryItemWrapper>
+      </EntryItemWrapper>
+    </div>
   )
 })
 
+const MemoiedGridItemFooter = memo(GridItemFooter)
+
 const MasonryItemFixedDimensionWrapper = (
-  props: PropsWithChildren<{
-    url: string
-  }>,
+  props: PropsWithChildren<
+    {
+      url: string
+      entryId: string
+    } & Pick<UniversalItemProps, "entryId" | "entryPreview" | "translation">
+  >,
 ) => {
-  const { url, children } = props
+  const { url, children, entryId, entryPreview, translation } = props
   const dim = useImageDimensions(url)
   const itemWidth = useMasonryItemWidth()
 
@@ -129,16 +152,27 @@ const MasonryItemFixedDimensionWrapper = (
     setItemStableRatio(url, stableRadio)
   }, [setItemStableRatio, stableRadio, url])
 
+  const style = useMemo(
+    () => ({
+      width: itemWidth,
+      height: itemWidth / stableRadioCtx,
+    }),
+    [itemWidth, stableRadioCtx],
+  )
+
+  if (!style.height) return null
+
   return (
-    <div
-      className="relative flex h-full gap-2 overflow-x-auto"
-      style={{
-        width: itemWidth,
-        height: itemWidth / stableRadioCtx,
-      }}
-    >
-      {children}
-    </div>
+    <>
+      <div className="relative flex h-full gap-2 overflow-x-auto" style={style}>
+        {children}
+      </div>
+      <MemoiedGridItemFooter
+        entryId={entryId}
+        entryPreview={entryPreview}
+        translation={translation}
+      />
+    </>
   )
 }
 
@@ -153,13 +187,13 @@ export const PictureItemSkeleton = (
         </div>
         <div className="relative flex-1 px-2 pb-3 pt-1 text-sm">
           <div className="relative mb-1 mt-1.5 truncate font-medium leading-none">
-            <Skeleton className="h-4 w-3/4 " />
+            <Skeleton className="h-4 w-3/4" />
           </div>
           <div className="mt-1 flex items-center gap-1 truncate text-[13px]">
             <Skeleton className="mr-0.5 size-4" />
-            <Skeleton className="h-3 w-1/2 " />
+            <Skeleton className="h-3 w-1/2" />
             <span className="text-zinc-500">·</span>
-            <Skeleton className="h-3 w-12 " />
+            <Skeleton className="h-3 w-12" />
           </div>
         </div>
       </div>
