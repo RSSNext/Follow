@@ -21,6 +21,7 @@ export function Component() {
     isList: true,
   })
   const listData = feed.data?.feed as ListModel
+  const isSubscribed = !!feed.data?.subscription
 
   const { t } = useTranslation("external")
   useTitle(feed.data?.feed.title)
@@ -65,14 +66,15 @@ export function Component() {
                 Copy List ID
               </Button>
               <Button
+                variant={isSubscribed ? "outline" : undefined}
                 onClick={() => {
                   presentFeedFormModal({
                     listId: id!,
                   })
                 }}
               >
-                <FollowIcon className="mr-1 size-3" />
-                {APP_NAME}
+                <FollowIcon className="mr-2 size-3" />
+                {isSubscribed ? "Followed" : <>{APP_NAME}</>}
               </Button>
             </span>
             <div className="flex w-full max-w-3xl flex-col gap-4 pb-12 pt-8">

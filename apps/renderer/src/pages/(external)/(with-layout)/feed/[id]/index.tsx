@@ -34,6 +34,7 @@ export function Component() {
     id,
   })
   const feedData = feed.data?.feed as FeedModel
+  const isSubscribed = !!feed.data?.subscription
   const entries = useEntriesPreview({
     id,
   })
@@ -118,6 +119,7 @@ export function Component() {
                 </Button>
               )}
               <Button
+                variant={isSubscribed ? "outline" : undefined}
                 onClick={() => {
                   presentFeedFormModal({
                     feedId: id!,
@@ -125,7 +127,7 @@ export function Component() {
                 }}
               >
                 <FollowIcon className="mr-1 size-3" />
-                {APP_NAME}
+                {isSubscribed ? "Followed" : <>{APP_NAME}</>}
               </Button>
             </span>
             <div
