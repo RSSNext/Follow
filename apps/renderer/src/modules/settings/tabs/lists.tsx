@@ -85,7 +85,7 @@ export const SettingLists = () => {
                     {t.settings("lists.fee.label")}
                   </TableHead>
 
-                  <TableHead className="w-20" size="sm">
+                  <TableHead className="w-20 text-center" size="sm">
                     {t.common("words.actions")}
                   </TableHead>
                 </TableRow>

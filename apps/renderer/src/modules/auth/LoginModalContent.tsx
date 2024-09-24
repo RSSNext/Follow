@@ -105,7 +105,7 @@ const LoginButtonContent = (props: { children: React.ReactNode; isLoading: boole
       ) : (
         <m.div
           key="text"
-          className="center"
+          className="center whitespace-nowrap"
           transition={{
             type: "spring",
           }}
