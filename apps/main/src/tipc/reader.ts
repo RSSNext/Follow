@@ -45,9 +45,22 @@ export const readerRoute = {
       }
     }),
 
-  getVoices: t.procedure.action(async () => {
-    const voices = await tts.getVoices()
-    return voices
+  getVoices: t.procedure.action(async ({ context: { sender } }) => {
+    const window = BrowserWindow.fromWebContents(sender)
+    try {
+      const voices = await tts.getVoices()
+      return voices
+    } catch (error: any) {
+      if (!window) {
+        return
+      }
+      callGlobalContextMethod(window, "toast.error", [
+        error.message,
+        {
+          duration: 1000,
+        },
+      ])
+    }
   }),
 
   setVoice: t.procedure.input<string>().action(async ({ input, context: { sender } }) => {
