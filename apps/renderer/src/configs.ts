@@ -4,6 +4,18 @@ import { FetchError } from "ofetch"
 
 import { CustomSafeError } from "./components/errors/helper"
 
+const ERROR_PATTERNS = [
+  /Network Error/i,
+  /Fetch Error/i,
+  /XHR Error/i,
+  /adsbygoogle/i,
+  /Failed to fetch/i,
+  "fetch failed",
+  "Unable to open cursor",
+  "Document is not focused.",
+  "HTTP Client Error",
+]
+
 export const SentryConfig: BrowserOptions = {
   // Performance Monitoring
   tracesSampleRate: 1, //  Capture 100% of the transactions
@@ -16,18 +28,14 @@ export const SentryConfig: BrowserOptions = {
   beforeSend(event, hint) {
     const error = hint.originalException
 
-    if (
-      error instanceof Error &&
-      (/Network Error/i.test(error.message) ||
-        /Fetch Error/i.test(error.message) ||
-        /XHR Error/i.test(error.message) ||
-        /adsbygoogle/i.test(error.message) ||
-        /Failed to fetch/i.test(error.message) ||
-        error.message.includes("fetch failed") ||
-        error.message.includes("Unable to open cursor") ||
-        error.message.includes("Document is not focused."))
-    ) {
-      return null
+    if (error instanceof Error) {
+      const isIgnoredError = ERROR_PATTERNS.some((pattern) =>
+        pattern instanceof RegExp ? pattern.test(error.message) : error.message.includes(pattern),
+      )
+
+      if (isIgnoredError) {
+        return null
+      }
     }
 
     const isPassthroughError = [CustomSafeError, FetchError].some((errorType) => {
