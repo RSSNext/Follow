@@ -192,7 +192,7 @@ export const VoiceSelector = () => {
         <SelectTrigger size="sm" className="w-48">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="h-64">
+        <SelectContent position="item-aligned">
           {data?.map((item) => (
             <SelectItem key={item.ShortName} value={item.ShortName}>
               {item.FriendlyName}

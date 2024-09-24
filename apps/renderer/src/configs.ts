@@ -14,6 +14,8 @@ const ERROR_PATTERNS = [
   "Unable to open cursor",
   "Document is not focused.",
   "HTTP Client Error",
+  // Biz errors
+  "Chain aborted",
 ]
 
 export const SentryConfig: BrowserOptions = {
