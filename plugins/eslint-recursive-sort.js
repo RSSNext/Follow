@@ -27,8 +27,8 @@ export default {
       create(context) {
         return {
           Program(node) {
-            if (context.getFilename().endsWith(".json")) {
-              const sourceCode = context.getSourceCode()
+            if (context.filename.endsWith(".json")) {
+              const { sourceCode } = context
               const text = sourceCode.getText()
 
               try {

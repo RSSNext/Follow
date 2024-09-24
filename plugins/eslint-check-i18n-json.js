@@ -1,5 +1,3 @@
-import path from "node:path"
-
 /** @type {import("eslint").ESLint.Plugin} */
 export default {
   rules: {
@@ -16,10 +14,10 @@ export default {
       create(context) {
         return {
           Program(node) {
-            const filename = context.getFilename()
-            if (path.basename(filename) !== "en.json") return
+            const { filename, sourceCode } = context
 
-            const sourceCode = context.getSourceCode()
+            if (!filename.endsWith(".json")) return
+
             let json
             try {
               json = JSON.parse(sourceCode.text)
