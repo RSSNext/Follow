@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 
+import { PlainModal } from "../modal/stacked/custom-modal"
 import { useModalStack } from "../modal/stacked/hooks"
-import { NoopChildren } from "../modal/stacked/utils"
 import type { PreviewMediaProps } from "./preview-media"
 import { PreviewMediaContent } from "./preview-media"
 
@@ -21,7 +21,7 @@ export const usePreviewMedia = () => {
           blur: true,
           className: "bg-black/80",
         },
-        CustomModalComponent: NoopChildren,
+        CustomModalComponent: PlainModal,
         clickOutsideToDismiss: true,
       })
     },

@@ -4,23 +4,26 @@ import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
 import React, { useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
 import { Outlet } from "react-router-dom"
 
 import { setMainContainerElement } from "~/atoms/dom"
+import { useViewport } from "~/atoms/hooks/viewport"
 import { getUISettings, setUISetting } from "~/atoms/settings/ui"
 import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
 import { useLoginModalShow, useWhoami } from "~/atoms/user"
 import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { ErrorComponentType } from "~/components/errors/enum"
 import { PanelSplitter } from "~/components/ui/divider"
+import { Kbd } from "~/components/ui/kbd/Kbd"
+import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { DeclarativeModal } from "~/components/ui/modal/stacked/declarative-modal"
-import { NoopChildren } from "~/components/ui/modal/stacked/utils"
 import { RootPortal } from "~/components/ui/portal"
 import { HotKeyScopeMap } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
+import { useI18n } from "~/hooks/common"
 import { preventDefault } from "~/lib/dom"
 import { cn } from "~/lib/utils"
 import { EnvironmentIndicator } from "~/modules/app/EnvironmentIndicator"
@@ -33,6 +36,7 @@ import { useShortcutsModal } from "~/modules/modal/shortcuts"
 import { CmdF } from "~/modules/panel/cmdf"
 import { SearchCmdK } from "~/modules/panel/cmdk"
 import { CmdNTrigger } from "~/modules/panel/cmdn"
+import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
 
 const FooterInfo = () => {
   const { t } = useTranslation()
@@ -53,7 +57,7 @@ const FooterInfo = () => {
             onClick={() => {
               window.open(`${repository.url}/releases`)
             }}
-            className="center cursor-pointer rounded-full border bg-background p-1.5 shadow-sm"
+            className="center rounded-full border bg-background p-1.5 shadow-sm"
           >
             <i className="i-mgc-download-2-cute-re size-3.5 opacity-80" />
           </button>
@@ -76,6 +80,29 @@ export function Component() {
 
   useDailyTask()
 
+  const isNotSupportWidth = useViewport((v) => v.w < 1024 && v.w !== 0) && !window.electron
+
+  if (isNotSupportWidth) {
+    return (
+      <div className="center fixed inset-0 flex-col text-balance px-4 text-center">
+        <i className="i-mingcute-device-line mb-2 size-16 text-muted-foreground" />
+        <div>{APP_NAME} is not supported on mobile devices.</div>
+        <div>
+          Your device width is <b>{`${window.innerWidth}`}px</b> less than minimum supported width
+          1024px.
+        </div>
+        <div>Please using desktop app to using {APP_NAME}</div>
+
+        <div>
+          Download:{" "}
+          <a className="follow-link--underline" href={repository.url}>
+            {repository.url}
+          </a>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       className="flex h-screen overflow-hidden"
@@ -84,16 +111,19 @@ export function Component() {
     >
       {!import.meta.env.PROD && <EnvironmentIndicator />}
 
-      <FeedResponsiveResizerContainer containerRef={containerRef}>
-        <FeedColumn>
-          <CornerPlayer />
-          <FooterInfo />
+      <AppLayoutGridContainerProvider>
+        <FeedResponsiveResizerContainer containerRef={containerRef}>
+          <FeedColumn>
+            <CornerPlayer />
+            <FooterInfo />
 
-          {ELECTRON && <AutoUpdater />}
+            {ELECTRON && <AutoUpdater />}
 
-          <NetworkStatusIndicator />
-        </FeedColumn>
-      </FeedResponsiveResizerContainer>
+            <NetworkStatusIndicator />
+          </FeedColumn>
+        </FeedResponsiveResizerContainer>
+      </AppLayoutGridContainerProvider>
+
       <main
         ref={setMainContainerElement}
         className="flex min-w-0 flex-1 bg-theme-background pt-[calc(var(--fo-window-padding-top)_-10px)] !outline-none"
@@ -113,7 +143,7 @@ export function Component() {
         <RootPortal>
           <DeclarativeModal
             id="login"
-            CustomModalComponent={NoopChildren}
+            CustomModalComponent={PlainModal}
             open
             title="Login"
             canClose={false}
@@ -196,13 +226,14 @@ const FeedResponsiveResizerContainer = ({
       timer = clearTimeout(timer)
     }
   }, [feedColumnShow])
+  const t = useI18n()
 
   return (
     <>
       <div
         className={cn(
           "shrink-0 overflow-hidden",
-          "absolute inset-y-0 z-10",
+          "absolute inset-y-0 z-[2]",
           feedColumnTempShow && !feedColumnShow && "shadow-drawer-right z-[12] border-r",
           !feedColumnShow && !feedColumnTempShow ? "-translate-x-full delay-200" : "",
           !isDragging ? "duration-200" : "",
@@ -213,9 +244,6 @@ const FeedResponsiveResizerContainer = ({
           "--fo-feed-col-w": `${position}px`,
         }}
       >
-        {/* {React.cloneElement(children, {
-          className: "!bg-native",
-        })} */}
         <Slot className={!feedColumnShow ? "!bg-native" : ""}>{children}</Slot>
       </div>
 
@@ -227,7 +255,34 @@ const FeedResponsiveResizerContainer = ({
       />
 
       {delayShowSplitter && (
-        <PanelSplitter isDragging={isDragging} cursor={separatorCursor} {...separatorProps} />
+        <PanelSplitter
+          isDragging={isDragging}
+          cursor={separatorCursor}
+          {...separatorProps}
+          onDoubleClick={() => {
+            setFeedColumnShow(false)
+          }}
+          tooltip={
+            !isDragging && (
+              <>
+                <div>
+                  {/* <b>Drag</b> to resize */}
+                  <Trans t={t} i18nKey="resize.tooltip.drag_to_resize" components={{ b: <b /> }} />
+                </div>
+                <div className="center">
+                  <span>
+                    <Trans
+                      t={t}
+                      i18nKey="resize.tooltip.double_click_to_collapse"
+                      components={{ b: <b /> }}
+                    />
+                  </span>{" "}
+                  <Kbd className="ml-1">{"["}</Kbd>
+                </div>
+              </>
+            )
+          }
+        />
       )}
     </>
   )

@@ -1,19 +1,23 @@
-import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid"
-import { debounce, throttle } from "lodash-es"
-import type { CSSProperties, FC, PropsWithChildren } from "react"
-import { memo, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { useSingleton } from "foxact/use-singleton"
+import { throttle } from "lodash-es"
+import type { RenderComponentProps } from "masonic"
+import { useInfiniteLoader } from "masonic"
+import type { FC } from "react"
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useEventCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
+import { Masonry } from "~/components/ui/Masonry"
 import { useScrollViewElement } from "~/components/ui/scroll-area/hooks"
+import { Skeleton } from "~/components/ui/skeleton"
+import { useRefValue } from "~/hooks/common"
 import { nextFrame } from "~/lib/dom"
-import { FeedViewType } from "~/lib/enum"
 import { getEntry } from "~/store/entry"
 import { imageActions } from "~/store/image"
 
 import { batchMarkRead } from "../hooks"
-import { EntryItemSkeleton } from "../item"
 import {
+  MasonryIntersectionContext,
   MasonryItemsAspectRatioContext,
   MasonryItemsAspectRatioSetterContext,
   MasonryItemWidthContext,
@@ -51,9 +55,11 @@ const getCurrentColumn = (w: number) => {
 
   return columns
 }
+const gutter = 24
 
 export const PictureMasonry: FC<MasonryProps> = (props) => {
   const { data } = props
+  const cacheMap = useSingleton(() => new Map<string, object>()).current
   const [isInitDim, setIsInitDim] = useState(false)
   const [isInitLayout, setIsInitLayout] = useState(false)
   const [currentItemWidth, setCurrentItemWidth] = useState(0)
@@ -74,12 +80,13 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
   }, [])
   const containerRef = useRef<HTMLDivElement>(null)
   const [currentColumn, setCurrentColumn] = useState(1)
+
   useLayoutEffect(() => {
     const $warpper = containerRef.current
     if (!$warpper) return
     const handler = () => {
       const column = getCurrentColumn($warpper.clientWidth)
-      setCurrentItemWidth(Math.trunc($warpper.clientWidth / column - 20))
+      setCurrentItemWidth(Math.trunc($warpper.clientWidth / column - gutter))
 
       setCurrentColumn(column)
 
@@ -87,7 +94,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
         setIsInitLayout(true)
       })
     }
-    const recal = throttle(handler, 50)
+    const recal = throttle(handler, 1000 / 12)
 
     let previousWidth = $warpper.offsetWidth
     const resizeObserver = new ResizeObserver((entries) => {
@@ -108,19 +115,156 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
     }
   }, [])
 
+  const items = useMemo(() => {
+    const result = data.map((entryId) => {
+      const cache = cacheMap.get(entryId)
+      if (cache) {
+        return cache
+      }
+
+      const ret = { entryId }
+      cacheMap.set(entryId, ret)
+      return ret
+    }) as { entryId: string; cache?: object }[]
+
+    if (props.hasNextPage) {
+      for (let i = 0; i < 10; i++) {
+        result.push({
+          entryId: `placeholder${i}`,
+        })
+      }
+    }
+
+    return result
+  }, [cacheMap, data, props.hasNextPage])
+
+  const [masonryItemsRadio, setMasonryItemsRadio] = useState<Record<string, number>>({})
+  const maybeLoadMore = useInfiniteLoader(props.endReached, {
+    isItemLoaded: (index, items) => !!items[index],
+    minimumBatchSize: 32,
+    threshold: 3,
+  })
+
+  const currentRange = useRef<{ start: number; end: number }>()
+  const handleRender = useCallback(
+    (startIndex: number, stopIndex: number, items: any[]) => {
+      currentRange.current = { start: startIndex, end: stopIndex }
+      return maybeLoadMore(startIndex, stopIndex, items)
+    },
+    [maybeLoadMore],
+  )
+  const scrollElement = useScrollViewElement()
+
+  const [intersectionObserver, setIntersectionObserver] = useState<IntersectionObserver>(null!)
+  const renderMarkRead = useGeneralSettingKey("renderMarkUnread")
+  const scrollMarkRead = useGeneralSettingKey("scrollMarkUnread")
+
+  const dataRef = useRefValue(data)
+  useEffect(() => {
+    if (!renderMarkRead && !scrollMarkRead) return
+    if (!scrollElement) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        renderInViewMarkRead(entries)
+        scrollOutViewMarkRead(entries)
+
+        function scrollOutViewMarkRead(entries: IntersectionObserverEntry[]) {
+          if (!scrollMarkRead) return
+          if (!scrollElement) return
+          let minimumIndex = Number.MAX_SAFE_INTEGER
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              return
+            }
+            const $target = entry.target as HTMLDivElement
+            const $targetScrollTop = $target.getBoundingClientRect().top
+
+            if ($targetScrollTop < 0) {
+              const { index } = (entry.target as HTMLDivElement).dataset
+              if (!index) return
+              const currentIndex = Number.parseInt(index)
+              // if index is 0, or not a number, then skip
+              if (!currentIndex) return
+              // It is possible that the end coordinates beyond the overscan range are still being calculated and the position is not actually determined. Filtering here
+              if (currentIndex > (currentRange.current?.end ?? 0)) {
+                return
+              }
+
+              minimumIndex = Math.min(minimumIndex, currentIndex)
+            }
+          })
+
+          if (minimumIndex !== Number.MAX_SAFE_INTEGER) {
+            batchMarkRead(dataRef.current.slice(0, minimumIndex))
+          }
+        }
+
+        function renderInViewMarkRead(entries: IntersectionObserverEntry[]) {
+          if (!renderMarkRead) return
+          const entryIds: string[] = []
+          entries.forEach((entry) => {
+            if (
+              entry.isIntersecting &&
+              entry.intersectionRatio >= 0.8 &&
+              entry.boundingClientRect.top >= entry.rootBounds!.top
+            ) {
+              entryIds.push((entry.target as HTMLDivElement).dataset.entryId as string)
+            }
+          })
+
+          batchMarkRead(entryIds)
+        }
+      },
+      {
+        rootMargin: "0px",
+        threshold: [0, 1],
+        root: scrollElement,
+      },
+    )
+    setIntersectionObserver(observer)
+    return () => {
+      observer.disconnect()
+    }
+  }, [scrollElement, renderMarkRead, scrollMarkRead, dataRef])
+
   return (
     <div ref={containerRef} className="p-4">
-      <MasonryItemWidthContext.Provider value={currentItemWidth}>
-        {isInitDim && isInitLayout && (
-          <PictureMasonryImpl
-            {...props}
-            column={currentColumn}
-            restoreDimensions={restoreDimensions}
-          />
-        )}
-      </MasonryItemWidthContext.Provider>
+      {isInitDim && isInitLayout && (
+        <MasonryItemWidthContext.Provider value={currentItemWidth}>
+          <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
+            <MasonryItemsAspectRatioSetterContext.Provider value={setMasonryItemsRadio}>
+              <MasonryIntersectionContext.Provider value={intersectionObserver}>
+                <Masonry
+                  items={items}
+                  columnGutter={gutter}
+                  columnWidth={currentItemWidth}
+                  columnCount={currentColumn}
+                  overscanBy={2}
+                  render={render}
+                  onRender={handleRender}
+                  itemKey={itemKey}
+                />
+              </MasonryIntersectionContext.Provider>
+            </MasonryItemsAspectRatioSetterContext.Provider>
+          </MasonryItemsAspectRatioContext.Provider>
+        </MasonryItemWidthContext.Provider>
+      )}
     </div>
   )
+}
+
+const itemKey = (item: { entryId: string }) => item.entryId
+const render: React.ComponentType<
+  RenderComponentProps<{
+    entryId: string
+  }>
+> = ({ data, index }) => {
+  if (data.entryId.startsWith("placeholder")) {
+    return <LoadingSkeletonItem />
+  }
+
+  return <PictureWaterFallItem entryId={data.entryId} index={index} />
 }
 interface MasonryProps {
   data: string[]
@@ -128,126 +272,17 @@ interface MasonryProps {
   hasNextPage: boolean
 }
 
-const PictureMasonryImpl = ({
-  data,
-  endReached,
-  hasNextPage,
-  restoreDimensions,
-  column,
-}: MasonryProps & {
-  restoreDimensions: () => Promise<void>
-  column: number
-}) => {
-  const masonryRef = useRef<MasonryInfiniteGrid>(null)
-
-  const $scroll = useScrollViewElement()
-  const currentItemWidth = useContext(MasonryItemWidthContext)
-  const itemStyle: CSSProperties = useMemo(() => ({ width: currentItemWidth }), [currentItemWidth])
-
-  const [masonryItemsRadio, setMasonryItemsRadio] = useState<Record<string, number>>({})
-
-  const scrollMarkUnread = useGeneralSettingKey("scrollMarkUnread")
-  const inViewMarkRead = useGeneralSettingKey("renderMarkUnread")
-  const handleScroll = useEventCallback(
-    debounce(() => {
-      if (!scrollMarkUnread) return
-      const $masonryRef = masonryRef.current
-      if (!$masonryRef) return
-      const items = $masonryRef.getVisibleItems()
-
-      const first = items[0]
-      if (!first) return
-      const itemIndex = first.element?.dataset.index
-      if (itemIndex === undefined) return
-      const prevIndex = +itemIndex - 1
-      if (Number.isNaN(prevIndex)) return
-      if (prevIndex < 0) return
-      const markReadIdsSlice = data.slice(0, prevIndex + 1)
-
-      batchMarkRead(markReadIdsSlice)
-    }, 100),
-  )
-
+const LoadingSkeletonItem = () => {
+  // random height, between 100-400px
+  const randomHeight = useSingleton(() => Math.random() * 300 + 100).current
   return (
-    <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
-      <MasonryItemsAspectRatioSetterContext.Provider value={setMasonryItemsRadio}>
-        <MasonryInfiniteGrid
-          ref={masonryRef}
-          onRenderComplete={useEventCallback((e) => {
-            if (!inViewMarkRead) {
-              return
-            }
-            const entryIds: string[] = []
-            for (const mount of e.mounted) {
-              const index = +(mount.element?.dataset.index as string)
-              if (Number.isNaN(index)) return
-              const entryId = data[index]
-
-              if (!entryId) continue
-              entryIds.push(entryId)
-            }
-            batchMarkRead(entryIds)
-          })}
-          placeholder={<LoadingSkeletonItem itemStyle={itemStyle} />}
-          onRequestAppend={(e) => {
-            if (!hasNextPage) return
-            e.wait()
-            const nextGroupKey = (+e.groupKey! || 0) + 1
-            e.currentTarget.appendPlaceholders(10, nextGroupKey)
-            endReached()
-              .then(restoreDimensions)
-              .finally(() => {
-                e.ready()
-              })
-          }}
-          onChangeScroll={handleScroll}
-          scrollContainer={$scroll}
-          gap={{ vertical: 24 }}
-          column={column}
-        >
-          {data.map((entryId, index) => (
-            <ItemWrapper
-              data-grid-groupkey={(index / 5) | 0}
-              data-index={index}
-              itemStyle={itemStyle}
-              key={entryId}
-              entryId={entryId}
-            >
-              <PictureWaterFallItem entryId={entryId} />
-            </ItemWrapper>
-          ))}
-        </MasonryInfiniteGrid>
-      </MasonryItemsAspectRatioSetterContext.Provider>
-    </MasonryItemsAspectRatioContext.Provider>
+    <div className="relative flex gap-2 overflow-x-auto">
+      <div
+        className="relative flex w-full shrink-0 items-center overflow-hidden rounded-md"
+        style={{ height: `${randomHeight}px` }}
+      >
+        <Skeleton className="size-full overflow-hidden" />
+      </div>
+    </div>
   )
 }
-
-const LoadingSkeletonItem = ({ itemStyle }: { itemStyle: CSSProperties }) => (
-  <div style={itemStyle}>
-    <EntryItemSkeleton count={1} view={FeedViewType.Pictures} />
-  </div>
-)
-
-const ItemWrapperImpl = ({
-  itemStyle,
-  style,
-  children,
-  entryId,
-  ...rest
-}: {
-  itemStyle: CSSProperties
-  entryId: string
-} & React.HtmlHTMLAttributes<HTMLDivElement> &
-  PropsWithChildren) => (
-  <div
-    style={{
-      ...style,
-      ...itemStyle,
-    }}
-    {...rest}
-  >
-    {children}
-  </div>
-)
-
-const ItemWrapper = memo(ItemWrapperImpl)

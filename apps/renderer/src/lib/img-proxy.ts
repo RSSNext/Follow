@@ -1,5 +1,6 @@
-import { env } from "@follow/shared/env"
 import { imageRefererMatches } from "@follow/shared/image"
+
+import { getAbValue, isAbEnabled } from "~/hooks/biz/useAb"
 
 export const getImageProxyUrl = ({
   url,
@@ -9,7 +10,14 @@ export const getImageProxyUrl = ({
   url: string
   width: number
   height: number
-}) => `${env.VITE_IMGPROXY_URL}?url=${encodeURIComponent(url)}&width=${width}&height=${height}`
+}) => {
+  const abValue = getAbValue("Image_Proxy_V2")
+  if (isAbEnabled("Image_Proxy_V2")) {
+    return `${abValue}?url=${encodeURIComponent(url)}&width=${width}&height=${height}`
+  } else {
+    return `${abValue}/unsafe/fit-in/${width}x${height}/${encodeURIComponent(url)}`
+  }
+}
 
 export const replaceImgUrlIfNeed = (url: string) => {
   for (const rule of imageRefererMatches) {

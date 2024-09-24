@@ -64,6 +64,7 @@ export const EntryListHeader: FC<{
   const isOnline = useIsOnline()
 
   const feed = useFeedById(routerParams.feedId)
+  const isList = feed?.type === "list"
 
   const titleStyleBasedView = ["pl-12", "pl-7", "pl-7", "pl-7", "px-5", "pl-12"]
 
@@ -103,7 +104,9 @@ export const EntryListHeader: FC<{
           </AppendTaildingDivider>
 
           {isOnline ? (
-            feed?.ownerUserId === user?.id && isBizId(routerParams.feedId!) ? (
+            feed?.ownerUserId === user?.id &&
+            isBizId(routerParams.feedId!) &&
+            feed?.type === "feed" ? (
               <ActionButton
                 tooltip="Refresh"
                 onClick={() => {
@@ -130,22 +133,26 @@ export const EntryListHeader: FC<{
               </ActionButton>
             )
           ) : null}
-          <ActionButton
-            tooltip={
-              !unreadOnly
-                ? t("entry_list_header.show_unread_only")
-                : t("entry_list_header.show_all")
-            }
-            shortcut={shortcuts.entries.toggleUnreadOnly.key}
-            onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
-          >
-            {unreadOnly ? (
-              <i className="i-mgc-round-cute-fi" />
-            ) : (
-              <i className="i-mgc-round-cute-re" />
-            )}
-          </ActionButton>
-          <MarkAllReadWithOverlay containerRef={containerRef} shortcut />
+          {!isList && (
+            <>
+              <ActionButton
+                tooltip={
+                  !unreadOnly
+                    ? t("entry_list_header.show_unread_only")
+                    : t("entry_list_header.show_all")
+                }
+                shortcut={shortcuts.entries.toggleUnreadOnly.key}
+                onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
+              >
+                {unreadOnly ? (
+                  <i className="i-mgc-round-cute-fi" />
+                ) : (
+                  <i className="i-mgc-round-cute-re" />
+                )}
+              </ActionButton>
+              <MarkAllReadWithOverlay containerRef={containerRef} shortcut />
+            </>
+          )}
         </div>
       </div>
       {titleAtBottom && titleInfo}

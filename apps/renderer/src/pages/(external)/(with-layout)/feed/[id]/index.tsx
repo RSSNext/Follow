@@ -4,6 +4,7 @@ import { useParams, useSearchParams } from "react-router-dom"
 import { toast } from "sonner"
 
 import { PoweredByFooter } from "~/components/common/PoweredByFooter"
+import { FeedCertification } from "~/components/feed-certification"
 import { FeedIcon } from "~/components/feed-icon"
 import { FollowIcon } from "~/components/icons/follow"
 import { Button } from "~/components/ui/button"
@@ -14,6 +15,7 @@ import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
 import { useTitle } from "~/hooks/common"
 import { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
+import type { FeedModel } from "~/models"
 import { ArticleItem } from "~/modules/entry-column/Items/article-item"
 import { NotificationItem } from "~/modules/entry-column/Items/notification-item"
 import { PictureItem } from "~/modules/entry-column/Items/picture-item"
@@ -31,6 +33,8 @@ export function Component() {
   const feed = useFeed({
     id,
   })
+  const feedData = feed.data?.feed as FeedModel
+  const isSubscribed = !!feed.data?.subscription
   const entries = useEntriesPreview({
     id,
   })
@@ -80,6 +84,7 @@ export function Component() {
             <div className="flex flex-col items-center">
               <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
                 <h1>{feed.data.feed.title}</h1>
+                <FeedCertification feed={feed.data.feed} />
               </div>
               <div className="mb-8 text-sm text-zinc-500">{feed.data.feed.description}</div>
             </div>
@@ -93,11 +98,11 @@ export function Component() {
               })}
             </div>
             <span className="center mb-8 flex gap-4">
-              {feed.data.feed.url.startsWith("https://") ? (
+              {feedData.url.startsWith("https://") ? (
                 <Button
                   variant={"outline"}
                   onClick={() => {
-                    window.open(feed.data.feed.url, "_blank")
+                    window.open(feedData.url, "_blank")
                   }}
                 >
                   View Feed URL
@@ -107,24 +112,27 @@ export function Component() {
                   variant={"outline"}
                   onClick={() => {
                     toast.success(t("copied_link"))
-                    navigator.clipboard.writeText(feed.data.feed.url)
+                    navigator.clipboard.writeText(feedData.url)
                   }}
                 >
                   Copy Feed URL
                 </Button>
               )}
               <Button
+                variant={isSubscribed ? "outline" : undefined}
                 onClick={() => {
-                  presentFeedFormModal(id!)
+                  presentFeedFormModal({
+                    feedId: id!,
+                  })
                 }}
               >
                 <FollowIcon className="mr-1 size-3" />
-                {APP_NAME}
+                {isSubscribed ? "Followed" : <>{APP_NAME}</>}
               </Button>
             </span>
             <div
               className={cn(
-                "w-full pb-12",
+                "w-full pb-12 pt-8",
                 views[view].gridMode
                   ? "grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
                   : "flex max-w-3xl flex-col gap-6",
@@ -141,10 +149,9 @@ export function Component() {
                     <Item
                       entryPreview={{
                         entries: entry,
-                        // @ts-expect-error
-                        feeds: feed.data.feed as FeedModel,
+                        feeds: feedData,
                         read: true,
-                        feedId: feed.data.feed.id!,
+                        feedId: feedData.id!,
                       }}
                       entryId={entry.id}
                     />

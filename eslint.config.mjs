@@ -1,6 +1,10 @@
 // @ts-check
 import { defineConfig } from "eslint-config-hyoban"
 
+import checkI18nJson from "./plugins/eslint-check-i18n-json.js"
+import noDebug from "./plugins/eslint-no-debug.js"
+import recursiveSort from "./plugins/eslint-recursive-sort.js"
+
 export default defineConfig(
   {
     formatting: false,
@@ -19,7 +23,11 @@ export default defineConfig(
         whitelist: ["center"],
       },
     },
+    plugins: {
+      "no-debug": noDebug,
+    },
     rules: {
+      "no-debug/no-debug-stack": "error",
       "unicorn/prefer-math-trunc": "off",
       "@eslint-react/no-clone-element": 0,
       "@eslint-react/hooks-extra/no-direct-set-state-in-use-effect": 0,
@@ -45,14 +53,13 @@ export default defineConfig(
   },
   {
     files: ["locales/**/*.json"],
+    plugins: {
+      "recursive-sort": recursiveSort,
+      "check-i18n-json": checkI18nJson,
+    },
     rules: {
-      "jsonc/sort-keys": [
-        "error",
-        {
-          pathPattern: ".*",
-          order: { type: "asc" },
-        },
-      ],
+      "recursive-sort/recursive-sort": "error",
+      "check-i18n-json/valid-i18n-keys": "error",
     },
   },
 )

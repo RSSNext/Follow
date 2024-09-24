@@ -75,7 +75,7 @@
     border-width: 1px;
     border-color: var(--fallback-bc, theme(colors.theme.accent.DEFAULT));
 
-    --bc: theme(colors.accent.foreground);
+    --bc: theme(colors.background);
     --fallback-bc: var(--bc);
     --chkbg: var(--bc);
     --fallback-b1: theme(colors.background);

@@ -6,7 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { MotionButtonBase } from "~/components/ui/button"
 import { RelativeTime } from "~/components/ui/datetime"
 import { LoadingCircle } from "~/components/ui/loading"
-import { ScrollArea } from "~/components/ui/scroll-area"
 import {
   Table,
   TableBody,
@@ -16,6 +15,7 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
+import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { cn } from "~/lib/utils"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { SettingSectionTitle } from "~/modules/settings/section"
@@ -41,14 +41,14 @@ export const TransactionsSection = () => {
   }
 
   return (
-    <div className="grow">
+    <div className="relative flex min-w-0 grow flex-col">
       <SettingSectionTitle title={t("wallet.transactions.title")} />
 
-      <ScrollArea.ScrollArea viewportClassName="grow">
-        <Table>
+      <div className="w-fit min-w-0 grow overflow-x-auto">
+        <Table className="w-full table-fixed">
           <TableHeader>
             <TableRow className="[&_*]:!font-semibold">
-              <TableHead className="min-w-16 whitespace-nowrap text-center" size="sm">
+              <TableHead className="whitespace-nowrap text-center" size="sm">
                 {t("wallet.transactions.type")}
               </TableHead>
               <TableHead className="whitespace-nowrap text-center" size="sm">
@@ -63,7 +63,7 @@ export const TransactionsSection = () => {
               <TableHead className="whitespace-nowrap pl-6" size="sm">
                 {t("wallet.transactions.date")}
               </TableHead>
-              <TableHead className="whitespace-nowrap pl-6" size="sm">
+              <TableHead className="whitespace-nowrap pl-6 text-center" size="sm">
                 {t("wallet.transactions.tx")}
               </TableHead>
             </TableRow>
@@ -83,12 +83,14 @@ export const TransactionsSection = () => {
                 <TableCell align="left" className="px-3" size="sm">
                   <UserRenderer user={row.fromUser} />
                 </TableCell>
-                <TableCell align="left" className="px-3" size="sm">
+                <TableCell align="left" className="truncate px-3" size="sm">
                   <UserRenderer user={row.toUser} />
                 </TableCell>
 
-                <TableCell align="left" size="sm" className="pl-6">
-                  <RelativeTime date={row.createdAt} dateFormatTemplate="l" />
+                <TableCell align="left" size="sm" className="whitespace-nowrap pl-6">
+                  <EllipsisHorizontalTextWithTooltip>
+                    <RelativeTime date={row.createdAt} dateFormatTemplate="l" />
+                  </EllipsisHorizontalTextWithTooltip>
                 </TableCell>
                 <TableCell align="left" size="sm" className="pl-6">
                   <Tooltip>
@@ -106,12 +108,12 @@ export const TransactionsSection = () => {
             ))}
           </TableBody>
         </Table>
-        {!transactions.data?.length && (
-          <div className="my-2 w-full text-center text-sm text-zinc-400">
-            {t("wallet.transactions.noTransactions")}
-          </div>
-        )}
-      </ScrollArea.ScrollArea>
+      </div>
+      {!transactions.data?.length && (
+        <div className="my-2 w-full text-center text-sm text-zinc-400">
+          {t("wallet.transactions.noTransactions")}
+        </div>
+      )}
     </div>
   )
 }
@@ -174,7 +176,7 @@ const UserRenderer = ({
       onClick={() => {
         if (user?.id) presentUserModal(user.id)
       }}
-      className={cn("flex items-center", user?.id ? "cursor-pointer" : "cursor-default")}
+      className="flex w-full min-w-0 cursor-button items-center"
     >
       {name === APP_NAME ? (
         <Logo className="aspect-square size-4" />
@@ -185,8 +187,14 @@ const UserRenderer = ({
         </Avatar>
       )}
 
-      <div className="ml-1">
-        {isMe ? <span className="font-bold">{t("wallet.transactions.you")}</span> : name}
+      <div className="ml-1 w-0 grow truncate">
+        <EllipsisHorizontalTextWithTooltip className="text-left">
+          {isMe ? (
+            <span className="font-bold">{t("wallet.transactions.you")}</span>
+          ) : (
+            <span>{name}</span>
+          )}
+        </EllipsisHorizontalTextWithTooltip>
       </div>
     </MotionButtonBase>
   )

@@ -7,7 +7,7 @@ import { cn } from "~/lib/utils"
 
 export const styledButtonVariant = cva(
   [
-    "inline-flex cursor-default select-none items-center justify-center gap-2 outline-offset-2 transition active:transition-none disabled:cursor-not-allowed",
+    "inline-flex cursor-button select-none items-center justify-center outline-offset-2 transition active:transition-none disabled:cursor-not-allowed",
     "ring-accent/20 duration-200 disabled:ring-0",
     "align-middle",
   ],

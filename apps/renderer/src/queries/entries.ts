@@ -114,15 +114,20 @@ export const useEntries = ({
   view,
   read,
   isArchived,
+  isList,
 }: {
   id?: number | string
   view?: number
   read?: boolean
   isArchived?: boolean
+  isList?: boolean
 }) =>
   useAuthInfiniteQuery(entries.entries({ id, view, read, isArchived }), {
     enabled: id !== undefined,
-    getNextPageParam: (lastPage) => lastPage.data?.at(-1)?.entries.publishedAt,
+    getNextPageParam: (lastPage) =>
+      isList
+        ? lastPage.data?.at(-1)?.entries.insertedAt
+        : lastPage.data?.at(-1)?.entries.publishedAt,
     initialPageParam: undefined,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

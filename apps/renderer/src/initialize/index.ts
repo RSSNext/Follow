@@ -7,6 +7,8 @@ import duration from "dayjs/plugin/duration"
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { enableMapSet } from "immer"
+import React from "react"
+import ReactDOM from "react-dom"
 import { toast } from "sonner"
 
 import { getUISettings } from "~/atoms/settings/ui"
@@ -95,12 +97,11 @@ export const initializeApp = async () => {
   })
 
   // should after hydrateSettings
-  const { dataPersist: enabledDataPersist, sendAnonymousData } = getGeneralSettings()
+  const { dataPersist: enabledDataPersist } = getGeneralSettings()
 
   initSentry()
+  initPostHog()
   await apm("i18n", initI18n)
-
-  if (sendAnonymousData) initPostHog()
 
   let dataHydratedTime: undefined | number
   // Initialize the database
@@ -119,6 +120,10 @@ export const initializeApp = async () => {
     data_hydrated_time: dataHydratedTime,
     version: APP_VERSION,
   })
+
+  // expose `React` `ReactDOM` to global, it's easier for developers to make plugins
+  window.React = React
+  window.ReactDOM = ReactDOM
 }
 
 import.meta.hot?.dispose(cleanup)

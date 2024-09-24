@@ -10,6 +10,6 @@ export const useRefValue = <S>(
 
   useLayoutEffect(() => {
     ref.current = value
-  })
+  }, [value])
   return ref as any
 }

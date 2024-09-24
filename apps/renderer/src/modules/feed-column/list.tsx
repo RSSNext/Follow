@@ -29,7 +29,7 @@ import {
 import { FeedCategory } from "./category"
 import { UnreadNumber } from "./unread-number"
 
-const useGroupedData = (view: FeedViewType) => {
+const useFeedsGroupedData = (view: FeedViewType) => {
   const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
 
   const data = useSubscriptionByView(view) || remoteData
@@ -53,6 +53,26 @@ const useGroupedData = (view: FeedViewType) => {
   }, [data])
 }
 
+const useListsGroupedData = (view: FeedViewType) => {
+  const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
+
+  const data = useSubscriptionByView(view) || remoteData
+
+  return useMemo(() => {
+    if (!data || data.length === 0) return {}
+
+    const groupFolder = {} as Record<string, string[]>
+
+    for (const subscription of data) {
+      if (!subscription.category && !subscription.defaultCategory) {
+        groupFolder[subscription.feedId] = [subscription.feedId]
+      }
+    }
+
+    return groupFolder
+  }, [data])
+}
+
 const useUpdateUnreadCount = () => {
   useAuthQuery(Queries.subscription.unreadAll(), {
     refetchInterval: false,
@@ -61,40 +81,38 @@ const useUpdateUnreadCount = () => {
 
 function FeedListImpl({ className, view }: { className?: string; view: number }) {
   const [expansion, setExpansion] = useState(false)
-  const data = useGroupedData(view)
+  const feedsData = useFeedsGroupedData(view)
+  const listsData = useListsGroupedData(view)
 
   useUpdateUnreadCount()
 
   const totalUnread = useFeedUnreadStore((state) => {
     let unread = 0
 
-    for (const category in data) {
-      for (const feedId of data[category]) {
+    for (const category in feedsData) {
+      for (const feedId of feedsData[category]) {
         unread += state.data[feedId] || 0
       }
     }
     return unread
   })
 
-  const hasData = Object.keys(data).length > 0
+  const hasData = Object.keys(feedsData).length > 0 || Object.keys(listsData).length > 0
 
   const feedId = useRouteFeedId()
-  const navigate = useNavigateEntry()
+  const navigateEntry = useNavigateEntry()
 
   const { t } = useTranslation()
 
   return (
     <div className={cn(className, "font-medium")}>
-      <div
-        onClick={stopPropagation}
-        className="mx-3 mb-2 flex items-center justify-between px-2.5 py-1"
-      >
+      <div onClick={stopPropagation} className="mx-3 flex items-center justify-between px-2.5 py-1">
         <div
           className="font-bold"
           onClick={(e) => {
             e.stopPropagation()
             if (view !== undefined) {
-              navigate({
+              navigateEntry({
                 entryId: null,
                 feedId: null,
                 view,
@@ -114,16 +132,17 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           <UnreadNumber unread={totalUnread} className="text-xs !text-inherit" />
         </div>
       </div>
+
       <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3" rootClassName="h-full">
         <div
           className={cn(
-            "flex h-8 w-full shrink-0 items-center rounded-md px-2.5 transition-colors",
+            "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5 transition-colors",
             feedId === FEED_COLLECTION_LIST && "bg-native-active",
           )}
           onClick={(e) => {
             e.stopPropagation()
             if (view !== undefined) {
-              navigate({
+              navigateEntry({
                 entryId: null,
                 feedId: FEED_COLLECTION_LIST,
                 view,
@@ -131,20 +150,36 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             }
           }}
         >
-          <i className="i-mgc-star-cute-fi mr-2 text-orange-500" />
+          <i className="i-mgc-star-cute-fi size-4 -translate-y-px text-amber-500" />
           {t("words.starred")}
         </div>
+        {Object.keys(listsData).length > 0 && (
+          <>
+            <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+              {t("words.lists")}
+            </div>
+            <SortableList view={view} expansion={expansion} data={listsData} by="alphabetical" />
+          </>
+        )}
+        <div
+          className={cn(
+            "flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
+            Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
+          )}
+        >
+          {t("words.feeds")}
+        </div>
         {hasData ? (
-          <SortableList view={view} expansion={expansion} data={data} />
+          <SortableList view={view} expansion={expansion} data={feedsData} />
         ) : (
           <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
             <Link
               to="/discover"
-              className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-default flex-col items-center justify-center gap-2"
+              className="absolute inset-0 mt-[-3.75rem] flex h-full flex-1 cursor-menu flex-col items-center justify-center gap-2"
               onClick={stopPropagation}
             >
               <i className="i-mgc-add-cute-re text-3xl" />
-              <span className="text-base">Add some feeds</span>
+              <span className="text-base">{t("sidebar.add_more_feeds")}</span>
             </Link>
           </div>
         )}
@@ -340,10 +375,10 @@ const SortByAlphabeticalList = ({ view, expansion, data }: FeedListProps) => {
   )
 }
 
-const SortableList = (props: FeedListProps) => {
-  const by = useFeedListSortSelector((s) => s.by)
+const SortableList = (props: FeedListProps & { by?: "count" | "alphabetical" }) => {
+  const userBy = useFeedListSortSelector((s) => s.by)
 
-  switch (by) {
+  switch (props.by || userBy) {
     case "count": {
       return <SortByUnreadList {...props} />
     }
