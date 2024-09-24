@@ -156,11 +156,12 @@ const MediaImpl: FC<MediaProps> = ({
 
   if (!type || !src) return null
 
-  if (hidden && showFallback) {
+  if (hidden && (showFallback || (!showFallback && mediaLoadState === "error"))) {
     return (
       <FallbackMedia
         mediaContainerClassName={mediaContainerClassName}
         className={className}
+        style={style}
         {...props}
       />
     )
@@ -179,7 +180,7 @@ const MediaImpl: FC<MediaProps> = ({
 export const Media: FC<MediaProps> = memo((props) => <MediaImpl {...props} key={props.src} />)
 
 const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, className, ...props }) => (
-  <div className={className}>
+  <div className={className} style={props.style}>
     <div
       className={cn(
         !(props.width || props.height) && "size-full",
