@@ -264,7 +264,7 @@ const NettingSetting = () => {
     <SettingItemGroup>
       <SettingInput
         type="text"
-        label={t("general.proxy")}
+        label={t("general.proxy.label")}
         labelClassName="w-[150px]"
         value={proxyConfig}
         onChange={(event) => setProxyConfig(event.target.value.trim())}
