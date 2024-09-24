@@ -93,3 +93,11 @@ export const shortcuts = {
     },
   },
 } as const
+
+export const shortcutsType: { [key in keyof typeof shortcuts]: string } = {
+  feeds: "keys.type.feeds",
+  layout: "keys.type.layout",
+  entries: "keys.type.entries",
+  entry: "keys.type.entry",
+  audio: "keys.type.audio",
+}
