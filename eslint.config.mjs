@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "eslint-config-hyoban"
 
+import checkI18nJson from "./plugins/eslint-check-i18n-json.js"
 import recursiveSort from "./plugins/eslint-recursive-sort.js"
 
 export default defineConfig(
@@ -49,9 +50,11 @@ export default defineConfig(
     files: ["locales/**/*.json"],
     plugins: {
       "recursive-sort": recursiveSort,
+      "check-i18n-json": checkI18nJson,
     },
     rules: {
       "recursive-sort/recursive-sort": "error",
+      "check-i18n-json/valid-i18n-keys": "error",
     },
   },
 )
