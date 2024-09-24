@@ -9,4 +9,11 @@ declare global {
     platform: NodeJS.Platform
   }
 }
+
+declare module "react" {
+  export interface AriaAttributes {
+    "data-testid"?: string
+  }
+}
+
 export {}

@@ -2,7 +2,7 @@ import fs from "node:fs"
 import { createRequire } from "node:module"
 import path from "node:path"
 
-import { callGlobalContextMethod } from "@follow/shared/bridge"
+import { callWindowExpose } from "@follow/shared/bridge"
 import { app, BrowserWindow } from "electron"
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts"
 
@@ -54,12 +54,9 @@ export const readerRoute = {
       if (!window) {
         return
       }
-      callGlobalContextMethod(window, "toast.error", [
-        error.message,
-        {
-          duration: 1000,
-        },
-      ])
+      callWindowExpose(window).toast.error(error.message, {
+        duration: 1000,
+      })
     }
   }),
 
@@ -70,12 +67,9 @@ export const readerRoute = {
     }
 
     await tts.setMetadata(input, OUTPUT_FORMAT.WEBM_24KHZ_16BIT_MONO_OPUS).catch((error) => {
-      callGlobalContextMethod(window, "toast.error", [
-        error.message,
-        {
-          duration: 1000,
-        },
-      ])
+      callWindowExpose(window).toast.error(error.message, {
+        duration: 1000,
+      })
     })
   }),
 

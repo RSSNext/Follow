@@ -5,6 +5,7 @@ import { Provider } from "jotai"
 import type { FC, PropsWithChildren } from "react"
 import { HotkeysProvider } from "react-hotkeys-hook"
 
+import { LottieRenderContainer } from "~/components/ui/lottie-container"
 import { ModalStackProvider } from "~/components/ui/modal"
 import { Toaster } from "~/components/ui/sonner"
 import { HotKeyScopeMap } from "~/constants"
@@ -39,6 +40,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <SettingSync />
               <ModalStackProvider />
               <ContextMenuProvider />
+              <LottieRenderContainer />
               <StableRouterProvider />
               <FeatureFlagDebugger />
               {import.meta.env.DEV && <Devtools />}

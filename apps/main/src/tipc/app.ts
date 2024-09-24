@@ -1,7 +1,7 @@
 import path from "node:path"
 
 import { getRendererHandlers } from "@egoist/tipc/main"
-import { callGlobalContextMethod } from "@follow/shared/bridge"
+import { callWindowExpose } from "@follow/shared/bridge"
 import type { BrowserWindow } from "electron"
 import { app, clipboard, dialog, screen } from "electron"
 
@@ -199,13 +199,17 @@ export const appRoute = {
     await downloadFile(input, result.filePath).catch((err) => {
       const senderWindow = (sender as Sender).getOwnerBrowserWindow()
       if (!senderWindow) return
-      callGlobalContextMethod(senderWindow, "toast.error", ["Download failed!"])
+      callWindowExpose(senderWindow).toast.error("Download failed!", {
+        duration: 1000,
+      })
       throw err
     })
 
     const senderWindow = (sender as Sender).getOwnerBrowserWindow()
     if (!senderWindow) return
-    callGlobalContextMethod(senderWindow, "toast.success", ["Download success!"])
+    callWindowExpose(senderWindow).toast.success("Download success!", {
+      duration: 1000,
+    })
   }),
 
   getAppPath: t.procedure.action(async () => app.getAppPath()),
