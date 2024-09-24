@@ -206,7 +206,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
           entries.forEach((entry) => {
             if (
               entry.isIntersecting &&
-              entry.intersectionRatio >= 0.8 && // 检查元素是否从下方滑入视图
+              entry.intersectionRatio >= 0.8 &&
               entry.boundingClientRect.top >= entry.rootBounds!.top
             ) {
               entryIds.push((entry.target as HTMLDivElement).dataset.entryId as string)
