@@ -1,4 +1,4 @@
-import { callGlobalContextMethod } from "@follow/shared/bridge"
+import { callWindowExpose } from "@follow/shared/bridge"
 import { dialog } from "electron"
 
 import { getMainWindow } from "~/window"
@@ -17,6 +17,7 @@ export const clearAllData = async () => {
     message: t("dialog.clearAllData"),
     buttons: [t("dialog.yes"), t("dialog.no")],
   })
+  const caller = callWindowExpose(win)
 
   if (result.response === 1) {
     return
@@ -36,11 +37,12 @@ export const clearAllData = async () => {
         "cookies",
       ],
     })
-    callGlobalContextMethod(win, "toast.success", ["App data reset successfully"])
+
+    caller.toast.success("App data reset successfully")
 
     // reload the app
     win.reload()
   } catch (error: any) {
-    callGlobalContextMethod(win, "toast.error", [`Error resetting app data: ${error.message}`])
+    caller.toast.error(`Error resetting app data: ${error.message}`)
   }
 }
