@@ -88,9 +88,11 @@ const LoginButtonContent = (props: { children: React.ReactNode; isLoading: boole
         <m.div
           animate={{
             y: 0,
+            opacity: 1,
           }}
           initial={{
             y: -30,
+            opacity: 0,
           }}
           transition={{
             type: "spring",
@@ -109,6 +111,7 @@ const LoginButtonContent = (props: { children: React.ReactNode; isLoading: boole
           }}
           exit={{
             y: "-100%",
+            opacity: 0,
           }}
         >
           {children}
