@@ -3,18 +3,19 @@ import { throttle } from "lodash-es"
 import type { RenderComponentProps } from "masonic"
 import { useInfiniteLoader } from "masonic"
 import type { FC } from "react"
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useEventCallback } from "usehooks-ts"
 
+import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { Masonry } from "~/components/ui/Masonry"
 import { useScrollViewElement } from "~/components/ui/scroll-area/hooks"
+import { Skeleton } from "~/components/ui/skeleton"
+import { useRefValue } from "~/hooks/common"
 import { nextFrame } from "~/lib/dom"
-import { FeedViewType } from "~/lib/enum"
 import { getEntry } from "~/store/entry"
 import { imageActions } from "~/store/image"
 
 import { batchMarkRead } from "../hooks"
-import { EntryItemSkeleton } from "../item"
 import {
   MasonryIntersectionContext,
   MasonryItemsAspectRatioContext,
@@ -144,25 +145,80 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
     threshold: 3,
   })
 
+  const currentRange = useRef<{ start: number; end: number }>()
+  const handleRender = useCallback(
+    (startIndex: number, stopIndex: number, items: any[]) => {
+      currentRange.current = { start: startIndex, end: stopIndex }
+      return maybeLoadMore(startIndex, stopIndex, items)
+    },
+    [maybeLoadMore],
+  )
   const scrollElement = useScrollViewElement()
 
   const [intersectionObserver, setIntersectionObserver] = useState<IntersectionObserver>(null!)
+  const renderMarkRead = useGeneralSettingKey("renderMarkUnread")
+  const scrollMarkRead = useGeneralSettingKey("scrollMarkUnread")
+
+  const dataRef = useRefValue(data)
   useEffect(() => {
+    if (!renderMarkRead && !scrollMarkRead) return
     if (!scrollElement) return
+
     const observer = new IntersectionObserver(
       (entries) => {
-        const entryIds: string[] = []
-        entries.forEach((entry) => {
-          if (entry.intersectionRatio >= 0.5) {
-            entryIds.push((entry.target as HTMLDivElement).dataset.entryId as string)
-          }
-        })
+        renderInViewMarkRead(entries)
+        scrollOutViewMarkRead(entries)
 
-        batchMarkRead(entryIds)
+        function scrollOutViewMarkRead(entries: IntersectionObserverEntry[]) {
+          if (!scrollMarkRead) return
+          if (!scrollElement) return
+          let minimumIndex = Number.MAX_SAFE_INTEGER
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              return
+            }
+            const $target = entry.target as HTMLDivElement
+            const $targetScrollTop = $target.getBoundingClientRect().top
+
+            if ($targetScrollTop < 0) {
+              const { index } = (entry.target as HTMLDivElement).dataset
+              if (!index) return
+              const currentIndex = Number.parseInt(index)
+              // if index is 0, or not a number, then skip
+              if (!currentIndex) return
+              // It is possible that the end coordinates beyond the overscan range are still being calculated and the position is not actually determined. Filtering here
+              if (currentIndex > (currentRange.current?.end ?? 0)) {
+                return
+              }
+
+              minimumIndex = Math.min(minimumIndex, currentIndex)
+            }
+          })
+
+          if (minimumIndex !== Number.MAX_SAFE_INTEGER) {
+            batchMarkRead(dataRef.current.slice(0, minimumIndex))
+          }
+        }
+
+        function renderInViewMarkRead(entries: IntersectionObserverEntry[]) {
+          if (!renderMarkRead) return
+          const entryIds: string[] = []
+          entries.forEach((entry) => {
+            if (
+              entry.isIntersecting &&
+              entry.intersectionRatio >= 0.8 &&
+              entry.boundingClientRect.top >= entry.rootBounds!.top
+            ) {
+              entryIds.push((entry.target as HTMLDivElement).dataset.entryId as string)
+            }
+          })
+
+          batchMarkRead(entryIds)
+        }
       },
       {
         rootMargin: "0px",
-        threshold: 1,
+        threshold: [0, 1],
         root: scrollElement,
       },
     )
@@ -170,7 +226,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
     return () => {
       observer.disconnect()
     }
-  }, [scrollElement])
+  }, [scrollElement, renderMarkRead, scrollMarkRead, dataRef])
 
   return (
     <div ref={containerRef} className="p-4">
@@ -186,7 +242,7 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
                   columnCount={currentColumn}
                   overscanBy={2}
                   render={render}
-                  onRender={maybeLoadMore}
+                  onRender={handleRender}
                   itemKey={itemKey}
                 />
               </MasonryIntersectionContext.Provider>
@@ -203,11 +259,12 @@ const render: React.ComponentType<
   RenderComponentProps<{
     entryId: string
   }>
-> = ({ data }) => {
+> = ({ data, index }) => {
   if (data.entryId.startsWith("placeholder")) {
     return <LoadingSkeletonItem />
   }
-  return <PictureWaterFallItem entryId={data.entryId} />
+
+  return <PictureWaterFallItem entryId={data.entryId} index={index} />
 }
 interface MasonryProps {
   data: string[]
@@ -215,4 +272,17 @@ interface MasonryProps {
   hasNextPage: boolean
 }
 
-const LoadingSkeletonItem = () => <EntryItemSkeleton count={1} view={FeedViewType.Pictures} />
+const LoadingSkeletonItem = () => {
+  // random height, between 100-400px
+  const randomHeight = useSingleton(() => Math.random() * 300 + 100).current
+  return (
+    <div className="relative flex gap-2 overflow-x-auto">
+      <div
+        className="relative flex w-full shrink-0 items-center overflow-hidden rounded-md"
+        style={{ height: `${randomHeight}px` }}
+      >
+        <Skeleton className="size-full overflow-hidden" />
+      </div>
+    </div>
+  )
+}

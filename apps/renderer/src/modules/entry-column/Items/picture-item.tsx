@@ -1,4 +1,3 @@
-import { useLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import { AnimatePresence, m } from "framer-motion"
 import type { PropsWithChildren } from "react"
 import { memo, useContext, useEffect, useMemo, useState } from "react"
@@ -68,7 +67,8 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   entryId,
   entryPreview,
   translation,
-}: UniversalItemProps) {
+  index,
+}: UniversalItemProps & { index: number }) {
   const entry = useEntry(entryId) || entryPreview
 
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
@@ -79,14 +79,13 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   const [ref, setRef] = useState<HTMLDivElement | null>(null)
   const intersectionObserver = useContext(MasonryIntersectionContext)
 
-  useLayoutEffect(() => {
-    if (ref) {
-      intersectionObserver.observe(ref)
-    }
+  useEffect(() => {
+    if (!ref) return
+
+    intersectionObserver.observe(ref)
+
     return () => {
-      if (ref) {
-        intersectionObserver.unobserve(ref)
-      }
+      intersectionObserver.unobserve(ref)
     }
   }, [ref, intersectionObserver])
 
@@ -97,6 +96,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
     <div
       ref={setRef}
       data-entry-id={entryId}
+      data-index={index}
       onMouseEnter={() => setIsMouseEnter(true)}
       onMouseLeave={() => setIsMouseEnter(false)}
     >

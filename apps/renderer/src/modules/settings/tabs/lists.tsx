@@ -82,7 +82,7 @@ export const SettingLists = () => {
                     {t.settings("lists.view")}
                   </TableHead>
                   <TableHead className="w-20" size="sm">
-                    {t.settings("lists.fee")}
+                    {t.settings("lists.fee.label")}
                   </TableHead>
 
                   <TableHead className="w-20" size="sm">
@@ -147,7 +147,7 @@ export const SettingLists = () => {
                             variant="ghost"
                             onClick={() => {
                               present({
-                                title: t.settings("lists.edit"),
+                                title: t.settings("lists.edit.label"),
                                 content: ({ dismiss }) => (
                                   <ListCreationModalContent dismiss={dismiss} id={row.id} />
                                 ),
@@ -314,7 +314,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
           render={({ field }) => (
             <FormItem>
               <div>
-                <FormLabel>{t("lists.fee")}</FormLabel>
+                <FormLabel>{t("lists.fee.label")}</FormLabel>
                 <FormDescription>{t("lists.fee.description")}</FormDescription>
               </div>
               <FormControl>
@@ -434,7 +434,7 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
             }
           }}
         >
-          {t("lists.feeds.add")}
+          {t("lists.feeds.add.label")}
         </Button>
       </div>
       <Divider className="mt-8" />

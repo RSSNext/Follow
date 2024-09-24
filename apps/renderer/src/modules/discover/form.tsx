@@ -207,7 +207,7 @@ export function DiscoverForm({ type }: { type: string }) {
               name="target"
               render={({ field }) => (
                 <FormItem className="!mt-4 flex items-center justify-between">
-                  <FormLabel>{t("discover.target")}</FormLabel>
+                  <FormLabel>{t("discover.target.label")}</FormLabel>
                   <FormControl>
                     <div className="flex gap-4 text-sm">
                       <RadioGroup

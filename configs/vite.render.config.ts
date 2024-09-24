@@ -125,7 +125,7 @@ export const viteRenderBaseConfig = {
         electron: false,
       },
       sourcemaps: {
-        filesToDeleteAfterUpload: ["out/web/assets/*.js.map"],
+        filesToDeleteAfterUpload: ["out/web/assets/*.js.map", "dist/renderer/assets/*.js.map"],
       },
     }),
 
