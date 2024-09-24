@@ -13,7 +13,6 @@ import {
   useEntryReadabilityContent,
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { useWhoami } from "~/atoms/user"
 import { m } from "~/components/common/Motion"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
@@ -41,26 +40,18 @@ import {
   WrappedElementProvider,
 } from "~/providers/wrapped-element-provider"
 import { Queries } from "~/queries"
-import { useEntry, useEntryReadHistory } from "~/store/entry"
-import { getPreferredTitle, useFeedById, useFeedHeaderTitle } from "~/store/feed"
+import { useEntry } from "~/store/entry"
+import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
-import { EntryTranslation } from "../entry-column/translation"
 import { useTipModal } from "../wallet/hooks"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
 import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
+import { EntryTitle } from "./components/EntryTitle"
 import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
 import { EntryContentProvider } from "./provider"
-
-const safeUrl = (url: string, baseUrl: string) => {
-  try {
-    return new URL(url, baseUrl).href
-  } catch {
-    return url
-  }
-}
 
 export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
   const title = useFeedHeaderTitle()
@@ -87,7 +78,6 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
 
 export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, className }) => {
   const { t } = useTranslation()
-  const user = useWhoami()
 
   const { error, data, isPending } = useAuthQuery(Queries.entries.byId(entryId), {
     staleTime: 300_000,
@@ -97,27 +87,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
   useTitle(entry?.entries.title)
 
   const feed = useFeedById(entry?.feedId) as FeedModel
-
-  const entryHistory = useEntryReadHistory(entryId)
-
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
-
-  const translation = useAuthQuery(
-    Queries.ai.translation({
-      entry: entry!,
-      language: entry?.settings?.translation,
-      extraFields: ["title"],
-    }),
-    {
-      enabled: !!entry?.settings?.translation,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      meta: {
-        persist: true,
-      },
-    },
-  )
-
   const summary = useAuthQuery(
     Queries.ai.summary({
       entryId,
@@ -166,16 +136,6 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
     [readerFontFamily],
   )
 
-  const populatedFullHref = useMemo(() => {
-    const href = entry?.entries.url
-    if (!href) return "#"
-
-    if (href.startsWith("http")) return href
-    const feedSiteUrl = feed?.siteUrl
-    if (href.startsWith("/") && feedSiteUrl) return safeUrl(href, feedSiteUrl)
-    return href
-  }, [entry?.entries.url, feed?.siteUrl])
-
   const openTipModal = useTipModal({
     userId: feed?.ownerUserId ?? undefined,
     feedId: entry?.feedId,
@@ -216,33 +176,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
             onContextMenu={stopPropagation}
             className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
           >
-            <a
-              href={populatedFullHref || void 0}
-              target="_blank"
-              className="-mx-6 block cursor-button rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
-              rel="noreferrer"
-            >
-              <div className="select-text break-words text-3xl font-bold">
-                <EntryTranslation source={entry.entries.title} target={translation.data?.title} />
-              </div>
-              <div className="mt-2 text-[13px] font-medium text-zinc-500">
-                {getPreferredTitle(feed)}
-              </div>
-              <div className="flex items-center gap-2 text-[13px] text-zinc-500">
-                {entry.entries.publishedAt && new Date(entry.entries.publishedAt).toLocaleString()}
-
-                <div className="flex items-center gap-1">
-                  <i className="i-mgc-eye-2-cute-re" />
-                  <span>
-                    {(
-                      (entryHistory?.readCount ?? 0) +
-                      (entryHistory?.userIds?.every((id) => id !== user?.id) ? 1 : 0)
-                    ) // if no me, +1
-                      .toLocaleString()}
-                  </span>
-                </div>
-              </div>
-            </a>
+            <EntryTitle entryId={entryId} />
 
             <WrappedElementProvider boundingDetection>
               <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem]">
