@@ -5,10 +5,9 @@ import { getMainWindow } from "~/window"
 
 import { t } from "./i18n"
 
-export const clearAllData = async () => {
+export const clearAllDataAndConfirm = async () => {
   const win = getMainWindow()
   if (!win) return
-  const ses = win.webContents.session
 
   // Dialog to confirm
   const result = await dialog.showMessageBox({
@@ -17,11 +16,19 @@ export const clearAllData = async () => {
     message: t("dialog.clearAllData"),
     buttons: [t("dialog.yes"), t("dialog.no")],
   })
-  const caller = callWindowExpose(win)
 
   if (result.response === 1) {
     return
   }
+  return clearAllData()
+}
+
+export const clearAllData = async () => {
+  const win = getMainWindow()
+  if (!win) return
+  const ses = win.webContents.session
+  const caller = callWindowExpose(win)
+
   try {
     await ses.clearCache()
 
