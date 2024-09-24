@@ -16,6 +16,7 @@ import common_ja from "../../../../locales/common/ja.json"
 import common_ko from "../../../../locales/common/ko.json"
 import common_pt from "../../../../locales/common/pt.json"
 import common_ru from "../../../../locales/common/ru.json"
+import common_tr from "../../../../locales/common/tr.json"
 import common_zhCN from "../../../../locales/common/zh-CN.json"
 import common_zhHK from "../../../../locales/common/zh-HK.json"
 import common_zhTW from "../../../../locales/common/zh-TW.json"
@@ -36,6 +37,7 @@ import lang_ja from "../../../../locales/lang/ja.json"
 import lang_ko from "../../../../locales/lang/ko.json"
 import lang_pt from "../../../../locales/lang/pt.json"
 import lang_ru from "../../../../locales/lang/ru.json"
+import lang_tr from "../../../../locales/lang/tr.json"
 import lang_zhCN from "../../../../locales/lang/zh-CN.json"
 import lang_zhHK from "../../../../locales/lang/zh-HK.json"
 import lang_zhTW from "../../../../locales/lang/zh-TW.json"
@@ -85,4 +87,5 @@ export const defaultResources = {
   "ar-KW": { lang: lang_arkw, common: common_arkw },
   "ar-TN": { lang: lang_artn, common: common_artn },
   ko: { lang: lang_ko, common: common_ko },
+  tr: { lang: lang_tr, common: common_tr },
 }

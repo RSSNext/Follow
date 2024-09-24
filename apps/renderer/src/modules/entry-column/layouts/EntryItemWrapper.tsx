@@ -86,7 +86,7 @@ export const EntryItemWrapper: FC<
             .map((item) => ({
               type: "text" as const,
               label: item.name,
-              click: item.onClick,
+              click: () => item.onClick(e),
               shortcut: item.shortcut,
             })),
           {

@@ -42,6 +42,7 @@ export const useAchievementModal = () => {
       title: "Achievements",
       content: AchievementModalContent,
       CustomModalComponent: SlideUpModal,
+      overlay: true,
     })
   }, [present])
 }
