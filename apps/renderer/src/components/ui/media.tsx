@@ -48,7 +48,7 @@ const MediaImpl: FC<MediaProps> = ({
   ...props
 }) => {
   const { src, style, type, previewImageUrl, showFallback, ...rest } = props
-  const [hidden, setHidden] = useState(!src)
+
   const [imgSrc, setImgSrc] = useState(() =>
     proxy && src && !failedList.has(src)
       ? getImageProxyUrl({
@@ -61,15 +61,17 @@ const MediaImpl: FC<MediaProps> = ({
 
   const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded" | "error">("loading")
   const errorHandle: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
-    setMediaLoadState("error")
     if (imgSrc !== props.src) {
       setImgSrc(props.src)
       failedList.add(props.src)
     } else {
-      setHidden(true)
+      setMediaLoadState("error")
+
       props.onError?.(e as any)
     }
   })
+
+  const isError = mediaLoadState === "error"
   const previewMedia = usePreviewMedia()
   const handleClick = useEventCallback((e: React.MouseEvent) => {
     if (popper && src) {
@@ -156,20 +158,30 @@ const MediaImpl: FC<MediaProps> = ({
 
   if (!type || !src) return null
 
-  if (hidden && (showFallback || (!showFallback && mediaLoadState === "error"))) {
-    return (
-      <FallbackMedia
-        mediaContainerClassName={mediaContainerClassName}
-        className={className}
-        style={style}
-        {...props}
-      />
-    )
+  if (isError) {
+    if (showFallback) {
+      return (
+        <FallbackMedia
+          mediaContainerClassName={mediaContainerClassName}
+          className={className}
+          style={style}
+          {...props}
+        />
+      )
+    } else {
+      return (
+        <div
+          className={cn("rounded bg-zinc-100 dark:bg-neutral-900", className)}
+          style={props.style}
+        />
+      )
+    }
   }
+
   return (
     <span
       data-state={type !== "video" ? mediaLoadState : undefined}
-      className={cn("block overflow-hidden rounded", hidden && "hidden", className)}
+      className={cn("block overflow-hidden rounded", className)}
       style={style}
     >
       {InnerContent}
@@ -184,14 +196,14 @@ const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, classNam
     <div
       className={cn(
         !(props.width || props.height) && "size-full",
-        "center relative rounded bg-zinc-100 object-cover dark:bg-neutral-900",
-        "not-prose flex max-h-full flex-col space-y-1 p-4",
+        "center rounded bg-zinc-100 dark:bg-neutral-900",
+        "not-prose !flex max-h-full flex-col space-y-1 p-4",
+
         mediaContainerClassName,
       )}
       style={{
         height: props.height ? `${props.height}px` : "",
         width: props.width ? `${props.width}px` : "100%",
-        ...props.style,
       }}
     >
       <i className="i-mgc-close-cute-re text-xl text-red-500" />
