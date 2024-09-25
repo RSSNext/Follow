@@ -255,6 +255,7 @@ const VideoPreview: FC<{
           variant={thumbnail ? "thumbnail" : "preview"}
           controls={false}
           src={src}
+          poster={previewImageUrl}
           ref={setVideoRef}
           muted
           className="relative size-full object-cover"
