@@ -78,3 +78,8 @@ export type RecommendationItem = ExtractBizResponse<
 export type ActionOperation = "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex"
 export type ActionEntryField = "all" | "title" | "content" | "author" | "url" | "order"
 export type ActionFeedField = "view" | "title" | "site_url" | "feed_url" | "category"
+
+export type MediaModel = Exclude<
+  ExtractBizResponse<typeof apiClient.entries.$get>["data"],
+  undefined
+>["entries"]["media"]

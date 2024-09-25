@@ -8,7 +8,7 @@ import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { Skeleton } from "~/components/ui/skeleton"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { FeedViewType } from "~/lib/enum"
-import { cn } from "~/lib/utils"
+import { cn, filterSmallMedia } from "~/lib/utils"
 import { useEntry } from "~/store/entry/hooks"
 import { useImageDimensions } from "~/store/image"
 
@@ -80,7 +80,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   const intersectionObserver = useContext(MasonryIntersectionContext)
 
   useEffect(() => {
-    if (!ref) return
+    if (!ref || !intersectionObserver) return
 
     intersectionObserver.observe(ref)
 
@@ -91,6 +91,8 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
 
   const [isMouseEnter, setIsMouseEnter] = useState(false)
   if (!entry) return null
+
+  const media = filterSmallMedia(entry.entries.media)
 
   return (
     <div
@@ -108,10 +110,10 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
           width: itemWidth,
         }}
       >
-        {entry.entries.media && entry.entries.media.length > 0 ? (
-          <MasonryItemFixedDimensionWrapper url={entry.entries.media[0].url}>
+        {media && media.length > 0 ? (
+          <MasonryItemFixedDimensionWrapper url={media[0].url}>
             <SwipeMedia
-              media={entry.entries.media}
+              media={media}
               className={cn("w-full shrink-0 grow rounded-md", isActive && "rounded-b-none")}
               proxySize={proxySize}
               imgClassName="object-cover"
