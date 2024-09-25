@@ -91,7 +91,7 @@ export function Component() {
           Your device width is <b>{`${window.innerWidth}`}px</b> less than minimum supported width
           1024px.
         </div>
-        <div>Please using desktop app to using {APP_NAME}</div>
+        <div>Please use desktop app to using {APP_NAME}</div>
 
         <div>
           Download:{" "}

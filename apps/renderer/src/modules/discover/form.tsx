@@ -187,7 +187,11 @@ export function DiscoverForm({ type }: { type: string }) {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-[512px] space-y-8">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-[512px] space-y-8"
+          data-testid="discover-form"
+        >
           <FormField
             control={form.control}
             name="keyword"
@@ -225,7 +229,7 @@ export function DiscoverForm({ type }: { type: string }) {
               )}
             />
           )}
-          <div className="center flex">
+          <div className="center flex" data-testid="discover-form-actions">
             <Button disabled={!form.formState.isValid} type="submit" isLoading={mutation.isPending}>
               {info[type].showModal ? t("discover.preview") : t("words.search")}
             </Button>

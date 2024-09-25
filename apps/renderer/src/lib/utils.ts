@@ -4,6 +4,7 @@ import { memoize } from "lodash-es"
 import { twMerge } from "tailwind-merge"
 import { parse } from "tldts"
 
+import type { MediaModel } from "~/models"
 import type { RSSHubRoute } from "~/modules/discover/types"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_PENDING } from "../constants/app"
@@ -260,3 +261,9 @@ export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
 }
 
 export const isEmptyObject = (obj: Record<string, any>) => Object.keys(obj).length === 0
+
+export const filterSmallMedia = (media: MediaModel) => {
+  return media?.filter(
+    (m) => !(m.type === "photo" && m.width && m.width < 65 && m.height && m.height < 65),
+  )
+}

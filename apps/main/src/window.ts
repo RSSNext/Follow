@@ -220,7 +220,7 @@ export const createMainWindow = () => {
       }
 
       const caller = callWindowExpose(window)
-      caller.electronClose()
+      caller.onWindowClose()
     } else {
       windows.mainWindow = null
     }
@@ -230,7 +230,7 @@ export const createMainWindow = () => {
     cancelPollingUpdateUnreadCount()
 
     const caller = callWindowExpose(window)
-    caller.electronShow()
+    caller.onWindowShow()
   })
 
   window.on("hide", async () => {

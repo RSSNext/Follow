@@ -11,4 +11,8 @@ export const imageRefererMatches = [
     url: /^https:\/\/cdnfile\.sspai\.com/,
     referer: "https://sspai.com",
   },
+  {
+    url: /^https:\/\/(?:\w|-)+\.cdninstagram\.com/,
+    referer: "https://www.instagram.com",
+  },
 ]

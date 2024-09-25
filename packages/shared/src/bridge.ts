@@ -6,18 +6,35 @@ import type { GeneralSettings, UISettings } from "./interface/settings"
 const PREFIX = "__follow"
 
 interface RenderGlobalContext {
+  /// Access Settings
   showSetting: (path?: string) => void
   getGeneralSettings: () => GeneralSettings
   getUISettings: () => UISettings
 
-  electronClose: () => void
-  electronShow: () => void
+  /**
+   * @description only work in electron app
+   */
+  onWindowClose: () => void
+  /**
+   * @description only work in electron app
+   */
+  onWindowShow: () => void
 
+  /// Actions
+  follow: (id: string, options?: { isList: boolean }) => void
+
+  /// Utils
   toast: typeof toast
+  // URL
+  getWebUrl: () => string
+  getApiUrl: () => string
 }
 
-export const registerGlobalContext = (context: RenderGlobalContext) => {
-  globalThis[PREFIX] = context
+export const registerGlobalContext = (context: Partial<RenderGlobalContext>) => {
+  globalThis[PREFIX] = {
+    ...globalThis[PREFIX],
+    ...context,
+  }
 }
 
 function createProxy<T extends RenderGlobalContext>(window: BrowserWindow, path: string[] = []): T {

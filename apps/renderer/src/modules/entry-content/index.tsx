@@ -212,6 +212,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
           key={entry.entries.id}
         >
           <article
+            data-testid="entry-render"
             onContextMenu={stopPropagation}
             className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
           >

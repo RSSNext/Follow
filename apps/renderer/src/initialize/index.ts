@@ -1,4 +1,3 @@
-import { registerGlobalContext } from "@follow/shared/bridge"
 import { env } from "@follow/shared/env"
 import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
@@ -9,14 +8,11 @@ import relativeTime from "dayjs/plugin/relativeTime"
 import { enableMapSet } from "immer"
 import React from "react"
 import ReactDOM from "react-dom"
-import { toast } from "sonner"
 
-import { getUISettings } from "~/atoms/settings/ui"
 import { isElectronBuild } from "~/constants"
 import { browserDB } from "~/database"
 import { initI18n } from "~/i18n"
 import { settingSyncQueue } from "~/modules/settings/helper/sync-queue"
-import { ElectronCloseEvent, ElectronShowEvent } from "~/providers/invalidate-query-provider"
 import { CleanerService } from "~/services/cleaner"
 
 import { subscribeNetworkStatus } from "../atoms/network"
@@ -71,23 +67,6 @@ export const initializeApp = async () => {
   enableMapSet()
 
   subscribeNetworkStatus()
-
-  registerGlobalContext({
-    showSetting: (path) => window.router.showSettings(path),
-    getGeneralSettings,
-    getUISettings,
-    /**
-     * Electron app only
-     */
-    electronClose() {
-      document.dispatchEvent(new ElectronCloseEvent())
-    },
-    electronShow() {
-      document.dispatchEvent(new ElectronShowEvent())
-    },
-
-    toast,
-  })
 
   apm("hydrateSettings", hydrateSettings)
 
