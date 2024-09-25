@@ -230,6 +230,7 @@ const VideoPreview: FC<{
   const [forceUpdate] = useForceUpdate()
   return (
     <div
+      className="size-full"
       onMouseEnter={() => {
         videoRef?.controls.play()?.then(forceUpdate)
       }}
