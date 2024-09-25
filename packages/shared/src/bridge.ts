@@ -22,6 +22,7 @@ interface RenderGlobalContext {
 
   /// Actions
   follow: (id: string, options?: { isList: boolean }) => void
+  profile: (id: string, variant?: "drawer" | "dialog") => void
 
   /// Utils
   toast: typeof toast
