@@ -61,15 +61,14 @@ export const GridItemFooter = ({
         />
         <div
           className={cn(
-            "relative mb-1 mt-1.5 flex w-full items-center gap-1 truncate font-medium leading-none",
-            !!entry.collections && "pr-5",
+            "relative mb-1 mt-1.5 flex w-full items-center gap-1 truncate font-medium",
             titleClassName,
           )}
         >
           <TitleMarquee className="min-w-0 grow">
             <EntryTranslation source={entry.entries.title} target={translation?.title} />
           </TitleMarquee>
-          {!!entry.collections && <StarIcon className="static shrink-0 self-end" />}
+          {!!entry.collections && <StarIcon className="shrink-0" />}
         </div>
       </div>
       <div className="flex items-center gap-1 truncate text-[13px]">
