@@ -68,7 +68,7 @@ export function ListItem({
       onMouseEnter={handlePrefetchEntry}
       onMouseLeave={handlePrefetchEntry.cancel}
       className={cn(
-        "group relative flex py-4 pl-3 pr-2",
+        "group relative flex cursor-menu py-4 pl-3 pr-2",
         !asRead &&
           "before:absolute before:-left-0.5 before:top-[1.4375rem] before:block before:size-2 before:rounded-full before:bg-accent",
       )}
@@ -182,6 +182,7 @@ export function ListItem({
 
       {withDetails && entry.entries.media?.[0] && (
         <Media
+          thumbnail
           src={entry.entries.media[0].url}
           type={entry.entries.media[0].type}
           previewImageUrl={entry.entries.media[0].preview_image_url}
@@ -235,7 +236,7 @@ function AudioCover({
 
       <div
         className={cn(
-          "center absolute inset-0 w-full transition-all duration-200 ease-in-out group-hover:opacity-100",
+          "center absolute inset-0 w-full transition-all duration-200 ease-in-out group-hover:-translate-y-2 group-hover:opacity-100",
           playStatus ? "opacity-100" : "opacity-0",
         )}
         onClick={handleClickPlay}
@@ -255,8 +256,11 @@ function AudioCover({
       </div>
 
       {!!estimatedMins && (
-        <div className="absolute bottom-0 w-full rounded-b-sm bg-white/50 text-center text-[13px] opacity-0 backdrop-blur duration-100 group-hover:opacity-100 dark:bg-neutral-900/70">
-          {formatEstimatedMins(estimatedMins)}
+        <div className="absolute bottom-0 w-full overflow-hidden rounded-b-sm text-center ">
+          <div className="absolute left-0 top-0 size-full bg-white/50 opacity-0 duration-200 group-hover:opacity-100 dark:bg-neutral-900/70" />
+          <div className="text-[13px] opacity-0 backdrop-blur-none duration-200 group-hover:opacity-100 group-hover:backdrop-blur-sm">
+            {formatEstimatedMins(estimatedMins)}
+          </div>
         </div>
       )}
     </div>

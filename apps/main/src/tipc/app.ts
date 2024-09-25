@@ -1,11 +1,12 @@
 import path from "node:path"
 
 import { getRendererHandlers } from "@egoist/tipc/main"
-import { callGlobalContextMethod } from "@follow/shared/bridge"
+import { callWindowExpose } from "@follow/shared/bridge"
 import type { BrowserWindow } from "electron"
 import { app, clipboard, dialog, screen } from "electron"
 
 import { registerMenuAndContextMenu } from "~/init"
+import { clearAllData } from "~/lib/cleaner"
 
 import { isWindows11 } from "../env"
 import { downloadFile } from "../lib/download"
@@ -71,58 +72,59 @@ export const appRoute = {
           case "maximum": {
             // FIXME: this is a electron bug, see https://github.com/RSSNext/Follow/issues/231
             // So in this way we use a workaround to fix it, that is manually resize the window
-            if (isWindows11) {
-              const display = screen.getDisplayMatching(window.getBounds())
-              const size = display.workAreaSize
+            // Comemnt the manually handle logic and disable backgroundMaterial for now
+            // if (isWindows11) {
+            //   const display = screen.getDisplayMatching(window.getBounds())
+            //   const size = display.workAreaSize
 
-              const isMaximized = size.height === window.getSize()[1]
+            //   const isMaximized = size.height === window.getSize()[1]
 
-              const storeKey = Symbol.for("maximized")
-              if (isMaximized) {
-                const stored = window[storeKey]
-                if (!stored) return
+            //   const storeKey = Symbol.for("maximized")
+            //   if (isMaximized) {
+            //     const stored = window[storeKey]
+            //     if (!stored) return
 
-                window.setResizable(true)
-                window.setMovable(true)
+            //     window.setResizable(true)
+            //     window.setMovable(true)
 
-                window.setBounds(
-                  {
-                    width: stored.size[0],
-                    height: stored.size[1],
-                    x: stored.position[0],
-                    y: stored.position[1],
-                  },
-                  true,
-                )
+            //     window.setBounds(
+            //       {
+            //         width: stored.size[0],
+            //         height: stored.size[1],
+            //         x: stored.position[0],
+            //         y: stored.position[1],
+            //       },
+            //       true,
+            //     )
 
-                delete window[storeKey]
-              } else {
-                const currentWindowSize = window.getSize()
-                const currentWindowPosition = window.getPosition()
-                window[storeKey] = {
-                  size: currentWindowSize,
-                  position: currentWindowPosition,
-                }
+            //     delete window[storeKey]
+            //   } else {
+            //     const currentWindowSize = window.getSize()
+            //     const currentWindowPosition = window.getPosition()
+            //     window[storeKey] = {
+            //       size: currentWindowSize,
+            //       position: currentWindowPosition,
+            //     }
 
-                // Maually Resize
-                const { workArea } = display
+            //     // Maually Resize
+            //     const { workArea } = display
 
-                window.setBounds(
-                  {
-                    x: workArea.x,
-                    y: workArea.y,
-                    width: workArea.width,
-                    height: workArea.height,
-                  },
-                  true,
-                )
+            //     window.setBounds(
+            //       {
+            //         x: workArea.x,
+            //         y: workArea.y,
+            //         width: workArea.width,
+            //         height: workArea.height,
+            //       },
+            //       true,
+            //     )
 
-                window.setResizable(false)
-                window.setMovable(false)
-              }
+            //     window.setResizable(false)
+            //     window.setMovable(false)
+            //   }
 
-              return
-            }
+            //   return
+            // }
 
             if (window.isMaximized()) {
               window.unmaximize()
@@ -197,13 +199,17 @@ export const appRoute = {
     await downloadFile(input, result.filePath).catch((err) => {
       const senderWindow = (sender as Sender).getOwnerBrowserWindow()
       if (!senderWindow) return
-      callGlobalContextMethod(senderWindow, "toast.error", ["Download failed!"])
+      callWindowExpose(senderWindow).toast.error("Download failed!", {
+        duration: 1000,
+      })
       throw err
     })
 
     const senderWindow = (sender as Sender).getOwnerBrowserWindow()
     if (!senderWindow) return
-    callGlobalContextMethod(senderWindow, "toast.success", ["Download success!"])
+    callWindowExpose(senderWindow).toast.success("Download success!", {
+      duration: 1000,
+    })
   }),
 
   getAppPath: t.procedure.action(async () => app.getAppPath()),
@@ -217,6 +223,8 @@ export const appRoute = {
 
     app.commandLine.appendSwitch("lang", input)
   }),
+
+  clearAllData: t.procedure.action(clearAllData),
 }
 
 interface Sender extends Electron.WebContents {

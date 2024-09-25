@@ -14,7 +14,7 @@ import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { getImageProxyUrl } from "~/lib/img-proxy"
 import { jotaiStore } from "~/lib/jotai"
 import { parseSocialMedia } from "~/lib/parsers"
-import { cn } from "~/lib/utils"
+import { cn, filterSmallMedia } from "~/lib/utils"
 import { useEntry } from "~/store/entry/hooks"
 import { useFeedById } from "~/store/feed"
 
@@ -45,6 +45,8 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
 
   const parsed = parseSocialMedia(entry.entries)
 
+  const media = filterSmallMedia(entry.entries.media)
+
   return (
     <div
       className={cn(
@@ -58,10 +60,10 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
       <div ref={ref} className="ml-2 min-w-0 flex-1">
         <div className={cn("-mt-0.5 flex-1 text-sm", content && "line-clamp-[10]")}>
           <div className="w-[calc(100%-10rem)] space-x-1 leading-6">
-            <span className="text-base font-semibold">
-              {entry.entries.author}
+            <span className="inline-flex items-center gap-1 text-base font-semibold">
+              <span>{entry.entries.author || feed.title}</span>
               {parsed?.type === "x" && (
-                <i className="i-mgc-twitter-cute-fi ml-1 size-3 text-[#4A99E9]" />
+                <i className="i-mgc-twitter-cute-fi size-3 text-[#4A99E9]" />
               )}
             </span>
 
@@ -94,9 +96,9 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
             {!!entry.collections && <StarIcon />}
           </div>
         </div>
-        {!!entry.entries.media?.length && (
+        {!!media?.length && (
           <div className="mt-4 flex gap-[8px] overflow-x-auto pb-2">
-            {entry.entries.media.map((media, i, mediaList) => {
+            {media.map((media, i, mediaList) => {
               const style: Partial<{
                 width: string
                 height: string

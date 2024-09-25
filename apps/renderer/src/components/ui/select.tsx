@@ -22,6 +22,7 @@ const SelectTrigger = React.forwardRef<
       "ring-accent/20 duration-200 focus:border-accent/80 focus:outline-none focus:ring-2",
       "border border-border",
       size === "sm" ? "h-7 p-2 text-sm" : "h-9 px-3 py-2 text-sm",
+      "hover:border-accent/80",
       className,
     )}
     {...props}
@@ -40,7 +41,7 @@ const SelectScrollUpButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollUpButton
     ref={ref}
-    className={cn("flex cursor-default items-center justify-center py-1", className)}
+    className={cn("flex cursor-select items-center justify-center py-1", className)}
     {...props}
   >
     <i className="i-mingcute-up-line" />
@@ -54,7 +55,7 @@ const SelectScrollDownButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollDownButton
     ref={ref}
-    className={cn("flex cursor-default items-center justify-center py-1", className)}
+    className={cn("flex cursor-select items-center justify-center py-1", className)}
     {...props}
   >
     <i className="i-mingcute-down-line" />
@@ -70,9 +71,11 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "shadow-perfect relative z-[1000] max-h-96 min-w-32 overflow-hidden rounded-md border bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        position === "popper" &&
+        "shadow-perfect relative z-[1000] max-h-96 min-w-32 overflow-hidden rounded-md border bg-popover text-popover-foreground",
+        position === "popper" && [
           "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        ],
         className,
       )}
       position={position}
@@ -113,7 +116,7 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "pointer-events-auto relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-theme-item-active focus:text-theme-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "pointer-events-auto relative flex w-full cursor-select items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-theme-item-active focus:text-theme-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className,
     )}
     {...props}

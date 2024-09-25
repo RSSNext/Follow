@@ -4,10 +4,16 @@ import { useWhoami } from "~/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { cn } from "~/lib/utils"
-import type { FeedModel } from "~/models"
+import type { TargetModel } from "~/models"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 
-export const FeedCertification = ({ feed, className }: { feed: FeedModel; className?: string }) => {
+export const FeedCertification = ({
+  feed,
+  className,
+}: {
+  feed: TargetModel
+  className?: string
+}) => {
   const me = useWhoami()
   const presentUserProfile = usePresentUserProfileModal("drawer")
   const { t } = useTranslation()
@@ -23,7 +29,7 @@ export const FeedCertification = ({ feed, className }: { feed: FeedModel; classN
         <TooltipPortal>
           <TooltipContent className="px-4 py-2">
             <div className="flex items-center text-base font-semibold">
-              <i className="i-mgc-certificate-cute-fi mr-2 shrink-0 text-accent" />
+              <i className="i-mgc-certificate-cute-fi mr-2 size-4 shrink-0 text-accent" />
               {t("feed_item.claimed_feed")}
             </div>
             <div>{t("feed_item.claimed_by_you")}</div>

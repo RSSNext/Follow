@@ -22,8 +22,9 @@ export const EntryItemWrapper: FC<
     view?: number
     itemClassName?: string
     overlay?: boolean
+    style?: React.CSSProperties
   } & PropsWithChildren
-> = ({ entry, view, overlay, children, itemClassName }) => {
+> = ({ entry, view, overlay, children, itemClassName, style }) => {
   const { items } = useEntryActions({
     view,
     entry,
@@ -85,7 +86,7 @@ export const EntryItemWrapper: FC<
             .map((item) => ({
               type: "text" as const,
               label: item.name,
-              click: item.onClick,
+              click: () => item.onClick(e),
               shortcut: item.shortcut,
             })),
           {
@@ -111,7 +112,7 @@ export const EntryItemWrapper: FC<
   )
 
   return (
-    <div data-entry-id={entry.entries.id}>
+    <div data-entry-id={entry.entries.id} style={style}>
       <div
         className={cn(
           "relative",

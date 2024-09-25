@@ -1,11 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
+import { m } from "framer-motion"
 import type { ReactNode } from "react"
 import { forwardRef, useMemo } from "react"
 
 import { getColorScheme, stringToHue } from "~/lib/color"
 import { getImageProxyUrl } from "~/lib/img-proxy"
 import { cn, getUrlIcon } from "~/lib/utils"
-import type { CombinedEntryModel, FeedModel } from "~/models"
+import type { CombinedEntryModel, FeedModel, TargetModel } from "~/models"
 
 import { PlatformIcon } from "./ui/platform-icon"
 
@@ -75,7 +76,7 @@ export function FeedIcon({
   siteUrl,
   useMedia,
 }: {
-  feed?: FeedModel
+  feed?: TargetModel
   entry?: CombinedEntryModel["entries"]
   fallbackUrl?: string
   className?: string
@@ -98,8 +99,9 @@ export function FeedIcon({
   }
 
   const colors = useMemo(
-    () => getColorScheme(stringToHue(feed?.title || feed?.url || siteUrl!), true),
-    [feed?.title, feed?.url, siteUrl],
+    () =>
+      getColorScheme(stringToHue(feed?.title || (feed as FeedModel)?.url || siteUrl || ""), true),
+    [feed?.title, (feed as FeedModel)?.url, siteUrl],
   )
   let ImageElement: ReactNode
   let finalSrc = ""
@@ -108,6 +110,32 @@ export function FeedIcon({
     width: size,
     height: size,
   }
+
+  const fallbackIcon = (
+    <span
+      style={
+        {
+          ...sizeStyle,
+          "--fo-light-background": colors.light.background,
+          "--fo-dark-background": colors.dark.background,
+        } as any
+      }
+      className={cn(
+        "flex shrink-0 items-center justify-center rounded-sm",
+        "bg-[var(--fo-light-background)] text-white dark:bg-[var(--fo-dark-background)]",
+        "mr-2",
+        className,
+      )}
+    >
+      <span
+        style={{
+          fontSize: size / 2,
+        }}
+      >
+        {!!feed?.title && feed.title[0]}
+      </span>
+    </span>
+  )
 
   switch (true) {
     case !feed && !!siteUrl: {
@@ -118,7 +146,7 @@ export function FeedIcon({
 
       ImageElement = (
         <PlatformIcon url={siteUrl} style={sizeStyle} className={cn("center mr-2", className)}>
-          <img style={sizeStyle} />
+          <m.img style={sizeStyle} initial={{ opacity: 0 }} animate={{ opacity: 1 }} />
         </PlatformIcon>
       )
       break
@@ -131,15 +159,20 @@ export function FeedIcon({
       })
       ImageElement = (
         <PlatformIcon url={image} style={sizeStyle} className={cn("center mr-2", className)}>
-          <img className={cn("mr-2", className)} style={sizeStyle} />
+          <m.img
+            className={cn("mr-2", className)}
+            style={sizeStyle}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          />
         </PlatformIcon>
       )
       break
     }
     case !!fallbackUrl:
-    case !!feed?.siteUrl: {
+    case !!(feed as FeedModel)?.siteUrl: {
       const [src, fallbackSrc] = getFeedIconSrc({
-        siteUrl: feed?.siteUrl || fallbackUrl,
+        siteUrl: (feed as FeedModel)?.siteUrl || fallbackUrl,
         fallback,
         proxy: {
           width: size * 2,
@@ -150,7 +183,7 @@ export function FeedIcon({
 
       ImageElement = (
         <PlatformIcon
-          url={feed?.siteUrl || fallbackUrl}
+          url={(feed as FeedModel)?.siteUrl || fallbackUrl}
           style={sizeStyle}
           className={cn("center mr-2", className)}
         >
@@ -161,6 +194,10 @@ export function FeedIcon({
           />
         </PlatformIcon>
       )
+      break
+    }
+    case !!feed?.title && !!feed.title[0]: {
+      ImageElement = fallbackIcon
       break
     }
     default: {
@@ -176,32 +213,10 @@ export function FeedIcon({
   if (fallback && !!finalSrc) {
     return (
       <Avatar className="shrink-0">
-        <AvatarImage
-          className="rounded-sm object-cover duration-200 animate-in fade-in-0"
-          asChild
-          src={finalSrc}
-        >
+        <AvatarImage className="rounded-sm object-cover" asChild src={finalSrc}>
           {ImageElement}
         </AvatarImage>
-        <AvatarFallback asChild>
-          <span
-            style={
-              {
-                ...sizeStyle,
-                "--fo-light-background": colors.light.background,
-                "--fo-dark-background": colors.dark.background,
-              } as any
-            }
-            className={cn(
-              "flex shrink-0 items-center justify-center rounded-sm",
-              "bg-[var(--fo-light-background)] text-white dark:bg-[var(--fo-dark-background)]",
-              "mr-2",
-              className,
-            )}
-          >
-            <span className="text-[9px]">{!!feed?.title && feed.title[0]}</span>
-          </span>
-        </AvatarFallback>
+        <AvatarFallback asChild>{fallbackIcon}</AvatarFallback>
       </Avatar>
     )
   }
@@ -211,7 +226,7 @@ export function FeedIcon({
   // Else
   return (
     <Avatar className="shrink-0">
-      <AvatarImage className="duration-200 animate-in fade-in-0" asChild src={finalSrc}>
+      <AvatarImage asChild src={finalSrc}>
         {ImageElement}
       </AvatarImage>
       <AvatarFallback>

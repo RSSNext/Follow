@@ -10,6 +10,7 @@
   "time.today": "今天",
   "time.yesterday": "昨天",
   "tips.load-lng-error": "加载语言包失败",
+  "words.actions": "操作",
   "words.back": "返回",
   "words.copy": "复制",
   "words.edit": "编辑",
@@ -19,6 +20,7 @@
   "words.items_one": "内容",
   "words.items_other": "内容",
   "words.local": "本地",
+  "words.manage": "管理",
   "words.record": "记录",
   "words.record_one": "记录",
   "words.record_other": "记录",
@@ -26,5 +28,7 @@
   "words.result_one": "结果",
   "words.result_other": "结果",
   "words.space": "",
+  "words.submit": "提交",
+  "words.update": "更新",
   "words.which.all": "全部"
 }

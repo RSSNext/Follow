@@ -19,13 +19,15 @@ export const createDefaultSettings = (): UISettings => ({
   modalDraggable: true,
   modalOpaque: true,
   reduceMotion: false,
+  usePointerCursor: false,
 
   // Font
   uiFontFamily: "SN Pro",
   readerFontFamily: "inherit",
   // Content
   readerRenderInlineStyle: false,
-  codeHighlightTheme: "github-dark",
+  codeHighlightThemeLight: "github-light",
+  codeHighlightThemeDark: "github-dark",
   guessCodeLanguage: true,
 
   // View

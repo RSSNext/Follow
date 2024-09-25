@@ -1,5 +1,6 @@
+import { AnimatePresence, m } from "framer-motion"
 import type { PropsWithChildren } from "react"
-import { memo, useEffect, useState } from "react"
+import { memo, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { SwipeMedia } from "~/components/ui/media/SwipeMedia"
@@ -7,15 +8,16 @@ import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { Skeleton } from "~/components/ui/skeleton"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { FeedViewType } from "~/lib/enum"
-import { cn } from "~/lib/utils"
+import { cn, filterSmallMedia } from "~/lib/utils"
 import { useEntry } from "~/store/entry/hooks"
 import { useImageDimensions } from "~/store/image"
 
 import { usePreviewMedia } from "../../../components/ui/media/hooks"
 import { EntryItemWrapper } from "../layouts/EntryItemWrapper"
-import { GridItem } from "../templates/grid-item-template"
+import { GridItem, GridItemFooter } from "../templates/grid-item-template"
 import type { UniversalItemProps } from "../types"
 import {
+  MasonryIntersectionContext,
   useMasonryItemRatio,
   useMasonryItemWidth,
   useSetStableMasonryItemRatio,
@@ -65,39 +67,83 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   entryId,
   entryPreview,
   translation,
-}: UniversalItemProps) {
+  index,
+}: UniversalItemProps & { index: number }) {
   const entry = useEntry(entryId) || entryPreview
 
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
   const previewMedia = usePreviewMedia()
+  const itemWidth = useMasonryItemWidth()
 
+  const [ref, setRef] = useState<HTMLDivElement | null>(null)
+  const intersectionObserver = useContext(MasonryIntersectionContext)
+
+  useEffect(() => {
+    if (!ref || !intersectionObserver) return
+
+    intersectionObserver.observe(ref)
+
+    return () => {
+      intersectionObserver.unobserve(ref)
+    }
+  }, [ref, intersectionObserver])
+
+  const [isMouseEnter, setIsMouseEnter] = useState(false)
   if (!entry) return null
 
+  const media = filterSmallMedia(entry.entries.media)
+
   return (
-    <EntryItemWrapper
-      view={FeedViewType.Pictures}
-      entry={entry}
-      itemClassName="group hover:bg-theme-item-hover rounded-md"
+    <div
+      ref={setRef}
+      data-entry-id={entryId}
+      data-index={index}
+      onMouseEnter={() => setIsMouseEnter(true)}
+      onMouseLeave={() => setIsMouseEnter(false)}
     >
-      <GridItem
-        wrapperClassName="p-0 h-full flex flex-col"
-        entryId={entryId}
-        entryPreview={entryPreview}
-        translation={translation}
+      <EntryItemWrapper
+        view={FeedViewType.Pictures}
+        entry={entry}
+        itemClassName="group hover:bg-theme-item-hover rounded-md"
+        style={{
+          width: itemWidth,
+        }}
       >
-        {entry.entries.media && entry.entries.media.length > 0 ? (
-          <MasonryItemFixedDimensionWrapper url={entry.entries.media[0].url}>
+        {media && media.length > 0 ? (
+          <MasonryItemFixedDimensionWrapper url={media[0].url}>
             <SwipeMedia
-              media={entry.entries.media}
+              media={media}
               className={cn("w-full shrink-0 grow rounded-md", isActive && "rounded-b-none")}
               proxySize={proxySize}
               imgClassName="object-cover"
               uniqueKey={entryId}
-              onPreview={(media, i) => {
-                previewMedia(media, i)
-              }}
+              onPreview={previewMedia}
             />
+
+            <AnimatePresence>
+              {isMouseEnter && (
+                <m.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute inset-x-0 -bottom-px z-[3] overflow-hidden rounded-b-md pb-1"
+                  key="footer"
+                >
+                  <div className="absolute inset-x-0 bottom-0 h-[56px]" style={maskStyle}>
+                    <div className="absolute inset-x-0 bottom-0 h-[56px] bg-gradient-to-t from-black/80 to-transparent" />
+                  </div>
+                  <GridItemFooter
+                    entryId={entryId}
+                    entryPreview={entryPreview}
+                    translation={translation}
+                    titleClassName="!text-white"
+                    descriptionClassName="!text-white/80"
+                    timeClassName="!text-white/60"
+                  />
+                </m.div>
+              )}
+            </AnimatePresence>
           </MasonryItemFixedDimensionWrapper>
         ) : (
           <div className="center aspect-video flex-col gap-1 rounded-md bg-muted text-xs text-muted-foreground">
@@ -105,11 +151,14 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
             No media available
           </div>
         )}
-      </GridItem>
-    </EntryItemWrapper>
+      </EntryItemWrapper>
+    </div>
   )
 })
 
+const maskStyle = {
+  maskImage: "linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 10px)",
+}
 const MasonryItemFixedDimensionWrapper = (
   props: PropsWithChildren<{
     url: string
@@ -129,14 +178,18 @@ const MasonryItemFixedDimensionWrapper = (
     setItemStableRatio(url, stableRadio)
   }, [setItemStableRatio, stableRadio, url])
 
+  const style = useMemo(
+    () => ({
+      width: itemWidth,
+      height: itemWidth / stableRadioCtx,
+    }),
+    [itemWidth, stableRadioCtx],
+  )
+
+  if (!style.height) return null
+
   return (
-    <div
-      className="relative flex h-full gap-2 overflow-x-auto"
-      style={{
-        width: itemWidth,
-        height: itemWidth / stableRadioCtx,
-      }}
-    >
+    <div className="relative flex h-full gap-2 overflow-x-auto overflow-y-hidden" style={style}>
       {children}
     </div>
   )
@@ -153,13 +206,13 @@ export const PictureItemSkeleton = (
         </div>
         <div className="relative flex-1 px-2 pb-3 pt-1 text-sm">
           <div className="relative mb-1 mt-1.5 truncate font-medium leading-none">
-            <Skeleton className="h-4 w-3/4 " />
+            <Skeleton className="h-4 w-3/4" />
           </div>
           <div className="mt-1 flex items-center gap-1 truncate text-[13px]">
             <Skeleton className="mr-0.5 size-4" />
-            <Skeleton className="h-3 w-1/2 " />
+            <Skeleton className="h-3 w-1/2" />
             <span className="text-zinc-500">·</span>
-            <Skeleton className="h-3 w-12 " />
+            <Skeleton className="h-3 w-12" />
           </div>
         </div>
       </div>

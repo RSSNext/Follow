@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { Fragment } from "react/jsx-runtime"
 import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 import { z } from "zod"
 
 import { Button } from "~/components/ui/button"
@@ -19,7 +19,6 @@ import { Input } from "~/components/ui/input"
 import { apiFetch } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
 import { cn } from "~/lib/utils"
-import type { FeedResponse } from "~/models"
 import { Queries } from "~/queries"
 
 import { FollowSummary } from "../../components/feed-summary"
@@ -36,20 +35,26 @@ const formSchema = z.object({
   }),
 })
 
-const list = [
+const NumberDisplay = ({ value }) => <span className="font-bold text-zinc-800">{value ?? 0}</span>
+
+const list: {
+  key: string
+  title: I18nKeys
+  className: string
+}[] = [
   {
     key: "parsedErrorItems",
-    title: "Parsed Error Items",
+    title: "discover.import.parsedErrorItems",
     className: "text-red-500",
   },
   {
     key: "successfulItems",
-    title: "Successful Items",
+    title: "discover.import.successfulItems",
     className: "text-green-500",
   },
   {
     key: "conflictItems",
-    title: "Conflict Items",
+    title: "discover.import.conflictItems",
     className: "text-yellow-500",
   },
 ]
@@ -89,6 +94,7 @@ export function DiscoverImport() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutation.mutate(values.file)
   }
+
   const { t } = useTranslation()
 
   return (
@@ -100,7 +106,7 @@ export function DiscoverImport() {
             name="file"
             render={({ field: { value, onChange, ...fieldProps } }) => (
               <FormItem>
-                <FormLabel>OPML file</FormLabel>
+                <FormLabel>{t("discover.import.opml")}</FormLabel>
                 <FormControl>
                   <label
                     className="center flex h-[100px] w-full rounded-md border border-dashed"
@@ -150,28 +156,27 @@ export function DiscoverImport() {
         <div className="mt-8 max-w-lg">
           <Card>
             <CardHeader className="block text-zinc-500">
-              <span className="font-bold text-zinc-800">
-                {mutation.data?.successfulItems.length || 0}
-              </span>{" "}
-              feeds were successfully imported,{" "}
-              <span className="font-bold text-zinc-800">
-                {mutation.data?.conflictItems.length || 0}
-              </span>{" "}
-              were already subscribed to, and{" "}
-              <span className="font-bold text-zinc-800">
-                {mutation.data?.parsedErrorItems.length || 0}
-              </span>{" "}
-              failed to import.
+              <Trans
+                ns="app"
+                i18nKey="discover.import.result"
+                components={{
+                  SuccessfulNum: <NumberDisplay value={mutation.data?.successfulItems.length} />,
+                  ConflictNum: <NumberDisplay value={mutation.data?.conflictItems.length} />,
+                  ErrorNum: <NumberDisplay value={mutation.data?.parsedErrorItems.length} />,
+                }}
+              />
             </CardHeader>
             <CardContent className="space-y-6">
               {list.map((item) => (
                 <div key={item.key}>
-                  <div className={cn("mb-4 text-lg font-medium", item.className)}>{item.title}</div>
+                  <div className={cn("mb-4 text-lg font-medium", item.className)}>
+                    {t(item.title)}
+                  </div>
                   <div className="space-y-4">
                     {!mutation.data?.[item.key].length && (
-                      <div className="text-zinc-500">No items</div>
+                      <div className="text-zinc-500">{t("discover.import.noItems")}</div>
                     )}
-                    {mutation.data?.[item.key].map((feed: FeedResponse) => (
+                    {mutation.data?.[item.key].map((feed) => (
                       <FollowSummary className="max-w-[462px]" key={feed.id} feed={feed} />
                     ))}
                   </div>

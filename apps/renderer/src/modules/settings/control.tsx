@@ -37,7 +37,7 @@ export const SettingSwitch: Component<{
   return (
     <div className={cn("mb-3 flex items-center justify-between gap-4", className)}>
       <Label htmlFor={id}>{label}</Label>
-      <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} className="cursor-auto" />
+      <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} />
     </div>
   )
 }

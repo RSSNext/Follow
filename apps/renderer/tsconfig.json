@@ -14,7 +14,8 @@
     "paths": {
       "~/*": ["src/*"],
       "@pkg": ["../../package.json"],
-      "@locales/*": ["../../locales/*"]
+      "@locales/*": ["../../locales/*"],
+      "@constants/*": ["../../constants/*"]
     }
   }
 }

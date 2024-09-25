@@ -1,5 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect } from "react"
+import type { DotLottie } from "@lottiefiles/dotlottie-react"
+import { DotLottieReact } from "@lottiefiles/dotlottie-react"
+import { m } from "framer-motion"
+import type { RefCallback } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
@@ -17,9 +21,15 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { SocialMediaLinks } from "~/constants/social"
+import { useSignOut } from "~/hooks/biz/useSignOut"
+import { tipcClient } from "~/lib/client"
 import { getFetchErrorMessage } from "~/lib/error-parser"
+import confettiUrl from "~/lottie/confetti.lottie?url"
 import { useInvitationMutation } from "~/queries/invitations"
+
+const absoluteConfettiUrl = new URL(confettiUrl, import.meta.url).href
 
 const formSchema = z.object({
   code: z.string().min(1),
@@ -42,15 +52,41 @@ export function Component() {
     invitationMutation.mutate(values.code)
   }
 
+  const [showConfetti, setShowConfetti] = useState(false)
+
   useEffect(() => {
     if (invitationMutation.isSuccess) {
+      setShowConfetti(true)
+    }
+  }, [invitationMutation.isSuccess])
+  const [dotLottie, setDotLottie] = useState<DotLottie | null>(null)
+
+  useEffect(() => {
+    function onComplete() {
       navigate("/")
     }
-  }, [invitationMutation.isSuccess, navigate])
+
+    if (dotLottie) {
+      dotLottie.addEventListener("complete", onComplete)
+    }
+
+    return () => {
+      if (dotLottie) {
+        dotLottie.removeEventListener("complete", onComplete)
+      }
+    }
+  }, [dotLottie, navigate])
+
+  const dotLottieRefCallback: RefCallback<DotLottie> = (dotLottie) => {
+    setDotLottie(dotLottie)
+  }
+
+  const signOut = useSignOut()
 
   return (
     <div className="container flex h-screen w-full flex-col items-center justify-center gap-14">
       <Logo className="size-20" />
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-[512px] max-w-full">
           <FormField
@@ -68,14 +104,56 @@ export function Component() {
               </FormItem>
             )}
           />
-          <div className="center flex">
+          <div className="center relative flex">
+            {showConfetti && (
+              <DotLottieReact
+                className="absolute size-[120px]"
+                src={absoluteConfettiUrl}
+                loop={false}
+                autoplay
+                dotLottieRefCallback={dotLottieRefCallback}
+              />
+            )}
             <Button
+              variant={showConfetti ? "outline" : "primary"}
               type="submit"
               disabled={!form.formState.isValid}
               isLoading={invitationMutation.isPending}
             >
+              {showConfetti && (
+                <m.i
+                  initial={{ y: 5 }}
+                  animate={{
+                    y: 0,
+                  }}
+                  className="i-mgc-check-circle-filled mr-2 text-green-500"
+                />
+              )}
               {t("invitation.activate")}
             </Button>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  buttonClassName="absolute -right-2 -top-1 text-foreground/80"
+                  className="size-8 text-lg"
+                  variant="ghost"
+                  type="button"
+                  onClick={() => {
+                    if (window.electron) {
+                      tipcClient?.clearAllData().then(() => {
+                        window.location.href = "/"
+                      })
+                    } else {
+                      signOut()
+                    }
+                  }}
+                >
+                  <i className="i-mingcute-exit-door-line" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t("login.signOut")}</TooltipContent>
+            </Tooltip>
           </div>
         </form>
       </Form>

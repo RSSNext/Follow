@@ -34,7 +34,7 @@ import { VolumeSlider } from "./VolumeSlider"
 type VideoPlayerProps = {
   src: string
 
-  variant?: "preview" | "player"
+  variant?: "preview" | "player" | "thumbnail"
 } & React.VideoHTMLAttributes<HTMLVideoElement> &
   PropsWithChildren
 export type VideoPlayerRef = {
@@ -58,7 +58,7 @@ interface VideoPlayerContextValue {
   controls: VideoPlayerRef["controls"]
   wrapperRef: React.RefObject<HTMLDivElement>
   src: string
-  variant: "preview" | "player"
+  variant: "preview" | "player" | "thumbnail"
 }
 const VideoPlayerContext = createContext<VideoPlayerContextValue>(null!)
 export const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(

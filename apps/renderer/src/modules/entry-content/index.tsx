@@ -1,4 +1,3 @@
-import { repository } from "@pkg"
 import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
@@ -35,7 +34,7 @@ import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { getNewIssueUrl } from "~/lib/issues"
 import { cn } from "~/lib/utils"
-import type { ActiveEntryId } from "~/models"
+import type { ActiveEntryId, FeedModel } from "~/models"
 import {
   useIsSoFWrappedElement,
   useWrappedElement,
@@ -97,7 +96,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
 
-  const feed = useFeedById(entry?.feedId)
+  const feed = useFeedById(entry?.feedId) as FeedModel
 
   const entryHistory = useEntryReadHistory(entryId)
 
@@ -213,13 +212,14 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
           key={entry.entries.id}
         >
           <article
+            data-testid="entry-render"
             onContextMenu={stopPropagation}
             className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
           >
             <a
               href={populatedFullHref || void 0}
               target="_blank"
-              className="-mx-6 block cursor-default rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
+              className="-mx-6 block cursor-button rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
               rel="noreferrer"
             >
               <div className="select-text break-words text-3xl font-bold">
@@ -413,6 +413,7 @@ const NoContent: FC<{
   url: string
 }> = ({ id, url }) => {
   const status = useEntryInReadabilityStatus(id)
+  const { t } = useTranslation("app")
 
   if (status !== ReadabilityStatus.INITIAL && status !== ReadabilityStatus.FAILURE) {
     return null
@@ -420,21 +421,12 @@ const NoContent: FC<{
   return (
     <div className="center">
       <div className="space-y-2 text-balance text-center text-sm text-zinc-400">
-        {(isWebBuild || status === ReadabilityStatus.FAILURE) && <span>No content</span>}
+        {(isWebBuild || status === ReadabilityStatus.FAILURE) && (
+          <span>{t("entry_content.no_content")}</span>
+        )}
         {isWebBuild && (
           <div>
-            <span>
-              Maybe web app doesn't support this content type. But you can{" "}
-              <a
-                target="_blank"
-                rel="noreferrer"
-                className="text-accent underline"
-                href={`${repository.url}/releases`}
-              >
-                download
-              </a>{" "}
-              the desktop app.
-            </span>
+            <span>{t("entry_content.web_app_notice")}</span>
           </div>
         )}
         {url && window.electron && <ReadabilityAutoToggle url={url} id={id} />}

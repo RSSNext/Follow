@@ -8,11 +8,13 @@ import { useWhoami } from "~/atoms/user"
 import { ImpressionView } from "~/components/common/ImpressionTracker"
 import { ActionButton } from "~/components/ui/button"
 import { DividerVertical } from "~/components/ui/divider"
+import { RotatingRefreshIcon } from "~/components/ui/loading"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, views } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useIsOnline } from "~/hooks/common"
+import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { cn, getOS, isBizId } from "~/lib/utils"
 import { useAIDailyReportModal } from "~/modules/ai/ai-daily/hooks"
@@ -62,6 +64,7 @@ export const EntryListHeader: FC<{
   const isOnline = useIsOnline()
 
   const feed = useFeedById(routerParams.feedId)
+  const isList = feed?.type === "list"
 
   const titleStyleBasedView = ["pl-12", "pl-7", "pl-7", "pl-7", "px-5", "pl-12"]
 
@@ -85,7 +88,7 @@ export const EntryListHeader: FC<{
 
             "translate-x-[6px]",
           )}
-          onClick={(e) => e.stopPropagation()}
+          onClick={stopPropagation}
         >
           {views[view].wideMode && entryId && entryId !== ROUTE_ENTRY_PENDING && (
             <>
@@ -101,14 +104,16 @@ export const EntryListHeader: FC<{
           </AppendTaildingDivider>
 
           {isOnline ? (
-            feed?.ownerUserId === user?.id && isBizId(routerParams.feedId!) ? (
+            feed?.ownerUserId === user?.id &&
+            isBizId(routerParams.feedId!) &&
+            feed?.type === "feed" ? (
               <ActionButton
                 tooltip="Refresh"
                 onClick={() => {
                   refreshFeed()
                 }}
               >
-                <i className={cn("i-mgc-refresh-2-cute-re", isPending && "animate-spin")} />
+                <RotatingRefreshIcon isRefreshing={isPending} />
               </ActionButton>
             ) : (
               <ActionButton
@@ -121,32 +126,33 @@ export const EntryListHeader: FC<{
                   refetch()
                 }}
               >
-                <i
-                  className={cn(
-                    "i-mgc-refresh-2-cute-re",
-                    isRefreshing && "animate-spin",
-                    hasUpdate && "text-accent",
-                  )}
+                <RotatingRefreshIcon
+                  className={cn(hasUpdate && "text-accent")}
+                  isRefreshing={isRefreshing}
                 />
               </ActionButton>
             )
           ) : null}
-          <ActionButton
-            tooltip={
-              !unreadOnly
-                ? t("entry_list_header.show_unread_only")
-                : t("entry_list_header.show_all")
-            }
-            shortcut={shortcuts.entries.toggleUnreadOnly.key}
-            onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
-          >
-            {unreadOnly ? (
-              <i className="i-mgc-round-cute-fi" />
-            ) : (
-              <i className="i-mgc-round-cute-re" />
-            )}
-          </ActionButton>
-          <MarkAllReadWithOverlay containerRef={containerRef} shortcut />
+          {!isList && (
+            <>
+              <ActionButton
+                tooltip={
+                  !unreadOnly
+                    ? t("entry_list_header.show_unread_only")
+                    : t("entry_list_header.show_all")
+                }
+                shortcut={shortcuts.entries.toggleUnreadOnly.key}
+                onClick={() => setGeneralSetting("unreadOnly", !unreadOnly)}
+              >
+                {unreadOnly ? (
+                  <i className="i-mgc-round-cute-fi" />
+                ) : (
+                  <i className="i-mgc-round-cute-re" />
+                )}
+              </ActionButton>
+              <MarkAllReadWithOverlay containerRef={containerRef} shortcut />
+            </>
+          )}
         </div>
       </div>
       {titleAtBottom && titleInfo}

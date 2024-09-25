@@ -1,4 +1,3 @@
-import { registerGlobalContext } from "@follow/shared/bridge"
 import { env } from "@follow/shared/env"
 import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
@@ -7,14 +6,13 @@ import duration from "dayjs/plugin/duration"
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { enableMapSet } from "immer"
-import { toast } from "sonner"
+import React from "react"
+import ReactDOM from "react-dom"
 
-import { getUISettings } from "~/atoms/settings/ui"
 import { isElectronBuild } from "~/constants"
 import { browserDB } from "~/database"
 import { initI18n } from "~/i18n"
 import { settingSyncQueue } from "~/modules/settings/helper/sync-queue"
-import { ElectronCloseEvent, ElectronShowEvent } from "~/providers/invalidate-query-provider"
 import { CleanerService } from "~/services/cleaner"
 
 import { subscribeNetworkStatus } from "../atoms/network"
@@ -70,23 +68,6 @@ export const initializeApp = async () => {
 
   subscribeNetworkStatus()
 
-  registerGlobalContext({
-    showSetting: (path) => window.router.showSettings(path),
-    getGeneralSettings,
-    getUISettings,
-    /**
-     * Electron app only
-     */
-    electronClose() {
-      document.dispatchEvent(new ElectronCloseEvent())
-    },
-    electronShow() {
-      document.dispatchEvent(new ElectronShowEvent())
-    },
-
-    toast,
-  })
-
   apm("hydrateSettings", hydrateSettings)
 
   apm("setting sync", () => {
@@ -95,12 +76,11 @@ export const initializeApp = async () => {
   })
 
   // should after hydrateSettings
-  const { dataPersist: enabledDataPersist, sendAnonymousData } = getGeneralSettings()
+  const { dataPersist: enabledDataPersist } = getGeneralSettings()
 
   initSentry()
+  initPostHog()
   await apm("i18n", initI18n)
-
-  if (sendAnonymousData) initPostHog()
 
   let dataHydratedTime: undefined | number
   // Initialize the database
@@ -119,6 +99,10 @@ export const initializeApp = async () => {
     data_hydrated_time: dataHydratedTime,
     version: APP_VERSION,
   })
+
+  // expose `React` `ReactDOM` to global, it's easier for developers to make plugins
+  window.React = React
+  window.ReactDOM = ReactDOM
 }
 
 import.meta.hot?.dispose(cleanup)

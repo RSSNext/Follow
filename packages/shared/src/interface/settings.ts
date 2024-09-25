@@ -22,10 +22,12 @@ export interface UISettings {
   modalDraggable: boolean
   modalOpaque: boolean
   reduceMotion: boolean
+  usePointerCursor: boolean | null
   uiFontFamily: string
   readerFontFamily: string
   readerRenderInlineStyle: boolean
-  codeHighlightTheme: string
+  codeHighlightThemeLight: string
+  codeHighlightThemeDark: string
   guessCodeLanguage: boolean
 
   // view
