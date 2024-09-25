@@ -8,6 +8,7 @@ import { getGeneralSettings } from "~/atoms/settings/general"
 import { getUISettings } from "~/atoms/settings/ui"
 import { useModalStack } from "~/components/ui/modal"
 import { FeedForm } from "~/modules/discover/feed-form"
+import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 
 import { ElectronCloseEvent, ElectronShowEvent } from "./invalidate-query-provider"
 
@@ -39,6 +40,8 @@ export const ExtensionExposeProvider = () => {
   }, [])
 
   const { t } = useTranslation()
+
+  const presentUserProfile = usePresentUserProfileModal("dialog")
   useEffect(() => {
     registerGlobalContext({
       follow(id, options) {
@@ -51,7 +54,11 @@ export const ExtensionExposeProvider = () => {
           ),
         })
       },
+
+      profile(id, variant) {
+        presentUserProfile(id, variant)
+      },
     })
-  }, [present, t])
+  }, [present, presentUserProfile, t])
   return null
 }
