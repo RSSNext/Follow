@@ -17,6 +17,7 @@ const failedList = new Set<string | undefined>()
 type BaseProps = {
   mediaContainerClassName?: string
   showFallback?: boolean
+  thumbnail?: boolean
 }
 export type MediaProps = BaseProps &
   (
@@ -45,6 +46,7 @@ const MediaImpl: FC<MediaProps> = ({
   proxy,
   popper = false,
   mediaContainerClassName,
+  thumbnail,
   ...props
 }) => {
   const { src, style, type, previewImageUrl, showFallback, ...rest } = props
@@ -133,7 +135,7 @@ const MediaImpl: FC<MediaProps> = ({
             )}
             onClick={handleClick}
           >
-            <VideoPreview src={src!} previewImageUrl={previewImageUrl} />
+            <VideoPreview src={src!} previewImageUrl={previewImageUrl} thumbnail={thumbnail} />
           </span>
         )
       }
@@ -222,7 +224,8 @@ const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, classNam
 const VideoPreview: FC<{
   src: string
   previewImageUrl?: string
-}> = ({ src, previewImageUrl }) => {
+  thumbnail?: boolean
+}> = ({ src, previewImageUrl, thumbnail = false }) => {
   const [isInitVideoPlayer, setIsInitVideoPlayer] = useState(!previewImageUrl)
 
   const [videoRef, setVideoRef] = useState<VideoPlayerRef | null>(null)
@@ -249,7 +252,7 @@ const VideoPreview: FC<{
         />
       ) : (
         <VideoPlayer
-          variant="preview"
+          variant={thumbnail ? "thumbnail" : "preview"}
           controls={false}
           src={src}
           ref={setVideoRef}
