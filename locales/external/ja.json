@@ -14,11 +14,11 @@
     "activate": "有効化",
     "codeOptions": {
       "1": "招待してくれるアルファテストユーザーを探しましょう。",
-      "2": "時折行われるプレゼント企画のために、私たちのDiscordサーバーに参加しましょう。",
-      "3": "時折行われるプレゼント企画のために、私たちのXアカウントをフォローしましょう。"
+      "2": "時折行われるプレゼント企画のために、私たちの Discord サーバーに参加しましょう。",
+      "3": "時折行われるプレゼント企画のために、私たちの X アカウントをフォローしましょう。"
     },
-    "earlyAccess": "現在、Followはアーリーアクセス中で、利用には招待コードが必要です。",
-    "earlyAccessMessage": "😰 申し訳ありませんが、Followは現在アーリーアクセス中で、招待コードが必要です。",
+    "earlyAccess": "現在、Follow はアーリーアクセス中で、利用には招待コードが必要です。",
+    "earlyAccessMessage": "😰 申し訳ありませんが、Follow は現在アーリーアクセス中で、招待コードが必要です。",
     "generateButton": "新しいコードを生成",
     "generateCost": "友達のために招待コードを生成するには、{{INVITATION_PRICE}} Power を消費できます。",
     "getCodeMessage": "以下の方法で招待コードを入手できます：",
@@ -26,8 +26,8 @@
   },
   "login": {
     "backToWebApp": "ウェブアプリに戻る",
-    "continueWithGitHub": "GitHubで続行",
-    "continueWithGoogle": "Googleで続行",
+    "continueWithGitHub": "GitHub で続行",
+    "continueWithGoogle": "Google で続行",
     "logInTo": "ログイン ",
     "openApp": "アプリを開く",
     "redirecting": "リダイレクト中",
