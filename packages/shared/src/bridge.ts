@@ -25,6 +25,9 @@ interface RenderGlobalContext {
 
   /// Utils
   toast: typeof toast
+  // URL
+  getWebUrl: () => string
+  getApiUrl: () => string
 }
 
 export const registerGlobalContext = (context: Partial<RenderGlobalContext>) => {

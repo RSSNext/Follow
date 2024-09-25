@@ -1,4 +1,5 @@
 import { registerGlobalContext } from "@follow/shared/bridge"
+import { env } from "@follow/shared/env"
 import { useEffect, useLayoutEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
@@ -28,6 +29,12 @@ export const ExtensionExposeProvider = () => {
       },
 
       toast,
+      getApiUrl() {
+        return env.VITE_API_URL
+      },
+      getWebUrl() {
+        return window.location.origin
+      },
     })
   }, [])
 
