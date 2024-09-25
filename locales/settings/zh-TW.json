@@ -139,7 +139,7 @@
   "invitation.generateCost": "您可以花費 {{INVITATION_PRICE}} <PowerIcon>Power</PowerIcon> 為您的朋友產生邀請碼。",
   "invitation.getCodeMessage": "您可以通過以下方式獲取邀請碼：",
   "invitation.limitationMessage": "基於您的使用時間，您最多可以產生 {{limitation}} 個邀請碼。",
-  "invitation.newInvitationSuccess": "🎉 邀請碼已產生, 邀請碼已複製",
+  "invitation.newInvitationSuccess": "🎉 邀請碼已產生，邀請碼已複製",
   "invitation.noInvitations": "沒有邀請",
   "invitation.notUsed": "為使用",
   "invitation.sidebar_title": "邀請",
