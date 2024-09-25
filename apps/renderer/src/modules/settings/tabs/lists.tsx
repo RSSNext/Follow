@@ -42,6 +42,7 @@ import { apiClient } from "~/lib/api-fetch"
 import { cn, isBizId } from "~/lib/utils"
 import type { ListModel } from "~/models"
 import { ViewSelectorRadioGroup } from "~/modules/shared/ViewSelectorRadioGroup"
+import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
 import { feedActions, getFeedById, useFeedById } from "~/store/feed"
 import { useSubscriptionStore } from "~/store/subscription"
@@ -78,16 +79,11 @@ export const SettingLists = () => {
               <TableHeader className="border-b">
                 <TableRow className="[&_*]:!font-semibold">
                   <TableHead size="sm">{t.settings("lists.title")}</TableHead>
-                  <TableHead className="w-36" size="sm">
-                    {t.settings("lists.view")}
-                  </TableHead>
-                  <TableHead className="w-20" size="sm">
-                    {t.settings("lists.fee.label")}
-                  </TableHead>
-
-                  <TableHead className="w-20 text-center" size="sm">
-                    {t.common("words.actions")}
-                  </TableHead>
+                  <TableHead size="sm">{t.settings("lists.view")}</TableHead>
+                  <TableHead size="sm">{t.settings("lists.fee.label")}</TableHead>
+                  <TableHead size="sm">{t.settings("lists.subscriptions")}</TableHead>
+                  <TableHead size="sm">{t.settings("lists.earnings")}</TableHead>
+                  <TableHead size="sm">{t.common("words.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="border-t-[12px] border-transparent [&_td]:!px-3">
@@ -107,22 +103,22 @@ export const SettingLists = () => {
                         <span className="inline-block max-w-[200px] truncate">{row.title}</span>
                       </a>
                     </TableCell>
-                    <TableCell align="center" size="sm">
-                      <div className="flex items-center gap-1">
-                        {t(views[row.view].name)}
-                        <span className={cn("inline-flex items-center", views[row.view].className)}>
-                          {views[row.view].icon}
-                        </span>
-                      </div>
+                    <TableCell size="sm">
+                      <span className={cn("inline-flex items-center", views[row.view].className)}>
+                        {views[row.view].icon}
+                      </span>
                     </TableCell>
-                    <TableCell align="center" size="sm">
+                    <TableCell size="sm">
                       <div className="flex items-center gap-1">
                         {row.fee}
                         <i className="i-mgc-power shrink-0 text-lg text-accent" />
                       </div>
                     </TableCell>
-
-                    <TableCell align="center" size="sm">
+                    <TableCell size="sm">{row.subscriptionCount}</TableCell>
+                    <TableCell size="sm">
+                      <Balance>{BigInt(row.purchaseAmount || 0n)}</Balance>
+                    </TableCell>
+                    <TableCell size="sm">
                       <Tooltip>
                         <TooltipTrigger>
                           <Button

@@ -3426,6 +3426,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         handle: string | null;
                         createdAt: string;
                     } | null | undefined;
+                    subscriptionCount?: number | undefined;
+                    purchaseAmount?: number | undefined;
                 }[];
             };
             outputFormat: "json" | "text";
