@@ -4,14 +4,17 @@ import { Trans, useTranslation } from "react-i18next"
 import { Logo } from "~/components/icons/logo"
 import { Button } from "~/components/ui/button"
 import { styledButtonVariant } from "~/components/ui/button/variants"
+import { CopyButton } from "~/components/ui/code-highlighter"
 import { Divider } from "~/components/ui/divider"
 import { SocialMediaLinks } from "~/constants/social"
+import { getCurrentEnvironment } from "~/lib/environment"
 import { getNewIssueUrl } from "~/lib/issues"
 
 import { SettingsTitle } from "../title"
 
 export const SettingAbout = () => {
   const { t } = useTranslation("settings")
+  const currentEnvironment = getCurrentEnvironment().join("\n")
 
   return (
     <div>
@@ -24,8 +27,9 @@ export const SettingAbout = () => {
             <div className="text-lg font-bold">
               {APP_NAME} {!import.meta.env.PROD ? `(${import.meta.env.MODE})` : ""}
             </div>
-            <div>
+            <div className="flex items-center gap-2">
               <span className="rounded bg-muted px-2 py-1 text-xs">{APP_VERSION}</span>
+              <CopyButton value={currentEnvironment} className="p-1 [&_i]:size-2.5" />
             </div>
           </div>
 
