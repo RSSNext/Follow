@@ -66,15 +66,14 @@ export const useFeedHeaderTitle = () => {
 export const useAddFeedToFeedList = (options?: { onSuccess: () => void; onError: () => void }) => {
   const { t } = useTranslation("settings")
   return useMutation({
-    mutationFn: async (payload: { feedId: string; listId: string }) => {
-      const feed = await apiClient.lists.feeds.$post({
-        json: {
-          listId: payload.listId,
-          feedId: payload.feedId,
-        },
+    mutationFn: async (
+      payload: { feedId: string; listId: string } | { feedIds: string[]; listId: string },
+    ) => {
+      const feeds = await apiClient.lists.feeds.$post({
+        json: payload,
       })
 
-      listActions.addFeedToFeedList(payload.listId, feed.data)
+      feeds.data.forEach((feed) => listActions.addFeedToFeedList(payload.listId, feed))
     },
     onSuccess: () => {
       toast.success(t("lists.feeds.add.success"))
