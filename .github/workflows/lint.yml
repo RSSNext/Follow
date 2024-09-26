@@ -24,6 +24,10 @@ jobs:
       - name: Checkout LFS objects
         run: git lfs checkout
 
+      - name: AutoCorrect
+        if: runner.os == 'Linux'
+        uses: huacnlee/autocorrect-action@main
+
       - uses: pnpm/action-setup@v4
 
       - name: Use Node.js ${{ matrix.node-version }}

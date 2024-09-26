@@ -15,6 +15,10 @@ jobs:
           ref: ${{ github.head_ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
+      - name: AutoCorrect
+        if: runner.os == 'Linux'
+        uses: huacnlee/autocorrect-action@main
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
