@@ -154,7 +154,6 @@ function FeedCategoryImpl({
                   submenu: listList.data?.map((list) => ({
                     label: list.title || "",
                     type: "text",
-                    icon: list.image,
                     click() {
                       return addMutation.mutate({
                         feedIds: ids,

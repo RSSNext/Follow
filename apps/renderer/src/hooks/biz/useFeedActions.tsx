@@ -86,26 +86,29 @@ export const useFeedActions = ({
         type: "separator" as const,
         disabled: isEntryList,
       },
-      {
-        type: "text" as const,
-        label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-        enabled: !!listList.data?.length,
-        submenu: listList.data?.map((list) => ({
-          label: list.title || "",
-          type: "text",
-          icon: list.image,
-          click() {
-            return addMutation.mutate({
-              feedId,
-              listId: list.id,
-            })
-          },
-        })),
-      },
-      {
-        type: "separator" as const,
-        disabled: isEntryList,
-      },
+      ...(!isList
+        ? [
+            {
+              type: "text" as const,
+              label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
+              enabled: !!listList.data?.length,
+              submenu: listList.data?.map((list) => ({
+                label: list.title || "",
+                type: "text" as const,
+                click() {
+                  return addMutation.mutate({
+                    feedId,
+                    listId: list.id,
+                  })
+                },
+              })),
+            },
+            {
+              type: "separator" as const,
+              disabled: isEntryList,
+            },
+          ]
+        : []),
       {
         type: "text" as const,
         label: isEntryList ? t("sidebar.feed_actions.edit_feed") : t("sidebar.feed_actions.edit"),
