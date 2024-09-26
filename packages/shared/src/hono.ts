@@ -3426,8 +3426,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         handle: string | null;
                         createdAt: string;
                     } | null | undefined;
-                    subscriptionCount?: number | undefined;
-                    purchaseAmount?: number | undefined;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -4940,6 +4938,24 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
         $put: {
+            input: {
+                json: {
+                    actionId: number;
+                };
+            };
+            output: {
+                code: number;
+                data: {
+                    actionId: number;
+                    result: boolean;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/achievement/check": {
+        $post: {
             input: {
                 json: {
                     actionId: number;
