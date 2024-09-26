@@ -5,6 +5,7 @@
   "confirm": "確認",
   "ok": "OK",
   "quantifier.piece": "個",
+  "space": "",
   "time.last_night": "昨夜",
   "time.the_night_before_last": "一昨夜",
   "time.today": "今日",
@@ -24,6 +25,5 @@
   "words.result": "結果",
   "words.result_one": "結果",
   "words.result_other": "結果",
-  "words.space": "",
   "words.which.all": "すべて"
 }

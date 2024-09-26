@@ -5,6 +5,7 @@
   "confirm": "確認",
   "ok": "確定",
   "quantifier.piece": "",
+  "space": " ",
   "time.last_night": "昨晚",
   "time.the_night_before_last": "前晚",
   "time.today": "今天",
@@ -24,6 +25,5 @@
   "words.result": "結果",
   "words.result_one": "結果",
   "words.result_other": "多筆結果",
-  "words.space": " ",
   "words.which.all": "全部"
 }

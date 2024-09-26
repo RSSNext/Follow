@@ -4,6 +4,7 @@
   "confirm": "Подтвердить",
   "ok": "ОК",
   "quantifier.piece": "",
+  "space": " ",
   "time.last_night": "Прошлой ночью",
   "time.the_night_before_last": "Позапрошлой ночью",
   "time.today": "Сегодня",
@@ -23,6 +24,5 @@
   "words.result": "результат",
   "words.result_one": "результат",
   "words.result_other": "результаты",
-  "words.space": " ",
   "words.which.all": "Все"
 }

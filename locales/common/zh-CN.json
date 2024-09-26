@@ -5,6 +5,7 @@
   "confirm": "确认",
   "ok": "好",
   "quantifier.piece": "条",
+  "space": "",
   "time.last_night": "昨晚",
   "time.the_night_before_last": "前天晚上",
   "time.today": "今天",
@@ -28,7 +29,6 @@
   "words.result": "结果",
   "words.result_one": "结果",
   "words.result_other": "结果",
-  "words.space": "",
   "words.submit": "提交",
   "words.update": "更新",
   "words.which.all": "全部"

@@ -80,7 +80,7 @@ export const RelativeTime: FC<{
       {/* https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904 */}
       <TooltipTrigger onFocusCapture={stopPropagation}>
         {relative}
-        {t("words.space")}
+        {t("space")}
         {t("words.ago")}
       </TooltipTrigger>
 

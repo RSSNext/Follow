@@ -1,16 +1,19 @@
+import { useMutation } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
 import { useShallow } from "zustand/react/shallow"
 
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING, views } from "~/constants"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
-import type { TargetModel } from "~/models"
+import { apiClient } from "~/lib/api-fetch"
+import type { FeedOrListRespModel } from "~/models"
 
 import { getSubscriptionByFeedId } from "../subscription"
-import { useFeedStore } from "./store"
+import { feedActions, useFeedStore } from "./store"
 import type { FeedQueryParams } from "./types"
 
-export const useFeedById = (feedId: Nullable<string>): TargetModel | null =>
+export const useFeedById = (feedId: Nullable<string>): FeedOrListRespModel | null =>
   useFeedStore((state) => (feedId ? state.feeds[feedId] : null))
 
 export const useFeedByIdOrUrl = (feed: FeedQueryParams) =>
@@ -26,7 +29,7 @@ export const useFeedByIdOrUrl = (feed: FeedQueryParams) =>
 
 export const useFeedByIdSelector = <T>(
   feedId: Nullable<string>,
-  selector: (feed: TargetModel) => T,
+  selector: (feed: FeedOrListRespModel) => T,
 ) =>
   useFeedStore(
     useShallow((state) => (feedId && state.feeds[feedId] ? selector(state.feeds[feedId]) : null)),
@@ -45,7 +48,6 @@ export const useFeedHeaderTitle = () => {
 
   switch (currentFeedId) {
     case ROUTE_FEED_PENDING: {
-      // TODO: fix this type error
       return t(views[view].name)
     }
     case FEED_COLLECTION_LIST: {
@@ -58,4 +60,55 @@ export const useFeedHeaderTitle = () => {
       return subscriptionTitle || feedTitle
     }
   }
+}
+
+export const useAddFeedToFeedList = (options?: { onSuccess: () => void; onError: () => void }) => {
+  const { t } = useTranslation("settings")
+  return useMutation({
+    mutationFn: async (payload: { feedId: string; listId: string }) => {
+      const feed = await apiClient.lists.feeds.$post({
+        json: {
+          listId: payload.listId,
+          feedId: payload.feedId,
+        },
+      })
+
+      feedActions.addFeedToFeedList(payload.listId, feed.data)
+    },
+    onSuccess: () => {
+      toast.success(t("lists.feeds.add.success"))
+
+      options?.onSuccess?.()
+    },
+    async onError() {
+      toast.error(t("lists.feeds.add.error"))
+      options?.onError?.()
+    },
+  })
+}
+
+export const useRemoveFeedFromFeedList = (options?: {
+  onSuccess: () => void
+  onError: () => void
+}) => {
+  const { t } = useTranslation("settings")
+  return useMutation({
+    mutationFn: async (payload: { feedId: string; listId: string }) => {
+      feedActions.removeFeedFromFeedList(payload.listId, payload.feedId)
+      await apiClient.lists.feeds.$delete({
+        json: {
+          listId: payload.listId,
+          feedId: payload.feedId,
+        },
+      })
+    },
+    onSuccess: () => {
+      toast.success(t("lists.feeds.delete.success"))
+      options?.onSuccess?.()
+    },
+    async onError() {
+      toast.error(t("lists.feeds.delete.error"))
+      options?.onError?.()
+    },
+  })
 }

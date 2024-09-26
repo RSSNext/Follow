@@ -5,6 +5,7 @@
   "confirm": "확인",
   "ok": "확인",
   "quantifier.piece": "",
+  "space": " ",
   "time.last_night": "어젯밤",
   "time.the_night_before_last": "그저께 밤",
   "time.today": "오늘",
@@ -27,7 +28,6 @@
   "words.result": "결과",
   "words.result_one": "결과",
   "words.result_other": "결과들",
-  "words.space": " ",
   "words.submit": "제출",
   "words.update": "업데이트",
   "words.which.all": "모두"

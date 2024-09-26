@@ -4,6 +4,7 @@
   "confirm": "Conferma",
   "ok": "OK",
   "quantifier.piece": "",
+  "space": " ",
   "time.last_night": "Ieri sera",
   "time.the_night_before_last": "L'altra sera",
   "time.today": "Oggi",
@@ -23,6 +24,5 @@
   "words.result": "risultato",
   "words.result_one": "risultato",
   "words.result_other": "risultati",
-  "words.space": " ",
   "words.which.all": "Tutti"
 }
