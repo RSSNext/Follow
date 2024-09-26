@@ -13,6 +13,7 @@ import {
   setReadabilityStatus,
 } from "~/atoms/readability"
 import { useIntegrationSettingKey } from "~/atoms/settings/integration"
+import { toggleShowSourceContent } from "~/atoms/source-content"
 import { whoami } from "~/atoms/user"
 import { mountLottie } from "~/components/ui/lottie-container"
 import {
@@ -345,6 +346,10 @@ export const useEntryActions = ({
         hide: !populatedEntry.entries.url,
         onClick: () => {
           if (!populatedEntry.entries.url) return
+          if (window.electron) {
+            toggleShowSourceContent()
+            return
+          }
           window.open(populatedEntry.entries.url, "_blank")
         },
       },

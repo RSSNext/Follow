@@ -13,6 +13,7 @@ import {
   useEntryReadabilityContent,
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
+import { useShowSourceContent } from "~/atoms/source-content"
 import { m } from "~/components/common/Motion"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
@@ -116,6 +117,7 @@ export const EntryContentRender: Component<{
   const view = useRouteParamsSelector((route) => route.view)
 
   const isInReadabilityMode = useEntryIsInReadability(entryId)
+  const showSourceContent = useShowSourceContent()
   const scrollerRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     scrollerRef.current?.scrollTo(0, 0)
@@ -173,6 +175,10 @@ export const EntryContentRender: Component<{
         className="h-[55px] shrink-0 px-3 @container"
         compact={compact}
       />
+
+      {showSourceContent && entry.entries.url && (
+        <webview src={entry.entries.url} className="size-full" />
+      )}
 
       <ScrollArea.ScrollArea
         mask={false}
