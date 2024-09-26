@@ -5,12 +5,7 @@ import { nanoid } from "nanoid"
 import { whoami } from "~/atoms/user"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type {
-  FeedModel,
-  FeedOrListModel,
-  FeedOrListRespModel,
-  UserModel,
-} from "~/models"
+import type { FeedModel, FeedOrListModel, FeedOrListRespModel, UserModel } from "~/models"
 import { FeedService } from "~/services"
 
 import { getSubscriptionByFeedId } from "../subscription"
