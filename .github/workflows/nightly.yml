@@ -13,7 +13,22 @@ env:
   NODE_OPTIONS: --max-old-space-size=8192
 
 jobs:
+  check-for-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check for code changes
+        id: check
+        run: |
+          git diff --quiet @{1.day.ago} HEAD -- ':!.github' || echo "should_run=true" >> $GITHUB_OUTPUT
+
   nightly-release:
+    needs: check-for-changes
+    if: needs.check-for-changes.outputs.should_run == 'true'
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -151,7 +166,6 @@ jobs:
           name: Nightly ${{ env.NIGHTLY_VERSION }}
           draft: false
           prerelease: true
-          tag_name: nightly-${{ env.NIGHTLY_VERSION }}
           files: |
             out/make/**/*.dmg
             out/make/**/*.zip
@@ -160,7 +174,7 @@ jobs:
             out/make/**/*.yml
           body: |
             This is an automated nightly release for testing purposes.
-            Version: 0.0.0-nightly.${{ env.NIGHTLY_VERSION }}
+            Version: ${{ env.NIGHTLY_VERSION }}
 
             **Warning:** This build may be unstable and is not recommended for production use.
         env:

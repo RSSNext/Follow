@@ -10,7 +10,6 @@ import { useModalStack } from "~/components/ui/modal"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 
-
 export const ExtensionExposeProvider = () => {
   const { present } = useModalStack()
   useLayoutEffect(() => {
