@@ -25,6 +25,7 @@ jobs:
         run: git lfs checkout
 
       - name: AutoCorrect
+        if: runner.os == 'Linux'
         uses: huacnlee/autocorrect-action@main
 
       - uses: pnpm/action-setup@v4

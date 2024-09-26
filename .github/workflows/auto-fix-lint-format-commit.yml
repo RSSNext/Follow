@@ -16,6 +16,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: AutoCorrect
+        if: runner.os == 'Linux'
         uses: huacnlee/autocorrect-action@main
 
       - name: Setup pnpm
