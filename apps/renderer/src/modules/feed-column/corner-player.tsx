@@ -223,6 +223,7 @@ const PlayerProgress = () => {
     if (isDraggingProgress) return
     if (duration > 0 && currentTime >= duration) {
       AudioPlayer?.pause()
+      AudioPlayer?.seek(duration)
       return
     }
     setControlledCurrentTime(currentTime)
