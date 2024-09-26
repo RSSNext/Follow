@@ -73,7 +73,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
 
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
-  const previewMedia = usePreviewMedia()
+  const previewMedia = usePreviewMedia(entryId)
   const itemWidth = useMasonryItemWidth()
 
   const [ref, setRef] = useState<HTMLDivElement | null>(null)

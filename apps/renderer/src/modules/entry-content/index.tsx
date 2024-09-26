@@ -50,7 +50,15 @@ import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
 import { EntryContentProvider } from "./provider"
 
-export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
+export const EntryContent = ({
+  entryId,
+  noMedia,
+  compact,
+}: {
+  entryId: ActiveEntryId
+  noMedia?: boolean
+  compact?: boolean
+}) => {
   const title = useFeedHeaderTitle()
   const { feedId, view } = useRouteParams()
 
@@ -70,10 +78,14 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
     )
   }
 
-  return <EntryContentRender entryId={entryId} />
+  return <EntryContentRender entryId={entryId} noMedia={noMedia} compact={compact} />
 }
 
-export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, className }) => {
+export const EntryContentRender: Component<{
+  entryId: string
+  noMedia?: boolean
+  compact?: boolean
+}> = ({ entryId, noMedia, className, compact }) => {
   const { t } = useTranslation()
 
   const { error, data, isPending } = useAuthQuery(Queries.entries.byId(entryId), {
@@ -148,6 +160,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
         entryId={entry.entries.id}
         view={0}
         className="h-[55px] shrink-0 px-3 @container"
+        compact={compact}
       />
 
       <ScrollArea.ScrollArea
@@ -167,7 +180,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
             onContextMenu={stopPropagation}
             className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
           >
-            <EntryTitle entryId={entryId} />
+            <EntryTitle entryId={entryId} compact={compact} />
 
             <WrappedElementProvider boundingDetection>
               <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem]">
@@ -187,6 +200,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
                   {!isInReadabilityMode ? (
                     <ShadowDOM>
                       <HTML
+                        noMedia={noMedia}
                         accessory={contentAccessories}
                         as="article"
                         className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em]"

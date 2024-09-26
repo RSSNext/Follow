@@ -2,6 +2,7 @@ import { useMemo } from "react"
 
 import { useWhoami } from "~/atoms/user"
 import { useAuthQuery } from "~/hooks/common"
+import { cn } from "~/lib/utils"
 import type { FeedModel } from "~/models"
 import { Queries } from "~/queries"
 import { useEntry, useEntryReadHistory } from "~/store/entry"
@@ -11,6 +12,7 @@ import { EntryTranslation } from "../../entry-column/translation"
 
 interface EntryLinkProps {
   entryId: string
+  compact?: boolean
 }
 
 const safeUrl = (url: string, baseUrl: string) => {
@@ -21,7 +23,7 @@ const safeUrl = (url: string, baseUrl: string) => {
   }
 }
 
-export const EntryTitle = ({ entryId }: EntryLinkProps) => {
+export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
   const user = useWhoami()
   const entry = useEntry(entryId)
   const feed = useFeedById(entry?.feedId) as FeedModel
@@ -62,7 +64,7 @@ export const EntryTitle = ({ entryId }: EntryLinkProps) => {
       className="-mx-6 block cursor-button rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
       rel="noreferrer"
     >
-      <div className="select-text break-words text-3xl font-bold">
+      <div className={cn("select-text break-words font-bold", compact ? "text-2xl" : "text-3xl")}>
         <EntryTranslation source={entry.entries.title} target={translation.data?.title} />
       </div>
       <div className="mt-2 text-[13px] font-medium text-zinc-500">{getPreferredTitle(feed)}</div>
