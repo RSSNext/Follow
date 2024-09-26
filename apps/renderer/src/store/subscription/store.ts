@@ -17,6 +17,8 @@ import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 
 export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
   defaultCategory?: string
+
+  listId?: string
 }
 interface SubscriptionState {
   /**
@@ -307,6 +309,20 @@ class SubscriptionActions {
 
     await Promise.all(
       folderFeedIds.map((feedId) => SubscriptionService.changeView(feedId, changeToView)),
+    )
+  }
+
+  async changeListView(listId: string, currentView: FeedViewType, toView: FeedViewType) {
+    const state = get()
+
+    const inCurrentViewIdx = state.feedIdByView[currentView].indexOf(listId)
+
+    if (inCurrentViewIdx === -1) return
+    set((state) =>
+      produce(state, (state) => {
+        state.feedIdByView[currentView].splice(inCurrentViewIdx, 1)
+        state.feedIdByView[toView].push(listId)
+      }),
     )
   }
 

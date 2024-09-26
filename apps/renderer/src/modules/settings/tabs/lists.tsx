@@ -50,7 +50,7 @@ import {
   useFeedById,
   useRemoveFeedFromFeedList,
 } from "~/store/feed"
-import { useSubscriptionStore } from "~/store/subscription"
+import { subscriptionActions, useSubscriptionStore } from "~/store/subscription"
 
 export const SettingLists = () => {
   const t = useI18n()
@@ -123,7 +123,7 @@ export const SettingLists = () => {
                     </TableCell>
                     <TableCell size="sm">
                       <Tooltip>
-                        <TooltipTrigger>
+                        <TooltipTrigger asChild>
                           <Button
                             variant="ghost"
                             onClick={() => {
@@ -141,7 +141,7 @@ export const SettingLists = () => {
                         </TooltipPortal>
                       </Tooltip>
                       <Tooltip>
-                        <TooltipTrigger>
+                        <TooltipTrigger asChild>
                           <Button
                             variant="ghost"
                             onClick={() => {
@@ -223,10 +223,12 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
         })
       }
     },
-    onSuccess: () => {
+    onSuccess: (_, values) => {
       toast.success(t(id ? "lists.edit.success" : "lists.created.success"))
       Queries.lists.list().invalidate()
       dismiss()
+
+      if (id) subscriptionActions.changeListView(id, views[list.view].view, views[values.view].view)
     },
     async onError() {
       toast.error(t(id ? "lists.edit.error" : "lists.created.error"))
@@ -252,7 +254,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
                 </FormLabel>
               </div>
               <FormControl>
-                <Input {...field} />
+                <Input autoFocus {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -377,6 +379,7 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
       <div className="flex items-center gap-2">
         <Autocomplete
           maxHeight={window.innerHeight < 600 ? 120 : 240}
+          autoFocus
           value={feedSearchFor}
           searchKeys={["name"]}
           onSuggestionSelected={(e) => {

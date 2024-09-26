@@ -63,7 +63,7 @@ class FeedActions {
             const optionalFields = ["owner", "tipUsers"] as const
             optionalFields.forEach((field) => {
               if (state.feeds[feed.id!]?.[field] && !(field in feed)) {
-                ;(feed as any)[field] = state.feeds[feed.id!]?.[field]
+                ;(feed as any)[field] = { ...state.feeds[feed.id!]?.[field] }
               }
             })
 
@@ -171,7 +171,7 @@ class FeedActions {
 
   async fetchOwnedLists() {
     const res = await apiClient.lists.list.$get()
-    this.upsertMany(res.data.concat())
+    this.upsertMany(res.data)
 
     return res.data
   }
