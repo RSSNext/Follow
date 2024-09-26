@@ -10,7 +10,6 @@ import { useModalStack } from "~/components/ui/modal"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 
-import { ElectronCloseEvent, ElectronShowEvent } from "./invalidate-query-provider"
 
 export const ExtensionExposeProvider = () => {
   const { present } = useModalStack()
@@ -19,15 +18,6 @@ export const ExtensionExposeProvider = () => {
       showSetting: (path) => window.router.showSettings(path),
       getGeneralSettings,
       getUISettings,
-      /**
-       * Electron app only
-       */
-      onWindowClose() {
-        document.dispatchEvent(new ElectronCloseEvent())
-      },
-      onWindowShow() {
-        document.dispatchEvent(new ElectronShowEvent())
-      },
 
       toast,
       getApiUrl() {

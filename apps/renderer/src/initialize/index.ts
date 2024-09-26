@@ -1,3 +1,4 @@
+import { registerGlobalContext } from "@follow/shared/bridge"
 import { env } from "@follow/shared/env"
 import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
@@ -11,6 +12,7 @@ import { isElectronBuild } from "~/constants"
 import { browserDB } from "~/database"
 import { initI18n } from "~/i18n"
 import { settingSyncQueue } from "~/modules/settings/helper/sync-queue"
+import { ElectronCloseEvent, ElectronShowEvent } from "~/providers/invalidate-query-provider"
 import { CleanerService } from "~/services/cleaner"
 
 import { subscribeNetworkStatus } from "../atoms/network"
@@ -53,6 +55,19 @@ export const initializeApp = async () => {
 
   // Set Environment
   document.documentElement.dataset.buildType = isElectronBuild ? "electron" : "web"
+
+  // Register global context for electron
+  registerGlobalContext({
+    /**
+     * Electron app only
+     */
+    onWindowClose() {
+      document.dispatchEvent(new ElectronCloseEvent())
+    },
+    onWindowShow() {
+      document.dispatchEvent(new ElectronShowEvent())
+    },
+  })
 
   apm("migration", doMigration)
 
