@@ -10,12 +10,13 @@ import { LoadingCircle } from "~/components/ui/loading"
 import { ROUTE_FEED_IN_FOLDER, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { useAnyPointDown, useInputComposition } from "~/hooks/common"
+import { useAnyPointDown, useAuthQuery, useInputComposition } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
-import { getPreferredTitle, useFeedStore } from "~/store/feed"
+import { Queries } from "~/queries"
+import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
@@ -115,6 +116,9 @@ function FeedCategoryImpl({
   })
   const isCategoryIsWaiting = isChangePending
 
+  const listList = useAuthQuery(Queries.lists.list())
+  const addMutation = useAddFeedToFeedList()
+
   return (
     <div tabIndex={-1} onClick={stopPropagation}>
       {!!showCollapse && (
@@ -135,24 +139,6 @@ function FeedCategoryImpl({
               [
                 {
                   type: "text",
-                  enabled: !!(folderName && typeof view === "number"),
-                  label: t("sidebar.feed_column.context_menu.change_to_other_view"),
-                  submenu: views
-                    .filter((v) => v.view !== view)
-                    .map((v) => ({
-                      // TODO: fix this type error
-                      label: t(v.name),
-                      enabled: true,
-                      type: "text",
-                      shortcut: (v.view + 1).toString(),
-                      icon: v.icon,
-                      click() {
-                        return changeCategoryView(v.view)
-                      },
-                    })),
-                },
-                {
-                  type: "text",
                   label: t("sidebar.feed_column.context_menu.mark_as_read"),
                   click: () => {
                     subscriptionActions.markReadByFeedIds({
@@ -161,6 +147,39 @@ function FeedCategoryImpl({
                   },
                 },
                 { type: "separator" },
+                {
+                  type: "text",
+                  label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
+                  enabled: !!listList.data?.length,
+                  submenu: listList.data?.map((list) => ({
+                    label: list.title || "",
+                    type: "text",
+                    icon: list.image,
+                    click() {
+                      return addMutation.mutate({
+                        feedIds: ids,
+                        listId: list.id,
+                      })
+                    },
+                  })),
+                },
+                { type: "separator" },
+                {
+                  type: "text",
+                  enabled: !!(folderName && typeof view === "number"),
+                  label: t("sidebar.feed_column.context_menu.change_to_other_view"),
+                  submenu: views
+                    .filter((v) => v.view !== view)
+                    .map((v) => ({
+                      label: t(v.name),
+                      type: "text",
+                      shortcut: (v.view + 1).toString(),
+                      icon: v.icon,
+                      click() {
+                        return changeCategoryView(v.view)
+                      },
+                    })),
+                },
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.rename_category"),

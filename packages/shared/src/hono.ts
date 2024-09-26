@@ -3440,6 +3440,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 json: {
                     feedId: string;
                     listId: string;
+                } | {
+                    feedIds: string[];
+                    listId: string;
                 };
             };
             output: {
@@ -3471,7 +3474,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         handle: string | null;
                         createdAt: string;
                     }[] | null | undefined;
-                };
+                }[];
             };
             outputFormat: "json" | "text";
             status: 200;
