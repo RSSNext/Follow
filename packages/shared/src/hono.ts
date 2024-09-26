@@ -4954,6 +4954,24 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
+    "/achievement/check": {
+        $post: {
+            input: {
+                json: {
+                    actionId: number;
+                };
+            };
+            output: {
+                code: number;
+                data: {
+                    actionId: number;
+                    result: boolean;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
 }, "/">;
 type AppType = typeof _routes;
 

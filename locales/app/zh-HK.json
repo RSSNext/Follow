@@ -85,7 +85,7 @@
   "feed_claim_modal.rss_instructions": "複製以下代碼並貼到你的 RSS 生成器中。",
   "feed_claim_modal.rss_json_format": "JSON 格式",
   "feed_claim_modal.rss_xml_format": "XML 格式",
-  "feed_claim_modal.rsshub_notice": "此訂閱源由 RSSHub 提供，緩存時間為1小時。發布內容後，請等待最多1小時更改才能生效。",
+  "feed_claim_modal.rsshub_notice": "此訂閱源由 RSSHub 提供，緩存時間為 1 小時。發布內容後，請等待最多 1 小時更改才能生效。",
   "feed_claim_modal.tab_content": "內容",
   "feed_claim_modal.tab_description": "描述",
   "feed_claim_modal.tab_rss": "RSS 標籤",

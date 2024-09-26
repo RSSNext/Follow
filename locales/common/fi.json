@@ -4,6 +4,7 @@
   "confirm": "Vahvista",
   "ok": "OK",
   "quantifier.piece": "",
+  "space": " ",
   "time.last_night": "Viime yö",
   "time.the_night_before_last": "Toissa yö",
   "time.today": "Tänään",
@@ -23,6 +24,5 @@
   "words.result": "tulos",
   "words.result_one": "tulos",
   "words.result_other": "tulokset",
-  "words.space": " ",
   "words.which.all": "Kaikki"
 }

@@ -2,7 +2,7 @@ import { WEB_URL } from "@follow/shared/constants"
 
 import { FeedIcon } from "~/components/feed-icon"
 import { cn } from "~/lib/utils"
-import type { TargetModel } from "~/models"
+import type { FeedOrListRespModel } from "~/models"
 
 import { FeedCertification } from "./feed-certification"
 import { EllipsisHorizontalTextWithTooltip } from "./ui/typography"
@@ -12,7 +12,7 @@ export function FollowSummary({
   docs,
   className,
 }: {
-  feed: TargetModel
+  feed: FeedOrListRespModel
   docs?: string
   className?: string
 }) {
