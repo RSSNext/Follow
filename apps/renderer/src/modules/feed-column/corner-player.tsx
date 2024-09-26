@@ -218,10 +218,15 @@ const PlayerProgress = () => {
   const { currentTime = 0, duration = 0 } = playerValue
   const [controlledCurrentTime, setControlledCurrentTime] = useState(currentTime)
   const [isDraggingProgress, setIsDraggingProgress] = useState(false)
+
   useEffect(() => {
     if (isDraggingProgress) return
+    if (duration > 0 && currentTime >= duration) {
+      AudioPlayer?.pause()
+      return
+    }
     setControlledCurrentTime(currentTime)
-  }, [currentTime, isDraggingProgress])
+  }, [currentTime, isDraggingProgress, duration])
 
   const getTimeIndicator = (time: number) => {
     return dayjs()
