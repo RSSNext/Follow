@@ -68,7 +68,11 @@ export const GridItemFooter = ({
           <TitleMarquee className="min-w-0 grow">
             <EntryTranslation source={entry.entries.title} target={translation?.title} />
           </TitleMarquee>
-          {!!entry.collections && <StarIcon className="shrink-0" />}
+          {!!entry.collections && (
+            <div className="h-0 shrink-0 -translate-y-2">
+              <StarIcon />
+            </div>
+          )}
         </div>
       </div>
       <div className="flex items-center gap-1 truncate text-[13px]">

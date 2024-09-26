@@ -59,7 +59,7 @@ export function SwipeMedia({
     <div
       ref={hoverRef}
       className={cn(
-        "relative flex w-full items-center overflow-hidden ",
+        "relative flex w-full items-center overflow-hidden",
         styles["swipe-wrapper"],
         className,
       )}
