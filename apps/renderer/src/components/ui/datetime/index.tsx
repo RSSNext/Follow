@@ -71,13 +71,18 @@ export const RelativeTime: FC<{
   }, [props.date, displayAbsoluteTimeAfterDay, dateFormatTemplate])
   const formated = dayjs(props.date).format(dateFormatTemplate)
 
+  const { t } = useTranslation("common")
   if (formated === relative) {
     return <>{relative}</>
   }
   return (
     <Tooltip>
       {/* https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904 */}
-      <TooltipTrigger onFocusCapture={stopPropagation}>{relative}</TooltipTrigger>
+      <TooltipTrigger onFocusCapture={stopPropagation}>
+        {relative}
+        {t("words.space")}
+        {t("words.ago")}
+      </TooltipTrigger>
 
       <TooltipPortal>
         <TooltipContent>{formated}</TooltipContent>
