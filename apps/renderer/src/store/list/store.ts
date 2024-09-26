@@ -1,4 +1,3 @@
-
 import { apiClient } from "~/lib/api-fetch"
 import type { FeedModel, ListModel, ListModelPoplutedFeeds } from "~/models"
 
@@ -63,6 +62,13 @@ class ListActionStatic {
     this.patch(listId, {
       feedIds: list.feedIds.filter((id) => id !== feedId),
     })
+  }
+
+  async fetchListById(id: string) {
+    const res = await apiClient.lists.$get({ query: { listId: id } })
+
+    this.upsertMany([res.data.list])
+    return res.data
   }
 }
 

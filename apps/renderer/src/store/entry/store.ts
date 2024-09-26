@@ -5,7 +5,7 @@ import { isNil, merge, omit } from "lodash-es"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { getEntriesParams, omitObjectUndefinedValue } from "~/lib/utils"
-import type { CombinedEntryModel, EntryModel, FeedOrListRespModel } from "~/models"
+import type { CombinedEntryModel, EntryModel, FeedModel, FeedOrListRespModel } from "~/models"
 import { EntryService } from "~/services"
 
 import { feedActions } from "../feed"
@@ -249,7 +249,7 @@ class EntryActions {
       }),
     )
     // Insert to feed store
-    feedActions.upsertMany(feeds)
+    feedActions.upsertMany(feeds as FeedModel[])
     const newStarIds = new Set(get().starIds)
     for (const entryId in entryCollection) {
       newStarIds.add(entryId)
