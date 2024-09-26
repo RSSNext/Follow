@@ -13,7 +13,7 @@ import {
   setReadabilityStatus,
 } from "~/atoms/readability"
 import { useIntegrationSettingKey } from "~/atoms/settings/integration"
-import { toggleShowSourceContent } from "~/atoms/source-content"
+import { getShowSourceContent, toggleShowSourceContent } from "~/atoms/source-content"
 import { whoami } from "~/atoms/user"
 import { mountLottie } from "~/components/ui/lottie-container"
 import {
@@ -172,6 +172,7 @@ export const useEntryActions = ({
       active?: boolean
       disabled?: boolean
       onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
+      onContextMenu?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
     }[] = [
       {
         name: t("entry_actions.save_media_to_eagle"),
@@ -344,13 +345,13 @@ export const useEntryActions = ({
         shortcut: shortcuts.entry.openInBrowser.key,
         className: "i-mgc-world-2-cute-re",
         hide: !populatedEntry.entries.url,
+        active: getShowSourceContent(),
         onClick: () => {
           if (!populatedEntry.entries.url) return
-          if (window.electron) {
-            toggleShowSourceContent()
-            return
-          }
           window.open(populatedEntry.entries.url, "_blank")
+        },
+        onContextMenu: () => {
+          toggleShowSourceContent()
         },
       },
       {

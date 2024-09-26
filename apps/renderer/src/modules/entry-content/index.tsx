@@ -82,6 +82,8 @@ export const EntryContent = ({
   return <EntryContentRender entryId={entryId} noMedia={noMedia} compact={compact} />
 }
 
+const ViewTag = window.electron ? "webview" : "iframe"
+
 export const EntryContentRender: Component<{
   entryId: string
   noMedia?: boolean
@@ -177,7 +179,7 @@ export const EntryContentRender: Component<{
       />
 
       {showSourceContent && entry.entries.url && (
-        <webview src={entry.entries.url} className="size-full" />
+        <ViewTag src={entry.entries.url} className="size-full" />
       )}
 
       <ScrollArea.ScrollArea
@@ -236,7 +238,7 @@ export const EntryContentRender: Component<{
             </WrappedElementProvider>
 
             {entry.settings?.readability && (
-              <ReadabilityAutoToggle id={entry.entries.id} url={entry.entries.url ?? ""} />
+              <ReadabilityAutoToggleEffect id={entry.entries.id} url={entry.entries.url ?? ""} />
             )}
 
             {!content && (
@@ -352,13 +354,13 @@ const NoContent: FC<{
             <span>{t("entry_content.web_app_notice")}</span>
           </div>
         )}
-        {url && window.electron && <ReadabilityAutoToggle url={url} id={id} />}
+        {url && window.electron && <ReadabilityAutoToggleEffect url={url} id={id} />}
       </div>
     </div>
   )
 }
 
-const ReadabilityAutoToggle = ({ url, id }: { url: string; id: string }) => {
+const ReadabilityAutoToggleEffect = ({ url, id }: { url: string; id: string }) => {
   const toggle = useEntryReadabilityToggle({
     id,
     url,
