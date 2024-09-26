@@ -547,7 +547,7 @@ declare const collections: drizzle_orm_pg_core.PgTableWithColumns<{
             generated: undefined;
         }, {}, {}>;
         feedId: drizzle_orm_pg_core.PgColumn<{
-            name: "feedId";
+            name: "feed_id";
             tableName: "collections";
             dataType: "string";
             columnType: "PgText";
@@ -3426,6 +3426,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         handle: string | null;
                         createdAt: string;
                     } | null | undefined;
+                    subscriptionCount?: number | undefined;
+                    purchaseAmount?: number | undefined;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -3696,7 +3698,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     userId: string;
                     view: number;
                     category: string | null;
-                    feedId: string;
                     feeds: {
                         type: "feed";
                         id: string;
@@ -3725,6 +3726,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             createdAt: string;
                         }[] | null | undefined;
                     };
+                    feedId: string;
                     isPrivate: boolean;
                 } | {
                     title: string | null;
