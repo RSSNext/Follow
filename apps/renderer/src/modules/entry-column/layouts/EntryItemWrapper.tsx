@@ -99,7 +99,7 @@ export const EntryItemWrapper: FC<
           },
           {
             type: "text" as const,
-            label: `${t("words.copy")}${t("words.space")}${t("words.entry")} ${t("words.id")}`,
+            label: `${t("words.copy")}${t("space")}${t("words.entry")} ${t("words.id")}`,
             click: () => {
               navigator.clipboard.writeText(entry.entries.id)
             },

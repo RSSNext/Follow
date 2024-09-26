@@ -108,6 +108,7 @@ export const useUnread = () =>
 export const useEntryActions = ({
   view,
   entry,
+  type,
 }: {
   view?: number
   entry?: FlatEntryModel | null
@@ -300,12 +301,14 @@ export const useEntryActions = ({
         className: "i-mgc-star-cute-re",
         hide: !!populatedEntry.collections,
         onClick: (e) => {
-          mountLottie(absoluteStarAnimationUri, {
-            x: e.clientX - 90,
-            y: e.clientY - 70,
-            height: 126,
-            width: 252,
-          })
+          if (type === "toolbar") {
+            mountLottie(absoluteStarAnimationUri, {
+              x: e.clientX - 90,
+              y: e.clientY - 70,
+              height: 126,
+              width: 252,
+            })
+          }
 
           collect.mutate()
         },

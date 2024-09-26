@@ -5,6 +5,7 @@
   "confirm": "Onayla",
   "ok": "Tamam",
   "quantifier.piece": "",
+  "space": " ",
   "time.last_night": "Dün Gece",
   "time.the_night_before_last": "Evvelsi Gece",
   "time.today": "Bugün",
@@ -27,7 +28,6 @@
   "words.result": "sonuç",
   "words.result_one": "sonuç",
   "words.result_other": "sonuçlar",
-  "words.space": " ",
   "words.submit": "Gönder",
   "words.update": "Güncelle",
   "words.which.all": "Tümü"

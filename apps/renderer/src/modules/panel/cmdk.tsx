@@ -318,7 +318,7 @@ const SearchResultCount: FC<{
                 <>
                   {count} {t.common("quantifier.piece")}
                   {t.common("words.local")}
-                  {t.common("words.space")}
+                  {t.common("space")}
                   {t.common("words.record", { count })}
                 </>
               )}

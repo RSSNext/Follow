@@ -40,16 +40,20 @@ import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { cn, isBizId } from "~/lib/utils"
-import type { ListModel } from "~/models"
+import type { FeedModel, ListModel } from "~/models"
 import { ViewSelectorRadioGroup } from "~/modules/shared/ViewSelectorRadioGroup"
+import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
-import { feedActions, getFeedById, useFeedById } from "~/store/feed"
-import { useSubscriptionStore } from "~/store/subscription"
+import {
+  getFeedById,
+  useAddFeedToFeedList,
+  useFeedById,
+  useRemoveFeedFromFeedList,
+} from "~/store/feed"
+import { subscriptionActions, useSubscriptionStore } from "~/store/subscription"
 
 export const SettingLists = () => {
-  // const { t: appT } = useTranslation()
   const t = useI18n()
-  // const { t } = useTranslation("settings")
   const listList = useAuthQuery(Queries.lists.list())
 
   const { present } = useModalStack()
@@ -78,16 +82,11 @@ export const SettingLists = () => {
               <TableHeader className="border-b">
                 <TableRow className="[&_*]:!font-semibold">
                   <TableHead size="sm">{t.settings("lists.title")}</TableHead>
-                  <TableHead className="w-36" size="sm">
-                    {t.settings("lists.view")}
-                  </TableHead>
-                  <TableHead className="w-20" size="sm">
-                    {t.settings("lists.fee.label")}
-                  </TableHead>
-
-                  <TableHead className="w-20 text-center" size="sm">
-                    {t.common("words.actions")}
-                  </TableHead>
+                  <TableHead size="sm">{t.settings("lists.view")}</TableHead>
+                  <TableHead size="sm">{t.settings("lists.fee.label")}</TableHead>
+                  <TableHead size="sm">{t.settings("lists.subscriptions")}</TableHead>
+                  <TableHead size="sm">{t.settings("lists.earnings")}</TableHead>
+                  <TableHead size="sm">{t.common("words.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="border-t-[12px] border-transparent [&_td]:!px-3">
@@ -107,24 +106,24 @@ export const SettingLists = () => {
                         <span className="inline-block max-w-[200px] truncate">{row.title}</span>
                       </a>
                     </TableCell>
-                    <TableCell align="center" size="sm">
-                      <div className="flex items-center gap-1">
-                        {t(views[row.view].name)}
-                        <span className={cn("inline-flex items-center", views[row.view].className)}>
-                          {views[row.view].icon}
-                        </span>
-                      </div>
+                    <TableCell size="sm">
+                      <span className={cn("inline-flex items-center", views[row.view].className)}>
+                        {views[row.view].icon}
+                      </span>
                     </TableCell>
-                    <TableCell align="center" size="sm">
+                    <TableCell size="sm">
                       <div className="flex items-center gap-1">
                         {row.fee}
                         <i className="i-mgc-power shrink-0 text-lg text-accent" />
                       </div>
                     </TableCell>
-
-                    <TableCell align="center" size="sm">
+                    <TableCell size="sm">{row.subscriptionCount}</TableCell>
+                    <TableCell size="sm">
+                      <Balance>{BigInt(row.purchaseAmount || 0n)}</Balance>
+                    </TableCell>
+                    <TableCell size="sm">
                       <Tooltip>
-                        <TooltipTrigger>
+                        <TooltipTrigger asChild>
                           <Button
                             variant="ghost"
                             onClick={() => {
@@ -142,7 +141,7 @@ export const SettingLists = () => {
                         </TooltipPortal>
                       </Tooltip>
                       <Tooltip>
-                        <TooltipTrigger>
+                        <TooltipTrigger asChild>
                           <Button
                             variant="ghost"
                             onClick={() => {
@@ -224,10 +223,12 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
         })
       }
     },
-    onSuccess: () => {
+    onSuccess: (_, values) => {
       toast.success(t(id ? "lists.edit.success" : "lists.created.success"))
       Queries.lists.list().invalidate()
       dismiss()
+
+      if (id) subscriptionActions.changeListView(id, views[list.view].view, views[values.view].view)
     },
     async onError() {
       toast.error(t(id ? "lists.edit.error" : "lists.created.error"))
@@ -253,7 +254,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
                 </FormLabel>
               </div>
               <FormControl>
-                <Input {...field} />
+                <Input autoFocus {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -346,42 +347,7 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
   const { t } = useTranslation("settings")
 
   const [feedSearchFor, setFeedSearchFor] = useState("")
-  const addMutation = useMutation({
-    mutationFn: async (values: string) => {
-      const feed = await apiClient.lists.feeds.$post({
-        json: {
-          listId: id,
-          feedId: values,
-        },
-      })
-      feedActions.upsertMany([feed.data])
-    },
-    onSuccess: () => {
-      toast.success(t("lists.feeds.add.success"))
-      Queries.lists.list().invalidate()
-    },
-    async onError() {
-      toast.error(t("lists.feeds.add.error"))
-    },
-  })
-
-  const removeMutation = useMutation({
-    mutationFn: async (feedId: string) => {
-      await apiClient.lists.feeds.$delete({
-        json: {
-          listId: id,
-          feedId,
-        },
-      })
-    },
-    onSuccess: () => {
-      toast.success(t("lists.feeds.delete.success"))
-      Queries.lists.list().invalidate()
-    },
-    async onError() {
-      toast.error(t("lists.feeds.delete.error"))
-    },
-  })
+  const addMutation = useAddFeedToFeedList()
 
   const allFeeds = useSubscriptionStore((store) => {
     const feedInfo = [] as { title: string; id: string }[]
@@ -399,11 +365,13 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
   })
 
   const autocompleteSuggestions: Suggestion[] = useMemo(() => {
-    return allFeeds.map((feed) => ({
-      name: feed.title,
-      value: feed.id,
-    }))
-  }, [allFeeds])
+    return allFeeds
+      .filter((feed) => !list.feedIds?.includes(feed.id))
+      .map((feed) => ({
+        name: feed.title,
+        value: feed.id,
+      }))
+  }, [allFeeds, list.feedIds])
 
   const selectedFeedIdRef = useRef<string | null>()
   return (
@@ -411,6 +379,7 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
       <div className="flex items-center gap-2">
         <Autocomplete
           maxHeight={window.innerHeight < 600 ? 120 : 240}
+          autoFocus
           value={feedSearchFor}
           searchKeys={["name"]}
           onSuggestionSelected={(e) => {
@@ -426,11 +395,11 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
           className="whitespace-nowrap"
           onClick={() => {
             if (isBizId(feedSearchFor)) {
-              addMutation.mutate(feedSearchFor)
+              addMutation.mutate({ feedId: feedSearchFor, listId: id })
               return
             }
             if (selectedFeedIdRef.current) {
-              addMutation.mutate(selectedFeedIdRef.current)
+              addMutation.mutate({ feedId: selectedFeedIdRef.current, listId: id })
             }
           }}
         >
@@ -442,9 +411,6 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
         <Table className="mt-4">
           <TableHeader className="border-b">
             <TableRow className="[&_*]:!font-semibold">
-              {/* <TableHead className="w-20 text-center" size="sm">
-                {t("lists.feeds.id")}
-              </TableHead> */}
               <TableHead size="sm" className="pl-8">
                 {t("lists.feeds.title")}
               </TableHead>
@@ -457,36 +423,41 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
             </TableRow>
           </TableHeader>
           <TableBody className="border-t-[12px] border-transparent">
-            {list.feeds?.map((row) => (
-              <TableRow key={row.title} className="h-8">
-                {/* <TableCell align="center" size="sm">
-                  {row.id}
-                </TableCell> */}
-                <TableCell size="sm">
-                  <a
-                    target="_blank"
-                    href={`${WEB_URL}/list/${row.id}`}
-                    className="flex items-center gap-2 font-semibold"
-                  >
-                    {row.siteUrl && <FeedIcon className="mr-0" siteUrl={row.siteUrl} />}
-                    <span className="inline-block max-w-[200px] truncate">{row.title}</span>
-                  </a>
-                </TableCell>
-                <TableCell align="center" size="sm">
-                  <div className="center">
-                    <FeedCertification className="ml-0" feed={row} />
-                  </div>
-                </TableCell>
-                <TableCell align="center" size="sm">
-                  <Button variant="ghost" onClick={() => removeMutation.mutate(row.id)}>
-                    <i className="i-mgc-delete-2-cute-re" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {list.feedIds?.map((feedId) => <RowRender feedId={feedId} key={feedId} listId={id} />)}
           </TableBody>
         </Table>
       </ScrollArea.ScrollArea>
     </>
+  )
+}
+
+const RowRender = ({ feedId, listId }: { feedId: string; listId: string }) => {
+  const feed = useFeedById(feedId) as FeedModel
+
+  const removeMutation = useRemoveFeedFromFeedList()
+  if (!feed) return null
+  return (
+    <TableRow key={feed.title} className="h-8">
+      <TableCell size="sm">
+        <a
+          target="_blank"
+          href={`${WEB_URL}/list/${feed.id}`}
+          className="flex items-center gap-2 font-semibold"
+        >
+          {feed.siteUrl && <FeedIcon className="mr-0" siteUrl={feed.siteUrl} />}
+          <span className="inline-block max-w-[200px] truncate">{feed.title}</span>
+        </a>
+      </TableCell>
+      <TableCell align="center" size="sm">
+        <div className="center">
+          <FeedCertification className="ml-0" feed={feed} />
+        </div>
+      </TableCell>
+      <TableCell align="center" size="sm">
+        <Button variant="ghost" onClick={() => removeMutation.mutate({ feedId: feed.id, listId })}>
+          <i className="i-mgc-delete-2-cute-re" />
+        </Button>
+      </TableCell>
+    </TableRow>
   )
 }

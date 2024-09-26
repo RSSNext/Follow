@@ -4,6 +4,7 @@
   "confirm": "تأكيد",
   "ok": "موافق",
   "quantifier.piece": "",
+  "space": " ",
   "time.last_night": "الليلة الماضية",
   "time.the_night_before_last": "الليلة قبل الماضية",
   "time.today": "اليوم",
@@ -23,6 +24,5 @@
   "words.result": "نتيجة",
   "words.result_one": "نتيجة",
   "words.result_other": "نتائج",
-  "words.space": " ",
   "words.which.all": "الكل"
 }

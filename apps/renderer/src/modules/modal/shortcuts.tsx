@@ -9,7 +9,7 @@ import { KbdCombined } from "~/components/ui/kbd/Kbd"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
 import { ScrollArea } from "~/components/ui/scroll-area"
-import { shortcuts } from "~/constants/shortcuts"
+import { shortcuts, shortcutsType } from "~/constants/shortcuts"
 import { useSwitchHotKeyScope } from "~/hooks/common"
 import { cn } from "~/lib/utils"
 
@@ -53,7 +53,7 @@ const ShortcutModalContent = () => {
         <div className="w-full space-y-6 px-4 pb-5 pt-3">
           {Object.keys(shortcuts).map((type) => (
             <section key={type}>
-              <div className="mb-2 text-base font-medium capitalize">{type}</div>
+              <div className="mb-2 text-base font-medium capitalize">{t(shortcutsType[type])}</div>
               <div className="rounded-md border text-[13px] text-zinc-600 dark:text-zinc-300">
                 {Object.keys(shortcuts[type]).map((action, index) => (
                   <div

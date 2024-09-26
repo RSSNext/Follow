@@ -167,7 +167,7 @@
   "lists.feeds.add.success": "成功新增資訊源到清單。",
   "lists.feeds.delete.error": "從清單移除資訊源失敗。",
   "lists.feeds.delete.success": "成功從清單移除資訊源。",
-  "lists.feeds.id": "資訊源ID",
+  "lists.feeds.id": "資訊源 ID",
   "lists.feeds.label": "資訊源",
   "lists.feeds.manage": "管理資訊源",
   "lists.feeds.owner": "擁有者",

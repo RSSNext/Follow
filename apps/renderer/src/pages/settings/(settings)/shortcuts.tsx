@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
 import { KbdCombined } from "~/components/ui/kbd/Kbd"
-import { shortcuts } from "~/constants/shortcuts"
+import { shortcuts, shortcutsType } from "~/constants/shortcuts"
 import { cn } from "~/lib/utils"
 import { SettingsTitle } from "~/modules/settings/title"
 import { defineSettingPageData } from "~/modules/settings/utils"
@@ -23,7 +23,7 @@ export function Component() {
       <div className="mt-4 space-y-6">
         {Object.keys(shortcuts).map((type) => (
           <section key={type}>
-            <div className="mb-2 text-sm font-medium capitalize">{type}</div>
+            <div className="mb-2 text-sm font-medium capitalize">{t(shortcutsType[type])}</div>
             <div className="rounded-md border text-[13px] text-zinc-600 dark:text-zinc-300">
               {Object.keys(shortcuts[type]).map((action, index) => (
                 <div

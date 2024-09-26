@@ -105,7 +105,7 @@ export function Component() {
                     window.open(feedData.url, "_blank")
                   }}
                 >
-                  View Feed URL
+                  {t("feed.view_feed_url")}
                 </Button>
               ) : (
                 <Button
@@ -115,7 +115,7 @@ export function Component() {
                     navigator.clipboard.writeText(feedData.url)
                   }}
                 >
-                  Copy Feed URL
+                  {t("feed.copy_feed_url")}
                 </Button>
               )}
               <Button
@@ -127,7 +127,7 @@ export function Component() {
                 }}
               >
                 <FollowIcon className="mr-1 size-3" />
-                {isSubscribed ? "Followed" : <>{APP_NAME}</>}
+                {isSubscribed ? t("feed.actions.followed") : <>{APP_NAME}</>}
               </Button>
             </span>
             <div

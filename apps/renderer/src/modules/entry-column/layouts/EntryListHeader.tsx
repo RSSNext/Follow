@@ -53,7 +53,7 @@ export const EntryListHeader: FC<{
       <div className="text-xs font-medium text-zinc-400">
         {totalCount || 0} {t("quantifier.piece", { ns: "common" })}
         {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
-        {t("words.space", { ns: "common" })}
+        {t("space", { ns: "common" })}
         {t("words.items", { ns: "common", count: totalCount })}
       </div>
     </div>

@@ -1,5 +1,7 @@
 {
   "copied_link": "鏈接已複製到剪貼簿",
+  "feed.actions.followed": "已訂閲",
+  "feed.copy_feed_url": "複製鏈接",
   "feed.feeds_one": "訂閲源",
   "feed.feeds_other": "訂閲源",
   "feed.follow_to_view_all": "跟隨以查看所有 {{count}} 個訂閲源...",
@@ -9,6 +11,7 @@
   "feed.followsAndReads": "在 {{appName}} 上有 {{subscriptionCount}} 個 {{subscriptionNoun}} 和 {{readCount}} 個 {{readNoun}}",
   "feed.read_one": "閱讀",
   "feed.read_other": "閱讀數",
+  "feed.view_feed_url": "查看鏈接",
   "header.app": "應用程式",
   "header.download": "下載",
   "invitation.activate": "激活",

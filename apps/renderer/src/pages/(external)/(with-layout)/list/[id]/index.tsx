@@ -12,6 +12,7 @@ import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
 import { useTitle } from "~/hooks/common"
 import type { ListModel } from "~/models"
 import { useFeed } from "~/queries/feed"
+import { useFeedById } from "~/store/feed/hooks"
 
 export function Component() {
   const { id } = useParams()
@@ -51,7 +52,7 @@ export function Component() {
                 subscriptionCount: feed.data.subscriptionCount,
                 subscriptionNoun: t("feed.follower", { count: feed.data.subscriptionCount }),
                 feedsCount: "feedCount" in feed.data ? feed.data.feedCount : 0,
-                feedsNoun: t("feed.feeds", { count: listData?.feeds?.length }),
+                feedsNoun: t("feed.feeds", { count: listData?.feedIds?.length }),
                 appName: APP_NAME,
               })}
             </div>
@@ -78,23 +79,9 @@ export function Component() {
               </Button>
             </span>
             <div className="flex w-full max-w-3xl flex-col gap-4 pb-12 pt-8">
-              {listData.feeds?.slice(0, 5).map((feed) => (
-                <a
-                  className="relative flex cursor-pointer items-center text-base"
-                  href={`/feed/${feed.id}`}
-                  target="_blank"
-                  key={feed.id}
-                >
-                  <FeedIcon
-                    fallback
-                    feed={feed}
-                    className="mask-squircle mask mr-2 shrink-0"
-                    size={20}
-                  />
-                  {feed.title}
-                  <FeedCertification feed={feed} />
-                </a>
-              ))}
+              {listData.feedIds
+                ?.slice(0, 5)
+                .map((feedId) => <FeedRow feedId={feedId} key={feedId} />)}
               {"feedCount" in feed.data && (
                 <div
                   onClick={() => {
@@ -115,5 +102,22 @@ export function Component() {
         )
       )}
     </>
+  )
+}
+
+const FeedRow = ({ feedId }: { feedId: string }) => {
+  const feed = useFeedById(feedId)
+  if (!feed) return null
+  return (
+    <a
+      className="relative flex cursor-pointer items-center text-base"
+      href={`/feed/${feed.id}`}
+      target="_blank"
+      key={feed.id}
+    >
+      <FeedIcon fallback feed={feed} className="mask-squircle mask mr-2 shrink-0" size={20} />
+      {feed.title}
+      <FeedCertification feed={feed} />
+    </a>
   )
 }

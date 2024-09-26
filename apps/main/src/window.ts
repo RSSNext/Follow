@@ -230,6 +230,7 @@ export const createMainWindow = () => {
     cancelPollingUpdateUnreadCount()
 
     const caller = callWindowExpose(window)
+
     caller.onWindowShow()
   })
 
