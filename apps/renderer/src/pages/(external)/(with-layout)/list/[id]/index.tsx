@@ -92,7 +92,7 @@ export function Component() {
                   className="text-sm text-zinc-500"
                 >
                   {t("feed.follow_to_view_all", {
-                    count: feed.data.feedCount,
+                    count: feed.data.feedCount || 0,
                   })}
                 </div>
               )}

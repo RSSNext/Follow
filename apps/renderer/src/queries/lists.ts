@@ -1,9 +1,9 @@
 import { defineQuery } from "~/lib/defineQuery"
-import { feedActions } from "~/store/feed"
+import { listActions } from "~/store/list"
 
 export const lists = {
   list: () =>
-    defineQuery(["lists"], async () => feedActions.fetchOwnedLists(), {
+    defineQuery(["lists"], async () => listActions.fetchOwnedLists(), {
       rootKey: ["lists"],
     }),
 }

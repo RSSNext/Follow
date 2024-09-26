@@ -9,7 +9,7 @@ import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { apiClient } from "~/lib/api-fetch"
 import type { FeedOrListRespModel } from "~/models"
 
-import { listActions } from "../list/store"
+import { listActions } from "../list"
 import { getSubscriptionByFeedId } from "../subscription"
 import { useFeedStore } from "./store"
 import type { FeedQueryParams } from "./types"

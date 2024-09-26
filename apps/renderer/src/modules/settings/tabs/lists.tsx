@@ -40,7 +40,7 @@ import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { cn, isBizId } from "~/lib/utils"
-import type { FeedModel, ListModel } from "~/models"
+import type { FeedModel } from "~/models"
 import { ViewSelectorRadioGroup } from "~/modules/shared/ViewSelectorRadioGroup"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
@@ -50,6 +50,7 @@ import {
   useFeedById,
   useRemoveFeedFromFeedList,
 } from "~/store/feed"
+import { useListById } from "~/store/list"
 import { subscriptionActions, useSubscriptionStore } from "~/store/subscription"
 
 export const SettingLists = () => {
@@ -191,7 +192,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
 
   const appT = useI18n()
 
-  const list = useFeedById(id) as ListModel
+  const list = useListById(id)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -228,6 +229,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
       Queries.lists.list().invalidate()
       dismiss()
 
+      if (!list) return
       if (id) subscriptionActions.changeListView(id, views[list.view].view, views[values.view].view)
     },
     async onError() {
@@ -343,7 +345,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
 }
 
 export const ListFeedsModalContent = ({ id }: { id: string }) => {
-  const list = useFeedById(id) as ListModel
+  const list = useListById(id)
   const { t } = useTranslation("settings")
 
   const [feedSearchFor, setFeedSearchFor] = useState("")
@@ -366,14 +368,15 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
 
   const autocompleteSuggestions: Suggestion[] = useMemo(() => {
     return allFeeds
-      .filter((feed) => !list.feedIds?.includes(feed.id))
+      .filter((feed) => !list?.feedIds?.includes(feed.id))
       .map((feed) => ({
         name: feed.title,
         value: feed.id,
       }))
-  }, [allFeeds, list.feedIds])
+  }, [allFeeds, list?.feedIds])
 
   const selectedFeedIdRef = useRef<string | null>()
+  if (!list) return null
   return (
     <>
       <div className="flex items-center gap-2">
