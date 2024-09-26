@@ -1,43 +1,39 @@
 {
   "copied_link": "連結已複製到剪貼簿",
-  "feed": {
-    "follower_one": "追隨者",
-    "follower_other": "追隨者",
-    "followsAndReads": "{{subscriptionCount}} 個 {{subscriptionNoun}} 和 {{readCount}} 個 {{readNoun}} 在 {{appName}}",
-    "read_one": "閱讀",
-    "read_other": "閱讀數"
-  },
-  "header": {
-    "app": "應用程式",
-    "download": "下載"
-  },
-  "invitation": {
-    "activate": "啟用",
-    "codeOptions": {
-      "1": "尋找任何內測用戶邀請您。",
-      "2": "加入我們的 Discord 伺服器，不定期贈送邀請碼。",
-      "3": "關注我們的 X 帳號，不定期贈送邀請碼。"
-    },
-    "earlyAccess": "Follow 目前處於搶先體驗階段，需要邀請碼才能使用。",
-    "earlyAccessMessage": "😰 抱歉，Follow 目前處於搶先體驗階段，需要邀請碼才能使用。",
-    "generateButton": "生成新邀請碼",
-    "generateCost": "您可以花費 {{INVITATION_PRICE}} 點 Power 為您的朋友生成邀請碼。",
-    "getCodeMessage": "您可以通過以下方式獲取邀請碼：",
-    "title": "邀請碼"
-  },
-  "login": {
-    "backToWebApp": "返回網頁應用程式",
-    "continueWithGitHub": "繼續使用 GitHub",
-    "continueWithGoogle": "繼續使用 Google",
-    "logInTo": "登入至 ",
-    "openApp": "開啟應用程式",
-    "redirecting": "正在重定向",
-    "welcomeTo": "歡迎來到 "
-  },
-  "redirect": {
-    "continueInBrowser": "在瀏覽器中繼續",
-    "instruction": "現在是時候打開 {{APP_NAME}} 並安全地關閉此頁面。",
-    "openApp": "開啟 {{APP_NAME}}",
-    "successMessage": "您已成功連接至 {{APP_NAME}} 帳戶。"
-  }
+  "feed.actions.followed": "已訂閲",
+  "feed.copy_feed_url": "複製鏈接",
+  "feed.feeds_one": "訂閲源",
+  "feed.feeds_other": "訂閲源",
+  "feed.follow_to_view_all": "跟隨以查看所有 {{count}} 個訂閲源...",
+  "feed.follower_one": "追隨者",
+  "feed.follower_other": "追隨者",
+  "feed.followsAndFeeds": "在 {{appName}} 上有 {{subscriptionCount}} 個 {{subscriptionNoun}} 和 {{feedsCount}} 個 {{feedsNoun}}",
+  "feed.followsAndReads": "{{subscriptionCount}} 個 {{subscriptionNoun}} 和 {{readCount}} 個 {{readNoun}} 在 {{appName}}",
+  "feed.read_one": "閱讀",
+  "feed.read_other": "閱讀數",
+  "feed.view_feed_url": "查看鏈接",
+  "header.app": "應用程式",
+  "header.download": "下載",
+  "invitation.activate": "啟用",
+  "invitation.codeOptions.1": "尋找任何內測用戶邀請您。",
+  "invitation.codeOptions.2": "加入我們的 Discord 伺服器，不定期贈送邀請碼。",
+  "invitation.codeOptions.3": "關注我們的 X 帳號，不定期贈送邀請碼。",
+  "invitation.earlyAccess": "Follow 目前處於搶先體驗階段，需要邀請碼才能使用。",
+  "invitation.earlyAccessMessage": "😰 抱歉，Follow 目前處於搶先體驗階段，需要邀請碼才能使用。",
+  "invitation.generateButton": "生成新邀請碼",
+  "invitation.generateCost": "您可以花費 {{INVITATION_PRICE}} 點 Power 為您的朋友生成邀請碼。",
+  "invitation.getCodeMessage": "您可以通過以下方式獲取邀請碼：",
+  "invitation.title": "邀請碼",
+  "login.backToWebApp": "返回網頁應用程式",
+  "login.continueWithGitHub": "繼續使用 GitHub",
+  "login.continueWithGoogle": "繼續使用 Google",
+  "login.logInTo": "登入至 ",
+  "login.openApp": "開啟應用程式",
+  "login.redirecting": "正在重定向",
+  "login.signOut": "登出",
+  "login.welcomeTo": "歡迎來到 ",
+  "redirect.continueInBrowser": "在瀏覽器中繼續",
+  "redirect.instruction": "現在是時候打開 {{APP_NAME}} 並安全地關閉此頁面。",
+  "redirect.openApp": "開啟 {{APP_NAME}}",
+  "redirect.successMessage": "您已成功連接至 {{APP_NAME}} 帳戶。"
 }

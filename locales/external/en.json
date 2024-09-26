@@ -1,5 +1,7 @@
 {
   "copied_link": "Copied link to clipboard",
+  "feed.actions.followed": "Followed",
+  "feed.copy_feed_url": "Copy Feed URL",
   "feed.feeds_one": "feed",
   "feed.feeds_other": "feeds",
   "feed.follow_to_view_all": "Follow to view all {{count}} feeds...",
@@ -9,6 +11,7 @@
   "feed.followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} with {{readCount}} {{readNoun}} on {{appName}}",
   "feed.read_one": "read",
   "feed.read_other": "reads",
+  "feed.view_feed_url": "View Feed URL",
   "header.app": "App",
   "header.download": "Download",
   "invitation.activate": "Activate",
