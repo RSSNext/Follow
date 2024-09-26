@@ -1,6 +1,6 @@
 import { repository } from "@pkg"
 
-import { detectBrowser, getOS } from "./utils"
+import { getCurrentEnvironment } from "./environment"
 
 interface IssueOptions {
   title: string
@@ -12,23 +12,7 @@ export const getNewIssueUrl = ({ body, label, title }: Partial<IssueOptions> = {
 
   const searchParams = new URLSearchParams()
 
-  const ua = navigator.userAgent
-  const appVersion = APP_VERSION
-  const env = window.electron ? "electron" : "web"
-  const os = getOS()
-  const browser = detectBrowser()
-
-  const nextBody = [
-    body || "",
-    "",
-    "### Environment",
-    "",
-    `**App Version**: ${appVersion}`,
-    `**OS**: ${os}`,
-    `**User Agent**: ${ua}`,
-    `**Env**: ${env}`,
-    `**Browser**: ${browser}`,
-  ].join("\n")
+  const nextBody = [body || "", "", ...getCurrentEnvironment()].join("\n")
   searchParams.set("body", nextBody)
   if (label) searchParams.set("label", label)
   if (title) searchParams.set("title", title)
