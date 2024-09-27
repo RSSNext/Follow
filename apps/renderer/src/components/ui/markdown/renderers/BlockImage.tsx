@@ -23,7 +23,7 @@ export const MarkdownBlockImage = (
       )}
       showFallback
       popper
-      className="inline-flex justify-center"
+      className="flex justify-center"
     />
   )
 }

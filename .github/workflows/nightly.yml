@@ -15,20 +15,20 @@ env:
 jobs:
   check-for-changes:
     runs-on: ubuntu-latest
-    outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
+    # outputs:
+    # should_run: ${{ steps.check.outputs.should_run }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Check for code changes
-        id: check
-        run: |
-          git diff --quiet @{1.day.ago} HEAD -- ':!.github' || echo "should_run=true" >> $GITHUB_OUTPUT
+      # - name: Check for code changes
+      #   id: check
+      #   run: |
+      #     git diff --quiet @{1.day.ago} HEAD -- ':!.github' || echo "should_run=true" >> $GITHUB_OUTPUT
 
   nightly-release:
-    needs: check-for-changes
-    if: needs.check-for-changes.outputs.should_run == 'true'
+    # needs: check-for-changes
+    # if: needs.check-for-changes.outputs.should_run == 'true'
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -107,20 +107,25 @@ jobs:
         shell: bash
         run: |
           # Get the current version from package.json
-          CURRENT_VERSION=$(node -p "require('./package.json').version")
-          # Remove any existing prerelease identifier (e.g., -alpha.1)
-          BASE_VERSION=$(echo $CURRENT_VERSION | sed -E 's/(-[a-zA-Z]+\.[0-9]+)$//')
-          # Generate the nightly version
-          NIGHTLY_DATE=$(date +'%Y%m%d')
-          NIGHTLY_VERSION="${BASE_VERSION}-nightly.${NIGHTLY_DATE}"
-          echo "NIGHTLY_VERSION=$NIGHTLY_VERSION" >> $GITHUB_ENV
-          # Update version in package.json
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            sed -i "s/\"version\": \".*\"/\"version\": \"$NIGHTLY_VERSION\"/" package.json
+          if [ -f package.json ]; then
+            CURRENT_VERSION=$(node -p "require('./package.json').version")
+            # Remove any existing prerelease identifier (e.g., -alpha.1)
+            BASE_VERSION=$(echo $CURRENT_VERSION | sed -E 's/(-[a-zA-Z]+\.[0-9]+)$//')
+            # Generate the nightly version
+            NIGHTLY_DATE=$(date +'%Y%m%d')
+            NIGHTLY_VERSION="${BASE_VERSION}-nightly.${NIGHTLY_DATE}"
+            echo "NIGHTLY_VERSION=$NIGHTLY_VERSION" >> $GITHUB_ENV
+            # Update version in package.json
+            if [[ "$RUNNER_OS" == "Windows" ]]; then
+              sed -i "s/\"version\": \".*\"/\"version\": \"$NIGHTLY_VERSION\"/" package.json
+            else
+              sed -i '' "s/\"version\": \".*\"/\"version\": \"$NIGHTLY_VERSION\"/" package.json
+            fi
+            echo "Updated version to $NIGHTLY_VERSION"
           else
-            sed -i '' "s/\"version\": \".*\"/\"version\": \"$NIGHTLY_VERSION\"/" package.json
+            echo "package.json not found"
+            exit 1
           fi
-          echo "Updated version to $NIGHTLY_VERSION"
 
       - name: Build
         if: matrix.os != 'macos-latest'

@@ -29,7 +29,7 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
   const { t } = useTranslation()
-  const previewMedia = usePreviewMedia()
+  const previewMedia = usePreviewMedia(entryId)
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
@@ -73,7 +73,7 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
 
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
-  const previewMedia = usePreviewMedia()
+  const previewMedia = usePreviewMedia(entryId)
   const itemWidth = useMasonryItemWidth()
 
   const [ref, setRef] = useState<HTMLDivElement | null>(null)

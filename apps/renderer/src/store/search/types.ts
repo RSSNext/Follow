@@ -1,7 +1,6 @@
 import type { EntryModel, FeedOrListRespModel } from "~/models"
 
 import type { SubscriptionFlatModel } from "../subscription"
-import type { SearchType } from "./constants"
 
 // @ts-expect-error
 export interface SearchResult<T extends object, A extends object = object> extends A {
@@ -14,7 +13,6 @@ export interface SearchState {
   subscriptions: SearchResult<SubscriptionFlatModel, { feedId: string }>[]
 
   keyword: string
-  searchType: SearchType
 }
 export interface SearchInstance {
   search: (keyword: string) => SearchState

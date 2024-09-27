@@ -1,5 +1,6 @@
 import { createElement, Fragment, memo, useEffect, useMemo, useState } from "react"
 
+import type { MediaInfo } from "~/lib/parse-html"
 import { parseHtml } from "~/lib/parse-html"
 import type { RemarkOptions } from "~/lib/parse-markdown"
 import { parseMarkdown } from "~/lib/parse-markdown"
@@ -42,21 +43,23 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
 
     accessory?: React.ReactNode
     noMedia?: boolean
+    mediaInfo?: MediaInfo
   } & JSX.IntrinsicElements[A] &
     Partial<{
       renderInlineStyle: boolean
     }>,
 ) => {
-  const { children, renderInlineStyle, as = "div", accessory, noMedia, ...rest } = props
+  const { children, renderInlineStyle, as = "div", accessory, noMedia, mediaInfo, ...rest } = props
   const [remarkOptions, setRemarkOptions] = useState({
     renderInlineStyle,
     noMedia,
+    mediaInfo,
   })
   const [shouldForceReMountKey, setShouldForceReMountKey] = useState(0)
 
   useEffect(() => {
     setRemarkOptions((options) => {
-      if (renderInlineStyle === options.renderInlineStyle || noMedia === options.noMedia) {
+      if (JSON.stringify(options) === JSON.stringify({ renderInlineStyle, noMedia })) {
         return options
       }
 

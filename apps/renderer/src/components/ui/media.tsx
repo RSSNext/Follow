@@ -152,9 +152,11 @@ const MediaImpl: FC<MediaProps> = ({
     mediaLoadState,
     popper,
     previewImageUrl,
-    props,
+    props.height,
+    props.width,
     rest,
     src,
+    thumbnail,
     type,
   ])
 

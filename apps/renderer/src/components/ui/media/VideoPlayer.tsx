@@ -27,8 +27,6 @@ import { cn } from "~/lib/utils"
 
 import { MotionButtonBase } from "../button"
 import { softSpringPreset } from "../constants/spring"
-import { KbdCombined } from "../kbd/Kbd"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip"
 import { VolumeSlider } from "./VolumeSlider"
 
 type VideoPlayerProps = {
@@ -225,7 +223,7 @@ const ControlBar = memo(() => {
       dragMomentum={false}
       dragConstraints={{ current: document.documentElement }}
       className={cn(
-        "absolute inset-x-2 -bottom-10 h-8 rounded-2xl border bg-zinc-100/90 backdrop-blur-xl dark:border-transparent dark:bg-neutral-700/90",
+        "absolute inset-x-2 bottom-2 h-8 rounded-2xl border bg-zinc-100/90 backdrop-blur-xl dark:border-transparent dark:bg-neutral-700/90",
         "flex items-center gap-3 px-3",
         "mx-auto max-w-[80vw]",
       )}
@@ -423,8 +421,6 @@ const PlayProgressBar = () => {
 const ActionIcon = ({
   className,
   onClick,
-  label,
-  labelDelayDuration = 700,
   children,
   shortcut,
 }: {
@@ -446,20 +442,12 @@ const ActionIcon = ({
     },
   )
   return (
-    <Tooltip delayDuration={labelDelayDuration}>
-      <TooltipTrigger asChild>
-        <button
-          type="button"
-          className="center relative z-[1] size-6 rounded-md hover:bg-theme-button-hover"
-          onClick={onClick}
-        >
-          {children || <i className={className} />}
-        </button>
-      </TooltipTrigger>
-      <TooltipContent className="flex items-center gap-1 text-xs">
-        {label}
-        {shortcut && <KbdCombined>{shortcut}</KbdCombined>}
-      </TooltipContent>
-    </Tooltip>
+    <button
+      type="button"
+      className="center relative z-[1] size-6 rounded-md hover:bg-theme-button-hover"
+      onClick={onClick}
+    >
+      {children || <i className={className} />}
+    </button>
   )
 }
