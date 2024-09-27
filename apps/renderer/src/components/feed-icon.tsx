@@ -6,7 +6,7 @@ import { forwardRef, useMemo } from "react"
 import { getColorScheme, stringToHue } from "~/lib/color"
 import { getImageProxyUrl } from "~/lib/img-proxy"
 import { cn, getUrlIcon } from "~/lib/utils"
-import type { CombinedEntryModel, FeedModel, TargetModel } from "~/models"
+import type { CombinedEntryModel, FeedModel, FeedOrListRespModel } from "~/models"
 
 import { PlatformIcon } from "./ui/platform-icon"
 
@@ -76,7 +76,7 @@ export function FeedIcon({
   siteUrl,
   useMedia,
 }: {
-  feed?: TargetModel
+  feed?: FeedOrListRespModel
   entry?: CombinedEntryModel["entries"]
   fallbackUrl?: string
   className?: string

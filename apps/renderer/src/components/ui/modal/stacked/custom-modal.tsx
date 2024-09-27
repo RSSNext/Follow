@@ -12,7 +12,12 @@ export const PlainModal = ({ children }: PropsWithChildren) => children
 
 export { PlainModal as NoopChildren }
 
-export const SlideUpModal = (props: PropsWithChildren) => {
+type ModalTemplateType = {
+  (props: PropsWithChildren<{ className?: string }>): JSX.Element
+  class: (className: string) => (props: PropsWithChildren<{ className?: string }>) => JSX.Element
+}
+
+export const SlideUpModal: ModalTemplateType = (props) => {
   const winHeight = useState(() => window.innerHeight)[0]
   const { dismiss } = useCurrentModal()
   return (
@@ -39,7 +44,8 @@ export const SlideUpModal = (props: PropsWithChildren) => {
         }}
         className={cn(
           "relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
-          "h-[80vh] w-[600px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
+          "aspect-[7/9] w-[600px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
+          props.className,
         )}
       >
         {props.children}
@@ -47,5 +53,11 @@ export const SlideUpModal = (props: PropsWithChildren) => {
         <ModalClose />
       </m.div>
     </div>
+  )
+}
+
+SlideUpModal.class = (className: string) => {
+  return (props: ComponentType) => (
+    <SlideUpModal {...props} className={cn(props.className, className)} />
   )
 }

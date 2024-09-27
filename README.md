@@ -9,14 +9,16 @@
     Next generation information browser.
     <br />
     <br />
-    <a href="https://discord.gg/xHCVQZ6wmZ">Discord</a>
+    <a href="https://discord.gg/followapp">Discord</a>
     ·
     <a href="https://x.com/intent/follow?screen_name=follow_app_">Twitter</a>
     ·
     <a href="https://github.com/RSSNext/Follow/releases">Releases</a>
     <br />
     <br />
-    <a href="https://trendshift.io/repositories/9938" target="_blank"><img src="https://trendshift.io/api/badge/repositories/9938" alt="RSSNext%2Ffollow | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+    <a href="https://trendshift.io/repositories/9938" target="_blank"><img src="https://github.com/user-attachments/assets/7d394847-f019-46e5-94ec-5bf4ccda6146" alt="RSSNext%2Ffollow | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+    <a href="https://trendshift.io/repositories/9938" target="_blank"><img src="https://github.com/user-attachments/assets/0696530c-cfe3-4f2e-975f-07ef31521092" alt="RSSNext%2Ffollow | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+    <a href="https://trendshift.io/repositories/9938" target="_blank"><img src="https://github.com/user-attachments/assets/c3c6ee92-f81a-4f0a-b9d7-c03832c8a3ee" alt="RSSNext%2Ffollow | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
   </p>
 </div>
 
@@ -73,7 +75,7 @@ The project is currently under active development. The following screenshots are
 
 ## Releases
 
-[![Discord](https://img.shields.io/discord/1243823539426033696?logo=discord&label=Discord&style=flat-square&color=5865F2)](https://discord.gg/xHCVQZ6wmZ) [![](https://img.shields.io/badge/any_text-Follow-blue?color=2CA5E0&label=_&logo=x&cacheSeconds=3600&style=flat-square)](https://x.com/intent/follow?screen_name=follow_app_)
+[![Discord](https://img.shields.io/discord/1243823539426033696?logo=discord&label=Discord&style=flat-square&color=5865F2)](https://discord.gg/followapp) [![](https://img.shields.io/badge/any_text-Follow-blue?color=2CA5E0&label=_&logo=x&cacheSeconds=3600&style=flat-square)](https://x.com/intent/follow?screen_name=follow_app_)
 
 Currently, Follow is still in the early developer preview stage (alpha) and is only available to a limited number of users through an invitation system.
 
@@ -87,7 +89,8 @@ If you have access, you are welcome to use the following methods to download and
 
 - Visit our online webapp at [app.follow.is](https://app.follow.is)
 - You can get the installation packages for each platform from the [Releases page](https://github.com/RSSNext/Follow/releases).
-- If you are using Arch linux, you can install package [follow-appimage](https://aur.archlinux.org/packages/follow-appimage) that maintained by [timochan](https://github.com/ttimochan).
+- If you are using Arch Linux, you can install package [follow-appimage](https://aur.archlinux.org/packages/follow-appimage) that maintained by [timochan](https://github.com/ttimochan).
+- If you are using Nix, you can install package [follow](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/fo/follow/package.nix) that maintained by [iosmanthus](https://github.com/iosmanthus).
 
 ## Contributing
 

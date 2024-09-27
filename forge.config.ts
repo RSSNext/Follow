@@ -1,6 +1,6 @@
 import crypto from "node:crypto"
 import fs, { readdirSync } from "node:fs"
-import { readdir } from "node:fs/promises"
+import { cp, readdir } from "node:fs/promises"
 import path, { resolve } from "node:path"
 
 import { FuseV1Options, FuseVersion } from "@electron/fuses"
@@ -26,7 +26,8 @@ const ymlMapsMap = {
 }
 
 const keepModules = new Set(["font-list", "vscode-languagedetection"])
-const keepLanguages = new Set(["en", "en_GB", "zh_CN", "zh-CN", "en-GB"])
+const keepLanguages = new Set(["en", "en_GB", "en-GB"])
+
 // remove folders & files not to be included in the app
 async function cleanSources(buildPath, electronVersion, platform, arch, callback) {
   // folders & files to be included in the app
@@ -57,6 +58,24 @@ async function cleanSources(buildPath, electronVersion, platform, arch, callback
         .map((item) => rimraf(path.join(buildPath, "node_modules", item))),
     )),
   ])
+
+  // copy needed node_modules to be included in the app
+  await Promise.all(
+    keepModules.values().map((item) => {
+      // Check is exist
+      if (fs.existsSync(path.join(buildPath, "node_modules", item))) {
+        // eslint-disable-next-line array-callback-return
+        return
+      }
+      return cp(
+        path.join(process.cwd(), "node_modules", item),
+        path.join(buildPath, "node_modules", item),
+        {
+          recursive: true,
+        },
+      )
+    }),
+  )
 
   callback()
 }

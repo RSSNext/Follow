@@ -17,6 +17,7 @@ const failedList = new Set<string | undefined>()
 type BaseProps = {
   mediaContainerClassName?: string
   showFallback?: boolean
+  thumbnail?: boolean
 }
 export type MediaProps = BaseProps &
   (
@@ -45,10 +46,11 @@ const MediaImpl: FC<MediaProps> = ({
   proxy,
   popper = false,
   mediaContainerClassName,
+  thumbnail,
   ...props
 }) => {
   const { src, style, type, previewImageUrl, showFallback, ...rest } = props
-  const [hidden, setHidden] = useState(!src)
+
   const [imgSrc, setImgSrc] = useState(() =>
     proxy && src && !failedList.has(src)
       ? getImageProxyUrl({
@@ -61,15 +63,17 @@ const MediaImpl: FC<MediaProps> = ({
 
   const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded" | "error">("loading")
   const errorHandle: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
-    setMediaLoadState("error")
     if (imgSrc !== props.src) {
       setImgSrc(props.src)
       failedList.add(props.src)
     } else {
-      setHidden(true)
+      setMediaLoadState("error")
+
       props.onError?.(e as any)
     }
   })
+
+  const isError = mediaLoadState === "error"
   const previewMedia = usePreviewMedia()
   const handleClick = useEventCallback((e: React.MouseEvent) => {
     if (popper && src) {
@@ -131,7 +135,7 @@ const MediaImpl: FC<MediaProps> = ({
             )}
             onClick={handleClick}
           >
-            <VideoPreview src={src!} previewImageUrl={previewImageUrl} />
+            <VideoPreview src={src!} previewImageUrl={previewImageUrl} thumbnail={thumbnail} />
           </span>
         )
       }
@@ -156,19 +160,30 @@ const MediaImpl: FC<MediaProps> = ({
 
   if (!type || !src) return null
 
-  if (hidden && showFallback) {
-    return (
-      <FallbackMedia
-        mediaContainerClassName={mediaContainerClassName}
-        className={className}
-        {...props}
-      />
-    )
+  if (isError) {
+    if (showFallback) {
+      return (
+        <FallbackMedia
+          mediaContainerClassName={mediaContainerClassName}
+          className={className}
+          style={style}
+          {...props}
+        />
+      )
+    } else {
+      return (
+        <div
+          className={cn("rounded bg-zinc-100 dark:bg-neutral-900", className)}
+          style={props.style}
+        />
+      )
+    }
   }
+
   return (
     <span
       data-state={type !== "video" ? mediaLoadState : undefined}
-      className={cn("block overflow-hidden rounded", hidden && "hidden", className)}
+      className={cn("block overflow-hidden rounded", className)}
       style={style}
     >
       {InnerContent}
@@ -179,18 +194,18 @@ const MediaImpl: FC<MediaProps> = ({
 export const Media: FC<MediaProps> = memo((props) => <MediaImpl {...props} key={props.src} />)
 
 const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, className, ...props }) => (
-  <div className={className}>
+  <div className={className} style={props.style}>
     <div
       className={cn(
         !(props.width || props.height) && "size-full",
-        "center relative rounded bg-zinc-100 object-cover dark:bg-neutral-900",
-        "not-prose flex max-h-full flex-col space-y-1 p-4",
+        "center rounded bg-zinc-100 dark:bg-neutral-900",
+        "not-prose !flex max-h-full flex-col space-y-1 p-4",
+
         mediaContainerClassName,
       )}
       style={{
         height: props.height ? `${props.height}px` : "",
         width: props.width ? `${props.width}px` : "100%",
-        ...props.style,
       }}
     >
       <i className="i-mgc-close-cute-re text-xl text-red-500" />
@@ -209,7 +224,8 @@ const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, classNam
 const VideoPreview: FC<{
   src: string
   previewImageUrl?: string
-}> = ({ src, previewImageUrl }) => {
+  thumbnail?: boolean
+}> = ({ src, previewImageUrl, thumbnail = false }) => {
   const [isInitVideoPlayer, setIsInitVideoPlayer] = useState(!previewImageUrl)
 
   const [videoRef, setVideoRef] = useState<VideoPlayerRef | null>(null)
@@ -217,6 +233,7 @@ const VideoPreview: FC<{
   const [forceUpdate] = useForceUpdate()
   return (
     <div
+      className="size-full"
       onMouseEnter={() => {
         videoRef?.controls.play()?.then(forceUpdate)
       }}
@@ -235,9 +252,10 @@ const VideoPreview: FC<{
         />
       ) : (
         <VideoPlayer
-          variant="preview"
+          variant={thumbnail ? "thumbnail" : "preview"}
           controls={false}
           src={src}
+          poster={previewImageUrl}
           ref={setVideoRef}
           muted
           className="relative size-full object-cover"

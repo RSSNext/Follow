@@ -42,18 +42,19 @@ export const useUserSubscriptionsQuery = (userId: string | undefined) => {
   return subscriptions
 }
 
-export const usePresentUserProfileModal = (variant: "drawer" | "dialog" = "dialog") => {
+type Variant = "drawer" | "dialog"
+export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
   const { present } = useModalStack()
 
   return useCallback(
-    (userId: string | undefined) => {
+    (userId: string | undefined, overrideVariant?: Variant) => {
       if (!userId) return
       present({
         title: "User Profile",
         content: () =>
           createElement(UserProfileModalContent, {
             userId,
-            variant,
+            variant: overrideVariant || variant,
           }),
         CustomModalComponent: PlainModal,
         clickOutsideToDismiss: true,

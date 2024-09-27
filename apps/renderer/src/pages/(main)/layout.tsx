@@ -80,13 +80,18 @@ export function Component() {
 
   useDailyTask()
 
-  const isNotSupportWidth = useViewport((v) => v.w < 1024 && v.w !== 0)
+  const isNotSupportWidth = useViewport((v) => v.w < 1024 && v.w !== 0) && !window.electron
 
   if (isNotSupportWidth) {
     return (
-      <div className="center fixed inset-0 flex-col">
+      <div className="center fixed inset-0 flex-col text-balance px-4 text-center">
         <i className="i-mingcute-device-line mb-2 size-16 text-muted-foreground" />
-        <div>Please using desktop app to using {APP_NAME}</div>
+        <div>{APP_NAME} is not supported on mobile devices.</div>
+        <div>
+          Your device width is <b>{`${window.innerWidth}`}px</b> less than minimum supported width
+          1024px.
+        </div>
+        <div>Please use desktop app to using {APP_NAME}</div>
 
         <div>
           Download:{" "}

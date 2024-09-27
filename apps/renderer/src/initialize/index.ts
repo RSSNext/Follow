@@ -7,11 +7,7 @@ import duration from "dayjs/plugin/duration"
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { enableMapSet } from "immer"
-import React from "react"
-import ReactDOM from "react-dom"
-import { toast } from "sonner"
 
-import { getUISettings } from "~/atoms/settings/ui"
 import { isElectronBuild } from "~/constants"
 import { browserDB } from "~/database"
 import { initI18n } from "~/i18n"
@@ -60,6 +56,19 @@ export const initializeApp = async () => {
   // Set Environment
   document.documentElement.dataset.buildType = isElectronBuild ? "electron" : "web"
 
+  // Register global context for electron
+  registerGlobalContext({
+    /**
+     * Electron app only
+     */
+    onWindowClose() {
+      document.dispatchEvent(new ElectronCloseEvent())
+    },
+    onWindowShow() {
+      document.dispatchEvent(new ElectronShowEvent())
+    },
+  })
+
   apm("migration", doMigration)
 
   // Initialize dayjs
@@ -71,23 +80,6 @@ export const initializeApp = async () => {
   enableMapSet()
 
   subscribeNetworkStatus()
-
-  registerGlobalContext({
-    showSetting: (path) => window.router.showSettings(path),
-    getGeneralSettings,
-    getUISettings,
-    /**
-     * Electron app only
-     */
-    electronClose() {
-      document.dispatchEvent(new ElectronCloseEvent())
-    },
-    electronShow() {
-      document.dispatchEvent(new ElectronShowEvent())
-    },
-
-    toast,
-  })
 
   apm("hydrateSettings", hydrateSettings)
 
@@ -120,10 +112,6 @@ export const initializeApp = async () => {
     data_hydrated_time: dataHydratedTime,
     version: APP_VERSION,
   })
-
-  // expose `React` `ReactDOM` to global, it's easier for developers to make plugins
-  window.React = React
-  window.ReactDOM = ReactDOM
 }
 
 import.meta.hot?.dispose(cleanup)

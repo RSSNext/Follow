@@ -182,6 +182,7 @@ export function ListItem({
 
       {withDetails && entry.entries.media?.[0] && (
         <Media
+          thumbnail
           src={entry.entries.media[0].url}
           type={entry.entries.media[0].type}
           previewImageUrl={entry.entries.media[0].preview_image_url}

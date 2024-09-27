@@ -14,6 +14,7 @@ import {
 } from "~/atoms/readability"
 import { useIntegrationSettingKey } from "~/atoms/settings/integration"
 import { whoami } from "~/atoms/user"
+import { mountLottie } from "~/components/ui/lottie-container"
 import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
@@ -23,11 +24,14 @@ import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
 import { nextFrame } from "~/lib/dom"
 import { getOS } from "~/lib/utils"
+import StarAnimationUri from "~/lottie/star.lottie?url"
 import type { CombinedEntryModel } from "~/models"
 import { useTipModal } from "~/modules/wallet/hooks"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
+
+const absoluteStarAnimationUri = new URL(StarAnimationUri, import.meta.url).href
 
 export const useEntryReadabilityToggle = ({ id, url }: { id: string; url: string }) =>
   useCallback(async () => {
@@ -104,6 +108,7 @@ export const useUnread = () =>
 export const useEntryActions = ({
   view,
   entry,
+  type,
 }: {
   view?: number
   entry?: FlatEntryModel | null
@@ -165,7 +170,7 @@ export const useEntryActions = ({
       hide?: boolean
       active?: boolean
       disabled?: boolean
-      onClick: () => void
+      onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
     }[] = [
       {
         name: t("entry_actions.save_media_to_eagle"),
@@ -295,7 +300,16 @@ export const useEntryActions = ({
         name: t("entry_actions.star"),
         className: "i-mgc-star-cute-re",
         hide: !!populatedEntry.collections,
-        onClick: () => {
+        onClick: (e) => {
+          if (type === "toolbar") {
+            mountLottie(absoluteStarAnimationUri, {
+              x: e.clientX - 90,
+              y: e.clientY - 70,
+              height: 126,
+              width: 252,
+            })
+          }
+
           collect.mutate()
         },
       },

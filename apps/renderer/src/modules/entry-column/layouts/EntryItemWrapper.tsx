@@ -86,7 +86,7 @@ export const EntryItemWrapper: FC<
             .map((item) => ({
               type: "text" as const,
               label: item.name,
-              click: item.onClick,
+              click: () => item.onClick(e),
               shortcut: item.shortcut,
             })),
           {
@@ -99,7 +99,7 @@ export const EntryItemWrapper: FC<
           },
           {
             type: "text" as const,
-            label: `${t("words.copy")}${t("words.space")}${t("words.entry")} ${t("words.id")}`,
+            label: `${t("words.copy")}${t("space")}${t("words.entry")} ${t("words.id")}`,
             click: () => {
               navigator.clipboard.writeText(entry.entries.id)
             },

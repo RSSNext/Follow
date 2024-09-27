@@ -61,7 +61,10 @@ export function Component() {
             </div>
             <div className="mb-8 text-sm text-zinc-500">{user.data?.handle}</div>
           </div>
-          <div className="mb-12 w-[70ch] max-w-full grow space-y-10">
+          <div
+            className="mb-12 w-[70ch] max-w-full grow space-y-10"
+            data-testid="profile-subscriptions"
+          >
             {subscriptions.isLoading ? (
               <LoadingCircle size="large" className="center fixed inset-0" />
             ) : (

@@ -24,6 +24,7 @@ import { Input } from "~/components/ui/input"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { SocialMediaLinks } from "~/constants/social"
 import { useSignOut } from "~/hooks/biz/useSignOut"
+import { tipcClient } from "~/lib/client"
 import { getFetchErrorMessage } from "~/lib/error-parser"
 import confettiUrl from "~/lottie/confetti.lottie?url"
 import { useInvitationMutation } from "~/queries/invitations"
@@ -139,8 +140,13 @@ export function Component() {
                   variant="ghost"
                   type="button"
                   onClick={() => {
-                    signOut()
-                    window.location.href = "/"
+                    if (window.electron) {
+                      tipcClient?.clearAllData().then(() => {
+                        window.location.href = "/"
+                      })
+                    } else {
+                      signOut()
+                    }
                   }}
                 >
                   <i className="i-mingcute-exit-door-line" />

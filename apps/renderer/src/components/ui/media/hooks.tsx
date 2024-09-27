@@ -5,14 +5,14 @@ import { useModalStack } from "../modal/stacked/hooks"
 import type { PreviewMediaProps } from "./preview-media"
 import { PreviewMediaContent } from "./preview-media"
 
-export const usePreviewMedia = () => {
+export const usePreviewMedia = (entryId?: string) => {
   const { present } = useModalStack()
   return useCallback(
     (media: PreviewMediaProps[], initialIndex = 0) => {
       present({
         content: () => (
           <div className="relative size-full">
-            <PreviewMediaContent initialIndex={initialIndex} media={media} />
+            <PreviewMediaContent initialIndex={initialIndex} media={media} entryId={entryId} />
           </div>
         ),
         title: "Media Preview",

@@ -21,7 +21,7 @@ export interface BaseButtonProps {
 
 interface ActionButtonProps {
   icon?: React.ReactNode | React.FC<ComponentType>
-  tooltip: React.ReactNode
+  tooltip?: React.ReactNode
   tooltipSide?: "top" | "bottom"
   active?: boolean
   disabled?: boolean
@@ -50,47 +50,52 @@ export const ActionButton = React.forwardRef<
     const buttonRef = React.useRef<HTMLButtonElement>(null)
     React.useImperativeHandle(ref, () => buttonRef.current!)
 
+    const Trigger = (
+      <button
+        ref={buttonRef}
+        // @see https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904
+        onFocusCapture={stopPropagation}
+        className={cn(
+          "no-drag-region inline-flex size-8 items-center justify-center text-xl",
+          active && "bg-zinc-500/15 hover:bg-zinc-500/20",
+          //"focus-visible:bg-zinc-500/30 focus-visible:!outline-none",
+          "rounded-md duration-200 hover:bg-theme-button-hover data-[state=open]:bg-theme-button-hover",
+          "disabled:cursor-not-allowed disabled:opacity-50",
+          className,
+        )}
+        type="button"
+        disabled={disabled}
+        {...rest}
+      >
+        {typeof icon === "function"
+          ? React.createElement(icon, {
+              className: "size-4 grayscale text-current",
+            })
+          : icon}
+
+        {children}
+      </button>
+    )
     return (
       <>
         {shortcut && <HotKeyTrigger shortcut={shortcut} fn={() => buttonRef.current?.click()} />}
-        <Tooltip disableHoverableContent>
-          <TooltipTrigger asChild>
-            <button
-              ref={buttonRef}
-              // @see https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904
-              onFocusCapture={stopPropagation}
-              className={cn(
-                "no-drag-region inline-flex size-8 items-center justify-center text-xl",
-                active && "bg-zinc-500/15 hover:bg-zinc-500/20",
-                //"focus-visible:bg-zinc-500/30 focus-visible:!outline-none",
-                "rounded-md duration-200 hover:bg-theme-button-hover data-[state=open]:bg-theme-button-hover",
-                "disabled:cursor-not-allowed disabled:opacity-50",
-                className,
-              )}
-              type="button"
-              disabled={disabled}
-              {...rest}
-            >
-              {typeof icon === "function"
-                ? React.createElement(icon, {
-                    className: "size-4 grayscale text-current",
-                  })
-                : icon}
-
-              {children}
-            </button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent className="flex items-center gap-1" side={tooltipSide ?? "bottom"}>
-              {tooltip}
-              {!!shortcut && (
-                <div className="ml-1">
-                  <KbdCombined className="text-foreground/80">{shortcut}</KbdCombined>
-                </div>
-              )}
-            </TooltipContent>
-          </TooltipPortal>
-        </Tooltip>
+        {tooltip ? (
+          <Tooltip disableHoverableContent>
+            <TooltipTrigger asChild>{Trigger}</TooltipTrigger>
+            <TooltipPortal>
+              <TooltipContent className="flex items-center gap-1" side={tooltipSide ?? "bottom"}>
+                {tooltip}
+                {!!shortcut && (
+                  <div className="ml-1">
+                    <KbdCombined className="text-foreground/80">{shortcut}</KbdCombined>
+                  </div>
+                )}
+              </TooltipContent>
+            </TooltipPortal>
+          </Tooltip>
+        ) : (
+          Trigger
+        )}
       </>
     )
   },

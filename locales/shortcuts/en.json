@@ -20,5 +20,10 @@
   "keys.feeds.switchToView": "Switch to View",
   "keys.layout.showShortcuts": "Show/Hide Shortcuts",
   "keys.layout.toggleSidebar": "Show/Hide Feed Sidebar",
+  "keys.type.audio": "audio",
+  "keys.type.entries": "entries",
+  "keys.type.entry": "entry",
+  "keys.type.feeds": "feeds",
+  "keys.type.layout": "layout",
   "sidebar_title": "Shortcuts"
 }

@@ -547,7 +547,7 @@ declare const collections: drizzle_orm_pg_core.PgTableWithColumns<{
             generated: undefined;
         }, {}, {}>;
         feedId: drizzle_orm_pg_core.PgColumn<{
-            name: "feedId";
+            name: "feed_id";
             tableName: "collections";
             dataType: "string";
             columnType: "PgText";
@@ -644,6 +644,7 @@ type MediaModel = {
     preview_image_url?: string;
     width?: number;
     height?: number;
+    blurhash?: string;
 };
 type AttachmentsModel = {
     url: string;
@@ -3425,6 +3426,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         handle: string | null;
                         createdAt: string;
                     } | null | undefined;
+                    subscriptionCount?: number | undefined;
+                    purchaseAmount?: number | undefined;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -3436,6 +3439,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     feedId: string;
+                    listId: string;
+                } | {
+                    feedIds: string[];
                     listId: string;
                 };
             };
@@ -3468,7 +3474,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         handle: string | null;
                         createdAt: string;
                     }[] | null | undefined;
-                };
+                }[];
             };
             outputFormat: "json" | "text";
             status: 200;
@@ -3695,7 +3701,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     userId: string;
                     view: number;
                     category: string | null;
-                    feedId: string;
                     feeds: {
                         type: "feed";
                         id: string;
@@ -3724,6 +3729,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             createdAt: string;
                         }[] | null | undefined;
                     };
+                    feedId: string;
                     isPrivate: boolean;
                 } | {
                     title: string | null;
@@ -4937,6 +4943,24 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
         $put: {
+            input: {
+                json: {
+                    actionId: number;
+                };
+            };
+            output: {
+                code: number;
+                data: {
+                    actionId: number;
+                    result: boolean;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/achievement/check": {
+        $post: {
             input: {
                 json: {
                     actionId: number;

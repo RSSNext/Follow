@@ -2,6 +2,7 @@
 // DONT EDIT THIS FILE MANUALLY
 export const currentSupportedLanguages = [
   "en",
+  "de",
   "ja",
   "zh-CN",
   "zh-TW",
@@ -19,6 +20,7 @@ export const currentSupportedLanguages = [
   "ru",
   "es",
   "ko",
+  "tr",
 ]
 export const dayjsLocaleImportMap = {
   en: ["en", () => import("dayjs/locale/en")],
@@ -38,7 +40,9 @@ export const dayjsLocaleImportMap = {
   ["ar-KW"]: ["ar-kw", () => import("dayjs/locale/ar-kw")],
   ["ar-TN"]: ["ar-tn", () => import("dayjs/locale/ar-tn")],
   ["zh-HK"]: ["zh-hk", () => import("dayjs/locale/zh-hk")],
+  ["de"]: ["de", () => import("dayjs/locale/de")],
   ["ko"]: ["ko", () => import("dayjs/locale/ko")],
+  ["tr"]: ["tr", () => import("dayjs/locale/tr")],
 }
 export const ns = ["app", "common", "lang", "settings", "shortcuts", "errors"] as const
 export const defaultNS = "app" as const
