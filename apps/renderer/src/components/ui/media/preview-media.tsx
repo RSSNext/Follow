@@ -1,6 +1,7 @@
 import type { MediaModel } from "@follow/shared/hono"
 import type { FC } from "react"
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
+import { Blurhash } from "react-blurhash"
 import { Keyboard, Mousewheel } from "swiper/modules"
 import type { SwiperRef } from "swiper/react"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -125,6 +126,9 @@ export const PreviewMediaContent: FC<{
             className="h-full w-auto object-contain"
             alt="cover"
             src={src}
+            height={media[0].height}
+            width={media[0].width}
+            blurhash={media[0].blurhash}
           />
         )}
       </Wrapper>
@@ -236,8 +240,9 @@ const FallbackableImage: FC<
     src: string
     containerClassName?: string
     fallbackUrl?: string
+    blurhash?: string
   }
-> = ({ src, onError, fallbackUrl, containerClassName, ...props }) => {
+> = ({ src, onError, fallbackUrl, containerClassName, blurhash, ...props }) => {
   const [currentSrc, setCurrentSrc] = useState(() => replaceImgUrlIfNeed(src))
   const [isAllError, setIsAllError] = useState(false)
 
@@ -281,11 +286,32 @@ const FallbackableImage: FC<
     <div className={cn("flex size-full flex-col", containerClassName)}>
       {isLoading && !isAllError && (
         <div className="center absolute inset-0 size-full">
-          <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+          {blurhash ? (
+            <Blurhash
+              hash={blurhash}
+              resolutionX={32}
+              resolutionY={32}
+              className="!size-full"
+              style={{ aspectRatio: `${props.width} / ${props.height}` }}
+            />
+          ) : (
+            <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+          )}
         </div>
       )}
       {!isAllError && (
-        <img src={currentSrc} onLoad={() => setIsLoading(false)} onError={handleError} {...props} />
+        <img
+          src={currentSrc}
+          onLoad={() => setIsLoading(false)}
+          onError={handleError}
+          height={props.height}
+          width={props.width}
+          {...props}
+          className={cn(
+            blurhash && !isLoading ? "duration-500 ease-in-out animate-in fade-in-0" : "",
+            props.className,
+          )}
+        />
       )}
       {isAllError && (
         <div

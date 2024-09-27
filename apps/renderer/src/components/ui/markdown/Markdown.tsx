@@ -56,7 +56,7 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
 
   useEffect(() => {
     setRemarkOptions((options) => {
-      if (renderInlineStyle === options.renderInlineStyle || noMedia === options.noMedia) {
+      if (JSON.stringify(options) === JSON.stringify({ renderInlineStyle, noMedia })) {
         return options
       }
 
