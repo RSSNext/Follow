@@ -13,7 +13,6 @@ import {
   useEntryReadabilityContent,
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { useShowSourceContent } from "~/atoms/source-content"
 import { m } from "~/components/common/Motion"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
@@ -46,6 +45,7 @@ import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
 import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
 import { EntryTitle } from "./components/EntryTitle"
+import { SourceContentView } from "./components/SourceContentView"
 import { SupportCreator } from "./components/SupportCreator"
 import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
@@ -82,8 +82,6 @@ export const EntryContent = ({
   return <EntryContentRender entryId={entryId} noMedia={noMedia} compact={compact} />
 }
 
-const ViewTag = window.electron ? "webview" : "iframe"
-
 export const EntryContentRender: Component<{
   entryId: string
   noMedia?: boolean
@@ -119,7 +117,6 @@ export const EntryContentRender: Component<{
   const view = useRouteParamsSelector((route) => route.view)
 
   const isInReadabilityMode = useEntryIsInReadability(entryId)
-  const showSourceContent = useShowSourceContent()
   const scrollerRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     scrollerRef.current?.scrollTo(0, 0)
@@ -178,92 +175,91 @@ export const EntryContentRender: Component<{
         compact={compact}
       />
 
-      {showSourceContent && entry.entries.url && (
-        <ViewTag src={entry.entries.url} className="size-full" />
-      )}
-
-      <ScrollArea.ScrollArea
-        mask={false}
-        rootClassName={cn("h-0 min-w-0 grow overflow-y-auto @container", className)}
-        scrollbarClassName="mr-[1.5px]"
-        viewportClassName="p-5"
-        ref={scrollerRef}
-      >
-        <div
-          style={stableRenderStyle}
-          className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
-          key={entry.entries.id}
+      <div className="relative flex size-full flex-col">
+        <ScrollArea.ScrollArea
+          mask={false}
+          rootClassName={cn("h-0 min-w-0 grow overflow-y-auto @container", className)}
+          scrollbarClassName="mr-[1.5px]"
+          viewportClassName="p-5"
+          ref={scrollerRef}
         >
-          <article
-            data-testid="entry-render"
-            onContextMenu={stopPropagation}
-            className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
+          <div
+            style={stableRenderStyle}
+            className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
+            key={entry.entries.id}
           >
-            <EntryTitle entryId={entryId} compact={compact} />
+            <article
+              data-testid="entry-render"
+              onContextMenu={stopPropagation}
+              className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
+            >
+              <EntryTitle entryId={entryId} compact={compact} />
 
-            <WrappedElementProvider boundingDetection>
-              <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem]">
-                <TitleMetaHandler entryId={entry.entries.id} />
-                {(summary.isLoading || summary.data) && (
-                  <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
-                    <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
-                      <i className="i-mgc-magic-2-cute-re align-middle" />
-                      <span>{t("entry_content.ai_summary")}</span>
+              <WrappedElementProvider boundingDetection>
+                <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem]">
+                  <TitleMetaHandler entryId={entry.entries.id} />
+                  {(summary.isLoading || summary.data) && (
+                    <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
+                      <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
+                        <i className="i-mgc-magic-2-cute-re align-middle" />
+                        <span>{t("entry_content.ai_summary")}</span>
+                      </div>
+                      <AutoResizeHeight spring className="text-sm leading-relaxed">
+                        {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
+                      </AutoResizeHeight>
                     </div>
-                    <AutoResizeHeight spring className="text-sm leading-relaxed">
-                      {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
-                    </AutoResizeHeight>
-                  </div>
-                )}
-                <ErrorBoundary fallback={RenderError}>
-                  {!isInReadabilityMode ? (
-                    <ShadowDOM>
-                      <HTML
-                        mediaInfo={mediaInfo}
-                        noMedia={noMedia}
-                        accessory={contentAccessories}
-                        as="article"
-                        className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
-                        style={stableRenderStyle}
-                        renderInlineStyle={readerRenderInlineStyle}
-                      >
-                        {content}
-                      </HTML>
-                    </ShadowDOM>
-                  ) : (
-                    <ReadabilityContent entryId={entryId} />
                   )}
-                </ErrorBoundary>
-              </div>
-            </WrappedElementProvider>
+                  <ErrorBoundary fallback={RenderError}>
+                    {!isInReadabilityMode ? (
+                      <ShadowDOM>
+                        <HTML
+                          mediaInfo={mediaInfo}
+                          noMedia={noMedia}
+                          accessory={contentAccessories}
+                          as="article"
+                          className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
+                          style={stableRenderStyle}
+                          renderInlineStyle={readerRenderInlineStyle}
+                        >
+                          {content}
+                        </HTML>
+                      </ShadowDOM>
+                    ) : (
+                      <ReadabilityContent entryId={entryId} />
+                    )}
+                  </ErrorBoundary>
+                </div>
+              </WrappedElementProvider>
 
-            {entry.settings?.readability && (
-              <ReadabilityAutoToggleEffect id={entry.entries.id} url={entry.entries.url ?? ""} />
-            )}
+              {entry.settings?.readability && (
+                <ReadabilityAutoToggleEffect id={entry.entries.id} url={entry.entries.url ?? ""} />
+              )}
 
-            {!content && (
-              <div className="center mt-16 min-w-0">
-                {isPending ? (
-                  <EntryContentLoading icon={feed?.siteUrl!} />
-                ) : error ? (
-                  <div className="center flex min-w-0 flex-col gap-2">
-                    <i className="i-mgc-close-cute-re text-3xl text-red-500" />
-                    <span className="font-sans text-sm">Network Error</span>
+              {!content && (
+                <div className="center mt-16 min-w-0">
+                  {isPending ? (
+                    <EntryContentLoading icon={feed?.siteUrl!} />
+                  ) : error ? (
+                    <div className="center flex min-w-0 flex-col gap-2">
+                      <i className="i-mgc-close-cute-re text-3xl text-red-500" />
+                      <span className="font-sans text-sm">Network Error</span>
 
-                    <pre className="mt-6 w-full overflow-auto whitespace-pre-wrap break-all">
-                      {error.message}
-                    </pre>
-                  </div>
-                ) : (
-                  <NoContent id={entry.entries.id} url={entry.entries.url ?? ""} />
-                )}
-              </div>
-            )}
+                      <pre className="mt-6 w-full overflow-auto whitespace-pre-wrap break-all">
+                        {error.message}
+                      </pre>
+                    </div>
+                  ) : (
+                    <NoContent id={entry.entries.id} url={entry.entries.url ?? ""} />
+                  )}
+                </div>
+              )}
 
-            {feed?.ownerUserId && <SupportCreator entryId={entryId} />}
-          </article>
-        </div>
-      </ScrollArea.ScrollArea>
+              {feed?.ownerUserId && <SupportCreator entryId={entryId} />}
+            </article>
+          </div>
+        </ScrollArea.ScrollArea>
+        <SourceContentView src={entry.entries.url} />
+      </div>
     </EntryContentProvider>
   )
 }
