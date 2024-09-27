@@ -15,20 +15,20 @@ env:
 jobs:
   check-for-changes:
     runs-on: ubuntu-latest
-    outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
+    # outputs:
+    # should_run: ${{ steps.check.outputs.should_run }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Check for code changes
-        id: check
-        run: |
-          git diff --quiet @{1.day.ago} HEAD -- ':!.github' || echo "should_run=true" >> $GITHUB_OUTPUT
+      # - name: Check for code changes
+      #   id: check
+      #   run: |
+      #     git diff --quiet @{1.day.ago} HEAD -- ':!.github' || echo "should_run=true" >> $GITHUB_OUTPUT
 
   nightly-release:
-    needs: check-for-changes
-    if: needs.check-for-changes.outputs.should_run == 'true'
+    # needs: check-for-changes
+    # if: needs.check-for-changes.outputs.should_run == 'true'
     runs-on: ${{ matrix.os }}
 
     strategy:
