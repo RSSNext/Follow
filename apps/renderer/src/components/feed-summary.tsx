@@ -47,6 +47,7 @@ export function FollowSummary({
           href={!isList ? feed.url || docs : `${WEB_URL}/list/${feed.id}`}
           target="_blank"
           rel="noreferrer"
+          className="truncate"
         >
           {!isList ? feed.url || docs : `list:${feed.id}`}
         </a>
