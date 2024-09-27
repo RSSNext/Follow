@@ -1,7 +1,16 @@
 import { m } from "framer-motion"
 import { throttle } from "lodash-es"
 import type { FC, PropsWithChildren } from "react"
-import { memo, useCallback, useId, useLayoutEffect, useMemo, useRef, useState } from "react"
+import {
+  cloneElement,
+  memo,
+  useCallback,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { SafeFragment } from "~/components/common/Fragment"
@@ -79,10 +88,13 @@ const DateItemInner: FC<{
   Wrapper?: FC<PropsWithChildren>
 }> = ({ date, endTime, startTime, className, Wrapper }) => {
   const rid = useId()
-  const RelativeElement = (
-    <m.span key="b" layout layoutId={rid}>
-      <RelativeDay date={date} />
-    </m.span>
+  const RelativeElement = useMemo(
+    () => (
+      <m.span key="b" layout layoutId={rid}>
+        <RelativeDay date={date} />
+      </m.span>
+    ),
+    [date, rid],
   )
 
   const handleMarkAllAsRead = useMarkAllByRoute({
@@ -108,6 +120,7 @@ const DateItemInner: FC<{
   const { feedId } = useRouteParams()
   const isList = isListSubscription(feedId)
 
+  const tooltipId = useRef(Math.random().toString())
   return (
     <div
       className={cn(className, isSticky && "border-b")}
@@ -122,7 +135,10 @@ const DateItemInner: FC<{
             <span>
               Mark
               <span> </span>
-              {RelativeElement}
+              {useMemo(
+                () => cloneElement(RelativeElement, { layoutId: tooltipId.current }),
+                [RelativeElement],
+              )}
               <span> </span>
               as read
             </span>
