@@ -1,4 +1,5 @@
 import type { Element, Text } from "hast"
+import type { Schema } from "hast-util-sanitize"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
 import { toText } from "hast-util-to-text"
@@ -32,29 +33,26 @@ export const parseHtml = (
   const file = new VFile(content)
   const { renderInlineStyle = false, noMedia = false } = options || {}
 
+  const rehypeSchema: Schema = { ...defaultSchema }
+
+  if (noMedia) {
+    rehypeSchema.tagNames = rehypeSchema.tagNames?.filter(
+      (tag) => tag !== "img" && tag !== "picture",
+    )
+  } else {
+    rehypeSchema.tagNames = [...rehypeSchema.tagNames!, "video", "style"]
+    rehypeSchema.attributes = {
+      ...rehypeSchema.attributes,
+      "*": renderInlineStyle
+        ? [...rehypeSchema.attributes!["*"], "style", "class"]
+        : rehypeSchema.attributes!["*"],
+      video: ["src", "poster"],
+    }
+  }
+
   const pipeline = unified()
     .use(rehypeParse, { fragment: true })
-    .use(
-      rehypeSanitize,
-      noMedia
-        ? {
-            ...defaultSchema,
-            tagNames: defaultSchema.tagNames?.filter((tag) => tag !== "img" && tag !== "picture"),
-          }
-        : {
-            ...defaultSchema,
-            tagNames: [...defaultSchema.tagNames!, "video", "style"],
-            attributes: {
-              ...defaultSchema.attributes,
-
-              "*": renderInlineStyle
-                ? [...defaultSchema.attributes!["*"], "style", "class"]
-                : defaultSchema.attributes!["*"],
-
-              video: ["src", "poster"],
-            },
-          },
-    )
+    .use(rehypeSanitize, rehypeSchema)
 
     .use(rehypeInferDescriptionMeta)
     .use(rehypeStringify)

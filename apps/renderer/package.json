@@ -76,6 +76,7 @@
     "path-to-regexp": "8.1.0",
     "posthog-js": "1.163.0",
     "re-resizable": "6.9.18",
+    "react-blurhash": "^0.3.0",
     "react-error-boundary": "4.0.13",
     "react-fast-marquee": "1.6.5",
     "react-hook-form": "7.53.0",

@@ -25,6 +25,6 @@ export const usePreviewMedia = (entryId?: string) => {
         clickOutsideToDismiss: true,
       })
     },
-    [present],
+    [entryId, present],
   )
 }
