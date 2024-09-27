@@ -49,7 +49,9 @@ export function FollowSummary({
           rel="noreferrer"
           className="truncate"
         >
-          {!isList ? feed.url || docs : `list:${feed.id}`}
+          <EllipsisHorizontalTextWithTooltip>
+            {`${!isList ? feed.url || docs : `list:${feed.id}`}`}
+          </EllipsisHorizontalTextWithTooltip>
         </a>
       </div>
     </div>
