@@ -2,6 +2,7 @@ import type { MediaModel } from "@follow/shared/hono"
 import type { FC } from "react"
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
 import { Blurhash } from "react-blurhash"
+import { useTranslation } from "react-i18next"
 import { Keyboard, Mousewheel } from "swiper/modules"
 import type { SwiperRef } from "swiper/react"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -25,6 +26,7 @@ const Wrapper: Component<{
   entryId?: string
 }> = ({ children, src, showActions, entryId }) => {
   const { dismiss } = useCurrentModal()
+  const { t } = useTranslation(["shortcuts", "external"])
 
   return (
     <div className="center relative size-full px-20 pb-8 pt-10" onClick={dismiss}>
@@ -50,7 +52,7 @@ const Wrapper: Component<{
               <Fragment>
                 {!!window.electron && (
                   <ActionButton
-                    tooltip="Download"
+                    tooltip={t("external:header.download")}
                     onClick={() => {
                       tipcClient?.download(src)
                     }}
@@ -59,7 +61,7 @@ const Wrapper: Component<{
                   </ActionButton>
                 )}
                 <ActionButton
-                  tooltip={COPY_MAP.OpenInBrowser()}
+                  tooltip={t(COPY_MAP.OpenInBrowser())}
                   onClick={() => {
                     window.open(src)
                   }}
