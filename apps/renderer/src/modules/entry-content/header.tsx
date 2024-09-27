@@ -109,7 +109,6 @@ function EntryHeaderImpl({
                 active={item.active}
                 shortcut={item.shortcut}
                 onClick={item.onClick}
-                onContextMenu={item.onContextMenu}
                 tooltip={item.name}
                 key={item.name}
               />

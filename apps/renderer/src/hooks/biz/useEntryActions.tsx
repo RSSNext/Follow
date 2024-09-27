@@ -13,7 +13,11 @@ import {
   setReadabilityStatus,
 } from "~/atoms/readability"
 import { useIntegrationSettingKey } from "~/atoms/settings/integration"
-import { getShowSourceContent, toggleShowSourceContent } from "~/atoms/source-content"
+import {
+  getShowSourceContent,
+  setShowSourceContent,
+  toggleShowSourceContent,
+} from "~/atoms/source-content"
 import { whoami } from "~/atoms/user"
 import { mountLottie } from "~/components/ui/lottie-container"
 import {
@@ -31,6 +35,8 @@ import { useTipModal } from "~/modules/wallet/hooks"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
+
+import { navigateEntry } from "./useNavigateEntry"
 
 const absoluteStarAnimationUri = new URL(StarAnimationUri, import.meta.url).href
 
@@ -172,7 +178,6 @@ export const useEntryActions = ({
       active?: boolean
       disabled?: boolean
       onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
-      onContextMenu?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
     }[] = [
       {
         name: t("entry_actions.save_media_to_eagle"),
@@ -344,14 +349,27 @@ export const useEntryActions = ({
         name: t("entry_actions.open_in_browser"),
         shortcut: shortcuts.entry.openInBrowser.key,
         className: "i-mgc-world-2-cute-re",
-        hide: !populatedEntry.entries.url,
-        active: getShowSourceContent(),
+        hide: type === "toolbar" || !populatedEntry.entries.url,
         onClick: () => {
           if (!populatedEntry.entries.url) return
           window.open(populatedEntry.entries.url, "_blank")
         },
-        onContextMenu: () => {
-          toggleShowSourceContent()
+      },
+      {
+        key: "openSourceContent",
+        // TODO update i18n
+        name: "Open source content",
+        // shortcut: shortcuts.entry.openInBrowser.key,
+        className: "i-mgc-world-2-cute-re",
+        hide: !populatedEntry.entries.url,
+        active: getShowSourceContent(),
+        onClick: () => {
+          if (type === "toolbar") {
+            toggleShowSourceContent()
+            return
+          }
+          navigateEntry({ entryId: populatedEntry.entries.id })
+          setShowSourceContent(true)
         },
       },
       {
