@@ -14,6 +14,16 @@ const variants = {
   exit: { x: "100%" },
 }
 
+const Banner = () => {
+  return (
+    <div className="z-50 w-full bg-yellow-600 p-3 text-white">
+      <div className="text-center">
+        <p>Some websites can't be displayed here. Download desktop app to view it.</p>
+      </div>
+    </div>
+  )
+}
+
 export const SourceContentView = ({ src }: { src: string | null }) => {
   const showSourceContent = useShowSourceContent()
   const [loading, setLoading] = useState(true)
@@ -51,18 +61,22 @@ export const SourceContentView = ({ src }: { src: string | null }) => {
           variants={variants}
           transition={softSpringPreset}
         >
-          {loading && (
-            <div className="center mt-16 min-w-0">
-              <EntryContentLoading icon={src} />
-            </div>
-          )}
-          <ViewTag
-            className="absolute left-0 top-0 size-full"
-            src={src}
-            ref={webviewRef}
-            // For iframe
-            onLoad={() => setLoading(false)}
-          />
+          {!window.electron && <Banner />}
+          <div className="relative flex size-full flex-col">
+            {loading && (
+              <div className="center mt-16 min-w-0">
+                <EntryContentLoading icon={src} />
+              </div>
+            )}
+            <ViewTag
+              ref={webviewRef}
+              className="absolute left-0 top-0 size-full"
+              src={src}
+              sandbox="allow-scripts allow-same-origin"
+              // For iframe
+              onLoad={() => setLoading(false)}
+            />
+          </div>
         </m.div>
       )}
     </AnimatePresence>
