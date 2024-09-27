@@ -24,7 +24,7 @@ const Banner = () => {
   )
 }
 
-export const SourceContentView = ({ src }: { src: string | null }) => {
+export const SourceContentView = ({ src }: { src: string }) => {
   const showSourceContent = useShowSourceContent()
   const [loading, setLoading] = useState(true)
   const webviewRef = useRef<HTMLIFrameElement | null>(null)
@@ -51,6 +51,30 @@ export const SourceContentView = ({ src }: { src: string | null }) => {
   }, [src, showSourceContent])
 
   return (
+    <>
+      {!window.electron && <Banner />}
+      <div className="relative flex size-full flex-col">
+        {loading && (
+          <div className="center mt-16 min-w-0">
+            <EntryContentLoading icon={src} />
+          </div>
+        )}
+        <ViewTag
+          ref={webviewRef}
+          className="absolute left-0 top-0 size-full"
+          src={src}
+          sandbox="allow-scripts allow-same-origin"
+          // For iframe
+          onLoad={() => setLoading(false)}
+        />
+      </div>
+    </>
+  )
+}
+
+export const SourceContentPanel = ({ src }: { src: string | null }) => {
+  const showSourceContent = useShowSourceContent()
+  return (
     <AnimatePresence>
       {showSourceContent && src && (
         <m.div
@@ -61,22 +85,7 @@ export const SourceContentView = ({ src }: { src: string | null }) => {
           variants={variants}
           transition={softSpringPreset}
         >
-          {!window.electron && <Banner />}
-          <div className="relative flex size-full flex-col">
-            {loading && (
-              <div className="center mt-16 min-w-0">
-                <EntryContentLoading icon={src} />
-              </div>
-            )}
-            <ViewTag
-              ref={webviewRef}
-              className="absolute left-0 top-0 size-full"
-              src={src}
-              sandbox="allow-scripts allow-same-origin"
-              // For iframe
-              onLoad={() => setLoading(false)}
-            />
-          </div>
+          <SourceContentView src={src} />
         </m.div>
       )}
     </AnimatePresence>

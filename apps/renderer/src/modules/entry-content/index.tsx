@@ -45,7 +45,7 @@ import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
 import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
 import { EntryTitle } from "./components/EntryTitle"
-import { SourceContentView } from "./components/SourceContentView"
+import { SourceContentPanel } from "./components/SourceContentView"
 import { SupportCreator } from "./components/SupportCreator"
 import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
@@ -258,7 +258,7 @@ export const EntryContentRender: Component<{
             </article>
           </div>
         </ScrollArea.ScrollArea>
-        <SourceContentView src={entry.entries.url} />
+        <SourceContentPanel src={entry.entries.url} />
       </div>
     </EntryContentProvider>
   )

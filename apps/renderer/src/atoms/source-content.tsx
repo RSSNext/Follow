@@ -3,6 +3,7 @@ import { useCallback } from "react"
 
 import { useModalStack } from "~/components/ui/modal"
 import { createAtomHooks } from "~/lib/jotai"
+import { SourceContentView } from "~/modules/entry-content/components/SourceContentView"
 
 export const [, , useShowSourceContent, , getShowSourceContent, setShowSourceContent] =
   createAtomHooks(atom<boolean>(false))
@@ -15,11 +16,10 @@ export const useSourceContentModal = () => {
 
   return useCallback(
     ({ title, src }: { title?: string; src: string }) => {
-      const ViewTag = window.electron ? "webview" : "iframe"
       present({
         id: src,
         title,
-        content: () => <ViewTag src={src} style={{ width: "100%", height: "100%" }} />,
+        content: () => <SourceContentView src={src} />,
         resizeable: true,
         clickOutsideToDismiss: true,
         // The number was picked arbitrarily
