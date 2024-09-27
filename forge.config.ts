@@ -26,7 +26,7 @@ const ymlMapsMap = {
 }
 
 const keepModules = new Set(["font-list", "vscode-languagedetection"])
-const keepLanguages = new Set(["en", "en_GB", "en-GB"])
+const keepLanguages = new Set(["en", "en_GB", "en-US", "en_US"])
 
 // remove folders & files not to be included in the app
 async function cleanSources(buildPath, electronVersion, platform, arch, callback) {
@@ -94,7 +94,10 @@ const config: ForgeConfig = {
       },
     ],
 
-    afterCopy: [cleanSources, setLanguages([...keepLanguages])],
+    afterCopy: [
+      cleanSources,
+      process.platform !== "win32" && setLanguages([...keepLanguages.values()]),
+    ],
     asar: true,
     ignore: [ignorePattern],
 
