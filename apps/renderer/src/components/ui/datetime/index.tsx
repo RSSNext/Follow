@@ -9,6 +9,8 @@ import { stopPropagation } from "~/lib/dom"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../tooltip"
 
 const formatTemplateString = "lll"
+const formatTemplateStringShort = "ll"
+
 const formatTime = (
   date: string | Date,
   relativeBeforeDay?: number,
@@ -141,7 +143,7 @@ export const RelativeDay = ({ date }: { date: Date }) => {
     }
   }, [date, language])
 
-  const formated = dayjs(date).format(formatTemplateString)
+  const formated = dayjs(date).format(formatTemplateStringShort)
   if (formated === dateString) {
     return <>{dateString}</>
   }
