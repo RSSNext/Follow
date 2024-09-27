@@ -80,6 +80,8 @@ async function cleanSources(buildPath, electronVersion, platform, arch, callback
   callback()
 }
 
+const noopAfterCopy = (buildPath, electronVersion, platform, arch, callback) => callback()
+
 const ignorePattern = new RegExp(`^/node_modules/(?!${[...keepModules].join("|")})`)
 
 const config: ForgeConfig = {
@@ -96,7 +98,7 @@ const config: ForgeConfig = {
 
     afterCopy: [
       cleanSources,
-      process.platform !== "win32" && setLanguages([...keepLanguages.values()]),
+      process.platform !== "win32" ? noopAfterCopy : setLanguages([...keepLanguages.values()]),
     ],
     asar: true,
     ignore: [ignorePattern],
