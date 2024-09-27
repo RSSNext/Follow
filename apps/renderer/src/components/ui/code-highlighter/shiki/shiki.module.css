@@ -1,6 +1,10 @@
 .shiki-wrapper {
   @apply rounded-md overflow-hidden;
 
+  pre {
+    @apply bg-transparent;
+  }
+
   &.transparent {
     :global {
       .shiki,

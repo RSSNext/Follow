@@ -215,7 +215,7 @@ export const EntryContentRender: Component<{
                         noMedia={noMedia}
                         accessory={contentAccessories}
                         as="article"
-                        className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em]"
+                        className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
                         style={stableRenderStyle}
                         renderInlineStyle={readerRenderInlineStyle}
                       >
@@ -315,7 +315,10 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
         </div>
       )}
 
-      <HTML as="article" className="prose dark:prose-invert prose-h1:text-[1.6em]">
+      <HTML
+        as="article"
+        className="prose dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
+      >
         {result?.content ?? ""}
       </HTML>
     </div>

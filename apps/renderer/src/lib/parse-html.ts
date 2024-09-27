@@ -164,6 +164,8 @@ export const parseHtml = (
                 ? propsChildren.find((i) => i.type === "code")
                 : propsChildren
 
+              if (!children) return null
+
               if (
                 "type" in children &&
                 children.type === "code" &&
