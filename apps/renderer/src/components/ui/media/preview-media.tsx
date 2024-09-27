@@ -38,7 +38,7 @@ const Wrapper: Component<{
         <div
           className={cn(
             "relative flex h-full w-auto overflow-hidden",
-            entryId ? "rounded-l-xl bg-native" : "rounded-xl",
+            entryId ? "min-w-96 items-center justify-center rounded-l-xl bg-native" : "rounded-xl",
           )}
         >
           {children}
