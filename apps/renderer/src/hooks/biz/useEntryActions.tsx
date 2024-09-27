@@ -14,9 +14,10 @@ import {
 } from "~/atoms/readability"
 import { useIntegrationSettingKey } from "~/atoms/settings/integration"
 import {
-  getShowSourceContent,
   setShowSourceContent,
   toggleShowSourceContent,
+  useShowSourceContent,
+  useSourceContentModal,
 } from "~/atoms/source-content"
 import { whoami } from "~/atoms/user"
 import { mountLottie } from "~/components/ui/lottie-container"
@@ -28,6 +29,7 @@ import {
 import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
 import { nextFrame } from "~/lib/dom"
+import { FeedViewType } from "~/lib/enum"
 import { getOS } from "~/lib/utils"
 import StarAnimationUri from "~/lottie/star.lottie?url"
 import type { CombinedEntryModel } from "~/models"
@@ -154,6 +156,9 @@ export const useEntryActions = ({
     feedId: populatedEntry?.feeds.id ?? undefined,
     entryId: populatedEntry?.entries.id ?? undefined,
   })
+
+  const showSourceContent = useShowSourceContent()
+  const showSourceContentModal = useSourceContentModal()
 
   const collect = useCollect(populatedEntry)
   const uncollect = useUnCollect(populatedEntry)
@@ -362,8 +367,16 @@ export const useEntryActions = ({
         // shortcut: shortcuts.entry.openInBrowser.key,
         className: "i-mgc-world-2-cute-re",
         hide: !populatedEntry.entries.url,
-        active: getShowSourceContent(),
+        active: showSourceContent,
         onClick: () => {
+          if (!populatedEntry.entries.url) return
+          if (view === FeedViewType.SocialMedia || view === FeedViewType.Videos) {
+            showSourceContentModal({
+              title: populatedEntry.entries.title ?? undefined,
+              src: populatedEntry.entries.url,
+            })
+            return
+          }
           if (type === "toolbar") {
             toggleShowSourceContent()
             return
@@ -428,9 +441,12 @@ export const useEntryActions = ({
     instapaperPassword,
     instapaperUsername,
     feed?.ownerUserId,
+    type,
+    showSourceContent,
     openTipModal,
     collect,
     uncollect,
+    showSourceContentModal,
     read,
     unread,
   ])
