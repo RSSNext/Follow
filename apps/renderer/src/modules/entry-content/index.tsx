@@ -148,6 +148,17 @@ export const EntryContentRender: Component<{
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
+  const mediaInfo = Object.fromEntries(
+    (entry.entries.media ?? data?.entries.media)
+      ?.filter((m) => m.type === "photo")
+      .map((cur) => [
+        cur.url,
+        {
+          width: cur.width,
+          height: cur.height,
+        },
+      ]) ?? [],
+  )
 
   return (
     <EntryContentProvider
@@ -200,6 +211,7 @@ export const EntryContentRender: Component<{
                   {!isInReadabilityMode ? (
                     <ShadowDOM>
                       <HTML
+                        mediaInfo={mediaInfo}
                         noMedia={noMedia}
                         accessory={contentAccessories}
                         as="article"

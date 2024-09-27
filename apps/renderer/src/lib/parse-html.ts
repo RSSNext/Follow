@@ -23,11 +23,22 @@ import { BlockError } from "~/components/ui/markdown/renderers/BlockErrorBoundar
 import { createHeadingRenderer } from "~/components/ui/markdown/renderers/Heading"
 import { Media } from "~/components/ui/media"
 
+function markInlineImage(node?: Element) {
+  for (const item of node?.children ?? []) {
+    if (item.type === "element" && item.tagName === "img") {
+      ;(item.properties as any).inline = true
+    }
+  }
+}
+
+export type MediaInfo = Record<string, { width?: number; height?: number }>
+
 export const parseHtml = (
   content: string,
   options?: Partial<{
     renderInlineStyle: boolean
     noMedia?: boolean
+    mediaInfo?: MediaInfo
   }>,
 ) => {
   const file = new VFile(content)
@@ -84,8 +95,17 @@ export const parseHtml = (
         jsxs: (type, props, key) => jsxs(type as any, props, key),
         passNode: true,
         components: {
-          a: ({ node, ...props }) => createElement(MarkdownLink, { ...props } as any),
-          img: Img,
+          a: ({ node, ...props }) => {
+            markInlineImage(node)
+            return createElement(MarkdownLink, { ...props } as any)
+          },
+          img: ({ ...props }) => {
+            return createElement(Img, {
+              ...props,
+              width: props.src ? options?.mediaInfo?.[props.src]?.width : props.width,
+              height: props.src ? options?.mediaInfo?.[props.src]?.height : props.height,
+            })
+          },
 
           h1: createHeadingRenderer(1),
           h2: createHeadingRenderer(2),
@@ -106,6 +126,10 @@ export const parseHtml = (
               }
             }
             return createElement(MarkdownP, props, props.children)
+          },
+          span: ({ node, ...props }) => {
+            markInlineImage(node)
+            return createElement("span", props, props.children)
           },
           hr: ({ node, ...props }) =>
             createElement("hr", {
@@ -195,7 +219,7 @@ const Img: Components["img"] = ({ node, ...props }) => {
       type: "photo",
       ...nextProps,
 
-      mediaContainerClassName: tw`max-w-full inline size-auto`,
+      mediaContainerClassName: tw`max-w-full inline rounded-md`,
       popper: true,
       className: tw`inline`,
       showFallback: true,
