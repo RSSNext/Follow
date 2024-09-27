@@ -96,7 +96,13 @@ If you have access, you are welcome to use the following methods to download and
 
 If you are eligible to use Follow, you are welcome to join the open source community to build together.
 
-Before you start, you need to install pnpm and then use it to install dependencies:
+Before you start, make sure you have enabled [Corepack](https://nodejs.org/api/corepack.html). Corepack makes sure you are using the correct version (`packageManager` field in `package.json`) for package manager when you run corresponding commands.
+
+```sh
+corepack enable
+```
+
+Install dependencies.
 
 ```sh
 pnpm install
