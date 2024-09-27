@@ -182,6 +182,7 @@
   "sidebar.feed_actions.open_site_in_browser": "在浏览器打开网站",
   "sidebar.feed_actions.unfollow": "取消订阅",
   "sidebar.feed_actions.unfollow_feed": "取消订阅",
+  "sidebar.feed_column.context_menu.add_feeds_to_list": "添加订阅源到列表",
   "sidebar.feed_column.context_menu.change_to_other_view": "更改为其他视图",
   "sidebar.feed_column.context_menu.delete_category": "删除分类",
   "sidebar.feed_column.context_menu.delete_category_confirmation": "删除分类 {{folderName}}？",
