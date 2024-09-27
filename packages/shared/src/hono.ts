@@ -993,18 +993,21 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         width: z.ZodOptional<z.ZodNumber>;
         height: z.ZodOptional<z.ZodNumber>;
         preview_image_url: z.ZodOptional<z.ZodString>;
+        blurhash: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         type: "photo" | "video";
         url: string;
         width?: number | undefined;
         height?: number | undefined;
         preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
     }, {
         type: "photo" | "video";
         url: string;
         width?: number | undefined;
         height?: number | undefined;
         preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
     }>, "many">>>;
     extra: z.ZodNullable<z.ZodOptional<z.ZodObject<{
         links: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
@@ -1053,6 +1056,7 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         width?: number | undefined;
         height?: number | undefined;
         preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
     }[] | null | undefined;
     attachments?: {
         url: string;
@@ -1088,6 +1092,7 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         width?: number | undefined;
         height?: number | undefined;
         preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
     }[] | null | undefined;
     attachments?: {
         url: string;
@@ -4320,6 +4325,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             width?: number | undefined;
                             height?: number | undefined;
                             preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
                         }[] | null | undefined;
                         attachments?: {
                             url: string;
@@ -4411,6 +4417,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             width?: number | undefined;
                             height?: number | undefined;
                             preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
                         }[] | null | undefined;
                         attachments?: {
                             url: string;
@@ -4490,6 +4497,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         width?: number | undefined;
                         height?: number | undefined;
                         preview_image_url?: string | undefined;
+                        blurhash?: string | undefined;
                     }[] | null | undefined;
                     attachments?: {
                         url: string;
@@ -4542,6 +4550,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             width?: number | undefined;
                             height?: number | undefined;
                             preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
                         }[] | null | undefined;
                         attachments?: {
                             url: string;
