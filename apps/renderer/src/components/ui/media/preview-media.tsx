@@ -40,7 +40,7 @@ const Wrapper: Component<{
         <div
           className={cn(
             "relative flex h-full w-auto overflow-hidden",
-            entryId ? "rounded-l-xl bg-native" : "rounded-xl",
+            entryId ? "min-w-96 items-center justify-center rounded-l-xl bg-native" : "rounded-xl",
           )}
         >
           {children}
@@ -289,13 +289,9 @@ const FallbackableImage: FC<
       {isLoading && !isAllError && (
         <div className="center absolute inset-0 size-full">
           {blurhash ? (
-            <Blurhash
-              hash={blurhash}
-              resolutionX={32}
-              resolutionY={32}
-              className="!size-full"
-              style={{ aspectRatio: `${props.width} / ${props.height}` }}
-            />
+            <div style={{ aspectRatio: `${props.width} / ${props.height}` }} className="w-full">
+              <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
+            </div>
           ) : (
             <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
           )}
