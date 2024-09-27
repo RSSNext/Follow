@@ -71,7 +71,7 @@ const Wrapper: Component<{
         </div>
         {entryId && (
           <div
-            className="box-border flex h-full w-[400px] min-w-0 shrink-0 flex-col rounded-r-xl bg-white px-2 pt-1"
+            className="box-border flex h-full w-[400px] min-w-0 shrink-0 flex-col rounded-r-xl bg-theme-background px-2 pt-1"
             onClick={stopPropagation}
           >
             <EntryContent entryId={entryId} noMedia compact />
