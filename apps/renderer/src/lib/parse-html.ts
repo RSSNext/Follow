@@ -137,14 +137,19 @@ export const parseHtml = (
             if (typeof props.children !== "object") {
               codeString = props.children.toString()
             } else {
+              const propsChildren = props.children
+              const children = Array.isArray(propsChildren)
+                ? propsChildren.find((i) => i.type === "code")
+                : propsChildren
+
               if (
-                "type" in props.children &&
-                props.children.type === "code" &&
-                props.children.props.className?.includes("language-")
+                "type" in children &&
+                children.type === "code" &&
+                children.props.className?.includes("language-")
               ) {
-                language = props.children.props.className.replace("language-", "")
+                language = children.props.className.replace("language-", "")
               }
-              const code = "props" in props.children && props.children.props.children
+              const code = "props" in children && children.props.children
               if (!code) return null
 
               try {
