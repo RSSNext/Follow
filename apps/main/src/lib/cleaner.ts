@@ -1,14 +1,13 @@
-import { callGlobalContextMethod } from "@follow/shared/bridge"
+import { callWindowExpose } from "@follow/shared/bridge"
 import { dialog } from "electron"
 
 import { getMainWindow } from "~/window"
 
 import { t } from "./i18n"
 
-export const clearAllData = async () => {
+export const clearAllDataAndConfirm = async () => {
   const win = getMainWindow()
   if (!win) return
-  const ses = win.webContents.session
 
   // Dialog to confirm
   const result = await dialog.showMessageBox({
@@ -21,6 +20,15 @@ export const clearAllData = async () => {
   if (result.response === 1) {
     return
   }
+  return clearAllData()
+}
+
+export const clearAllData = async () => {
+  const win = getMainWindow()
+  if (!win) return
+  const ses = win.webContents.session
+  const caller = callWindowExpose(win)
+
   try {
     await ses.clearCache()
 
@@ -36,11 +44,12 @@ export const clearAllData = async () => {
         "cookies",
       ],
     })
-    callGlobalContextMethod(win, "toast.success", ["App data reset successfully"])
+
+    caller.toast.success("App data reset successfully")
 
     // reload the app
     win.reload()
   } catch (error: any) {
-    callGlobalContextMethod(win, "toast.error", [`Error resetting app data: ${error.message}`])
+    caller.toast.error(`Error resetting app data: ${error.message}`)
   }
 }

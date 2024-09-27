@@ -1,4 +1,3 @@
-import { useLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import { AnimatePresence, m } from "framer-motion"
 import type { PropsWithChildren } from "react"
 import { memo, useContext, useEffect, useMemo, useState } from "react"
@@ -9,7 +8,7 @@ import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { Skeleton } from "~/components/ui/skeleton"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { FeedViewType } from "~/lib/enum"
-import { cn } from "~/lib/utils"
+import { cn, filterSmallMedia } from "~/lib/utils"
 import { useEntry } from "~/store/entry/hooks"
 import { useImageDimensions } from "~/store/image"
 
@@ -30,7 +29,7 @@ export function PictureItem({ entryId, entryPreview, translation }: UniversalIte
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
   const { t } = useTranslation()
-  const previewMedia = usePreviewMedia()
+  const previewMedia = usePreviewMedia(entryId)
   if (!entry) return <ReactVirtuosoItemPlaceholder />
   return (
     <GridItem entryId={entryId} entryPreview={entryPreview} translation={translation}>
@@ -68,50 +67,53 @@ export const PictureWaterFallItem = memo(function PictureWaterFallItem({
   entryId,
   entryPreview,
   translation,
-}: UniversalItemProps) {
+  index,
+}: UniversalItemProps & { index: number }) {
   const entry = useEntry(entryId) || entryPreview
 
   const isActive = useRouteParamsSelector(({ entryId }) => entryId === entry?.entries.id)
 
-  const previewMedia = usePreviewMedia()
+  const previewMedia = usePreviewMedia(entryId)
   const itemWidth = useMasonryItemWidth()
 
   const [ref, setRef] = useState<HTMLDivElement | null>(null)
   const intersectionObserver = useContext(MasonryIntersectionContext)
 
-  useLayoutEffect(() => {
-    if (ref) {
-      intersectionObserver.observe(ref)
-    }
+  useEffect(() => {
+    if (!ref || !intersectionObserver) return
+
+    intersectionObserver.observe(ref)
+
     return () => {
-      if (ref) {
-        intersectionObserver.unobserve(ref)
-      }
+      intersectionObserver.unobserve(ref)
     }
   }, [ref, intersectionObserver])
 
   const [isMouseEnter, setIsMouseEnter] = useState(false)
   if (!entry) return null
 
+  const media = filterSmallMedia(entry.entries.media)
+
   return (
     <div
       ref={setRef}
       data-entry-id={entryId}
+      data-index={index}
       onMouseEnter={() => setIsMouseEnter(true)}
       onMouseLeave={() => setIsMouseEnter(false)}
     >
       <EntryItemWrapper
         view={FeedViewType.Pictures}
         entry={entry}
-        itemClassName="group hover:bg-theme-item-hover rounded-md"
+        itemClassName="group hover:bg-theme-item-hover rounded-md overflow-hidden"
         style={{
           width: itemWidth,
         }}
       >
-        {entry.entries.media && entry.entries.media.length > 0 ? (
-          <MasonryItemFixedDimensionWrapper url={entry.entries.media[0].url}>
+        {media && media.length > 0 ? (
+          <MasonryItemFixedDimensionWrapper url={media[0].url}>
             <SwipeMedia
-              media={entry.entries.media}
+              media={media}
               className={cn("w-full shrink-0 grow rounded-md", isActive && "rounded-b-none")}
               proxySize={proxySize}
               imgClassName="object-cover"

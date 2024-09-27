@@ -21,8 +21,9 @@ export const MarkdownBlockImage = (
         "rounded",
         size.w < Number.parseInt(props.width as string) && "w-full",
       )}
+      showFallback
       popper
-      className="inline-flex justify-center"
+      className="flex justify-center"
     />
   )
 }

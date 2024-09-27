@@ -547,7 +547,7 @@ declare const collections: drizzle_orm_pg_core.PgTableWithColumns<{
             generated: undefined;
         }, {}, {}>;
         feedId: drizzle_orm_pg_core.PgColumn<{
-            name: "feedId";
+            name: "feed_id";
             tableName: "collections";
             dataType: "string";
             columnType: "PgText";
@@ -993,18 +993,21 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         width: z.ZodOptional<z.ZodNumber>;
         height: z.ZodOptional<z.ZodNumber>;
         preview_image_url: z.ZodOptional<z.ZodString>;
+        blurhash: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         type: "photo" | "video";
         url: string;
         width?: number | undefined;
         height?: number | undefined;
         preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
     }, {
         type: "photo" | "video";
         url: string;
         width?: number | undefined;
         height?: number | undefined;
         preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
     }>, "many">>>;
     extra: z.ZodNullable<z.ZodOptional<z.ZodObject<{
         links: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
@@ -1053,6 +1056,7 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         width?: number | undefined;
         height?: number | undefined;
         preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
     }[] | null | undefined;
     attachments?: {
         url: string;
@@ -1088,6 +1092,7 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
         width?: number | undefined;
         height?: number | undefined;
         preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
     }[] | null | undefined;
     attachments?: {
         url: string;
@@ -3426,6 +3431,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         handle: string | null;
                         createdAt: string;
                     } | null | undefined;
+                    subscriptionCount?: number | undefined;
+                    purchaseAmount?: number | undefined;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -3437,6 +3444,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     feedId: string;
+                    listId: string;
+                } | {
+                    feedIds: string[];
                     listId: string;
                 };
             };
@@ -3469,7 +3479,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         handle: string | null;
                         createdAt: string;
                     }[] | null | undefined;
-                };
+                }[];
             };
             outputFormat: "json" | "text";
             status: 200;
@@ -3696,7 +3706,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     userId: string;
                     view: number;
                     category: string | null;
-                    feedId: string;
                     feeds: {
                         type: "feed";
                         id: string;
@@ -3725,6 +3734,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             createdAt: string;
                         }[] | null | undefined;
                     };
+                    feedId: string;
                     isPrivate: boolean;
                 } | {
                     title: string | null;
@@ -4315,6 +4325,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             width?: number | undefined;
                             height?: number | undefined;
                             preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
                         }[] | null | undefined;
                         attachments?: {
                             url: string;
@@ -4406,6 +4417,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             width?: number | undefined;
                             height?: number | undefined;
                             preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
                         }[] | null | undefined;
                         attachments?: {
                             url: string;
@@ -4485,6 +4497,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         width?: number | undefined;
                         height?: number | undefined;
                         preview_image_url?: string | undefined;
+                        blurhash?: string | undefined;
                     }[] | null | undefined;
                     attachments?: {
                         url: string;
@@ -4537,6 +4550,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             width?: number | undefined;
                             height?: number | undefined;
                             preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
                         }[] | null | undefined;
                         attachments?: {
                             url: string;
@@ -4938,6 +4952,24 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
         $put: {
+            input: {
+                json: {
+                    actionId: number;
+                };
+            };
+            output: {
+                code: number;
+                data: {
+                    actionId: number;
+                    result: boolean;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/achievement/check": {
+        $post: {
             input: {
                 json: {
                     actionId: number;

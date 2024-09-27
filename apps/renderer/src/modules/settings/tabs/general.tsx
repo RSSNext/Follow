@@ -192,7 +192,7 @@ export const VoiceSelector = () => {
         <SelectTrigger size="sm" className="w-48">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="h-64">
+        <SelectContent position="item-aligned">
           {data?.map((item) => (
             <SelectItem key={item.ShortName} value={item.ShortName}>
               {item.FriendlyName}
@@ -242,10 +242,21 @@ export const LanguageSelector = () => {
                 ? defaultResources[lang].lang.name
                 : langT(`langs.${lang}` as any)
 
+            const originalLanguageName = defaultResources[lang].lang.name
             return (
-              <SelectItem key={lang} value={lang}>
-                {languageName}{" "}
-                {typeof percent === "number" ? (percent >= 100 ? null : `(${percent}%)`) : null}
+              <SelectItem className="group" key={lang} value={lang}>
+                <span className={cn(originalLanguageName !== languageName && "group-hover:hidden")}>
+                  {languageName}
+                  {typeof percent === "number" ? (percent >= 100 ? null : ` (${percent}%)`) : null}
+                </span>
+                {originalLanguageName !== languageName && (
+                  <span
+                    className="hidden duration-500 animate-in fade-in-0 group-hover:block"
+                    key={"org"}
+                  >
+                    {originalLanguageName}
+                  </span>
+                )}
               </SelectItem>
             )
           })}
@@ -264,7 +275,7 @@ const NettingSetting = () => {
     <SettingItemGroup>
       <SettingInput
         type="text"
-        label={t("general.proxy")}
+        label={t("general.proxy.label")}
         labelClassName="w-[150px]"
         value={proxyConfig}
         onChange={(event) => setProxyConfig(event.target.value.trim())}

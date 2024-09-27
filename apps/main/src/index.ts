@@ -1,6 +1,5 @@
 import { electronApp, optimizer } from "@electron-toolkit/utils"
-import { APP_PROTOCOL, DEEPLINK_SCHEME } from "@follow/shared/constants"
-import { extractElectronWindowOptions } from "@follow/shared/electron"
+import { APP_PROTOCOL } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { app, BrowserWindow, session } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
@@ -8,9 +7,10 @@ import squirrelStartup from "electron-squirrel-startup"
 import { isDev, isMacOS } from "./env"
 import { initializeAppStage0, initializeAppStage1 } from "./init"
 import { updateProxy } from "./lib/proxy"
+import { handleUrlRouting } from "./lib/router"
 import { setAuthSessionToken } from "./lib/user"
 import { registerUpdater } from "./updater"
-import { createMainWindow, createWindow } from "./window"
+import { createMainWindow } from "./window"
 
 if (isDev) console.info("[main] env loaded:", env)
 
@@ -138,17 +138,7 @@ function bootstrap() {
         mainWindow.reload()
       }
     } else {
-      const options = extractElectronWindowOptions(url)
-
-      const { height, resizable = true, width } = options || {}
-      createWindow({
-        extraPath: `#${url.replace(DEEPLINK_SCHEME, "/")}`,
-        width: width ?? 800,
-        height: height ?? 700,
-        minWidth: 600,
-        minHeight: 600,
-        resizable,
-      })
+      handleUrlRouting(url)
     }
   }
 

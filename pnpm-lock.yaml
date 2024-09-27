@@ -522,6 +522,9 @@ importers:
       re-resizable:
         specifier: 6.9.18
         version: 6.9.18(patch_hash=yitcmpfwcomg2fky72uc3lhk2i)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-blurhash:
+        specifier: ^0.3.0
+        version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
       react-error-boundary:
         specifier: 4.0.13
         version: 4.0.13(react@18.3.1)
@@ -3958,6 +3961,9 @@ packages:
   bluebird@3.7.2:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
 
+  blurhash@2.0.5:
+    resolution: {integrity: sha512-cRygWd7kGBQO3VEhPiTgq4Wc43ctsM+o46urrmPOiuAe+07fzlSB9OJVdpgDL0jPqXUVQ9ht7aq7kxOeJHRK+w==}
+
   bn.js@4.12.0:
     resolution: {integrity: sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==}
 
@@ -7369,6 +7375,12 @@ packages:
     peerDependencies:
       react: ^16.13.1 || ^17.0.0 || ^18.0.0
       react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
+
+  react-blurhash@0.3.0:
+    resolution: {integrity: sha512-XlKr4Ns1iYFRnk6DkAblNbAwN/bTJvxTVoxMvmTcURdc5oLoXZwqAF9N3LZUh/HT+QFlq5n6IS6VsDGsviYAiQ==}
+    peerDependencies:
+      blurhash: ^2.0.3
+      react: '>=15'
 
   react-dom@18.3.1:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
@@ -12851,6 +12863,8 @@ snapshots:
 
   bluebird@3.7.2: {}
 
+  blurhash@2.0.5: {}
+
   bn.js@4.12.0: {}
 
   bn.js@5.2.1: {}
@@ -16970,6 +16984,11 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+
+  react-blurhash@0.3.0(blurhash@2.0.5)(react@18.3.1):
+    dependencies:
+      blurhash: 2.0.5
+      react: 18.3.1
 
   react-dom@18.3.1(react@18.3.1):
     dependencies:

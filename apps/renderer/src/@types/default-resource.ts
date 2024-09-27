@@ -7,6 +7,7 @@ import common_arkw from "../../../../locales/common/ar-KW.json"
 import common_arma from "../../../../locales/common/ar-MA.json"
 import common_arsa from "../../../../locales/common/ar-SA.json"
 import common_artn from "../../../../locales/common/ar-TN.json"
+import common_de from "../../../../locales/common/de.json"
 import common_en from "../../../../locales/common/en.json"
 import common_es from "../../../../locales/common/es.json"
 import common_fi from "../../../../locales/common/fi.json"
@@ -16,7 +17,9 @@ import common_ja from "../../../../locales/common/ja.json"
 import common_ko from "../../../../locales/common/ko.json"
 import common_pt from "../../../../locales/common/pt.json"
 import common_ru from "../../../../locales/common/ru.json"
+import common_tr from "../../../../locales/common/tr.json"
 import common_zhCN from "../../../../locales/common/zh-CN.json"
+import common_zhHK from "../../../../locales/common/zh-HK.json"
 import common_zhTW from "../../../../locales/common/zh-TW.json"
 import errors_en from "../../../../locales/errors/en.json"
 import external_en from "../../../../locales/external/en.json"
@@ -26,6 +29,7 @@ import lang_arkw from "../../../../locales/lang/ar-KW.json"
 import lang_arma from "../../../../locales/lang/ar-MA.json"
 import lang_arsa from "../../../../locales/lang/ar-SA.json"
 import lang_artn from "../../../../locales/lang/ar-TN.json"
+import lang_de from "../../../../locales/lang/de.json"
 import lang_en from "../../../../locales/lang/en.json"
 import lang_es from "../../../../locales/lang/es.json"
 import lang_fi from "../../../../locales/lang/fi.json"
@@ -35,7 +39,9 @@ import lang_ja from "../../../../locales/lang/ja.json"
 import lang_ko from "../../../../locales/lang/ko.json"
 import lang_pt from "../../../../locales/lang/pt.json"
 import lang_ru from "../../../../locales/lang/ru.json"
+import lang_tr from "../../../../locales/lang/tr.json"
 import lang_zhCN from "../../../../locales/lang/zh-CN.json"
+import lang_zhHK from "../../../../locales/lang/zh-HK.json"
 import lang_zhTW from "../../../../locales/lang/zh-TW.json"
 import settings_en from "../../../../locales/settings/en.json"
 import shortcuts_en from "../../../../locales/shortcuts/en.json"
@@ -60,6 +66,11 @@ export const defaultResources = {
     lang: lang_zhCN,
     common: common_zhCN,
   },
+  "zh-HK": {
+    lang: lang_zhHK,
+    common: common_zhHK,
+  },
+
   ja: {
     lang: lang_ja,
     common: common_ja,
@@ -77,5 +88,7 @@ export const defaultResources = {
   "ar-IQ": { lang: lang_ariq, common: common_ariq },
   "ar-KW": { lang: lang_arkw, common: common_arkw },
   "ar-TN": { lang: lang_artn, common: common_artn },
+  de: { lang: lang_de, common: common_de },
   ko: { lang: lang_ko, common: common_ko },
+  tr: { lang: lang_tr, common: common_tr },
 }

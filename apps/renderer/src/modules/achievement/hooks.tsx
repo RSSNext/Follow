@@ -15,6 +15,7 @@ import { SlideUpModal } from "~/components/ui/modal/stacked/custom-modal"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { Chain } from "~/lib/chain"
+import { cn } from "~/lib/utils"
 import achievementAnimationUri from "~/lottie/achievement.lottie?url"
 
 const absoluteachievementAnimationUri = new URL(achievementAnimationUri, import.meta.url).href
@@ -42,6 +43,7 @@ export const useAchievementModal = () => {
       title: "Achievements",
       content: AchievementModalContent,
       CustomModalComponent: SlideUpModal,
+      overlay: true,
     })
   }, [present])
 }
@@ -123,6 +125,18 @@ export const AchievementModalContent: FC = () => {
     },
   })
   const achievementsDataAtom = useSingleton(() => atom<typeof achievements>())
+  const { mutateAsync: checkAchievement, isPending: checkPending } = useMutation({
+    mutationFn: async (actionId: number) => {
+      return apiClient.achievement.check.$post({
+        json: {
+          actionId,
+        },
+      })
+    },
+    onSuccess: () => {
+      refetch()
+    },
+  })
   const t = useI18n()
 
   return (
@@ -190,30 +204,45 @@ export const AchievementModalContent: FC = () => {
                     <span className="select-none opacity-0">{t("words.mint")}</span>
                   </div>
                 )}
+
                 {achievement.type === "incomplete" && (
-                  <div
+                  <button
+                    type="button"
                     className={styledButtonVariant({
                       variant: "ghost",
-                      className: "relative hover:bg-transparent",
+                      className: "relative hover:bg-transparent group cursor-pointer",
                     })}
+                    onClick={() => {
+                      checkAchievement(achievement.actionId)
+                    }}
                   >
-                    <span className="center relative ml-2 inline-flex w-24 -translate-y-1 flex-col *:!m-0">
-                      <small className="shrink-0 text-xs leading-tight text-muted-foreground">
-                        {achievement.progress} / {achievement.progressMax}
-                      </small>
-                      <span className="relative h-1 w-full overflow-hidden rounded-full bg-accent/10">
-                        <span
-                          className="absolute -left-3 top-0 inline-block h-1 rounded-full bg-accent"
-                          style={{
-                            width: `calc(${Math.min(
-                              (achievement.progress / achievement.progressMax) * 100,
-                              100,
-                            )}% + 0.75rem)`,
-                          }}
-                        />
+                    <div className="center absolute z-[1] opacity-0 duration-200 group-hover:opacity-100">
+                      <i
+                        className={cn(
+                          "i-mgc-refresh-2-cute-re size-5 text-accent",
+                          checkPending && "animate-spin",
+                        )}
+                      />
+                    </div>
+                    <div className="duration-200 group-hover:opacity-30">
+                      <span className="center relative ml-2 inline-flex w-24 -translate-y-1 flex-col *:!m-0">
+                        <small className="shrink-0 text-xs leading-tight text-muted-foreground">
+                          {achievement.progress} / {achievement.progressMax}
+                        </small>
+                        <span className="relative h-1 w-full overflow-hidden rounded-full bg-accent/10">
+                          <span
+                            className="absolute -left-3 top-0 inline-block h-1 rounded-full bg-accent"
+                            style={{
+                              width: `calc(${Math.min(
+                                (achievement.progress / achievement.progressMax) * 100,
+                                100,
+                              )}% + 0.75rem)`,
+                            }}
+                          />
+                        </span>
                       </span>
-                    </span>
-                  </div>
+                    </div>
+                  </button>
                 )}
 
                 {achievement.type === "received" && (

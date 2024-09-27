@@ -149,7 +149,7 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
 
   if (!loaded) {
     return (
-      <pre className={className}>
+      <pre className={cn("bg-transparent", className)}>
         <code>{code}</code>
       </pre>
     )

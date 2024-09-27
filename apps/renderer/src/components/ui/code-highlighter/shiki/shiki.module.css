@@ -1,6 +1,10 @@
 .shiki-wrapper {
   @apply rounded-md overflow-hidden;
 
+  pre {
+    @apply bg-transparent;
+  }
+
   &.transparent {
     :global {
       .shiki,
@@ -13,6 +17,22 @@
   :global {
     .shiki {
       @apply !m-0 !px-0;
+
+      font-family:
+        "OperatorMonoSSmLig Nerd Font",
+        "Cascadia Code PL",
+        "FantasqueSansMono Nerd Font",
+        "Operator Mono",
+        JetBrainsMono,
+        "Fira Code Retina",
+        "Fira Code",
+        "Consolas",
+        Monaco,
+        "Hannotate SC",
+        monospace,
+        -apple-system,
+        system-ui,
+        sans-serif;
     }
 
     pre {

@@ -4,7 +4,7 @@ import type { BrowserWindow, MenuItem, MenuItemConstructorOptions } from "electr
 import { Menu } from "electron"
 
 import { isDev, isMacOS } from "./env"
-import { clearAllData } from "./lib/cleaner"
+import { clearAllDataAndConfirm } from "./lib/cleaner"
 import { t } from "./lib/i18n"
 import { revealLogFile } from "./logger"
 import { checkForUpdates, quitAndInstall } from "./updater"
@@ -38,7 +38,7 @@ export const registerAppMenu = () => {
               { type: "separator" },
               {
                 label: t("menu.clearAllData"),
-                click: clearAllData,
+                click: clearAllDataAndConfirm,
               },
               { role: "quit", label: t("menu.quit", { name }) },
             ],

@@ -1,10 +1,17 @@
 import { produce } from "immer"
+import { omit } from "lodash-es"
 import { nanoid } from "nanoid"
 
 import { whoami } from "~/atoms/user"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type { TargetModel, UserModel } from "~/models"
+import type {
+  FeedModel,
+  FeedOrListModel,
+  FeedOrListRespModel,
+  ListModel,
+  UserModel,
+} from "~/models"
 import { FeedService } from "~/services"
 
 import { getSubscriptionByFeedId } from "../subscription"
@@ -23,9 +30,16 @@ class FeedActions {
     set({ feeds: {} })
   }
 
-  upsertMany(feeds: TargetModel[]) {
+  upsertMany(feeds: FeedOrListRespModel[]) {
     runTransactionInScope(() => {
-      FeedService.upsertMany(feeds)
+      FeedService.upsertMany(
+        feeds.map((feed) => {
+          if (feed.type === "list") {
+            return omit(feed, ["feeds"])
+          }
+          return feed
+        }),
+      )
     })
     set((state) =>
       produce(state, (state) => {
@@ -49,11 +63,11 @@ class FeedActions {
             const optionalFields = ["owner", "tipUsers"] as const
             optionalFields.forEach((field) => {
               if (state.feeds[feed.id!]?.[field] && !(field in feed)) {
-                ;(feed as any)[field] = state.feeds[feed.id!]?.[field]
+                ;(feed as any)[field] = { ...state.feeds[feed.id!]?.[field] }
               }
             })
 
-            state.feeds[feed.id] = feed
+            state.feeds[feed.id] = omit(feed, "feeds") as FeedOrListModel
           } else {
             // Store temp feed in memory
             const nonce = feed["nonce"] || nanoid(8)
@@ -67,7 +81,7 @@ class FeedActions {
     )
   }
 
-  private patch(feedId: string, patch: Partial<TargetModel>) {
+  private patch(feedId: string, patch: Partial<FeedOrListRespModel>) {
     set((state) =>
       produce(state, (state) => {
         const feed = state.feeds[feedId]
@@ -98,6 +112,27 @@ class FeedActions {
       if (!feed) return
       await FeedService.upsert(feed)
     })
+  }
+
+  async addFeedToFeedList(listId: string, feed: FeedModel) {
+    const list = get().feeds[listId] as ListModel
+    if (!list) return
+    feedActions.upsertMany([feed])
+
+    this.patch(listId, {
+      feedIds: [feed.id, ...list.feedIds],
+    })
+    feedActions.upsertMany([get().feeds[listId]])
+  }
+
+  async removeFeedFromFeedList(listId: string, feedId: string) {
+    const list = get().feeds[listId] as ListModel
+    if (!list) return
+
+    this.patch(listId, {
+      feedIds: list.feedIds.filter((id) => id !== feedId),
+    })
+    feedActions.upsertMany([get().feeds[listId]])
   }
 
   // API Fetcher
@@ -143,10 +178,10 @@ class FeedActions {
 }
 export const feedActions = new FeedActions()
 
-export const getFeedById = (feedId: string): Nullable<TargetModel> =>
+export const getFeedById = (feedId: string): Nullable<FeedOrListRespModel> =>
   useFeedStore.getState().feeds[feedId]
 
-export const getPreferredTitle = (feed?: TargetModel | null) => {
+export const getPreferredTitle = (feed?: FeedOrListRespModel | null) => {
   if (!feed?.id) {
     return feed?.title
   }

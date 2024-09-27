@@ -2,7 +2,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
-import { callGlobalContextMethod } from "@follow/shared/bridge"
+import { callWindowExpose } from "@follow/shared/bridge"
 import { imageRefererMatches } from "@follow/shared/image"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, screen, shell } from "electron"
@@ -219,7 +219,8 @@ export const createMainWindow = () => {
         window.hide()
       }
 
-      callGlobalContextMethod(window, "electronClose")
+      const caller = callWindowExpose(window)
+      caller.onWindowClose()
     } else {
       windows.mainWindow = null
     }
@@ -228,11 +229,14 @@ export const createMainWindow = () => {
   window.on("show", () => {
     cancelPollingUpdateUnreadCount()
 
-    callGlobalContextMethod(window, "electronShow")
+    const caller = callWindowExpose(window)
+
+    caller.onWindowShow()
   })
 
   window.on("hide", async () => {
-    const settings = await callGlobalContextMethod(window, "getUISettings")
+    const caller = callWindowExpose(window)
+    const settings = await caller.getUISettings()
 
     if (settings.showDockBadge) {
       pollingUpdateUnreadCount()
@@ -247,7 +251,8 @@ export const createSettingWindow = (path?: string) => {
   // if we open a new window then the state between the two windows will be out of sync.
   if (windows.mainWindow && windows.mainWindow.isVisible()) {
     windows.mainWindow.show()
-    callGlobalContextMethod(windows.mainWindow, "showSetting", [path])
+
+    callWindowExpose(windows.mainWindow).showSetting(path)
     return
   }
   if (windows.settingWindow) {

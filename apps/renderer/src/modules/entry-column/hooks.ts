@@ -252,8 +252,8 @@ function sortEntriesIdByEntryPublishedAt(entries: string[]) {
 function sortEntriesIdByStarAt(entries: string[]) {
   const entriesId2Map = entryActions.getFlattenMapEntries()
   return entries.slice().sort((a, b) => {
-    const aStar = entriesId2Map[a].collections?.createdAt
-    const bStar = entriesId2Map[b].collections?.createdAt
+    const aStar = entriesId2Map[a]?.collections?.createdAt
+    const bStar = entriesId2Map[b]?.collections?.createdAt
     if (!aStar || !bStar) return 0
     return bStar.localeCompare(aStar)
   })

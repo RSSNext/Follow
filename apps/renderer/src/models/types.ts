@@ -25,9 +25,10 @@ export type TransactionModel = ExtractBizResponse<
 
 export type FeedModel = ExtractBizResponse<typeof apiClient.feeds.$get>["data"]["feed"]
 
-export type ListModel = ExtractBizResponse<typeof apiClient.lists.$get>["data"]["list"]
-
-export type TargetModel = FeedModel | ListModel
+type ListModelPoplutedFeeds = ExtractBizResponse<typeof apiClient.lists.$get>["data"]["list"]
+export type ListModel = Omit<ListModelPoplutedFeeds, "feeds">
+export type FeedOrListRespModel = FeedModel | ListModelPoplutedFeeds
+export type FeedOrListModel = FeedModel | ListModel
 
 export type EntryResponse = Exclude<
   Extract<ExtractBizResponse<typeof apiClient.entries.$get>, { code: 0 }>["data"],
@@ -78,3 +79,8 @@ export type RecommendationItem = ExtractBizResponse<
 export type ActionOperation = "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex"
 export type ActionEntryField = "all" | "title" | "content" | "author" | "url" | "order"
 export type ActionFeedField = "view" | "title" | "site_url" | "feed_url" | "category"
+
+export type MediaModel = Exclude<
+  ExtractBizResponse<typeof apiClient.entries.$get>["data"],
+  undefined
+>["entries"]["media"]

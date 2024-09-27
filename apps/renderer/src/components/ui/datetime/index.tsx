@@ -9,6 +9,8 @@ import { stopPropagation } from "~/lib/dom"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../tooltip"
 
 const formatTemplateString = "lll"
+const formatTemplateStringShort = "ll"
+
 const formatTime = (
   date: string | Date,
   relativeBeforeDay?: number,
@@ -71,13 +73,18 @@ export const RelativeTime: FC<{
   }, [props.date, displayAbsoluteTimeAfterDay, dateFormatTemplate])
   const formated = dayjs(props.date).format(dateFormatTemplate)
 
+  const { t } = useTranslation("common")
   if (formated === relative) {
     return <>{relative}</>
   }
   return (
     <Tooltip>
       {/* https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904 */}
-      <TooltipTrigger onFocusCapture={stopPropagation}>{relative}</TooltipTrigger>
+      <TooltipTrigger onFocusCapture={stopPropagation}>
+        {relative}
+        {t("space")}
+        {t("words.ago")}
+      </TooltipTrigger>
 
       <TooltipPortal>
         <TooltipContent>{formated}</TooltipContent>
@@ -136,7 +143,7 @@ export const RelativeDay = ({ date }: { date: Date }) => {
     }
   }, [date, language])
 
-  const formated = dayjs(date).format(formatTemplateString)
+  const formated = dayjs(date).format(formatTemplateStringShort)
   if (formated === dateString) {
     return <>{dateString}</>
   }

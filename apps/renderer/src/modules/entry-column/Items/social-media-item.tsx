@@ -14,7 +14,7 @@ import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { getImageProxyUrl } from "~/lib/img-proxy"
 import { jotaiStore } from "~/lib/jotai"
 import { parseSocialMedia } from "~/lib/parsers"
-import { cn } from "~/lib/utils"
+import { cn, filterSmallMedia } from "~/lib/utils"
 import { useEntry } from "~/store/entry/hooks"
 import { useFeedById } from "~/store/feed"
 
@@ -44,6 +44,8 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
   const content = entry.entries.content || entry.entries.description
 
   const parsed = parseSocialMedia(entry.entries)
+
+  const media = filterSmallMedia(entry.entries.media)
 
   return (
     <div
@@ -94,9 +96,9 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
             {!!entry.collections && <StarIcon />}
           </div>
         </div>
-        {!!entry.entries.media?.length && (
+        {!!media?.length && (
           <div className="mt-4 flex gap-[8px] overflow-x-auto pb-2">
-            {entry.entries.media.map((media, i, mediaList) => {
+            {media.map((media, i, mediaList) => {
               const style: Partial<{
                 width: string
                 height: string
