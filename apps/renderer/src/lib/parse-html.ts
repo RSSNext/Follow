@@ -139,7 +139,7 @@ export const parseHtml = (
               const children = Array.isArray(propsChildren)
                 ? propsChildren.find((i) => i.type === "code")
                 : propsChildren
-              // children might be undefined due to `find`
+
               if (!children) return null
 
               if (
