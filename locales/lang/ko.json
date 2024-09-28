@@ -5,6 +5,7 @@
   "langs.ar-MA": "العربية (모로코)",
   "langs.ar-SA": "العربية (사우디아라비아)",
   "langs.ar-TN": "العربية (튀니지)",
+  "langs.de": "독일 사람",
   "langs.en": "영어",
   "langs.es": "스페인어",
   "langs.fi": "핀란드어",
@@ -18,5 +19,5 @@
   "langs.zh-CN": "간체 중국어",
   "langs.zh-HK": "번체 중국어 (홍콩)",
   "langs.zh-TW": "번체 중국어 (대만)",
-  "name": "영어"
+  "name": "한국어"
 }
