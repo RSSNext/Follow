@@ -160,9 +160,8 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
             shortcut={`${index + 1}`}
             className={cn(
               active === index && item.className,
-              "flex flex-col items-center gap-1 text-xl",
+              "flex h-11 flex-col items-center gap-1 text-xl",
               ELECTRON ? "hover:!bg-theme-vibrancyBg" : "",
-              showSidebarUnreadCount && "h-11",
               active === index && useHotkeysSwitch ? "bg-zinc-500/30" : "",
             )}
             onClick={(e) => {
@@ -172,7 +171,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
             }}
           >
             {item.icon}
-            {showSidebarUnreadCount && (
+            {showSidebarUnreadCount ? (
               <div className="text-[0.625rem] font-medium leading-none">
                 {unreadByView[index] > 99 ? (
                   <span className="-mr-0.5">99+</span>
@@ -180,6 +179,17 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
                   unreadByView[index]
                 )}
               </div>
+            ) : (
+              <i
+                className={cn(
+                  "i-mgc-round-cute-fi text-[0.25rem]",
+                  unreadByView[index]
+                    ? active === index
+                      ? "opacity-100"
+                      : "opacity-60"
+                    : "opacity-0",
+                )}
+              />
             )}
           </ActionButton>
         ))}

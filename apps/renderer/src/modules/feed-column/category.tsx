@@ -31,15 +31,9 @@ interface FeedCategoryProps {
   data: FeedId[]
   view?: number
   expansion: boolean
-  showUnreadCount?: boolean
 }
 
-function FeedCategoryImpl({
-  data: ids,
-  view,
-  expansion,
-  showUnreadCount = true,
-}: FeedCategoryProps) {
+function FeedCategoryImpl({ data: ids, view, expansion }: FeedCategoryProps) {
   const { t } = useTranslation()
 
   const sortByUnreadFeedList = useFeedUnreadStore((state) =>
@@ -241,14 +235,7 @@ function FeedCategoryImpl({
               />
             ) : (
               <Fragment>
-                <span
-                  className={cn(
-                    "grow truncate",
-                    !showUnreadCount && (unread ? "font-bold" : "font-medium opacity-70"),
-                  )}
-                >
-                  {folderName}
-                </span>
+                <span className="grow truncate">{folderName}</span>
 
                 <UnreadNumber unread={unread} className="ml-2" />
               </Fragment>
@@ -280,7 +267,6 @@ function FeedCategoryImpl({
               ids={ids}
               showCollapse={showCollapse as boolean}
               view={view as FeedViewType}
-              showUnreadCount={showUnreadCount}
             />
           </m.div>
         )}
@@ -368,7 +354,6 @@ const RenameCategoryForm: FC<{
 
 type SortListProps = {
   ids: string[]
-  showUnreadCount?: boolean
   view: FeedViewType
   showCollapse: boolean
 }
@@ -389,7 +374,7 @@ const SortedFeedItems = (props: SortListProps) => {
 }
 
 const SortByAlphabeticalList = (props: SortListProps) => {
-  const { ids, showUnreadCount, showCollapse, view } = props
+  const { ids, showCollapse, view } = props
   const isDesc = useFeedListSortSelector((s) => s.order === "desc")
   const sortedFeedList = useFeedStore((state) => {
     const res = ids.sort((a, b) => {
@@ -407,7 +392,6 @@ const SortByAlphabeticalList = (props: SortListProps) => {
     <Fragment>
       {sortedFeedList.map((feedId) => (
         <FeedItem
-          showUnreadCount={showUnreadCount}
           key={feedId}
           feedId={feedId}
           view={view}
@@ -417,7 +401,7 @@ const SortByAlphabeticalList = (props: SortListProps) => {
     </Fragment>
   )
 }
-const SortByUnreadList = ({ ids, showUnreadCount, showCollapse, view }: SortListProps) => {
+const SortByUnreadList = ({ ids, showCollapse, view }: SortListProps) => {
   const isDesc = useFeedListSortSelector((s) => s.order === "desc")
   const sortByUnreadFeedList = useFeedUnreadStore((state) => {
     const res = ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0))
@@ -428,7 +412,6 @@ const SortByUnreadList = ({ ids, showUnreadCount, showCollapse, view }: SortList
     <Fragment>
       {sortByUnreadFeedList.map((feedId) => (
         <FeedItem
-          showUnreadCount={showUnreadCount}
           key={feedId}
           feedId={feedId}
           view={view}
