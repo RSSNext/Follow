@@ -51,6 +51,7 @@ export default defineConfig(
       "@stylistic/jsx-self-closing-comp": "error",
     },
   },
+  // @ts-expect-error
   {
     files: ["locales/**/*.json"],
     plugins: {
@@ -60,6 +61,7 @@ export default defineConfig(
     rules: {
       "recursive-sort/recursive-sort": "error",
       "check-i18n-json/valid-i18n-keys": "error",
+      "check-i18n-json/no-extra-keys": "error",
     },
   },
 )

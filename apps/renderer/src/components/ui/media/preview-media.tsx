@@ -26,7 +26,7 @@ const Wrapper: Component<{
   entryId?: string
 }> = ({ children, src, showActions, entryId }) => {
   const { dismiss } = useCurrentModal()
-  const { t } = useTranslation("shortcuts")
+  const { t } = useTranslation(["shortcuts", "external"])
 
   return (
     <div className="center relative size-full px-20 pb-8 pt-10" onClick={dismiss}>
@@ -52,7 +52,7 @@ const Wrapper: Component<{
               <Fragment>
                 {!!window.electron && (
                   <ActionButton
-                    tooltip="Download"
+                    tooltip={t("external:header.download")}
                     onClick={() => {
                       tipcClient?.download(src)
                     }}
@@ -289,13 +289,9 @@ const FallbackableImage: FC<
       {isLoading && !isAllError && (
         <div className="center absolute inset-0 size-full">
           {blurhash ? (
-            <Blurhash
-              hash={blurhash}
-              resolutionX={32}
-              resolutionY={32}
-              className="!size-full"
-              style={{ aspectRatio: `${props.width} / ${props.height}` }}
-            />
+            <div style={{ aspectRatio: `${props.width} / ${props.height}` }} className="w-full">
+              <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
+            </div>
           ) : (
             <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
           )}

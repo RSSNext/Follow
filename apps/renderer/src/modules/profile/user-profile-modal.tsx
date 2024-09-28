@@ -190,7 +190,7 @@ export const UserProfileModalContent: FC<{
         className={cn(
           "relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
           variant === "drawer"
-            ? "shadow-drawer-left h-full w-[60ch] max-w-full"
+            ? "shadow-drawer-to-left h-full w-[60ch] max-w-full"
             : "h-[80vh] w-[800px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
         )}
       >
@@ -234,7 +234,7 @@ export const UserProfileModalContent: FC<{
           <Fragment>
             <div
               className={cn(
-                "center m-12 mb-4 flex shrink-0 flex-col",
+                "center m-12 mb-4 flex shrink-0 flex-col duration-700",
                 isHeaderSimple ? "mt-3 flex-row" : "flex-col",
               )}
             >
@@ -242,7 +242,7 @@ export const UserProfileModalContent: FC<{
                 asChild
                 className={cn("aspect-square", isHeaderSimple ? "size-12" : "size-16")}
               >
-                <m.span layout>
+                <m.span layout transition={{ duration: 0.35 }}>
                   <AvatarImage
                     className="duration-200 animate-in fade-in-0"
                     asChild
@@ -255,6 +255,7 @@ export const UserProfileModalContent: FC<{
               </Avatar>
               <m.div
                 layout
+                transition={{ duration: 0.35 }}
                 className={cn(
                   "flex cursor-text select-text flex-col items-center",
                   isHeaderSimple ? "ml-8 items-start" : "",
