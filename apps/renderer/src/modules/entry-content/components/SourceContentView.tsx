@@ -32,17 +32,11 @@ export const SourceContentView = ({ src }: { src: string }) => {
   useEffect(() => {
     const abortController = new AbortController()
     const webview = webviewRef.current
-    if (!webview) {
-      return
-    }
-    const handleDidStartLoading = () => setLoading(true)
+    if (!webview) return
     const handleDidStopLoading = () => setLoading(false)
 
     // See https://www.electronjs.org/docs/latest/api/webview-tag#example
-    webview.addEventListener("did-start-loading", handleDidStartLoading, {
-      signal: abortController.signal,
-    })
-    webview.addEventListener("did-stop-loading", handleDidStopLoading, {
+    webview.addEventListener("did-start-loading", handleDidStopLoading, {
       signal: abortController.signal,
     })
 
@@ -60,14 +54,21 @@ export const SourceContentView = ({ src }: { src: string }) => {
             <EntryContentLoading icon={src} />
           </div>
         )}
-        <ViewTag
-          ref={webviewRef}
-          className="absolute left-0 top-0 size-full"
-          src={src}
-          sandbox="allow-scripts allow-same-origin"
-          // For iframe
-          onLoad={() => setLoading(false)}
-        />
+        <m.div
+          className="size-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: loading ? 0 : 1 }}
+          transition={softSpringPreset}
+        >
+          <ViewTag
+            ref={webviewRef}
+            className="size-full"
+            src={src}
+            sandbox="allow-scripts allow-same-origin"
+            // For iframe
+            onLoad={() => setLoading(false)}
+          />
+        </m.div>
       </div>
     </>
   )
