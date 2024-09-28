@@ -2,7 +2,6 @@
   "ai_daily.title": "Actualités Principales - {{title}}",
   "ai_daily.tooltip.content": "Voici des nouvelles sélectionnées par l'IA à partir de votre chronologie (<From /> - <To />) qui peuvent être importantes pour vous.",
   "ai_daily.tooltip.update_schedule": "Mise à jour quotidienne à 8h00 et 20h00.",
-  "app.app_name": "NOM_APP",
   "app.copy_logo_svg": "Copier le logo SVG",
   "app.toggle_sidebar": "Afficher/Masquer la barre latérale",
   "discover.any_url_or_keyword": "Toute URL ou mot-clé",

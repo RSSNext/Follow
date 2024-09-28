@@ -71,7 +71,7 @@ export default {
           category: "Possible Errors",
           recommended: true,
         },
-        fixable: null,
+        fixable: "code", // 将 fixable 设置为 "code"
       },
       create(context) {
         return {
@@ -109,6 +109,15 @@ export default {
               context.report({
                 node,
                 message: `Key "${key}" is present in ${lang}.json but not in en.json for namespace "${namespace}"`,
+                fix(fixer) {
+                  const newJson = Object.fromEntries(
+                    Object.entries(currentJson).filter(([k]) => !extraKeys.includes(k)),
+                  )
+
+                  const newText = `${JSON.stringify(newJson, null, 2)}\n`
+
+                  return fixer.replaceText(node, newText)
+                },
               })
             }
           },

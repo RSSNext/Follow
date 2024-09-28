@@ -77,7 +77,7 @@
     "electron-packager-languages": "0.5.0",
     "electron-vite": "^2.3.0",
     "eslint": "^9.11.1",
-    "eslint-config-hyoban": "^3.1.7",
+    "eslint-config-hyoban": "^3.1.8",
     "fake-indexeddb": "6.0.0",
     "hono": "4.6.3",
     "lint-staged": "15.2.10",

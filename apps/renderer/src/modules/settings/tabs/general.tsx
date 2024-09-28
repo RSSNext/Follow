@@ -253,7 +253,7 @@ export const LanguageSelector = () => {
                 </span>
                 {originalLanguageName !== languageName && (
                   <span
-                    className="hidden group-hover:flex absolute inset-x-0 inset-y-0 items-center pl-2"
+                    className="absolute inset-0 hidden items-center pl-2 group-hover:flex"
                     key={"org"}
                   >
                     {originalLanguageName}
