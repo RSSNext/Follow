@@ -190,7 +190,7 @@ export const UserProfileModalContent: FC<{
         className={cn(
           "relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
           variant === "drawer"
-            ? "shadow-drawer-left h-full w-[60ch] max-w-full"
+            ? "shadow-drawer-to-left h-full w-[60ch] max-w-full"
             : "h-[80vh] w-[800px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
         )}
       >

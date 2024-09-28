@@ -280,17 +280,21 @@
 }
 
 @layer components {
-  .shadow-drawer-left {
-    box-shadow: -12px 0px 20px -6px rgba(41, 41, 41, 0.1);
+  .shadow-drawer-to-left {
+    box-shadow:
+      -12px 0 20px -6px rgba(41, 41, 41, 0.1),
+      24px 0 20px -6px rgba(41, 41, 41, 0.1);
   }
-  [data-theme="dark"] .shadow-drawer-left {
-    box-shadow: -12px 0px 20px -6px rgba(0, 0, 0, 0.653);
+  [data-theme="dark"] .shadow-drawer-to-left {
+    box-shadow:
+      -12px 0px 20px -6px rgba(0, 0, 0, 0.653),
+      24px 0 20px -6px rgba(0, 0, 0, 0.653);
   }
 
-  .shadow-drawer-right {
+  .shadow-drawer-to-right {
     box-shadow: 12px 0px 20px -6px rgba(41, 41, 41, 0.1);
   }
-  [data-theme="dark"] .shadow-drawer-right {
+  [data-theme="dark"] .shadow-drawer-to-right {
     box-shadow: 12px 0px 20px -6px rgba(0, 0, 0, 0.653);
   }
 }
@@ -313,12 +317,12 @@
 
 @layer components {
   .shadow-tooltip-bottom {
-    --bg: theme(colors.accent.DEFAULT/0.3);
+    --bg: theme(colors.accent/0.3);
     box-shadow: 0px 5px 20px -11px var(--bg);
   }
 
   .shadow-tooltip-top {
-    --bg: theme(colors.accent.DEFAULT/0.3);
+    --bg: theme(colors.accent/0.3);
     box-shadow: 0px -5px 20px -11px var(--bg);
   }
 }
@@ -373,5 +377,11 @@
     100% {
       transform: rotateY(180deg);
     }
+  }
+}
+
+@layer utilities {
+  .safe-inset-top {
+    top: var(--fo-window-padding-top, 0);
   }
 }
