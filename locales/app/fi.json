@@ -2,7 +2,6 @@
   "ai_daily.title": "Pääuutiset - {{title}}",
   "ai_daily.tooltip.content": "Tässä ovat uutiset, jotka AI on valinnut aikajanaltasi (<From /> - <To />), ja jotka saattavat olla sinulle tärkeitä.",
   "ai_daily.tooltip.update_schedule": "Päivitetään päivittäin klo 8 ja klo 20.",
-  "app.app_name": "SOVELLUKSEN_NIMI",
   "app.copy_logo_svg": "Kopioi Logo SVG",
   "app.toggle_sidebar": "Vaihda sivupalkki",
   "discover.any_url_or_keyword": "Mikä tahansa URL tai avainsana",
