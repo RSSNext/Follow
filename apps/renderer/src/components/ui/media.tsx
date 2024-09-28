@@ -61,6 +61,18 @@ const MediaImpl: FC<MediaProps> = ({
       : src,
   )
 
+  const previewImageSrc = useMemo(
+    () =>
+      proxy && previewImageUrl
+        ? getImageProxyUrl({
+            url: previewImageUrl,
+            width: proxy.width,
+            height: proxy.height,
+          })
+        : previewImageUrl,
+    [previewImageUrl, proxy],
+  )
+
   const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded" | "error">("loading")
   const errorHandle: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
     if (imgSrc !== props.src) {
@@ -135,7 +147,7 @@ const MediaImpl: FC<MediaProps> = ({
             )}
             onClick={handleClick}
           >
-            <VideoPreview src={src!} previewImageUrl={previewImageUrl} thumbnail={thumbnail} />
+            <VideoPreview src={src!} previewImageUrl={previewImageSrc} thumbnail={thumbnail} />
           </span>
         )
       }
@@ -151,7 +163,7 @@ const MediaImpl: FC<MediaProps> = ({
     mediaContainerClassName,
     mediaLoadState,
     popper,
-    previewImageUrl,
+    previewImageSrc,
     props.height,
     props.width,
     rest,
