@@ -361,9 +361,8 @@ export const useEntryActions = ({
         },
       },
       {
-        key: "openSourceContent",
-        // TODO update i18n
-        name: "Open source content",
+        key: "viewSourceContent",
+        name: t("entry_actions.view_source_content"),
         // shortcut: shortcuts.entry.openInBrowser.key,
         className: "i-mgc-world-2-cute-re",
         hide: !populatedEntry.entries.url,
