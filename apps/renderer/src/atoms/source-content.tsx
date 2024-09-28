@@ -23,7 +23,7 @@ export const useSourceContentModal = () => {
         resizeable: true,
         clickOutsideToDismiss: true,
         // The number was picked arbitrarily
-        resizeDefaultSize: { width: 900, height: 900 },
+        resizeDefaultSize: { width: 900, height: 700 },
       })
     },
     [present],
