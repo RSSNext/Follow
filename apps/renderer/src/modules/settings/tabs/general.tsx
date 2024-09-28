@@ -245,13 +245,15 @@ export const LanguageSelector = () => {
             const originalLanguageName = defaultResources[lang].lang.name
             return (
               <SelectItem className="group" key={lang} value={lang}>
-                <span className={cn(originalLanguageName !== languageName && "group-hover:hidden")}>
+                <span
+                  className={cn(originalLanguageName !== languageName && "group-hover:invisible")}
+                >
                   {languageName}
                   {typeof percent === "number" ? (percent >= 100 ? null : ` (${percent}%)`) : null}
                 </span>
                 {originalLanguageName !== languageName && (
                   <span
-                    className="hidden duration-500 animate-in fade-in-0 group-hover:block"
+                    className="hidden group-hover:flex absolute inset-x-0 inset-y-0 items-center pl-2"
                     key={"org"}
                   >
                     {originalLanguageName}
