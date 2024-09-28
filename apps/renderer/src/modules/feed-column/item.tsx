@@ -118,7 +118,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
             isFeed && feed.errorAt && "text-red-900 dark:text-red-500",
           )}
         >
-          <FeedIcon fallback feed={feed} size={isList ? 32 : 16} />
+          <FeedIcon fallback feed={feed} size={isList ? 28 : 16} />
           <div className="truncate">{getPreferredTitle(feed)}</div>
           {isFeed && <FeedCertification feed={feed} className="text-[15px]" />}
           {isFeed && feed.errorAt && (
