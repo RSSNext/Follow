@@ -162,7 +162,7 @@
   "lists.edit.success": "编辑列表成功",
   "lists.fee.description": "其他人订阅这个列表时要支付的费用",
   "lists.fee.label": "费用",
-  "lists.feeds.actions": "自动化",
+  "lists.feeds.actions": "操作",
   "lists.feeds.add.error": "添加订阅源到列表时失败",
   "lists.feeds.add.label": "添加",
   "lists.feeds.add.success": "订阅源已添加到列表",
