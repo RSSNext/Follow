@@ -366,7 +366,7 @@ export const useEntryActions = ({
         key: "viewSourceContent",
         name: t("entry_actions.view_source_content"),
         // shortcut: shortcuts.entry.openInBrowser.key,
-        className: "i-mgc-world-2-cute-re",
+        className: !showSourceContent ? "i-mgc-world-2-cute-re" : tw`i-mgc-world-2-cute-fi`,
         hide: !populatedEntry.entries.url,
         active: showSourceContent,
         onClick: () => {
