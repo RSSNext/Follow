@@ -61,6 +61,18 @@ const MediaImpl: FC<MediaProps> = ({
       : src,
   )
 
+  const previewImageSrc = useMemo(
+    () =>
+      proxy && previewImageUrl
+        ? getImageProxyUrl({
+            url: previewImageUrl,
+            width: proxy.width,
+            height: proxy.height,
+          })
+        : previewImageUrl,
+    [previewImageUrl, proxy],
+  )
+
   const [mediaLoadState, setMediaLoadState] = useState<"loading" | "loaded" | "error">("loading")
   const errorHandle: React.ReactEventHandler<HTMLImageElement> = useEventCallback((e) => {
     if (imgSrc !== props.src) {
@@ -135,7 +147,7 @@ const MediaImpl: FC<MediaProps> = ({
             )}
             onClick={handleClick}
           >
-            <VideoPreview src={src!} previewImageUrl={previewImageUrl} thumbnail={thumbnail} />
+            <VideoPreview src={src!} previewImageUrl={previewImageSrc} thumbnail={thumbnail} />
           </span>
         )
       }
@@ -151,7 +163,7 @@ const MediaImpl: FC<MediaProps> = ({
     mediaContainerClassName,
     mediaLoadState,
     popper,
-    previewImageUrl,
+    previewImageSrc,
     props.height,
     props.width,
     rest,
@@ -201,7 +213,7 @@ const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, classNam
       className={cn(
         !(props.width || props.height) && "size-full",
         "center rounded bg-zinc-100 dark:bg-neutral-900",
-        "not-prose !flex max-h-full flex-col space-y-1 p-4",
+        "not-prose !flex max-h-full flex-col space-y-1 p-4 @container",
 
         mediaContainerClassName,
       )}
@@ -210,14 +222,16 @@ const FallbackMedia: FC<MediaProps> = ({ type, mediaContainerClassName, classNam
         width: props.width ? `${props.width}px` : "100%",
       }}
     >
-      <i className="i-mgc-close-cute-re text-xl text-red-500" />
-      <p>Media loaded failed</p>
-      <div className="space-x-1 break-all px-4 text-sm">
-        Go to{" "}
-        <a href={props.src} target="_blank" rel="noreferrer" className="follow-link--underline">
-          {props.src}
-        </a>
-        <i className="i-mgc-external-link-cute-re translate-y-px" />
+      <div className="hidden @sm:hidden @md:contents">
+        <i className="i-mgc-close-cute-re text-xl text-red-500" />
+        <p>Media loaded failed</p>
+        <div className="space-x-1 break-all px-4 text-sm">
+          Go to{" "}
+          <a href={props.src} target="_blank" rel="noreferrer" className="follow-link--underline">
+            original media url
+          </a>
+          <i className="i-mgc-external-link-cute-re translate-y-0.5" />
+        </div>
       </div>
     </div>
   </div>

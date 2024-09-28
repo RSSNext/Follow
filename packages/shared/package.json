@@ -31,11 +31,10 @@
     "@t3-oss/env-core": "^0.11.1",
     "drizzle-orm": "^0.33.0",
     "electron": "^32.1.2",
-    "hono": "^4.6.2",
+    "hono": "^4.6.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sonner": "^1.5.0",
     "zod": "^3.23.8"
-  },
-  "devDependencies": {}
+  }
 }
