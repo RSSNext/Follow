@@ -263,6 +263,7 @@ export const ModalInternal = memo(
                   className={cn(
                     "no-drag-region fixed z-20",
                     modal ? "inset-0 overflow-auto" : "left-0 top-0",
+                    "safe-inset-top",
                     currentIsClosing ? "!pointer-events-none" : "!pointer-events-auto",
                     modalContainerClassName,
                   )}
