@@ -175,7 +175,7 @@ export const EntryContentRender: Component<{
         compact={compact}
       />
 
-      <div className="relative flex size-full flex-col">
+      <div className="relative flex size-full flex-col overflow-hidden">
         <ScrollArea.ScrollArea
           mask={false}
           rootClassName={cn("h-0 min-w-0 grow overflow-y-auto @container", className)}
