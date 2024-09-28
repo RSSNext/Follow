@@ -84,3 +84,27 @@ export type MediaModel = Exclude<
   ExtractBizResponse<typeof apiClient.entries.$get>["data"],
   undefined
 >["entries"]["media"]
+
+export type ActionsInput = {
+  name: string
+  condition: {
+    field?: ActionFeedField
+    operator?: ActionOperation
+    value?: string
+  }[]
+  result: {
+    translation?: string
+    summary?: boolean
+    readability?: boolean
+    rewriteRules?: {
+      from: string
+      to: string
+    }[]
+    blockRules?: {
+      field?: ActionEntryField
+      operator?: ActionOperation
+      value?: string | number
+    }[]
+    webhooks?: string[]
+  }
+}[]
