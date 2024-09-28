@@ -187,9 +187,7 @@ const formSchema = z.object({
 })
 
 const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: string }) => {
-  const { t } = useTranslation("settings")
-
-  const appT = useI18n()
+  const { t } = useTranslation(["settings", "common"])
 
   const list = useFeedById(id) as ListModel
 
@@ -334,7 +332,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
         />
         <div className="flex justify-end">
           <Button type="submit" isLoading={createMutation.isPending}>
-            {id ? appT.common("words.update") : appT.common("words.create")}
+            {id ? t("common:words.update") : t("common:words.create")}
           </Button>
         </div>
       </form>

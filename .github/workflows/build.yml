@@ -51,10 +51,6 @@ jobs:
           fetch-depth: 1
           lfs: true
 
-      - name: AutoCorrect
-        if: runner.os == 'Linux'
-        uses: huacnlee/autocorrect-action@main
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
