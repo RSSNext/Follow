@@ -72,8 +72,11 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
                 asChild
                 className={clsx(
                   "z-10 flex max-h-[300px] flex-col overflow-y-auto rounded-md border bg-background drop-shadow",
-                  // Animation, fade up
-                  "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-3",
+                  "data-[state=open]:animate-in data-[state=closed]:animate-out",
+                  "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+                  "data-[state=closed]:slide-out-to-left-5 data-[state=open]:slide-in-from-left-5",
+                  "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+                  "transition-all duration-200 ease-in-out",
                 )}
               >
                 <ul>
@@ -99,14 +102,11 @@ const EntryUserRow: Component<{ userId: string }> = memo(({ userId }) => {
   if (!user) return null
 
   return (
-    <li className="relative flex min-w-0 max-w-[50ch] rounded-md p-1 hover:bg-muted">
-      <button
-        type="button"
-        className="flex min-w-0 items-center gap-2 truncate"
-        onClick={() => {
-          presentUserProfile(userId)
-        }}
-      >
+    <li
+      onClick={() => presentUserProfile(userId)}
+      className="relative flex min-w-0 max-w-[50ch] rounded-md p-1 hover:bg-muted"
+    >
+      <button type="button" className="flex min-w-0 items-center gap-2 truncate">
         <Avatar className="aspect-square size-7 overflow-hidden rounded-full border border-border ring-1 ring-background">
           <AvatarImage src={user?.image || undefined} />
           <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
