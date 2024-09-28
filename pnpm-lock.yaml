@@ -150,8 +150,8 @@ importers:
         specifier: ^9.11.1
         version: 9.11.1(jiti@2.0.0)
       eslint-config-hyoban:
-        specifier: ^3.1.7
-        version: 3.1.7(@typescript-eslint/eslint-plugin@8.7.0(@typescript-eslint/parser@8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.6.2))(eslint@9.11.1(jiti@2.0.0))(typescript@5.6.2))(eslint@9.11.1(jiti@2.0.0))(tailwindcss@3.4.13)(typescript@5.6.2)
+        specifier: ^3.1.8
+        version: 3.1.8(@typescript-eslint/eslint-plugin@8.7.0(@typescript-eslint/parser@8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.6.2))(eslint@9.11.1(jiti@2.0.0))(typescript@5.6.2))(eslint@9.11.1(jiti@2.0.0))(tailwindcss@3.4.13)(typescript@5.6.2)
       fake-indexeddb:
         specifier: 6.0.0
         version: 6.0.0
@@ -649,6 +649,9 @@ importers:
       typescript:
         specifier: ^5.6.2
         version: 5.6.2
+      vitest:
+        specifier: '2.0'
+        version: 2.0.5(@types/node@22.7.4)(terser@5.34.1)
 
   packages/shared:
     dependencies:
@@ -5028,8 +5031,8 @@ packages:
     peerDependencies:
       eslint: ^9.5.0
 
-  eslint-config-hyoban@3.1.7:
-    resolution: {integrity: sha512-35r1FdI9lfa5aowbaDidpjsRcDn8HO+8/RhtcfFblkc30DqQkyxPmgAxY1ohn8NSzEUdLqzfyqIBlK2E9bOfmw==}
+  eslint-config-hyoban@3.1.8:
+    resolution: {integrity: sha512-YRvuuQgzzrNw8+2Xmqbdrvx4BYeG06HeeU4AvAm5OBq5x31ShWY1s3Zu7AVVIoLGJCbDNECq8ViLtdS6yJtWug==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^9.0.0
@@ -14131,7 +14134,7 @@ snapshots:
       eslint: 9.11.1(jiti@2.0.0)
       find-up-simple: 1.0.0
 
-  eslint-config-hyoban@3.1.7(@typescript-eslint/eslint-plugin@8.7.0(@typescript-eslint/parser@8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.6.2))(eslint@9.11.1(jiti@2.0.0))(typescript@5.6.2))(eslint@9.11.1(jiti@2.0.0))(tailwindcss@3.4.13)(typescript@5.6.2):
+  eslint-config-hyoban@3.1.8(@typescript-eslint/eslint-plugin@8.7.0(@typescript-eslint/parser@8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.6.2))(eslint@9.11.1(jiti@2.0.0))(typescript@5.6.2))(eslint@9.11.1(jiti@2.0.0))(tailwindcss@3.4.13)(typescript@5.6.2):
     dependencies:
       '@eslint-react/eslint-plugin': 1.14.2(eslint@9.11.1(jiti@2.0.0))(typescript@5.6.2)
       '@eslint/js': 9.11.1

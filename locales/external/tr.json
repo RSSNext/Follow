@@ -4,7 +4,6 @@
   "feed.feeds_other": "besleme",
   "feed.follower_one": "takipçi",
   "feed.follower_other": "takipçi",
-  "feed.follower_to_view_all": "takipçi",
   "feed.followsAndFeeds": "{{subscriptionCount}} {{subscriptionNoun}} ve {{feedsCount}} {{feedsNoun}} {{appName}} üzerinde",
   "feed.followsAndReads": "{{appName}} üzerinde {{readCount}} {{readNoun}} ile {{subscriptionCount}} {{subscriptionNoun}}",
   "feed.read_one": "okuma",
