@@ -11,12 +11,13 @@ import type { FlatEntryModel } from "~/store/entry"
 import { useEntry } from "~/store/entry/hooks"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
-import { ArticleItem, ArticleItemSkeleton } from "./Items/article-item"
-import { AudioItem, AudioItemSkeleton } from "./Items/audio-item"
-import { NotificationItem, NotificationItemSkeleton } from "./Items/notification-item"
-import { PictureItem, PictureItemSkeleton } from "./Items/picture-item"
-import { SocialMediaItem, SocialMediaItemSkeleton } from "./Items/social-media-item"
-import { VideoItem, VideoItemSkeleton } from "./Items/video-item"
+import { getItemComponentByView } from "./Items"
+import { ArticleItemSkeleton } from "./Items/article-item"
+import { AudioItemSkeleton } from "./Items/audio-item"
+import { NotificationItemSkeleton } from "./Items/notification-item"
+import { PictureItemSkeleton } from "./Items/picture-item"
+import { SocialMediaItemSkeleton } from "./Items/social-media-item"
+import { VideoItemSkeleton } from "./Items/video-item"
 import { EntryItemWrapper } from "./layouts/EntryItemWrapper"
 import { girdClassNames } from "./styles"
 import type { EntryListItemFC } from "./types"
@@ -42,37 +43,7 @@ function EntryItemImpl({ entry, view }: { entry: FlatEntryModel; view?: number }
     },
   )
 
-  let Item: EntryListItemFC
-
-  switch (view) {
-    case FeedViewType.Articles: {
-      Item = ArticleItem
-      break
-    }
-    case FeedViewType.SocialMedia: {
-      Item = SocialMediaItem
-      break
-    }
-    case FeedViewType.Pictures: {
-      Item = PictureItem
-      break
-    }
-    case FeedViewType.Videos: {
-      Item = VideoItem
-      break
-    }
-    case FeedViewType.Audios: {
-      Item = AudioItem
-      break
-    }
-    case FeedViewType.Notifications: {
-      Item = NotificationItem
-      break
-    }
-    default: {
-      Item = ArticleItem
-    }
-  }
+  const Item: EntryListItemFC = getItemComponentByView(view as FeedViewType)
 
   return (
     <EntryItemWrapper itemClassName={Item.wrapperClassName} entry={entry} view={view} overlay>
