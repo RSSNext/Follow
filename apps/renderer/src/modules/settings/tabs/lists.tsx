@@ -345,7 +345,11 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
   const { t } = useTranslation("settings")
 
   const [feedSearchFor, setFeedSearchFor] = useState("")
-  const addMutation = useAddFeedToFeedList()
+  const addMutation = useAddFeedToFeedList({
+    onSuccess: () => {
+      setFeedSearchFor("")
+    },
+  })
 
   const allFeeds = useSubscriptionStore((store) => {
     const feedInfo = [] as { title: string; id: string }[]

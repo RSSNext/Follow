@@ -224,6 +224,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
                         operator: z.infer<typeof ruleOperatorSchema>;
                         value: string | number;
                     }[];
+                    webhooks?: string[];
                 };
             }[];
             driverParam: unknown;
@@ -281,6 +282,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
             field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }>, "many">>;
+        webhooks: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -294,6 +296,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
             field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
+        webhooks?: string[] | undefined;
     }, {
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -307,6 +310,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
             field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
+        webhooks?: string[] | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     name: string;
@@ -323,6 +327,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
             field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
+        webhooks?: string[] | undefined;
     };
     condition: {
         value: string;
@@ -344,6 +349,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
             field: "title" | "all" | "content" | "author" | "url" | "order";
             operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
         }[] | undefined;
+        webhooks?: string[] | undefined;
     };
     condition: {
         value: string;
@@ -401,6 +407,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }>, "many">>;
+            webhooks: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -414,6 +421,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
+            webhooks?: string[] | undefined;
         }, {
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
@@ -427,6 +435,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
+            webhooks?: string[] | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         name: string;
@@ -443,6 +452,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
+            webhooks?: string[] | undefined;
         };
         condition: {
             value: string;
@@ -464,6 +474,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
+            webhooks?: string[] | undefined;
         };
         condition: {
             value: string;
@@ -488,6 +499,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
+            webhooks?: string[] | undefined;
         };
         condition: {
             value: string;
@@ -512,6 +524,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 field: "title" | "all" | "content" | "author" | "url" | "order";
                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
             }[] | undefined;
+            webhooks?: string[] | undefined;
         };
         condition: {
             value: string;
@@ -3211,6 +3224,21 @@ declare const feedPowerTokensRelations: drizzle_orm.Relations<"feedPowerTokens",
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
+    "/admin/clean": {
+        $post: {
+            input: {
+                json: {
+                    type: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
     "/lists": {
         $get: {
             input: {
@@ -4382,6 +4410,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             from: string;
                             to: string;
                         }[] | undefined;
+                        webhooks?: string[] | undefined;
                     } | undefined;
                 }[] | undefined;
                 total?: number | undefined;
@@ -4878,6 +4907,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                                 field: "title" | "all" | "content" | "author" | "url" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
+                            webhooks?: string[] | undefined;
                         };
                         condition: {
                             value: string;
@@ -4908,6 +4938,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                                 field: "title" | "all" | "content" | "author" | "url" | "order";
                                 operator: "contains" | "not_contains" | "eq" | "not_eq" | "gt" | "lt" | "regex";
                             }[] | undefined;
+                            webhooks?: string[] | undefined;
                         };
                         condition: {
                             value: string;
