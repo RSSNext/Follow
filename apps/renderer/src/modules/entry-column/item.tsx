@@ -55,10 +55,12 @@ function EntryItemImpl({ entry, view }: { entry: FlatEntryModel; view?: number }
     }
     case FeedViewType.Pictures: {
       Item = PictureItem
+      Item.overlayItemClassName = "top-0"
       break
     }
     case FeedViewType.Videos: {
       Item = VideoItem
+      Item.overlayItemClassName = "top-0"
       break
     }
     case FeedViewType.Audios: {
@@ -75,7 +77,13 @@ function EntryItemImpl({ entry, view }: { entry: FlatEntryModel; view?: number }
   }
 
   return (
-    <EntryItemWrapper itemClassName={Item.wrapperClassName} entry={entry} view={view} overlay>
+    <EntryItemWrapper
+      itemClassName={Item.wrapperClassName}
+      entry={entry}
+      view={view}
+      overlay
+      overlayItemClassName={Item.overlayItemClassName}
+    >
       <Item entryId={entry.entries.id} translation={translation.data} />
     </EntryItemWrapper>
   )
