@@ -1,4 +1,4 @@
-import { createElement, Fragment, memo, useEffect, useMemo, useState } from "react"
+import { createElement, Fragment, memo, useEffect, useMemo, useRef, useState } from "react"
 
 import type { MediaInfo } from "~/lib/parse-html"
 import { parseHtml } from "~/lib/parse-html"
@@ -44,12 +44,23 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
     accessory?: React.ReactNode
     noMedia?: boolean
     mediaInfo?: MediaInfo
+
+    translate?: (html: HTMLElement | null) => void
   } & JSX.IntrinsicElements[A] &
     Partial<{
       renderInlineStyle: boolean
     }>,
 ) => {
-  const { children, renderInlineStyle, as = "div", accessory, noMedia, mediaInfo, ...rest } = props
+  const {
+    children,
+    renderInlineStyle,
+    as = "div",
+    accessory,
+    noMedia,
+    mediaInfo,
+    translate,
+    ...rest
+  } = props
   const [remarkOptions, setRemarkOptions] = useState({
     renderInlineStyle,
     noMedia,
@@ -69,6 +80,16 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
   }, [renderInlineStyle, noMedia])
 
   const [refElement, setRefElement] = useState<HTMLElement | null>(null)
+
+  const onceRef = useRef(false)
+  useEffect(() => {
+    if (onceRef.current || !refElement) {
+      return
+    }
+
+    translate?.(refElement)
+    onceRef.current = true
+  }, [translate, refElement])
 
   const markdownElement = useMemo(
     () =>

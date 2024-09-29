@@ -29,6 +29,7 @@ import { useAuthQuery, useTitle } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { getNewIssueUrl } from "~/lib/issues"
+import { LanguageMap } from "~/lib/translate"
 import { cn } from "~/lib/utils"
 import type { ActiveEntryId, FeedModel } from "~/models"
 import {
@@ -149,6 +150,22 @@ export const EntryContentRender: Component<{
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
+
+  const translate = async (html: HTMLElement | null) => {
+    if (!html || !entry || !entry.settings?.translation) return
+
+    const fullText = html.textContent ?? ""
+    if (!fullText) return
+
+    const { franc } = await import("franc-min")
+    const sourceLanguage = franc(fullText)
+    if (sourceLanguage === LanguageMap[entry.settings?.translation].code) {
+      return
+    }
+
+    const { immersiveTranslate } = await import("~/lib/immersive-translate")
+    immersiveTranslate({ html, entry })
+  }
   const mediaInfo = Object.fromEntries(
     (entry.entries.media ?? data?.entries.media)
       ?.filter((m) => m.type === "photo")
@@ -213,6 +230,7 @@ export const EntryContentRender: Component<{
                     {!isInReadabilityMode ? (
                       <ShadowDOM>
                         <HTML
+                          translate={translate}
                           mediaInfo={mediaInfo}
                           noMedia={noMedia}
                           accessory={contentAccessories}

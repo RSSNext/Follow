@@ -4838,6 +4838,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     id: string | string[];
                     language: string | string[];
                     fields: string | string[];
+                    part?: string | string[] | undefined;
                 };
             };
             output: {
