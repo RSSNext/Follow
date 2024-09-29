@@ -22,10 +22,9 @@ export const EntryItemWrapper: FC<
     view?: number
     itemClassName?: string
     overlay?: boolean
-    overlayItemClassName?: string
     style?: React.CSSProperties
   } & PropsWithChildren
-> = ({ entry, view, overlay, children, itemClassName, overlayItemClassName, style }) => {
+> = ({ entry, view, overlay, children, itemClassName, style }) => {
   const { items } = useEntryActions({
     view,
     entry,
@@ -128,10 +127,7 @@ export const EntryItemWrapper: FC<
         onContextMenu={handleContextMenu}
       >
         {overlay ? (
-          <ListItemHoverOverlay
-            isActive={isActive || isContextMenuOpen}
-            className={overlayItemClassName}
-          >
+          <ListItemHoverOverlay isActive={isActive || isContextMenuOpen}>
             {children}
           </ListItemHoverOverlay>
         ) : (
