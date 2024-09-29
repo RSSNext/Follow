@@ -95,12 +95,12 @@ export const useShortcutsModal = () => {
     })
   }, [present])
 
-  return () => {
+  return useCallback(() => {
     const shortcutsModal = getModalStackById(id)
     if (shortcutsModal && shortcutsModal.modal) {
       dismiss(id)
       return
     }
     showShortcutsModal()
-  }
+  }, [dismiss, getModalStackById, showShortcutsModal])
 }
