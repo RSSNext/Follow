@@ -24,10 +24,11 @@ export const handleUrlRouting = (url: string) => {
         mainWindow.focus()
         const caller = callWindowExpose(mainWindow)
 
-        const id = searchParams.get("id")
+        const id = searchParams.get("id") ?? undefined
         const isList = searchParams.get("type") === "list"
-        if (!id) return
-        caller.follow(id, { isList })
+        const urlParam = searchParams.get("url") ?? undefined
+        if (!id && !url) return
+        caller.follow({ isList, id, url: urlParam })
         return
       }
       default: {
