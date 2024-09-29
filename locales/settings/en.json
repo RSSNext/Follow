@@ -39,6 +39,7 @@
   "actions.action_card.to": "To",
   "actions.action_card.translate_into": "Translate into",
   "actions.action_card.value": "Value",
+  "actions.action_card.webhooks": "Webhooks",
   "actions.action_card.when_feeds_match": "When feeds match…",
   "actions.newRule": "New Rule",
   "actions.save": "Save",

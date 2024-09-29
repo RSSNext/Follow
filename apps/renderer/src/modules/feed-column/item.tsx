@@ -26,9 +26,8 @@ interface FeedItemProps {
   feedId: string
   view?: number
   className?: string
-  showUnreadCount?: boolean
 }
-const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedItemProps) => {
+const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   const { t } = useTranslation()
   const subscription = useSubscriptionByFeedId(feedId)
   const navigate = useNavigateEntry()
@@ -119,15 +118,8 @@ const FeedItemImpl = ({ view, feedId, className, showUnreadCount = true }: FeedI
             isFeed && feed.errorAt && "text-red-900 dark:text-red-500",
           )}
         >
-          <FeedIcon fallback feed={feed} size={isList ? 32 : 16} />
-          <div
-            className={cn(
-              "truncate",
-              !showUnreadCount && (feedUnread ? "font-bold" : "font-medium opacity-70"),
-            )}
-          >
-            {getPreferredTitle(feed)}
-          </div>
+          <FeedIcon fallback feed={feed} size={isList ? 28 : 16} />
+          <div className="truncate">{getPreferredTitle(feed)}</div>
           {isFeed && <FeedCertification feed={feed} className="text-[15px]" />}
           {isFeed && feed.errorAt && (
             <Tooltip delayDuration={300}>

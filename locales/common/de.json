@@ -5,6 +5,7 @@
   "confirm": "Bestätigen",
   "ok": "OK",
   "quantifier.piece": "",
+  "space": " ",
   "time.last_night": "Letzte Nacht",
   "time.the_night_before_last": "Vorgestern Nacht",
   "time.today": "Heute",
@@ -24,6 +25,5 @@
   "words.result": "Ergebnis",
   "words.result_one": "Ergebnis",
   "words.result_other": "Ergebnisse",
-  "words.space": " ",
   "words.which.all": "Alle"
 }

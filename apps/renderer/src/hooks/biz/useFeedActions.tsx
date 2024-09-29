@@ -155,6 +155,7 @@ export const useFeedActions = ({
           isList
             ? "sidebar.feed_actions.open_list_in_browser"
             : "sidebar.feed_actions.open_feed_in_browser",
+          { which: t(window.electron ? "words.browser" : "words.newTab") },
         ),
         disabled: isEntryList,
         shortcut: "O",
@@ -170,7 +171,9 @@ export const useFeedActions = ({
         ? [
             {
               type: "text" as const,
-              label: t("sidebar.feed_actions.open_site_in_browser"),
+              label: t("sidebar.feed_actions.open_site_in_browser", {
+                which: t(window.electron ? "words.browser" : "words.newTab"),
+              }),
               shortcut: "Meta+O",
               disabled: isEntryList,
               click: () => {

@@ -4,7 +4,6 @@ import { Fragment, memo, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
-import { useUISettingKey } from "~/atoms/settings/ui"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import { IconOpacityTransition } from "~/components/ux/transition/icon"
 import { FEED_COLLECTION_LIST, views } from "~/constants"
@@ -284,7 +283,6 @@ type FeedListProps = {
   data: Record<string, string[]>
 }
 const SortByUnreadList = ({ view, expansion, data }: FeedListProps) => {
-  const showUnreadCount = useUISettingKey("sidebarShowUnreadCount")
   const isDesc = useFeedListSortSelector((s) => s.order === "desc")
 
   const sortedByUnread = useFeedUnreadStore((state) => {
@@ -311,13 +309,7 @@ const SortByUnreadList = ({ view, expansion, data }: FeedListProps) => {
   return (
     <Fragment>
       {sortedByUnread?.map(([category, ids]) => (
-        <FeedCategory
-          showUnreadCount={showUnreadCount}
-          key={category}
-          data={ids}
-          view={view}
-          expansion={expansion}
-        />
+        <FeedCategory key={category} data={ids} view={view} expansion={expansion} />
       ))}
     </Fragment>
   )
@@ -358,18 +350,10 @@ const SortByAlphabeticalList = ({ view, expansion, data }: FeedListProps) => {
     sortedByAlphabetical = sortedByAlphabetical.reverse()
   }
 
-  const showUnreadCount = useUISettingKey("sidebarShowUnreadCount")
-
   return (
     <Fragment>
       {sortedByAlphabetical.map((category) => (
-        <FeedCategory
-          showUnreadCount={showUnreadCount}
-          key={category}
-          data={data[category]}
-          view={view}
-          expansion={expansion}
-        />
+        <FeedCategory key={category} data={data[category]} view={view} expansion={expansion} />
       ))}
     </Fragment>
   )

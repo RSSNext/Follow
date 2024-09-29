@@ -49,18 +49,20 @@ export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
   return useCallback(
     (userId: string | undefined, overrideVariant?: Variant) => {
       if (!userId) return
+      const finalVariant = overrideVariant || variant
       present({
         title: "User Profile",
         content: () =>
           createElement(UserProfileModalContent, {
             userId,
-            variant: overrideVariant || variant,
+            variant: finalVariant,
           }),
         CustomModalComponent: PlainModal,
         clickOutsideToDismiss: true,
-        modal: variant === "dialog",
-        overlay: variant === "dialog",
-        modalContainerClassName: variant === "drawer" ? "right-4 left-[auto] top-4 bottom-4" : "",
+        modal: finalVariant === "dialog",
+        overlay: finalVariant === "dialog",
+        modalContainerClassName:
+          finalVariant === "drawer" ? "right-4 left-[auto] top-4 bottom-4" : "",
       })
     },
     [present, variant],

@@ -15,4 +15,8 @@ export const imageRefererMatches = [
     url: /^https:\/\/(?:\w|-)+\.cdninstagram\.com/,
     referer: "https://www.instagram.com",
   },
+  {
+    url: /^https:\/\/sp1\.piokok\.com/,
+    referer: "https://sp1.piokok.com",
+  },
 ]
