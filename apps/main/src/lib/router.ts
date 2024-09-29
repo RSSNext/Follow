@@ -27,7 +27,7 @@ export const handleUrlRouting = (url: string) => {
         const id = searchParams.get("id") ?? undefined
         const isList = searchParams.get("type") === "list"
         const urlParam = searchParams.get("url") ?? undefined
-        if (!id && !url) return
+        if (!id && !urlParam) return
         caller.follow({ isList, id, url: urlParam })
         return
       }
