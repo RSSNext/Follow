@@ -19,4 +19,8 @@ export const imageRefererMatches = [
     url: /^https:\/\/sp1\.piokok\.com/,
     referer: "https://sp1.piokok.com",
   },
+  {
+    url: /^https:\/\/img\.hellogithub\.com/,
+    referer: "https://hellogithub.com",
+  },
 ]
