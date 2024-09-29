@@ -379,9 +379,3 @@
     }
   }
 }
-
-@layer utilities {
-  .safe-inset-top {
-    top: var(--fo-window-padding-top, 0);
-  }
-}

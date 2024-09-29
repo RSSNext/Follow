@@ -13,14 +13,10 @@ import { LoadingCircle } from "~/components/ui/loading"
 import { views } from "~/constants"
 import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
 import { useTitle } from "~/hooks/common"
-import { FeedViewType } from "~/lib/enum"
+import type { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
 import type { FeedModel } from "~/models"
-import { ArticleItem } from "~/modules/entry-column/Items/article-item"
-import { NotificationItem } from "~/modules/entry-column/Items/notification-item"
-import { PictureItem } from "~/modules/entry-column/Items/picture-item"
-import { SocialMediaItem } from "~/modules/entry-column/Items/social-media-item"
-import { VideoItem } from "~/modules/entry-column/Items/video-item"
+import { getItemComponentByView } from "~/modules/entry-column/Items"
 import type { UniversalItemProps } from "~/modules/entry-column/types"
 import { useEntriesPreview } from "~/queries/entries"
 import { useFeed } from "~/queries/feed"
@@ -39,32 +35,8 @@ export function Component() {
     id,
   })
 
-  let Item: FC<UniversalItemProps>
-  switch (view) {
-    case FeedViewType.Articles: {
-      Item = ArticleItem
-      break
-    }
-    case FeedViewType.SocialMedia: {
-      Item = SocialMediaItem
-      break
-    }
-    case FeedViewType.Pictures: {
-      Item = PictureItem
-      break
-    }
-    case FeedViewType.Videos: {
-      Item = VideoItem
-      break
-    }
-    case FeedViewType.Notifications: {
-      Item = NotificationItem
-      break
-    }
-    default: {
-      Item = ArticleItem
-    }
-  }
+  const Item: FC<UniversalItemProps> = getItemComponentByView(view as FeedViewType)
+
   const { t } = useTranslation("external")
   useTitle(feed.data?.feed.title)
   const presentFeedFormModal = usePresentFeedFormModal()

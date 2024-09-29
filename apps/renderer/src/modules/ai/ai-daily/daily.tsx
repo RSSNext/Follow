@@ -184,6 +184,7 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
 }) => {
   const content = useQueryData({ endDate, startDate, view })
   const RelatedEntryLink = useState(() => createRelatedEntryLink("toast"))[0]
+  const { t } = useTranslation()
   return (
     <div className="center flex-col">
       {content.isLoading ? (
@@ -203,7 +204,7 @@ export const DailyReportModalContent: Component<DailyReportContentProps> = ({
       ) : (
         <div className="center pointer-events-none absolute inset-0 translate-y-6 flex-col gap-4 opacity-80">
           <EmptyIcon />
-          <p>No AI news found for this period.</p>
+          <p>{t("ai_daily.no_found")}</p>
         </div>
       )}
 
