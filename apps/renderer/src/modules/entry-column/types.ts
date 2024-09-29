@@ -17,4 +17,5 @@ export type UniversalItemProps = {
 
 export type EntryListItemFC<P extends object = object> = FC<P & UniversalItemProps> & {
   wrapperClassName?: string
+  overlayItemClassName?: string
 }
