@@ -81,16 +81,26 @@ const ShortcutModalContent = () => {
 }
 
 export const useShortcutsModal = () => {
-  const { present } = useModalStack()
+  const { present, dismiss, getModalStackById } = useModalStack()
+  const id = "shortcuts"
 
-  return useCallback(() => {
+  const showShortcutsModal = useCallback(() => {
     present({
       title: "Shortcuts",
+      id,
       overlay: false,
-      id: "shortcuts",
       content: () => <ShortcutModalContent />,
       CustomModalComponent: PlainModal,
       clickOutsideToDismiss: true,
     })
   }, [present])
+
+  return () => {
+    const shortcutsModal = getModalStackById(id)
+    if (shortcutsModal && shortcutsModal.modal) {
+      dismiss(id)
+      return
+    }
+    showShortcutsModal()
+  }
 }
