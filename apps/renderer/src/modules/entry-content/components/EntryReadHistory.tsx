@@ -10,7 +10,9 @@ import { memo } from "react"
 
 import { useWhoami } from "~/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
+import { ScrollArea } from "~/components/ui/scroll-area"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
+import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useAuthQuery } from "~/hooks/common"
 import { useAppLayoutGridContainerWidth } from "~/providers/app-grid-layout-container-provider"
 import { Queries } from "~/queries"
@@ -69,9 +71,8 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
                 sideOffset={12}
                 align="start"
                 side="right"
-                asChild
                 className={clsx(
-                  "z-10 flex max-h-[300px] flex-col overflow-y-auto rounded-md border bg-background drop-shadow",
+                  "z-10 rounded-md border bg-background drop-shadow",
                   "data-[state=open]:animate-in data-[state=closed]:animate-out",
                   "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
                   "data-[state=closed]:slide-out-to-left-5 data-[state=open]:slide-in-from-left-5",
@@ -79,14 +80,19 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
                   "transition-all duration-200 ease-in-out",
                 )}
               >
-                <ul>
-                  {entryHistory.userIds
-                    .filter((id) => id !== me?.id)
-                    .slice(LIMIT)
-                    .map((userId) => (
-                      <EntryUserRow userId={userId} key={userId} />
-                    ))}
-                </ul>
+                <ScrollArea.ScrollArea
+                  rootClassName="max-h-[300px] max-w-[20ch] flex flex-col"
+                  flex
+                >
+                  <ul>
+                    {entryHistory.userIds
+                      .filter((id) => id !== me?.id)
+                      .slice(LIMIT)
+                      .map((userId) => (
+                        <EntryUserRow userId={userId} key={userId} />
+                      ))}
+                  </ul>
+                </ScrollArea.ScrollArea>
               </HoverCardContent>
             </HoverCardPortal>
           )}
@@ -104,16 +110,20 @@ const EntryUserRow: Component<{ userId: string }> = memo(({ userId }) => {
   return (
     <li
       onClick={() => presentUserProfile(userId)}
-      className="relative flex min-w-0 max-w-[50ch] rounded-md p-1 hover:bg-muted"
+      role="button"
+      tabIndex={0}
+      className="relative flex min-w-0 max-w-[50ch] shrink-0 cursor-button items-center gap-2 truncate rounded-md p-1 px-2 hover:bg-muted"
     >
-      <button type="button" className="flex min-w-0 items-center gap-2 truncate">
-        <Avatar className="aspect-square size-7 overflow-hidden rounded-full border border-border ring-1 ring-background">
-          <AvatarImage src={user?.image || undefined} />
-          <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
-        </Avatar>
+      <Avatar className="block aspect-square size-7 overflow-hidden rounded-full border border-border ring-1 ring-background">
+        <AvatarImage src={user?.image || undefined} />
+        <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
+      </Avatar>
 
-        {user.name && <p className="truncate pr-8 text-xs font-medium">{user.name}</p>}
-      </button>
+      {user.name && (
+        <EllipsisHorizontalTextWithTooltip className="pr-8 text-xs font-medium">
+          <span>{user.name}</span>
+        </EllipsisHorizontalTextWithTooltip>
+      )}
     </li>
   )
 })
