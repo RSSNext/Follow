@@ -64,6 +64,12 @@ export const useModalStack = (options?: ModalStackOptions) => {
   }
 }
 const actions = {
+  getTopModalStack() {
+    return jotaiStore.get(modalStackAtom)[0]
+  },
+  getModalStackById(id: string) {
+    return jotaiStore.get(modalStackAtom).find((item) => item.id === id)
+  },
   dismiss(id: string) {
     jotaiStore.set(modalStackAtom, (p) => p.filter((item) => item.id !== id))
   },
