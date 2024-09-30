@@ -36,7 +36,6 @@ export const CornerPlayer = () => {
   const entry = useEntry(entryId)
   const feed = useFeedById(entry?.feedId)
 
-  //FIXME: I am not sure
   useNowPlaying()
 
   return (
