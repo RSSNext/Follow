@@ -2,6 +2,7 @@ import { isUndefined } from "lodash-es"
 
 import { getReadonlyRoute, getStableRouterNavigate } from "~/atoms/route"
 import { setSidebarActiveView } from "~/atoms/sidebar"
+import { resetShowSourceContent } from "~/atoms/source-content"
 import { ROUTE_ENTRY_PENDING, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "~/constants"
 import { FeedViewType } from "~/lib/enum"
 
@@ -37,6 +38,7 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
     nextSearchParams.set("view", view.toString())
     setSidebarActiveView(view)
   }
+  resetShowSourceContent()
 
   const finalView = nextSearchParams.get("view")
 

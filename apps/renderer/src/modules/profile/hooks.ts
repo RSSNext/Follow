@@ -50,6 +50,7 @@ export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
     (userId: string | undefined, overrideVariant?: Variant) => {
       if (!userId) return
       const finalVariant = overrideVariant || variant
+
       present({
         title: "User Profile",
         content: () =>
@@ -61,8 +62,9 @@ export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
         clickOutsideToDismiss: true,
         modal: finalVariant === "dialog",
         overlay: finalVariant === "dialog",
+        autoFocus: false,
         modalContainerClassName:
-          finalVariant === "drawer" ? "right-4 left-[auto] top-4 bottom-4" : "",
+          finalVariant === "drawer" ? tw`right-4 left-[auto] safe-inset-top-4 bottom-4` : "",
       })
     },
     [present, variant],
