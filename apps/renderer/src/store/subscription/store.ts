@@ -31,6 +31,11 @@ interface SubscriptionState {
    * Value: FeedId[]
    */
   feedIdByView: Record<FeedViewType, FeedId[]>
+  /**
+   * Key: FeedViewType
+   * Value: Record<string, boolean>
+   */
+  categoryOpenStateByView: Record<FeedViewType, Record<string, boolean>>
 }
 
 function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
@@ -64,10 +69,19 @@ const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
   [FeedViewType.SocialMedia]: [],
   [FeedViewType.Videos]: [],
 }
+const emptyCategoryOpenStateByView: Record<FeedViewType, Record<string, boolean>> = {
+  [FeedViewType.Articles]: {},
+  [FeedViewType.Audios]: {},
+  [FeedViewType.Notifications]: {},
+  [FeedViewType.Pictures]: {},
+  [FeedViewType.SocialMedia]: {},
+  [FeedViewType.Videos]: {},
+}
 
 export const useSubscriptionStore = createZustandStore<SubscriptionState>("subscription")(() => ({
   data: {},
   feedIdByView: { ...emptyDataIdByView },
+  categoryOpenStateByView: { ...emptyCategoryOpenStateByView },
 }))
 
 const set = useSubscriptionStore.setState
@@ -100,7 +114,9 @@ class SubscriptionActions {
     }
 
     const transformedData = morphResponseData(res.data)
+
     this.upsertMany(transformedData)
+    this.updateCategoryOpenState(transformedData.filter((s) => s.category || s.defaultCategory))
     feedActions.upsertMany(res.data.map((s) => ("feeds" in s ? s.feeds : s.lists)))
 
     return res.data
@@ -115,9 +131,40 @@ class SubscriptionActions {
         subscriptions.forEach((subscription) => {
           state.data[subscription.feedId] = omit(subscription, "feeds")
           state.feedIdByView[subscription.view].push(subscription.feedId)
-
           return state
         })
+      }),
+    )
+  }
+
+  updateCategoryOpenState(subscriptions: SubscriptionFlatModel[]) {
+    set((state) =>
+      produce(state, (state) => {
+        subscriptions.forEach((subscription) => {
+          const folderName = subscription.category || subscription.defaultCategory
+          state.categoryOpenStateByView[subscription.view][folderName] =
+            state.categoryOpenStateByView[subscription.view][folderName] || false
+          return state
+        })
+      }),
+    )
+  }
+
+  toggleCategoryOpenState(view: FeedViewType, category: string) {
+    set((state) =>
+      produce(state, (state) => {
+        state.categoryOpenStateByView[view][category] =
+          !state.categoryOpenStateByView[view][category]
+      }),
+    )
+  }
+
+  expandCategoryOpenStateByView(view: FeedViewType, isOpen: boolean) {
+    set((state) =>
+      produce(state, (state) => {
+        for (const category in state.categoryOpenStateByView[view]) {
+          state.categoryOpenStateByView[view][category] = isOpen
+        }
       }),
     )
   }
@@ -195,6 +242,7 @@ class SubscriptionActions {
     set({
       data: {},
       feedIdByView: { ...emptyDataIdByView },
+      categoryOpenStateByView: { ...emptyCategoryOpenStateByView },
     })
   }
 

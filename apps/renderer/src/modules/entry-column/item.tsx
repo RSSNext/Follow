@@ -4,19 +4,14 @@ import { memo } from "react"
 import { LoadingCircle } from "~/components/ui/loading"
 import { views } from "~/constants"
 import { useAuthQuery } from "~/hooks/common"
-import { FeedViewType } from "~/lib/enum"
+import type { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
 import { Queries } from "~/queries"
 import type { FlatEntryModel } from "~/store/entry"
 import { useEntry } from "~/store/entry/hooks"
 
 import { ReactVirtuosoItemPlaceholder } from "../../components/ui/placeholder"
-import { ArticleItem, ArticleItemSkeleton } from "./Items/article-item"
-import { AudioItem, AudioItemSkeleton } from "./Items/audio-item"
-import { NotificationItem, NotificationItemSkeleton } from "./Items/notification-item"
-import { PictureItem, PictureItemSkeleton } from "./Items/picture-item"
-import { SocialMediaItem, SocialMediaItemSkeleton } from "./Items/social-media-item"
-import { VideoItem, VideoItemSkeleton } from "./Items/video-item"
+import { getItemComponentByView, getSkeletonItemComponentByView } from "./Items"
 import { EntryItemWrapper } from "./layouts/EntryItemWrapper"
 import { girdClassNames } from "./styles"
 import type { EntryListItemFC } from "./types"
@@ -42,48 +37,10 @@ function EntryItemImpl({ entry, view }: { entry: FlatEntryModel; view?: number }
     },
   )
 
-  let Item: EntryListItemFC
-
-  switch (view) {
-    case FeedViewType.Articles: {
-      Item = ArticleItem
-      break
-    }
-    case FeedViewType.SocialMedia: {
-      Item = SocialMediaItem
-      break
-    }
-    case FeedViewType.Pictures: {
-      Item = PictureItem
-      Item.overlayItemClassName = "top-0"
-      break
-    }
-    case FeedViewType.Videos: {
-      Item = VideoItem
-      Item.overlayItemClassName = "top-0"
-      break
-    }
-    case FeedViewType.Audios: {
-      Item = AudioItem
-      break
-    }
-    case FeedViewType.Notifications: {
-      Item = NotificationItem
-      break
-    }
-    default: {
-      Item = ArticleItem
-    }
-  }
+  const Item: EntryListItemFC = getItemComponentByView(view as FeedViewType)
 
   return (
-    <EntryItemWrapper
-      itemClassName={Item.wrapperClassName}
-      entry={entry}
-      view={view}
-      overlay
-      overlayItemClassName={Item.overlayItemClassName}
-    >
+    <EntryItemWrapper itemClassName={Item.wrapperClassName} entry={entry} view={view} overlay>
       <Item entryId={entry.entries.id} translation={translation.data} />
     </EntryItemWrapper>
   )
@@ -95,15 +52,6 @@ export const EntryItem: FC<EntryItemProps> = memo(({ entryId, view }) => {
   return <EntryItemImpl entry={entry} view={view} />
 })
 
-const SkeletonItemMap = {
-  [FeedViewType.Articles]: ArticleItemSkeleton,
-  [FeedViewType.SocialMedia]: SocialMediaItemSkeleton,
-  [FeedViewType.Pictures]: PictureItemSkeleton,
-  [FeedViewType.Videos]: VideoItemSkeleton,
-  [FeedViewType.Audios]: AudioItemSkeleton,
-  [FeedViewType.Notifications]: NotificationItemSkeleton,
-}
-
 const LoadingCircleFallback = (
   <div className="center mt-2">
     <LoadingCircle size="medium" />
@@ -114,7 +62,7 @@ export const EntryItemSkeleton: FC<{
   view: FeedViewType
   count?: number
 }> = memo(({ view, count }) => {
-  const SkeletonItem = SkeletonItemMap[view]
+  const SkeletonItem = getSkeletonItemComponentByView(view)
   if (count === 1) {
     return SkeletonItem
   }

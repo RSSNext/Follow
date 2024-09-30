@@ -30,10 +30,10 @@ type FeedId = string
 interface FeedCategoryProps {
   data: FeedId[]
   view?: number
-  expansion: boolean
+  categoryOpenStateData: Record<string, boolean>
 }
 
-function FeedCategoryImpl({ data: ids, view, expansion }: FeedCategoryProps) {
+function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCategoryProps) {
   const { t } = useTranslation()
 
   const sortByUnreadFeedList = useFeedUnreadStore((state) =>
@@ -46,17 +46,29 @@ function FeedCategoryImpl({ data: ids, view, expansion }: FeedCategoryProps) {
   const folderName = subscription?.category || subscription.defaultCategory
 
   const showCollapse = sortByUnreadFeedList.length > 1 || subscription?.category
-  const [open, setOpen] = useState(!showCollapse)
+  const open = folderName ? categoryOpenStateData[folderName] : true
 
-  const shouldOpen = useRouteParamsSelector(
-    (s) => typeof s.feedId === "string" && ids.includes(s.feedId),
-  )
+  const shouldOpen =
+    useRouteParamsSelector((s) => typeof s.feedId === "string" && ids.includes(s.feedId)) ||
+    ids.length === 1
 
   const itemsRef = useRef<HTMLDivElement>(null)
 
+  const toggleCategoryOpenState = (e) => {
+    e.stopPropagation()
+    if (!isCategoryEditing) {
+      setCategoryActive()
+    }
+    if (view !== undefined && folderName) {
+      subscriptionActions.toggleCategoryOpenState(view, folderName)
+    }
+  }
+
   useEffect(() => {
     if (shouldOpen) {
-      setOpen(true)
+      if (!open && view !== undefined && folderName) {
+        subscriptionActions.toggleCategoryOpenState(view, folderName)
+      }
 
       const $items = itemsRef.current
 
@@ -66,12 +78,7 @@ function FeedCategoryImpl({ data: ids, view, expansion }: FeedCategoryProps) {
         behavior: "smooth",
       })
     }
-  }, [shouldOpen])
-  useEffect(() => {
-    if (showCollapse) {
-      setOpen(expansion)
-    }
-  }, [expansion])
+  }, [shouldOpen, open, view, folderName])
 
   const setCategoryActive = () => {
     if (view !== undefined) {
@@ -200,11 +207,7 @@ function FeedCategoryImpl({ data: ids, view, expansion }: FeedCategoryProps) {
           <div className="flex w-full min-w-0 items-center">
             <button
               type="button"
-              onClick={(e) => {
-                if (isCategoryEditing) return
-                e.stopPropagation()
-                setOpen(!open)
-              }}
+              onClick={toggleCategoryOpenState}
               data-state={open ? "open" : "close"}
               className={cn(
                 "flex h-8 items-center [&_.i-mgc-right-cute-fi]:data-[state=open]:rotate-90",

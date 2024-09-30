@@ -15,7 +15,12 @@ import type { FeedViewType } from "~/lib/enum"
 import { cn, sortByAlphabet } from "~/lib/utils"
 import { Queries } from "~/queries"
 import { getPreferredTitle, useFeedStore } from "~/store/feed"
-import { getSubscriptionByFeedId, useSubscriptionByView } from "~/store/subscription"
+import {
+  getSubscriptionByFeedId,
+  subscriptionActions,
+  useCategoryOpenStateByView,
+  useSubscriptionByView,
+} from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import {
@@ -79,10 +84,10 @@ const useUpdateUnreadCount = () => {
 }
 
 function FeedListImpl({ className, view }: { className?: string; view: number }) {
-  const [expansion, setExpansion] = useState(false)
   const feedsData = useFeedsGroupedData(view)
   const listsData = useListsGroupedData(view)
-
+  const categoryOpenStateData = useCategoryOpenStateByView(view)
+  const expansion = Object.values(categoryOpenStateData).every((value) => value === true)
   useUpdateUnreadCount()
 
   const totalUnread = useFeedUnreadStore((state) => {
@@ -124,9 +129,15 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
         <div className="ml-2 flex items-center gap-3 text-sm text-theme-vibrancyFg">
           <SortButton />
           {expansion ? (
-            <i className="i-mgc-list-collapse-cute-re" onClick={() => setExpansion(false)} />
+            <i
+              className="i-mgc-list-collapse-cute-re"
+              onClick={() => subscriptionActions.expandCategoryOpenStateByView(view, false)}
+            />
           ) : (
-            <i className="i-mgc-list-expansion-cute-re" onClick={() => setExpansion(true)} />
+            <i
+              className="i-mgc-list-expansion-cute-re"
+              onClick={() => subscriptionActions.expandCategoryOpenStateByView(view, true)}
+            />
           )}
           <UnreadNumber unread={totalUnread} className="text-xs !text-inherit" />
         </div>
@@ -157,7 +168,12 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
               {t("words.lists")}
             </div>
-            <SortableList view={view} expansion={expansion} data={listsData} by="alphabetical" />
+            <SortableList
+              view={view}
+              data={listsData}
+              categoryOpenStateData={categoryOpenStateData}
+              by="alphabetical"
+            />
           </>
         )}
         <div
@@ -169,7 +185,11 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           {t("words.feeds")}
         </div>
         {hasData ? (
-          <SortableList view={view} expansion={expansion} data={feedsData} />
+          <SortableList
+            view={view}
+            data={feedsData}
+            categoryOpenStateData={categoryOpenStateData}
+          />
         ) : (
           <div className="flex h-full flex-1 items-center font-normal text-zinc-500">
             <Link
@@ -279,10 +299,10 @@ const SortButton = () => {
 
 type FeedListProps = {
   view: number
-  expansion: boolean
   data: Record<string, string[]>
+  categoryOpenStateData: Record<string, boolean>
 }
-const SortByUnreadList = ({ view, expansion, data }: FeedListProps) => {
+const SortByUnreadList = ({ view, data, categoryOpenStateData }: FeedListProps) => {
   const isDesc = useFeedListSortSelector((s) => s.order === "desc")
 
   const sortedByUnread = useFeedUnreadStore((state) => {
@@ -309,13 +329,18 @@ const SortByUnreadList = ({ view, expansion, data }: FeedListProps) => {
   return (
     <Fragment>
       {sortedByUnread?.map(([category, ids]) => (
-        <FeedCategory key={category} data={ids} view={view} expansion={expansion} />
+        <FeedCategory
+          key={category}
+          data={ids}
+          view={view}
+          categoryOpenStateData={categoryOpenStateData}
+        />
       ))}
     </Fragment>
   )
 }
 
-const SortByAlphabeticalList = ({ view, expansion, data }: FeedListProps) => {
+const SortByAlphabeticalList = ({ view, data, categoryOpenStateData }: FeedListProps) => {
   const categoryName2RealDisplayNameMap = useFeedStore((state) => {
     const map = {} as Record<string, string>
     for (const categoryName in data) {
@@ -353,7 +378,12 @@ const SortByAlphabeticalList = ({ view, expansion, data }: FeedListProps) => {
   return (
     <Fragment>
       {sortedByAlphabetical.map((category) => (
-        <FeedCategory key={category} data={data[category]} view={view} expansion={expansion} />
+        <FeedCategory
+          key={category}
+          data={data[category]}
+          view={view}
+          categoryOpenStateData={categoryOpenStateData}
+        />
       ))}
     </Fragment>
   )
