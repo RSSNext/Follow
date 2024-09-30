@@ -112,6 +112,7 @@ const CornerPlayerImpl = () => {
     setNowPlaying({
       title: entry?.entries.title || undefined,
       artist: feed?.title || undefined,
+      album: feed?.image || undefined,
       artwork: [{ src: entry?.entries.authorAvatar || feed?.image || "" }],
     })
   }, [entry, feed])
