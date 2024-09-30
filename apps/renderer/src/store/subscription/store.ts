@@ -105,13 +105,11 @@ class SubscriptionActions {
       set((state) => ({
         ...state,
         feedIdByView: { ...state.feedIdByView, [view]: [] },
-        categoryOpenStateByView: { ...state.categoryOpenStateByView },
       }))
     } else {
       set((state) => ({
         ...state,
         feedIdByView: { ...emptyDataIdByView },
-        categoryOpenStateByView: { ...state.categoryOpenStateByView },
       }))
     }
 
