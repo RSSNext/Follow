@@ -14,6 +14,8 @@
     <a href="https://x.com/intent/follow?screen_name=follow_app_">Twitter</a>
     ·
     <a href="https://github.com/RSSNext/Follow/releases">Releases</a>
+    ·
+    <a href="README.md">English</a>
     <br />
     <br />
     <a href="https://trendshift.io/repositories/9938" target="_blank"><img src="https://github.com/user-attachments/assets/7d394847-f019-46e5-94ec-5bf4ccda6146" alt="RSSNext%2Ffollow | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
