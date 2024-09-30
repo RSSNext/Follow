@@ -30,6 +30,7 @@ import { cn } from "~/lib/utils"
 
 import { Divider } from "../../divider"
 import { RootPortalProvider } from "../../portal/provider"
+import { EllipsisHorizontalTextWithTooltip } from "../../typography"
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX, modalMontionConfig } from "./constants"
 import type { CurrentModalContentProps, ModalActionsInternal } from "./context"
@@ -359,9 +360,11 @@ export const ModalInternal = memo(
                       onPointerDownCapture={handleDrag}
                       onPointerDown={handleResizeEnable}
                     >
-                      <Dialog.Title className="flex max-w-full shrink-0 grow items-center gap-2 px-4 py-1 text-lg font-semibold">
+                      <Dialog.Title className="flex w-0 max-w-full grow items-center gap-2 px-4 py-1 text-lg font-semibold">
                         {icon && <span className="size-4">{icon}</span>}
-                        <span className="truncate">{title}</span>
+                        <EllipsisHorizontalTextWithTooltip className="truncate">
+                          <span>{title}</span>
+                        </EllipsisHorizontalTextWithTooltip>
                       </Dialog.Title>
                       {canClose && (
                         <Dialog.DialogClose className="center p-2" tabIndex={1} onClick={close}>
