@@ -8,6 +8,7 @@ import { useEventCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { Masonry } from "~/components/ui/Masonry"
+import { MediaContainerWidthProvider } from "~/components/ui/media"
 import { useScrollViewElement } from "~/components/ui/scroll-area/hooks"
 import { Skeleton } from "~/components/ui/skeleton"
 import { useRefValue } from "~/hooks/common"
@@ -235,16 +236,18 @@ export const PictureMasonry: FC<MasonryProps> = (props) => {
           <MasonryItemsAspectRatioContext.Provider value={masonryItemsRadio}>
             <MasonryItemsAspectRatioSetterContext.Provider value={setMasonryItemsRadio}>
               <MasonryIntersectionContext.Provider value={intersectionObserver}>
-                <Masonry
-                  items={items}
-                  columnGutter={gutter}
-                  columnWidth={currentItemWidth}
-                  columnCount={currentColumn}
-                  overscanBy={2}
-                  render={render}
-                  onRender={handleRender}
-                  itemKey={itemKey}
-                />
+                <MediaContainerWidthProvider width={currentItemWidth}>
+                  <Masonry
+                    items={items}
+                    columnGutter={gutter}
+                    columnWidth={currentItemWidth}
+                    columnCount={currentColumn}
+                    overscanBy={2}
+                    render={render}
+                    onRender={handleRender}
+                    itemKey={itemKey}
+                  />
+                </MediaContainerWidthProvider>
               </MasonryIntersectionContext.Provider>
             </MasonryItemsAspectRatioSetterContext.Provider>
           </MasonryItemsAspectRatioContext.Provider>

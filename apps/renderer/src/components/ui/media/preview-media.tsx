@@ -293,6 +293,7 @@ const FallbackableImage: FC<
   return (
     <div className={cn("center flex size-full flex-col", containerClassName)}>
       {isLoading && !isAllError && (
+        // FIXME: optimize this if image load, the placeholder background will flash
         <div className="center absolute inset-0 size-full">
           {blurhash ? (
             <div style={{ aspectRatio: `${props.width} / ${props.height}` }} className="w-full">
@@ -305,6 +306,7 @@ const FallbackableImage: FC<
       )}
       {!isAllError && (
         <img
+          data-blurhash={blurhash}
           src={currentSrc}
           onLoad={() => setIsLoading(false)}
           onError={handleError}

@@ -5,7 +5,9 @@ import { parseHtml } from "~/lib/parse-html"
 import type { RemarkOptions } from "~/lib/parse-markdown"
 import { parseMarkdown } from "~/lib/parse-markdown"
 import { cn } from "~/lib/utils"
+import { useWrappedElementSize } from "~/providers/wrapped-element-provider"
 
+import { MediaContainerWidthProvider } from "../media"
 import { MarkdownRenderContainerRefContext } from "./context"
 
 export const Markdown: Component<
@@ -79,10 +81,14 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
     [children, remarkOptions],
   )
 
+  const { w: containerWidth } = useWrappedElementSize()
+
   if (!markdownElement) return null
   return (
     <MarkdownRenderContainerRefContext.Provider value={refElement}>
-      {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
+      <MediaContainerWidthProvider width={containerWidth}>
+        {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
+      </MediaContainerWidthProvider>
       {accessory && <Fragment key={shouldForceReMountKey}>{accessory}</Fragment>}
     </MarkdownRenderContainerRefContext.Provider>
   )
