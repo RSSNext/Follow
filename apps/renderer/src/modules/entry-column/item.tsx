@@ -39,10 +39,17 @@ function EntryItemImpl({ entry, view }: { entry: FlatEntryModel; view?: number }
   )
 
   const Item: EntryListItemFC = getItemComponentByView(view as FeedViewType)
-  const overlayItemClassName = (view === FeedViewTypeEnum.Pictures || view === FeedViewTypeEnum.Videos) ? "top-0" : ""
+  const overlayItemClassName =
+    view === FeedViewTypeEnum.Pictures || view === FeedViewTypeEnum.Videos ? "top-0" : ""
 
   return (
-    <EntryItemWrapper itemClassName={Item.wrapperClassName} entry={entry} view={view} overlay overlayItemClassName={overlayItemClassName}>
+    <EntryItemWrapper
+      itemClassName={Item.wrapperClassName}
+      entry={entry}
+      view={view}
+      overlay
+      overlayItemClassName={overlayItemClassName}
+    >
       <Item entryId={entry.entries.id} translation={translation.data} />
     </EntryItemWrapper>
   )
