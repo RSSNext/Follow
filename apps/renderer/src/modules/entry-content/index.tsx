@@ -43,7 +43,12 @@ import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
-import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
+import {
+  getTranslationCache,
+  setEntryContentScrollToTop,
+  setEntryTitleMeta,
+  setTranslationCache,
+} from "./atoms"
 import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
 import { EntryTitle } from "./components/EntryTitle"
 import { SourceContentPanel } from "./components/SourceContentView"
@@ -164,8 +169,17 @@ export const EntryContentRender: Component<{
     }
 
     const { immersiveTranslate } = await import("~/lib/immersive-translate")
-    immersiveTranslate({ html, entry })
+    immersiveTranslate({
+      html,
+      entry,
+      cache: {
+        get: (key: string) => getTranslationCache()[key],
+        set: (key: string, value: string) =>
+          setTranslationCache({ ...getTranslationCache(), [key]: value }),
+      },
+    })
   }
+
   const mediaInfo = Object.fromEntries(
     (entry.entries.media ?? data?.entries.media)
       ?.filter((m) => m.type === "photo")

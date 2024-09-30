@@ -8,14 +8,28 @@ function textNodesUnder(el: Node) {
   const children: Node[] = el.nodeType === Node.TEXT_NODE ? [el] : []
   const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT)
   while (walker.nextNode()) {
-    children.push(walker.currentNode)
+    const { currentNode } = walker
+    if (currentNode.textContent) {
+      children.push(currentNode)
+    }
   }
   return children
 }
 
 const tagsToDuplicate = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "li", "blockquote"]
 
-export function immersiveTranslate({ html, entry }: { html?: HTMLElement; entry: FlatEntryModel }) {
+export function immersiveTranslate({
+  html,
+  entry,
+  cache,
+}: {
+  html?: HTMLElement
+  entry: FlatEntryModel
+  cache?: {
+    get: (key: string) => string | undefined
+    set: (key: string, value: string) => void
+  }
+}) {
   if (!html || !entry.settings?.translation) {
     return
   }
@@ -38,7 +52,10 @@ export function immersiveTranslate({ html, entry }: { html?: HTMLElement; entry:
     tag.dataset.childCount = children.length.toString()
 
     const fontTag = document.createElement("font")
-    fontTag.style.display = "none"
+
+    if (children.length > 2) {
+      fontTag.style.display = "none"
+    }
 
     for (const child of children) {
       const clone = child.cloneNode(true)
@@ -52,17 +69,10 @@ export function immersiveTranslate({ html, entry }: { html?: HTMLElement; entry:
           continue
         }
 
-        translate({
-          entry,
-          language: entry.settings?.translation,
-          part: textNode.textContent,
-          extraFields: ["content"],
-        }).then((transformed) => {
-          if (!transformed?.content) {
-            return
-          }
+        const { textContent } = textNode
 
-          textNode.textContent = transformed.content
+        const afterTranslate = (translated: string) => {
+          textNode.textContent = translated
 
           if (tag.dataset.childCount === undefined) {
             throw new Error("childCount is undefined")
@@ -72,6 +82,30 @@ export function immersiveTranslate({ html, entry }: { html?: HTMLElement; entry:
           tag.dataset.childCount = childCount.toString()
           if (childCount === 0) {
             fontTag.style.display = "initial"
+          }
+        }
+
+        if (cache) {
+          const cached = cache.get(textContent)
+          if (cached) {
+            afterTranslate(cached)
+            continue
+          }
+        }
+
+        translate({
+          entry,
+          language: entry.settings?.translation,
+          part: textContent,
+          extraFields: ["content"],
+        }).then((transformed) => {
+          if (!transformed?.content) {
+            return
+          }
+
+          afterTranslate(transformed.content)
+          if (cache) {
+            cache.set(textContent, transformed.content)
           }
         })
       }
