@@ -234,7 +234,7 @@ export const UserProfileModalContent: FC<{
           <Fragment>
             <div
               className={cn(
-                "center m-12 mb-4 flex shrink-0 flex-col duration-700",
+                "center m-12 mb-4 flex shrink-0 flex-col f-motion-reduce:duration-700",
                 isHeaderSimple ? "mt-3 flex-row" : "flex-col",
               )}
             >
@@ -328,7 +328,7 @@ const SubscriptionGroup: FC<{
     <div>
       <button
         onClick={() => setIsOpened(!isOpened)}
-        className="mb-2 flex w-full items-center justify-between text-2xl font-bold"
+        className="mb-2 mt-8 flex w-full items-center justify-between text-2xl font-bold"
         type="button"
       >
         <h3>{category}</h3>
@@ -371,7 +371,7 @@ const SubscriptionItem: FC<{
   return (
     <m.div
       exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.2 } }}
-      className={cn("group relative", isLoose ? "border-b py-5" : "py-2")}
+      className={cn("group relative", isLoose ? "border-b py-5 last:border-b-0" : "py-2")}
       data-feed-id={subscription.feedId}
     >
       <a
