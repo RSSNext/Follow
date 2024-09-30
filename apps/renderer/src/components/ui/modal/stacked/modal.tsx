@@ -359,10 +359,9 @@ export const ModalInternal = memo(
                       onPointerDownCapture={handleDrag}
                       onPointerDown={handleResizeEnable}
                     >
-                      <Dialog.Title className="flex shrink-0 grow items-center gap-2 px-4 py-1 text-lg font-semibold">
+                      <Dialog.Title className="flex max-w-full shrink-0 grow items-center gap-2 px-4 py-1 text-lg font-semibold">
                         {icon && <span className="size-4">{icon}</span>}
-
-                        <span>{title}</span>
+                        <span className="truncate">{title}</span>
                       </Dialog.Title>
                       {canClose && (
                         <Dialog.DialogClose className="center p-2" tabIndex={1} onClick={close}>
