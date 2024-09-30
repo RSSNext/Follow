@@ -128,10 +128,7 @@ export const EntryItemWrapper: FC<
         onContextMenu={handleContextMenu}
       >
         {overlay ? (
-          <ListItemHoverOverlay
-            isActive={isActive || isContextMenuOpen}
-            className={overlayItemClassName}
-          >
+          <ListItemHoverOverlay isActive={isActive || isContextMenuOpen} className={overlayItemClassName}>
             {children}
           </ListItemHoverOverlay>
         ) : (
