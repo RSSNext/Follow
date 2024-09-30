@@ -36,7 +36,7 @@ export const SourceContentView = ({ src }: { src: string }) => {
     const handleDidStopLoading = () => setLoading(false)
 
     // See https://www.electronjs.org/docs/latest/api/webview-tag#example
-    webview.addEventListener("did-start-loading", handleDidStopLoading, {
+    webview.addEventListener("did-stop-loading", handleDidStopLoading, {
       signal: abortController.signal,
     })
 
