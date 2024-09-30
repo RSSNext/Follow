@@ -5,6 +5,7 @@ import { LoadingCircle } from "~/components/ui/loading"
 import { views } from "~/constants"
 import { useAuthQuery } from "~/hooks/common"
 import type { FeedViewType } from "~/lib/enum"
+import { FeedViewType as FeedViewTypeEnum } from "~/lib/enum"
 import { cn } from "~/lib/utils"
 import { Queries } from "~/queries"
 import type { FlatEntryModel } from "~/store/entry"
@@ -38,9 +39,17 @@ function EntryItemImpl({ entry, view }: { entry: FlatEntryModel; view?: number }
   )
 
   const Item: EntryListItemFC = getItemComponentByView(view as FeedViewType)
+  const overlayItemClassName =
+    view === FeedViewTypeEnum.Pictures || view === FeedViewTypeEnum.Videos ? "top-0" : ""
 
   return (
-    <EntryItemWrapper itemClassName={Item.wrapperClassName} entry={entry} view={view} overlay>
+    <EntryItemWrapper
+      itemClassName={Item.wrapperClassName}
+      entry={entry}
+      view={view}
+      overlay
+      overlayItemClassName={overlayItemClassName}
+    >
       <Item entryId={entry.entries.id} translation={translation.data} />
     </EntryItemWrapper>
   )
