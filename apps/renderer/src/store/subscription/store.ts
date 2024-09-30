@@ -105,13 +105,11 @@ class SubscriptionActions {
       set((state) => ({
         ...state,
         feedIdByView: { ...state.feedIdByView, [view]: [] },
-        categoryOpenStateByView: { ...state.categoryOpenStateByView },
       }))
     } else {
       set((state) => ({
         ...state,
         feedIdByView: { ...emptyDataIdByView },
-        categoryOpenStateByView: { ...state.categoryOpenStateByView },
       }))
     }
 
@@ -157,6 +155,14 @@ class SubscriptionActions {
       produce(state, (state) => {
         state.categoryOpenStateByView[view][category] =
           !state.categoryOpenStateByView[view][category]
+      }),
+    )
+  }
+
+  changeCategoryOpenState(view: FeedViewType, category: string, status: boolean) {
+    set((state) =>
+      produce(state, (state) => {
+        state.categoryOpenStateByView[view][category] = status
       }),
     )
   }
