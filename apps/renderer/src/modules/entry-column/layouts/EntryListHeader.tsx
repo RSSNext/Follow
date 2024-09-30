@@ -47,10 +47,10 @@ export const EntryListHeader: FC<{
     <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
       <div className="min-w-0 break-all text-lg font-bold leading-none">
         <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
-          {headerTitle}
+          <span className="relative -top-px">{headerTitle}</span>
         </EllipsisHorizontalTextWithTooltip>
       </div>
-      <div className="text-xs font-medium text-zinc-400">
+      <div className="text-xs font-medium leading-none text-zinc-400">
         {totalCount || 0} {t("quantifier.piece", { ns: "common" })}
         {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
         {t("space", { ns: "common" })}
