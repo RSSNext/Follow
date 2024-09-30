@@ -18,6 +18,7 @@ import { EntryContent } from "~/modules/entry-content"
 import { ActionButton, MotionButtonBase } from "../button"
 import { microReboundPreset } from "../constants/spring"
 import { useCurrentModal } from "../modal"
+import { RootPortal } from "../portal"
 import { VideoPlayer } from "./VideoPlayer"
 
 const Wrapper: Component<{
@@ -44,33 +45,35 @@ const Wrapper: Component<{
           )}
         >
           {children}
-          <div
-            className="absolute bottom-4 right-4 z-[99] flex gap-3 text-white/70 [&_button]:hover:text-white"
-            onClick={stopPropagation}
-          >
-            {showActions && (
-              <Fragment>
-                {!!window.electron && (
+          <RootPortal>
+            <div
+              className="fixed bottom-4 right-4 z-[99] flex gap-3 text-white/70 [&_button]:hover:text-white"
+              onClick={stopPropagation}
+            >
+              {showActions && (
+                <Fragment>
+                  {!!window.electron && (
+                    <ActionButton
+                      tooltip={t("external:header.download")}
+                      onClick={() => {
+                        tipcClient?.download(src)
+                      }}
+                    >
+                      <i className="i-mgc-download-2-cute-re" />
+                    </ActionButton>
+                  )}
                   <ActionButton
-                    tooltip={t("external:header.download")}
+                    tooltip={t(COPY_MAP.OpenInBrowser())}
                     onClick={() => {
-                      tipcClient?.download(src)
+                      window.open(src)
                     }}
                   >
-                    <i className="i-mgc-download-2-cute-re" />
+                    <i className="i-mgc-external-link-cute-re" />
                   </ActionButton>
-                )}
-                <ActionButton
-                  tooltip={t(COPY_MAP.OpenInBrowser())}
-                  onClick={() => {
-                    window.open(src)
-                  }}
-                >
-                  <i className="i-mgc-external-link-cute-re" />
-                </ActionButton>
-              </Fragment>
-            )}
-          </div>
+                </Fragment>
+              )}
+            </div>
+          </RootPortal>
         </div>
         {entryId && (
           <div
@@ -228,6 +231,9 @@ export const PreviewMediaContent: FC<{
                 alt="cover"
                 src={med.url}
                 loading="lazy"
+                height={med.height}
+                width={med.width}
+                blurhash={med.blurhash}
               />
             )}
           </SwiperSlide>
@@ -285,7 +291,7 @@ const FallbackableImage: FC<
   }, [currentSrc, currentState, fallbackUrl, src])
 
   return (
-    <div className={cn("flex size-full flex-col", containerClassName)}>
+    <div className={cn("center flex size-full flex-col", containerClassName)}>
       {isLoading && !isAllError && (
         <div className="center absolute inset-0 size-full">
           {blurhash ? (
@@ -309,6 +315,11 @@ const FallbackableImage: FC<
             blurhash && !isLoading ? "duration-500 ease-in-out animate-in fade-in-0" : "",
             props.className,
           )}
+          style={{
+            maxHeight: `min(100%, ${Number.parseInt(props.height as string)}px)`,
+            maxWidth: `min(100%, ${Number.parseInt(props.width as string)}px)`,
+            ...props.style,
+          }}
         />
       )}
       {isAllError && (
@@ -344,7 +355,7 @@ const FallbackableImage: FC<
       )}
 
       {currentState === "fallback" && (
-        <div className="mt-4 text-center text-xs">
+        <div className="mt-4 text-center text-xs text-white/60">
           <span>
             This image is preview in low quality, because the original image is not available.
           </span>

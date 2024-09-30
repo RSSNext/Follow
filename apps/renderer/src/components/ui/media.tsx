@@ -30,6 +30,7 @@ export type MediaProps = BaseProps &
         type: "photo"
         previewImageUrl?: string
         cacheDimensions?: boolean
+        blurhash?: string
       })
     | (VideoHTMLAttributes<HTMLVideoElement> & {
         proxy?: {
@@ -95,6 +96,9 @@ const MediaImpl: FC<MediaProps> = ({
             url: src,
             type,
             fallbackUrl: imgSrc,
+            blurhash: "blurhash" in props ? props.blurhash : undefined,
+            width: Number.parseInt(props.width as string),
+            height: Number.parseInt(props.height as string),
           },
         ],
         0,
