@@ -2,11 +2,13 @@ import * as Slider from "@radix-ui/react-slider"
 import type { TooltipContentProps } from "@radix-ui/react-tooltip"
 import dayjs from "dayjs"
 import { AnimatePresence, m } from "framer-motion"
+import { noop } from "lodash-es"
 import { useEffect, useState } from "react"
 import Marquee from "react-fast-marquee"
 import { useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 
+import { useMediaMetadataSetValue, useNowPlaying } from "~/atoms/media-session"
 import {
   AudioPlayer,
   getAudioPlayerAtomValue,
@@ -33,6 +35,9 @@ export const CornerPlayer = () => {
   const entryId = useAudioPlayerAtomSelector((v) => v.entryId)
   const entry = useEntry(entryId)
   const feed = useFeedById(entry?.feedId)
+
+  //FIXME: I am not sure
+  useNowPlaying()
 
   return (
     <AnimatePresence>
@@ -91,6 +96,7 @@ const CornerPlayerImpl = () => {
   const entryId = useAudioPlayerAtomSelector((v) => v.entryId)
   const status = useAudioPlayerAtomSelector((v) => v.status)
   const isMute = useAudioPlayerAtomSelector((v) => v.isMute)
+  const mediaMetadataSetValue = useMediaMetadataSetValue()
 
   const playerValue = { entryId, status, isMute }
 
@@ -101,6 +107,20 @@ const CornerPlayerImpl = () => {
     preventDefault: true,
     scopes: HotKeyScopeMap.Home,
   })
+
+  useEffect(() => {
+    if (!entry || !feed) {
+      return noop
+    }
+
+    mediaMetadataSetValue(
+      new MediaMetadata({
+        title: entry?.entries.title || undefined,
+        artist: feed?.title || undefined,
+        artwork: [{ src: entry?.entries.authorAvatar || feed?.image || "" }],
+      }),
+    )
+  }, [entry, feed])
 
   const navigateToEntry = useNavigateEntry()
   usePlayerTracker()
