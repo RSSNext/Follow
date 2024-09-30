@@ -159,6 +159,14 @@ class SubscriptionActions {
     )
   }
 
+  changeCategoryOpenState(view: FeedViewType, category: string, status: boolean) {
+    set((state) =>
+      produce(state, (state) => {
+        state.categoryOpenStateByView[view][category] = status
+      }),
+    )
+  }
+
   expandCategoryOpenStateByView(view: FeedViewType, isOpen: boolean) {
     set((state) =>
       produce(state, (state) => {

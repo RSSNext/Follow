@@ -67,7 +67,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   useEffect(() => {
     if (shouldOpen) {
       if (!open && view !== undefined && folderName) {
-        subscriptionActions.toggleCategoryOpenState(view, folderName)
+        subscriptionActions.changeCategoryOpenState(view, folderName, true)
       }
 
       const $items = itemsRef.current
