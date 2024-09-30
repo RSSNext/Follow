@@ -98,7 +98,7 @@
 
 如果您有资格使用 Follow，欢迎加入开源社区共同建设。
 
-在开始之前， 请确保已启用 [Corepack](https://nodejs.org/api/corepack.html). 以确保您在运行相应命令时使用正确版本的包管理器 (`packageManager` 中的 `package.json`) 
+在开始之前， 请确保已启用 [Corepack](https://nodejs.org/api/corepack.html). 以确保您在运行相应命令时使用正确版本的包管理器 (`packageManager` 中的 `package.json`)
 
 ```sh
 corepack enable
