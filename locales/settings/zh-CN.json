@@ -39,6 +39,7 @@
   "actions.action_card.to": "到",
   "actions.action_card.translate_into": "翻译成",
   "actions.action_card.value": "值",
+  "actions.action_card.webhooks": "Webhooks",
   "actions.action_card.when_feeds_match": "当订阅源满足：",
   "actions.newRule": "新规则",
   "actions.save": "保存",
