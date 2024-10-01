@@ -1,13 +1,13 @@
 import { createElement, Fragment, memo, useEffect, useMemo, useState } from "react"
 
-import type { MediaInfo } from "~/lib/parse-html"
 import { parseHtml } from "~/lib/parse-html"
 import type { RemarkOptions } from "~/lib/parse-markdown"
 import { parseMarkdown } from "~/lib/parse-markdown"
 import { cn } from "~/lib/utils"
 import { useWrappedElementSize } from "~/providers/wrapped-element-provider"
 
-import { MediaContainerWidthProvider } from "../media"
+import type { MediaInfoRecord } from "../media"
+import { MediaContainerWidthProvider, MediaInfoRecordProvider } from "../media"
 import { MarkdownRenderContainerRefContext } from "./context"
 
 export const Markdown: Component<
@@ -45,7 +45,7 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
 
     accessory?: React.ReactNode
     noMedia?: boolean
-    mediaInfo?: MediaInfo
+    mediaInfo?: MediaInfoRecord
   } & JSX.IntrinsicElements[A] &
     Partial<{
       renderInlineStyle: boolean
@@ -55,7 +55,6 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
   const [remarkOptions, setRemarkOptions] = useState({
     renderInlineStyle,
     noMedia,
-    mediaInfo,
   })
   const [shouldForceReMountKey, setShouldForceReMountKey] = useState(0)
 
@@ -87,7 +86,9 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
   return (
     <MarkdownRenderContainerRefContext.Provider value={refElement}>
       <MediaContainerWidthProvider width={containerWidth}>
-        {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
+        <MediaInfoRecordProvider mediaInfo={mediaInfo}>
+          {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
+        </MediaInfoRecordProvider>
       </MediaContainerWidthProvider>
       {accessory && <Fragment key={shouldForceReMountKey}>{accessory}</Fragment>}
     </MarkdownRenderContainerRefContext.Provider>

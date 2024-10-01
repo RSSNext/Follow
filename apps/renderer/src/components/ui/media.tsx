@@ -52,7 +52,15 @@ const MediaImpl: FC<MediaProps> = ({
   thumbnail,
   ...props
 }) => {
-  const { src, style, type, previewImageUrl, showFallback, blurhash, ...rest } = props
+  const { src, style, type, previewImageUrl, showFallback, blurhash, height, width, ...rest } =
+    props
+
+  const ctxMediaInfo = useContext(MediaInfoRecordContext)
+  const ctxHeight = ctxMediaInfo[src!]?.height
+  const ctxWidth = ctxMediaInfo[src!]?.width
+
+  const finalHeight = height || ctxHeight
+  const finalWidth = width || ctxWidth
 
   const [imgSrc, setImgSrc] = useState(() =>
     proxy && src && !failedList.has(src)
@@ -130,6 +138,8 @@ const MediaImpl: FC<MediaProps> = ({
       case "photo": {
         return (
           <img
+            height={finalHeight}
+            width={finalWidth}
             {...(rest as ImgHTMLAttributes<HTMLImageElement>)}
             onError={errorHandle}
             className={cn(
@@ -152,7 +162,7 @@ const MediaImpl: FC<MediaProps> = ({
           <span
             className={cn(
               "center",
-              !(props.width || props.height) && "size-full",
+              !(finalWidth || finalHeight) && "size-full",
               "relative cursor-card bg-stone-100 object-cover",
               mediaContainerClassName,
             )}
@@ -172,11 +182,11 @@ const MediaImpl: FC<MediaProps> = ({
     handleOnLoad,
     imgSrc,
     mediaContainerClassName,
+    finalHeight,
+    finalWidth,
     mediaLoadState,
     popper,
     previewImageSrc,
-    props.height,
-    props.width,
     rest,
     src,
     thumbnail,
@@ -387,4 +397,22 @@ export const MediaContainerWidthProvider = ({
 
 const useMediaContainerWidth = () => {
   return useContext(MediaContainerWidthContext)
+}
+
+export type MediaInfoRecord = Record<string, { width?: number; height?: number }>
+const MediaInfoRecordContext = createContext<MediaInfoRecord>({})
+
+const noop = {} as const
+export const MediaInfoRecordProvider = ({
+  children,
+  mediaInfo,
+}: {
+  children: React.ReactNode
+  mediaInfo?: MediaInfoRecord
+}) => {
+  return (
+    <MediaInfoRecordContext.Provider value={mediaInfo || noop}>
+      {children}
+    </MediaInfoRecordContext.Provider>
+  )
 }

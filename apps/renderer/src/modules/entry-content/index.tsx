@@ -145,21 +145,25 @@ export const EntryContentRender: Component<{
         : undefined,
     [readerFontFamily],
   )
+  const mediaInfo = useMemo(
+    () =>
+      Object.fromEntries(
+        (entry?.entries.media ?? data?.entries.media)
+          ?.filter((m) => m.type === "photo")
+          .map((cur) => [
+            cur.url,
+            {
+              width: cur.width,
+              height: cur.height,
+            },
+          ]) ?? [],
+      ),
+    [entry?.entries.media, data?.entries.media],
+  )
 
   if (!entry) return null
 
   const content = entry?.entries.content ?? data?.entries.content
-  const mediaInfo = Object.fromEntries(
-    (entry.entries.media ?? data?.entries.media)
-      ?.filter((m) => m.type === "photo")
-      .map((cur) => [
-        cur.url,
-        {
-          width: cur.width,
-          height: cur.height,
-        },
-      ]) ?? [],
-  )
 
   return (
     <EntryContentProvider

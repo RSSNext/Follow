@@ -31,14 +31,11 @@ function markInlineImage(node?: Element) {
   }
 }
 
-export type MediaInfo = Record<string, { width?: number; height?: number }>
-
 export const parseHtml = (
   content: string,
   options?: Partial<{
     renderInlineStyle: boolean
     noMedia?: boolean
-    mediaInfo?: MediaInfo
   }>,
 ) => {
   const file = new VFile(content)
@@ -99,13 +96,7 @@ export const parseHtml = (
             markInlineImage(node)
             return createElement(MarkdownLink, { ...props } as any)
           },
-          img: ({ ...props }) => {
-            return createElement(Img, {
-              ...props,
-              width: props.src ? options?.mediaInfo?.[props.src]?.width : props.width,
-              height: props.src ? options?.mediaInfo?.[props.src]?.height : props.height,
-            })
-          },
+          img: Img,
 
           h1: createHeadingRenderer(1),
           h2: createHeadingRenderer(2),
@@ -216,6 +207,7 @@ const Img: Components["img"] = ({ node, ...props }) => {
     ...props,
     proxy: { height: 0, width: 700 },
   }
+
   if (node?.properties.inline) {
     return createElement(Media, {
       type: "photo",
