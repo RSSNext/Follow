@@ -340,6 +340,12 @@ export const ModalInternal = memo(
                   dragListener={false}
                   dragMomentum={false}
                   dragConstraints={edgeElementRef}
+                  onMeasureDragConstraints={(constraints) => {
+                    return {
+                      ...constraints,
+                      top: constraints.top + 32,
+                    }
+                  }}
                   whileDrag={{
                     cursor: "grabbing",
                   }}

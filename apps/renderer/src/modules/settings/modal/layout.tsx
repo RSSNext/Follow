@@ -75,6 +75,12 @@ export function SettingModalLayout(
         dragMomentum={false}
         dragElastic={false}
         dragConstraints={edgeElementRef}
+        onMeasureDragConstraints={(constraints) => {
+          return {
+            ...constraints,
+            top: constraints.top + 32,
+          }
+        }}
         whileDrag={{
           cursor: "grabbing",
         }}
