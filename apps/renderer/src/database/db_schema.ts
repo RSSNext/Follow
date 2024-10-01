@@ -33,3 +33,8 @@ export const dbSchemaV6 = {
   ...dbSchemaV5,
   lists: "&id, title",
 }
+
+export const dbSchemaV7 = {
+  ...dbSchemaV6,
+  inboxes: "&id",
+}

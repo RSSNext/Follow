@@ -27,8 +27,11 @@ export type FeedModel = ExtractBizResponse<typeof apiClient.feeds.$get>["data"][
 
 export type ListModelPoplutedFeeds = ExtractBizResponse<typeof apiClient.lists.$get>["data"]["list"]
 export type ListModel = Omit<ListModelPoplutedFeeds, "feeds">
-export type FeedOrListRespModel = FeedModel | ListModelPoplutedFeeds
-export type FeedOrListModel = FeedModel | ListModel
+
+export type InboxModel = ExtractBizResponse<typeof apiClient.inboxes.$get>["data"]
+
+export type FeedOrListRespModel = FeedModel | ListModelPoplutedFeeds | InboxModel
+export type FeedOrListModel = FeedModel | ListModel | InboxModel
 
 export type EntryResponse = Exclude<
   Extract<ExtractBizResponse<typeof apiClient.entries.$get>, { code: 0 }>["data"],

@@ -9,7 +9,7 @@ import { FeedIcon } from "~/components/feed-icon"
 import { OouiUserAnonymous } from "~/components/icons/OouiUserAnonymous"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
-import { useFeedActions, useListActions } from "~/hooks/biz/useFeedActions"
+import { useFeedActions, useInboxActions, useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAnyPointDown } from "~/hooks/common"
@@ -19,6 +19,7 @@ import { getNewIssueUrl } from "~/lib/issues"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn } from "~/lib/utils"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
+import { useInboxById } from "~/store/inbox"
 import { useListById } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
@@ -240,3 +241,62 @@ const ListItemImpl: Component<{
 }
 
 export const ListItem = memo(ListItemImpl)
+
+const InboxItemImpl: Component<{
+  inboxId: string
+  view: FeedViewType
+}> = ({ view, inboxId, className }) => {
+  const inbox = useInboxById(inboxId)
+
+  const isActive = useRouteParamsSelector((routerParams) => routerParams.feedId === inboxId)
+  const { items } = useInboxActions({ inboxId })
+
+  const inboxUnread = useFeedUnreadStore((state) => state.data[inboxId] || 0)
+
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+  useAnyPointDown(() => {
+    setIsContextMenuOpen(false)
+  })
+  const navigate = useNavigateEntry()
+  const handleNavigate = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation()
+
+      navigate({
+        feedId: inboxId,
+        entryId: null,
+        view,
+      })
+    },
+    [inboxId, navigate, view],
+  )
+  if (!inbox) return null
+  return (
+    <div
+      data-inbox-id={inboxId}
+      className={cn(
+        "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-sm font-medium leading-loose",
+        (isActive || isContextMenuOpen) && "bg-native-active",
+        "py-1.5 pl-2.5",
+        className,
+      )}
+      onClick={handleNavigate}
+      onContextMenu={(e) => {
+        setIsContextMenuOpen(true)
+        showNativeMenu(items, e)
+      }}
+    >
+      <div className={"flex min-w-0 items-center"}>
+        <div className="mr-2 flex size-[16px] items-center justify-center">
+          <i className="i-mgc-inbox-cute-fi" />
+        </div>
+        <EllipsisHorizontalTextWithTooltip className="truncate capitalize">
+          <span>{inbox.id}'s inbox</span>
+        </EllipsisHorizontalTextWithTooltip>
+      </div>
+      <UnreadNumber unread={inboxUnread} className="ml-2" />
+    </div>
+  )
+}
+
+export const InboxItem = memo(InboxItemImpl)

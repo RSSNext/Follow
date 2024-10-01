@@ -22,7 +22,7 @@ import {
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { getFeedListSort, setFeedListSortBy, setFeedListSortOrder, useFeedListSort } from "./atom"
-import { SortableFeedList, SortByAlphabeticalList } from "./sort-by"
+import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
 import { UnreadNumber } from "./unread-number"
 
 const useFeedsGroupedData = (view: FeedViewType) => {
@@ -57,12 +57,32 @@ const useListsGroupedData = (view: FeedViewType) => {
   return useMemo(() => {
     if (!data || data.length === 0) return {}
 
+    const lists = data.filter((s) => "listId" in s)
+
     const groupFolder = {} as Record<string, string[]>
 
-    for (const subscription of data) {
-      if (!subscription.category && !subscription.defaultCategory) {
-        groupFolder[subscription.feedId] = [subscription.feedId]
-      }
+    for (const subscription of lists) {
+      groupFolder[subscription.feedId] = [subscription.feedId]
+    }
+
+    return groupFolder
+  }, [data])
+}
+
+const useInboxesGroupedData = (view: FeedViewType) => {
+  const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
+
+  const data = useSubscriptionByView(view) || remoteData
+
+  return useMemo(() => {
+    if (!data || data.length === 0) return {}
+
+    const inboxes = data.filter((s) => "inboxId" in s)
+
+    const groupFolder = {} as Record<string, string[]>
+
+    for (const subscription of inboxes) {
+      groupFolder[subscription.feedId] = [subscription.feedId]
     }
 
     return groupFolder
@@ -78,6 +98,7 @@ const useUpdateUnreadCount = () => {
 function FeedListImpl({ className, view }: { className?: string; view: number }) {
   const feedsData = useFeedsGroupedData(view)
   const listsData = useListsGroupedData(view)
+  const inboxesData = useInboxesGroupedData(view)
   const categoryOpenStateData = useCategoryOpenStateByView(view)
   const expansion = Object.values(categoryOpenStateData).every((value) => value === true)
   useUpdateUnreadCount()
@@ -93,7 +114,10 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
     return unread
   })
 
-  const hasData = Object.keys(feedsData).length > 0 || Object.keys(listsData).length > 0
+  const hasData =
+    Object.keys(feedsData).length > 0 ||
+    Object.keys(listsData).length > 0 ||
+    Object.keys(inboxesData).length > 0
 
   const feedId = useRouteFeedId()
   const navigateEntry = useNavigateEntry()
@@ -104,6 +128,8 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   useAuthQuery(Queries.lists.list())
 
   const hasListData = Object.keys(listsData).length > 0
+  const hasInboxData = Object.keys(inboxesData).length > 0
+
   return (
     <div className={cn(className, "font-medium")}>
       <div onClick={stopPropagation} className="mx-3 flex items-center justify-between px-2.5 py-1">
@@ -164,11 +190,18 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
               {t("words.lists")}
             </div>
-
             <SortByAlphabeticalList view={view} />
           </>
         )}
-        {hasListData && hasData && (
+        {hasInboxData && (
+          <>
+            <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+              {t("words.inbox")}
+            </div>
+            <SortByAlphabeticalInbox view={view} />
+          </>
+        )}
+        {(hasListData || hasInboxData) && (
           <div
             className={cn(
               "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",

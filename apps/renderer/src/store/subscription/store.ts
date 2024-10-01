@@ -7,12 +7,13 @@ import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedViewType } from "~/lib/enum"
 import { capitalizeFirstLetter } from "~/lib/utils"
-import type { FeedModel, ListModelPoplutedFeeds, SubscriptionModel } from "~/models"
+import type { FeedModel, InboxModel, ListModelPoplutedFeeds, SubscriptionModel } from "~/models"
 import { SubscriptionService } from "~/services"
 
 import { entryActions } from "../entry"
 import { feedActions, getFeedById } from "../feed"
-import { listActions } from "../list/store"
+import { inboxActions } from "../inbox"
+import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 
@@ -120,16 +121,20 @@ class SubscriptionActions {
 
     const feeds = [] as FeedModel[]
     const lists = [] as ListModelPoplutedFeeds[]
+    const inboxes = [] as InboxModel[]
     for (const subscription of res.data) {
       if ("feeds" in subscription) {
         feeds.push(subscription.feeds)
-      } else {
+      } else if ("lists" in subscription) {
         lists.push(subscription.lists)
+      } else if ("inboxes" in subscription) {
+        inboxes.push(subscription.inboxes)
       }
     }
     this.updateCategoryOpenState(transformedData.filter((s) => s.category || s.defaultCategory))
     feedActions.upsertMany(feeds)
     listActions.upsertMany(lists)
+    inboxActions.upsertMany(inboxes)
 
     return res.data
   }
@@ -141,7 +146,11 @@ class SubscriptionActions {
     set((state) =>
       produce(state, (state) => {
         subscriptions.forEach((subscription) => {
-          state.data[subscription.feedId] = omit(subscription, "feeds")
+          state.data[subscription.feedId] = omit(subscription, [
+            "feeds",
+            "lists",
+            "inboxes",
+          ]) as SubscriptionFlatModel
           state.feedIdByView[subscription.view].push(subscription.feedId)
           return state
         })

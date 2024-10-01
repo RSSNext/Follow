@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next"
 
 import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal"
+import { INBOXES_EMAIL_DOMAIN } from "~/constants"
 import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem } from "~/lib/native-menu"
 import { useFeedClaimModal } from "~/modules/claim"
@@ -14,6 +15,7 @@ import {
   useFeedById,
   useRemoveFeedFromFeedList,
 } from "~/store/feed"
+import { useInboxById } from "~/store/inbox"
 import { useListById, useListByView } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 
@@ -310,6 +312,47 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
 
     return items
   }, [list, t, present, deleteSubscription, subscription, navigateEntry, listId, view])
+
+  return { items }
+}
+
+export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
+  const { t } = useTranslation()
+  const inbox = useInboxById(inboxId)
+  const { present } = useModalStack()
+
+  const items = useMemo(() => {
+    if (!inbox) return []
+
+    const items: NativeMenuItem[] = [
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.edit"),
+        shortcut: "E",
+        click: () => {
+          // present({
+          //   title: t("sidebar.feed_actions.edit_inbox"),
+          //   content: ({ dismiss }) => <FeedForm asWidget id={inboxId} onSuccess={dismiss} isList />,
+          // })
+        },
+      },
+      {
+        type: "separator" as const,
+        disabled: false,
+      },
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.copy_email_address"),
+        shortcut: "Meta+Shift+C",
+        disabled: false,
+        click: () => {
+          navigator.clipboard.writeText(`${inboxId}@${INBOXES_EMAIL_DOMAIN}`)
+        },
+      },
+    ]
+
+    return items
+  }, [inbox, t, inboxId, present])
 
   return { items }
 }
