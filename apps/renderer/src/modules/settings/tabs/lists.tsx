@@ -87,7 +87,9 @@ export const SettingLists = () => {
                   <TableHead size="sm">{t.settings("lists.fee.label")}</TableHead>
                   <TableHead size="sm">{t.settings("lists.subscriptions")}</TableHead>
                   <TableHead size="sm">{t.settings("lists.earnings")}</TableHead>
-                  <TableHead size="sm">{t.common("words.actions")}</TableHead>
+                  <TableHead size="sm" className="center">
+                    {t.common("words.actions")}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="border-t-[12px] border-transparent [&_td]:!px-3">
@@ -131,7 +133,7 @@ export const SettingLists = () => {
                     <TableCell size="sm">
                       <Balance>{BigInt(row.purchaseAmount || 0n)}</Balance>
                     </TableCell>
-                    <TableCell size="sm">
+                    <TableCell size="sm" className="center">
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button
