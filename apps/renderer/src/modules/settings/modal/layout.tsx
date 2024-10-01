@@ -1,3 +1,4 @@
+import type { BoundingBox } from "framer-motion"
 import { useDragControls } from "framer-motion"
 import { Resizable } from "re-resizable"
 import type { PointerEventHandler, PropsWithChildren } from "react"
@@ -8,6 +9,7 @@ import { m } from "~/components/common/Motion"
 import { Logo } from "~/components/icons/logo"
 import { LetsIconsResizeDownRightLight } from "~/components/icons/resize"
 import { useResizeableModal } from "~/components/ui/modal"
+import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "~/constants"
 import { preventDefault } from "~/lib/dom"
 import { cn, getOS } from "~/lib/utils"
 
@@ -55,6 +57,15 @@ export function SettingModalLayout(
     },
     [dragController, draggable, handlePointDown],
   )
+  const measureDragConstraints = useCallback((constraints: BoundingBox) => {
+    if (getOS() === "Windows") {
+      return {
+        ...constraints,
+        top: constraints.top + ElECTRON_CUSTOM_TITLEBAR_HEIGHT,
+      }
+    }
+    return constraints
+  }, [])
 
   return (
     <div className={cn("h-full", !isResizeable && "center")} ref={edgeElementRef}>
@@ -75,15 +86,7 @@ export function SettingModalLayout(
         dragMomentum={false}
         dragElastic={false}
         dragConstraints={edgeElementRef}
-        onMeasureDragConstraints={(constraints) => {
-          if (getOS() === "Windows") {
-            return {
-              ...constraints,
-              top: constraints.top + 32,
-            }
-          }
-          return constraints
-        }}
+        onMeasureDragConstraints={measureDragConstraints}
         whileDrag={{
           cursor: "grabbing",
         }}

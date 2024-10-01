@@ -1,4 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog"
+import type { BoundingBox } from "framer-motion"
 import { useAnimationControls, useDragControls } from "framer-motion"
 import { produce } from "immer"
 import { useSetAtom } from "jotai"
@@ -23,7 +24,7 @@ import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { SafeFragment } from "~/components/common/Fragment"
 import { m } from "~/components/common/Motion"
 import { ErrorComponentType } from "~/components/errors/enum"
-import { isElectronBuild } from "~/constants"
+import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT, isElectronBuild } from "~/constants"
 import { useSwitchHotKeyScope } from "~/hooks/common"
 import { nextFrame, stopPropagation } from "~/lib/dom"
 import { cn, getOS } from "~/lib/utils"
@@ -251,6 +252,17 @@ export const ModalInternal = memo(
       },
       [autoFocus],
     )
+
+    const measureDragConstraints = useCallback((constraints: BoundingBox) => {
+      if (getOS() === "Windows") {
+        return {
+          ...constraints,
+          top: constraints.top + ElECTRON_CUSTOM_TITLEBAR_HEIGHT,
+        }
+      }
+      return constraints
+    }, [])
+
     useImperativeHandle(ref, () => modalElementRef.current!)
     if (CustomModalComponent) {
       return (
@@ -340,15 +352,7 @@ export const ModalInternal = memo(
                   dragListener={false}
                   dragMomentum={false}
                   dragConstraints={edgeElementRef}
-                  onMeasureDragConstraints={(constraints) => {
-                    if (getOS() === "Windows") {
-                      return {
-                        ...constraints,
-                        top: constraints.top + 32,
-                      }
-                    }
-                    return constraints
-                  }}
+                  onMeasureDragConstraints={measureDragConstraints}
                   whileDrag={{
                     cursor: "grabbing",
                   }}
