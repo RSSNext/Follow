@@ -366,10 +366,7 @@ export const ModalInternal = memo(
                     className="flex grow flex-col"
                   >
                     <div
-                      className={cn(
-                        "relative flex items-center",
-                        "max-h-[70vh] min-w-[300px] max-w-[90vw] lg:max-h-[calc(100vh-20rem)] lg:max-w-[70vw]",
-                      )}
+                      className={"relative flex items-center"}
                       onPointerDownCapture={handleDrag}
                       onPointerDown={handleResizeEnable}
                     >

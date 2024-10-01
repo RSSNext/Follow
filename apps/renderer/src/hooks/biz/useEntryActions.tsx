@@ -371,7 +371,12 @@ export const useEntryActions = ({
         active: showSourceContent,
         onClick: () => {
           if (!populatedEntry.entries.url) return
-          if (view === FeedViewType.SocialMedia || view === FeedViewType.Videos) {
+          const viewPreviewInModal = [
+            FeedViewType.SocialMedia,
+            FeedViewType.Videos,
+            FeedViewType.Pictures,
+          ].includes(view!)
+          if (viewPreviewInModal) {
             showSourceContentModal({
               title: populatedEntry.entries.title ?? undefined,
               src: populatedEntry.entries.url,
