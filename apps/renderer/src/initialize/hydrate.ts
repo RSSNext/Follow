@@ -11,7 +11,9 @@ import {
   FeedUnreadService,
   SubscriptionService,
 } from "~/services"
+import { ListService } from "~/services/list"
 import type { FlatEntryModel } from "~/store/entry"
+import { listActions } from "~/store/list"
 
 import { entryActions, useEntryStore } from "../store/entry/store"
 import { feedActions, useFeedStore } from "../store/feed"
@@ -25,7 +27,13 @@ export const setHydrated = (v: boolean) => {
 export const hydrateDatabaseToStore = async () => {
   async function hydrate() {
     const now = Date.now()
-    await Promise.all([hydrateFeed(), hydrateSubscription(), hydrateFeedUnread(), hydrateEntry()])
+    await Promise.all([
+      hydrateFeed(),
+      hydrateSubscription(),
+      hydrateFeedUnread(),
+      hydrateEntry(),
+      hydrateList(),
+    ])
 
     window.__dbIsReady = true
     const costTime = Date.now() - now
@@ -87,6 +95,11 @@ async function hydrateSubscription() {
   const subscriptions = await SubscriptionService.findAll()
 
   subscriptionActions.upsertMany(subscriptions)
+}
+
+async function hydrateList() {
+  const lists = await ListService.findAll()
+  listActions.upsertMany(lists)
 }
 
 const logHydrateError = (message: string) => {

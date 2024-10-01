@@ -1,5 +1,7 @@
+import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import type { FeedModel, ListModel, ListModelPoplutedFeeds } from "~/models"
+import { ListService } from "~/services/list"
 
 import { feedActions } from "../feed"
 import { createImmerSetter, createZustandStore } from "../utils/helper"
@@ -29,6 +31,8 @@ class ListActionStatic {
       feedActions.upsertMany(feeds)
       return state
     })
+
+    runTransactionInScope(() => ListService.upsertMany(lists))
   }
 
   async fetchOwnedLists() {
@@ -43,6 +47,12 @@ class ListActionStatic {
       state.lists[listId] = { ...state.lists[listId], ...data }
       return state
     })
+
+    runTransactionInScope(async () => {
+      const patchedData = get().lists[listId]
+      if (!patchedData) return
+      return ListService.upsert(patchedData as ListModel)
+    })
   }
   async addFeedToFeedList(listId: string, feed: FeedModel) {
     const list = get().lists[listId]
@@ -54,7 +64,6 @@ class ListActionStatic {
     })
   }
 
-  // TODO sync to index db
   async removeFeedFromFeedList(listId: string, feedId: string) {
     const list = get().lists[listId] as ListModel
     if (!list) return

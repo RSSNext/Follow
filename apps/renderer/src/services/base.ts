@@ -1,6 +1,7 @@
 import type Dexie from "dexie"
 import type { UpdateSpec } from "dexie"
 
+
 export abstract class BaseService<T extends { id: string }> {
   constructor(public readonly table: Dexie.Table<T, string>) {}
 
