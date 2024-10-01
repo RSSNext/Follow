@@ -26,6 +26,7 @@ export function SettingModalLayout(
   const setTab = useSetSettingTab()
   const tab = useSettingTab()
   const elementRef = useRef<HTMLDivElement>(null)
+  const edgeElementRef = useRef<HTMLDivElement>(null)
   const { handlePointDown, isResizeable, resizeableStyle } = useResizeableModal(elementRef, {
     enableResizeable: true,
   })
@@ -56,7 +57,7 @@ export function SettingModalLayout(
   )
 
   return (
-    <div className={cn("h-full", !isResizeable && "center")}>
+    <div className={cn("h-full", !isResizeable && "center")} ref={edgeElementRef}>
       <m.div
         exit={{
           opacity: 0,
@@ -73,6 +74,7 @@ export function SettingModalLayout(
         dragListener={false}
         dragMomentum={false}
         dragElastic={false}
+        dragConstraints={edgeElementRef}
         whileDrag={{
           cursor: "grabbing",
         }}
