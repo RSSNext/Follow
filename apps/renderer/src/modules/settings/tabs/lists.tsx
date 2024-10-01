@@ -108,9 +108,18 @@ export const SettingLists = () => {
                       </a>
                     </TableCell>
                     <TableCell size="sm">
-                      <span className={cn("inline-flex items-center", views[row.view].className)}>
-                        {views[row.view].icon}
-                      </span>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span
+                            className={cn("inline-flex items-center", views[row.view].className)}
+                          >
+                            {views[row.view].icon}
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipPortal>
+                          <TooltipContent>{t(views[row.view].name)}</TooltipContent>
+                        </TooltipPortal>
+                      </Tooltip>
                     </TableCell>
                     <TableCell size="sm">
                       <div className="flex items-center gap-1">
