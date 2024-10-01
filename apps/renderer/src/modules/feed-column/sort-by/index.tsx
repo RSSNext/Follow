@@ -1,4 +1,3 @@
-
 import { useFeedListSortSelector } from "../atom"
 import { SortByAlphabeticalFeedList, SortByAlphabeticalListList } from "./SortByAlphabeticalList"
 import { SortByUnreadFeedList } from "./SortByUnreadList"
