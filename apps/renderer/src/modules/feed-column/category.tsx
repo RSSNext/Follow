@@ -46,29 +46,21 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const folderName = subscription?.category || subscription.defaultCategory
 
   const showCollapse = sortByUnreadFeedList.length > 1 || subscription?.category
-  const open = folderName ? categoryOpenStateData[folderName] : true
 
-  const shouldOpen =
-    useRouteParamsSelector((s) => typeof s.feedId === "string" && ids.includes(s.feedId)) ||
-    ids.length === 1
-
-  const itemsRef = useRef<HTMLDivElement>(null)
-
-  const toggleCategoryOpenState = (e) => {
-    e.stopPropagation()
-    if (!isCategoryEditing) {
-      setCategoryActive()
+  const [open, setOpen] = useState(() => {
+    if (!showCollapse) return true
+    if (folderName && typeof categoryOpenStateData[folderName] === "boolean") {
+      return categoryOpenStateData[folderName]
     }
-    if (view !== undefined && folderName) {
-      subscriptionActions.toggleCategoryOpenState(view, folderName)
-    }
-  }
+    return false
+  })
 
+  const shouldOpen = useRouteParamsSelector(
+    (s) => typeof s.feedId === "string" && ids.includes(s.feedId),
+  )
   useEffect(() => {
     if (shouldOpen) {
-      if (!open && view !== undefined && folderName) {
-        subscriptionActions.changeCategoryOpenState(view, folderName, true)
-      }
+      setOpen(true)
 
       const $items = itemsRef.current
 
@@ -78,13 +70,31 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
         behavior: "smooth",
       })
     }
-  }, [shouldOpen, open, view, folderName])
+  }, [shouldOpen])
+  const expansion = folderName ? categoryOpenStateData[folderName] : true
+
+  useEffect(() => {
+    if (showCollapse) {
+      setOpen(expansion)
+    }
+  }, [expansion])
+
+  const itemsRef = useRef<HTMLDivElement>(null)
+
+  const toggleCategoryOpenState = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    if (!isCategoryEditing) {
+      setCategoryActive()
+    }
+    if (view !== undefined && folderName) {
+      subscriptionActions.toggleCategoryOpenState(view, folderName)
+    }
+  }
 
   const setCategoryActive = () => {
     if (view !== undefined) {
       navigate({
         entryId: null,
-        // TODO joint feedId is too long, need to be optimized
         folderName,
         view,
       })
