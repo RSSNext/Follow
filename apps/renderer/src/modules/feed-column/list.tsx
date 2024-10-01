@@ -100,6 +100,9 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
 
   const { t } = useTranslation()
 
+  // Data prefetch
+  useAuthQuery(Queries.lists.list())
+
   const hasListData = Object.keys(listsData).length > 0
   return (
     <div className={cn(className, "font-medium")}>

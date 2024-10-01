@@ -8,12 +8,15 @@ import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem } from "~/lib/native-menu"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
-import { Queries } from "~/queries"
-import { getFeedById, useAddFeedToFeedList, useFeedById } from "~/store/feed"
-import { useListById } from "~/store/list"
+import {
+  getFeedById,
+  useAddFeedToFeedList,
+  useFeedById,
+  useRemoveFeedFromFeedList,
+} from "~/store/feed"
+import { useListById, useListByView } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 
-import { useAuthQuery } from "../common"
 import { useNavigateEntry } from "./useNavigateEntry"
 import { getRouteParams } from "./useRouteParams"
 import { useDeleteSubscription } from "./useSubscriptionActions"
@@ -40,8 +43,10 @@ export const useFeedActions = ({
   const navigateEntry = useNavigateEntry()
   const isEntryList = type === "entryList"
 
-  const listList = useAuthQuery(Queries.lists.list())
   const addMutation = useAddFeedToFeedList()
+  const removeMutation = useRemoveFeedFromFeedList()
+
+  const listByView = useListByView(view!)
 
   const items = useMemo(() => {
     if (!feed) return []
@@ -83,17 +88,28 @@ export const useFeedActions = ({
       {
         type: "text" as const,
         label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-        enabled: !!listList.data?.length,
-        submenu: listList.data?.map((list) => ({
-          label: list.title || "",
-          type: "text" as const,
-          click() {
-            return addMutation.mutate({
-              feedId,
-              listId: list.id,
-            })
-          },
-        })),
+        enabled: !!listByView?.length,
+        submenu: listByView?.map((list) => {
+          const isIncluded = list.feedIds.includes(feedId)
+          return {
+            label: list.title || "",
+            type: "text" as const,
+            checked: isIncluded,
+            click() {
+              if (!isIncluded) {
+                addMutation.mutate({
+                  feedId,
+                  listId: list.id,
+                })
+              } else {
+                removeMutation.mutate({
+                  feedId,
+                  listId: list.id,
+                })
+              }
+            },
+          }
+        }),
       },
       {
         type: "separator" as const,
@@ -186,7 +202,7 @@ export const useFeedActions = ({
     feed,
     t,
     isEntryList,
-    listList.data,
+    listByView,
     feedId,
     claimFeed,
     addMutation,

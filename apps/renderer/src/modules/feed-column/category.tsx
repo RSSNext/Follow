@@ -10,13 +10,13 @@ import { LoadingCircle } from "~/components/ui/loading"
 import { ROUTE_FEED_IN_FOLDER, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { useAnyPointDown, useAuthQuery, useInputComposition } from "~/hooks/common"
+import { useAnyPointDown, useInputComposition } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
-import { Queries } from "~/queries"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
+import { useListByView } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
@@ -127,8 +127,9 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   })
   const isCategoryIsWaiting = isChangePending
 
-  const listList = useAuthQuery(Queries.lists.list())
   const addMutation = useAddFeedToFeedList()
+
+  const listList = useListByView(view!)
 
   return (
     <div tabIndex={-1} onClick={stopPropagation}>
@@ -161,8 +162,8 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-                  enabled: !!listList.data?.length,
-                  submenu: listList.data?.map((list) => ({
+                  enabled: !!listList?.length,
+                  submenu: listList?.map((list) => ({
                     label: list.title || "",
                     type: "text",
                     click() {
@@ -182,7 +183,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                     .filter((v) => v.view !== view)
                     .map((v) => ({
                       label: t(v.name),
-                      type: "text",
+                      type: "text" as const,
                       shortcut: (v.view + 1).toString(),
                       icon: v.icon,
                       click() {
