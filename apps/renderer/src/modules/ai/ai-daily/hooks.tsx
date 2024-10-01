@@ -65,11 +65,12 @@ export const useParseDailyDate = (day: DayOf) => {
 
 export const useAIDailyReportModal = () => {
   const { present } = useModalStack()
+  const { t } = useTranslation()
 
   return useCallback(() => {
     present({
       content: () => <FeedDailyModalContent />,
-      title: "AI Daily Report",
+      title: t("ai_daily.header"),
       resizeable: true,
       clickOutsideToDismiss: true,
 

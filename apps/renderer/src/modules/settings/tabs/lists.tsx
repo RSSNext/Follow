@@ -188,9 +188,7 @@ const formSchema = z.object({
 })
 
 const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: string }) => {
-  const { t } = useTranslation("settings")
-
-  const appT = useI18n()
+  const { t } = useTranslation(["settings", "common"])
 
   const list = useListById(id)
 
@@ -336,7 +334,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
         />
         <div className="flex justify-end">
           <Button type="submit" isLoading={createMutation.isPending}>
-            {id ? appT.common("words.update") : appT.common("words.create")}
+            {id ? t("common:words.update") : t("common:words.create")}
           </Button>
         </div>
       </form>
@@ -349,7 +347,11 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
   const { t } = useTranslation("settings")
 
   const [feedSearchFor, setFeedSearchFor] = useState("")
-  const addMutation = useAddFeedToFeedList()
+  const addMutation = useAddFeedToFeedList({
+    onSuccess: () => {
+      setFeedSearchFor("")
+    },
+  })
 
   const allFeeds = useSubscriptionStore((store) => {
     const feedInfo = [] as { title: string; id: string }[]

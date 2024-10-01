@@ -33,13 +33,19 @@ export const ExtensionExposeProvider = () => {
   const presentUserProfile = usePresentUserProfileModal("dialog")
   useEffect(() => {
     registerGlobalContext({
-      follow(id, options) {
+      follow(options) {
         present({
           title: options?.isList
             ? t("sidebar.feed_actions.edit_list")
             : t("sidebar.feed_actions.edit_feed"),
           content: ({ dismiss }) => (
-            <FeedForm asWidget id={id} onSuccess={dismiss} isList={options?.isList} />
+            <FeedForm
+              asWidget
+              id={options?.id}
+              url={options?.url}
+              onSuccess={dismiss}
+              isList={options?.isList}
+            />
           ),
         })
       },

@@ -8,6 +8,7 @@ import { Button } from "~/components/ui/button"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { useModalStack } from "~/components/ui/modal"
+import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { FEED_COLLECTION_LIST } from "~/constants"
 import { useAsRead } from "~/hooks/biz/useAsRead"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
@@ -89,7 +90,9 @@ export function ListItem({
             entry.collections && "text-zinc-600 dark:text-zinc-500",
           )}
         >
-          <span className="truncate">{getPreferredTitle(feed)}</span>
+          <EllipsisHorizontalTextWithTooltip className="truncate">
+            {getPreferredTitle(feed)}
+          </EllipsisHorizontalTextWithTooltip>
           <span>·</span>
           <span className="shrink-0">{!!displayTime && <RelativeTime date={displayTime} />}</span>
         </div>
@@ -186,12 +189,16 @@ export function ListItem({
           src={entry.entries.media[0].url}
           type={entry.entries.media[0].type}
           previewImageUrl={entry.entries.media[0].preview_image_url}
-          className="ml-2 size-20 shrink-0"
+          className="center ml-2 flex size-20 max-w-20 shrink-0 rounded"
+          mediaContainerClassName={"w-auto h-auto rounded"}
           loading="lazy"
           proxy={{
             width: 160,
             height: 160,
           }}
+          height={entry.entries.media[0].height}
+          width={entry.entries.media[0].width}
+          blurhash={entry.entries.media[0].blurhash}
         />
       )}
     </div>

@@ -2,7 +2,6 @@
   "ai_daily.title": "Top News - {{title}}",
   "ai_daily.tooltip.content": "Qui ci sono notizie selezionate dall'IA dalla tua timeline (<From /> - <To />) che potrebbero essere importanti per te.",
   "ai_daily.tooltip.update_schedule": "Aggiornato ogni giorno alle 8 AM e alle 8 PM.",
-  "app.app_name": "NOME_APP",
   "app.copy_logo_svg": "Copia Logo SVG",
   "app.toggle_sidebar": "Mostra/Nascondi Sidebar",
   "discover.any_url_or_keyword": "Qualsiasi URL o Parola Chiave",

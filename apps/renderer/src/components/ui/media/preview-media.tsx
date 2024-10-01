@@ -1,6 +1,8 @@
 import type { MediaModel } from "@follow/shared/hono"
 import type { FC } from "react"
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
+import { Blurhash } from "react-blurhash"
+import { useTranslation } from "react-i18next"
 import { Keyboard, Mousewheel } from "swiper/modules"
 import type { SwiperRef } from "swiper/react"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -11,64 +13,75 @@ import { tipcClient } from "~/lib/client"
 import { stopPropagation } from "~/lib/dom"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { cn } from "~/lib/utils"
+import { EntryContent } from "~/modules/entry-content"
 
 import { ActionButton, MotionButtonBase } from "../button"
 import { microReboundPreset } from "../constants/spring"
 import { useCurrentModal } from "../modal"
+import { RootPortal } from "../portal"
 import { VideoPlayer } from "./VideoPlayer"
 
 const Wrapper: Component<{
   src: string
   showActions?: boolean
-}> = ({ children, src, showActions }) => {
+  entryId?: string
+}> = ({ children, src, showActions, entryId }) => {
   const { dismiss } = useCurrentModal()
+  const { t } = useTranslation(["shortcuts", "external"])
 
   return (
-    <div className="center relative size-full p-12" onClick={dismiss}>
+    <div className="center relative size-full px-20 pb-8 pt-10" onClick={dismiss}>
       <m.div
-        className="center size-full"
+        className="center flex size-full"
         initial={{ scale: 0.94, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.94, opacity: 0 }}
         transition={microReboundPreset}
       >
-        {children}
-      </m.div>
-      <m.div
-        initial={{ opacity: 0.8 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="absolute bottom-4 right-4 flex gap-3 text-white/70 [&_button]:hover:text-white"
-        onClick={stopPropagation}
-      >
-        <button
-          onClick={dismiss}
-          className="center fixed right-6 top-6 size-8 rounded-full border border-white/20 bg-neutral-900 text-white"
-          type="button"
+        <div
+          className={cn(
+            "relative flex h-full w-auto overflow-hidden",
+            entryId ? "min-w-96 items-center justify-center rounded-l-xl bg-native" : "rounded-xl",
+          )}
         >
-          <i className="i-mgc-close-cute-re" />
-        </button>
-        {showActions && (
-          <Fragment>
-            {!!window.electron && (
-              <ActionButton
-                tooltip="Download"
-                onClick={() => {
-                  tipcClient?.download(src)
-                }}
-              >
-                <i className="i-mgc-download-2-cute-re" />
-              </ActionButton>
-            )}
-            <ActionButton
-              tooltip={COPY_MAP.OpenInBrowser()}
-              onClick={() => {
-                window.open(src)
-              }}
+          {children}
+          <RootPortal>
+            <div
+              className="fixed bottom-4 right-4 z-[99] flex gap-3 text-white/70 [&_button]:hover:text-white"
+              onClick={stopPropagation}
             >
-              <i className="i-mgc-external-link-cute-re" />
-            </ActionButton>
-          </Fragment>
+              {showActions && (
+                <Fragment>
+                  {!!window.electron && (
+                    <ActionButton
+                      tooltip={t("external:header.download")}
+                      onClick={() => {
+                        tipcClient?.download(src)
+                      }}
+                    >
+                      <i className="i-mgc-download-2-cute-re" />
+                    </ActionButton>
+                  )}
+                  <ActionButton
+                    tooltip={t(COPY_MAP.OpenInBrowser())}
+                    onClick={() => {
+                      window.open(src)
+                    }}
+                  >
+                    <i className="i-mgc-external-link-cute-re" />
+                  </ActionButton>
+                </Fragment>
+              )}
+            </div>
+          </RootPortal>
+        </div>
+        {entryId && (
+          <div
+            className="box-border flex h-full w-[400px] min-w-0 shrink-0 flex-col rounded-r-xl bg-theme-background px-2 pt-1"
+            onClick={stopPropagation}
+          >
+            <EntryContent entryId={entryId} noMedia compact />
+          </div>
         )}
       </m.div>
     </div>
@@ -81,7 +94,8 @@ export interface PreviewMediaProps extends MediaModel {
 export const PreviewMediaContent: FC<{
   media: PreviewMediaProps[]
   initialIndex?: number
-}> = ({ media, initialIndex = 0 }) => {
+  entryId?: string
+}> = ({ media, initialIndex = 0, entryId }) => {
   const [currentMedia, setCurrentMedia] = useState(media[initialIndex])
   const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex)
   const swiperRef = useRef<SwiperRef>(null)
@@ -100,29 +114,33 @@ export const PreviewMediaContent: FC<{
     const src = media[0].url
     const { type } = media[0]
     return (
-      <Wrapper src={src} showActions={type !== "video"}>
+      <Wrapper src={src} showActions={type !== "video"} entryId={entryId}>
         {type === "video" ? (
           <VideoPlayer
             src={src}
             controls
             autoPlay
             muted
-            className="size-full object-contain"
+            className={cn("h-full w-auto object-contain", entryId && "rounded-l-xl")}
             onClick={stopPropagation}
           />
         ) : (
           <FallbackableImage
             fallbackUrl={media[0].fallbackUrl}
-            className="size-full object-contain"
+            containerClassName="w-auto"
+            className="h-full w-auto object-contain"
             alt="cover"
             src={src}
+            height={media[0].height}
+            width={media[0].width}
+            blurhash={media[0].blurhash}
           />
         )}
       </Wrapper>
     )
   }
   return (
-    <Wrapper src={currentMedia.url} showActions={currentMedia.type !== "video"}>
+    <Wrapper src={currentMedia.url} showActions={currentMedia.type !== "video"} entryId={entryId}>
       <Swiper
         ref={swiperRef}
         loop
@@ -138,7 +156,7 @@ export const PreviewMediaContent: FC<{
           setCurrentSlideIndex(realIndex)
         }}
         modules={[Mousewheel, Keyboard]}
-        className="size-full"
+        className="h-full w-auto"
       >
         {showActions && (
           <div tabIndex={-1} onClick={stopPropagation}>
@@ -148,7 +166,7 @@ export const PreviewMediaContent: FC<{
               transition={{ ease: "easeInOut", duration: 0.2 }}
               onClick={() => swiperRef.current?.swiper.slidePrev()}
               type="button"
-              className="center fixed left-2 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
+              className="center absolute left-2 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
             >
               <i className="i-mingcute-arrow-left-line" />
             </m.button>
@@ -159,7 +177,7 @@ export const PreviewMediaContent: FC<{
               transition={{ ease: "easeInOut", duration: 0.2 }}
               onClick={() => swiperRef.current?.swiper.slideNext()}
               type="button"
-              className="center fixed right-2 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
+              className="center absolute right-2 top-1/2 z-[99] size-8 -translate-y-1/2 rounded-full border border-white/20 bg-neutral-900/80 text-white backdrop-blur duration-200 hover:bg-neutral-900"
             >
               <i className="i-mingcute-arrow-right-line" />
             </m.button>
@@ -168,13 +186,13 @@ export const PreviewMediaContent: FC<{
 
         {showActions && (
           <div>
-            <div className="fixed bottom-4 left-4 text-sm tabular-nums text-white/60 animate-in fade-in-0 slide-in-from-bottom-6">
+            <div className="absolute bottom-4 left-4 text-sm tabular-nums text-white/60 animate-in fade-in-0 slide-in-from-bottom-6">
               {currentSlideIndex + 1} / {media.length}
             </div>
             <div
               tabIndex={-1}
               onClick={stopPropagation}
-              className="center fixed bottom-4 left-1/2 h-6 -translate-x-1/2 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200 animate-in fade-in-0 slide-in-from-bottom-6"
+              className="center absolute bottom-4 left-1/2 z-[99] h-6 -translate-x-1/2 gap-2 rounded-full bg-neutral-700/90 px-4 duration-200 animate-in fade-in-0 slide-in-from-bottom-6"
             >
               {Array.from({ length: media.length })
                 .fill(0)
@@ -200,6 +218,8 @@ export const PreviewMediaContent: FC<{
             {med.type === "video" ? (
               <VideoPlayer
                 src={med.url}
+                autoPlay
+                muted
                 controls
                 className="size-full object-contain"
                 onClick={(e) => e.stopPropagation()}
@@ -211,6 +231,9 @@ export const PreviewMediaContent: FC<{
                 alt="cover"
                 src={med.url}
                 loading="lazy"
+                height={med.height}
+                width={med.width}
+                blurhash={med.blurhash}
               />
             )}
           </SwiperSlide>
@@ -223,9 +246,11 @@ export const PreviewMediaContent: FC<{
 const FallbackableImage: FC<
   Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> & {
     src: string
+    containerClassName?: string
     fallbackUrl?: string
+    blurhash?: string
   }
-> = ({ src, onError, fallbackUrl, ...props }) => {
+> = ({ src, onError, fallbackUrl, containerClassName, blurhash, ...props }) => {
   const [currentSrc, setCurrentSrc] = useState(() => replaceImgUrlIfNeed(src))
   const [isAllError, setIsAllError] = useState(false)
 
@@ -266,14 +291,38 @@ const FallbackableImage: FC<
   }, [currentSrc, currentState, fallbackUrl, src])
 
   return (
-    <div className="flex size-full flex-col">
+    <div className={cn("center flex size-full flex-col", containerClassName)}>
       {isLoading && !isAllError && (
+        // FIXME: optimize this if image load, the placeholder background will flash
         <div className="center absolute inset-0 size-full">
-          <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+          {blurhash ? (
+            <div style={{ aspectRatio: `${props.width} / ${props.height}` }} className="w-full">
+              <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
+            </div>
+          ) : (
+            <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+          )}
         </div>
       )}
       {!isAllError && (
-        <img src={currentSrc} onLoad={() => setIsLoading(false)} onError={handleError} {...props} />
+        <img
+          data-blurhash={blurhash}
+          src={currentSrc}
+          onLoad={() => setIsLoading(false)}
+          onError={handleError}
+          height={props.height}
+          width={props.width}
+          {...props}
+          className={cn(
+            blurhash && !isLoading ? "duration-500 ease-in-out animate-in fade-in-0" : "",
+            props.className,
+          )}
+          style={{
+            maxHeight: `min(100%, ${Number.parseInt(props.height as string)}px)`,
+            maxWidth: `min(100%, ${Number.parseInt(props.width as string)}px)`,
+            ...props.style,
+          }}
+        />
       )}
       {isAllError && (
         <div
@@ -308,7 +357,7 @@ const FallbackableImage: FC<
       )}
 
       {currentState === "fallback" && (
-        <div className="mt-4 text-center text-xs">
+        <div className="mt-4 text-center text-xs text-white/60">
           <span>
             This image is preview in low quality, because the original image is not available.
           </span>

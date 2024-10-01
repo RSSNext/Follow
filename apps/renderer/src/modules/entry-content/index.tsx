@@ -13,18 +13,14 @@ import {
   useEntryReadabilityContent,
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { useWhoami } from "~/atoms/user"
 import { m } from "~/components/common/Motion"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
-import { Button } from "~/components/ui/button"
-import { Divider } from "~/components/ui/divider"
 import { HTML } from "~/components/ui/markdown"
 import { Toc } from "~/components/ui/markdown/components/Toc"
 import { useInPeekModal } from "~/components/ui/modal/inspire/PeekModal"
 import { RootPortal } from "~/components/ui/portal"
 import { ScrollArea } from "~/components/ui/scroll-area"
-import { UserAvatar } from "~/components/user-button"
 import { isWebBuild, ROUTE_FEED_PENDING } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
@@ -41,28 +37,29 @@ import {
   WrappedElementProvider,
 } from "~/providers/wrapped-element-provider"
 import { Queries } from "~/queries"
-import { useEntry, useEntryReadHistory } from "~/store/entry"
-import { getPreferredTitle, useFeedById, useFeedHeaderTitle } from "~/store/feed"
+import { useEntry } from "~/store/entry"
+import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
-import { EntryTranslation } from "../entry-column/translation"
-import { useTipModal } from "../wallet/hooks"
 import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
 import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
+import { EntryTitle } from "./components/EntryTitle"
+import { SourceContentPanel } from "./components/SourceContentView"
+import { SupportCreator } from "./components/SupportCreator"
 import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
 import { EntryContentProvider } from "./provider"
 
-const safeUrl = (url: string, baseUrl: string) => {
-  try {
-    return new URL(url, baseUrl).href
-  } catch {
-    return url
-  }
-}
-
-export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
+export const EntryContent = ({
+  entryId,
+  noMedia,
+  compact,
+}: {
+  entryId: ActiveEntryId
+  noMedia?: boolean
+  compact?: boolean
+}) => {
   const title = useFeedHeaderTitle()
   const { feedId, view } = useRouteParams()
 
@@ -82,12 +79,15 @@ export const EntryContent = ({ entryId }: { entryId: ActiveEntryId }) => {
     )
   }
 
-  return <EntryContentRender entryId={entryId} />
+  return <EntryContentRender entryId={entryId} noMedia={noMedia} compact={compact} />
 }
 
-export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, className }) => {
+export const EntryContentRender: Component<{
+  entryId: string
+  noMedia?: boolean
+  compact?: boolean
+}> = ({ entryId, noMedia, className, compact }) => {
   const { t } = useTranslation()
-  const user = useWhoami()
 
   const { error, data, isPending } = useAuthQuery(Queries.entries.byId(entryId), {
     staleTime: 300_000,
@@ -97,27 +97,7 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
   useTitle(entry?.entries.title)
 
   const feed = useFeedById(entry?.feedId) as FeedModel
-
-  const entryHistory = useEntryReadHistory(entryId)
-
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
-
-  const translation = useAuthQuery(
-    Queries.ai.translation({
-      entry: entry!,
-      language: entry?.settings?.translation,
-      extraFields: ["title"],
-    }),
-    {
-      enabled: !!entry?.settings?.translation,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      meta: {
-        persist: true,
-      },
-    },
-  )
-
   const summary = useAuthQuery(
     Queries.ai.summary({
       entryId,
@@ -165,22 +145,21 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
         : undefined,
     [readerFontFamily],
   )
-
-  const populatedFullHref = useMemo(() => {
-    const href = entry?.entries.url
-    if (!href) return "#"
-
-    if (href.startsWith("http")) return href
-    const feedSiteUrl = feed?.siteUrl
-    if (href.startsWith("/") && feedSiteUrl) return safeUrl(href, feedSiteUrl)
-    return href
-  }, [entry?.entries.url, feed?.siteUrl])
-
-  const openTipModal = useTipModal({
-    userId: feed?.ownerUserId ?? undefined,
-    feedId: entry?.feedId,
-    entryId,
-  })
+  const mediaInfo = useMemo(
+    () =>
+      Object.fromEntries(
+        (entry?.entries.media ?? data?.entries.media)
+          ?.filter((m) => m.type === "photo")
+          .map((cur) => [
+            cur.url,
+            {
+              width: cur.width,
+              height: cur.height,
+            },
+          ]) ?? [],
+      ),
+    [entry?.entries.media, data?.entries.media],
+  )
 
   if (!entry) return null
 
@@ -197,151 +176,94 @@ export const EntryContentRender: Component<{ entryId: string }> = ({ entryId, cl
         entryId={entry.entries.id}
         view={0}
         className="h-[55px] shrink-0 px-3 @container"
+        compact={compact}
       />
 
-      <ScrollArea.ScrollArea
-        mask={false}
-        rootClassName={cn("h-0 min-w-0 grow overflow-y-auto @container", className)}
-        scrollbarClassName="mr-[1.5px]"
-        viewportClassName="p-5"
-        ref={scrollerRef}
-      >
-        <div
-          style={stableRenderStyle}
-          className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
-          key={entry.entries.id}
+      <div className="relative flex size-full flex-col overflow-hidden">
+        <ScrollArea.ScrollArea
+          mask={false}
+          rootClassName={cn("h-0 min-w-0 grow overflow-y-auto @container", className)}
+          scrollbarClassName="mr-[1.5px]"
+          viewportClassName="p-5"
+          ref={scrollerRef}
         >
-          <article
-            data-testid="entry-render"
-            onContextMenu={stopPropagation}
-            className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
+          <div
+            style={stableRenderStyle}
+            className="duration-200 ease-in-out animate-in fade-in slide-in-from-bottom-24 f-motion-reduce:fade-in-0 f-motion-reduce:slide-in-from-bottom-0"
+            key={entry.entries.id}
           >
-            <a
-              href={populatedFullHref || void 0}
-              target="_blank"
-              className="-mx-6 block cursor-button rounded-lg p-6 transition-colors hover:bg-theme-item-hover focus-visible:bg-theme-item-hover focus-visible:!outline-none @sm:-mx-3 @sm:p-3"
-              rel="noreferrer"
+            <article
+              data-testid="entry-render"
+              onContextMenu={stopPropagation}
+              className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
             >
-              <div className="select-text break-words text-3xl font-bold">
-                <EntryTranslation source={entry.entries.title} target={translation.data?.title} />
-              </div>
-              <div className="mt-2 text-[13px] font-medium text-zinc-500">
-                {getPreferredTitle(feed)}
-              </div>
-              <div className="flex items-center gap-2 text-[13px] text-zinc-500">
-                {entry.entries.publishedAt && new Date(entry.entries.publishedAt).toLocaleString()}
+              <EntryTitle entryId={entryId} compact={compact} />
 
-                <div className="flex items-center gap-1">
-                  <i className="i-mgc-eye-2-cute-re" />
-                  <span>
-                    {(
-                      (entryHistory?.readCount ?? 0) +
-                      (entryHistory?.userIds?.every((id) => id !== user?.id) ? 1 : 0)
-                    ) // if no me, +1
-                      .toLocaleString()}
-                  </span>
-                </div>
-              </div>
-            </a>
-
-            <WrappedElementProvider boundingDetection>
-              <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem]">
-                <TitleMetaHandler entryId={entry.entries.id} />
-                {(summary.isLoading || summary.data) && (
-                  <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
-                    <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
-                      <i className="i-mgc-magic-2-cute-re align-middle" />
-                      <span>{t("entry_content.ai_summary")}</span>
+              <WrappedElementProvider boundingDetection>
+                <div className="mx-auto mb-32 mt-8 max-w-full cursor-auto select-text break-all text-[0.94rem]">
+                  <TitleMetaHandler entryId={entry.entries.id} />
+                  {(summary.isLoading || summary.data) && (
+                    <div className="my-8 space-y-1 rounded-lg border px-4 py-3">
+                      <div className="flex items-center gap-2 font-medium text-zinc-800 dark:text-neutral-400">
+                        <i className="i-mgc-magic-2-cute-re align-middle" />
+                        <span>{t("entry_content.ai_summary")}</span>
+                      </div>
+                      <AutoResizeHeight spring className="text-sm leading-relaxed">
+                        {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
+                      </AutoResizeHeight>
                     </div>
-                    <AutoResizeHeight spring className="text-sm leading-relaxed">
-                      {summary.isLoading ? SummaryLoadingSkeleton : summary.data}
-                    </AutoResizeHeight>
-                  </div>
-                )}
-                <ErrorBoundary fallback={RenderError}>
-                  {!isInReadabilityMode ? (
-                    <ShadowDOM>
-                      <HTML
-                        accessory={contentAccessories}
-                        as="article"
-                        className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em]"
-                        style={stableRenderStyle}
-                        renderInlineStyle={readerRenderInlineStyle}
-                      >
-                        {content}
-                      </HTML>
-                    </ShadowDOM>
-                  ) : (
-                    <ReadabilityContent entryId={entryId} />
                   )}
-                </ErrorBoundary>
-              </div>
-            </WrappedElementProvider>
+                  <ErrorBoundary fallback={RenderError}>
+                    {!isInReadabilityMode ? (
+                      <ShadowDOM>
+                        <HTML
+                          mediaInfo={mediaInfo}
+                          noMedia={noMedia}
+                          accessory={contentAccessories}
+                          as="article"
+                          className="prose !max-w-full dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
+                          style={stableRenderStyle}
+                          renderInlineStyle={readerRenderInlineStyle}
+                        >
+                          {content}
+                        </HTML>
+                      </ShadowDOM>
+                    ) : (
+                      <ReadabilityContent entryId={entryId} />
+                    )}
+                  </ErrorBoundary>
+                </div>
+              </WrappedElementProvider>
 
-            {entry.settings?.readability && (
-              <ReadabilityAutoToggle id={entry.entries.id} url={entry.entries.url ?? ""} />
-            )}
+              {entry.settings?.readability && (
+                <ReadabilityAutoToggleEffect id={entry.entries.id} url={entry.entries.url ?? ""} />
+              )}
 
-            {!content && (
-              <div className="center mt-16 min-w-0">
-                {isPending ? (
-                  <EntryContentLoading icon={feed?.siteUrl!} />
-                ) : error ? (
-                  <div className="center flex min-w-0 flex-col gap-2">
-                    <i className="i-mgc-close-cute-re text-3xl text-red-500" />
-                    <span className="font-sans text-sm">Network Error</span>
+              {!content && (
+                <div className="center mt-16 min-w-0">
+                  {isPending ? (
+                    <EntryContentLoading icon={feed?.siteUrl!} />
+                  ) : error ? (
+                    <div className="center flex min-w-0 flex-col gap-2">
+                      <i className="i-mgc-close-cute-re text-3xl text-red-500" />
+                      <span className="font-sans text-sm">Network Error</span>
 
-                    <pre className="mt-6 w-full overflow-auto whitespace-pre-wrap break-all">
-                      {error.message}
-                    </pre>
-                  </div>
-                ) : (
-                  <NoContent id={entry.entries.id} url={entry.entries.url ?? ""} />
-                )}
-              </div>
-            )}
-
-            {feed?.ownerUserId && (
-              <>
-                <Divider />
-
-                <div className="my-16 flex flex-col items-center gap-8">
-                  <UserAvatar
-                    className="w-40 flex-col gap-3 p-0"
-                    avatarClassName="size-12"
-                    userId={feed.ownerUserId}
-                    enableModal
-                  />
-                  <Button className="text-base" onClick={() => openTipModal()}>
-                    <i className="i-mgc-power-outline mr-1.5 text-lg" />
-                    {t("entry_content.support_creator")}
-                  </Button>
-                  {!!feed.tipUsers?.length && (
-                    <>
-                      <div className="text-sm text-zinc-500">
-                        {t("entry_content.support_amount", { amount: feed.tipUsers.length })}
-                      </div>
-                      <div className="flex w-fit max-w-80 flex-wrap gap-4">
-                        {feed.tipUsers?.map((user) => (
-                          <div key={user.id} className="size-8">
-                            <UserAvatar
-                              className="h-auto p-0"
-                              avatarClassName="size-8"
-                              userId={user?.id}
-                              enableModal={true}
-                              hideName={true}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </>
+                      <pre className="mt-6 w-full overflow-auto whitespace-pre-wrap break-all">
+                        {error.message}
+                      </pre>
+                    </div>
+                  ) : (
+                    <NoContent id={entry.entries.id} url={entry.entries.url ?? ""} />
                   )}
                 </div>
-              </>
-            )}
-          </article>
-        </div>
-      </ScrollArea.ScrollArea>
+              )}
+
+              {feed?.ownerUserId && <SupportCreator entryId={entryId} />}
+            </article>
+          </div>
+        </ScrollArea.ScrollArea>
+        <SourceContentPanel src={entry.entries.url} />
+      </div>
     </EntryContentProvider>
   )
 }
@@ -401,7 +323,10 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
         </div>
       )}
 
-      <HTML as="article" className="prose dark:prose-invert prose-h1:text-[1.6em]">
+      <HTML
+        as="article"
+        className="prose dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
+      >
         {result?.content ?? ""}
       </HTML>
     </div>
@@ -429,13 +354,13 @@ const NoContent: FC<{
             <span>{t("entry_content.web_app_notice")}</span>
           </div>
         )}
-        {url && window.electron && <ReadabilityAutoToggle url={url} id={id} />}
+        {url && window.electron && <ReadabilityAutoToggleEffect url={url} id={id} />}
       </div>
     </div>
   )
 }
 
-const ReadabilityAutoToggle = ({ url, id }: { url: string; id: string }) => {
+const ReadabilityAutoToggleEffect = ({ url, id }: { url: string; id: string }) => {
   const toggle = useEntryReadabilityToggle({
     id,
     url,

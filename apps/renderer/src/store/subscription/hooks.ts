@@ -6,6 +6,10 @@ import { useSubscriptionStore } from "../subscription"
 type FeedId = string
 export const useFeedIdByView = (view: FeedViewType) =>
   useSubscriptionStore((state) => state.feedIdByView[view] || [])
+
+export const useCategoryOpenStateByView = (view: FeedViewType) =>
+  useSubscriptionStore((state) => state.categoryOpenStateByView[view])
+
 export const useSubscriptionByView = (view: FeedViewType) =>
   useSubscriptionStore((state) => state.feedIdByView[view].map((id) => state.data[id]))
 

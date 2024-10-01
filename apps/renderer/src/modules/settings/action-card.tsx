@@ -27,35 +27,7 @@ import {
 import { ViewSelectContent } from "~/components/view-select-content"
 import { stopPropagation } from "~/lib/dom"
 import { cn } from "~/lib/utils"
-import type {
-  ActionEntryField,
-  ActionFeedField,
-  ActionOperation,
-  SupportedLanguages,
-} from "~/models"
-
-type ActionsInput = {
-  name: string
-  condition: {
-    field?: ActionFeedField
-    operator?: ActionOperation
-    value?: string
-  }[]
-  result: {
-    translation?: string
-    summary?: boolean
-    readability?: boolean
-    rewriteRules?: {
-      from: string
-      to: string
-    }[]
-    blockRules?: {
-      field?: ActionEntryField
-      operator?: ActionOperation
-      value?: string | number
-    }[]
-  }
-}[]
+import type { ActionFeedField, ActionOperation, ActionsInput, SupportedLanguages } from "~/models"
 
 const TransitionOptions: {
   name: string
@@ -614,6 +586,56 @@ export function ActionCard({
                       <AddTableRow
                         onClick={() => {
                           data.result.blockRules!.push({})
+                          onChange(data)
+                        }}
+                      />
+                    </>
+                  )}
+                </SettingCollapsible>
+                <Divider />
+
+                <SettingCollapsible
+                  title={t("actions.action_card.webhooks")}
+                  open={!!data.result.webhooks}
+                  onOpenChange={(open) => {
+                    if (open) {
+                      data.result.webhooks = [""]
+                    } else {
+                      delete data.result.webhooks
+                    }
+                    onChange(data)
+                  }}
+                >
+                  {data.result.webhooks && data.result.webhooks.length > 0 && (
+                    <>
+                      {data.result.webhooks.map((webhook, rewriteIdx) => {
+                        return (
+                          <div key={rewriteIdx} className="flex items-center gap-2">
+                            <DeleteTableCell
+                              onClick={() => {
+                                if (data.result.webhooks?.length === 1) {
+                                  delete data.result.webhooks
+                                } else {
+                                  data.result.webhooks?.splice(rewriteIdx, 1)
+                                }
+                                onChange(data)
+                              }}
+                            />
+                            <Input
+                              value={webhook}
+                              className="h-8"
+                              placeholder="https://"
+                              onChange={(e) => {
+                                data.result.webhooks![rewriteIdx] = e.target.value
+                                onChange(data)
+                              }}
+                            />
+                          </div>
+                        )
+                      })}
+                      <AddTableRow
+                        onClick={() => {
+                          data.result.webhooks!.push("")
                           onChange(data)
                         }}
                       />

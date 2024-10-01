@@ -58,7 +58,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
     >
       <FeedIcon fallback feed={feed} entry={entry.entries} size={32} className="mt-1" />
       <div ref={ref} className="ml-2 min-w-0 flex-1">
-        <div className={cn("-mt-0.5 flex-1 text-sm", content && "line-clamp-[10]")}>
+        <div className="-mt-0.5 flex-1 text-sm">
           <div className="w-[calc(100%-10rem)] space-x-1 leading-6">
             <span className="inline-flex items-center gap-1 text-base font-semibold">
               <span>{entry.entries.author || feed.title}</span>
@@ -137,7 +137,8 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
                   src={media.url}
                   type={media.type}
                   previewImageUrl={media.preview_image_url}
-                  className="size-28 shrink-0 data-[state=loading]:!bg-zinc-200 dark:data-[state=loading]:!bg-neutral-700"
+                  blurhash={media.blurhash}
+                  className="size-28 shrink-0 data-[state=loading]:!bg-theme-placeholder-image"
                   loading="lazy"
                   proxy={proxySize}
                   onClick={(e) => {
@@ -146,6 +147,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
                       mediaList.map((m) => ({
                         url: m.url,
                         type: m.type,
+                        blurhash: m.blurhash,
                         fallbackUrl:
                           m.preview_image_url ?? getImageProxyUrl({ url: m.url, ...proxySize }),
                       })),

@@ -2,7 +2,6 @@
   "ai_daily.title": "أهم الأخبار - {{title}}",
   "ai_daily.tooltip.content": "إليك الأخبار التي تم اختيارها بواسطة الذكاء الاصطناعي من خطك الزمني (<From /> - <To />) والتي قد تكون مهمة بالنسبة لك.",
   "ai_daily.tooltip.update_schedule": "يتم التحديث يوميًا في الساعة 8 صباحًا و8 مساءً.",
-  "app.app_name": "APP_NAME",
   "app.copy_logo_svg": "نسخ شعار SVG",
   "app.toggle_sidebar": "تبديل الشريط الجانبي",
   "discover.any_url_or_keyword": "أي عنوان URL أو كلمة مفتاحية",

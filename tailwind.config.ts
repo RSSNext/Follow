@@ -23,6 +23,9 @@ export default resolveConfig({
     },
 
     extend: {
+      spacing: {
+        "safe-inset-top": "var(--fo-window-padding-top, 0)",
+      },
       fontFamily: {
         theme: "var(--fo-font-family)",
         default: "SN pro, sans-serif, system-ui",
@@ -105,6 +108,11 @@ export default resolveConfig({
           button: {
             hover: "var(--fo-button-hover)",
           },
+
+          placeholder: {
+            text: "var(--fo-text-placeholder)",
+            image: "var(--fo-image-placeholder)",
+          },
         },
       },
       borderRadius: {
@@ -139,6 +147,31 @@ export default resolveConfig({
       addVariant("f-motion-reduce", '[data-motion-reduce="true"] &')
       addVariant("group-motion-reduce", ':merge(.group)[data-motion-reduce="true"] &')
       addVariant("peer-motion-reduce", ':merge(.peer)[data-motion-reduce="true"] ~ &')
+    }),
+    plugin(({ addUtilities, matchUtilities, theme }) => {
+      addUtilities({
+        ".safe-inset-top": {
+          top: "var(--fo-window-padding-top, 0)",
+        },
+      })
+
+      const safeInsetTopVariants = {}
+      for (let i = 1; i <= 16; i++) {
+        safeInsetTopVariants[`.safe-inset-top-${i}`] = {
+          top: `calc(var(--fo-window-padding-top, 0px) + ${theme(`spacing.${i}`)})`,
+        }
+      }
+      addUtilities(safeInsetTopVariants)
+
+      // Add arbitrary value support
+      matchUtilities(
+        {
+          "safe-inset-top": (value) => ({
+            top: `calc(var(--fo-window-padding-top, 0px) + ${value})`,
+          }),
+        },
+        { values: theme("spacing") },
+      )
     }),
   ],
 })

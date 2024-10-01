@@ -26,7 +26,7 @@ import { useI18n, useInputComposition } from "~/hooks/common"
 import type { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
 import { getFeedById } from "~/store/feed"
-import { searchActions, useSearchStore } from "~/store/search"
+import { searchActions, useSearchStore, useSearchType } from "~/store/search"
 import { SearchType } from "~/store/search/constants"
 import type { SearchInstance } from "~/store/search/types"
 import { getSubscriptionByFeedId } from "~/store/subscription"
@@ -286,7 +286,7 @@ const SearchResultCount: FC<{
   const t = useI18n()
   const searchInstance = React.useContext(SearchCmdKContext)
   const hasKeyword = useSearchStore((s) => !!s.keyword)
-  const searchType = useSearchStore((s) => s.searchType)
+  const searchType = useSearchType()
 
   const recordCountPromise = useMemo(async () => {
     let count = 0
@@ -334,7 +334,7 @@ const SearchResultCount: FC<{
 }
 const SearchOptions: Component = memo(({ children }) => {
   const { t } = useTranslation()
-  const searchType = useSearchStore((s) => s.searchType)
+  const searchType = useSearchType()
 
   const searchInstance = React.useContext(SearchCmdKContext)
 

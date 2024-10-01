@@ -63,7 +63,10 @@ export const useFeedHeaderTitle = () => {
   }
 }
 
-export const useAddFeedToFeedList = (options?: { onSuccess: () => void; onError: () => void }) => {
+export const useAddFeedToFeedList = (options?: {
+  onSuccess?: () => void
+  onError?: () => void
+}) => {
   const { t } = useTranslation("settings")
   return useMutation({
     mutationFn: async (

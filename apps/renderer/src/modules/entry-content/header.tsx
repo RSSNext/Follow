@@ -31,10 +31,12 @@ function EntryHeaderImpl({
   view,
   entryId,
   className,
+  compact,
 }: {
   view: number
   entryId: string
   className?: string
+  compact?: boolean
 }) {
   const entry = useEntry(entryId)
 
@@ -90,7 +92,7 @@ function EntryHeaderImpl({
         </div>
 
         <div className="relative flex shrink-0 items-center justify-end gap-3">
-          <ElectronAdditionActions view={view} entry={entry} key={entry.entries.id} />
+          {!compact && <ElectronAdditionActions view={view} entry={entry} key={entry.entries.id} />}
 
           {items
             .filter((item) => !item.hide)
