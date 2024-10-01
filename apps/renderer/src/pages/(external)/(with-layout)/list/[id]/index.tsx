@@ -11,47 +11,46 @@ import { LoadingCircle } from "~/components/ui/loading"
 import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
 import { useTitle } from "~/hooks/common"
 import type { ListModel } from "~/models"
-import { useFeed } from "~/queries/feed"
+import { useList } from "~/queries/lists"
 import { useFeedById } from "~/store/feed/hooks"
 
 export function Component() {
   const { id } = useParams()
 
-  const feed = useFeed({
-    id,
-    isList: true,
+  const list = useList({
+    id: id!,
   })
-  const listData = feed.data?.feed as ListModel
-  const isSubscribed = !!feed.data?.subscription
+  const listData = list.data?.list as ListModel
+  const isSubscribed = !!list.data?.subscription
 
   const { t } = useTranslation("external")
-  useTitle(feed.data?.feed.title)
+  useTitle(list.data?.list.title)
   const presentFeedFormModal = usePresentFeedFormModal()
   return (
     <>
-      {feed.isLoading ? (
+      {list.isLoading ? (
         <LoadingCircle size="large" className="center fixed inset-0" />
       ) : (
-        feed.data?.feed && (
+        list.data?.list && (
           <div className="mx-auto mt-12 flex max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
             <FeedIcon
               fallback
-              feed={feed.data.feed}
+              feed={list.data.list}
               className="mask-squircle mask shrink-0"
               size={64}
             />
             <div className="flex flex-col items-center">
               <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
-                <h1>{feed.data.feed.title}</h1>
-                <FeedCertification feed={feed.data.feed} />
+                <h1>{list.data.list.title}</h1>
+                <FeedCertification feed={list.data.list} />
               </div>
-              <div className="mb-8 text-sm text-zinc-500">{feed.data.feed.description}</div>
+              <div className="mb-8 text-sm text-zinc-500">{list.data.list.description}</div>
             </div>
             <div className="mb-4 text-sm">
               {t("feed.followsAndFeeds", {
-                subscriptionCount: feed.data.subscriptionCount,
-                subscriptionNoun: t("feed.follower", { count: feed.data.subscriptionCount }),
-                feedsCount: "feedCount" in feed.data ? feed.data.feedCount : 0,
+                subscriptionCount: list.data?.subscriptionCount,
+                subscriptionNoun: t("feed.follower", { count: list.data?.subscriptionCount }),
+                feedsCount: "feedCount" in listData ? listData.feedCount : 0,
                 feedsNoun: t("feed.feeds", { count: listData?.feedIds?.length }),
                 appName: APP_NAME,
               })}
@@ -82,7 +81,7 @@ export function Component() {
               {listData.feedIds
                 ?.slice(0, 5)
                 .map((feedId) => <FeedRow feedId={feedId} key={feedId} />)}
-              {"feedCount" in feed.data && (
+              {"feedCount" in list.data && (
                 <div
                   onClick={() => {
                     presentFeedFormModal({
@@ -92,7 +91,7 @@ export function Component() {
                   className="text-sm text-zinc-500"
                 >
                   {t("feed.follow_to_view_all", {
-                    count: feed.data.feedCount,
+                    count: list.data.feedCount || 0,
                   })}
                 </div>
               )}

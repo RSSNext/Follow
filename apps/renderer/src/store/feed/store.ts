@@ -5,13 +5,7 @@ import { nanoid } from "nanoid"
 import { whoami } from "~/atoms/user"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type {
-  FeedModel,
-  FeedOrListModel,
-  FeedOrListRespModel,
-  ListModel,
-  UserModel,
-} from "~/models"
+import type { FeedModel, FeedOrListModel, FeedOrListRespModel, UserModel } from "~/models"
 import { FeedService } from "~/services"
 
 import { getSubscriptionByFeedId } from "../subscription"
@@ -30,16 +24,9 @@ class FeedActions {
     set({ feeds: {} })
   }
 
-  upsertMany(feeds: FeedOrListRespModel[]) {
+  upsertMany(feeds: FeedModel[]) {
     runTransactionInScope(() => {
-      FeedService.upsertMany(
-        feeds.map((feed) => {
-          if (feed.type === "list") {
-            return omit(feed, ["feeds"])
-          }
-          return feed
-        }),
-      )
+      FeedService.upsertMany(feeds)
     })
     set((state) =>
       produce(state, (state) => {
@@ -72,9 +59,6 @@ class FeedActions {
             // Store temp feed in memory
             const nonce = feed["nonce"] || nanoid(8)
             state.feeds[nonce] = { ...feed, id: nonce }
-          }
-          if ("feeds" in feed && feed.feeds) {
-            this.upsertMany(feed.feeds)
           }
         }
       }),
@@ -114,50 +98,20 @@ class FeedActions {
     })
   }
 
-  async addFeedToFeedList(listId: string, feed: FeedModel) {
-    const list = get().feeds[listId] as ListModel
-    if (!list) return
-    feedActions.upsertMany([feed])
-
-    this.patch(listId, {
-      feedIds: [feed.id, ...list.feedIds],
-    })
-    feedActions.upsertMany([get().feeds[listId]])
-  }
-
-  async removeFeedFromFeedList(listId: string, feedId: string) {
-    const list = get().feeds[listId] as ListModel
-    if (!list) return
-
-    this.patch(listId, {
-      feedIds: list.feedIds.filter((id) => id !== feedId),
-    })
-    feedActions.upsertMany([get().feeds[listId]])
-  }
-
   // API Fetcher
   //
 
-  async fetchFeedById({ id, url, isList }: FeedQueryParams) {
-    const res = isList
-      ? await apiClient.lists.$get({
-          query: {
-            listId: id!,
-          },
-        })
-      : await apiClient.feeds.$get({
-          query: {
-            id,
-            url,
-          },
-        })
+  async fetchFeedById({ id, url }: FeedQueryParams) {
+    const res = await apiClient.feeds.$get({
+      query: {
+        id,
+        url,
+      },
+    })
 
     const nonce = nanoid(8)
 
-    const finalData = {
-      ...("list" in res.data ? res.data.list : res.data.feed),
-    }
-
+    const finalData = res.data.feed
     if (!finalData.id) {
       finalData["nonce"] = nonce
     }
@@ -167,13 +121,6 @@ class FeedActions {
       ...res.data,
       feed: !finalData.id ? { ...finalData, id: nonce } : finalData,
     }
-  }
-
-  async fetchOwnedLists() {
-    const res = await apiClient.lists.list.$get()
-    this.upsertMany(res.data)
-
-    return res.data
   }
 }
 export const feedActions = new FeedActions()

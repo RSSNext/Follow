@@ -7,11 +7,12 @@ import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedViewType } from "~/lib/enum"
 import { capitalizeFirstLetter } from "~/lib/utils"
-import type { SubscriptionModel } from "~/models"
+import type { FeedModel, ListModelPoplutedFeeds, SubscriptionModel } from "~/models"
 import { SubscriptionService } from "~/services"
 
 import { entryActions } from "../entry"
 import { feedActions, getFeedById } from "../feed"
+import { listActions } from "../list/store"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 
@@ -116,8 +117,19 @@ class SubscriptionActions {
     const transformedData = morphResponseData(res.data)
 
     this.upsertMany(transformedData)
+
+    const feeds = [] as FeedModel[]
+    const lists = [] as ListModelPoplutedFeeds[]
+    for (const subscription of res.data) {
+      if ("feeds" in subscription) {
+        feeds.push(subscription.feeds)
+      } else {
+        lists.push(subscription.lists)
+      }
+    }
     this.updateCategoryOpenState(transformedData.filter((s) => s.category || s.defaultCategory))
-    feedActions.upsertMany(res.data.map((s) => ("feeds" in s ? s.feeds : s.lists)))
+    feedActions.upsertMany(feeds)
+    listActions.upsertMany(lists)
 
     return res.data
   }

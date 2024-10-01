@@ -2,10 +2,11 @@ import type { Transaction } from "dexie"
 import Dexie from "dexie"
 
 import { LOCAL_DB_NAME } from "./constants"
-import { dbSchemaV1, dbSchemaV2, dbSchemaV3, dbSchemaV4, dbSchemaV5 } from "./db_schema"
+import { dbSchemaV1, dbSchemaV2, dbSchemaV3, dbSchemaV4, dbSchemaV5, dbSchemaV6 } from "./db_schema"
 import type { DB_Cleaner } from "./schemas/cleaner"
 import type { DB_Entry, DB_EntryRelated } from "./schemas/entry"
 import type { DB_Feed, DB_FeedUnread } from "./schemas/feed"
+import type { DB_List } from "./schemas/list"
 import type { DB_Subscription } from "./schemas/subscription"
 
 export interface LocalDBSchemaMap {
@@ -15,6 +16,7 @@ export interface LocalDBSchemaMap {
   entryRelated: DB_EntryRelated
   feedUnreads: DB_FeedUnread
   cleaner: DB_Cleaner
+  lists: DB_List
 }
 
 // Define a local DB
@@ -24,6 +26,7 @@ export class BrowserDB extends Dexie {
   public subscriptions: BrowserDBTable<"subscriptions">
   public entryRelated: BrowserDBTable<"entryRelated">
   public feedUnreads: BrowserDBTable<"feedUnreads">
+  public lists: BrowserDBTable<"lists">
   public cleaner: BrowserDBTable<"cleaner">
 
   constructor() {
@@ -33,6 +36,7 @@ export class BrowserDB extends Dexie {
     this.version(3).stores(dbSchemaV3)
     this.version(4).stores(dbSchemaV4)
     this.version(5).stores(dbSchemaV5)
+    this.version(6).stores(dbSchemaV6)
 
     this.entries = this.table("entries")
     this.feeds = this.table("feeds")
@@ -40,6 +44,7 @@ export class BrowserDB extends Dexie {
     this.entryRelated = this.table("entryRelated")
     this.feedUnreads = this.table("feedUnreads")
     this.cleaner = this.table("cleaner")
+    this.lists = this.table("lists")
   }
 
   async upgradeToV2(trans: Transaction) {

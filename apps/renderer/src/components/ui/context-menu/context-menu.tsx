@@ -106,8 +106,8 @@ const ContextMenuCheckboxItem = React.forwardRef<
     {...props}
   >
     <span className="absolute left-2 flex items-center justify-center">
-      <ContextMenuPrimitive.ItemIndicator>
-        <i className="i-mgc-check-filled size-4" />
+      <ContextMenuPrimitive.ItemIndicator asChild>
+        <i className="i-mgc-check-filled size-3" />
       </ContextMenuPrimitive.ItemIndicator>
     </span>
     {children}

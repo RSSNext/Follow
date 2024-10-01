@@ -9,8 +9,9 @@ import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { apiClient } from "~/lib/api-fetch"
 import type { FeedOrListRespModel } from "~/models"
 
+import { listActions } from "../list"
 import { getSubscriptionByFeedId } from "../subscription"
-import { feedActions, useFeedStore } from "./store"
+import { useFeedStore } from "./store"
 import type { FeedQueryParams } from "./types"
 
 export const useFeedById = (feedId: Nullable<string>): FeedOrListRespModel | null =>
@@ -75,7 +76,7 @@ export const useAddFeedToFeedList = (options?: {
         json: payload,
       })
 
-      feeds.data.forEach((feed) => feedActions.addFeedToFeedList(payload.listId, feed))
+      feeds.data.forEach((feed) => listActions.addFeedToFeedList(payload.listId, feed))
     },
     onSuccess: () => {
       toast.success(t("lists.feeds.add.success"))
@@ -96,7 +97,7 @@ export const useRemoveFeedFromFeedList = (options?: {
   const { t } = useTranslation("settings")
   return useMutation({
     mutationFn: async (payload: { feedId: string; listId: string }) => {
-      feedActions.removeFeedFromFeedList(payload.listId, payload.feedId)
+      listActions.removeFeedFromFeedList(payload.listId, payload.feedId)
       await apiClient.lists.feeds.$delete({
         json: {
           listId: payload.listId,

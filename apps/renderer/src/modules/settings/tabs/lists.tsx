@@ -40,7 +40,7 @@ import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { cn, isBizId } from "~/lib/utils"
-import type { FeedModel, ListModel } from "~/models"
+import type { FeedModel } from "~/models"
 import { ViewSelectorRadioGroup } from "~/modules/shared/ViewSelectorRadioGroup"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
@@ -50,6 +50,7 @@ import {
   useFeedById,
   useRemoveFeedFromFeedList,
 } from "~/store/feed"
+import { useListById } from "~/store/list"
 import { subscriptionActions, useSubscriptionStore } from "~/store/subscription"
 
 export const SettingLists = () => {
@@ -86,7 +87,9 @@ export const SettingLists = () => {
                   <TableHead size="sm">{t.settings("lists.fee.label")}</TableHead>
                   <TableHead size="sm">{t.settings("lists.subscriptions")}</TableHead>
                   <TableHead size="sm">{t.settings("lists.earnings")}</TableHead>
-                  <TableHead size="sm">{t.common("words.actions")}</TableHead>
+                  <TableHead size="sm" className="center">
+                    {t.common("words.actions")}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="border-t-[12px] border-transparent [&_td]:!px-3">
@@ -107,9 +110,18 @@ export const SettingLists = () => {
                       </a>
                     </TableCell>
                     <TableCell size="sm">
-                      <span className={cn("inline-flex items-center", views[row.view].className)}>
-                        {views[row.view].icon}
-                      </span>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span
+                            className={cn("inline-flex items-center", views[row.view].className)}
+                          >
+                            {views[row.view].icon}
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipPortal>
+                          <TooltipContent>{t(views[row.view].name)}</TooltipContent>
+                        </TooltipPortal>
+                      </Tooltip>
                     </TableCell>
                     <TableCell size="sm">
                       <div className="flex items-center gap-1">
@@ -121,7 +133,7 @@ export const SettingLists = () => {
                     <TableCell size="sm">
                       <Balance>{BigInt(row.purchaseAmount || 0n)}</Balance>
                     </TableCell>
-                    <TableCell size="sm">
+                    <TableCell size="sm" className="center">
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button
@@ -189,7 +201,7 @@ const formSchema = z.object({
 const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: string }) => {
   const { t } = useTranslation(["settings", "common"])
 
-  const list = useFeedById(id) as ListModel
+  const list = useListById(id)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -226,6 +238,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
       Queries.lists.list().invalidate()
       dismiss()
 
+      if (!list) return
       if (id) subscriptionActions.changeListView(id, views[list.view].view, views[values.view].view)
     },
     async onError() {
@@ -341,7 +354,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
 }
 
 export const ListFeedsModalContent = ({ id }: { id: string }) => {
-  const list = useFeedById(id) as ListModel
+  const list = useListById(id)
   const { t } = useTranslation("settings")
 
   const [feedSearchFor, setFeedSearchFor] = useState("")
@@ -368,14 +381,15 @@ export const ListFeedsModalContent = ({ id }: { id: string }) => {
 
   const autocompleteSuggestions: Suggestion[] = useMemo(() => {
     return allFeeds
-      .filter((feed) => !list.feedIds?.includes(feed.id))
+      .filter((feed) => !list?.feedIds?.includes(feed.id))
       .map((feed) => ({
         name: feed.title,
         value: feed.id,
       }))
-  }, [allFeeds, list.feedIds])
+  }, [allFeeds, list?.feedIds])
 
   const selectedFeedIdRef = useRef<string | null>()
+  if (!list) return null
   return (
     <>
       <div className="flex items-center gap-2">

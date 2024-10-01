@@ -14,6 +14,7 @@ export type NativeMenuItem =
       shortcut?: string
       disabled?: boolean
       submenu?: NativeMenuItem[]
+      checked?: boolean
     }
   | { type: "separator"; disabled?: boolean }
 
