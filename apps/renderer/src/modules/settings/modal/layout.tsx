@@ -9,7 +9,7 @@ import { Logo } from "~/components/icons/logo"
 import { LetsIconsResizeDownRightLight } from "~/components/icons/resize"
 import { useResizeableModal } from "~/components/ui/modal"
 import { preventDefault } from "~/lib/dom"
-import { cn } from "~/lib/utils"
+import { cn, getOS } from "~/lib/utils"
 
 import { settings } from "../constants"
 import { SettingSyncIndicator } from "../helper/SyncIndicator"
@@ -76,10 +76,13 @@ export function SettingModalLayout(
         dragElastic={false}
         dragConstraints={edgeElementRef}
         onMeasureDragConstraints={(constraints) => {
-          return {
-            ...constraints,
-            top: constraints.top + 32,
+          if (getOS() === "Windows") {
+            return {
+              ...constraints,
+              top: constraints.top + 32,
+            }
           }
+          return constraints
         }}
         whileDrag={{
           cursor: "grabbing",

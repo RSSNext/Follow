@@ -26,7 +26,7 @@ import { ErrorComponentType } from "~/components/errors/enum"
 import { isElectronBuild } from "~/constants"
 import { useSwitchHotKeyScope } from "~/hooks/common"
 import { nextFrame, stopPropagation } from "~/lib/dom"
-import { cn } from "~/lib/utils"
+import { cn, getOS } from "~/lib/utils"
 
 import { Divider } from "../../divider"
 import { RootPortalProvider } from "../../portal/provider"
@@ -341,10 +341,13 @@ export const ModalInternal = memo(
                   dragMomentum={false}
                   dragConstraints={edgeElementRef}
                   onMeasureDragConstraints={(constraints) => {
-                    return {
-                      ...constraints,
-                      top: constraints.top + 32,
+                    if (getOS() === "Windows") {
+                      return {
+                        ...constraints,
+                        top: constraints.top + 32,
+                      }
                     }
+                    return constraints
                   }}
                   whileDrag={{
                     cursor: "grabbing",
