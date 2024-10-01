@@ -8,6 +8,7 @@ import { FeedCertification } from "~/components/feed-certification"
 import { FeedIcon } from "~/components/feed-icon"
 import { OouiUserAnonymous } from "~/components/icons/OouiUserAnonymous"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
+import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useFeedActions, useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
@@ -218,7 +219,9 @@ const ListItemImpl: Component<{
     >
       <div className={"flex min-w-0 items-center"}>
         <FeedIcon fallback feed={list} size={28} />
-        <div className="truncate">{list.title}</div>
+        <EllipsisHorizontalTextWithTooltip className="truncate">
+          {list.title}
+        </EllipsisHorizontalTextWithTooltip>
 
         {subscription.isPrivate && (
           <Tooltip delayDuration={300}>
