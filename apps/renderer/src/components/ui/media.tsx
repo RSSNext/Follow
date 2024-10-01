@@ -1,7 +1,7 @@
 import { useForceUpdate } from "framer-motion"
 import type { FC, ImgHTMLAttributes, VideoHTMLAttributes } from "react"
 import { createContext, memo, useContext, useMemo, useState } from "react"
-import { Blurhash } from "react-blurhash"
+import { Blurhash, BlurhashCanvas } from "react-blurhash"
 import { useEventCallback } from "usehooks-ts"
 
 import { nextFrame } from "~/lib/dom"
@@ -134,8 +134,9 @@ const MediaImpl: FC<MediaProps> = ({
             onError={errorHandle}
             className={cn(
               "size-full object-contain",
-              "bg-gray-200 duration-200 dark:bg-neutral-800",
+              // "bg-gray-200 dark:bg-neutral-800",
               popper && "cursor-zoom-in",
+              "duration-200",
               mediaLoadState === "loaded" ? "opacity-100" : "opacity-0",
               "!my-0",
               mediaContainerClassName,
@@ -196,11 +197,25 @@ const MediaImpl: FC<MediaProps> = ({
       )
     } else {
       return (
-        // TODO blurhash
-        <div
-          className={cn("rounded bg-zinc-100 dark:bg-neutral-900", className)}
-          style={props.style}
-        />
+        <div className={cn("relative rounded", className)} style={props.style}>
+          <span
+            className={cn(
+              "relative inline-block max-w-full bg-theme-placeholder-image",
+              mediaContainerClassName,
+            )}
+            style={{
+              aspectRatio:
+                props.height && props.width ? `${props.width} / ${props.height}` : undefined,
+              width: props.width ? `${props.width}px` : "100%",
+            }}
+          >
+            {props.blurhash && (
+              <span className="absolute inset-0 overflow-hidden rounded">
+                <BlurhashCanvas hash={props.blurhash} className="size-full" />
+              </span>
+            )}
+          </span>
+        </div>
       )
     }
   }

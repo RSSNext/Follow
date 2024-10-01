@@ -137,7 +137,8 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
                   src={media.url}
                   type={media.type}
                   previewImageUrl={media.preview_image_url}
-                  className="size-28 shrink-0 data-[state=loading]:!bg-zinc-200 dark:data-[state=loading]:!bg-neutral-700"
+                  blurhash={media.blurhash}
+                  className="size-28 shrink-0 data-[state=loading]:!bg-theme-placeholder-image"
                   loading="lazy"
                   proxy={proxySize}
                   onClick={(e) => {
@@ -146,6 +147,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
                       mediaList.map((m) => ({
                         url: m.url,
                         type: m.type,
+                        blurhash: m.blurhash,
                         fallbackUrl:
                           m.preview_image_url ?? getImageProxyUrl({ url: m.url, ...proxySize }),
                       })),

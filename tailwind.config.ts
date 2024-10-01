@@ -108,6 +108,11 @@ export default resolveConfig({
           button: {
             hover: "var(--fo-button-hover)",
           },
+
+          placeholder: {
+            text: "var(--fo-text-placeholder)",
+            image: "var(--fo-image-placeholder)",
+          },
         },
       },
       borderRadius: {

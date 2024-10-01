@@ -59,7 +59,7 @@ export const TextArea = forwardRef<
         "border-transparent",
         isFocus && "border-accent/80 ring-2",
 
-        "dark:text-zinc-200 dark:placeholder:text-zinc-500",
+        "placeholder:text-theme-placeholder-text dark:text-zinc-200",
         wrapperClassName,
       )}
       onMouseMove={handleMouseMove}
