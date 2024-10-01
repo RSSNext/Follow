@@ -31,6 +31,12 @@ class InboxActionStatic {
 
     return res.data
   }
+
+  clear() {
+    set((state) => {
+      state.inboxes = {}
+    })
+  }
 }
 
 export const inboxActions = new InboxActionStatic()

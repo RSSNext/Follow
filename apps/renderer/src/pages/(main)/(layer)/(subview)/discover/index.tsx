@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { DiscoverEmail } from "~/modules/discover/email-form"
 import { DiscoverForm } from "~/modules/discover/form"
 import { DiscoverImport } from "~/modules/discover/import"
 import { Recommendations } from "~/modules/discover/recommendations"
@@ -29,17 +30,16 @@ const tabs: {
     value: "rsshub",
   },
   {
+    name: "words.email",
+    value: "email",
+  },
+  {
     name: "words.rss3",
     value: "rss3",
   },
   {
     name: "words.user",
     value: "user",
-  },
-  {
-    name: "words.email",
-    value: "email",
-    disabled: true,
   },
   {
     name: "words.import",
@@ -87,6 +87,7 @@ export function Component() {
 const TabComponent: Record<string, React.FC<{ type: string }>> = {
   import: DiscoverImport,
   rss3: DiscoverRSS3,
+  email: DiscoverEmail,
   user: DiscoverUser,
   default: DiscoverForm,
 }
