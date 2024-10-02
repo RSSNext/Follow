@@ -75,7 +75,7 @@ export function SettingModalLayout(
           scale: 0.96,
         }}
         className={cn(
-          "relative flex overflow-hidden rounded-xl rounded-br-none border border-border",
+          "relative flex rounded-xl rounded-br-none border border-border",
           !overlay && "shadow-perfect",
         )}
         style={resizeableStyle}
