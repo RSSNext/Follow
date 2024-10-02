@@ -9,6 +9,7 @@ import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem } from "~/lib/native-menu"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
+import { ListForm } from "~/modules/discover/list-form"
 import {
   getFeedById,
   useAddFeedToFeedList,
@@ -252,7 +253,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
         click: () => {
           present({
             title: t("sidebar.feed_actions.edit_list"),
-            content: ({ dismiss }) => <FeedForm asWidget id={listId} onSuccess={dismiss} isList />,
+            content: ({ dismiss }) => <ListForm asWidget id={listId} onSuccess={dismiss} />,
           })
         },
       },
@@ -330,10 +331,10 @@ export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
         label: t("sidebar.feed_actions.edit"),
         shortcut: "E",
         click: () => {
-          // present({
-          //   title: t("sidebar.feed_actions.edit_inbox"),
-          //   content: ({ dismiss }) => <FeedForm asWidget id={inboxId} onSuccess={dismiss} isList />,
-          // })
+          present({
+            title: t("sidebar.feed_actions.edit_inbox"),
+            content: ({ dismiss }) => <ListForm asWidget id={inboxId} onSuccess={dismiss} />,
+          })
         },
       },
       {

@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { useEffect, useMemo, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
@@ -8,7 +8,6 @@ import { z } from "zod"
 
 import { FollowSummary } from "~/components/feed-summary"
 import { Logo } from "~/components/icons/logo"
-import { Autocomplete } from "~/components/ui/auto-completion"
 import { Button } from "~/components/ui/button"
 import { Card, CardHeader } from "~/components/ui/card"
 import {
@@ -24,17 +23,17 @@ import { Input } from "~/components/ui/input"
 import { LoadingCircle } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { Switch } from "~/components/ui/switch"
-import { useAuthQuery, useI18n } from "~/hooks/common"
+import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { tipcClient } from "~/lib/client"
 import { FeedViewType } from "~/lib/enum"
 import { getFetchErrorMessage, toastFetchError } from "~/lib/error-parser"
 import { getNewIssueUrl } from "~/lib/issues"
 import { cn } from "~/lib/utils"
-import type { FeedModel } from "~/models"
-import { feed as feedQuery, useFeed } from "~/queries/feed"
+import type { ListModel } from "~/models"
+import { lists as listsQuery, useList } from "~/queries/lists"
 import { subscription as subscriptionQuery } from "~/queries/subscriptions"
-import { useFeedByIdOrUrl } from "~/store/feed"
+import { useListById } from "~/store/list"
 import { useSubscriptionByFeedId } from "~/store/subscription"
 import { feedUnreadActions } from "~/store/unread"
 
@@ -49,24 +48,23 @@ const formSchema = z.object({
 
 const defaultValue = { view: FeedViewType.Articles.toString() } as z.infer<typeof formSchema>
 
-export const FeedForm: Component<{
-  url?: string
-  id?: string
+export const ListForm: Component<{
+  id: string
+
   defaultValues?: z.infer<typeof formSchema>
+
   asWidget?: boolean
+
   onSuccess?: () => void
-}> = ({ id: _id, defaultValues = defaultValue, url, asWidget, onSuccess }) => {
-  const queryParams = { id: _id, url }
+}> = ({ id: _id, defaultValues = defaultValue, asWidget, onSuccess }) => {
+  const queryParams = { id: _id }
 
-  const feedQuery = useFeed(queryParams)
+  const feedQuery = useList(queryParams)
 
-  const id = feedQuery.data?.feed.id || _id
-  const feed = useFeedByIdOrUrl({
-    id,
-    url,
-  }) as FeedModel
+  const id = feedQuery.data?.list.id || _id
+  const list = useListById(id)
 
-  const hasSub = useSubscriptionByFeedId(feed?.id || "")
+  const hasSub = useSubscriptionByFeedId(list?.id || "")
   const isSubscribed = !!feedQuery.data?.subscription || hasSub
 
   const { t } = useTranslation()
@@ -85,16 +83,15 @@ export const FeedForm: Component<{
         </div>
       )}
 
-      {feed ? (
-        <FeedInnerForm
+      {list ? (
+        <ListInnerForm
           {...{
             defaultValues,
             id,
-            url,
             asWidget,
             onSuccess,
             subscriptionData: feedQuery.data?.subscription,
-            feed,
+            list,
           }}
         />
       ) : feedQuery.isLoading ? (
@@ -127,9 +124,9 @@ export const FeedForm: Component<{
                     body: [
                       "### Info:",
                       "",
-                      "Feed URL:",
+                      "List ID:",
                       "```",
-                      url,
+                      id,
                       "```",
                       "",
                       "Error:",
@@ -137,7 +134,7 @@ export const FeedForm: Component<{
                       getFetchErrorMessage(feedQuery.error),
                       "```",
                     ].join("\n"),
-                    title: `Error in fetching feed: ${id ?? url}`,
+                    title: `Error in fetching list: ${id}`,
                   }),
                   "_blank",
                 )
@@ -151,20 +148,20 @@ export const FeedForm: Component<{
         <div className="center h-full grow flex-col">
           <i className="i-mgc-question-cute-re mb-6 size-12 text-zinc-500" />
           <p>{t("feed_form.feed_not_found")}</p>
-          <p>{url}</p>
+          <p>{id}</p>
         </div>
       )}
     </div>
   )
 }
 
-const FeedInnerForm = ({
+const ListInnerForm = ({
   defaultValues,
   id,
   asWidget,
   onSuccess,
   subscriptionData,
-  feed,
+  list,
 }: {
   defaultValues?: z.infer<typeof formSchema>
   id?: string
@@ -176,7 +173,7 @@ const FeedInnerForm = ({
     isPrivate?: boolean
     title?: string | null
   }
-  feed: FeedModel
+  list: ListModel
 }) => {
   const subscription = useSubscriptionByFeedId(id || "") || subscriptionData
   const isSubscribed = !!subscription
@@ -184,7 +181,10 @@ const FeedInnerForm = ({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      view: list.view.toString(),
+    },
   })
 
   const { setClickOutSideToDismiss, dismiss } = useCurrentModal()
@@ -205,12 +205,11 @@ const FeedInnerForm = ({
   const followMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const body = {
-        url: feed.url,
+        listId: list.id,
         view: Number.parseInt(values.view),
         category: values.category,
         isPrivate: values.isPrivate,
         title: values.title,
-        feedId: feed.id,
       }
       const $method = isSubscribed ? apiClient.subscriptions.$patch : apiClient.subscriptions.$post
 
@@ -228,10 +227,10 @@ const FeedInnerForm = ({
       tipcClient?.invalidateQuery(subscriptionQuery.byView(Number.parseInt(variables.view)).key)
       feedUnreadActions.fetchUnreadByView(Number.parseInt(variables.view))
 
-      const feedId = feed.id
-      if (feedId) {
-        feedQuery.byId({ id: feedId }).invalidate()
-        tipcClient?.invalidateQuery(feedQuery.byId({ id: feedId }).key)
+      const listId = list.id
+      if (listId) {
+        listsQuery.byId({ id: listId }).invalidate()
+        tipcClient?.invalidateQuery(listsQuery.byId({ id: listId }).key)
       }
       toast(isSubscribed ? t("feed_form.updated") : t("feed_form.followed"), {
         duration: 1000,
@@ -254,22 +253,11 @@ const FeedInnerForm = ({
 
   const t = useI18n()
 
-  const categories = useAuthQuery(subscriptionQuery.categories())
-
-  const suggestions = useMemo(
-    () =>
-      categories.data?.map((i) => ({
-        name: i,
-        value: i,
-      })) || [],
-    [categories.data],
-  )
-
   return (
     <div className="flex flex-1 flex-col gap-y-4">
       <Card>
         <CardHeader>
-          <FollowSummary feed={feed} />
+          <FollowSummary feed={list} />
         </CardHeader>
       </Card>
       <Form {...form}>
@@ -281,7 +269,11 @@ const FeedInnerForm = ({
               <FormItem>
                 <FormLabel>{t("feed_form.view")}</FormLabel>
 
-                <ViewSelectorRadioGroup {...form.register("view")} />
+                <ViewSelectorRadioGroup
+                  {...form.register("view")}
+                  disabled={true}
+                  className="opacity-60"
+                />
                 <FormMessage />
               </FormItem>
             )}
@@ -297,34 +289,6 @@ const FeedInnerForm = ({
                 </div>
                 <FormControl>
                   <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="category"
-            render={({ field }) => (
-              <FormItem>
-                <div>
-                  <FormLabel>{t("feed_form.category")}</FormLabel>
-                  <FormDescription>{t("feed_form.category_description")}</FormDescription>
-                </div>
-                <FormControl>
-                  <div>
-                    <Autocomplete
-                      maxHeight={window.innerHeight < 600 ? 120 : 240}
-                      portal
-                      suggestions={suggestions}
-                      {...(field as any)}
-                      onSuggestionSelected={(suggestion) => {
-                        if (suggestion) {
-                          field.onChange(suggestion.value)
-                        }
-                      }}
-                    />
-                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -351,6 +315,18 @@ const FeedInnerForm = ({
               </FormItem>
             )}
           />
+          {!!list.fee && !isSubscribed && (
+            <div>
+              <FormLabel className="flex items-center gap-1">
+                {t("feed_form.fee")}{" "}
+                <div className="ml-2 flex scale-[0.85] items-center gap-1">
+                  {list.fee}
+                  <i className="i-mgc-power size-4 text-accent" />
+                </div>
+              </FormLabel>
+              <FormDescription className="mt-0.5">{t("feed_form.fee_description")}</FormDescription>
+            </div>
+          )}
           <div className="flex flex-1 items-end justify-end gap-4">
             {isSubscribed && (
               <Button
@@ -365,7 +341,13 @@ const FeedInnerForm = ({
               </Button>
             )}
             <Button ref={buttonRef} type="submit" isLoading={followMutation.isPending}>
-              {isSubscribed ? t("feed_form.update") : t("feed_form.follow")}
+              {isSubscribed
+                ? t("feed_form.update")
+                : list.fee
+                  ? t("feed_form.follow_with_fee", {
+                      fee: list.fee,
+                    })
+                  : t("feed_form.follow")}
             </Button>
           </div>
         </form>

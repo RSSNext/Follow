@@ -12,8 +12,6 @@ class ServiceStatic extends BaseService<{ id: string }> {
   override async upsertMany(data: InboxModel[]) {
     CleanerService.reset(data.map((d) => ({ type: "feed", id: d.id! })))
 
-    // FIXME The backend should not pass these computed attributes, and these need to be removed here.
-    // Subsequent refactoring of the backend data flow should not nest computed attributes
     return this.table.bulkPut(data)
   }
 
