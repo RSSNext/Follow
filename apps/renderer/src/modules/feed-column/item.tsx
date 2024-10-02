@@ -221,7 +221,7 @@ const ListItemImpl: Component<{
       <div className={"flex min-w-0 items-center"}>
         <FeedIcon fallback feed={list} size={28} />
         <EllipsisHorizontalTextWithTooltip className="truncate">
-          {list.title}
+          {getPreferredTitle(list)}
         </EllipsisHorizontalTextWithTooltip>
 
         {subscription.isPrivate && (
@@ -287,11 +287,9 @@ const InboxItemImpl: Component<{
       }}
     >
       <div className={"flex min-w-0 items-center"}>
-        <div className="mr-2 flex size-[16px] items-center justify-center">
-          <i className="i-mgc-inbox-cute-fi" />
-        </div>
-        <EllipsisHorizontalTextWithTooltip className="truncate capitalize">
-          <span>{inbox.id}'s inbox</span>
+        <FeedIcon fallback feed={inbox} size={16} />
+        <EllipsisHorizontalTextWithTooltip className="truncate">
+          {getPreferredTitle(inbox)}
         </EllipsisHorizontalTextWithTooltip>
       </div>
       <UnreadNumber unread={inboxUnread} className="ml-2" />
