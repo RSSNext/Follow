@@ -196,7 +196,6 @@ const ListInnerForm = ({
   useEffect(() => {
     if (subscription) {
       form.setValue("view", `${subscription?.view}`)
-      subscription?.category && form.setValue("category", subscription.category)
       form.setValue("isPrivate", subscription?.isPrivate || false)
       form.setValue("title", subscription?.title || "")
     }

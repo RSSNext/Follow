@@ -9,6 +9,7 @@ import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem } from "~/lib/native-menu"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
+import { InboxForm } from "~/modules/discover/inbox-form"
 import { ListForm } from "~/modules/discover/list-form"
 import {
   getFeedById,
@@ -333,7 +334,7 @@ export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
         click: () => {
           present({
             title: t("sidebar.feed_actions.edit_inbox"),
-            content: ({ dismiss }) => <ListForm asWidget id={inboxId} onSuccess={dismiss} />,
+            content: ({ dismiss }) => <InboxForm asWidget id={inboxId} onSuccess={dismiss} />,
           })
         },
       },

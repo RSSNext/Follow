@@ -31,7 +31,13 @@ const formSchema = z.object({
     .regex(/^[\w-]+$/),
 })
 
-export function DiscoverEmail() {
+export function DiscoverEmail({
+  fullWidth,
+  onSuccess,
+}: {
+  fullWidth?: boolean
+  onSuccess?: () => void
+}) {
   const { t } = useTranslation()
   const inboxes = useInboxByView(FeedViewType.Articles)
   const hasInbox = inboxes.length > 0
@@ -62,12 +68,14 @@ export function DiscoverEmail() {
           handle,
         },
       })
+      onSuccess?.()
     },
   })
 
   const mutationDestroy = useMutation({
     mutationFn: async () => {
       await apiClient.inboxes.$delete()
+      onSuccess?.()
     },
   })
 
@@ -127,7 +135,7 @@ export function DiscoverEmail() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[512px] space-y-8"
+          className={cn("w-[512px] space-y-8", fullWidth && "w-full")}
           data-testid="discover-form"
         >
           <FormField
@@ -137,7 +145,7 @@ export function DiscoverEmail() {
               <FormItem>
                 <FormLabel>{t("discover.email_handle")}</FormLabel>
                 <FormControl>
-                  <div className="flex w-64 items-center gap-2">
+                  <div className={cn("flex w-64 items-center gap-2")}>
                     <Input autoFocus {...field} />
                     <span className="text-zinc-500">{`@${INBOXES_EMAIL_DOMAIN}`}</span>
                   </div>
@@ -146,7 +154,10 @@ export function DiscoverEmail() {
               </FormItem>
             )}
           />
-          <div className="center flex gap-4" data-testid="discover-form-actions">
+          <div
+            className={cn("center flex gap-4", fullWidth && "justify-end")}
+            data-testid="discover-form-actions"
+          >
             <Button
               disabled={!form.formState.isValid}
               type="submit"

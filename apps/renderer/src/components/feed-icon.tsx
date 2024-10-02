@@ -200,6 +200,10 @@ export function FeedIcon({
       ImageElement = fallbackIcon
       break
     }
+    case feed?.type === "inbox": {
+      ImageElement = <i className="i-mgc-inbox-cute-fi mr-2 shrink-0" style={sizeStyle} />
+      break
+    }
     default: {
       ImageElement = <i className="i-mgc-link-cute-re mr-2 shrink-0" style={sizeStyle} />
       break
