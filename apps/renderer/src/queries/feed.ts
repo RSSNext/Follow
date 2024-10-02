@@ -76,7 +76,7 @@ export const useRefreshFeedMutation = (feedId?: string) =>
       if (!feedId) return
       entries
         .entries({
-          id: feedId!,
+          feedId: feedId!,
         })
         .invalidateRoot()
     },
