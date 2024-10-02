@@ -7,23 +7,29 @@ import { entryHistoryActions } from "~/store/entry-history/action"
 
 export const entries = {
   entries: ({
-    id,
+    feedId,
+    inboxId,
+    listId,
     view,
     read,
     limit,
     isArchived,
   }: {
-    id?: number | string
+    feedId?: number | string
+    inboxId?: number | string
+    listId?: number | string
     view?: number
     read?: boolean
     limit?: number
     isArchived?: boolean
   }) =>
     defineQuery(
-      ["entries", id, view, read, limit],
+      ["entries", inboxId || listId || feedId, view, read, limit],
       async ({ pageParam }) =>
         entryActions.fetchEntries({
-          id,
+          feedId,
+          inboxId,
+          listId,
           view,
           read,
           limit,
@@ -31,7 +37,7 @@ export const entries = {
           isArchived,
         }),
       {
-        rootKey: ["entries", id],
+        rootKey: ["entries", inboxId || listId || feedId],
         structuralSharing: false,
       },
     ),
@@ -72,7 +78,7 @@ export const entries = {
       async () => {
         const query = {
           ...getEntriesParams({
-            id,
+            feedId: id,
             view,
           }),
           read,
@@ -110,20 +116,24 @@ export const entries = {
 }
 
 export const useEntries = ({
-  id,
+  feedId,
+  inboxId,
+  listId,
   view,
   read,
   isArchived,
   isList,
 }: {
-  id?: number | string
+  feedId?: number | string
+  inboxId?: number | string
+  listId?: number | string
   view?: number
   read?: boolean
   isArchived?: boolean
   isList?: boolean
 }) =>
-  useAuthInfiniteQuery(entries.entries({ id, view, read, isArchived }), {
-    enabled: id !== undefined,
+  useAuthInfiniteQuery(entries.entries({ feedId, inboxId, listId, view, read, isArchived }), {
+    enabled: feedId !== undefined || inboxId !== undefined || listId !== undefined,
     getNextPageParam: (lastPage) =>
       isList
         ? lastPage.data?.at(-1)?.entries.insertedAt

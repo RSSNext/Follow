@@ -270,7 +270,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
         shortcut: "Meta+G",
         disabled: getRouteParams().feedId === listId,
         click: () => {
-          navigateEntry({ feedId: listId })
+          navigateEntry({ listId })
         },
       },
       {

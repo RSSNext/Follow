@@ -59,7 +59,7 @@ export const useEntriesByView = ({
   const routeParams = useRouteParams()
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
-  const { feedId, view, isAllFeeds, isCollection } = routeParams
+  const { feedId, view, isAllFeeds, isCollection, listId, inboxId } = routeParams
   const isList = isListSubscription(feedId)
 
   const folderIds = useFolderFeedsByFeedId({
@@ -68,7 +68,9 @@ export const useEntriesByView = ({
   })
 
   const entriesOptions = {
-    id: folderIds?.join(",") || feedId,
+    feedId: folderIds?.join(",") || feedId,
+    inboxId,
+    listId,
     view,
     ...(unreadOnly === true && { read: false }),
     isArchived,

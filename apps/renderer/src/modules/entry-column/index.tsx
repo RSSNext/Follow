@@ -99,7 +99,7 @@ function EntryColumnImpl() {
     !isCollection &&
     routeFeedId !== ROUTE_FEED_PENDING &&
     entries.totalCount < 40 &&
-    feed?.type !== "list"
+    feed?.type === "feed"
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {

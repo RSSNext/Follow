@@ -68,33 +68,47 @@ class EntryActions {
   }
 
   async fetchEntries({
-    id,
+    feedId,
+    inboxId,
+    listId,
     view,
     read,
     limit,
     pageParam,
     isArchived,
   }: {
-    id?: number | string
+    feedId?: number | string
+    inboxId?: number | string
+    listId?: number | string
     view?: number
     read?: boolean
     limit?: number
     pageParam?: string
     isArchived?: boolean
   }) {
-    const data = await apiClient.entries.$post({
-      json: {
-        publishedAfter: pageParam,
-        read,
-        limit,
-        isArchived,
-        // withContent: true,
-        ...getEntriesParams({
-          id,
-          view,
-        }),
-      },
-    })
+    const data = inboxId
+      ? await apiClient.entries.inbox.$post({
+          json: {
+            publishedAfter: pageParam,
+            limit,
+            inboxId: `${inboxId}`,
+          },
+        })
+      : await apiClient.entries.$post({
+          json: {
+            publishedAfter: pageParam,
+            read,
+            limit,
+            isArchived,
+            // withContent: true,
+            ...getEntriesParams({
+              feedId,
+              inboxId,
+              listId,
+              view,
+            }),
+          },
+        })
 
     if (data.data) {
       this.upsertMany(data.data)
@@ -226,7 +240,7 @@ class EntryActions {
           // Push entryFeedMap
           entryFeedMap[item.entries.id] = item.feeds.id
           // Push entryCollection
-          if (item.collections) {
+          if ("collections" in item) {
             entryCollection[item.entries.id] = item.collections
           }
 
@@ -294,7 +308,7 @@ class EntryActions {
           )
 
           // Push entryCollection
-          if (item.collections) {
+          if ("collections" in item) {
             entryCollection[item.entries.id] = item.collections
           }
         }

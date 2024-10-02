@@ -174,7 +174,7 @@ const ListItemImpl: Component<{
 }> = ({ view, listId, className }) => {
   const list = useListById(listId)
 
-  const isActive = useRouteParamsSelector((routerParams) => routerParams.feedId === listId)
+  const isActive = useRouteParamsSelector((routerParams) => routerParams.listId === listId)
   const { items } = useListActions({ listId, view })
 
   const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
@@ -190,7 +190,7 @@ const ListItemImpl: Component<{
       e.stopPropagation()
 
       navigate({
-        feedId: listId,
+        listId,
         entryId: null,
         view,
       })
@@ -248,7 +248,7 @@ const InboxItemImpl: Component<{
 }> = ({ view, inboxId, className }) => {
   const inbox = useInboxById(inboxId)
 
-  const isActive = useRouteParamsSelector((routerParams) => routerParams.feedId === inboxId)
+  const isActive = useRouteParamsSelector((routerParams) => routerParams.inboxId === inboxId)
   const { items } = useInboxActions({ inboxId })
 
   const inboxUnread = useFeedUnreadStore((state) => state.data[inboxId] || 0)
@@ -263,7 +263,7 @@ const InboxItemImpl: Component<{
       e.stopPropagation()
 
       navigate({
-        feedId: inboxId,
+        inboxId,
         entryId: null,
         view,
       })
