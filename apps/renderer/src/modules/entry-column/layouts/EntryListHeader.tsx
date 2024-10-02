@@ -66,16 +66,13 @@ export const EntryListHeader: FC<{
   const feed = useFeedById(routerParams.feedId)
   const isList = feed?.type === "list"
 
-  const titleStyleBasedView = ["pl-12", "pl-7", "pl-7", "pl-7", "px-5", "pl-12"]
-
   const containerRef = React.useRef<HTMLDivElement>(null)
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
-        titleStyleBasedView[view],
+        "mb-2 flex w-full flex-col pl-7 pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
       )}
     >
       <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
