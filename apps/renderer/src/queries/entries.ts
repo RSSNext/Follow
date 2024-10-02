@@ -63,22 +63,28 @@ export const entries = {
     ),
 
   checkNew: ({
-    id,
+    feedId,
+    inboxId,
+    listId,
     view,
     read,
     fetchedTime,
   }: {
-    id?: number | string
+    feedId?: number | string
+    inboxId?: number | string
+    listId?: number | string
     view?: number
     read?: boolean
     fetchedTime: number
   }) =>
     defineQuery(
-      ["entry-checkNew", id, view, read, fetchedTime],
+      ["entry-checkNew", inboxId || listId || feedId, view, read, fetchedTime],
       async () => {
         const query = {
           ...getEntriesParams({
-            feedId: id,
+            feedId,
+            inboxId,
+            listId,
             view,
           }),
           read,
@@ -101,7 +107,7 @@ export const entries = {
       },
 
       {
-        rootKey: ["entry-checkNew", id],
+        rootKey: ["entry-checkNew", inboxId || listId || feedId],
       },
     ),
 
@@ -122,7 +128,6 @@ export const useEntries = ({
   view,
   read,
   isArchived,
-  isList,
 }: {
   feedId?: number | string
   inboxId?: number | string
@@ -130,12 +135,11 @@ export const useEntries = ({
   view?: number
   read?: boolean
   isArchived?: boolean
-  isList?: boolean
 }) =>
   useAuthInfiniteQuery(entries.entries({ feedId, inboxId, listId, view, read, isArchived }), {
     enabled: feedId !== undefined || inboxId !== undefined || listId !== undefined,
     getNextPageParam: (lastPage) =>
-      isList
+      inboxId
         ? lastPage.data?.at(-1)?.entries.insertedAt
         : lastPage.data?.at(-1)?.entries.publishedAt,
     initialPageParam: undefined,
