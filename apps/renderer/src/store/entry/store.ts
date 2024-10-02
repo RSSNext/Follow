@@ -10,6 +10,7 @@ import { EntryService } from "~/services"
 
 import { feedActions } from "../feed"
 import { imageActions } from "../image"
+import { inboxActions } from "../inbox"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import { internal_batchMarkRead } from "./helper"
@@ -62,6 +63,23 @@ class EntryActions {
         omit(data, "read") as any,
       ])
       feedActions.upsertMany([data.feeds])
+    }
+
+    return data
+  }
+
+  async fetchInboxEntryById(entryId: string) {
+    const { data } = await apiClient.entries.inbox.$get({
+      query: {
+        id: entryId,
+      },
+    })
+    if (data) {
+      this.upsertMany([
+        // patch data, should omit `read` because the network race condition or server cache
+        omit(data, "read") as any,
+      ])
+      inboxActions.upsertMany([data.feeds])
     }
 
     return data
