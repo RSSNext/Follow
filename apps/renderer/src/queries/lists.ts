@@ -13,7 +13,7 @@ export const lists = {
     }),
 }
 
-export const useList = ({ id }: { id: string }) =>
-  useAuthQuery(lists.byId({ id }), {
+export const useList = ({ id }: { id?: string }) =>
+  useAuthQuery(lists.byId({ id: id! }), {
     enabled: !!id,
   })

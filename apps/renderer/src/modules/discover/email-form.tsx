@@ -37,6 +37,7 @@ export function DiscoverEmail({
 }: {
   fullWidth?: boolean
   onSuccess?: () => void
+  type?: string
 }) {
   const { t } = useTranslation()
   const inboxes = useInboxByView(FeedViewType.Articles)

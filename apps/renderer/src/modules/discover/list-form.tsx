@@ -49,7 +49,7 @@ const formSchema = z.object({
 const defaultValue = { view: FeedViewType.Articles.toString() } as z.infer<typeof formSchema>
 
 export const ListForm: Component<{
-  id: string
+  id?: string
 
   defaultValues?: z.infer<typeof formSchema>
 

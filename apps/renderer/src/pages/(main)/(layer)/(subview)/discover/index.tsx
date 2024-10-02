@@ -84,7 +84,7 @@ export function Component() {
   )
 }
 
-const TabComponent: Record<string, React.FC<{ type: string }>> = {
+const TabComponent: Record<string, React.FC<{ type?: string }>> = {
   import: DiscoverImport,
   rss3: DiscoverRSS3,
   email: DiscoverEmail,
