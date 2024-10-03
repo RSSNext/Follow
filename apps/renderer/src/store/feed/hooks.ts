@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query"
-import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useShallow } from "zustand/react/shallow"
@@ -7,11 +6,11 @@ import { useShallow } from "zustand/react/shallow"
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING, views } from "~/constants"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { apiClient } from "~/lib/api-fetch"
-import type { FeedOrListRespModel } from "~/models"
+import type { FeedOrListRespModel, InboxModel, ListModel } from "~/models"
 
-import { listActions } from "../list"
-import { getSubscriptionByFeedId } from "../subscription"
-import { useFeedStore } from "./store"
+import { useInboxStore } from "../inbox"
+import { listActions, useListStore } from "../list"
+import { getPreferredTitle, useFeedStore } from "./store"
 import type { FeedQueryParams } from "./types"
 
 export const useFeedById = (feedId: Nullable<string>): FeedOrListRespModel | null =>
@@ -36,16 +35,32 @@ export const useFeedByIdSelector = <T>(
     useShallow((state) => (feedId && state.feeds[feedId] ? selector(state.feeds[feedId]) : null)),
   )
 
+export const useListByIdSelector = <T>(
+  listId: Nullable<string>,
+  selector: (list: ListModel) => T,
+) =>
+  useListStore(
+    useShallow((state) => (listId && state.lists[listId] ? selector(state.lists[listId]) : null)),
+  )
+
+export const useInboxByIdSelector = <T>(
+  inboxId: Nullable<string>,
+  selector: (inbox: InboxModel) => T,
+) =>
+  useInboxStore(
+    useShallow((state) =>
+      inboxId && state.inboxes[inboxId] ? selector(state.inboxes[inboxId]) : null,
+    ),
+  )
+
 export const useFeedHeaderTitle = () => {
   const { t } = useTranslation()
 
-  const { feedId: currentFeedId, view } = useRouteParams()
+  const { feedId: currentFeedId, view, listId, inboxId } = useRouteParams()
 
-  const feedTitle = useFeedByIdSelector(currentFeedId, (feed) => feed.title)
-  const subscriptionTitle = useMemo(
-    () => (currentFeedId ? (getSubscriptionByFeedId(currentFeedId)?.title ?? "") : ""),
-    [currentFeedId],
-  )
+  const listTitle = useListByIdSelector(listId, (list) => getPreferredTitle(list))
+  const inboxTitle = useInboxByIdSelector(inboxId, (inbox) => getPreferredTitle(inbox))
+  const feedTitle = useFeedByIdSelector(currentFeedId, (feed) => getPreferredTitle(feed))
 
   switch (currentFeedId) {
     case ROUTE_FEED_PENDING: {
@@ -58,7 +73,7 @@ export const useFeedHeaderTitle = () => {
       if (currentFeedId?.startsWith(ROUTE_FEED_IN_FOLDER)) {
         return currentFeedId.replace(ROUTE_FEED_IN_FOLDER, "")
       }
-      return subscriptionTitle || feedTitle
+      return feedTitle || listTitle || inboxTitle
     }
   }
 }
