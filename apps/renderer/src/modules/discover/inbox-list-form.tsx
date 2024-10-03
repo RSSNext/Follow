@@ -15,14 +15,14 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { apiClient } from "~/lib/api-fetch"
-import { FeedViewType } from "~/lib/enum"
-import { inboxActions, useInboxByView } from "~/store/inbox"
+import { useInboxList } from "~/queries/inboxes"
+import { inboxActions } from "~/store/inbox"
 
 import { InboxForm } from "./inbox-form"
 
 export function DiscoverInboxList() {
   const { t } = useTranslation()
-  const inboxes = useInboxByView(FeedViewType.Articles)
+  const inboxes = useInboxList()
 
   const { present } = useModalStack()
 
@@ -50,7 +50,7 @@ export function DiscoverInboxList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {inboxes.map((inbox) => (
+          {inboxes.data?.map((inbox) => (
             <TableRow key={inbox.id}>
               <TableCell size="sm">{inbox.id}</TableCell>
               <TableCell size="sm">

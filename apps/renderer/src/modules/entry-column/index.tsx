@@ -178,9 +178,10 @@ function EntryColumnImpl() {
       }
       data-total-count={virtuosoOptions.totalCount}
     >
-      {virtuosoOptions.totalCount === 0 && !entries.isLoading && !entries.error && (
-        <AddFeedHelper />
-      )}
+      {virtuosoOptions.totalCount === 0 &&
+        !entries.isLoading &&
+        !entries.error &&
+        feed?.type === "feed" && <AddFeedHelper />}
 
       <EntryListHeader
         refetch={entries.refetch}
