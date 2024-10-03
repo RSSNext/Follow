@@ -19,7 +19,7 @@ import { inboxActions, useInboxByView } from "~/store/inbox"
 
 import { InboxForm } from "./inbox-form"
 
-export function DiscoverEmail({ onSuccess }: { onSuccess?: () => void; type?: string }) {
+export function DiscoverInboxList({ onSuccess }: { onSuccess?: () => void; type?: string }) {
   const { t } = useTranslation()
   const inboxes = useInboxByView(FeedViewType.Articles)
 
@@ -45,11 +45,23 @@ export function DiscoverEmail({ onSuccess }: { onSuccess?: () => void; type?: st
 
   return (
     <>
-      <Table className="mb-8 w-[512px]">
+      <div className="mb-4 flex items-center gap-2 text-sm text-zinc-500">
+        <span>{t("discover.inbox.description")}</span>
+        <a
+          href="https://github.com/RSSNext/Follow/wiki/Inbox#webhooks"
+          className="text-zinc-600 underline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {t("discover.inbox.webhooks_docs")}
+        </a>
+      </div>
+      <Table className="mb-8 w-[600px]">
         <TableHeader>
           <TableRow>
             <TableHead className="pl-0 pr-6">{t("discover.inbox.handle")}</TableHead>
             <TableHead className="pl-0 pr-6">{t("discover.inbox.email")}</TableHead>
+            <TableHead className="pl-0 pr-6">{t("discover.inbox.title")}</TableHead>
             <TableHead className="pl-0 pr-6">{t("discover.inbox.secret")}</TableHead>
             <TableHead className="px-0">{t("discover.inbox.actions")}</TableHead>
           </TableRow>
@@ -61,6 +73,7 @@ export function DiscoverEmail({ onSuccess }: { onSuccess?: () => void; type?: st
               <TableCell size="sm">
                 {inbox.id}@{INBOXES_EMAIL_DOMAIN}
               </TableCell>
+              <TableCell size="sm">{inbox.title}</TableCell>
               <TableCell size="sm">{inbox.secret}</TableCell>
               <TableCell size="sm">
                 <Button variant="ghost" onClick={() => mutationDestroy.mutate(inbox.id)}>

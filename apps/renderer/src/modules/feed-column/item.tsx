@@ -277,7 +277,7 @@ const InboxItemImpl: Component<{
       className={cn(
         "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-sm font-medium leading-loose",
         (isActive || isContextMenuOpen) && "bg-native-active",
-        "py-1.5 pl-2.5",
+        "py-[2px] pl-2.5",
         className,
       )}
       onClick={handleNavigate}
