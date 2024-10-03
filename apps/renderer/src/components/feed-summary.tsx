@@ -38,7 +38,7 @@ export function FollowSummary({
       siteLink = void 0
       feedLink = siteLink
       feedText = `${feed.id}@${INBOXES_EMAIL_DOMAIN}`
-      feedTitle = `${feed.id}'s Inbox`
+      feedTitle = feed.title || `${feed.id}'s Inbox`
       break
     }
   }

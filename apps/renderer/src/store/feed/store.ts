@@ -134,7 +134,7 @@ export const getPreferredTitle = (feed?: FeedOrListRespModel | null) => {
   }
 
   if (feed.type === "inbox") {
-    return `${feed.id.slice(0, 1).toUpperCase()}${feed.id.slice(1)}'s Inbox`
+    return feed.title || `${feed.id.slice(0, 1).toUpperCase()}${feed.id.slice(1)}'s Inbox`
   }
 
   const subscription = getSubscriptionByFeedId(feed.id)

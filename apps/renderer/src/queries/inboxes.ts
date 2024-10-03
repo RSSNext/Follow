@@ -9,7 +9,7 @@ export const inboxes = {
     }),
 }
 
-export const useInbox = ({ id }: { id: string }) =>
-  useAuthQuery(inboxes.byId({ id }), {
+export const useInbox = ({ id }: { id?: string }) =>
+  useAuthQuery(inboxes.byId({ id: id! }), {
     enabled: !!id,
   })

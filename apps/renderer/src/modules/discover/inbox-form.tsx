@@ -1,21 +1,34 @@
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
+import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
+import { z } from "zod"
 
 import { FollowSummary } from "~/components/feed-summary"
 import { Logo } from "~/components/icons/logo"
 import { Button } from "~/components/ui/button"
 import { Card, CardHeader } from "~/components/ui/card"
-import { LoadingCircle } from "~/components/ui/loading"
-import { getFetchErrorMessage } from "~/lib/error-parser"
-import { getNewIssueUrl } from "~/lib/issues"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { INBOXES_EMAIL_DOMAIN } from "~/constants"
+import { apiClient } from "~/lib/api-fetch"
+import { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
 import type { InboxModel } from "~/models"
 import { useInbox } from "~/queries/inboxes"
 import { useInboxById } from "~/store/inbox"
-
-import { DiscoverEmail } from "./email-form"
+import { subscriptionActions } from "~/store/subscription"
 
 export const InboxForm: Component<{
-  id: string
+  id?: string
   asWidget?: boolean
   onSuccess?: () => void
 }> = ({ id: _id, asWidget, onSuccess }) => {
@@ -34,7 +47,7 @@ export const InboxForm: Component<{
     <div
       className={cn(
         "flex h-full flex-col",
-        asWidget ? "min-h-[320px] w-[550px] max-w-full" : "px-[18px] pb-[18px] pt-12",
+        asWidget ? "min-h-[210px] w-[550px] max-w-full" : "px-[18px] pb-[18px] pt-12",
       )}
     >
       {!asWidget && (
@@ -43,86 +56,147 @@ export const InboxForm: Component<{
           {isSubscribed ? t("feed_form.update_follow") : t("feed_form.add_follow")}
         </div>
       )}
-
-      {inbox ? (
-        <InboxInnerForm
-          {...{
-            id,
-            asWidget,
-            onSuccess,
-            inbox,
-          }}
-        />
-      ) : feedQuery.isLoading ? (
-        <div className="flex flex-1 items-center justify-center">
-          <LoadingCircle size="large" />
-        </div>
-      ) : feedQuery.error ? (
-        <div className="center grow flex-col gap-3">
-          <i className="i-mgc-close-cute-re size-7 text-red-500" />
-          <p>{t("feed_form.error_fetching_feed")}</p>
-          <p className="cursor-text select-text break-all px-8 text-center">
-            {getFetchErrorMessage(feedQuery.error)}
-          </p>
-
-          <div className="flex items-center gap-4">
-            <Button
-              variant="text"
-              onClick={() => {
-                feedQuery.refetch()
-              }}
-            >
-              {t("feed_form.retry")}
-            </Button>
-
-            <Button
-              variant="primary"
-              onClick={() => {
-                window.open(
-                  getNewIssueUrl({
-                    body: [
-                      "### Info:",
-                      "",
-                      "List ID:",
-                      "```",
-                      id,
-                      "```",
-                      "",
-                      "Error:",
-                      "```",
-                      getFetchErrorMessage(feedQuery.error),
-                      "```",
-                    ].join("\n"),
-                    title: `Error in fetching list: ${id}`,
-                  }),
-                  "_blank",
-                )
-              }}
-            >
-              {t("feed_form.feedback")}
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <div className="center h-full grow flex-col">
-          <i className="i-mgc-question-cute-re mb-6 size-12 text-zinc-500" />
-          <p>{t("feed_form.feed_not_found")}</p>
-          <p>{id}</p>
-        </div>
-      )}
+      <InboxInnerForm
+        {...{
+          onSuccess,
+          inbox,
+        }}
+      />
     </div>
   )
 }
 
-const InboxInnerForm = ({ onSuccess, inbox }: { onSuccess?: () => void; inbox: InboxModel }) => {
+const inboxHandleSchema = z
+  .string()
+  .min(3)
+  .max(32)
+  .regex(/^[a-z0-9_-]+$/)
+
+const formSchema = z.object({
+  handle: inboxHandleSchema,
+  title: z.string(),
+})
+
+const InboxInnerForm = ({
+  onSuccess,
+  inbox,
+}: {
+  onSuccess?: () => void
+  inbox?: Nullable<InboxModel>
+}) => {
+  const { t } = useTranslation()
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      handle: inbox?.id,
+      title: inbox?.title || "",
+    },
+  })
+
+  const mutationCreate = useMutation({
+    mutationFn: async ({ handle, title }: { handle: string; title: string }) => {
+      await apiClient.inboxes.$post({
+        json: {
+          handle,
+          title,
+        },
+      })
+      onSuccess?.()
+    },
+    onSuccess: (_) => {
+      subscriptionActions.fetchByView(FeedViewType.Articles)
+      toast.success(t("discover.inbox_create_success"))
+    },
+    onError: () => {
+      toast.error(t("discover.inbox_create_error"))
+    },
+  })
+
+  const mutationChange = useMutation({
+    mutationFn: async ({ handle, title }: { handle: string; title: string }) => {
+      await apiClient.inboxes.$put({
+        json: {
+          handle,
+          title,
+        },
+      })
+      onSuccess?.()
+    },
+    onSuccess: () => {
+      subscriptionActions.fetchByView(FeedViewType.Articles)
+      toast.success(t("discover.inbox_update_success"))
+    },
+    onError: () => {
+      toast.error(t("discover.inbox_update_error"))
+    },
+  })
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    if (inbox) {
+      mutationChange.mutate({ handle: values.handle, title: values.title })
+    } else {
+      mutationCreate.mutate({ handle: values.handle, title: values.title })
+    }
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-y-4">
-      <Card>
-        <CardHeader>
-          <FollowSummary feed={inbox} />
-        </CardHeader>
-      </Card>
-      <DiscoverEmail fullWidth onSuccess={onSuccess} />
+      {inbox && (
+        <Card>
+          <CardHeader>
+            <FollowSummary feed={inbox} />
+          </CardHeader>
+        </Card>
+      )}
+      <>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className={cn("space-y-4")}
+            data-testid="discover-form"
+          >
+            {!inbox && (
+              <FormField
+                control={form.control}
+                name="handle"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("discover.inbox_handle")}</FormLabel>
+                    <FormControl>
+                      <div className={cn("flex w-64 items-center gap-2")}>
+                        <Input autoFocus {...field} />
+                        <span className="text-zinc-500">{`@${INBOXES_EMAIL_DOMAIN}`}</span>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("discover.inbox_title")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div
+              className={cn("center flex justify-end gap-4")}
+              data-testid="discover-form-actions"
+            >
+              <Button type="submit" isLoading={mutationCreate.isPending}>
+                {t(inbox ? "discover.inbox_update" : "discover.inbox_create")}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </>
     </div>
   )
 }

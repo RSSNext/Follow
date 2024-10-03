@@ -41,6 +41,12 @@ class InboxActionStatic {
       state.inboxes = {}
     })
   }
+
+  clearByInboxId(id: string) {
+    set((state) => {
+      delete state.inboxes[id]
+    })
+  }
 }
 
 export const inboxActions = new InboxActionStatic()

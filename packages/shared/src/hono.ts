@@ -2613,6 +2613,22 @@ declare const inboxes: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        title: drizzle_orm_pg_core.PgColumn<{
+            name: "title";
+            tableName: "inboxes";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -2620,11 +2636,14 @@ declare const inboxesOpenAPISchema: z.ZodObject<{
     userId: z.ZodString;
     handle: z.ZodString;
     secret: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
 }, z.UnknownKeysParam, z.ZodTypeAny, {
+    title: string | null;
     handle: string;
     userId: string;
     secret: string;
 }, {
+    title: string | null;
     handle: string;
     userId: string;
     secret: string;
@@ -4140,6 +4159,20 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $post: {
             input: {
                 json: {
+                    handle: string;
+                    title?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $put: {
+            input: {
+                json: {
+                    title: string;
                     handle: string;
                 };
             };
