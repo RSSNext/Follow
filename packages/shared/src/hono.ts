@@ -2387,6 +2387,172 @@ declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<
         }[] | null | undefined;
     } | null | undefined;
 }>;
+declare const inboxesEntriesInsertOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    title: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    content: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    id: z.ZodOptional<z.ZodString>;
+    author: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    guid: z.ZodString;
+    media: z.ZodOptional<z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
+    categories: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodString, "many">>>;
+    attachments: z.ZodOptional<z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
+    extra: z.ZodOptional<z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
+    authorUrl: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    authorAvatar: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    insertedAt: z.ZodString;
+    publishedAt: z.ZodString;
+    inboxHandle: z.ZodString;
+}, "id" | "media" | "attachments" | "extra" | "insertedAt" | "publishedAt" | "inboxHandle">, {
+    attachments: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+        url: z.ZodString;
+        duration_in_seconds: z.ZodOptional<z.ZodNumber>;
+        mime_type: z.ZodOptional<z.ZodString>;
+        size_in_bytes: z.ZodOptional<z.ZodNumber>;
+        title: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }, {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }>, "many">>>;
+    media: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+        url: z.ZodString;
+        type: z.ZodEnum<["photo", "video"]>;
+        width: z.ZodOptional<z.ZodNumber>;
+        height: z.ZodOptional<z.ZodNumber>;
+        preview_image_url: z.ZodOptional<z.ZodString>;
+        blurhash: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }, {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }>, "many">>>;
+    extra: z.ZodNullable<z.ZodOptional<z.ZodObject<{
+        links: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+            url: z.ZodString;
+            type: z.ZodString;
+            content_html: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }, {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }>, "many">>>;
+    }, "strip", z.ZodTypeAny, {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    }, {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    }>>>;
+    publishedAt: z.ZodString;
+}>, "strip", z.ZodTypeAny, {
+    guid: string;
+    publishedAt: string;
+    description?: string | null | undefined;
+    title?: string | null | undefined;
+    content?: string | null | undefined;
+    author?: string | null | undefined;
+    url?: string | null | undefined;
+    media?: {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }[] | null | undefined;
+    categories?: string[] | null | undefined;
+    attachments?: {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }[] | null | undefined;
+    extra?: {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    } | null | undefined;
+    authorUrl?: string | null | undefined;
+    authorAvatar?: string | null | undefined;
+}, {
+    guid: string;
+    publishedAt: string;
+    description?: string | null | undefined;
+    title?: string | null | undefined;
+    content?: string | null | undefined;
+    author?: string | null | undefined;
+    url?: string | null | undefined;
+    media?: {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }[] | null | undefined;
+    categories?: string[] | null | undefined;
+    attachments?: {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }[] | null | undefined;
+    extra?: {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    } | null | undefined;
+    authorUrl?: string | null | undefined;
+    authorAvatar?: string | null | undefined;
+}>;
 declare const inboxesEntriesRelations: drizzle_orm.Relations<"inboxes_entries", {
     inboxes: drizzle_orm.One<"inboxes", true>;
 }>;
@@ -2431,23 +2597,43 @@ declare const inboxes: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        secret: drizzle_orm_pg_core.PgColumn<{
+            name: "secret";
+            tableName: "inboxes";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
-declare const inboxesOpenAPISchema: zod.ZodObject<{
-    userId: zod.ZodString;
-    handle: zod.ZodString;
-}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+declare const inboxesOpenAPISchema: z.ZodObject<{
+    userId: z.ZodString;
+    handle: z.ZodString;
+    secret: z.ZodString;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
     handle: string;
     userId: string;
+    secret: string;
 }, {
     handle: string;
     userId: string;
+    secret: string;
 }>;
 declare const inboxesRelations: drizzle_orm.Relations<"inboxes", {
     users: drizzle_orm.One<"user", true>;
     entries: drizzle_orm.Many<"inboxes_entries">;
 }>;
+declare const inboxHandleSchema: z.ZodString;
 
 declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "invitations";
@@ -3911,7 +4097,11 @@ declare const feedPowerTokensRelations: drizzle_orm.Relations<"feedPowerTokens",
 declare const _routes: hono_hono_base.HonoBase<Env, {
     "/inboxes": {
         $delete: {
-            input: {};
+            input: {
+                json: {
+                    handle: string;
+                };
+            };
             output: {
                 code: 0;
             };
@@ -3919,12 +4109,17 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
         $get: {
-            input: {};
+            input: {
+                query: {
+                    handle: string | string[];
+                };
+            };
             output: {
                 code: 0;
                 data: {
                     type: "inbox";
                     id: string;
+                    secret: string;
                     description?: string | null | undefined;
                     title?: string | null | undefined;
                     image?: string | null | undefined;
@@ -3938,18 +4133,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         createdAt: string;
                     } | null | undefined;
                 };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-        $put: {
-            input: {
-                json: {
-                    handle: string;
-                };
-            };
-            output: {
-                code: 0;
             };
             outputFormat: "json" | "text";
             status: 200;
@@ -3968,6 +4151,51 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
     "/inboxes/webhook": {
+        $post: {
+            input: {
+                json: {
+                    guid: string;
+                    publishedAt: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    content?: string | null | undefined;
+                    author?: string | null | undefined;
+                    url?: string | null | undefined;
+                    media?: {
+                        type: "photo" | "video";
+                        url: string;
+                        width?: number | undefined;
+                        height?: number | undefined;
+                        preview_image_url?: string | undefined;
+                        blurhash?: string | undefined;
+                    }[] | null | undefined;
+                    categories?: string[] | null | undefined;
+                    attachments?: {
+                        url: string;
+                        title?: string | undefined;
+                        duration_in_seconds?: number | undefined;
+                        mime_type?: string | undefined;
+                        size_in_bytes?: number | undefined;
+                    }[] | null | undefined;
+                    extra?: {
+                        links?: {
+                            type: string;
+                            url: string;
+                            content_html?: string | undefined;
+                        }[] | null | undefined;
+                    } | null | undefined;
+                    authorUrl?: string | null | undefined;
+                    authorAvatar?: string | null | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/inboxes/email": {
         $post: {
             input: {
                 json: {
@@ -4601,6 +4829,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     inboxes: {
                         type: "inbox";
                         id: string;
+                        secret: string;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
                         image?: string | null | undefined;
@@ -5103,6 +5332,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     feeds: {
                         type: "inbox";
                         id: string;
+                        secret: string;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
                         image?: string | null | undefined;
@@ -5185,6 +5415,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     feeds: {
                         type: "inbox";
                         id: string;
+                        secret: string;
                         description?: string | null | undefined;
                         title?: string | null | undefined;
                         image?: string | null | undefined;
@@ -5969,4 +6200,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxes, inboxesEntries, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, mediaZodSchema, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, mediaZodSchema, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

@@ -25,8 +25,12 @@ class InboxActionStatic {
     runTransactionInScope(() => InboxService.upsertMany(inboxs))
   }
 
-  async fetchOwnedInboxs() {
-    const res = await apiClient.inboxes.$get()
+  async fetchInboxById(id: string) {
+    const res = await apiClient.inboxes.$get({
+      query: {
+        handle: id,
+      },
+    })
     this.upsertMany([res.data])
 
     return res.data

@@ -4,7 +4,7 @@ import { inboxActions } from "~/store/inbox"
 
 export const inboxes = {
   byId: ({ id }: { id: string }) =>
-    defineQuery(["lists", id], async () => inboxActions.fetchOwnedInboxs(), {
+    defineQuery(["lists", id], async () => inboxActions.fetchInboxById(id), {
       rootKey: ["lists"],
     }),
 }

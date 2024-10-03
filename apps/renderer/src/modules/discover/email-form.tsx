@@ -23,12 +23,14 @@ import { cn } from "~/lib/utils"
 import { inboxActions, useInboxByView } from "~/store/inbox"
 import { subscriptionActions } from "~/store/subscription"
 
+const inboxHandleSchema = z
+  .string()
+  .min(3)
+  .max(32)
+  .regex(/^[a-z0-9_-]+$/)
+
 const formSchema = z.object({
-  handle: z
-    .string()
-    .min(1)
-    .max(32)
-    .regex(/^[\w-]+$/),
+  handle: inboxHandleSchema,
 })
 
 export function DiscoverEmail({
