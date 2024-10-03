@@ -1,3 +1,7 @@
+import { useMemo } from "react"
+
+import { useFeedByIdSelector } from "~/store/feed"
+
 import { TimeStamp } from "../components/TimeStamp"
 
 export const ensureAndRenderTimeStamp = (children: string) => {
@@ -34,4 +38,27 @@ export function timeStringToSeconds(time: string): number | null {
   } else {
     return null
   }
+}
+
+const safeUrl = (url: string, baseUrl: string) => {
+  try {
+    return new URL(url, baseUrl).href
+  } catch {
+    return url
+  }
+}
+export const usePopulatedFullUrl = (feedId: string, relativeUrl?: string) => {
+  const feedSiteUrl = useFeedByIdSelector(feedId, (feed) =>
+    "siteUrl" in feed ? feed.siteUrl : undefined,
+  )
+
+  const populatedFullHref = useMemo(() => {
+    if (!relativeUrl) return void 0
+
+    if (relativeUrl.startsWith("http")) return relativeUrl
+    if (relativeUrl.startsWith("/") && feedSiteUrl) return safeUrl(relativeUrl, feedSiteUrl)
+    return relativeUrl
+  }, [feedSiteUrl, relativeUrl])
+
+  return populatedFullHref
 }
