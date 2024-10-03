@@ -21,6 +21,7 @@ import { ShikiHighLighter } from "~/components/ui/code-highlighter"
 import { MarkdownBlockImage, MarkdownLink, MarkdownP } from "~/components/ui/markdown/renderers"
 import { BlockError } from "~/components/ui/markdown/renderers/BlockErrorBoundary"
 import { createHeadingRenderer } from "~/components/ui/markdown/renderers/Heading"
+import { MarkdownInlineImage } from "~/components/ui/markdown/renderers/InlineImage"
 import { Media } from "~/components/ui/media"
 
 function markInlineImage(node?: Element) {
@@ -208,19 +209,10 @@ const Img: Components["img"] = ({ node, ...props }) => {
     proxy: { height: 0, width: 700 },
   }
 
-  if (node?.properties.inline) {
-    return createElement(Media, {
-      type: "photo",
-      ...nextProps,
-
-      mediaContainerClassName: tw`max-w-full inline rounded-md`,
-      popper: true,
-      className: tw`inline`,
-      showFallback: true,
-    })
-  }
-
-  return createElement(MarkdownBlockImage, nextProps)
+  return createElement(
+    node?.properties.inline ? MarkdownInlineImage : MarkdownBlockImage,
+    nextProps,
+  )
 }
 
 function extractCodeFromHtml(htmlString: string) {
