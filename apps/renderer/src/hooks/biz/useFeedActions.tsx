@@ -1,4 +1,5 @@
 import { WEB_URL } from "@follow/shared/constants"
+import { env } from "@follow/shared/env"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -8,12 +9,15 @@ import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem } from "~/lib/native-menu"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
+import { InboxForm } from "~/modules/discover/inbox-form"
+import { ListForm } from "~/modules/discover/list-form"
 import {
   getFeedById,
   useAddFeedToFeedList,
   useFeedById,
   useRemoveFeedFromFeedList,
 } from "~/store/feed"
+import { useInboxById } from "~/store/inbox"
 import { useListById, useListByView } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 
@@ -250,7 +254,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
         click: () => {
           present({
             title: t("sidebar.feed_actions.edit_list"),
-            content: ({ dismiss }) => <FeedForm asWidget id={listId} onSuccess={dismiss} isList />,
+            content: ({ dismiss }) => <ListForm asWidget id={listId} onSuccess={dismiss} />,
           })
         },
       },
@@ -266,7 +270,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
         shortcut: "Meta+G",
         disabled: getRouteParams().feedId === listId,
         click: () => {
-          navigateEntry({ feedId: listId })
+          navigateEntry({ listId })
         },
       },
       {
@@ -310,6 +314,47 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
 
     return items
   }, [list, t, present, deleteSubscription, subscription, navigateEntry, listId, view])
+
+  return { items }
+}
+
+export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
+  const { t } = useTranslation()
+  const inbox = useInboxById(inboxId)
+  const { present } = useModalStack()
+
+  const items = useMemo(() => {
+    if (!inbox) return []
+
+    const items: NativeMenuItem[] = [
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.edit"),
+        shortcut: "E",
+        click: () => {
+          present({
+            title: t("sidebar.feed_actions.edit_inbox"),
+            content: ({ dismiss }) => <InboxForm asWidget id={inboxId} onSuccess={dismiss} />,
+          })
+        },
+      },
+      {
+        type: "separator" as const,
+        disabled: false,
+      },
+      {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.copy_email_address"),
+        shortcut: "Meta+Shift+C",
+        disabled: false,
+        click: () => {
+          navigator.clipboard.writeText(`${inboxId}${env.VITE_INBOXES_EMAIL}`)
+        },
+      },
+    ]
+
+    return items
+  }, [inbox, t, inboxId, present])
 
   return { items }
 }

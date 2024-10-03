@@ -46,7 +46,9 @@ export function ListItem({
 
   const handlePrefetchEntry = useDebounceCallback(
     () => {
-      Queries.entries.byId(entryId).prefetch()
+      feed?.type === "inbox"
+        ? Queries.entries.byInboxId(entryId).prefetch()
+        : Queries.entries.byId(entryId).prefetch()
     },
     300,
     { leading: false },

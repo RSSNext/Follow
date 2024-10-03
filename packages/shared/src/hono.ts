@@ -673,6 +673,111 @@ type ExtraModel = {
         content_html?: string;
     }[];
 };
+declare const CommonEntryFields: {
+    id: drizzle_orm.HasRuntimeDefault<drizzle_orm.HasDefault<drizzle_orm.IsPrimaryKey<drizzle_orm.NotNull<drizzle_orm_pg_core.PgTextBuilder<{
+        name: "id";
+        dataType: "string";
+        columnType: "PgText";
+        data: string;
+        enumValues: [string, ...string[]];
+        driverParam: string;
+        generated: undefined;
+    }>>>>>;
+    title: drizzle_orm_pg_core.PgTextBuilder<{
+        name: "title";
+        dataType: "string";
+        columnType: "PgText";
+        data: string;
+        enumValues: [string, ...string[]];
+        driverParam: string;
+        generated: undefined;
+    }>;
+    url: drizzle_orm_pg_core.PgTextBuilder<{
+        name: "url";
+        dataType: "string";
+        columnType: "PgText";
+        data: string;
+        enumValues: [string, ...string[]];
+        driverParam: string;
+        generated: undefined;
+    }>;
+    content: drizzle_orm_pg_core.PgTextBuilder<{
+        name: "content";
+        dataType: "string";
+        columnType: "PgText";
+        data: string;
+        enumValues: [string, ...string[]];
+        driverParam: string;
+        generated: undefined;
+    }>;
+    description: drizzle_orm_pg_core.PgTextBuilder<{
+        name: "description";
+        dataType: "string";
+        columnType: "PgText";
+        data: string;
+        enumValues: [string, ...string[]];
+        driverParam: string;
+        generated: undefined;
+    }>;
+    guid: drizzle_orm.NotNull<drizzle_orm_pg_core.PgTextBuilder<{
+        name: "guid";
+        dataType: "string";
+        columnType: "PgText";
+        data: string;
+        enumValues: [string, ...string[]];
+        driverParam: string;
+        generated: undefined;
+    }>>;
+    author: drizzle_orm_pg_core.PgTextBuilder<{
+        name: "author";
+        dataType: "string";
+        columnType: "PgText";
+        data: string;
+        enumValues: [string, ...string[]];
+        driverParam: string;
+        generated: undefined;
+    }>;
+    authorUrl: drizzle_orm_pg_core.PgTextBuilder<{
+        name: "author_url";
+        dataType: "string";
+        columnType: "PgText";
+        data: string;
+        enumValues: [string, ...string[]];
+        driverParam: string;
+        generated: undefined;
+    }>;
+    authorAvatar: drizzle_orm_pg_core.PgTextBuilder<{
+        name: "author_avatar";
+        dataType: "string";
+        columnType: "PgText";
+        data: string;
+        enumValues: [string, ...string[]];
+        driverParam: string;
+        generated: undefined;
+    }>;
+    insertedAt: drizzle_orm.NotNull<drizzle_orm_pg_core.PgTimestampBuilderInitial<"inserted_at">>;
+    publishedAt: drizzle_orm.NotNull<drizzle_orm_pg_core.PgTimestampBuilderInitial<"published_at">>;
+    media: drizzle_orm.$Type<drizzle_orm_pg_core.PgJsonbBuilderInitial<"media">, MediaModel[]>;
+    categories: drizzle_orm_pg_core.PgArrayBuilder<{
+        name: "categories";
+        dataType: "array";
+        columnType: "PgArray";
+        data: string[];
+        driverParam: string | string[];
+        enumValues: [string, ...string[]];
+        generated: drizzle_orm.GeneratedColumnConfig<string>;
+    }, {
+        name: "categories";
+        dataType: "string";
+        columnType: "PgText";
+        data: string;
+        enumValues: [string, ...string[]];
+        driverParam: string;
+        generated: undefined;
+    }>;
+    attachments: drizzle_orm.$Type<drizzle_orm_pg_core.PgJsonbBuilderInitial<"attachments">, AttachmentsModel[]>;
+    extra: drizzle_orm.$Type<drizzle_orm_pg_core.PgJsonbBuilderInitial<"extra">, ExtraModel>;
+};
 declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "entries";
     schema: undefined;
@@ -689,22 +794,6 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             isPrimaryKey: true;
             isAutoincrement: false;
             hasRuntimeDefault: true;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        feedId: drizzle_orm_pg_core.PgColumn<{
-            name: "feed_id";
-            tableName: "entries";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
             generated: undefined;
@@ -948,12 +1037,95 @@ declare const entries: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        feedId: drizzle_orm_pg_core.PgColumn<{
+            name: "feed_id";
+            tableName: "entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
+declare const attachmentsZodSchema: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+    url: z.ZodString;
+    duration_in_seconds: z.ZodOptional<z.ZodNumber>;
+    mime_type: z.ZodOptional<z.ZodString>;
+    size_in_bytes: z.ZodOptional<z.ZodNumber>;
+    title: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    url: string;
+    title?: string | undefined;
+    duration_in_seconds?: number | undefined;
+    mime_type?: string | undefined;
+    size_in_bytes?: number | undefined;
+}, {
+    url: string;
+    title?: string | undefined;
+    duration_in_seconds?: number | undefined;
+    mime_type?: string | undefined;
+    size_in_bytes?: number | undefined;
+}>, "many">>>;
+declare const mediaZodSchema: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+    url: z.ZodString;
+    type: z.ZodEnum<["photo", "video"]>;
+    width: z.ZodOptional<z.ZodNumber>;
+    height: z.ZodOptional<z.ZodNumber>;
+    preview_image_url: z.ZodOptional<z.ZodString>;
+    blurhash: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    type: "photo" | "video";
+    url: string;
+    width?: number | undefined;
+    height?: number | undefined;
+    preview_image_url?: string | undefined;
+    blurhash?: string | undefined;
+}, {
+    type: "photo" | "video";
+    url: string;
+    width?: number | undefined;
+    height?: number | undefined;
+    preview_image_url?: string | undefined;
+    blurhash?: string | undefined;
+}>, "many">>>;
+declare const extraZodSchema: z.ZodNullable<z.ZodOptional<z.ZodObject<{
+    links: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+        url: z.ZodString;
+        type: z.ZodString;
+        content_html: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        type: string;
+        url: string;
+        content_html?: string | undefined;
+    }, {
+        type: string;
+        url: string;
+        content_html?: string | undefined;
+    }>, "many">>>;
+}, "strip", z.ZodTypeAny, {
+    links?: {
+        type: string;
+        url: string;
+        content_html?: string | undefined;
+    }[] | null | undefined;
+}, {
+    links?: {
+        type: string;
+        url: string;
+        content_html?: string | undefined;
+    }[] | null | undefined;
+}>>>;
 declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     id: z.ZodString;
-    feedId: z.ZodString;
     title: z.ZodNullable<z.ZodString>;
     url: z.ZodNullable<z.ZodString>;
     content: z.ZodNullable<z.ZodString>;
@@ -980,6 +1152,7 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
         [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
     } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+    feedId: z.ZodString;
 }, "media" | "attachments" | "extra">, {
     attachments: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
         url: z.ZodString;
@@ -1058,11 +1231,11 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     url: string | null;
     feedId: string;
     guid: string;
+    categories: string[] | null;
     authorUrl: string | null;
     authorAvatar: string | null;
     insertedAt: string;
     publishedAt: string;
-    categories: string[] | null;
     media?: {
         type: "photo" | "video";
         url: string;
@@ -1094,11 +1267,11 @@ declare const entriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     url: string | null;
     feedId: string;
     guid: string;
+    categories: string[] | null;
     authorUrl: string | null;
     authorAvatar: string | null;
     insertedAt: string;
     publishedAt: string;
-    categories: string[] | null;
     media?: {
         type: "photo" | "video";
         url: string;
@@ -1764,6 +1937,722 @@ declare const timelineRelations: drizzle_orm.Relations<"timeline", {
     feeds: drizzle_orm.One<"feeds", true>;
     collections: drizzle_orm.One<"collections", true>;
 }>;
+
+declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "inboxes_entries";
+    schema: undefined;
+    columns: {
+        id: drizzle_orm_pg_core.PgColumn<{
+            name: "id";
+            tableName: "inboxes_entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        title: drizzle_orm_pg_core.PgColumn<{
+            name: "title";
+            tableName: "inboxes_entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        url: drizzle_orm_pg_core.PgColumn<{
+            name: "url";
+            tableName: "inboxes_entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        content: drizzle_orm_pg_core.PgColumn<{
+            name: "content";
+            tableName: "inboxes_entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        description: drizzle_orm_pg_core.PgColumn<{
+            name: "description";
+            tableName: "inboxes_entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        guid: drizzle_orm_pg_core.PgColumn<{
+            name: "guid";
+            tableName: "inboxes_entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        author: drizzle_orm_pg_core.PgColumn<{
+            name: "author";
+            tableName: "inboxes_entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        authorUrl: drizzle_orm_pg_core.PgColumn<{
+            name: "author_url";
+            tableName: "inboxes_entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        authorAvatar: drizzle_orm_pg_core.PgColumn<{
+            name: "author_avatar";
+            tableName: "inboxes_entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        insertedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "inserted_at";
+            tableName: "inboxes_entries";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        publishedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "published_at";
+            tableName: "inboxes_entries";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        media: drizzle_orm_pg_core.PgColumn<{
+            name: "media";
+            tableName: "inboxes_entries";
+            dataType: "json";
+            columnType: "PgJsonb";
+            data: MediaModel[];
+            driverParam: unknown;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        categories: drizzle_orm_pg_core.PgColumn<{
+            name: "categories";
+            tableName: "inboxes_entries";
+            dataType: "array";
+            columnType: "PgArray";
+            data: string[];
+            driverParam: string | string[];
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: drizzle_orm.Column<{
+                name: "categories";
+                tableName: "inboxes_entries";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                driverParam: string;
+                notNull: false;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                generated: undefined;
+            }, object, object>;
+            generated: undefined;
+        }, {}, {}>;
+        attachments: drizzle_orm_pg_core.PgColumn<{
+            name: "attachments";
+            tableName: "inboxes_entries";
+            dataType: "json";
+            columnType: "PgJsonb";
+            data: AttachmentsModel[];
+            driverParam: unknown;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        extra: drizzle_orm_pg_core.PgColumn<{
+            name: "extra";
+            tableName: "inboxes_entries";
+            dataType: "json";
+            columnType: "PgJsonb";
+            data: ExtraModel;
+            driverParam: unknown;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        inboxHandle: drizzle_orm_pg_core.PgColumn<{
+            name: "inbox_handle";
+            tableName: "inboxes_entries";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
+    id: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
+    url: z.ZodNullable<z.ZodString>;
+    content: z.ZodNullable<z.ZodString>;
+    description: z.ZodNullable<z.ZodString>;
+    guid: z.ZodString;
+    author: z.ZodNullable<z.ZodString>;
+    authorUrl: z.ZodNullable<z.ZodString>;
+    authorAvatar: z.ZodNullable<z.ZodString>;
+    insertedAt: z.ZodString;
+    publishedAt: z.ZodString;
+    media: z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+    categories: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
+    attachments: z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+    extra: z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
+    inboxHandle: z.ZodString;
+}, "media" | "attachments" | "extra">, {
+    attachments: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+        url: z.ZodString;
+        duration_in_seconds: z.ZodOptional<z.ZodNumber>;
+        mime_type: z.ZodOptional<z.ZodString>;
+        size_in_bytes: z.ZodOptional<z.ZodNumber>;
+        title: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }, {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }>, "many">>>;
+    media: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+        url: z.ZodString;
+        type: z.ZodEnum<["photo", "video"]>;
+        width: z.ZodOptional<z.ZodNumber>;
+        height: z.ZodOptional<z.ZodNumber>;
+        preview_image_url: z.ZodOptional<z.ZodString>;
+        blurhash: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }, {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }>, "many">>>;
+    extra: z.ZodNullable<z.ZodOptional<z.ZodObject<{
+        links: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+            url: z.ZodString;
+            type: z.ZodString;
+            content_html: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }, {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }>, "many">>>;
+    }, "strip", z.ZodTypeAny, {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    }, {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    }>>>;
+}>, "strip", z.ZodTypeAny, {
+    description: string | null;
+    title: string | null;
+    content: string | null;
+    id: string;
+    author: string | null;
+    url: string | null;
+    guid: string;
+    categories: string[] | null;
+    authorUrl: string | null;
+    authorAvatar: string | null;
+    insertedAt: string;
+    publishedAt: string;
+    inboxHandle: string;
+    media?: {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }[] | null | undefined;
+    attachments?: {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }[] | null | undefined;
+    extra?: {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    } | null | undefined;
+}, {
+    description: string | null;
+    title: string | null;
+    content: string | null;
+    id: string;
+    author: string | null;
+    url: string | null;
+    guid: string;
+    categories: string[] | null;
+    authorUrl: string | null;
+    authorAvatar: string | null;
+    insertedAt: string;
+    publishedAt: string;
+    inboxHandle: string;
+    media?: {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }[] | null | undefined;
+    attachments?: {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }[] | null | undefined;
+    extra?: {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    } | null | undefined;
+}>;
+declare const inboxesEntriesInsertOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    title: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    content: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    id: z.ZodOptional<z.ZodString>;
+    author: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    guid: z.ZodString;
+    media: z.ZodOptional<z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
+    categories: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodString, "many">>>;
+    attachments: z.ZodOptional<z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
+    extra: z.ZodOptional<z.ZodNullable<z.ZodType<string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null, z.ZodTypeDef, string | number | boolean | {
+        [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
+    } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>>;
+    authorUrl: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    authorAvatar: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    insertedAt: z.ZodString;
+    publishedAt: z.ZodString;
+    inboxHandle: z.ZodString;
+}, "id" | "media" | "attachments" | "extra" | "insertedAt" | "publishedAt" | "inboxHandle">, {
+    attachments: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+        url: z.ZodString;
+        duration_in_seconds: z.ZodOptional<z.ZodNumber>;
+        mime_type: z.ZodOptional<z.ZodString>;
+        size_in_bytes: z.ZodOptional<z.ZodNumber>;
+        title: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }, {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }>, "many">>>;
+    media: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+        url: z.ZodString;
+        type: z.ZodEnum<["photo", "video"]>;
+        width: z.ZodOptional<z.ZodNumber>;
+        height: z.ZodOptional<z.ZodNumber>;
+        preview_image_url: z.ZodOptional<z.ZodString>;
+        blurhash: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }, {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }>, "many">>>;
+    extra: z.ZodNullable<z.ZodOptional<z.ZodObject<{
+        links: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
+            url: z.ZodString;
+            type: z.ZodString;
+            content_html: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }, {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }>, "many">>>;
+    }, "strip", z.ZodTypeAny, {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    }, {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    }>>>;
+    publishedAt: z.ZodString;
+}>, "strip", z.ZodTypeAny, {
+    guid: string;
+    publishedAt: string;
+    description?: string | null | undefined;
+    title?: string | null | undefined;
+    content?: string | null | undefined;
+    author?: string | null | undefined;
+    url?: string | null | undefined;
+    media?: {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }[] | null | undefined;
+    categories?: string[] | null | undefined;
+    attachments?: {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }[] | null | undefined;
+    extra?: {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    } | null | undefined;
+    authorUrl?: string | null | undefined;
+    authorAvatar?: string | null | undefined;
+}, {
+    guid: string;
+    publishedAt: string;
+    description?: string | null | undefined;
+    title?: string | null | undefined;
+    content?: string | null | undefined;
+    author?: string | null | undefined;
+    url?: string | null | undefined;
+    media?: {
+        type: "photo" | "video";
+        url: string;
+        width?: number | undefined;
+        height?: number | undefined;
+        preview_image_url?: string | undefined;
+        blurhash?: string | undefined;
+    }[] | null | undefined;
+    categories?: string[] | null | undefined;
+    attachments?: {
+        url: string;
+        title?: string | undefined;
+        duration_in_seconds?: number | undefined;
+        mime_type?: string | undefined;
+        size_in_bytes?: number | undefined;
+    }[] | null | undefined;
+    extra?: {
+        links?: {
+            type: string;
+            url: string;
+            content_html?: string | undefined;
+        }[] | null | undefined;
+    } | null | undefined;
+    authorUrl?: string | null | undefined;
+    authorAvatar?: string | null | undefined;
+}>;
+declare const inboxesEntriesRelations: drizzle_orm.Relations<"inboxes_entries", {
+    inboxes: drizzle_orm.One<"inboxes", true>;
+}>;
+type inboxesEntriesModel = InferInsertModel<typeof inboxesEntries> & {
+    attachments?: AttachmentsModel[] | null;
+    media?: MediaModel[] | null;
+};
+
+declare const inboxes: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "inboxes";
+    schema: undefined;
+    columns: {
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "inboxes";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        handle: drizzle_orm_pg_core.PgColumn<{
+            name: "handle";
+            tableName: "inboxes";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        secret: drizzle_orm_pg_core.PgColumn<{
+            name: "secret";
+            tableName: "inboxes";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        title: drizzle_orm_pg_core.PgColumn<{
+            name: "title";
+            tableName: "inboxes";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const inboxesOpenAPISchema: z.ZodObject<{
+    userId: z.ZodString;
+    handle: z.ZodString;
+    secret: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
+}, z.UnknownKeysParam, z.ZodTypeAny, {
+    title: string | null;
+    handle: string;
+    userId: string;
+    secret: string;
+}, {
+    title: string | null;
+    handle: string;
+    userId: string;
+    secret: string;
+}>;
+declare const inboxesRelations: drizzle_orm.Relations<"inboxes", {
+    users: drizzle_orm.One<"user", true>;
+    entries: drizzle_orm.Many<"inboxes_entries">;
+}>;
+declare const inboxHandleSchema: z.ZodString;
 
 declare const invitations: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "invitations";
@@ -2826,6 +3715,7 @@ declare const usersRelations: drizzle_orm.Relations<"user", {
     actions: drizzle_orm.One<"actions", true>;
     wallets: drizzle_orm.One<"wallets", true>;
     feeds: drizzle_orm.Many<"feeds">;
+    inboxes: drizzle_orm.One<"inboxes", true>;
 }>;
 
 declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
@@ -3224,6 +4114,146 @@ declare const feedPowerTokensRelations: drizzle_orm.Relations<"feedPowerTokens",
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
+    "/inboxes": {
+        $delete: {
+            input: {
+                json: {
+                    handle: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $get: {
+            input: {
+                query: {
+                    handle: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data: {
+                    type: "inbox";
+                    id: string;
+                    secret: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    image?: string | null | undefined;
+                    ownerUserId?: string | null | undefined;
+                    owner?: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    } | null | undefined;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $post: {
+            input: {
+                json: {
+                    handle: string;
+                    title?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $put: {
+            input: {
+                json: {
+                    title: string;
+                    handle: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/inboxes/webhook": {
+        $post: {
+            input: {
+                json: {
+                    guid: string;
+                    publishedAt: string;
+                    description?: string | null | undefined;
+                    title?: string | null | undefined;
+                    content?: string | null | undefined;
+                    author?: string | null | undefined;
+                    url?: string | null | undefined;
+                    media?: {
+                        type: "photo" | "video";
+                        url: string;
+                        width?: number | undefined;
+                        height?: number | undefined;
+                        preview_image_url?: string | undefined;
+                        blurhash?: string | undefined;
+                    }[] | null | undefined;
+                    categories?: string[] | null | undefined;
+                    attachments?: {
+                        url: string;
+                        title?: string | undefined;
+                        duration_in_seconds?: number | undefined;
+                        mime_type?: string | undefined;
+                        size_in_bytes?: number | undefined;
+                    }[] | null | undefined;
+                    extra?: {
+                        links?: {
+                            type: string;
+                            url: string;
+                            content_html?: string | undefined;
+                        }[] | null | undefined;
+                    } | null | undefined;
+                    authorUrl?: string | null | undefined;
+                    authorAvatar?: string | null | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/inboxes/email": {
+        $post: {
+            input: {
+                json: {
+                    date: string;
+                    from: {
+                        address: string;
+                        name?: string | undefined;
+                    };
+                    to: {
+                        address: string;
+                        name?: string | undefined;
+                    };
+                    messageId: string;
+                    subject?: string | undefined;
+                    html?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
     "/admin/clean": {
         $post: {
             input: {
@@ -3821,6 +4851,31 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     listId: string;
                     lastViewedAt: string | null;
                     category?: string | undefined;
+                } | {
+                    title: string | null;
+                    userId: string;
+                    view: number;
+                    category: string | null;
+                    feedId: string;
+                    inboxId: string;
+                    isPrivate: boolean;
+                    inboxes: {
+                        type: "inbox";
+                        id: string;
+                        secret: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                    };
                 })[];
             };
             outputFormat: "json" | "text";
@@ -4257,6 +5312,162 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         };
     };
 } & {
+    "/entries/inbox": {
+        $post: {
+            input: {
+                json: {
+                    inboxId: string;
+                    limit?: number | undefined;
+                    publishedAfter?: string | undefined;
+                    publishedBefore?: string | undefined;
+                };
+            };
+            output: {
+                code: 0;
+                remaining: number;
+                data?: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        id: string;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        inboxHandle: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    };
+                    feeds: {
+                        type: "inbox";
+                        id: string;
+                        secret: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                    };
+                    read: boolean | null;
+                    collections?: {
+                        createdAt: string;
+                    } | undefined;
+                    settings?: {
+                        summary?: boolean | undefined;
+                        translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
+                        readability?: boolean | undefined;
+                        rewriteRules?: {
+                            from: string;
+                            to: string;
+                        }[] | undefined;
+                        webhooks?: string[] | undefined;
+                    } | undefined;
+                }[] | undefined;
+                total?: number | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+        $get: {
+            input: {
+                query: {
+                    id: string | string[];
+                };
+            };
+            output: {
+                code: 0;
+                data?: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        content: string | null;
+                        id: string;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        insertedAt: string;
+                        publishedAt: string;
+                        inboxHandle: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    };
+                    feeds: {
+                        type: "inbox";
+                        id: string;
+                        secret: string;
+                        description?: string | null | undefined;
+                        title?: string | null | undefined;
+                        image?: string | null | undefined;
+                        ownerUserId?: string | null | undefined;
+                        owner?: {
+                            name: string | null;
+                            id: string;
+                            emailVerified: string | null;
+                            image: string | null;
+                            handle: string | null;
+                            createdAt: string;
+                        } | null | undefined;
+                    };
+                } | undefined;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
     "/entries/read-histories/:id": {
         $get: {
             input: {
@@ -4325,6 +5536,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     limit?: number | undefined;
                     publishedAfter?: string | undefined;
                     publishedBefore?: string | undefined;
+                    listId?: string | undefined;
                     collected?: boolean | undefined;
                     isCollection?: boolean | undefined;
                     isArchived?: boolean | undefined;
@@ -4342,11 +5554,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         author: string | null;
                         url: string | null;
                         guid: string;
+                        categories: string[] | null;
                         authorUrl: string | null;
                         authorAvatar: string | null;
                         insertedAt: string;
                         publishedAt: string;
-                        categories: string[] | null;
                         media?: {
                             type: "photo" | "video";
                             url: string;
@@ -4435,11 +5647,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         author: string | null;
                         url: string | null;
                         guid: string;
+                        categories: string[] | null;
                         authorUrl: string | null;
                         authorAvatar: string | null;
                         insertedAt: string;
                         publishedAt: string;
-                        categories: string[] | null;
                         media?: {
                             type: "photo" | "video";
                             url: string;
@@ -4515,11 +5727,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     url: string | null;
                     feedId: string;
                     guid: string;
+                    categories: string[] | null;
                     authorUrl: string | null;
                     authorAvatar: string | null;
                     insertedAt: string;
                     publishedAt: string;
-                    categories: string[] | null;
                     media?: {
                         type: "photo" | "video";
                         url: string;
@@ -4568,11 +5780,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         url: string | null;
                         feedId: string;
                         guid: string;
+                        categories: string[] | null;
                         authorUrl: string | null;
                         authorAvatar: string | null;
                         insertedAt: string;
                         publishedAt: string;
-                        categories: string[] | null;
                         media?: {
                             type: "photo" | "video";
                             url: string;
@@ -4838,6 +6050,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     id: string | string[];
                     language: string | string[];
                     fields: string | string[];
+                    part?: string | string[] | undefined;
                 };
             };
             output: {
@@ -5020,4 +6233,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, mediaZodSchema, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

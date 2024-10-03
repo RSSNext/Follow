@@ -1,5 +1,9 @@
 import { useFeedListSortSelector } from "../atom"
-import { SortByAlphabeticalFeedList, SortByAlphabeticalListList } from "./SortByAlphabeticalList"
+import {
+  SortByAlphabeticalFeedList,
+  SortByAlphabeticalInboxList,
+  SortByAlphabeticalListList,
+} from "./SortByAlphabeticalList"
 import { SortByUnreadFeedList } from "./SortByUnreadList"
 import type { FeedListProps, ListListProps } from "./types"
 
@@ -22,6 +26,16 @@ export const SortByAlphabeticalList = (props: ListListProps) => {
   switch (by) {
     default: {
       return <SortByAlphabeticalListList {...props} />
+    }
+  }
+}
+
+export const SortByAlphabeticalInbox = (props: ListListProps) => {
+  const by = useFeedListSortSelector((s) => s.by)
+
+  switch (by) {
+    default: {
+      return <SortByAlphabeticalInboxList {...props} />
     }
   }
 }

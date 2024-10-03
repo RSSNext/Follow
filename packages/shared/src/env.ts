@@ -10,6 +10,7 @@ export const env = createEnv({
     VITE_IMGPROXY_URL: z.string().url(),
     VITE_SENTRY_DSN: z.string().optional(),
     VITE_POSTHOG_KEY: z.string().optional(),
+    VITE_INBOXES_EMAIL: z.string().default("@follow.re"),
   },
 
   emptyStringAsUndefined: true,

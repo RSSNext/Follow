@@ -32,5 +32,8 @@
   "8002": "List limit exceeded",
   "8003": "Feed already added to list",
   "9000": "Achievement not completed",
-  "9001": "Achievement already received"
+  "9001": "Achievement already received",
+  "10000": "Inbox not found",
+  "10001": "Inbox already exists",
+  "10002": "Inbox limit exceeded"
 }

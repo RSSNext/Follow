@@ -3,7 +3,13 @@ import { isUndefined } from "lodash-es"
 import { getReadonlyRoute, getStableRouterNavigate } from "~/atoms/route"
 import { setSidebarActiveView } from "~/atoms/sidebar"
 import { resetShowSourceContent } from "~/atoms/source-content"
-import { ROUTE_ENTRY_PENDING, ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "~/constants"
+import {
+  ROUTE_ENTRY_PENDING,
+  ROUTE_FEED_IN_FOLDER,
+  ROUTE_FEED_IN_INBOX,
+  ROUTE_FEED_IN_LIST,
+  ROUTE_FEED_PENDING,
+} from "~/constants"
 import { FeedViewType } from "~/lib/enum"
 
 type NavigateEntryOptions = Partial<{
@@ -11,6 +17,8 @@ type NavigateEntryOptions = Partial<{
   entryId: string | null
   view: FeedViewType
   folderName: string
+  inboxId: string
+  listId: string
 }>
 /**
  * @description a hook to navigate to `feedId`, `entryId`, add search for `view`, `level`
@@ -19,7 +27,7 @@ type NavigateEntryOptions = Partial<{
 export const useNavigateEntry = () => navigateEntry
 
 export const navigateEntry = (options: NavigateEntryOptions) => {
-  const { entryId, feedId, view, folderName } = options || {}
+  const { entryId, feedId, view, folderName, inboxId, listId } = options || {}
   const { params, searchParams } = getReadonlyRoute()
   let finalFeedId = feedId || params.feedId || ROUTE_FEED_PENDING
 
@@ -29,6 +37,14 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
 
   if (folderName) {
     finalFeedId = `${ROUTE_FEED_IN_FOLDER}${folderName}`
+  }
+
+  if (inboxId) {
+    finalFeedId = `${ROUTE_FEED_IN_INBOX}${inboxId}`
+  }
+
+  if (listId) {
+    finalFeedId = `${ROUTE_FEED_IN_LIST}${listId}`
   }
 
   finalFeedId = encodeURIComponent(finalFeedId)

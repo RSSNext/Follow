@@ -9,7 +9,7 @@ import { FeedIcon } from "~/components/feed-icon"
 import { OouiUserAnonymous } from "~/components/icons/OouiUserAnonymous"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
-import { useFeedActions, useListActions } from "~/hooks/biz/useFeedActions"
+import { useFeedActions, useInboxActions, useListActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAnyPointDown } from "~/hooks/common"
@@ -19,6 +19,7 @@ import { getNewIssueUrl } from "~/lib/issues"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn } from "~/lib/utils"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
+import { useInboxById } from "~/store/inbox"
 import { useListById } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
@@ -173,7 +174,7 @@ const ListItemImpl: Component<{
 }> = ({ view, listId, className }) => {
   const list = useListById(listId)
 
-  const isActive = useRouteParamsSelector((routerParams) => routerParams.feedId === listId)
+  const isActive = useRouteParamsSelector((routerParams) => routerParams.listId === listId)
   const { items } = useListActions({ listId, view })
 
   const listUnread = useFeedUnreadStore((state) => state.data[listId] || 0)
@@ -189,7 +190,7 @@ const ListItemImpl: Component<{
       e.stopPropagation()
 
       navigate({
-        feedId: listId,
+        listId,
         entryId: null,
         view,
       })
@@ -220,7 +221,7 @@ const ListItemImpl: Component<{
       <div className={"flex min-w-0 items-center"}>
         <FeedIcon fallback feed={list} size={28} />
         <EllipsisHorizontalTextWithTooltip className="truncate">
-          {list.title}
+          {getPreferredTitle(list)}
         </EllipsisHorizontalTextWithTooltip>
 
         {subscription.isPrivate && (
@@ -240,3 +241,60 @@ const ListItemImpl: Component<{
 }
 
 export const ListItem = memo(ListItemImpl)
+
+const InboxItemImpl: Component<{
+  inboxId: string
+  view: FeedViewType
+}> = ({ view, inboxId, className }) => {
+  const inbox = useInboxById(inboxId)
+
+  const isActive = useRouteParamsSelector((routerParams) => routerParams.inboxId === inboxId)
+  const { items } = useInboxActions({ inboxId })
+
+  const inboxUnread = useFeedUnreadStore((state) => state.data[inboxId] || 0)
+
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+  useAnyPointDown(() => {
+    setIsContextMenuOpen(false)
+  })
+  const navigate = useNavigateEntry()
+  const handleNavigate = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation()
+
+      navigate({
+        inboxId,
+        entryId: null,
+        view,
+      })
+    },
+    [inboxId, navigate, view],
+  )
+  if (!inbox) return null
+  return (
+    <div
+      data-inbox-id={inboxId}
+      className={cn(
+        "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-sm font-medium leading-loose",
+        (isActive || isContextMenuOpen) && "bg-native-active",
+        "py-[2px] pl-2.5",
+        className,
+      )}
+      onClick={handleNavigate}
+      onContextMenu={(e) => {
+        setIsContextMenuOpen(true)
+        showNativeMenu(items, e)
+      }}
+    >
+      <div className={"flex min-w-0 items-center"}>
+        <FeedIcon fallback feed={inbox} size={16} />
+        <EllipsisHorizontalTextWithTooltip className="truncate">
+          {getPreferredTitle(inbox)}
+        </EllipsisHorizontalTextWithTooltip>
+      </div>
+      <UnreadNumber unread={inboxUnread} className="ml-2" />
+    </div>
+  )
+}
+
+export const InboxItem = memo(InboxItemImpl)

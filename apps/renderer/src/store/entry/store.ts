@@ -10,6 +10,7 @@ import { EntryService } from "~/services"
 
 import { feedActions } from "../feed"
 import { imageActions } from "../image"
+import { inboxActions } from "../inbox"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import { internal_batchMarkRead } from "./helper"
@@ -67,34 +68,65 @@ class EntryActions {
     return data
   }
 
+  async fetchInboxEntryById(entryId: string) {
+    const { data } = await apiClient.entries.inbox.$get({
+      query: {
+        id: entryId,
+      },
+    })
+    if (data) {
+      this.upsertMany([
+        // patch data, should omit `read` because the network race condition or server cache
+        omit(data, "read") as any,
+      ])
+      inboxActions.upsertMany([data.feeds])
+    }
+
+    return data
+  }
+
   async fetchEntries({
-    id,
+    feedId,
+    inboxId,
+    listId,
     view,
     read,
     limit,
     pageParam,
     isArchived,
   }: {
-    id?: number | string
+    feedId?: number | string
+    inboxId?: number | string
+    listId?: number | string
     view?: number
     read?: boolean
     limit?: number
     pageParam?: string
     isArchived?: boolean
   }) {
-    const data = await apiClient.entries.$post({
-      json: {
-        publishedAfter: pageParam,
-        read,
-        limit,
-        isArchived,
-        // withContent: true,
-        ...getEntriesParams({
-          id,
-          view,
-        }),
-      },
-    })
+    const data = inboxId
+      ? await apiClient.entries.inbox.$post({
+          json: {
+            publishedAfter: pageParam,
+            limit,
+            inboxId: `${inboxId}`,
+          },
+        })
+      : await apiClient.entries.$post({
+          json: {
+            publishedAfter: pageParam,
+            read,
+            limit,
+            isArchived,
+            // withContent: true,
+            ...getEntriesParams({
+              feedId,
+              inboxId,
+              listId,
+              view,
+            }),
+          },
+        })
 
     if (data.data) {
       this.upsertMany(data.data)
@@ -226,7 +258,7 @@ class EntryActions {
           // Push entryFeedMap
           entryFeedMap[item.entries.id] = item.feeds.id
           // Push entryCollection
-          if (item.collections) {
+          if ("collections" in item) {
             entryCollection[item.entries.id] = item.collections
           }
 
@@ -294,7 +326,7 @@ class EntryActions {
           )
 
           // Push entryCollection
-          if (item.collections) {
+          if ("collections" in item) {
             entryCollection[item.entries.id] = item.collections
           }
         }

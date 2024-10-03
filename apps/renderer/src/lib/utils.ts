@@ -18,20 +18,38 @@ export function clamp(value, min, max) {
   return Math.max(Math.min(max, value), min)
 }
 
-export function getEntriesParams({ id, view }: { id?: number | string; view?: number }) {
+export function getEntriesParams({
+  feedId,
+  inboxId,
+  listId,
+  view,
+}: {
+  feedId?: number | string
+  inboxId?: number | string
+  listId?: number | string
+  view?: number
+}) {
   const params: {
     feedId?: string
     feedIdList?: string[]
     isCollection?: boolean
     withContent?: boolean
+    inboxId?: string
+    listId?: string
   } = {}
-  if (id === FEED_COLLECTION_LIST) {
-    params.isCollection = true
-  } else if (id && id !== ROUTE_FEED_PENDING) {
-    if (id.toString().includes(",")) {
-      params.feedIdList = `${id}`.split(",")
-    } else {
-      params.feedId = `${id}`
+  if (inboxId) {
+    params.inboxId = `${inboxId}`
+  } else if (listId) {
+    params.listId = `${listId}`
+  } else if (feedId) {
+    if (feedId === FEED_COLLECTION_LIST) {
+      params.isCollection = true
+    } else if (feedId !== ROUTE_FEED_PENDING) {
+      if (feedId.toString().includes(",")) {
+        params.feedIdList = `${feedId}`.split(",")
+      } else {
+        params.feedId = `${feedId}`
+      }
     }
   }
   if (view === FeedViewType.SocialMedia) {
