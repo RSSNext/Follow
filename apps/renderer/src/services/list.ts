@@ -2,11 +2,13 @@ import { omit } from "lodash-es"
 
 import { browserDB } from "~/database"
 import type { ListModel } from "~/models/types"
+import { listActions } from "~/store/list"
 
 import { BaseService } from "./base"
 import { CleanerService } from "./cleaner"
+import type { Hydable } from "./interface"
 
-class ServiceStatic extends BaseService<{ id: string }> {
+class ServiceStatic extends BaseService<{ id: string }> implements Hydable {
   constructor() {
     super(browserDB.lists)
   }
@@ -31,6 +33,11 @@ class ServiceStatic extends BaseService<{ id: string }> {
 
   async bulkDelete(ids: string[]) {
     return this.table.bulkDelete(ids)
+  }
+
+  async hydrate() {
+    const lists = await ListService.findAll()
+    listActions.upsertMany(lists)
   }
 }
 

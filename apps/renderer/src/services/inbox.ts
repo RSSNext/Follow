@@ -1,10 +1,12 @@
 import { browserDB } from "~/database"
 import type { InboxModel } from "~/models/types"
+import { inboxActions } from "~/store/inbox"
 
 import { BaseService } from "./base"
 import { CleanerService } from "./cleaner"
+import type { Hydable } from "./interface"
 
-class ServiceStatic extends BaseService<{ id: string }> {
+class ServiceStatic extends BaseService<{ id: string }> implements Hydable {
   constructor() {
     super(browserDB.inboxes)
   }
@@ -27,6 +29,11 @@ class ServiceStatic extends BaseService<{ id: string }> {
 
   async bulkDelete(ids: string[]) {
     return this.table.bulkDelete(ids)
+  }
+
+  async hydrate() {
+    const data = await this.findAll()
+    inboxActions.upsertMany(data)
   }
 }
 

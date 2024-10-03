@@ -1,11 +1,13 @@
 import { browserDB } from "~/database"
 import type { FeedModel, FeedOrListModel } from "~/models/types"
+import { feedActions } from "~/store/feed"
 
 import { BaseService } from "./base"
 import { CleanerService } from "./cleaner"
+import type { Hydable } from "./interface"
 
 type FeedModelWithId = FeedModel & { id: string }
-class ServiceStatic extends BaseService<FeedModelWithId> {
+class ServiceStatic extends BaseService<FeedModelWithId> implements Hydable {
   constructor() {
     super(browserDB.feeds)
   }
@@ -26,6 +28,11 @@ class ServiceStatic extends BaseService<FeedModelWithId> {
 
   async bulkDelete(ids: string[]) {
     return this.table.bulkDelete(ids)
+  }
+
+  async hydrate() {
+    const feeds = await FeedService.findAll()
+    feedActions.upsertMany(feeds)
   }
 }
 
