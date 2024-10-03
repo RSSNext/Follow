@@ -225,11 +225,13 @@ class SubscriptionActions {
 
   async markReadByFeedIds({
     feedIds,
+    inboxId,
     view,
     filter,
     listId,
   }: {
     feedIds?: string[]
+    inboxId?: string
     view?: FeedViewType
     filter?: MarkReadFilter
     listId?: string
@@ -244,15 +246,22 @@ class SubscriptionActions {
               ? {
                   listId,
                 }
-              : {
-                  feedIdList: stableFeedIds,
-                }),
+              : inboxId
+                ? {
+                    inboxId,
+                  }
+                : {
+                    feedIdList: stableFeedIds,
+                  }),
             ...filter,
           },
         }),
       async () => {
         if (listId) {
           feedUnreadActions.updateByFeedId(listId, 0)
+        } else if (inboxId) {
+          feedUnreadActions.updateByFeedId(inboxId, 0)
+          entryActions.patchManyByFeedId(inboxId, { read: true }, filter)
         } else {
           for (const feedId of stableFeedIds) {
             // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.

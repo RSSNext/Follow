@@ -5086,6 +5086,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     view?: number | undefined;
                     feedIdList?: string[] | undefined;
                     feedId?: string | undefined;
+                    inboxId?: string | undefined;
                     listId?: string | undefined;
                     startTime?: number | undefined;
                     endTime?: number | undefined;
