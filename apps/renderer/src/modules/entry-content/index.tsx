@@ -246,7 +246,9 @@ export const EntryContentRender: Component<{
               {!content && (
                 <div className="center mt-16 min-w-0">
                   {isPending ? (
-                    <EntryContentLoading icon={feed?.siteUrl!} />
+                    <EntryContentLoading
+                      icon={feed?.type === "inbox" ? undefined : feed?.siteUrl!}
+                    />
                   ) : error ? (
                     <div className="center flex min-w-0 flex-col gap-2">
                       <i className="i-mgc-close-cute-re text-3xl text-red-500" />
