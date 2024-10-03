@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 import { Button } from "~/components/ui/button"
+import { CopyButton } from "~/components/ui/code-highlighter"
 import { useModalStack } from "~/components/ui/modal"
 import {
   Table,
@@ -19,27 +20,9 @@ import { inboxActions, useInboxByView } from "~/store/inbox"
 
 import { InboxForm } from "./inbox-form"
 
-export function DiscoverInboxList({ onSuccess }: { onSuccess?: () => void; type?: string }) {
+export function DiscoverInboxList() {
   const { t } = useTranslation()
   const inboxes = useInboxByView(FeedViewType.Articles)
-
-  const mutationDestroy = useMutation({
-    mutationFn: async (id: string) => {
-      await apiClient.inboxes.$delete({
-        json: {
-          handle: id,
-        },
-      })
-      onSuccess?.()
-    },
-    onSuccess: (_, handle) => {
-      inboxActions.clearByInboxId(handle)
-      toast.success(t("discover.inbox_destroy_success"))
-    },
-    onError: () => {
-      toast.error(t("discover.inbox_destroy_error"))
-    },
-  })
 
   const { present } = useModalStack()
 
@@ -71,12 +54,38 @@ export function DiscoverInboxList({ onSuccess }: { onSuccess?: () => void; type?
             <TableRow key={inbox.id}>
               <TableCell size="sm">{inbox.id}</TableCell>
               <TableCell size="sm">
-                {inbox.id}@{INBOXES_EMAIL_DOMAIN}
+                <div className="group relative flex w-fit items-center gap-2">
+                  <span className="shrink-0">
+                    {inbox.id}@{INBOXES_EMAIL_DOMAIN}
+                  </span>
+                  <CopyButton
+                    value={`${inbox.id}@${INBOXES_EMAIL_DOMAIN}`}
+                    className="absolute -right-6 p-1 opacity-0 group-hover:opacity-100 [&_i]:size-3"
+                  />
+                </div>
               </TableCell>
               <TableCell size="sm">{inbox.title}</TableCell>
-              <TableCell size="sm">{inbox.secret}</TableCell>
               <TableCell size="sm">
-                <Button variant="ghost" onClick={() => mutationDestroy.mutate(inbox.id)}>
+                <div className="group relative flex w-fit items-center gap-2 font-mono">
+                  <span className="shrink-0">****</span>
+                  <CopyButton
+                    value={inbox.secret}
+                    className="absolute -right-6 p-1 opacity-0 group-hover:opacity-100 [&_i]:size-3"
+                  />
+                </div>
+              </TableCell>
+              <TableCell size="sm">
+                <Button
+                  variant="ghost"
+                  onClick={() =>
+                    present({
+                      title: t("discover.inbox_destroy_confirm"),
+                      content: ({ dismiss }) => (
+                        <ConfirmDestroyModalContent id={inbox.id} dismiss={dismiss} />
+                      ),
+                    })
+                  }
+                >
                   <i className="i-mgc-delete-2-cute-re" />
                 </Button>
                 <Button
@@ -112,5 +121,36 @@ export function DiscoverInboxList({ onSuccess }: { onSuccess?: () => void; type?
         </Button>
       </div>
     </>
+  )
+}
+
+const ConfirmDestroyModalContent = ({ id, dismiss }: { id: string; dismiss: () => void }) => {
+  const { t } = useTranslation()
+
+  const mutationDestroy = useMutation({
+    mutationFn: async (id: string) => {
+      await apiClient.inboxes.$delete({
+        json: {
+          handle: id,
+        },
+      })
+    },
+    onSuccess: (_, handle) => {
+      inboxActions.clearByInboxId(handle)
+      toast.success(t("discover.inbox_destroy_success"))
+      dismiss()
+    },
+    onError: () => {
+      toast.error(t("discover.inbox_destroy_error"))
+    },
+  })
+
+  return (
+    <div className="w-[512px]">
+      <div className="mb-4 text-red-600">{t("discover.inbox_destroy_warning")}</div>
+      <div className="flex justify-end">
+        <Button onClick={() => mutationDestroy.mutate(id)}>{t("words.confirm")}</Button>
+      </div>
+    </div>
   )
 }
