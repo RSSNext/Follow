@@ -76,7 +76,7 @@ function EntryColumnImpl() {
     const feedId = activeEntry?.feedId
     if (!feedId) return
 
-    entryActions.markRead(feedId, activeEntryId, true)
+    entryActions.markRead({ feedId, entryId: activeEntryId, read: true })
   }, [activeEntry?.feedId, activeEntryId, isCollection, isPendingEntry])
 
   const isInteracted = useRef(false)

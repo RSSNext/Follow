@@ -2213,6 +2213,22 @@ declare const inboxesEntries: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        read: drizzle_orm_pg_core.PgColumn<{
+            name: "read";
+            tableName: "inboxes_entries";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -2245,6 +2261,7 @@ declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<
         [key: string]: string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null;
     } | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | (string | number | boolean | any | any | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null>>;
     inboxHandle: z.ZodString;
+    read: z.ZodNullable<z.ZodBoolean>;
 }, "media" | "attachments" | "extra">, {
     attachments: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
         url: z.ZodString;
@@ -2327,6 +2344,7 @@ declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<
     authorAvatar: string | null;
     insertedAt: string;
     publishedAt: string;
+    read: boolean | null;
     inboxHandle: string;
     media?: {
         type: "photo" | "video";
@@ -2363,6 +2381,7 @@ declare const inboxesEntriesOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<
     authorAvatar: string | null;
     insertedAt: string;
     publishedAt: string;
+    read: boolean | null;
     inboxHandle: string;
     media?: {
         type: "photo" | "video";
@@ -2415,6 +2434,7 @@ declare const inboxesEntriesInsertOpenAPISchema: z.ZodObject<z.objectUtil.extend
     authorAvatar: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     insertedAt: z.ZodString;
     publishedAt: z.ZodString;
+    read: z.ZodOptional<z.ZodNullable<z.ZodBoolean>>;
     inboxHandle: z.ZodString;
 }, "id" | "media" | "attachments" | "extra" | "insertedAt" | "publishedAt" | "inboxHandle">, {
     attachments: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
@@ -2519,6 +2539,7 @@ declare const inboxesEntriesInsertOpenAPISchema: z.ZodObject<z.objectUtil.extend
     } | null | undefined;
     authorUrl?: string | null | undefined;
     authorAvatar?: string | null | undefined;
+    read?: boolean | null | undefined;
 }, {
     guid: string;
     publishedAt: string;
@@ -2552,6 +2573,7 @@ declare const inboxesEntriesInsertOpenAPISchema: z.ZodObject<z.objectUtil.extend
     } | null | undefined;
     authorUrl?: string | null | undefined;
     authorAvatar?: string | null | undefined;
+    read?: boolean | null | undefined;
 }>;
 declare const inboxesEntriesRelations: drizzle_orm.Relations<"inboxes_entries", {
     inboxes: drizzle_orm.One<"inboxes", true>;
@@ -4219,6 +4241,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     } | null | undefined;
                     authorUrl?: string | null | undefined;
                     authorAvatar?: string | null | undefined;
+                    read?: boolean | null | undefined;
                 };
             };
             output: {
@@ -5018,6 +5041,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     entryIds: string[];
+                    isInbox?: boolean | undefined;
                 };
             };
             output: {
@@ -5030,6 +5054,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {
                 json: {
                     entryId: string;
+                    isInbox?: boolean | undefined;
                 };
             };
             output: {
@@ -5365,6 +5390,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         authorAvatar: string | null;
                         insertedAt: string;
                         publishedAt: string;
+                        read: boolean | null;
                         inboxHandle: string;
                         media?: {
                             type: "photo" | "video";
@@ -5448,6 +5474,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         authorAvatar: string | null;
                         insertedAt: string;
                         publishedAt: string;
+                        read: boolean | null;
                         inboxHandle: string;
                         media?: {
                             type: "photo" | "video";

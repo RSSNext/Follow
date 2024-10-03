@@ -345,10 +345,11 @@ class EntryActions {
     }))
   }
 
-  async markRead(feedId: string, entryId: string, read: boolean) {
-    const currentIsRead = get().flatMapEntries[entryId]?.read
+  async markRead({ feedId, entryId, read }: { feedId: string; entryId: string; read: boolean }) {
+    const entry = get().flatMapEntries[entryId]
+    const isInbox = entry?.entries && "inboxHandle" in entry.entries
 
-    if (read && currentIsRead) {
+    if (read && entry?.read) {
       return
     }
 
@@ -362,11 +363,12 @@ class EntryActions {
       // Send api request
       async () => {
         if (read) {
-          await internal_batchMarkRead([feedId, entryId])
+          await internal_batchMarkRead([feedId, entryId, isInbox])
         } else {
           await apiClient.reads.$delete({
             json: {
               entryId,
+              isInbox,
             },
           })
         }

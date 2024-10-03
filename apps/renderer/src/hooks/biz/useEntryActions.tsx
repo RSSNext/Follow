@@ -106,12 +106,22 @@ export const useUnCollect = (entry: Nullable<CombinedEntryModel>) => {
 export const useRead = () =>
   useMutation({
     mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry && entryActions.markRead(entry.feeds.id, entry.entries.id, true),
+      entry &&
+      entryActions.markRead({
+        feedId: entry.feeds.id,
+        entryId: entry.entries.id,
+        read: true,
+      }),
   })
 export const useUnread = () =>
   useMutation({
     mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry && entryActions.markRead(entry.feeds.id, entry.entries.id, false),
+      entry &&
+      entryActions.markRead({
+        feedId: entry.feeds.id,
+        entryId: entry.entries.id,
+        read: false,
+      }),
   })
 
 export const useEntryActions = ({

@@ -51,7 +51,7 @@ export const EntryItemWrapper: FC<
       if (!document.hasFocus()) return
       if (asRead) return
 
-      entryActions.markRead(entry.feedId, entry.entries.id, true)
+      entryActions.markRead({ feedId: entry.feedId, entryId: entry.entries.id, read: true })
     },
     233,
     {
