@@ -1,3 +1,4 @@
+import { env } from "@follow/shared/env"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
@@ -18,7 +19,6 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
-import { INBOXES_EMAIL_DOMAIN } from "~/constants"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
@@ -165,7 +165,7 @@ const InboxInnerForm = ({
                     <FormControl>
                       <div className={cn("flex w-64 items-center gap-2")}>
                         <Input autoFocus {...field} />
-                        <span className="text-zinc-500">{`@${INBOXES_EMAIL_DOMAIN}`}</span>
+                        <span className="text-zinc-500">{env.VITE_INBOXES_EMAIL}</span>
                       </div>
                     </FormControl>
                     <FormMessage />

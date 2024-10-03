@@ -1,7 +1,7 @@
 import { WEB_URL } from "@follow/shared/constants"
+import { env } from "@follow/shared/env"
 
 import { FeedIcon } from "~/components/feed-icon"
-import { INBOXES_EMAIL_DOMAIN } from "~/constants"
 import { cn } from "~/lib/utils"
 import type { FeedOrListRespModel } from "~/models"
 
@@ -37,7 +37,7 @@ export function FollowSummary({
     case "inbox": {
       siteLink = void 0
       feedLink = siteLink
-      feedText = `${feed.id}@${INBOXES_EMAIL_DOMAIN}`
+      feedText = `${feed.id}${env.VITE_INBOXES_EMAIL}`
       feedTitle = feed.title || `${feed.id}'s Inbox`
       break
     }

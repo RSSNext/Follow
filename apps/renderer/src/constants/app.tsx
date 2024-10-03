@@ -15,5 +15,3 @@ export const ROUTE_FEED_IN_INBOX = "inbox-"
 
 export const DAILY_CLAIM_AMOUNT = "20"
 export const INVITATION_PRICE = "100"
-
-export const INBOXES_EMAIL_DOMAIN = "follow.re"

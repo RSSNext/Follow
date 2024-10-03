@@ -1,10 +1,10 @@
 import { WEB_URL } from "@follow/shared/constants"
+import { env } from "@follow/shared/env"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal"
-import { INBOXES_EMAIL_DOMAIN } from "~/constants"
 import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem } from "~/lib/native-menu"
 import { useFeedClaimModal } from "~/modules/claim"
@@ -348,7 +348,7 @@ export const useInboxActions = ({ inboxId }: { inboxId: string }) => {
         shortcut: "Meta+Shift+C",
         disabled: false,
         click: () => {
-          navigator.clipboard.writeText(`${inboxId}@${INBOXES_EMAIL_DOMAIN}`)
+          navigator.clipboard.writeText(`${inboxId}${env.VITE_INBOXES_EMAIL}`)
         },
       },
     ]

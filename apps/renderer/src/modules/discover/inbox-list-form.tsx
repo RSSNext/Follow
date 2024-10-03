@@ -1,3 +1,4 @@
+import { env } from "@follow/shared/env"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
@@ -13,7 +14,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
-import { INBOXES_EMAIL_DOMAIN } from "~/constants"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedViewType } from "~/lib/enum"
 import { inboxActions, useInboxByView } from "~/store/inbox"
@@ -56,10 +56,11 @@ export function DiscoverInboxList() {
               <TableCell size="sm">
                 <div className="group relative flex w-fit items-center gap-2">
                   <span className="shrink-0">
-                    {inbox.id}@{INBOXES_EMAIL_DOMAIN}
+                    {inbox.id}
+                    {env.VITE_INBOXES_EMAIL}
                   </span>
                   <CopyButton
-                    value={`${inbox.id}@${INBOXES_EMAIL_DOMAIN}`}
+                    value={`${inbox.id}${env.VITE_INBOXES_EMAIL}`}
                     className="absolute -right-6 p-1 opacity-0 group-hover:opacity-100 [&_i]:size-3"
                   />
                 </div>
