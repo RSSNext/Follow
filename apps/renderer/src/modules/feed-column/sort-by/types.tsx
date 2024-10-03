@@ -9,4 +9,5 @@ export type SortBy = "count" | "alphabetical"
 
 export type ListListProps = {
   view: FeedViewType
+  data: Record<string, string[]>
 }

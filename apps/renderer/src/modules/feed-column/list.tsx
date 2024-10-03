@@ -190,7 +190,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
               {t("words.lists")}
             </div>
-            <SortByAlphabeticalList view={view} />
+            <SortByAlphabeticalList view={view} data={listsData} />
           </>
         )}
         {hasInboxData && (
@@ -198,7 +198,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
             <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
               {t("words.inbox")}
             </div>
-            <SortByAlphabeticalInbox view={view} />
+            <SortByAlphabeticalInbox view={view} data={inboxesData} />
           </>
         )}
         {(hasListData || hasInboxData) && (
