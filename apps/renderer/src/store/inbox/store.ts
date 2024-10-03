@@ -13,16 +13,16 @@ export const useInboxStore = createZustandStore<InboxState>("inbox")(() => ({
 const set = createImmerSetter(useInboxStore)
 
 class InboxActionStatic {
-  upsertMany(inboxs: InboxModel[]) {
-    if (inboxs.length === 0) return
+  upsertMany(inboxes: InboxModel[]) {
+    if (inboxes.length === 0) return
     set((state) => {
-      for (const inbox of inboxs) {
+      for (const inbox of inboxes) {
         state.inboxes[inbox.id] = inbox
       }
       return state
     })
 
-    runTransactionInScope(() => InboxService.upsertMany(inboxs))
+    runTransactionInScope(() => InboxService.upsertMany(inboxes))
   }
 
   async fetchInboxById(id: string) {
