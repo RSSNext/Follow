@@ -4257,12 +4257,11 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 json: {
                     date: string;
                     from: {
-                        address: string;
                         name?: string | undefined;
+                        address?: string | undefined;
                     };
                     to: {
                         address: string;
-                        name?: string | undefined;
                     };
                     messageId: string;
                     subject?: string | undefined;

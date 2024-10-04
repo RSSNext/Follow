@@ -324,7 +324,7 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
         </p>
       ) : (
         <div className="center mt-16 flex flex-col gap-2">
-          <LoadingWithIcon size="large" icon={<i className="i-mgc-sparkles-2-cute-re" />} />
+          <LoadingWithIcon size="large" icon={<i className="i-mgc-docment-cute-re" />} />
           <span className="text-sm">{t("entry_content.fetching_content")}</span>
         </div>
       )}
