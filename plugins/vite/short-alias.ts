@@ -1,4 +1,13 @@
+import generate from "@babel/generator"
+import { parse } from "@babel/parser"
+import traverse from "@babel/traverse"
+import * as t from "@babel/types"
 import type { Plugin } from "vite"
+
+// @ts-expect-error
+const traverseApply: typeof traverse = traverse.default || traverse
+// @ts-expect-error
+const generateApply: typeof generate = generate.default || generate
 
 export function shortAliasPlugin(): Plugin {
   const aliasMap = new Map<string, string>()
@@ -21,37 +30,36 @@ export function shortAliasPlugin(): Plugin {
     name: "short-alias",
     renderChunk(code, chunk) {
       if (chunk.fileName.startsWith("vendor/")) return code
-      const importRegex = /import\s*(\{[^}]+\})\s*from\s*(['"])([^'"]+)\2/g
 
-      return code.replaceAll(importRegex, (match, imports, quote, source) => {
-        // Only process imports with curly braces
-        if (!imports.startsWith("{") || !imports.endsWith("}")) {
-          return match
-        }
+      const ast = parse(code, {
+        sourceType: "module",
+        plugins: ["typescript"],
+      })
 
-        const newImports = imports
-          .slice(1, -1) // Remove the curly braces
-          .split(",")
-          .map((imp) => {
-            const [original, alias] = imp.trim().split(/\s+as\s+/)
-            if (alias) {
-              // If an alias already exists, keep it or shorten it if it's too long
-              if (alias.length > 3) {
-                let shortAlias = aliasMap.get(alias)
+      traverseApply(ast, {
+        ImportDeclaration(path) {
+          path.node.specifiers.forEach((specifier) => {
+            if (t.isImportSpecifier(specifier)) {
+              const imported = specifier.imported as t.Identifier
+              const local = specifier.local as t.Identifier
+
+              if (local.name !== imported.name && local.name.length > 3) {
+                let shortAlias = aliasMap.get(local.name)
                 if (!shortAlias) {
                   shortAlias = generateShortAlias()
-                  aliasMap.set(alias, shortAlias)
+                  aliasMap.set(local.name, shortAlias)
                 }
-                return `${original} as ${shortAlias}`
-              }
-              return imp.trim()
-            }
-            return imp.trim()
-          })
-          .join(", ")
 
-        return `import {${newImports}} from ${quote}${source}${quote}`
+                path.scope.rename(local.name, shortAlias)
+                local.name = shortAlias
+              }
+            }
+          })
+        },
       })
+
+      const output = generateApply(ast, { retainLines: true }, code)
+      return output.code
     },
   }
 }
