@@ -47,6 +47,13 @@ class InboxActionStatic {
       delete state.inboxes[id]
     })
   }
+
+  async fetchOwnedInboxes() {
+    const res = await apiClient.inboxes.list.$get()
+    this.upsertMany(res.data)
+
+    return res.data
+  }
 }
 
 export const inboxActions = new InboxActionStatic()

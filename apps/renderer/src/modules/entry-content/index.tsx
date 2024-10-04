@@ -30,7 +30,7 @@ import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { getNewIssueUrl } from "~/lib/issues"
 import { cn } from "~/lib/utils"
-import type { ActiveEntryId, FeedModel } from "~/models"
+import type { ActiveEntryId, FeedModel, InboxModel } from "~/models"
 import {
   useIsSoFWrappedElement,
   useWrappedElement,
@@ -89,15 +89,19 @@ export const EntryContentRender: Component<{
 }> = ({ entryId, noMedia, className, compact }) => {
   const { t } = useTranslation()
 
-  const { error, data, isPending } = useAuthQuery(Queries.entries.byId(entryId), {
-    staleTime: 300_000,
-  })
-
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
 
-  const feed = useFeedById(entry?.feedId) as FeedModel
+  const feed = useFeedById(entry?.feedId) as FeedModel | InboxModel
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
+
+  const { error, data, isPending } = useAuthQuery(
+    feed?.type === "inbox" ? Queries.entries.byInboxId(entryId) : Queries.entries.byId(entryId),
+    {
+      staleTime: 300_000,
+    },
+  )
+
   const summary = useAuthQuery(
     Queries.ai.summary({
       entryId,
@@ -242,7 +246,9 @@ export const EntryContentRender: Component<{
               {!content && (
                 <div className="center mt-16 min-w-0">
                   {isPending ? (
-                    <EntryContentLoading icon={feed?.siteUrl!} />
+                    <EntryContentLoading
+                      icon={feed?.type === "inbox" ? undefined : feed?.siteUrl!}
+                    />
                   ) : error ? (
                     <div className="center flex min-w-0 flex-col gap-2">
                       <i className="i-mgc-close-cute-re text-3xl text-red-500" />

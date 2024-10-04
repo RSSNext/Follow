@@ -35,7 +35,7 @@ export const EntryListHeader: FC<{
 
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
-  const { feedId, entryId, view } = routerParams
+  const { feedId, entryId, view, listId } = routerParams
 
   const headerTitle = useFeedHeaderTitle()
   const os = getOS()
@@ -58,13 +58,13 @@ export const EntryListHeader: FC<{
       </div>
     </div>
   )
-  const { mutateAsync: refreshFeed, isPending } = useRefreshFeedMutation(routerParams.feedId)
+  const { mutateAsync: refreshFeed, isPending } = useRefreshFeedMutation(feedId)
 
   const user = useWhoami()
   const isOnline = useIsOnline()
 
-  const feed = useFeedById(routerParams.feedId)
-  const isList = feed?.type === "list"
+  const feed = useFeedById(feedId)
+  const isList = !!listId
 
   const titleStyleBasedView = ["pl-12", "pl-7", "pl-7", "pl-7", "px-5", "pl-12"]
 

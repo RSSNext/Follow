@@ -235,7 +235,7 @@ export function batchMarkRead(ids: string[]) {
 
   if (batchLikeIds.length > 0) {
     for (const [feedId, id] of batchLikeIds) {
-      entryActions.markRead(feedId, id, true)
+      entryActions.markRead({ feedId, entryId: id, read: true })
     }
   }
 }
