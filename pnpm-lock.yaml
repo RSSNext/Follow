@@ -489,9 +489,6 @@ importers:
       lethargy:
         specifier: 1.0.9
         version: 1.0.9
-      linkedom:
-        specifier: ^0.18.5
-        version: 0.18.5
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
