@@ -11,7 +11,13 @@ import resolveConfig from "tailwindcss/resolveConfig"
 /** @type {import('tailwindcss').Config} */
 export default resolveConfig({
   darkMode: ["class", '[data-theme="dark"]'],
-  content: ["./apps/renderer/**/*.{ts,tsx}", "./apps/web/**/*.{ts,tsx}"],
+  content: [
+    "./apps/renderer/src/**/*.{ts,tsx}",
+    "./apps/web/src/**/*.{ts,tsx}",
+
+    "./apps/renderer/index.html",
+    "./apps/web/index.html",
+  ],
   prefix: "",
   theme: {
     container: {
