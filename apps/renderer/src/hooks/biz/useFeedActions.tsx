@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next"
 import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal"
 import type { FeedViewType } from "~/lib/enum"
-import type { NativeMenuItem } from "~/lib/native-menu"
+import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
@@ -47,8 +47,8 @@ export const useFeedActions = ({
   const navigateEntry = useNavigateEntry()
   const isEntryList = type === "entryList"
 
-  const addMutation = useAddFeedToFeedList()
-  const removeMutation = useRemoveFeedFromFeedList()
+  const { mutateAsync: addFeedToListMutation } = useAddFeedToFeedList()
+  const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
 
   const listByView = useListByView(view!)
 
@@ -101,12 +101,12 @@ export const useFeedActions = ({
             checked: isIncluded,
             click() {
               if (!isIncluded) {
-                addMutation.mutate({
+                addFeedToListMutation({
                   feedId,
                   listId: list.id,
                 })
               } else {
-                removeMutation.mutate({
+                removeFeedFromListMutation({
                   feedId,
                   listId: list.id,
                 })
@@ -209,7 +209,8 @@ export const useFeedActions = ({
     listByView,
     feedId,
     claimFeed,
-    addMutation,
+    addFeedToListMutation,
+    removeFeedFromListMutation,
     present,
     deleteSubscription,
     subscription,
@@ -226,25 +227,21 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
   const subscription = useSubscriptionByFeedId(listId)
 
   const { present } = useModalStack()
-  const deleteSubscription = useDeleteSubscription({})
+  const { mutateAsync: deleteSubscription } = useDeleteSubscription({})
 
   const navigateEntry = useNavigateEntry()
 
   const items = useMemo(() => {
     if (!list) return []
 
-    const items: NativeMenuItem[] = [
-      ...(list.ownerUserId === whoami()?.id
-        ? [
-            {
-              type: "text" as const,
-              label: t("sidebar.feed_actions.list_owned_by_you"),
-            },
-          ]
-        : []),
+    const items: NullableNativeMenuItem[] = [
+      list.ownerUserId === whoami()?.id && {
+        type: "text" as const,
+        label: t("sidebar.feed_actions.list_owned_by_you"),
+      },
       {
         type: "separator" as const,
-        disabled: false,
+        hide: list.ownerUserId !== whoami()?.id,
       },
 
       {
@@ -262,7 +259,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
         type: "text" as const,
         label: t("sidebar.feed_actions.unfollow"),
         shortcut: "Meta+Backspace",
-        click: () => deleteSubscription.mutate(subscription),
+        click: () => deleteSubscription(subscription),
       },
       {
         type: "text" as const,

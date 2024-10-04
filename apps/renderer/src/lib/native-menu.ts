@@ -3,7 +3,7 @@ import { get } from "lodash-es"
 import { tipcClient } from "./client"
 import { getOS } from "./utils"
 
-export type NativeMenuItem =
+export type NativeMenuItem = (
   | {
       type: "text"
       label: string
@@ -17,6 +17,9 @@ export type NativeMenuItem =
       checked?: boolean
     }
   | { type: "separator"; disabled?: boolean }
+) & { hide?: boolean }
+
+export type NullableNativeMenuItem = NativeMenuItem | null | undefined | false | ""
 
 function sortShortcutsString(shortcut: string) {
   const order = ["Shift", "Ctrl", "Alt", "Meta"]
@@ -32,7 +35,7 @@ function sortShortcutsString(shortcut: string) {
   return [...sortedModifiers, ...otherKeys].join("+")
 }
 export const showNativeMenu = async (
-  items: Array<Nullable<NativeMenuItem | false>>,
+  items: Array<NullableNativeMenuItem>,
   e?: MouseEvent | React.MouseEvent,
 ) => {
   const nextItems = (items.filter(Boolean) as NativeMenuItem[]).map((item) => {
@@ -41,6 +44,10 @@ export const showNativeMenu = async (
         ...item,
         shortcut: item.shortcut ? sortShortcutsString(item.shortcut) : undefined,
       }
+    }
+
+    if (item.hide) {
+      return []
     }
     return item
   }) as NativeMenuItem[]
