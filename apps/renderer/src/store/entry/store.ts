@@ -5,11 +5,12 @@ import { isNil, merge, omit } from "lodash-es"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { getEntriesParams, omitObjectUndefinedValue } from "~/lib/utils"
-import type { CombinedEntryModel, EntryModel, FeedOrListRespModel } from "~/models"
+import type { CombinedEntryModel, EntryModel, FeedModel, FeedOrListRespModel } from "~/models"
 import { EntryService } from "~/services"
 
 import { feedActions } from "../feed"
 import { imageActions } from "../image"
+import { inboxActions } from "../inbox"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import { internal_batchMarkRead } from "./helper"
@@ -67,34 +68,65 @@ class EntryActions {
     return data
   }
 
+  async fetchInboxEntryById(entryId: string) {
+    const { data } = await apiClient.entries.inbox.$get({
+      query: {
+        id: entryId,
+      },
+    })
+    if (data) {
+      this.upsertMany([
+        // patch data, should omit `read` because the network race condition or server cache
+        omit(data, "read") as any,
+      ])
+      inboxActions.upsertMany([data.feeds])
+    }
+
+    return data
+  }
+
   async fetchEntries({
-    id,
+    feedId,
+    inboxId,
+    listId,
     view,
     read,
     limit,
     pageParam,
     isArchived,
   }: {
-    id?: number | string
+    feedId?: number | string
+    inboxId?: number | string
+    listId?: number | string
     view?: number
     read?: boolean
     limit?: number
     pageParam?: string
     isArchived?: boolean
   }) {
-    const data = await apiClient.entries.$post({
-      json: {
-        publishedAfter: pageParam,
-        read,
-        limit,
-        isArchived,
-        // withContent: true,
-        ...getEntriesParams({
-          id,
-          view,
-        }),
-      },
-    })
+    const data = inboxId
+      ? await apiClient.entries.inbox.$post({
+          json: {
+            publishedAfter: pageParam,
+            limit,
+            inboxId: `${inboxId}`,
+          },
+        })
+      : await apiClient.entries.$post({
+          json: {
+            publishedAfter: pageParam,
+            read,
+            limit,
+            isArchived,
+            // withContent: true,
+            ...getEntriesParams({
+              feedId,
+              inboxId,
+              listId,
+              view,
+            }),
+          },
+        })
 
     if (data.data) {
       this.upsertMany(data.data)
@@ -226,7 +258,7 @@ class EntryActions {
           // Push entryFeedMap
           entryFeedMap[item.entries.id] = item.feeds.id
           // Push entryCollection
-          if (item.collections) {
+          if ("collections" in item) {
             entryCollection[item.entries.id] = item.collections
           }
 
@@ -249,7 +281,7 @@ class EntryActions {
       }),
     )
     // Insert to feed store
-    feedActions.upsertMany(feeds)
+    feedActions.upsertMany(feeds as FeedModel[])
     const newStarIds = new Set(get().starIds)
     for (const entryId in entryCollection) {
       newStarIds.add(entryId)
@@ -294,7 +326,7 @@ class EntryActions {
           )
 
           // Push entryCollection
-          if (item.collections) {
+          if ("collections" in item) {
             entryCollection[item.entries.id] = item.collections
           }
         }
@@ -313,10 +345,11 @@ class EntryActions {
     }))
   }
 
-  async markRead(feedId: string, entryId: string, read: boolean) {
-    const currentIsRead = get().flatMapEntries[entryId]?.read
+  async markRead({ feedId, entryId, read }: { feedId: string; entryId: string; read: boolean }) {
+    const entry = get().flatMapEntries[entryId]
+    const isInbox = entry?.entries && "inboxHandle" in entry.entries
 
-    if (read && currentIsRead) {
+    if (read && entry?.read) {
       return
     }
 
@@ -330,11 +363,12 @@ class EntryActions {
       // Send api request
       async () => {
         if (read) {
-          await internal_batchMarkRead([feedId, entryId])
+          await internal_batchMarkRead([feedId, entryId, isInbox])
         } else {
           await apiClient.reads.$delete({
             json: {
               entryId,
+              isInbox,
             },
           })
         }

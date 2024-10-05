@@ -76,7 +76,7 @@ function EntryColumnImpl() {
     const feedId = activeEntry?.feedId
     if (!feedId) return
 
-    entryActions.markRead(feedId, activeEntryId, true)
+    entryActions.markRead({ feedId, entryId: activeEntryId, read: true })
   }, [activeEntry?.feedId, activeEntryId, isCollection, isPendingEntry])
 
   const isInteracted = useRef(false)
@@ -99,7 +99,7 @@ function EntryColumnImpl() {
     !isCollection &&
     routeFeedId !== ROUTE_FEED_PENDING &&
     entries.totalCount < 40 &&
-    feed?.type !== "list"
+    feed?.type === "feed"
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const virtuosoOptions = {
@@ -178,9 +178,10 @@ function EntryColumnImpl() {
       }
       data-total-count={virtuosoOptions.totalCount}
     >
-      {virtuosoOptions.totalCount === 0 && !entries.isLoading && !entries.error && (
-        <AddFeedHelper />
-      )}
+      {virtuosoOptions.totalCount === 0 &&
+        !entries.isLoading &&
+        !entries.error &&
+        feed?.type === "feed" && <AddFeedHelper />}
 
       <EntryListHeader
         refetch={entries.refetch}

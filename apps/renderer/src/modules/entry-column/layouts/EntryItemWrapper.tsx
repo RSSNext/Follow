@@ -21,10 +21,11 @@ export const EntryItemWrapper: FC<
     entry: FlatEntryModel
     view?: number
     itemClassName?: string
+    overlayItemClassName?: string
     overlay?: boolean
     style?: React.CSSProperties
   } & PropsWithChildren
-> = ({ entry, view, overlay, children, itemClassName, style }) => {
+> = ({ entry, view, overlay, children, itemClassName, overlayItemClassName, style }) => {
   const { items } = useEntryActions({
     view,
     entry,
@@ -50,7 +51,7 @@ export const EntryItemWrapper: FC<
       if (!document.hasFocus()) return
       if (asRead) return
 
-      entryActions.markRead(entry.feedId, entry.entries.id, true)
+      entryActions.markRead({ feedId: entry.feedId, entryId: entry.entries.id, read: true })
     },
     233,
     {
@@ -127,7 +128,10 @@ export const EntryItemWrapper: FC<
         onContextMenu={handleContextMenu}
       >
         {overlay ? (
-          <ListItemHoverOverlay isActive={isActive || isContextMenuOpen}>
+          <ListItemHoverOverlay
+            isActive={isActive || isContextMenuOpen}
+            className={overlayItemClassName}
+          >
             {children}
           </ListItemHoverOverlay>
         ) : (

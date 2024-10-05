@@ -92,6 +92,7 @@ export function SwipeMedia({
                   previewImageUrl={med.preview_image_url}
                   loading="lazy"
                   proxy={proxySize}
+                  blurhash={med.blurhash}
                   onClick={(e) => {
                     e.stopPropagation()
                     onPreview?.(uniqMedia, i)
@@ -131,6 +132,9 @@ export function SwipeMedia({
           loading="lazy"
           proxy={proxySize}
           showFallback={true}
+          height={uniqMedia[0].height}
+          width={uniqMedia[0].width}
+          blurhash={uniqMedia[0].blurhash}
         />
       ) : (
         <div className="relative flex aspect-video w-full items-center overflow-hidden rounded-t-2xl border-b">

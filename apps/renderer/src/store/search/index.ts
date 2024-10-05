@@ -53,7 +53,6 @@ class SearchActions {
     const feedsMap = new Map(feeds.map((feed) => [feed.id, feed]))
 
     const entriesFuse = this.createFuse(entries, ["title", "content", "description", "id"])
-    // @ts-expect-error
     const feedsFuse = this.createFuse(feeds, ["title", "description", "id", "siteUrl", "url"])
     const subscriptionsFuse = this.createFuse(subscriptions, ["title", "category"])
 

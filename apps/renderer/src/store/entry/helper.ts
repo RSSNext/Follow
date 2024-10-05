@@ -33,8 +33,13 @@ export const getFilteredFeedIds = (feedIds: string[], filter?: EntryFilter) => {
 }
 
 const unread = create({
-  fetcher: async (ids: [FeedId, EntryId][]) => {
-    await apiClient.reads.$post({ json: { entryIds: ids.map((i) => i[1]) } })
+  fetcher: async (ids: ([FeedId, EntryId, boolean] | [FeedId, EntryId])[]) => {
+    await apiClient.reads.$post({
+      json: {
+        entryIds: ids.map((i) => i[1]),
+        isInbox: ids[0][2],
+      },
+    })
 
     return []
   },

@@ -1,96 +1,19 @@
-import fs, { readFileSync } from "node:fs"
-import path, { resolve } from "node:path"
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 
-import * as babel from "@babel/core"
-import generate from "@babel/generator"
-import { parse } from "@babel/parser"
-import * as t from "@babel/types"
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
-import { set } from "lodash-es"
 import { prerelease } from "semver"
-import type { Plugin, UserConfig } from "vite"
+import type { UserConfig } from "vite"
 
+import { customI18nHmrPlugin } from "../plugins/vite/i18n-hmr"
+import { localesPlugin } from "../plugins/vite/locales"
+import { twMacro } from "../plugins/vite/tw-macro"
+import i18nCompleteness from "../plugins/vite/utils/i18n-completeness"
 import { getGitHash } from "../scripts/lib"
-import i18nCompleteness from "./i18n-completeness"
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
-function localesPlugin(): Plugin {
-  return {
-    name: "locales-merge",
-    enforce: "post",
-    generateBundle(_options, bundle) {
-      const localesDir = path.resolve(__dirname, "../locales")
-      const namespaces = fs.readdirSync(localesDir).filter((dir) => dir !== ".DS_Store")
-      const languageResources = {}
-
-      namespaces.forEach((namespace) => {
-        const namespacePath = path.join(localesDir, namespace)
-        const files = fs.readdirSync(namespacePath).filter((file) => file.endsWith(".json"))
-
-        files.forEach((file) => {
-          const lang = path.basename(file, ".json")
-          const filePath = path.join(namespacePath, file)
-          const content = JSON.parse(fs.readFileSync(filePath, "utf-8"))
-
-          if (!languageResources[lang]) {
-            languageResources[lang] = {}
-          }
-
-          const obj = {}
-
-          const keys = Object.keys(content as object)
-          for (const accessorKey of keys) {
-            set(obj, accessorKey, (content as any)[accessorKey])
-          }
-
-          languageResources[lang][namespace] = obj
-        })
-      })
-
-      Object.entries(languageResources).forEach(([lang, resources]) => {
-        const fileName = `locales/${lang}.js`
-
-        const content = `export default ${JSON.stringify(resources)};`
-
-        this.emitFile({
-          type: "asset",
-          fileName,
-          source: content,
-        })
-      })
-
-      // Remove original JSON chunks
-      Object.keys(bundle).forEach((key) => {
-        if (key.startsWith("locales/") && key.endsWith(".json")) {
-          delete bundle[key]
-        }
-      })
-    },
-  }
-}
-
-function customI18nHmrPlugin(): Plugin {
-  return {
-    name: "custom-i18n-hmr",
-    handleHotUpdate({ file, server }) {
-      if (file.endsWith(".json") && file.includes("locales")) {
-        server.ws.send({
-          type: "custom",
-          event: "i18n-update",
-          data: {
-            file,
-            content: readFileSync(file, "utf-8"),
-          },
-        })
-
-        // return empty array to prevent the default HMR
-        return []
-      }
-    },
-  }
-}
 
 export const viteRenderBaseConfig = {
   resolve: {
@@ -130,7 +53,7 @@ export const viteRenderBaseConfig = {
     }),
 
     localesPlugin(),
-    viteTwToRawString(),
+    twMacro(),
     customI18nHmrPlugin(),
   ],
   define: {
@@ -147,52 +70,3 @@ export const viteRenderBaseConfig = {
     I18N_COMPLETENESS_MAP: JSON.stringify({ ...i18nCompleteness, en: 100 }),
   },
 } satisfies UserConfig
-
-function viteTwToRawString(): Plugin {
-  return {
-    name: "vite-plugin-tw-to-raw-string",
-
-    transform(code, id) {
-      // Only Process .tsx .ts .jsx .js files
-      if (!/\.[jt]sx?$/.test(id)) {
-        return null
-      }
-      // Parse the code using Babel's parser with TypeScript support
-      const ast = parse(code, {
-        sourceType: "module",
-        plugins: ["jsx", "typescript"], // Add typescript support
-      })
-
-      babel.traverse(ast, {
-        TaggedTemplateExpression(path) {
-          if (t.isIdentifier(path.node.tag, { name: "tw" })) {
-            const { quasi } = path.node
-            if (t.isTemplateLiteral(quasi)) {
-              // Create a new template literal by combining quasis and expressions
-              const quasis = quasi.quasis.map((q) => q.value.raw)
-
-              // Replace the tagged template expression with the new template literal as a string
-              path.replaceWith(
-                t.templateLiteral(
-                  quasis.map((q, i) =>
-                    t.templateElement({ raw: q, cooked: q }, i === quasis.length - 1),
-                  ),
-                  quasi.expressions,
-                ),
-              )
-            }
-          }
-        },
-      })
-
-      // Generate the transformed code from the modified AST
-      // @ts-expect-error
-      const output = generate.default(ast, {}, code)
-
-      return {
-        code: output.code,
-        map: null, // Source map generation can be added if necessary
-      }
-    },
-  }
-}

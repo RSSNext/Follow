@@ -4,6 +4,7 @@ import { useHotkeys } from "react-hotkeys-hook"
 
 import {
   ContextMenu,
+  ContextMenuCheckboxItem,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuPortal,
@@ -112,7 +113,11 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
       return <ContextMenuSeparator />
     }
     case "text": {
-      const Wrapper = item.submenu ? ContextMenuSubTrigger : ContextMenuItem
+      const Wrapper = item.submenu
+        ? ContextMenuSubTrigger
+        : typeof item.checked === "boolean"
+          ? ContextMenuCheckboxItem
+          : ContextMenuItem
 
       const Sub = item.submenu ? ContextMenuSub : Fragment
       return (
@@ -122,6 +127,7 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
             disabled={item.enabled === false || (item.click === undefined && !item.submenu)}
             onClick={onClick}
             className="flex items-center gap-2"
+            checked={item.checked}
           >
             {item.icon}
             {item.label}

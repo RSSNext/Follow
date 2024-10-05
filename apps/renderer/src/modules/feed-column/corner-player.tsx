@@ -28,6 +28,12 @@ const handleClickPlay = () => {
   AudioPlayer.togglePlayAndPause()
 }
 
+const setNowPlaying = (metadata: MediaMetadataInit) => {
+  if ("mediaSession" in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata(metadata)
+  }
+}
+
 export const CornerPlayer = () => {
   const show = useAudioPlayerAtomSelector((v) => v.show)
   const entryId = useAudioPlayerAtomSelector((v) => v.entryId)
@@ -101,6 +107,15 @@ const CornerPlayerImpl = () => {
     preventDefault: true,
     scopes: HotKeyScopeMap.Home,
   })
+
+  useEffect(() => {
+    setNowPlaying({
+      title: entry?.entries.title || undefined,
+      artist: feed?.title || undefined,
+      album: feed?.image || undefined,
+      artwork: [{ src: entry?.entries.authorAvatar || feed?.image || "" }],
+    })
+  }, [entry, feed])
 
   const navigateToEntry = useNavigateEntry()
   usePlayerTracker()

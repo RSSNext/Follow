@@ -21,7 +21,7 @@ interface RenderGlobalContext {
   onWindowShow: () => void
 
   /// Actions
-  follow: (id: string, options?: { isList: boolean }) => void
+  follow: (options?: { isList: boolean; id?: string; url?: string }) => void
   profile: (id: string, variant?: "drawer" | "dialog") => void
 
   /// Utils

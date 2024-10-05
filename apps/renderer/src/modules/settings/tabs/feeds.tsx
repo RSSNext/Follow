@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
+import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useAuthQuery } from "~/hooks/common"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
@@ -57,9 +58,9 @@ export const SettingFeeds = () => {
                         className="flex items-center"
                       >
                         <FeedIcon fallback feed={row.feed} size={16} />
-                        <span className="inline-block max-w-[200px] truncate">
+                        <EllipsisHorizontalTextWithTooltip className="inline-block max-w-[200px] truncate">
                           {row.feed.title}
-                        </span>
+                        </EllipsisHorizontalTextWithTooltip>
                       </a>
                     </TableCell>
                     <TableCell align="center" className="tabular-nums" size="sm">

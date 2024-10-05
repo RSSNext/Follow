@@ -1,6 +1,7 @@
 /* eslint-disable no-unsafe-finally */
+import { produce } from "immer"
 import { unstable_batchedUpdates } from "react-dom"
-import type { StateCreator } from "zustand"
+import type { StateCreator, StoreApi, UseBoundStore } from "zustand"
 import type { PersistStorage } from "zustand/middleware"
 import { devtools } from "zustand/middleware"
 import { shallow } from "zustand/shallow"
@@ -126,4 +127,13 @@ export const doMutationAndTransaction = async <M, T>(
   } else {
     return await Promise.all([wrappedMutation(), wrappedTransaction()])
   }
+}
+
+export function createImmerSetter<T>(useStore: UseBoundStore<StoreApi<T>>) {
+  return (updater: (state: T) => void) =>
+    useStore.setState((state) =>
+      produce(state, (draft) => {
+        updater(draft as T)
+      }),
+    )
 }
