@@ -2,6 +2,7 @@ import { env } from "@follow/shared/env"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
+import { useUISettingKey } from "~/atoms/settings/ui"
 import { FeedIcon } from "~/components/feed-icon"
 import { FollowIcon } from "~/components/icons/follow"
 import { Button } from "~/components/ui/button"
@@ -61,19 +62,23 @@ export function ListItem({
   const isFollowed = !!useSubscriptionStore((state) => feedId && state.data[feedId])
   const { present } = useModalStack()
 
+  const settingWideMode = useUISettingKey("wideMode")
+
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
   const displayTime = inInCollection ? entry.collections?.createdAt : entry.entries.publishedAt
   const envIsSafari = isSafari()
+
   return (
     <div
       onMouseEnter={handlePrefetchEntry}
       onMouseLeave={handlePrefetchEntry.cancel}
       className={cn(
-        "group relative flex cursor-menu py-4 pl-3 pr-2",
+        "group relative flex cursor-menu pl-3 pr-2",
         !asRead &&
           "before:absolute before:-left-0.5 before:top-[1.4375rem] before:block before:size-2 before:rounded-full before:bg-accent",
+        settingWideMode ? "py-3" : "py-4",
       )}
     >
       {!withAudio && <FeedIcon feed={feed} fallback entry={entry.entries} />}
@@ -82,7 +87,7 @@ export function ListItem({
           "-mt-0.5 flex-1 text-sm leading-tight",
 
           // FIXME: Safari bug, not support line-clamp cross elements
-          !envIsSafari && "line-clamp-4",
+          !envIsSafari && (settingWideMode ? "line-clamp-2" : "line-clamp-4"),
         )}
       >
         <div
@@ -177,7 +182,7 @@ export function ListItem({
               fallback={false}
               feed={feed}
               entry={entry.entries}
-              size={80}
+              size={settingWideMode ? 65 : 80}
               className="m-0 rounded"
               useMedia
             />
@@ -191,7 +196,10 @@ export function ListItem({
           src={entry.entries.media[0].url}
           type={entry.entries.media[0].type}
           previewImageUrl={entry.entries.media[0].preview_image_url}
-          className="center ml-2 flex size-20 max-w-20 shrink-0 rounded"
+          className={cn(
+            "center ml-2 flex shrink-0 rounded",
+            settingWideMode ? "size-12" : "size-20",
+          )}
           mediaContainerClassName={"w-auto h-auto rounded"}
           loading="lazy"
           proxy={{

@@ -98,6 +98,7 @@ export const EntryListHeader: FC<{
           )}
 
           <AppendTaildingDivider>
+            {!views[view].wideMode && <WideModeButton />}
             {view === FeedViewType.SocialMedia && <DailyReportButton />}
             {view === FeedViewType.Pictures && <SwitchToMasonryButton />}
             {view === FeedViewType.Pictures && <FilterNoImageButton />}
@@ -226,6 +227,39 @@ const SwitchToMasonryButton = () => {
         }
       >
         <i className={cn(!isMasonry ? "i-mgc-grid-cute-re" : "i-mgc-grid-2-cute-re")} />
+      </ActionButton>
+    </ImpressionView>
+  )
+}
+
+const WideModeButton = () => {
+  const isWideMode = useUISettingKey("wideMode")
+  const { t } = useTranslation()
+
+  return (
+    <ImpressionView
+      event="Switch to Wide Mode"
+      properties={{
+        wideMode: isWideMode ? 1 : 0,
+      }}
+    >
+      <ActionButton
+        onClick={() => {
+          setUISetting("wideMode", !isWideMode)
+          window.posthog?.capture("Switch to Wide Mode", {
+            wideMode: !isWideMode ? 1 : 0,
+            click: 1,
+          })
+        }}
+        tooltip={
+          !isWideMode
+            ? t("entry_list_header.switch_to_widemode")
+            : t("entry_list_header.switch_to_normalmode")
+        }
+      >
+        <i
+          className={cn(isWideMode ? "i-mgc-align-justify-cute-re" : "i-mgc-align-left-cute-re")}
+        />
       </ActionButton>
     </ImpressionView>
   )
