@@ -57,7 +57,7 @@ export const toastFetchError = (
   const toastOptions: ExternalToast = {
     ..._toastOptions,
     classNames: {
-      toast: "items-start",
+      toast: "items-start bg-theme-background",
       title: "-mt-1 mb-1", // to align with the icon (actually cut the top space from line-height)
       content: "w-full",
       ..._toastOptions.classNames,
