@@ -16,6 +16,7 @@ import {
 } from "~/components/ui/table"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedViewType } from "~/lib/enum"
+import { createErrorToaster } from "~/lib/error-parser"
 import { useInboxList } from "~/queries/inboxes"
 import { subscriptionActions } from "~/store/subscription"
 
@@ -156,9 +157,7 @@ const ConfirmDestroyModalContent = ({ id, onSuccess }: { id: string; onSuccess: 
       toast.success(t("discover.inbox_destroy_success"))
       onSuccess()
     },
-    onError: () => {
-      toast.error(t("discover.inbox_destroy_error"))
-    },
+    onError: createErrorToaster(t("discover.inbox_destroy_error")),
   })
 
   return (
