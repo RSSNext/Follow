@@ -6,6 +6,7 @@ import { toast } from "sonner"
 
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { Markdown } from "~/components/ui/markdown"
+import { cn } from "~/lib/utils"
 
 export const getFetchErrorMessage = (error: Error) => {
   if (error instanceof FetchError) {
@@ -74,7 +75,11 @@ export const toastFetchError = (
       ...toastOptions,
       description: createElement("div", {}, [
         createElement(CopyButton, {
-          className: "float-end relative z-[1]",
+          className: cn(
+            "relative z-[1] float-end -mt-1",
+            "border-transparent bg-theme-background text-theme-foreground opacity-60 transition-opacity",
+            "hover:bg-theme-button-hover hover:opacity-100 focus:border-theme-foreground/80",
+          ),
           key: "copy",
           value: _reason,
         }),
