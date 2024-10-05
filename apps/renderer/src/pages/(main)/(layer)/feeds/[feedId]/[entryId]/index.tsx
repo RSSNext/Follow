@@ -38,13 +38,13 @@ export const Component = () => {
               transition={{ duration: 0.2, type: "spring" }}
               className={cn(
                 "flex min-w-0 flex-1 flex-col",
-                wideMode && "absolute inset-0 z-10 bg-theme-background pl-12",
+                wideMode && "absolute inset-0 z-10 bg-theme-background",
               )}
             >
               {wideMode && (
                 <ActionButton
                   className={cn(
-                    "absolute left-3 top-3 z-10",
+                    "absolute left-3 top-3 z-10 duration-200",
                     shouldHeaderPaddingLeft
                       ? "left-[calc(theme(width.3)+theme(width.feed-col))]"
                       : "left-3",
@@ -57,7 +57,9 @@ export const Component = () => {
               <EntryContent
                 entryId={realEntryId}
                 classNames={{
-                  header: shouldHeaderPaddingLeft ? "ml-[theme(width.feed-col)]" : "",
+                  header: shouldHeaderPaddingLeft
+                    ? "ml-[calc(theme(width.feed-col)+theme(width.12))]"
+                    : "ml-12",
                 }}
               />
             </m.div>

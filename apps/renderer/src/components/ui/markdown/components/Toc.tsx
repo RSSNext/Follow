@@ -19,6 +19,7 @@ import { springScrollToElement } from "~/lib/scroller"
 import { cn } from "~/lib/utils"
 import {
   useGetWrappedElementPosition,
+  useWrappedElementPosition,
   useWrappedElementSize,
 } from "~/providers/wrapped-element-provider"
 
@@ -81,7 +82,7 @@ export const Toc: Component = ({ className }) => {
     [toc],
   )
 
-  const [_, setTreeRef] = useState<HTMLUListElement | null>()
+  const [_, setTreeRef] = useState<HTMLDivElement | null>()
 
   const scrollContainerElement = useScrollViewElement()
 
@@ -195,12 +196,44 @@ export const Toc: Component = ({ className }) => {
 
   const [hoverShow, setHoverShow] = useState(false)
 
+  const renderContentElementPosition = useWrappedElementPosition()
+  const renderContentElementSize = useWrappedElementSize()
+
+  const xAxis = renderContentElementPosition.x + renderContentElementSize.w
+  const w = window.innerWidth
+
+  const shouldShowTitle = w - xAxis > 300
+
   if (toc.length === 0) return null
+
+  if (shouldShowTitle)
+    return (
+      <div
+        ref={setTreeRef}
+        className={cn(
+          "group relative overflow-auto opacity-60 duration-200 scrollbar-none group-hover:opacity-100",
+          "flex w-[300px] flex-col",
+          className,
+        )}
+      >
+        {toc.map((heading, index) => (
+          <MemoedItem
+            variant="title-line"
+            heading={heading}
+            key={heading.anchorId}
+            rootDepth={rootDepth}
+            onClick={handleScrollTo}
+            isScrollOut={index < currentScrollRange[0]}
+            range={index === currentScrollRange[0] ? currentScrollRange[1] : 0}
+          />
+        ))}
+      </div>
+    )
   return (
     <div className="flex grow flex-col scroll-smooth px-2 scrollbar-none">
       <HoverCard.Root openDelay={100} open={hoverShow} onOpenChange={setHoverShow}>
         <HoverCard.Trigger asChild>
-          <ul
+          <div
             ref={setTreeRef}
             className={cn(
               "group overflow-auto opacity-60 duration-200 scrollbar-none group-hover:opacity-100",
@@ -217,7 +250,7 @@ export const Toc: Component = ({ className }) => {
                 range={index === currentScrollRange[0] ? currentScrollRange[1] : 0}
               />
             ))}
-          </ul>
+          </div>
         </HoverCard.Trigger>
         <HoverCard.Portal forceMount>
           <div>

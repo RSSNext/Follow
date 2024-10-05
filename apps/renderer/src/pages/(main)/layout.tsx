@@ -12,6 +12,7 @@ import { setMainContainerElement } from "~/atoms/dom"
 import { useViewport } from "~/atoms/hooks/viewport"
 import { getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
 import {
+  getFeedColumnTempShow,
   setFeedColumnShow,
   setFeedColumnTempShow,
   useFeedColumnShow,
@@ -212,14 +213,20 @@ const FeedResponsiveResizerContainer = ({
   const feedColumnShow = useFeedColumnShow()
   const feedColumnTempShow = useFeedColumnTempShow()
 
-  const isInEntryContentWideMode = useUISettingKey("wideMode")
   useEffect(() => {
+    if (feedColumnShow) {
+      setFeedColumnTempShow(false)
+      return
+    }
     const handler = throttle((e: MouseEvent) => {
       const mouseX = e.clientX
       const mouseY = e.clientY
 
+      const uiSettings = getUISettings()
+      const feedColumnTempShow = getFeedColumnTempShow()
+      const isInEntryContentWideMode = uiSettings.wideMode
       if (mouseY < 100 && isInEntryContentWideMode) return
-      const threshold = feedColumnTempShow ? getUISettings().feedColWidth : 100
+      const threshold = feedColumnTempShow ? uiSettings.feedColWidth : 100
 
       if (mouseX < threshold) {
         setFeedColumnTempShow(true)
@@ -232,7 +239,7 @@ const FeedResponsiveResizerContainer = ({
     return () => {
       document.removeEventListener("mousemove", handler)
     }
-  }, [feedColumnTempShow, isInEntryContentWideMode])
+  }, [feedColumnShow])
 
   useHotkeys(
     shortcuts.layout.toggleSidebar.key,
