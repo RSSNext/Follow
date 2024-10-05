@@ -15,8 +15,9 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { apiClient } from "~/lib/api-fetch"
+import { FeedViewType } from "~/lib/enum"
 import { useInboxList } from "~/queries/inboxes"
-import { inboxActions } from "~/store/inbox"
+import { subscriptionActions } from "~/store/subscription"
 
 import { InboxForm } from "./inbox-form"
 
@@ -82,7 +83,13 @@ export function DiscoverInboxList() {
                     present({
                       title: t("discover.inbox_destroy_confirm"),
                       content: ({ dismiss }) => (
-                        <ConfirmDestroyModalContent id={inbox.id} dismiss={dismiss} />
+                        <ConfirmDestroyModalContent
+                          id={inbox.id}
+                          onSuccess={() => {
+                            inboxes.refetch()
+                            dismiss()
+                          }}
+                        />
                       ),
                     })
                   }
@@ -113,7 +120,15 @@ export function DiscoverInboxList() {
           onClick={() =>
             present({
               title: t("sidebar.feed_actions.new_inbox"),
-              content: ({ dismiss }) => <InboxForm asWidget onSuccess={dismiss} />,
+              content: ({ dismiss }) => (
+                <InboxForm
+                  asWidget
+                  onSuccess={() => {
+                    inboxes.refetch()
+                    dismiss()
+                  }}
+                />
+              ),
             })
           }
         >
@@ -125,7 +140,7 @@ export function DiscoverInboxList() {
   )
 }
 
-const ConfirmDestroyModalContent = ({ id, dismiss }: { id: string; dismiss: () => void }) => {
+const ConfirmDestroyModalContent = ({ id, onSuccess }: { id: string; onSuccess: () => void }) => {
   const { t } = useTranslation()
 
   const mutationDestroy = useMutation({
@@ -136,10 +151,10 @@ const ConfirmDestroyModalContent = ({ id, dismiss }: { id: string; dismiss: () =
         },
       })
     },
-    onSuccess: (_, handle) => {
-      inboxActions.clearByInboxId(handle)
+    onSuccess: () => {
+      subscriptionActions.fetchByView(FeedViewType.Articles)
       toast.success(t("discover.inbox_destroy_success"))
-      dismiss()
+      onSuccess()
     },
     onError: () => {
       toast.error(t("discover.inbox_destroy_error"))
