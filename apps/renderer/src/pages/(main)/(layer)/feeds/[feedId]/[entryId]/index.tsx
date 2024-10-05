@@ -23,7 +23,7 @@ export const Component = () => {
   const wideMode = settingWideMode && realEntryId
   const feedColumnTempShow = useFeedColumnTempShow()
   const feedColumnShow = useFeedColumnShow()
-  const shouldHeaderPaddingLeft = feedColumnTempShow && !feedColumnShow
+  const shouldHeaderPaddingLeft = feedColumnTempShow && !feedColumnShow && settingWideMode
 
   return (
     <AnimatePresence>
