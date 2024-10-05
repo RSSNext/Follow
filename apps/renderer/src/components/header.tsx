@@ -27,10 +27,10 @@ export function Header() {
   const scrollYState = useMotionValueToState(scrollY)
 
   return (
-    <header className="fixed inset-x-0 top-0 z-[99] px-5 py-2 lg:px-0">
+    <header className="fixed inset-x-0 top-0 z-[99] px-5 py-2 xl:px-0">
       <div className="relative mx-auto my-4 flex w-full max-w-[1240px] items-center justify-between">
         <div
-          className="absolute inset-0 z-0 -mx-3 -my-2 rounded-full bg-slate-50/80 backdrop-blur-lg dark:bg-neutral-900/80 lg:-mx-8"
+          className="absolute inset-0 z-0 -mx-3 -my-2 rounded-full bg-slate-50/80 backdrop-blur-lg dark:bg-neutral-900/80 xl:-mx-8"
           style={{
             opacity: scrollYState / 100,
           }}
