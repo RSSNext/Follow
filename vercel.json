@@ -15,7 +15,7 @@
   ],
   "headers": [
     {
-      "source": "/vendor/*.js",
+      "source": "/vendor/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
