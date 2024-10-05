@@ -111,7 +111,10 @@ export function SettingModalLayout(
             {draggable && (
               <div className="absolute inset-x-0 top-0 z-[1] h-8" onPointerDown={handleDrag} />
             )}
-            <div className="flex h-0 flex-1 bg-theme-modal-background-opaque" ref={elementRef}>
+            <div
+              className="flex h-0 flex-1 rounded-xl bg-theme-modal-background-opaque"
+              ref={elementRef}
+            >
               <div className="flex min-h-0 min-w-44 max-w-[20ch] flex-col border-r px-2 py-6">
                 <div className="mb-4 flex h-8 items-center gap-2 px-2 font-default font-bold">
                   <Logo className="mr-1 size-6" />
@@ -136,7 +139,7 @@ export function SettingModalLayout(
                   <SettingSyncIndicator />
                 </div>
               </div>
-              <div className="relative flex h-full min-w-0 flex-1 flex-col bg-theme-background pt-1">
+              <div className="relative flex h-full min-w-0 flex-1 flex-col rounded-xl bg-theme-background pt-1">
                 <Suspense>{children}</Suspense>
               </div>
             </div>
