@@ -197,10 +197,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       <div className="relative flex size-full overflow-hidden" ref={carouselRef}>
         <SwipeWrapper active={active}>
           {views.map((item, index) => (
-            <section
-              key={item.name}
-              className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center"
-            >
+            <section key={item.name} className="h-full w-feed-col shrink-0 snap-center">
               <FeedList className="flex size-full flex-col text-sm" view={index} />
             </section>
           ))}

@@ -39,6 +39,7 @@ import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/compon
 import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
+import { createErrorToaster } from "~/lib/error-parser"
 import { cn, isBizId } from "~/lib/utils"
 import type { FeedModel } from "~/models"
 import { ViewSelectorRadioGroup } from "~/modules/shared/ViewSelectorRadioGroup"
@@ -241,9 +242,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
       if (!list) return
       if (id) subscriptionActions.changeListView(id, views[list.view].view, views[values.view].view)
     },
-    async onError() {
-      toast.error(t(id ? "lists.edit.error" : "lists.created.error"))
-    },
+    onError: createErrorToaster(id ? t("lists.edit.error") : t("lists.created.error")),
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
