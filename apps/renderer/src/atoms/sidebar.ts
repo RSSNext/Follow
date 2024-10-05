@@ -49,3 +49,5 @@ viewAtom.onMount = () => {
   }
 }
 export const [, , useFeedColumnShow, , , setFeedColumnShow] = createAtomHooks(atom(true))
+
+export const [, , useFeedColumnTempShow, , , setFeedColumnTempShow] = createAtomHooks(atom(false))

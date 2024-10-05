@@ -2,6 +2,8 @@ import { AnimatePresence } from "framer-motion"
 import { useParams } from "react-router-dom"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
+import { useFeedColumnShow, useFeedColumnTempShow } from "~/atoms/sidebar"
+import { m } from "~/components/common/Motion"
 import { ActionButton } from "~/components/ui/button"
 import { ROUTE_ENTRY_PENDING, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
@@ -19,28 +21,48 @@ export const Component = () => {
   const realEntryId = entryId === ROUTE_ENTRY_PENDING ? "" : entryId
   const disable = views[view].wideMode || (settingWideMode && !realEntryId)
   const wideMode = settingWideMode && realEntryId
+  const feedColumnTempShow = useFeedColumnTempShow()
+  const feedColumnShow = useFeedColumnShow()
+  const shouldHeaderPaddingLeft = feedColumnTempShow && !feedColumnShow
 
   return (
     <AnimatePresence>
       <AppLayoutGridContainerProvider>
-        {!disable && (
-          <div
-            className={cn(
-              "flex min-w-0 flex-1 flex-col",
-              wideMode && "absolute inset-0 z-10 bg-white pl-12",
-            )}
-          >
-            {wideMode && (
-              <ActionButton
-                className="absolute left-2.5 top-2.5 z-10"
-                onClick={() => navigate({ entryId: null })}
-              >
-                <i className="i-mgc-close-cute-re text-2xl" />
-              </ActionButton>
-            )}
-            <EntryContent entryId={realEntryId} />
-          </div>
-        )}
+        <AnimatePresence>
+          {!disable && (
+            <m.div
+              // slide up
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 100 }}
+              transition={{ duration: 0.2, type: "spring" }}
+              className={cn(
+                "flex min-w-0 flex-1 flex-col",
+                wideMode && "absolute inset-0 z-10 bg-theme-background pl-12",
+              )}
+            >
+              {wideMode && (
+                <ActionButton
+                  className={cn(
+                    "absolute left-3 top-3 z-10",
+                    shouldHeaderPaddingLeft
+                      ? "left-[calc(theme(width.3)+theme(width.feed-col))]"
+                      : "left-3",
+                  )}
+                  onClick={() => navigate({ entryId: null })}
+                >
+                  <i className="i-mgc-close-cute-re size-5" />
+                </ActionButton>
+              )}
+              <EntryContent
+                entryId={realEntryId}
+                classNames={{
+                  header: shouldHeaderPaddingLeft ? "ml-[theme(width.feed-col)]" : "",
+                }}
+              />
+            </m.div>
+          )}
+        </AnimatePresence>
       </AppLayoutGridContainerProvider>
     </AnimatePresence>
   )

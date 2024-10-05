@@ -25,7 +25,7 @@
   "login.redirecting": "إعادة التوجيه",
   "login.welcomeTo": "مرحبًا بك في",
   "redirect.continueInBrowser": "المتابعة في المتصفح",
-  "redirect.instruction": "الآن هو الوقت المناسب لفتح {{APP_NAME}} وإغلاق هذه الصفحة بأمان.",
-  "redirect.openApp": "افتح {{APP_NAME}}",
-  "redirect.successMessage": "تم الاتصال بنجاح بحساب {{APP_NAME}}."
+  "redirect.instruction": "الآن هو الوقت المناسب لفتح {{app_name}} وإغلاق هذه الصفحة بأمان.",
+  "redirect.openApp": "افتح {{app_name}}",
+  "redirect.successMessage": "تم الاتصال بنجاح بحساب {{app_name}}."
 }

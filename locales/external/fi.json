@@ -22,7 +22,7 @@
   "login.redirecting": "Uudelleenohjataan",
   "login.welcomeTo": "Tervetuloa ",
   "redirect.continueInBrowser": "Jatka selaimessa",
-  "redirect.instruction": "Nyt on aika avata {{APP_NAME}} ja sulkea tämä sivu turvallisesti.",
-  "redirect.openApp": "Avaa {{APP_NAME}}",
-  "redirect.successMessage": "Olet onnistuneesti yhdistänyt {{APP_NAME}}-tilisi."
+  "redirect.instruction": "Nyt on aika avata {{app_name}} ja sulkea tämä sivu turvallisesti.",
+  "redirect.openApp": "Avaa {{app_name}}",
+  "redirect.successMessage": "Olet onnistuneesti yhdistänyt {{app_name}}-tilisi."
 }

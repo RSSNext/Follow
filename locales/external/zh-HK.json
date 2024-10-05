@@ -33,7 +33,7 @@
   "login.signOut": "登出",
   "login.welcomeTo": "歡迎來到",
   "redirect.continueInBrowser": "在瀏覽器中繼續",
-  "redirect.instruction": "現在是時候打開 {{APP_NAME}} 並安全地關閉此頁面。",
-  "redirect.openApp": "打開 {{APP_NAME}}",
-  "redirect.successMessage": "你已成功連接到 {{APP_NAME}} 帳戶。"
+  "redirect.instruction": "現在是時候打開 {{app_name}} 並安全地關閉此頁面。",
+  "redirect.openApp": "打開 {{app_name}}",
+  "redirect.successMessage": "你已成功連接到 {{app_name}} 帳戶。"
 }

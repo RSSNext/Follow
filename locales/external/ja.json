@@ -24,7 +24,7 @@
   "login.redirecting": "リダイレクト中",
   "login.welcomeTo": "ようこそ ",
   "redirect.continueInBrowser": "ブラウザで続行",
-  "redirect.instruction": "今が{{APP_NAME}}を開き、このページを安全に閉じる時です。",
-  "redirect.openApp": "{{APP_NAME}}を開く",
-  "redirect.successMessage": "{{APP_NAME}}アカウントに正常に接続されました。"
+  "redirect.instruction": "今が{{app_name}}を開き、このページを安全に閉じる時です。",
+  "redirect.openApp": "{{app_name}}を開く",
+  "redirect.successMessage": "{{app_name}}アカウントに正常に接続されました。"
 }

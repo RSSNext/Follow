@@ -46,6 +46,9 @@ export default resolveConfig({
         switch: "var(--cursor-switch)",
         card: "var(--cursor-card)",
       },
+      width: {
+        "feed-col": "var(--fo-feed-col-w)",
+      },
       colors: {
         border: "hsl(var(--border) / <alpha-value>)",
         background: "hsl(var(--background) / <alpha-value>)",

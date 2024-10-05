@@ -29,7 +29,7 @@
   "login.signOut": "Çıkış yap",
   "login.welcomeTo": "Hoş geldiniz ",
   "redirect.continueInBrowser": "Tarayıcıda Devam Et",
-  "redirect.instruction": "Şimdi {{APP_NAME}} uygulamasını açma ve bu sayfayı güvenle kapatma zamanı.",
-  "redirect.openApp": "{{APP_NAME}} Uygulamasını Aç",
-  "redirect.successMessage": "{{APP_NAME}} Hesabına başarıyla bağlandınız."
+  "redirect.instruction": "Şimdi {{app_name}} uygulamasını açma ve bu sayfayı güvenle kapatma zamanı.",
+  "redirect.openApp": "{{app_name}} Uygulamasını Aç",
+  "redirect.successMessage": "{{app_name}} Hesabına başarıyla bağlandınız."
 }
