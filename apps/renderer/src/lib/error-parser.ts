@@ -1,6 +1,7 @@
 import { t } from "i18next"
 import { FetchError } from "ofetch"
 import { createElement } from "react"
+import type { ExternalToast } from "sonner"
 import { toast } from "sonner"
 
 import { CopyButton } from "~/components/ui/code-highlighter"
@@ -22,7 +23,17 @@ export const getFetchErrorMessage = (error: Error) => {
 
   return error.message
 }
-export const toastFetchError = (error: Error) => {
+
+/**
+ * Just a wrapper around `toastFetchError` to create a function that can be used as a callback.
+ */
+export const createErrorToaster = (title?: string, toastOptions?: ExternalToast) => (err: Error) =>
+  toastFetchError(err, { title, ...toastOptions })
+
+export const toastFetchError = (
+  error: Error,
+  { title: _title, ..._toastOptions }: ExternalToast & { title?: string } = {},
+) => {
   let message = ""
   let _reason = ""
   if (error instanceof FetchError) {
@@ -43,30 +54,36 @@ export const toastFetchError = (error: Error) => {
     }
   }
 
-  if (!_reason) {
-    return toast.error(message)
-  } else {
-    return toast.error(message, {
-      duration: 5000,
+  const toastOptions: ExternalToast = {
+    ..._toastOptions,
+    classNames: {
+      toast: "items-start",
+      title: "-mt-1 mb-1", // to align with the icon (actually cut the top space from line-height)
+      content: "w-full",
+      ..._toastOptions.classNames,
+    },
+  }
 
-      description: createElement(
-        "div",
-        {
-          className: "min-w-0 flex relative",
-        },
-        [
-          createElement(CopyButton, {
-            className: "absolute right-0 top-0 z-[1]",
-            key: "copy",
-            value: _reason,
-          }),
-          createElement(Markdown, {
-            key: "reason",
-            className: "text-sm opacity-70 min-w-0",
-            children: _reason,
-          }),
-        ],
-      ),
+  if (!_reason) {
+    const title = _title || message
+    toastOptions.description = _title ? message : undefined
+    return toast.error(title, toastOptions)
+  } else {
+    return toast.error(message || _title, {
+      duration: 5000,
+      ...toastOptions,
+      description: createElement("div", {}, [
+        createElement(CopyButton, {
+          className: "float-end relative z-[1]",
+          key: "copy",
+          value: _reason,
+        }),
+        createElement(Markdown, {
+          key: "reason",
+          className: "text-sm opacity-70 min-w-0 flex-1",
+          children: _reason,
+        }),
+      ]),
     })
   }
 }
