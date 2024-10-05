@@ -39,6 +39,7 @@
   "actions.action_card.to": "到",
   "actions.action_card.translate_into": "翻譯成",
   "actions.action_card.value": "數值",
+  "actions.action_card.webhooks": "Webhooks",
   "actions.action_card.when_feeds_match": "當 RSS 匹配時…",
   "actions.newRule": "新增規則",
   "actions.save": "儲存",
