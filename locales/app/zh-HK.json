@@ -4,7 +4,7 @@
   "achievement.first_claim_feed_description": "你在 Follow 上擁有你的 Feed",
   "achievement.mint_more_power": "成為資深玩家，賺取更多 <power />",
   "ai_daily.header": "AI 日報",
-  "ai_daily.no_found": "該期間未找到AI新聞",
+  "ai_daily.no_found": "該期間未找到 AI 新聞",
   "ai_daily.title": "頭條新聞 - {{title}}",
   "ai_daily.tooltip.content": "以下是由 AI 從你的時間線中選出的新聞（<From /> - <To />），可能對你很重要。",
   "ai_daily.tooltip.update_schedule": "每天上午 8 點和下午 8 點更新。",

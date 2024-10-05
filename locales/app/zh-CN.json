@@ -4,7 +4,7 @@
   "achievement.first_claim_feed_description": "在 Follow 上认证订阅源",
   "achievement.mint_more_power": "成为硬核玩家，赚取更多 <power />",
   "ai_daily.header": "AI 日报",
-  "ai_daily.no_found": "该期间未找到AI新闻",
+  "ai_daily.no_found": "该期间未找到 AI 新闻",
   "ai_daily.title": "热点 - {{title}}",
   "ai_daily.tooltip.content": "AI 根据时间线（<From /> - <To />）提取的重点信息",
   "ai_daily.tooltip.update_schedule": "每天 8:00 和 20:00 定时更新",

@@ -4,7 +4,7 @@
   "achievement.first_claim_feed_description": "在 Follow 上認證訂閱源",
   "achievement.mint_more_power": "成為核心玩家，賺取更多 <power />",
   "ai_daily.header": "AI 日報",
-  "ai_daily.no_found": "該期間未找到AI新聞",
+  "ai_daily.no_found": "該期間未找到 AI 新聞",
   "ai_daily.title": "頭條新聞 - {{title}}",
   "ai_daily.tooltip.content": "以下是 AI 從您的時間軸中選擇的新聞（<From /> - <To />），可能對您很重要。",
   "ai_daily.tooltip.update_schedule": "每天早上 8 點和晚上 8 點更新。",
