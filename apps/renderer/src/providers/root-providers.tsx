@@ -47,6 +47,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <FeatureFlagDebugger />
               {import.meta.env.DEV && <Devtools />}
               {children}
+              <Toaster />
             </I18nProvider>
           </Provider>
         </HotkeysProvider>
@@ -54,7 +55,6 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
         <InvalidateQueryProvider />
       </PersistQueryClientProvider>
     </MotionConfig>
-    <Toaster />
   </LazyMotion>
 )
 
