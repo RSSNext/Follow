@@ -12,7 +12,6 @@ import { viteRenderBaseConfig } from "./configs/vite.render.config"
 import type { env as EnvType } from "./packages/shared/src/env"
 import { createDependencyChunksPlugin } from "./plugins/vite/deps"
 import { htmlInjectPlugin } from "./plugins/vite/html-inject"
-import { shortAliasPlugin } from "./plugins/vite/short-alias"
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
@@ -117,7 +116,9 @@ export default ({ mode }) => {
         ["@sentry/react", "posthog-js"],
         ["zod", "react-hook-form", "@hookform/resolvers"],
       ]),
-      shortAliasPlugin(),
+      // FIXME this plugin to rename symbol will cost lots time about ~30s on M2 Max machine.
+      // And reduce main chunk js ~10K Brotli. Does that make sense?
+      // shortAliasPlugin(),
 
       process.env.ANALYZER && analyzer(),
     ],
