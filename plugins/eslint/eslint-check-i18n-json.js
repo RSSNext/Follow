@@ -1,6 +1,7 @@
 // @ts-check
 /** @type {import("eslint").ESLint.Plugin} */
 import fs from "node:fs"
+import path from "node:path"
 
 export default {
   rules: {
@@ -80,7 +81,7 @@ export default {
 
             if (!filename.endsWith(".json")) return
 
-            const parts = filename.split("/")
+            const parts = filename.split(path.sep)
             const lang = parts.at(-1).split(".")[0]
             const namespace = parts.at(-2)
 
