@@ -102,7 +102,14 @@ export function DiscoverInboxList() {
                     present({
                       title: t("sidebar.feed_actions.edit_inbox"),
                       content: ({ dismiss }) => (
-                        <InboxForm asWidget id={inbox.id} onSuccess={dismiss} />
+                        <InboxForm
+                          asWidget
+                          id={inbox.id}
+                          onSuccess={() => {
+                            inboxes.refetch()
+                            dismiss()
+                          }}
+                        />
                       ),
                     })
                   }}
