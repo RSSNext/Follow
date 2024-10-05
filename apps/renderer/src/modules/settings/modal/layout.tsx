@@ -139,7 +139,7 @@ export function SettingModalLayout(
                   <SettingSyncIndicator />
                 </div>
               </div>
-              <div className="relative flex h-full min-w-0 flex-1 flex-col rounded-xl bg-theme-background pt-1">
+              <div className="relative flex h-full min-w-0 flex-1 flex-col rounded-tr-xl bg-theme-background pt-1">
                 <Suspense>{children}</Suspense>
               </div>
             </div>
