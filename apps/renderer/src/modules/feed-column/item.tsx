@@ -46,11 +46,6 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         entryId: null,
         view,
       })
-      if (feed?.type === "list") {
-        subscriptionActions.markReadByFeedIds({
-          listId: feedId,
-        })
-      }
       // focus to main container in order to let keyboard can navigate entry items by arrow keys
       nextFrame(() => {
         getMainContainerElement()?.focus()
@@ -193,6 +188,13 @@ const ListItemImpl: Component<{
         listId,
         entryId: null,
         view,
+      })
+      subscriptionActions.markReadByFeedIds({
+        listId,
+      })
+      // focus to main container in order to let keyboard can navigate entry items by arrow keys
+      nextFrame(() => {
+        getMainContainerElement()?.focus()
       })
     },
     [listId, navigate, view],

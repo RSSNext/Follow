@@ -12,7 +12,6 @@ import { viteRenderBaseConfig } from "./configs/vite.render.config"
 import type { env as EnvType } from "./packages/shared/src/env"
 import { createDependencyChunksPlugin } from "./plugins/vite/deps"
 import { htmlInjectPlugin } from "./plugins/vite/html-inject"
-import { shortAliasPlugin } from "./plugins/vite/short-alias"
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
@@ -76,8 +75,11 @@ export default ({ mode }) => {
       mkcert(),
       devPrint(),
       createDependencyChunksPlugin([
-        ["react", "react-dom"],
+        //  React framework
+        ["react", "react-dom", "react-router-dom", "react-error-boundary"],
+        // Data Statement
         ["zustand", "jotai", "use-context-selector", "immer", "dexie"],
+        // Remark
         [
           "remark-directive",
           "remark-gfm",
@@ -87,6 +89,7 @@ export default ({ mode }) => {
           "@microflash/remark-callout-directives",
           "remark-gh-alerts",
         ],
+        // Rehype
         [
           "rehype-parse",
           "rehype-sanitize",
@@ -101,6 +104,7 @@ export default ({ mode }) => {
         ["clsx", "tailwind-merge", "class-variance-authority"],
         ["@radix-ui/react-dialog", "re-resizable"],
         ["i18next", "i18next-browser-languagedetector", "react-i18next"],
+        // Data query
         [
           "@tanstack/react-query",
           "@tanstack/react-query-persist-client",
@@ -112,7 +116,9 @@ export default ({ mode }) => {
         ["@sentry/react", "posthog-js"],
         ["zod", "react-hook-form", "@hookform/resolvers"],
       ]),
-      shortAliasPlugin(),
+      // FIXME this plugin to rename symbol will cost lots time about ~30s on M2 Max machine.
+      // And reduce main chunk js ~10K Brotli. Does that make sense?
+      // shortAliasPlugin(),
 
       process.env.ANALYZER && analyzer(),
     ],
