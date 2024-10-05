@@ -7,6 +7,7 @@ import {
 import clsx from "clsx"
 import { m } from "framer-motion"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
@@ -133,6 +134,7 @@ const EntryUser: Component<{
   i: number
 }> = memo(({ userId, i }) => {
   const user = useUserById(userId)
+  const { t } = useTranslation()
   const presentUserProfile = usePresentUserProfileModal("drawer")
   if (!user) return null
   return (
@@ -160,7 +162,9 @@ const EntryUser: Component<{
         </m.button>
       </TooltipTrigger>
       <TooltipPortal>
-        <TooltipContent side="top">Recent reader: {user.name}</TooltipContent>
+        <TooltipContent side="top">
+          {t("entry_actions.recent_reader")} {user.name}
+        </TooltipContent>
       </TooltipPortal>
     </Tooltip>
   )

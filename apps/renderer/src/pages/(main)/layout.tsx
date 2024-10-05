@@ -75,29 +75,44 @@ const errorTypes = [
 export function Component() {
   const isAuthFail = useLoginModalShow()
   const user = useWhoami()
-
+  const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
 
   useDailyTask()
 
-  const isNotSupportWidth = useViewport((v) => v.w < 1024 && v.w !== 0) && !window.electron
+  const supportMinWidth = 1024
+  const isNotSupportWidth =
+    useViewport((v) => v.w < supportMinWidth && v.w !== 0) && !window.electron
 
   if (isNotSupportWidth) {
     return (
       <div className="center fixed inset-0 flex-col text-balance px-4 text-center">
         <i className="i-mingcute-device-line mb-2 size-16 text-muted-foreground" />
-        <div>{APP_NAME} is not yet supported on mobile devices.</div>
+        <div>{t("notify.unSupportWidth", { APP_NAME })}</div>
         <div>
-          Your device width is <b>{`${window.innerWidth}`}px</b>, which is less than the minimum
-          supported width 1024px.
+          <Trans
+            i18nKey="notify.unSupportWidth_1"
+            components={{
+              b: <b />,
+            }}
+            values={{
+              width: `${window.innerWidth}px`,
+              minWidth: `${supportMinWidth}px`,
+            }}
+          />
         </div>
-        <div>Please switch to the desktop app to continue using {APP_NAME}</div>
-
         <div>
-          Download:{" "}
-          <a className="follow-link--underline" href={repository.url}>
-            {repository.url}
-          </a>
+          <Trans
+            i18nKey="notify.unSupportWidth_2"
+            components={{
+              url: (
+                <a className="follow-link--underline" href={repository.url}>
+                  {repository.url}
+                </a>
+              ),
+            }}
+            values={{ APP_NAME }}
+          />
         </div>
       </div>
     )
