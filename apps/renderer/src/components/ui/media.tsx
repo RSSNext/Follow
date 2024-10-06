@@ -127,6 +127,7 @@ const MediaImpl: FC<MediaProps> = ({
         width: e.currentTarget.naturalWidth,
         height: e.currentTarget.naturalHeight,
         ratio: e.currentTarget.naturalWidth / e.currentTarget.naturalHeight,
+        blurhash: props.blurhash,
       })
     }
   })
