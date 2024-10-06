@@ -33,7 +33,7 @@
   "login.signOut": "Sign out",
   "login.welcomeTo": "Welcome to ",
   "redirect.continueInBrowser": "Continue in Browser",
-  "redirect.instruction": "Now is the time to open {{APP_NAME}} and safely close this page.",
-  "redirect.openApp": "Open {{APP_NAME}}",
-  "redirect.successMessage": "You have successfully connected to {{APP_NAME}} Account."
+  "redirect.instruction": "Now is the time to open {{app_name}} and safely close this page.",
+  "redirect.openApp": "Open {{app_name}}",
+  "redirect.successMessage": "You have successfully connected to {{app_name}} Account."
 }

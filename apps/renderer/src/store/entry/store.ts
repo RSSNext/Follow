@@ -271,6 +271,7 @@ class EntryActions {
                   width: media.width,
                   height: media.height,
                   ratio: media.width / media.height,
+                  blurhash: media.blurhash,
                 },
               ])
             }

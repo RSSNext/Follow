@@ -2,7 +2,7 @@ import { repository } from "@pkg"
 import { Slot } from "@radix-ui/react-slot"
 import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
-import React, { useEffect, useRef, useState } from "react"
+import React, { forwardRef, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans, useTranslation } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
@@ -10,8 +10,14 @@ import { Outlet } from "react-router-dom"
 
 import { setMainContainerElement } from "~/atoms/dom"
 import { useViewport } from "~/atoms/hooks/viewport"
-import { getUISettings, setUISetting } from "~/atoms/settings/ui"
-import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
+import { getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
+import {
+  getFeedColumnTempShow,
+  setFeedColumnShow,
+  setFeedColumnTempShow,
+  useFeedColumnShow,
+  useFeedColumnTempShow,
+} from "~/atoms/sidebar"
 import { useLoginModalShow, useWhoami } from "~/atoms/user"
 import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { ErrorComponentType } from "~/components/errors/enum"
@@ -88,7 +94,7 @@ export function Component() {
     return (
       <div className="center fixed inset-0 flex-col text-balance px-4 text-center">
         <i className="i-mingcute-device-line mb-2 size-16 text-muted-foreground" />
-        <div>{t("notify.unSupportWidth", { APP_NAME })}</div>
+        <div>{t("notify.unSupportWidth", { app_name: APP_NAME })}</div>
         <div>
           <Trans
             i18nKey="notify.unSupportWidth_1"
@@ -111,7 +117,7 @@ export function Component() {
                 </a>
               ),
             }}
-            values={{ APP_NAME }}
+            values={{ app_name: APP_NAME }}
           />
         </div>
       </div>
@@ -119,11 +125,7 @@ export function Component() {
   }
 
   return (
-    <div
-      className="flex h-screen overflow-hidden"
-      ref={containerRef}
-      onContextMenu={preventDefault}
-    >
+    <RootContainer ref={containerRef}>
       {!import.meta.env.PROD && <EnvironmentIndicator />}
 
       <AppLayoutGridContainerProvider>
@@ -168,9 +170,27 @@ export function Component() {
           </DeclarativeModal>
         </RootPortal>
       )}
-    </div>
+    </RootContainer>
   )
 }
+
+const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children }, ref) => {
+  const feedColWidth = useUISettingKey("feedColWidth")
+  return (
+    <div
+      ref={ref}
+      style={
+        {
+          "--fo-feed-col-w": `${feedColWidth}px`,
+        } as any
+      }
+      className="flex h-screen overflow-hidden"
+      onContextMenu={preventDefault}
+    >
+      {children}
+    </div>
+  )
+})
 
 const FeedResponsiveResizerContainer = ({
   containerRef,
@@ -191,12 +211,22 @@ const FeedResponsiveResizerContainer = ({
   })
 
   const feedColumnShow = useFeedColumnShow()
-  const [feedColumnTempShow, setFeedColumnTempShow] = useState(false)
+  const feedColumnTempShow = useFeedColumnTempShow()
 
   useEffect(() => {
+    if (feedColumnShow) {
+      setFeedColumnTempShow(false)
+      return
+    }
     const handler = throttle((e: MouseEvent) => {
       const mouseX = e.clientX
-      const threshold = feedColumnTempShow ? getUISettings().feedColWidth : 100
+      const mouseY = e.clientY
+
+      const uiSettings = getUISettings()
+      const feedColumnTempShow = getFeedColumnTempShow()
+      const isInEntryContentWideMode = uiSettings.wideMode
+      if (mouseY < 100 && isInEntryContentWideMode) return
+      const threshold = feedColumnTempShow ? uiSettings.feedColWidth : 100
 
       if (mouseX < threshold) {
         setFeedColumnTempShow(true)
@@ -209,7 +239,7 @@ const FeedResponsiveResizerContainer = ({
     return () => {
       document.removeEventListener("mousemove", handler)
     }
-  }, [feedColumnTempShow])
+  }, [feedColumnShow])
 
   useHotkeys(
     shortcuts.layout.toggleSidebar.key,

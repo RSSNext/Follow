@@ -24,6 +24,7 @@ import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { SafeFragment } from "~/components/common/Fragment"
 import { m } from "~/components/common/Motion"
 import { ErrorComponentType } from "~/components/errors/enum"
+import { resizableOnly } from "~/components/ui/modal"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT, isElectronBuild } from "~/constants"
 import { useSwitchHotKeyScope } from "~/hooks/common"
 import { nextFrame, stopPropagation } from "~/lib/dom"
@@ -358,9 +359,7 @@ export const ModalInternal = memo(
                   }}
                 >
                   <ResizeSwitch
-                    enable={{
-                      bottomRight: true,
-                    }}
+                    enable={resizableOnly("bottomRight")}
                     onResizeStart={handleResizeEnable}
                     defaultSize={resizeDefaultSize}
                     className="flex grow flex-col"

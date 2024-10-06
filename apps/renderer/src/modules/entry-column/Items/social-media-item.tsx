@@ -93,7 +93,7 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
               target={translation?.content}
               isHTML
             />
-            {!!entry.collections && <StarIcon />}
+            {!!entry.collections && <StarIcon className="absolute right-0 top-0" />}
           </div>
         </div>
         {!!media?.length && (

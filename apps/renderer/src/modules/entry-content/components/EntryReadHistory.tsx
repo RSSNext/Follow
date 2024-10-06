@@ -22,6 +22,11 @@ import { useUserById } from "~/store/user"
 
 import { usePresentUserProfileModal } from "../../profile/hooks"
 
+const getLimit = (width: number): number => {
+  if (width > 900) return 15
+  if (width > 600) return 10
+  return 5
+}
 export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) => {
   const me = useWhoami()
   const entryHistory = useEntryReadHistory(entryId)
@@ -33,7 +38,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
 
   const appGirdContainerWidth = useAppLayoutGridContainerWidth()
 
-  const LIMIT = appGirdContainerWidth > 600 ? 10 : 5
+  const LIMIT = getLimit(appGirdContainerWidth)
 
   if (!entryHistory) return null
   if (!me) return null
@@ -56,7 +61,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
               type="button"
               style={{
                 right: `${LIMIT * 8}px`,
-                zIndex: 11,
+                zIndex: LIMIT + 1,
               }}
               className="no-drag-region relative flex size-7 items-center justify-center rounded-full border border-border bg-muted ring-2 ring-background"
             >

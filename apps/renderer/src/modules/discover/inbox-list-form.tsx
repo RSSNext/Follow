@@ -16,6 +16,7 @@ import {
 } from "~/components/ui/table"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedViewType } from "~/lib/enum"
+import { createErrorToaster } from "~/lib/error-parser"
 import { useInboxList } from "~/queries/inboxes"
 import { subscriptionActions } from "~/store/subscription"
 
@@ -47,7 +48,7 @@ export function DiscoverInboxList() {
             <TableHead className="pl-0 pr-6">{t("discover.inbox.email")}</TableHead>
             <TableHead className="pl-0 pr-6">{t("discover.inbox.title")}</TableHead>
             <TableHead className="pl-0 pr-6">{t("discover.inbox.secret")}</TableHead>
-            <TableHead className="px-0">{t("discover.inbox.actions")}</TableHead>
+            <TableHead className="center px-0">{t("discover.inbox.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -76,7 +77,7 @@ export function DiscoverInboxList() {
                   />
                 </div>
               </TableCell>
-              <TableCell size="sm">
+              <TableCell size="sm" className="center">
                 <Button
                   variant="ghost"
                   onClick={() =>
@@ -156,9 +157,7 @@ const ConfirmDestroyModalContent = ({ id, onSuccess }: { id: string; onSuccess: 
       toast.success(t("discover.inbox_destroy_success"))
       onSuccess()
     },
-    onError: () => {
-      toast.error(t("discover.inbox_destroy_error"))
-    },
+    onError: createErrorToaster(t("discover.inbox_destroy_error")),
   })
 
   return (

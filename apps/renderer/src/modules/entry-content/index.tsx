@@ -51,20 +51,28 @@ import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
 import { EntryContentProvider } from "./provider"
 
+export interface EntryContentClassNames {
+  header?: string
+}
 export const EntryContent = ({
   entryId,
   noMedia,
   compact,
+  classNames,
 }: {
   entryId: ActiveEntryId
   noMedia?: boolean
   compact?: boolean
+  classNames?: EntryContentClassNames
 }) => {
   const title = useFeedHeaderTitle()
   const { feedId, view } = useRouteParams()
-
+  const enableEntryWideMode = useUISettingKey("wideMode")
   useTitle(title)
   if (!entryId) {
+    if (enableEntryWideMode) {
+      return null
+    }
     return (
       <m.div
         className="center size-full flex-col"
@@ -79,14 +87,22 @@ export const EntryContent = ({
     )
   }
 
-  return <EntryContentRender entryId={entryId} noMedia={noMedia} compact={compact} />
+  return (
+    <EntryContentRender
+      entryId={entryId}
+      noMedia={noMedia}
+      compact={compact}
+      classNames={classNames}
+    />
+  )
 }
 
 export const EntryContentRender: Component<{
   entryId: string
   noMedia?: boolean
   compact?: boolean
-}> = ({ entryId, noMedia, className, compact }) => {
+  classNames?: EntryContentClassNames
+}> = ({ entryId, noMedia, className, compact, classNames }) => {
   const { t } = useTranslation()
 
   const entry = useEntry(entryId)
@@ -179,7 +195,7 @@ export const EntryContentRender: Component<{
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
-        className="h-[55px] shrink-0 px-3 @container"
+        className={cn("h-[55px] shrink-0 px-3 @container", classNames?.header)}
         compact={compact}
       />
 
