@@ -174,12 +174,7 @@ const DateItemInner: FC<{
             <Trans
               i18nKey="mark_all_read_button.confirm_mark_all"
               components={{
-                which: (
-                  <>
-       
-                    {RelativeElement}
-                  </>
-                ),
+                which: <>{RelativeElement}</>,
               }}
             />
           </div>
