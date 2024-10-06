@@ -1,5 +1,6 @@
 import { env } from "@follow/shared/env"
 import { useMutation } from "@tanstack/react-query"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
@@ -27,6 +28,21 @@ export function DiscoverInboxList() {
 
   const { present } = useModalStack()
 
+  const [inboxListData, setInboxListData] = useState(inboxes.data || [])
+
+  useEffect(() => {
+    if (inboxes.data) {
+      setInboxListData(inboxes.data)
+    }
+  }, [inboxes.data])
+
+  const optimisticUpdateInboxListData = (inboxId, title) => {
+    const updatedInboxes = inboxListData.map((inbox) =>
+      inbox.id === inboxId ? { ...inbox, title } : inbox,
+    )
+    setInboxListData(updatedInboxes)
+  }
+
   return (
     <>
       <div className="mb-4 flex items-center gap-2 text-sm text-zinc-500">
@@ -51,7 +67,7 @@ export function DiscoverInboxList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {inboxes.data?.map((inbox) => (
+          {inboxListData?.map((inbox) => (
             <TableRow key={inbox.id}>
               <TableCell size="sm">{inbox.id}</TableCell>
               <TableCell size="sm">
@@ -105,9 +121,10 @@ export function DiscoverInboxList() {
                         <InboxForm
                           asWidget
                           id={inbox.id}
-                          onSuccess={() => {
-                            inboxes.refetch()
+                          onSuccess={(title?: string) => {
+                            optimisticUpdateInboxListData(inbox.id, title)
                             dismiss()
+                            inboxes.refetch()
                           }}
                         />
                       ),

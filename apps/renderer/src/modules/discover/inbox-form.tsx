@@ -81,7 +81,7 @@ const InboxInnerForm = ({
   onSuccess,
   inbox,
 }: {
-  onSuccess?: () => void
+  onSuccess?: (title?: string) => void
   inbox?: Nullable<InboxModel>
 }) => {
   const { t } = useTranslation()
@@ -114,13 +114,13 @@ const InboxInnerForm = ({
 
   const mutationChange = useMutation({
     mutationFn: async ({ handle, title }: { handle: string; title: string }) => {
+      onSuccess?.(title)
       await apiClient.inboxes.$put({
         json: {
           handle,
           title,
         },
       })
-      onSuccess?.()
     },
     onSuccess: () => {
       subscriptionActions.fetchByView(FeedViewType.Articles)
