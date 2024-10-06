@@ -73,7 +73,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
       <div
         data-feed-id={feedId}
         className={cn(
-          "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
+          "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose transition-colors hover:bg-theme-item-hover",
           (isActive || isContextMenuOpen) && "bg-native-active",
           isFeed ? "py-[2px]" : "py-1.5",
           className,
