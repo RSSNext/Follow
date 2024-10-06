@@ -333,6 +333,7 @@ const ListCreationModalContent = ({ dismiss, id }: { dismiss: () => void; id?: s
                   <Input
                     {...field}
                     type="number"
+                    min={0}
                     onChange={(value) => field.onChange(value.target.valueAsNumber)}
                   />
                   <i className="i-mgc-power ml-4 shrink-0 text-xl text-accent" />
