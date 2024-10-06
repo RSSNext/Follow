@@ -8,7 +8,7 @@ import { useUISettingSelector } from "~/atoms/settings/ui"
 import { m } from "~/components/common/Motion"
 import { Logo } from "~/components/icons/logo"
 import { LetsIconsResizeDownRightLight } from "~/components/icons/resize"
-import { useResizeableModal } from "~/components/ui/modal"
+import { resizableOnly, useResizeableModal } from "~/components/ui/modal"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "~/constants"
 import { preventDefault } from "~/lib/dom"
 import { cn, getOS } from "~/lib/utils"
@@ -94,9 +94,7 @@ export function SettingModalLayout(
         <SettingContext.Provider value={defaultCtx}>
           <Resizable
             onResizeStart={handlePointDown}
-            enable={{
-              bottomRight: true,
-            }}
+            enable={resizableOnly("bottomRight")}
             style={{ ...resizeableStyle, position: "static" }}
             defaultSize={{
               width: 800,
