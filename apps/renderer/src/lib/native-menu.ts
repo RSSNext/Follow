@@ -16,7 +16,7 @@ export type NativeMenuItem = (
       submenu?: NativeMenuItem[]
       checked?: boolean
     }
-  | { type: "separator"; disabled?: boolean }
+  | { type: "separator"; disabled?: boolean; enabled?: boolean }
 ) & { hide?: boolean }
 
 export type NullableNativeMenuItem = NativeMenuItem | null | undefined | false | ""

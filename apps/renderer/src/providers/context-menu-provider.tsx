@@ -108,6 +108,10 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
     preventDefault: true,
   })
 
+  if (item.enabled === false) {
+    return null
+  }
+
   switch (item.type) {
     case "separator": {
       return <ContextMenuSeparator />
@@ -120,11 +124,12 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
           : ContextMenuItem
 
       const Sub = item.submenu ? ContextMenuSub : Fragment
+
       return (
         <Sub>
           <Wrapper
             ref={itemRef}
-            disabled={item.enabled === false || (item.click === undefined && !item.submenu)}
+            disabled={item.click === undefined && !item.submenu}
             onClick={onClick}
             className="flex items-center gap-2"
             checked={item.checked}

@@ -88,6 +88,7 @@ export const useFeedActions = ({
       {
         type: "separator" as const,
         disabled: isEntryList,
+        enabled: !!listByView?.length,
       },
       {
         type: "text" as const,
