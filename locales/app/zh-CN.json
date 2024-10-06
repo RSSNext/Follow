@@ -99,7 +99,7 @@
   "entry_list_header.show_unread_only": "仅显示未读",
   "entry_list_header.switch_to_grid": "切换到网格",
   "entry_list_header.switch_to_masonry": "切换到瀑布流",
-  "entry_list_header.switch_to_normalmode": "切换到正常模式",
+  "entry_list_header.switch_to_normalmode": "切换到双列模式",
   "entry_list_header.switch_to_widemode": "切换到宽屏模式",
   "entry_list_header.unread": "未读",
   "feed_claim_modal.choose_verification_method": "提供三种认证方式，选择其中一种继续：",

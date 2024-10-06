@@ -1,6 +1,7 @@
 import { useWheel } from "@use-gesture/react"
 import { AnimatePresence, easeOut } from "framer-motion"
-import { useRef } from "react"
+import type { FC, PropsWithChildren } from "react"
+import { useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { useParams } from "react-router-dom"
 
@@ -22,8 +23,8 @@ export const Component = () => {
 
   const settingWideMode = useUISettingKey("wideMode")
   const realEntryId = entryId === ROUTE_ENTRY_PENDING ? "" : entryId
-  const inEntryContentWideMode = !(views[view].wideMode || (settingWideMode && !realEntryId))
-  const wideMode = settingWideMode && realEntryId
+  const showEntryContent = !(views[view].wideMode || (settingWideMode && !realEntryId))
+  const wideMode = !!(settingWideMode && realEntryId)
   const feedColumnTempShow = useFeedColumnTempShow()
   const feedColumnShow = useFeedColumnShow()
   const shouldHeaderPaddingLeft = feedColumnTempShow && !feedColumnShow && settingWideMode
@@ -31,18 +32,68 @@ export const Component = () => {
   useHotkeys(
     "Escape",
     () => {
-      if (inEntryContentWideMode) {
+      if (settingWideMode) {
         navigate({ entryId: null })
       }
     },
     {
-      enabled: inEntryContentWideMode,
+      enabled: showEntryContent,
       scopes: HotKeyScopeMap.Home,
       preventDefault: true,
     },
   )
-  const carouselRef = useRef<HTMLDivElement>(null)
 
+  if (!showEntryContent) {
+    return null
+  }
+
+  return (
+    <AnimatePresence mode="popLayout">
+      <AppLayoutGridContainerProvider>
+        <EntryGridContainer showEntryContent={showEntryContent} wideMode={wideMode}>
+          {wideMode && (
+            // Close button
+            <ActionButton
+              className={cn(
+                "absolute left-3 top-3 z-10 duration-200",
+                shouldHeaderPaddingLeft
+                  ? "left-[calc(theme(width.3)+theme(width.feed-col))]"
+                  : "left-3",
+              )}
+              tooltip="Close"
+              shortcut="Escape"
+              disableTriggerShortcut
+              onClick={() => navigate({ entryId: null })}
+            >
+              <i className="i-mgc-close-cute-re size-5" />
+            </ActionButton>
+          )}
+
+          <EntryContent
+            entryId={realEntryId}
+            classNames={{
+              header: shouldHeaderPaddingLeft
+                ? "ml-[calc(theme(width.feed-col)+theme(width.8))]"
+                : wideMode
+                  ? "ml-8"
+                  : "",
+            }}
+          />
+        </EntryGridContainer>
+      </AppLayoutGridContainerProvider>
+    </AnimatePresence>
+  )
+}
+
+const EntryGridContainer: FC<
+  PropsWithChildren<{
+    showEntryContent: boolean
+    wideMode: boolean
+  }>
+> = ({ children, showEntryContent, wideMode }) => {
+  const [containerRef, setContainerRef] = useState<HTMLDivElement | null>()
+
+  const navigate = useNavigateEntry()
   useWheel(
     ({ delta: [dex] }) => {
       if (dex < -50) {
@@ -50,56 +101,32 @@ export const Component = () => {
       }
     },
     {
-      enabled: inEntryContentWideMode,
-      target: carouselRef,
+      enabled: showEntryContent && wideMode,
+      target: containerRef!,
       eventOptions: { capture: true },
       axis: "x",
     },
   )
 
-  return (
-    <AnimatePresence>
-      <AppLayoutGridContainerProvider>
-        <AnimatePresence>
-          {inEntryContentWideMode && (
-            <m.div
-              ref={carouselRef}
-              // slide up
-              initial={{ opacity: 0, y: 100 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 100, transition: { duration: 0.2, ease: easeOut } }}
-              transition={{ duration: 0.2, type: "spring" }}
-              className={cn(
-                "flex min-w-0 flex-1 flex-col",
-                wideMode && "absolute inset-0 z-10 bg-theme-background",
-              )}
-            >
-              {wideMode && (
-                <ActionButton
-                  className={cn(
-                    "absolute left-3 top-3 z-10 duration-200",
-                    shouldHeaderPaddingLeft
-                      ? "left-[calc(theme(width.3)+theme(width.feed-col))]"
-                      : "left-3",
-                  )}
-                  onClick={() => navigate({ entryId: null })}
-                >
-                  <i className="i-mgc-close-cute-re size-5" />
-                </ActionButton>
-              )}
-
-              <EntryContent
-                entryId={realEntryId}
-                classNames={{
-                  header: shouldHeaderPaddingLeft
-                    ? "ml-[calc(theme(width.feed-col)+theme(width.8))]"
-                    : "ml-8",
-                }}
-              />
-            </m.div>
-          )}
-        </AnimatePresence>
-      </AppLayoutGridContainerProvider>
-    </AnimatePresence>
-  )
+  if (wideMode) {
+    return (
+      <m.div
+        ref={setContainerRef}
+        // slide up
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 100, transition: { duration: 0.2, ease: easeOut } }}
+        transition={{ duration: 0.2, type: "spring" }}
+        className={cn("flex min-w-0 flex-1 flex-col", "absolute inset-0 z-10 bg-theme-background")}
+      >
+        {children}
+      </m.div>
+    )
+  } else {
+    return (
+      <div ref={setContainerRef} className="flex min-w-0 flex-1 flex-col">
+        {children}
+      </div>
+    )
+  }
 }
