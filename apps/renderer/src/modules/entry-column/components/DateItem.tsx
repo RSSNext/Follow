@@ -178,7 +178,6 @@ const DateItemInner: FC<{
                   <>
        
                     {RelativeElement}
-                    <span> </span>
                   </>
                 ),
               }}
