@@ -11,6 +11,7 @@ import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
 import { ListForm } from "~/modules/discover/list-form"
+import { useSettingModal } from "~/modules/settings/modal/hooks"
 import {
   getFeedById,
   useAddFeedToFeedList,
@@ -37,7 +38,7 @@ export const useFeedActions = ({
   const { t } = useTranslation()
   const feed = useFeedById(feedId)
   const subscription = useSubscriptionByFeedId(feedId)
-
+  const settingModalPresent = useSettingModal()
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
   const claimFeed = useFeedClaimModal({
@@ -88,33 +89,40 @@ export const useFeedActions = ({
       {
         type: "separator" as const,
         disabled: isEntryList,
-        enabled: !!listByView?.length,
       },
       {
         type: "text" as const,
         label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-        enabled: !!listByView?.length,
-        submenu: listByView?.map((list) => {
-          const isIncluded = list.feedIds.includes(feedId)
-          return {
-            label: list.title || "",
+        submenu: [
+          ...listByView.map((list) => {
+            const isIncluded = list.feedIds.includes(feedId)
+            return {
+              label: list.title || "",
+              type: "text" as const,
+              checked: isIncluded,
+              click() {
+                if (!isIncluded) {
+                  addFeedToListMutation({
+                    feedId,
+                    listId: list.id,
+                  })
+                } else {
+                  removeFeedFromListMutation({
+                    feedId,
+                    listId: list.id,
+                  })
+                }
+              },
+            }
+          }),
+          {
+            label: t("sidebar.feed_actions.create_list"),
             type: "text" as const,
-            checked: isIncluded,
             click() {
-              if (!isIncluded) {
-                addFeedToListMutation({
-                  feedId,
-                  listId: list.id,
-                })
-              } else {
-                removeFeedFromListMutation({
-                  feedId,
-                  listId: list.id,
-                })
-              }
+              settingModalPresent("list")
             },
-          }
-        }),
+          },
+        ],
       },
       {
         type: "separator" as const,
@@ -212,6 +220,7 @@ export const useFeedActions = ({
     claimFeed,
     addFeedToListMutation,
     removeFeedFromListMutation,
+    settingModalPresent,
     present,
     deleteSubscription,
     subscription,

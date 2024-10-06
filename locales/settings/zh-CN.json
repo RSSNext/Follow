@@ -153,7 +153,7 @@
   "invitation.tableHeaders.creationTime": "创建时间",
   "invitation.tableHeaders.usedBy": "使用者",
   "invitation.title": "邀请码",
-  "lists.create": "创建新列表",
+  "lists.create": "创建列表",
   "lists.created.error": "创建列表失败",
   "lists.created.success": "创建列表成功",
   "lists.description": "描述",
