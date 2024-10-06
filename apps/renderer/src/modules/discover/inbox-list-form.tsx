@@ -48,7 +48,7 @@ export function DiscoverInboxList() {
             <TableHead className="pl-0 pr-6">{t("discover.inbox.email")}</TableHead>
             <TableHead className="pl-0 pr-6">{t("discover.inbox.title")}</TableHead>
             <TableHead className="pl-0 pr-6">{t("discover.inbox.secret")}</TableHead>
-            <TableHead className="px-0">{t("discover.inbox.actions")}</TableHead>
+            <TableHead className="center px-0">{t("discover.inbox.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -77,7 +77,7 @@ export function DiscoverInboxList() {
                   />
                 </div>
               </TableCell>
-              <TableCell size="sm">
+              <TableCell size="sm" className="center">
                 <Button
                   variant="ghost"
                   onClick={() =>

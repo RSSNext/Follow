@@ -24,7 +24,7 @@
   "discover.inbox.actions": "操作",
   "discover.inbox.description": "你可以通过电子邮件和 Webhooks 在收件箱接收信息。",
   "discover.inbox.email": "电子邮件",
-  "discover.inbox.handle": "处理",
+  "discover.inbox.handle": "标识符",
   "discover.inbox.secret": "密钥",
   "discover.inbox.title": "标题",
   "discover.inbox.webhooks_docs": "Webhooks 文档。",
