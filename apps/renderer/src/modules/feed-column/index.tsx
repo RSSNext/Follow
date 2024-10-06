@@ -155,7 +155,6 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         {views.map((item, index) => (
           <ActionButton
             key={item.name}
-            // TODO: fix this type error
             tooltip={t(item.name)}
             shortcut={`${index + 1}`}
             className={cn(

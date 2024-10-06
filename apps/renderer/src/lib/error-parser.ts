@@ -78,7 +78,7 @@ export const toastFetchError = (
           className: cn(
             "relative z-[1] float-end -mt-1",
             "border-transparent bg-theme-background text-theme-foreground opacity-60 transition-opacity",
-            "hover:bg-theme-button-hover hover:opacity-100 focus:border-theme-foreground/80",
+            "hover:bg-theme-button-hover hover:opacity-100 focus:border-theme-foreground/20",
           ),
           key: "copy",
           value: _reason,

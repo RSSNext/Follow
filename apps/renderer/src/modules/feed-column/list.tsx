@@ -234,24 +234,24 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   )
 }
 
+const LIST = [
+  { icon: "i-mgc-sort-ascending-cute-re", by: "count", order: "asc" },
+  { icon: "i-mgc-sort-descending-cute-re", by: "count", order: "desc" },
+
+  {
+    icon: "i-mgc-az-sort-descending-letters-cute-re",
+    by: "alphabetical",
+    order: "asc",
+  },
+  {
+    icon: "i-mgc-az-sort-ascending-letters-cute-re",
+    by: "alphabetical",
+    order: "desc",
+  },
+] as const
 const SortButton = () => {
   const { by, order } = useFeedListSort()
   const { t } = useTranslation()
-  const LIST = [
-    { icon: "i-mgc-sort-ascending-cute-re", by: "count", order: "asc" },
-    { icon: "i-mgc-sort-descending-cute-re", by: "count", order: "desc" },
-
-    {
-      icon: "i-mgc-az-sort-descending-letters-cute-re",
-      by: "alphabetical",
-      order: "asc",
-    },
-    {
-      icon: "i-mgc-az-sort-ascending-letters-cute-re",
-      by: "alphabetical",
-      order: "desc",
-    },
-  ] as const
 
   const [open, setOpen] = useState(false)
 
