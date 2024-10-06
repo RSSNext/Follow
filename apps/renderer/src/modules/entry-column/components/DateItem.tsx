@@ -176,7 +176,7 @@ const DateItemInner: FC<{
               components={{
                 which: (
                   <>
-                    <span> </span>
+       
                     {RelativeElement}
                     <span> </span>
                   </>
