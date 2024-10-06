@@ -320,7 +320,7 @@ const FallbackableImage: FC<
             props.className,
           )}
           style={
-            height * width === 0
+            Number.isNaN(height) || Number.isNaN(width) || height === 0 || width === 0
               ? {}
               : {
                   maxHeight: `min(100%, ${height}px)`,
