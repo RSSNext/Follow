@@ -25,6 +25,7 @@ import { ListCreationModalContent } from "../settings/tabs/lists/modals"
 import { useFeedListSortSelector } from "./atom"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { FeedItem } from "./item"
+import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
 type FeedId = string
@@ -136,10 +137,10 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
     <div tabIndex={-1} onClick={stopPropagation}>
       {!!showCollapse && (
         <div
+          data-active={isActive || isContextMenuOpen}
           className={cn(
             "flex w-full cursor-menu items-center justify-between rounded-md px-2.5",
-            "duration-200 hover:bg-theme-item-hover",
-            (isActive || isContextMenuOpen) && "!bg-native-active",
+            feedColumnStyles.item,
           )}
           onClick={(e) => {
             e.stopPropagation()
