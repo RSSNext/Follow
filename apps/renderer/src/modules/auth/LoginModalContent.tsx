@@ -23,8 +23,9 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
 
   const { t } = useTranslation()
 
-  const [loadingLockSet, setLoadingLockSet] = useState<false | string>(false)
+  const [loadingLockSet, setLoadingLockSet] = useState<string>("")
 
+  const disabled = !!loadingLockSet
   return (
     <div className="center flex h-full" onClick={canClose ? modal.dismiss : undefined}>
       <m.div
@@ -43,10 +44,10 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
           <MotionButtonBase
             className={clsx(
               "center h-[48px] w-[320px] rounded-[8px] !bg-black font-sans text-base font-medium text-white hover:!bg-black/80 focus:!border-black/80 focus:!ring-black/80",
-              !!loadingLockSet && "pointer-events-none opacity-50",
+              disabled && "pointer-events-none opacity-50",
               "overflow-hidden",
             )}
-            disabled={!!loadingLockSet}
+            disabled={disabled}
             onClick={() => {
               loginHandler("github", runtime)
               setLoadingLockSet("github")
@@ -58,10 +59,10 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
             </LoginButtonContent>
           </MotionButtonBase>
           <MotionButtonBase
-            disabled={!!loadingLockSet}
+            disabled={disabled}
             className={clsx(
               "center h-[48px] w-[320px] rounded-[8px] bg-blue-500 font-sans text-base font-medium text-white hover:bg-blue-500/90 focus:!border-blue-500/80 focus:!ring-blue-500/80",
-              !!loadingLockSet && "pointer-events-none opacity-50",
+              disabled && "pointer-events-none opacity-50",
               "overflow-hidden",
             )}
             onClick={() => {
