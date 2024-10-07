@@ -12,6 +12,7 @@ import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
 import { ListForm } from "~/modules/discover/list-form"
 import { useSettingModal } from "~/modules/settings/modal/hooks"
+import { ListCreationModalContent } from "~/modules/settings/tabs/lists/modals"
 import {
   getFeedById,
   useAddFeedToFeedList,
@@ -116,10 +117,17 @@ export const useFeedActions = ({
             }
           }),
           {
+            type: "separator",
+          },
+          {
             label: t("sidebar.feed_actions.create_list"),
             type: "text" as const,
+            icon: <i className="i-mgc-add-cute-re" />,
             click() {
-              settingModalPresent("list")
+              present({
+                title: t("sidebar.feed_actions.create_list"),
+                content: () => <ListCreationModalContent />,
+              })
             },
           },
         ],

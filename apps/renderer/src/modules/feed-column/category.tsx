@@ -21,6 +21,7 @@ import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscripti
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
+import { ListCreationModalContent } from "../settings/tabs/lists/modals"
 import { useFeedListSortSelector } from "./atom"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { FeedItem } from "./item"
@@ -164,16 +165,33 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
                   enabled: !!listList?.length,
-                  submenu: listList?.map((list) => ({
-                    label: list.title || "",
-                    type: "text",
-                    click() {
-                      return addMutation.mutate({
-                        feedIds: ids,
-                        listId: list.id,
-                      })
-                    },
-                  })),
+                  // @ts-expect-error
+                  submenu: listList
+                    ?.map((list) => ({
+                      label: list.title || "",
+                      type: "text",
+                      click() {
+                        return addMutation.mutate({
+                          feedIds: ids,
+                          listId: list.id,
+                        })
+                      },
+                    }))
+                    // @ts-expect-error
+                    .concat([
+                      { type: "separator" },
+                      {
+                        label: t("sidebar.feed_actions.create_list"),
+                        type: "text" as const,
+
+                        click() {
+                          present({
+                            title: t("sidebar.feed_actions.create_list"),
+                            content: () => <ListCreationModalContent />,
+                          })
+                        },
+                      },
+                    ]),
                 },
                 { type: "separator" },
                 {
