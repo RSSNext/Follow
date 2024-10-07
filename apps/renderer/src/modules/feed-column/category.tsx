@@ -136,8 +136,9 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
       {!!showCollapse && (
         <div
           className={cn(
-            "flex w-full cursor-menu items-center justify-between rounded-md px-2.5 transition-colors hover:bg-theme-item-hover",
-            (isActive || isContextMenuOpen) && "bg-native-active",
+            "flex w-full cursor-menu items-center justify-between rounded-md px-2.5",
+            "duration-200 hover:bg-theme-item-hover",
+            (isActive || isContextMenuOpen) && "!bg-native-active",
           )}
           onClick={(e) => {
             e.stopPropagation()

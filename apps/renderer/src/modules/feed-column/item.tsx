@@ -73,8 +73,9 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
       <div
         data-feed-id={feedId}
         className={cn(
-          "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose transition-colors hover:bg-theme-item-hover",
-          (isActive || isContextMenuOpen) && "bg-native-active",
+          "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
+          "duration-200 hover:bg-theme-item-hover",
+          (isActive || isContextMenuOpen) && "!bg-native-active",
           isFeed ? "py-[2px]" : "py-1.5",
           className,
         )}
@@ -206,7 +207,8 @@ const ListItemImpl: Component<{
       data-list-id={listId}
       className={cn(
         "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-sm font-medium leading-loose",
-        (isActive || isContextMenuOpen) && "bg-native-active",
+        (isActive || isContextMenuOpen) && "!bg-native-active",
+        "duration-200 hover:bg-theme-item-hover",
         "py-1.5 pl-2.5",
         className,
       )}
@@ -278,7 +280,8 @@ const InboxItemImpl: Component<{
       data-inbox-id={inboxId}
       className={cn(
         "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-sm font-medium leading-loose",
-        (isActive || isContextMenuOpen) && "bg-native-active",
+        (isActive || isContextMenuOpen) && "!bg-native-active",
+        "duration-200 hover:bg-theme-item-hover",
         "py-[2px] pl-2.5",
         className,
       )}
