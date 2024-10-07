@@ -22,8 +22,7 @@ export const useSourceContentModal = () => {
         content: () => <SourceContentView src={src} />,
         resizeable: true,
         clickOutsideToDismiss: true,
-        // The number was picked arbitrarily
-        resizeDefaultSize: { width: 900, height: 700 },
+        max: true,
       })
     },
     [present],

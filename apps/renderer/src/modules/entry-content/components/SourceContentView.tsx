@@ -1,5 +1,6 @@
 import { AnimatePresence } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useShowSourceContent } from "~/atoms/source-content"
 import { m } from "~/components/common/Motion"
@@ -15,10 +16,11 @@ const variants = {
 }
 
 const Banner = () => {
+  const { t } = useTranslation()
   return (
     <div className="z-50 w-full bg-yellow-600 p-3 text-white">
       <div className="text-center">
-        <p>Some websites can't be displayed here. Download desktop app to view it.</p>
+        <p>{t("notify.unSupportDisplay")}</p>
       </div>
     </div>
   )
@@ -36,7 +38,7 @@ export const SourceContentView = ({ src }: { src: string }) => {
     const handleDidStopLoading = () => setLoading(false)
 
     // See https://www.electronjs.org/docs/latest/api/webview-tag#example
-    webview.addEventListener("did-start-loading", handleDidStopLoading, {
+    webview.addEventListener("did-stop-loading", handleDidStopLoading, {
       signal: abortController.signal,
     })
 

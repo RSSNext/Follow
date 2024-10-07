@@ -8,6 +8,7 @@ import { getGeneralSettings } from "~/atoms/settings/general"
 import { getUISettings } from "~/atoms/settings/ui"
 import { useModalStack } from "~/components/ui/modal"
 import { FeedForm } from "~/modules/discover/feed-form"
+import { ListForm } from "~/modules/discover/list-form"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 
 export const ExtensionExposeProvider = () => {
@@ -38,15 +39,12 @@ export const ExtensionExposeProvider = () => {
           title: options?.isList
             ? t("sidebar.feed_actions.edit_list")
             : t("sidebar.feed_actions.edit_feed"),
-          content: ({ dismiss }) => (
-            <FeedForm
-              asWidget
-              id={options?.id}
-              url={options?.url}
-              onSuccess={dismiss}
-              isList={options?.isList}
-            />
-          ),
+          content: ({ dismiss }) =>
+            options?.isList ? (
+              <ListForm asWidget id={options?.id} onSuccess={dismiss} />
+            ) : (
+              <FeedForm asWidget id={options?.id} url={options?.url} onSuccess={dismiss} />
+            ),
         })
       },
 

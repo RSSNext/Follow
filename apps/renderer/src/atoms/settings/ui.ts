@@ -33,6 +33,7 @@ export const createDefaultSettings = (): UISettings => ({
   // View
   pictureViewMasonry: true,
   pictureViewFilterNoImage: false,
+  wideMode: false,
 
   // TTS
   voice: "en-US-AndrewMultilingualNeural",

@@ -21,6 +21,7 @@ import { ShikiHighLighter } from "~/components/ui/code-highlighter"
 import { MarkdownBlockImage, MarkdownLink, MarkdownP } from "~/components/ui/markdown/renderers"
 import { BlockError } from "~/components/ui/markdown/renderers/BlockErrorBoundary"
 import { createHeadingRenderer } from "~/components/ui/markdown/renderers/Heading"
+import { MarkdownInlineImage } from "~/components/ui/markdown/renderers/InlineImage"
 import { Media } from "~/components/ui/media"
 
 function markInlineImage(node?: Element) {
@@ -31,14 +32,11 @@ function markInlineImage(node?: Element) {
   }
 }
 
-export type MediaInfo = Record<string, { width?: number; height?: number }>
-
 export const parseHtml = (
   content: string,
   options?: Partial<{
     renderInlineStyle: boolean
     noMedia?: boolean
-    mediaInfo?: MediaInfo
   }>,
 ) => {
   const file = new VFile(content)
@@ -99,13 +97,7 @@ export const parseHtml = (
             markInlineImage(node)
             return createElement(MarkdownLink, { ...props } as any)
           },
-          img: ({ ...props }) => {
-            return createElement(Img, {
-              ...props,
-              width: props.src ? options?.mediaInfo?.[props.src]?.width : props.width,
-              height: props.src ? options?.mediaInfo?.[props.src]?.height : props.height,
-            })
-          },
+          img: Img,
 
           h1: createHeadingRenderer(1),
           h2: createHeadingRenderer(2),
@@ -216,19 +208,11 @@ const Img: Components["img"] = ({ node, ...props }) => {
     ...props,
     proxy: { height: 0, width: 700 },
   }
-  if (node?.properties.inline) {
-    return createElement(Media, {
-      type: "photo",
-      ...nextProps,
 
-      mediaContainerClassName: tw`max-w-full inline rounded-md`,
-      popper: true,
-      className: tw`inline`,
-      showFallback: true,
-    })
-  }
-
-  return createElement(MarkdownBlockImage, nextProps)
+  return createElement(
+    node?.properties.inline ? MarkdownInlineImage : MarkdownBlockImage,
+    nextProps,
+  )
 }
 
 function extractCodeFromHtml(htmlString: string) {

@@ -15,9 +15,10 @@ export function Component() {
 
   // Memo this initial value to avoid re-render
 
+  const settingWideMode = useUISettingKey("wideMode")
   const entryColWidth = useMemo(() => getUISettings().entryColWidth, [])
   const { view } = useRouteParams()
-  const inWideMode = view ? views[view].wideMode : false
+  const inWideMode = (view ? views[view].wideMode : false) || settingWideMode
   const feedColumnWidth = useUISettingKey("feedColWidth")
   const { position, separatorProps, isDragging, separatorCursor } = useResizable({
     axis: "x",
@@ -32,7 +33,7 @@ export function Component() {
   })
 
   return (
-    <div ref={containerRef} className="flex min-w-0 grow">
+    <div ref={containerRef} className="relative flex min-w-0 grow">
       <div
         className={cn("h-full shrink-0", inWideMode ? "flex-1" : "border-r", "will-change-[width]")}
         style={{

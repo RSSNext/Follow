@@ -1,35 +1,14 @@
-import { useMemo } from "react"
-
 import { FeedViewType } from "~/lib/enum"
 import { useEntryContentContext } from "~/modules/entry-content/hooks"
-import { useFeedByIdSelector } from "~/store/feed"
 
 import type { LinkProps } from "../../link"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "../../tooltip"
-import { ensureAndRenderTimeStamp } from "../utils"
+import { ensureAndRenderTimeStamp, usePopulatedFullUrl } from "../utils"
 
-const safeUrl = (url: string, baseUrl: string) => {
-  try {
-    return new URL(url, baseUrl).href
-  } catch {
-    return url
-  }
-}
 export const MarkdownLink = (props: LinkProps) => {
   const { view, feedId } = useEntryContentContext()
 
-  const feedSiteUrl = useFeedByIdSelector(feedId, (feed) =>
-    "siteUrl" in feed ? feed.siteUrl : undefined,
-  )
-
-  const populatedFullHref = useMemo(() => {
-    const { href } = props
-    if (!href) return "#"
-
-    if (href.startsWith("http")) return href
-    if (href.startsWith("/") && feedSiteUrl) return safeUrl(href, feedSiteUrl)
-    return href
-  }, [feedSiteUrl, props])
+  const populatedFullHref = usePopulatedFullUrl(feedId, props.href)
 
   const parseTimeStamp = view === FeedViewType.Audios
   if (parseTimeStamp) {

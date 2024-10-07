@@ -106,12 +106,22 @@ export const useUnCollect = (entry: Nullable<CombinedEntryModel>) => {
 export const useRead = () =>
   useMutation({
     mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry && entryActions.markRead(entry.feeds.id, entry.entries.id, true),
+      entry &&
+      entryActions.markRead({
+        feedId: entry.feeds.id,
+        entryId: entry.entries.id,
+        read: true,
+      }),
   })
 export const useUnread = () =>
   useMutation({
     mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry && entryActions.markRead(entry.feeds.id, entry.entries.id, false),
+      entry &&
+      entryActions.markRead({
+        feedId: entry.feeds.id,
+        entryId: entry.entries.id,
+        read: false,
+      }),
   })
 
 export const useEntryActions = ({
@@ -371,7 +381,12 @@ export const useEntryActions = ({
         active: showSourceContent,
         onClick: () => {
           if (!populatedEntry.entries.url) return
-          if (view === FeedViewType.SocialMedia || view === FeedViewType.Videos) {
+          const viewPreviewInModal = [
+            FeedViewType.SocialMedia,
+            FeedViewType.Videos,
+            FeedViewType.Pictures,
+          ].includes(view!)
+          if (viewPreviewInModal) {
             showSourceContentModal({
               title: populatedEntry.entries.title ?? undefined,
               src: populatedEntry.entries.url,

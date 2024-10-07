@@ -7,6 +7,7 @@ import {
 import clsx from "clsx"
 import { m } from "framer-motion"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
@@ -21,6 +22,11 @@ import { useUserById } from "~/store/user"
 
 import { usePresentUserProfileModal } from "../../profile/hooks"
 
+const getLimit = (width: number): number => {
+  if (width > 900) return 15
+  if (width > 600) return 10
+  return 5
+}
 export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) => {
   const me = useWhoami()
   const entryHistory = useEntryReadHistory(entryId)
@@ -32,7 +38,7 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
 
   const appGirdContainerWidth = useAppLayoutGridContainerWidth()
 
-  const LIMIT = appGirdContainerWidth > 600 ? 10 : 5
+  const LIMIT = getLimit(appGirdContainerWidth)
 
   if (!entryHistory) return null
   if (!me) return null
@@ -54,8 +60,8 @@ export const EntryReadHistory: Component<{ entryId: string }> = ({ entryId }) =>
             <button
               type="button"
               style={{
-                right: `${(LIMIT - 1) * 8}px`,
-                zIndex: 11,
+                right: `${LIMIT * 8}px`,
+                zIndex: LIMIT + 1,
               }}
               className="no-drag-region relative flex size-7 items-center justify-center rounded-full border border-border bg-muted ring-2 ring-background"
             >
@@ -133,6 +139,7 @@ const EntryUser: Component<{
   i: number
 }> = memo(({ userId, i }) => {
   const user = useUserById(userId)
+  const { t } = useTranslation()
   const presentUserProfile = usePresentUserProfileModal("drawer")
   if (!user) return null
   return (
@@ -154,13 +161,15 @@ const EntryUser: Component<{
           }}
         >
           <Avatar className="aspect-square size-7 border border-border ring-1 ring-background">
-            <AvatarImage src={user?.image || undefined} />
+            <AvatarImage src={user?.image || undefined} className="bg-theme-placeholder-image" />
             <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
         </m.button>
       </TooltipTrigger>
       <TooltipPortal>
-        <TooltipContent side="top">Recent reader: {user.name}</TooltipContent>
+        <TooltipContent side="top">
+          {t("entry_actions.recent_reader")} {user.name}
+        </TooltipContent>
       </TooltipPortal>
     </Tooltip>
   )

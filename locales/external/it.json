@@ -22,7 +22,7 @@
   "login.redirecting": "Reindirizzamento in corso",
   "login.welcomeTo": "Benvenuto su",
   "redirect.continueInBrowser": "Continua nel Browser",
-  "redirect.instruction": "Ora è il momento di aprire {{APP_NAME}} e chiudere in sicurezza questa pagina.",
-  "redirect.openApp": "Apri {{APP_NAME}}",
-  "redirect.successMessage": "Ti sei connesso con successo all'account {{APP_NAME}}."
+  "redirect.instruction": "Ora è il momento di aprire {{app_name}} e chiudere in sicurezza questa pagina.",
+  "redirect.openApp": "Apri {{app_name}}",
+  "redirect.successMessage": "Ti sei connesso con successo all'account {{app_name}}."
 }

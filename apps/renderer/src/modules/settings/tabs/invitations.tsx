@@ -64,6 +64,9 @@ export const SettingInvitations = () => {
         </p>
       </div>
       <Button
+        disabled={
+          !limitation.data || (invitations?.data && invitations?.data?.length >= limitation.data)
+        }
         onClick={() => {
           present({
             title: t("invitation.confirmModal.title"),
@@ -71,7 +74,7 @@ export const SettingInvitations = () => {
           })
         }}
       >
-        <i className="i-mgc-heart-hand-cute-re mr-1 text-base" />
+        <i className="i-mgc-love-cute-re mr-1 text-base" />
         {t("invitation.generateButton")}
       </Button>
       <Divider className="mb-6 mt-8" />

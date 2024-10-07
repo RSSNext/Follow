@@ -28,6 +28,7 @@ const ContextMenuSubTrigger = React.forwardRef<
       inset && "pl-8",
       "center gap-2",
       className,
+      props.disabled && "cursor-not-allowed opacity-30",
     )}
     {...props}
   >
@@ -106,8 +107,8 @@ const ContextMenuCheckboxItem = React.forwardRef<
     {...props}
   >
     <span className="absolute left-2 flex items-center justify-center">
-      <ContextMenuPrimitive.ItemIndicator>
-        <i className="i-mgc-check-filled size-4" />
+      <ContextMenuPrimitive.ItemIndicator asChild>
+        <i className="i-mgc-check-filled size-3" />
       </ContextMenuPrimitive.ItemIndicator>
     </span>
     {children}

@@ -8,6 +8,7 @@ export interface StoreImageType {
   width: number
   height: number
   ratio: number
+  blurhash?: string
 }
 interface State {
   images: Record<string, StoreImageType>

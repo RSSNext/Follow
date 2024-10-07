@@ -30,6 +30,7 @@ import type { FeedViewType } from "~/lib/enum"
 
 import { FollowSummary } from "../../components/feed-summary"
 import { FeedForm } from "./feed-form"
+import { ListForm } from "./list-form"
 
 const formSchema = z.object({
   keyword: z.string().min(1),
@@ -63,7 +64,7 @@ const info: Record<
 }
 
 type DiscoverSearchData = Awaited<ReturnType<typeof apiClient.discover.$post>>["data"]
-export function DiscoverForm({ type }: { type: string }) {
+export function DiscoverForm({ type = "search" }: { type?: string }) {
   const { prefix, default: defaultValue } = info[type]
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -320,21 +321,33 @@ const SearchCard: FC<{
               onClick={() => {
                 present({
                   title: "Add Feed",
-                  content: ({ dismiss }) => (
-                    <FeedForm
-                      asWidget
-                      url={item.feed?.url}
-                      id={item.feed?.id || item.list?.id}
-                      isList={!!item.list?.id}
-                      defaultValues={{
-                        view: getSidebarActiveView().toString(),
-                      }}
-                      onSuccess={() => {
-                        onSuccess(item)
-                        dismiss()
-                      }}
-                    />
-                  ),
+                  content: ({ dismiss }) =>
+                    item.list?.id ? (
+                      <ListForm
+                        asWidget
+                        id={item.list?.id}
+                        defaultValues={{
+                          view: getSidebarActiveView().toString(),
+                        }}
+                        onSuccess={() => {
+                          onSuccess(item)
+                          dismiss()
+                        }}
+                      />
+                    ) : (
+                      <FeedForm
+                        asWidget
+                        url={item.feed?.url}
+                        id={item.feed?.id}
+                        defaultValues={{
+                          view: getSidebarActiveView().toString(),
+                        }}
+                        onSuccess={() => {
+                          onSuccess(item)
+                          dismiss()
+                        }}
+                      />
+                    ),
                 })
               }}
             >

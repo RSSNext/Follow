@@ -11,7 +11,13 @@ import resolveConfig from "tailwindcss/resolveConfig"
 /** @type {import('tailwindcss').Config} */
 export default resolveConfig({
   darkMode: ["class", '[data-theme="dark"]'],
-  content: ["./apps/renderer/**/*.{ts,tsx}", "./apps/web/**/*.{ts,tsx}"],
+  content: [
+    "./apps/renderer/src/**/*.{ts,tsx}",
+    "./apps/web/src/**/*.{ts,tsx}",
+
+    "./apps/renderer/index.html",
+    "./apps/web/index.html",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -39,6 +45,9 @@ export default resolveConfig({
         radio: "var(--cursor-radio)",
         switch: "var(--cursor-switch)",
         card: "var(--cursor-card)",
+      },
+      width: {
+        "feed-col": "var(--fo-feed-col-w)",
       },
       colors: {
         border: "hsl(var(--border) / <alpha-value>)",
@@ -107,6 +116,11 @@ export default resolveConfig({
           },
           button: {
             hover: "var(--fo-button-hover)",
+          },
+
+          placeholder: {
+            text: "var(--fo-text-placeholder)",
+            image: "var(--fo-image-placeholder)",
           },
         },
       },

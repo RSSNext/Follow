@@ -12,6 +12,7 @@ export interface ActionMenuItem {
   shortcut?: string
   icon?: string
   submenu?: MenuItem[]
+  checked?: boolean
 }
 export const menuRoute = {
   showContextMenu: t.procedure
@@ -28,10 +29,13 @@ export const menuRoute = {
               type: "separator" as const,
             }
           }
+
           return {
             label: item.label,
             enabled: item.enabled ?? true,
             accelerator: item.shortcut?.replace("Meta", "CmdOrCtrl"),
+            checked: typeof item.checked === "boolean" ? item.checked : undefined,
+            type: typeof item.checked === "boolean" ? "checkbox" : undefined,
             click() {
               context.sender.send(
                 "menu-click",

@@ -35,7 +35,7 @@ export const EntryListHeader: FC<{
 
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
-  const { feedId, entryId, view } = routerParams
+  const { feedId, entryId, view, listId } = routerParams
 
   const headerTitle = useFeedHeaderTitle()
   const os = getOS()
@@ -45,7 +45,7 @@ export const EntryListHeader: FC<{
 
   const titleInfo = !!headerTitle && (
     <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
-      <div className="min-w-0 break-all text-lg font-bold leading-none">
+      <div className="h-6 min-w-0 break-all text-lg font-bold leading-tight">
         <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
           <span className="relative -top-px">{headerTitle}</span>
         </EllipsisHorizontalTextWithTooltip>
@@ -58,13 +58,13 @@ export const EntryListHeader: FC<{
       </div>
     </div>
   )
-  const { mutateAsync: refreshFeed, isPending } = useRefreshFeedMutation(routerParams.feedId)
+  const { mutateAsync: refreshFeed, isPending } = useRefreshFeedMutation(feedId)
 
   const user = useWhoami()
   const isOnline = useIsOnline()
 
-  const feed = useFeedById(routerParams.feedId)
-  const isList = feed?.type === "list"
+  const feed = useFeedById(feedId)
+  const isList = !!listId
 
   const titleStyleBasedView = ["pl-12", "pl-7", "pl-7", "pl-7", "px-5", "pl-12"]
 
@@ -98,6 +98,7 @@ export const EntryListHeader: FC<{
           )}
 
           <AppendTaildingDivider>
+            {!views[view].wideMode && <WideModeButton />}
             {view === FeedViewType.SocialMedia && <DailyReportButton />}
             {view === FeedViewType.Pictures && <SwitchToMasonryButton />}
             {view === FeedViewType.Pictures && <FilterNoImageButton />}
@@ -226,6 +227,37 @@ const SwitchToMasonryButton = () => {
         }
       >
         <i className={cn(!isMasonry ? "i-mgc-grid-cute-re" : "i-mgc-grid-2-cute-re")} />
+      </ActionButton>
+    </ImpressionView>
+  )
+}
+
+const WideModeButton = () => {
+  const isWideMode = useUISettingKey("wideMode")
+  const { t } = useTranslation()
+
+  return (
+    <ImpressionView
+      event="Switch to Wide Mode"
+      properties={{
+        wideMode: isWideMode ? 1 : 0,
+      }}
+    >
+      <ActionButton
+        onClick={() => {
+          setUISetting("wideMode", !isWideMode)
+          window.posthog?.capture("Switch to Wide Mode", {
+            wideMode: !isWideMode ? 1 : 0,
+            click: 1,
+          })
+        }}
+        tooltip={
+          !isWideMode
+            ? t("entry_list_header.switch_to_widemode")
+            : t("entry_list_header.switch_to_normalmode")
+        }
+      >
+        <i className={cn(!isWideMode ? "i-mgc-align-justify-cute-re" : "i-mgc-layout-4-cute-re")} />
       </ActionButton>
     </ImpressionView>
   )

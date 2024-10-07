@@ -8,7 +8,7 @@ import { useRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRoutePara
 import { useAuthQuery } from "~/hooks/common"
 import { entries, useEntries } from "~/queries/entries"
 import { entryActions, useEntryIdsByFeedIdOrView } from "~/store/entry"
-import { isListSubscription, useFolderFeedsByFeedId } from "~/store/subscription"
+import { useFolderFeedsByFeedId } from "~/store/subscription"
 import { feedUnreadActions } from "~/store/unread"
 
 export const useEntryMarkReadHandler = (entriesIds: string[]) => {
@@ -59,8 +59,7 @@ export const useEntriesByView = ({
   const routeParams = useRouteParams()
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
-  const { feedId, view, isAllFeeds, isCollection } = routeParams
-  const isList = isListSubscription(feedId)
+  const { feedId, view, isAllFeeds, isCollection, listId, inboxId } = routeParams
 
   const folderIds = useFolderFeedsByFeedId({
     feedId,
@@ -68,11 +67,12 @@ export const useEntriesByView = ({
   })
 
   const entriesOptions = {
-    id: folderIds?.join(",") || feedId,
+    feedId: folderIds?.join(",") || feedId,
+    inboxId,
+    listId,
     view,
     ...(unreadOnly === true && { read: false }),
     isArchived,
-    isList,
   }
   const query = useEntries(entriesOptions)
 
@@ -169,10 +169,10 @@ export const useEntriesByView = ({
     () =>
       isCollection
         ? sortEntriesIdByStarAt(mergedEntries[view])
-        : isList
+        : listId
           ? sortEntriesIdByEntryInsertedAt(mergedEntries[view])
           : sortEntriesIdByEntryPublishedAt(mergedEntries[view]),
-    [isCollection, isList, mergedEntries, view],
+    [isCollection, listId, mergedEntries, view],
   )
 
   const groupByDate = useGeneralSettingKey("groupByDate")
@@ -192,7 +192,7 @@ export const useEntriesByView = ({
         continue
       }
       const date = new Date(
-        isList ? entry.entries.insertedAt : entry.entries.publishedAt,
+        listId ? entry.entries.insertedAt : entry.entries.publishedAt,
       ).toDateString()
       if (date !== lastDate) {
         counts.push(1)
@@ -235,7 +235,7 @@ export function batchMarkRead(ids: string[]) {
 
   if (batchLikeIds.length > 0) {
     for (const [feedId, id] of batchLikeIds) {
-      entryActions.markRead(feedId, id, true)
+      entryActions.markRead({ feedId, entryId: id, read: true })
     }
   }
 }

@@ -2,12 +2,14 @@ import { env } from "@follow/shared/env"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
+import { useUISettingKey } from "~/atoms/settings/ui"
 import { FeedIcon } from "~/components/feed-icon"
 import { FollowIcon } from "~/components/icons/follow"
 import { Button } from "~/components/ui/button"
 import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import { useModalStack } from "~/components/ui/modal"
+import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { FEED_COLLECTION_LIST } from "~/constants"
 import { useAsRead } from "~/hooks/biz/useAsRead"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
@@ -45,7 +47,9 @@ export function ListItem({
 
   const handlePrefetchEntry = useDebounceCallback(
     () => {
-      Queries.entries.byId(entryId).prefetch()
+      feed?.type === "inbox"
+        ? Queries.entries.byInboxId(entryId).prefetch()
+        : Queries.entries.byId(entryId).prefetch()
     },
     300,
     { leading: false },
@@ -58,19 +62,23 @@ export function ListItem({
   const isFollowed = !!useSubscriptionStore((state) => feedId && state.data[feedId])
   const { present } = useModalStack()
 
+  const settingWideMode = useUISettingKey("wideMode")
+
   // NOTE: prevent 0 height element, react virtuoso will not stop render any more
   if (!entry || !feed) return <ReactVirtuosoItemPlaceholder />
 
   const displayTime = inInCollection ? entry.collections?.createdAt : entry.entries.publishedAt
   const envIsSafari = isSafari()
+
   return (
     <div
       onMouseEnter={handlePrefetchEntry}
       onMouseLeave={handlePrefetchEntry.cancel}
       className={cn(
-        "group relative flex cursor-menu py-4 pl-3 pr-2",
+        "group relative flex cursor-menu pl-3 pr-2",
         !asRead &&
           "before:absolute before:-left-0.5 before:top-[1.4375rem] before:block before:size-2 before:rounded-full before:bg-accent",
+        settingWideMode ? "py-3" : "py-4",
       )}
     >
       {!withAudio && <FeedIcon feed={feed} fallback entry={entry.entries} />}
@@ -79,7 +87,7 @@ export function ListItem({
           "-mt-0.5 flex-1 text-sm leading-tight",
 
           // FIXME: Safari bug, not support line-clamp cross elements
-          !envIsSafari && "line-clamp-4",
+          !envIsSafari && (settingWideMode ? "line-clamp-2" : "line-clamp-4"),
         )}
       >
         <div
@@ -89,7 +97,9 @@ export function ListItem({
             entry.collections && "text-zinc-600 dark:text-zinc-500",
           )}
         >
-          <span className="truncate">{getPreferredTitle(feed)}</span>
+          <EllipsisHorizontalTextWithTooltip className="truncate">
+            {getPreferredTitle(feed)}
+          </EllipsisHorizontalTextWithTooltip>
           <span>·</span>
           <span className="shrink-0">{!!displayTime && <RelativeTime date={displayTime} />}</span>
         </div>
@@ -116,7 +126,7 @@ export function ListItem({
               target={translation?.description}
             />
           )}
-          {!!entry.collections && <StarIcon />}
+          {!!entry.collections && <StarIcon className="absolute right-0 top-0" />}
         </div>
         {withDetails && (
           <div
@@ -172,7 +182,7 @@ export function ListItem({
               fallback={false}
               feed={feed}
               entry={entry.entries}
-              size={80}
+              size={settingWideMode ? 65 : 80}
               className="m-0 rounded"
               useMedia
             />
@@ -186,12 +196,19 @@ export function ListItem({
           src={entry.entries.media[0].url}
           type={entry.entries.media[0].type}
           previewImageUrl={entry.entries.media[0].preview_image_url}
-          className="ml-2 size-20 shrink-0"
+          className={cn(
+            "center ml-2 flex shrink-0 rounded",
+            settingWideMode ? "size-12" : "size-20",
+          )}
+          mediaContainerClassName={"w-auto h-auto rounded"}
           loading="lazy"
           proxy={{
             width: 160,
             height: 160,
           }}
+          height={entry.entries.media[0].height}
+          width={entry.entries.media[0].width}
+          blurhash={entry.entries.media[0].blurhash}
         />
       )}
     </div>

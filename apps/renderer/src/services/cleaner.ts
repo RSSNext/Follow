@@ -80,5 +80,9 @@ class CleanerServiceStatic {
       cleanerModel.bulkDelete(data.map((d) => d.refId)),
     ])
   }
+
+  async cleanRefById(refIds: string[]) {
+    return cleanerModel.bulkDelete(refIds)
+  }
 }
 export const CleanerService = new CleanerServiceStatic()

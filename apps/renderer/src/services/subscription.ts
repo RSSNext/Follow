@@ -2,12 +2,14 @@ import { uniq } from "lodash-es"
 
 import { browserDB } from "~/database"
 import type { SubscriptionFlatModel } from "~/store/subscription"
+import { subscriptionActions } from "~/store/subscription"
 
 import { BaseService } from "./base"
+import type { Hydable } from "./interface"
 
 type SubscriptionModelWithId = SubscriptionFlatModel & { id: string }
 
-class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
+class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> implements Hydable {
   constructor() {
     super(browserDB.subscriptions)
   }
@@ -27,7 +29,7 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
 
   override async upsertMany(data: SubscriptionFlatModel[]) {
     return this.table.bulkPut(
-      data.map(({ feeds, ...d }: any) => ({
+      data.map(({ feeds, lists, inboxes, ...d }: any) => ({
         ...d,
         id: this.uniqueId(d.userId, d.feedId),
       })),
@@ -67,6 +69,12 @@ class SubscriptionServiceStatic extends BaseService<SubscriptionModelWithId> {
       .equals(userId)
       .and((item) => feedIdList.includes(item.feedId))
       .modify({ category })
+  }
+
+  async hydrate() {
+    const subscriptions = await SubscriptionService.findAll()
+
+    subscriptionActions.upsertMany(subscriptions)
   }
 }
 

@@ -20,8 +20,18 @@ function createStore(dbName: string, storeName: string): UseStore {
 const db = createStore("FOLLOW_IMAGE_DIMENSIONS", "image-dimensions")
 export const getImageDimensionsFromDb = async (url: string) => await get(url, db)
 
-export const saveImageDimensionsToDb = async (url: string, dimensions: StoreImageType) =>
-  await set(url, dimensions, db)
+export const saveImageDimensionsToDb = async (url: string, dimensions: StoreImageType) => {
+  const oldData = await getImageDimensionsFromDb(url)
+
+  await set(
+    url,
+    {
+      ...oldData,
+      ...dimensions,
+    },
+    db,
+  )
+}
 
 export const clearImageDimensionsDb = async () => {
   const store = await db("readwrite", (store) => store.clear())

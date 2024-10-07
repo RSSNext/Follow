@@ -13,12 +13,14 @@ import {
 } from "react"
 import { useEventCallback } from "usehooks-ts"
 
-import { getViewport } from "~/atoms/hooks/viewport"
+import { getViewport, useViewport } from "~/atoms/hooks/viewport"
+import { useUISettingKey } from "~/atoms/settings/ui"
 import { getElementTop } from "~/lib/dom"
 import { springScrollToElement } from "~/lib/scroller"
 import { cn } from "~/lib/utils"
 import {
   useGetWrappedElementPosition,
+  useWrappedElementPosition,
   useWrappedElementSize,
 } from "~/providers/wrapped-element-provider"
 
@@ -40,168 +42,91 @@ export interface ITocItem {
   $heading: HTMLHeadingElement
 }
 
+const WiderTocStyle = {
+  width: 200,
+} satisfies React.CSSProperties
 export const Toc: Component = ({ className }) => {
   const markdownElement = useContext(MarkdownRenderContainerRefContext)
+  const { toc, rootDepth } = useTocItems(markdownElement)
+  const { currentScrollRange, handleScrollTo } = useScrollTracking(toc)
 
-  const $headings = useMemo(
-    () =>
-      (markdownElement?.querySelectorAll("h1, h2, h3, h4, h5, h6") || []) as HTMLHeadingElement[],
-    [markdownElement],
-  )
+  const renderContentElementPosition = useWrappedElementPosition()
+  const renderContentElementSize = useWrappedElementSize()
+  const entryContentInWideMode = useUISettingKey("wideMode")
+  const shouldShowTitle = useViewport((v) => {
+    if (!entryContentInWideMode) return false
+    const { w } = v
+    const xAxis = renderContentElementPosition.x + renderContentElementSize.w
 
-  const toc: ITocItem[] = useMemo(
-    () =>
-      Array.from($headings).map((el, idx) => {
-        const depth = +el.tagName.slice(1)
-        const elClone = el.cloneNode(true) as HTMLElement
-
-        const title = elClone.textContent || ""
-
-        const index = idx
-
-        return {
-          depth,
-          index: Number.isNaN(index) ? -1 : index,
-          title,
-          anchorId: el.dataset.rid || "",
-          $heading: el,
-        }
-      }),
-    [$headings],
-  )
-
-  const rootDepth = useMemo(
-    () =>
-      toc?.length
-        ? (toc.reduce(
-            (d: number, cur) => Math.min(d, cur.depth),
-            toc[0]?.depth || 0,
-          ) as any as number)
-        : 0,
-    [toc],
-  )
-
-  const [_, setTreeRef] = useState<HTMLUListElement | null>()
-
-  const scrollContainerElement = useScrollViewElement()
-
-  const scrollDelayHandlerRef = useRef<any>(null)
-
-  const handleScrollTo = useEventCallback(
-    (i: number, $el: HTMLElement | null, _anchorId: string) => {
-      if ($el) {
-        const handle = () => {
-          scrollDelayHandlerRef.current && clearTimeout(scrollDelayHandlerRef.current)
-          springScrollToElement($el, -100, scrollContainerElement!).then(() => {
-            throttleCallerRef.current?.cancel()
-            scrollDelayHandlerRef.current = setTimeout(() => {
-              setCurrentScrollRange([i, 1])
-            }, 36)
-          })
-        }
-        handle()
-      }
-    },
-  )
-
-  const { h } = useWrappedElementSize()
-  const [currentScrollRange, setCurrentScrollRange] = useState([-1, 0])
-
-  const headingRangeParser = () => {
-    // calculate the range of data-container-top between each two headings
-    const titleBetweenPositionTopRangeMap = [] as [number, number][]
-    for (let i = 0; i < $headings.length - 1; i++) {
-      const $heading = $headings[i]
-
-      const headingTop =
-        Number.parseInt($heading.dataset["containerTop"] || "0") || getElementTop($heading)
-      if (!$heading.dataset) {
-        // @ts-expect-error
-        $heading.dataset["containerTop"] = headingTop.toString()
-      }
-
-      const $nextHeading = $headings[i + 1]
-
-      const nextTop = getElementTop($nextHeading)
-      if (!$nextHeading.dataset) {
-        // @ts-expect-error
-        $nextHeading.dataset["containerTop"] = nextTop.toString()
-      }
-
-      titleBetweenPositionTopRangeMap.push([headingTop, nextTop])
-    }
-    return titleBetweenPositionTopRangeMap
-  }
-
-  const [titleBetweenPositionTopRangeMap, setTitleBetweenPositionTopRangeMap] =
-    useState(headingRangeParser)
-
-  useLayoutEffect(() => {
-    startTransition(() => {
-      setTitleBetweenPositionTopRangeMap(headingRangeParser)
-    })
-  }, [$headings, h])
-
-  const throttleCallerRef = useRef<DebouncedFuncLeading<() => void>>()
-  const getWrappedElPos = useGetWrappedElementPosition()
-
-  useEffect(() => {
-    if (!scrollContainerElement) return
-
-    const handler = throttle(() => {
-      const { y } = getWrappedElPos()
-      const top = scrollContainerElement.scrollTop + y
-      const winHeight = getViewport().h
-      const deltaHeight = top >= winHeight ? winHeight : (top / winHeight) * winHeight
-
-      const actualTop = Math.floor(Math.max(0, top - y + deltaHeight)) || 0
-
-      // current top is in which range?
-      const currentRangeIndex = titleBetweenPositionTopRangeMap.findIndex(
-        ([start, end]) => actualTop >= start && actualTop <= end,
-      )
-      const currentRange = titleBetweenPositionTopRangeMap[currentRangeIndex]
-
-      if (currentRange) {
-        const [start, end] = currentRange
-
-        // current top is this range, the precent is ?
-        const precent = (actualTop - start) / (end - start)
-
-        // position , precent
-        setCurrentScrollRange([currentRangeIndex, precent])
-      } else {
-        const last = titleBetweenPositionTopRangeMap.at(-1) || [0, 0]
-
-        if (top + winHeight > last[1]) {
-          setCurrentScrollRange([
-            titleBetweenPositionTopRangeMap.length,
-            1 - (last[1] - top) / winHeight,
-          ])
-        } else {
-          setCurrentScrollRange([-1, 1])
-        }
-      }
-    }, 100)
-
-    throttleCallerRef.current = handler
-    scrollContainerElement.addEventListener("scroll", handler)
-
-    return () => {
-      scrollContainerElement.removeEventListener("scroll", handler)
-      handler.cancel()
-    }
-  }, [getWrappedElPos, scrollContainerElement, titleBetweenPositionTopRangeMap])
-
-  const [hoverShow, setHoverShow] = useState(false)
+    return w - xAxis > WiderTocStyle.width + 50
+  })
 
   if (toc.length === 0) return null
+
+  return shouldShowTitle ? (
+    <TocContainer
+      className={className}
+      toc={toc}
+      rootDepth={rootDepth}
+      currentScrollRange={currentScrollRange}
+      handleScrollTo={handleScrollTo}
+    />
+  ) : (
+    <TocHoverCard
+      className={className}
+      toc={toc}
+      rootDepth={rootDepth}
+      currentScrollRange={currentScrollRange}
+      handleScrollTo={handleScrollTo}
+    />
+  )
+}
+
+const TocContainer: React.FC<TocContainerProps> = ({
+  className,
+  toc,
+  rootDepth,
+  currentScrollRange,
+  handleScrollTo,
+}) => {
+  return (
+    <div
+      className={cn(
+        "group relative overflow-auto opacity-60 duration-200 scrollbar-none group-hover:opacity-100",
+        "flex flex-col",
+        className,
+      )}
+      style={WiderTocStyle}
+    >
+      {toc.map((heading, index) => (
+        <MemoedItem
+          variant="title-line"
+          heading={heading}
+          key={heading.anchorId}
+          rootDepth={rootDepth}
+          onClick={handleScrollTo}
+          isScrollOut={index < currentScrollRange[0]}
+          range={index === currentScrollRange[0] ? currentScrollRange[1] : 0}
+        />
+      ))}
+    </div>
+  )
+}
+
+const TocHoverCard: React.FC<TocHoverCardProps> = ({
+  className,
+  toc,
+  rootDepth,
+  currentScrollRange,
+  handleScrollTo,
+}) => {
+  const [hoverShow, setHoverShow] = useState(false)
+
   return (
     <div className="flex grow flex-col scroll-smooth px-2 scrollbar-none">
       <HoverCard.Root openDelay={100} open={hoverShow} onOpenChange={setHoverShow}>
         <HoverCard.Trigger asChild>
-          <ul
-            ref={setTreeRef}
+          <div
             className={cn(
               "group overflow-auto opacity-60 duration-200 scrollbar-none group-hover:opacity-100",
               className,
@@ -217,7 +142,7 @@ export const Toc: Component = ({ className }) => {
                 range={index === currentScrollRange[0] ? currentScrollRange[1] : 0}
               />
             ))}
-          </ul>
+          </div>
         </HoverCard.Trigger>
         <HoverCard.Portal forceMount>
           <div>
@@ -302,3 +227,164 @@ const MemoedItem = memo<TocItemProps>((props) => {
   return <TocItem range={range} {...rest} />
 })
 MemoedItem.displayName = "MemoedItem"
+
+// Hooks
+const useTocItems = (markdownElement: HTMLElement | null) => {
+  const $headings = useMemo(
+    () =>
+      (markdownElement?.querySelectorAll("h1, h2, h3, h4, h5, h6") || []) as HTMLHeadingElement[],
+    [markdownElement],
+  )
+
+  const toc: ITocItem[] = useMemo(
+    () =>
+      Array.from($headings).map((el, idx) => {
+        const depth = +el.tagName.slice(1)
+        const elClone = el.cloneNode(true) as HTMLElement
+        const title = elClone.textContent || ""
+        const index = idx
+
+        return {
+          depth,
+          index: Number.isNaN(index) ? -1 : index,
+          title,
+          anchorId: el.dataset.rid || "",
+          $heading: el,
+        }
+      }),
+    [$headings],
+  )
+
+  const rootDepth = useMemo(
+    () =>
+      toc?.length
+        ? (toc.reduce(
+            (d: number, cur) => Math.min(d, cur.depth),
+            toc[0]?.depth || 0,
+          ) as any as number)
+        : 0,
+    [toc],
+  )
+
+  return { toc, rootDepth }
+}
+
+const useScrollTracking = (toc: ITocItem[]) => {
+  const scrollContainerElement = useScrollViewElement()
+  const [currentScrollRange, setCurrentScrollRange] = useState([-1, 0] as [number, number])
+  const { h } = useWrappedElementSize()
+  const getWrappedElPos = useGetWrappedElementPosition()
+
+  const headingRangeParser = () => {
+    // calculate the range of data-container-top between each two headings
+    const titleBetweenPositionTopRangeMap = [] as [number, number][]
+    for (let i = 0; i < toc.length - 1; i++) {
+      const { $heading } = toc[i]
+      const $nextHeading = toc[i + 1].$heading
+
+      const headingTop =
+        Number.parseInt($heading.dataset["containerTop"] || "0") || getElementTop($heading)
+      if (!$heading.dataset) {
+        // @ts-expect-error
+        $heading.dataset["containerTop"] = headingTop.toString()
+      }
+
+      const nextTop = getElementTop($nextHeading)
+      if (!$nextHeading.dataset) {
+        // @ts-expect-error
+        $nextHeading.dataset["containerTop"] = nextTop.toString()
+      }
+
+      titleBetweenPositionTopRangeMap.push([headingTop, nextTop])
+    }
+    return titleBetweenPositionTopRangeMap
+  }
+
+  const [titleBetweenPositionTopRangeMap, setTitleBetweenPositionTopRangeMap] =
+    useState(headingRangeParser)
+
+  useLayoutEffect(() => {
+    startTransition(() => {
+      setTitleBetweenPositionTopRangeMap(headingRangeParser)
+    })
+  }, [toc, h])
+
+  const throttleCallerRef = useRef<DebouncedFuncLeading<() => void>>()
+
+  useEffect(() => {
+    if (!scrollContainerElement) return
+
+    const handler = throttle(() => {
+      const { y } = getWrappedElPos()
+      const top = scrollContainerElement.scrollTop + y
+      const winHeight = getViewport().h
+      const deltaHeight = top >= winHeight ? winHeight : (top / winHeight) * winHeight
+
+      const actualTop = Math.floor(Math.max(0, top - y + deltaHeight)) || 0
+
+      // current top is in which range?
+      const currentRangeIndex = titleBetweenPositionTopRangeMap.findIndex(
+        ([start, end]) => actualTop >= start && actualTop <= end,
+      )
+      const currentRange = titleBetweenPositionTopRangeMap[currentRangeIndex]
+
+      if (currentRange) {
+        const [start, end] = currentRange
+
+        // current top is this range, the precent is ?
+        const precent = (actualTop - start) / (end - start)
+
+        // position , precent
+        setCurrentScrollRange([currentRangeIndex, precent])
+      } else {
+        const last = titleBetweenPositionTopRangeMap.at(-1) || [0, 0]
+
+        if (top + winHeight > last[1]) {
+          setCurrentScrollRange([
+            titleBetweenPositionTopRangeMap.length,
+            1 - (last[1] - top) / winHeight,
+          ])
+        } else {
+          setCurrentScrollRange([-1, 1])
+        }
+      }
+    }, 100)
+
+    throttleCallerRef.current = handler
+    scrollContainerElement.addEventListener("scroll", handler)
+
+    return () => {
+      scrollContainerElement.removeEventListener("scroll", handler)
+      handler.cancel()
+    }
+  }, [getWrappedElPos, scrollContainerElement, titleBetweenPositionTopRangeMap])
+
+  const handleScrollTo = useEventCallback(
+    (i: number, $el: HTMLElement | null, _anchorId: string) => {
+      if ($el) {
+        const handle = () => {
+          springScrollToElement($el, -100, scrollContainerElement!).then(() => {
+            throttleCallerRef.current?.cancel()
+            setTimeout(() => {
+              setCurrentScrollRange([i, 1])
+            }, 36)
+          })
+        }
+        handle()
+      }
+    },
+  )
+
+  return { currentScrollRange, handleScrollTo }
+}
+
+// Types
+interface TocContainerProps {
+  className?: string
+  toc: ITocItem[]
+  rootDepth: number
+  currentScrollRange: [number, number]
+  handleScrollTo: (i: number, $el: HTMLElement | null, anchorId: string) => void
+}
+
+interface TocHoverCardProps extends TocContainerProps {}

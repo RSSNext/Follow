@@ -155,14 +155,13 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         {views.map((item, index) => (
           <ActionButton
             key={item.name}
-            // TODO: fix this type error
             tooltip={t(item.name)}
             shortcut={`${index + 1}`}
             className={cn(
               active === index && item.className,
               "flex h-11 flex-col items-center gap-1 text-xl",
-              ELECTRON ? "hover:!bg-theme-vibrancyBg" : "",
-              active === index && useHotkeysSwitch ? "bg-zinc-500/30" : "",
+              ELECTRON ? "hover:!bg-theme-item-hover" : "",
+              active === index && useHotkeysSwitch ? "bg-theme-item-active" : "",
             )}
             onClick={(e) => {
               setActive(index)
@@ -197,10 +196,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       <div className="relative flex size-full overflow-hidden" ref={carouselRef}>
         <SwipeWrapper active={active}>
           {views.map((item, index) => (
-            <section
-              key={item.name}
-              className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center"
-            >
+            <section key={item.name} className="h-full w-feed-col shrink-0 snap-center">
               <FeedList className="flex size-full flex-col text-sm" view={index} />
             </section>
           ))}

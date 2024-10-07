@@ -10,20 +10,22 @@ import { LoadingCircle } from "~/components/ui/loading"
 import { ROUTE_FEED_IN_FOLDER, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { useAnyPointDown, useAuthQuery, useInputComposition } from "~/hooks/common"
+import { useAnyPointDown, useInputComposition } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
-import { Queries } from "~/queries"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
+import { useListByView } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
+import { ListCreationModalContent } from "../settings/tabs/lists/modals"
 import { useFeedListSortSelector } from "./atom"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { FeedItem } from "./item"
+import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
 type FeedId = string
@@ -46,29 +48,21 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const folderName = subscription?.category || subscription.defaultCategory
 
   const showCollapse = sortByUnreadFeedList.length > 1 || subscription?.category
-  const open = folderName ? categoryOpenStateData[folderName] : true
 
-  const shouldOpen =
-    useRouteParamsSelector((s) => typeof s.feedId === "string" && ids.includes(s.feedId)) ||
-    ids.length === 1
-
-  const itemsRef = useRef<HTMLDivElement>(null)
-
-  const toggleCategoryOpenState = (e) => {
-    e.stopPropagation()
-    if (!isCategoryEditing) {
-      setCategoryActive()
+  const [open, setOpen] = useState(() => {
+    if (!showCollapse) return true
+    if (folderName && typeof categoryOpenStateData[folderName] === "boolean") {
+      return categoryOpenStateData[folderName]
     }
-    if (view !== undefined && folderName) {
-      subscriptionActions.toggleCategoryOpenState(view, folderName)
-    }
-  }
+    return false
+  })
 
+  const shouldOpen = useRouteParamsSelector(
+    (s) => typeof s.feedId === "string" && ids.includes(s.feedId),
+  )
   useEffect(() => {
     if (shouldOpen) {
-      if (!open && view !== undefined && folderName) {
-        subscriptionActions.changeCategoryOpenState(view, folderName, true)
-      }
+      setOpen(true)
 
       const $items = itemsRef.current
 
@@ -78,13 +72,31 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
         behavior: "smooth",
       })
     }
-  }, [shouldOpen, open, view, folderName])
+  }, [shouldOpen])
+  const expansion = folderName ? categoryOpenStateData[folderName] : true
+
+  useEffect(() => {
+    if (showCollapse) {
+      setOpen(expansion)
+    }
+  }, [expansion])
+
+  const itemsRef = useRef<HTMLDivElement>(null)
+
+  const toggleCategoryOpenState = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    if (!isCategoryEditing) {
+      setCategoryActive()
+    }
+    if (view !== undefined && folderName) {
+      subscriptionActions.toggleCategoryOpenState(view, folderName)
+    }
+  }
 
   const setCategoryActive = () => {
     if (view !== undefined) {
       navigate({
         entryId: null,
-        // TODO joint feedId is too long, need to be optimized
         folderName,
         view,
       })
@@ -117,16 +129,18 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   })
   const isCategoryIsWaiting = isChangePending
 
-  const listList = useAuthQuery(Queries.lists.list())
   const addMutation = useAddFeedToFeedList()
+
+  const listList = useListByView(view!)
 
   return (
     <div tabIndex={-1} onClick={stopPropagation}>
       {!!showCollapse && (
         <div
+          data-active={isActive || isContextMenuOpen}
           className={cn(
-            "flex w-full cursor-menu items-center justify-between rounded-md px-2.5 transition-colors",
-            (isActive || isContextMenuOpen) && "bg-native-active",
+            "flex w-full cursor-menu items-center justify-between rounded-md px-2.5",
+            feedColumnStyles.item,
           )}
           onClick={(e) => {
             e.stopPropagation()
@@ -151,28 +165,43 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-                  enabled: !!listList.data?.length,
-                  submenu: listList.data?.map((list) => ({
-                    label: list.title || "",
-                    type: "text",
-                    click() {
-                      return addMutation.mutate({
-                        feedIds: ids,
-                        listId: list.id,
-                      })
-                    },
-                  })),
+                  // @ts-expect-error
+                  submenu: listList
+                    ?.map((list) => ({
+                      label: list.title || "",
+                      type: "text",
+                      click() {
+                        return addMutation.mutate({
+                          feedIds: ids,
+                          listId: list.id,
+                        })
+                      },
+                    }))
+                    .concat([
+                      // @ts-expect-error
+                      { type: "separator" as const },
+                      {
+                        label: t("sidebar.feed_actions.create_list"),
+                        type: "text" as const,
+
+                        click() {
+                          present({
+                            title: t("sidebar.feed_actions.create_list"),
+                            content: () => <ListCreationModalContent />,
+                          })
+                        },
+                      },
+                    ]),
                 },
                 { type: "separator" },
                 {
                   type: "text",
-                  enabled: !!(folderName && typeof view === "number"),
                   label: t("sidebar.feed_column.context_menu.change_to_other_view"),
                   submenu: views
                     .filter((v) => v.view !== view)
                     .map((v) => ({
                       label: t(v.name),
-                      type: "text",
+                      type: "text" as const,
                       shortcut: (v.view + 1).toString(),
                       icon: v.icon,
                       click() {

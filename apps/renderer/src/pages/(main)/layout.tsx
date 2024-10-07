@@ -2,7 +2,7 @@ import { repository } from "@pkg"
 import { Slot } from "@radix-ui/react-slot"
 import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
-import React, { useEffect, useRef, useState } from "react"
+import React, { forwardRef, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans, useTranslation } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
@@ -10,8 +10,14 @@ import { Outlet } from "react-router-dom"
 
 import { setMainContainerElement } from "~/atoms/dom"
 import { useViewport } from "~/atoms/hooks/viewport"
-import { getUISettings, setUISetting } from "~/atoms/settings/ui"
-import { setFeedColumnShow, useFeedColumnShow } from "~/atoms/sidebar"
+import { getUISettings, setUISetting, useUISettingKey } from "~/atoms/settings/ui"
+import {
+  getFeedColumnTempShow,
+  setFeedColumnShow,
+  setFeedColumnTempShow,
+  useFeedColumnShow,
+  useFeedColumnTempShow,
+} from "~/atoms/sidebar"
 import { useLoginModalShow, useWhoami } from "~/atoms/user"
 import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { ErrorComponentType } from "~/components/errors/enum"
@@ -75,40 +81,51 @@ const errorTypes = [
 export function Component() {
   const isAuthFail = useLoginModalShow()
   const user = useWhoami()
-
+  const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
 
   useDailyTask()
 
-  const isNotSupportWidth = useViewport((v) => v.w < 1024 && v.w !== 0) && !window.electron
+  const supportMinWidth = 1024
+  const isNotSupportWidth =
+    useViewport((v) => v.w < supportMinWidth && v.w !== 0) && !window.electron
 
   if (isNotSupportWidth) {
     return (
       <div className="center fixed inset-0 flex-col text-balance px-4 text-center">
         <i className="i-mingcute-device-line mb-2 size-16 text-muted-foreground" />
-        <div>{APP_NAME} is not yet supported on mobile devices.</div>
+        <div>{t("notify.unSupportWidth", { app_name: APP_NAME })}</div>
         <div>
-          Your device width is <b>{`${window.innerWidth}`}px</b>, which is less than the minimum
-          supported width 1024px.
+          <Trans
+            i18nKey="notify.unSupportWidth_1"
+            components={{
+              b: <b />,
+            }}
+            values={{
+              width: `${window.innerWidth}px`,
+              minWidth: `${supportMinWidth}px`,
+            }}
+          />
         </div>
-        <div>Please switch to the desktop app to continue using {APP_NAME}</div>
-
         <div>
-          Download:{" "}
-          <a className="follow-link--underline" href={repository.url}>
-            {repository.url}
-          </a>
+          <Trans
+            i18nKey="notify.unSupportWidth_2"
+            components={{
+              url: (
+                <a className="follow-link--underline" href={repository.url}>
+                  {repository.url}
+                </a>
+              ),
+            }}
+            values={{ app_name: APP_NAME }}
+          />
         </div>
       </div>
     )
   }
 
   return (
-    <div
-      className="flex h-screen overflow-hidden"
-      ref={containerRef}
-      onContextMenu={preventDefault}
-    >
+    <RootContainer ref={containerRef}>
       {!import.meta.env.PROD && <EnvironmentIndicator />}
 
       <AppLayoutGridContainerProvider>
@@ -153,9 +170,27 @@ export function Component() {
           </DeclarativeModal>
         </RootPortal>
       )}
-    </div>
+    </RootContainer>
   )
 }
+
+const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children }, ref) => {
+  const feedColWidth = useUISettingKey("feedColWidth")
+  return (
+    <div
+      ref={ref}
+      style={
+        {
+          "--fo-feed-col-w": `${feedColWidth}px`,
+        } as any
+      }
+      className="flex h-screen overflow-hidden"
+      onContextMenu={preventDefault}
+    >
+      {children}
+    </div>
+  )
+})
 
 const FeedResponsiveResizerContainer = ({
   containerRef,
@@ -176,12 +211,22 @@ const FeedResponsiveResizerContainer = ({
   })
 
   const feedColumnShow = useFeedColumnShow()
-  const [feedColumnTempShow, setFeedColumnTempShow] = useState(false)
+  const feedColumnTempShow = useFeedColumnTempShow()
 
   useEffect(() => {
+    if (feedColumnShow) {
+      setFeedColumnTempShow(false)
+      return
+    }
     const handler = throttle((e: MouseEvent) => {
       const mouseX = e.clientX
-      const threshold = feedColumnTempShow ? getUISettings().feedColWidth : 100
+      const mouseY = e.clientY
+
+      const uiSettings = getUISettings()
+      const feedColumnTempShow = getFeedColumnTempShow()
+      const isInEntryContentWideMode = uiSettings.wideMode
+      if (mouseY < 100 && isInEntryContentWideMode) return
+      const threshold = feedColumnTempShow ? uiSettings.feedColWidth : 100
 
       if (mouseX < threshold) {
         setFeedColumnTempShow(true)
@@ -194,7 +239,7 @@ const FeedResponsiveResizerContainer = ({
     return () => {
       document.removeEventListener("mousemove", handler)
     }
-  }, [feedColumnTempShow])
+  }, [feedColumnShow])
 
   useHotkeys(
     shortcuts.layout.toggleSidebar.key,

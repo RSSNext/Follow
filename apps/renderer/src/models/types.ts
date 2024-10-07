@@ -25,10 +25,13 @@ export type TransactionModel = ExtractBizResponse<
 
 export type FeedModel = ExtractBizResponse<typeof apiClient.feeds.$get>["data"]["feed"]
 
-type ListModelPoplutedFeeds = ExtractBizResponse<typeof apiClient.lists.$get>["data"]["list"]
+export type ListModelPoplutedFeeds = ExtractBizResponse<typeof apiClient.lists.$get>["data"]["list"]
 export type ListModel = Omit<ListModelPoplutedFeeds, "feeds">
-export type FeedOrListRespModel = FeedModel | ListModelPoplutedFeeds
-export type FeedOrListModel = FeedModel | ListModel
+
+export type InboxModel = ExtractBizResponse<typeof apiClient.inboxes.$get>["data"]
+
+export type FeedOrListRespModel = FeedModel | ListModelPoplutedFeeds | InboxModel
+export type FeedOrListModel = FeedModel | ListModel | InboxModel
 
 export type EntryResponse = Exclude<
   Extract<ExtractBizResponse<typeof apiClient.entries.$get>, { code: 0 }>["data"],
@@ -36,7 +39,8 @@ export type EntryResponse = Exclude<
 >
 
 export type EntriesResponse = Array<
-  Exclude<Awaited<ReturnType<typeof apiClient.entries.$post>>["data"], undefined>
+  | Exclude<Awaited<ReturnType<typeof apiClient.entries.$post>>["data"], undefined>
+  | Exclude<Awaited<ReturnType<typeof apiClient.entries.inbox.$post>>["data"], undefined>
 >[number]
 
 export type CombinedEntryModel = EntriesResponse[number] & {

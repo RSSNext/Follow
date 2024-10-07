@@ -31,7 +31,7 @@ import { FeedViewType } from "~/lib/enum"
 import { getNewIssueUrl } from "~/lib/issues"
 import { LanguageMap } from "~/lib/translate"
 import { cn } from "~/lib/utils"
-import type { ActiveEntryId, FeedModel } from "~/models"
+import type { ActiveEntryId, FeedModel, InboxModel } from "~/models"
 import {
   useIsSoFWrappedElement,
   useWrappedElement,
@@ -57,20 +57,28 @@ import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
 import { EntryContentProvider } from "./provider"
 
+export interface EntryContentClassNames {
+  header?: string
+}
 export const EntryContent = ({
   entryId,
   noMedia,
   compact,
+  classNames,
 }: {
   entryId: ActiveEntryId
   noMedia?: boolean
   compact?: boolean
+  classNames?: EntryContentClassNames
 }) => {
   const title = useFeedHeaderTitle()
   const { feedId, view } = useRouteParams()
-
+  const enableEntryWideMode = useUISettingKey("wideMode")
   useTitle(title)
   if (!entryId) {
+    if (enableEntryWideMode) {
+      return null
+    }
     return (
       <m.div
         className="center size-full flex-col"
@@ -85,25 +93,37 @@ export const EntryContent = ({
     )
   }
 
-  return <EntryContentRender entryId={entryId} noMedia={noMedia} compact={compact} />
+  return (
+    <EntryContentRender
+      entryId={entryId}
+      noMedia={noMedia}
+      compact={compact}
+      classNames={classNames}
+    />
+  )
 }
 
 export const EntryContentRender: Component<{
   entryId: string
   noMedia?: boolean
   compact?: boolean
-}> = ({ entryId, noMedia, className, compact }) => {
+  classNames?: EntryContentClassNames
+}> = ({ entryId, noMedia, className, compact, classNames }) => {
   const { t } = useTranslation()
-
-  const { error, data, isPending } = useAuthQuery(Queries.entries.byId(entryId), {
-    staleTime: 300_000,
-  })
 
   const entry = useEntry(entryId)
   useTitle(entry?.entries.title)
 
-  const feed = useFeedById(entry?.feedId) as FeedModel
+  const feed = useFeedById(entry?.feedId) as FeedModel | InboxModel
   const readerRenderInlineStyle = useUISettingKey("readerRenderInlineStyle")
+
+  const { error, data, isPending } = useAuthQuery(
+    feed?.type === "inbox" ? Queries.entries.byInboxId(entryId) : Queries.entries.byId(entryId),
+    {
+      staleTime: 300_000,
+    },
+  )
+
   const summary = useAuthQuery(
     Queries.ai.summary({
       entryId,
@@ -151,6 +171,21 @@ export const EntryContentRender: Component<{
         : undefined,
     [readerFontFamily],
   )
+  const mediaInfo = useMemo(
+    () =>
+      Object.fromEntries(
+        (entry?.entries.media ?? data?.entries.media)
+          ?.filter((m) => m.type === "photo")
+          .map((cur) => [
+            cur.url,
+            {
+              width: cur.width,
+              height: cur.height,
+            },
+          ]) ?? [],
+      ),
+    [entry?.entries.media, data?.entries.media],
+  )
 
   if (!entry) return null
 
@@ -180,18 +215,6 @@ export const EntryContentRender: Component<{
     })
   }
 
-  const mediaInfo = Object.fromEntries(
-    (entry.entries.media ?? data?.entries.media)
-      ?.filter((m) => m.type === "photo")
-      .map((cur) => [
-        cur.url,
-        {
-          width: cur.width,
-          height: cur.height,
-        },
-      ]) ?? [],
-  )
-
   return (
     <EntryContentProvider
       entryId={entry.entries.id}
@@ -202,7 +225,7 @@ export const EntryContentRender: Component<{
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
-        className="h-[55px] shrink-0 px-3 @container"
+        className={cn("h-[55px] shrink-0 px-3 @container", classNames?.header)}
         compact={compact}
       />
 
@@ -270,7 +293,9 @@ export const EntryContentRender: Component<{
               {!content && (
                 <div className="center mt-16 min-w-0">
                   {isPending ? (
-                    <EntryContentLoading icon={feed?.siteUrl!} />
+                    <EntryContentLoading
+                      icon={feed?.type === "inbox" ? undefined : feed?.siteUrl!}
+                    />
                   ) : error ? (
                     <div className="center flex min-w-0 flex-col gap-2">
                       <i className="i-mgc-close-cute-re text-3xl text-red-500" />
@@ -346,7 +371,7 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
         </p>
       ) : (
         <div className="center mt-16 flex flex-col gap-2">
-          <LoadingWithIcon size="large" icon={<i className="i-mgc-sparkles-2-cute-re" />} />
+          <LoadingWithIcon size="large" icon={<i className="i-mgc-docment-cute-re" />} />
           <span className="text-sm">{t("entry_content.fetching_content")}</span>
         </div>
       )}

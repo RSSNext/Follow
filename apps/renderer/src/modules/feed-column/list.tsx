@@ -1,6 +1,6 @@
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, m } from "framer-motion"
-import { Fragment, memo, useMemo, useState } from "react"
+import { memo, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
@@ -12,25 +12,18 @@ import { useRouteFeedId } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
-import { cn, sortByAlphabet } from "~/lib/utils"
+import { cn } from "~/lib/utils"
 import { Queries } from "~/queries"
-import { getPreferredTitle, useFeedStore } from "~/store/feed"
 import {
-  getSubscriptionByFeedId,
   subscriptionActions,
   useCategoryOpenStateByView,
   useSubscriptionByView,
 } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
-import {
-  getFeedListSort,
-  setFeedListSortBy,
-  setFeedListSortOrder,
-  useFeedListSort,
-  useFeedListSortSelector,
-} from "./atom"
-import { FeedCategory } from "./category"
+import { getFeedListSort, setFeedListSortBy, setFeedListSortOrder, useFeedListSort } from "./atom"
+import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
+import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
 const useFeedsGroupedData = (view: FeedViewType) => {
@@ -65,12 +58,32 @@ const useListsGroupedData = (view: FeedViewType) => {
   return useMemo(() => {
     if (!data || data.length === 0) return {}
 
+    const lists = data.filter((s) => "listId" in s)
+
     const groupFolder = {} as Record<string, string[]>
 
-    for (const subscription of data) {
-      if (!subscription.category && !subscription.defaultCategory) {
-        groupFolder[subscription.feedId] = [subscription.feedId]
-      }
+    for (const subscription of lists) {
+      groupFolder[subscription.feedId] = [subscription.feedId]
+    }
+
+    return groupFolder
+  }, [data])
+}
+
+const useInboxesGroupedData = (view: FeedViewType) => {
+  const { data: remoteData } = useAuthQuery(Queries.subscription.byView(view))
+
+  const data = useSubscriptionByView(view) || remoteData
+
+  return useMemo(() => {
+    if (!data || data.length === 0) return {}
+
+    const inboxes = data.filter((s) => "inboxId" in s)
+
+    const groupFolder = {} as Record<string, string[]>
+
+    for (const subscription of inboxes) {
+      groupFolder[subscription.feedId] = [subscription.feedId]
     }
 
     return groupFolder
@@ -86,6 +99,7 @@ const useUpdateUnreadCount = () => {
 function FeedListImpl({ className, view }: { className?: string; view: number }) {
   const feedsData = useFeedsGroupedData(view)
   const listsData = useListsGroupedData(view)
+  const inboxesData = useInboxesGroupedData(view)
   const categoryOpenStateData = useCategoryOpenStateByView(view)
   const expansion = Object.values(categoryOpenStateData).every((value) => value === true)
   useUpdateUnreadCount()
@@ -101,12 +115,21 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
     return unread
   })
 
-  const hasData = Object.keys(feedsData).length > 0 || Object.keys(listsData).length > 0
+  const hasData =
+    Object.keys(feedsData).length > 0 ||
+    Object.keys(listsData).length > 0 ||
+    Object.keys(inboxesData).length > 0
 
   const feedId = useRouteFeedId()
   const navigateEntry = useNavigateEntry()
 
   const { t } = useTranslation()
+
+  // Data prefetch
+  useAuthQuery(Queries.lists.list())
+
+  const hasListData = Object.keys(listsData).length > 0
+  const hasInboxData = Object.keys(inboxesData).length > 0
 
   return (
     <div className={cn(className, "font-medium")}>
@@ -145,9 +168,10 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
 
       <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3" rootClassName="h-full">
         <div
+          data-active={feedId === FEED_COLLECTION_LIST}
           className={cn(
-            "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5 transition-colors",
-            feedId === FEED_COLLECTION_LIST && "bg-native-active",
+            "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5",
+            feedColumnStyles.item,
           )}
           onClick={(e) => {
             e.stopPropagation()
@@ -163,29 +187,34 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           <i className="i-mgc-star-cute-fi size-4 -translate-y-px text-amber-500" />
           {t("words.starred")}
         </div>
-        {Object.keys(listsData).length > 0 && (
+        {hasListData && (
           <>
             <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
               {t("words.lists")}
             </div>
-            <SortableList
-              view={view}
-              data={listsData}
-              categoryOpenStateData={categoryOpenStateData}
-              by="alphabetical"
-            />
+            <SortByAlphabeticalList view={view} data={listsData} />
           </>
         )}
-        <div
-          className={cn(
-            "flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
-            Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
-          )}
-        >
-          {t("words.feeds")}
-        </div>
+        {hasInboxData && (
+          <>
+            <div className="mt-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors">
+              {t("words.inbox")}
+            </div>
+            <SortByAlphabeticalInbox view={view} data={inboxesData} />
+          </>
+        )}
+        {(hasListData || hasInboxData) && (
+          <div
+            className={cn(
+              "mb-1 flex h-6 w-full shrink-0 items-center rounded-md px-2.5 text-xs font-semibold text-theme-vibrancyFg transition-colors",
+              Object.keys(feedsData).length === 0 ? "mt-0" : "mt-1",
+            )}
+          >
+            {t("words.feeds")}
+          </div>
+        )}
         {hasData ? (
-          <SortableList
+          <SortableFeedList
             view={view}
             data={feedsData}
             categoryOpenStateData={categoryOpenStateData}
@@ -207,24 +236,24 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   )
 }
 
+const LIST = [
+  { icon: "i-mgc-sort-ascending-cute-re", by: "count", order: "asc" },
+  { icon: "i-mgc-sort-descending-cute-re", by: "count", order: "desc" },
+
+  {
+    icon: "i-mgc-az-sort-descending-letters-cute-re",
+    by: "alphabetical",
+    order: "asc",
+  },
+  {
+    icon: "i-mgc-az-sort-ascending-letters-cute-re",
+    by: "alphabetical",
+    order: "desc",
+  },
+] as const
 const SortButton = () => {
   const { by, order } = useFeedListSort()
   const { t } = useTranslation()
-  const LIST = [
-    { icon: "i-mgc-sort-ascending-cute-re", by: "count", order: "asc" },
-    { icon: "i-mgc-sort-descending-cute-re", by: "count", order: "desc" },
-
-    {
-      icon: "i-mgc-az-sort-descending-letters-cute-re",
-      by: "alphabetical",
-      order: "asc",
-    },
-    {
-      icon: "i-mgc-az-sort-ascending-letters-cute-re",
-      by: "alphabetical",
-      order: "desc",
-    },
-  ] as const
 
   const [open, setOpen] = useState(false)
 
@@ -295,111 +324,6 @@ const SortButton = () => {
       </HoverCard.Portal>
     </HoverCard.Root>
   )
-}
-
-type FeedListProps = {
-  view: number
-  data: Record<string, string[]>
-  categoryOpenStateData: Record<string, boolean>
-}
-const SortByUnreadList = ({ view, data, categoryOpenStateData }: FeedListProps) => {
-  const isDesc = useFeedListSortSelector((s) => s.order === "desc")
-
-  const sortedByUnread = useFeedUnreadStore((state) => {
-    const sortedList = [] as [string, string[]][]
-    const folderUnread = {} as Record<string, number>
-    // Calc total unread count for each folder
-    for (const category in data) {
-      folderUnread[category] = data[category].reduce((acc, cur) => (state.data[cur] || 0) + acc, 0)
-    }
-
-    // Sort by unread count
-    Object.keys(folderUnread)
-      .sort((a, b) => folderUnread[b] - folderUnread[a])
-      .forEach((key) => {
-        sortedList.push([key, data[key]])
-      })
-
-    if (!isDesc) {
-      sortedList.reverse()
-    }
-    return sortedList
-  })
-
-  return (
-    <Fragment>
-      {sortedByUnread?.map(([category, ids]) => (
-        <FeedCategory
-          key={category}
-          data={ids}
-          view={view}
-          categoryOpenStateData={categoryOpenStateData}
-        />
-      ))}
-    </Fragment>
-  )
-}
-
-const SortByAlphabeticalList = ({ view, data, categoryOpenStateData }: FeedListProps) => {
-  const categoryName2RealDisplayNameMap = useFeedStore((state) => {
-    const map = {} as Record<string, string>
-    for (const categoryName in data) {
-      const feedId = data[categoryName][0]
-
-      if (!feedId) {
-        continue
-      }
-      const feed = state.feeds[feedId]
-      if (!feed) {
-        continue
-      }
-      const hascategoryNameNotDefault = !!getSubscriptionByFeedId(feedId)?.category
-      const isSingle = data[categoryName].length === 1
-      if (!isSingle || hascategoryNameNotDefault) {
-        map[categoryName] = categoryName
-      } else {
-        map[categoryName] = getPreferredTitle(feed)!
-      }
-    }
-    return map
-  })
-
-  const isDesc = useFeedListSortSelector((s) => s.order === "desc")
-
-  let sortedByAlphabetical = Object.keys(data).sort((a, b) => {
-    const nameA = categoryName2RealDisplayNameMap[a]
-    const nameB = categoryName2RealDisplayNameMap[b]
-    return sortByAlphabet(nameA, nameB)
-  })
-  if (!isDesc) {
-    sortedByAlphabetical = sortedByAlphabetical.reverse()
-  }
-
-  return (
-    <Fragment>
-      {sortedByAlphabetical.map((category) => (
-        <FeedCategory
-          key={category}
-          data={data[category]}
-          view={view}
-          categoryOpenStateData={categoryOpenStateData}
-        />
-      ))}
-    </Fragment>
-  )
-}
-
-const SortableList = (props: FeedListProps & { by?: "count" | "alphabetical" }) => {
-  const userBy = useFeedListSortSelector((s) => s.by)
-
-  switch (props.by || userBy) {
-    case "count": {
-      return <SortByUnreadList {...props} />
-    }
-    case "alphabetical": {
-      return <SortByAlphabeticalList {...props} />
-    }
-  }
 }
 
 export const FeedList = memo(FeedListImpl)

@@ -1,9 +1,9 @@
 // @ts-check
 import { defineConfig } from "eslint-config-hyoban"
 
-import checkI18nJson from "./plugins/eslint-check-i18n-json.js"
-import noDebug from "./plugins/eslint-no-debug.js"
-import recursiveSort from "./plugins/eslint-recursive-sort.js"
+import checkI18nJson from "./plugins/eslint/eslint-check-i18n-json.js"
+import noDebug from "./plugins/eslint/eslint-no-debug.js"
+import recursiveSort from "./plugins/eslint/eslint-recursive-sort.js"
 
 export default defineConfig(
   {
