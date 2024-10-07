@@ -59,7 +59,7 @@ export const toastFetchError = (
     ..._toastOptions,
     classNames: {
       toast: "items-start bg-theme-background",
-      title: "-mt-1 mb-1", // to align with the icon (actually cut the top space from line-height)
+      title: tw`-mt-0.5`, // to align with the icon (actually cut the top space from line-height)
       content: "w-full",
       ..._toastOptions.classNames,
     },
@@ -85,7 +85,7 @@ export const toastFetchError = (
         }),
         createElement(Markdown, {
           key: "reason",
-          className: "text-sm opacity-70 min-w-0 flex-1",
+          className: "text-sm opacity-70 min-w-0 flex-1 mt-1",
           children: _reason,
         }),
       ]),
