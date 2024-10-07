@@ -290,6 +290,8 @@ const FallbackableImage: FC<
     }
   }, [currentSrc, currentState, fallbackUrl, src])
 
+  const height = Number.parseInt(props.height as string)
+  const width = Number.parseInt(props.width as string)
   return (
     <div className={cn("center flex size-full flex-col", containerClassName)}>
       {isLoading && !isAllError && (
@@ -317,11 +319,15 @@ const FallbackableImage: FC<
             blurhash && !isLoading ? "duration-500 ease-in-out animate-in fade-in-0" : "",
             props.className,
           )}
-          style={{
-            maxHeight: `min(100%, ${Number.parseInt(props.height as string)}px)`,
-            maxWidth: `min(100%, ${Number.parseInt(props.width as string)}px)`,
-            ...props.style,
-          }}
+          style={
+            Number.isNaN(height) || Number.isNaN(width) || height === 0 || width === 0
+              ? props.style
+              : {
+                  maxHeight: `min(100%, ${height}px)`,
+                  maxWidth: `min(100%, ${width}px)`,
+                  ...props.style,
+                }
+          }
         />
       )}
       {isAllError && (
