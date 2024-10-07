@@ -11,7 +11,6 @@ import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
 import { ListForm } from "~/modules/discover/list-form"
-import { useSettingModal } from "~/modules/settings/modal/hooks"
 import { ListCreationModalContent } from "~/modules/settings/tabs/lists/modals"
 import {
   getFeedById,
@@ -39,7 +38,6 @@ export const useFeedActions = ({
   const { t } = useTranslation()
   const feed = useFeedById(feedId)
   const subscription = useSubscriptionByFeedId(feedId)
-  const settingModalPresent = useSettingModal()
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
   const claimFeed = useFeedClaimModal({
@@ -228,7 +226,6 @@ export const useFeedActions = ({
     claimFeed,
     addFeedToListMutation,
     removeFeedFromListMutation,
-    settingModalPresent,
     present,
     deleteSubscription,
     subscription,

@@ -164,7 +164,6 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-                  enabled: !!listList?.length,
                   // @ts-expect-error
                   submenu: listList
                     ?.map((list) => ({
@@ -196,7 +195,6 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 { type: "separator" },
                 {
                   type: "text",
-                  enabled: !!(folderName && typeof view === "number"),
                   label: t("sidebar.feed_column.context_menu.change_to_other_view"),
                   submenu: views
                     .filter((v) => v.view !== view)

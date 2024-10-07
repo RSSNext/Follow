@@ -8,7 +8,6 @@ export type NativeMenuItem = (
       type: "text"
       label: string
       click?: () => void
-      enabled?: boolean
       /** only work in web app */
       icon?: React.ReactNode
       shortcut?: string
@@ -16,7 +15,7 @@ export type NativeMenuItem = (
       submenu?: NativeMenuItem[]
       checked?: boolean
     }
-  | { type: "separator"; disabled?: boolean; enabled?: boolean }
+  | { type: "separator"; disabled?: boolean }
 ) & { hide?: boolean }
 
 export type NullableNativeMenuItem = NativeMenuItem | null | undefined | false | ""
@@ -130,7 +129,7 @@ export const showNativeMenu = async (
         return {
           ...item,
           icon: undefined,
-          enabled: item.enabled ?? (item.click !== undefined || !!item.submenu),
+          enabled: item.click !== undefined || (!!item.submenu && item.submenu.length > 0),
           click: undefined,
           submenu: item.submenu ? transformMenuItems(item.submenu) : undefined,
           shortcut: item.shortcut?.replace("Meta", "CmdOrCtrl"),

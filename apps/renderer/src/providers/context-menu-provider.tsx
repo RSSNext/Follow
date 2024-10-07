@@ -110,7 +110,7 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
     preventDefault: true,
   })
 
-  if (item.enabled === false) {
+  if (item.hide) {
     return null
   }
 
