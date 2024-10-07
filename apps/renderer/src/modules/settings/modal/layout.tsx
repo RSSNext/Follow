@@ -119,8 +119,8 @@ export function SettingModalLayout(
                   {settings.map((t) => (
                     <button
                       key={t.path}
-                      className={`my-0.5 flex w-full items-center rounded-lg px-2.5 py-0.5 leading-loose text-theme-foreground/70 transition-colors hover:bg-theme-item-hover ${
-                        tab === t.path ? "bg-theme-item-active text-theme-foreground/90" : ""
+                      className={`my-0.5 flex w-full items-center rounded-lg px-2.5 py-0.5 leading-loose text-theme-foreground/70 duration-200 hover:bg-theme-item-hover ${
+                        tab === t.path ? "!bg-theme-item-active !text-theme-foreground/90" : ""
                       }`}
                       type="button"
                       onClick={() => setTab(t.path)}

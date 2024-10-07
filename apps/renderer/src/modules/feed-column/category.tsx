@@ -177,9 +177,9 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                         })
                       },
                     }))
-                    // @ts-expect-error
                     .concat([
-                      { type: "separator" },
+                      // @ts-expect-error
+                      { type: "separator" as const },
                       {
                         label: t("sidebar.feed_actions.create_list"),
                         type: "text" as const,
