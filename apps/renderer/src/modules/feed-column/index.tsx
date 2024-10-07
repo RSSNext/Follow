@@ -160,8 +160,8 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
             className={cn(
               active === index && item.className,
               "flex h-11 flex-col items-center gap-1 text-xl",
-              ELECTRON ? "hover:!bg-theme-vibrancyBg" : "",
-              active === index && useHotkeysSwitch ? "bg-zinc-500/30" : "",
+              ELECTRON ? "hover:!bg-theme-item-hover" : "",
+              active === index && useHotkeysSwitch ? "bg-theme-item-active" : "",
             )}
             onClick={(e) => {
               setActive(index)

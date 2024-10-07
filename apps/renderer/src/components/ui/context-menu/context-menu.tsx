@@ -28,6 +28,7 @@ const ContextMenuSubTrigger = React.forwardRef<
       inset && "pl-8",
       "center gap-2",
       className,
+      props.disabled && "cursor-not-allowed opacity-30",
     )}
     {...props}
   >

@@ -203,6 +203,7 @@
   "sidebar.feed_actions.copy_feed_url": "复制链接",
   "sidebar.feed_actions.copy_list_id": "复制列表 ID",
   "sidebar.feed_actions.copy_list_url": "复制列表链接",
+  "sidebar.feed_actions.create_list": "创建列表",
   "sidebar.feed_actions.edit": "编辑",
   "sidebar.feed_actions.edit_feed": "编辑订阅",
   "sidebar.feed_actions.edit_inbox": "编辑收件箱",

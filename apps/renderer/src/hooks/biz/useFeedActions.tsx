@@ -11,6 +11,7 @@ import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
 import { ListForm } from "~/modules/discover/list-form"
+import { ListCreationModalContent } from "~/modules/settings/tabs/lists/modals"
 import {
   getFeedById,
   useAddFeedToFeedList,
@@ -37,7 +38,6 @@ export const useFeedActions = ({
   const { t } = useTranslation()
   const feed = useFeedById(feedId)
   const subscription = useSubscriptionByFeedId(feedId)
-
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
   const claimFeed = useFeedClaimModal({
@@ -92,28 +92,43 @@ export const useFeedActions = ({
       {
         type: "text" as const,
         label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-        enabled: !!listByView?.length,
-        submenu: listByView?.map((list) => {
-          const isIncluded = list.feedIds.includes(feedId)
-          return {
-            label: list.title || "",
+        submenu: [
+          ...listByView.map((list) => {
+            const isIncluded = list.feedIds.includes(feedId)
+            return {
+              label: list.title || "",
+              type: "text" as const,
+              checked: isIncluded,
+              click() {
+                if (!isIncluded) {
+                  addFeedToListMutation({
+                    feedId,
+                    listId: list.id,
+                  })
+                } else {
+                  removeFeedFromListMutation({
+                    feedId,
+                    listId: list.id,
+                  })
+                }
+              },
+            }
+          }),
+          {
+            type: "separator",
+          },
+          {
+            label: t("sidebar.feed_actions.create_list"),
             type: "text" as const,
-            checked: isIncluded,
+            icon: <i className="i-mgc-add-cute-re" />,
             click() {
-              if (!isIncluded) {
-                addFeedToListMutation({
-                  feedId,
-                  listId: list.id,
-                })
-              } else {
-                removeFeedFromListMutation({
-                  feedId,
-                  listId: list.id,
-                })
-              }
+              present({
+                title: t("sidebar.feed_actions.create_list"),
+                content: () => <ListCreationModalContent />,
+              })
             },
-          }
-        }),
+          },
+        ],
       },
       {
         type: "separator" as const,

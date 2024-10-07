@@ -203,6 +203,7 @@
   "sidebar.feed_actions.copy_feed_url": "Copy feed URL",
   "sidebar.feed_actions.copy_list_id": "Copy list ID",
   "sidebar.feed_actions.copy_list_url": "Copy list URL",
+  "sidebar.feed_actions.create_list": "Create New list",
   "sidebar.feed_actions.edit": "Edit",
   "sidebar.feed_actions.edit_feed": "Edit feed",
   "sidebar.feed_actions.edit_inbox": "Edit inbox",
