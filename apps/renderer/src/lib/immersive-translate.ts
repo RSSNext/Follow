@@ -53,7 +53,7 @@ export function immersiveTranslate({
 
     const fontTag = document.createElement("font")
 
-    if (children.length > 2) {
+    if (children.length > 0) {
       fontTag.style.display = "none"
     }
 
