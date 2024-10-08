@@ -1,6 +1,8 @@
-import { imageRefererMatches, webpCloudPublicServicesMatches } from "@follow/shared/image"
-
-import { getAbValue, isAbEnabled } from "~/hooks/biz/useAb"
+import {
+  IMAGE_PROXY_URL,
+  imageRefererMatches,
+  webpCloudPublicServicesMatches,
+} from "@follow/shared/image"
 
 export const getImageProxyUrl = ({
   url,
@@ -11,12 +13,7 @@ export const getImageProxyUrl = ({
   width: number
   height: number
 }) => {
-  const abValue = getAbValue("Image_Proxy_V2")
-  if (isAbEnabled("Image_Proxy_V2")) {
-    return `${abValue}?url=${encodeURIComponent(url)}&width=${width}&height=${height}`
-  } else {
-    return `${abValue}/unsafe/fit-in/${width}x${height}/${encodeURIComponent(url)}`
-  }
+  return `${IMAGE_PROXY_URL}?url=${encodeURIComponent(url)}&width=${width}&height=${height}`
 }
 
 export const replaceImgUrlIfNeed = (url?: string) => {
