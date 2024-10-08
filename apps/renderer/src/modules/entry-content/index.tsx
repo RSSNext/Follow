@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
@@ -407,7 +408,7 @@ const NoContent: FC<{
             <span>{t("entry_content.web_app_notice")}</span>
           </div>
         )}
-        {url && window.electron && <ReadabilityAutoToggleEffect url={url} id={id} />}
+        {url && IN_ELECTRON && <ReadabilityAutoToggleEffect url={url} id={id} />}
       </div>
     </div>
   )

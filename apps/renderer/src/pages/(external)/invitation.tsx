@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { DotLottie } from "@lottiefiles/dotlottie-react"
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
@@ -140,7 +141,7 @@ export function Component() {
                   variant="ghost"
                   type="button"
                   onClick={() => {
-                    if (window.electron) {
+                    if (IN_ELECTRON) {
                       tipcClient?.clearAllData().then(() => {
                         window.location.href = "/"
                       })

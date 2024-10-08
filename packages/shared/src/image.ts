@@ -20,3 +20,11 @@ export const imageRefererMatches = [
     referer: "https://sp1.piokok.com",
   },
 ]
+
+export const webpCloudPublicServicesMatches = [
+  // https://docs.webp.se/public-services/github-avatar/
+  {
+    url: /^https:\/\/avatars\.githubusercontent\.com\/u\//,
+    target: "https://avatars-githubusercontent.webp.se/u/",
+  },
+]

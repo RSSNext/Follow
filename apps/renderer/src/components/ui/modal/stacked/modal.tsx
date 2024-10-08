@@ -109,12 +109,17 @@ export const ModalInternal = memo(
 
     const modalElementRef = useRef<HTMLDivElement>(null)
 
+    const dragController = useDragControls()
     const {
-      handlePointDown: handleResizeEnable,
+      handleResizeStop,
+      handleResizeStart,
+      relocateModal,
+      preferDragDir,
       isResizeable,
       resizeableStyle,
     } = useResizeableModal(modalElementRef, {
       enableResizeable: resizeable,
+      dragControls: dragController,
     })
     const animateController = useAnimationControls()
     useEffect(() => {
@@ -137,7 +142,6 @@ export const ModalInternal = memo(
         })
     }, [animateController])
 
-    const dragController = useDragControls()
     const handleDrag: PointerEventHandler<HTMLDivElement> = useCallback(
       (e) => {
         if (draggable) {
@@ -347,7 +351,7 @@ export const ModalInternal = memo(
                   onClick={stopPropagation}
                   onSelect={handleSelectStart}
                   onKeyUp={handleDetectSelectEnd}
-                  drag
+                  drag={draggable && (preferDragDir || draggable)}
                   dragControls={dragController}
                   dragElastic={0}
                   dragListener={false}
@@ -360,14 +364,15 @@ export const ModalInternal = memo(
                 >
                   <ResizeSwitch
                     enable={resizableOnly("bottomRight")}
-                    onResizeStart={handleResizeEnable}
+                    onResizeStart={handleResizeStart}
+                    onResizeStop={handleResizeStop}
                     defaultSize={resizeDefaultSize}
                     className="flex grow flex-col"
                   >
                     <div
                       className={"relative flex items-center"}
                       onPointerDownCapture={handleDrag}
-                      onPointerDown={handleResizeEnable}
+                      onPointerDown={relocateModal}
                     >
                       <Dialog.Title className="flex w-0 max-w-full grow items-center gap-2 px-4 py-1 text-lg font-semibold">
                         {icon && <span className="size-4">{icon}</span>}

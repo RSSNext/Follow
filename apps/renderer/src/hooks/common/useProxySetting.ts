@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { atom, useAtomValue, useSetAtom } from "jotai"
 import { useCallback } from "react"
 
@@ -17,7 +18,7 @@ export const useSetProxy = () => {
   const setProxy = useSetAtom(proxyAtom)
   return useCallback(
     (proxyString: string) => {
-      if (!window.electron) {
+      if (!IN_ELECTRON) {
         return
       }
       setProxy(proxyString)

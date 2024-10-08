@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from "react"
+import { Trans } from "react-i18next"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { SafeFragment } from "~/components/common/Fragment"
@@ -133,14 +134,15 @@ const DateItemInner: FC<{
         <ActionButton
           tooltip={
             <span>
-              Mark
-              <span> </span>
-              {useMemo(
-                () => cloneElement(RelativeElement, { layoutId: tooltipId.current }),
-                [RelativeElement],
-              )}
-              <span> </span>
-              as read
+              <Trans
+                i18nKey="mark_all_read_button.mark_as_read"
+                components={{
+                  which: useMemo(
+                    () => cloneElement(RelativeElement, { layoutId: tooltipId.current }),
+                    [RelativeElement],
+                  ),
+                }}
+              />
             </span>
           }
           onClick={() => {
@@ -163,9 +165,12 @@ const DateItemInner: FC<{
 
         {confirmMark ? (
           <div className="animate-mask-in" key="a">
-            Mark
-            <span> </span>
-            {RelativeElement} as read?
+            <Trans
+              i18nKey="mark_all_read_button.confirm_mark_all"
+              components={{
+                which: <>{RelativeElement}</>,
+              }}
+            />
           </div>
         ) : (
           RelativeElement

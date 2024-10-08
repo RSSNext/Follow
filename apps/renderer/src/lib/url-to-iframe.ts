@@ -1,6 +1,8 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
+
 export const urlToIframe = (url?: string | null, mini?: boolean) => {
   if (url?.match(/\/\/www.bilibili.com\/video\/BV\w+/)) {
-    const player = window.electron
+    const player = IN_ELECTRON
       ? "https://www.bilibili.com/blackboard/newplayer.html"
       : "https://player.bilibili.com/player.html"
     return `${player}?${new URLSearchParams({

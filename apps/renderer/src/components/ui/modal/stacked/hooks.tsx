@@ -1,3 +1,5 @@
+import type { DragControls } from "framer-motion"
+import type { ResizeCallback, ResizeStartCallback } from "re-resizable"
 import { useCallback, useContext, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { useEventCallback } from "usehooks-ts"
@@ -87,14 +89,17 @@ export const useResizeableModal = (
   modalElementRef: React.RefObject<HTMLDivElement>,
   {
     enableResizeable,
+    dragControls,
   }: {
     enableResizeable: boolean
+    dragControls?: DragControls
   },
 ) => {
   const [resizeableStyle, setResizeableStyle] = useState({} as React.CSSProperties)
   const [isResizeable, setIsResizeable] = useState(false)
+  const [preferDragDir, setPreferDragDir] = useState<"x" | "y" | null>(null)
 
-  const handlePointDown = useEventCallback(() => {
+  const relocateModal = useEventCallback(() => {
     if (!enableResizeable) return
     if (isResizeable) return
     const $modalElement = modalElementRef.current
@@ -112,10 +117,33 @@ export const useResizeableModal = (
       })
     })
   })
+  const handleResizeStart = useEventCallback(((e, dir) => {
+    if (!enableResizeable) return
+    relocateModal()
+
+    const hasTop = /top/i.test(dir)
+    const hasLeft = /left/i.test(dir)
+    if (hasTop || hasLeft) {
+      dragControls?.start(e as any)
+      if (hasTop && hasLeft) {
+        setPreferDragDir(null)
+      } else if (hasTop) {
+        setPreferDragDir("y")
+      } else if (hasLeft) {
+        setPreferDragDir("x")
+      }
+    }
+  }) satisfies ResizeStartCallback)
+  const handleResizeStop = useEventCallback((() => {
+    setPreferDragDir(null)
+  }) satisfies ResizeCallback)
 
   return {
     resizeableStyle,
     isResizeable,
-    handlePointDown,
+    relocateModal,
+    handleResizeStart,
+    handleResizeStop,
+    preferDragDir,
   }
 }

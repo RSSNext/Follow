@@ -23,6 +23,7 @@ import { INVITATION_PRICE } from "~/constants"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
+import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { Queries } from "~/queries"
 
@@ -122,7 +123,9 @@ export const SettingInvitations = () => {
                               }}
                             >
                               <Avatar className="aspect-square size-5 border border-border ring-1 ring-background">
-                                <AvatarImage src={row.users?.image || undefined} />
+                                <AvatarImage
+                                  src={replaceImgUrlIfNeed(row.users?.image || undefined)}
+                                />
                                 <AvatarFallback>{row.users?.name?.slice(0, 2)}</AvatarFallback>
                               </Avatar>
                             </button>

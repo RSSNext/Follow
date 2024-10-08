@@ -1,5 +1,6 @@
 import "./styles/main.css"
 
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { ClickToComponent } from "click-to-react-component"
 import * as React from "react"
 import ReactDOM from "react-dom/client"
@@ -17,7 +18,7 @@ initializeApp().finally(() => {
 
 const $container = document.querySelector("#root") as HTMLElement
 
-if (window.electron && getOS() === "Windows") {
+if (IN_ELECTRON && getOS() === "Windows") {
   document.body.style.cssText += `--fo-window-padding-top: ${ElECTRON_CUSTOM_TITLEBAR_HEIGHT}px;`
 }
 ReactDOM.createRoot($container).render(

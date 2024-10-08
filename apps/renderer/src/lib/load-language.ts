@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import dayjs from "dayjs"
 import i18next from "i18next"
 import { toast } from "sonner"
@@ -70,7 +71,7 @@ export const loadLanguageAndApply = async (lang: string) => {
   } else {
     let importFilePath = ""
 
-    if (window.electron) {
+    if (IN_ELECTRON) {
       importFilePath =
         (await tipcClient?.resolveAppAsarPath(`dist/renderer/locales/${lang}.js`)) || ""
 
