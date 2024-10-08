@@ -40,6 +40,8 @@ import { FeedColumn } from "~/modules/feed-column"
 import { AutoUpdater } from "~/modules/feed-column/auto-updater"
 import { CornerPlayer } from "~/modules/feed-column/corner-player"
 import { useShortcutsModal } from "~/modules/modal/shortcuts"
+import { GuideModalContent } from "~/modules/new-user-guide/guide-modal-content"
+import { useIsNewUserGuideFinished } from "~/modules/new-user-guide/hooks"
 import { CmdF } from "~/modules/panel/cmdf"
 import { SearchCmdK } from "~/modules/panel/cmdk"
 import { CmdNTrigger } from "~/modules/panel/cmdn"
@@ -89,6 +91,8 @@ export function Component() {
 
   const supportMinWidth = 1024
   const isNotSupportWidth = useViewport((v) => v.w < supportMinWidth && v.w !== 0) && !IN_ELECTRON
+
+  const isNewUserGuideFinished = useIsNewUserGuideFinished()
 
   if (isNotSupportWidth) {
     return (
@@ -155,6 +159,19 @@ export function Component() {
       <SearchCmdK />
       <CmdNTrigger />
       {ELECTRON && <CmdF />}
+
+      {user && !isNewUserGuideFinished && (
+        <RootPortal>
+          <DeclarativeModal
+            id="new-user-guide"
+            title="New User Guide"
+            CustomModalComponent={PlainModal}
+            open
+          >
+            <GuideModalContent />
+          </DeclarativeModal>
+        </RootPortal>
+      )}
 
       {isAuthFail && !user && (
         <RootPortal>
