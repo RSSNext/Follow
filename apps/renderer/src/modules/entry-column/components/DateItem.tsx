@@ -137,15 +137,9 @@ const DateItemInner: FC<{
               <Trans
                 i18nKey="mark_all_read_button.mark_as_read"
                 components={{
-                  which: (
-                    <>
-                      <span> </span>
-                      {useMemo(
-                        () => cloneElement(RelativeElement, { layoutId: tooltipId.current }),
-                        [RelativeElement],
-                      )}
-                      <span> </span>
-                    </>
+                  which: useMemo(
+                    () => cloneElement(RelativeElement, { layoutId: tooltipId.current }),
+                    [RelativeElement],
                   ),
                 }}
               />
