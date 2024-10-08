@@ -1,9 +1,13 @@
-import { Logo } from "~/components/icons/logo"
+import { DotLottieReact } from "@lottiefiles/dotlottie-react"
+
 import { stopPropagation } from "~/lib/dom"
 import { cn } from "~/lib/utils"
+import FollowAnimationUri from "~/lottie/follow.lottie?url"
 import { useFeedHeaderTitle } from "~/store/feed"
 
 import { useEntryContentPlaceholderLogoShow } from "../atoms"
+
+const absoluteFollowAnimationUri = new URL(FollowAnimationUri, import.meta.url).href
 
 export const EntryPlaceholderLogo = () => {
   const title = useFeedHeaderTitle()
@@ -18,7 +22,18 @@ export const EntryPlaceholderLogo = () => {
         !logoShow && "translate-y-[-50px] opacity-0",
       )}
     >
-      <Logo className="size-16 opacity-40 grayscale" />
+      {/* <Logo className="size-16 opacity-40 grayscale" /> */}
+      <div className="size-16 rounded-xl bg-accent grayscale">
+        <DotLottieReact
+          className="size-16"
+          autoplay
+          speed={2}
+          height={64}
+          width={64}
+          src={absoluteFollowAnimationUri}
+          loop={false}
+        />
+      </div>
       <span className="max-w-[60ch]">{title}</span>
     </div>
   )
