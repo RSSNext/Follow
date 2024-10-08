@@ -13,7 +13,8 @@ import {
 } from "react"
 import { useEventCallback } from "usehooks-ts"
 
-import { getViewport } from "~/atoms/hooks/viewport"
+import { getViewport, useViewport } from "~/atoms/hooks/viewport"
+import { useUISettingKey } from "~/atoms/settings/ui"
 import { getElementTop } from "~/lib/dom"
 import { springScrollToElement } from "~/lib/scroller"
 import { cn } from "~/lib/utils"
@@ -41,6 +42,9 @@ export interface ITocItem {
   $heading: HTMLHeadingElement
 }
 
+const WiderTocStyle = {
+  width: 200,
+} satisfies React.CSSProperties
 export const Toc: Component = ({ className }) => {
   const markdownElement = useContext(MarkdownRenderContainerRefContext)
   const { toc, rootDepth } = useTocItems(markdownElement)
@@ -48,11 +52,14 @@ export const Toc: Component = ({ className }) => {
 
   const renderContentElementPosition = useWrappedElementPosition()
   const renderContentElementSize = useWrappedElementSize()
+  const entryContentInWideMode = useUISettingKey("wideMode")
+  const shouldShowTitle = useViewport((v) => {
+    if (!entryContentInWideMode) return false
+    const { w } = v
+    const xAxis = renderContentElementPosition.x + renderContentElementSize.w
 
-  const xAxis = renderContentElementPosition.x + renderContentElementSize.w
-  const w = window.innerWidth
-
-  const shouldShowTitle = w - xAxis > 300
+    return w - xAxis > WiderTocStyle.width + 50
+  })
 
   if (toc.length === 0) return null
 
@@ -86,9 +93,10 @@ const TocContainer: React.FC<TocContainerProps> = ({
     <div
       className={cn(
         "group relative overflow-auto opacity-60 duration-200 scrollbar-none group-hover:opacity-100",
-        "flex w-[300px] flex-col",
+        "flex flex-col",
         className,
       )}
+      style={WiderTocStyle}
     >
       {toc.map((heading, index) => (
         <MemoedItem

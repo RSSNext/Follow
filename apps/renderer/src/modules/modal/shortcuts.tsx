@@ -30,7 +30,10 @@ const ShortcutModalContent = () => {
       dragControls={dragControls}
       dragMomentum={false}
       dragElastic={0}
-      exit={{ opacity: 0 }}
+      exit={{
+        scale: 0.96,
+        opacity: 0,
+      }}
       whileDrag={{
         cursor: "grabbing",
       }}

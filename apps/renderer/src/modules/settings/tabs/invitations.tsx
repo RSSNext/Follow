@@ -64,6 +64,9 @@ export const SettingInvitations = () => {
         </p>
       </div>
       <Button
+        disabled={
+          !limitation.data || (invitations?.data && invitations?.data?.length >= limitation.data)
+        }
         onClick={() => {
           present({
             title: t("invitation.confirmModal.title"),

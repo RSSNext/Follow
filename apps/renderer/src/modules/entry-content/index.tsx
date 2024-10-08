@@ -67,9 +67,12 @@ export const EntryContent = ({
 }) => {
   const title = useFeedHeaderTitle()
   const { feedId, view } = useRouteParams()
-
+  const enableEntryWideMode = useUISettingKey("wideMode")
   useTitle(title)
   if (!entryId) {
+    if (enableEntryWideMode) {
+      return null
+    }
     return (
       <m.div
         className="center size-full flex-col"

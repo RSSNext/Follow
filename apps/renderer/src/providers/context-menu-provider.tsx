@@ -20,6 +20,7 @@ import { useSwitchHotKeyScope } from "~/hooks/common"
 import { nextFrame } from "~/lib/dom"
 import type { NativeMenuItem } from "~/lib/native-menu"
 import { CONTEXT_MENU_SHOW_EVENT_KEY } from "~/lib/native-menu"
+import { cn } from "~/lib/utils"
 
 export const ContextMenuProvider: Component = ({ children }) => (
   <>
@@ -76,6 +77,7 @@ const Handler = () => {
       )
     }
 
+    // eslint-disable-next-line @eslint-react/web-api/no-leaked-event-listener
     document.addEventListener(CONTEXT_MENU_SHOW_EVENT_KEY, handler)
     return () => {
       document.removeEventListener(CONTEXT_MENU_SHOW_EVENT_KEY, handler)
@@ -108,6 +110,10 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
     preventDefault: true,
   })
 
+  if (item.hide) {
+    return null
+  }
+
   switch (item.type) {
     case "separator": {
       return <ContextMenuSeparator />
@@ -120,17 +126,20 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
           : ContextMenuItem
 
       const Sub = item.submenu ? ContextMenuSub : Fragment
+
       return (
         <Sub>
           <Wrapper
             ref={itemRef}
-            disabled={item.enabled === false || (item.click === undefined && !item.submenu)}
+            disabled={item.click === undefined && !item.submenu}
             onClick={onClick}
             className="flex items-center gap-2"
             checked={item.checked}
           >
-            {item.icon}
-            {item.label}
+            {item.icon && (
+              <span className="absolute left-2 flex items-center justify-center">{item.icon}</span>
+            )}
+            <span className={cn(item.icon && "pl-6")}>{item.label}</span>
 
             {!!item.shortcut && (
               <div className="ml-auto pl-4">

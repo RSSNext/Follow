@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 import { Button } from "~/components/ui/button"
+import { LoadingWithIcon } from "~/components/ui/loading"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
@@ -57,6 +58,18 @@ export function Component() {
       toastFetchError(error)
     },
   })
+
+  if (actions.isPending) {
+    return (
+      <div className="center absolute inset-0 flex">
+        <LoadingWithIcon
+          icon={<i className={iconName} />}
+          size="large"
+          className="-translate-y-full"
+        />
+      </div>
+    )
+  }
 
   return (
     <>

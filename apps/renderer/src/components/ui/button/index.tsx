@@ -26,6 +26,7 @@ interface ActionButtonProps {
   active?: boolean
   disabled?: boolean
   shortcut?: string
+  disableTriggerShortcut?: boolean
 }
 
 export const ActionButton = React.forwardRef<
@@ -43,6 +44,7 @@ export const ActionButton = React.forwardRef<
       active,
       shortcut,
       disabled,
+      disableTriggerShortcut,
       ...rest
     },
     ref,
@@ -78,7 +80,9 @@ export const ActionButton = React.forwardRef<
     )
     return (
       <>
-        {shortcut && <HotKeyTrigger shortcut={shortcut} fn={() => buttonRef.current?.click()} />}
+        {shortcut && !disableTriggerShortcut && (
+          <HotKeyTrigger shortcut={shortcut} fn={() => buttonRef.current?.click()} />
+        )}
         {tooltip ? (
           <Tooltip disableHoverableContent>
             <TooltipTrigger asChild>{Trigger}</TooltipTrigger>
