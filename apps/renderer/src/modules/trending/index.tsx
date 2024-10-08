@@ -1,4 +1,4 @@
-import { Button } from "@headlessui/react"
+import type { User } from "@auth/core/types"
 import { useQuery } from "@tanstack/react-query"
 import { m } from "framer-motion"
 import type { FC } from "react"
@@ -8,7 +8,8 @@ import { FeedIcon } from "~/components/feed-icon"
 import { IconoirBrightCrown } from "~/components/icons/crown"
 import { PhUsersBold } from "~/components/icons/users"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { LoadingCircle } from "~/components/ui/loading"
+import { Button } from "~/components/ui/button"
+import { LoadingWithIcon } from "~/components/ui/loading"
 import { useModalStack } from "~/components/ui/modal"
 import { DrawerModalLayout } from "~/components/ui/modal/stacked/custom-modal"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
@@ -16,7 +17,7 @@ import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { stopPropagation } from "~/lib/dom"
 import { cn } from "~/lib/utils"
-import type { Models } from "~/models"
+import type { FeedModel, Models } from "~/models"
 
 import { usePresentUserProfileModal } from "../profile/hooks"
 
@@ -38,7 +39,7 @@ export const Trend = () => {
           className={cn(
             "box-content flex size-6 items-center justify-center rounded-full p-1 text-accent",
             "duration-200 hover:shadow-none",
-            "cursor-pointer",
+
             "absolute bottom-0 right-2",
           )}
           initial={{
@@ -51,7 +52,7 @@ export const Trend = () => {
             scale: 0.92,
           }}
         >
-          <i className="i-mingcute-trending-up-line" />
+          <i className="i-mgc-trending-up-cute-re" />
         </m.button>
       </TooltipTrigger>
     </Tooltip>
@@ -68,7 +69,10 @@ const TrendContent = () => {
   if (!data)
     return (
       <div className="center absolute inset-0">
-        <LoadingCircle size="large" />
+        <LoadingWithIcon
+          icon={<i className="i-mingcute-trending-up-line text-3xl" />}
+          size="large"
+        />
       </div>
     )
   return (
@@ -101,7 +105,7 @@ const TrendingLists: FC<{
             <button
               type="button"
               className={cn(
-                "flex w-full min-w-0 cursor-pointer items-center pl-2",
+                "flex w-full min-w-0 items-center pl-2",
                 "rounded-md duration-200 hover:bg-gray-100 dark:hover:bg-zinc-800",
                 !!item.description && "rounded-xl py-2",
               )}
@@ -109,7 +113,7 @@ const TrendingLists: FC<{
                 follow({ isList: true, id: item.id })
               }}
             >
-              <FeedIcon feed={item} size={60} className="rounded" />
+              <FeedIcon feed={item as any} size={40} />
 
               <div className={cn("ml-1 flex w-full flex-col text-left")}>
                 <div className="flex items-end gap-2">
@@ -117,7 +121,9 @@ const TrendingLists: FC<{
 
                   <UserCount count={item.subscriberCount} />
                 </div>
-                <div className={cn("-mt-1 line-clamp-2 text-sm")}>{item.description}</div>
+                {!!item.description && (
+                  <div className={cn("-mt-1 line-clamp-2 text-sm")}>{item.description}</div>
+                )}
               </div>
             </button>
           </li>
@@ -137,26 +143,26 @@ const UserCount = ({ count }: { count: number }) => {
 }
 
 interface TopUserAvatarProps {
-  user: Models.User
+  user: User
   position: string
 }
 
 const TopUserAvatar: React.FC<TopUserAvatarProps> = ({ user, position }) => (
   <div className={`absolute ${position} flex w-[50px] flex-col`}>
-    <Avatar className="block aspect-square size-7 overflow-hidden rounded-full border border-border ring-1 ring-background">
+    <Avatar className="block aspect-square size-[50px] overflow-hidden rounded-full border border-border ring-1 ring-background">
       <AvatarImage src={user?.image || undefined} />
       <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
     </Avatar>
 
     {user.name && (
-      <EllipsisHorizontalTextWithTooltip className="pr-8 text-xs font-medium">
+      <EllipsisHorizontalTextWithTooltip className="mt-2 text-xs font-medium">
         <span>{user.name}</span>
       </EllipsisHorizontalTextWithTooltip>
     )}
   </div>
 )
 
-const TrendingUsers: FC<{ data: Models.User[] }> = ({ data }) => {
+const TrendingUsers: FC<{ data: User[] }> = ({ data }) => {
   const profile = usePresentUserProfileModal("dialog")
   return (
     <section className="w-full text-left">
@@ -165,11 +171,10 @@ const TrendingUsers: FC<{ data: Models.User[] }> = ({ data }) => {
         <div className="absolute left-[calc(50%+15px)] top-[8px] rotate-[40deg] text-[20px] text-accent">
           <IconoirBrightCrown />
         </div>
-        {/* Top 3 users */}
+
         {data.slice(0, 3).map((user, index: number) => (
           <button
             onFocusCapture={stopPropagation}
-            className="cursor-pointer"
             type="button"
             onClick={() => {
               profile(user.id)
@@ -193,22 +198,21 @@ const TrendingUsers: FC<{ data: Models.User[] }> = ({ data }) => {
       {data.length > 3 && (
         <ul className="mt-8 flex flex-col gap-4 pl-2">
           {data.slice(3).map((user) => (
-            <li key={user.id} className="flex items-center gap-3">
+            <li key={user.id}>
               <button
                 onFocusCapture={stopPropagation}
-                className="cursor-pointer"
+                className="flex w-full items-center gap-3"
                 type="button"
                 onClick={() => {
                   profile(user.id)
                 }}
               >
-                <Avatar className="block aspect-square size-7 overflow-hidden rounded-full border border-border ring-1 ring-background">
+                <Avatar className="block aspect-square size-[40px] overflow-hidden rounded-full border border-border ring-1 ring-background">
                   <AvatarImage src={user?.image || undefined} />
                   <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
                 </Avatar>
+                <span className="font-medium">{user.name}</span>
               </button>
-
-              <span className="font-medium">{user.name}</span>
             </li>
           ))}
         </ul>
@@ -217,7 +221,7 @@ const TrendingUsers: FC<{ data: Models.User[] }> = ({ data }) => {
   )
 }
 
-const TrendingFeeds = ({ data }: { data: Models.TrendingFeed[] }) => {
+const TrendingFeeds = ({ data }: { data: FeedModel[] }) => {
   const follow = useFollow()
   return (
     <section className="mt-8 w-full text-left">
@@ -238,22 +242,22 @@ const TrendingFeeds = ({ data }: { data: Models.TrendingFeed[] }) => {
                 href={`/feed/${feed.id}`}
                 className="flex grow items-center gap-2 py-1"
               >
-                <div className="size-4">
-                  <FeedIcon feed={feed} size={60} className="rounded" />
+                <div>
+                  <FeedIcon feed={feed} size={24} className="rounded" />
                 </div>
                 <div className="flex w-full min-w-0 grow items-center">
-                  <div className={cn("truncate")}>{feed.title}</div>
+                  <div className={"truncate"}>{feed.title}</div>
                 </div>
               </a>
 
               <div className="pr-2">
-                <UserCount count={feed.subscriberCount} />
+                <UserCount count={(feed as any).subscriberCount} />
 
                 <Button
                   type="button"
-                  className={cn(
-                    "absolute inset-y-0 right-0 font-medium opacity-0 duration-200 group-hover:opacity-100",
-                  )}
+                  buttonClassName={
+                    "absolute inset-y-0.5 right-0 font-medium opacity-0 duration-200 group-hover:opacity-100"
+                  }
                   onClick={() => {
                     follow({ isList: false, id: feed.id })
                   }}
