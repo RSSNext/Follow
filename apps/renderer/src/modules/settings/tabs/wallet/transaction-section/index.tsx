@@ -16,6 +16,7 @@ import {
 } from "~/components/ui/table"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
+import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { cn } from "~/lib/utils"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { SettingSectionTitle } from "~/modules/settings/section"
@@ -182,7 +183,7 @@ const UserRenderer = ({
         <Logo className="aspect-square size-4" />
       ) : (
         <Avatar className="aspect-square size-4 duration-200 animate-in fade-in-0">
-          <AvatarImage src={user?.image || undefined} />
+          <AvatarImage src={replaceImgUrlIfNeed(user?.image || undefined)} />
           <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
         </Avatar>
       )}

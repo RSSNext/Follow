@@ -1,4 +1,4 @@
-import { imageRefererMatches } from "@follow/shared/image"
+import { imageRefererMatches, webpCloudPublicServicesMatches } from "@follow/shared/image"
 
 import { getAbValue, isAbEnabled } from "~/hooks/biz/useAb"
 
@@ -19,7 +19,15 @@ export const getImageProxyUrl = ({
   }
 }
 
-export const replaceImgUrlIfNeed = (url: string) => {
+export const replaceImgUrlIfNeed = (url?: string) => {
+  if (!url) return url
+
+  for (const rule of webpCloudPublicServicesMatches) {
+    if (rule.url.test(url)) {
+      return url.replace(rule.url, rule.target)
+    }
+  }
+
   for (const rule of imageRefererMatches) {
     if (rule.url.test(url)) {
       return getImageProxyUrl({ url, width: 0, height: 0 })
