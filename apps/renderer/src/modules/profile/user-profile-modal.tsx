@@ -20,6 +20,7 @@ import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { nextFrame, stopPropagation } from "~/lib/dom"
+import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { getStorageNS } from "~/lib/ns"
 import { cn } from "~/lib/utils"
 import type { SubscriptionModel } from "~/models"
@@ -246,7 +247,7 @@ export const UserProfileModalContent: FC<{
                   <AvatarImage
                     className="duration-200 animate-in fade-in-0"
                     asChild
-                    src={userInfo.avatar || undefined}
+                    src={replaceImgUrlIfNeed(userInfo.avatar || undefined)}
                   >
                     <m.img layout />
                   </AvatarImage>
@@ -291,7 +292,7 @@ export const UserProfileModalContent: FC<{
                   size="large"
                   icon={
                     <Avatar className="aspect-square size-4">
-                      <AvatarImage src={userInfo.avatar || undefined} />
+                      <AvatarImage src={replaceImgUrlIfNeed(userInfo.avatar || undefined)} />
                       <AvatarFallback>{userInfo.name?.slice(0, 2)}</AvatarFallback>
                     </Avatar>
                   }

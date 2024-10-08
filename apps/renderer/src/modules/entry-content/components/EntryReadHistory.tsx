@@ -15,6 +15,7 @@ import { ScrollArea } from "~/components/ui/scroll-area"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useAuthQuery } from "~/hooks/common"
+import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { useAppLayoutGridContainerWidth } from "~/providers/app-grid-layout-container-provider"
 import { Queries } from "~/queries"
 import { useEntryReadHistory } from "~/store/entry"
@@ -121,7 +122,7 @@ const EntryUserRow: Component<{ userId: string }> = memo(({ userId }) => {
       className="relative flex min-w-0 max-w-[50ch] shrink-0 cursor-button items-center gap-2 truncate rounded-md p-1 px-2 hover:bg-muted"
     >
       <Avatar className="block aspect-square size-7 overflow-hidden rounded-full border border-border ring-1 ring-background">
-        <AvatarImage src={user?.image || undefined} />
+        <AvatarImage src={replaceImgUrlIfNeed(user?.image || undefined)} />
         <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
       </Avatar>
 
@@ -161,7 +162,10 @@ const EntryUser: Component<{
           }}
         >
           <Avatar className="aspect-square size-7 border border-border ring-1 ring-background">
-            <AvatarImage src={user?.image || undefined} className="bg-theme-placeholder-image" />
+            <AvatarImage
+              src={replaceImgUrlIfNeed(user?.image || undefined)}
+              className="bg-theme-placeholder-image"
+            />
             <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
         </m.button>
