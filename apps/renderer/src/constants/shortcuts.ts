@@ -69,6 +69,10 @@ export const shortcuts = {
       name: "keys.entry.copyLink",
       key: "Shift+Meta+C",
     },
+    copyTitle: {
+      name: "keys.entry.copyTitle",
+      key: "Shift+Meta+B",
+    },
     tip: {
       name: "keys.entry.tip",
       key: "Shift+Meta+T",
