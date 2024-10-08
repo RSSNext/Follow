@@ -1,6 +1,8 @@
 import type { MediaModel } from "@follow/shared/hono"
 import type { FC } from "react"
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
+import { Blurhash } from "react-blurhash"
+import { useTranslation } from "react-i18next"
 import { Keyboard, Mousewheel } from "swiper/modules"
 import type { SwiperRef } from "swiper/react"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -16,6 +18,7 @@ import { EntryContent } from "~/modules/entry-content"
 import { ActionButton, MotionButtonBase } from "../button"
 import { microReboundPreset } from "../constants/spring"
 import { useCurrentModal } from "../modal"
+import { RootPortal } from "../portal"
 import { VideoPlayer } from "./VideoPlayer"
 
 const Wrapper: Component<{
@@ -24,6 +27,7 @@ const Wrapper: Component<{
   entryId?: string
 }> = ({ children, src, showActions, entryId }) => {
   const { dismiss } = useCurrentModal()
+  const { t } = useTranslation(["shortcuts", "external"])
 
   return (
     <div className="center relative size-full px-20 pb-8 pt-10" onClick={dismiss}>
@@ -37,37 +41,39 @@ const Wrapper: Component<{
         <div
           className={cn(
             "relative flex h-full w-auto overflow-hidden",
-            entryId ? "rounded-l-xl bg-native" : "rounded-xl",
+            entryId ? "min-w-96 items-center justify-center rounded-l-xl bg-native" : "rounded-xl",
           )}
         >
           {children}
-          <div
-            className="absolute bottom-4 right-4 z-[99] flex gap-3 text-white/70 [&_button]:hover:text-white"
-            onClick={stopPropagation}
-          >
-            {showActions && (
-              <Fragment>
-                {!!window.electron && (
+          <RootPortal>
+            <div
+              className="pointer-events-auto fixed bottom-4 right-4 z-[99] flex gap-3 text-white/70 [&_button]:hover:text-white"
+              onClick={stopPropagation}
+            >
+              {showActions && (
+                <Fragment>
+                  {!!window.electron && (
+                    <ActionButton
+                      tooltip={t("external:header.download")}
+                      onClick={() => {
+                        tipcClient?.download(src)
+                      }}
+                    >
+                      <i className="i-mgc-download-2-cute-re" />
+                    </ActionButton>
+                  )}
                   <ActionButton
-                    tooltip="Download"
+                    tooltip={t(COPY_MAP.OpenInBrowser())}
                     onClick={() => {
-                      tipcClient?.download(src)
+                      window.open(src)
                     }}
                   >
-                    <i className="i-mgc-download-2-cute-re" />
+                    <i className="i-mgc-external-link-cute-re" />
                   </ActionButton>
-                )}
-                <ActionButton
-                  tooltip={COPY_MAP.OpenInBrowser()}
-                  onClick={() => {
-                    window.open(src)
-                  }}
-                >
-                  <i className="i-mgc-external-link-cute-re" />
-                </ActionButton>
-              </Fragment>
-            )}
-          </div>
+                </Fragment>
+              )}
+            </div>
+          </RootPortal>
         </div>
         {entryId && (
           <div
@@ -125,6 +131,9 @@ export const PreviewMediaContent: FC<{
             className="h-full w-auto object-contain"
             alt="cover"
             src={src}
+            height={media[0].height}
+            width={media[0].width}
+            blurhash={media[0].blurhash}
           />
         )}
       </Wrapper>
@@ -222,6 +231,9 @@ export const PreviewMediaContent: FC<{
                 alt="cover"
                 src={med.url}
                 loading="lazy"
+                height={med.height}
+                width={med.width}
+                blurhash={med.blurhash}
               />
             )}
           </SwiperSlide>
@@ -236,8 +248,9 @@ const FallbackableImage: FC<
     src: string
     containerClassName?: string
     fallbackUrl?: string
+    blurhash?: string
   }
-> = ({ src, onError, fallbackUrl, containerClassName, ...props }) => {
+> = ({ src, onError, fallbackUrl, containerClassName, blurhash, ...props }) => {
   const [currentSrc, setCurrentSrc] = useState(() => replaceImgUrlIfNeed(src))
   const [isAllError, setIsAllError] = useState(false)
 
@@ -277,15 +290,45 @@ const FallbackableImage: FC<
     }
   }, [currentSrc, currentState, fallbackUrl, src])
 
+  const height = Number.parseInt(props.height as string)
+  const width = Number.parseInt(props.width as string)
   return (
-    <div className={cn("flex size-full flex-col", containerClassName)}>
+    <div className={cn("center flex size-full flex-col", containerClassName)}>
       {isLoading && !isAllError && (
+        // FIXME: optimize this if image load, the placeholder background will flash
         <div className="center absolute inset-0 size-full">
-          <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+          {blurhash ? (
+            <div style={{ aspectRatio: `${props.width} / ${props.height}` }} className="w-full">
+              <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
+            </div>
+          ) : (
+            <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+          )}
         </div>
       )}
       {!isAllError && (
-        <img src={currentSrc} onLoad={() => setIsLoading(false)} onError={handleError} {...props} />
+        <img
+          data-blurhash={blurhash}
+          src={currentSrc}
+          onLoad={() => setIsLoading(false)}
+          onError={handleError}
+          height={props.height}
+          width={props.width}
+          {...props}
+          className={cn(
+            blurhash && !isLoading ? "duration-500 ease-in-out animate-in fade-in-0" : "",
+            props.className,
+          )}
+          style={
+            Number.isNaN(height) || Number.isNaN(width) || height === 0 || width === 0
+              ? props.style
+              : {
+                  maxHeight: `min(100%, ${height}px)`,
+                  maxWidth: `min(100%, ${width}px)`,
+                  ...props.style,
+                }
+          }
+        />
       )}
       {isAllError && (
         <div
@@ -320,7 +363,7 @@ const FallbackableImage: FC<
       )}
 
       {currentState === "fallback" && (
-        <div className="mt-4 text-center text-xs">
+        <div className="mt-4 text-center text-xs text-white/60">
           <span>
             This image is preview in low quality, because the original image is not available.
           </span>

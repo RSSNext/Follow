@@ -1,42 +1,28 @@
 {
-  "feed": {
-    "follow_one": "seuraa",
-    "follow_other": "seuraajat",
-    "followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} ja {{readCount}} {{readNoun}} palvelussa {{appName}}",
-    "read_one": "lue",
-    "read_other": "lukee"
-  },
-  "header": {
-    "app": "Sovellus",
-    "download": "Lataa"
-  },
-  "invitation": {
-    "activate": "Aktivoi",
-    "codeOptions": {
-      "1": "Etsi mikä tahansa alpha-testaaja kutsumaan sinut.",
-      "2": "Liity Discord-palvelimeemme satunnaisia arvontoja varten.",
-      "3": "Seuraa X-tiliämme satunnaisia arvontoja varten."
-    },
-    "earlyAccess": "Follow on tällä hetkellä varhaisessa käytössä ja vaatii kutsukoodin.",
-    "earlyAccessMessage": "😰 Pahoittelut, Follow on tällä hetkellä varhaisessa käytössä ja vaatii kutsukoodin.",
-    "generateButton": "Luo uusi koodi",
-    "generateCost": "Voit käyttää {{INVITATION_PRICE}} Poweria luodaksesi kutsukoodin ystävillesi.",
-    "getCodeMessage": "Voit saada kutsukoodin seuraavilla tavoilla:",
-    "title": "Kutsukoodi"
-  },
-  "login": {
-    "backToWebApp": "Takaisin verkkosovellukseen",
-    "continueWithGitHub": "Jatka GitHubilla",
-    "continueWithGoogle": "Jatka Googlella",
-    "logInTo": "Kirjaudu sisään ",
-    "openApp": "Avaa sovellus",
-    "redirecting": "Uudelleenohjataan",
-    "welcomeTo": "Tervetuloa "
-  },
-  "redirect": {
-    "continueInBrowser": "Jatka selaimessa",
-    "instruction": "Nyt on aika avata {{APP_NAME}} ja sulkea tämä sivu turvallisesti.",
-    "openApp": "Avaa {{APP_NAME}}",
-    "successMessage": "Olet onnistuneesti yhdistänyt {{APP_NAME}}-tilisi."
-  }
+  "feed.followsAndReads": "{{subscriptionCount}} {{subscriptionNoun}} ja {{readCount}} {{readNoun}} palvelussa {{appName}}",
+  "feed.read_one": "lue",
+  "feed.read_other": "lukee",
+  "header.app": "Sovellus",
+  "header.download": "Lataa",
+  "invitation.activate": "Aktivoi",
+  "invitation.codeOptions.1": "Etsi mikä tahansa alpha-testaaja kutsumaan sinut.",
+  "invitation.codeOptions.2": "Liity Discord-palvelimeemme satunnaisia arvontoja varten.",
+  "invitation.codeOptions.3": "Seuraa X-tiliämme satunnaisia arvontoja varten.",
+  "invitation.earlyAccess": "Follow on tällä hetkellä varhaisessa käytössä ja vaatii kutsukoodin.",
+  "invitation.earlyAccessMessage": "😰 Pahoittelut, Follow on tällä hetkellä varhaisessa käytössä ja vaatii kutsukoodin.",
+  "invitation.generateButton": "Luo uusi koodi",
+  "invitation.generateCost": "Voit käyttää {{INVITATION_PRICE}} Poweria luodaksesi kutsukoodin ystävillesi.",
+  "invitation.getCodeMessage": "Voit saada kutsukoodin seuraavilla tavoilla:",
+  "invitation.title": "Kutsukoodi",
+  "login.backToWebApp": "Takaisin verkkosovellukseen",
+  "login.continueWithGitHub": "Jatka GitHubilla",
+  "login.continueWithGoogle": "Jatka Googlella",
+  "login.logInTo": "Kirjaudu sisään ",
+  "login.openApp": "Avaa sovellus",
+  "login.redirecting": "Uudelleenohjataan",
+  "login.welcomeTo": "Tervetuloa ",
+  "redirect.continueInBrowser": "Jatka selaimessa",
+  "redirect.instruction": "Nyt on aika avata {{app_name}} ja sulkea tämä sivu turvallisesti.",
+  "redirect.openApp": "Avaa {{app_name}}",
+  "redirect.successMessage": "Olet onnistuneesti yhdistänyt {{app_name}}-tilisi."
 }

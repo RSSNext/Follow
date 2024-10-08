@@ -20,6 +20,8 @@
   --fo-text-primary-hover: 0 0% 14.9%;
 
   --fo-button-hover: theme(colors.zinc.500/0.1);
+  --fo-image-placeholder: theme(colors.zinc.100);
+  --fo-text-placeholder: theme(colors.zinc.400);
 }
 
 [data-theme="dark"] {
@@ -44,6 +46,8 @@
   --fo-text-primary-hover: 240 4.9% 83.9%;
 
   --fo-button-hover: theme(colors.neutral.400/0.15);
+  --fo-image-placeholder: theme(colors.neutral.800);
+  --fo-text-placeholder: theme(colors.zinc.500);
 }
 
 [data-theme="light"] {

@@ -4,10 +4,11 @@ import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 import { Button } from "~/components/ui/button"
+import { LoadingWithIcon } from "~/components/ui/loading"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
-import type { ActionEntryField, ActionFeedField, ActionOperation, ActionsResponse } from "~/models"
+import type { ActionsInput, ActionsResponse } from "~/models"
 import { ActionCard } from "~/modules/settings/action-card"
 import { SettingsTitle } from "~/modules/settings/title"
 import { defineSettingPageData } from "~/modules/settings/utils"
@@ -21,28 +22,6 @@ export const loader = defineSettingPageData({
   name: "titles.actions",
   priority,
 })
-
-type ActionsInput = {
-  name: string
-  condition: {
-    field?: ActionFeedField
-    operator?: ActionOperation
-    value?: string
-  }[]
-  result: {
-    translation?: string
-    summary?: boolean
-    rewriteRules?: {
-      from: string
-      to: string
-    }[]
-    blockRules?: {
-      field?: ActionEntryField
-      operator?: ActionOperation
-      value?: string | number
-    }[]
-  }
-}[]
 
 export function Component() {
   const { t } = useTranslation("settings")
@@ -63,6 +42,7 @@ export function Component() {
         action.result.blockRules = action.result.blockRules?.filter(
           (r) => r.field && r.operator && r.value,
         )
+        action.result.webhooks = action.result.webhooks?.filter((w) => w)
       })
       await apiClient.actions.$put({
         json: {
@@ -78,6 +58,18 @@ export function Component() {
       toastFetchError(error)
     },
   })
+
+  if (actions.isPending) {
+    return (
+      <div className="center absolute inset-0 flex">
+        <LoadingWithIcon
+          icon={<i className={iconName} />}
+          size="large"
+          className="-translate-y-full"
+        />
+      </div>
+    )
+  }
 
   return (
     <>

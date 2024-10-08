@@ -191,7 +191,7 @@ export const UserProfileModalContent: FC<{
         className={cn(
           "relative flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
           variant === "drawer"
-            ? "shadow-drawer-left h-full w-[60ch] max-w-full"
+            ? "shadow-drawer-to-left h-full w-[60ch] max-w-full"
             : "h-[80vh] w-[800px] max-w-full shadow lg:max-h-[calc(100vh-10rem)]",
         )}
       >
@@ -235,7 +235,7 @@ export const UserProfileModalContent: FC<{
           <Fragment>
             <div
               className={cn(
-                "center m-12 mb-4 flex shrink-0 flex-col",
+                "center m-12 mb-4 flex shrink-0 flex-col f-motion-reduce:duration-700",
                 isHeaderSimple ? "mt-3 flex-row" : "flex-col",
               )}
             >
@@ -243,7 +243,7 @@ export const UserProfileModalContent: FC<{
                 asChild
                 className={cn("aspect-square", isHeaderSimple ? "size-12" : "size-16")}
               >
-                <m.span layout>
+                <m.span layout transition={{ duration: 0.35 }}>
                   <AvatarImage
                     className="duration-200 animate-in fade-in-0"
                     asChild
@@ -256,6 +256,7 @@ export const UserProfileModalContent: FC<{
               </Avatar>
               <m.div
                 layout
+                transition={{ duration: 0.35 }}
                 className={cn(
                   "flex cursor-text select-text flex-col items-center",
                   isHeaderSimple ? "ml-8 items-start" : "",
@@ -328,7 +329,7 @@ const SubscriptionGroup: FC<{
     <div>
       <button
         onClick={() => setIsOpened(!isOpened)}
-        className="mb-2 flex w-full items-center justify-between text-2xl font-bold"
+        className="mb-2 mt-8 flex w-full items-center justify-between text-2xl font-bold"
         type="button"
       >
         <h3>{category}</h3>
@@ -371,7 +372,7 @@ const SubscriptionItem: FC<{
   return (
     <m.div
       exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.2 } }}
-      className={cn("group relative", isLoose ? "border-b py-5" : "py-2")}
+      className={cn("group relative", isLoose ? "border-b py-5 last:border-b-0" : "py-2")}
       data-feed-id={subscription.feedId}
     >
       <a

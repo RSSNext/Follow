@@ -29,7 +29,7 @@
   "login.signOut": "로그아웃",
   "login.welcomeTo": "환영합니다",
   "redirect.continueInBrowser": "브라우저에서 계속",
-  "redirect.instruction": "{{APP_NAME}}을 (를) 열고 이 페이지를 안전하게 닫을 시간입니다.",
-  "redirect.openApp": "{{APP_NAME}} 열기",
-  "redirect.successMessage": "{{APP_NAME}} 계정에 성공적으로 연결되었습니다."
+  "redirect.instruction": "{{app_name}}을 (를) 열고 이 페이지를 안전하게 닫을 시간입니다.",
+  "redirect.openApp": "{{app_name}} 열기",
+  "redirect.successMessage": "{{app_name}} 계정에 성공적으로 연결되었습니다."
 }

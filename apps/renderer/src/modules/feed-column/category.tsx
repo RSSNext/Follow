@@ -10,36 +10,32 @@ import { LoadingCircle } from "~/components/ui/loading"
 import { ROUTE_FEED_IN_FOLDER, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { useAnyPointDown, useAuthQuery, useInputComposition } from "~/hooks/common"
+import { useAnyPointDown, useInputComposition } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
-import { Queries } from "~/queries"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
+import { useListByView } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
+import { ListCreationModalContent } from "../settings/tabs/lists/modals"
 import { useFeedListSortSelector } from "./atom"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { FeedItem } from "./item"
+import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
 type FeedId = string
 interface FeedCategoryProps {
   data: FeedId[]
   view?: number
-  expansion: boolean
-  showUnreadCount?: boolean
+  categoryOpenStateData: Record<string, boolean>
 }
 
-function FeedCategoryImpl({
-  data: ids,
-  view,
-  expansion,
-  showUnreadCount = true,
-}: FeedCategoryProps) {
+function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCategoryProps) {
   const { t } = useTranslation()
 
   const sortByUnreadFeedList = useFeedUnreadStore((state) =>
@@ -52,14 +48,18 @@ function FeedCategoryImpl({
   const folderName = subscription?.category || subscription.defaultCategory
 
   const showCollapse = sortByUnreadFeedList.length > 1 || subscription?.category
-  const [open, setOpen] = useState(!showCollapse)
+
+  const [open, setOpen] = useState(() => {
+    if (!showCollapse) return true
+    if (folderName && typeof categoryOpenStateData[folderName] === "boolean") {
+      return categoryOpenStateData[folderName]
+    }
+    return false
+  })
 
   const shouldOpen = useRouteParamsSelector(
     (s) => typeof s.feedId === "string" && ids.includes(s.feedId),
   )
-
-  const itemsRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     if (shouldOpen) {
       setOpen(true)
@@ -73,17 +73,30 @@ function FeedCategoryImpl({
       })
     }
   }, [shouldOpen])
+  const expansion = folderName ? categoryOpenStateData[folderName] : true
+
   useEffect(() => {
     if (showCollapse) {
       setOpen(expansion)
     }
   }, [expansion])
 
+  const itemsRef = useRef<HTMLDivElement>(null)
+
+  const toggleCategoryOpenState = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    if (!isCategoryEditing) {
+      setCategoryActive()
+    }
+    if (view !== undefined && folderName) {
+      subscriptionActions.toggleCategoryOpenState(view, folderName)
+    }
+  }
+
   const setCategoryActive = () => {
     if (view !== undefined) {
       navigate({
         entryId: null,
-        // TODO joint feedId is too long, need to be optimized
         folderName,
         view,
       })
@@ -116,16 +129,18 @@ function FeedCategoryImpl({
   })
   const isCategoryIsWaiting = isChangePending
 
-  const listList = useAuthQuery(Queries.lists.list())
   const addMutation = useAddFeedToFeedList()
+
+  const listList = useListByView(view!)
 
   return (
     <div tabIndex={-1} onClick={stopPropagation}>
       {!!showCollapse && (
         <div
+          data-active={isActive || isContextMenuOpen}
           className={cn(
-            "flex w-full cursor-menu items-center justify-between rounded-md px-2.5 transition-colors",
-            (isActive || isContextMenuOpen) && "bg-native-active",
+            "flex w-full cursor-menu items-center justify-between rounded-md px-2.5",
+            feedColumnStyles.item,
           )}
           onClick={(e) => {
             e.stopPropagation()
@@ -150,28 +165,43 @@ function FeedCategoryImpl({
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-                  enabled: !!listList.data?.length,
-                  submenu: listList.data?.map((list) => ({
-                    label: list.title || "",
-                    type: "text",
-                    click() {
-                      return addMutation.mutate({
-                        feedIds: ids,
-                        listId: list.id,
-                      })
-                    },
-                  })),
+                  // @ts-expect-error
+                  submenu: listList
+                    ?.map((list) => ({
+                      label: list.title || "",
+                      type: "text",
+                      click() {
+                        return addMutation.mutate({
+                          feedIds: ids,
+                          listId: list.id,
+                        })
+                      },
+                    }))
+                    .concat([
+                      // @ts-expect-error
+                      { type: "separator" as const },
+                      {
+                        label: t("sidebar.feed_actions.create_list"),
+                        type: "text" as const,
+
+                        click() {
+                          present({
+                            title: t("sidebar.feed_actions.create_list"),
+                            content: () => <ListCreationModalContent />,
+                          })
+                        },
+                      },
+                    ]),
                 },
                 { type: "separator" },
                 {
                   type: "text",
-                  enabled: !!(folderName && typeof view === "number"),
                   label: t("sidebar.feed_column.context_menu.change_to_other_view"),
                   submenu: views
                     .filter((v) => v.view !== view)
                     .map((v) => ({
                       label: t(v.name),
-                      type: "text",
+                      type: "text" as const,
                       shortcut: (v.view + 1).toString(),
                       icon: v.icon,
                       click() {
@@ -206,11 +236,7 @@ function FeedCategoryImpl({
           <div className="flex w-full min-w-0 items-center">
             <button
               type="button"
-              onClick={(e) => {
-                if (isCategoryEditing) return
-                e.stopPropagation()
-                setOpen(!open)
-              }}
+              onClick={toggleCategoryOpenState}
               data-state={open ? "open" : "close"}
               className={cn(
                 "flex h-8 items-center [&_.i-mgc-right-cute-fi]:data-[state=open]:rotate-90",
@@ -241,14 +267,7 @@ function FeedCategoryImpl({
               />
             ) : (
               <Fragment>
-                <span
-                  className={cn(
-                    "grow truncate",
-                    !showUnreadCount && (unread ? "font-bold" : "font-medium opacity-70"),
-                  )}
-                >
-                  {folderName}
-                </span>
+                <span className="grow truncate">{folderName}</span>
 
                 <UnreadNumber unread={unread} className="ml-2" />
               </Fragment>
@@ -280,7 +299,6 @@ function FeedCategoryImpl({
               ids={ids}
               showCollapse={showCollapse as boolean}
               view={view as FeedViewType}
-              showUnreadCount={showUnreadCount}
             />
           </m.div>
         )}
@@ -368,7 +386,6 @@ const RenameCategoryForm: FC<{
 
 type SortListProps = {
   ids: string[]
-  showUnreadCount?: boolean
   view: FeedViewType
   showCollapse: boolean
 }
@@ -389,7 +406,7 @@ const SortedFeedItems = (props: SortListProps) => {
 }
 
 const SortByAlphabeticalList = (props: SortListProps) => {
-  const { ids, showUnreadCount, showCollapse, view } = props
+  const { ids, showCollapse, view } = props
   const isDesc = useFeedListSortSelector((s) => s.order === "desc")
   const sortedFeedList = useFeedStore((state) => {
     const res = ids.sort((a, b) => {
@@ -407,7 +424,6 @@ const SortByAlphabeticalList = (props: SortListProps) => {
     <Fragment>
       {sortedFeedList.map((feedId) => (
         <FeedItem
-          showUnreadCount={showUnreadCount}
           key={feedId}
           feedId={feedId}
           view={view}
@@ -417,7 +433,7 @@ const SortByAlphabeticalList = (props: SortListProps) => {
     </Fragment>
   )
 }
-const SortByUnreadList = ({ ids, showUnreadCount, showCollapse, view }: SortListProps) => {
+const SortByUnreadList = ({ ids, showCollapse, view }: SortListProps) => {
   const isDesc = useFeedListSortSelector((s) => s.order === "desc")
   const sortByUnreadFeedList = useFeedUnreadStore((state) => {
     const res = ids.sort((a, b) => (state.data[b] || 0) - (state.data[a] || 0))
@@ -428,7 +444,6 @@ const SortByUnreadList = ({ ids, showUnreadCount, showCollapse, view }: SortList
     <Fragment>
       {sortByUnreadFeedList.map((feedId) => (
         <FeedItem
-          showUnreadCount={showUnreadCount}
           key={feedId}
           feedId={feedId}
           view={view}

@@ -13,6 +13,12 @@ import {
   setReadabilityStatus,
 } from "~/atoms/readability"
 import { useIntegrationSettingKey } from "~/atoms/settings/integration"
+import {
+  setShowSourceContent,
+  toggleShowSourceContent,
+  useShowSourceContent,
+  useSourceContentModal,
+} from "~/atoms/source-content"
 import { whoami } from "~/atoms/user"
 import { mountLottie } from "~/components/ui/lottie-container"
 import {
@@ -23,6 +29,7 @@ import {
 import { shortcuts } from "~/constants/shortcuts"
 import { tipcClient } from "~/lib/client"
 import { nextFrame } from "~/lib/dom"
+import { FeedViewType } from "~/lib/enum"
 import { getOS } from "~/lib/utils"
 import StarAnimationUri from "~/lottie/star.lottie?url"
 import type { CombinedEntryModel } from "~/models"
@@ -30,6 +37,8 @@ import { useTipModal } from "~/modules/wallet/hooks"
 import type { FlatEntryModel } from "~/store/entry"
 import { entryActions } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
+
+import { navigateEntry } from "./useNavigateEntry"
 
 const absoluteStarAnimationUri = new URL(StarAnimationUri, import.meta.url).href
 
@@ -97,12 +106,22 @@ export const useUnCollect = (entry: Nullable<CombinedEntryModel>) => {
 export const useRead = () =>
   useMutation({
     mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry && entryActions.markRead(entry.feeds.id, entry.entries.id, true),
+      entry &&
+      entryActions.markRead({
+        feedId: entry.feeds.id,
+        entryId: entry.entries.id,
+        read: true,
+      }),
   })
 export const useUnread = () =>
   useMutation({
     mutationFn: async (entry: Nullable<CombinedEntryModel>) =>
-      entry && entryActions.markRead(entry.feeds.id, entry.entries.id, false),
+      entry &&
+      entryActions.markRead({
+        feedId: entry.feeds.id,
+        entryId: entry.entries.id,
+        read: false,
+      }),
   })
 
 export const useEntryActions = ({
@@ -147,6 +166,9 @@ export const useEntryActions = ({
     feedId: populatedEntry?.feeds.id ?? undefined,
     entryId: populatedEntry?.entries.id ?? undefined,
   })
+
+  const showSourceContent = useShowSourceContent()
+  const showSourceContentModal = useSourceContentModal()
 
   const collect = useCollect(populatedEntry)
   const uncollect = useUnCollect(populatedEntry)
@@ -339,13 +361,44 @@ export const useEntryActions = ({
       },
       {
         key: "openInBrowser",
-        name: t("entry_actions.open_in_browser"),
+        name: t("entry_actions.open_in_browser", {
+          which: t(window.electron ? "words.browser" : "words.newTab"),
+        }),
         shortcut: shortcuts.entry.openInBrowser.key,
         className: "i-mgc-world-2-cute-re",
-        hide: !populatedEntry.entries.url,
+        hide: type === "toolbar" || !populatedEntry.entries.url,
         onClick: () => {
           if (!populatedEntry.entries.url) return
           window.open(populatedEntry.entries.url, "_blank")
+        },
+      },
+      {
+        key: "viewSourceContent",
+        name: t("entry_actions.view_source_content"),
+        // shortcut: shortcuts.entry.openInBrowser.key,
+        className: !showSourceContent ? "i-mgc-world-2-cute-re" : tw`i-mgc-world-2-cute-fi`,
+        hide: !populatedEntry.entries.url,
+        active: showSourceContent,
+        onClick: () => {
+          if (!populatedEntry.entries.url) return
+          const viewPreviewInModal = [
+            FeedViewType.SocialMedia,
+            FeedViewType.Videos,
+            FeedViewType.Pictures,
+          ].includes(view!)
+          if (viewPreviewInModal) {
+            showSourceContentModal({
+              title: populatedEntry.entries.title ?? undefined,
+              src: populatedEntry.entries.url,
+            })
+            return
+          }
+          if (type === "toolbar") {
+            toggleShowSourceContent()
+            return
+          }
+          navigateEntry({ entryId: populatedEntry.entries.id })
+          setShowSourceContent(true)
         },
       },
       {
@@ -404,9 +457,12 @@ export const useEntryActions = ({
     instapaperPassword,
     instapaperUsername,
     feed?.ownerUserId,
+    type,
+    showSourceContent,
     openTipModal,
     collect,
     uncollect,
+    showSourceContentModal,
     read,
     unread,
   ])

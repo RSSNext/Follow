@@ -7,23 +7,29 @@ import { entryHistoryActions } from "~/store/entry-history/action"
 
 export const entries = {
   entries: ({
-    id,
+    feedId,
+    inboxId,
+    listId,
     view,
     read,
     limit,
     isArchived,
   }: {
-    id?: number | string
+    feedId?: number | string
+    inboxId?: number | string
+    listId?: number | string
     view?: number
     read?: boolean
     limit?: number
     isArchived?: boolean
   }) =>
     defineQuery(
-      ["entries", id, view, read, limit],
+      ["entries", inboxId || listId || feedId, view, read, limit],
       async ({ pageParam }) =>
         entryActions.fetchEntries({
-          id,
+          feedId,
+          inboxId,
+          listId,
           view,
           read,
           limit,
@@ -31,12 +37,16 @@ export const entries = {
           isArchived,
         }),
       {
-        rootKey: ["entries", id],
+        rootKey: ["entries", inboxId || listId || feedId],
         structuralSharing: false,
       },
     ),
   byId: (id: string) =>
     defineQuery(["entry", id], async () => entryActions.fetchEntryById(id), {
+      rootKey: ["entries"],
+    }),
+  byInboxId: (id: string) =>
+    defineQuery(["entry", id], async () => entryActions.fetchInboxEntryById(id), {
       rootKey: ["entries"],
     }),
   preview: (id: string) =>
@@ -57,22 +67,28 @@ export const entries = {
     ),
 
   checkNew: ({
-    id,
+    feedId,
+    inboxId,
+    listId,
     view,
     read,
     fetchedTime,
   }: {
-    id?: number | string
+    feedId?: number | string
+    inboxId?: number | string
+    listId?: number | string
     view?: number
     read?: boolean
     fetchedTime: number
   }) =>
     defineQuery(
-      ["entry-checkNew", id, view, read, fetchedTime],
+      ["entry-checkNew", inboxId || listId || feedId, view, read, fetchedTime],
       async () => {
         const query = {
           ...getEntriesParams({
-            id,
+            feedId,
+            inboxId,
+            listId,
             view,
           }),
           read,
@@ -95,7 +111,7 @@ export const entries = {
       },
 
       {
-        rootKey: ["entry-checkNew", id],
+        rootKey: ["entry-checkNew", inboxId || listId || feedId],
       },
     ),
 
@@ -110,22 +126,24 @@ export const entries = {
 }
 
 export const useEntries = ({
-  id,
+  feedId,
+  inboxId,
+  listId,
   view,
   read,
   isArchived,
-  isList,
 }: {
-  id?: number | string
+  feedId?: number | string
+  inboxId?: number | string
+  listId?: number | string
   view?: number
   read?: boolean
   isArchived?: boolean
-  isList?: boolean
 }) =>
-  useAuthInfiniteQuery(entries.entries({ id, view, read, isArchived }), {
-    enabled: id !== undefined,
+  useAuthInfiniteQuery(entries.entries({ feedId, inboxId, listId, view, read, isArchived }), {
+    enabled: feedId !== undefined || inboxId !== undefined || listId !== undefined,
     getNextPageParam: (lastPage) =>
-      isList
+      inboxId
         ? lastPage.data?.at(-1)?.entries.insertedAt
         : lastPage.data?.at(-1)?.entries.publishedAt,
     initialPageParam: undefined,

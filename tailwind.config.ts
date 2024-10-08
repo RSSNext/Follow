@@ -11,7 +11,13 @@ import resolveConfig from "tailwindcss/resolveConfig"
 /** @type {import('tailwindcss').Config} */
 export default resolveConfig({
   darkMode: ["class", '[data-theme="dark"]'],
-  content: ["./apps/renderer/**/*.{ts,tsx}", "./apps/web/**/*.{ts,tsx}"],
+  content: [
+    "./apps/renderer/src/**/*.{ts,tsx}",
+    "./apps/web/src/**/*.{ts,tsx}",
+
+    "./apps/renderer/index.html",
+    "./apps/web/index.html",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -23,6 +29,9 @@ export default resolveConfig({
     },
 
     extend: {
+      spacing: {
+        "safe-inset-top": "var(--fo-window-padding-top, 0)",
+      },
       fontFamily: {
         theme: "var(--fo-font-family)",
         default: "SN pro, sans-serif, system-ui",
@@ -36,6 +45,9 @@ export default resolveConfig({
         radio: "var(--cursor-radio)",
         switch: "var(--cursor-switch)",
         card: "var(--cursor-card)",
+      },
+      width: {
+        "feed-col": "var(--fo-feed-col-w)",
       },
       colors: {
         border: "hsl(var(--border) / <alpha-value>)",
@@ -105,6 +117,11 @@ export default resolveConfig({
           button: {
             hover: "var(--fo-button-hover)",
           },
+
+          placeholder: {
+            text: "var(--fo-text-placeholder)",
+            image: "var(--fo-image-placeholder)",
+          },
         },
       },
       borderRadius: {
@@ -139,6 +156,31 @@ export default resolveConfig({
       addVariant("f-motion-reduce", '[data-motion-reduce="true"] &')
       addVariant("group-motion-reduce", ':merge(.group)[data-motion-reduce="true"] &')
       addVariant("peer-motion-reduce", ':merge(.peer)[data-motion-reduce="true"] ~ &')
+    }),
+    plugin(({ addUtilities, matchUtilities, theme }) => {
+      addUtilities({
+        ".safe-inset-top": {
+          top: "var(--fo-window-padding-top, 0)",
+        },
+      })
+
+      const safeInsetTopVariants = {}
+      for (let i = 1; i <= 16; i++) {
+        safeInsetTopVariants[`.safe-inset-top-${i}`] = {
+          top: `calc(var(--fo-window-padding-top, 0px) + ${theme(`spacing.${i}`)})`,
+        }
+      }
+      addUtilities(safeInsetTopVariants)
+
+      // Add arbitrary value support
+      matchUtilities(
+        {
+          "safe-inset-top": (value) => ({
+            top: `calc(var(--fo-window-padding-top, 0px) + ${value})`,
+          }),
+        },
+        { values: theme("spacing") },
+      )
     }),
   ],
 })

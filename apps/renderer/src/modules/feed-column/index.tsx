@@ -155,15 +155,13 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
         {views.map((item, index) => (
           <ActionButton
             key={item.name}
-            // TODO: fix this type error
             tooltip={t(item.name)}
             shortcut={`${index + 1}`}
             className={cn(
               active === index && item.className,
-              "flex flex-col items-center gap-1 text-xl",
-              ELECTRON ? "hover:!bg-theme-vibrancyBg" : "",
-              showSidebarUnreadCount && "h-11",
-              active === index && useHotkeysSwitch ? "bg-zinc-500/30" : "",
+              "flex h-11 flex-col items-center gap-1 text-xl",
+              ELECTRON ? "hover:!bg-theme-item-hover" : "",
+              active === index && useHotkeysSwitch ? "bg-theme-item-active" : "",
             )}
             onClick={(e) => {
               setActive(index)
@@ -172,7 +170,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
             }}
           >
             {item.icon}
-            {showSidebarUnreadCount && (
+            {showSidebarUnreadCount ? (
               <div className="text-[0.625rem] font-medium leading-none">
                 {unreadByView[index] > 99 ? (
                   <span className="-mr-0.5">99+</span>
@@ -180,6 +178,17 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
                   unreadByView[index]
                 )}
               </div>
+            ) : (
+              <i
+                className={cn(
+                  "i-mgc-round-cute-fi text-[0.25rem]",
+                  unreadByView[index]
+                    ? active === index
+                      ? "opacity-100"
+                      : "opacity-60"
+                    : "opacity-0",
+                )}
+              />
             )}
           </ActionButton>
         ))}
@@ -187,10 +196,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       <div className="relative flex size-full overflow-hidden" ref={carouselRef}>
         <SwipeWrapper active={active}>
           {views.map((item, index) => (
-            <section
-              key={item.name}
-              className="h-full w-[var(--fo-feed-col-w)] shrink-0 snap-center"
-            >
+            <section key={item.name} className="h-full w-feed-col shrink-0 snap-center">
               <FeedList className="flex size-full flex-col text-sm" view={index} />
             </section>
           ))}

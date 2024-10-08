@@ -186,8 +186,8 @@ const ElectronAdditionActions = window.electron
           name: t("entry_content.header.readability"),
           className: cn(
             isInReadability(entryReadabilityStatus)
-              ? `i-mgc-sparkles-2-filled`
-              : `i-mgc-sparkles-2-cute-re`,
+              ? `i-mgc-docment-cute-fi`
+              : `i-mgc-docment-cute-re`,
             entryReadabilityStatus === ReadabilityStatus.WAITING ? `animate-pulse` : "",
           ),
           key: "readability",

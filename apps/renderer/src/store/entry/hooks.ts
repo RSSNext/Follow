@@ -9,8 +9,21 @@ import { getEntryIsInView, getFilteredFeedIds } from "./helper"
 import { useEntryStore } from "./store"
 import type { EntryFilter, FlatEntryModel } from "./types"
 
-export const useEntry = (entryId: Nullable<string>): FlatEntryModel | null =>
-  useEntryStore(useShallow((state) => (entryId ? state.flatMapEntries[entryId] : null)))
+export const useEntry = <T = FlatEntryModel>(
+  entryId: Nullable<string>,
+  selector?: (state: FlatEntryModel) => T,
+): T | null =>
+  useEntryStore(
+    useShallow((state) => {
+      if (!entryId) return null
+      const data = state.flatMapEntries[entryId]
+
+      if (!data) return null
+
+      return selector ? selector(data) : (data as T)
+    }),
+  )
+
 // feedId: single feedId, multiple feedId joint by `,`, and `collections`
 export const useEntryIdsByFeedId = (feedId: string, filter?: EntryFilter) =>
   useEntryStore(

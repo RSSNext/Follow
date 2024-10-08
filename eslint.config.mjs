@@ -1,9 +1,9 @@
 // @ts-check
 import { defineConfig } from "eslint-config-hyoban"
 
-import checkI18nJson from "./plugins/eslint-check-i18n-json.js"
-import noDebug from "./plugins/eslint-no-debug.js"
-import recursiveSort from "./plugins/eslint-recursive-sort.js"
+import checkI18nJson from "./plugins/eslint/eslint-check-i18n-json.js"
+import noDebug from "./plugins/eslint/eslint-no-debug.js"
+import recursiveSort from "./plugins/eslint/eslint-recursive-sort.js"
 
 export default defineConfig(
   {
@@ -51,6 +51,7 @@ export default defineConfig(
       "@stylistic/jsx-self-closing-comp": "error",
     },
   },
+  // @ts-expect-error
   {
     files: ["locales/**/*.json"],
     plugins: {
@@ -60,6 +61,7 @@ export default defineConfig(
     rules: {
       "recursive-sort/recursive-sort": "error",
       "check-i18n-json/valid-i18n-keys": "error",
+      "check-i18n-json/no-extra-keys": "error",
     },
   },
 )

@@ -33,6 +33,7 @@ export interface UISettings {
   // view
   pictureViewMasonry: boolean
   pictureViewFilterNoImage: boolean
+  wideMode: boolean
 
   // tts
   voice: string

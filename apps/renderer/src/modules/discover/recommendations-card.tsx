@@ -25,11 +25,20 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
       <CardContent className="p-5 pt-0">
         <ul className="space-y-1 text-sm text-muted-foreground">
           {Object.keys(data.routes).map((route) => (
-            <li key={route} className="duration-200 hover:text-theme-foreground-hover">
+            <li
+              key={route}
+              className="hover:text-theme-foreground-hover"
+              onClick={(e) => {
+                ;(e.target as HTMLElement).querySelector("button")?.click()
+              }}
+              tabIndex={-1}
+            >
               <button
                 type="button"
+                className="rounded p-0.5 duration-200 hover:bg-muted hover:px-1.5"
                 onClick={() => {
                   present({
+                    id: `recommendation-content-${route}`,
                     content: () => (
                       <RecommendationContent routePrefix={routePrefix} route={data.routes[route]} />
                     ),

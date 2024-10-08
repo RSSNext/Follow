@@ -3,15 +3,18 @@ import { omit } from "lodash-es"
 import { parse } from "tldts"
 
 import { whoami } from "~/atoms/user"
+import { ROUTE_FEED_IN_LIST } from "~/constants"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedViewType } from "~/lib/enum"
 import { capitalizeFirstLetter } from "~/lib/utils"
-import type { SubscriptionModel } from "~/models"
+import type { FeedModel, InboxModel, ListModelPoplutedFeeds, SubscriptionModel } from "~/models"
 import { SubscriptionService } from "~/services"
 
 import { entryActions } from "../entry"
 import { feedActions, getFeedById } from "../feed"
+import { inboxActions } from "../inbox"
+import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 
@@ -31,6 +34,11 @@ interface SubscriptionState {
    * Value: FeedId[]
    */
   feedIdByView: Record<FeedViewType, FeedId[]>
+  /**
+   * Key: FeedViewType
+   * Value: Record<string, boolean>
+   */
+  categoryOpenStateByView: Record<FeedViewType, Record<string, boolean>>
 }
 
 function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
@@ -64,10 +72,19 @@ const emptyDataIdByView: Record<FeedViewType, FeedId[]> = {
   [FeedViewType.SocialMedia]: [],
   [FeedViewType.Videos]: [],
 }
+const emptyCategoryOpenStateByView: Record<FeedViewType, Record<string, boolean>> = {
+  [FeedViewType.Articles]: {},
+  [FeedViewType.Audios]: {},
+  [FeedViewType.Notifications]: {},
+  [FeedViewType.Pictures]: {},
+  [FeedViewType.SocialMedia]: {},
+  [FeedViewType.Videos]: {},
+}
 
 export const useSubscriptionStore = createZustandStore<SubscriptionState>("subscription")(() => ({
   data: {},
   feedIdByView: { ...emptyDataIdByView },
+  categoryOpenStateByView: { ...emptyCategoryOpenStateByView },
 }))
 
 const set = useSubscriptionStore.setState
@@ -100,8 +117,25 @@ class SubscriptionActions {
     }
 
     const transformedData = morphResponseData(res.data)
+
     this.upsertMany(transformedData)
-    feedActions.upsertMany(res.data.map((s) => ("feeds" in s ? s.feeds : s.lists)))
+
+    const feeds = [] as FeedModel[]
+    const lists = [] as ListModelPoplutedFeeds[]
+    const inboxes = [] as InboxModel[]
+    for (const subscription of res.data) {
+      if ("feeds" in subscription) {
+        feeds.push(subscription.feeds)
+      } else if ("lists" in subscription) {
+        lists.push(subscription.lists)
+      } else if ("inboxes" in subscription) {
+        inboxes.push(subscription.inboxes)
+      }
+    }
+    this.updateCategoryOpenState(transformedData.filter((s) => s.category || s.defaultCategory))
+    feedActions.upsertMany(feeds)
+    listActions.upsertMany(lists)
+    inboxActions.upsertMany(inboxes)
 
     return res.data
   }
@@ -113,11 +147,54 @@ class SubscriptionActions {
     set((state) =>
       produce(state, (state) => {
         subscriptions.forEach((subscription) => {
-          state.data[subscription.feedId] = omit(subscription, "feeds")
+          state.data[subscription.feedId] = omit(subscription, [
+            "feeds",
+            "lists",
+            "inboxes",
+          ]) as SubscriptionFlatModel
           state.feedIdByView[subscription.view].push(subscription.feedId)
-
           return state
         })
+      }),
+    )
+  }
+
+  updateCategoryOpenState(subscriptions: SubscriptionFlatModel[]) {
+    set((state) =>
+      produce(state, (state) => {
+        subscriptions.forEach((subscription) => {
+          const folderName = subscription.category || subscription.defaultCategory
+          state.categoryOpenStateByView[subscription.view][folderName] =
+            state.categoryOpenStateByView[subscription.view][folderName] || false
+          return state
+        })
+      }),
+    )
+  }
+
+  toggleCategoryOpenState(view: FeedViewType, category: string) {
+    set((state) =>
+      produce(state, (state) => {
+        state.categoryOpenStateByView[view][category] =
+          !state.categoryOpenStateByView[view][category]
+      }),
+    )
+  }
+
+  changeCategoryOpenState(view: FeedViewType, category: string, status: boolean) {
+    set((state) =>
+      produce(state, (state) => {
+        state.categoryOpenStateByView[view][category] = status
+      }),
+    )
+  }
+
+  expandCategoryOpenStateByView(view: FeedViewType, isOpen: boolean) {
+    set((state) =>
+      produce(state, (state) => {
+        for (const category in state.categoryOpenStateByView[view]) {
+          state.categoryOpenStateByView[view][category] = isOpen
+        }
       }),
     )
   }
@@ -149,11 +226,13 @@ class SubscriptionActions {
 
   async markReadByFeedIds({
     feedIds,
+    inboxId,
     view,
     filter,
     listId,
   }: {
     feedIds?: string[]
+    inboxId?: string
     view?: FeedViewType
     filter?: MarkReadFilter
     listId?: string
@@ -168,15 +247,22 @@ class SubscriptionActions {
               ? {
                   listId,
                 }
-              : {
-                  feedIdList: stableFeedIds,
-                }),
+              : inboxId
+                ? {
+                    inboxId,
+                  }
+                : {
+                    feedIdList: stableFeedIds,
+                  }),
             ...filter,
           },
         }),
       async () => {
         if (listId) {
           feedUnreadActions.updateByFeedId(listId, 0)
+        } else if (inboxId) {
+          feedUnreadActions.updateByFeedId(inboxId, 0)
+          entryActions.patchManyByFeedId(inboxId, { read: true }, filter)
         } else {
           for (const feedId of stableFeedIds) {
             // We can not process this logic in local, so skip it. and then we will fetch the unread count from server.
@@ -195,6 +281,7 @@ class SubscriptionActions {
     set({
       data: {},
       feedIdByView: { ...emptyDataIdByView },
+      categoryOpenStateByView: { ...emptyCategoryOpenStateByView },
     })
   }
 
@@ -373,7 +460,7 @@ export const getSubscriptionByFeedId = (feedId: FeedId) => {
 
 export const isListSubscription = (feedId?: FeedId) => {
   if (!feedId) return false
-  const subscription = getSubscriptionByFeedId(feedId)
+  const subscription = getSubscriptionByFeedId(feedId.replace(ROUTE_FEED_IN_LIST, ""))
   if (!subscription) return false
   return "listId" in subscription && !!subscription.listId
 }

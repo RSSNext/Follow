@@ -4,13 +4,14 @@ import { useTranslation } from "react-i18next"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { useGeneralSettingKey } from "~/atoms/settings/general"
-import { ListItemHoverOverlay } from "~/components/ui/list-item-hover-overlay"
+import { views } from "~/constants/tabs"
 import { useAsRead } from "~/hooks/biz/useAsRead"
 import { useEntryActions } from "~/hooks/biz/useEntryActions"
 import { useFeedActions } from "~/hooks/biz/useFeedActions"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
 import { useAnyPointDown } from "~/hooks/common"
+import type { FeedViewType } from "~/lib/enum"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn } from "~/lib/utils"
 import type { FlatEntryModel } from "~/store/entry"
@@ -21,10 +22,9 @@ export const EntryItemWrapper: FC<
     entry: FlatEntryModel
     view?: number
     itemClassName?: string
-    overlay?: boolean
     style?: React.CSSProperties
   } & PropsWithChildren
-> = ({ entry, view, overlay, children, itemClassName, style }) => {
+> = ({ entry, view, children, itemClassName, style }) => {
   const { items } = useEntryActions({
     view,
     entry,
@@ -50,7 +50,7 @@ export const EntryItemWrapper: FC<
       if (!document.hasFocus()) return
       if (asRead) return
 
-      entryActions.markRead(entry.feedId, entry.entries.id, true)
+      entryActions.markRead({ feedId: entry.feedId, entryId: entry.entries.id, read: true })
     },
     233,
     {
@@ -117,7 +117,9 @@ export const EntryItemWrapper: FC<
         className={cn(
           "relative",
           asRead ? "text-zinc-700 dark:text-neutral-400" : "text-zinc-900 dark:text-neutral-300",
-
+          views[view as FeedViewType]?.wideMode ? "rounded-md" : "-mx-2 px-2",
+          "duration-200 hover:bg-theme-item-hover",
+          (isActive || isContextMenuOpen) && "!bg-theme-item-active",
           itemClassName,
         )}
         onClick={handleClick}
@@ -126,13 +128,7 @@ export const EntryItemWrapper: FC<
         onDoubleClick={handleDoubleClick}
         onContextMenu={handleContextMenu}
       >
-        {overlay ? (
-          <ListItemHoverOverlay isActive={isActive || isContextMenuOpen}>
-            {children}
-          </ListItemHoverOverlay>
-        ) : (
-          children
-        )}
+        {children}
       </div>
     </div>
   )

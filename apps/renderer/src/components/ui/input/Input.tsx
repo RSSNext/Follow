@@ -18,11 +18,11 @@ export const Input = forwardRef<
       ref={ref}
       className={cn(
         "min-w-0 flex-auto appearance-none rounded-lg text-sm",
-        "bg-theme-background px-3 py-[calc(theme(spacing.2)-1px)] placeholder:text-zinc-400 dark:bg-zinc-700/[0.15]",
+        "bg-theme-background px-3 py-[calc(theme(spacing.2)-1px)]",
         "ring-accent/20 duration-200 focus:border-accent/80 focus:outline-none focus:ring-2",
         "focus:!bg-accent/5",
         "border border-border",
-        "dark:text-zinc-200 dark:placeholder:text-zinc-500",
+        "placeholder:text-theme-placeholder-text dark:bg-zinc-700/[0.15] dark:text-zinc-200",
         "hover:border-accent/60",
         props.type === "password" ? "font-mono placeholder:font-sans" : "font-sans",
         "w-full",

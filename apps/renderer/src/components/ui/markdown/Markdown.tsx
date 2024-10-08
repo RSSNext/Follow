@@ -4,7 +4,10 @@ import { parseHtml } from "~/lib/parse-html"
 import type { RemarkOptions } from "~/lib/parse-markdown"
 import { parseMarkdown } from "~/lib/parse-markdown"
 import { cn } from "~/lib/utils"
+import { useWrappedElementSize } from "~/providers/wrapped-element-provider"
 
+import type { MediaInfoRecord } from "../media"
+import { MediaContainerWidthProvider, MediaInfoRecordProvider } from "../media"
 import { MarkdownRenderContainerRefContext } from "./context"
 
 export const Markdown: Component<
@@ -42,12 +45,13 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
 
     accessory?: React.ReactNode
     noMedia?: boolean
+    mediaInfo?: MediaInfoRecord
   } & JSX.IntrinsicElements[A] &
     Partial<{
       renderInlineStyle: boolean
     }>,
 ) => {
-  const { children, renderInlineStyle, as = "div", accessory, noMedia, ...rest } = props
+  const { children, renderInlineStyle, as = "div", accessory, noMedia, mediaInfo, ...rest } = props
   const [remarkOptions, setRemarkOptions] = useState({
     renderInlineStyle,
     noMedia,
@@ -56,7 +60,7 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
 
   useEffect(() => {
     setRemarkOptions((options) => {
-      if (renderInlineStyle === options.renderInlineStyle || noMedia === options.noMedia) {
+      if (JSON.stringify(options) === JSON.stringify({ renderInlineStyle, noMedia })) {
         return options
       }
 
@@ -76,10 +80,16 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
     [children, remarkOptions],
   )
 
+  const { w: containerWidth } = useWrappedElementSize()
+
   if (!markdownElement) return null
   return (
     <MarkdownRenderContainerRefContext.Provider value={refElement}>
-      {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
+      <MediaContainerWidthProvider width={containerWidth}>
+        <MediaInfoRecordProvider mediaInfo={mediaInfo}>
+          {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
+        </MediaInfoRecordProvider>
+      </MediaContainerWidthProvider>
       {accessory && <Fragment key={shouldForceReMountKey}>{accessory}</Fragment>}
     </MarkdownRenderContainerRefContext.Provider>
   )

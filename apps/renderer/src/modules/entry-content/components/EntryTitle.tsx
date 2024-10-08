@@ -1,6 +1,8 @@
 import { useMemo } from "react"
 
 import { useWhoami } from "~/atoms/user"
+import { FeedIcon } from "~/components/feed-icon"
+import { RelativeTime } from "~/components/ui/datetime"
 import { useAuthQuery } from "~/hooks/common"
 import { cn } from "~/lib/utils"
 import type { FeedModel } from "~/models"
@@ -57,7 +59,19 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
 
   if (!entry) return null
 
-  return (
+  return compact ? (
+    <div className="-mx-6 flex cursor-button items-center gap-2 rounded-lg p-6 transition-colors @sm:-mx-3 @sm:p-3">
+      <FeedIcon fallback feed={feed} entry={entry.entries} size={50} />
+      <div className="leading-6">
+        <div className="flex items-center gap-1 text-base font-semibold">
+          <span>{entry.entries.author || feed.title}</span>
+        </div>
+        <div className="text-zinc-500">
+          <RelativeTime date={entry.entries.publishedAt} />
+        </div>
+      </div>
+    </div>
+  ) : (
     <a
       href={populatedFullHref || void 0}
       target="_blank"

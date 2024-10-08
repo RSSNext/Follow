@@ -1,4 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog"
+import type { BoundingBox } from "framer-motion"
 import { useAnimationControls, useDragControls } from "framer-motion"
 import { produce } from "immer"
 import { useSetAtom } from "jotai"
@@ -23,13 +24,15 @@ import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { SafeFragment } from "~/components/common/Fragment"
 import { m } from "~/components/common/Motion"
 import { ErrorComponentType } from "~/components/errors/enum"
-import { isElectronBuild } from "~/constants"
+import { resizableOnly } from "~/components/ui/modal"
+import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT, isElectronBuild } from "~/constants"
 import { useSwitchHotKeyScope } from "~/hooks/common"
 import { nextFrame, stopPropagation } from "~/lib/dom"
-import { cn } from "~/lib/utils"
+import { cn, getOS } from "~/lib/utils"
 
 import { Divider } from "../../divider"
 import { RootPortalProvider } from "../../portal/provider"
+import { EllipsisHorizontalTextWithTooltip } from "../../typography"
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX, modalMontionConfig } from "./constants"
 import type { CurrentModalContentProps, ModalActionsInternal } from "./context"
@@ -106,12 +109,17 @@ export const ModalInternal = memo(
 
     const modalElementRef = useRef<HTMLDivElement>(null)
 
+    const dragController = useDragControls()
     const {
-      handlePointDown: handleResizeEnable,
+      handleResizeStop,
+      handleResizeStart,
+      relocateModal,
+      preferDragDir,
       isResizeable,
       resizeableStyle,
     } = useResizeableModal(modalElementRef, {
       enableResizeable: resizeable,
+      dragControls: dragController,
     })
     const animateController = useAnimationControls()
     useEffect(() => {
@@ -134,7 +142,6 @@ export const ModalInternal = memo(
         })
     }, [animateController])
 
-    const dragController = useDragControls()
     const handleDrag: PointerEventHandler<HTMLDivElement> = useCallback(
       (e) => {
         if (draggable) {
@@ -250,6 +257,17 @@ export const ModalInternal = memo(
       },
       [autoFocus],
     )
+
+    const measureDragConstraints = useCallback((constraints: BoundingBox) => {
+      if (getOS() === "Windows") {
+        return {
+          ...constraints,
+          top: constraints.top + ElECTRON_CUSTOM_TITLEBAR_HEIGHT,
+        }
+      }
+      return constraints
+    }, [])
+
     useImperativeHandle(ref, () => modalElementRef.current!)
     if (CustomModalComponent) {
       return (
@@ -333,36 +351,34 @@ export const ModalInternal = memo(
                   onClick={stopPropagation}
                   onSelect={handleSelectStart}
                   onKeyUp={handleDetectSelectEnd}
-                  drag
+                  drag={draggable && (preferDragDir || draggable)}
                   dragControls={dragController}
                   dragElastic={0}
                   dragListener={false}
                   dragMomentum={false}
                   dragConstraints={edgeElementRef}
+                  onMeasureDragConstraints={measureDragConstraints}
                   whileDrag={{
                     cursor: "grabbing",
                   }}
                 >
                   <ResizeSwitch
-                    enable={{
-                      bottomRight: true,
-                    }}
-                    onResizeStart={handleResizeEnable}
+                    enable={resizableOnly("bottomRight")}
+                    onResizeStart={handleResizeStart}
+                    onResizeStop={handleResizeStop}
                     defaultSize={resizeDefaultSize}
                     className="flex grow flex-col"
                   >
                     <div
-                      className={cn(
-                        "relative flex items-center",
-                        "max-h-[70vh] min-w-[300px] max-w-[90vw] lg:max-h-[calc(100vh-20rem)] lg:max-w-[70vw]",
-                      )}
+                      className={"relative flex items-center"}
                       onPointerDownCapture={handleDrag}
-                      onPointerDown={handleResizeEnable}
+                      onPointerDown={relocateModal}
                     >
-                      <Dialog.Title className="flex shrink-0 grow items-center gap-2 px-4 py-1 text-lg font-semibold">
+                      <Dialog.Title className="flex w-0 max-w-full grow items-center gap-2 px-4 py-1 text-lg font-semibold">
                         {icon && <span className="size-4">{icon}</span>}
-
-                        <span>{title}</span>
+                        <EllipsisHorizontalTextWithTooltip className="truncate">
+                          <span>{title}</span>
+                        </EllipsisHorizontalTextWithTooltip>
                       </Dialog.Title>
                       {canClose && (
                         <Dialog.DialogClose className="center p-2" tabIndex={1} onClick={close}>
