@@ -24,7 +24,7 @@ export const replaceImgUrlIfNeed = (url?: string) => {
 
   for (const rule of webpCloudPublicServicesMatches) {
     if (rule.url.test(url)) {
-      return url.replace(rule.url, rule.referer)
+      return url.replace(rule.url, rule.target)
     }
   }
 
