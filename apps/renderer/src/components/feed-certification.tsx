@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useWhoami } from "~/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
+import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { cn } from "~/lib/utils"
 import type { FeedOrListRespModel } from "~/models"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
@@ -60,7 +61,7 @@ export const FeedCertification = ({
                     presentUserProfile(feed.owner!.id)
                   }}
                 >
-                  <AvatarImage src={feed.owner.image || undefined} />
+                  <AvatarImage src={replaceImgUrlIfNeed(feed.owner.image || undefined)} />
                   <AvatarFallback>{feed.owner.name?.slice(0, 2)}</AvatarFallback>
                 </Avatar>
               ) : (

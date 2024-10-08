@@ -10,6 +10,7 @@ import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { nextFrame } from "~/lib/dom"
+import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { cn } from "~/lib/utils"
 import { useAchievementModal } from "~/modules/achievement/hooks"
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
@@ -203,7 +204,7 @@ export function UserAvatar({
       >
         <AvatarImage
           className="duration-200 animate-in fade-in-0"
-          src={renderUserData?.image || undefined}
+          src={replaceImgUrlIfNeed(renderUserData?.image || undefined)}
         />
         <AvatarFallback>{renderUserData?.name?.slice(0, 2)}</AvatarFallback>
       </Avatar>

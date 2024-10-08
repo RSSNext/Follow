@@ -1,3 +1,5 @@
+export const IMAGE_PROXY_URL = "https://webp.follow.is"
+
 export const imageRefererMatches = [
   {
     url: /^https:\/\/\w+\.sinaimg.cn/,
@@ -18,5 +20,13 @@ export const imageRefererMatches = [
   {
     url: /^https:\/\/sp1\.piokok\.com/,
     referer: "https://sp1.piokok.com",
+  },
+]
+
+export const webpCloudPublicServicesMatches = [
+  // https://docs.webp.se/public-services/github-avatar/
+  {
+    url: /^https:\/\/avatars\.githubusercontent\.com\/u\//,
+    target: "https://avatars-githubusercontent.webp.se/u/",
   },
 ]
