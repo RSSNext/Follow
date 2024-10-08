@@ -8,6 +8,7 @@ import { app, nativeTheme, Notification, shell } from "electron"
 import contextMenu from "electron-context-menu"
 
 import { getIconPath } from "./helper"
+import { apiClient } from "./lib/api-client"
 import { t } from "./lib/i18n"
 import { store } from "./lib/store"
 import { registerAppMenu } from "./menu"
@@ -130,6 +131,15 @@ const registerPushNotifications = async () => {
   const credentials = store.get(credentialsKey)
   const persistentIds = store.get(persistentIdsKey)
 
+  if (credentials) {
+    apiClient.messaging.$post({
+      json: {
+        token: credentials.fcm.token,
+        channel: "desktop",
+      },
+    })
+  }
+
   const instance = new PushReceiver({
     debug: isDev,
     firebase: env.VITE_FIREBASE_CONFIG,
@@ -139,7 +149,12 @@ const registerPushNotifications = async () => {
 
   instance.onCredentialsChanged(({ newCredentials }) => {
     store.set(credentialsKey, newCredentials)
-    updateCredentials()
+    apiClient.messaging.$post({
+      json: {
+        token: newCredentials.fcm.token,
+        channel: "desktop",
+      },
+    })
   })
 
   instance.onNotification((notification) => {
@@ -151,8 +166,4 @@ const registerPushNotifications = async () => {
   })
 
   await instance.connect()
-}
-
-async function updateCredentials() {
-  // await apiClient.messaging.$post()
 }
