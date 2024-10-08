@@ -10,7 +10,6 @@ import { SocialMediaLinks } from "~/constants/social"
 import { getCurrentEnvironment } from "~/lib/environment"
 import { getNewIssueUrl } from "~/lib/issues"
 
-import { SettingsTitle } from "../title"
 
 export const SettingAbout = () => {
   const { t } = useTranslation("settings")
@@ -18,7 +17,6 @@ export const SettingAbout = () => {
 
   return (
     <div>
-      <SettingsTitle />
       <section className="mt-4">
         <div className="flex gap-3">
           <Logo className="size-[52px]" />
@@ -29,7 +27,10 @@ export const SettingAbout = () => {
             </div>
             <div className="flex items-center gap-2">
               <span className="rounded bg-muted px-2 py-1 text-xs">{APP_VERSION}</span>
-              <CopyButton value={currentEnvironment} className="p-1 [&_i]:size-2.5" />
+              <CopyButton
+                value={currentEnvironment}
+                className="border-0 bg-transparent p-1 text-foreground/80 hover:bg-theme-item-hover hover:text-foreground active:bg-theme-item-active [&_i]:size-3"
+              />
             </div>
           </div>
 

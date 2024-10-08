@@ -1,4 +1,5 @@
 import { SettingAbout } from "~/modules/settings/tabs/about"
+import { SettingsTitle } from "~/modules/settings/title"
 import { defineSettingPageData } from "~/modules/settings/utils"
 
 export const loader = defineSettingPageData({
@@ -6,4 +7,9 @@ export const loader = defineSettingPageData({
   name: "titles.about",
   priority: 9999,
 })
-export const Component = () => <SettingAbout />
+export const Component = () => (
+  <>
+    <SettingsTitle />
+    <SettingAbout />
+  </>
+)
