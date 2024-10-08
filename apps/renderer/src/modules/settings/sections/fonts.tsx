@@ -1,4 +1,5 @@
 /* eslint-disable @eslint-react/hooks-extra/ensure-custom-hooks-using-other-hooks */
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect, useMemo, useRef } from "react"
 import * as React from "react"
@@ -36,6 +37,7 @@ const useFontDataElectron = () => {
   )
 }
 
+// eslint-disable-next-line @eslint-react/hooks-extra/no-redundant-custom-hook
 const useFontDataWeb = () => [
   { label: FALLBACK_FONT, value: "inherit" },
   { label: "System UI", value: "system-ui" },
@@ -50,7 +52,7 @@ const useFontDataWeb = () => [
   },
 ]
 
-const useFontData = window.electron ? useFontDataElectron : useFontDataWeb
+const useFontData = IN_ELECTRON ? useFontDataElectron : useFontDataWeb
 export const ContentFontSelector = () => {
   const { t } = useTranslation("settings")
   const data = useFontData()

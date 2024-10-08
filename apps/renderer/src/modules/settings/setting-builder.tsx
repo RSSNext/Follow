@@ -63,6 +63,7 @@ export const createSettingBuilder =
         }
         const assertSetting = setting as SettingItem<T> | SectionSettingItem | ActionSettingItem
 
+        if (!assertSetting) return null
         if (assertSetting.disabled) return null
 
         if ("type" in assertSetting && assertSetting.type === "title" && assertSetting.value) {

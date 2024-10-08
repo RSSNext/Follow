@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 
@@ -96,6 +97,6 @@ const InvalidateQueryProviderWebApp = () => {
   return null
 }
 
-export const InvalidateQueryProvider = window.electron
+export const InvalidateQueryProvider = IN_ELECTRON
   ? InvalidateQueryProviderElectron
   : InvalidateQueryProviderWebApp

@@ -1,5 +1,7 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
+
 const OpenInBrowser = (_t?: any) =>
-  window.electron ? "keys.entry.openInBrowser" : "keys.entry.openInNewTab"
+  IN_ELECTRON ? "keys.entry.openInBrowser" : "keys.entry.openInNewTab"
 
 export const COPY_MAP = {
   OpenInBrowser,

@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { useQuery } from "@tanstack/react-query"
 import { useAtom } from "jotai"
 import { useCallback, useEffect } from "react"
@@ -98,9 +99,9 @@ export const SettingGeneral = () => {
             description: t("general.mark_as_read.render.description"),
           }),
 
-          { type: "title", value: "TTS", disabled: !window.electron },
+          { type: "title", value: "TTS", disabled: !IN_ELECTRON },
 
-          window.electron && VoiceSelector,
+          IN_ELECTRON && VoiceSelector,
 
           // { type: "title", value: "Secure" },
           // defineSettingItem("jumpOutLinkWarn", {
@@ -159,8 +160,8 @@ export const SettingGeneral = () => {
             buttonText: t("general.rebuild_database.button"),
           },
 
-          { type: "title", value: t("general.network"), disabled: !window.electron },
-          window.electron && NettingSetting,
+          { type: "title", value: t("general.network"), disabled: !IN_ELECTRON },
+          IN_ELECTRON && NettingSetting,
         ]}
       />
     </div>

@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
@@ -362,7 +363,7 @@ export const useEntryActions = ({
       {
         key: "openInBrowser",
         name: t("entry_actions.open_in_browser", {
-          which: t(window.electron ? "words.browser" : "words.newTab"),
+          which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
         }),
         shortcut: shortcuts.entry.openInBrowser.key,
         className: "i-mgc-world-2-cute-re",
@@ -406,12 +407,12 @@ export const useEntryActions = ({
         key: "share",
         className: getOS() === "macOS" ? `i-mgc-share-3-cute-re` : "i-mgc-share-forward-cute-re",
         shortcut: shortcuts.entry.share.key,
-        hide: !window.electron && !navigator.share,
+        hide: !IN_ELECTRON && !navigator.share,
 
         onClick: () => {
           if (!populatedEntry.entries.url) return
 
-          if (window.electron) {
+          if (IN_ELECTRON) {
             return tipcClient?.showShareMenu(populatedEntry.entries.url)
           } else {
             navigator.share({

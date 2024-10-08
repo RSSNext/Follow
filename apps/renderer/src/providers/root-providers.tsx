@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { LazyMotion, MotionConfig } from "framer-motion"
@@ -59,7 +60,5 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
 )
 
 const Devtools = () => (
-  <>
-    {!window.electron && <ReactQueryDevtools buttonPosition="bottom-left" client={queryClient} />}
-  </>
+  <>{!IN_ELECTRON && <ReactQueryDevtools buttonPosition="bottom-left" client={queryClient} />}</>
 )

@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { wrapCreateBrowserRouter } from "@sentry/react"
 import { createBrowserRouter, createHashRouter } from "react-router-dom"
 
@@ -10,7 +11,7 @@ const globTree = import.meta.glob("./pages/**/*.tsx")
 const tree = buildGlobRoutes(globTree)
 
 let routerCreator =
-  window.electron || globalThis["__DEBUG_PROXY__"] ? createHashRouter : createBrowserRouter
+  IN_ELECTRON || globalThis["__DEBUG_PROXY__"] ? createHashRouter : createBrowserRouter
 if (window.SENTRY_RELEASE) {
   routerCreator = wrapCreateBrowserRouter(routerCreator)
 }

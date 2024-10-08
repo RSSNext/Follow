@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { Slot } from "@radix-ui/react-slot"
 import { noop } from "foxact/noop"
 import { AnimatePresence, m } from "framer-motion"
@@ -119,7 +120,7 @@ function EntryHeaderImpl({
   )
 }
 
-const ElectronAdditionActions = window.electron
+const ElectronAdditionActions = IN_ELECTRON
   ? ({
       view = FeedViewType.Articles,
       entry,

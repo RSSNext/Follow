@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { repository } from "@pkg"
 import { Slot } from "@radix-ui/react-slot"
 import { throttle } from "lodash-es"
@@ -87,8 +88,7 @@ export function Component() {
   useDailyTask()
 
   const supportMinWidth = 1024
-  const isNotSupportWidth =
-    useViewport((v) => v.w < supportMinWidth && v.w !== 0) && !window.electron
+  const isNotSupportWidth = useViewport((v) => v.w < supportMinWidth && v.w !== 0) && !IN_ELECTRON
 
   if (isNotSupportWidth) {
     return (
@@ -166,7 +166,7 @@ export function Component() {
             canClose={false}
             clickOutsideToDismiss={false}
           >
-            <LoginModalContent canClose={false} runtime={window.electron ? "app" : "browser"} />
+            <LoginModalContent canClose={false} runtime={IN_ELECTRON ? "app" : "browser"} />
           </DeclarativeModal>
         </RootPortal>
       )}

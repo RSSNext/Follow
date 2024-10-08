@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { get } from "lodash-es"
 
 import { tipcClient } from "./client"
@@ -58,8 +59,7 @@ export const showNativeMenu = async (
   }
 
   // only show native menu on macOS electron, because in other platform, the native ui is not good
-
-  if (!window.electron || getOS() !== "macOS") {
+  if (!IN_ELECTRON || getOS() !== "macOS") {
     document.dispatchEvent(
       new CustomEvent(CONTEXT_MENU_SHOW_EVENT_KEY, {
         detail: {

@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import type { MediaModel } from "@follow/shared/hono"
 import type { FC } from "react"
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
@@ -52,7 +53,7 @@ const Wrapper: Component<{
             >
               {showActions && (
                 <Fragment>
-                  {!!window.electron && (
+                  {IN_ELECTRON && (
                     <ActionButton
                       tooltip={t("external:header.download")}
                       onClick={() => {
