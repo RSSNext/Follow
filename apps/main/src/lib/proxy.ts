@@ -38,18 +38,17 @@ const normalizeProxyUri = (userProxy: string) => {
   if (!userProxy) {
     return
   }
+  // Only use the first proxy if there are multiple urls
+  const firstInput = userProxy.split(",")[0]
+
   try {
-    const proxyUrl = new URL(userProxy)
+    const proxyUrl = new URL(firstInput)
     if (!URL_SCHEME.has(proxyUrl.protocol) || !proxyUrl.hostname || !proxyUrl.port) {
       return
     }
     // There are multiple ways to specify a proxy in Electron,
     // but for security reasons, we only support simple proxy URLs for now.
-    return [
-      `${proxyUrl.protocol}//${proxyUrl.hostname}:${proxyUrl.port}`,
-      // Failing over to using no proxy if the proxy is unavailable
-      "direct://",
-    ].join(",")
+    return `${proxyUrl.protocol}//${proxyUrl.hostname}:${proxyUrl.port}`
   } catch {
     return
   }
@@ -67,10 +66,15 @@ export const updateProxy = () => {
     })
     return
   }
+  const proxyRules = [
+    proxyUri,
+    // Failing over to using no proxy if the proxy is unavailable
+    "direct://",
+  ].join(",")
 
-  logger.log(`Loading proxy: ${proxyUri}`)
+  logger.log(`Loading proxy: ${proxyRules}`)
   session.defaultSession.setProxy({
-    proxyRules: proxyUri,
+    proxyRules,
     proxyBypassRules: BYPASS_RULES,
   })
 }
