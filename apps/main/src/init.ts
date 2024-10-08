@@ -16,7 +16,9 @@ const appFolder = {
   prod: "Follow",
   dev: "Follow (dev)",
 }
-
+if (process.argv.length === 3 && process.argv[2].startsWith("follow-dev:")) {
+  process.env.NODE_ENV = "development"
+}
 const isDev = process.env.NODE_ENV === "development"
 
 /**
