@@ -162,7 +162,10 @@ const EntryUser: Component<{
           }}
         >
           <Avatar className="aspect-square size-7 border border-border ring-1 ring-background">
-            <AvatarImage src={replaceImgUrlIfNeed(user?.image || undefined)} className="bg-theme-placeholder-image" />
+            <AvatarImage
+              src={replaceImgUrlIfNeed(user?.image || undefined)}
+              className="bg-theme-placeholder-image"
+            />
             <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
         </m.button>
