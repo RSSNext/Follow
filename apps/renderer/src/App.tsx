@@ -1,5 +1,4 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
-import { env } from "@follow/shared/env"
 import { useEffect, useLayoutEffect } from "react"
 import { Outlet } from "react-router-dom"
 
@@ -7,16 +6,13 @@ import { queryClient } from "~/lib/query-client"
 
 import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"
-import { applyAfterReadyCallbacks } from "./initialize/queue.js"
+import { applyAfterReadyCallbacks } from "./initialize/queue"
 import { appLog } from "./lib/log"
 import { cn, getOS } from "./lib/utils"
-import { Titlebar } from "./modules/app/Titlebar.js"
+import { Titlebar } from "./modules/app/Titlebar"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"
 
-if (import.meta.env.DEV) {
-  console.info("[renderer] env loaded:", env)
-}
 function App() {
   useEffect(() => {
     const cleanup = handlers?.invalidateQuery.listen((queryKey) => {
@@ -97,4 +93,5 @@ const AppSkeleton = () => {
     </div>
   )
 }
-export default App
+
+export { App as Component }
