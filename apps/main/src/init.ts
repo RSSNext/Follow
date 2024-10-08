@@ -1,8 +1,10 @@
 import path from "node:path"
 
 import { registerIpcMain } from "@egoist/tipc/main"
+import { PushReceiver } from "@eneris/push-receiver"
 import { APP_PROTOCOL } from "@follow/shared/constants"
-import { app, nativeTheme, shell } from "electron"
+import { env } from "@follow/shared/env"
+import { app, nativeTheme, Notification, shell } from "electron"
 import contextMenu from "electron-context-menu"
 
 import { getIconPath } from "./helper"
@@ -55,6 +57,8 @@ export const initializeAppStage1 = () => {
   // code. You can also put them in separate files and require them here.
 
   registerMenuAndContextMenu()
+
+  registerPushNotifications()
 }
 
 let contextMenuDisposer: () => void
@@ -114,4 +118,41 @@ export const registerMenuAndContextMenu = () => {
       ]
     },
   })
+}
+
+const registerPushNotifications = async () => {
+  if (!env.VITE_FIREBASE_CONFIG) {
+    return
+  }
+
+  const credentialsKey = "notifications-credentials"
+  const persistentIdsKey = "notifications-persistent-ids"
+  const credentials = store.get(credentialsKey)
+  const persistentIds = store.get(persistentIdsKey)
+
+  const instance = new PushReceiver({
+    debug: isDev,
+    firebase: env.VITE_FIREBASE_CONFIG,
+    persistentIds: persistentIds || [],
+    credentials,
+  })
+
+  instance.onCredentialsChanged(({ newCredentials }) => {
+    store.set(credentialsKey, newCredentials)
+    updateCredentials()
+  })
+
+  instance.onNotification((notification) => {
+    new Notification({
+      title: notification.message.data?.title as string,
+      body: notification.message.data?.body as string,
+    }).show()
+    store.set(persistentIdsKey, instance.persistentIds)
+  })
+
+  await instance.connect()
+}
+
+async function updateCredentials() {
+  // await apiClient.messaging.$post()
 }
