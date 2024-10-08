@@ -10,7 +10,6 @@ import { SocialMediaLinks } from "~/constants/social"
 import { getCurrentEnvironment } from "~/lib/environment"
 import { getNewIssueUrl } from "~/lib/issues"
 
-
 export const SettingAbout = () => {
   const { t } = useTranslation("settings")
   const currentEnvironment = getCurrentEnvironment().join("\n")
