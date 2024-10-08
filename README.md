@@ -124,7 +124,7 @@ You need to fill in the required environment variables first.
 cp .env.example .env
 ```
 
-Then run:
+Then set `VITE_API_URL` to `https://api.follow.is` and run:
 
 ```sh
 pnpm run dev
