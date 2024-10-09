@@ -215,7 +215,7 @@ export const EntryContentRender: Component<{
             <article
               data-testid="entry-render"
               onContextMenu={stopPropagation}
-              className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
+              className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch] @7xl:max-w-[80ch]"
             >
               <EntryTitle entryId={entryId} compact={compact} />
 
@@ -334,7 +334,7 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
   return (
     <div className="grow">
       {result ? (
-        <p className="rounded-xl border p-3 text-sm opacity-80">
+        <p className="mb-4 rounded-xl border p-3 text-sm opacity-80">
           <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
           {t("entry_content.readability_notice")}
         </p>
