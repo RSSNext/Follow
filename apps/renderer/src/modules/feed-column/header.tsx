@@ -165,7 +165,7 @@ const SearchTrigger = () => {
   const canSearch = useGeneralSettingKey("dataPersist")
 
   useHotkeys(
-    "meta+k",
+    "meta+k,ctrl+k",
     () => {
       setAppSearchOpen(true)
     },
