@@ -160,17 +160,17 @@ function Step({
           inactive: {
             backgroundColor: "var(--fo-background)",
             borderColor: "hsl(var(--border) / 0.5)",
-            color: "#a3a3a3",
+            color: "hsl(var(--fo-a) / 0.2)",
           },
           active: {
             backgroundColor: "var(--fo-background)",
-            borderColor: "#ff760a", // theme-accent-500
-            color: "#ff760a",
+            borderColor: "hsl(var(--fo-a) / 1)",
+            color: "hsl(var(--fo-a) / 1)",
           },
           complete: {
-            backgroundColor: "#ff760a",
-            borderColor: "#ff760a",
-            color: "#ff760a",
+            backgroundColor: "hsl(var(--fo-a) / 1)",
+            borderColor: "hsl(var(--fo-a) / 1)",
+            color: "hsl(var(--fo-a) / 1)",
           },
         }}
         transition={{ duration: 0.2 }}
