@@ -24,6 +24,7 @@ import { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
+import { useListById } from "~/store/list"
 
 const handleClickPlay = () => {
   AudioPlayer.togglePlayAndPause()
@@ -98,11 +99,13 @@ const CornerPlayerImpl = () => {
   const entryId = useAudioPlayerAtomSelector((v) => v.entryId)
   const status = useAudioPlayerAtomSelector((v) => v.status)
   const isMute = useAudioPlayerAtomSelector((v) => v.isMute)
+  const listId = useAudioPlayerAtomSelector((v) => v.listId)
 
   const playerValue = { entryId, status, isMute }
 
   const entry = useEntry(playerValue.entryId)
   const feed = useFeedById(entry?.feedId)
+  const list = useListById(listId)
 
   useHotkeys("space", handleClickPlay, {
     preventDefault: true,
@@ -121,23 +124,31 @@ const CornerPlayerImpl = () => {
   const navigateToEntry = useNavigateEntry()
   usePlayerTracker()
 
-  const navigateOptions = useMemo<NavigateEntryOptions>(() => {
-    if (!entry || !feed) return null
+  const navigateOptions = useMemo<NavigateEntryOptions | null>(() => {
+    if (!entry) return null
     const options: NavigateEntryOptions = {
       entryId: entry.entries.id,
     }
-    if (feed.type === "inbox") {
-      options.inboxId = feed.id
-    } else if (feed.type === "list") {
-      options.listId = feed.id
-    } else {
+    if (feed?.type === "inbox") {
+      Object.assign(options, {
+        inboxId: feed.id,
+        view: FeedViewType.Articles,
+      })
+    } else if (list) {
+      Object.assign(options, {
+        listId: list.id,
+        view: list.view,
+      })
+    } else if (feed) {
       Object.assign(options, {
         feedId: feed.id,
         view: entry.view ?? FeedViewType.Audios,
       })
+    } else {
+      return null
     }
     return options
-  }, [entry, feed])
+  }, [entry, feed, list])
   if (!entry || !feed) return null
 
   return (
