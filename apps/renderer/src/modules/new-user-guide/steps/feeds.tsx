@@ -80,7 +80,7 @@ function TrendingFeeds() {
 
 export function FeedsGuide() {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8">
       <TrendingFeeds />
       <section>
         <h2 className="my-2 text-xl font-bold">Or you can import feeds from other sources</h2>
