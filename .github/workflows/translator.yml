@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: lizheming/github-translate-action
+      - uses: lizheming/github-translate-action@c55aac477e98562d4faed9f77c54ab8306ae6ebf
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
