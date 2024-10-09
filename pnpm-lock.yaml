@@ -206,9 +206,6 @@ importers:
       vite:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@22.7.4)(terser@5.34.1)
-      vite-bundle-analyzer:
-        specifier: 0.12.1
-        version: 0.12.1
       vite-plugin-mkcert:
         specifier: 1.17.6
         version: 1.17.6(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
@@ -8560,9 +8557,6 @@ packages:
 
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
-
-  vite-bundle-analyzer@0.12.1:
-    resolution: {integrity: sha512-mIYwsDvTYCqXAUtOZIL3f7NdwWUeL/MlNFhOJzlTdcZE4pye6h06IEnOvWhnc/e+HM4oVVNxuRHZt0Rz6VO7EA==}
 
   vite-node@2.0.5:
     resolution: {integrity: sha512-LdsW4pxj0Ot69FAoXZ1yTnA9bjGohr2yNBU7QKRxpz8ITSkhuDl6h3zS/tvgz4qrNjeRnvrWeXQ8ZF7Um4W00Q==}
@@ -18314,8 +18308,6 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
-
-  vite-bundle-analyzer@0.12.1: {}
 
   vite-node@2.0.5(@types/node@22.7.4)(terser@5.34.1):
     dependencies:
