@@ -6,10 +6,11 @@ import { useTranslation } from "react-i18next"
 import { Button } from "~/components/ui/button"
 import { settings } from "~/queries/settings"
 
+import { DiscoverImport } from "../discover/import"
 import { settingSyncQueue } from "../settings/helper/sync-queue"
 import { AppearanceGuide } from "./steps/appearance"
 import { BehaviorGuide } from "./steps/behavior"
-import { FeedsGuide } from "./steps/feeds"
+import { TrendingFeeds } from "./steps/feeds"
 
 const variants = {
   enter: {
@@ -43,8 +44,12 @@ export function GuideModalContent() {
         content: createElement(BehaviorGuide),
       },
       {
-        title: "Get Your Feeds Ready",
-        content: createElement(FeedsGuide),
+        title: "Popular Feeds",
+        content: createElement(TrendingFeeds),
+      },
+      {
+        title: "Import Feeds",
+        content: createElement(DiscoverImport),
       },
     ],
     [t],
@@ -74,8 +79,8 @@ export function GuideModalContent() {
   }, [])
 
   return (
-    <div className="relative flex h-[70vh] w-[70vw] flex-col items-center justify-center overflow-hidden rounded-lg border bg-background">
-      <h1 className="absolute left-8 top-14 text-3xl font-bold">{title}</h1>
+    <div className="relative flex h-[70vh] w-[70vw] flex-col items-center justify-center overflow-hidden rounded-lg border bg-background shadow-lg">
+      <h1 className="absolute left-6 top-4 text-3xl font-bold">{title}</h1>
 
       <div className="relative mx-auto flex w-full max-w-lg items-center">
         <AnimatePresence initial={false}>
@@ -108,7 +113,7 @@ export function GuideModalContent() {
         </AnimatePresence>
       </div>
 
-      <div className="absolute inset-x-0 bottom-4 flex w-full items-center justify-between px-8">
+      <div className="absolute inset-x-0 bottom-4 flex w-full items-center justify-between px-6">
         <div className="flex h-fit gap-6">
           {Array.from({ length: totalSteps }, (_, i) => i + 1).map((i) => (
             <Step key={i} step={i} currentStep={step} onClick={() => setStep(i)} />
