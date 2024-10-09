@@ -18,6 +18,7 @@
   "main": "./src/index.ts",
   "scripts": {
     "build": "tsup",
+    "test": "vitest",
     "typecheck": "tsup && tsc --noEmit"
   },
   "dependencies": {
