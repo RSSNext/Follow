@@ -79,49 +79,20 @@ const errorTypes = [
   ErrorComponentType.FeedFoundCanBeFollow,
   ErrorComponentType.FeedNotFound,
 ] as ErrorComponentType[]
+
+const supportMinWidth = 1024
 export function Component() {
   const isAuthFail = useLoginModalShow()
   const user = useWhoami()
-  const { t } = useTranslation()
+
   const containerRef = useRef<HTMLDivElement>(null)
 
   useDailyTask()
 
-  const supportMinWidth = 1024
   const isNotSupportWidth = useViewport((v) => v.w < supportMinWidth && v.w !== 0) && !IN_ELECTRON
 
   if (isNotSupportWidth) {
-    return (
-      <div className="center fixed inset-0 flex-col text-balance px-4 text-center">
-        <i className="i-mingcute-device-line mb-2 size-16 text-muted-foreground" />
-        <div>{t("notify.unSupportWidth", { app_name: APP_NAME })}</div>
-        <div>
-          <Trans
-            i18nKey="notify.unSupportWidth_1"
-            components={{
-              b: <b />,
-            }}
-            values={{
-              width: `${window.innerWidth}px`,
-              minWidth: `${supportMinWidth}px`,
-            }}
-          />
-        </div>
-        <div>
-          <Trans
-            i18nKey="notify.unSupportWidth_2"
-            components={{
-              url: (
-                <a className="follow-link--underline" href={repository.url}>
-                  {repository.url}
-                </a>
-              ),
-            }}
-            values={{ app_name: APP_NAME }}
-          />
-        </div>
-      </div>
-    )
+    return <NotSupport />
   }
 
   return (
@@ -330,5 +301,41 @@ const FeedResponsiveResizerContainer = ({
         />
       )}
     </>
+  )
+}
+
+const NotSupport = () => {
+  const { t } = useTranslation()
+  const w = useViewport((v) => v.w)
+  return (
+    <div className="center fixed inset-0 flex-col text-balance px-4 text-center">
+      <i className="i-mingcute-device-line mb-2 size-16 text-muted-foreground" />
+      <div>{t("notify.unSupportWidth", { app_name: APP_NAME })}</div>
+      <div>
+        <Trans
+          i18nKey="notify.unSupportWidth_1"
+          components={{
+            b: <b />,
+          }}
+          values={{
+            width: `${w}px`,
+            minWidth: `${supportMinWidth}px`,
+          }}
+        />
+      </div>
+      <div>
+        <Trans
+          i18nKey="notify.unSupportWidth_2"
+          components={{
+            url: (
+              <a className="follow-link--underline" href={repository.url}>
+                {repository.url}
+              </a>
+            ),
+          }}
+          values={{ app_name: APP_NAME }}
+        />
+      </div>
+    </div>
   )
 }

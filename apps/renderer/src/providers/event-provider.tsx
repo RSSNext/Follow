@@ -1,5 +1,3 @@
-"use client"
-
 import { useIsomorphicLayoutEffect } from "foxact/use-isomorphic-layout-effect"
 import { throttle } from "lodash-es"
 import type { FC } from "react"
