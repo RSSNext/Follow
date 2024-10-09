@@ -125,10 +125,21 @@ export function GuideModalContent() {
       <div className="absolute inset-x-0 bottom-4 flex w-full items-center justify-between px-6">
         <div className="flex h-fit gap-6">
           {Array.from({ length: totalSteps }, (_, i) => i + 1).map((i) => (
-            <Step key={i} step={i} currentStep={step} onClick={() => setStep(i)} />
+            <Step key={i} step={i} currentStep={step} />
           ))}
         </div>
-        <div className="flex flex-col">
+        <div className="flex gap-2">
+          <Button
+            onClick={() => {
+              if (step > 0) {
+                setStep((prev) => prev - 1)
+              }
+            }}
+            disabled={step === 0}
+            variant={"outline"}
+          >
+            Back
+          </Button>
           <Button
             onClick={() => {
               if (step <= totalSteps) {
@@ -140,24 +151,17 @@ export function GuideModalContent() {
           >
             {step <= totalSteps ? "Next" : "Finish"}
           </Button>
-          <Button variant="text" className="text-xs text-foreground/70" onClick={finishGuide}>
-            Skip for now
-          </Button>
         </div>
       </div>
     </div>
   )
 }
 
-function Step({
-  step,
-  currentStep,
-  onClick,
-}: { step: number; currentStep: number } & ComponentProps<"button">) {
+function Step({ step, currentStep }: { step: number; currentStep: number }) {
   const status = currentStep === step ? "active" : currentStep < step ? "inactive" : "complete"
 
   return (
-    <m.button onClick={onClick} animate={status} className="relative">
+    <m.div animate={status} className="relative">
       <m.div
         variants={{
           active: {
@@ -210,7 +214,7 @@ function Step({
           )}
         </div>
       </m.div>
-    </m.button>
+    </m.div>
   )
 }
 
