@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next"
 import { Button } from "~/components/ui/button"
 
 import { DiscoverImport } from "../discover/import"
-import { setIsNewUserGuideFinished } from "./hooks"
 import { AppearanceGuide } from "./steps/appearance"
 import { BehaviorGuide } from "./steps/behavior"
 
@@ -111,8 +110,6 @@ export function GuideModalContent() {
           onClick={() => {
             if (step <= totalSteps) {
               setStep((prev) => prev + 1)
-            } else {
-              setIsNewUserGuideFinished(true)
             }
           }}
         >

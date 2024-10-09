@@ -30,7 +30,7 @@ import { RootPortal } from "~/components/ui/portal"
 import { HotKeyScopeMap } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
-import { useI18n } from "~/hooks/common"
+import { useAuthQuery, useI18n } from "~/hooks/common"
 import { preventDefault } from "~/lib/dom"
 import { cn } from "~/lib/utils"
 import { EnvironmentIndicator } from "~/modules/app/EnvironmentIndicator"
@@ -41,11 +41,11 @@ import { AutoUpdater } from "~/modules/feed-column/auto-updater"
 import { CornerPlayer } from "~/modules/feed-column/corner-player"
 import { useShortcutsModal } from "~/modules/modal/shortcuts"
 import { GuideModalContent } from "~/modules/new-user-guide/guide-modal-content"
-import { useIsNewUserGuideFinished } from "~/modules/new-user-guide/hooks"
 import { CmdF } from "~/modules/panel/cmdf"
 import { SearchCmdK } from "~/modules/panel/cmdk"
 import { CmdNTrigger } from "~/modules/panel/cmdn"
 import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
+import { settings } from "~/queries/settings"
 
 const FooterInfo = () => {
   const { t } = useTranslation()
@@ -92,7 +92,8 @@ export function Component() {
   const supportMinWidth = 1024
   const isNotSupportWidth = useViewport((v) => v.w < supportMinWidth && v.w !== 0) && !IN_ELECTRON
 
-  const isNewUserGuideFinished = useIsNewUserGuideFinished()
+  const { data: remoteSettings, isLoading } = useAuthQuery(settings.get(), {})
+  const isNewUser = !isLoading && remoteSettings && Object.keys(remoteSettings.updated).length === 0
 
   if (isNotSupportWidth) {
     return (
@@ -160,7 +161,7 @@ export function Component() {
       <CmdNTrigger />
       {ELECTRON && <CmdF />}
 
-      {user && !isNewUserGuideFinished && (
+      {user && isNewUser && (
         <RootPortal>
           <DeclarativeModal
             id="new-user-guide"
