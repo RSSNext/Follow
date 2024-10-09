@@ -92,7 +92,7 @@ export const EntryItemWrapper: FC<
           {
             type: "separator" as const,
           },
-          ...feedItems.filter((item) => !item.disabled),
+          ...feedItems.filter((item) => item && !item.disabled),
 
           {
             type: "separator" as const,

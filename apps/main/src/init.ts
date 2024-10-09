@@ -1,16 +1,22 @@
 import path from "node:path"
 
-import { registerIpcMain } from "@egoist/tipc/main"
+import { getRendererHandlers, registerIpcMain } from "@egoist/tipc/main"
+import { PushReceiver } from "@eneris/push-receiver"
 import { APP_PROTOCOL } from "@follow/shared/constants"
-import { app, nativeTheme, shell } from "electron"
+import { env } from "@follow/shared/env"
+import type { MessagingData } from "@follow/shared/hono"
+import { app, nativeTheme, Notification, shell } from "electron"
 import contextMenu from "electron-context-menu"
 
 import { getIconPath } from "./helper"
+import { apiClient } from "./lib/api-client"
 import { t } from "./lib/i18n"
 import { store } from "./lib/store"
 import { registerAppMenu } from "./menu"
+import type { RendererHandlers } from "./renderer-handlers"
 import { initializeSentry } from "./sentry"
 import { router } from "./tipc"
+import { createMainWindow, getMainWindow } from "./window"
 
 const appFolder = {
   prod: "Follow",
@@ -55,6 +61,8 @@ export const initializeAppStage1 = () => {
   // code. You can also put them in separate files and require them here.
 
   registerMenuAndContextMenu()
+
+  registerPushNotifications()
 }
 
 let contextMenuDisposer: () => void
@@ -114,4 +122,75 @@ export const registerMenuAndContextMenu = () => {
       ]
     },
   })
+}
+
+const registerPushNotifications = async () => {
+  if (!env.VITE_FIREBASE_CONFIG) {
+    return
+  }
+
+  const credentialsKey = "notifications-credentials"
+  const persistentIdsKey = "notifications-persistent-ids"
+  const credentials = store.get(credentialsKey)
+  const persistentIds = store.get(persistentIdsKey)
+
+  if (credentials) {
+    apiClient.messaging.$post({
+      json: {
+        token: credentials.fcm.token,
+        channel: "desktop",
+      },
+    })
+  }
+
+  const instance = new PushReceiver({
+    debug: isDev,
+    firebase: env.VITE_FIREBASE_CONFIG,
+    persistentIds: persistentIds || [],
+    credentials,
+  })
+
+  instance.onCredentialsChanged(({ newCredentials }) => {
+    store.set(credentialsKey, newCredentials)
+    apiClient.messaging.$post({
+      json: {
+        token: newCredentials.fcm.token,
+        channel: "desktop",
+      },
+    })
+  })
+
+  instance.onNotification((notification) => {
+    const data = notification.message.data as MessagingData
+    switch (data.type) {
+      case "new-entry": {
+        const notification = new Notification({
+          title: data.title,
+          body: data.description,
+        })
+        notification.on("click", () => {
+          let mainWindow = getMainWindow()
+          if (!mainWindow) {
+            mainWindow = createMainWindow()
+          }
+          mainWindow.restore()
+          mainWindow.focus()
+          const handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
+          handlers.navigateEntry.send({
+            feedId: data.feedId,
+            entryId: data.entryId,
+            view: Number.parseInt(data.view),
+          })
+        })
+        notification.show()
+        break
+      }
+      default: {
+        break
+      }
+    }
+    store.set(persistentIdsKey, instance.persistentIds)
+  })
+
+  await instance.connect()
 }

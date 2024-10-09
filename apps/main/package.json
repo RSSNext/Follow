@@ -25,6 +25,7 @@
     "@egoist/tipc": "0.3.2",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
+    "@eneris/push-receiver": "4.2.0",
     "@follow/shared": "workspace:*",
     "@mozilla/readability": "^0.5.0",
     "@sentry/electron": "5.4.0",
