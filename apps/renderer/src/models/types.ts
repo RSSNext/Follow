@@ -100,6 +100,7 @@ export type ActionsInput = {
     translation?: string
     summary?: boolean
     readability?: boolean
+    silence?: boolean
     rewriteRules?: {
       from: string
       to: string
