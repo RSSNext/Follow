@@ -39,7 +39,7 @@ import {
 } from "~/providers/wrapped-element-provider"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
-import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
+import { useFeedById } from "~/store/feed"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
@@ -66,10 +66,9 @@ export const EntryContent = ({
   compact?: boolean
   classNames?: EntryContentClassNames
 }) => {
-  const title = useFeedHeaderTitle()
   const { feedId, view } = useRouteParams()
   const enableEntryWideMode = useUISettingKey("wideMode")
-  useTitle(title)
+
   if (!entryId) {
     if (enableEntryWideMode) {
       return null
@@ -216,7 +215,7 @@ export const EntryContentRender: Component<{
             <article
               data-testid="entry-render"
               onContextMenu={stopPropagation}
-              className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
+              className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch] @7xl:max-w-[80ch]"
             >
               <EntryTitle entryId={entryId} compact={compact} />
 
@@ -335,7 +334,7 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
   return (
     <div className="grow">
       {result ? (
-        <p className="rounded-xl border p-3 text-sm opacity-80">
+        <p className="mb-4 rounded-xl border p-3 text-sm opacity-80">
           <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
           {t("entry_content.readability_notice")}
         </p>

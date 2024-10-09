@@ -4,7 +4,7 @@ import { FeedNotFoundErrorFallback } from "./FeedNotFound"
 import { ModalErrorFallback } from "./ModalError"
 import { PageErrorFallback } from "./PageError"
 
-export const ErrorFallbackMap = {
+const ErrorFallbackMap = {
   [ErrorComponentType.Modal]: ModalErrorFallback,
   [ErrorComponentType.Page]: PageErrorFallback,
   [ErrorComponentType.FeedFoundCanBeFollow]: FeedFoundCanBeFollowErrorFallback,

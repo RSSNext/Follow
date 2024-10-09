@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import type { BoundingBox } from "framer-motion"
 import { useDragControls } from "framer-motion"
 import { Resizable } from "re-resizable"
@@ -127,9 +128,9 @@ export function SettingModalLayout(
                   {settings.map((t) => (
                     <button
                       key={t.path}
-                      className={`my-0.5 flex w-full items-center rounded-lg px-2.5 py-0.5 leading-loose text-theme-foreground/70 duration-200 hover:bg-theme-item-hover ${
+                      className={`my-0.5 flex w-full items-center rounded-lg px-2.5 py-0.5 leading-loose text-theme-foreground/70 ${
                         tab === t.path ? "!bg-theme-item-active !text-theme-foreground/90" : ""
-                      }`}
+                      } ${!IN_ELECTRON && "duration-200 hover:bg-theme-item-hover"}`}
                       type="button"
                       onClick={() => setTab(t.path)}
                     >

@@ -9,6 +9,7 @@ import { DiscoverInboxList } from "~/modules/discover/inbox-list-form"
 import { Recommendations } from "~/modules/discover/recommendations"
 import { DiscoverRSS3 } from "~/modules/discover/rss3-form"
 import { DiscoverUser } from "~/modules/discover/user-form"
+import { Trend } from "~/modules/trending"
 
 import { useSubViewTitle } from "../hooks"
 
@@ -64,12 +65,14 @@ export function Component() {
           })
         }}
       >
-        <TabsList className="w-full">
+        <TabsList className="relative w-full">
           {tabs.map((tab) => (
             <TabsTrigger key={tab.name} value={tab.value} disabled={tab.disabled}>
               {t(tab.name)}
             </TabsTrigger>
           ))}
+
+          <Trend />
         </TabsList>
         {tabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
