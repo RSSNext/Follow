@@ -2,7 +2,7 @@ import * as Slider from "@radix-ui/react-slider"
 import type { TooltipContentProps } from "@radix-ui/react-tooltip"
 import dayjs from "dayjs"
 import { AnimatePresence, m } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Marquee from "react-fast-marquee"
 import { useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
@@ -18,6 +18,7 @@ import { microReboundPreset } from "~/components/ui/constants/spring"
 import { VolumeSlider } from "~/components/ui/media/VolumeSlider"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { HotKeyScopeMap } from "~/constants"
+import type { NavigateEntryOptions } from "~/hooks/biz/useNavigateEntry"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
@@ -120,6 +121,23 @@ const CornerPlayerImpl = () => {
   const navigateToEntry = useNavigateEntry()
   usePlayerTracker()
 
+  const navigateOptions = useMemo<NavigateEntryOptions>(() => {
+    if (!entry || !feed) return null
+    const options: NavigateEntryOptions = {
+      entryId: entry.entries.id,
+    }
+    if (feed.type === "inbox") {
+      options.inboxId = feed.id
+    } else if (feed.type === "list") {
+      options.inboxId = feed.id
+    } else {
+      Object.assign(options, {
+        feedId: feed.id,
+        view: entry.view ?? FeedViewType.Audios,
+      })
+    }
+    return options
+  }, [entry, feed])
   if (!entry || !feed) return null
 
   return (
@@ -178,13 +196,7 @@ const CornerPlayerImpl = () => {
           />
           <ActionIcon
             className="i-mgc-external-link-cute-re"
-            onClick={() =>
-              navigateToEntry({
-                entryId: entry.entries.id,
-                feedId: feed.id,
-                view: FeedViewType.Audios,
-              })
-            }
+            onClick={() => navigateToEntry(navigateOptions)}
             label={t("player.open_entry")}
           />
           <ActionIcon
@@ -312,7 +324,9 @@ const ActionIcon = ({
       onClick={onClick}
       asChild
     >
-      <button type="button">{children || <i className={className} />}</button>
+      <button aria-label={label} type="button">
+        {children || <i aria-hidden className={className} />}
+      </button>
     </TooltipTrigger>
     <TooltipContent align={tooltipAlign}>{label}</TooltipContent>
   </Tooltip>
