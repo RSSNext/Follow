@@ -6,6 +6,7 @@
   "keys.entries.refetch": "Refetch",
   "keys.entries.toggleUnreadOnly": "Toggle Unread Only",
   "keys.entry.copyLink": "Copy Link",
+  "keys.entry.copyTitle": "Copy Title",
   "keys.entry.openInBrowser": "Open in Browser",
   "keys.entry.openInNewTab": "Open in New Tab",
   "keys.entry.scrollDown": "Scroll Down",

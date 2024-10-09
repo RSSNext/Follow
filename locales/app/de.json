@@ -19,7 +19,6 @@
   "entry_actions.failed_to_save_to_eagle": "Speichern in Eagle fehlgeschlagen.",
   "entry_actions.failed_to_save_to_instapaper": "Speichern in Instapaper fehlgeschlagen.",
   "entry_actions.failed_to_save_to_readwise": "Speichern in Readwise fehlgeschlagen.",
-  "entry_actions.link_copied": "Link in die Zwischenablage kopiert.",
   "entry_actions.mark_as_read": "Als gelesen markieren",
   "entry_actions.mark_as_unread": "Als ungelesen markieren",
   "entry_actions.open_in_browser": "Im Browser öffnen",
