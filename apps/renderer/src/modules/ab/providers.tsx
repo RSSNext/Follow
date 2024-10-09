@@ -55,7 +55,7 @@ const ABModalContent = () => {
   const setEnableDebugOverride = useSetAtom(enableDebugOverrideAtom)
   return (
     <div>
-      <Label className="flex items-center justify-between">
+      <Label className="flex items-center justify-between gap-4">
         Enable Override A/B
         <Switch
           checked={enableOverride}
@@ -71,7 +71,7 @@ const ABModalContent = () => {
         {Object.keys(features).map((key) => {
           return (
             <div key={key} className="flex w-full items-center justify-between">
-              <Label className="flex w-full items-center justify-between text-sm">
+              <Label className="flex w-full items-center justify-between gap-4 text-sm">
                 {key}
                 <SwitchInternal Key={key as any} />
               </Label>

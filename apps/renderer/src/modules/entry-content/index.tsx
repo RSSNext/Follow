@@ -39,7 +39,7 @@ import {
 } from "~/providers/wrapped-element-provider"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
-import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
+import { useFeedById } from "~/store/feed"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
@@ -66,10 +66,9 @@ export const EntryContent = ({
   compact?: boolean
   classNames?: EntryContentClassNames
 }) => {
-  const title = useFeedHeaderTitle()
   const { feedId, view } = useRouteParams()
   const enableEntryWideMode = useUISettingKey("wideMode")
-  useTitle(title)
+
   if (!entryId) {
     if (enableEntryWideMode) {
       return null
