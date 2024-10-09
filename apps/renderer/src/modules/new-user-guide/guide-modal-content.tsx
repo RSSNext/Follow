@@ -1,15 +1,15 @@
 import { AnimatePresence, m } from "framer-motion"
 import type { ComponentProps } from "react"
-import { createElement, useMemo, useState } from "react"
+import { createElement, useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Button } from "~/components/ui/button"
 import { settings } from "~/queries/settings"
 
-import { DiscoverImport } from "../discover/import"
 import { settingSyncQueue } from "../settings/helper/sync-queue"
 import { AppearanceGuide } from "./steps/appearance"
 import { BehaviorGuide } from "./steps/behavior"
+import { FeedsGuide } from "./steps/feeds"
 
 const variants = {
   enter: {
@@ -43,8 +43,8 @@ export function GuideModalContent() {
         content: createElement(BehaviorGuide),
       },
       {
-        title: "Import Feeds from OPML file",
-        content: createElement(DiscoverImport),
+        title: "Get Your Feeds Ready",
+        content: createElement(FeedsGuide),
       },
     ],
     [t],
@@ -66,6 +66,12 @@ export function GuideModalContent() {
           : "You're all set!",
     [status, guideSteps, step],
   )
+
+  const finishGuide = useCallback(() => {
+    settingSyncQueue.replaceRemote().then(() => {
+      settings.get().invalidate()
+    })
+  }, [])
 
   return (
     <div className="relative flex h-screen w-screen flex-1 flex-col justify-center overflow-hidden bg-background">
@@ -107,19 +113,20 @@ export function GuideModalContent() {
         ))}
       </div>
 
-      <div className="absolute bottom-16 right-10">
+      <div className="absolute bottom-8 right-10 flex flex-col">
         <Button
           onClick={() => {
             if (step <= totalSteps) {
               setStep((prev) => prev + 1)
             } else {
-              settingSyncQueue.replaceRemote().then(() => {
-                settings.get().invalidate()
-              })
+              finishGuide()
             }
           }}
         >
           {step <= totalSteps ? "Next" : "Finish"}
+        </Button>
+        <Button variant="text" className="text-foreground" onClick={finishGuide}>
+          Skip for now
         </Button>
       </div>
     </div>
