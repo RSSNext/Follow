@@ -118,9 +118,9 @@
     "pre-commit": "pnpm exec lint-staged"
   },
   "lint-staged": {
-    "*": "eslint --fix",
-    "*.{js,jsx,ts,tsx,json}": [
-      "prettier --write "
+    "*": [
+      "eslint --fix",
+      "prettier --ignore-unknown --write"
     ]
   },
   "bump": {
