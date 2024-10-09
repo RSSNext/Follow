@@ -74,10 +74,10 @@ export function GuideModalContent() {
   }, [])
 
   return (
-    <div className="relative flex h-screen w-screen flex-1 flex-col justify-center overflow-hidden bg-background">
+    <div className="relative flex h-[70vh] w-[70vw] flex-col items-center justify-center overflow-hidden rounded-lg border bg-background">
       <h1 className="absolute left-8 top-14 text-3xl font-bold">{title}</h1>
 
-      <div className="relative mx-auto flex h-96 w-full max-w-xl items-center">
+      <div className="relative mx-auto flex w-full max-w-lg items-center">
         <AnimatePresence initial={false}>
           <m.div
             key={step - 1}

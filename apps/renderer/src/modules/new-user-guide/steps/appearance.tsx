@@ -1,4 +1,3 @@
-import { ContentFontSelector, UIFontSelector } from "~/modules/settings/sections/fonts"
 import { AppThemeSegment, TextSize } from "~/modules/settings/tabs/apperance"
 import { LanguageSelector } from "~/modules/settings/tabs/general"
 
@@ -8,8 +7,6 @@ export function AppearanceGuide() {
       <LanguageSelector />
       <AppThemeSegment />
       <TextSize />
-      <UIFontSelector />
-      <ContentFontSelector />
     </div>
   )
 }

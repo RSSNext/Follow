@@ -138,7 +138,10 @@ export function Component() {
             id="new-user-guide"
             title="New User Guide"
             CustomModalComponent={PlainModal}
+            modalContainerClassName="flex items-center justify-center"
             open
+            canClose={false}
+            clickOutsideToDismiss={false}
           >
             <GuideModalContent />
           </DeclarativeModal>
