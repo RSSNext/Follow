@@ -3290,6 +3290,17 @@ declare const messagingOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<
 declare const messagingRelations: drizzle_orm.Relations<"messaging", {
     users: drizzle_orm.One<"user", false>;
 }>;
+declare enum MessagingType {
+    NewEntry = "new-entry"
+}
+type MessagingData = {
+    type: MessagingType.NewEntry;
+    feedId: string;
+    entryId: string;
+    view: string;
+    title: string;
+    description: string;
+};
 
 declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "settings";
@@ -4245,6 +4256,16 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     channel: "desktop" | "mobile";
                 };
             };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/messaging/test": {
+        $get: {
+            input: {};
             output: {
                 code: 0;
             };
@@ -6412,4 +6433,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

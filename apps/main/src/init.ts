@@ -1,9 +1,10 @@
 import path from "node:path"
 
-import { registerIpcMain } from "@egoist/tipc/main"
+import { getRendererHandlers, registerIpcMain } from "@egoist/tipc/main"
 import { PushReceiver } from "@eneris/push-receiver"
 import { APP_PROTOCOL } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
+import type { MessagingData } from "@follow/shared/hono"
 import { app, nativeTheme, Notification, shell } from "electron"
 import contextMenu from "electron-context-menu"
 
@@ -12,8 +13,10 @@ import { apiClient } from "./lib/api-client"
 import { t } from "./lib/i18n"
 import { store } from "./lib/store"
 import { registerAppMenu } from "./menu"
+import type { RendererHandlers } from "./renderer-handlers"
 import { initializeSentry } from "./sentry"
 import { router } from "./tipc"
+import { createMainWindow, getMainWindow } from "./window"
 
 const appFolder = {
   prod: "Follow",
@@ -158,10 +161,34 @@ const registerPushNotifications = async () => {
   })
 
   instance.onNotification((notification) => {
-    new Notification({
-      title: notification.message.data?.title as string,
-      body: notification.message.data?.body as string,
-    }).show()
+    const data = notification.message.data as MessagingData
+    switch (data.type) {
+      case "new-entry": {
+        const notification = new Notification({
+          title: data.title,
+          body: data.description,
+        })
+        notification.on("click", () => {
+          let mainWindow = getMainWindow()
+          if (!mainWindow) {
+            mainWindow = createMainWindow()
+          }
+          mainWindow.restore()
+          mainWindow.focus()
+          const handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
+          handlers.navigateEntry.send({
+            feedId: data.feedId,
+            entryId: data.entryId,
+            view: Number.parseInt(data.view),
+          })
+        })
+        notification.show()
+        break
+      }
+      default: {
+        break
+      }
+    }
     store.set(persistentIdsKey, instance.persistentIds)
   })
 

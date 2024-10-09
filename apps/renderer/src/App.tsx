@@ -6,6 +6,7 @@ import { queryClient } from "~/lib/query-client"
 
 import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"
+import { navigateEntry } from "./hooks/biz/useNavigateEntry"
 import { applyAfterReadyCallbacks } from "./initialize/queue"
 import { appLog } from "./lib/log"
 import { cn, getOS } from "./lib/utils"
@@ -19,6 +20,10 @@ function App() {
       queryClient.invalidateQueries({
         queryKey,
       })
+    })
+
+    handlers?.navigateEntry.listen((options) => {
+      navigateEntry(options)
     })
 
     return cleanup
