@@ -20,6 +20,9 @@ export default defineConfig({
         "~": resolve("./apps/main/src"),
       },
     },
+    define: {
+      ELECTRON: "true",
+    },
   },
   preload: {
     build: {

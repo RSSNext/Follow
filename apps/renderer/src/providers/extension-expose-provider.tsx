@@ -10,9 +10,12 @@ import { useModalStack } from "~/components/ui/modal"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { ListForm } from "~/modules/discover/list-form"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
+import { useSettingModal } from "~/modules/settings/modal/hooks"
 
 export const ExtensionExposeProvider = () => {
   const { present } = useModalStack()
+  const showSettings = useSettingModal()
+
   useLayoutEffect(() => {
     registerGlobalContext({
       showSetting: (path) => window.router.showSettings(path),
@@ -28,6 +31,11 @@ export const ExtensionExposeProvider = () => {
       },
     })
   }, [])
+  useEffect(() => {
+    // @ts-expect-error
+    window.router ||= {}
+    window.router.showSettings = showSettings
+  }, [showSettings])
 
   const { t } = useTranslation()
 

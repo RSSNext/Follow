@@ -1,3 +1,5 @@
+export const IMAGE_PROXY_URL = "https://webp.follow.is"
+
 export const imageRefererMatches = [
   {
     url: /^https:\/\/\w+\.sinaimg.cn/,

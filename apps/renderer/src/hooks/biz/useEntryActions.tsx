@@ -361,6 +361,20 @@ export const useEntryActions = ({
         },
       },
       {
+        key: "copyTitle",
+        name: t("entry_actions.copy_title"),
+        className: "i-mgc-link-cute-re",
+        hide: !populatedEntry.entries.title,
+        shortcut: shortcuts.entry.copyTitle.key,
+        onClick: () => {
+          if (!populatedEntry.entries.title) return
+          navigator.clipboard.writeText(populatedEntry.entries.title)
+          toast(t("entry_actions.title_copied"), {
+            duration: 1000,
+          })
+        },
+      },
+      {
         key: "openInBrowser",
         name: t("entry_actions.open_in_browser", {
           which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
