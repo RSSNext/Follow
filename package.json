@@ -14,7 +14,7 @@
   },
   "main": "./dist/main/index.js",
   "scripts": {
-    "analyze:web": "rm -rf out/web && ANALYZER=1 vite build",
+    "analyze:web": "npx vite-bundle-visualizer",
     "build": "electron-vite build && electron-forge make",
     "build:macos": "electron-vite build && electron-forge make --arch=universal --platform=darwin",
     "build:web": "rm -rf out/web && vite build",
@@ -96,7 +96,6 @@
     "tsx": "4.19.1",
     "typescript": "5.4.5",
     "vite": "^5.4.8",
-    "vite-bundle-analyzer": "0.12.1",
     "vite-plugin-mkcert": "1.17.6",
     "vite-tsconfig-paths": "5.0.1",
     "vitest": "2.0"

@@ -5,7 +5,6 @@ import legacy from "@vitejs/plugin-legacy"
 import { cyan, dim, green } from "kolorist"
 import type { PluginOption, ViteDevServer } from "vite"
 import { defineConfig, loadEnv } from "vite"
-import { analyzer } from "vite-bundle-analyzer"
 import mkcert from "vite-plugin-mkcert"
 
 import { viteRenderBaseConfig } from "./configs/vite.render.config"
@@ -97,12 +96,34 @@ export default ({ mode }) => {
           "rehype-infer-description-meta",
           "hast-util-to-jsx-runtime",
           "hast-util-to-text",
+          "react-shadow",
         ],
         ["vfile", "unified"],
         ["lodash-es"],
         ["framer-motion"],
         ["clsx", "tailwind-merge", "class-variance-authority"],
-        ["@radix-ui/react-dialog", "re-resizable"],
+
+        [
+          "@radix-ui/react-dialog",
+          "@radix-ui/react-avatar",
+          "@radix-ui/react-checkbox",
+          "@radix-ui/react-context",
+          "@radix-ui/react-dropdown-menu",
+          "@radix-ui/react-hover-card",
+          "@radix-ui/react-label",
+          "@radix-ui/react-popover",
+          "@radix-ui/react-radio-group",
+          "@radix-ui/react-scroll-area",
+          "@radix-ui/react-select",
+          "@radix-ui/react-slider",
+          "@radix-ui/react-slot",
+          "@radix-ui/react-switch",
+          "@radix-ui/react-tabs",
+          "@radix-ui/react-toast",
+          "@radix-ui/react-tooltip",
+
+          "@headlessui/react",
+        ],
         ["i18next", "i18next-browser-languagedetector", "react-i18next"],
         // Data query
         [
@@ -115,9 +136,9 @@ export default ({ mode }) => {
         ["shiki", "@shikijs/transformers"],
         ["@sentry/react", "posthog-js"],
         ["zod", "react-hook-form", "@hookform/resolvers"],
-      ]),
 
-      process.env.ANALYZER && analyzer(),
+        ["swiper"],
+      ]),
     ],
 
     define: {
