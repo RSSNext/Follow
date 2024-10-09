@@ -22,9 +22,12 @@ export type NativeMenuItem = (
 export type NullableNativeMenuItem = NativeMenuItem | null | undefined | false | ""
 
 function sortShortcutsString(shortcut: string) {
-  const order = ["Shift", "Ctrl", "Alt", "Meta"]
-
-  const arr = shortcut.split("+")
+  const order = ["Shift", "Ctrl", "Meta", "Alt"]
+  let nextShortcut = shortcut
+  if (getOS() === "Windows") {
+    nextShortcut = shortcut.replace("Meta", "Ctrl").replace("meta", "ctrl")
+  }
+  const arr = nextShortcut.split("+")
 
   const sortedModifiers = arr
     .filter((key) => order.includes(key))
@@ -38,16 +41,12 @@ export const showNativeMenu = async (
   items: Array<NullableNativeMenuItem>,
   e?: MouseEvent | React.MouseEvent,
 ) => {
-  const nextItems = (items.filter(Boolean) as NativeMenuItem[]).map((item) => {
+  const nextItems = (items.filter((item) => item && !item.hide) as NativeMenuItem[]).map((item) => {
     if (item.type === "text") {
       return {
         ...item,
         shortcut: item.shortcut ? sortShortcutsString(item.shortcut) : undefined,
       }
-    }
-
-    if (item.hide) {
-      return []
     }
     return item
   }) as NativeMenuItem[]
@@ -120,10 +119,10 @@ export const showNativeMenu = async (
   })
 
   await tipcClient?.showContextMenu({
-    items: transformMenuItems(nextItems),
+    items: transformMenuItemsForNative(nextItems),
   })
 
-  function transformMenuItems(nextItems: NativeMenuItem[]) {
+  function transformMenuItemsForNative(nextItems: NativeMenuItem[]) {
     return nextItems.map((item) => {
       if (item.type === "text") {
         return {
@@ -131,7 +130,7 @@ export const showNativeMenu = async (
           icon: undefined,
           enabled: item.click !== undefined || (!!item.submenu && item.submenu.length > 0),
           click: undefined,
-          submenu: item.submenu ? transformMenuItems(item.submenu) : undefined,
+          submenu: item.submenu ? transformMenuItemsForNative(item.submenu) : undefined,
           shortcut: item.shortcut?.replace("Meta", "CmdOrCtrl"),
         }
       }

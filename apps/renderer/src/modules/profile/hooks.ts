@@ -1,14 +1,16 @@
-import { createElement, useCallback } from "react"
+import { createElement, lazy, useCallback } from "react"
 import { parse } from "tldts"
 
-import { useModalStack } from "~/components/ui/modal"
 import { PlainModal } from "~/components/ui/modal/stacked/custom-modal"
+import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { capitalizeFirstLetter } from "~/lib/utils"
 
-import { UserProfileModalContent } from "./user-profile-modal"
+const LazyUserProfileModalContent = lazy(() =>
+  import("./user-profile-modal").then((mod) => ({ default: mod.UserProfileModalContent })),
+)
 
 export const useUserSubscriptionsQuery = (userId: string | undefined) => {
   const subscriptions = useAuthQuery(
@@ -54,7 +56,7 @@ export const usePresentUserProfileModal = (variant: Variant = "dialog") => {
       present({
         title: "User Profile",
         content: () =>
-          createElement(UserProfileModalContent, {
+          createElement(LazyUserProfileModalContent, {
             userId,
             variant: finalVariant,
           }),

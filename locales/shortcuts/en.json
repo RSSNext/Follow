@@ -20,6 +20,7 @@
   "keys.feeds.switchToView": "Switch to View",
   "keys.layout.showShortcuts": "Show/Hide Shortcuts",
   "keys.layout.toggleSidebar": "Show/Hide Feed Sidebar",
+  "keys.layout.toggleWideMode": "Toggle Wide Mode",
   "keys.type.audio": "audio",
   "keys.type.entries": "entries",
   "keys.type.entry": "entry",

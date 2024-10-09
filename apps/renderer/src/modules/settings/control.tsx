@@ -5,7 +5,7 @@ import { Button } from "~/components/ui/button"
 import { Checkbox } from "~/components/ui/checkbox"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
-import { SegmentGroup, SegmentItem } from "~/components/ui/segement"
+import { SegmentGroup, SegmentItem } from "~/components/ui/segment"
 import { Switch } from "~/components/ui/switch"
 import { cn } from "~/lib/utils"
 

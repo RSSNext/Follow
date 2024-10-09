@@ -245,6 +245,7 @@ const WideModeButton = () => {
       }}
     >
       <ActionButton
+        shortcut={shortcuts.layout.toggleWideMode.key}
         onClick={() => {
           setUISetting("wideMode", !isWideMode)
           window.posthog?.capture("Switch to Wide Mode", {

@@ -363,7 +363,7 @@ export const useEntryActions = ({
       {
         key: "copyTitle",
         name: t("entry_actions.copy_title"),
-        className: "i-mingcute-copy-line",
+        className: tw`i-mgc-copy-cute-re`,
         hide: !populatedEntry.entries.title,
         shortcut: shortcuts.entry.copyTitle.key,
         onClick: () => {
@@ -421,7 +421,7 @@ export const useEntryActions = ({
         key: "share",
         className: getOS() === "macOS" ? `i-mgc-share-3-cute-re` : "i-mgc-share-forward-cute-re",
         shortcut: shortcuts.entry.share.key,
-        hide: !IN_ELECTRON && !navigator.share,
+        hide: !(populatedEntry.entries.url && navigator.share),
 
         onClick: () => {
           if (!populatedEntry.entries.url) return

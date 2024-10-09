@@ -2,6 +2,7 @@ import { IN_ELECTRON } from "@follow/shared/constants"
 import { wrapCreateBrowserRouter } from "@sentry/react"
 import { createBrowserRouter, createHashRouter } from "react-router-dom"
 
+import { Component as App } from "./App"
 import { ErrorElement } from "./components/common/ErrorElement"
 import { NotFound } from "./components/common/NotFound"
 import { buildGlobRoutes } from "./lib/route-builder"
@@ -18,7 +19,7 @@ if (window.SENTRY_RELEASE) {
 export const router = routerCreator([
   {
     path: "/",
-    lazy: () => import("./App"),
+    Component: App,
     children: tree,
     errorElement: <ErrorElement />,
   },

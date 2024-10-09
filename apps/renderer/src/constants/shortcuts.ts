@@ -24,6 +24,10 @@ export const shortcuts = {
       name: "keys.layout.showShortcuts",
       key: "H",
     },
+    toggleWideMode: {
+      name: "keys.layout.toggleWideMode",
+      key: "Meta+[",
+    },
   },
   entries: {
     refetch: {

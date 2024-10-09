@@ -1,4 +1,4 @@
-import type { Element, Text } from "hast"
+import type { Element, Parent, Text } from "hast"
 import type { Schema } from "hast-util-sanitize"
 import type { Components } from "hast-util-to-jsx-runtime"
 import { toJsxRuntime } from "hast-util-to-jsx-runtime"
@@ -32,6 +32,31 @@ function markInlineImage(node?: Element) {
   }
 }
 
+/**
+ * Remove the last <br> element in the tree
+ */
+function rehypeTrimEndBrElement() {
+  function trim(tree: Parent): void {
+    if (!Array.isArray(tree.children) || tree.children.length === 0) {
+      return
+    }
+
+    for (let i = tree.children.length - 1; i >= 0; i--) {
+      const item = tree.children[i]
+      if (item.type === "element") {
+        if (item.tagName === "br") {
+          tree.children.pop()
+          continue
+        } else {
+          trim(item)
+        }
+      }
+      break
+    }
+  }
+  return trim
+}
+
 export const parseHtml = (
   content: string,
   options?: Partial<{
@@ -62,7 +87,7 @@ export const parseHtml = (
   const pipeline = unified()
     .use(rehypeParse, { fragment: true })
     .use(rehypeSanitize, rehypeSchema)
-
+    .use(rehypeTrimEndBrElement)
     .use(rehypeInferDescriptionMeta)
     .use(rehypeStringify)
 
