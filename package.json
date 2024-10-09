@@ -32,7 +32,7 @@
     "publish": "electron-vite build && electron-forge publish",
     "start": "electron-vite preview",
     "sync:ab": "tsx scripts/pull-ab-flags.ts",
-    "test": "pnpm -F web run test",
+    "test": "pnpm --recursive run test",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "typecheck:node": "pnpm -F electron-main run typecheck",
     "typecheck:web": "pnpm -F web run typecheck"
