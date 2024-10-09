@@ -35,6 +35,7 @@
   "actions.action_card.operation_options.matches_regex": "matches regex",
   "actions.action_card.operator": "Operator",
   "actions.action_card.rewrite_rules": "Rewrite Rules",
+  "actions.action_card.silence": "Silence",
   "actions.action_card.then_do": "Then do…",
   "actions.action_card.to": "To",
   "actions.action_card.translate_into": "Translate into",
