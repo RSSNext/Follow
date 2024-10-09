@@ -3,7 +3,6 @@ import type { NavigateFunction } from "react-router-dom"
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
 
 import { setNavigate, setRoute } from "~/atoms/route"
-import { useSettingModal } from "~/modules/settings/modal/hooks"
 
 declare global {
   export const router: {
@@ -33,19 +32,16 @@ export const StableRouterProvider = () => {
   const nav = useNavigate()
   const location = useLocation()
 
-  const showSettings = useSettingModal()
-
   // NOTE: This is a hack to expose the navigate function to the window object, avoid to import `router` circular issue.
   useLayoutEffect(() => {
     window.router.navigate = nav
-    window.router.showSettings = showSettings
     setRoute({
       params,
       searchParams,
       location,
     })
     setNavigate({ fn: nav })
-  }, [searchParams, params, location, nav, showSettings])
+  }, [searchParams, params, location, nav])
 
   // Posthog tracking
   useEffect(() => {

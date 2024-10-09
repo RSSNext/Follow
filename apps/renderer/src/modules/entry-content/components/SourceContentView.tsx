@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { AnimatePresence } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -8,7 +9,7 @@ import { softSpringPreset } from "~/components/ui/constants/spring"
 
 import { EntryContentLoading } from "../loading"
 
-const ViewTag = window.electron ? "webview" : "iframe"
+const ViewTag = IN_ELECTRON ? "webview" : "iframe"
 const variants = {
   hidden: { x: "100%" },
   visible: { x: 0 },
@@ -49,7 +50,7 @@ export const SourceContentView = ({ src }: { src: string }) => {
 
   return (
     <>
-      {!window.electron && <Banner />}
+      {!IN_ELECTRON && <Banner />}
       <div className="relative flex size-full flex-col">
         {loading && (
           <div className="center mt-16 min-w-0">

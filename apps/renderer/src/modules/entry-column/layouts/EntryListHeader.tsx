@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import type { FC } from "react"
 import * as React from "react"
 import { useTranslation } from "react-i18next"
@@ -40,7 +41,7 @@ export const EntryListHeader: FC<{
   const headerTitle = useFeedHeaderTitle()
   const os = getOS()
 
-  const titleAtBottom = window.electron && os === "macOS"
+  const titleAtBottom = IN_ELECTRON && os === "macOS"
   const isInCollectionList = feedId === FEED_COLLECTION_LIST
 
   const titleInfo = !!headerTitle && (

@@ -1,4 +1,4 @@
-import { WEB_URL } from "@follow/shared/constants"
+import { IN_ELECTRON, WEB_URL } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
@@ -169,7 +169,7 @@ export const useFeedActions = ({
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.open_feed_in_browser", {
-          which: t(window.electron ? "words.browser" : "words.newTab"),
+          which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
         }),
         disabled: isEntryList,
         shortcut: "O",
@@ -178,7 +178,7 @@ export const useFeedActions = ({
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.open_site_in_browser", {
-          which: t(window.electron ? "words.browser" : "words.newTab"),
+          which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
         }),
         shortcut: "Meta+O",
         disabled: isEntryList,
@@ -292,7 +292,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.open_list_in_browser", {
-          which: t(window.electron ? "words.browser" : "words.newTab"),
+          which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
         }),
         disabled: false,
         shortcut: "O",

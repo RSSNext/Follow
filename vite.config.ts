@@ -76,7 +76,7 @@ export default ({ mode }) => {
       devPrint(),
       createDependencyChunksPlugin([
         //  React framework
-        ["react", "react-dom", "react-router-dom", "react-error-boundary"],
+        ["react", "react-dom", "react-router-dom", "react-error-boundary", "react-dom/server"],
         // Data Statement
         ["zustand", "jotai", "use-context-selector", "immer", "dexie"],
         // Remark
@@ -116,9 +116,6 @@ export default ({ mode }) => {
         ["@sentry/react", "posthog-js"],
         ["zod", "react-hook-form", "@hookform/resolvers"],
       ]),
-      // FIXME this plugin to rename symbol will cost lots time about ~30s on M2 Max machine.
-      // And reduce main chunk js ~10K Brotli. Does that make sense?
-      // shortAliasPlugin(),
 
       process.env.ANALYZER && analyzer(),
     ],

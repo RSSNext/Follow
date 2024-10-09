@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url"
 
 import { is } from "@electron-toolkit/utils"
 import { callWindowExpose } from "@follow/shared/bridge"
-import { imageRefererMatches } from "@follow/shared/image"
+import { IMAGE_PROXY_URL, imageRefererMatches } from "@follow/shared/image"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, screen, shell } from "electron"
 
@@ -124,15 +124,9 @@ export function createWindow(
   }
 
   window.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
-    const trueUrl =
-      process.env["VITE_IMGPROXY_URL"] && details.url.startsWith(process.env["VITE_IMGPROXY_URL"])
-        ? decodeURIComponent(
-            details.url.replace(
-              new RegExp(`^${process.env["VITE_IMGPROXY_URL"]}/unsafe/\\d+x\\d+/`),
-              "",
-            ),
-          )
-        : details.url
+    const trueUrl = details.url.startsWith(IMAGE_PROXY_URL)
+      ? new URL(details.url).searchParams.get("url") || details.url
+      : details.url
     const refererMatch = imageRefererMatches.find((item) => item.url.test(trueUrl))
     callback({
       requestHeaders: {

@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { atom, useAtomValue } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { useCallback, useLayoutEffect } from "react"
@@ -10,7 +11,7 @@ import { getStorageNS } from "~/lib/ns"
 
 const useDarkQuery = () => useMediaQuery("(prefers-color-scheme: dark)")
 type ColorMode = "light" | "dark" | "system"
-const themeAtom = !window.electron
+const themeAtom = !IN_ELECTRON
   ? atomWithStorage(getStorageNS("color-mode"), "system" as ColorMode, undefined, {
       getOnInit: true,
     })
@@ -55,13 +56,13 @@ const useSyncThemeWebApp = () => {
   }, [colorMode, systemIsDark])
 }
 
-export const useSyncThemeark = window.electron ? useSyncThemeElectron : useSyncThemeWebApp
+export const useSyncThemeark = IN_ELECTRON ? useSyncThemeElectron : useSyncThemeWebApp
 
 export const useSetTheme = () =>
   useCallback((colorMode: ColorMode) => {
     jotaiStore.set(themeAtom, colorMode)
 
-    if (window.electron) {
+    if (IN_ELECTRON) {
       tipcClient?.setAppearance(colorMode)
     }
   }, [])

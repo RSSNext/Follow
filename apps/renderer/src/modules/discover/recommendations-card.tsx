@@ -35,7 +35,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
             >
               <button
                 type="button"
-                className="rounded p-0.5 duration-200 hover:bg-muted hover:px-1.5"
+                className="-translate-x-1.5 rounded p-0.5 px-1.5 duration-200 hover:translate-x-0 hover:bg-muted"
                 onClick={() => {
                   present({
                     id: `recommendation-content-${route}`,
