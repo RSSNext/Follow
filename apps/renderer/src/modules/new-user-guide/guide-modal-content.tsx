@@ -4,6 +4,7 @@ import { createElement, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Button } from "~/components/ui/button"
+import { settings } from "~/queries/settings"
 
 import { DiscoverImport } from "../discover/import"
 import { settingSyncQueue } from "../settings/helper/sync-queue"
@@ -112,7 +113,9 @@ export function GuideModalContent() {
             if (step <= totalSteps) {
               setStep((prev) => prev + 1)
             } else {
-              settingSyncQueue.replaceRemote()
+              settingSyncQueue.replaceRemote().then(() => {
+                settings.get().invalidate()
+              })
             }
           }}
         >
