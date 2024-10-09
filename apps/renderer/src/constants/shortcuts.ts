@@ -1,6 +1,7 @@
 import { COPY_MAP } from "~/constants"
+import { getOS } from "~/lib/utils"
 
-export const shortcuts = {
+const shortcutsVal = {
   feeds: {
     add: {
       name: "keys.feeds.add",
@@ -102,7 +103,23 @@ export const shortcuts = {
   },
 } as const
 
-export const shortcutsType: { [key in keyof typeof shortcuts]: I18nKeysForShortcuts } = {
+const replaceMetaWithCtrl = (obj: Record<string, any>) => {
+  if (getOS() !== "Windows") return obj
+
+  for (const type in obj) {
+    for (const action in obj[type]) {
+      const item = obj[type][action]
+      item.key = item.key?.replace("Meta", "Ctrl")
+      item.extra = item.extra?.replace("Meta", "Ctrl")
+    }
+  }
+
+  return obj
+}
+
+export const shortcuts = replaceMetaWithCtrl(shortcutsVal)
+
+export const shortcutsType: { [key in keyof typeof shortcutsVal]: I18nKeysForShortcuts } = {
   feeds: "keys.type.feeds",
   layout: "keys.type.layout",
   entries: "keys.type.entries",
