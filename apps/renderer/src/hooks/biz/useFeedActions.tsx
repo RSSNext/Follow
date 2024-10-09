@@ -7,6 +7,7 @@ import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal"
 import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
+import { isBizId } from "~/lib/utils"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
@@ -55,7 +56,7 @@ export const useFeedActions = ({
   const items = useMemo(() => {
     if (!feed) return []
 
-    const items: NativeMenuItem[] = [
+    const items: NullableNativeMenuItem[] = [
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.mark_all_as_read"),
@@ -63,20 +64,18 @@ export const useFeedActions = ({
         disabled: isEntryList,
         click: () => subscriptionActions.markReadByFeedIds({ feedIds: [feedId] }),
       },
-      ...(!feed.ownerUserId && !!feed.id && !false
-        ? [
-            {
-              type: "text" as const,
-              label: isEntryList
-                ? t("sidebar.feed_actions.claim_feed")
-                : t("sidebar.feed_actions.claim"),
-              shortcut: "C",
-              click: () => {
-                claimFeed()
-              },
-            },
-          ]
-        : []),
+      !feed.ownerUserId &&
+        !!isBizId(feed.id) &&
+        feed.type === "feed" && {
+          type: "text" as const,
+          label: isEntryList
+            ? t("sidebar.feed_actions.claim_feed")
+            : t("sidebar.feed_actions.claim"),
+          shortcut: "C",
+          click: () => {
+            claimFeed()
+          },
+        },
       ...(feed.ownerUserId === whoami()?.id
         ? [
             {
