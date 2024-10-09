@@ -161,9 +161,9 @@ export function createWindow(
 
   return window
 }
+export const windowStateStoreKey = "windowState"
 export const createMainWindow = () => {
-  const storeKey = "windowState"
-  const windowState = store.get(storeKey) as {
+  const windowState = store.get(windowStateStoreKey) as {
     height: number
     width: number
     x: number
@@ -201,7 +201,7 @@ export const createMainWindow = () => {
       const windowStoreKey = Symbol.for("maximized")
       if (window[windowStoreKey]) {
         const stored = window[windowStoreKey]
-        store.set(storeKey, {
+        store.set(windowStateStoreKey, {
           width: stored.size[0],
           height: stored.size[1],
           x: stored.position[0],
@@ -213,7 +213,7 @@ export const createMainWindow = () => {
     }
 
     const bounds = window.getBounds()
-    store.set(storeKey, {
+    store.set(windowStateStoreKey, {
       width: bounds.width,
       height: bounds.height,
       x: bounds.x,

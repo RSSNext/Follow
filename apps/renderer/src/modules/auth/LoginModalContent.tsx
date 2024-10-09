@@ -1,6 +1,6 @@
 import clsx from "clsx"
 import { AnimatePresence, m } from "framer-motion"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { FollowIcon } from "~/components/icons/follow"
@@ -23,7 +23,26 @@ export const LoginModalContent = (props: LoginModalContentProps) => {
 
   const { t } = useTranslation()
 
-  const [loadingLockSet, setLoadingLockSet] = useState<string>("")
+  const [loadingLockSet, _setLoadingLockSet] = useState<string>("")
+
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const setLoadingLockSet = (id: string) => {
+    _setLoadingLockSet(id)
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+    }
+    timerRef.current = setTimeout(() => {
+      _setLoadingLockSet("")
+    }, 3000)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+      }
+    }
+  }, [])
 
   const disabled = !!loadingLockSet
   return (

@@ -79,6 +79,12 @@ class ListActionStatic {
     this.upsertMany([res.data.list])
     return res.data
   }
+
+  async clear() {
+    set((state) => {
+      state.lists = {}
+    })
+  }
 }
 
 export const listActions = new ListActionStatic()

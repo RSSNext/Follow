@@ -14,7 +14,10 @@ export function Component() {
 
   const getCallbackUrl = async () => {
     const { data } = await apiClient["auth-app"]["new-session"].$post({})
-    return `${DEEPLINK_SCHEME}auth?token=${data.sessionToken}`
+    return {
+      url: `${DEEPLINK_SCHEME}auth?token=${data.sessionToken}&userId=${data.userId}`,
+      userId: data.userId,
+    }
   }
 
   const onceRef = useRef(false)
@@ -24,7 +27,7 @@ export function Component() {
     if (window.electron) {
       navigate("/")
     } else {
-      getCallbackUrl().then((url) => {
+      getCallbackUrl().then(({ url }) => {
         window.open(url, "_top")
 
         // If you are in development, you can use the following code to open the app
@@ -42,13 +45,22 @@ export function Component() {
         {t("redirect.instruction", { app_name: APP_NAME })}
       </h2>
       <div className="center flex flex-col gap-4 sm:flex-row">
-        <Button variant="text" className="h-14 px-10 text-base" onClick={() => navigate("/")}>
+        <Button
+          variant="text"
+          className="h-14 px-10 text-base"
+          onClick={() => {
+            navigate("/")
+          }}
+        >
           {t("redirect.continueInBrowser")}
         </Button>
 
         <Button
           className="h-14 !rounded-full px-5 text-lg"
-          onClick={async () => window.open(await getCallbackUrl(), "_top")}
+          onClick={async () => {
+            const { url } = await getCallbackUrl()
+            window.open(url, "_top")
+          }}
         >
           {t("redirect.openApp", { app_name: APP_NAME })}
         </Button>
