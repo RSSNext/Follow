@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next"
 import { Button } from "~/components/ui/button"
 
 import { DiscoverImport } from "../discover/import"
+import { settingSyncQueue } from "../settings/helper/sync-queue"
 import { AppearanceGuide } from "./steps/appearance"
 import { BehaviorGuide } from "./steps/behavior"
 
@@ -110,6 +111,8 @@ export function GuideModalContent() {
           onClick={() => {
             if (step <= totalSteps) {
               setStep((prev) => prev + 1)
+            } else {
+              settingSyncQueue.replaceRemote()
             }
           }}
         >
