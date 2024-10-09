@@ -27,7 +27,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
           {Object.keys(data.routes).map((route) => (
             <li
               key={route}
-              className="hover:text-theme-foreground-hover"
+              className="group hover:text-theme-foreground-hover"
               onClick={(e) => {
                 ;(e.target as HTMLElement).querySelector("button")?.click()
               }}
@@ -35,7 +35,7 @@ export const RecommendationCard: FC<RecommendationCardProps> = memo(({ data, rou
             >
               <button
                 type="button"
-                className="-translate-x-1.5 rounded p-0.5 px-1.5 duration-200 hover:translate-x-0 hover:bg-muted"
+                className="-translate-x-1.5 rounded p-0.5 px-1.5 duration-200 group-hover:translate-x-0 group-hover:bg-muted"
                 onClick={() => {
                   present({
                     id: `recommendation-content-${route}`,
