@@ -412,13 +412,23 @@ export function ActionCard({
                   <Select
                     value={data.result.translation}
                     onValueChange={(value) => {
-                      data.result.translation = value
+                      if (value === "none") {
+                        delete data.result.translation
+                      } else {
+                        data.result.translation = value
+                      }
                       onChange(data)
                     }}
                   >
                     <CommonSelectTrigger className="max-w-44" />
                     <SelectContent>
-                      {TransitionOptions.map((option) => (
+                      {[
+                        {
+                          name: t("actions.action_card.no_translation"),
+                          value: "none",
+                        },
+                        ...TransitionOptions,
+                      ].map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.name}
                         </SelectItem>

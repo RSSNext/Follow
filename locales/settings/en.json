@@ -26,6 +26,7 @@
   "actions.action_card.from": "From",
   "actions.action_card.generate_summary": "Generate summary using AI",
   "actions.action_card.name": "Name",
+  "actions.action_card.no_translation": "No translation",
   "actions.action_card.operation_options.contains": "contains",
   "actions.action_card.operation_options.does_not_contain": "does not contain",
   "actions.action_card.operation_options.is_equal_to": "is equal to",
