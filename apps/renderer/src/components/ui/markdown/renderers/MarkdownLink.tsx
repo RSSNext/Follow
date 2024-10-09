@@ -45,7 +45,7 @@ export const MarkdownLink = (props: LinkProps) => {
             <CopyButton
               value={populatedFullHref!}
               className="ml-1 inline-block size-5 p-0.5 [&_i]:size-3"
-             />
+            />
           </TooltipContent>
         </TooltipPortal>
       )}
