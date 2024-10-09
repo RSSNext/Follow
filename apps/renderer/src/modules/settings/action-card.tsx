@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Button } from "~/components/ui/button"
@@ -160,7 +160,6 @@ const OperationTableCell = ({
 const SettingCollapsible = ({
   title,
   onOpenChange,
-  open,
   children,
 }: {
   title: string
@@ -168,9 +167,16 @@ const SettingCollapsible = ({
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }) => {
+  const [open, setOpen] = useState(false)
+
+  const toggleOpen = () => {
+    setOpen((pre) => !pre)
+    onOpenChange && onOpenChange(!open)
+  }
+
   if (typeof open === "boolean" && typeof onOpenChange === "function") {
     return (
-      <CollapseControlled isOpened={open} onOpenChange={onOpenChange} title={title}>
+      <CollapseControlled isOpened={open} onOpenChange={toggleOpen} title={title}>
         <div className="px-1 pt-2">{children}</div>
       </CollapseControlled>
     )
@@ -452,170 +458,166 @@ export function ActionCard({
 
                 <SettingCollapsible
                   title={t("actions.action_card.rewrite_rules")}
-                  open={!!data.result.rewriteRules}
                   onOpenChange={(open) => {
-                    if (open) {
+                    if (
+                      open &&
+                      (!data.result.rewriteRules || data.result.rewriteRules?.length === 0)
+                    ) {
                       data.result.rewriteRules = [
                         {
                           from: "",
                           to: "",
                         },
                       ]
-                    } else {
-                      delete data.result.rewriteRules
                     }
                     onChange(data)
                   }}
                 >
                   {data.result.rewriteRules && data.result.rewriteRules.length > 0 && (
-                    <>
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead size="sm" />
-                            <TableHead size="sm">{t("actions.action_card.from")}</TableHead>
-                            <TableHead size="sm">{t("actions.action_card.to")}</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {data.result.rewriteRules.map((rule, rewriteIdx) => {
-                            const change = (key: string, value: string) => {
-                              data.result.rewriteRules![rewriteIdx][key] = value
-                              onChange(data)
-                            }
-                            return (
-                              <TableRow key={rewriteIdx}>
-                                <DeleteTableCell
-                                  onClick={() => {
-                                    if (data.result.rewriteRules?.length === 1) {
-                                      delete data.result.rewriteRules
-                                    } else {
-                                      data.result.rewriteRules?.splice(rewriteIdx, 1)
-                                    }
-                                    onChange(data)
-                                  }}
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead size="sm" />
+                          <TableHead size="sm">{t("actions.action_card.from")}</TableHead>
+                          <TableHead size="sm">{t("actions.action_card.to")}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {data.result.rewriteRules.map((rule, rewriteIdx) => {
+                          const change = (key: string, value: string) => {
+                            data.result.rewriteRules![rewriteIdx][key] = value
+                            onChange(data)
+                          }
+                          return (
+                            <TableRow key={rewriteIdx}>
+                              <DeleteTableCell
+                                onClick={() => {
+                                  if (data.result.rewriteRules?.length === 1) {
+                                    delete data.result.rewriteRules
+                                  } else {
+                                    data.result.rewriteRules?.splice(rewriteIdx, 1)
+                                  }
+                                  onChange(data)
+                                }}
+                              />
+                              <TableCell size="sm">
+                                <Input
+                                  value={rule.from}
+                                  className="h-8"
+                                  onChange={(e) => change("from", e.target.value)}
                                 />
-                                <TableCell size="sm">
-                                  <Input
-                                    value={rule.from}
-                                    className="h-8"
-                                    onChange={(e) => change("from", e.target.value)}
-                                  />
-                                </TableCell>
-                                <TableCell size="sm">
-                                  <Input
-                                    value={rule.to}
-                                    className="h-8"
-                                    onChange={(e) => change("to", e.target.value)}
-                                  />
-                                </TableCell>
-                              </TableRow>
-                            )
-                          })}
-                        </TableBody>
-                      </Table>
-                      <AddTableRow
-                        onClick={() => {
-                          data.result.rewriteRules!.push({
-                            from: "",
-                            to: "",
-                          })
-                          onChange(data)
-                        }}
-                      />
-                    </>
+                              </TableCell>
+                              <TableCell size="sm">
+                                <Input
+                                  value={rule.to}
+                                  className="h-8"
+                                  onChange={(e) => change("to", e.target.value)}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })}
+                      </TableBody>
+                    </Table>
                   )}
+                  <AddTableRow
+                    onClick={() => {
+                      if (!data.result.rewriteRules) {
+                        data.result.rewriteRules = []
+                      }
+                      data.result.rewriteRules!.push({
+                        from: "",
+                        to: "",
+                      })
+                      onChange(data)
+                    }}
+                  />
                 </SettingCollapsible>
                 <Divider />
                 <SettingCollapsible
                   title={t("actions.action_card.block_rules")}
-                  open={!!data.result.blockRules}
                   onOpenChange={(open) => {
-                    if (open) {
+                    if (open && (!data.result.blockRules || data.result.blockRules?.length === 0)) {
                       data.result.blockRules = [{}]
-                    } else {
-                      delete data.result.blockRules
                     }
                     onChange(data)
                   }}
                 >
                   {data.result.blockRules && data.result.blockRules.length > 0 && (
-                    <>
-                      <Table>
-                        <FieldTableHeader />
-                        <TableBody>
-                          {data.result.blockRules.map((rule, index) => {
-                            const change = (key: string, value: string | number) => {
-                              data.result.blockRules![index][key] = value
-                              onChange(data)
-                            }
-                            const type =
-                              EntryOptions.find((option) => option.value === rule.field)?.type ||
-                              "text"
-                            return (
-                              <TableRow key={index}>
-                                <DeleteTableCell
-                                  onClick={() => {
-                                    if (data.result.blockRules?.length === 1) {
-                                      delete data.result.blockRules
-                                    } else {
-                                      data.result.blockRules?.splice(index, 1)
-                                    }
-                                    onChange(data)
-                                  }}
-                                />
-                                <TableCell size="sm">
-                                  <Select
-                                    value={rule.field}
-                                    onValueChange={(value) => change("field", value)}
-                                  >
-                                    <CommonSelectTrigger />
-                                    <SelectContent>
-                                      {EntryOptions.map((option) => (
-                                        <SelectItem key={option.value} value={option.value}>
-                                          {option.name}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                </TableCell>
-                                <OperationTableCell
+                    <Table>
+                      <FieldTableHeader />
+                      <TableBody>
+                        {data.result.blockRules.map((rule, index) => {
+                          const change = (key: string, value: string | number) => {
+                            data.result.blockRules![index][key] = value
+                            onChange(data)
+                          }
+                          const type =
+                            EntryOptions.find((option) => option.value === rule.field)?.type ||
+                            "text"
+                          return (
+                            <TableRow key={index}>
+                              <DeleteTableCell
+                                onClick={() => {
+                                  if (data.result.blockRules?.length === 1) {
+                                    delete data.result.blockRules
+                                  } else {
+                                    data.result.blockRules?.splice(index, 1)
+                                  }
+                                  onChange(data)
+                                }}
+                              />
+                              <TableCell size="sm">
+                                <Select
+                                  value={rule.field}
+                                  onValueChange={(value) => change("field", value)}
+                                >
+                                  <CommonSelectTrigger />
+                                  <SelectContent>
+                                    {EntryOptions.map((option) => (
+                                      <SelectItem key={option.value} value={option.value}>
+                                        {option.name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </TableCell>
+                              <OperationTableCell
+                                type={type}
+                                value={rule.operator}
+                                onValueChange={(value) => change("operator", value)}
+                              />
+                              <TableCell size="sm">
+                                <Input
                                   type={type}
-                                  value={rule.operator}
-                                  onValueChange={(value) => change("operator", value)}
+                                  value={rule.value}
+                                  className="h-8"
+                                  onChange={(e) => change("value", e.target.value)}
                                 />
-                                <TableCell size="sm">
-                                  <Input
-                                    type={type}
-                                    value={rule.value}
-                                    className="h-8"
-                                    onChange={(e) => change("value", e.target.value)}
-                                  />
-                                </TableCell>
-                              </TableRow>
-                            )
-                          })}
-                        </TableBody>
-                      </Table>
-                      <AddTableRow
-                        onClick={() => {
-                          data.result.blockRules!.push({})
-                          onChange(data)
-                        }}
-                      />
-                    </>
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })}
+                      </TableBody>
+                    </Table>
                   )}
+                  <AddTableRow
+                    onClick={() => {
+                      if (!data.result.blockRules) {
+                        data.result.blockRules = []
+                      }
+                      data.result.blockRules!.push({})
+                      onChange(data)
+                    }}
+                  />
                 </SettingCollapsible>
                 <Divider />
 
                 <SettingCollapsible
                   title={t("actions.action_card.webhooks")}
-                  open={!!data.result.webhooks}
                   onOpenChange={(open) => {
-                    if (open) {
+                    if (open && (!data.result.webhooks || data.result.webhooks?.length === 0)) {
                       data.result.webhooks = [""]
-                    } else {
-                      delete data.result.webhooks
                     }
                     onChange(data)
                   }}
@@ -647,14 +649,17 @@ export function ActionCard({
                           </div>
                         )
                       })}
-                      <AddTableRow
-                        onClick={() => {
-                          data.result.webhooks!.push("")
-                          onChange(data)
-                        }}
-                      />
                     </>
                   )}
+                  <AddTableRow
+                    onClick={() => {
+                      if (!data.result.webhooks) {
+                        data.result.webhooks = []
+                      }
+                      data.result.webhooks!.push("")
+                      onChange(data)
+                    }}
+                  />
                 </SettingCollapsible>
               </div>
             </div>
