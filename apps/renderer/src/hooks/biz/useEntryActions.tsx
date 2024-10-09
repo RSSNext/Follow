@@ -136,21 +136,6 @@ export const useEntryActions = ({
 }) => {
   const { t } = useTranslation()
 
-  const checkEagle = useQuery({
-    queryKey: ["check-eagle"],
-    enabled: !!entry?.entries.url && view !== undefined,
-    queryFn: async () => {
-      try {
-        await ofetch("http://localhost:41595")
-        return true
-      } catch (error: unknown) {
-        return (error as FetchError).data?.code === 401
-      }
-    },
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  })
-
   const feed = useFeedById(entry?.feedId)
 
   const populatedEntry = useMemo(() => {
@@ -181,6 +166,21 @@ export const useEntryActions = ({
   const enableInstapaper = useIntegrationSettingKey("enableInstapaper")
   const instapaperUsername = useIntegrationSettingKey("instapaperUsername")
   const instapaperPassword = useIntegrationSettingKey("instapaperPassword")
+
+  const checkEagle = useQuery({
+    queryKey: ["check-eagle"],
+    enabled: ELECTRON && enableEagle && !!entry?.entries.url && view !== undefined,
+    queryFn: async () => {
+      try {
+        await ofetch("http://localhost:41595")
+        return true
+      } catch (error: unknown) {
+        return (error as FetchError).data?.code === 401
+      }
+    },
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  })
 
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
