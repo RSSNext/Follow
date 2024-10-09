@@ -68,7 +68,7 @@ export function GuideModalContent() {
 
   return (
     <div className="relative flex h-screen w-screen flex-1 flex-col justify-center overflow-hidden bg-background">
-      <h1 className="absolute left-10 top-10 text-3xl font-bold">{title}</h1>
+      <h1 className="absolute left-10 top-16 text-3xl font-bold">{title}</h1>
       <div className="relative mx-10 flex h-96 w-full max-w-xl items-center">
         <AnimatePresence initial={false}>
           <m.div
@@ -100,13 +100,13 @@ export function GuideModalContent() {
         </AnimatePresence>
       </div>
 
-      <div className="absolute bottom-10 left-10 flex gap-8">
+      <div className="absolute bottom-16 left-10 flex gap-8">
         {Array.from({ length: totalSteps }, (_, i) => i + 1).map((i) => (
           <Step key={i} step={i} currentStep={step} onClick={() => setStep(i)} />
         ))}
       </div>
 
-      <div className="absolute bottom-10 right-10">
+      <div className="absolute bottom-16 right-10">
         <Button
           onClick={() => {
             if (step <= totalSteps) {
