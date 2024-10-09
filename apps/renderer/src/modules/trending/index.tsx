@@ -1,6 +1,5 @@
 import type { User } from "@auth/core/types"
 import { useQuery } from "@tanstack/react-query"
-import { m } from "framer-motion"
 import type { FC } from "react"
 
 import { getTrendingAggregates } from "~/api/trending"
@@ -8,7 +7,7 @@ import { FeedIcon } from "~/components/feed-icon"
 import { IconoirBrightCrown } from "~/components/icons/crown"
 import { PhUsersBold } from "~/components/icons/users"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { Button } from "~/components/ui/button"
+import { ActionButton, Button } from "~/components/ui/button"
 import { LoadingWithIcon } from "~/components/ui/loading"
 import { useModalStack } from "~/components/ui/modal"
 import { DrawerModalLayout } from "~/components/ui/modal/stacked/custom-modal"
@@ -27,8 +26,7 @@ export const Trend = () => {
     <Tooltip>
       <TooltipContent>Trending</TooltipContent>
       <TooltipTrigger asChild>
-        <m.button
-          type="button"
+        <ActionButton
           onClick={() => {
             present({
               title: "Trending",
@@ -37,23 +35,13 @@ export const Trend = () => {
             })
           }}
           className={cn(
-            "box-content flex size-6 items-center justify-center rounded-full p-1 text-accent",
-            "duration-200 hover:shadow-none",
+            "size-6 text-accent duration-200 hover:shadow-none",
 
-            "absolute bottom-0 right-2",
+            "absolute bottom-1 right-3",
           )}
-          initial={{
-            scale: 0,
-          }}
-          animate={{
-            scale: 1,
-          }}
-          whileTap={{
-            scale: 0.92,
-          }}
         >
           <i className="i-mgc-trending-up-cute-re" />
-        </m.button>
+        </ActionButton>
       </TooltipTrigger>
     </Tooltip>
   )
@@ -104,15 +92,12 @@ const TrendingLists: FC<{
           <li key={item.id}>
             <button
               type="button"
-              className={cn(
-                "flex w-full min-w-0 items-center pl-2",
-                "rounded-md duration-200 hover:bg-gray-100 dark:hover:bg-zinc-800",
-                !!item.description && "rounded-xl py-2",
-              )}
+              className={"group relative flex w-full min-w-0 items-center pl-2"}
               onClick={() => {
                 follow({ isList: true, id: item.id })
               }}
             >
+              <div className="absolute -inset-y-1 inset-x-0 rounded-lg duration-200 group-hover:bg-theme-item-hover" />
               <FeedIcon feed={item as any} size={40} />
 
               <div className={cn("ml-1 flex w-full flex-col text-left")}>
@@ -122,7 +107,7 @@ const TrendingLists: FC<{
                   <UserCount count={item.subscriberCount} />
                 </div>
                 {!!item.description && (
-                  <div className={cn("-mt-1 line-clamp-2 text-sm")}>{item.description}</div>
+                  <div className={"-mt-0.5 line-clamp-2 text-xs"}>{item.description}</div>
                 )}
               </div>
             </button>
@@ -148,7 +133,8 @@ interface TopUserAvatarProps {
 }
 
 const TopUserAvatar: React.FC<TopUserAvatarProps> = ({ user, position }) => (
-  <div className={`absolute ${position} flex w-[50px] flex-col`}>
+  <div className={`absolute ${position} group flex w-[50px] flex-col`}>
+    <div className="absolute -inset-x-4 -inset-y-2 rounded-lg duration-200 group-hover:bg-theme-item-hover" />
     <Avatar className="block aspect-square size-[50px] overflow-hidden rounded-full border border-border ring-1 ring-background">
       <AvatarImage src={user?.image || undefined} />
       <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
@@ -168,7 +154,7 @@ const TrendingUsers: FC<{ data: User[] }> = ({ data }) => {
     <section className="w-full text-left">
       <h2 className="my-2 text-xl font-bold">Trending Users</h2>
       <div className="relative h-[100px]">
-        <div className="absolute left-[calc(50%+15px)] top-[8px] rotate-[40deg] text-[20px] text-accent">
+        <div className="absolute left-[calc(50%+12px)] top-[12px] rotate-45 text-[20px] text-accent">
           <IconoirBrightCrown />
         </div>
 
@@ -201,12 +187,13 @@ const TrendingUsers: FC<{ data: User[] }> = ({ data }) => {
             <li key={user.id}>
               <button
                 onFocusCapture={stopPropagation}
-                className="flex w-full items-center gap-3"
+                className="group relative flex w-full items-center gap-3"
                 type="button"
                 onClick={() => {
                   profile(user.id)
                 }}
               >
+                <div className="absolute -inset-2 rounded-lg duration-200 group-hover:bg-theme-item-hover" />
                 <Avatar className="block aspect-square size-[40px] overflow-hidden rounded-full border border-border ring-1 ring-background">
                   <AvatarImage src={user?.image || undefined} />
                   <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
@@ -232,7 +219,7 @@ const TrendingFeeds = ({ data }: { data: FeedModel[] }) => {
           return (
             <li
               className={cn(
-                "group flex w-full items-center gap-1 rounded-md pl-2 duration-200 hover:bg-gray-100 dark:hover:bg-zinc-800",
+                "group flex w-full items-center gap-1 rounded-md pl-2 duration-200 hover:bg-theme-item-hover",
                 "relative",
               )}
               key={feed.id}
