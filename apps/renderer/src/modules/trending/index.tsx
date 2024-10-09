@@ -1,6 +1,7 @@
 import type { User } from "@auth/core/types"
 import { useQuery } from "@tanstack/react-query"
 import type { FC } from "react"
+import { useTranslation } from "react-i18next"
 
 import { getTrendingAggregates } from "~/api/trending"
 import { FeedIcon } from "~/components/feed-icon"
@@ -9,7 +10,7 @@ import { PhUsersBold } from "~/components/icons/users"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { ActionButton, Button } from "~/components/ui/button"
 import { LoadingWithIcon } from "~/components/ui/loading"
-import { useModalStack } from "~/components/ui/modal"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { DrawerModalLayout } from "~/components/ui/modal/stacked/custom-modal"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
@@ -23,9 +24,10 @@ import { usePresentUserProfileModal } from "../profile/hooks"
 
 export const Trend = () => {
   const { present } = useModalStack()
+  const { t } = useTranslation()
   return (
     <Tooltip>
-      <TooltipContent>Trending</TooltipContent>
+      <TooltipContent>{t("words.trending")}</TooltipContent>
       <TooltipTrigger asChild>
         <ActionButton
           onClick={() => {
@@ -37,7 +39,6 @@ export const Trend = () => {
           }}
           className={cn(
             "size-6 text-accent duration-200 hover:shadow-none",
-
             "absolute bottom-1 right-3",
           )}
         >
@@ -55,6 +56,8 @@ const TrendContent = () => {
     },
   })
 
+  const { t } = useTranslation()
+  const { dismiss } = useCurrentModal()
   if (!data)
     return (
       <div className="center absolute inset-0">
@@ -66,14 +69,21 @@ const TrendContent = () => {
     )
   return (
     <div className="flex size-full grow flex-col gap-4">
-      <div className="flex w-full items-center justify-center gap-2 text-2xl">
+      <div className="-mt-4 flex w-full items-center justify-center gap-2 text-2xl">
         <i className="i-mingcute-trending-up-line text-3xl" />
-        <span className="font-bold">Trending</span>
+        <span className="font-bold">{t("words.trending")}</span>
       </div>
+      <ActionButton
+        className="absolute right-4 top-4"
+        onClick={dismiss}
+        tooltip={t("close", { ns: "common" })}
+      >
+        <i className="i-mgc-close-cute-re" />
+      </ActionButton>
       <ScrollArea.ScrollArea
         rootClassName="flex h-0 w-[calc(100%+8px)] grow flex-col overflow-visible"
         viewportClassName="pb-4"
-        scrollbarClassName="-mr-4"
+        scrollbarClassName="-mr-6"
       >
         <TrendingUsers data={data.trendingUsers} />
         <TrendingLists data={data.trendingLists} />
@@ -88,9 +98,10 @@ const TrendingLists: FC<{
   data: Models.TrendingList[]
 }> = ({ data }) => {
   const follow = useFollow()
+  const { t } = useTranslation()
   return (
     <section className="mt-8 w-full text-left">
-      <h2 className="my-2 text-xl font-bold">Trending Lists</h2>
+      <h2 className="my-2 text-xl font-bold">{t("trending.list")}</h2>
 
       <ul className="mt-4 flex flex-col gap-3 pb-4">
         {data.map((item) => (
@@ -155,9 +166,10 @@ const TopUserAvatar: React.FC<TopUserAvatarProps> = ({ user, position }) => (
 
 const TrendingUsers: FC<{ data: User[] }> = ({ data }) => {
   const profile = usePresentUserProfileModal("dialog")
+  const { t } = useTranslation()
   return (
     <section className="w-full text-left">
-      <h2 className="my-2 text-xl font-bold">Trending Users</h2>
+      <h2 className="my-2 text-xl font-bold">{t("trending.user")}</h2>
       <div className="relative h-[100px]">
         <div className="absolute left-[calc(50%+12px)] top-[12px] rotate-45 text-[20px] text-accent">
           <IconoirBrightCrown />
@@ -215,9 +227,10 @@ const TrendingUsers: FC<{ data: User[] }> = ({ data }) => {
 
 const TrendingFeeds = ({ data }: { data: FeedModel[] }) => {
   const follow = useFollow()
+  const { t } = useTranslation()
   return (
     <section className="mt-8 w-full text-left">
-      <h2 className="my-2 text-xl font-bold">Trending Feeds</h2>
+      <h2 className="my-2 text-xl font-bold">{t("trending.feed")}</h2>
 
       <ul className="mt-2 flex flex-col">
         {data.map((feed) => {
@@ -254,7 +267,7 @@ const TrendingFeeds = ({ data }: { data: FeedModel[] }) => {
                     follow({ isList: false, id: feed.id })
                   }}
                 >
-                  Follow
+                  {t("feed_form.follow")}
                 </Button>
               </div>
             </li>
