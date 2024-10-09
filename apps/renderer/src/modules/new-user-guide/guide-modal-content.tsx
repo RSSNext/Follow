@@ -75,8 +75,8 @@ export function GuideModalContent() {
 
   return (
     <div className="relative flex h-screen w-screen flex-1 flex-col justify-center overflow-hidden bg-background">
-      <h1 className="absolute left-10 top-16 text-3xl font-bold">{title}</h1>
-      <div className="relative mx-10 flex h-96 w-full max-w-xl items-center">
+      <h1 className="absolute left-8 top-14 text-3xl font-bold">{title}</h1>
+      <div className="relative mx-8 flex h-96 w-full max-w-xl items-center">
         <AnimatePresence initial={false}>
           <m.div
             key={step - 1}
@@ -107,27 +107,28 @@ export function GuideModalContent() {
         </AnimatePresence>
       </div>
 
-      <div className="absolute bottom-16 left-10 flex gap-8">
-        {Array.from({ length: totalSteps }, (_, i) => i + 1).map((i) => (
-          <Step key={i} step={i} currentStep={step} onClick={() => setStep(i)} />
-        ))}
-      </div>
-
-      <div className="absolute bottom-8 right-10 flex flex-col">
-        <Button
-          onClick={() => {
-            if (step <= totalSteps) {
-              setStep((prev) => prev + 1)
-            } else {
-              finishGuide()
-            }
-          }}
-        >
-          {step <= totalSteps ? "Next" : "Finish"}
-        </Button>
-        <Button variant="text" className="text-foreground" onClick={finishGuide}>
-          Skip for now
-        </Button>
+      <div className="absolute inset-x-0 bottom-4 flex w-full items-center justify-between px-8">
+        <div className="flex h-fit gap-6">
+          {Array.from({ length: totalSteps }, (_, i) => i + 1).map((i) => (
+            <Step key={i} step={i} currentStep={step} onClick={() => setStep(i)} />
+          ))}
+        </div>
+        <div className="flex flex-col">
+          <Button
+            onClick={() => {
+              if (step <= totalSteps) {
+                setStep((prev) => prev + 1)
+              } else {
+                finishGuide()
+              }
+            }}
+          >
+            {step <= totalSteps ? "Next" : "Finish"}
+          </Button>
+          <Button variant="text" className="text-xs text-foreground/70" onClick={finishGuide}>
+            Skip for now
+          </Button>
+        </div>
       </div>
     </div>
   )
