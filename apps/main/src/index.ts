@@ -10,7 +10,7 @@ import { initializeAppStage0, initializeAppStage1 } from "./init"
 import { updateProxy } from "./lib/proxy"
 import { handleUrlRouting } from "./lib/router"
 import { store } from "./lib/store"
-import { setAuthSessionToken } from "./lib/user"
+import { setAuthSessionToken, updateNotificationsToken } from "./lib/user"
 import { registerUpdater } from "./updater"
 import { createMainWindow, getMainWindow, windowStateStoreKey } from "./window"
 
@@ -154,6 +154,8 @@ function bootstrap() {
         })
         userId && (await callWindowExpose(mainWindow).clearIfLoginOtherAccount(userId))
         mainWindow.reload()
+
+        updateNotificationsToken()
       }
     } else {
       handleUrlRouting(url)
