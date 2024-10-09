@@ -8,9 +8,11 @@ import { settings } from "~/queries/settings"
 
 import { DiscoverImport } from "../discover/import"
 import { settingSyncQueue } from "../settings/helper/sync-queue"
+import { useHaveUsedOtherRSSReader } from "./atoms"
 import { AppearanceGuide } from "./steps/appearance"
 import { BehaviorGuide } from "./steps/behavior"
 import { TrendingFeeds } from "./steps/feeds"
+import { RookieCheck } from "./steps/rookie"
 
 const variants = {
   enter: {
@@ -32,27 +34,34 @@ const variants = {
 export function GuideModalContent() {
   const { t } = useTranslation("settings")
   const [step, setStep] = useState(0)
+  const haveUsedOtherRSSReader = useHaveUsedOtherRSSReader()
 
   const guideSteps = useMemo(
-    () => [
-      {
-        title: t("appearance.sidebar_title"),
-        content: createElement(AppearanceGuide),
-      },
-      {
-        title: "Behavior",
-        content: createElement(BehaviorGuide),
-      },
-      {
-        title: "Popular Feeds",
-        content: createElement(TrendingFeeds),
-      },
-      {
-        title: "Import Feeds",
-        content: createElement(DiscoverImport),
-      },
-    ],
-    [t],
+    () =>
+      [
+        {
+          title: t("appearance.sidebar_title"),
+          content: createElement(AppearanceGuide),
+        },
+        {
+          title: "Rookie Check",
+          content: createElement(RookieCheck),
+        },
+        haveUsedOtherRSSReader && {
+          title: "Behavior",
+          content: createElement(BehaviorGuide),
+        },
+        haveUsedOtherRSSReader
+          ? {
+              title: "Import Feeds",
+              content: createElement(DiscoverImport),
+            }
+          : {
+              title: "Popular Feeds",
+              content: createElement(TrendingFeeds),
+            },
+      ].filter((i) => typeof i !== "boolean"),
+    [haveUsedOtherRSSReader, t],
   )
 
   const totalSteps = useMemo(() => guideSteps.length, [guideSteps])

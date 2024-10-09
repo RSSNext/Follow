@@ -21,7 +21,7 @@ export function TrendingFeeds() {
   const { t } = useTranslation()
 
   return (
-    <ul className="flex flex-col gap-1">
+    <ul className="flex flex-col items-center justify-center gap-1">
       {data ? (
         data.trendingFeeds.map((feed) => {
           return (
