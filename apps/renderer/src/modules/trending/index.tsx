@@ -11,6 +11,7 @@ import { ActionButton, Button } from "~/components/ui/button"
 import { LoadingWithIcon } from "~/components/ui/loading"
 import { useModalStack } from "~/components/ui/modal"
 import { DrawerModalLayout } from "~/components/ui/modal/stacked/custom-modal"
+import { ScrollArea } from "~/components/ui/scroll-area"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useFollow } from "~/hooks/biz/useFollow"
@@ -69,13 +70,17 @@ const TrendContent = () => {
         <i className="i-mingcute-trending-up-line text-3xl" />
         <span className="font-bold">Trending</span>
       </div>
-      <div className="flex h-0 w-[calc(100%+8px)] grow flex-col overflow-auto pb-4 pr-2">
+      <ScrollArea.ScrollArea
+        rootClassName="flex h-0 w-[calc(100%+8px)] grow flex-col overflow-visible"
+        viewportClassName="pb-4"
+        scrollbarClassName="-mr-4"
+      >
         <TrendingUsers data={data.trendingUsers} />
         <TrendingLists data={data.trendingLists} />
         <TrendingFeeds data={data.trendingFeeds} />
 
         <TrendingEntries data={data.trendingEntries} />
-      </div>
+      </ScrollArea.ScrollArea>
     </div>
   )
 }
@@ -193,7 +198,7 @@ const TrendingUsers: FC<{ data: User[] }> = ({ data }) => {
                   profile(user.id)
                 }}
               >
-                <div className="absolute -inset-2 rounded-lg duration-200 group-hover:bg-theme-item-hover" />
+                <div className="absolute -inset-2 right-0 rounded-lg duration-200 group-hover:bg-theme-item-hover" />
                 <Avatar className="block aspect-square size-[40px] overflow-hidden rounded-full border border-border ring-1 ring-background">
                   <AvatarImage src={user?.image || undefined} />
                   <AvatarFallback>{user.name?.slice(0, 2)}</AvatarFallback>
