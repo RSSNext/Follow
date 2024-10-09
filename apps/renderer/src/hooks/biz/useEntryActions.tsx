@@ -363,7 +363,7 @@ export const useEntryActions = ({
       {
         key: "copyTitle",
         name: t("entry_actions.copy_title"),
-        className: "i-mgc-link-cute-re",
+        className: "i-mingcute-copy-line",
         hide: !populatedEntry.entries.title,
         shortcut: shortcuts.entry.copyTitle.key,
         onClick: () => {
