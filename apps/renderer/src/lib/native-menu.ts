@@ -41,16 +41,12 @@ export const showNativeMenu = async (
   items: Array<NullableNativeMenuItem>,
   e?: MouseEvent | React.MouseEvent,
 ) => {
-  const nextItems = (items.filter(Boolean) as NativeMenuItem[]).map((item) => {
+  const nextItems = (items.filter((item) => item && !item.hide) as NativeMenuItem[]).map((item) => {
     if (item.type === "text") {
       return {
         ...item,
         shortcut: item.shortcut ? sortShortcutsString(item.shortcut) : undefined,
       }
-    }
-
-    if (item.hide) {
-      return []
     }
     return item
   }) as NativeMenuItem[]
