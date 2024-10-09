@@ -1,3 +1,4 @@
+import { CopyButton } from "~/components/ui/code-highlighter"
 import { FeedViewType } from "~/lib/enum"
 import { useEntryContentContext } from "~/modules/entry-content/hooks"
 
@@ -41,6 +42,10 @@ export const MarkdownLink = (props: LinkProps) => {
         <TooltipPortal>
           <TooltipContent align="start" className="break-all" side="bottom">
             {populatedFullHref}
+            <CopyButton
+              value={populatedFullHref!}
+              className="ml-1 inline-block size-5 p-0.5 [&_i]:size-3"
+             />
           </TooltipContent>
         </TooltipPortal>
       )}
