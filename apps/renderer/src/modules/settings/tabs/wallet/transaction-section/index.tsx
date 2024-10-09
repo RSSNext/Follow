@@ -89,9 +89,7 @@ export const TransactionsSection = () => {
                 </TableCell>
 
                 <TableCell align="left" size="sm" className="whitespace-nowrap pl-6">
-                  <EllipsisHorizontalTextWithTooltip>
-                    <RelativeTime date={row.createdAt} dateFormatTemplate="l" />
-                  </EllipsisHorizontalTextWithTooltip>
+                  <RelativeTime date={row.createdAt} dateFormatTemplate="l" />
                 </TableCell>
                 <TableCell align="left" size="sm" className="pl-6">
                   <Tooltip>
