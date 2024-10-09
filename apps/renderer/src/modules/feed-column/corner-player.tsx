@@ -129,7 +129,7 @@ const CornerPlayerImpl = () => {
     if (feed.type === "inbox") {
       options.inboxId = feed.id
     } else if (feed.type === "list") {
-      options.inboxId = feed.id
+      options.listId = feed.id
     } else {
       Object.assign(options, {
         feedId: feed.id,
