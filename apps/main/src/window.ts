@@ -7,7 +7,7 @@ import { IMAGE_PROXY_URL, imageRefererMatches } from "@follow/shared/image"
 import type { BrowserWindowConstructorOptions } from "electron"
 import { BrowserWindow, screen, shell } from "electron"
 
-import { isDev, isMacOS, isWindows11 } from "./env"
+import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
 import { registerContextMenu } from "./lib/context-menu"
 import { store } from "./lib/store"
@@ -140,6 +140,9 @@ export function createWindow(
   // Make it consistent with Chrome on Windows, instead of SimSun.
   // ref: [[Feature Request]: Add possibility to change DevTools font · Issue #42055 · electron/electron](https://github.com/electron/electron/issues/42055)
   window.webContents.on("devtools-opened", () => {
+    if (!isWindows) {
+      return
+    }
     const css = `
       :root {
           --source-code-font-family: consolas; // For code such as Elements panel
