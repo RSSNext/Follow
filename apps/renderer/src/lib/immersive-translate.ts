@@ -34,6 +34,32 @@ export function immersiveTranslate({
     return
   }
 
+  if (html.childNodes.length === 1 && html.childNodes[0].nodeType === Node.TEXT_NODE) {
+    const textNode = html.childNodes[0] as Text
+    if (!textNode.textContent) {
+      return
+    }
+
+    translate({
+      entry,
+      language: entry.settings?.translation,
+      part: textNode.textContent,
+      extraFields: ["content"],
+    }).then((transformed) => {
+      if (!transformed?.content) {
+        return
+      }
+
+      const p = document.createElement("p")
+      p.append(document.createTextNode(textNode.textContent!))
+      p.append(document.createElement("br"))
+      p.append(document.createTextNode(transformed.content))
+
+      textNode.replaceWith(p)
+    })
+    return
+  }
+
   const tags = Array.from(html.querySelectorAll(tagsToDuplicate.join(","))).filter((tag) => {
     const children = tag.querySelectorAll(tagsToDuplicate.join(","))
     if (children.length > 0) {
@@ -49,7 +75,7 @@ export function immersiveTranslate({
     }
 
     const children = Array.from(tag.childNodes)
-    tag.dataset.childCount = children.length.toString()
+    tag.dataset.childCount = children.filter((child) => child.textContent).length.toString()
 
     const fontTag = document.createElement("font")
 
