@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom"
 
 import { PoweredByFooter } from "~/components/common/PoweredByFooter"
 import { Button } from "~/components/ui/button"
-import { UserAvatar } from "~/components/user-button"
 import { apiClient } from "~/lib/api-fetch"
+import { UserAvatar } from "~/modules/user/UserAvatar"
 
 export function Component() {
   const navigate = useNavigate()

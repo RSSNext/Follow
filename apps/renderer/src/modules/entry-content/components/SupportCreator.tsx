@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next"
 
 import { Button } from "~/components/ui/button"
 import { Divider } from "~/components/ui/divider"
-import { UserAvatar } from "~/components/user-button"
+import { UserAvatar } from "~/modules/user/UserAvatar"
 import { useEntry } from "~/store/entry"
 import { useFeedById } from "~/store/feed"
 

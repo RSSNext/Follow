@@ -12,11 +12,11 @@ import { setFeedColumnShow, useFeedColumnShow, useSidebarActiveView } from "~/at
 import { Logo } from "~/components/icons/logo"
 import { ActionButton } from "~/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
-import { ProfileButton } from "~/components/user-button"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useI18n } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import { cn } from "~/lib/utils"
+import { ProfileButton } from "~/modules/user/ProfileButton"
 
 const useBackHome = (active: number) => {
   const navigate = useNavigateEntry()

@@ -1,28 +1,22 @@
 import { repository } from "@pkg"
 import type { FC } from "react"
-import { forwardRef, memo, useState } from "react"
+import { memo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
 
 import { useWhoami } from "~/atoms/user"
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { useSignOut } from "~/hooks/biz/useSignOut"
-import { useAuthQuery, useMeasure } from "~/hooks/common"
-import { apiClient } from "~/lib/api-fetch"
-import { defineQuery } from "~/lib/defineQuery"
+import { useMeasure } from "~/hooks/common"
 import { nextFrame } from "~/lib/dom"
-import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { cn } from "~/lib/utils"
 import { useAchievementModal } from "~/modules/achievement/hooks"
-import { LoginModalContent } from "~/modules/auth/LoginModalContent"
+import { usePowerModal } from "~/modules/power/hooks"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { useSettingModal } from "~/modules/settings/modal/hooks"
 import { Balance } from "~/modules/wallet/balance"
 import { useSession } from "~/queries/auth"
 import { useWallet } from "~/queries/wallet"
 
-import { UserArrowLeftIcon } from "./icons/user"
-import { ActionButton } from "./ui/button"
+import { ActionButton } from "../../components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,41 +24,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu/dropdown-menu"
-import { PlainModal } from "./ui/modal/stacked/custom-modal"
-import { useModalStack } from "./ui/modal/stacked/hooks"
-import { RootPortal } from "./ui/portal"
+} from "../../components/ui/dropdown-menu/dropdown-menu"
+import { RootPortal } from "../../components/ui/portal"
+import type { LoginProps } from "./LoginButton"
+import { LoginButton } from "./LoginButton"
+import { UserAvatar } from "./UserAvatar"
 
-interface LoginProps {
-  method?: "redirect" | "modal"
-}
-export const LoginButton: FC<LoginProps> = (props) => {
-  const { method } = props
-  const modalStack = useModalStack()
-  const { t } = useTranslation()
-  const Content = (
-    <ActionButton
-      className="relative z-[1]"
-      onClick={
-        method === "modal"
-          ? () => {
-              modalStack.present({
-                CustomModalComponent: PlainModal,
-                title: "Login",
-                id: "login",
-                content: () => <LoginModalContent runtime={window.electron ? "app" : "browser"} />,
-                clickOutsideToDismiss: true,
-              })
-            }
-          : undefined
-      }
-      tooltip={t("words.login")}
-    >
-      <UserArrowLeftIcon className="size-4" />
-    </ActionButton>
-  )
-  return method === "modal" ? Content : <Link to="/login">{Content}</Link>
-}
 export const ProfileButton: FC<LoginProps> = memo((props) => {
   const { status, session } = useSession()
   const { user } = session || {}
@@ -75,6 +40,9 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   const { t } = useTranslation()
   const [ref, { x, y }] = useMeasure()
   const [dropdown, setDropdown] = useState(false)
+
+  const presentPowerModal = usePowerModal()
+
   if (status !== "authenticated") {
     return <LoginButton {...props} />
   }
@@ -116,7 +84,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
 
         <DropdownMenuItem
           onClick={() => {
-            nextFrame(() => settingModalPresent("wallet"))
+            nextFrame(presentPowerModal)
           }}
         >
           <div className="flex w-full items-center justify-between gap-6 px-1.5 font-semibold">
@@ -185,78 +153,22 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
 })
 ProfileButton.displayName = "ProfileButton"
 
-export const UserAvatar = forwardRef<
-  HTMLDivElement,
-  {
-    className?: string
-    avatarClassName?: string
-    hideName?: boolean
-    userId?: string
-    enableModal?: boolean
-    style?: React.CSSProperties
-  } & LoginProps
->(({ className, avatarClassName, hideName, userId, enableModal, style, ...props }, ref) => {
-  const { session, status } = useSession({
-    enabled: !userId,
-  })
-  const presentUserProfile = usePresentUserProfileModal("drawer")
-
-  const profile = useAuthQuery(
-    defineQuery(["profiles", userId], async () => {
-      const res = await apiClient.profiles.$get({
-        query: { id: userId! },
-      })
-      return res.data
-    }),
-    {
-      enabled: !!userId,
-    },
-  )
-
-  if (!userId && status !== "authenticated") {
-    return <LoginButton {...props} />
-  }
-
-  const renderUserData = userId ? profile.data : session?.user
-  return (
-    <div
-      style={style}
-      ref={ref}
-      className={cn(
-        "flex h-20 items-center justify-center gap-2 px-5 py-2 font-medium text-zinc-600 dark:text-zinc-300",
-        className,
-      )}
-      onClick={enableModal ? () => presentUserProfile(userId) : undefined}
-    >
-      <Avatar
-        className={cn(
-          "aspect-square h-full w-auto overflow-hidden rounded-full border bg-stone-300",
-          avatarClassName,
-        )}
-      >
-        <AvatarImage
-          className="duration-200 animate-in fade-in-0"
-          src={replaceImgUrlIfNeed(renderUserData?.image || undefined)}
-        />
-        <AvatarFallback>{renderUserData?.name?.slice(0, 2)}</AvatarFallback>
-      </Avatar>
-      {!hideName && <div>{renderUserData?.name}</div>}
-    </div>
-  )
-})
-
-UserAvatar.displayName = "UserAvatar"
 function PowerButton() {
   const user = useWhoami()
   const wallet = useWallet({ userId: user?.id })
+  const { isLoading } = wallet
   const myWallet = wallet.data?.[0]
 
   return (
     <div className="flex items-center gap-1">
       <i className="i-mgc-power text-accent" />
-      <Balance>
-        {BigInt(myWallet?.dailyPowerToken || 0n) + BigInt(myWallet?.cashablePowerToken || 0n)}
-      </Balance>
+      {isLoading ? (
+        <span className="h-3 w-8 animate-pulse rounded-xl bg-theme-inactive" />
+      ) : (
+        <Balance>
+          {BigInt(myWallet?.dailyPowerToken || 0n) + BigInt(myWallet?.cashablePowerToken || 0n)}
+        </Balance>
+      )}
     </div>
   )
 }
@@ -266,7 +178,7 @@ function LevelButton() {
     <div className="flex items-center gap-1">
       <i className="i-mgc-vip-2-cute-fi text-accent" />
       <span>Lv.1</span>
-      <sub className="text-[0.6rem] font-normal">x1</sub>
+      <sub className="-translate-y-px text-[0.6rem] font-normal">x1</sub>
     </div>
   )
 }

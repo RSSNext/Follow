@@ -23,7 +23,7 @@ import { SettingSectionTitle } from "~/modules/settings/section"
 import { Balance } from "~/modules/wallet/balance"
 import { useWallet, useWalletTransactions } from "~/queries/wallet"
 
-export const TransactionsSection = () => {
+export const TransactionsSection: Component = ({ className }) => {
   const { t } = useTranslation("settings")
   const user = useWhoami()
   const wallet = useWallet({ userId: user?.id })
@@ -35,7 +35,7 @@ export const TransactionsSection = () => {
 
   if (transactions.isLoading) {
     return (
-      <div className="center mt-12">
+      <div className={cn("center mt-12", className)}>
         <LoadingCircle size="large" />
       </div>
     )
@@ -45,9 +45,9 @@ export const TransactionsSection = () => {
     <div className="relative flex min-w-0 grow flex-col">
       <SettingSectionTitle title={t("wallet.transactions.title")} />
 
-      <div className="w-fit min-w-0 grow overflow-x-auto">
+      <div className={cn("w-fit min-w-0 grow overflow-x-auto", className)}>
         <Table className="w-full table-fixed">
-          <TableHeader>
+          <TableHeader className="sticky top-0 z-10 bg-theme-background">
             <TableRow className="[&_*]:!font-semibold">
               <TableHead className="whitespace-nowrap text-center" size="sm">
                 {t("wallet.transactions.type")}
