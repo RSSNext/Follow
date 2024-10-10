@@ -72,7 +72,7 @@ export function Component() {
             </TabsTrigger>
           ))}
 
-          <Trend />
+          <Trend className="relative bottom-0 left-1.5" />
         </TabsList>
         {tabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
