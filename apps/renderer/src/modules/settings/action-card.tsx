@@ -454,6 +454,20 @@ export function ActionCard({
 
                 <div className="flex w-full items-center justify-between">
                   <span className="w-0 shrink grow truncate">
+                    {t("actions.action_card.new_entry_notification")}
+                  </span>
+                  <Switch
+                    checked={data.result.newEntryNotification}
+                    onCheckedChange={(checked) => {
+                      data.result.newEntryNotification = checked
+                      onChange(data)
+                    }}
+                  />
+                </div>
+                <Divider />
+
+                <div className="flex w-full items-center justify-between">
+                  <span className="w-0 shrink grow truncate">
                     {t("actions.action_card.silence")}
                   </span>
                   <Switch

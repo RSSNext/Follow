@@ -60,7 +60,7 @@ export const FeedColumnHeader = memo(() => {
           </div>
         </LogoContextMenu>
       )}
-      <div className="relative flex items-center gap-1" onClick={stopPropagation}>
+      <div className="relative flex items-center gap-2" onClick={stopPropagation}>
         <Link to="/discover" tabIndex={-1}>
           <ActionButton shortcut="Meta+T" tooltip={t("words.discover")}>
             <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
@@ -89,6 +89,9 @@ const LayoutActionButton = () => {
   }, [feedColumnShow])
 
   const t = useI18n()
+
+  if (feedColumnShow) return null
+
   return (
     <m.div initial={animation} animate={animation} className="overflow-hidden">
       <ActionButton

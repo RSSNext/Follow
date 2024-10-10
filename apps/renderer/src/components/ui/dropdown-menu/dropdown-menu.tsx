@@ -87,12 +87,12 @@ const DropdownMenuItem = React.forwardRef<
     )}
     {...props}
   >
-    {props.icon && (
+    {!!props.icon && (
       <span className="mr-1.5 inline-flex size-4 items-center justify-center">{props.icon}</span>
     )}
     {props.children}
     {/* Justify Fill */}
-    {props.icon && <span className="ml-1.5 size-4" />}
+    {!!props.icon && <span className="ml-1.5 size-4" />}
   </DropdownMenuPrimitive.Item>
 ))
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName

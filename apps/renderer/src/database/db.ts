@@ -30,7 +30,7 @@ export interface LocalDBSchemaMap {
 }
 
 // Define a local DB
-export class BrowserDB extends Dexie {
+class BrowserDB extends Dexie {
   public entries: BrowserDBTable<"entries">
   public feeds: BrowserDBTable<"feeds">
   public subscriptions: BrowserDBTable<"subscriptions">
