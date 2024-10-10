@@ -1,14 +1,13 @@
 import { repository } from "@pkg"
-import { m } from "framer-motion"
 import type { FC } from "react"
-import { memo } from "react"
+import { forwardRef, memo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { useWhoami } from "~/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { useSignOut } from "~/hooks/biz/useSignOut"
-import { useAuthQuery } from "~/hooks/common"
+import { useAuthQuery, useMeasure } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { nextFrame } from "~/lib/dom"
@@ -34,6 +33,7 @@ import {
 } from "./ui/dropdown-menu/dropdown-menu"
 import { PlainModal } from "./ui/modal/stacked/custom-modal"
 import { useModalStack } from "./ui/modal/stacked/hooks"
+import { RootPortal } from "./ui/portal"
 
 interface LoginProps {
   method?: "redirect" | "modal"
@@ -73,32 +73,38 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   const presentUserProfile = usePresentUserProfileModal("dialog")
   const presentAchievement = useAchievementModal()
   const { t } = useTranslation()
+  const [ref, { x, y }] = useMeasure()
+  const [dropdown, setDropdown] = useState(false)
   if (status !== "authenticated") {
     return <LoginButton {...props} />
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu onOpenChange={setDropdown}>
       <DropdownMenuTrigger asChild className="!outline-none focus-visible:bg-theme-item-hover">
         <ActionButton>
-          <UserAvatar className="h-6 p-0 [&_*]:border-0" hideName />
+          <UserAvatar ref={ref} className="h-6 p-0 [&_*]:border-0" hideName />
         </ActionButton>
       </DropdownMenuTrigger>
+
+      <RootPortal>
+        <UserAvatar
+          style={{
+            left: x,
+            top: y,
+          }}
+          className={cn(
+            "pointer-events-none fixed -bottom-6 z-[999] p-0 duration-200 [&_*]:border-0",
+            dropdown ? "h-14 -translate-x-4" : "h-6",
+          )}
+          hideName
+        />
+      </RootPortal>
       <DropdownMenuContent
-        className="min-w-[180px] overflow-visible px-4 pt-4"
+        className="min-w-[180px] overflow-visible px-1 pt-4"
         side="bottom"
         align="center"
       >
-        <DropdownMenuLabel className="pointer-events-none absolute -top-11 left-1/2 z-10 -translate-x-1/2">
-          <m.div
-            className="origin-[1.75rem_20%]"
-            initial={{ scale: 0.42 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0.42 }}
-          >
-            <UserAvatar className="h-14 shrink-0 p-0" hideName />
-          </m.div>
-        </DropdownMenuLabel>
         <DropdownMenuLabel>
           <div className="text-center leading-none">
             <div className="truncate text-lg">{user?.name}</div>
@@ -111,7 +117,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             nextFrame(() => settingModalPresent("wallet"))
           }}
         >
-          <div className="flex items-center justify-between gap-6 font-semibold">
+          <div className="flex w-full items-center justify-between gap-6 px-1.5 font-semibold">
             <PowerButton />
             <LevelButton />
           </div>
@@ -120,6 +126,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
+          className="pl-3"
           onClick={() => {
             presentUserProfile(user?.id)
           }}
@@ -129,6 +136,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         </DropdownMenuItem>
 
         <DropdownMenuItem
+          className="pl-3"
           onClick={() => {
             presentAchievement()
           }}
@@ -139,6 +147,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
+          className="pl-3"
           onClick={() => {
             nextFrame(settingModalPresent)
           }}
@@ -150,6 +159,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         {!window.electron && (
           <>
             <DropdownMenuItem
+              className="pl-3"
               onClick={() => {
                 window.open(`${repository.url}/releases`)
               }}
@@ -160,7 +170,11 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             <DropdownMenuSeparator />
           </>
         )}
-        <DropdownMenuItem onClick={signOut} icon={<i className="i-mgc-exit-cute-re" />}>
+        <DropdownMenuItem
+          className="pl-3"
+          onClick={signOut}
+          icon={<i className="i-mgc-exit-cute-re" />}
+        >
           {t("user_button.log_out")}
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -169,20 +183,17 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
 })
 ProfileButton.displayName = "ProfileButton"
 
-export function UserAvatar({
-  className,
-  avatarClassName,
-  hideName,
-  userId,
-  enableModal,
-  ...props
-}: {
-  className?: string
-  avatarClassName?: string
-  hideName?: boolean
-  userId?: string
-  enableModal?: boolean
-} & LoginProps) {
+export const UserAvatar = forwardRef<
+  HTMLDivElement,
+  {
+    className?: string
+    avatarClassName?: string
+    hideName?: boolean
+    userId?: string
+    enableModal?: boolean
+    style?: React.CSSProperties
+  } & LoginProps
+>(({ className, avatarClassName, hideName, userId, enableModal, style, ...props }, ref) => {
   const { session, status } = useSession({
     enabled: !userId,
   })
@@ -207,6 +218,8 @@ export function UserAvatar({
   const renderUserData = userId ? profile.data : session?.user
   return (
     <div
+      style={style}
+      ref={ref}
       className={cn(
         "flex h-20 items-center justify-center gap-2 px-5 py-2 font-medium text-zinc-600 dark:text-zinc-300",
         className,
@@ -228,8 +241,9 @@ export function UserAvatar({
       {!hideName && <div>{renderUserData?.name}</div>}
     </div>
   )
-}
+})
 
+UserAvatar.displayName = "UserAvatar"
 function PowerButton() {
   const user = useWhoami()
   const wallet = useWallet({ userId: user?.id })
