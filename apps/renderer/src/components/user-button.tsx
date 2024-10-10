@@ -87,19 +87,21 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         </ActionButton>
       </DropdownMenuTrigger>
 
-      <RootPortal>
-        <UserAvatar
-          style={{
-            left: x,
-            top: y,
-          }}
-          className={cn(
-            "pointer-events-none fixed -bottom-6 z-[999] p-0 duration-200 [&_*]:border-0",
-            dropdown ? "h-14 -translate-x-4" : "h-6",
-          )}
-          hideName
-        />
-      </RootPortal>
+      {x !== 0 && y !== 0 && (
+        <RootPortal>
+          <UserAvatar
+            style={{
+              left: x,
+              top: y,
+            }}
+            className={cn(
+              "pointer-events-none fixed -bottom-6 z-[999] p-0 duration-200 [&_*]:border-0",
+              dropdown ? "h-14 -translate-x-4" : "h-6",
+            )}
+            hideName
+          />
+        </RootPortal>
+      )}
       <DropdownMenuContent
         className="min-w-[180px] overflow-visible px-1 pt-4"
         side="bottom"
