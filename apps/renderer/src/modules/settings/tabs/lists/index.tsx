@@ -20,6 +20,7 @@ import { useAuthQuery, useI18n } from "~/hooks/common"
 import { cn } from "~/lib/utils"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
+import { useDeleteFeedList } from "~/store/list"
 
 import { ListCreationModalContent, ListFeedsModalContent } from "./modals"
 
@@ -28,6 +29,8 @@ export const SettingLists = () => {
   const listList = useAuthQuery(Queries.lists.list())
 
   const { present } = useModalStack()
+
+  const deleteFeedList = useDeleteFeedList()
 
   return (
     <section className="mt-4">
@@ -138,6 +141,21 @@ export const SettingLists = () => {
                         </TooltipTrigger>
                         <TooltipPortal>
                           <TooltipContent>{t.common("words.edit")}</TooltipContent>
+                        </TooltipPortal>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            onClick={() => {
+                              deleteFeedList.mutate({ listId: row.id })
+                            }}
+                          >
+                            <i className="i-mgc-delete-2-cute-re" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipPortal>
+                          <TooltipContent>{t.common("words.delete")}</TooltipContent>
                         </TooltipPortal>
                       </Tooltip>
                     </TableCell>
