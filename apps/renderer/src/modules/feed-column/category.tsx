@@ -16,7 +16,7 @@ import type { FeedViewType } from "~/lib/enum"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
-import { useListByView } from "~/store/list"
+import { useOwnedList } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
@@ -131,7 +131,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
 
   const addMutation = useAddFeedToFeedList()
 
-  const listList = useListByView(view!)
+  const listList = useOwnedList(view!)
 
   return (
     <div tabIndex={-1} onClick={stopPropagation}>
