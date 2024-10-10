@@ -78,7 +78,7 @@ export const registerMenuAndContextMenu = () => {
     showCopyImageAddress: true,
     showCopyImage: true,
     showInspectElement: isDev,
-    showSelectAll: false,
+    showSelectAll: true,
     showCopyVideoAddress: true,
     showSaveVideoAs: true,
 
@@ -118,6 +118,18 @@ export const registerMenuAndContextMenu = () => {
           click: () => {
             shell.openExternal(params.linkURL)
           },
+        },
+        {
+          role: "undo",
+          label: t("menu.undo"),
+          accelerator: "CmdOrCtrl+Z",
+          visible: params.isEditable,
+        },
+        {
+          role: "redo",
+          label: t("menu.redo"),
+          accelerator: "CmdOrCtrl+Shift+Z",
+          visible: params.isEditable,
         },
       ]
     },
