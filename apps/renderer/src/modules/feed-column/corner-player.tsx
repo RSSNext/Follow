@@ -207,7 +207,11 @@ const CornerPlayerImpl = () => {
           />
           <ActionIcon
             className="i-mgc-external-link-cute-re"
-            onClick={() => navigateToEntry(navigateOptions)}
+            onClick={() => {
+              if (navigateOptions) {
+                navigateToEntry(navigateOptions)
+              }
+            }}
             label={t("player.open_entry")}
           />
           <ActionIcon
@@ -335,9 +339,7 @@ const ActionIcon = ({
       onClick={onClick}
       asChild
     >
-      <button aria-label={label} type="button">
-        {children || <i aria-hidden className={className} />}
-      </button>
+      <button type="button">{children || <i aria-hidden className={className} />}</button>
     </TooltipTrigger>
     <TooltipContent align={tooltipAlign}>{label}</TooltipContent>
   </Tooltip>
