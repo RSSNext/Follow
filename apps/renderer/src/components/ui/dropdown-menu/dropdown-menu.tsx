@@ -1,9 +1,26 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import * as React from "react"
 
+import { useHotkeyScope, useTypeScriptHappyCallback } from "~/hooks/common"
 import { cn } from "~/lib/utils"
 
-const DropdownMenu = DropdownMenuPrimitive.Root
+const DropdownMenu: typeof DropdownMenuPrimitive.Root = (props) => {
+  const [open, setOpen] = React.useState(!!props.open)
+  useHotkeyScope("DropdownMenu", open)
+
+  return (
+    <DropdownMenuPrimitive.Root
+      {...props}
+      onOpenChange={useTypeScriptHappyCallback(
+        (open) => {
+          setOpen(open)
+          props.onOpenChange?.(open)
+        },
+        [props.onOpenChange],
+      )}
+    />
+  )
+}
 
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
 
@@ -54,20 +71,22 @@ DropdownMenuSubContent.displayName = DropdownMenuPrimitive.SubContent.displayNam
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
-  <DropdownMenuPrimitive.Portal>
-    <DropdownMenuPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      className={cn(
-        "shadow-context-menu z-50 min-w-32 overflow-hidden rounded-md border bg-theme-background p-1 text-theme-foreground",
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        className,
-      )}
-      {...props}
-    />
-  </DropdownMenuPrimitive.Portal>
-))
+>(({ className, sideOffset = 4, ...props }, ref) => {
+  return (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.Content
+        ref={ref}
+        sideOffset={sideOffset}
+        className={cn(
+          "shadow-context-menu z-50 min-w-32 overflow-hidden rounded-md border bg-theme-background p-1 text-theme-foreground",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          className,
+        )}
+        {...props}
+      />
+    </DropdownMenuPrimitive.Portal>
+  )
+})
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName
 
 const DropdownMenuItem = React.forwardRef<
