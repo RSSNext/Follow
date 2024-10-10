@@ -123,10 +123,6 @@ export function Component() {
         </AppErrorBoundary>
       </main>
 
-      <SearchCmdK />
-      <CmdNTrigger />
-      {ELECTRON && <CmdF />}
-
       {isAuthFail && !user && (
         <RootPortal>
           <DeclarativeModal
@@ -141,6 +137,10 @@ export function Component() {
           </DeclarativeModal>
         </RootPortal>
       )}
+
+      <SearchCmdK />
+      <CmdNTrigger />
+      {ELECTRON && <CmdF />}
     </RootContainer>
   )
 }
@@ -155,7 +155,7 @@ const RootContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children 
           "--fo-feed-col-w": `${feedColWidth}px`,
         } as any
       }
-      className="flex h-screen overflow-hidden"
+      className="relative z-0 flex h-screen overflow-hidden"
       onContextMenu={preventDefault}
     >
       {children}

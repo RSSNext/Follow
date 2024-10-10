@@ -9,6 +9,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { useDebounceCallback, useEventCallback } from "usehooks-ts"
 
 import { softSpringPreset } from "~/components/ui/constants/spring"
+import { RootPortal } from "~/components/ui/portal"
 import { useInputComposition, useRefValue } from "~/hooks/common"
 import { tipcClient } from "~/lib/client"
 import { nextFrame } from "~/lib/dom"
@@ -117,7 +118,7 @@ const CmdFImpl: FC<{
         e.preventDefault()
         nativeSearch(value)
       }}
-      className="center shadow-perfect fixed right-8 top-12 z-[1000] size-9 w-64 gap-2 rounded-2xl border bg-zinc-50/90 pl-3 pr-2 backdrop-blur duration-200 focus-within:border-accent dark:bg-neutral-800/80"
+      className="center shadow-perfect fixed right-8 top-12 size-9 w-64 gap-2 rounded-2xl border bg-zinc-50/90 pl-3 pr-2 backdrop-blur duration-200 focus-within:border-accent dark:bg-neutral-800/80"
     >
       <div className="relative h-full grow">
         <input
@@ -238,22 +239,24 @@ export const CmdF = () => {
     setShow(true)
   })
   return (
-    <AnimatePresence>
-      {show && (
-        <m.div
-          className="relative z-[1000]"
-          initial={{ opacity: 0.8, y: -150 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -150 }}
-          transition={softSpringPreset}
-        >
-          <CmdFImpl
-            onClose={() => {
-              setShow(false)
-            }}
-          />
-        </m.div>
-      )}
-    </AnimatePresence>
+    <RootPortal>
+      <AnimatePresence>
+        {show && (
+          <m.div
+            className="fixed top-0 w-full"
+            initial={{ opacity: 0.8, y: -150 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -150 }}
+            transition={softSpringPreset}
+          >
+            <CmdFImpl
+              onClose={() => {
+                setShow(false)
+              }}
+            />
+          </m.div>
+        )}
+      </AnimatePresence>
+    </RootPortal>
   )
 }
