@@ -9,7 +9,6 @@ import { BrowserWindow, screen, shell } from "electron"
 
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
-import { registerContextMenu } from "./lib/context-menu"
 import { store } from "./lib/store"
 import { logger } from "./logger"
 import { cancelPollingUpdateUnreadCount, pollingUpdateUnreadCount } from "./tipc/dock"
@@ -156,8 +155,6 @@ export function createWindow(
       `)
     })
   }
-
-  registerContextMenu(window)
 
   return window
 }
