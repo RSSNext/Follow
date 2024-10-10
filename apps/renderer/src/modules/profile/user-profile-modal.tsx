@@ -16,6 +16,7 @@ import { ActionButton, Button } from "~/components/ui/button"
 import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { ScrollArea } from "~/components/ui/scroll-area"
+import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
@@ -299,15 +300,20 @@ export const UserProfileModalContent: FC<{
                   className="center h-48 w-full max-w-full"
                 />
               ) : (
-                subscriptions.data &&
-                Object.keys(subscriptions.data).map((category) => (
-                  <SubscriptionGroup
-                    key={category}
-                    category={category}
-                    subscriptions={subscriptions.data?.[category]}
-                    itemStyle={itemStyle}
-                  />
-                ))
+                subscriptions.data && (
+                  <div className="flex w-full">
+                    <div className="relative flex w-0 grow flex-col">
+                      {Object.keys(subscriptions.data).map((category) => (
+                        <SubscriptionGroup
+                          key={category}
+                          category={category}
+                          subscriptions={subscriptions.data?.[category]}
+                          itemStyle={itemStyle}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )
               )}
             </ScrollArea.ScrollArea>
           </Fragment>
@@ -332,7 +338,11 @@ const SubscriptionGroup: FC<{
         className="mb-2 mt-8 flex w-full items-center justify-between text-2xl font-bold"
         type="button"
       >
-        <h3 className="truncate">{category}</h3>
+        <h3 className="min-w-0 pr-1">
+          <EllipsisHorizontalTextWithTooltip className="min-w-0 truncate">
+            {category}
+          </EllipsisHorizontalTextWithTooltip>
+        </h3>
 
         <div className="inline-flex shrink-0 items-center opacity-50">
           <i
