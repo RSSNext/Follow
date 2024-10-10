@@ -159,6 +159,8 @@
   "lists.create": "创建列表",
   "lists.created.error": "创建列表失败",
   "lists.created.success": "创建列表成功",
+  "lists.delete.error": "删除列表失败",
+  "lists.delete.success": "删除列表成功",
   "lists.description": "描述",
   "lists.earnings": "收入",
   "lists.edit.error": "编辑列表失败",
