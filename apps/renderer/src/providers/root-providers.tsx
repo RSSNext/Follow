@@ -62,6 +62,13 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <EventProvider />
 
               <UserProvider />
+
+              <StableRouterProvider />
+              <SettingSync />
+
+              {import.meta.env.DEV && <Devtools />}
+              {children}
+
               <Suspense>
                 <LazyExtensionExposeProvider />
                 <LazyModalStackProvider />
@@ -69,12 +76,6 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
                 <LazyLottieRenderContainer />
                 <LazyFeatureFlagDebugger />
               </Suspense>
-
-              <StableRouterProvider />
-              <SettingSync />
-
-              {import.meta.env.DEV && <Devtools />}
-              {children}
               <Toaster />
             </I18nProvider>
           </Provider>
