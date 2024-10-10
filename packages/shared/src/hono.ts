@@ -3968,15 +3968,15 @@ declare const walletsOpenAPISchema: zod.ZodObject<{
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     createdAt: string;
     userId: string;
-    address: string | null;
     addressIndex: number;
+    address: string | null;
     dailyPowerToken: string;
     cashablePowerToken: string;
 }, {
     createdAt: string;
     userId: string;
-    address: string | null;
     addressIndex: number;
+    address: string | null;
     dailyPowerToken: string;
     cashablePowerToken: string;
 }>;
@@ -4895,19 +4895,14 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
     };
     "/wallets": {
         $get: {
-            input: {
-                query: {
-                    userId?: string | string[] | undefined;
-                    address?: string | string[] | undefined;
-                };
-            };
+            input: {};
             output: {
                 code: 0;
                 data: {
                     createdAt: string;
                     userId: string;
-                    address: string | null;
                     addressIndex: number;
+                    address: string | null;
                     dailyPowerToken: string;
                     cashablePowerToken: string;
                 }[];

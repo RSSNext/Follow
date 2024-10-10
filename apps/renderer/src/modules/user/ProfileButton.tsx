@@ -4,7 +4,6 @@ import { memo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
-import { useWhoami } from "~/atoms/user"
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { useMeasure } from "~/hooks/common"
 import { nextFrame } from "~/lib/dom"
@@ -157,8 +156,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
 ProfileButton.displayName = "ProfileButton"
 
 function PowerButton() {
-  const user = useWhoami()
-  const wallet = useWallet({ userId: user?.id })
+  const wallet = useWallet()
   const { isLoading } = wallet
   const myWallet = wallet.data?.[0]
 

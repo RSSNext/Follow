@@ -2,7 +2,6 @@ import { from } from "dnum"
 import type { FC } from "react"
 import { useState } from "react"
 
-import { useWhoami } from "~/atoms/user"
 import { Button } from "~/components/ui/button"
 import { Divider } from "~/components/ui/divider"
 import { LoadingWithIcon } from "~/components/ui/loading"
@@ -21,8 +20,7 @@ import { Balance } from "./balance"
 const DEFAULT_RECOMMENDED_TIP = 10
 
 const useMyWallet = () => {
-  const user = useWhoami()
-  const myWallet = useWallet({ userId: user?.id })
+  const myWallet = useWallet()
   return myWallet
 }
 

@@ -8,7 +8,7 @@ export function Component() {
   const { t } = useTranslation()
 
   return (
-    <div className="max-w-screen-md px-10">
+    <div className="w-[768px] px-10">
       <div className="mb-8 flex items-center gap-2 text-3xl font-bold">
         <div className="motion-preset-shake center text-accent motion-delay-500">
           <i className="i-mgc-power" />

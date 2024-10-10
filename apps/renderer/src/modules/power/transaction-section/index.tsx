@@ -26,7 +26,7 @@ import { useWallet, useWalletTransactions } from "~/queries/wallet"
 export const TransactionsSection: Component = ({ className }) => {
   const { t } = useTranslation("settings")
   const user = useWhoami()
-  const wallet = useWallet({ userId: user?.id })
+  const wallet = useWallet()
   const myWallet = wallet.data?.[0]
 
   const transactions = useWalletTransactions({ fromOrToUserId: user?.id })

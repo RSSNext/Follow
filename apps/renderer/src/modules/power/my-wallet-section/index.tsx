@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
-import { useWhoami } from "~/atoms/user"
 import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { LoadingWithIcon } from "~/components/ui/loading"
@@ -19,8 +18,7 @@ import { WithdrawButton } from "./withdraw"
 
 export const MyWalletSection = () => {
   const { t } = useTranslation("settings")
-  const user = useWhoami()
-  const wallet = useWallet({ userId: user?.id })
+  const wallet = useWallet()
   const myWallet = wallet.data?.[0]
 
   const refreshMutation = useMutation({
