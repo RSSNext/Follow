@@ -90,7 +90,7 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
           {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
         </MediaInfoRecordProvider>
       </MediaContainerWidthProvider>
-      {accessory && <Fragment key={shouldForceReMountKey}>{accessory}</Fragment>}
+      {!!accessory && <Fragment key={shouldForceReMountKey}>{accessory}</Fragment>}
     </MarkdownRenderContainerRefContext.Provider>
   )
 }

@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "eslint-config-hyoban"
+import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
 
 import checkI18nJson from "./plugins/eslint/eslint-check-i18n-json.js"
 import noDebug from "./plugins/eslint/eslint-no-debug.js"
@@ -16,6 +16,27 @@ export default defineConfig(
       "resources/**",
     ],
     preferESM: false,
+    // @ts-expect-error TODO: fix this in eslint-config-hyoban
+    projectService: {
+      allowDefaultProject: ["apps/main/preload/index.d.ts"],
+      defaultProject: "tsconfig.json",
+    },
+    typeChecked: "essential",
+  },
+  {
+    files: GLOB_TS_SRC,
+    rules: {
+      "require-await": "off",
+      "@typescript-eslint/require-await": "warn",
+      "@typescript-eslint/await-thenable": "warn",
+      "@typescript-eslint/no-floating-promises": "warn",
+      "@typescript-eslint/no-misused-promises": [
+        "warn",
+        {
+          checksVoidReturn: { arguments: false, attributes: false },
+        },
+      ],
+    },
   },
   {
     settings: {
@@ -51,7 +72,6 @@ export default defineConfig(
       "@stylistic/jsx-self-closing-comp": "error",
     },
   },
-  // @ts-expect-error
   {
     files: ["locales/**/*.json"],
     plugins: {
