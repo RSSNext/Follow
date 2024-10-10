@@ -1,4 +1,6 @@
 import { WEB_URL } from "@follow/shared/constants"
+import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 import { Avatar, AvatarImage } from "~/components/ui/avatar"
 import { Button } from "~/components/ui/button"
@@ -17,10 +19,11 @@ import {
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
+import { apiClient } from "~/lib/api-fetch"
 import { cn } from "~/lib/utils"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
-import { useDeleteFeedList } from "~/store/list"
+import { listActions } from "~/store/list"
 
 import { ListCreationModalContent, ListFeedsModalContent } from "./modals"
 
@@ -30,7 +33,23 @@ export const SettingLists = () => {
 
   const { present } = useModalStack()
 
-  const deleteFeedList = useDeleteFeedList()
+  const deleteFeedList = useMutation({
+    mutationFn: async (payload: { listId: string }) => {
+      listActions.deleteList(payload.listId)
+      await apiClient.lists.$delete({
+        json: {
+          listId: payload.listId,
+        },
+      })
+    },
+    onSuccess: () => {
+      toast.success(t.settings("lists.delete.success"))
+      Queries.lists.list().invalidate()
+    },
+    async onError() {
+      toast.error(t.settings("lists.delete.error"))
+    },
+  })
 
   return (
     <section className="mt-4">
