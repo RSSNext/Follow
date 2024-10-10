@@ -350,7 +350,7 @@ const FeedInnerForm = ({
                 </div>
 
                 <ViewSelectorRadioGroup
-                  feedOrList={feed}
+                  feed={feed}
                   value={field.value}
                   {...form.register("view")}
                 />

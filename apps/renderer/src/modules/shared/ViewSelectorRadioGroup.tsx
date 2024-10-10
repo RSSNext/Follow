@@ -13,8 +13,8 @@ import { EntryItem } from "../entry-column/item"
 
 export const ViewSelectorRadioGroup = forwardRef<
   HTMLInputElement,
-  { feedOrList?: FeedModel | ListModel } & React.InputHTMLAttributes<HTMLInputElement>
->(({ feedOrList, className, value, ...rest }, ref) => {
+  { feed?: FeedModel } & React.InputHTMLAttributes<HTMLInputElement>
+>(({ feed: feedOrList, className, value, ...rest }, ref) => {
   const t = useI18n()
 
   return (
