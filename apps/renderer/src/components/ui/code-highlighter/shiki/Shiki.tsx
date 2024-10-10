@@ -45,14 +45,14 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
     if (language || !isElectronBuild) return
 
     if (!bundledLanguagesKeysSet) {
-      void import("shiki/langs")
+      import("shiki/langs")
         .then(({ bundledLanguages }) => {
           langModule = bundledLanguages
           bundledLanguagesKeysSet = new Set(Object.keys(bundledLanguages))
         })
         .then(guessLanguage)
     } else {
-      void guessLanguage()
+      guessLanguage()
     }
 
     function guessLanguage() {

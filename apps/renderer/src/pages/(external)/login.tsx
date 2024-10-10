@@ -5,9 +5,9 @@ import { useLocation, useNavigate } from "react-router-dom"
 
 import { Logo } from "~/components/icons/logo"
 import { Button } from "~/components/ui/button"
-import { UserAvatar } from "~/components/user-button"
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { LOGIN_CALLBACK_URL, loginHandler } from "~/lib/auth"
+import { UserAvatar } from "~/modules/user/UserAvatar"
 
 export function Component() {
   return (

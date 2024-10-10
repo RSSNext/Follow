@@ -47,10 +47,12 @@ export default defineConfig(
       "no-debug": noDebug,
     },
     rules: {
+      "@typescript-eslint/no-floating-promises": "off",
       "no-debug/no-debug-stack": "error",
       "unicorn/prefer-math-trunc": "off",
       "@eslint-react/no-clone-element": 0,
       "@eslint-react/hooks-extra/no-direct-set-state-in-use-effect": 0,
+      "@typescript-eslint/no-misused-promises": 0,
       // NOTE: Disable this temporarily
       "react-compiler/react-compiler": 0,
       "no-restricted-syntax": 0,

@@ -151,7 +151,10 @@ export default resolveConfig({
     require("tailwindcss-animate"),
     require("@tailwindcss/container-queries"),
     require("@tailwindcss/typography"),
+    require("tailwindcss-motion"),
+
     require("./apps/renderer/src/styles/tailwind-extend.css"),
+
     plugin(({ addVariant }) => {
       addVariant("f-motion-reduce", '[data-motion-reduce="true"] &')
       addVariant("group-motion-reduce", ':merge(.group)[data-motion-reduce="true"] &')

@@ -21,7 +21,7 @@ import type { FeedModel, Models } from "~/models"
 
 import { usePresentUserProfileModal } from "../profile/hooks"
 
-export const Trend = () => {
+export const Trend = ({ className }: { className?: string }) => {
   const { present } = useModalStack()
   const { t } = useTranslation()
   return (
@@ -39,6 +39,7 @@ export const Trend = () => {
           className={cn(
             "size-6 text-accent duration-200 hover:shadow-none",
             "absolute bottom-1 right-3",
+            className,
           )}
         >
           <i className="i-mgc-trending-up-cute-re" />

@@ -364,7 +364,7 @@ export const useEntryActions = ({
         key: "copyTitle",
         name: t("entry_actions.copy_title"),
         className: tw`i-mgc-copy-cute-re`,
-        hide: !populatedEntry.entries.title,
+        hide: !populatedEntry.entries.title || type === "toolbar",
         shortcut: shortcuts.entry.copyTitle.key,
         onClick: () => {
           if (!populatedEntry.entries.title) return
