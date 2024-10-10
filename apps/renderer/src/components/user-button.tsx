@@ -1,9 +1,11 @@
 import { repository } from "@pkg"
+import { m } from "framer-motion"
 import type { FC } from "react"
 import { memo } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
+import { useWhoami } from "~/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { useAuthQuery } from "~/hooks/common"
@@ -16,7 +18,9 @@ import { useAchievementModal } from "~/modules/achievement/hooks"
 import { LoginModalContent } from "~/modules/auth/LoginModalContent"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { useSettingModal } from "~/modules/settings/modal/hooks"
+import { Balance } from "~/modules/wallet/balance"
 import { useSession } from "~/queries/auth"
+import { useWallet } from "~/queries/wallet"
 
 import { UserArrowLeftIcon } from "./icons/user"
 import { ActionButton } from "./ui/button"
@@ -77,23 +81,44 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="!outline-none focus-visible:bg-theme-item-hover">
         <ActionButton>
-          <UserAvatar className="h-5 p-0 [&_*]:border-0" hideName />
+          <UserAvatar className="h-6 p-0 [&_*]:border-0" hideName />
         </ActionButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="min-w-[180px]" side="bottom" align="end">
-        <DropdownMenuLabel className="text-xs text-theme-foreground/60">
-          {t("user_button.account")}
+      <DropdownMenuContent
+        className="min-w-[180px] overflow-visible px-4 pt-4"
+        side="bottom"
+        align="center"
+      >
+        <DropdownMenuLabel className="pointer-events-none absolute -top-11 left-1/2 z-10 -translate-x-1/2">
+          <m.div
+            className="origin-[1.75rem_20%]"
+            initial={{ scale: 0.42 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.42 }}
+          >
+            <UserAvatar className="h-14 shrink-0 p-0" hideName />
+          </m.div>
         </DropdownMenuLabel>
         <DropdownMenuLabel>
-          <div className="-mt-1 flex items-center gap-2">
-            <UserAvatar className="h-7 shrink-0 p-0" hideName />
-            <div className="max-w-40 leading-none">
-              <div className="truncate">{user?.name}</div>
-              <div className="truncate text-xs font-medium text-zinc-500">{user?.handle}</div>
-            </div>
+          <div className="text-center leading-none">
+            <div className="truncate text-lg">{user?.name}</div>
+            <div className="truncate text-xs font-medium text-zinc-500">{user?.handle}</div>
           </div>
         </DropdownMenuLabel>
+
+        <DropdownMenuItem
+          onClick={() => {
+            nextFrame(() => settingModalPresent("wallet"))
+          }}
+        >
+          <div className="flex items-center justify-between gap-6 font-semibold">
+            <PowerButton />
+            <LevelButton />
+          </div>
+        </DropdownMenuItem>
+
         <DropdownMenuSeparator />
+
         <DropdownMenuItem
           onClick={() => {
             presentUserProfile(user?.id)
@@ -113,14 +138,6 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem
-          onClick={() => {
-            nextFrame(() => settingModalPresent("wallet"))
-          }}
-          icon={<i className="i-mgc-power-outline" />}
-        >
-          {t("user_button.power")}
-        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
             nextFrame(settingModalPresent)
@@ -213,41 +230,27 @@ export function UserAvatar({
   )
 }
 
-// const AppTheme = () => {
-//   const theme = useThemeAtomValue()
-//   const setTheme = useSetTheme()
-//   return (
-//     <SettingTabbedSegment
-//       className="mb-0"
-//       label={(
-//         <span>
-//           <i className="i-mgc-palette-cute-re mr-2 translate-y-0.5" />
-//           <span className="text-sm font-normal">
-//             Theme
-//           </span>
-//         </span>
-//       )}
-//       value={theme}
-//       values={[
-//         {
-//           value: "system",
-//           label: "",
-//           icon: <i className="i-mingcute-monitor-line" />,
-//         },
-//         {
-//           value: "light",
-//           label: "",
-//           icon: <i className="i-mingcute-sun-line" />,
-//         },
-//         {
-//           value: "dark",
-//           label: "",
-//           icon: <i className="i-mingcute-moon-line" />,
-//         },
-//       ]}
-//       onValueChanged={(value) => {
-//         setTheme(value as "light" | "dark" | "system")
-//       }}
-//     />
-//   )
-// }
+function PowerButton() {
+  const user = useWhoami()
+  const wallet = useWallet({ userId: user?.id })
+  const myWallet = wallet.data?.[0]
+
+  return (
+    <div className="flex items-center gap-1">
+      <i className="i-mgc-power text-accent" />
+      <Balance>
+        {BigInt(myWallet?.dailyPowerToken || 0n) + BigInt(myWallet?.cashablePowerToken || 0n)}
+      </Balance>
+    </div>
+  )
+}
+
+function LevelButton() {
+  return (
+    <div className="flex items-center gap-1">
+      <i className="i-mgc-vip-2-cute-fi text-accent" />
+      <span>Lv.1</span>
+      <sub className="text-[0.6rem] font-normal">x1</sub>
+    </div>
+  )
+}
