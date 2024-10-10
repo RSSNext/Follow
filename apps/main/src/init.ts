@@ -9,9 +9,9 @@ import { app, nativeTheme, Notification, shell } from "electron"
 import contextMenu from "electron-context-menu"
 
 import { getIconPath } from "./helper"
-import { apiClient } from "./lib/api-client"
 import { t } from "./lib/i18n"
 import { store } from "./lib/store"
+import { updateNotificationsToken } from "./lib/user"
 import { registerAppMenu } from "./menu"
 import type { RendererHandlers } from "./renderer-handlers"
 import { initializeSentry } from "./sentry"
@@ -134,14 +134,7 @@ const registerPushNotifications = async () => {
   const credentials = store.get(credentialsKey)
   const persistentIds = store.get(persistentIdsKey)
 
-  if (credentials) {
-    apiClient.messaging.$post({
-      json: {
-        token: credentials.fcm.token,
-        channel: "desktop",
-      },
-    })
-  }
+  updateNotificationsToken()
 
   const instance = new PushReceiver({
     debug: isDev,
@@ -151,13 +144,7 @@ const registerPushNotifications = async () => {
   })
 
   instance.onCredentialsChanged(({ newCredentials }) => {
-    store.set(credentialsKey, newCredentials)
-    apiClient.messaging.$post({
-      json: {
-        token: newCredentials.fcm.token,
-        channel: "desktop",
-      },
-    })
+    updateNotificationsToken(newCredentials)
   })
 
   instance.onNotification((notification) => {

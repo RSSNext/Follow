@@ -159,6 +159,8 @@
   "lists.create": "Create New List",
   "lists.created.error": "Failed to create list.",
   "lists.created.success": "List created successfully!",
+  "lists.delete.error": "Failed to delete list.",
+  "lists.delete.success": "List deleted successfully!",
   "lists.description": "Description",
   "lists.earnings": "Earn",
   "lists.edit.error": "Failed to edit list.",

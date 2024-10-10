@@ -1,4 +1,6 @@
 import { WEB_URL } from "@follow/shared/constants"
+import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 import { Avatar, AvatarImage } from "~/components/ui/avatar"
 import { Button } from "~/components/ui/button"
@@ -17,9 +19,11 @@ import {
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
+import { apiClient } from "~/lib/api-fetch"
 import { cn } from "~/lib/utils"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
+import { listActions } from "~/store/list"
 
 import { ListCreationModalContent, ListFeedsModalContent } from "./modals"
 
@@ -28,6 +32,24 @@ export const SettingLists = () => {
   const listList = useAuthQuery(Queries.lists.list())
 
   const { present } = useModalStack()
+
+  const deleteFeedList = useMutation({
+    mutationFn: async (payload: { listId: string }) => {
+      listActions.deleteList(payload.listId)
+      await apiClient.lists.$delete({
+        json: {
+          listId: payload.listId,
+        },
+      })
+    },
+    onSuccess: () => {
+      toast.success(t.settings("lists.delete.success"))
+      Queries.lists.list().invalidate()
+    },
+    async onError() {
+      toast.error(t.settings("lists.delete.error"))
+    },
+  })
 
   return (
     <section className="mt-4">
@@ -138,6 +160,21 @@ export const SettingLists = () => {
                         </TooltipTrigger>
                         <TooltipPortal>
                           <TooltipContent>{t.common("words.edit")}</TooltipContent>
+                        </TooltipPortal>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            onClick={() => {
+                              deleteFeedList.mutate({ listId: row.id })
+                            }}
+                          >
+                            <i className="i-mgc-delete-2-cute-re" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipPortal>
+                          <TooltipContent>{t.common("words.delete")}</TooltipContent>
                         </TooltipPortal>
                       </Tooltip>
                     </TableCell>

@@ -10,6 +10,7 @@ import { useModalStack } from "~/components/ui/modal"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { useSettingModal } from "~/modules/settings/modal/hooks"
+import { clearDataIfLoginOtherAccount } from "~/store/utils/clear"
 
 export const ExtensionExposeProvider = () => {
   const { present } = useModalStack()
@@ -27,6 +28,10 @@ export const ExtensionExposeProvider = () => {
       },
       getWebUrl() {
         return window.location.origin
+      },
+
+      clearIfLoginOtherAccount(newUserId: string) {
+        clearDataIfLoginOtherAccount(newUserId)
       },
     })
   }, [])
