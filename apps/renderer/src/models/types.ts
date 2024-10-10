@@ -114,3 +114,5 @@ export type ActionsInput = {
     webhooks?: string[]
   }
 }[]
+
+export const TransactionTypes = ["mint", "purchase", "tip", "withdraw"] as const

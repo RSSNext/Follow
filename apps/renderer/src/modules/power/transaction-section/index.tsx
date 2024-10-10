@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { useWhoami } from "~/atoms/user"
@@ -5,7 +6,6 @@ import { Logo } from "~/components/icons/logo"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { MotionButtonBase } from "~/components/ui/button"
 import { RelativeTime } from "~/components/ui/datetime"
-import { LoadingCircle } from "~/components/ui/loading"
 import {
   Table,
   TableBody,
@@ -14,14 +14,18 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
+import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { cn } from "~/lib/utils"
+import { TransactionTypes } from "~/models/types"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { SettingSectionTitle } from "~/modules/settings/section"
 import { Balance } from "~/modules/wallet/balance"
 import { useWallet, useWalletTransactions } from "~/queries/wallet"
+
+const tabs = ["all", ...TransactionTypes] as const
 
 export const TransactionsSection: Component = ({ className }) => {
   const { t } = useTranslation("settings")
@@ -29,22 +33,27 @@ export const TransactionsSection: Component = ({ className }) => {
   const wallet = useWallet()
   const myWallet = wallet.data?.[0]
 
-  const transactions = useWalletTransactions({ fromOrToUserId: user?.id })
+  const [type, setType] = useState("all")
+
+  const transactions = useWalletTransactions({
+    fromOrToUserId: user?.id,
+    type: type === "all" ? undefined : type,
+  })
 
   if (!myWallet) return null
-
-  if (transactions.isLoading) {
-    return (
-      <div className={cn("center mt-12", className)}>
-        <LoadingCircle size="large" />
-      </div>
-    )
-  }
 
   return (
     <div className="relative flex min-w-0 grow flex-col">
       <SettingSectionTitle title={t("wallet.transactions.title")} />
-
+      <Tabs value={type} onValueChange={(val) => setType(val)}>
+        <TabsList className="relative -ml-2 border-b-transparent">
+          {tabs.map((tab) => (
+            <TabsTrigger key={tab} value={tab} className="py-0">
+              {t(`wallet.transactions.types.${tab}`)}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
       <div className={cn("w-fit min-w-0 grow overflow-x-auto", className)}>
         <Table className="w-full table-fixed">
           <TableHeader className="sticky top-0 z-10 bg-theme-background">
