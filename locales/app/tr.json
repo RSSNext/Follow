@@ -32,7 +32,6 @@
   "entry_actions.failed_to_save_to_eagle": "Eagle'a kaydetme başarısız oldu.",
   "entry_actions.failed_to_save_to_instapaper": "Instapaper'a kaydetme başarısız oldu.",
   "entry_actions.failed_to_save_to_readwise": "Readwise'a kaydetme başarısız oldu.",
-  "entry_actions.link_copied": "Bağlantı panoya kopyalandı.",
   "entry_actions.mark_as_read": "Okundu olarak işaretle",
   "entry_actions.mark_as_unread": "Okunmadı olarak işaretle",
   "entry_actions.open_in_browser": "Tarayıcıda aç",

@@ -32,7 +32,6 @@
   "entry_actions.failed_to_save_to_eagle": "Eagle 에 저장하지 못했습니다.",
   "entry_actions.failed_to_save_to_instapaper": "Instapaper 에 저장하지 못했습니다.",
   "entry_actions.failed_to_save_to_readwise": "Readwise 에 저장하지 못했습니다.",
-  "entry_actions.link_copied": "링크가 클립보드에 복사되었습니다.",
   "entry_actions.mark_as_read": "읽음으로 표시",
   "entry_actions.mark_as_unread": "읽지 않음으로 표시",
   "entry_actions.open_in_browser": "브라우저에서 열기",

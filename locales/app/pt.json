@@ -19,7 +19,6 @@
   "entry_actions.failed_to_save_to_eagle": "Eagle への保存に失敗しました。",
   "entry_actions.failed_to_save_to_instapaper": "Instapaper への保存に失敗しました。",
   "entry_actions.failed_to_save_to_readwise": "Readwise への保存に失敗しました。",
-  "entry_actions.link_copied": "リンクがクリップボードにコピーされました。",
   "entry_actions.mark_as_read": "既読にする",
   "entry_actions.mark_as_unread": "未読にする",
   "entry_actions.open_in_browser": "ブラウザで開く",
