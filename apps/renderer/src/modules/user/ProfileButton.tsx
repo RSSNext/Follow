@@ -48,107 +48,110 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   }
 
   return (
-    <DropdownMenu onOpenChange={setDropdown}>
-      <DropdownMenuTrigger asChild className="!outline-none focus-visible:bg-theme-item-hover">
-        <ActionButton>
-          <UserAvatar ref={ref} className="h-6 p-0 [&_*]:border-0" hideName />
-        </ActionButton>
-      </DropdownMenuTrigger>
+    <>
+      <DropdownMenu onOpenChange={setDropdown}>
+        <DropdownMenuTrigger asChild className="!outline-none focus-visible:bg-theme-item-hover">
+          <ActionButton>
+            <UserAvatar ref={ref} className="h-6 p-0 [&_*]:border-0" hideName />
+          </ActionButton>
+        </DropdownMenuTrigger>
 
+        <DropdownMenuContent
+          className="min-w-[180px] overflow-visible px-1 pt-4"
+          side="bottom"
+          align="center"
+        >
+          <DropdownMenuLabel>
+            <div className="text-center leading-none">
+              <div className="truncate text-lg">{user?.name}</div>
+              <div className="truncate text-xs font-medium text-zinc-500">{user?.handle}</div>
+            </div>
+          </DropdownMenuLabel>
+
+          <DropdownMenuItem
+            onClick={() => {
+              nextFrame(presentPowerModal)
+            }}
+          >
+            <div className="flex w-full items-center justify-between gap-6 px-1.5 font-semibold">
+              <PowerButton />
+              <LevelButton />
+            </div>
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem
+            className="pl-3"
+            onClick={() => {
+              presentUserProfile(user?.id)
+            }}
+            icon={<i className="i-mgc-user-3-cute-re" />}
+          >
+            {t("user_button.profile")}
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            className="pl-3"
+            onClick={() => {
+              presentAchievement()
+            }}
+            icon={<i className="i-mgc-trophy-cute-re" />}
+          >
+            {t("user_button.achievement")}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem
+            className="pl-3"
+            onClick={() => {
+              nextFrame(settingModalPresent)
+            }}
+            icon={<i className="i-mgc-settings-7-cute-re" />}
+          >
+            {t("user_button.preferences")}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          {!window.electron && (
+            <>
+              <DropdownMenuItem
+                className="pl-3"
+                onClick={() => {
+                  window.open(`${repository.url}/releases`)
+                }}
+                icon={<i className="i-mgc-download-2-cute-re" />}
+              >
+                {t("user_button.download_desktop_app")}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
+          <DropdownMenuItem
+            className="pl-3"
+            onClick={signOut}
+            icon={<i className="i-mgc-exit-cute-re" />}
+          >
+            {t("user_button.log_out")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       {x !== 0 && y !== 0 && (
         <RootPortal>
           <UserAvatar
             style={{
-              left: x,
+              left: x - (dropdown ? 16 : 0),
               top: y,
             }}
             className={cn(
               "pointer-events-none fixed -bottom-6 z-[999] p-0 duration-200 [&_*]:border-0",
-              dropdown ? "h-14 -translate-x-4" : "h-6",
+              "transform-gpu will-change-[left,top,height]",
+              dropdown ? "h-14 " : "h-6",
             )}
             hideName
           />
         </RootPortal>
       )}
-      <DropdownMenuContent
-        className="min-w-[180px] overflow-visible px-1 pt-4"
-        side="bottom"
-        align="center"
-      >
-        <DropdownMenuLabel>
-          <div className="text-center leading-none">
-            <div className="truncate text-lg">{user?.name}</div>
-            <div className="truncate text-xs font-medium text-zinc-500">{user?.handle}</div>
-          </div>
-        </DropdownMenuLabel>
-
-        <DropdownMenuItem
-          onClick={() => {
-            nextFrame(presentPowerModal)
-          }}
-        >
-          <div className="flex w-full items-center justify-between gap-6 px-1.5 font-semibold">
-            <PowerButton />
-            <LevelButton />
-          </div>
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem
-          className="pl-3"
-          onClick={() => {
-            presentUserProfile(user?.id)
-          }}
-          icon={<i className="i-mgc-user-3-cute-re" />}
-        >
-          {t("user_button.profile")}
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className="pl-3"
-          onClick={() => {
-            presentAchievement()
-          }}
-          icon={<i className="i-mgc-trophy-cute-re" />}
-        >
-          {t("user_button.achievement")}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem
-          className="pl-3"
-          onClick={() => {
-            nextFrame(settingModalPresent)
-          }}
-          icon={<i className="i-mgc-settings-7-cute-re" />}
-        >
-          {t("user_button.preferences")}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        {!window.electron && (
-          <>
-            <DropdownMenuItem
-              className="pl-3"
-              onClick={() => {
-                window.open(`${repository.url}/releases`)
-              }}
-              icon={<i className="i-mgc-download-2-cute-re" />}
-            >
-              {t("user_button.download_desktop_app")}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-          </>
-        )}
-        <DropdownMenuItem
-          className="pl-3"
-          onClick={signOut}
-          icon={<i className="i-mgc-exit-cute-re" />}
-        >
-          {t("user_button.log_out")}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    </>
   )
 })
 ProfileButton.displayName = "ProfileButton"
