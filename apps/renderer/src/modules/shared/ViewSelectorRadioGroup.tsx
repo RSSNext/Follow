@@ -1,14 +1,20 @@
 import { forwardRef } from "react"
 
-import { Card, CardHeader } from "~/components/ui/card"
+import { Card, CardContent, CardHeader } from "~/components/ui/card"
+import { LoadingCircle } from "~/components/ui/loading"
 import { views } from "~/constants"
 import { useI18n } from "~/hooks/common"
+import { FeedViewType } from "~/lib/enum"
 import { cn } from "~/lib/utils"
+import type { FeedModel, ListModel } from "~/models"
+import { useEntriesPreview } from "~/queries/entries"
+
+import { EntryItem } from "../entry-column/item"
 
 export const ViewSelectorRadioGroup = forwardRef<
   HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement>
->(({ className, ...rest }, ref) => {
+  { feedOrList?: FeedModel | ListModel } & React.InputHTMLAttributes<HTMLInputElement>
+>(({ feedOrList, className, value, ...rest }, ref) => {
   const t = useI18n()
 
   return (
@@ -41,6 +47,35 @@ export const ViewSelectorRadioGroup = forwardRef<
           </div>
         ))}
       </CardHeader>
+      <CardContent>
+        <ViewPreview feedOrList={feedOrList} view={+(value ?? FeedViewType.Articles)} />
+      </CardContent>
     </Card>
   )
 })
+
+const ViewPreview = ({
+  feedOrList,
+  view,
+}: {
+  feedOrList?: FeedModel | ListModel
+  view: FeedViewType
+}) => {
+  const id = feedOrList?.id
+  const entries = useEntriesPreview({
+    id,
+  })
+  const { isLoading } = entries
+
+  if (isLoading) {
+    return <LoadingCircle size="large" className="center" />
+  }
+
+  return (
+    <div>
+      {entries.data
+        ?.slice(0, 3)
+        .map((entry) => <EntryItem key={entry.id} entryId={entry.id} view={view} />)}
+    </div>
+  )
+}
