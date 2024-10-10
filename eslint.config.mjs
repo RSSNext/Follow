@@ -16,7 +16,6 @@ export default defineConfig(
       "resources/**",
     ],
     preferESM: false,
-    // @ts-expect-error TODO: fix this in eslint-config-hyoban
     projectService: {
       allowDefaultProject: ["apps/main/preload/index.d.ts"],
       defaultProject: "tsconfig.json",
@@ -72,6 +71,7 @@ export default defineConfig(
       "@stylistic/jsx-self-closing-comp": "error",
     },
   },
+  // @ts-expect-error
   {
     files: ["locales/**/*.json"],
     plugins: {
