@@ -47,6 +47,7 @@ export default defineConfig(
       "no-debug": noDebug,
     },
     rules: {
+      "@typescript-eslint/no-floating-promises": "off",
       "no-debug/no-debug-stack": "error",
       "unicorn/prefer-math-trunc": "off",
       "@eslint-react/no-clone-element": 0,
