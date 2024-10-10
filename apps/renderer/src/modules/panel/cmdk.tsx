@@ -214,7 +214,7 @@ export const SearchCmdK: React.FC = () => {
             </Command.List>
           </ScrollArea.ScrollArea>
 
-          <div className="bg-red relative h-10">
+          <div className="relative flex items-center justify-between px-3 py-2">
             <SearchOptions />
             <SearchResultCount count={totalCount} />
           </div>
@@ -312,7 +312,7 @@ const SearchResultCount: FC<{
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <small className="center absolute bottom-3 right-3 shrink-0 gap-1 opacity-80">
+        <small className="center shrink-0 gap-1 opacity-80">
           {hasKeyword ? (
             <span>
               {count} {t.common("words.result", { count })}
@@ -344,7 +344,7 @@ const SearchOptions: Component = memo(({ children }) => {
   const searchInstance = React.useContext(SearchCmdKContext)
 
   return (
-    <div className="absolute bottom-2 left-4 flex items-center gap-2 text-sm text-theme-foreground/80">
+    <div className="flex items-center gap-2 text-sm text-theme-foreground/80">
       <span className="shrink-0">{t("search.options.search_type")}</span>
 
       <Select
