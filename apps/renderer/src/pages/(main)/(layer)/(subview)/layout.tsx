@@ -33,7 +33,7 @@ export function Component() {
     return () => {
       $scroll.removeEventListener("scroll", handler)
     }
-  }, [scrollRef, title])
+  }, [scrollRef])
 
   const { t } = useTranslation()
   return (
