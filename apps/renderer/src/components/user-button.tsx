@@ -2,7 +2,7 @@ import { repository } from "@pkg"
 import type { FC } from "react"
 import { forwardRef, memo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { useWhoami } from "~/atoms/user"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
@@ -75,6 +75,8 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   const { t } = useTranslation()
   const [ref, { x, y }] = useMeasure()
   const [dropdown, setDropdown] = useState(false)
+  const navigate = useNavigate()
+
   if (status !== "authenticated") {
     return <LoginButton {...props} />
   }
@@ -116,7 +118,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
 
         <DropdownMenuItem
           onClick={() => {
-            nextFrame(() => settingModalPresent("wallet"))
+            nextFrame(() => navigate("/power"))
           }}
         >
           <div className="flex w-full items-center justify-between gap-6 px-1.5 font-semibold">

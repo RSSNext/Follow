@@ -48,56 +48,44 @@ export const TransactionsSection = () => {
       <div className="w-fit min-w-0 grow overflow-x-auto">
         <Table className="w-full table-fixed">
           <TableHeader>
-            <TableRow className="[&_*]:!font-semibold">
-              <TableHead className="whitespace-nowrap text-center" size="sm">
-                {t("wallet.transactions.type")}
-              </TableHead>
-              <TableHead className="whitespace-nowrap text-center" size="sm">
-                {t("wallet.transactions.amount")}
-              </TableHead>
-              <TableHead className="whitespace-nowrap pl-8" size="sm">
-                {t("wallet.transactions.from")}
-              </TableHead>
-              <TableHead className="whitespace-nowrap pl-8" size="sm">
-                {t("wallet.transactions.to")}
-              </TableHead>
-              <TableHead className="whitespace-nowrap pl-6" size="sm">
-                {t("wallet.transactions.date")}
-              </TableHead>
-              <TableHead className="whitespace-nowrap pl-6 text-center" size="sm">
-                {t("wallet.transactions.tx")}
-              </TableHead>
+            <TableRow className="[&_*]:!pl-0 [&_*]:!font-semibold">
+              <TableHead>{t("wallet.transactions.type")}</TableHead>
+              <TableHead>{t("wallet.transactions.amount")}</TableHead>
+              <TableHead>{t("wallet.transactions.from")}</TableHead>
+              <TableHead>{t("wallet.transactions.to")}</TableHead>
+              <TableHead>{t("wallet.transactions.date")}</TableHead>
+              <TableHead>{t("wallet.transactions.tx")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {transactions.data?.map((row) => (
               <TableRow key={row.hash}>
-                <TableCell align="center" size="sm">
+                <TableCell align="left" size="sm">
                   <TypeRenderer type={row.type} />
                 </TableCell>
-                <TableCell align="center" size="sm">
+                <TableCell align="left" size="sm">
                   <BalanceRenderer
                     sign={row.fromUserId === user?.id ? "-" : "+"}
                     amount={row.powerToken}
                   />
                 </TableCell>
-                <TableCell align="left" className="px-3" size="sm">
+                <TableCell align="left" size="sm">
                   <UserRenderer user={row.fromUser} />
                 </TableCell>
-                <TableCell align="left" className="truncate px-3" size="sm">
+                <TableCell align="left" size="sm">
                   <UserRenderer user={row.toUser} />
                 </TableCell>
 
-                <TableCell align="left" size="sm" className="whitespace-nowrap pl-6">
+                <TableCell align="left" size="sm">
                   <EllipsisHorizontalTextWithTooltip>
                     <RelativeTime date={row.createdAt} dateFormatTemplate="l" />
                   </EllipsisHorizontalTextWithTooltip>
                 </TableCell>
-                <TableCell align="left" size="sm" className="pl-6">
+                <TableCell align="left" size="sm">
                   <Tooltip>
                     <TooltipTrigger>
                       <a target="_blank" href={`https://scan.rss3.io/tx/${row.hash}`}>
-                        {row.hash.slice(0, 6)}...
+                        {row.hash.slice(0, 10)}...
                       </a>
                     </TooltipTrigger>
                     <TooltipPortal>
@@ -125,19 +113,7 @@ const TypeRenderer = ({
   type: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["type"]
 }) => {
   const { t } = useTranslation("settings")
-  return (
-    <div
-      className={cn("center rounded-full px-1.5 py-px text-xs uppercase", {
-        "bg-theme-accent-700 text-white": type === "tip",
-        "bg-green-700 text-white": type === "mint",
-        "bg-red-700 text-white": type === "burn",
-        "bg-yellow-700 text-white": type === "withdraw",
-        "bg-blue-700 text-white": type === "purchase",
-      })}
-    >
-      {t(`wallet.transactions.types.${type}`)}
-    </div>
-  )
+  return <div className="uppercase">{t(`wallet.transactions.types.${type}`)}</div>
 }
 
 const BalanceRenderer = ({
@@ -148,7 +124,7 @@ const BalanceRenderer = ({
   amount: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number]["powerToken"]
 }) => (
   <div
-    className={cn("flex items-center justify-center", {
+    className={cn("flex items-center", {
       "text-green-500": sign === "+",
       "text-red-500": sign === "-",
     })}

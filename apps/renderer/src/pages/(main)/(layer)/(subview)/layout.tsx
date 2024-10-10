@@ -67,7 +67,7 @@ export function Component() {
         flex
         ref={setRef}
         rootClassName="w-full"
-        viewportClassName="pb-10 pt-40 [&>div]:items-center [&>div]:gap-8"
+        viewportClassName="pb-10 pt-28 [&>div]:items-center"
       >
         <Outlet />
       </ScrollArea.ScrollArea>
