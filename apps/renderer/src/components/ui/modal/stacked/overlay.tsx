@@ -2,6 +2,7 @@ import type { ForwardedRef } from "react"
 import { forwardRef } from "react"
 
 import { m } from "~/components/common/Motion"
+import { stopPropagation } from "~/lib/dom"
 import { cn } from "~/lib/utils"
 
 import { RootPortal } from "../../portal"
@@ -32,7 +33,7 @@ export const ModalOverlay = forwardRef(
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         style={{ zIndex }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={stopPropagation}
       />
     </RootPortal>
   ),
