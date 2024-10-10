@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback, useLayoutEffect, useRef } from "react"
 import { useHotkeysContext } from "react-hotkeys-hook"
 
 import { HotKeyScopeMap } from "~/constants"
@@ -18,9 +18,41 @@ export const useSwitchHotKeyScope = () => {
       for (const key of allScopes) {
         disableScope(key)
       }
-
-      enableScope(nextScope[0])
+      for (const key of nextScope) {
+        enableScope(key)
+      }
     },
     [disableScope, enableScope],
   )
+}
+export const useHotkeyScopeFn = (scope: keyof typeof HotKeyScopeMap) => {
+  const { enableScope, disableScope, enabledScopes } = useHotkeysContext()
+  const currentScopeRef = useRef(enabledScopes)
+
+  return useCallback(() => {
+    const currentScope = currentScopeRef.current
+    for (const key of allScopes) {
+      disableScope(key)
+    }
+    for (const key of scope) {
+      enableScope(key)
+    }
+    return () => {
+      for (const key of scope) {
+        disableScope(key)
+      }
+      for (const scope of currentScope) {
+        enableScope(scope)
+      }
+    }
+  }, [enableScope, disableScope, scope])
+}
+
+export const useHotkeyScope = (scope: keyof typeof HotKeyScopeMap, when: boolean) => {
+  const fn = useHotkeyScopeFn(scope)
+  useLayoutEffect(() => {
+    if (when) {
+      return fn()
+    }
+  }, [fn, when])
 }

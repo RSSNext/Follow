@@ -19,7 +19,6 @@
   "entry_actions.failed_to_save_to_eagle": "Échec de l'enregistrement sur Eagle.",
   "entry_actions.failed_to_save_to_instapaper": "Échec de l'enregistrement sur Instapaper.",
   "entry_actions.failed_to_save_to_readwise": "Échec de l'enregistrement sur Readwise.",
-  "entry_actions.link_copied": "Lien copié dans le presse-papiers.",
   "entry_actions.mark_as_read": "Marquer comme lu",
   "entry_actions.mark_as_unread": "Marquer comme non lu",
   "entry_actions.open_in_browser": "Ouvrir dans le navigateur",

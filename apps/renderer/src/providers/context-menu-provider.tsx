@@ -136,7 +136,7 @@ const Item = memo(({ item }: { item: NativeMenuItem }) => {
             className="flex items-center gap-2"
             checked={item.checked}
           >
-            {item.icon && (
+            {!!item.icon && (
               <span className="absolute left-2 flex items-center justify-center">{item.icon}</span>
             )}
             <span className={cn(item.icon && "pl-6")}>{item.label}</span>

@@ -46,9 +46,9 @@ const Wrapper: Component<{
           )}
         >
           {children}
-          <RootPortal>
+          <RootPortal to={entryId ? null : undefined}>
             <div
-              className="pointer-events-auto fixed bottom-4 right-4 z-[99] flex gap-3 text-white/70 [&_button]:hover:text-white"
+              className="pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-white/70 [&_button]:hover:text-white"
               onClick={stopPropagation}
             >
               {showActions && (

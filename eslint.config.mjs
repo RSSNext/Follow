@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "eslint-config-hyoban"
+import { defineConfig, GLOB_TS_SRC } from "eslint-config-hyoban"
 
 import checkI18nJson from "./plugins/eslint/eslint-check-i18n-json.js"
 import noDebug from "./plugins/eslint/eslint-no-debug.js"
@@ -16,6 +16,26 @@ export default defineConfig(
       "resources/**",
     ],
     preferESM: false,
+    projectService: {
+      allowDefaultProject: ["apps/main/preload/index.d.ts"],
+      defaultProject: "tsconfig.json",
+    },
+    typeChecked: "essential",
+  },
+  {
+    files: GLOB_TS_SRC,
+    rules: {
+      "require-await": "off",
+      "@typescript-eslint/require-await": "warn",
+      "@typescript-eslint/await-thenable": "warn",
+      "@typescript-eslint/no-floating-promises": "warn",
+      "@typescript-eslint/no-misused-promises": [
+        "warn",
+        {
+          checksVoidReturn: { arguments: false, attributes: false },
+        },
+      ],
+    },
   },
   {
     settings: {
@@ -27,10 +47,12 @@ export default defineConfig(
       "no-debug": noDebug,
     },
     rules: {
+      "@typescript-eslint/no-floating-promises": "off",
       "no-debug/no-debug-stack": "error",
       "unicorn/prefer-math-trunc": "off",
       "@eslint-react/no-clone-element": 0,
       "@eslint-react/hooks-extra/no-direct-set-state-in-use-effect": 0,
+      "@typescript-eslint/no-misused-promises": 0,
       // NOTE: Disable this temporarily
       "react-compiler/react-compiler": 0,
       "no-restricted-syntax": 0,

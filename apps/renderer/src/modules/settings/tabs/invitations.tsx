@@ -49,7 +49,9 @@ export const SettingInvitations = () => {
               INVITATION_PRICE,
             }}
             components={{
-              PowerIcon: <i className="i-mgc-power ml-1 mr-0.5 text-base text-accent" />,
+              PowerIcon: (
+                <i className="i-mgc-power mx-0.5 size-3.5 -translate-y-px text-base text-accent" />
+              ),
             }}
             i18nKey="invitation.generateCost"
           />
@@ -182,10 +184,9 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
             INVITATION_PRICE,
           }}
           components={{
-            PowerIcon: <i className="i-mgc-power mx-1 text-base text-accent" />,
-            div: <div />,
+            PowerIcon: <i className="i-mgc-power mx-0.5 size-3.5 -translate-y-px text-accent" />,
           }}
-          i18nKey="invitation.confirmModal.message"
+          i18nKey="invitation.generateCost"
         />
       </div>
       <div className="mt-2 text-sm">{t("invitation.confirmModal.confirm")}</div>

@@ -10,8 +10,6 @@ export const initPosthog = () => {
 }
 export const posthog = initPosthog()
 
-// posthog?.debug(true)
-
 export const trackEvent = (event: string, properties?: Record<string, any>) => {
   const userId = getUser()?.id
   if (!userId) return

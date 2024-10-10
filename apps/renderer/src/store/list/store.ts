@@ -73,11 +73,26 @@ class ListActionStatic {
     })
   }
 
+  async deleteList(listId: string) {
+    set((state) => {
+      delete state.lists[listId]
+      return state
+    })
+
+    runTransactionInScope(() => ListService.bulkDelete([listId]))
+  }
+
   async fetchListById(id: string) {
     const res = await apiClient.lists.$get({ query: { listId: id } })
 
     this.upsertMany([res.data.list])
     return res.data
+  }
+
+  async clear() {
+    set((state) => {
+      state.lists = {}
+    })
   }
 }
 

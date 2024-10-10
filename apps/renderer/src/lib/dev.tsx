@@ -6,7 +6,7 @@ export const attachOpenInEditor = (stack: string) => {
     if (!line.includes("at ")) {
       return line
     }
-    const match = line.match(/(http:\/\/localhost:\d+\/[^:]+):(\d+):(\d+)/)
+    const match = line.match(/http:\/\/localhost:\d+\/[^:]+:\d+:\d+/)
 
     if (match) {
       const [o] = match

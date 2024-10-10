@@ -102,8 +102,10 @@ jobs:
           # Update version in package.json
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             sed -i "s/\"version\": \".*\"/\"version\": \"$NIGHTLY_VERSION\"/" package.json
-          else
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
             sed -i '' "s/\"version\": \".*\"/\"version\": \"$NIGHTLY_VERSION\"/" package.json
+          else
+            sed -i "s/\"version\": \".*\"/\"version\": \"$NIGHTLY_VERSION\"/" package.json
           fi
           echo "Updated version to $NIGHTLY_VERSION"
 

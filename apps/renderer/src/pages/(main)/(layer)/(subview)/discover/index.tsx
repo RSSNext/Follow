@@ -9,6 +9,7 @@ import { DiscoverInboxList } from "~/modules/discover/inbox-list-form"
 import { Recommendations } from "~/modules/discover/recommendations"
 import { DiscoverRSS3 } from "~/modules/discover/rss3-form"
 import { DiscoverUser } from "~/modules/discover/user-form"
+import { Trend } from "~/modules/trending"
 
 import { useSubViewTitle } from "../hooks"
 
@@ -53,8 +54,8 @@ export function Component() {
   useSubViewTitle("words.discover")
 
   return (
-    <>
-      <div className="text-2xl font-bold">{t("words.discover")}</div>
+    <div className="flex flex-col items-center gap-8">
+      <div className="pt-12 text-2xl font-bold">{t("words.discover")}</div>
       <Tabs
         value={search.get("type") || "search"}
         onValueChange={(val) => {
@@ -64,12 +65,14 @@ export function Component() {
           })
         }}
       >
-        <TabsList className="w-full">
+        <TabsList className="relative w-full">
           {tabs.map((tab) => (
             <TabsTrigger key={tab.name} value={tab.value} disabled={tab.disabled}>
               {t(tab.name)}
             </TabsTrigger>
           ))}
+
+          <Trend className="relative bottom-0 left-1.5" />
         </TabsList>
         {tabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
@@ -80,7 +83,7 @@ export function Component() {
         ))}
       </Tabs>
       <Recommendations />
-    </>
+    </div>
   )
 }
 

@@ -78,11 +78,12 @@ export const getOS = memoize((): OS => {
   }
 
   const { userAgent } = window.navigator,
-    { platform } = window.navigator,
     macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"],
     windowsPlatforms = ["Win32", "Win64", "Windows", "WinCE"],
     iosPlatforms = ["iPhone", "iPad", "iPod"]
-  let os = ""
+  // @ts-expect-error
+  const platform = window.navigator.userAgentData?.platform || window.navigator.platform
+  let os = platform
 
   if (macosPlatforms.includes(platform)) {
     os = "macOS"

@@ -14,7 +14,7 @@
   },
   "main": "./dist/main/index.js",
   "scripts": {
-    "analyze:web": "rm -rf out/web && ANALYZER=1 vite build",
+    "analyze:web": "npx vite-bundle-visualizer",
     "build": "electron-vite build && electron-forge make",
     "build:macos": "electron-vite build && electron-forge make --arch=universal --platform=darwin",
     "build:web": "rm -rf out/web && vite build",
@@ -32,7 +32,7 @@
     "publish": "electron-vite build && electron-forge publish",
     "start": "electron-vite preview",
     "sync:ab": "tsx scripts/pull-ab-flags.ts",
-    "test": "pnpm -F web run test",
+    "test": "pnpm --recursive run test",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "typecheck:node": "pnpm -F electron-main run typecheck",
     "typecheck:web": "pnpm -F web run typecheck"
@@ -76,8 +76,8 @@
     "electron-devtools-installer": "3.2.0",
     "electron-packager-languages": "0.5.0",
     "electron-vite": "^2.3.0",
-    "eslint": "^9.11.1",
-    "eslint-config-hyoban": "^3.1.8",
+    "eslint": "^9.12.0",
+    "eslint-config-hyoban": "^3.1.10",
     "fake-indexeddb": "6.0.0",
     "hono": "4.6.3",
     "lint-staged": "15.2.10",
@@ -94,12 +94,11 @@
     "tailwindcss-animate": "1.0.7",
     "tsup": "8.3.0",
     "tsx": "4.19.1",
-    "typescript": "5.4.5",
+    "typescript": "5.6.2",
     "vite": "^5.4.8",
-    "vite-bundle-analyzer": "0.12.1",
     "vite-plugin-mkcert": "1.17.6",
     "vite-tsconfig-paths": "5.0.1",
-    "vitest": "2.0"
+    "vitest": "2.0.5"
   },
   "pnpm": {
     "patchedDependencies": {
@@ -119,9 +118,9 @@
     "pre-commit": "pnpm exec lint-staged"
   },
   "lint-staged": {
-    "*": "eslint --fix",
-    "*.{js,jsx,ts,tsx,json}": [
-      "prettier --write "
+    "*": [
+      "eslint --fix",
+      "prettier --ignore-unknown --write"
     ]
   },
   "bump": {

@@ -27,7 +27,7 @@ import { cn, isBizId } from "~/lib/utils"
 import type { FeedModel } from "~/models"
 import { useFeed } from "~/queries/feed"
 import { entryActions, getEntry, useEntry } from "~/store/entry"
-import { useFeedById } from "~/store/feed"
+import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 import { useSubscriptionByFeedId } from "~/store/subscription"
 
 import { useEntriesByView, useEntryMarkReadHandler } from "./hooks"
@@ -66,7 +66,8 @@ function EntryColumnImpl() {
   } = useRouteParams()
   const activeEntry = useEntry(activeEntryId)
   const feed = useFeedById(routeFeedId)
-  useTitle(feed?.title)
+  const title = useFeedHeaderTitle()
+  useTitle(title)
 
   useEffect(() => {
     if (!activeEntryId) return

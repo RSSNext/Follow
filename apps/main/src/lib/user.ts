@@ -1,5 +1,7 @@
 import type { User } from "@auth/core/types"
+import type { Credentials } from "@eneris/push-receiver/dist/types"
 
+import { apiClient } from "./api-client"
 import { store } from "./store"
 
 const AuthKey = "authSessionToken"
@@ -15,3 +17,18 @@ export const getUser = (): User | null => {
 }
 
 export const cleanUser = () => store.set(UserKey, null)
+
+export const updateNotificationsToken = async (newCredentials?: Credentials) => {
+  if (newCredentials) {
+    store.set("notifications-credentials", newCredentials)
+  }
+  const credentials = newCredentials || store.get("notifications-credentials")
+  if (credentials?.fcm?.token) {
+    await apiClient.messaging.$post({
+      json: {
+        token: credentials.fcm.token,
+        channel: "desktop",
+      },
+    })
+  }
+}

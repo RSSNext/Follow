@@ -245,8 +245,11 @@ const WideModeButton = () => {
       }}
     >
       <ActionButton
+        shortcut={shortcuts.layout.toggleWideMode.key}
         onClick={() => {
           setUISetting("wideMode", !isWideMode)
+          // TODO: Remove this after useMeasure can get bounds in time
+          window.dispatchEvent(new Event("resize"))
           window.posthog?.capture("Switch to Wide Mode", {
             wideMode: !isWideMode ? 1 : 0,
             click: 1,

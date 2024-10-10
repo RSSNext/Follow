@@ -65,7 +65,6 @@ export const EntryTranslation: Component<{
                   "shadow-modal rounded-xl border bg-background p-2",
                   "group-data-[side=top]:top-0",
                   "group-data-[side=bottom]:top-full",
-                  "max-w-[30ch]",
                 )}
                 viewportClassName="max-h-[12ch]"
               >

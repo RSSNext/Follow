@@ -332,7 +332,7 @@ const SubscriptionGroup: FC<{
         className="mb-2 mt-8 flex w-full items-center justify-between text-2xl font-bold"
         type="button"
       >
-        <h3>{category}</h3>
+        <h3 className="truncate">{category}</h3>
 
         <div className="inline-flex shrink-0 items-center opacity-50">
           <i

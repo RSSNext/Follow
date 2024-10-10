@@ -375,7 +375,7 @@ export const ModalInternal = memo(
                       onPointerDown={relocateModal}
                     >
                       <Dialog.Title className="flex w-0 max-w-full grow items-center gap-2 px-4 py-1 text-lg font-semibold">
-                        {icon && <span className="size-4">{icon}</span>}
+                        {!!icon && <span className="size-4">{icon}</span>}
                         <EllipsisHorizontalTextWithTooltip className="truncate">
                           <span>{title}</span>
                         </EllipsisHorizontalTextWithTooltip>
