@@ -149,71 +149,76 @@ export const SearchCmdK: React.FC = () => {
         />
         <div className={cn(styles["status-bar"], isPending && styles["loading"])} />
 
-        <ScrollArea.ScrollArea
-          ref={scrollViewRef}
-          viewportClassName="max-h-[50vh] [&>div]:!flex"
-          rootClassName="h-full px-5"
-          scrollbarClassName="mb-6"
-        >
-          <Command.List className="flex w-full min-w-0 flex-col">
-            <SearchPlaceholder />
+        <div className="flex flex-1 flex-col overflow-y-hidden">
+          <ScrollArea.ScrollArea
+            ref={scrollViewRef}
+            viewportClassName="max-h-[50vh] [&>div]:!flex"
+            rootClassName="flex-1 px-5"
+            scrollbarClassName="mb-6"
+          >
+            <Command.List className="flex w-full min-w-0 flex-col">
+              <SearchPlaceholder />
 
-            {renderedEntries.length > 0 && (
-              <Command.Group
-                heading={
-                  <SearchGroupHeading
-                    icon="i-mgc-paper-cute-fi size-4"
-                    title={t("search.group.entries")}
-                  />
-                }
-                className="flex w-full min-w-0 flex-col py-2"
-              >
-                {renderedEntries.map((entry) => {
-                  const feed = getFeedById(entry.feedId)
-                  return (
-                    <SearchItem
-                      key={`entry-${entry.item.id}-${entry.feedId}`}
-                      view={feed?.id ? getSubscriptionByFeedId(feed.id)?.view : undefined}
-                      title={entry.item.title!}
-                      feedId={entry.feedId}
-                      entryId={entry.item.id}
-                      id={entry.item.id}
-                      icon={feed?.type === "feed" ? feed?.siteUrl : undefined}
-                      subtitle={feed?.title}
+              {renderedEntries.length > 0 && (
+                <Command.Group
+                  heading={
+                    <SearchGroupHeading
+                      icon="i-mgc-paper-cute-fi size-4"
+                      title={t("search.group.entries")}
                     />
-                  )
-                })}
-              </Command.Group>
-            )}
-            {renderedFeeds.length > 0 && (
-              <Command.Group
-                heading={
-                  <SearchGroupHeading
-                    icon="i-mgc-rss-cute-fi size-4 text-accent"
-                    title={t("search.group.feeds")}
-                  />
-                }
-                className="py-2"
-              >
-                {renderedFeeds.map((feed) => (
-                  <SearchItem
-                    key={`feed-${feed.item.id}`}
-                    view={getSubscriptionByFeedId(feed.item.id!)?.view}
-                    title={feed.item.title!}
-                    feedId={feed.item.id!}
-                    entryId={ROUTE_ENTRY_PENDING}
-                    id={feed.item.id!}
-                    icon={feed.item.type === "feed" ? feed.item.siteUrl : undefined}
-                    subtitle={useFeedUnreadStore.getState().data[feed.item.id!]?.toString()}
-                  />
-                ))}
-              </Command.Group>
-            )}
-            {canLoadMore && <LoadMoreIndicator className="center w-full" onLoading={loadMore} />}
-          </Command.List>
-        </ScrollArea.ScrollArea>
-        <SearchOptions />
-        <SearchResultCount count={totalCount} />
+                  }
+                  className="flex w-full min-w-0 flex-col py-2"
+                >
+                  {renderedEntries.map((entry) => {
+                    const feed = getFeedById(entry.feedId)
+                    return (
+                      <SearchItem
+                        key={`entry-${entry.item.id}-${entry.feedId}`}
+                        view={feed?.id ? getSubscriptionByFeedId(feed.id)?.view : undefined}
+                        title={entry.item.title!}
+                        feedId={entry.feedId}
+                        entryId={entry.item.id}
+                        id={entry.item.id}
+                        icon={feed?.type === "feed" ? feed?.siteUrl : undefined}
+                        subtitle={feed?.title}
+                      />
+                    )
+                  })}
+                </Command.Group>
+              )}
+              {renderedFeeds.length > 0 && (
+                <Command.Group
+                  heading={
+                    <SearchGroupHeading
+                      icon="i-mgc-rss-cute-fi size-4 text-accent"
+                      title={t("search.group.feeds")}
+                    />
+                  }
+                  className="py-2"
+                >
+                  {renderedFeeds.map((feed) => (
+                    <SearchItem
+                      key={`feed-${feed.item.id}`}
+                      view={getSubscriptionByFeedId(feed.item.id!)?.view}
+                      title={feed.item.title!}
+                      feedId={feed.item.id!}
+                      entryId={ROUTE_ENTRY_PENDING}
+                      id={feed.item.id!}
+                      icon={feed.item.type === "feed" ? feed.item.siteUrl : undefined}
+                      subtitle={useFeedUnreadStore.getState().data[feed.item.id!]?.toString()}
+                    />
+                  ))}
+                </Command.Group>
+              )}
+              {canLoadMore && <LoadMoreIndicator className="center w-full" onLoading={loadMore} />}
+            </Command.List>
+          </ScrollArea.ScrollArea>
+
+          <div className="bg-red relative h-10">
+            <SearchOptions />
+            <SearchResultCount count={totalCount} />
+          </div>
+        </div>
       </Command.Dialog>
     </SearchCmdKContext.Provider>
   )
