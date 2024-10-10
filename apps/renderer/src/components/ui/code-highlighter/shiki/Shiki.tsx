@@ -57,6 +57,9 @@ export const ShikiHighLighter: FC<ShikiProps> = (props) => {
 
     function guessLanguage() {
       return tipcClient?.detectCodeStringLanguage({ codeString: code }).then((result) => {
+        if (!result) {
+          return
+        }
         if (bundledLanguagesKeysSet?.has(result.languageId)) {
           setCurrentLanguage(result.languageId)
         }

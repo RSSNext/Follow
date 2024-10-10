@@ -55,7 +55,7 @@ export const readerRoute = {
       if (!window) {
         return
       }
-      return callWindowExpose(window).toast.error(error.message, {
+      void callWindowExpose(window).toast.error(error.message, {
         duration: 1000,
       })
     }
