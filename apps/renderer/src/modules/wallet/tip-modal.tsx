@@ -1,6 +1,7 @@
 import { from } from "dnum"
 import type { FC } from "react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 import { Button } from "~/components/ui/button"
 import { Divider } from "~/components/ui/divider"
@@ -14,7 +15,6 @@ import { UserAvatar } from "~/modules/user/UserAvatar"
 import { useWallet, useWalletTipMutation } from "~/queries/wallet"
 
 import { useFeedClaimModal } from "../claim"
-import { useSettingModal } from "../settings/modal/hooks-hack"
 import { Balance } from "./balance"
 
 const DEFAULT_RECOMMENDED_TIP = 10
@@ -65,11 +65,11 @@ const TipModalContent_: FC<{
 
   const { dismiss } = useCurrentModal()
 
-  const settingModalPresent = useSettingModal()
-
   const claimFeed = useFeedClaimModal({
     feedId,
   })
+
+  const navigate = useNavigate()
 
   if (myWallet.isPending) {
     return <Loading />
@@ -80,7 +80,7 @@ const TipModalContent_: FC<{
       <div className="flex w-[80vw] max-w-[350px] flex-col gap-5">
         <p className="text-sm text-theme-foreground/80">{t("tip_modal.no_wallet")}</p>
         <div className="flex justify-end">
-          <Button variant="primary" onClick={() => nextFrame(() => settingModalPresent("wallet"))}>
+          <Button variant="primary" onClick={() => nextFrame(() => navigate("/power"))}>
             {t("tip_modal.create_wallet")}
           </Button>
         </div>
