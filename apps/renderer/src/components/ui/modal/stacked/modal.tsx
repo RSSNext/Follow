@@ -268,17 +268,21 @@ export const ModalInternal = memo(
     }, [])
 
     useImperativeHandle(ref, () => modalElementRef.current!)
+
+    const Overlay = (
+      <ModalOverlay
+        blur={overlayOptions?.blur}
+        className={cn(overlayOptions?.className, {
+          hidden: modalSettingOverlay || item.overlay ? false : true,
+        })}
+      />
+    )
     if (CustomModalComponent) {
       return (
         <Wrapper>
           <Dialog.Root open onOpenChange={onClose} modal={modal}>
             <Dialog.Portal>
-              <ModalOverlay
-                blur={overlayOptions?.blur}
-                className={cn(overlayOptions?.className, {
-                  hidden: modalSettingOverlay || item.overlay ? false : true,
-                })}
-              />
+              {Overlay}
               <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
               <Dialog.Content asChild onOpenAutoFocus={openAutoFocus}>
                 <div
@@ -319,12 +323,7 @@ export const ModalInternal = memo(
       <Wrapper>
         <Dialog.Root modal={modal} open onOpenChange={onClose}>
           <Dialog.Portal>
-            <ModalOverlay
-              blur={overlayOptions?.blur}
-              className={cn(overlayOptions?.className, {
-                hidden: modalSettingOverlay || item.overlay ? false : true,
-              })}
-            />
+            {Overlay}
             <Dialog.Content asChild onOpenAutoFocus={openAutoFocus}>
               <div
                 ref={edgeElementRef}
