@@ -80,6 +80,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
               <ComboboxInput
                 ref={forwardedRef}
                 as={Input}
+                autoComplete="off"
                 aria-label="Select Category"
                 displayValue={renderSuggestion}
                 value={value}
