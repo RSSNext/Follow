@@ -6,7 +6,7 @@ import { useEventCallback } from "usehooks-ts"
 
 import { useUserRole } from "~/atoms/user"
 import { CustomSafeError } from "~/components/errors/helper"
-import { Button } from "~/components/ui/button"
+import { ActionButton, Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { useModalStack } from "~/components/ui/modal"
 import {
@@ -113,8 +113,9 @@ export function DiscoverInboxList() {
                 </div>
               </TableCell>
               <TableCell size="sm" className="center">
-                <Button
-                  variant="ghost"
+                <ActionButton
+                  size="sm"
+                  tooltip={t("discover.inbox_destroy")}
                   onClick={() =>
                     present({
                       title: t("discover.inbox_destroy_confirm"),
@@ -131,9 +132,9 @@ export function DiscoverInboxList() {
                   }
                 >
                   <i className="i-mgc-delete-2-cute-re" />
-                </Button>
-                <Button
-                  variant="ghost"
+                </ActionButton>
+                <ActionButton
+                  size="sm"
                   onClick={() => {
                     present({
                       title: t("sidebar.feed_actions.edit_inbox"),
@@ -144,7 +145,7 @@ export function DiscoverInboxList() {
                   }}
                 >
                   <i className="i-mgc-edit-cute-re" />
-                </Button>
+                </ActionButton>
               </TableCell>
             </TableRow>
           ))}
@@ -195,9 +196,14 @@ const ConfirmDestroyModalContent = ({ id, onSuccess }: { id: string; onSuccess: 
 
   return (
     <div className="w-[512px]">
-      <div className="mb-4 text-red-600">{t("discover.inbox_destroy_warning")}</div>
+      <div className="mb-4">
+        <i className="i-mingcute-warning-fill -mb-1 mr-1 size-5 text-red-500" />
+        {t("discover.inbox_destroy_warning")}
+      </div>
       <div className="flex justify-end">
-        <Button onClick={() => mutationDestroy.mutate(id)}>{t("words.confirm")}</Button>
+        <Button className="bg-red-600" onClick={() => mutationDestroy.mutate(id)}>
+          {t("words.confirm")}
+        </Button>
       </div>
     </div>
   )
