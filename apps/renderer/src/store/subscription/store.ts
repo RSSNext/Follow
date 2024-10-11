@@ -16,12 +16,13 @@ import { feedActions, getFeedById } from "../feed"
 import { inboxActions } from "../inbox"
 import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
-import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import { createImmerSetter, createZustandStore, doMutationAndTransaction } from "../utils/helper"
 
 export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
   defaultCategory?: string
 
   listId?: string
+  inboxId?: string
 }
 interface SubscriptionState {
   /**
@@ -89,6 +90,7 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>("subsc
 
 const set = useSubscriptionStore.setState
 const get = useSubscriptionStore.getState
+const immerSet = createImmerSetter(useSubscriptionStore)
 
 type MarkReadFilter = {
   startTime: number
@@ -144,59 +146,47 @@ class SubscriptionActions {
     runTransactionInScope(() => {
       SubscriptionService.upsertMany(subscriptions)
     })
-    set((state) =>
-      produce(state, (state) => {
-        subscriptions.forEach((subscription) => {
-          state.data[subscription.feedId] = omit(subscription, [
-            "feeds",
-            "lists",
-            "inboxes",
-          ]) as SubscriptionFlatModel
-          state.feedIdByView[subscription.view].push(subscription.feedId)
-          return state
-        })
-      }),
-    )
+    immerSet((state) => {
+      subscriptions.forEach((subscription) => {
+        state.data[subscription.feedId] = omit(subscription, [
+          "feeds",
+          "lists",
+          "inboxes",
+        ]) as SubscriptionFlatModel
+        state.feedIdByView[subscription.view].push(subscription.feedId)
+      })
+    })
   }
 
   updateCategoryOpenState(subscriptions: SubscriptionFlatModel[]) {
-    set((state) =>
-      produce(state, (state) => {
-        subscriptions.forEach((subscription) => {
-          const folderName = subscription.category || subscription.defaultCategory
-          state.categoryOpenStateByView[subscription.view][folderName] =
-            state.categoryOpenStateByView[subscription.view][folderName] || false
-          return state
-        })
+    immerSet((state) =>
+      subscriptions.forEach((subscription) => {
+        const folderName = subscription.category || subscription.defaultCategory
+        state.categoryOpenStateByView[subscription.view][folderName] =
+          state.categoryOpenStateByView[subscription.view][folderName] || false
+        return state
       }),
     )
   }
 
   toggleCategoryOpenState(view: FeedViewType, category: string) {
-    set((state) =>
-      produce(state, (state) => {
-        state.categoryOpenStateByView[view][category] =
-          !state.categoryOpenStateByView[view][category]
-      }),
+    immerSet(
+      (state) =>
+        (state.categoryOpenStateByView[view][category] =
+          !state.categoryOpenStateByView[view][category]),
     )
   }
 
   changeCategoryOpenState(view: FeedViewType, category: string, status: boolean) {
-    set((state) =>
-      produce(state, (state) => {
-        state.categoryOpenStateByView[view][category] = status
-      }),
-    )
+    immerSet((state) => (state.categoryOpenStateByView[view][category] = status))
   }
 
   expandCategoryOpenStateByView(view: FeedViewType, isOpen: boolean) {
-    set((state) =>
-      produce(state, (state) => {
-        for (const category in state.categoryOpenStateByView[view]) {
-          state.categoryOpenStateByView[view][category] = isOpen
-        }
-      }),
-    )
+    immerSet((state) => {
+      for (const category in state.categoryOpenStateByView[view]) {
+        state.categoryOpenStateByView[view][category] = isOpen
+      }
+    })
   }
 
   async markReadByView(view: FeedViewType, filter?: MarkReadFilter) {

@@ -40,3 +40,16 @@ export const useFolderFeedsByFeedId = ({ feedId, view }: { feedId?: string; view
     }
     return feedIds
   })
+
+export const useListSubscriptionCount = () =>
+  useSubscriptionStore((state) => Object.values(state.data).filter((s) => !!s.listId).length)
+
+export const useInboxSubscriptionCount = () =>
+  useSubscriptionStore((state) => Object.values(state.data).filter((s) => !!s.inboxId).length)
+
+export const useFeedSubscriptionCount = () =>
+  useSubscriptionStore(
+    (state) =>
+      // FIXME: Backend data compatibility
+      Object.values(state.data).filter((s) => !!s.feedId && !s.listId && !s.inboxId).length,
+  )
