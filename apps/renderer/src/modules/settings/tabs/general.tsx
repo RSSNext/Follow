@@ -1,4 +1,5 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { env } from "@follow/shared/env"
 import { useQuery } from "@tanstack/react-query"
 import { useAtom } from "jotai"
 import { useCallback, useEffect } from "react"
@@ -158,6 +159,17 @@ export const SettingGeneral = () => {
             },
             description: t("general.rebuild_database.description"),
             buttonText: t("general.rebuild_database.button"),
+          },
+          {
+            label: t("general.export.label"),
+            description: t("general.export.description"),
+            buttonText: t("general.export.button"),
+            action: () => {
+              const link = document.createElement("a")
+              link.href = `${env.VITE_API_URL}/subscriptions/export`
+              link.download = "follow.opml"
+              link.click()
+            },
           },
 
           { type: "title", value: t("general.network"), disabled: !IN_ELECTRON },
