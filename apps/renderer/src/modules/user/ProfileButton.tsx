@@ -4,9 +4,11 @@ import { forwardRef, memo, useCallback, useLayoutEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
+import { useUserRole } from "~/atoms/user"
 import { useSignOut } from "~/hooks/biz/useSignOut"
 import { useMeasure } from "~/hooks/common"
 import { nextFrame } from "~/lib/dom"
+import { UserRole } from "~/lib/enum"
 import { cn } from "~/lib/utils"
 import { useAchievementModal } from "~/modules/achievement/hooks"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
@@ -41,6 +43,8 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   const [dropdown, setDropdown] = useState(false)
 
   const navigate = useNavigate()
+
+  const role = useUserRole()
 
   if (status !== "authenticated") {
     return <LoginButton {...props} />
@@ -88,15 +92,17 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             {t("user_button.profile")}
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            className="pl-3"
-            onClick={() => {
-              presentAchievement()
-            }}
-            icon={<i className="i-mgc-trophy-cute-re" />}
-          >
-            {t("user_button.achievement")}
-          </DropdownMenuItem>
+          {role !== UserRole.Trial && (
+            <DropdownMenuItem
+              className="pl-3"
+              onClick={() => {
+                presentAchievement()
+              }}
+              icon={<i className="i-mgc-trophy-cute-re" />}
+            >
+              {t("user_button.achievement")}
+            </DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
 
           <DropdownMenuItem

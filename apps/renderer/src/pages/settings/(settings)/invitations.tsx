@@ -1,3 +1,4 @@
+import { UserRole } from "~/lib/enum"
 import { SettingInvitations } from "~/modules/settings/tabs/invitations"
 import { SettingsTitle } from "~/modules/settings/title"
 import { defineSettingPageData } from "~/modules/settings/utils"
@@ -9,6 +10,9 @@ export const loader = defineSettingPageData({
   iconName,
   name: "titles.invitations",
   priority,
+  hideIf(ctx) {
+    return ctx.role !== UserRole.Trial
+  },
 })
 
 export function Component() {
