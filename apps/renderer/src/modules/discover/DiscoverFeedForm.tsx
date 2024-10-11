@@ -98,7 +98,13 @@ export const DiscoverFeedForm = ({
   routePrefix: string
   noDescription?: boolean
   submitButtonClassName?: string
-  routeParams?: Record<string, string>
+  routeParams?: Record<
+    string,
+    {
+      description: string
+      default?: string
+    }
+  >
 }) => {
   const { t } = useTranslation()
   const keys = useMemo(
@@ -292,14 +298,19 @@ export const DiscoverFeedForm = ({
           )
         })}
         {routeParams && (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             {Object.entries(routeParams).map(([key, value]) => (
               <FormItem key={`${routeParamsKeyPrefix}${key}`} className="flex flex-col space-y-2">
                 <FormLabel className="capitalize">{key}</FormLabel>
-                <Input {...form.register(`${routeParamsKeyPrefix}${key}`)} />
-                {!!value && (
+                <Input
+                  {...form.register(`${routeParamsKeyPrefix}${key}`)}
+                  placeholder={value.default}
+                />
+                {!!value.description && (
                   <EllipsisHorizontalTextWithTooltip>
-                    <Markdown className="text-xs text-theme-foreground/50">{value}</Markdown>
+                    <Markdown className="text-xs text-theme-foreground/50">
+                      {value.description}
+                    </Markdown>
                   </EllipsisHorizontalTextWithTooltip>
                 )}
               </FormItem>

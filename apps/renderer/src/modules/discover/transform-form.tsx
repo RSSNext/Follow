@@ -8,16 +8,37 @@ import { Queries } from "~/queries"
 import { DiscoverFeedForm } from "./DiscoverFeedForm"
 
 const transformRouteParams = {
-  title: "The title of the RSS",
-  item: "The HTML elements as item using CSS selector",
-  itemTitle: "The HTML elements as title in item using CSS selector",
-  itemTitleAttr: "The attributes of title element as title",
-  itemLink: "The HTML elements as link in item using CSS selector",
-  itemLinkAttr: "The attributes of link element as link",
-  itemDesc: "The HTML elements as descrption in item using CSS selector",
-  itemDescAttr: "The attributes of descrption element as description",
-  itemPubDate: "The HTML elements as pubDate in item using CSS selector",
-  itemPubDateAttr: "The attributes of pubDate element as pubDate",
+  title: { description: "The title of the RSS", default: "Extract from <title>" },
+  item: { description: "The HTML elements as item using CSS selector", default: "html" },
+  itemTitle: {
+    description: "The HTML elements as title in item using CSS selector",
+    default: "item element",
+  },
+  itemTitleAttr: {
+    description: "The attributes of title element as title",
+    default: "Element text",
+  },
+  itemLink: {
+    description: "The HTML elements as link in item using CSS selector",
+    default: "item element",
+  },
+  itemLinkAttr: { description: "The attributes of link element as link", default: "href" },
+  itemDesc: {
+    description: "The HTML elements as description in item using CSS selector",
+    default: "item element",
+  },
+  itemDescAttr: {
+    description: "The attributes of description element as description",
+    default: "Element html",
+  },
+  itemPubDate: {
+    description: "The HTML elements as pubDate in item using CSS selector",
+    default: "item element",
+  },
+  itemPubDateAttr: {
+    description: "The attributes of pubDate element as pubDate",
+    default: "Element html",
+  },
 }
 
 export function DiscoverTransform() {
