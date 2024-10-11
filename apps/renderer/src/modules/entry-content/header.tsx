@@ -2,7 +2,7 @@ import { IN_ELECTRON } from "@follow/shared/constants"
 import { Slot } from "@radix-ui/react-slot"
 import { noop } from "foxact/noop"
 import { AnimatePresence, m } from "framer-motion"
-import { memo, useMemo, useState } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { AudioPlayer, getAudioPlayerAtomValue } from "~/atoms/player"
@@ -25,7 +25,7 @@ import type { FlatEntryModel } from "~/store/entry"
 import { useEntry } from "~/store/entry/hooks"
 import { useFeedById } from "~/store/feed"
 
-import { useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
+import { setEntryContentScrollToTop, useEntryContentScrollToTop, useEntryTitleMeta } from "./atoms"
 import { EntryReadHistory } from "./components/EntryReadHistory"
 
 function EntryHeaderImpl({
@@ -51,6 +51,10 @@ function EntryHeaderImpl({
   const isAtTop = useEntryContentScrollToTop()
 
   const shouldShowMeta = !isAtTop && !!entryTitleMeta?.title
+
+  useEffect(() => {
+    setEntryContentScrollToTop(true)
+  }, [entryId])
 
   if (!entry?.entries) return null
 
