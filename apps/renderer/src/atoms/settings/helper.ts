@@ -37,8 +37,17 @@ export const createSettingAtom = <T extends object>(
     setSettings(newSettings)
   }
 
-  const useSettingKey = <T extends keyof ReturnType<typeof getSettings>>(key: T) =>
-    useAtomValue(useMemo(() => selectAtom(atom, (s) => s[key]), [key]))
+  const selectAtomCacheMap = {} as Record<keyof ReturnType<typeof getSettings>, any>
+
+  const useSettingKey = <T extends keyof ReturnType<typeof getSettings>>(key: T) => {
+    let selectedAtom = selectAtomCacheMap[key]
+    if (!selectedAtom) {
+      selectedAtom = selectAtom(atom, (s) => s[key])
+      selectAtomCacheMap[key] = selectedAtom
+    }
+
+    return useAtomValue(selectedAtom)
+  }
 
   const useSettingSelector = <
     T extends keyof ReturnType<typeof getSettings>,
