@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu/dropdown-menu"
 import { RootPortal } from "../../components/ui/portal"
+import { useActivationModal } from "../activation"
 import type { LoginProps } from "./LoginButton"
 import { LoginButton } from "./LoginButton"
 import { UserAvatar } from "./UserAvatar"
@@ -58,7 +59,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
-          className="min-w-[180px] overflow-visible px-1 pt-4"
+          className="min-w-[180px] overflow-visible px-1 pt-6"
           side="bottom"
           align="center"
         >
@@ -220,6 +221,26 @@ function PowerButton() {
 }
 
 function LevelButton() {
+  const role = useUserRole()
+  const { t } = useTranslation()
+  const presentActivationModal = useActivationModal()
+  if (role === UserRole.Trial) {
+    return (
+      <div className="group relative flex items-center gap-1">
+        <span className="duration-100 group-hover:opacity-0">Trial User</span>
+        <button
+          type="button"
+          className="center absolute inset-0 opacity-0 duration-200 group-hover:opacity-100"
+          onClick={(e) => {
+            e.stopPropagation()
+            presentActivationModal()
+          }}
+        >
+          {t("activation.activate")}
+        </button>
+      </div>
+    )
+  }
   return (
     <div className="flex items-center gap-1">
       <i className="i-mgc-vip-2-cute-fi text-accent" />

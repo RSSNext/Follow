@@ -37,6 +37,7 @@ export const toastFetchError = (
 ) => {
   let message = ""
   let _reason = ""
+
   if (error instanceof FetchError) {
     try {
       const json = JSON.parse(error.response?._data)

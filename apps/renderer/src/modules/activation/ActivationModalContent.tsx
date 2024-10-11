@@ -54,6 +54,12 @@ export const ActivationModalContent = () => {
     }
   }, [invitationMutation.isSuccess, setClickOutSideToDismiss])
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      form.setFocus("code", { shouldSelect: true })
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
   return (
     <Form {...form}>
       <form
@@ -68,7 +74,6 @@ export const ActivationModalContent = () => {
               <FormLabel className="!text-foreground">{t("activation.description")}</FormLabel>
               <FormControl>
                 <Input
-                  autoFocus
                   className="font-mono placeholder:font-default"
                   placeholder={t("activation.title")}
                   {...field}

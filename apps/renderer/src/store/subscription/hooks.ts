@@ -1,5 +1,5 @@
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "~/constants"
-import type { FeedViewType } from "~/lib/enum"
+import { FeedViewType } from "~/lib/enum"
 
 import { useSubscriptionStore } from "../subscription"
 
@@ -45,7 +45,12 @@ export const useListSubscriptionCount = () =>
   useSubscriptionStore((state) => Object.values(state.data).filter((s) => !!s.listId).length)
 
 export const useInboxSubscriptionCount = () =>
-  useSubscriptionStore((state) => Object.values(state.data).filter((s) => !!s.inboxId).length)
+  useSubscriptionStore(
+    (state) =>
+      Object.values(state.data).filter(
+        (s) => !!s.inboxId && state.feedIdByView[FeedViewType.Articles].includes(s.inboxId),
+      ).length,
+  )
 
 export const useFeedSubscriptionCount = () =>
   useSubscriptionStore(
