@@ -32,10 +32,6 @@ const tabs: {
     value: "rsshub",
   },
   {
-    name: "words.transform",
-    value: "transform",
-  },
-  {
     name: "words.inbox",
     value: "inbox",
   },
@@ -46,6 +42,10 @@ const tabs: {
   {
     name: "words.user",
     value: "user",
+  },
+  {
+    name: "words.transform",
+    value: "transform",
   },
   {
     name: "words.import",

@@ -1,13 +1,11 @@
-// routeParams
-
 import { LoadingCircle } from "~/components/ui/loading"
-import { TokenBrandedRss3 } from "~/components/ui/platform-icon/icons"
 import { useAuthQuery } from "~/hooks/common"
 import { Queries } from "~/queries"
 
+import type { RouteParams } from "./DiscoverFeedForm"
 import { DiscoverFeedForm } from "./DiscoverFeedForm"
 
-const transformRouteParams = {
+const transformRouteParams: RouteParams = {
   title: { description: "The title of the RSS", default: "Extract from <title>" },
   item: { description: "The HTML elements as item using CSS selector", default: "html" },
   itemTitle: {
@@ -56,7 +54,6 @@ export function DiscoverTransform() {
   if (isLoading) {
     return (
       <div className="center mt-12 flex w-full flex-col gap-8">
-        <TokenBrandedRss3 className="size-[50px]" />
         <LoadingCircle size="large" />
       </div>
     )

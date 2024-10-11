@@ -87,6 +87,14 @@ const FeedDescription = ({ description }: { description?: string }) => {
 
 const routeParamsKeyPrefix = "route-params-"
 
+export type RouteParams = Record<
+  string,
+  {
+    description: string
+    default?: string
+  }
+>
+
 export const DiscoverFeedForm = ({
   route,
   routePrefix,
@@ -98,13 +106,7 @@ export const DiscoverFeedForm = ({
   routePrefix: string
   noDescription?: boolean
   submitButtonClassName?: string
-  routeParams?: Record<
-    string,
-    {
-      description: string
-      default?: string
-    }
-  >
+  routeParams?: RouteParams
 }) => {
   const { t } = useTranslation()
   const keys = useMemo(
