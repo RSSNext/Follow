@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
+import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { nextFrame } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
 import {
@@ -297,9 +298,9 @@ export const DiscoverFeedForm = ({
                 <FormLabel className="capitalize">{key}</FormLabel>
                 <Input {...form.register(`${routeParamsKeyPrefix}${key}`)} />
                 {!!value && (
-                  <Markdown className="line-clamp-1 text-xs text-theme-foreground/50">
-                    {value}
-                  </Markdown>
+                  <EllipsisHorizontalTextWithTooltip>
+                    <Markdown className="text-xs text-theme-foreground/50">{value}</Markdown>
+                  </EllipsisHorizontalTextWithTooltip>
                 )}
               </FormItem>
             ))}
