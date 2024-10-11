@@ -1,3 +1,4 @@
+import * as Dialog from "@radix-ui/react-dialog"
 import type { ForwardedRef } from "react"
 import { forwardRef } from "react"
 
@@ -17,18 +18,20 @@ export const ModalOverlay = forwardRef(
     },
     ref: ForwardedRef<HTMLDivElement>,
   ) => (
-    <m.div
-      ref={ref}
-      id="modal-overlay"
-      className={cn(
-        "!pointer-events-none fixed inset-0 rounded-[var(--fo-window-radius)] bg-zinc-50/80 dark:bg-neutral-900/80",
-        blur && "backdrop-blur-sm",
-        className,
-      )}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      style={{ zIndex }}
-    />
+    <Dialog.Overlay asChild>
+      <m.div
+        ref={ref}
+        id="modal-overlay"
+        className={cn(
+          "!pointer-events-none fixed inset-0 rounded-[var(--fo-window-radius)] bg-zinc-50/80 dark:bg-neutral-900/80",
+          blur && "backdrop-blur-sm",
+          className,
+        )}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        style={{ zIndex }}
+      />
+    </Dialog.Overlay>
   ),
 )

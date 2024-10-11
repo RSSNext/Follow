@@ -273,9 +273,12 @@ export const ModalInternal = memo(
         <Wrapper>
           <Dialog.Root open onOpenChange={onClose} modal={modal}>
             <Dialog.Portal>
-              {(modalSettingOverlay || item.overlay) && (
-                <ModalOverlay blur={overlayOptions?.blur} className={overlayOptions?.className} />
-              )}
+              <ModalOverlay
+                blur={overlayOptions?.blur}
+                className={cn(overlayOptions?.className, {
+                  hidden: modalSettingOverlay || item.overlay ? false : true,
+                })}
+              />
               <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
               <Dialog.Content asChild onOpenAutoFocus={openAutoFocus}>
                 <div
