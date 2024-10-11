@@ -40,6 +40,10 @@ interface SubscriptionState {
    * Value: Record<string, boolean>
    */
   categoryOpenStateByView: Record<FeedViewType, Record<string, boolean>>
+  /**
+   * Store the subscription ids that current user followed.
+   */
+  subscriptionIdSet: Set<string>
 }
 
 function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
@@ -86,6 +90,7 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>("subsc
   data: {},
   feedIdByView: { ...emptyDataIdByView },
   categoryOpenStateByView: { ...emptyCategoryOpenStateByView },
+  subscriptionIdSet: new Set<string>(),
 }))
 
 const set = useSubscriptionStore.setState
@@ -96,8 +101,24 @@ type MarkReadFilter = {
   startTime: number
   endTime: number
 }
-
+let subscribeOnce = false
 class SubscriptionActions {
+  constructor() {
+    if (subscribeOnce) return
+    subscribeOnce = true
+    // autorun
+    useSubscriptionStore.subscribe((next, prev) => {
+      if (next.feedIdByView !== prev.feedIdByView) {
+        const allSubscriptionIds = Object.values(next.feedIdByView).flat()
+        set((state) => {
+          return {
+            ...state,
+            subscriptionIdSet: new Set(allSubscriptionIds),
+          }
+        })
+      }
+    })
+  }
   async fetchByView(view?: FeedViewType) {
     const res = await apiClient.subscriptions.$get({
       query: {
@@ -287,22 +308,19 @@ class SubscriptionActions {
           },
         }),
       async () => {
-        set((state) =>
-          produce(state, (state) => {
-            Object.keys(state.data).forEach((id) => {
-              if (idSet.has(id)) {
-                const subscription = state.data[id]
-                const feed = getFeedById(subscription.feedId)
-                if (!feed || feed.type !== "feed") return
-                const { siteUrl } = feed
-                if (!siteUrl) return
-                const parsed = parse(siteUrl)
-                subscription.category = null
-                // The logic for removing Category here is to use domain as the default category name.
-                parsed.domain &&
-                  (subscription.defaultCategory = capitalizeFirstLetter(parsed.domain))
-              }
-            })
+        immerSet((state) =>
+          Object.keys(state.data).forEach((id) => {
+            if (idSet.has(id)) {
+              const subscription = state.data[id]
+              const feed = getFeedById(subscription.feedId)
+              if (!feed || feed.type !== "feed") return
+              const { siteUrl } = feed
+              if (!siteUrl) return
+              const parsed = parse(siteUrl)
+              subscription.category = null
+              // The logic for removing Category here is to use domain as the default category name.
+              parsed.domain && (subscription.defaultCategory = capitalizeFirstLetter(parsed.domain))
+            }
           }),
         )
         const { data } = get()

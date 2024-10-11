@@ -1,5 +1,5 @@
 import { useWheel } from "@use-gesture/react"
-import { AnimatePresence, easeOut } from "framer-motion"
+import { easeOut } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
 import { useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
@@ -48,40 +48,38 @@ export const Component = () => {
   }
 
   return (
-    <AnimatePresence mode="popLayout">
-      <AppLayoutGridContainerProvider>
-        <EntryGridContainer showEntryContent={showEntryContent} wideMode={wideMode}>
-          {wideMode && (
-            // Close button
-            <ActionButton
-              className={cn(
-                "absolute left-3 top-3 z-10 duration-200",
-                shouldHeaderPaddingLeft
-                  ? "left-[calc(theme(width.3)+theme(width.feed-col))]"
-                  : "left-3",
-              )}
-              tooltip="Close"
-              shortcut="Escape"
-              disableTriggerShortcut
-              onClick={() => navigate({ entryId: null })}
-            >
-              <i className="i-mgc-close-cute-re size-5" />
-            </ActionButton>
-          )}
+    <AppLayoutGridContainerProvider>
+      <EntryGridContainer showEntryContent={showEntryContent} wideMode={wideMode}>
+        {wideMode && (
+          // Close button
+          <ActionButton
+            className={cn(
+              "absolute left-3 top-3 z-10 duration-200",
+              shouldHeaderPaddingLeft
+                ? "left-[calc(theme(width.3)+theme(width.feed-col))]"
+                : "left-3",
+            )}
+            tooltip="Close"
+            shortcut="Escape"
+            disableTriggerShortcut
+            onClick={() => navigate({ entryId: null })}
+          >
+            <i className="i-mgc-close-cute-re size-5" />
+          </ActionButton>
+        )}
 
-          <EntryContent
-            entryId={realEntryId}
-            classNames={{
-              header: shouldHeaderPaddingLeft
-                ? "ml-[calc(theme(width.feed-col)+theme(width.8))]"
-                : wideMode
-                  ? "ml-8"
-                  : "",
-            }}
-          />
-        </EntryGridContainer>
-      </AppLayoutGridContainerProvider>
-    </AnimatePresence>
+        <EntryContent
+          entryId={realEntryId}
+          classNames={{
+            header: shouldHeaderPaddingLeft
+              ? "ml-[calc(theme(width.feed-col)+theme(width.8))]"
+              : wideMode
+                ? "ml-8"
+                : "",
+          }}
+        />
+      </EntryGridContainer>
+    </AppLayoutGridContainerProvider>
   )
 }
 

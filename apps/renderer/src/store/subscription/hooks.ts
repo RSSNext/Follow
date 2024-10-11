@@ -42,7 +42,11 @@ export const useFolderFeedsByFeedId = ({ feedId, view }: { feedId?: string; view
   })
 
 export const useListSubscriptionCount = () =>
-  useSubscriptionStore((state) => Object.values(state.data).filter((s) => !!s.listId).length)
+  useSubscriptionStore(
+    (state) =>
+      Object.values(state.data).filter((s) => !!s.listId && state.subscriptionIdSet.has(s.listId))
+        .length,
+  )
 
 export const useInboxSubscriptionCount = () =>
   useSubscriptionStore(
@@ -55,6 +59,8 @@ export const useInboxSubscriptionCount = () =>
 export const useFeedSubscriptionCount = () =>
   useSubscriptionStore(
     (state) =>
-      // FIXME: Backend data compatibility
-      Object.values(state.data).filter((s) => !!s.feedId && !s.listId && !s.inboxId).length,
+      Object.values(state.data).filter(
+        // FIXME: Backend data compatibility
+        (s) => !!s.feedId && !s.listId && !s.inboxId && state.subscriptionIdSet.has(s.feedId),
+      ).length,
   )

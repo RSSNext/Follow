@@ -145,9 +145,15 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
       jotaiStore.set(
         discoverSearchDataAtom,
         produce(currentData, (draft) => {
-          const sub = draft.find(
-            (i) => i.feed?.id === item.feed?.id || i.list?.id === item.list?.id,
-          )
+          const sub = draft.find((i) => {
+            if (item.feed) {
+              return i.feed?.id === item.feed.id
+            }
+            if (item.list) {
+              return i.list?.id === item.list.id
+            }
+            return false
+          })
           if (!sub) return
           sub.isSubscribed = true
           sub.subscriptionCount = -~(sub.subscriptionCount as number)
