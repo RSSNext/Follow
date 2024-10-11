@@ -4,19 +4,20 @@ import { Logo } from "~/components/icons/logo"
 import { WindowUnderBlur } from "~/components/ui/background"
 import { isElectronBuild } from "~/constants"
 import { preventDefault } from "~/lib/dom"
-import { settings } from "~/modules/settings/constants"
+import { useAvailableSettings } from "~/modules/settings/hooks/use-setting-ctx"
 import { SettingsSidebarTitle } from "~/modules/settings/title"
 
 function Layout() {
   const location = useLocation()
   const tab = location.pathname.replace(/^\/settings\/?/, "")
+  const availableSettings = useAvailableSettings()
 
   return (
     <div className="flex h-screen flex-col" onContextMenu={preventDefault}>
       <div className="flex flex-1">
         <WindowUnderBlur className="flex h-full w-44 flex-col border-r px-2.5 py-3 pt-3.5">
           <div className="grow pt-8">
-            {settings.map((t) => (
+            {availableSettings.map((t) => (
               <Link
                 key={t.path}
                 className={`my-1 flex cursor-menu items-center rounded-md px-2.5 py-0.5 leading-loose text-theme-foreground/70 transition-colors dark:text-theme-foreground/90 ${

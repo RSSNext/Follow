@@ -14,8 +14,8 @@ import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "~/constants"
 import { preventDefault } from "~/lib/dom"
 import { cn, getOS } from "~/lib/utils"
 
-import { settings } from "../constants"
 import { SettingSyncIndicator } from "../helper/SyncIndicator"
+import { useAvailableSettings } from "../hooks/use-setting-ctx"
 import { SettingsSidebarTitle } from "../title"
 import { useSetSettingTab, useSettingTab } from "./context"
 import { defaultCtx, SettingContext } from "./hooks"
@@ -43,15 +43,16 @@ export function SettingModalLayout(
     dragControls: dragController,
   })
 
+  const availableSettings = useAvailableSettings()
   useEffect(() => {
     if (!tab) {
       if (initialTab) {
         setTab(initialTab)
       } else {
-        setTab(settings[0].path)
+        setTab(availableSettings[0].path)
       }
     }
-  }, [])
+  }, [availableSettings])
 
   const { draggable, overlay } = useUISettingSelector((state) => ({
     draggable: state.modalDraggable,
@@ -125,7 +126,7 @@ export function SettingModalLayout(
                   {APP_NAME}
                 </div>
                 <nav className="flex grow flex-col">
-                  {settings.map((t) => (
+                  {availableSettings.map((t) => (
                     <button
                       key={t.path}
                       className={`my-0.5 flex w-full items-center rounded-lg px-2.5 py-0.5 leading-loose text-theme-foreground/70 ${

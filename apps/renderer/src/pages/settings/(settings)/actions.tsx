@@ -1,3 +1,4 @@
+import { UserRole } from "~/lib/enum"
 import { ActionSetting } from "~/modules/settings/tabs/actions"
 import { SettingsTitle } from "~/modules/settings/title"
 import { defineSettingPageData } from "~/modules/settings/utils"
@@ -9,6 +10,7 @@ export const loader = defineSettingPageData({
   iconName,
   name: "titles.actions",
   priority,
+  hideIf: (ctx) => ctx.role === UserRole.Trial,
 })
 
 export function Component() {
