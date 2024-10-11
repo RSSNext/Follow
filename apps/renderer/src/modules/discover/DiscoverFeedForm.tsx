@@ -141,7 +141,7 @@ export const DiscoverFeedForm = ({
             ])
             .concat(
               routeParams
-                ? Object.entries(routeParams).map(([key, _value]) => [
+                ? Object.entries(routeParams).map(([key]) => [
                     `${routeParamsKeyPrefix}${key}`,
                     z.string(),
                   ])
@@ -187,12 +187,14 @@ export const DiscoverFeedForm = ({
         )
 
         const fillRegexpPath = regexpPathToPath(
-          routeParamsPath ? route.path.slice(0, route.path.indexOf("/:routeParams")) : route.path,
+          routeParams && routeParamsPath
+            ? route.path.slice(0, route.path.indexOf("/:routeParams"))
+            : route.path,
           data,
         )
         const url = `rsshub://${routePrefix}${fillRegexpPath}`
 
-        const finalUrl = routeParamsPath ? `${url}/${routeParamsPath}` : url
+        const finalUrl = routeParams && routeParamsPath ? `${url}/${routeParamsPath}` : url
 
         const defaultView = getViewFromRoute(route) || (getSidebarActiveView() as FeedViewType)
 
@@ -220,7 +222,7 @@ export const DiscoverFeedForm = ({
         }
       }
     },
-    [dismissAll, form, keys, present, route, routePrefix],
+    [dismissAll, form, keys, present, route, routeParams, routePrefix],
   )
 
   const formElRef = useRef<HTMLFormElement>(null)
