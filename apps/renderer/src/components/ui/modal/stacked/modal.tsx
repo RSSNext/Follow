@@ -319,6 +319,12 @@ export const ModalInternal = memo(
       <Wrapper>
         <Dialog.Root modal={modal} open onOpenChange={onClose}>
           <Dialog.Portal>
+            <ModalOverlay
+              blur={overlayOptions?.blur}
+              className={cn(overlayOptions?.className, {
+                hidden: modalSettingOverlay || item.overlay ? false : true,
+              })}
+            />
             <Dialog.Content asChild onOpenAutoFocus={openAutoFocus}>
               <div
                 ref={edgeElementRef}
