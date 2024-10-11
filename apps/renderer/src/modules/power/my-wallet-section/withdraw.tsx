@@ -94,15 +94,13 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
           i18nKey="wallet.withdraw.availableBalance"
           components={{
             Balance: (
-              <Balance className="inline-block">
+              <Balance className="inline-block" value={wallet.data?.[0].cashablePowerToken || "0"}>
                 {wallet.data?.[0].cashablePowerToken || "0"}
               </Balance>
             ),
           }}
           ns="settings"
-        >
-          {wallet.data?.[0].cashablePowerToken || "0"}
-        </Trans>
+        />
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-96 space-y-4">
