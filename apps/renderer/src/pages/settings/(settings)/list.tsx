@@ -10,9 +10,7 @@ export const loader = defineSettingPageData({
   iconName,
   name: "titles.lists",
   priority,
-  hideIf(ctx) {
-    return ctx.role !== UserRole.Trial
-  },
+  hideIf: (ctx) => ctx.role === UserRole.Trial,
 })
 
 export function Component() {
