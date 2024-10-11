@@ -6,7 +6,7 @@ export const setDockCount = (input: number) => {
   // TODO use Electron Overlay API
   if (isWindows) return
   if (app.dock) {
-    app.dock.setBadge(input === 0 ? "" : input < 100 ? input.toString() : "99+")
+    app.dock.setBadge(input === 0 ? "" : input < 10000 ? input.toString() : "9999+")
   } else {
     app.setBadgeCount(input)
   }
