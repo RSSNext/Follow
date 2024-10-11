@@ -12,7 +12,7 @@ class ServiceStatic extends BaseService<{ id: string }> implements Hydable {
   }
 
   override async upsertMany(data: InboxModel[]) {
-    CleanerService.reset(data.map((d) => ({ type: "feed", id: d.id! })))
+    CleanerService.reset(data.map((d) => ({ type: "inbox", id: d.id! })))
 
     return this.table.bulkPut(data)
   }
@@ -23,7 +23,7 @@ class ServiceStatic extends BaseService<{ id: string }> implements Hydable {
 
   override async upsert(data: InboxModel): Promise<string | null> {
     if (!data.id) return null
-    CleanerService.reset([{ type: "feed", id: data.id }])
+    CleanerService.reset([{ type: "inbox", id: data.id }])
     return this.table.put(data)
   }
 
