@@ -76,8 +76,8 @@
     "electron-devtools-installer": "3.2.0",
     "electron-packager-languages": "0.5.0",
     "electron-vite": "^2.3.0",
-    "eslint": "^9.11.1",
-    "eslint-config-hyoban": "^3.1.8",
+    "eslint": "^9.12.0",
+    "eslint-config-hyoban": "^3.1.10",
     "fake-indexeddb": "6.0.0",
     "hono": "4.6.3",
     "lint-staged": "15.2.10",
@@ -94,11 +94,11 @@
     "tailwindcss-animate": "1.0.7",
     "tsup": "8.3.0",
     "tsx": "4.19.1",
-    "typescript": "5.4.5",
+    "typescript": "5.6.2",
     "vite": "^5.4.8",
     "vite-plugin-mkcert": "1.17.6",
     "vite-tsconfig-paths": "5.0.1",
-    "vitest": "2.0"
+    "vitest": "2.0.5"
   },
   "pnpm": {
     "patchedDependencies": {

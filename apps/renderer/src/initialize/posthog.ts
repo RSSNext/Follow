@@ -13,10 +13,18 @@ declare global {
     }
   }
 }
-export const initPostHog = async () => {
+export const initPostHog = () => {
   if (env.VITE_POSTHOG_KEY === undefined) return
   posthog.init(env.VITE_POSTHOG_KEY, {
     person_profiles: "identified_only",
+    enable_heatmaps: false,
+    autocapture: false,
+    loaded: () => {
+      const user = whoami()
+      if (user) {
+        posthog.identify(user.id, { name: user.name, handle: user.handle })
+      }
+    },
   })
 
   const { capture, reset } = posthog
@@ -39,10 +47,5 @@ export const initPostHog = async () => {
         options,
       ] as const)
     },
-  }
-
-  const user = whoami()
-  if (user) {
-    posthog.identify(user.id, { name: user.name, handle: user.handle })
   }
 }

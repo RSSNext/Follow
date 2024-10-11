@@ -19,7 +19,6 @@
   "entry_actions.failed_to_save_to_eagle": "Не удалось сохранить в Eagle.",
   "entry_actions.failed_to_save_to_instapaper": "Не удалось сохранить в Instapaper.",
   "entry_actions.failed_to_save_to_readwise": "Не удалось сохранить в Readwise.",
-  "entry_actions.link_copied": "Ссылка скопирована в буфер обмена.",
   "entry_actions.mark_as_read": "Отметить как прочитанное",
   "entry_actions.mark_as_unread": "Отметить как непрочитанное",
   "entry_actions.open_in_browser": "Открыть в браузере",

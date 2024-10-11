@@ -233,9 +233,10 @@ const Img: Components["img"] = ({ node, ...props }) => {
     ...props,
     proxy: { height: 0, width: 700 },
   }
+  const widthPx = Number.parseInt(props.width as string)
 
   return createElement(
-    node?.properties.inline ? MarkdownInlineImage : MarkdownBlockImage,
+    node?.properties.inline && widthPx < 600 ? MarkdownInlineImage : MarkdownBlockImage,
     nextProps,
   )
 }

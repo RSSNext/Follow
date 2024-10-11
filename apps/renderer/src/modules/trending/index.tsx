@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next"
 
 import { getTrendingAggregates } from "~/api/trending"
 import { FeedIcon } from "~/components/feed-icon"
-import { IconoirBrightCrown } from "~/components/icons/crown"
 import { PhUsersBold } from "~/components/icons/users"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { ActionButton, Button } from "~/components/ui/button"
@@ -22,7 +21,7 @@ import type { FeedModel, Models } from "~/models"
 
 import { usePresentUserProfileModal } from "../profile/hooks"
 
-export const Trend = () => {
+export const Trend = ({ className }: { className?: string }) => {
   const { present } = useModalStack()
   const { t } = useTranslation()
   return (
@@ -40,6 +39,7 @@ export const Trend = () => {
           className={cn(
             "size-6 text-accent duration-200 hover:shadow-none",
             "absolute bottom-1 right-3",
+            className,
           )}
         >
           <i className="i-mgc-trending-up-cute-re" />
@@ -171,8 +171,12 @@ const TrendingUsers: FC<{ data: User[] }> = ({ data }) => {
     <section className="w-full text-left">
       <h2 className="my-2 text-xl font-bold">{t("trending.user")}</h2>
       <div className="relative h-[100px]">
-        <div className="absolute left-[calc(50%+12px)] top-[12px] rotate-45 text-[20px] text-accent">
-          <IconoirBrightCrown />
+        <div className="absolute left-[calc(50%+15px)] top-[8px] rotate-45 text-[20px] text-accent">
+          <i className="i-mgc-vip-2-cute-fi" />
+        </div>
+
+        <div className="absolute left-[calc(33%+15px)] top-[calc(theme(spacing.3))] rotate-45 text-[20px] text-accent/80">
+          <i className="i-mgc-vip-2-cute-re" />
         </div>
 
         {data.slice(0, 3).map((user, index: number) => (

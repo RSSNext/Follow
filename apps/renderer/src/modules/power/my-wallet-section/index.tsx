@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
-import { useWhoami } from "~/atoms/user"
 import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { Divider } from "~/components/ui/divider"
@@ -20,8 +19,7 @@ import { WithdrawButton } from "./withdraw"
 
 export const MyWalletSection = () => {
   const { t } = useTranslation("settings")
-  const user = useWhoami()
-  const wallet = useWallet({ userId: user?.id })
+  const wallet = useWallet()
   const myWallet = wallet.data?.[0]
 
   const refreshMutation = useMutation({
@@ -53,6 +51,7 @@ export const MyWalletSection = () => {
       <div className="space-y-8">
         <div>
           <div className="text-sm">
+            <i className="i-mgc-power mr-0.5 size-3.5 translate-y-px text-accent" />
             <Trans
               i18nKey="wallet.power.description"
               ns="settings"
@@ -71,7 +70,7 @@ export const MyWalletSection = () => {
             <p>{t("wallet.power.dailyClaim", { amount: DAILY_CLAIM_AMOUNT })}</p>
           </div>
           <SettingSectionTitle margin="compact" title={t("wallet.address.title")} />
-          <div className="flex items-center gap-2 text-sm">
+          <div className="group flex items-center gap-2 text-sm">
             <a
               href={`https://scan.rss3.io/address/${myWallet.address}`}
               target="_blank"
@@ -79,7 +78,10 @@ export const MyWalletSection = () => {
             >
               {myWallet.address}
             </a>
-            <CopyButton value={myWallet.address!} className="p-1 [&_i]:size-2.5" />
+            <CopyButton
+              value={myWallet.address!}
+              className="p-1 opacity-0 duration-200 group-hover:opacity-100 [&_i]:size-2.5"
+            />
           </div>
           <SettingSectionTitle title={t("wallet.balance.title")} margin="compact" />
           <div className="mb-2 flex items-end justify-between">
@@ -125,6 +127,7 @@ export const MyWalletSection = () => {
           </Tooltip>
         </div>
       </div>
+
       <Divider className="my-8" />
     </>
   )

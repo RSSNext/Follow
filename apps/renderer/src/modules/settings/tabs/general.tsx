@@ -133,7 +133,7 @@ export const SettingGeneral = () => {
           }),
           {
             label: t("general.rebuild_database.label"),
-            action: async () => {
+            action: () => {
               present({
                 title: t("general.rebuild_database.title"),
                 clickOutsideToDismiss: true,
@@ -143,7 +143,7 @@ export const SettingGeneral = () => {
                     <p>{t("general.rebuild_database.warning.line2")}</p>
                     <div className="mt-4 flex justify-end">
                       <Button
-                        className="bg-red-600 px-3 text-white dark:bg-red-500"
+                        className="bg-red-500 px-3 text-white"
                         onClick={async () => {
                           await clearLocalPersistStoreData()
                           window.location.reload()

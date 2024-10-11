@@ -12,7 +12,7 @@ import {
 } from "~/constants"
 import { FeedViewType } from "~/lib/enum"
 
-type NavigateEntryOptions = Partial<{
+export type NavigateEntryOptions = Partial<{
   feedId: string | null
   entryId: string | null
   view: FeedViewType

@@ -19,7 +19,6 @@
   "entry_actions.failed_to_save_to_eagle": "Tallennus Eagleen epäonnistui.",
   "entry_actions.failed_to_save_to_instapaper": "Tallennus Instapaperiin epäonnistui.",
   "entry_actions.failed_to_save_to_readwise": "Tallennus Readwiseen epäonnistui.",
-  "entry_actions.link_copied": "Linkki kopioitu leikepöydälle.",
   "entry_actions.mark_as_read": "Merkitse luetuksi",
   "entry_actions.mark_as_unread": "Merkitse lukemattomaksi",
   "entry_actions.open_in_browser": "Avaa selaimessa",

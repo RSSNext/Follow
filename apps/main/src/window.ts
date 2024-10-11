@@ -9,7 +9,6 @@ import { BrowserWindow, screen, shell } from "electron"
 
 import { isDev, isMacOS, isWindows, isWindows11 } from "./env"
 import { getIconPath } from "./helper"
-import { registerContextMenu } from "./lib/context-menu"
 import { store } from "./lib/store"
 import { logger } from "./logger"
 import { cancelPollingUpdateUnreadCount, pollingUpdateUnreadCount } from "./tipc/dock"
@@ -141,11 +140,13 @@ export function createWindow(
     // Make it consistent with Chrome on Windows, instead of SimSun.
     // ref: [[Feature Request]: Add possibility to change DevTools font · Issue #42055 · electron/electron](https://github.com/electron/electron/issues/42055)
     window.webContents.on("devtools-opened", () => {
+      // source-code-font: For code such as Elements panel
+      // monospace-font: For sidebar such as Event Listener Panel
       const css = `
         :root {
-            --source-code-font-family: consolas; // For code such as Elements panel
+            --source-code-font-family: consolas;
             --source-code-font-size: 13px;
-            --monospace-font-family: consolas; // For sidebar such as Event Listener Panel
+            --monospace-font-family: consolas;
             --monospace-font-size: 13px;
         }`
       window.webContents.devToolsWebContents?.executeJavaScript(`
@@ -157,13 +158,11 @@ export function createWindow(
     })
   }
 
-  registerContextMenu(window)
-
   return window
 }
+export const windowStateStoreKey = "windowState"
 export const createMainWindow = () => {
-  const storeKey = "windowState"
-  const windowState = store.get(storeKey) as {
+  const windowState = store.get(windowStateStoreKey) as {
     height: number
     width: number
     x: number
@@ -201,7 +200,7 @@ export const createMainWindow = () => {
       const windowStoreKey = Symbol.for("maximized")
       if (window[windowStoreKey]) {
         const stored = window[windowStoreKey]
-        store.set(storeKey, {
+        store.set(windowStateStoreKey, {
           width: stored.size[0],
           height: stored.size[1],
           x: stored.position[0],
@@ -213,7 +212,7 @@ export const createMainWindow = () => {
     }
 
     const bounds = window.getBounds()
-    store.set(storeKey, {
+    store.set(windowStateStoreKey, {
       width: bounds.width,
       height: bounds.height,
       x: bounds.x,

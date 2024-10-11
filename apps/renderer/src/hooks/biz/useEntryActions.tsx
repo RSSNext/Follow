@@ -355,7 +355,7 @@ export const useEntryActions = ({
         onClick: () => {
           if (!populatedEntry.entries.url) return
           navigator.clipboard.writeText(populatedEntry.entries.url)
-          toast(t("entry_actions.link_copied"), {
+          toast(t("entry_actions.copied_notify", { which: t("words.link") }), {
             duration: 1000,
           })
         },
@@ -364,12 +364,12 @@ export const useEntryActions = ({
         key: "copyTitle",
         name: t("entry_actions.copy_title"),
         className: tw`i-mgc-copy-cute-re`,
-        hide: !populatedEntry.entries.title,
+        hide: !populatedEntry.entries.title || type === "toolbar",
         shortcut: shortcuts.entry.copyTitle.key,
         onClick: () => {
           if (!populatedEntry.entries.title) return
           navigator.clipboard.writeText(populatedEntry.entries.title)
-          toast(t("entry_actions.title_copied"), {
+          toast(t("entry_actions.copied_notify", { which: t("words.title") }), {
             duration: 1000,
           })
         },

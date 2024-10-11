@@ -1,4 +1,5 @@
 import { electronApp, optimizer } from "@electron-toolkit/utils"
+import { callWindowExpose } from "@follow/shared/bridge"
 import { APP_PROTOCOL } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { app, BrowserWindow, session } from "electron"
@@ -8,9 +9,10 @@ import { isDev, isMacOS } from "./env"
 import { initializeAppStage0, initializeAppStage1 } from "./init"
 import { updateProxy } from "./lib/proxy"
 import { handleUrlRouting } from "./lib/router"
-import { setAuthSessionToken } from "./lib/user"
+import { store } from "./lib/store"
+import { setAuthSessionToken, updateNotificationsToken } from "./lib/user"
 import { registerUpdater } from "./updater"
-import { createMainWindow } from "./window"
+import { createMainWindow, getMainWindow, windowStateStoreKey } from "./window"
 
 if (isDev) console.info("[main] env loaded:", env)
 
@@ -115,13 +117,28 @@ function bootstrap() {
     }
   })
 
-  const handleOpen = (url: string) => {
+  app.on("before-quit", () => {
+    // store window pos when before app quit
+    const window = getMainWindow()
+    if (!window) return
+    const bounds = window.getBounds()
+
+    store.set(windowStateStoreKey, {
+      width: bounds.width,
+      height: bounds.height,
+      x: bounds.x,
+      y: bounds.y,
+    })
+  })
+
+  const handleOpen = async (url: string) => {
     const isValid = URL.canParse(url)
     if (!isValid) return
     const urlObj = new URL(url)
 
     if (urlObj.hostname === "auth" || urlObj.pathname === "//auth") {
       const token = urlObj.searchParams.get("token")
+      const userId = urlObj.searchParams.get("userId")
 
       const apiURL = process.env["VITE_API_URL"] || import.meta.env.VITE_API_URL
       if (token && apiURL) {
@@ -135,7 +152,10 @@ function bootstrap() {
           domain: new URL(apiURL).hostname,
           sameSite: "no_restriction",
         })
+        userId && (await callWindowExpose(mainWindow).clearIfLoginOtherAccount(userId))
         mainWindow.reload()
+
+        updateNotificationsToken()
       }
     } else {
       handleUrlRouting(url)

@@ -12,11 +12,11 @@ import { setFeedColumnShow, useFeedColumnShow, useSidebarActiveView } from "~/at
 import { Logo } from "~/components/icons/logo"
 import { ActionButton } from "~/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
-import { ProfileButton } from "~/components/user-button"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useI18n } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import { cn } from "~/lib/utils"
+import { ProfileButton } from "~/modules/user/ProfileButton"
 
 const useBackHome = (active: number) => {
   const navigate = useNavigateEntry()
@@ -60,7 +60,7 @@ export const FeedColumnHeader = memo(() => {
           </div>
         </LogoContextMenu>
       )}
-      <div className="relative flex items-center gap-1" onClick={stopPropagation}>
+      <div className="relative flex items-center gap-2" onClick={stopPropagation}>
         <Link to="/discover" tabIndex={-1}>
           <ActionButton shortcut="Meta+T" tooltip={t("words.discover")}>
             <i className="i-mgc-add-cute-re size-5 text-theme-vibrancyFg" />
@@ -89,6 +89,9 @@ const LayoutActionButton = () => {
   }, [feedColumnShow])
 
   const t = useI18n()
+
+  if (feedColumnShow) return null
+
   return (
     <m.div initial={animation} animate={animation} className="overflow-hidden">
       <ActionButton

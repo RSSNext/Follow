@@ -44,8 +44,7 @@ export const wallet = {
   },
 }
 
-export const useWallet = ({ userId }: { userId?: string } = {}) =>
-  useAuthQuery(wallet.get({ userId }), { enabled: !!userId })
+export const useWallet = () => useAuthQuery(wallet.get())
 
 export const useWalletTransactions = (query: Parameters<typeof wallet.transactions.get>[0] = {}) =>
   useAuthQuery(wallet.transactions.get(query))
