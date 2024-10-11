@@ -119,6 +119,7 @@
   "general.sidebar_title": "General",
   "general.timeline": "Timeline",
   "general.unread": "Unread",
+  "general.use_default_browser_open_source_content": "Use default browser to open source content",
   "general.voices": "Voices",
   "integration.eagle.enable.description": "Display 'Save media to Eagle' button when available.",
   "integration.eagle.enable.label": "Enable",

@@ -112,6 +112,7 @@
   "general.sidebar_title": "Genel",
   "general.timeline": "Zaman Çizelgesi",
   "general.unread": "Okunmamış",
+  "general.use_default_browser_open_source_content": "",
   "general.voices": "Sesler",
   "integration.eagle.enable.description": "Mevcut olduğunda 'Medyayı Eagle'a kaydet' düğmesini göster.",
   "integration.eagle.enable.label": "Etkinleştir",

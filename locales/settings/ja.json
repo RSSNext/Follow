@@ -100,6 +100,7 @@
   "general.sidebar_title": "一般",
   "general.timeline": "タイムライン",
   "general.unread": "未読",
+  "general.use_default_browser_open_source_content": "デフォルトのブラウザで原文を開く",
   "general.voices": "音声",
   "integration.eagle.enable.description": "利用可能な場合、'Eagle にメディアを保存' ボタンを表示します。",
   "integration.eagle.enable.label": "有効化",

@@ -13,6 +13,7 @@ import {
   setReadabilityContent,
   setReadabilityStatus,
 } from "~/atoms/readability"
+import { useGeneralSettingKey } from "~/atoms/settings/general"
 import { useIntegrationSettingKey } from "~/atoms/settings/integration"
 import {
   setShowSourceContent,
@@ -166,6 +167,9 @@ export const useEntryActions = ({
   const enableInstapaper = useIntegrationSettingKey("enableInstapaper")
   const instapaperUsername = useIntegrationSettingKey("instapaperUsername")
   const instapaperPassword = useIntegrationSettingKey("instapaperPassword")
+  const useDefaultBrowserOpenSourceContent = useGeneralSettingKey(
+    "useDefaultBrowserOpenSourceContent",
+  )
 
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
@@ -396,6 +400,12 @@ export const useEntryActions = ({
         active: showSourceContent,
         onClick: () => {
           if (!populatedEntry.entries.url) return
+
+          if (useDefaultBrowserOpenSourceContent) {
+            window.open(populatedEntry.entries.url, "_blank")
+            return
+          }
+
           const viewPreviewInModal = [
             FeedViewType.SocialMedia,
             FeedViewType.Videos,
@@ -480,6 +490,7 @@ export const useEntryActions = ({
     showSourceContentModal,
     read,
     unread,
+    useDefaultBrowserOpenSourceContent,
   ])
 
   return {

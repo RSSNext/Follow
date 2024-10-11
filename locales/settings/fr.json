@@ -100,6 +100,7 @@
   "general.sidebar_title": "Général",
   "general.timeline": "Chronologie",
   "general.unread": "Non lu",
+  "general.use_default_browser_open_source_content": "Ouvrir le texte original avec le navigateur par défaut",
   "general.voices": "Voix",
   "integration.eagle.enable.description": "Afficher le bouton 'Enregistrer le média sur Eagle' lorsqu'il est disponible.",
   "integration.eagle.enable.label": "Activer",

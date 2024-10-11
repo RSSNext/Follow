@@ -100,6 +100,7 @@
   "general.sidebar_title": "Generale",
   "general.timeline": "Cronologia",
   "general.unread": "Non letti",
+  "general.use_default_browser_open_source_content": "Apri il documento originale con il browser predefinito",
   "general.voices": "Voci",
   "integration.eagle.enable.description": "Mostra il pulsante 'Salva media su Eagle' quando disponibile.",
   "integration.eagle.enable.label": "Abilita",

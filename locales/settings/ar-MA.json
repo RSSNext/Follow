@@ -100,6 +100,7 @@
   "general.sidebar_title": "عام",
   "general.timeline": "الجدول الزمني",
   "general.unread": "غير مقروء",
+  "general.use_default_browser_open_source_content": "افتح النص الأصلي باستخدام المتصفح الافتراضي",
   "general.voices": "الأصوات",
   "integration.eagle.enable.description": "عرض زر 'حفظ الوسائط لـ Eagle' إلا كان متوفر.",
   "integration.eagle.enable.label": "تشغيل",

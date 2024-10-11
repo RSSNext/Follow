@@ -100,6 +100,7 @@
   "general.sidebar_title": "Geral",
   "general.timeline": "Linha do tempo",
   "general.unread": "Não lidos",
+  "general.use_default_browser_open_source_content": "Abrir o texto original com o navegador padrão",
   "general.voices": "Vozes",
   "integration.eagle.enable.description": "Exibir o botão 'Guardar mídia no Eagle' quando disponível.",
   "integration.eagle.enable.label": "Ativar",

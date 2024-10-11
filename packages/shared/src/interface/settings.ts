@@ -1,5 +1,6 @@
 export interface GeneralSettings {
   appLaunchOnStartup: boolean
+  useDefaultBrowserOpenSourceContent: boolean
   language: string
   dataPersist: boolean
   sendAnonymousData: boolean

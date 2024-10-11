@@ -100,6 +100,7 @@
   "general.sidebar_title": "Yleiset",
   "general.timeline": "Aikajana",
   "general.unread": "Lukematon",
+  "general.use_default_browser_open_source_content": "Avaa alkuperäinen teksti oletusselaimella",
   "general.voices": "Äänet",
   "integration.eagle.enable.description": "Näytä 'Tallenna media Eagleen' -painike, kun saatavilla.",
   "integration.eagle.enable.label": "Ota käyttöön",

@@ -7,6 +7,7 @@ import { createSettingAtom } from "./helper"
 const createDefaultSettings = (): GeneralSettings => ({
   // App
   appLaunchOnStartup: false,
+  useDefaultBrowserOpenSourceContent: false,
   language: "en",
   // Data control
   dataPersist: true,
@@ -42,6 +43,7 @@ export const subscribeShouldUseIndexedDB = (callback: (value: boolean) => void) 
 
 export const generalServerSyncWhiteListKeys: (keyof GeneralSettings)[] = [
   "appLaunchOnStartup",
+  "useDefaultBrowserOpenSourceContent",
   "dataPersist",
   "sendAnonymousData",
   "language",

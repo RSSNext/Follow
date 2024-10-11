@@ -112,6 +112,7 @@
   "general.sidebar_title": "일반",
   "general.timeline": "타임라인",
   "general.unread": "읽지 않음",
+  "general.use_default_browser_open_source_content": "기본 브라우저로 원문 열기",
   "general.voices": "음성",
   "integration.eagle.enable.description": "가능할 때 '미디어를 Eagle 에 저장' 버튼 표시.",
   "integration.eagle.enable.label": "활성화",

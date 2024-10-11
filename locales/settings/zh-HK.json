@@ -116,6 +116,7 @@
   "general.sidebar_title": "一般",
   "general.timeline": "時間軸",
   "general.unread": "未讀",
+  "general.use_default_browser_open_source_content": "使用默認瀏覽器打開原始內容",
   "general.voices": "語音",
   "integration.eagle.enable.description": "顯示\"將媒體保存到 Eagle\"按鈕（如果可用）。",
   "integration.eagle.enable.label": "啟用",

@@ -53,6 +53,10 @@ export const SettingGeneral = () => {
     setGeneralSetting("appLaunchOnStartup", checked)
   }, [])
 
+  const saveSourceContentSetting = useCallback((checked: boolean) => {
+    setGeneralSetting("useDefaultBrowserOpenSourceContent", checked)
+  }, [])
+
   const { present } = useModalStack()
 
   return (
@@ -72,6 +76,13 @@ export const SettingGeneral = () => {
             },
           }),
           LanguageSelector,
+          defineSettingItem("useDefaultBrowserOpenSourceContent", {
+            label: t("general.use_default_browser_open_source_content"),
+            disabled: !tipcClient,
+            onChange(value) {
+              saveSourceContentSetting(value)
+            },
+          }),
           {
             type: "title",
             value: t("general.timeline"),

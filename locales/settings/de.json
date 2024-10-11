@@ -112,6 +112,7 @@
   "general.sidebar_title": "Allgemein",
   "general.timeline": "Zeitleiste",
   "general.unread": "Ungelesen",
+  "general.use_default_browser_open_source_content": "Öffne das Original im Standardbrowser",
   "general.voices": "Stimmen",
   "integration.eagle.enable.description": "Zeige den Button „Medien zu Eagle speichern“, wenn verfügbar.",
   "integration.eagle.enable.label": "Aktivieren",

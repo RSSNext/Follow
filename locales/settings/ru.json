@@ -100,6 +100,7 @@
   "general.sidebar_title": "Общие",
   "general.timeline": "Лента",
   "general.unread": "Непрочитанное",
+  "general.use_default_browser_open_source_content": "Открыть оригинальный текст в браузере по умолчанию",
   "general.voices": "Голоса",
   "integration.eagle.enable.description": "Отображать кнопку 'Сохранить медиа в Eagle', когда доступно.",
   "integration.eagle.enable.label": "Включить",
