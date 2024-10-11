@@ -84,16 +84,20 @@ const FeedDescription = ({ description }: { description?: string }) => {
   )
 }
 
+const routeParamsKeyPrefix = "route-params-"
+
 export const DiscoverFeedForm = ({
   route,
   routePrefix,
   noDescription,
   submitButtonClassName,
+  routeParams,
 }: {
   route: RSSHubRoute
   routePrefix: string
   noDescription?: boolean
   submitButtonClassName?: string
+  routeParams?: Record<string, string>
 }) => {
   const { t } = useTranslation()
   const keys = useMemo(
@@ -121,13 +125,22 @@ export const DiscoverFeedForm = ({
     () =>
       z.object({
         ...Object.fromEntries(
-          keys.map((keyItem) => [
-            keyItem.name,
-            keyItem.optional ? z.string().optional().nullable() : z.string().min(1),
-          ]),
+          keys
+            .map((keyItem) => [
+              keyItem.name,
+              keyItem.optional ? z.string().optional().nullable() : z.string().min(1),
+            ])
+            .concat(
+              routeParams
+                ? Object.entries(routeParams).map(([key, _value]) => [
+                    `${routeParamsKeyPrefix}${key}`,
+                    z.string(),
+                  ])
+                : [],
+            ),
         ),
       }),
-    [keys],
+    [keys, routeParams],
   )
 
   const defaultValue = useMemo(() => {
@@ -150,10 +163,28 @@ export const DiscoverFeedForm = ({
   const { present, dismissAll } = useModalStack()
 
   const onSubmit = useCallback(
-    (data: Record<string, string>) => {
+    (_data: Record<string, string>) => {
+      const data = Object.fromEntries(
+        Object.entries(_data).filter(([key]) => !key.startsWith(routeParamsKeyPrefix)),
+      )
+
       try {
-        const fillRegexpPath = regexpPathToPath(route.path, data)
+        const routeParamsPath = encodeURIComponent(
+          Object.entries(_data)
+            .filter(([key, value]) => key.startsWith(routeParamsKeyPrefix) && value)
+            .map(([key, value]) => [key.slice(routeParamsKeyPrefix.length), value])
+            .map(([key, value]) => `${key}=${value}`)
+            .join("&"),
+        )
+
+        const fillRegexpPath = regexpPathToPath(
+          routeParamsPath ? route.path.slice(0, route.path.indexOf("/:routeParams")) : route.path,
+          data,
+        )
         const url = `rsshub://${routePrefix}${fillRegexpPath}`
+
+        const finalUrl = routeParamsPath ? `${url}/${routeParamsPath}` : url
+
         const defaultView = getViewFromRoute(route) || (getSidebarActiveView() as FeedViewType)
 
         present({
@@ -161,7 +192,7 @@ export const DiscoverFeedForm = ({
           content: () => (
             <FeedForm
               asWidget
-              url={url}
+              url={finalUrl}
               defaultValues={{
                 view: defaultView.toString(),
               }}
@@ -180,7 +211,7 @@ export const DiscoverFeedForm = ({
         }
       }
     },
-    [dismissAll, form, keys, present, route.path, routePrefix],
+    [dismissAll, form, keys, present, route, routePrefix],
   )
 
   const formElRef = useRef<HTMLFormElement>(null)
@@ -259,6 +290,21 @@ export const DiscoverFeedForm = ({
             </FormItem>
           )
         })}
+        {routeParams && (
+          <div className="grid grid-cols-2 gap-4">
+            {Object.entries(routeParams).map(([key, value]) => (
+              <FormItem key={`${routeParamsKeyPrefix}${key}`} className="flex flex-col space-y-2">
+                <FormLabel className="capitalize">{key}</FormLabel>
+                <Input {...form.register(`${routeParamsKeyPrefix}${key}`)} />
+                {!!value && (
+                  <Markdown className="line-clamp-1 text-xs text-theme-foreground/50">
+                    {value}
+                  </Markdown>
+                )}
+              </FormItem>
+            ))}
+          </div>
+        )}
         {!noDescription && (
           <>
             <FeedDescription description={route.description} />
