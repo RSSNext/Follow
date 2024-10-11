@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../../components/ui/too
 
 export const Balance = ({
   children,
+  value,
   className,
   precision = 0,
   withSuffix = false,
@@ -13,12 +14,13 @@ export const Balance = ({
 }: {
   /** The token balance in wei. */
   children: bigint | string
+  value?: bigint | string
   className?: string
   precision?: number
   withSuffix?: boolean
   withTooltip?: boolean
 }) => {
-  const n = [BigInt(children || 0n), 18] as const
+  const n = [BigInt(children) || BigInt(value || 0n), 18] as const
   const formatted = format(n, { digits: precision, trailingZeros: true })
   const formattedFull = format(n, { digits: 18, trailingZeros: true })
 
