@@ -19,10 +19,6 @@ import { initializeSentry } from "./sentry"
 import { router } from "./tipc"
 import { createMainWindow, getMainWindow } from "./window"
 
-const appFolder = {
-  prod: "Follow",
-  dev: "Follow (dev)",
-}
 if (process.argv.length === 3 && process.argv[2].startsWith("follow-dev:")) {
   process.env.NODE_ENV = "development"
 }
@@ -32,7 +28,8 @@ const isDev = process.env.NODE_ENV === "development"
  * Mandatory and fast initializers for the app
  */
 export function initializeAppStage0() {
-  app.setPath("appData", path.join(app.getPath("appData"), isDev ? appFolder.dev : appFolder.prod))
+  if (isDev) app.setPath("appData", path.join(app.getPath("appData"), "Follow (dev)"))
+  initializeSentry()
 }
 export const initializeAppStage1 = () => {
   if (process.defaultApp) {
@@ -44,8 +41,6 @@ export const initializeAppStage1 = () => {
   } else {
     app.setAsDefaultProtocolClient(APP_PROTOCOL)
   }
-
-  initializeSentry()
 
   registerIpcMain(router)
 
