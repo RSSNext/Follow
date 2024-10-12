@@ -14,7 +14,7 @@ export const EntryPlaceholderLogo = () => {
     <div
       onContextMenu={stopPropagation}
       className={cn(
-        "flex w-full min-w-0 flex-col items-center justify-center gap-1 text-balance px-12 pb-6 text-center text-lg font-medium text-zinc-400 duration-500",
+        "flex w-full min-w-0 flex-col items-center justify-center gap-1 px-12 pb-6 text-center text-lg font-medium text-zinc-400 duration-500",
         !logoShow && "translate-y-[-50px] opacity-0",
       )}
     >
