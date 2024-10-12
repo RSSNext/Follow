@@ -46,7 +46,7 @@ export const createSettingAtom = <T extends object>(
       selectAtomCacheMap[key] = selectedAtom
     }
 
-    return useAtomValue(selectedAtom)
+    return useAtomValue(selectedAtom) as ReturnType<typeof getSettings>[T]
   }
 
   const useSettingSelector = <
