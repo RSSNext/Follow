@@ -3,7 +3,7 @@ import { repository } from "@pkg"
 import { Slot } from "@radix-ui/react-slot"
 import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
-import React, { forwardRef, useEffect, useRef, useState } from "react"
+import React, { forwardRef, lazy, Suspense, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans, useTranslation } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
@@ -40,12 +40,15 @@ import { FeedColumn } from "~/modules/feed-column"
 import { AutoUpdater } from "~/modules/feed-column/auto-updater"
 import { CornerPlayer } from "~/modules/feed-column/corner-player"
 import { useShortcutsModal } from "~/modules/modal/shortcuts"
-import { GuideModalContent } from "~/modules/new-user-guide/guide-modal-content"
 import { CmdF } from "~/modules/panel/cmdf"
 import { SearchCmdK } from "~/modules/panel/cmdk"
 import { CmdNTrigger } from "~/modules/panel/cmdn"
 import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
 import { settings } from "~/queries/settings"
+
+const LazyNewUserGuideModal = lazy(() =>
+  import("~/modules/new-user-guide/modal").then((m) => ({ default: m.NewUserGuideModal })),
+)
 
 const FooterInfo = () => {
   const { t } = useTranslation()
@@ -133,19 +136,9 @@ export function Component() {
       {ELECTRON && <CmdF />}
 
       {user && isNewUser && (
-        <RootPortal>
-          <DeclarativeModal
-            id="new-user-guide"
-            title="New User Guide"
-            CustomModalComponent={PlainModal}
-            modalContainerClassName="flex items-center justify-center"
-            open
-            canClose={false}
-            clickOutsideToDismiss={false}
-          >
-            <GuideModalContent />
-          </DeclarativeModal>
-        </RootPortal>
+        <Suspense>
+          <LazyNewUserGuideModal />
+        </Suspense>
       )}
 
       {isAuthFail && !user && (
