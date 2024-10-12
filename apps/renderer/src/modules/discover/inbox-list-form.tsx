@@ -5,6 +5,7 @@ import { toast } from "sonner"
 
 import { ActionButton, Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
+import { LoadingCircle } from "~/components/ui/loading"
 import { useModalStack } from "~/components/ui/modal"
 import {
   Table,
@@ -27,6 +28,14 @@ export function DiscoverInboxList() {
   const inboxes = useInboxList()
 
   const { present } = useModalStack()
+
+  if (inboxes.isLoading) {
+    return (
+      <div className="center mt-12 flex w-full flex-col gap-8">
+        <LoadingCircle size="large" />
+      </div>
+    )
+  }
 
   return (
     <>
