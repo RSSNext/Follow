@@ -8,6 +8,7 @@ import { DiscoverImport } from "~/modules/discover/import"
 import { DiscoverInboxList } from "~/modules/discover/inbox-list-form"
 import { Recommendations } from "~/modules/discover/recommendations"
 import { DiscoverRSS3 } from "~/modules/discover/rss3-form"
+import { DiscoverTransform } from "~/modules/discover/transform-form"
 import { DiscoverUser } from "~/modules/discover/user-form"
 import { Trend } from "~/modules/trending"
 
@@ -43,6 +44,10 @@ const tabs: {
     value: "user",
   },
   {
+    name: "words.transform",
+    value: "transform",
+  },
+  {
     name: "words.import",
     value: "import",
   },
@@ -54,8 +59,8 @@ export function Component() {
   useSubViewTitle("words.discover")
 
   return (
-    <>
-      <div className="text-2xl font-bold">{t("words.discover")}</div>
+    <div className="flex flex-col items-center gap-8">
+      <div className="pt-12 text-2xl font-bold">{t("words.discover")}</div>
       <Tabs
         value={search.get("type") || "search"}
         onValueChange={(val) => {
@@ -72,7 +77,7 @@ export function Component() {
             </TabsTrigger>
           ))}
 
-          <Trend />
+          <Trend className="relative bottom-0 left-1.5" />
         </TabsList>
         {tabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
@@ -83,7 +88,7 @@ export function Component() {
         ))}
       </Tabs>
       <Recommendations />
-    </>
+    </div>
   )
 }
 
@@ -93,4 +98,5 @@ const TabComponent: Record<string, React.FC<{ type?: string }>> = {
   inbox: DiscoverInboxList,
   user: DiscoverUser,
   default: DiscoverForm,
+  transform: DiscoverTransform,
 }

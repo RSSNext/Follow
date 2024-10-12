@@ -7,6 +7,7 @@ import { EventBus } from "~/lib/event-bus"
 import { defaultNS, ns } from "./@types/constants"
 import { defaultResources } from "./@types/default-resource"
 import { getGeneralSettings } from "./atoms/settings/general"
+import { isDev } from "./constants"
 import { Chain } from "./lib/chain"
 import { jotaiStore } from "./lib/jotai"
 import { getStorageNS } from "./lib/ns"
@@ -42,14 +43,17 @@ export const initI18n = async () => {
   const i18next = jotaiStore.get(i18nAtom)
 
   const lang = getGeneralSettings().language
-  const cache = LocaleCache.shared.get(lang)
 
   const mergedResources = {
     ...defaultResources,
   }
 
-  if (cache) {
-    mergedResources[lang] = cache
+  let cache = null as any
+  if (!isDev) {
+    cache = LocaleCache.shared.get(lang)
+    if (cache) {
+      mergedResources[lang] = cache
+    }
   }
 
   await i18next.use(initReactI18next).init({

@@ -9,9 +9,9 @@ import { whoami } from "~/atoms/user"
 import { cn } from "~/lib/utils"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 
+import { UserAvatar } from "../modules/user/UserAvatar"
 import { FollowIcon } from "./icons/follow"
 import { Logo } from "./icons/logo"
-import { UserAvatar } from "./user-button"
 
 const useMotionValueToState = (value: MotionValue<number>) => {
   const [state, setState] = useState(value.get())

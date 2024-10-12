@@ -1,4 +1,5 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { env } from "@follow/shared/env"
 import { useQuery } from "@tanstack/react-query"
 import { useAtom } from "jotai"
 import { useCallback, useEffect } from "react"
@@ -133,7 +134,7 @@ export const SettingGeneral = () => {
           }),
           {
             label: t("general.rebuild_database.label"),
-            action: async () => {
+            action: () => {
               present({
                 title: t("general.rebuild_database.title"),
                 clickOutsideToDismiss: true,
@@ -143,7 +144,7 @@ export const SettingGeneral = () => {
                     <p>{t("general.rebuild_database.warning.line2")}</p>
                     <div className="mt-4 flex justify-end">
                       <Button
-                        className="bg-red-600 px-3 text-white dark:bg-red-500"
+                        className="bg-red-500 px-3 text-white"
                         onClick={async () => {
                           await clearLocalPersistStoreData()
                           window.location.reload()
@@ -158,6 +159,17 @@ export const SettingGeneral = () => {
             },
             description: t("general.rebuild_database.description"),
             buttonText: t("general.rebuild_database.button"),
+          },
+          {
+            label: t("general.export.label"),
+            description: t("general.export.description"),
+            buttonText: t("general.export.button"),
+            action: () => {
+              const link = document.createElement("a")
+              link.href = `${env.VITE_API_URL}/subscriptions/export`
+              link.download = "follow.opml"
+              link.click()
+            },
           },
 
           { type: "title", value: t("general.network"), disabled: !IN_ELECTRON },

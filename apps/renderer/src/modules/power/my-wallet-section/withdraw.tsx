@@ -7,7 +7,6 @@ import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { useWhoami } from "~/atoms/user"
 import { Button } from "~/components/ui/button"
 import {
   Form,
@@ -44,8 +43,7 @@ export const WithdrawButton = () => {
 
 const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
   const { t } = useTranslation("settings")
-  const user = useWhoami()
-  const wallet = useWallet({ userId: user?.id })
+  const wallet = useWallet()
   const cashablePowerTokenBigInt = [BigInt(wallet.data?.[0].cashablePowerToken || 0n), 18] as const
   const cashablePowerTokenNumber = toNumber(cashablePowerTokenBigInt)
 
@@ -96,15 +94,13 @@ const WithdrawModalContent = ({ dismiss }: { dismiss: () => void }) => {
           i18nKey="wallet.withdraw.availableBalance"
           components={{
             Balance: (
-              <Balance className="inline-block">
+              <Balance className="inline-block" value={wallet.data?.[0].cashablePowerToken || "0"}>
                 {wallet.data?.[0].cashablePowerToken || "0"}
               </Balance>
             ),
           }}
           ns="settings"
-        >
-          {wallet.data?.[0].cashablePowerToken || "0"}
-        </Trans>
+        />
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-96 space-y-4">

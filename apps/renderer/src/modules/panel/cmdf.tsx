@@ -241,6 +241,7 @@ export const CmdF = () => {
     <AnimatePresence>
       {show && (
         <m.div
+          className="relative z-[1000]"
           initial={{ opacity: 0.8, y: -150 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -150 }}

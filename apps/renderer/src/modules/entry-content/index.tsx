@@ -30,6 +30,7 @@ import { useAuthQuery, useTitle } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { getNewIssueUrl } from "~/lib/issues"
+import { LanguageMap } from "~/lib/translate"
 import { cn } from "~/lib/utils"
 import type { ActiveEntryId, FeedModel, InboxModel } from "~/models"
 import {
@@ -43,7 +44,12 @@ import { useFeedById } from "~/store/feed"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
-import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
+import {
+  getTranslationCache,
+  setEntryContentScrollToTop,
+  setEntryTitleMeta,
+  setTranslationCache,
+} from "./atoms"
 import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
 import { EntryTitle } from "./components/EntryTitle"
 import { SourceContentPanel } from "./components/SourceContentView"
@@ -185,6 +191,30 @@ export const EntryContentRender: Component<{
 
   const content = entry?.entries.content ?? data?.entries.content
 
+  const translate = async (html: HTMLElement | null) => {
+    if (!html || !entry || !entry.settings?.translation) return
+
+    const fullText = html.textContent ?? ""
+    if (!fullText) return
+
+    const { franc } = await import("franc-min")
+    const sourceLanguage = franc(fullText)
+    if (sourceLanguage === LanguageMap[entry.settings?.translation].code) {
+      return
+    }
+
+    const { immersiveTranslate } = await import("~/lib/immersive-translate")
+    immersiveTranslate({
+      html,
+      entry,
+      cache: {
+        get: (key: string) => getTranslationCache()[key],
+        set: (key: string, value: string) =>
+          setTranslationCache({ ...getTranslationCache(), [key]: value }),
+      },
+    })
+  }
+
   return (
     <EntryContentProvider
       entryId={entry.entries.id}
@@ -237,6 +267,7 @@ export const EntryContentRender: Component<{
                     {!isInReadabilityMode ? (
                       <ShadowDOM>
                         <HTML
+                          translate={translate}
                           mediaInfo={mediaInfo}
                           noMedia={noMedia}
                           accessory={contentAccessories}

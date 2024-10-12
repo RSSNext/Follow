@@ -1,15 +1,16 @@
 import fs from "node:fs"
-import { createRequire } from "node:module"
 import path from "node:path"
 
 import { callWindowExpose } from "@follow/shared/bridge"
 import { app, BrowserWindow } from "electron"
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts"
+import type { ModelResult } from "vscode-languagedetection"
+
+import { detectCodeStringLanguage } from "~/modules/language-detection"
 
 import { readability } from "../lib/readability"
 import { t } from "./_instance"
 
-const require = createRequire(import.meta.url)
 const tts = new MsEdgeTTS()
 
 export const readerRoute = {
@@ -54,7 +55,7 @@ export const readerRoute = {
       if (!window) {
         return
       }
-      callWindowExpose(window).toast.error(error.message, {
+      void callWindowExpose(window).toast.error(error.message, {
         duration: 1000,
       })
     }
@@ -67,7 +68,7 @@ export const readerRoute = {
     }
 
     await tts.setMetadata(input, OUTPUT_FORMAT.WEBM_24KHZ_16BIT_MONO_OPUS).catch((error) => {
-      callWindowExpose(window).toast.error(error.message, {
+      return callWindowExpose(window).toast.error(error.message, {
         duration: 1000,
       })
     })
@@ -76,9 +77,20 @@ export const readerRoute = {
   detectCodeStringLanguage: t.procedure
     .input<{ codeString: string }>()
     .action(async ({ input }) => {
-      const { ModelOperations } = require("vscode-languagedetection")
-      const modelOperations = new ModelOperations()
-      const result = await modelOperations.runModel(input.codeString)
-      return result
+      const { codeString } = input
+      const languages = detectCodeStringLanguage(codeString)
+
+      let finalLanguage: ModelResult | undefined
+      for await (const language of languages) {
+        if (!finalLanguage) {
+          finalLanguage = language
+          continue
+        }
+        if (language.confidence > finalLanguage.confidence) {
+          finalLanguage = language
+        }
+      }
+
+      return finalLanguage
     }),
 }

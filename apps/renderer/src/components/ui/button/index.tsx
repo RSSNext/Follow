@@ -27,8 +27,15 @@ interface ActionButtonProps {
   disabled?: boolean
   shortcut?: string
   disableTriggerShortcut?: boolean
+  size?: "sm" | "md" | "base"
 }
 
+const actionButtonStyleVariant = {
+  size: {
+    base: tw`text-xl size-8`,
+    sm: tw`text-sm size-6`,
+  },
+}
 export const ActionButton = React.forwardRef<
   HTMLButtonElement,
   ComponentType<ActionButtonProps> & React.HTMLAttributes<HTMLButtonElement>
@@ -45,6 +52,7 @@ export const ActionButton = React.forwardRef<
       shortcut,
       disabled,
       disableTriggerShortcut,
+      size = "base",
       ...rest
     },
     ref,
@@ -60,10 +68,11 @@ export const ActionButton = React.forwardRef<
         // @see https://github.com/radix-ui/primitives/issues/2248#issuecomment-2147056904
         onFocusCapture={stopPropagation}
         className={cn(
-          "no-drag-region inline-flex size-8 items-center justify-center text-xl",
+          "no-drag-region inline-flex items-center justify-center",
           active && "bg-zinc-500/15 hover:bg-zinc-500/20",
           "rounded-md duration-200 hover:bg-theme-button-hover data-[state=open]:bg-theme-button-hover",
           "disabled:cursor-not-allowed disabled:opacity-50",
+          actionButtonStyleVariant.size[size],
           className,
         )}
         type="button"
@@ -86,7 +95,9 @@ export const ActionButton = React.forwardRef<
         )}
         {tooltip ? (
           <Tooltip disableHoverableContent>
-            <TooltipTrigger asChild>{Trigger}</TooltipTrigger>
+            <TooltipTrigger aria-label={typeof tooltip === "string" ? tooltip : undefined} asChild>
+              {Trigger}
+            </TooltipTrigger>
             <TooltipPortal>
               <TooltipContent className="flex items-center gap-1" side={tooltipSide ?? "bottom"}>
                 {tooltip}

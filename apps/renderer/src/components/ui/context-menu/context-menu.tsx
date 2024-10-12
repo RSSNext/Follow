@@ -99,7 +99,7 @@ const ContextMenuCheckboxItem = React.forwardRef<
   <ContextMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      "relative flex cursor-checkbox select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-theme-item-hover focus:text-theme-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex cursor-checkbox select-none items-center rounded-sm px-8 py-1.5 text-sm outline-none focus:bg-theme-item-hover focus:text-theme-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "focus-within:outline-transparent",
       className,
     )}

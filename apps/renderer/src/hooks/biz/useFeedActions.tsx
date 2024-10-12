@@ -20,7 +20,7 @@ import {
   useRemoveFeedFromFeedList,
 } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
-import { useListById, useListByView } from "~/store/list"
+import { useListById, useOwnedList } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 
 import { useNavigateEntry } from "./useNavigateEntry"
@@ -51,7 +51,7 @@ export const useFeedActions = ({
   const { mutateAsync: addFeedToListMutation } = useAddFeedToFeedList()
   const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
 
-  const listByView = useListByView(view!)
+  const listByView = useOwnedList(view!)
 
   const items = useMemo(() => {
     if (!feed) return []
