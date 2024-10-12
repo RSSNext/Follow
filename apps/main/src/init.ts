@@ -148,12 +148,12 @@ const registerPushNotifications = async () => {
     debug: true,
     firebase: env.VITE_FIREBASE_CONFIG,
     persistentIds: persistentIds || [],
-    credentials,
+    credentials: credentials || null,
     bundleId: "is.follow",
     chromeId: "is.follow",
   })
   logger.info(
-    `PushReceiver initialized with token ${credentials?.fcm?.token} and firebase config ${env.VITE_FIREBASE_CONFIG}`,
+    `PushReceiver initialized with credentials ${JSON.stringify(credentials)} and firebase config ${env.VITE_FIREBASE_CONFIG}`,
   )
 
   instance.onReady(() => {
@@ -199,4 +199,6 @@ const registerPushNotifications = async () => {
   })
 
   await instance.connect()
+
+  logger.info("PushReceiver connected")
 }
