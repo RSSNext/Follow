@@ -72,20 +72,28 @@ export function GuideModalContent() {
         {
           title: t.settings("appearance.sidebar_title"),
           content: createElement(AppearanceGuide),
+          icon: "i-mgc-palette-cute-re",
         },
         {
           title: t.app("new_user_guide.step.start_question.title"),
           content: createElement(RookieCheck),
+          icon: "i-mgc-question-cute-re",
         },
         haveUsedOtherRSSReader && {
           title: t.app("new_user_guide.step.behavior.title"),
           content: createElement(BehaviorGuide),
+          icon: tw`i-mingcute-cursor-3-line`,
         },
         {
           title: "Popular Feeds",
           content: createElement(TrendingFeeds),
+          icon: "i-mgc-trending-up-cute-re",
         },
-      ].filter((i) => !!i) as { title: string; content: FunctionComponentElement<object> }[],
+      ].filter((i) => !!i) as {
+        title: string
+        icon: string
+        content: FunctionComponentElement<object>
+      }[],
     [haveUsedOtherRSSReader, t],
   )
 
@@ -109,7 +117,12 @@ export function GuideModalContent() {
       layout
       className="relative flex flex-col items-center justify-center overflow-hidden rounded-xl border bg-theme-background"
     >
-      {!!title && <h1 className="absolute left-6 top-4 text-xl font-bold">{title}</h1>}
+      {!!title && (
+        <h1 className="absolute left-6 top-4 text-xl font-bold">
+          <i className={clsx(guideSteps[step - 1].icon, "mr-2 size-[22px] translate-y-1")} />
+          {title}
+        </h1>
+      )}
 
       <div className="relative mx-auto flex w-full max-w-lg items-center">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
