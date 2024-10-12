@@ -9,7 +9,7 @@
       "destination": "/__debug_proxy.html"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!assets|vendor|locales/).*)",
       "destination": "/index.html"
     }
   ],
