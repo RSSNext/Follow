@@ -3,7 +3,7 @@ import { LanguageSelector } from "~/modules/settings/tabs/general"
 
 export function AppearanceGuide() {
   return (
-    <div className="space-y-4">
+    <div className="mt-20 box-content w-[400px] space-y-4 px-6 pb-24">
       <LanguageSelector />
       <AppThemeSegment />
       <TextSize />

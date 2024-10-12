@@ -1,5 +1,6 @@
+import clsx from "clsx"
 import { AnimatePresence, m } from "framer-motion"
-import type { ComponentProps } from "react"
+import type { ComponentProps, FunctionComponentElement } from "react"
 import { createElement, useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -15,10 +16,11 @@ import { BehaviorGuide } from "./steps/behavior"
 import { TrendingFeeds } from "./steps/feeds"
 import { RookieCheck } from "./steps/rookie"
 
+const containerWidth = 600
 const variants = {
   enter: (direction: number) => {
     return {
-      x: direction > 0 ? 1000 : -1000,
+      x: direction > 0 ? containerWidth : -containerWidth,
       opacity: 0,
     }
   },
@@ -30,7 +32,7 @@ const variants = {
   exit: (direction: number) => {
     return {
       zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
+      x: direction < 0 ? containerWidth : -containerWidth,
       opacity: 0,
     }
   },
@@ -39,9 +41,9 @@ const variants = {
 function Intro() {
   const { t } = useTranslation("app")
   return (
-    <div className="text-balance text-center">
+    <div className="mb-20 w-[50ch] text-balance pt-14 text-center">
       <Logo className="mx-auto size-20" />
-      <p className="mb-3 mt-6 text-xl font-semibold">{t("new_user_guide.intro.title")}</p>
+      <p className="mt-5 text-xl font-semibold">{t("new_user_guide.intro.title")}</p>
       <p className="text-lg">{t("new_user_guide.intro.description")}</p>
     </div>
   )
@@ -50,9 +52,9 @@ function Intro() {
 function Outtro() {
   const { t } = useTranslation("app")
   return (
-    <div className="text-balance text-center">
+    <div className="mb-20 w-[50ch] text-balance pt-14 text-center">
       <Logo className="mx-auto size-20" />
-      <p className="mb-3 mt-6 text-xl font-semibold">{t("new_user_guide.outro.title")}</p>
+      <p className="mt-5 text-xl font-semibold">{t("new_user_guide.outro.title")}</p>
       <p className="text-lg">{t("new_user_guide.outro.description")}</p>
     </div>
   )
@@ -83,7 +85,7 @@ export function GuideModalContent() {
           title: "Popular Feeds",
           content: createElement(TrendingFeeds),
         },
-      ].filter((i) => typeof i !== "boolean"),
+      ].filter((i) => !!i) as { title: string; content: FunctionComponentElement<object> }[],
     [haveUsedOtherRSSReader, t],
   )
 
@@ -103,14 +105,16 @@ export function GuideModalContent() {
   }, [])
 
   return (
-    <div className="relative flex h-[70vh] w-[70vw] flex-col items-center justify-center overflow-hidden rounded-xl border bg-theme-background">
-      {!!title && <h1 className="absolute left-6 top-4 text-2xl font-bold">{title}</h1>}
+    <m.div
+      layout
+      className="relative flex flex-col items-center justify-center overflow-hidden rounded-xl border bg-theme-background"
+    >
+      {!!title && <h1 className="absolute left-6 top-4 text-xl font-bold">{title}</h1>}
 
       <div className="relative mx-auto flex w-full max-w-lg items-center">
-        <AnimatePresence initial={false} custom={direction}>
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <m.div
             key={step - 1}
-            className="absolute inset-x-0"
             custom={direction}
             variants={variants}
             initial="enter"
@@ -118,7 +122,7 @@ export function GuideModalContent() {
             exit="exit"
             transition={{
               x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.2 },
+              opacity: { duration: 0.1 },
             }}
           >
             {status === "initial" ? (
@@ -132,25 +136,26 @@ export function GuideModalContent() {
         </AnimatePresence>
       </div>
 
-      <div className="absolute inset-x-0 bottom-4 flex w-full items-center justify-between px-6">
-        <div className="flex h-fit gap-6">
+      <div className="absolute inset-x-0 bottom-4 z-[1] flex w-full items-center justify-between px-6">
+        <div className={clsx("flex h-fit gap-4", step === 0 && "invisible")}>
           {Array.from({ length: totalSteps }, (_, i) => i + 1).map((i) => (
             <Step key={i} step={i} currentStep={step} />
           ))}
         </div>
         <div className="flex gap-2">
-          <Button
-            onClick={() => {
-              if (step > 0) {
-                setStep((prev) => prev - 1)
-                setDirection(-1)
-              }
-            }}
-            disabled={step === 0}
-            variant={"outline"}
-          >
-            Back
-          </Button>
+          {step !== 0 && step <= totalSteps && (
+            <Button
+              onClick={() => {
+                if (step > 0) {
+                  setStep((prev) => prev - 1)
+                  setDirection(-1)
+                }
+              }}
+              variant={"outline"}
+            >
+              Back
+            </Button>
+          )}
           <Button
             onClick={() => {
               if (step <= totalSteps) {
@@ -165,7 +170,7 @@ export function GuideModalContent() {
           </Button>
         </div>
       </div>
-    </div>
+    </m.div>
   )
 }
 
@@ -193,7 +198,7 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
           type: "tween",
           ease: "circOut",
         }}
-        className="absolute inset-0 rounded-full bg-theme-accent-200"
+        className="absolute inset-0 rounded-full bg-theme-accent/20"
       />
 
       <m.div
@@ -202,7 +207,7 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
           inactive: {
             backgroundColor: "var(--fo-background)",
             borderColor: "hsl(var(--border) / 0.5)",
-            color: "hsl(var(--fo-a) / 0.2)",
+            color: "hsl(var(--fo-foreground) / 0.2)",
           },
           active: {
             backgroundColor: "var(--fo-background)",
@@ -216,11 +221,11 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
           },
         }}
         transition={{ duration: 0.2 }}
-        className="relative flex size-10 items-center justify-center rounded-full border-2 font-semibold"
+        className="relative flex size-7 items-center justify-center rounded-full border text-xs font-semibold"
       >
         <div className="flex items-center justify-center">
           {status === "complete" ? (
-            <AnimatedCheckIcon className="size-6 text-white" />
+            <AnimatedCheckIcon className="size-4 text-white" />
           ) : (
             <span>{step}</span>
           )}

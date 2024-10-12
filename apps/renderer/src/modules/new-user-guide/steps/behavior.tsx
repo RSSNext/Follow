@@ -16,7 +16,7 @@ export function BehaviorGuide() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="mt-20 space-y-4 px-6 pb-24">
       <div>
         <h2 className="my-6 text-xl font-semibold">
           {t("new_user_guide.step.behavior.unread_question.content")}
