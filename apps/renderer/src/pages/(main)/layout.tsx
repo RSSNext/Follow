@@ -132,7 +132,7 @@ export function Component() {
       <CmdNTrigger />
       {ELECTRON && <CmdF />}
 
-      {user && !isNewUser && (
+      {user && isNewUser && (
         <RootPortal>
           <DeclarativeModal
             id="new-user-guide"
