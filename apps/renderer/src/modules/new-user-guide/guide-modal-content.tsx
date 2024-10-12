@@ -3,6 +3,7 @@ import type { ComponentProps } from "react"
 import { createElement, useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import { Logo } from "~/components/icons/logo"
 import { Button } from "~/components/ui/button"
 import { settings } from "~/queries/settings"
 
@@ -65,15 +66,7 @@ export function GuideModalContent() {
     [step, totalSteps],
   )
 
-  const title = useMemo(
-    () =>
-      status === "initial"
-        ? "New User Guide"
-        : status === "active"
-          ? guideSteps[step - 1].title
-          : "You're all set!",
-    [status, guideSteps, step],
-  )
+  const title = useMemo(() => guideSteps[step - 1]?.title, [guideSteps, step])
 
   const finishGuide = useCallback(() => {
     settingSyncQueue.replaceRemote().then(() => {
@@ -83,7 +76,7 @@ export function GuideModalContent() {
 
   return (
     <div className="relative flex h-[70vh] w-[70vw] flex-col items-center justify-center overflow-hidden rounded-lg border bg-background shadow-lg">
-      <h1 className="absolute left-6 top-4 text-3xl font-bold">{title}</h1>
+      {title && <h1 className="absolute left-6 top-4 text-3xl font-bold">{title}</h1>}
 
       <div className="relative mx-auto flex w-full max-w-lg items-center">
         <AnimatePresence initial={false}>
@@ -100,9 +93,10 @@ export function GuideModalContent() {
             }}
           >
             {status === "initial" ? (
-              <div className="text-lg">
-                <p>Welcome to Follow! This guide will help you get started with the app.</p>
-                <p>Click "Next" to continue.</p>
+              <div className="text-balance text-center">
+                <Logo className="mx-auto size-20" />
+                <p className="mb-3 mt-6 text-xl font-semibold">Welcome to Follow!</p>
+                <p className="text-lg">This guide will help you get started with the app.</p>
               </div>
             ) : status === "active" ? (
               guideSteps[step - 1].content
