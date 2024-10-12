@@ -284,7 +284,7 @@ export const ModalInternal = memo(
             <Dialog.Portal>
               {Overlay}
               <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
-              <Dialog.Content asChild onOpenAutoFocus={openAutoFocus}>
+              <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={openAutoFocus}>
                 <div
                   ref={edgeElementRef}
                   className={cn(
@@ -324,7 +324,7 @@ export const ModalInternal = memo(
         <Dialog.Root modal={modal} open onOpenChange={onClose}>
           <Dialog.Portal>
             {Overlay}
-            <Dialog.Content asChild onOpenAutoFocus={openAutoFocus}>
+            <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={openAutoFocus}>
               <div
                 ref={edgeElementRef}
                 className={cn(
