@@ -80,8 +80,8 @@ export function GuideModalContent() {
   }, [])
 
   return (
-    <div className="relative flex h-[70vh] w-[70vw] flex-col items-center justify-center overflow-hidden rounded-lg border bg-background shadow-lg">
-      {title && <h1 className="absolute left-6 top-4 text-3xl font-bold">{title}</h1>}
+    <div className="relative flex h-[70vh] w-[70vw] flex-col items-center justify-center overflow-hidden rounded-xl border bg-theme-background">
+      {title && <h1 className="absolute left-6 top-4 text-2xl font-bold">{title}</h1>}
 
       <div className="relative mx-auto flex w-full max-w-lg items-center">
         <AnimatePresence initial={false} custom={direction}>
