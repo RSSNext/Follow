@@ -145,12 +145,14 @@ const registerPushNotifications = async () => {
   updateNotificationsToken()
 
   const instance = new PushReceiver({
-    debug: isDev,
+    debug: true,
     firebase: env.VITE_FIREBASE_CONFIG,
     persistentIds: persistentIds || [],
     credentials,
   })
-  logger.info(`PushReceiver initialized with token ${credentials?.fcm?.token}`)
+  logger.info(
+    `PushReceiver initialized with token ${credentials?.fcm?.token} and firebase config ${env.VITE_FIREBASE_CONFIG}`,
+  )
 
   instance.onCredentialsChanged(({ newCredentials }) => {
     logger.info(`PushReceiver credentials changed to ${newCredentials?.fcm?.token}`)
