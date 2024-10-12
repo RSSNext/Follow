@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 
 import { Logo } from "~/components/icons/logo"
 import { Button } from "~/components/ui/button"
+import { useI18n } from "~/hooks/common"
 import { settings } from "~/queries/settings"
 
 import { settingSyncQueue } from "../settings/helper/sync-queue"
@@ -35,8 +36,30 @@ const variants = {
   },
 }
 
+function Intro() {
+  const { t } = useTranslation("app")
+  return (
+    <div className="text-balance text-center">
+      <Logo className="mx-auto size-20" />
+      <p className="mb-3 mt-6 text-xl font-semibold">{t("new_user_guide.intro.title")}</p>
+      <p className="text-lg">{t("new_user_guide.intro.description")}</p>
+    </div>
+  )
+}
+
+function Outtro() {
+  const { t } = useTranslation("app")
+  return (
+    <div className="text-balance text-center">
+      <Logo className="mx-auto size-20" />
+      <p className="mb-3 mt-6 text-xl font-semibold">{t("new_user_guide.outro.title")}</p>
+      <p className="text-lg">{t("new_user_guide.outro.description")}</p>
+    </div>
+  )
+}
+
 export function GuideModalContent() {
-  const { t } = useTranslation("settings")
+  const t = useI18n()
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
   const haveUsedOtherRSSReader = useHaveUsedOtherRSSReader()
@@ -45,15 +68,15 @@ export function GuideModalContent() {
     () =>
       [
         {
-          title: t("appearance.sidebar_title"),
+          title: t.settings("appearance.sidebar_title"),
           content: createElement(AppearanceGuide),
         },
         {
-          title: "Rookie Check",
+          title: t.app("new_user_guide.step.start_question.title"),
           content: createElement(RookieCheck),
         },
         haveUsedOtherRSSReader && {
-          title: "Behavior",
+          title: t.app("new_user_guide.step.behavior.title"),
           content: createElement(BehaviorGuide),
         },
         {
@@ -81,7 +104,7 @@ export function GuideModalContent() {
 
   return (
     <div className="relative flex h-[70vh] w-[70vw] flex-col items-center justify-center overflow-hidden rounded-xl border bg-theme-background">
-      {title && <h1 className="absolute left-6 top-4 text-2xl font-bold">{title}</h1>}
+      {!!title && <h1 className="absolute left-6 top-4 text-2xl font-bold">{title}</h1>}
 
       <div className="relative mx-auto flex w-full max-w-lg items-center">
         <AnimatePresence initial={false} custom={direction}>
@@ -99,19 +122,11 @@ export function GuideModalContent() {
             }}
           >
             {status === "initial" ? (
-              <div className="text-balance text-center">
-                <Logo className="mx-auto size-20" />
-                <p className="mb-3 mt-6 text-xl font-semibold">Welcome to Follow!</p>
-                <p className="text-lg">This guide will help you get started with the app.</p>
-              </div>
+              <Intro />
             ) : status === "active" ? (
               guideSteps[step - 1].content
             ) : status === "complete" ? (
-              <div className="text-balance text-center">
-                <Logo className="mx-auto size-20" />
-                <p className="mb-3 mt-6 text-xl font-semibold">That's it! You're all set.</p>
-                <p className="text-lg">Click "Finish" to close this guide.</p>
-              </div>
+              <Outtro />
             ) : null}
           </m.div>
         </AnimatePresence>
