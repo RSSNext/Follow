@@ -354,7 +354,7 @@ export const useEntryActions = ({
             toast.success(
               <>
                 {t("entry_actions.saved_to_omnivore")},{" "}
-                <a target="_blank" className="underline" href={data.url}>
+                <a target="_blank" className="underline" href={data.data.saveUrl.url}>
                   view
                 </a>
               </>,
