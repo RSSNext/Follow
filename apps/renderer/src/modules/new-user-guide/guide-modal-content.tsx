@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next"
 import { Button } from "~/components/ui/button"
 import { settings } from "~/queries/settings"
 
-import { DiscoverImport } from "../discover/import"
 import { settingSyncQueue } from "../settings/helper/sync-queue"
 import { useHaveUsedOtherRSSReader } from "./atoms"
 import { AppearanceGuide } from "./steps/appearance"
@@ -51,15 +50,10 @@ export function GuideModalContent() {
           title: "Behavior",
           content: createElement(BehaviorGuide),
         },
-        haveUsedOtherRSSReader
-          ? {
-              title: "Import Feeds",
-              content: createElement(DiscoverImport),
-            }
-          : {
-              title: "Popular Feeds",
-              content: createElement(TrendingFeeds),
-            },
+        {
+          title: "Popular Feeds",
+          content: createElement(TrendingFeeds),
+        },
       ].filter((i) => typeof i !== "boolean"),
     [haveUsedOtherRSSReader, t],
   )
