@@ -1,5 +1,6 @@
 import { m, useMotionTemplate, useMotionValue } from "framer-motion"
 import { useCallback, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useAudioPlayerAtomSelector } from "~/atoms/player"
 import { setUpdaterStatus, useUpdaterStatus } from "~/atoms/updater"
@@ -10,6 +11,7 @@ import { handlers } from "~/tipc"
 
 export const AutoUpdater = () => {
   const updaterStatus = useUpdaterStatus()
+  const { t } = useTranslation()
 
   useEffect(() => {
     const unlisten = handlers?.updateDownloaded.listen(() => {
@@ -65,8 +67,8 @@ export const AutoUpdater = () => {
           } as any
         }
       />
-      <div className="font-medium">{APP_NAME} is ready to update!</div>
-      <div className="text-xs text-zinc-500">Click to restart</div>
+      <div className="font-medium">{t("notify.update_info", { app_name: APP_NAME })}</div>
+      <div className="text-xs text-zinc-500">{t("notify.update_info_1")}</div>
     </m.div>
   )
 }

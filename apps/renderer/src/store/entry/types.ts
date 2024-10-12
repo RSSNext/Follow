@@ -9,6 +9,7 @@ type EntriesIdTable = Record<FeedId, EntryId[]>
 
 export type FlatEntryModel = Omit<CombinedEntryModel, "feeds"> & {
   feedId: FeedId
+  view?: number
 }
 export interface EntryState {
   /**

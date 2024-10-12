@@ -53,7 +53,11 @@
     {
       "rule": "unused-imports/no-unused-imports",
       "severity": "off"
-    }
+    },
+    { "rule": "@typescript-eslint/require-await", "severity": "info" },
+    { "rule": "@typescript-eslint/await-thenable", "severity": "info" },
+    { "rule": "@typescript-eslint/no-floating-promises", "severity": "info" },
+    { "rule": "@typescript-eslint/no-misused-promises", "severity": "info" }
   ],
   "cSpell.words": ["Hydable", "rsshub", "Русский"],
   "editor.foldingImportsByDefault": true,

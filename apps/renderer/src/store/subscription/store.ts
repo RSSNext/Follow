@@ -17,6 +17,7 @@ import { inboxActions } from "../inbox"
 import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import { subscriptionCategoryExistSelector } from "./selector"
 
 export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
   defaultCategory?: string
@@ -39,6 +40,10 @@ interface SubscriptionState {
    * Value: Record<string, boolean>
    */
   categoryOpenStateByView: Record<FeedViewType, Record<string, boolean>>
+  /**
+   * Category Set
+   */
+  categories: Set<string>
 }
 
 function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
@@ -85,6 +90,8 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>("subsc
   data: {},
   feedIdByView: { ...emptyDataIdByView },
   categoryOpenStateByView: { ...emptyCategoryOpenStateByView },
+
+  categories: new Set(),
 }))
 
 const set = useSubscriptionStore.setState
@@ -96,6 +103,20 @@ type MarkReadFilter = {
 }
 
 class SubscriptionActions {
+  constructor() {
+    useSubscriptionStore.subscribe((state, prev) => {
+      if (state.data === prev.data) return
+
+      const categories = new Set<string>()
+      for (const subscription of Object.values(state.data)) {
+        subscription.category && categories.add(subscription.category)
+      }
+      set((state) => ({
+        ...state,
+        categories,
+      }))
+    })
+  }
   async fetchByView(view?: FeedViewType) {
     const res = await apiClient.subscriptions.$get({
       query: {
@@ -464,3 +485,6 @@ export const isListSubscription = (feedId?: FeedId) => {
   if (!subscription) return false
   return "listId" in subscription && !!subscription.listId
 }
+
+export const subscriptionCategoryExist = (name: string) =>
+  subscriptionCategoryExistSelector(name)(get())

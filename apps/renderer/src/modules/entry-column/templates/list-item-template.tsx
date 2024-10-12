@@ -126,7 +126,7 @@ export function ListItem({
               target={translation?.description}
             />
           )}
-          {!!entry.collections && <StarIcon />}
+          {!!entry.collections && <StarIcon className="absolute right-0 top-0" />}
         </div>
         {withDetails && (
           <div

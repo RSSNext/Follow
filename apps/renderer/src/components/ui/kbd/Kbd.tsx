@@ -18,18 +18,21 @@ const SpecialKeys = {
     ctrl: "Ctrl",
     alt: "Alt",
     shift: "Shift",
+    escape: "Esc",
   },
   macOS: {
     meta: "⌘",
     ctrl: "⌃",
     alt: "⌥",
     shift: "⇧",
+    escape: "⎋",
   },
   Linux: {
     meta: "Super",
     ctrl: "Ctrl",
     alt: "Alt",
     shift: "Shift",
+    escape: "Escape",
   },
 }
 // @ts-ignore

@@ -29,6 +29,8 @@ export function Component() {
     containerRef,
     onResizeEnd({ position }) {
       setUISetting("entryColWidth", position)
+      // TODO: Remove this after useMeasure can get bounds in time
+      window.dispatchEvent(new Event("resize"))
     },
   })
 

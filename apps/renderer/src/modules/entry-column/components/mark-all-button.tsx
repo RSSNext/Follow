@@ -9,10 +9,10 @@ import { useOnClickOutside } from "usehooks-ts"
 import { ActionButton, Button, IconButton } from "~/components/ui/button"
 import { Kbd, KbdCombined } from "~/components/ui/kbd/Kbd"
 import { RootPortal } from "~/components/ui/portal"
-import { HotKeyScopeMap } from "~/constants"
+import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT, HotKeyScopeMap } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useI18n } from "~/hooks/common"
-import { cn } from "~/lib/utils"
+import { cn, getOS } from "~/lib/utils"
 
 import type { MarkAllFilter } from "../hooks/useMarkAll"
 import { useMarkAllByRoute } from "../hooks/useMarkAll"
@@ -51,7 +51,7 @@ export const MarkAllReadWithOverlay = forwardRef<
         <m.div
           ref={setPopoverRef}
           initial={{ y: -70 }}
-          animate={{ y: 0 }}
+          animate={{ y: getOS() === "Windows" ? -ElECTRON_CUSTOM_TITLEBAR_HEIGHT : 0 }}
           exit={{ y: -70 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
           className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"
@@ -66,10 +66,10 @@ export const MarkAllReadWithOverlay = forwardRef<
               <i className="i-mgc-check-circle-cute-re" />
               <span className="text-sm font-bold">
                 <Trans
-                  i18nKey="mark_all_read_button.mark_as_read"
-                  // should be fixed by using `as const` but it's not working
-                  // @ts-expect-error https://www.i18next.com/overview/typescript#type-error-template-literal
-                  values={{ which: commonT(`words.which.${which}`) }}
+                  i18nKey="mark_all_read_button.confirm_mark_all"
+                  components={{
+                    which: commonT(`words.which.${which}` as any),
+                  }}
                 />
               </span>
             </span>
@@ -132,10 +132,8 @@ export const MarkAllReadWithOverlay = forwardRef<
           <>
             <Trans
               i18nKey="mark_all_read_button.mark_as_read"
-              values={{
-                // @ts-expect-error https://www.i18next.com/overview/typescript#type-error-template-literal
-                // should be fixed by using `as const` but it's not working
-                which: commonT(`words.which.${which}`),
+              components={{
+                which: commonT(`words.which.${which}` as any),
               }}
             />
             {shortcut && (
@@ -220,9 +218,14 @@ export const FlatMarkAllReadButton: FC<MarkAllButtonProps> = (props) => {
         )}
       </AnimatePresence>
       <span className={cn(status === "confirm" ? "opacity-0" : "opacity-100", "duration-200")}>
-        {t("mark_all_read_button.mark_as_read", {
-          which: typeof which === "string" ? t.common(`words.which.${which}` as any) : which,
-        })}
+        <Trans
+          i18nKey="mark_all_read_button.mark_as_read"
+          components={{
+            which: (
+              <>{typeof which === "string" ? t.common(`words.which.${which}` as any) : which}</>
+            ),
+          }}
+        />
       </span>
       <span
         className={cn(

@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { useHover } from "@use-gesture/react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
@@ -17,7 +18,7 @@ import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder
 import { GridItem } from "../templates/grid-item-template"
 import type { UniversalItemProps } from "../types"
 
-const ViewTag = window.electron ? "webview" : "iframe"
+const ViewTag = IN_ELECTRON ? "webview" : "iframe"
 
 export function VideoItem({ entryId, entryPreview, translation }: UniversalItemProps) {
   const entry = useEntry(entryId) || entryPreview

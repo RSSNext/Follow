@@ -24,7 +24,7 @@ export const ModalOverlay = forwardRef(
         ref={ref}
         id="modal-overlay"
         className={cn(
-          "pointer-events-none fixed inset-0 z-[11] rounded-[var(--fo-window-radius)] bg-zinc-50/80 dark:bg-neutral-900/80",
+          "!pointer-events-none fixed inset-0 z-[11] rounded-[var(--fo-window-radius)] bg-zinc-50/80 dark:bg-neutral-900/80",
           blur && "backdrop-blur-sm",
           className,
         )}

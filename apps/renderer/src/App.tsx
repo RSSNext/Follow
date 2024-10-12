@@ -1,4 +1,4 @@
-import { env } from "@follow/shared/env"
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { useEffect, useLayoutEffect } from "react"
 import { Outlet } from "react-router-dom"
 
@@ -6,16 +6,14 @@ import { queryClient } from "~/lib/query-client"
 
 import { useAppIsReady } from "./atoms/app"
 import { useUISettingKey } from "./atoms/settings/ui"
-import { applyAfterReadyCallbacks } from "./initialize/queue.js"
+import { navigateEntry } from "./hooks/biz/useNavigateEntry"
+import { applyAfterReadyCallbacks } from "./initialize/queue"
 import { appLog } from "./lib/log"
 import { cn, getOS } from "./lib/utils"
-import { Titlebar } from "./modules/app/Titlebar.js"
+import { Titlebar } from "./modules/app/Titlebar"
 import { RootProviders } from "./providers/root-providers"
 import { handlers } from "./tipc"
 
-if (import.meta.env.DEV) {
-  console.info("[renderer] env loaded:", env)
-}
 function App() {
   useEffect(() => {
     const cleanup = handlers?.invalidateQuery.listen((queryKey) => {
@@ -24,12 +22,16 @@ function App() {
       })
     })
 
+    handlers?.navigateEntry.listen((options) => {
+      navigateEntry(options)
+    })
+
     return cleanup
   }, [])
 
   useLayoutEffect(() => {
     // Electron app register in app scope, but web app should register in window scope
-    if (window.electron) return
+    if (IN_ELECTRON) return
     const handleOpenSettings = (e) => {
       if (e.key === "," && (e.metaKey || e.ctrlKey)) {
         window.router.showSettings()
@@ -43,10 +45,10 @@ function App() {
     }
   }, [])
 
-  const windowsElectron = window.electron && getOS() === "Windows"
+  const windowsElectron = IN_ELECTRON && getOS() === "Windows"
   return (
     <RootProviders>
-      {window.electron && (
+      {IN_ELECTRON && (
         <div
           className={cn(
             "drag-region fixed inset-x-0 top-0 h-12 shrink-0",
@@ -96,4 +98,5 @@ const AppSkeleton = () => {
     </div>
   )
 }
-export default App
+
+export { App as Component }

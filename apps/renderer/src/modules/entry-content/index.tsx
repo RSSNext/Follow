@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC } from "react"
@@ -29,6 +30,7 @@ import { useAuthQuery, useTitle } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { getNewIssueUrl } from "~/lib/issues"
+import { LanguageMap } from "~/lib/translate"
 import { cn } from "~/lib/utils"
 import type { ActiveEntryId, FeedModel, InboxModel } from "~/models"
 import {
@@ -38,11 +40,16 @@ import {
 } from "~/providers/wrapped-element-provider"
 import { Queries } from "~/queries"
 import { useEntry } from "~/store/entry"
-import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
+import { useFeedById } from "~/store/feed"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
-import { setEntryContentScrollToTop, setEntryTitleMeta } from "./atoms"
+import {
+  getTranslationCache,
+  setEntryContentScrollToTop,
+  setEntryTitleMeta,
+  setTranslationCache,
+} from "./atoms"
 import { EntryPlaceholderLogo } from "./components/EntryPlaceholderLogo"
 import { EntryTitle } from "./components/EntryTitle"
 import { SourceContentPanel } from "./components/SourceContentView"
@@ -51,20 +58,27 @@ import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
 import { EntryContentProvider } from "./provider"
 
+export interface EntryContentClassNames {
+  header?: string
+}
 export const EntryContent = ({
   entryId,
   noMedia,
   compact,
+  classNames,
 }: {
   entryId: ActiveEntryId
   noMedia?: boolean
   compact?: boolean
+  classNames?: EntryContentClassNames
 }) => {
-  const title = useFeedHeaderTitle()
   const { feedId, view } = useRouteParams()
+  const enableEntryWideMode = useUISettingKey("wideMode")
 
-  useTitle(title)
   if (!entryId) {
+    if (enableEntryWideMode) {
+      return null
+    }
     return (
       <m.div
         className="center size-full flex-col"
@@ -79,14 +93,22 @@ export const EntryContent = ({
     )
   }
 
-  return <EntryContentRender entryId={entryId} noMedia={noMedia} compact={compact} />
+  return (
+    <EntryContentRender
+      entryId={entryId}
+      noMedia={noMedia}
+      compact={compact}
+      classNames={classNames}
+    />
+  )
 }
 
 export const EntryContentRender: Component<{
   entryId: string
   noMedia?: boolean
   compact?: boolean
-}> = ({ entryId, noMedia, className, compact }) => {
+  classNames?: EntryContentClassNames
+}> = ({ entryId, noMedia, className, compact, classNames }) => {
   const { t } = useTranslation()
 
   const entry = useEntry(entryId)
@@ -169,6 +191,30 @@ export const EntryContentRender: Component<{
 
   const content = entry?.entries.content ?? data?.entries.content
 
+  const translate = async (html: HTMLElement | null) => {
+    if (!html || !entry || !entry.settings?.translation) return
+
+    const fullText = html.textContent ?? ""
+    if (!fullText) return
+
+    const { franc } = await import("franc-min")
+    const sourceLanguage = franc(fullText)
+    if (sourceLanguage === LanguageMap[entry.settings?.translation].code) {
+      return
+    }
+
+    const { immersiveTranslate } = await import("~/lib/immersive-translate")
+    immersiveTranslate({
+      html,
+      entry,
+      cache: {
+        get: (key: string) => getTranslationCache()[key],
+        set: (key: string, value: string) =>
+          setTranslationCache({ ...getTranslationCache(), [key]: value }),
+      },
+    })
+  }
+
   return (
     <EntryContentProvider
       entryId={entry.entries.id}
@@ -179,7 +225,7 @@ export const EntryContentRender: Component<{
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
-        className="h-[55px] shrink-0 px-3 @container"
+        className={cn("h-[55px] shrink-0 px-3 @container", classNames?.header)}
         compact={compact}
       />
 
@@ -199,7 +245,7 @@ export const EntryContentRender: Component<{
             <article
               data-testid="entry-render"
               onContextMenu={stopPropagation}
-              className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch]"
+              className="relative m-auto min-w-0 max-w-[550px] @3xl:max-w-[70ch] @7xl:max-w-[80ch]"
             >
               <EntryTitle entryId={entryId} compact={compact} />
 
@@ -221,6 +267,7 @@ export const EntryContentRender: Component<{
                     {!isInReadabilityMode ? (
                       <ShadowDOM>
                         <HTML
+                          translate={translate}
                           mediaInfo={mediaInfo}
                           noMedia={noMedia}
                           accessory={contentAccessories}
@@ -318,7 +365,7 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
   return (
     <div className="grow">
       {result ? (
-        <p className="rounded-xl border p-3 text-sm opacity-80">
+        <p className="mb-4 rounded-xl border p-3 text-sm opacity-80">
           <i className="i-mgc-information-cute-re mr-1 translate-y-[2px]" />
           {t("entry_content.readability_notice")}
         </p>
@@ -360,7 +407,7 @@ const NoContent: FC<{
             <span>{t("entry_content.web_app_notice")}</span>
           </div>
         )}
-        {url && window.electron && <ReadabilityAutoToggleEffect url={url} id={id} />}
+        {url && IN_ELECTRON && <ReadabilityAutoToggleEffect url={url} id={id} />}
       </div>
     </div>
   )

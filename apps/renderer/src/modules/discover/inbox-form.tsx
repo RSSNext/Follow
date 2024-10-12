@@ -21,6 +21,7 @@ import {
 import { Input } from "~/components/ui/input"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedViewType } from "~/lib/enum"
+import { createErrorToaster } from "~/lib/error-parser"
 import { cn } from "~/lib/utils"
 import type { InboxModel } from "~/models"
 import { useInbox } from "~/queries/inboxes"
@@ -107,9 +108,7 @@ const InboxInnerForm = ({
       subscriptionActions.fetchByView(FeedViewType.Articles)
       toast.success(t("discover.inbox_create_success"))
     },
-    onError: () => {
-      toast.error(t("discover.inbox_create_error"))
-    },
+    onError: createErrorToaster(t("discover.inbox_create_error")),
   })
 
   const mutationChange = useMutation({
@@ -126,9 +125,7 @@ const InboxInnerForm = ({
       subscriptionActions.fetchByView(FeedViewType.Articles)
       toast.success(t("discover.inbox_update_success"))
     },
-    onError: () => {
-      toast.error(t("discover.inbox_update_error"))
-    },
+    onError: createErrorToaster(t("discover.inbox_update_error")),
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {

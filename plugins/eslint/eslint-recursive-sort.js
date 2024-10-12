@@ -36,7 +36,10 @@ export default {
                 const sortedJson = sortObjectKeys(json)
                 const sortedText = `${JSON.stringify(sortedJson, null, 2)}\n`
 
-                if (text.trim() !== sortedText.trim()) {
+                const noWhiteSpaceDiff = (a, b) =>
+                  a.replaceAll(/\s/g, "") === b.replaceAll(/\s/g, "")
+
+                if (!noWhiteSpaceDiff(text, sortedText)) {
                   context.report({
                     node,
                     message: "JSON keys are not sorted recursively",

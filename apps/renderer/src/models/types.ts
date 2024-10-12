@@ -100,6 +100,8 @@ export type ActionsInput = {
     translation?: string
     summary?: boolean
     readability?: boolean
+    silence?: boolean
+    newEntryNotification?: boolean
     rewriteRules?: {
       from: string
       to: string
@@ -112,3 +114,5 @@ export type ActionsInput = {
     webhooks?: string[]
   }
 }[]
+
+export const TransactionTypes = ["mint", "purchase", "tip", "withdraw"] as const

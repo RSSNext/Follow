@@ -8,9 +8,9 @@
   "feed.follower_one": "关注者",
   "feed.follower_other": "关注者",
   "feed.followsAndFeeds": "在 {{appName}} 上有 {{subscriptionCount}} 个{{subscriptionNoun}}和 {{feedsCount}} 个{{feedsNoun}}",
-  "feed.followsAndReads": "在 {{appName}} 上有 {{subscriptionCount}} 个{{subscriptionNoun}}，{{readCount}} 篇{{readNoun}}",
-  "feed.read_one": "文章",
-  "feed.read_other": "文章",
+  "feed.followsAndReads": "在 {{appName}} 上有 {{subscriptionCount}} 个{{subscriptionNoun}}，{{readCount}} 次近期{{readNoun}}",
+  "feed.read_one": "阅读",
+  "feed.read_other": "阅读",
   "feed.view_feed_url": "查看链接",
   "header.app": "应用",
   "header.download": "下载",
@@ -33,7 +33,7 @@
   "login.signOut": "登出",
   "login.welcomeTo": "欢迎来到 ",
   "redirect.continueInBrowser": "在浏览器中继续",
-  "redirect.instruction": "现在可以打开 {{APP_NAME}} 并关闭此页面",
-  "redirect.openApp": "打开 {{APP_NAME}}",
-  "redirect.successMessage": "已成功连接到 {{APP_NAME}} 账户。"
+  "redirect.instruction": "现在可以打开 {{app_name}} 并关闭此页面",
+  "redirect.openApp": "打开 {{app_name}}",
+  "redirect.successMessage": "已成功连接到 {{app_name}} 账户。"
 }

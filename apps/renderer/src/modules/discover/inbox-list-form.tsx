@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
-import { Button } from "~/components/ui/button"
+import { ActionButton, Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { useModalStack } from "~/components/ui/modal"
 import {
@@ -16,6 +16,7 @@ import {
 } from "~/components/ui/table"
 import { apiClient } from "~/lib/api-fetch"
 import { FeedViewType } from "~/lib/enum"
+import { createErrorToaster } from "~/lib/error-parser"
 import { useInboxList } from "~/queries/inboxes"
 import { subscriptionActions } from "~/store/subscription"
 
@@ -47,7 +48,7 @@ export function DiscoverInboxList() {
             <TableHead className="pl-0 pr-6">{t("discover.inbox.email")}</TableHead>
             <TableHead className="pl-0 pr-6">{t("discover.inbox.title")}</TableHead>
             <TableHead className="pl-0 pr-6">{t("discover.inbox.secret")}</TableHead>
-            <TableHead className="px-0">{t("discover.inbox.actions")}</TableHead>
+            <TableHead className="center px-0">{t("discover.inbox.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -76,9 +77,10 @@ export function DiscoverInboxList() {
                   />
                 </div>
               </TableCell>
-              <TableCell size="sm">
-                <Button
-                  variant="ghost"
+              <TableCell size="sm" className="center">
+                <ActionButton
+                  size="sm"
+                  tooltip={t("discover.inbox_destroy")}
                   onClick={() =>
                     present({
                       title: t("discover.inbox_destroy_confirm"),
@@ -95,9 +97,9 @@ export function DiscoverInboxList() {
                   }
                 >
                   <i className="i-mgc-delete-2-cute-re" />
-                </Button>
-                <Button
-                  variant="ghost"
+                </ActionButton>
+                <ActionButton
+                  size="sm"
                   onClick={() => {
                     present({
                       title: t("sidebar.feed_actions.edit_inbox"),
@@ -108,7 +110,7 @@ export function DiscoverInboxList() {
                   }}
                 >
                   <i className="i-mgc-edit-cute-re" />
-                </Button>
+                </ActionButton>
               </TableCell>
             </TableRow>
           ))}
@@ -156,16 +158,19 @@ const ConfirmDestroyModalContent = ({ id, onSuccess }: { id: string; onSuccess: 
       toast.success(t("discover.inbox_destroy_success"))
       onSuccess()
     },
-    onError: () => {
-      toast.error(t("discover.inbox_destroy_error"))
-    },
+    onError: createErrorToaster(t("discover.inbox_destroy_error")),
   })
 
   return (
     <div className="w-[512px]">
-      <div className="mb-4 text-red-600">{t("discover.inbox_destroy_warning")}</div>
+      <div className="mb-4">
+        <i className="i-mingcute-warning-fill -mb-1 mr-1 size-5 text-red-500" />
+        {t("discover.inbox_destroy_warning")}
+      </div>
       <div className="flex justify-end">
-        <Button onClick={() => mutationDestroy.mutate(id)}>{t("words.confirm")}</Button>
+        <Button className="bg-red-600" onClick={() => mutationDestroy.mutate(id)}>
+          {t("words.confirm")}
+        </Button>
       </div>
     </div>
   )

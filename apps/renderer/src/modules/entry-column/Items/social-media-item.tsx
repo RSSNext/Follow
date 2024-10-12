@@ -81,19 +81,14 @@ export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, transl
               <RelativeTime date={entry.entries.publishedAt} />
             </span>
           </div>
-          <div
-            className={cn(
-              "relative mt-1 whitespace-pre-line text-base",
-              !!entry.collections && "pr-5",
-            )}
-          >
+          <div className={cn("relative mt-1 text-base", !!entry.collections && "pr-5")}>
             <EntryTranslation
               className="cursor-auto select-text text-sm leading-relaxed prose-blockquote:mt-0 [&_br:last-child]:hidden"
               source={content}
               target={translation?.content}
               isHTML
             />
-            {!!entry.collections && <StarIcon />}
+            {!!entry.collections && <StarIcon className="absolute right-0 top-0" />}
           </div>
         </div>
         {!!media?.length && (

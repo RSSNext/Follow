@@ -24,6 +24,7 @@ import { useListById } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
+import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
 interface FeedItemProps {
@@ -72,9 +73,10 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
     <>
       <div
         data-feed-id={feedId}
+        data-active={isActive || isContextMenuOpen}
         className={cn(
           "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
-          (isActive || isContextMenuOpen) && "bg-native-active",
+          feedColumnStyles.item,
           isFeed ? "py-[2px]" : "py-1.5",
           className,
         )}
@@ -204,9 +206,10 @@ const ListItemImpl: Component<{
   return (
     <div
       data-list-id={listId}
+      data-active={isActive || isContextMenuOpen}
       className={cn(
         "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-sm font-medium leading-loose",
-        (isActive || isContextMenuOpen) && "bg-native-active",
+        feedColumnStyles.item,
         "py-1.5 pl-2.5",
         className,
       )}
@@ -275,10 +278,11 @@ const InboxItemImpl: Component<{
   if (!inbox) return null
   return (
     <div
+      data-active={isActive || isContextMenuOpen}
       data-inbox-id={inboxId}
       className={cn(
         "flex w-full cursor-menu items-center justify-between rounded-md pr-2.5 text-sm font-medium leading-loose",
-        (isActive || isContextMenuOpen) && "bg-native-active",
+        feedColumnStyles.item,
         "py-[2px] pl-2.5",
         className,
       )}

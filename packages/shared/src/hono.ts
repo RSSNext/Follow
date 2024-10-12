@@ -215,6 +215,8 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
                     translation?: z.infer<typeof languageSchema>;
                     summary?: boolean;
                     readability?: boolean;
+                    silence?: boolean;
+                    newEntryNotification?: boolean;
                     rewriteRules?: {
                         from: string;
                         to: string;
@@ -259,6 +261,8 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
         summary: z.ZodOptional<z.ZodBoolean>;
         readability: z.ZodOptional<z.ZodBoolean>;
+        silence: z.ZodOptional<z.ZodBoolean>;
+        newEntryNotification: z.ZodOptional<z.ZodBoolean>;
         rewriteRules: z.ZodOptional<z.ZodArray<z.ZodObject<{
             from: z.ZodString;
             to: z.ZodString;
@@ -287,6 +291,8 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        silence?: boolean | undefined;
+        newEntryNotification?: boolean | undefined;
         rewriteRules?: {
             from: string;
             to: string;
@@ -301,6 +307,8 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        silence?: boolean | undefined;
+        newEntryNotification?: boolean | undefined;
         rewriteRules?: {
             from: string;
             to: string;
@@ -318,6 +326,8 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        silence?: boolean | undefined;
+        newEntryNotification?: boolean | undefined;
         rewriteRules?: {
             from: string;
             to: string;
@@ -340,6 +350,8 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        silence?: boolean | undefined;
+        newEntryNotification?: boolean | undefined;
         rewriteRules?: {
             from: string;
             to: string;
@@ -384,6 +396,8 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
             summary: z.ZodOptional<z.ZodBoolean>;
             readability: z.ZodOptional<z.ZodBoolean>;
+            silence: z.ZodOptional<z.ZodBoolean>;
+            newEntryNotification: z.ZodOptional<z.ZodBoolean>;
             rewriteRules: z.ZodOptional<z.ZodArray<z.ZodObject<{
                 from: z.ZodString;
                 to: z.ZodString;
@@ -412,6 +426,8 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            silence?: boolean | undefined;
+            newEntryNotification?: boolean | undefined;
             rewriteRules?: {
                 from: string;
                 to: string;
@@ -426,6 +442,8 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            silence?: boolean | undefined;
+            newEntryNotification?: boolean | undefined;
             rewriteRules?: {
                 from: string;
                 to: string;
@@ -443,6 +461,8 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            silence?: boolean | undefined;
+            newEntryNotification?: boolean | undefined;
             rewriteRules?: {
                 from: string;
                 to: string;
@@ -465,6 +485,8 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            silence?: boolean | undefined;
+            newEntryNotification?: boolean | undefined;
             rewriteRules?: {
                 from: string;
                 to: string;
@@ -490,6 +512,8 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            silence?: boolean | undefined;
+            newEntryNotification?: boolean | undefined;
             rewriteRules?: {
                 from: string;
                 to: string;
@@ -515,6 +539,8 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            silence?: boolean | undefined;
+            newEntryNotification?: boolean | undefined;
             rewriteRules?: {
                 from: string;
                 to: string;
@@ -3191,6 +3217,91 @@ declare const listsTimelineRelations: drizzle_orm.Relations<"lists_timeline", {
     feeds: drizzle_orm.One<"feeds", true>;
 }>;
 
+declare const messaging: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "messaging";
+    schema: undefined;
+    columns: {
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "user_id";
+            tableName: "messaging";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        token: drizzle_orm_pg_core.PgColumn<{
+            name: "token";
+            tableName: "messaging";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        channel: drizzle_orm_pg_core.PgColumn<{
+            name: "channel";
+            tableName: "messaging";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const messagingOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
+    userId: z.ZodNullable<z.ZodString>;
+    token: z.ZodString;
+    channel: z.ZodString;
+}, "channel">, {
+    channel: z.ZodEnum<["desktop", "mobile"]>;
+}>, "strip", z.ZodTypeAny, {
+    userId: string | null;
+    token: string;
+    channel: "desktop" | "mobile";
+}, {
+    userId: string | null;
+    token: string;
+    channel: "desktop" | "mobile";
+}>;
+declare const messagingRelations: drizzle_orm.Relations<"messaging", {
+    users: drizzle_orm.One<"user", false>;
+}>;
+declare enum MessagingType {
+    NewEntry = "new-entry"
+}
+type MessagingData = {
+    type: MessagingType.NewEntry;
+    feedId: string;
+    entryId: string;
+    view: string;
+    title: string;
+    description: string;
+};
+
 declare const settings: drizzle_orm_pg_core.PgTableWithColumns<{
     name: "settings";
     schema: undefined;
@@ -3738,6 +3849,7 @@ declare const usersRelations: drizzle_orm.Relations<"user", {
     wallets: drizzle_orm.One<"wallets", true>;
     feeds: drizzle_orm.Many<"feeds">;
     inboxes: drizzle_orm.One<"inboxes", true>;
+    messaging: drizzle_orm.Many<"messaging">;
 }>;
 
 declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
@@ -3856,15 +3968,15 @@ declare const walletsOpenAPISchema: zod.ZodObject<{
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     createdAt: string;
     userId: string;
-    address: string | null;
     addressIndex: number;
+    address: string | null;
     dailyPowerToken: string;
     cashablePowerToken: string;
 }, {
     createdAt: string;
     userId: string;
-    address: string | null;
     addressIndex: number;
+    address: string | null;
     dailyPowerToken: string;
     cashablePowerToken: string;
 }>;
@@ -4136,6 +4248,32 @@ declare const feedPowerTokensRelations: drizzle_orm.Relations<"feedPowerTokens",
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
+    "/messaging": {
+        $post: {
+            input: {
+                json: {
+                    token: string;
+                    channel: "desktop" | "mobile";
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/messaging/test": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
     "/inboxes": {
         $delete: {
             input: {
@@ -4757,19 +4895,14 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
     };
     "/wallets": {
         $get: {
-            input: {
-                query: {
-                    userId?: string | string[] | undefined;
-                    address?: string | string[] | undefined;
-                };
-            };
+            input: {};
             output: {
                 code: 0;
                 data: {
                     createdAt: string;
                     userId: string;
-                    address: string | null;
                     addressIndex: number;
+                    address: string | null;
                     dailyPowerToken: string;
                     cashablePowerToken: string;
                 }[];
@@ -5041,6 +5174,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 json: {
                     entryIds: string[];
                     isInbox?: boolean | undefined;
+                    readHistories?: string[] | undefined;
                 };
             };
             output: {
@@ -5440,6 +5574,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         summary?: boolean | undefined;
                         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                         readability?: boolean | undefined;
+                        silence?: boolean | undefined;
+                        newEntryNotification?: boolean | undefined;
                         rewriteRules?: {
                             from: string;
                             to: string;
@@ -5672,6 +5808,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         summary?: boolean | undefined;
                         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                         readability?: boolean | undefined;
+                        silence?: boolean | undefined;
+                        newEntryNotification?: boolean | undefined;
                         rewriteRules?: {
                             from: string;
                             to: string;
@@ -6165,6 +6303,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             summary?: boolean | undefined;
                             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                             readability?: boolean | undefined;
+                            silence?: boolean | undefined;
+                            newEntryNotification?: boolean | undefined;
                             rewriteRules?: {
                                 from: string;
                                 to: string;
@@ -6196,6 +6336,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             summary?: boolean | undefined;
                             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                             readability?: boolean | undefined;
+                            silence?: boolean | undefined;
+                            newEntryNotification?: boolean | undefined;
                             rewriteRules?: {
                                 from: string;
                                 to: string;
@@ -6287,4 +6429,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, mediaZodSchema, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

@@ -2,6 +2,7 @@ import { noop } from "foxact/noop"
 import { atomWithStorage, createJSONStorage } from "jotai/utils"
 import type { SyncStorage } from "jotai/vanilla/utils/atomWithStorage"
 
+import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { createAtomHooks } from "~/lib/jotai"
 import { getStorageNS } from "~/lib/ns"
 
@@ -16,6 +17,8 @@ type PlayerAtomValue = {
   isMute?: boolean
   volume?: number
   playbackRate?: number
+  /** the listId from the route to indicate that the audio is triggered from a list */
+  listId?: string
 }
 
 const playerInitialValue: PlayerAtomValue = {
@@ -66,11 +69,14 @@ export const AudioPlayer = {
       return
     }
 
+    const routeParams = getRouteParams()
+
     setAudioPlayerAtomValue({
       ...curV,
       ...v,
       status: "loading",
       show: true,
+      listId: routeParams.listId,
     })
 
     if (this.audio.src !== v.src) {

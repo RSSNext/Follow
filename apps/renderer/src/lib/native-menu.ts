@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { get } from "lodash-es"
 
 import { tipcClient } from "./client"
@@ -8,7 +9,6 @@ export type NativeMenuItem = (
       type: "text"
       label: string
       click?: () => void
-      enabled?: boolean
       /** only work in web app */
       icon?: React.ReactNode
       shortcut?: string
@@ -22,9 +22,12 @@ export type NativeMenuItem = (
 export type NullableNativeMenuItem = NativeMenuItem | null | undefined | false | ""
 
 function sortShortcutsString(shortcut: string) {
-  const order = ["Shift", "Ctrl", "Alt", "Meta"]
-
-  const arr = shortcut.split("+")
+  const order = ["Shift", "Ctrl", "Meta", "Alt"]
+  let nextShortcut = shortcut
+  if (getOS() === "Windows") {
+    nextShortcut = shortcut.replace("Meta", "Ctrl").replace("meta", "ctrl")
+  }
+  const arr = nextShortcut.split("+")
 
   const sortedModifiers = arr
     .filter((key) => order.includes(key))
@@ -38,16 +41,12 @@ export const showNativeMenu = async (
   items: Array<NullableNativeMenuItem>,
   e?: MouseEvent | React.MouseEvent,
 ) => {
-  const nextItems = (items.filter(Boolean) as NativeMenuItem[]).map((item) => {
+  const nextItems = (items.filter((item) => item && !item.hide) as NativeMenuItem[]).map((item) => {
     if (item.type === "text") {
       return {
         ...item,
         shortcut: item.shortcut ? sortShortcutsString(item.shortcut) : undefined,
       }
-    }
-
-    if (item.hide) {
-      return []
     }
     return item
   }) as NativeMenuItem[]
@@ -59,8 +58,7 @@ export const showNativeMenu = async (
   }
 
   // only show native menu on macOS electron, because in other platform, the native ui is not good
-
-  if (!window.electron || getOS() !== "macOS") {
+  if (!IN_ELECTRON || getOS() !== "macOS") {
     document.dispatchEvent(
       new CustomEvent(CONTEXT_MENU_SHOW_EVENT_KEY, {
         detail: {
@@ -121,18 +119,18 @@ export const showNativeMenu = async (
   })
 
   await tipcClient?.showContextMenu({
-    items: transformMenuItems(nextItems),
+    items: transformMenuItemsForNative(nextItems),
   })
 
-  function transformMenuItems(nextItems: NativeMenuItem[]) {
+  function transformMenuItemsForNative(nextItems: NativeMenuItem[]) {
     return nextItems.map((item) => {
       if (item.type === "text") {
         return {
           ...item,
           icon: undefined,
-          enabled: item.enabled ?? (item.click !== undefined || !!item.submenu),
+          enabled: item.click !== undefined || (!!item.submenu && item.submenu.length > 0),
           click: undefined,
-          submenu: item.submenu ? transformMenuItems(item.submenu) : undefined,
+          submenu: item.submenu ? transformMenuItemsForNative(item.submenu) : undefined,
           shortcut: item.shortcut?.replace("Meta", "CmdOrCtrl"),
         }
       }

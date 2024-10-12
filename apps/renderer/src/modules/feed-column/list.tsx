@@ -23,6 +23,7 @@ import { useFeedUnreadStore } from "~/store/unread"
 
 import { getFeedListSort, setFeedListSortBy, setFeedListSortOrder, useFeedListSort } from "./atom"
 import { SortableFeedList, SortByAlphabeticalInbox, SortByAlphabeticalList } from "./sort-by"
+import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
 const useFeedsGroupedData = (view: FeedViewType) => {
@@ -167,9 +168,10 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
 
       <ScrollArea.ScrollArea mask={false} flex viewportClassName="!px-3" rootClassName="h-full">
         <div
+          data-active={feedId === FEED_COLLECTION_LIST}
           className={cn(
-            "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5 transition-colors",
-            feedId === FEED_COLLECTION_LIST && "bg-native-active",
+            "mt-1 flex h-8 w-full shrink-0 cursor-menu items-center gap-2 rounded-md px-2.5",
+            feedColumnStyles.item,
           )}
           onClick={(e) => {
             e.stopPropagation()
@@ -234,24 +236,24 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
   )
 }
 
+const LIST = [
+  { icon: "i-mgc-sort-ascending-cute-re", by: "count", order: "asc" },
+  { icon: "i-mgc-sort-descending-cute-re", by: "count", order: "desc" },
+
+  {
+    icon: "i-mgc-az-sort-descending-letters-cute-re",
+    by: "alphabetical",
+    order: "asc",
+  },
+  {
+    icon: "i-mgc-az-sort-ascending-letters-cute-re",
+    by: "alphabetical",
+    order: "desc",
+  },
+] as const
 const SortButton = () => {
   const { by, order } = useFeedListSort()
   const { t } = useTranslation()
-  const LIST = [
-    { icon: "i-mgc-sort-ascending-cute-re", by: "count", order: "asc" },
-    { icon: "i-mgc-sort-descending-cute-re", by: "count", order: "desc" },
-
-    {
-      icon: "i-mgc-az-sort-descending-letters-cute-re",
-      by: "alphabetical",
-      order: "asc",
-    },
-    {
-      icon: "i-mgc-az-sort-ascending-letters-cute-re",
-      by: "alphabetical",
-      order: "desc",
-    },
-  ] as const
 
   const [open, setOpen] = useState(false)
 

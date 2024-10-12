@@ -79,7 +79,11 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
       rel="noreferrer"
     >
       <div className={cn("select-text break-words font-bold", compact ? "text-2xl" : "text-3xl")}>
-        <EntryTranslation source={entry.entries.title} target={translation.data?.title} />
+        <EntryTranslation
+          source={entry.entries.title}
+          target={translation.data?.title}
+          useOverlay
+        />
       </div>
       <div className="mt-2 text-[13px] font-medium text-zinc-500">{getPreferredTitle(feed)}</div>
       <div className="flex items-center gap-2 text-[13px] text-zinc-500">

@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type { FetchError } from "ofetch"
 import { ofetch } from "ofetch"
@@ -135,21 +136,6 @@ export const useEntryActions = ({
 }) => {
   const { t } = useTranslation()
 
-  const checkEagle = useQuery({
-    queryKey: ["check-eagle"],
-    enabled: !!entry?.entries.url && view !== undefined,
-    queryFn: async () => {
-      try {
-        await ofetch("http://localhost:41595")
-        return true
-      } catch (error: unknown) {
-        return (error as FetchError).data?.code === 401
-      }
-    },
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  })
-
   const feed = useFeedById(entry?.feedId)
 
   const populatedEntry = useMemo(() => {
@@ -180,6 +166,21 @@ export const useEntryActions = ({
   const enableInstapaper = useIntegrationSettingKey("enableInstapaper")
   const instapaperUsername = useIntegrationSettingKey("instapaperUsername")
   const instapaperPassword = useIntegrationSettingKey("instapaperPassword")
+
+  const checkEagle = useQuery({
+    queryKey: ["check-eagle"],
+    enabled: ELECTRON && enableEagle && !!entry?.entries.url && view !== undefined,
+    queryFn: async () => {
+      try {
+        await ofetch("http://localhost:41595")
+        return true
+      } catch (error: unknown) {
+        return (error as FetchError).data?.code === 401
+      }
+    },
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  })
 
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
@@ -354,7 +355,21 @@ export const useEntryActions = ({
         onClick: () => {
           if (!populatedEntry.entries.url) return
           navigator.clipboard.writeText(populatedEntry.entries.url)
-          toast(t("entry_actions.link_copied"), {
+          toast(t("entry_actions.copied_notify", { which: t("words.link") }), {
+            duration: 1000,
+          })
+        },
+      },
+      {
+        key: "copyTitle",
+        name: t("entry_actions.copy_title"),
+        className: tw`i-mgc-copy-cute-re`,
+        hide: !populatedEntry.entries.title || type === "toolbar",
+        shortcut: shortcuts.entry.copyTitle.key,
+        onClick: () => {
+          if (!populatedEntry.entries.title) return
+          navigator.clipboard.writeText(populatedEntry.entries.title)
+          toast(t("entry_actions.copied_notify", { which: t("words.title") }), {
             duration: 1000,
           })
         },
@@ -362,7 +377,7 @@ export const useEntryActions = ({
       {
         key: "openInBrowser",
         name: t("entry_actions.open_in_browser", {
-          which: t(window.electron ? "words.browser" : "words.newTab"),
+          which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
         }),
         shortcut: shortcuts.entry.openInBrowser.key,
         className: "i-mgc-world-2-cute-re",
@@ -406,12 +421,12 @@ export const useEntryActions = ({
         key: "share",
         className: getOS() === "macOS" ? `i-mgc-share-3-cute-re` : "i-mgc-share-forward-cute-re",
         shortcut: shortcuts.entry.share.key,
-        hide: !window.electron && !navigator.share,
+        hide: !(populatedEntry.entries.url && navigator.share),
 
         onClick: () => {
           if (!populatedEntry.entries.url) return
 
-          if (window.electron) {
+          if (IN_ELECTRON) {
             return tipcClient?.showShareMenu(populatedEntry.entries.url)
           } else {
             navigator.share({

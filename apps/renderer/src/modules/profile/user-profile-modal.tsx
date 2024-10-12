@@ -16,10 +16,12 @@ import { ActionButton, Button } from "~/components/ui/button"
 import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
 import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { ScrollArea } from "~/components/ui/scroll-area"
+import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { nextFrame, stopPropagation } from "~/lib/dom"
+import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { getStorageNS } from "~/lib/ns"
 import { cn } from "~/lib/utils"
 import type { SubscriptionModel } from "~/models"
@@ -246,7 +248,7 @@ export const UserProfileModalContent: FC<{
                   <AvatarImage
                     className="duration-200 animate-in fade-in-0"
                     asChild
-                    src={userInfo.avatar || undefined}
+                    src={replaceImgUrlIfNeed(userInfo.avatar || undefined)}
                   >
                     <m.img layout />
                   </AvatarImage>
@@ -291,22 +293,27 @@ export const UserProfileModalContent: FC<{
                   size="large"
                   icon={
                     <Avatar className="aspect-square size-4">
-                      <AvatarImage src={userInfo.avatar || undefined} />
+                      <AvatarImage src={replaceImgUrlIfNeed(userInfo.avatar || undefined)} />
                       <AvatarFallback>{userInfo.name?.slice(0, 2)}</AvatarFallback>
                     </Avatar>
                   }
                   className="center h-48 w-full max-w-full"
                 />
               ) : (
-                subscriptions.data &&
-                Object.keys(subscriptions.data).map((category) => (
-                  <SubscriptionGroup
-                    key={category}
-                    category={category}
-                    subscriptions={subscriptions.data?.[category]}
-                    itemStyle={itemStyle}
-                  />
-                ))
+                subscriptions.data && (
+                  <div className="flex w-full">
+                    <div className="relative flex w-0 grow flex-col">
+                      {Object.keys(subscriptions.data).map((category) => (
+                        <SubscriptionGroup
+                          key={category}
+                          category={category}
+                          subscriptions={subscriptions.data?.[category]}
+                          itemStyle={itemStyle}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )
               )}
             </ScrollArea.ScrollArea>
           </Fragment>
@@ -331,7 +338,11 @@ const SubscriptionGroup: FC<{
         className="mb-2 mt-8 flex w-full items-center justify-between text-2xl font-bold"
         type="button"
       >
-        <h3>{category}</h3>
+        <h3 className="min-w-0 pr-1">
+          <EllipsisHorizontalTextWithTooltip className="min-w-0 truncate">
+            {category}
+          </EllipsisHorizontalTextWithTooltip>
+        </h3>
 
         <div className="inline-flex shrink-0 items-center opacity-50">
           <i

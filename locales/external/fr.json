@@ -24,7 +24,7 @@
   "login.redirecting": "Redirection",
   "login.welcomeTo": "Bienvenue sur",
   "redirect.continueInBrowser": "Continuer dans le navigateur",
-  "redirect.instruction": "Il est maintenant temps d'ouvrir {{APP_NAME}} et de fermer cette page en toute sécurité.",
-  "redirect.openApp": "Ouvrir {{APP_NAME}}",
-  "redirect.successMessage": "Vous vous êtes connecté avec succès à votre compte {{APP_NAME}}."
+  "redirect.instruction": "Il est maintenant temps d'ouvrir {{app_name}} et de fermer cette page en toute sécurité.",
+  "redirect.openApp": "Ouvrir {{app_name}}",
+  "redirect.successMessage": "Vous vous êtes connecté avec succès à votre compte {{app_name}}."
 }

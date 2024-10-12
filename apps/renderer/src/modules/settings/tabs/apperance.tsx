@@ -1,3 +1,4 @@
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { useTranslation } from "react-i18next"
 import { bundledThemesInfo } from "shiki/themes"
 
@@ -50,7 +51,7 @@ export const SettingAppearance = () => {
 
           defineItem("showDockBadge", {
             label: t("appearance.show_dock_badge.label"),
-            hide: !window.electron || !["macOS", "Linux"].includes(getOS()),
+            hide: !IN_ELECTRON || !["macOS", "Linux"].includes(getOS()),
           }),
 
           defineItem("sidebarShowUnreadCount", {

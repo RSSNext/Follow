@@ -22,7 +22,7 @@
   "login.redirecting": "Перенаправление",
   "login.welcomeTo": "Добро пожаловать в ",
   "redirect.continueInBrowser": "Продолжить в браузере",
-  "redirect.instruction": "Сейчас самое время открыть {{APP_NAME}} и безопасно закрыть эту страницу.",
-  "redirect.openApp": "Открыть {{APP_NAME}}",
-  "redirect.successMessage": "Вы успешно подключились к аккаунту {{APP_NAME}}."
+  "redirect.instruction": "Сейчас самое время открыть {{app_name}} и безопасно закрыть эту страницу.",
+  "redirect.openApp": "Открыть {{app_name}}",
+  "redirect.successMessage": "Вы успешно подключились к аккаунту {{app_name}}."
 }

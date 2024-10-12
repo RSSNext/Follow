@@ -1,4 +1,4 @@
-import { WEB_URL } from "@follow/shared/constants"
+import { IN_ELECTRON, WEB_URL } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
@@ -7,10 +7,12 @@ import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal"
 import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
+import { isBizId } from "~/lib/utils"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
 import { ListForm } from "~/modules/discover/list-form"
+import { ListCreationModalContent } from "~/modules/settings/tabs/lists/modals"
 import {
   getFeedById,
   useAddFeedToFeedList,
@@ -18,7 +20,7 @@ import {
   useRemoveFeedFromFeedList,
 } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
-import { useListById, useListByView } from "~/store/list"
+import { useListById, useOwnedList } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 
 import { useNavigateEntry } from "./useNavigateEntry"
@@ -37,7 +39,6 @@ export const useFeedActions = ({
   const { t } = useTranslation()
   const feed = useFeedById(feedId)
   const subscription = useSubscriptionByFeedId(feedId)
-
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
   const claimFeed = useFeedClaimModal({
@@ -50,12 +51,12 @@ export const useFeedActions = ({
   const { mutateAsync: addFeedToListMutation } = useAddFeedToFeedList()
   const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
 
-  const listByView = useListByView(view!)
+  const listByView = useOwnedList(view!)
 
   const items = useMemo(() => {
     if (!feed) return []
 
-    const items: NativeMenuItem[] = [
+    const items: NullableNativeMenuItem[] = [
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.mark_all_as_read"),
@@ -63,20 +64,18 @@ export const useFeedActions = ({
         disabled: isEntryList,
         click: () => subscriptionActions.markReadByFeedIds({ feedIds: [feedId] }),
       },
-      ...(!feed.ownerUserId && !!feed.id && !false
-        ? [
-            {
-              type: "text" as const,
-              label: isEntryList
-                ? t("sidebar.feed_actions.claim_feed")
-                : t("sidebar.feed_actions.claim"),
-              shortcut: "C",
-              click: () => {
-                claimFeed()
-              },
-            },
-          ]
-        : []),
+      !feed.ownerUserId &&
+        !!isBizId(feed.id) &&
+        feed.type === "feed" && {
+          type: "text" as const,
+          label: isEntryList
+            ? t("sidebar.feed_actions.claim_feed")
+            : t("sidebar.feed_actions.claim"),
+          shortcut: "C",
+          click: () => {
+            claimFeed()
+          },
+        },
       ...(feed.ownerUserId === whoami()?.id
         ? [
             {
@@ -92,28 +91,43 @@ export const useFeedActions = ({
       {
         type: "text" as const,
         label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-        enabled: !!listByView?.length,
-        submenu: listByView?.map((list) => {
-          const isIncluded = list.feedIds.includes(feedId)
-          return {
-            label: list.title || "",
+        submenu: [
+          ...listByView.map((list) => {
+            const isIncluded = list.feedIds.includes(feedId)
+            return {
+              label: list.title || "",
+              type: "text" as const,
+              checked: isIncluded,
+              click() {
+                if (!isIncluded) {
+                  addFeedToListMutation({
+                    feedId,
+                    listId: list.id,
+                  })
+                } else {
+                  removeFeedFromListMutation({
+                    feedId,
+                    listId: list.id,
+                  })
+                }
+              },
+            }
+          }),
+          {
+            type: "separator",
+          },
+          {
+            label: t("sidebar.feed_actions.create_list"),
             type: "text" as const,
-            checked: isIncluded,
+            icon: <i className="i-mgc-add-cute-re" />,
             click() {
-              if (!isIncluded) {
-                addFeedToListMutation({
-                  feedId,
-                  listId: list.id,
-                })
-              } else {
-                removeFeedFromListMutation({
-                  feedId,
-                  listId: list.id,
-                })
-              }
+              present({
+                title: t("sidebar.feed_actions.create_list"),
+                content: () => <ListCreationModalContent />,
+              })
             },
-          }
-        }),
+          },
+        ],
       },
       {
         type: "separator" as const,
@@ -154,7 +168,7 @@ export const useFeedActions = ({
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.open_feed_in_browser", {
-          which: t(window.electron ? "words.browser" : "words.newTab"),
+          which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
         }),
         disabled: isEntryList,
         shortcut: "O",
@@ -163,7 +177,7 @@ export const useFeedActions = ({
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.open_site_in_browser", {
-          which: t(window.electron ? "words.browser" : "words.newTab"),
+          which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
         }),
         shortcut: "Meta+O",
         disabled: isEntryList,
@@ -277,7 +291,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.open_list_in_browser", {
-          which: t(window.electron ? "words.browser" : "words.newTab"),
+          which: t(IN_ELECTRON ? "words.browser" : "words.newTab"),
         }),
         disabled: false,
         shortcut: "O",

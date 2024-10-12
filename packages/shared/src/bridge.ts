@@ -24,6 +24,9 @@ interface RenderGlobalContext {
   follow: (options?: { isList: boolean; id?: string; url?: string }) => void
   profile: (id: string, variant?: "drawer" | "dialog") => void
 
+  // user data
+  clearIfLoginOtherAccount: (newUserId: string) => void
+
   /// Utils
   toast: typeof toast
   // URL

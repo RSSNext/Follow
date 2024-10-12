@@ -12,6 +12,7 @@ import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
 import { useAuthQuery, useI18n, useTitle } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
+import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { cn, isBizId } from "~/lib/utils"
 import { useUserSubscriptionsQuery } from "~/modules/profile/hooks"
 
@@ -50,7 +51,7 @@ export function Component() {
           <Avatar className="aspect-square size-16">
             <AvatarImage
               className="duration-200 animate-in fade-in-0"
-              src={user.data?.image || undefined}
+              src={replaceImgUrlIfNeed(user.data?.image || undefined)}
             />
             <AvatarFallback>{user.data?.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>

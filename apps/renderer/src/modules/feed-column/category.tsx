@@ -16,14 +16,20 @@ import type { FeedViewType } from "~/lib/enum"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
-import { useListByView } from "~/store/list"
-import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
+import { useOwnedList } from "~/store/list"
+import {
+  subscriptionActions,
+  subscriptionCategoryExist,
+  useSubscriptionByFeedId,
+} from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
+import { ListCreationModalContent } from "../settings/tabs/lists/modals"
 import { useFeedListSortSelector } from "./atom"
 import { CategoryRemoveDialogContent } from "./category-remove-dialog"
 import { FeedItem } from "./item"
+import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
 type FeedId = string
@@ -129,15 +135,16 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
 
   const addMutation = useAddFeedToFeedList()
 
-  const listList = useListByView(view!)
+  const listList = useOwnedList(view!)
 
   return (
     <div tabIndex={-1} onClick={stopPropagation}>
       {!!showCollapse && (
         <div
+          data-active={isActive || isContextMenuOpen}
           className={cn(
-            "flex w-full cursor-menu items-center justify-between rounded-md px-2.5 transition-colors",
-            (isActive || isContextMenuOpen) && "bg-native-active",
+            "flex w-full cursor-menu items-center justify-between rounded-md px-2.5",
+            feedColumnStyles.item,
           )}
           onClick={(e) => {
             e.stopPropagation()
@@ -162,22 +169,37 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-                  enabled: !!listList?.length,
-                  submenu: listList?.map((list) => ({
-                    label: list.title || "",
-                    type: "text",
-                    click() {
-                      return addMutation.mutate({
-                        feedIds: ids,
-                        listId: list.id,
-                      })
-                    },
-                  })),
+                  // @ts-expect-error
+                  submenu: listList
+                    ?.map((list) => ({
+                      label: list.title || "",
+                      type: "text",
+                      click() {
+                        return addMutation.mutate({
+                          feedIds: ids,
+                          listId: list.id,
+                        })
+                      },
+                    }))
+                    .concat([
+                      // @ts-expect-error
+                      { type: "separator" as const },
+                      {
+                        label: t("sidebar.feed_actions.create_list"),
+                        type: "text" as const,
+
+                        click() {
+                          present({
+                            title: t("sidebar.feed_actions.create_list"),
+                            content: () => <ListCreationModalContent />,
+                          })
+                        },
+                      },
+                    ]),
                 },
                 { type: "separator" },
                 {
                   type: "text",
-                  enabled: !!(folderName && typeof view === "number"),
                   label: t("sidebar.feed_column.context_menu.change_to_other_view"),
                   submenu: views
                     .filter((v) => v.view !== view)
@@ -201,7 +223,8 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.delete_category"),
-                  click: async () => {
+                  hide: !folderName || !subscriptionCategoryExist(folderName),
+                  click: () => {
                     present({
                       title: t("sidebar.feed_column.context_menu.delete_category_confirmation", {
                         folderName,

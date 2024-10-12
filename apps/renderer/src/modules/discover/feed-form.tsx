@@ -243,7 +243,7 @@ const FeedInnerForm = ({
 
       onSuccess?.()
     },
-    async onError(err) {
+    onError(err) {
       toastFetchError(err)
     },
   })

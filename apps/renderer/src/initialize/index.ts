@@ -1,4 +1,5 @@
 import { registerGlobalContext } from "@follow/shared/bridge"
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { authConfigManager } from "@hono/auth-js/react"
 import { repository } from "@pkg"
@@ -106,7 +107,7 @@ export const initializeApp = async () => {
   appLog(`Initialize ${APP_NAME} done,`, `${loadingTime}ms`)
 
   window.posthog?.capture("app_init", {
-    electron: !!window.electron,
+    electron: IN_ELECTRON,
     loading_time: loadingTime,
     using_indexed_db: enabledDataPersist,
     data_hydrated_time: dataHydratedTime,
