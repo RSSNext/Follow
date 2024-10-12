@@ -273,7 +273,7 @@ export const ModalInternal = memo(
       <ModalOverlay
         blur={overlayOptions?.blur}
         className={cn(overlayOptions?.className, {
-          hidden: modalSettingOverlay || item.overlay ? false : true,
+          hidden: item.overlay ? false : !modalSettingOverlay,
         })}
       />
     )
