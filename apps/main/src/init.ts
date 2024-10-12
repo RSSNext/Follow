@@ -198,7 +198,11 @@ const registerPushNotifications = async () => {
     store.set(persistentIdsKey, instance.persistentIds)
   })
 
-  await instance.connect()
+  try {
+    await instance.connect()
+  } catch (error) {
+    logger.error(`PushReceiver error: ${error}`)
+  }
 
   logger.info("PushReceiver connected")
 }
