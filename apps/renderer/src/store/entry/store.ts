@@ -11,6 +11,7 @@ import { EntryService } from "~/services"
 import { feedActions } from "../feed"
 import { imageActions } from "../image"
 import { inboxActions } from "../inbox"
+import { getSubscriptionByFeedId } from "../subscription"
 import { feedUnreadActions } from "../unread"
 import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import { internal_batchMarkRead } from "./helper"
@@ -349,6 +350,7 @@ class EntryActions {
   async markRead({ feedId, entryId, read }: { feedId: string; entryId: string; read: boolean }) {
     const entry = get().flatMapEntries[entryId]
     const isInbox = entry?.entries && "inboxHandle" in entry.entries
+    const subscription = getSubscriptionByFeedId(feedId)
 
     if (read && entry?.read) {
       return
@@ -364,7 +366,11 @@ class EntryActions {
       // Send api request
       async () => {
         if (read) {
-          await internal_batchMarkRead([feedId, entryId, isInbox])
+          await internal_batchMarkRead({
+            entryId,
+            isInbox,
+            isPrivate: subscription?.isPrivate,
+          })
         } else {
           await apiClient.reads.$delete({
             json: {

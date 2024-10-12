@@ -8,6 +8,7 @@ import { DiscoverImport } from "~/modules/discover/import"
 import { DiscoverInboxList } from "~/modules/discover/inbox-list-form"
 import { Recommendations } from "~/modules/discover/recommendations"
 import { DiscoverRSS3 } from "~/modules/discover/rss3-form"
+import { DiscoverTransform } from "~/modules/discover/transform-form"
 import { DiscoverUser } from "~/modules/discover/user-form"
 import { Trend } from "~/modules/trending"
 
@@ -41,6 +42,10 @@ const tabs: {
   {
     name: "words.user",
     value: "user",
+  },
+  {
+    name: "words.transform",
+    value: "transform",
   },
   {
     name: "words.import",
@@ -93,4 +98,5 @@ const TabComponent: Record<string, React.FC<{ type?: string }>> = {
   inbox: DiscoverInboxList,
   user: DiscoverUser,
   default: DiscoverForm,
+  transform: DiscoverTransform,
 }

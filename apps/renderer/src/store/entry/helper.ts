@@ -7,9 +7,6 @@ import { useSubscriptionStore } from "../subscription"
 import { useEntryStore } from "./store"
 import type { EntryFilter } from "./types"
 
-type EntryId = string
-type FeedId = string
-
 export const getFilteredFeedIds = (feedIds: string[], filter?: EntryFilter) => {
   const state = useEntryStore.getState()
   const ids = [] as string[]
@@ -33,11 +30,18 @@ export const getFilteredFeedIds = (feedIds: string[], filter?: EntryFilter) => {
 }
 
 const unread = create({
-  fetcher: async (ids: ([FeedId, EntryId, boolean] | [FeedId, EntryId])[]) => {
+  fetcher: async (
+    ids: {
+      entryId: string
+      isInbox: boolean
+      isPrivate?: boolean
+    }[],
+  ) => {
     await apiClient.reads.$post({
       json: {
-        entryIds: ids.map((i) => i[1]),
-        isInbox: ids[0][2],
+        entryIds: ids.map((i) => i.entryId),
+        isInbox: ids[0].isInbox,
+        readHistories: ids.filter((i) => !i.isPrivate).map((i) => i.entryId),
       },
     })
 
