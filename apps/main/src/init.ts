@@ -12,6 +12,7 @@ import { getIconPath } from "./helper"
 import { t } from "./lib/i18n"
 import { store } from "./lib/store"
 import { updateNotificationsToken } from "./lib/user"
+import { logger } from "./logger"
 import { registerAppMenu } from "./menu"
 import type { RendererHandlers } from "./renderer-handlers"
 import { initializeSentry } from "./sentry"
@@ -154,12 +155,15 @@ const registerPushNotifications = async () => {
     persistentIds: persistentIds || [],
     credentials,
   })
+  logger.info(`PushReceiver initialized with token ${credentials?.fcm?.token}`)
 
   instance.onCredentialsChanged(({ newCredentials }) => {
+    logger.info(`PushReceiver credentials changed to ${newCredentials?.fcm?.token}`)
     updateNotificationsToken(newCredentials)
   })
 
   instance.onNotification((notification) => {
+    logger.info(`PushReceiver received notification: ${JSON.stringify(notification.message.data)}`)
     const data = notification.message.data as MessagingData
     switch (data.type) {
       case "new-entry": {

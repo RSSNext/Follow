@@ -11,6 +11,7 @@ import { viteRenderBaseConfig } from "./configs/vite.render.config"
 import type { env as EnvType } from "./packages/shared/src/env"
 import { createDependencyChunksPlugin } from "./plugins/vite/deps"
 import { htmlInjectPlugin } from "./plugins/vite/html-inject"
+import { createPlatformSpecificImportPlugin } from "./plugins/vite/specific-import"
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
@@ -75,7 +76,8 @@ export default ({ mode }) => {
       devPrint(),
       createDependencyChunksPlugin([
         //  React framework
-        ["react", "react-dom", "react-router-dom", "react-error-boundary", "react-dom/server"],
+        ["react", "react-dom"],
+        ["react-error-boundary", "react-dom/server", "react-router-dom"],
         // Data Statement
         ["zustand", "jotai", "use-context-selector", "immer", "dexie"],
         // Remark
@@ -131,7 +133,6 @@ export default ({ mode }) => {
           "@tanstack/react-query-persist-client",
           "@tanstack/query-sync-storage-persister",
         ],
-        ["blurhash", "react-blurhash"],
         ["tldts"],
         ["shiki", "@shikijs/transformers"],
         ["@sentry/react", "posthog-js"],
@@ -139,6 +140,8 @@ export default ({ mode }) => {
 
         ["swiper"],
       ]),
+
+      createPlatformSpecificImportPlugin(false),
     ],
 
     define: {

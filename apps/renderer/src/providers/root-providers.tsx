@@ -4,7 +4,7 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { LazyMotion, MotionConfig } from "framer-motion"
 import { Provider } from "jotai"
 import type { FC, PropsWithChildren } from "react"
-import { lazy, Suspense } from "react"
+import { Suspense } from "react"
 import { HotkeysProvider } from "react-hotkeys-hook"
 
 import { Toaster } from "~/components/ui/sonner"
@@ -15,36 +15,18 @@ import { persistConfig, queryClient } from "~/lib/query-client"
 import { EventProvider } from "./event-provider"
 import { I18nProvider } from "./i18n-provider"
 import { InvalidateQueryProvider } from "./invalidate-query-provider"
+import {
+  LazyContextMenuProvider,
+  LazyExtensionExposeProvider,
+  LazyFeatureFlagDebugger,
+  LazyLottieRenderContainer,
+  LazyModalStackProvider,
+  // specific import should add `index` postfix
+} from "./lazy/index"
 import { SettingSync } from "./setting-sync"
 import { StableRouterProvider } from "./stable-router-provider"
 import { UserProvider } from "./user-provider"
 
-const LazyLottieRenderContainer = lazy(() =>
-  import("../components/ui/lottie-container").then((res) => ({
-    default: res.LottieRenderContainer,
-  })),
-)
-const LazyContextMenuProvider = lazy(() =>
-  import("./context-menu-provider").then((res) => ({
-    default: res.ContextMenuProvider,
-  })),
-)
-const LazyModalStackProvider = lazy(() =>
-  import("../components/ui/modal/stacked/provider").then((res) => ({
-    default: res.ModalStackProvider,
-  })),
-)
-
-const LazyExtensionExposeProvider = lazy(() =>
-  import("./extension-expose-provider").then((res) => ({
-    default: res.ExtensionExposeProvider,
-  })),
-)
-const LazyFeatureFlagDebugger = lazy(() =>
-  import("../modules/ab/providers").then((res) => ({
-    default: res.FeatureFlagDebugger,
-  })),
-)
 const loadFeatures = () => import("../framer-lazy-feature").then((res) => res.default)
 export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
   <LazyMotion features={loadFeatures} strict key="framer">
@@ -62,6 +44,13 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <EventProvider />
 
               <UserProvider />
+
+              <StableRouterProvider />
+              <SettingSync />
+
+              {import.meta.env.DEV && <Devtools />}
+              {children}
+
               <Suspense>
                 <LazyExtensionExposeProvider />
                 <LazyModalStackProvider />
@@ -69,12 +58,6 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
                 <LazyLottieRenderContainer />
                 <LazyFeatureFlagDebugger />
               </Suspense>
-
-              <StableRouterProvider />
-              <SettingSync />
-
-              {import.meta.env.DEV && <Devtools />}
-              {children}
               <Toaster />
             </I18nProvider>
           </Provider>
