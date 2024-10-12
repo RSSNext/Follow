@@ -146,7 +146,7 @@ const registerPushNotifications = async () => {
 
   const instance = new PushReceiver({
     debug: true,
-    firebase: env.VITE_FIREBASE_CONFIG,
+    firebase: JSON.parse(env.VITE_FIREBASE_CONFIG),
     persistentIds: persistentIds || [],
     credentials: credentials || null,
     bundleId: "is.follow",
@@ -201,7 +201,7 @@ const registerPushNotifications = async () => {
   try {
     await instance.connect()
   } catch (error) {
-    logger.error(`PushReceiver error: ${error}`)
+    logger.error(`PushReceiver error: ${error instanceof Error ? error.stack : error}`)
   }
 
   logger.info("PushReceiver connected")
