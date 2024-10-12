@@ -40,10 +40,20 @@ export interface UISettings {
 }
 
 export interface IntegrationSettings {
+  // eagle
   enableEagle: boolean
+
+  // readwise
   enableReadwise: boolean
   readwiseToken: string
+
+  // instapaper
   enableInstapaper: boolean
   instapaperUsername: string
   instapaperPassword: string
+
+  // omnivore
+  enableOmnivore: boolean
+  omnivoreEndpoint: string
+  omnivoreToken: string
 }
