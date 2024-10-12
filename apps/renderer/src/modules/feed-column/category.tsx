@@ -10,11 +10,12 @@ import { LoadingCircle } from "~/components/ui/loading"
 import { ROUTE_FEED_IN_FOLDER, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { useAnyPointDown, useInputComposition } from "~/hooks/common"
+import { useAnyPointDown, useAuthQuery, useInputComposition } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
+import { subscription as subscriptionQuery } from "~/queries/subscriptions"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
 import { useOwnedList } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
@@ -132,6 +133,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const addMutation = useAddFeedToFeedList()
 
   const listList = useOwnedList(view!)
+  const categories = useAuthQuery(subscriptionQuery.categories())
 
   return (
     <div tabIndex={-1} onClick={stopPropagation}>
@@ -219,7 +221,8 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.delete_category"),
-                  click: async () => {
+                  hide: !folderName || !categories.data?.includes(folderName),
+                  click: () => {
                     present({
                       title: t("sidebar.feed_column.context_menu.delete_category_confirmation", {
                         folderName,
