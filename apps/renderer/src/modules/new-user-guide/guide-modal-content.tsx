@@ -15,25 +15,30 @@ import { TrendingFeeds } from "./steps/feeds"
 import { RookieCheck } from "./steps/rookie"
 
 const variants = {
-  enter: {
-    x: 1000,
-    opacity: 0,
+  enter: (direction: number) => {
+    return {
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0,
+    }
   },
   center: {
     zIndex: 1,
     x: 0,
     opacity: 1,
   },
-  exit: {
-    zIndex: 0,
-    x: -1000,
-    opacity: 0,
+  exit: (direction: number) => {
+    return {
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0,
+    }
   },
 }
 
 export function GuideModalContent() {
   const { t } = useTranslation("settings")
   const [step, setStep] = useState(0)
+  const [direction, setDirection] = useState(1)
   const haveUsedOtherRSSReader = useHaveUsedOtherRSSReader()
 
   const guideSteps = useMemo(
@@ -79,10 +84,11 @@ export function GuideModalContent() {
       {title && <h1 className="absolute left-6 top-4 text-3xl font-bold">{title}</h1>}
 
       <div className="relative mx-auto flex w-full max-w-lg items-center">
-        <AnimatePresence initial={false}>
+        <AnimatePresence initial={false} custom={direction}>
           <m.div
             key={step - 1}
             className="absolute inset-x-0"
+            custom={direction}
             variants={variants}
             initial="enter"
             animate="center"
@@ -101,9 +107,10 @@ export function GuideModalContent() {
             ) : status === "active" ? (
               guideSteps[step - 1].content
             ) : status === "complete" ? (
-              <div className="text-lg">
-                <p>That's it! You're all set.</p>
-                <p>Click "Finish" to close this guide.</p>
+              <div className="text-balance text-center">
+                <Logo className="mx-auto size-20" />
+                <p className="mb-3 mt-6 text-xl font-semibold">That's it! You're all set.</p>
+                <p className="text-lg">Click "Finish" to close this guide.</p>
               </div>
             ) : null}
           </m.div>
@@ -121,6 +128,7 @@ export function GuideModalContent() {
             onClick={() => {
               if (step > 0) {
                 setStep((prev) => prev - 1)
+                setDirection(-1)
               }
             }}
             disabled={step === 0}
@@ -132,6 +140,7 @@ export function GuideModalContent() {
             onClick={() => {
               if (step <= totalSteps) {
                 setStep((prev) => prev + 1)
+                setDirection(1)
               } else {
                 finishGuide()
               }
