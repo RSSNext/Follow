@@ -48,9 +48,9 @@ import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-cont
 const FooterInfo = () => {
   const { t } = useTranslation()
   return (
-    <div className="relative">
+    <div className="relative !mt-0">
       {APP_VERSION?.[0] === "0" && (
-        <div className="pointer-events-none !mt-0 w-full py-3 text-center text-xs opacity-20">
+        <div className="pointer-events-none w-full py-3 text-center text-xs opacity-20">
           {t("early_access")}{" "}
           {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
         </div>
