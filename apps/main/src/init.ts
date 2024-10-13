@@ -12,16 +12,13 @@ import { getIconPath } from "./helper"
 import { t } from "./lib/i18n"
 import { store } from "./lib/store"
 import { updateNotificationsToken } from "./lib/user"
+import { logger } from "./logger"
 import { registerAppMenu } from "./menu"
 import type { RendererHandlers } from "./renderer-handlers"
 import { initializeSentry } from "./sentry"
 import { router } from "./tipc"
 import { createMainWindow, getMainWindow } from "./window"
 
-const appFolder = {
-  prod: "Follow",
-  dev: "Follow (dev)",
-}
 if (process.argv.length === 3 && process.argv[2].startsWith("follow-dev:")) {
   process.env.NODE_ENV = "development"
 }
@@ -31,7 +28,8 @@ const isDev = process.env.NODE_ENV === "development"
  * Mandatory and fast initializers for the app
  */
 export function initializeAppStage0() {
-  app.setPath("appData", path.join(app.getPath("appData"), isDev ? appFolder.dev : appFolder.prod))
+  if (isDev) app.setPath("appData", path.join(app.getPath("appData"), "Follow (dev)"))
+  initializeSentry()
 }
 export const initializeAppStage1 = () => {
   if (process.defaultApp) {
@@ -43,8 +41,6 @@ export const initializeAppStage1 = () => {
   } else {
     app.setAsDefaultProtocolClient(APP_PROTOCOL)
   }
-
-  initializeSentry()
 
   registerIpcMain(router)
 
@@ -149,17 +145,28 @@ const registerPushNotifications = async () => {
   updateNotificationsToken()
 
   const instance = new PushReceiver({
-    debug: isDev,
-    firebase: env.VITE_FIREBASE_CONFIG,
+    debug: true,
+    firebase: JSON.parse(env.VITE_FIREBASE_CONFIG),
     persistentIds: persistentIds || [],
-    credentials,
+    credentials: credentials || null,
+    bundleId: "is.follow",
+    chromeId: "is.follow",
+  })
+  logger.info(
+    `PushReceiver initialized with credentials ${JSON.stringify(credentials)} and firebase config ${env.VITE_FIREBASE_CONFIG}`,
+  )
+
+  instance.onReady(() => {
+    logger.info("PushReceiver ready")
   })
 
   instance.onCredentialsChanged(({ newCredentials }) => {
+    logger.info(`PushReceiver credentials changed to ${newCredentials?.fcm?.token}`)
     updateNotificationsToken(newCredentials)
   })
 
   instance.onNotification((notification) => {
+    logger.info(`PushReceiver received notification: ${JSON.stringify(notification.message.data)}`)
     const data = notification.message.data as MessagingData
     switch (data.type) {
       case "new-entry": {
@@ -191,5 +198,11 @@ const registerPushNotifications = async () => {
     store.set(persistentIdsKey, instance.persistentIds)
   })
 
-  await instance.connect()
+  try {
+    await instance.connect()
+  } catch (error) {
+    logger.error(`PushReceiver error: ${error instanceof Error ? error.stack : error}`)
+  }
+
+  logger.info("PushReceiver connected")
 }

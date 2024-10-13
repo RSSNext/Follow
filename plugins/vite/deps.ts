@@ -1,6 +1,6 @@
 import type { Plugin, UserConfig } from "vite"
 
-export function createDependencyChunksPlugin(dependencies: string[] | string[][]): Plugin {
+export function createDependencyChunksPlugin(dependencies: string[][]): Plugin {
   return {
     name: "dependency-chunks",
     config(config: UserConfig) {
