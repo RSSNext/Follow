@@ -19,7 +19,7 @@ export const EntryPlaceholderLogo = () => {
       )}
     >
       <Logo className="size-16 opacity-40 grayscale" />
-      <span className="max-w-[60ch]">{title}</span>
+      <div className="line-clamp-3 w-[60ch] max-w-full">{title}</div>
     </div>
   )
 }
