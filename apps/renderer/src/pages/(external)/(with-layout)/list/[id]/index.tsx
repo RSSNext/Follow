@@ -50,7 +50,7 @@ export function Component() {
               {t("feed.followsAndFeeds", {
                 subscriptionCount: list.data?.subscriptionCount,
                 subscriptionNoun: t("feed.follower", { count: list.data?.subscriptionCount }),
-                feedsCount: "feedCount" in listData ? listData.feedCount : 0,
+                feedsCount: list.data?.feedCount || 0,
                 feedsNoun: t("feed.feeds", { count: listData?.feedIds?.length }),
                 appName: APP_NAME,
               })}

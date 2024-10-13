@@ -74,7 +74,7 @@ export const parseHtml = (
       (tag) => tag !== "img" && tag !== "picture",
     )
   } else {
-    rehypeSchema.tagNames = [...rehypeSchema.tagNames!, "video", "style"]
+    rehypeSchema.tagNames = [...rehypeSchema.tagNames!, "video", "style", "figure"]
     rehypeSchema.attributes = {
       ...rehypeSchema.attributes,
       "*": renderInlineStyle
@@ -181,7 +181,7 @@ export const parseHtml = (
                 ? propsChildren.find((i) => i.type === "code")
                 : propsChildren
 
-              if (!children) return null
+              if (!children) return createElement("pre", props, props.children)
 
               if (
                 "type" in children &&
@@ -191,7 +191,7 @@ export const parseHtml = (
                 language = children.props.className.replace("language-", "")
               }
               const code = "props" in children && children.props.children
-              if (!code) return null
+              if (!code) createElement("pre", props, props.children)
 
               try {
                 codeString = extractCodeFromHtml(renderToString(code))
@@ -203,7 +203,7 @@ export const parseHtml = (
               }
             }
 
-            if (!codeString) return null
+            if (!codeString) return createElement("pre", props, props.children)
 
             return createElement(ShikiHighLighter, {
               code: codeString.trimEnd(),

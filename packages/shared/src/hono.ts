@@ -5174,6 +5174,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                 json: {
                     entryIds: string[];
                     isInbox?: boolean | undefined;
+                    readHistories?: string[] | undefined;
                 };
             };
             output: {

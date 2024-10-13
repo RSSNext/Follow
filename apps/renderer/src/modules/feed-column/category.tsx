@@ -17,7 +17,11 @@ import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
 import { useOwnedList } from "~/store/list"
-import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
+import {
+  subscriptionActions,
+  subscriptionCategoryExist,
+  useSubscriptionByFeedId,
+} from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
@@ -219,7 +223,8 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.delete_category"),
-                  click: async () => {
+                  hide: !folderName || !subscriptionCategoryExist(folderName),
+                  click: () => {
                     present({
                       title: t("sidebar.feed_column.context_menu.delete_category_confirmation", {
                         folderName,

@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query"
+import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { getFetchErrorMessage, toastFetchError } from "~/lib/error-parser"
-import { useSettingModal } from "~/modules/settings/modal/hooks"
 
 export const wallet = {
   get: ({ userId }: { userId?: string } = {}) =>
@@ -68,7 +68,7 @@ export const useClaimCheck = () =>
   })
 
 export const useClaimWalletDailyRewardMutation = () => {
-  const settingModalPresent = useSettingModal()
+  const navigate = useNavigate()
 
   return useMutation({
     mutationKey: ["claimWalletDailyReward"],
@@ -82,10 +82,7 @@ export const useClaimWalletDailyRewardMutation = () => {
       window.posthog?.capture("daily_reward_claimed")
 
       toast(
-        <div
-          className="flex items-center gap-1 text-lg"
-          onClick={() => settingModalPresent("wallet")}
-        >
+        <div className="flex items-center gap-1 text-lg" onClick={() => navigate("/power")}>
           <i className="i-mgc-power text-accent animate-flip" />
         </div>,
         {

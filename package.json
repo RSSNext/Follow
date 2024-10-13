@@ -1,7 +1,7 @@
 {
   "name": "Follow",
   "type": "module",
-  "version": "0.0.1-alpha.19",
+  "version": "0.0.1-alpha.21",
   "private": true,
   "packageManager": "pnpm@9.11.0",
   "description": "Next generation information browser",

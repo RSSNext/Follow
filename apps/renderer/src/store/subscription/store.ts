@@ -17,6 +17,7 @@ import { inboxActions } from "../inbox"
 import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
 import { createImmerSetter, createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import { subscriptionCategoryExistSelector } from "./selector"
 
 export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
   defaultCategory?: string
@@ -41,7 +42,11 @@ interface SubscriptionState {
    */
   categoryOpenStateByView: Record<FeedViewType, Record<string, boolean>>
   /**
-   * Store the subscription ids that current user followed.
+   * All named categories names set
+   */
+  categories: Set<string>
+  /**
+   * All subscription ids set
    */
   subscriptionIdSet: Set<string>
 }
@@ -90,7 +95,8 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>("subsc
   data: {},
   feedIdByView: { ...emptyDataIdByView },
   categoryOpenStateByView: { ...emptyCategoryOpenStateByView },
-  subscriptionIdSet: new Set<string>(),
+  categories: new Set(),
+  subscriptionIdSet: new Set(),
 }))
 
 const set = useSubscriptionStore.setState
@@ -117,6 +123,19 @@ class SubscriptionActions {
           }
         })
       }
+    })
+
+    useSubscriptionStore.subscribe((state, prev) => {
+      if (state.data === prev.data) return
+
+      const categories = new Set<string>()
+      for (const subscription of Object.values(state.data)) {
+        subscription.category && categories.add(subscription.category)
+      }
+      set((state) => ({
+        ...state,
+        categories,
+      }))
     })
   }
   async fetchByView(view?: FeedViewType) {
@@ -453,7 +472,6 @@ class SubscriptionActions {
         }),
       async () =>
         // Db
-
         SubscriptionService.renameCategory(whoami()!.id, subscriptionIds, newCategory),
     )
   }
@@ -472,3 +490,6 @@ export const isListSubscription = (feedId?: FeedId) => {
   if (!subscription) return false
   return "listId" in subscription && !!subscription.listId
 }
+
+export const subscriptionCategoryExist = (name: string) =>
+  subscriptionCategoryExistSelector(name)(get())

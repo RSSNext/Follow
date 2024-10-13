@@ -28,7 +28,7 @@ export const AppLayoutGridContainerProvider: FC<PropsWithChildren> = ({ children
 
   return (
     <AppLayoutGridContainerWidthContext.Provider value={width}>
-      <div ref={ref} className="contents">
+      <div ref={ref} className="relative z-0 contents">
         {children}
       </div>
     </AppLayoutGridContainerWidthContext.Provider>

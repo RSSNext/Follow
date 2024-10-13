@@ -1,7 +1,7 @@
 import { FEED_COLLECTION_LIST, ROUTE_FEED_IN_FOLDER } from "~/constants"
 import { FeedViewType } from "~/lib/enum"
 
-import { useSubscriptionStore } from "../subscription"
+import { subscriptionCategoryExistSelector, useSubscriptionStore } from "../subscription"
 
 type FeedId = string
 export const useFeedIdByView = (view: FeedViewType) =>
@@ -64,3 +64,6 @@ export const useFeedSubscriptionCount = () =>
         (s) => !!s.feedId && !s.listId && !s.inboxId && state.subscriptionIdSet.has(s.feedId),
       ).length,
   )
+
+export const useSubscriptionCategoryExist = (name: string) =>
+  useSubscriptionStore(subscriptionCategoryExistSelector(name))

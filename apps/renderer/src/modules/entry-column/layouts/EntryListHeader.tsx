@@ -261,7 +261,9 @@ const WideModeButton = () => {
             : t("entry_list_header.switch_to_normalmode")
         }
       >
-        <i className={cn(!isWideMode ? "i-mgc-align-justify-cute-re" : "i-mgc-layout-4-cute-re")} />
+        <i
+          className={cn(isWideMode ? "i-mgc-align-justify-cute-re" : "i-mgc-align-left-cute-re")}
+        />
       </ActionButton>
     </ImpressionView>
   )
