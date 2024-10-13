@@ -6,7 +6,9 @@ import { useTranslation } from "react-i18next"
 
 import { Logo } from "~/components/icons/logo"
 import { Button } from "~/components/ui/button"
+import { mountLottie } from "~/components/ui/lottie-container"
 import { useI18n } from "~/hooks/common"
+import confettiUrl from "~/lottie/confetti.lottie?url"
 import { settings } from "~/queries/settings"
 
 import { settingSyncQueue } from "../settings/helper/sync-queue"
@@ -59,8 +61,8 @@ function Outtro() {
     </div>
   )
 }
-
-export function GuideModalContent() {
+const absoluteConfettiUrl = new URL(confettiUrl, import.meta.url).href
+export function GuideModalContent({ onClose }: { onClose: () => void }) {
   const t = useI18n()
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
@@ -170,12 +172,25 @@ export function GuideModalContent() {
             </Button>
           )}
           <Button
-            onClick={() => {
+            onClick={(e) => {
               if (step <= totalSteps) {
                 setStep((prev) => prev + 1)
                 setDirection(1)
               } else {
                 finishGuide()
+
+                const target = e.target as HTMLElement
+                const { x, y } = target.getBoundingClientRect()
+                mountLottie(absoluteConfettiUrl, {
+                  x: x - 40,
+                  y: y - 80,
+
+                  height: 120,
+                  width: 120,
+                  onComplete() {
+                    onClose()
+                  },
+                })
               }
             }}
           >
