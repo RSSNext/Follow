@@ -191,7 +191,7 @@ export const parseHtml = (
                 language = children.props.className.replace("language-", "")
               }
               const code = "props" in children && children.props.children
-              if (!code) createElement("pre", props, props.children)
+              if (!code) return createElement("pre", props, props.children)
 
               try {
                 codeString = extractCodeFromHtml(renderToString(code))
