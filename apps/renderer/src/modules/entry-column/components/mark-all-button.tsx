@@ -9,7 +9,7 @@ import { useOnClickOutside } from "usehooks-ts"
 import { ActionButton, Button, IconButton } from "~/components/ui/button"
 import { Kbd, KbdCombined } from "~/components/ui/kbd/Kbd"
 import { RootPortal } from "~/components/ui/portal"
-import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT, HotKeyScopeMap } from "~/constants"
+import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT, HotKeyScopeMap, isElectronBuild } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useI18n } from "~/hooks/common"
 import { cn, getOS } from "~/lib/utils"
@@ -51,7 +51,9 @@ export const MarkAllReadWithOverlay = forwardRef<
         <m.div
           ref={setPopoverRef}
           initial={{ y: -70 }}
-          animate={{ y: getOS() === "Windows" ? -ElECTRON_CUSTOM_TITLEBAR_HEIGHT : 0 }}
+          animate={{
+            y: isElectronBuild && getOS() === "Windows" ? -ElECTRON_CUSTOM_TITLEBAR_HEIGHT : 0,
+          }}
           exit={{ y: -70 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
           className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"

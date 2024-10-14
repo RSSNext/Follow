@@ -24,7 +24,6 @@ import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { SafeFragment } from "~/components/common/Fragment"
 import { m } from "~/components/common/Motion"
 import { ErrorComponentType } from "~/components/errors/enum"
-import { resizableOnly } from "~/components/ui/modal"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT, isElectronBuild } from "~/constants"
 import { useSwitchHotKeyScope } from "~/hooks/common"
 import { nextFrame, stopPropagation } from "~/lib/dom"
@@ -34,11 +33,12 @@ import { Divider } from "../../divider"
 import { RootPortalProvider } from "../../portal/provider"
 import { EllipsisHorizontalTextWithTooltip } from "../../typography"
 import { modalStackAtom } from "./atom"
-import { MODAL_STACK_Z_INDEX, modalMontionConfig } from "./constants"
+import { modalMontionConfig } from "./constants"
 import type { CurrentModalContentProps, ModalActionsInternal } from "./context"
 import { CurrentModalContext } from "./context"
 import { useResizeableModal } from "./hooks"
-import type { ModalProps } from "./types"
+import { ModalOverlay } from "./overlay"
+import type { ModalOverlayOptions, ModalProps } from "./types"
 
 const DragBar = isElectronBuild ? (
   <span className="drag-region fixed left-0 right-36 top-0 h-8" />
@@ -50,10 +50,15 @@ export const ModalInternal = memo(
       item: ModalProps & { id: string }
       index: number
 
-      isTop: boolean
+      isTop?: boolean
+      isBottom?: boolean
+      overlayOptions?: ModalOverlayOptions
       onClose?: (open: boolean) => void
     } & PropsWithChildren
-  >(function Modal({ item, index, onClose: onPropsClose, children, isTop }, ref) {
+  >(function Modal(
+    { item, overlayOptions, onClose: onPropsClose, children, isTop, isBottom },
+    ref,
+  ) {
     const {
       CustomModalComponent,
       modalClassName,
@@ -96,8 +101,8 @@ export const ModalInternal = memo(
     )
 
     const opaque = useUISettingKey("modalOpaque")
+    const modalSettingOverlay = useUISettingKey("modalOverlay")
 
-    const zIndexStyle = useMemo(() => ({ zIndex: MODAL_STACK_Z_INDEX + index + 1 }), [index])
     const dismiss = useCallback(
       (e: SyntheticEvent) => {
         e.stopPropagation()
@@ -224,10 +229,7 @@ export const ModalInternal = memo(
       }
     }, [switchHotkeyScope])
 
-    const modalStyle = useMemo(
-      () => ({ ...zIndexStyle, ...resizeableStyle }),
-      [resizeableStyle, zIndexStyle],
-    )
+    const modalStyle = resizeableStyle
     const isSelectingRef = useRef(false)
     const handleSelectStart = useCallback(() => {
       isSelectingRef.current = true
@@ -269,17 +271,27 @@ export const ModalInternal = memo(
     }, [])
 
     useImperativeHandle(ref, () => modalElementRef.current!)
+
+    const Overlay = (
+      <ModalOverlay
+        blur={overlayOptions?.blur}
+        className={cn(overlayOptions?.className, {
+          invisible: item.overlay ? false : !(modalSettingOverlay && isBottom),
+        })}
+      />
+    )
     if (CustomModalComponent) {
       return (
         <Wrapper>
           <Dialog.Root open onOpenChange={onClose} modal={modal}>
             <Dialog.Portal>
+              {Overlay}
               <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
-              <Dialog.Content asChild onOpenAutoFocus={openAutoFocus}>
+              <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={openAutoFocus}>
                 <div
                   ref={edgeElementRef}
                   className={cn(
-                    "no-drag-region fixed z-20",
+                    "no-drag-region fixed",
                     modal ? "inset-0 overflow-auto" : "left-0 top-0",
                     currentIsClosing ? "!pointer-events-none" : "!pointer-events-auto",
                     modalContainerClassName,
@@ -287,7 +299,6 @@ export const ModalInternal = memo(
                   onPointerUp={handleDetectSelectEnd}
                   onClick={handleClickOutsideToDismiss}
                   onFocus={stopPropagation}
-                  style={zIndexStyle}
                 >
                   {DragBar}
                   <div
@@ -315,12 +326,12 @@ export const ModalInternal = memo(
       <Wrapper>
         <Dialog.Root modal={modal} open onOpenChange={onClose}>
           <Dialog.Portal>
-            <Dialog.Content asChild onOpenAutoFocus={openAutoFocus}>
+            {Overlay}
+            <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={openAutoFocus}>
               <div
                 ref={edgeElementRef}
-                style={zIndexStyle}
                 className={cn(
-                  "fixed z-20 flex",
+                  "fixed flex",
                   modal ? "inset-0 overflow-auto" : "left-0 top-0",
                   currentIsClosing && "!pointer-events-none",
                   modalContainerClassName,
@@ -363,7 +374,7 @@ export const ModalInternal = memo(
                   }}
                 >
                   <ResizeSwitch
-                    enable={resizableOnly("bottomRight")}
+                    // enable={resizableOnly("bottomRight")}
                     onResizeStart={handleResizeStart}
                     onResizeStop={handleResizeStop}
                     defaultSize={resizeDefaultSize}

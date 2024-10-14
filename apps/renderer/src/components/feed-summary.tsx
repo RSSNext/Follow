@@ -17,17 +17,12 @@ export function FollowSummary({
   docs?: string
   className?: string
 }) {
-  let siteLink
-  let feedLink
+  let siteLink: string | undefined
+  let feedLink: string | undefined
   let feedTitle = feed.title
-  let feedText
+  let feedText: string | undefined
+
   switch (feed.type) {
-    case "feed": {
-      siteLink = feed.siteUrl || void 0
-      feedLink = feed.url || docs
-      feedText = feed.url || docs
-      break
-    }
     case "list": {
       siteLink = `${WEB_URL}/list/${feed.id}`
       feedLink = siteLink
@@ -39,6 +34,12 @@ export function FollowSummary({
       feedLink = siteLink
       feedText = `${feed.id}${env.VITE_INBOXES_EMAIL}`
       feedTitle = feed.title || `${feed.id}'s Inbox`
+      break
+    }
+    default: {
+      siteLink = feed.siteUrl || void 0
+      feedLink = feed.url || docs
+      feedText = feed.url || docs
       break
     }
   }

@@ -181,6 +181,7 @@ export const parseHtml = (
                 ? propsChildren.find((i) => i.type === "code")
                 : propsChildren
 
+              // Don't process not code block
               if (!children) return createElement("pre", props, props.children)
 
               if (
@@ -190,8 +191,8 @@ export const parseHtml = (
               ) {
                 language = children.props.className.replace("language-", "")
               }
-              const code = "props" in children && children.props.children
-              if (!code) createElement("pre", props, props.children)
+              const code = ("props" in children && children.props.children) || children
+              if (!code) return null
 
               try {
                 codeString = extractCodeFromHtml(renderToString(code))
@@ -241,9 +242,14 @@ const Img: Components["img"] = ({ node, ...props }) => {
   )
 }
 
-function extractCodeFromHtml(htmlString: string) {
+export function extractCodeFromHtml(htmlString: string) {
   const tempDiv = document.createElement("div")
   tempDiv.innerHTML = htmlString
+
+  const hasPre = tempDiv.querySelector("pre")
+  if (!hasPre) {
+    tempDiv.innerHTML = `<pre><code>${htmlString}</code></pre>`
+  }
 
   // 1. line break via <div />
   const divElements = tempDiv.querySelectorAll("div")
@@ -272,6 +278,14 @@ function extractCodeFromHtml(htmlString: string) {
       if (spanAsLineBreak) break
     }
   }
+
+  if (!spanAsLineBreak) {
+    const usingBr = tempDiv.querySelector("br")
+    if (usingBr) {
+      spanAsLineBreak = true
+    }
+  }
+
   if (spanElements.length > 0) {
     for (const node of tempDiv.children) {
       if (spanAsLineBreak) {

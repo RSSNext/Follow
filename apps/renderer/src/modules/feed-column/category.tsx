@@ -7,17 +7,22 @@ import { useOnClickOutside } from "usehooks-ts"
 
 import { MotionButtonBase } from "~/components/ui/button"
 import { LoadingCircle } from "~/components/ui/loading"
+import { useScrollViewElement } from "~/components/ui/scroll-area/hooks"
 import { ROUTE_FEED_IN_FOLDER, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { useAnyPointDown, useInputComposition } from "~/hooks/common"
+import { useAnyPointDown, useInputComposition, useRefValue } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
 import { useOwnedList } from "~/store/list"
-import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
+import {
+  subscriptionActions,
+  subscriptionCategoryExist,
+  useSubscriptionByFeedId,
+} from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
 import { useModalStack } from "../../components/ui/modal/stacked/hooks"
@@ -60,6 +65,8 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const shouldOpen = useRouteParamsSelector(
     (s) => typeof s.feedId === "string" && ids.includes(s.feedId),
   )
+  const scroller = useScrollViewElement()
+  const scrollerRef = useRefValue(scroller)
   useEffect(() => {
     if (shouldOpen) {
       setOpen(true)
@@ -67,12 +74,21 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
       const $items = itemsRef.current
 
       if (!$items) return
-      $items.querySelector(`[data-feed-id="${getRouteParams().feedId}"]`)?.scrollIntoView({
-        block: "center",
+      const $target = $items.querySelector(
+        `[data-feed-id="${getRouteParams().feedId}"]`,
+      ) as HTMLElement
+      if (!$target) return
+
+      const $scroller = scrollerRef.current
+      if (!$scroller) return
+
+      const scrollTop = $target.offsetTop - $scroller.clientHeight / 2
+      $scroller.scrollTo({
+        top: scrollTop,
         behavior: "smooth",
       })
     }
-  }, [shouldOpen])
+  }, [scrollerRef, shouldOpen])
   const expansion = folderName ? categoryOpenStateData[folderName] : true
 
   useEffect(() => {
@@ -219,7 +235,8 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.delete_category"),
-                  click: async () => {
+                  hide: !folderName || !subscriptionCategoryExist(folderName),
+                  click: () => {
                     present({
                       title: t("sidebar.feed_column.context_menu.delete_category_confirmation", {
                         folderName,
