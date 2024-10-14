@@ -18,7 +18,7 @@ import { VFile } from "vfile"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { Checkbox } from "~/components/ui/checkbox"
 import { ShikiHighLighter } from "~/components/ui/code-highlighter"
-import { KateX } from "~/components/ui/katex"
+import { LazyKateX } from "~/components/ui/katex/lazy"
 import { MarkdownBlockImage, MarkdownLink, MarkdownP } from "~/components/ui/markdown/renderers"
 import { BlockError } from "~/components/ui/markdown/renderers/BlockErrorBoundary"
 import { useIsInParagraphContext } from "~/components/ui/markdown/renderers/ctx"
@@ -372,7 +372,7 @@ const Math = ({ node }) => {
   if (!annotation) return null
   const latex = annotation.value
 
-  return createElement(KateX, {
+  return createElement(LazyKateX, {
     children: latex,
     mode: isInParagraph ? "inline" : "display",
   })

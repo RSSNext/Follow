@@ -1,6 +1,7 @@
-import katexStyle from "katex/dist/katex.min.css?url"
+import katexStyle from "katex/dist/katex.min.css?raw"
 import { createElement, Fragment, memo, useEffect, useMemo, useRef, useState } from "react"
 
+import { MemoedDangerousHTMLStyle } from "~/components/common/MemoedDangerousHTMLStyle"
 import { parseHtml } from "~/lib/parse-html"
 import type { RemarkOptions } from "~/lib/parse-markdown"
 import { parseMarkdown } from "~/lib/parse-markdown"
@@ -109,7 +110,7 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
     <MarkdownRenderContainerRefContext.Provider value={refElement}>
       <MediaContainerWidthProvider width={containerWidth}>
         <MediaInfoRecordProvider mediaInfo={mediaInfo}>
-          <link href={katexStyle} rel="stylesheet" />
+          <MemoedDangerousHTMLStyle>{katexStyle}</MemoedDangerousHTMLStyle>
           {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
         </MediaInfoRecordProvider>
       </MediaContainerWidthProvider>
