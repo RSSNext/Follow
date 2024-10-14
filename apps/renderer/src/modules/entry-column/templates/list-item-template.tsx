@@ -58,7 +58,7 @@ export function ListItem({
   const isSubscription =
     withFollow && entry?.entries.url?.startsWith(UrlBuilder.shareFeed(entry.feedId))
   const feedId = isSubscription
-    ? entry?.entries.url?.replace(UrlBuilder.shareFeed(entry.feedId), "")
+    ? entry?.entries.url?.slice(UrlBuilder.shareFeed(entry.feedId).length)
     : undefined
   const isFollowed = !!useSubscriptionStore((state) => feedId && state.data[feedId])
   const { present } = useModalStack()

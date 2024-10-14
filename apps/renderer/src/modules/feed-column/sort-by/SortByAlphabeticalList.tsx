@@ -1,5 +1,6 @@
 import { Fragment } from "react"
 
+import { INBOX_PREFIX_ID } from "~/constants"
 import { sortByAlphabet } from "~/lib/utils"
 import { getPreferredTitle, useFeedStore } from "~/store/feed"
 import { getSubscriptionByFeedId } from "~/store/subscription"
@@ -76,7 +77,13 @@ export const SortByAlphabeticalInboxList = ({ view, data }: ListListProps) => {
   return (
     <div>
       {Object.keys(data).map((feedId) => (
-        <InboxItem key={feedId} inboxId={feedId.replace("inbox-", "")} view={view} />
+        <InboxItem
+          key={feedId}
+          inboxId={
+            feedId.startsWith(INBOX_PREFIX_ID) ? feedId.slice(INBOX_PREFIX_ID.length) : feedId
+          }
+          view={view}
+        />
       ))}
     </div>
   )
