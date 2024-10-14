@@ -15,10 +15,7 @@ import { SentryConfig } from "../configs"
 export const initSentry = async () => {
   if (!window.SENTRY_RELEASE) return
   if (import.meta.env.DEV) return
-  const [Sentry, posthog] = await Promise.all([
-    import("@sentry/react"),
-    import("posthog-js").then((module) => module.default),
-  ])
+  const Sentry = await import("@sentry/react")
   Sentry.init({
     dsn: env.VITE_SENTRY_DSN,
     environment: RELEASE_CHANNEL,
@@ -34,12 +31,6 @@ export const initSentry = async () => {
       }),
       Sentry.captureConsoleIntegration({
         levels: ["error"],
-      }),
-      posthog.sentryIntegration({
-        organization: "follow-rg",
-
-        projectId: 4507570439979008,
-        severityAllowList: ["error", "info"], // optional: here is set to handle captureMessage (info) and captureException (error)
       }),
     ],
     ...SentryConfig,

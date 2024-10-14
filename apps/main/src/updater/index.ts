@@ -2,7 +2,6 @@ import { getRendererHandlers } from "@egoist/tipc/main"
 import { autoUpdater } from "electron-updater"
 
 import { channel, isDev } from "../env"
-import { trackEvent } from "../lib/posthog"
 import { logger } from "../logger"
 import type { RendererHandlers } from "../renderer-handlers"
 import { destroyMainWindow, getMainWindow } from "../window"
@@ -112,7 +111,7 @@ export const registerUpdater = async () => {
   autoUpdater.on("download-progress", (e) => {
     logger.info(`Download progress: ${e.percent}`)
   })
-  autoUpdater.on("update-downloaded", (e) => {
+  autoUpdater.on("update-downloaded", () => {
     downloading = false
     logger.info("Update downloaded, ready to install")
 
@@ -120,10 +119,6 @@ export const registerUpdater = async () => {
     if (!mainWindow) return
     const handlers = getRendererHandlers<RendererHandlers>(mainWindow.webContents)
 
-    trackEvent("update_ready_to_install", {
-      version: e.version,
-      releaseVersion: e.releaseName,
-    })
     handlers.updateDownloaded.send()
   })
   autoUpdater.on("error", (e) => {

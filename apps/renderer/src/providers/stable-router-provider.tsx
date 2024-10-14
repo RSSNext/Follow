@@ -43,16 +43,15 @@ export const StableRouterProvider = () => {
     setNavigate({ fn: nav })
   }, [searchParams, params, location, nav])
 
-  // Posthog tracking
   useEffect(() => {
     const { pathname } = location
-    if (pathname && window.posthog) {
+    if (pathname && window.analytics) {
       let url = window.origin + pathname
       if (searchParams.toString()) {
         url = `${url}?${searchParams.toString()}`
       }
-      window.posthog.capture("$pageview", {
-        $current_url: url,
+      window.analytics.capture("$pageview", {
+        url,
       })
     }
   }, [location, searchParams])
