@@ -1,3 +1,4 @@
+import katexStyle from "katex/dist/katex.min.css?url"
 import { createElement, Fragment, memo, useEffect, useMemo, useRef, useState } from "react"
 
 import { parseHtml } from "~/lib/parse-html"
@@ -108,6 +109,7 @@ const HTMLImpl = <A extends keyof JSX.IntrinsicElements = "div">(
     <MarkdownRenderContainerRefContext.Provider value={refElement}>
       <MediaContainerWidthProvider width={containerWidth}>
         <MediaInfoRecordProvider mediaInfo={mediaInfo}>
+          <link href={katexStyle} rel="stylesheet" />
           {createElement(as, { ...rest, ref: setRefElement }, markdownElement)}
         </MediaInfoRecordProvider>
       </MediaContainerWidthProvider>
