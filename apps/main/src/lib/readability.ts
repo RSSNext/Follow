@@ -3,6 +3,8 @@ import { name, version } from "@pkg"
 import { parseHTML } from "linkedom"
 import { fetch } from "ofetch"
 
+import { isDev } from "~/env"
+
 const userAgents = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 ${name}/${version}`
 
 export async function readability(url: string) {
@@ -41,7 +43,7 @@ export async function readability(url: string) {
   })
 
   const reader = new Readability(document, {
-    // debug: isDev,
+    debug: isDev,
   })
   return reader.parse()
 }
