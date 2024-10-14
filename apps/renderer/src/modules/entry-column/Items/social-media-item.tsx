@@ -21,7 +21,7 @@ import { useFeedById } from "~/store/feed"
 import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
 import { StarIcon } from "../star-icon"
 import { EntryTranslation } from "../translation"
-import type { EntryListItemFC } from "../types"
+import type { EntryItemStatelessProps, EntryListItemFC } from "../types"
 
 const socialMediaContentWidthAtom = atom(0)
 export const SocialMediaItem: EntryListItemFC = ({ entryId, entryPreview, translation }) => {
@@ -196,6 +196,49 @@ const ActionBar = ({ entryId }: { entryId: string }) => {
             key={item.name}
           />
         ))}
+    </div>
+  )
+}
+
+export function SocialMediaItemStateLess({ entry, feed }: EntryItemStatelessProps) {
+  return (
+    <div className="relative m-auto rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
+      <div className="relative">
+        <div className="group relative flex px-8 py-6">
+          <FeedIcon feed={feed} fallback />
+          <div className="ml-2 min-w-0 flex-1">
+            <div className="-mt-0.5 line-clamp-5 flex-1 text-sm">
+              <div className="flex space-x-1">
+                <span>{feed.title}</span>
+                <span className="text-zinc-500">·</span>
+                <span>{!!entry.publishedAt && <RelativeTime date={entry.publishedAt} />}</span>
+              </div>
+              <div className="relative mt-0.5 text-base">{entry.description}</div>
+            </div>
+            <div className="mt-2 flex gap-2 overflow-x-auto">
+              {entry.media?.map((media) => (
+                <Media
+                  key={media.url}
+                  thumbnail
+                  src={media.url}
+                  type={media.type}
+                  previewImageUrl={media.preview_image_url}
+                  className="center ml-2 flex size-20 shrink-0 rounded"
+                  mediaContainerClassName={"w-auto h-auto rounded"}
+                  loading="lazy"
+                  proxy={{
+                    width: 160,
+                    height: 160,
+                  }}
+                  height={media.height}
+                  width={media.width}
+                  blurhash={media.blurhash}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

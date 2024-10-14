@@ -31,7 +31,7 @@ import { FeedViewType } from "~/lib/enum"
 import { getFetchErrorMessage, toastFetchError } from "~/lib/error-parser"
 import { getNewIssueUrl } from "~/lib/issues"
 import { cn } from "~/lib/utils"
-import type { FeedModel } from "~/models"
+import type { EntryModelSimple, FeedModel } from "~/models"
 import { feed as feedQuery, useFeed } from "~/queries/feed"
 import { subscription as subscriptionQuery } from "~/queries/subscriptions"
 import { useFeedByIdOrUrl } from "~/store/feed"
@@ -94,6 +94,7 @@ export const FeedForm: Component<{
             asWidget,
             onSuccess,
             subscriptionData: feedQuery.data?.subscription,
+            entries: feedQuery.data?.entries,
             feed,
           }}
         />
@@ -165,6 +166,7 @@ const FeedInnerForm = ({
   onSuccess,
   subscriptionData,
   feed,
+  entries,
 }: {
   defaultValues?: z.infer<typeof formSchema>
   id?: string
@@ -177,6 +179,7 @@ const FeedInnerForm = ({
     title?: string | null
   }
   feed: FeedModel
+  entries?: EntryModelSimple[]
 }) => {
   const subscription = useSubscriptionByFeedId(id || "") || subscriptionData
   const isSubscribed = !!subscription
@@ -281,7 +284,12 @@ const FeedInnerForm = ({
               <FormItem>
                 <FormLabel>{t("feed_form.view")}</FormLabel>
 
-                <ViewSelectorRadioGroup {...form.register("view")} />
+                <ViewSelectorRadioGroup
+                  {...form.register("view")}
+                  entries={entries}
+                  feed={feed}
+                  view={Number(form.getValues("view"))}
+                />
                 <FormMessage />
               </FormItem>
             )}

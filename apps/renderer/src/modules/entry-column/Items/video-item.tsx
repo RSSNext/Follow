@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react"
 
 import { AudioPlayer } from "~/atoms/player"
 import { m } from "~/components/common/Motion"
+import { FeedIcon } from "~/components/feed-icon"
+import { RelativeTime } from "~/components/ui/datetime"
 import { Media } from "~/components/ui/media"
 import type { ModalContentComponent } from "~/components/ui/modal"
 import { useModalStack } from "~/components/ui/modal"
@@ -16,7 +18,7 @@ import { useEntry } from "~/store/entry/hooks"
 
 import { ReactVirtuosoItemPlaceholder } from "../../../components/ui/placeholder"
 import { GridItem } from "../templates/grid-item-template"
-import type { UniversalItemProps } from "../types"
+import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
 
 const ViewTag = IN_ELECTRON ? "webview" : "iframe"
 
@@ -129,6 +131,52 @@ const PreviewVideoModalContent: ModalContentComponent<{
     <m.div exit={{ scale: 0.94, opacity: 0 }} className="size-full p-12" onClick={() => dismiss()}>
       <ViewTag src={src} className="size-full" />
     </m.div>
+  )
+}
+
+export function VideoItemStateLess({ entry, feed }: EntryItemStatelessProps) {
+  return (
+    <div className="relative mx-auto w-full max-w-lg rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
+      <div className="relative">
+        <div className="p-1.5">
+          <div className="w-full">
+            <div className="overflow-x-auto">
+              {entry.media?.[0] ? (
+                <Media
+                  thumbnail
+                  src={entry.media[0].url}
+                  type={entry.media[0].type}
+                  previewImageUrl={entry.media[0].preview_image_url}
+                  className="aspect-video w-full shrink-0 overflow-hidden"
+                  mediaContainerClassName={"w-auto h-auto rounded"}
+                  loading="lazy"
+                  proxy={{
+                    width: 0,
+                    height: 0,
+                  }}
+                  height={entry.media[0].height}
+                  width={entry.media[0].width}
+                  blurhash={entry.media[0].blurhash}
+                />
+              ) : (
+                <Skeleton className="aspect-video w-full shrink-0 overflow-hidden" />
+              )}
+            </div>
+          </div>
+          <div className="relative flex-1 px-2 pb-3 pt-1 text-sm">
+            <div className="relative mb-1 mt-1.5 truncate font-medium leading-none">
+              {entry.title}
+            </div>
+            <div className="mt-1 flex items-center gap-1 truncate text-[13px]">
+              <FeedIcon feed={feed} fallback className="size-4" />
+              <span>{feed.title}</span>
+              <span className="text-zinc-500">·</span>
+              {!!entry.publishedAt && <RelativeTime date={entry.publishedAt} />}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
