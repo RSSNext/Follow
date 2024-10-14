@@ -5,7 +5,8 @@ interface ImportMetaEnv {
   VITE_API_URL: string
   VITE_IMGPROXY_URL: string
   VITE_SENTRY_DSN: string
-  VITE_POSTHOG_KEY: string
+  VITE_OPENPANEL_CLIENT_ID: string
+  VITE_OPENPANEL_API_URL: string
   VITE_FIREBASE_CONFIG: string
 }
 

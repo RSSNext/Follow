@@ -79,7 +79,7 @@ export const useClaimWalletDailyRewardMutation = () => {
     onSuccess() {
       wallet.get().invalidate()
       wallet.claimCheck().invalidate()
-      window.posthog?.capture("daily_reward_claimed")
+      window.analytics?.capture("daily_reward_claimed")
 
       toast(
         <div className="flex items-center gap-1 text-lg" onClick={() => navigate("/power")}>
@@ -108,7 +108,7 @@ export const useWalletTipMutation = () =>
     onSuccess(_, variables) {
       wallet.get().invalidate()
       wallet.transactions.get().invalidate()
-      window.posthog?.capture("tip_sent", {
+      window.analytics?.capture("tip_sent", {
         amount: variables.amount,
         entryId: variables.entryId,
       })

@@ -45,7 +45,7 @@ export const SearchCmdK: React.FC = () => {
   React.useEffect(() => {
     if (!open) return
 
-    window.posthog?.capture("search_open")
+    window.analytics?.capture("search_open")
     // Refresh data
     setPage(0)
     setSearchInstance(() => searchActions.createLocalDbSearch())
