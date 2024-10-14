@@ -13,7 +13,7 @@ export const ViewSelectorRadioGroup = forwardRef<
   {
     entries?: EntryModelSimple[]
     feed?: FeedModel
-    view: number
+    view?: number
   } & React.InputHTMLAttributes<HTMLInputElement>
 >(({ entries, feed, view, className, ...rest }, ref) => {
   const t = useI18n()
