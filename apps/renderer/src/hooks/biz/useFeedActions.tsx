@@ -38,6 +38,7 @@ export const useFeedActions = ({
 }) => {
   const { t } = useTranslation()
   const feed = useFeedById(feedId)
+  const isInbox = feed?.type === "inbox"
   const subscription = useSubscriptionByFeedId(feedId)
   const { present } = useModalStack()
   const deleteSubscription = useDeleteSubscription({})
@@ -91,6 +92,7 @@ export const useFeedActions = ({
       {
         type: "text" as const,
         label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
+        disabled: isInbox,
         submenu: [
           ...listByView.map((list) => {
             const isIncluded = list.feedIds.includes(feedId)
@@ -150,13 +152,14 @@ export const useFeedActions = ({
           ? t("sidebar.feed_actions.unfollow_feed")
           : t("sidebar.feed_actions.unfollow"),
         shortcut: "Meta+Backspace",
+        disabled: isInbox,
         click: () => deleteSubscription.mutate(subscription),
       },
       {
         type: "text" as const,
         label: t("sidebar.feed_actions.navigate_to_feed"),
         shortcut: "Meta+G",
-        disabled: !isEntryList || getRouteParams().feedId === feedId,
+        disabled: isInbox || !isEntryList || getRouteParams().feedId === feedId,
         click: () => {
           navigateEntry({ feedId })
         },
