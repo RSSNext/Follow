@@ -1,7 +1,7 @@
-import { WEB_URL } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 
 import { FeedIcon } from "~/components/feed-icon"
+import { UrlBuilder } from "~/lib/url-builder"
 import { cn } from "~/lib/utils"
 import type { FeedOrListRespModel } from "~/models"
 
@@ -24,9 +24,9 @@ export function FollowSummary({
 
   switch (feed.type) {
     case "list": {
-      siteLink = `${WEB_URL}/list/${feed.id}`
+      siteLink = UrlBuilder.shareList(feed.id)
       feedLink = siteLink
-      feedText = `/list/${feed.id}`
+      feedText = UrlBuilder.shareList(feed.id)
       break
     }
     case "inbox": {

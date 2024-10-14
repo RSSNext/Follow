@@ -1,4 +1,4 @@
-import { IN_ELECTRON, WEB_URL } from "@follow/shared/constants"
+import { IN_ELECTRON } from "@follow/shared/constants"
 import { env } from "@follow/shared/env"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
@@ -7,6 +7,7 @@ import { whoami } from "~/atoms/user"
 import { useModalStack } from "~/components/ui/modal"
 import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
+import { UrlBuilder } from "~/lib/url-builder"
 import { isBizId } from "~/lib/utils"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
@@ -175,7 +176,7 @@ export const useFeedActions = ({
         }),
         disabled: isEntryList,
         shortcut: "O",
-        click: () => window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank"),
+        click: () => window.open(UrlBuilder.shareFeed(feedId, view), "_blank"),
       },
       {
         type: "text" as const,
@@ -298,7 +299,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
         }),
         disabled: false,
         shortcut: "O",
-        click: () => window.open(`${WEB_URL}/list/${listId}?view=${view}`, "_blank"),
+        click: () => window.open(UrlBuilder.shareList(listId, view), "_blank"),
       },
 
       {
@@ -311,8 +312,7 @@ export const useListActions = ({ listId, view }: { listId: string; view: FeedVie
         disabled: false,
         shortcut: "Meta+C",
         click: () => {
-          const url = `${WEB_URL}/list/${listId}?view=${view}`
-          navigator.clipboard.writeText(url)
+          navigator.clipboard.writeText(UrlBuilder.shareList(listId, view))
         },
       },
       {
