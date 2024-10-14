@@ -50,8 +50,8 @@ export const ModalInternal = memo(
       item: ModalProps & { id: string }
       index: number
 
-      isTop: boolean
-      isBottom: boolean
+      isTop?: boolean
+      isBottom?: boolean
       overlayOptions?: ModalOverlayOptions
       onClose?: (open: boolean) => void
     } & PropsWithChildren
