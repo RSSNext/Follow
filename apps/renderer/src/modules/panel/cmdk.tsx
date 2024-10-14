@@ -11,6 +11,7 @@ import { LoadMoreIndicator } from "~/components/common/LoadMoreIndicator"
 import { FeedIcon } from "~/components/feed-icon"
 import { EmptyIcon } from "~/components/icons/empty"
 import { Logo } from "~/components/icons/logo"
+import { useModalStack } from "~/components/ui/modal"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import {
   Select,
@@ -58,6 +59,8 @@ export const SearchCmdK: React.FC = () => {
   const dialogRef = React.useRef<HTMLDivElement>(null)
   const scrollViewRef = React.useRef<HTMLDivElement>(null)
 
+  const { getTopModalStack } = useModalStack()
+
   React.useEffect(() => {
     const $input = inputRef.current
     if (open && $input) {
@@ -71,7 +74,7 @@ export const SearchCmdK: React.FC = () => {
     (e) => {
       const $input = inputRef.current
 
-      if (e.key === "Escape" && !isCompositionRef.current) {
+      if (e.key === "Escape" && !isCompositionRef.current && !getTopModalStack()) {
         setAppSearchOpen(false)
         return
       }
@@ -82,7 +85,7 @@ export const SearchCmdK: React.FC = () => {
         $input?.focus()
       }
     },
-    [isCompositionRef],
+    [getTopModalStack, isCompositionRef],
   )
   const [isPending, startTransition] = React.useTransition()
   const handleSearch = React.useCallback(
