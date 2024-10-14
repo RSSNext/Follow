@@ -108,6 +108,8 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
 
   const title = useMemo(() => guideSteps[step - 1]?.title, [guideSteps, step])
 
+  const [isLottieAnimating, setIsLottieAnimating] = useState(false)
+
   const finishGuide = useCallback(() => {
     settingSyncQueue.replaceRemote().then(() => {
       settings.get().invalidate()
@@ -172,6 +174,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
             </Button>
           )}
           <Button
+            disabled={isLottieAnimating}
             onClick={(e) => {
               if (step <= totalSteps) {
                 setStep((prev) => prev + 1)
@@ -181,13 +184,18 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
 
                 const target = e.target as HTMLElement
                 const { x, y } = target.getBoundingClientRect()
+                setIsLottieAnimating(true)
                 mountLottie(absoluteConfettiUrl, {
                   x: x - 40,
                   y: y - 80,
 
                   height: 120,
                   width: 120,
+
+                  speed: 2,
+
                   onComplete() {
+                    setIsLottieAnimating(false)
                     onClose()
                   },
                 })
