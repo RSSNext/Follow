@@ -177,11 +177,12 @@ export const parseHtml = (
               codeString = props.children.toString()
             } else {
               const propsChildren = props.children
-              let children = Array.isArray(propsChildren)
+              const children = Array.isArray(propsChildren)
                 ? propsChildren.find((i) => i.type === "code")
                 : propsChildren
 
-              if (!children) children = createElement("pre", props, props.children)
+              // Don't process not code block
+              if (!children) return createElement("pre", props, props.children)
 
               if (
                 "type" in children &&
