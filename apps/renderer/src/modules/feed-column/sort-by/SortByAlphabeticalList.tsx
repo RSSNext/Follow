@@ -75,8 +75,8 @@ export const SortByAlphabeticalListList = ({ view, data }: ListListProps) => {
 export const SortByAlphabeticalInboxList = ({ view, data }: ListListProps) => {
   return (
     <div>
-      {Object.keys(data).map((inboxId) => (
-        <InboxItem key={inboxId} inboxId={inboxId} view={view} />
+      {Object.keys(data).map((feedId) => (
+        <InboxItem key={feedId} inboxId={feedId.replace("inbox-", "")} view={view} />
       ))}
     </div>
   )
