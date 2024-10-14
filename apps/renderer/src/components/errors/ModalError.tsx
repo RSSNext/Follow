@@ -9,7 +9,7 @@ import { Button } from "../ui/button"
 import { useCurrentModal } from "../ui/modal"
 import { parseError } from "./helper"
 
-export const ModalErrorFallback: FC<AppErrorFallbackProps> = (props) => {
+const ModalErrorFallback: FC<AppErrorFallbackProps> = (props) => {
   const { message, stack } = parseError(props.error)
   const modal = useCurrentModal()
   return (
@@ -50,3 +50,4 @@ export const ModalErrorFallback: FC<AppErrorFallbackProps> = (props) => {
     </m.div>
   )
 }
+export default ModalErrorFallback
