@@ -4,9 +4,10 @@ import { Trans, useTranslation } from "react-i18next"
 import { Button } from "~/components/ui/button"
 import { Tooltip, TooltipContent } from "~/components/ui/tooltip"
 import { DAILY_CLAIM_AMOUNT } from "~/constants"
+import { Level } from "~/modules/wallet/level"
 import { useClaimCheck, useClaimWalletDailyRewardMutation } from "~/queries/wallet"
 
-export const ClaimDailyReward = () => {
+export const ClaimDailyReward = ({ level }: { level: number }) => {
   const mutation = useClaimWalletDailyRewardMutation()
   const { t } = useTranslation("settings")
 
@@ -23,6 +24,7 @@ export const ClaimDailyReward = () => {
           disabled={!canClaim}
         >
           {canClaim ? t("wallet.claim.button.claim") : t("wallet.claim.button.claimed")}
+          <Level className="ml-3" level={level} hideIcon />
         </Button>
       </TooltipTrigger>
       <TooltipContent>

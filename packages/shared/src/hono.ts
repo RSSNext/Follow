@@ -3923,6 +3923,22 @@ declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        powerToken: drizzle_orm_pg_core.PgColumn<{
+            name: "power_token";
+            tableName: "wallets";
+            dataType: "string";
+            columnType: "PgNumeric";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
         dailyPowerToken: drizzle_orm_pg_core.PgColumn<{
             name: "daily_power_token";
             tableName: "wallets";
@@ -3955,6 +3971,86 @@ declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        rank: drizzle_orm_pg_core.PgColumn<{
+            name: "rank";
+            tableName: "wallets";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        level: drizzle_orm_pg_core.PgColumn<{
+            name: "level";
+            tableName: "wallets";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        preActivePoints: drizzle_orm_pg_core.PgColumn<{
+            name: "pre_active_points";
+            tableName: "wallets";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        activePoints: drizzle_orm_pg_core.PgColumn<{
+            name: "active_points";
+            tableName: "wallets";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        statusUpdatedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "status_updated_at";
+            tableName: "wallets";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -3963,22 +4059,40 @@ declare const walletsOpenAPISchema: zod.ZodObject<{
     address: zod.ZodNullable<zod.ZodString>;
     userId: zod.ZodString;
     createdAt: zod.ZodString;
+    powerToken: zod.ZodString;
     dailyPowerToken: zod.ZodString;
     cashablePowerToken: zod.ZodString;
+    rank: zod.ZodNullable<zod.ZodNumber>;
+    level: zod.ZodNullable<zod.ZodNumber>;
+    preActivePoints: zod.ZodNullable<zod.ZodNumber>;
+    activePoints: zod.ZodNullable<zod.ZodNumber>;
+    statusUpdatedAt: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     createdAt: string;
     userId: string;
     addressIndex: number;
     address: string | null;
+    powerToken: string;
     dailyPowerToken: string;
     cashablePowerToken: string;
+    rank: number | null;
+    level: number | null;
+    preActivePoints: number | null;
+    activePoints: number | null;
+    statusUpdatedAt: string | null;
 }, {
     createdAt: string;
     userId: string;
     addressIndex: number;
     address: string | null;
+    powerToken: string;
     dailyPowerToken: string;
     cashablePowerToken: string;
+    rank: number | null;
+    level: number | null;
+    preActivePoints: number | null;
+    activePoints: number | null;
+    statusUpdatedAt: string | null;
 }>;
 declare const walletsRelations: drizzle_orm.Relations<"wallets", {
     user: drizzle_orm.One<"user", true>;
@@ -4170,10 +4284,10 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     fromUserId: string | null;
     toUserId: string | null;
     hash: string;
+    powerToken: string;
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
-    powerToken: string;
     comment: string | null;
 }, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
@@ -4181,10 +4295,10 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     fromUserId: string | null;
     toUserId: string | null;
     hash: string;
+    powerToken: string;
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
-    powerToken: string;
     comment: string | null;
 }>;
 declare const transactionsRelations: drizzle_orm.Relations<"transactions", {
@@ -4783,10 +4897,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     fromUserId: string | null;
                     toUserId: string | null;
                     hash: string;
+                    powerToken: string;
                     toFeedId: string | null;
                     toListId: string | null;
                     toEntryId: string | null;
-                    powerToken: string;
                     comment: string | null;
                     fromUser?: {
                         name: string | null;
@@ -4903,8 +5017,14 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     userId: string;
                     addressIndex: number;
                     address: string | null;
+                    powerToken: string;
                     dailyPowerToken: string;
                     cashablePowerToken: string;
+                    rank: number | null;
+                    level: number | null;
+                    preActivePoints: number | null;
+                    activePoints: number | null;
+                    statusUpdatedAt: string | null;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -4925,6 +5045,38 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {};
             output: {
                 code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/wallets/ranking": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    user: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    };
+                    createdAt: string;
+                    userId: string;
+                    addressIndex: number;
+                    address: string | null;
+                    powerToken: string;
+                    dailyPowerToken: string;
+                    cashablePowerToken: string;
+                    rank: number | null;
+                    level: number | null;
+                    preActivePoints: number | null;
+                    activePoints: number | null;
+                    statusUpdatedAt: string | null;
+                }[];
             };
             outputFormat: "json" | "text";
             status: 200;

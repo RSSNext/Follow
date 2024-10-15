@@ -112,7 +112,7 @@
   "integration.readwise.enable.description": "Exibir o botão 'Guardar no Readwise' quando disponível.",
   "integration.readwise.enable.label": "Ativar",
   "integration.readwise.title": "Readwise",
-  "integration.readwise.token.description": "Pode obtê-lo aqui: readwise.io/access_token.",
+  "integration.readwise.token.description": "Pode obtê-lo aqui: ",
   "integration.readwise.token.label": "Token de Acesso do Readwise",
   "integration.sidebar_title": "Integração",
   "integration.tip": "Dica: Os seus dados sensíveis são armazenados localmente e não são carregados para o servidor.",
