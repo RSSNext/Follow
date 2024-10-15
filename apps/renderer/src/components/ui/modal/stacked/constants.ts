@@ -18,5 +18,5 @@ export const modalMontionConfig = {
   transition: microReboundPreset,
 }
 
-// Radix context menu z-index 999
-export const MODAL_STACK_Z_INDEX = 1001
+// Radix context menu z-index 10000
+export const MODAL_STACK_Z_INDEX = 10000
