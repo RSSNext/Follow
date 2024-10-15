@@ -48,7 +48,7 @@ export const ViewSelectorRadioGroup = forwardRef<
           </div>
         ))}
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="space-y-2 p-2">
         {!!feed &&
           entries
             ?.slice(0, 2)

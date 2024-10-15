@@ -279,23 +279,6 @@ const FeedInnerForm = ({
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-1 flex-col gap-y-4">
           <FormField
             control={form.control}
-            name="view"
-            render={() => (
-              <FormItem>
-                <FormLabel>{t("feed_form.view")}</FormLabel>
-
-                <ViewSelectorRadioGroup
-                  {...form.register("view")}
-                  entries={entries}
-                  feed={feed}
-                  view={Number(form.getValues("view"))}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="title"
             render={({ field }) => (
               <FormItem>
@@ -359,7 +342,24 @@ const FeedInnerForm = ({
               </FormItem>
             )}
           />
-          <div className="flex flex-1 items-end justify-end gap-4">
+          <FormField
+            control={form.control}
+            name="view"
+            render={() => (
+              <FormItem className="mb-16">
+                <FormLabel>{t("feed_form.view")}</FormLabel>
+
+                <ViewSelectorRadioGroup
+                  {...form.register("view")}
+                  entries={entries}
+                  feed={feed}
+                  view={Number(form.getValues("view"))}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="fixed inset-x-0 bottom-0 flex flex-1 items-end justify-end gap-4 bg-theme-background p-4">
             {isSubscribed && (
               <Button
                 type="button"
