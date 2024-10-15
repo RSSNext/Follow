@@ -398,7 +398,7 @@ const SubscriptionItem: FC<{
             !isLoose && "flex items-center",
           )}
         >
-          <div className="truncate font-medium leading-none">{subscription.feeds?.title}</div>
+          <div className="truncate font-medium leading-tight">{subscription.feeds?.title}</div>
           {isLoose && (
             <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
               {subscription.feeds?.description}

@@ -129,6 +129,7 @@ export function Component() {
             id="login"
             CustomModalComponent={PlainModal}
             open
+            overlay
             title="Login"
             canClose={false}
             clickOutsideToDismiss={false}

@@ -12,7 +12,16 @@ function getSettings() {
     loader: () => SettingPageConfig
   }[]
   for (const path in map) {
-    const p = path.split("/").pop()?.replace(".tsx", "").replace("(settings)", "")!
+    const prefix = "(settings)"
+    const postfix = ".tsx"
+    const lastItem = path.split("/").pop()
+
+    if (!lastItem) continue
+    let p = lastItem.slice(0, -postfix.length)
+
+    if (p.includes(prefix)) {
+      p = p.replace(prefix, "")
+    }
 
     if (p === "index" || p === "layout") continue
 

@@ -46,12 +46,12 @@ export const EntryListHeader: FC<{
 
   const titleInfo = !!headerTitle && (
     <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
-      <div className="h-6 min-w-0 break-all text-lg font-bold leading-tight">
+      <div className="mt-1 h-6 min-w-0 break-all text-lg font-bold leading-tight">
         <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
           <span className="relative -top-px">{headerTitle}</span>
         </EllipsisHorizontalTextWithTooltip>
       </div>
-      <div className="text-xs font-medium leading-none text-zinc-400">
+      <div className="whitespace-nowrap text-xs font-medium leading-none text-zinc-400">
         {totalCount || 0} {t("quantifier.piece", { ns: "common" })}
         {unreadOnly && !isInCollectionList ? t("words.unread") : ""}
         {t("space", { ns: "common" })}

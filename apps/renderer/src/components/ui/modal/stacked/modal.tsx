@@ -24,7 +24,6 @@ import { AppErrorBoundary } from "~/components/common/AppErrorBoundary"
 import { SafeFragment } from "~/components/common/Fragment"
 import { m } from "~/components/common/Motion"
 import { ErrorComponentType } from "~/components/errors/enum"
-import { resizableOnly } from "~/components/ui/modal"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT, isElectronBuild } from "~/constants"
 import { useSwitchHotKeyScope } from "~/hooks/common"
 import { nextFrame, stopPropagation } from "~/lib/dom"
@@ -51,11 +50,15 @@ export const ModalInternal = memo(
       item: ModalProps & { id: string }
       index: number
 
-      isTop: boolean
+      isTop?: boolean
+      isBottom?: boolean
       overlayOptions?: ModalOverlayOptions
       onClose?: (open: boolean) => void
     } & PropsWithChildren
-  >(function Modal({ item, overlayOptions, onClose: onPropsClose, children, isTop }, ref) {
+  >(function Modal(
+    { item, overlayOptions, onClose: onPropsClose, children, isTop, isBottom },
+    ref,
+  ) {
     const {
       CustomModalComponent,
       modalClassName,
@@ -273,7 +276,7 @@ export const ModalInternal = memo(
       <ModalOverlay
         blur={overlayOptions?.blur}
         className={cn(overlayOptions?.className, {
-          hidden: item.overlay ? false : !modalSettingOverlay,
+          invisible: item.overlay ? false : !(modalSettingOverlay && isBottom),
         })}
       />
     )
@@ -371,7 +374,7 @@ export const ModalInternal = memo(
                   }}
                 >
                   <ResizeSwitch
-                    enable={resizableOnly("bottomRight")}
+                    // enable={resizableOnly("bottomRight")}
                     onResizeStart={handleResizeStart}
                     onResizeStop={handleResizeStop}
                     defaultSize={resizeDefaultSize}

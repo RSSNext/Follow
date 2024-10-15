@@ -1,4 +1,3 @@
-import { WEB_URL } from "@follow/shared/constants"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
@@ -20,6 +19,7 @@ import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/compon
 import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
+import { UrlBuilder } from "~/lib/url-builder"
 import { cn } from "~/lib/utils"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
@@ -90,7 +90,7 @@ export const SettingLists = () => {
                     <TableCell size="sm">
                       <a
                         target="_blank"
-                        href={`${WEB_URL}/list/${row.id}`}
+                        href={UrlBuilder.shareList(row.id)}
                         className="inline-flex items-center gap-2 font-semibold"
                       >
                         {row.image && (

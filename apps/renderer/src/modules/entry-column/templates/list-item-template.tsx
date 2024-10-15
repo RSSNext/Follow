@@ -1,4 +1,3 @@
-import { env } from "@follow/shared/env"
 import { useDebounceCallback } from "usehooks-ts"
 
 import { AudioPlayer, useAudioPlayerAtomSelector } from "~/atoms/player"
@@ -13,6 +12,7 @@ import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { FEED_COLLECTION_LIST } from "~/constants"
 import { useAsRead } from "~/hooks/biz/useAsRead"
 import { useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
+import { UrlBuilder } from "~/lib/url-builder"
 import { cn, isSafari } from "~/lib/utils"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { EntryTranslation } from "~/modules/entry-column/translation"
@@ -55,9 +55,10 @@ export function ListItem({
     { leading: false },
   )
 
-  const isSubscription = withFollow && entry?.entries.url?.startsWith(`${env.VITE_WEB_URL}/feed/`)
+  const isSubscription =
+    withFollow && entry?.entries.url?.startsWith(UrlBuilder.shareFeed(entry.feedId))
   const feedId = isSubscription
-    ? entry?.entries.url?.replace(`${env.VITE_WEB_URL}/feed/`, "")
+    ? entry?.entries.url?.slice(UrlBuilder.shareFeed(entry.feedId).length)
     : undefined
   const isFollowed = !!useSubscriptionStore((state) => feedId && state.data[feedId])
   const { present } = useModalStack()

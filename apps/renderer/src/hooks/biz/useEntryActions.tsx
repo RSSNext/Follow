@@ -138,6 +138,7 @@ export const useEntryActions = ({
   const { t } = useTranslation()
 
   const feed = useFeedById(entry?.feedId)
+  const isInbox = feed?.type === "inbox"
 
   const populatedEntry = useMemo(() => {
     if (!entry) return null
@@ -374,7 +375,7 @@ export const useEntryActions = ({
         shortcut: shortcuts.entry.tip.key,
         name: t("entry_actions.tip"),
         className: "i-mgc-power-outline",
-        hide: feed?.ownerUserId === whoami()?.id,
+        hide: isInbox || feed?.ownerUserId === whoami()?.id,
         onClick: () => {
           nextFrame(openTipModal)
         },

@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [0.0.1-alpha.20](https://github.com/RSSNext/follow/compare/v0.0.1-alpha.19...v0.0.1-alpha.20) (2024-10-12)
+## [0.0.1-alpha.21](https://github.com/RSSNext/follow/compare/v0.0.1-alpha.19...v0.0.1-alpha.21) (2024-10-12)
 
 
 ### Bug Fixes
@@ -17,6 +17,7 @@
 * accept import opml ([39ecc82](https://github.com/RSSNext/follow/commit/39ecc82a8ceecd77139ffccb31a33904082a3d1b))
 * **achievement:** loading button style ([96bb514](https://github.com/RSSNext/follow/commit/96bb51425427864bc4e77b75808271371839c57a))
 * add app version on posthog ([9933463](https://github.com/RSSNext/follow/commit/99334639e28b2a2a17b9c3fdd64f0d6d37bdd181))
+* add aria-describedby to modal content ([bb463a3](https://github.com/RSSNext/follow/commit/bb463a311fe020d079ed021489239a9141246a48))
 * add bg when context menu trigger, fix [#389](https://github.com/RSSNext/follow/issues/389) ([53f3185](https://github.com/RSSNext/follow/commit/53f3185e7955d1a72912905d8565c5efb0a0bda0))
 * add copy image in electron, fix [#317](https://github.com/RSSNext/follow/issues/317) ([466e0b7](https://github.com/RSSNext/follow/commit/466e0b78ccc5df66ab11a1e71a800e70c9b34312))
 * add db index ([a888a78](https://github.com/RSSNext/follow/commit/a888a789e10ecd8b3fab713e859bfe9f56bfe0ad))
@@ -246,6 +247,7 @@
 * improve proxy URI handling ([#810](https://github.com/RSSNext/follow/issues/810)) ([e7e930d](https://github.com/RSSNext/follow/commit/e7e930d1771e19d909433021d6757eabb44de73f))
 * inbox data refreshment ([a3a7c82](https://github.com/RSSNext/follow/commit/a3a7c82ea6308756a800514d9df528815ba77781))
 * incorrect tooltip in read history ([#385](https://github.com/RSSNext/follow/issues/385)) ([cabe210](https://github.com/RSSNext/follow/commit/cabe210aaf8f4a1133fa653532874fa86d02c252))
+* init store after app init ([728ea84](https://github.com/RSSNext/follow/commit/728ea84fa6e9faff1990184285390a1d86eb2c56))
 * inline table style ([5837bd4](https://github.com/RSSNext/follow/commit/5837bd4089b59855d0b583aed5d0e97fce04e094))
 * input box table style ([e0890d5](https://github.com/RSSNext/follow/commit/e0890d5b388facd1f9c16ac706a32f0aa2efdef5))
 * Input issues fixed [#535](https://github.com/RSSNext/follow/issues/535),[#536](https://github.com/RSSNext/follow/issues/536) ([3d48637](https://github.com/RSSNext/follow/commit/3d486379b91dff13bfbcc90532efd3e186405a13))
@@ -254,6 +256,7 @@
 * invitation page error display area ([5915357](https://github.com/RSSNext/follow/commit/59153573d8a5d368adfe41b0f5cebc4d6d44a9f3))
 * **invitation:** reset app data then logout ([5933cea](https://github.com/RSSNext/follow/commit/5933ceab63de0a7a46e85d0b841acbf893d8fcec))
 * **item:** center content if no desc ([18e26a4](https://github.com/RSSNext/follow/commit/18e26a41c3cf80316bc97c44a1239e6ec45c5db9))
+* json parse for env VITE_FIREBASE_CONFIG ([b2916bd](https://github.com/RSSNext/follow/commit/b2916bd8b81d02e1f5b673ed34c7f0f181d641c2))
 * kbd cls and set home scope in shortcuts guideline ([d9999a3](https://github.com/RSSNext/follow/commit/d9999a3fc6cfeae0f3b45b6390cf79d9135566b7))
 * lang/*.json ([#526](https://github.com/RSSNext/follow/issues/526)) ([be3b2e7](https://github.com/RSSNext/follow/commit/be3b2e7503c1061a1e312394bb0c3556e39ec062))
 * language setting syncing ([fa1dc5d](https://github.com/RSSNext/follow/commit/fa1dc5df35a2225bb22320a8fc049d3c0b75fa5b))
@@ -507,6 +510,7 @@
 * user modal list padding ([992ea15](https://github.com/RSSNext/follow/commit/992ea1594af02e3815adae2fe99de4f205543239))
 * user profile can not scroll by scrollbar ([eac1965](https://github.com/RSSNext/follow/commit/eac1965cfc3d2bc86e11f256237322f15892b897))
 * userActions in feed store ([8da4fb7](https://github.com/RSSNext/follow/commit/8da4fb71d9cc14832bc985cf8c1bd6f04dbe4e4c))
+* **vercel:** filter subpath ([fc38072](https://github.com/RSSNext/follow/commit/fc38072320f8225e6ae60f4e25719eaeb9ff5e6a))
 * video preview ([e38820c](https://github.com/RSSNext/follow/commit/e38820c1aa2294f45e05d331bf4bce0e4d8efb44))
 * view icon color in dark mode ([991bff7](https://github.com/RSSNext/follow/commit/991bff7660e93b872f1398c89c0fe4316f4327d9))
 * view source content in picture view ([16938f6](https://github.com/RSSNext/follow/commit/16938f60786f8496152361405c0fcff4635f7d59))
@@ -522,6 +526,7 @@
 * windows maximize will lost frame and background material ([2bd0e78](https://github.com/RSSNext/follow/commit/2bd0e78e4f859d9c98f53f748c9871a41348db1c))
 * windows multi-display ([7490cd1](https://github.com/RSSNext/follow/commit/7490cd12d0e42a7f41931acd9d77bf64be39a26d))
 * windows sep, fixes [#741](https://github.com/RSSNext/follow/issues/741) ([9b1de77](https://github.com/RSSNext/follow/commit/9b1de775d2157606c30c4ece3287a42e1e9463a3))
+* windows web mark all read ui ([#908](https://github.com/RSSNext/follow/issues/908)) ([45b4bd8](https://github.com/RSSNext/follow/commit/45b4bd8085377e8178b6804c0718726ecc15145b))
 * **windows:** dont remove locale ([7305eba](https://github.com/RSSNext/follow/commit/7305eba3fee218330818d96ca155f833aa99d631))
 * **windows:** skip remove locle ([5df82d0](https://github.com/RSSNext/follow/commit/5df82d0c0f98bebb6e78a694a6ceda3644eb36ef))
 * withdraw availableBalance ([167d82a](https://github.com/RSSNext/follow/commit/167d82adc061078102fa9984d29f94735d052ce9))
@@ -541,6 +546,7 @@
 * add biz code i18n for fr and ru ([#521](https://github.com/RSSNext/follow/issues/521)) ([0dc4b86](https://github.com/RSSNext/follow/commit/0dc4b866d7eff2d32df2158902d6d1fbdea41f27))
 * add biz code i18n for zh-cn ([#503](https://github.com/RSSNext/follow/issues/503)) ([d35e011](https://github.com/RSSNext/follow/commit/d35e0119953a154d18273c1d155f14d03c9a6ce8))
 * add biz user info on sentry tracker ([e3e52ab](https://github.com/RSSNext/follow/commit/e3e52abedeb5507ca71d663faa7ef050b661cf0a))
+* add bundleId to PushReceiver ([f196493](https://github.com/RSSNext/follow/commit/f196493b68a84489de93ac0c3944b039c79f25c0))
 * add copy title to context menu of feed entry ([#801](https://github.com/RSSNext/follow/issues/801)) ([1f57ab2](https://github.com/RSSNext/follow/commit/1f57ab2ac76ef04aff37814b4c7e961ad33b6e11))
 * add discover back to top fab ([a97e60c](https://github.com/RSSNext/follow/commit/a97e60cd005ca7ebb5aed56655b94975ebf1ccb7))
 * add divider when sticky for date item ([755e292](https://github.com/RSSNext/follow/commit/755e292af05c3adeae8943cc5c4c05af11d30d16))
@@ -705,6 +711,7 @@
 * new power page ([c3630f8](https://github.com/RSSNext/follow/commit/c3630f85bd221ecf875b20337e5c6a452c613362))
 * no media available tip in picture item ([1d4fca4](https://github.com/RSSNext/follow/commit/1d4fca4e7d0e7c6f02f1ac775f36079ef5ce1129))
 * no media available tip in picture item ([58d9b3b](https://github.com/RSSNext/follow/commit/58d9b3b1b09f52def911521c08d9835f31221401))
+* notifications logger ([97041ab](https://github.com/RSSNext/follow/commit/97041abab5f0846249343de07f592ba6fc421870))
 * only closing window can trigger query invalidation ([a8e48f4](https://github.com/RSSNext/follow/commit/a8e48f493127104035e9537e0461c4a40e2dc339))
 * only show has media entry item in picture view ([f7dedf2](https://github.com/RSSNext/follow/commit/f7dedf2b27f2597a49e9381af5581b6d0550421b))
 * optimize 404 page ([f51b1e2](https://github.com/RSSNext/follow/commit/f51b1e2de9e8d8c3bdea9db79476c17cd7247a4b))
@@ -763,6 +770,7 @@
 * support pageup/pagedown to scroll up/down ([6e0c3bc](https://github.com/RSSNext/follow/commit/6e0c3bc5e3e2437a51fa991940b4e4496ed2bb75))
 * support setting proxy for app ([#452](https://github.com/RSSNext/follow/issues/452)) ([cfd5275](https://github.com/RSSNext/follow/commit/cfd527545ade50a529698bdd57ec16d0f3ccee98))
 * support shortcut to toggle wide mode ([b7a054f](https://github.com/RSSNext/follow/commit/b7a054f3132079693f0d93a65eb236c95920bcb8))
+* support specific import for web and electron ([9a84a29](https://github.com/RSSNext/follow/commit/9a84a293967d5d415e86041c7a586846519def5f))
 * support toc parser ([fb4ca52](https://github.com/RSSNext/follow/commit/fb4ca522440aced4d2aa18fda2a9d5c43e32d0d1))
 * sync indicator when disable ([945ddda](https://github.com/RSSNext/follow/commit/945dddae2534f07e5289e307c36de1f8334636bc))
 * tiny styles ([78bcc55](https://github.com/RSSNext/follow/commit/78bcc5562baa12cece51da6564b77c6f37a1596c))

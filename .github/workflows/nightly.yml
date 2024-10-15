@@ -10,6 +10,7 @@ env:
   VITE_IMGPROXY_URL: ${{ vars.VITE_IMGPROXY_URL }}
   VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
   VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}
+  VITE_FIREBASE_CONFIG: ${{ vars.VITE_FIREBASE_CONFIG }}
   NODE_OPTIONS: --max-old-space-size=8192
 
 jobs:

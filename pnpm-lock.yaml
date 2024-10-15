@@ -9,9 +9,9 @@ overrides:
   isarray: npm:@nolyfill/isarray@^1
 
 patchedDependencies:
-  '@mozilla/readability@0.5.0':
-    hash: fgkvsbckled47trggkhdkimzbm
-    path: patches/@mozilla__readability@0.5.0.patch
+  '@mozilla/readability':
+    hash: 43niildbdafdxi7qfcwhpkkxwa
+    path: patches/@mozilla__readability.patch
   electron-context-menu:
     hash: c53at4t5fflixuwjz35hmcqdu4
     path: patches/electron-context-menu.patch
@@ -88,7 +88,7 @@ importers:
         version: 4.3.1
       '@mozilla/readability':
         specifier: ^0.5.0
-        version: 0.5.0(patch_hash=fgkvsbckled47trggkhdkimzbm)
+        version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       '@pengx17/electron-forge-maker-appimage':
         specifier: 1.2.1
         version: 1.2.1(dmg-builder@25.0.5(electron-builder-squirrel-windows@25.0.5))(electron-builder-squirrel-windows@25.0.5(dmg-builder@25.0.5))
@@ -155,6 +155,9 @@ importers:
       fake-indexeddb:
         specifier: 6.0.0
         version: 6.0.0
+      happy-dom:
+        specifier: 15.7.4
+        version: 15.7.4
       hono:
         specifier: 4.6.3
         version: 4.6.3(patch_hash=iej2g43ojhll5opwbnvyorjq4e)
@@ -214,7 +217,7 @@ importers:
         version: 5.0.1(typescript@5.6.2)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
       vitest:
         specifier: 2.0.5
-        version: 2.0.5(@types/node@22.7.4)(terser@5.34.1)
+        version: 2.0.5(@types/node@22.7.4)(happy-dom@15.7.4)(terser@5.34.1)
 
   apps/main:
     dependencies:
@@ -235,7 +238,7 @@ importers:
         version: link:../../packages/shared
       '@mozilla/readability':
         specifier: ^0.5.0
-        version: 0.5.0(patch_hash=fgkvsbckled47trggkhdkimzbm)
+        version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       '@sentry/electron':
         specifier: 5.4.0
         version: 5.4.0
@@ -350,7 +353,7 @@ importers:
         version: 4.3.1
       '@mozilla/readability':
         specifier: ^0.5.0
-        version: 0.5.0(patch_hash=fgkvsbckled47trggkhdkimzbm)
+        version: 0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)
       '@radix-ui/react-avatar':
         specifier: 1.1.0
         version: 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.10)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -489,6 +492,9 @@ importers:
       jotai:
         specifier: 2.10.0
         version: 2.10.0(@types/react@18.3.10)(react@18.3.1)
+      katex:
+        specifier: 0.16.11
+        version: 0.16.11
       lethargy:
         specifier: 1.0.9
         version: 1.0.9
@@ -619,6 +625,9 @@ importers:
       '@hono/node-server':
         specifier: 1.13.1
         version: 1.13.1(hono@4.6.3(patch_hash=iej2g43ojhll5opwbnvyorjq4e))
+      '@types/katex':
+        specifier: 0.16.7
+        version: 0.16.7
       '@types/lodash-es':
         specifier: 4.17.12
         version: 4.17.12
@@ -642,7 +651,7 @@ importers:
         version: 18.3.1(react@18.3.1)
       vitest:
         specifier: '2.0'
-        version: 2.0.5(@types/node@22.7.4)(terser@5.34.1)
+        version: 2.0.5(@types/node@22.7.4)(happy-dom@15.7.4)(terser@5.34.1)
 
   packages/shared:
     dependencies:
@@ -3602,6 +3611,9 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
+  '@types/katex@0.16.7':
+    resolution: {integrity: sha512-HMwFiRujE5PjrgwHQ25+bsLJgowjGjm5Z8FVSf0N6PwgJrwxH0QxzHYDcKsTfV3wva0vzrpqMTJS2jXPr5BMEQ==}
+
   '@types/keyv@3.1.4':
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
 
@@ -4401,6 +4413,10 @@ packages:
   commander@7.2.0:
     resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
     engines: {node: '>= 10'}
+
+  commander@8.3.0:
+    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
+    engines: {node: '>= 12'}
 
   commander@9.5.0:
     resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
@@ -5672,6 +5688,10 @@ packages:
     engines: {node: '>=0.4.7'}
     hasBin: true
 
+  happy-dom@15.7.4:
+    resolution: {integrity: sha512-r1vadDYGMtsHAAsqhDuk4IpPvr6N8MGKy5ntBo7tSdim+pWDxus2PNqOcOt8LuDZ4t3KJHE+gCuzupcx/GKnyQ==}
+    engines: {node: '>=18.0.0'}
+
   has-flag@3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
     engines: {node: '>=4'}
@@ -6182,6 +6202,10 @@ packages:
 
   jws@3.2.2:
     resolution: {integrity: sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==}
+
+  katex@0.16.11:
+    resolution: {integrity: sha512-RQrI8rlHY92OLf3rho/Ts8i/XvjgguEjOkO1BEXcU3N8BqPpSzBNwV/G0Ukr+P/l3ivvJUE/Fa/CwbS6HesGNQ==}
+    hasBin: true
 
   keycode@2.2.1:
     resolution: {integrity: sha512-Rdgz9Hl9Iv4QKi8b0OlCRQEzp4AgVxyCtz5S/+VIHezDmrDhkp2N2TqBWOLz0/gbeREXOOiI9/4b8BY9uw2vFg==}
@@ -8760,6 +8784,10 @@ packages:
   webidl-conversions@4.0.2:
     resolution: {integrity: sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==}
 
+  webidl-conversions@7.0.0:
+    resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
+    engines: {node: '>=12'}
+
   webpack-sources@3.2.3:
     resolution: {integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==}
     engines: {node: '>=10.13.0'}
@@ -8770,6 +8798,10 @@ packages:
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
+
+  whatwg-mimetype@3.0.0:
+    resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
+    engines: {node: '>=12'}
 
   whatwg-mimetype@4.0.0:
     resolution: {integrity: sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg==}
@@ -10768,7 +10800,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@mozilla/readability@0.5.0(patch_hash=fgkvsbckled47trggkhdkimzbm)': {}
+  '@mozilla/readability@0.5.0(patch_hash=43niildbdafdxi7qfcwhpkkxwa)': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -12467,6 +12499,8 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
+  '@types/katex@0.16.7': {}
+
   '@types/keyv@3.1.4':
     dependencies:
       '@types/node': 22.7.4
@@ -13517,6 +13551,8 @@ snapshots:
   commander@5.1.0: {}
 
   commander@7.2.0: {}
+
+  commander@8.3.0: {}
 
   commander@9.5.0: {}
 
@@ -15116,6 +15152,12 @@ snapshots:
     optionalDependencies:
       uglify-js: 3.19.2
 
+  happy-dom@15.7.4:
+    dependencies:
+      entities: 4.5.0
+      webidl-conversions: 7.0.0
+      whatwg-mimetype: 3.0.0
+
   has-flag@3.0.0: {}
 
   has-flag@4.0.0: {}
@@ -15684,6 +15726,10 @@ snapshots:
     dependencies:
       jwa: 1.4.1
       safe-buffer: 5.2.1
+
+  katex@0.16.11:
+    dependencies:
+      commander: 8.3.0
 
   keycode@2.2.1: {}
 
@@ -18570,7 +18616,7 @@ snapshots:
       fsevents: 2.3.3
       terser: 5.34.1
 
-  vitest@2.0.5(@types/node@22.7.4)(terser@5.34.1):
+  vitest@2.0.5(@types/node@22.7.4)(happy-dom@15.7.4)(terser@5.34.1):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.5
@@ -18593,6 +18639,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.7.4
+      happy-dom: 15.7.4
     transitivePeerDependencies:
       - less
       - lightningcss
@@ -18617,6 +18664,8 @@ snapshots:
 
   webidl-conversions@4.0.2: {}
 
+  webidl-conversions@7.0.0: {}
+
   webpack-sources@3.2.3: {}
 
   webpack-virtual-modules@0.5.0: {}
@@ -18624,6 +18673,8 @@ snapshots:
   whatwg-encoding@3.1.1:
     dependencies:
       iconv-lite: 0.6.3
+
+  whatwg-mimetype@3.0.0: {}
 
   whatwg-mimetype@4.0.0: {}
 

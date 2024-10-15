@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   VITE_IMGPROXY_URL: string
   VITE_SENTRY_DSN: string
   VITE_POSTHOG_KEY: string
+  VITE_FIREBASE_CONFIG: string
 }
 
 interface ImportMeta {
