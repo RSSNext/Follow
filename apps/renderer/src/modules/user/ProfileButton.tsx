@@ -8,6 +8,7 @@ import { useSignOut } from "~/hooks/biz/useSignOut"
 import { useMeasure } from "~/hooks/common"
 import { nextFrame } from "~/lib/dom"
 import { cn } from "~/lib/utils"
+import type { WalletModel } from "~/models"
 import { useAchievementModal } from "~/modules/achievement/hooks"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { useSettingModal } from "~/modules/settings/modal/hooks"
@@ -25,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu/dropdown-menu"
 import { RootPortal } from "../../components/ui/portal"
+import { Level } from "../wallet/level"
 import type { LoginProps } from "./LoginButton"
 import { LoginButton } from "./LoginButton"
 import { UserAvatar } from "./UserAvatar"
@@ -41,6 +43,10 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   const [dropdown, setDropdown] = useState(false)
 
   const navigate = useNavigate()
+
+  const wallet = useWallet()
+  const { isLoading: isLoadingWallet } = wallet
+  const myWallet = wallet.data?.[0]
 
   if (status !== "authenticated") {
     return <LoginButton {...props} />
@@ -74,8 +80,8 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             }}
           >
             <div className="flex w-full items-center justify-between gap-6 px-1.5 font-semibold">
-              <PowerButton />
-              <LevelButton />
+              <PowerButton isLoading={isLoadingWallet} myWallet={myWallet} />
+              <Level level={myWallet?.level || 0} isLoading={isLoadingWallet} />
             </div>
           </DropdownMenuItem>
 
@@ -197,31 +203,15 @@ const TransitionAvatar = forwardRef<
   )
 })
 
-function PowerButton() {
-  const wallet = useWallet()
-  const { isLoading } = wallet
-  const myWallet = wallet.data?.[0]
-
+function PowerButton({ isLoading, myWallet }: { isLoading: boolean; myWallet?: WalletModel }) {
   return (
     <div className="flex items-center gap-1">
       <i className="i-mgc-power text-accent" />
       {isLoading ? (
         <span className="h-3 w-8 animate-pulse rounded-xl bg-theme-inactive" />
       ) : (
-        <Balance>
-          {BigInt(myWallet?.dailyPowerToken || 0n) + BigInt(myWallet?.cashablePowerToken || 0n)}
-        </Balance>
+        <Balance>{BigInt(myWallet?.powerToken || 0n)}</Balance>
       )}
-    </div>
-  )
-}
-
-function LevelButton() {
-  return (
-    <div className="flex items-center gap-1">
-      <i className="i-mgc-vip-2-cute-fi text-accent" />
-      <span>Lv.1</span>
-      <sub className="-translate-y-px text-[0.6rem] font-normal">x1</sub>
     </div>
   )
 }

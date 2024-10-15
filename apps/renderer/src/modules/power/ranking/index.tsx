@@ -18,6 +18,7 @@ import { cn } from "~/lib/utils"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { SettingSectionTitle } from "~/modules/settings/section"
 import { Balance } from "~/modules/wallet/balance"
+import { Level } from "~/modules/wallet/level"
 import type { useWalletTransactions } from "~/queries/wallet"
 import { useWalletRanking } from "~/queries/wallet"
 
@@ -66,12 +67,20 @@ export const PowerRanking: Component = ({ className }) => {
                   <TableRow>
                     <TableCell className="py-2">{!!row.rank && rankNumber(row.rank)}</TableCell>
                     <TableCell className="py-2">
-                      <UserRenderer user={row.user} />
+                      <UserRenderer
+                        user={row.user}
+                        avatarClassName={!!row.rank && row.rank <= 3 ? "size-5" : "size-4"}
+                      />
                     </TableCell>
                     <TableCell className="py-2">
-                      <Balance>{row.powerToken}</Balance>
+                      <div className="flex items-center gap-1">
+                        <i className="i-mgc-power align-text-bottom text-accent" />
+                        <Balance>{row.powerToken}</Balance>
+                      </div>
                     </TableCell>
-                    <TableCell className="py-2">{row.level}</TableCell>
+                    <TableCell className="py-2">
+                      {!!row.level && <Level level={row.level} />}
+                    </TableCell>
                   </TableRow>
                 </Fragment>
               )
@@ -88,10 +97,12 @@ export const PowerRanking: Component = ({ className }) => {
 
 const UserRenderer = ({
   user,
+  avatarClassName,
 }: {
   user?: NonNullable<ReturnType<typeof useWalletTransactions>["data"]>[number][
     | "fromUser"
     | "toUser"]
+  avatarClassName?: string
 }) => {
   const { t } = useTranslation("settings")
   const me = useWhoami()
@@ -107,7 +118,7 @@ const UserRenderer = ({
       }}
       className="flex w-full min-w-0 cursor-button items-center gap-2"
     >
-      <Avatar className="aspect-square size-6 duration-200 animate-in fade-in-0">
+      <Avatar className={cn("aspect-square duration-200 animate-in fade-in-0", avatarClassName)}>
         <AvatarImage src={replaceImgUrlIfNeed(user?.image || undefined)} />
         <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
       </Avatar>
