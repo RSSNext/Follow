@@ -392,7 +392,11 @@ export const ModalInternal = memo(
                         </EllipsisHorizontalTextWithTooltip>
                       </Dialog.Title>
                       {canClose && (
-                        <Dialog.DialogClose className="center p-2" tabIndex={1} onClick={close}>
+                        <Dialog.DialogClose
+                          className="center z-[1] p-2"
+                          tabIndex={1}
+                          onClick={close}
+                        >
                           <i className="i-mgc-close-cute-re" />
                         </Dialog.DialogClose>
                       )}
