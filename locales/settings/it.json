@@ -112,7 +112,7 @@
   "integration.readwise.enable.description": "Mostra il pulsante 'Salva su Readwise' quando disponibile.",
   "integration.readwise.enable.label": "Abilita",
   "integration.readwise.title": "Readwise",
-  "integration.readwise.token.description": "Puoi ottenerlo qui: readwise.io/access_token.",
+  "integration.readwise.token.description": "Puoi ottenerlo qui: ",
   "integration.readwise.token.label": "Token di accesso Readwise",
   "integration.sidebar_title": "Integrazione",
   "integration.tip": "Suggerimento: I tuoi dati sensibili sono memorizzati localmente e non vengono caricati sul server.",
