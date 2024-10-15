@@ -8,7 +8,6 @@ import { FeedCertification } from "~/components/feed-certification"
 import { FeedIcon } from "~/components/feed-icon"
 import { FollowIcon } from "~/components/icons/follow"
 import { Button } from "~/components/ui/button"
-import { ListItemHoverOverlay } from "~/components/ui/list-item-hover-overlay"
 import { LoadingCircle } from "~/components/ui/loading"
 import { views } from "~/constants"
 import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
@@ -117,7 +116,7 @@ export function Component() {
                   target="_blank"
                   key={entry.id}
                 >
-                  <ListItemHoverOverlay className="rounded">
+                  <div className="rounded-xl pl-3 duration-300 hover:bg-theme-item-active">
                     <Item
                       entryPreview={{
                         entries: entry,
@@ -127,7 +126,7 @@ export function Component() {
                       }}
                       entryId={entry.id}
                     />
-                  </ListItemHoverOverlay>
+                  </div>
                 </a>
               ))}
             </div>
