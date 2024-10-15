@@ -21,9 +21,9 @@ const defaultCtxValue: CurrentModalContentProps = {
 
 export const CurrentModalContext = reactCreateContext<CurrentModalContentProps>(defaultCtxValue)
 export const CurrentModalStateContext = createContextSelector<{
-  isActive: boolean
+  isTop: boolean
 }>({
-  isActive: false,
+  isTop: true,
 })
 
 export type ModalContentComponent<T = object> = FC<ModalActionsInternal & T>

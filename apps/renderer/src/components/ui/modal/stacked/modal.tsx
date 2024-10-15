@@ -3,7 +3,7 @@ import type { BoundingBox } from "framer-motion"
 import { produce } from "immer"
 import { useSetAtom } from "jotai"
 import { Resizable } from "re-resizable"
-import type { PropsWithChildren, SyntheticEvent } from "react"
+import type { FC, PropsWithChildren, SyntheticEvent } from "react"
 import {
   createElement,
   forwardRef,
@@ -34,7 +34,7 @@ import { EllipsisHorizontalTextWithTooltip } from "../../typography"
 import { modalStackAtom } from "./atom"
 import { MODAL_STACK_Z_INDEX, modalMontionConfig } from "./constants"
 import type { CurrentModalContentProps, ModalActionsInternal } from "./context"
-import { CurrentModalContext } from "./context"
+import { CurrentModalContext, CurrentModalStateContext } from "./context"
 import { useModalAnimate } from "./internal/use-animate"
 import { useModalResizeAndDrag } from "./internal/use-drag"
 import { useModalSelect } from "./internal/use-select"
@@ -220,6 +220,7 @@ export const ModalInternal = memo(
         }
       />
     )
+
     if (CustomModalComponent) {
       return (
         <Wrapper>
@@ -251,9 +252,9 @@ export const ModalInternal = memo(
                     onSelect={handleSelectStart}
                     onKeyUp={handleDetectSelectEnd}
                   >
-                    <CurrentModalContext.Provider value={ModalContextProps}>
+                    <ModalContext modalContextProps={ModalContextProps} isTop={!!isTop}>
                       <CustomModalComponent>{finalChildren}</CustomModalComponent>
-                    </CurrentModalContext.Provider>
+                    </ModalContext>
                   </div>
                 </div>
               </Dialog.Content>
@@ -350,9 +351,9 @@ export const ModalInternal = memo(
                     <Divider className="my-2 shrink-0 border-slate-200 opacity-80 dark:border-neutral-800" />
 
                     <div className="min-h-0 shrink grow overflow-auto px-4 py-2">
-                      <CurrentModalContext.Provider value={ModalContextProps}>
+                      <ModalContext modalContextProps={ModalContextProps} isTop={!!isTop}>
                         {finalChildren}
-                      </CurrentModalContext.Provider>
+                      </ModalContext>
                     </div>
                   </ResizeSwitch>
                 </m.div>
@@ -373,4 +374,26 @@ const useShortcutScope = () => {
       switchHotkeyScope("Home")
     }
   }, [switchHotkeyScope])
+}
+
+const ModalContext: FC<
+  PropsWithChildren & {
+    modalContextProps: CurrentModalContentProps
+    isTop: boolean
+  }
+> = ({ modalContextProps, isTop, children }) => {
+  return (
+    <CurrentModalContext.Provider value={modalContextProps}>
+      <CurrentModalStateContext.Provider
+        value={useMemo(
+          () => ({
+            isTop: !!isTop,
+          }),
+          [isTop],
+        )}
+      >
+        {children}
+      </CurrentModalStateContext.Provider>
+    </CurrentModalContext.Provider>
+  )
 }

@@ -2,13 +2,14 @@ import type { DragControls } from "framer-motion"
 import type { ResizeCallback, ResizeStartCallback } from "re-resizable"
 import { useCallback, useContext, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
+import { useContextSelector } from "use-context-selector"
 import { useEventCallback } from "usehooks-ts"
 
 import { getUISettings } from "~/atoms/settings/ui"
 import { jotaiStore } from "~/lib/jotai"
 
 import { modalStackAtom } from "./atom"
-import { CurrentModalContext } from "./context"
+import { CurrentModalContext, CurrentModalStateContext } from "./context"
 import type { ModalProps, ModalStackOptions } from "./types"
 
 export const modalIdToPropsMap = {} as Record<string, ModalProps>
@@ -147,3 +148,5 @@ export const useResizeableModal = (
     preferDragDir,
   }
 }
+
+export const useIsTopModal = () => useContextSelector(CurrentModalStateContext, (v) => v.isTop)
