@@ -124,7 +124,7 @@ const TrendingLists: FC<{
                   <UserCount count={item.subscriberCount} />
                 </div>
                 {!!item.description && (
-                  <div className={"-mt-0.5 line-clamp-2 text-xs"}>{item.description}</div>
+                  <div className={"line-clamp-2 text-xs"}>{item.description}</div>
                 )}
               </div>
             </button>
@@ -242,7 +242,7 @@ const TrendingFeeds = ({ data }: { data: FeedModel[] }) => {
           return (
             <li
               className={cn(
-                "group flex w-full items-center gap-1 rounded-md pl-2 duration-200 hover:bg-theme-item-hover",
+                "group flex w-full items-center gap-1 rounded-md py-0.5 pl-2 duration-200 hover:bg-theme-item-hover",
                 "relative",
               )}
               key={feed.id}
@@ -284,17 +284,18 @@ const TrendingFeeds = ({ data }: { data: FeedModel[] }) => {
 }
 
 const TrendingEntries = ({ data }: { data: Models.TrendingEntry[] }) => {
+  const { t } = useTranslation()
   const filteredData = data.filter((entry) => !entry.url.startsWith("https://x.com"))
   return (
     <section className="mt-8 w-full text-left">
-      <h2 className="my-2 text-xl font-bold">Trending Entries</h2>
+      <h2 className="my-2 text-xl font-bold">{t("trending.entry")}</h2>
 
       <ul className="mt-2 list-inside list-disc space-y-1">
         {filteredData.map((entry) => {
           return (
             <li
               key={entry.id}
-              className="relative truncate whitespace-nowrap pr-10 marker:text-accent"
+              className="relative truncate whitespace-nowrap py-0.5 pr-10 marker:text-accent"
             >
               <a
                 href={entry.url}
