@@ -606,6 +606,9 @@ importers:
       use-context-selector:
         specifier: 2.0.0
         version: 2.0.0(react@18.3.1)(scheduler@0.23.2)
+      use-sync-external-store:
+        specifier: 1.2.2
+        version: 1.2.2(react@18.3.1)
       usehooks-ts:
         specifier: 3.1.0
         version: 3.1.0(react@18.3.1)
@@ -19016,7 +19019,6 @@ snapshots:
   use-sync-external-store@1.2.2(react@18.3.1):
     dependencies:
       react: 18.3.1
-    optional: true
 
   usehooks-ts@3.1.0(react@18.3.1):
     dependencies:

@@ -104,6 +104,7 @@
     "tldts": "6.1.51",
     "unified": "11.0.5",
     "use-context-selector": "2.0.0",
+    "use-sync-external-store": "1.2.2",
     "usehooks-ts": "3.1.0",
     "vfile": "6.0.3",
     "zod": "3.23.8",
