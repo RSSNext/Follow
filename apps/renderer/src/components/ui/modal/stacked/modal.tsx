@@ -24,7 +24,7 @@ import { SafeFragment } from "~/components/common/Fragment"
 import { m } from "~/components/common/Motion"
 import { ErrorComponentType } from "~/components/errors/enum"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT, isElectronBuild } from "~/constants"
-import { useSwitchHotKeyScope } from "~/hooks/common"
+import { useRefValue, useSwitchHotKeyScope } from "~/hooks/common"
 import { nextFrame, stopPropagation } from "~/lib/dom"
 import { cn, getOS } from "~/lib/utils"
 
@@ -157,17 +157,17 @@ export const ModalInternal = memo(
       [ModalProps],
     )
 
-    const edgeElementRef = useRef<HTMLDivElement>(null)
+    const [edgeElementRef, setEdgeElementRef] = useState<HTMLDivElement | null>(null)
 
     const finalChildren = useMemo(
       () => (
         <AppErrorBoundary errorType={ErrorComponentType.Modal}>
-          <RootPortalProvider value={edgeElementRef.current as HTMLElement}>
+          <RootPortalProvider value={edgeElementRef as HTMLElement}>
             {children ?? createElement(content, ModalProps)}
           </RootPortalProvider>
         </AppErrorBoundary>
       ),
-      [ModalProps, children, content],
+      [ModalProps, children, content, edgeElementRef],
     )
 
     useEffect(() => {
@@ -221,6 +221,8 @@ export const ModalInternal = memo(
       />
     )
 
+    const mutateableEdgeElementRef = useRefValue(edgeElementRef)
+
     if (CustomModalComponent) {
       return (
         <Wrapper>
@@ -230,7 +232,7 @@ export const ModalInternal = memo(
               <Dialog.DialogTitle className="sr-only">{title}</Dialog.DialogTitle>
               <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={openAutoFocus}>
                 <div
-                  ref={edgeElementRef}
+                  ref={setEdgeElementRef}
                   className={cn(
                     "no-drag-region fixed",
                     modal ? "inset-0 overflow-auto" : "left-0 top-0",
@@ -273,7 +275,7 @@ export const ModalInternal = memo(
             {Overlay}
             <Dialog.Content asChild aria-describedby={undefined} onOpenAutoFocus={openAutoFocus}>
               <div
-                ref={edgeElementRef}
+                ref={setEdgeElementRef}
                 className={cn(
                   "fixed flex",
                   modal ? "inset-0 overflow-auto" : "left-0 top-0",
@@ -314,7 +316,7 @@ export const ModalInternal = memo(
                   dragElastic={0}
                   dragListener={false}
                   dragMomentum={false}
-                  dragConstraints={edgeElementRef}
+                  dragConstraints={mutateableEdgeElementRef}
                   onMeasureDragConstraints={measureDragConstraints}
                   whileDrag={{
                     cursor: "grabbing",

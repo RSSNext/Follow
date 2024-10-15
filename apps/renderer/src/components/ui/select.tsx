@@ -3,6 +3,8 @@ import * as React from "react"
 
 import { cn } from "~/lib/utils"
 
+import { RootPortal } from "./portal"
+
 const Select = SelectPrimitive.Root
 
 const SelectGroup = SelectPrimitive.Group
@@ -67,7 +69,7 @@ const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
 >(({ className, children, position = "popper", ...props }, ref) => (
-  <SelectPrimitive.Portal>
+  <RootPortal>
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
@@ -93,7 +95,7 @@ const SelectContent = React.forwardRef<
       </SelectPrimitive.Viewport>
       <SelectScrollDownButton />
     </SelectPrimitive.Content>
-  </SelectPrimitive.Portal>
+  </RootPortal>
 ))
 SelectContent.displayName = SelectPrimitive.Content.displayName
 
