@@ -17,6 +17,7 @@ const defaultCtxValue: CurrentModalContentProps = {
   dismiss: warnNoProvider,
   setClickOutSideToDismiss: warnNoProvider,
   ref: { current: null },
+  getIndex: () => 0,
 }
 
 export const CurrentModalContext = reactCreateContext<CurrentModalContentProps>(defaultCtxValue)
@@ -30,4 +31,5 @@ export type ModalContentComponent<T = object> = FC<ModalActionsInternal & T>
 export type ModalActionsInternal = {
   dismiss: () => void
   setClickOutSideToDismiss: (value: boolean) => void
+  getIndex: () => number
 }
