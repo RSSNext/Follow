@@ -162,7 +162,7 @@ const ConfirmDestroyModalContent = ({ id, onSuccess }: { id: string; onSuccess: 
   })
 
   return (
-    <div className="w-[512px]">
+    <div className="w-[540px]">
       <div className="mb-4">
         <i className="i-mingcute-warning-fill -mb-1 mr-1 size-5 text-red-500" />
         {t("discover.inbox_destroy_warning")}

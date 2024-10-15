@@ -37,6 +37,10 @@ const transformRouteParams: RouteParams = {
     description: "The attributes of pubDate element as pubDate",
     default: "Element html",
   },
+  itemContent: {
+    description:
+      "The HTML elements as description in item using CSS selector ( in itemLink page for full content )",
+  },
 }
 
 export function DiscoverTransform() {
@@ -62,7 +66,7 @@ export function DiscoverTransform() {
   return (
     <>
       {data?.rsshub.routes && (
-        <div className="w-[512px]">
+        <div className="w-[540px]">
           <DiscoverFeedForm
             routePrefix="rsshub"
             route={data?.rsshub.routes["/transform/html/:url/:routeParams"]}
