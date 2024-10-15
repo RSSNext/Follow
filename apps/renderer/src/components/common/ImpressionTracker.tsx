@@ -26,7 +26,7 @@ const ImpressionViewImpl: Component<ImpressionProps> = memo((props) => {
       }
       setImpression(true)
 
-      window.posthog?.capture(props.event, {
+      window.analytics?.capture(props.event, {
         impression: 1,
         ...props.properties,
       })

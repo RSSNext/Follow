@@ -171,7 +171,7 @@ const DailyReportButton: FC = () => {
       <ActionButton
         onClick={() => {
           present()
-          window.posthog?.capture("Daily Report Modal", {
+          window.analytics?.capture("Daily Report Modal", {
             click: 1,
           })
         }}
@@ -216,7 +216,7 @@ const SwitchToMasonryButton = () => {
       <ActionButton
         onClick={() => {
           setUISetting("pictureViewMasonry", !isMasonry)
-          window.posthog?.capture("Switch to Masonry", {
+          window.analytics?.capture("Switch to Masonry", {
             masonry: !isMasonry ? 1 : 0,
             click: 1,
           })
@@ -250,7 +250,7 @@ const WideModeButton = () => {
           setUISetting("wideMode", !isWideMode)
           // TODO: Remove this after useMeasure can get bounds in time
           window.dispatchEvent(new Event("resize"))
-          window.posthog?.capture("Switch to Wide Mode", {
+          window.analytics?.capture("Switch to Wide Mode", {
             wideMode: !isWideMode ? 1 : 0,
             click: 1,
           })

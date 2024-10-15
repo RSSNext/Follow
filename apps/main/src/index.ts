@@ -72,6 +72,7 @@ function bootstrap() {
         userAgent = userAgent.replace(/\s?Electron\/[\d.]+/, "")
         userAgent = userAgent.replace(/\s?Follow\/[\d.a-zA-Z-]+/, "")
       }
+      details.requestHeaders["Origin"] = "https://app.follow.is"
       details.requestHeaders["User-Agent"] = userAgent
       callback({ cancel: false, requestHeaders: details.requestHeaders })
     })

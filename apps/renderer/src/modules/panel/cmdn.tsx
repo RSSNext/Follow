@@ -44,7 +44,7 @@ const CmdNPanel = () => {
 
     const defaultView = getSidebarActiveView() as FeedViewType
 
-    window.posthog?.capture("quick_add_feed", { url, defaultView })
+    window.analytics?.capture("quick_add_feed", { url, defaultView })
 
     present({
       title: "Add Feed",

@@ -70,7 +70,7 @@ const AppLayer = () => {
 
   useEffect(() => {
     const doneTime = Math.trunc(performance.now())
-    window.posthog?.capture("ui_render_init", {
+    window.analytics?.capture("ui_render_init", {
       time: doneTime,
     })
     appLog("App is ready", `${doneTime}ms`)

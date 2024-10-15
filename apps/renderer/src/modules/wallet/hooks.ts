@@ -23,7 +23,7 @@ export const useTipModal = ({
       toast.error("Invalid feed id or entry id")
       return
     }
-    window.posthog?.capture("tip_modal_opened", { entryId })
+    window.analytics?.capture("tip_modal_opened", { entryId })
     present({
       title: t("tip_modal.tip_title"),
       content: () => createElement(TipModalContent, { userId, feedId, entryId }),
