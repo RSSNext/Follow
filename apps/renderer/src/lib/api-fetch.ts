@@ -19,25 +19,13 @@ export const apiFetch = ofetch.create({
     }
 
     const csrfToken = await csrfTokenPromise
-    if (options.method && options.method.toLowerCase() !== "get") {
-      if (typeof options.body === "string") {
-        options.body = JSON.parse(options.body)
-      }
-      if (!options.body) {
-        options.body = {}
-      }
-      if (options.body instanceof FormData) {
-        options.body.append("csrfToken", csrfToken)
-      } else {
-        ;(options.body as Record<string, unknown>).csrfToken = csrfToken
-      }
 
-      const header = new Headers(options.headers)
+    const header = new Headers(options.headers)
 
-      header.set("x-app-version", PKG.version)
-      header.set("X-App-Dev", process.env.NODE_ENV === "development" ? "1" : "0")
-      options.headers = header
-    }
+    header.set("x-app-version", PKG.version)
+    header.set("X-App-Dev", process.env.NODE_ENV === "development" ? "1" : "0")
+    header.set("X-Csrf-Token", csrfToken)
+    options.headers = header
   },
   onResponse() {
     setApiStatus(NetworkStatus.ONLINE)
