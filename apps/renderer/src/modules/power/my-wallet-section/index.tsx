@@ -3,7 +3,6 @@ import { Trans, useTranslation } from "react-i18next"
 
 import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { Divider } from "~/components/ui/divider"
 import { LoadingWithIcon } from "~/components/ui/loading"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { DAILY_CLAIM_AMOUNT } from "~/constants"
@@ -127,8 +126,6 @@ export const MyWalletSection = () => {
           </Tooltip>
         </div>
       </div>
-
-      <Divider className="my-8" />
     </>
   )
 }
