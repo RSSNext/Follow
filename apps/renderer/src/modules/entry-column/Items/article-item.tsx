@@ -17,25 +17,25 @@ export function ArticleItemStateLess({ entry, feed }: EntryItemStatelessProps) {
     <div className="relative rounded-md text-zinc-700 transition-colors dark:text-neutral-400">
       <div className="relative">
         <div className="group relative flex py-4 pl-3 pr-2">
-          <FeedIcon feed={feed} fallback />
-          <div className="-mt-0.5 flex-1 text-sm leading-tight">
+          <FeedIcon className="mr-2 size-5 rounded-sm" feed={feed} fallback />
+          <div className="-mt-0.5 line-clamp-4 flex-1 text-sm leading-tight">
             <div className="flex gap-1 text-[10px] font-bold text-zinc-400 dark:text-neutral-500">
               <span>{feed.title}</span>
               <span>·</span>
               <span>{!!entry.publishedAt && <RelativeTime date={entry.publishedAt} />}</span>
             </div>
-            <div className="relative my-1 line-clamp-1 break-words font-medium">{entry.title}</div>
-            <div className="mt-1.5 line-clamp-3 text-[13px] text-zinc-400 dark:text-neutral-500">
+            <div className="relative my-1 break-words font-medium">{entry.title}</div>
+            <div className="mt-1.5 text-[13px] text-zinc-400 dark:text-neutral-500">
               {entry.description}
             </div>
           </div>
-          {entry.media?.[0] && (
+          {entry.media?.[0] ? (
             <Media
               thumbnail
               src={entry.media[0].url}
               type={entry.media[0].type}
               previewImageUrl={entry.media[0].preview_image_url}
-              className="center ml-2 flex size-20 shrink-0 rounded"
+              className="ml-2 size-20 overflow-hidden rounded"
               mediaContainerClassName={"w-auto h-auto rounded"}
               loading="lazy"
               proxy={{
@@ -46,6 +46,8 @@ export function ArticleItemStateLess({ entry, feed }: EntryItemStatelessProps) {
               width={entry.media[0].width}
               blurhash={entry.media[0].blurhash}
             />
+          ) : (
+            <Skeleton className="ml-2 size-20 overflow-hidden rounded" />
           )}
         </div>
       </div>
