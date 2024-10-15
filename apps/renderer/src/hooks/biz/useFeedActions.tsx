@@ -115,7 +115,7 @@ export const useFeedActions = ({
               },
             }
           }),
-          ...(listByView.length > 0 ? [{ type: "separator" as const }] : []),
+          listByView.length > 0 && { type: "separator" as const },
           {
             label: t("sidebar.feed_actions.create_list"),
             type: "text" as const,
