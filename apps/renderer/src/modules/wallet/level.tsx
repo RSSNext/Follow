@@ -1,9 +1,21 @@
+import { cn } from "~/lib/utils"
+
 export const multiples = [0.1, 1, 2, 5, 18]
 
-export const Level = ({ level, isLoading }: { level: number; isLoading?: boolean }) => {
+export const Level = ({
+  level,
+  isLoading,
+  hideIcon,
+  className,
+}: {
+  level: number
+  isLoading?: boolean
+  hideIcon?: boolean
+  className?: string
+}) => {
   return (
-    <div className="flex items-center gap-1">
-      <i className="i-mgc-vip-2-cute-fi text-accent" />
+    <div className={cn("flex items-center gap-1", className)}>
+      {!hideIcon && <i className="i-mgc-vip-2-cute-fi text-accent" />}
       {isLoading ? (
         <span className="h-3 w-8 animate-pulse rounded-xl bg-theme-inactive" />
       ) : (
