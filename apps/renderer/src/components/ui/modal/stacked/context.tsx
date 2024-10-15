@@ -1,5 +1,6 @@
 import type { FC, RefObject } from "react"
-import { createContext } from "react"
+import { createContext as reactCreateContext } from "react"
+import { createContext as createContextSelector } from "use-context-selector"
 
 export type CurrentModalContentProps = ModalActionsInternal & {
   ref: RefObject<HTMLElement | null>
@@ -18,7 +19,12 @@ const defaultCtxValue: CurrentModalContentProps = {
   ref: { current: null },
 }
 
-export const CurrentModalContext = createContext<CurrentModalContentProps>(defaultCtxValue)
+export const CurrentModalContext = reactCreateContext<CurrentModalContentProps>(defaultCtxValue)
+export const CurrentModalStateContext = createContextSelector<{
+  isActive: boolean
+}>({
+  isActive: false,
+})
 
 export type ModalContentComponent<T = object> = FC<ModalActionsInternal & T>
 export type ModalActionsInternal = {
