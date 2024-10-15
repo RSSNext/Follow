@@ -24,7 +24,8 @@ enum AchievementsActionIdMap {
   LIST_SUBSCRIBE_100 = 3,
   LIST_SUBSCRIBE_500 = 4,
   PRODUCT_HUNT_VOTE = 5,
-  FOLLOW_SPECIAL_FEED = 6,
+  // TODO
+  // FOLLOW_SPECIAL_FEED = 6,
 }
 
 const achievementActionIdCopyMap: Record<
@@ -55,10 +56,10 @@ const achievementActionIdCopyMap: Record<
     title: "achievement.product_hunt_vote",
     description: "achievement.product_hunt_vote_description",
   },
-  [AchievementsActionIdMap.FOLLOW_SPECIAL_FEED]: {
-    title: "achievement.follow_special_feed",
-    description: "achievement.follow_special_feed_description",
-  },
+  // [AchievementsActionIdMap.FOLLOW_SPECIAL_FEED]: {
+  //   title: "achievement.follow_special_feed",
+  //   description: "achievement.follow_special_feed_description",
+  // },
 }
 
 export const AchievementModalContent: FC = () => {
@@ -195,7 +196,7 @@ export const AchievementModalContent: FC = () => {
                     {achievement.power && (
                       <span className="ml-2 inline-flex items-center gap-0.5 text-xs font-normal">
                         <span className="font-medium opacity-80">{achievement.power}</span>
-                        <i className="i-mgc-power -translate-y-px text-sm text-accent" />
+                        <i className="i-mgc-power scale-95 text-sm text-accent" />
                       </span>
                     )}
                   </div>
