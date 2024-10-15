@@ -16,6 +16,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { stopPropagation } from "~/lib/dom"
+import { UrlBuilder } from "~/lib/url-builder"
 import { cn } from "~/lib/utils"
 import type { FeedModel, Models } from "~/models"
 
@@ -248,7 +249,7 @@ const TrendingFeeds = ({ data }: { data: FeedModel[] }) => {
             >
               <a
                 target="_blank"
-                href={`/feed/${feed.id}`}
+                href={UrlBuilder.shareFeed(feed.id)}
                 className="flex grow items-center gap-2 py-1"
               >
                 <div>

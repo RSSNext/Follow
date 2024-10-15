@@ -42,8 +42,10 @@ export const toastFetchError = (
       const json = JSON.parse(error.response?._data)
 
       const { reason, code, message: _message } = json
-      const i18nKey = `errors:${code}` as any
-      const i18nMessage = t(i18nKey) === i18nKey ? message : t(i18nKey)
+      message = _message
+
+      const tValue = t(`errors:${code}` as any)
+      const i18nMessage = tValue === code.toString() ? message : tValue
 
       message = i18nMessage
 
