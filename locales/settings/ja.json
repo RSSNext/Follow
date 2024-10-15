@@ -112,7 +112,7 @@
   "integration.readwise.enable.description": "利用可能な場合、'Readwise に保存' ボタンを表示します。",
   "integration.readwise.enable.label": "有効化",
   "integration.readwise.title": "Readwise",
-  "integration.readwise.token.description": "こちらで取得できます：readwise.io/access_token.",
+  "integration.readwise.token.description": "こちらで取得できます：",
   "integration.readwise.token.label": "Readwise アクセス トークン",
   "integration.sidebar_title": "統合",
   "integration.tip": "ヒント：あなたの機密データはローカルに保存され、サーバーにアップロードされません。",
