@@ -1,4 +1,3 @@
-import { WEB_URL } from "@follow/shared/constants"
 import dayjs from "dayjs"
 import { memo, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -17,6 +16,7 @@ import { nextFrame } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
 import { getNewIssueUrl } from "~/lib/issues"
 import { showNativeMenu } from "~/lib/native-menu"
+import { UrlBuilder } from "~/lib/url-builder"
 import { cn } from "~/lib/utils"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
 import { useInboxById } from "~/store/inbox"
@@ -82,7 +82,7 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         )}
         onClick={handleNavigate}
         onDoubleClick={() => {
-          window.open(`${WEB_URL}/feed/${feedId}?view=${view}`, "_blank")
+          window.open(UrlBuilder.shareFeed(feedId, view), "_blank")
         }}
         onContextMenu={(e) => {
           setIsContextMenuOpen(true)
@@ -215,7 +215,7 @@ const ListItemImpl: Component<{
       )}
       onClick={handleNavigate}
       onDoubleClick={() => {
-        window.open(`${WEB_URL}/list/${listId}?view=${view}`, "_blank")
+        window.open(UrlBuilder.shareList(listId, view), "_blank")
       }}
       onContextMenu={(e) => {
         setIsContextMenuOpen(true)

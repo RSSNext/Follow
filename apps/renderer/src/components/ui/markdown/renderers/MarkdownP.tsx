@@ -4,6 +4,7 @@ import { FeedViewType } from "~/lib/enum"
 import { useEntryContentContextSelector } from "~/modules/entry-content/hooks"
 
 import { ensureAndRenderTimeStamp } from "../utils"
+import { IsInParagraphContext } from "./ctx"
 
 export const MarkdownP: Component<
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>
@@ -29,5 +30,9 @@ export const MarkdownP: Component<
     )
   }
 
-  return <p {...props}>{children}</p>
+  return (
+    <p {...props}>
+      <IsInParagraphContext.Provider value={true}>{children}</IsInParagraphContext.Provider>
+    </p>
+  )
 }

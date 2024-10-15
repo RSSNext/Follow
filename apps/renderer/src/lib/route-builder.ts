@@ -9,7 +9,10 @@ function nestPaths(paths: string[]): NestedStructure {
 
   paths.forEach((path) => {
     // Remove the './pages' prefix and the '.tsx' suffix
-    const trimmedPath = path.replace("./pages/", "").replace(".tsx", "")
+    const prefix = "./pages/"
+    const suffix = ".tsx"
+    const trimmedPath = path.slice(prefix.length, -suffix.length)
+
     const parts = trimmedPath.split("/")
 
     let currentLevel = result

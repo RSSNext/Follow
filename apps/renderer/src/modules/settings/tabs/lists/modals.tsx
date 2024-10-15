@@ -1,4 +1,3 @@
-import { WEB_URL } from "@follow/shared/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useMemo, useRef, useState } from "react"
@@ -37,6 +36,7 @@ import {
 import { views } from "~/constants"
 import { apiClient } from "~/lib/api-fetch"
 import { createErrorToaster } from "~/lib/error-parser"
+import { UrlBuilder } from "~/lib/url-builder"
 import { isBizId } from "~/lib/utils"
 import type { FeedModel } from "~/models"
 import { ViewSelectorRadioGroup } from "~/modules/shared/ViewSelectorRadioGroup"
@@ -317,7 +317,7 @@ const RowRender = ({ feedId, listId }: { feedId: string; listId: string }) => {
       <TableCell size="sm">
         <a
           target="_blank"
-          href={`${WEB_URL}/list/${feed.id}`}
+          href={UrlBuilder.shareList(feed.id)}
           className="flex items-center gap-2 font-semibold"
         >
           {feed.siteUrl && <FeedIcon className="mr-0" siteUrl={feed.siteUrl} />}

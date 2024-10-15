@@ -196,7 +196,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[512px] space-y-8"
+          className="w-[540px] space-y-8"
           data-testid="discover-form"
         >
           <FormField
