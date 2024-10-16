@@ -2,6 +2,7 @@ import { m, useAnimationControls } from "framer-motion"
 import type { FC, PropsWithChildren } from "react"
 import { useEffect, useState } from "react"
 
+import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "~/constants"
 import { nextFrame, stopPropagation } from "~/lib/dom"
 import { cn } from "~/lib/utils"
 
@@ -104,6 +105,9 @@ export const DrawerModalLayout: FC<PropsWithChildren> = ({ children }) => {
           "shadow-drawer-to-left w-[60ch] max-w-full",
           "fixed inset-y-2 right-2",
         )}
+        style={{
+          top: `${ElECTRON_CUSTOM_TITLEBAR_HEIGHT}px`,
+        }}
       >
         {children}
       </m.div>
