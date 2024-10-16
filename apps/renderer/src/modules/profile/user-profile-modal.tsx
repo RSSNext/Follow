@@ -250,11 +250,12 @@ export const UserProfileModalContent: FC<{
                     asChild
                     src={replaceImgUrlIfNeed(userInfo.avatar || undefined)}
                   >
-                    <m.img layout />
+                    <m.img layout transition={{ duration: 0.35 }} />
                   </AvatarImage>
                   <AvatarFallback>{userInfo.name?.slice(0, 2)}</AvatarFallback>
                 </m.span>
               </Avatar>
+
               <m.div
                 layout
                 transition={{ duration: 0.35 }}

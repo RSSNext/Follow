@@ -14,6 +14,7 @@ import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRoutePara
 import { useAnyPointDown, useInputComposition, useRefValue } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
+import type { NullableNativeMenuItem } from "~/lib/native-menu"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
@@ -166,6 +167,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
           }}
           onContextMenu={(e) => {
             setIsContextMenuOpen(true)
+
             showNativeMenu(
               [
                 {
@@ -181,21 +183,23 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-                  // @ts-expect-error
+
                   submenu: listList
-                    ?.map((list) => ({
-                      label: list.title || "",
-                      type: "text",
-                      click() {
-                        return addMutation.mutate({
-                          feedIds: ids,
-                          listId: list.id,
-                        })
-                      },
-                    }))
+                    ?.map(
+                      (list) =>
+                        ({
+                          label: list.title || "",
+                          type: "text",
+                          click() {
+                            return addMutation.mutate({
+                              feedIds: ids,
+                              listId: list.id,
+                            })
+                          },
+                        }) as NullableNativeMenuItem,
+                    )
+                    .concat(listList?.length > 0 ? [{ type: "separator" as const }] : [])
                     .concat([
-                      // @ts-expect-error
-                      { type: "separator" as const },
                       {
                         label: t("sidebar.feed_actions.create_list"),
                         type: "text" as const,

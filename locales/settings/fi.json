@@ -112,7 +112,7 @@
   "integration.readwise.enable.description": "Näytä 'Tallenna Readwiseen' -painike, kun saatavilla.",
   "integration.readwise.enable.label": "Ota käyttöön",
   "integration.readwise.title": "Readwise",
-  "integration.readwise.token.description": "Voit saada sen täältä: readwise.io/access_token.",
+  "integration.readwise.token.description": "Voit saada sen täältä: ",
   "integration.readwise.token.label": "Readwise Access Token",
   "integration.sidebar_title": "Integraatiot",
   "integration.tip": "Vinkki: Arkaluontoiset tietosi tallennetaan paikallisesti eikä niitä lähetetä palvelimelle.",

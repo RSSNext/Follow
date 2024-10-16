@@ -4,6 +4,8 @@ import * as React from "react"
 import { useHotkeyScope, useTypeScriptHappyCallback } from "~/hooks/common"
 import { cn } from "~/lib/utils"
 
+import { RootPortal } from "../portal"
+
 const DropdownMenu: typeof DropdownMenuPrimitive.Root = (props) => {
   const [open, setOpen] = React.useState(!!props.open)
   useHotkeyScope("DropdownMenu", open)
@@ -73,7 +75,7 @@ const DropdownMenuContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => {
   return (
-    <DropdownMenuPrimitive.Portal>
+    <RootPortal>
       <DropdownMenuPrimitive.Content
         ref={ref}
         sideOffset={sideOffset}
@@ -84,7 +86,7 @@ const DropdownMenuContent = React.forwardRef<
         )}
         {...props}
       />
-    </DropdownMenuPrimitive.Portal>
+    </RootPortal>
   )
 })
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName

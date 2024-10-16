@@ -6,6 +6,7 @@ import { forwardRef, Fragment, useCallback, useEffect, useState } from "react"
 import { cn } from "~/lib/utils"
 
 import { Input } from "../input"
+import { useCorrectZIndex } from "../modal"
 
 export type Suggestion = {
   name: string
@@ -65,6 +66,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       doFilter()
     }, [doFilter])
 
+    const zIndex = useCorrectZIndex(9)
     return (
       <Combobox
         immediate
@@ -89,15 +91,16 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
               <AnimatePresence>
                 {open && (
                   <ComboboxOptions
-                    portal={portal}
+                    portal
                     static
                     as={m.div}
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     anchor="bottom"
+                    style={{ zIndex }}
                     className={cn(
-                      "pointer-events-auto z-[99] max-h-48 grow",
+                      "pointer-events-auto max-h-48 grow",
                       "shadow-perfect overflow-auto rounded-md border border-border bg-popover text-popover-foreground",
                       "w-[var(--input-width)] empty:invisible",
                     )}

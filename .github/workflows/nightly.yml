@@ -51,6 +51,10 @@ jobs:
           node-version: 22
           cache: "pnpm"
 
+      - name: Install Python setuptools
+        if: runner.os == 'macOS'
+        run: brew install python-setuptools
+
       - name: Install appdmg
         if: runner.os == 'macOS'
         run: pnpm add -g appdmg
