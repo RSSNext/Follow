@@ -27,10 +27,10 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/tsconfig": "^1.0.1",
-    "@hono/node-server": "^1.13.1",
+    "@hono/node-server": "^1.13.2",
     "@t3-oss/env-core": "^0.11.1",
-    "drizzle-orm": "^0.33.0",
-    "electron": "^32.1.2",
+    "drizzle-orm": "^0.34.1",
+    "electron": "^33.0.0",
     "hono": "^4.6.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
