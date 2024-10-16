@@ -43,7 +43,7 @@ const prodHandler = (app: FastifyInstance) => {
     //   reply.send(content)
     // }
 
-    const template = require("./index.template")
+    const template = require("./index.template").default
 
     reply.type("text/html")
     reply.send(template)
