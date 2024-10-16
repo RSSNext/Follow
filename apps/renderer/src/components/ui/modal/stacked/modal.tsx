@@ -131,10 +131,12 @@ export const ModalInternal = memo(
 
     const { noticeModal, animateController } = useModalAnimate(!!isTop)
 
+    const getIndex = useEventCallback(() => index)
     const modalContentRef = useRef<HTMLDivElement>(null)
     const ModalProps: ModalActionsInternal = useMemo(
       () => ({
         dismiss: close,
+        getIndex,
         setClickOutSideToDismiss: (v) => {
           setStack((state) =>
             produce(state, (draft) => {
@@ -146,7 +148,7 @@ export const ModalInternal = memo(
           )
         },
       }),
-      [close, item.id, setStack],
+      [close, getIndex, item.id, setStack],
     )
 
     const ModalContextProps = useMemo<CurrentModalContentProps>(
@@ -210,10 +212,11 @@ export const ModalInternal = memo(
     }, [])
 
     useImperativeHandle(ref, () => modalElementRef.current!)
+    const currentModalZIndex = MODAL_STACK_Z_INDEX + index * 2
 
     const Overlay = (
       <ModalOverlay
-        zIndex={MODAL_STACK_Z_INDEX - 1}
+        zIndex={currentModalZIndex - 1}
         blur={overlayOptions?.blur}
         hidden={
           item.overlay ? currentIsClosing : !(modalSettingOverlay && isBottom) || currentIsClosing
@@ -240,7 +243,7 @@ export const ModalInternal = memo(
                     modalContainerClassName,
                   )}
                   style={{
-                    zIndex: MODAL_STACK_Z_INDEX + index,
+                    zIndex: currentModalZIndex,
                   }}
                   onPointerUp={handleDetectSelectEnd}
                   onClick={handleClickOutsideToDismiss}
@@ -287,7 +290,7 @@ export const ModalInternal = memo(
                 onPointerUp={handleDetectSelectEnd}
                 onClick={handleClickOutsideToDismiss}
                 style={{
-                  zIndex: MODAL_STACK_Z_INDEX + index,
+                  zIndex: currentModalZIndex,
                 }}
               >
                 {DragBar}

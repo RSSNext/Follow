@@ -112,7 +112,7 @@
   "integration.readwise.enable.description": "عرض زر 'حفظ إلى Readwise' عند توفره.",
   "integration.readwise.enable.label": "تمكين",
   "integration.readwise.title": "Readwise",
-  "integration.readwise.token.description": "يمكنك الحصول عليه هنا: readwise.io/access_token.",
+  "integration.readwise.token.description": "يمكنك الحصول عليه هنا: ",
   "integration.readwise.token.label": "رمز الوصول إلى Readwise",
   "integration.sidebar_title": "التكامل",
   "integration.tip": "نصيحة: يتم تخزين بياناتك الحساسة محليًا ولا يتم تحميلها على الخادم.",

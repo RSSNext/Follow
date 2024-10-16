@@ -1,6 +1,8 @@
 import type { DragControls } from "framer-motion"
+import { useAtomValue } from "jotai"
+import { selectAtom } from "jotai/utils"
 import type { ResizeCallback, ResizeStartCallback } from "re-resizable"
-import { useCallback, useContext, useId, useRef, useState } from "react"
+import { useCallback, useContext, useId, useMemo, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { useContextSelector } from "use-context-selector"
 import { useEventCallback } from "usehooks-ts"
@@ -9,6 +11,7 @@ import { getUISettings } from "~/atoms/settings/ui"
 import { jotaiStore } from "~/lib/jotai"
 
 import { modalStackAtom } from "./atom"
+import { MODAL_STACK_Z_INDEX } from "./constants"
 import { CurrentModalContext, CurrentModalStateContext } from "./context"
 import type { ModalProps, ModalStackOptions } from "./types"
 
@@ -150,3 +153,17 @@ export const useResizeableModal = (
 }
 
 export const useIsTopModal = () => useContextSelector(CurrentModalStateContext, (v) => v.isTop)
+
+export const useCorrectZIndex = (fallbackZIndex = 0) => {
+  const inModal = useCurrentModal()
+
+  return useAtomValue(
+    useMemo(
+      () =>
+        selectAtom(modalStackAtom, (v) =>
+          inModal ? v.length + MODAL_STACK_Z_INDEX + inModal.getIndex() + 1 : fallbackZIndex,
+        ),
+      [fallbackZIndex, inModal],
+    ),
+  )
+}

@@ -124,7 +124,7 @@
   "integration.readwise.enable.description": "가능할 때 'Readwise 에 저장' 버튼 표시.",
   "integration.readwise.enable.label": "활성화",
   "integration.readwise.title": "Readwise",
-  "integration.readwise.token.description": "여기에서 받을 수 있습니다: readwise.io/access_token.",
+  "integration.readwise.token.description": "여기에서 받을 수 있습니다: ",
   "integration.readwise.token.label": "Readwise 액세스 토큰",
   "integration.sidebar_title": "통합",
   "integration.tip": "팁: 귀하의 민감한 데이터는 로컬에 저장되며 서버로 업로드되지 않습니다.",
