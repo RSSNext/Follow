@@ -3,8 +3,9 @@ import { HttpBindings } from '@hono/node-server';
 import * as zod from 'zod';
 import { z } from 'zod';
 import * as drizzle_orm_pg_core from 'drizzle-orm/pg-core';
+import { AnyPgColumn } from 'drizzle-orm/pg-core';
 import * as drizzle_orm from 'drizzle-orm';
-import { InferInsertModel } from 'drizzle-orm';
+import { InferInsertModel, SQL } from 'drizzle-orm';
 
 type Env = {
     Bindings: HttpBindings;
@@ -3525,6 +3526,7 @@ declare const users: drizzle_orm_pg_core.PgTableWithColumns<{
     };
     dialect: "pg";
 }>;
+declare function lower(handle: AnyPgColumn): SQL;
 declare const usersOpenApiSchema: z.ZodObject<Omit<{
     id: z.ZodString;
     name: z.ZodNullable<z.ZodString>;
@@ -3971,86 +3973,6 @@ declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
-        rank: drizzle_orm_pg_core.PgColumn<{
-            name: "rank";
-            tableName: "wallets";
-            dataType: "number";
-            columnType: "PgInteger";
-            data: number;
-            driverParam: string | number;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        level: drizzle_orm_pg_core.PgColumn<{
-            name: "level";
-            tableName: "wallets";
-            dataType: "number";
-            columnType: "PgInteger";
-            data: number;
-            driverParam: string | number;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        preActivePoints: drizzle_orm_pg_core.PgColumn<{
-            name: "pre_active_points";
-            tableName: "wallets";
-            dataType: "number";
-            columnType: "PgInteger";
-            data: number;
-            driverParam: string | number;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        activePoints: drizzle_orm_pg_core.PgColumn<{
-            name: "active_points";
-            tableName: "wallets";
-            dataType: "number";
-            columnType: "PgInteger";
-            data: number;
-            driverParam: string | number;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        statusUpdatedAt: drizzle_orm_pg_core.PgColumn<{
-            name: "status_updated_at";
-            tableName: "wallets";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
     };
     dialect: "pg";
 }>;
@@ -4062,11 +3984,6 @@ declare const walletsOpenAPISchema: zod.ZodObject<{
     powerToken: zod.ZodString;
     dailyPowerToken: zod.ZodString;
     cashablePowerToken: zod.ZodString;
-    rank: zod.ZodNullable<zod.ZodNumber>;
-    level: zod.ZodNullable<zod.ZodNumber>;
-    preActivePoints: zod.ZodNullable<zod.ZodNumber>;
-    activePoints: zod.ZodNullable<zod.ZodNumber>;
-    statusUpdatedAt: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
     createdAt: string;
     userId: string;
@@ -4075,11 +3992,6 @@ declare const walletsOpenAPISchema: zod.ZodObject<{
     powerToken: string;
     dailyPowerToken: string;
     cashablePowerToken: string;
-    rank: number | null;
-    level: number | null;
-    preActivePoints: number | null;
-    activePoints: number | null;
-    statusUpdatedAt: string | null;
 }, {
     createdAt: string;
     userId: string;
@@ -4088,16 +4000,12 @@ declare const walletsOpenAPISchema: zod.ZodObject<{
     powerToken: string;
     dailyPowerToken: string;
     cashablePowerToken: string;
-    rank: number | null;
-    level: number | null;
-    preActivePoints: number | null;
-    activePoints: number | null;
-    statusUpdatedAt: string | null;
 }>;
 declare const walletsRelations: drizzle_orm.Relations<"wallets", {
     user: drizzle_orm.One<"user", true>;
     transactionsFrom: drizzle_orm.Many<"transactions">;
     transactionTo: drizzle_orm.Many<"transactions">;
+    level: drizzle_orm.One<"levels", false>;
 }>;
 declare const transactionType: drizzle_orm_pg_core.PgEnum<["tip", "mint", "burn", "withdraw", "purchase"]>;
 declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
@@ -4359,6 +4267,173 @@ declare const feedPowerTokensOpenAPISchema: zod.ZodObject<{
 }>;
 declare const feedPowerTokensRelations: drizzle_orm.Relations<"feedPowerTokens", {
     feed: drizzle_orm.One<"feeds", true>;
+}>;
+declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "levels";
+    schema: undefined;
+    columns: {
+        address: drizzle_orm_pg_core.PgColumn<{
+            name: "address";
+            tableName: "levels";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        rank: drizzle_orm_pg_core.PgColumn<{
+            name: "rank";
+            tableName: "levels";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        level: drizzle_orm_pg_core.PgColumn<{
+            name: "level";
+            tableName: "levels";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        preActivePoints: drizzle_orm_pg_core.PgColumn<{
+            name: "pre_active_points";
+            tableName: "levels";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        activePoints: drizzle_orm_pg_core.PgColumn<{
+            name: "active_points";
+            tableName: "levels";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        statusUpdatedAt: drizzle_orm_pg_core.PgColumn<{
+            name: "status_updated_at";
+            tableName: "levels";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        powerToken: drizzle_orm_pg_core.PgColumn<{
+            name: "power_token";
+            tableName: "levels";
+            dataType: "string";
+            columnType: "PgNumeric";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "userId";
+            tableName: "levels";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const levelsOpenAPISchema: zod.ZodObject<{
+    address: zod.ZodString;
+    rank: zod.ZodNullable<zod.ZodNumber>;
+    level: zod.ZodNullable<zod.ZodNumber>;
+    preActivePoints: zod.ZodNullable<zod.ZodNumber>;
+    activePoints: zod.ZodNullable<zod.ZodNumber>;
+    statusUpdatedAt: zod.ZodNullable<zod.ZodString>;
+    powerToken: zod.ZodString;
+    userId: zod.ZodString;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    userId: string;
+    address: string;
+    powerToken: string;
+    rank: number | null;
+    level: number | null;
+    preActivePoints: number | null;
+    activePoints: number | null;
+    statusUpdatedAt: string | null;
+}, {
+    userId: string;
+    address: string;
+    powerToken: string;
+    rank: number | null;
+    level: number | null;
+    preActivePoints: number | null;
+    activePoints: number | null;
+    statusUpdatedAt: string | null;
+}>;
+declare const levelsRelations: drizzle_orm.Relations<"levels", {
+    wallet: drizzle_orm.One<"wallets", true>;
+    user: drizzle_orm.One<"user", true>;
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
@@ -5020,11 +5095,16 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     powerToken: string;
                     dailyPowerToken: string;
                     cashablePowerToken: string;
-                    rank: number | null;
-                    level: number | null;
-                    preActivePoints: number | null;
-                    activePoints: number | null;
-                    statusUpdatedAt: string | null;
+                    level: {
+                        userId: string;
+                        address: string;
+                        powerToken: string;
+                        rank: number | null;
+                        level: number | null;
+                        preActivePoints: number | null;
+                        activePoints: number | null;
+                        statusUpdatedAt: string | null;
+                    } | null;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -5064,13 +5144,9 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         handle: string | null;
                         createdAt: string;
                     };
-                    createdAt: string;
                     userId: string;
-                    addressIndex: number;
-                    address: string | null;
+                    address: string;
                     powerToken: string;
-                    dailyPowerToken: string;
-                    cashablePowerToken: string;
                     rank: number | null;
                     level: number | null;
                     preActivePoints: number | null;
@@ -5591,6 +5667,39 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        publishedAt: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    }[];
                     feed: {
                         type: "feed";
                         id: string;
@@ -6581,4 +6690,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

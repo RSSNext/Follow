@@ -84,7 +84,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
           >
             <div className="flex w-full items-center justify-between gap-6 px-1.5 font-semibold">
               <PowerButton isLoading={isLoadingWallet} myWallet={myWallet} />
-              <Level level={myWallet?.level || 0} isLoading={isLoadingWallet} />
+              <Level level={myWallet?.level?.level || 0} isLoading={isLoadingWallet} />
             </div>
           </DropdownMenuItem>
 

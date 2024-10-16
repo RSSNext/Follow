@@ -83,7 +83,7 @@ export const MyWalletSection = () => {
           />
         </div>
         <SettingSectionTitle title={t("wallet.balance.level")} margin="compact" />
-        <Level level={myWallet.level || 0} />
+        <Level level={myWallet.level?.level || 0} />
         <SettingSectionTitle title={t("wallet.balance.title")} margin="compact" />
         <div className="mb-2 flex items-end justify-between">
           <div className="flex items-center gap-1">
@@ -105,7 +105,7 @@ export const MyWalletSection = () => {
           </div>
           <div className="flex gap-2">
             <WithdrawButton />
-            <ClaimDailyReward level={myWallet.level || 0} />
+            <ClaimDailyReward level={myWallet.level?.level || 0} />
           </div>
         </div>
         <Tooltip>
