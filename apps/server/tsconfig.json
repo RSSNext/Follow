@@ -22,6 +22,14 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["./src/**/*.ts", "./index.ts", "./api/index.ts", "./tsup.config.ts"],
+  "include": [
+    "./src/**/*.ts",
+    "./index.ts",
+    "./api/index.ts",
+    "./tsup.config.ts",
+    "./client/**/*.ts",
+    "./client/**/*.tsx",
+    "./tailwind.config.ts"
+  ],
   "exclude": ["node_modules"]
 }
