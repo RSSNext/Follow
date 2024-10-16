@@ -25,6 +25,7 @@
   },
   "include": [
     "./src/**/*.ts",
+    "./src/**/*.tsx",
     "./index.ts",
     "./api/index.ts",
     "./tsup.config.ts",
