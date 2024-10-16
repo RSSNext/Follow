@@ -19,15 +19,21 @@ if (window.SENTRY_RELEASE) {
   routerCreator = wrapCreateBrowserRouter(routerCreator)
 }
 
-export const router = routerCreator([
+export const router = routerCreator(
+  [
+    {
+      path: "/",
+      lazy: () => import("./App"),
+      children: tree,
+      // errorElement: <ErrorElement />,
+    },
+    // {
+    //   path: "*",
+    // element: <NotFound />,
+    // },
+  ],
   {
-    path: "/",
-    lazy: () => import("./App"),
-    children: tree,
-    // errorElement: <ErrorElement />,
+    // todo
+    // basename: "/test",
   },
-  // {
-  //   path: "*",
-  // element: <NotFound />,
-  // },
-])
+)
