@@ -1,11 +1,12 @@
 import { AnimatePresence, m } from "framer-motion"
 import type { FC, ReactNode } from "react"
-import { forwardRef, Fragment, useState } from "react"
+import { forwardRef, Fragment, useMemo, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useOnClickOutside } from "usehooks-ts"
 
+import { useViewport } from "~/atoms/hooks/viewport"
 import { ActionButton, Button, IconButton } from "~/components/ui/button"
 import { Kbd, KbdCombined } from "~/components/ui/kbd/Kbd"
 import { RootPortal } from "~/components/ui/portal"
@@ -42,9 +43,14 @@ export const MarkAllReadWithOverlay = forwardRef<
   useOnClickOutside({ current: popoverRef }, () => {
     setShow(false)
   })
+
+  const w = useViewport((v) => v.w)
+  const $parent = containerRef.current!
+  const rect = useMemo(() => {
+    return $parent.getBoundingClientRect()
+  }, [w, $parent])
+
   const renderPopup = () => {
-    const $parent = containerRef.current!
-    const rect = $parent.getBoundingClientRect()
     const paddingLeft = $parent.offsetLeft
     // electron window has pt-[calc(var(--fo-window-padding-top)_-10px)]
     const isElectronWindows = isElectronBuild && getOS() === "Windows"
