@@ -9,6 +9,7 @@
   "dependencies": {
     "@fastify/middie": "9.0.2",
     "@follow/shared": "workspace:*",
+    "click-to-react-component": "1.1.0",
     "fastify": "5.0.0"
   },
   "devDependencies": {
