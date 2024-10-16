@@ -1,0 +1,16 @@
+{
+  "name": "@follow/server",
+  "type": "module",
+  "scripts": {
+    "dev": "NODE_ENV=development tsx index.ts"
+  },
+  "dependencies": {
+    "@fastify/middie": "9.0.2",
+    "@follow/shared": "workspace:*",
+    "fastify": "5.0.0"
+  },
+  "devDependencies": {
+    "tsx": "4.19.1",
+    "vite": "5.4.9"
+  }
+}
