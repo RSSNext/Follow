@@ -16,7 +16,7 @@ patchedDependencies:
     hash: c53at4t5fflixuwjz35hmcqdu4
     path: patches/electron-context-menu.patch
   hono:
-    hash: iej2g43ojhll5opwbnvyorjq4e
+    hash: hhch3aogyxhxjttgmn52vtceyy
     path: patches/hono.patch
   immer@10.1.1:
     hash: og7mbnoo5vh43tjlw5rbmrdbvu
@@ -67,7 +67,7 @@ importers:
         version: 5.1.0
       '@hono/node-server':
         specifier: 1.13.2
-        version: 1.13.2(hono@4.6.3(patch_hash=iej2g43ojhll5opwbnvyorjq4e))
+        version: 1.13.2(hono@4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy))
       '@hookform/resolvers':
         specifier: 3.9.0
         version: 3.9.0(react-hook-form@7.53.0(react@18.3.1))
@@ -118,10 +118,10 @@ importers:
         version: 18.3.1
       '@vitejs/plugin-legacy':
         specifier: 5.4.2
-        version: 5.4.2(terser@5.34.1)(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1))
+        version: 5.4.2(terser@5.35.0)(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0))
       '@vitejs/plugin-react':
         specifier: ^4.3.2
-        version: 4.3.2(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1))
+        version: 4.3.2(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0))
       cssnano:
         specifier: 7.0.6
         version: 7.0.6(postcss@8.4.47)
@@ -145,7 +145,7 @@ importers:
         version: 0.5.0
       electron-vite:
         specifier: ^2.3.0
-        version: 2.3.0(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1))
+        version: 2.3.0(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0))
       eslint:
         specifier: ^9.12.0
         version: 9.12.0(jiti@2.3.3)
@@ -159,8 +159,8 @@ importers:
         specifier: 15.7.4
         version: 15.7.4
       hono:
-        specifier: 4.6.3
-        version: 4.6.3(patch_hash=iej2g43ojhll5opwbnvyorjq4e)
+        specifier: 4.6.5
+        version: 4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy)
       lint-staged:
         specifier: 15.2.10
         version: 15.2.10
@@ -208,16 +208,16 @@ importers:
         version: 5.6.3
       vite:
         specifier: ^5.4.9
-        version: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)
+        version: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)
       vite-plugin-mkcert:
         specifier: 1.17.6
-        version: 1.17.6(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1))
+        version: 1.17.6(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0))
       vite-tsconfig-paths:
         specifier: 5.0.1
-        version: 5.0.1(typescript@5.6.3)(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1))
+        version: 5.0.1(typescript@5.6.3)(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0))
       vitest:
         specifier: 2.0.5
-        version: 2.0.5(@types/node@22.7.5)(happy-dom@15.7.4)(lightningcss@1.27.0)(terser@5.34.1)
+        version: 2.0.5(@types/node@22.7.5)(happy-dom@15.7.4)(lightningcss@1.27.0)(terser@5.35.0)
 
   apps/main:
     dependencies:
@@ -313,8 +313,8 @@ importers:
         specifier: 3.2.0
         version: 3.2.0
       hono:
-        specifier: 4.6.3
-        version: 4.6.3(patch_hash=iej2g43ojhll5opwbnvyorjq4e)
+        specifier: 4.6.5
+        version: 4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy)
 
   apps/renderer:
     dependencies:
@@ -338,7 +338,7 @@ importers:
         version: 2.1.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@hono/auth-js':
         specifier: 1.0.11
-        version: 1.0.11(@auth/core@0.37.0)(hono@4.6.5(patch_hash=iej2g43ojhll5opwbnvyorjq4e))(react@18.3.1)
+        version: 1.0.11(@auth/core@0.37.0)(hono@4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy))(react@18.3.1)
       '@hookform/resolvers':
         specifier: 3.9.0
         version: 3.9.0(react-hook-form@7.53.0(react@18.3.1))
@@ -625,9 +625,12 @@ importers:
       '@babel/generator':
         specifier: 7.25.7
         version: 7.25.7
+      '@follow/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@hono/node-server':
         specifier: 1.13.2
-        version: 1.13.2(hono@4.6.5(patch_hash=iej2g43ojhll5opwbnvyorjq4e))
+        version: 1.13.2(hono@4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy))
       '@types/katex':
         specifier: 0.16.7
         version: 0.16.7
@@ -690,7 +693,7 @@ importers:
         version: 2.10.1(@types/react@18.3.11)(react@18.3.1)
       rc-modal-sheet:
         specifier: 0.3.2
-        version: 0.3.2(@radix-ui/react-dialog@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@2.5.4)(vaul@0.9.9(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        version: 0.3.2(@radix-ui/react-dialog@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@2.5.4)(vaul@1.1.0(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -733,7 +736,7 @@ importers:
         version: 4.19.1
       vite:
         specifier: 5.4.9
-        version: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)
+        version: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)
 
   packages/components:
     dependencies:
@@ -796,7 +799,7 @@ importers:
         version: 1.0.1(@types/node@22.7.5)
       '@hono/node-server':
         specifier: ^1.13.2
-        version: 1.13.2(hono@4.6.5(patch_hash=iej2g43ojhll5opwbnvyorjq4e))
+        version: 1.13.2(hono@4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy))
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
@@ -807,8 +810,8 @@ importers:
         specifier: ^33.0.0
         version: 33.0.0
       hono:
-        specifier: ^4.6.3
-        version: 4.6.5(patch_hash=iej2g43ojhll5opwbnvyorjq4e)
+        specifier: ^4.6.5
+        version: 4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -4149,6 +4152,11 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
+  acorn@8.13.0:
+    resolution: {integrity: sha512-8zSiw54Oxrdym50NlZ9sUusyO1Z1ZchgRLWRaK6c86XJFClyCgFKetdowBg5bKxyp/u+CDBJG4Mpp0m3HLZl9w==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+
   add-stream@1.0.0:
     resolution: {integrity: sha512-qQLMr+8o0WC4FZGQTcJiKBVC59JylcPSrTtk6usvmIDFUOCKegapy1VHQwRbFMOFyb/inzUVqHs+eMYKDM1YeQ==}
 
@@ -6206,10 +6214,6 @@ packages:
     resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}
     engines: {node: '>=0.10.0'}
 
-  hono@4.6.3:
-    resolution: {integrity: sha512-0LeEuBNFeSHGqZ9sNVVgZjB1V5fmhkBSB0hZrpqStSMLOWgfLy0dHOvrjbJh0H2khsjet6rbHfWTHY0kpYThKQ==}
-    engines: {node: '>=16.9.0'}
-
   hono@4.6.5:
     resolution: {integrity: sha512-qsmN3V5fgtwdKARGLgwwHvcdLKursMd+YOt69eGpl1dUCJb8mCd7hZfyZnBYjxCegBG7qkJRQRUy2oO25yHcyQ==}
     engines: {node: '>=16.9.0'}
@@ -7288,8 +7292,8 @@ packages:
     resolution: {integrity: sha512-bLn/fU/ALVBE9wj+p4Y21ZJWYFjUXLXPi/IewyLZkx3ApxKDNBWCKdReeKOtD8dWpOdDCeMyLh6ZewzcLsG2Nw==}
     engines: {node: '>=10'}
 
-  node-abi@3.70.0:
-    resolution: {integrity: sha512-xMTIZdvAyzGyxwOwxXv/8V/f/KAqKWNCeNIIFu2doEtQp9wvMUTam036At/iVtJqum6n5ljbAhUmXAUOhyivSA==}
+  node-abi@3.71.0:
+    resolution: {integrity: sha512-SZ40vRiy/+wRTf21hxkkEjPJZpARzUMVcJoQse2EF8qkUWbbO2z7vd5oA/H6bVH6SZQ5STGcu0KRDS7biNRfxw==}
     engines: {node: '>=10'}
 
   node-addon-api@1.7.2:
@@ -8895,8 +8899,8 @@ packages:
     resolution: {integrity: sha512-yYrrsWnrXMcdsnu/7YMYAofM1ktpL5By7vZhf15CrXijWWrEYZks5AXBudalfSWJLlnen/QUJUB5aoB0kqZUGA==}
     engines: {node: '>=6.0.0'}
 
-  terser@5.34.1:
-    resolution: {integrity: sha512-FsJZ7iZLd/BXkz+4xrRTGJ26o/6VTjQytUk8b8OxkwcD2I+79VPJlz7qss1+zE7h8GNIScFqXcDyJ/KqBYZFVA==}
+  terser@5.35.0:
+    resolution: {integrity: sha512-TmYbQnzVfrx3RQsPoItoPplymixIAtp2R2xlpyVBYmFmvI34IzLhCLj8SimRb/kZXlq4t1gA+vbcTqLQ3+5Q5g==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -8922,8 +8926,8 @@ packages:
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
 
-  tinyexec@0.3.0:
-    resolution: {integrity: sha512-tVGE0mVJPGb0chKhqmsoosjsS+qUnJVGJpZgsHYQcGoPlG3B51R3PouqTgEGH2Dc9jjFyOqOpix6ZHNMXp1FZg==}
+  tinyexec@0.3.1:
+    resolution: {integrity: sha512-WiCJLEECkO18gwqIp6+hJg0//p23HXp4S+gGtAKu3mI2F2/sXC4FvHvXvB0zJVVaTPhx1/tOwdbRsa1sOBIKqQ==}
 
   tinyglobby@0.2.6:
     resolution: {integrity: sha512-NbBoFBpqfcgd1tCiO8Lkfdk+xrA7mlLR9zgvZcZWQQwU63XAfUePyd6wZBaU93Hqw347lHnwFzttAkemHzzz4g==}
@@ -8941,8 +8945,8 @@ packages:
     resolution: {integrity: sha512-n1cw8k1k0x4pgA2+9XrOkFydTerNcJ1zWCO5Nn9scWHTD+5tp8dghT2x1uduQePZTZgd3Tupf+x9BxJjeJi77Q==}
     engines: {node: '>=14.0.0'}
 
-  tldts-core@6.1.51:
-    resolution: {integrity: sha512-bu9oCYYWC1iRjx+3UnAjqCsfrWNZV1ghNQf49b3w5xE8J/tNShHTzp5syWJfwGH+pxUgTTLUnzHnfuydW7wmbg==}
+  tldts-core@6.1.52:
+    resolution: {integrity: sha512-j4OxQI5rc1Ve/4m/9o2WhWSC4jGc4uVbCINdOEJRAraCi0YqTqgMcxUx7DbmuP0G3PCixoof/RZB0Q5Kh9tagw==}
 
   tldts@6.1.51:
     resolution: {integrity: sha512-33lfQoL0JsDogIbZ8fgRyvv77GnRtwkNE/MOKocwUgPO1WrSfsq7+vQRKxRQZai5zd+zg97Iv9fpFQSzHyWdLA==}
@@ -9278,8 +9282,8 @@ packages:
     resolution: {integrity: sha512-OljLrQ9SQdOUqTaQxqL5dEfZWrXExyyWsozYlAWFawPVNuD83igl7uJD2RTkNMbniIYgt8l81eCJGIdQF7avLQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  vaul@0.9.9:
-    resolution: {integrity: sha512-7afKg48srluhZwIkaU+lgGtFCUsYBSGOl8vcc8N/M3YQlZFlynHD15AE+pwrYdc826o7nrIND4lL9Y6b9WWZZQ==}
+  vaul@1.1.0:
+    resolution: {integrity: sha512-YhO/bikcauk48hzhMhvIvT+U87cuCbNbKk9fF4Ou5UkI9t2KkBMernmdP37pCzF15hrv55fcny1YhexK8h6GVQ==}
     peerDependencies:
       react: ^16.8 || ^17.0 || ^18.0
       react-dom: ^16.8 || ^17.0 || ^18.0
@@ -9579,7 +9583,7 @@ snapshots:
   '@antfu/install-pkg@0.4.1':
     dependencies:
       package-manager-detector: 0.2.0
-      tinyexec: 0.3.0
+      tinyexec: 0.3.1
 
   '@antfu/utils@0.7.10': {}
 
@@ -10971,7 +10975,7 @@ snapshots:
       detect-libc: 2.0.3
       fs-extra: 10.1.0
       got: 11.8.6
-      node-abi: 3.70.0
+      node-abi: 3.71.0
       node-api-version: 0.2.0
       node-gyp: 9.4.1
       ora: 5.4.1
@@ -11424,19 +11428,15 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@hono/auth-js@1.0.11(@auth/core@0.37.0)(hono@4.6.5(patch_hash=iej2g43ojhll5opwbnvyorjq4e))(react@18.3.1)':
+  '@hono/auth-js@1.0.11(@auth/core@0.37.0)(hono@4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy))(react@18.3.1)':
     dependencies:
       '@auth/core': 0.37.0
-      hono: 4.6.5(patch_hash=iej2g43ojhll5opwbnvyorjq4e)
+      hono: 4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy)
       react: 18.3.1
 
-  '@hono/node-server@1.13.2(hono@4.6.3(patch_hash=iej2g43ojhll5opwbnvyorjq4e))':
+  '@hono/node-server@1.13.2(hono@4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy))':
     dependencies:
-      hono: 4.6.3(patch_hash=iej2g43ojhll5opwbnvyorjq4e)
-
-  '@hono/node-server@1.13.2(hono@4.6.5(patch_hash=iej2g43ojhll5opwbnvyorjq4e))':
-    dependencies:
-      hono: 4.6.5(patch_hash=iej2g43ojhll5opwbnvyorjq4e)
+      hono: 4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy)
 
   '@hookform/resolvers@3.9.0(react-hook-form@7.53.0(react@18.3.1))':
     dependencies:
@@ -13619,7 +13619,7 @@ snapshots:
       '@use-gesture/core': 10.3.1
       react: 18.3.1
 
-  '@vitejs/plugin-legacy@5.4.2(terser@5.34.1)(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1))':
+  '@vitejs/plugin-legacy@5.4.2(terser@5.35.0)(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0))':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/preset-env': 7.25.4(@babel/core@7.25.2)
@@ -13629,19 +13629,19 @@ snapshots:
       magic-string: 0.30.11
       regenerator-runtime: 0.14.1
       systemjs: 6.15.1
-      terser: 5.34.1
-      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)
+      terser: 5.35.0
+      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-react@4.3.2(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1))':
+  '@vitejs/plugin-react@4.3.2(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0))':
     dependencies:
       '@babel/core': 7.25.8
       '@babel/plugin-transform-react-jsx-self': 7.25.7(@babel/core@7.25.8)
       '@babel/plugin-transform-react-jsx-source': 7.25.7(@babel/core@7.25.8)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)
+      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -13704,7 +13704,13 @@ snapshots:
     dependencies:
       acorn: 8.12.1
 
+  acorn-jsx@5.3.2(acorn@8.13.0):
+    dependencies:
+      acorn: 8.13.0
+
   acorn@8.12.1: {}
+
+  acorn@8.13.0: {}
 
   add-stream@1.0.0: {}
 
@@ -15083,7 +15089,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron-vite@2.3.0(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)):
+  electron-vite@2.3.0(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)):
     dependencies:
       '@babel/core': 7.25.2
       '@babel/plugin-transform-arrow-functions': 7.24.7(@babel/core@7.25.2)
@@ -15091,7 +15097,7 @@ snapshots:
       esbuild: 0.21.5
       magic-string: 0.30.11
       picocolors: 1.1.0
-      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)
+      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -15595,8 +15601,8 @@ snapshots:
 
   espree@9.6.1:
     dependencies:
-      acorn: 8.12.1
-      acorn-jsx: 5.3.2(acorn@8.12.1)
+      acorn: 8.13.0
+      acorn-jsx: 5.3.2(acorn@8.13.0)
       eslint-visitor-keys: 3.4.3
 
   esquery@1.6.0:
@@ -16366,9 +16372,7 @@ snapshots:
     dependencies:
       parse-passwd: 1.0.0
 
-  hono@4.6.3(patch_hash=iej2g43ojhll5opwbnvyorjq4e): {}
-
-  hono@4.6.5(patch_hash=iej2g43ojhll5opwbnvyorjq4e): {}
+  hono@4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy): {}
 
   hosted-git-info@2.8.9: {}
 
@@ -16709,7 +16713,7 @@ snapshots:
 
   jsonc-eslint-parser@2.4.0:
     dependencies:
-      acorn: 8.12.1
+      acorn: 8.13.0
       eslint-visitor-keys: 3.4.3
       espree: 9.6.1
       semver: 7.6.3
@@ -17656,7 +17660,7 @@ snapshots:
     dependencies:
       semver: 7.6.3
 
-  node-abi@3.70.0:
+  node-abi@3.71.0:
     dependencies:
       semver: 7.6.3
 
@@ -18435,13 +18439,13 @@ snapshots:
       randombytes: 2.1.0
       safe-buffer: 5.2.1
 
-  rc-modal-sheet@0.3.2(@radix-ui/react-dialog@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@2.5.4)(vaul@0.9.9(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+  rc-modal-sheet@0.3.2(@radix-ui/react-dialog@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@2.5.4)(vaul@1.1.0(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
     dependencies:
       '@radix-ui/react-dialog': 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       clsx: 2.1.1
       framer-motion: 11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwind-merge: 2.5.4
-      vaul: 0.9.9(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      vaul: 1.1.0(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   rc9@2.1.2:
     dependencies:
@@ -18466,7 +18470,7 @@ snapshots:
 
   react-error-boundary@4.0.13(react@18.3.1):
     dependencies:
-      '@babel/runtime': 7.25.4
+      '@babel/runtime': 7.25.7
       react: 18.3.1
 
   react-fast-marquee@1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
@@ -19365,10 +19369,10 @@ snapshots:
       rimraf: 2.6.3
     optional: true
 
-  terser@5.34.1:
+  terser@5.35.0:
     dependencies:
       '@jridgewell/source-map': 0.3.6
-      acorn: 8.12.1
+      acorn: 8.13.0
       commander: 2.20.3
       source-map-support: 0.5.21
 
@@ -19392,7 +19396,7 @@ snapshots:
 
   tinybench@2.9.0: {}
 
-  tinyexec@0.3.0: {}
+  tinyexec@0.3.1: {}
 
   tinyglobby@0.2.6:
     dependencies:
@@ -19405,11 +19409,11 @@ snapshots:
 
   tinyspy@3.0.2: {}
 
-  tldts-core@6.1.51: {}
+  tldts-core@6.1.52: {}
 
   tldts@6.1.51:
     dependencies:
-      tldts-core: 6.1.51
+      tldts-core: 6.1.52
 
   tmp-promise@3.0.3:
     dependencies:
@@ -19728,7 +19732,7 @@ snapshots:
 
   validate-npm-package-name@5.0.1: {}
 
-  vaul@0.9.9(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  vaul@1.1.0(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@radix-ui/react-dialog': 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
@@ -19759,13 +19763,13 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vite-node@2.0.5(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1):
+  vite-node@2.0.5(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0):
     dependencies:
       cac: 6.7.14
       debug: 4.3.7
       pathe: 1.1.2
       tinyrainbow: 1.2.0
-      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)
+      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -19777,28 +19781,28 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-mkcert@1.17.6(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)):
+  vite-plugin-mkcert@1.17.6(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)):
     dependencies:
       '@octokit/rest': 20.1.1
       axios: 1.7.7(debug@4.3.7)
       debug: 4.3.7
       picocolors: 1.1.0
-      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)
+      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)
     transitivePeerDependencies:
       - supports-color
 
-  vite-tsconfig-paths@5.0.1(typescript@5.6.3)(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)):
+  vite-tsconfig-paths@5.0.1(typescript@5.6.3)(vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)):
     dependencies:
       debug: 4.3.7
       globrex: 0.1.2
       tsconfck: 3.1.1(typescript@5.6.3)
     optionalDependencies:
-      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)
+      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1):
+  vite@5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.47
@@ -19807,9 +19811,9 @@ snapshots:
       '@types/node': 22.7.5
       fsevents: 2.3.3
       lightningcss: 1.27.0
-      terser: 5.34.1
+      terser: 5.35.0
 
-  vitest@2.0.5(@types/node@22.7.5)(happy-dom@15.7.4)(lightningcss@1.27.0)(terser@5.34.1):
+  vitest@2.0.5(@types/node@22.7.5)(happy-dom@15.7.4)(lightningcss@1.27.0)(terser@5.35.0):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.5
@@ -19827,8 +19831,8 @@ snapshots:
       tinybench: 2.9.0
       tinypool: 1.0.1
       tinyrainbow: 1.2.0
-      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)
-      vite-node: 2.0.5(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.34.1)
+      vite: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)
+      vite-node: 2.0.5(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.7.5

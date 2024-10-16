@@ -14,4 +14,10 @@ declare global {
   export function tw(strings: TemplateStringsArray, ...values: any[]): string
 }
 
+declare module "react" {
+  export interface AriaAttributes {
+    "data-testid"?: string
+  }
+}
+
 export {}

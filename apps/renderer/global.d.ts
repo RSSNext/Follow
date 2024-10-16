@@ -10,10 +10,4 @@ declare global {
   }
 }
 
-declare module "react" {
-  export interface AriaAttributes {
-    "data-testid"?: string
-  }
-}
-
 export {}
