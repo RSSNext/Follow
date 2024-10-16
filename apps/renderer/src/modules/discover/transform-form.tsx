@@ -41,6 +41,7 @@ const transformRouteParams: RouteParams = {
     description:
       "The HTML elements as description in item using CSS selector ( in itemLink page for full content )",
   },
+  encoding: { description: "The encoding of the HTML content", default: "utf-8" },
 }
 
 export function DiscoverTransform() {
