@@ -4,6 +4,7 @@ import { defineConfig } from "vite"
 // \const dirname = fileURLToPath(import.meta.url)
 export default () => {
   return defineConfig({
+    base: "",
     resolve: {
       alias: {
         "~": "./src",
