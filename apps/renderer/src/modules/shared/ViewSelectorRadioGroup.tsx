@@ -48,14 +48,13 @@ export const ViewSelectorRadioGroup = forwardRef<
           </div>
         ))}
       </CardHeader>
-      <CardContent className="space-y-2 p-2">
-        {!!feed &&
-          entries
-            ?.slice(0, 2)
-            .map((entry) => (
-              <EntryItemStateless entry={entry} feed={feed} view={view} key={entry.guid} />
-            ))}
-      </CardContent>
+      {!!feed && !!entries && (
+        <CardContent className="space-y-2 p-2">
+          {entries.slice(0, 2).map((entry) => (
+            <EntryItemStateless entry={entry} feed={feed} view={view} key={entry.guid} />
+          ))}
+        </CardContent>
+      )}
     </Card>
   )
 })
