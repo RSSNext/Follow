@@ -1,14 +1,21 @@
 import { forwardRef } from "react"
 
-import { Card, CardHeader } from "~/components/ui/card"
+import { Card, CardContent, CardHeader } from "~/components/ui/card"
 import { views } from "~/constants"
 import { useI18n } from "~/hooks/common"
 import { cn } from "~/lib/utils"
+import type { EntryModelSimple, FeedModel } from "~/models"
+
+import { EntryItemStateless } from "../entry-column/item"
 
 export const ViewSelectorRadioGroup = forwardRef<
   HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement>
->(({ className, ...rest }, ref) => {
+  {
+    entries?: EntryModelSimple[]
+    feed?: FeedModel
+    view?: number
+  } & React.InputHTMLAttributes<HTMLInputElement>
+>(({ entries, feed, view, className, ...rest }, ref) => {
   const t = useI18n()
 
   return (
@@ -41,6 +48,13 @@ export const ViewSelectorRadioGroup = forwardRef<
           </div>
         ))}
       </CardHeader>
+      {!!feed && !!entries && (
+        <CardContent className="space-y-2 p-2">
+          {entries.slice(0, 2).map((entry) => (
+            <EntryItemStateless entry={entry} feed={feed} view={view} key={entry.guid} />
+          ))}
+        </CardContent>
+      )}
     </Card>
   )
 })

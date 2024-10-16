@@ -5441,6 +5441,39 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        publishedAt: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    }[];
                     feed: {
                         type: "feed";
                         id: string;

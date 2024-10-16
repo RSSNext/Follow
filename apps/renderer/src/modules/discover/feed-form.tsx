@@ -31,7 +31,7 @@ import { FeedViewType } from "~/lib/enum"
 import { getFetchErrorMessage, toastFetchError } from "~/lib/error-parser"
 import { getNewIssueUrl } from "~/lib/issues"
 import { cn } from "~/lib/utils"
-import type { FeedModel } from "~/models"
+import type { EntryModelSimple, FeedModel } from "~/models"
 import { feed as feedQuery, useFeed } from "~/queries/feed"
 import { subscription as subscriptionQuery } from "~/queries/subscriptions"
 import { useFeedByIdOrUrl } from "~/store/feed"
@@ -94,6 +94,7 @@ export const FeedForm: Component<{
             asWidget,
             onSuccess,
             subscriptionData: feedQuery.data?.subscription,
+            entries: feedQuery.data?.entries,
             feed,
           }}
         />
@@ -165,6 +166,7 @@ const FeedInnerForm = ({
   onSuccess,
   subscriptionData,
   feed,
+  entries,
 }: {
   defaultValues?: z.infer<typeof formSchema>
   id?: string
@@ -177,6 +179,7 @@ const FeedInnerForm = ({
     title?: string | null
   }
   feed: FeedModel
+  entries?: EntryModelSimple[]
 }) => {
   const subscription = useSubscriptionByFeedId(id || "") || subscriptionData
   const isSubscribed = !!subscription
@@ -276,18 +279,6 @@ const FeedInnerForm = ({
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-1 flex-col gap-y-4">
           <FormField
             control={form.control}
-            name="view"
-            render={() => (
-              <FormItem>
-                <FormLabel>{t("feed_form.view")}</FormLabel>
-
-                <ViewSelectorRadioGroup {...form.register("view")} />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="title"
             render={({ field }) => (
               <FormItem>
@@ -351,7 +342,24 @@ const FeedInnerForm = ({
               </FormItem>
             )}
           />
-          <div className="flex flex-1 items-end justify-end gap-4">
+          <FormField
+            control={form.control}
+            name="view"
+            render={() => (
+              <FormItem className="mb-16">
+                <FormLabel>{t("feed_form.view")}</FormLabel>
+
+                <ViewSelectorRadioGroup
+                  {...form.register("view")}
+                  entries={entries}
+                  feed={feed}
+                  view={Number(form.getValues("view"))}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="absolute inset-x-0 bottom-0 flex flex-1 items-end justify-end gap-4 bg-theme-background p-4">
             {isSubscribed && (
               <Button
                 type="button"
