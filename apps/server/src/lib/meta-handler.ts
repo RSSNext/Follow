@@ -26,6 +26,8 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
 
   const url = req.originalUrl
 
+  console.error("req.originalUrl", url)
+
   switch (true) {
     case url.startsWith("/share/feeds"): {
       const feedId = url.slice(url.lastIndexOf("/") + 1)
