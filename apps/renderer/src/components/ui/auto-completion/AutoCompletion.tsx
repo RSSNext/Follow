@@ -1,7 +1,7 @@
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from "@headlessui/react"
 import { AnimatePresence, m } from "framer-motion"
 import Fuse from "fuse.js"
-import { forwardRef, Fragment, useCallback, useEffect, useState } from "react"
+import { forwardRef, useCallback, useEffect, useState } from "react"
 
 import { cn } from "~/lib/utils"
 
@@ -18,8 +18,6 @@ export interface AutocompleteProps extends React.InputHTMLAttributes<HTMLInputEl
 
   onSuggestionSelected: (suggestion: NoInfer<Suggestion> | null) => void
 
-  portal?: boolean
-
   // classnames
 
   searchKeys?: string[]
@@ -35,7 +33,6 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       renderSuggestion = defaultRenderSuggestion,
       onSuggestionSelected,
       maxHeight,
-      portal,
       value,
       searchKeys = defaultSearchKeys,
       defaultValue,
@@ -78,7 +75,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       >
         {({ open }) => {
           return (
-            <Fragment>
+            <div className="relative">
               <ComboboxInput
                 ref={forwardedRef}
                 as={Input}
@@ -91,18 +88,18 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
               <AnimatePresence>
                 {open && (
                   <ComboboxOptions
-                    portal
+                    portal={false}
                     static
                     as={m.div}
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.98 }}
-                    anchor="bottom"
                     style={{ zIndex }}
                     className={cn(
                       "pointer-events-auto max-h-48 grow",
                       "shadow-perfect overflow-auto rounded-md border border-border bg-popover text-popover-foreground",
                       "w-[var(--input-width)] empty:invisible",
+                      "absolute inset-x-0 top-[110%]",
                     )}
                   >
                     <div style={{ maxHeight }}>
@@ -122,7 +119,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                   </ComboboxOptions>
                 )}
               </AnimatePresence>
-            </Fragment>
+            </div>
           )
         }}
       </Combobox>

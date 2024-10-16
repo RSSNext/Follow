@@ -306,7 +306,6 @@ const FeedInnerForm = ({
                   <div>
                     <Autocomplete
                       maxHeight={window.innerHeight < 600 ? 120 : 240}
-                      portal
                       suggestions={suggestions}
                       {...(field as any)}
                       onSuggestionSelected={(suggestion) => {
