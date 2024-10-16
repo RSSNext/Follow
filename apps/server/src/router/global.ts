@@ -6,6 +6,8 @@ import { fileURLToPath } from "node:url"
 
 import type { FastifyInstance, FastifyRequest } from "fastify"
 
+import { isDev } from "~/lib/env"
+
 import { injectMetaHandler } from "../lib/meta-handler"
 
 const require = createRequire(import.meta.url)
@@ -19,10 +21,8 @@ const devHandler = (app: FastifyInstance) => {
     const vite = require("../lib/dev-vite").getViteServer()
     try {
       let template = readFileSync(path.resolve(root, vite.config.root, "index.html"), "utf-8")
-
       template = await vite.transformIndexHtml(url, template)
-
-      template = await transfromTemplate(template, req.originalUrl, req)
+      template = await transfromTemplate(template, req)
 
       reply.type("text/html")
       reply.send(template)
@@ -54,24 +54,39 @@ const prodHandler = (app: FastifyInstance) => {
 
 export const globalRoute = process.env.NODE_ENV === "development" ? devHandler : prodHandler
 
-async function transfromTemplate(template: string, url: string, req: FastifyRequest) {
-  const dynamicInjectMetaString = await injectMetaHandler(url, req).catch((err) => {
-    if (process.env.NODE_ENV === "development") {
+async function transfromTemplate(template: string, req: FastifyRequest) {
+  const injectMetadata = await injectMetaHandler(req).catch((err) => {
+    if (isDev) {
       throw err
     }
-    return ""
+    return []
   })
-  template = template.replace(`<!-- SSG-META -->`, dynamicInjectMetaString)
 
-  if (dynamicInjectMetaString) {
-    template = template.replace(`<!-- SSG-META -->`, dynamicInjectMetaString)
-
-    // Remove <!-- Default Open Graph --> between <!-- End Default Open Graph -->
-    const endCommentString = "<!-- End Default Open Graph -->"
-    const startIndex = template.indexOf("<!-- Default Open Graph -->")
-    const endIndex = template.indexOf(endCommentString)
-    template = template.slice(0, startIndex) + template.slice(endIndex + endCommentString.length)
+  if (!injectMetadata) {
+    return template
   }
+
+  const allMetaString = []
+  let isTitleReplaced = false
+  for (const meta of injectMetadata) {
+    switch (meta.type) {
+      case "meta": {
+        allMetaString.push(`<meta property="${meta.property}" content="${meta.content}" />`)
+        break
+      }
+      case "title": {
+        template = template.replace(`<!-- TITLE -->`, meta.title)
+        isTitleReplaced = true
+        break
+      }
+    }
+  }
+
+  if (!isTitleReplaced) {
+    template = template.replace(`<!-- TITLE -->`, `Follow`)
+  }
+
+  template = template.replace(`<!-- SSG-META -->`, allMetaString.join("\n"))
 
   return template
 }

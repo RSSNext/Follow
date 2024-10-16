@@ -5,7 +5,6 @@ import { defineConfig } from "vite"
 
 import { viteRenderBaseConfig } from "../../configs/vite.render.config"
 
-// \const dirname = fileURLToPath(import.meta.url)
 const isCI = process.env.CI === "1"
 export default () => {
   return defineConfig({

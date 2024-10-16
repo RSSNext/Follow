@@ -1,50 +1,42 @@
 import type { FastifyRequest } from "fastify"
 
 import { createApiClient, getTokenFromCookie } from "./api-client"
-import { buildSeoMetaTags } from "./seo"
 
-export async function injectMetaHandler(url: string, req: FastifyRequest) {
-  const metaArr = [] as string[]
+interface MetaTagdata {
+  type: "meta"
+  property: string
+  content: string
+}
 
+interface MetaTitle {
+  type: "title"
+  title: string
+}
+
+export type MetaTag = MetaTagdata | MetaTitle
+
+export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]> {
+  const metaArr = [] as MetaTag[]
+
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const apiClient = createApiClient(getTokenFromCookie(req.headers.cookie || ""))
 
   const hostFromReq = req.headers.host
   const protocol = req.headers["x-forwarded-proto"] || req.protocol || "https"
 
+  const url = req.originalUrl
+
   switch (true) {
-    case url.startsWith("/feed"): {
-      const parsedUrl = new URL(url, "https://app.follow.is")
-      const feedId = parsedUrl.pathname.split("/")[2]
-      const feed: any = await apiClient.feeds
-        .$get({
-          query: {
-            id: feedId,
-          },
-        })
+    case url.startsWith("/share/feeds"): {
+      const feedId = url.slice(url.lastIndexOf("/") + 1)
 
-        // @ts-ignore
-        .then((res) => res.data.feed)
-
-      if (!feed) {
-        return ""
-      }
-
-      if (!feed.title || !feed.description) {
-        return ""
-      }
-
-      metaArr.push(
-        ...buildSeoMetaTags({
-          openGraph: {
-            title: feed.title,
-            description: feed.description,
-            image: `${protocol}://${hostFromReq}/og/feed/${feed.id}`,
-          },
-        }),
-      )
-      break
+      metaArr.push({
+        type: "meta",
+        property: "og:image",
+        content: `${protocol}://${hostFromReq}/og/feed/${feedId}`,
+      })
     }
   }
 
-  return metaArr.join("\n")
+  return metaArr
 }

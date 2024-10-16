@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build && tsup",
-    "dev": "NODE_ENV=development tsx index.ts",
+    "dev": "NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
     "start": "tsx index.ts"
   },
   "dependencies": {
