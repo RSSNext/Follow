@@ -6,6 +6,7 @@ import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useOnClickOutside } from "usehooks-ts"
 
+import { useViewport } from "~/atoms/hooks/viewport"
 import { ActionButton, Button, IconButton } from "~/components/ui/button"
 import { Kbd, KbdCombined } from "~/components/ui/kbd/Kbd"
 import { RootPortal } from "~/components/ui/portal"
@@ -42,6 +43,10 @@ export const MarkAllReadWithOverlay = forwardRef<
   useOnClickOutside({ current: popoverRef }, () => {
     setShow(false)
   })
+
+  // change popup's width when viewport changes.
+  useViewport((v) => v.w)
+
   const renderPopup = () => {
     const $parent = containerRef.current!
     const rect = $parent.getBoundingClientRect()
