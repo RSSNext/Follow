@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "Bundler",
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noEmit": true,
+    "baseUrl": ".",
+    "declaration": true,
+    "paths": {
+      "@follow/utils/*": ["./src/*"]
+    }
+  }
+}

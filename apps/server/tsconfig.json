@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "types": ["vite/client"],
     "plugins": [
       {
         "name": "next"
@@ -29,6 +30,7 @@
     "./tsup.config.ts",
     "./client/**/*.ts",
     "./client/**/*.tsx",
+    "./vite.config.ts",
     "./tailwind.config.ts"
   ],
   "exclude": ["node_modules"]

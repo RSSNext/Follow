@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { readFileSync } from "node:fs"
 import { createRequire } from "node:module"
 import path, { dirname, resolve } from "node:path"

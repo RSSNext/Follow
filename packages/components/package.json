@@ -1,0 +1,8 @@
+{
+  "name": "@follow/components",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    "./tailwind": "./assets/tailwind.css"
+  }
+}
