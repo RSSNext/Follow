@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/((?!assets|vendor|locales/).*)",
-      "destination": "/"
+      "source": "/(.*)",
+      "destination": "/api"
     }
   ]
 }
