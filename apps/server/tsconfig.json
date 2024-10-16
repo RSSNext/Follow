@@ -13,7 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "types": ["vite/client"],
+    "types": ["vite/client", "@follow/types/react", "@follow/types/global"],
     "plugins": [
       {
         "name": "next"

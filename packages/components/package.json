@@ -3,6 +3,18 @@
   "version": "0.0.1",
   "private": true,
   "exports": {
-    "./tailwind": "./assets/tailwind.css"
+    "./tailwind": "./assets/tailwind.css",
+    "./modules/*": "./src/modules/*",
+    "./common/*": "./src/common/*",
+    "./icons/*": "./src/icons/*",
+    "./ui/*": "./src/ui/*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@follow/types": "workspace:*",
+    "@follow/utils": "workspace:*"
   }
 }

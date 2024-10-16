@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noEmit": true,
+    "baseUrl": ".",
+    "jsx": "preserve",
+    "declaration": true,
+    "types": ["@follow/types/react", "@follow/types/global"],
+    "paths": {
+      "@follow/utils/*": ["./src/*"],
+      "@pkg": ["../../package.json"]
+    }
+  },
+  "include": ["src/**/*"]
+}

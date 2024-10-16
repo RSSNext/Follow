@@ -11,6 +11,7 @@
     "@follow/components": "workspace:*",
     "@follow/shared": "workspace:*",
     "@follow/utils": "workspace:*",
+    "@tanstack/react-query": "5.59.14",
     "click-to-react-component": "1.1.0",
     "fastify": "5.0.0",
     "framer-motion": "11.11.9",
@@ -20,6 +21,7 @@
     "swr": "2.2.5"
   },
   "devDependencies": {
+    "@follow/types": "workspace:*",
     "tsup": "8.3.0",
     "tsx": "4.19.1",
     "vite": "5.4.9"
