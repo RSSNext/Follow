@@ -28,6 +28,7 @@
     "./src/**/*.tsx",
     "./index.ts",
     "./api/index.ts",
+    "./scripts/**/*.ts",
     "./tsup.config.ts",
     "./client/**/*.ts",
     "./client/**/*.tsx",

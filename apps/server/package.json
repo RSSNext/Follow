@@ -1,7 +1,7 @@
 {
   "name": "@follow/server",
   "scripts": {
-    "build": "vite build && tsup",
+    "build": "vite build && tsx scripts/generate-font-data.ts && tsup",
     "dev": "NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
     "start": "tsx index.ts"
   },
