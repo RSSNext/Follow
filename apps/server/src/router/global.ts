@@ -32,19 +32,8 @@ const devHandler = (app: FastifyInstance) => {
 }
 const prodHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
-    // const pathname = req.originalUrl
-
-    // if (pathname.startsWith("/assets")) {
-    //   const subPath = pathname.replace("/assets", "")
-    //   const content = readFileSync(path.resolve(__dirname, `../../dist/assets${subPath}`), "utf-8")
-
-    //   const type = subPath.endsWith(".css") ? "text/css" : "application/javascript"
-    //   reply.type(type)
-    //   reply.send(content)
-    // }
-
-    const template = require("./index.template").default
-
+    let template = require("./index.template").default
+    template = await transfromTemplate(template, req)
     reply.type("text/html")
     reply.send(template)
   })
