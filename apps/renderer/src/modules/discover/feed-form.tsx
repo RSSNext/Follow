@@ -261,10 +261,12 @@ const FeedInnerForm = ({
 
   const suggestions = useMemo(
     () =>
-      categories.data?.map((i) => ({
-        name: i,
-        value: i,
-      })) || [],
+      (
+        categories.data?.map((i) => ({
+          name: i,
+          value: i,
+        })) || []
+      ).sort((a, b) => a.name.localeCompare(b.name)),
     [categories.data],
   )
 
