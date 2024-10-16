@@ -5,7 +5,7 @@ import { FeedIcon } from "~/components/feed-icon"
 import { RelativeTime } from "~/components/ui/datetime"
 import { useAuthQuery } from "~/hooks/common"
 import { cn } from "~/lib/utils"
-import type { FeedModel } from "~/models"
+import type { FeedModel, InboxModel } from "~/models"
 import { Queries } from "~/queries"
 import { useEntry, useEntryReadHistory } from "~/store/entry"
 import { getPreferredTitle, useFeedById } from "~/store/feed"
@@ -32,6 +32,8 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
   const entryHistory = useEntryReadHistory(entryId)
 
   const populatedFullHref = useMemo(() => {
+    // ? Why is this as a FeedModel? Testing revealed that it could be InboxModel
+    if ((feed as unknown as InboxModel)?.type === "inbox") return entry?.entries.authorUrl
     const href = entry?.entries.url
     if (!href) return "#"
 
@@ -85,7 +87,9 @@ export const EntryTitle = ({ entryId, compact }: EntryLinkProps) => {
           useOverlay
         />
       </div>
-      <div className="mt-2 text-[13px] font-medium text-zinc-500">{getPreferredTitle(feed)}</div>
+      <div className="mt-2 text-[13px] font-medium text-zinc-500">
+        {getPreferredTitle(feed, entry.entries)}
+      </div>
       <div className="flex items-center gap-2 text-[13px] text-zinc-500">
         {entry.entries.publishedAt && new Date(entry.entries.publishedAt).toLocaleString()}
 
