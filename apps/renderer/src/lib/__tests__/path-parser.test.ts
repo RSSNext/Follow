@@ -8,7 +8,7 @@ import {
   parseRegexpPathParams,
   regexpPathToPath,
   transformUriPath,
-} from "./path-parser"
+} from "../path-parser"
 
 describe("test `transformUriPath()`", () => {
   test("normal path", () => {

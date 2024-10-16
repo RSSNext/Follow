@@ -3,13 +3,13 @@ import * as React from "react"
 
 import { cn } from "~/lib/utils"
 
+import { RootPortal } from "../portal"
+
 const ContextMenu = ContextMenuPrimitive.Root
 
 const ContextMenuTrigger = ContextMenuPrimitive.Trigger
 
 const ContextMenuGroup = ContextMenuPrimitive.Group
-
-const ContextMenuPortal = ContextMenuPrimitive.Portal
 
 const ContextMenuSub = ContextMenuPrimitive.Sub
 
@@ -42,16 +42,16 @@ const ContextMenuSubContent = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubContent>
 >(({ className, ...props }, ref) => (
-  <ContextMenuPrimitive.Portal>
+  <RootPortal>
     <ContextMenuPrimitive.SubContent
       ref={ref}
       className={cn(
-        "z-[1001] min-w-32 overflow-hidden rounded-md border bg-theme-modal-background-opaque p-1 text-theme-foreground/90 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:shadow-zinc-800/60",
+        "min-w-32 overflow-hidden rounded-md border bg-theme-modal-background-opaque p-1 text-theme-foreground/90 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:shadow-zinc-800/60",
         className,
       )}
       {...props}
     />
-  </ContextMenuPrimitive.Portal>
+  </RootPortal>
 ))
 ContextMenuSubContent.displayName = ContextMenuPrimitive.SubContent.displayName
 
@@ -59,17 +59,17 @@ const ContextMenuContent = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content>
 >(({ className, ...props }, ref) => (
-  <ContextMenuPrimitive.Portal>
+  <RootPortal>
     <ContextMenuPrimitive.Content
       ref={ref}
       className={cn(
-        "z-[999] min-w-32 overflow-hidden rounded-md border border-border bg-theme-modal-background-opaque p-1 text-theme-foreground/90 shadow-lg dark:shadow-zinc-800/60",
+        "z-[60] min-w-32 overflow-hidden rounded-md border border-border bg-theme-modal-background-opaque p-1 text-theme-foreground/90 shadow-lg dark:shadow-zinc-800/60",
         "text-xs",
         className,
       )}
       {...props}
     />
-  </ContextMenuPrimitive.Portal>
+  </RootPortal>
 ))
 ContextMenuContent.displayName = ContextMenuPrimitive.Content.displayName
 
@@ -149,7 +149,6 @@ export {
   ContextMenuGroup,
   ContextMenuItem,
   ContextMenuLabel,
-  ContextMenuPortal,
   ContextMenuRadioGroup,
   ContextMenuSeparator,
   ContextMenuSub,
@@ -157,3 +156,5 @@ export {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 }
+
+export { RootPortal as ContextMenuPortal } from "../portal"

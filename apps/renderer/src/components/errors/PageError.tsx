@@ -7,7 +7,7 @@ import { FeedbackIssue } from "../common/ErrorElement"
 import { Button } from "../ui/button"
 import { parseError, useResetErrorWhenRouteChange } from "./helper"
 
-export const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {
+const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {
   const { message, stack } = parseError(props.error)
   useResetErrorWhenRouteChange(props.resetError)
   return (
@@ -43,3 +43,5 @@ export const PageErrorFallback: FC<AppErrorFallbackProps> = (props) => {
     </div>
   )
 }
+
+export default PageErrorFallback

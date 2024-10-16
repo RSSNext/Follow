@@ -138,6 +138,7 @@ function FeedListImpl({ className, view }: { className?: string; view: number })
           className="font-bold"
           onClick={(e) => {
             e.stopPropagation()
+            if (!document.hasFocus()) return
             if (view !== undefined) {
               navigateEntry({
                 entryId: null,

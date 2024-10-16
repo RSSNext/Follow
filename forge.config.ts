@@ -154,6 +154,7 @@ const config: ForgeConfig = {
     new MakerSquirrel({
       name: "Follow",
       setupIcon: "resources/icon.ico",
+      iconUrl: "https://app.follow.is/favicon.ico",
     }),
     new MakerAppImage({
       options: {

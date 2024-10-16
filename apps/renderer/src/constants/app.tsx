@@ -15,3 +15,5 @@ export const ROUTE_FEED_IN_INBOX = "inbox-"
 
 export const DAILY_CLAIM_AMOUNT = "20"
 export const INVITATION_PRICE = "100"
+
+export const INBOX_PREFIX_ID = "inbox-"

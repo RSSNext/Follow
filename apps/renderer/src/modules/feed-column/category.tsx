@@ -1,18 +1,20 @@
 import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
-import { Fragment, memo, useEffect, useRef, useState } from "react"
+import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useOnClickOutside } from "usehooks-ts"
 
 import { MotionButtonBase } from "~/components/ui/button"
 import { LoadingCircle } from "~/components/ui/loading"
+import { useScrollViewElement } from "~/components/ui/scroll-area/hooks"
 import { ROUTE_FEED_IN_FOLDER, views } from "~/constants"
 import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRouteParams"
-import { useAnyPointDown, useInputComposition } from "~/hooks/common"
+import { useAnyPointDown, useInputComposition, useRefValue } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
+import type { NullableNativeMenuItem } from "~/lib/native-menu"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
@@ -51,19 +53,30 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const subscription = useSubscriptionByFeedId(ids[0])
   const folderName = subscription?.category || subscription.defaultCategory
 
-  const showCollapse = sortByUnreadFeedList.length > 1 || subscription?.category
+  const showCollapse = sortByUnreadFeedList.length > 1 || !!subscription?.category
 
-  const [open, setOpen] = useState(() => {
+  const open = useMemo(() => {
     if (!showCollapse) return true
     if (folderName && typeof categoryOpenStateData[folderName] === "boolean") {
       return categoryOpenStateData[folderName]
     }
     return false
-  })
+  }, [categoryOpenStateData, folderName, showCollapse])
+
+  const setOpen = useCallback(
+    (next: boolean) => {
+      if (view !== undefined && folderName) {
+        subscriptionActions.changeCategoryOpenState(view, folderName, next)
+      }
+    },
+    [folderName, view],
+  )
 
   const shouldOpen = useRouteParamsSelector(
     (s) => typeof s.feedId === "string" && ids.includes(s.feedId),
   )
+  const scroller = useScrollViewElement()
+  const scrollerRef = useRefValue(scroller)
   useEffect(() => {
     if (shouldOpen) {
       setOpen(true)
@@ -71,19 +84,21 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
       const $items = itemsRef.current
 
       if (!$items) return
-      $items.querySelector(`[data-feed-id="${getRouteParams().feedId}"]`)?.scrollIntoView({
-        block: "center",
+      const $target = $items.querySelector(
+        `[data-feed-id="${getRouteParams().feedId}"]`,
+      ) as HTMLElement
+      if (!$target) return
+
+      const $scroller = scrollerRef.current
+      if (!$scroller) return
+
+      const scrollTop = $target.offsetTop - $scroller.clientHeight / 2
+      $scroller.scrollTo({
+        top: scrollTop,
         behavior: "smooth",
       })
     }
-  }, [shouldOpen])
-  const expansion = folderName ? categoryOpenStateData[folderName] : true
-
-  useEffect(() => {
-    if (showCollapse) {
-      setOpen(expansion)
-    }
-  }, [expansion])
+  }, [scrollerRef, setOpen, shouldOpen])
 
   const itemsRef = useRef<HTMLDivElement>(null)
 
@@ -154,6 +169,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
           }}
           onContextMenu={(e) => {
             setIsContextMenuOpen(true)
+
             showNativeMenu(
               [
                 {
@@ -169,21 +185,23 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-                  // @ts-expect-error
+
                   submenu: listList
-                    ?.map((list) => ({
-                      label: list.title || "",
-                      type: "text",
-                      click() {
-                        return addMutation.mutate({
-                          feedIds: ids,
-                          listId: list.id,
-                        })
-                      },
-                    }))
+                    ?.map(
+                      (list) =>
+                        ({
+                          label: list.title || "",
+                          type: "text",
+                          click() {
+                            return addMutation.mutate({
+                              feedIds: ids,
+                              listId: list.id,
+                            })
+                          },
+                        }) as NullableNativeMenuItem,
+                    )
+                    .concat(listList?.length > 0 ? [{ type: "separator" as const }] : [])
                     .concat([
-                      // @ts-expect-error
-                      { type: "separator" as const },
                       {
                         label: t("sidebar.feed_actions.create_list"),
                         type: "text" as const,

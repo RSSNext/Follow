@@ -112,7 +112,7 @@
   "integration.readwise.enable.description": "Отображать кнопку 'Сохранить в Readwise', когда доступно.",
   "integration.readwise.enable.label": "Включить",
   "integration.readwise.title": "Readwise",
-  "integration.readwise.token.description": "Вы можете получить его здесь: readwise.io/access_token.",
+  "integration.readwise.token.description": "Вы можете получить его здесь: ",
   "integration.readwise.token.label": "Токен доступа Readwise",
   "integration.sidebar_title": "Интеграции",
   "integration.tip": "Подсказка: Ваши конфиденциальные данные хранятся локально и не загружаются на сервер.",

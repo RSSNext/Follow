@@ -3,6 +3,7 @@ import { resolve } from "node:path"
 import { defineConfig } from "electron-vite"
 
 import { viteRenderBaseConfig } from "./configs/vite.render.config"
+import { createPlatformSpecificImportPlugin } from "./plugins/vite/specific-import"
 
 export default defineConfig({
   main: {
@@ -40,6 +41,8 @@ export default defineConfig({
   },
   renderer: {
     ...viteRenderBaseConfig,
+
+    plugins: [...viteRenderBaseConfig.plugins, createPlatformSpecificImportPlugin(true)],
 
     root: "apps/renderer",
     build: {

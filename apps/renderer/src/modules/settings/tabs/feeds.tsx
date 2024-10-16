@@ -1,4 +1,3 @@
-import { WEB_URL } from "@follow/shared/constants"
 import { useTranslation } from "react-i18next"
 
 import { FeedIcon } from "~/components/feed-icon"
@@ -15,6 +14,7 @@ import {
 } from "~/components/ui/table"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useAuthQuery } from "~/hooks/common"
+import { UrlBuilder } from "~/lib/url-builder"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
 
@@ -54,7 +54,7 @@ export const SettingFeeds = () => {
                     <TableCell size="sm">
                       <a
                         target="_blank"
-                        href={`${WEB_URL}/feed/${row.feed.id}`}
+                        href={UrlBuilder.shareFeed(row.feed.id)}
                         className="flex items-center"
                       >
                         <FeedIcon fallback feed={row.feed} size={16} />

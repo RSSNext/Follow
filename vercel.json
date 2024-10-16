@@ -13,6 +13,18 @@
       "destination": "/index.html"
     }
   ],
+  "redirects": [
+    {
+      "source": "/feed/:id",
+      "destination": "/share/feeds/:id",
+      "permanent": true
+    },
+    {
+      "source": "/list/:id",
+      "destination": "/share/lists/:id",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/vendor/(.*)",

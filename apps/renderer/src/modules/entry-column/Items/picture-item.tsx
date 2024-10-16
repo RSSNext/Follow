@@ -3,6 +3,9 @@ import type { PropsWithChildren } from "react"
 import { memo, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import { FeedIcon } from "~/components/feed-icon"
+import { RelativeTime } from "~/components/ui/datetime"
+import { Media } from "~/components/ui/media"
 import { SwipeMedia } from "~/components/ui/media/SwipeMedia"
 import { ReactVirtuosoItemPlaceholder } from "~/components/ui/placeholder"
 import { Skeleton } from "~/components/ui/skeleton"
@@ -15,7 +18,7 @@ import { useImageDimensions } from "~/store/image"
 import { usePreviewMedia } from "../../../components/ui/media/hooks"
 import { EntryItemWrapper } from "../layouts/EntryItemWrapper"
 import { GridItem, GridItemFooter } from "../templates/grid-item-template"
-import type { UniversalItemProps } from "../types"
+import type { EntryItemStatelessProps, UniversalItemProps } from "../types"
 import {
   MasonryIntersectionContext,
   useMasonryItemRatio,
@@ -191,6 +194,57 @@ const MasonryItemFixedDimensionWrapper = (
   return (
     <div className="relative flex h-full gap-2 overflow-x-auto overflow-y-hidden" style={style}>
       {children}
+    </div>
+  )
+}
+
+export function PictureItemStateLess({ entry, feed }: EntryItemStatelessProps) {
+  return (
+    <div className="relative mx-auto max-w-md rounded-md bg-theme-background text-zinc-700 transition-colors dark:text-neutral-400">
+      <div className="relative">
+        <div className="p-1.5">
+          <div className="relative flex gap-2 overflow-x-auto">
+            <div
+              className={cn(
+                "relative flex w-full shrink-0 items-center overflow-hidden rounded-md",
+                !entry.media?.[0].url && "aspect-square",
+              )}
+            >
+              {entry.media?.[0] ? (
+                <Media
+                  thumbnail
+                  src={entry.media[0].url}
+                  type={entry.media[0].type}
+                  previewImageUrl={entry.media[0].preview_image_url}
+                  className="size-full overflow-hidden"
+                  mediaContainerClassName={"w-auto h-auto rounded"}
+                  loading="lazy"
+                  proxy={{
+                    width: 0,
+                    height: 0,
+                  }}
+                  height={entry.media[0].height}
+                  width={entry.media[0].width}
+                  blurhash={entry.media[0].blurhash}
+                />
+              ) : (
+                <Skeleton className="size-full overflow-hidden" />
+              )}
+            </div>
+          </div>
+          <div className="relative flex-1 px-2 pb-3 pt-1 text-sm">
+            <div className="relative mb-1 mt-1.5 truncate font-medium leading-none">
+              {entry.title}
+            </div>
+            <div className="mt-1 flex items-center gap-1 truncate text-[13px]">
+              <FeedIcon feed={feed} fallback className="size-4" />
+              <span>{feed.title}</span>
+              <span className="text-zinc-500">·</span>
+              {!!entry.publishedAt && <RelativeTime date={entry.publishedAt} />}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

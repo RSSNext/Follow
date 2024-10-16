@@ -56,7 +56,7 @@ export const TransactionsSection: Component = ({ className }) => {
       </Tabs>
       <div className={cn("w-fit min-w-0 grow overflow-x-auto", className)}>
         <Table className="w-full table-fixed">
-          <TableHeader className="sticky top-0 z-10 bg-theme-background">
+          <TableHeader className="sticky top-0 bg-theme-background">
             <TableRow className="[&_*]:!pl-0 [&_*]:!font-semibold">
               <TableHead>{t("wallet.transactions.type")}</TableHead>
               <TableHead>{t("wallet.transactions.amount")}</TableHead>

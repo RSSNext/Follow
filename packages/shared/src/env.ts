@@ -11,27 +11,7 @@ export const env = createEnv({
     VITE_SENTRY_DSN: z.string().optional(),
     VITE_POSTHOG_KEY: z.string().optional(),
     VITE_INBOXES_EMAIL: z.string().default("@follow.re"),
-    VITE_FIREBASE_CONFIG: z
-      .string()
-      .transform((content) => {
-        try {
-          return JSON.parse(content)
-        } catch {
-          return z.NEVER
-        }
-      })
-      .pipe(
-        z.object({
-          apiKey: z.string(),
-          authDomain: z.string(),
-          projectId: z.string(),
-          storageBucket: z.string(),
-          messagingSenderId: z.string(),
-          appId: z.string(),
-          measurementId: z.string(),
-        }),
-      )
-      .optional(),
+    VITE_FIREBASE_CONFIG: z.string().optional(),
   },
 
   emptyStringAsUndefined: true,

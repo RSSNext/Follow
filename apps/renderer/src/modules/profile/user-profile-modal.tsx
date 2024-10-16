@@ -250,11 +250,12 @@ export const UserProfileModalContent: FC<{
                     asChild
                     src={replaceImgUrlIfNeed(userInfo.avatar || undefined)}
                   >
-                    <m.img layout />
+                    <m.img layout transition={{ duration: 0.35 }} />
                   </AvatarImage>
                   <AvatarFallback>{userInfo.name?.slice(0, 2)}</AvatarFallback>
                 </m.span>
               </Avatar>
+
               <m.div
                 layout
                 transition={{ duration: 0.35 }}
@@ -398,7 +399,7 @@ const SubscriptionItem: FC<{
             !isLoose && "flex items-center",
           )}
         >
-          <div className="truncate font-medium leading-none">{subscription.feeds?.title}</div>
+          <div className="truncate font-medium leading-tight">{subscription.feeds?.title}</div>
           {isLoose && (
             <div className="mt-1 line-clamp-1 text-xs text-zinc-500">
               {subscription.feeds?.description}

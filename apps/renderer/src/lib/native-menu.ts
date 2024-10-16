@@ -4,22 +4,39 @@ import { get } from "lodash-es"
 import { tipcClient } from "./client"
 import { getOS } from "./utils"
 
-export type NativeMenuItem = (
-  | {
-      type: "text"
-      label: string
-      click?: () => void
-      /** only work in web app */
-      icon?: React.ReactNode
-      shortcut?: string
-      disabled?: boolean
-      submenu?: NativeMenuItem[]
-      checked?: boolean
-    }
-  | { type: "separator"; disabled?: boolean }
-) & { hide?: boolean }
+type MenuItemWithHide<T> = T & {
+  hide?: boolean
+}
 
-export type NullableNativeMenuItem = NativeMenuItem | null | undefined | false | ""
+type BaseMenuItemText = MenuItemWithHide<{
+  type: "text"
+  label: string
+  click?: () => void
+  /** only work in web app */
+  icon?: React.ReactNode
+  shortcut?: string
+  disabled?: boolean
+  checked?: boolean
+}>
+
+type BaseMenuItemSeparator = MenuItemWithHide<{
+  type: "separator"
+  disabled?: boolean
+}>
+
+type BaseMenuItem = BaseMenuItemText | BaseMenuItemSeparator
+
+export type NativeMenuItem = BaseMenuItem & {
+  submenu?: NativeMenuItem[]
+}
+
+export type NullableNativeMenuItem =
+  | (BaseMenuItemText & { submenu?: NullableNativeMenuItem[] })
+  | BaseMenuItemSeparator
+  | null
+  | undefined
+  | false
+  | ""
 
 function sortShortcutsString(shortcut: string) {
   const order = ["Shift", "Ctrl", "Meta", "Alt"]
@@ -37,19 +54,24 @@ function sortShortcutsString(shortcut: string) {
 
   return [...sortedModifiers, ...otherKeys].join("+")
 }
-export const showNativeMenu = async (
-  items: Array<NullableNativeMenuItem>,
-  e?: MouseEvent | React.MouseEvent,
-) => {
-  const nextItems = (items.filter((item) => item && !item.hide) as NativeMenuItem[]).map((item) => {
+
+function processMenuItems(items: NullableNativeMenuItem[]): NativeMenuItem[] {
+  return (items.filter((item) => item && !item.hide) as NativeMenuItem[]).map((item) => {
     if (item.type === "text") {
       return {
         ...item,
         shortcut: item.shortcut ? sortShortcutsString(item.shortcut) : undefined,
+        submenu: item.submenu ? processMenuItems(item.submenu) : undefined,
       }
     }
     return item
-  }) as NativeMenuItem[]
+  })
+}
+export const showNativeMenu = async (
+  items: Array<NullableNativeMenuItem>,
+  e?: MouseEvent | React.MouseEvent,
+) => {
+  const nextItems = processMenuItems(items)
 
   const el = e && e.currentTarget
 
