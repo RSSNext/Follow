@@ -1,10 +1,9 @@
 import { PoweredByFooter } from "@follow/components/common/PoweredByFooter.jsx"
-
+import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 // import { FeedCertification } from "~/components/feed-certification"
 // import { FeedIcon } from "~/components/feed-icon"
 // import { FollowIcon } from "~/components/icons/follow"
 // import { Button } from "~/components/ui/button"
-// import { LoadingCircle } from "~/components/ui/loading"
 // import { views } from "~/constants"
 // import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
 // import { useTitle } from "~/hooks/common"
@@ -20,7 +19,12 @@ export function Component() {
   // const { id } = useParams()
   // const [search] = useSearchParams()
   // const view = Number.parseInt(search.get("view") || "0")
-  return <PoweredByFooter />
+  return (
+    <>
+      <LoadingCircle size="large" className="center fixed inset-0" />
+      <PoweredByFooter />
+    </>
+  )
 
   // const feed = useFeed({
   //   id,

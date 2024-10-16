@@ -9,7 +9,7 @@
     "baseUrl": ".",
     "jsx": "preserve",
     "declaration": true,
-    "types": ["@follow/types/react", "@follow/types/global"],
+    "types": ["@follow/types/react", "@follow/types/global", "vite/client"],
     "paths": {
       "@follow/components/*": ["./src/*"],
       "@pkg": ["../../package.json"]
