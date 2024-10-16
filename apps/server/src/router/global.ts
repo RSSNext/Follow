@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs"
+import { readFileSync } from "node:fs"
 import { createRequire } from "node:module"
 import path, { dirname, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -31,27 +31,27 @@ const devHandler = (app: FastifyInstance) => {
     }
   })
 }
-const handler = (app: FastifyInstance) => {
+const prodHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
     const pathname = req.originalUrl
     const __dirname = dirname(fileURLToPath(import.meta.url))
     if (pathname.startsWith("/assets")) {
       const subPath = pathname.replace("/assets", "")
-      const content = readFileSync(path.resolve(__dirname, `../out/web/assets${subPath}`), "utf-8")
+      const content = readFileSync(path.resolve(__dirname, `../../dist/assets${subPath}`), "utf-8")
 
       const type = subPath.endsWith(".css") ? "text/css" : "application/javascript"
       reply.type(type)
       reply.send(content)
     }
 
-    let template = readFileSync(path.resolve(__dirname, "../out/web/index.html"), "utf-8")
+    const template = readFileSync(path.resolve(__dirname, "../../dist/index.html"), "utf-8")
 
     reply.type("text/html")
     reply.send(template)
   })
 }
 
-export const globalRoute = process.env.NODE_ENV === "development" ? devHandler : handler
+export const globalRoute = process.env.NODE_ENV === "development" ? devHandler : prodHandler
 
 async function transfromTemplate(template: string, url: string, req: FastifyRequest) {
   const dynamicInjectMetaString = await injectMetaHandler(url, req).catch((err) => {

@@ -2,7 +2,9 @@
   "name": "@follow/server",
   "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=development tsx index.ts"
+    "build": "vite build && tsup",
+    "dev": "NODE_ENV=development tsx index.ts",
+    "start": "tsx index.ts"
   },
   "dependencies": {
     "@fastify/middie": "9.0.2",
@@ -10,6 +12,7 @@
     "fastify": "5.0.0"
   },
   "devDependencies": {
+    "tsup": "8.3.0",
     "tsx": "4.19.1",
     "vite": "5.4.9"
   }
