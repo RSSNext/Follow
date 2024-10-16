@@ -317,7 +317,7 @@ const RowRender = ({ feedId, listId }: { feedId: string; listId: string }) => {
       <TableCell size="sm">
         <a
           target="_blank"
-          href={UrlBuilder.shareList(feed.id)}
+          href={UrlBuilder.shareFeed(feed.id)}
           className="flex items-center gap-2 font-semibold"
         >
           {feed.siteUrl && <FeedIcon className="mr-0" siteUrl={feed.siteUrl} />}
