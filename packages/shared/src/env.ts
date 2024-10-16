@@ -20,8 +20,15 @@ export const env = createEnv({
   skipValidation: !isDev,
 })
 
+const metaEnvIsEmpty = () => {
+  return Object.keys(import.meta.env).length === 0
+}
+
 function getRuntimeEnv() {
   try {
+    if (metaEnvIsEmpty()) {
+      return process.env
+    }
     return injectExternalEnv(import.meta.env)
   } catch {
     return process.env

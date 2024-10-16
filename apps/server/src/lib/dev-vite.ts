@@ -1,11 +1,10 @@
-import { dirname, resolve } from "node:path"
-import { fileURLToPath } from "node:url"
+import { resolve } from "node:path"
 
 import type { FastifyInstance } from "fastify"
 import type { ViteDevServer } from "vite"
 import { createServer as createViteServer } from "vite"
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..")
+const root = resolve(__dirname, "../..")
 
 let globalVite: ViteDevServer
 export const registerDevViteServer = async (app: FastifyInstance) => {
@@ -13,7 +12,7 @@ export const registerDevViteServer = async (app: FastifyInstance) => {
     server: { middlewareMode: true },
     appType: "custom",
 
-    configFile: resolve(root, "vite.config.ts"),
+    configFile: resolve(root, "vite.config.mts"),
   })
   globalVite = vite
 

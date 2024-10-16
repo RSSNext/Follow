@@ -1,6 +1,5 @@
 {
   "name": "@follow/server",
-  "type": "module",
   "scripts": {
     "build": "vite build && tsup",
     "dev": "NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
@@ -26,6 +25,7 @@
     "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
+    "lightningcss": "1.27.0",
     "tsup": "8.3.0",
     "tsx": "4.19.1",
     "vite": "5.4.9"

@@ -1,8 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { readFileSync } from "node:fs"
-import { createRequire } from "node:module"
-import path, { dirname, resolve } from "node:path"
-import { fileURLToPath } from "node:url"
+import path, { resolve } from "node:path"
 
 import type { FastifyInstance, FastifyRequest } from "fastify"
 
@@ -10,13 +8,13 @@ import { isDev } from "~/lib/env"
 
 import { injectMetaHandler } from "../lib/meta-handler"
 
-const require = createRequire(import.meta.url)
+// const require = createRequire(import.meta.url)
 
 const devHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
     const url = req.originalUrl
 
-    const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..")
+    const root = resolve(__dirname, "../..")
 
     const vite = require("../lib/dev-vite").getViteServer()
     try {
@@ -35,7 +33,7 @@ const devHandler = (app: FastifyInstance) => {
 const prodHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
     const pathname = req.originalUrl
-    const __dirname = dirname(fileURLToPath(import.meta.url))
+
     if (pathname.startsWith("/assets")) {
       const subPath = pathname.replace("/assets", "")
       const content = readFileSync(path.resolve(__dirname, `../../dist/assets${subPath}`), "utf-8")

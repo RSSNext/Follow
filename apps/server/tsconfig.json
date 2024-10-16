@@ -31,7 +31,7 @@
     "./tsup.config.ts",
     "./client/**/*.ts",
     "./client/**/*.tsx",
-    "./vite.config.ts",
+    "vite.config.mts",
     "./tailwind.config.ts"
   ],
   "exclude": ["node_modules"]

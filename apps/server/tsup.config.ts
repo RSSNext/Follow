@@ -6,6 +6,7 @@ export default defineConfig(() => {
     outDir: "dist/server",
     splitting: false,
     clean: true,
-    format: ["esm"],
+    format: ["cjs"],
+    external: ["lightningcss"],
   }
 })
