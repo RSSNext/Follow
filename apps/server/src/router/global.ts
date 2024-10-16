@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { readdirSync, readFileSync, statSync } from "node:fs"
+import { readFileSync } from "node:fs"
 import path, { resolve } from "node:path"
 
 import type { FastifyInstance, FastifyRequest } from "fastify"
@@ -32,24 +32,18 @@ const devHandler = (app: FastifyInstance) => {
 }
 const prodHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
-    const pathname = req.originalUrl
+    // const pathname = req.originalUrl
 
-    if (process.env.VERCEL === "1") {
-      const ls = listFiles("/var/task/")
-      reply.send(ls)
-      return
-    }
+    // if (pathname.startsWith("/assets")) {
+    //   const subPath = pathname.replace("/assets", "")
+    //   const content = readFileSync(path.resolve(__dirname, `../../dist/assets${subPath}`), "utf-8")
 
-    if (pathname.startsWith("/assets")) {
-      const subPath = pathname.replace("/assets", "")
-      const content = readFileSync(path.resolve(__dirname, `../../dist/assets${subPath}`), "utf-8")
+    //   const type = subPath.endsWith(".css") ? "text/css" : "application/javascript"
+    //   reply.type(type)
+    //   reply.send(content)
+    // }
 
-      const type = subPath.endsWith(".css") ? "text/css" : "application/javascript"
-      reply.type(type)
-      reply.send(content)
-    }
-
-    const template = readFileSync(path.resolve(__dirname, "../../dist/index.html"), "utf-8")
+    const template = require("./index.template")
 
     reply.type("text/html")
     reply.send(template)
@@ -93,30 +87,4 @@ async function transfromTemplate(template: string, req: FastifyRequest) {
   template = template.replace(`<!-- SSG-META -->`, allMetaString.join("\n"))
 
   return template
-}
-
-function listFiles(dirPath) {
-  const result = {}
-
-  function traverseDirectory(currentPath) {
-    const files = readdirSync(currentPath)
-    const contents = []
-
-    files.forEach((file) => {
-      const fullPath = path.join(currentPath, file)
-      const stats = statSync(fullPath)
-
-      if (stats.isDirectory()) {
-        const subDirContents = traverseDirectory(fullPath)
-        contents.push({ [file]: subDirContents })
-      } else {
-        contents.push(file)
-      }
-    })
-
-    return contents
-  }
-
-  result[path.basename(dirPath)] = traverseDirectory(dirPath)
-  return result
 }

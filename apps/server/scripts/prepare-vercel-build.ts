@@ -7,7 +7,7 @@ const fontsDirPath = resolve(fontDepsPath, "../files")
 const fontsDir = readdirSync(fontsDirPath).filter(
   (name) => !name.endsWith(".woff2") && !name.includes("italic"),
 )
-async function main() {
+async function generateFontData() {
   const files = {} as Record<string, string>
   await Promise.all(
     fontsDir.map(async (file) => {
@@ -24,4 +24,14 @@ async function main() {
     `export default ${JSON.stringify(files, null, 2)}`,
   )
 }
-main()
+
+async function generateIndexHtmlData() {
+  const indexHtml = await fs.readFile(path.join(__dirname, "../dist/index.html"), "utf-8")
+  await fs.writeFile(
+    path.join(__dirname, "../src/router/index.template.ts"),
+    `export default ${JSON.stringify(indexHtml)}`,
+  )
+}
+
+generateFontData()
+generateIndexHtmlData()

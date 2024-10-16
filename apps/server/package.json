@@ -1,7 +1,10 @@
 {
   "name": "@follow/server",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
-    "build": "vite build && tsx scripts/generate-font-data.ts && tsup",
+    "build": "vite build && tsx scripts/prepare-vercel-build.ts && tsup",
     "dev": "NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
     "start": "tsx index.ts"
   },

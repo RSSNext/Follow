@@ -15,4 +15,5 @@ stats.html
 electron.vite.config.*.mjs
 vite.config.*.mjs
 
-fonts-data.ts
+apps/server/**/fonts-data.ts
+apps/server/**/index.template.ts
