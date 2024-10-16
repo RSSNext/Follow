@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { readFileSync } from "node:fs"
+import { readdirSync, readFileSync, statSync } from "node:fs"
 import path, { resolve } from "node:path"
 
 import type { FastifyInstance, FastifyRequest } from "fastify"
@@ -33,6 +33,12 @@ const devHandler = (app: FastifyInstance) => {
 const prodHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
     const pathname = req.originalUrl
+
+    if (process.env.VERCEL === "1") {
+      const ls = listFiles("/var/task/")
+      reply.send(ls)
+      return
+    }
 
     if (pathname.startsWith("/assets")) {
       const subPath = pathname.replace("/assets", "")
@@ -87,4 +93,30 @@ async function transfromTemplate(template: string, req: FastifyRequest) {
   template = template.replace(`<!-- SSG-META -->`, allMetaString.join("\n"))
 
   return template
+}
+
+function listFiles(dirPath) {
+  const result = {}
+
+  function traverseDirectory(currentPath) {
+    const files = readdirSync(currentPath)
+    const contents = []
+
+    files.forEach((file) => {
+      const fullPath = path.join(currentPath, file)
+      const stats = statSync(fullPath)
+
+      if (stats.isDirectory()) {
+        const subDirContents = traverseDirectory(fullPath)
+        contents.push({ [file]: subDirContents })
+      } else {
+        contents.push(file)
+      }
+    })
+
+    return contents
+  }
+
+  result[path.basename(dirPath)] = traverseDirectory(dirPath)
+  return result
 }
