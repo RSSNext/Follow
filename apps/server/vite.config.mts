@@ -11,8 +11,9 @@ export default () => {
     base: isCI ? "/external-dist" : undefined,
     resolve: {
       alias: {
-        "~": "./src",
+        // "~": "./src",
         "@pkg": resolve(__dirname, "../../package.json"),
+        "@client": resolve(__dirname, "./client"),
       },
     },
     define: {

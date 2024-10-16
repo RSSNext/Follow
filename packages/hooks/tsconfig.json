@@ -11,7 +11,7 @@
     "declaration": true,
     "types": ["@follow/types/react", "@follow/types/global"],
     "paths": {
-      "@follow/components/*": ["./src/*"],
+      "@follow/hooks/*": ["./src/*"],
       "@pkg": ["../../package.json"]
     }
   },

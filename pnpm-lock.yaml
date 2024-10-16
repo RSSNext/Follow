@@ -658,6 +658,9 @@ importers:
       '@fastify/middie':
         specifier: 9.0.2
         version: 9.0.2
+      '@follow/hooks':
+        specifier: workspace:*
+        version: link:../../packages/hooks
       '@fontsource/sn-pro':
         specifier: 5.1.0
         version: 5.1.0
@@ -670,18 +673,30 @@ importers:
       click-to-react-component:
         specifier: 1.1.0
         version: 1.1.0(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      dayjs:
+        specifier: 1.11.13
+        version: 1.11.13
       fastify:
         specifier: 5.0.0
         version: 5.0.0
       framer-motion:
         specifier: 11.11.9
         version: 11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      i18next:
+        specifier: ^23.16.0
+        version: 23.16.0
       jotai:
         specifier: 2.10.1
         version: 2.10.1(@types/react@18.3.11)(react@18.3.1)
+      rc-modal-sheet:
+        specifier: 0.3.2
+        version: 0.3.2(@radix-ui/react-dialog@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@2.5.4)(vaul@0.9.9(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       react:
         specifier: ^18.3.1
         version: 18.3.1
+      react-i18next:
+        specifier: ^15.0.3
+        version: 15.0.3(i18next@23.16.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router-dom:
         specifier: 6.27.0
         version: 6.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -728,12 +743,48 @@ importers:
       '@follow/utils':
         specifier: workspace:*
         version: link:../utils
+      foxact:
+        specifier: 0.2.39
+        version: 0.2.39(react@18.3.1)
+      jotai:
+        specifier: 2.10.1
+        version: 2.10.1(@types/react@18.3.11)(react@18.3.1)
+      lodash-es:
+        specifier: 4.17.21
+        version: 4.17.21
       react:
         specifier: ^18.0.0
         version: 18.3.1
       react-dom:
         specifier: ^18.0.0
         version: 18.3.1(react@18.3.1)
+
+  packages/hooks:
+    dependencies:
+      '@follow/types':
+        specifier: workspace:*
+        version: link:../types
+      '@follow/utils':
+        specifier: workspace:*
+        version: link:../utils
+      foxact:
+        specifier: 0.2.39
+        version: 0.2.39(react@18.3.1)
+      jotai:
+        specifier: 2.10.1
+        version: 2.10.1(@types/react@18.3.11)(react@18.3.1)
+      lodash-es:
+        specifier: 4.17.21
+        version: 4.17.21
+      react:
+        specifier: ^18.0.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.0.0
+        version: 18.3.1(react@18.3.1)
+      usehooks-ts:
+        specifier: 3.1.0
+        version: 3.1.0(react@18.3.1)
 
   packages/shared:
     dependencies:
@@ -8024,6 +8075,15 @@ packages:
   randomfill@1.0.4:
     resolution: {integrity: sha512-87lcbR8+MhcWcUiQ+9e+Rwx8MyR2P7qnt15ynUlbm3TU/fjbgz4GsvfSUDTemtCCtVCqb4ZcEFlyPNTh9bBTLw==}
 
+  rc-modal-sheet@0.3.2:
+    resolution: {integrity: sha512-V6q4+xpeIj9VRL/44zCaXCkRLjVZ1iSYUuyiqveD24gQFy41s9GwjTrMoZ0T6Xg54I2wzuXRUITRH1hrHIjF+A==}
+    peerDependencies:
+      '@radix-ui/react-dialog': ^1
+      clsx: '*'
+      framer-motion: ^11
+      tailwind-merge: ^2
+      vaul: ^0.9.0
+
   rc9@2.1.2:
     resolution: {integrity: sha512-btXCnMmRIBINM2LDZoEmOogIZU7Qe7zn4BpomSKZ/ykbLObuBdvG+mFq11DL6fjH1DRwHhrlgtYWG96bJiC7Cg==}
 
@@ -9217,6 +9277,12 @@ packages:
   validate-npm-package-name@5.0.1:
     resolution: {integrity: sha512-OljLrQ9SQdOUqTaQxqL5dEfZWrXExyyWsozYlAWFawPVNuD83igl7uJD2RTkNMbniIYgt8l81eCJGIdQF7avLQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+
+  vaul@0.9.9:
+    resolution: {integrity: sha512-7afKg48srluhZwIkaU+lgGtFCUsYBSGOl8vcc8N/M3YQlZFlynHD15AE+pwrYdc826o7nrIND4lL9Y6b9WWZZQ==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
 
   verror@1.10.1:
     resolution: {integrity: sha512-veufcmxri4e3XSrT0xwfUR7kguIkaxBeosDg00yDWhk49wdwkSUrvvsm7nc75e1PUyvIeZj6nS8VQRYz2/S4Xg==}
@@ -18369,6 +18435,14 @@ snapshots:
       randombytes: 2.1.0
       safe-buffer: 5.2.1
 
+  rc-modal-sheet@0.3.2(@radix-ui/react-dialog@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@2.5.4)(vaul@0.9.9(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+    dependencies:
+      '@radix-ui/react-dialog': 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      clsx: 2.1.1
+      framer-motion: 11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      tailwind-merge: 2.5.4
+      vaul: 0.9.9(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+
   rc9@2.1.2:
     dependencies:
       defu: 6.1.4
@@ -19653,6 +19727,15 @@ snapshots:
       spdx-expression-parse: 3.0.1
 
   validate-npm-package-name@5.0.1: {}
+
+  vaul@0.9.9(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      '@radix-ui/react-dialog': 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
 
   verror@1.10.1:
     dependencies:
