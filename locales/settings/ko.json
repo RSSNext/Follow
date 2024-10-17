@@ -210,7 +210,6 @@
   "wallet.create.button": "지갑 생성",
   "wallet.create.description": "<PowerIcon /> <strong>파워</strong>를 받기 위해 무료 지갑을 생성하세요. 이는 제작자를 보상하는 데 사용할 수 있으며, 콘텐츠 기여에 대해 보상을 받을 수도 있습니다.",
   "wallet.power.dailyClaim": "매일 {{amount}} 무료 파워를 클레임할 수 있으며, 이는 Follow 에서 RSS 항목에 팁을 보내는 데 사용할 수 있습니다.",
-  "wallet.power.description": "파워는 {{blockchainName}} 블록체인의 <Link>ERC-20 토큰</Link>입니다.",
   "wallet.sidebar_title": "파워",
   "wallet.transactions.amount": "금액",
   "wallet.transactions.date": "날짜",

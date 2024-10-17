@@ -209,7 +209,6 @@
   "wallet.create.button": "Cüzdan Oluştur",
   "wallet.create.description": "İçerik katkılarınız için ödüllendirilmek ve ayrıca içerik oluşturucuları ödüllendirmek için kullanılabilecek <PowerIcon /> <strong>Power</strong> almak için ücretsiz bir cüzdan oluşturun.",
   "wallet.power.dailyClaim": "Günlük olarak {{amount}} ücretsiz Power alabilirsiniz, bu Follow'da RSS girdilerine bahşiş vermek için kullanılabilir.",
-  "wallet.power.description": "Power, {{blockchainName}} blok zincirinde bir <Link>ERC-20 token</Link>'dır.",
   "wallet.sidebar_title": "Power",
   "wallet.transactions.amount": "Miktar",
   "wallet.transactions.date": "Tarih",

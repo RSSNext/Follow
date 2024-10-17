@@ -168,7 +168,6 @@
   "wallet.create.button": "Создать кошелек",
   "wallet.create.description": "Создайте бесплатный кошелек для получения <PowerIcon /> <strong>Power</strong>, который можно использовать для вознаграждения создателей контента и получения наград за ваши собственные публикации.",
   "wallet.power.dailyClaim": "Вы можете ежедневно получать {{amount}} бесплатного Power, который можно использовать для вознаграждения записей RSS на Follow.",
-  "wallet.power.description": "Power — это <Link>токен ERC-20</Link> на блокчейне {{blockchainName}}.",
   "wallet.sidebar_title": "Power",
   "wallet.transactions.amount": "Сумма",
   "wallet.transactions.date": "Дата",
