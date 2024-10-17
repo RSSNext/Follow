@@ -29,13 +29,17 @@ export default defineConfig(() => {
         process.env.VERCEL === "1"
           ? `
       try {
+      require.resolve("@fontsource/sn-pro")
+      require.resolve('kose-font')
+      require.resolve('kose-font/fonts/KosefontP-JP.ttf')
+      require.resolve('kose-font/fonts/Kosefont-JP.ttf')
       ${(() => {
         const require = createRequire(import.meta.url)
         const fontDepsPath = require.resolve("@fontsource/sn-pro")
         const fontsDirPath = resolve(fontDepsPath, "../files")
         return fs
           .readdirSync(path.join(fontsDirPath))
-          .map((file) => `require("@fontsource/sn-pro/files/${file}")`)
+          .map((file) => `require.resolve("@fontsource/sn-pro/files/${file}")`)
           .join("\n")
       })()}
       } catch {}
