@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs"
 import path, { resolve } from "node:path"
 
 import type { FastifyInstance, FastifyRequest } from "fastify"
+import { parseHTML } from "linkedom"
 
 import { isDev } from "~/lib/env"
 
@@ -32,14 +33,32 @@ const devHandler = (app: FastifyInstance) => {
 }
 const prodHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
-    return reply.send({
-      headers: req.headers,
-      url: req.url,
-      ip: req.ip,
-    })
-
+    // return reply.send({
+    //   headers: req.headers,
+    //   url: req.url,
+    //   ip: req.ip,
+    // })
     let template = require("../../.generated/index.template").default
     template = await transfromTemplate(template, req)
+
+    const isInVercelReverseProxy = req.headers["x-middleware-subrequest"]
+
+    if (isInVercelReverseProxy) {
+      // Add asset prefix
+      // Map all link and script to /assets
+      // <script type="module" crossorigin src="/assets/index-kQ31_hj7.js"></script>
+      // <link rel="stylesheet" crossorigin href="/assets/index-BORNdGZP.css">
+      const prefix = "/external-dist"
+      const { document } = parseHTML(template)
+      for (const script of document.querySelectorAll("script")) {
+        script.src = `${prefix}${script.src}`
+      }
+      for (const link of document.querySelectorAll("link")) {
+        link.href = `${prefix}${link.href}`
+      }
+      template = document.toString()
+    }
+
     reply.type("text/html")
     reply.send(template)
   })
