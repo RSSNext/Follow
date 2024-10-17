@@ -120,3 +120,5 @@ export type ActionsInput = {
 }[]
 
 export const TransactionTypes = ["mint", "purchase", "tip", "withdraw"] as const
+
+export type WalletModel = ExtractBizResponse<typeof apiClient.wallets.$get>["data"][number]
