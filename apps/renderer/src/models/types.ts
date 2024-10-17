@@ -49,6 +49,10 @@ export type CombinedEntryModel = EntriesResponse[number] & {
   }
 }
 export type EntryModel = CombinedEntryModel["entries"]
+export type EntryModelSimple = Exclude<
+  ExtractBizResponse<typeof apiClient.feeds.$get>["data"]["entries"],
+  undefined
+>[number]
 export type DiscoverResponse = Array<
   Exclude<ExtractBizResponse<typeof apiClient.discover.$post>["data"], undefined>[number]
 >

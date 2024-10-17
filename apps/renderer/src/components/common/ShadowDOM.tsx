@@ -1,38 +1,15 @@
 import { nanoid } from "nanoid"
 import type { FC, PropsWithChildren, ReactNode } from "react"
-import {
-  createContext,
-  createElement,
-  memo,
-  useContext,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react"
+import { createContext, createElement, useContext, useLayoutEffect, useMemo, useState } from "react"
 import root from "react-shadow"
 
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { useReduceMotion } from "~/hooks/biz/useReduceMotion"
 import { useIsDark } from "~/hooks/common"
 
-const ShadowDOMContext = createContext(false)
+import { MemoedDangerousHTMLStyle } from "./MemoedDangerousHTMLStyle"
 
-const MemoedDangerousHTMLStyle: FC<
-  {
-    children: string
-  } & React.DetailedHTMLProps<React.StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement> &
-    Record<string, unknown>
-> = memo(({ children, ...rest }) => (
-  <style
-    {...rest}
-    dangerouslySetInnerHTML={useMemo(
-      () => ({
-        __html: children,
-      }),
-      [children],
-    )}
-  />
-))
+const ShadowDOMContext = createContext(false)
 
 const weakMapElementKey = new WeakMap<HTMLStyleElement | HTMLLinkElement, string>()
 const cloneStylesElement = (_mutationRecord?: MutationRecord) => {

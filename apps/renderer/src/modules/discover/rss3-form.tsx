@@ -29,7 +29,7 @@ export function DiscoverRSS3() {
   return (
     <>
       {data?.rss3.routes && (
-        <div className="w-[512px]">
+        <div className="w-[540px]">
           <DiscoverFeedForm
             routePrefix="rss3"
             route={data.rss3.routes[Object.keys(data.rss3.routes)[0]]}

@@ -16,6 +16,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { stopPropagation } from "~/lib/dom"
+import { UrlBuilder } from "~/lib/url-builder"
 import { cn } from "~/lib/utils"
 import type { FeedModel, Models } from "~/models"
 
@@ -82,7 +83,7 @@ const TrendContent = () => {
       </ActionButton>
       <ScrollArea.ScrollArea
         rootClassName="flex h-0 w-[calc(100%+8px)] grow flex-col overflow-visible"
-        viewportClassName="pb-4"
+        viewportClassName="pb-4 [&>div]:!block"
         scrollbarClassName="-mr-6"
       >
         <TrendingUsers data={data.trendingUsers} />
@@ -123,7 +124,7 @@ const TrendingLists: FC<{
                   <UserCount count={item.subscriberCount} />
                 </div>
                 {!!item.description && (
-                  <div className={"-mt-0.5 line-clamp-2 text-xs"}>{item.description}</div>
+                  <div className={"line-clamp-2 text-xs"}>{item.description}</div>
                 )}
               </div>
             </button>
@@ -241,14 +242,14 @@ const TrendingFeeds = ({ data }: { data: FeedModel[] }) => {
           return (
             <li
               className={cn(
-                "group flex w-full items-center gap-1 rounded-md pl-2 duration-200 hover:bg-theme-item-hover",
+                "group flex w-full items-center gap-1 rounded-md py-0.5 pl-2 duration-200 hover:bg-theme-item-hover",
                 "relative",
               )}
               key={feed.id}
             >
               <a
                 target="_blank"
-                href={`/feed/${feed.id}`}
+                href={UrlBuilder.shareFeed(feed.id)}
                 className="flex grow items-center gap-2 py-1"
               >
                 <div>
@@ -283,17 +284,18 @@ const TrendingFeeds = ({ data }: { data: FeedModel[] }) => {
 }
 
 const TrendingEntries = ({ data }: { data: Models.TrendingEntry[] }) => {
+  const { t } = useTranslation()
   const filteredData = data.filter((entry) => !entry.url.startsWith("https://x.com"))
   return (
     <section className="mt-8 w-full text-left">
-      <h2 className="my-2 text-xl font-bold">Trending Entries</h2>
+      <h2 className="my-2 text-xl font-bold">{t("trending.entry")}</h2>
 
       <ul className="mt-2 list-inside list-disc space-y-1">
         {filteredData.map((entry) => {
           return (
             <li
               key={entry.id}
-              className="relative truncate whitespace-nowrap pr-10 marker:text-accent"
+              className="relative truncate whitespace-nowrap py-0.5 pr-10 marker:text-accent"
             >
               <a
                 href={entry.url}

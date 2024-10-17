@@ -54,7 +54,10 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   return (
     <>
       <DropdownMenu onOpenChange={setDropdown}>
-        <DropdownMenuTrigger asChild className="!outline-none focus-visible:bg-theme-item-hover">
+        <DropdownMenuTrigger
+          asChild
+          className="!outline-none focus-visible:bg-theme-item-hover data-[state=open]:bg-transparent"
+        >
           <TransitionAvatar stage={dropdown ? "zoom-in" : ""} />
         </DropdownMenuTrigger>
 
@@ -186,7 +189,7 @@ const TransitionAvatar = forwardRef<
             className={cn(
               "pointer-events-none fixed -bottom-6 p-0 duration-200 [&_*]:border-0",
               "transform-gpu will-change-[left,top,height]",
-              zoomIn ? "z-[999] h-14" : "z-[-1] h-6",
+              zoomIn ? "z-[51] h-14" : "z-[-1] h-6",
             )}
             hideName
             onTransitionEnd={() => {

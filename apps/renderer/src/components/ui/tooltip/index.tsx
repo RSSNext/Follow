@@ -46,6 +46,6 @@ const TooltipContent = React.forwardRef<
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
-const TooltipPortal = TooltipPrimitive.Portal
+export { Tooltip, TooltipContent, TooltipTrigger }
 
-export { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger }
+export { RootPortal as TooltipPortal } from "../portal"

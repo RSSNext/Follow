@@ -13,6 +13,7 @@ import { useAuthQuery, useI18n, useTitle } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
+import { UrlBuilder } from "~/lib/url-builder"
 import { cn, isBizId } from "~/lib/utils"
 import { useUserSubscriptionsQuery } from "~/modules/profile/hooks"
 
@@ -80,7 +81,7 @@ export function Component() {
                           <div key={subscription.feedId} className="group relative border-b py-5">
                             <a
                               className="flex flex-1 cursor-button"
-                              href={`/feed/${subscription.feedId}`}
+                              href={UrlBuilder.shareFeed(subscription.feedId)}
                               target="_blank"
                             >
                               <FeedIcon

@@ -124,7 +124,7 @@
   "integration.readwise.enable.description": "Mevcut olduğunda 'Readwise'a kaydet' düğmesini göster.",
   "integration.readwise.enable.label": "Etkinleştir",
   "integration.readwise.title": "Readwise",
-  "integration.readwise.token.description": "Buradan alabilirsiniz: readwise.io/access_token.",
+  "integration.readwise.token.description": "Buradan alabilirsiniz: ",
   "integration.readwise.token.label": "Readwise Erişim Tokeni",
   "integration.sidebar_title": "Entegrasyon",
   "integration.tip": "İpucu: Hassas verileriniz yerel olarak saklanır ve sunucuya yüklenmez.",

@@ -14,10 +14,7 @@ import { Button } from "../ui/button"
 import { useModalStack } from "../ui/modal"
 import { CustomSafeError, useResetErrorWhenRouteChange } from "./helper"
 
-export const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({
-  resetError,
-  error,
-}) => {
+const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({ resetError, error }) => {
   if (!(error instanceof FeedFoundCanBeFollowError)) {
     throw error
   }
@@ -90,6 +87,7 @@ export const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({
   )
 }
 
+export default FeedFoundCanBeFollowErrorFallback
 export class FeedFoundCanBeFollowError extends CustomSafeError {
   constructor(public detail: FeedModel) {
     super("Feed Found Can Be Follow")

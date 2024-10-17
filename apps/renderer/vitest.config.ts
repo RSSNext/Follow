@@ -15,7 +15,7 @@ export default defineProject({
   test: {
     globals: true,
     setupFiles: [resolve(__dirname, "./setup-file.ts")],
-    environment: "node",
+    environment: "happy-dom",
     includeSource: [resolve(__dirname, ".")],
     dom: true,
   },
@@ -35,5 +35,7 @@ export default defineProject({
     tsconfigPath({
       projects: ["./tsconfig.json"],
     }),
+
+    twMacro(),
   ],
 })

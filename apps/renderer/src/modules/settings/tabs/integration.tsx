@@ -7,6 +7,7 @@ import { Divider } from "~/components/ui/divider"
 import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
+  SimpleIconsOmnivore,
   SimpleIconsReadwise,
 } from "~/components/ui/platform-icon/icons"
 
@@ -99,6 +100,56 @@ export const SettingIntegration = () => {
             componentProps: {
               labelClassName: "w-[150px]",
             },
+          }),
+          {
+            type: "title",
+            value: (
+              <span className="flex items-center gap-2 font-bold">
+                <SimpleIconsOmnivore />
+                {t("integration.omnivore.title")}
+              </span>
+            ),
+          },
+          defineSettingItem("enableOmnivore", {
+            label: t("integration.omnivore.enable.label"),
+            description: t("integration.omnivore.enable.description"),
+          }),
+          defineSettingItem("omnivoreEndpoint", {
+            label: t("integration.omnivore.endpoint.label"),
+            vertical: true,
+            description: (
+              <>
+                {t("integration.omnivore.endpoint.description")}{" "}
+                <a
+                  target="_blank"
+                  className="underline"
+                  rel="noreferrer noopener"
+                  href="https://api-prod.omnivore.app/api/graphql"
+                >
+                  https://api-prod.omnivore.app/api/graphql
+                </a>
+                .
+              </>
+            ),
+          }),
+          defineSettingItem("omnivoreToken", {
+            label: t("integration.omnivore.token.label"),
+            vertical: true,
+            type: "password",
+            description: (
+              <>
+                {t("integration.omnivore.token.description")}{" "}
+                <a
+                  target="_blank"
+                  className="underline"
+                  rel="noreferrer noopener"
+                  href="https://omnivore.app/settings/api"
+                >
+                  omnivore.app/settings/api
+                </a>
+                .
+              </>
+            ),
           }),
 
           BottomTip,
