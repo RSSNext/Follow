@@ -295,9 +295,14 @@ const FallbackableImage: FC<
   const width = Number.parseInt(props.width as string)
   return (
     <div className={cn("center flex size-full flex-col", containerClassName)}>
-      {isLoading && !isAllError && (
+      {!isAllError && (
         // FIXME: optimize this if image load, the placeholder background will flash
-        <div className="center absolute inset-0 size-full">
+        <div
+          className={cn(
+            "center absolute inset-0 size-full transition-opacity duration-700",
+            isLoading ? "opacity-100" : "opacity-0",
+          )}
+        >
           {blurhash ? (
             <div style={{ aspectRatio: `${props.width} / ${props.height}` }} className="w-full">
               <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
@@ -317,7 +322,8 @@ const FallbackableImage: FC<
           width={props.width}
           {...props}
           className={cn(
-            blurhash && !isLoading ? "duration-500 ease-in-out animate-in fade-in-0" : "",
+            "transition-opacity duration-700",
+            isLoading ? "opacity-0" : "opacity-100",
             props.className,
           )}
           style={
