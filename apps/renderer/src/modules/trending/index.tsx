@@ -83,7 +83,7 @@ const TrendContent = () => {
       </ActionButton>
       <ScrollArea.ScrollArea
         rootClassName="flex h-0 w-[calc(100%+8px)] grow flex-col overflow-visible"
-        viewportClassName="pb-4"
+        viewportClassName="pb-4 [&>div]:!block"
         scrollbarClassName="-mr-6"
       >
         <TrendingUsers data={data.trendingUsers} />
