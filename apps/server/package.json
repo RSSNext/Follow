@@ -24,6 +24,7 @@
     "linkedom": "^0.18.5",
     "rc-modal-sheet": "0.3.2",
     "react": "^18.3.1",
+    "react-hotkeys-hook": "4.5.1",
     "react-i18next": "^15.0.3",
     "react-router-dom": "6.27.0",
     "satori": "0.11.2",

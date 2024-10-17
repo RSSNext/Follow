@@ -1,3 +1,4 @@
+import { omit } from "lodash-es"
 import resolveConfig from "tailwindcss/resolveConfig"
 
 import { baseConfig } from "../../configs/tailwind.base.config"
@@ -5,6 +6,13 @@ import { baseConfig } from "../../configs/tailwind.base.config"
 /** @type {import('tailwindcss').Config} */
 export default resolveConfig({
   ...baseConfig,
+  theme: {
+    ...baseConfig.theme,
+    extend: {
+      ...baseConfig.theme.extend,
+      colors: omit(baseConfig.theme.extend.colors, "accent"),
+    },
+  },
   content: [
     "./client/**/*.{ts,tsx}",
     "./index.html",
@@ -21,9 +29,11 @@ export default resolveConfig({
 
           primary: "#007AFF", //#0A84FF
           accent: "#ff760a",
-          "accent-content": "#fafafa",
+          "accent-content": "#fff",
           neutral: "#04262d",
-          "base-100": "#fafffd",
+
+          "base-100": "#fff",
+          "base-content": "#0C0A09",
 
           info: "#32ADE6", // 50 173 230
           success: "#34C759",
@@ -39,9 +49,10 @@ export default resolveConfig({
 
           primary: "#0A84FF",
           accent: "#ff760a",
-          "accent-content": "#fafafa",
+          "accent-content": "#fff",
           neutral: "#04262d",
-          "base-100": "#fafffd",
+          "base-100": "#121212",
+          "base-content": "#FAFAF9",
 
           info: "#32ADE6", // 50 173 230
           success: "#34C759",

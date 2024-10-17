@@ -8,7 +8,6 @@
   :root,
   #shadow-html {
     --radius: 0.5rem;
-    --a: theme("colors.theme.accent.DEFAULT");
   }
 
   [data-theme="light"] {
