@@ -6,6 +6,7 @@ import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { useOnClickOutside } from "usehooks-ts"
 
+import { useViewport } from "~/atoms/hooks/viewport"
 import { ActionButton, Button, IconButton } from "~/components/ui/button"
 import { Kbd, KbdCombined } from "~/components/ui/kbd/Kbd"
 import { RootPortal } from "~/components/ui/portal"
@@ -21,7 +22,6 @@ interface MarkAllButtonProps {
   filter?: MarkAllFilter
   className?: string
   which?: ReactNode
-
   shortcut?: boolean
 }
 
@@ -31,7 +31,6 @@ export const MarkAllReadWithOverlay = forwardRef<
     containerRef: React.RefObject<HTMLDivElement>
   }
 >(({ filter, className, which = "all", shortcut, containerRef }, ref) => {
-  const { t } = useTranslation()
   const { t: commonT } = useTranslation("common")
 
   const [show, setShow] = useState(false)
@@ -42,61 +41,7 @@ export const MarkAllReadWithOverlay = forwardRef<
   useOnClickOutside({ current: popoverRef }, () => {
     setShow(false)
   })
-  const renderPopup = () => {
-    const $parent = containerRef.current!
-    const rect = $parent.getBoundingClientRect()
-    const paddingLeft = $parent.offsetLeft
-    // electron window has pt-[calc(var(--fo-window-padding-top)_-10px)]
-    const isElectronWindows = isElectronBuild && getOS() === "Windows"
-    return (
-      <RootPortal to={$parent}>
-        <m.div
-          ref={setPopoverRef}
-          initial={{
-            y: isElectronWindows ? -95 : -70,
-          }}
-          animate={{
-            y: isElectronWindows ? -10 : 0,
-          }}
-          exit={{
-            y: isElectronWindows ? -95 : -70,
-          }}
-          transition={{ type: "spring", damping: 20, stiffness: 300 }}
-          className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"
-          style={{
-            left: -paddingLeft,
-            top: rect.top,
-            width: rect.width,
-          }}
-        >
-          <div className="flex w-full translate-x-[-2px] items-center justify-between gap-3 !py-3 pl-6 pr-3 [&_button]:text-xs">
-            <span className="center gap-[calc(0.5rem+2px)]">
-              <i className="i-mgc-check-circle-cute-re" />
-              <span className="text-sm font-bold">
-                <Trans
-                  i18nKey="mark_all_read_button.confirm_mark_all"
-                  components={{
-                    which: commonT(`words.which.${which}` as any),
-                  }}
-                />
-              </span>
-            </span>
-            <div className="space-x-4">
-              <IconButton
-                icon={<i className="i-mgc-check-filled" />}
-                onClick={() => {
-                  handleMarkAllAsRead()
-                  setShow(false)
-                }}
-              >
-                {t("words.confirm")}
-              </IconButton>
-            </div>
-          </div>
-        </m.div>
-      </RootPortal>
-    )
-  }
+
   useHotkeys(
     shortcuts.entries.markAllAsRead.key,
     () => {
@@ -162,10 +107,82 @@ export const MarkAllReadWithOverlay = forwardRef<
         <i className="i-mgc-check-circle-cute-re" />
       </ActionButton>
 
-      <AnimatePresence>{show && renderPopup()}</AnimatePresence>
+      <AnimatePresence>
+        {show && (
+          <Popup
+            which={which}
+            containerRef={containerRef}
+            setPopoverRef={setPopoverRef}
+            setShow={setShow}
+            handleMarkAllAsRead={handleMarkAllAsRead}
+          />
+        )}
+      </AnimatePresence>
     </Fragment>
   )
 })
+
+const Popup = ({ which, containerRef, setPopoverRef, setShow, handleMarkAllAsRead }) => {
+  const { t } = useTranslation()
+  const { t: commonT } = useTranslation("common")
+  const $parent = containerRef.current!
+  const rect = $parent.getBoundingClientRect()
+  const paddingLeft = $parent.offsetLeft
+
+  // change popup's width when viewport changes.
+  useViewport((v) => v.w)
+
+  // electron window has pt-[calc(var(--fo-window-padding-top)_-10px)]
+  const isElectronWindows = isElectronBuild && getOS() === "Windows"
+  return (
+    <RootPortal to={$parent}>
+      <m.div
+        ref={setPopoverRef}
+        initial={{
+          y: isElectronWindows ? -95 : -70,
+        }}
+        animate={{
+          y: isElectronWindows ? -10 : 0,
+        }}
+        exit={{
+          y: isElectronWindows ? -95 : -70,
+        }}
+        transition={{ type: "spring", damping: 20, stiffness: 300 }}
+        className="shadow-modal absolute z-50 bg-theme-modal-background-opaque shadow"
+        style={{
+          left: -paddingLeft,
+          top: rect.top,
+          width: rect.width,
+        }}
+      >
+        <div className="flex w-full translate-x-[-2px] items-center justify-between gap-3 !py-3 pl-6 pr-3 [&_button]:text-xs">
+          <span className="center gap-[calc(0.5rem+2px)]">
+            <i className="i-mgc-check-circle-cute-re" />
+            <span className="text-sm font-bold">
+              <Trans
+                i18nKey="mark_all_read_button.confirm_mark_all"
+                components={{
+                  which: commonT(`words.which.${which}` as any),
+                }}
+              />
+            </span>
+          </span>
+          <div className="space-x-4">
+            <IconButton
+              icon={<i className="i-mgc-check-filled" />}
+              onClick={() => {
+                handleMarkAllAsRead()
+                setShow(false)
+              }}
+            >
+              {t("words.confirm")}
+            </IconButton>
+          </div>
+        </div>
+      </m.div>
+    </RootPortal>
+  )
+}
 
 const ConfirmMarkAllReadInfo = ({ undo }: { undo: () => any }) => {
   const { t } = useTranslation()
