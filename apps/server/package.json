@@ -35,6 +35,7 @@
     "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
+    "daisyui": "4.12.13",
     "lightningcss": "1.27.0",
     "tsup": "8.3.0",
     "tsx": "4.19.1",
