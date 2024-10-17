@@ -29,6 +29,7 @@ import {
 } from "../../components/ui/dropdown-menu/dropdown-menu"
 import { RootPortal } from "../../components/ui/portal"
 import { useActivationModal } from "../activation"
+import { ActivityPoints } from "../wallet/activity-points"
 import { Level } from "../wallet/level"
 import type { LoginProps } from "./LoginButton"
 import { LoginButton } from "./LoginButton"
@@ -87,6 +88,11 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             <div className="flex w-full items-center justify-between gap-6 px-1.5 font-semibold">
               <PowerButton isLoading={isLoadingWallet} myWallet={myWallet} />
               <Level level={myWallet?.level?.level || 0} isLoading={isLoadingWallet} />
+              <ActivityPoints
+                className="text-sm"
+                points={myWallet?.level?.prevActivityPoints || 0}
+                isLoading={isLoadingWallet}
+              />
             </div>
           </DropdownMenuItem>
 

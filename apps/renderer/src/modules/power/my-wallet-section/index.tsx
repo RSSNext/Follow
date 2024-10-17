@@ -126,6 +126,9 @@ export const MyWalletSection = () => {
         </div>
         <Divider className="my-8" />
         <SettingSectionTitle title={t("wallet.balance.dailyReward")} margin="compact" />
+        <div className="my-2 text-[15px] leading-tight text-orange-500">
+          {t("wallet.power.rewardDescription3")}
+        </div>
         <div className="my-1 text-sm">{t("wallet.power.rewardDescription")}</div>
         <div className="my-1 text-sm">
           <Trans
