@@ -134,7 +134,7 @@
   "integration.readwise.enable.label": "啟用",
   "integration.readwise.title": "Readwise",
   "integration.readwise.token.description": "您可以在這裡取得",
-  "integration.readwise.token.label": "Readwise 存取權杖",
+  "integration.readwise.token.label": "Readwise 令牌",
   "integration.sidebar_title": "整合功能",
   "integration.tip": "提示：您的敏感資料儲存於本機，不會上傳到伺服器。",
   "integration.title": "整合功能",
