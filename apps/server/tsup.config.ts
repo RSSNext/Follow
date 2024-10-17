@@ -18,13 +18,6 @@ export default defineConfig(() => {
     },
     banner: {
       // A trick to get vercel to recognize fonts as such and then keep the node_modules
-      //       js: `try {
-      //   require("@fontsource/sn-pro/files/sn-pro-latin-200-italic.woff")
-      //   require("@fontsource/sn-pro/files/sn-pro-latin-200-italic.woff")
-      //   require("@fontsource/sn-pro/files/sn-pro-latin-200-italic.woff")
-      //   require("@fontsource/sn-pro/files/sn-pro-latin-200-italic.woff")
-      //   require("@fontsource/sn-pro/files/sn-pro-latin-200-italic.woff")
-      // } catch {}`,
       js:
         process.env.VERCEL === "1"
           ? `

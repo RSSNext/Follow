@@ -32,6 +32,12 @@ const devHandler = (app: FastifyInstance) => {
 }
 const prodHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
+    return reply.send({
+      headers: req.headers,
+      url: req.url,
+      ip: req.ip,
+    })
+
     let template = require("../../.generated/index.template").default
     template = await transfromTemplate(template, req)
     reply.type("text/html")
