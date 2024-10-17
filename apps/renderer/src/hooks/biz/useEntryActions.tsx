@@ -25,6 +25,7 @@ import { mountLottie } from "~/components/ui/lottie-container"
 import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
+  SimpleIconsObsidian,
   SimpleIconsOmnivore,
   SimpleIconsReadwise,
 } from "~/components/ui/platform-icon/icons"
@@ -171,6 +172,8 @@ export const useEntryActions = ({
   const enableOmnivore = useIntegrationSettingKey("enableOmnivore")
   const omnivoreToken = useIntegrationSettingKey("omnivoreToken")
   const omnivoreEndpoint = useIntegrationSettingKey("omnivoreEndpoint")
+  const enableObsidian = useIntegrationSettingKey("enableObsidian")
+  const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
 
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
@@ -371,6 +374,32 @@ export const useEntryActions = ({
         },
       },
       {
+        name: t("entry_actions.save_to_obsidian"),
+        icon: <SimpleIconsObsidian />,
+        key: "saveToObsidian",
+        hide: !enableObsidian || !obsidianVaultPath || !populatedEntry.entries.url,
+        onClick: async () => {
+          try {
+            await tipcClient?.saveToObsidian({
+              url: populatedEntry.entries.url,
+              title: populatedEntry.entries.title || "",
+              content: populatedEntry.entries.content || "",
+              author: populatedEntry.entries.author || "",
+              publishedAt: populatedEntry.entries.publishedAt || "",
+            })
+
+            toast.success(t("entry_actions.saved_to_obsidian"), {
+              duration: 3000,
+            })
+          } catch (error) {
+            console.error("Failed to save to Obsidian:", error)
+            toast.error(t("entry_actions.failed_to_save_to_obsidian"), {
+              duration: 3000,
+            })
+          }
+        },
+      },
+      {
         key: "tip",
         shortcut: shortcuts.entry.tip.key,
         name: t("entry_actions.tip"),
@@ -534,6 +563,8 @@ export const useEntryActions = ({
     enableInstapaper,
     instapaperPassword,
     instapaperUsername,
+    enableObsidian,
+    obsidianVaultPath,
     feed?.ownerUserId,
     type,
     showSourceContent,
@@ -543,6 +574,10 @@ export const useEntryActions = ({
     showSourceContentModal,
     read,
     unread,
+    enableOmnivore,
+    isInbox,
+    omnivoreEndpoint,
+    omnivoreToken,
   ])
 
   return {
