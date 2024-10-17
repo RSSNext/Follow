@@ -8,7 +8,7 @@ export const Balance = ({
   children,
   value,
   className,
-  precision = 0,
+  precision = 2,
   withSuffix = false,
   withTooltip = false,
 }: {

@@ -220,7 +220,7 @@ function PowerButton({ isLoading, myWallet }: { isLoading: boolean; myWallet?: W
       {isLoading ? (
         <span className="h-3 w-8 animate-pulse rounded-xl bg-theme-inactive" />
       ) : (
-        <Balance>{BigInt(myWallet?.powerToken || 0n)}</Balance>
+        <Balance precision={0}>{BigInt(myWallet?.powerToken || 0n)}</Balance>
       )}
     </div>
   )
