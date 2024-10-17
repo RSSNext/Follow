@@ -182,7 +182,7 @@ const TransitionAvatar = forwardRef<
             className={cn(
               "pointer-events-none fixed -bottom-6 p-0 duration-200 [&_*]:border-0",
               "transform-gpu will-change-[left,top,height]",
-              zoomIn ? "z-[51] h-14" : "z-[-1] h-6",
+              zoomIn ? "z-[99] h-14" : "z-[-1] h-6",
             )}
             hideName
             onTransitionEnd={() => {
