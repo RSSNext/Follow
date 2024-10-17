@@ -14,6 +14,7 @@ export const useActivationModal = () => {
         title: t("activation.title"),
         content: ActivationModalContent,
         id: "activation",
+        autoFocus: false,
       }),
     [present, t],
   )

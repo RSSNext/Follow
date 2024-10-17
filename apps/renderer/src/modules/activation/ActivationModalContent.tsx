@@ -57,7 +57,7 @@ export const ActivationModalContent = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       form.setFocus("code", { shouldSelect: true })
-    }, 100)
+    }, 300)
     return () => clearTimeout(timer)
   }, [])
   return (

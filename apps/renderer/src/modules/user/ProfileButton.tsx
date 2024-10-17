@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu/dropdown-menu"
 import { RootPortal } from "../../components/ui/portal"
+import { useActivationModal } from "../activation"
 import { Level } from "../wallet/level"
 import type { LoginProps } from "./LoginButton"
 import { LoginButton } from "./LoginButton"
@@ -50,6 +51,7 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
   const wallet = useWallet()
   const { isLoading: isLoadingWallet } = wallet
   const myWallet = wallet.data?.[0]
+  const presentActivationModal = useActivationModal()
 
   if (status !== "authenticated") {
     return <LoginButton {...props} />
@@ -100,17 +102,20 @@ export const ProfileButton: FC<LoginProps> = memo((props) => {
             {t("user_button.profile")}
           </DropdownMenuItem>
 
-          {role !== UserRole.Trial && (
-            <DropdownMenuItem
-              className="pl-3"
-              onClick={() => {
+          <DropdownMenuItem
+            className="pl-3"
+            onClick={() => {
+              if (role !== UserRole.Trial) {
                 presentAchievement()
-              }}
-              icon={<i className="i-mgc-trophy-cute-re" />}
-            >
-              {t("user_button.achievement")}
-            </DropdownMenuItem>
-          )}
+              } else {
+                presentActivationModal()
+              }
+            }}
+            icon={<i className="i-mgc-trophy-cute-re" />}
+          >
+            {t("user_button.achievement")}
+          </DropdownMenuItem>
+
           <DropdownMenuSeparator />
 
           <DropdownMenuItem

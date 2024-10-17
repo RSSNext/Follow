@@ -5,6 +5,7 @@ export interface SettingPageContext {
 }
 
 export enum DisableWhy {
+  Noop = "noop",
   NotActivation = "not_activation",
 }
 
