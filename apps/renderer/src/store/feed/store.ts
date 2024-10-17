@@ -5,7 +5,13 @@ import { nanoid } from "nanoid"
 import { whoami } from "~/atoms/user"
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import type { FeedModel, FeedOrListModel, FeedOrListRespModel, UserModel } from "~/models"
+import type {
+  CombinedEntryModel,
+  FeedModel,
+  FeedOrListModel,
+  FeedOrListRespModel,
+  UserModel,
+} from "~/models"
 import { FeedService } from "~/services"
 
 import { getSubscriptionByFeedId } from "../subscription"
@@ -128,12 +134,16 @@ export const feedActions = new FeedActions()
 export const getFeedById = (feedId: string): Nullable<FeedOrListRespModel> =>
   useFeedStore.getState().feeds[feedId]
 
-export const getPreferredTitle = (feed?: FeedOrListRespModel | null) => {
+export const getPreferredTitle = (
+  feed?: FeedOrListRespModel | null,
+  entry?: CombinedEntryModel["entries"],
+) => {
   if (!feed?.id) {
     return feed?.title
   }
 
   if (feed.type === "inbox") {
+    if (entry?.authorUrl) return entry.authorUrl.replace(/^mailto:/, "")
     return feed.title || `${feed.id.slice(0, 1).toUpperCase()}${feed.id.slice(1)}'s Inbox`
   }
 
