@@ -1,6 +1,6 @@
 import type { FastifyRequest } from "fastify"
 
-import { createApiClient, getTokenFromCookie } from "./api-client"
+import { createApiClient, getTokenFromCookie } from "./lib/api-client"
 
 interface MetaTagdata {
   type: "meta"
@@ -18,7 +18,6 @@ export type MetaTag = MetaTagdata | MetaTitle
 export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]> {
   const metaArr = [] as MetaTag[]
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
   const apiClient = createApiClient(getTokenFromCookie(req.headers.cookie || ""))
 
   const hostFromReq = req.headers.host
@@ -30,11 +29,25 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
     case url.startsWith("/share/feeds"): {
       const feedId = url.slice(url.lastIndexOf("/") + 1)
 
-      metaArr.push({
-        type: "meta",
-        property: "og:image",
-        content: `${protocol}://${hostFromReq}/og/feed/${feedId}`,
-      })
+      const feed = await apiClient.feeds.$get({ query: { id: feedId } })
+
+      const { title, description } = feed.data.feed
+      metaArr.push(
+        {
+          type: "meta",
+          property: "og:image",
+          content: `${protocol}://${hostFromReq}/og/feed/${feedId}`,
+        },
+        {
+          type: "meta",
+          property: "og:description",
+          content: description || "",
+        },
+        {
+          type: "title",
+          title: title || "",
+        },
+      )
     }
   }
 

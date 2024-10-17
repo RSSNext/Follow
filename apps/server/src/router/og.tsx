@@ -3,16 +3,26 @@ import { Readable } from "node:stream"
 import type { FastifyInstance } from "fastify"
 import React from "react"
 
-import { renderToImage } from "~/og/render-to-image"
+import { createApiClient, getTokenFromCookie } from "~/lib/api-client"
+import { renderToImage } from "~/lib/og/render-to-image"
 
 export const ogRoute = (app: FastifyInstance) => {
   app.get("/og/:type/:id", async (req, reply) => {
     const { type, id } = req.params as Record<string, string>
 
-    // const token = getTokenFromCookie(req.headers.cookie || "")
-    // const apiClient = createApiClient(token)
+    const token = getTokenFromCookie(req.headers.cookie || "")
+    const apiClient = createApiClient(token)
+
     switch (type) {
       case "feed": {
+        const feed = await apiClient.feeds.$get({ query: { id } }).catch(() => null)
+
+        if (!feed?.data.feed) {
+          return reply.code(404).send("Not found")
+        }
+
+        const { title, description } = feed.data.feed
+
         try {
           const imageRes = await renderToImage(
             <div
@@ -27,8 +37,8 @@ export const ogRoute = (app: FastifyInstance) => {
                 justifyContent: "center",
               }}
             >
-              {type}
-              {id}
+              {title}
+              {description}
             </div>,
             {
               width: 1200,

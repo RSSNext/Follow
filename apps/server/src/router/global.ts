@@ -7,9 +7,7 @@ import { parseHTML } from "linkedom"
 
 import { isDev } from "~/lib/env"
 
-import { injectMetaHandler } from "../lib/meta-handler"
-
-// const require = createRequire(import.meta.url)
+import { injectMetaHandler } from "../meta-handler"
 
 const devHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
@@ -33,11 +31,6 @@ const devHandler = (app: FastifyInstance) => {
 }
 const prodHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
-    // return reply.send({
-    //   headers: req.headers,
-    //   url: req.url,
-    //   ip: req.ip,
-    // })
     let template = require("../../.generated/index.template").default
     template = await transfromTemplate(template, req)
 
@@ -87,8 +80,10 @@ async function transfromTemplate(template: string, req: FastifyRequest) {
         break
       }
       case "title": {
-        template = template.replace(`<!-- TITLE -->`, meta.title)
-        isTitleReplaced = true
+        if (meta.title) {
+          template = template.replace(`<!-- TITLE -->`, `${meta.title} | Follow`)
+          isTitleReplaced = true
+        }
         break
       }
     }

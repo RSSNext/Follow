@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fastify/middie": "9.0.2",
+    "@fastify/request-context": "6.0.1",
     "@follow/constants": "workspace:*",
     "@follow/hooks": "workspace:*",
     "@fontsource/sn-pro": "5.1.0",

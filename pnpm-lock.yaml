@@ -661,6 +661,9 @@ importers:
       '@fastify/middie':
         specifier: 9.0.2
         version: 9.0.2
+      '@fastify/request-context':
+        specifier: 6.0.1
+        version: 6.0.1
       '@follow/constants':
         specifier: workspace:*
         version: link:../../packages/constants
@@ -2298,6 +2301,9 @@ packages:
 
   '@fastify/middie@9.0.2':
     resolution: {integrity: sha512-MHvAhUBxrefkpx4A8HtjOjAdlaCtY8j19PC6ORfm7KPMb/dklDeqBqR4xPRTtcBRPZUYq2jAJJWQCB4eO+dtKw==}
+
+  '@fastify/request-context@6.0.1':
+    resolution: {integrity: sha512-eivIMvr5IXeCsvOTdS0QQfFLPOinxAKnjmqnz4whOUbqnuzAi2ScpGmd4JPRpRLD2Y/SiX7QW5pfaqGmMZF1ng==}
 
   '@floating-ui/core@0.6.2':
     resolution: {integrity: sha512-jktYRmZwmau63adUG3GKOAVCofBXkk55S/zQ94XOorAHhwqFIOFAy1rSp2N0Wp6/tGbe9V3u/ExlGZypyY17rg==}
@@ -11540,6 +11546,10 @@ snapshots:
       fastify-plugin: 5.0.1
       path-to-regexp: 8.2.0
       reusify: 1.0.4
+
+  '@fastify/request-context@6.0.1':
+    dependencies:
+      fastify-plugin: 5.0.1
 
   '@floating-ui/core@0.6.2': {}
 

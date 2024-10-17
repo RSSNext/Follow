@@ -44,20 +44,31 @@ const weights = [
   },
 ] as const
 
-let fontsData = []
+let fontsData = [] as any[]
 
-const fontDepsPath = require.resolve("@fontsource/sn-pro")
-const fontsDirPath = resolve(fontDepsPath, "../files")
-const fontsDir = fs
-  .readdirSync(fontsDirPath)
+const snFontDepsPath = require.resolve("@fontsource/sn-pro")
+const snFontsDirPath = resolve(snFontDepsPath, "../files")
+const snFontsDir = fs
+  .readdirSync(snFontsDirPath)
   .filter((name) => !name.endsWith(".woff2") && !name.includes("italic"))
 
-fontsData = fontsDir.map((file) => ({
+fontsData = snFontsDir.map((file) => ({
   name: file.split("-")[0],
-  data: fs.readFileSync(path.join(fontsDirPath, file)),
+  data: fs.readFileSync(path.join(snFontsDirPath, file)),
   weight: weights.find((weight) => weight.name === file.split("-")[1])?.weight,
   style: file.includes("Italic") ? "italic" : ("normal" as "italic" | "normal"),
 }))
+
+const koseFontPath = require.resolve("kose-font")
+
+const koseFontData = fs.readFileSync(koseFontPath)
+
+fontsData.push({
+  name: "Kose",
+  data: koseFontData,
+  weight: 400,
+  style: "normal" as "italic" | "normal",
+})
 
 // if (isDev) {
 //   const fontDepsPath = require.resolve("@fontsource/sn-pro")

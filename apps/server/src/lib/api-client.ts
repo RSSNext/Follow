@@ -1,15 +1,26 @@
 import "./load-env"
 
+import { requestContext } from "@fastify/request-context"
 import { env } from "@follow/shared/env"
 import type { AppType } from "@follow/shared/hono"
 import { hc } from "hono/client"
 import { ofetch } from "ofetch"
 
 import PKG from "../../../../package.json"
+import { isDev } from "./env"
 
 export const createApiClient = (authSessionToken: string) => {
+  const req = requestContext.get("req")!
+
+  const { host } = req.headers
+
+  let baseURL = env.VITE_EXTERNAL_API_URL || env.VITE_API_URL
+
+  if (env.VITE_EXTERNAL_API_URL?.startsWith("/")) {
+    baseURL = `http://${host}${env.VITE_EXTERNAL_API_URL}`
+  }
   const apiFetch = ofetch.create({
-    baseURL: process.env.VITE_API_URL,
+    baseURL,
     credentials: "include",
 
     retry: false,
@@ -21,12 +32,12 @@ export const createApiClient = (authSessionToken: string) => {
     },
   })
 
-  const apiClient = hc<AppType>(env.VITE_API_URL, {
-    fetch: async (input, options = {}) => apiFetch(input.toString(), options),
+  const apiClient = hc<AppType>("", {
+    fetch: async (input: any, options = {}) => apiFetch(input.toString(), options),
     headers() {
       return {
         "X-App-Version": PKG.version,
-        "X-App-Dev": __DEV__ ? "1" : "0",
+        "X-App-Dev": isDev ? "1" : "0",
         Cookie: authSessionToken ? `authjs.session-token=${authSessionToken}` : "",
       }
     },
@@ -38,10 +49,13 @@ export const getTokenFromCookie = (cookie: string) => {
   const parsedCookieMap = cookie
     .split(";")
     .map((item) => item.trim())
-    .reduce((acc, item) => {
-      const [key, value] = item.split("=")
-      acc[key] = value
-      return acc
-    }, {})
+    .reduce(
+      (acc, item) => {
+        const [key, value] = item.split("=")
+        acc[key] = value
+        return acc
+      },
+      {} as Record<string, string>,
+    )
   return parsedCookieMap["authjs.session-token"]
 }

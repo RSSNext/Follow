@@ -1,6 +1,8 @@
 import "./src/lib/load-env"
 
 import middie from "@fastify/middie"
+import { fastifyRequestContext } from "@fastify/request-context"
+import type { FastifyRequest } from "fastify"
 import Fastify from "fastify"
 
 import { isDev } from "~/lib/env"
@@ -10,11 +12,23 @@ import { ogRoute } from "./src/router/og"
 
 const isVercel = process.env.VERCEL === "1"
 
+declare module "@fastify/request-context" {
+  interface RequestContextData {
+    req: FastifyRequest
+  }
+}
+
 export const createApp = async () => {
   const app = Fastify({})
 
+  app.register(fastifyRequestContext)
   await app.register(middie, {
     hook: "onRequest",
+  })
+
+  app.addHook("onRequest", (req, reply, done) => {
+    req.requestContext.set("req", req)
+    done()
   })
 
   if (isDev) {
