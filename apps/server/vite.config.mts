@@ -16,6 +16,7 @@ export default () => {
     },
     define: {
       ...viteRenderBaseConfig.define,
+      ELECTRON: "false",
     },
     plugins: [react(), twMacro()],
 

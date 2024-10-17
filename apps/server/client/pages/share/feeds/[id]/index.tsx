@@ -7,6 +7,7 @@ import { Button } from "@follow/components/ui/button/index.jsx"
 import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { views } from "@follow/constants"
+import { useTitle } from "@follow/hooks"
 import { cn } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
 import { useParams, useSearchParams } from "react-router-dom"
@@ -18,6 +19,7 @@ export function Component() {
   const view = Number.parseInt(search.get("view") || "0")
 
   const { t } = useTranslation("external")
+
   const feed = useFeed({
     id: id!,
   })
@@ -28,6 +30,7 @@ export function Component() {
     id,
   })
 
+  useTitle(feed.data?.feed.title)
   if (feed.isLoading || !feed.data?.feed || !feedData) {
     return (
       <>
