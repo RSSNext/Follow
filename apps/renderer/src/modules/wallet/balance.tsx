@@ -25,13 +25,9 @@ export const Balance = ({
   const formattedFull = format(n, { digits: 18, trailingZeros: true })
 
   const Content = (
-    <div className={cn("tabular-nums", className)}>
-      {formatted}{" "}
-      {withSuffix && (
-        <span>
-          Power <i className="i-mgc-power align-text-bottom text-accent" />
-        </span>
-      )}
+    <div className={cn("inline-flex items-center gap-1 tabular-nums", className)}>
+      {withSuffix && <i className="i-mgc-power align-text-bottom text-accent" />}
+      <span>{formatted}</span>
     </div>
   )
 

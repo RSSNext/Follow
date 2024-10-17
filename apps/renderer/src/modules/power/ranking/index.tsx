@@ -74,8 +74,7 @@ export const PowerRanking: Component = ({ className }) => {
                     </TableCell>
                     <TableCell className="py-2">
                       <div className="flex items-center gap-1">
-                        <i className="i-mgc-power align-text-bottom text-accent" />
-                        <Balance>{row.powerToken}</Balance>
+                        <Balance withSuffix>{row.powerToken}</Balance>
                       </div>
                     </TableCell>
                     <TableCell className="py-2">

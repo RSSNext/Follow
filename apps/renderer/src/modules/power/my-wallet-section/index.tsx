@@ -9,6 +9,7 @@ import { DAILY_CLAIM_AMOUNT } from "~/constants"
 import { apiClient } from "~/lib/api-fetch"
 import { cn } from "~/lib/utils"
 import { SettingSectionTitle } from "~/modules/settings/section"
+import { ActivityPoints } from "~/modules/wallet/activity-points"
 import { Balance } from "~/modules/wallet/balance"
 import { Level } from "~/modules/wallet/level"
 import { useWallet, wallet as walletActions } from "~/queries/wallet"
@@ -82,50 +83,79 @@ export const MyWalletSection = () => {
             className="p-1 opacity-0 duration-200 group-hover:opacity-100 [&_i]:size-2.5"
           />
         </div>
-        <SettingSectionTitle title={t("wallet.balance.level")} margin="compact" />
-        <Level level={myWallet.level?.level || 0} />
         <SettingSectionTitle title={t("wallet.balance.title")} margin="compact" />
-        <div className="mb-2 flex items-end justify-between">
-          <div className="flex items-center gap-1">
-            <Balance className="text-xl font-bold text-accent">
-              {BigInt(myWallet.dailyPowerToken || 0n) + BigInt(myWallet.cashablePowerToken || 0n)}
-            </Balance>
-            <Button
-              variant="ghost"
-              onClick={() => refreshMutation.mutate()}
-              disabled={refreshMutation.isPending}
-            >
-              <i
-                className={cn(
-                  "i-mgc-refresh-2-cute-re",
-                  refreshMutation.isPending && "animate-spin",
-                )}
-              />
-            </Button>
+        <div className="mb-2 flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-1">
+              <Balance className="text-xl font-bold text-accent">
+                {BigInt(myWallet.powerToken || 0n)}
+              </Balance>
+              <Button
+                variant="ghost"
+                onClick={() => refreshMutation.mutate()}
+                disabled={refreshMutation.isPending}
+              >
+                <i
+                  className={cn(
+                    "i-mgc-refresh-2-cute-re",
+                    refreshMutation.isPending && "animate-spin",
+                  )}
+                />
+              </Button>
+            </div>
+            <Tooltip>
+              <TooltipTrigger className="mt-1 block">
+                <div className="flex flex-row items-center gap-x-2 text-xs">
+                  <span className="flex items-center gap-1 text-left">
+                    {t("wallet.balance.withdrawable")} <i className="i-mgc-question-cute-re" />
+                  </span>
+                  <Balance className="center text-[12px] font-medium">
+                    {myWallet.cashablePowerToken}
+                  </Balance>
+                </div>
+              </TooltipTrigger>
+              <TooltipPortal>
+                <TooltipContent align="start" className="z-[999]">
+                  <p>{t("wallet.balance.withdrawableTooltip")}</p>
+                </TooltipContent>
+              </TooltipPortal>
+            </Tooltip>
           </div>
           <div className="flex gap-2">
             <WithdrawButton />
-            <ClaimDailyReward level={myWallet.level?.level || 0} />
           </div>
         </div>
-        <Tooltip>
-          <TooltipTrigger className="block">
-            <div className="flex flex-row items-center gap-x-2 text-xs text-zinc-600 dark:text-neutral-400">
-              <span className="flex items-center gap-1 text-left">
-                {t("wallet.balance.withdrawable")} <i className="i-mingcute-question-line" />
-              </span>
-
-              <Balance className="center text-[12px] font-medium">
-                {myWallet.cashablePowerToken}
-              </Balance>
+        <SettingSectionTitle title={t("wallet.balance.dailyReward")} margin="compact" />
+        <div className="my-1 text-sm">
+          All active users on Follow are eligible for daily power rewards, which can be used for
+          purchases and tipping on Follow.
+        </div>
+        <div className="my-1 text-sm">
+          Based on your level and past activities, you can receive a{" "}
+          <Balance className="align-top" withSuffix>
+            {BigInt(myWallet.todayDailyPower || 0n)}
+          </Balance>{" "}
+          reward today.{" "}
+          <a
+            href="https://github.com/RSSNext/Follow/wiki/Power#daily-reward"
+            target="_blank"
+            className="underline"
+            rel="noreferrer noopener"
+          >
+            Learn more.
+          </a>
+        </div>
+        <div className="my-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="space-y-1">
+              <Level level={myWallet.level?.level || 0} />
+              <ActivityPoints points={myWallet.level?.prevActivityPoints || 0} />
             </div>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent align="start" className="z-[999]">
-              <p>{t("wallet.balance.withdrawableTooltip")}</p>
-            </TooltipContent>
-          </TooltipPortal>
-        </Tooltip>
+            <i className="i-mgc-right-cute-li text-3xl" />
+            <Balance withSuffix>{BigInt(myWallet.todayDailyPower || 0n)}</Balance>
+          </div>
+          <ClaimDailyReward />
+        </div>
       </div>
     </>
   )

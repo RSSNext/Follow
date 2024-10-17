@@ -4320,8 +4320,8 @@ declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
-        preActivePoints: drizzle_orm_pg_core.PgColumn<{
-            name: "pre_active_points";
+        prevActivityPoints: drizzle_orm_pg_core.PgColumn<{
+            name: "prev_activity_points";
             tableName: "levels";
             dataType: "number";
             columnType: "PgInteger";
@@ -4336,8 +4336,8 @@ declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
-        activePoints: drizzle_orm_pg_core.PgColumn<{
-            name: "active_points";
+        activityPoints: drizzle_orm_pg_core.PgColumn<{
+            name: "activity_points";
             tableName: "levels";
             dataType: "number";
             columnType: "PgInteger";
@@ -4407,8 +4407,8 @@ declare const levelsOpenAPISchema: zod.ZodObject<{
     address: zod.ZodString;
     rank: zod.ZodNullable<zod.ZodNumber>;
     level: zod.ZodNullable<zod.ZodNumber>;
-    preActivePoints: zod.ZodNullable<zod.ZodNumber>;
-    activePoints: zod.ZodNullable<zod.ZodNumber>;
+    prevActivityPoints: zod.ZodNullable<zod.ZodNumber>;
+    activityPoints: zod.ZodNullable<zod.ZodNumber>;
     statusUpdatedAt: zod.ZodNullable<zod.ZodString>;
     powerToken: zod.ZodString;
     userId: zod.ZodString;
@@ -4418,8 +4418,8 @@ declare const levelsOpenAPISchema: zod.ZodObject<{
     powerToken: string;
     rank: number | null;
     level: number | null;
-    preActivePoints: number | null;
-    activePoints: number | null;
+    prevActivityPoints: number | null;
+    activityPoints: number | null;
     statusUpdatedAt: string | null;
 }, {
     userId: string;
@@ -4427,8 +4427,8 @@ declare const levelsOpenAPISchema: zod.ZodObject<{
     powerToken: string;
     rank: number | null;
     level: number | null;
-    preActivePoints: number | null;
-    activePoints: number | null;
+    prevActivityPoints: number | null;
+    activityPoints: number | null;
     statusUpdatedAt: string | null;
 }>;
 declare const levelsRelations: drizzle_orm.Relations<"levels", {
@@ -5040,19 +5040,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
-    "/wallets/transactions/claim_daily_ttl": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    ttl: number;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
     "/wallets/transactions/withdraw": {
         $post: {
             input: {
@@ -5096,15 +5083,13 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     dailyPowerToken: string;
                     cashablePowerToken: string;
                     level: {
-                        userId: string;
-                        address: string;
-                        powerToken: string;
                         rank: number | null;
                         level: number | null;
-                        preActivePoints: number | null;
-                        activePoints: number | null;
-                        statusUpdatedAt: string | null;
+                        prevActivityPoints: number | null;
+                        activityPoints: number | null;
                     } | null;
+                    todayDailyPower: string;
+                    tomorrowDailyPower: string;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -5149,8 +5134,8 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     powerToken: string;
                     rank: number | null;
                     level: number | null;
-                    preActivePoints: number | null;
-                    activePoints: number | null;
+                    prevActivityPoints: number | null;
+                    activityPoints: number | null;
                     statusUpdatedAt: string | null;
                 }[];
             };
