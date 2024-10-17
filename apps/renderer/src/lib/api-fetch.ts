@@ -65,10 +65,11 @@ export const apiClient = hc<AppType>(env.VITE_API_URL, {
       }
       throw err
     }),
-  headers() {
+  async headers() {
     return {
       "X-App-Version": PKG.version,
       "X-App-Dev": process.env.NODE_ENV === "development" ? "1" : "0",
+      "X-Csrf-Token": await getCsrfToken(),
     }
   },
 })
