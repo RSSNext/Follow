@@ -46,30 +46,43 @@ const weights = [
 
 let fontsData = []
 
-if (__DEV__) {
-  const fontDepsPath = require.resolve("@fontsource/sn-pro")
-  const fontsDirPath = resolve(fontDepsPath, "../files")
-  const fontsDir = fs
-    .readdirSync(fontsDirPath)
-    .filter((name) => !name.endsWith(".woff2") && !name.includes("italic"))
+const fontDepsPath = require.resolve("@fontsource/sn-pro")
+const fontsDirPath = resolve(fontDepsPath, "../files")
+const fontsDir = fs
+  .readdirSync(fontsDirPath)
+  .filter((name) => !name.endsWith(".woff2") && !name.includes("italic"))
 
-  fontsData = fontsDir.map((file) => ({
-    name: file.split("-")[0],
-    data: fs.readFileSync(path.join(fontsDirPath, file)),
-    weight: weights.find((weight) => weight.name === file.split("-")[1])?.weight,
-    style: file.includes("Italic") ? "italic" : ("normal" as "italic" | "normal"),
-  }))
-} else {
-  const { default: fontsBase64Data } = require("../../.generated/fonts-data")
+fontsData = fontsDir.map((file) => ({
+  name: file.split("-")[0],
+  data: fs.readFileSync(path.join(fontsDirPath, file)),
+  weight: weights.find((weight) => weight.name === file.split("-")[1])?.weight,
+  style: file.includes("Italic") ? "italic" : ("normal" as "italic" | "normal"),
+}))
 
-  for (const fontName in fontsBase64Data) {
-    fontsData.push({
-      name: fontName.split("-")[0],
-      weight: weights.find((weight) => weight.name === fontName.split("-")[1])?.weight,
-      style: fontName.includes("Italic") ? "italic" : ("normal" as "italic" | "normal"),
-      data: Buffer.from(fontsBase64Data[fontName], "base64"),
-    })
-  }
-}
+// if (isDev) {
+//   const fontDepsPath = require.resolve("@fontsource/sn-pro")
+//   const fontsDirPath = resolve(fontDepsPath, "../files")
+//   const fontsDir = fs
+//     .readdirSync(fontsDirPath)
+//     .filter((name) => !name.endsWith(".woff2") && !name.includes("italic"))
+
+//   fontsData = fontsDir.map((file) => ({
+//     name: file.split("-")[0],
+//     data: fs.readFileSync(path.join(fontsDirPath, file)),
+//     weight: weights.find((weight) => weight.name === file.split("-")[1])?.weight,
+//     style: file.includes("Italic") ? "italic" : ("normal" as "italic" | "normal"),
+//   }))
+// } else {
+//   const { default: fontsBase64Data } = require("../../.generated/fonts-data")
+
+//   for (const fontName in fontsBase64Data) {
+//     fontsData.push({
+//       name: fontName.split("-")[0],
+//       weight: weights.find((weight) => weight.name === fontName.split("-")[1])?.weight,
+//       style: fontName.includes("Italic") ? "italic" : ("normal" as "italic" | "normal"),
+//       data: Buffer.from(fontsBase64Data[fontName], "base64"),
+//     })
+//   }
+// }
 
 export default fontsData
