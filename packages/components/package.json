@@ -10,7 +10,8 @@
     "./ui/*": "./src/ui/*",
     "./providers/*": "./src/providers/*",
     "./hooks/*": "./src/hooks/*",
-    "./atoms/*": "./src/atoms/*"
+    "./atoms/*": "./src/atoms/*",
+    "./dayjs": "./src/utils/dayjs.ts"
   },
   "peerDependencies": {
     "react": "^18.0.0",

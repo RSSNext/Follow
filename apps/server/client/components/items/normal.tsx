@@ -17,8 +17,7 @@ export function NormalListItem({
   const feed = entryPreview?.feeds
 
   if (!entry || !feed) return null
-
-  const displayTime = entry.collections?.createdAt
+  const displayTime = entry.entries.publishedAt
 
   return (
     <div className={"group relative flex cursor-menu pl-3 pr-2"}>
