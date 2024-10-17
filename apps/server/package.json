@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fastify/middie": "9.0.2",
+    "@follow/constants": "workspace:*",
     "@follow/hooks": "workspace:*",
     "@fontsource/sn-pro": "5.1.0",
     "@resvg/resvg-js": "2.6.2",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@follow/components": "workspace:*",
+    "@follow/models": "workspace:*",
     "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",

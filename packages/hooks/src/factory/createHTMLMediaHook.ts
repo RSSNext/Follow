@@ -243,7 +243,7 @@ export default function createHTMLMediaHook<T extends HTMLAudioElement | HTMLVid
       const el = ref.current!
 
       if (!el) {
-        if (process.env.NODE_ENV !== "production") {
+        if (import.meta.env.DEV) {
           if (tag === "audio") {
             console.error(
               "useAudio() ref to <audio> element is empty at mount. " +

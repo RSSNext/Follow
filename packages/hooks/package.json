@@ -13,6 +13,7 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
+    "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
     "foxact": "0.2.39",

@@ -1,5 +1,6 @@
 import { EventProvider } from "@follow/components/providers/event-provider.jsx"
 import { StableRouterProvider } from "@follow/components/providers/stable-router-provider.jsx"
+import { Toaster } from "@follow/components/ui/toast/index.jsx"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { LazyMotion, MotionConfig } from "framer-motion"
 import { Provider } from "jotai"
@@ -28,6 +29,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
           <ModalStackContainer>
             <MobileDetector />
             <UserProvider />
+            <Toaster />
             {children}
           </ModalStackContainer>
         </QueryClientProvider>

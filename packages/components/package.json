@@ -19,6 +19,7 @@
   "dependencies": {
     "@follow/hooks": "workspace:*",
     "@follow/models": "workspace:*",
+    "@follow/shared": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
     "@headlessui/react": "2.1.10",
@@ -43,6 +44,7 @@
     "class-variance-authority": "0.7.0",
     "foxact": "0.2.39",
     "jotai": "2.10.1",
-    "lodash-es": "4.17.21"
+    "lodash-es": "4.17.21",
+    "sonner": "^1.5.0"
   }
 }

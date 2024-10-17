@@ -19,7 +19,10 @@ const useMotionValueToState = (value: MotionValue<number>) => {
 function Container({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   return (
     <div
-      className={cn("mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8", className)}
+      className={cn(
+        "mx-auto w-full max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8",
+        className,
+      )}
       {...props}
     />
   )
@@ -37,7 +40,7 @@ export const Header = () => {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 px-4 py-5 backdrop-blur-lg transition-all lg:px-10",
+        "fixed inset-x-0 top-0 z-50 flex h-[80px] w-full items-center px-4 backdrop-blur-lg transition-all lg:px-10",
         scrollYState && "border-b",
       )}
     >

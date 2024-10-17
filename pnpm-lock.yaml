@@ -661,6 +661,9 @@ importers:
       '@fastify/middie':
         specifier: 9.0.2
         version: 9.0.2
+      '@follow/constants':
+        specifier: workspace:*
+        version: link:../../packages/constants
       '@follow/hooks':
         specifier: workspace:*
         version: link:../../packages/hooks
@@ -676,6 +679,9 @@ importers:
       click-to-react-component:
         specifier: 1.1.0
         version: 1.1.0(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      constants:workspace@*:
+        specifier: link:@follow/constants:workspace@*
+        version: link:@follow/constants:workspace@*
       dayjs:
         specifier: 1.11.13
         version: 1.11.13
@@ -725,6 +731,9 @@ importers:
       '@follow/components':
         specifier: workspace:*
         version: link:../../packages/components
+      '@follow/models':
+        specifier: workspace:*
+        version: link:../../packages/models
       '@follow/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -773,6 +782,9 @@ importers:
       '@follow/models':
         specifier: workspace:*
         version: link:../models
+      '@follow/shared':
+        specifier: workspace:*
+        version: link:../shared
       '@follow/types':
         specifier: workspace:*
         version: link:../types
@@ -854,9 +866,21 @@ importers:
       react-dom:
         specifier: ^18.0.0
         version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^1.5.0
+        version: 1.5.0(patch_hash=6s3tquyt5wnkqaogymn3mkivuq)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+
+  packages/constants:
+    dependencies:
+      '@follow/types':
+        specifier: workspace:*
+        version: link:../types
 
   packages/hooks:
     dependencies:
+      '@follow/shared':
+        specifier: workspace:*
+        version: link:../shared
       '@follow/types':
         specifier: workspace:*
         version: link:../types
