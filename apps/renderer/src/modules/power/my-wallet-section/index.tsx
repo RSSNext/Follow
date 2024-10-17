@@ -3,9 +3,9 @@ import { Trans, useTranslation } from "react-i18next"
 
 import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
+import { Divider } from "~/components/ui/divider"
 import { LoadingWithIcon } from "~/components/ui/loading"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
-import { DAILY_CLAIM_AMOUNT } from "~/constants"
 import { apiClient } from "~/lib/api-fetch"
 import { cn } from "~/lib/utils"
 import { SettingSectionTitle } from "~/modules/settings/section"
@@ -53,7 +53,7 @@ export const MyWalletSection = () => {
         <div className="text-sm">
           <i className="i-mgc-power mr-0.5 size-3.5 translate-y-px text-accent" />
           <Trans
-            i18nKey="wallet.power.description"
+            i18nKey="wallet.power.description2"
             ns="settings"
             values={{ blockchainName: "VSL" }}
             components={{
@@ -67,7 +67,6 @@ export const MyWalletSection = () => {
               ),
             }}
           />
-          <p>{t("wallet.power.dailyClaim", { amount: DAILY_CLAIM_AMOUNT })}</p>
         </div>
         <SettingSectionTitle margin="compact" title={t("wallet.address.title")} />
         <div className="group flex items-center gap-2 text-sm">
@@ -125,25 +124,34 @@ export const MyWalletSection = () => {
             <WithdrawButton />
           </div>
         </div>
+        <Divider className="my-8" />
         <SettingSectionTitle title={t("wallet.balance.dailyReward")} margin="compact" />
+        <div className="my-1 text-sm">{t("wallet.power.rewardDescription")}</div>
         <div className="my-1 text-sm">
-          All active users on Follow are eligible for daily power rewards, which can be used for
-          purchases and tipping on Follow.
-        </div>
-        <div className="my-1 text-sm">
-          Based on your level and past activities, you can receive a{" "}
-          <Balance className="align-top" withSuffix>
-            {BigInt(myWallet.todayDailyPower || 0n)}
-          </Balance>{" "}
-          reward today.{" "}
-          <a
-            href="https://github.com/RSSNext/Follow/wiki/Power#daily-reward"
-            target="_blank"
-            className="underline"
-            rel="noreferrer noopener"
-          >
-            Learn more.
-          </a>
+          <Trans
+            i18nKey="wallet.power.rewardDescription2"
+            ns="settings"
+            values={{ blockchainName: "VSL" }}
+            components={{
+              Balance: (
+                <Balance
+                  className="align-top"
+                  withSuffix
+                  value={BigInt(myWallet.todayDailyPower || 0n)}
+                >
+                  {BigInt(myWallet.todayDailyPower || 0n)}
+                </Balance>
+              ),
+              Link: (
+                <a
+                  href="https://github.com/RSSNext/Follow/wiki/Power#daily-reward"
+                  target="_blank"
+                  className="underline"
+                  rel="noreferrer noopener"
+                />
+              ),
+            }}
+          />
         </div>
         <div className="my-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
