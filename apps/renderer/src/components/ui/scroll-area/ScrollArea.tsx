@@ -137,10 +137,7 @@ export const ScrollArea = React.forwardRef<
         <Viewport
           ref={setViewportRef}
           onWheel={stopPropagation}
-          className={cn(
-            flex ? "[&>div]:!flex [&>div]:!flex-col" : "[&>div]:!block",
-            viewportClassName,
-          )}
+          className={cn(flex ? "[&>div]:!flex [&>div]:!flex-col" : "", viewportClassName)}
           mask={mask}
         >
           {children}
