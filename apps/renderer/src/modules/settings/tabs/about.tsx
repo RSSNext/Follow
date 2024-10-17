@@ -98,12 +98,12 @@ export const SettingAbout = () => {
               key={link.url}
               className={styledButtonVariant({
                 variant: "outline",
-                className: "flex-1",
+                className: "flex-1 !p-0",
               })}
             >
               <a
                 href={link.url}
-                className="center flex w-full gap-1"
+                className="center flex w-full gap-1 px-3 py-1.5"
                 target="_blank"
                 rel="noreferrer"
               >
