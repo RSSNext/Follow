@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
-import { useProxyValue, useSetProxy } from "~/hooks/common/useProxySetting"
+import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
 import { initPostHog } from "~/initialize/posthog"
 import { tipcClient } from "~/lib/client"

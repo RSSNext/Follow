@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
-import { Fragment, memo, useEffect, useRef, useState } from "react"
+import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useOnClickOutside } from "usehooks-ts"
 
@@ -53,15 +53,24 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const subscription = useSubscriptionByFeedId(ids[0])
   const folderName = subscription?.category || subscription.defaultCategory
 
-  const showCollapse = sortByUnreadFeedList.length > 1 || subscription?.category
+  const showCollapse = sortByUnreadFeedList.length > 1 || !!subscription?.category
 
-  const [open, setOpen] = useState(() => {
+  const open = useMemo(() => {
     if (!showCollapse) return true
     if (folderName && typeof categoryOpenStateData[folderName] === "boolean") {
       return categoryOpenStateData[folderName]
     }
     return false
-  })
+  }, [categoryOpenStateData, folderName, showCollapse])
+
+  const setOpen = useCallback(
+    (next: boolean) => {
+      if (view !== undefined && folderName) {
+        subscriptionActions.changeCategoryOpenState(view, folderName, next)
+      }
+    },
+    [folderName, view],
+  )
 
   const shouldOpen = useRouteParamsSelector(
     (s) => typeof s.feedId === "string" && ids.includes(s.feedId),
@@ -89,14 +98,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
         behavior: "smooth",
       })
     }
-  }, [scrollerRef, shouldOpen])
-  const expansion = folderName ? categoryOpenStateData[folderName] : true
-
-  useEffect(() => {
-    if (showCollapse) {
-      setOpen(expansion)
-    }
-  }, [expansion])
+  }, [scrollerRef, setOpen, shouldOpen])
 
   const itemsRef = useRef<HTMLDivElement>(null)
 
