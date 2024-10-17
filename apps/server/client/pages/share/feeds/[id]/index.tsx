@@ -1,4 +1,3 @@
-import { PoweredByFooter } from "@follow/components/common/PoweredByFooter.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 // import { FeedCertification } from "~/components/feed-certification"
 // import { FeedIcon } from "~/components/feed-icon"
@@ -22,7 +21,6 @@ export function Component() {
   return (
     <>
       <LoadingCircle size="large" className="center fixed inset-0" />
-      <PoweredByFooter />
     </>
   )
 

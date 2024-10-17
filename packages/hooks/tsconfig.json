@@ -1,10 +1,6 @@
 {
+  "extends": "../tsconfig.extend.json",
   "compilerOptions": {
-    "moduleResolution": "Bundler",
-    "target": "ES2022",
-    "noImplicitReturns": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "noEmit": true,
     "baseUrl": ".",
     "jsx": "preserve",

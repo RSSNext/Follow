@@ -2,6 +2,7 @@ import { IN_ELECTRON } from "@follow/shared/constants"
 
 import { detectBrowser, getOS } from "./utils"
 
+declare const APP_VERSION: string
 export const getCurrentEnvironment = () => {
   const ua = navigator.userAgent
   const appVersion = APP_VERSION

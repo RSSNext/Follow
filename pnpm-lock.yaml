@@ -744,6 +744,21 @@ importers:
         specifier: 5.4.9
         version: 5.4.9(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.35.0)
 
+  packages/atoms:
+    dependencies:
+      '@follow/hooks':
+        specifier: workspace:*
+        version: link:../hooks
+      '@follow/types':
+        specifier: workspace:*
+        version: link:../types
+      '@follow/utils':
+        specifier: workspace:*
+        version: link:../utils
+      jotai:
+        specifier: 2.10.1
+        version: 2.10.1(@types/react@18.3.11)(react@18.3.1)
+
   packages/components:
     dependencies:
       '@follow/hooks':

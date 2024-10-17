@@ -9,6 +9,7 @@ import type { FC, PropsWithChildren } from "react"
 
 import { queryClient } from "../lib/query-client"
 import { jotaiStore } from "../lib/store"
+import { UserProvider } from "./user-provider"
 
 const loadFeatures = () => import("../framer-lazy-feature").then((res) => res.default)
 export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
@@ -26,6 +27,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
           <StableRouterProvider />
           <ModalStackContainer>
             <MobileDetector />
+            <UserProvider />
             {children}
           </ModalStackContainer>
         </QueryClientProvider>

@@ -2,11 +2,10 @@
   "extends": "../tsconfig.extend.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "jsx": "preserve",
     "declaration": true,
     "types": ["@follow/types/react", "@follow/types/global", "vite/client"],
     "paths": {
-      "@follow/components/*": ["./src/*"],
+      "@follow/atoms/*": ["./src/*"],
       "@pkg": ["../../package.json"]
     }
   },

@@ -8,6 +8,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export type OS = "macOS" | "iOS" | "Windows" | "Android" | "Linux" | ""
+declare global {
+  interface Window {
+    platform?: string
+  }
+}
+declare const ELECTRON: boolean
 export const getOS = memoize((): OS => {
   if (window.platform) {
     switch (window.platform) {

@@ -8,11 +8,6 @@ import { cloneElement, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
-import { whoami } from "~/atoms/user"
-import { usePresentUserProfileModal } from "~/modules/profile/hooks"
-
-import { UserAvatar } from "../modules/user/UserAvatar"
-
 const useMotionValueToState = (value: MotionValue<number>) => {
   const [state, setState] = useState(value.get())
   useMotionValueEvent(value, "change", (v) => setState(v))
@@ -20,7 +15,6 @@ const useMotionValueToState = (value: MotionValue<number>) => {
 }
 
 export function Header() {
-  const present = usePresentUserProfileModal()
   const { t } = useTranslation("external")
 
   const { scrollY } = useScroll()
@@ -56,7 +50,7 @@ export function Header() {
               />
             </div>
           </div>
-          <button
+          {/* <button
             className="cursor-pointer"
             type="button"
             onClick={() => {
@@ -64,7 +58,7 @@ export function Header() {
             }}
           >
             <UserAvatar className="h-10 bg-transparent p-0" hideName />
-          </button>
+          </button> */}
         </div>
       </div>
     </header>
