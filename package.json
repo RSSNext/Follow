@@ -21,6 +21,7 @@
     "bump": "vv",
     "dev": "electron-vite dev",
     "dev:debug": "export DEBUG=true && vite --debug",
+    "dev:server": "pnpm run --filter=server dev",
     "dev:web": "vite",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

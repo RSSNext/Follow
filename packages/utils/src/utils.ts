@@ -2,6 +2,7 @@ import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
 import { memoize } from "lodash-es"
 import { twMerge } from "tailwind-merge"
+import { parse } from "tldts"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -163,3 +164,34 @@ export const sortByAlphabet = (a: string, b: string) => {
 }
 
 export const isEmptyObject = (obj: Record<string, any>) => Object.keys(obj).length === 0
+
+export const parseSafeUrl = (url: string) => {
+  try {
+    return new URL(url)
+  } catch {
+    return null
+  }
+}
+
+export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
+  let src: string
+  let fallbackUrl = ""
+
+  try {
+    const { host } = new URL(url)
+    const pureDomain = parse(host).domainWithoutSuffix
+    fallbackUrl = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain
+      ?.slice(0, 2)
+      .toUpperCase()}`
+    src = `https://unavatar.follow.is/${host}?fallback=${fallback || false}`
+  } catch {
+    const pureDomain = parse(url).domainWithoutSuffix
+    src = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain?.slice(0, 2).toUpperCase()}`
+  }
+  const ret = {
+    src,
+    fallbackUrl,
+  }
+
+  return ret
+}

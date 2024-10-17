@@ -770,6 +770,9 @@ importers:
       '@follow/hooks':
         specifier: workspace:*
         version: link:../hooks
+      '@follow/models':
+        specifier: workspace:*
+        version: link:../models
       '@follow/types':
         specifier: workspace:*
         version: link:../types
@@ -879,6 +882,24 @@ importers:
         specifier: 3.1.0
         version: 3.1.0(react@18.3.1)
 
+  packages/models:
+    dependencies:
+      '@auth/core':
+        specifier: 0.37.0
+        version: 0.37.0
+      '@follow/shared':
+        specifier: workspace:*
+        version: link:../shared
+      '@follow/types':
+        specifier: workspace:*
+        version: link:../types
+      '@follow/utils':
+        specifier: workspace:*
+        version: link:../utils
+      hono:
+        specifier: 4.6.5
+        version: 4.6.5(patch_hash=hhch3aogyxhxjttgmn52vtceyy)
+
   packages/shared:
     dependencies:
       '@electron-toolkit/preload':
@@ -931,6 +952,9 @@ importers:
       tailwind-merge:
         specifier: 2.5.4
         version: 2.5.4
+      tldts:
+        specifier: 6.1.51
+        version: 6.1.51
 
 packages:
 

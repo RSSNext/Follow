@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@follow/hooks": "workspace:*",
+    "@follow/models": "workspace:*",
     "@follow/types": "workspace:*",
     "@follow/utils": "workspace:*",
     "@headlessui/react": "2.1.10",

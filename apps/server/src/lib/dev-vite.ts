@@ -13,6 +13,7 @@ export const registerDevViteServer = async (app: FastifyInstance) => {
     appType: "custom",
 
     configFile: resolve(root, "vite.config.mts"),
+    envDir: root,
   })
   globalVite = vite
 

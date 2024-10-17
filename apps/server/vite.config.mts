@@ -18,5 +18,17 @@ export default () => {
       ...viteRenderBaseConfig.define,
     },
     plugins: [react(), twMacro()],
+
+    server: {
+      proxy: {
+        "/api": {
+          target: "https://api.follow.is",
+          changeOrigin: true,
+          rewrite(path) {
+            return path.replace("/api", "")
+          },
+        },
+      },
+    },
   })
 }

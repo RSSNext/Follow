@@ -6,7 +6,7 @@ import { ofetch } from "ofetch"
 
 let csrfTokenPromise: Promise<string> | null = null
 export const apiFetch = ofetch.create({
-  baseURL: env.VITE_API_URL,
+  baseURL: env.VITE_EXTERNAL_API_URL || env.VITE_API_URL,
   credentials: "include",
   retry: false,
   onRequest: async ({ options }) => {
@@ -24,7 +24,7 @@ export const apiFetch = ofetch.create({
   },
 })
 
-export const apiClient = hc<AppType>(env.VITE_API_URL, {
+export const apiClient = hc<AppType>(env.VITE_EXTERNAL_API_URL || env.VITE_API_URL, {
   fetch: async (input: any, options = {}) =>
     apiFetch(input.toString(), options).catch((err) => {
       throw err

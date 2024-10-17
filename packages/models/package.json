@@ -1,0 +1,22 @@
+{
+  "name": "@follow/models",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts"
+    },
+    "./types": {
+      "import": "./src/types.ts",
+      "require": "./src/types.ts"
+    }
+  },
+  "dependencies": {
+    "@auth/core": "0.37.0",
+    "@follow/shared": "workspace:*",
+    "@follow/types": "workspace:*",
+    "@follow/utils": "workspace:*",
+    "hono": "4.6.5"
+  }
+}

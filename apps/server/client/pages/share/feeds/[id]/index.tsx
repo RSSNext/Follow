@@ -1,32 +1,39 @@
+import { useEntriesPreview } from "@client/query/entries"
+import { useFeed } from "@client/query/feed"
+import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
-// import { FeedCertification } from "~/components/feed-certification"
-// import { FeedIcon } from "~/components/feed-icon"
-// import { FollowIcon } from "~/components/icons/follow"
-// import { Button } from "~/components/ui/button"
-// import { views } from "~/constants"
-// import { usePresentFeedFormModal } from "~/hooks/biz/useFeedFormModal"
-// import { useTitle } from "~/hooks/common"
-// import type { FeedViewType } from "~/lib/enum"
-// import { cn } from "~/lib/utils"
-// import type { FeedModel } from "~/models"
-// import { getItemComponentByView } from "~/modules/entry-column/Items"
-// import type { UniversalItemProps } from "~/modules/entry-column/types"
-// import { useEntriesPreview } from "~/queries/entries"
-// import { useFeed } from "~/queries/feed"
+import type { FeedModel } from "@follow/shared/hono"
+import { useParams, useSearchParams } from "react-router-dom"
 
 export function Component() {
-  // const { id } = useParams()
-  // const [search] = useSearchParams()
-  // const view = Number.parseInt(search.get("view") || "0")
+  const { id } = useParams()
+  const [search] = useSearchParams()
+  const view = Number.parseInt(search.get("view") || "0")
+
+  const feed = useFeed({
+    id: id!,
+  })
+
+  const feedData = feed.data?.feed
+  const isSubscribed = !!feed.data?.subscription
+  const entries = useEntriesPreview({
+    id,
+  })
+
+  if (feed.isLoading || !feed.data?.feed) {
+    return (
+      <>
+        <LoadingCircle size="large" className="center fixed inset-0" />
+      </>
+    )
+  }
+
   return (
-    <>
-      <LoadingCircle size="large" className="center fixed inset-0" />
-    </>
+    <div className="mx-auto mt-12 flex w-full max-w-5xl flex-col items-center justify-center p-4 lg:p-0">
+      <FeedIcon fallback feed={feed.data.feed} className="mask-squircle mask shrink-0" size={64} />
+    </div>
   )
 
-  // const feed = useFeed({
-  //   id,
-  // })
   // const feedData = feed.data?.feed as FeedModel
   // const isSubscribed = !!feed.data?.subscription
   // const entries = useEntriesPreview({
