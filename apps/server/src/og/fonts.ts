@@ -1,8 +1,6 @@
 import fs from "node:fs"
 import path, { resolve } from "node:path"
 
-import { isDev } from "~/lib/env"
-
 const weights = [
   {
     name: "Thin",
@@ -47,10 +45,13 @@ const weights = [
 ] as const
 
 let fontsData = []
-if (isDev) {
+
+if (__DEV__) {
   const fontDepsPath = require.resolve("@fontsource/sn-pro")
   const fontsDirPath = resolve(fontDepsPath, "../files")
-  const fontsDir = fs.readdirSync(fontsDirPath).filter((name) => !name.endsWith(".woff2"))
+  const fontsDir = fs
+    .readdirSync(fontsDirPath)
+    .filter((name) => !name.endsWith(".woff2") && !name.includes("italic"))
 
   fontsData = fontsDir.map((file) => ({
     name: file.split("-")[0],
@@ -59,7 +60,7 @@ if (isDev) {
     style: file.includes("Italic") ? "italic" : ("normal" as "italic" | "normal"),
   }))
 } else {
-  const { default: fontsBase64Data } = require("./fonts-data")
+  const { default: fontsBase64Data } = require("../../.generated/fonts-data")
 
   for (const fontName in fontsBase64Data) {
     fontsData.push({

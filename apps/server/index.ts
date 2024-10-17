@@ -1,7 +1,5 @@
 import "./src/lib/load-env"
 
-import { createRequire } from "node:module"
-
 import middie from "@fastify/middie"
 import Fastify from "fastify"
 
@@ -20,7 +18,6 @@ export const createApp = async () => {
   })
 
   if (isDev) {
-    const require = createRequire(import.meta.url)
     const devVite = require("./src/lib/dev-vite")
     await devVite.registerDevViteServer(app)
   }

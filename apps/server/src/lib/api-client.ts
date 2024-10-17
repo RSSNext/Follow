@@ -26,7 +26,7 @@ export const createApiClient = (authSessionToken: string) => {
     headers() {
       return {
         "X-App-Version": PKG.version,
-        "X-App-Dev": process.env.NODE_ENV === "development" ? "1" : "0",
+        "X-App-Dev": __DEV__ ? "1" : "0",
         Cookie: authSessionToken ? `authjs.session-token=${authSessionToken}` : "",
       }
     },

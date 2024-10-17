@@ -32,14 +32,14 @@ const devHandler = (app: FastifyInstance) => {
 }
 const prodHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
-    let template = require("./index.template").default
+    let template = require("../../.generated/index.template").default
     template = await transfromTemplate(template, req)
     reply.type("text/html")
     reply.send(template)
   })
 }
 
-export const globalRoute = process.env.NODE_ENV === "development" ? devHandler : prodHandler
+export const globalRoute = isDev ? devHandler : prodHandler
 
 async function transfromTemplate(template: string, req: FastifyRequest) {
   const injectMetadata = await injectMetaHandler(req).catch((err) => {

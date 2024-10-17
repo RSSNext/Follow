@@ -4,7 +4,7 @@
     "node": "20.x"
   },
   "scripts": {
-    "build": "vite build && tsx scripts/prepare-vercel-build.ts && tsup",
+    "build": "NODE_ENV=production vite build && tsx scripts/prepare-vercel-build.ts && tsup && tsx scripts/cleanup-vercel-build.ts",
     "dev": "NODE_ENV=development tsx watch --include \"src/**/*.ts\" --exclude \"./*.ts\" --exclude \"./*.mjs\" index.ts",
     "start": "tsx index.ts"
   },
