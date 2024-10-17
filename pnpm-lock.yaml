@@ -848,6 +848,9 @@ importers:
       class-variance-authority:
         specifier: 0.7.0
         version: 0.7.0
+      dayjs:
+        specifier: 1.11.13
+        version: 1.11.13
       foxact:
         specifier: 0.2.39
         version: 0.2.39(react@18.3.1)
@@ -860,12 +863,21 @@ importers:
       react:
         specifier: ^18.0.0
         version: 18.3.1
+      react-blurhash:
+        specifier: ^0.3.0
+        version: 0.3.0(blurhash@2.0.5)(react@18.3.1)
       react-dom:
         specifier: ^18.0.0
         version: 18.3.1(react@18.3.1)
+      react-i18next:
+        specifier: ^15.0.3
+        version: 15.0.3(i18next@23.16.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(patch_hash=6s3tquyt5wnkqaogymn3mkivuq)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      usehooks-ts:
+        specifier: 3.1.0
+        version: 3.1.0(react@18.3.1)
 
   packages/constants:
     dependencies:

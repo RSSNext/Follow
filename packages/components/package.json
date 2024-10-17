@@ -42,9 +42,13 @@
     "@radix-ui/react-toast": "1.2.2",
     "@radix-ui/react-tooltip": "1.1.3",
     "class-variance-authority": "0.7.0",
+    "dayjs": "1.11.13",
     "foxact": "0.2.39",
     "jotai": "2.10.1",
     "lodash-es": "4.17.21",
-    "sonner": "^1.5.0"
+    "react-blurhash": "^0.3.0",
+    "react-i18next": "^15.0.3",
+    "sonner": "^1.5.0",
+    "usehooks-ts": "3.1.0"
   }
 }

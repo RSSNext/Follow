@@ -1,3 +1,4 @@
+import { NormalListItem } from "@client/components/items/normal"
 import { MainContainer } from "@client/components/layout/main"
 import { FeedCertification } from "@client/components/ui/feed-certification"
 import { useEntriesPreview } from "@client/query/entries"
@@ -110,15 +111,10 @@ export function Component() {
             key={entry.id}
           >
             <div className="rounded-xl pl-3 duration-300 hover:bg-theme-item-active">
-              {/* <Item
-                entryPreview={{
-                  entries: entry,
-                  feeds: feedData,
-                  read: true,
-                  feedId: feedData.id!,
-                }}
+              <NormalListItem
                 entryId={entry.id}
-              /> */}
+                entryPreview={{ entries: entry, feeds: feedData, read: true, feedId: feedData.id! }}
+              />
             </div>
           </a>
         ))}

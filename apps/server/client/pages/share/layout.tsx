@@ -12,7 +12,7 @@ export const Component = () => {
           }`}
       </MemoedDangerousHTMLStyle>
       <Header />
-      <main className="mx-auto max-w-[var(--container-max-width)] flex-1">
+      <main className="relative mx-auto w-full max-w-[var(--container-max-width)] flex-1">
         <Outlet />
       </main>
       <PoweredByFooter />
