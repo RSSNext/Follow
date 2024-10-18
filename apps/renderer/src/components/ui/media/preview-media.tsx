@@ -48,7 +48,8 @@ const Wrapper: Component<{
           {children}
           <RootPortal to={entryId ? null : undefined}>
             <div
-              className="pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-white/70 [&_button]:hover:text-white"
+              className="pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-theme-vibrancyFg dark:text-white/70 
+                [&_button]:hover:text-theme-vibrancyFg dark:[&_button]:hover:text-white"
               onClick={stopPropagation}
             >
               {showActions && (
