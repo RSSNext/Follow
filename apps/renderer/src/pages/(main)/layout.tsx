@@ -3,7 +3,7 @@ import { repository } from "@pkg"
 import { Slot } from "@radix-ui/react-slot"
 import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
-import React, { forwardRef, useEffect, useRef, useState } from "react"
+import React, { forwardRef, lazy, Suspense, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans, useTranslation } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
@@ -30,7 +30,7 @@ import { RootPortal } from "~/components/ui/portal"
 import { HotKeyScopeMap } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useDailyTask } from "~/hooks/biz/useDailyTask"
-import { useI18n } from "~/hooks/common"
+import { useAuthQuery, useI18n } from "~/hooks/common"
 import { preventDefault } from "~/lib/dom"
 import { cn } from "~/lib/utils"
 import { EnvironmentIndicator } from "~/modules/app/EnvironmentIndicator"
@@ -44,6 +44,11 @@ import { CmdF } from "~/modules/panel/cmdf"
 import { SearchCmdK } from "~/modules/panel/cmdk"
 import { CmdNTrigger } from "~/modules/panel/cmdn"
 import { AppLayoutGridContainerProvider } from "~/providers/app-grid-layout-container-provider"
+import { settings } from "~/queries/settings"
+
+const LazyNewUserGuideModal = lazy(() =>
+  import("~/modules/new-user-guide/modal").then((m) => ({ default: m.NewUserGuideModal })),
+)
 
 const FooterInfo = () => {
   const { t } = useTranslation()
@@ -90,6 +95,9 @@ export function Component() {
 
   const isNotSupportWidth = useViewport((v) => v.w < supportMinWidth && v.w !== 0) && !IN_ELECTRON
 
+  const { data: remoteSettings, isLoading } = useAuthQuery(settings.get(), {})
+  const isNewUser = !isLoading && remoteSettings && Object.keys(remoteSettings.updated).length === 0
+
   if (isNotSupportWidth) {
     return <NotSupport />
   }
@@ -121,6 +129,12 @@ export function Component() {
           <Outlet />
         </AppErrorBoundary>
       </main>
+
+      {user && isNewUser && (
+        <Suspense>
+          <LazyNewUserGuideModal />
+        </Suspense>
+      )}
 
       {isAuthFail && !user && (
         <RootPortal>

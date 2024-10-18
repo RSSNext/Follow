@@ -148,7 +148,7 @@ const textSizeMap = {
   large: 20,
 }
 
-const TextSize = () => {
+export const TextSize = () => {
   const { t } = useTranslation("settings")
   const uiTextSize = useUISettingSelector((state) => state.uiTextSize)
 
@@ -177,7 +177,7 @@ const TextSize = () => {
   )
 }
 
-const AppThemeSegment = () => {
+export const AppThemeSegment = () => {
   const { t } = useTranslation("settings")
   const theme = useThemeAtomValue()
   const setTheme = useSetTheme()

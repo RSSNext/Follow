@@ -1,6 +1,6 @@
 import type { User } from "@auth/core/types"
 
-import type { FeedModel, ListModelPoplutedFeeds } from "./types"
+import type { FeedModel } from "./types"
 
 export * from "./types"
 
@@ -20,7 +20,7 @@ export namespace Models {
 
   export interface TrendingAggregates {
     trendingFeeds: FeedModel[]
-    trendingLists: ListModelPoplutedFeeds[]
+    trendingLists: TrendingList[]
     trendingEntries: TrendingEntry[]
     trendingUsers: User[]
   }
