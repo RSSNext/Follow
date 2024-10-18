@@ -48,8 +48,7 @@ const Wrapper: Component<{
           {children}
           <RootPortal to={entryId ? null : undefined}>
             <div
-              className="pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-theme-vibrancyFg dark:text-white/70 
-                [&_button]:hover:text-theme-vibrancyFg dark:[&_button]:hover:text-white"
+              className="pointer-events-auto absolute bottom-4 right-4 z-[99] flex gap-3 text-theme-vibrancyFg dark:text-white/70 [&_button]:hover:text-theme-vibrancyFg dark:[&_button]:hover:text-white"
               onClick={stopPropagation}
             >
               {showActions && (
@@ -305,7 +304,14 @@ const FallbackableImage: FC<
           )}
         >
           {blurhash ? (
-            <div style={{ aspectRatio: `${props.width} / ${props.height}` }} className="w-full">
+            <div
+              style={{
+                aspectRatio: `${props.width} / ${props.height}`,
+                width: props.width,
+                height: props.height,
+              }}
+              className={cn(!props.height || !props.width ? "w-full" : "")}
+            >
               <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
             </div>
           ) : (
