@@ -4,7 +4,7 @@ import { useSingleton } from "foxact/use-singleton"
 import { atom, useStore } from "jotai"
 import { nanoid } from "nanoid"
 import type { FC } from "react"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { Trans } from "react-i18next"
 
 import { Button } from "~/components/ui/button"
@@ -19,6 +19,13 @@ import achievementAnimationUri from "~/lottie/achievement.lottie?url"
 const absoluteachievementAnimationUri = new URL(achievementAnimationUri, import.meta.url).href
 enum AchievementsActionIdMap {
   FIRST_CLAIM_FEED = 0,
+  FIRST_CREATE_LIST = 1,
+  LIST_SUBSCRIBE_50 = 2,
+  LIST_SUBSCRIBE_100 = 3,
+  LIST_SUBSCRIBE_500 = 4,
+  PRODUCT_HUNT_VOTE = 5,
+  // TODO
+  // FOLLOW_SPECIAL_FEED = 6,
 }
 
 const achievementActionIdCopyMap: Record<
@@ -29,6 +36,30 @@ const achievementActionIdCopyMap: Record<
     title: "achievement.first_claim_feed",
     description: "achievement.first_claim_feed_description",
   },
+  [AchievementsActionIdMap.FIRST_CREATE_LIST]: {
+    title: "achievement.first_create_list",
+    description: "achievement.first_create_list_description",
+  },
+  [AchievementsActionIdMap.LIST_SUBSCRIBE_50]: {
+    title: "achievement.list_subscribe_50",
+    description: "achievement.list_subscribe_50_description",
+  },
+  [AchievementsActionIdMap.LIST_SUBSCRIBE_100]: {
+    title: "achievement.list_subscribe_100",
+    description: "achievement.list_subscribe_100_description",
+  },
+  [AchievementsActionIdMap.LIST_SUBSCRIBE_500]: {
+    title: "achievement.list_subscribe_500",
+    description: "achievement.list_subscribe_500_description",
+  },
+  [AchievementsActionIdMap.PRODUCT_HUNT_VOTE]: {
+    title: "achievement.product_hunt_vote",
+    description: "achievement.product_hunt_vote_description",
+  },
+  // [AchievementsActionIdMap.FOLLOW_SPECIAL_FEED]: {
+  //   title: "achievement.follow_special_feed",
+  //   description: "achievement.follow_special_feed_description",
+  // },
 }
 
 export const AchievementModalContent: FC = () => {
@@ -66,6 +97,7 @@ export const AchievementModalContent: FC = () => {
   })
 
   useEffect(() => {
+    if (isLoading) return
     if (!achievements) return
     let shouldPolling = false
     const pollingChain = new Chain()
@@ -85,7 +117,7 @@ export const AchievementModalContent: FC = () => {
     return () => {
       pollingChain.abort()
     }
-  }, [achievements, refetch])
+  }, [achievements, isLoading, refetch])
 
   const { mutateAsync: mintAchievement, isPending: isMinting } = useMutation({
     mutationFn: async (actionId: number) => {
@@ -110,6 +142,14 @@ export const AchievementModalContent: FC = () => {
     },
   })
   const t = useI18n()
+
+  const sortedAchievements = useMemo(() => {
+    return achievements?.sort((a, b) => {
+      if (a.type === "received") return -1
+      if (b.type === "received") return 1
+      return 0
+    })
+  }, [achievements])
 
   return (
     <div className="relative flex w-full grow flex-col items-center">
@@ -143,7 +183,7 @@ export const AchievementModalContent: FC = () => {
             <LoadingWithIcon icon={<i className="i-mgc-trophy-cute-re" />} size="large" />
           </div>
         ) : (
-          achievements?.map((achievement) => {
+          sortedAchievements?.map((achievement) => {
             const copy = achievementActionIdCopyMap[achievement.actionId]
             if (!copy) return null
 
@@ -156,7 +196,7 @@ export const AchievementModalContent: FC = () => {
                     {achievement.power && (
                       <span className="ml-2 inline-flex items-center gap-0.5 text-xs font-normal">
                         <span className="font-medium opacity-80">{achievement.power}</span>
-                        <i className="i-mgc-power text-sm text-accent" />
+                        <i className="i-mgc-power scale-95 text-sm text-accent" />
                       </span>
                     )}
                   </div>
