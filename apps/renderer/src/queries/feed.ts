@@ -61,7 +61,7 @@ export const useClaimFeedMutation = (feedId: string) =>
       toastFetchError(err)
     },
     onSuccess() {
-      window.posthog?.capture("feed_claimed", {
+      window.analytics?.capture("feed_claimed", {
         feedId,
       })
     },

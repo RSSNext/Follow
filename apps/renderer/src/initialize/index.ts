@@ -19,9 +19,9 @@ import { CleanerService } from "~/services/cleaner"
 import { subscribeNetworkStatus } from "../atoms/network"
 import { getGeneralSettings, subscribeShouldUseIndexedDB } from "../atoms/settings/general"
 import { appLog } from "../lib/log"
+import { initAnalytics } from "./analytics"
 import { hydrateDatabaseToStore, hydrateSettings, setHydrated } from "./hydrate"
 import { doMigration } from "./migrates"
-import { initPostHog } from "./posthog"
 import { initSentry } from "./sentry"
 
 const cleanup = subscribeShouldUseIndexedDB((value) => {
@@ -93,7 +93,7 @@ export const initializeApp = async () => {
   const { dataPersist: enabledDataPersist } = getGeneralSettings()
 
   initSentry()
-  initPostHog()
+  initAnalytics()
   await apm("i18n", initI18n)
 
   let dataHydratedTime: undefined | number
@@ -106,7 +106,7 @@ export const initializeApp = async () => {
   const loadingTime = Date.now() - now
   appLog(`Initialize ${APP_NAME} done,`, `${loadingTime}ms`)
 
-  window.posthog?.capture("app_init", {
+  window.analytics?.capture("app_init", {
     electron: IN_ELECTRON,
     loading_time: loadingTime,
     using_indexed_db: enabledDataPersist,
