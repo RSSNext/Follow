@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from "react"
+import { useLayoutEffect } from "react"
 import type { NavigateFunction } from "react-router-dom"
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
 
@@ -42,19 +42,6 @@ export const StableRouterProvider = () => {
     })
     setNavigate({ fn: nav })
   }, [searchParams, params, location, nav])
-
-  useEffect(() => {
-    const { pathname } = location
-    if (pathname && window.analytics) {
-      let url = window.origin + pathname
-      if (searchParams.toString()) {
-        url = `${url}?${searchParams.toString()}`
-      }
-      window.analytics.capture("$pageview", {
-        url,
-      })
-    }
-  }, [location, searchParams])
 
   return null
 }
