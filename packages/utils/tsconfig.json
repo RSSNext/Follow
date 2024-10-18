@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.extend.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration": true,
+    "paths": {
+      "@follow/utils/*": ["./src/*"]
+    }
+  }
+}

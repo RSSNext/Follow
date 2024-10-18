@@ -11,6 +11,7 @@
     "noImplicitReturns": false,
     "noEmit": true,
     "skipLibCheck": true,
+    "types": ["vite/client", "@follow/types/global", "@follow/types/react"],
     "paths": {
       "~/*": ["src/*"],
       "@pkg": ["../../package.json"],

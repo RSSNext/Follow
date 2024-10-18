@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs"
-import { resolve } from "node:path"
+import { dirname, resolve } from "node:path"
+import { fileURLToPath } from "node:url"
 
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
@@ -12,7 +13,8 @@ import { twMacro } from "../plugins/vite/tw-macro"
 import i18nCompleteness from "../plugins/vite/utils/i18n-completeness"
 import { getGitHash } from "../scripts/lib"
 
-const pkg = JSON.parse(readFileSync("package.json", "utf8"))
+const pkgDir = dirname(fileURLToPath(import.meta.url))
+const pkg = JSON.parse(readFileSync(resolve(pkgDir, "../package.json"), "utf8"))
 const isCI = process.env.CI === "true" || process.env.CI === "1"
 
 export const viteRenderBaseConfig = {

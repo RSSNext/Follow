@@ -8,7 +8,7 @@ import { compareColors, stringToColor } from "@iconify/utils/lib/colors"
 import type { Config } from "tailwindcss"
 import plugin from "tailwindcss/plugin"
 
-export const baseConfig: Config = {
+export const baseConfig = {
   darkMode: ["class", '[data-theme="dark"]'],
   content: [],
   prefix: "",
@@ -179,7 +179,7 @@ export const baseConfig: Config = {
       )
     }),
   ],
-}
+} satisfies Config
 
 function getCollections(dir: string) {
   // Import icons

@@ -53,7 +53,7 @@ export const TextArea = forwardRef<
   return (
     <div
       className={cn(
-        "group relative h-full border ring-0 ring-accent/20 duration-200 [--spotlight-color:oklch(var(--a)_/_0.12)]",
+        "group relative h-full border ring-0 ring-accent/20 duration-200",
         roundedMap[rounded],
 
         "border-transparent",
