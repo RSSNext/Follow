@@ -235,7 +235,7 @@
   "wallet.power.dailyClaim": "你可以每日領取 {{amount}} 免費的 Power，用於在 Follow 上贊助 RSS 條目。",
   "wallet.power.description": "Power 是一個 <Link>ERC-20 代幣</Link>，基於 {{blockchainName}} 區塊鏈。",
   "wallet.sidebar_title": "Power",
-  "wallet.transactions.amount": "數���",
+  "wallet.transactions.amount": "數量",
   "wallet.transactions.date": "日期",
   "wallet.transactions.from": "來自",
   "wallet.transactions.noTransactions": "無交易記錄",

@@ -114,7 +114,7 @@
   "integration.obsidian.title": "Obsidian",
   "integration.obsidian.vaultPath.description": "La ruta a tu bóveda de Obsidian.",
   "integration.obsidian.vaultPath.label": "Ruta de la bóveda de Obsidian",
-  "integration.readwise.enable.description": "Mostrar el bot��n 'Guardar en Readwise' cuando esté disponible.",
+  "integration.readwise.enable.description": "Mostrar el botón 'Guardar en Readwise' cuando esté disponible.",
   "integration.readwise.enable.label": "Habilitar",
   "integration.readwise.title": "Readwise",
   "integration.readwise.token.description": "Puedes obtenerlo aquí: ",
