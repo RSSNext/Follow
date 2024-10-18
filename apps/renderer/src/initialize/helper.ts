@@ -1,15 +1,20 @@
 import type { User } from "@auth/core/types"
 
-export const setIntegrationIdentify = (user: User) =>
-  Promise.all([
-    import("@sentry/react").then(({ setTag }) => {
-      setTag("user_id", user.id)
-      setTag("user_name", user.name)
-    }),
-    import("posthog-js").then(({ default: posthog }) => {
-      posthog.identify(user.id, {
-        name: user.name,
-        handle: user.handle,
-      })
-    }),
-  ])
+import { op } from "./op"
+
+export const setIntegrationIdentify = async (user: User) => {
+  op.identify({
+    profileId: user.id,
+    email: user.email,
+    avatar: user.image,
+    lastName: user.name,
+    properties: {
+      handle: user.handle,
+      name: user.name,
+    },
+  })
+  await import("@sentry/react").then(({ setTag }) => {
+    setTag("user_id", user.id)
+    setTag("user_name", user.name)
+  })
+}

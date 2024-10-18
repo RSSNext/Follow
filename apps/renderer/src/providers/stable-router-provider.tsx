@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from "react"
+import { useLayoutEffect } from "react"
 import type { NavigateFunction } from "react-router-dom"
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
 
@@ -42,20 +42,6 @@ export const StableRouterProvider = () => {
     })
     setNavigate({ fn: nav })
   }, [searchParams, params, location, nav])
-
-  // Posthog tracking
-  useEffect(() => {
-    const { pathname } = location
-    if (pathname && window.posthog) {
-      let url = window.origin + pathname
-      if (searchParams.toString()) {
-        url = `${url}?${searchParams.toString()}`
-      }
-      window.posthog.capture("$pageview", {
-        $current_url: url,
-      })
-    }
-  }, [location, searchParams])
 
   return null
 }
