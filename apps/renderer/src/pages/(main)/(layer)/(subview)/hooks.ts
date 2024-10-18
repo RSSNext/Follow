@@ -1,6 +1,6 @@
-import { atom, useAtomValue } from "jotai"
-import { useHydrateAtoms } from "jotai/utils"
+import { atom, useAtomValue, useSetAtom } from "jotai"
 import type { ReactNode } from "react"
+import { useEffect } from "react"
 
 import { useI18n, useTitle } from "~/hooks/common"
 
@@ -12,7 +12,11 @@ export function useSubViewTitle(title: ReactNode, fallbackTitleString: string): 
 export function useSubViewTitle(title: I18nKeys | ReactNode, fallbackTitleString?: string) {
   const t = useI18n()
   useTitle(typeof title === "string" ? t(title as I18nKeys) : fallbackTitleString)
-  useHydrateAtoms([[titleAtom, typeof title === "string" ? t(title as I18nKeys) : title]])
+
+  const setTitle = useSetAtom(titleAtom)
+  useEffect(() => {
+    setTitle(typeof title === "string" ? t(title as I18nKeys) : title)
+  }, [setTitle, t, title])
 }
 
 export const useSubViewTitleValue = () => useAtomValue(titleAtom)
