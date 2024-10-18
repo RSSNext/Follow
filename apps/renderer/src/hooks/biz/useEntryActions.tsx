@@ -175,6 +175,45 @@ export const useEntryActions = ({
   const enableObsidian = useIntegrationSettingKey("enableObsidian")
   const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
 
+  // 检查 Obsidian 功能是否启用
+  const obsidianEnabledQuery = useQuery({
+    queryKey: ["obsidian-enabled"],
+    queryFn: () => {
+      return !!enableObsidian && !!obsidianVaultPath
+    },
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    staleTime: Infinity,
+  })
+
+  // Obsidian 保存操作
+  const saveToObsidian = useMutation({
+    mutationKey: ["save-to-obsidian"],
+    mutationFn: async (data: {
+      url: string
+      title: string
+      content: string
+      author: string
+      publishedAt: string
+      vaultPath: string
+    }) => {
+      if (!obsidianEnabledQuery.data) {
+        throw new Error("Obsidian feature is not enabled")
+      }
+      return await tipcClient?.saveToObsidian(data)
+    },
+    onSuccess: () => {
+      toast.success(t("entry_actions.saved_to_obsidian"), {
+        duration: 3000,
+      })
+    },
+    onError: () => {
+      toast.error(t("entry_actions.failed_to_save_to_obsidian"), {
+        duration: 3000,
+      })
+    },
+  })
+
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
     enabled: ELECTRON && enableEagle && !!entry?.entries.url && view !== undefined,
@@ -377,26 +416,18 @@ export const useEntryActions = ({
         name: t("entry_actions.save_to_obsidian"),
         icon: <SimpleIconsObsidian />,
         key: "saveToObsidian",
-        hide: !enableObsidian || !obsidianVaultPath || !populatedEntry.entries.url,
-        onClick: async () => {
-          try {
-            await tipcClient?.saveToObsidian({
-              url: populatedEntry.entries.url,
-              title: populatedEntry.entries.title || "",
-              content: populatedEntry.entries.content || "",
-              author: populatedEntry.entries.author || "",
-              publishedAt: populatedEntry.entries.publishedAt || "",
-            })
+        hide: !obsidianEnabledQuery.data || !populatedEntry?.entries?.url,
+        onClick: () => {
+          if (!populatedEntry?.entries?.url || !obsidianVaultPath) return
 
-            toast.success(t("entry_actions.saved_to_obsidian"), {
-              duration: 3000,
-            })
-          } catch (error) {
-            console.error("Failed to save to Obsidian:", error)
-            toast.error(t("entry_actions.failed_to_save_to_obsidian"), {
-              duration: 3000,
-            })
-          }
+          saveToObsidian.mutate({
+            url: populatedEntry.entries.url,
+            title: populatedEntry.entries.title || "",
+            content: populatedEntry.entries.content || "",
+            author: populatedEntry.entries.author || "",
+            publishedAt: populatedEntry.entries.publishedAt || "",
+            vaultPath: obsidianVaultPath,
+          })
         },
       },
       {
@@ -578,9 +609,13 @@ export const useEntryActions = ({
     isInbox,
     omnivoreEndpoint,
     omnivoreToken,
+    obsidianEnabledQuery.data,
+    saveToObsidian,
   ])
 
   return {
     items,
+    saveToObsidian,
+    obsidianEnabled: obsidianEnabledQuery.data,
   }
 }
