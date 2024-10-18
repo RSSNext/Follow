@@ -2,6 +2,7 @@ import { createElement } from "react"
 import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 
+import { useUserRole } from "~/atoms/user"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { UserRole } from "~/lib/enum"
 import { cn } from "~/lib/utils"
@@ -13,9 +14,6 @@ import { Recommendations } from "~/modules/discover/recommendations"
 import { DiscoverRSS3 } from "~/modules/discover/rss3-form"
 import { DiscoverTransform } from "~/modules/discover/transform-form"
 import { DiscoverUser } from "~/modules/discover/user-form"
-import { useSettingPageContext } from "~/modules/settings/hooks/use-setting-ctx"
-import type { SettingPageContext } from "~/modules/settings/utils"
-import { DisableWhy } from "~/modules/settings/utils"
 import { Trend } from "~/modules/trending"
 
 import { useSubViewTitle } from "../hooks"
@@ -23,7 +21,7 @@ import { useSubViewTitle } from "../hooks"
 const tabs: {
   name: I18nKeys
   value: string
-  disableIf?: (ctx: SettingPageContext) => [boolean, DisableWhy]
+  disableForTrial?: boolean
 }[] = [
   {
     name: "words.search",
@@ -40,7 +38,7 @@ const tabs: {
   {
     name: "words.inbox",
     value: "inbox",
-    disableIf: (ctx) => [ctx.role === UserRole.Trial, DisableWhy.NotActivation],
+    disableForTrial: true,
   },
   {
     name: "words.rss3",
@@ -65,15 +63,14 @@ export function Component() {
   const { t } = useTranslation()
   useSubViewTitle("words.discover")
 
-  const ctx = useSettingPageContext()
   const presentActivationModal = useActivationModal()
+  const role = useUserRole()
 
   const currentTabs = tabs.map((tab) => {
-    const [disabled, why] = tab.disableIf?.(ctx) || [false, DisableWhy.Noop]
+    const disabled = tab.disableForTrial && role === UserRole.Trial
     return {
       ...tab,
       disabled,
-      why,
     }
   })
 
@@ -97,15 +94,7 @@ export function Component() {
               className={cn(tab.disabled && "cursor-not-allowed opacity-50")}
               onClick={() => {
                 if (tab.disabled) {
-                  switch (tab.why) {
-                    case DisableWhy.NotActivation: {
-                      presentActivationModal()
-                      break
-                    }
-                    case DisableWhy.Noop: {
-                      break
-                    }
-                  }
+                  presentActivationModal()
                 }
               }}
             >
