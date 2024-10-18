@@ -3,6 +3,9 @@ import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { UserRole } from "~/lib/enum"
+import { cn } from "~/lib/utils"
+import { useActivationModal } from "~/modules/activation"
 import { DiscoverForm } from "~/modules/discover/form"
 import { DiscoverImport } from "~/modules/discover/import"
 import { DiscoverInboxList } from "~/modules/discover/inbox-list-form"
@@ -10,6 +13,9 @@ import { Recommendations } from "~/modules/discover/recommendations"
 import { DiscoverRSS3 } from "~/modules/discover/rss3-form"
 import { DiscoverTransform } from "~/modules/discover/transform-form"
 import { DiscoverUser } from "~/modules/discover/user-form"
+import { useSettingPageContext } from "~/modules/settings/hooks/use-setting-ctx"
+import type { SettingPageContext } from "~/modules/settings/utils"
+import { DisableWhy } from "~/modules/settings/utils"
 import { Trend } from "~/modules/trending"
 
 import { useSubViewTitle } from "../hooks"
@@ -17,7 +23,7 @@ import { useSubViewTitle } from "../hooks"
 const tabs: {
   name: I18nKeys
   value: string
-  disabled?: boolean
+  disableIf?: (ctx: SettingPageContext) => [boolean, DisableWhy]
 }[] = [
   {
     name: "words.search",
@@ -34,6 +40,7 @@ const tabs: {
   {
     name: "words.inbox",
     value: "inbox",
+    disableIf: (ctx) => [ctx.role === UserRole.Trial, DisableWhy.NotActivation],
   },
   {
     name: "words.rss3",
@@ -58,6 +65,18 @@ export function Component() {
   const { t } = useTranslation()
   useSubViewTitle("words.discover")
 
+  const ctx = useSettingPageContext()
+  const presentActivationModal = useActivationModal()
+
+  const currentTabs = tabs.map((tab) => {
+    const [disabled, why] = tab.disableIf?.(ctx) || [false, DisableWhy.Noop]
+    return {
+      ...tab,
+      disabled,
+      why,
+    }
+  })
+
   return (
     <div className="flex flex-col items-center gap-8">
       <div className="pt-12 text-2xl font-bold">{t("words.discover")}</div>
@@ -71,15 +90,32 @@ export function Component() {
         }}
       >
         <TabsList className="relative w-full">
-          {tabs.map((tab) => (
-            <TabsTrigger key={tab.name} value={tab.value} disabled={tab.disabled}>
+          {currentTabs.map((tab) => (
+            <TabsTrigger
+              key={tab.name}
+              value={tab.value}
+              className={cn(tab.disabled && "cursor-not-allowed opacity-50")}
+              onClick={() => {
+                if (tab.disabled) {
+                  switch (tab.why) {
+                    case DisableWhy.NotActivation: {
+                      presentActivationModal()
+                      break
+                    }
+                    case DisableWhy.Noop: {
+                      break
+                    }
+                  }
+                }
+              }}
+            >
               {t(tab.name)}
             </TabsTrigger>
           ))}
 
           <Trend className="relative bottom-0 left-1.5" />
         </TabsList>
-        {tabs.map((tab) => (
+        {currentTabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
             {createElement(TabComponent[tab.value] || TabComponent.default, {
               type: tab.value,
