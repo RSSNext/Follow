@@ -7,7 +7,6 @@ import { useCallback, useLayoutEffect, useRef, useState } from "react"
 import { isHotkeyPressed, useHotkeys } from "react-hotkeys-hook"
 import { useTranslation } from "react-i18next"
 
-import { getReadonlyRoute } from "~/atoms/route"
 import { useUISettingKey } from "~/atoms/settings/ui"
 import { useSidebarActiveView } from "~/atoms/sidebar"
 import { ActionButton } from "~/components/ui/button"
@@ -74,9 +73,7 @@ export function FeedColumn({ children, className }: PropsWithChildren<{ classNam
       const nextActive = typeof args === "function" ? args(active) : args
       setActive_(args)
 
-      if (getReadonlyRoute().location.pathname.startsWith(Routes.Feeds)) {
-        navigateBackHome(nextActive)
-      }
+      navigateBackHome(nextActive)
     },
     [active, navigateBackHome],
   )
