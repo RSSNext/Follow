@@ -17,7 +17,7 @@ export async function readability(url: string) {
     const contentType = res.headers.get("content-type")
     // text/html; charset=GBK
     if (!contentType) return res.text()
-    const charset = contentType.match(/charset=([^;]+)/)?.[1]
+    const charset = contentType.match(/charset=([a-zA-Z-\d]+)/)?.[1]
     if (charset) {
       const blob = await res.blob()
       const buffer = await blob.arrayBuffer()
