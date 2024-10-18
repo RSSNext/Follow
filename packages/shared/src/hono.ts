@@ -4365,22 +4365,6 @@ declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
-        statusUpdatedAt: drizzle_orm_pg_core.PgColumn<{
-            name: "status_updated_at";
-            tableName: "levels";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
         powerToken: drizzle_orm_pg_core.PgColumn<{
             name: "power_token";
             tableName: "levels";
@@ -4422,7 +4406,6 @@ declare const levelsOpenAPISchema: zod.ZodObject<{
     level: zod.ZodNullable<zod.ZodNumber>;
     prevActivityPoints: zod.ZodNullable<zod.ZodNumber>;
     activityPoints: zod.ZodNullable<zod.ZodNumber>;
-    statusUpdatedAt: zod.ZodNullable<zod.ZodString>;
     powerToken: zod.ZodString;
     userId: zod.ZodString;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
@@ -4433,7 +4416,6 @@ declare const levelsOpenAPISchema: zod.ZodObject<{
     level: number | null;
     prevActivityPoints: number | null;
     activityPoints: number | null;
-    statusUpdatedAt: string | null;
 }, {
     userId: string;
     address: string;
@@ -4442,7 +4424,6 @@ declare const levelsOpenAPISchema: zod.ZodObject<{
     level: number | null;
     prevActivityPoints: number | null;
     activityPoints: number | null;
-    statusUpdatedAt: string | null;
 }>;
 declare const levelsRelations: drizzle_orm.Relations<"levels", {
     wallet: drizzle_orm.One<"wallets", true>;
@@ -5149,7 +5130,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     level: number | null;
                     prevActivityPoints: number | null;
                     activityPoints: number | null;
-                    statusUpdatedAt: string | null;
                 }[];
             };
             outputFormat: "json" | "text";
