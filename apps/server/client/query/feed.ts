@@ -18,3 +18,5 @@ export const useFeed = ({ id }: { id: string }) =>
       ReturnType<typeof fetchFeedById>
     >,
   })
+
+export type Feed = Awaited<ReturnType<typeof fetchFeedById>>

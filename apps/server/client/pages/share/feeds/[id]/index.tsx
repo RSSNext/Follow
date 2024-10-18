@@ -1,19 +1,28 @@
 import { NormalListItem } from "@client/components/items/normal"
 import { MainContainer } from "@client/components/layout/main"
 import { FeedCertification } from "@client/components/ui/feed-certification"
+import type { EntriesPreview } from "@client/query/entries"
 import { useEntriesPreview } from "@client/query/entries"
+import type { Feed } from "@client/query/feed"
 import { useFeed } from "@client/query/feed"
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { Button } from "@follow/components/ui/button/index.jsx"
 import { FeedIcon } from "@follow/components/ui/feed-icon/index.jsx"
 import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
-import { views } from "@follow/constants"
+import { FeedViewType } from "@follow/constants"
 import { useTitle } from "@follow/hooks"
 import { cn } from "@follow/utils/utils"
+import type { FC } from "react"
+import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { useParams, useSearchParams } from "react-router-dom"
 import { toast } from "sonner"
 
+const viewsRenderType = {
+  Normal: [FeedViewType.Articles, FeedViewType.Audios, FeedViewType.Notifications],
+  Picture: [FeedViewType.Pictures],
+  Grid: [FeedViewType.Videos],
+}
 export function Component() {
   const { id } = useParams()
   const [search] = useSearchParams()
@@ -32,6 +41,19 @@ export function Component() {
   })
 
   useTitle(feed.data?.feed.title)
+  const renderContent = useMemo(() => {
+    switch (true) {
+      case viewsRenderType.Normal.includes(view): {
+        return <NormalList entries={entries.data!} feed={feed.data} />
+      }
+      case viewsRenderType.Picture.includes(view): {
+        return <div>Picture</div>
+      }
+      case viewsRenderType.Grid.includes(view): {
+        return <div>Grid</div>
+      }
+    }
+  }, [entries.data, feed.data, view])
   if (feed.isLoading || !feed.data?.feed || !feedData) {
     return (
       <>
@@ -100,17 +122,31 @@ export function Component() {
         {entries.isLoading && !entries.data && (
           <LoadingCircle size="large" className="center mt-12" />
         )}
-        {entries.data?.map((entry) => (
-          <a className="relative" href={entry.url || void 0} target="_blank" key={entry.id}>
-            <div className="rounded-xl pl-3 duration-300 hover:bg-theme-item-hover">
-              <NormalListItem
-                entryId={entry.id}
-                entryPreview={{ entries: entry, feeds: feedData, read: true, feedId: feedData.id! }}
-              />
-            </div>
-          </a>
-        ))}
+
+        {renderContent}
       </div>
     </MainContainer>
+  )
+}
+
+const NormalList: FC<{
+  entries: EntriesPreview
+
+  feed: Feed
+}> = ({ entries, feed }) => {
+  return (
+    <>
+      {entries?.map((entry) => (
+        <a className="relative" href={entry.url || void 0} target="_blank" key={entry.id}>
+          <div className="rounded-xl pl-3 duration-300 hover:bg-theme-item-hover">
+            <NormalListItem
+              withDetails
+              entryId={entry.id}
+              entryPreview={{ entries: entry, feeds: feed.feed, read: true, feedId: feed.feed.id! }}
+            />
+          </div>
+        </a>
+      ))}
+    </>
   )
 }
