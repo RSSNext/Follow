@@ -33,7 +33,8 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
 
   switch (true) {
     case url.startsWith("/share/feeds"): {
-      const feedId = url.slice(url.lastIndexOf("/") + 1)
+      const parsedUrl = new URL(url, `https://${hostFromReq}`)
+      const feedId = parsedUrl.pathname.split("/")[3]
 
       const feed = await apiClient.feeds.$get({ query: { id: feedId } })
 
