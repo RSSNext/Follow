@@ -175,7 +175,6 @@ export const useEntryActions = ({
   const enableObsidian = useIntegrationSettingKey("enableObsidian")
   const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
 
-  // 检查 Obsidian 功能是否启用
   const obsidianEnabledQuery = useQuery({
     queryKey: ["obsidian-enabled"],
     queryFn: () => {
@@ -186,7 +185,6 @@ export const useEntryActions = ({
     staleTime: Infinity,
   })
 
-  // Obsidian 保存操作
   const saveToObsidian = useMutation({
     mutationKey: ["save-to-obsidian"],
     mutationFn: async (data: {
