@@ -143,7 +143,7 @@ export const useEntries = ({
   useAuthInfiniteQuery(entries.entries({ feedId, inboxId, listId, view, read, isArchived }), {
     enabled: feedId !== undefined || inboxId !== undefined || listId !== undefined,
     getNextPageParam: (lastPage) =>
-      inboxId
+      inboxId || listId
         ? lastPage.data?.at(-1)?.entries.insertedAt
         : lastPage.data?.at(-1)?.entries.publishedAt,
     initialPageParam: undefined,
