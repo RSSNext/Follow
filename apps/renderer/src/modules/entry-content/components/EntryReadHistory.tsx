@@ -28,10 +28,15 @@ import { usePresentUserProfileModal } from "../../profile/hooks"
 const getLimit = (width: number): number => {
   const routeParams = getRouteParams()
   // social media view has four extra buttons
-  if (routeParams.view === FeedViewType.SocialMedia) {
-    if (width > 1050) return 15
-    if (width > 750) return 10
-    return 5
+  if (
+    [FeedViewType.SocialMedia, FeedViewType.Pictures, FeedViewType.Videos].includes(
+      routeParams.view,
+    )
+  ) {
+    if (width > 1100) return 15
+    if (width > 950) return 10
+    if (width > 800) return 5
+    return 3
   }
   if (width > 900) return 15
   if (width > 600) return 10

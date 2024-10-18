@@ -20,7 +20,6 @@ export const useFeedClaimModal = ({ feedId }: { feedId?: string }) => {
     present({
       title: t("feed_claim_modal.title"),
       content: () => createElement(FeedClaimModalContent, { feedId }),
-      modalClassName: "!h-auto !max-h-screen",
     })
   }, [feedId, present])
 }
