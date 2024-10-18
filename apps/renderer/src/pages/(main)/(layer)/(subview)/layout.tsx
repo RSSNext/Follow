@@ -7,8 +7,9 @@ import { getSidebarActiveView, setSidebarActiveView } from "~/atoms/sidebar"
 import { MotionButtonBase } from "~/components/ui/button"
 import { FABContainer, FABPortable } from "~/components/ui/fab"
 import { ScrollArea } from "~/components/ui/scroll-area"
+import { isElectronBuild } from "~/constants"
 import { springScrollTo } from "~/lib/scroller"
-import { cn } from "~/lib/utils"
+import { cn, getOS } from "~/lib/utils"
 
 import { useSubViewTitleValue } from "./hooks"
 
@@ -36,6 +37,10 @@ export function Component() {
   }, [scrollRef])
 
   const { t } = useTranslation()
+
+  // electron window has pt-[calc(var(--fo-window-padding-top)_-10px)]
+  const isElectronWindows = isElectronBuild && getOS() === "Windows"
+
   return (
     <div className="relative flex size-full">
       <div
@@ -43,6 +48,7 @@ export function Component() {
           "absolute inset-x-0 top-0 z-10 p-4",
           "grid grid-cols-[1fr_auto_1fr] items-center gap-4",
           isTitleSticky && "group border-b bg-zinc-50/80 backdrop-blur-xl dark:bg-neutral-900/90",
+          isTitleSticky && isElectronWindows && "-top-5",
         )}
       >
         <MotionButtonBase
