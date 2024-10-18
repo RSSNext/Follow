@@ -175,15 +175,6 @@ export const useEntryActions = ({
   const enableObsidian = useIntegrationSettingKey("enableObsidian")
   const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
 
-  const obsidianEnabledQuery = useQuery({
-    queryKey: ["obsidian-enabled"],
-    queryFn: () => {
-      return !!enableObsidian && !!obsidianVaultPath
-    },
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    staleTime: Infinity,
-  })
 
   const saveToObsidian = useMutation({
     mutationKey: ["save-to-obsidian"],
