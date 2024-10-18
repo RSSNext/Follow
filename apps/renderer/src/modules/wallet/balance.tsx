@@ -20,7 +20,7 @@ export const Balance = ({
   withSuffix?: boolean
   withTooltip?: boolean
 }) => {
-  const n = [BigInt(children) || BigInt(value || 0n), 18] as const
+  const n = [BigInt(children || 0n) || BigInt(value || 0n), 18] as const
   const formatted = format(n, { digits: precision, trailingZeros: true })
   const formattedFull = format(n, { digits: 18, trailingZeros: true })
 
