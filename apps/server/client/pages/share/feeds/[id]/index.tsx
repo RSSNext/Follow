@@ -1,4 +1,5 @@
 import { NormalListItem } from "@client/components/items/normal"
+import { PictureList } from "@client/components/items/picture"
 import { MainContainer } from "@client/components/layout/main"
 import { FeedCertification } from "@client/components/ui/feed-certification"
 import type { EntriesPreview } from "@client/query/entries"
@@ -47,7 +48,7 @@ export function Component() {
         return <NormalList entries={entries.data!} feed={feed.data} />
       }
       case viewsRenderType.Picture.includes(view): {
-        return <div>Picture</div>
+        return <PictureList entries={entries.data!} feed={feed.data} />
       }
       case viewsRenderType.Grid.includes(view): {
         return <div>Grid</div>
@@ -119,16 +120,15 @@ export function Component() {
         </Button>
       </span>
       <div className={cn("w-full pb-12 pt-8", "flex max-w-3xl flex-col gap-2")}>
-        {entries.isLoading && !entries.data && (
+        {entries.isLoading && !entries.data ? (
           <LoadingCircle size="large" className="center mt-12" />
+        ) : (
+          renderContent
         )}
-
-        {renderContent}
       </div>
     </MainContainer>
   )
 }
-
 const NormalList: FC<{
   entries: EntriesPreview
 

@@ -32,11 +32,13 @@
     "react-blurhash": "^0.3.0",
     "react-hotkeys-hook": "4.5.1",
     "react-i18next": "^15.0.3",
+    "react-photo-view": "1.2.6",
     "react-router-dom": "6.27.0",
     "satori": "0.11.2",
     "sonner": "^1.5.0",
     "swr": "2.2.5",
-    "uniqolor": "1.1.1"
+    "uniqolor": "1.1.1",
+    "use-context-selector": "2.0.0"
   },
   "devDependencies": {
     "@follow/components": "workspace:*",
