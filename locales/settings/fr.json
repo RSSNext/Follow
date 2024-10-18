@@ -168,7 +168,6 @@
   "wallet.create.button": "Créer un portefeuille",
   "wallet.create.description": "Créez un portefeuille gratuit pour recevoir <PowerIcon /> <strong>Power</strong>, qui peut être utilisé pour récompenser les créateurs et aussi pour recevoir des récompenses pour vos contributions au contenu.",
   "wallet.power.dailyClaim": "Vous pouvez réclamer {{amount}} Power gratuit quotidiennement, qui peut être utilisé pour donner des pourboires aux entrées RSS sur Follow.",
-  "wallet.power.description": "Power est un jeton <Link>ERC-20</Link> sur la blockchain {{blockchainName}}.",
   "wallet.sidebar_title": "Power",
   "wallet.transactions.amount": "Montant",
   "wallet.transactions.date": "Date",

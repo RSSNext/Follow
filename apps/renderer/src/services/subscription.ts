@@ -2,7 +2,7 @@ import { uniq } from "lodash-es"
 
 import { browserDB } from "~/database"
 import type { SubscriptionFlatModel } from "~/store/subscription"
-import { subscriptionActions } from "~/store/subscription"
+import { subscriptionActions } from "~/store/subscription/store"
 
 import { BaseService } from "./base"
 import type { Hydable } from "./interface"

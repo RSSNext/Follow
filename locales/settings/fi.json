@@ -168,7 +168,6 @@
   "wallet.create.button": "Luo lompakko",
   "wallet.create.description": "Luo ilmainen lompakko vastaanottaaksesi <PowerIcon /> <strong>Poweria</strong>, jota voit käyttää palkitaksesi tekijöitä ja saadaksesi palkintoja sisällön tuottamisesta.",
   "wallet.power.dailyClaim": "Voit vahvistaa {{amount}} ilmaista Poweria päivittäin, jota voit käyttää tipataksesi RSS-merkintöjä Follow'ssa.",
-  "wallet.power.description": "Power on <Link>ERC-20-token</Link> {{blockchainName}}-lohkoketjussa.",
   "wallet.sidebar_title": "Power",
   "wallet.transactions.amount": "Määrä",
   "wallet.transactions.date": "Päivämäärä",

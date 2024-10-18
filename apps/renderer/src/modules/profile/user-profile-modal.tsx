@@ -14,9 +14,10 @@ import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { ActionButton, Button } from "~/components/ui/button"
 import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
-import { useCurrentModal, useModalStack } from "~/components/ui/modal"
+import { useCurrentModal } from "~/components/ui/modal"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
+import { useFollow } from "~/hooks/biz/useFollow"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
@@ -28,8 +29,6 @@ import type { SubscriptionModel } from "~/models"
 import { useUserSubscriptionsQuery } from "~/modules/profile/hooks"
 import { useSubscriptionStore } from "~/store/subscription"
 import { useUserById } from "~/store/user"
-
-import { FeedForm } from "../discover/feed-form"
 
 const itemVariantAtom = atomWithStorage(
   getStorageNS("item-variant"),
@@ -377,7 +376,7 @@ const SubscriptionItem: FC<{
 }> = ({ subscription, variant }) => {
   const t = useI18n()
   const isFollowed = !!useSubscriptionStore((state) => state.data[subscription.feedId])
-  const { present } = useModalStack()
+  const follow = useFollow()
   const isLoose = variant === "loose"
   if (!("feeds" in subscription)) return null
   return (
@@ -414,21 +413,14 @@ const SubscriptionItem: FC<{
 
               const defaultView = subscription.view
 
-              present({
-                title: `${isFollowed ? `${t.common("words.edit")} ` : ""}${APP_NAME} - ${subscription.feeds.title}`,
-                clickOutsideToDismiss: true,
-                content: ({ dismiss }) => (
-                  <FeedForm
-                    asWidget
-                    id={subscription.feedId}
-                    url={subscription.feeds.url}
-                    defaultValues={{
-                      view: defaultView.toString(),
-                      category: subscription.category,
-                    }}
-                    onSuccess={dismiss}
-                  />
-                ),
+              follow({
+                id: subscription.feedId,
+                url: subscription.feeds.url,
+                isList: false,
+                defaultValues: {
+                  view: defaultView.toString(),
+                  category: subscription.category,
+                },
               })
             }}
           >

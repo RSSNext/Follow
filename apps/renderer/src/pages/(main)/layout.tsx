@@ -51,8 +51,7 @@ const FooterInfo = () => {
     <div className="relative !mt-0">
       {APP_VERSION?.[0] === "0" && (
         <div className="pointer-events-none w-full py-3 text-center text-xs opacity-20">
-          {t("early_access")}{" "}
-          {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
+          {t("beta_access")} {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
         </div>
       )}
 

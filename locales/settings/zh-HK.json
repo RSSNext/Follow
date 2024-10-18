@@ -228,7 +228,6 @@
   "wallet.create.button": "創建錢包",
   "wallet.create.description": "創建一個免費的錢包來接收 <PowerIcon /> <strong>Power</strong>，可以用來贊助創作者，也可以因你的內容貢獻而獲得回報。",
   "wallet.power.dailyClaim": "你可以每日領取 {{amount}} 免費的 Power，用於在 Follow 上贊助 RSS 條目。",
-  "wallet.power.description": "Power 是一個 <Link>ERC-20 代幣</Link>，基於 {{blockchainName}} 區塊鏈。",
   "wallet.sidebar_title": "Power",
   "wallet.transactions.amount": "數量",
   "wallet.transactions.date": "日期",

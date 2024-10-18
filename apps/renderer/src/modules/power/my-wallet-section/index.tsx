@@ -6,11 +6,12 @@ import { CopyButton } from "~/components/ui/code-highlighter"
 import { Divider } from "~/components/ui/divider"
 import { LoadingWithIcon } from "~/components/ui/loading"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
-import { DAILY_CLAIM_AMOUNT } from "~/constants"
 import { apiClient } from "~/lib/api-fetch"
 import { cn } from "~/lib/utils"
 import { SettingSectionTitle } from "~/modules/settings/section"
+import { ActivityPoints } from "~/modules/wallet/activity-points"
 import { Balance } from "~/modules/wallet/balance"
+import { Level } from "~/modules/wallet/level"
 import { useWallet, wallet as walletActions } from "~/queries/wallet"
 
 import { ClaimDailyReward } from "./claim-daily-reward"
@@ -48,46 +49,45 @@ export const MyWalletSection = () => {
   }
   return (
     <>
-      <div className="space-y-8">
-        <div>
-          <div className="text-sm">
-            <i className="i-mgc-power mr-0.5 size-3.5 translate-y-px text-accent" />
-            <Trans
-              i18nKey="wallet.power.description"
-              ns="settings"
-              values={{ blockchainName: "VSL" }}
-              components={{
-                Link: (
-                  <a
-                    className="underline"
-                    target="_blank"
-                    href="https://scan.rss3.io/token/0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8"
-                    rel="noreferrer noopener"
-                  />
-                ),
-              }}
-            />
-            <p>{t("wallet.power.dailyClaim", { amount: DAILY_CLAIM_AMOUNT })}</p>
-          </div>
-          <SettingSectionTitle margin="compact" title={t("wallet.address.title")} />
-          <div className="group flex items-center gap-2 text-sm">
-            <a
-              href={`https://scan.rss3.io/address/${myWallet.address}`}
-              target="_blank"
-              className="underline"
-            >
-              {myWallet.address}
-            </a>
-            <CopyButton
-              value={myWallet.address!}
-              className="p-1 opacity-0 duration-200 group-hover:opacity-100 [&_i]:size-2.5"
-            />
-          </div>
-          <SettingSectionTitle title={t("wallet.balance.title")} margin="compact" />
-          <div className="mb-2 flex items-end justify-between">
+      <div>
+        <div className="text-sm">
+          <i className="i-mgc-power mr-0.5 size-3.5 translate-y-px text-accent" />
+          <Trans
+            i18nKey="wallet.power.description2"
+            ns="settings"
+            values={{ blockchainName: "VSL" }}
+            components={{
+              Link: (
+                <a
+                  className="underline"
+                  target="_blank"
+                  href="https://scan.rss3.io/token/0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8"
+                  rel="noreferrer noopener"
+                />
+              ),
+            }}
+          />
+        </div>
+        <SettingSectionTitle margin="compact" title={t("wallet.address.title")} />
+        <div className="group flex items-center gap-2 text-sm">
+          <a
+            href={`https://scan.rss3.io/address/${myWallet.address}`}
+            target="_blank"
+            className="underline"
+          >
+            {myWallet.address}
+          </a>
+          <CopyButton
+            value={myWallet.address!}
+            className="p-1 opacity-0 duration-200 group-hover:opacity-100 [&_i]:size-2.5"
+          />
+        </div>
+        <SettingSectionTitle title={t("wallet.balance.title")} margin="compact" />
+        <div className="mb-2 flex items-center justify-between">
+          <div>
             <div className="flex items-center gap-1">
               <Balance className="text-xl font-bold text-accent">
-                {BigInt(myWallet.dailyPowerToken || 0n) + BigInt(myWallet.cashablePowerToken || 0n)}
+                {BigInt(myWallet.powerToken || 0n)}
               </Balance>
               <Button
                 variant="ghost"
@@ -102,33 +102,72 @@ export const MyWalletSection = () => {
                 />
               </Button>
             </div>
-            <div className="flex gap-2">
-              <WithdrawButton />
-              <ClaimDailyReward />
-            </div>
+            <Tooltip>
+              <TooltipTrigger className="mt-1 block">
+                <div className="flex flex-row items-center gap-x-2 text-xs">
+                  <span className="flex items-center gap-1 text-left">
+                    {t("wallet.balance.withdrawable")} <i className="i-mgc-question-cute-re" />
+                  </span>
+                  <Balance className="center text-[12px] font-medium">
+                    {myWallet.cashablePowerToken}
+                  </Balance>
+                </div>
+              </TooltipTrigger>
+              <TooltipPortal>
+                <TooltipContent align="start" className="z-[999]">
+                  <p>{t("wallet.balance.withdrawableTooltip")}</p>
+                </TooltipContent>
+              </TooltipPortal>
+            </Tooltip>
           </div>
-          <Tooltip>
-            <TooltipTrigger className="block">
-              <div className="flex flex-row items-center gap-x-2 text-xs text-zinc-600 dark:text-neutral-400">
-                <span className="flex items-center gap-1 text-left">
-                  {t("wallet.balance.withdrawable")} <i className="i-mingcute-question-line" />
-                </span>
-
-                <Balance className="center text-[12px] font-medium">
-                  {myWallet.cashablePowerToken}
+          <div className="flex gap-2">
+            <WithdrawButton />
+          </div>
+        </div>
+        <Divider className="my-8" />
+        <SettingSectionTitle title={t("wallet.balance.dailyReward")} margin="compact" />
+        <div className="my-2 text-[15px] leading-tight text-orange-500">
+          {t("wallet.power.rewardDescription3")}
+        </div>
+        <div className="my-1 text-sm">{t("wallet.power.rewardDescription")}</div>
+        <div className="my-1 text-sm">
+          <Trans
+            i18nKey="wallet.power.rewardDescription2"
+            ns="settings"
+            values={{ blockchainName: "VSL" }}
+            components={{
+              Balance: (
+                <Balance
+                  className="align-top"
+                  withSuffix
+                  value={BigInt(myWallet.todayDailyPower || 0n)}
+                >
+                  {BigInt(myWallet.todayDailyPower || 0n)}
                 </Balance>
-              </div>
-            </TooltipTrigger>
-            <TooltipPortal>
-              <TooltipContent align="start" className="z-[999]">
-                <p>{t("wallet.balance.withdrawableTooltip")}</p>
-              </TooltipContent>
-            </TooltipPortal>
-          </Tooltip>
+              ),
+              Link: (
+                <a
+                  href="https://github.com/RSSNext/Follow/wiki/Power#daily-reward"
+                  target="_blank"
+                  className="underline"
+                  rel="noreferrer noopener"
+                />
+              ),
+            }}
+          />
+        </div>
+        <div className="my-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="space-y-1">
+              <Level level={myWallet.level?.level || 0} />
+              <ActivityPoints points={myWallet.level?.prevActivityPoints || 0} />
+            </div>
+            <i className="i-mgc-right-cute-li text-3xl" />
+            <Balance withSuffix>{BigInt(myWallet.todayDailyPower || 0n)}</Balance>
+          </div>
+          <ClaimDailyReward />
         </div>
       </div>
-
-      <Divider className="my-8" />
     </>
   )
 }

@@ -176,7 +176,6 @@
   "wallet.create.button": "إنشاء محفظة",
   "wallet.create.description": "أنشئ محفظة مجانية لتلقي <PowerIcon /> <strong>باور</strong>، والذي يمكن استخدامه لمكافأة المبدعين وأيضًا الحصول على مكافآت لمساهماتك في المحتوى.",
   "wallet.power.dailyClaim": "يمكنك المطالبة بـ {{amount}} باور مجاني يوميًا، والذي يمكن استخدامه لإعطاء إكراميات لمقالات RSS على Follow.",
-  "wallet.power.description": "باور هو رمز <Link>ERC-20</Link> على بلوكتشين {{blockchainName}}.",
   "wallet.sidebar_title": "باور",
   "wallet.transactions.amount": "المبلغ",
   "wallet.transactions.date": "التاريخ",

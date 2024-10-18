@@ -248,11 +248,13 @@ export const ModalInternal = memo(
                   onPointerUp={handleDetectSelectEnd}
                   onClick={handleClickOutsideToDismiss}
                   onFocus={stopPropagation}
+                  tabIndex={-1}
                 >
                   {DragBar}
                   <div
                     className={cn("contents", modalClassName)}
                     onClick={stopPropagation}
+                    tabIndex={-1}
                     ref={modalElementRef}
                     onSelect={handleSelectStart}
                     onKeyUp={handleDetectSelectEnd}
@@ -292,6 +294,7 @@ export const ModalInternal = memo(
                 style={{
                   zIndex: currentModalZIndex,
                 }}
+                tabIndex={-1}
               >
                 {DragBar}
 
@@ -311,6 +314,7 @@ export const ModalInternal = memo(
                     "border border-slate-200 dark:border-neutral-800",
                     modalClassName,
                   )}
+                  tabIndex={-1}
                   onClick={stopPropagation}
                   onSelect={handleSelectStart}
                   onKeyUp={handleDetectSelectEnd}

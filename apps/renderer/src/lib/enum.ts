@@ -11,3 +11,8 @@ export enum Routes {
   Feeds = "/feeds",
   Discover = "/discover",
 }
+
+export enum UserRole {
+  Trial = "trial",
+  User = "user",
+}

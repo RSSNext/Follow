@@ -13,10 +13,13 @@ import { resizableOnly, useResizeableModal } from "~/components/ui/modal"
 import { ElECTRON_CUSTOM_TITLEBAR_HEIGHT } from "~/constants"
 import { preventDefault } from "~/lib/dom"
 import { cn, getOS } from "~/lib/utils"
+import { useActivationModal } from "~/modules/activation"
 
-import { settings } from "../constants"
 import { SettingSyncIndicator } from "../helper/SyncIndicator"
+import { useAvailableSettings, useSettingPageContext } from "../hooks/use-setting-ctx"
 import { SettingsSidebarTitle } from "../title"
+import type { SettingPageConfig } from "../utils"
+import { DisableWhy } from "../utils"
 import { useSetSettingTab, useSettingTab } from "./context"
 import { defaultCtx, SettingContext } from "./hooks"
 
@@ -43,15 +46,16 @@ export function SettingModalLayout(
     dragControls: dragController,
   })
 
+  const availableSettings = useAvailableSettings()
   useEffect(() => {
     if (!tab) {
       if (initialTab) {
         setTab(initialTab)
       } else {
-        setTab(settings[0].path)
+        setTab(availableSettings[0].path)
       }
     }
-  }, [])
+  }, [availableSettings])
 
   const { draggable, overlay } = useUISettingSelector((state) => ({
     draggable: state.modalDraggable,
@@ -125,17 +129,14 @@ export function SettingModalLayout(
                   {APP_NAME}
                 </div>
                 <nav className="flex grow flex-col">
-                  {settings.map((t) => (
-                    <button
+                  {availableSettings.map((t) => (
+                    <SettingItemButton
                       key={t.path}
-                      className={`my-0.5 flex w-full items-center rounded-lg px-2.5 py-0.5 leading-loose text-theme-foreground/70 ${
-                        tab === t.path ? "!bg-theme-item-active !text-theme-foreground/90" : ""
-                      } ${!IN_ELECTRON && "duration-200 hover:bg-theme-item-hover"}`}
-                      type="button"
-                      onClick={() => setTab(t.path)}
-                    >
-                      <SettingsSidebarTitle path={t.path} className="text-[0.94rem] font-medium" />
-                    </button>
+                      tab={tab}
+                      setTab={setTab}
+                      item={t}
+                      path={t.path}
+                    />
                   ))}
                 </nav>
 
@@ -153,5 +154,49 @@ export function SettingModalLayout(
         </SettingContext.Provider>
       </m.div>
     </div>
+  )
+}
+
+const SettingItemButton = (props: {
+  tab: string
+  setTab: (tab: string) => void
+  item: SettingPageConfig
+  path: string
+}) => {
+  const { tab, setTab, item, path } = props
+  const { disableIf } = item
+
+  const ctx = useSettingPageContext()
+
+  const [disabled, why] = disableIf?.(ctx) || [false, DisableWhy.Noop]
+  const presentActivationModal = useActivationModal()
+
+  return (
+    <button
+      className={cn(
+        "my-0.5 flex w-full items-center rounded-lg px-2.5 py-0.5 leading-loose text-theme-foreground/70",
+        tab === path && "!bg-theme-item-active !text-theme-foreground/90",
+        !IN_ELECTRON && "duration-200 hover:bg-theme-item-hover",
+        disabled && "cursor-not-allowed opacity-50",
+      )}
+      type="button"
+      onClick={() => {
+        if (!disabled) {
+          setTab(path)
+        } else {
+          switch (why) {
+            case DisableWhy.NotActivation: {
+              presentActivationModal()
+              break
+            }
+            case DisableWhy.Noop: {
+              break
+            }
+          }
+        }
+      }}
+    >
+      <SettingsSidebarTitle path={path} className="text-[0.94rem] font-medium" />
+    </button>
   )
 }

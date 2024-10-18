@@ -16,13 +16,14 @@ import { feedActions, getFeedById } from "../feed"
 import { inboxActions } from "../inbox"
 import { listActions } from "../list"
 import { feedUnreadActions } from "../unread"
-import { createZustandStore, doMutationAndTransaction } from "../utils/helper"
+import { createImmerSetter, createZustandStore, doMutationAndTransaction } from "../utils/helper"
 import { subscriptionCategoryExistSelector } from "./selector"
 
 export type SubscriptionFlatModel = Omit<SubscriptionModel, "feeds"> & {
   defaultCategory?: string
 
   listId?: string
+  inboxId?: string
 }
 interface SubscriptionState {
   /**
@@ -41,9 +42,13 @@ interface SubscriptionState {
    */
   categoryOpenStateByView: Record<FeedViewType, Record<string, boolean>>
   /**
-   * Category Set
+   * All named categories names set
    */
   categories: Set<string>
+  /**
+   * All subscription ids set
+   */
+  subscriptionIdSet: Set<string>
 }
 
 function morphResponseData(data: SubscriptionModel[]): SubscriptionFlatModel[] {
@@ -90,20 +95,36 @@ export const useSubscriptionStore = createZustandStore<SubscriptionState>("subsc
   data: {},
   feedIdByView: { ...emptyDataIdByView },
   categoryOpenStateByView: { ...emptyCategoryOpenStateByView },
-
   categories: new Set(),
+  subscriptionIdSet: new Set(),
 }))
 
 const set = useSubscriptionStore.setState
 const get = useSubscriptionStore.getState
+const immerSet = createImmerSetter(useSubscriptionStore)
 
 type MarkReadFilter = {
   startTime: number
   endTime: number
 }
-
+let subscribeOnce = false
 class SubscriptionActions {
   constructor() {
+    if (subscribeOnce) return
+    subscribeOnce = true
+    // autorun
+    useSubscriptionStore.subscribe((next, prev) => {
+      if (next.feedIdByView !== prev.feedIdByView) {
+        const allSubscriptionIds = Object.values(next.feedIdByView).flat()
+        set((state) => {
+          return {
+            ...state,
+            subscriptionIdSet: new Set(allSubscriptionIds),
+          }
+        })
+      }
+    })
+
     useSubscriptionStore.subscribe((state, prev) => {
       if (state.data === prev.data) return
 
@@ -165,59 +186,47 @@ class SubscriptionActions {
     runTransactionInScope(() => {
       SubscriptionService.upsertMany(subscriptions)
     })
-    set((state) =>
-      produce(state, (state) => {
-        subscriptions.forEach((subscription) => {
-          state.data[subscription.feedId] = omit(subscription, [
-            "feeds",
-            "lists",
-            "inboxes",
-          ]) as SubscriptionFlatModel
-          state.feedIdByView[subscription.view].push(subscription.feedId)
-          return state
-        })
-      }),
-    )
+    immerSet((state) => {
+      subscriptions.forEach((subscription) => {
+        state.data[subscription.feedId] = omit(subscription, [
+          "feeds",
+          "lists",
+          "inboxes",
+        ]) as SubscriptionFlatModel
+        state.feedIdByView[subscription.view].push(subscription.feedId)
+      })
+    })
   }
 
   updateCategoryOpenState(subscriptions: SubscriptionFlatModel[]) {
-    set((state) =>
-      produce(state, (state) => {
-        subscriptions.forEach((subscription) => {
-          const folderName = subscription.category || subscription.defaultCategory
-          state.categoryOpenStateByView[subscription.view][folderName] =
-            state.categoryOpenStateByView[subscription.view][folderName] || false
-          return state
-        })
+    immerSet((state) =>
+      subscriptions.forEach((subscription) => {
+        const folderName = subscription.category || subscription.defaultCategory
+        state.categoryOpenStateByView[subscription.view][folderName] =
+          state.categoryOpenStateByView[subscription.view][folderName] || false
+        return state
       }),
     )
   }
 
   toggleCategoryOpenState(view: FeedViewType, category: string) {
-    set((state) =>
-      produce(state, (state) => {
-        state.categoryOpenStateByView[view][category] =
-          !state.categoryOpenStateByView[view][category]
-      }),
+    immerSet(
+      (state) =>
+        (state.categoryOpenStateByView[view][category] =
+          !state.categoryOpenStateByView[view][category]),
     )
   }
 
   changeCategoryOpenState(view: FeedViewType, category: string, status: boolean) {
-    set((state) =>
-      produce(state, (state) => {
-        state.categoryOpenStateByView[view][category] = status
-      }),
-    )
+    immerSet((state) => (state.categoryOpenStateByView[view][category] = status))
   }
 
   expandCategoryOpenStateByView(view: FeedViewType, isOpen: boolean) {
-    set((state) =>
-      produce(state, (state) => {
-        for (const category in state.categoryOpenStateByView[view]) {
-          state.categoryOpenStateByView[view][category] = isOpen
-        }
-      }),
-    )
+    immerSet((state) => {
+      for (const category in state.categoryOpenStateByView[view]) {
+        state.categoryOpenStateByView[view][category] = isOpen
+      }
+    })
   }
 
   async markReadByView(view: FeedViewType, filter?: MarkReadFilter) {
@@ -318,22 +327,19 @@ class SubscriptionActions {
           },
         }),
       async () => {
-        set((state) =>
-          produce(state, (state) => {
-            Object.keys(state.data).forEach((id) => {
-              if (idSet.has(id)) {
-                const subscription = state.data[id]
-                const feed = getFeedById(subscription.feedId)
-                if (!feed || feed.type !== "feed") return
-                const { siteUrl } = feed
-                if (!siteUrl) return
-                const parsed = parse(siteUrl)
-                subscription.category = null
-                // The logic for removing Category here is to use domain as the default category name.
-                parsed.domain &&
-                  (subscription.defaultCategory = capitalizeFirstLetter(parsed.domain))
-              }
-            })
+        immerSet((state) =>
+          Object.keys(state.data).forEach((id) => {
+            if (idSet.has(id)) {
+              const subscription = state.data[id]
+              const feed = getFeedById(subscription.feedId)
+              if (!feed || feed.type !== "feed") return
+              const { siteUrl } = feed
+              if (!siteUrl) return
+              const parsed = parse(siteUrl)
+              subscription.category = null
+              // The logic for removing Category here is to use domain as the default category name.
+              parsed.domain && (subscription.defaultCategory = capitalizeFirstLetter(parsed.domain))
+            }
           }),
         )
         const { data } = get()
@@ -466,7 +472,6 @@ class SubscriptionActions {
         }),
       async () =>
         // Db
-
         SubscriptionService.renameCategory(whoami()!.id, subscriptionIds, newCategory),
     )
   }

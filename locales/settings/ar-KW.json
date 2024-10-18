@@ -176,7 +176,6 @@
   "wallet.create.button": "إنشاء محفظة",
   "wallet.create.description": "أنشئ محفظة مجانية لتلقي <PowerIcon /> <strong>Power</strong>، والذي يمكن استخدامه لمكافأة المبدعين والحصول أيضًا على مكافآت مقابل مساهماتك في المحتوى.",
   "wallet.power.dailyClaim": "يمكنك المطالبة بـ {{amount}} Power مجانًا يوميًا، والذي يمكن استخدامه لإكراميات لمقالات RSS على Follow.",
-  "wallet.power.description": "Power هو <Link>رمز ERC-20</Link> على بلوكتشين {{blockchainName}}.",
   "wallet.sidebar_title": "Power",
   "wallet.transactions.amount": "المبلغ",
   "wallet.transactions.date": "التاريخ",

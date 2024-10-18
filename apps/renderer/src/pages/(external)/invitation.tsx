@@ -35,7 +35,10 @@ const absoluteConfettiUrl = new URL(confettiUrl, import.meta.url).href
 const formSchema = z.object({
   code: z.string().min(1),
 })
-
+/**
+ *
+ * @deprecated
+ */
 export function Component() {
   const { t } = useTranslation("external")
   const navigate = useNavigate()

@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react"
 import { useLocation } from "react-router-dom"
 
+import { nextFrame } from "~/lib/dom"
+import { createErrorToaster } from "~/lib/error-parser"
+
 export const parseError = (error: unknown): { message?: string; stack?: string } => {
   if (error instanceof Error) {
     return {
@@ -15,9 +18,13 @@ export const parseError = (error: unknown): { message?: string; stack?: string }
   }
 }
 
+// TODO: move this
 export class CustomSafeError extends Error {
-  constructor(message: string) {
+  constructor(message: string, toast?: boolean) {
     super(message)
+    if (toast) {
+      nextFrame(() => createErrorToaster(message)(this))
+    }
   }
 }
 

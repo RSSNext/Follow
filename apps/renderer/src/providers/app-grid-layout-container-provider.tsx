@@ -35,7 +35,4 @@ export const AppLayoutGridContainerProvider: FC<PropsWithChildren> = ({ children
   )
 }
 
-export const useAppLayoutGridContainerWidth = () => {
-  const width = useContext(AppLayoutGridContainerWidthContext)
-  return width
-}
+export const useAppLayoutGridContainerWidth = () => useContext(AppLayoutGridContainerWidthContext)

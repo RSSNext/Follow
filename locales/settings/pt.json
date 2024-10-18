@@ -168,7 +168,6 @@
   "wallet.create.button": "Criar Carteira",
   "wallet.create.description": "Crie uma carteira gratuita para receber <PowerIcon /> <strong>Power</strong>, que pode ser utilizado para recompensar criadores e também para ser recompensado pelas suas contribuições de conteúdo.",
   "wallet.power.dailyClaim": "Pode reivindicar {{amount}} de Power gratuito diariamente, que pode ser usado para dar dicas em entradas de RSS no Follow.",
-  "wallet.power.description": "O Power é um <Link>token ERC-20</Link> na blockchain {{blockchainName}}.",
   "wallet.sidebar_title": "Power",
   "wallet.transactions.amount": "Quantia",
   "wallet.transactions.date": "Data",
