@@ -1,43 +1,13 @@
 import { PlatformIcon } from "@follow/components/ui/platform-icon/index.jsx"
+import { getFeedIconSrc } from "@follow/components/utils/icon"
 import type { CombinedEntryModel, FeedModel, FeedOrListRespModel } from "@follow/models/types"
 import { getColorScheme, stringToHue } from "@follow/utils/color"
 import { getImageProxyUrl } from "@follow/utils/img-proxy"
-import { cn, getUrlIcon } from "@follow/utils/utils"
+import { cn } from "@follow/utils/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { m } from "framer-motion"
 import type { ReactNode } from "react"
 import { forwardRef, useMemo } from "react"
-
-const getFeedIconSrc = ({
-  src,
-  siteUrl,
-  fallback,
-  proxy,
-}: {
-  src?: string
-  siteUrl?: string
-  fallback?: boolean
-  proxy?: { height: number; width: number }
-} = {}) => {
-  if (src) {
-    if (proxy) {
-      return [
-        getImageProxyUrl({
-          url: src,
-          width: proxy.width,
-          height: proxy.height,
-        }),
-        "",
-      ]
-    }
-
-    return [src, ""]
-  }
-  if (!siteUrl) return ["", ""]
-  const ret = getUrlIcon(siteUrl, fallback)
-
-  return [ret.src, ret.fallbackUrl]
-}
 
 const FallbackableImage = forwardRef<
   HTMLImageElement,

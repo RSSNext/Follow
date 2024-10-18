@@ -1,5 +1,6 @@
 import { Readable } from "node:stream"
 
+import { getFeedIconSrc } from "@follow/components/utils/icon.js"
 import type { FastifyInstance } from "fastify"
 import React from "react"
 import uniqolor from "uniqolor"
@@ -23,7 +24,18 @@ export const ogRoute = (app: FastifyInstance) => {
         }
 
         const { title, description, image } = feed.data.feed
-        const imageBase64 = await getImageBase64(image)
+
+        const [src] = getFeedIconSrc({
+          siteUrl: feed.data.feed.siteUrl!,
+          proxy: {
+            width: 256,
+            height: 256,
+          },
+          fallback: true,
+          src: image!,
+        })
+
+        const imageBase64 = await getImageBase64(image || src)
         const [bgAccent, bgAccentLight, bgAccentUltraLight] = getBackgroundGradient(title!)
 
         try {
@@ -63,7 +75,7 @@ export const ogRoute = (app: FastifyInstance) => {
                     bottom: 24,
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
+                    justifyContent: "space-between",
                     gap: "1rem",
                     transformOrigin: "bottom right",
                     transform: `scale(0.7)`,
@@ -81,6 +93,7 @@ export const ogRoute = (app: FastifyInstance) => {
                     alignItems: "center",
                     justifyContent: "center",
                     flexShrink: 0,
+                    width: "45%",
                   }}
                 >
                   {imageBase64 ? (
@@ -94,9 +107,11 @@ export const ogRoute = (app: FastifyInstance) => {
                   style={{
                     display: "flex",
                     flexGrow: 1,
+                    flexShrink: 1,
+                    width: "52%",
                     flexDirection: "column",
                     overflow: "hidden",
-                    // alignItems: "start",
+                    textAlign: "left",
                     justifyContent: "center",
                   }}
                 >
