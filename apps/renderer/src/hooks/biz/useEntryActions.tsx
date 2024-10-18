@@ -175,7 +175,6 @@ export const useEntryActions = ({
   const enableObsidian = useIntegrationSettingKey("enableObsidian")
   const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
 
-
   const saveToObsidian = useMutation({
     mutationKey: ["save-to-obsidian"],
     mutationFn: async (data: {
