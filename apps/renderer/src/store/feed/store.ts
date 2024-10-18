@@ -25,6 +25,7 @@ export const useFeedStore = createZustandStore<FeedState>("feed")(() => ({
 
 const set = useFeedStore.setState
 const get = useFeedStore.getState
+const distanceTime = 1000 * 60 * 60 * 9
 class FeedActions {
   clear() {
     set({ feeds: {} })
@@ -40,7 +41,7 @@ class FeedActions {
           if (
             feed.type === "feed" &&
             feed.errorAt &&
-            new Date(feed.errorAt).getTime() > Date.now() - 1000 * 60 * 60 * 9
+            new Date(feed.errorAt).getTime() > Date.now() - distanceTime
           ) {
             feed.errorAt = null
           }
