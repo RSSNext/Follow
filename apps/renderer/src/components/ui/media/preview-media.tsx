@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next"
 import { Keyboard, Mousewheel } from "swiper/modules"
 import type { SwiperRef } from "swiper/react"
 import { Swiper, SwiperSlide } from "swiper/react"
+import { useWindowSize } from "usehooks-ts"
 
 import { m } from "~/components/common/Motion"
 import { COPY_MAP } from "~/constants"
@@ -293,10 +294,20 @@ const FallbackableImage: FC<
 
   const height = Number.parseInt(props.height as string)
   const width = Number.parseInt(props.width as string)
+
+  const { height: windowHeight, width: windowWidth } = useWindowSize()
+
   return (
     <div className={cn("center flex size-full flex-col", containerClassName)}>
       {!isAllError && (
-        <div className={cn("relative", width > height ? "w-full" : "h-full")}>
+        <div
+          className={cn("relative", width < height && "h-full")}
+          style={{
+            // px-20 pb-8 pt-10
+            width: width > height ? (windowHeight - 32 - 40) * (width / height) : undefined,
+            maxWidth: width > height ? windowWidth - 80 - 80 - 400 : undefined,
+          }}
+        >
           <img
             data-blurhash={blurhash}
             src={currentSrc}
