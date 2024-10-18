@@ -14,7 +14,7 @@ class ServiceStatic extends BaseService<{ id: string }> implements Hydable {
   }
 
   override async upsertMany(data: ListModel[]) {
-    CleanerService.reset(data.map((d) => ({ type: "feed", id: d.id! })))
+    CleanerService.reset(data.map((d) => ({ type: "list", id: d.id! })))
 
     // FIXME The backend should not pass these computed attributes, and these need to be removed here.
     // Subsequent refactoring of the backend data flow should not nest computed attributes
@@ -27,7 +27,7 @@ class ServiceStatic extends BaseService<{ id: string }> implements Hydable {
 
   override async upsert(data: ListModel): Promise<string | null> {
     if (!data.id) return null
-    CleanerService.reset([{ type: "feed", id: data.id }])
+    CleanerService.reset([{ type: "list", id: data.id }])
     return this.table.put(omit(data, "owner"))
   }
 

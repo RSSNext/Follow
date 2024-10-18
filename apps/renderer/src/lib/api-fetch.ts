@@ -4,9 +4,12 @@ import { getCsrfToken } from "@hono/auth-js/react"
 import PKG from "@pkg"
 import { hc } from "hono/client"
 import { FetchError, ofetch } from "ofetch"
+import { createElement } from "react"
+import { toast } from "sonner"
 
 import { NetworkStatus, setApiStatus } from "~/atoms/network"
 import { setLoginModalShow } from "~/atoms/user"
+import { NeedActivationToast } from "~/modules/activation/NeedActivationToast"
 
 let csrfTokenPromise: Promise<string> | null = null
 export const apiFetch = ofetch.create({
@@ -50,6 +53,20 @@ export const apiFetch = ofetch.create({
       const json = JSON.parse(context.response._data)
       if (context.response.status === 400 && json.code === 1003) {
         router.navigate("/invitation")
+      }
+      if (json.code.toString().startsWith("11")) {
+        setTimeout(() => {
+          const toastId = toast.error(
+            createElement(NeedActivationToast, {
+              dimiss: () => {
+                toast.dismiss(toastId)
+              },
+            }),
+            {
+              duration: 10e4,
+            },
+          )
+        }, 500)
       }
     } catch {
       // ignore

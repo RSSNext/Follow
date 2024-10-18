@@ -46,13 +46,14 @@ const formSchema = z.object({
   isPrivate: z.boolean().optional(),
   title: z.string().optional(),
 })
+export type FeedFormDataValuesType = z.infer<typeof formSchema>
 
-const defaultValue = { view: FeedViewType.Articles.toString() } as z.infer<typeof formSchema>
+const defaultValue = { view: FeedViewType.Articles.toString() } as FeedFormDataValuesType
 
 export const FeedForm: Component<{
   url?: string
   id?: string
-  defaultValues?: z.infer<typeof formSchema>
+  defaultValues?: FeedFormDataValuesType
   asWidget?: boolean
   onSuccess?: () => void
 }> = ({ id: _id, defaultValues = defaultValue, url, asWidget, onSuccess }) => {

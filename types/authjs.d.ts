@@ -13,5 +13,6 @@ declare module "@auth/core/types" {
 
   interface Session {
     user: User
+    role: "user" | "trial"
   }
 }

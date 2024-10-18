@@ -42,9 +42,21 @@ class InboxActionStatic {
     })
   }
 
-  clearByInboxId(id: string) {
+  private clearByInboxId(id: string) {
     set((state) => {
       delete state.inboxes[id]
+    })
+  }
+
+  async deleteInbox(inboxId: string) {
+    // TODO rollback
+    this.clearByInboxId(inboxId)
+    runTransactionInScope(() => InboxService.bulkDelete([inboxId]))
+
+    await apiClient.inboxes.$delete({
+      json: {
+        handle: inboxId,
+      },
     })
   }
 

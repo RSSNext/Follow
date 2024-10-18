@@ -296,53 +296,35 @@ const FallbackableImage: FC<
   return (
     <div className={cn("center flex size-full flex-col", containerClassName)}>
       {!isAllError && (
-        // FIXME: optimize this if image load, the placeholder background will flash
-        <div
-          className={cn(
-            "center absolute inset-0 size-full transition-opacity duration-700",
-            isLoading ? "opacity-100" : "opacity-0",
-          )}
-        >
-          {blurhash ? (
-            <div
-              style={{
-                aspectRatio: `${props.width} / ${props.height}`,
-                width: props.width,
-                height: props.height,
-              }}
-              className={cn(!props.height || !props.width ? "w-full" : "")}
-            >
+        <div className={cn("relative", width > height ? "w-full" : "h-full")}>
+          <img
+            data-blurhash={blurhash}
+            src={currentSrc}
+            onLoad={() => setIsLoading(false)}
+            onError={handleError}
+            height={props.height}
+            width={props.width}
+            {...props}
+            className={cn(
+              "transition-opacity duration-700",
+              isLoading ? "opacity-0" : "opacity-100",
+              props.className,
+            )}
+            style={props.style}
+          />
+          <div
+            className={cn(
+              "center absolute inset-0 size-full transition-opacity duration-700",
+              isLoading ? "opacity-100" : "opacity-0",
+            )}
+          >
+            {blurhash ? (
               <Blurhash hash={blurhash} resolutionX={32} resolutionY={32} className="!size-full" />
-            </div>
-          ) : (
-            <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
-          )}
+            ) : (
+              <i className="i-mgc-loading-3-cute-re size-8 animate-spin text-white/80" />
+            )}
+          </div>
         </div>
-      )}
-      {!isAllError && (
-        <img
-          data-blurhash={blurhash}
-          src={currentSrc}
-          onLoad={() => setIsLoading(false)}
-          onError={handleError}
-          height={props.height}
-          width={props.width}
-          {...props}
-          className={cn(
-            "transition-opacity duration-700",
-            isLoading ? "opacity-0" : "opacity-100",
-            props.className,
-          )}
-          style={
-            Number.isNaN(height) || Number.isNaN(width) || height === 0 || width === 0
-              ? props.style
-              : {
-                  maxHeight: `min(100%, ${height}px)`,
-                  maxWidth: `min(100%, ${width}px)`,
-                  ...props.style,
-                }
-          }
-        />
       )}
       {isAllError && (
         <div

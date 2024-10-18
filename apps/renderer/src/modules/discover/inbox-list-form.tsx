@@ -2,7 +2,10 @@ import { env } from "@follow/shared/env"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
+import { useEventCallback } from "usehooks-ts"
 
+import { useUserRole } from "~/atoms/user"
+import { CustomSafeError } from "~/components/errors/helper"
 import { ActionButton, Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { LoadingCircle } from "~/components/ui/loading"
@@ -15,19 +18,51 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
-import { apiClient } from "~/lib/api-fetch"
-import { FeedViewType } from "~/lib/enum"
+import { MAX_TRIAL_USER_INBOX_SUBSCRIPTION } from "~/constants/limit"
+import { FeedViewType, UserRole } from "~/lib/enum"
 import { createErrorToaster } from "~/lib/error-parser"
 import { useInboxList } from "~/queries/inboxes"
-import { subscriptionActions } from "~/store/subscription"
+import { inboxActions } from "~/store/inbox"
+import { subscriptionActions, useInboxSubscriptionCount } from "~/store/subscription"
 
+import { useActivationModal } from "../activation"
 import { InboxForm } from "./inbox-form"
 
+const useCanCreateMoreInboxAndNotify = () => {
+  const role = useUserRole()
+  const currentInboxCount = useInboxSubscriptionCount()
+  const presentActivationModal = useActivationModal()
+
+  return useEventCallback(() => {
+    if (role === UserRole.Trial) {
+      const can = currentInboxCount < MAX_TRIAL_USER_INBOX_SUBSCRIPTION
+      if (!can) {
+        presentActivationModal()
+
+        throw new CustomSafeError(
+          `Trial user cannot create more inboxes, limit: ${MAX_TRIAL_USER_INBOX_SUBSCRIPTION}, current: ${currentInboxCount}`,
+          true,
+        )
+      }
+      return can
+    } else {
+      // const can = currentInboxCount < MAX_INBOX_COUNT
+      // if (!can) {
+      //   //  TODO
+      // }
+      // return can
+
+      return true
+    }
+  })
+}
 export function DiscoverInboxList() {
   const { t } = useTranslation()
   const inboxes = useInboxList()
 
   const { present } = useModalStack()
+
+  const preCheck = useCanCreateMoreInboxAndNotify()
 
   return (
     <>
@@ -128,9 +163,11 @@ export function DiscoverInboxList() {
         </TableBody>
       </Table>
       <div className="center flex">
+        {/* New Inbox */}
         <Button
           className="flex items-center gap-2"
           onClick={() =>
+            preCheck() &&
             present({
               title: t("sidebar.feed_actions.new_inbox"),
               content: ({ dismiss }) => (
@@ -158,11 +195,7 @@ const ConfirmDestroyModalContent = ({ id, onSuccess }: { id: string; onSuccess: 
 
   const mutationDestroy = useMutation({
     mutationFn: async (id: string) => {
-      await apiClient.inboxes.$delete({
-        json: {
-          handle: id,
-        },
-      })
+      return inboxActions.deleteInbox(id)
     },
     onSuccess: () => {
       subscriptionActions.fetchByView(FeedViewType.Articles)

@@ -1,3 +1,4 @@
+import { useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { useLoaderData } from "react-router-dom"
 
@@ -5,6 +6,7 @@ import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { cn } from "~/lib/utils"
 
 import { settings } from "./constants"
+import { IsInSettingIndependentWindowContext } from "./context"
 import type { SettingPageConfig } from "./utils"
 
 export const SettingsSidebarTitle = ({ path, className }: { path: string; className?: string }) => {
@@ -37,6 +39,7 @@ export const SettingsTitle = ({
     headerIcon,
   } = (useLoaderData() || loader?.() || {}) as SettingPageConfig
 
+  const isInSettingIndependentWindow = useContext(IsInSettingIndependentWindowContext)
   if (!title) {
     return null
   }
@@ -45,6 +48,7 @@ export const SettingsTitle = ({
       className={cn(
         "flex items-center gap-2 pb-2 pt-6 text-xl font-bold",
         "sticky top-0 mb-4",
+        isInSettingIndependentWindow ? "z-[99] bg-background" : "",
         className,
       )}
     >

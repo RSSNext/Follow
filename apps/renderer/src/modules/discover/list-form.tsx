@@ -48,10 +48,11 @@ const formSchema = z.object({
 
 const defaultValue = { view: FeedViewType.Articles.toString() } as z.infer<typeof formSchema>
 
+export type ListFormDataValuesType = z.infer<typeof formSchema>
 export const ListForm: Component<{
   id?: string
 
-  defaultValues?: z.infer<typeof formSchema>
+  defaultValues?: ListFormDataValuesType
 
   asWidget?: boolean
 
