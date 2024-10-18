@@ -1,3 +1,4 @@
+import fs from "node:fs/promises"
 import path from "node:path"
 
 import { getRendererHandlers } from "@egoist/tipc/main"
@@ -225,6 +226,46 @@ export const appRoute = {
   }),
 
   clearAllData: t.procedure.action(clearAllData),
+
+  saveToObsidian: t.procedure
+    .input<{
+      url: string
+      title: string
+      content: string
+      author: string
+      publishedAt: string
+      vaultPath: string
+    }>()
+    .action(async ({ input }) => {
+      try {
+        const { url, title, content, author, publishedAt, vaultPath } = input
+
+        const safeTitle = (title || "untitled").trim()
+        const fileName = `${safeTitle
+          .replaceAll(/[^a-z0-9]/gi, "_")
+          .toLowerCase()
+          .slice(0, 100)}.md`
+        const filePath = path.join(vaultPath, fileName)
+
+        const markdown = `---
+url: ${url}
+author: ${author}
+publishedAt: ${publishedAt}
+---
+
+# ${title}
+
+${content}
+`
+
+        await fs.writeFile(filePath, markdown, "utf-8")
+        return { success: true }
+      } catch (error) {
+        console.error("Failed to save to Obsidian:", error)
+        const errorMessage = error instanceof Error ? error.message : String(error)
+        return { success: false, error: errorMessage }
+      }
+    }),
 }
 
 interface Sender extends Electron.WebContents {

@@ -19,6 +19,10 @@ export const createDefaultSettings = (): IntegrationSettings => ({
   enableOmnivore: false,
   omnivoreEndpoint: "",
   omnivoreToken: "",
+
+  // obsidian
+  enableObsidian: false,
+  obsidianVaultPath: "",
 })
 
 export const {
