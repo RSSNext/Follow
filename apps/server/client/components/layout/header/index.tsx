@@ -72,7 +72,7 @@ export const Header = () => {
               onClick={handleToApp}
             >
               Open app
-              <Kbd className="kbd-xs !leading-0 ml-2 scale-[0.85] rounded-sm !border-transparent !bg-zinc-200 !font-mono text-black">
+              <Kbd className="kbd-xs !leading-0 !dark:bg-zinc-200 ml-2 size-5 scale-[0.85] rounded-sm !border-transparent !bg-zinc-50 !font-mono text-black">
                 L
               </Kbd>
             </Button>

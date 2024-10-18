@@ -703,6 +703,9 @@ importers:
       linkedom:
         specifier: ^0.18.5
         version: 0.18.5
+      ofetch:
+        specifier: 1.4.1
+        version: 1.4.1
       rc-modal-sheet:
         specifier: 0.3.2
         version: 0.3.2(@radix-ui/react-dialog@1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(clsx@2.1.1)(framer-motion@11.11.9(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwind-merge@2.5.4)(vaul@1.1.0(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
@@ -727,6 +730,9 @@ importers:
       swr:
         specifier: 2.2.5
         version: 2.2.5(react@18.3.1)
+      uniqolor:
+        specifier: 1.1.1
+        version: 1.1.1
     devDependencies:
       '@follow/components':
         specifier: workspace:*
@@ -9328,6 +9334,9 @@ packages:
 
   unified@11.0.5:
     resolution: {integrity: sha512-xKvGhPWw3k84Qjh8bI3ZeJjqnyadK+GEFtazSfZv/rKeTkTjOJho6mFqh2SM96iIcZokxiOpg78GazTSg8+KHA==}
+
+  uniqolor@1.1.1:
+    resolution: {integrity: sha512-HUwezlXCwm5bzsEXW7AP7ybezH13uWENRgYT+3dOdhJPvpYucSqvIGckMiLn+Uy2j0NVf3fPp43uZ4aun3t4Ww==}
 
   unique-filename@2.0.1:
     resolution: {integrity: sha512-ODWHtkkdx3IAR+veKxFV+VBkUMcN+FaqzUUd7IZzt+0zhDZFPFxhlqwPF3YQvMHx1TD0tdgYl+kuPnJ8E6ql7A==}
@@ -19820,6 +19829,8 @@ snapshots:
       is-plain-obj: 4.1.0
       trough: 2.2.0
       vfile: 6.0.3
+
+  uniqolor@1.1.1: {}
 
   unique-filename@2.0.1:
     dependencies:

@@ -13,7 +13,13 @@ interface MetaTitle {
   title: string
 }
 
-export type MetaTag = MetaTagdata | MetaTitle
+interface MetaHydrateData {
+  type: "hydrate"
+  data: any
+  path: string
+  key: string
+}
+export type MetaTag = MetaTagdata | MetaTitle | MetaHydrateData
 
 export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]> {
   const metaArr = [] as MetaTag[]
@@ -46,6 +52,12 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
         {
           type: "title",
           title: title || "",
+        },
+        {
+          type: "hydrate",
+          data: feed.data,
+          path: apiClient.feeds.$url({ query: { id: feedId } }).pathname,
+          key: `feeds.$get,query:id=${feedId}`,
         },
       )
     }

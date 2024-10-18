@@ -24,6 +24,7 @@
     "jotai": "2.10.1",
     "kose-font": "1.0.0",
     "linkedom": "^0.18.5",
+    "ofetch": "1.4.1",
     "rc-modal-sheet": "0.3.2",
     "react": "^18.3.1",
     "react-hotkeys-hook": "4.5.1",
@@ -31,7 +32,8 @@
     "react-router-dom": "6.27.0",
     "satori": "0.11.2",
     "sonner": "^1.5.0",
-    "swr": "2.2.5"
+    "swr": "2.2.5",
+    "uniqolor": "1.1.1"
   },
   "devDependencies": {
     "@follow/components": "workspace:*",

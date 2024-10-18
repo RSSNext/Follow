@@ -43,6 +43,7 @@ export function Component() {
   return (
     <MainContainer>
       <FeedIcon fallback feed={feed.data.feed} className="mask-squircle mask shrink-0" size={64} />
+
       <div className="flex flex-col items-center">
         <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
           <h1>{feed.data.feed.title}</h1>
@@ -103,6 +104,9 @@ export function Component() {
             : "flex max-w-3xl flex-col gap-6",
         )}
       >
+        {entries.isLoading && !entries.data && (
+          <LoadingCircle size="large" className="center mt-12" />
+        )}
         {entries.data?.map((entry) => (
           <a
             className="relative cursor-pointer"

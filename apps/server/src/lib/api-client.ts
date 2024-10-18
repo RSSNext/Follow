@@ -20,7 +20,7 @@ export const createApiClient = (authSessionToken: string) => {
     baseURL = `http://${host}${env.VITE_EXTERNAL_API_URL}`
   }
   const apiFetch = ofetch.create({
-    baseURL,
+    // baseURL,
     credentials: "include",
 
     retry: false,
@@ -32,7 +32,7 @@ export const createApiClient = (authSessionToken: string) => {
     },
   })
 
-  const apiClient = hc<AppType>("", {
+  const apiClient = hc<AppType>(baseURL, {
     fetch: async (input: any, options = {}) => apiFetch(input.toString(), options),
     headers() {
       return {

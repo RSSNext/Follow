@@ -2,8 +2,9 @@
 import { readFileSync } from "node:fs"
 import path, { resolve } from "node:path"
 
-import type { FastifyInstance, FastifyRequest } from "fastify"
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import { parseHTML } from "linkedom"
+import { FetchError } from "ofetch"
 
 import { isDev } from "~/lib/env"
 
@@ -19,7 +20,7 @@ const devHandler = (app: FastifyInstance) => {
     try {
       let template = readFileSync(path.resolve(root, vite.config.root, "index.html"), "utf-8")
       template = await vite.transformIndexHtml(url, template)
-      template = await transfromTemplate(template, req)
+      template = await safeInjectMetaToTemplate(template, req, reply)
 
       reply.type("text/html")
       reply.send(template)
@@ -32,7 +33,7 @@ const devHandler = (app: FastifyInstance) => {
 const prodHandler = (app: FastifyInstance) => {
   app.get("*", async (req, reply) => {
     let template = require("../../.generated/index.template").default
-    template = await transfromTemplate(template, req)
+    template = await safeInjectMetaToTemplate(template, req, reply)
 
     const isInVercelReverseProxy = req.headers["x-middleware-subrequest"]
 
@@ -59,7 +60,20 @@ const prodHandler = (app: FastifyInstance) => {
 
 export const globalRoute = isDev ? devHandler : prodHandler
 
-async function transfromTemplate(template: string, req: FastifyRequest) {
+async function safeInjectMetaToTemplate(template: string, req: FastifyRequest, res: FastifyReply) {
+  try {
+    return await injectMetaToTemplate(template, req)
+  } catch (e) {
+    console.error("inject meta error", e)
+
+    if (e instanceof FetchError && e.response?.status) {
+      res.code(e.response.status)
+    }
+
+    return template
+  }
+}
+async function injectMetaToTemplate(template: string, req: FastifyRequest) {
   const injectMetadata = await injectMetaHandler(req).catch((err) => {
     if (isDev) {
       throw err
@@ -84,6 +98,18 @@ async function transfromTemplate(template: string, req: FastifyRequest) {
           template = template.replace(`<!-- TITLE -->`, `${meta.title} | Follow`)
           isTitleReplaced = true
         }
+        break
+      }
+      case "hydrate": {
+        const { document } = parseHTML(template)
+        // Insert hydrate script
+        const script = document.createElement("script")
+        script.innerHTML = `
+          window.__HYDRATE__ = window.__HYDRATE__ || {}
+          window.__HYDRATE__['${meta.key}'] = ${JSON.stringify(meta.data)}
+        `
+        document.head.append(script)
+        template = document.toString()
         break
       }
     }

@@ -7,3 +7,7 @@ export const getPreferredTitle = (feed?: FeedOrListRespModel | null) => {
 
   return feed.title
 }
+
+export const getHydrateData = (key: string) => {
+  return window.__HYDRATE__[key]
+}

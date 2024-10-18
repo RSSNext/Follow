@@ -43,7 +43,6 @@ const weights = [
     weight: 900,
   },
 ] as const
-
 let fontsData = [] as any[]
 
 const snFontDepsPath = require.resolve("@fontsource/sn-pro")
@@ -52,12 +51,18 @@ const snFontsDir = fs
   .readdirSync(snFontsDirPath)
   .filter((name) => !name.endsWith(".woff2") && !name.includes("italic"))
 
-fontsData = snFontsDir.map((file) => ({
-  name: file.split("-")[0],
-  data: fs.readFileSync(path.join(snFontsDirPath, file)),
-  weight: weights.find((weight) => weight.name === file.split("-")[1])?.weight,
-  style: file.includes("Italic") ? "italic" : ("normal" as "italic" | "normal"),
-}))
+fontsData = snFontsDir.map((file) => {
+  const weight = weights.find((weight) => file.includes(weight.weight.toString()))
+  if (!weight) {
+    return null
+  }
+  return {
+    name: `SN Pro`,
+    data: fs.readFileSync(path.join(snFontsDirPath, file)),
+    weight: weight.weight,
+    style: file.includes("Italic") ? "italic" : ("normal" as "italic" | "normal"),
+  }
+})
 
 const koseFontPath = require.resolve("kose-font")
 
