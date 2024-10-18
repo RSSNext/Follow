@@ -498,7 +498,6 @@ const ContainerToc: FC = memo(() => {
               "flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring spring-soft",
               "max-h-[calc(100vh-100px)] overflow-auto scrollbar-none",
 
-              "@[500px]:-translate-x-12",
               "@[700px]:-translate-x-12 @[800px]:-translate-x-16 @[900px]:translate-x-0 @[900px]:items-start",
             )}
           />
