@@ -41,7 +41,7 @@ export function Component() {
   }
 
   return (
-    <MainContainer>
+    <MainContainer className="items-center">
       <FeedIcon fallback feed={feed.data.feed} className="mask-squircle mask shrink-0" size={64} />
 
       <div className="flex flex-col items-center">
@@ -96,25 +96,13 @@ export function Component() {
           {isSubscribed ? t("feed.actions.followed") : <>{APP_NAME}</>}
         </Button>
       </span>
-      <div
-        className={cn(
-          "w-full pb-12 pt-8",
-          views[view].gridMode
-            ? "grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
-            : "flex max-w-3xl flex-col gap-6",
-        )}
-      >
+      <div className={cn("w-full pb-12 pt-8", "flex max-w-3xl flex-col gap-2")}>
         {entries.isLoading && !entries.data && (
           <LoadingCircle size="large" className="center mt-12" />
         )}
         {entries.data?.map((entry) => (
-          <a
-            className="relative cursor-pointer"
-            href={entry.url || void 0}
-            target="_blank"
-            key={entry.id}
-          >
-            <div className="rounded-xl pl-3 duration-300 hover:bg-theme-item-active">
+          <a className="relative" href={entry.url || void 0} target="_blank" key={entry.id}>
+            <div className="rounded-xl pl-3 duration-300 hover:bg-theme-item-hover">
               <NormalListItem
                 entryId={entry.id}
                 entryPreview={{ entries: entry, feeds: feedData, read: true, feedId: feedData.id! }}

@@ -14,11 +14,3 @@
 @import "@fontsource/sn-pro/800.css";
 @import "@fontsource/sn-pro/900-italic.css";
 @import "@fontsource/sn-pro/900.css";
-
-button {
-  --cursor-button: pointer;
-}
-
-::selection {
-  @apply bg-accent text-white;
-}

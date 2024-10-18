@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "exports": {
-    "./tailwind": "./assets/tailwind.css",
+    "./tailwind": "./assets/index.css",
     "./modules/*": "./src/modules/*",
     "./common/*": "./src/common/*",
     "./icons/*": "./src/icons/*",

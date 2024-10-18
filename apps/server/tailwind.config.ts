@@ -1,8 +1,9 @@
+import daisyui from "daisyui"
 import { omit } from "lodash-es"
+import colors from "tailwindcss/colors"
 import resolveConfig from "tailwindcss/resolveConfig"
 
 import { baseConfig } from "../../configs/tailwind.base.config"
-
 /** @type {import('tailwindcss').Config} */
 export default resolveConfig({
   ...baseConfig,
@@ -10,7 +11,9 @@ export default resolveConfig({
     ...baseConfig.theme,
     extend: {
       ...baseConfig.theme.extend,
-      colors: omit(baseConfig.theme.extend.colors, "accent"),
+      colors: {
+        ...omit(baseConfig.theme.extend.colors, "accent"),
+      },
     },
   },
   content: [
@@ -18,7 +21,7 @@ export default resolveConfig({
     "./index.html",
     "./node_modules/@follow/components/**/*.{ts,tsx}",
   ],
-  plugins: [...baseConfig.plugins, require("daisyui")],
+  plugins: [...baseConfig.plugins, daisyui],
   daisyui: {
     logs: false,
     darkTheme: "dark",
@@ -30,7 +33,7 @@ export default resolveConfig({
           primary: "#007AFF", //#0A84FF
           accent: "#ff760a",
           "accent-content": "#fff",
-          neutral: "#04262d",
+          neutral: "#212427",
 
           "base-100": "#fff",
           "base-content": "#0C0A09",
@@ -50,7 +53,7 @@ export default resolveConfig({
           primary: "#0A84FF",
           accent: "#ff760a",
           "accent-content": "#fff",
-          neutral: "#04262d",
+          neutral: "#2a2a2a",
           "base-100": "#121212",
           "base-content": "#FAFAF9",
 

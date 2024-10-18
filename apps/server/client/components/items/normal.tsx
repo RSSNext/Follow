@@ -20,7 +20,7 @@ export function NormalListItem({
   const displayTime = entry.entries.publishedAt
 
   return (
-    <div className={"group relative flex cursor-menu pl-3 pr-2"}>
+    <div className={"group relative flex pl-3 pr-2 rounded-lg duration-200 py-4"}>
       <FeedIcon feed={feed} fallback entry={entry.entries} />
       <div className={"-mt-0.5 flex-1 text-sm leading-tight"}>
         <div
@@ -47,11 +47,9 @@ export function NormalListItem({
 
           {/* {!!entry.collections && <StarIcon className="absolute right-0 top-0" />} */}
         </div>
-        {withDetails && (
-          <div className={cn("text-[13px]", "text-zinc-400 dark:text-neutral-500")}>
-            {entry.entries.description}
-          </div>
-        )}
+        <div className={cn("text-[13px]", "text-zinc-400 dark:text-neutral-500")}>
+          {entry.entries.description}
+        </div>
       </div>
 
       {withDetails && entry.entries.media?.[0] && (

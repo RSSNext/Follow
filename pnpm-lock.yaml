@@ -12,6 +12,9 @@ patchedDependencies:
   '@mozilla/readability':
     hash: 43niildbdafdxi7qfcwhpkkxwa
     path: patches/@mozilla__readability.patch
+  daisyui:
+    hash: igsntdatmoaxzwxof4bkkh35fy
+    path: patches/daisyui.patch
   electron-context-menu:
     hash: c53at4t5fflixuwjz35hmcqdu4
     path: patches/electron-context-menu.patch
@@ -751,7 +754,7 @@ importers:
         version: link:../../packages/utils
       daisyui:
         specifier: 4.12.13
-        version: 4.12.13(postcss@8.4.47)
+        version: 4.12.13(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.4.47)
       lightningcss:
         specifier: 1.27.0
         version: 1.27.0
@@ -15017,7 +15020,7 @@ snapshots:
 
   culori@3.3.0: {}
 
-  daisyui@4.12.13(postcss@8.4.47):
+  daisyui@4.12.13(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.4.47):
     dependencies:
       css-selector-tokenizer: 0.8.0
       culori: 3.3.0

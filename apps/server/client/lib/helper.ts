@@ -9,5 +9,5 @@ export const getPreferredTitle = (feed?: FeedOrListRespModel | null) => {
 }
 
 export const getHydrateData = (key: string) => {
-  return window.__HYDRATE__[key]
+  return window.__HYDRATE__?.[key]
 }

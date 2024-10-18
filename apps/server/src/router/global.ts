@@ -70,6 +70,8 @@ async function safeInjectMetaToTemplate(template: string, req: FastifyRequest, r
       res.code(e.response.status)
     }
 
+    template = template.replace(`<!-- TITLE -->`, `Follow`)
+
     return template
   }
 }
