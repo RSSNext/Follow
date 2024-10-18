@@ -14,6 +14,7 @@ import {
   useEntryReadabilityContent,
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
+import { enableShowSourceContent } from "~/atoms/source-content"
 import { m } from "~/components/common/Motion"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
@@ -289,6 +290,7 @@ export const EntryContentRender: Component<{
               {entry.settings?.readability && (
                 <ReadabilityAutoToggleEffect id={entry.entries.id} url={entry.entries.url ?? ""} />
               )}
+              {entry.settings?.sourceContent && <ViewSourceContentAutoToggleEffect />}
 
               {!content && (
                 <div className="center mt-16 min-w-0">
@@ -306,7 +308,11 @@ export const EntryContentRender: Component<{
                       </pre>
                     </div>
                   ) : (
-                    <NoContent id={entry.entries.id} url={entry.entries.url ?? ""} />
+                    <NoContent
+                      id={entry.entries.id}
+                      url={entry.entries.url ?? ""}
+                      sourceContent={entry.settings?.sourceContent}
+                    />
                   )}
                 </div>
               )}
@@ -389,7 +395,8 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
 const NoContent: FC<{
   id: string
   url: string
-}> = ({ id, url }) => {
+  sourceContent?: boolean
+}> = ({ id, url, sourceContent }) => {
   const status = useEntryInReadabilityStatus(id)
   const { t } = useTranslation("app")
 
@@ -407,10 +414,23 @@ const NoContent: FC<{
             <span>{t("entry_content.web_app_notice")}</span>
           </div>
         )}
-        {url && IN_ELECTRON && <ReadabilityAutoToggleEffect url={url} id={id} />}
+        {!sourceContent && url && IN_ELECTRON && <ReadabilityAutoToggleEffect url={url} id={id} />}
       </div>
     </div>
   )
+}
+
+const ViewSourceContentAutoToggleEffect = () => {
+  const onceRef = useRef(false)
+
+  useEffect(() => {
+    if (!onceRef.current) {
+      onceRef.current = true
+      enableShowSourceContent()
+    }
+  }, [])
+
+  return null
 }
 
 const ReadabilityAutoToggleEffect = ({ url, id }: { url: string; id: string }) => {
@@ -478,7 +498,6 @@ const ContainerToc: FC = memo(() => {
               "flex flex-col items-end animate-in fade-in-0 slide-in-from-bottom-12 easing-spring spring-soft",
               "max-h-[calc(100vh-100px)] overflow-auto scrollbar-none",
 
-              "@[500px]:-translate-x-12",
               "@[700px]:-translate-x-12 @[800px]:-translate-x-16 @[900px]:translate-x-0 @[900px]:items-start",
             )}
           />

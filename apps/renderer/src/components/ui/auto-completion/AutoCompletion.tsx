@@ -1,8 +1,9 @@
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from "@headlessui/react"
 import { AnimatePresence, m } from "framer-motion"
 import Fuse from "fuse.js"
-import { forwardRef, useCallback, useEffect, useState } from "react"
+import { forwardRef, Fragment, useCallback, useEffect, useState } from "react"
 
+import { stopPropagation } from "~/lib/dom"
 import { cn } from "~/lib/utils"
 
 import { Input } from "../input"
@@ -33,6 +34,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       renderSuggestion = defaultRenderSuggestion,
       onSuggestionSelected,
       maxHeight,
+
       value,
       searchKeys = defaultSearchKeys,
       defaultValue,
@@ -75,7 +77,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       >
         {({ open }) => {
           return (
-            <div className="relative">
+            <Fragment>
               <ComboboxInput
                 ref={forwardedRef}
                 as={Input}
@@ -88,18 +90,19 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
               <AnimatePresence>
                 {open && (
                   <ComboboxOptions
-                    portal={false}
+                    portal
                     static
                     as={m.div}
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.98 }}
+                    anchor="bottom"
                     style={{ zIndex }}
+                    onWheel={stopPropagation}
                     className={cn(
                       "pointer-events-auto max-h-48 grow",
                       "shadow-perfect overflow-auto rounded-md border border-border bg-popover text-popover-foreground",
                       "w-[var(--input-width)] empty:invisible",
-                      "absolute inset-x-0 top-[110%]",
                     )}
                   >
                     <div style={{ maxHeight }}>
@@ -119,7 +122,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                   </ComboboxOptions>
                 )}
               </AnimatePresence>
-            </div>
+            </Fragment>
           )
         }}
       </Combobox>

@@ -68,15 +68,11 @@ const usePlayerTracker = () => {
   useEffect(() => {
     const handler = () => {
       const playerState = getAudioPlayerAtomValue()
-      window.posthog?.capture(
-        "player_open_duration",
-        {
-          duration: Date.now() - playerOpenAt,
-          status: playerState.status,
-          trigger: "beforeunload",
-        },
-        { transport: "sendBeacon" },
-      )
+      window.analytics?.capture("player_open_duration", {
+        duration: Date.now() - playerOpenAt,
+        status: playerState.status,
+        trigger: "beforeunload",
+      })
     }
 
     window.addEventListener("beforeunload", handler)
@@ -86,7 +82,7 @@ const usePlayerTracker = () => {
   useEffect(() => {
     if (!show) {
       const playerState = getAudioPlayerAtomValue()
-      window.posthog?.capture("player_open_duration", {
+      window.analytics?.capture("player_open_duration", {
         duration: Date.now() - playerOpenAt,
         status: playerState.status,
         trigger: "manual",

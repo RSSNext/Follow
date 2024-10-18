@@ -27,7 +27,7 @@ import {
 } from "~/components/ui/select"
 import { useProxyValue, useSetProxy } from "~/hooks/biz/useProxySetting"
 import { fallbackLanguage } from "~/i18n"
-import { initPostHog } from "~/initialize/posthog"
+import { initAnalytics } from "~/initialize/analytics"
 import { tipcClient } from "~/lib/client"
 import { cn } from "~/lib/utils"
 import { clearLocalPersistStoreData } from "~/store/utils/clear"
@@ -125,10 +125,10 @@ export const SettingGeneral = () => {
             onChange(value) {
               setGeneralSetting("sendAnonymousData", value)
               if (value) {
-                initPostHog()
+                initAnalytics()
               } else {
-                window.posthog?.reset()
-                delete window.posthog
+                window.analytics?.reset()
+                delete window.analytics
               }
             },
           }),

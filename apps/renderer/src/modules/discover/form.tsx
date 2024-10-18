@@ -25,12 +25,12 @@ import { Media } from "~/components/ui/media"
 import { useModalStack } from "~/components/ui/modal/stacked/hooks"
 import { Radio } from "~/components/ui/radio-group"
 import { RadioGroup } from "~/components/ui/radio-group/RadioGroup"
+import { useFollow } from "~/hooks/biz/useFollow"
 import { apiClient } from "~/lib/api-fetch"
 import type { FeedViewType } from "~/lib/enum"
 
 import { FollowSummary } from "../../components/feed-summary"
 import { FeedForm } from "./feed-form"
-import { ListForm } from "./list-form"
 
 const formSchema = z.object({
   keyword: z.string().min(1),
@@ -270,7 +270,7 @@ const SearchCard: FC<{
   onSuccess: (item: DiscoverSearchData[number]) => void
   onUnSubscribed?: (item: DiscoverSearchData[number]) => void
 }> = memo(({ item, onSuccess }) => {
-  const { present } = useModalStack()
+  const follow = useFollow()
 
   return (
     <Card data-feed-id={item.feed?.id || item.list?.id} className="select-text">
@@ -325,35 +325,16 @@ const SearchCard: FC<{
             <Button
               variant={item.isSubscribed ? "outline" : undefined}
               onClick={() => {
-                present({
-                  title: "Add Feed",
-                  content: ({ dismiss }) =>
-                    item.list?.id ? (
-                      <ListForm
-                        asWidget
-                        id={item.list?.id}
-                        defaultValues={{
-                          view: getSidebarActiveView().toString(),
-                        }}
-                        onSuccess={() => {
-                          onSuccess(item)
-                          dismiss()
-                        }}
-                      />
-                    ) : (
-                      <FeedForm
-                        asWidget
-                        url={item.feed?.url}
-                        id={item.feed?.id}
-                        defaultValues={{
-                          view: getSidebarActiveView().toString(),
-                        }}
-                        onSuccess={() => {
-                          onSuccess(item)
-                          dismiss()
-                        }}
-                      />
-                    ),
+                follow({
+                  isList: !!item.list?.id,
+                  id: item.list?.id,
+                  url: item.feed?.url,
+                  defaultValues: {
+                    view: getSidebarActiveView().toString(),
+                  },
+                  onSuccess() {
+                    onSuccess(item)
+                  },
                 })
               }}
             >

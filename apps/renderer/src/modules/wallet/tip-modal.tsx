@@ -93,7 +93,7 @@ const TipModalContent_: FC<{
       <div className="flex w-[80vw] max-w-[350px] flex-col gap-5">
         <p className="text-sm text-theme-foreground/80">{t("tip_modal.tip_sent")}</p>
         <p>
-          <Balance className="mr-1 inline-block text-sm" withSuffix>
+          <Balance className="mr-1 text-sm" withSuffix>
             {amountBigInt}
           </Balance>{" "}
           {t("tip_modal.tip_amount_sent")}

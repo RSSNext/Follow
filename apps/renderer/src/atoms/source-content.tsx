@@ -9,6 +9,7 @@ export const [, , useShowSourceContent, , getShowSourceContent, setShowSourceCon
   createAtomHooks(atom<boolean>(false))
 
 export const toggleShowSourceContent = () => setShowSourceContent(!getShowSourceContent())
+export const enableShowSourceContent = () => setShowSourceContent(true)
 export const resetShowSourceContent = () => setShowSourceContent(false)
 
 export const useSourceContentModal = () => {
