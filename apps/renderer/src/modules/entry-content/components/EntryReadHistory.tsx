@@ -14,7 +14,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { ScrollArea } from "~/components/ui/scroll-area"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
+import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { useAuthQuery } from "~/hooks/common"
+import { FeedViewType } from "~/lib/enum"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
 import { useAppLayoutGridContainerWidth } from "~/providers/app-grid-layout-container-provider"
 import { Queries } from "~/queries"
@@ -24,6 +26,13 @@ import { useUserById } from "~/store/user"
 import { usePresentUserProfileModal } from "../../profile/hooks"
 
 const getLimit = (width: number): number => {
+  const routeParams = getRouteParams()
+  // social media view has four extra buttons
+  if (routeParams.view === FeedViewType.SocialMedia) {
+    if (width > 1050) return 15
+    if (width > 750) return 10
+    return 5
+  }
   if (width > 900) return 15
   if (width > 600) return 10
   return 5
