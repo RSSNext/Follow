@@ -90,7 +90,7 @@ export function Component() {
           <Button
             variant={"outline"}
             onClick={() => {
-              window.open(feedData.url, "_blank")
+              window.open(feedData.siteUrl || feedData.url, "_blank")
             }}
           >
             {t("feed.view_feed_url")}
