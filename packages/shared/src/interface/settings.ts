@@ -56,4 +56,8 @@ export interface IntegrationSettings {
   enableOmnivore: boolean
   omnivoreEndpoint: string
   omnivoreToken: string
+
+  // obsidian
+  enableObsidian: boolean
+  obsidianVaultPath: string
 }
