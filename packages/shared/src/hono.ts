@@ -216,6 +216,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
                     translation?: z.infer<typeof languageSchema>;
                     summary?: boolean;
                     readability?: boolean;
+                    sourceContent?: boolean;
                     silence?: boolean;
                     newEntryNotification?: boolean;
                     rewriteRules?: {
@@ -262,6 +263,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
         summary: z.ZodOptional<z.ZodBoolean>;
         readability: z.ZodOptional<z.ZodBoolean>;
+        sourceContent: z.ZodOptional<z.ZodBoolean>;
         silence: z.ZodOptional<z.ZodBoolean>;
         newEntryNotification: z.ZodOptional<z.ZodBoolean>;
         rewriteRules: z.ZodOptional<z.ZodArray<z.ZodObject<{
@@ -292,6 +294,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
         newEntryNotification?: boolean | undefined;
         rewriteRules?: {
@@ -308,6 +311,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
         newEntryNotification?: boolean | undefined;
         rewriteRules?: {
@@ -327,6 +331,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
         newEntryNotification?: boolean | undefined;
         rewriteRules?: {
@@ -351,6 +356,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
         newEntryNotification?: boolean | undefined;
         rewriteRules?: {
@@ -397,6 +403,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
             summary: z.ZodOptional<z.ZodBoolean>;
             readability: z.ZodOptional<z.ZodBoolean>;
+            sourceContent: z.ZodOptional<z.ZodBoolean>;
             silence: z.ZodOptional<z.ZodBoolean>;
             newEntryNotification: z.ZodOptional<z.ZodBoolean>;
             rewriteRules: z.ZodOptional<z.ZodArray<z.ZodObject<{
@@ -427,6 +434,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -443,6 +451,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -462,6 +471,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -486,6 +496,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -513,6 +524,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -540,6 +552,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -5609,6 +5622,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         summary?: boolean | undefined;
                         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                         readability?: boolean | undefined;
+                        sourceContent?: boolean | undefined;
                         silence?: boolean | undefined;
                         newEntryNotification?: boolean | undefined;
                         rewriteRules?: {
@@ -5843,6 +5857,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         summary?: boolean | undefined;
                         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                         readability?: boolean | undefined;
+                        sourceContent?: boolean | undefined;
                         silence?: boolean | undefined;
                         newEntryNotification?: boolean | undefined;
                         rewriteRules?: {
@@ -6338,6 +6353,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             summary?: boolean | undefined;
                             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                             readability?: boolean | undefined;
+                            sourceContent?: boolean | undefined;
                             silence?: boolean | undefined;
                             newEntryNotification?: boolean | undefined;
                             rewriteRules?: {
@@ -6371,6 +6387,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             summary?: boolean | undefined;
                             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                             readability?: boolean | undefined;
+                            sourceContent?: boolean | undefined;
                             silence?: boolean | undefined;
                             newEntryNotification?: boolean | undefined;
                             rewriteRules?: {

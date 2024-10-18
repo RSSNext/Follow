@@ -480,6 +480,20 @@ export function ActionCard({
                 </div>
                 <Divider />
 
+                <div className="flex w-full items-center justify-between">
+                  <span className="w-0 shrink grow truncate">
+                    {t("actions.action_card.source_content")}
+                  </span>
+                  <Switch
+                    checked={data.result.sourceContent}
+                    onCheckedChange={(checked) => {
+                      data.result.sourceContent = checked
+                      onChange(data)
+                    }}
+                  />
+                </div>
+                <Divider />
+
                 <SettingCollapsible
                   title={t("actions.action_card.rewrite_rules")}
                   onOpenChange={(open) => {
