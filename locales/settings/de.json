@@ -210,7 +210,6 @@
   "wallet.create.button": "Wallet erstellen",
   "wallet.create.description": "Erstellen Sie eine kostenlose Wallet, um <PowerIcon /> <strong>Power</strong> zu erhalten, die verwendet werden kann, um Ersteller zu belohnen und auch für Ihre Inhaltsbeiträge belohnt zu werden.",
   "wallet.power.dailyClaim": "Sie können täglich {{amount}} kostenlose Power beanspruchen, die verwendet werden kann, um RSS-Einträge auf Follow zu belohnen.",
-  "wallet.power.description": "Power ist ein <Link>ERC-20-Token</Link> auf der {{blockchainName}}-Blockchain.",
   "wallet.sidebar_title": "Power",
   "wallet.transactions.amount": "Betrag",
   "wallet.transactions.date": "Datum",

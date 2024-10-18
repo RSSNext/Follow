@@ -42,12 +42,28 @@ export const wallet = {
         },
       ),
   },
+
+  ranking: {
+    get: () =>
+      defineQuery(
+        ["wallet", "ranking"],
+        async () => {
+          const res = await apiClient.wallets.ranking.$get()
+          return res.data
+        },
+        {
+          rootKey: ["wallet", "ranking"],
+        },
+      ),
+  },
 }
 
 export const useWallet = () => useAuthQuery(wallet.get())
 
 export const useWalletTransactions = (query: Parameters<typeof wallet.transactions.get>[0] = {}) =>
   useAuthQuery(wallet.transactions.get(query))
+
+export const useWalletRanking = () => useAuthQuery(wallet.ranking.get())
 
 export const useCreateWalletMutation = () =>
   useMutation({

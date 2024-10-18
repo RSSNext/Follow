@@ -175,7 +175,6 @@
   "wallet.create.button": "ウォレットを作成",
   "wallet.create.description": "<PowerIcon /> <strong>Power</strong>を受け取るための無料ウォレットを作成し、クリエイターを報酬したり、コンテンツ貢献で報酬を得ることができます。",
   "wallet.power.dailyClaim": "毎日{{amount}}の無料 Power を取得でき、それを使って Follow の RSS エントリにチップを送ることができます。",
-  "wallet.power.description": "Power は、{{blockchainName}}ブロックチェーン上の<Link>ERC-20 トークン</Link>です。",
   "wallet.sidebar_title": "Power",
   "wallet.transactions.amount": "金額",
   "wallet.transactions.date": "日付",
