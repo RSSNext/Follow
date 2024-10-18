@@ -175,7 +175,7 @@ export const PictureList: FC<{
   return (
     <PhotoProvider>
       <TeleportalTakeOff>
-        <div className="relative flex min-w-0 px-8">
+        <div className="relative flex min-w-0 px-2 lg:px-6">
           <MemoedDangerousHTMLStyle>{inlineStyle}</MemoedDangerousHTMLStyle>
           <div className="flex w-full flex-wrap" ref={containerRef}>
             {isInitLayout && (
