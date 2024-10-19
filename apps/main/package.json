@@ -44,8 +44,6 @@
     "msedge-tts": "1.3.4",
     "nanoid": "5.0.7",
     "ofetch": "1.4.1",
-    "posthog-js": "1.169.0",
-    "posthog-node": "4.2.1",
     "semver": "7.6.3",
     "vscode-languagedetection": "npm:@vscode/vscode-languagedetection@^1.0.22"
   },
