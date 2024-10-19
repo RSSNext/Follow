@@ -10,9 +10,11 @@ import { ImpressionView } from "~/components/common/ImpressionTracker"
 import { ActionButton } from "~/components/ui/button"
 import { DividerVertical } from "~/components/ui/divider"
 import { RotatingRefreshIcon } from "~/components/ui/loading"
+import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, views } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
+import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useIsOnline } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
@@ -20,8 +22,10 @@ import { FeedViewType } from "~/lib/enum"
 import { cn, getOS, isBizId } from "~/lib/utils"
 import { useAIDailyReportModal } from "~/modules/ai/ai-daily/hooks"
 import { EntryHeader } from "~/modules/entry-content/header"
+import { InboxItem, ListItem } from "~/modules/feed-column/item"
 import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
+import { useSubscriptionStore } from "~/store/subscription"
 
 import { MarkAllReadWithOverlay } from "../components/mark-all-button"
 
@@ -36,13 +40,23 @@ export const EntryListHeader: FC<{
 
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
-  const { feedId, entryId, view, listId } = routerParams
+  const { feedId, entryId, view, listId, inboxId } = routerParams
 
   const headerTitle = useFeedHeaderTitle()
   const os = getOS()
 
   const titleAtBottom = IN_ELECTRON && os === "macOS"
   const isInCollectionList = feedId === FEED_COLLECTION_LIST
+
+  const listsData = useSubscriptionStore((state) =>
+    state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "listId" in s),
+  )
+  const inboxData = useSubscriptionStore((state) =>
+    state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "inboxId" in s),
+  )
+  const hasData = listsData.length > 0 || inboxData.length > 0
+
+  const timeline = listId || inboxId || ""
 
   const titleInfo = !!headerTitle && (
     <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
@@ -67,17 +81,13 @@ export const EntryListHeader: FC<{
   const feed = useFeedById(feedId)
   const isList = !!listId
 
-  const titleStyleBasedView = ["pl-12", "pl-7", "pl-7", "pl-7", "px-5", "pl-12"]
-
   const containerRef = React.useRef<HTMLDivElement>(null)
+  const navigate = useNavigateEntry()
 
   return (
     <div
       ref={containerRef}
-      className={cn(
-        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
-        titleStyleBasedView[view],
-      )}
+      className="mb-2 flex w-full flex-col pl-6 pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out"
     >
       <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
         {!titleAtBottom && titleInfo}
@@ -158,6 +168,45 @@ export const EntryListHeader: FC<{
         </div>
       </div>
       {titleAtBottom && titleInfo}
+      {hasData && (
+        <Tabs
+          className="-ml-3 overflow-x-auto scrollbar-none"
+          value={timeline}
+          onValueChange={(val) => {
+            if (!val) {
+              navigate({
+                feedId: null,
+                entryId: null,
+                view,
+              })
+            }
+          }}
+        >
+          <TabsList className="h-10 border-b-0">
+            <TabsTrigger value="">Yours</TabsTrigger>
+            {listsData.map((s) => (
+              <TabsTrigger key={s.listId} value={s.listId!}>
+                <ListItem
+                  listId={s.listId!}
+                  view={view}
+                  iconSize={16}
+                  className="h-5 !bg-transparent p-0 leading-none"
+                />
+              </TabsTrigger>
+            ))}
+            {inboxData.map((s) => (
+              <TabsTrigger key={s.inboxId} value={s.inboxId!}>
+                <InboxItem
+                  inboxId={s.inboxId!}
+                  view={view}
+                  iconSize={16}
+                  className="h-5 !bg-transparent p-0 leading-none"
+                />
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      )}
     </div>
   )
 }
