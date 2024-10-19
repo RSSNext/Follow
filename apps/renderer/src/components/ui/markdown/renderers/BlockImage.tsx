@@ -26,6 +26,7 @@ export const MarkdownBlockImage = (
     <Media
       type="photo"
       {...props}
+      loading="lazy"
       src={src}
       height={media?.height || props.height}
       width={media?.width || props.width}
