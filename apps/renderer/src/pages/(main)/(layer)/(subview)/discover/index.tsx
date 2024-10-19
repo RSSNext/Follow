@@ -102,13 +102,15 @@ export function Component() {
             </TabsTrigger>
           ))}
 
-          <Trend className="relative bottom-0 left-1.5" />
+          <Trend className="relative bottom-0 left-1.5 mr-3.5 w-6" />
         </TabsList>
         {currentTabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
-            {createElement(TabComponent[tab.value] || TabComponent.default, {
-              type: tab.value,
-            })}
+            <div className={tab.value === "inbox" ? "" : "center flex"}>
+              {createElement(TabComponent[tab.value] || TabComponent.default, {
+                type: tab.value,
+              })}
+            </div>
           </TabsContent>
         ))}
       </Tabs>
