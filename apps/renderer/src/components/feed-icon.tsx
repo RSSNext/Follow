@@ -76,7 +76,7 @@ export function FeedIcon({
   siteUrl,
   useMedia,
 }: {
-  feed?: FeedOrListRespModel
+  feed?: FeedOrListRespModel | null
   entry?: CombinedEntryModel["entries"]
   fallbackUrl?: string
   className?: string

@@ -102,7 +102,7 @@ export const DrawerModalLayout: FC<PropsWithChildren> = ({ children }) => {
         className={cn(
           "flex flex-col items-center overflow-hidden rounded-xl border bg-theme-background p-8 pb-0",
           "shadow-drawer-to-left w-[60ch] max-w-full",
-          "fixed inset-y-2 right-2",
+          "fixed bottom-0 right-2 safe-inset-top-4",
         )}
       >
         {children}

@@ -13,7 +13,8 @@ export const handleUrlRouting = (url: string) => {
     const { pathname, searchParams } = new URL(uri, "https://follow.dev")
 
     switch (pathname) {
-      case "/add": {
+      case "/add":
+      case "/add/": {
         const mainWindow = getMainWindow()
         if (!mainWindow) {
           createMainWindow()

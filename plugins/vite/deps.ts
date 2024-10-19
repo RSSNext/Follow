@@ -11,9 +11,11 @@ export function createDependencyChunksPlugin(dependencies: string[][]): Plugin {
       const { output } = config.build.rollupOptions
       const outputConfig = Array.isArray(output) ? output[0] : output
       outputConfig.manualChunks = outputConfig.manualChunks || {}
-      outputConfig.assetFileNames = "assets/[name].[hash][extname]"
+      outputConfig.assetFileNames = "assets/[name].[hash:6][extname]"
       outputConfig.chunkFileNames = (chunkInfo) => {
-        return chunkInfo.name.startsWith("vendor/") ? "[name].[hash].js" : "assets/[name].[hash].js"
+        return chunkInfo.name.startsWith("vendor/")
+          ? "[name].[hash].js"
+          : "assets/[name].[hash:9].js"
       }
 
       const manualChunks = Array.isArray(output) ? output[0].manualChunks : output.manualChunks
@@ -22,7 +24,7 @@ export function createDependencyChunksPlugin(dependencies: string[][]): Plugin {
 
       dependencies.forEach((dep, index) => {
         if (Array.isArray(dep)) {
-          const chunkName = `vendor/a${index}`
+          const chunkName = `vendor/${index}`
           manualChunks[chunkName] = dep
         } else {
           manualChunks[`vendor/${dep}`] = [dep]

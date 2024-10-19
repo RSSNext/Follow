@@ -36,13 +36,9 @@ class ImageActions {
   }
 
   async fetchDimensionsFromDb(images: string[]) {
-    const dims = [] as StoreImageType[]
-    for (const image of images) {
-      const dbData = await getImageDimensionsFromDb(image)
-      if (dbData) {
-        dims.push(dbData)
-      }
-    }
+    const dims = (await Promise.all(images.map((image) => getImageDimensionsFromDb(image)))).filter(
+      Boolean,
+    ) as StoreImageType[]
     imageActions.saveImages(dims)
   }
 

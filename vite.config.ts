@@ -135,7 +135,7 @@ export default ({ mode }) => {
         ],
         ["tldts"],
         ["shiki", "@shikijs/transformers"],
-        ["@sentry/react", "posthog-js"],
+        ["@sentry/react", "@openpanel/web"],
         ["zod", "react-hook-form", "@hookform/resolvers"],
 
         ["swiper"],

@@ -58,8 +58,8 @@ export const navigateEntry = (options: NavigateEntryOptions) => {
 
   const finalView = nextSearchParams.get("view")
 
-  if (window.posthog) {
-    window.posthog.capture("Navigate Entry", {
+  if (window.analytics) {
+    window.analytics.capture("Navigate Entry", {
       feedId: finalFeedId,
       entryId,
       view: finalView ? Number.parseInt(finalView, 10) : FeedViewType.Articles,

@@ -216,6 +216,7 @@ declare const actions: drizzle_orm_pg_core.PgTableWithColumns<{
                     translation?: z.infer<typeof languageSchema>;
                     summary?: boolean;
                     readability?: boolean;
+                    sourceContent?: boolean;
                     silence?: boolean;
                     newEntryNotification?: boolean;
                     rewriteRules?: {
@@ -262,6 +263,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
         summary: z.ZodOptional<z.ZodBoolean>;
         readability: z.ZodOptional<z.ZodBoolean>;
+        sourceContent: z.ZodOptional<z.ZodBoolean>;
         silence: z.ZodOptional<z.ZodBoolean>;
         newEntryNotification: z.ZodOptional<z.ZodBoolean>;
         rewriteRules: z.ZodOptional<z.ZodArray<z.ZodObject<{
@@ -292,6 +294,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
         newEntryNotification?: boolean | undefined;
         rewriteRules?: {
@@ -308,6 +311,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
         newEntryNotification?: boolean | undefined;
         rewriteRules?: {
@@ -327,6 +331,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
         newEntryNotification?: boolean | undefined;
         rewriteRules?: {
@@ -351,6 +356,7 @@ declare const actionsItemOpenAPISchema: z.ZodObject<{
         summary?: boolean | undefined;
         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
         readability?: boolean | undefined;
+        sourceContent?: boolean | undefined;
         silence?: boolean | undefined;
         newEntryNotification?: boolean | undefined;
         rewriteRules?: {
@@ -397,6 +403,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             translation: z.ZodOptional<z.ZodEnum<["en", "ja", "zh-CN", "zh-TW"]>>;
             summary: z.ZodOptional<z.ZodBoolean>;
             readability: z.ZodOptional<z.ZodBoolean>;
+            sourceContent: z.ZodOptional<z.ZodBoolean>;
             silence: z.ZodOptional<z.ZodBoolean>;
             newEntryNotification: z.ZodOptional<z.ZodBoolean>;
             rewriteRules: z.ZodOptional<z.ZodArray<z.ZodObject<{
@@ -427,6 +434,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -443,6 +451,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -462,6 +471,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -486,6 +496,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -513,6 +524,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -540,6 +552,7 @@ declare const actionsOpenAPISchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
             summary?: boolean | undefined;
             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
             readability?: boolean | undefined;
+            sourceContent?: boolean | undefined;
             silence?: boolean | undefined;
             newEntryNotification?: boolean | undefined;
             rewriteRules?: {
@@ -3925,6 +3938,22 @@ declare const wallets: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
+        powerToken: drizzle_orm_pg_core.PgColumn<{
+            name: "power_token";
+            tableName: "wallets";
+            dataType: "string";
+            columnType: "PgNumeric";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
         dailyPowerToken: drizzle_orm_pg_core.PgColumn<{
             name: "daily_power_token";
             tableName: "wallets";
@@ -3965,6 +3994,7 @@ declare const walletsOpenAPISchema: zod.ZodObject<{
     address: zod.ZodNullable<zod.ZodString>;
     userId: zod.ZodString;
     createdAt: zod.ZodString;
+    powerToken: zod.ZodString;
     dailyPowerToken: zod.ZodString;
     cashablePowerToken: zod.ZodString;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
@@ -3972,6 +4002,7 @@ declare const walletsOpenAPISchema: zod.ZodObject<{
     userId: string;
     addressIndex: number;
     address: string | null;
+    powerToken: string;
     dailyPowerToken: string;
     cashablePowerToken: string;
 }, {
@@ -3979,6 +4010,7 @@ declare const walletsOpenAPISchema: zod.ZodObject<{
     userId: string;
     addressIndex: number;
     address: string | null;
+    powerToken: string;
     dailyPowerToken: string;
     cashablePowerToken: string;
 }>;
@@ -3986,6 +4018,7 @@ declare const walletsRelations: drizzle_orm.Relations<"wallets", {
     user: drizzle_orm.One<"user", true>;
     transactionsFrom: drizzle_orm.Many<"transactions">;
     transactionTo: drizzle_orm.Many<"transactions">;
+    level: drizzle_orm.One<"levels", false>;
 }>;
 declare const transactionType: drizzle_orm_pg_core.PgEnum<["tip", "mint", "burn", "withdraw", "purchase"]>;
 declare const transactions: drizzle_orm_pg_core.PgTableWithColumns<{
@@ -4172,10 +4205,10 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     fromUserId: string | null;
     toUserId: string | null;
     hash: string;
+    powerToken: string;
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
-    powerToken: string;
     comment: string | null;
 }, {
     type: "tip" | "mint" | "burn" | "withdraw" | "purchase";
@@ -4183,10 +4216,10 @@ declare const transactionsOpenAPISchema: zod.ZodObject<{
     fromUserId: string | null;
     toUserId: string | null;
     hash: string;
+    powerToken: string;
     toFeedId: string | null;
     toListId: string | null;
     toEntryId: string | null;
-    powerToken: string;
     comment: string | null;
 }>;
 declare const transactionsRelations: drizzle_orm.Relations<"transactions", {
@@ -4247,6 +4280,154 @@ declare const feedPowerTokensOpenAPISchema: zod.ZodObject<{
 }>;
 declare const feedPowerTokensRelations: drizzle_orm.Relations<"feedPowerTokens", {
     feed: drizzle_orm.One<"feeds", true>;
+}>;
+declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
+    name: "levels";
+    schema: undefined;
+    columns: {
+        address: drizzle_orm_pg_core.PgColumn<{
+            name: "address";
+            tableName: "levels";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        rank: drizzle_orm_pg_core.PgColumn<{
+            name: "rank";
+            tableName: "levels";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        level: drizzle_orm_pg_core.PgColumn<{
+            name: "level";
+            tableName: "levels";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        prevActivityPoints: drizzle_orm_pg_core.PgColumn<{
+            name: "prev_activity_points";
+            tableName: "levels";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        activityPoints: drizzle_orm_pg_core.PgColumn<{
+            name: "activity_points";
+            tableName: "levels";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        powerToken: drizzle_orm_pg_core.PgColumn<{
+            name: "power_token";
+            tableName: "levels";
+            dataType: "string";
+            columnType: "PgNumeric";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+        userId: drizzle_orm_pg_core.PgColumn<{
+            name: "userId";
+            tableName: "levels";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+declare const levelsOpenAPISchema: zod.ZodObject<{
+    address: zod.ZodString;
+    rank: zod.ZodNullable<zod.ZodNumber>;
+    level: zod.ZodNullable<zod.ZodNumber>;
+    prevActivityPoints: zod.ZodNullable<zod.ZodNumber>;
+    activityPoints: zod.ZodNullable<zod.ZodNumber>;
+    powerToken: zod.ZodString;
+    userId: zod.ZodString;
+}, zod.UnknownKeysParam, zod.ZodTypeAny, {
+    userId: string;
+    address: string;
+    powerToken: string;
+    rank: number | null;
+    level: number | null;
+    prevActivityPoints: number | null;
+    activityPoints: number | null;
+}, {
+    userId: string;
+    address: string;
+    powerToken: string;
+    rank: number | null;
+    level: number | null;
+    prevActivityPoints: number | null;
+    activityPoints: number | null;
+}>;
+declare const levelsRelations: drizzle_orm.Relations<"levels", {
+    wallet: drizzle_orm.One<"wallets", true>;
+    user: drizzle_orm.One<"user", true>;
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
@@ -4785,10 +4966,10 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     fromUserId: string | null;
                     toUserId: string | null;
                     hash: string;
+                    powerToken: string;
                     toFeedId: string | null;
                     toListId: string | null;
                     toEntryId: string | null;
-                    powerToken: string;
                     comment: string | null;
                     fromUser?: {
                         name: string | null;
@@ -4853,19 +5034,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             status: 200;
         };
     };
-    "/wallets/transactions/claim_daily_ttl": {
-        $get: {
-            input: {};
-            output: {
-                code: 0;
-                data: {
-                    ttl: number;
-                };
-            };
-            outputFormat: "json" | "text";
-            status: 200;
-        };
-    };
     "/wallets/transactions/withdraw": {
         $post: {
             input: {
@@ -4905,8 +5073,17 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     userId: string;
                     addressIndex: number;
                     address: string | null;
+                    powerToken: string;
                     dailyPowerToken: string;
                     cashablePowerToken: string;
+                    level: {
+                        rank: number | null;
+                        level: number | null;
+                        prevActivityPoints: number | null;
+                        activityPoints: number | null;
+                    } | null;
+                    todayDailyPower: string;
+                    tomorrowDailyPower: string;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -4927,6 +5104,33 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             input: {};
             output: {
                 code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/wallets/ranking": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    user: {
+                        name: string | null;
+                        id: string;
+                        emailVerified: string | null;
+                        image: string | null;
+                        handle: string | null;
+                        createdAt: string;
+                    };
+                    userId: string;
+                    address: string;
+                    powerToken: string;
+                    rank: number | null;
+                    level: number | null;
+                    prevActivityPoints: number | null;
+                    activityPoints: number | null;
+                }[];
             };
             outputFormat: "json" | "text";
             status: 200;
@@ -5441,6 +5645,39 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: 0;
                 data: {
+                    entries: {
+                        description: string | null;
+                        title: string | null;
+                        author: string | null;
+                        url: string | null;
+                        guid: string;
+                        categories: string[] | null;
+                        authorUrl: string | null;
+                        authorAvatar: string | null;
+                        publishedAt: string;
+                        media?: {
+                            type: "photo" | "video";
+                            url: string;
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            preview_image_url?: string | undefined;
+                            blurhash?: string | undefined;
+                        }[] | null | undefined;
+                        attachments?: {
+                            url: string;
+                            title?: string | undefined;
+                            duration_in_seconds?: number | undefined;
+                            mime_type?: string | undefined;
+                            size_in_bytes?: number | undefined;
+                        }[] | null | undefined;
+                        extra?: {
+                            links?: {
+                                type: string;
+                                url: string;
+                                content_html?: string | undefined;
+                            }[] | null | undefined;
+                        } | null | undefined;
+                    }[];
                     feed: {
                         type: "feed";
                         id: string;
@@ -5576,6 +5813,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         summary?: boolean | undefined;
                         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                         readability?: boolean | undefined;
+                        sourceContent?: boolean | undefined;
                         silence?: boolean | undefined;
                         newEntryNotification?: boolean | undefined;
                         rewriteRules?: {
@@ -5810,6 +6048,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         summary?: boolean | undefined;
                         translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                         readability?: boolean | undefined;
+                        sourceContent?: boolean | undefined;
                         silence?: boolean | undefined;
                         newEntryNotification?: boolean | undefined;
                         rewriteRules?: {
@@ -6305,6 +6544,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             summary?: boolean | undefined;
                             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                             readability?: boolean | undefined;
+                            sourceContent?: boolean | undefined;
                             silence?: boolean | undefined;
                             newEntryNotification?: boolean | undefined;
                             rewriteRules?: {
@@ -6338,6 +6578,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             summary?: boolean | undefined;
                             translation?: "en" | "ja" | "zh-CN" | "zh-TW" | undefined;
                             readability?: boolean | undefined;
+                            sourceContent?: boolean | undefined;
                             silence?: boolean | undefined;
                             newEntryNotification?: boolean | undefined;
                             rewriteRules?: {
@@ -6431,4 +6672,4 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
 }, "/">;
 type AppType = typeof _routes;
 
-export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };
+export { type ActionsModel, type AppType, type AttachmentsModel, CommonEntryFields, type EntriesModel, type EntryReadHistoriesModel, type ExtraModel, type FeedModel, type MediaModel, type MessagingData, MessagingType, type SettingsModel, accounts, achievements, achievementsOpenAPISchema, actions, actionsItemOpenAPISchema, actionsOpenAPISchema, actionsRelations, attachmentsZodSchema, collections, collectionsOpenAPISchema, collectionsRelations, entries, entriesOpenAPISchema, entriesRelations, entryReadHistories, entryReadHistoriesOpenAPISchema, entryReadHistoriesRelations, extraZodSchema, feedPowerTokens, feedPowerTokensOpenAPISchema, feedPowerTokensRelations, feeds, feedsOpenAPISchema, feedsRelations, inboxHandleSchema, inboxes, inboxesEntries, inboxesEntriesInsertOpenAPISchema, type inboxesEntriesModel, inboxesEntriesOpenAPISchema, inboxesEntriesRelations, inboxesOpenAPISchema, inboxesRelations, invitations, invitationsOpenAPISchema, invitationsRelations, languageSchema, levels, levelsOpenAPISchema, levelsRelations, lists, listsOpenAPISchema, listsRelations, listsSubscriptions, listsSubscriptionsOpenAPISchema, listsSubscriptionsRelations, listsTimeline, listsTimelineOpenAPISchema, listsTimelineRelations, lower, mediaZodSchema, messaging, messagingOpenAPISchema, messagingRelations, sessions, settings, subscriptions, subscriptionsOpenAPISchema, subscriptionsRelations, timeline, timelineOpenAPISchema, timelineRelations, transactionType, transactions, transactionsOpenAPISchema, transactionsRelations, users, usersOpenApiSchema, usersRelations, verificationTokens, wallets, walletsOpenAPISchema, walletsRelations };

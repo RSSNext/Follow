@@ -3,7 +3,8 @@ import { repository } from "@pkg"
 import { Slot } from "@radix-ui/react-slot"
 import { throttle } from "lodash-es"
 import type { PropsWithChildren } from "react"
-import React, { forwardRef, useEffect, useRef, useState } from "react"
+import * as React from "react"
+import { forwardRef, useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import { Trans, useTranslation } from "react-i18next"
 import { useResizable } from "react-resizable-layout"
@@ -51,8 +52,7 @@ const FooterInfo = () => {
     <div className="relative !mt-0">
       {APP_VERSION?.[0] === "0" && (
         <div className="pointer-events-none w-full py-3 text-center text-xs opacity-20">
-          {t("early_access")}{" "}
-          {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
+          {t("beta_access")} {GIT_COMMIT_SHA ? `(${GIT_COMMIT_SHA.slice(0, 7).toUpperCase()})` : ""}
         </div>
       )}
 

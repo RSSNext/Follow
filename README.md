@@ -132,6 +132,9 @@ pnpm run dev
 
 Since it is not very convenient to develop in Electron, the first way to develop and contribute is recommended at this stage.
 
+> [!TIP]
+> If you can't log in to the app, copy the `authjs.session-token` in the cookie from your browser into the app.
+
 ## License
 
 Follow is licensed under the GNU General Public License version 3 with the addition of the following special exception:

@@ -42,12 +42,28 @@ export const wallet = {
         },
       ),
   },
+
+  ranking: {
+    get: () =>
+      defineQuery(
+        ["wallet", "ranking"],
+        async () => {
+          const res = await apiClient.wallets.ranking.$get()
+          return res.data
+        },
+        {
+          rootKey: ["wallet", "ranking"],
+        },
+      ),
+  },
 }
 
 export const useWallet = () => useAuthQuery(wallet.get())
 
 export const useWalletTransactions = (query: Parameters<typeof wallet.transactions.get>[0] = {}) =>
   useAuthQuery(wallet.transactions.get(query))
+
+export const useWalletRanking = () => useAuthQuery(wallet.ranking.get())
 
 export const useCreateWalletMutation = () =>
   useMutation({
@@ -79,7 +95,7 @@ export const useClaimWalletDailyRewardMutation = () => {
     onSuccess() {
       wallet.get().invalidate()
       wallet.claimCheck().invalidate()
-      window.posthog?.capture("daily_reward_claimed")
+      window.analytics?.capture("daily_reward_claimed")
 
       toast(
         <div className="flex items-center gap-1 text-lg" onClick={() => navigate("/power")}>
@@ -108,7 +124,7 @@ export const useWalletTipMutation = () =>
     onSuccess(_, variables) {
       wallet.get().invalidate()
       wallet.transactions.get().invalidate()
-      window.posthog?.capture("tip_sent", {
+      window.analytics?.capture("tip_sent", {
         amount: variables.amount,
         entryId: variables.entryId,
       })
