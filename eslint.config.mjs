@@ -28,13 +28,8 @@ export default defineConfig(
       "require-await": "off",
       "@typescript-eslint/require-await": "warn",
       "@typescript-eslint/await-thenable": "warn",
-      "@typescript-eslint/no-floating-promises": "warn",
-      "@typescript-eslint/no-misused-promises": [
-        "warn",
-        {
-          checksVoidReturn: { arguments: false, attributes: false },
-        },
-      ],
+      "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/no-misused-promises": "off",
     },
   },
   {
@@ -47,12 +42,9 @@ export default defineConfig(
       "no-debug": noDebug,
     },
     rules: {
-      "@typescript-eslint/no-floating-promises": "off",
       "no-debug/no-debug-stack": "error",
-      "unicorn/prefer-math-trunc": "off",
       "@eslint-react/no-clone-element": 0,
       "@eslint-react/hooks-extra/no-direct-set-state-in-use-effect": 0,
-      "@typescript-eslint/no-misused-promises": 0,
       // NOTE: Disable this temporarily
       "react-compiler/react-compiler": 0,
       "no-restricted-syntax": 0,
