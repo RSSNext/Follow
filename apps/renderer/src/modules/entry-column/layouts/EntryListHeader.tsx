@@ -40,23 +40,13 @@ export const EntryListHeader: FC<{
 
   const unreadOnly = useGeneralSettingKey("unreadOnly")
 
-  const { feedId, entryId, view, listId, inboxId } = routerParams
+  const { feedId, entryId, view, listId } = routerParams
 
   const headerTitle = useFeedHeaderTitle()
   const os = getOS()
 
   const titleAtBottom = IN_ELECTRON && os === "macOS"
   const isInCollectionList = feedId === FEED_COLLECTION_LIST
-
-  const listsData = useSubscriptionStore((state) =>
-    state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "listId" in s),
-  )
-  const inboxData = useSubscriptionStore((state) =>
-    state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "inboxId" in s),
-  )
-  const hasData = listsData.length > 0 || inboxData.length > 0
-
-  const timeline = listId || inboxId || ""
 
   const titleInfo = !!headerTitle && (
     <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
@@ -82,7 +72,6 @@ export const EntryListHeader: FC<{
   const isList = !!listId
 
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const navigate = useNavigateEntry()
 
   return (
     <div
@@ -115,8 +104,8 @@ export const EntryListHeader: FC<{
             {view === FeedViewType.Pictures && <FilterNoImageButton />}
           </AppendTaildingDivider>
 
-          {isOnline ? (
-            feed?.ownerUserId === user?.id &&
+          {isOnline &&
+            (feed?.ownerUserId === user?.id &&
             isBizId(routerParams.feedId!) &&
             feed?.type === "feed" ? (
               <ActionButton
@@ -143,8 +132,7 @@ export const EntryListHeader: FC<{
                   isRefreshing={isRefreshing}
                 />
               </ActionButton>
-            )
-          ) : null}
+            ))}
           {!isList && (
             <>
               <ActionButton
@@ -168,45 +156,7 @@ export const EntryListHeader: FC<{
         </div>
       </div>
       {titleAtBottom && titleInfo}
-      {hasData && (
-        <Tabs
-          className="-ml-3 overflow-x-auto scrollbar-none"
-          value={timeline}
-          onValueChange={(val) => {
-            if (!val) {
-              navigate({
-                feedId: null,
-                entryId: null,
-                view,
-              })
-            }
-          }}
-        >
-          <TabsList className="h-10 border-b-0">
-            <TabsTrigger value="">Yours</TabsTrigger>
-            {listsData.map((s) => (
-              <TabsTrigger key={s.listId} value={s.listId!}>
-                <ListItem
-                  listId={s.listId!}
-                  view={view}
-                  iconSize={16}
-                  className="h-5 !bg-transparent p-0 leading-none"
-                />
-              </TabsTrigger>
-            ))}
-            {inboxData.map((s) => (
-              <TabsTrigger key={s.inboxId} value={s.inboxId!}>
-                <InboxItem
-                  inboxId={s.inboxId!}
-                  view={view}
-                  iconSize={16}
-                  className="h-5 !bg-transparent p-0 leading-none"
-                />
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-      )}
+      <TimelineTabs />
     </div>
   )
 }
@@ -326,3 +276,62 @@ const AppendTaildingDivider = ({ children }: { children: React.ReactNode }) => (
     )}
   </>
 )
+
+const TimelineTabs = () => {
+  const routerParams = useRouteParams()
+  const { view, listId, inboxId } = routerParams
+
+  const listsData = useSubscriptionStore((state) =>
+    state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "listId" in s),
+  )
+  const inboxData = useSubscriptionStore((state) =>
+    state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "inboxId" in s),
+  )
+  const hasData = listsData.length > 0 || inboxData.length > 0
+
+  const timeline = listId || inboxId || ""
+
+  const navigate = useNavigateEntry()
+  if (!hasData) return null
+  return (
+    <Tabs
+      className="-mr-4 mt-1 overflow-x-auto scrollbar-none"
+      value={timeline}
+      onValueChange={(val) => {
+        if (!val) {
+          navigate({
+            feedId: null,
+            entryId: null,
+            view,
+          })
+        }
+      }}
+    >
+      <TabsList className="h-10 space-x-3 border-b-0">
+        <TabsTrigger className="p-0" value="">
+          Yours
+        </TabsTrigger>
+        {listsData.map((s) => (
+          <TabsTrigger className="p-0" key={s.listId} value={s.listId!}>
+            <ListItem
+              listId={s.listId!}
+              view={view}
+              iconSize={16}
+              className="h-5 !bg-transparent p-0 leading-none"
+            />
+          </TabsTrigger>
+        ))}
+        {inboxData.map((s) => (
+          <TabsTrigger key={s.inboxId} value={s.inboxId!}>
+            <InboxItem
+              inboxId={s.inboxId!}
+              view={view}
+              iconSize={16}
+              className="h-5 !bg-transparent p-0 leading-none"
+            />
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
+  )
+}
