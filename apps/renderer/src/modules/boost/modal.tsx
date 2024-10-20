@@ -44,6 +44,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
     return (
       <div className="flex w-[80vw] max-w-[350px] flex-col gap-5">
         <p className="text-sm text-theme-foreground/80">{t("tip_modal.tip_sent")}</p>
+        <BoostProgress {...boostStatus} />
         <p>
           <Balance className="mr-1 inline-block text-sm" withSuffix>
             {amountBigInt}
@@ -100,31 +101,31 @@ const BoostProgress = ({
   const percentage = (boostCount / (boostCount + remainingBoostsToLevelUp)) * 100
   const nextLevel = level + 1
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col px-2">
       <div className="relative w-full pt-12">
         <span
-          className="absolute bottom-0 mb-9 flex h-10 w-12 -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-full bg-white px-3.5 py-2 text-xs font-medium text-gray-800 shadow-[0px_12px_30px_0px_rgba(16,24,40,0.1)] after:absolute after:bottom-[-5px] after:left-1/2 after:-z-10 after:flex after:size-3 after:-translate-x-1/2 after:rotate-45 after:bg-white"
+          className="absolute bottom-0 mb-10 flex h-8 w-12 -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-full bg-white px-3.5 py-2 text-sm font-bold text-gray-800 shadow-[0px_12px_30px_0px_rgba(16,24,40,0.1)] transition-all duration-500 ease-out after:absolute after:bottom-[-5px] after:left-1/2 after:-z-10 after:flex after:size-3 after:-translate-x-1/2 after:rotate-45 after:bg-white"
           style={{ left: `${percentage}%` }}
         >
           ⚡️ {boostCount}
         </span>
-        <div className="relative flex h-6 w-full overflow-hidden rounded-3xl bg-gray-100">
+        <div className="relative flex h-6 w-full overflow-hidden rounded-3xl bg-gray-100 dark:bg-gray-800">
           <div
             role="progressbar"
             aria-valuenow={boostCount}
             aria-valuemin={0}
             aria-valuemax={remainingBoostsToLevelUp}
             style={{ width: `${percentage}%` }}
-            className="flex h-full items-center justify-center rounded-3xl  bg-accent text-white"
+            className="flex h-full items-center justify-center rounded-3xl bg-accent text-white transition-all duration-500 ease-out"
           />
         </div>
       </div>
 
       <div className="mt-2 flex items-center justify-between">
-        <span className="text-lg text-accent">Lv. {level}</span>
-        <span className="text-lg text-accent">Lv. {nextLevel}</span>
+        <span className="text-lg font-bold text-accent">Lv. {level}</span>
+        <span className="text-lg font-bold text-accent">Lv. {nextLevel}</span>
       </div>
-      <small className="center mt-1 gap-1 text-theme-vibrancyFg">
+      <small className="center mt-1 gap-1">
         {remainingBoostsToLevelUp} more boost will unlock the next level of privilege.
       </small>
     </div>
