@@ -4,6 +4,7 @@ import type { ComponentProps, FunctionComponentElement } from "react"
 import { createElement, useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import RSSHubIcon from "~/assets/rsshub-icon.png"
 import { Logo } from "~/components/icons/logo"
 import { Button } from "~/components/ui/button"
 import { mountLottie } from "~/components/ui/lottie-container"
@@ -17,6 +18,7 @@ import { AppearanceGuide } from "./steps/appearance"
 import { BehaviorGuide } from "./steps/behavior"
 import { TrendingFeeds } from "./steps/feeds"
 import { RookieCheck } from "./steps/rookie"
+import { RSSHubGuide } from "./steps/rsshub"
 
 const containerWidth = 600
 const variants = {
@@ -87,13 +89,18 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
           icon: tw`i-mingcute-cursor-3-line`,
         },
         {
-          title: "Popular Feeds",
+          title: t.app("new_user_guide.step.trending.title"),
           content: createElement(TrendingFeeds),
           icon: "i-mgc-trending-up-cute-re",
         },
+        {
+          title: t.app("new_user_guide.step.rsshub.title"),
+          content: createElement(RSSHubGuide),
+          icon: <img src={RSSHubIcon} className="size-[22px]" />,
+        },
       ].filter((i) => !!i) as {
         title: string
-        icon: string
+        icon: React.ReactNode
         content: FunctionComponentElement<object>
       }[],
     [haveUsedOtherRSSReader, t],
@@ -122,13 +129,17 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
       className="relative flex flex-col items-center justify-center overflow-hidden rounded-xl border bg-theme-background"
     >
       {!!title && (
-        <h1 className="absolute left-6 top-4 text-xl font-bold">
-          <i className={clsx(guideSteps[step - 1].icon, "mr-2 size-[22px] translate-y-1")} />
+        <h1 className="absolute left-6 top-4 flex items-center gap-2 text-xl font-bold">
+          {typeof guideSteps[step - 1].icon === "string" ? (
+            <i className={clsx(guideSteps[step - 1].icon, "size-[22px]")} />
+          ) : (
+            guideSteps[step - 1].icon
+          )}
           {title}
         </h1>
       )}
 
-      <div className="relative mx-auto flex w-full max-w-lg items-center">
+      <div className="relative mx-auto flex w-full max-w-2xl items-center">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <m.div
             key={step - 1}
