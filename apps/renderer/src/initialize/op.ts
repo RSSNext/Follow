@@ -2,7 +2,7 @@ import { env } from "@follow/shared/env"
 import { OpenPanel } from "@openpanel/web"
 
 export const op = new OpenPanel({
-  clientId: env.VITE_OPENPANEL_CLIENT_ID,
+  clientId: env.VITE_OPENPANEL_CLIENT_ID ?? "",
   trackScreenViews: true,
   trackOutgoingLinks: true,
   trackAttributes: true,
