@@ -313,3 +313,13 @@ export const getLevelMultiplier = (level: number) => {
 
   return (poolMultiplier / rangeMultiplier).toFixed(0)
 }
+
+export const getBlockchainExplorerUrl = () => {
+  const serverConfigs = getServerConfigs()
+
+  if (serverConfigs?.IS_RSS3_TESTNET) {
+    return `https://scan.testnet.rss3.io`
+  } else {
+    return `https://scan.rss3.io`
+  }
+}

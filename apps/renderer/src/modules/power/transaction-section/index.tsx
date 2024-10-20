@@ -19,7 +19,7 @@ import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
-import { cn } from "~/lib/utils"
+import { cn, getBlockchainExplorerUrl } from "~/lib/utils"
 import { TransactionTypes } from "~/models/types"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { SettingSectionTitle } from "~/modules/settings/section"
@@ -103,7 +103,7 @@ export const TransactionsSection: Component = ({ className }) => {
                     <TooltipTrigger>
                       <a
                         target="_blank"
-                        href={`https://scan.rss3.io/tx/${row.hash}`}
+                        href={`${getBlockchainExplorerUrl()}/tx/${row.hash}`}
                         className="underline"
                       >
                         {row.hash.slice(0, 10)}...
@@ -122,7 +122,7 @@ export const TransactionsSection: Component = ({ className }) => {
       {!!transactions.data?.length && (
         <a
           className="my-2 w-full text-sm text-zinc-400 underline"
-          href={`https://scan.rss3.io/address/${myWallet.address}`}
+          href={`${getBlockchainExplorerUrl()}/address/${myWallet.address}`}
           target="_blank"
         >
           {t("wallet.transactions.more")}

@@ -4454,6 +4454,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     INVITATION_INTERVAL_DAYS: number;
                     INVITATION_PRICE: number;
                     DAILY_POWER_SUPPLY: number;
+                    IS_RSS3_TESTNET: boolean;
                 };
             };
             outputFormat: "json" | "text";

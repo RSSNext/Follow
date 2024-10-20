@@ -8,7 +8,7 @@ import { Divider } from "~/components/ui/divider"
 import { LoadingWithIcon } from "~/components/ui/loading"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { apiClient } from "~/lib/api-fetch"
-import { cn } from "~/lib/utils"
+import { cn, getBlockchainExplorerUrl } from "~/lib/utils"
 import { SettingSectionTitle } from "~/modules/settings/section"
 import { ActivityPoints } from "~/modules/wallet/activity-points"
 import { Balance } from "~/modules/wallet/balance"
@@ -66,7 +66,7 @@ export const MyWalletSection = () => {
                 <a
                   className="underline"
                   target="_blank"
-                  href="https://scan.rss3.io/token/0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8"
+                  href={`${getBlockchainExplorerUrl()}/token/0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8`}
                   rel="noreferrer noopener"
                 />
               ),
@@ -76,7 +76,7 @@ export const MyWalletSection = () => {
         <SettingSectionTitle margin="compact" title={t("wallet.address.title")} />
         <div className="group flex items-center gap-2 text-sm">
           <a
-            href={`https://scan.rss3.io/address/${myWallet.address}`}
+            href={`${getBlockchainExplorerUrl()}/address/${myWallet.address}`}
             target="_blank"
             className="underline"
           >
