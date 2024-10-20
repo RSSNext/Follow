@@ -10,11 +10,9 @@ import { ImpressionView } from "~/components/common/ImpressionTracker"
 import { ActionButton } from "~/components/ui/button"
 import { DividerVertical } from "~/components/ui/divider"
 import { RotatingRefreshIcon } from "~/components/ui/loading"
-import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { FEED_COLLECTION_LIST, ROUTE_ENTRY_PENDING, views } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
-import { useNavigateEntry } from "~/hooks/biz/useNavigateEntry"
 import { useRouteParams } from "~/hooks/biz/useRouteParams"
 import { useIsOnline } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
@@ -22,12 +20,11 @@ import { FeedViewType } from "~/lib/enum"
 import { cn, getOS, isBizId } from "~/lib/utils"
 import { useAIDailyReportModal } from "~/modules/ai/ai-daily/hooks"
 import { EntryHeader } from "~/modules/entry-content/header"
-import { InboxItem, ListItem } from "~/modules/feed-column/item"
 import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
-import { useSubscriptionStore } from "~/store/subscription"
 
 import { MarkAllReadWithOverlay } from "../components/mark-all-button"
+import { TimelineTabs } from "./TimelineTabs"
 
 export const EntryListHeader: FC<{
   totalCount: number
@@ -76,7 +73,7 @@ export const EntryListHeader: FC<{
   return (
     <div
       ref={containerRef}
-      className="mb-2 flex w-full flex-col pl-6 pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out"
+      className="flex w-full flex-col pl-6 pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out"
     >
       <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
         {!titleAtBottom && titleInfo}
@@ -276,62 +273,3 @@ const AppendTaildingDivider = ({ children }: { children: React.ReactNode }) => (
     )}
   </>
 )
-
-const TimelineTabs = () => {
-  const routerParams = useRouteParams()
-  const { view, listId, inboxId } = routerParams
-
-  const listsData = useSubscriptionStore((state) =>
-    state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "listId" in s),
-  )
-  const inboxData = useSubscriptionStore((state) =>
-    state.feedIdByView[view].map((id) => state.data[id]).filter((s) => "inboxId" in s),
-  )
-  const hasData = listsData.length > 0 || inboxData.length > 0
-
-  const timeline = listId || inboxId || ""
-
-  const navigate = useNavigateEntry()
-  if (!hasData) return null
-  return (
-    <Tabs
-      className="-mr-4 mt-1 overflow-x-auto scrollbar-none"
-      value={timeline}
-      onValueChange={(val) => {
-        if (!val) {
-          navigate({
-            feedId: null,
-            entryId: null,
-            view,
-          })
-        }
-      }}
-    >
-      <TabsList className="h-10 space-x-3 border-b-0">
-        <TabsTrigger className="p-0" value="">
-          Yours
-        </TabsTrigger>
-        {listsData.map((s) => (
-          <TabsTrigger className="p-0" key={s.listId} value={s.listId!}>
-            <ListItem
-              listId={s.listId!}
-              view={view}
-              iconSize={16}
-              className="h-5 !bg-transparent p-0 leading-none"
-            />
-          </TabsTrigger>
-        ))}
-        {inboxData.map((s) => (
-          <TabsTrigger key={s.inboxId} value={s.inboxId!}>
-            <InboxItem
-              inboxId={s.inboxId!}
-              view={view}
-              iconSize={16}
-              className="h-5 !bg-transparent p-0 leading-none"
-            />
-          </TabsTrigger>
-        ))}
-      </TabsList>
-    </Tabs>
-  )
-}
