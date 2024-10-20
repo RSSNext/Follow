@@ -19,7 +19,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
   const dPowerBigInt = BigInt(myWalletData?.dailyPowerToken ?? 0)
   const cPowerBigInt = BigInt(myWalletData?.cashablePowerToken ?? 0)
   const balanceBigInt = cPowerBigInt + dPowerBigInt
-  const [amount, setAmount] = useState<number>(80)
+  const [amount, setAmount] = useState<number>(0)
   const amountBigInt = from(amount, 18)[0]
   const wrongNumberRange = amountBigInt > balanceBigInt || amountBigInt <= BigInt(0)
 
@@ -71,7 +71,11 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
         </small>
 
         <BoostProgress {...boostStatus} />
-        <RadioCards value={amount} onValueChange={setAmount} />
+        <RadioCards
+          monthlyBoostCost={boostStatus.monthlyBoostCost}
+          value={amount}
+          onValueChange={setAmount}
+        />
       </div>
 
       <Button

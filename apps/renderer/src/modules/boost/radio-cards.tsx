@@ -4,26 +4,28 @@ import { RadioCard } from "~/components/ui/radio-group/RadioCard"
 const radios = [
   {
     name: "1 Month",
-    amount: 80,
+    value: 1,
   },
   {
     name: "3 Months",
-    amount: 240,
+    value: 3,
   },
   {
     name: "6 Months",
-    amount: 480,
+    value: 6,
   },
   {
     name: "1 Year",
-    amount: 960,
+    value: 12,
   },
 ]
 
 export const RadioCards = ({
+  monthlyBoostCost,
   value,
   onValueChange,
 }: {
+  monthlyBoostCost: number
   value: number
   onValueChange: (value: number) => void
 }) => {
@@ -34,12 +36,12 @@ export const RadioCards = ({
           <RadioCard
             key={item.name}
             wrapperClassName="justify-center"
-            value={item.amount.toString()}
+            value={(item.value * monthlyBoostCost).toString()}
             label={
               <div>
                 <h3 className="pr-3 font-medium leading-none">{item.name}</h3>
                 <p className="mt-1 flex items-center justify-center gap-1 text-sm text-theme-vibrancyFg">
-                  {item.amount}
+                  {item.value * monthlyBoostCost}
                   <i className="i-mgc-power text-accent" />
                 </p>
               </div>
