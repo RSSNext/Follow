@@ -65,7 +65,7 @@ function EntryHeaderImpl({
       <div
         className={cn(
           "absolute left-5 top-0 flex h-full items-center gap-2 text-[13px] leading-none text-zinc-500",
-          isAtTop ? "visible z-[11]" : "invisible z-[-99]",
+          "visible z-[11]",
           views[view].wideMode && "static",
           shouldShowMeta && "hidden",
         )}

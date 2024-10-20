@@ -9,6 +9,7 @@ export const RootPortal: FC<
   } & PropsWithChildren
 > = (props) => {
   const to = useRootPortal()
+
   if (props.to === null) return props.children
 
   return createPortal(props.children, props.to || to || document.body)

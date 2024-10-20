@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
-import { Fragment, memo, useEffect, useRef, useState } from "react"
+import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useOnClickOutside } from "usehooks-ts"
 
@@ -14,6 +14,7 @@ import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRoutePara
 import { useAnyPointDown, useInputComposition, useRefValue } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import type { FeedViewType } from "~/lib/enum"
+import type { NullableNativeMenuItem } from "~/lib/native-menu"
 import { showNativeMenu } from "~/lib/native-menu"
 import { cn, sortByAlphabet } from "~/lib/utils"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
@@ -52,15 +53,24 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
   const subscription = useSubscriptionByFeedId(ids[0])
   const folderName = subscription?.category || subscription.defaultCategory
 
-  const showCollapse = sortByUnreadFeedList.length > 1 || subscription?.category
+  const showCollapse = sortByUnreadFeedList.length > 1 || !!subscription?.category
 
-  const [open, setOpen] = useState(() => {
+  const open = useMemo(() => {
     if (!showCollapse) return true
     if (folderName && typeof categoryOpenStateData[folderName] === "boolean") {
       return categoryOpenStateData[folderName]
     }
     return false
-  })
+  }, [categoryOpenStateData, folderName, showCollapse])
+
+  const setOpen = useCallback(
+    (next: boolean) => {
+      if (view !== undefined && folderName) {
+        subscriptionActions.changeCategoryOpenState(view, folderName, next)
+      }
+    },
+    [folderName, view],
+  )
 
   const shouldOpen = useRouteParamsSelector(
     (s) => typeof s.feedId === "string" && ids.includes(s.feedId),
@@ -88,18 +98,11 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
         behavior: "smooth",
       })
     }
-  }, [scrollerRef, shouldOpen])
-  const expansion = folderName ? categoryOpenStateData[folderName] : true
-
-  useEffect(() => {
-    if (showCollapse) {
-      setOpen(expansion)
-    }
-  }, [expansion])
+  }, [scrollerRef, setOpen, shouldOpen])
 
   const itemsRef = useRef<HTMLDivElement>(null)
 
-  const toggleCategoryOpenState = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const toggleCategoryOpenState = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
     e.stopPropagation()
     if (!isCategoryEditing) {
       setCategoryActive()
@@ -166,6 +169,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
           }}
           onContextMenu={(e) => {
             setIsContextMenuOpen(true)
+
             showNativeMenu(
               [
                 {
@@ -181,21 +185,23 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
                 {
                   type: "text",
                   label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
-                  // @ts-expect-error
+
                   submenu: listList
-                    ?.map((list) => ({
-                      label: list.title || "",
-                      type: "text",
-                      click() {
-                        return addMutation.mutate({
-                          feedIds: ids,
-                          listId: list.id,
-                        })
-                      },
-                    }))
+                    ?.map(
+                      (list) =>
+                        ({
+                          label: list.title || "",
+                          type: "text",
+                          click() {
+                            return addMutation.mutate({
+                              feedIds: ids,
+                              listId: list.id,
+                            })
+                          },
+                        }) as NullableNativeMenuItem,
+                    )
+                    .concat(listList?.length > 0 ? [{ type: "separator" as const }] : [])
                     .concat([
-                      // @ts-expect-error
-                      { type: "separator" as const },
                       {
                         label: t("sidebar.feed_actions.create_list"),
                         type: "text" as const,
@@ -250,7 +256,7 @@ function FeedCategoryImpl({ data: ids, view, categoryOpenStateData }: FeedCatego
             )
           }}
         >
-          <div className="flex w-full min-w-0 items-center">
+          <div className="flex w-full min-w-0 items-center" onDoubleClick={toggleCategoryOpenState}>
             <button
               type="button"
               onClick={toggleCategoryOpenState}

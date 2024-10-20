@@ -25,6 +25,7 @@ import { mountLottie } from "~/components/ui/lottie-container"
 import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
+  SimpleIconsOmnivore,
   SimpleIconsReadwise,
 } from "~/components/ui/platform-icon/icons"
 import { shortcuts } from "~/constants/shortcuts"
@@ -167,6 +168,9 @@ export const useEntryActions = ({
   const enableInstapaper = useIntegrationSettingKey("enableInstapaper")
   const instapaperUsername = useIntegrationSettingKey("instapaperUsername")
   const instapaperPassword = useIntegrationSettingKey("instapaperPassword")
+  const enableOmnivore = useIntegrationSettingKey("enableOmnivore")
+  const omnivoreToken = useIntegrationSettingKey("omnivoreToken")
+  const omnivoreEndpoint = useIntegrationSettingKey("omnivoreEndpoint")
 
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
@@ -303,6 +307,64 @@ export const useEntryActions = ({
             )
           } catch {
             toast.error(t("entry_actions.failed_to_save_to_instapaper"), {
+              duration: 3000,
+            })
+          }
+        },
+      },
+      {
+        name: t("entry_actions.save_to_omnivore"),
+        icon: <SimpleIconsOmnivore />,
+        key: "saveToomnivore",
+        hide: !enableOmnivore || !omnivoreToken || !omnivoreEndpoint || !populatedEntry.entries.url,
+        onClick: async () => {
+          const saveUrlQuery = `
+  mutation SaveUrl($input: SaveUrlInput!) {
+    saveUrl(input: $input) {
+      ... on SaveSuccess {
+        url
+        clientRequestId
+      }
+      ... on SaveError {
+        errorCodes
+        message
+      }
+    }
+  }
+`
+
+          try {
+            const data = await ofetch(omnivoreEndpoint, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: omnivoreToken,
+              },
+              body: {
+                query: saveUrlQuery,
+                variables: {
+                  input: {
+                    url: populatedEntry.entries.url,
+                    source: "Follow",
+                    clientRequestId: globalThis.crypto.randomUUID(),
+                    publishedAt: new Date(populatedEntry.entries.publishedAt),
+                  },
+                },
+              },
+            })
+            toast.success(
+              <>
+                {t("entry_actions.saved_to_omnivore")},{" "}
+                <a target="_blank" className="underline" href={data.data.saveUrl.url}>
+                  view
+                </a>
+              </>,
+              {
+                duration: 3000,
+              },
+            )
+          } catch {
+            toast.error(t("entry_actions.failed_to_save_to_omnivore"), {
               duration: 3000,
             })
           }

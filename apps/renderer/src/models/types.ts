@@ -25,8 +25,8 @@ export type TransactionModel = ExtractBizResponse<
 
 export type FeedModel = ExtractBizResponse<typeof apiClient.feeds.$get>["data"]["feed"]
 
-export type ListModelPoplutedFeeds = ExtractBizResponse<typeof apiClient.lists.$get>["data"]["list"]
 export type ListModel = Omit<ListModelPoplutedFeeds, "feeds">
+export type ListModelPoplutedFeeds = ExtractBizResponse<typeof apiClient.lists.$get>["data"]["list"]
 
 export type InboxModel = ExtractBizResponse<typeof apiClient.inboxes.$get>["data"]
 
@@ -49,6 +49,10 @@ export type CombinedEntryModel = EntriesResponse[number] & {
   }
 }
 export type EntryModel = CombinedEntryModel["entries"]
+export type EntryModelSimple = Exclude<
+  ExtractBizResponse<typeof apiClient.feeds.$get>["data"]["entries"],
+  undefined
+>[number]
 export type DiscoverResponse = Array<
   Exclude<ExtractBizResponse<typeof apiClient.discover.$post>["data"], undefined>[number]
 >
@@ -101,6 +105,7 @@ export type ActionsInput = {
     summary?: boolean
     readability?: boolean
     silence?: boolean
+    sourceContent?: boolean
     newEntryNotification?: boolean
     rewriteRules?: {
       from: string
@@ -116,3 +121,5 @@ export type ActionsInput = {
 }[]
 
 export const TransactionTypes = ["mint", "purchase", "tip", "withdraw"] as const
+
+export type WalletModel = ExtractBizResponse<typeof apiClient.wallets.$get>["data"][number]

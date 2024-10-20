@@ -3,13 +3,13 @@ import * as React from "react"
 
 import { cn } from "~/lib/utils"
 
+import { RootPortal } from "../portal"
+
 const ContextMenu = ContextMenuPrimitive.Root
 
 const ContextMenuTrigger = ContextMenuPrimitive.Trigger
 
 const ContextMenuGroup = ContextMenuPrimitive.Group
-
-const ContextMenuPortal = ContextMenuPrimitive.Portal
 
 const ContextMenuSub = ContextMenuPrimitive.Sub
 
@@ -42,7 +42,7 @@ const ContextMenuSubContent = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubContent>
 >(({ className, ...props }, ref) => (
-  <ContextMenuPrimitive.Portal>
+  <RootPortal>
     <ContextMenuPrimitive.SubContent
       ref={ref}
       className={cn(
@@ -51,7 +51,7 @@ const ContextMenuSubContent = React.forwardRef<
       )}
       {...props}
     />
-  </ContextMenuPrimitive.Portal>
+  </RootPortal>
 ))
 ContextMenuSubContent.displayName = ContextMenuPrimitive.SubContent.displayName
 
@@ -59,17 +59,17 @@ const ContextMenuContent = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content>
 >(({ className, ...props }, ref) => (
-  <ContextMenuPrimitive.Portal>
+  <RootPortal>
     <ContextMenuPrimitive.Content
       ref={ref}
       className={cn(
-        "z-[999] min-w-32 overflow-hidden rounded-md border border-border bg-theme-modal-background-opaque p-1 text-theme-foreground/90 shadow-lg dark:shadow-zinc-800/60",
+        "z-[60] min-w-32 overflow-hidden rounded-md border border-border bg-theme-modal-background-opaque p-1 text-theme-foreground/90 shadow-lg dark:shadow-zinc-800/60",
         "text-xs",
         className,
       )}
       {...props}
     />
-  </ContextMenuPrimitive.Portal>
+  </RootPortal>
 ))
 ContextMenuContent.displayName = ContextMenuPrimitive.Content.displayName
 
@@ -149,7 +149,6 @@ export {
   ContextMenuGroup,
   ContextMenuItem,
   ContextMenuLabel,
-  ContextMenuPortal,
   ContextMenuRadioGroup,
   ContextMenuSeparator,
   ContextMenuSub,
@@ -157,3 +156,5 @@ export {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 }
+
+export { RootPortal as ContextMenuPortal } from "../portal"

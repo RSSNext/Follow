@@ -1,5 +1,6 @@
 import { m, useAnimation } from "framer-motion"
-import React, { cloneElement, useEffect } from "react"
+import * as React from "react"
+import { cloneElement, useEffect } from "react"
 
 import { cn } from "~/lib/utils"
 
@@ -128,10 +129,9 @@ export const RotatingRefreshIcon: React.FC<{
         transition: { duration: 1, repeat: Infinity, ease: "linear" },
       })
     } else {
-      controls.stop()
       controls.start({
         rotate: 360,
-        transition: { ease: "linear", type: "spring" },
+        transition: { type: "spring" },
       })
     }
   }, [isRefreshing, controls])

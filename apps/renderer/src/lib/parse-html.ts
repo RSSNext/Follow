@@ -18,8 +18,10 @@ import { VFile } from "vfile"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { Checkbox } from "~/components/ui/checkbox"
 import { ShikiHighLighter } from "~/components/ui/code-highlighter"
+import { LazyKateX } from "~/components/ui/katex/lazy"
 import { MarkdownBlockImage, MarkdownLink, MarkdownP } from "~/components/ui/markdown/renderers"
 import { BlockError } from "~/components/ui/markdown/renderers/BlockErrorBoundary"
+import { useIsInParagraphContext } from "~/components/ui/markdown/renderers/ctx"
 import { createHeadingRenderer } from "~/components/ui/markdown/renderers/Heading"
 import { MarkdownInlineImage } from "~/components/ui/markdown/renderers/InlineImage"
 import { Media } from "~/components/ui/media"
@@ -68,6 +70,7 @@ export const parseHtml = (
   const { renderInlineStyle = false, noMedia = false } = options || {}
 
   const rehypeSchema: Schema = { ...defaultSchema }
+  rehypeSchema.tagNames = [...rehypeSchema.tagNames!, "math"]
 
   if (noMedia) {
     rehypeSchema.tagNames = rehypeSchema.tagNames?.filter(
@@ -148,6 +151,8 @@ export const parseHtml = (
             markInlineImage(node)
             return createElement("span", props, props.children)
           },
+          // @ts-expect-error
+          math: Math,
           hr: ({ node, ...props }) =>
             createElement("hr", {
               ...props,
@@ -357,5 +362,18 @@ function rehypeUrlToAnchor(tree: Node) {
     }
 
     ;(parent.children as (Text | Element)[]).splice(index, 1, ...newNodes)
+  })
+}
+
+const Math = ({ node }) => {
+  const annotation = node.children.at(-1)
+
+  const isInParagraph = useIsInParagraphContext()
+  if (!annotation) return null
+  const latex = annotation.value
+
+  return createElement(LazyKateX, {
+    children: latex,
+    mode: isInParagraph ? "inline" : "display",
   })
 }

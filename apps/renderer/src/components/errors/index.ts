@@ -1,14 +1,14 @@
+import { lazy } from "react"
+
 import { ErrorComponentType } from "./enum"
-import { FeedFoundCanBeFollowErrorFallback } from "./FeedFoundCanBeFollowErrorFallback"
-import { FeedNotFoundErrorFallback } from "./FeedNotFound"
-import { ModalErrorFallback } from "./ModalError"
-import { PageErrorFallback } from "./PageError"
 
 const ErrorFallbackMap = {
-  [ErrorComponentType.Modal]: ModalErrorFallback,
-  [ErrorComponentType.Page]: PageErrorFallback,
-  [ErrorComponentType.FeedFoundCanBeFollow]: FeedFoundCanBeFollowErrorFallback,
-  [ErrorComponentType.FeedNotFound]: FeedNotFoundErrorFallback,
+  [ErrorComponentType.Modal]: lazy(() => import("./ModalError")),
+  [ErrorComponentType.Page]: lazy(() => import("./PageError")),
+  [ErrorComponentType.FeedFoundCanBeFollow]: lazy(
+    () => import("./FeedFoundCanBeFollowErrorFallback"),
+  ),
+  [ErrorComponentType.FeedNotFound]: lazy(() => import("./FeedNotFound")),
 }
 
 export const getErrorFallback = (type: ErrorComponentType) => ErrorFallbackMap[type]

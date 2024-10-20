@@ -3,7 +3,7 @@ import { typescriptHappyForwardRef } from "foxact/typescript-happy-forward-ref"
 import type { HTMLMotionProps } from "framer-motion"
 import { AnimatePresence } from "framer-motion"
 import { atom, useAtomValue } from "jotai"
-import type React from "react"
+import type * as React from "react"
 import type { JSX, PropsWithChildren, ReactNode } from "react"
 import { useId } from "react"
 
