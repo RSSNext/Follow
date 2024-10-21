@@ -6,17 +6,16 @@ import { renderToImage } from "~/lib/og/render-to-image"
 
 import { getImageBase64, OGAvatar, OGCanvas } from "./__base"
 
-export const renderFeedOG = async (apiClient: ApiClient, feedId: string) => {
-  const feed = await apiClient.feeds.$get({ query: { id: feedId } }).catch(() => null)
+export const renderListOG = async (apiClient: ApiClient, listId: string) => {
+  const feed = await apiClient.lists.$get({ query: { listId } }).catch(() => null)
 
-  if (!feed?.data.feed) {
+  if (!feed?.data.list) {
     throw 404
   }
 
-  const { title, description, image } = feed.data.feed
+  const { title, description, image } = feed.data.list
 
   const [src] = getFeedIconSrc({
-    siteUrl: feed.data.feed.siteUrl!,
     proxy: {
       width: 256,
       height: 256,
@@ -24,8 +23,13 @@ export const renderFeedOG = async (apiClient: ApiClient, feedId: string) => {
     fallback: true,
     src: image!,
   })
+
   const numberFormatter = new Intl.NumberFormat("en-US")
-  const imageBase64 = await getImageBase64(image || src)
+  let imageBase64: string | null = null
+
+  if (src) {
+    imageBase64 = await getImageBase64(src)
+  }
 
   try {
     const imageRes = await renderToImage(

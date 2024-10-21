@@ -77,7 +77,7 @@ const adjustColorTowardsTarget = (color: string, targetColor: string, factor: nu
   return rgbToHex(r, g, b)
 }
 
-const getBackgroundGradient = (seed?: Nullable<string>) => {
+export const getBackgroundGradient = (seed?: Nullable<string>) => {
   const nextSeed = seed ?? Math.random().toString(36).slice(7)
 
   const bgAccent = uniqolor(nextSeed, {
@@ -152,4 +152,32 @@ export async function getImageBase64(image: string | null | undefined) {
     }
     return null
   })
+}
+
+export const OGAvatar: React.FC<{ base64?: Nullable<string>; title: string }> = ({
+  base64,
+  title,
+}) => {
+  const [bgAccent, bgAccentLight, bgAccentUltraLight] = getBackgroundGradient(title)
+  return (
+    <>
+      {base64 ? (
+        <img src={base64} style={{ width: 256, height: 256, borderRadius: "50%" }} />
+      ) : (
+        <div
+          style={{
+            width: 256,
+            height: 256,
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: `linear-gradient(37deg, ${bgAccent} 27.82%, ${bgAccentLight} 79.68%, ${bgAccentUltraLight} 100%)`,
+          }}
+        >
+          <span style={{ fontSize: 128, fontWeight: 700, color: "white" }}>{title?.[0]}</span>
+        </div>
+      )}
+    </>
+  )
 }

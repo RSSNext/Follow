@@ -5,6 +5,7 @@ import type { FastifyInstance, FastifyReply } from "fastify"
 import { createApiClient, getTokenFromCookie } from "~/lib/api-client"
 
 import { renderFeedOG } from "./feed"
+import { renderListOG } from "./list"
 import { renderUserOG } from "./user"
 
 export const ogRoute = (app: FastifyInstance) => {
@@ -27,6 +28,10 @@ export const ogRoute = (app: FastifyInstance) => {
       }
       case "user": {
         imageRes = await renderUserOG(apiClient, id).catch(errorFallback)
+        break
+      }
+      case "list": {
+        imageRes = await renderListOG(apiClient, id).catch(errorFallback)
         break
       }
       default: {
