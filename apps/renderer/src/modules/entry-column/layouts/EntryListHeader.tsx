@@ -24,6 +24,7 @@ import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
 
 import { MarkAllReadWithOverlay } from "../components/mark-all-button"
+import { TimelineTabs } from "./TimelineTabs"
 
 export const EntryListHeader: FC<{
   totalCount: number
@@ -67,17 +68,12 @@ export const EntryListHeader: FC<{
   const feed = useFeedById(feedId)
   const isList = !!listId
 
-  const titleStyleBasedView = ["pl-12", "pl-7", "pl-7", "pl-7", "px-5", "pl-12"]
-
   const containerRef = React.useRef<HTMLDivElement>(null)
 
   return (
     <div
       ref={containerRef}
-      className={cn(
-        "mb-2 flex w-full flex-col pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out",
-        titleStyleBasedView[view],
-      )}
+      className="flex w-full flex-col pl-6 pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out"
     >
       <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
         {!titleAtBottom && titleInfo}
@@ -105,8 +101,8 @@ export const EntryListHeader: FC<{
             {view === FeedViewType.Pictures && <FilterNoImageButton />}
           </AppendTaildingDivider>
 
-          {isOnline ? (
-            feed?.ownerUserId === user?.id &&
+          {isOnline &&
+            (feed?.ownerUserId === user?.id &&
             isBizId(routerParams.feedId!) &&
             feed?.type === "feed" ? (
               <ActionButton
@@ -133,8 +129,7 @@ export const EntryListHeader: FC<{
                   isRefreshing={isRefreshing}
                 />
               </ActionButton>
-            )
-          ) : null}
+            ))}
           {!isList && (
             <>
               <ActionButton
@@ -158,6 +153,7 @@ export const EntryListHeader: FC<{
         </div>
       </div>
       {titleAtBottom && titleInfo}
+      <TimelineTabs />
     </div>
   )
 }

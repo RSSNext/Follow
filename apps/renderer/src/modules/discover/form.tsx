@@ -342,7 +342,7 @@ const SearchCard: FC<{
             </Button>
             <div className="ml-6 text-zinc-500">
               <span className="font-medium text-zinc-800 dark:text-zinc-200">
-                {item.subscriptionCount}
+                {item.subscriptionCount ?? 0}
               </span>{" "}
               Followers
             </div>

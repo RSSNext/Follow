@@ -18,6 +18,7 @@ export const MarkdownInlineImage = (
     <Media
       type="photo"
       {...props}
+      loading="lazy"
       src={populatedUrl}
       mediaContainerClassName={cn("inline max-w-full rounded-md")}
       popper

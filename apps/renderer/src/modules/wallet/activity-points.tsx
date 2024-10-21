@@ -14,7 +14,7 @@ export const ActivityPoints = ({
     <div className={cn("flex items-center gap-1", className)}>
       <i className="i-mgc-fire-cute-fi text-red-500" />
       <span>{isLoading ? <Skeleton className="size-4" /> : points}</span>
-      <sub className="-translate-y-px text-[0.6rem] font-normal">x{Math.floor(points / 10)}</sub>
+      <sub className="-translate-y-px text-[0.6rem] font-normal">{Math.floor(points / 10)}x</sub>
     </div>
   )
 }

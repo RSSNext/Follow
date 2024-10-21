@@ -4,7 +4,7 @@
   "achievement.first_claim_feed_description": "You own your feed on Follow",
   "achievement.mint_more_power": "Be a hardcore player and earn more <power />",
   "activation.activate": "Activate",
-  "activation.description": "During the public beta, users who have not used their activation code can only use some of the features.",
+  "activation.description": "During the public beta phase, current feature is limited for inactive users.",
   "activation.title": "Invitation Code",
   "ai_daily.header": "AI Daily Report",
   "ai_daily.no_found": "No AI news found for this period.",

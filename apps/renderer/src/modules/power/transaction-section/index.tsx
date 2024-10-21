@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import { useServerConfigs } from "~/atoms/server-configs"
 import { useWhoami } from "~/atoms/user"
 import { Logo } from "~/components/icons/logo"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
@@ -18,7 +19,7 @@ import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
-import { cn } from "~/lib/utils"
+import { cn, getBlockchainExplorerUrl } from "~/lib/utils"
 import { TransactionTypes } from "~/models/types"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { SettingSectionTitle } from "~/modules/settings/section"
@@ -40,11 +41,18 @@ export const TransactionsSection: Component = ({ className }) => {
     type: type === "all" ? undefined : type,
   })
 
+  const serverConfigs = useServerConfigs()
+
   if (!myWallet) return null
 
   return (
     <div className="relative flex min-w-0 grow flex-col">
       <SettingSectionTitle title={t("wallet.transactions.title")} />
+      <p className="mb-4 text-sm">
+        {t("wallet.transactions.description", {
+          percentage: Number.parseInt(serverConfigs?.TAX_POINT || "0") / 100,
+        })}
+      </p>
       <Tabs value={type} onValueChange={(val) => setType(val)}>
         <TabsList className="relative -ml-2 border-b-transparent">
           {tabs.map((tab) => (
@@ -93,7 +101,11 @@ export const TransactionsSection: Component = ({ className }) => {
                 <TableCell align="left" size="sm">
                   <Tooltip>
                     <TooltipTrigger>
-                      <a target="_blank" href={`https://scan.rss3.io/tx/${row.hash}`}>
+                      <a
+                        target="_blank"
+                        href={`${getBlockchainExplorerUrl()}/tx/${row.hash}`}
+                        className="underline"
+                      >
                         {row.hash.slice(0, 10)}...
                       </a>
                     </TooltipTrigger>
@@ -107,8 +119,17 @@ export const TransactionsSection: Component = ({ className }) => {
           </TableBody>
         </Table>
       </div>
+      {!!transactions.data?.length && (
+        <a
+          className="my-2 w-full text-sm text-zinc-400 underline"
+          href={`${getBlockchainExplorerUrl()}/address/${myWallet.address}`}
+          target="_blank"
+        >
+          {t("wallet.transactions.more")}
+        </a>
+      )}
       {!transactions.data?.length && (
-        <div className="my-2 w-full text-center text-sm text-zinc-400">
+        <div className="my-2 w-full text-sm text-zinc-400">
           {t("wallet.transactions.noTransactions")}
         </div>
       )}

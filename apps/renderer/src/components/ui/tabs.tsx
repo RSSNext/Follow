@@ -56,8 +56,7 @@ const tabsTriggerVariants = cva("", {
     variant: {
       default:
         "py-1.5 border-b-2 border-transparent data-[state=active]:text-accent dark:data-[state=active]:text-theme-accent-500",
-      rounded:
-        "py-1 rounded-sm data-[state=active]:bg-theme-accent-300 dark:data-[state=active]:bg-theme-accent-800 data-[state=active]:shadow-sm",
+      rounded: "!py-1 !px-3 bg-transparent",
     },
   },
   defaultVariants: {
@@ -68,58 +67,64 @@ const tabsTriggerVariants = cva("", {
 export interface TabsTriggerProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>,
     VariantProps<typeof tabsTriggerVariants> {}
-const TabsTrigger = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Trigger>,
-  TabsTriggerProps
->(({ className, variant, children, ...props }, ref) => {
-  const triggerRef = React.useRef(null)
-  React.useImperativeHandle(ref, () => triggerRef.current!, [ref])
+const TabsTrigger = React.forwardRef<HTMLDivElement, TabsTriggerProps>(
+  ({ className, variant, children, ...props }, ref) => {
+    const triggerRef = React.useRef<HTMLDivElement>(null)
+    React.useImperativeHandle(ref, () => triggerRef.current!, [])
 
-  const [isSelect, setIsSelect] = React.useState(false)
-  const id = React.useContext(TabsIdContext)
-  const layoutId = `tab-selected-underline-${id}`
-  React.useLayoutEffect(() => {
-    if (!triggerRef.current) return
+    const [isSelect, setIsSelect] = React.useState(false)
+    const id = React.useContext(TabsIdContext)
+    const layoutId = `tab-selected-underline-${id}`
+    React.useLayoutEffect(() => {
+      if (!triggerRef.current) return
 
-    const trigger = triggerRef.current as HTMLElement
+      const trigger = triggerRef.current as HTMLElement
 
-    const isSelect = trigger.dataset.state === "active"
-    setIsSelect(isSelect)
-    const ob = new MutationObserver(() => {
       const isSelect = trigger.dataset.state === "active"
       setIsSelect(isSelect)
-    })
-    ob.observe(trigger, {
-      attributes: true,
-      attributeFilter: ["data-state"],
-    })
+      const ob = new MutationObserver(() => {
+        const isSelect = trigger.dataset.state === "active"
+        setIsSelect(isSelect)
+      })
+      ob.observe(trigger, {
+        attributes: true,
+        attributeFilter: ["data-state"],
+      })
 
-    return () => {
-      ob.disconnect()
-    }
-  }, [])
+      return () => {
+        ob.disconnect()
+      }
+    }, [])
 
-  return (
-    <TabsPrimitive.Trigger
-      ref={triggerRef}
-      className={cn(
-        "inline-flex items-center justify-center whitespace-nowrap px-3 text-sm font-medium ring-offset-background transition-all disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-theme-foreground",
-        "relative",
-        tabsTriggerVariants({ variant }),
-        className,
-      )}
-      {...props}
-    >
-      {children}
-      {isSelect && (
-        <m.span
-          layoutId={layoutId}
-          className="absolute -bottom-1 h-0.5 w-[calc(100%-16px)] rounded bg-accent"
-        />
-      )}
-    </TabsPrimitive.Trigger>
-  )
-})
+    return (
+      <TabsPrimitive.Trigger
+        ref={triggerRef as any}
+        className={cn(
+          "inline-flex items-center justify-center whitespace-nowrap px-3 text-sm font-medium ring-offset-background transition-all disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-theme-foreground",
+          "group relative z-[1]",
+          tabsTriggerVariants({ variant }),
+          // !isSelect &&
+          //   "hover:before:bg-theme-item-hover before:content-[''] before:pointer-events-none before:absolute before:inset-y-0 before:inset-x-1 before:duration-200 before:opacity-60 before:rounded-lg",
+          // className,
+        )}
+        {...props}
+      >
+        {children}
+        {isSelect && (
+          <m.span
+            layoutId={layoutId}
+            className={cn(
+              "absolute",
+              variant === "rounded"
+                ? "inset-0 z-[-1] rounded-lg bg-muted duration-200 group-hover:bg-theme-item-hover"
+                : "-bottom-1 h-0.5 w-[calc(100%-16px)] rounded bg-accent",
+            )}
+          />
+        )}
+      </TabsPrimitive.Trigger>
+    )
+  },
+)
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
 
 const TabsContent = React.forwardRef<

@@ -168,7 +168,8 @@ export const FeedItem = memo(FeedItemImpl)
 const ListItemImpl: Component<{
   listId: string
   view: FeedViewType
-}> = ({ view, listId, className }) => {
+  iconSize?: number
+}> = ({ view, listId, className, iconSize = 28 }) => {
   const list = useListById(listId)
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.listId === listId)
@@ -224,7 +225,7 @@ const ListItemImpl: Component<{
       }}
     >
       <div className={"flex min-w-0 items-center"}>
-        <FeedIcon fallback feed={list} size={28} />
+        <FeedIcon fallback feed={list} size={iconSize} />
         <EllipsisHorizontalTextWithTooltip className="truncate">
           {getPreferredTitle(list)}
         </EllipsisHorizontalTextWithTooltip>
@@ -250,7 +251,8 @@ export const ListItem = memo(ListItemImpl)
 const InboxItemImpl: Component<{
   inboxId: string
   view: FeedViewType
-}> = ({ view, inboxId, className }) => {
+  iconSize?: number
+}> = ({ view, inboxId, className, iconSize = 16 }) => {
   const inbox = useInboxById(inboxId)
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.inboxId === inboxId)
@@ -293,7 +295,7 @@ const InboxItemImpl: Component<{
       }}
     >
       <div className={"flex min-w-0 items-center"}>
-        <FeedIcon fallback feed={inbox} size={16} />
+        <FeedIcon fallback feed={inbox} size={iconSize} />
         <EllipsisHorizontalTextWithTooltip className="truncate">
           {getPreferredTitle(inbox)}
         </EllipsisHorizontalTextWithTooltip>

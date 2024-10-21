@@ -3,6 +3,7 @@ import dayjs from "dayjs"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
+import { useServerConfigs } from "~/atoms/server-configs"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
@@ -19,7 +20,6 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
-import { INVITATION_PRICE } from "~/constants"
 import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { toastFetchError } from "~/lib/error-parser"
@@ -35,6 +35,8 @@ export const SettingInvitations = () => {
   const { present } = useModalStack()
   const presentUserProfile = usePresentUserProfileModal("drawer")
 
+  const serverConfigs = useServerConfigs()
+
   return (
     <section className="mt-4">
       <div className="mb-4 space-y-2 text-sm">
@@ -46,7 +48,7 @@ export const SettingInvitations = () => {
           <Trans
             ns="settings"
             values={{
-              INVITATION_PRICE,
+              INVITATION_PRICE: serverConfigs?.INVITATION_PRICE,
             }}
             components={{
               PowerIcon: (
@@ -164,7 +166,7 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
   const newInvitation = useMutation({
     mutationKey: ["newInvitation"],
     mutationFn: () => apiClient.invitations.new.$post(),
-    async onError(err) {
+    onError(err) {
       toastFetchError(err)
     },
     onSuccess(data) {
@@ -175,13 +177,15 @@ const ConfirmModalContent = ({ dismiss }: { dismiss: () => void }) => {
     },
   })
 
+  const serverConfigs = useServerConfigs()
+
   return (
     <>
       <div className="flex items-center text-sm">
         <Trans
           ns="settings"
           values={{
-            INVITATION_PRICE,
+            INVITATION_PRICE: serverConfigs?.INVITATION_PRICE,
           }}
           components={{
             PowerIcon: <i className="i-mgc-power mx-0.5 size-3.5 -translate-y-px text-accent" />,
