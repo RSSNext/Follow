@@ -442,6 +442,31 @@ class EntryActions {
       },
     }))
   }
+
+  async deleteInboxEntry(entryId: string) {
+    const entry = get().flatMapEntries[entryId]
+    if (!entry) return
+
+    set((state) =>
+      produce(state, (draft) => {
+        delete draft.flatMapEntries[entryId]
+        for (const feedId in draft.entries) {
+          const index = draft.entries[feedId].indexOf(entryId)
+          if (index !== -1) {
+            draft.entries[feedId].splice(index, 1)
+          }
+        }
+      }),
+    )
+    await doMutationAndTransaction(
+      async () => {
+        await apiClient.entries.inbox.$delete({ json: { entryId } })
+      },
+      async () => {
+        await EntryService.deleteEntries([entryId])
+      },
+    )
+  }
 }
 
 export const entryActions = new EntryActions()

@@ -24,6 +24,7 @@ export const Input = forwardRef<
         "border border-border",
         "placeholder:text-theme-placeholder-text dark:bg-zinc-700/[0.15] dark:text-zinc-200",
         "hover:border-accent/60",
+        "disabled:cursor-not-allowed disabled:opacity-50",
         props.type === "password" ? "font-mono placeholder:font-sans" : "font-sans",
         "w-full",
         className,

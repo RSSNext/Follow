@@ -23,6 +23,7 @@ import {
   LazyModalStackProvider,
   // specific import should add `index` postfix
 } from "./lazy/index"
+import { ServerConfigsProvider } from "./server-configs-provider"
 import { SettingSync } from "./setting-sync"
 import { StableRouterProvider } from "./stable-router-provider"
 import { UserProvider } from "./user-provider"
@@ -44,6 +45,7 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
               <EventProvider />
 
               <UserProvider />
+              <ServerConfigsProvider />
 
               <StableRouterProvider />
               <SettingSync />

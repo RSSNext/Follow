@@ -1,16 +1,16 @@
+import { useContext } from "react"
+
 import { AudioPlayer } from "~/atoms/player"
 import { nextFrame } from "~/lib/dom"
-import { useEntryContentContext } from "~/modules/entry-content/hooks"
 import { useEntry } from "~/store/entry"
 
-import { timeStringToSeconds } from "../utils"
+import { EntryInfoContext } from "../context"
 
 export const TimeStamp = (props: { time: string }) => {
-  const { entryId, audioSrc: src } = useEntryContentContext()
-
+  const { entryId } = useContext(EntryInfoContext)
   const entry = useEntry(entryId)
   const mediaDuration = entry?.entries.attachments?.[0]?.duration_in_seconds
-
+  const src = entry?.entries?.attachments?.[0].url
   if (!src) return <span>{props.time}</span>
 
   const seekTo = timeStringToSeconds(props.time)
@@ -88,4 +88,18 @@ const CircleProgress: React.FC<CircleProgressProps> = ({
       />
     </svg>
   )
+}
+
+function timeStringToSeconds(time: string): number | null {
+  const timeParts = time.split(":").map(Number)
+
+  if (timeParts.length === 2) {
+    const [minutes, seconds] = timeParts
+    return minutes * 60 + seconds
+  } else if (timeParts.length === 3) {
+    const [hours, minutes, seconds] = timeParts
+    return hours * 3600 + minutes * 60 + seconds
+  } else {
+    return null
+  }
 }

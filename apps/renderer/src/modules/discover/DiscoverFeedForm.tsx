@@ -13,7 +13,7 @@ import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { Form, FormItem, FormLabel } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
-import { Markdown } from "~/components/ui/markdown"
+import { Markdown } from "~/components/ui/markdown/Markdown"
 import { useCurrentModal, useIsTopModal, useModalStack } from "~/components/ui/modal"
 import {
   Select,

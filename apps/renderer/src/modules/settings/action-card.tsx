@@ -73,7 +73,7 @@ const DeleteTableCell = ({ disabled, onClick }: { disabled?: boolean; onClick?: 
   </TableCell>
 )
 
-const AddTableRow = ({ onClick }: { onClick?: () => void }) => {
+const AddTableRow = ({ onClick, disabled }: { onClick?: () => void; disabled?: boolean }) => {
   const { t } = useTranslation("settings")
   return (
     <Button
@@ -81,6 +81,7 @@ const AddTableRow = ({ onClick }: { onClick?: () => void }) => {
       className="mt-1 w-full gap-1"
       buttonClassName="py-1"
       onClick={onClick}
+      disabled={disabled}
     >
       <i className="i-mgc-add-cute-re" /> {t("actions.action_card.add")}
     </Button>
@@ -91,10 +92,12 @@ const OperationTableCell = ({
   type,
   value,
   onValueChange,
+  disabled,
 }: {
   type: string
   value?: ActionOperation
   onValueChange?: (value: ActionOperation) => void
+  disabled?: boolean
 }) => {
   const { t } = useTranslation("settings")
 
@@ -141,7 +144,7 @@ const OperationTableCell = ({
   const options = OperationOptions.filter((option) => option.types.includes(type))
   return (
     <TableCell size="sm">
-      <Select value={value} onValueChange={onValueChange}>
+      <Select disabled={disabled} value={value} onValueChange={onValueChange}>
         <SelectTrigger className="h-8">
           <SelectValue />
         </SelectTrigger>
@@ -260,6 +263,8 @@ export function ActionCard({
     ]
   }, [t])
 
+  const { disabled } = data.result
+
   return (
     <Card>
       <CardHeader className="space-y-4 px-6 py-4">
@@ -287,6 +292,14 @@ export function ActionCard({
               />
 
               <div className="name-placeholder flex-1 text-sm">{data.name}</div>
+              <Switch
+                checked={!data.result.disabled}
+                onCheckedChange={(checked) => {
+                  data.result.disabled = !checked
+                  onChange(data)
+                }}
+                onClick={stopPropagation}
+              />
             </div>
           }
         >
@@ -307,8 +320,12 @@ export function ActionCard({
                     onChange(data)
                   }}
                 >
-                  <Radio label={t("actions.action_card.all")} value="all" />
-                  <Radio label={t("actions.action_card.custom_filters")} value="filter" />
+                  <Radio disabled={disabled} label={t("actions.action_card.all")} value="all" />
+                  <Radio
+                    disabled={disabled}
+                    label={t("actions.action_card.custom_filters")}
+                    value="filter"
+                  />
                 </RadioGroup>
               </div>
 
@@ -331,6 +348,7 @@ export function ActionCard({
                         return (
                           <TableRow key={conditionIdx}>
                             <DeleteTableCell
+                              disabled={disabled}
                               onClick={() => {
                                 data.condition.splice(conditionIdx, 1)
                                 onChange(data)
@@ -338,6 +356,7 @@ export function ActionCard({
                             />
                             <TableCell size="sm">
                               <Select
+                                disabled={disabled}
                                 value={condition.field}
                                 onValueChange={(value: ActionFeedField) => change("field", value)}
                               >
@@ -353,12 +372,14 @@ export function ActionCard({
                             </TableCell>
                             <OperationTableCell
                               type={type}
+                              disabled={disabled}
                               value={condition.operator}
                               onValueChange={(value) => change("operator", value)}
                             />
                             <TableCell size="sm">
                               {type === "view" ? (
                                 <Select
+                                  disabled={disabled}
                                   onValueChange={(value) => change("value", value)}
                                   value={condition.value}
                                 >
@@ -367,6 +388,7 @@ export function ActionCard({
                                 </Select>
                               ) : (
                                 <Input
+                                  disabled={disabled}
                                   type={type}
                                   value={condition.value}
                                   className="h-8"
@@ -380,6 +402,7 @@ export function ActionCard({
                     </TableBody>
                   </Table>
                   <AddTableRow
+                    disabled={disabled}
                     onClick={() => {
                       data.condition.push({})
                       onChange(data)
@@ -396,6 +419,7 @@ export function ActionCard({
                     {t("actions.action_card.generate_summary")}
                   </span>
                   <Switch
+                    disabled={disabled}
                     checked={data.result.summary}
                     onCheckedChange={(checked) => {
                       data.result.summary = checked
@@ -410,6 +434,7 @@ export function ActionCard({
                     {t("actions.action_card.translate_into")}
                   </span>
                   <Select
+                    disabled={disabled}
                     value={data.result.translation}
                     onValueChange={(value) => {
                       if (value === "none") {
@@ -443,6 +468,7 @@ export function ActionCard({
                     {t("actions.action_card.enable_readability")}
                   </span>
                   <Switch
+                    disabled={disabled}
                     checked={data.result.readability}
                     onCheckedChange={(checked) => {
                       data.result.readability = checked
@@ -454,9 +480,25 @@ export function ActionCard({
 
                 <div className="flex w-full items-center justify-between">
                   <span className="w-0 shrink grow truncate">
+                    {t("actions.action_card.source_content")}
+                  </span>
+                  <Switch
+                    disabled={disabled}
+                    checked={data.result.sourceContent}
+                    onCheckedChange={(checked) => {
+                      data.result.sourceContent = checked
+                      onChange(data)
+                    }}
+                  />
+                </div>
+                <Divider />
+
+                <div className="flex w-full items-center justify-between">
+                  <span className="w-0 shrink grow truncate">
                     {t("actions.action_card.new_entry_notification")}
                   </span>
                   <Switch
+                    disabled={disabled}
                     checked={data.result.newEntryNotification}
                     onCheckedChange={(checked) => {
                       data.result.newEntryNotification = checked
@@ -471,23 +513,10 @@ export function ActionCard({
                     {t("actions.action_card.silence")}
                   </span>
                   <Switch
+                    disabled={disabled}
                     checked={data.result.silence}
                     onCheckedChange={(checked) => {
                       data.result.silence = checked
-                      onChange(data)
-                    }}
-                  />
-                </div>
-                <Divider />
-
-                <div className="flex w-full items-center justify-between">
-                  <span className="w-0 shrink grow truncate">
-                    {t("actions.action_card.source_content")}
-                  </span>
-                  <Switch
-                    checked={data.result.sourceContent}
-                    onCheckedChange={(checked) => {
-                      data.result.sourceContent = checked
                       onChange(data)
                     }}
                   />
@@ -529,6 +558,7 @@ export function ActionCard({
                           return (
                             <TableRow key={rewriteIdx}>
                               <DeleteTableCell
+                                disabled={disabled}
                                 onClick={() => {
                                   if (data.result.rewriteRules?.length === 1) {
                                     delete data.result.rewriteRules
@@ -540,6 +570,7 @@ export function ActionCard({
                               />
                               <TableCell size="sm">
                                 <Input
+                                  disabled={disabled}
                                   value={rule.from}
                                   className="h-8"
                                   onChange={(e) => change("from", e.target.value)}
@@ -547,6 +578,7 @@ export function ActionCard({
                               </TableCell>
                               <TableCell size="sm">
                                 <Input
+                                  disabled={disabled}
                                   value={rule.to}
                                   className="h-8"
                                   onChange={(e) => change("to", e.target.value)}
@@ -559,6 +591,7 @@ export function ActionCard({
                     </Table>
                   )}
                   <AddTableRow
+                    disabled={disabled}
                     onClick={() => {
                       if (!data.result.rewriteRules) {
                         data.result.rewriteRules = []
@@ -596,6 +629,7 @@ export function ActionCard({
                           return (
                             <TableRow key={index}>
                               <DeleteTableCell
+                                disabled={disabled}
                                 onClick={() => {
                                   if (data.result.blockRules?.length === 1) {
                                     delete data.result.blockRules
@@ -607,6 +641,7 @@ export function ActionCard({
                               />
                               <TableCell size="sm">
                                 <Select
+                                  disabled={disabled}
                                   value={rule.field}
                                   onValueChange={(value) => change("field", value)}
                                 >
@@ -621,12 +656,14 @@ export function ActionCard({
                                 </Select>
                               </TableCell>
                               <OperationTableCell
+                                disabled={disabled}
                                 type={type}
                                 value={rule.operator}
                                 onValueChange={(value) => change("operator", value)}
                               />
                               <TableCell size="sm">
                                 <Input
+                                  disabled={disabled}
                                   type={type}
                                   value={rule.value}
                                   className="h-8"
@@ -640,6 +677,7 @@ export function ActionCard({
                     </Table>
                   )}
                   <AddTableRow
+                    disabled={disabled}
                     onClick={() => {
                       if (!data.result.blockRules) {
                         data.result.blockRules = []
@@ -666,6 +704,7 @@ export function ActionCard({
                         return (
                           <div key={rewriteIdx} className="flex items-center gap-2">
                             <DeleteTableCell
+                              disabled={disabled}
                               onClick={() => {
                                 if (data.result.webhooks?.length === 1) {
                                   delete data.result.webhooks
@@ -676,6 +715,7 @@ export function ActionCard({
                               }}
                             />
                             <Input
+                              disabled={disabled}
                               value={webhook}
                               className="h-8"
                               placeholder="https://"
@@ -690,6 +730,7 @@ export function ActionCard({
                     </>
                   )}
                   <AddTableRow
+                    disabled={disabled}
                     onClick={() => {
                       if (!data.result.webhooks) {
                         data.result.webhooks = []

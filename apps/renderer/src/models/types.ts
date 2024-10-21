@@ -101,6 +101,7 @@ export type ActionsInput = {
     value?: string
   }[]
   result: {
+    disabled?: boolean
     translation?: string
     summary?: boolean
     readability?: boolean
@@ -123,3 +124,5 @@ export type ActionsInput = {
 export const TransactionTypes = ["mint", "purchase", "tip", "withdraw"] as const
 
 export type WalletModel = ExtractBizResponse<typeof apiClient.wallets.$get>["data"][number]
+
+export type ServerConfigs = ExtractBizResponse<typeof apiClient.status.configs.$get>["data"]

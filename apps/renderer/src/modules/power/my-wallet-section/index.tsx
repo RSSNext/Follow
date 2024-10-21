@@ -1,13 +1,14 @@
 import { useMutation } from "@tanstack/react-query"
 import { Trans, useTranslation } from "react-i18next"
 
+import { useServerConfigs } from "~/atoms/server-configs"
 import { Button } from "~/components/ui/button"
 import { CopyButton } from "~/components/ui/code-highlighter"
 import { Divider } from "~/components/ui/divider"
 import { LoadingWithIcon } from "~/components/ui/loading"
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/components/ui/tooltip"
 import { apiClient } from "~/lib/api-fetch"
-import { cn } from "~/lib/utils"
+import { cn, getBlockchainExplorerUrl } from "~/lib/utils"
 import { SettingSectionTitle } from "~/modules/settings/section"
 import { ActivityPoints } from "~/modules/wallet/activity-points"
 import { Balance } from "~/modules/wallet/balance"
@@ -16,12 +17,16 @@ import { useWallet, wallet as walletActions } from "~/queries/wallet"
 
 import { ClaimDailyReward } from "./claim-daily-reward"
 import { CreateWallet } from "./create-wallet"
+import { useRewardDescriptionModal } from "./reward-description-modal"
 import { WithdrawButton } from "./withdraw"
 
 export const MyWalletSection = () => {
   const { t } = useTranslation("settings")
   const wallet = useWallet()
   const myWallet = wallet.data?.[0]
+  const serverConfigs = useServerConfigs()
+
+  const rewardDescriptionModal = useRewardDescriptionModal()
 
   const refreshMutation = useMutation({
     mutationFn: async () => {
@@ -61,7 +66,7 @@ export const MyWalletSection = () => {
                 <a
                   className="underline"
                   target="_blank"
-                  href="https://scan.rss3.io/token/0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8"
+                  href={`${getBlockchainExplorerUrl()}/token/0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8`}
                   rel="noreferrer noopener"
                 />
               ),
@@ -71,7 +76,7 @@ export const MyWalletSection = () => {
         <SettingSectionTitle margin="compact" title={t("wallet.address.title")} />
         <div className="group flex items-center gap-2 text-sm">
           <a
-            href={`https://scan.rss3.io/address/${myWallet.address}`}
+            href={`${getBlockchainExplorerUrl()}/address/${myWallet.address}`}
             target="_blank"
             className="underline"
           >
@@ -126,9 +131,11 @@ export const MyWalletSection = () => {
         </div>
         <Divider className="my-8" />
         <SettingSectionTitle title={t("wallet.balance.dailyReward")} margin="compact" />
-        <div className="my-2 text-[15px] leading-tight text-orange-500">
-          {t("wallet.power.rewardDescription3")}
-        </div>
+        {serverConfigs?.DISABLE_PERSONAL_DAILY_POWER && (
+          <div className="my-2 text-[15px] leading-tight text-orange-500">
+            {t("wallet.power.rewardDescription3")}
+          </div>
+        )}
         <div className="my-1 text-sm">{t("wallet.power.rewardDescription")}</div>
         <div className="my-1 text-sm">
           <Trans
@@ -138,21 +145,14 @@ export const MyWalletSection = () => {
             components={{
               Balance: (
                 <Balance
-                  className="align-top"
+                  className="align-sub"
                   withSuffix
                   value={BigInt(myWallet.todayDailyPower || 0n)}
                 >
                   {BigInt(myWallet.todayDailyPower || 0n)}
                 </Balance>
               ),
-              Link: (
-                <a
-                  href="https://github.com/RSSNext/Follow/wiki/Power#daily-reward"
-                  target="_blank"
-                  className="underline"
-                  rel="noreferrer noopener"
-                />
-              ),
+              Link: <Button onClick={rewardDescriptionModal} variant="text" />,
             }}
           />
         </div>
