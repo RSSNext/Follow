@@ -9,7 +9,9 @@ import { ofetch } from "ofetch"
 import PKG from "../../../../package.json"
 import { isDev } from "./env"
 
-export const createApiClient = (authSessionToken: string) => {
+export const createApiClient = () => {
+  const authSessionToken = getTokenFromCookie(requestContext.get("req")?.headers.cookie || "")
+
   const req = requestContext.get("req")!
 
   const { host } = req.headers

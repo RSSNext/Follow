@@ -1,7 +1,7 @@
 import { isBizId } from "@follow/utils/utils"
 import type { FastifyRequest } from "fastify"
 
-import { createApiClient, getTokenFromCookie } from "./lib/api-client"
+import { createApiClient } from "./lib/api-client"
 
 interface MetaTagdata {
   type: "meta"
@@ -32,7 +32,7 @@ export type MetaTag = MetaTagdata | MetaOpenGraph | MetaTitle | MetaHydrateData
 export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]> {
   const metaArr = [] as MetaTag[]
 
-  const apiClient = createApiClient(getTokenFromCookie(req.headers.cookie || ""))
+  const apiClient = createApiClient()
 
   const hostFromReq = req.headers.host
   const protocol = req.headers["x-forwarded-proto"] || req.protocol || "https"

@@ -68,7 +68,7 @@ const prodHandler = (app: FastifyInstance) => {
       globalThis["__followEnv"][key] = env2[key];
     }
   }
-injectEnv({"VITE_API_URL":"${apiUrl}"})`
+injectEnv({"VITE_API_URL":"${apiUrl}","VITE_EXTERNAL_API_URL":"${apiUrl}"})`
           const $script = document.createElement("script")
           $script.innerHTML = template
           document.head.prepend($script)
