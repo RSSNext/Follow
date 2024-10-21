@@ -60,7 +60,7 @@ The project is currently under active development. The following screenshots are
   ![Screenshot 2024-09-10 at 6 27 08 PM](https://github.com/user-attachments/assets/82d71c46-c039-41b9-b3cd-5ad078ff14a5)
   ![Screenshot 2024-09-10 at 8 10 56 PM](https://github.com/user-attachments/assets/2424dfd4-59a6-4dad-8eb7-8db61a711b45)
 
-- Social features. Follow is also a social platform that allows you to follow other users, share your subscriptions, and discover new content. It also offers a subscription list synchronization feature, enabling your friends to sync with your subscriptions. Click [here](https://app.follow.is/profile/54728159538884608) to view my automatically generated personal page.
+- Social features. Follow is also a social platform that allows you to follow other users, share your subscriptions, and discover new content. It also offers a subscription list synchronization feature, enabling your friends to sync with your subscriptions. Click [here](https://app.follow.is/share/users/54728159538884608) to view my automatically generated personal page.
   ![Screenshot 2024-09-10 at 6 26 37 PM](https://github.com/user-attachments/assets/b636fd6d-0fcb-436b-8856-f7a965dba12d)
 
 - Extensive customization options

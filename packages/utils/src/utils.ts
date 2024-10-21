@@ -195,3 +195,5 @@ export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
 
   return ret
 }
+
+export { parse as parseUrl } from "tldts"

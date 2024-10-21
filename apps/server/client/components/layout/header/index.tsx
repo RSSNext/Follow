@@ -29,10 +29,33 @@ function Container({ className, ...props }: React.ComponentPropsWithoutRef<"div"
   )
 }
 
-export const Header = () => {
+const HeaderWrapper: Component = (props) => {
   const { scrollY } = useScroll()
   const scrollYState = useMotionValueToState(scrollY)
+  const showOverlay = scrollYState > 100
 
+  return (
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 flex h-[80px] w-full items-center px-4 duration-200 lg:px-10",
+        showOverlay && "h-[60px] border-b",
+      )}
+    >
+      <div
+        className={cn(
+          "absolute inset-0 transform-gpu [-webkit-backdrop-filter:saturate(180%)_blur(20px)] [backdrop-filter:saturate(180%)_blur(20px)] [backface-visibility:hidden]",
+          "bg-[var(--bg-opacity)] duration-200 [border-bottom:1px_solid_rgb(187_187_187_/_20%)]",
+        )}
+        style={{
+          opacity: showOverlay ? 1 : 0,
+        }}
+      />
+
+      {props.children}
+    </header>
+  )
+}
+export const Header = () => {
   const handleToApp = () => {
     openInFollowApp(
       "",
@@ -45,12 +68,7 @@ export const Header = () => {
   useHotkeys("l", handleToApp)
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 flex h-[80px] w-full items-center px-4 backdrop-blur-lg transition-all lg:px-10",
-        scrollYState && "border-b",
-      )}
-    >
+    <HeaderWrapper>
       <Container>
         <nav className="relative flex justify-between">
           <div className="flex items-center md:gap-x-12">
@@ -61,7 +79,7 @@ export const Header = () => {
           </div>
           <div className="flex items-center gap-4">
             <Button
-              className="flex size-9 rounded-full border-neutral-300 bg-transparent dark:border-neutral-500 md:w-auto md:px-2"
+              className="flex size-9 rounded-full border-neutral-300 bg-transparent hover:border-zinc-400 dark:border-neutral-700 dark:hover:border-zinc-600 md:w-auto md:px-2"
               variant="outline"
             >
               <a
@@ -86,6 +104,6 @@ export const Header = () => {
           </div>
         </nav>
       </Container>
-    </header>
+    </HeaderWrapper>
   )
 }

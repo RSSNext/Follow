@@ -10,7 +10,6 @@ export const UserProvider = () => {
     if (!session?.user) return
     setWhoami(session.user)
 
-    // TODO: integration identify
     setIntegrationIdentify(session.user)
   }, [session?.user])
 
