@@ -1,6 +1,7 @@
 import { cn } from "@follow/utils/utils"
 import { m, useAnimation } from "framer-motion"
-import React, { cloneElement, useEffect } from "react"
+import * as React from "react"
+import { cloneElement, useEffect } from "react"
 
 interface LoadingCircleProps {
   size: "small" | "medium" | "large"

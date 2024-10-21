@@ -1,5 +1,5 @@
 import type { SVGProps } from "react"
-import React from "react"
+import * as React from "react"
 
 export function PhUsersBold(props: SVGProps<SVGSVGElement>) {
   return (
