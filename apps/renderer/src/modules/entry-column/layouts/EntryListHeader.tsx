@@ -18,7 +18,7 @@ import { useIsOnline } from "~/hooks/common"
 import { stopPropagation } from "~/lib/dom"
 import { FeedViewType } from "~/lib/enum"
 import { cn, getOS, isBizId } from "~/lib/utils"
-import { useAIDailyReportModal } from "~/modules/ai/ai-daily/hooks"
+import { useAIDailyReportModal } from "~/modules/ai/ai-daily/useAIDailyReportModal"
 import { EntryHeader } from "~/modules/entry-content/header"
 import { useRefreshFeedMutation } from "~/queries/feed"
 import { useFeedById, useFeedHeaderTitle } from "~/store/feed"
@@ -47,7 +47,7 @@ export const EntryListHeader: FC<{
 
   const titleInfo = !!headerTitle && (
     <div className={!titleAtBottom ? "min-w-0 translate-y-1" : void 0}>
-      <div className="mt-1 h-6 min-w-0 break-all text-lg font-bold leading-tight">
+      <div className="h-6 min-w-0 break-all text-lg font-bold leading-tight">
         <EllipsisHorizontalTextWithTooltip className="inline-block !w-auto max-w-full">
           <span className="relative -top-px">{headerTitle}</span>
         </EllipsisHorizontalTextWithTooltip>

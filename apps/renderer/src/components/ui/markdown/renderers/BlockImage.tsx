@@ -1,10 +1,11 @@
+import { useContext } from "react"
+import { useContextSelector } from "use-context-selector"
+
 import { cn } from "~/lib/utils"
-import { useEntryContentContext } from "~/modules/entry-content/hooks"
 import { useWrappedElementSize } from "~/providers/wrapped-element-provider"
-import { useEntry } from "~/store/entry"
 
 import { Media } from "../../media"
-import { usePopulatedFullUrl } from "../utils"
+import { MarkdownImageRecordContext, MarkdownRenderActionContext } from "../context"
 
 export const MarkdownBlockImage = (
   props: React.ImgHTMLAttributes<HTMLImageElement> & {
@@ -15,12 +16,13 @@ export const MarkdownBlockImage = (
   },
 ) => {
   const size = useWrappedElementSize()
-  const { feedId } = useEntryContentContext()
 
-  const src = usePopulatedFullUrl(feedId, props.src)
+  const { transformUrl } = useContext(MarkdownRenderActionContext)
+  const src = transformUrl(props.src)
 
-  const { entryId } = useEntryContentContext()
-  const media = useEntry(entryId, (entry) => entry?.entries.media?.find((m) => m.url === props.src))
+  const media = useContextSelector(MarkdownImageRecordContext, (record) =>
+    props.src ? record[props.src] : null,
+  )
 
   return (
     <Media
