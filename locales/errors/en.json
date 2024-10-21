@@ -41,5 +41,6 @@
   "9001": "Achievement already received",
   "10000": "Inbox not found",
   "10001": "Inbox already exists",
-  "10002": "Inbox limit exceeded"
+  "10002": "Inbox limit exceeded",
+  "10003": "Inbox permission denied"
 }

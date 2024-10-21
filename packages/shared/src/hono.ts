@@ -5927,6 +5927,18 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             outputFormat: "json" | "text";
             status: 200;
         };
+        $delete: {
+            input: {
+                json: {
+                    entryId: string;
+                };
+            };
+            output: {
+                code: 0;
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
     };
     "/entries/read-histories/:id": {
         $get: {
@@ -6360,6 +6372,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
+                    route?: string | string[] | undefined;
                     category?: string | string[] | undefined;
                     namespace?: string | string[] | undefined;
                 };

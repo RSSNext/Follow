@@ -127,6 +127,21 @@ export const useUnread = () =>
       }),
   })
 
+export const useDeleteInboxEntry = () => {
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (entryId: string) => {
+      await entryActions.deleteInboxEntry(entryId)
+    },
+    onSuccess: () => {
+      toast.success(t("entry_actions.deleted"))
+    },
+    onError: () => {
+      toast.error(t("entry_actions.failed_to_delete"))
+    },
+  })
+}
+
 export const useEntryActions = ({
   view,
   entry,
@@ -215,6 +230,8 @@ export const useEntryActions = ({
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
+
+  const deleteInboxEntry = useDeleteInboxEntry()
 
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
@@ -454,6 +471,14 @@ export const useEntryActions = ({
         hide: !populatedEntry.collections,
         onClick: () => {
           uncollect.mutate()
+        },
+      },
+      {
+        key: "delete",
+        name: t("entry_actions.delete"),
+        hide: !isInbox,
+        onClick: () => {
+          deleteInboxEntry.mutate(populatedEntry.entries.id)
         },
       },
       {
