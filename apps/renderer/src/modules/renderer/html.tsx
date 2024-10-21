@@ -28,7 +28,10 @@ export function EntryContentHTMLRenderer<AS extends keyof JSX.IntrinsicElements 
 } & HTMLProps<AS>) {
   const entry = useEntry(entryId)
 
-  const populatedFullUrl = usePopulatedFullUrl(feedId, entry?.entries.url || void 0)
+  const feedSiteUrl = useFeedByIdSelector(feedId, (feed) =>
+    "siteUrl" in feed ? feed.siteUrl : undefined,
+  )
+
   const images: Record<string, MarkdownImage> = useMemo(() => {
     return (
       entry?.entries.media?.reduce(
@@ -52,11 +55,13 @@ export function EntryContentHTMLRenderer<AS extends keyof JSX.IntrinsicElements 
         return view === FeedViewType.Audios
       },
       transformUrl(url) {
-        return populatedFullUrl ?? url ?? ""
+        if (!url || url.startsWith("http")) return url
+        if (url.startsWith("/") && feedSiteUrl) return safeUrl(url, feedSiteUrl)
+        return url
       },
       ensureAndRenderTimeStamp,
     }
-  }, [populatedFullUrl, view])
+  }, [feedSiteUrl, view])
   return (
     <MarkdownImageRecordContext.Provider value={images}>
       <MarkdownRenderActionContext.Provider value={actions}>
@@ -75,21 +80,6 @@ const safeUrl = (url: string, baseUrl: string) => {
   } catch {
     return url
   }
-}
-const usePopulatedFullUrl = (feedId: string, relativeUrl?: string) => {
-  const feedSiteUrl = useFeedByIdSelector(feedId, (feed) =>
-    "siteUrl" in feed ? feed.siteUrl : undefined,
-  )
-
-  const populatedFullHref = useMemo(() => {
-    if (!relativeUrl) return void 0
-
-    if (relativeUrl.startsWith("http")) return relativeUrl
-    if (relativeUrl.startsWith("/") && feedSiteUrl) return safeUrl(relativeUrl, feedSiteUrl)
-    return relativeUrl
-  }, [feedSiteUrl, relativeUrl])
-
-  return populatedFullHref
 }
 
 const ensureAndRenderTimeStamp = (children: string) => {
