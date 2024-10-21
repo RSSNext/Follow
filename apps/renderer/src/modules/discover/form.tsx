@@ -80,7 +80,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
     mutationFn: async ({ keyword, target }: { keyword: string; target: "feeds" | "lists" }) => {
       const { data } = await apiClient.discover.$post({
         json: {
-          keyword,
+          keyword: keyword.trim(),
           target,
         },
       })
@@ -119,7 +119,7 @@ export function DiscoverForm({ type = "search" }: { type?: string }) {
 
   const keyword = form.watch("keyword")
   useEffect(() => {
-    const trimmedKeyword = keyword.trim()
+    const trimmedKeyword = keyword.trimStart()
     if (!prefix) {
       form.setValue("keyword", trimmedKeyword)
       return

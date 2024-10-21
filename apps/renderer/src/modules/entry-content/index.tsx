@@ -18,7 +18,6 @@ import { enableShowSourceContent } from "~/atoms/source-content"
 import { m } from "~/components/common/Motion"
 import { ShadowDOM } from "~/components/common/ShadowDOM"
 import { AutoResizeHeight } from "~/components/ui/auto-resize-height"
-import { HTML } from "~/components/ui/markdown"
 import { Toc } from "~/components/ui/markdown/components/Toc"
 import { useInPeekModal } from "~/components/ui/modal/inspire/PeekModal"
 import { RootPortal } from "~/components/ui/portal"
@@ -45,6 +44,7 @@ import { useFeedById } from "~/store/feed"
 
 import { LoadingWithIcon } from "../../components/ui/loading"
 import { EntryPlaceholderDaily } from "../ai/ai-daily/EntryPlaceholderDaily"
+import { EntryContentHTMLRenderer } from "../renderer/html"
 import {
   getTranslationCache,
   setEntryContentScrollToTop,
@@ -57,7 +57,6 @@ import { SourceContentPanel } from "./components/SourceContentView"
 import { SupportCreator } from "./components/SupportCreator"
 import { EntryHeader } from "./header"
 import { EntryContentLoading } from "./loading"
-import { EntryContentProvider } from "./provider"
 
 export interface EntryContentClassNames {
   header?: string
@@ -217,12 +216,7 @@ export const EntryContentRender: Component<{
   }
 
   return (
-    <EntryContentProvider
-      entryId={entry.entries.id}
-      feedId={entry.feedId}
-      audioSrc={entry.entries?.attachments?.[0].url}
-      view={view}
-    >
+    <>
       <EntryHeader
         entryId={entry.entries.id}
         view={0}
@@ -267,8 +261,11 @@ export const EntryContentRender: Component<{
                   <ErrorBoundary fallback={RenderError}>
                     {!isInReadabilityMode ? (
                       <ShadowDOM>
-                        <HTML
-                          translate={translate}
+                        <EntryContentHTMLRenderer
+                          view={view}
+                          feedId={feed?.id}
+                          entryId={entryId}
+                          handleTranslate={translate}
                           mediaInfo={mediaInfo}
                           noMedia={noMedia}
                           accessory={contentAccessories}
@@ -278,10 +275,10 @@ export const EntryContentRender: Component<{
                           renderInlineStyle={readerRenderInlineStyle}
                         >
                           {content}
-                        </HTML>
+                        </EntryContentHTMLRenderer>
                       </ShadowDOM>
                     ) : (
-                      <ReadabilityContent entryId={entryId} />
+                      <ReadabilityContent entryId={entryId} feedId={feed.id} />
                     )}
                   </ErrorBoundary>
                 </div>
@@ -323,7 +320,7 @@ export const EntryContentRender: Component<{
         </ScrollArea.ScrollArea>
         <SourceContentPanel src={entry.entries.url} />
       </div>
-    </EntryContentProvider>
+    </>
   )
 }
 
@@ -364,9 +361,10 @@ const TitleMetaHandler: Component<{
   return null
 }
 
-const ReadabilityContent = ({ entryId }: { entryId: string }) => {
+const ReadabilityContent = ({ entryId, feedId }: { entryId: string; feedId: string }) => {
   const { t } = useTranslation()
   const result = useEntryReadabilityContent(entryId)
+  const view = useRouteParamsSelector((route) => route.view)
 
   return (
     <div className="grow">
@@ -382,12 +380,15 @@ const ReadabilityContent = ({ entryId }: { entryId: string }) => {
         </div>
       )}
 
-      <HTML
+      <EntryContentHTMLRenderer
+        view={view}
+        feedId={feedId}
+        entryId={entryId}
         as="article"
         className="prose dark:prose-invert prose-h1:text-[1.6em] prose-h1:font-bold"
       >
         {result?.content ?? ""}
-      </HTML>
+      </EntryContentHTMLRenderer>
     </div>
   )
 }
