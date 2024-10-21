@@ -1,4 +1,5 @@
-import fs from "node:fs/promises"
+import fs from "node:fs"
+import fsp from "node:fs/promises"
 import path from "node:path"
 
 import { getRendererHandlers } from "@egoist/tipc/main"
@@ -240,12 +241,12 @@ export const appRoute = {
       try {
         const { url, title, content, author, publishedAt, vaultPath } = input
 
-        const safeTitle = (title || "untitled").trim()
-        const fileName = `${safeTitle
-          .replaceAll(/[^a-z0-9]/gi, "_")
-          .toLowerCase()
-          .slice(0, 100)}.md`
+        const fileName = `${(title || publishedAt).trim().slice(0, 20)}.md`
         const filePath = path.join(vaultPath, fileName)
+        const exists = fs.existsSync(filePath)
+        if (exists) {
+          return { success: false, error: "File already exists" }
+        }
 
         const markdown = `---
 url: ${url}
@@ -258,7 +259,7 @@ publishedAt: ${publishedAt}
 ${content}
 `
 
-        await fs.writeFile(filePath, markdown, "utf-8")
+        await fsp.writeFile(filePath, markdown, "utf-8")
         return { success: true }
       } catch (error) {
         console.error("Failed to save to Obsidian:", error)

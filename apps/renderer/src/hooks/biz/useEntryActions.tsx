@@ -186,20 +186,18 @@ export const useEntryActions = ({
       publishedAt: string
       vaultPath: string
     }) => {
-      if (!isObsidianEnabled) {
-        throw new Error("Obsidian feature is not enabled")
-      }
       return await tipcClient?.saveToObsidian(data)
     },
-    onSuccess: () => {
-      toast.success(t("entry_actions.saved_to_obsidian"), {
-        duration: 3000,
-      })
-    },
-    onError: () => {
-      toast.error(t("entry_actions.failed_to_save_to_obsidian"), {
-        duration: 3000,
-      })
+    onSuccess: (data) => {
+      if (data?.success) {
+        toast.success(t("entry_actions.saved_to_obsidian"), {
+          duration: 3000,
+        })
+      } else {
+        toast.error(`${t("entry_actions.failed_to_save_to_obsidian")}: ${data?.error}`, {
+          duration: 3000,
+        })
+      }
     },
   })
 
@@ -407,7 +405,7 @@ export const useEntryActions = ({
         key: "saveToObsidian",
         hide: !isObsidianEnabled || !populatedEntry?.entries?.url,
         onClick: () => {
-          if (!populatedEntry?.entries?.url || !obsidianVaultPath) return
+          if (!isObsidianEnabled || !populatedEntry?.entries?.url) return
 
           saveToObsidian.mutate({
             url: populatedEntry.entries.url,
