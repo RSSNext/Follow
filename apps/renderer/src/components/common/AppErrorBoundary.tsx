@@ -1,7 +1,7 @@
 import type { FallbackRender } from "@sentry/react"
 import { ErrorBoundary } from "@sentry/react"
 import type { FC, PropsWithChildren } from "react"
-import { createElement, useCallback } from "react"
+import { createElement, Suspense, useCallback } from "react"
 
 import { getErrorFallback } from "../errors"
 import type { ErrorComponentType } from "../errors/enum"
@@ -38,8 +38,9 @@ type ErrorFallbackProps = Parameters<FallbackRender>["0"]
 export type AppErrorFallbackProps = ErrorFallbackProps & {}
 const AppErrorBoundaryItem: FC<AppErrorBoundaryProps> = ({ errorType, children }) => {
   const fallbackRender = useCallback(
-    (fallbackProps: ErrorFallbackProps) =>
-      createElement(getErrorFallback(errorType), fallbackProps),
+    (fallbackProps: ErrorFallbackProps) => (
+      <Suspense>{createElement(getErrorFallback(errorType), fallbackProps)}</Suspense>
+    ),
     [errorType],
   )
 
