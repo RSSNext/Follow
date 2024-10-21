@@ -60,7 +60,7 @@ const prodHandler = (app: FastifyInstance) => {
 
         // override client side api url
 
-        const upstreamHost = req.headers.host || req.headers["x-forwarded-host"]
+        const upstreamHost = req.headers["x-forwarded-host"] || req.headers.host
         const protocol = req.headers["x-forwarded-proto"] || "https"
         const upstreamOrigin = `${protocol}://${upstreamHost}`
 
