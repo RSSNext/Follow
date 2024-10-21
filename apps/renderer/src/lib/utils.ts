@@ -4,6 +4,7 @@ import { memoize } from "lodash-es"
 import { twMerge } from "tailwind-merge"
 import { parse } from "tldts"
 
+import { getServerConfigs } from "~/atoms/server-configs"
 import type { MediaModel } from "~/models"
 import type { RSSHubRoute } from "~/modules/discover/types"
 
@@ -285,4 +286,40 @@ export const filterSmallMedia = (media: MediaModel) => {
   return media?.filter(
     (m) => !(m.type === "photo" && m.width && m.width < 65 && m.height && m.height < 65),
   )
+}
+
+export const getLevelMultiplier = (level: number) => {
+  if (level === 0) {
+    return 0.1
+  }
+  const serverConfigs = getServerConfigs()
+  if (!serverConfigs) {
+    return 1
+  }
+  const level1Range = serverConfigs?.LEVEL_PERCENTAGES[3] - serverConfigs?.LEVEL_PERCENTAGES[2]
+  const percentageIndex = serverConfigs.LEVEL_PERCENTAGES.length - level
+  let levelCurrentRange
+  if (percentageIndex - 1 < 0) {
+    levelCurrentRange = serverConfigs?.LEVEL_PERCENTAGES[percentageIndex]
+  } else {
+    levelCurrentRange =
+      serverConfigs?.LEVEL_PERCENTAGES[percentageIndex] -
+      serverConfigs?.LEVEL_PERCENTAGES[percentageIndex - 1]
+  }
+  const rangeMultiplier = levelCurrentRange / level1Range
+
+  const poolMultiplier =
+    serverConfigs?.DAILY_POWER_PERCENTAGES[level] / serverConfigs?.DAILY_POWER_PERCENTAGES[1]
+
+  return (poolMultiplier / rangeMultiplier).toFixed(0)
+}
+
+export const getBlockchainExplorerUrl = () => {
+  const serverConfigs = getServerConfigs()
+
+  if (serverConfigs?.IS_RSS3_TESTNET) {
+    return `https://scan.testnet.rss3.io`
+  } else {
+    return `https://scan.rss3.io`
+  }
 }

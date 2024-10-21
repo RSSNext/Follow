@@ -1,6 +1,4 @@
-import { cn } from "~/lib/utils"
-
-export const multiples = [0.1, 1, 2, 5, 18]
+import { cn, getLevelMultiplier } from "~/lib/utils"
 
 export const Level = ({
   level,
@@ -21,7 +19,9 @@ export const Level = ({
       ) : (
         <>
           <span>Lv.{level}</span>
-          <sub className="-translate-y-px text-[0.6rem] font-normal">x{multiples[level]}</sub>
+          <sub className="-translate-y-px text-[0.6rem] font-normal">
+            {getLevelMultiplier(level)}x
+          </sub>
         </>
       )}
     </div>
