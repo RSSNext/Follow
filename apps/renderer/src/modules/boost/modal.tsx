@@ -9,6 +9,8 @@ import { boosts, useBoostFeedMutation } from "~/queries/boosts"
 import { useWallet } from "~/queries/wallet"
 
 import { Balance } from "../wallet/balance"
+import { BoostProgress } from "./boost-progress"
+import { LevelBenefits } from "./level-benefits"
 import { RadioCards } from "./radio-cards"
 
 export const BoostModalContent = ({ feedId }: { feedId: string }) => {
@@ -35,7 +37,7 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
   if (isLoading || !boostStatus) {
     return (
       <div className="center pointer-events-none grow -translate-y-16">
-        <LoadingWithIcon icon={<i className="i-mgc-trophy-cute-re" />} size="large" />
+        <LoadingWithIcon icon={<i className="i-mgc-rocket-cute-fi" />} size="large" />
       </div>
     )
   }
@@ -67,7 +69,8 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
         <div className="mt-4 text-xl font-bold">🚀 Boost Feed</div>
 
         <small className="center mt-1 gap-1 text-theme-vibrancyFg">
-          Boost feed to get more privilege, everyone subscribed to this feed will thank you.
+          Enhance feed to unlock additional benefits, and those who subscribe will be grateful for
+          the benefits!
         </small>
 
         <BoostProgress {...boostStatus} />
@@ -81,57 +84,14 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
       <Button
         disabled={boostFeedMutation.isSuccess || boostFeedMutation.isPending || wrongNumberRange}
         isLoading={boostFeedMutation.isPending}
-        variant={boostFeedMutation.isSuccess ? "outline" : "primary"}
+        variant="primary"
         onClick={handleBoost}
       >
-        {boostFeedMutation.isSuccess && (
-          <i className="i-mgc-check-circle-filled mr-2 bg-green-500" />
-        )}
+        <i className="i-mgc-rocket-cute-fi mr-2 shrink-0" />
         Boost
       </Button>
-    </div>
-  )
-}
 
-const BoostProgress = ({
-  level,
-  boostCount,
-  remainingBoostsToLevelUp,
-}: {
-  level: number
-  boostCount: number
-  remainingBoostsToLevelUp: number
-}) => {
-  const percentage = (boostCount / (boostCount + remainingBoostsToLevelUp)) * 100
-  const nextLevel = level + 1
-  return (
-    <div className="flex w-full flex-col px-2">
-      <div className="relative w-full pt-12">
-        <span
-          className="absolute bottom-0 mb-10 flex h-8 w-12 -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-full bg-white px-3.5 py-2 text-sm font-bold text-gray-800 shadow-[0px_12px_30px_0px_rgba(16,24,40,0.1)] transition-all duration-500 ease-out after:absolute after:bottom-[-5px] after:left-1/2 after:-z-10 after:flex after:size-3 after:-translate-x-1/2 after:rotate-45 after:bg-white"
-          style={{ left: `${percentage}%` }}
-        >
-          ⚡️ {boostCount}
-        </span>
-        <div className="relative flex h-6 w-full overflow-hidden rounded-3xl bg-gray-100 dark:bg-gray-800">
-          <div
-            role="progressbar"
-            aria-valuenow={boostCount}
-            aria-valuemin={0}
-            aria-valuemax={remainingBoostsToLevelUp}
-            style={{ width: `${percentage}%` }}
-            className="flex h-full items-center justify-center rounded-3xl bg-accent text-white transition-all duration-500 ease-out"
-          />
-        </div>
-      </div>
-
-      <div className="mt-2 flex items-center justify-between">
-        <span className="text-lg font-bold text-accent">Lv. {level}</span>
-        <span className="text-lg font-bold text-accent">Lv. {nextLevel}</span>
-      </div>
-      <small className="center mt-1 gap-1">
-        {remainingBoostsToLevelUp} more boost will unlock the next level of privilege.
-      </small>
+      <LevelBenefits />
     </div>
   )
 }
