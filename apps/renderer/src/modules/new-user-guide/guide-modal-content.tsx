@@ -45,7 +45,7 @@ const variants = {
 function Intro() {
   const { t } = useTranslation("app")
   return (
-    <div className="mb-20 w-[50ch] text-balance pt-14 text-center">
+    <div className="w-[50ch] text-balance text-center">
       <Logo className="mx-auto size-20" />
       <p className="mt-5 text-xl font-semibold">{t("new_user_guide.intro.title")}</p>
       <p className="text-lg">{t("new_user_guide.intro.description")}</p>
@@ -57,7 +57,7 @@ function Intro() {
 function Outtro() {
   const { t } = useTranslation("app")
   return (
-    <div className="mb-20 w-[50ch] text-balance pt-14 text-center">
+    <div className="w-[50ch] text-balance text-center">
       <Logo className="mx-auto size-20" />
       <p className="mt-5 text-xl font-semibold">{t("new_user_guide.outro.title")}</p>
       <p className="text-lg">{t("new_user_guide.outro.description")}</p>
@@ -135,6 +135,32 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
         </h1>
       )}
 
+      <div className="relative mx-auto flex w-full max-w-2xl items-center">
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <m.div
+            key={step - 1}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.1 },
+            }}
+            className="mt-20 px-6 pb-24"
+          >
+            {status === "initial" ? (
+              <Intro />
+            ) : status === "active" ? (
+              guideSteps[step - 1].content
+            ) : status === "complete" ? (
+              <Outtro />
+            ) : null}
+          </m.div>
+        </AnimatePresence>
+      </div>
+
       <div className="absolute inset-x-0 bottom-4 z-[1] flex w-full items-center justify-between px-6">
         <div className={clsx("flex h-fit gap-4", step === 0 && "invisible")}>
           {Array.from({ length: totalSteps }, (_, i) => i + 1).map((i) => (
@@ -187,31 +213,6 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
             {step <= totalSteps ? "Next" : "Finish"}
           </Button>
         </div>
-      </div>
-
-      <div className="relative mx-auto flex w-full max-w-2xl items-center">
-        <AnimatePresence initial={false} custom={direction} mode="popLayout">
-          <m.div
-            key={step - 1}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.1 },
-            }}
-          >
-            {status === "initial" ? (
-              <Intro />
-            ) : status === "active" ? (
-              guideSteps[step - 1].content
-            ) : status === "complete" ? (
-              <Outtro />
-            ) : null}
-          </m.div>
-        </AnimatePresence>
       </div>
     </m.div>
   )

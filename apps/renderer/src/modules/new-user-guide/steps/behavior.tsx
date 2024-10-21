@@ -16,31 +16,29 @@ export function BehaviorGuide() {
   }
 
   return (
-    <div className="mt-20 space-y-4 px-6 pb-24">
-      <div>
-        <h2 className="my-6 text-xl font-semibold">
-          {t("new_user_guide.step.behavior.unread_question.content")}
-        </h2>
-        <div className="flex flex-col gap-4">
-          <RadioGroup
-            value={value}
-            onValueChange={(value) => {
-              setValue(value as Behavior)
-              updateSettings(value as Behavior)
-            }}
-          >
-            <Radio
-              wrapperClassName="border rounded-lg p-4 has-[:checked]:bg-theme-accent-50 has-[:checked]:text-theme-accent-900 has-[:checked]:border-theme-accent-200"
-              label={t("new_user_guide.step.behavior.unread_question.option1")}
-              value="default"
-            />
-            <Radio
-              wrapperClassName="border rounded-lg p-4 has-[:checked]:bg-theme-accent-50 has-[:checked]:text-theme-accent-900 has-[:checked]:border-theme-accent-200"
-              label={t("new_user_guide.step.behavior.unread_question.option2")}
-              value="disabled"
-            />
-          </RadioGroup>
-        </div>
+    <div className="space-y-4">
+      <h2 className="mb-6 text-xl font-semibold">
+        {t("new_user_guide.step.behavior.unread_question.content")}
+      </h2>
+      <div className="flex flex-col gap-4">
+        <RadioGroup
+          value={value}
+          onValueChange={(value) => {
+            setValue(value as Behavior)
+            updateSettings(value as Behavior)
+          }}
+        >
+          <Radio
+            wrapperClassName="border rounded-lg p-4 has-[:checked]:bg-theme-accent-50 has-[:checked]:text-theme-accent-900 has-[:checked]:border-theme-accent-200"
+            label={t("new_user_guide.step.behavior.unread_question.option1")}
+            value="default"
+          />
+          <Radio
+            wrapperClassName="border rounded-lg p-4 has-[:checked]:bg-theme-accent-50 has-[:checked]:text-theme-accent-900 has-[:checked]:border-theme-accent-200"
+            label={t("new_user_guide.step.behavior.unread_question.option2")}
+            value="disabled"
+          />
+        </RadioGroup>
       </div>
     </div>
   )
