@@ -676,12 +676,18 @@ importers:
       '@fontsource/sn-pro':
         specifier: 5.1.0
         version: 5.1.0
+      '@openpanel/web':
+        specifier: 1.0.1
+        version: 1.0.1
       '@radix-ui/react-avatar':
         specifier: 1.1.1
         version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@resvg/resvg-js':
         specifier: 2.6.2
         version: 2.6.2
+      '@sentry/react':
+        specifier: 8.34.0
+        version: 8.34.0(react@18.3.1)
       '@tanstack/react-query':
         specifier: 5.59.14
         version: 5.59.14(react@18.3.1)

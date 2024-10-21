@@ -5,6 +5,9 @@ declare global {
   interface Window {
     __HYDRATE__: Record<string, any>
   }
+
+  export const GIT_COMMIT_SHA: string
+  export const APP_VERSION: string
 }
 
 export {}
