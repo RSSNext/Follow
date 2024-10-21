@@ -11,10 +11,14 @@ export const env = createEnv({
     VITE_SENTRY_DSN: z.string().optional(),
     VITE_INBOXES_EMAIL: z.string().default("@follow.re"),
     VITE_FIREBASE_CONFIG: z.string().optional(),
-    // For external, use api_url if you don't want to fill it in.
-    VITE_EXTERNAL_API_URL: z.string().optional(),
+
     VITE_OPENPANEL_CLIENT_ID: z.string().optional(),
     VITE_OPENPANEL_API_URL: z.string().url().optional(),
+
+    // For external, use api_url if you don't want to fill it in.
+    VITE_EXTERNAL_PROD_API_URL: z.string().optional(),
+    VITE_EXTERNAL_DEV_API_URL: z.string().optional(),
+    VITE_EXTERNAL_API_URL: z.string().optional(),
   },
 
   emptyStringAsUndefined: true,

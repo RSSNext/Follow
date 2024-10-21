@@ -19,8 +19,16 @@ export const createApiClient = (authSessionToken: string) => {
   if (env.VITE_EXTERNAL_API_URL?.startsWith("/")) {
     baseURL = `http://${host}${env.VITE_EXTERNAL_API_URL}`
   }
+
+  const upstreamEnv = req.requestContext.get("upstreamEnv")
+  if (upstreamEnv === "dev" && env.VITE_EXTERNAL_DEV_API_URL) {
+    baseURL = env.VITE_EXTERNAL_DEV_API_URL
+  }
+  if (upstreamEnv === "prod" && env.VITE_EXTERNAL_PROD_API_URL) {
+    baseURL = env.VITE_EXTERNAL_PROD_API_URL
+  }
+
   const apiFetch = ofetch.create({
-    // baseURL,
     credentials: "include",
 
     retry: false,

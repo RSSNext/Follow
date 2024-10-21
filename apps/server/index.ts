@@ -15,6 +15,8 @@ const isVercel = process.env.VERCEL === "1"
 declare module "@fastify/request-context" {
   interface RequestContextData {
     req: FastifyRequest
+
+    upstreamEnv: "prod" | "dev"
   }
 }
 
@@ -28,6 +30,10 @@ export const createApp = async () => {
 
   app.addHook("onRequest", (req, reply, done) => {
     req.requestContext.set("req", req)
+
+    const { host } = req.headers
+
+    if (!isDev) req.requestContext.set("upstreamEnv", host?.includes("dev") ? "dev" : "prod")
     done()
   })
 

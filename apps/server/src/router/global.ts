@@ -2,6 +2,7 @@
 import { readFileSync } from "node:fs"
 import path, { resolve } from "node:path"
 
+import { env } from "@follow/shared/env"
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import { parseHTML } from "linkedom"
 import { FetchError } from "ofetch"
@@ -51,6 +52,35 @@ const prodHandler = (app: FastifyInstance) => {
       for (const link of document.querySelectorAll("link")) {
         link.href = `${prefix}${link.href}`
       }
+
+      const upstreamEnv = req.requestContext.get("upstreamEnv")
+
+      if (upstreamEnv) {
+        document.head.prepend(document.createComment(`upstreamEnv: ${upstreamEnv}`))
+
+        // override client side api url
+
+        const injectScript = (apiUrl: string) => {
+          const template = `function injectEnv(env2) {
+    for (const key in env2) {
+      if (env2[key] === void 0) continue;
+      globalThis["__followEnv"] ??= {};
+      globalThis["__followEnv"][key] = env2[key];
+    }
+  }
+injectEnv({"VITE_API_URL":"${apiUrl}"})`
+          const $script = document.createElement("script")
+          $script.innerHTML = template
+          document.head.prepend($script)
+        }
+        if (upstreamEnv === "dev" && env.VITE_EXTERNAL_DEV_API_URL) {
+          injectScript(env.VITE_EXTERNAL_DEV_API_URL)
+        }
+        if (upstreamEnv === "prod" && env.VITE_EXTERNAL_PROD_API_URL) {
+          injectScript(env.VITE_EXTERNAL_PROD_API_URL)
+        }
+      }
+
       template = document.toString()
     }
 
