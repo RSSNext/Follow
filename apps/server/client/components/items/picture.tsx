@@ -100,7 +100,6 @@ const getCurrentColumn = (w: number) => {
 
   return columns
 }
-const gutter = 24
 export const PictureList: FC<{
   entries: EntriesPreview
 
@@ -111,13 +110,16 @@ export const PictureList: FC<{
   const [currentColumn, setCurrentColumn] = useState(1)
   const containerRef = useRef<HTMLDivElement>(null)
   const [isInitLayout, setIsInitLayout] = useState(false)
+
+  const xGutter = currentColumn === 1 ? 0 : 12
+  const yGutter = 12
   useLayoutEffect(() => {
     const $warpper = containerRef.current
     if (!$warpper) return
     const handler = () => {
       const column = getCurrentColumn($warpper.clientWidth)
 
-      setCurrentItemWidth(Math.trunc($warpper.clientWidth / column - gutter))
+      setCurrentItemWidth(Math.trunc($warpper.clientWidth / column - xGutter))
 
       setCurrentColumn(column)
 
@@ -144,7 +146,7 @@ export const PictureList: FC<{
     return () => {
       resizeObserver.disconnect()
     }
-  }, [])
+  }, [xGutter])
 
   const items = useMemo(() => {
     const flattenedItems = []
@@ -185,7 +187,7 @@ export const PictureList: FC<{
                     <div className="relative w-full">
                       <Masonry
                         items={items}
-                        columnGutter={gutter}
+                        columnGutter={yGutter}
                         columnWidth={currentItemWidth}
                         columnCount={currentColumn}
                         overscanBy={2}
