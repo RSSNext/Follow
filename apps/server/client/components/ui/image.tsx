@@ -35,7 +35,7 @@ export const LazyImage = forwardRef<HTMLImageElement, LazyImageProps>(
       })
     }, [src, proxy?.height, proxy?.width])
     return (
-      <Avatar.Root>
+      <Avatar.Root className="relative">
         <Avatar.Image
           ref={ref}
           src={nextSrc}
@@ -48,7 +48,7 @@ export const LazyImage = forwardRef<HTMLImageElement, LazyImageProps>(
         <Avatar.Fallback asChild>
           <div
             className={cn(
-              "center size-full",
+              "center size-full max-w-full",
 
               !blurhash && "bg-theme-inactive/50",
               className,

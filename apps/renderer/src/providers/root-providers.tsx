@@ -18,6 +18,7 @@ import { InvalidateQueryProvider } from "./invalidate-query-provider"
 import {
   LazyContextMenuProvider,
   LazyExtensionExposeProvider,
+  LazyExternalJumpInProvider,
   LazyFeatureFlagDebugger,
   LazyLottieRenderContainer,
   LazyModalStackProvider,
@@ -58,6 +59,8 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
                 <LazyModalStackProvider />
                 <LazyContextMenuProvider />
                 <LazyLottieRenderContainer />
+                <LazyExternalJumpInProvider />
+
                 <LazyFeatureFlagDebugger />
               </Suspense>
               <Toaster />

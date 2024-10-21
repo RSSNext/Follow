@@ -7,6 +7,7 @@ import { parseHTML } from "linkedom"
 import { FetchError } from "ofetch"
 
 import { isDev } from "~/lib/env"
+import { buildSeoMetaTags } from "~/lib/seo"
 
 import { injectMetaHandler } from "../meta-handler"
 
@@ -91,6 +92,10 @@ async function injectMetaToTemplate(template: string, req: FastifyRequest) {
   let isTitleReplaced = false
   for (const meta of injectMetadata) {
     switch (meta.type) {
+      case "openGraph": {
+        allMetaString.push(buildSeoMetaTags({ openGraph: meta }))
+        break
+      }
       case "meta": {
         allMetaString.push(`<meta property="${meta.property}" content="${meta.content}" />`)
         break

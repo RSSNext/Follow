@@ -76,7 +76,7 @@ export function Component() {
     <MainContainer className="items-center">
       <FeedIcon fallback feed={feed.data.feed} className="mask-squircle mask shrink-0" size={64} />
 
-      <div className="flex flex-col items-center">
+      <div className="flex max-w-prose flex-col items-center">
         <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
           <h1>{feed.data.feed.title}</h1>
           <FeedCertification feed={feed.data.feed} />

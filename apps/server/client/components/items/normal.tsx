@@ -57,17 +57,19 @@ function NormalListItemImpl({
       </div>
 
       {withDetails && entry.entries.media?.[0] && (
-        <LazyImage
-          proxy={{
-            width: 160,
-            height: 160,
-          }}
-          className="size-24 overflow-hidden rounded"
-          src={entry.entries.media[0].url}
-          height={entry.entries.media[0].height}
-          width={entry.entries.media[0].width}
-          blurhash={entry.entries.media[0].blurhash}
-        />
+        <div className="relative size-24 overflow-hidden rounded">
+          <LazyImage
+            proxy={{
+              width: 160,
+              height: 160,
+            }}
+            className="overflow-hidden rounded"
+            src={entry.entries.media[0].url}
+            height={entry.entries.media[0].height}
+            width={entry.entries.media[0].width}
+            blurhash={entry.entries.media[0].blurhash}
+          />
+        </div>
       )}
     </div>
   )

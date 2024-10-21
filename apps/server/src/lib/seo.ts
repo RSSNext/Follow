@@ -19,5 +19,5 @@ export function buildSeoMetaTags(configs: {
       ? `<meta property="twitter:description" content="${openGraph.description}" />`
       : "",
     openGraph.image ? `<meta property="twitter:image" content="${openGraph.image}" />` : "",
-  ]
+  ].join("\n")
 }

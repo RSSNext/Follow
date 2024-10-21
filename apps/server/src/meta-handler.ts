@@ -8,6 +8,13 @@ interface MetaTagdata {
   content: string
 }
 
+interface MetaOpenGraph {
+  type: "openGraph"
+  title: string
+  description?: string
+  image?: string | null
+}
+
 interface MetaTitle {
   type: "title"
   title: string
@@ -19,7 +26,7 @@ interface MetaHydrateData {
   path: string
   key: string
 }
-export type MetaTag = MetaTagdata | MetaTitle | MetaHydrateData
+export type MetaTag = MetaTagdata | MetaOpenGraph | MetaTitle | MetaHydrateData
 
 export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]> {
   const metaArr = [] as MetaTag[]
@@ -41,14 +48,10 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
       const { title, description } = feed.data.feed
       metaArr.push(
         {
-          type: "meta",
-          property: "og:image",
-          content: `${protocol}://${hostFromReq}/og/feed/${feedId}`,
-        },
-        {
-          type: "meta",
-          property: "og:description",
-          content: description || "",
+          type: "openGraph",
+          title: title || "",
+          description: description || "",
+          image: `${protocol}://${hostFromReq}/og/feed/${feedId}`,
         },
         {
           type: "title",
@@ -59,6 +62,33 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
           data: feed.data,
           path: apiClient.feeds.$url({ query: { id: feedId } }).pathname,
           key: `feeds.$get,query:id=${feedId}`,
+        },
+      )
+      break
+    }
+    case url.startsWith("/share/lists"): {
+      const parsedUrl = new URL(url, `https://${hostFromReq}`)
+      const listId = parsedUrl.pathname.split("/")[3]
+
+      const list = await apiClient.lists.$get({ query: { listId } })
+
+      const { title, description } = list.data.list
+      metaArr.push(
+        {
+          type: "openGraph",
+          title: title || "",
+          description: description || "",
+          image: `${protocol}://${hostFromReq}/og/list/${listId}`,
+        },
+        {
+          type: "title",
+          title: title || "",
+        },
+        {
+          type: "hydrate",
+          data: list.data,
+          path: apiClient.lists.$url({ query: { listId } }).pathname,
+          key: `lists.$get,query:listId=${listId}`,
         },
       )
     }
