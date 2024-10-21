@@ -52,14 +52,14 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
             tableName: "achievements";
             dataType: "string";
             columnType: "PgText";
-            data: "received" | "checking" | "completed" | "incomplete";
+            data: "received" | "checking" | "completed" | "incomplete" | "audit";
             driverParam: string;
             notNull: true;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: ["checking", "completed", "incomplete", "received"];
+            enumValues: ["checking", "completed", "incomplete", "audit", "received"];
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
@@ -149,14 +149,14 @@ declare const achievements: drizzle_orm_pg_core.PgTableWithColumns<{
 declare const achievementsOpenAPISchema: zod.ZodObject<{
     id: zod.ZodString;
     userId: zod.ZodString;
-    type: zod.ZodEnum<["checking", "completed", "incomplete", "received"]>;
+    type: zod.ZodEnum<["checking", "completed", "incomplete", "audit", "received"]>;
     actionId: zod.ZodNumber;
     progress: zod.ZodNumber;
     progressMax: zod.ZodNumber;
     done: zod.ZodBoolean;
     doneAt: zod.ZodNullable<zod.ZodString>;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
-    type: "received" | "checking" | "completed" | "incomplete";
+    type: "received" | "checking" | "completed" | "incomplete" | "audit";
     id: string;
     userId: string;
     actionId: number;
@@ -165,7 +165,7 @@ declare const achievementsOpenAPISchema: zod.ZodObject<{
     done: boolean;
     doneAt: string | null;
 }, {
-    type: "received" | "checking" | "completed" | "incomplete";
+    type: "received" | "checking" | "completed" | "incomplete" | "audit";
     id: string;
     userId: string;
     actionId: number;
@@ -4431,6 +4431,37 @@ declare const levelsRelations: drizzle_orm.Relations<"levels", {
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
+    "/status/configs": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    MAX_SUBSCRIPTIONS: number;
+                    MAX_LISTS: number;
+                    MAX_ACTIONS: number;
+                    MAX_WEBHOOKS_PER_ACTION: number;
+                    MAX_INBOXES: number;
+                    IMPORTING_TITLE: string;
+                    DAILY_POWER_PERCENTAGES: number[];
+                    LEVEL_PERCENTAGES: number[];
+                    DAILY_CLAIM_AMOUNT: {
+                        trial: number;
+                        normal: number;
+                    };
+                    DISABLE_PERSONAL_DAILY_POWER: boolean;
+                    TAX_POINT: string;
+                    INVITATION_INTERVAL_DAYS: number;
+                    INVITATION_PRICE: number;
+                    DAILY_POWER_SUPPLY: number;
+                    IS_RSS3_TESTNET: boolean;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
     "/messaging": {
         $post: {
             input: {
@@ -5083,7 +5114,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         activityPoints: number | null;
                     } | null;
                     todayDailyPower: string;
-                    tomorrowDailyPower: string;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -6330,6 +6360,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
+                    route?: string | string[] | undefined;
                     category?: string | string[] | undefined;
                     namespace?: string | string[] | undefined;
                 };
@@ -6618,7 +6649,7 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
             output: {
                 code: number;
                 data: {
-                    type: "received" | "checking" | "completed" | "incomplete";
+                    type: "received" | "checking" | "completed" | "incomplete" | "audit";
                     id: string;
                     userId: string;
                     actionId: number;
@@ -6664,6 +6695,21 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     actionId: number;
                     result: boolean;
                 };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/achievement/audit": {
+        $post: {
+            input: {
+                json: {
+                    actionId: number;
+                    payload?: any;
+                };
+            };
+            output: {
+                code: number;
             };
             outputFormat: "json" | "text";
             status: 200;

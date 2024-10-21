@@ -4,12 +4,14 @@ import { useSingleton } from "foxact/use-singleton"
 import { atom, useStore } from "jotai"
 import { nanoid } from "nanoid"
 import type { FC } from "react"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { Trans } from "react-i18next"
 
 import { Button } from "~/components/ui/button"
 import { styledButtonVariant } from "~/components/ui/button/variants"
+import { Input } from "~/components/ui/input"
 import { LoadingCircle, LoadingWithIcon } from "~/components/ui/loading"
+import { useCurrentModal, useModalStack } from "~/components/ui/modal"
 import { useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { Chain } from "~/lib/chain"
@@ -61,19 +63,18 @@ const achievementActionIdCopyMap: Record<
   //   description: "achievement.follow_special_feed_description",
   // },
 }
-
+const _achievementType = apiClient.achievement.$get({
+  query: {
+    type: "all",
+  },
+})
+type Achievement = Awaited<typeof _achievementType>["data"]
 export const AchievementModalContent: FC = () => {
   const jotaiStore = useStore()
   const queryClient = useQueryClient()
 
   const defaultAchievements = useSingleton(buildDefaultAchievements)
 
-  const _achievementType = apiClient.achievement.$get({
-    query: {
-      type: "all",
-    },
-  })
-  type Achievement = Awaited<typeof _achievementType>["data"]
   const {
     data: achievements,
     isLoading,
@@ -129,18 +130,7 @@ export const AchievementModalContent: FC = () => {
     },
   })
   const achievementsDataAtom = useSingleton(() => atom<typeof achievements>())
-  const { mutateAsync: checkAchievement, isPending: checkPending } = useMutation({
-    mutationFn: async (actionId: number) => {
-      return apiClient.achievement.check.$post({
-        json: {
-          actionId,
-        },
-      })
-    },
-    onSuccess: () => {
-      refetch()
-    },
-  })
+
   const t = useI18n()
 
   const sortedAchievements = useMemo(() => {
@@ -204,7 +194,6 @@ export const AchievementModalContent: FC = () => {
                     {t(copy.description)}
                   </div>
                 </div>
-
                 {achievement.type === "checking" && (
                   <div
                     className={styledButtonVariant({
@@ -216,47 +205,9 @@ export const AchievementModalContent: FC = () => {
                     <span className="select-none opacity-0">{t("words.mint")}</span>
                   </div>
                 )}
-
                 {achievement.type === "incomplete" && (
-                  <button
-                    type="button"
-                    className={styledButtonVariant({
-                      variant: "ghost",
-                      className: "relative hover:bg-transparent group cursor-pointer",
-                    })}
-                    onClick={() => {
-                      checkAchievement(achievement.actionId)
-                    }}
-                  >
-                    <div className="center absolute z-[1] opacity-0 duration-200 group-hover:opacity-100">
-                      <i
-                        className={cn(
-                          "i-mgc-refresh-2-cute-re size-5 text-accent",
-                          checkPending && "animate-spin",
-                        )}
-                      />
-                    </div>
-                    <div className="duration-200 group-hover:opacity-30">
-                      <span className="center relative ml-2 inline-flex w-24 -translate-y-1 flex-col *:!m-0">
-                        <small className="shrink-0 text-xs leading-tight text-muted-foreground">
-                          {achievement.progress} / {achievement.progressMax}
-                        </small>
-                        <span className="relative h-1 w-full overflow-hidden rounded-full bg-accent/10">
-                          <span
-                            className="absolute -left-3 top-0 inline-block h-1 rounded-full bg-accent"
-                            style={{
-                              width: `calc(${Math.min(
-                                (achievement.progress / achievement.progressMax) * 100,
-                                100,
-                              )}% + 0.75rem)`,
-                            }}
-                          />
-                        </span>
-                      </span>
-                    </div>
-                  </button>
+                  <IncompleteButton achievement={achievement} refetch={refetch} />
                 )}
-
                 {achievement.type === "received" && (
                   <div
                     className={styledButtonVariant({
@@ -267,6 +218,18 @@ export const AchievementModalContent: FC = () => {
                   >
                     <i className="i-mgc-check-filled" />
                     {t("achievement.all_done")}
+                  </div>
+                )}
+
+                {achievement.type === "audit" && (
+                  <div
+                    className={styledButtonVariant({
+                      variant: "outline",
+                      className:
+                        "relative cursor-not-allowed !bg-zinc-100/50 gap-1 border-zinc-200 text-zinc-800 dark:text-foreground dark:!bg-zinc-100/5 dark:border-zinc-200/20",
+                    })}
+                  >
+                    Validating...
                   </div>
                 )}
                 {achievement.type === "completed" && (
@@ -320,4 +283,147 @@ const buildDefaultAchievements = () => {
       progressMax: 0,
     },
   ]
+}
+
+const IncompleteButton: FC<{
+  achievement: Achievement[number]
+  refetch: () => void
+}> = ({ achievement, refetch }) => {
+  const { mutateAsync: checkAchievement, isPending: checkPending } = useMutation({
+    mutationFn: async (actionId: number) => {
+      return apiClient.achievement.check.$post({
+        json: {
+          actionId,
+        },
+      })
+    },
+    onSuccess: () => {
+      refetch()
+    },
+  })
+
+  const { present } = useModalStack()
+  const Content = useMemo(() => {
+    switch (achievement.actionId) {
+      case AchievementsActionIdMap.PRODUCT_HUNT_VOTE: {
+        return (
+          <Button
+            onClick={() => {
+              present({
+                title: "Validate Your Vote",
+                content: () => <VoteValidateModalContent refetch={refetch} />,
+              })
+            }}
+          >
+            Validate
+          </Button>
+        )
+      }
+      default: {
+        return (
+          <>
+            <div className="center absolute z-[1] opacity-0 duration-200 group-hover:opacity-100">
+              <i
+                className={cn(
+                  "i-mgc-refresh-2-cute-re size-5 text-accent",
+                  checkPending && "animate-spin",
+                )}
+              />
+            </div>
+            <div className="duration-200 group-hover:opacity-30">
+              <span className="center relative ml-2 inline-flex w-24 -translate-y-1 flex-col *:!m-0">
+                <small className="shrink-0 text-xs leading-tight text-muted-foreground">
+                  {achievement.progress} / {achievement.progressMax}
+                </small>
+                <span className="relative h-1 w-full overflow-hidden rounded-full bg-accent/10">
+                  <span
+                    className="absolute -left-3 top-0 inline-block h-1 rounded-full bg-accent"
+                    style={{
+                      width: `calc(${Math.min(
+                        (achievement.progress / achievement.progressMax) * 100,
+                        100,
+                      )}% + 0.75rem)`,
+                    }}
+                  />
+                </span>
+              </span>
+            </div>
+          </>
+        )
+      }
+    }
+  }, [
+    achievement.actionId,
+    achievement.progress,
+    achievement.progressMax,
+    checkPending,
+    present,
+    refetch,
+  ])
+
+  return (
+    <button
+      type="button"
+      className={styledButtonVariant({
+        variant: "ghost",
+        className: "relative hover:bg-transparent group cursor-pointer",
+      })}
+      onClick={() => {
+        checkAchievement(achievement.actionId)
+      }}
+    >
+      {Content}
+    </button>
+  )
+}
+const VoteValidateModalContent: FC<{ refetch: () => void }> = ({ refetch }) => {
+  const ref = useRef<HTMLInputElement>(null)
+  const { dismiss } = useCurrentModal()
+  const { present } = useModalStack()
+  const { mutateAsync: audit, isPending } = useMutation({
+    mutationFn: (username: string) => {
+      return apiClient.achievement.audit.$post({
+        json: {
+          actionId: AchievementsActionIdMap.PRODUCT_HUNT_VOTE,
+          payload: {
+            username,
+          },
+        },
+      })
+    },
+    onSuccess: () => {
+      dismiss()
+
+      refetch()
+      present({
+        title: "Thank you!",
+        content: () => <div>Thank you for your vote. Please wait for our verification.</div>,
+        clickOutsideToDismiss: true,
+      })
+    },
+  })
+  return (
+    <form
+      className="flex flex-col gap-2"
+      onSubmit={(e) => {
+        e.preventDefault()
+        if (!ref.current?.value) return
+        audit(ref.current.value)
+      }}
+    >
+      <label>
+        Please vote for <a href="https://www.producthunt.com/posts/follow-app_">Follow</a> on
+        Product Hunk! Then fill in your username here.
+      </label>
+      <div>
+        <Input ref={ref} autoFocus placeholder="Your Product Hunt username" />
+      </div>
+
+      <div className="mt-2 flex justify-end">
+        <Button isLoading={isPending} type="submit">
+          Validate
+        </Button>
+      </div>
+    </form>
+  )
 }
