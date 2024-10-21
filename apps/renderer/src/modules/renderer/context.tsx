@@ -1,3 +1,4 @@
+import { createContext as createReactContext } from "react"
 import { createContext } from "use-context-selector"
 
 import { FeedViewType } from "~/lib/enum"
@@ -20,3 +21,13 @@ export const EntryContentContext = createContext<EntryContentContext>(defaultCon
 export const EntryContentProvider: Component<EntryContentContext> = ({ children, ...value }) => (
   <EntryContentContext.Provider value={value}>{children}</EntryContentContext.Provider>
 )
+
+export interface EntryInfoContext {
+  feedId: string
+  entryId: string
+}
+const defaultInfoContextValue: EntryInfoContext = {
+  feedId: "",
+  entryId: "",
+}
+export const EntryInfoContext = createReactContext<EntryInfoContext>(defaultInfoContextValue)

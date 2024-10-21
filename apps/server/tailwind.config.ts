@@ -1,6 +1,5 @@
 import daisyui from "daisyui"
 import { omit } from "lodash-es"
-import colors from "tailwindcss/colors"
 import resolveConfig from "tailwindcss/resolveConfig"
 
 import { baseConfig } from "../../configs/tailwind.base.config"

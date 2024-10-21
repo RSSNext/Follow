@@ -23,6 +23,7 @@
   "4002": "Insufficient balance",
   "4003": "Feed insufficient withdrawable balance",
   "4004": "Target user wallet error",
+  "4005": "Daily power calculation in progress",
   "5000": "Invitation limit exceeded. Please try again in a few days.",
   "5001": "Invitation already exists.",
   "5002": "Invitation code already used.",

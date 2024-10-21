@@ -5,7 +5,7 @@ import type { ExternalToast } from "sonner"
 import { toast } from "sonner"
 
 import { CopyButton } from "~/components/ui/code-highlighter"
-import { Markdown } from "~/components/ui/markdown"
+import { Markdown } from "~/components/ui/markdown/Markdown"
 import { cn } from "~/lib/utils"
 
 export const getFetchErrorMessage = (error: Error) => {

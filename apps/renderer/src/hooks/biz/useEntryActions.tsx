@@ -25,6 +25,7 @@ import { mountLottie } from "~/components/ui/lottie-container"
 import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
+  SimpleIconsObsidian,
   SimpleIconsOmnivore,
   SimpleIconsReadwise,
 } from "~/components/ui/platform-icon/icons"
@@ -171,6 +172,34 @@ export const useEntryActions = ({
   const enableOmnivore = useIntegrationSettingKey("enableOmnivore")
   const omnivoreToken = useIntegrationSettingKey("omnivoreToken")
   const omnivoreEndpoint = useIntegrationSettingKey("omnivoreEndpoint")
+  const enableObsidian = useIntegrationSettingKey("enableObsidian")
+  const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
+  const isObsidianEnabled = enableObsidian && !!obsidianVaultPath
+
+  const saveToObsidian = useMutation({
+    mutationKey: ["save-to-obsidian"],
+    mutationFn: async (data: {
+      url: string
+      title: string
+      content: string
+      author: string
+      publishedAt: string
+      vaultPath: string
+    }) => {
+      return await tipcClient?.saveToObsidian(data)
+    },
+    onSuccess: (data) => {
+      if (data?.success) {
+        toast.success(t("entry_actions.saved_to_obsidian"), {
+          duration: 3000,
+        })
+      } else {
+        toast.error(`${t("entry_actions.failed_to_save_to_obsidian")}: ${data?.error}`, {
+          duration: 3000,
+        })
+      }
+    },
+  })
 
   const checkEagle = useQuery({
     queryKey: ["check-eagle"],
@@ -371,6 +400,24 @@ export const useEntryActions = ({
         },
       },
       {
+        name: t("entry_actions.save_to_obsidian"),
+        icon: <SimpleIconsObsidian />,
+        key: "saveToObsidian",
+        hide: !isObsidianEnabled || !populatedEntry?.entries?.url,
+        onClick: () => {
+          if (!isObsidianEnabled || !populatedEntry?.entries?.url) return
+
+          saveToObsidian.mutate({
+            url: populatedEntry.entries.url,
+            title: populatedEntry.entries.title || "",
+            content: populatedEntry.entries.content || "",
+            author: populatedEntry.entries.author || "",
+            publishedAt: populatedEntry.entries.publishedAt || "",
+            vaultPath: obsidianVaultPath,
+          })
+        },
+      },
+      {
         key: "tip",
         shortcut: shortcuts.entry.tip.key,
         name: t("entry_actions.tip"),
@@ -534,9 +581,16 @@ export const useEntryActions = ({
     enableInstapaper,
     instapaperPassword,
     instapaperUsername,
+    enableOmnivore,
+    omnivoreToken,
+    omnivoreEndpoint,
+    isObsidianEnabled,
+    isInbox,
     feed?.ownerUserId,
     type,
     showSourceContent,
+    obsidianVaultPath,
+    saveToObsidian,
     openTipModal,
     collect,
     uncollect,

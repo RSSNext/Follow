@@ -1,10 +1,7 @@
-import { useCallback, useMemo } from "react"
+import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
-import { useModalStack } from "~/components/ui/modal"
-
 import { DayOf } from "./constants"
-import { FeedDailyModalContent } from "./FeedDailyModalContent"
 
 export const useParseDailyDate = (day: DayOf) => {
   const { t } = useTranslation("common")
@@ -61,20 +58,4 @@ export const useParseDailyDate = (day: DayOf) => {
 
     return { title, startDate, endDate }
   }, [day, t])
-}
-
-export const useAIDailyReportModal = () => {
-  const { present } = useModalStack()
-  const { t } = useTranslation()
-
-  return useCallback(() => {
-    present({
-      content: () => <FeedDailyModalContent />,
-      title: t("ai_daily.header"),
-      resizeable: true,
-      clickOutsideToDismiss: true,
-
-      resizeDefaultSize: { width: 660, height: 450 },
-    })
-  }, [present])
 }

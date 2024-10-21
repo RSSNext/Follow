@@ -13,10 +13,8 @@ export const env = createEnv({
     VITE_FIREBASE_CONFIG: z.string().optional(),
     // For external, use api_url if you don't want to fill it in.
     VITE_EXTERNAL_API_URL: z.string().optional(),
-    VITE_OPENPANEL_CLIENT_ID: z.string(),
-    VITE_OPENPANEL_API_URL: z.string().url(),
-
-    VITE_POSTHOG_KEY: z.string().optional(),
+    VITE_OPENPANEL_CLIENT_ID: z.string().optional(),
+    VITE_OPENPANEL_API_URL: z.string().url().optional(),
   },
 
   emptyStringAsUndefined: true,

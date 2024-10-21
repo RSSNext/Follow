@@ -75,7 +75,6 @@
     "nanoid": "5.0.7",
     "ofetch": "1.4.1",
     "path-to-regexp": "8.2.0",
-    "posthog-js": "1.169.1",
     "re-resizable": "6.10.0",
     "react-blurhash": "^0.3.0",
     "react-error-boundary": "4.0.13",

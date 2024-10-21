@@ -4365,22 +4365,6 @@ declare const levels: drizzle_orm_pg_core.PgTableWithColumns<{
             baseColumn: never;
             generated: undefined;
         }, {}, {}>;
-        statusUpdatedAt: drizzle_orm_pg_core.PgColumn<{
-            name: "status_updated_at";
-            tableName: "levels";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: false;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
         powerToken: drizzle_orm_pg_core.PgColumn<{
             name: "power_token";
             tableName: "levels";
@@ -4422,7 +4406,6 @@ declare const levelsOpenAPISchema: zod.ZodObject<{
     level: zod.ZodNullable<zod.ZodNumber>;
     prevActivityPoints: zod.ZodNullable<zod.ZodNumber>;
     activityPoints: zod.ZodNullable<zod.ZodNumber>;
-    statusUpdatedAt: zod.ZodNullable<zod.ZodString>;
     powerToken: zod.ZodString;
     userId: zod.ZodString;
 }, zod.UnknownKeysParam, zod.ZodTypeAny, {
@@ -4433,7 +4416,6 @@ declare const levelsOpenAPISchema: zod.ZodObject<{
     level: number | null;
     prevActivityPoints: number | null;
     activityPoints: number | null;
-    statusUpdatedAt: string | null;
 }, {
     userId: string;
     address: string;
@@ -4442,7 +4424,6 @@ declare const levelsOpenAPISchema: zod.ZodObject<{
     level: number | null;
     prevActivityPoints: number | null;
     activityPoints: number | null;
-    statusUpdatedAt: string | null;
 }>;
 declare const levelsRelations: drizzle_orm.Relations<"levels", {
     wallet: drizzle_orm.One<"wallets", true>;
@@ -4450,6 +4431,37 @@ declare const levelsRelations: drizzle_orm.Relations<"levels", {
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
+    "/status/configs": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    MAX_SUBSCRIPTIONS: number;
+                    MAX_LISTS: number;
+                    MAX_ACTIONS: number;
+                    MAX_WEBHOOKS_PER_ACTION: number;
+                    MAX_INBOXES: number;
+                    IMPORTING_TITLE: string;
+                    DAILY_POWER_PERCENTAGES: number[];
+                    LEVEL_PERCENTAGES: number[];
+                    DAILY_CLAIM_AMOUNT: {
+                        trial: number;
+                        normal: number;
+                    };
+                    DISABLE_PERSONAL_DAILY_POWER: boolean;
+                    TAX_POINT: string;
+                    INVITATION_INTERVAL_DAYS: number;
+                    INVITATION_PRICE: number;
+                    DAILY_POWER_SUPPLY: number;
+                    IS_RSS3_TESTNET: boolean;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
     "/messaging": {
         $post: {
             input: {
@@ -5102,7 +5114,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         activityPoints: number | null;
                     } | null;
                     todayDailyPower: string;
-                    tomorrowDailyPower: string;
                 }[];
             };
             outputFormat: "json" | "text";
@@ -5149,7 +5160,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                     level: number | null;
                     prevActivityPoints: number | null;
                     activityPoints: number | null;
-                    statusUpdatedAt: string | null;
                 }[];
             };
             outputFormat: "json" | "text";

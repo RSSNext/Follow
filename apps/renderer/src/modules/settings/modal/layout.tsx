@@ -181,9 +181,8 @@ const SettingItemButton = (props: {
       )}
       type="button"
       onClick={() => {
-        if (!disabled) {
-          setTab(path)
-        } else {
+        setTab(path)
+        if (disabled) {
           switch (why) {
             case DisableWhy.NotActivation: {
               presentActivationModal()
