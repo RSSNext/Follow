@@ -1,4 +1,5 @@
 import { siteConfig } from "@client/configs"
+import { openInFollowApp } from "@client/lib/helper"
 import { Logo } from "@follow/components/icons/logo.jsx"
 import { Button } from "@follow/components/ui/button/index.jsx"
 import { Kbd } from "@follow/components/ui/kbd/Kbd.jsx"
@@ -33,7 +34,13 @@ export const Header = () => {
   const scrollYState = useMotionValueToState(scrollY)
 
   const handleToApp = () => {
-    window.open(siteConfig.appUrl, "_blank")
+    openInFollowApp(
+      "",
+      () => {
+        window.open(siteConfig.appUrl, "_blank")
+      },
+      true,
+    )
   }
   useHotkeys("l", handleToApp)
 

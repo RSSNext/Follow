@@ -13,7 +13,11 @@ export const getHydrateData = (key: string) => {
   return window.__HYDRATE__?.[key]
 }
 
-export const openInFollowApp = (deeplink: string, fallback: () => void): Promise<boolean> => {
+export const openInFollowApp = (
+  deeplink: string,
+  fallback: () => void,
+  alwaysFallback?: boolean,
+): Promise<boolean> => {
   return new Promise((resolve) => {
     const timeout = 500
     let isAppOpened = false
@@ -34,12 +38,12 @@ export const openInFollowApp = (deeplink: string, fallback: () => void): Promise
 
     setTimeout(() => {
       cleanup()
-      if (!isAppOpened) {
+      if (!isAppOpened && !alwaysFallback) {
         fallback()
         resolve(false)
-      } else {
-        // TODO present a modal to the user asking if they want to open the app
+        return
       }
+      // TODO present a modal to the user asking if they want to open the app
     }, timeout)
   })
 }
