@@ -1,3 +1,6 @@
+import { m } from "framer-motion"
+
+import { softSpringPreset } from "~/components/ui/constants/spring"
 import { RadioGroup } from "~/components/ui/radio-group"
 import { RadioCard } from "~/components/ui/radio-group/RadioCard"
 
@@ -31,7 +34,13 @@ export const RadioCards = ({
 }) => {
   return (
     <RadioGroup value={value.toString()} onValueChange={(value) => onValueChange(+value)}>
-      <div className="grid w-full grid-cols-2 gap-2">
+      <m.div
+        className="grid w-full grid-cols-2 gap-2 overflow-hidden"
+        initial={{ height: "auto", opacity: 0 }}
+        animate={{ height: "auto", opacity: 1 }}
+        exit={{ height: 0, opacity: 0 }}
+        transition={softSpringPreset}
+      >
         {radios.map((item) => (
           <RadioCard
             key={item.name}
@@ -48,7 +57,7 @@ export const RadioCards = ({
             }
           />
         ))}
-      </div>
+      </m.div>
     </RadioGroup>
   )
 }

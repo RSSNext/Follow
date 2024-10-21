@@ -1,14 +1,15 @@
 import { from } from "dnum"
+import { AnimatePresence, m } from "framer-motion"
 import { useCallback, useState } from "react"
 
 import { Button } from "~/components/ui/button"
+import { softSpringPreset } from "~/components/ui/constants/spring"
 import { LoadingWithIcon } from "~/components/ui/loading"
 import { useCurrentModal } from "~/components/ui/modal"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { boosts, useBoostFeedMutation } from "~/queries/boosts"
 import { useWallet } from "~/queries/wallet"
 
-import { Balance } from "../wallet/balance"
 import { BoostProgress } from "./boost-progress"
 import { LevelBenefits } from "./level-benefits"
 import { RadioCards } from "./radio-cards"
@@ -42,27 +43,6 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
     )
   }
 
-  if (boostFeedMutation.isSuccess) {
-    return (
-      <div className="flex w-[80vw] max-w-[350px] flex-col gap-5">
-        <p className="text-sm text-theme-foreground/80">{t("tip_modal.tip_sent")}</p>
-        <BoostProgress {...boostStatus} />
-        <p>
-          <Balance className="mr-1 inline-block text-sm" withSuffix>
-            {amountBigInt}
-          </Balance>{" "}
-          {t("tip_modal.tip_amount_sent")}
-        </p>
-
-        <div className="flex justify-end">
-          <Button variant="primary" onClick={() => dismiss()}>
-            {t.common("ok")}
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="flex w-[80vw] max-w-[350px] flex-col gap-3">
       <div className="relative flex w-full grow flex-col items-center gap-3">
@@ -74,22 +54,38 @@ export const BoostModalContent = ({ feedId }: { feedId: string }) => {
         </small>
 
         <BoostProgress {...boostStatus} />
-        <RadioCards
-          monthlyBoostCost={boostStatus.monthlyBoostCost}
-          value={amount}
-          onValueChange={setAmount}
-        />
+
+        <AnimatePresence>
+          {!boostFeedMutation.isSuccess && (
+            <RadioCards
+              monthlyBoostCost={boostStatus.monthlyBoostCost}
+              value={amount}
+              onValueChange={setAmount}
+            />
+          )}
+        </AnimatePresence>
       </div>
 
-      <Button
-        disabled={boostFeedMutation.isSuccess || boostFeedMutation.isPending || wrongNumberRange}
-        isLoading={boostFeedMutation.isPending}
-        variant="primary"
-        onClick={handleBoost}
-      >
-        <i className="i-mgc-rocket-cute-fi mr-2 shrink-0" />
-        Boost
-      </Button>
+      {boostFeedMutation.isSuccess ? (
+        <>
+          <m.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={softSpringPreset}>
+            Thank you for your support!
+          </m.p>
+          <Button variant="primary" onClick={() => dismiss()}>
+            {t.common("close")}
+          </Button>
+        </>
+      ) : (
+        <Button
+          disabled={boostFeedMutation.isSuccess || boostFeedMutation.isPending || wrongNumberRange}
+          isLoading={boostFeedMutation.isPending}
+          variant="primary"
+          onClick={handleBoost}
+        >
+          <i className="i-mgc-rocket-cute-fi mr-2 shrink-0" />
+          Boost
+        </Button>
+      )}
 
       <LevelBenefits />
     </div>
