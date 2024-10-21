@@ -174,6 +174,7 @@ export const useEntryActions = ({
   const omnivoreEndpoint = useIntegrationSettingKey("omnivoreEndpoint")
   const enableObsidian = useIntegrationSettingKey("enableObsidian")
   const obsidianVaultPath = useIntegrationSettingKey("obsidianVaultPath")
+  const isObsidianEnabled = enableObsidian && !!obsidianVaultPath
 
   const saveToObsidian = useMutation({
     mutationKey: ["save-to-obsidian"],
@@ -185,7 +186,7 @@ export const useEntryActions = ({
       publishedAt: string
       vaultPath: string
     }) => {
-      if (!obsidianEnabledQuery.data) {
+      if (!isObsidianEnabled) {
         throw new Error("Obsidian feature is not enabled")
       }
       return await tipcClient?.saveToObsidian(data)
@@ -404,7 +405,7 @@ export const useEntryActions = ({
         name: t("entry_actions.save_to_obsidian"),
         icon: <SimpleIconsObsidian />,
         key: "saveToObsidian",
-        hide: !obsidianEnabledQuery.data || !populatedEntry?.entries?.url,
+        hide: !isObsidianEnabled || !populatedEntry?.entries?.url,
         onClick: () => {
           if (!populatedEntry?.entries?.url || !obsidianVaultPath) return
 
@@ -582,28 +583,25 @@ export const useEntryActions = ({
     enableInstapaper,
     instapaperPassword,
     instapaperUsername,
-    enableObsidian,
-    obsidianVaultPath,
+    enableOmnivore,
+    omnivoreToken,
+    omnivoreEndpoint,
+    isObsidianEnabled,
+    isInbox,
     feed?.ownerUserId,
     type,
     showSourceContent,
+    obsidianVaultPath,
+    saveToObsidian,
     openTipModal,
     collect,
     uncollect,
     showSourceContentModal,
     read,
     unread,
-    enableOmnivore,
-    isInbox,
-    omnivoreEndpoint,
-    omnivoreToken,
-    obsidianEnabledQuery.data,
-    saveToObsidian,
   ])
 
   return {
     items,
-    saveToObsidian,
-    obsidianEnabled: obsidianEnabledQuery.data,
   }
 }
