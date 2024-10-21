@@ -127,6 +127,21 @@ export const useUnread = () =>
       }),
   })
 
+export const useDeleteInboxEntry = () => {
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (entryId: string) => {
+      await entryActions.deleteInboxEntry(entryId)
+    },
+    onSuccess: () => {
+      toast.success(t("entry_actions.deleted"))
+    },
+    onError: () => {
+      toast.error(t("entry_actions.failed_to_delete"))
+    },
+  })
+}
+
 export const useEntryActions = ({
   view,
   entry,
@@ -215,6 +230,8 @@ export const useEntryActions = ({
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
+
+  const deleteInboxEntry = useDeleteInboxEntry()
 
   const items = useMemo(() => {
     if (!populatedEntry || view === undefined) return []
@@ -403,9 +420,9 @@ export const useEntryActions = ({
         name: t("entry_actions.save_to_obsidian"),
         icon: <SimpleIconsObsidian />,
         key: "saveToObsidian",
-        hide: !isObsidianEnabled || !populatedEntry?.entries?.url,
+        hide: !isObsidianEnabled || !populatedEntry?.entries?.url || !IN_ELECTRON,
         onClick: () => {
-          if (!isObsidianEnabled || !populatedEntry?.entries?.url) return
+          if (!isObsidianEnabled || !populatedEntry?.entries?.url || !IN_ELECTRON) return
 
           saveToObsidian.mutate({
             url: populatedEntry.entries.url,
@@ -454,6 +471,15 @@ export const useEntryActions = ({
         hide: !populatedEntry.collections,
         onClick: () => {
           uncollect.mutate()
+        },
+      },
+      {
+        key: "delete",
+        name: t("entry_actions.delete"),
+        hide: !isInbox,
+        className: "i-mgc-delete-2-cute-re",
+        onClick: () => {
+          deleteInboxEntry.mutate(populatedEntry.entries.id)
         },
       },
       {

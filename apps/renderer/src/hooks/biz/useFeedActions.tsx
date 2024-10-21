@@ -138,6 +138,7 @@ export const useFeedActions = ({
         type: "text" as const,
         label: isEntryList ? t("sidebar.feed_actions.edit_feed") : t("sidebar.feed_actions.edit"),
         shortcut: "E",
+        disabled: isInbox,
         click: () => {
           present({
             title: t("sidebar.feed_actions.edit_feed"),

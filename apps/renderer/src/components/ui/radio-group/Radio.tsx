@@ -23,7 +23,7 @@ export const Radio: FC<
     onChange?.(e)
   })
   return (
-    <div className={cn("flex items-center", wrapperClassName)}>
+    <label className={cn("flex items-center", wrapperClassName)} htmlFor={id ?? fallbackId}>
       <input
         {...rest}
         type="radio"
@@ -43,6 +43,6 @@ export const Radio: FC<
       >
         {label}
       </label>
-    </div>
+    </label>
   )
 }

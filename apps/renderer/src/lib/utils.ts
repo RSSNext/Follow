@@ -267,7 +267,7 @@ export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
     fallbackUrl = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain
       ?.slice(0, 2)
       .toUpperCase()}`
-    src = `https://unavatar.follow.is/${host}?fallback=${fallback || false}`
+    src = `https://unavatar.webp.se/${host}?fallback=${fallback || false}`
   } catch {
     const pureDomain = parse(url).domainWithoutSuffix
     src = `https://avatar.vercel.sh/${pureDomain}.svg?text=${pureDomain?.slice(0, 2).toUpperCase()}`
