@@ -1,5 +1,7 @@
 import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 
+import { Markdown } from "~/components/ui/markdown/Markdown"
 import { useAuthQuery } from "~/hooks/common"
 import { isASCII } from "~/lib/utils"
 import { RecommendationCard } from "~/modules/discover/recommendations-card"
@@ -18,6 +20,8 @@ const pickedRoutes = new Set([
 ])
 
 export function RSSHubGuide() {
+  const { t } = useTranslation("app")
+
   const rsshubPopular = useAuthQuery(
     Queries.discover.rsshubCategory({
       category: "popular",
@@ -65,12 +69,15 @@ export function RSSHubGuide() {
   }
 
   return (
-    <div className="grid h-[600px] w-full grid-cols-3 gap-3">
-      {keys
-        .filter((key) => pickedRoutes.has(key))
-        .map((key) => (
-          <RecommendationCard key={key} data={data[key]} routePrefix={key} />
-        ))}
+    <div className="h-[610px] w-[630px] space-y-3">
+      <Markdown className="text-balance text-sm">{t("new_user_guide.step.rsshub.info")}</Markdown>
+      <div className="grid grid-cols-3 gap-3">
+        {keys
+          .filter((key) => pickedRoutes.has(key))
+          .map((key) => (
+            <RecommendationCard key={key} data={data[key]} routePrefix={key} />
+          ))}
+      </div>
     </div>
   )
 }

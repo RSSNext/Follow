@@ -18,6 +18,7 @@ export const NewUserGuideModal = () => {
         open={open}
         canClose={false}
         clickOutsideToDismiss={false}
+        overlay
       >
         <GuideModalContent onClose={() => setOpen(false)} />
       </DeclarativeModal>

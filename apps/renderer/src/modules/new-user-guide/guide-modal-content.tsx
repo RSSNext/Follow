@@ -2,21 +2,25 @@ import clsx from "clsx"
 import { AnimatePresence, m } from "framer-motion"
 import type { ComponentProps, FunctionComponentElement } from "react"
 import { createElement, useCallback, useMemo, useState } from "react"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 
 import RSSHubIcon from "~/assets/rsshub-icon.png"
 import { Logo } from "~/components/icons/logo"
 import { Button } from "~/components/ui/button"
+import { Kbd } from "~/components/ui/kbd/Kbd"
 import { mountLottie } from "~/components/ui/lottie-container"
+import { Markdown } from "~/components/ui/markdown/Markdown"
 import { useI18n } from "~/hooks/common"
 import confettiUrl from "~/lottie/confetti.lottie?url"
 import { settings } from "~/queries/settings"
 
+import { DiscoverImport } from "../discover/import"
 import { settingSyncQueue } from "../settings/helper/sync-queue"
 import { LanguageSelector } from "../settings/tabs/general"
 import { useHaveUsedOtherRSSReader } from "./atoms"
 import { BehaviorGuide } from "./steps/behavior"
 import { TrendingFeeds } from "./steps/feeds"
+import { Introduction } from "./steps/introduction"
 import { RookieCheck } from "./steps/rookie"
 import { RSSHubGuide } from "./steps/rsshub"
 
@@ -75,6 +79,53 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
     () =>
       [
         {
+          icon: "i-mgc-grid-cute-re",
+          title: "Features",
+          content: createElement(Introduction, {
+            features: [
+              {
+                icon: "i-mgc-magic-2-cute-re",
+                title: t.settings("titles.actions"),
+                description: t.app("new_user_guide.step.features.actions.description"),
+              },
+              {
+                icon: "i-mgc-department-cute-re",
+                title: t.settings("titles.integration"),
+                description: t.app("new_user_guide.step.features.integration.description"),
+              },
+              {
+                icon: "i-mgc-rada-cute-re",
+                title: t.settings("titles.lists"),
+                description: t.settings("lists.info"),
+              },
+              {
+                icon: "i-mgc-hotkey-cute-re",
+                title: t.settings("titles.shortcuts"),
+                description: (
+                  <p>
+                    {t.app("new_user_guide.step.features.shortcuts.description1")}{" "}
+                    <Trans
+                      i18nKey="new_user_guide.step.features.shortcuts.description2"
+                      components={{
+                        kbd: <Kbd>H</Kbd>,
+                      }}
+                    />
+                  </p>
+                ),
+              },
+            ],
+          }),
+        },
+        {
+          title: "Power",
+          icon: "i-mgc-power",
+          content: (
+            <Markdown className="max-w-xl">
+              {t.app("new_user_guide.step.power.description")}
+            </Markdown>
+          ),
+        },
+        {
           title: t.app("new_user_guide.step.start_question.title"),
           content: createElement(RookieCheck),
           icon: "i-mgc-question-cute-re",
@@ -85,15 +136,21 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
           icon: tw`i-mingcute-cursor-3-line`,
         },
         {
-          title: t.app("new_user_guide.step.trending.title"),
-          content: createElement(TrendingFeeds),
-          icon: "i-mgc-trending-up-cute-re",
-        },
-        {
           title: t.app("new_user_guide.step.rsshub.title"),
           content: createElement(RSSHubGuide),
           icon: <img src={RSSHubIcon} className="size-[22px]" />,
         },
+        haveUsedOtherRSSReader
+          ? {
+              title: t.app("new_user_guide.step.import.title"),
+              content: createElement(DiscoverImport),
+              icon: "i-mingcute-file-import-line",
+            }
+          : {
+              title: t.app("new_user_guide.step.trending.title"),
+              content: createElement(TrendingFeeds),
+              icon: "i-mgc-trending-up-cute-re",
+            },
       ].filter((i) => !!i) as {
         title: string
         icon: React.ReactNode
@@ -135,7 +192,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
         </h1>
       )}
 
-      <div className="relative mx-auto flex w-full max-w-2xl items-center">
+      <div className="relative mx-auto flex w-full max-w-3xl items-center">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <m.div
             key={step - 1}
@@ -162,7 +219,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
       </div>
 
       <div className="absolute inset-x-0 bottom-4 z-[1] flex w-full items-center justify-between px-6">
-        <div className={clsx("flex h-fit gap-4", step === 0 && "invisible")}>
+        <div className={clsx("flex h-fit gap-3", step === 0 && "invisible")}>
           {Array.from({ length: totalSteps }, (_, i) => i + 1).map((i) => (
             <Step key={i} step={i} currentStep={step} />
           ))}

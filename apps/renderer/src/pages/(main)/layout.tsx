@@ -237,9 +237,7 @@ const FeedResponsiveResizerContainer = ({
     },
   )
   const showShortcuts = useShortcutsModal()
-  useHotkeys(shortcuts.layout.showShortcuts.key, showShortcuts, {
-    scopes: HotKeyScopeMap.Home,
-  })
+  useHotkeys(shortcuts.layout.showShortcuts.key, showShortcuts)
 
   const [delayShowSplitter, setDelayShowSplitter] = useState(feedColumnShow)
 
