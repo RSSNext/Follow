@@ -42,6 +42,12 @@ export const createApp = async () => {
     await devVite.registerDevViteServer(app)
   }
 
+  app.get("/metrics", (req, reply) => {
+    reply.send({
+      headers: req.headers,
+      host: req.headers.host,
+    })
+  })
   ogRoute(app)
   globalRoute(app)
 
