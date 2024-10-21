@@ -18,6 +18,7 @@ import {
 import { Input } from "~/components/ui/input"
 import { useCurrentModal } from "~/components/ui/modal"
 import { getFetchErrorMessage } from "~/lib/error-parser"
+import { cn } from "~/lib/utils"
 import confettiUrl from "~/lottie/confetti.lottie?url"
 import { auth } from "~/queries/auth"
 import { useInvitationMutation } from "~/queries/invitations"
@@ -26,7 +27,13 @@ const formSchema = z.object({
   code: z.string().min(1),
 })
 const absoluteConfettiUrl = new URL(confettiUrl, import.meta.url).href
-export const ActivationModalContent = () => {
+export const ActivationModalContent = ({
+  className,
+  hideDescription,
+}: {
+  className?: string
+  hideDescription?: boolean
+}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -64,14 +71,16 @@ export const ActivationModalContent = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-[512px] max-w-full overflow-hidden px-0.5"
+        className={cn("w-[512px] max-w-full overflow-hidden px-0.5", className)}
       >
         <FormField
           control={form.control}
           name="code"
           render={({ field }) => (
             <FormItem className="flex flex-col items-center gap-2 md:block">
-              <FormLabel className="!text-foreground">{t("activation.description")}</FormLabel>
+              {!hideDescription && (
+                <FormLabel className="!text-foreground">{t("activation.description")}</FormLabel>
+              )}
               <FormControl>
                 <Input
                   className="font-mono placeholder:font-default"

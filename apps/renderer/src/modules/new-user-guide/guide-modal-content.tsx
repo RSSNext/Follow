@@ -12,16 +12,15 @@ import { mountLottie } from "~/components/ui/lottie-container"
 import { Markdown } from "~/components/ui/markdown/Markdown"
 import { useI18n } from "~/hooks/common"
 import confettiUrl from "~/lottie/confetti.lottie?url"
+import { MyWalletSection } from "~/modules/power/my-wallet-section"
 import { settings } from "~/queries/settings"
 
+import { ActivationModalContent } from "../activation/ActivationModalContent"
 import { DiscoverImport } from "../discover/import"
+import { ProfileSettingForm } from "../profile/profile-setting-form"
 import { settingSyncQueue } from "../settings/helper/sync-queue"
 import { LanguageSelector } from "../settings/tabs/general"
-import { useHaveUsedOtherRSSReader } from "./atoms"
 import { BehaviorGuide } from "./steps/behavior"
-import { TrendingFeeds } from "./steps/feeds"
-import { Introduction } from "./steps/introduction"
-import { RookieCheck } from "./steps/rookie"
 import { RSSHubGuide } from "./steps/rsshub"
 
 const containerWidth = 600
@@ -51,7 +50,7 @@ function Intro() {
   return (
     <div className="w-[50ch] space-y-4 text-balance text-center">
       <Logo className="mx-auto size-20" />
-      <p className="mt-5 text-xl font-semibold">{t("new_user_guide.intro.title")}</p>
+      <p className="mt-5 text-xl font-bold">{t("new_user_guide.intro.title")}</p>
       <p className="text-lg">{t("new_user_guide.intro.description")}</p>
       <LanguageSelector containerClassName="px-16" contentClassName="z-10" />
     </div>
@@ -73,90 +72,67 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
   const t = useI18n()
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
-  const haveUsedOtherRSSReader = useHaveUsedOtherRSSReader()
 
   const guideSteps = useMemo(
     () =>
       [
         {
-          icon: "i-mgc-grid-cute-re",
-          title: "Features",
-          content: createElement(Introduction, {
-            features: [
-              {
-                icon: "i-mgc-magic-2-cute-re",
-                title: t.settings("titles.actions"),
-                description: t.app("new_user_guide.step.features.actions.description"),
-              },
-              {
-                icon: "i-mgc-department-cute-re",
-                title: t.settings("titles.integration"),
-                description: t.app("new_user_guide.step.features.integration.description"),
-              },
-              {
-                icon: "i-mgc-rada-cute-re",
-                title: t.settings("titles.lists"),
-                description: t.settings("lists.info"),
-              },
-              {
-                icon: "i-mgc-hotkey-cute-re",
-                title: t.settings("titles.shortcuts"),
-                description: (
-                  <p>
-                    {t.app("new_user_guide.step.features.shortcuts.description1")}{" "}
-                    <Trans
-                      i18nKey="new_user_guide.step.features.shortcuts.description2"
-                      components={{
-                        kbd: <Kbd>H</Kbd>,
-                      }}
-                    />
-                  </p>
-                ),
-              },
-            ],
-          }),
+          title: t.app("new_user_guide.step.migrate.profile"),
+          content: <ProfileSettingForm className="w-[500px]" buttonClassName="text-center !mt-8" />,
+          icon: "i-mgc-user-setting-cute-re",
         },
         {
-          title: "Power",
-          icon: "i-mgc-power",
-          content: (
-            <Markdown className="max-w-xl">
-              {t.app("new_user_guide.step.power.description")}
-            </Markdown>
-          ),
+          title: t.app("new_user_guide.step.activation.title"),
+          description: t.app("new_user_guide.step.activation.description"),
+          content: <ActivationModalContent className="w-[500px]" hideDescription />,
+          icon: "i-mgc-love-cute-re",
         },
         {
-          title: t.app("new_user_guide.step.start_question.title"),
-          content: createElement(RookieCheck),
-          icon: "i-mgc-question-cute-re",
+          title: t.app("new_user_guide.step.migrate.wallet"),
+          content: <MyWalletSection className="w-[600px]" />,
+          icon: <i className="i-mgc-power text-accent" />,
         },
-        haveUsedOtherRSSReader && {
-          title: t.app("new_user_guide.step.behavior.title"),
+        {
+          title: t.app("new_user_guide.step.behavior.unread_question.content"),
+          description: t.app("new_user_guide.step.behavior.unread_question.description"),
           content: createElement(BehaviorGuide),
-          icon: tw`i-mingcute-cursor-3-line`,
+          icon: tw`i-mgc-cursor-3-cute-re`,
+        },
+        {
+          title: t.app("new_user_guide.step.migrate.title"),
+          content: createElement(DiscoverImport),
+          icon: "i-mgc-file-import-cute-re",
         },
         {
           title: t.app("new_user_guide.step.rsshub.title"),
+          description: t.app("new_user_guide.step.rsshub.info"),
           content: createElement(RSSHubGuide),
           icon: <img src={RSSHubIcon} className="size-[22px]" />,
         },
-        haveUsedOtherRSSReader
-          ? {
-              title: t.app("new_user_guide.step.import.title"),
-              content: createElement(DiscoverImport),
-              icon: "i-mingcute-file-import-line",
-            }
-          : {
-              title: t.app("new_user_guide.step.trending.title"),
-              content: createElement(TrendingFeeds),
-              icon: "i-mgc-trending-up-cute-re",
-            },
+        {
+          title: t.app("new_user_guide.step.shortcuts.title"),
+          content: (
+            <div className="w-[400px] space-y-2">
+              <p>{t.app("new_user_guide.step.shortcuts.description1")}</p>
+              <p>
+                <Trans
+                  i18nKey="new_user_guide.step.shortcuts.description2"
+                  components={{
+                    kbd: <Kbd>H</Kbd>,
+                  }}
+                />
+              </p>
+            </div>
+          ),
+          icon: "i-mgc-hotkey-cute-re",
+        },
       ].filter((i) => !!i) as {
         title: string
         icon: React.ReactNode
         content: FunctionComponentElement<object>
+        description?: string
       }[],
-    [haveUsedOtherRSSReader, t],
+    [t],
   )
 
   const totalSteps = useMemo(() => guideSteps.length, [guideSteps])
@@ -179,20 +155,9 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
   return (
     <m.div
       layout
-      className="relative flex flex-col items-center justify-center overflow-hidden rounded-xl border bg-theme-background"
+      className="relative flex min-h-[80%] w-4/5 flex-col items-center justify-center overflow-hidden rounded-xl bg-theme-background shadow-xl"
     >
-      {!!title && (
-        <h1 className="absolute left-6 top-4 flex items-center gap-2 text-xl font-bold">
-          {typeof guideSteps[step - 1].icon === "string" ? (
-            <i className={clsx(guideSteps[step - 1].icon, "size-[22px]")} />
-          ) : (
-            guideSteps[step - 1].icon
-          )}
-          {title}
-        </h1>
-      )}
-
-      <div className="relative mx-auto flex w-full max-w-3xl items-center">
+      <div className="center relative mx-auto w-full">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <m.div
             key={step - 1}
@@ -205,8 +170,27 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
               x: { type: "spring", stiffness: 300, damping: 30 },
               opacity: { duration: 0.1 },
             }}
-            className="mt-20 px-6 pb-24"
+            className="mt-12 px-20 pb-24"
           >
+            {!!title && (
+              <div className="mb-6">
+                <h1 className="mb-2 flex w-full items-center justify-center gap-2 text-xl font-bold">
+                  {typeof guideSteps[step - 1].icon === "string" ? (
+                    <i className={clsx(guideSteps[step - 1].icon, "size-[22px]")} />
+                  ) : (
+                    guideSteps[step - 1].icon
+                  )}
+                  {title}
+                </h1>
+                {!!guideSteps[step - 1].description && (
+                  <div className="text-center text-sm text-theme-vibrancyFg">
+                    <Markdown className="max-w-full text-sm">
+                      {guideSteps[step - 1].description!}
+                    </Markdown>
+                  </div>
+                )}
+              </div>
+            )}
             {status === "initial" ? (
               <Intro />
             ) : status === "active" ? (
@@ -225,7 +209,7 @@ export function GuideModalContent({ onClose }: { onClose: () => void }) {
           ))}
         </div>
         <div className="flex gap-2">
-          {step !== 0 && step <= totalSteps && (
+          {step !== 0 && (
             <Button
               onClick={() => {
                 if (step > 0) {
