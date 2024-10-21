@@ -1,8 +1,7 @@
 import { useWhoami } from "@client/atoms/user"
 import { MainContainer } from "@client/components/layout/main"
-import { apiClient } from "@client/lib/api-fetch"
 import { openInFollowApp } from "@client/lib/helper"
-import { useUserSubscriptionsQuery } from "@client/query/users"
+import { useUserQuery, useUserSubscriptionsQuery } from "@client/query/users"
 import { PoweredByFooter } from "@follow/components/common/PoweredByFooter.jsx"
 import { FollowIcon } from "@follow/components/icons/follow.jsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@follow/components/ui/avatar/index.jsx"
@@ -12,41 +11,21 @@ import { LoadingCircle } from "@follow/components/ui/loading/index.jsx"
 import { useTitle } from "@follow/hooks"
 import { replaceImgUrlIfNeed } from "@follow/utils/img-proxy"
 import { UrlBuilder } from "@follow/utils/url-builder"
-import { cn, isBizId } from "@follow/utils/utils"
-import { useQuery } from "@tanstack/react-query"
+import { cn } from "@follow/utils/utils"
 import { Fragment } from "react"
 import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
 
 export const Component = () => {
   const params = useParams()
-  const handleOrId = isBizId(params.id || "")
-    ? params.id
-    : `${params.id}`.startsWith("@")
-      ? `${params.id}`.slice(1)
-      : params.id
 
-  const user = useQuery({
-    queryKey: ["profiles", handleOrId],
-    queryFn: async () => {
-      if (!handleOrId) throw new Error("handleOrId is required")
-      const res = await apiClient.profiles.$get({
-        query: {
-          handle: isBizId(handleOrId) ? undefined : handleOrId,
-          id: isBizId(handleOrId) ? handleOrId : undefined,
-        },
-      })
-      return res.data
-    },
-    enabled: !!handleOrId,
-  })
+  const user = useUserQuery(params.id)
 
   const subscriptions = useUserSubscriptionsQuery(user.data?.id)
 
   useTitle(user.data?.name)
   const me = useWhoami()
   const isMe = user.data?.id === me?.id
-  // const presentFeedFormModal = usePresentFeedFormModal()
 
   const { t } = useTranslation("common")
   return (
@@ -66,7 +45,9 @@ export const Component = () => {
             <div className="mb-2 mt-4 flex items-center text-2xl font-bold">
               <h1>{user.data?.name}</h1>
             </div>
-            <div className="mb-8 text-sm text-zinc-500">{user.data?.handle}</div>
+            {user.data?.handle && (
+              <div className="mb-8 text-sm text-zinc-500">@{user.data.handle}</div>
+            )}
           </div>
           <div
             className="mb-12 w-[70ch] max-w-full grow space-y-10"

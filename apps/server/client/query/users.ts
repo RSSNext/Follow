@@ -1,5 +1,6 @@
 import { apiClient } from "@client/lib/api-fetch"
-import { capitalizeFirstLetter, parseUrl } from "@follow/utils/utils"
+import { getHydrateData } from "@client/lib/helper"
+import { capitalizeFirstLetter, isBizId, parseUrl } from "@follow/utils/utils"
 import { useQuery } from "@tanstack/react-query"
 
 export const useUserSubscriptionsQuery = (userId: string | undefined) => {
@@ -27,5 +28,30 @@ export const useUserSubscriptionsQuery = (userId: string | undefined) => {
       return groupFolder
     },
     enabled: !!userId,
+  })
+}
+
+export const fetchUser = async (handleOrId: string | undefined) => {
+  const handle = isBizId(handleOrId || "")
+    ? handleOrId
+    : `${handleOrId}`.startsWith("@")
+      ? `${handleOrId}`.slice(1)
+      : handleOrId
+
+  const res = await apiClient.profiles.$get({
+    query: {
+      handle,
+      id: isBizId(handle || "") ? handle : undefined,
+    },
+  })
+  return res.data
+}
+
+export const useUserQuery = (handleOrId: string | undefined) => {
+  return useQuery({
+    queryKey: ["profiles", handleOrId],
+    queryFn: () => fetchUser(handleOrId),
+    enabled: !!handleOrId,
+    initialData: getHydrateData(`profiles.$get,query:id=${handleOrId}`),
   })
 }

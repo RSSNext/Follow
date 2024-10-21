@@ -1,3 +1,4 @@
+import { isBizId } from "@follow/utils/utils"
 import type { FastifyRequest } from "fastify"
 
 import { createApiClient, getTokenFromCookie } from "./lib/api-client"
@@ -91,6 +92,45 @@ export async function injectMetaHandler(req: FastifyRequest): Promise<MetaTag[]>
           key: `lists.$get,query:listId=${listId}`,
         },
       )
+      break
+    }
+    case url.startsWith("/share/users"): {
+      const parsedUrl = new URL(url, `https://${hostFromReq}`)
+      const userId = parsedUrl.pathname.split("/")[3]
+
+      const handle = isBizId(userId || "")
+        ? userId
+        : `${userId}`.startsWith("@")
+          ? `${userId}`.slice(1)
+          : userId
+
+      const res = await apiClient.profiles.$get({
+        query: {
+          handle,
+          id: isBizId(handle || "") ? handle : undefined,
+        },
+      })
+      const { name } = res.data
+
+      metaArr.push(
+        {
+          type: "title",
+          title: name || "",
+        },
+        {
+          type: "openGraph",
+          title: name || "",
+          image: `${protocol}://${hostFromReq}/og/user/${userId}`,
+        },
+        {
+          type: "hydrate",
+          data: res.data,
+          path: apiClient.profiles.$url({ query: { id: userId } }).pathname,
+          key: `profiles.$get,query:id=${userId}`,
+        },
+      )
+
+      break
     }
   }
 
