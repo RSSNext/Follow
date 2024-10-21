@@ -9,6 +9,7 @@ import type { FeedViewType } from "~/lib/enum"
 import type { NativeMenuItem, NullableNativeMenuItem } from "~/lib/native-menu"
 import { UrlBuilder } from "~/lib/url-builder"
 import { isBizId } from "~/lib/utils"
+import { useBoostModal } from "~/modules/boost/hooks"
 import { useFeedClaimModal } from "~/modules/claim"
 import { FeedForm } from "~/modules/discover/feed-form"
 import { InboxForm } from "~/modules/discover/inbox-form"
@@ -52,6 +53,7 @@ export const useFeedActions = ({
 
   const { mutateAsync: addFeedToListMutation } = useAddFeedToFeedList()
   const { mutateAsync: removeFeedFromListMutation } = useRemoveFeedFromFeedList()
+  const openBoostModal = useBoostModal()
 
   const listByView = useOwnedList(view!)
 
@@ -86,6 +88,13 @@ export const useFeedActions = ({
             },
           ]
         : []),
+      {
+        type: "text" as const,
+        label: "Boost",
+        click: () => {
+          openBoostModal(feedId)
+        },
+      },
       {
         type: "separator" as const,
         disabled: isEntryList,
