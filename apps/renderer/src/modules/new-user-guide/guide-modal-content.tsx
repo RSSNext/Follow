@@ -45,7 +45,7 @@ const variants = {
 function Intro() {
   const { t } = useTranslation("app")
   return (
-    <div className="w-[50ch] text-balance text-center">
+    <div className="w-[50ch] space-y-4 text-balance text-center">
       <Logo className="mx-auto size-20" />
       <p className="mt-5 text-xl font-semibold">{t("new_user_guide.intro.title")}</p>
       <p className="text-lg">{t("new_user_guide.intro.description")}</p>
@@ -57,7 +57,7 @@ function Intro() {
 function Outtro() {
   const { t } = useTranslation("app")
   return (
-    <div className="w-[50ch] text-balance text-center">
+    <div className="w-[50ch] space-y-4 text-balance text-center">
       <Logo className="mx-auto size-20" />
       <p className="mt-5 text-xl font-semibold">{t("new_user_guide.outro.title")}</p>
       <p className="text-lg">{t("new_user_guide.outro.description")}</p>

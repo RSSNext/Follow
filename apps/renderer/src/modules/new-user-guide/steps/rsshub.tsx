@@ -65,7 +65,7 @@ export function RSSHubGuide() {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-3">
+    <div className="grid h-[600px] w-full grid-cols-3 gap-3">
       {keys
         .filter((key) => pickedRoutes.has(key))
         .map((key) => (
