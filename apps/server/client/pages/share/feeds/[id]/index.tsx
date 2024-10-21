@@ -1,3 +1,4 @@
+import { GridList } from "@client/components/items/grid"
 import { NormalListItem } from "@client/components/items/normal"
 import { PictureList } from "@client/components/items/picture"
 import { MainContainer } from "@client/components/layout/main"
@@ -20,10 +21,17 @@ import { useParams, useSearchParams } from "react-router-dom"
 import { toast } from "sonner"
 
 const viewsRenderType = {
-  Normal: [FeedViewType.Articles, FeedViewType.Audios, FeedViewType.Notifications],
+  Normal: [
+    FeedViewType.Articles,
+    FeedViewType.Audios,
+    FeedViewType.Notifications,
+    FeedViewType.SocialMedia,
+  ],
   Picture: [FeedViewType.Pictures],
   Grid: [FeedViewType.Videos],
 }
+
+const numberFormatter = new Intl.NumberFormat()
 export function Component() {
   const { id } = useParams()
   const [search] = useSearchParams()
@@ -51,7 +59,7 @@ export function Component() {
         return <PictureList entries={entries.data!} feed={feed.data} />
       }
       case viewsRenderType.Grid.includes(view): {
-        return <div>Grid</div>
+        return <GridList entries={entries.data!} feed={feed.data} />
       }
     }
   }, [entries.data, feed.data, view])
@@ -77,9 +85,9 @@ export function Component() {
 
       <div className="mb-4 text-sm">
         {t("feed.followsAndReads", {
-          subscriptionCount: feed.data.subscriptionCount,
+          subscriptionCount: numberFormatter.format(feed.data.subscriptionCount),
           subscriptionNoun: t("feed.follower", { count: feed.data.subscriptionCount }),
-          readCount: feed.data.readCount,
+          readCount: numberFormatter.format(feed.data.readCount),
           readNoun: t("feed.read", { count: feed.data.readCount }),
           appName: APP_NAME,
         })}
