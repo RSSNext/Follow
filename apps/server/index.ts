@@ -33,7 +33,12 @@ export const createApp = async () => {
 
     const { host } = req.headers
 
-    if (!isDev) req.requestContext.set("upstreamEnv", host?.includes("dev") ? "dev" : "prod")
+    const forwardedHost = req.headers["x-forwarded-host"]
+    const finalHost = forwardedHost || host
+
+    if (!isDev) req.requestContext.set("upstreamEnv", finalHost?.includes("dev") ? "dev" : "prod")
+
+    reply.header("x-handled-host", finalHost)
     done()
   })
 
@@ -42,12 +47,6 @@ export const createApp = async () => {
     await devVite.registerDevViteServer(app)
   }
 
-  app.get("/metrics", (req, reply) => {
-    reply.send({
-      headers: req.headers,
-      host: req.headers.host,
-    })
-  })
   ogRoute(app)
   globalRoute(app)
 
