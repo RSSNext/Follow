@@ -477,6 +477,7 @@ export const useEntryActions = ({
         key: "delete",
         name: t("entry_actions.delete"),
         hide: !isInbox,
+        className: "i-mgc-delete-2-cute-re",
         onClick: () => {
           deleteInboxEntry.mutate(populatedEntry.entries.id)
         },
