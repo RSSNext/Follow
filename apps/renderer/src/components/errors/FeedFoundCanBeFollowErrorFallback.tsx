@@ -9,10 +9,10 @@ import { FeedForm } from "~/modules/discover/feed-form"
 import { entries } from "~/queries/entries"
 
 import type { AppErrorFallbackProps } from "../common/AppErrorBoundary"
-import { FeedIcon } from "../feed-icon"
 import { Button } from "../ui/button"
 import { useModalStack } from "../ui/modal"
 import { CustomSafeError, useResetErrorWhenRouteChange } from "./helper"
+import { FeedPreview } from "./previews/FeedPreview"
 
 const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({ resetError, error }) => {
   if (!(error instanceof FeedFoundCanBeFollowError)) {
@@ -24,65 +24,59 @@ const FeedFoundCanBeFollowErrorFallback: FC<AppErrorFallbackProps> = ({ resetErr
   useResetErrorWhenRouteChange(resetError)
 
   return (
-    <div className="flex w-full flex-col items-center justify-center rounded-md bg-theme-modal-background-opaque p-2">
-      <div className="center m-auto flex max-w-prose flex-col gap-4 text-center">
-        <FeedIcon feed={feed} size={60} className="rounded" />
+    <div className="flex w-full flex-col overflow-auto bg-theme-modal-background-opaque p-2">
+      <FeedPreview feedId={feed.id}>
+        {{
+          actions: (
+            <div className="center mt-3 gap-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  navigate("/")
+                  setTimeout(() => {
+                    resetError()
+                  }, 100)
+                }}
+              >
+                Back
+              </Button>
 
-        <div className="text-lg font-bold">{feed.title}</div>
+              <Button
+                onClick={() => {
+                  present({
+                    title: "Add Feed",
+                    content: ({ dismiss }) => (
+                      <FeedForm
+                        asWidget
+                        url={feed.url}
+                        defaultValues={{
+                          view: getSidebarActiveView().toString(),
+                        }}
+                        onSuccess={() => {
+                          dismiss()
 
-        <p className="my-3">{feed.description}</p>
+                          const { feedId, view } = getRouteParams()
 
-        <div className="center gap-1 opacity-80">
-          <i className="i-mgc-information-cute-re" />
-          We found this feed in our database, you can follow it or go back to homepage.
-        </div>
-        <div className="center mt-12 gap-4">
-          <Button
-            variant="outline"
-            onClick={() => {
-              navigate("/")
-              setTimeout(() => {
-                resetError()
-              }, 100)
-            }}
-          >
-            Back
-          </Button>
+                          const entriesOptions = {
+                            id: feedId,
+                            view,
+                          }
 
-          <Button
-            onClick={() => {
-              present({
-                title: "Add Feed",
-                content: ({ dismiss }) => (
-                  <FeedForm
-                    asWidget
-                    url={feed.url}
-                    defaultValues={{
-                      view: getSidebarActiveView().toString(),
-                    }}
-                    onSuccess={() => {
-                      dismiss()
-
-                      const { feedId, view } = getRouteParams()
-
-                      const entriesOptions = {
-                        id: feedId,
-                        view,
-                      }
-
-                      entries.entries(entriesOptions).remove()
-                      nextFrame(() => resetError())
-                    }}
-                  />
-                ),
-              })
-            }}
-            variant="primary"
-          >
-            Follow
-          </Button>
-        </div>
-      </div>
+                          entries.entries(entriesOptions).remove()
+                          nextFrame(() => resetError())
+                        }}
+                      />
+                    ),
+                  })
+                }}
+                variant="primary"
+              >
+                Follow
+              </Button>
+            </div>
+          ),
+        }}
+      </FeedPreview>
     </div>
   )
 }

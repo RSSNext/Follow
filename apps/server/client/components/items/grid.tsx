@@ -60,7 +60,6 @@ const GridItemFooter: FC<{
   return (
     <div className={"relative px-2 py-1 text-sm"}>
       <div className="flex items-center">
-        <div className={"mr-1 size-1.5 shrink-0 self-center rounded-full bg-accent duration-200"} />
         <div className={"relative mb-1 mt-1.5 flex w-full items-center gap-1 truncate font-medium"}>
           <TitleMarquee className="min-w-0 grow">{entryPreview.title}</TitleMarquee>
         </div>

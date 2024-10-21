@@ -3,6 +3,7 @@ import { NormalListItem } from "@client/components/items/normal"
 import { PictureList } from "@client/components/items/picture"
 import { MainContainer } from "@client/components/layout/main"
 import { FeedCertification } from "@client/components/ui/feed-certification"
+import { openInFollowApp } from "@client/lib/helper"
 import type { EntriesPreview } from "@client/query/entries"
 import { useEntriesPreview } from "@client/query/entries"
 import type { Feed } from "@client/query/feed"
@@ -117,10 +118,9 @@ export function Component() {
         <Button
           variant={isSubscribed ? "outline" : undefined}
           onClick={() => {
-            // TODO: jump to follow app page
-            // presentFeedFormModal({
-            //   feedId: id!,
-            // })
+            openInFollowApp(`add?id=${id}`, () => {
+              window.location.href = `/feeds/${id}/pending?view=${view}`
+            })
           }}
         >
           <FollowIcon className="mr-1 size-3" />
