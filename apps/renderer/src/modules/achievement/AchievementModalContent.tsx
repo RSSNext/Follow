@@ -4,7 +4,7 @@ import { useSingleton } from "foxact/use-singleton"
 import { atom, useStore } from "jotai"
 import { nanoid } from "nanoid"
 import type { FC } from "react"
-import { useEffect, useMemo, useRef } from "react"
+import { useEffect, useId, useMemo, useRef } from "react"
 import { Trans } from "react-i18next"
 
 import { useServerConfigs } from "~/atoms/server-configs"
@@ -404,6 +404,8 @@ const VoteValidateModalContent: FC<{ refetch: () => void }> = ({ refetch }) => {
     },
   })
   const { PRODUCT_HUNT_VOTE_URL } = useServerConfigs() || {}
+  const id = useId()
+
   return (
     <form
       className="flex flex-col gap-2"
@@ -413,12 +415,20 @@ const VoteValidateModalContent: FC<{ refetch: () => void }> = ({ refetch }) => {
         audit(ref.current.value)
       }}
     >
-      <label>
-        Please vote for <a href={PRODUCT_HUNT_VOTE_URL}>Follow</a> on Product Hunk! Then fill in
-        your username here.
+      <label htmlFor={id}>
+        Please vote for {APP_NAME} on{" "}
+        <a
+          href={PRODUCT_HUNT_VOTE_URL}
+          className="follow-link--underline"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Product Hunk!
+        </a>{" "}
+        Then fill in your username here.
       </label>
       <div>
-        <Input ref={ref} autoFocus placeholder="Your Product Hunt username" />
+        <Input ref={ref} autoFocus id={id} placeholder="Your Product Hunt username" />
       </div>
 
       <div className="mt-2 flex justify-end">
