@@ -43,6 +43,5 @@
   "9003": "Achievement audit not needed",
   "10000": "Inbox not found",
   "10001": "Inbox already exists",
-  "10002": "Inbox limit exceeded",
-  "10003": "Inbox permission denied"
+  "10002": "Inbox limit exceeded"
 }

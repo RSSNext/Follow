@@ -7,6 +7,7 @@ import type { FC } from "react"
 import { useEffect, useMemo, useRef } from "react"
 import { Trans } from "react-i18next"
 
+import { useServerConfigs } from "~/atoms/server-configs"
 import { Button } from "~/components/ui/button"
 import { styledButtonVariant } from "~/components/ui/button/variants"
 import { Input } from "~/components/ui/input"
@@ -402,6 +403,7 @@ const VoteValidateModalContent: FC<{ refetch: () => void }> = ({ refetch }) => {
       })
     },
   })
+  const { PRODUCT_HUNT_VOTE_URL } = useServerConfigs() || {}
   return (
     <form
       className="flex flex-col gap-2"
@@ -412,8 +414,8 @@ const VoteValidateModalContent: FC<{ refetch: () => void }> = ({ refetch }) => {
       }}
     >
       <label>
-        Please vote for <a href="https://www.producthunt.com/posts/follow-app_">Follow</a> on
-        Product Hunk! Then fill in your username here.
+        Please vote for <a href={PRODUCT_HUNT_VOTE_URL}>Follow</a> on Product Hunk! Then fill in
+        your username here.
       </label>
       <div>
         <Input ref={ref} autoFocus placeholder="Your Product Hunt username" />
