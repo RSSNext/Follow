@@ -60,6 +60,10 @@ const prodHandler = (app: FastifyInstance) => {
 
         // override client side api url
 
+        const upstreamHost = req.headers.host || req.headers["x-forwarded-host"]
+        const protocol = req.headers["x-forwarded-proto"] || "https"
+        const upstreamOrigin = `${protocol}://${upstreamHost}`
+
         const injectScript = (apiUrl: string) => {
           const template = `function injectEnv(env2) {
     for (const key in env2) {
@@ -68,7 +72,7 @@ const prodHandler = (app: FastifyInstance) => {
       globalThis["__followEnv"][key] = env2[key];
     }
   }
-injectEnv({"VITE_API_URL":"${apiUrl}","VITE_EXTERNAL_API_URL":"${apiUrl}"})`
+injectEnv({"VITE_API_URL":"${apiUrl}","VITE_EXTERNAL_API_URL":"${apiUrl}","VITE_WEB_URL":"${upstreamOrigin}"})`
           const $script = document.createElement("script")
           $script.innerHTML = template
           document.head.prepend($script)
