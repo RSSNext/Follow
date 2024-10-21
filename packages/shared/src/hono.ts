@@ -4431,6 +4431,37 @@ declare const levelsRelations: drizzle_orm.Relations<"levels", {
 }>;
 
 declare const _routes: hono_hono_base.HonoBase<Env, {
+    "/status/configs": {
+        $get: {
+            input: {};
+            output: {
+                code: 0;
+                data: {
+                    MAX_SUBSCRIPTIONS: number;
+                    MAX_LISTS: number;
+                    MAX_ACTIONS: number;
+                    MAX_WEBHOOKS_PER_ACTION: number;
+                    MAX_INBOXES: number;
+                    IMPORTING_TITLE: string;
+                    DAILY_POWER_PERCENTAGES: number[];
+                    LEVEL_PERCENTAGES: number[];
+                    DAILY_CLAIM_AMOUNT: {
+                        trial: number;
+                        normal: number;
+                    };
+                    DISABLE_PERSONAL_DAILY_POWER: boolean;
+                    TAX_POINT: string;
+                    INVITATION_INTERVAL_DAYS: number;
+                    INVITATION_PRICE: number;
+                    DAILY_POWER_SUPPLY: number;
+                    IS_RSS3_TESTNET: boolean;
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+} & {
     "/messaging": {
         $post: {
             input: {
@@ -5083,7 +5114,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                         activityPoints: number | null;
                     } | null;
                     todayDailyPower: string;
-                    tomorrowDailyPower: string;
                 }[];
             };
             outputFormat: "json" | "text";
