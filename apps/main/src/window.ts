@@ -169,30 +169,35 @@ export const createMainWindow = () => {
     y: number
   } | null
   const primaryDisplay = screen.getPrimaryDisplay()
-  const { width: screenWidth, height: screenHeight } = primaryDisplay.workAreaSize
+  const { workArea } = primaryDisplay
 
-  // Ensure the window is within screen bounds
-  const ensureInBounds = (value: number, size: number, max: number) => {
-    if (value + size > max) {
-      return Math.max(0, max - size)
-    }
-    return Math.max(0, value)
+  const maxWidth = workArea.width
+  const maxHeight = workArea.height
+
+  const width = Math.min(windowState?.width || 1200, maxWidth)
+  const height = Math.min(windowState?.height || 900, maxHeight)
+
+  const ensureInBounds = (value: number, min: number, max: number): number => {
+    return Math.max(min, Math.min(value, max))
   }
 
-  const width = windowState?.width || 1200
-  const height = windowState?.height || 900
   const x =
-    windowState?.x !== undefined ? ensureInBounds(windowState.x, width, screenWidth) : undefined
+    windowState?.x !== undefined
+      ? ensureInBounds(windowState.x, workArea.x, workArea.x + workArea.width - width)
+      : undefined
+
   const y =
-    windowState?.y !== undefined ? ensureInBounds(windowState.y, height, screenHeight) : undefined
+    windowState?.y !== undefined
+      ? ensureInBounds(windowState.y, workArea.y, workArea.y + workArea.height - height)
+      : undefined
 
   const window = createWindow({
     width: windowState?.width || 1200,
     height: windowState?.height || 900,
     x,
     y,
-    minWidth: 1024,
-    minHeight: 500,
+    minWidth: Math.min(1024, maxWidth),
+    minHeight: Math.min(500, maxHeight),
   })
 
   window.on("close", () => {
