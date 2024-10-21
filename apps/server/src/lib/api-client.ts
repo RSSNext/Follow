@@ -59,3 +59,5 @@ export const getTokenFromCookie = (cookie: string) => {
     )
   return parsedCookieMap["authjs.session-token"]
 }
+
+export type ApiClient = ReturnType<typeof createApiClient>

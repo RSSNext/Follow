@@ -11,8 +11,13 @@
   "dependencies": {
     "@fastify/middie": "9.0.2",
     "@fastify/request-context": "6.0.1",
+    "@follow/components": "workspace:*",
     "@follow/constants": "workspace:*",
     "@follow/hooks": "workspace:*",
+    "@follow/models": "workspace:*",
+    "@follow/shared": "workspace:*",
+    "@follow/types": "workspace:*",
+    "@follow/utils": "workspace:*",
     "@fontsource/sn-pro": "5.1.0",
     "@openpanel/web": "1.0.1",
     "@radix-ui/react-avatar": "1.1.1",
@@ -43,11 +48,6 @@
     "use-context-selector": "2.0.0"
   },
   "devDependencies": {
-    "@follow/components": "workspace:*",
-    "@follow/models": "workspace:*",
-    "@follow/shared": "workspace:*",
-    "@follow/types": "workspace:*",
-    "@follow/utils": "workspace:*",
     "daisyui": "4.12.13",
     "lightningcss": "1.27.0",
     "tsup": "8.3.0",

@@ -667,12 +667,27 @@ importers:
       '@fastify/request-context':
         specifier: 6.0.1
         version: 6.0.1
+      '@follow/components':
+        specifier: workspace:*
+        version: link:../../packages/components
       '@follow/constants':
         specifier: workspace:*
         version: link:../../packages/constants
       '@follow/hooks':
         specifier: workspace:*
         version: link:../../packages/hooks
+      '@follow/models':
+        specifier: workspace:*
+        version: link:../../packages/models
+      '@follow/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      '@follow/types':
+        specifier: workspace:*
+        version: link:../../packages/types
+      '@follow/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@fontsource/sn-pro':
         specifier: 5.1.0
         version: 5.1.0
@@ -758,21 +773,6 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(react@18.3.1)(scheduler@0.23.2)
     devDependencies:
-      '@follow/components':
-        specifier: workspace:*
-        version: link:../../packages/components
-      '@follow/models':
-        specifier: workspace:*
-        version: link:../../packages/models
-      '@follow/shared':
-        specifier: workspace:*
-        version: link:../../packages/shared
-      '@follow/types':
-        specifier: workspace:*
-        version: link:../../packages/types
-      '@follow/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
       daisyui:
         specifier: 4.12.13
         version: 4.12.13(patch_hash=igsntdatmoaxzwxof4bkkh35fy)(postcss@8.4.47)
