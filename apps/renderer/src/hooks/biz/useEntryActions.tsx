@@ -403,9 +403,9 @@ export const useEntryActions = ({
         name: t("entry_actions.save_to_obsidian"),
         icon: <SimpleIconsObsidian />,
         key: "saveToObsidian",
-        hide: !isObsidianEnabled || !populatedEntry?.entries?.url,
+        hide: !isObsidianEnabled || !populatedEntry?.entries?.url || !IN_ELECTRON,
         onClick: () => {
-          if (!isObsidianEnabled || !populatedEntry?.entries?.url) return
+          if (!isObsidianEnabled || !populatedEntry?.entries?.url || !IN_ELECTRON) return
 
           saveToObsidian.mutate({
             url: populatedEntry.entries.url,
