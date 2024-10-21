@@ -2,7 +2,7 @@ import { Readable } from "node:stream"
 
 import { getFeedIconSrc } from "@follow/components/utils/icon.js"
 import type { FastifyInstance } from "fastify"
-import React from "react"
+import * as React from "react"
 import uniqolor from "uniqolor"
 
 import { createApiClient, getTokenFromCookie } from "~/lib/api-client"
@@ -127,7 +127,7 @@ export const ogRoute = (app: FastifyInstance) => {
                   <p
                     style={{
                       fontSize: "1.8rem",
-                      height: "5.2rem",
+                      height: "5.8rem",
                       overflow: "hidden",
                       lineClamp: 2,
                       color: "#000000",
