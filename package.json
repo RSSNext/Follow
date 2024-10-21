@@ -21,6 +21,7 @@
     "bump": "vv",
     "dev": "electron-vite dev",
     "dev:debug": "export DEBUG=true && vite --debug",
+    "dev:server": "pnpm run --filter=server dev",
     "dev:web": "vite",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -80,7 +81,7 @@
     "eslint-config-hyoban": "^3.1.11",
     "fake-indexeddb": "6.0.0",
     "happy-dom": "15.7.4",
-    "hono": "4.6.3",
+    "hono": "4.6.5",
     "lint-staged": "15.2.10",
     "nbump": "2.0.7",
     "postcss": "8.4.47",
@@ -108,7 +109,8 @@
       "re-resizable": "patches/re-resizable@6.9.17.patch",
       "hono": "patches/hono.patch",
       "electron-context-menu": "patches/electron-context-menu.patch",
-      "@mozilla/readability": "patches/@mozilla__readability.patch"
+      "@mozilla/readability": "patches/@mozilla__readability.patch",
+      "daisyui": "patches/daisyui.patch"
     },
     "overrides": {
       "is-core-module": "npm:@nolyfill/is-core-module@^1",
