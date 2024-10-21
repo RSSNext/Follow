@@ -7,6 +7,7 @@ import { Divider } from "~/components/ui/divider"
 import {
   SimpleIconsEagle,
   SimpleIconsInstapaper,
+  SimpleIconsObsidian,
   SimpleIconsOmnivore,
   SimpleIconsReadwise,
 } from "~/components/ui/platform-icon/icons"
@@ -150,6 +151,24 @@ export const SettingIntegration = () => {
                 .
               </>
             ),
+          }),
+          {
+            type: "title",
+            value: (
+              <span className="flex items-center gap-2 font-bold">
+                <SimpleIconsObsidian />
+                {t("integration.obsidian.title")}
+              </span>
+            ),
+          },
+          defineSettingItem("enableObsidian", {
+            label: t("integration.obsidian.enable.label"),
+            description: t("integration.obsidian.enable.description"),
+          }),
+          defineSettingItem("obsidianVaultPath", {
+            label: t("integration.obsidian.vaultPath.label"),
+            vertical: true,
+            description: t("integration.obsidian.vaultPath.description"),
           }),
 
           BottomTip,
