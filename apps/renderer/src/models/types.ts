@@ -101,6 +101,7 @@ export type ActionsInput = {
     value?: string
   }[]
   result: {
+    disabled?: boolean
     translation?: string
     summary?: boolean
     readability?: boolean
