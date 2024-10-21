@@ -106,7 +106,7 @@ export function Component() {
         </TabsList>
         {currentTabs.map((tab) => (
           <TabsContent key={tab.name} value={tab.value} className="mt-8">
-            <div className={tab.value === "inbox" ? "" : "center flex"}>
+            <div className={tab.value === "inbox" ? "" : "center flex flex-col"}>
               {createElement(TabComponent[tab.value] || TabComponent.default, {
                 type: tab.value,
               })}
