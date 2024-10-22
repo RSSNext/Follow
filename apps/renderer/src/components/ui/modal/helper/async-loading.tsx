@@ -1,4 +1,3 @@
-import type { UseQueryResult } from "@tanstack/react-query"
 import * as React from "react"
 import { useTranslation } from "react-i18next"
 
@@ -9,8 +8,14 @@ import { createErrorToaster } from "~/lib/error-parser"
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../tooltip"
 
+export interface UseAsyncFetcher<T> {
+  data: Nullable<T>
+  error: Nullable<Error>
+  isLoading: boolean
+  refetch: () => void
+}
 interface AsyncModalContentProps<T> {
-  queryResult: UseQueryResult<T, Error>
+  queryResult: UseAsyncFetcher<T>
   renderContent: (data: T) => React.ReactNode
   loadingComponent?: React.ReactNode
 }
