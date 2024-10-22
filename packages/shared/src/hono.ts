@@ -6388,7 +6388,6 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
         $get: {
             input: {
                 query: {
-                    route?: string | string[] | undefined;
                     category?: string | string[] | undefined;
                     namespace?: string | string[] | undefined;
                 };
@@ -6415,6 +6414,23 @@ declare const _routes: hono_hono_base.HonoBase<Env, {
                             };
                         };
                     };
+                };
+            };
+            outputFormat: "json" | "text";
+            status: 200;
+        };
+    };
+    "/discover/rsshub/route": {
+        $get: {
+            input: {
+                query: {
+                    route: string | string[];
+                };
+            };
+            output: {
+                data: {
+                    prefix: string;
+                    route?: any;
                 };
             };
             outputFormat: "json" | "text";

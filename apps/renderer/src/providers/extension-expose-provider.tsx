@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import { getGeneralSettings } from "~/atoms/settings/general"
 import { getUISettings } from "~/atoms/settings/ui"
 import { useModalStack } from "~/components/ui/modal"
+import { useDiscoverRSSHubRouteModal } from "~/hooks/biz/useDiscoverRSSHubRoute"
 import { useFollow } from "~/hooks/biz/useFollow"
 import { usePresentUserProfileModal } from "~/modules/profile/hooks"
 import { useSettingModal } from "~/modules/settings/modal/hooks"
@@ -45,6 +46,7 @@ export const ExtensionExposeProvider = () => {
 
   const follow = useFollow()
   const presentUserProfile = usePresentUserProfileModal("dialog")
+  const presentDiscoverRSSHubRoute = useDiscoverRSSHubRouteModal()
   useEffect(() => {
     registerGlobalContext({
       follow,
@@ -52,7 +54,10 @@ export const ExtensionExposeProvider = () => {
       profile(id, variant) {
         presentUserProfile(id, variant)
       },
+      rsshubRoute(route) {
+        presentDiscoverRSSHubRoute(route)
+      },
     })
-  }, [follow, present, presentUserProfile, t])
+  }, [follow, present, presentDiscoverRSSHubRoute, presentUserProfile, t])
   return null
 }

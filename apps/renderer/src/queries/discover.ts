@@ -20,4 +20,13 @@ export const discover = {
       })
       return res.data
     }),
+  rsshubRoute: ({ route }: { route: string }) =>
+    defineQuery(["discover", "rsshub", "route", route], async () => {
+      const res = await apiClient.discover.rsshub.route.$get({
+        query: {
+          route,
+        },
+      })
+      return res.data
+    }),
 }
