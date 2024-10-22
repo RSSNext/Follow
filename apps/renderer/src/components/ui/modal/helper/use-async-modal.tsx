@@ -17,6 +17,9 @@ export type AsyncModalOptions<T> = {
   icon?: (data: T) => React.ReactNode
   useDataFetcher: () => UseAsyncFetcher<T>
   content: FC<ModalActionsInternal & { data: T }>
+
+  // Modal options
+  overlay?: boolean
 }
 const AsyncModalContext = createContext<AsyncModalOptions<any>>(null!)
 export const useAsyncModal = () => {
@@ -32,6 +35,7 @@ export const useAsyncModal = () => {
       ),
       title: "Loading...",
       CustomModalComponent: NoopChildren,
+      overlay: options.overlay,
     })
   })
 }

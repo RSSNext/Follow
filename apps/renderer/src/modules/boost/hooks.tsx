@@ -1,19 +1,26 @@
 import { useCallback } from "react"
 
-import { useModalStack } from "~/components/ui/modal"
+import { useAsyncModal } from "~/components/ui/modal/helper/use-async-modal"
+import { useAuthQuery } from "~/hooks/common"
+import { boosts } from "~/queries/boosts"
 
 import { BoostModalContent } from "./modal"
 
 export const useBoostModal = () => {
-  const { present } = useModalStack()
+  const present = useAsyncModal()
 
   return useCallback(
     (feedId: string) => {
-      present({
+      const useDataFetcher = () => useAuthQuery(boosts.getStatus({ feedId }))
+
+      type ResponseType = Awaited<ReturnType<ReturnType<typeof useDataFetcher>["fn"]>>
+
+      present<ResponseType>({
         id: "boost",
         title: "Boost",
         content: () => <BoostModalContent feedId={feedId} />,
         overlay: true,
+        useDataFetcher,
       })
     },
     [present],
