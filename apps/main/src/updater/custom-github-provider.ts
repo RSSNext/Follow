@@ -1,5 +1,7 @@
 // credits: migrated from https://github.com/toeverything/AFFiNE/blob/a802dc4fd6aa720f7a7a995816c78c0b24c514f5/packages/frontend/electron/src/main/updater/custom-github-provider.ts
 
+import { URL } from "node:url"
+
 import type {
   CustomPublishOptions,
   GithubOptions,
