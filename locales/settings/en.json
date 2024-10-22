@@ -58,6 +58,8 @@
   "appearance.general": "General",
   "appearance.guess_code_language.description": "Major programming languages that use models to infer unlabeled code blocks",
   "appearance.guess_code_language.label": "Guess code language",
+  "appearance.hide_recent_reader.description": "Hide the recent reader in the entry header.",
+  "appearance.hide_recent_reader.label": "Hide recent reader",
   "appearance.misc": "Misc",
   "appearance.modal_overlay.description": "Show modal overlay",
   "appearance.modal_overlay.label": "Show modal overlay",
