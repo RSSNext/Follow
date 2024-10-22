@@ -30,10 +30,12 @@ import { useDeleteSubscription } from "./useSubscriptionActions"
 
 export const useFeedActions = ({
   feedId,
+  feedIds,
   view,
   type,
 }: {
   feedId: string
+  feedIds?: string[]
   view?: number
   type?: "feedList" | "entryList"
 }) => {
@@ -55,6 +57,8 @@ export const useFeedActions = ({
 
   const listByView = useOwnedList(view!)
 
+  const isMultipleSelection = feedIds && feedIds.length > 0
+
   const items = useMemo(() => {
     if (!feed) return []
 
@@ -64,7 +68,11 @@ export const useFeedActions = ({
         label: t("sidebar.feed_actions.mark_all_as_read"),
         shortcut: "Meta+Shift+A",
         disabled: isEntryList,
-        click: () => subscriptionActions.markReadByFeedIds({ feedIds: [feedId] }),
+        click: () =>
+          subscriptionActions.markReadByFeedIds({
+            feedIds: isMultipleSelection ? feedIds : [feedId],
+          }),
+        supportMultipleSelection: true,
       },
       !feed.ownerUserId &&
         !!isBizId(feed.id) &&
@@ -94,6 +102,7 @@ export const useFeedActions = ({
         type: "text" as const,
         label: t("sidebar.feed_column.context_menu.add_feeds_to_list"),
         disabled: isInbox,
+        supportMultipleSelection: true,
         submenu: [
           ...listByView.map((list) => {
             const isIncluded = list.feedIds.includes(feedId)
@@ -102,6 +111,14 @@ export const useFeedActions = ({
               type: "text" as const,
               checked: isIncluded,
               click() {
+                if (isMultipleSelection) {
+                  addFeedToListMutation({
+                    feedIds,
+                    listId: list.id,
+                  })
+                  return
+                }
+
                 if (!isIncluded) {
                   addFeedToListMutation({
                     feedId,
@@ -223,8 +240,11 @@ export const useFeedActions = ({
     feed,
     t,
     isEntryList,
+    isInbox,
     listByView,
     feedId,
+    isMultipleSelection,
+    feedIds,
     claimFeed,
     addFeedToListMutation,
     removeFeedFromListMutation,

@@ -24,6 +24,7 @@ import { useListById } from "~/store/list"
 import { subscriptionActions, useSubscriptionByFeedId } from "~/store/subscription"
 import { useFeedUnreadStore } from "~/store/unread"
 
+import { useSelectedFeedIds } from "./atom"
 import { feedColumnStyles } from "./styles"
 import { UnreadNumber } from "./unread-number"
 
@@ -37,9 +38,20 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
   const subscription = useSubscriptionByFeedId(feedId)
   const navigate = useNavigateEntry()
   const feed = useFeedById(feedId)
+  const [selectedFeedIds, setSelectedFeedIds] = useSelectedFeedIds()
 
-  const handleNavigate: React.MouseEventHandler<HTMLDivElement> = useCallback(
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
+      if (e.metaKey) {
+        setSelectedFeedIds((prev) => {
+          if (prev.includes(feedId)) {
+            return prev.filter((id) => id !== feedId)
+          }
+          return prev.concat(feedId)
+        })
+        return
+      }
+
       e.stopPropagation()
       if (view === undefined) return
       navigate({
@@ -52,18 +64,25 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
         getMainContainerElement()?.focus()
       })
     },
-    [feedId, navigate, view, feed?.type],
+    [feedId, navigate, setSelectedFeedIds, view],
   )
 
   const feedUnread = useFeedUnreadStore((state) => state.data[feedId] || 0)
 
   const isActive = useRouteParamsSelector((routerParams) => routerParams.feedId === feedId)
 
-  const { items } = useFeedActions({ feedId, view })
+  const { items } = useFeedActions({
+    feedIds: selectedFeedIds,
+    feedId,
+    view,
+  })
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-  useAnyPointDown(() => {
+  useAnyPointDown((e) => {
     setIsContextMenuOpen(false)
+    if (!(e.target instanceof HTMLElement) || !e.target.closest("[data-feed-id]")) {
+      setSelectedFeedIds([])
+    }
   })
   if (!feed) return null
 
@@ -73,14 +92,14 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
     <>
       <div
         data-feed-id={feedId}
-        data-active={isActive || isContextMenuOpen}
+        data-active={isActive || isContextMenuOpen || selectedFeedIds.includes(feedId)}
         className={cn(
           "flex w-full cursor-menu items-center justify-between rounded-md py-[2px] pr-2.5 text-sm font-medium leading-loose",
           feedColumnStyles.item,
           isFeed ? "py-[2px]" : "py-1.5",
           className,
         )}
-        onClick={handleNavigate}
+        onClick={handleClick}
         onDoubleClick={() => {
           window.open(UrlBuilder.shareFeed(feedId, view), "_blank")
         }}
@@ -110,7 +129,17 @@ const FeedItemImpl = ({ view, feedId, className }: FeedItemProps) => {
               },
             )
           }
-          showNativeMenu(nextItems, e)
+          showNativeMenu(
+            nextItems.filter(
+              (item) =>
+                selectedFeedIds.length === 0 ||
+                (typeof item === "object" &&
+                  item !== null &&
+                  "supportMultipleSelection" in item &&
+                  item.supportMultipleSelection),
+            ),
+            e,
+          )
         }}
       >
         <div
