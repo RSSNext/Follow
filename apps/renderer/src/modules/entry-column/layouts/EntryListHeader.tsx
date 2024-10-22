@@ -75,7 +75,7 @@ export const EntryListHeader: FC<{
       ref={containerRef}
       className="flex w-full flex-col pl-6 pr-4 pt-2.5 transition-[padding] duration-300 ease-in-out"
     >
-      <div className={cn("flex w-full", titleAtBottom ? "justify-end" : "justify-between")}>
+      <div className={cn("flex h-10 w-full", titleAtBottom ? "justify-end" : "justify-between")}>
         {!titleAtBottom && titleInfo}
 
         <div
