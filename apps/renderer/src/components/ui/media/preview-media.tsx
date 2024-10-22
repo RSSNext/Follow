@@ -304,7 +304,10 @@ const FallbackableImage: FC<
           className={cn("relative", width < height && "h-full")}
           style={{
             // px-20 pb-8 pt-10
-            width: width > height ? (windowHeight - 32 - 40) * (width / height) : undefined,
+            width:
+              width && height && width > height
+                ? Math.min((windowHeight - 32 - 40) * (width / height), width)
+                : undefined,
             maxWidth: width > height ? windowWidth - 80 - 80 - 400 : undefined,
           }}
         >
