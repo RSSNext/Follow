@@ -51,7 +51,7 @@ export const SettingFeeds = () => {
               <TableBody className="border-t-[12px] border-transparent">
                 {claimedList.data?.map((row) => (
                   <TableRow key={row.feed.id} className="h-8">
-                    <TableCell size="sm">
+                    <TableCell size="sm" width={200}>
                       <a
                         target="_blank"
                         href={UrlBuilder.shareFeed(row.feed.id)}
