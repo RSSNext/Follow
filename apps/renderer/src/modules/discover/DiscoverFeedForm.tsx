@@ -1,6 +1,7 @@
 import { Button } from "@follow/components/ui/button/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { nextFrame } from "@follow/utils/dom"
+import { cn } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { omit } from "lodash-es"
 import type { FC } from "react"
@@ -31,7 +32,7 @@ import {
   parseRegexpPathParams,
   regexpPathToPath,
 } from "~/lib/path-parser"
-import { cn, getViewFromRoute } from "~/lib/utils"
+import { getViewFromRoute } from "~/lib/utils"
 
 import { FeedForm } from "./feed-form"
 import type { RSSHubRoute } from "./types"

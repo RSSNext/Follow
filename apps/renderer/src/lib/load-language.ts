@@ -1,4 +1,5 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { getOS, isEmptyObject } from "@follow/utils/utils"
 import dayjs from "dayjs"
 import i18next from "i18next"
 import { toast } from "sonner"
@@ -7,7 +8,6 @@ import { currentSupportedLanguages, dayjsLocaleImportMap } from "~/@types/consta
 import { defaultResources } from "~/@types/default-resource"
 import { fallbackLanguage, i18nAtom, langChain, LocaleCache } from "~/i18n"
 import { jotaiStore } from "~/lib/jotai"
-import { getOS, isEmptyObject } from "~/lib/utils"
 
 import { tipcClient } from "./client"
 import { appLog } from "./log"

@@ -1,4 +1,5 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { UrlBuilder } from "@follow/utils/url-builder"
 import { isBizId } from "@follow/utils/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -37,7 +38,6 @@ import {
 import { views } from "~/constants"
 import { apiClient } from "~/lib/api-fetch"
 import { createErrorToaster } from "~/lib/error-parser"
-import { UrlBuilder } from "~/lib/url-builder"
 import type { FeedModel } from "~/models"
 import { ViewSelectorRadioGroup } from "~/modules/shared/ViewSelectorRadioGroup"
 import { Queries } from "~/queries"

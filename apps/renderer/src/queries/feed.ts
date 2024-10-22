@@ -1,3 +1,4 @@
+import { formatXml } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 
 import { ROUTE_FEED_IN_FOLDER, ROUTE_FEED_PENDING } from "~/constants"
@@ -5,7 +6,6 @@ import { useAuthQuery } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { toastFetchError } from "~/lib/error-parser"
-import { formatXml } from "~/lib/utils"
 import type { FeedQueryParams } from "~/store/feed"
 import { feedActions } from "~/store/feed"
 

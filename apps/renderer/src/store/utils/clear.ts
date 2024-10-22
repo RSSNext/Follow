@@ -1,6 +1,7 @@
+import { getStorageNS } from "@follow/utils/ns"
+
 import { clearUISettings } from "~/atoms/settings/ui"
 import { browserDB } from "~/database"
-import { getStorageNS } from "~/lib/ns"
 
 import { entryActions } from "../entry"
 import { feedActions } from "../feed"

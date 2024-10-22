@@ -19,7 +19,6 @@ import {
   LazyContextMenuProvider,
   LazyExtensionExposeProvider,
   LazyExternalJumpInProvider,
-  LazyFeatureFlagDebugger,
   LazyLottieRenderContainer,
   LazyModalStackProvider,
   // specific import should add `index` postfix
@@ -60,8 +59,6 @@ export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
                 <LazyContextMenuProvider />
                 <LazyLottieRenderContainer />
                 <LazyExternalJumpInProvider />
-
-                <LazyFeatureFlagDebugger />
               </Suspense>
               <Toaster />
             </I18nProvider>

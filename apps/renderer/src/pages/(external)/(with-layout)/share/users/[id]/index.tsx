@@ -1,4 +1,6 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { UrlBuilder } from "@follow/utils/url-builder"
+import { cn, isBizId } from "@follow/utils/utils"
 import { Fragment } from "react/jsx-runtime"
 import { useParams } from "react-router-dom"
 
@@ -13,8 +15,6 @@ import { useAuthQuery, useI18n, useTitle } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
 import { defineQuery } from "~/lib/defineQuery"
 import { replaceImgUrlIfNeed } from "~/lib/img-proxy"
-import { UrlBuilder } from "~/lib/url-builder"
-import { cn, isBizId } from "~/lib/utils"
 import { useUserSubscriptionsQuery } from "~/modules/profile/hooks"
 
 export function Component() {

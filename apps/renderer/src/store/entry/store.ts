@@ -1,10 +1,11 @@
 import type { EntryReadHistoriesModel } from "@follow/shared/hono"
+import { omitObjectUndefinedValue } from "@follow/utils/utils"
 import { produce } from "immer"
 import { isNil, merge, omit } from "lodash-es"
 
 import { runTransactionInScope } from "~/database"
 import { apiClient } from "~/lib/api-fetch"
-import { getEntriesParams, omitObjectUndefinedValue } from "~/lib/utils"
+import { getEntriesParams } from "~/lib/utils"
 import type { CombinedEntryModel, EntryModel, FeedModel, FeedOrListRespModel } from "~/models"
 import { EntryService } from "~/services"
 

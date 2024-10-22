@@ -1,7 +1,7 @@
+import { sortByAlphabet } from "@follow/utils/utils"
 import { Fragment } from "react"
 
 import { INBOX_PREFIX_ID } from "~/constants"
-import { sortByAlphabet } from "~/lib/utils"
 import { getPreferredTitle, useFeedStore } from "~/store/feed"
 import { getSubscriptionByFeedId } from "~/store/subscription"
 

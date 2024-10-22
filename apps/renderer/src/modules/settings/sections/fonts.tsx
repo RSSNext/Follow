@@ -2,6 +2,7 @@
 import { Button } from "@follow/components/ui/button/index.js"
 import { IN_ELECTRON } from "@follow/shared/constants"
 import { nextFrame } from "@follow/utils/dom"
+import { getStorageNS } from "@follow/utils/ns"
 import { useQuery } from "@tanstack/react-query"
 import { useCallback, useEffect, useMemo, useRef } from "react"
 import * as React from "react"
@@ -18,7 +19,6 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 import { tipcClient } from "~/lib/client"
-import { getStorageNS } from "~/lib/ns"
 
 const FALLBACK_FONT = "Default (UI Font)"
 const DEFAULT_FONT = "SN Pro"

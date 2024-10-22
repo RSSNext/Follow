@@ -1,15 +1,15 @@
+import { EventBus } from "@follow/utils/event-bus"
+import { getStorageNS } from "@follow/utils/ns"
 import { useAtomValue } from "jotai"
 import { atomWithStorage, selectAtom } from "jotai/utils"
 import { useMemo } from "react"
 
 import { useRefValue } from "~/hooks/common"
-import { EventBus } from "~/lib/event-bus"
 import { createAtomHooks } from "~/lib/jotai"
-import { getStorageNS } from "~/lib/ns"
 import type { SettingItem } from "~/modules/settings/setting-builder"
 import { createSettingBuilder } from "~/modules/settings/setting-builder"
 
-declare module "~/lib/event-bus" {
+declare module "@follow/utils/event-bus" {
   interface CustomEvent {
     SETTING_CHANGE_EVENT: {
       updated: number

@@ -1,4 +1,5 @@
 import { Button } from "@follow/components/ui/button/index.js"
+import { UrlBuilder } from "@follow/utils/url-builder"
 import { cn } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
@@ -20,7 +21,6 @@ import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from "~/compon
 import { views } from "~/constants"
 import { useAuthQuery, useI18n } from "~/hooks/common"
 import { apiClient } from "~/lib/api-fetch"
-import { UrlBuilder } from "~/lib/url-builder"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
 import { listActions } from "~/store/list"

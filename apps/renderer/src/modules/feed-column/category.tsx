@@ -1,6 +1,7 @@
 import { MotionButtonBase } from "@follow/components/ui/button/index.js"
 import type { FeedViewType } from "@follow/constants"
 import { stopPropagation } from "@follow/utils/dom"
+import { cn, sortByAlphabet } from "@follow/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import type { FC } from "react"
@@ -16,7 +17,6 @@ import { getRouteParams, useRouteParamsSelector } from "~/hooks/biz/useRoutePara
 import { useAnyPointDown, useInputComposition, useRefValue } from "~/hooks/common"
 import type { NullableNativeMenuItem } from "~/lib/native-menu"
 import { showNativeMenu } from "~/lib/native-menu"
-import { cn, sortByAlphabet } from "~/lib/utils"
 import { getPreferredTitle, useAddFeedToFeedList, useFeedStore } from "~/store/feed"
 import { useOwnedList } from "~/store/list"
 import {

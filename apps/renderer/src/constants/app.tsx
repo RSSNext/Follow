@@ -1,4 +1,4 @@
-import { getStorageNS } from "~/lib/ns"
+import { getStorageNS } from "@follow/utils/ns"
 
 /// Feed
 export const FEED_COLLECTION_LIST = "collections"

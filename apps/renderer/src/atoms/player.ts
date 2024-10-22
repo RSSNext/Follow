@@ -1,10 +1,10 @@
+import { getStorageNS } from "@follow/utils/ns"
 import { noop } from "foxact/noop"
 import { atomWithStorage, createJSONStorage } from "jotai/utils"
 import type { SyncStorage } from "jotai/vanilla/utils/atomWithStorage"
 
 import { getRouteParams } from "~/hooks/biz/useRouteParams"
 import { createAtomHooks } from "~/lib/jotai"
-import { getStorageNS } from "~/lib/ns"
 
 type PlayerAtomValue = {
   show: boolean

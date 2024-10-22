@@ -9,10 +9,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export type OS = "macOS" | "iOS" | "Windows" | "Android" | "Linux" | ""
-declare global {
-  interface Window {
-    platform?: NodeJS.Platform
-  }
+
+declare const window: {
+  platform: NodeJS.Platform
+  navigator: Navigator
 }
 declare const ELECTRON: boolean
 export const getOS = memoize((): OS => {
@@ -196,3 +196,6 @@ export const getUrlIcon = (url: string, fallback?: boolean | undefined) => {
 }
 
 export { parse as parseUrl } from "tldts"
+
+export const clamp = (value: number, min: number, max: number) =>
+  Math.min(Math.max(value, min), max)

@@ -1,4 +1,5 @@
 import { IconButton } from "@follow/components/ui/button/index.js"
+import { getStorageNS } from "@follow/utils/ns"
 import { Label } from "@radix-ui/react-label"
 import { PopoverPortal } from "@radix-ui/react-popover"
 import { atomWithStorage } from "jotai/utils"
@@ -8,7 +9,6 @@ import { useGeneralSettingKey, useGeneralSettingValue } from "~/atoms/settings/g
 import { Checkbox } from "~/components/ui/checkbox"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
 import { jotaiStore } from "~/lib/jotai"
-import { getStorageNS } from "~/lib/ns"
 import { withSettingEnabled } from "~/modules/settings/helper/withSettingEnable"
 
 const TrustedKey = getStorageNS("trusted-external-link")

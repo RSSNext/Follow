@@ -1,9 +1,8 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { getStorageNS } from "@follow/utils/ns"
 import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { useMediaQuery } from "usehooks-ts"
-
-import { getStorageNS } from "~/lib/ns"
 
 export const useDarkQuery = () => useMediaQuery("(prefers-color-scheme: dark)")
 export type ColorMode = "light" | "dark" | "system"

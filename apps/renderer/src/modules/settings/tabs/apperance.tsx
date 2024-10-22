@@ -1,4 +1,5 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { getOS } from "@follow/utils/utils"
 import { useTranslation } from "react-i18next"
 import { bundledThemesInfo } from "shiki/themes"
 
@@ -18,7 +19,6 @@ import {
 } from "~/components/ui/select"
 import { isElectronBuild } from "~/constants"
 import { useIsDark, useSetTheme, useThemeAtomValue } from "~/hooks/common"
-import { getOS } from "~/lib/utils"
 
 import { SettingTabbedSegment } from "../control"
 import { ContentFontSelector, UIFontSelector } from "../sections/fonts"

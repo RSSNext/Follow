@@ -1,8 +1,8 @@
 import { IN_ELECTRON } from "@follow/shared/constants"
+import { getOS } from "@follow/utils/utils"
 import { get } from "lodash-es"
 
 import { tipcClient } from "./client"
-import { getOS } from "./utils"
 
 type MenuItemWithHide<T> = T & {
   hide?: boolean

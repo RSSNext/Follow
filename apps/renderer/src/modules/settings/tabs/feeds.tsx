@@ -1,3 +1,4 @@
+import { UrlBuilder } from "@follow/utils/url-builder"
 import { useTranslation } from "react-i18next"
 
 import { FeedIcon } from "~/components/feed-icon"
@@ -14,7 +15,6 @@ import {
 } from "~/components/ui/table"
 import { EllipsisHorizontalTextWithTooltip } from "~/components/ui/typography"
 import { useAuthQuery } from "~/hooks/common"
-import { UrlBuilder } from "~/lib/url-builder"
 import { Balance } from "~/modules/wallet/balance"
 import { Queries } from "~/queries"
 
