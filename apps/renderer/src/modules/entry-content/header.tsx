@@ -1,4 +1,5 @@
 import { ActionButton } from "@follow/components/ui/button/index.js"
+import { ActionButton } from "@follow/components/ui/button/index.jsx"
 import { DividerVertical } from "@follow/components/ui/divider/index.js"
 import { FeedViewType } from "@follow/constants"
 import { IN_ELECTRON } from "@follow/shared/constants"
@@ -16,8 +17,6 @@ import {
   useEntryInReadabilityStatus,
 } from "~/atoms/readability"
 import { useUISettingKey } from "~/atoms/settings/ui"
-import { ActionButton } from "@follow/components/ui/button/index.jsx"
-import { DividerVertical } from "@follow/components/ui/divider/index.js"
 import { views } from "~/constants"
 import { shortcuts } from "~/constants/shortcuts"
 import { useEntryActions, useEntryReadabilityToggle } from "~/hooks/biz/useEntryActions"
